@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 15:59:18 $
+ *  last change: $Author: obr $ $Date: 2001-02-12 12:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,7 +565,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
 
 #if defined WNT
 //                  xInstance = xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDragAndDrop" ) );
-                    * ( reinterpret_cast < HWND * > ( windowId.getArray() ) ) = pEnvData->hWnd;
+//                  * ( reinterpret_cast < HWND * > ( windowId.getArray() ) ) = pEnvData->hWnd;
 #elif defined UNX
                     aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DragAndDrop" );
                     aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DropTarget" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndevdis.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 15:59:18 $
+ *  last change: $Author: obr $ $Date: 2001-02-12 12:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,27 +66,59 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETDRAGCONTEXT_HPP_
+#include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
+#endif
+
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 
 #ifndef _SV_WINDOW_HXX
 #include <window.hxx>
 #endif
 
-class DNDEventDispatcher: public ::cppu::WeakImplHelper1<
-    ::com::sun::star::datatransfer::dnd::XDropTargetListener >
+class DNDEventDispatcher: public ::cppu::WeakImplHelper2<
+    ::com::sun::star::datatransfer::dnd::XDropTargetListener,
+    ::com::sun::star::datatransfer::dnd::XDropTargetDragContext >
 {
     Window * m_pTopWindow;
     Window * m_pCurrentWindow;
 
-    // actions:  1 : DragEnter  2 : DragOver  3 : DropActionChanged
-    sal_Int32 dragAction( sal_Int8 action, Window * pWindow, const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde );
+    ::osl::Mutex m_aMutex;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > m_aDataFlavorList;
+
+    /*
+     * fire the events on the dnd listener container of the specified window
+     */
+
+    sal_Int32 fireDragEnterEvent( Window *pWindow, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext >& xContext,
+        const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >& aFlavorList ) throw(::com::sun::star::uno::RuntimeException);
+
+    sal_Int32 fireDragOverEvent( Window *pWindow, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext >& xContext,
+        const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction ) throw(::com::sun::star::uno::RuntimeException);
+
+    sal_Int32 fireDragExitEvent( Window *pWindow ) throw(::com::sun::star::uno::RuntimeException);
+
+    sal_Int32 fireDropActionChangedEvent( Window *pWindow, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext >& xContext,
+        const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction ) throw(::com::sun::star::uno::RuntimeException);
+
+    sal_Int32 fireDropEvent( Window *pWindow, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDropContext >& xContext,
+        const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable ) throw(::com::sun::star::uno::RuntimeException);
 
 public:
 
     DNDEventDispatcher( Window * pTopWindow );
     virtual ~DNDEventDispatcher();
+
+    /*
+     * XDropTargetDragContext
+     */
+
+    virtual void SAL_CALL acceptDrag( const sal_Int8 dropAction ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL rejectDrag() throw(::com::sun::star::uno::RuntimeException);
 
     /*
      * XDropTargetListener

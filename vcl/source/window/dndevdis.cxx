@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 15:59:18 $
+ *  last change: $Author: obr $ $Date: 2001-02-12 12:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <vos/mutex.hxx>
 #include <svapp.hxx>
 
+using namespace ::osl;
 using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
@@ -97,64 +98,40 @@ DNDEventDispatcher::~DNDEventDispatcher()
 void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
     throw(RuntimeException)
 {
+    MutexGuard aImplGuard( m_aMutex );
+
     Point location( dtde.Location.X, dtde.Location.Y );
-    sal_Bool bSendDragEnter = sal_False;
 
     // find the window that is toplevel for this coordinates
-    OClearableGuard aGuard( Application::GetSolarMutex() );
+    OClearableGuard aSolarGuard( Application::GetSolarMutex() );
     Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
-    aGuard.clear();
+    aSolarGuard.clear();
 
     // handle the case that drop is in an other vcl window than the last dragOver
     if( pChildWindow != m_pCurrentWindow )
     {
         // fire dragExit on listeners of previous window
-        dragExit( dtde );
+        fireDragExitEvent( m_pCurrentWindow );
 
-        // remember to send drag enter later
-        bSendDragEnter = sal_True;
+        fireDragEnterEvent( pChildWindow, static_cast < XDropTargetDragContext * > (this),
+            dtde.DropAction, location, dtde.SourceActions, m_aDataFlavorList );
     }
 
     sal_Int32 nListeners = 0;
 
     // send drop event to the child window
-    if( pChildWindow )
-    {
-        OClearableGuard aGuard2( Application::GetSolarMutex() );
-
-        // query DropTarget from child window
-        Reference< XDropTarget > xDropTarget = pChildWindow->GetDropTarget();
-
-        if( xDropTarget.is() )
-        {
-            // retrieve relative mouse position
-            Point relLoc = pChildWindow->ImplFrameToOutput( location );
-            aGuard2.clear();
-
-            // send DragEnterEvent if other window than at last dragOver
-            if( bSendDragEnter )
-            {
-#if 0
-                static_cast < DNDListenerContainer * > ( xDropTarget.get() )->
-                    fireDragEnterEvent( static_cast < XDropTargetDragContext * > (dtde.Context.get()),
-                        dtde.DropAction, ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ),
-                        dtde.SourceActions );
-#endif
-            }
-
-            // fire...Event returns the number of listeners found
-            nListeners = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->
-                fireDropEvent( dtde.Context, dtde.DropAction,
-                    ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ),
-                    dtde.SourceActions, dtde.Transferable );
-        }
-    }
+    nListeners = fireDropEvent( pChildWindow, dtde.Context, dtde.DropAction,
+        location, dtde.SourceActions, dtde.Transferable );
 
     // reject drop if no listeners found
     if( nListeners == 0 ) {
         OSL_TRACE( "rejecting drop due to missing listeners." );
         dtde.Context->rejectDrop();
     }
+
+    // this is a drop -> no further drag overs
+    m_pCurrentWindow = NULL;
+    m_aDataFlavorList.realloc( 0 );
 }
 
 //==================================================================================================
@@ -164,24 +141,28 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
 void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtdee )
     throw(RuntimeException)
 {
-    sal_Int32 nListeners;
+    MutexGuard aImplGuard( m_aMutex );
+    Point location( dtdee.Location.X, dtdee.Location.Y );
 
     // find the window that is toplevel for this coordinates
-    OClearableGuard aGuard( Application::GetSolarMutex() );
-    Window * pChildWindow = m_pTopWindow->ImplFindWindow( Point( dtdee.Location.X, dtdee.Location.Y ) );
-    aGuard.clear();
+    OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
+    aSolarGuard.clear();
 
     // assume pointer write operation to be atomic
     m_pCurrentWindow = pChildWindow;
+    m_aDataFlavorList = dtdee.SupportedDataFlavors;
 
     // fire dragEnter on listeners of current window
-    nListeners = dragAction( 1, pChildWindow, dtdee );
+    sal_Int32 nListeners = fireDragEnterEvent( pChildWindow, dtdee.Context, dtdee.DropAction, location,
+        dtdee.SourceActions, dtdee.SupportedDataFlavors );
 
     // reject drag if no listener found
     if( nListeners == 0 ) {
         OSL_TRACE( "rejecting drag enter due to missing listeners." );
         dtdee.Context->rejectDrag();
     }
+
 }
 
 //==================================================================================================
@@ -191,23 +172,13 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
 void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& dte )
     throw(RuntimeException)
 {
-    Window * pChildWindow = m_pCurrentWindow;
+    MutexGuard aImplGuard( m_aMutex );
 
-    // send the last window a drag exit
-    if( pChildWindow )
-    {
-        OClearableGuard aGuard( Application::GetSolarMutex() );
+    fireDragExitEvent( m_pCurrentWindow );
 
-        // query DropTarget from child window
-        Reference< XDropTarget > xDropTarget = pChildWindow->GetDropTarget();
-        aGuard.clear();
-
-        if( xDropTarget.is() )
-            static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragExitEvent();
-    }
-
-    // reset current window
+    // reset member values
     m_pCurrentWindow = NULL;
+    m_aDataFlavorList.realloc( 0 );
 }
 
 //==================================================================================================
@@ -217,28 +188,33 @@ void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& dte )
 void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
     throw(RuntimeException)
 {
+    MutexGuard aImplGuard( m_aMutex );
+
+    Point location( dtde.Location.X, dtde.Location.Y );
     sal_Int32 nListeners;
 
     // find the window that is toplevel for this coordinates
-    OClearableGuard aGuard( Application::GetSolarMutex() );
-    Window * pChildWindow = m_pTopWindow->ImplFindWindow( Point( dtde.Location.X, dtde.Location.Y ) );
-    aGuard.clear();
+    OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
+    aSolarGuard.clear();
 
     if( pChildWindow != m_pCurrentWindow )
     {
         // fire dragExit on listeners of previous window
-        dragExit( dtde );
+        fireDragExitEvent( m_pCurrentWindow );
 
         // remember new window
         m_pCurrentWindow = pChildWindow;
 
         // fire dragEnter on listeners of current window
-        nListeners = dragAction( 1, pChildWindow, dtde );
+        nListeners = fireDragEnterEvent( pChildWindow, dtde.Context, dtde.DropAction, location,
+            dtde.SourceActions, m_aDataFlavorList );
     }
     else
     {
         // fire dragOver on listeners of current window
-        nListeners = dragAction( 2, pChildWindow, dtde );
+        nListeners = fireDragOverEvent( pChildWindow, dtde.Context, dtde.DropAction, location,
+            dtde.SourceActions );
     }
 
     // reject drag if no listener found
@@ -256,28 +232,33 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
 void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& dtde )
     throw(RuntimeException)
 {
+    MutexGuard aImplGuard( m_aMutex );
+
+    Point location( dtde.Location.X, dtde.Location.Y );
     sal_Int32 nListeners;
 
     // find the window that is toplevel for this coordinates
-    OClearableGuard aGuard( Application::GetSolarMutex() );
-    Window * pChildWindow = m_pTopWindow->ImplFindWindow( Point( dtde.Location.X, dtde.Location.Y ) );
-    aGuard.clear();
+    OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
+    aSolarGuard.clear();
 
     if( pChildWindow != m_pCurrentWindow )
     {
         // fire dragExit on listeners of previous window
-        dragExit( dtde );
+        fireDragExitEvent( m_pCurrentWindow );
 
         // remember new window
         m_pCurrentWindow = pChildWindow;
 
         // fire dragEnter on listeners of current window
-        nListeners = dragAction( 1, pChildWindow, dtde );
+        nListeners = fireDragEnterEvent( pChildWindow, dtde.Context, dtde.DropAction, location,
+            dtde.SourceActions, m_aDataFlavorList );
     }
     else
     {
         // fire dropActionChanged on listeners of current window
-        nListeners = dragAction( 3, pChildWindow, dtde );
+        nListeners = fireDropActionChangedEvent( pChildWindow, dtde.Context, dtde.DropAction, location,
+            dtde.SourceActions );
     }
 
     // reject drag if no listener found
@@ -299,10 +280,30 @@ void SAL_CALL DNDEventDispatcher::disposing( const EventObject& eo )
 }
 
 //==================================================================================================
-// DNDEventDispatcher::dragAction
+// DNDEventDispatcher::acceptDrag
 //==================================================================================================
 
-sal_Int32 DNDEventDispatcher::dragAction( sal_Int8 action, Window * pWindow, const DropTargetDragEvent& dtde )
+void SAL_CALL DNDEventDispatcher::acceptDrag( const sal_Int8 dropAction ) throw(RuntimeException)
+{
+}
+
+//==================================================================================================
+// DNDEventDispatcher::rejectDrag
+//==================================================================================================
+
+void SAL_CALL DNDEventDispatcher::rejectDrag() throw(RuntimeException)
+{
+}
+
+//==================================================================================================
+// DNDEventDispatcher::fireDragEnterEvent
+//==================================================================================================
+
+sal_Int32 DNDEventDispatcher::fireDragEnterEvent( Window *pWindow,
+    const Reference< XDropTargetDragContext >& xContext, const sal_Int8 nDropAction,
+    const Point& rLocation, const sal_Int8 nSourceActions, const Sequence< DataFlavor >& aFlavorList
+)
+    throw(RuntimeException)
 {
     sal_Int32 n = 0;
 
@@ -316,38 +317,134 @@ sal_Int32 DNDEventDispatcher::dragAction( sal_Int8 action, Window * pWindow, con
         if( xDropTarget.is() )
         {
             // retrieve relative mouse position
-            Point relLoc = pWindow->ImplFrameToOutput( Point( dtde.Location.X, dtde.Location.Y ) );
+            Point relLoc = pWindow->ImplFrameToOutput( rLocation );
             aGuard.clear();
 
-            // fire...Event returns the number of listeners found
-            switch( action )
-            {
-            case 1:
-#if 0
-                n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->
-                    fireDragEnterEvent( dtde.Context, dtde.DropAction,
-                        ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ),
-                        dtde.SourceActions );
-#endif
-                break;
+            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragEnterEvent( xContext, nDropAction,
+                 ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ), nSourceActions, aFlavorList );
+        }
+    }
 
-            case 2:
-                n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->
-                    fireDragOverEvent( dtde.Context, dtde.DropAction,
-                        ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ),
-                        dtde.SourceActions );
-                break;
+    return n;
+}
 
-            case 3:
-                n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->
-                    fireDropActionChangedEvent( dtde.Context, dtde.DropAction,
-                        ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ),
-                        dtde.SourceActions );
-                break;
+//==================================================================================================
+// DNDEventDispatcher::fireDragOverEvent
+//==================================================================================================
 
-            default:
-                ;
-            }
+sal_Int32 DNDEventDispatcher::fireDragOverEvent( Window *pWindow,
+    const Reference< XDropTargetDragContext >& xContext, const sal_Int8 nDropAction,
+    const Point& rLocation, const sal_Int8 nSourceActions
+)
+    throw(RuntimeException)
+{
+    sal_Int32 n = 0;
+
+    if( pWindow )
+    {
+        OClearableGuard aGuard( Application::GetSolarMutex() );
+
+        // query DropTarget from window
+        Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
+
+        if( xDropTarget.is() )
+        {
+            // retrieve relative mouse position
+            Point relLoc = pWindow->ImplFrameToOutput( rLocation );
+            aGuard.clear();
+
+            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragOverEvent( xContext, nDropAction,
+                ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ), nSourceActions );
+        }
+    }
+
+    return n;
+}
+
+//==================================================================================================
+// DNDEventDispatcher::fireDragExitEvent
+//==================================================================================================
+
+sal_Int32 DNDEventDispatcher::fireDragExitEvent( Window *pWindow ) throw(RuntimeException)
+{
+    sal_Int32 n = 0;
+
+    if( pWindow )
+    {
+        OClearableGuard aGuard( Application::GetSolarMutex() );
+
+        // query DropTarget from window
+        Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
+
+        aGuard.clear();
+
+        if( xDropTarget.is() )
+            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragExitEvent();
+    }
+
+    return n;
+}
+
+//==================================================================================================
+// DNDEventDispatcher::fireDropActionChangedEvent
+//==================================================================================================
+
+sal_Int32 DNDEventDispatcher::fireDropActionChangedEvent( Window *pWindow,
+    const Reference< XDropTargetDragContext >& xContext, const sal_Int8 nDropAction,
+    const Point& rLocation, const sal_Int8 nSourceActions
+)
+    throw(RuntimeException)
+{
+    sal_Int32 n = 0;
+
+    if( pWindow )
+    {
+        OClearableGuard aGuard( Application::GetSolarMutex() );
+
+        // query DropTarget from window
+        Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
+
+        if( xDropTarget.is() )
+        {
+            // retrieve relative mouse position
+            Point relLoc = pWindow->ImplFrameToOutput( rLocation );
+            aGuard.clear();
+
+            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDropActionChangedEvent( xContext, nDropAction,
+                ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ), nSourceActions );
+        }
+    }
+
+    return n;
+}
+
+//==================================================================================================
+// DNDEventDispatcher::fireDropEvent
+//==================================================================================================
+
+sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
+    const Reference< XDropTargetDropContext >& xContext, const sal_Int8 nDropAction, const Point& rLocation,
+    const sal_Int8 nSourceActions, const Reference< XTransferable >& xTransferable
+)
+    throw(RuntimeException)
+{
+    sal_Int32 n = 0;
+
+    if( pWindow )
+    {
+        OClearableGuard aGuard( Application::GetSolarMutex() );
+
+        // query DropTarget from window
+        Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
+
+        if( xDropTarget.is() )
+        {
+            // retrieve relative mouse position
+            Point relLoc = pWindow->ImplFrameToOutput( rLocation );
+            aGuard.clear();
+
+            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDropEvent( xContext, nDropAction,
+                ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ), nSourceActions, xTransferable );
         }
     }
 
