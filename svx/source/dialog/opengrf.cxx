@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-30 11:37:46 $
+ *  last change: $Author: obo $ $Date: 2002-11-06 11:02:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,10 +383,10 @@ void SvxOpenGraphicDialog::SetCurrentFilter(const String&   rStr)
 
 void SvxOpenGraphicDialog::SetControlHelpIds( const INT16* _pControlId, const INT32* _pHelpId )
 {
-    mpImpl->aFileDlg.SetControlHelpIds( _pControlId, _pHelpId );
+    mpImpl->maFileDlg.SetControlHelpIds( _pControlId, _pHelpId );
 }
 
 void SvxOpenGraphicDialog::SetDialogHelpId( const INT32 _nHelpId )
 {
-    mpImpl->aFileDlg.SetDialogHelpId( _nHelpId );
+    mpImpl->maFileDlg.SetDialogHelpId( _nHelpId );
 }
