@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaThreadPoolFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2002-06-25 07:16:52 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ import java.util.Hashtable;
 import com.sun.star.uno.UnoRuntime;
 
 
-public class JavaThreadPoolFactory implements IThreadPoolFactory {
+public class JavaThreadPoolFactory {
     private static final boolean DEBUG = false;
 
     protected Hashtable _jobQueues  = new Hashtable();
@@ -95,6 +95,12 @@ public class JavaThreadPoolFactory implements IThreadPoolFactory {
 //              }.start();
 //      }
 
+    public static ThreadId getThreadId() {
+        Thread t = Thread.currentThread();
+        return t instanceof JobQueue.JobDispatcher
+            ? ((JobQueue.JobDispatcher) t).getThreadId()
+            : new ThreadId(UnoRuntime.generateOid(t));
+    }
 
     /**
      * For debugging, lists the jobqueues
@@ -107,42 +113,6 @@ public class JavaThreadPoolFactory implements IThreadPoolFactory {
             System.err.println(" - " + elements.nextElement());
         }
     }
-
-
-
-    /**
-     * Gets the <code>ThreadID</code> of the given thread.
-     * <p>
-     * @return   the thread id
-     * @param    thread   the thread
-     * @see      com.sun.star.lib.uno.environments.remote.ThreadID
-     */
-    public ThreadId getThreadId(Thread thread) {
-        ThreadId threadId = null;
-
-        if(thread instanceof JobQueue.JobDispatcher)
-            threadId = ((JobQueue.JobDispatcher)thread).getThreadId();
-        else {
-            threadId = new ThreadId(UnoRuntime.generateOid(thread));
-        }
-
-        if(DEBUG) System.err.println("##### ThreadPool.getThreadId:" + threadId);
-
-        return threadId;
-    }
-
-
-    /**
-     * Gets the <code>ThreadID</code> of this thread.
-     * Implements the method of <code>IThreadPool</code>
-     * <p>
-     * @return the thread id
-     * @see com.sun.star.lib.uno.environments.remote.IThreadPool#getThreadId
-     */
-    public ThreadId getThreadId() {
-        return getThreadId(Thread.currentThread());
-    }
-
 
     void addJobQueue(JobQueue jobQueue) {
         if(DEBUG) System.err.println("##### "+ getClass().getName() + ".addJobQueue:" + jobQueue + " " + ((jobQueue._sync_jobQueue != null) ? jobQueue._sync_jobQueue._threadId : null));
