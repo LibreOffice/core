@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 11:09:31 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 13:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1359,7 +1359,7 @@ Reference< awt::XControlModel >  BibDataManager::loadGridModel(const rtl::OUStri
         Reference< XPropertySet >  xPropSet( xModel, UNO_QUERY );
         Any aDbSource; aDbSource <<= rName;
         xPropSet->setPropertyValue( C2U("Name"),aDbSource);
-        rtl::OUString aControlName(C2U("com.sun.star.form.control.ExtendedGridControl"));
+        rtl::OUString aControlName(C2U("com.sun.star.form.control.DispatchGridControl"));
         Any aAny; aAny <<= aControlName;
         xPropSet->setPropertyValue( C2U("DefaultControl"),aAny );
 
