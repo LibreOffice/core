@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:44:06 $
+ *  last change: $Author: nn $ $Date: 2000-12-11 18:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,8 @@ void __EXPORT ScDrawPage::RequestBasic()
 {
     ScDrawLayer* pLayer = (ScDrawLayer*)GetModel();
     SfxObjectShell* pDocSh = pLayer->GetDocument()->GetDocumentShell();
-    SetBasic(pDocSh->GetBasic());
+    if (pDocSh)
+        SetBasic(pDocSh->GetBasic());
 }
 
 

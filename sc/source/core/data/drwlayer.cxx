@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-03 16:55:09 $
+ *  last change: $Author: nn $ $Date: 2000-12-11 18:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -824,13 +824,8 @@ __EXPORT ScDrawLayer::~ScDrawLayer()
 
 SdrPage* __EXPORT ScDrawLayer::AllocPage(FASTBOOL bMasterPage)
 {
-//  StarBASIC* pBasic = pDoc->GetDocumentShell()->GetBasicManager()->GetLib(0);
-
+    //  don't create basic until it is needed
     StarBASIC* pBasic = NULL;
-    SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
-    if ( pDocSh /* && pDocSh->HasSbxObject() ??? */ )
-        pBasic = pDocSh->GetBasic();
-
     ScDrawPage* pPage = new ScDrawPage( *this, pBasic, bMasterPage );
     return pPage;
 }
@@ -849,12 +844,8 @@ BOOL ScDrawLayer::HasObjects() const
 
 void ScDrawLayer::UpdateBasic()
 {
-    SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
-    StarBASIC* pBasic = pDocSh ? pDocSh->GetBasic() : 0;
-
-    USHORT nCount = GetPageCount();
-    for (USHORT i=0; i<nCount; i++)
-        ((ScDrawPage*) GetPage(i))->SetBasic(pBasic);
+    //  don't create basic until it is needed
+    //! remove this method?
 }
 
 SdrModel* __EXPORT ScDrawLayer::AllocModel() const
