@@ -2,8 +2,8 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.38 $
- *  last change: $Author: nf $ $Date: 2001-12-05 15:14:38 $
+ *  $Revision: 1.39 $
+ *  last change: $Author: obo $ $Date: 2001-12-14 18:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ chinese_simplified ] = "字体(~F)";
         Text[ russian ] = "�����";
         Text[ polish ] = "Czcionka";
-        Text[ japanese ] = "ﾌｫﾝﾄ(~F)";
+        Text[ japanese ] = "フォント(~F)";
         Text[ chinese_traditional ] = "字型(~F)";
         Text[ arabic ] = "����";
         Text[ greek ] = "�������������";
@@ -306,7 +306,7 @@ String RID_SUBSETSTR_BASIC_LATIN
         Text[ swedish ] = "Latin (standard)";
         Text[ polish ] = "�aci�ski podstawowy";
         Text[ portuguese_brazilian ] = "Basic Latin";
-        Text[ japanese ] = "基本ﾗﾃﾝ文字";
+        Text[ japanese ] = "基本ラテン文字";
         Text[ korean ] = "라틴어 (기본)";
         Text[ chinese_simplified ] = "基本拉丁文";
         Text[ chinese_traditional ] = "基本拉丁文";
@@ -331,7 +331,7 @@ String RID_SUBSETSTR_LATIN_1
         Text[ swedish ] = "Latin-1";
         Text[ polish ] = "�aci�ski-1";
         Text[ portuguese_brazilian ] = "Latin-1";
-        Text[ japanese ] = "ﾗﾃﾝ文字 1";
+        Text[ japanese ] = "ラテン文字 1";
         Text[ korean ] = "라틴-1";
         Text[ chinese_simplified ] = "拉丁文-1";
         Text[ chinese_traditional ] = "拉丁文-1";
@@ -356,7 +356,7 @@ String RID_SUBSETSTR_LATIN_EXTENDED_A
         Text[ swedish ] = "Ut�kat latin A";
         Text[ polish ] = "�aci�ski rozszerzony-A";
         Text[ portuguese_brazilian ] = "Latin Extended-A";
-        Text[ japanese ] = "ﾗﾃﾝ拡張文字 A";
+        Text[ japanese ] = "ラテン拡張文字 A";
         Text[ korean ] = "라틴어,  확장-A";
         Text[ chinese_simplified ] = "拉丁文扩充 A";
         Text[ chinese_traditional ] = "拉丁文擴充-A";
@@ -381,7 +381,7 @@ String RID_SUBSETSTR_LATIN_EXTENDED_B
         Text[ swedish ] = "Ut�kat latin B";
         Text[ polish ] = "�aci�ski rozszerzony-B";
         Text[ portuguese_brazilian ] = "Latin Extended-B";
-        Text[ japanese ] = "ﾗﾃﾝ拡張文字 B";
+        Text[ japanese ] = "ラテン拡張文字 B";
         Text[ korean ] = "라틴어, 확장-B";
         Text[ chinese_simplified ] = "拉丁文扩充 B";
         Text[ chinese_traditional ] = "拉丁文擴充-B";
@@ -431,7 +431,7 @@ String RID_SUBSETSTR_SPACING_MODIFIERS
         Text[ swedish ] = "Avst�nds�ndrande tecken";
         Text[ polish ] = "Litery modyfikuj�ce odst�py";
         Text[ portuguese_brazilian ] = "Spacing Modifier Letters";
-        Text[ japanese ] = "ｽﾍﾟｰｽ調整文字";
+        Text[ japanese ] = "スペース調整文字";
         Text[ korean ] = "간격 조정 문자";
         Text[ chinese_simplified ] = "间隔修饰符号";
         Text[ chinese_traditional ] = "間隔修飾字元";
@@ -457,7 +457,7 @@ String RID_SUBSETSTR_COMB_DIACRITICAL
         Text[ polish ] = "��cz�ce znaki diakrytyczne";
         Text[ portuguese_brazilian ] = "Combining Diacritical Marks";
         Text[ japanese ] = "結合分音記号";
-        Text[ korean ] = "복합  변별적 발음 부호";
+        Text[ korean ] = "복합 변별적 발음 부호";
         Text[ chinese_simplified ] = "组合式符号";
         Text[ chinese_traditional ] = "組合式符號";
         Text[ turkish ] = "Combining Diacritical Marks";
@@ -481,7 +481,7 @@ String RID_SUBSETSTR_BASIC_GREEK
         Text[ swedish ] = "Grekisk (standard)";
         Text[ polish ] = "Grecki podstawowy";
         Text[ portuguese_brazilian ] = "Basic Greek";
-        Text[ japanese ] = "基本ｷﾞﾘｼｬ文字";
+        Text[ japanese ] = "基本ギリシャ文字";
         Text[ korean ] = "그리스어 (기본)";
         Text[ chinese_simplified ] = "基本希腊语";
         Text[ chinese_traditional ] = "基本希腊語";
@@ -506,7 +506,7 @@ String RID_SUBSETSTR_GREEK_SYMS_COPTIC
         Text[ swedish ] = "Grekiska symboler och koptiska";
         Text[ polish ] = "Symbole greckie i koptyjskie";
         Text[ portuguese_brazilian ] = "Greek Symbols And Coptic";
-        Text[ japanese ] = "ｷﾞﾘｼｬ記号、ｺﾌﾟﾃｨｯｸ";
+        Text[ japanese ] = "ギリシャ記号、コプティック";
         Text[ korean ] = "그리스 기호와 콥트어";
         Text[ chinese_simplified ] = "希腊符号和古代埃及文";
         Text[ chinese_traditional ] = "希腊符號和埃及古語";
@@ -531,7 +531,7 @@ String RID_SUBSETSTR_CYRILLIC
         Text[ swedish ] = "Kyrillisk";
         Text[ polish ] = "Cyrylica";
         Text[ portuguese_brazilian ] = "Cyrillic";
-        Text[ japanese ] = "ｷﾘﾙ文字";
+        Text[ japanese ] = "キリル文字";
         Text[ korean ] = "키릴어";
         Text[ chinese_simplified ] = "西里尔语";
         Text[ chinese_traditional ] = "西里爾語";
@@ -556,7 +556,7 @@ String RID_SUBSETSTR_ARMENIAN
         Text[ swedish ] = "Armenisk";
         Text[ polish ] = "Arme�ski";
         Text[ portuguese_brazilian ] = "Armenian";
-        Text[ japanese ] = "ｱﾙﾒﾆｱ";
+        Text[ japanese ] = "アルメニア";
         Text[ korean ] = "아르메니아어";
         Text[ chinese_simplified ] = "亚美尼亚语";
         Text[ chinese_traditional ] = "亞美尼亞語";
@@ -581,8 +581,8 @@ String RID_SUBSETSTR_HEBREW_EXTENDED
         Text[ swedish ] = "Hebreisk (standard)";
         Text[ polish ] = "Hebrajski podstawowy";
         Text[ portuguese_brazilian ] = "Basic Hebrew";
-        Text[ japanese ] = "基本ﾍﾌﾞﾗｲ文字";
-        Text[ korean ] = "히브리어 (기본)";
+        Text[ japanese ] = "基本ヘブライ文字";
+        Text[ korean ] = "히브리어(기본)";
         Text[ chinese_simplified ] = "基本希伯来语";
         Text[ chinese_traditional ] = "基本希伯來語";
         Text[ turkish ] = "Basic Hebrew";
@@ -606,8 +606,8 @@ String RID_SUBSETSTR_BASIC_HEBREW
         Text[ swedish ] = "Hebreisk (ut�kad)";
         Text[ polish ] = "Hebrajski rozszerzony";
         Text[ portuguese_brazilian ] = "Hebrew Extended";
-        Text[ japanese ] = "ﾍﾌﾞﾗｲ拡張文字";
-        Text[ korean ] = "히브리어 (확장)";
+        Text[ japanese ] = "ヘブライ拡張文字";
+        Text[ korean ] = "히브리어(확장)";
         Text[ chinese_simplified ] = "希伯来语扩充";
         Text[ chinese_traditional ] = "希伯來語擴充";
         Text[ turkish ] = "Hebrew Extended";
@@ -631,8 +631,8 @@ String RID_SUBSETSTR_BASIC_ARABIC
         Text[ swedish ] = "Arabisk (standard)";
         Text[ polish ] = "Arabski podstawowy";
         Text[ portuguese_brazilian ] = "Basic Arabic";
-        Text[ japanese ] = "基本ｱﾗﾋﾞｱ文字";
-        Text[ korean ] = "아랍어 (기본)";
+        Text[ japanese ] = "基本アラビア文字";
+        Text[ korean ] = "아랍어(기본)";
         Text[ chinese_simplified ] = "基本阿拉伯语";
         Text[ chinese_traditional ] = "基本阿拉伯語";
         Text[ turkish ] = "Basic Arabic";
@@ -656,8 +656,8 @@ String RID_SUBSETSTR_ARABIC_EXTENDED
         Text[ swedish ] = "Arabisk (ut�kad)";
         Text[ polish ] = "Arabski roszerzony";
         Text[ portuguese_brazilian ] = "Arabic Extended";
-        Text[ japanese ] = "ｱﾗﾋﾞｱ拡張文字";
-        Text[ korean ] = "아랍어 (확장)";
+        Text[ japanese ] = "アラビア拡張文字";
+        Text[ korean ] = "아랍어(확장)";
 
         Text[ chinese_simplified ] = "阿拉伯语扩充";
         Text[ chinese_traditional ] = "阿拉伯語擴充";
@@ -682,7 +682,7 @@ String RID_SUBSETSTR_DEVANAGARI
         Text[ swedish ] = "Devanagari";
         Text[ polish ] = "Devanagari";
         Text[ portuguese_brazilian ] = "Devanagari";
-        Text[ japanese ] = "ﾃﾞｰｳﾞｧﾅｰｶﾞﾘｰ";
+        Text[ japanese ] = "デーヴァナーガリー";
         Text[ korean ] = "데바나가리어";
         Text[ chinese_simplified ] = "梵文字母";
         Text[ chinese_traditional ] = "梵文字母";
@@ -707,7 +707,7 @@ String RID_SUBSETSTR_BENGALI
         Text[ swedish ] = "Bengali";
         Text[ polish ] = "Bengalski";
         Text[ portuguese_brazilian ] = "Bengali";
-        Text[ japanese ] = "ﾍﾞﾝｶﾞﾙ";
+        Text[ japanese ] = "ベンガル";
         Text[ korean ] = "벵골어";
         Text[ chinese_simplified ] = "孟加拉语";
         Text[ chinese_traditional ] = "孟加拉人語";
@@ -732,7 +732,7 @@ String RID_SUBSETSTR_GURMUKHI
         Text[ swedish ] = "Gurmukhi";
         Text[ polish ] = "Gurmukhi";
         Text[ portuguese_brazilian ] = "Gurmukhi";
-        Text[ japanese ] = "ｸﾞﾙﾑｷｰ";
+        Text[ japanese ] = "グルムキー";
         Text[ korean ] = "Gurmukhi";
         Text[ chinese_simplified ] = "印度北部的 Gurmukhi 语言";
         Text[ chinese_traditional ] = "印度北部的 Gurmukhi 語言";
@@ -757,7 +757,7 @@ String RID_SUBSETSTR_GUJARATI
         Text[ swedish ] = "Gujarati";
         Text[ polish ] = "Gujarati";
         Text[ portuguese_brazilian ] = "Gujarati";
-        Text[ japanese ] = "ｸﾞｼﾞｬﾗｰﾃｨ";
+        Text[ japanese ] = "グジャラーティ";
         Text[ korean ] = "Gujarati";
         Text[ chinese_simplified ] = "印度北部的 Gujarati 语言";
         Text[ chinese_traditional ] = "印度北部的 Gujarati 語言";
@@ -782,7 +782,7 @@ String RID_SUBSETSTR_ORIYA
         Text[ swedish ] = "Oriya";
         Text[ polish ] = "Oriya";
         Text[ portuguese_brazilian ] = "Oriya";
-        Text[ japanese ] = "ｵﾘﾔｰ";
+        Text[ japanese ] = "オリヤー";
         Text[ korean ] = "오리야어";
         Text[ chinese_simplified ] = "印度北部的 Oriya 语言";
         Text[ chinese_traditional ] = "印度北部的 Oriya 語言";
@@ -807,7 +807,7 @@ String RID_SUBSETSTR_TAMIL
         Text[ swedish ] = "Tamil";
         Text[ polish ] = "Tamilski";
         Text[ portuguese_brazilian ] = "Tamil";
-        Text[ japanese ] = "ﾀﾐﾙ";
+        Text[ japanese ] = "タミル";
         Text[ korean ] = "타밀어";
         Text[ chinese_simplified ] = "坦米尔语";
         Text[ chinese_traditional ] = "坦米爾語";
@@ -833,7 +833,7 @@ String RID_SUBSETSTR_TELUGU
         Text[ swedish ] = "Telugu";
         Text[ polish ] = "Telugu";
         Text[ portuguese_brazilian ] = "Telugu";
-        Text[ japanese ] = "ﾃﾙｸﾞ";
+        Text[ japanese ] = "テルグ";
         Text[ korean ] = "텔루구어";
         Text[ chinese_simplified ] = "印度北部的 Telugu 语言";
         Text[ chinese_traditional ] = "印度北部的 Telugu 語言";
@@ -858,8 +858,8 @@ String RID_SUBSETSTR_KANNADA
         Text[ swedish ] = "Kannada";
         Text[ polish ] = "Kannada";
         Text[ portuguese_brazilian ] = "Kannada";
-        Text[ japanese ] = "ｶﾝﾅﾀﾞ";
-        Text[ korean ] = "Kannada";
+        Text[ japanese ] = "カンナダ";
+        Text[ korean ] = "캐나다어";
         Text[ chinese_simplified ] = "(印度)卡纳达语";
         Text[ chinese_traditional ] = "印度的卡納達語";
         Text[ turkish ] = "Kannada";
@@ -883,7 +883,7 @@ String RID_SUBSETSTR_MALAYALAM
         Text[ swedish ] = "Malajiska";
         Text[ polish ] = "Malajski";
         Text[ portuguese_brazilian ] = "Malayalam";
-        Text[ japanese ] = "ﾏﾗﾔｰﾗﾑ";
+        Text[ japanese ] = "マラヤーラム";
         Text[ korean ] = "말레이시아어";
         Text[ chinese_simplified ] = "印度西南部的Dravidian语的方言";
         Text[ chinese_traditional ] = "印度西南部的Dravidian語的方言";
@@ -908,7 +908,7 @@ String RID_SUBSETSTR_THAI
         Text[ swedish ] = "Thail�ndsk";
         Text[ polish ] = "Tajski";
         Text[ portuguese_brazilian ] = "Thai";
-        Text[ japanese ] = "ﾀｲ";
+        Text[ japanese ] = "タイ";
         Text[ korean ] = "타이랜드어";
         Text[ chinese_simplified ] = "泰语";
         Text[ chinese_traditional ] = "泰語";
@@ -933,7 +933,7 @@ String RID_SUBSETSTR_LAO
         Text[ swedish ] = "Laotisk";
         Text[ polish ] = "Laota�ski";
         Text[ portuguese_brazilian ] = "Lao";
-        Text[ japanese ] = "ﾗｵ";
+        Text[ japanese ] = "ラオ";
         Text[ korean ] = "라오스어";
         Text[ chinese_simplified ] = "老挝语";
         Text[ chinese_traditional ] = "老撾語";
@@ -958,7 +958,7 @@ String RID_SUBSETSTR_BASIC_GEORGIAN
         Text[ swedish ] = "Georgisk (standard)";
         Text[ polish ] = "Gruzi�ski podstawowy";
         Text[ portuguese_brazilian ] = "Basic Georgian";
-        Text[ japanese ] = "基本 ｸﾞﾙｼﾞｱ文字";
+        Text[ japanese ] = "基本 グルジア文字";
         Text[ korean ] = "그루지아어 (기본)";
         Text[ chinese_simplified ] = "基本格鲁吉亚语";
         Text[ chinese_traditional ] = "基本格魯吉亞語";
@@ -976,14 +976,14 @@ String RID_SUBSETSTR_GEORGIAN_EXTENDED
         Text[ russian ] = "����������� ����������";
         Text[ greek ] = "��������� ����������";
         Text[ dutch ] = "Georgisch - uitgebreid";
-        Text[ french ] = "Georgien �tendu";
+        Text[ french ] = "G�orgien �tendu";
         Text[ spanish ] = "Georgiano extendido";
         Text[ italian ] = "Georgiano esteso";
         Text[ danish ] = "Georgian Extended";
         Text[ swedish ] = "Georgisk (standard)";
         Text[ polish ] = "Gruzi�ski rozszerzony";
         Text[ portuguese_brazilian ] = "Georgian Extended";
-        Text[ japanese ] = "ｸﾞﾙｼﾞｱ拡張文字";
+        Text[ japanese ] = "グルジア拡張文字";
         Text[ korean ] = "그루지아어 (확장)";
         Text[ chinese_simplified ] = "格鲁吉亚语扩充";
         Text[ chinese_traditional ] = "格魯吉亞語擴充";
@@ -1008,7 +1008,7 @@ String RID_SUBSETSTR_HANGUL_JAMO
         Text[ swedish ] = "Hangul Jamo";
         Text[ polish ] = "Hangul Jamo";
         Text[ portuguese_brazilian ] = "Hangul Jamo";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ字母";
+        Text[ japanese ] = "ハングル字母";
         Text[ korean ] = "한글 자모";
         Text[ chinese_simplified ] = "韩文 Jamo";
         Text[ chinese_traditional ] = "韓文 Jamo";
@@ -1033,7 +1033,7 @@ String RID_SUBSETSTR_LATIN_EXTENDED_ADDS
         Text[ swedish ] = "Ut�kat latin till�gg";
         Text[ polish ] = "�aci�ski rozszerzony dodatkowy";
         Text[ portuguese_brazilian ] = "Latin Extended Additional";
-        Text[ japanese ] = "ﾗﾃﾝ拡張文字追補";
+        Text[ japanese ] = "ラテン拡張文字追補";
         Text[ korean ] = "라틴어 (확장 추가)";
         Text[ chinese_simplified ] = "拉丁文扩充附加";
         Text[ chinese_traditional ] = "拉丁文擴充附加";
@@ -1058,7 +1058,7 @@ String RID_SUBSETSTR_GREEK_EXTENDED
         Text[ swedish ] = "Grekisk (ut�kad)";
         Text[ polish ] = "Grecki rozszerzony";
         Text[ portuguese_brazilian ] = "Greek Extended";
-        Text[ japanese ] = "ｷﾞﾘｼｬ拡張文字";
+        Text[ japanese ] = "ギリシャ拡張文字";
         Text[ korean ] = "그리스어 (확장)";
         Text[ chinese_simplified ] = "希腊语扩充";
         Text[ chinese_traditional ] = "希腊語擴充";
@@ -1309,10 +1309,10 @@ String RID_SUBSETSTR_CONTROL_PICTURES
         Text[ swedish ] = "Tangentbordssymboler";
         Text[ polish ] = "Symbole klawiaturowe";
         Text[ portuguese_brazilian ] = "Control Pictures";
-        Text[ japanese ] = "ｷｰﾎﾞｰﾄﾞ記号";
+        Text[ japanese ] = "キーボード記号";
         Text[ korean ] = "키보드  기호";
         Text[ chinese_simplified ] = "键盘符号";
-        Text[ chinese_traditional ] = "控製符號";
+        Text[ chinese_traditional ] = "控制符號";
         Text[ turkish ] = "Control Pictures";
         Text[ arabic ] = "������ ������";
         Text[ catalan ] = "S�mbolos del teclado";
@@ -1352,7 +1352,7 @@ String RID_SUBSETSTR_ENCLOSED_ALPHANUM
         Text[ russian ] = "���������� ���������-�������� �������";
         Text[ greek ] = "�������������� ����������";
         Text[ dutch ] = "Ingesloten tekens";
-        Text[ french ] = "Alphanumeriques encercl�s";
+        Text[ french ] = "Alphanum�riques encercl�s";
         Text[ spanish ] = "Caracteres incluidos";
         Text[ italian ] = "Alfanumerici inclusi";
         Text[ danish ] = "Enclosed Alphanumerics";
@@ -1409,7 +1409,7 @@ String RID_SUBSETSTR_BLOCK_ELEMENTS
         Text[ swedish ] = "Blocksymboler";
         Text[ polish ] = "Elementy blokowe";
         Text[ portuguese_brazilian ] = "Block Elements";
-        Text[ japanese ] = "ﾌﾞﾛｯｸ要素";
+        Text[ japanese ] = "ブロック要素";
         Text[ korean ] = "블록 기호";
         Text[ chinese_simplified ] = "方块元素";
         Text[ chinese_traditional ] = "區塊元件";
@@ -1467,7 +1467,7 @@ String RID_SUBSETSTR_MISC_DINGBATS
         Text[ turkish ] = "Miscellaneous Symbols";
         Text[ arabic ] = "���� ������";
         Text[ catalan ] = "Diversos s�mbolos";
-        Text[ finnish ] = "Sekalaiset merkit";
+        Text[ finnish ] = "Sekalaiset symbolit";
     };
 String RID_SUBSETSTR_DINGBATS
 {
@@ -1561,7 +1561,7 @@ String RID_SUBSETSTR_KATAKANA
         Text[ swedish ] = "Katakana";
         Text[ polish ] = "Katakana";
         Text[ portuguese_brazilian ] = "Katakana";
-        Text[ japanese ] = "ｶﾀｶﾅ";
+        Text[ japanese ] = "カタカナ";
         Text[ korean ] = "가다가나";
         Text[ chinese_simplified ] = "片假名";
         Text[ chinese_traditional ] = "片假名";
@@ -1611,7 +1611,7 @@ String RID_SUBSETSTR_HANGUL_COMPAT_JAMO
         Text[ swedish ] = "Hangul-kompatibilitet Jamo";
         Text[ polish ] = "Jambo zgodne z Hangul";
         Text[ portuguese_brazilian ] = "Hangul Compatibility Jamo";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ互換字母";
+        Text[ japanese ] = "ハングル互換字母";
         Text[ korean ] = "한글 호환 자모";
         Text[ chinese_simplified ] = "韩文兼容 Jamo";
         Text[ chinese_traditional ] = "韓文兼容 Jamo";
@@ -1712,7 +1712,7 @@ String RID_SUBSETSTR_HANGUL
         Text[ swedish ] = "Hangul";
         Text[ polish ] = "Hangul";
         Text[ portuguese_brazilian ] = "Hangul";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ";
+        Text[ japanese ] = "ハングル";
         Text[ korean ] = "한글";
         Text[ chinese_simplified ] = "韩文";
         Text[ chinese_traditional ] = "韓文";
@@ -1787,7 +1787,7 @@ String RID_SUBSETSTR_PRIVATE_USE_AREA
         Text[ swedish ] = "Symboler specifika f. teckenupps�ttningar";
         Text[ polish ] = "Symbole specyficzne dla zbioru znak�w";
         Text[ portuguese_brazilian ] = "Private Use Area";
-        Text[ japanese ] = "ﾌﾟﾗｲﾍﾞｰﾄｴﾘｱ";
+        Text[ japanese ] = "プライベートエリア";
         Text[ korean ] = "문자집합 고유의 기호";
         Text[ chinese_simplified ] = "专用区";
         Text[ chinese_traditional ] = "專用區域";
@@ -1837,7 +1837,7 @@ String RID_SUBSETSTR_ALPHA_PRESENTATION
         Text[ swedish ] = "Alfabetiska presentationsformat";
         Text[ polish ] = "Fromy prezentacji alfabetycznej";
         Text[ portuguese_brazilian ] = "Alphabetic Presentation Forms";
-        Text[ japanese ] = "ｱﾙﾌｧﾍﾞｯﾄ表示形";
+        Text[ japanese ] = "アルファベット表示形";
         Text[ korean ] = "알파벳 프리젠테이션 형식";
         Text[ chinese_simplified ] = "字母的演示形式";
         Text[ chinese_traditional ] = "字母演示圖樣";
@@ -1863,7 +1863,7 @@ String RID_SUBSETSTR_ARABIC_PRESENT_A
         Text[ swedish ] = "Arabiskt presentationsformat-A";
         Text[ polish ] = "Arabskie formy prezentacyjne-A";
         Text[ portuguese_brazilian ] = "Arabic Presentation Forms-A";
-        Text[ japanese ] = "ｱﾗﾋﾞｱ表示形 A";
+        Text[ japanese ] = "アラビア表示形 A";
         Text[ korean ] = "아랍어 프리젠테이션 유형-A";
         Text[ chinese_simplified ] = "阿拉伯演示形式 A";
         Text[ chinese_traditional ] = "阿拉伯演示圖樣-A";
@@ -1964,7 +1964,7 @@ String RID_SUBSETSTR_ARABIC_PRESENT_B
         Text[ swedish ] = "Arabiskt presentationsformat-B";
         Text[ polish ] = "Arabskie formy prezenacyjne-B";
         Text[ portuguese_brazilian ] = "Arabic Presentation Forms-B";
-        Text[ japanese ] = "ｱﾗﾋﾞｱ表示形 B";
+        Text[ japanese ] = "アラビア表示形 B";
         Text[ korean ] = "아랍어 프리젠테이션 유형-B";
         Text[ chinese_simplified ] = "阿拉伯演示形式 B";
         Text[ chinese_traditional ] = "阿拉伯演示圖樣-B";
@@ -1996,7 +1996,7 @@ String RID_SUBSETSTR_HALFW_FULLW_FORMS
         Text[ turkish ] = "Halfwidth And Fullwidth Forms";
         Text[ arabic ] = "����� ���� ����� ����� ���� ����";
         Text[ catalan ] = "Formas anchas y medio anchas";
-        Text[ finnish ] = "Puoli- ja t�ysilevyiset lomakkeet";
+        Text[ finnish ] = "Puolileve�t ja t�ysleve�t lomakkeet";
     };
 String RID_SUBSETSTR_SPECIALS
 {
@@ -2039,7 +2039,7 @@ String RID_SUBSETSTR_HANGUL_GA
         Text[ swedish ] = "Hangul Ga";
         Text[ polish ] = "Hangul Ga";
         Text[ portuguese_brazilian ] = "Hangul Ga";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ Ga";
+        Text[ japanese ] = "ハングル Ga";
         Text[ korean ] = "한글 가";
         Text[ chinese_simplified ] = "韩文 Ga";
         Text[ chinese_traditional ] = "韓文 Ga";
@@ -2064,7 +2064,7 @@ String RID_SUBSETSTR_HANGUL_NA
         Text[ swedish ] = "Hangul Na";
         Text[ polish ] = "Hangul Na";
         Text[ portuguese_brazilian ] = "Hangul Na";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ Na";
+        Text[ japanese ] = "ハングル Na";
         Text[ korean ] = "한글 나";
         Text[ chinese_simplified ] = "韩文 Na";
         Text[ chinese_traditional ] = "韓文 Na";
@@ -2089,7 +2089,7 @@ String RID_SUBSETSTR_HANGUL_DA
         Text[ swedish ] = "Hangul Da";
         Text[ polish ] = "Hangul Da";
         Text[ portuguese_brazilian ] = "Hangul Da";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ Da";
+        Text[ japanese ] = "ハングル Da";
         Text[ korean ] = "한글 다";
         Text[ chinese_simplified ] = "韩文 Da";
         Text[ chinese_traditional ] = "韓文 Da";
@@ -2114,7 +2114,7 @@ String RID_SUBSETSTR_HANGUL_RA
         Text[ swedish ] = "Hangul Ra";
         Text[ polish ] = "Hangul Ra";
         Text[ portuguese_brazilian ] = "Hangul Ra";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ Ra";
+        Text[ japanese ] = "ハングル Ra";
         Text[ korean ] = "한글 라";
         Text[ chinese_simplified ] = "韩文 Ra";
         Text[ chinese_traditional ] = "韓文 Ra";
@@ -2139,7 +2139,7 @@ String RID_SUBSETSTR_HANGUL_MA
         Text[ swedish ] = "Hangul Ma";
         Text[ polish ] = "Hangul Ma";
         Text[ portuguese_brazilian ] = "Hangul Ma";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ Ma";
+        Text[ japanese ] = "ハングル Ma";
         Text[ korean ] = "한글 마";
         Text[ chinese_simplified ] = "韩文 Ma";
         Text[ chinese_traditional ] = "韓文 Ma";
@@ -2164,7 +2164,7 @@ String RID_SUBSETSTR_HANGUL_BA
         Text[ swedish ] = "Hangul Ba";
         Text[ polish ] = "Hangul Ba";
         Text[ portuguese_brazilian ] = "Hangul Ba";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ Ba";
+        Text[ japanese ] = "ハングル Ba";
         Text[ korean ] = "한글 바";
         Text[ chinese_simplified ] = "韩文 Ba";
         Text[ chinese_traditional ] = "韓文 Ba";
@@ -2189,7 +2189,7 @@ String RID_SUBSETSTR_HANGUL_SA
         Text[ swedish ] = "Hangul Sa";
         Text[ polish ] = "Hangul Sa";
         Text[ portuguese_brazilian ] = "Hangul Sa";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ Sa";
+        Text[ japanese ] = "ハングル Sa";
         Text[ korean ] = "한글 사";
         Text[ chinese_simplified ] = "韩文 Sa";
         Text[ chinese_traditional ] = "韓文 Sa";
@@ -2214,7 +2214,7 @@ String RID_SUBSETSTR_HANGUL_AH
         Text[ swedish ] = "Hangul Ah";
         Text[ polish ] = "Hangul Ah";
         Text[ portuguese_brazilian ] = "Hangul Ah";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ Ah";
+        Text[ japanese ] = "ハングル Ah";
         Text[ korean ] = "한글 아";
         Text[ chinese_simplified ] = "韩文 Ah";
         Text[ chinese_traditional ] = "韓文 Ah";
@@ -2239,7 +2239,7 @@ String RID_SUBSETSTR_HANGUL_JA
         Text[ swedish ] = "Hangul Ja";
         Text[ polish ] = "Hangul Ja";
         Text[ portuguese_brazilian ] = "Hangul Ja";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ Ja";
+        Text[ japanese ] = "ハングル Ja";
         Text[ korean ] = "한글 자";
         Text[ chinese_simplified ] = "韩文 Ja";
         Text[ chinese_traditional ] = "韓文 Ja";
@@ -2264,7 +2264,7 @@ String RID_SUBSETSTR_HANGUL_CHA
         Text[ swedish ] = "Hangul Cha";
         Text[ polish ] = "Hangul Cha";
         Text[ portuguese_brazilian ] = "Hangul Cha";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ Cha";
+        Text[ japanese ] = "ハングル Cha";
         Text[ korean ] = "한글 차";
         Text[ chinese_simplified ] = "韩文 Cha";
         Text[ chinese_traditional ] = "韓文 Cha";
@@ -2289,7 +2289,7 @@ String RID_SUBSETSTR_HANGUL_KA
         Text[ swedish ] = "Hangul Ka";
         Text[ polish ] = "Hangul Ka";
         Text[ portuguese_brazilian ] = "Hangul Ka";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ Ka";
+        Text[ japanese ] = "ハングル Ka";
         Text[ korean ] = "한글 가";
         Text[ chinese_simplified ] = "韩文 Ka";
         Text[ chinese_traditional ] = "韓文 Ka";
@@ -2314,7 +2314,7 @@ String RID_SUBSETSTR_HANGUL_TA
         Text[ swedish ] = "Hangul Ta";
         Text[ polish ] = "Hangul Ta";
         Text[ portuguese_brazilian ] = "Hangul Ta";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ Ta";
+        Text[ japanese ] = "ハングル Ta";
         Text[ korean ] = "한글 타";
         Text[ chinese_simplified ] = "韩文 Ta";
         Text[ chinese_traditional ] = "韓文 Ta";
@@ -2339,7 +2339,7 @@ String RID_SUBSETSTR_HANGUL_PA
         Text[ swedish ] = "Hangul Pa";
         Text[ polish ] = "Hangul Pa";
         Text[ portuguese_brazilian ] = "Hangul Pa";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ Pa";
+        Text[ japanese ] = "ハングル Pa";
         Text[ korean ] = "한글 파";
         Text[ chinese_simplified ] = "韩文 Pa";
         Text[ chinese_traditional ] = "韓文 Pa";
@@ -2364,7 +2364,7 @@ String RID_SUBSETSTR_HANGUL_HA
         Text[ swedish ] = "Hangul Ha";
         Text[ polish ] = "Hangul Ha";
         Text[ portuguese_brazilian ] = "Hangul Ha";
-        Text[ japanese ] = "ﾊﾝｸﾞﾙ Ha";
+        Text[ japanese ] = "ハングル Ha";
         Text[ korean ] = "한글 하";
         Text[ chinese_simplified ] = "韩文 Ha";
         Text[ chinese_traditional ] = "韓文 Ha";
@@ -2464,7 +2464,7 @@ String RID_SUBSETSTR_MYANMAR
         Text[ swedish ] = "Myanmar";
         Text[ polish ] = "Myanmar";
         Text[ portuguese_brazilian ] = "Myanmar";
-        Text[ japanese ] = "ﾐｬﾝﾏｰ";
+        Text[ japanese ] = "ミャンマー";
         Text[ korean ] = "미얀마어";
         Text[ chinese_simplified ] = "缅甸语";
         Text[ chinese_traditional ] = "緬甸語";
@@ -2489,7 +2489,7 @@ String RID_SUBSETSTR_KHMER
         Text[ swedish ] = "Khmer";
         Text[ polish ] = "Khmerski";
         Text[ portuguese_brazilian ] = "Khmer";
-        Text[ japanese ] = "ｸﾒｰﾙ";
+        Text[ japanese ] = "クメール";
         Text[ korean ] = "크메르어";
         Text[ chinese_simplified ] = "谷美尔语";
         Text[ chinese_traditional ] = "谷美爾語";
@@ -2665,7 +2665,7 @@ String RID_SUBSETSTR_CANADIAN_ABORIGINAL
         Text[ swedish ] = "Kanadensiska aboriginstavelser";
         Text[ polish ] = "Kanadyjskie sylaby aborygen�w";
         Text[ portuguese_brazilian ] = "Canadian Aboriginal Syllables";
-        Text[ japanese ] = "ｶﾅﾃﾞｨｱﾝ原住民音節文字";
+        Text[ japanese ] = "カナディアン原住民音節文字";
         Text[ korean ] = "캐나다 토착 음절";
         Text[ chinese_simplified ] = "加拿大土著语的音节";
         Text[ chinese_traditional ] = "加拿大土著人的語言字母";
@@ -2690,7 +2690,7 @@ String RID_SUBSETSTR_MONGOLIAN
         Text[ swedish ] = "Mongoliska";
         Text[ polish ] = "Mongolski";
         Text[ portuguese_brazilian ] = "Mongolian";
-        Text[ japanese ] = "ﾓﾝｺﾞﾙ";
+        Text[ japanese ] = "モンゴル";
         Text[ korean ] = "몽고어";
         Text[ chinese_simplified ] = "蒙古语";
         Text[ chinese_traditional ] = "蒙古語";
@@ -2702,6 +2702,7 @@ String RID_SUBSETSTR_MONGOLIAN
 };
 
 // ********************************************************************** EOF
+
 
 
 
