@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:57:54 $
+ *  last change: $Author: dr $ $Date: 2003-07-28 10:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,7 +795,7 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
 
                 const SfxPoolItem* pItem;
                 if( (aSel.nStartPos + 1 == aSel.nEndPos) &&     // fields are single characters
-                    (aItemSet.GetItemState( EE_FEATURE_FIELD, sal_False, &pItem ) == SFX_ITEM_SET) )
+                    (aEditSet.GetItemState( EE_FEATURE_FIELD, sal_False, &pItem ) == SFX_ITEM_SET) )
                 {
                     if( const SvxFieldData* pFieldData = static_cast< const SvxFieldItem* >( pItem )->GetField() )
                     {
