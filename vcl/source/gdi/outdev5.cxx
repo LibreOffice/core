@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev5.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:33:31 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:22:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,20 +61,12 @@
 
 #define _SV_OUTDEV_CXX
 #include <tools/ref.hxx>
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
-#endif
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
-#endif
-#else
-#ifndef _SV_RMOUTDEV_HXX
-#include <rmoutdev.hxx>
-#endif
 #endif
 
 #ifndef _DEBUG_HXX
@@ -132,7 +124,6 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
     nHorzRound = ImplLogicWidthToDevicePixel( nHorzRound );
     nVertRound = ImplLogicHeightToDevicePixel( nVertRound );
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if ( !mpGraphics )
     {
@@ -166,20 +157,6 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
                 mpGraphics->DrawPolygon( aRoundRectPoly.GetSize(), pPtAry, this );
         }
     }
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-    {
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-        if ( mbInitFillColor )
-            ImplInitFillColor();
-        if ( !nHorzRound || !nVertRound )
-            pGraphics->DrawRect( aRect );
-        else
-            pGraphics->DrawRect( aRect, nHorzRound, nVertRound );
-    }
-#endif
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawRect( rRect, nHorzRound, nVertRound );
@@ -202,7 +179,6 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
     if ( aRect.IsEmpty() )
         return;
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if ( !mpGraphics )
     {
@@ -231,17 +207,6 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
             mpGraphics->DrawPolygon( aRectPoly.GetSize(), pPtAry, this );
         }
     }
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-    {
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-        if ( mbInitFillColor )
-            ImplInitFillColor();
-        pGraphics->DrawEllipse( aRect );
-    }
-#endif
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawEllipse( rRect );
@@ -265,7 +230,6 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
     if ( aRect.IsEmpty() )
         return;
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if ( !mpGraphics )
     {
@@ -290,19 +254,6 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
         const SalPoint* pPtAry = (const SalPoint*)aArcPoly.GetConstPointAry();
         mpGraphics->DrawPolyLine( aArcPoly.GetSize(), pPtAry, this );
     }
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-    {
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-        if ( mbInitFillColor )
-            ImplInitFillColor();
-        pGraphics->DrawArc( aRect,
-                            ImplLogicToDevicePixel( rStartPt ),
-                            ImplLogicToDevicePixel( rEndPt ) );
-    }
-#endif
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawArc( rRect, rStartPt, rEndPt );
@@ -326,7 +277,6 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
     if ( aRect.IsEmpty() )
         return;
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if ( !mpGraphics )
     {
@@ -358,19 +308,6 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
             mpGraphics->DrawPolygon( aPiePoly.GetSize(), pPtAry, this );
         }
     }
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-    {
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-        if ( mbInitFillColor )
-            ImplInitFillColor();
-        pGraphics->DrawPie( aRect,
-                            ImplLogicToDevicePixel( rStartPt ),
-                            ImplLogicToDevicePixel( rEndPt ) );
-    }
-#endif
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPie( rRect, rStartPt, rEndPt );
@@ -394,7 +331,6 @@ void OutputDevice::DrawChord( const Rectangle& rRect,
     if ( aRect.IsEmpty() )
         return;
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if ( !mpGraphics )
     {
@@ -426,19 +362,6 @@ void OutputDevice::DrawChord( const Rectangle& rRect,
             mpGraphics->DrawPolygon( aChordPoly.GetSize(), pPtAry, this );
         }
     }
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-    {
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-        if ( mbInitFillColor )
-            ImplInitFillColor();
-        pGraphics->DrawChord( aRect,
-                              ImplLogicToDevicePixel( rStartPt ),
-                              ImplLogicToDevicePixel( rEndPt ) );
-    }
-#endif
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawChord( rRect, rStartPt, rEndPt );
