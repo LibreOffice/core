@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-01-26 13:22:20 $
+ *  last change: $Author: os $ $Date: 2001-02-02 11:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1176,6 +1176,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
     SwWrtShell& rSh = pView->GetWrtShell();
 
     Reference< sdbc::XRow > xRow(xResultSet, UNO_QUERY);
+
     BOOL bScrollable;
     //with the drag and drop interface no result set is initially available
     Reference< sdbc::XStatement > xStatement;
@@ -1197,7 +1198,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
                 xResultSet = xStatement->executeQuery(aDBData.sStatement);
             xRow = Reference< sdbc::XRow >(xResultSet, UNO_QUERY);
         }
-        catch(Exception aExcept)
+        catch(Exception& aExcept)
         {
             DBG_ERROR("exception caught")
         }
