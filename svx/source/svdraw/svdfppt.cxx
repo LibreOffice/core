@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-09 12:54:23 $
+ *  last change: $Author: sj $ $Date: 2001-02-09 15:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2256,12 +2256,13 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 sal_uInt16  nParaIndex = (UINT16)pTextObj->GetCurrentIndex();
                 SfxStyleSheet* pS = ( ppStyleSheetAry ) ? ppStyleSheetAry[ pPara->pParaSet->mnDepth ] : pSheet;
 
-                rOutliner.Insert( String( pParaText, (UINT16)nCurrentIndex ), nParaIndex, pPara->GetLevel() );
+                ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
+                rOutliner.Insert( String(), nParaIndex, pPara->GetLevel() );
+                rOutliner.QuickInsertText( String( pParaText, (UINT16)nCurrentIndex ), aSelection );
                 rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
                 if ( pS )
                     rOutliner.SetStyleSheet( nParaIndex, pS );
 
-                ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
                 for ( pPortion = pPara->First(); pPortion; pPortion = pPara->Next() )
                 {
                     SfxItemSet aPortionAttribs( rOutliner.GetEmptyItemSet() );
