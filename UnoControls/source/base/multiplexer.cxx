@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multiplexer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:11:17 $
+ *  last change: $Author: rt $ $Date: 2001-12-07 16:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ Any SAL_CALL OMRCListenerMultiplexerHelper::queryInterface( const Type& rType ) 
 //  XInterface
 //____________________________________________________________________________________________________________
 
-void SAL_CALL OMRCListenerMultiplexerHelper::acquire() throw( RuntimeException )
+void SAL_CALL OMRCListenerMultiplexerHelper::acquire() throw()
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -199,7 +199,7 @@ void SAL_CALL OMRCListenerMultiplexerHelper::acquire() throw( RuntimeException )
 //  XInterface
 //____________________________________________________________________________________________________________
 
-void SAL_CALL OMRCListenerMultiplexerHelper::release() throw( RuntimeException )
+void SAL_CALL OMRCListenerMultiplexerHelper::release() throw()
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
