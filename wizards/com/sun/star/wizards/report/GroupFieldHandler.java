@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupFieldHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $Date: 2004/04/23 13:04:32 $
+ *  last change: $Author: vg $Date$
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,7 +57,6 @@
  *  Contributor(s): _______________________________________
  *
  */
-
 package com.sun.star.wizards.report;
 
 import com.sun.star.wizards.ui.*;
@@ -145,7 +144,6 @@ WizardDialog oWizardDialog;
             String[] CurGroupNames = xFieldsListBox.getItems();
             CurReportDocument.addGroupNametoDocument(CurGroupNames, CurGroupTitle, GroupFieldVector, ReportWizard.ReportPath, iSelCount);
             CurUnoDialog.setControlProperty("lblBlindTextNote_1", "Enabled", new Boolean(true));
-            oWizardDialog.setStepEnabled(ReportWizard.SOSORTPAGE, (xFieldsListBox.getItemCount() > 0));
         }
 
         public void shiftFromRightToLeft(String[] OldSelitems, String[] Newitems){
@@ -156,7 +154,6 @@ WizardDialog oWizardDialog;
                 CurReportDocument.removeGroupName(NewSelList, OldGroupTitle, GroupFieldVector);
                 String[] NewSelGroupNames = xSelFieldsListBox.getItems();
                 CurUnoDialog.setControlProperty("lblBlindTextNote_1", "Enabled", new Boolean(NewSelGroupNames.length == 0));
-                oWizardDialog.setStepEnabled(ReportWizard.SOSORTPAGE, (xFieldsListBox.getItemCount() > 0));
             }
         }
 
