@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:29:20 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 14:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,7 +613,6 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
                 DEFINE_CONST_UNICODE("Title"),
                 makeAny(::rtl::OUString(SfxResId(STR_HELP_WINDOW_TITLE))));
 
-        xParentWindow->setPosSize(50, 50, 300, 200, ::com::sun::star::awt::PosSize::SIZE);
         pHelpWindow->setContainerWindow( xParentWindow );
         xParentWindow->setVisible(sal_True);
         xHelpWindow->setVisible(sal_True);
@@ -638,11 +637,11 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
     // check if its an URL or a jump mark!
     String          aHelpURL(rURL    );
     INetURLObject   aParser (aHelpURL);
-    ::rtl::OUString sJumpMark;
-    if (aParser.GetProtocol() != INET_PROT_VND_SUN_STAR_HELP)
+    ::rtl::OUString sKeyword;
+    if ( aParser.GetProtocol() != INET_PROT_VND_SUN_STAR_HELP )
     {
         aHelpURL  = CreateHelpURL_Impl( 0, GetHelpModuleName_Impl( 0 ) );
-        sJumpMark = ::rtl::OUString( rURL );
+        sKeyword = ::rtl::OUString( rURL );
     }
 
     Reference < XFrame > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
@@ -672,19 +671,13 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
     if (!xHelp.is() || !xHelpContent.is() || !pHelpWindow)
         return FALSE;
 
-    Sequence< PropertyValue > aArgs;
-    if (sJumpMark.getLength() > 0)
-    {
-        aArgs.realloc(1);
-        aArgs[0].Name    = DEFINE_CONST_UNICODE("HelpKeyword");
-        aArgs[0].Value <<= sJumpMark;
-    }
-
     pHelpWindow->SetHelpURL( aHelpURL );
     pHelpWindow->loadHelpContent(aHelpURL);
+    if ( sKeyword.getLength() > 0 )
+        pHelpWindow->OpenKeyword( sKeyword );
 
-    Reference < ::com::sun::star::awt::XTopWindow > xTopWindow(xHelp->getContainerWindow(), UNO_QUERY);
-    if (xTopWindow.is())
+    Reference < ::com::sun::star::awt::XTopWindow > xTopWindow( xHelp->getContainerWindow(), UNO_QUERY );
+    if ( xTopWindow.is() )
         xTopWindow->toFront();
 
     return TRUE;
