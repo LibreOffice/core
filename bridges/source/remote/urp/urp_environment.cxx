@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-14 09:57:58 $
+ *  last change: $Author: jbu $ $Date: 2001-07-04 14:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 
 #include <rtl/alloc.h>
 #include <rtl/uuid.h>
+#include <rtl/unload.h>
 
 #include <uno/environment.h>
 #include <uno/lbnames.h>
@@ -99,6 +100,7 @@ using namespace ::com::sun::star::uno;
 
 namespace bridges_urp
 {
+rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
 //  static void dumpProperties( struct Properties *p )
 //  {
@@ -396,7 +398,9 @@ void RemoteEnvironment::thisDisposing( uno_Environment *pEnvRemote )
 
      uno_threadpool_destroy( pImpl->m_hThreadPool );
 
+    delete pImpl;
     pContext->aBase.release( (uno_Context * ) pContext );
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 #ifdef DEBUG
       thisCounter.release();
 #endif
@@ -427,6 +431,7 @@ using namespace bridges_urp;
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment(
     uno_Environment * pEnvRemote )
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     // set C-virtual methods
     pEnvRemote->environmentDisposing = RemoteEnvironment::thisDisposing;
     pEnvRemote->pExtEnv->computeObjectIdentifier = RemoteEnvironment::thisComputeObjectIdentifier;
@@ -575,4 +580,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_ext_getMapping(
     }
 }
 
-
+extern "C" sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
