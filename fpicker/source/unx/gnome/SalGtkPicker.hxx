@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkPicker.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:08:43 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 09:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,18 @@ class SalGtkPicker
         virtual rtl::OUString SAL_CALL implgetDisplayDirectory(  )
             throw( com::sun::star::uno::RuntimeException );
 
+};
+
+class RunDialog
+{
+private:
+    bool bFinished;
+    gint mnStatus;
+    GtkWidget *m_pDialog;
+public:
+    void run();
+    RunDialog(GtkWidget *pDialog) : bFinished(false), m_pDialog(pDialog) { }
+    gint runandwaitforresult();
 };
 
 #endif
