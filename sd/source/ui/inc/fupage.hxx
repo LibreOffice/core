@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:07:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,12 @@
 #include "fupoor.hxx"
 #endif
 
+class SfxItemSet;
+class SdBackgroundObjUndoAction;
+class SdPage;
+
 namespace sd {
+class DrawViewShell;
 
 class FuPage
     : public FuPoor
@@ -80,10 +85,24 @@ class FuPage
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq );
-    virtual ~FuPage (void) {}
+    virtual ~FuPage (void);
 
-    virtual void Activate() {}         // Function aktivieren
-    virtual void Deactivate() {}           // Function deaktivieren
+    virtual void Activate();           // Function aktivieren
+    virtual void Deactivate();         // Function deaktivieren
+
+    const SfxItemSet* ExecuteDialog( Window* pParent );
+    void ApplyItemSet( const SfxItemSet* pArgs );
+
+private:
+    SfxRequest&                 mrReq;
+    const SfxItemSet*           mpArgs;
+    SdBackgroundObjUndoAction*  mpBackgroundObjUndoAction;
+    Size                        maSize;
+    bool                        mbPageBckgrdDeleted;
+    bool                        mbMasterPage;
+    bool                        mbDisplayBackgroundTabPage;
+    SdPage*                     mpPage;
+    DrawViewShell*              mpDrawViewShell;
 };
 
 } // end of namespace sd
