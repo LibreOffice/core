@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpopup.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-27 13:10:41 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,13 +244,14 @@ SvxFieldData* SdFieldPopup::GetField()
         const SvxDateField* pDateField = (const SvxDateField*) pField;
         SvxDateType   eType;
         SvxDateFormat eFormat;
+        USHORT i;
 
         if( IsItemChecked( 1 ) )
             eType = SVXDATETYPE_FIX;
         else
             eType = SVXDATETYPE_VAR;
 
-        for( USHORT i = 3; i <= nCount; i++ )
+        for( i = 3; i <= nCount; i++ )
         {
             if( IsItemChecked( i ) )
                 break;
@@ -276,13 +277,14 @@ SvxFieldData* SdFieldPopup::GetField()
         const SvxExtTimeField* pTimeField = (const SvxExtTimeField*) pField;
         SvxTimeType   eType;
         SvxTimeFormat eFormat;
+        USHORT i;
 
         if( IsItemChecked( 1 ) )
             eType = SVXTIMETYPE_FIX;
         else
             eType = SVXTIMETYPE_VAR;
 
-        for( USHORT i = 3; i <= nCount; i++ )
+        for( i = 3; i <= nCount; i++ )
         {
             if( IsItemChecked( i ) )
                 break;
@@ -309,13 +311,14 @@ SvxFieldData* SdFieldPopup::GetField()
         const SvxExtFileField* pFileField = (const SvxExtFileField*) pField;
         SvxFileType   eType;
         SvxFileFormat eFormat;
+        USHORT i;
 
         if( IsItemChecked( 1 ) )
             eType = SVXFILETYPE_FIX;
         else
             eType = SVXFILETYPE_VAR;
 
-        for( USHORT i = 3; i <= nCount; i++ )
+        for( i = 3; i <= nCount; i++ )
         {
             if( IsItemChecked( i ) )
                 break;
@@ -348,13 +351,14 @@ SvxFieldData* SdFieldPopup::GetField()
         const SvxAuthorField* pAuthorField = (const SvxAuthorField*) pField;
         SvxAuthorType   eType;
         SvxAuthorFormat eFormat;
+        USHORT i;
 
         if( IsItemChecked( 1 ) )
             eType = SVXAUTHORTYPE_FIX;
         else
             eType = SVXAUTHORTYPE_VAR;
 
-        for( USHORT i = 3; i <= nCount; i++ )
+        for( i = 3; i <= nCount; i++ )
         {
             if( IsItemChecked( i ) )
                 break;
