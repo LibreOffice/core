@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-08 19:06:46 $
+ *  last change: $Author: mib $ $Date: 2001-11-22 19:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,28 @@ void SwXMLExport::_ExportAutoStyles()
     // The order in which styles are collected *MUST* be the same as
     // the order in which they are exported. Otherwise, caching will
     // fail.
+
+    if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
+    {
+        if( (getExportFlags() & EXPORT_CONTENT) == 0 )
+        {
+            // only master pages are exported => styles for frames bound
+            // to frames (but none for frames bound to pages) need to be
+            // collected.
+            GetTextParagraphExport()->collectFramesBoundToFrameAutoStyles(
+                                                bShowProgress );
+        }
+        else
+        {
+            // content (and optional master pages) are exported => styles
+            // for frames bound to frame or to pages need to be
+            // collected.
+            GetTextParagraphExport()->collectFramesBoundToPageOrFrameAutoStyles(
+                                                bShowProgress );
+        }
+
+    }
+
     // exported in _ExportMasterStyles
     if( (getExportFlags() & EXPORT_MASTERSTYLES) != 0 )
         GetPageExport()->collectAutoStyles( sal_False );
@@ -306,7 +328,6 @@ void SwXMLExport::_ExportAutoStyles()
                 GetFormExport()->examineForms(xPage);
         }
 
-        GetTextParagraphExport()->collectFrameBoundToPageAutoStyles( bShowProgress );
         GetTextParagraphExport()->collectTextAutoStyles( xText, bShowProgress );
     }
 
