@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-10 08:23:32 $
+ *  last change: $Author: oj $ $Date: 2002-05-22 11:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2750,6 +2750,8 @@ void OQueryDesignView::GetFocus()
     OQueryView::GetFocus();
     if ( m_pSelectionBox && !m_pSelectionBox->HasChildPathFocus() )
     {
+        // first we have to deactivate the current cell to refill when nescessary
+        m_pSelectionBox->DeactivateCell();
         m_pSelectionBox->ActivateCell(m_pSelectionBox->GetCurRow(), m_pSelectionBox->GetCurColumnId());
         m_pSelectionBox->GrabFocus();
     }
