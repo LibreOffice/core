@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementformatter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 13:55:02 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,20 @@ void ElementFormatter::prepareElement(ElementInfo const& _aInfo)
     addName(_aInfo.name);
     addNodeFlags(_aInfo.flags);
     addOperation(_aInfo.op);
+}
+// -----------------------------------------------------------------------------
+
+void ElementFormatter::prepareSimpleElement(ElementType::Enum _eType)
+{
+    if (!m_xAttributes.is())
+    {
+        m_xAttributes.set( new AttributeListImpl() );
+        addNamespaces();
+    }
+    else
+        m_xAttributes->clear();
+
+    m_aElementType = _eType;
 }
 // -----------------------------------------------------------------------------
 

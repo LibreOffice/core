@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerwriter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 13:55:02 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,10 +166,13 @@ namespace configmgr
             void writeValue(uno::Any const & _aValue);
             void writeValue(uno::Any const & _aValue, OUString const & _aLocale);
 
+            void outputValue(uno::Any const & _aValue);
+
             void raiseMalformedDataException(sal_Char const * pMsg);
             void raiseIllegalTypeException(sal_Char const * pMsg);
         private:
             typedef std::stack< OUString > TagStack;
+            uno::Reference< uno::XInterface > m_xTCV;
             TagStack            m_aTagStack;
             ElementFormatter    m_aFormatter;
             uno::Type           m_aPropertyType;

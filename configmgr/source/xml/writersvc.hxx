@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writersvc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 13:55:02 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ namespace configmgr
         {
         public:
             typedef uno::Reference< lang::XMultiServiceFactory > const & CreationArg;
+            typedef uno::Reference< lang::XMultiServiceFactory >    ServiceFactory;
 
             explicit
             WriterService(CreationArg _xServiceFactory);
@@ -147,7 +148,6 @@ namespace configmgr
 
         protected:
             typedef uno::Reference< sax::XDocumentHandler >         SaxHandler;
-            typedef uno::Reference< lang::XMultiServiceFactory >    ServiceFactory;
 
             ServiceFactory getServiceFactory() const
             { return m_xServiceFactory; }

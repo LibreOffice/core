@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: jb $ $Date: 2002-05-27 10:39:04 $
+#   last change: $Author: jb $ $Date: 2002-05-28 15:43:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,6 +107,7 @@ SLOFILES=\
     $(SLO)$/parsersvc.obj \
     $(SLO)$/writersvc.obj \
     $(SLO)$/layerwriter.obj \
+    $(SLO)$/valueformatter.obj \
     $(SLO)$/xmlstrings.obj \
 
 # --- Targets ---

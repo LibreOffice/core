@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementformatter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:39:04 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@ namespace configmgr
 
             /// resets the formatter for a new element type
             void prepareElement(ElementInfo const& _aInfo);
+
+            /// resets the formatter for a new element type
+            void prepareSimpleElement(ElementType::Enum _eType);
 
             /// sets the instantiated type of a set item,
             void addInstanceType(OUString const & _aElementType, OUString const & _aElementTypeModule);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerwriter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:39:04 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #ifndef CONFIGMGR_API_FACTORY_HXX_
 #include "confapifactory.hxx"
 #endif
+
+#ifndef CONFIGMGR_XML_VALUEFORMATTER_HXX
+#include "valueformatter.hxx"
+#endif
 // -----------------------------------------------------------------------------
 
 namespace configmgr
@@ -83,8 +87,32 @@ uno::Reference< uno::XInterface > SAL_CALL instantiateLayerWriter
 }
 // -----------------------------------------------------------------------------
 
+namespace
+{
+    typedef uno::Reference< script::XTypeConverter > TypeConverter;
+
+    static inline
+    uno::Reference< uno::XInterface > createTCV(LayerWriter::ServiceFactory const & _xSvcFactory)
+    {
+        OSL_ENSURE(_xSvcFactory.is(),"Cannot create Write Formatter without a ServiceManager");
+
+        static const rtl::OUString k_sTCVService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"));
+
+        return TypeConverter::query(_xSvcFactory->createInstance(k_sTCVService));
+    }
+
+    static inline
+    TypeConverter asTCV(uno::Reference< uno::XInterface > const & _xTCV)
+    {
+        OSL_ASSERT(TypeConverter::query(_xTCV).get() == _xTCV.get());
+        return static_cast< script::XTypeConverter * >(_xTCV.get());
+    }
+}
+// -----------------------------------------------------------------------------
+
 LayerWriter::LayerWriter(ServiceFactory const & _xSvcFactory)
 : LayerWriterService_Base(_xSvcFactory)
+, m_xTCV( createTCV(_xSvcFactory) )
 , m_bInProperty(false)
 {
 }
@@ -323,6 +351,8 @@ void LayerWriter::endElement()
     OSL_ASSERT(!m_aTagStack.empty()); // checks done elsewhere
 
     getWriteHandler()->endElement(m_aTagStack.top());
+    getWriteHandler()->ignorableWhitespace(OUString());
+
     m_aTagStack.pop();
     m_bInProperty = false;
 }
@@ -330,11 +360,35 @@ void LayerWriter::endElement()
 
 void LayerWriter::writeValue(uno::Any const & _aValue)
 {
+    m_aFormatter.prepareSimpleElement( ElementType::value );
+    outputValue(_aValue);
 }
 // -----------------------------------------------------------------------------
 
 void LayerWriter::writeValue(uno::Any const & _aValue, OUString const & _aLocale)
 {
+    m_aFormatter.prepareSimpleElement( ElementType::value );
+    m_aFormatter.addLanguage(_aLocale);
+    outputValue(_aValue);
+}
+// -----------------------------------------------------------------------------
+
+void LayerWriter::outputValue(uno::Any const & _aValue)
+{
+    ValueFormatter aValueFormatter(_aValue);
+
+    aValueFormatter.addValueAttributes(m_aFormatter);
+
+    OUString sTag       = m_aFormatter.getElementTag();
+    OUString sContent   = aValueFormatter.getContent( asTCV(this->m_xTCV) );
+
+    SaxHandler xOut = getWriteHandler();
+    xOut->startElement(sTag, m_aFormatter.getElementAttributes());
+
+    if (sContent.getLength()) xOut->characters(sContent);
+
+    xOut->endElement(sTag);
+    xOut->ignorableWhitespace(OUString());
 }
 // -----------------------------------------------------------------------------
 
