@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-09-23 15:02:08 $
+#   last change: $Author: hr $ $Date: 2004-03-09 12:07:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,5 +66,6 @@ TARGET=scriptruntimeforjava
 
 .INCLUDE : ant.mk
 
+.IF "$(SOLAR_JAVA)"!=""
 ALLTAR : ANTBUILD
-
+.ENDIF
