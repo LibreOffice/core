@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:30:51 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,8 +664,8 @@ TabPage RID_SCPAGE_CALC
         QuickHelpText [ swedish ] = "Vδrdet 0 motsvarar 1900-01-01" ;
         Text[ chinese_simplified ] = "01.01.1900 ( Star~Calc 1.0 )";
         Text[ russian ] = "01.01.1900 ( Star~Calc 1.0 )";
-        Text[ polish ] = "01.01.1900 ( StarOffice Calc 1.0 )";
-        Text[ japanese ] = "01.01.1900 (StarOffice Calc 1.0)(~C)";
+        Text[ polish ] = "01.01.1900 ( StarCalc 1.0 )";
+        Text[ japanese ] = "01/01/1900 (Star~Calc 1.0)";
         Text[ chinese_traditional ] = "01.01.1900 ( Star~Calc 1.0 )";
         Text[ arabic ] = "01/01/1900 ( Star~Calc 1.0)";
         QuickHelpText[ russian ] = "Ηνΰχενθε 0 ρξξςβεςρςβσες 01.01.1900";
@@ -712,7 +712,7 @@ TabPage RID_SCPAGE_CALC
         Text[ chinese_simplified ] = "01.01.1904";
         Text[ russian ] = "~01.01.1904";
         Text[ polish ] = "01.01.1904";
-        Text[ japanese ] = "01.01.1904";
+        Text[ japanese ] = "~01/01/1904";
         Text[ chinese_traditional ] = "~01.01.1904";
         Text[ arabic ] = "01/01/1904~";
         QuickHelpText[ russian ] = "Ηνΰχενθε 0 ρξξςβεςρςβσες 01.01.1904";
@@ -810,7 +810,7 @@ TabPage RID_SCPAGE_CALC
         Text [ dutch ] = "~Hoofd-/kleine letters belangrijk" ;
         Text [ spanish ] = "~Mayϊsculas/minϊsculas" ;
         Text [ danish ] = "Forskel pε store og smε bogstaver" ;
-        Text [ swedish ] = "Observera versaler/~gemener" ;
+        Text [ swedish ] = "Versalkδnsli~g" ;
         Text [ finnish ] = "~Case sensitive" ;
         Text [ english_us ] = "Case se~nsitive" ;
         Text[ chinese_simplified ] = "Ηψ·Φ΄σΠ΅Π΄(~C)";
@@ -1184,10 +1184,10 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ chinese_simplified ] = "ΔϊÒªΙΎ³ύΥβΈφΜυΔΏ\n#£Ώ";
         Text[ russian ] = "Σδΰλθςό ηΰοθρό\n#\n?";
         Text[ polish ] = "Czy ten wpis\n#\n ma byζ usuniκty?";
-        Text[ japanese ] = "€–Ϊ\n#\n‚πν‚µ‚ά‚·‚©?";
+        Text[ japanese ] = "€–Ϊ \n#\n ‚πν‚µ‚ά‚·‚©B";
         Text[ chinese_traditional ] = "±z­n§R°£³o­Σ¶µ¥Ψ\n# ΅H";
         Text[ arabic ] = "εα ΚΡνΟ έΪαΗυ ΝΠέ ΗαΕΟΡΗΜ \n#\nΏ";
-        Text[ greek ] = "Θέλετε πραγματικά να διαγραφεί η εγγραφή\n#;";
+        Text[ greek ] = "Θέλετε πραγματικά να διαγραφεί η καταχώριση\n#;";
         Text[ korean ] = "ΗΧΈρ\n#\nΐ» ΑφΏμ½Γ°Ϊ½ΐ΄Ο±ξ?";
         Text[ turkish ] = "\n#\ngiriώi silinsin mi?";
         Text[ language_user1 ] = " ";
@@ -2589,7 +2589,7 @@ TabPage RID_SCPAGE_INPUT
         Text[ japanese ] = "Enter·°‚π‰‚µ‚Δ•ÒWΣ°Δή‚ΙΨ‚θ‘Φ‚¦(~E)";
         Text[ chinese_traditional ] = "«φΐ»¦^¨®ΑδΒΰ¤J½sΏθΌÒ¦΅(~E)";
         Text[ arabic ] = "ΕΦΫΨ γέΚΗΝ ΗαΕΟΞΗα ααΚΫννΡ Εαμ ζΦΪ ΗαΚΝΡνΡ";
-        Text[ greek ] = "Πατήστε το πλήκτρο Enter για να αλλάξετε στην κατάσταση ~επεξεργασίας";
+        Text[ greek ] = "Πατήστε το πλήκτρο 'Enter' για να αλλάξετε στην κατάσταση ~επεξεργασίας";
         Text[ korean ] = "ΖνΑύ Έπµε·Ξ ΐόΘ―ΗΟ±β ΐ§ΗΨΌ­ Ώ£ΕΝΈ¦ ΄©Έ£½Κ½ΓΏΐ.(~E)";
         Text[ turkish ] = "Enter tuώuna basύldύπύnda ~dόzenleme kipine geηilir";
         Text[ language_user1 ] = " ";
