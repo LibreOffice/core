@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: bc $ $Date: 2002-08-30 16:57:39 $
+ *  last change: $Author: bc $ $Date: 2002-09-10 14:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ public class ReportWizard {
      static XDesktop xDesktop;
      ReportDocument CurReportDocument;
      ReportPaths CurReportPaths;
-
+     String DefaultName;
      java.util.Vector GroupFieldVector;
      String TemplatePath;
 
@@ -321,7 +321,7 @@ public class ReportWizard {
     try{
         short DBIndex = xDBListBox.getSelectedItemPos();
         String sDBName = DatabaseNames[DBIndex];
-    boolean bGetConnection = CurReportDocument.CurDBMetaData.getConnection(xMSF,CurReportDocument, sDBName, sMsgNoConnection, sMsgConnectionImpossible);
+    boolean bGetConnection = CurReportDocument.CurDBMetaData.getConnection(CurReportDocument, sDBName, sMsgNoConnection, sMsgConnectionImpossible);
         if (bGetConnection == true){
         CurReportDocument.CurDBMetaData.DataSourceName = sDBName;
         String[] ContentList = CurReportDocument.CurDBMetaData.getDBMetaData(CurReportDocument);
@@ -481,12 +481,12 @@ public class ReportWizard {
             break;
 
         case SOCONTENTLST:
-//          CurReportDocument.ReportTextDocument.lockControllers();
+            CurReportDocument.ReportTextDocument.lockControllers();
             iPos = xContentListBox.getSelectedItemPos();
             CurReportDocument.loadSectionsfromTemplate(CurReportPaths.ContentFiles[0][iPos]);
             CurReportDocument.loadStyleTemplates(CurReportPaths.ContentFiles[0][iPos], "LoadTextStyles");
             CurReportDocument.setTableColumnSeparators();
-//          CurReportDocument.ReportTextDocument.unlockControllers();
+            CurReportDocument.ReportTextDocument.unlockControllers();
             CurReportDocument.selectFirstPage();
             break;
 
@@ -635,10 +635,11 @@ public class ReportWizard {
         //TODO: A message box should pop up when a single sorting criteria has been selected more than once
         break;
         case 4:
-        CurUNODialog.assignPropertyToDialogControl("cmdGoOn", "Enabled", new Boolean(false));
+//      CurUNODialog.assignPropertyToDialogControl("cmdGoOn", "Enabled", new Boolean(false));
         CurUNODialog.assignPropertyToDialogControl("cmdGoOn", "Label", scmdReady);
         Object oFocusButton = CurUNODialog.xDlgContainer.getControl("optCreateReportTemplate");
         xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, oFocusButton);
+        assignDocumentPathstoTextControl(xMSF);
         break;
         case 5:
         bcreateTemplate = ((Short)  CurUNODialog.getPropertyOfDialogControl("optCreateReportTemplate", "State")).shortValue() == (short) 1;
@@ -761,21 +762,22 @@ public class ReportWizard {
     try{
         short iNextItemPos;
         boolean bDoEnable = (xSortListBox[CurIndex].getSelectedItemPos() > 0);      // the first Item is for "undefined"
-        if (bDoEnable == true){
-            if (CurIndex > MaxSortIndex)
-                MaxSortIndex = CurIndex;
+    if (bDoEnable == true){
+        if (CurIndex > MaxSortIndex)
+        MaxSortIndex = CurIndex;
+    }
+    if (bDoEnable == false){
+        if (CurIndex < MaxSortIndex){
+        for (int i = CurIndex + 1; i <= MAXSORTCRITERIA; i++){
+            toggleSortListBox(i, false);
+            if (i < MaxSortIndex)
+            xSortListBox[i+1].selectItemPos((short)0,true);
         }
-        if (bDoEnable == false){
-            if (CurIndex < MaxSortIndex){
-                for (int i = CurIndex + 1; i <= MAXSORTCRITERIA; i++){
-                    toggleSortListBox(i, false);
-                    if (i < MaxSortIndex)
-                        xSortListBox[i+1].selectItemPos((short)0,true);
-                }
-            }
         }
+    }
         else
             toggleSortListBox(CurIndex+1, bDoEnable);
+// The following code can be reactivated in a future version when task #100799 will be fixed
 /*  if ((bDoEnable == false) && (MaxSortIndex > CurIndex)){
             for (int i= CurIndex; i < MaxSortIndex; i++){
                 iNextItemPos = xSortListBox[i+1].getSelectedItemPos();
@@ -832,7 +834,6 @@ public class ReportWizard {
     public void insertStorePathToTextBox(XMultiServiceFactory xMSF){
     try{
     String sStorePath = "";
-    String DefaultName = "Report_" + CurReportDocument.CurDBMetaData.DataSourceName + "_" + CurReportDocument.CurDBMetaData.MainCommandName;
     boolean bStoreAsTemplate = ((Short) CurUNODialog.getPropertyOfDialogControl("optCreateReportTemplate", "State")).shortValue() == (short) 1;
     if (bStoreAsTemplate == true){
         if (CurReportPaths.UserTemplatePath == null)
@@ -905,9 +906,25 @@ public class ReportWizard {
     }}
 
 
+    public void assignDocumentPathstoTextControl(XMultiServiceFactory xMSF){
+    String DefaultPath;
+    DefaultName = "Report_" + CurReportDocument.CurDBMetaData.DataSourceName + "_" + CurReportDocument.CurDBMetaData.MainCommandName;
+    CurReportPaths.UserTemplatePath = tools.getOfficePath(xMSF, "Template","user");
+    DefaultPath = CurReportPaths.UserTemplatePath + "/" + DefaultName + ".stw";
+    DefaultPath = tools.convertfromURLNotation(DefaultPath);
+    CurUNODialog.assignPropertyToDialogControl("txtSavePath_1", "Text", DefaultPath);
 
-    public void fillFifthStep(){
+    CurReportPaths.WorkPath = tools.getOfficePath(xMSF, "Work","");
+    DefaultPath = CurReportPaths.WorkPath + "/" + DefaultName + ".sxw";
+    DefaultPath = tools.convertfromURLNotation(DefaultPath);
+    CurUNODialog.assignPropertyToDialogControl("txtSavePath_2", "Text", DefaultPath);
+    }
+
+
+
+    public void fillFifthStep(XMultiServiceFactory xMSF){
     try{
+
     CurUNODialog.insertRadioButton("optCreateReportTemplate", SOOPTSAVEASTEMPLATE, new ActionListenerImpl(),
                             new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
                             new Object[] {new Integer(8), "HID:34370", sSaveAsTemplate, new Integer(6), new Integer(41), new Short((short) 1), new Integer(5), new Short((short) 40), new Integer(250)});
@@ -929,6 +946,7 @@ public class ReportWizard {
     CurUNODialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblAutomaticLink",
                 new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "Width"},
                 new Object[] {new Integer(8), sCreateLinkAutomatically, new Integer(16), new Integer(108), new Integer(5), new Integer(200)});
+
 
     insertSaveControls(140, 1, false, 46, 34376);
 
@@ -1083,6 +1101,7 @@ public class ReportWizard {
     try{
     CurUNODialog.assignPropertyToDialogControl("cmdBack", "Enabled", new Boolean(true));
         CurDBMetaData.FieldNames = xSelFieldsListBox.getItems();
+    CurDBMetaData.getFormatKeys();
     XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xGroupListBox);
     xWindow.setFocus();
 
@@ -1266,7 +1285,6 @@ public class ReportWizard {
     CurUNODialog.insertButton("cmdGoOn", SOCMDGOON, new ActionListenerImpl(),
                             new String[] {"DefaultButton", "Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
                             new Object[] {new Boolean(true), new Boolean(false), new Integer(14), "HID:34323", scmdGoOn, new Integer(211), new Integer(190), new Integer(0), new Short((short) 63), new Integer(53)});
-
     }
     catch(Exception exception){
         exception.printStackTrace(System.out);
@@ -1276,7 +1294,8 @@ public class ReportWizard {
     public static void main (String args[]) {
         String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
     try {
-            xGlobalMSF = tools.connect(ConnectStr);
+
+        xGlobalMSF = tools.connect(ConnectStr);
         if(xGlobalMSF != null)  System.out.println("Connected to "+ ConnectStr);
         ReportWizard CurReportWizard = new ReportWizard();
         CurReportWizard.startReportWizard(xGlobalMSF, null);
@@ -1312,14 +1331,14 @@ public class ReportWizard {
         CurReportDocument.ProgressBar.setValue(80);
         fillFourthStep(xMSF);
         CurReportDocument.ProgressBar.setValue(95);
-        fillFifthStep();
+        fillFifthStep(xMSF);
         CurReportDocument.ProgressBar.setValue(100);
         bCloseDocument = true;
         CurReportDocument.ProgressBar.end();
-        short RetValue = CurUNODialog.executeDialog(xMSF, CurReportDocument.Frame.getComponentWindow().getPosSize());
+        short RetValue = CurUNODialog.executeDialog(xMSF, CurReportDocument.Frame.getComponentWindow().getPosSize(), CurReportDocument.xWindowPeer);
         boolean bdisposeDialog = true;
         switch (RetValue){
-        case 0:     // via Cancelbutton or via sourceCode with "endExecute"
+        case 0:             // via Cancelbutton or via sourceCode with "endExecute"
             if (bCloseDocument == true){
             CurUNODialog.xComponent.dispose();
             CurReportDocument.Component.dispose();
@@ -1331,7 +1350,7 @@ public class ReportWizard {
                 bdisposeDialog = false;
                 Dataimport CurDataimport = new Dataimport();
                 CurUNOProgressDialog = CurDataimport.showProgressDisplay(xMSF, CurReportDocument, false);  // CurReportDocument.Frame.getComponentWindow().getPosSize().Width);
-                if (CurReportDocument.CurDBMetaData.executeCommand(xMSF, CurReportDocument.Frame, sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot)){
+                if (CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot)){
                 CurDataimport.insertDatabaseDatatoReportDocument(xMSF, CurReportDocument, CurUNOProgressDialog);
                 }
                 CurUNOProgressDialog.xComponent.dispose();
@@ -1358,7 +1377,6 @@ public class ReportWizard {
     catch(java.lang.Exception jexception ){
     jexception.printStackTrace(System.out);
     }}
-
 
 
     public static void getReportResources(XMultiServiceFactory xMSF, boolean bgetProgressResourcesOnly){
@@ -1446,6 +1464,7 @@ public class ReportWizard {
     sProgressDataImport = tools.getResText(xResInvoke, RID_REPORT + 67);
     sMsgNoConnection = tools.getResText(xResInvoke, RID_COMMON + 14);
     }
+
 
     class ReportPaths{
     public String TemplatePath;
