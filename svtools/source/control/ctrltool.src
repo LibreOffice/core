@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 13:25:15 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 18:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ String STR_SVT_STYLE_NORMAL
     Text[ turkish ] = "Normal";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Predeterminado";
-    Text[ finnish ] = "Säännöllinen";
+    Text[ finnish ] = "S??nn?linen";
 };
 
 String STR_SVT_STYLE_NORMAL_ITALIC
@@ -296,7 +296,7 @@ String STR_SVT_FONTMAP_BOTH
     TEXT [ italian ] = "Questo tipo di carattere verrà utilizzato sia per lo schermo che per la stampante." ;
     TEXT [ portuguese_brazilian ] = "Esta mesma fonte ser  utilizada na impressora e na tela." ;
     TEXT [ portuguese ] = "O tipo de letra utilizado para a impressora e para o ecrã é o mesmo." ;
-    TEXT [ finnish ] = "Samaa fonttia käytetään sekä tulostimessa että näytössä." ;
+    TEXT [ finnish ] = "Samaa fonttia k?ytet??n sek? tulostimessa ett? n?yt?s?." ;
     TEXT [ danish ] = "Denne skrifttype vil blive brugt både på skærmen og på printeren." ;
     TEXT [ french ] = "La même police est utilisée pour l'impression et l'affichage à l'écran." ;
     TEXT [ swedish ] = "Samma teckensnitt används för både skrivare och bildskärm." ;
@@ -324,7 +324,7 @@ String STR_SVT_FONTMAP_PRINTERONLY
     TEXT [ italian ] = "Il tipo di carattere visualizzato differisce da quello stampato." ;
     TEXT [ portuguese_brazilian ] = "Esta ? uma fonte de impressora. A imagem na tela pode n?o corresponder exatamente." ;
     TEXT [ portuguese ] = "Letra de impressora. A letra vista no ecrã pode apresentar um pequeno desvio." ;
-    TEXT [ finnish ] = "Tämä on tulostinfontti. Näyttökuva saattaa olla erilainen." ;
+    TEXT [ finnish ] = "T?m? on tulostinfontti. N?ytt?uva saattaa olla erilainen." ;
     TEXT [ danish ] = "Dette er en printerskrifttype. Skærmbilledet svarer muligvis ikke helt til printerskrifttypen." ;
     TEXT [ french ] = "Police d'imprimante. L'affichage et l'impression ne seront pas toujours identiques." ;
     TEXT [ swedish ] = "Detta är ett skrivarteckensnitt. Visningen på skärmbilden kan avvika något." ;
@@ -351,7 +351,7 @@ String STR_SVT_FONTMAP_SCREENONLY
     TEXT [ italian ] = "Questo è un carattere per lo schermo. La stampa può essere leggermente diversa." ;
     TEXT [ portuguese_brazilian ] = "Esta ? uma fonte de tela. A imagem impressa pode n?o corresponder exatamente." ;
     TEXT [ portuguese ] = "Letra de ecrã. A letra impressa pode apresentar um pequeno desvio." ;
-    TEXT [ finnish ] = "Tämä on näyttöfontti. Tulostinkuva saattaa olla erilainen." ;
+    TEXT [ finnish ] = "T?m? on n?ytt?ontti. Tulostinkuva saattaa olla erilainen." ;
     TEXT [ danish ] = "Dette er en skærmskrifttype. Udskriften kan muligvis afvige lidt." ;
     TEXT [ french ] = "Police d'écran. L'impression et l'affichage ne seront pas toujours identiques." ;
     TEXT [ swedish ] = "Detta är ett skärmteckensnitt. Utskriften kan vara lätt avvikande." ;
@@ -393,7 +393,7 @@ String STR_SVT_FONTMAP_SIZENOTAVAILABLE
     TEXT[ arabic ] = "ÍÌã ÇáÎØ åÐÇ ÛíÑ ãËÈÊ. ÓæÝ íÊã ÇÓÊÎÏÇã ÃßËÑ ÇáÃÍÌÇã ÇáãæÌæÏÉ ÞÑÈÇð áå.";
     TEXT[ turkish ] = "Bu yazýtipi boyu yüklenmedi. Mevcut boylardan en uygun olaný kullanýlacak.";
     TEXT[ catalan ] = "Este tamaño de fuente no está instalado. Se usará el tamaño disponible más adecuado.";
-    TEXT[ finnish ] = "Tätä fonttikokoa ei ole asennettu. Lähintä käytettävissä olevaa kokoa käytetään.";
+    TEXT[ finnish ] = "T?t? fonttikokoa ei ole asennettu. L?hint? k?ytett?viss? olevaa kokoa k?ytet??n.";
 };
 
 String STR_SVT_FONTMAP_STYLENOTAVAILABLE
@@ -420,7 +420,7 @@ String STR_SVT_FONTMAP_STYLENOTAVAILABLE
     TEXT[ turkish ] = "Bu yazýtipi taklit edilecek ya da en uygun olan biçim kullanýlacak.";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Se imitará este estilo de fuente o se usará el más adecuado.";
-    TEXT[ finnish ] = "Tämä fonttityyli simuloidaan tai lähintä vastaavaa tyyliä käytetään.";
+    TEXT[ finnish ] = "T?m? fonttityyli simuloidaan tai l?hint? vastaavaa tyyli? k?ytet??n.";
 };
 
 String STR_SVT_FONTMAP_NOTAVAILABLE
@@ -446,8 +446,9 @@ String STR_SVT_FONTMAP_NOTAVAILABLE
     TEXT[ arabic ] = "åÐÇ ÇáÎØ ÛíÑ ãËÈÊ. ÓæÝ íÊã ÇÓÊÎÏÇã ÃßËÑ ÇáÎØæØ ÇáãæÌæÏÉ ÞÑÈÇð áå.";
     TEXT[ turkish ] = "Bu yazýtipi yüklenmedi. Mevcut yazýtiplerinden en uygun olaný kullanýlacak.";
     TEXT[ catalan ] = "Esta fuente no está instalada. Se usará la fuente existente más adecuada.";
-    TEXT[ finnish ] = "Tätä fonttia ei ole asennettu. Lähintä käytettävissä olevaa fonttia käytetään.";
+    TEXT[ finnish ] = "T?t? fonttia ei ole asennettu. L?hint? k?ytett?viss? olevaa fonttia k?ytet??n.";
 };
+
 
 
 
