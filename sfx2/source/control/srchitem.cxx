@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-19 10:55:58 $
+ *  last change: $Author: tl $ $Date: 2001-02-21 13:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef __SBX_SBXVARIABLE_HXX
 #include <svtools/sbxvar.hxx>
 #endif
+#ifndef _SVT_SEARCHOPT_HXX_
+#include <svtools/searchopt.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_UTIL_XREPLACEABLE_HPP_
 #include <com/sun/star/util/XReplaceable.hpp>
@@ -120,7 +123,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
                           OUString(),
                           Locale(),
                           2, 2, 2,
-                          0x00000000 ),
+                          TransliterationModules_IGNORE_CASE ),
     nCommand        ( 0 ),
     bBackward       ( sal_False ),
     bPattern        ( sal_False ),
@@ -129,8 +132,65 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     bRowDirection   ( sal_True ),
     bAllTables      ( sal_False ),
     nCellType       ( SVX_SEARCHIN_FORMULA ),
-    nAppFlag        ( SVX_SEARCHAPP_WRITER )
+    nAppFlag        ( SVX_SEARCHAPP_WRITER ),
+    bAsianOptions   ( FALSE )
 {
+    SvtSearchOptions aOpt;
+
+    bBackward       = aOpt.IsBackwards();
+    bAsianOptions   = aOpt.IsUseAsianOptions();
+
+    if (aOpt.IsUseRegularExpression())
+        aSearchOpt.algorithmType = SearchAlgorithms_REGEXP;
+    if (aOpt.IsSimilaritySearch())
+        aSearchOpt.algorithmType = SearchAlgorithms_APPROXIMATE;
+    if (aOpt.IsWholeWordsOnly())
+        aSearchOpt.searchFlag |= SearchFlags::NORM_WORD_ONLY;
+
+    INT32 &rFlags = aSearchOpt.transliterateFlags;
+
+    if (!aOpt.IsMatchCase())
+    {
+        aSearchOpt.searchFlag |= SearchFlags::ALL_IGNORE_CASE;
+        rFlags |= TransliterationModules_IGNORE_CASE;
+    }
+
+    if (!aOpt.IsMatchFullHalfWidthForms())
+        rFlags |= TransliterationModules_IGNORE_WIDTH;
+    if (!aOpt.IsMatchHiraganaKatakana())
+        rFlags |= TransliterationModules_IGNORE_KANA;
+    if (!aOpt.IsMatchContractions())
+        rFlags |= TransliterationModules_ignoreSize_ja_JP;
+    if (!aOpt.IsMatchMinusDashChoon())
+        rFlags |= TransliterationModules_ignoreMinusSign_ja_JP;
+    if (!aOpt.IsMatchRepeatCharMarks())
+        rFlags |= TransliterationModules_ignoreIterationMark_ja_JP;
+    if (!aOpt.IsMatchVariantFormKanji())
+        rFlags |= TransliterationModules_ignoreTraditionalKanji_ja_JP;
+    if (!aOpt.IsMatchOldKanaForms())
+        rFlags |= TransliterationModules_ignoreTraditionalKana_ja_JP;
+    if (!aOpt.IsMatchDiziDuzu())
+        rFlags |= TransliterationModules_ignoreZiZu_ja_JP;
+    if (!aOpt.IsMatchBavaHafa())
+        rFlags |= TransliterationModules_ignoreBaFa_ja_JP;
+    if (!aOpt.IsMatchTsithichiDhizi())
+        rFlags |= TransliterationModules_ignoreTiJi_ja_JP;
+    if (!aOpt.IsMatchHyuiyuByuvyu())
+        rFlags |= TransliterationModules_ignoreHyuByu_ja_JP;
+    if (!aOpt.IsMatchSesheZeje())
+        rFlags |= TransliterationModules_ignoreSeZe_ja_JP;
+    if (!aOpt.IsMatchIaiya())
+        rFlags |= TransliterationModules_ignoreIandEfollowedByYa_ja_JP;
+    if (!aOpt.IsMatchKiku())
+        rFlags |= TransliterationModules_ignoreKiKuFollowedBySa_ja_JP;
+    if ( aOpt.IsIgnorePunctuation())
+        rFlags |= TransliterationModules_ignoreSeparator_ja_JP;
+    if ( aOpt.IsIgnoreWhitespace())
+        rFlags |= TransliterationModules_ignoreSpace_ja_JP;
+    if ( aOpt.IsIgnoreProlongedSoundMark())
+        rFlags |= TransliterationModules_ignoreProlongedSoundMark_ja_JP;
+    if ( aOpt.IsIgnoreMiddleDot())
+        rFlags |= TransliterationModules_ignoreMiddleDot_ja_JP;
 }
 
 // -----------------------------------------------------------------------
@@ -148,7 +208,14 @@ SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
     bRowDirection   ( rItem.bRowDirection ),
     bAllTables      ( rItem.bAllTables ),
     nCellType       ( rItem.nCellType ),
-    nAppFlag        ( rItem.nAppFlag )
+    nAppFlag        ( rItem.nAppFlag ),
+    bAsianOptions   ( rItem.bAsianOptions )
+{
+}
+
+// -----------------------------------------------------------------------
+
+SvxSearchItem::~SvxSearchItem()
 {
 }
 
@@ -161,21 +228,13 @@ SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *pPool) const
 // -----------------------------------------------------------------------
 
 //! used below
-static BOOL operator == ( const Locale& rItem1, const Locale& rItem2 )
-{
-    return rItem1.Language  == rItem2.Language  &&
-           rItem1.Country   == rItem2.Country   &&
-           rItem1.Variant   == rItem2.Variant;
-}
-
-//! used below
 static BOOL operator == ( const SearchOptions& rItem1, const SearchOptions& rItem2 )
 {
     return rItem1.algorithmType         == rItem2.algorithmType &&
            rItem1.searchFlag            == rItem2.searchFlag    &&
            rItem1.searchString          == rItem2.searchString  &&
            rItem1.replaceString         == rItem2.replaceString &&
-           rItem1.Locale                == rItem2.Locale        &&
+           //rItem1.Locale              == rItem2.Locale        &&
            rItem1.changedChars          == rItem2.changedChars  &&
            rItem1.deletedChars          == rItem2.deletedChars  &&
            rItem1.insertedChars         == rItem2.insertedChars &&
@@ -196,6 +255,7 @@ int SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
            ( bAllTables     == rSItem.bAllTables )      &&
            ( nCellType      == rSItem.nCellType )       &&
            ( nAppFlag       == rSItem.nAppFlag )        &&
+           ( bAsianOptions  == rSItem.bAsianOptions )   &&
            ( aSearchOpt     == rSItem.aSearchOpt );
 }
 
@@ -278,9 +338,9 @@ void SvxSearchItem::SetToDescriptor( ::com::sun::star::uno::Reference< ::com::su
 }
 
 
-void SvxSearchItem::SetMatchHalfFullWidthForms( sal_Bool bVal )
+void SvxSearchItem::SetMatchFullHalfWidthForms( sal_Bool bVal )
 {
-    if (bVal)
+    if (!bVal)
         aSearchOpt.transliterateFlags |=  TransliterationModules_IGNORE_WIDTH;
     else
         aSearchOpt.transliterateFlags &= ~TransliterationModules_IGNORE_WIDTH;
@@ -298,11 +358,16 @@ void SvxSearchItem::SetWordOnly( sal_Bool bVal )
 
 void SvxSearchItem::SetExact( sal_Bool bVal )
 {
-    // Exact == !ALL_IGNORE_CASE
     if (!bVal)
-        aSearchOpt.searchFlag |=  SearchFlags::ALL_IGNORE_CASE;
+    {
+        aSearchOpt.searchFlag         |=  SearchFlags::ALL_IGNORE_CASE;
+        aSearchOpt.transliterateFlags |=  TransliterationModules_IGNORE_CASE;
+    }
     else
-        aSearchOpt.searchFlag &= ~SearchFlags::ALL_IGNORE_CASE;
+    {
+        aSearchOpt.searchFlag         &= ~SearchFlags::ALL_IGNORE_CASE;
+        aSearchOpt.transliterateFlags &= ~TransliterationModules_IGNORE_CASE;
+    }
 }
 
 
@@ -346,4 +411,15 @@ void SvxSearchItem::SetLevenshtein( sal_Bool bVal )
     else
         aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
 }
+
+
+void SvxSearchItem::SetTransliterationFlags( sal_Int32 nFlags )
+{
+    aSearchOpt.transliterateFlags = nFlags;
+    if (nFlags & TransliterationModules_IGNORE_CASE)
+        aSearchOpt.searchFlag |=  SearchFlags::ALL_IGNORE_CASE;
+    else
+        aSearchOpt.searchFlag &= ~SearchFlags::ALL_IGNORE_CASE;
+}
+
 
