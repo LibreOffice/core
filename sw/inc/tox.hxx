@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:39:53 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ public:
     // fill tab stop positions from template to pattern
     // #i21237#
     void                    AdjustTabStops(SwDoc& rDoc,
-                                           BOOL bDefaultRightTabStop = FALSE);
+                                           BOOL bInsertNewTabStops = FALSE);
 
     inline USHORT   GetTOXType() const;
     inline USHORT   GetFormMax() const;
