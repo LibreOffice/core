@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-20 19:33:33 $
+ *  last change: $Author: fme $ $Date: 2001-07-23 15:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
     }
     else
         pTmpFnt = GetFont();
-    Point aTmpPos( nX, nY + nAsc );
+    Point aTmpPos( nX, nY );
     sal_Bool bPaint = sal_True;
     if( !IsClipChg() )
     {
@@ -310,6 +310,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
     }
     else if( bGoLeft )
         aTmpPos.X() -= pTmpFnt->_GetTxtSize( aDrawInf ).Width();
+    aTmpPos.Y() += nAsc;
     aDrawInf.SetPos( aTmpPos );
     if( bPaint )
         pTmpFnt->_DrawText( aDrawInf );
