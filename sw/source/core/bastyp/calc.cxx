@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1321,7 +1321,9 @@ SwSbxValue SwCalc::Term()
                             }
                             break;
 
-  /*            case CALC_POW:  {
+/*
+// removed here because of #77448# (=2*3^2 != 18)
+            case CALC_POW:  {
                                 GetToken();
 #if defined(MAC) && !defined(__powerc)
                                 long double fraction, integer;
@@ -1329,7 +1331,7 @@ SwSbxValue SwCalc::Term()
                                 double fraction, integer;
 #endif
                                 double right = Prim().GetDouble(),
-                                        dleft = left.GetDouble();
+                                       dleft = left.GetDouble();
 
                                 fraction = modf( right, &integer );
                                 if( ( dleft < 0.0 && 0.0 != fraction ) ||
@@ -1457,7 +1459,10 @@ SwSbxValue SwCalc::Prim()
                                 if( eCurrOper != CALC_RP )
                                     eError = CALC_BRACK;
                                 else
+                                {
                                     GetToken();
+                                    bChkPow = TRUE; // in order for =(7)^2 to work
+                                }
                             }
                             break;
 
@@ -1504,6 +1509,7 @@ SwSbxValue SwCalc::Prim()
             eError = CALC_OVERFLOW;
     }
 
+    // added here because of #77448# (=2*3^2 should be 18)
     if( bChkPow && eCurrOper == CALC_POW )
     {
         double dleft = nErg.GetDouble();
