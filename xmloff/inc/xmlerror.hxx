@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlerror.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-05 17:51:20 $
+ *  last change: $Author: hr $ $Date: 2001-10-10 16:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #ifndef _XMLOFF_XMLERROR_HXX
 #define _XMLOFF_XMLERROR_HXX
 
-
+#ifndef _COM_SUN_STAR_XML_SAX_SAXPARSEEXCEPTION_HPP_
+#include <com/sun/star/xml/sax/SAXParseException.hpp>
+#endif
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -128,7 +130,6 @@ namespace com { namespace sun { namespace star {
     namespace uno { template<class X> class Sequence; }
     namespace uno { template<class X> class Reference; }
     namespace xml { namespace sax { class XLocator; } }
-    namespace xml { namespace sax { class SAXParseException; } }
 } } }
 class ErrorRecord;
 
