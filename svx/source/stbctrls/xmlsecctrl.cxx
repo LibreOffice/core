@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsecctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-13 08:43:49 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,11 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( USHORT _nSlotId,  USHORT _nId, S
     ,mpImpl( new XmlSecStatusBarControl_Impl )
 {
     mpImpl->mnState = SIGNATURESTATE_UNKNOWN;
-    mpImpl->maImage = Image( ResId( RID_SVXBMP_SIGNET, DIALOG_MGR() ) );
-    mpImpl->maImageBroken = Image( ResId( RID_SVXBMP_SIGNET_BROKEN, DIALOG_MGR() ) );
+
+    sal_Bool bIsDark = GetStatusBar().GetBackground().GetColor().IsDark();
+    mpImpl->maImage = Image( SVX_RES( bIsDark ? RID_SVXBMP_SIGNET_H : RID_SVXBMP_SIGNET ) );
+    mpImpl->maImageBroken =
+        Image( SVX_RES( bIsDark ? RID_SVXBMP_SIGNET_BROKEN_H : RID_SVXBMP_SIGNET_BROKEN ) );
 }
 
 XmlSecStatusBarControl::~XmlSecStatusBarControl()
