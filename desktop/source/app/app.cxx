@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 13:51:11 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,7 +587,8 @@ void Desktop::DeInit()
     ::comphelper::setProcessServiceFactory( NULL );
 
     // clear lockfile
-    m_pLockfile->clean();
+    if (m_pLockfile != NULL)
+        m_pLockfile->clean();
 
     if( !Application::IsRemoteServer() )
     {
@@ -621,7 +622,7 @@ BOOL Desktop::QueryExit()
         a <<= (sal_Bool)sal_False;
         xPropertySet->setPropertyValue( OUSTRING(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
     } else {
-        m_pLockfile->clean();
+        if (m_pLockfile != NULL) m_pLockfile->clean();
     }
 
     return bExit;
@@ -1227,13 +1228,7 @@ void Desktop::Main()
     }
 
     // ----  Startup screen ----
-    Reference<XStatusIndicator> rSplashScreen = getSplashScreen();
-    if (! rSplashScreen.is()) {
-        FatalError( MakeStartupErrorMessage(
-        OUString::createFromAscii("Unable to create instance of com.sun.star.office.SplashScreen")));
-        return;
-    }
-    rSplashScreen->start(OUString::createFromAscii("SplashScreen"), 100);
+    OpenSplashScreen();
 
     //  Initialise Single Signon
     if ( !InitSSO() ) return;
@@ -1248,7 +1243,7 @@ void Desktop::Main()
     //  Read the common configuration items for optimization purpose
     if ( !InitializeConfiguration() ) return;
 
-    rSplashScreen->setValue(15);
+    SetSplashScreenProgress(15);
 
     // create title string
     sal_Bool    bCheckOk = sal_False;
@@ -1275,7 +1270,7 @@ void Desktop::Main()
     aTitle += aVerId;
     aTitle += 0x005D ; // 5Dh ^= ']'
 #endif
-    rSplashScreen->setValue(20);
+    SetSplashScreenProgress(20);
     SetDisplayName( aTitle );
     Reference < XComponent > xWrapper;
     SvtPathOptions* pPathOptions = NULL;
@@ -1285,19 +1280,20 @@ void Desktop::Main()
     {
         // register services first
         RegisterServices( xSMgr );
-        rSplashScreen->setValue(30);
+        SetSplashScreenProgress(30);
 
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
         pPathOptions = new SvtPathOptions;
-        rSplashScreen->setValue(40);
+        SetSplashScreenProgress(40);
         pLanguageOptions = new SvtLanguageOptions(sal_True);
-        rSplashScreen->setValue(45);
+        SetSplashScreenProgress(45);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
 
-        Sequence< Any > aSeq(1);
+        Sequence< Any > aSeq(2);
+        aSeq[1] <<= m_rSplashScreen;
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ createInstance com.sun.star.office.OfficeWrapper" );
         xWrapper = Reference < XComponent >( xSMgr->createInstanceWithArguments( DEFINE_CONST_UNICODE( "com.sun.star.office.OfficeWrapper" ), aSeq ), UNO_QUERY );
-        rSplashScreen->setValue(65);
+        SetSplashScreenProgress(65);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} createInstance com.sun.star.office.OfficeWrapper" );
 
     }
@@ -1327,7 +1323,7 @@ void Desktop::Main()
 
     // Preload function depends on an initialized sfx application!
     bTerminateRequested = OEMPreloadProcess();
-    rSplashScreen->setValue(75);
+    SetSplashScreenProgress(75);
 
     sal_Bool bUseSystemFileDialog;
     if ( pCmdLineArgs->IsHeadless() )
@@ -1345,7 +1341,7 @@ void Desktop::Main()
 
     // initialize test-tool library (if available)
     InitTestToolLib();
-    rSplashScreen->setValue(80);
+    SetSplashScreenProgress(80);
 
     if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() )
         InitializeQuickstartMode( xSMgr );
@@ -1359,12 +1355,12 @@ void Desktop::Main()
             Reference< XTypeDetection >
                 xTypeDetection( xSMgr->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))), UNO_QUERY );
-            rSplashScreen->setValue(85);
+            SetSplashScreenProgress(85);
             Reference< XDesktop > xDesktop( xSMgr->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
             if ( xDesktop.is() )
                 xDesktop->addTerminateListener( new OfficeIPCThreadController );
-            rSplashScreen->setValue(100);
+            SetSplashScreenProgress(100);
         }
         catch ( com::sun::star::uno::Exception& e )
         {
@@ -1547,10 +1543,7 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
 
     OpenClients();
     // CloseStartupScreen();
-    Reference<XStatusIndicator>
-        rSplashScreen(::comphelper::getProcessServiceFactory()->createInstance(
-        DEFINE_CONST_UNICODE( "com.sun.star.office.SplashScreen")), UNO_QUERY);
-    rSplashScreen->end();
+    CloseSplashScreen();
 
     CheckFirstRun( );
 
@@ -2038,9 +2031,9 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 #endif
 }
 
-Reference<XStatusIndicator> Desktop::getSplashScreen()
+void Desktop::OpenSplashScreen()
 {
-    ::rtl::OUString     aTmpString;
+       ::rtl::OUString      aTmpString;
     CommandLineArgs*    pCmdLine = GetCommandLineArgs();
     sal_Bool bVisible = sal_False;
     // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
@@ -2054,13 +2047,34 @@ Reference<XStatusIndicator> Desktop::getSplashScreen()
          !pCmdLine->GetPrintToList( aTmpString ) )
     {
         bVisible = sal_True;
+        Sequence< Any > aSeq( 1 );
+        aSeq[0] <<= bVisible;
+        m_rSplashScreen = Reference<XStatusIndicator>(
+            comphelper::getProcessServiceFactory()->createInstanceWithArguments(
+            OUString::createFromAscii("com.sun.star.office.SplashScreen"),
+            aSeq), UNO_QUERY);
+
+        if(m_rSplashScreen.is())
+                m_rSplashScreen->start(OUString::createFromAscii("SplashScreen"), 100);
     }
-    Sequence< Any > aSeq( 1 );
-    aSeq[0] <<= bVisible;
-    Reference<XStatusIndicator> rSplashScreen(
-        ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-        DEFINE_CONST_UNICODE( "com.sun.star.office.SplashScreen"), aSeq), UNO_QUERY);
-    return rSplashScreen;
+
+}
+
+void Desktop::SetSplashScreenProgress(sal_Int32 iProgress)
+{
+    if(m_rSplashScreen.is())
+    {
+        m_rSplashScreen->setValue(iProgress);
+    }
+}
+
+void Desktop::CloseSplashScreen()
+{
+    if(m_rSplashScreen.is())
+    {
+        m_rSplashScreen->end();
+        m_rSplashScreen = NULL;
+    }
 }
 
 // ========================================================================
