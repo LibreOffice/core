@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PresentationViewShell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:59:05 $
+ *  last change: $Author: rt $ $Date: 2005-02-07 16:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@ public:
         FrameView* pFrameView,
         SfxRequest& rRequest,
         USHORT nPageNumber);
+
+protected:
+    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, BOOL bIsFirst);
+    virtual SvxRuler* CreateVRuler(::sd::Window* pWin);
 
 private:
     Rectangle       maOldVisArea;
