@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: abi $ $Date: 2001-08-24 13:59:14 $
+ *  last change: $Author: abi $ $Date: 2001-08-24 14:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,9 +398,10 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
         rtl::OString fileName( fileNameOU.getStr(),fileNameOU.getLength(),RTL_TEXTENCODING_UTF8 );
 
         if( table->open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
-        {
-            delete table;
-            table = 0;
+          {
+          table->close( 0 );
+          delete table;
+          table = 0;
         }
 
         it->second = table;
@@ -592,7 +593,6 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
             info->sort( listKey_,KeywordInfo::Compare( getCollator( Language,
                                                                     rtl::OUString() ) ) );
             cursor->close();
-            table.close( 0 );
 
             Sequence< rtl::OUString >& keywords = info->getKeywordList();
             Db *table2 = getBerkeley( Database,Language );
@@ -617,6 +617,8 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                 }
             }
         }
+
+        table.close( 0 );
     }
 
     return it->second;
