@@ -571,6 +571,7 @@ hedabu: ..\inc\xmleohlp.hxx %_DEST%\inc%_EXT%\svx\xmleohlp.hxx
 hedabu: ..\inc\unopool.hxx %_DEST%\inc%_EXT%\svx\unopool.hxx
 hedabu: ..\inc\dbaexchange.hxx %_DEST%\inc%_EXT%\svx\dbaexchange.hxx
 hedabu: ..\inc\srchcfg.hxx %_DEST%\inc%_EXT%\svx\srchcfg.hxx
+hedabu: ..\inc\forbiddencharacterstable.hxx %_DEST%\inc%_EXT%\svx\forbiddencharacterstable.hxx
 
 ..\xml\SvxDrawPage.xml %_DEST%\xml%_EXT%\SvxDrawPage.xml
 ..\xml\SvxGraphicObject.xml %_DEST%\xml%_EXT%\SvxGraphicObject.xml
