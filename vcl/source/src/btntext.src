@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:05:06 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ String SV_BUTTONTEXT_OK
     TEXT[ czech ] = "OK";
     TEXT[ hebrew ] = "‮אישור‬";
     TEXT[ hindi ] = "ठीक";
+    TEXT[ slovak ] = "OK";
 };
 
 String SV_BUTTONTEXT_CANCEL
@@ -129,6 +130,7 @@ String SV_BUTTONTEXT_CANCEL
     TEXT[ czech ] = "~Zrušit";
     TEXT[ hebrew ] = "‮ביטול‬";
     TEXT[ hindi ] = "रद्द करो";
+    TEXT[ slovak ] = "Zrušiť";
 };
 
 String SV_BUTTONTEXT_YES
@@ -162,6 +164,7 @@ String SV_BUTTONTEXT_YES
     TEXT[ czech ] = "~Ano";
     TEXT[ hebrew ] = "‮כן‬";
     TEXT[ hindi ] = "~हाँ";
+    TEXT[ slovak ] = "~Áno";
 };
 
 String SV_BUTTONTEXT_NO
@@ -195,6 +198,7 @@ String SV_BUTTONTEXT_NO
     TEXT[ czech ] = "~Ne";
     TEXT[ hebrew ] = "‮לא‬";
     TEXT[ hindi ] = "~नहीं";
+    TEXT[ slovak ] = "~Nie";
 };
 
 String SV_BUTTONTEXT_RETRY
@@ -228,6 +232,7 @@ String SV_BUTTONTEXT_RETRY
     TEXT[ czech ] = "Zkusit znovu";
     TEXT[ hebrew ] = "‮לנסות שוב‬";
     TEXT[ hindi ] = "~फ़िर से प्रयत्न करना";
+    TEXT[ slovak ] = "~Skúsiť znovu";
 };
 
 String SV_BUTTONTEXT_HELP
@@ -261,6 +266,7 @@ String SV_BUTTONTEXT_HELP
     TEXT[ czech ] = "~Nápověda";
     TEXT[ hebrew ] = "‮עזרה‬";
     TEXT[ hindi ] = "~सहायता";
+    TEXT[ slovak ] = "~Pomocník";
 };
 
 String SV_BUTTONTEXT_MORE
@@ -278,7 +284,7 @@ String SV_BUTTONTEXT_MORE
     TEXT[ english_us ] = "~More";
     TEXT[ russian ] = "������";
     TEXT[ polish ] = "~Wi�cej";
-    TEXT[ japanese ] = "オプション(~M)";
+    TEXT[ japanese ] = "詳細(~M)";
     TEXT[ chinese_simplified ] = "其他(~M)";
     TEXT[ chinese_traditional ] = "其他(~M)";
     TEXT[ arabic ] = "������";
@@ -294,6 +300,7 @@ String SV_BUTTONTEXT_MORE
     TEXT[ czech ] = "Více";
     TEXT[ hebrew ] = "‮עוד‬";
     TEXT[ hindi ] = "~अधिक";
+    TEXT[ slovak ] = "~Viac";
 };
 
 String SV_BUTTONTEXT_IGNORE
@@ -324,6 +331,7 @@ String SV_BUTTONTEXT_IGNORE
     Text[ czech ] = "~Ignorovat";
     Text[ hebrew ] = "‮להתעלם‬";
     Text[ hindi ] = "~उपेक्षा करो";
+    Text[ slovak ] = "~Ignorovať";
 };
 
 String SV_BUTTONTEXT_ABORT
@@ -354,6 +362,7 @@ String SV_BUTTONTEXT_ABORT
     Text[ czech ] = "Přerušit";
     Text[ hebrew ] = "~Abbrechen";
     Text[ hindi ] = "~रद्द करो";
+    Text[ slovak ] = "Pr~erušiť";
 };
 
 /* HelpTexte, die wir derzeit nicht mehr verwenden:
@@ -390,6 +399,8 @@ YES         ~Kyll�
 NO          ~Ei
 RETRY       ~Yrit�uudelleen
 */
+
+
 
 
 
