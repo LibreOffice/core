@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResourceManager.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:06:55 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,7 +37,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-
 // base classes
 import com.sun.star.ucb.*;
 import com.sun.star.uno.UnoRuntime;
@@ -53,10 +52,11 @@ public class ResourceManager {
      */
     private  Helper      m_helper;
     private  XInterface  m_ucb;
-    private  String      m_connectString;
+    private  String      m_connectString = "";
     private  String      m_contenturl = "";
     private  String      m_srcURL = "";
     private  String      m_targetFolderURL = "";
+    private  String      m_newTitle = "";
     private  String      m_transOperation = "";
 
     /**
@@ -67,6 +67,7 @@ public class ResourceManager {
      *                          -url=..
      *                          -srcURL=...          (optional).
      *                          -targetFolderURL=... (optional).
+     *                          -newTitle=...        (optional).
      *                          -transOper=...       (optional).
      *                       See Help (method printCmdLineUsage()).
      *                       Without the arguments a new connection to a
@@ -100,8 +101,9 @@ public class ResourceManager {
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
         String sourceURL       = getContentURL();      // URL of the source object
         String targetFolderURL = getTargetFolderURL(); // URL of the target folder
+        String newTitle        = getNewTitle();        // New name for the resource
         String transOperation  = getTransOperation();
-        return transferResource( sourceURL, targetFolderURL, transOperation );
+        return transferResource( sourceURL, targetFolderURL, newTitle, transOperation );
     }
 
     /**
@@ -115,13 +117,14 @@ public class ResourceManager {
      *@exception  com.sun.star.uno.Exception
      */
     public boolean transferResource(
-            String sourceURL, String targetFolderURL, String transOperation )
+            String sourceURL, String targetFolderURL,
+            String newTitle, String transOperation )
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
 
         boolean result = false;
         if ( m_ucb != null && sourceURL != null && !sourceURL.equals( "" ) &&
              targetFolderURL != null && !targetFolderURL.equals( "" ) &&
-             transOperation != null && !transOperation.equals( "" ) &&
+             newTitle != null && transOperation != null && !transOperation.equals( "" ) &&
              ( transOperation.equals( "copy" ) || transOperation.equals( "move" ) ||
                transOperation.equals( "link" ))) {
 
@@ -139,8 +142,8 @@ public class ResourceManager {
             arg.SourceURL = sourceURL;
             arg.TargetURL = targetFolderURL;
 
-            // object keeps it current name
-            arg.NewTitle  = "";
+            // object get a new unique name
+            arg.NewTitle  = newTitle;
 
             // fail, if object with same name exists in target folder
             arg.NameClash = NameClash.ERROR;
@@ -189,6 +192,17 @@ public class ResourceManager {
     }
 
     /**
+     * Get new title for the resource to be transfered.
+     *
+     *@return String    That contains a new title for the transfered
+     *                  resource. Can be empty. In this case resource
+     *                  will keep the title it has in the source folder.
+     */
+    public String getNewTitle() {
+        return m_newTitle;
+    }
+
+    /**
      * Parse arguments
      *
      *@param      String[]   Arguments
@@ -203,6 +217,8 @@ public class ResourceManager {
                 m_contenturl    = args[i].substring( 5 );
             } else if ( args[i].startsWith( "-targetFolderURL=" )) {
                 m_targetFolderURL = args[i].substring( 17 );
+            } else if ( args[i].startsWith( "-newTitle=" )) {
+                m_newTitle = args[i].substring( 10 );
             } else if ( args[i].startsWith( "-transOper=" )) {
                 m_transOperation = args[i].substring( 11 );
             } else if ( args[i].startsWith( "-help" ) ||
@@ -224,6 +240,10 @@ public class ResourceManager {
             m_targetFolderURL = Helper.getCurrentDirAsAbsoluteFileURL();
         }
 
+        if ( m_newTitle == null || m_newTitle.equals( "" )) {
+            m_newTitle = "transfered-resource-" + System.currentTimeMillis();
+        }
+
         if ( m_transOperation == null || m_transOperation.equals( "" )) {
             m_transOperation = "copy";
         }
@@ -234,11 +254,11 @@ public class ResourceManager {
      */
     public void printCmdLineUsage() {
         System.out.println(
-            "Usage: ResourceManager -connect=socket,host=...,port=... -transOper=... -url=... -targetFolderURL=..." );
+            "Usage: ResourceManager -connect=socket,host=...,port=... -url=... -targetFolderURL=... -newTitle=... -transOper=... " );
         System.out.println(
-            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir>/data/data.txt> -targetFolderURL=<workdir> -transOper=copy");
+            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir>/data/data.txt> -targetFolderURL=<workdir> -newTitle=transfered-resource-<uniquepostfix> -transOper=copy");
         System.out.println(
-            "\nExample : -transOper=copy -url=file:///temp/MyFile.txt -targetFolderURL=file:///test/" );
+            "\nExample : -url=file:///temp/MyFile.txt -targetFolderURL=file:///test/ -newTitle=RenamedFile.txt -transOper=copy " );
     }
 
     /**
@@ -261,15 +281,18 @@ public class ResourceManager {
             ResourceManager transResource = new ResourceManager( args );
             String sourceURL       = transResource.getContentURL();
             String targetFolderURL = transResource.getTargetFolderURL();
+            String newTitle        = transResource.getNewTitle();
             String transOperation  = transResource.getTransOperation();
             boolean result = transResource.transferResource(
-                                sourceURL, targetFolderURL, transOperation );
+                                sourceURL, targetFolderURL, newTitle, transOperation );
             if ( result )
                 System.out.println( "\nTransfering resource succeeded." );
             else
                 System.out.println( "Transfering resource failed." );
+
             System.out.println( "   Source URL        : " + sourceURL );
             System.out.println( "   Target Folder URL : " + targetFolderURL );
+            System.out.println( "   New name          : " + newTitle );
             System.out.println( "   Transfer Operation: " + transOperation );
 
 

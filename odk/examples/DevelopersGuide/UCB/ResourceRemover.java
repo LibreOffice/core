@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResourceRemover.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:07:14 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,7 +37,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-
 // base classes
 import com.sun.star.ucb.*;
 
@@ -159,7 +158,7 @@ public class ResourceRemover {
         System.out.println(
             "Usage   : ResourceRemover -connect=socket,host=...,port=... -url=..." );
         System.out.println(
-            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir>/data-<uniquepostfix>" );
+            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir>/resource-<uniquepostfix>" );
         System.out.println(
             "\nExample  : -url=file:///temp/MyFile.txt \n" );
     }
