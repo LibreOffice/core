@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 09:57:03 $
+ *  last change: $Author: mba $ $Date: 2001-06-27 12:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3059,10 +3059,6 @@ ToolBox RID_ENVTOOLBOX
     Align = BOXALIGN_TOP ;
     ItemList =
     {
-/*      ToolBoxItem
-        {
-            Identifier = SID_TOPDOC ;
-        };*/
         ToolBoxItem
         {
             Identifier = SID_OPENURL ;
@@ -3071,14 +3067,6 @@ ToolBox RID_ENVTOOLBOX
         {
             Type = TOOLBOXITEM_SEPARATOR ;
         };
-/*      ToolBoxItem
-        {
-            Identifier = SID_BROWSE_BACKWARD ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_BROWSE_FORWARD ;
-        };*/
         ToolBoxItem
         {
             Identifier = SID_BROWSE_STOP ;
@@ -3087,10 +3075,6 @@ ToolBox RID_ENVTOOLBOX
         {
             Type = TOOLBOXITEM_SEPARATOR ;
         };
-/*      ToolBoxItem
-        {
-            Identifier = SID_RELOAD ;
-        };*/
         ToolBoxItem
         {
             Identifier = SID_EDITDOC ;
@@ -3098,6 +3082,10 @@ ToolBox RID_ENVTOOLBOX
         ToolBoxItem
         {
             Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NEWDOCDIRECT ;
         };
         ToolBoxItem
         {
@@ -3117,10 +3105,6 @@ ToolBox RID_ENVTOOLBOX
             Identifier = SID_SAVEASDOC ;
             Hide = TRUE;
         };
-/*      ToolBoxItem
-        {
-            Identifier = SID_MAIL_SEND ;
-        };*/
         ToolBoxItem
         {
             Identifier = SID_PRINTDOCDIRECT ;
@@ -3179,10 +3163,6 @@ ToolBox RID_ENVTOOLBOX
             Identifier = SID_HYPERLINK_INSERT ;
             Hide = TRUE;
         };
-/*      ToolBoxItem
-        {
-            Identifier = SID_HELP_PI ;
-        };*/
         ToolBoxItem
         {
             Identifier = SID_WIN_FULLSCREEN ;
