@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:31:50 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1188,6 +1188,7 @@ void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
         if( bEnabled )
             xIPObj->EnableSetModified( FALSE );
         */
+
         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
         awt::Size aSz = xObj->getVisualAreaSize( nAspect );
         Size aSize( aSz.Width, aSz.Height );
