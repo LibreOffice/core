@@ -5,8 +5,8 @@
 #*    Beschreibung      Basis fuer ViewShell-IDL
 #*
 #*    Ersterstellung    SOH 04.04.97
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 16:48:29 $
-#*    $Revision: 1.1.1.1 $
+#*    Letzte Aenderung  $Author: dl $ $Date: 2001-01-24 13:21:02 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:   T:/sd/sdi/_drvwsh.sdv  $
 #*
@@ -16,7 +16,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/_drvwsh.sdi,v 1.1.1.1 2000-09-18 16:48:29 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/_drvwsh.sdi,v 1.2 2001-01-24 13:21:02 dl Exp $
 
 *************************************************************************/
  // solange Nicht in svxslots.ilb
@@ -1356,13 +1356,13 @@ interface DrawView : View
         ExecMethod = ExecRuler ;
         StateMethod = GetRulerState ;
     ]
-/*
+
     SID_ATTR_TABSTOP // ole : no, status : ?
     [
         ExecMethod = ExecRuler ;
         StateMethod = GetRulerState ;
     ]
-*/
+
     SID_ATTR_PARA_LRSPACE // ole : no, status : ?
     [
         ExecMethod = ExecRuler ;
@@ -2084,6 +2084,9 @@ interface DrawView : View
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 16:48:29  hr
+      initial import
+
       Revision 1.62  2000/08/11 12:44:21  ka
       #77537# Gallery reanimation
 
