@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-26 13:38:28 $
+ *  last change: $Author: mtg $ $Date: 2001-03-15 11:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,15 +474,18 @@ ULONG SwTextBlocks::ConvertToNew()
         // da dieser die ganze Zeit leben bleibt
         // und lesen die Dateivorlagen erneut ein
         SvPersist* pPersist2 = pOld->pDoc->GetPersist();
-        delete pOld->pDoc;
         if (SWBLK_SW2 == nType )
         {
-            nErr = pTwo->LoadDoc();
+            delete pOld->pDoc;
             pOld->pDoc = pNew->pDoc;
+            nErr = pTwo->LoadDoc();
         }
         else
         {
             nErr = pThree->OpenFile ( TRUE );
+            // Within this call, Sw3IoImp::SetDoc calls RemoveLink
+            // on the old document, and deletes it if the
+            // ref count is now zero
             pThree->SetDoc ( pNew->pDoc );
             pOld->pDoc->AddLink();
         }
