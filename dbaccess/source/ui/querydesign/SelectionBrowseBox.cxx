@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:26:26 $
+ *  last change: $Author: oj $ $Date: 2001-03-20 08:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _DBAUI_SQLMESSAGE_HXX_
+#include "sqlmessage.hxx"
 #endif
 
 
@@ -954,15 +957,17 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                             }
                             else
                             {
-                                //  SbaExtInfoBox(this,aErrorMsg).Execute();
-                                // TODO show error
+                                String sTitle(ModuleRes(STR_STAT_WARNING));
+                                OSQLMessageBox aDlg(this,sTitle,aErrorMsg,WB_OK | WB_DEF_OK,OSQLMessageBox::Warning);
+                                aDlg.Execute();
                                 bError = sal_True;
                             }
                         }
                         else
                         {
-                            //  SbaExtInfoBox(this,aErrorMsg).Execute();
-                            // TODO show error
+                            String sTitle(ModuleRes(STR_STAT_WARNING));
+                            OSQLMessageBox aDlg(this,sTitle,aErrorMsg,WB_OK | WB_DEF_OK,OSQLMessageBox::Warning);
+                            aDlg.Execute();
                             bError = sal_True;
                         }
                     }
@@ -982,12 +987,15 @@ sal_Bool OSelectionBrowseBox::SaveModified()
 
         RowModified(GetCurRow(), GetCurColumnId());
 
-        // und noch die Undo-Action fuer das Ganze
-        OTabFieldCellModifiedUndoAct* pUndoAct = new OTabFieldCellModifiedUndoAct(this);
-        pUndoAct->SetCellIndex(GetCurRow());
-        pUndoAct->SetColId(GetCurColumnId());
-        pUndoAct->SetCellContents(strOldCellContents);
-        static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->AddUndoAction(pUndoAct);
+        if(!bError)
+        {
+            // und noch die Undo-Action fuer das Ganze
+            OTabFieldCellModifiedUndoAct* pUndoAct = new OTabFieldCellModifiedUndoAct(this);
+            pUndoAct->SetCellIndex(GetCurRow());
+            pUndoAct->SetColId(GetCurColumnId());
+            pUndoAct->SetCellContents(strOldCellContents);
+            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->AddUndoAction(pUndoAct);
+        }
     }
 
     // habe ich Daten in einer FieldDescription gespeichert, die vorher leer war und es nach den Aenderungen nicht mehr ist ?
@@ -1315,7 +1323,7 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDesc* pEntry, long& nColId)
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     DBG_ASSERT(static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size() == sal_uInt16(ColCount() - 1), "OSelectionBrowseBox::InsertColumn : inkonsistent state !");
         // das Control sollte immer genau eine Spalte mehr haben, naemlich die HandleColumn
-    DBG_ASSERT(sal_uInt16(nColId == -1) || (nColId <= static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size()), "OSelectionBrowseBox::InsertColumn : invalid parameter nColId.");
+    DBG_ASSERT(sal_uInt16(nColId == -1) || (nColId <= (long)static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc()->size()), "OSelectionBrowseBox::InsertColumn : invalid parameter nColId.");
         // -1 heisst ganz hinten, Count heisst ganz hinten, der Rest bezeichnet eine richtige Position
 
     sal_uInt16 nCurCol = GetCurColumnId();
