@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgview.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-06-06 05:12:12 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include <filterflags.h>
 #endif
 
+#ifndef __FRAMEWORK_QUERIES_H_
+#include <queries.h>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -149,6 +153,7 @@
 #define FRAMESET_START_HTML             "index.html"
 #define FRAMESET_TYPES_HTML             "fs_types.html"
 #define FRAMESET_FILTERS_HTML           "fs_filters.html"
+#define FRAMESET_MODULFILTERS_HTML      "fs_modulfilters.html"
 #define FRAMESET_DETECTORS_HTML         "fs_detectors.html"
 #define FRAMESET_LOADERS_HTML           "fs_loaders.html"
 #define FRAMESET_INVALIDFILTERS_HTML    "fs_invalidfilters.html"
@@ -170,6 +175,7 @@
 #define INVALIDLOADERS_HTML             "invalidloaders.html"
 
 #define FILTERFLAGS_HTML                "filterflags.html"
+#define MODULFILTERS_HTML               "modulfilters.html"
 
 #define TARGET_MENU                     "menu"
 #define TARGET_VIEW                     "view"
@@ -225,6 +231,7 @@ class CFGView : public Application
         void impl_printSyntax                   ();
         void impl_generateTypeListHTML          ();
         void impl_generateFilterListHTML        ();
+        void impl_generateFilterModulListHTML   ();
         void impl_generateDetectorListHTML      ();
         void impl_generateLoaderListHTML        ();
         void impl_generateInvalidFiltersHTML    ();
@@ -399,6 +406,11 @@ void CFGView::impl_generateHTMLView()
     sMenuHTML.appendAscii( "\" target=\""                                                                               );
     sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
     sMenuHTML.appendAscii( "\">All Filters</a></li>\n"                                                                  );
+    sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "All Filters sorted by modules"
+    sMenuHTML.appendAscii( FRAMESET_MODULFILTERS_HTML                                                                   );
+    sMenuHTML.appendAscii( "\" target=\""                                                                               );
+    sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
+    sMenuHTML.appendAscii( "\">Filters by Moduls</a></li>\n"                                                            );
     sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "All Detectors"
     sMenuHTML.appendAscii( FRAMESET_DETECTORS_HTML                                                                      );
     sMenuHTML.appendAscii( "\" target=\""                                                                               );
@@ -431,6 +443,7 @@ void CFGView::impl_generateHTMLView()
 
     impl_generateTypeListHTML           ();
     impl_generateFilterListHTML         ();
+    impl_generateFilterModulListHTML    ();
     impl_generateDetectorListHTML       ();
     impl_generateLoaderListHTML         ();
     impl_generateInvalidFiltersHTML     ();
@@ -612,7 +625,7 @@ void CFGView::impl_generateFilterListHTML()
     sal_Int32                             nFilterCounter = 0                                    ;
     sal_Int32                             nCount         = lNames.getLength()                   ;
     Filter                                aFilter                                               ;
-    for( nFilterCounter=1; nFilterCounter<nCount; ++nFilterCounter )
+    for( nFilterCounter=0; nFilterCounter<nCount; ++nFilterCounter )
     {
         aFilter = m_aData.pCache->getFilter( lNames[nFilterCounter] );
 
@@ -722,6 +735,246 @@ void CFGView::impl_generateFilterListHTML()
 }
 
 //*****************************************************************************************************************
+void CFGView::impl_generateFilterModulListHTML()
+{
+    //-------------------------------------------------------------------------------------------------------------
+    // generate frameset for filters sorted by modules
+    OUStringBuffer sFiltersFramesetHTML( 10000 );
+
+    sFiltersFramesetHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Filters sorted by modules\n\t\t</title>\n\t</head>\n" );  // open html
+    sFiltersFramesetHTML.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"                                                                   );  // open frameset for cols
+    sFiltersFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                                );  // generate frame "list"
+    sFiltersFramesetHTML.appendAscii( TARGET_LIST                                                                                           );
+    sFiltersFramesetHTML.appendAscii( "\" src=\""                                                                                           );
+    sFiltersFramesetHTML.appendAscii( MODULFILTERS_HTML                                                                                     );
+    sFiltersFramesetHTML.appendAscii( "\" title=\"List\">\n"                                                                                );
+    sFiltersFramesetHTML.appendAscii( "\t\t\t<frame name=\""                                                                                );  // generate frame "properties"
+    sFiltersFramesetHTML.appendAscii( TARGET_PROPERTIES                                                                                     );
+    sFiltersFramesetHTML.appendAscii( "\" src=\""                                                                                           );
+    sFiltersFramesetHTML.appendAscii( FILTERPROPERTIES_HTML                                                                                 );
+    sFiltersFramesetHTML.appendAscii( "\" title=\"Properties\">\n"                                                                          );
+    sFiltersFramesetHTML.appendAscii( "\t\t</frameset>\n"                                                                                   );  // close frameset cols
+    sFiltersFramesetHTML.appendAscii( "</html>\n"                                                                                           );  // close html
+
+    impl_writeFile( FRAMESET_FILTERS_HTML, U2B(sFiltersFramesetHTML.makeStringAndClear()) );
+
+    //-------------------------------------------------------------------------------------------------------------
+    // generate filter list (names and links only!)
+    // use same loop to generate filter property list!
+    OUStringBuffer sAllFiltersHTML( 10000 );
+    OUStringBuffer sFilterPropHTML( 10000 );
+
+    sAllFiltersHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tAll Filters\n\t\t</title>\n\t</head>\n\t<body>\n"                                        );  // open html
+    sAllFiltersHTML.appendAscii( "\t\t<table border=0><tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Filter</strong></td></tr>\n" );  // open table
+
+    sFilterPropHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFilterProperties\n\t\t</title>\n\t</head>\n\t<body>\n"                                   );  // open html
+
+    css::uno::Sequence< ::rtl::OUString > lWriter ;
+    css::uno::Sequence< ::rtl::OUString > lWeb    ;
+    css::uno::Sequence< ::rtl::OUString > lGlobal ;
+    css::uno::Sequence< ::rtl::OUString > lChart  ;
+    css::uno::Sequence< ::rtl::OUString > lCalc   ;
+    css::uno::Sequence< ::rtl::OUString > lImpress;
+    css::uno::Sequence< ::rtl::OUString > lDraw   ;
+    css::uno::Sequence< ::rtl::OUString > lMath   ;
+    css::uno::Sequence< ::rtl::OUString > lGraphic;
+    css::uno::Sequence< ::rtl::OUString > lDefault;
+    css::uno::Sequence< ::rtl::OUString > lNames  ;
+
+    m_aData.pCache->queryFilters( FILTERQUERY_TEXTDOCUMENT_WITHDEFAULT        ) >>= lWriter   ;
+    m_aData.pCache->queryFilters( FILTERQUERY_WEBDOCUMENT_WITHDEFAULT         ) >>= lWeb      ;
+    m_aData.pCache->queryFilters( FILTERQUERY_GLOBALDOCUMENT_WITHDEFAULT      ) >>= lGlobal   ;
+    m_aData.pCache->queryFilters( FILTERQUERY_CHARTDOCUMENT_WITHDEFAULT       ) >>= lChart    ;
+    m_aData.pCache->queryFilters( FILTERQUERY_SPREADSHEETDOCUMENT_WITHDEFAULT ) >>= lCalc     ;
+    m_aData.pCache->queryFilters( FILTERQUERY_PRESENTATIONDOCUMENT_WITHDEFAULT) >>= lImpress  ;
+    m_aData.pCache->queryFilters( FILTERQUERY_DRAWINGDOCUMENT_WITHDEFAULT     ) >>= lDraw     ;
+    m_aData.pCache->queryFilters( FILTERQUERY_FORMULARPROPERTIES_WITHDEFAULT  ) >>= lMath     ;
+    m_aData.pCache->queryFilters( FILTERQUERY_GRAPHICFILTERS                  ) >>= lGraphic  ;
+    m_aData.pCache->queryFilters( FILTERQUERY_DEFAULTFILTERS                  ) >>= lDefault  ;
+
+    sal_Int32       nModuls       = 0;
+    sal_Int32       nFilters      = 0;
+    sal_Int32       nModulCount   = 0;
+    sal_Int32       nFilterCount  = 0;
+    Filter          aFilter          ;
+    ::rtl::OString  sModul           ;
+
+    for( nModuls=0; nModuls<nModulCount; ++nModuls )
+    {
+        switch( nModuls )
+        {
+            case 0: {
+                        lNames = lWriter;
+                        sModul = "Writer";
+                    }
+                    break;
+            case 1: {
+                        lNames = lWeb    ;
+                        sModul = "Web";
+                    }
+                    break;
+            case 2: {
+                        lNames = lGlobal ;
+                        sModul = "GlobalDokument";
+                    }
+                    break;
+            case 3: {
+                        lNames = lChart  ;
+                        sModul = "Chart";
+                    }
+                    break;
+            case 4: {
+                        lNames = lCalc   ;
+                        sModul = "Calc";
+                    }
+                    break;
+            case 5: {
+                        lNames = lImpress;
+                        sModul = "Impress";
+                    }
+                    break;
+            case 6: {
+                        lNames = lDraw   ;
+                        sModul = "Draw";
+                    }
+                    break;
+            case 7: {
+                        lNames = lMath   ;
+                        sModul = "Math";
+                    }
+                    break;
+            case 8: {
+                        lNames = lGraphic;
+                        sModul = "Graphic";
+                    }
+                    break;
+            case 9: {
+                        lNames = lDefault;
+                        sModul = "Default Filter!";
+                    }
+                    break;
+        }
+
+        sAllFiltersHTML.appendAscii ( "\t\t\t<tr>\n"                                                                        );
+        sAllFiltersHTML.appendAscii ( "\t\t\t\t<td bgcolor=#000000 fgcolor=#ffffff valign=\"top\" align=\"top\">-</td>\n"   );
+        sAllFiltersHTML.appendAscii ( "\t\t\t\t<td bgcolor=#000000 fgcolor=#ffffff valign=\"top\" align=\"top\">"           );
+        sAllFiltersHTML.appendAscii ( sModul                                                                                );
+        sAllFiltersHTML.appendAscii ( "</td>\n"                                                                             );
+        sAllFiltersHTML.appendAscii ( "\t\t\t</tr>\n"                                                                       );
+
+        nFilterCount = lNames.getLength();
+
+        for( nFilters=0; nFilters<nFilterCount; ++nFilters )
+        {
+            aFilter = m_aData.pCache->getFilter( lNames[nFilters] );
+
+            // write entry in filter list table
+            sAllFiltersHTML.appendAscii ( "\t\t\t<tr>\n"                                                                                                            );  // open row
+            sAllFiltersHTML.appendAscii ( "\t\t\t\t<td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">"                                                               );  // open column "nr"
+            sAllFiltersHTML.append      ( OUString::valueOf( nFilters )                                                                                             );  // write nr
+            sAllFiltersHTML.appendAscii ( "</td>\n"                                                                                                                 );  // close column "nr"
+            sAllFiltersHTML.appendAscii ( "\t\t\t\t<td>"                                                                                                            );  // open column "name"
+            sAllFiltersHTML.appendAscii ( "<a href=\""                                                                                                              );  // open href="filterproperties.html#<filtername>"
+            sAllFiltersHTML.appendAscii ( FILTERPROPERTIES_HTML                                                                                                     );
+            sAllFiltersHTML.appendAscii ( "#"                                                                                                                       );
+            sAllFiltersHTML.append      ( aFilter.sName                                                                                                             );
+            sAllFiltersHTML.appendAscii ( "\" target=\""                                                                                                            );
+            sAllFiltersHTML.appendAscii ( TARGET_PROPERTIES                                                                                                         );
+            sAllFiltersHTML.appendAscii ( "\">"                                                                                                                     );
+            sAllFiltersHTML.append      ( aFilter.sName                                                                                                             );  // write name
+            sAllFiltersHTML.appendAscii ( "</a>"                                                                                                                    );  // close href
+            sAllFiltersHTML.appendAscii ( "</td>\n"                                                                                                                 );  // close column "name"
+            sAllFiltersHTML.appendAscii ( "\t\t\t</tr>\n"                                                                                                           );  // close row
+
+            // write entry in filter property table
+            sFilterPropHTML.appendAscii ( "\t\t<a name=\""                                                                                                          );  // set target="#<typename>" to follow table
+            sFilterPropHTML.append      ( aFilter.sName                                                                                                             );
+            sFilterPropHTML.appendAscii ( "\"></a>"                                                                                                                 );
+            sFilterPropHTML.appendAscii ( "\t\t<table border=0>\n"                                                                                                  );  // open table
+            sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Nr.</td><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">&nbsp;");    // generate row "Nr <value>"
+            sFilterPropHTML.append      ( OUString::valueOf( nFilters )                                                                                             );
+            sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+            sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Name</td><td valign=\"top\" align=\"top\">&nbsp;"             );  // generate row "Name <value>"
+            sFilterPropHTML.append      ( aFilter.sName                                                                                                             );
+            sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+            sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Order</td><td valign=\"top\" align=\"top\">&nbsp;\""          );  // generate row "Order <value>"
+            sFilterPropHTML.append      ( aFilter.nOrder                                                                                                            );
+            sFilterPropHTML.appendAscii ( "\"</td></tr>\n"                                                                                                          );
+            sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Type</td><td valign=\"top\" align=\"top\">&nbsp;\""           );  // generate row "Type <value>"
+            sFilterPropHTML.append      ( aFilter.sType                                                                                                             );
+            sFilterPropHTML.appendAscii ( "\"</td></tr>\n"                                                                                                          );
+            sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">UIName</td><td valign=\"top\" align=\"top\">"                 );  // generate row "UIName <value>"
+            for(    ConstStringHashIterator pUIName=aFilter.lUINames.begin()  ;
+                    pUIName!=aFilter.lUINames.end()                           ;
+                    ++pUIName                                                 )
+            {
+                sFilterPropHTML.appendAscii   ( "&nbsp;["       );
+                sFilterPropHTML.append        ( pUIName->first  );
+                sFilterPropHTML.appendAscii   ( "] \""          );
+                sFilterPropHTML.append        ( pUIName->second );
+                sFilterPropHTML.appendAscii   ( "\"<br>"        );
+            }
+            sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                          );
+            sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">DocumentService</td><td valign=\"top\" align=\"top\">&nbsp;"  );  // generate row "DocumentService <value>"
+            sFilterPropHTML.append      ( aFilter.sDocumentService                                                                                          );
+            sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+            sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">FilterService</td><td valign=\"top\" align=\"top\">&nbsp;"    );  // generate row "FilterService <value>"
+            sFilterPropHTML.append      ( aFilter.sFilterService                                                                                            );
+            sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+            sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">Flags</td><td valign=\"top\" align=\"top\">&nbsp;"            );  // generate row "Flags <value>"
+            if( aFilter.nFlags & FILTERFLAG_IMPORT          ) { sFilterPropHTML.append( FILTERFLAGNAME_IMPORT          ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_EXPORT          ) { sFilterPropHTML.append( FILTERFLAGNAME_EXPORT          ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_TEMPLATE        ) { sFilterPropHTML.append( FILTERFLAGNAME_TEMPLATE        ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_INTERNAL        ) { sFilterPropHTML.append( FILTERFLAGNAME_INTERNAL        ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_TEMPLATEPATH    ) { sFilterPropHTML.append( FILTERFLAGNAME_TEMPLATEPATH    ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_OWN             ) { sFilterPropHTML.append( FILTERFLAGNAME_OWN             ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_ALIEN           ) { sFilterPropHTML.append( FILTERFLAGNAME_ALIEN           ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_USESOPTIONS     ) { sFilterPropHTML.append( FILTERFLAGNAME_USESOPTIONS     ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_DEFAULT         ) { sFilterPropHTML.append( FILTERFLAGNAME_DEFAULT         ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_NOTINFILEDIALOG ) { sFilterPropHTML.append( FILTERFLAGNAME_NOTINFILEDIALOG ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_NOTINCHOOSER    ) { sFilterPropHTML.append( FILTERFLAGNAME_NOTINCHOOSER    ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_ASYNCHRON       ) { sFilterPropHTML.append( FILTERFLAGNAME_ASYNCHRON       ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_READONLY        ) { sFilterPropHTML.append( FILTERFLAGNAME_READONLY        ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_NOTINSTALLED    ) { sFilterPropHTML.append( FILTERFLAGNAME_NOTINSTALLED    ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_CONSULTSERVICE  ) { sFilterPropHTML.append( FILTERFLAGNAME_CONSULTSERVICE  ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_3RDPARTYFILTER  ) { sFilterPropHTML.append( FILTERFLAGNAME_3RDPARTYFILTER  ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_PACKED          ) { sFilterPropHTML.append( FILTERFLAGNAME_PACKED          ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_SILENTEXPORT    ) { sFilterPropHTML.append( FILTERFLAGNAME_SILENTEXPORT    ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_BROWSERPREFERED ) { sFilterPropHTML.append( FILTERFLAGNAME_BROWSERPREFERED ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+            if( aFilter.nFlags & FILTERFLAG_PREFERED        ) { sFilterPropHTML.append( FILTERFLAGNAME_PREFERED        ); sFilterPropHTML.appendAscii( "<br>&nbsp;" ); };
+
+            sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+            sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">UserData</td><td valign=\"top\" align=\"top\">"               );  // generate row "UserData <value>"
+            for(    ConstStringListIterator pUserData=aFilter.lUserData.begin() ;
+                    pUserData!=aFilter.lUserData.end()                          ;
+                    ++pUserData                                                 )
+            {
+                sFilterPropHTML.appendAscii ( "&nbsp;\""    );
+                sFilterPropHTML.append      ( *pUserData    );
+                sFilterPropHTML.appendAscii ( "\"<br>"      );
+            }
+            sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+            sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">FileFormatVersion</td><td valign=\"top\" align=\"top\">&nbsp;");  // generate row "FileFormatVersion <value>"
+            sFilterPropHTML.append      ( OUString::valueOf( aFilter.nFileFormatVersion )                                                                           );
+            sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+            sFilterPropHTML.appendAscii ( "\t\t\t<tr><td bgcolor=#f5f9d5 valign=\"top\" align=\"top\">TemplateName</td><td valign=\"top\" align=\"top\">&nbsp;"     );  // generate row "TemplateName <value>"
+            sFilterPropHTML.append      ( aFilter.sTemplateName                                                                                                     );
+            sFilterPropHTML.appendAscii ( "</td></tr>\n"                                                                                                            );
+            sFilterPropHTML.appendAscii ( "\t\t</table>\n"                                                                                                          );  // close table
+            sFilterPropHTML.appendAscii ( "\t\t<p>\n"                                                                                                               );  // add space between this and following table
+        }
+    }
+
+    sAllFiltersHTML.appendAscii( "</table>\n"           );  // close table
+    sAllFiltersHTML.appendAscii( "</body>\n</html>\n"   );  // close html
+
+    sFilterPropHTML.appendAscii( "</body>\n</html>\n"   );  // close html
+
+    impl_writeFile( ALLFILTERS_HTML      , U2B(sAllFiltersHTML.makeStringAndClear()) );
+    impl_writeFile( FILTERPROPERTIES_HTML, U2B(sFilterPropHTML.makeStringAndClear()) );
+}
+
+//*****************************************************************************************************************
 void CFGView::impl_generateDetectorListHTML()
 {
     //-------------------------------------------------------------------------------------------------------------
@@ -758,7 +1011,7 @@ void CFGView::impl_generateDetectorListHTML()
 
     css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pCache->getAllDetectorNames();
     sal_Int32                             nCount = lNames.getLength()                   ;
-    for( sal_Int32 nItem=1; nItem<nCount; ++nItem )
+    for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
     {
         Detector aDetector = m_aData.pCache->getDetector( lNames[nItem] );
 
@@ -851,7 +1104,7 @@ void CFGView::impl_generateLoaderListHTML()
 
     css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pCache->getAllLoaderNames();
     sal_Int32                             nCount = lNames.getLength()                 ;
-    for( sal_Int32 nItem=1; nItem<nCount; ++nItem )
+    for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
     {
         Loader aLoader = m_aData.pCache->getLoader( lNames[nItem] );
 
@@ -958,11 +1211,11 @@ void CFGView::impl_generateInvalidFiltersHTML()
     sal_Int32                             nTypeCount   = lTypes.getLength()                 ;
     FileType                              aType  ;
     Filter                                aFilter;
-    for( sal_Int32 nFilter=1; nFilter<nFilterCount; ++nFilter )
+    for( sal_Int32 nFilter=0; nFilter<nFilterCount; ++nFilter )
     {
         aFilter = m_aData.pCache->getFilter( lFilters[nFilter] );
         sal_Bool bFound = sal_False;
-        for( sal_Int32 nType=1; nType<nTypeCount; ++nType )
+        for( sal_Int32 nType=0; nType<nTypeCount; ++nType )
         {
             aType = m_aData.pCache->getType( lTypes[nType] );
             if( aFilter.sType == aType.sName )
@@ -1032,11 +1285,11 @@ void CFGView::impl_generateInvalidDetectorsHTML()
     sal_Int32                             nTypeCount   = lTypes.getLength()                 ;
     FileType                              aType    ;
     Detector                              aDetector;
-    for( sal_Int32 nDetector=1; nDetector<nDetectorCount; ++nDetector )
+    for( sal_Int32 nDetector=0; nDetector<nDetectorCount; ++nDetector )
     {
         aDetector = m_aData.pCache->getDetector( lDetectors[nDetector] );
         sal_Bool bFound = sal_False;
-        for( sal_Int32 nType=1; nType<nTypeCount; ++nType )
+        for( sal_Int32 nType=0; nType<nTypeCount; ++nType )
         {
             aType = m_aData.pCache->getType( lTypes[nType] );
             for( ConstStringListIterator pTypeListEntry=aDetector.lTypes.begin(); pTypeListEntry!=aDetector.lTypes.end(); ++pTypeListEntry )
@@ -1107,11 +1360,11 @@ void CFGView::impl_generateInvalidLoadersHTML()
     sal_Int32                             nTypeCount   = lTypes.getLength()                 ;
     FileType                              aType    ;
     Loader                                aLoader  ;
-    for( sal_Int32 nLoader=1; nLoader<nLoaderCount; ++nLoader )
+    for( sal_Int32 nLoader=0; nLoader<nLoaderCount; ++nLoader )
     {
         aLoader = m_aData.pCache->getLoader( lLoaders[nLoader] );
         sal_Bool bFound = sal_False;
-        for( sal_Int32 nType=1; nType<nTypeCount; ++nType )
+        for( sal_Int32 nType=0; nType<nTypeCount; ++nType )
         {
             aType = m_aData.pCache->getType( lTypes[nType] );
             for( ConstStringListIterator pTypeListEntry=aLoader.lTypes.begin(); pTypeListEntry!=aLoader.lTypes.end(); ++pTypeListEntry )
@@ -1157,7 +1410,7 @@ void CFGView::impl_generateFilterFlagsHTML()
 
     css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pCache->getAllFilterNames();
     sal_Int32                             nCount = lNames.getLength();
-    for( sal_Int32 nItem=1; nItem!=nCount; ++nItem )
+    for( sal_Int32 nItem=0; nItem!=nCount; ++nItem )
     {
         Filter aFilter = m_aData.pCache->getFilter( lNames[nItem] );
 
