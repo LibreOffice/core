@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:24:02 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,10 +224,16 @@ public:
     sal_Int32           GetUsedHierarchy( sal_Int32 nDim );
 
     BOOL                GetMembersNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
-    BOOL                GetMembers( sal_Int32 nDim, com::sun::star::uno::Sequence< rtl::OUString >& rMembers, com::sun::star::uno::Sequence< sal_Bool >* pVisible = 0 );
+    BOOL                GetMembers( sal_Int32 nDim,
+                            com::sun::star::uno::Sequence< rtl::OUString >& rMembers,
+                            com::sun::star::uno::Sequence< sal_Bool >* pVisible = 0,
+                            com::sun::star::uno::Sequence< sal_Bool >* pShowDet = 0 );
 
     BOOL                GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
-    BOOL                GetMembers( sal_Int32 nDim, sal_Int32 nHier, com::sun::star::uno::Sequence< rtl::OUString >& rMembers, com::sun::star::uno::Sequence< sal_Bool >* pVisible = 0 );
+    BOOL                GetMembers( sal_Int32 nDim, sal_Int32 nHier,
+                            com::sun::star::uno::Sequence< rtl::OUString >& rMembers,
+                            com::sun::star::uno::Sequence< sal_Bool >* pVisible = 0,
+                            com::sun::star::uno::Sequence< sal_Bool >* pShowDet = 0 );
 
     void                UpdateReference( UpdateRefMode eUpdateRefMode,
                                          const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
