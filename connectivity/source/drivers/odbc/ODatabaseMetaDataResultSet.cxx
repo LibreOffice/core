@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 17:59:22 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,14 +58,12 @@
  *
  *
  ************************************************************************/
-
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
+#endif
 
 #ifndef _CONNECTIVITY_ADO_ADATABASEMETADATARESULTSET_HXX_
 #include "odbc/ODatabaseMetaDataResultSet.hxx"
-#endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE odbc
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -106,6 +104,7 @@
 #ifndef _CONNECTIVITY_OTOOLS_HXX_
 #include "odbc/OTools.hxx"
 #endif
+
 
 using namespace connectivity::odbc;
 using namespace cppu;
@@ -157,9 +156,7 @@ void ODatabaseMetaDataResultSet::disposing(void)
 Any SAL_CALL ODatabaseMetaDataResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OPropertySetHelper::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = ODatabaseMetaDataResultSet_BASE::queryInterface(rType);
-    return aRet;
+    return aRet.hasValue() ? aRet : ODatabaseMetaDataResultSet_BASE::queryInterface(rType);
 }
 // -----------------------------------------------------------------------------
 Reference< XPropertySetInfo > SAL_CALL ODatabaseMetaDataResultSet::getPropertySetInfo(  ) throw(RuntimeException)
@@ -202,9 +199,10 @@ sal_Int32 ODatabaseMetaDataResultSet::mapColumn (sal_Int32  column)
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed )
-        throw DisposedException();
+
 
     Reference< XResultSetMetaData > xMeta = getMetaData();
     sal_Int32 nLen = xMeta->getColumnCount();
@@ -217,9 +215,9 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     return NULL;
@@ -227,9 +225,10 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     return NULL;
@@ -238,9 +237,10 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
 
@@ -251,7 +251,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex 
         case DataType::BIT:
             {
                 sal_Int8 nValue = 0;
-                getValue(m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,nValue);
+                OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,&nValue,sizeof nValue);
                 bRet = nValue != 0;
             }
             break;
@@ -264,13 +264,14 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex 
 
 sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     sal_Int8  nVal = 0;
-    getValue(m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,nVal);
+    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,&nVal,sizeof nVal);
 
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
         return sal_Int8((*m_aValueRangeIter).second[(sal_Int32)nVal]);
@@ -280,9 +281,10 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
 
 Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     sal_Int32 nType = getMetaData()->getColumnType(columnIndex);
@@ -302,55 +304,58 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
 
 ::com::sun::star::util::Date SAL_CALL ODatabaseMetaDataResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     DATE_STRUCT aDate;
     aDate.day = 0;
     aDate.month = 0;
     aDate.year = 0;
-    getValue(m_aStatementHandle,columnIndex,SQL_C_DATE,m_bWasNull,**this,aDate);
+    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_DATE,m_bWasNull,**this,&aDate,sizeof aDate);
     return Date(aDate.day,aDate.month,aDate.year);
 }
 // -------------------------------------------------------------------------
 
 double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     double nValue(0.0);
-    getValue(m_aStatementHandle,columnIndex,SQL_C_DOUBLE,m_bWasNull,**this,nValue);
+    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_DOUBLE,m_bWasNull,**this,&nValue,sizeof nValue);
     return nValue;
 }
 // -------------------------------------------------------------------------
 
 float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     float nVal(0);
-    getValue(m_aStatementHandle,columnIndex,SQL_C_FLOAT,m_bWasNull,**this,nVal);
+    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_FLOAT,m_bWasNull,**this,&nVal,sizeof nVal);
     return nVal;
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     sal_Int32 nVal = 0;
-    getValue(m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,nVal);
+    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,&nVal,sizeof nVal);
 
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
         return (*m_aValueRangeIter).second[(sal_Int32)nVal];
@@ -360,9 +365,10 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getRow(  ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     return 0;
 }
@@ -370,9 +376,10 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getRow(  ) throw(SQLException, Ru
 
 sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
     columnIndex = mapColumn(columnIndex);
     return sal_Int64(0);
 }
@@ -380,20 +387,18 @@ sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex ) 
 
 Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
 
-    if(!m_xMetaData.is())
-        m_xMetaData = new OResultSetMetaData(m_aStatementHandle);
-    return m_xMetaData;
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
+    ::osl::MutexGuard aGuard( m_aMutex );
+    return m_xMetaData.is() ? m_xMetaData :  (m_xMetaData = new OResultSetMetaData(m_aStatementHandle));
 }
 // -------------------------------------------------------------------------
 Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     return NULL;
@@ -403,9 +408,10 @@ Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 col
 
 Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     return NULL;
@@ -413,9 +419,10 @@ Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 colum
 // -------------------------------------------------------------------------
 Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     return NULL;
@@ -424,9 +431,10 @@ Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 colum
 
 Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     return NULL;
@@ -435,9 +443,10 @@ Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 columnI
 
 Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     return Any();
@@ -446,13 +455,14 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const
 
 sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     sal_Int16 nVal = 0;
-    getValue(m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,nVal);
+    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,&nVal,sizeof nVal);
 
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
         return sal_Int16((*m_aValueRangeIter).second[(sal_Int32)nVal]);
@@ -462,9 +472,10 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
 ::rtl::OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     ::rtl::OUString aVal = OTools::getStringValue(m_aStatementHandle,(SQLUSMALLINT)columnIndex,getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
@@ -477,13 +488,14 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
 ::com::sun::star::util::Time SAL_CALL ODatabaseMetaDataResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     TIME_STRUCT aTime={0,0,0};
-    getValue(m_aStatementHandle,columnIndex,SQL_C_TIME,m_bWasNull,**this,aTime);
+    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_TIME,m_bWasNull,**this,&aTime,sizeof aTime);
     return Time(0,aTime.second,aTime.minute,aTime.hour);
 }
 // -------------------------------------------------------------------------
@@ -491,49 +503,54 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
 ::com::sun::star::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     columnIndex = mapColumn(columnIndex);
     TIMESTAMP_STRUCT aTime={0,0,0,0,0,0,0};
-    getValue(m_aStatementHandle,columnIndex,SQL_C_TIMESTAMP,m_bWasNull,**this,aTime);
+    OTools::getValue(m_aStatementHandle,columnIndex,SQL_C_TIMESTAMP,m_bWasNull,**this,&aTime,sizeof aTime);
     return DateTime(aTime.fraction*1000,aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year);
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     return m_nCurrentFetchState == SQL_NO_DATA;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     return m_nRowPos == 1;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     return m_bEOF && m_nCurrentFetchState != SQL_NO_DATA;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ODatabaseMetaDataResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     if(first())
         previous();
@@ -542,9 +559,10 @@ void SAL_CALL ODatabaseMetaDataResultSet::beforeFirst(  ) throw(SQLException, Ru
 // -------------------------------------------------------------------------
 void SAL_CALL ODatabaseMetaDataResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     if(last())
         next();
@@ -555,9 +573,10 @@ void SAL_CALL ODatabaseMetaDataResultSet::afterLast(  ) throw(SQLException, Runt
 void SAL_CALL ODatabaseMetaDataResultSet::close(  ) throw(SQLException, RuntimeException)
 {
     {
+
+        checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
         ::osl::MutexGuard aGuard( m_aMutex );
-        if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-            throw DisposedException();
+
     }
     dispose();
 }
@@ -565,9 +584,10 @@ void SAL_CALL ODatabaseMetaDataResultSet::close(  ) throw(SQLException, RuntimeE
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_FIRST,0);
     OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
@@ -580,9 +600,9 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  ) throw(SQLException, Runt
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  ) throw(SQLException, RuntimeException)
 {
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed )
-        throw DisposedException();
+
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_LAST,0);
     OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
@@ -592,9 +612,10 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  ) throw(SQLException, Runti
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_ABSOLUTE,row);
     OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
@@ -606,9 +627,10 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row ) throw(SQ
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_RELATIVE,row);
     OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
@@ -620,9 +642,10 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row ) throw(SQ
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_PRIOR,0);
     OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
@@ -640,26 +663,29 @@ Reference< XInterface > SAL_CALL ODatabaseMetaDataResultSet::getStatement(  ) th
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     return m_pRowStatusArray[0] == SQL_ROW_DELETED;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
-{   ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+{
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
+    ::osl::MutexGuard aGuard( m_aMutex );
+
 
     return m_pRowStatusArray[0] == SQL_ROW_ADDED;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     return m_pRowStatusArray[0] == SQL_ROW_UPDATED;
 }
@@ -667,9 +693,10 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  ) throw(SQLException,
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     return m_nRowPos == 0;
 }
@@ -677,9 +704,10 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  ) throw(SQLExcepti
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     //  m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_NEXT,0);
     m_nCurrentFetchState = N3SQLFetch(m_aStatementHandle);
@@ -690,26 +718,29 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  ) throw(SQLException, Runti
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     return m_bWasNull;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ODatabaseMetaDataResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL ODatabaseMetaDataResultSet::cancel(  ) throw(RuntimeException)
 {
+
+    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+
 
     OTools::ThrowException(N3SQLCancel(m_aStatementHandle),m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
@@ -909,12 +940,13 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
 
 
     const char  *pCOL = NULL;
+    const char* pComma = ",";
     const ::rtl::OUString* pBegin = types.getConstArray();
     const ::rtl::OUString* pEnd = pBegin + types.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
         aCOL += ::rtl::OUStringToOString(*pBegin,m_nTextEncoding);
-        aCOL += ",";
+        aCOL += pComma;
     }
     if(aCOL.getLength())
         pCOL = aCOL.getStr();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 18:11:58 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,10 +86,6 @@
 #ifndef _CONNECTIVITY_ADABAS_BCONNECTION_HXX_
 #include "adabas/BConnection.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE adabas
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
@@ -164,7 +160,7 @@ Reference< XPropertySet > OTables::createEmptyObject()
 void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
+    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
     ObjectMap::iterator aIter = m_aNameMap.find(aName);
     if( aIter != m_aNameMap.end())
         throw ElementExistException(aName,*this);
@@ -185,10 +181,10 @@ void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQ
     OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
         Reference< XStatement > xStmt = pConnection->createStatement(  );
     aSql = ::rtl::OUString::createFromAscii("COMMENT ON TABLE ")
-            + aQuote + getString(descriptor->getPropertyValue(PROPERTY_SCHEMANAME)) + aQuote + aDot
-            + aQuote + getString(descriptor->getPropertyValue(PROPERTY_NAME)) + aQuote
+            + aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME))) + aQuote + aDot
+            + aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
             + ::rtl::OUString::createFromAscii(" '")
-            + getString(descriptor->getPropertyValue(PROPERTY_DESCRIPTION))
+            + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION)))
             + ::rtl::OUString::createFromAscii("'");
     xStmt->execute(aSql);
 
@@ -198,8 +194,8 @@ void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQ
     Reference< XPropertySet > xColProp;
 
     aSql = ::rtl::OUString::createFromAscii("COMMENT ON COLUMN ")
-            + aQuote + getString(descriptor->getPropertyValue(PROPERTY_SCHEMANAME)) + aQuote + aDot
-            + aQuote + getString(descriptor->getPropertyValue(PROPERTY_NAME)) + aQuote  + aDot
+            + aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME))) + aQuote + aDot
+            + aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote  + aDot
             + aQuote;
 
     for(sal_Int32 i=0;i<xColumns->getCount();++i)
@@ -207,10 +203,10 @@ void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQ
         ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
         if(xColProp.is())
         {
-            ::rtl::OUString aDescription = getString(xColProp->getPropertyValue(PROPERTY_DESCRIPTION));
+            ::rtl::OUString aDescription = getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION)));
             if(aDescription.getLength())
             {
-                ::rtl::OUString aCom = aSql + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote
+                ::rtl::OUString aCom = aSql + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
                                             + ::rtl::OUString::createFromAscii(" '")
                                             + aDescription
                                             + ::rtl::OUString::createFromAscii("'");
@@ -250,7 +246,7 @@ void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQ
         aName   = elementName.copy(nLen+1);
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
         Reference<XPropertySet> xProp(xTunnel,UNO_QUERY);
-        if(xProp.is() && ::comphelper::getString(xProp->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")) // here we have a view
+        if(xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString::createFromAscii("VIEW")) // here we have a view
             aSql += ::rtl::OUString::createFromAscii("VIEW ");
         else
             aSql += ::rtl::OUString::createFromAscii("TABLE ");
@@ -279,13 +275,13 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
     ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
     ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii("."),sSchema;
 
-    descriptor->getPropertyValue(PROPERTY_SCHEMANAME) >>= sSchema;
+    descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= sSchema;
     if(sSchema.getLength())
         aSql += ::dbtools::quoteName(aQuote, sSchema) + aDot;
     else
-        descriptor->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getUserName().toAsciiUpperCase()));
+        descriptor->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),makeAny(static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getUserName().toAsciiUpperCase()));
 
-    aSql += ::dbtools::quoteName(aQuote, getString(descriptor->getPropertyValue(PROPERTY_NAME)))
+    aSql += ::dbtools::quoteName(aQuote, getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))))
                 + ::rtl::OUString::createFromAscii(" (");
 
     // columns
@@ -303,37 +299,37 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
         if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
         {
 
-            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote;
+            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
 
             aSql = aSql + ::rtl::OUString::createFromAscii(" ");
 
-            aTypeName = xColProp->getPropertyValue(PROPERTY_TYPENAME);
+            aTypeName = xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
 
             if(aTypeName.hasValue() && getString(aTypeName).getLength())
                 aSql = aSql + getString(aTypeName);
             else
                 aSql = aSql + getTypeString(xColProp) + ::rtl::OUString::createFromAscii(" ");
 
-            switch(getINT32(xColProp->getPropertyValue(PROPERTY_TYPE)))
+            switch(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
             {
                 case DataType::CHAR:
                 case DataType::VARCHAR:
                     aSql = aSql + ::rtl::OUString::createFromAscii("(")
-                                + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(PROPERTY_PRECISION)))
+                                + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
                                 + ::rtl::OUString::createFromAscii(")");
                     break;
 
                 case DataType::DECIMAL:
                 case DataType::NUMERIC:
                     aSql = aSql + ::rtl::OUString::createFromAscii("(")
-                                + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(PROPERTY_PRECISION)))
+                                + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
                                 + ::rtl::OUString::createFromAscii(",")
-                                + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(PROPERTY_SCALE)))
+                                + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))))
                                 + ::rtl::OUString::createFromAscii(")");
                     break;
             }
-            ::rtl::OUString aDefault = getString(xColProp->getPropertyValue(PROPERTY_DEFAULTVALUE));
-            if(getINT32(xColProp->getPropertyValue(PROPERTY_ISNULLABLE)) == ColumnValue::NO_NULLS)
+            ::rtl::OUString aDefault = getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
+            if(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
             {
                 aSql = aSql + ::rtl::OUString::createFromAscii(" NOT NULL");
                 if(aDefault.getLength())
@@ -359,7 +355,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
             if(::cppu::extractInterface(xColProp,xKeys->getByIndex(i)) && xColProp.is())
             {
 
-                sal_Int32 nKeyType      = getINT32(xColProp->getPropertyValue(PROPERTY_TYPE));
+                sal_Int32 nKeyType      = getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 
                 if(nKeyType == KeyType::PRIMARY)
                 {
@@ -376,7 +372,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                     for(sal_Int32 i=0;i<xColumns->getCount();++i)
                     {
                         if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
-                            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote
+                            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
                                         +   ::rtl::OUString::createFromAscii(",");
                     }
 
@@ -393,7 +389,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                     for(sal_Int32 i=0;i<xColumns->getCount();++i)
                     {
                         if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
-                            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote
+                            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
                                         + ::rtl::OUString::createFromAscii(",");
                     }
 
@@ -401,7 +397,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                 }
                 else if(nKeyType == KeyType::FOREIGN)
                 {
-                    sal_Int32 nDeleteRule   = getINT32(xColProp->getPropertyValue(PROPERTY_DELETERULE));
+                    sal_Int32 nDeleteRule   = getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE)));
 
                     xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
                     xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
@@ -409,7 +405,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                         throw SQLException();
 
                     aSql = aSql + ::rtl::OUString::createFromAscii(" FOREIGN KEY ");
-                    ::rtl::OUString aName,aSchema,aRefTable = getString(xColProp->getPropertyValue(PROPERTY_REFERENCEDTABLE));
+                    ::rtl::OUString aName,aSchema,aRefTable = getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)));
                     sal_Int32 nLen = aRefTable.indexOf('.');
                     aSchema = aRefTable.copy(0,nLen);
                     aName   = aRefTable.copy(nLen+1);
@@ -421,7 +417,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                     for(sal_Int32 i=0;i<xColumns->getCount();++i)
                     {
                         if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
-                            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote
+                            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
                                         + ::rtl::OUString::createFromAscii(",");
                     }
 
@@ -458,7 +454,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
         Reference< XStatement > xStmt = pConnection->createStatement(  );
     xStmt->execute(aSql);
 
-    if(getString(descriptor->getPropertyValue(PROPERTY_DESCRIPTION)).getLength())
+    if(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION))).getLength())
         setComments(descriptor);
 }
 // -----------------------------------------------------------------------------

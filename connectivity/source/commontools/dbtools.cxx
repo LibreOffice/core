@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 17:25:49 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,9 +163,8 @@
 #ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/XExecutableDialog.hpp>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
 
 using namespace ::comphelper;
@@ -180,7 +179,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::form;
-using namespace connectivity::dbtools;
+using namespace connectivity;
 
 //.........................................................................
 namespace dbtools
@@ -365,7 +364,7 @@ Reference< XConnection > getConnection_allowException(
             sal_Bool bPwdReq = sal_False;
             try
             {
-                xProp->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
+                xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
                 bPwdReq = ::cppu::any2bool(xProp->getPropertyValue(::rtl::OUString::createFromAscii("IsPasswordRequired")));
                 xProp->getPropertyValue(::rtl::OUString::createFromAscii("User")) >>= sUser;
             }
@@ -458,8 +457,8 @@ Reference< XConnection> calcConnection(
 
                     if (hasProperty(s_sUserProp, xRowSetProps))
                         xRowSetProps->getPropertyValue(s_sUserProp) >>= sUser;
-                    if (hasProperty(PROPERTY_PASSWORD, xRowSetProps))
-                        xRowSetProps->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
+                    if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD), xRowSetProps))
+                        xRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
                     xReturn = getConnection_allowException(sDataSourceName, sUser, sPwd, _rxFactory);
                 }
                 else if (sURL.getLength())
@@ -472,8 +471,8 @@ Reference< XConnection> calcConnection(
                         ::rtl::OUString sUser, sPwd;
                         if (hasProperty(s_sUserProp, xRowSetProps))
                             xRowSetProps->getPropertyValue(s_sUserProp) >>= sUser;
-                        if (hasProperty(PROPERTY_PASSWORD, xRowSetProps))
-                            xRowSetProps->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
+                        if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD), xRowSetProps))
+                            xRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
                         if (sUser.getLength())
                         {   // use user and pwd together with the url
                             Sequence< PropertyValue> aInfo(2);
@@ -975,13 +974,13 @@ Reference< XSQLQueryComposer> getCurrentSettingsComposer(
             const ::rtl::OUString sPropApplyFilter = ::rtl::OUString::createFromAscii("ApplyFilter");
 
             // first ensure we have all properties needed
-            if (hasProperty(PROPERTY_COMMAND, _rxRowSetProps) && hasProperty(sPropCommandType, _rxRowSetProps)
+            if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND), _rxRowSetProps) && hasProperty(sPropCommandType, _rxRowSetProps)
                 && hasProperty(sPropFilter, _rxRowSetProps) && hasProperty(sPropOrder, _rxRowSetProps)
-                && hasProperty(PROPERTY_ESCAPEPROCESSING, _rxRowSetProps) && hasProperty(sPropApplyFilter, _rxRowSetProps))
+                && hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING), _rxRowSetProps) && hasProperty(sPropApplyFilter, _rxRowSetProps))
             {
                 sal_Int32 nCommandType = getINT32(_rxRowSetProps->getPropertyValue(sPropCommandType));
-                ::rtl::OUString sCommand = getString(_rxRowSetProps->getPropertyValue(PROPERTY_COMMAND));
-                sal_Bool bEscapeProcessing = getBOOL(_rxRowSetProps->getPropertyValue(PROPERTY_ESCAPEPROCESSING));
+                ::rtl::OUString sCommand = getString(_rxRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)));
+                sal_Bool bEscapeProcessing = getBOOL(_rxRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING)));
                 switch (nCommandType)
                 {
                     case CommandType::COMMAND:
@@ -1021,16 +1020,16 @@ Reference< XSQLQueryComposer> getCurrentSettingsComposer(
                             break;
 
                         //  a native query ?
-                        if (!hasProperty(PROPERTY_ESCAPEPROCESSING, xQueryProps))
+                        if (!hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING), xQueryProps))
                             break;
-                        if (!getBOOL(xQueryProps->getPropertyValue(PROPERTY_ESCAPEPROCESSING)))
+                        if (!getBOOL(xQueryProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING))))
                             break;
 
-                        if (!hasProperty(PROPERTY_COMMAND, xQueryProps))
+                        if (!hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND), xQueryProps))
                             break;
 
                         // the command used by the query
-                        sStatement = getString(xQueryProps->getPropertyValue(PROPERTY_COMMAND));
+                        sStatement = getString(xQueryProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)));
                         OSL_ENSURE(sStatement.getLength(),"Statement is empty!");
 
                         // use an additional composer to build a statement from the query filter/order props
@@ -1262,6 +1261,9 @@ void showError(const SQLExceptionInfo& _rInfo,
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2001/05/11 17:25:49  pl
+ *  rtl string api changes
+ *
  *  Revision 1.23  2001/04/27 10:09:14  oj
  *  comment out the OSL_ESNURE in QualifiedNameComponents
  *

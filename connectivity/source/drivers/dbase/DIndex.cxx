@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-11 09:18:49 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,6 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbase
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/sdbcx/VColumn.hxx"
 #endif
@@ -126,17 +122,6 @@
 #ifndef _CONNECTIVITY_DBASE_DRESULTSET_HXX_
 #include "dbase/DResultSet.hxx"
 #endif
-// define the properties of this lib
-// this file includes the properties for this dll
-namespace connectivity
-{
-    namespace dbase
-    {
-#ifndef CONNECTIVITY_USTRINGDESCRIPTION_IMPL_HXX
-#include "UStringDescription_Impl.hxx"
-#endif
-    }
-}
 // -------------------------------------------------------------------------
 using namespace connectivity;
 using namespace ucb;
@@ -257,7 +242,7 @@ sal_Bool ODbaseIndex::openIndexFile()
         {
             ::rtl::OUString sErrMsg = ::rtl::OUString::createFromAscii("Could not open index: ");
             sErrMsg += sFile;
-            throw SQLException(sErrMsg,*this,SQLSTATE_GENERAL,1000,Any());
+            throw SQLException(sErrMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
         }
     }
 
@@ -477,7 +462,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rInd
 ::rtl::OUString ODbaseIndex::getCompletePath()
 {
     ::rtl::OUString sDir = m_pTable->getConnection()->getURL();
-    sDir += STR_DELIMITER;
+    sDir += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sDir += m_Name;
     sDir += ::rtl::OUString::createFromAscii(".ndx");
     return sDir;
@@ -490,7 +475,7 @@ void ODbaseIndex::createINFEntry()
     sEntry += String::CreateFromAscii(".ndx");
 
     ::rtl::OUString sCfgFile(m_pTable->getConnection()->getURL());
-    sCfgFile += STR_DELIMITER;
+    sCfgFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sCfgFile += m_pTable->getName();
     sCfgFile += ::rtl::OUString::createFromAscii(".inf");
 
@@ -528,13 +513,13 @@ BOOL ODbaseIndex::DropImpl()
     if(UCBContentHelper::Exists(sPath))
     {
         if(!UCBContentHelper::Kill(sPath))
-            throw SQLException(::rtl::OUString::createFromAscii("Could not delete index!"),*m_pTable,SQLSTATE_GENERAL,1000,Any());
+            throw SQLException(::rtl::OUString::createFromAscii("Could not delete index!"),*m_pTable,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
 
     // InfDatei abgleichen
 
     ::rtl::OUString sCfgFile(m_pTable->getConnection()->getURL());
-    sCfgFile += STR_DELIMITER;
+    sCfgFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);;
     sCfgFile += m_pTable->getName();
     sCfgFile += ::rtl::OUString::createFromAscii(".inf");
 
@@ -573,11 +558,11 @@ BOOL ODbaseIndex::CreateImpl()
     // Anlegen des Index
     ::rtl::OUString sFile = getCompletePath();
     if(UCBContentHelper::Exists(sFile))
-        throw SQLException(::rtl::OUString::createFromAscii("Object already exists!"),*this,SQLSTATE_SEQUENCE,1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Object already exists!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
 
     // Index ist nur einstufig
     if (m_pColumns->getCount() > 1)
-        throw SQLException(::rtl::OUString::createFromAscii("Not capable! Only one column per index."),*this,SQLSTATE_SEQUENCE,1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Not capable! Only one column per index."),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
 
     Reference<XFastPropertySet> xCol;
     ::cppu::extractInterface(xCol,m_pColumns->getByIndex(0));
@@ -599,7 +584,7 @@ BOOL ODbaseIndex::CreateImpl()
     // create the index file
     m_pFileStream = UcbStreamHelper::CreateStream(sFile,STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
     if (!m_pFileStream)
-        throw SQLException(::rtl::OUString::createFromAscii("Could not access index file!"),*this,SQLSTATE_SEQUENCE,1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Could not access index file!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
 
     m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
     m_pFileStream->SetBufferSize(512);
@@ -646,7 +631,7 @@ BOOL ODbaseIndex::CreateImpl()
         closeImpl();
         if(UCBContentHelper::Exists(sFile))
             UCBContentHelper::Kill(sFile);
-        throw SQLException(::rtl::OUString::createFromAscii("Could not create index!"),*this,SQLSTATE_SEQUENCE,1000,makeAny(e));
+        throw SQLException(::rtl::OUString::createFromAscii("Could not create index!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,makeAny(e));
     }
     if (!xSet.is())
     {
@@ -654,7 +639,7 @@ BOOL ODbaseIndex::CreateImpl()
         closeImpl();
         if(UCBContentHelper::Exists(sFile))
             UCBContentHelper::Kill(sFile);
-        throw SQLException(::rtl::OUString::createFromAscii("Could not create index!"),*this,SQLSTATE_SEQUENCE,1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Could not create index!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
     }
 
     // Setzen der Headerinfo
@@ -666,10 +651,10 @@ BOOL ODbaseIndex::CreateImpl()
 
     Reference< XPropertySet > xTableCol(*find(aCols->begin(),aCols->end(),aName,::comphelper::UStringMixEqual(isCaseSensitive())));
 
-    xTableCol->getPropertyValue(PROPERTY_TYPE) >>= nType;
+    xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
 
     m_aHeader.db_keytype = (nType == DataType::VARCHAR || nType == DataType::CHAR) ? 0 : 1;
-    m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : (USHORT)getINT32(xTableCol->getPropertyValue(PROPERTY_PRECISION));
+    m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : (USHORT)getINT32(xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
     m_aHeader.db_maxkeys = (512 - 8) / (8 + m_aHeader.db_keylen);
 
     ByteString aCol(aName,m_pTable->getConnection()->getTextEncoding());
@@ -723,7 +708,7 @@ BOOL ODbaseIndex::CreateImpl()
                     closeImpl();
                     if(UCBContentHelper::Exists(sFile))
                         UCBContentHelper::Kill(sFile);
-                    throw SQLException(::rtl::OUString::createFromAscii("Can not create index values are not unique!"),*this,SQLSTATE_GENERAL,1000,Any());
+                    throw SQLException(::rtl::OUString::createFromAscii("Can not create index values are not unique!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
                 }
             }
             aInsertKey.setValue(aValue);
@@ -743,7 +728,7 @@ BOOL ODbaseIndex::CreateImpl()
         closeImpl();
         if(UCBContentHelper::Exists(sFile))
             UCBContentHelper::Kill(sFile);
-        throw SQLException(::rtl::OUString::createFromAscii("Could not create index!"),*this,SQLSTATE_SEQUENCE,1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Could not create index!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
     }
     Release();
     createINFEntry();

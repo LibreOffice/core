@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 18:45:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,10 +119,12 @@
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
+#ifndef _CONNECTIVITY_MODULECONTEXT_HXX_
+#include "ModuleContext.hxx"
+#endif
 
 using namespace connectivity::file;
-using namespace connectivity::dbtools;
-
+using namespace dbtools;
 //------------------------------------------------------------------------------
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

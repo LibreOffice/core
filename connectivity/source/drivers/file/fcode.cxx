@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 18:45:42 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,8 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE file
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
 
 using namespace connectivity;
@@ -159,6 +158,7 @@ const ORowSetValue& OOperandRow::getValue() const
     OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->size(),"Invalid RowPos is >= vector.size()");
     return (*m_pRow)[m_nRowPos];
 }
+
 // -----------------------------------------------------------------------------
 void OOperandValue::setValue(const ORowSetValue& _rVal)
 {
@@ -166,7 +166,7 @@ void OOperandValue::setValue(const ORowSetValue& _rVal)
 }
 //------------------------------------------------------------------
 OOperandAttr::OOperandAttr(sal_uInt16 _nPos,const Reference< XPropertySet>& _xColumn)
-    : OOperandRow(_nPos,getINT32(_xColumn->getPropertyValue(PROPERTY_TYPE)))
+    : OOperandRow(_nPos,getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
     , m_xColumn(_xColumn)
 {
 }
@@ -216,19 +216,19 @@ void OOperandParam::describe(const Reference< XPropertySet>& rColumn, ::vos::ORe
 
     try
     {
-        xColumn->setPropertyValue(PROPERTY_TYPENAME,rColumn->getPropertyValue(PROPERTY_TYPENAME));
-        xColumn->setPropertyValue(PROPERTY_DEFAULTVALUE,rColumn->getPropertyValue(PROPERTY_DEFAULTVALUE));
-        xColumn->setPropertyValue(PROPERTY_PRECISION,rColumn->getPropertyValue(PROPERTY_PRECISION));
-        xColumn->setPropertyValue(PROPERTY_TYPE,rColumn->getPropertyValue(PROPERTY_TYPE));
-        xColumn->setPropertyValue(PROPERTY_SCALE,rColumn->getPropertyValue(PROPERTY_SCALE));
-        xColumn->setPropertyValue(PROPERTY_ISNULLABLE,rColumn->getPropertyValue(PROPERTY_ISNULLABLE));
-        xColumn->setPropertyValue(PROPERTY_ISAUTOINCREMENT,rColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT));
+        xColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME),rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)));
+        xColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE),rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
+        xColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION),rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
+        xColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
+        xColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE),rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
+        xColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE),rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)));
+        xColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT),rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)));
     }
     catch(const Exception&)
     {
     }
 
-    m_eDBType = getINT32(rColumn->getPropertyValue(PROPERTY_TYPE));
+    m_eDBType = getINT32(rColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 }
 
 //------------------------------------------------------------------

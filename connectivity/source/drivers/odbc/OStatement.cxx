@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 17:59:22 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,6 @@
 #ifndef _CONNECTIVITY_ODBC_ORESULTSET_HXX_
 #include "odbc/OResultSet.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE odbc
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
@@ -127,17 +123,6 @@
     }
 #endif
 
-// define the properties of this lib
-// this file includes the properties for this dll
-namespace connectivity
-{
-    namespace odbc
-    {
-#ifndef CONNECTIVITY_USTRINGDESCRIPTION_IMPL_HXX
-#include "UStringDescription_Impl.hxx"
-#endif
-    }
-}
 
 
 using namespace connectivity::odbc;
@@ -215,8 +200,8 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
 void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     OTools::ThrowException(N3SQLCancel(m_aStatementHandle),m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
@@ -226,8 +211,8 @@ void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        if (OStatement_BASE::rBHelper.bDisposed)
-            throw DisposedException();
+        checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     }
     dispose();
 }
@@ -242,8 +227,8 @@ void SAL_CALL OStatement::clearBatch(  ) throw(SQLException, RuntimeException)
 void OStatement_Base::reset() throw (SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     clearWarnings ();
 
@@ -264,8 +249,8 @@ void OStatement_Base::reset() throw (SQLException)
 void OStatement_Base::clearMyResultSet () throw (SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     Reference<XCloseable> xCloseable;
     if(::comphelper::query_interface(m_xResultSet.get(),xCloseable))
@@ -276,8 +261,8 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
 sal_Int32 OStatement_Base::getRowCount () throw( SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     sal_Int32   numRows = 0;
 
@@ -338,8 +323,8 @@ sal_Bool OStatement_Base::lockIfNecessary (const ::rtl::OUString& sql) throw( SQ
 void OStatement_Base::setWarning (const SQLWarning &ex) throw( SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     m_aLastWarning = ex;
 }
@@ -352,8 +337,8 @@ void OStatement_Base::setWarning (const SQLWarning &ex) throw( SQLException)
 sal_Int32 OStatement_Base::getColumnCount () throw( SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     sal_Int16   numCols = 0;
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
@@ -371,8 +356,8 @@ sal_Int32 OStatement_Base::getColumnCount () throw( SQLException)
 sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     ::rtl::OString aSql(::rtl::OUStringToOString(sql,getOwnConnection()->getTextEncoding()));
 
@@ -421,8 +406,8 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
 Reference< XResultSet > OStatement_Base::getResultSet (sal_Bool checkCount) throw( SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     if (m_xResultSet.get().is())  // if resultset already retrieved,
     {
@@ -483,8 +468,8 @@ sal_Int32 OStatement_Base::getStmtOption (short fOption) const throw( SQLExcepti
 Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     Reference< XResultSet > xRS = NULL;
 
@@ -508,8 +493,8 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
 Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
     return (Reference< XConnection >)m_pConnection;
 }
 // -------------------------------------------------------------------------
@@ -526,8 +511,8 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
 void SAL_CALL OStatement::addBatch( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     m_aBatchList.push_back(sql);
 }
@@ -535,8 +520,8 @@ void SAL_CALL OStatement::addBatch( const ::rtl::OUString& sql ) throw(SQLExcept
 Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     ::rtl::OString aBatchSql;
     sal_Int32 nLen = 0;
@@ -567,8 +552,8 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
 sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     sal_Int32 numRows = -1;
 
@@ -594,8 +579,8 @@ sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) 
 Reference< XResultSet > SAL_CALL OStatement_Base::getResultSet(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     m_xResultSet = getResultSet(sal_True);
     return m_xResultSet;
@@ -605,8 +590,8 @@ Reference< XResultSet > SAL_CALL OStatement_Base::getResultSet(  ) throw(SQLExce
 sal_Int32 SAL_CALL OStatement_Base::getUpdateCount(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     sal_Int32 rowCount = -1;
 
@@ -623,8 +608,8 @@ sal_Int32 SAL_CALL OStatement_Base::getUpdateCount(  ) throw(SQLException, Runti
 sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     OResultSet* pRS = NULL;
     SQLWarning  warning;
@@ -676,8 +661,8 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
 Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     return makeAny(m_aLastWarning);
 }
@@ -687,8 +672,8 @@ Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeExcepti
 void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     m_aLastWarning = SQLWarning();
 }
@@ -785,8 +770,8 @@ sal_Int32 OStatement_Base::getMaxFieldSize() const throw(SQLException, RuntimeEx
 void OStatement_Base::setQueryTimeOut(sal_Int32 seconds) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_QUERY_TIMEOUT,(SQLPOINTER)seconds,SQL_IS_UINTEGER);
@@ -798,8 +783,8 @@ void OStatement_Base::setQueryTimeOut(sal_Int32 seconds) throw(SQLException, Run
 void OStatement_Base::setMaxRows(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_MAX_ROWS, (SQLPOINTER)_par0,SQL_IS_UINTEGER);
@@ -812,8 +797,8 @@ void OStatement_Base::setMaxRows(sal_Int32 _par0) throw(SQLException, RuntimeExc
 void OStatement_Base::setResultSetConcurrency(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     SQLINTEGER nSet;
     if(_par0 == ResultSetConcurrency::READ_ONLY)
@@ -829,8 +814,8 @@ void OStatement_Base::setResultSetConcurrency(sal_Int32 _par0) throw(SQLExceptio
 void OStatement_Base::setResultSetType(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_ROW_BIND_TYPE,(SQLPOINTER)SQL_BIND_BY_COLUMN,SQL_IS_UINTEGER);
@@ -868,8 +853,8 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0) throw(SQLException, Runt
 void OStatement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_Int32 nCursType = 0;
@@ -893,8 +878,8 @@ void OStatement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLException, Run
 void OStatement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
 
@@ -916,8 +901,8 @@ void OStatement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeE
 void OStatement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     THROW_SQL(N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_MAX_LENGTH,(SQLPOINTER)_par0,SQL_IS_UINTEGER));
@@ -926,8 +911,8 @@ void OStatement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLException, Runti
 void OStatement_Base::setCursorName(const ::rtl::OUString &_par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     ::rtl::OString aName(::rtl::OUStringToOString(_par0,getOwnConnection()->getTextEncoding()));
@@ -936,8 +921,8 @@ void OStatement_Base::setCursorName(const ::rtl::OUString &_par0) throw(SQLExcep
 // -------------------------------------------------------------------------
 sal_Bool OStatement_Base::isUsingBookmarks() const throw(SQLException, RuntimeException)
 {
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue = SQL_UB_OFF;
@@ -949,8 +934,8 @@ sal_Bool OStatement_Base::isUsingBookmarks() const throw(SQLException, RuntimeEx
 void OStatement_Base::setUsingBookmarks(sal_Bool _bUseBookmark) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OStatement_BASE::rBHelper.bDisposed)
-        throw DisposedException();
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue = _bUseBookmark ? SQL_UB_VARIABLE : SQL_UB_OFF;
@@ -990,34 +975,35 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
                             const Any& rValue )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
+    sal_Bool bConverted = sal_False;
     switch(nHandle)
     {
         case PROPERTY_ID_QUERYTIMEOUT:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getQueryTimeOut());
+            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getQueryTimeOut());
         case PROPERTY_ID_MAXFIELDSIZE:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxFieldSize());
+            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxFieldSize());
         case PROPERTY_ID_MAXROWS:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxRows());
+            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxRows());
         case PROPERTY_ID_CURSORNAME:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getCursorName());
+            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getCursorName());
         case PROPERTY_ID_RESULTSETCONCURRENCY:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetConcurrency());
+            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetConcurrency());
         case PROPERTY_ID_RESULTSETTYPE:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetType());
+            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetType());
         case PROPERTY_ID_FETCHDIRECTION:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
+            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
         case PROPERTY_ID_FETCHSIZE:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchSize());
+            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchSize());
         case PROPERTY_ID_ESCAPEPROCESSING:
-            //  return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
+            //  bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
             break;
         case PROPERTY_ID_USEBOOKMARKS:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, isUsingBookmarks());
+            bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, isUsingBookmarks());
 
         default:
             ;
     }
-    return sal_False;
+    return bConverted;
 }
 // -------------------------------------------------------------------------
 void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)

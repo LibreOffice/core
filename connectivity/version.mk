@@ -2,9 +2,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-08 12:12:04 $
+#   last change: $Author: oj $ $Date: 2001-05-14 11:55:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,22 @@ ADO_MICRO=0
 ADO_CPP=1
 
 ADO=$(ADO_TARGET_TARGET)_$(CMPEXT)
+
+# ----------------------------ODBC BASE settings-----------------------------------#
+# target
+ODBC2_TARGET=odbcbase
+
+# the major 
+ODBC2_MAJOR=2
+# the minor 
+ODBC2_MINOR=0
+# the micro 
+ODBC2_MICRO=0
+
+# this is a c++ compatible library 
+ODBC2_CPP=1
+
+ODBC2=$(ODBC2_TARGET_TARGET)_$(CMPEXT)
 
 # ----------------------------ODBC settings-----------------------------------#
 # target

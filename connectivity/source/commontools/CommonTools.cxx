@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 17:25:49 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,20 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
+#include <cppuhelper/interfacecontainer.h>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
 
 inline sal_Unicode rtl_ascii_toUpperCase( sal_Unicode ch )
@@ -92,6 +100,7 @@ inline sal_Unicode rtl_ascii_toUpperCase( sal_Unicode ch )
 namespace connectivity
 {
     using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace dbtools;
     //------------------------------------------------------------------------------
@@ -295,7 +304,7 @@ namespace connectivity
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
     {
-        while (__first != __last && !_rCase(getString((*__first)->getPropertyValue(PROPERTY_NAME)),_rVal))
+        while (__first != __last && !_rCase(getString((*__first)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),_rVal))
             ++__first;
         return __first;
     }
@@ -305,7 +314,7 @@ namespace connectivity
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
     {
-        while (__first != __last && !_rCase(getString((*__first)->getPropertyValue(PROPERTY_REALNAME)),_rVal))
+        while (__first != __last && !_rCase(getString((*__first)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME))),_rVal))
             ++__first;
         return __first;
     }
@@ -319,5 +328,52 @@ namespace connectivity
         while (__first != __last && !_rCase(getString(Reference<XPropertySet>((*__first),UNO_QUERY)->getPropertyValue(_rProp)),_rVal))
             ++__first;
         return __first;
+    }
+
+    void release(oslInterlockedCount& _refCount,
+                 ::cppu::OBroadcastHelper& rBHelper,
+                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                 ::com::sun::star::lang::XComponent* _pObject)
+    {
+        if (osl_decrementInterlockedCount( &_refCount ) == 0)
+        {
+            osl_incrementInterlockedCount( &_refCount );
+
+            if (!rBHelper.bDisposed && !rBHelper.bInDispose)
+            {
+                // remember the parent
+                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xParent;
+                {
+                    ::osl::MutexGuard aGuard( rBHelper.rMutex );
+                    xParent = _xInterface;
+                    _xInterface = NULL;
+                }
+
+                // First dispose
+                _pObject->dispose();
+
+                // only the alive ref holds the object
+                OSL_ASSERT( _refCount == 1 );
+
+                // release the parent in the ~
+                if (xParent.is())
+                {
+                    ::osl::MutexGuard aGuard( rBHelper.rMutex );
+                    _xInterface = xParent;
+                }
+
+//                  // destroy the object if xHoldAlive decrement the refcount to 0
+//                  m_pDerivedImplementation->WEAK::release();
+            }
+        }
+        else
+            osl_incrementInterlockedCount( &_refCount );
+    }
+
+    void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
+    {
+        if (_bThrow)
+            throw DisposedException();
+
     }
 }

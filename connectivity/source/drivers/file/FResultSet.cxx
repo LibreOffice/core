@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 18:45:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,6 @@
 #endif
 #ifndef _CONNECTIVITY_FILE_ORESULTSET_HXX_
 #include "file/FResultSet.hxx"
-#endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE file
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
 #endif
 #ifndef _CONNECTIVITY_FILE_ORESULTSETMETADATA_HXX_
 #include "file/FResultSetMetaData.hxx"
@@ -139,6 +135,7 @@
 using namespace connectivity;
 using namespace connectivity::file;
 using namespace cppu;
+using namespace dbtools;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -205,10 +202,10 @@ OResultSet::~OResultSet()
 // -------------------------------------------------------------------------
 void OResultSet::construct()
 {
-    registerProperty(PROPERTY_FETCHSIZE,            PROPERTY_ID_FETCHSIZE,          0,&m_nFetchSize,        ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(PROPERTY_RESULTSETTYPE,        PROPERTY_ID_RESULTSETTYPE,      PropertyAttribute::READONLY,&m_nResultSetType,       ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(PROPERTY_FETCHDIRECTION,       PROPERTY_ID_FETCHDIRECTION,     0,&m_nFetchDirection,   ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(PROPERTY_RESULTSETCONCURRENCY, PROPERTY_ID_RESULTSETCONCURRENCY,PropertyAttribute::READONLY,&m_nResultSetConcurrency,                ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),           PROPERTY_ID_FETCHSIZE,          0,&m_nFetchSize,        ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),        PROPERTY_ID_RESULTSETTYPE,      PropertyAttribute::READONLY,&m_nResultSetType,       ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),      PROPERTY_ID_FETCHDIRECTION,     0,&m_nFetchDirection,   ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY), PROPERTY_ID_RESULTSETCONCURRENCY,PropertyAttribute::READONLY,&m_nResultSetConcurrency,                ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
 }
 // -------------------------------------------------------------------------
 void OResultSet::disposing(void)
@@ -291,7 +288,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinarySt
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -303,7 +300,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacte
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -316,7 +313,7 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLExcep
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -330,7 +327,7 @@ sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLExceptio
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -344,7 +341,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     // it could happen that values are updated as string and then called for as getBytes
@@ -366,7 +363,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
 
@@ -381,7 +378,7 @@ double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLExceptio
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -395,7 +392,7 @@ float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException,
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -409,7 +406,7 @@ sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLExceptio
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -438,7 +435,7 @@ sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLExcepti
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
 
     columnIndex = mapColumn(columnIndex);
     return sal_Int64();
@@ -463,7 +460,7 @@ Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -477,7 +474,7 @@ Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) throw(S
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -489,7 +486,7 @@ Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 columnIndex ) throw(S
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -502,7 +499,7 @@ Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) throw(SQL
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     return NULL;
 }
@@ -526,7 +523,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -541,7 +538,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
@@ -557,7 +554,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
 
     columnIndex = mapColumn(columnIndex);
     return (*m_aRow)[columnIndex];
@@ -572,7 +569,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     return (*m_aRow)[columnIndex];
 }
@@ -830,7 +827,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
     if(m_pTable->isReadOnly())
-        throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,SQLSTATE_GENERAL,1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     m_bRowUpdated = m_pTable->UpdateRow(m_aInsertRow.getBody(), m_aRow,Reference<XIndexAccess>(m_xColNames,UNO_QUERY));
     (*m_aInsertRow)[0] = (sal_Int32)(*m_aRow)[0];
 
@@ -855,7 +852,7 @@ void SAL_CALL OResultSet::deleteRow() throw(SQLException, RuntimeException)
         throw DisposedException();
 
     if(m_pTable->isReadOnly())
-        throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,SQLSTATE_GENERAL,1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     sal_Int32 nPos = (sal_Int32)(*m_aRow)[0];
     m_bRowDeleted = m_pTable->DeleteRow(m_xColumns.getBody());
     if(m_bRowDeleted && m_pFileSet)
@@ -899,7 +896,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
     if(m_pTable->isReadOnly())
-        throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,SQLSTATE_GENERAL,1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 
     Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
 
@@ -925,7 +922,7 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -941,7 +938,7 @@ void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) thr
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -955,7 +952,7 @@ void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -970,7 +967,7 @@ void SAL_CALL OResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) thro
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -984,7 +981,7 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -994,7 +991,7 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(
 void SAL_CALL OResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQLException, RuntimeException)
 {
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     throw RuntimeException();
 }
@@ -1006,7 +1003,7 @@ void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQ
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1021,7 +1018,7 @@ void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1035,7 +1032,7 @@ void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUSt
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1049,7 +1046,7 @@ void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sa
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1063,7 +1060,7 @@ void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::s
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1078,7 +1075,7 @@ void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const ::com::sun::s
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1093,7 +1090,7 @@ void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::s
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1110,7 +1107,7 @@ void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Refer
         ::dbtools::throwFunctionSequenceException(*this);
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     Sequence<sal_Int8> aSeq;
     x->readSomeBytes(aSeq,length);
@@ -1127,7 +1124,7 @@ void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Re
         ::dbtools::throwFunctionSequenceException(*this);
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     Sequence<sal_Int8> aSeq;
     x->readSomeBytes(aSeq,length);
@@ -1149,7 +1146,7 @@ void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) th
         throw DisposedException();
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
@@ -1163,7 +1160,7 @@ void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any&
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
-        throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
+        throwInvalidIndexException(*this);
     columnIndex = mapColumn(columnIndex);
     OSL_ENSURE(0,"OResultSet::updateNumericObject: NYI");
 }
@@ -2200,7 +2197,7 @@ BOOL OResultSet::OpenImpl()
                                     Reference<XColumnsSupplier> xIndex;
                                     ::cppu::extractInterface(xIndex,xIndexes->getByIndex(i));
                                     Reference<XNameAccess> xIndexCols = xIndex->getColumns();
-                                    if(xIndexCols->hasByName(connectivity::getString(xColProp->getPropertyValue(PROPERTY_NAME))))
+                                    if(xIndexCols->hasByName(connectivity::getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))))
                                     {
                                         m_pFileSet = new OKeySet();
 
@@ -2738,7 +2735,7 @@ void OResultSet::SetAssignValue(const String& aColumnName,
         (*m_aAssignValues)[nId].setNull();
     else
     {
-        switch (getINT32(xCol->getPropertyValue(PROPERTY_TYPE)))
+        switch (getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
         {
             // Kriterium je nach Typ als String oder double in die Variable packen ...
             case DataType::CHAR:
@@ -2828,10 +2825,10 @@ UINT32 OResultSet::AddParameter(OSQLParseNode * pParameter, const Reference<XPro
         // Typ, Precision, Scale ... der angegebenen Column verwenden,
         // denn dieser Column wird der Wert zugewiesen bzw. mit dieser
         // Column wird der Wert verglichen.
-        eType = getINT32(_xCol->getPropertyValue(PROPERTY_TYPE));
-        nPrecision = getINT32(_xCol->getPropertyValue(PROPERTY_PRECISION));
-        nScale = getINT32(_xCol->getPropertyValue(PROPERTY_SCALE));
-        nNullable = getINT32(_xCol->getPropertyValue(PROPERTY_ISNULLABLE));;
+        eType = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
+        nPrecision = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
+        nScale = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
+        nNullable = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)));;
     }
 
     Reference<XPropertySet> xParaColumn;
@@ -2965,7 +2962,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
             _xNames->getByIndex(i) >>= xTableColumn;
             OSL_ENSURE(xTableColumn.is(), "OResultSet::OpenImpl: invalid table column!");
             if (xTableColumn.is())
-                xTableColumn->getPropertyValue(PROPERTY_NAME) >>= sTableColumnName;
+                xTableColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sTableColumnName;
             else
                 sTableColumnName = ::rtl::OUString();
 
@@ -2976,10 +2973,10 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                     ++aIter
                 )
             {
-                if((*aIter)->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME))
-                    (*aIter)->getPropertyValue(PROPERTY_REALNAME) >>= sSelectColumnRealName;
+                if((*aIter)->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME)))
+                    (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME)) >>= sSelectColumnRealName;
                 else
-                    (*aIter)->getPropertyValue(PROPERTY_NAME) >>= sSelectColumnRealName;
+                    (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sSelectColumnRealName;
 
                 if (aCase(sTableColumnName, sSelectColumnRealName))
                 {
@@ -2995,7 +2992,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                     aRowIter->setBound(sal_True);
                     sal_Int32 nType = DataType::OTHER;
                     if (xTableColumn.is())
-                        xTableColumn->getPropertyValue(PROPERTY_TYPE) >>= nType;
+                        xTableColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
                     aRowIter->setTypeKind(nType);
                 }
             }

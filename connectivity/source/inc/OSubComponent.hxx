@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSubComponent.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-08 10:03:03 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,29 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-
+#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
+#include <cppuhelper/interfacecontainer.h>
+#endif
+namespace com
+{
+    namespace sun
+    {
+        namespace star
+        {
+            namespace lang
+            {
+                class XComponent;
+            }
+        }
+    }
+}
 namespace connectivity
 {
 
+    void release(oslInterlockedCount& _refCount,
+                 ::cppu::OBroadcastHelper& rBHelper,
+                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                 ::com::sun::star::lang::XComponent* _pObject);
     //************************************************************
     // OSubComponent
     //************************************************************
@@ -96,39 +115,10 @@ namespace connectivity
         }
         void relase_ChildImpl()
         {
-            if (osl_decrementInterlockedCount( &m_pDerivedImplementation->m_refCount ) == 0)
-            {
-                osl_incrementInterlockedCount( &m_pDerivedImplementation->m_refCount );
-
-                if (!m_pDerivedImplementation->rBHelper.bDisposed && !m_pDerivedImplementation->rBHelper.bInDispose)
-                {
-                    // remember the parent
-                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xParent;
-                    {
-                        ::osl::MutexGuard aGuard( m_pDerivedImplementation->rBHelper.rMutex );
-                        xParent = m_xParent;
-                        m_xParent = NULL;
-                    }
-
-                    // First dispose
-                    m_pDerivedImplementation->dispose();
-
-                    // only the alive ref holds the object
-                    OSL_ASSERT( m_pDerivedImplementation->m_refCount == 1 );
-
-                    // release the parent in the ~
-                    if (xParent.is())
-                    {
-                        ::osl::MutexGuard aGuard( m_pDerivedImplementation->rBHelper.rMutex );
-                        m_xParent = xParent;
-                    }
-
-//                  // destroy the object if xHoldAlive decrement the refcount to 0
-//                  m_pDerivedImplementation->WEAK::release();
-                }
-            }
-            else
-                osl_incrementInterlockedCount( &m_pDerivedImplementation->m_refCount );
+            ::connectivity::release(m_pDerivedImplementation->m_refCount,
+                                    m_pDerivedImplementation->rBHelper,
+                                    m_xParent,
+                                    m_pDerivedImplementation);
 
             m_pDerivedImplementation->WEAK::release();
         }

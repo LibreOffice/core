@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2001-05-09 08:21:05 $
+#   last change: $Author: oj $ $Date: 2001-05-14 11:48:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,17 +100,7 @@ SLOFILES=\
         $(SLO)$/BDatabaseMetaData.obj			\
         $(SLO)$/BPreparedStatement.obj          \
         $(SLO)$/BStatement.obj                  \
-        $(SLO)$/BResultSet.obj					\
-        $(SLO)$/OPreparedStatement.obj			\
-        $(SLO)$/OStatement.obj					\
-        $(SLO)$/OResultSetMetaData.obj			\
-        $(SLO)$/OResultSet.obj					\
-        $(SLO)$/OTools.obj						\
-        $(SLO)$/ODatabaseMetaData.obj			\
-        $(SLO)$/ODatabaseMetaDataResultSet.obj	\
-        $(SLO)$/ODriver.obj						\
-        $(SLO)$/OFunctions.obj					\
-        $(SLO)$/OConnection.obj
+        $(SLO)$/BResultSet.obj
         
 .IF "$(OS)"=="MACOSX"
 #SHL1VERSIONMAP=$(ADABAS_TARGET).$(DLLPOSTFIX).map
@@ -129,9 +119,12 @@ SHL1STDLIBS=\
     $(OSLLIB)					\
     $(SALLIB)					\
     $(DBTOOLSLIB)				\
+    $(ODBCBASELIB)				\
     $(COMPHELPERLIB)
 
-#SHL1LIBS+= $(SLB)$/odbc.lib
+.IF "$(ODBCBASELIB)" == ""
+SHL1STDLIBS+= iodbcbase.lib
+.ENDIF
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)

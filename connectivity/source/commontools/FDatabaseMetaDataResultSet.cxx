@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 17:25:49 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 11:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,6 @@
 #ifndef _CONNECTIVITY_FDATABASEMETADATARESULTSET_HXX_
 #include "FDatabaseMetaDataResultSet.hxx"
 #endif
-#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#include "propertyids.hxx"
-#endif
 #ifndef _CONNECTIVITY_DATABASEMETADATARESULTSETMETADATA_HXX_
 #include "FDatabaseMetaDataResultSetMetaData.hxx"
 #endif
@@ -109,9 +105,12 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
 #endif
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
+#endif
 
 using namespace connectivity;
-using namespace connectivity::dbtools;
+using namespace dbtools;
 using namespace cppu;
 //------------------------------------------------------------------------------
 using namespace ::com::sun::star::beans;
@@ -139,10 +138,10 @@ ODatabaseMetaDataResultSet::~ODatabaseMetaDataResultSet()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::construct()
 {
-    registerProperty(PROPERTY_FETCHSIZE,            PROPERTY_ID_FETCHSIZE,          0,&m_nFetchSize,        ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(PROPERTY_RESULTSETTYPE,        PROPERTY_ID_RESULTSETTYPE,          PropertyAttribute::READONLY,&m_nResultSetType,       ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(PROPERTY_FETCHDIRECTION,       PROPERTY_ID_FETCHDIRECTION,     0,  &m_nFetchDirection, ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(PROPERTY_RESULTSETCONCURRENCY, PROPERTY_ID_RESULTSETCONCURRENCY,   PropertyAttribute::READONLY,&m_nResultSetConcurrency,                ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),           PROPERTY_ID_FETCHSIZE,          0,&m_nFetchSize,        ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),        PROPERTY_ID_RESULTSETTYPE,          PropertyAttribute::READONLY,&m_nResultSetType,       ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),      PROPERTY_ID_FETCHDIRECTION,     0,  &m_nFetchDirection, ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY), PROPERTY_ID_RESULTSETCONCURRENCY,   PropertyAttribute::READONLY,&m_nResultSetConcurrency,                ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::disposing(void)
@@ -213,7 +212,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
         return NULL;
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
     m_nColPos = columnIndex;
     return NULL;
@@ -229,7 +228,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
         return NULL;
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
 
     return NULL;
@@ -245,7 +244,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex 
         return sal_False;
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
     return (*m_aRowsIter)[columnIndex];
 }
@@ -260,7 +259,7 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
         return 0;
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
 
     return (*m_aRowsIter)[columnIndex];
@@ -276,7 +275,7 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
         return Sequence< sal_Int8 >();
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
 ;
 
@@ -293,7 +292,7 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
         return ::com::sun::star::util::Date(0,0,0);
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
 ;
 
@@ -310,7 +309,7 @@ double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex ) t
         return 0.0;
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
 ;
 
@@ -328,7 +327,7 @@ float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex ) thr
         return 0.0;
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
 ;
 
@@ -346,7 +345,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
         return 0;
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
 ;
 
@@ -374,7 +373,7 @@ sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex ) 
         return sal_Int64();
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
 ;
 
@@ -403,7 +402,7 @@ Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 col
         return NULL;
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
 
     return NULL;
@@ -420,7 +419,7 @@ Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 colum
         return NULL;
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
 
     return NULL;
@@ -435,7 +434,7 @@ Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 colum
         return NULL;
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
 
     return NULL;
@@ -451,7 +450,7 @@ Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 columnI
         return NULL;
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
 
     return NULL;
@@ -467,7 +466,7 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const
         return Any();
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-                throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+                ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
     return (*m_aRowsIter)[columnIndex].makeAny();
 }
@@ -482,7 +481,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
         return 0;
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
 
     return (*m_aRowsIter)[columnIndex];
@@ -499,7 +498,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
         return ::rtl::OUString();
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
 
     m_nColPos = columnIndex;
@@ -519,7 +518,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
         return ::com::sun::star::util::Time(0,0,0,0);
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
     m_nColPos = columnIndex;
 
 ;
@@ -539,7 +538,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
         return ::com::sun::star::util::DateTime(0,0,0,0,0,0,0);
 
     if(columnIndex >= (sal_Int32)(*m_aRowsIter).size() || columnIndex < 1)
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString(),0,Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
     m_nColPos = columnIndex;
 ;
