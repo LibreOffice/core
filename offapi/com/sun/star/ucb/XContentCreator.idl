@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentCreator.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ module com { module sun { module star { module ucb {
     @see      XContent
     @see      XCommandProcessor
 */
-interface XContentCreator: com::sun::star::uno::XInterface
+published interface XContentCreator: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** returns a list with information about the creatable contents.
