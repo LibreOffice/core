@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: os $ $Date: 2002-08-13 07:51:41 $
+ *  last change: $Author: os $ $Date: 2002-08-22 13:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,8 @@ String RID_SVXITEMS_TRUE
     Text[ korean ] = "TRUE";
     Text[ turkish ] = "Do�ru";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Verdadero";
+    Text[ catalan ] = "Cert";
+    Text[ thai ] = "จริง";
 };
 String RID_SVXITEMS_FALSE
 {
@@ -115,7 +116,8 @@ String RID_SVXITEMS_FALSE
     Text[ korean ] = "FALSE";
     Text[ turkish ] = "Yanl��";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Falso";
+    Text[ catalan ] = "Fals";
+    Text[ thai ] = "เท็จ";
 };
  // Extras -------------------------------------------------------------------
 String RID_SVXITEMS_EXTRAS_CHARCOLOR
@@ -143,7 +145,8 @@ String RID_SVXITEMS_EXTRAS_CHARCOLOR
     Text[ korean ] = "글꼴 색상";
     Text[ turkish ] = "Yaz�tipi rengi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Color del car�cter";
+    Text[ catalan ] = "Color de la lletra";
+    Text[ thai ] = "สีตัวอักษร";
 };
  // SvxSearchItem ------------------------------------------------------------
  // Kommando
@@ -172,7 +175,8 @@ String RID_SVXITEMS_SEARCHCMD_FIND
     Text[ korean ] = "찾기";
     Text[ turkish ] = "Ara";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Buscar";
+    Text[ catalan ] = "Cerca";
+    Text[ thai ] = "ค้นหา";
 };
 String RID_SVXITEMS_SEARCHCMD_FIND_ALL
 {
@@ -199,7 +203,8 @@ String RID_SVXITEMS_SEARCHCMD_FIND_ALL
     Text[ korean ] = "모두 찾기";
     Text[ turkish ] = "T�m�n� ara";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Buscar todo";
+    Text[ catalan ] = "Cerca-ho tot";
+    Text[ thai ] = "หาทั้งหมด";
 };
 String RID_SVXITEMS_SEARCHCMD_REPLACE
 {
@@ -226,7 +231,8 @@ String RID_SVXITEMS_SEARCHCMD_REPLACE
     Text[ korean ] = "대체";
     Text[ turkish ] = "De�i�tir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Reemplazar";
+    Text[ catalan ] = "Reempla�a";
+    Text[ thai ] = "แทนที่";
 };
 String RID_SVXITEMS_SEARCHCMD_REPLACE_ALL
 {
@@ -253,7 +259,8 @@ String RID_SVXITEMS_SEARCHCMD_REPLACE_ALL
     Text[ korean ] = "모두 바꾸기";
     Text[ turkish ] = "T�m�n� de�i�tir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Reemplazar todo";
+    Text[ catalan ] = "Reempla�a-ho tot";
+    Text[ thai ] = "แทนที่ทั้งหมด";
 };
  // Vorlagen
 String RID_SVXITEMS_SEARCHSTYL_CHAR
@@ -281,7 +288,8 @@ String RID_SVXITEMS_SEARCHSTYL_CHAR
     Text[ korean ] = "문자 템플릿";
     Text[ turkish ] = "Karakter bi�imi";
     Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
-    Text[ catalan ] = "Estilo de caracteres";
+    Text[ catalan ] = "Estil de car�cters";
+    Text[ thai ] = "ลักษณะตัวอักขระ";
 };
 String RID_SVXITEMS_SEARCHSTYL_PARA
 {
@@ -308,7 +316,8 @@ String RID_SVXITEMS_SEARCHSTYL_PARA
     Text[ korean ] = "단락 템플릿";
     Text[ turkish ] = "Paragraf bi�imi";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
-    Text[ catalan ] = "Estilo de p�rrafo";
+    Text[ catalan ] = "Estil de par�graf";
+    Text[ thai ] = "ลักษณะย่อหน้า";
 };
 String RID_SVXITEMS_SEARCHSTYL_FRAME
 {
@@ -335,7 +344,8 @@ String RID_SVXITEMS_SEARCHSTYL_FRAME
     Text[ korean ] = "프레임 템플릿";
     Text[ turkish ] = "�er�eve bi�imi";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
-    Text[ catalan ] = "Estilo de marcos";
+    Text[ catalan ] = "Estil del marc";
+    Text[ thai ] = "ลักษณะกรอบ";
 };
 String RID_SVXITEMS_SEARCHSTYL_PAGE
 {
@@ -362,7 +372,8 @@ String RID_SVXITEMS_SEARCHSTYL_PAGE
     Text[ korean ] = "페이지 스타일";
     Text[ turkish ] = "Sayfa bi�imi";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
-    Text[ catalan ] = "Estilo de p�gina";
+    Text[ catalan ] = "Estil de p�gina";
+    Text[ thai ] = "ลักษณะหน้า";
 };
  // Zellen-Typ
 String RID_SVXITEMS_SEARCHIN_FORMULA
@@ -391,6 +402,7 @@ String RID_SVXITEMS_SEARCHIN_FORMULA
     Text[ turkish ] = "Form�l";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "F�rmula";
+    Text[ thai ] = "สูตรคำนวณ";
 };
 String RID_SVXITEMS_SEARCHIN_VALUE
 {
@@ -418,6 +430,7 @@ String RID_SVXITEMS_SEARCHIN_VALUE
     Text[ turkish ] = "De�er";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Valor";
+    Text[ thai ] = "ค่า";
 };
 String RID_SVXITEMS_SEARCHIN_NOTE
 {
@@ -445,6 +458,7 @@ String RID_SVXITEMS_SEARCHIN_NOTE
     Text[ turkish ] = "Not";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nota";
+    Text[ thai ] = "บันทึกย่อ";
 };
  // Applikation
 String RID_SVXITEMS_SEARCHAPP_WRITER
@@ -489,7 +503,8 @@ String RID_SVXITEMS_BREAK_NONE
     Text[ korean ] = "나누기 없음";
     Text[ turkish ] = "Kesme yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Continuo";
+    Text[ catalan ] = "Cap salt";
+    Text[ thai ] = "ไม่แบ่ง";
 };
 String RID_SVXITEMS_BREAK_COLUMN_BEFORE
 {
@@ -516,7 +531,8 @@ String RID_SVXITEMS_BREAK_COLUMN_BEFORE
     Text[ korean ] = "새 열 앞에서 나누기";
     Text[ turkish ] = "Yeni s�tundan �nce kes";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Salto antes de nueva columna";
+    Text[ catalan ] = "Salt abans de columna nova";
+    Text[ thai ] = "แบ่งก่อนคอลัมน์ใหม่";
 };
 String RID_SVXITEMS_BREAK_COLUMN_AFTER
 {
@@ -543,7 +559,8 @@ String RID_SVXITEMS_BREAK_COLUMN_AFTER
     Text[ korean ] = "새 열 뒤에서 나누기";
     Text[ turkish ] = "Yeni s�tundan sonra kes";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Salto despu�s de nueva columna";
+    Text[ catalan ] = "Salt despr�s de columna nova";
+    Text[ thai ] = "แบ่งหลังคอลัมน์ใหม่";
 };
 String RID_SVXITEMS_BREAK_COLUMN_BOTH
 {
@@ -570,7 +587,8 @@ String RID_SVXITEMS_BREAK_COLUMN_BOTH
     Text[ korean ] = "새 열의 앞뒤에서 나누기";
     Text[ turkish ] = "Yeni s�tundan �nce ve sonra kes";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Salto antes y despu�s de nueva columna";
+    Text[ catalan ] = "Salt abans i despr�s de columna nova";
+    Text[ thai ] = "แบ่งก่อนและหลังคอลัมน์ใหม่";
 };
 String RID_SVXITEMS_BREAK_PAGE_BEFORE
 {
@@ -597,7 +615,8 @@ String RID_SVXITEMS_BREAK_PAGE_BEFORE
     Text[ korean ] = "새 페이지 앞에서 나누기";
     Text[ turkish ] = "Yeni sayfadan �nce kes";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Salto antes de p�gina nueva";
+    Text[ catalan ] = "Salt abans de p�gina nova";
+    Text[ thai ] = "แบ่งก่อนหน้าใหม่";
 };
 String RID_SVXITEMS_BREAK_PAGE_AFTER
 {
@@ -624,7 +643,8 @@ String RID_SVXITEMS_BREAK_PAGE_AFTER
     Text[ korean ] = "새 페이지 다음에서 나누기";
     Text[ turkish ] = "Yeni sayfadan sonra kes";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Salto despu�s de p�gina nueva";
+    Text[ catalan ] = "Salt despr�s de p�gina nova";
+    Text[ thai ] = "แบ่งหลังหน้าใหม่";
 };
 String RID_SVXITEMS_BREAK_PAGE_BOTH
 {
@@ -651,7 +671,8 @@ String RID_SVXITEMS_BREAK_PAGE_BOTH
     Text[ korean ] = "새 페이지 앞뒤에서 나누기";
     Text[ turkish ] = "Yeni sayfadan �nce ve sonra kes";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Salto antes y despu�s de nueva p�gina";
+    Text[ catalan ] = "Salt abans i despr�s de p�gina nova";
+    Text[ thai ] = "แบ่งก่อนและหลังหน้าใหม่";
 };
  // enum SvxShadowLocation ---------------------------------------------------
 String RID_SVXITEMS_SHADOW_NONE
@@ -679,7 +700,8 @@ String RID_SVXITEMS_SHADOW_NONE
     Text[ korean ] = "음영 없음";
     Text[ turkish ] = "G�lge yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin sombra";
+    Text[ catalan ] = "Sense ombra";
+    Text[ thai ] = "ไม่มีเงา";
 };
 String RID_SVXITEMS_SHADOW_TOPLEFT
 {
@@ -706,7 +728,8 @@ String RID_SVXITEMS_SHADOW_TOPLEFT
     Text[ korean ] = "위 왼쪽에 음영";
     Text[ turkish ] = "Sol �stte g�lge";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sombra arriba a la izquierda";
+    Text[ catalan ] = "Ombra superior esquerra";
+    Text[ thai ] = "เงาด้านบนซ้าย";
 };
 String RID_SVXITEMS_SHADOW_TOPRIGHT
 {
@@ -733,7 +756,8 @@ String RID_SVXITEMS_SHADOW_TOPRIGHT
     Text[ korean ] = "위 오른쪽에 음영";
     Text[ turkish ] = "Sa� �stte g�lge";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sombra arriba a la derecha";
+    Text[ catalan ] = "Ombra superior dreta";
+    Text[ thai ] = "เงาด้านบนขวา";
 };
 String RID_SVXITEMS_SHADOW_BOTTOMLEFT
 {
@@ -760,7 +784,8 @@ String RID_SVXITEMS_SHADOW_BOTTOMLEFT
     Text[ korean ] = "아래 왼쪽에 음영";
     Text[ turkish ] = "Sol altta g�lge";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sombra abajo a la izquierda";
+    Text[ catalan ] = "Ombra inferior esquerra";
+    Text[ thai ] = "เงาด้านล่างซ้าย";
 };
 String RID_SVXITEMS_SHADOW_BOTTOMRIGHT
 {
@@ -787,7 +812,8 @@ String RID_SVXITEMS_SHADOW_BOTTOMRIGHT
     Text[ korean ] = "아래 오른쪽에 음영";
     Text[ turkish ] = "Sa� altta g�lge";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sombra abajo a la derecha";
+    Text[ catalan ] = "Ombra inferior dreta";
+    Text[ thai ] = "เงาด้านล่างขวา";
 };
  // enum BrushStyle ----------------------------------------------------------
 String RID_SVXITEMS_BRUSHSTYLE_NULL
@@ -815,7 +841,8 @@ String RID_SVXITEMS_BRUSHSTYLE_NULL
     Text[ korean ] = "없음";
     Text[ turkish ] = "Yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ninguno";
+    Text[ catalan ] = "Cap";
+    Text[ thai ] = "ไม่มี";
 };
 String RID_SVXITEMS_BRUSHSTYLE_SOLID
 {
@@ -842,7 +869,8 @@ String RID_SVXITEMS_BRUSHSTYLE_SOLID
     Text[ korean ] = "실선";
     Text[ turkish ] = "Dolu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "S�lido";
+    Text[ catalan ] = "S�lid";
+    Text[ thai ] = "ทึบ";
 };
 String RID_SVXITEMS_BRUSHSTYLE_HORZ
 {
@@ -870,6 +898,7 @@ String RID_SVXITEMS_BRUSHSTYLE_HORZ
     Text[ turkish ] = "Yatay";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Horitzontal";
+    Text[ thai ] = "แนวนอน";
 };
 String RID_SVXITEMS_BRUSHSTYLE_VERT
 {
@@ -897,6 +926,7 @@ String RID_SVXITEMS_BRUSHSTYLE_VERT
     Text[ turkish ] = "Dikey";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vertical";
+    Text[ thai ] = "แนวตั้ง";
 };
 String RID_SVXITEMS_BRUSHSTYLE_CROSS
 {
@@ -923,7 +953,8 @@ String RID_SVXITEMS_BRUSHSTYLE_CROSS
     Text[ korean ] = "격자";
     Text[ turkish ] = "Karo";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cuadriculado";
+    Text[ catalan ] = "Graella";
+    Text[ thai ] = "เส้นตาราง";
 };
 String RID_SVXITEMS_BRUSHSTYLE_DIAGCROSS
 {
@@ -950,7 +981,8 @@ String RID_SVXITEMS_BRUSHSTYLE_DIAGCROSS
     Text[ korean ] = "대각선 격자 무늬";
     Text[ turkish ] = "Baklava dilimi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cuadriculado diagonal";
+    Text[ catalan ] = "Diamant";
+    Text[ thai ] = "เพชร";
 };
 String RID_SVXITEMS_BRUSHSTYLE_UPDIAG
 {
@@ -977,7 +1009,8 @@ String RID_SVXITEMS_BRUSHSTYLE_UPDIAG
     Text[ korean ] = "대각선을 위로";
     Text[ turkish ] = "Diyagonal yukar�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Diagonal hacia arriba";
+    Text[ catalan ] = "Diagonal cap amunt";
+    Text[ thai ] = "ทแยงมุมขึ้น";
 };
 String RID_SVXITEMS_BRUSHSTYLE_DOWNDIAG
 {
@@ -1004,7 +1037,8 @@ String RID_SVXITEMS_BRUSHSTYLE_DOWNDIAG
     Text[ korean ] = "대각선 아래로";
     Text[ turkish ] = "Diyagonal a�a��";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Diagonal hacia abajo";
+    Text[ catalan ] = "Diagonal cap avall";
+    Text[ thai ] = "ทแยงมุมลง";
 };
 String RID_SVXITEMS_BRUSHSTYLE_25
 {
@@ -1043,7 +1077,8 @@ String RID_SVXITEMS_BRUSHSTYLE_BITMAP
     Text[ korean ] = "비트맵";
     Text[ turkish ] = "Resim";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imagen";
+    Text[ catalan ] = "Imatge";
+    Text[ thai ] = "ภาพ";
 };
  // enum ColorName -----------------------------------------------------------
 String RID_SVXITEMS_COLOR
@@ -1071,7 +1106,8 @@ String RID_SVXITEMS_COLOR
     Text[ korean ] = "색상 ";
     Text[ turkish ] = "Renk ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Color   ";
+    Text[ catalan ] = "Color ";
+    Text[ thai ] = "สี ";
 };
 String RID_SVXITEMS_COLOR_BLACK
 {
@@ -1098,7 +1134,8 @@ String RID_SVXITEMS_COLOR_BLACK
     Text[ korean ] = "검은색";
     Text[ turkish ] = "Siyah";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Negro";
+    Text[ catalan ] = "Negre";
+    Text[ thai ] = "ดำ";
 };
 String RID_SVXITEMS_COLOR_BLUE
 {
@@ -1125,7 +1162,8 @@ String RID_SVXITEMS_COLOR_BLUE
     Text[ korean ] = "청색";
     Text[ turkish ] = "Mavi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Azul";
+    Text[ catalan ] = "Blau";
+    Text[ thai ] = "น้ำเงิน";
 };
 String RID_SVXITEMS_COLOR_GREEN
 {
@@ -1152,7 +1190,8 @@ String RID_SVXITEMS_COLOR_GREEN
     Text[ korean ] = "녹색";
     Text[ turkish ] = "Ye�il";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Verde";
+    Text[ catalan ] = "Verd";
+    Text[ thai ] = "เขียว";
 };
 String RID_SVXITEMS_COLOR_CYAN
 {
@@ -1180,6 +1219,7 @@ String RID_SVXITEMS_COLOR_CYAN
     Text[ turkish ] = "Camg�be�i";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cian";
+    Text[ thai ] = "ฟ้า";
 };
 String RID_SVXITEMS_COLOR_RED
 {
@@ -1206,7 +1246,8 @@ String RID_SVXITEMS_COLOR_RED
     Text[ korean ] = "적색";
     Text[ turkish ] = "K�rm�z�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Rojo";
+    Text[ catalan ] = "Vermell";
+    Text[ thai ] = "แดง";
 };
 String RID_SVXITEMS_COLOR_MAGENTA
 {
@@ -1234,6 +1275,7 @@ String RID_SVXITEMS_COLOR_MAGENTA
     Text[ turkish ] = "Mor";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Magenta";
+    Text[ thai ] = "ม่วง";
 };
 String RID_SVXITEMS_COLOR_BROWN
 {
@@ -1260,7 +1302,8 @@ String RID_SVXITEMS_COLOR_BROWN
     Text[ korean ] = "갈색";
     Text[ turkish ] = "Kahverengi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Marr�n";
+    Text[ catalan ] = "Marr�";
+    Text[ thai ] = "น้ำตาล";
 };
 String RID_SVXITEMS_COLOR_GRAY
 {
@@ -1288,6 +1331,7 @@ String RID_SVXITEMS_COLOR_GRAY
     Text[ turkish ] = "Gri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Gris";
+    Text[ thai ] = "เทา";
 };
 String RID_SVXITEMS_COLOR_LIGHTGRAY
 {
@@ -1314,7 +1358,8 @@ String RID_SVXITEMS_COLOR_LIGHTGRAY
     Text[ korean ] = "밝은 회색";
     Text[ turkish ] = "A��k gri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Gris claro";
+    Text[ catalan ] = "Gris clar";
+    Text[ thai ] = "เทาอ่อน";
 };
 String RID_SVXITEMS_COLOR_LIGHTBLUE
 {
@@ -1341,7 +1386,8 @@ String RID_SVXITEMS_COLOR_LIGHTBLUE
     Text[ korean ] = "밝은 청색";
     Text[ turkish ] = "A��k mavi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Azul claro";
+    Text[ catalan ] = "Blau clar";
+    Text[ thai ] = "น้ำเงินอ่อน";
 };
 String RID_SVXITEMS_COLOR_LIGHTGREEN
 {
@@ -1368,7 +1414,8 @@ String RID_SVXITEMS_COLOR_LIGHTGREEN
     Text[ korean ] = "밝은 녹색";
     Text[ turkish ] = "A��k ye�il";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Verde claro";
+    Text[ catalan ] = "Verd clar";
+    Text[ thai ] = "เขียวอ่อน";
 };
 String RID_SVXITEMS_COLOR_LIGHTCYAN
 {
@@ -1395,7 +1442,8 @@ String RID_SVXITEMS_COLOR_LIGHTCYAN
     Text[ korean ] = "밝은 청록색";
     Text[ turkish ] = "A��k camg�be�i";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cian claro";
+    Text[ catalan ] = "Cian clar";
+    Text[ thai ] = "ฟ้าอ่อน";
 };
 String RID_SVXITEMS_COLOR_LIGHTRED
 {
@@ -1422,7 +1470,8 @@ String RID_SVXITEMS_COLOR_LIGHTRED
     Text[ korean ] = "밝은 적색";
     Text[ turkish ] = "A��k k�rm�z�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Rojo claro";
+    Text[ catalan ] = "Vermell clar";
+    Text[ thai ] = "แดงอ่อน";
 };
 String RID_SVXITEMS_COLOR_LIGHTMAGENTA
 {
@@ -1449,7 +1498,8 @@ String RID_SVXITEMS_COLOR_LIGHTMAGENTA
     Text[ korean ] = "밝은 선홍색";
     Text[ turkish ] = "Eflatun";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Magenta claro";
+    Text[ catalan ] = "Magenta clar";
+    Text[ thai ] = "ม่วงอ่อน";
 };
 String RID_SVXITEMS_COLOR_YELLOW
 {
@@ -1476,7 +1526,8 @@ String RID_SVXITEMS_COLOR_YELLOW
     Text[ korean ] = "황색";
     Text[ turkish ] = "Sar�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Amarillo";
+    Text[ catalan ] = "Groc";
+    Text[ thai ] = "เหลือง";
 };
 String RID_SVXITEMS_COLOR_WHITE
 {
@@ -1503,7 +1554,8 @@ String RID_SVXITEMS_COLOR_WHITE
     Text[ korean ] = "흰색";
     Text[ turkish ] = "Beyaz";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Blanco";
+    Text[ catalan ] = "Blanc";
+    Text[ thai ] = "ขาว";
 };
 String RID_SVXITEMS_COLOR_MENUBAR
 {
@@ -1592,6 +1644,7 @@ String RID_SVXITEMS_ITALIC_NONE
     Text[ turkish ] = "�talik de�il";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No cursiva";
+    Text[ thai ] = "ไม่เอียง";
 };
 String RID_SVXITEMS_ITALIC_OBLIQUE
 {
@@ -1618,7 +1671,8 @@ String RID_SVXITEMS_ITALIC_OBLIQUE
     Text[ korean ] = "이탤릭체";
     Text[ turkish ] = "E�ri italik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cursiva oblicua";
+    Text[ catalan ] = "Cursiva obliqua";
+    Text[ thai ] = "เอียงเฉ";
 };
 String RID_SVXITEMS_ITALIC_NORMAL
 {
@@ -1646,6 +1700,7 @@ String RID_SVXITEMS_ITALIC_NORMAL
     Text[ turkish ] = "�talik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cursiva";
+    Text[ thai ] = "เอียง";
 };
  // enum FontWeight -------------------------------------------------------
 String RID_SVXITEMS_WEIGHT_DONTKNOW
@@ -1677,7 +1732,8 @@ String RID_SVXITEMS_WEIGHT_THIN
     Text[ korean ] = "가늘게";
     Text[ turkish ] = "�nce";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "delgada";
+    Text[ catalan ] = "prim";
+    Text[ thai ] = "บาง";
 };
 String RID_SVXITEMS_WEIGHT_ULTRALIGHT
 {
@@ -1704,7 +1760,8 @@ String RID_SVXITEMS_WEIGHT_ULTRALIGHT
     Text[ korean ] = "아주 가늘게";
     Text[ turkish ] = "�ok ince";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "ultra delgada";
+    Text[ catalan ] = "ultraprim";
+    Text[ thai ] = "บางเป็นพิเศษ";
 };
 String RID_SVXITEMS_WEIGHT_LIGHT
 {
@@ -1731,7 +1788,8 @@ String RID_SVXITEMS_WEIGHT_LIGHT
     Text[ korean ] = "밝게";
     Text[ turkish ] = "�nce";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "claro";
+    Text[ catalan ] = "clar";
+    Text[ thai ] = "อ่อน";
 };
 String RID_SVXITEMS_WEIGHT_SEMILIGHT
 {
@@ -1758,7 +1816,8 @@ String RID_SVXITEMS_WEIGHT_SEMILIGHT
     Text[ korean ] = "중간 밝게";
     Text[ turkish ] = "Yar� ince";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "semi claro";
+    Text[ catalan ] = "semisuau";
+    Text[ thai ] = "กึ่งอ่อน";
 };
 String RID_SVXITEMS_WEIGHT_NORMAL
 {
@@ -1786,6 +1845,7 @@ String RID_SVXITEMS_WEIGHT_NORMAL
     Text[ turkish ] = "Normal";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "normal";
+    Text[ thai ] = "ปกติ";
 };
 String RID_SVXITEMS_WEIGHT_MEDIUM
 {
@@ -1812,7 +1872,8 @@ String RID_SVXITEMS_WEIGHT_MEDIUM
     Text[ korean ] = "중간";
     Text[ turkish ] = "Orta";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "medio";
+    Text[ catalan ] = "mitj�";
+    Text[ thai ] = "ปานกลาง";
 };
 String RID_SVXITEMS_WEIGHT_SEMIBOLD
 {
@@ -1839,7 +1900,8 @@ String RID_SVXITEMS_WEIGHT_SEMIBOLD
     Text[ korean ] = "굵게, 중간";
     Text[ turkish ] = "Yar� kal�n";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "semi negrita";
+    Text[ catalan ] = "seminegreta";
+    Text[ thai ] = "กึ่งหนา";
 };
 String RID_SVXITEMS_WEIGHT_BOLD
 {
@@ -1866,7 +1928,8 @@ String RID_SVXITEMS_WEIGHT_BOLD
     Text[ korean ] = "굵게";
     Text[ turkish ] = "Kal�n";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "negrita";
+    Text[ catalan ] = "negreta";
+    Text[ thai ] = "หนา";
 };
 String RID_SVXITEMS_WEIGHT_ULTRABOLD
 {
@@ -1893,7 +1956,8 @@ String RID_SVXITEMS_WEIGHT_ULTRABOLD
     Text[ korean ] = "아주 굵게";
     Text[ turkish ] = "�ok kal�n";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "ultra negrita";
+    Text[ catalan ] = "ultranegreta";
+    Text[ thai ] = "หนาเป็นพิเศษ";
 };
 String RID_SVXITEMS_WEIGHT_BLACK
 {
@@ -1920,7 +1984,8 @@ String RID_SVXITEMS_WEIGHT_BLACK
     Text[ korean ] = "검은색";
     Text[ turkish ] = "Siyah";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "negro";
+    Text[ catalan ] = "negre";
+    Text[ thai ] = "ดำ";
 };
  // enum FontUnderline ----------------------------------------------------
 String RID_SVXITEMS_UL_NONE
@@ -1948,7 +2013,8 @@ String RID_SVXITEMS_UL_NONE
     Text[ korean ] = "밑줄 없음";
     Text[ turkish ] = "Alt� �izili de�il";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin subrayado";
+    Text[ catalan ] = "Sense subratllat";
+    Text[ thai ] = "ไม่ขีดเส้นใต้";
 };
 String RID_SVXITEMS_UL_SINGLE
 {
@@ -1975,7 +2041,8 @@ String RID_SVXITEMS_UL_SINGLE
     Text[ korean ] = "단일 밑줄";
     Text[ turkish ] = "Alt� tek �izili";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado sencillo";
+    Text[ catalan ] = "Subratllat simple";
+    Text[ thai ] = "ขีดเส้นใต้เส้นเดียว";
 };
 String RID_SVXITEMS_UL_DOUBLE
 {
@@ -2002,7 +2069,8 @@ String RID_SVXITEMS_UL_DOUBLE
     Text[ korean ] = "이중 밑줄";
     Text[ turkish ] = "Alt� �ift �izili";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado doble";
+    Text[ catalan ] = "Subratllat doble";
+    Text[ thai ] = "ขีดเส้นใต้เส้นคู่";
 };
 String RID_SVXITEMS_UL_DOTTED
 {
@@ -2029,7 +2097,8 @@ String RID_SVXITEMS_UL_DOTTED
     Text[ korean ] = "점선 밑줄";
     Text[ turkish ] = "Noktalarla alt� �izili";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado punteado";
+    Text[ catalan ] = "Subratllat de punts";
+    Text[ thai ] = "ขีดเส้นใต้แบบจุด";
 };
 String RID_SVXITEMS_UL_DONTKNOW
 {
@@ -2054,8 +2123,9 @@ String RID_SVXITEMS_UL_DONTKNOW
     Text[ korean ] = "밑줄";
     Text[ turkish ] = "Alt� �izili";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado";
+    Text[ catalan ] = "Subratllat";
     Text[ finnish ] = "Alleviivaa";
+    Text[ thai ] = "ขีดเส้นใต้";
 };
 String RID_SVXITEMS_UL_DASH
 {
@@ -2080,8 +2150,9 @@ String RID_SVXITEMS_UL_DASH
     Text[ korean ] = "밑줄(대시)";
     Text[ turkish ] = "Alt� �izili (�izgi)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado (trazo)";
+    Text[ catalan ] = "Subratllat (tra�)";
     Text[ finnish ] = "Alleviivaus (katkoviiva)";
+    Text[ thai ] = "ขีดเส้นใต้ (เส้นประ)";
 };
 String RID_SVXITEMS_UL_LONGDASH
 {
@@ -2106,8 +2177,9 @@ String RID_SVXITEMS_UL_LONGDASH
     Text[ korean ] = "밑줄(긴 대시)";
     Text[ turkish ] = "Alt� �izili (uzun �izgi)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado (trazo largo)";
+    Text[ catalan ] = "Subratllat (tra� llarg)";
     Text[ finnish ] = "Alleviivaus (pitk�t viivat)";
+    Text[ thai ] = "ขีดเส้นใต้ (เส้นประยาว)";
 };
 String RID_SVXITEMS_UL_DASHDOT
 {
@@ -2132,8 +2204,9 @@ String RID_SVXITEMS_UL_DASHDOT
     Text[ korean ] = "밑줄(일점 쇄선)";
     Text[ turkish ] = "Alt� �izili (nokta �izgi)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado (punto trazo)";
+    Text[ catalan ] = "Subratllat (punt tra�)";
     Text[ finnish ] = "Alleviivaus (pistekatkoviiva)";
+    Text[ thai ] = "ขีดเส้นใต้ (เส้นประจุด)";
 };
 String RID_SVXITEMS_UL_DASHDOTDOT
 {
@@ -2158,8 +2231,9 @@ String RID_SVXITEMS_UL_DASHDOTDOT
     Text[ korean ] = "밑줄(이점 쇄선)";
     Text[ turkish ] = "Alt� �izili (nokta nokta �izgi)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado (punto punto trazo)";
+    Text[ catalan ] = "Subratllat (punt punt tra�)";
     Text[ finnish ] = "Alleviivaus (piste piste viiva)";
+    Text[ thai ] = "ขีดเส้นใต้ (เส้นประจุดจุด)";
 };
 String RID_SVXITEMS_UL_SMALLWAVE
 {
@@ -2184,8 +2258,9 @@ String RID_SVXITEMS_UL_SMALLWAVE
     Text[ korean ] = "밑줄(작은 파선)";
     Text[ turkish ] = "Alt� �izili (k���k dalga)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado (ondulaci�n peque�a)";
+    Text[ catalan ] = "Subratllat (ona petita)";
     Text[ finnish ] = "Alleviivaus (pieni aalto)";
+    Text[ thai ] = "ขีดเส้นใต้ (ลอนเล็ก)";
 };
 String RID_SVXITEMS_UL_WAVE
 {
@@ -2210,8 +2285,9 @@ String RID_SVXITEMS_UL_WAVE
     Text[ korean ] = "밑줄(파선)";
     Text[ turkish ] = "Alt� �izili (dalga)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado (ondulado)";
+    Text[ catalan ] = "Subratllat (ona)";
     Text[ finnish ] = "Alleviivaus (aalto)";
+    Text[ thai ] = "ขีดเส้นใต้ (ลอน)";
 };
 String RID_SVXITEMS_UL_DOUBLEWAVE
 {
@@ -2236,8 +2312,9 @@ String RID_SVXITEMS_UL_DOUBLEWAVE
     Text[ korean ] = "밑줄(이중 파선)";
     Text[ turkish ] = "Alt� �izili (�ift dalga)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado (ondulado doble)";
+    Text[ catalan ] = "Subratllat (ona doble)";
     Text[ finnish ] = "Alleviivaus (kaksinkertainen aaltoviiva)";
+    Text[ thai ] = "ขีดเส้นใต้ (ลอนคู่)";
 };
 String RID_SVXITEMS_UL_BOLD
 {
@@ -2262,8 +2339,9 @@ String RID_SVXITEMS_UL_BOLD
     Text[ korean ] = "굵은 밑줄";
     Text[ turkish ] = "Alt� �izili (kal�n)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado negrita";
+    Text[ catalan ] = "Subratllat (negreta)";
     Text[ finnish ] = "Alleviivattu (lihavoitu)";
+    Text[ thai ] = "ขีดเส้นใต้ (หนา)";
 };
 String RID_SVXITEMS_UL_BOLDDOTTED
 {
@@ -2288,8 +2366,9 @@ String RID_SVXITEMS_UL_BOLDDOTTED
     Text[ korean ] = "굵은 점선 밑줄";
     Text[ turkish ] = "Noktalarla alt� �izili (kal�n)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado negrita punteado";
+    Text[ catalan ] = "Subratllat de punts (negreta)";
     Text[ finnish ] = "Katkonainen alleviivaus (lihavoitu)";
+    Text[ thai ] = "ขีดเส้นใต้แบบจุด (หนา)";
 };
 String RID_SVXITEMS_UL_BOLDDASH
 {
@@ -2314,8 +2393,9 @@ String RID_SVXITEMS_UL_BOLDDASH
     Text[ korean ] = "밑줄(굵은 대시)";
     Text[ turkish ] = "Alt� �izili (kal�n �izgi)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado (trazo negrita)";
+    Text[ catalan ] = "Subratallat (tra� negreta)";
     Text[ finnish ] = "Alleviivaus (lihavoitu katkoviiva)";
+    Text[ thai ] = "ขีดเส้นใต้ (เส้นประหนา)";
 };
 String RID_SVXITEMS_UL_BOLDLONGDASH
 {
@@ -2340,8 +2420,9 @@ String RID_SVXITEMS_UL_BOLDLONGDASH
     Text[ korean ] = "밑줄(일점 쇄선, 굵게)";
     Text[ turkish ] = "Alt� �izili (uzun kal�n �izgi)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado (trazo negrita largo)";
+    Text[ catalan ] = "Subratllat (tra� negreta llarg)";
     Text[ finnish ] = "Alleviivaus (pitk�t viivat, lihavoitu)";
+    Text[ thai ] = "ขีดเส้นใต้ (เส้นประยาว, หนา)";
 };
 String RID_SVXITEMS_UL_BOLDDASHDOT
 {
@@ -2366,8 +2447,9 @@ String RID_SVXITEMS_UL_BOLDDASHDOT
     Text[ korean ] = "밑줄(일점 쇄선, 굵게)";
     Text[ turkish ] = "Alt� �izili (kal�n nokta �izgi)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado (punto trazo negrita)";
+    Text[ catalan ] = "Subratllat (punt tra� negreta)";
     Text[ finnish ] = "Alleviivaus (lihavoitu pistekatkoviiva)";
+    Text[ thai ] = "ขีดเส้นใต้ (เส้นประจุด, หนา)";
 };
 String RID_SVXITEMS_UL_BOLDDASHDOTDOT
 {
@@ -2392,8 +2474,9 @@ String RID_SVXITEMS_UL_BOLDDASHDOTDOT
     Text[ korean ] = "밑줄(이점 쇄선, 굵게)";
     Text[ turkish ] = "Alt� �izili (kal�n nokta nokta �izgi)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado (punto punto trazo negrita)";
+    Text[ catalan ] = "Subratllat (punt punt tra� negreta)";
     Text[ finnish ] = "Alleviivaus (lihavoitu pistepisteviiva)";
+    Text[ thai ] = "ขีดเส้นใต้ (เส้นประจุดจุด, หนา)";
 };
 String RID_SVXITEMS_UL_BOLDWAVE
 {
@@ -2418,8 +2501,9 @@ String RID_SVXITEMS_UL_BOLDWAVE
     Text[ korean ] = "밑줄(굵은 파선)";
     Text[ turkish ] = "Alt� �izili (kal�n dalga)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado (ondulado negrita)";
+    Text[ catalan ] = "Subratllat (ona, negreta)";
     Text[ finnish ] = "Alleviivaus (aalto, lihavoitu)";
+    Text[ thai ] = "ขีดเส้นใต้ (ลอน, หนา)";
 };
  // enum FontStrikeout ----------------------------------------------------
 String RID_SVXITEMS_STRIKEOUT_NONE
@@ -2447,7 +2531,8 @@ String RID_SVXITEMS_STRIKEOUT_NONE
     Text[ korean ] = "취소선 없음";
     Text[ turkish ] = "�st� �izili de�il";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin tachar";
+    Text[ catalan ] = "Sense barrat";
+    Text[ thai ] = "ไม่ขีดทับ";
 };
 String RID_SVXITEMS_STRIKEOUT_SINGLE
 {
@@ -2474,7 +2559,8 @@ String RID_SVXITEMS_STRIKEOUT_SINGLE
     Text[ korean ] = "단일 취소선";
     Text[ turkish ] = "Tek �izgiyle �st� �izili";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tachado sencillo";
+    Text[ catalan ] = "Barrat simple";
+    Text[ thai ] = "เส้นขีดทับเส้นเดียว";
 };
 String RID_SVXITEMS_STRIKEOUT_DOUBLE
 {
@@ -2501,7 +2587,8 @@ String RID_SVXITEMS_STRIKEOUT_DOUBLE
     Text[ korean ] = "이중 취소선";
     Text[ turkish ] = "�ift �izgiyle �st� �izili";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tachado doble";
+    Text[ catalan ] = "Barrat doble";
+    Text[ thai ] = "เส้นขีดทับคู่";
 };
 String RID_SVXITEMS_STRIKEOUT_BOLD
 {
@@ -2526,8 +2613,9 @@ String RID_SVXITEMS_STRIKEOUT_BOLD
     Text[ korean ] = "굵은 취소선";
     Text[ turkish ] = "Kal�n �izgiyle �st� �izili";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tachado negrita";
+    Text[ catalan ] = "Negreta barrada";
     Text[ finnish ] = "Lihavoitu yliviivaus";
+    Text[ thai ] = "เส้นขีดทับหนา";
 };
 String RID_SVXITEMS_STRIKEOUT_SLASH
 {
@@ -2552,8 +2640,9 @@ String RID_SVXITEMS_STRIKEOUT_SLASH
     Text[ korean ] = "/가 있는 취소선";
     Text[ turkish ] = "/ ile �st� �izili";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tachado con /";
+    Text[ catalan ] = "Barrat amb barra";
     Text[ finnish ] = "Yliviivaus kenoviivalla";
+    Text[ thai ] = "ขีดทับด้วย /";
 };
 String RID_SVXITEMS_STRIKEOUT_X
 {
@@ -2578,8 +2667,9 @@ String RID_SVXITEMS_STRIKEOUT_X
     Text[ korean ] = "X가 있는 취소선";
     Text[ turkish ] = "X ile �st� �izili";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tachado con X";
+    Text[ catalan ] = "Barrat amb ics";
     Text[ finnish ] = "Yliviivaus X-merkeill�";
+    Text[ thai ] = "ขีดทับด้วย X";
 };
  // enum CASEMAP ----------------------------------------------------------
 String RID_SVXITEMS_CASEMAP_NONE
@@ -2607,7 +2697,8 @@ String RID_SVXITEMS_CASEMAP_NONE
     Text[ korean ] = "없음";
     Text[ turkish ] = "Yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ninguno";
+    Text[ catalan ] = "Cap";
+    Text[ thai ] = "ไม่มี";
 };
 String RID_SVXITEMS_CASEMAP_VERSALIEN
 {
@@ -2634,7 +2725,8 @@ String RID_SVXITEMS_CASEMAP_VERSALIEN
     Text[ korean ] = "대문자";
     Text[ turkish ] = "B�y�k harflerle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "May�sculas";
+    Text[ catalan ] = "Maj�scules";
+    Text[ thai ] = "ตัวพิมพ์ใหญ่";
 };
 String RID_SVXITEMS_CASEMAP_GEMEINE
 {
@@ -2661,7 +2753,8 @@ String RID_SVXITEMS_CASEMAP_GEMEINE
     Text[ korean ] = "소문자";
     Text[ turkish ] = "K���k harflerle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Min�sculas";
+    Text[ catalan ] = "Min�scules";
+    Text[ thai ] = "ตัวพิมพ์เล็ก";
 };
 String RID_SVXITEMS_CASEMAP_TITEL
 {
@@ -2688,7 +2781,8 @@ String RID_SVXITEMS_CASEMAP_TITEL
     Text[ korean ] = "제목";
     Text[ turkish ] = "Ba�l�k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Caracteres del t�tulo";
+    Text[ catalan ] = "Car�cters de t�tol";
+    Text[ thai ] = "ชื่อเรื่อง";
 };
 String RID_SVXITEMS_CASEMAP_KAPITAELCHEN
 {
@@ -2715,7 +2809,8 @@ String RID_SVXITEMS_CASEMAP_KAPITAELCHEN
     Text[ korean ] = "스몰캡";
     Text[ turkish ] = "K���k b�y�k harflerle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Versalitas";
+    Text[ catalan ] = "Maj�scules petites";
+    Text[ thai ] = "ตัวพิมพ์เล็ก";
 };
  // enum ESCAPEMENT -------------------------------------------------------
 String RID_SVXITEMS_ESCAPEMENT_OFF
@@ -2743,7 +2838,8 @@ String RID_SVXITEMS_ESCAPEMENT_OFF
     Text[ korean ] = "보통 위치";
     Text[ turkish ] = "Normal duru�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Posici�n normal";
+    Text[ catalan ] = "Posici� normal";
+    Text[ thai ] = "ตำแหน่งปกติ";
 };
 String RID_SVXITEMS_ESCAPEMENT_SUPER
 {
@@ -2770,7 +2866,8 @@ String RID_SVXITEMS_ESCAPEMENT_SUPER
     Text[ korean ] = "위 첨자 ";
     Text[ turkish ] = "�st simge ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Super�ndice   ";
+    Text[ catalan ] = "Super�ndex   ";
+    Text[ thai ] = "ตัวยก ";
 };
 String RID_SVXITEMS_ESCAPEMENT_SUB
 {
@@ -2797,7 +2894,8 @@ String RID_SVXITEMS_ESCAPEMENT_SUB
     Text[ korean ] = "아래 첨자 ";
     Text[ turkish ] = "Alt simge ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sub�ndice   ";
+    Text[ catalan ] = "Sub�ndex   ";
+    Text[ thai ] = "ตัวห้อย ";
 };
 String RID_SVXITEMS_ESCAPEMENT_AUTO
 {
@@ -2822,8 +2920,9 @@ String RID_SVXITEMS_ESCAPEMENT_AUTO
     Text[ korean ] = "자동";
     Text[ turkish ] = "Otomatik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "autom�tico";
+    Text[ catalan ] = "autom�tic";
     Text[ finnish ] = "automaattinen";
+    Text[ thai ] = "อัตโนมัติ";
 };
  // enum SvxAdjust -----------------------------------------------------------
 String RID_SVXITEMS_ADJUST_LEFT
@@ -2851,7 +2950,8 @@ String RID_SVXITEMS_ADJUST_LEFT
     Text[ korean ] = "왼쪽 맞춤";
     Text[ turkish ] = "Sola hizala";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Alinear a la izquierda";
+    Text[ catalan ] = "Alinea a l'esquerra";
+    Text[ thai ] = "ชิดซ้าย";
 };
 String RID_SVXITEMS_ADJUST_RIGHT
 {
@@ -2878,7 +2978,8 @@ String RID_SVXITEMS_ADJUST_RIGHT
     Text[ korean ] = "오른쪽 맞춤";
     Text[ turkish ] = "Sa�a hizala";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Alinear a la derecha";
+    Text[ catalan ] = "Alinea a la dreta";
+    Text[ thai ] = "ชิดขวา";
 };
 String RID_SVXITEMS_ADJUST_BLOCK
 {
@@ -2898,14 +2999,15 @@ String RID_SVXITEMS_ADJUST_BLOCK
     Text[ chinese_simplified ] = "左右对齐";
     Text[ russian ] = "������������ �� ������";
     Text[ polish ] = "Wyjustowanie";
-    Text[ japanese ] = "均等割付";
+    Text[ japanese ] = "両端揃え";
     Text[ chinese_traditional ] = "左右對齊";
     Text[ arabic ] = "���";
     Text[ greek ] = "������ ��������";
     Text[ korean ] = "양쪽 맞춤";
     Text[ turkish ] = "�ki yana yasla";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Justificado";
+    Text[ catalan ] = "Justifica";
+    Text[ thai ] = "ชิดขอบ";
 };
 String RID_SVXITEMS_ADJUST_CENTER
 {
@@ -2932,7 +3034,8 @@ String RID_SVXITEMS_ADJUST_CENTER
     Text[ korean ] = "가운데 맞춤";
     Text[ turkish ] = "Ortala";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Centrado";
+    Text[ catalan ] = "Centrat";
+    Text[ thai ] = "ตรงกลาง";
 };
 String RID_SVXITEMS_ADJUST_BLOCKLINE
 {
@@ -2952,14 +3055,15 @@ String RID_SVXITEMS_ADJUST_BLOCKLINE
     Text[ chinese_simplified ] = "左右对齐";
     Text[ russian ] = "������������ �� ������";
     Text[ polish ] = "Wyjustowanie";
-    Text[ japanese ] = "均等割付";
+    Text[ japanese ] = "両端揃え";
     Text[ chinese_traditional ] = "左右對齊";
     Text[ arabic ] = "���";
     Text[ greek ] = "������ ��������";
     Text[ korean ] = "양쪽 맞춤";
     Text[ turkish ] = "�ki yana yasla";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Justificado";
+    Text[ catalan ] = "Justifica";
+    Text[ thai ] = "ชิดขอบ";
 };
  // DB-Server-Connect --------------------------------------------------------
 String RID_SVXITEMS_DBTYPE_ODBC
@@ -3003,7 +3107,8 @@ String RID_SVXITEMS_DBTYPE_FLAT
     Text[ korean ] = "텍스트";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Texto";
+    Text[ catalan ] = "Text";
+    Text[ thai ] = "ข้อความ";
 };
  // enum SvxTabAdjust --------------------------------------------------------
 String RID_SVXITEMS_TAB_DECIMAL_CHAR
@@ -3031,7 +3136,8 @@ String RID_SVXITEMS_TAB_DECIMAL_CHAR
     Text[ korean ] = "소수점 기호:";
     Text[ turkish ] = "Ondal�k ay�r�c�s�:";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Car�cter decimal:";
+    Text[ catalan ] = "Car�cter decimal:";
+    Text[ thai ] = "สัญลักษณ์ทศนิยม:";
 };
 String RID_SVXITEMS_TAB_FILL_CHAR
 {
@@ -3058,7 +3164,8 @@ String RID_SVXITEMS_TAB_FILL_CHAR
     Text[ korean ] = "채움 기호:";
     Text[ turkish ] = "�nc�:";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Car�cter de relleno:";
+    Text[ catalan ] = "Car�cter d'emplenament:";
+    Text[ thai ] = "เติมตัวอักขระ:";
 };
 String RID_SVXITEMS_TAB_ADJUST_LEFT
 {
@@ -3085,7 +3192,8 @@ String RID_SVXITEMS_TAB_ADJUST_LEFT
     Text[ korean ] = "왼쪽";
     Text[ turkish ] = "Sol";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Izquierda";
+    Text[ catalan ] = "Esquerra";
+    Text[ thai ] = "ซ้าย";
 };
 String RID_SVXITEMS_TAB_ADJUST_RIGHT
 {
@@ -3112,7 +3220,8 @@ String RID_SVXITEMS_TAB_ADJUST_RIGHT
     Text[ korean ] = "오른쪽";
     Text[ turkish ] = "Sa�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Derecha";
+    Text[ catalan ] = "Dreta";
+    Text[ thai ] = "ขวา";
 };
 String RID_SVXITEMS_TAB_ADJUST_DECIMAL
 {
@@ -3140,6 +3249,7 @@ String RID_SVXITEMS_TAB_ADJUST_DECIMAL
     Text[ turkish ] = "Ondal�k";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Decimal";
+    Text[ thai ] = "ทศนิยม";
 };
 String RID_SVXITEMS_TAB_ADJUST_CENTER
 {
@@ -3166,7 +3276,8 @@ String RID_SVXITEMS_TAB_ADJUST_CENTER
     Text[ korean ] = "가운데";
     Text[ turkish ] = "Orta";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Centrado";
+    Text[ catalan ] = "Centrat";
+    Text[ thai ] = "ตรงกลาง";
 };
 String RID_SVXITEMS_TAB_ADJUST_DEFAULT
 {
@@ -3193,7 +3304,8 @@ String RID_SVXITEMS_TAB_ADJUST_DEFAULT
     Text[ korean ] = "기본";
     Text[ turkish ] = "Standart";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Predeterminado";
+    Text[ catalan ] = "Per defecte";
+    Text[ thai ] = "ค่าเริ่มต้น";
 };
  // Typ-Namen der SlotIds ----------------------------------------------------
 String RID_ATTR_ZOOM
@@ -3222,6 +3334,7 @@ String RID_ATTR_ZOOM
     Text[ turkish ] = "�l�ek";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Escala";
+    Text[ thai ] = "สเกล";
 };
 String RID_ATTR_BRUSH
 {
@@ -3248,7 +3361,8 @@ String RID_ATTR_BRUSH
     Text[ korean ] = "붓";
     Text[ turkish ] = "F�r�a";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Pincel";
+    Text[ catalan ] = "Pinzell";
+    Text[ thai ] = "แปรง";
 };
 String RID_ATTR_TABSTOP
 {
@@ -3275,7 +3389,8 @@ String RID_ATTR_TABSTOP
     Text[ korean ] = "탭 위치";
     Text[ turkish ] = "Sekme duraklar�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tabuladores";
+    Text[ catalan ] = "Tabuladors";
+    Text[ thai ] = "ตัวหยุดระยะกั้น";
 };
 String RID_ATTR_TABSTOP_DEFAULTS
 {
@@ -3314,7 +3429,8 @@ String RID_ATTR_CHAR
     Text[ korean ] = "기호";
     Text[ turkish ] = "Karakter";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Car�cter";
+    Text[ catalan ] = "Car�cter";
+    Text[ thai ] = "ตัวอักขระ";
 };
 String RID_ATTR_CHAR_FONT
 {
@@ -3341,7 +3457,8 @@ String RID_ATTR_CHAR_FONT
     Text[ korean ] = "글꼴";
     Text[ turkish ] = "Yaz�tipi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Fuente";
+    Text[ catalan ] = "Tipus de lletra";
+    Text[ thai ] = "ตัวอักษร";
 };
 String RID_ATTR_CHAR_POSTURE
 {
@@ -3368,7 +3485,8 @@ String RID_ATTR_CHAR_POSTURE
     Text[ korean ] = "글꼴 위치";
     Text[ turkish ] = "Yaz�tipi duru�u";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Posici�n de la fuente";
+    Text[ catalan ] = "Postura de la lletra";
+    Text[ thai ] = "ตัวอักษรท่า";
 };
 String RID_ATTR_CHAR_WEIGHT
 {
@@ -3395,7 +3513,8 @@ String RID_ATTR_CHAR_WEIGHT
     Text[ korean ] = "글꼴 두께";
     Text[ turkish ] = "Yaz�tipi kal�nl���";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Peso de fuente";
+    Text[ catalan ] = "Pes de la lletra";
+    Text[ thai ] = "น้ำหนักตัวอักษร";
 };
 String RID_ATTR_CHAR_SHADOWED
 {
@@ -3422,7 +3541,8 @@ String RID_ATTR_CHAR_SHADOWED
     Text[ korean ] = "음영";
     Text[ turkish ] = "G�lgeli";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sombreado";
+    Text[ catalan ] = "Amb ombra";
+    Text[ thai ] = "มีเงา";
 };
 String RID_ATTR_CHAR_WORDLINEMODE
 {
@@ -3449,7 +3569,8 @@ String RID_ATTR_CHAR_WORDLINEMODE
     Text[ korean ] = "단어별";
     Text[ turkish ] = "Yaln�zca s�zc�kler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Solo palabras";
+    Text[ catalan ] = "Paraules individuals";
+    Text[ thai ] = "คำเฉพาะ";
 };
 String RID_ATTR_CHAR_CONTOUR
 {
@@ -3476,7 +3597,8 @@ String RID_ATTR_CHAR_CONTOUR
     Text[ korean ] = "윤곽";
     Text[ turkish ] = "Kontur";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Contorno";
+    Text[ catalan ] = "Contorn";
+    Text[ thai ] = "เค้าร่าง";
 };
 String RID_ATTR_CHAR_STRIKEOUT
 {
@@ -3503,7 +3625,8 @@ String RID_ATTR_CHAR_STRIKEOUT
     Text[ korean ] = "취소선";
     Text[ turkish ] = "�st� �izili";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tachado";
+    Text[ catalan ] = "Barrat";
+    Text[ thai ] = "ขีดทับ";
 };
 String RID_ATTR_CHAR_UNDERLINE
 {
@@ -3530,7 +3653,8 @@ String RID_ATTR_CHAR_UNDERLINE
     Text[ korean ] = "밑줄";
     Text[ turkish ] = "Alt� �izili";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Subrayado";
+    Text[ catalan ] = "Subratllat";
+    Text[ thai ] = "ขีดเส้นใต้";
 };
 String RID_ATTR_CHAR_FONTHEIGHT
 {
@@ -3541,7 +3665,7 @@ String RID_ATTR_CHAR_FONTHEIGHT
     Text [ portuguese_brazilian ] = "Altura de fonte" ;
     Text [ portuguese ] = "Altura do tipo de letra" ;
     Text [ finnish ] = "Fontin korkeus" ;
-    Text [ danish ] = "Skrifth�jde" ;
+    Text [ danish ] = "Skriftgrad" ;
     Text [ french ] = "Taille" ;
     Text [ swedish ] = "Teckenstorlek" ;
     Text [ dutch ] = "Letterhoogte" ;
@@ -3557,7 +3681,8 @@ String RID_ATTR_CHAR_FONTHEIGHT
     Text[ korean ] = "크기";
     Text[ turkish ] = "Yaz�tipi boyu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Altura de la fuente";
+    Text[ catalan ] = "Al�ada del tipus de lletra";
+    Text[ thai ] = "ความสูงของตัวอักษร";
 };
 String RID_ATTR_CHAR_PROPSIZE
 {
@@ -3584,7 +3709,8 @@ String RID_ATTR_CHAR_PROPSIZE
     Text[ korean ] = "상대적 글꼴 크기";
     Text[ turkish ] = "Orant�l� yaz�tipi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tama�o relativo";
+    Text[ catalan ] = "Mida relativa de la lletra";
+    Text[ thai ] = "ขนาดตัวอักษรสัมพัทธ์";
 };
 String RID_ATTR_CHAR_COLOR
 {
@@ -3611,7 +3737,8 @@ String RID_ATTR_CHAR_COLOR
     Text[ korean ] = "글꼴 색";
     Text[ turkish ] = "Yaz�tipi rengi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Color de fuente";
+    Text[ catalan ] = "Color de la lletra";
+    Text[ thai ] = "สีตัวอักษร";
 };
 String RID_ATTR_CHAR_KERNING
 {
@@ -3638,7 +3765,8 @@ String RID_ATTR_CHAR_KERNING
     Text[ korean ] = "커닝";
     Text[ language_user1 ] = " ";
     Text[ turkish ] = "Kerning";
-    Text[ catalan ] = "Ajuste entre caracteres";
+    Text[ catalan ] = "Interlletratge";
+    Text[ thai ] = "ปรับระยะห่าง";
 };
 String RID_ATTR_CHAR_CASEMAP
 {
@@ -3665,7 +3793,8 @@ String RID_ATTR_CHAR_CASEMAP
     Text[ greek ] = "��������";
     Text[ korean ] = "효과";
     Text[ turkish ] = "Efektler";
-    Text[ catalan ] = "Efectos";
+    Text[ catalan ] = "Efectes";
+    Text[ thai ] = "ลักษณะพิเศษ";
 };
 String RID_ATTR_CHAR_LANGUAGE
 {
@@ -3693,6 +3822,7 @@ String RID_ATTR_CHAR_LANGUAGE
     Text[ turkish ] = "Dil";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Idioma";
+    Text[ thai ] = "ภาษา";
 };
 String RID_ATTR_CHAR_ESCAPEMENT
 {
@@ -3719,7 +3849,8 @@ String RID_ATTR_CHAR_ESCAPEMENT
     Text[ korean ] = "위치";
     Text[ turkish ] = "Konum";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Posici�n";
+    Text[ catalan ] = "Posici�";
+    Text[ thai ] = "ตำแหน่ง";
 };
 String RID_ATTR_CHAR_FONTLIST
 {
@@ -3748,8 +3879,9 @@ String RID_ATTR_CHAR_BLINK
     Text[ korean ] = "깜박임";
     Text[ turkish ] = "Yan�p s�nme";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Intermitente";
+    Text[ catalan ] = "Parpelleig";
     Text[ finnish ] = "Vilkkuva";
+    Text[ thai ] = "กระพริบ";
 };
 String RID_ATTR_CHAR_CHARSETCOLOR
 {
@@ -3773,8 +3905,9 @@ String RID_ATTR_CHAR_CHARSETCOLOR
     Text[ chinese_traditional ] = "字型顏色";
     Text[ arabic ] = "��� ������ ������";
     Text[ turkish ] = "Karakter k�mesi rengi";
-    Text[ catalan ] = "Color de car�cter";
+    Text[ catalan ] = "Color de car�cter";
     Text[ finnish ] = "Merkist�n v�ri";
+    Text[ thai ] = "สีชุดตัวอักขระ";
 };
 String RID_ATTR_BORDER_INNER
 {
@@ -3813,7 +3946,8 @@ String RID_ATTR_PARA
     Text[ korean ] = "단락";
     Text[ turkish ] = "Paragraf";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "P�rrafo";
+    Text[ catalan ] = "Par�graf";
+    Text[ thai ] = "ย่อหน้า";
 };
 String RID_ATTR_PARA_ADJUST
 {
@@ -3840,7 +3974,8 @@ String RID_ATTR_PARA_ADJUST
     Text[ korean ] = "맞춤";
     Text[ turkish ] = "Hizalama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Alineaci�n";
+    Text[ catalan ] = "Alineament";
+    Text[ thai ] = "จัดตำแหน่ง";
 };
 String RID_ATTR_PARA_ADJUST_LEFT
 {
@@ -3887,7 +4022,8 @@ String RID_ATTR_PARA_LINESPACE
     Text[ korean ] = "줄 간격";
     Text[ turkish ] = "Sat�r aral���";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Interlineado";
+    Text[ catalan ] = "Interlineat";
+    Text[ thai ] = "ระยะห่างบรรทัด";
 };
 String RID_ATTR_PARA_LINESPACE_10
 {
@@ -3926,7 +4062,8 @@ String RID_ATTR_PARA_PAGEBREAK
     Text[ korean ] = "페이지 나누기";
     Text[ turkish ] = "Sayfa sonu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Salto de p�gina";
+    Text[ catalan ] = "Salt de p�gina";
+    Text[ thai ] = "แบ่งหน้า";
 };
 String RID_ATTR_PARA_HYPHENZONE
 {
@@ -3953,7 +4090,8 @@ String RID_ATTR_PARA_HYPHENZONE
     Text[ korean ] = "하이픈 넣기";
     Text[ turkish ] = "Heceleme";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Separaci�n sil�bica";
+    Text[ catalan ] = "Separaci� en s�l.labes";
+    Text[ thai ] = "ยัติภังค์";
 };
 String RID_ATTR_PARA_SPLIT
 {
@@ -3969,7 +4107,7 @@ String RID_ATTR_PARA_SPLIT
     Text [ swedish ] = "Dela stycke" ;
     Text [ dutch ] = "Alinea splitsen" ;
     Text [ spanish ] = "Dividir p�rrafo" ;
-    Text [ english_us ] = "Split paragraph" ;
+    Text [ english_us ] = "Do not split paragraph" ;
     Text[ chinese_simplified ] = "分开段落";
     Text[ russian ] = "��������� �����";
     Text[ polish ] = "Podziel akapit";
@@ -3980,7 +4118,8 @@ String RID_ATTR_PARA_SPLIT
     Text[ korean ] = "단락 나누기";
     Text[ turkish ] = "Paragraf� ay�r";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Dividir p�rrafo";
+    Text[ catalan ] = "Divideix el par�graf";
+    Text[ thai ] = "แยกย่อหน้า";
 };
 String RID_ATTR_PARA_WIDOWS
 {
@@ -4000,14 +4139,15 @@ String RID_ATTR_PARA_WIDOWS
     Text[ chinese_simplified ] = "段前分页";
     Text[ russian ] = "�������� ������� ������";
     Text[ polish ] = "Szewcy";
-    Text[ japanese ] = "改ページ時に残す行数";
+    Text[ japanese ] = "オーファン";
     Text[ chinese_traditional ] = "段落前分頁";
     Text[ arabic ] = "������ �������";
     Text[ greek ] = "������";
     Text[ korean ] = "처음 한줄";
     Text[ turkish ] = "Tek sat�r (paragraf ba��)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Hu�rfanas";
+    Text[ catalan ] = "Viudes";
+    Text[ thai ] = "บรรทัดสุดท้ายของย่อหน้า";
 };
 String RID_ATTR_PARA_ORPHANS
 {
@@ -4027,14 +4167,15 @@ String RID_ATTR_PARA_ORPHANS
     Text[ chinese_simplified ] = "孤行控制";
     Text[ russian ] = "��������� ������� ������";
     Text[ polish ] = "B�karty";
-    Text[ japanese ] = "段落前で改ページ";
+    Text[ japanese ] = "ウィドウ";
     Text[ chinese_traditional ] = "段落遺留字串控制";
     Text[ arabic ] = "������ �������";
     Text[ greek ] = "�����";
     Text[ korean ] = "마지막 한줄";
     Text[ turkish ] = "Tek sat�r (paragraf sonu)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Viudas";
+    Text[ catalan ] = "Orfes";
+    Text[ thai ] = "บรรทัดแรกของย่อหน้า";
 };
 String RID_ATTR_PARA_ULSPACE
 {
@@ -4061,7 +4202,8 @@ String RID_ATTR_PARA_ULSPACE
     Text[ korean ] = "간격";
     Text[ turkish ] = "Aral�k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Espacio";
+    Text[ catalan ] = "Espaiat";
+    Text[ thai ] = "ระยะห่าง";
 };
 String RID_ATTR_PARA_LRSPACE
 {
@@ -4088,7 +4230,8 @@ String RID_ATTR_PARA_LRSPACE
     Text[ korean ] = "들여 쓰기";
     Text[ turkish ] = "Girinti";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sangr�a";
+    Text[ catalan ] = "Sagnat";
+    Text[ thai ] = "ระยะเยื้อง";
 };
 String RID_ATTR_POSTIT_AUTHOR
 {
@@ -4131,7 +4274,8 @@ String RID_ATTR_LRSPACE
     Text[ korean ] = "들여쓰기";
     Text[ turkish ] = "Girinti";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sangr�a";
+    Text[ catalan ] = "Sagnat";
+    Text[ thai ] = "ระยะเยื้อง";
 };
 String RID_ATTR_ULSPACE
 {
@@ -4158,7 +4302,8 @@ String RID_ATTR_ULSPACE
     Text[ korean ] = "간격";
     Text[ turkish ] = "Aral�k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Espacio";
+    Text[ catalan ] = "Espaiat";
+    Text[ thai ] = "ระยะห่าง";
 };
 String RID_ATTR_PAGE
 {
@@ -4185,7 +4330,8 @@ String RID_ATTR_PAGE
     Text[ korean ] = "페이지";
     Text[ turkish ] = "Sayfa";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "P�gina";
+    Text[ catalan ] = "P�gina";
+    Text[ thai ] = "หน้า";
 };
 String RID_ATTR_PAGE_SIZE
 {
@@ -4268,7 +4414,8 @@ String RID_ATTR_PARA_MODEL
     Text[ korean ] = "페이지 스타일";
     Text[ turkish ] = "Sayfa bi�imi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Estilo de p�gina";
+    Text[ catalan ] = "Estil de p�gina";
+    Text[ thai ] = "ลักษณะหน้า";
 };
 String RID_ATTR_PARA_KEEP
 {
@@ -4295,7 +4442,8 @@ String RID_ATTR_PARA_KEEP
     Text[ korean ] = "단락들을 같은 페이지에";
     Text[ turkish ] = "Paragraflar� bir arada tut";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Mantener p�rrafos juntos";
+    Text[ catalan ] = "Mant� els par�grafs junts";
+    Text[ thai ] = "ติดตามด้วยย่อหน้าถัดไป";
 };
 String RID_ATTR_FLASH
 {
@@ -4309,7 +4457,7 @@ String RID_ATTR_FLASH
     Text[ spanish ] = "Intermitente";
     Text[ finnish ] = "Blinking";
     Text[ italian ] = "Lampeggiante";
-    Text[ danish ] = "Blinking";
+    Text[ danish ] = "Blinkende";
     Text[ swedish ] = "Blinkande";
     Text[ polish ] = "Blinking";
     Text[ portuguese_brazilian ] = "Blinking";
@@ -4319,7 +4467,8 @@ String RID_ATTR_FLASH
     Text[ chinese_traditional ] = "閃動";
     Text[ turkish ] = "Blinking";
     Text[ arabic ] = "Blinking";
-    Text[ catalan ] = "Blinking";
+    Text[ catalan ] = "Intermitent";
+    Text[ thai ] = "Blinking";
 };
 String RID_ATTR_PARA_REGISTER
 {
@@ -4333,7 +4482,7 @@ String RID_ATTR_PARA_REGISTER
     Text[ spanish ] = "Conformidad registro";
     Text[ finnish ] = "Register-true";
     Text[ italian ] = "Conformit� registro";
-    Text[ danish ] = "Register-true";
+    Text[ danish ] = "Hold register";
     Text[ swedish ] = "Register";
     Text[ polish ] = "Register-true";
     Text[ portuguese_brazilian ] = "Register-true";
@@ -4343,7 +4492,8 @@ String RID_ATTR_PARA_REGISTER
     Text[ chinese_traditional ] = "正反頁的行距相等";
     Text[ turkish ] = "Register-true";
     Text[ arabic ] = "Register-true";
-    Text[ catalan ] = "Register-true";
+    Text[ catalan ] = "Registrat-cert";
+    Text[ thai ] = "Register-true";
 };
 String RID_ATTR_BRUSH_CHAR
 {
@@ -4357,7 +4507,7 @@ String RID_ATTR_BRUSH_CHAR
     Text[ spanish ] = "Fondo de car�cter";
     Text[ finnish ] = "Character Background";
     Text[ italian ] = "Sfondo carattere";
-    Text[ danish ] = "Character Background";
+    Text[ danish ] = "Tegnbaggrund";
     Text[ swedish ] = "Teckenbakgrund";
     Text[ polish ] = "Character Background";
     Text[ portuguese_brazilian ] = "Character Background";
@@ -4367,7 +4517,8 @@ String RID_ATTR_BRUSH_CHAR
     Text[ chinese_traditional ] = "字元背景";
     Text[ turkish ] = "Character Background";
     Text[ arabic ] = "Character Background";
-    Text[ catalan ] = "Character Background";
+    Text[ catalan ] = "Car�cter de fons";
+    Text[ thai ] = "Character background";
 };
 String RID_ATTR_CHAR_CJK_FONT
 {
@@ -4381,7 +4532,7 @@ String RID_ATTR_CHAR_CJK_FONT
     Text[ spanish ] = "Fuente asi�tica";
     Text[ finnish ] = "Asian Font";
     Text[ italian ] = "Caratteri asiatici";
-    Text[ danish ] = "Asian Font";
+    Text[ danish ] = "Asiatisk skrift";
     Text[ swedish ] = "Asiatiskt teckensnitt";
     Text[ polish ] = "Asian Font";
     Text[ portuguese_brazilian ] = "Asian Font";
@@ -4391,7 +4542,8 @@ String RID_ATTR_CHAR_CJK_FONT
     Text[ chinese_traditional ] = "中日韓文字";
     Text[ turkish ] = "Asian Font";
     Text[ arabic ] = "Asian Font";
-    Text[ catalan ] = "Asian Font";
+    Text[ catalan ] = "Tipus de lletra asi�tic";
+    Text[ thai ] = "Asian font";
 };
 String RID_ATTR_CHAR_CJK_FONTHEIGHT
 {
@@ -4405,7 +4557,7 @@ String RID_ATTR_CHAR_CJK_FONTHEIGHT
     Text[ spanish ] = "Tama�o de la fuente asi�tica";
     Text[ finnish ] = "Size asian font";
     Text[ italian ] = "Dimensioni del carattere asiatico";
-    Text[ danish ] = "Size asian font";
+    Text[ danish ] = "Skriftgrad, asiatisk skrift";
     Text[ swedish ] = "Teckenstorlek asiatiskt teckensnitt";
     Text[ polish ] = "Size asian font";
     Text[ portuguese_brazilian ] = "Size asian font";
@@ -4415,7 +4567,8 @@ String RID_ATTR_CHAR_CJK_FONTHEIGHT
     Text[ chinese_traditional ] = "中日韓文字的字型規格";
     Text[ turkish ] = "Size asian font";
     Text[ arabic ] = "Size asian font";
-    Text[ catalan ] = "Size asian font";
+    Text[ catalan ] = "Mida de la lletra";
+    Text[ thai ] = "Size of Asian font";
 };
 String RID_ATTR_CHAR_CJK_LANGUAGE
 {
@@ -4429,7 +4582,7 @@ String RID_ATTR_CHAR_CJK_LANGUAGE
     Text[ spanish ] = "Idioma de la fuente asi�tica";
     Text[ finnish ] = "Language asian font";
     Text[ italian ] = "Lingua carattere asiatico";
-    Text[ danish ] = "Language asian font";
+    Text[ danish ] = "Sprog, asiatisk skrift";
     Text[ swedish ] = "Spr�k asiatiskt teckensnitt";
     Text[ polish ] = "Language asian font";
     Text[ portuguese_brazilian ] = "Language asian font";
@@ -4439,7 +4592,8 @@ String RID_ATTR_CHAR_CJK_LANGUAGE
     Text[ chinese_traditional ] = "中日韓文字語言";
     Text[ turkish ] = "Language asian font";
     Text[ arabic ] = "Language asian font";
-    Text[ catalan ] = "Language asian font";
+    Text[ catalan ] = "Tipus de lletra asi�tic";
+    Text[ thai ] = "Language of Asian fonts";
 };
 String RID_ATTR_CHAR_CJK_POSTURE
 {
@@ -4453,7 +4607,7 @@ String RID_ATTR_CHAR_CJK_POSTURE
     Text[ spanish ] = "Posici�n de la fuente asi�tica";
     Text[ finnish ] = "Posture asian font";
     Text[ italian ] = "Orientamento carattere asiatico";
-    Text[ danish ] = "Posture asian font";
+    Text[ danish ] = "Skriftposition, asiatisk skrift";
     Text[ swedish ] = "Teckenstil asiatiskt teckensnitt";
     Text[ polish ] = "Posture asian font";
     Text[ portuguese_brazilian ] = "Posture asian font";
@@ -4463,7 +4617,8 @@ String RID_ATTR_CHAR_CJK_POSTURE
     Text[ chinese_traditional ] = "中日韓文字字型的式樣";
     Text[ turkish ] = "Posture asian font";
     Text[ arabic ] = "Posture asian font";
-    Text[ catalan ] = "Posture asian font";
+    Text[ catalan ] = "Posici� de la lletra asi�tica";
+    Text[ thai ] = "Posture of Asian fonts";
 };
 String RID_ATTR_CHAR_CJK_WEIGHT
 {
@@ -4477,7 +4632,7 @@ String RID_ATTR_CHAR_CJK_WEIGHT
     Text[ spanish ] = "Peso de la fuente asi�tica";
     Text[ finnish ] = "Weight asian font";
     Text[ italian ] = "Spessore carattere asiatico";
-    Text[ danish ] = "Weight asian font";
+    Text[ danish ] = "Skrifttykkelse, asiatisk skrift";
     Text[ swedish ] = "Tjocklek asiatiskt teckensnitt";
     Text[ polish ] = "Weight asian font";
     Text[ portuguese_brazilian ] = "Weight asian font";
@@ -4487,11 +4642,12 @@ String RID_ATTR_CHAR_CJK_WEIGHT
     Text[ chinese_traditional ] = "中日韓文字字型的粗細";
     Text[ turkish ] = "Weight asian font";
     Text[ arabic ] = "Weight asian font";
-    Text[ catalan ] = "Weight asian font";
+    Text[ catalan ] = "Al�ada de la lletra asi�tica";
+    Text[ thai ] = "Weight of Asian fonts";
 };
 String RID_ATTR_CHAR_CTL_FONT
 {
-    Text = "Komplexe Skripte" ;
+    Text = "CTL" ;
     Text [ english_us ] = "Complex scripts" ;
     Text[ portuguese ] = "Complex scripts";
     Text[ russian ] = "Complex scripts";
@@ -4501,17 +4657,18 @@ String RID_ATTR_CHAR_CTL_FONT
     Text[ spanish ] = "Scripts complejos";
     Text[ finnish ] = "Complex scripts";
     Text[ italian ] = "Script complessi";
-    Text[ danish ] = "Complex scripts";
+    Text[ danish ] = "Komplekse scripts";
     Text[ swedish ] = "Komplexa skript";
     Text[ polish ] = "Complex scripts";
     Text[ portuguese_brazilian ] = "Complex scripts";
-    Text[ japanese ] = "混在文章";
+    Text[ japanese ] = "複合文字言語";
     Text[ korean ] = "합성 스크립트";
     Text[ chinese_simplified ] = "复杂的文字";
     Text[ chinese_traditional ] = "複雜的文字";
     Text[ turkish ] = "Complex scripts";
     Text[ arabic ] = "Complex scripts";
-    Text[ catalan ] = "Complex scripts";
+    Text[ catalan ] = "Scripts complexos";
+    Text[ thai ] = "Complex scripts";
 };
 String RID_ATTR_CHAR_CTL_FONTHEIGHT
 {
@@ -4525,17 +4682,18 @@ String RID_ATTR_CHAR_CTL_FONTHEIGHT
     Text[ spanish ] = "Tama�o de scripts complejos";
     Text[ finnish ] = "Size complex scripts";
     Text[ italian ] = "Dimensioni degli script complessi";
-    Text[ danish ] = "Size complex scripts";
+    Text[ danish ] = "Skriftgrad, komplekse scripts";
     Text[ swedish ] = "Teckenstorlek komplexa teckensnitt";
     Text[ polish ] = "Size complex scripts";
     Text[ portuguese_brazilian ] = "Size complex scripts";
-    Text[ japanese ] = "混在文章用フォントのサイズ";
+    Text[ japanese ] = "複合文字言語用フォントのサイズ";
     Text[ korean ] = "크기 합성 스크립트";
-    Text[ chinese_simplified ] = "复杂的文字的字体规格";
-    Text[ chinese_traditional ] = "複雜的文字的字型規格";
+    Text[ chinese_simplified ] = "复杂的文字的字体大小";
+    Text[ chinese_traditional ] = "複雜的文字的字型大小";
     Text[ turkish ] = "Size complex scripts";
     Text[ arabic ] = "Size complex scripts";
-    Text[ catalan ] = "Size complex scripts";
+    Text[ catalan ] = "Mida dels scripts complexos";
+    Text[ thai ] = "Size of complex scripts";
 };
 String RID_ATTR_CHAR_CTL_LANGUAGE
 {
@@ -4549,17 +4707,18 @@ String RID_ATTR_CHAR_CTL_LANGUAGE
     Text[ spanish ] = "Idioma de scripts complejos";
     Text[ finnish ] = "Language complex scripts";
     Text[ italian ] = "Lingua script complessi";
-    Text[ danish ] = "Language complex scripts";
+    Text[ danish ] = "Sprog, komplekse scripts";
     Text[ swedish ] = "Spr�k komplexa skript";
     Text[ polish ] = "Language complex scripts";
     Text[ portuguese_brazilian ] = "Language complex scripts";
-    Text[ japanese ] = "混在文章用の言語";
+    Text[ japanese ] = "複合文字言語";
     Text[ korean ] = "언어 합성 스크립트";
     Text[ chinese_simplified ] = "复杂的文字语言";
     Text[ chinese_traditional ] = "複雜的文字語言";
     Text[ turkish ] = "Language complex scripts";
     Text[ arabic ] = "Language complex scripts";
-    Text[ catalan ] = "Language complex scripts";
+    Text[ catalan ] = "Scripts d'idioma complexos";
+    Text[ thai ] = "Language of complex scripts";
 };
 String RID_ATTR_CHAR_CTL_POSTURE
 {
@@ -4573,17 +4732,18 @@ String RID_ATTR_CHAR_CTL_POSTURE
     Text[ spanish ] = "Posici�n de scripts complejos";
     Text[ finnish ] = "Posture complex scripts";
     Text[ italian ] = "Orientamento script complessi";
-    Text[ danish ] = "Posture complex scripts";
+    Text[ danish ] = "Skriftposition, komplekse scripts";
     Text[ swedish ] = "Teckenstil komplexa skript";
     Text[ polish ] = "Posture complex scripts";
     Text[ portuguese_brazilian ] = "Posture complex scripts";
-    Text[ japanese ] = "混在文章用フォントのスタイル";
+    Text[ japanese ] = "複合文字言語用フォントのスタイル";
     Text[ korean ] = "스타일 합성 스크립트";
     Text[ chinese_simplified ] = "复杂的文字的字体式样";
     Text[ chinese_traditional ] = "複雜的文字的字型式樣";
     Text[ turkish ] = "Posture complex scripts";
     Text[ arabic ] = "Posture complex scripts";
     Text[ catalan ] = "Posture complex scripts";
+    Text[ thai ] = "Posture of complex scripts";
 };
 String RID_ATTR_CHAR_CTL_WEIGHT
 {
@@ -4597,17 +4757,18 @@ String RID_ATTR_CHAR_CTL_WEIGHT
     Text[ spanish ] = "Peso de scripts complejos";
     Text[ finnish ] = "Weight complex scripts";
     Text[ italian ] = "Spessore script complessi";
-    Text[ danish ] = "Weight complex scripts";
+    Text[ danish ] = "Skrifttykkelse, komplekse scripts";
     Text[ swedish ] = "Tjocklek komplexa skript";
     Text[ polish ] = "Weight complex scripts";
     Text[ portuguese_brazilian ] = "Weight complex scripts";
-    Text[ japanese ] = "混在文章用フォントの太さ";
+    Text[ japanese ] = "複合文字言語用フォントの太さ";
     Text[ korean ] = "두께 합성 스크립트";
-    Text[ chinese_simplified ] = "复杂的文字的字体粗细";
+    Text[ chinese_simplified ] = "复杂的文字字体粗细";
     Text[ chinese_traditional ] = "複雜的文字的字型粗細";
     Text[ turkish ] = "Weight complex scripts";
     Text[ arabic ] = "Weight complex scripts";
-    Text[ catalan ] = "Weight complex scripts";
+    Text[ catalan ] = "Scripts d'al�ada complexos";
+    Text[ thai ] = "Weight of complex scripts";
 };
 String RID_ATTR_CHAR_TWO_LINES
 {
@@ -4621,7 +4782,7 @@ String RID_ATTR_CHAR_TWO_LINES
     Text[ spanish ] = "L�neas dobles";
     Text[ finnish ] = "Double lined";
     Text[ italian ] = "Due righe";
-    Text[ danish ] = "Double lined";
+    Text[ danish ] = "Dobbeltlinjet";
     Text[ swedish ] = "Dubbla rader";
     Text[ polish ] = "Double lined";
     Text[ portuguese_brazilian ] = "Double lined";
@@ -4631,7 +4792,8 @@ String RID_ATTR_CHAR_TWO_LINES
     Text[ chinese_traditional ] = "雙行";
     Text[ turkish ] = "Double lined";
     Text[ arabic ] = "Double lined";
-    Text[ catalan ] = "Double lined";
+    Text[ catalan ] = "L�nia doble";
+    Text[ thai ] = "Double-lined";
 };
 String RID_ATTR_CHAR_EMPHASISMARK
 {
@@ -4645,7 +4807,7 @@ String RID_ATTR_CHAR_EMPHASISMARK
     Text[ spanish ] = "Caracteres de acentuaci�n";
     Text[ finnish ] = "Emphasis mark";
     Text[ italian ] = "Segni esclamativi";
-    Text[ danish ] = "Emphasis mark";
+    Text[ danish ] = "Fremh�vningstegn";
     Text[ swedish ] = "Betoningstecken";
     Text[ polish ] = "Emphasis mark";
     Text[ portuguese_brazilian ] = "Emphasis mark";
@@ -4655,7 +4817,8 @@ String RID_ATTR_CHAR_EMPHASISMARK
     Text[ chinese_traditional ] = "重音符號";
     Text[ turkish ] = "Emphasis mark";
     Text[ arabic ] = "Emphasis mark";
-    Text[ catalan ] = "Emphasis mark";
+    Text[ catalan ] = "Marca d'�mfasi";
+    Text[ thai ] = "Emphasis mark";
 };
 String RID_ATTR_PARA_SCRIPTSPACE
 {
@@ -4669,17 +4832,18 @@ String RID_ATTR_PARA_SCRIPTSPACE
     Text[ spanish ] = "Espacio del texto";
     Text[ finnish ] = "Text spacing";
     Text[ italian ] = "Spaziatura testo";
-    Text[ danish ] = "Text spacing";
+    Text[ danish ] = "Tekstafstand";
     Text[ swedish ] = "Textavst�nd";
     Text[ polish ] = "Text spacing";
     Text[ portuguese_brazilian ] = "Text spacing";
     Text[ japanese ] = "文字間隔";
-    Text[ korean ] = "텍스트 자간";
+    Text[ korean ] = "문자 간격";
     Text[ chinese_simplified ] = "文字的间隔";
     Text[ chinese_traditional ] = "文字的間隔";
     Text[ turkish ] = "Text spacing";
     Text[ arabic ] = "Text spacing";
-    Text[ catalan ] = "Text spacing";
+    Text[ catalan ] = "Espai de text";
+    Text[ thai ] = "Text spacing";
 };
 String RID_ATTR_PARA_HANGPUNCTUATION
 {
@@ -4693,7 +4857,7 @@ String RID_ATTR_PARA_HANGPUNCTUATION
     Text[ spanish ] = "Puntuaci�n saliente";
     Text[ finnish ] = "Hanging punctuation";
     Text[ italian ] = "Punteggiatura sospesa";
-    Text[ danish ] = "Hanging punctuation";
+    Text[ danish ] = "H�ngende tegns�tning";
     Text[ swedish ] = "H�ngande interpunktion";
     Text[ polish ] = "Hanging punctuation";
     Text[ portuguese_brazilian ] = "Hanging punctuation";
@@ -4703,7 +4867,8 @@ String RID_ATTR_PARA_HANGPUNCTUATION
     Text[ chinese_traditional ] = "行末附加標點符號";
     Text[ turkish ] = "Hanging punctuation";
     Text[ arabic ] = "Hanging punctuation";
-    Text[ catalan ] = "Hanging punctuation";
+    Text[ catalan ] = "Puntuaci� sortint";
+    Text[ thai ] = "Hanging punctuation";
 };
 String RID_ATTR_PARA_FORBIDDEN_RULES
 {
@@ -4717,7 +4882,7 @@ String RID_ATTR_PARA_FORBIDDEN_RULES
     Text[ spanish ] = "Caracteres no permitidos";
     Text[ finnish ] = "Forbidden characters";
     Text[ italian ] = "Caratteri non ammessi";
-    Text[ danish ] = "Forbidden characters";
+    Text[ danish ] = "Forbudte tegn";
     Text[ swedish ] = "F�rbjudna tecken";
     Text[ polish ] = "Forbidden characters";
     Text[ portuguese_brazilian ] = "Forbidden characters";
@@ -4727,7 +4892,8 @@ String RID_ATTR_PARA_FORBIDDEN_RULES
     Text[ chinese_traditional ] = "禁止使用的字元";
     Text[ turkish ] = "Forbidden characters";
     Text[ arabic ] = "Forbidden characters";
-    Text[ catalan ] = "Forbidden characters";
+    Text[ catalan ] = "Car�cters prohibits";
+    Text[ thai ] = "Forbidden characters";
 };
 String RID_ATTR_CHAR_ROTATED
 {
@@ -4751,7 +4917,8 @@ String RID_ATTR_CHAR_ROTATED
     Text[ chinese_traditional ] = "旋轉";
     Text[ turkish ] = "D�nd�r";
     Text[ arabic ] = "�������";
-    Text[ catalan ] = "Rotation";
+    Text[ catalan ] = "Rotaci�";
+    Text[ thai ] = "Rotation";
 };
 String RID_ATTR_CHAR_SCALEWIDTH
 {
@@ -4765,7 +4932,7 @@ String RID_ATTR_CHAR_SCALEWIDTH
     Text[ spanish ] = "Escala";
     Text[ finnish ] = "Scaling";
     Text[ italian ] = "Scala";
-    Text[ danish ] = "Scaling";
+    Text[ danish ] = "Skalering";
     Text[ swedish ] = "Skalning";
     Text[ polish ] = "Scaling";
     Text[ portuguese_brazilian ] = "Scaling";
@@ -4775,7 +4942,8 @@ String RID_ATTR_CHAR_SCALEWIDTH
     Text[ chinese_traditional ] = "顯示比例";
     Text[ turkish ] = "Scaling";
     Text[ arabic ] = "Scaling";
-    Text[ catalan ] = "Scaling";
+    Text[ catalan ] = "Escala";
+    Text[ thai ] = "Scale";
 };
 String RID_ATTR_CHAR_RELIEF
 {
@@ -4799,7 +4967,8 @@ String RID_ATTR_CHAR_RELIEF
     Text[ chinese_traditional ] = "浮雕";
     Text[ turkish ] = "R�lyef";
     Text[ arabic ] = "���";
-    Text[ catalan ] = "Relief";
+    Text[ catalan ] = "Relleu";
+    Text[ thai ] = "นูน";
 };
 String RID_PARA_VERTALIGN
 {
@@ -4813,7 +4982,7 @@ String RID_PARA_VERTALIGN
     Text[ spanish ] = "Alineaci�n vertical del texto";
     Text[ finnish ] = "Vertical text alignment";
     Text[ italian ] = "Allineamento del testo verticale";
-    Text[ danish ] = "Vertical text alignment";
+    Text[ danish ] = "Lodret tekstjustering";
     Text[ swedish ] = "Vertikal textjustering";
     Text[ polish ] = "Vertical text alignment";
     Text[ portuguese_brazilian ] = "Vertical text alignment";
@@ -4824,6 +4993,7 @@ String RID_PARA_VERTALIGN
     Text[ turkish ] = "Vertical text alignment";
     Text[ arabic ] = "Vertical text alignment";
     Text[ catalan ] = "Vertical text alignment";
+    Text[ thai ] = "Vertical text alignment";
 };
 String RID_SINGLE_LINE0
 {
@@ -4848,8 +5018,9 @@ String RID_SINGLE_LINE0
     Text[ korean ] = "단일 가는 선";
     Text[ turkish ] = "Tek, �nce �izgi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sencillo, l�neas finas";
+    Text[ catalan ] = "Senzill, l�nies fines";
     Text[ finnish ] = "Yksitt�inen, ohuet viivat";
+    Text[ thai ] = "เส้นเดียว, เส้นบาง";
 };
 String RID_SINGLE_LINE1
 {
@@ -4874,8 +5045,9 @@ String RID_SINGLE_LINE1
     Text[ korean ] = "단일, 얇게";
     Text[ turkish ] = "Tek, �nce";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sencilla, delgada";
+    Text[ catalan ] = "Simple, prim";
     Text[ finnish ] = "Yksitt�inen, ohut";
+    Text[ thai ] = "เส้นเดียว, บาง";
 };
 String RID_SINGLE_LINE2
 {
@@ -4900,8 +5072,9 @@ String RID_SINGLE_LINE2
     Text[ korean ] = "단일, 굵게";
     Text[ turkish ] = "Tek, Kal�n";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sencilla, gruesa";
+    Text[ catalan ] = "Simple, gruixut";
     Text[ finnish ] = "Yksitt�inen, paksu";
+    Text[ thai ] = "เส้นเดียว, หนา";
 };
 String RID_SINGLE_LINE3
 {
@@ -4926,8 +5099,9 @@ String RID_SINGLE_LINE3
     Text[ korean ] = "단일, 아주 굵게";
     Text[ turkish ] = "Tek, �ok kal�n";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sencilla, muy gruesa";
+    Text[ catalan ] = "Simple, molt gruixut";
     Text[ finnish ] = "Yksitt�inen, hyvin paksu";
+    Text[ thai ] = "เส้นเดียว, หนามาก";
 };
 String RID_SINGLE_LINE4
 {
@@ -4952,8 +5126,9 @@ String RID_SINGLE_LINE4
     Text[ korean ] = "단일, 진함";
     Text[ turkish ] = "Tek, Kal�n";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sencillo, negrita";
+    Text[ catalan ] = "Simple, negreta";
     Text[ finnish ] = "Yksitt�inen, leve�";
+    Text[ thai ] = "เส้นเดียว, หนา";
 };
 String RID_DOUBLE_LINE0
 {
@@ -4978,8 +5153,9 @@ String RID_DOUBLE_LINE0
     Text[ korean ] = "이중, 가는 선, 간격: 작게";
     Text[ turkish ] = "�ift, �nce �izgi, Aral�k: k���k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Doble, L�neas finas, Espacio: peque�o";
+    Text[ catalan ] = "Doble, L�nies fines, Espai: petit";
     Text[ finnish ] = "Kaksinkertainen, ohuet viivat, v�lit: pienet";
+    Text[ thai ] = "เส้นคู่, เส้นบาง, ระยะห่าง: เล็ก";
 };
 String RID_DOUBLE_LINE1
 {
@@ -5004,8 +5180,9 @@ String RID_DOUBLE_LINE1
     Text[ korean ] = "이중, 가는 선, 간격: 크게";
     Text[ turkish ] = "�ift, �nce �izgi, Aral�k: b�y�k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Doble, L�nea fina, Espacio: grande";
+    Text[ catalan ] = "Doble, L�nia fina, Espai: gran";
     Text[ finnish ] = "Kaksinkertainen, ohut viiva, v�lit: suuret";
+    Text[ thai ] = "เส้นคู่, เส้นบาง, ระยะห่าง: ใหญ่";
 };
 String RID_DOUBLE_LINE2
 {
@@ -5030,8 +5207,9 @@ String RID_DOUBLE_LINE2
     Text[ korean ] = "이중, 얇게, 간격: 작게";
     Text[ turkish ] = "�ift, �nce, Aral�k: k���k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Doble, delgada, Espacio: peque�o";
+    Text[ catalan ] = "Doble, prim, espaiat: petit";
     Text[ finnish ] = "Kaksinkertainen, ohut, v�lit: pienet";
+    Text[ thai ] = "เส้นคู่, บาง, ระยะห่าง: เล็ก";
 };
 String RID_DOUBLE_LINE3
 {
@@ -5056,8 +5234,9 @@ String RID_DOUBLE_LINE3
     Text[ korean ] = "이중, 두껍게, 간격: 크게";
     Text[ turkish ] = "�ift, Kal�n, Aral�k: b�y�k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Doble, gruesa, Espacio: grande";
+    Text[ catalan ] = "Doble, gruixut, espaiat: gran";
     Text[ finnish ] = "Kaksinkertainen, paksu, v�lit: suuret";
+    Text[ thai ] = "เส้นคู่, หนา, ระยะห่าง: ใหญ่";
 };
 String RID_DOUBLE_LINE4
 {
@@ -5082,8 +5261,9 @@ String RID_DOUBLE_LINE4
     Text[ korean ] = "이중, 안: 가는 선, 바깥: 얇게, 간격: 크게";
     Text[ turkish ] = "�ift, ��: ince �izgi, D��: ince, Aral�k: b�y�k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Doble, interior: L�nea fina, exterior: delgada, Espacio: grande";
+    Text[ catalan ] = "Doble, interior: L�nia fina, exterior: prima, Espai: gran";
     Text[ finnish ] = "Kaksinkertainen, sis�ll�: ohuet viivat, ulkopuolella: ohut, v�lit: suuret";
+    Text[ thai ] = "เส้นคู่, ด้านใน: เส้นบาง, ด้านนอก: บาง, ระยะห่าง: ใหญ่";
 };
 String RID_DOUBLE_LINE5
 {
@@ -5108,8 +5288,9 @@ String RID_DOUBLE_LINE5
     Text[ korean ] = "이중, 안: 가는 선, 바깥: 굵게, 간격: 크게";
     Text[ turkish ] = "�ift, ��: ince �izgi, D��: kal�n, Aral�k: b�y�k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Doble, interior: L�nea fina, exterior: gruesa, Espacio: grande";
+    Text[ catalan ] = "Doble, interior: L�nia fina, exterior: gruixuda, Espai: gran";
     Text[ finnish ] = "Kaksinkertainen, sis�ll�: ohuet viivat, ulkopuolella: paksu, v�lit: suuret";
+    Text[ thai ] = "เส้นคู่, ด้านใน: เส้นบาง, ด้านนอก: หนา, ระยะห่าง: ใหญ่";
 };
 String RID_DOUBLE_LINE6
 {
@@ -5134,8 +5315,9 @@ String RID_DOUBLE_LINE6
     Text[ korean ] = "이중, 안: 가는 선, 바깥: 아주 굵게, 간격: 크게";
     Text[ turkish ] = "�ift, ��: ince �izgi, D��: �ok kal�n, Aral�k: b�y�k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Doble, interior: L�nea fina, exterior: muy gruesa, Espacio: grande";
+    Text[ catalan ] = "Doble, interior: L�nia fina, exterior: molt gruixuda, Espai: gran";
     Text[ finnish ] = "Kaksinkertainen, sis�ll�: ohuet viivat, ulkopuolella: hyvin paksu, v�lit: suuret";
+    Text[ thai ] = "เส้นคู่, ด้านใน: เส้นบาง, ด้านนอก: หนามาก, ระยะห่าง: ใหญ่";
 };
 String RID_DOUBLE_LINE7
 {
@@ -5160,8 +5342,9 @@ String RID_DOUBLE_LINE7
     Text[ korean ] = "이중, 안: 얇게, 바깥: 굵게, 간격: 크게";
     Text[ turkish ] = "�ift, ��: ince, D��: kal�n, Aral�k: b�y�k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Doble, interior: fina, exterior: gruesa, Espacio: grande";
+    Text[ catalan ] = "Doble, dins: prim, fora: gruixut, espaiat: gran";
     Text[ finnish ] = "Kaksinkertainen, sis�ll�: ohut, ulkopuolella: paksu, v�lit: suuret";
+    Text[ thai ] = "เส้นคู่, ด้านใน: บาง, ด้านนอก: หนา, ระยะห่าง: ใหญ่";
 };
 String RID_DOUBLE_LINE8
 {
@@ -5186,8 +5369,9 @@ String RID_DOUBLE_LINE8
     Text[ korean ] = "이중, 안: 두껍게, 바깥: 얇게, 간격: 작게";
     Text[ turkish ] = "�ift, ��: kal�n, D��: ince, Aral�k: k���k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Doble, interior: gruesa, exterior: delgada, Espacio: peque�o";
+    Text[ catalan ] = "Doble, dins: gruixut, fora: prim, espaiat: petit";
     Text[ finnish ] = "Kaksinkertainen, sis�ll�: paksu, ulkopuolella: ohut, v�lit: pienet";
+    Text[ thai ] = "เส้นคู่, ด้านใน: หนา, ด้านนอก: บาง, ระยะห่าง: เล็ก";
 };
 String RID_DOUBLE_LINE9
 {
@@ -5212,8 +5396,9 @@ String RID_DOUBLE_LINE9
     Text[ korean ] = "이중, 안: 두껍게, 바깥: 아주 굵게, 간격: 크게";
     Text[ turkish ] = "�ift, ��: kal�n, D��: �ok kal�n, Aral�k: b�y�k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Doble, interior: gruesa, Exterior: muy gruesa, Espacio: grande";
+    Text[ catalan ] = "Doble, dins: gruixut, fora: molt gruixut, espaiat: gran";
     Text[ finnish ] = "Kaksinkertainen, sis�ll�: paksu, ulkopuolella: hyvin paksu, v�lit: suuret";
+    Text[ thai ] = "เส้นคู่, ด้านใน: หนา, ด้านนอก: หนามาก, ระยะห่าง: ใหญ่";
 };
 String RID_DOUBLE_LINE10
 {
@@ -5238,8 +5423,9 @@ String RID_DOUBLE_LINE10
     Text[ korean ] = "이중, 안: 매우 굵게, 바깥: 굵게, 간격: 크게";
     Text[ turkish ] = "�ift, ��: �ok kal�n, D��: kal�n, Aral�k: b�y�k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Doble, interior: muy gruesa, Exterior: gruesa, Espacio: grande";
+    Text[ catalan ] = "Doble, dins: molt gruixut, fora: gruixut, espaiat: gran";
     Text[ finnish ] = "Kaksinkertainen, sis�ll�: hyvin paksu, ulkopuolella: paksu, v�lit: suuret";
+    Text[ thai ] = "เส้นคู่, ด้านใน: หนามาก, ด้านนอก: หนา, ระยะห่าง: ใหญ่";
 };
 String RID_SVXITEMS_METRIC_MM
 {
@@ -5290,7 +5476,8 @@ String RID_SVXITEMS_HORJUST_STANDARD
     Text[ korean ] = "수평 맞춤, 기본";
     Text[ turkish ] = "Yatay hizalama (standart)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Alineaci�n horizontal est�ndar";
+    Text[ catalan ] = "Alineament horitzontal est�ndard";
+    Text[ thai ] = "ค่าเริ่มต้นจัดตำแหน่งแนวนอน";
 };
 String RID_SVXITEMS_HORJUST_LEFT
 {
@@ -5317,7 +5504,8 @@ String RID_SVXITEMS_HORJUST_LEFT
     Text[ korean ] = "왼쪽 맞춤";
     Text[ turkish ] = "Sola hizala";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Alinear a la izquierda";
+    Text[ catalan ] = "Alinea a l'esquerra";
+    Text[ thai ] = "ชิดซ้าย";
 };
 String RID_SVXITEMS_HORJUST_CENTER
 {
@@ -5344,7 +5532,8 @@ String RID_SVXITEMS_HORJUST_CENTER
     Text[ korean ] = "수평 가운데";
     Text[ turkish ] = "Yatay ortala";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Centrado horizontal";
+    Text[ catalan ] = "Centrat horitzontalment";
+    Text[ thai ] = "ตรงกลางแนวนอน";
 };
 String RID_SVXITEMS_HORJUST_RIGHT
 {
@@ -5371,7 +5560,8 @@ String RID_SVXITEMS_HORJUST_RIGHT
     Text[ korean ] = "오른쪽 맞춤";
     Text[ turkish ] = "Sa�a hizala";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ajustar a la derecha";
+    Text[ catalan ] = "Alinea a la dreta";
+    Text[ thai ] = "ชิดขวา";
 };
 String RID_SVXITEMS_HORJUST_BLOCK
 {
@@ -5391,14 +5581,15 @@ String RID_SVXITEMS_HORJUST_BLOCK
     Text[ chinese_simplified ] = "左右对齐";
     Text[ russian ] = "������������ �� ������";
     Text[ polish ] = "Wyjustowanie";
-    Text[ japanese ] = "均等割付";
+    Text[ japanese ] = "両端揃え";
     Text[ chinese_traditional ] = "左右對齊";
     Text[ arabic ] = "���";
     Text[ greek ] = "������ ��������";
     Text[ korean ] = "양쪽 맞춤";
     Text[ turkish ] = "�ki yana yasla";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Justificado";
+    Text[ catalan ] = "Justifica";
+    Text[ thai ] = "ชิดขอบ";
 };
 String RID_SVXITEMS_HORJUST_REPEAT
 {
@@ -5425,7 +5616,8 @@ String RID_SVXITEMS_HORJUST_REPEAT
     Text[ korean ] = "맞춤 반복";
     Text[ turkish ] = "Hizalamay� yinele";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Repetir ajuste";
+    Text[ catalan ] = "Repeteix l'alineament";
+    Text[ thai ] = "ทำการจัดตำแหน่งซ้ำ";
 };
 String RID_SVXITEMS_VERJUST_STANDARD
 {
@@ -5452,7 +5644,8 @@ String RID_SVXITEMS_VERJUST_STANDARD
     Text[ korean ] = "수직 맞춤, 기본";
     Text[ turkish ] = "Standart dikey hizalama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Alineaci�n vertical est�ndar";
+    Text[ catalan ] = "Alineament vertical est�ndard";
+    Text[ thai ] = "ค่าเริ่มต้นจัดตำแหน่งแนวตั้ง";
 };
 String RID_SVXITEMS_VERJUST_TOP
 {
@@ -5479,7 +5672,8 @@ String RID_SVXITEMS_VERJUST_TOP
     Text[ korean ] = "위 맞춤";
     Text[ turkish ] = "Yukar� do�ru hizala";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Alinear arriba";
+    Text[ catalan ] = "Alinea a la part superior";
+    Text[ thai ] = "ชิดด้านบน";
 };
 String RID_SVXITEMS_VERJUST_CENTER
 {
@@ -5506,7 +5700,8 @@ String RID_SVXITEMS_VERJUST_CENTER
     Text[ korean ] = "수직 가운데";
     Text[ turkish ] = "Dikey ortala";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Centrado vertical";
+    Text[ catalan ] = "Centrat verticalment";
+    Text[ thai ] = "ตรงกลางแนวตั้ง";
 };
 String RID_SVXITEMS_VERJUST_BOTTOM
 {
@@ -5533,7 +5728,8 @@ String RID_SVXITEMS_VERJUST_BOTTOM
     Text[ korean ] = "아래 맞춤";
     Text[ turkish ] = "A�a�� hizala";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Alinear abajo";
+    Text[ catalan ] = "Alinea a la part inferior";
+    Text[ thai ] = "ชิดด้านล่าง";
 };
 String RID_SVXITEMS_ORI_STANDARD
 {
@@ -5560,7 +5756,8 @@ String RID_SVXITEMS_ORI_STANDARD
     Text[ korean ] = "쓰기 방향 표준";
     Text[ turkish ] = "Standart yazma y�n�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Orientaci�n predeterminada";
+    Text[ catalan ] = "Orientaci� predeterminada";
+    Text[ thai ] = "ค่าเริ่มต้นการวางแนว";
 };
 String RID_SVXITEMS_ORI_TOPBOTTOM
 {
@@ -5587,7 +5784,8 @@ String RID_SVXITEMS_ORI_TOPBOTTOM
     Text[ korean ] = "위에서 아래로";
     Text[ turkish ] = "Yukar�dan a�a��";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "De arriba hacia abajo";
+    Text[ catalan ] = "De la part superior a la inferior";
+    Text[ thai ] = "จากบนลงล่าง";
 };
 String RID_SVXITEMS_ORI_BOTTOMTOP
 {
@@ -5614,7 +5812,8 @@ String RID_SVXITEMS_ORI_BOTTOMTOP
     Text[ korean ] = "아래에서 위로";
     Text[ turkish ] = "A�a��dan yukar�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "De abajo hacia arriba";
+    Text[ catalan ] = "De la part inferior a la superior";
+    Text[ thai ] = "ล่างขึ้นบน";
 };
 String RID_SVXITEMS_ORI_STACKED
 {
@@ -5641,7 +5840,8 @@ String RID_SVXITEMS_ORI_STACKED
     Text[ korean ] = "위로 쌓기";
     Text[ turkish ] = "�st �ste";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Apilado";
+    Text[ catalan ] = "Apilat";
+    Text[ thai ] = "กองซ้อน";
 };
  // GetValueText von BoolItems
 String RID_SVXITEMS_SHADOWED_TRUE
@@ -5669,7 +5869,8 @@ String RID_SVXITEMS_SHADOWED_TRUE
     Text[ korean ] = "음영";
     Text[ turkish ] = "G�lgeli";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sombreado";
+    Text[ catalan ] = "Amb ombra";
+    Text[ thai ] = "มีเงา";
 };
 String RID_SVXITEMS_SHADOWED_FALSE
 {
@@ -5696,7 +5897,8 @@ String RID_SVXITEMS_SHADOWED_FALSE
     Text[ korean ] = "음영 없음";
     Text[ turkish ] = "G�lgeli de�il";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin sombra";
+    Text[ catalan ] = "Sense ombra";
+    Text[ thai ] = "ไม่มีเงา";
 };
 String RID_SVXITEMS_BLINK_TRUE
 {
@@ -5721,8 +5923,9 @@ String RID_SVXITEMS_BLINK_TRUE
     Text[ korean ] = "깜박임";
     Text[ turkish ] = "Yan�p s�nme";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Intermitente";
+    Text[ catalan ] = "Parpelleig";
     Text[ finnish ] = "Vilkkuva";
+    Text[ thai ] = "กระพริบ";
 };
 String RID_SVXITEMS_BLINK_FALSE
 {
@@ -5747,8 +5950,9 @@ String RID_SVXITEMS_BLINK_FALSE
     Text[ korean ] = "깜박임 없음";
     Text[ turkish ] = "Yan�p s�nme yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No intermitente";
+    Text[ catalan ] = "No parpellejant";
     Text[ finnish ] = "Ei vilkkuva";
+    Text[ thai ] = "ไม่กระพริบ";
 };
 String RID_SVXITEMS_AUTOKERN_TRUE
 {
@@ -5775,7 +5979,8 @@ String RID_SVXITEMS_AUTOKERN_TRUE
     Text[ korean ] = "커닝, 쌍";
     Text[ turkish ] = "Aral�k azaltma";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ajuste par entre caracteres ";
+    Text[ catalan ] = "Interlletratge parell";
+    Text[ thai ] = "ปรับระยะคู่";
 };
 String RID_SVXITEMS_AUTOKERN_FALSE
 {
@@ -5802,7 +6007,8 @@ String RID_SVXITEMS_AUTOKERN_FALSE
     Text[ korean ] = "커닝, 쌍 아님";
     Text[ turkish ] = "Aral�k azaltma yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin ajuste par entre caracteres";
+    Text[ catalan ] = "Sense interlletratge parell";
+    Text[ thai ] = "ไม่ปรับระยะคู่";
 };
 String RID_SVXITEMS_WORDLINE_TRUE
 {
@@ -5829,7 +6035,8 @@ String RID_SVXITEMS_WORDLINE_TRUE
     Text[ korean ] = "단어별";
     Text[ turkish ] = "Yaln�zca s�zc�kler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Solo palabras";
+    Text[ catalan ] = "Paraules individuals";
+    Text[ thai ] = "คำเฉพาะ";
 };
 String RID_SVXITEMS_WORDLINE_FALSE
 {
@@ -5856,7 +6063,8 @@ String RID_SVXITEMS_WORDLINE_FALSE
     Text[ korean ] = "단어별로 하지 않음";
     Text[ turkish ] = "Yaln�zca s�zc�kler de�il";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No solo palabras";
+    Text[ catalan ] = "No nom�s paraules";
+    Text[ thai ] = "ไม่ใช่คำอย่างเดียว";
 };
 String RID_SVXITEMS_CONTOUR_TRUE
 {
@@ -5883,7 +6091,8 @@ String RID_SVXITEMS_CONTOUR_TRUE
     Text[ korean ] = "윤곽";
     Text[ turkish ] = "Konturlu yaz�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Contorno";
+    Text[ catalan ] = "Contorn";
+    Text[ thai ] = "เค้าร่าง";
 };
 String RID_SVXITEMS_CONTOUR_FALSE
 {
@@ -5910,7 +6119,8 @@ String RID_SVXITEMS_CONTOUR_FALSE
     Text[ korean ] = "윤곽 없음";
     Text[ turkish ] = "Konturlu yaz� de�il";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin contornos";
+    Text[ catalan ] = "Sense contorn";
+    Text[ thai ] = "ไม่มีเค้าร่าง";
 };
 String RID_SVXITEMS_NOLINEBREAK_TRUE
 {
@@ -5953,7 +6163,8 @@ String RID_SVXITEMS_PRINT_TRUE
     Text[ korean ] = "인쇄";
     Text[ turkish ] = "Yazd�r";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imprimir";
+    Text[ catalan ] = "Imprimeix";
+    Text[ thai ] = "พิมพ์";
 };
 String RID_SVXITEMS_PRINT_FALSE
 {
@@ -5980,7 +6191,8 @@ String RID_SVXITEMS_PRINT_FALSE
     Text[ korean ] = "인쇄 않음";
     Text[ turkish ] = "Yazd�rma";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No imprimir";
+    Text[ catalan ] = "No imprimeixis";
+    Text[ thai ] = "ห้ามพิมพ์";
 };
 String RID_SVXITEMS_OPAQUE_TRUE
 {
@@ -6007,7 +6219,8 @@ String RID_SVXITEMS_OPAQUE_TRUE
     Text[ korean ] = "불투명";
     Text[ turkish ] = "Opak";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opaco";
+    Text[ catalan ] = "Opac";
+    Text[ thai ] = "ทึบ";
 };
 String RID_SVXITEMS_OPAQUE_FALSE
 {
@@ -6034,7 +6247,8 @@ String RID_SVXITEMS_OPAQUE_FALSE
     Text[ korean ] = "불투명하지 않게";
     Text[ turkish ] = "Opak de�il";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No opaco";
+    Text[ catalan ] = "No opac";
+    Text[ thai ] = "ไม่ทึบ";
 };
 String RID_SVXITEMS_FMTKEEP_TRUE
 {
@@ -6061,7 +6275,8 @@ String RID_SVXITEMS_FMTKEEP_TRUE
     Text[ korean ] = "단락들을 같은 페이지에";
     Text[ turkish ] = "Paragraflar� bir arada tut";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Mantener p�rrafos juntos";
+    Text[ catalan ] = "Mant� els par�grafs junts";
+    Text[ thai ] = "ติดตามด้วยย่อหน้าถัดไป";
 };
 String RID_SVXITEMS_FMTKEEP_FALSE
 {
@@ -6088,7 +6303,8 @@ String RID_SVXITEMS_FMTKEEP_FALSE
     Text[ korean ] = "단락들을 같은 페이지에 놓지 않음";
     Text[ turkish ] = "Paragraflar� bir arada tutma";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No mantener p�rrafos juntos";
+    Text[ catalan ] = "No mantinguis els par�grafs junts";
+    Text[ thai ] = "ห้ามเก็บย่อหน้าไว้ด้วยกัน";
 };
 String RID_SVXITEMS_FMTSPLIT_TRUE
 {
@@ -6115,7 +6331,8 @@ String RID_SVXITEMS_FMTSPLIT_TRUE
     Text[ korean ] = "단락 나누기";
     Text[ turkish ] = "Paragraf� ay�r";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Dividir p�rrafo";
+    Text[ catalan ] = "Divideix el par�graf";
+    Text[ thai ] = "แยกย่อหน้า";
 };
 String RID_SVXITEMS_FMTSPLIT_FALSE
 {
@@ -6142,7 +6359,8 @@ String RID_SVXITEMS_FMTSPLIT_FALSE
     Text[ korean ] = "단락 나누지 않기";
     Text[ turkish ] = "Paragraf� ay�rma";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No dividir p�rrafo";
+    Text[ catalan ] = "No divideixis el par�graf";
+    Text[ thai ] = "ห้ามแยกย่อหน้า";
 };
 String RID_SVXITEMS_PROT_CONTENT_TRUE
 {
@@ -6169,7 +6387,8 @@ String RID_SVXITEMS_PROT_CONTENT_TRUE
     Text[ korean ] = "내용 보호";
     Text[ turkish ] = "��erik korunuyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Contenido protegido";
+    Text[ catalan ] = "Contingut protegit";
+    Text[ thai ] = "ป้องกันเนื้อหา";
 };
 String RID_SVXITEMS_PROT_CONTENT_FALSE
 {
@@ -6196,7 +6415,8 @@ String RID_SVXITEMS_PROT_CONTENT_FALSE
     Text[ korean ] = "내용 보호 없음";
     Text[ turkish ] = "��erik korunmuyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Contenido no protegido";
+    Text[ catalan ] = "Contingut no protegit";
+    Text[ thai ] = "ไม่ป้องกันเนื้อหา";
 };
 String RID_SVXITEMS_PROT_SIZE_TRUE
 {
@@ -6223,7 +6443,8 @@ String RID_SVXITEMS_PROT_SIZE_TRUE
     Text[ korean ] = "크기 보호";
     Text[ turkish ] = "Boyut korunuyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tama�o protegido";
+    Text[ catalan ] = "Mida protegida";
+    Text[ thai ] = "ป้องกันขนาด";
 };
 String RID_SVXITEMS_PROT_SIZE_FALSE
 {
@@ -6250,7 +6471,8 @@ String RID_SVXITEMS_PROT_SIZE_FALSE
     Text[ korean ] = "크기 보호 없음";
     Text[ turkish ] = "Boyut korunmuyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tama�o no protegido";
+    Text[ catalan ] = "Mida no protegida";
+    Text[ thai ] = "ไม่ป้องกันขนาด";
 };
 String RID_SVXITEMS_PROT_POS_TRUE
 {
@@ -6277,7 +6499,8 @@ String RID_SVXITEMS_PROT_POS_TRUE
     Text[ korean ] = "위치 보호";
     Text[ turkish ] = "Konum korunuyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Posici�n protegida";
+    Text[ catalan ] = "Posici� protegida";
+    Text[ thai ] = "ป้องกันตำแหน่ง";
 };
 String RID_SVXITEMS_PROT_POS_FALSE
 {
@@ -6304,7 +6527,8 @@ String RID_SVXITEMS_PROT_POS_FALSE
     Text[ korean ] = "위치 보호 없음";
     Text[ turkish ] = "Konum korunmuyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Posici�n no protegida";
+    Text[ catalan ] = "Posici� no protegida";
+    Text[ thai ] = "ไม่ป้องกันตำแหน่ง";
 };
 String RID_SVXITEMS_TRANSPARENT_TRUE
 {
@@ -6331,7 +6555,8 @@ String RID_SVXITEMS_TRANSPARENT_TRUE
     Text[ korean ] = "투명";
     Text[ turkish ] = "Saydam";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Transparente";
+    Text[ catalan ] = "Transparent";
+    Text[ thai ] = "โปร่งแสง";
 };
 String RID_SVXITEMS_TRANSPARENT_FALSE
 {
@@ -6358,7 +6583,8 @@ String RID_SVXITEMS_TRANSPARENT_FALSE
     Text[ korean ] = "투명하지 않게";
     Text[ turkish ] = "Saydam de�il";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No transparente";
+    Text[ catalan ] = "No transparent";
+    Text[ thai ] = "ไม่โปร่งแสง";
 };
 String RID_SVXITEMS_BOXINF_TABLE_TRUE
 {
@@ -6385,7 +6611,8 @@ String RID_SVXITEMS_BOXINF_TABLE_TRUE
     Text[ korean ] = "시트";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tabla";
+    Text[ catalan ] = "Taula";
+    Text[ thai ] = "ตาราง";
 };
 String RID_SVXITEMS_BOXINF_TABLE_FALSE
 {
@@ -6412,7 +6639,8 @@ String RID_SVXITEMS_BOXINF_TABLE_FALSE
     Text[ korean ] = "시트 없음";
     Text[ turkish ] = "Tablo de�il";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin tabla";
+    Text[ catalan ] = "Sense taula";
+    Text[ thai ] = "ไม่มีตาราง";
 };
 String RID_SVXITEMS_BOXINF_DIST_TRUE
 {
@@ -6439,7 +6667,8 @@ String RID_SVXITEMS_BOXINF_DIST_TRUE
     Text[ korean ] = "간격 사용 가능";
     Text[ turkish ] = "Aral�k etkin";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Espacio activado";
+    Text[ catalan ] = "S'ha habilitat l'espaiat";
+    Text[ thai ] = "เปิดการใช้ระยะห่าง";
 };
 String RID_SVXITEMS_BOXINF_DIST_FALSE
 {
@@ -6466,7 +6695,8 @@ String RID_SVXITEMS_BOXINF_DIST_FALSE
     Text[ korean ] = "간격 사용 불가능";
     Text[ turkish ] = "Aral�k etkin de�il";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Espacio desactivado";
+    Text[ catalan ] = "S'ha inhabilitat l'espaiat";
+    Text[ thai ] = "ไม่เปิดการใช้ระยะห่าง";
 };
 String RID_SVXITEMS_BOXINF_MDIST_TRUE
 {
@@ -6493,7 +6723,8 @@ String RID_SVXITEMS_BOXINF_MDIST_TRUE
     Text[ korean ] = "간격 미달 없음";
     Text[ turkish ] = "Aral�k k���lt�lemez";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Mantener el espacio";
+    Text[ catalan ] = "Conserva l'interval d'espaiat";
+    Text[ thai ] = "รักษาช่วงของระยะห่าง";
 };
 String RID_SVXITEMS_BOXINF_MDIST_FALSE
 {
@@ -6520,7 +6751,8 @@ String RID_SVXITEMS_BOXINF_MDIST_FALSE
     Text[ korean ] = "간격 미달 허용";
     Text[ turkish ] = "Aral�k k���lt�lebilir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Permitir espacio menor al especificado";
+    Text[ catalan ] = "Es permet no acomplir l'interval d'espaiat";
+    Text[ thai ] = "ให้ช่วงระยะห่างที่สั้นห่างออก";
 };
 String RID_SVXITEMS_HYPHEN_TRUE
 {
@@ -6547,7 +6779,8 @@ String RID_SVXITEMS_HYPHEN_TRUE
     Text[ korean ] = "하이픈 넣기";
     Text[ turkish ] = "Heceleme";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Separaci�n sil�bica";
+    Text[ catalan ] = "Separaci� en s�l.labes";
+    Text[ thai ] = "ใช้ยัติภังค์";
 };
 String RID_SVXITEMS_HYPHEN_FALSE
 {
@@ -6574,7 +6807,8 @@ String RID_SVXITEMS_HYPHEN_FALSE
     Text[ korean ] = "하이픈 없음";
     Text[ turkish ] = "Heceleme yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin separaci�n sil�bica";
+    Text[ catalan ] = "Sense separaci� en s�l.labes";
+    Text[ thai ] = "ไม่ใส่ยัติภังค์";
 };
 String RID_SVXITEMS_PAGE_END_TRUE
 {
@@ -6601,7 +6835,8 @@ String RID_SVXITEMS_PAGE_END_TRUE
     Text[ korean ] = "페이지 끝";
     Text[ turkish ] = "Sayfa sonu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Fin de p�gina";
+    Text[ catalan ] = "Fi de p�gina";
+    Text[ thai ] = "จบหน้า";
 };
 String RID_SVXITEMS_PAGE_END_FALSE
 {
@@ -6628,7 +6863,8 @@ String RID_SVXITEMS_PAGE_END_FALSE
     Text[ korean ] = "페이지 끝 없음";
     Text[ turkish ] = "Sayfa sonu de�il";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin fin de p�gina";
+    Text[ catalan ] = "Sense fin de p�gina";
+    Text[ thai ] = "ไม่จบหน้า";
 };
 String RID_SVXITEMS_MARGIN_LEFT
 {
@@ -6655,7 +6891,8 @@ String RID_SVXITEMS_MARGIN_LEFT
     Text[ korean ] = "왼쪽 여백: ";
     Text[ turkish ] = "Sol kenar: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Margen izquierdo:   ";
+    Text[ catalan ] = "Marge esquerre: ";
+    Text[ thai ] = "ระยะขอบซ้าย: ";
 };
 String RID_SVXITEMS_MARGIN_TOP
 {
@@ -6682,7 +6919,8 @@ String RID_SVXITEMS_MARGIN_TOP
     Text[ korean ] = "위 여백: ";
     Text[ turkish ] = "�st kenar: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Margen superior:   ";
+    Text[ catalan ] = "Marge superior: ";
+    Text[ thai ] = "ระยะขอบบน: ";
 };
 String RID_SVXITEMS_MARGIN_RIGHT
 {
@@ -6709,7 +6947,8 @@ String RID_SVXITEMS_MARGIN_RIGHT
     Text[ korean ] = "오른쪽 여백: ";
     Text[ turkish ] = "Sa� kenar: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Margen derecho:  ";
+    Text[ catalan ] = "Marge dret: ";
+    Text[ thai ] = "ระยะขอบขวา: ";
 };
 String RID_SVXITEMS_MARGIN_BOTTOM
 {
@@ -6736,7 +6975,8 @@ String RID_SVXITEMS_MARGIN_BOTTOM
     Text[ korean ] = "아래 여백: ";
     Text[ turkish ] = "Alt kenar: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Margen inferior:   ";
+    Text[ catalan ] = "Marge inferior: ";
+    Text[ thai ] = "ระยะขอบล่าง: ";
 };
 String RID_SVXITEMS_SIZE_WIDTH
 {
@@ -6763,7 +7003,8 @@ String RID_SVXITEMS_SIZE_WIDTH
     Text[ korean ] = "너비: ";
     Text[ turkish ] = "Geni�lik: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ancho:   ";
+    Text[ catalan ] = "Amplada: ";
+    Text[ thai ] = "ความกว้าง: ";
 };
 String RID_SVXITEMS_SIZE_HEIGHT
 {
@@ -6790,7 +7031,8 @@ String RID_SVXITEMS_SIZE_HEIGHT
     Text[ korean ] = "높이: ";
     Text[ turkish ] = "Y�kseklik: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Alto:   ";
+    Text[ catalan ] = "Al�ada:   ";
+    Text[ thai ] = "ความสูง: ";
 };
 String RID_SVXITEMS_LRSPACE_LEFT
 {
@@ -6817,7 +7059,8 @@ String RID_SVXITEMS_LRSPACE_LEFT
     Text[ korean ] = "왼쪽 들여쓰기 ";
     Text[ turkish ] = "Sol girinti ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sangr�a a la izquierda   ";
+    Text[ catalan ] = "Sagnat esquerre ";
+    Text[ thai ] = "เยื้องซ้าย ";
 };
 String RID_SVXITEMS_LRSPACE_FLINE
 {
@@ -6844,7 +7087,8 @@ String RID_SVXITEMS_LRSPACE_FLINE
     Text[ korean ] = "첫 행 ";
     Text[ turkish ] = "�lk sat�r ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Primera l�nea   ";
+    Text[ catalan ] = "Primera l�nia   ";
+    Text[ thai ] = "บรรทัดแรก ";
 };
 String RID_SVXITEMS_LRSPACE_RIGHT
 {
@@ -6871,7 +7115,8 @@ String RID_SVXITEMS_LRSPACE_RIGHT
     Text[ korean ] = "오른쪽 들여쓰기 ";
     Text[ turkish ] = "Sa� girinti ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sangr�a a la derecha   ";
+    Text[ catalan ] = "Sagnat dret ";
+    Text[ thai ] = "เยื้องขวา ";
 };
 String RID_SVXITEMS_SHADOW_COMPLETE
 {
@@ -6898,7 +7143,8 @@ String RID_SVXITEMS_SHADOW_COMPLETE
     Text[ korean ] = "음영: ";
     Text[ turkish ] = "G�lge: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sombra: ";
+    Text[ catalan ] = "Ombra: ";
+    Text[ thai ] = "เงา: ";
 };
 String RID_SVXITEMS_BORDER_COMPLETE
 {
@@ -6925,7 +7171,8 @@ String RID_SVXITEMS_BORDER_COMPLETE
     Text[ korean ] = "테두리: ";
     Text[ turkish ] = "Kenarl�k ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Bordes ";
+    Text[ catalan ] = "Vores ";
+    Text[ thai ] = "เส้นขอบ ";
 };
 String RID_SVXITEMS_BORDER_NONE
 {
@@ -6949,8 +7196,9 @@ String RID_SVXITEMS_BORDER_NONE
     Text[ chinese_traditional ] = "沒有邊框";
     Text[ arabic ] = "���� ����";
     Text[ turkish ] = "Kenarl�k yok";
-    Text[ catalan ] = "Sin bordes";
+    Text[ catalan ] = "Sense vores";
     Text[ finnish ] = "Ei reunusta";
+    Text[ thai ] = "ไม่มีเส้นขอบ";
 };
 String RID_SVXITEMS_BORDER_TOP
 {
@@ -6977,7 +7225,8 @@ String RID_SVXITEMS_BORDER_TOP
     Text[ korean ] = "위 ";
     Text[ turkish ] = "�st ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "arriba ";
+    Text[ catalan ] = "part superior ";
+    Text[ thai ] = "บน ";
 };
 String RID_SVXITEMS_BORDER_BOTTOM
 {
@@ -7004,7 +7253,8 @@ String RID_SVXITEMS_BORDER_BOTTOM
     Text[ korean ] = "아래 ";
     Text[ turkish ] = "Alt ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "abajo ";
+    Text[ catalan ] = "part inferior ";
+    Text[ thai ] = "ล่าง ";
 };
 String RID_SVXITEMS_BORDER_LEFT
 {
@@ -7031,7 +7281,8 @@ String RID_SVXITEMS_BORDER_LEFT
     Text[ korean ] = "왼쪽 ";
     Text[ turkish ] = "Sol ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "izquierda ";
+    Text[ catalan ] = "esquerra ";
+    Text[ thai ] = "ซ้าย ";
 };
 String RID_SVXITEMS_BORDER_RIGHT
 {
@@ -7058,7 +7309,8 @@ String RID_SVXITEMS_BORDER_RIGHT
     Text[ korean ] = "오른쪽 ";
     Text[ turkish ] = "Sa� ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "derecha ";
+    Text[ catalan ] = "dreta ";
+    Text[ thai ] = "ขวา ";
 };
 String RID_SVXITEMS_BORDER_DISTANCE
 {
@@ -7085,7 +7337,8 @@ String RID_SVXITEMS_BORDER_DISTANCE
     Text[ korean ] = "간격 ";
     Text[ turkish ] = "Aral�k ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Espacio   ";
+    Text[ catalan ] = "Espaiat ";
+    Text[ thai ] = "ระยะห่าง ";
 };
 String RID_SVXITEMS_ULSPACE_UPPER
 {
@@ -7112,7 +7365,8 @@ String RID_SVXITEMS_ULSPACE_UPPER
     Text[ korean ] = "위부터 ";
     Text[ turkish ] = "Yukar�dan ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Desde arriba ";
+    Text[ catalan ] = "Des de la part superior ";
+    Text[ thai ] = "จากด้านบน ";
 };
 String RID_SVXITEMS_ULSPACE_LOWER
 {
@@ -7139,7 +7393,8 @@ String RID_SVXITEMS_ULSPACE_LOWER
     Text[ korean ] = "아래부터 ";
     Text[ turkish ] = "A�a��dan ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Desde abajo ";
+    Text[ catalan ] = "Des de la part inferior ";
+    Text[ thai ] = "จากด้านล่าง ";
 };
 String RID_SVXITEMS_PAGE_COMPLETE
 {
@@ -7166,7 +7421,8 @@ String RID_SVXITEMS_PAGE_COMPLETE
     Text[ korean ] = "페이지 설명: ";
     Text[ turkish ] = "Sayfa a��klamas�: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Descripci�n de la p�gina:  ";
+    Text[ catalan ] = "Descripci� de la p�gina:  ";
+    Text[ thai ] = "คำอธิบายหน้า: ";
 };
 String RID_SVXITEMS_PAGE_NUM_CHR_UPPER
 {
@@ -7193,7 +7449,8 @@ String RID_SVXITEMS_PAGE_NUM_CHR_UPPER
     Text[ korean ] = "대문자";
     Text[ turkish ] = "B�y�k harf";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "May�sculas";
+    Text[ catalan ] = "Maj�scules";
+    Text[ thai ] = "ตัวพิมพ์ใหญ่";
 };
 String RID_SVXITEMS_PAGE_NUM_CHR_LOWER
 {
@@ -7220,7 +7477,8 @@ String RID_SVXITEMS_PAGE_NUM_CHR_LOWER
     Text[ korean ] = "소문자";
     Text[ turkish ] = "K���k harf";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Min�sculas";
+    Text[ catalan ] = "Min�scules";
+    Text[ thai ] = "ตัวพิมพ์เล็ก";
 };
 String RID_SVXITEMS_PAGE_NUM_ROM_UPPER
 {
@@ -7247,7 +7505,8 @@ String RID_SVXITEMS_PAGE_NUM_ROM_UPPER
     Text[ korean ] = "로마 대문자";
     Text[ turkish ] = "B�y�k Romen rakamlar�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "May�sculas romanas";
+    Text[ catalan ] = "Maj�scules romanes";
+    Text[ thai ] = "ตัวพิมพ์ใหญ่โรมัน";
 };
 String RID_SVXITEMS_PAGE_NUM_ROM_LOWER
 {
@@ -7274,7 +7533,8 @@ String RID_SVXITEMS_PAGE_NUM_ROM_LOWER
     Text[ korean ] = "로마 소문자";
     Text[ turkish ] = "K���k Romen rakamlar�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Min�sculas romanas";
+    Text[ catalan ] = "Min�scules romanes";
+    Text[ thai ] = "ตัวพิมพ์เล็กโรมัน";
 };
 String RID_SVXITEMS_PAGE_NUM_ARABIC
 {
@@ -7301,7 +7561,8 @@ String RID_SVXITEMS_PAGE_NUM_ARABIC
     Text[ korean ] = "아라비아";
     Text[ turkish ] = "Arap rakamlar�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "�rabe";
+    Text[ catalan ] = "�rab";
+    Text[ thai ] = "อารบิก";
 };
 String RID_SVXITEMS_PAGE_NUM_NONE
 {
@@ -7328,7 +7589,8 @@ String RID_SVXITEMS_PAGE_NUM_NONE
     Text[ korean ] = "없음";
     Text[ turkish ] = "Yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ninguno";
+    Text[ catalan ] = "Cap";
+    Text[ thai ] = "ไม่มี";
 };
 String RID_SVXITEMS_PAGE_LAND_TRUE
 {
@@ -7355,7 +7617,8 @@ String RID_SVXITEMS_PAGE_LAND_TRUE
     Text[ korean ] = "가로 방향";
     Text[ turkish ] = "Yatay";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Horizontal";
+    Text[ catalan ] = "Horitzontal";
+    Text[ thai ] = "แนวนอน";
 };
 String RID_SVXITEMS_PAGE_LAND_FALSE
 {
@@ -7383,6 +7646,7 @@ String RID_SVXITEMS_PAGE_LAND_FALSE
     Text[ turkish ] = "Dikey";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vertical";
+    Text[ thai ] = "แนวตั้ง";
 };
 String RID_SVXITEMS_PAGE_USAGE_LEFT
 {
@@ -7409,7 +7673,8 @@ String RID_SVXITEMS_PAGE_USAGE_LEFT
     Text[ korean ] = "왼쪽";
     Text[ turkish ] = "Sol";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Izquierda";
+    Text[ catalan ] = "Esquerra";
+    Text[ thai ] = "ซ้าย";
 };
 String RID_SVXITEMS_PAGE_USAGE_RIGHT
 {
@@ -7436,7 +7701,8 @@ String RID_SVXITEMS_PAGE_USAGE_RIGHT
     Text[ korean ] = "오른쪽";
     Text[ turkish ] = "Sa�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Derecha";
+    Text[ catalan ] = "Dreta";
+    Text[ thai ] = "ขวา";
 };
 String RID_SVXITEMS_PAGE_USAGE_ALL
 {
@@ -7463,7 +7729,8 @@ String RID_SVXITEMS_PAGE_USAGE_ALL
     Text[ korean ] = "모두";
     Text[ turkish ] = "T�m�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Todo";
+    Text[ catalan ] = "Tot";
+    Text[ thai ] = "ทั้งหมด";
 };
 String RID_SVXITEMS_PAGE_USAGE_MIRROR
 {
@@ -7490,7 +7757,8 @@ String RID_SVXITEMS_PAGE_USAGE_MIRROR
     Text[ korean ] = "대칭";
     Text[ turkish ] = "Yans�ma";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Reflejado";
+    Text[ catalan ] = "Replicat";
+    Text[ thai ] = "ส่อง";
 };
 String RID_SVXITEMS_LINES
 {
@@ -7517,7 +7785,8 @@ String RID_SVXITEMS_LINES
     Text[ korean ] = "줄";
     Text[ turkish ] = "Sat�r";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "L�neas";
+    Text[ catalan ] = "L�nies";
+    Text[ thai ] = "บรรทัด";
 };
 String RID_SVXITEMS_WIDOWS_COMPLETE
 {
@@ -7537,14 +7806,15 @@ String RID_SVXITEMS_WIDOWS_COMPLETE
     Text[ chinese_simplified ] = "段前分页";
     Text[ russian ] = "���������� ��������� �������� �������� ";
     Text[ polish ] = "Kontrola szewc�w";
-    Text[ japanese ] = "改ページの前に残す行数";
+    Text[ japanese ] = "オーファン制限";
     Text[ chinese_traditional ] = "段落前分頁";
     Text[ arabic ] = "������ ������� ������� ";
     Text[ greek ] = "������� �������";
     Text[ korean ] = "첫 줄 분리 방지 ";
     Text[ turkish ] = "�lk sat�r� paragrafla birle�tir ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Hu�rfanas ";
+    Text[ catalan ] = "Orfes ";
+    Text[ thai ] = "ตัวควบคุมบรรทัดสุดท้ายของย่อหน้า";
 };
 String RID_SVXITEMS_ORPHANS_COMPLETE
 {
@@ -7564,14 +7834,15 @@ String RID_SVXITEMS_ORPHANS_COMPLETE
     Text[ chinese_simplified ] = "孤行控制";
     Text[ russian ] = "���������� ���������� �������� �������� ";
     Text[ polish ] = "Kontrola b�kart�w";
-    Text[ japanese ] = "段落前で改ページ ";
+    Text[ japanese ] = "ウィドウ制限";
     Text[ chinese_traditional ] = "段落遺留字串控制";
     Text[ arabic ] = "������ ������� ������� ";
     Text[ greek ] = "������� �����";
     Text[ korean ] = "마지막 줄 분리 방지 ";
     Text[ turkish ] = "Son sat�r� paragrafla birle�tir ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Viudas   ";
+    Text[ catalan ] = "Viudes   ";
+    Text[ thai ] = "ตัวควบคุมบรรทัดแรกของย่อหน้า ";
 };
 String RID_SVXITEMS_HYPHEN_MINLEAD
 {
@@ -7598,7 +7869,8 @@ String RID_SVXITEMS_HYPHEN_MINLEAD
     Text[ korean ] = "줄 끝에 문자";
     Text[ turkish ] = "Sat�r sonunda karakterler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Caracteres al final de la l�nea";
+    Text[ catalan ] = "Car�scters al fi de la l�nia";
+    Text[ thai ] = "ตัวอักขระที่จุดสิ้นสุดของบรรทัด";
 };
 String RID_SVXITEMS_HYPHEN_MINTRAIL
 {
@@ -7625,7 +7897,8 @@ String RID_SVXITEMS_HYPHEN_MINTRAIL
     Text[ korean ] = "줄 시작 부분(~T)";
     Text[ turkish ] = "Sat�r ba��nda karakterler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "caracteres al comienzo de la l�nea";
+    Text[ catalan ] = "car�cters a l'inici de la l�nia";
+    Text[ thai ] = "ตัวอักขระที่จุดเริ่มต้นของบรรทัด";
 };
 String RID_SVXITEMS_HYPHEN_MAX
 {
@@ -7652,7 +7925,8 @@ String RID_SVXITEMS_HYPHEN_MAX
     Text[ korean ] = "하이픈 자리";
     Text[ turkish ] = "Ay�rma yerleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "guiones";
+    Text[ catalan ] = "Guionets";
+    Text[ thai ] = "ยัติภังค์";
 };
 String RID_SVXITEMS_PAGEMODEL_COMPLETE
 {
@@ -7679,7 +7953,8 @@ String RID_SVXITEMS_PAGEMODEL_COMPLETE
     Text[ korean ] = "페이지 스타일: ";
     Text[ turkish ] = "Sayfa bi�imi: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Estilo de p�gina:  ";
+    Text[ catalan ] = "Estil de p�gina:  ";
+    Text[ thai ] = "ลักษณะหน้า: ";
 };
 String RID_SVXITEMS_KERNING_COMPLETE
 {
@@ -7706,7 +7981,8 @@ String RID_SVXITEMS_KERNING_COMPLETE
     Text[ korean ] = "커닝";
     Text[ turkish ] = "Aral�k azaltma ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ajuste entre caracteres   ";
+    Text[ catalan ] = "Interlletratge ";
+    Text[ thai ] = "ปรับระยะ ";
 };
 String RID_SVXITEMS_KERNING_EXPANDED
 {
@@ -7733,7 +8009,8 @@ String RID_SVXITEMS_KERNING_EXPANDED
     Text[ korean ] = "장평 ";
     Text[ turkish ] = "Geni� ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "expandido ";
+    Text[ catalan ] = "blocat ";
+    Text[ thai ] = "ล็อค ";
 };
 String RID_SVXITEMS_KERNING_CONDENSED
 {
@@ -7760,7 +8037,8 @@ String RID_SVXITEMS_KERNING_CONDENSED
     Text[ korean ] = "좁게 ";
     Text[ turkish ] = "Dar ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "condensada   ";
+    Text[ catalan ] = "Condensat ";
+    Text[ thai ] = "บีบ ";
 };
 String RID_SVXITEMS_AUTHOR_COMPLETE
 {
@@ -7787,7 +8065,8 @@ String RID_SVXITEMS_AUTHOR_COMPLETE
     Text[ korean ] = "작성자: ";
     Text[ turkish ] = "Yazan: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Autor:   ";
+    Text[ catalan ] = "Autor: ";
+    Text[ thai ] = "ผู้เขียน: ";
 };
 String RID_SVXITEMS_DATE_COMPLETE
 {
@@ -7814,7 +8093,8 @@ String RID_SVXITEMS_DATE_COMPLETE
     Text[ korean ] = "날짜: ";
     Text[ turkish ] = "Tarih: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Fecha:   ";
+    Text[ catalan ] = "Data: ";
+    Text[ thai ] = "วันที่: ";
 };
 String RID_SVXITEMS_TEXT_COMPLETE
 {
@@ -7841,7 +8121,8 @@ String RID_SVXITEMS_TEXT_COMPLETE
     Text[ korean ] = "텍스트: ";
     Text[ turkish ] = "Metin: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Texto: ";
+    Text[ catalan ] = "Text: ";
+    Text[ thai ] = "ข้อความ: ";
 };
 String RID_SVXITEMS_BACKGROUND_COLOR
 {
@@ -7866,8 +8147,9 @@ String RID_SVXITEMS_BACKGROUND_COLOR
     Text[ korean ] = "배경색: ";
     Text[ turkish ] = "Artalan rengi: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Color de fondo:   ";
+    Text[ catalan ] = "Color de fons: ";
     Text[ finnish ] = "Taustav�ri: ";
+    Text[ thai ] = "สีพื้นหลัง: ";
 };
 String RID_SVXITEMS_PATTERN_COLOR
 {
@@ -7892,8 +8174,9 @@ String RID_SVXITEMS_PATTERN_COLOR
     Text[ korean ] = "패턴 색상: ";
     Text[ turkish ] = "Desen rengi: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Color modelo:  ";
+    Text[ catalan ] = "Color model:  ";
     Text[ finnish ] = "Kuvion v�ri: ";
+    Text[ thai ] = "สีลวดลาย: ";
 };
 String RID_SVXITEMS_GRAPHIC
 {
@@ -7918,8 +8201,9 @@ String RID_SVXITEMS_GRAPHIC
     Text[ korean ] = "그래픽";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imagen";
+    Text[ catalan ] = "Imatge";
     Text[ finnish ] = "Grafiikka";
+    Text[ thai ] = "กราฟิค";
 };
 
 String RID_SVXITEMS_BRUSH_CHAR
@@ -7945,8 +8229,9 @@ String RID_SVXITEMS_BRUSH_CHAR
     Text[ korean ] = "문자 배경";
     Text[ turkish ] = "Karakter artalan�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Fondo de car�cter";
+    Text[ catalan ] = "Fons de car�cter";
     Text[ finnish ] = "Merkin tausta";
+    Text[ thai ] = "พื้นหลังตัวอักขระ";
 };
 
 
@@ -7962,7 +8247,7 @@ String RID_SVXITEMS_EMPHASIS_NONE_STYLE
     Text[ french ] = "aucun(e)";
     Text[ spanish ] = "ninguno";
     Text[ italian ] = "nessuno";
-    Text[ danish ] = "none";
+    Text[ danish ] = "ingen";
     Text[ swedish ] = "ingen";
     Text[ polish ] = "brak";
     Text[ portuguese_brazilian ] = "none";
@@ -7972,8 +8257,9 @@ String RID_SVXITEMS_EMPHASIS_NONE_STYLE
     Text[ chinese_traditional ] = "無";
     Text[ turkish ] = "none";
     Text[ arabic ] = "����";
-    Text[ catalan ] = "ninguno";
+    Text[ catalan ] = "cap";
     Text[ finnish ] = "ei mit��n";
+    Text[ thai ] = "ไม่มี";
 };
 String RID_SVXITEMS_EMPHASIS_DOT_STYLE
 {
@@ -7987,7 +8273,7 @@ String RID_SVXITEMS_EMPHASIS_DOT_STYLE
     Text[ french ] = "Points ";
     Text[ spanish ] = "Puntos ";
     Text[ italian ] = "Punti ";
-    Text[ danish ] = "Dots ";
+    Text[ danish ] = "Prikker ";
     Text[ swedish ] = "Prickar ";
     Text[ polish ] = "Kropki ";
     Text[ portuguese_brazilian ] = "Dots ";
@@ -7997,8 +8283,9 @@ String RID_SVXITEMS_EMPHASIS_DOT_STYLE
     Text[ chinese_traditional ] = "點 ";
     Text[ turkish ] = "Dots ";
     Text[ arabic ] = "����";
-    Text[ catalan ] = "Puntos ";
+    Text[ catalan ] = "Punts ";
     Text[ finnish ] = "Pilkut";
+    Text[ thai ] = "จุด ";
 };
 String RID_SVXITEMS_EMPHASIS_CIRCLE_STYLE
 {
@@ -8012,7 +8299,7 @@ String RID_SVXITEMS_EMPHASIS_CIRCLE_STYLE
     Text[ french ] = "Cercle ";
     Text[ spanish ] = "C�rculo ";
     Text[ italian ] = "Cerchio ";
-    Text[ danish ] = "Ring ";
+    Text[ danish ] = "Cirkel ";
     Text[ swedish ] = "Cirkel ";
     Text[ polish ] = "K�ko ";
     Text[ portuguese_brazilian ] = "Ring ";
@@ -8022,8 +8309,9 @@ String RID_SVXITEMS_EMPHASIS_CIRCLE_STYLE
     Text[ chinese_traditional ] = "圓形 ";
     Text[ turkish ] = "Ring ";
     Text[ arabic ] = "�����";
-    Text[ catalan ] = "C�rculo ";
+    Text[ catalan ] = "Cercle ";
     Text[ finnish ] = "Ympyr�";
+    Text[ thai ] = "วงกลม ";
 };
 String RID_SVXITEMS_EMPHASIS_DISC_STYLE
 {
@@ -8038,7 +8326,7 @@ String RID_SVXITEMS_EMPHASIS_DISC_STYLE
     Text[ french ] = "Cercle plein ";
     Text[ spanish ] = "c�rculo relleno ";
     Text[ italian ] = "Cerchio pieno ";
-    Text[ danish ] = "Filled ring ";
+    Text[ danish ] = "udfyldt cirkel ";
     Text[ swedish ] = "Fylld cirkel ";
     Text[ polish ] = "K�ko wype�nione ";
     Text[ portuguese_brazilian ] = "Filled ring ";
@@ -8048,8 +8336,9 @@ String RID_SVXITEMS_EMPHASIS_DISC_STYLE
     Text[ chinese_traditional ] = "充填的圓形 ";
     Text[ turkish ] = "Filled ring ";
     Text[ arabic ] = "����� �����";
-    Text[ catalan ] = "c�rculo relleno ";
+    Text[ catalan ] = "Cercle ple ";
     Text[ finnish ] = "T�ytetty ympyr�";
+    Text[ thai ] = "เติมวงกลม ";
 };
 String RID_SVXITEMS_EMPHASIS_ACCENT_STYLE
 {
@@ -8073,8 +8362,9 @@ String RID_SVXITEMS_EMPHASIS_ACCENT_STYLE
     Text[ chinese_traditional ] = "重音符號 ";
     Text[ turkish ] = "Accent ";
     Text[ arabic ] = "����� ����� ";
-    Text[ catalan ] = "Acento ";
+    Text[ catalan ] = "Accent ";
     Text[ finnish ] = "Aksentti";
+    Text[ thai ] = "เน้น ";
 };
 
 String RID_SVXITEMS_EMPHASIS_ABOVE_POS
@@ -8089,7 +8379,7 @@ String RID_SVXITEMS_EMPHASIS_ABOVE_POS
     Text[ french ] = "Au-dessus";
     Text[ spanish ] = "Encima";
     Text[ italian ] = "Sopra";
-    Text[ danish ] = "Above";
+    Text[ danish ] = "Derover";
     Text[ swedish ] = "Ovanf�r";
     Text[ polish ] = "Powy�ej";
     Text[ portuguese_brazilian ] = "Above";
@@ -8099,8 +8389,9 @@ String RID_SVXITEMS_EMPHASIS_ABOVE_POS
     Text[ chinese_traditional ] = "之上";
     Text[ turkish ] = "Above";
     Text[ arabic ] = "����";
-    Text[ catalan ] = "Encima";
+    Text[ catalan ] = "A sobre";
     Text[ finnish ] = "Ylh��ll�";
+    Text[ thai ] = "ข้างบน";
 };
 String RID_SVXITEMS_EMPHASIS_BELOW_POS
 {
@@ -8114,7 +8405,7 @@ String RID_SVXITEMS_EMPHASIS_BELOW_POS
     Text[ french ] = "En dessous";
     Text[ spanish ] = "Debajo";
     Text[ italian ] = "In basso";
-    Text[ danish ] = "Below";
+    Text[ danish ] = "Derunder";
     Text[ swedish ] = "Nedanf�r";
     Text[ polish ] = "Poni�ej";
     Text[ portuguese_brazilian ] = "Below";
@@ -8124,8 +8415,9 @@ String RID_SVXITEMS_EMPHASIS_BELOW_POS
     Text[ chinese_traditional ] = "之下";
     Text[ turkish ] = "Below";
     Text[ arabic ] = "����";
-    Text[ catalan ] = "Debajo";
+    Text[ catalan ] = "Sota";
     Text[ finnish ] = "Alhaalla";
+    Text[ thai ] = "ข้างล่าง";
 };
 
 String RID_SVXITEMS_TWOLINES_OFF
@@ -8140,7 +8432,7 @@ String RID_SVXITEMS_TWOLINES_OFF
     Text[ french ] = "'Deux lignes en une' d�sactiv�";
     Text[ spanish ] = "Desactivar l�neas dobles";
     Text[ italian ] = "Disattiva 'A due righe'";
-    Text[ danish ] = "Two lines off";
+    Text[ danish ] = "Dobbelt fra";
     Text[ swedish ] = "Dubbla rader av";
     Text[ polish ] = "Wy��cz podw�jne wiersze";
     Text[ portuguese_brazilian ] = "Two lines off";
@@ -8150,8 +8442,9 @@ String RID_SVXITEMS_TWOLINES_OFF
     Text[ chinese_traditional ] = "不使用雙行";
     Text[ turkish ] = "Two lines off";
     Text[ arabic ] = "Two lines off";
-    Text[ catalan ] = "Desactivar l�neas dobles";
+    Text[ catalan ] = "Desactiva l�nies dobles";
     Text[ finnish ] = "Kaksoisviiva off";
+    Text[ thai ] = "ขีดเส้นปิดคู่";
 };
 String RID_SVXITEMS_TWOLINES
 {
@@ -8165,7 +8458,7 @@ String RID_SVXITEMS_TWOLINES
     Text[ french ] = "Deux lignes en une";
     Text[ spanish ] = "L�neas dobles";
     Text[ italian ] = "A due righe";
-    Text[ danish ] = "Two lines";
+    Text[ danish ] = "Dobbelt";
     Text[ swedish ] = "Dubbla rader";
     Text[ polish ] = "podw�jne";
     Text[ portuguese_brazilian ] = "Two lines";
@@ -8175,8 +8468,9 @@ String RID_SVXITEMS_TWOLINES
     Text[ chinese_traditional ] = "雙行";
     Text[ turkish ] = "Two lines";
     Text[ arabic ] = "�����";
-    Text[ catalan ] = "Dos l�neas";
+    Text[ catalan ] = "Dues l�nies";
     Text[ finnish ] = "Kaksoisviiva";
+    Text[ thai ] = "ขีดเส้นคู่";
 };
 
 String RID_SVXITEMS_SCRPTSPC_OFF
@@ -8191,7 +8485,7 @@ String RID_SVXITEMS_SCRPTSPC_OFF
     Text[ french ] = "Espacement des caract�res non automatique";
     Text[ spanish ] = "Interlineado no autom�tico";
     Text[ italian ] = "Nessuna distanza automatica tra i caratteri";
-    Text[ danish ] = "No automatic character distance";
+    Text[ danish ] = "Ingen automatisk tegnafstand";
     Text[ swedish ] = "Inget automatiskt teckenavst�nd";
     Text[ polish ] = "Bez automatycznych odst�p�w mi�dzy literami";
     Text[ portuguese_brazilian ] = "No automatic character distance";
@@ -8201,8 +8495,9 @@ String RID_SVXITEMS_SCRPTSPC_OFF
     Text[ chinese_traditional ] = "不自動調整字元間隔";
     Text[ turkish ] = "No automatic character distance";
     Text[ arabic ] = "���� ����� ������ ������";
-    Text[ catalan ] = "Interlineado no autom�tico";
+    Text[ catalan ] = "Interlineat no autom�tic";
     Text[ finnish ] = "Ei automaattisia merkkiv�lej�";
+    Text[ thai ] = "ระยะห่างตัวอักขระไม่อัตโนมัติ";
 };
 String RID_SVXITEMS_SCRPTSPC_ON
 {
@@ -8216,7 +8511,7 @@ String RID_SVXITEMS_SCRPTSPC_ON
     Text[ french ] = "Espacement des caract�res non automatique";
     Text[ spanish ] = "Interlineado no autom�tico";
     Text[ italian ] = "Nessuno spazio automatico tra i caratteri";
-    Text[ danish ] = "Automatic character distance";
+    Text[ danish ] = "Ingen automatisk tegnafstand";
     Text[ swedish ] = "Inget automatiskt teckenavst�nd";
     Text[ polish ] = "Bez automatycznych odst�p�w mi�dzy literami";
     Text[ portuguese_brazilian ] = "Automatic character distance";
@@ -8226,8 +8521,9 @@ String RID_SVXITEMS_SCRPTSPC_ON
     Text[ chinese_traditional ] = "不自動調整字元間隔";
     Text[ turkish ] = "Automatic character distance";
     Text[ arabic ] = "���� ����� ������ ������";
-    Text[ catalan ] = "Interlineado no autom�tico";
+    Text[ catalan ] = "Interlineat no autom�tic";
     Text[ finnish ] = "Ei automaattisia merkkiv�lej�";
+    Text[ thai ] = "ระยะห่างตัวอักขระไม่อัตโนมัติ";
 };
 
 String RID_SVXITEMS_HNGPNCT_OFF
@@ -8242,7 +8538,7 @@ String RID_SVXITEMS_HNGPNCT_OFF
     Text[ french ] = "Pas de ponctuation en retrait en fin de ligne";
     Text[ spanish ] = "Sin puntuaci�n suspendida al final de l�nea";
     Text[ italian ] = "Nessuna interpunzione a fine riga";
-    Text[ danish ] = "No hanging punctuation at line end";
+    Text[ danish ] = "Ingen h�ngende tegns�tning ved r�kkeafslutning";
     Text[ swedish ] = "Ingen h�ngande interpunktion vid radslutet";
     Text[ polish ] = "Koniec wiersza bez sierot i wd�w";
     Text[ portuguese_brazilian ] = "No hanging punctuation at line end";
@@ -8252,8 +8548,9 @@ String RID_SVXITEMS_HNGPNCT_OFF
     Text[ chinese_traditional ] = "行末不附加標點符號";
     Text[ turkish ] = "No hanging punctuation at line end";
     Text[ arabic ] = "���� ������ ����� ����� ��� ����� �����";
-    Text[ catalan ] = "Sin puntuaci�n suspendida al final de l�nea";
+    Text[ catalan ] = "Sense puntuaci� suspesa a la fi de l�nia";
     Text[ finnish ] = "Ei riippuvia v�limerkkej� rivin loppuun";
+    Text[ thai ] = "เครื่องหมายวรรคตอนไม่ลอยที่จุดสิ้นสุดบรรทัด";
 };
 String RID_SVXITEMS_HNGPNCT_ON
 {
@@ -8267,7 +8564,7 @@ String RID_SVXITEMS_HNGPNCT_ON
     Text[ french ] = "Ponctuation en retrait en fin de ligne";
     Text[ spanish ] = "Puntuaci�n libre al final de l�nea";
     Text[ italian ] = "Interpunzione a fine riga";
-    Text[ danish ] = "Hanging punctuation at line end";
+    Text[ danish ] = "H�ngende tegns�tning ved r�kkeafslutning";
     Text[ swedish ] = "H�ngande interpunktion vid radslutet";
     Text[ polish ] = "Sieroty i wdowy na ko�cu wiersza";
     Text[ portuguese_brazilian ] = "Hanging punctuation at line end";
@@ -8277,8 +8574,9 @@ String RID_SVXITEMS_HNGPNCT_ON
     Text[ chinese_traditional ] = "行末附加標點符號";
     Text[ turkish ] = "Hanging punctuation at line end";
     Text[ arabic ] = "������ ����� ����� ��� ����� �����";
-    Text[ catalan ] = "Puntuaci�n libre al final de l�nea";
+    Text[ catalan ] = "Puntuaci� lliure a la fi de l�nia";
     Text[ finnish ] = "Riippuvat v�limerkit rivin lopussa";
+    Text[ thai ] = "เครื่องหมายวรรคตอนลอยที่จุดสิ้นสุดบรรทัด";
 };
 String RID_SVXITEMS_FORBIDDEN_RULE_OFF
 {
@@ -8292,7 +8590,7 @@ String RID_SVXITEMS_FORBIDDEN_RULE_OFF
     Text[ french ] = "Tenir compte des caract�res interdits en d�but et en fin de ligne";
     Text[ spanish ] = "Considerar caracteres no permitidos a comienzo y final de l�nea.";
     Text[ italian ] = "Considera elenco dei caratteri non consentiti all'inizio e alla fine della riga";
-    Text[ danish ] = "Apply list of forbidden characters at line end and line start";
+    Text[ danish ] = "Tag hensyn til forbudte tegn ved linjestart og -slutning";
     Text[ swedish ] = "Anv�nd lista med f�rbjudna tecken i b�rjan och slutet av rader";
     Text[ polish ] = "Uwzgl�dnij niedozwolone znaki na pocz�tku i na ko�cu wiersza";
     Text[ portuguese_brazilian ] = "Apply list of forbidden characters at line end and line start";
@@ -8302,8 +8600,9 @@ String RID_SVXITEMS_FORBIDDEN_RULE_OFF
     Text[ chinese_traditional ] = "顧及行首行尾禁止使用的字元";
     Text[ turkish ] = "Apply list of forbidden characters at line end and line start";
     Text[ arabic ] = "����� ������ �������� ��� ����� ������ ��������";
-    Text[ catalan ] = "Considerar caracteres no aceptables a comienzo y final de l�nea.";
+    Text[ catalan ] = "Considera car�cters no acceptables a l'inici i final de l�nia.";
     Text[ finnish ] = "Lis�� kiellettyjen merkkien luettelo rivien alkuihin ja loppuihin";
+    Text[ thai ] = "ใช้รายการตัวอักขระที่ห้ามที่บรรทัดเริ่มต้นและบรรทัดสุดท้าย";
 };
 
 String RID_SVXITEMS_FORBIDDEN_RULE_ON
@@ -8318,7 +8617,7 @@ String RID_SVXITEMS_FORBIDDEN_RULE_ON
     Text[ french ] = "Ignorer les caract�res interdits en d�but et en fin de ligne";
     Text[ spanish ] = "No considerar caracteres no permitidos a comienzo y final de l�nea.";
     Text[ italian ] = "Non considerare elenco dei caratteri non consentiti all'inizio e alla fine della riga";
-    Text[ danish ] = "Don't Apply list of forbidden characters at line end and line start";
+    Text[ danish ] = "Tag ikke hensyn til forbudte tegn ved linjestart og -slutning";
     Text[ swedish ] = "Anv�nd inte lista med f�rbjudna tecken i b�rjan och slutet av rader";
     Text[ polish ] = "Nie uwzgl�dniaj niedozwolonych znak�w na pocz�tku i na ko�cu wiersza";
     Text[ portuguese_brazilian ] = "Don't Apply list of forbidden characters at line end and line start";
@@ -8328,8 +8627,9 @@ String RID_SVXITEMS_FORBIDDEN_RULE_ON
     Text[ chinese_traditional ] = "不顧及行首行尾禁止使用的字元";
     Text[ turkish ] = "Don't Apply list of forbidden characters at line end and line start";
     Text[ arabic ] = "��� ����� ������ �������� ��� ����� ������ ��������";
-    Text[ catalan ] = "No considerar caracteres no aceptables a comienzo y final de l�nea.";
+    Text[ catalan ] = "No consideris car�cters no acceptables al principi i final de l�nia.";
     Text[ finnish ] = "�l� lis�� kiellettyjen merkkien luetteloa rivien alkuihin ja loppuihin";
+    Text[ thai ] = "ไม่ใช้รายการตัวอักขระที่ห้ามที่บรรทัดเริ่มต้นและบรรทัดสุดท้าย";
 };
 
 
@@ -8345,7 +8645,7 @@ String RID_SVXITEMS_CHARROTATE_OFF
     Text[ french ] = "Sans rotation des caract�res";
     Text[ spanish ] = "Sin rotaci�n de caracteres";
     Text[ italian ] = "Senza rotazione carattere";
-    Text[ danish ] = "no rotated character";
+    Text[ danish ] = "ingen roterede tegn";
     Text[ swedish ] = "Inga roterade tecken";
     Text[ polish ] = "bez obr�conych znak�w";
     Text[ portuguese_brazilian ] = "no rotated character";
@@ -8355,8 +8655,9 @@ String RID_SVXITEMS_CHARROTATE_OFF
     Text[ chinese_traditional ] = "字元不旋轉";
     Text[ turkish ] = "no rotated character";
     Text[ arabic ] = "���� ������� ����";
-    Text[ catalan ] = "Sin car�cteres cambiados";
+    Text[ catalan ] = "Sense car�cters canviats";
     Text[ finnish ] = "Ei kierrettyj� merkkej�";
+    Text[ thai ] = "ตัวอักขระที่ไม่หมุน";
 };
 String RID_SVXITEMS_CHARROTATE
 {
@@ -8370,7 +8671,7 @@ String RID_SVXITEMS_CHARROTATE
     Text[ french ] = "Rotation des caract�res : $(ARG1)�";
     Text[ spanish ] = "Car�cter rodado en $(ARG1)�";
     Text[ italian ] = "Carattere rotato di $(ARG1)�";
-    Text[ danish ] = "character rotated by $(ARG1)�";
+    Text[ danish ] = "Tegn roteret med $(ARG1)�";
     Text[ swedish ] = "Tecken roterat med $(ARG1)�";
     Text[ polish ] = "znaki obr�cono o $(ARG1)�";
     Text[ portuguese_brazilian ] = "character rotated by $(ARG1)?";
@@ -8380,8 +8681,9 @@ String RID_SVXITEMS_CHARROTATE
     Text[ chinese_traditional ] = "字元旋轉 $(ARG1)°";
     Text[ turkish ] = "character rotated by $(ARG1)�";
     Text[ arabic ] = "������� ������ ������ $(ARG1)�";
-    Text[ catalan ] = "Car�cter rodado en $(ARG1)�";
+    Text[ catalan ] = "Car�cter rodat en $(ARG1)�";
     Text[ finnish ] = "Merkki� kierretty $(ARG1)°";
+    Text[ thai ] = "ตัวอักขระหมุนโดย $(ARG1)ฐ";
 };
 String RID_SVXITEMS_CHARROTATE_FITLINE
 {
@@ -8395,7 +8697,7 @@ String RID_SVXITEMS_CHARROTATE_FITLINE
     Text[ french ] = " Ajuster � la ligne";
     Text[ spanish ] = "ajustar a fila";
     Text[ italian ] = "Adatta alla riga";
-    Text[ danish ] = " fit to line";
+    Text[ danish ] = " tilpas til linje";
     Text[ swedish ] = " Anpassa till rad";
     Text[ polish ] = "Wyr�wnaj do wiersza";
     Text[ portuguese_brazilian ] = " fit to line";
@@ -8407,6 +8709,7 @@ String RID_SVXITEMS_CHARROTATE_FITLINE
     Text[ arabic ] = "������ �����";
     Text[ catalan ] = "ajustar a fila";
     Text[ finnish ] = "Sovita riviin";
+    Text[ thai ] = "จัดพอดีบรรทัด";
 };
 String RID_SVXITEMS_CHARSCALE
 {
@@ -8420,7 +8723,7 @@ String RID_SVXITEMS_CHARSCALE
     Text[ french ] = "Graduation des caract�res : $(ARG1)%";
     Text[ spanish ] = "Aumento del tama�o de car�cter $(ARG1)%";
     Text[ italian ] = "Scala carattere $(ARG1)%";
-    Text[ danish ] = "Scaled characters $(ARG1)%";
+    Text[ danish ] = "Tegnskalering $(ARG1)%";
     Text[ swedish ] = "Teckenskalning $(ARG1)%";
     Text[ polish ] = "Skalowane znaki $(ARG1)%";
     Text[ portuguese_brazilian ] = "Scaled characters $(ARG1)%";
@@ -8430,8 +8733,9 @@ String RID_SVXITEMS_CHARSCALE
     Text[ chinese_traditional ] = "字元顯示比例 $(ARG1)%";
     Text[ turkish ] = "Scaled characters $(ARG1)%";
     Text[ arabic ] = "����� ������ $(ARG1)%";
-    Text[ catalan ] = "Aumento del tama�o de car�cter $(ARG1)%";
+    Text[ catalan ] = "Augment de la mida de car�cter $(ARG1)%";
     Text[ finnish ] = "Merkkej� skaalattu $(ARG1)%";
+    Text[ thai ] = "สเกลตัวอักขระ $(ARG1)%";
 };
 String RID_SVXITEMS_CHARSCALE_OFF
 {
@@ -8445,7 +8749,7 @@ String RID_SVXITEMS_CHARSCALE_OFF
     Text[ french ] = "Sans graduation des caract�res";
     Text[ spanish ] = "sin aumento de tama�o del car�cter";
     Text[ italian ] = "Senza scala carattere";
-    Text[ danish ] = "no scaled characters";
+    Text[ danish ] = "ingen tegnskalering";
     Text[ swedish ] = "Ingen teckenskalning";
     Text[ polish ] = "bez skalowania znak�w";
     Text[ portuguese_brazilian ] = "no scaled characters";
@@ -8455,8 +8759,9 @@ String RID_SVXITEMS_CHARSCALE_OFF
     Text[ chinese_traditional ] = "不使用字元顯示比例";
     Text[ turkish ] = "no scaled characters";
     Text[ arabic ] = "���� ����� ������";
-    Text[ catalan ] = "sin aumento de tama�o del car�cter";
+    Text[ catalan ] = "Sense augment de la mida del car�cter";
     Text[ finnish ] = "Ei skaalattuja merkkej�";
+    Text[ thai ] = "ไม่สเกลตัวอักขระ";
 };
 
 String RID_SVXITEMS_RELIEF_NONE
@@ -8471,7 +8776,7 @@ String RID_SVXITEMS_RELIEF_NONE
     Text[ french ] = "Sans relief";
     Text[ spanish ] = "Sin relieve";
     Text[ italian ] = "Senza rilievo";
-    Text[ danish ] = "No Emboss";
+    Text[ danish ] = "Intet relief";
     Text[ swedish ] = "Ingen relief";
     Text[ polish ] = "Bez reliefu";
     Text[ portuguese_brazilian ] = "No Emboss";
@@ -8481,8 +8786,9 @@ String RID_SVXITEMS_RELIEF_NONE
     Text[ chinese_traditional ] = "無浮雕效果";
     Text[ turkish ] = "No Emboss";
     Text[ arabic ] = "���� ���";
-    Text[ catalan ] = "Sin relieve";
+    Text[ catalan ] = "Sense relleu";
     Text[ finnish ] = "Ei korkokuvaa";
+    Text[ thai ] = "ไม่นูน";
 };
 String RID_SVXITEMS_RELIEF_EMBOSSED
 {
@@ -8496,7 +8802,7 @@ String RID_SVXITEMS_RELIEF_EMBOSSED
     Text[ french ] = "Relief";
     Text[ spanish ] = "Relieve";
     Text[ italian ] = "Rilievo";
-    Text[ danish ] = "Emboss";
+    Text[ danish ] = "Relief";
     Text[ swedish ] = "Relief";
     Text[ polish ] = "Uwypuklenie";
     Text[ portuguese_brazilian ] = "Emboss";
@@ -8506,8 +8812,9 @@ String RID_SVXITEMS_RELIEF_EMBOSSED
     Text[ chinese_traditional ] = "浮雕";
     Text[ turkish ] = "Emboss";
     Text[ arabic ] = "���";
-    Text[ catalan ] = "Relieve";
+    Text[ catalan ] = "Relleu";
     Text[ finnish ] = "Korkokuva";
+    Text[ thai ] = "นูน";
 };
 String RID_SVXITEMS_RELIEF_ENGRAVED
 {
@@ -8521,7 +8828,7 @@ String RID_SVXITEMS_RELIEF_ENGRAVED
     Text[ french ] = "Empreinte";
     Text[ spanish ] = "Grabado";
     Text[ italian ] = "Incisione";
-    Text[ danish ] = "Engrave";
+    Text[ danish ] = "Indgraveret";
     Text[ swedish ] = "Gravyr";
     Text[ polish ] = "Grawura";
     Text[ portuguese_brazilian ] = "Engrave";
@@ -8531,8 +8838,9 @@ String RID_SVXITEMS_RELIEF_ENGRAVED
     Text[ chinese_traditional ] = "雕刻";
     Text[ turkish ] = "Engrave";
     Text[ arabic ] = "���";
-    Text[ catalan ] = "Grabado";
+    Text[ catalan ] = "Gravat";
     Text[ finnish ] = "Kaiverrettu";
+    Text[ thai ] = "รอยจารึก";
 };
 String RID_SVXITEMS_PARAVERTALIGN_AUTO
 {
@@ -8546,7 +8854,7 @@ String RID_SVXITEMS_PARAVERTALIGN_AUTO
     Text[ french ] = "Alignement automatique du texte";
     Text[ spanish ] = "Alineaci�n de texto autom�tica";
     Text[ italian ] = "Allineamento automatico testo";
-    Text[ danish ] = "text alignment automatically";
+    Text[ danish ] = "Automatisk tekstjustering";
     Text[ swedish ] = "Textjustering automatiskt";
     Text[ polish ] = "Automatyczne wyr�wnanie tekstu";
     Text[ portuguese_brazilian ] = "text alignment automatically";
@@ -8556,8 +8864,9 @@ String RID_SVXITEMS_PARAVERTALIGN_AUTO
     Text[ chinese_traditional ] = "文字自動對齊";
     Text[ turkish ] = "text alignment automatically";
     Text[ arabic ] = "text alignment automatically";
-    Text[ catalan ] = "text alignment automatically";
+    Text[ catalan ] = "Alineament autom�tic del text";
     Text[ finnish ] = "Automaattinen tekstin tasaus";
+    Text[ thai ] = "จัดตำแหน่งข้อความอัตโนมัติ";
 };
 String RID_SVXITEMS_PARAVERTALIGN_BASELINE
 {
@@ -8571,7 +8880,7 @@ String RID_SVXITEMS_PARAVERTALIGN_BASELINE
     Text[ french ] = "Alignement du texte sur la ligne de base";
     Text[ spanish ] = "Alineaci�n de texto a l�nea base";
     Text[ italian ] = "Allineamento alla linea di base";
-    Text[ danish ] = "text alignment baseline";
+    Text[ danish ] = "Tekstjustering Basislinje";
     Text[ swedish ] = "Textjustering baslinje";
     Text[ polish ] = "Wyr�wnanie tekstu do linii podstawowej";
     Text[ portuguese_brazilian ] = "text alignment baseline";
@@ -8581,8 +8890,9 @@ String RID_SVXITEMS_PARAVERTALIGN_BASELINE
     Text[ chinese_traditional ] = "文字和基線對齊";
     Text[ turkish ] = "text alignment baseline";
     Text[ arabic ] = "text alignment baseline";
-    Text[ catalan ] = "text alignment baseline";
+    Text[ catalan ] = "Text alineat a la l�nia base";
     Text[ finnish ] = "Tekstin tasaus perusviivan mukaan";
+    Text[ thai ] = "จัดตำแหน่งข้อความไปยังบรรทัดฐาน";
 };
 String RID_SVXITEMS_PARAVERTALIGN_TOP
 {
@@ -8596,7 +8906,7 @@ String RID_SVXITEMS_PARAVERTALIGN_TOP
     Text[ french ] = "Alignement du texte en haut";
     Text[ spanish ] = "Alineaci�n de texto arriba";
     Text[ italian ] = "Allineamento testo in alto";
-    Text[ danish ] = "text alignment top";
+    Text[ danish ] = "Tekstjustering top";
     Text[ swedish ] = "Textjustering uppe";
     Text[ polish ] = "Wyr�wnanie tekstu do g�ry";
     Text[ portuguese_brazilian ] = "text alignment top";
@@ -8606,8 +8916,9 @@ String RID_SVXITEMS_PARAVERTALIGN_TOP
     Text[ chinese_traditional ] = "文字向上對齊";
     Text[ turkish ] = "text alignment top";
     Text[ arabic ] = "text alignment top";
-    Text[ catalan ] = "text alignment top";
+    Text[ catalan ] = "Text alineat a la part superior";
     Text[ finnish ] = "Tekstin tasaus yl�reunan mukaan";
+    Text[ thai ] = "จัดข้อความชิดด้านบน";
 };
 String RID_SVXITEMS_PARAVERTALIGN_CENTER
 {
@@ -8621,7 +8932,7 @@ String RID_SVXITEMS_PARAVERTALIGN_CENTER
     Text[ french ] = "Alignement du texte centr�";
     Text[ spanish ] = "Alineaci�n de texto centrada";
     Text[ italian ] = "Allineamento del testo al centro";
-    Text[ danish ] = "text alignment center";
+    Text[ danish ] = "Tekstjustering centreret";
     Text[ swedish ] = "Textjustering centrerat";
     Text[ polish ] = "Wy�rodkowanie tekstu";
     Text[ portuguese_brazilian ] = "text alignment center";
@@ -8631,8 +8942,9 @@ String RID_SVXITEMS_PARAVERTALIGN_CENTER
     Text[ chinese_traditional ] = "文字置中對齊";
     Text[ turkish ] = "text alignment center";
     Text[ arabic ] = "text alignment center";
-    Text[ catalan ] = "text alignment center";
+    Text[ catalan ] = "Text alineat al mig";
     Text[ finnish ] = "Tekstin tasaus keskikohdan mukaan";
+    Text[ thai ] = "จัดข้อความอยู่ตรงกลาง";
 };
 String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
 {
@@ -8646,7 +8958,7 @@ String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
     Text[ french ] = "Alignement du texte en bas";
     Text[ spanish ] = "Alineaci�n de texto abajo";
     Text[ italian ] = "Allineamento del testo in basso";
-    Text[ danish ] = "text alignment bottom";
+    Text[ danish ] = "Tekstjustering bund";
     Text[ swedish ] = "Textjustering nere";
     Text[ polish ] = "Wyr�wnanie tekstu do do�u";
     Text[ portuguese_brazilian ] = "text alignment bottom";
@@ -8656,8 +8968,9 @@ String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
     Text[ chinese_traditional ] = "文字向下對齊";
     Text[ turkish ] = "text alignment bottom";
     Text[ arabic ] = "text alignment bottom";
-    Text[ catalan ] = "text alignment bottom";
+    Text[ catalan ] = "Text alineat a la part inferior";
     Text[ finnish ] = "Tekstin tasaus alareunan mukaan";
+    Text[ thai ] = "จัดข้อความชิดด้านล่าง";
 };
 
 String RID_SVXITEMS_FRMDIR_HORI_LEFT_TOP
@@ -8673,7 +8986,7 @@ String RID_SVXITEMS_FRMDIR_HORI_LEFT_TOP
     Text[ spanish ] = "Flujo de texto horizontal desde la izquierda";
     Text[ finnish ] = "text flow horizontal from left";
     Text[ italian ] = "Testo orizzontale da sinistra a destra";
-    Text[ danish ] = "text flow horizontal from left";
+    Text[ danish ] = "Tekstretning � Fra venstre mod h�jre (vandret)";
     Text[ swedish ] = "Textriktning v�nster-till-h�ger (horisontellt)";
     Text[ polish ] = "text flow horizontal from left";
     Text[ portuguese_brazilian ] = "text flow horizontal from left";
@@ -8684,6 +8997,7 @@ String RID_SVXITEMS_FRMDIR_HORI_LEFT_TOP
     Text[ turkish ] = "text flow horizontal from left";
     Text[ arabic ] = "text flow horizontal from left";
     Text[ catalan ] = "text flow horizontal from left";
+    Text[ thai ] = "text flow horizontal from left";
 };
 String RID_SVXITEMS_FRMDIR_HORI_RIGHT_TOP
 {
@@ -8698,7 +9012,7 @@ String RID_SVXITEMS_FRMDIR_HORI_RIGHT_TOP
     Text[ spanish ] = "Flujo de texto horizontal desde la derecha";
     Text[ finnish ] = "text flow horizontal from right";
     Text[ italian ] = "Testo orizzontale da destra a sinistra";
-    Text[ danish ] = "text flow horizontal from right";
+    Text[ danish ] = "Tekstretning � Fra h�jre mod venstre (vandret)";
     Text[ swedish ] = "Textriktning h�ger-till-v�nster (horisontellt)";
     Text[ polish ] = "text flow horizontal from right";
     Text[ portuguese_brazilian ] = "text flow horizontal from right";
@@ -8709,6 +9023,7 @@ String RID_SVXITEMS_FRMDIR_HORI_RIGHT_TOP
     Text[ turkish ] = "text flow horizontal from right";
     Text[ arabic ] = "text flow horizontal from right";
     Text[ catalan ] = "text flow horizontal from right";
+    Text[ thai ] = "text flow horizontal from right";
 };
 String RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT
 {
@@ -8723,7 +9038,7 @@ String RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT
     Text[ spanish ] = "Flujo de texto vertical de derecha a izquierda";
     Text[ finnish ] = "text flow vertical from right";
     Text[ italian ] = "Testo verticale da destra a sinistra";
-    Text[ danish ] = "text flow vertical from right";
+    Text[ danish ] = "Tekstretning � Fra h�jre mod venstre (lodret)";
     Text[ swedish ] = "Textriktning h�ger-till-v�nster (vertikalt)";
     Text[ polish ] = "text flow vertical from right";
     Text[ portuguese_brazilian ] = "text flow vertical from right";
@@ -8734,6 +9049,7 @@ String RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT
     Text[ turkish ] = "text flow vertical from right";
     Text[ arabic ] = "text flow vertical from right";
     Text[ catalan ] = "text flow vertical from right";
+    Text[ thai ] = "text flow vertical from right";
 };
 String RID_SVXITEMS_FRMDIR_VERT_TOP_LEFT
 {
@@ -8748,7 +9064,7 @@ String RID_SVXITEMS_FRMDIR_VERT_TOP_LEFT
     Text[ spanish ] = "Flujo de texto vertical de izquierda a derecha";
     Text[ finnish ] = "text flow vertical from left";
     Text[ italian ] = "Testo verticale da sinistra a destra";
-    Text[ danish ] = "text flow vertical from left";
+    Text[ danish ] = "Tekstretning � Fra venstre mod h�jre (lodret)";
     Text[ swedish ] = "Textriktning v�nster-till-h�ger (vertikalt)";
     Text[ polish ] = "text flow vertical from left";
     Text[ portuguese_brazilian ] = "text flow vertical from left";
@@ -8759,6 +9075,7 @@ String RID_SVXITEMS_FRMDIR_VERT_TOP_LEFT
     Text[ turkish ] = "text flow vertical from left";
     Text[ arabic ] = "text flow vertical from left";
     Text[ catalan ] = "text flow vertical from left";
+    Text[ thai ] = "text flow vertical from left";
 };
 String RID_SVXITEMS_FRMDIR_ENVIRONMENT
 {
@@ -8773,17 +9090,18 @@ String RID_SVXITEMS_FRMDIR_ENVIRONMENT
     Text[ spanish ] = "Utilizar la configuraci�n del flujo de texto del objeto superior";
     Text[ finnish ] = "text flow from environment";
     Text[ italian ] = "Usa le impostazioni di testo dell'oggetto superiore";
-    Text[ danish ] = "text flow from environment";
+    Text[ danish ] = "Tekstretning � Anvend det overordnede objekts indstilling";
     Text[ swedish ] = "Anv�nd det �verordnade objektets inst�llning av textriktning";
     Text[ polish ] = "text flow from environment";
     Text[ portuguese_brazilian ] = "text flow from environment";
     Text[ japanese ] = "上位オブジェクトに設定した体裁を使用";
     Text[ korean ] = "고급 설정으로부터 텍스트 방향 설정";
-    Text[ chinese_simplified ] = "text flow from environment";
+    Text[ chinese_simplified ] = "沿用现有的文字方向的设定";
     Text[ chinese_traditional ] = "沿用現有的文字方向的設定";
     Text[ turkish ] = "text flow from environment";
     Text[ arabic ] = "text flow from environment";
     Text[ catalan ] = "text flow from environment";
+    Text[ thai ] = "text flow from environment";
 };
 
 String RID_SVXITEMS_PARASNAPTOGRID_ON
@@ -8799,17 +9117,18 @@ String RID_SVXITEMS_PARASNAPTOGRID_ON
     Text[ spanish ] = "Utilizar la cuadr�cula en el p�rrafo (si activada) ";
     Text[ finnish ] = "paragraph snap to grid";
     Text[ italian ] = "Cattura il paragrafo alla griglia di testo (se attivata)";
-    Text[ danish ] = "paragraph snap to grid";
+    Text[ danish ] = "Afstanden m�les ved tekstgitteret (ved aktivering)";
     Text[ swedish ] = "Stycke f�sts mot textraster (om det �r aktiverat)";
     Text[ polish ] = "paragraph snap to grid";
     Text[ portuguese_brazilian ] = "paragraph snap to grid";
-    Text[ japanese ] = "段落を文字グリッド線で位置合わせ (グリッド線表示状態で)";
-    Text[ korean ] = "단락을 문자 수/열 수 외곽선에 정렬 (활성시)";
+    Text[ japanese ] = "段落を罫線位置に合わせる(罫線がオンの場合)";
+    Text[ korean ] = "단락을 그리드선에 정렬 (활성시)";
     Text[ chinese_simplified ] = "段落和文字格子线对齐(如使用文字格子线)";
     Text[ chinese_traditional ] = "段落和文字格子線對齊(如有使用文字格子線)";
     Text[ turkish ] = "paragraph snap to grid";
     Text[ arabic ] = "paragraph snap to grid";
     Text[ catalan ] = "paragraph snap to grid";
+    Text[ thai ] = "paragraph snap to grid";
 };
 
 String RID_SVXITEMS_PARASNAPTOGRID_OFF
@@ -8825,17 +9144,18 @@ String RID_SVXITEMS_PARASNAPTOGRID_OFF
     Text[ spanish ] = "No utiliza la cuadr�cula en el p�rrafo";
     Text[ finnish ] = "paragraph does not snap to grid";
     Text[ italian ] = "Non cattura il paragrafo alla griglia di testo";
-    Text[ danish ] = "paragraph does not snap to grid";
+    Text[ danish ] = "Afstanden m�les ikke ved tekstgitteret";
     Text[ swedish ] = "Stycke f�sts inte mot textraster";
     Text[ polish ] = "paragraph does not snap to grid";
     Text[ portuguese_brazilian ] = "paragraph does not snap to grid";
-    Text[ japanese ] = "段落を文字グリッド線で位置合わせしない";
-    Text[ korean ] = "단락을 문자 수/열 수 외곽선에 정렬 안함";
+    Text[ japanese ] = "段落を罫線位置に合わせない";
+    Text[ korean ] = "단락을 그리드선에 정렬 안함";
     Text[ chinese_simplified ] = "段落不和文字格子线对齐";
     Text[ chinese_traditional ] = "段落不和文字格子線對齊";
     Text[ turkish ] = "paragraph does not snap to grid";
     Text[ arabic ] = "paragraph does not snap to grid";
     Text[ catalan ] = "paragraph does not snap to grid";
+    Text[ thai ] = "paragraph does not snap to grid";
 };
 
  // ********************************************************************** EOF
