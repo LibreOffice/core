@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_SheetLinksEnumeration.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:12:45 $
+ *  last change:$Date: 2003-11-18 16:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,9 +142,9 @@ public class ScIndexEnumeration_SheetLinksEnumeration extends TestCase {
         XSheetLinkable SL = (XSheetLinkable)
             UnoRuntime.queryInterface(XSheetLinkable.class, oSheet);
 
-        // creating link. Doesn't matter that it refers to unexistant object.
-        // this is for proper work of X*Access tests.
-        SL.link("dummy.sdc", "AnySheet", "", "",
+        // creating link.
+        String aSourceArea = util.utils.getFullTestURL("calcshapes.sxc");
+        SL.link(aSourceArea, "Sheet1", "", "",
             com.sun.star.sheet.SheetLinkMode.VALUE);
 
         // Getting links.
