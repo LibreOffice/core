@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-20 12:54:12 $
+ *  last change: $Author: pb $ $Date: 2000-12-07 17:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
+#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -83,11 +89,13 @@
 struct HelpHistoryEntry_Impl
 {
     String  aURL;
+
+    HelpHistoryEntry_Impl( const String& rURL ) : aURL( rURL ) {}
 };
 
 DECLARE_LIST(HelpHistoryList_Impl,HelpHistoryEntry_Impl*);
 
-class HelpInterceptor : public ::cppu::WeakImplHelper3<
+class HelpInterceptor_Impl : public ::cppu::WeakImplHelper3<
 
         ::com::sun::star::frame::XDispatchProviderInterceptor,
         ::com::sun::star::frame::XInterceptorInfo,
@@ -95,15 +103,23 @@ class HelpInterceptor : public ::cppu::WeakImplHelper3<
 
 {
 private:
+    // the component which's dispatches we're intercepting
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception > m_xIntercepted;
+
     // chaining
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xSlaveDispatcher;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xMasterDispatcher;
 
     HelpHistoryList_Impl*   m_pHistory;
+    ULONG                   m_nCurPos;
+
+    void                    addURL( const String& rURL );
 
 public:
-    HelpInterceptor();
-    ~HelpInterceptor();
+    HelpInterceptor_Impl();
+    ~HelpInterceptor_Impl();
+
+    void                    setInterception( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame );
 
     // XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL

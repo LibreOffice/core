@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-20 12:54:12 $
+ *  last change: $Author: pb $ $Date: 2000-12-07 17:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,40 +62,88 @@
 #include "helpinterceptor.hxx"
 #include "sfxuno.hxx"
 
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HDL_
+#include <com/sun/star/beans/PropertyValue.hdl>
+#endif
+#include <limits.h>
+
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-HelpInterceptor::HelpInterceptor() :
+HelpInterceptor_Impl::HelpInterceptor_Impl() :
 
-    m_pHistory( NULL )
+    m_pHistory  ( NULL ),
+    m_nCurPos   ( 0 )
 
 {
 }
 
 // -----------------------------------------------------------------------
 
-HelpInterceptor::~HelpInterceptor()
+HelpInterceptor_Impl::~HelpInterceptor_Impl()
 {
-    for ( USHORT i = 0; i < m_pHistory->Count(); ++i )
+    for ( USHORT i = 0; m_pHistory && i < m_pHistory->Count(); ++i )
         delete m_pHistory->GetObject(i);
     delete m_pHistory;
+
+    if ( m_xIntercepted.is() )
+        m_xIntercepted->releaseDispatchProviderInterceptor( (XDispatchProviderInterceptor*)this );
+}
+
+// -----------------------------------------------------------------------
+
+void HelpInterceptor_Impl::addURL( const String& rURL )
+{
+    if ( !m_pHistory )
+        m_pHistory = new HelpHistoryList_Impl;
+    ULONG nCount = m_pHistory->Count();
+    if ( nCount && m_nCurPos < ( nCount - 1 ) )
+    {
+        for ( ULONG i = nCount - 1; i > m_nCurPos; i-- )
+            delete m_pHistory->Remove(i);
+    }
+
+    m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL ), LIST_APPEND );
+    m_nCurPos = m_pHistory->Count() - 1;
+}
+
+// -----------------------------------------------------------------------
+
+void HelpInterceptor_Impl::setInterception( Reference< XFrame > xFrame )
+{
+    m_xIntercepted = Reference< XDispatchProviderInterception>( xFrame, UNO_QUERY );
+
+    if ( m_xIntercepted.is() )
+        m_xIntercepted->registerDispatchProviderInterceptor( (XDispatchProviderInterceptor*)this );
 }
 
 // XDispatchProvider
 
-Reference< XDispatch > SAL_CALL HelpInterceptor::queryDispatch(
+Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
 
     const URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags )
 
     throw( RuntimeException )
 
 {
+    INetURLObject aObj( aURL.Complete );
+    if ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
+        addURL( aURL.Complete );
+
     Reference< XDispatch > xResult;
+
+    if ( !xResult.is() && m_xSlaveDispatcher.is() )
+        xResult = m_xSlaveDispatcher->queryDispatch(aURL, aTargetFrameName, nSearchFlags);
+
     return xResult;
 }
 
-Sequence < Reference < XDispatch > > SAL_CALL HelpInterceptor::queryDispatches(
+Sequence < Reference < XDispatch > > SAL_CALL HelpInterceptor_Impl::queryDispatches(
 
     const Sequence< DispatchDescriptor >& aDescripts )
 
@@ -114,7 +162,7 @@ Sequence < Reference < XDispatch > > SAL_CALL HelpInterceptor::queryDispatches(
 
 // XDispatchProviderInterceptor
 
-Reference< XDispatchProvider > SAL_CALL HelpInterceptor::getSlaveDispatchProvider()
+Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getSlaveDispatchProvider()
 
     throw( RuntimeException )
 
@@ -122,7 +170,7 @@ Reference< XDispatchProvider > SAL_CALL HelpInterceptor::getSlaveDispatchProvide
     return m_xSlaveDispatcher;
 }
 
-void SAL_CALL HelpInterceptor::setSlaveDispatchProvider( const Reference< XDispatchProvider >& xNewSlave )
+void SAL_CALL HelpInterceptor_Impl::setSlaveDispatchProvider( const Reference< XDispatchProvider >& xNewSlave )
 
     throw( RuntimeException )
 
@@ -130,7 +178,7 @@ void SAL_CALL HelpInterceptor::setSlaveDispatchProvider( const Reference< XDispa
     m_xSlaveDispatcher = xNewSlave;
 }
 
-Reference< XDispatchProvider > SAL_CALL HelpInterceptor::getMasterDispatchProvider()
+Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getMasterDispatchProvider()
 
     throw( RuntimeException )
 
@@ -138,7 +186,7 @@ Reference< XDispatchProvider > SAL_CALL HelpInterceptor::getMasterDispatchProvid
     return m_xMasterDispatcher;
 }
 
-void SAL_CALL HelpInterceptor::setMasterDispatchProvider( const Reference< XDispatchProvider >& xNewMaster )
+void SAL_CALL HelpInterceptor_Impl::setMasterDispatchProvider( const Reference< XDispatchProvider >& xNewMaster )
 
     throw( RuntimeException )
 
@@ -148,7 +196,7 @@ void SAL_CALL HelpInterceptor::setMasterDispatchProvider( const Reference< XDisp
 
 // XInterceptorInfo
 
-Sequence< ::rtl::OUString > SAL_CALL HelpInterceptor::getInterceptedURLs()
+Sequence< ::rtl::OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 
     throw( RuntimeException )
 
@@ -160,26 +208,40 @@ Sequence< ::rtl::OUString > SAL_CALL HelpInterceptor::getInterceptedURLs()
 
 // XDispatch
 
-void SAL_CALL HelpInterceptor::dispatch( const URL& aURL,
-                                         const Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
+void SAL_CALL HelpInterceptor_Impl::dispatch(
+    const URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
 
     throw( RuntimeException )
 
 {
-    if ( String( DEFINE_CONST_UNICODE(".uno:") ) == String( aURL.Protocol ) )
+    sal_Bool bBack = ( String( DEFINE_CONST_UNICODE(".uno:Backward") ) == String( aURL.Complete ) );
+    if ( bBack || String( DEFINE_CONST_UNICODE(".uno:Forward") ) == String( aURL.Complete ) )
     {
-        String aCommand( aURL.Path );
-
-        if ( aCommand == String( DEFINE_CONST_UNICODE("backward" ) ) )
+        if ( m_pHistory && m_nCurPos > 0 )
         {
+            ULONG nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
+                                                    : ( !bBack && m_nCurPos < m_pHistory->Count() - 1 )
+                                                    ? ++m_nCurPos
+                                                    : ULONG_MAX;
+
+            if ( nPos < ULONG_MAX )
+            {
+                HelpHistoryEntry_Impl* pEntry = m_pHistory->GetObject( nPos );
+                if ( pEntry )
+                {
+                    URL aURL;
+                    aURL.Complete = pEntry->aURL;
+                    Reference < XDispatch > xDisp = m_xSlaveDispatcher->queryDispatch( aURL, String(), 0 );
+                    if ( xDisp.is() )
+                        xDisp->dispatch( aURL, Sequence < PropertyValue >() );
+
+                }
+            }
         }
-    }
-    else
-    {
     }
 }
 
-void SAL_CALL HelpInterceptor::addStatusListener( const Reference< XStatusListener >& xControl,
+void SAL_CALL HelpInterceptor_Impl::addStatusListener( const Reference< XStatusListener >& xControl,
                                                   const URL& aURL )
 
     throw( RuntimeException )
@@ -187,7 +249,7 @@ void SAL_CALL HelpInterceptor::addStatusListener( const Reference< XStatusListen
 {
 }
 
-void SAL_CALL HelpInterceptor::removeStatusListener( const Reference< XStatusListener >& xControl,
+void SAL_CALL HelpInterceptor_Impl::removeStatusListener( const Reference< XStatusListener >& xControl,
                                                      const URL& aURL )
 
     throw( RuntimeException )
