@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:57:27 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ TabDialog DLG_FRM_STD
                 Text[ hebrew ] = "‮סוג‬";
                 Text[ hindi ] = "वर्ग";
                 Text[ slovak ] = "Typ";
+                Text[ hungarian ] = "Típus";
+                Text[ slovenian ] = "Vrsta";
             };
             PageItem
             {
@@ -133,7 +135,7 @@ TabDialog DLG_FRM_STD
                 Text [ french ] = "Options" ;
                 Text [ dutch ] = "Overige" ;
                 Text [ swedish ] = "Till�gg" ;
-                Text [ danish ] = "Supplerende" ;
+                Text [ danish ] = "Indstillinger" ;
                 Text [ portuguese_brazilian ] = "Op��es" ;
                 Text [ portuguese ] = "Op��es" ;
                 Text[ chinese_simplified ] = "其他";
@@ -152,6 +154,8 @@ TabDialog DLG_FRM_STD
                 Text[ hebrew ] = "‮אפשרויות‬";
                 Text[ hindi ] = "विकल्प";
                 Text[ slovak ] = "Nastavenia";
+                Text[ hungarian ] = "Beállítások";
+                Text[ slovenian ] = "Možnosti";
             };
             PageItem
             {
@@ -185,6 +189,8 @@ TabDialog DLG_FRM_STD
                 Text[ hebrew ] = "‮שבירת שורות‬";
                 Text[ hindi ] = "लपेटना";
                 Text[ slovak ] = "Obtekanie textu";
+                Text[ hungarian ] = "Körbefuttatás";
+                Text[ slovenian ] = "Oblivanje";
             };
             PageItem
             {
@@ -217,6 +223,8 @@ TabDialog DLG_FRM_STD
                 Text[ hebrew ] = "Hyperlink";
                 Text[ hindi ] = "हाइपरलिंक";
                 Text[ slovak ] = "Hypertextový odkaz";
+                Text[ hungarian ] = "Hiperhivatkozás";
+                Text[ slovenian ] = "Hiperpovezava";
             };
             PageItem
             {
@@ -230,7 +238,7 @@ TabDialog DLG_FRM_STD
                 Text [ portuguese ] = "Contornos" ;
                 Text [ spanish ] = "Bordes" ;
                 Text [ finnish ] = "Reunat" ;
-                Text [ danish ] = "Ramme" ;
+                Text [ danish ] = "Kanter" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
                 Text [ dutch ] = "Omranding" ;
@@ -250,6 +258,8 @@ TabDialog DLG_FRM_STD
                 Text[ hebrew ] = "‮מסגרות‬";
                 Text[ hindi ] = "किनारें";
                 Text[ slovak ] = "Okraje";
+                Text[ hungarian ] = "Szegélyek";
+                Text[ slovenian ] = "Obrobe";
             };
             PageItem
             {
@@ -283,6 +293,8 @@ TabDialog DLG_FRM_STD
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
                 Text[ slovak ] = "Pozadie";
+                Text[ hungarian ] = "Háttér";
+                Text[ slovenian ] = "Ozadje";
             };
             PageItem
             {
@@ -316,6 +328,8 @@ TabDialog DLG_FRM_STD
                 Text[ hebrew ] = "‮טורים‬";
                 Text[ hindi ] = "स्तंभें";
                 Text[ slovak ] = "Stĺpce";
+                Text[ hungarian ] = "Hasábok";
+                Text[ slovenian ] = "Stolpci";
             };
             PageItem
             {
@@ -347,6 +361,8 @@ TabDialog DLG_FRM_STD
                 Text[ hebrew ] = "‮הפעלת מאקרו‬";
                 Text[ hindi ] = "मॉक्रो";
                 Text[ slovak ] = "Makro";
+                Text[ hungarian ] = "Makró";
+                Text[ slovenian ] = "Makro";
             };
         };
     };
@@ -365,6 +381,8 @@ TabDialog DLG_FRM_STD
     Text[ hebrew ] = "‮מסגרת‬";
     Text[ hindi ] = "फ्रेम ";
     Text[ slovak ] = "Rámček";
+    Text[ hungarian ] = "Keret";
+    Text[ slovenian ] = "Okvir";
 };
 TabDialog DLG_FRM_GRF
 {
@@ -420,6 +438,8 @@ TabDialog DLG_FRM_GRF
                 Text[ hebrew ] = "‮סוג‬";
                 Text[ hindi ] = "वर्ग";
                 Text[ slovak ] = "Typ";
+                Text[ hungarian ] = "Típus";
+                Text[ slovenian ] = "Vrsta";
             };
             PageItem
             {
@@ -433,7 +453,7 @@ TabDialog DLG_FRM_GRF
                 Text [ french ] = "Options" ;
                 Text [ dutch ] = "Overige" ;
                 Text [ swedish ] = "Till�gg" ;
-                Text [ danish ] = "Supplerende" ;
+                Text [ danish ] = "Indstillinger" ;
                 Text [ portuguese_brazilian ] = "Op��es" ;
                 Text [ portuguese ] = "Op��es" ;
                 Text[ chinese_simplified ] = "其他";
@@ -452,6 +472,8 @@ TabDialog DLG_FRM_GRF
                 Text[ hebrew ] = "‮אפשרויות‬";
                 Text[ hindi ] = "विकल्प";
                 Text[ slovak ] = "Nastavenia";
+                Text[ hungarian ] = "Beállítások";
+                Text[ slovenian ] = "Možnosti";
             };
             PageItem
             {
@@ -485,6 +507,8 @@ TabDialog DLG_FRM_GRF
                 Text[ hebrew ] = "‮שבירת שורות‬";
                 Text[ hindi ] = "लपेटना";
                 Text[ slovak ] = "Obtekanie textu";
+                Text[ hungarian ] = "Körbefuttatás";
+                Text[ slovenian ] = "Oblivanje";
             };
             PageItem
             {
@@ -517,6 +541,8 @@ TabDialog DLG_FRM_GRF
                 Text[ hebrew ] = "Hyperlink";
                 Text[ hindi ] = "हाइपरलिंक";
                 Text[ slovak ] = "Hypertextový odkaz";
+                Text[ hungarian ] = "Hiperhivatkozás";
+                Text[ slovenian ] = "Hiperpovezava";
             };
             PageItem
             {
@@ -550,6 +576,8 @@ TabDialog DLG_FRM_GRF
                 Text[ hebrew ] = "‮גרפיקה‬";
                 Text[ hindi ] = "सुचित्र";
                 Text[ slovak ] = "Obrázky";
+                Text[ hungarian ] = "Kép";
+                Text[ slovenian ] = "Grafika";
             };
             PageItem
             {
@@ -582,6 +610,8 @@ TabDialog DLG_FRM_GRF
                 Text[ hebrew ] = "Zuschneiden";
                 Text[ hindi ] = "क्रॉप";
                 Text[ slovak ] = "Orezať";
+                Text[ hungarian ] = "Levágás";
+                Text[ slovenian ] = "Obreži";
             };
             PageItem
             {
@@ -595,7 +625,7 @@ TabDialog DLG_FRM_GRF
                 Text [ portuguese ] = "Contornos" ;
                 Text [ spanish ] = "Bordes" ;
                 Text [ finnish ] = "Reunat" ;
-                Text [ danish ] = "Ramme" ;
+                Text [ danish ] = "Kanter" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
                 Text [ dutch ] = "Omranding" ;
@@ -615,6 +645,8 @@ TabDialog DLG_FRM_GRF
                 Text[ hebrew ] = "‮מסגרות‬";
                 Text[ hindi ] = "किनारें";
                 Text[ slovak ] = "Okraje";
+                Text[ hungarian ] = "Szegélyek";
+                Text[ slovenian ] = "Obrobe";
             };
             PageItem
             {
@@ -648,6 +680,8 @@ TabDialog DLG_FRM_GRF
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
                 Text[ slovak ] = "Pozadie";
+                Text[ hungarian ] = "Háttér";
+                Text[ slovenian ] = "Ozadje";
             };
             PageItem
             {
@@ -679,6 +713,8 @@ TabDialog DLG_FRM_GRF
                 Text[ hebrew ] = "‮הפאלת מאקרו‬";
                 Text[ hindi ] = "मॉक्रो";
                 Text[ slovak ] = "Makro";
+                Text[ hungarian ] = "Makró";
+                Text[ slovenian ] = "Makro";
             };
         };
     };
@@ -697,6 +733,8 @@ TabDialog DLG_FRM_GRF
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र";
     Text[ slovak ] = "Obrázky";
+    Text[ hungarian ] = "Kép";
+    Text[ slovenian ] = "Grafika";
 };
 TabDialog DLG_FRM_OLE
 {
@@ -763,6 +801,8 @@ TabDialog DLG_FRM_OLE
                 Text[ hebrew ] = "‮סוג‬";
                 Text[ hindi ] = "वर्ग";
                 Text[ slovak ] = "Typ";
+                Text[ hungarian ] = "Típus";
+                Text[ slovenian ] = "Vrsta";
             };
             PageItem
             {
@@ -776,7 +816,7 @@ TabDialog DLG_FRM_OLE
                 Text [ french ] = "Options" ;
                 Text [ dutch ] = "Overige" ;
                 Text [ swedish ] = "Till�gg" ;
-                Text [ danish ] = "Supplerende" ;
+                Text [ danish ] = "Indstillinger" ;
                 Text [ portuguese_brazilian ] = "Op��es" ;
                 Text [ portuguese ] = "Op��es" ;
                 Text[ chinese_simplified ] = "其他";
@@ -795,6 +835,8 @@ TabDialog DLG_FRM_OLE
                 Text[ hebrew ] = "‮אפשרויות‬";
                 Text[ hindi ] = "विकल्प";
                 Text[ slovak ] = "Nastavenia";
+                Text[ hungarian ] = "Beállítások";
+                Text[ slovenian ] = "Možnosti";
             };
             PageItem
             {
@@ -828,6 +870,8 @@ TabDialog DLG_FRM_OLE
                 Text[ hebrew ] = "‮שבירת שורות‬";
                 Text[ hindi ] = "लपेटना";
                 Text[ slovak ] = "Obtekanie textu";
+                Text[ hungarian ] = "Körbefuttatás";
+                Text[ slovenian ] = "Oblivanje";
             };
             PageItem
             {
@@ -860,6 +904,8 @@ TabDialog DLG_FRM_OLE
                 Text[ hebrew ] = "Hyperlink";
                 Text[ hindi ] = "हाइपरलिंक";
                 Text[ slovak ] = "Hypertextový odkaz";
+                Text[ hungarian ] = "Hiperhivatkozás";
+                Text[ slovenian ] = "Hiperpovezava";
             };
             PageItem
             {
@@ -873,7 +919,7 @@ TabDialog DLG_FRM_OLE
                 Text [ portuguese ] = "Contornos" ;
                 Text [ spanish ] = "Bordes" ;
                 Text [ finnish ] = "Reunat" ;
-                Text [ danish ] = "Ramme" ;
+                Text [ danish ] = "Kanter" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
                 Text [ dutch ] = "Omranding" ;
@@ -893,6 +939,8 @@ TabDialog DLG_FRM_OLE
                 Text[ hebrew ] = "‮מסגרות‬";
                 Text[ hindi ] = "किनारें";
                 Text[ slovak ] = "Okraje";
+                Text[ hungarian ] = "Szegélyek";
+                Text[ slovenian ] = "Obrobe";
             };
             PageItem
             {
@@ -926,6 +974,8 @@ TabDialog DLG_FRM_OLE
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
                 Text[ slovak ] = "Pozadie";
+                Text[ hungarian ] = "Háttér";
+                Text[ slovenian ] = "Ozadje";
             };
             /*
             PageItem  {
@@ -976,6 +1026,8 @@ TabDialog DLG_FRM_OLE
                 Text[ hebrew ] = "‮הפעלת מאקרו‬";
                 Text[ hindi ] = "मॉक्रो";
                 Text[ slovak ] = "Makro";
+                Text[ hungarian ] = "Makró";
+                Text[ slovenian ] = "Makro";
             };
         };
     };
@@ -984,6 +1036,8 @@ TabDialog DLG_FRM_OLE
     Text[ hebrew ] = "‮אוביקט‬";
     Text[ hindi ] = "वस्तु";
     Text[ slovak ] = "Objekt";
+    Text[ hungarian ] = "Objektum";
+    Text[ slovenian ] = "Predmet";
 };
 TabPage TP_FRM_STD
 {
@@ -1004,7 +1058,7 @@ TabPage TP_FRM_STD
         Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "~Leveys" ;
-        Text [ danish ] = "Bredde" ;
+        Text [ danish ] = "~Bredde" ;
         Text [ french ] = "Largeur" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "B~reedte" ;
@@ -1025,6 +1079,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "~चौड़ाई";
         Text[ slovak ] = "Ší~rka";
+        Text[ hungarian ] = "S~zélesség";
+        Text[ slovenian ] = "~Širina";
     };
     MetricField ED_WIDTH
     {
@@ -1076,6 +1132,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "R~elativ";
         Text[ hindi ] = "~सम्बन्धित";
         Text[ slovak ] = "~Relatívny";
+        Text[ hungarian ] = "~Relatív";
+        Text[ slovenian ] = "Relat~ivno";
     };
     FixedText FT_HEIGHT
     {
@@ -1110,6 +1168,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
         Text[ slovak ] = "~Výška";
+        Text[ hungarian ] = "~Magasság";
+        Text[ slovenian ] = "Vi~šina";
     };
     MetricField ED_HEIGHT
     {
@@ -1141,7 +1201,7 @@ TabPage TP_FRM_STD
         Text [ spanish ] = "Rela~tivo" ;
         Text [ french ] = "Relatif" ;
         Text [ swedish ] = "Rel~ativ" ;
-        Text [ danish ] = "Relativ" ;
+        Text [ danish ] = "Relati~v" ;
         Text [ portuguese_brazilian ] = "Re~lativo" ;
         Text [ portuguese ] = "Relat~ivo" ;
         Text[ chinese_simplified ] = "相对的(~L)";
@@ -1160,6 +1220,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "Re~lativ";
         Text[ hindi ] = "सम्बन्धि~त";
         Text[ slovak ] = "Re~latívny";
+        Text[ hungarian ] = "R~elatív";
+        Text[ slovenian ] = "Re~lativno";
     };
     CheckBox CB_FIXEDRATIO
     {
@@ -1174,7 +1236,7 @@ TabPage TP_FRM_STD
         Text [ french ] = "Proportionnel" ;
         Text [ dutch ] = "~Proporties synchroniseren" ;
         Text [ swedish ] = "Anpassa ~proportionellt" ;
-        Text [ danish ] = "Bevar ~proportioner" ;
+        Text [ danish ] = "~Bevar st�rrelsesforhold" ;
         Text [ portuguese_brazilian ] = "~Manter propor��es" ;
         Text [ portuguese ] = "Pr~oporcional" ;
         Text[ chinese_simplified ] = "保持比例(~K)";
@@ -1194,6 +1256,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "~Abgleich";
         Text[ hindi ] = "~अनुरूप रखो";
         Text[ slovak ] = "~Zachovať pomer";
+        Text[ hungarian ] = "Rögzí~tett méretarány";
+        Text[ slovenian ] = "~Ohrani sorazmerno";
     };
     CheckBox CB_AUTOHEIGHT
     {
@@ -1215,7 +1279,7 @@ TabPage TP_FRM_STD
         Text[ spanish ] = "~Tama�o autom�tico";
         Text[ finnish ] = "Automaattinen korkeus";
         Text[ italian ] = "Altezza. ~auto";
-        Text[ danish ] = "Automatisk h~�jde";
+        Text[ danish ] = "Automatisk st�rrelse";
         Text[ polish ] = "Wysoko�� automatyczna ";
         Text[ portuguese_brazilian ] = "Altura A~utom�tica";
         Text[ turkish ] = "Otomatikboyut";
@@ -1226,6 +1290,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "Au~tom. Größe";
         Text[ hindi ] = "स्वचालित ढंग से ~ऊँचाई";
         Text[ slovak ] = "Automatická ~výška";
+        Text[ hungarian ] = "Automatikus méretezés";
+        Text[ slovenian ] = "Samodejno prilagodi velikost";
     };
     PushButton BT_REALSIZE
     {
@@ -1240,7 +1306,7 @@ TabPage TP_FRM_STD
         Text [ portuguese_brazilian ] = "Tamanho ~Original" ;
         Text [ portuguese ] = "~Tamanho original" ;
         Text [ finnish ] = "~Alkuper�inen koko" ;
-        Text [ danish ] = "~Oprindelig st." ;
+        Text [ danish ] = "~Oprindelig st�rrelse" ;
         Text [ french ] = "Taille d'origine" ;
         Text [ swedish ] = "~Originalstorlek" ;
         Text [ dutch ] = "Re�le grootte" ;
@@ -1261,6 +1327,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "~Originalgröße";
         Text[ hindi ] = "~यथार्थ परिमाण";
         Text[ slovak ] = "~Pôvodná veľkosť";
+        Text[ hungarian ] = "~Eredeti méret";
+        Text[ slovenian ] = "~Izvirna velikost";
     };
     FixedLine FL_SIZE
     {
@@ -1294,6 +1362,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "परिमाण";
         Text[ slovak ] = "Veľkosť";
+        Text[ hungarian ] = "Méret";
+        Text[ slovenian ] = "Velikost";
     };
     FixedLine FL_TYPE_SEP
     {
@@ -1332,6 +1402,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "An der ~Seite";
         Text[ hindi ] = "~पृष्ठ में";
         Text[ slovak ] = "K ~stránke";
+        Text[ hungarian ] = "~Oldalhoz";
+        Text[ slovenian ] = "Na s~tran";
     };
     RadioButton RB_ANCHOR_PARA
     {
@@ -1364,6 +1436,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "Am ~Absatz";
         Text[ hindi ] = "प~रिच्छेद में";
         Text[ slovak ] = "K od~stavcu";
+        Text[ hungarian ] = "~Bekezdéshez";
+        Text[ slovenian ] = "Na ods~tavek";
     };
     RadioButton RB_ANCHOR_AT_CHAR
     {
@@ -1396,6 +1470,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "Am Ze~ichen";
         Text[ hindi ] = "अ~क्षर में";
         Text[ slovak ] = "K zn~aku";
+        Text[ hungarian ] = "~Karakterhez";
+        Text[ slovenian ] = "Na ~znak";
     };
     RadioButton RB_ANCHOR_AS_CHAR
     {
@@ -1429,6 +1505,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "Als Zei~chen";
         Text[ hindi ] = "~अक्षर जैसे ";
         Text[ slovak ] = "~Ako znak";
+        Text[ hungarian ] = "Ka~rakterként";
+        Text[ slovenian ] = "Kot z~nak";
     };
     RadioButton RB_ANCHOR_FRAME
     {
@@ -1461,6 +1539,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "Am ~Rahmen";
         Text[ hindi ] = "फ्रे~म में ";
         Text[ slovak ] = "K rá~mcu";
+        Text[ hungarian ] = "~Keretre";
+        Text[ slovenian ] = "Na ~okvir";
     };
     FixedLine FL_TYPE
     {
@@ -1494,6 +1574,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "‮עוגן‬";
         Text[ hindi ] = "ऐन्कर";
         Text[ slovak ] = "Ukotvenie";
+        Text[ hungarian ] = "Horgony";
+        Text[ slovenian ] = "Sidro";
     };
     Window WN_BSP
     {
@@ -1512,7 +1594,7 @@ TabPage TP_FRM_STD
         Text [ portuguese_brazilian ] = "Hori~zontal" ;
         Text [ portuguese ] = "Hori~zontal" ;
         Text [ finnish ] = "Vaakataso" ;
-        Text [ danish ] = "Va~ndret" ;
+        Text [ danish ] = "~Vandret" ;
         Text [ french ] = "Horizontal" ;
         Text [ swedish ] = "Horiso~ntellt" ;
         Text [ dutch ] = "Horizon~taal" ;
@@ -1533,6 +1615,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "Horizo~ntal";
         Text[ hindi ] = "सम~तल";
         Text[ slovak ] = "Vodo~rovne";
+        Text[ hungarian ] = "~Vízszintes";
+        Text[ slovenian ] = "Vodo~ravno";
     };
     ListBox DLB_HORIZONTAL
     {
@@ -1574,6 +1658,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "u~m";
         Text[ hindi ] = "~से";
         Text[ slovak ] = "~o";
+        Text[ hungarian ] = "~mérték";
+        Text[ slovenian ] = "z~a";
     };
     MetricField ED_AT_HORZ_POS
     {
@@ -1625,6 +1711,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "z~u";
         Text[ hindi ] = "~को";
         Text[ slovak ] = "~k";
+        Text[ hungarian ] = "~cél:";
+        Text[ slovenian ] = "~do";
     };
     ListBox LB_HORI_RELATION
     {
@@ -1643,7 +1731,7 @@ TabPage TP_FRM_STD
         Text [ english_us ] = "~Mirror on even pages" ;
         Text [ portuguese_brazilian ] = "~Refletir nas p�ginas pares" ;
         Text [ swedish ] = "spe~gelv�nt p� j�mna sidor" ;
-        Text [ danish ] = "Spejlvend p� lige sider" ;
+        Text [ danish ] = "~Spejlvend p� lige sider" ;
         Text [ italian ] = "Rispecchia su pagine pari" ;
         Text [ spanish ] = "Reflejar en ~p�ginas pares" ;
         Text [ french ] = "En vis-�-vis sur les pages paires" ;
@@ -1665,6 +1753,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "Auf geraden Seiten spie~geln";
         Text[ hindi ] = "~समसंख्या पृष्ठों में दर्पण  ";
         Text[ slovak ] = "~Zrkadliť na párnych stránkach";
+        Text[ hungarian ] = "~Páros oldalakon tükrözés";
+        Text[ slovenian ] = "~Zrcali na sodih straneh";
     };
     FixedText FT_VERTICAL
     {
@@ -1678,7 +1768,7 @@ TabPage TP_FRM_STD
         Text [ portuguese_brazilian ] = "~Vertical" ;
         Text [ portuguese ] = "~Vertical" ;
         Text [ finnish ] = "Pystytaso" ;
-        Text [ danish ] = "Lodret" ;
+        Text [ danish ] = "~Lodret" ;
         Text [ french ] = "Vertical" ;
         Text [ swedish ] = "~Vertikalt" ;
         Text [ dutch ] = "~Verticaal" ;
@@ -1699,6 +1789,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "~Vertikal";
         Text[ hindi ] = "~लम्बरूप";
         Text[ slovak ] = "~Zvisle";
+        Text[ hungarian ] = "~Függőleges";
+        Text[ slovenian ] = "~Navpično";
     };
     ListBox DLB_VERTICAL
     {
@@ -1719,7 +1811,7 @@ TabPage TP_FRM_STD
         Text [ portuguese_brazilian ] = "de" ;
         Text [ portuguese ] = "em" ;
         Text [ finnish ] = "et�isyys" ;
-        Text [ danish ] = "v~ed" ;
+        Text [ danish ] = "ved" ;
         Text [ french ] = "�" ;
         Text [ swedish ] = "me~d" ;
         Text [ dutch ] = "~om" ;
@@ -1740,6 +1832,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "u~m";
         Text[ hindi ] = "से";
         Text[ slovak ] = "Autor";
+        Text[ hungarian ] = "mérték";
+        Text[ slovenian ] = "od";
     };
     MetricField ED_AT_VERT_POS
     {
@@ -1791,6 +1885,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "z~u";
         Text[ hindi ] = "~को";
         Text[ slovak ] = "~k";
+        Text[ hungarian ] = "cé~l";
+        Text[ slovenian ] = "d~o";
     };
     ListBox LB_VERT_RELATION
     {
@@ -1831,6 +1927,8 @@ TabPage TP_FRM_STD
         Text[ hebrew ] = "Position";
         Text[ hindi ] = "स्थान";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Pozíció";
+        Text[ slovenian ] = "Položaj";
     };
 };
 TabPage TP_GRF_EXT
@@ -1876,6 +1974,8 @@ TabPage TP_GRF_EXT
         Text[ hebrew ] = "Verknüpfung";
         Text[ hindi ] = "लिंक";
         Text[ slovak ] = "Odkaz";
+        Text[ hungarian ] = "Hivatkozás";
+        Text[ slovenian ] = "Povezava";
     };
     FixedText FT_CONNECT
     {
@@ -1889,7 +1989,7 @@ TabPage TP_GRF_EXT
         Text [ french ] = "~Nom de fichier" ;
         Text [ dutch ] = "Bestands~naam" ;
         Text [ swedish ] = "~Filnamn" ;
-        Text [ danish ] = "Filnavn" ;
+        Text [ danish ] = "~Filnavn" ;
         Text [ portuguese_brazilian ] = "~Nome do arquivo" ;
         Text [ portuguese ] = "~Nome do ficheiro" ;
         Text[ chinese_simplified ] = "文件名(~F)";
@@ -1908,6 +2008,8 @@ TabPage TP_GRF_EXT
         Text[ hebrew ] = "‮שם קובץ‬";
         Text[ hindi ] = "~फाइल नाम";
         Text[ slovak ] = "~Meno súboru";
+        Text[ hungarian ] = "~Fájlnév";
+        Text[ slovenian ] = "Ime ~datoteke";
     };
     Edit ED_CONNECT
     {
@@ -1945,6 +2047,8 @@ TabPage TP_GRF_EXT
         Text[ hebrew ] = "‮[ללא]‬";
         Text[ hindi ] = "[कोई नहीं]";
         Text[ slovak ] = "[Nič]";
+        Text[ hungarian ] = "[Semmi]";
+        Text[ slovenian ] = "[brez]";
     };
     PushButton PB_BROWSE
     {
@@ -1979,6 +2083,8 @@ TabPage TP_GRF_EXT
         Text[ hebrew ] = "~...";
         Text[ hindi ] = "~...";
         Text[ slovak ] = "~...";
+        Text[ hungarian ] = "~...";
+        Text[ slovenian ] = "~...";
     };
     CheckBox CB_VERT
     {
@@ -1993,7 +2099,7 @@ TabPage TP_GRF_EXT
         Text [ portuguese_brazilian ] = "~Verticalmente" ;
         Text [ portuguese ] = "~vertical" ;
         Text [ finnish ] = "Pystytaso" ;
-        Text [ danish ] = "lodret" ;
+        Text [ danish ] = "~Lodret" ;
         Text [ french ] = "� la verticale" ;
         Text [ swedish ] = "~vertikalt" ;
         Text [ dutch ] = "verti~caal" ;
@@ -2014,6 +2120,8 @@ TabPage TP_GRF_EXT
         Text[ hebrew ] = "~vertikal";
         Text[ hindi ] = "~लंबरूप प्रकार से";
         Text[ slovak ] = "~Zvisle";
+        Text[ hungarian ] = "~Függőlegesen";
+        Text[ slovenian ] = "~Navpično";
     };
     CheckBox CB_HOR
     {
@@ -2047,6 +2155,8 @@ TabPage TP_GRF_EXT
         Text[ hebrew ] = "hori~zontal";
         Text[ hindi ] = "~समतल प्रकार से ";
         Text[ slovak ] = "Vodo~rovne";
+        Text[ hungarian ] = "Víz~szintesen";
+        Text[ slovenian ] = "Vodo~ravno";
     };
     RadioButton RB_MIRROR_ALL_PAGES
     {
@@ -2080,6 +2190,8 @@ TabPage TP_GRF_EXT
         Text[ hebrew ] = "~auf allen Seiten";
         Text[ hindi ] = "सब पृष्ठो में";
         Text[ slovak ] = "Na všetkých stranách";
+        Text[ hungarian ] = "Minden oldalon";
+        Text[ slovenian ] = "Na vseh straneh";
     };
     RadioButton RB_MIRROR_LEFT_PAGES
     {
@@ -2113,6 +2225,8 @@ TabPage TP_GRF_EXT
         Text[ hebrew ] = "auf ~linken Seiten";
         Text[ hindi ] = "बायाँ पृष्ठो में ";
         Text[ slovak ] = "Na ľavých stránkach";
+        Text[ hungarian ] = "Bal oldalakon";
+        Text[ slovenian ] = "Na levih straneh";
     };
     RadioButton RB_MIRROR_RIGHT_PAGES
     {
@@ -2146,6 +2260,8 @@ TabPage TP_GRF_EXT
         Text[ hebrew ] = "auf ~rechten Seiten";
         Text[ hindi ] = "दाहिना पृष्ठो में";
         Text[ slovak ] = "Na pravých stránkach";
+        Text[ hungarian ] = "Jobb oldalakon";
+        Text[ slovenian ] = "Na desnih straneh";
     };
     Window WN_BMP
     {
@@ -2184,6 +2300,8 @@ TabPage TP_GRF_EXT
         Text[ hebrew ] = "Spiegeln";
         Text[ hindi ] = "फ्लिप";
         Text[ slovak ] = "Prevrátiť";
+        Text[ hungarian ] = "Tükrözés";
+        Text[ slovenian ] = "Obrni";
     };
 };
 String STR_EDIT_GRF
@@ -2195,7 +2313,7 @@ String STR_EDIT_GRF
     TEXT [ portuguese_brazilian ] = "Link" ;
     TEXT [ portuguese ] = "Ligar" ;
     TEXT [ finnish ] = "Linkki" ;
-    TEXT [ danish ] = "K�d" ;
+    TEXT [ danish ] = "Sammenk�d" ;
     TEXT [ french ] = "Lien " ;
     TEXT [ swedish ] = "L�nka" ;
     TEXT [ dutch ] = "Koppelen" ;
@@ -2216,6 +2334,8 @@ String STR_EDIT_GRF
     TEXT[ hebrew ] = "Verknüpfen";
     TEXT[ hindi ] = "लिंक";
     TEXT[ slovak ] = "Odkaz";
+    TEXT[ hungarian ] = "Hivatkozás";
+    TEXT[ slovenian ] = "Povezava";
 };
 
 TabPage TP_FRM_URL
@@ -2256,6 +2376,8 @@ TabPage TP_FRM_URL
         Text[ hebrew ] = "~URL";
         Text[ hindi ] = "~URL";
         Text[ slovak ] = "~URL";
+        Text[ hungarian ] = "~URL";
+        Text[ slovenian ] = "~URL";
     };
     Edit ED_URL
     {
@@ -2277,7 +2399,7 @@ TabPage TP_FRM_URL
         Text [ french ] = "Nom" ;
         Text [ dutch ] = "~Naam" ;
         Text [ swedish ] = "~Namn" ;
-        Text [ danish ] = "Navn" ;
+        Text [ danish ] = "~Navn" ;
         Text [ portuguese_brazilian ] = "~Nome" ;
         Text [ portuguese ] = "~Nome" ;
         Text[ chinese_simplified ] = "名称(~N)";
@@ -2296,6 +2418,8 @@ TabPage TP_FRM_URL
         Text[ hebrew ] = "~Name";
         Text[ hindi ] = "~नाम";
         Text[ slovak ] = "~Názov";
+        Text[ hungarian ] = "~Név";
+        Text[ slovenian ] = "~Ime";
     };
     Edit ED_NAME
     {
@@ -2317,7 +2441,7 @@ TabPage TP_FRM_URL
         Text [ spanish ] = "~Marco" ;
         Text [ french ] = "Cadre" ;
         Text [ swedish ] = "R~am" ;
-        Text [ danish ] = "Frame" ;
+        Text [ danish ] = "Ramme" ;
         Text [ portuguese_brazilian ] = "Frame" ;
         Text [ portuguese ] = "~Frame" ;
         Text[ chinese_simplified ] = "框对象";
@@ -2336,6 +2460,8 @@ TabPage TP_FRM_URL
         Text[ hebrew ] = "‮מסגרת‬";
         Text[ hindi ] = "फ्रेम ";
         Text[ slovak ] = "Rámček";
+        Text[ hungarian ] = "K~eret";
+        Text[ slovenian ] = "Okvir";
     };
     ComboBox CB_FRAME
     {
@@ -2373,10 +2499,12 @@ TabPage TP_FRM_URL
         Text[ catalan ] = "Na~vega...";
         Text[ finnish ] = "~Selaa...";
         Text[ thai ] = "เ~รียกดู...";
-        Text[ czech ] = "Listovat...";
+        Text[ czech ] = "Procházet...";
         Text[ hebrew ] = "‮עיון...‬";
         Text[ hindi ] = "~ब्रउज़...";
         Text[ slovak ] = "~Listovať...";
+        Text[ hungarian ] = "~Tallózás...";
+        Text[ slovenian ] = "Pre~brskaj...";
     };
     FixedLine FL_HYPERLINK
     {
@@ -2409,6 +2537,8 @@ TabPage TP_FRM_URL
         Text[ hebrew ] = "Link zu";
         Text[ hindi ] = "को लिंक";
         Text[ slovak ] = "Odkaz na";
+        Text[ hungarian ] = "Hivatkozás célja:";
+        Text[ slovenian ] = "Poveži z";
     };
     CheckBox CB_SERVER
     {
@@ -2441,6 +2571,8 @@ TabPage TP_FRM_URL
         Text[ hebrew ] = "~Server-side image map";
         Text[ hindi ] = "~सर्वर-भाग का चित्र नक्शा";
         Text[ slovak ] = "Obr. mapa na strane ~serveru";
+        Text[ hungarian ] = "~Kiszolgálóoldali interaktív kép";
+        Text[ slovenian ] = "Slika s povezavami na strani ~strežnika";
     };
     CheckBox CB_CLIENT
     {
@@ -2473,6 +2605,8 @@ TabPage TP_FRM_URL
         Text[ hebrew ] = "~Client-side image map";
         Text[ hindi ] = "~ग्राहक-भाग का चित्र नक्शा";
         Text[ slovak ] = "Obr. mapa na strane ~klienta";
+        Text[ hungarian ] = "Ügyfél~oldali interaktív kép";
+        Text[ slovenian ] = "Slika s povezavami na strani ~uporabnika";
     };
     FixedLine FL_IMAGE
     {
@@ -2505,6 +2639,8 @@ TabPage TP_FRM_URL
         Text[ hebrew ] = "Image map";
         Text[ hindi ] = "चित्र नक्शा";
         Text[ slovak ] = "Obr. mapa";
+        Text[ hungarian ] = "Interaktív kép";
+        Text[ slovenian ] = "Slika s povezavami";
     };
 };
 TabPage TP_FRM_ADD
@@ -2526,7 +2662,7 @@ TabPage TP_FRM_ADD
         Text [ french ] = "Nom" ;
         Text [ dutch ] = "~Naam" ;
         Text [ swedish ] = "~Namn" ;
-        Text [ danish ] = "Navn" ;
+        Text [ danish ] = "~Navn" ;
         Text [ portuguese_brazilian ] = "~Nome" ;
         Text [ portuguese ] = "~Nome" ;
         Text[ chinese_simplified ] = "名称(~N)";
@@ -2545,6 +2681,8 @@ TabPage TP_FRM_ADD
         Text[ hebrew ] = "~Name";
         Text[ hindi ] = "~नाम";
         Text[ slovak ] = "~Názov";
+        Text[ hungarian ] = "~Név";
+        Text[ slovenian ] = "~Ime";
     };
     Edit ED_NAME
     {
@@ -2565,7 +2703,7 @@ TabPage TP_FRM_ADD
         Text [ french ] = "~Texte (facultatif)" ;
         Text [ dutch ] = "~Alternatieve tekst" ;
         Text [ swedish ] = "~Alternativtext" ;
-        Text [ danish ] = "Alternativtekst" ;
+        Text [ danish ] = "~Alternativ (Kun tekst)" ;
         Text [ portuguese_brazilian ] = "~Alternativo (Somente texto)" ;
         Text [ portuguese ] = "Texto ~alternativo" ;
         Text[ chinese_simplified ] = "替代文字(~A)";
@@ -2584,6 +2722,8 @@ TabPage TP_FRM_ADD
         Text[ hebrew ] = "~Alternativtext";
         Text[ hindi ] = "~विकल्प (केवल टेक्स्ट्)";
         Text[ slovak ] = "~Alternatívny text";
+        Text[ hungarian ] = "~Választás (csak szöveg)";
+        Text[ slovenian ] = "~Alternativno (samo besedilo)";
     };
     Edit ED_ALT_NAME
     {
@@ -2601,7 +2741,7 @@ TabPage TP_FRM_ADD
         Text [ english_us ] = "~Previous link" ;
         Text [ portuguese_brazilian ] = "V�ncu~lo anterior" ;
         Text [ swedish ] = "F�re~g�ende" ;
-        Text [ danish ] = "Overordnet" ;
+        Text [ danish ] = "~Tidligere k�de" ;
         Text [ italian ] = "Precedente" ;
         Text [ spanish ] = "~Anterior" ;
         Text [ french ] = "Pr�c�dent" ;
@@ -2623,6 +2763,8 @@ TabPage TP_FRM_ADD
         Text[ hebrew ] = "~Vorgänger";
         Text[ hindi ] = "~पिछला लिंक";
         Text[ slovak ] = "~Predchádzajúci odkaz";
+        Text[ hungarian ] = "~Előző hivatkozás";
+        Text[ slovenian ] = "~Prejšnja povezava";
     };
     ListBox LB_PREV
     {
@@ -2739,6 +2881,14 @@ TabPage TP_FRM_ADD
     {
          < "<Keiner>" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "<Nincs>" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "<Brez>" ; > ;
+    };
     };
     FixedText FT_NEXT
     {
@@ -2749,7 +2899,7 @@ TabPage TP_FRM_ADD
         Text [ english_us ] = "~Next link" ;
         Text [ portuguese_brazilian ] = "~Pr�ximo v�nculo" ;
         Text [ swedish ] = "~F�ljande" ;
-        Text [ danish ] = "Underordnet" ;
+        Text [ danish ] = "~N�ste k�de" ;
         Text [ italian ] = "~Successivo" ;
         Text [ spanish ] = "~V�nculo siguiente" ;
         Text [ french ] = "Lien suivant" ;
@@ -2771,6 +2921,8 @@ TabPage TP_FRM_ADD
         Text[ hebrew ] = "Nach~folger";
         Text[ hindi ] = "~अगला लिंक";
         Text[ slovak ] = "Ďa~lší odkaz";
+        Text[ hungarian ] = "~Következő hivatkozás";
+        Text[ slovenian ] = "~Naslednja povezava";
     };
     ListBox LB_NEXT
     {
@@ -2887,6 +3039,14 @@ TabPage TP_FRM_ADD
     {
          < "<Keiner>" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "<Nincs>" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "<Brez>" ; > ;
+    };
     };
     FixedLine FL_NAME
     {
@@ -2900,7 +3060,7 @@ TabPage TP_FRM_ADD
         Text [ french ] = "Noms" ;
         Text [ dutch ] = "Namen" ;
         Text [ swedish ] = "Namn" ;
-        Text [ danish ] = "Navn" ;
+        Text [ danish ] = "Navne" ;
         Text [ portuguese_brazilian ] = "Nomes" ;
         Text [ portuguese ] = "Nomes" ;
         Text[ chinese_simplified ] = "名称";
@@ -2919,6 +3079,8 @@ TabPage TP_FRM_ADD
         Text[ hebrew ] = "Namen";
         Text[ hindi ] = "नाम";
         Text[ slovak ] = "Názvy";
+        Text[ hungarian ] = "Nevek";
+        Text[ slovenian ] = "Imena";
     };
     CheckBox CB_PROTECT_CONTENT
     {
@@ -2930,7 +3092,7 @@ TabPage TP_FRM_ADD
         Text [ english_us ] = "~Contents" ;
         Text [ portuguese_brazilian ] = "~Conte�do" ;
         Text [ swedish ] = "~Inneh�ll" ;
-        Text [ danish ] = "Indhold" ;
+        Text [ danish ] = "I~ndhold" ;
         Text [ italian ] = "Contenuto" ;
         Text [ spanish ] = "~Contenido" ;
         Text [ french ] = "Contenu" ;
@@ -2952,6 +3114,8 @@ TabPage TP_FRM_ADD
         Text[ hebrew ] = "‮תוכן עיניינים‬";
         Text[ hindi ] = "~विषय";
         Text[ slovak ] = "~Obsah";
+        Text[ hungarian ] = "~Tartalom";
+        Text[ slovenian ] = "~Vsebina";
     };
     CheckBox CB_PROTECT_FRAME
     {
@@ -2963,7 +3127,7 @@ TabPage TP_FRM_ADD
         Text [ english_us ] = "P~osition" ;
         Text [ portuguese_brazilian ] = "P~osi��o" ;
         Text [ swedish ] = "~Position" ;
-        Text [ danish ] = "Placering" ;
+        Text [ danish ] = "~Placering" ;
         Text [ italian ] = "Pos~izione" ;
         Text [ spanish ] = "P~osici�n" ;
         Text [ french ] = "Position" ;
@@ -2985,6 +3149,8 @@ TabPage TP_FRM_ADD
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्था~न";
         Text[ slovak ] = "U~miestnenie";
+        Text[ hungarian ] = "~Pozíció";
+        Text[ slovenian ] = "P~oložaj";
     };
     CheckBox CB_PROTECT_SIZE
     {
@@ -2996,7 +3162,7 @@ TabPage TP_FRM_ADD
         Text [ english_us ] = "~Size" ;
         Text [ portuguese_brazilian ] = "~Tamanho" ;
         Text [ swedish ] = "~Storlek" ;
-        Text [ danish ] = "St�rrelse" ;
+        Text [ danish ] = "~St�rrelse" ;
         Text [ italian ] = "~Dimensione" ;
         Text [ spanish ] = "~Tama�o" ;
         Text [ french ] = "~Taille" ;
@@ -3018,6 +3184,8 @@ TabPage TP_FRM_ADD
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "~परिमाण";
         Text[ slovak ] = "~Veľkosť";
+        Text[ hungarian ] = "~Méret";
+        Text[ slovenian ] = "Veliko~st";
     };
     FixedLine FL_PROTECT
     {
@@ -3050,6 +3218,8 @@ TabPage TP_FRM_ADD
         Text[ hebrew ] = "Schützen";
         Text[ hindi ] = "रक्षा करो";
         Text[ slovak ] = "Zamknúť";
+        Text[ hungarian ] = "Védelem";
+        Text[ slovenian ] = "Zaščiti";
     };
     CheckBox CB_EDIT_IN_READONLY
     {
@@ -3061,7 +3231,7 @@ TabPage TP_FRM_ADD
         Text [ english_us ] = "~Editable in read-only document" ;
         Text [ portuguese_brazilian ] = "~Edit�vel num documento somente leitura" ;
         Text [ swedish ] = "R~edigerbar i skrivskyddat dokument" ;
-        Text [ danish ] = "Redigerbar i skrivebeskyttet dokument" ;
+        Text [ danish ] = "~Redigerbar i skrivebeskyttet dokument" ;
         Text [ italian ] = "Modificabile nel documento a sola lettura" ;
         Text [ spanish ] = "Se puede editar en documentos de s�lo lectura" ;
         Text [ french ] = "� �diter dans le document en mode Lecture seule" ;
@@ -3083,6 +3253,8 @@ TabPage TP_FRM_ADD
         Text[ hebrew ] = "~Editierbar in schreibgeschütztem Dokument";
         Text[ hindi ] = "संपादन ~केवल पढ़ने योग्य लेखपत्र में ";
         Text[ slovak ] = "~Editovateľné v dokumente určenom len na čítanie";
+        Text[ hungarian ] = "S~zerkeszthető a csak olvasható dokumentumokban is";
+        Text[ slovenian ] = "Za ~urejanje v dokumentu, ki je samo za branje";
     };
     CheckBox CB_PRINT_FRAME
     {
@@ -3096,7 +3268,7 @@ TabPage TP_FRM_ADD
         Text [ portuguese_brazilian ] = "Im~primir" ;
         Text [ portuguese ] = "Imprimir" ;
         Text [ finnish ] = "Tu~losta" ;
-        Text [ danish ] = "Udskriv" ;
+        Text [ danish ] = "~Udskriv" ;
         Text [ french ] = "~Imprimer" ;
         Text [ swedish ] = "Skriv ~ut" ;
         Text [ dutch ] = "Afdru~kken" ;
@@ -3117,6 +3289,8 @@ TabPage TP_FRM_ADD
         Text[ hebrew ] = "‮הדפסה‬";
         Text[ hindi ] = "छ~पाई";
         Text[ slovak ] = "~Tlač";
+        Text[ hungarian ] = "Ny~omtatandó";
+        Text[ slovenian ] = "Na~tisni";
     };
     FixedLine FL_EXT
     {
@@ -3149,6 +3323,8 @@ TabPage TP_FRM_ADD
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "विशेषतायें";
         Text[ slovak ] = "Vlastnosti";
+        Text[ hungarian ] = "Tulajdonságok";
+        Text[ slovenian ] = "Lastnosti";
     };
 
     FixedText FT_TEXTFLOW
@@ -3162,13 +3338,13 @@ TabPage TP_FRM_ADD
         Text[ english_us ] = "~Text direction";
         Text[ portuguese ] = "~Text flow";
         Text[ russian ] = "~Text flow";
-        Text[ greek ] = "~Text flow";
-        Text[ dutch ] = "~Text flow";
+        Text[ greek ] = "~���������� ��������";
+        Text[ dutch ] = "~Tekstrichting";
         Text[ french ] = "Orientation du texte";
         Text[ spanish ] = "~Direcci�n de escritura";
         Text[ finnish ] = "~Text flow";
         Text[ italian ] = "Testo";
-        Text[ danish ] = "~Text flow";
+        Text[ danish ] = "~Tekstretning";
         Text[ swedish ] = "~Textriktning";
         Text[ polish ] = "~Text flow";
         Text[ portuguese_brazilian ] = "Orienta��o do texto";
@@ -3184,6 +3360,8 @@ TabPage TP_FRM_ADD
         Text[ hebrew ] = "~Textfluss";
         Text[ hindi ] = "~Text direction";
         Text[ slovak ] = "Smer ~textu";
+        Text[ hungarian ] = "Szö~vegirány";
+        Text[ slovenian ] = "Smer ~besedila";
     };
     ListBox LB_TEXTFLOW
     {
@@ -3241,7 +3419,7 @@ TabPage TP_FRM_ADD
          < "Fra venstre mod h�jre (vandret)" ; 0; > ;
         < "Fra h�jre mod venstre (vandret)" ; 1; > ;
         < "Fra h�jre mod venstre (lodret)" ; 2; > ;
-        < "Anvend det overordnede objekts indstilling" ; 4; > ;
+        < "Brug indstillinger fra det overordnede objekt" ; 4; > ;
         };
     StringList [ swedish ] =
     {
@@ -3294,16 +3472,16 @@ TabPage TP_FRM_ADD
     };
     StringList [ greek ] =
     {
-         < "Left-to-right (horizontal)" ; 0; > ;
-        < "Right-to-left (horizontal)" ; 1; > ;
-        < "Right-to-left (vertical)" ; 2; > ;
-        < "Einstellung des �bergeordneten Objektes verwenden" ; 4; > ;
+         < "��������-����-����� (���������)" ; 0; > ;
+        < "�����-����-�������� (���������)" ; 1; > ;
+        < "�����-����-�������� (����������)" ; 2; > ;
+        < "����� ��������� ������������ ������������" ; 4; > ;
     };
     StringList [ dutch ] =
     {
-         < "Left-to-right (horizontal)" ; 0; > ;
-        < "Right-to-left (horizontal)" ; 1; > ;
-        < "Right-to-left (vertical)" ; 2; > ;
+         < "Van links naar rechts (horizontaal)" ; 0; > ;
+        < "Van rechts naar links (horizontaal)" ; 1; > ;
+        < "Van rechts naar links (verticaal)" ; 2; > ;
         < "Instelling van het object op het bovenliggende niveau gebruiken" ; 4; > ;
     };
     StringList [ finnish ] =
@@ -3390,8 +3568,25 @@ TabPage TP_FRM_ADD
         < "Sprava-do-ľava (vertikálne)" ; 2; > ;
         < "Použiť nastavenia nadriadeného objektu" ; 4; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Balról jobbra (vízszintes)" ; 0; > ;
+        < "Jobbról balra (vízszintes)" ; 1; > ;
+        < "Jobbról balra (függőleges)" ; 2; > ;
+        < "Szülőobjektum beállításainak használata" ; 4; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Levo-desno (vodoravno)" ; 0; > ;
+        < "Desno-levo (vodoravno)" ; 1; > ;
+        < "Desno-levo (navpično)" ; 2; > ;
+        < "Uporabi predmetne nastavitve smeri besedila" ; 4; > ;
+    };
     };
 };
+
+
+
 
 
 
