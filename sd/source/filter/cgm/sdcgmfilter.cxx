@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdcgmfilter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:30:27 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ sal_Bool SdCGMFilter::Import()
 
                     aSet.Put( XFillColorItem( String(), aColor ) );
                     aSet.Put( XFillStyleItem( XFILL_SOLID ) );
-                    pObj->SetItemSetAndBroadcast( aSet );
+                    pObj->SetMergedItemSetAndBroadcast( aSet );
                 }
             }
         }
