@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:02:48 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     }
 }
 
-sal_Int32 FindPosInSeq_Impl( const Sequence <long>& rOff, sal_Int32 nPos )
+sal_Int32 FindPosInSeq_Impl( const Sequence <sal_Int32>& rOff, sal_Int32 nPos )
 {
     sal_Int32 nRet = 0, nEnd = rOff.getLength();
     while( nRet < nEnd && nPos > rOff[ nRet ] ) ++nRet;
