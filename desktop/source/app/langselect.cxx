@@ -2,8 +2,8 @@
  *
  *  $RCSfile: langselect.cxx,v $
  *
- *  $Revision: 1.9 $
- *  last change: $Author: kz $ $Date: 2004-07-26 15:11:22 $
+ *  $Revision: 1.10 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 13:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ OUString LanguageSelection::getUserLanguage()
         {
             aLanguage = aLangString;
         }
-    } catch (com::sun::star::uno::RuntimeException)
+    } catch (com::sun::star::uno::Exception)
     {
         // didn't work - return dontknow
         return aLanguage;
@@ -325,7 +325,7 @@ IsoList LanguageSelection::getInstalledIsoLanguages()
 
         for (int i=0; i<aLangSeq.getLength(); i++)
                aList.push_back(aLangSeq[i]);
-    } catch (com::sun::star::uno::RuntimeException)
+    } catch (com::sun::star::uno::Exception)
     {
         // didn't work - return empty list
     }
