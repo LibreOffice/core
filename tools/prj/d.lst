@@ -154,14 +154,9 @@ hedabu: ..\inc\vector2d.hxx %_DEST%\inc%_EXT%\tools\vector2d.hxx
 
 ..\testshl\inc\*.hxx %_DEST%\inc%_EXT%\testshl\*.hxx
 
-..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
-..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
-..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
-
 ..\%__SRC%\bin\rscdep.exe %_DEST%\bin%_EXT%\rscdep.exe
 ..\%__SRC%\bin\rscdep %_DEST%\bin%_EXT%\rscdep
 ..\%__SRC%\bin\zipdep.exe %_DEST%\bin%_EXT%\zipdep.exe
 ..\%__SRC%\bin\zipdep %_DEST%\bin%_EXT%\zipdep
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
-dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
