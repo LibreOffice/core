@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:00:09 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XKEYSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_XINDEXESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 #endif
@@ -160,7 +163,7 @@ namespace
 // -------------------------------------------------------------------------
 OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
                  const ::rtl::OUString& _rUpdateTableName,    // this can be the alias or the full qualified name
-                 const Reference< XSQLQueryComposer >& _xComposer)
+                 const Reference< XSingleSelectQueryAnalyzer >& _xComposer)
             :m_xTable(_xTable)
             ,m_bRowCountFinal(sal_False)
             ,m_xComposer(_xComposer)
@@ -264,8 +267,9 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
         aCreator.append(aFilter);
         aFilter = aCreator.m_sFilter;
     }
-    m_xComposer->setFilter(aFilter);
-    m_xStatement = m_xConnection->prepareStatement(m_xComposer->getComposedQuery());
+    Reference<XSingleSelectQueryComposer> xComp(m_xComposer,UNO_QUERY);
+    xComp->setFilter(aFilter);
+    m_xStatement = m_xConnection->prepareStatement(m_xComposer->getQuery());
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OKeySet::getBookmark( const ORowSetRow& _rRow ) throw(SQLException, RuntimeException)
