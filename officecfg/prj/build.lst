@@ -4,6 +4,7 @@ oc	officecfg\org\openoffice\configuration	nmake	-	all	oc_config NULL
 oc	officecfg\org\openoffice\helper			nmake	-	all	oc_helper oc_config NULL
 oc	officecfg\registry\schema				nmake	-	all	oc_reg_schema oc_helper NULL
 oc	officecfg\registry\data					nmake	-	all	oc_reg_data oc_reg_schema NULL
+oc	officecfg\util							nmake	-	all	oc_util oc_reg_data NULL
 oc	officecfg\registry\schema\org\openoffice\Office	get			-	all	oc_reg_schema_office NULL
 oc	officecfg\registry\schema\org\openoffice\ucb		get		-	all	oc_reg_schema_ucb NULL
 oc	officecfg\registry\schema\org\openoffice			get		-	all	oc_reg_schema_ooo NULL
