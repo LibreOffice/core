@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-11 10:18:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,7 @@ SalI18N_InputMethod::~SalI18N_InputMethod()
 // debug routine: lets have a look at the provided method styles
 //
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 
 extern "C" char*
 GetMethodName( XIMStyle nStyle, char *pBuf, int nBufSize)
@@ -443,23 +443,23 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
                 if( XGetIMValues( maMethod,
                                   XNQueryUnicodeCharacterSubset, &subsets, NULL ) == NULL )
                 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr, "IM reports %d subsets: ", subsets->count_subsets );
 #endif
                     I18NStatus& rStatus( I18NStatus::get() );
                     rStatus.clearChoices();
                     for( int i = 0; i < subsets->count_subsets; i++ )
                     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr,"\"%s\" ", subsets->supported_subsets[i].name );
 #endif
                         rStatus.addChoice( String( subsets->supported_subsets[i].name, RTL_TEXTENCODING_UTF8 ), &subsets->supported_subsets[i] );
                     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr, "\n" );
 #endif
                 }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 else
                     fprintf( stderr, "query subsets failed\n" );
 #endif
@@ -487,7 +487,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
             if (   XGetIMValues(maMethod, XNQueryInputStyle, &mpStyles, NULL)
                 != NULL)
                 mbUseable = False;
-            #ifdef DEBUG
+            #if OSL_DEBUG_LEVEL > 1
             fprintf(stderr, "Creating %s-Lingual InputMethod\n",
                 mbMultiLingual ? "Multi" : "Mono" );
             PrintInputStyle( mpStyles );
@@ -499,7 +499,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
         }
     }
 
-    #ifdef DEBUG
+    #if OSL_DEBUG_LEVEL > 1
     if ( !mbUseable )
         fprintf(stderr, "input method creation failed\n");
     #endif
