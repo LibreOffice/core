@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-22 10:54:50 $
+ *  last change: $Author: fs $ $Date: 2001-06-26 07:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1715,7 +1715,11 @@ BOOL OResultSet::OpenImpl()
 {
     m_pSQLAnalyzer = createAnalyzer();
     const OSQLTables& xTabs = m_aSQLIterator.getTables();
-    OSL_ENSURE(xTabs.begin() != xTabs.end(),"NO table in statement!");
+    if ((xTabs.begin() == xTabs.end()) || !xTabs.begin()->second.is())
+        throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid."),
+                                    static_cast<XWeak*>(this),
+                                    makeAny(m_aSQLIterator.getWarning())
+                                );
 
     OSQLTable xTable = xTabs.begin()->second;
     m_xColumns = m_aSQLIterator.getSelectColumns();
