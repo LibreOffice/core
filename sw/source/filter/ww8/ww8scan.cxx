@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:52:06 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,7 +687,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0xD626, 0, L_VAR}, // "sprmTSetBrc10" tap.rgtc[].rgbrc;complex
         {0x7627, 0, L_VAR}, // "sprmTSetShd" tap.rgshd;complex
         {0x7628, 0, L_VAR}, // "sprmTSetShdOdd" tap.rgshd;complex
-        {0x7629, 0, L_VAR}, // "sprmTTextFlow" tap.rgtc[].fVerticaltap,
+        {0x7629, 4, L_FIX}, // "sprmTTextFlow" tap.rgtc[].fVerticaltap,
                             // rgtc[].fBackwardtap, rgtc[].fRotateFont;0 or 10
                             // or 10 or 1;word;
         {0xD62A, 1, L_FIX}, // "sprmTDiagLine" ;;;
@@ -2455,6 +2455,16 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::Entry::operator<
     return (mnFC < rSecond.mnFC);
 }
 
+bool IsReplaceAllSprm(USHORT nSpId)
+{
+    return (0x6645 == nSpId || 0x6646 == nSpId);
+}
+
+bool IsExpandableSprm(USHORT nSpId)
+{
+    return 0x646B == nSpId;
+}
+
 WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(BYTE nFibVer, SvStream* pSt, SvStream* pDataSt,
     long _nFilePos, long nItemSiz, ePLCFT ePl, WW8_FC nStartFc)
     : nItemSize(nItemSiz), nFilePos(_nFilePos),  mnIdx(0), ePLCF(ePl),
@@ -2490,33 +2500,48 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(BYTE nFibVer, SvStream* pSt, SvStream* pDataSt,
                         aEntry.mnLen = maRawData[nOfs];
                         if (8 <= nFibVer && !aEntry.mnLen)
                         {
-                            aEntry.mnLen = maRawData[ nOfs+1 ];
+                            aEntry.mnLen = maRawData[nOfs+1];
                             nDelta++;
                         }
 
+                        aEntry.mnLen *= 2;
+                        aEntry.mnLen -= 2;
+
                         aEntry.mnIStd = SVBT16ToShort(maRawData+nOfs+1+nDelta);
 
-                        aEntry.mpData = maRawData + nOfs + 3+ nDelta;
+                        aEntry.mpData = maRawData + nOfs + 3 + nDelta;
 
                         USHORT nSpId = maSprmParser.GetSprmId(aEntry.mpData);
 
-                        if (0x6645 == nSpId || 0x6646 == nSpId)
+                        /*
+                         If we replace then we throw away the old data, if we
+                         are expanding, then we tack the old data onto the end
+                         of the new data
+                        */
+                        bool bExpand = IsExpandableSprm(nSpId);
+                        if (IsReplaceAllSprm(nSpId) || bExpand)
                         {
+                            sal_uInt16 nOrigLen = bExpand ? aEntry.mnLen : 0;
+                            sal_uInt8 *pOrigData = bExpand ? aEntry.mpData : 0;
+
                             UINT32 nCurr = pDataSt->Tell();
 
                             UINT32 nPos = SVBT32ToLong(aEntry.mpData + 2);
                             pDataSt->Seek(nPos);
                             *pDataSt >> aEntry.mnLen;
-                            aEntry.mpData = new sal_uInt8[aEntry.mnLen];
+                            aEntry.mpData =
+                                new sal_uInt8[aEntry.mnLen + nOrigLen];
                             aEntry.mbMustDelete = true;
                             pDataSt->Read(aEntry.mpData, aEntry.mnLen);
 
                             pDataSt->Seek( nCurr );
-                        }
-                        else
-                        {
-                            aEntry.mnLen *= 2;
-                            aEntry.mnLen -= 2;
+
+                            if (pOrigData)
+                            {
+                                memcpy(aEntry.mpData + aEntry.mnLen,
+                                    pOrigData, nOrigLen);
+                                aEntry.mnLen += nOrigLen;
+                            }
                         }
                     }
                     break;
