@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblctrl.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:12:56 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,7 @@ FloatingWindow RID_TBL_OPT_CTRL
     Hide = TRUE ;
     SVLook = TRUE ;
     HelpID = HID_TBL_OPT_CTRL ;
-    Text = "Optimieren" ;
-    Text [ English ] = "Optimieren" ;
+    Text [ de ] = "Optimieren" ;
     ToolBox TBX_OPTIMIZE_TABLE
     {
         MenuStrings = TRUE ;
@@ -100,34 +99,8 @@ FloatingWindow RID_TBL_OPT_CTRL
             };
         };
     };
-    Text [ english_us ] = "Optimize" ;
-    Text [ italian ] = "Ottimizza" ;
-    Text [ spanish ] = "Optimizar" ;
-    Text [ french ] = "Optimiser" ;
-    Text [ dutch ] = "Optimaliseren" ;
-    Text [ swedish ] = "Optimera" ;
-    Text [ danish ] = "Optimer" ;
-    Text [ portuguese_brazilian ] = "Otimizar" ;
-    Text [ portuguese ] = "Optimizar" ;
-    Text[ chinese_simplified ] = "æœ€ä½³åŒ–";
-    Text[ russian ] = "Îïòèìèçèğîâàòü";
-    Text[ polish ] = "Optymalizuj";
-    Text[ japanese ] = "æœ€é©åŒ–";
-    Text[ chinese_traditional ] = "æœ€é©åŒ–";
-    Text[ arabic ] = "ÇáÔßá ÇáÃãËá";
-    Text[ greek ] = "Âåëôéóôïğïßçóç";
-    Text[ korean ] = "ìµœì í™”";
-    Text[ turkish ] = "İyileştir";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Optimitza";
-    Text[ finnish ] = "Optimoi";
-    Text[ thai ] = "à¸—à¸³à¹ƒà¸«à¹‰à¹€à¸«à¸¡à¸²à¸°à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
-    Text[ czech ] = "Optimalizovat";
-    Text[ hebrew ] = "â€®×¡×™×“×•×¨ ××™×˜×‘×™â€¬";
-    Text[ hindi ] = "à¤¯à¥‹à¤—à¥à¤¯ à¤•à¤°à¤¨à¤¾";
-    Text[ slovak ] = "OptimalizovaÅ¥";
-    Text[ hungarian ] = "OptimalizÃ¡lÃ¡s";
-    Text[ slovenian ] = "Optimiraj";
+    Text [ en-US ] = "Optimize" ;
+    Text [ x-comment ] = " ";
 };
 
 
