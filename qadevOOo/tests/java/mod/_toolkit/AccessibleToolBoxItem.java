@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleToolBoxItem.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change:$Date: 2004-01-05 20:40:45 $
+ *  last change:$Date: 2004-07-23 10:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ public class AccessibleToolBoxItem extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(
+        XWindow xWindow = at.getCurrentContainerWindow(
                                   (XMultiServiceFactory) tParam.getMSF(),
                                   aModel);
 
