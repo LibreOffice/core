@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsadd.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 11:42:41 $
+#   last change: $Author: hr $ $Date: 2004-10-11 14:06:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,7 @@ use CvsModule;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.4 $ ';
+my $id_str = ' $Revision: 1.5 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -110,6 +110,7 @@ print "$script_name -- version: $script_rev\n";
 #### global #####
 
 my $force_checkout = '';
+my $allow_modified = 0;
 my $is_debug = 0;
 my $opt_dir  = '';  # dir option
 my $vcsid = "unkown";
@@ -183,14 +184,14 @@ sub update_modules {
         my $result = $cvs_module->update($stand_dir, $master_tag);
         my ($updated, $merged, $conflicts) =
             $cvs_module->handle_update_infomation($result);
-        if ($merged || $conflicts) {
+        if ( ( $merged && ! $allow_modified ) || $conflicts ) {
             push(@rejected_modules, $module);
             next;
         };
         push(@updated_modules, $module);
     };
     if (@rejected_modules) {
-        print_warning("Found conflicts and/or locallily files in the following modules:");
+        print_warning("Found conflicts and/or locally modified files in the following modules:");
         print STDERR "$_\n" foreach (@rejected_modules);
         print_warning("These modules will not be added to CWS. Clean up and try adding them again.");
     };
@@ -241,7 +242,8 @@ sub parse_options
         print_error("Sorry! not for non-cygwin Windows environment",2);
     }
     my $help;
-    my $success = GetOptions('-h' => \$help, '-a' => \$force_checkout);
+    my $success = GetOptions('-h' => \$help, '-a' => \$force_checkout,
+                 '-f' => \$allow_modified);
     if ( $help || !$success || $#ARGV < 0 ) {
         usage();
         exit(1);
@@ -651,6 +653,7 @@ sub usage
     print STDERR "Add one or more modules to child workspace.\n";
     print STDERR "Options:\n";
     print STDERR "    -a    use cvs checkout instead of copying\n";
+    print STDERR "    -f    incorporate modified files into cws\n";
     print STDERR "    -h    print this help\n";
 
 }
