@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:49 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     Text = "Pfade ausw�hlen" ;
     Text [ English ] = "Select paths" ;
     Text [ english_us ] = "Select Paths" ;
-    Text [ portuguese_brazilian ] = "Pfade ausw?hlen" ;
+    Text [ portuguese_brazilian ] = "Selecionar caminhos" ;
     Text [ swedish ] = "V�lj s�kv�gar" ;
     Text [ danish ] = "V�lg stier" ;
     Text [ italian ] = "Seleziona percorsi" ;
@@ -112,7 +112,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ English ] = "Add..." ;
         Text [ portuguese ] = "~Adicionar..." ;
         Text [ english_us ] = "~Add..." ;
-        Text [ portuguese_brazilian ] = "Hi~nzuf?en" ;
+        Text [ portuguese_brazilian ] = "~Adicionar..." ;
         Text [ swedish ] = "L�gg t~ill..." ;
         Text [ danish ] = "T~ilf�j..." ;
         Text [ italian ] = "~Aggiungi..." ;
@@ -121,7 +121,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ dutch ] = "Toe~voegen..." ;
         Text[ chinese_simplified ] = "新增(~A)...";
         Text[ russian ] = "��������...";
-        Text[ polish ] = "Dodaj...";
+        Text[ polish ] = "~Dodaj...";
         Text[ japanese ] = "追加(~A)...";
         Text[ chinese_traditional ] = "新增(~A)...";
         Text[ arabic ] = "...�����";
@@ -134,6 +134,9 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ catalan ] = "~Afegeix...";
         Text[ finnish ] = "~Lis��...";
         Text[ thai ] = "เ~พิ่ม...";
+        Text[ czech ] = "Přidat...";
+        Text[ hebrew ] = "‮הוספה...‬";
+        Text[ hindi ] = "~जोड़ो...";
     };
     PushButton BTN_DEL_MULTIPATH
     {
@@ -143,7 +146,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ English ] = "~Delete" ;
         Text [ portuguese ] = "E~liminar" ;
         Text [ english_us ] = "~Delete" ;
-        Text [ portuguese_brazilian ] = "~L?chen" ;
+        Text [ portuguese_brazilian ] = "~Excluir" ;
         Text [ swedish ] = "~Radera" ;
         Text [ danish ] = "Slet" ;
         Text [ italian ] = "~Elimina" ;
@@ -152,7 +155,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ dutch ] = "~Wissen" ;
         Text[ chinese_simplified ] = "删除(~D)";
         Text[ russian ] = "�������";
-        Text[ polish ] = "Usu�";
+        Text[ polish ] = "~Usu�";
         Text[ japanese ] = "削除(~D)";
         Text[ chinese_traditional ] = "刪除(~D)";
         Text[ arabic ] = "���";
@@ -165,6 +168,9 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ catalan ] = "~Suprimeix";
         Text[ finnish ] = "~Poista";
         Text[ thai ] = "~ลบ";
+        Text[ czech ] = "Smazat";
+        Text[ hebrew ] = "‮מחיקה‬";
+        Text[ hindi ] = "मि~टाओ";
     };
     FixedLine GB_MULTIPATH
     {
@@ -173,7 +179,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text = "Pfade" ;
         Text [ English ] = "Paths" ;
         Text [ english_us ] = "Paths" ;
-        Text [ portuguese_brazilian ] = "Pfade" ;
+        Text [ portuguese_brazilian ] = "Caminhos" ;
         Text [ swedish ] = "S�kv�gar" ;
         Text [ danish ] = "Stier" ;
         Text [ italian ] = "Percorsi" ;
@@ -191,11 +197,14 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ chinese_simplified ] = "路径";
         Text[ greek ] = "���������";
         Text[ korean ] = "경로";
-        Text[ turkish ] = "Veri yollar�";
+        Text[ turkish ] = "Dizinler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Camins";
         Text[ finnish ] = "Polut";
         Text[ thai ] = "เส้นทาง";
+        Text[ czech ] = "Cesty";
+        Text[ hebrew ] = "‮מסלולים‬";
+        Text[ hindi ] = "मार्ग";
     };
     OKButton BTN_MULTIPATH_OK
     {
@@ -214,13 +223,16 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     Text[ thai ] = "เลือกเส้นทาง";
+    Text[ czech ] = "Vybrat cesty";
+    Text[ hebrew ] = "‮מסלולים נבחרים‬";
+    Text[ hindi ] = "मार्गों को चुनो";
 };
 String RID_MULTIPATH_DBL_ERR
 {
     Text = "Der Pfad %1 ist bereits vorhanden." ;
     Text [ ENGLISH ] = "The path %1 is already defined." ;
     Text [ english_us ] = "The path %1 already exists." ;
-    Text [ portuguese_brazilian ] = "Der Pfad %1 ist bereits vorhanden." ;
+    Text [ portuguese_brazilian ] = "O caminho %1 j� existe." ;
     Text [ swedish ] = "S�kv�gen %1 finns redan." ;
     Text [ danish ] = "Stien %1 findes allerede." ;
     Text [ italian ] = "Il percorso %1 esiste gi�." ;
@@ -243,6 +255,9 @@ String RID_MULTIPATH_DBL_ERR
     Text[ catalan ] = "El cam� %1 ja existeix.";
     Text[ finnish ] = "Polku %1 on jo olemassa.";
     Text[ thai ] = "เส้นทาง %1 มีอยู่แล้ว";
+    Text[ czech ] = "Cesta %1 již existuje.";
+    Text[ hebrew ] = "‮המסלול %1 כבר קיים.‬";
+    Text[ hindi ] = "मार्ग %1 पहिले से ही अस्तित्व में है ।";
 };
 String RID_SVXSTR_FILE_TITLE
 {
@@ -250,7 +265,7 @@ String RID_SVXSTR_FILE_TITLE
     Text [ English ] = "Select files" ;
     Text [ english_us ] = "Select files" ;
     Text [ portuguese ] = "Seleccionar ficheiros" ;
-    Text [ portuguese_brazilian ] = "Dateien ausw?hlen" ;
+    Text [ portuguese_brazilian ] = "Selecionar arquivos" ;
     Text [ swedish ] = "V�lj ut filer" ;
     Text [ danish ] = "V�lg filer" ;
     Text [ italian ] = "Seleziona file" ;
@@ -272,6 +287,9 @@ String RID_SVXSTR_FILE_TITLE
     Text[ catalan ] = "Seleccioneu els fitxers";
     Text[ finnish ] = "Valitse tiedostot";
     Text[ thai ] = "เลือกแฟ้ม";
+    Text[ czech ] = "Vybrat soubory";
+    Text[ hebrew ] = "‮בחירת קבצים‬";
+    Text[ hindi ] = "फाइलों को चुनो";
 };
 String RID_SVXSTR_FILE_HEADLINE
 {
@@ -279,7 +297,7 @@ String RID_SVXSTR_FILE_HEADLINE
     Text [ English ] = "Files" ;
     Text [ english_us ] = "Files" ;
     Text [ portuguese ] = "Ficheiros" ;
-    Text [ portuguese_brazilian ] = "Dateien" ;
+    Text [ portuguese_brazilian ] = "Arquivos" ;
     Text [ swedish ] = "Filer" ;
     Text [ danish ] = "Filer" ;
     Text [ italian ] = "File" ;
@@ -301,15 +319,18 @@ String RID_SVXSTR_FILE_HEADLINE
     Text[ catalan ] = "Fitxers";
     Text[ finnish ] = "Tiedostot";
     Text[ thai ] = "Files";
+    Text[ czech ] = "Soubory";
+    Text[ hebrew ] = "‮קבצים‬";
+    Text[ hindi ] = "Files";
 };
 String RID_SVXSTR_ARCHIVE_TITLE
 {
     Text = "Archive ausw�hlen" ;
     Text [ English ] = "Select archives" ;
     Text [ english_us ] = "Select Archives" ;
-    Text[ portuguese ] = "Select archives";
+    Text[ portuguese ] = "Select Archives";
     Text[ russian ] = "����� �������";
-    Text[ greek ] = "Select archives";
+    Text[ greek ] = "Select Archives";
     Text[ dutch ] = "Archieven selecteren";
     Text[ french ] = "S�lection des archives";
     Text[ spanish ] = "Seleccionar archivos";
@@ -317,16 +338,19 @@ String RID_SVXSTR_ARCHIVE_TITLE
     Text[ italian ] = "Seleziona archivio";
     Text[ danish ] = "V�lg arkiver";
     Text[ swedish ] = "V�lj arkiv";
-    Text[ polish ] = "Select archives";
-    Text[ portuguese_brazilian ] = "Select archives";
+    Text[ polish ] = "Wybierz archiwa";
+    Text[ portuguese_brazilian ] = "Selecionar Documentos Arquivados";
     Text[ japanese ] = "アーカイブの選択";
     Text[ korean ] = "보관 선택";
     Text[ chinese_simplified ] = "选择文件";
     Text[ chinese_traditional ] = "選擇檔案";
-    Text[ turkish ] = "Select archives";
-    Text[ arabic ] = "Select archives";
+    Text[ turkish ] = "Ar�iv Se�";
+    Text[ arabic ] = "Select Archives";
     Text[ catalan ] = "Selecci� de fitxers";
     Text[ thai ] = "Select Archives";
+    Text[ czech ] = "Vybrat archívy";
+    Text[ hebrew ] = "‮בחירת ארכיונים‬";
+    Text[ hindi ] = "Select Archives";
 };
 String RID_SVXSTR_ARCHIVE_HEADLINE
 {
@@ -343,16 +367,19 @@ String RID_SVXSTR_ARCHIVE_HEADLINE
     Text[ italian ] = "Archivi";
     Text[ danish ] = "Arkiv";
     Text[ swedish ] = "Arkiv";
-    Text[ polish ] = "Archives";
-    Text[ portuguese_brazilian ] = "Archives";
+    Text[ polish ] = "Archiwa";
+    Text[ portuguese_brazilian ] = "Documentos Arquivados";
     Text[ japanese ] = "アーカイブ";
     Text[ korean ] = "보관";
     Text[ chinese_simplified ] = "文件";
     Text[ chinese_traditional ] = "檔案";
-    Text[ turkish ] = "Archives";
+    Text[ turkish ] = "Ar�ivler";
     Text[ arabic ] = "Archives";
     Text[ catalan ] = "Fitxers";
     Text[ thai ] = "Archives";
+    Text[ czech ] = "Archívy";
+    Text[ hebrew ] = "‮ארכיונים‬";
+    Text[ hindi ] = "Archives";
 };
 String RID_SVXSTR_MULTIFILE_DBL_ERR
 {
@@ -360,7 +387,7 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
     Text [ ENGLISH ] = "The file %1 is already defined." ;
     Text [ english_us ] = "The file %1 already exists." ;
     Text [ portuguese ] = "O ficheiro %1 j� existe." ;
-    Text [ portuguese_brazilian ] = "Die Datei %1 ist bereits vorhanden." ;
+    Text [ portuguese_brazilian ] = "O arquivo %1 j� existe." ;
     Text [ swedish ] = "Filen %1 existerar redan." ;
     Text [ danish ] = "Filen %1 findes allerede." ;
     Text [ italian ] = "Il file %1 esiste gi�." ;
@@ -382,7 +409,19 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
     Text[ catalan ] = "El fitxer %1 ja existeix.";
     Text[ finnish ] = "Tiedosto %1 on jo olemassa.";
     Text[ thai ] = "แฟ้ม %1 มีอยู่แล้ว";
+    Text[ czech ] = "Soubor %1 již existuje.";
+    Text[ hebrew ] = "‮הקובץ %1 כבר קיים.‬";
+    Text[ hindi ] = "%1 फाइल पहिले से ही अस्तित्व में है ।";
 };
+
+
+
+
+
+
+
+
+
 
 
 
