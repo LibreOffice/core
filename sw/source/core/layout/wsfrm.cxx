@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ama $ $Date: 2002-03-13 15:41:46 $
+ *  last change: $Author: ama $ $Date: 2002-03-28 11:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2437,7 +2437,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         nDist = LONG_MAX - nFrmHeight;
 
     SwTwips nMin = 0;
-    if ( GetUpper() )
+    if ( GetUpper() && !IsCellFrm() )
     {
         SwFrm *pFrm = GetUpper()->Lower();
         while( pFrm )
@@ -2508,7 +2508,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 
     if ( !bTst )
     {
-        if( nReal != nDist )
+        if( nReal != nDist && !IsCellFrm() )
         {
             nDist -= nReal;
             (Frm().*fnRect->fnSetHeight)( (Frm().*fnRect->fnGetHeight)()
