@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ins_paste.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-29 10:34:49 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SD_DLLIMPLEMENTATION
+#undef SD_DLLIMPLEMENTATION
+#endif
 
 #include "ins_paste.hrc"
 #include "ins_paste.hxx"
