@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:21:44 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ ModalDialog DLG_GLOSSARY
     Text [ ENGLISH ] = "AutoText" ;
     Text [ norwegian ] = "AutoTekst" ;
     Text [ italian ] = "Testo automatico" ;
-    Text [ portuguese_brazilian ] = "Texto autom tico" ;
+    Text [ portuguese_brazilian ] = "Texto autom?tico" ;
     Text [ portuguese ] = "AutoTexto" ;
     Text [ finnish ] = "Automaattinen teksti" ;
     Text [ danish ] = "AutoTekst" ;
@@ -133,7 +133,7 @@ ModalDialog DLG_GLOSSARY
         Text[ italian ] = "Mostra ~anteprima";
         Text[ danish ] = "Vis eksempel";
         Text[ swedish ] = "Visa förhandsvisning";
-        Text[ polish ] = "Wyœwietl podgl¹d";
+        Text[ polish ] = "Wy?wietl podgl¹d";
         Text[ portuguese_brazilian ] = "Show ~preview";
         Text[ japanese ] = "ÌßÚËŞ­°‚Ì•\\¦(~W)";
         Text[ korean ] = "¹Ì¸®º¸±â º¸ÀÌ±â(~W)";
@@ -163,7 +163,7 @@ ModalDialog DLG_GLOSSARY
         Text [ portuguese ] = "Mostrar ~resto do nome como sugestão durante a digitação" ;
         Text[ chinese_simplified ] = "×Ô¶¯ÏÔÊ¾ÊäÈëÎÄÌáÊ¾(~D)";
         Text[ russian ] = "Ïğè ââîäå ïîêàçûâàòü âåñü àâòîòåêñò êàê ïîäñêàçêó";
-        Text[ polish ] = "Wyœwietl w trakcie pisania pozosta³¹ czêœæ s³owa";
+        Text[ polish ] = "Wy?wietl w trakcie pisania pozosta³¹ czê?æ s³owa";
         Text[ japanese ] = "“ü—Í’†‚ÉÃ·½ÄÌŞÛ¯¸–¼‚ğƒqƒ“ƒg•\\¦‚·‚é(~D)";
         Text[ chinese_traditional ] = "¦Û°Ê§¹¦¨Åã¥Ü(~D)";
         Text[ arabic ] = "ÚÑÖ ÈŞíÉ ÅÏÎÇá ÇáäÕ ÇáÊáŞÇÆí ÃËäÇÁ ÇáßÊÇÈÉ Úáì Ôßá ÊáãíÍ";
@@ -296,7 +296,7 @@ ModalDialog DLG_GLOSSARY
         Text [ ENGLISH ] = "AutoText" ;
         Text [ norwegian ] = "AutoTekst" ;
         Text [ italian ] = "Testo automatico" ;
-        Text [ portuguese_brazilian ] = "Texto autom tico" ;
+        Text [ portuguese_brazilian ] = "Texto autom?tico" ;
         Text [ portuguese ] = "AutoTexto" ;
         Text [ finnish ] = "Automaattinen teksti" ;
         Text [ danish ] = "AutoTekst" ;
@@ -380,7 +380,7 @@ ModalDialog DLG_GLOSSARY
         Size = MAP_APPFONT ( 207 , 24 ) ;
         Text= "Verknüpfungen relativ speichern";
         Text[ italian ] = "Salvare i collegamenti in modo relativo";
-        Text[ portuguese_brazilian ] = "Verknüpfungen relativ speichern";
+        Text[ portuguese_brazilian ] = "Verkn?fungen relativ speichern";
         Text[ portuguese ] = "Guardar ligações em modo relativo";
         Text[ danish ] = "Gem kæderne relativt";
         Text[ french ] = "Enregistrement relatif des liens";
@@ -483,7 +483,7 @@ ModalDialog DLG_GLOSSARY
         Text [ ENGLISH ] = "AutoTe~xt" ;
         Text [ norwegian ] = "AutoTekst" ;
         Text [ italian ] = "Testo auto." ;
-        Text [ portuguese_brazilian ] = "Texto autom tico" ;
+        Text [ portuguese_brazilian ] = "Texto autom?tico" ;
         Text [ portuguese ] = "AutoTe~xto" ;
         Text [ finnish ] = "~Automaattinen teksti" ;
         Text [ danish ] = "AutoTekst" ;
@@ -553,7 +553,7 @@ ModalDialog DLG_GLOSSARY
         Text [ dutch ] = "~Pad..." ;
         Text[ chinese_simplified ] = "Â·¾¶(~P)...";
         Text[ russian ] = "Ïóòü...";
-        Text[ polish ] = "Œcie¿ka...";
+        Text[ polish ] = "?cie¿ka...";
         Text[ japanese ] = "Êß½(~P)...";
         Text[ chinese_traditional ] = "¸ô®|(~P)...";
         Text[ arabic ] = "ÇáãÓÇÑ...";
@@ -578,7 +578,7 @@ ModalDialog DLG_GLOSSARY
         Text[ italian ] = "La cartella 'AutoText' è di sola lettura. Volete richiamare il dialogo del percorso?";
         Text[ danish ] = "Der findes ingen skriverettigheder til 'AutoTekst'-bibliotekerne. Vil du åbne stidialogen?";
         Text[ swedish ] = "Det saknas skrivrättigheter för katalogerna för 'AutoText'. Vill Du öppna sökvägsdialogen?";
-        Text[ polish ] = "Katalogi 'Autotekst' s¹ tylko do odczytu. Czy wywo³aæ dialog œcie¿ki?";
+        Text[ polish ] = "Katalogi 'Autotekst' s¹ tylko do odczytu. Czy wywo³aæ dialog ?cie¿ki?";
         Text[ portuguese_brazilian ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
         Text[ japanese ] = "u“ü—Íx‰‡v‚ÌÃŞ¨Ú¸ÄØ‚Í‘‚«‚İ•ÛŒì‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBÊß½İ’è‚ÌÀŞ²±Û¸ŞÎŞ¯¸½‚ğŒÄ‚Ño‚µ‚Ü‚·‚©B";
         Text[ korean ] = "'AutoText' µğ·ºÅä¸®´Â ÀĞ±â Àü¿ëÀÔ´Ï´Ù. °æ·Î ¼³Á¤ ´ëÈ­»óÀÚ¸¦ È£ÃâÇÒ±î¿ä?";
@@ -911,7 +911,7 @@ InfoBox MSG_DOUBLE_SHORTNAME
     MESSAGE [ ENGLISH ] = "Short name already in use. Please choose annother name!" ;
     MESSAGE [ norwegian ] = "Kort navn er i bruk. Vennligst velg et annet navn!" ;
     MESSAGE [ italian ] = "La sigla è già in uso. Scegliere un altro nome." ;
-    MESSAGE [ portuguese_brazilian ] = "AbreviaçÆo j  em uso. Por favor escolha outro nome!" ;
+    MESSAGE [ portuguese_brazilian ] = "Abrevia??o j? em uso. Por favor escolha outro nome!" ;
     MESSAGE [ portuguese ] = "Abreviatura já existe. Por favor escolha outro nome!" ;
     MESSAGE [ finnish ] = "Pikavalinnan nimi on jo käytössä. Valitse jokin muu nimi." ;
     MESSAGE [ danish ] = "Denne genvej eksisterer allerede. Vælg venligst et andet navn!" ;
@@ -941,7 +941,7 @@ QueryBox MSG_QUERY_DELETE
     MESSAGE [ English ] = "Delete AutoText?" ;
     MESSAGE [ norwegian ] = "Slette AutoTekst?" ;
     MESSAGE [ italian ] = "Elimina inserimento testo automatico?." ;
-    MESSAGE [ portuguese_brazilian ] = "Apagar TextoAutom tico?" ;
+    MESSAGE [ portuguese_brazilian ] = "Apagar TextoAutom?tico?" ;
     MESSAGE [ portuguese ] = "Deseja apagar o AutoTexto?" ;
     MESSAGE [ finnish ] = "Poistetaanko automaattinen teksti?" ;
     MESSAGE [ danish ] = "Skal denne AutoTekst slettes?" ;
@@ -1001,7 +1001,7 @@ String STR_QUERY_DELETE_GROUP2
     Text [ swedish ] = "raderas?" ;
     Text [ danish ] = "slettes?" ;
     Text [ portuguese ] = "a secção?" ;
-    Text [ portuguese_brazilian ] = "gelöscht werden?" ;
+    Text [ portuguese_brazilian ] = "gel?cht werden?" ;
     Text[ chinese_simplified ] = "£¿";
     Text[ russian ] = "îáëàñòü?";
     Text[ polish ] = "ma zostaæ usuniêty?";
@@ -1117,7 +1117,7 @@ ModalDialog DLG_RENAME_GLOS
         Text [ dutch ] = "Afko~rting" ;
         Text [ swedish ] = "~Förkortning" ;
         Text [ danish ] = "Genvej" ;
-        Text [ portuguese_brazilian ] = "Kü~rzel" ;
+        Text [ portuguese_brazilian ] = "K?rzel" ;
         Text [ portuguese ] = "Iniciais" ;
         Text[ chinese_simplified ] = "ËõĞ´(~C)";
         Text[ russian ] = "Ñîêğàùåíèå";
@@ -1190,7 +1190,7 @@ ModalDialog DLG_RENAME_GLOS
         Text [ dutch ] = "~Afkorting" ;
         Text [ swedish ] = "~Ersätt" ;
         Text [ danish ] = "Erstat" ;
-        Text [ portuguese_brazilian ] = "~Kürzel" ;
+        Text [ portuguese_brazilian ] = "~K?zel" ;
         Text [ portuguese ] = "S~ubstituir" ;
         Text[ chinese_simplified ] = "Á´½Ó(~S)";
         Text[ russian ] = "Ñîêğàùåíèå";
