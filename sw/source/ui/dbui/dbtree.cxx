@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 15:56:04 $
+ *  last change: $Author: os $ $Date: 2001-03-14 10:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                 return;
             Any aDBSource = xDBContext->getByName(sSourceName);
             Reference<XDataSource>* pxSource = (Reference<XDataSource>*)aDBSource.getValue();
-            BOOL bTable = pParent->GetUserData() != 0;
+            BOOL bTable = pParent->GetUserData() == 0;
             Reference<XConnection> xConnection;
             try
             {
@@ -350,7 +350,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                         sTableName = pTblNames[i];
                         SvLBoxEntry* pTableEntry = InsertEntry(sTableName, aTableBMP, aTableBMP, pParent, bShowColumns);
                         //to discriminate between queries and tables the user data of table entries is set
-                        pTableEntry->SetUserData((void*)1);
+                        pTableEntry->SetUserData((void*)0);
                     }
                 }
 
@@ -365,7 +365,8 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     for (long i = 0; i < nCount; i++)
                     {
                         sQueryName = pQueryNames[i];
-                        InsertEntry(sQueryName, aQueryBMP, aQueryBMP, pParent, bShowColumns);
+                        SvLBoxEntry* pQueryEntry = InsertEntry(sQueryName, aQueryBMP, aQueryBMP, pParent, bShowColumns);
+                        pQueryEntry->SetUserData((void*)0);
                     }
                 }
             }
@@ -406,7 +407,7 @@ String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, BOOL* p
         sDBName = GetEntryText(GetParent(pEntry));
         if(pbIsTable)
         {
-            *pbIsTable = pEntry->GetUserData() != 0;
+            *pbIsTable = pEntry->GetUserData() == 0;
         }
         rTableName = GetEntryText(pEntry);
     }
