@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-30 12:58:13 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #include <vos/timer.hxx>
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/poly.hxx>
+#include <tools/poly.hxx>
 #include "grfcache.hxx"
 
 // -----------
