@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bulitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-07-11 12:40:52 $
+ *  last change: $Author: mt $ $Date: 2001-07-17 13:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #include <vcl/system.hxx>
 #endif
 #pragma hdrstop
+
+#include <vcl/outdev.hxx>
 
 #define _SVX_BULITEM_CXX
 
@@ -285,7 +287,7 @@ SfxPoolItem* SvxBulletItem::Create( SvStream& rStrm, USHORT nVersion ) const
 
 void SvxBulletItem::SetDefaultFont_Impl()
 {
-    aFont = System::_GetStandardFont( _STDFONT_ROMAN );
+    aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, LANGUAGE_SYSTEM, 0 );
     aFont.SetAlign( ALIGN_BOTTOM);
     aFont.SetTransparent( TRUE );
 }
