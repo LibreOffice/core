@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2004-02-03 18:18:23 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #endif
+
+#include <numeric>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -238,12 +240,20 @@ namespace basegfx
         B2DPolyPolygon applyLineDashing(const B2DPolyPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen)
         {
             B2DPolyPolygon aRetval;
-            const sal_uInt32 nPolygonCount(rCandidate.count());
 
-            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            if(0.0 == fFullDashDotLen && raDashDotArray.size())
             {
-                B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
-                aRetval.append(applyLineDashing(aCandidate, raDashDotArray, fFullDashDotLen));
+                // calculate fFullDashDotLen from raDashDotArray
+                fFullDashDotLen = ::std::accumulate(raDashDotArray.begin(), raDashDotArray.end(), 0.0);
+            }
+
+            if(rCandidate.count() && fFullDashDotLen > 0.0)
+            {
+                for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+                {
+                    B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
+                    aRetval.append(applyLineDashing(aCandidate, raDashDotArray, fFullDashDotLen));
+                }
             }
 
             return aRetval;
