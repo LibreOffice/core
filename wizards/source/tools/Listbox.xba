@@ -268,4 +268,40 @@ Dim CurIndex as Integer
 	Next i
 	GetSelectedListboxItems() = SelList()
 End Function
-</script:module>
+
+
+&apos; Note: When using this Sub it must be ensured that the
+&apos; &apos;RemoveItem&apos; appears only only once in the Listbox
+Sub RemoveListboxItemByName(oListbox as Object, RemoveItem as String)
+Dim OldList() as String
+Dim i as Integer
+Dim a as Integer
+Dim MaxIndex as Integer
+	a = 0
+	MaxIndex = Ubound(oListbox.StringItemList())
+	OldList = oListbox.StringItemList()
+	Dim NewList(MaxIndex -1)
+	For i = 0 To MaxIndex
+		If RemoveItem &lt;&gt; OldList(i) Then
+			NewList(a) = OldList(i)
+			a = a + 1
+		End If
+	Next i
+	oListbox.StringItemList() = NewList()
+End Sub
+
+
+Function GetItemPos(oListBox as Object, sItem as String)
+Dim ItemList()
+Dim MaxIndex as Integer
+Dim i as Integer
+	ItemList() = oListBox.StringItemList()
+	MaxIndex = Ubound(ItemList())	
+	For i = 0 To MaxIndex
+		If sItem = ItemList(i) Then
+			GetItemPos() = i
+			Exit Function
+		End If
+	Next i
+	GetItemPos() = -1
+End Function</script:module>

@@ -146,10 +146,9 @@ Function LoadDialog(Libname as String, DialogName as String, Optional oLibContai
 Dim oLib as Object
 Dim oLibDialog as Object
 Dim oRuntimeDialog as Object
-	If IsMissing( oLibContainer ) then
+	If IsMissing(oLibContainer ) then
 		oLibContainer = DialogLibraries
 	End If
-	oLibContainer.LoadLibrary(Libname)
 	oLib = oLibContainer.GetByName(Libname)
 	oLibDialog = oLib.GetByName(DialogName)
 	oRuntimeDialog = CreateUnoDialog(oLibDialog)

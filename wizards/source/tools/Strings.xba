@@ -42,7 +42,7 @@ Dim BigLen%, PreLen%, PostLen%
 			BigLen = Len(BigString)
 			PostLen = Len(PostString)
 			FindPartString = Mid(BigString,StartPos + PreLen, EndPos - (StartPos + PreLen))
-			&apos; Da diese Funktion daf?r programmiert wurde, in einer Schleife abgearbeitet zu werden
+			&apos; Da diese Funktion dafür programmiert wurde, in einer Schleife abgearbeitet zu werden
 			&apos; muss die initiale Suchposition hinter die Position des gefundenen Teilstrings gesetzt werden.
 			SearchPos = EndPos + PostLen
 		Else
@@ -53,6 +53,22 @@ Dim BigLen%, PreLen%, PostLen%
 		FindPartString = &quot;&quot;
 	End If
 End Function
+
+
+&apos; Note iCompare = 0 (Binary comparison)
+&apos; 	   iCompare = 1 (Text comparison)
+Function PartStringInArray(BigArray(), SearchString as String, iCompare as Integer) as Integer
+Dim MaxIndex as Integer
+Dim i as Integer
+	MaxIndex = Ubound(BigArray())
+	For i = 0 To MaxIndex
+		If Instr(1, BigArray(i), SearchString, iCompare) &lt;&gt; 0 Then
+			PartStringInArray() = i
+			Exit Function
+		End If
+	Next i
+	PartStringInArray() = -1
+End Function		
 
 
 &apos; Deletes the String &apos;SmallString&apos; out of the String &apos;BigString&apos;
@@ -118,7 +134,11 @@ Dim StartUbound as Integer
 	If Not IsMissing(Maxindex) Then
 		MaxIndex = i	
 	End If
-	ReDim Preserve LocList(i) as String
+	If i &lt;&gt; -1 Then
+		ReDim Preserve LocList(i) as String
+	Else
+		ReDim LocList() as String
+	End If
 	ArrayOutofString = LocList()
 End Function
 
