@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSpellAlternatives.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: arellano $ $Date: 2001-04-04 17:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@ module com { module sun { module star { module linguistic2 {
 
     <P>This is used by the
     <member scope="com::sun::star::linguistic2">XSpellChecker::spell</member>
-    function when the words was not found to be correct.
-    Suggestions for other words to be used may be provided also along with
+    function when the word was not found to be correct.
+    Suggestions for other words to be used may be provided along with
     a failure-type that may specifiy why the word was not correct.
     </P>
 
@@ -91,14 +91,14 @@ interface XSpellAlternatives : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /**
          @returns
-             the word that was spelled.
+             the word that was misspelled.
      */
     string getWord();
 
     //-------------------------------------------------------------------------
     /**
         @returns
-            the Locale which specifies the language of the spelled word.
+            the Locale which specifies the language of the misspelled word.
     */
     com::sun::star::lang::Locale getLocale();
 
