@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepivot.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:52:39 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #endif
 
+#include <algorithm>
 #include <math.h>
 
 #ifndef INCLUDED_RTL_MATH_HXX
@@ -278,7 +279,7 @@ void XclExpPCItem::WriteBody( XclExpStream& rStrm )
             nMin = static_cast< sal_uInt8 >( fTime );
             fTime -= nMin;
             fTime *= 60;
-            nSec = ::ulimit< sal_uInt8 >( fTime + 0.001, 59 );
+            nSec = ulimit_cast< sal_uInt8 >( fTime + 0.001, 59 );
         }
 
         rStrm << nYear << nMonth << nDay << nHour << nMin << nSec;
@@ -368,20 +369,20 @@ void XclExpPCField::SetGroupChildField( const XclExpPCField& rChildField )
 
 sal_uInt16 XclExpPCField::GetItemCount() const
 {
-    return static_cast< sal_uInt16 >( GetVisItemList().Count() );
+    return static_cast< sal_uInt16 >( GetVisItemList().Size() );
 }
 
 const XclExpPCItem* XclExpPCField::GetItem( sal_uInt16 nItemIdx ) const
 {
-    return GetVisItemList().GetObject( nItemIdx );
+    return GetVisItemList().GetRecord( nItemIdx ).get();
 }
 
 sal_uInt16 XclExpPCField::GetItemIndex( const String& rItemName ) const
 {
     const XclExpPCItemList& rItemList = GetVisItemList();
-    for( const XclExpPCItem* pItem = rItemList.First(); pItem; pItem = rItemList.Next() )
-        if( pItem->ConvertToText() == rItemName )
-            return static_cast< sal_uInt16 >( rItemList.GetCurPos() );
+    for( size_t nPos = 0, nSize = rItemList.Size(); nPos < nSize; ++nPos )
+        if( rItemList.GetRecord( nPos )->ConvertToText() == rItemName )
+            return static_cast< sal_uInt16 >( nPos );
     return EXC_PC_NOITEM;
 }
 
@@ -442,7 +443,7 @@ void XclExpPCField::InitStandardField( const ScRange& rRange )
     rDoc.GetString( aPos.Col(), aPos.Row(), aPos.Tab(), maFieldInfo.maName );
 
     // loop over all cells, create pivot cache items
-    for( aPos.IncRow(); (aPos.Row() <= rRange.aEnd.Row()) && (maOrigItemList.Count() < EXC_PC_MAXITEMCOUNT); aPos.IncRow() )
+    for( aPos.IncRow(); (aPos.Row() <= rRange.aEnd.Row()) && (maOrigItemList.Size() < EXC_PC_MAXITEMCOUNT); aPos.IncRow() )
     {
         if( rDoc.HasValueData( aPos.Col(), aPos.Row(), aPos.Tab() ) )
         {
@@ -547,7 +548,7 @@ void XclExpPCField::InitDateGroupField( const ScDPObject& rDPObj, const ScDPNumG
     InsertNumDateGroupItems( rDPObj, rDateInfo, nDatePart );
 }
 
-void XclExpPCField::InsertItemArrayIndex( ULONG nListPos )
+void XclExpPCField::InsertItemArrayIndex( size_t nListPos )
 {
     DBG_ASSERT( IsStandardField(), "XclExpPCField::InsertItemArrayIndex - only for standard fields" );
     maIndexVec.push_back( static_cast< sal_uInt16 >( nListPos ) );
@@ -555,60 +556,64 @@ void XclExpPCField::InsertItemArrayIndex( ULONG nListPos )
 
 void XclExpPCField::InsertOrigItem( XclExpPCItem* pNewItem )
 {
-    sal_uInt16 nItemIdx = static_cast< sal_uInt16 >( maOrigItemList.Count() );
-    maOrigItemList.Append( pNewItem );
+    size_t nItemIdx = maOrigItemList.Size();
+    maOrigItemList.AppendRecord( XclExpPCItemRef( pNewItem ) );
     InsertItemArrayIndex( nItemIdx );
     mnTypeFlags |= pNewItem->GetTypeFlag();
 }
 
 void XclExpPCField::InsertOrigTextItem( const String& rText )
 {
+    size_t nPos = 0;
     bool bFound = false;
-    for( const XclExpPCItem* pItem = maOrigItemList.First(); !bFound && pItem; pItem = maOrigItemList.Next() )
-        bFound = pItem->EqualsText( rText );
+    for( size_t nSize = maOrigItemList.Size(); !bFound && (nPos < nSize); ++nPos )
+        bFound = maOrigItemList.GetRecord( nPos )->EqualsText( rText );
     if( bFound )
-        InsertItemArrayIndex( maOrigItemList.GetCurPos() );
+        InsertItemArrayIndex( nPos );
     else
         InsertOrigItem( new XclExpPCItem( rText ) );
 }
 
 void XclExpPCField::InsertOrigDoubleItem( double fValue )
 {
+    size_t nPos = 0;
     bool bFound = false;
-    for( const XclExpPCItem* pItem = maOrigItemList.First(); !bFound && pItem; pItem = maOrigItemList.Next() )
-        bFound = pItem->EqualsDouble( fValue );
+    for( size_t nSize = maOrigItemList.Size(); !bFound && (nPos < nSize); ++nPos )
+        bFound = maOrigItemList.GetRecord( nPos )->EqualsDouble( fValue );
     if( bFound )
-        InsertItemArrayIndex( maOrigItemList.GetCurPos() );
+        InsertItemArrayIndex( nPos );
     else
         InsertOrigItem( new XclExpPCItem( fValue, false ) );
 }
 
 void XclExpPCField::InsertOrigDateItem( double fDate )
 {
+    size_t nPos = 0;
     bool bFound = false;
-    for( const XclExpPCItem* pItem = maOrigItemList.First(); !bFound && pItem; pItem = maOrigItemList.Next() )
-        bFound = pItem->EqualsDate( fDate );
+    for( size_t nSize = maOrigItemList.Size(); !bFound && (nPos < nSize); ++nPos )
+        bFound = maOrigItemList.GetRecord( nPos )->EqualsDate( fDate );
     if( bFound )
-        InsertItemArrayIndex( maOrigItemList.GetCurPos() );
+        InsertItemArrayIndex( nPos );
     else
         InsertOrigItem( new XclExpPCItem( fDate, true ) );
 }
 
 void XclExpPCField::InsertOrigBoolItem( bool bValue )
 {
+    size_t nPos = 0;
     bool bFound = false;
-    for( const XclExpPCItem* pItem = maOrigItemList.First(); !bFound && pItem; pItem = maOrigItemList.Next() )
-        bFound = pItem->EqualsBool( bValue );
+    for( size_t nSize = maOrigItemList.Size(); !bFound && (nPos < nSize); ++nPos )
+        bFound = maOrigItemList.GetRecord( nPos )->EqualsBool( bValue );
     if( bFound )
-        InsertItemArrayIndex( maOrigItemList.GetCurPos() );
+        InsertItemArrayIndex( nPos );
     else
         InsertOrigItem( new XclExpPCItem( bValue ) );
 }
 
 sal_uInt16 XclExpPCField::InsertGroupItem( XclExpPCItem* pNewItem )
 {
-    maGroupItemList.Append( pNewItem );
-    return static_cast< sal_uInt16 >( maGroupItemList.Count() - 1 );
+    maGroupItemList.AppendRecord( XclExpPCItemRef( pNewItem ) );
+    return static_cast< sal_uInt16 >( maGroupItemList.Size() - 1 );
 }
 
 void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScDPNumGroupInfo& rNumInfo, sal_Int32 nDatePart )
@@ -627,7 +632,7 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
         const TypedStrCollection& rGroupColl = aTmpDim.GetNumEntries( rOrigColl, GetDocPtr() );
         for( USHORT nIdx = 0, nCount = rGroupColl.GetCount(); nIdx < nCount; ++nIdx )
             if( const TypedStrData* pStrData = rGroupColl[ nIdx ] )
-                maGroupItemList.Append( new XclExpPCItem( pStrData->GetString() ) );
+                InsertGroupItem( new XclExpPCItem( pStrData->GetString() ) );
     }
 }
 
@@ -635,19 +640,19 @@ void XclExpPCField::SetNumGroupLimit( const ScDPNumGroupInfo& rNumInfo )
 {
     ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN, rNumInfo.AutoStart );
     ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX, rNumInfo.AutoEnd );
-    maNumGroupLimits.Append( new XclExpPCItem( rNumInfo.Start, false ) );
-    maNumGroupLimits.Append( new XclExpPCItem( rNumInfo.End, false ) );
-    maNumGroupLimits.Append( new XclExpPCItem( rNumInfo.Step, false ) );
+    maNumGroupLimits.AppendRecord( XclExpPCItemRef( new XclExpPCItem( rNumInfo.Start, false ) ) );
+    maNumGroupLimits.AppendRecord( XclExpPCItemRef( new XclExpPCItem( rNumInfo.End, false ) ) );
+    maNumGroupLimits.AppendRecord( XclExpPCItemRef( new XclExpPCItem( rNumInfo.Step, false ) ) );
 }
 
 void XclExpPCField::SetDateGroupLimit( const ScDPNumGroupInfo& rDateInfo, bool bUseStep )
 {
     ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN, rDateInfo.AutoStart );
     ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX, rDateInfo.AutoEnd );
-    maNumGroupLimits.Append( new XclExpPCItem( rDateInfo.Start, true ) );
-    maNumGroupLimits.Append( new XclExpPCItem( rDateInfo.End, true ) );
-    sal_Int16 nStep = bUseStep ? ::lulimit< sal_Int16 >( rDateInfo.Step, 1, SAL_MAX_INT16 ) : 1;
-    maNumGroupLimits.Append( new XclExpPCItem( nStep ) );
+    maNumGroupLimits.AppendRecord( XclExpPCItemRef( new XclExpPCItem( rDateInfo.Start, true ) ) );
+    maNumGroupLimits.AppendRecord( XclExpPCItemRef( new XclExpPCItem( rDateInfo.End, true ) ) );
+    sal_Int16 nStep = bUseStep ? limit_cast< sal_Int16 >( rDateInfo.Step, 1, SAL_MAX_INT16 ) : 1;
+    maNumGroupLimits.AppendRecord( XclExpPCItemRef( new XclExpPCItem( nStep ) ) );
 }
 
 void XclExpPCField::Finalize()
@@ -655,7 +660,7 @@ void XclExpPCField::Finalize()
     // flags
     ::set_flag( maFieldInfo.mnFlags, EXC_SXFIELD_HASITEMS, !GetVisItemList().Empty() );
     // Excel writes long indexes even for 0x0100 items (indexes from 0x00 to 0xFF)
-    ::set_flag( maFieldInfo.mnFlags, EXC_SXFIELD_16BIT, maOrigItemList.Count() >= 0x0100 );
+    ::set_flag( maFieldInfo.mnFlags, EXC_SXFIELD_16BIT, maOrigItemList.Size() >= 0x0100 );
     ::set_flag( maFieldInfo.mnFlags, EXC_SXFIELD_NUMGROUP, IsNumGroupField() || IsDateGroupField() );
     /*  mnTypeFlags is updated in all Insert***Item() functions. Now the flags
         for the current combination of item types is added to the flags. */
@@ -663,10 +668,10 @@ void XclExpPCField::Finalize()
 
 
     // item count fields
-    maFieldInfo.mnVisItems = static_cast< sal_uInt16 >( GetVisItemList().Count() );
-    maFieldInfo.mnGroupItems = static_cast< sal_uInt16 >( maGroupItemList.Count() );
+    maFieldInfo.mnVisItems = static_cast< sal_uInt16 >( GetVisItemList().Size() );
+    maFieldInfo.mnGroupItems = static_cast< sal_uInt16 >( maGroupItemList.Size() );
     // maFieldInfo.mnBaseItems set in InitStdGroupField()
-    maFieldInfo.mnOrigItems = static_cast< sal_uInt16 >( maOrigItemList.Count() );
+    maFieldInfo.mnOrigItems = static_cast< sal_uInt16 >( maOrigItemList.Size() );
 }
 
 void XclExpPCField::WriteSxnumgroup( XclExpStream& rStrm )
@@ -679,7 +684,7 @@ void XclExpPCField::WriteSxnumgroup( XclExpStream& rStrm )
         rStrm.EndRecord();
 
         // limits (min/max/step) for numeric grouping
-        DBG_ASSERT( maNumGroupLimits.Count() == 3,
+        DBG_ASSERT( maNumGroupLimits.Size() == 3,
             "XclExpPCField::WriteSxnumgroup - missing numeric grouping limits" );
         maNumGroupLimits.Save( rStrm );
     }
@@ -770,12 +775,12 @@ bool XclExpPivotCache::HasItemIndexList() const
 
 sal_uInt16 XclExpPivotCache::GetFieldCount() const
 {
-    return static_cast< sal_uInt16 >( maFieldList.Count() );
+    return static_cast< sal_uInt16 >( maFieldList.Size() );
 }
 
 const XclExpPCField* XclExpPivotCache::GetField( sal_uInt16 nFieldIdx ) const
 {
-    return maFieldList.GetObject( nFieldIdx );
+    return maFieldList.GetRecord( nFieldIdx ).get();
 }
 
 const XclExpPCField* XclExpPivotCache::GetField( const String& rFieldName ) const
@@ -816,15 +821,16 @@ void XclExpPivotCache::Save( XclExpStream& rStrm )
 
 XclExpPCField* XclExpPivotCache::GetFieldAcc( sal_uInt16 nFieldIdx )
 {
-    return maFieldList.GetObject( nFieldIdx );
+    return maFieldList.GetRecord( nFieldIdx ).get();
 }
 
 XclExpPCField* XclExpPivotCache::GetFieldAcc( const String& rFieldName )
 {
-    for( XclExpPCField* pField = maFieldList.First(); pField; pField = maFieldList.Next() )
-        if( pField->GetFieldName() == rFieldName )
-            return pField;
-    return 0;
+    XclExpPCField* pField = 0;
+    for( size_t nPos = 0, nSize = maFieldList.Size(); !pField && (nPos < nSize); ++nPos )
+        if( maFieldList.GetRecord( nPos )->GetFieldName() == rFieldName )
+            pField = maFieldList.GetRecord( nPos ).get();
+    return pField;
 }
 
 void XclExpPivotCache::AddFields( const ScDPObject& rDPObj )
@@ -846,7 +852,8 @@ void XclExpPivotCache::AddStdFields( const ScDPObject& rDPObj )
         ScRange aColRange( rRange );
         aColRange.aStart.SetCol( nScCol );
         aColRange.aEnd.SetCol( nScCol );
-        maFieldList.Append( new XclExpPCField( GetRoot(), *this, GetFieldCount(), rDPObj, aColRange ) );
+        maFieldList.AppendRecord( XclExpPCFieldRef(
+            new XclExpPCField( GetRoot(), *this, GetFieldCount(), rDPObj, aColRange ) ) );
     }
 }
 
@@ -866,15 +873,16 @@ void XclExpPivotCache::AddGroupFields( const ScDPObject& rDPObj )
                     while( pGroupDim )
                     {
                         // insert the new grouping field
-                        XclExpPCField* pNewGroupField = new XclExpPCField( GetRoot(), *this, GetFieldCount(), rDPObj, *pGroupDim, *pCurrStdField );
-                        maFieldList.Append( pNewGroupField );
+                        XclExpPCFieldRef xNewGroupField( new XclExpPCField(
+                            GetRoot(), *this, GetFieldCount(), rDPObj, *pGroupDim, *pCurrStdField ) );
+                        maFieldList.AppendRecord( xNewGroupField );
 
                         // register new grouping field at current grouping field, building a chain
-                        pLastGroupField->SetGroupChildField( *pNewGroupField );
+                        pLastGroupField->SetGroupChildField( *xNewGroupField );
 
                         // next grouping dimension
                         pGroupDim = pSaveDimData->GetGroupDimForBase( pGroupDim->GetGroupDimName() );
-                        pLastGroupField = pNewGroupField;
+                        pLastGroupField = xNewGroupField.get();
                     }
                 }
             }
@@ -940,14 +948,15 @@ void XclExpPivotCache::WriteSxidarrayList( XclExpStream& rStrm ) const
     if( HasItemIndexList() )
     {
         sal_uInt32 nRecSize = 0;
-        for( const XclExpPCField* pField = maFieldList.First(); pField; pField = maFieldList.Next() )
-            nRecSize += pField->GetIndexSize();
+        size_t nPos, nSize = maFieldList.Size();
+        for( nPos = 0; nPos < nSize; ++nPos )
+            nRecSize += maFieldList.GetRecord( nPos )->GetIndexSize();
 
         for( sal_uInt32 nSrcRow = 0; nSrcRow < maPCInfo.mnSrcRecs; ++nSrcRow )
         {
             rStrm.StartRecord( EXC_ID_SXIDARRAY, nRecSize );
-            for( const XclExpPCField* pField = maFieldList.First(); pField; pField = maFieldList.Next() )
-                pField->WriteIndex( rStrm, nSrcRow );
+            for( nPos = 0; nPos < nSize; ++nPos )
+                maFieldList.GetRecord( nPos )->WriteIndex( rStrm, nSrcRow );
             rStrm.EndRecord();
         }
     }
@@ -1039,8 +1048,8 @@ XclExpPTField::XclExpPTField( const XclExpPivotTable& rPTable, sal_uInt16 nCache
     // create field items
     if( mpCacheField )
         for( sal_uInt16 nItemIdx = 0, nItemCount = mpCacheField->GetItemCount(); nItemIdx < nItemCount; ++nItemIdx )
-            maItemList.Append( new XclExpPTItem( *mpCacheField, nItemIdx ) );
-    maFieldInfo.mnItemCount = static_cast< sal_uInt16 >( maItemList.Count() );
+            maItemList.AppendRecord( XclExpPTItemRef( new XclExpPTItem( *mpCacheField, nItemIdx ) ) );
+    maFieldInfo.mnItemCount = static_cast< sal_uInt16 >( maItemList.Size() );
 }
 
 // data access ----------------------------------------------------------------
@@ -1070,9 +1079,9 @@ const XclExpPTItem* XclExpPTField::GetItem( const String& rName ) const
 
 sal_uInt16 XclExpPTField::GetItemIndex( const String& rName, sal_uInt16 nDefaultIdx ) const
 {
-    for( const XclExpPTItem* pItem = maItemList.First(); pItem; pItem = maItemList.Next() )
-        if( pItem->GetItemName() == rName )
-            return static_cast< sal_uInt16 >( maItemList.GetCurPos() );
+    for( size_t nPos = 0, nSize = maItemList.Size(); nPos < nSize; ++nPos )
+        if( maItemList.GetRecord( nPos )->GetItemName() == rName )
+            return static_cast< sal_uInt16 >( nPos );
     return nDefaultIdx;
 }
 
@@ -1139,9 +1148,14 @@ void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
     // item properties
     const List& rMemList = rSaveDim.GetMembers();
     for( ULONG nMemIdx = 0, nMemCount = rMemList.Count(); nMemIdx < nMemCount; ++nMemIdx )
+    {
         if( const ScDPSaveMember* pSaveMem = static_cast< const ScDPSaveMember* >( rMemList.GetObject( nMemIdx ) ) )
+        {
+
             if( XclExpPTItem* pItem = GetItemAcc( pSaveMem->GetName() ) )
                 pItem->SetPropertiesFromMember( *pSaveMem );
+        }
+    }
 }
 
 void XclExpPTField::SetDataPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
@@ -1222,15 +1236,16 @@ void XclExpPTField::Save( XclExpStream& rStrm )
 
 XclExpPTItem* XclExpPTField::GetItemAcc( const String& rName )
 {
-    for( XclExpPTItem* pItem = maItemList.First(); pItem; pItem = maItemList.Next() )
-        if( pItem->GetItemName() == rName )
-            return pItem;
-    return 0;
+    XclExpPTItem* pItem = 0;
+    for( size_t nPos = 0, nSize = maItemList.Size(); !pItem && (nPos < nSize); ++nPos )
+        if( maItemList.GetRecord( nPos )->GetItemName() == rName )
+            pItem = maItemList.GetRecord( nPos ).get();
+    return pItem;
 }
 
 void XclExpPTField::AppendSubtotalItem( sal_uInt16 nItemType )
 {
-    maItemList.Append( new XclExpPTItem( nItemType, EXC_SXVI_DEFAULT_CACHE, true ) );
+    maItemList.AppendRecord( XclExpPTItemRef( new XclExpPTItem( nItemType, EXC_SXVI_DEFAULT_CACHE, true ) ) );
     ++maFieldInfo.mnItemCount;
 }
 
@@ -1276,7 +1291,7 @@ XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& r
 
             /*  1)  Default-construct all pivot table fields for all pivot cache fields. */
             for( sal_uInt16 nFieldIdx = 0, nFieldCount = mrPCache.GetFieldCount(); nFieldIdx < nFieldCount; ++nFieldIdx )
-                maFieldList.Append( new XclExpPTField( *this, nFieldIdx ) );
+                maFieldList.AppendRecord( XclExpPTFieldRef( new XclExpPTField( *this, nFieldIdx ) ) );
 
             const List& rDimList = pSaveData->GetDimensions();
             ULONG nDimIdx, nDimCount = rDimList.Count();
@@ -1314,7 +1329,7 @@ SCTAB XclExpPivotTable::GetScTab() const
 
 const XclExpPTField* XclExpPivotTable::GetField( sal_uInt16 nFieldIdx ) const
 {
-    return (nFieldIdx == EXC_SXIVD_DATA) ? &maDataOrientField : maFieldList.GetObject( nFieldIdx );
+    return (nFieldIdx == EXC_SXIVD_DATA) ? &maDataOrientField : maFieldList.GetRecord( nFieldIdx ).get();
 }
 
 const XclExpPTField* XclExpPivotTable::GetField( const String& rName ) const
@@ -1358,10 +1373,11 @@ void XclExpPivotTable::Save( XclExpStream& rStrm )
 
 XclExpPTField* XclExpPivotTable::GetFieldAcc( const String& rName )
 {
-    for( XclExpPTField* pField = maFieldList.First(); pField; pField = maFieldList.Next() )
-        if( pField->GetFieldName() == rName )
-            return pField;
-    return 0;
+    XclExpPTField* pField = 0;
+    for( size_t nPos = 0, nSize = maFieldList.Size(); !pField && (nPos < nSize); ++nPos )
+        if( maFieldList.GetRecord( nPos )->GetFieldName() == rName )
+            pField = maFieldList.GetRecord( nPos ).get();
+    return pField;
 }
 
 XclExpPTField* XclExpPivotTable::GetFieldAcc( const ScDPSaveDimension& rSaveDim )
@@ -1435,7 +1451,7 @@ void XclExpPivotTable::SetDataFieldPropertiesFromDim( const ScDPSaveDimension& r
 void XclExpPivotTable::Finalize()
 {
     // field numbers
-    maPTInfo.mnFields = static_cast< sal_uInt16 >( maFieldList.Count() );
+    maPTInfo.mnFields = static_cast< sal_uInt16 >( maFieldList.Size() );
     maPTInfo.mnRowFields = static_cast< sal_uInt16 >( maRowFields.size() );
     maPTInfo.mnColFields = static_cast< sal_uInt16 >( maColFields.size() );
     maPTInfo.mnPageFields = static_cast< sal_uInt16 >( maPageFields.size() );
@@ -1445,8 +1461,8 @@ void XclExpPivotTable::Finalize()
     maPTExtInfo.mnPagePerCol = maPTInfo.mnPageFields;
 
     // subtotal items
-    for( XclExpPTField* pField = maFieldList.First(); pField; pField = maFieldList.Next() )
-        pField->AppendSubtotalItems();
+    for( size_t nPos = 0, nSize = maFieldList.Size(); nPos < nSize; ++nPos )
+        maFieldList.GetRecord( nPos )->AppendSubtotalItems();
 
     // find data field orientation field
     maPTInfo.mnDataPos = EXC_SXVIEW_DATALAST;
@@ -1523,8 +1539,11 @@ void XclExpPivotTable::WriteSxpi( XclExpStream& rStrm ) const
         rStrm.StartRecord( EXC_ID_SXPI, maPageFields.size() * 6 );
         rStrm.SetSliceSize( 6 );
         for( ScfUInt16Vec::const_iterator aIt = maPageFields.begin(), aEnd = maPageFields.end(); aIt != aEnd; ++aIt )
-            if( const XclExpPTField* pField = maFieldList.GetObject( *aIt ) )
-                pField->WriteSxpiEntry( rStrm );
+        {
+            const XclExpPTFieldRef xField = maFieldList.GetRecord( *aIt );
+            if( xField.get() )
+                xField->WriteSxpiEntry( rStrm );
+        }
         rStrm.EndRecord();
     }
 }
@@ -1532,8 +1551,11 @@ void XclExpPivotTable::WriteSxpi( XclExpStream& rStrm ) const
 void XclExpPivotTable::WriteSxdiList( XclExpStream& rStrm ) const
 {
     for( XclPTDataFieldPosVec::const_iterator aIt = maDataFields.begin(), aEnd = maDataFields.end(); aIt != aEnd; ++aIt )
-        if( const XclExpPTField* pField = maFieldList.GetObject( aIt->first ) )
-            pField->WriteSxdi( rStrm, aIt->second );
+    {
+        const XclExpPTFieldRef xField = maFieldList.GetRecord( aIt->first );
+        if( xField.get() )
+            xField->WriteSxdi( rStrm, aIt->second );
+    }
 }
 
 void XclExpPivotTable::WriteSxli( XclExpStream& rStrm, sal_uInt16 nLineCount, sal_uInt16 nIndexCount ) const
@@ -1577,7 +1599,8 @@ void XclExpPivotTableManager::CreatePivotTables()
         for( USHORT nDPObj = 0, nCount = pDPColl->GetCount(); nDPObj < nCount; ++nDPObj )
             if( ScDPObject* pDPObj = (*pDPColl)[ nDPObj ] )
                 if( const XclExpPivotCache* pPCache = CreatePivotCache( *pDPObj ) )
-                    maPTableList.Append( new XclExpPivotTable( GetRoot(), *pDPObj, *pPCache ) );
+                    maPTableList.AppendRecord( XclExpPivotTableRef(
+                        new XclExpPivotTable( GetRoot(), *pDPObj, *pPCache ) ) );
 }
 
 void XclExpPivotTableManager::WritePivotCaches( XclExpStream& rStrm )
@@ -1587,9 +1610,12 @@ void XclExpPivotTableManager::WritePivotCaches( XclExpStream& rStrm )
 
 void XclExpPivotTableManager::WritePivotTables( XclExpStream& rStrm, SCTAB nScTab )
 {
-    for( XclExpPivotTable* pPTable = maPTableList.First(); pPTable; pPTable = maPTableList.Next() )
-        if( pPTable->GetScTab() == nScTab )
-            pPTable->Save( rStrm );
+    for( size_t nPos = 0, nSize = maPTableList.Size(); nPos < nSize; ++nPos )
+    {
+        XclExpPivotTableRef xPTable = maPTableList.GetRecord( nPos );
+        if( xPTable->GetScTab() == nScTab )
+            xPTable->Save( rStrm );
+    }
 }
 
 // private --------------------------------------------------------------------
@@ -1610,22 +1636,24 @@ const XclExpPivotCache* XclExpPivotTableManager::CreatePivotCache( const ScDPObj
             if( !pDimSaveData || !pDimSaveData->HasGroupDimensions() )
             {
                 // check all existing pivot caches
-                for( XclExpPivotCache* pPCache = maPCacheList.First(); pPCache; pPCache = maPCacheList.Next() )
+                for( size_t nPos = 0, nSize = maPCacheList.Size(); nPos < nSize; ++nPos )
+                {
+                    XclExpPivotCacheRef xPCache = maPCacheList.GetRecord( nPos );
                     // pivot cache does not have grouping info and source data is equal
-                    if( !pPCache->HasAddFields() && pPCache->HasEqualDataSource( rDPObj ) )
-                        return pPCache;
+                    if( !xPCache->HasAddFields() && xPCache->HasEqualDataSource( rDPObj ) )
+                        return xPCache.get();
+                }
             }
         }
     }
 
     // create a new pivot cache
-    sal_uInt16 nNewCacheIdx = static_cast< sal_uInt16 >( maPCacheList.Count() );
-    ::std::auto_ptr< XclExpPivotCache > xNewPCache(
-        new XclExpPivotCache( GetRoot(), rDPObj, nNewCacheIdx ) );
+    sal_uInt16 nNewCacheIdx = static_cast< sal_uInt16 >( maPCacheList.Size() );
+    XclExpPivotCacheRef xNewPCache( new XclExpPivotCache( GetRoot(), rDPObj, nNewCacheIdx ) );
     if( xNewPCache->IsValid() )
     {
-        maPCacheList.Append( xNewPCache.release() );
-        return maPCacheList.Last();
+        maPCacheList.AppendRecord( xNewPCache );
+        return xNewPCache.get();
     }
 
     return 0;
