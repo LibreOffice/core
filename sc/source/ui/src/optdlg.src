@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:17:21 $
+ *  last change: $Author: dr $ $Date: 2001-06-15 12:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1171,8 +1171,8 @@ TabPage RID_SCPAGE_CONTENT
     };
     FixedText FT_COLOR
     {
-        Pos = MAP_APPFONT ( 20 , 28 ) ;
-        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Pos = MAP_APPFONT ( 21 , 28 ) ;
+        Size = MAP_APPFONT ( 31 , 8 ) ;
         Text = "F~arbe" ;
         Text [ ENGLISH ] = "~Color" ;
         Text [ norwegian ] = "~Color" ;
