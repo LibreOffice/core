@@ -644,6 +644,28 @@ BOOL CALLBACK GrowChildWindows(
     return TRUE;
 }
 
+/*
+BOOL CALLBACK EnumChildProc(HWND hwndChild, LPARAM lParam)
+{
+    HFONT aFont = *((HFONT*) lParam);
+    HDC hDC = GetDC( hwndChild );
+    SelectObject( hDC, aFont );
+    ReleaseDC( hwndChild, hDC );
+    return TRUE;
+}
+
+void ApplySystemFont( HWND hwndDlg )
+{
+    NONCLIENTMETRICSA aNonClientMetrics;
+    aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
+    if ( SystemParametersInfoA( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
+    {
+        HFONT aSysFont = CreateFontIndirectA( &aNonClientMetrics.lfMessageFont );
+        EnumChildWindows(hwndDlg, EnumChildProc, (LPARAM) &aSysFont);
+    }
+}
+*/
+
 BOOL CALLBACK PreviewDialogProc(
     HWND hwndDlg,
     UINT uMsg,
@@ -827,7 +849,6 @@ BOOL CALLBACK OptionsDialogProc(
     {
     case WM_INITDIALOG:
         {
-
             TCHAR   szBuffer[1024] = TEXT("");
             HINSTANCE   hInstance = (HINSTANCE)GetWindowLong( hwndDlg, GWL_HINSTANCE );
             HWND    hwndParent = (HWND)GetWindowLong( hwndDlg, GWL_HWNDPARENT );
@@ -932,6 +953,9 @@ void UpdateReportDialogControls( HWND hwndDlg )
     EnableWindow(
         GetDlgItem(hwndDlg, IDC_EDIT_EMAIL),
         Button_GetCheck(GetDlgItem(hwndDlg, IDC_ALLOW_CONTACT)) & BST_CHECKED ? TRUE : FALSE );
+    EnableWindow(
+        GetDlgItem(hwndDlg, IDC_LABEL_EMAIL),
+        Button_GetCheck(GetDlgItem(hwndDlg, IDC_ALLOW_CONTACT)) & BST_CHECKED ? TRUE : FALSE );
 }
 
 //***************************************************************************
@@ -947,7 +971,7 @@ BOOL CALLBACK ReportDialogProc(
     {
     case WM_INITDIALOG:
         {
-                CrashReportParams   *pParams = (CrashReportParams*)GetWindowLong( GetParent(hwndDlg), GWL_USERDATA );
+            CrashReportParams   *pParams = (CrashReportParams*)GetWindowLong( GetParent(hwndDlg), GWL_USERDATA );
             HINSTANCE   hInstance = (HINSTANCE)GetWindowLong(hwndDlg, GWL_HINSTANCE );
             TCHAR       szBuffer[FORMATBUFSIZE];
 
@@ -1009,6 +1033,12 @@ BOOL CALLBACK ReportDialogProc(
             ShowWindow( GetDlgItem(GetParent(hwndDlg),IDFINISH), TRUE );
             ShowWindow( GetDlgItem(GetParent(hwndDlg),IDNEXT), FALSE );
 
+            /*
+            SetWindowLong( GetDlgItem(GetParent(hwndDlg),IDFINISH), GWL_STYLE,
+                GetWindowLong( GetDlgItem(GetParent(hwndDlg),IDFINISH), GWL_STYLE) | BS_DEFPUSHBUTTON );
+            SetWindowLong( GetDlgItem(GetParent(hwndDlg),IDBACK), GWL_STYLE,
+                GetWindowLong( GetDlgItem(GetParent(hwndDlg),IDBACK), GWL_STYLE) &~ BS_DEFPUSHBUTTON );
+                */
             SetFocus( GetDlgItem(hwndDlg,IDC_EDIT_TITLE) );
         }
         break;
