@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-19 11:17:59 $
+ *  last change: $Author: hdu $ $Date: 2002-10-01 15:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 #include <poly.hxx>
 #endif // _SV_POLY_HXX
 #endif // ENABLE_CTL
+
+#ifdef GCP_KERN_HACK
+#include <algorithm>
+#endif // GCP_KERN_HACK
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -869,8 +873,8 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
     maGraphicsData.mbFontKernInit = TRUE;
     if ( maGraphicsData.mpFontKernPairs )
     {
-        delete maGraphicsData.mpFontKernPairs;
-        maGraphicsData.mpFontKernPairs = 0;
+        delete[] maGraphicsData.mpFontKernPairs;
+        maGraphicsData.mpFontKernPairs = NULL;
     }
     maGraphicsData.mnFontKernPairCount = 0;
 
@@ -1057,7 +1061,7 @@ static void ImplAddKerningPairs( SalGraphicsData* pData )
         pData->mpFontKernPairs = new KERNINGPAIR[nPairs+pData->mnFontKernPairCount];
         memcpy( pData->mpFontKernPairs, pOldPairs,
                 pData->mnFontKernPairCount*sizeof( KERNINGPAIR ) );
-        delete pOldPairs;
+        delete[] pOldPairs;
     }
 
     UINT            nCP = aInfo.ciACP;
@@ -1142,24 +1146,36 @@ ULONG SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
     DBG_ASSERT( sizeof( KERNINGPAIR ) == sizeof( ImplKernPairData ),
                 "SalGraphics::GetKernPairs(): KERNINGPAIR != ImplKernPairData" );
 
-    if ( aSalShlData.mbWNT )
+    if ( maGraphicsData.mbFontKernInit )
     {
-        if ( !pKernPairs )
-            return ::GetKerningPairsW( maGraphicsData.mhDC, 0, NULL );
-        else
-            return ::GetKerningPairsW( maGraphicsData.mhDC, nPairs, (KERNINGPAIR*)pKernPairs );
-    }
-    else
-    {
-        if ( maGraphicsData.mbFontKernInit )
+        if( maGraphicsData.mpFontKernPairs )
         {
-            if ( maGraphicsData.mpFontKernPairs )
-            {
-                delete maGraphicsData.mpFontKernPairs;
-                maGraphicsData.mpFontKernPairs = 0;
-            }
-            maGraphicsData.mnFontKernPairCount = 0;
+            delete[] maGraphicsData.mpFontKernPairs;
+            maGraphicsData.mpFontKernPairs = NULL;
+        }
+        maGraphicsData.mnFontKernPairCount = 0;
 
+        if ( aSalShlData.mbWNT )
+        {
+            KERNINGPAIR* pPairs = NULL;
+            int nCount = ::GetKerningPairsW( maGraphicsData.mhDC, 0, NULL );
+            if( nCount )
+            {
+#ifdef GCP_KERN_HACK
+                pPairs = new KERNINGPAIR[ nCount+1 ];
+                maGraphicsData.mpFontKernPairs = pPairs;
+                maGraphicsData.mnFontKernPairCount = nCount;
+                ::GetKerningPairsW( maGraphicsData.mhDC, nCount, pPairs );
+#else // GCP_KERN_HACK
+                pPairs = pKernPairs;
+                nCount = (nCount < nPairs) : nCount : nPairs;
+                ::GetKerningPairsW( maGraphicsData.mhDC, nCount, pPairs );
+                return nCount;
+#endif // GCP_KERN_HACK
+            }
+        }
+        else
+        {
             if ( !maGraphicsData.mnFontCharSetCount )
                 ImplGetAllFontCharSets( &maGraphicsData );
 
@@ -1178,21 +1194,27 @@ ULONG SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
                     DeleteFont( hNewFont );
                 }
             }
-
-            maGraphicsData.mbFontKernInit = FALSE;
         }
 
-        if ( !pKernPairs )
-            return maGraphicsData.mnFontKernPairCount;
-        else
-        {
-            if ( nPairs > maGraphicsData.mnFontKernPairCount )
-                nPairs = maGraphicsData.mnFontKernPairCount;
-            memcpy( pKernPairs, maGraphicsData.mpFontKernPairs,
-                    nPairs*sizeof( ImplKernPairData ) );
-            return nPairs;
-        }
+        maGraphicsData.mbFontKernInit = FALSE;
+
+        std::sort( maGraphicsData.mpFontKernPairs,
+            maGraphicsData.mpFontKernPairs + maGraphicsData.mnFontKernPairCount,
+            ImplCmpKernData );
     }
+
+    if( !pKernPairs )
+        return maGraphicsData.mnFontKernPairCount;
+    else if( maGraphicsData.mpFontKernPairs )
+    {
+        if ( nPairs < maGraphicsData.mnFontKernPairCount )
+            nPairs = maGraphicsData.mnFontKernPairCount;
+        memcpy( pKernPairs, maGraphicsData.mpFontKernPairs,
+                nPairs*sizeof( ImplKernPairData ) );
+        return nPairs;
+    }
+
+    return 0;
 }
 
 // -----------------------------------------------------------------------

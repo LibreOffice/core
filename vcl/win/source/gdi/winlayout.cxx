@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-26 19:01:34 $
+ *  last change: $Author: hdu $ $Date: 2002-10-01 15:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,9 @@
 #include <malloc.h>
 #define alloca _alloca
 
-#ifndef DISABLE_UNISCRIBE //TODO: use ENABLE_UNISCRIBE in pmk
-#define USE_UNISCRIBE
-#endif
+#ifdef GCP_KERN_HACK
+#include <algorithm>
+#endif // GCP_KERN_HACK
 
 // =======================================================================
 
@@ -100,7 +100,12 @@ public:
 class SimpleWinLayout : public WinLayout
 {
 public:
-                    SimpleWinLayout( HDC hDC, const ImplLayoutArgs& );
+                    SimpleWinLayout( HDC hDC, const ImplLayoutArgs&
+#ifdef GCP_KERN_HACK
+                        , const KERNINGPAIR* pPairs, int nPairs
+#endif // GCP_KERN_HACK
+                    );
+
     virtual         ~SimpleWinLayout();
 
     virtual bool    LayoutText( const ImplLayoutArgs& );
@@ -130,13 +135,26 @@ private:
     UINT*           mpGlyphs2Chars;
     int             mnNotdefWidth;
     long            mnWidth;
+
+#ifdef GCP_KERN_HACK
+    const KERNINGPAIR* mpKerningPairs;
+    int             mnKerningPairs;
+#endif // GCP_KERN_HACK
 };
 
 // -----------------------------------------------------------------------
 
-SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs )
+SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs,
+#ifdef GCP_KERN_HACK
+        const KERNINGPAIR* pKerningPairs, int nKerningPairs
+#endif // GCP_KERN_HACK
+    )
 :   WinLayout( rArgs ),
     mhDC( hDC ),
+#ifdef GCP_KERN_HACK
+    mpKerningPairs( pKerningPairs ),
+    mnKerningPairs( nKerningPairs ),
+#endif // GCP_KERN_HACK
     mnGlyphCount( 0 ),
     mnCharCount( 0 ),
     mpOutGlyphs( NULL ),
@@ -207,9 +225,11 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     if( rArgs.mnFlags & (SAL_LAYOUT_KERNING_PAIRS | SAL_LAYOUT_KERNING_ASIAN) )
         mpGlyphOrigAdvs = new int[ nMaxGlyphCount ];
 
+#ifndef GCP_KERN_HACK
     // enable kerning if requested
     if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
         nGcpOption |= GCP_USEKERNING;
+#endif // GCP_KERN_HACK
 
     // apply reordering if requested
     char* pGcpClass = NULL;
@@ -255,6 +275,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
             0, &aGCPW, nGcpOption );
         mnGlyphCount = aGCPW.lpOutString ? aGCPW.nMaxFit : aGCPW.nGlyphs;
 
+#ifndef GCP_KERN_HACK
         // get undisturbed placement
         if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
         {
@@ -264,6 +285,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
                 rArgs.mpStr + rArgs.mnMinCharPos, nMaxGlyphCount,
                 0, &aGCPW, (nGcpOption & ~GCP_USEKERNING) );
         }
+#endif // GCP_KERN_HACK
     }
     else
     {
@@ -331,6 +353,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         // TODO: map lpOrderA to lpOrderW
         // CHECK: lpDxA->lpDxW mapping
 
+#ifndef GCP_KERN_HACK
         if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
         {
             aGCPA.lpOrder = NULL;
@@ -338,6 +361,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
             nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
                 0, &aGCPA, (nGcpOption & ~GCP_USEKERNING) );
         }
+#endif // GCP_KERN_HACK
     }
 
     // cache essential layout properties
@@ -348,7 +372,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
 
     // #101097# fixup display of notdef glyphs
     // TODO: is there a way to convince Win32(incl W95) API to use notdef directly?
-    int i;
+    int i, j;
     for( i = 0; i < mnGlyphCount; ++i )
     {
         if( (mpGlyphAdvances[i] != 0)
@@ -375,7 +399,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     {
         mpGlyphs2Chars = new UINT[ nMaxGlyphCount ];
         i = 0;
-        for( int j = mnGlyphCount; --j >= i; ++i )
+        for( j = mnGlyphCount; --j >= i; ++i )
         {
             WCHAR nTempGlyph    = mpOutGlyphs[ i ];
             int nTempAdvance    = mpGlyphAdvances[ i ];
@@ -406,15 +430,16 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         ApplyDXArray( rArgs.mpDXArray );
     else if( rArgs.mnLayoutWidth )
         Justify( rArgs.mnLayoutWidth );
-
-    if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN)
-    &&  !rArgs.mpDXArray && !rArgs.mnLayoutWidth )
+#ifdef GCP_KERN_HACK
+    else if( rArgs.mnFlags & (SAL_LAYOUT_KERNING_ASIAN|SAL_LAYOUT_KERNING_PAIRS) )
+    {
+#else // GCP_KERN_HACK
+    else if( rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN )
     {
         if( !(rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS) )
-        {
+#endif // GCP_KERN_HACK
             for( i = 0; i < mnGlyphCount; ++i )
                 mpGlyphOrigAdvs[i] = mpGlyphAdvances[i];
-        }
 
         bool bVertical = false;
         const xub_Unicode* pStr = rArgs.mpStr + rArgs.mnMinCharPos;
@@ -424,6 +449,21 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
             ++nLen;
         for( i = 1; i < nLen; ++i )
         {
+#ifdef GCP_KERN_HACK
+            if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS) && mnKerningPairs )
+            {
+                const KERNINGPAIR aRefPair = {pStr[i-1],pStr[i],0};
+                const KERNINGPAIR* pPair = std::lower_bound( mpKerningPairs,
+                    mpKerningPairs + mnKerningPairs, aRefPair, ImplCmpKernData );
+                if( pPair->wFirst==aRefPair.wFirst && pPair->wSecond==aRefPair.wSecond )
+                {
+                    mpGlyphAdvances[ i-1 ] += pPair->iKernAmount;
+                    mnWidth += pPair->iKernAmount;
+                }
+            }
+            else if( rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN )
+#endif // GCP_KERN_HACK
+
             if( (0x3000 == (0xFF00 & pStr[i-1]))
             &&  (0x3000 == (0xFF00 & pStr[i])) )
             {
@@ -1707,7 +1747,16 @@ SalLayout* SalGraphics::LayoutText( ImplLayoutArgs& rArgs )
     else
 #endif // USE_UNISCRIBE
     {
-        pWinLayout = new SimpleWinLayout( maGraphicsData.mhDC, rArgs );
+#ifdef GCP_KERN_HACK
+        if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS) && maGraphicsData.mbFontKernInit )
+            GetKernPairs( 0, NULL );
+#endif // GCP_KERN_HACK
+
+        pWinLayout = new SimpleWinLayout( maGraphicsData.mhDC, rArgs
+#ifdef GCP_KERN_HACK
+            , maGraphicsData.mpFontKernPairs, maGraphicsData.mnFontKernPairCount
+#endif // GCP_KERN_HACK
+            );
     }
 
     if( !pWinLayout->LayoutText( rArgs ) )

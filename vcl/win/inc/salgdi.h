@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-28 12:38:53 $
+ *  last change: $Author: hdu $ $Date: 2002-10-01 15:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@ struct ImplFontSelectData;
 #define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
 
+// win32 platform specifics, maybe move pmk file
+#define USE_UNISCRIBE
+#define GCP_KERN_HACK
+
 // -------------------
 // - SalGraphicsData -
 // -------------------
@@ -138,5 +142,20 @@ void    ImplGetLogFontFromFontSelect( HDC hDC,
 #else
 #define MAX_64KSALPOINTS    ((((USHORT)0xFFFF)-8)/sizeof(POINTS))
 #endif
+
+// -----------
+// - Inlines -
+// -----------
+
+// #102411# Win's GCP mishandles kerning => we need to do it ourselves
+// SalGraphicsData::mpFontKernPairs is sorted by
+inline bool ImplCmpKernData( const KERNINGPAIR& a, const KERNINGPAIR& b )
+{
+    if( a.wFirst < b.wFirst )
+        return true;
+    if( (a.wFirst == b.wFirst) && (a.wSecond < b.wSecond) )
+        return true;
+    return false;
+}
 
 #endif // _SV_SALGDI_H
