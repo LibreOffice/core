@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 10:50:31 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 12:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,16 +756,21 @@ BOOL FormattedField::ImplGetValue(double& dNewVal)
     // Sonderbehandlung fuer %-Formatierung
     if (ImplGetFormatter()->GetType(m_nFormatKey) == NUMBERFORMAT_PERCENT)
     {
-        ULONG nTempFormat = 0;
+        // the language of our format
+        LanguageType eLanguage = m_pFormatter->GetEntry(m_nFormatKey)->GetLanguage();
+        // the default number format for this language
+        ULONG nStandardNumericFormat = m_pFormatter->GetStandardFormat(NUMBERFORMAT_NUMBER, eLanguage);
+
+        ULONG nTempFormat = nStandardNumericFormat;
         double dTemp;
         if (m_pFormatter->IsNumberFormat(sText, nTempFormat, dTemp) &&
             NUMBERFORMAT_NUMBER == m_pFormatter->GetType(nTempFormat))
             // der String entspricht einer Number-Formatierung, hat also nur kein %
-            // -> dranhaengen
+            // -> append it
             sText += '%';
-        // (damit wird aus einer Eingabe '3' ein '3%', und der Formatter macht dann daraus
-        // ein double 0.03. Ansonsten wuerden wir hier bei einer Eingabe von '3' ein double
-        // 3 zurueckliefern, was 300 Prozent entspricht ...
+        // (with this, a input of '3' becomes '3%', which then by the formatter is translated
+        // into 0.03. Without this, the formatter would give us the double 3 for an input '3',
+        // which equals 300 percent.
     }
     if (!ImplGetFormatter()->IsNumberFormat(sText, nFormatKey, dNewVal))
         return FALSE;
