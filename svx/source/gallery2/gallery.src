@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:06:56 $
+ *  last change: $Author: ka $ $Date: 2001-04-17 11:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2392,56 +2392,56 @@ Menu RID_SVXMN_GALLERY2
         {
             Identifier = MN_COPYCLIPBOARD;
             HelpId = HID_GALLERY_MN_COPYCLIPBOARD;
-            Text = "~Kopieren" ; \
-            Text [ English ] = "~Copy" ; \
-            Text [ norwegian ] = "~Kopier" ; \
-            Text [ italian ] = "~Copia" ; \
-            Text [ portuguese_brazilian ] = "~Copiar" ; \
-            Text [ portuguese ] = "~Copiar" ; \
-            Text [ finnish ] = "~Kopioi" ; \
-            Text [ danish ] = "K~opier" ; \
-            Text [ french ] = "~Copier" ; \
-            Text [ swedish ] = "~Kopiera" ; \
-            Text [ dutch ] = "~KopiÎren" ; \
-            Text [ spanish ] = "~Copiar" ; \
-            Text [ english_us ] = "~Copy" ;\
-            Text[ chinese_simplified ] = "∏¥÷∆(~C)";    \
-            Text[ russian ] = " ÓÔËÓ‚‡Ú¸"; \
-            Text[ polish ] = "Kopiuj";  \
-            Text[ japanese ] = "∫Àﬂ∞(~C)";  \
-            Text[ chinese_traditional ] = "Ω∆ªs(~C)";   \
-            Text[ arabic ] = "‰”Œ"; \
-            Text[ dutch ] = "~KopiÎren";    \
-            Text[ chinese_simplified ] = "∏¥÷∆(~C)";    \
-            Text[ greek ] = "¡ÌÙÈ~„Ò·ˆﬁ";   \
-            Text[ korean ] = "∫πªÁ(~C)";    \
+            Text = "~Kopieren" ;
+            Text [ English ] = "~Copy" ;
+            Text [ norwegian ] = "~Kopier" ;
+            Text [ italian ] = "~Copia" ;
+            Text [ portuguese_brazilian ] = "~Copiar" ;
+            Text [ portuguese ] = "~Copiar" ;
+            Text [ finnish ] = "~Kopioi" ;
+            Text [ danish ] = "K~opier" ;
+            Text [ french ] = "~Copier" ;
+            Text [ swedish ] = "~Kopiera" ;
+            Text [ dutch ] = "~KopiÎren" ;
+            Text [ spanish ] = "~Copiar" ;
+            Text [ english_us ] = "~Copy" ;
+            Text[ chinese_simplified ] = "∏¥÷∆(~C)";
+            Text[ russian ] = " ÓÔËÓ‚‡Ú¸";
+            Text[ polish ] = "Kopiuj";
+            Text[ japanese ] = "∫Àﬂ∞(~C)";
+            Text[ chinese_traditional ] = "Ω∆ªs(~C)";
+            Text[ arabic ] = "‰”Œ";
+            Text[ dutch ] = "~KopiÎren";
+            Text[ chinese_simplified ] = "∏¥÷∆(~C)";
+            Text[ greek ] = "¡ÌÙÈ~„Ò·ˆﬁ";
+            Text[ korean ] = "∫πªÁ(~C)";
             Text[ turkish ] = "K~opyala";
         };
         MenuItem
         {
             Identifier = MN_PASTECLIPBOARD;
             HelpId = HID_GALLERY_MN_PASTECLIPBOARD;
-            Text = "~Einf¸gen" ; \
-            Text [ ENGLISH ] = "Insert" ; \
-            Text [ norwegian ] = "Sett inn" ; \
-            Text [ italian ] = "~Inserisci" ; \
-            Text [ portuguese_brazilian ] = "Inserir" ; \
-            Text [ portuguese ] = "~Inserir" ; \
-            Text [ finnish ] = "Lis‰‰" ; \
-            Text [ danish ] = "~IndsÊt" ; \
-            Text [ french ] = "C~oller" ; \
-            Text [ swedish ] = "~Infoga" ; \
-            Text [ dutch ] = "~Plakken" ; \
-            Text [ spanish ] = "~Insertar" ; \
-            Text [ english_us ] = "~Insert" ; \
-            Text[ chinese_simplified ] = "≤Â»Î(~I)";    \
-            Text[ russian ] = "¬ÒÚ~‡‚Í‡";       \
-            Text[ polish ] = "W~staw";      \
-            Text[ japanese ] = "ì\\ÇËïtÇØ(~I)"; \
-            Text[ chinese_traditional ] = "¥°§J(~I)"    ;   \
-            Text[ greek ] = "~≈ÈÛ·„˘„ﬁ" ;   \
-            Text[ korean ] = "ª¿‘(~I)" ;   \
-            Text[ arabic ] = "≈œ—«Ã"    ;   \
+            Text = "~Einf¸gen" ;
+            Text [ ENGLISH ] = "Insert" ;
+            Text [ norwegian ] = "Sett inn" ;
+            Text [ italian ] = "~Inserisci" ;
+            Text [ portuguese_brazilian ] = "Inserir" ;
+            Text [ portuguese ] = "~Inserir" ;
+            Text [ finnish ] = "Lis‰‰" ;
+            Text [ danish ] = "~IndsÊt" ;
+            Text [ french ] = "C~oller" ;
+            Text [ swedish ] = "~Infoga" ;
+            Text [ dutch ] = "~Plakken" ;
+            Text [ spanish ] = "~Insertar" ;
+            Text [ english_us ] = "~Insert" ;
+            Text[ chinese_simplified ] = "≤Â»Î(~I)";
+            Text[ russian ] = "¬ÒÚ~‡‚Í‡";
+            Text[ polish ] = "W~staw";
+            Text[ japanese ] = "ì\\ÇËïtÇØ(~I)";
+            Text[ chinese_traditional ] = "¥°§J(~I)"    ;
+            Text[ greek ] = "~≈ÈÛ·„˘„ﬁ" ;
+            Text[ korean ] = "ª¿‘(~I)" ;
+            Text[ arabic ] = "≈œ—«Ã"    ;
             Text[ turkish ] = "~Ekle"   ;
         };
     };
