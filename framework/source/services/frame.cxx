@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: as $ $Date: 2001-07-04 13:31:16 $
+ *  last change: $Author: as $ $Date: 2001-07-18 06:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1334,20 +1334,25 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     // First operation should be ... "stopp all listening for window events on our container window".
-    // We will die ... this events are superflous! (method is threadsafe by himself)
+    // These events are superflous but can make trouble!
+    // We will die, die and die ...
     implts_stopWindowListening();
 
-    // Send message to all listener and forget her references.
-    LOG_DISPOSEEVENT( "Frame", sName )
-    css::lang::EventObject aEvent( xThis );
-    m_aListenerContainer.disposeAndClear( aEvent );
-
-    // It's neccessary to forget our component and her window ...
+    // It's neccessary to forget our component and her window too...
     // because this mechanism could start different callback mechanism!
     // And it's not a good idea to disable this object for real working by setting mode to E_BEFORECLOSE here.
     // Otherwise to much calls must be handle the special "IN-DISPOSING" case.
     implts_setComponent( css::uno::Reference< css::awt::XWindow >      () ,
                          css::uno::Reference< css::frame::XController >() );
+
+    // Send message to all listener and forget her references.
+    // Attention: Don't do it before you forget currently set component!
+    // Because - our dispatch helper are listener on this frame. They will die, if this instance die!
+    // But "implts_setComponent()" needs the dispatch mechanism ... So we should
+    // forget our listener after that.
+    LOG_DISPOSEEVENT( "Frame", sName )
+    css::lang::EventObject aEvent( xThis );
+    m_aListenerContainer.disposeAndClear( aEvent );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Lock it again to disable object for real working!
