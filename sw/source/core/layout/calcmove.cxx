@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-21 10:30:47 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1383,7 +1383,9 @@ void SwCntntFrm::MakeAll()
                     const FASTBOOL bNxtNew =
                         ( 0 == (pNxt->Prt().*fnRect->fnGetHeight)() ) &&
                         (!pNxt->IsTxtFrm() ||!((SwTxtFrm*)pNxt)->IsHiddenNow());
+
                     pNxt->Calc();
+
                     if ( !bMovedBwd &&
                          ((bMoveFwdInvalid && !GetIndNext()) ||
                           bNxtNew) )
@@ -1443,7 +1445,7 @@ void SwCntntFrm::MakeAll()
                 SwTwips nTmp = (GetUpper()->Prt().*fnRect->fnGetHeight)() -
                                (Prt().*fnRect->fnGetTop)();
                 BOOL bSplit = !GetIndPrev();
-                if ( nTmp > 0 && WouldFit( nTmp, bSplit ) )
+                if ( nTmp > 0 && WouldFit( nTmp, bSplit, sal_False ) )
                 {
                     Prepare( PREP_WIDOWS_ORPHANS, 0, FALSE );
                     bValidSize = FALSE;
@@ -1687,12 +1689,12 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
                 bRet = ((SwTxtFrm*)pFrm)->TestFormat( pPrev, nSpace, bSplit );
             }
             else
-                bRet = pFrm->WouldFit( nSpace, bSplit );
+                bRet = pFrm->WouldFit( nSpace, bSplit, sal_False );
             pTmpFrm->Remove();
             pTmpFrm->InsertBefore( pUp, pOldNext );
         }
         else
-            bRet = pFrm->WouldFit( nSpace, bSplit );
+            bRet = pFrm->WouldFit( nSpace, bSplit, sal_False );
 
         SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFrm );
         const SwBorderAttrs &rAttrs = *aAccess.Get();
