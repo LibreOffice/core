@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:21:21 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
 #pragma hdrstop
 
