@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-19 16:10:54 $
+ *  last change: $Author: jb $ $Date: 2001-11-20 14:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@
 #define BOOTSTRAP_DATA_NAME                 SAL_CONFIGFILE("bootstrap")
 
 #define BOOTSTRAP_ITEM_PRODUCT_KEY          "ProductKey"
-#define BOOTSTRAP_ITEM_VERSIONFILE          "VersionFile"
+#define BOOTSTRAP_ITEM_VERSIONFILE          "Location"
 #define BOOTSTRAP_ITEM_LOGO                 "Logo"
 #define BOOTSTRAP_ITEM_BUILDID              "buildid"
 
