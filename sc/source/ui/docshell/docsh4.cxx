@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 16:28:40 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,9 +926,20 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 USHORT nFlags;
                                 aDocument.GetScenarioData( nTab, aComment, aColor, nFlags );
 
+                                // Determine if the Sheet that the Scenario was created on
+                                // is protected. But first we need to find that Sheet.
+                                // Rewind back to the actual sheet.
+                                USHORT nActualTab = nTab;
+                                do
+                                {
+                                    nActualTab--;
+                                }
+                                while(aDocument.IsScenario(nActualTab));
+                                BOOL bSheetProtected = aDocument.IsTabProtected(nActualTab);
+
                                 //! anderen Titel am Dialog setzen
                                 ScNewScenarioDlg* pNewDlg =
-                                    new ScNewScenarioDlg( GetDialogParent(), aName, TRUE );
+                                    new ScNewScenarioDlg( GetDialogParent(), aName, TRUE, bSheetProtected);
                                 pNewDlg->SetScenarioData( aName, aComment, aColor, nFlags );
                                 if ( pNewDlg->Execute() == RET_OK )
                                 {
