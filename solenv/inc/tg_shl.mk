@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.81 $
+#   $Revision: 1.82 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 10:09:53 $
+#   last change: $Author: rt $ $Date: 2004-08-23 09:18:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,7 +113,9 @@ STDSHL=
 SHL$(TNR)ARCHIVES=
 .ENDIF
 
+.IF "$(SHL$(TNR)USE_EXPORTS)"==""
 SHL$(TNR)DEF*=$(MISC)$/$(SHL$(TNR)TARGET).def
+.ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"==""
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
@@ -289,6 +291,15 @@ LINKINCTARGETS+=$(MISC)$/$(SHL$(TNR)TARGETN:b)_linkinc.ls
 $(SHL$(TNR)TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
+.IF "$(SHL$(TNR)USE_EXPORTS)"=="name"
+.IF "$(GUI)"=="WNT"
+SHL$(TNR)LINKLIST=$(MISC)$/$(SHL$(TNR)TARGET)_link.lst
+$(MISC)$/$(SHL$(TNR)TARGET)_link.lst : $(SHL$(TNR)LIBS) 
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+.ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"=="name"
+
 $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
@@ -302,7 +313,8 @@ $(SHL$(TNR)TARGETN) : \
                     $(USE_SHL$(TNR)VERSIONMAP)\
                     $(SHL$(TNR)RES)\
                     $(SHL$(TNR)VERSIONH)\
-                    $(SHL$(TNR)DEPN)
+                    $(SHL$(TNR)DEPN) \
+                    $(SHL$(TNR)LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL$(TNR)TARGETN)
 .IF "$(UPDATER)"=="YES"
@@ -358,6 +370,7 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
 .IF "$(linkinc)"==""
+.IF "$(SHL$(TNR)USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
@@ -380,7 +393,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)STDLIBS) \
         $(STDSHL) $(STDSHL$(TNR)) \
         $(SHL$(TNR)LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -394,8 +407,22 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)STDLIBS)                      \
         $(STDSHL) $(STDSHL$(TNR))                           \
         $(SHL$(TNR)LINKRES) \
-    )
+    ) $(LINKOUTPUTFILTER)
 .ENDIF			# "$(USE_DEFFILE)"!=""
+.ELSE			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
+    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL$(TNR)BASEX)		\
+        $(SHL$(TNR)STACK) -out:$(SHL$(TNR)TARGETN)	\
+        -map:$(MISC)$/$(@:B).map				\
+        $(USE_$(TNR)IMPLIB) \
+        $(STDOBJ)							\
+        $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ))   \
+        @$(MISC)$/$(SHL$(TNR)TARGET)_link.lst \
+        @$(mktmp $(SHL$(TNR)STDLIBS)                      \
+        $(STDSHL) $(STDSHL$(TNR))                           \
+        $(SHL$(TNR)LINKRES) \
+    )
+.ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL$(TNR)TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL$(TNR)TARGET).lst
