@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:45:19 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,10 +103,17 @@ namespace dbaui
     //==================================================================
     class OTableDesignView : public ODataView
     {
+        enum ChildFocusState
+        {
+            DESCRIPTION,
+            EDITOR,
+            NONE
+        };
     private:
         ::com::sun::star::lang::Locale      m_aLocale;
         OTableBorderWindow*                 m_pWin;
         OTableController*                   m_pController;
+        ChildFocusState                     m_eChildFocus;
 
     protected:
 
@@ -119,6 +126,9 @@ namespace dbaui
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&,
                             OTableController* _pController);
         virtual ~OTableDesignView();
+
+        // window overloads
+        virtual long            PreNotify( NotifyEvent& rNEvt );
 
         OTableEditorCtrl*       GetEditorCtrl() const { return m_pWin->GetEditorCtrl(); }
         OTableFieldDescWin*     GetDescWin()    const { return m_pWin->GetDescWin(); }

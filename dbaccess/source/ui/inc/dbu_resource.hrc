@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:30:17 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,9 @@
 #define RID_TABLEDESIGNROWPOPUPMENU     RID_MENU_START +  7
 #define RID_BRW_TABLEDESIGN_TOOLBOX     RID_MENU_START +  8
 #define RID_SBA_RTF_PKEYPOPUP           RID_MENU_START +  9
+#define RID_TABLE_DESIGN_MAIN_MENU      RID_MENU_START + 10
+#define RID_QUERY_DESIGN_MAIN_MENU      RID_MENU_START + 11
+#define RID_RELATION_DESIGN_MAIN_MENU   RID_MENU_START + 12
 
 //========================================================================
 // strings
@@ -378,6 +381,9 @@
 #define STR_CONNECTING_DATASOURCE           RID_STRING_START + 147
 #define STR_LOADING_QUERY                   RID_STRING_START + 148
 #define STR_LOADING_TABLE                   RID_STRING_START + 149
+#define STR_VIEW_TITLE                      RID_STRING_START + 150
+#define STR_QUERYDESIGN_NO_VIEW_SUPPORT     RID_STRING_START + 151
+#define STR_QUERYDESIGN_NO_VIEW_ASK         RID_STRING_START + 152
 
 //========================================================================
 // untyped resources
@@ -392,6 +398,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.38  2001/04/12 15:30:17  fs
+ *  +STR_LOADING_TABLE/-QUERY
+ *
  *  Revision 1.37  2001/04/11 11:36:03  oj
  *  #85699# check if pkey already exists
  *

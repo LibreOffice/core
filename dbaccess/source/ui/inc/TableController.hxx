@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-11 11:36:03 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ namespace dbaui
         ::rtl::OUString createUniqueName(const ::rtl::OUString& _rName);
 
     protected:
+        virtual String          getMenu() const;
         // all the features which should be handled by this class
         virtual void            AddSupportedFeatures();
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.

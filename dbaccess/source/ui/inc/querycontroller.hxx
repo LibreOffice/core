@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-23 09:30:05 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,14 +140,19 @@ namespace dbaui
         sal_Bool        m_bViewTable;       // show the table row in the design view
         sal_Bool        m_bViewFunction;    // show the function row in the design view
         sal_Bool        m_bEsacpeProcessing;// is true when we shouldn't parse the statement
+        sal_Bool        m_bCreateView;      // set to true when we should create a view otherwise we create a normal query
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getQueries();
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getElements() const;
+        void askForNewName( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xElements,
+                            sal_Bool _bSaveAs);
         // creates the querycomposer
         void setQueryComposer();
         void deleteIterator();
         void executeQuery();
+        void doSaveAsDoc(sal_Bool _bSaveAs);
 
     protected:
+        virtual String          getMenu() const;
         // all the features which should be handled by this class
         virtual void            AddSupportedFeatures();
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
