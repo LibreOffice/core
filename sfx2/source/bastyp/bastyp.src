@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 19:22:15 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ String ERR_INET_NAME_RESOLVE
     Text[ korean ] = "ÄÄÇ»ÅÍ ÀÌ¸§À» È®ÀÎÇÏÁö ¸øÇß½À´Ï´Ù \n";
     Text[ turkish ] = "Bilgisayarýn adý çözülemedi\n";
     Text[ catalan ] = "El nombre del ordenador no se pudo resolver.\n";
+    Text[ finnish ] = "Tietokoneen nimeä ei voitu selvittää \n";
 };
 String ERR_INET_CONNECT
 {
@@ -111,6 +112,7 @@ String ERR_INET_CONNECT
     Text[ korean ] = "ÀÎÅÍ³Ý Á¢¼ÓÀ»¡¡±¸ÃàÇÏÁö ¸øÇß½À´Ï´Ù.";
     Text[ turkish ] = "Internet baðlantýsý gerçekleþtirilemedi.";
     Text[ catalan ] = "No se pudo crear la conexión Internet";
+    Text[ finnish ] = "Internet-yhteyden muodostaminen ei onnistunut";
 };
 String ERR_INET_READ
 {
@@ -135,6 +137,7 @@ String ERR_INET_READ
     Text[ korean ] = "ÀÎÅÍ³ÝÀ»¡¡ÅëÇÑ µ¥ÀÌÅÍ ÀÐ±â ¿À·ù\n.¼­¹ö ¿À·ù ¸Þ½ÃÁö: $(ARG1)";
     Text[ turkish ] = "Internet üzerinden veri okunurken hata oluþtu.\nSunucu hata iletisi: $(ARG1)";
     Text[ catalan ] = "Los datos no se pudieron leer a través de Internet.\nMensaje de error del servidor: $(ARG1)";
+    Text[ finnish ] = "On ilmennyt virhe luettaessa tietoja Internetistä.\nPalvelimen virhesanoma: $(ARG1)";
 };
 String ERR_INET_WRITE
 {
@@ -159,6 +162,7 @@ String ERR_INET_WRITE
     Text[ korean ] = "ÀÎÅÍ³Ý¿¡¼­ µ¥ÀÌÅÍ  Àü¼Û ¿À·ù.\n¼­¹ö ¿À·ù ¸Þ½ÃÁö: $(ARG1)";
     Text[ turkish ] = "Veriler Internet üzerinden aktarýlamadý.\nSunucu hata iletisi: $(ARG1)";
     Text[ catalan ] = "Los datos no se pudieron transferir a Internet.\nMensaje de error del servidor: $(ARG1)";
+    Text[ finnish ] = "On ilmennyt virhe siirrettäessä tietoja Internetiin.\nPalvelimen virhesanoma: $(ARG1)";
 };
 String ERR_INET_GENERAL
 {
@@ -183,6 +187,7 @@ String ERR_INET_GENERAL
     Text[ korean ] = "ÀÎÅÍ³Ý¿¡¼­¡¡ÀÏ¹ÝÀûÀÎ ¿À·ù¡¡¹ß»ý";
     Text[ turkish ] = "Genel Internet hatasý";
     Text[ catalan ] = "Error general en Internet";
+    Text[ finnish ] = "Yleinen Internet-virhe";
 };
 String ERR_WRONG_URL
 {
@@ -207,6 +212,7 @@ String ERR_WRONG_URL
     Text[ korean ] = "URL ¿À·ù\n";
     Text[ turkish ] = "Hatalý URL\n";
     Text[ catalan ] = "URL errónea\n";
+    Text[ finnish ] = "Virheellinen URL-osoite\n";
 };
 String ERR_ACTIVEDOWNLOADS
 {
@@ -230,6 +236,7 @@ String ERR_ACTIVEDOWNLOADS
     Text[ korean ] = "´Ù¿î·Îµå°¡ ÁøÇàÁßÀÔ´Ï´Ù.\n±×·¡µµ Ãë¼ÒÇÏ½Ã°Ú½À´Ï±î?\n";
     Text[ turkish ] = "Þu an devam eden veri indirme iþleri var.\nGerçekten çýkmak istiyor musunuz?\n";
     Text[ catalan ] = "Todavía existen descargas activas.\n¿Desea realmente cancelar?\n";
+    Text[ finnish ] = "Noutoja on yhä käynnissä.\nHaluatko varmasti lopettaa?\n";
 };
 String ERR_QUEUEDDOWNLOADS
 {
@@ -254,6 +261,7 @@ String ERR_QUEUEDDOWNLOADS
     Text[ korean ] = "´Ù¿î·Îµå°¡ ÁøÇà ÁßÀÔ´Ï´Ù.\n±×·¡µµ Á¾·áÇÏ½Ã°Ú½À´Ï±î?\n";
     Text[ turkish ] = "Bekleme sýrasýnda veri indirme iþleri var.\nGerçekten çýkmak istiyor musunuz?\n";
     Text[ catalan ] = "Todavía hay documentos para descargar.\n¿Desea realmente cancelar?\n";
+    Text[ finnish ] = "Noutoja on vielä suorittamatta.\nHaluatko varmasti lopettaa?\n";
 };
 String ERR_FILEISLOCAL
 {
@@ -278,6 +286,7 @@ String ERR_FILEISLOCAL
     Text[ korean ] = "ÆÄÀÏÀº ÀÌ¹Ì »ç¿ëÀÚÀÇ¡¡ÄÄÇ»ÅÍ¿¡¡¡Áö¿ªÀûÀ¸·Î¡¡Á¸ÀçÇÕ´Ï´Ù.\n±×·¡µµ º¹»çÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Dosya bilgisayarýnýzda zaten mevcut.\nYine de kopyalansýn mý?";
     Text[ catalan ] = "El archivo ya está guardado localmente en su ordenador.\n¿Desea copiarlo de todas maneras?";
+    Text[ finnish ] = "Tiedosto on jo tietokoneella.\nHaluatko kopioida tiedoston?";
 };
 String ERR_FILENAMECHECK83
 {
@@ -302,6 +311,7 @@ String ERR_FILENAMECHECK83
     Text[ korean ] = "ÁöÁ¤µÈ ÆÄÀÏ ÀÌ¸§ÀÌ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.\nÆÄÀÏÀÇ ÀÌ¸§ÀÌ 8¹®ÀÚ¸¦ ÃÊ°úÇÒ ¼ö ¾ø´Ù´ÂÁ¡°ú   \n È®ÀåÀÚ°¡3¹®ÀÚ¸¦ ÃÊ°ú ÇÒ¼ö ¾ø´Ù´ÂÁ¡¿¡ À¯ÀÇÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Girilen dosya adý geçerli deðil.\nDosya adý en fazla 8 ve dosyan\\uzantýsý en fazla 3 karakter uzunluðunda olabilir.";
     Text[ catalan ] = "El nombre del archivo especificado no es válido.\\Tenga en cuenta que el nombre debe tener un máximo de 8 caracteres\ny la terminación 3.";
+    Text[ finnish ] = "Annettu tiedostonimi on virheellinen.\nTiedostonimi voi olla korkeintaan kahdeksan merkin pituinen\nja tunniste voi olla enintään kolmen merkin pituinen.";
 };
 String ERR_INSUFFICIENTDISKSPACE
 {
@@ -325,6 +335,7 @@ String ERR_INSUFFICIENTDISKSPACE
     Text[ korean ] = "ÆÄÀÏ %1ÀÌ£¨°¡ £©»ç¿ë°¡´ÉÇÑ µð½ºÅ© °ø°£º¸´Ù¡¡Å®´Ï´Ù.\n±×·¡µµ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?\n";
     Text[ turkish ] = "%1 dosyasý mevcut disk alanýný aþýyor.\nDevam etmek istiyor musunuz ?\n";
     Text[ catalan ] = "El tamaño del archivo %1 excederá al del disponible en el disco.\n¿Desea continuar?\n";
+    Text[ finnish ] = "Tiedoston %1 koko on suurempi kuin käytettävissä oleva levytila.\nHaluatko jatkaa?\n";
 };
 //= Texte "downloadcontroller" =================================================================
 String STR_DOWNLOAD_SOURCE
@@ -350,6 +361,7 @@ String STR_DOWNLOAD_SOURCE
     Text[ korean ] = "¼Ò½º";
     Text[ turkish ] = "Kaynak";
     Text[ catalan ] = "Fuente";
+    Text[ finnish ] = "Lähde";
 };
 String STR_DOWNLOAD_DESTINATION
 {
@@ -374,6 +386,7 @@ String STR_DOWNLOAD_DESTINATION
     Text[ korean ] = "Å¸°Ù";
     Text[ turkish ] = "Hedef";
     Text[ catalan ] = "Destino";
+    Text[ finnish ] = "Kohde";
 };
 String STR_DOWNLOAD_STATE
 {
@@ -398,6 +411,7 @@ String STR_DOWNLOAD_STATE
     Text[ korean ] = "»óÅÂ";
     Text[ turkish ] = "Durum";
     Text[ catalan ] = "Estado";
+    Text[ finnish ] = "Tila";
 };
 String STR_DOWNLOAD_REMAININGTIME
 {
@@ -422,6 +436,7 @@ String STR_DOWNLOAD_REMAININGTIME
     Text[ korean ] = "³²Àº ½Ã°£";
     Text[ turkish ] = "Kalan süre";
     Text[ catalan ] = "Tiempo restante";
+    Text[ finnish ] = "Aikaa jäljellä";
 };
 String STR_DOWNLOAD_STATEFORMAT
 {
@@ -446,6 +461,7 @@ String STR_DOWNLOAD_STATEFORMAT
     Text[ arabic ] = "$(READ) of $(TOTAL) [ $(TIME) ]";
     Text[ turkish ] = "$(READ) Toplam $(TOTAL) [ $(TIME) ]";
     Text[ catalan ] = "$(READ) de $(TOTAL) [ $(TIME) ]";
+    Text[ finnish ] = "$(READ)/$(TOTAL) [ $(TIME) ]";
 };
 
 Resource RID_DLSTATUS2
@@ -476,6 +492,7 @@ Resource RID_DLSTATUS2
         Text[ turkish ] = "Baðlanýlan: $(HOST). Yanýt bekleniyor...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Conexión con: $(HOST). Esperando respuesta...";
+        Text[ finnish ] = "Yhdistetään kohteeseen: $(HOST). Odotetaan vastausta...";
     };
     String SVBINDSTATUS_CONNECTING
     {
@@ -503,6 +520,7 @@ Resource RID_DLSTATUS2
         Text[ turkish ] = "Açýlan:  $(HOST) üzerinde bulunan $(TARGET)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Abriendo: $(TARGET) en $(HOST)";
+        Text[ finnish ] = "Avataan $(TARGET) koneelta $(HOST)";
     };
     String SVBINDSTATUS_DOWNLOADINGDATA
     {
@@ -530,6 +548,7 @@ Resource RID_DLSTATUS2
         Text[ turkish ] = "Aktarýlan: $(TARGET) Okunan: $(BYTE)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Transfiriendo: $(TARGET) Leído: $(BYTE)";
+        Text[ finnish ] = "Siirretään: $(TARGET) Luettu: $(BYTE)";
     };
     String SVBINDSTATUS_ENDDOWNLOADDATA
     {
@@ -557,6 +576,7 @@ Resource RID_DLSTATUS2
         Text[ turkish ] = "Baðlantý kesildi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desconectado";
+        Text[ finnish ] = "Istunto lopetettu";
     };
 };
 
