@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:24:47 $
+ *  last change: $Author: oj $ $Date: 2000-12-15 09:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6196,9 +6196,6 @@ String RID_STR_AUTOFIELD
     Text[ arabic ] = "<ÍÞá ÊáÞÇÆí>";
     Text[ turkish ] = "<Otomatik alan>";
 };
-
-#define RID_STR_FILTER_FILTER_FOR                   (RID_FORMS_START +215)
-#define RID_STR_FILTER_FILTER_OR                    (RID_FORMS_START +215)
 
 
 QueryBox RID_QRY_SAVEMODIFIED
