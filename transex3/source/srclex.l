@@ -31,6 +31,7 @@ extern SetError();
 extern GetError();
 extern char *GetOutputFile( int argc, char* argv[]);
 extern FILE *GetNextFile();
+extern int isQuiet();
 
 /* forwards */
 void YYWarning();
@@ -245,12 +246,14 @@ main( int argc, char* argv[])
 	int nRetValue = 0;
 	char *pOutput;
 	FILE *pFile;
-
-	fprintf( stdout, "\nTransEx 3.1 Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.\n" );
-	fprintf( stdout, "========================================================================\n" );
-
+    
 	pOutput = GetOutputFile( argc, argv );
-	if ( !pOutput ) {
+	if( !isQuiet() ){ 
+        fprintf( stdout, "\nTransEx 3.1 Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.\n" );
+	    fprintf( stdout, "========================================================================\n" );
+    }
+
+    if ( !pOutput ) {
 		fprintf( stdout, "Syntax:TRANSEX[-p Prj][-r PrjRoot]-i FileIn...[-o FileOut][-m DataBase][-e][-b][-u][-NOUTF8][-L l1,l2,...]\n" );
 		fprintf( stdout, " Prj:      Project\n" );
 		fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
@@ -286,7 +289,7 @@ main( int argc, char* argv[])
 	nRetValue = GetError();
 	EndExport();
 
-	fprintf( stdout, "\n===================================\n\n" );
+	if( !isQuiet() ) fprintf( stdout, "\n===================================\n\n" ); 
 
 	/* return error level */
 	return nRetValue;
