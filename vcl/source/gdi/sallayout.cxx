@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:02:51 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1464,6 +1464,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
     // merge the fallback levels
     long nXPos = 0;
+    int nFallbackUnitsPerPixel = 1;
     for( n = 0; n < nLevel; ++n )
         maFallbackRuns[n].ResetPos();
     while( nValid[0] )
@@ -1477,7 +1478,13 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         if( n < nLevel )
         {
             // use base(n==0) or fallback(n>=1) level
-            long nNewPos = nXPos * mpLayouts[n]->GetUnitsPerPixel() / mnUnitsPerPixel;
+            long nNewPos = nXPos;
+            nFallbackUnitsPerPixel = mpLayouts[n]->GetUnitsPerPixel();
+            if( nFallbackUnitsPerPixel != mnUnitsPerPixel )
+            {
+                nNewPos *= nFallbackUnitsPerPixel;
+                nNewPos /= mnUnitsPerPixel;
+            }
             mpLayouts[n]->MoveGlyph( nStartOld[n], nNewPos );
         }
         else
@@ -1488,12 +1495,19 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                 n = 0;  // keep NotDef in base level
             else
                 n = -1; // drop NotDef in base level
+            nFallbackUnitsPerPixel = mnUnitsPerPixel;
         }
 
         if( n >= 0 )
         {
             // use glyph from best matching layout
-            nXPos += nGlyphAdv[n] * mnUnitsPerPixel / mpLayouts[n]->GetUnitsPerPixel();
+            int nCurrentGlyphAdv = nGlyphAdv[n];
+            if( nFallbackUnitsPerPixel != mnUnitsPerPixel )
+            {
+                nCurrentGlyphAdv *= mnUnitsPerPixel;
+                nCurrentGlyphAdv /= nFallbackUnitsPerPixel;
+            }
+            nXPos += nCurrentGlyphAdv;
 
             // complete this glyph cluster, then advance to next
             for( int nActivePos = nCharPos[0];; )
@@ -1503,7 +1517,13 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                     nStartNew[n], &nGlyphAdv[n], &nCharPos[n] );
                 if( !nValid[n] || (nCharPos[n] != nActivePos) )
                     break;
-                nXPos += nGlyphAdv[n] * mnUnitsPerPixel / mpLayouts[n]->GetUnitsPerPixel();
+                int nCurrentGlyphAdv = nGlyphAdv[n];
+                if( nFallbackUnitsPerPixel != mnUnitsPerPixel )
+                {
+                    nCurrentGlyphAdv *= mnUnitsPerPixel;
+                    nCurrentGlyphAdv /= nFallbackUnitsPerPixel;
+                }
+                nXPos += nCurrentGlyphAdv;
             }
 
             // performance optimization (fallback level is completed)
@@ -1515,7 +1535,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         {
             // drop NotDef glyph from base layout
             mpLayouts[0]->DropGlyph( nStartOld[0] );
-            mpLayouts[0]->MoveGlyph( nStartNew[0], nXPos*mpLayouts[0]->GetUnitsPerPixel()/mnUnitsPerPixel );
+            mpLayouts[0]->MoveGlyph( nStartNew[0], nXPos );
 
             // get next glyph in base layout
             nStartOld[0] = nStartNew[0];
