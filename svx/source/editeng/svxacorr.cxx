@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-19 08:11:24 $
+ *  last change: $Author: os $ $Date: 2002-09-11 14:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,10 +847,10 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
                                     LanguageType eLang )
 {
     // Grossbuchstabe am Satz-Anfang ??
-    if( !rTxt.Len() )
+    if( !rTxt.Len() || nEndPos <= nSttPos )
         return FALSE;
 
-    CharClass& rCC = GetCharClass( eLang );
+     CharClass& rCC = GetCharClass( eLang );
     String aText( rTxt );
     const sal_Unicode *pStart = aText.GetBuffer(),
                       *pStr = pStart + nEndPos,
