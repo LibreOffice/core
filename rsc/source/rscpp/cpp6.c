@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp6.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:56:43 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,7 +621,7 @@ int     c;                              /* First character of token     */
         register int            nhash;
         register DEFBUF         *dp;
         register char           *np;
-        int                     temp;
+        int                     temp = 0;
         int                     isrecurse;      /* For #define foo foo  */
 
         np = token;
@@ -707,7 +707,7 @@ char            *why;
 {
         register DEFBUF         *dp;
         register DEFBUF         **syp;
-        FILE *pRememberOut;
+        FILE *pRememberOut = NULL;
 
         if ( bDumpDefs )    /*ER */
         {
@@ -736,7 +736,7 @@ register DEFBUF *dp;
 {
         register char           *cp;
         register int            c;
-        FILE *pRememberOut;
+        FILE *pRememberOut = NULL;
 
 /*ER dump #define's to pDefOut */
         if ( bDumpDefs )
