@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:58:57 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 13:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,10 +462,10 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ swedish ] = "Automatiskt horisontal";
         Text[ polish ] = "Automatycznie poziomo";
         Text[ portuguese_brazilian ] = "~Automatic horizontal";
-        Text[ japanese ] = "©“®“I‚É‰¡•ûŒü‚Ö(~H)";
+        Text[ japanese ] = "©“®“I‚É‰¡•ûŒü‚Ö(~U)";
         Text[ korean ] = "ÀÚµ¿ ¼öÆò(~U)";
-        Text[ chinese_simplified ] = "×Ô¶¯Ë®Æ½(~H)";
-        Text[ chinese_traditional ] = "¦Û°Ê¤ô¥­(~H)";
+        Text[ chinese_simplified ] = "×Ô¶¯Ë®Æ½(~U)";
+        Text[ chinese_traditional ] = "¦Û°Ê¤ô¥­(~U)";
         Text[ arabic ] = "ÃİŞí ÊáŞÇÆíÇğ";
         Text[ turkish ] = "O~tomatik yatay";
         Text[ language_user1 ] = " ";
@@ -546,7 +546,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ chinese_simplified ] = "×Ô¶¯";
         Text[ russian ] = "Àâòîìàòè÷åñêè";
         Text[ polish ] = "Automatycznie";
-        Text[ japanese ] = "©“®“I";
+        Text[ japanese ] = "©“®";
         Text[ chinese_traditional ] = "¦Û°Ê";
         Text[ arabic ] = "ÊáŞÇÆí";
         Text[ greek ] = "Áõôüìáôá";
