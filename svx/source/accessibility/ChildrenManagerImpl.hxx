@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: af $ $Date: 2002-05-30 15:55:24 $
+ *  last change: $Author: af $ $Date: 2002-06-03 15:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,9 +455,15 @@ private:
 
 
 
-/** Pair for each visible shape, that contains a reference to the shape a
-    reference to the corresponding accessible object.  The accessible object
-    is only created on demand and is initially empty.
+/** A child descriptor holds a reference to a UNO shape and the
+    corresponding accessible object.  There are two use cases:
+    <ol><li>The accessible object is only created on demand and is then
+    initially empty.</li>
+    <li>There is no UNO shape.  The accessible object is given as argument
+    to the constructor.</li>
+    </ol>
+    In both cases the child descriptor assumes ownership over the accessible
+    object.
 */
 class ChildDescriptor
 {
