@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-21 11:17:30 $
+ *  last change: $Author: ama $ $Date: 2000-12-21 09:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,9 +223,8 @@ void SwLineLayout::CreateSpaceAdd()
  * Aus FormatLine() ausgelagert.
  *************************************************************************/
 
-void SwLineLayout::CalcLine( SwTxtFormatter &rLine )
+void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 {
-    SwTxtFormatInfo &rInf = rLine.GetInfo();
     const KSHORT nLineWidth = rInf.RealWidth();
 
     KSHORT nFlyAscent;

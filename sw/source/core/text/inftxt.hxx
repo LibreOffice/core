@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-11 11:00:54 $
+ *  last change: $Author: ama $ $Date: 2000-12-21 09:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@ protected:
     sal_Bool bHanging : 1;      // formatting of hanging punctuation allowed
     sal_Bool bScriptSpace : 1;  // space between different scripts (Asian/Latin)
     sal_Bool bForbiddenChars : 1; // Forbidden start/endline characters
+    sal_Bool bRotated : 1;      // 90 degree rotation
 
 protected:
     void _NoteAnimation();
@@ -243,6 +244,8 @@ public:
     inline void SetScriptSpace( const sal_Bool bNew ) { bScriptSpace = bNew; }
     inline sal_Bool HasForbiddenChars() const { return bForbiddenChars; }
     inline void SetForbiddenChars( const sal_Bool bN ) { bForbiddenChars = bN; }
+    inline sal_Bool IsRotated() const { return bRotated; }
+    inline void SetRotated( const sal_Bool bNew ) { bRotated = bNew; }
     inline ViewShell *GetVsh() { return pVsh; }
     inline const ViewShell *GetVsh() const { return pVsh; }
     inline OutputDevice *GetOut() { return pOut; }
@@ -379,7 +382,6 @@ public:
                           const sal_Bool bKern = sal_False ) const;
     void DrawRect( const SwRect &rRect, sal_Bool bNoGraphic = sal_False,
                    sal_Bool bRetouche = sal_True ) const;
-    void DrawRect( const SwLinePortion &rPor ) const;
     void DrawTab( const SwLinePortion &rPor ) const;
     void DrawLineBreak( const SwLinePortion &rPor ) const;
     void DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) const;

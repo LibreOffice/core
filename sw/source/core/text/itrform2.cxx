@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-24 15:43:45 $
+ *  last change: $Author: ama $ $Date: 2000-12-21 09:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1235,7 +1235,11 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                 if( RES_TXTATR_CJK_RUBY == pTwoLines->Which() )
                     pTmp = new SwRubyPortion( *pTwoLines,*rInf.GetFont(),nEnd );
                 else
+#ifdef ROTATION_TEST
+                    pTmp = new SwRotatedPortion( nEnd );
+#else
                     pTmp = new SwDoubleLinePortion( *pTwoLines, nEnd );
+#endif
                 return pTmp;
             }
         }
@@ -1405,7 +1409,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
             GetInfo().SetDropInit( sal_False );
         }
 
-        pCurr->CalcLine( *this );
+        pCurr->CalcLine( *this, GetInfo() );
         CalcRealHeight( GetInfo().IsNewLine() );
 
         if ( IsFlyInCntBase() && !IsQuick() )
@@ -1413,7 +1417,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
             KSHORT nTmpAscent, nTmpHeight;
             CalcAscentAndHeight( nTmpAscent, nTmpHeight );
             AlignFlyInCntBase( Y() + long( nTmpAscent ) );
-            pCurr->CalcLine( *this );
+            pCurr->CalcLine( *this, GetInfo() );
             CalcRealHeight();
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-11 11:00:17 $
+ *  last change: $Author: ama $ $Date: 2000-12-21 09:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,8 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bRuby( rNew.IsRuby() ),
       bHanging( rNew.IsHanging() ),
       bScriptSpace( rNew.HasScriptSpace() ),
-      bForbiddenChars( rNew.HasForbiddenChars() )
+      bForbiddenChars( rNew.HasForbiddenChars() ),
+      bRotated( rNew.IsRotated() )
 {
 #ifndef PRODUCT
     ChkOutDev( *this );
@@ -362,7 +363,7 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     bStopUnderFlow = sal_False;
     bSpecialUnderline = sal_False;
     bMulti = bFirstMulti = bRuby = bHanging = bScriptSpace =
-        bForbiddenChars = sal_False;
+        bForbiddenChars = bRotated = sal_False;
     SetLen( GetMinLen( *this ) );
 }
 
@@ -388,7 +389,8 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bRuby( rNew.IsRuby() ),
       bHanging( rNew.IsHanging() ),
       bScriptSpace( rNew.HasScriptSpace() ),
-      bForbiddenChars( rNew.HasForbiddenChars() )
+      bForbiddenChars( rNew.HasForbiddenChars() ),
+      bRotated( rNew.IsRotated() )
 {
 #ifndef PRODUCT
     ChkOutDev( *this );
@@ -527,13 +529,49 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
 }
 
 /*************************************************************************
- *                          GetDrawPos()
+ *                          lcl_CalcRect()
  *************************************************************************/
-inline Point GetDrawPos( const Point &rPos, const SwLinePortion &rPor )
+
+SwRect lcl_CalcRect( const SwTxtPaintInfo *pInf, const SwLinePortion &rPor )
 {
-    // Bei Baselineausgabe muss der Ascent der Portion abgezogen werden.
-    // DrawRects sind immer per TopLeft.
-    return Point( rPos.X(), rPos.Y() - rPor.GetAscent() );
+    Size aSize( rPor.Width(), rPor.Height() );
+    if( rPor.IsHangingPortion() )
+        aSize.Width() = ((SwHangingPortion&)rPor).GetInnerWidth();
+    if( rPor.InSpaceGrp() && pInf->GetSpaceAdd() )
+    {
+        SwTwips nAdd = rPor.CalcSpacing( pInf->GetSpaceAdd(), *pInf );
+        if( rPor.InFldGrp() && pInf->GetSpaceAdd() < 0 && nAdd )
+            nAdd += pInf->GetSpaceAdd();
+        aSize.Width() += nAdd;
+    }
+    Point aPoint;
+
+    if( pInf->IsRotated() )
+    {
+        long nTmp = aSize.Width();
+        aSize.Width() = aSize.Height();
+        aSize.Height() = nTmp;
+        aPoint.A() = pInf->X() - rPor.GetAscent();
+        aPoint.B() = pInf->Y() - aSize.Height();
+    }
+    else
+    {
+        aPoint.A() = pInf->X();
+        aPoint.B() = pInf->Y() - rPor.GetAscent();
+    }
+
+    SwRect aRect( aPoint, aSize );
+    if( aRect.HasArea() )
+    {
+        ::SwAlignRect( aRect, (ViewShell*)pInf->GetVsh() );
+
+        if ( pInf->GetOut()->IsClipRegion() )
+        {
+            SwRect aClip( pInf->GetOut()->GetClipRegion().GetBoundRect() );
+            aRect.Intersection( aClip );
+        }
+    }
+    return aRect;
 }
 
 /*************************************************************************
@@ -559,17 +597,6 @@ void SwTxtPaintInfo::DrawRect( const SwRect &rRect, sal_Bool bNoGraphic,
 }
 
 /*************************************************************************
- *                     SwTxtPaintInfo::DrawRect()
- *************************************************************************/
-
-void SwTxtPaintInfo::DrawRect( const SwLinePortion &rPor ) const
-{
-    const Size aSize( rPor.Width(), rPor.Height() );
-    const SwRect aRect( GetDrawPos( aPos, rPor ), aSize );
-    DrawRect( aRect );
-}
-
-/*************************************************************************
  *                     SwTxtPaintInfo::DrawTab()
  *************************************************************************/
 
@@ -577,8 +604,7 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
 {
     if( OnWin() )
     {
-        const Size aSize( rPor.Width(), rPor.Height() );
-        const Rectangle aRect( GetDrawPos( aPos, rPor ), aSize );
+        const SwRect aRect( lcl_CalcRect( this, rPor ) );
 #ifndef PRODUCT
 #ifdef DEBUG
         if( IsOptDbg() )
@@ -598,8 +624,9 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
     if( OnWin() )
     {
         const Size aSize( pOpt->GetLineBreakWidth(pWin), rPor.Height() );
-        const Rectangle aRect( GetDrawPos( aPos, rPor ), aSize );
-        pOpt->PaintLineBreak( pWin, aRect );
+        const SwRect aRect( lcl_CalcRect( this, rPor ) );
+        if( aRect.HasArea() )
+             pOpt->PaintLineBreak( pWin, aRect.SVRect() );
     }
 }
 
@@ -622,32 +649,6 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) 
 /*************************************************************************
  *                     SwTxtPaintInfo::DrawBackGround()
  *************************************************************************/
-
-SwRect lcl_CalcRect( const SwTxtPaintInfo *pInf, const SwLinePortion &rPor )
-{
-    SwRect aRect( GetDrawPos( pInf->GetPos(), rPor ),
-                  Size( rPor.Width(), rPor.Height() ) );
-    if( rPor.IsHangingPortion() )
-        aRect.Width( ((SwHangingPortion&)rPor).GetInnerWidth() );
-    if( rPor.InSpaceGrp() && pInf->GetSpaceAdd() )
-    {
-        SwTwips nAdd = rPor.CalcSpacing( pInf->GetSpaceAdd(), *pInf );
-        if( rPor.InFldGrp() && pInf->GetSpaceAdd() < 0 && nAdd )
-            nAdd += pInf->GetSpaceAdd();
-        aRect.Width( aRect.Width() + nAdd );
-    }
-    if( aRect.HasArea() )
-    {
-        ::SwAlignRect( aRect, (ViewShell*)pInf->GetVsh() );
-
-        if ( pInf->GetOut()->IsClipRegion() )
-        {
-            SwRect aClip( pInf->GetOut()->GetClipRegion().GetBoundRect() );
-            aRect.Intersection( aClip );
-        }
-    }
-    return aRect;
-}
 
 void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
 {

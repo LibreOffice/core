@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-21 11:16:08 $
+ *  last change: $Author: ama $ $Date: 2000-12-21 09:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ public:
     void Init( SwLinePortion *pNextPortion = NULL);
 
     // Sammelt die Daten fuer die Zeile.
-    void CalcLine( SwTxtFormatter &rLine );
+    void CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf );
 
     inline void SetRealHeight( KSHORT nNew ) { nRealHeight = nNew; }
     inline KSHORT GetRealHeight() const { return nRealHeight; }

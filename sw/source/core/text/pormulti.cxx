@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-18 10:06:13 $
+ *  last change: $Author: ama $ $Date: 2000-12-21 09:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _FCHRFMT_HXX //autogen
 #include <fchrfmt.hxx>
 #endif
+#ifndef _LAYFRM_HXX
+#include <layfrm.hxx>       // GetUpper()
+#endif
 #ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
 #endif
@@ -145,7 +148,7 @@ void SwMultiPortion::Paint( const SwTxtPaintInfo &rInf ) const
  * The internal line has to calculate first.
  * --------------------------------------------------*/
 
-void SwMultiPortion::CalcSize( SwTxtFormatter& rLine )
+void SwMultiPortion::CalcSize( SwTxtFormatter& rLine, SwTxtFormatInfo &rInf )
 {
     Width( 0 );
     Height( 0 );
@@ -153,7 +156,7 @@ void SwMultiPortion::CalcSize( SwTxtFormatter& rLine )
     SwLineLayout *pLay = &GetRoot();
     do
     {
-        pLay->CalcLine( rLine );
+        pLay->CalcLine( rLine, rInf );
         if( IsRuby() && ( OnTop() == ( pLay == &GetRoot() ) ) )
         {
             // An empty phonetic line don't need an ascent or a height.
@@ -923,7 +926,8 @@ class SwSpaceManipulator
     SvShorts *pOldSpaceAdd;
     MSHORT nOldSpIdx;
     short nSpaceAdd;
-    sal_Bool bSpaceChg;
+    sal_Bool bSpaceChg  : 1;
+    sal_Bool bRotate    : 1;
 public:
     SwSpaceManipulator( SwTxtPaintInfo& rInf, SwMultiPortion& rMult );
     ~SwSpaceManipulator();
@@ -936,6 +940,8 @@ SwSpaceManipulator::SwSpaceManipulator( SwTxtPaintInfo& rInf,
 {
     pOldSpaceAdd = rInfo.GetpSpaceAdd();
     nOldSpIdx = rInfo.GetSpaceIdx();
+    bRotate = rInfo.IsRotated();
+    rInfo.SetRotated( rMulti.GetRotation() );
     bSpaceChg = sal_False;
     if( rMulti.IsDouble() )
     {
@@ -988,6 +994,7 @@ SwSpaceManipulator::~SwSpaceManipulator()
     }
     rInfo.SetSpaceAdd( pOldSpaceAdd );
     rInfo.SetSpaceIdx( nOldSpIdx);
+    rInfo.SetRotated( bRotate );
 }
 
 /*-----------------13.10.00 16:24-------------------
@@ -1004,8 +1011,8 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 
     // old values must be saved and restored at the end
     xub_StrLen nOldLen = GetInfo().GetLen();
-    KSHORT nOldX = GetInfo().X();
-    KSHORT nOldY = GetInfo().Y();
+    KSHORT nOldX = KSHORT(GetInfo().X());
+    KSHORT nOldY = KSHORT(GetInfo().Y());
     xub_StrLen nOldIdx = GetInfo().GetIdx();
 
     SwSpaceManipulator aManip( GetInfo(), rMulti );
@@ -1013,11 +1020,14 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     SwFontSave *pFontSave;
     SwFont* pTmpFnt;
 
-    if( rMulti.IsDouble() )
+    if( rMulti.IsDouble() || rMulti.GetRotation() )
     {
         pTmpFnt = new SwFont( *GetInfo().GetFont() );
-        SetPropFont( 50 );
-        pTmpFnt->SetProportion( GetPropFont() );
+        if( rMulti.IsDouble() )
+        {
+            SetPropFont( 50 );
+            pTmpFnt->SetProportion( GetPropFont() );
+        }
         pTmpFnt->SetVertical( rMulti.GetRotation() );
         pFontSave = new SwFontSave( GetInfo(), pTmpFnt, this );
     }
@@ -1036,7 +1046,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         GetInfo().SetIdx( nOldIdx );
     }
 
-    KSHORT nTmpX = GetInfo().X();
+    KSHORT nTmpX = KSHORT(GetInfo().X());
 
     SwLineLayout* pLay = &rMulti.GetRoot();// the first line of the multiportion
     SwLinePortion* pPor = pLay->GetFirstPortion();//first portion of these line
@@ -1045,8 +1055,8 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     // this temporary to the baseline of the inner lines of the multiportion.
     if( rMulti.GetRotation() )
     {
-        GetInfo().Y( nOldY - rMulti.GetAscent() );
-        GetInfo().X( nTmpX + rMulti.Width() - pLay->GetAscent() );
+        GetInfo().Y( nOldY - rMulti.GetAscent() + rMulti.Height() );
+        GetInfo().X( nTmpX + pLay->GetAscent() );
     }
     else
         GetInfo().Y( nOldY - rMulti.GetAscent() + pLay->GetAscent() );
@@ -1107,8 +1117,9 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             aManip.SecondLine();
             if( rMulti.GetRotation() )
             {
-                GetInfo().X( nTmpX + pLay->Height() - pLay->GetAscent() );
-                GetInfo().Y( nOldY - rMulti.GetAscent() );
+                GetInfo().X( nTmpX + rMulti.Width()
+                             - pLay->Height() + pLay->GetAscent() );
+                GetInfo().Y( nOldY - rMulti.GetAscent() + rMulti.Height() );
             }
             else
             {
@@ -1187,11 +1198,19 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
     SeekAndChg( rInf );
     SwFontSave *pFontSave;
-    if( rMulti.IsDouble() )
+    if( rMulti.IsDouble() || rMulti.GetRotation() )
     {
         SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
-        SetPropFont( 50 );
-        pTmpFnt->SetProportion( GetPropFont() );
+        if( rMulti.GetRotation() )
+        {
+            pTmpFnt->SetVertical( sal_True );
+            nMaxWidth = GetTxtFrm()->GetUpper()->Prt().Height();
+        }
+        if( rMulti.IsDouble() )
+        {
+            SetPropFont( 50 );
+            pTmpFnt->SetProportion( GetPropFont() );
+        }
         pFontSave = new SwFontSave( rInf, pTmpFnt, this );
     }
     else
@@ -1247,7 +1266,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         bRet = FALSE;
         FormatReset( aInf );
         aInf.X( nTmpX );
-        aInf.Width( nActWidth );
+        aInf.Width( KSHORT(nActWidth) );
         if( pFirstRest )
         {
             ASSERT( pFirstRest->InFldGrp(), "BuildMulti: Fieldrest exspected");
@@ -1261,9 +1280,11 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         // If there's no more rubytext, then buildportion is forbidden
         if( pFirstRest || !aInf.IsRuby() )
             BuildPortions( aInf );
-        rMulti.CalcSize( *this );
+        rMulti.CalcSize( *this, aInf );
         pCurr->SetRealHeight( pCurr->Height() );
-        if( pCurr->GetLen() < nMultiLen || rMulti.IsRuby() || aInf.GetRest() )
+        if( rMulti.GetRotation() )
+            break;
+        else if( pCurr->GetLen()<nMultiLen || rMulti.IsRuby() || aInf.GetRest())
         {
             xub_StrLen nFirstLen = pCurr->GetLen();
             delete pCurr->GetNext();
@@ -1291,7 +1312,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
                 aTmp.SetRest( aInf.GetRest() );
             aInf.SetRest( NULL );
             BuildPortions( aTmp );
-            rMulti.CalcSize( *this );
+            rMulti.CalcSize( *this, aInf );
             pCurr->SetRealHeight( pCurr->Height() );
             if( rMulti.IsRuby() )
             {
@@ -1353,14 +1374,6 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         if( ((SwDoubleLinePortion&)rMulti).GetBrackets() )
             rMulti.Width( rMulti.Width() +
                 ((SwDoubleLinePortion&)rMulti).BracketWidth() );
-        if( rMulti.GetRotation() )
-        {
-            SwTwips nH = rMulti.Width();
-            rMulti.Width( rMulti.Height() );
-            rMulti.Height( nH );
-            if( rMulti.GetAscent() > nH )
-                rMulti.SetAscent( nH );
-        }
     }
     else
     {
@@ -1371,16 +1384,34 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             ((SwRubyPortion&)rMulti).CalcRubyOffset();
         }
     }
+    if( rMulti.GetRotation() )
+    {
+        SwTwips nH = rMulti.Width();
+        rMulti.Width( rMulti.Height() );
+        rMulti.Height( KSHORT(nH) );
+        if( rMulti.GetAscent() > nH )
+            rMulti.SetAscent( KSHORT(nH) );
+        if( nTmpX + rMulti.Width() > rInf.Width() )
+        {
+            bRet = sal_True;
+            rMulti.GetRoot().Truncate();
+            rMulti.GetRoot().SetLen(0);
+            rMulti.GetRoot().Width(0);
+            rMulti.CalcSize( *this, aInf );
+            rMulti.SetLen(0);
+            rInf.SetIdx( nStartIdx );
+        }
+    }
 
     if( bRet )
     {
+        ASSERT( !pNextFirst || pNextFirst->InFldGrp(),
+            "BuildMultiPortion: Surprising restportion, field exspected" );
         SwMultiPortion *pTmp;
         if( rMulti.IsDouble() )
             pTmp = new SwDoubleLinePortion( ((SwDoubleLinePortion&)rMulti),
                                             nMultiLen + rInf.GetIdx() );
-        ASSERT( !pNextFirst || pNextFirst->InFldGrp(),
-            "BuildMultiPortion: Surprising restportion, field exspected" );
-        if( rMulti.IsRuby() )
+        else if( rMulti.IsRuby() )
         {
             ASSERT( !pNextSecond || pNextSecond->InFldGrp(),
                 "BuildMultiPortion: Surprising restportion, field exspected" );
@@ -1394,7 +1425,11 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             }
             pTmp->SetFollowFld();
         }
-        if( pNextFirst )
+        else if( rMulti.GetRotation() )
+            pTmp = new SwRotatedPortion( nMultiLen + rInf.GetIdx() );
+        else
+            pTmp = NULL;
+        if( pNextFirst && pTmp )
         {
             pTmp->SetFollowFld();
             pTmp->GetRoot().SetPortion( pNextFirst );
@@ -1521,6 +1556,8 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         else if( pMulti->IsRuby() )
             pTmp = new SwRubyPortion( *pHint, *GetInfo().GetFont(), nMultiPos,
                                 ((SwRubyPortion*)pMulti)->GetRubyOffset() );
+        else if( pMulti->GetRotation() )
+            pTmp = new SwRotatedPortion( nMultiPos );
         else
             return pRest;
         pTmp->SetFollowFld();
@@ -1576,7 +1613,7 @@ SwTxtCursorSave::~SwTxtCursorSave()
 {
     if( bSpaceChg )
         SwDoubleLinePortion::ResetSpaceAdd( pTxtCrsr->pCurr );
-    pTxtCrsr->pCurr->Width( nWidth );
+    pTxtCrsr->pCurr->Width( KSHORT(nWidth) );
     pTxtCrsr->pCurr = pCurr;
     pTxtCrsr->nStart = nStart;
     pTxtCrsr->SetPropFont( nOldProp );

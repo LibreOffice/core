@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-18 10:05:30 $
+ *  last change: $Author: ama $ $Date: 2000-12-21 09:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ public:
     virtual long CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
 
     // Summarize the internal lines to calculate the (external) size
-    virtual void CalcSize( SwTxtFormatter& rLine );
+    void CalcSize( SwTxtFormatter& rLine, SwTxtFormatInfo &rInf );
 
     inline sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd );
     inline sal_Bool HasBrackets() const;
@@ -206,6 +206,12 @@ public:
     inline xub_StrLen GetRubyOffset() const { return nRubyOffset; }
 };
 
+class SwRotatedPortion : public SwMultiPortion
+{
+public:
+    SwRotatedPortion( xub_StrLen nEnd )
+        : SwMultiPortion( nEnd ) { SetRotation( sal_True ); }
+};
 
 // For cursor travelling in multiportions
 

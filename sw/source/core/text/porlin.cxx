@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-30 10:00:19 $
+ *  last change: $Author: ama $ $Date: 2000-12-21 09:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo &rInf, SwLinePortion *pLast )
         return;
     const KSHORT nHalfView = nViewWidth / 2;
 
-    KSHORT nPos = rInf.X();
+    KSHORT nPos = KSHORT(rInf.X());
     KSHORT pLastWidth = pLast->Width();
     if ( pLast->InSpaceGrp() && rInf.GetSpaceAdd() )
         pLastWidth += pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
@@ -378,16 +378,30 @@ void SwLinePortion::FormatEOL( SwTxtFormatInfo &rInf )
 void SwLinePortion::Move( SwTxtPaintInfo &rInf )
 {
     if ( InSpaceGrp() && rInf.GetSpaceAdd() )
-        rInf.X( rInf.X() + PrtWidth() + CalcSpacing(rInf.GetSpaceAdd(),rInf) );
+    {
+        SwTwips nTmp = PrtWidth() + CalcSpacing( rInf.GetSpaceAdd(), rInf );
+        if( rInf.IsRotated() )
+            rInf.Y( rInf.Y() - nTmp );
+        else
+            rInf.X( rInf.X() + nTmp );
+    }
     else
     {
         if( InFixMargGrp() )
         {
             if( rInf.GetSpaceAdd() < 0 )
-                rInf.X( rInf.X() + rInf.GetSpaceAdd() );
+            {
+                if( rInf.IsRotated() )
+                    rInf.Y( rInf.Y() - rInf.GetSpaceAdd() );
+                else
+                    rInf.X( rInf.X() + rInf.GetSpaceAdd() );
+            }
             rInf.IncSpaceIdx();
         }
-        rInf.X( rInf.X() + PrtWidth() );
+        if( rInf.IsRotated() )
+            rInf.Y( rInf.Y() - PrtWidth() );
+        else
+            rInf.X( rInf.X() + PrtWidth() );
     }
     if( IsMultiPortion() && ((SwMultiPortion*)this)->HasTabulator() )
         rInf.IncSpaceIdx();
