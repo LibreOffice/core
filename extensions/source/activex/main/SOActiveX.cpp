@@ -482,6 +482,9 @@ HRESULT CSOActiveX::LoadURLToFrame( )
     // HRESULT hr = CallLoadComponentFromURL1PBool( mCurFileUrl, L"ReadOnly", mbViewOnly );
     if( !SUCCEEDED( hr ) ) return hr;
 
+    hr = CallDispatch1PBool( L"slot:6661", L"MenuBarVisible", FALSE );
+    if( !SUCCEEDED( hr ) ) return hr;
+
     /*
     // create dispatch interceptor
     mpDispatchInterceptor = new CComObject< SODispatchInterceptor >();
