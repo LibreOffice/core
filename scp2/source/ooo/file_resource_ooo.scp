@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_resource_ooo.scp,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: is $ $Date: 2004-02-05 18:10:04 $
+*  last change: $Author: is $ $Date: 2004-02-10 11:10:55 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -68,6 +68,8 @@ STD_RES_FILE( gid_File_Res_Basctl, basctl)
 STD_RES_FILE( gid_File_Res_Bib, bib )
 
 STD_RES_FILE( gid_File_Res_Cal, cal )
+
+STD_RES_FILE( gid_File_Res_Chartcontroller, chartcontroller )
 
 STD_RES_FILE( gid_File_Res_Com, com)
 
