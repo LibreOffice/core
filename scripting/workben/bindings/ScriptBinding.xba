@@ -1069,21 +1069,25 @@ sub PopulateScriptList( lang as String, loc as String )
         next langIndex
 		dim locnDisplayList( length ) as new com.sun.star.beans.PropertyValue
 		for index = lbound(filesysScripts()) to ubound(filesysScripts())
-			scriptextn = filesysScripts(n)
+			scriptextn = filesysScripts( index )
 			pos = lastIndexOf( scriptextn, &quot;.&quot; )
             scriptextn = mid( scriptextn, pos + 1, len( scriptextn ) - pos )
-            for extnsIndex = lbound(extns) to ubound(extns)
+            
+            for extnsIndex = lbound(extns()) to ubound(extns())
                 extn = extns(extnsIndex)
-                if ( detailedView ) and ( scriptextn = extn ) then
-                    locnDisplayList( index ).Name = filesysScripts( index )
-                    locnDisplayList( index ).Value = filesysScripts( index )
-                elseif ( scriptextn = extn ) then
-                    REM replace name with simplified view
-                    locnDisplayList( index ).Name = filesysScripts( index )
-                    locnDisplayList( index ).Value = filesysScripts( index )
+                if ( scriptextn = extn ) then 
+                	if ( detailedView ) then
+                    	locnDisplayList( index ).Name = filesysScripts( index )
+                    	locnDisplayList( index ).Value = filesysScripts( index )
+                	else
+						REM replace name with simplified view
+						locnDisplayList( index ).Name = filesysScripts( index )
+						locnDisplayList( index ).Value = filesysScripts( index )
+					end if
+				scriptList.addItem( locnDisplayList( index ).Name, index )
+				exit for 
                 end if
             next extnsIndex
-			scriptList.addItem( locnDisplayList( index ).Name, index )
 		next index
 		ScriptDisplayList(0) = locnDisplayList()
 		scriptList.selectItemPos( 0, true )
@@ -1594,10 +1598,12 @@ sub MenuComboListener()
 end sub
 
 sub LangLocComboListener()
+   
 	combo = bindingDialog.getControl( &quot;LanguageCombo&quot; ) 
 	language = combo.text
 	combo = bindingDialog.getControl( &quot;LocationCombo&quot; )
 	location = combo.text 
+
 	PopulateScriptList( language,location )
 	
     &apos;Enable/disable Assign button
@@ -1899,15 +1905,21 @@ sub BrowseButton()
 			ReDim preserve filesysScripts(filesysCount) as String
 			filesysScripts( filesysCount ) = sFileURL
 			filesysCount=filesysCount+1
+			&apos; if user changed filter in file picker then populate
+			&apos; language with language associated with that in file picker
 			sFilter = oFilePicker.getCurrentFilter()
 			langCombo = bindingDialog.getControl( &quot;LanguageCombo&quot; )
 			dim items() as String
 			items() = langCombo.getItems()
 			for index = lbound(items()) to ubound(items())
-				iPos = inStr(sFilter,items(index))
+				iPos = inStr(sFilter,&quot; &quot;)
+				Dim theLanguage as String
 				if( iPos &gt; 0 ) then
-					langCombo.text = items( index )
-					exit for
+					theLanguage = Left( sFilter, iPos - 1)
+				    if ( theLanguage = items( index ) ) then
+				 		langCombo.text = items( index )
+				 		exit for
+				 	end if
 				end if
 			next index
 		End If
