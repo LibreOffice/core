@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2001-01-31 16:32:51 $
+ *  last change: $Author: pl $ $Date: 2001-02-01 14:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,9 @@
 #endif
 #ifndef _VCL_UNOWRAP_HXX
 #include <unowrap.hxx>
+#endif
+#ifndef _VCL_XCONNECTION_HXX
+#include <xconnection.hxx>
 #endif
 
 #include <com/sun/star/uno/Reference.h>
@@ -1595,6 +1598,18 @@ UnoWrapperBase* Application::GetUnoWrapper()
 {
     ImplSVData* pSVData = ImplGetSVData();
     return pSVData->mpUnoWrapper;
+}
+
+// -----------------------------------------------------------------------
+
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection > Application::GetDisplayConnection()
+{
+#ifndef REMOTE_APPSERVER
+    ImplSVData* pSVData = ImplGetSVData();
+    return pSVData->mpDisplayConnection ? pSVData->mpDisplayConnection : new ::vcl::DisplayConnection;
+#else
+    return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection >();
+#endif
 }
 
 // -----------------------------------------------------------------------

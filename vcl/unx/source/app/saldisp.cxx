@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oisin $ $Date: 2001-01-31 15:00:25 $
+ *  last change: $Author: pl $ $Date: 2001-02-01 14:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2671,7 +2671,10 @@ final long SalDisplay::Dispatch( XEvent *pEvent )
       if ( mpInputMethod->FilterEvent( pEvent, None ) )
         return 0;
 
-    DtIntegrator::HandleXEvent( pEvent );
+    // DtIntegrator::HandleXEvent( pEvent );
+    SalInstance* pInstance = GetSalData()->pFirstInstance_;
+    if( pInstance->maInstData.mpEventCallback )
+        pInstance->maInstData.mpEventCallback( pInstance->maInstData.mpEventInst, pEvent, sizeof( XEvent ) );
 
     switch( pEvent->type )
     {

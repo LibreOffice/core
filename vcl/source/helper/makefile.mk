@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pl $ $Date: 2000-10-27 15:24:45 $
+#   last change: $Author: pl $ $Date: 2001-02-01 14:08:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,10 @@ SLOFILES=\
     $(SLO)$/evntpost.obj		\
     $(SLO)$/sunowrap.obj		\
     $(SLO)$/threadex.obj
+
+.IF "$(remote)" == ""
+SLOFILES+=$(SLO)$/xconnection.obj
+.ENDIF
 
 .IF "$(GUI)" == "UNX"
 SLOFILES+=\

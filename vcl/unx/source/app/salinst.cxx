@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oisin $ $Date: 2001-01-31 15:00:25 $
+ *  last change: $Author: pl $ $Date: 2001-02-01 14:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,3 +354,22 @@ void SalInstance::AcquireYieldMutex( ULONG nCount )
 final void SalInstance::Yield( BOOL bWait )
 { GetSalData()->GetLib()->Yield( bWait ); }
 
+void SalInstance::SetEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) )
+{
+    maInstData.mpEventInst      = pInstance;
+    maInstData.mpEventCallback  = pCallback;
+}
+
+void SalInstance::SetErrorEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) )
+{
+    maInstData.mpErrorEventInst     = pInstance;
+    maInstData.mpErrorEventCallback = pCallback;
+}
+
+void* SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
+{
+    static const char* pDisplay = getenv( "DISPLAY" );
+    rReturnedType   = AsciiCString;
+    rReturnedBytes  = pDisplay ? strlen( pDisplay )+1 : 1;
+    return pDisplay ? pDisplay : "";
+}

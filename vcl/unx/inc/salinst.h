@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: pl $ $Date: 2001-02-01 14:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.1.1.1 $  $Author: hr $  $Date: 2000-09-18 17:05:41 $    //
+// $Revision: 1.2 $  $Author: pl $  $Date: 2001-02-01 14:08:06 $    //
 //                                                                            //
 // $Workfile:   salinst.h  $                                                  //
 //  $Modtime:   17 Jul 1997 17:21:10  $                                       //
@@ -106,9 +106,13 @@ class SalInstanceData
 
 public:
 
-    void*           mpFilterInst;
-    void*           mpFilterCallback;
-    SalYieldMutex*  mpSalYieldMutex;
+    void*                           mpFilterInst;
+    void*                           mpFilterCallback;
+    SalYieldMutex*                  mpSalYieldMutex;
+    bool(*mpEventCallback)(void*,void*,int);
+    void*                           mpEventInst;
+    bool(*mpErrorEventCallback)(void*,void*,int);
+    void*                           mpErrorEventInst;
 };
 
 #endif // _SV_SALINST_H
