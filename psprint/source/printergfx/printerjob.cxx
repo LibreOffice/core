@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-23 11:49:05 $
+ *  last change: $Author: cp $ $Date: 2001-05-31 11:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,6 +826,22 @@ bool PrinterJob::writeProlog (osl::File* pFile)
         "/rectfill { rectangle fill } def\n"
         "/rectstroke { rectangle stroke } def } if\n"
         "\n"
+        "/psp_lzwfilter { currentfile /ASCII85Decode filter /LZWDecode filter } def\n"
+        "/psp_ascii85filter { currentfile /ASCII85Decode filter } def\n"
+        "/psp_lzwstring { psp_lzwfilter 1024 string readstring } def\n"
+        "/psp_ascii85string { psp_ascii85filter 1024 string readstring } def\n"
+        "/psp_imagedict {\n"
+        "/psp_bitspercomponent { 3 eq { 1 }{ 8 } ifelse } def\n"
+        "/psp_decodearray { [ [0 1 0 1 0 1] [0 255] [0 1] [0 255] ] exch get }\n"
+        "def 7 dict dup\n"
+        "/ImageType 1 put dup\n"
+        "/Width 7 -1 roll put dup\n"
+        "/Height 5 index put dup\n"
+        "/BitsPerComponent 4 index psp_bitspercomponent put dup\n"
+        "/Decode 5 -1 roll psp_decodearray put dup\n"
+        "/ImageMatrix [1 0 0 1 0 0] dup 5 8 -1 roll put put dup\n"
+        "/DataSource 4 -1 roll 1 eq { psp_lzwfilter } { psp_ascii85filter } ifelse put\n"
+        "} def\n"
         "%%EndProlog\n"
     };
     WritePS (pFile, pProlog);

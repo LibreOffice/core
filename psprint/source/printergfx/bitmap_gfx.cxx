@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap_gfx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-18 13:54:05 $
+ *  last change: $Author: cp $ $Date: 2001-05-31 11:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,15 +470,31 @@ PrinterGfx::DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
     if (mnPSLevel >= 2)
     {
         if (rBitmap.GetDepth() == 1)
+        {
             DrawPS2MonoImage (rBitmap, rSrc);
+        }
         else
         if (rBitmap.GetDepth() ==  8 && mbColor)
-            DrawPS2PaletteImage (rBitmap, rSrc);
+        {
+            // if the palette is larger than the image itself print it as a truecolor
+            // image to save diskspace. This is important for printing transparent
+            // bitmaps that are disassembled into small pieces
+            sal_Int32 nImageSz   = rSrc.GetWidth() * rSrc.GetHeight();
+            sal_Int32 nPaletteSz = rBitmap.GetPaletteEntryCount();
+            if ((nImageSz < nPaletteSz) || (nImageSz < 24) )
+                DrawPS2TrueColorImage (rBitmap, rSrc);
+            else
+                DrawPS2PaletteImage (rBitmap, rSrc);
+        }
         else
         if (rBitmap.GetDepth() == 24 && mbColor)
+        {
             DrawPS2TrueColorImage (rBitmap, rSrc);
+        }
         else
+        {
             DrawPS2GrayImage (rBitmap, rSrc);
+        }
     }
     else
     {
@@ -574,36 +590,25 @@ PrinterGfx::writePS2ImageHeader (const Rectangle& rArea, psp::ImageType nType)
 {
     sal_Int32 nChar = 0;
     sal_Char  pImage [512];
-    sal_Int32 nBitsPerComponent = (nType == psp::MonochromeImage) ? 1 : 8;
-    sal_Char *pDecodeArray;
+
+    sal_Int32 nDictType;
     switch (nType)
     {
-        case psp::TrueColorImage:  pDecodeArray = "[0 1 0 1 0 1]";  break;
-        case psp::MonochromeImage: pDecodeArray = "[0 255]";        break;
-        case psp::PaletteImage:    pDecodeArray = "[0 255]";        break;
-        case psp::GrayScaleImage:  pDecodeArray = "[0 1]";          break;
+        case psp::TrueColorImage:  nDictType = 0; break;
+        case psp::PaletteImage:    nDictType = 1; break;
+        case psp::GrayScaleImage:  nDictType = 2; break;
+        case psp::MonochromeImage: nDictType = 3; break;
     }
+    sal_Int32 nCompressType = mbCompressBmp ? 1 : 0;
 
-    nChar += psp::appendStr  ("<<\n",                      pImage + nChar);
-    nChar += psp::appendStr  ("/ImageType 1\n",            pImage + nChar);
-    nChar += psp::appendStr  ("/Width ",                   pImage + nChar);
-    nChar += psp::getValueOf (rArea.GetWidth(),            pImage + nChar);
-    nChar += psp::appendStr  ("\n/Height ",                pImage + nChar);
-    nChar += psp::getValueOf (rArea.GetHeight(),           pImage + nChar);
-    nChar += psp::appendStr  ("\n/BitsPerComponent ",      pImage + nChar);
-    nChar += psp::getValueOf (nBitsPerComponent,           pImage + nChar);
-    nChar += psp::appendStr  ("\n/Decode\n",               pImage + nChar);
-    nChar += psp::appendStr  (pDecodeArray,                pImage + nChar);
-    nChar += psp::appendStr  ("\n/ImageMatrix ",           pImage + nChar);
-    nChar += psp::appendStr  ("[ 1 0 0 1 0 ",              pImage + nChar);
-    nChar += psp::getValueOf (rArea.GetHeight(),           pImage + nChar);
-    nChar += psp::appendStr  ("]\n",                       pImage + nChar);
-    nChar += psp::appendStr  ("/DataSource currentfile\n", pImage + nChar);
-    nChar += psp::appendStr  ("/ASCII85Decode filter\n",   pImage + nChar);
-    if (mbCompressBmp)
-        nChar += psp::appendStr ("/LZWDecode filter\n",    pImage + nChar);
-    nChar += psp::appendStr  (">>\n",                      pImage + nChar);
-    nChar += psp::appendStr  ("image\n",                   pImage + nChar);
+    nChar += psp::getValueOf (rArea.GetWidth(),  pImage + nChar);
+    nChar += psp::appendStr  (" ",               pImage + nChar);
+    nChar += psp::getValueOf (rArea.GetHeight(), pImage + nChar);
+    nChar += psp::appendStr  (" ",               pImage + nChar);
+    nChar += psp::getValueOf (nDictType,         pImage + nChar);
+    nChar += psp::appendStr  (" ",               pImage + nChar);
+    nChar += psp::getValueOf (nCompressType,     pImage + nChar);
+    nChar += psp::appendStr  (" psp_imagedict image\n", pImage + nChar);
 
     WritePS (mpPageBody, pImage);
 }
@@ -611,53 +616,50 @@ PrinterGfx::writePS2ImageHeader (const Rectangle& rArea, psp::ImageType nType)
 void
 PrinterGfx::writePS2Colorspace(const PrinterBmp& rBitmap, psp::ImageType nType)
 {
-    sal_Int32 nChar = 0;
-    sal_Char  pImage [4096];
-
     switch (nType)
     {
         case psp::GrayScaleImage:
-            nChar += psp::appendStr ("/DeviceGray setcolorspace\n", pImage);
+
+            WritePS (mpPageBody, "/DeviceGray setcolorspace\n");
             break;
 
         case psp::TrueColorImage:
-            nChar += psp::appendStr ("/DeviceRGB setcolorspace\n", pImage);
+
+            WritePS (mpPageBody, "/DeviceRGB setcolorspace\n");
             break;
 
         case psp::MonochromeImage:
         case psp::PaletteImage:
 
-            nChar += psp::appendStr  ("[/Indexed /DeviceRGB ", pImage + nChar);
-            nChar += psp::getValueOf (rBitmap.GetPaletteEntryCount() - 1, pImage + nChar);
-            nChar += psp::appendStr  ("\n<",                   pImage + nChar );
+            sal_Int32 nChar = 0;
+            sal_Char  pImage [4096];
 
-            sal_Int32 nColumn = 0;
+            sal_Int32 nSize = rBitmap.GetPaletteEntryCount() - 1;
+
+            nChar += psp::appendStr ("[/Indexed /DeviceRGB ", pImage + nChar);
+            nChar += psp::getValueOf (rBitmap.GetPaletteEntryCount() - 1, pImage + nChar);
+            if (mbCompressBmp)
+                nChar += psp::appendStr ("\npsp_lzwstring\n", pImage + nChar);
+            else
+                nChar += psp::appendStr ("\npsp_ascii85string\n", pImage + nChar);
+            WritePS (mpPageBody, pImage);
+
+            ByteEncoder* pEncoder = mbCompressBmp ? new LZWEncoder(mpPageBody)
+                                                  : new Ascii85Encoder(mpPageBody);
             for (sal_Int32 i = 0; i < rBitmap.GetPaletteEntryCount(); i++)
             {
                 PrinterColor aColor = rBitmap.GetPaletteColor(i);
 
-                nChar += psp::getHexValueOf (aColor.GetRed(),   pImage + nChar);
-                nChar += psp::getHexValueOf (aColor.GetGreen(), pImage + nChar);
-                nChar += psp::getHexValueOf (aColor.GetBlue(),  pImage + nChar);
-
-                if (++nColumn > (nLineLength / 7)) // each entry accounts for 7 Bytes
-                {
-                    nChar += psp::appendStr ("\n", pImage + nChar);
-                    nColumn = 0;
-                }
-                else
-                {
-                    nChar += psp::appendStr (" ", pImage + nChar);
-                }
-
+                pEncoder->EncodeByte (aColor.GetRed());
+                pEncoder->EncodeByte (aColor.GetGreen());
+                pEncoder->EncodeByte (aColor.GetBlue());
             }
+            delete pEncoder;
 
-            nChar += psp::appendStr  (">\n",               pImage + nChar);
-            nChar += psp::appendStr  ("] setcolorspace\n", pImage + nChar);
+            WritePS (mpPageBody, "pop ] setcolorspace\n");
+
             break;
     }
-
-    WritePS (mpPageBody, pImage);
 }
 
 void
