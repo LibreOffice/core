@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxfactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:54:36 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,12 +114,12 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENTFACTORY_HPP_
-#include <drafts/com/sun/star/ui/XUIElementFactory.hpp>
+#ifndef _COM_SUN_STAR_UI_XUIELEMENTFACTORY_HPP_
+#include <com/sun/star/ui/XUIElementFactory.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -139,7 +139,7 @@ namespace framework
 
 class ToolBoxFactory :  public com::sun::star::lang::XTypeProvider                  ,
                         public com::sun::star::lang::XServiceInfo                   ,
-                        public drafts::com::sun::star::ui::XUIElementFactory        ,
+                        public ::com::sun::star::ui::XUIElementFactory        ,
                         protected ThreadHelpBase                                    ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                         public ::cppu::OWeakObject
 {
@@ -153,11 +153,11 @@ class ToolBoxFactory :  public com::sun::star::lang::XTypeProvider              
         DECLARE_XTYPEPROVIDER
 
         // XUIElementFactory
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XUIElement > SAL_CALL createUIElement( const ::rtl::OUString& ResourceURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args ) throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL createUIElement( const ::rtl::OUString& ResourceURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args ) throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XModuleManager > m_xModuleManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > m_xModuleManager;
 };
 
 }
