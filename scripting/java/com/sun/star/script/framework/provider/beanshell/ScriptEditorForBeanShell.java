@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptEditorForBeanShell.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: svesik $ $Date: 2004-04-19 23:10:48 $
+*  last change: $Author: hr $ $Date: 2004-07-23 14:02:55 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -88,6 +88,7 @@ import bsh.Interpreter;
 import drafts.com.sun.star.script.provider.XScriptContext;
 import com.sun.star.script.framework.provider.ScriptEditor;
 import com.sun.star.script.framework.container.ScriptMetaData;
+import com.sun.star.script.framework.provider.ClassLoaderFactory;
 
 public class ScriptEditorForBeanShell
     implements ScriptEditor, ActionListener
@@ -100,6 +101,7 @@ public class ScriptEditorForBeanShell
 
     private XScriptContext context;
     private URL scriptURL = null;
+    private ClassLoader  cl = null;
 
     // global ScriptEditorForBeanShell returned for getEditor() calls
     private static ScriptEditorForBeanShell theScriptEditorForBeanShell;
@@ -206,6 +208,23 @@ public class ScriptEditorForBeanShell
         return "bsh";
     }
 
+
+    /**
+     *  Indicates the line where error occured
+     *
+     */
+    public void indicateErrorLine( int lineNum )
+    {
+        model.indicateErrorLine( lineNum );
+    }
+    /**
+     *  Executes the script edited by the editor
+     *
+     */
+    public Object execute() throws Exception {
+        frame.toFront();
+        return model.execute( context, cl );
+    }
     /**
      *  Opens an editor window for the specified ScriptMetaData.
      *  If an editor window is already open for that data it will be
@@ -219,6 +238,13 @@ public class ScriptEditorForBeanShell
 
         if (entry != null ) {
             try {
+                ClassLoader cl = null;
+                try {
+                    cl = ClassLoaderFactory.getURLClassLoader( entry );
+                }
+                catch (Exception ignore) // TODO re-examine error handling
+                {
+                }
                 String sUrl = entry.getParcelLocation();
                 if ( !sUrl.endsWith( "/" ) )
                 {
@@ -237,7 +263,7 @@ public class ScriptEditorForBeanShell
                 }
                 else
                 {
-                    new ScriptEditorForBeanShell(context, url);
+                    new ScriptEditorForBeanShell(context, cl, url);
                 }
             }
             catch (IOException ioe) {
@@ -249,13 +275,14 @@ public class ScriptEditorForBeanShell
     private ScriptEditorForBeanShell() {
     }
 
-    private ScriptEditorForBeanShell(XScriptContext context, URL url)
+    private ScriptEditorForBeanShell(XScriptContext context, ClassLoader cl,
+        URL url)
     {
         this.context   = context;
         this.scriptURL = url;
         this.model     = new ScriptSourceModel(url);
         this.filename  = url.getFile();
-
+        this.cl = cl;
         try {
             Class c = Class.forName(
                 "org.openoffice.netbeans.editor.NetBeansSourceView");
@@ -332,14 +359,7 @@ public class ScriptEditorForBeanShell
         OutputStream fos = null;
         try {
             String s = view.getText();
-            if ( scriptURL.getProtocol().equals("file") )
-            {
-                fos = new FileOutputStream( filename );
-            }
-            else
-            {
-                fos = scriptURL.openConnection().getOutputStream();
-            }
+            fos = scriptURL.openConnection().getOutputStream();
             if ( fos  != null) {
                 fos.write(s.getBytes());
             }
@@ -381,11 +401,12 @@ public class ScriptEditorForBeanShell
 
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Run")) {
-            try {
-                model.execute(context);
+            try
+            {
+                execute();
             }
-            catch (java.lang.reflect.InvocationTargetException ite) {
-                showErrorMessage(ite.getMessage());
+            catch (Exception invokeException ) {
+                showErrorMessage(invokeException.getMessage());
             }
         }
         else if (e.getActionCommand().equals("Close")) {
