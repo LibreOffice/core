@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: vg $ $Date: 2002-01-10 17:18:59 $
+#   last change: $Author: hjs $ $Date: 2002-01-18 12:42:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.41 $ ';
+$id_str = ' $Revision: 1.42 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -377,13 +377,32 @@ sub CorrectPath {
 # Get platform-dependent dmake commando
 #
 sub GetDmakeCommando {
-    my ($dmake, $arg);
+    my ($dmake, $dmake_insert);
 
     # Setting alias for dmake
-    $dmake = 'dmake';
-    while ($arg = pop(@dmake_args)) {
-        $dmake .= ' '.$arg;
-    };
+    $dmake_insert = join ' ', @dmake_args;
+    if (defined $ENV{PRODUCTNAME}) {
+        if (defined $ENV{DMAKE}) {
+            $dmake = $ENV{DMAKE};
+            if ($ENV{GUI} ne 'UNX') {
+                $dmake = $ENV{COMSPEC} . ' -c ' . "\"$dmake\"";
+                $dmake =~ s/#/%/g;
+#               print "$dmake";
+            } else {
+                $dmake = $ENV{SHELL} . " -cf \"$dmake\"";
+#               print "$dmake";
+            }
+        } else {
+            die "PRODUCNAME without \$DMAKE set";
+        }
+        $dmake =~ s/\&\&/$dmake_insert \&\&/;
+    } else {
+        if (defined $ENV{DMAKE}) {
+            $dmake = $ENV{DMAKE} . $dmake_insert;
+        } else {
+            $dmake = 'dmake' . $dmake_insert;
+        }
+    }
     return $dmake;
 };
 
