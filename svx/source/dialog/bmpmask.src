@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:10:42 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ japanese ] = "ι€ιζ€§(~A)";
         Text[ chinese_traditional ] = "ι€ζ(~A)";
         Text[ arabic ] = "ΤέΗένΙ";
-        Text[ greek ] = "Διαφάνεια";
+        Text[ greek ] = "~Διαφάνεια";
         Text[ korean ] = "ν¬λª…(~A)";
         Text[ turkish ] = "ή~effaflύk";
         Text[ language_user1 ] = " ";
@@ -434,7 +434,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ japanese ] = "η½®ζ›(~R)";
         Text[ chinese_traditional ] = "ζ›Ώδ»£(~R)";
         Text[ arabic ] = "ΗΣΚΘΟΗα";
-        Text[ greek ] = "Αντικατάσταση";
+        Text[ greek ] = "~Αντικατάσταση";
         Text[ korean ] = "λ°”κΎΈκΈ°(~R)";
         Text[ turkish ] = "~Deπiώtir";
         Text[ language_user1 ] = " ";
@@ -608,13 +608,14 @@ String RID_SVXDLG_BMPMASK_STR_SOURCECOLOR
     Text[ portuguese ] = "Cor-fonte";
     Text[ russian ] = "Θρυξδνϋι";
     Text[ polish ] = "Kolor orygin.";
-    Text[ portuguese_brazilian ] = "Cor-Fonte";
+    Text[ portuguese_brazilian ] = "Cor de origem";
     Text[ thai ] = "ΰΉΰΈ«ΰΈ¥ΰΉΰΈ‡ΰΈªΰΈµ";
     Text[ hindi ] = "ΰ¤®ΰ¥‚ΰ¤² ΰ¤°ΰ¤‚ΰ¤—";
     Text[ slovak ] = "PΓ΄vodnΓ΅ farba";
 };
 
  // ********************************************************************** EOF
+
 
 
 
