@@ -8,7 +8,7 @@
 Public HeaderPreviews(4) as Object
 Public ImportDialog as Object
 Public ImportDialogArea as Object
-Public bSetFonts as Boolean
+
 &apos; If the ProgressPage ist already on Top The Dialog will be immediately closed when this flag is
 &apos; set to False
 Public bConversionIsRunnig as Boolean
@@ -21,12 +21,7 @@ Sub Main()
 	End If
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	RetValue = 10
-	bSetFonts = False
 	bConversionIsRunnig = False
-	If bSetFonts Then
-		BasicLibraries.LoadLibrary(&quot;Translater&quot;)
-		GetFontNames()
-	End If
 	sCRLF = CHR(10) &amp; CHR(13)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	oFactoriesAccess = GetRegistryKeyContent(&quot;org.openoffice.Setup/Office/Factories&quot;)
@@ -47,7 +42,7 @@ Sub Main()
 	ImportDialogArea.GetControl(&quot;optSODocuments&quot;).SetFocus()
 	RetValue = ImportDialogArea.Execute()
 	If RetValue = 0 Then
-		CallCancelTask()
+		CancelTask()
 	End If
 	ImportDialogArea.Dispose()
 	End
@@ -125,9 +120,7 @@ Dim iCurStep as Integer
 				FillStep_Welcome()
 				bDoKeepApplValues = True
 			End If
-			
 	End Select
-
 	ImportDialog.cmdGoOn.DefaultButton = True
 	RepaintHeaderPreview()	
 	Exit Sub
@@ -136,17 +129,10 @@ RTError:
 End Sub
 
 
-Sub CallCancelTask()
-	CancelTask(True)
-End Sub
 
-
-Sub CancelTask(bCloseDialog as Boolean)
+Sub CancelTask()
 	If bConversionIsRunnig Then
 		If Msgbox(sConvertError1, 36, sConvertError2) = 6 Then
-			If bCloseDialog Then
-				ImportDialogArea.EndExecute
-			End If
 			bCancelTask = True
 		Else
 			bCancelTask = False

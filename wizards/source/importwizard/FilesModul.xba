@@ -6,9 +6,13 @@ Public AbsTemplateFound as Integer
 Public AbsDocuFound as Integer
 Public oLogDocument as Object
 Public oLogTable as Object
+Public bLogExists as Boolean
+
 Public bInsertRow as Boolean
 Public sLogUrl as String
 Public sCurPassWord as String
+Public FileCount as Integer
+
 
 
 
@@ -97,42 +101,47 @@ Dim bIsDocument as Boolean
 Dim iOverWrite as Integer
 Dim bDoSave as Boolean
 Dim sCurFileExists as String
-Dim oModel as Object
 Dim MaxFileIndex as Integer
-Dim FileCount as Integer
-&apos;Dim sOldExtension as String
 Dim bContainsBasicMacro as Boolean
 Dim bIsPassWordProtected as Boolean
 	bConversionIsRunnig = True
+	bLogExists = false
 	AbsTemplateFound = 0
 	AbsDocuFound = 0
 	For i = 0 To ApplCount-1
 		&apos;templates
+		If bCancelTask Or RetValue = 0 Then
+			bConversionIsRunnig = False
+			Exit Sub
+		End if		
 		bIsDocument = False
 		CurFound = ReadApplicationDirectories(i, FilesList(), bIsDocument, sFilterName())
 		ShowCurrentProgress(bIsDocument, CurFound)
 	Next i
 	For i = 0 To ApplCount-1
 		&apos;documents
+		If bCancelTask Or RetValue = 0 Then
+			bConversionIsRunnig = False
+			Exit Sub
+		End if		
 		bIsDocument = True
 		CurFound = ReadApplicationDirectories(i, FilesList(), bIsDocument, sFilterName())
 		ShowCurrentProgress(bIsDocument, CurFound)
 	Next i
 	TotFound = AbsTemplateFound + AbsDocuFound
-	CreateLogDocument(OpenProperties())
 	If TotFound &gt; 0 Then
+		CreateLogDocument(OpenProperties())
 		InitializeProgressPage(ImportDialog)
 		OpenProperties(0).Name = &quot;Hidden&quot;
 		OpenProperties(0).Value = True
 		OpenProperties(1).Name = &quot;AsTemplate&quot;
 		OpenProperties(1).Name = False
-		
 		MaxFileIndex = Ubound(FilesList(),1)
 		FileCount = 0
 		For i = 0 To MaxFileIndex
 			If bCancelTask Or RetValue = 0 Then
 				bConversionIsRunnig = False
-				Exit Sub
+				Exit For
 			End if
 			bDoSave = True
 			sFullName = FilesList(i,0)
@@ -140,19 +149,11 @@ Dim bIsPassWordProtected as Boolean
 			ApplIndex = FilesList(i,2)
 			sViewPath = CutPathView(sFullName, 60)
 			ImportDialog.LabelCurDocument.Label = Str(i+1) &amp; &quot;/&quot; &amp; MaxFileIndex + 1 &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
-&apos;		sOldExtension = GetFileNameExtension(sFullName, &quot;/&quot;)
-&apos;		Select Case sOldExtension
-&apos;			Case &quot;vor&quot;, &quot;dot&quot;, &quot;xlt&quot;, &quot;pot&quot;
-&apos;				OpenProperties(1).Value = False
-&apos;			Case Else
-&apos;				OpenProperties(1).Value = False
-&apos;		End Select
 			oDocument = StarDesktop.LoadComponentFromURL(sFullName, &quot;_blank&quot;, 0, OpenProperties())
-			bIsPassWordProtected = CheckPassWordProtection(oDocument)
-			bContainsBasicMacro = CheckIfMacroExists(oDocument)
-			If bSetFonts Then
-				CheckScripts(oDocument, 1)
+			If Not IsNull(oDocument) Then
+				bIsPassWordProtected = CheckPassWordProtection(oDocument)
 			End If
+			bContainsBasicMacro = CheckIfMacroExists(oDocument)
 
 			If Not IsNull(oDocument) Then
 				Select Case sExtension
@@ -206,14 +207,8 @@ Dim bIsPassWordProtected as Boolean
 			End If
 		Next i
 	End If
-	AddLogStatistics(FileCount)
-	oLogDocument.Dispose()
-	If (ImportDialog.chkLogfile.State = 1) And (FileCount &gt; 0) Then
-		ImportDialog.cmdShowLogFile.Enabled = True
-	End If
-	ImportDialog.cmdCancel.Label = sCloseButton
-	ImportDialog.cmdGoOn.Label = sReady
-	ImportDialog.cmdGoOn.Enabled = True
+	AddLogStatistics()
+	FinalizeDialogButtons()
 	bConversionIsRunnig = False
 	Exit Sub
 RTError:
@@ -318,7 +313,7 @@ Dim oLogCursor as Object
 Dim oLogRows as Object
 Dim NoArgs()
 Dim i as Integer
-Dim bLogExists as Boolean
+Dim bLogIsThere as Boolean
 	If ImportDialog.chkLogfile.State = 1 Then
 		i = 2
 		OpenProperties(0).Name = &quot;Hidden&quot;
@@ -335,8 +330,8 @@ Dim bLogExists as Boolean
 		bInsertRow = False
 		sLogUrl = SOWorkPath &amp; &quot;/Logfile.sxw&quot;
 		Do
-			bLogExists = oUcb.Exists(sLogUrl)
-			If bLogExists Then
+			bLogIsThere = oUcb.Exists(sLogUrl)
+			If bLogIsThere Then
 				If i = 2 Then
 					sLogUrl = ReplaceString(sLogUrl, &quot;/Logfile_2.sxw&quot;, &quot;/Logfile.sxw&quot;)
 				Else
@@ -344,9 +339,10 @@ Dim bLogExists as Boolean
 				End If
 				i = i + 1
 			End If
-		Loop Until Not bLogExists
+		Loop Until Not bLogIsThere
+		bLogExists = True
 		oLogDocument.StoreAsUrl(sLogUrl, NoArgs())
-	EndIf
+	End If
 End Sub
 
 
@@ -358,7 +354,7 @@ Dim LocFileName as String
 Dim LocUrl as String
 Dim i as Integer
 Dim oCommentCursor as Object
-	If ImportDialog.chkLogfile.State = 1 Then
+	If bLogExists Then
 		If bInsertRow Then
 			oLogTable.Rows.InsertByIndex(oLogTable.Rows.Count,1)
 		Else
@@ -387,12 +383,12 @@ Dim oCommentCursor as Object
 End Sub
 
 
-Sub AddLogStatistics(FileCount as Integer)
+Sub AddLogStatistics()
 Dim oCell as Object
 Dim oLogCursor as Object
 Dim MaxRowIndex as Integer
 Dim oTableCursor as Object
-	If ImportDialog.chkLogfile.State = 1 Then
+	If bLogExists Then
 		MaxRowIndex = oLogTable.Rows.Count
 		sLogSummary = ReplaceString(sLogSummary, FileCount, &quot;&lt;COUNT&gt;&quot;)
 		oLogTable.Rows.InsertByIndex(MaxRowIndex, 1)
@@ -403,6 +399,8 @@ Dim oTableCursor as Object
 		oTableCursor.goRight(1, True)
 		oTableCursor.mergeRange()
 		oLogDocument.Store()
+		oLogDocument.Dispose()
+		bLogExists = False
 	End If
 End Sub
 

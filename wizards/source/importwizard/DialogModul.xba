@@ -502,4 +502,13 @@ Dim oRefControl
 	oRefControl = ImportDialogArea.GetControl(RefControlName)
 	GetFolderName(oRefControl.Model)
 	ToggleNextButton()
-End Sub</script:module>
+End Sub
+
+
+Sub FinalizeDialogButtons()	
+	ImportDialog.cmdShowLogFile.Enabled = FileCount &gt; 0
+	ImportDialog.cmdCancel.Enabled = False
+	ImportDialog.cmdGoOn.Label = sCloseButton
+	ImportDialog.cmdGoOn.Enabled = True
+End Sub	
+</script:module>

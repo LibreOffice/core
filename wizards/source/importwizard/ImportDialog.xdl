@@ -29,7 +29,7 @@
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ImportWizard.Main.PrevStep" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="cmdCancel" dlg:tab-index="18" dlg:left="6" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34572" dlg:value="cmdCancel">
-   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ImportWizard.Main.CallCancelTask" script:language="StarBasic"/>
+   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ImportWizard.Main.CancelTask" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="cmdHelp" dlg:tab-index="19" dlg:left="65" dlg:top="190" dlg:width="50" dlg:height="14" dlg:tag="34571" dlg:value="cmdHelp" dlg:button-type="help"/>
   <dlg:button dlg:id="cmdGoOn" dlg:tab-index="20" dlg:left="214" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34574" dlg:value="cmdGoOn">
