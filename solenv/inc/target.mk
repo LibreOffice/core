@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-02 13:58:54 $
+#   last change: $Author: hjs $ $Date: 2001-02-05 19:59:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,6 +146,14 @@ DEPFILESx+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(DEPOBJFIL
 DEPFILESx+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(OBJFILES:s/.obj/.dpcc/))
 DEPFILESx+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SLOFILES:s/.obj/.dpcc/))
 DEPFILESx+=$(subst,$(PAR),$(MISC) $(ALLPARFILES:s/.par/.dpcc/))
+.IF "$(RCFILES)"!=""
+.IF "$(RESNAME)"!=""
+#RCTARGET!:=$(foreach,i,$(alllangext) $(RES)$/$i$/$(RESNAME).res)
+DEPFILESx+=$(MISC)$/$(RESNAME).dpcc
+.ELSE			# "$(RESNAME)"!=""
+DEPFILESx+=$(foreach,i,$(alllangext) $(MISC)$/$i$/$(TARGET).dprc)
+.ENDIF			# "$(RESNAME)"!=""
+.ENDIF			# "$(RCFILES)"!=""
 DEPFILES=$(uniq $(DEPFILESx))
 
 .IF "$(TESTOBJECTS)"!=""
@@ -166,9 +174,9 @@ something_wrong_with_objects :
 .ENDIF			# "$(DEPFILES_TEST)"!=""
 .ENDIF			# "$(TESTOBJECTS)"!=""
 
-.IF "$(depend)" == ""
-
 .INCLUDE : postset.mk
+
+.IF "$(depend)" == ""
 
 # -------
 # - ALL -
