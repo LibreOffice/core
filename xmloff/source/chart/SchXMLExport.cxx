@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 18:29:14 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1967,12 +1967,8 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             }
             if( bExportContent )
             {
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, (mnDomainAxes > 0)
-                                       ? XML_DOMAIN      // scatter (or bubble) chart
-                                       : XML_CATEGORY );
-
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_X );
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, XML_PRIMARY_X );
-
 
                 // write style name
                 AddAutoStyleAttribute( aPropertyStates );
@@ -2099,10 +2095,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             }
             if( bExportContent )
             {
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, (mnDomainAxes > 0)
-                                       ? XML_DOMAIN      // scatter (or bubble) chart
-                                       : XML_CATEGORY );
-
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_X );
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, XML_SECONDARY_X );
                 AddAutoStyleAttribute( aPropertyStates );
                 pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
@@ -2148,7 +2141,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             }
             if( bExportContent )
             {
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_VALUE );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_Y );
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, XML_PRIMARY_Y );
                 AddAutoStyleAttribute( aPropertyStates );
                 pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
@@ -2255,7 +2248,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             }
             if( bExportContent )
             {
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_VALUE );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_Y );
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, XML_SECONDARY_Y );
                 AddAutoStyleAttribute( aPropertyStates );
                 pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
@@ -2298,7 +2291,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             }
             if( bExportContent )
             {
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_SERIES );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_Z );
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, XML_PRIMARY_Z );
 
                 AddAutoStyleAttribute( aPropertyStates );
