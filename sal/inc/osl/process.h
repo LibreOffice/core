@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 13:01:52 $
+ *  last change: $Author: jbu $ $Date: 2001-03-16 15:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,14 +285,6 @@ oslProcessError SAL_CALL osl_getCommandArg(sal_uInt32 nArg, rtl_uString **strCom
     @param strValue [out] string that receives the value of environment variable.
 */
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *strVar, rtl_uString **strValue);
-
-/** Receive io-resources like file descriptors or sockets from the parent process.
-    @param Resources [out] is the buffer in wich the resources are returned.
-    @param Max [in] is the size of this buffer.
-    @return osl_Process_E_None if the variable exists, otherwise an errorcode.
-    @see osl_executeProcess (provide the ioresources)
-*/
-oslProcessError SAL_CALL osl_getIOResources(oslIOResource Resources[], sal_uInt32 Max);
 
 sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe Pipe, oslSocket Socket);
 
