@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewElementListProvider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 15:15:28 $
+ *  last change: $Author: iha $ $Date: 2003-12-04 16:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
     pPage->NbcInsertObject(pObj);
     pView->MarkObj(pObj,pPageView);
     if( pSymbolShapeProperties )
-        pObj->SetItemSet(*pSymbolShapeProperties);
+        pObj->SetMergedItemSet(*pSymbolShapeProperties);
 
     GDIMetaFile aMeta(pView->GetAllMarkedMetaFile());
 
