@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:19:18 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
     }
 
     fillListBox(_rDatasources);
-
+#ifdef HAVE_ODBC_ADMINISTRATION
     // allow ODBC datasource managenment
     if ( DST_ODBC == _eType || DST_MYSQL_ODBC == _eType )
     {
@@ -203,7 +203,7 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
         m_aManageDatasources.Enable();
         m_aManageDatasources.SetClickHdl(LINK(this,ODatasourceSelectDialog,ManageClickHdl));
     }
-
+#endif
     m_aDatasource.SetDoubleClickHdl(LINK(this,ODatasourceSelectDialog,ListDblClickHdl));
     FreeResource();
 }
@@ -270,13 +270,12 @@ IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, pButton )
     return 0L;
 }
 // -----------------------------------------------------------------------
+#ifdef HAVE_ODBC_ADMINISTRATION
 IMPL_LINK( ODatasourceSelectDialog, ManageClickHdl, PushButton*, pButton )
 {
     OOdbcManagement aOdbcConfig;
-#ifdef HAVE_ODBC_ADMINISTRATION
     if (!aOdbcConfig.isLoaded())
     {
-#endif
         // show an error message
         OLocalResourceAccess aLocRes(DLG_DATASOURCE_SELECTION, RSC_MODALDIALOG);
         String sError(ModuleRes(STR_COULDNOTLOAD_CONFIGLIB));
@@ -286,7 +285,6 @@ IMPL_LINK( ODatasourceSelectDialog, ManageClickHdl, PushButton*, pButton )
         m_aDatasource.GrabFocus();
         m_aManageDatasources.Disable();
         return 1L;
-#ifdef HAVE_ODBC_ADMINISTRATION
     }
 
     aOdbcConfig.manageDataSources(GetSystemData()->hWnd);
@@ -297,8 +295,8 @@ IMPL_LINK( ODatasourceSelectDialog, ManageClickHdl, PushButton*, pButton )
     fillListBox(aOdbcDatasources);
 
     return 0L;
-#endif
 }
+#endif
 // -----------------------------------------------------------------------------
 void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
 {
