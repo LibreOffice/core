@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hdu $ $Date: 2001-05-23 12:41:12 $
+ *  last change: $Author: hdu $ $Date: 2001-07-11 15:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,11 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
 
     mpDisplay = _pDisplay;
 
-    if( getenv("SAL_ANTIALIAS_DISABLE") )
+    int nEnvAntiAlias = ~0;
+    const char* pEnvAntiAlias = getenv( "SAL_ANTIALIAS_DISABLE" );
+    if( pEnvAntiAlias )
+        nEnvAntiAlias = atoi( pEnvAntiAlias );
+    if( nEnvAntiAlias == 0 )
         return;
 
     // we can do anti aliasing on the client side
@@ -106,6 +110,9 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
             mbForcedAA = false;
     if( pXVisualInfo != NULL )
         XFree( pXVisualInfo );
+
+    if( (nEnvAntiAlias & 1) == 0 )
+        mbForcedAA = false;
 
 #if defined(USE_XRENDER)
     // but we prefer the hardware accelerated solution
@@ -133,10 +140,10 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     pFunc = dlsym( pRenderLib, "XRenderFindVisualFormat" );
 
     if( !pFunc ) return;
-    pXRenderFindVisualFormat    = (XRenderPictFormat*(*)(Display*,Visual*))pFunc;
+    pXRenderFindVisualFormat        = (XRenderPictFormat*(*)(Display*,Visual*))pFunc;
     pFunc = dlsym( pRenderLib, "XRenderFindFormat" );
     if( !pFunc ) return;
-    pXRenderFindFormat          = (XRenderPictFormat*(*)(Display*,unsigned long,XRenderPictFormat*,int))pFunc;
+    pXRenderFindFormat              = (XRenderPictFormat*(*)(Display*,unsigned long,XRenderPictFormat*,int))pFunc;
     pFunc = dlsym( pRenderLib, "XRenderCreateGlyphSet" );
     if( !pFunc ) return;
     pXRenderCreateGlyphSet          = (GlyphSet(*)(Display*,XRenderPictFormat*))pFunc;
@@ -175,6 +182,8 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     if( pVisualFormat != NULL )
         mbUsingXRender = true;
 
+    if( (nEnvAntiAlias & 2) == 0 )
+        mbUsingXRender = false;
 #endif // USE_XRENDER
 }
 
@@ -322,7 +331,6 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
             {
                 // conversion table LSB<->MSB (for XCreatePixmapFromData)
                 static const unsigned char lsb2msb[256] =
-
                 {
                     0x00, 0x80, 0x40, 0xC0, 0x20, 0xA0, 0x60, 0xE0,
                     0x10, 0x90, 0x50, 0xD0, 0x30, 0xB0, 0x70, 0xF0,
@@ -364,7 +372,7 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
 
                 aPixmap = XCreatePixmapFromBitmapData( mpDisplay,
                     DefaultRootWindow( mpDisplay ), (char*)maRawBitmap.mpBits,
-                    maRawBitmap.mnWidth, maRawBitmap.mnHeight, 0, 1, 1 );
+                    maRawBitmap.mnWidth, maRawBitmap.mnHeight, 1, 0, 1 );
                 mnBytesUsed += nBytes;
             }
         }
