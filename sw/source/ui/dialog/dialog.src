@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:41:22 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ String STR_PATH_NOT_FOUND1
     Text[ polish ] = "Katalog";
     Text[ japanese ] = "οΎƒοΎο½¨οΎο½ΈοΎ„οΎγ€";
     Text[ language_user1 ] = " ";
-    Text[ chinese_traditional ] = "ι€™ε€‹η›®ι„ '";
+    Text[ chinese_traditional ] = "ι€™ε€‹η›®ι„<";
     Text[ arabic ] = "ΗαΟανα '";
     Text[ greek ] = "Ο κατάλογος '";
     Text[ korean ] = "λ””λ ‰ν† λ¦¬'";
@@ -192,7 +192,7 @@ String STR_PATH_NOT_FOUND2
     Text[ russian ] = "' νε ρσωερςβσες.";
     Text[ polish ] = "nie istnieje.";
     Text[ japanese ] = "γ€γ―ε­ε¨γ—γ¦γ„γΎγ›γ‚“γ€‚";
-    Text[ chinese_traditional ] = "' δΈε­ε¨γ€‚";
+    Text[ chinese_traditional ] = ">δΈε­ε¨γ€‚";
     Text[ arabic ] = "' ΫνΡ γζΜζΟ.";
     Text[ greek ] = "' δεν υπάρχει.";
     Text[ korean ] = "' μ΄/κ°€ μ΅΄μ¬ν•μ§€ μ•μ";
@@ -204,6 +204,7 @@ String STR_FLT_SGV
 {
     Text = "SGV - StarDraw 2.0,SGV" ;
 };
+
 
 
 
