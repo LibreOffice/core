@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.11 $
+*  $Revision: 1.12 $
 *
-*  last change: $Author: lkovacs $ $Date: 2002-11-01 13:58:33 $
+*  last change: $Author: lkovacs $ $Date: 2002-11-04 15:42:00 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -279,6 +279,7 @@ throw( RuntimeException )
     return itr->second;
 }
 
+//*******************************************************************
 void SAL_CALL
 ScriptStorageManager::refreshScriptStorage(const OUString & stringURI)
 throw( RuntimeException )
@@ -390,6 +391,25 @@ throw ( ::com::sun::star::uno::RuntimeException )
 
     // erase the entry from the hash
     m_ScriptStorageHash.erase( scriptStorageID );
+
+    StorageId_hash::iterator it = m_StorageIdHash.begin();
+    StorageId_hash::iterator it_end = m_StorageIdHash.end();
+    for( ; it != it_end; ++it)
+    {
+    if (it->second == scriptStorageID)
+        {
+         break;
+        }
+    }
+
+    if (it == it_end)
+    {
+    throw RuntimeException(
+            OUSTR( "ScriptStorageManager::disposing: attempt to dispose non-existent storage" ),
+            Reference< XInterface >() );
+    }
+
+    m_StorageIdHash.erase(it);
 }
 
 //*************************************************************************
