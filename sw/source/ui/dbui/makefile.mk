@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: os $ $Date: 2001-08-30 13:56:10 $
+#   last change: $Author: os $ $Date: 2002-05-31 07:17:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,6 @@ CXXFILES = \
 
 SRCFILES =  \
         dbinsdlg.src	\
-        dbtree.src	\
         dbui.src
 
 SLOFILES =  \
