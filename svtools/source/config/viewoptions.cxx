@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2000-12-04 12:07:08 $
+ *  last change: $Author: mba $ $Date: 2000-12-08 10:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1699,4 +1699,42 @@ Mutex& SvtViewOptions::GetOwnStaticMutex()
     }
     // Return new created or already existing mutex object.
     return *pMutex;
+}
+
+void SvtViewOptions::AcquireOptions()
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    if( ++m_nRefCount_Dialogs == 1 )
+        m_pDataContainer_Dialogs = new SvtViewDialogOptions_Impl;
+    if( ++m_nRefCount_TabDialogs == 1 )
+        m_pDataContainer_TabDialogs = new SvtViewTabDialogOptions_Impl;
+    if( ++m_nRefCount_TabPages == 1 )
+        m_pDataContainer_TabPages = new SvtViewTabPageOptions_Impl;
+    if( ++m_nRefCount_Windows == 1 )
+        m_pDataContainer_Windows = new SvtViewWindowOptions_Impl;
+}
+
+void SvtViewOptions::ReleaseOptions()
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    if( --m_nRefCount_Dialogs == 0 )
+    {
+        delete m_pDataContainer_Dialogs;
+        m_pDataContainer_Dialogs = NULL;
+    }
+    if( --m_nRefCount_TabDialogs == 0 )
+    {
+        delete m_pDataContainer_TabDialogs;
+        m_pDataContainer_TabDialogs = NULL;
+    }
+    if( --m_nRefCount_TabPages == 0 )
+    {
+        delete m_pDataContainer_TabPages;
+        m_pDataContainer_TabPages = NULL;
+    }
+    if( --m_nRefCount_Windows == 0 )
+    {
+        delete m_pDataContainer_Windows;
+        m_pDataContainer_Windows = NULL;
+    }
 }
