@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 14:54:58 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 12:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
     virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::lang::IllegalArgumentException);
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue);
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception );
 
     ::com::sun::star::uno::Any  SAL_CALL getFastPropertyValue( sal_Int32 nHandle )
        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -376,8 +376,8 @@ public:
     virtual void SAL_CALL removeSubmitListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XSubmitListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
 
     // com::sun::star::container::XChild
-    virtual InterfaceRef SAL_CALL getParent() { return OFormComponents::getParent(); }
-    virtual void SAL_CALL setParent(const InterfaceRef& Parent);
+    virtual InterfaceRef SAL_CALL getParent() throw ( ::com::sun::star::uno::RuntimeException) { return OFormComponents::getParent(); }
+    virtual void SAL_CALL setParent(const InterfaceRef& Parent) throw ( :: com::sun::star::lang::NoSupportException , ::com::sun::star::uno::RuntimeException);
 
     // com::sun::star::container::XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
