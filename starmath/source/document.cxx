@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 11:11:47 $
+ *  last change: $Author: cmc $ $Date: 2000-11-15 10:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,10 @@
 #ifndef MATHTYPE_HXX
 #include <mathtype.hxx>
 #endif
+#ifndef MATHML_HXX
+#include <mathml.hxx>
+#endif
+
 
 
 using namespace ::com::sun::star;
@@ -625,8 +629,23 @@ void SmDocShell::Convert40To50Txt()
 BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
 {
     BOOL     bSuccess = FALSE;
-    String aTmpStr( C2S( "Equation Native" ));
-    if( rMedium.IsStorage() && rMedium.GetStorage()->IsStream( aTmpStr ))
+    if (rMedium.GetFilter()->GetFilterName().EqualsAscii(
+                    "MathML XML (Math)" ))
+    {
+        SmXMLWrapper aEquation(GetModel());
+        DBG_ASSERT(!pTree,"pTree not NULL");
+        if (pTree)
+            delete pTree;
+        pTree = aEquation.Import(rMedium);
+        if (pTree)
+        {
+            //ToDo
+            //aText = pTree->CreateTextFromTree();
+            bSuccess = TRUE;
+        }
+    }
+    else if( rMedium.IsStorage() && rMedium.GetStorage()->IsStream(
+        C2S( "Equation Native" )))
     {
         // is this a MathType Storage?
         MathType aEquation( aText );
@@ -803,8 +822,17 @@ BOOL SmDocShell::ConvertTo( SfxMedium &rMedium )
 {
     BOOL bRet = FALSE;
     const SfxFilter* pFlt = rMedium.GetFilter();
-    if( pFlt && pFlt->GetFilterName().EqualsAscii( "MathType 3.x" ))
-        bRet = WriteAsMathType3( rMedium );
+    if( pFlt )
+    {
+        if(pFlt->GetFilterName().EqualsAscii(
+            "MathML XML (Math)" ))
+        {
+            SmXMLWrapper aEquation(GetModel());
+            bRet = aEquation.Export(rMedium,pTree);
+        }
+        else if( pFlt->GetFilterName().EqualsAscii("MathType 3.x"))
+            bRet = WriteAsMathType3( rMedium );
+    }
     return bRet;
 }
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jp $ $Date: 2000-11-08 14:49:23 $
+#   last change: $Author: cmc $ $Date: 2000-11-15 10:47:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,6 +103,7 @@ SLOFILES =  \
         $(SLO)$/dialog.obj \
         $(SLO)$/document.obj \
         $(SLO)$/mathtype.obj \
+        $(SLO)$/mathml.obj \
         $(SLO)$/format.obj \
         $(SLO)$/node.obj \
         $(SLO)$/parse.obj \
