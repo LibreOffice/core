@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-30 18:28:19 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 11:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2108,7 +2108,8 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow, sal_Bool bForceInsertIfNewRow)
                     // we need to insert the if the current row isn't the insert row or if the
                     // cursor triggered the move by itselt and we need a reinitialization of the row
                     Reference< XPropertySet > xCursorProps((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
-                    if (bForceInsertIfNewRow || !::comphelper::getBOOL(xCursorProps->getPropertyValue(FM_PROP_ISNEW)))
+                    //  if ( !::comphelper::getBOOL(xCursorProps->getPropertyValue(FM_PROP_ISNEW)) || (bForceInsertIfNewRow && !::comphelper::getBOOL(xCursorProps->getPropertyValue(FM_PROP_ISNEW))) )
+                    if ( !::comphelper::getBOOL(xCursorProps->getPropertyValue(FM_PROP_ISNEW)) )
                     {
                         Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
                         xUpdateCursor->moveToInsertRow();
@@ -2117,14 +2118,18 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow, sal_Bool bForceInsertIfNewRow)
                 }
                 else
                 {
-                    Any aBookmark = m_pSeekCursor->getBookmark();
-                    if (!m_xCurrentRow || m_xCurrentRow->IsNew() || !CompareBookmark(aBookmark, m_pDataCursor->getBookmark()))
+
+                    if ( !m_pSeekCursor->isBeforeFirst() && !m_pSeekCursor->isAfterLast() )
                     {
-                        // adjust the cursor to the new desired row
-                        if (!m_pDataCursor->moveToBookmark(aBookmark))
+                        Any aBookmark = m_pSeekCursor->getBookmark();
+                        if (!m_xCurrentRow || m_xCurrentRow->IsNew() || !CompareBookmark(aBookmark, m_pDataCursor->getBookmark()))
                         {
-                            EndCursorAction();
-                            return sal_False;
+                            // adjust the cursor to the new desired row
+                            if (!m_pDataCursor->moveToBookmark(aBookmark))
+                            {
+                                EndCursorAction();
+                                return sal_False;
+                            }
                         }
                     }
                 }
