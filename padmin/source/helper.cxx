@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:46:06 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,8 @@ ResId padmin::PaResId( ULONG nId )
     static ResMgr* pPaResMgr = NULL;
     if( ! pPaResMgr )
     {
-        LanguageType nLang = LANGUAGE_SYSTEM;
+        ::com::sun::star::lang::Locale aLocale;
+//      LanguageType nLang = LANGUAGE_SYSTEM;
 
         utl::OConfigurationNode aNode =
             utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
@@ -148,14 +149,20 @@ ResId padmin::PaResId( ULONG nId )
             Any aValue = aNode.getNodeValue( OUString::createFromAscii( "ooLocale" ) );
             if( aValue >>= aLoc )
             {
-                LanguageType nTmpLang = ConvertIsoStringToLanguage( aLoc );
-                if( nTmpLang != LANGUAGE_DONTKNOW )
-                    nLang = nTmpLang;
+//                LanguageType nTmpLang = ConvertIsoStringToLanguage( aLoc );
+//                if( nTmpLang != LANGUAGE_DONTKNOW )
+//                    nLang = nTmpLang;
+                sal_Int32 nIndex = 0;
+                aLocale.Language = aLoc.getToken( 0, '-', nIndex );
+                aLocale.Country = aLoc.getToken( 0, '-', nIndex );
+                aLocale.Variant = aLoc.getToken( 0, '-', nIndex );
             }
         }
-        pPaResMgr = ResMgr::SearchCreateResMgr( "spa" MAKE_NUMSTR(SUPD), nLang );
+//      pPaResMgr = ResMgr::SearchCreateResMgr( "spa" MAKE_NUMSTR(SUPD), nLang );
+        pPaResMgr = ResMgr::SearchCreateResMgr( "spa" MAKE_NUMSTR(SUPD), aLocale );
         AllSettings aSettings = Application::GetSettings();
-        aSettings.SetUILanguage( nLang );
+//        aSettings.SetUILanguage( nLang );
+        aSettings.SetUILocale( aLocale );
         Application::SetSettings( aSettings );
     }
     return ResId( nId, pPaResMgr );
