@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1237,7 +1237,7 @@ String STR_OLE_EDIT
     TEXT [ portuguese ] = "Editar objecto" ;
     TEXT [ finnish ] = "Muokkaa objektia" ;
     TEXT [ danish ] = "Rediger objekt" ;
-    TEXT [ french ] = "Modifier l'objet" ;
+    TEXT [ french ] = "Éditer l'objet" ;
     TEXT [ swedish ] = "Redigera objekt" ;
     TEXT [ dutch ] = "Een object bewerken" ;
     TEXT [ spanish ] = "Editar objeto" ;
@@ -1343,7 +1343,7 @@ String STR_FRMUI_WRAP
     Text [ danish ] = "Ombrydning" ;
     Text [ french ] = "Adaptation du texte" ;
     Text [ swedish ] = "Textanpassning" ;
-    Text [ dutch ] = "Om beeld" ;
+    Text [ dutch ] = "Omloop" ;
     Text [ spanish ] = "Ajuste" ;
     Text [ english_us ] = "Wrap" ;
     Text[ chinese_simplified ] = "»·ÈÆ";
@@ -1370,7 +1370,7 @@ InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
     MESSAGE [ portuguese ] = "O espaço entre as colunas é grande demais para a largura das colunas." ;
     MESSAGE [ finnish ] = "Palstojen väli on palstojen leveyttä suurempi." ;
     MESSAGE [ danish ] = "Kolonneafstanden er for stor til kolonnebredden." ;
-    MESSAGE [ french ] = "Largeur de gouttière excède largeur de colonne." ;
+    MESSAGE [ french ] = "Écart entre les colonnes excède largeur de colonne." ;
     MESSAGE [ swedish ] = "Fästmarginalens bredd är för stor för kolumnbredden." ;
     MESSAGE [ dutch ] = "De kolomafstand is te groot voor deze kolombreedte" ;
     MESSAGE [ spanish ] = "La distancia entre columnas es demasiado grande para el ancho de las columnas." ;
