@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:39:28 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -12105,9 +12105,9 @@ String STR_STATSTR_WRITING
 
 String STR_MATH_DOCUMENT_FULLTYPE_60
 {
-    Text = "%PRODUCTNAME 6.0 Formel" ;
-    Text [ ENGLISH ] = "StarOffice 6.0 Formula" ;
-    Text[ english_us ] = "%PRODUCTNAME 6.0 Formula";
+    Text = "%PRODUCTNAME %PRODUCTVERSION Formel" ;
+    Text [ ENGLISH ] = "StarOffice %PRODUCTVERSION Formula" ;
+    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION Formula";
     Text[ portuguese ] = "StarOffice 6.0 Fórmula";
     Text[ russian ] = "Ôîðìóëà â %PRODUCTNAME 6.0";
     Text[ greek ] = "%PRODUCTNAME 6.0 Ôýðïò";
