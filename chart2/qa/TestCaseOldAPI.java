@@ -20,11 +20,12 @@ import com.sun.star.awt.*;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.CloseVetoException;
 
-import drafts.com.sun.star.chart2.XTitled;
-import drafts.com.sun.star.chart2.XTitle;
-import drafts.com.sun.star.chart2.XDataProvider;
-import drafts.com.sun.star.chart2.XFormattedString;
-import drafts.com.sun.star.chart2.XDiagramProvider;
+import com.sun.star.chart2.XTitled;
+import com.sun.star.chart2.XTitle;
+import com.sun.star.chart2.XDataProvider;
+import com.sun.star.chart2.XDataReceiver;
+import com.sun.star.chart2.XFormattedString;
+import com.sun.star.chart2.XDiagramProvider;
 
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.comp.helper.ComponentContext;
@@ -162,9 +163,9 @@ public class TestCaseOldAPI extends ComplexTestCase {
         try
         {
             // trying back-querying (from old Wrapper to new Model)
-            drafts.com.sun.star.chart2.XChartDocument xNewDoc =
-                (drafts.com.sun.star.chart2.XChartDocument) UnoRuntime.queryInterface(
-                    drafts.com.sun.star.chart2.XChartDocument.class,
+            com.sun.star.chart2.XChartDocument xNewDoc =
+                (com.sun.star.chart2.XChartDocument) UnoRuntime.queryInterface(
+                    com.sun.star.chart2.XChartDocument.class,
                     mxOldDoc );
 
             // set title at new chart
@@ -537,19 +538,17 @@ public class TestCaseOldAPI extends ComplexTestCase {
                 XDataProvider.class,
                 xFactory.createInstance( "com.sun.star.comp.chart.FileDataProvider" ));
 
-            drafts.com.sun.star.chart2.XChartDocument xDoc =
-                (drafts.com.sun.star.chart2.XChartDocument) UnoRuntime.queryInterface(
-                    drafts.com.sun.star.chart2.XChartDocument.class,
-                    xModel );
+            XDataReceiver xRec = (XDataReceiver) UnoRuntime.queryInterface(
+                XDataReceiver.class, xModel );
 
             if( xDataProv != null &&
-                xDoc != null )
+                xRec != null )
             {
-                xDoc.attachDataProvider( xDataProv );
+                xRec.attachDataProvider( xDataProv );
                 String aURL = "file://" + System.getProperty( "user.dir" ) +
                     System.getProperty( "file.separator" ) + "data.chd";
                 log.println( aURL );
-                xDoc.setRangeRepresentation( aURL );
+                xRec.setRangeRepresentation( aURL );
             }
         }
         catch( Exception ex )
@@ -623,11 +622,11 @@ public class TestCaseOldAPI extends ComplexTestCase {
                 aStrings[0] = (XFormattedString) UnoRuntime.queryInterface(
                     XFormattedString.class,
                     xFact.createInstance(
-                        "drafts.com.sun.star.chart2.FormattedString" ));
+                        "com.sun.star.chart2.FormattedString" ));
                 aStrings[1] = (XFormattedString) UnoRuntime.queryInterface(
                     XFormattedString.class,
                     xFact.createInstance(
-                        "drafts.com.sun.star.chart2.FormattedString" ));
+                        "com.sun.star.chart2.FormattedString" ));
                 aStrings[0].setString( aTitle );
                 aStrings[1].setString( " Title" );
 
@@ -637,7 +636,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                 xTitle = (XTitle) UnoRuntime.queryInterface(
                     XTitle.class,
                     xCompFact.createInstanceWithContext(
-                        "drafts.com.sun.star.chart2.Title",
+                        "com.sun.star.chart2.Title",
                         new ComponentContext( aParams, getComponentContext( xFact ) )));
 
                 xTitle.setText( aStrings );
