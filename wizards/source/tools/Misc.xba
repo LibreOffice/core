@@ -177,20 +177,21 @@ End Function
 
 &apos; Gets a special configured PathSetting
 Function GetPathSettings(sPathType as String,  Optional bshowall as Boolean, Optional ListIndex as integer) as String
-Dim oPathSettings as Object
+Dim oSettings, oPathSettings as Object
 Dim sPath as String
 Dim PathList() as String
 Dim MaxIndex as Integer
-Dim oUcb as Object
-	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
-	oPathSettings = createUnoService(&quot;com.sun.star.util.PathSettings&quot;)
+Dim oPS as Object
+	
+	oPS = createUnoService(&quot;com.sun.star.util.PathSettings&quot;)
+
   	If Not IsMissing(bShowall) Then
 		If bShowAll Then
-			ShowPropertyValues(oPathSettings)
+			ShowPropertyValues(oPS)
 			Exit Function
 		End If
 	End If
- 	sPath = oPathSettings.GetPropertyValue(sPathType)
+ 	sPath = oPS.getPropertyValue(sPathType)
 	If Not IsMissing(ListIndex) Then
 		&apos; Share and User-Directory
 		If Instr(1,sPath,&quot;;&quot;) &lt;&gt; 0 Then
@@ -435,12 +436,15 @@ End Sub
 
 Function GetDocumentType(oDocument)
 	On Local Error GoTo NODOCUMENTTYPE
+&apos;	ShowSupportedServiceNames(oDocument)
 	If oDocument.SupportsService(&quot;com.sun.star.sheet.SpreadsheetDocument&quot;) Then
 		GetDocumentType() = &quot;scalc&quot;
 	ElseIf oDocument.SupportsService(&quot;com.sun.star.text.TextDocument&quot;) Then
 		GetDocumentType() = &quot;swriter&quot;
 	ElseIf oDocument.SupportsService(&quot;com.sun.star.drawing.DrawingDocument&quot;) Then
 		GetDocumentType() = &quot;sdraw&quot;
+	ElseIf oDocument.SupportsService(&quot;com.sun.star.presentation.PresentationDocument&quot;) Then
+		GetDocumentType() = &quot;simpress&quot;
 	ElseIf oDocument.SupportsService(&quot;com.sun.star.formula.FormulaProperties&quot;) Then
 		GetDocumentType() = &quot;smath&quot;
 	End If
@@ -755,18 +759,18 @@ Dim ErrMsg as String
 	oDocument = StarDesktop.LoadComponentFromURL(sUrl,&quot;_default&quot;,0, NoArgs())
 NOMODULEINSTALLED:
 	If (Err &lt;&gt; 0) OR IsNull(oDocument) Then
-		If InitResources(&quot;&quot;, &quot;dbw&quot;) Then
+		If InitResources(&quot;&quot;, &quot;com&quot;) Then
 			Select Case sType
 				Case &quot;swriter&quot;
-					ErrMsg = GetResText(501)
+					ErrMsg = GetResText(1001)
 				Case &quot;scalc&quot;
-					ErrMsg = GetResText(502)
+					ErrMsg = GetResText(1002)
 				Case &quot;simpress&quot;
-					ErrMsg = GetResText(503)
+					ErrMsg = GetResText(1003)
 				Case &quot;sdraw&quot;
-					ErrMsg = GetResText(504)
+					ErrMsg = GetResText(1004)
 				Case &quot;smath&quot;
-					ErrMsg = GetResText(505)
+					ErrMsg = GetResText(1005)
 				Case Else
 					ErrMsg = &quot;Invalid Document Type!&quot;
 			End Select
