@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 19:25:36 $
+#   last change: $Author: kz $ $Date: 2004-02-26 15:54:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,7 +109,9 @@ SLOFILES=	\
         $(SLO)$/grfitem.obj \
         $(SLO)$/clipfmtitem.obj \
         $(SLO)$/svxempty.obj \
-        $(SLO)$/xmlcnitm.obj
+        $(SLO)$/xmlcnitm.obj \
+        $(SLO)$/charhiddenitem.obj
+
 
 EXCEPTIONSFILES= \
         $(SLO)$/paraitem.obj \
