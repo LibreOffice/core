@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:33:00 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,9 +189,9 @@
 #include "svxids.hrc"
 #endif
 
-#ifndef _SVX_TABORDER_HXX
-#include "taborder.hxx"
-#endif
+//CHINA001 #ifndef _SVX_TABORDER_HXX
+//CHINA001 #include "taborder.hxx"
+//CHINA001 #endif
 
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
@@ -262,6 +262,9 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+
+#include "svxdlg.hxx" //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 #define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
     try                                                                     \
@@ -986,9 +989,16 @@ void FmFormShell::Execute(SfxRequest &rReq)
         }   break;
         case SID_FM_TAB_DIALOG:
         {
-            FmTabOrderDlg aTabOrderDlg(::comphelper::getProcessServiceFactory(), Application::GetDefDialogParent(), this );
-            aTabOrderDlg.Execute();
-            rReq.Done();
+            //CHINA001 FmTabOrderDlg aTabOrderDlg(::comphelper::getProcessServiceFactory(), GetpApp()->GetAppWindow(), this );
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            if(pFact)
+            {
+                VclAbstractDialog* aTabOrderDlg = pFact->CreateFmTabOrderDlg( ::comphelper::getProcessServiceFactory(), Application::GetDefDialogParent(), this, ResId(RID_SVXDLG_TAB_ORDER) );
+                DBG_ASSERT(aTabOrderDlg, "Dialogdiet fail!");//CHINA001
+                aTabOrderDlg->Execute(); //CHINA001 aTabOrderDlg.Execute();
+                rReq.Done();
+                delete aTabOrderDlg;
+            }
         }   break;
         case SID_FM_DESIGN_MODE:
         {
@@ -1202,12 +1212,19 @@ void FmFormShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                FmInputRecordNoDialog dlg(NULL);
-                dlg.SetValue(xCursor->getRow());
-                if (dlg.Execute() == RET_OK)
-                    nRecord = dlg.GetValue();
+                //CHINA001 FmInputRecordNoDialog dlg(NULL);
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                if(pFact)
+                {
+                    AbstractFmInputRecordNoDialog* dlg = pFact->CreateFmInputRecordNoDialog( NULL, ResId(RID_SVX_DLG_INPUTRECORDNO) );
+                    DBG_ASSERT(dlg, "Dialogdiet fail!");//CHINA001
+                    dlg->SetValue(xCursor->getRow()); //CHINA001 dlg.SetValue(xCursor->getRow());
+                    if (dlg->Execute() == RET_OK) //CHINA001 if (dlg.Execute() == RET_OK)
+                        nRecord = dlg->GetValue(); //CHINA001 nRecord = dlg.GetValue();
 
-                rReq.AppendItem( SfxInt32Item( FN_PARAM_1, nRecord ) );
+                    rReq.AppendItem( SfxInt32Item( FN_PARAM_1, nRecord ) );
+                    delete dlg; //add by CHINA001
+                }
             }
 
             if (nRecord != -1)
