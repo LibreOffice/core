@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctabl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:17:02 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,7 @@ uno::Reference< uno::XInterface > SAL_CALL create_EnhancedCustomShapeEngine( con
 #ifndef SVX_LIGHT
 #include "UnoGraphicExporter.hxx"
 #endif
+#include "unogalthemeprovider.hxx"
 
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -317,6 +318,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
 #ifndef SVX_LIGHT
             writeInfo( pKey, svx::GraphicExporter_getImplementationName(), svx::GraphicExporter_getSupportedServiceNames() );
 #endif
+            writeInfo( pKey, ::unogallery::GalleryThemeProvider_getImplementationName(),::unogallery::GalleryThemeProvider_getSupportedServiceNames() );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -364,6 +366,13 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 svx::GraphicExporter_getSupportedServiceNames() );
         }
 #endif
+        else if( ::unogallery::GalleryThemeProvider_getImplementationName().equalsAscii( pImplName ) )
+        {
+            xFactory = ::cppu::createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                ::unogallery::GalleryThemeProvider_getImplementationName(),
+                ::unogallery::GalleryThemeProvider_createInstance,
+                ::unogallery::GalleryThemeProvider_getSupportedServiceNames() );
+        }
         if( xFactory.is())
         {
             xFactory->acquire();
@@ -375,5 +384,3 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
 }
 
 }
-
-
