@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.69 $
+#   $Revision: 1.70 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 13:46:13 $
+#   last change: $Author: rt $ $Date: 2005-01-31 17:21:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,11 +69,8 @@ TARGET=copying
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 #----------------------------------------------------------------
 
-#IDLLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f -print))}
 IDLLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f | sed -e '/star.portal/d' -e'/star.webservices/d'))}
 DESTIDLLIST={$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLLIST))}
-
-#IDLDIRLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type d -print))}
 
 DESTINCLUDELIST={$(subst,$(SOLARINCDIR),$(DESTDIRINC) $(INCLUDELIST))}
 DESTINCDIRLIST={$(subst,$(INCOUT),$(DESTDIRINC) $(INCLUDEDIRLIST))}
@@ -119,7 +116,6 @@ EXELIST = \
     $(DESTDIRBIN)$/idlc$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/javamaker$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/xml2cmp$(EXEPOSTFIX)	\
-    $(DESTDIRBIN)$/uno$(EXEPOSTFIX) \
     $(DESTDIRBIN)$/autodoc$(EXEPOSTFIX) \
     $(DESTDIRBIN)$/unoapploader$(EXEPOSTFIX)
 
@@ -164,6 +160,14 @@ SETTINGSLIST= \
     $(DESTDIRSETTINGS)$/settings.mk \
     $(DESTDIRSETTINGS)$/std.mk \
     $(DESTDIRSETTINGS)$/stdtarget.mk
+
+.IF "$(GUI)"=="WNT"
+SETTINGSLIST+=$(DESTDIRSETTINGS)$/component.uno.def
+.ENDIF
+
+.IF "$(GUI)"=="UNX"
+SETTINGSLIST+=$(DESTDIRSETTINGS)$/component.uno.map
+.ENDIF
 
 DOCUSTUDIO4INTEGRATIONHTMLFILES= \
     $(DESTDIRDOCU)$/DevStudioWizards$/CalcAddinWizard.html \
@@ -239,17 +243,35 @@ DOCUHTMLFILES+= \
 
 DOCUFILES+= \
     $(DOCUHTMLFILES) \
-    $(DESTDIRDOCUIMAGES)$/black_dot.gif \
     $(DESTDIRDOCUIMAGES)$/nada.gif \
-    $(DESTDIRDOCUIMAGES)$/logo.gif \
-    $(DESTDIRDOCUIMAGES)$/sdk_logo.gif
+    $(DESTDIRDOCUIMAGES)$/arrow-1.gif \
+    $(DESTDIRDOCUIMAGES)$/arrow-2.gif \
+    $(DESTDIRDOCUIMAGES)$/arrow-3.gif \
+    $(DESTDIRDOCUIMAGES)$/bg_table.gif \
+    $(DESTDIRDOCUIMAGES)$/bluball.gif \
+    $(DESTDIRDOCUIMAGES)$/nada.gif \
+    $(DESTDIRDOCUIMAGES)$/nav_down.png \
+    $(DESTDIRDOCUIMAGES)$/nav_home.png \
+    $(DESTDIRDOCUIMAGES)$/nav_left.png \
+    $(DESTDIRDOCUIMAGES)$/nav_right.png \
+    $(DESTDIRDOCUIMAGES)$/nav_up.png \
+    $(DESTDIRDOCUIMAGES)$/sdk_head-1.gif \
+    $(DESTDIRDOCUIMAGES)$/sdk_head-2.gif \
+    $(DESTDIRDOCUIMAGES)$/sdk_head-3.gif \
+    $(DESTDIRDOCUIMAGES)$/sdk_line-1.gif \
+    $(DESTDIRDOCUIMAGES)$/sdk_line-2.gif \
+    $(DESTDIRDOCUIMAGES)$/so-main-app_32.png \
+    $(DESTDIRDOCUIMAGES)$/ooo-main-app_32.png
+
 #	$(DOCUSTUDIO4INTEGRATIONGRAPHICSFILES) \
 
 .IF "$(GUI)"=="UNX"
 INSTALLSCRIPT= \
     $(DESTDIR)$/configure \
     $(DESTDIR)$/configure.pl \
-    $(DESTDIR)$/setsdkenv_unix.in
+    $(DESTDIR)$/setsdkenv_unix \
+    $(DESTDIR)$/setsdkenv_unix.sh.in \
+    $(DESTDIR)$/setsdkenv_unix.csh.in
 .ELSE
 INSTALLSCRIPT= \
     $(DESTDIR)$/configureWindows.bat \
@@ -275,14 +297,27 @@ DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
 DIR_CREATE_FLAG=$(MISC)$/copying_dirs_created.txt
 DIR_FILE_FLAG=$(MISC)$/copying_files.txt
 
+# Special work for simple uno bootstrap mechanism
+# zip uno loader class files and winreg helper library for later
+# use in the build process (e.g. helper tools)
+MYZIPTARGET=$(BIN)$/uno_loader_classes.zip
+MYZIPFLAGS=-u -r
+MYZIPDIR=$(DESTDIRJAR)
+MYZIPLIST=com$/* win$/*
+
 #--------------------------------------------------
 # TARGETS
 #--------------------------------------------------
 all : \
     $(DIR_FILE_LIST) \
-    $(DIR_FILE_FLAG)
+    $(DIR_FILE_FLAG) \
+    $(MYZIPTARGET)
 
 #--------------------------------------------------
 # use global rules
 #--------------------------------------------------   
 .INCLUDE: $(PRJ)$/util$/odk_rules.pmk
+
+$(MYZIPTARGET) : $(DESTDIRJAR)$/win$/unowinreg.dll $(DESTCLASSESLIST)
+    +cd $(MYZIPDIR) && zip $(MYZIPFLAGS) ..$/..$/..$/bin$/$(MYZIPTARGET:b) $(MYZIPLIST)
+
