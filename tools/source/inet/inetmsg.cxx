@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetmsg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 16:36:37 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,29 +399,29 @@ BOOL INetRFC822Message::GenerateDateField (
 
     USHORT nNum = rDateTime.GetDay();
     if (nNum < 10) rDateField += '0';
-    rDateField += nNum;
+    rDateField += ByteString::CreateFromInt32(nNum);
     rDateField += ' ';
 
     rDateField += months[(USHORT)(rDateTime.GetMonth() - 1)];
     rDateField += ' ';
 
-    rDateField += rDateTime.GetYear();
+    rDateField += ByteString::CreateFromInt32(rDateTime.GetYear());
     rDateField += ' ';
 
     // Insert Time.
     nNum = rDateTime.GetHour();
     if (nNum < 10) rDateField += '0';
-    rDateField += nNum;
+    rDateField += ByteString::CreateFromInt32(nNum);
     rDateField += ':';
 
     nNum = rDateTime.GetMin();
     if (nNum < 10) rDateField += '0';
-    rDateField += nNum;
+    rDateField += ByteString::CreateFromInt32(nNum);
     rDateField += ':';
 
     nNum = rDateTime.GetSec();
     if (nNum < 10) rDateField += '0';
-    rDateField += nNum;
+    rDateField += ByteString::CreateFromInt32(nNum);
     rDateField += " GMT";
 
     // Done.
