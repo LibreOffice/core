@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-13 12:40:36 $
+ *  last change: $Author: nn $ $Date: 2001-07-19 19:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
+#ifndef _CLIPLISTENER_HXX
+#include <svtools/cliplistener.hxx>
+#endif
 
 #include "app.hrc"
 #include "helpids.h"
@@ -193,7 +196,9 @@ SdDrawViewShell::SdDrawViewShell(SfxViewFrame* pFrame, SfxViewShell *pOldShell) 
     nLastSlot(0),
     bReadOnly(pDocSh->IsReadOnly()),
     bInEffectAssignment(FALSE),
-    pSlotArray( NULL )
+    pSlotArray( NULL ),
+    pClipEvtLstnr(NULL),
+    bPastePossible(FALSE)
 {
     if (pOldShell)
     {
@@ -237,7 +242,9 @@ SdDrawViewShell::SdDrawViewShell(SfxViewFrame* pFrame,
     nLastSlot(0),
     bReadOnly(pDocSh->IsReadOnly()),
     bInEffectAssignment(FALSE),
-    pSlotArray( NULL )
+    pSlotArray( NULL ),
+    pClipEvtLstnr(NULL),
+    bPastePossible(FALSE)
 {
     pFrameView = new FrameView(pDoc);
     pFrameView->Connect();
@@ -308,6 +315,12 @@ __EXPORT SdDrawViewShell::~SdDrawViewShell()
     // entsprechende Shell ist aber schon vom SFX vom Dispatcher-Stack
     // genommen worden.
     bObjectBarSwitchEnabled = FALSE;
+
+    if ( pClipEvtLstnr )
+    {
+        pClipEvtLstnr->AddRemoveListener( GetActiveWindow(), FALSE );
+        pClipEvtLstnr->release();
+    }
 
     delete pDrView;
     SetWindow(NULL);
