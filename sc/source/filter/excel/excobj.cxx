@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:32:37 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,9 +186,8 @@ void ImportExcel::Obj()
     }
     if( pObj )
     {
-//-/        pObj->SetAttributes( aSet, TRUE );
-        pObj->ClearItem();
-        pObj->SetItemSetAndBroadcast(aSet);
+        pObj->ClearMergedItem();
+        pObj->SetMergedItemSetAndBroadcast(aSet);
 
         pObj->NbcSetLogicRect(Rectangle( aUL, aLR ) );
         pObj->SetLayer( SC_LAYER_FRONT );
@@ -490,9 +489,8 @@ void ImportExcel::EndAllChartObjects( void )
 
                 SdrOle2Obj*     pSdrObj = new SdrOle2Obj( aIPObj, aName, p->aRect );
 
-//-/                pSdrObj->SetAttributes( *p->pAttrs, TRUE );
-                pSdrObj->ClearItem();
-                pSdrObj->SetItemSetAndBroadcast(*p->pAttrs);
+                pSdrObj->ClearMergedItem();
+                pSdrObj->SetMergedItemSetAndBroadcast(*p->pAttrs);
 
                 pSdrObj->SetLayer( SC_LAYER_FRONT );
 
