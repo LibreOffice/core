@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XColumnsSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:07 $
+ *  last change:$Date: 2003-09-08 10:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.sdbcx;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbcx.XColumnsSupplier;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.sdbcx.XColumnsSupplier</code>
@@ -83,7 +84,6 @@ public class _XColumnsSupplier extends MultiMethodTest {
     * <code>XNameAccess</code> object, FAILED otherwise.
     */
     public void _getColumns() {
-        boolean result = true ;
 
         XNameAccess cols = oObj.getColumns() ;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _ResultSet.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:07 $
+ *  last change:$Date: 2003-09-08 10:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,22 +61,7 @@
 
 package ifc.sdbcx;
 
-import java.io.PrintWriter;
-
-import com.sun.star.uno.XInterface;
-import com.sun.star.lang.XServiceInfo;
-
-import com.sun.star.uno.UnoRuntime;
-
-import util.*;
-import lib.*;
-
-import com.sun.star.beans.XPropertySet;
-
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sheet.FunctionArgument;
-import com.sun.star.beans.UnknownPropertyException ;
-import com.sun.star.beans.PropertyVetoException ;
+import lib.MultiPropertyTest;
 
 /**
 * Testing <code>com.sun.star.sdbcx.ResultSet</code>
