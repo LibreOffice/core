@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.15 2000-12-15 14:04:20 mib Exp $
+	$Id: text.mod,v 1.16 2000-12-19 14:48:14 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -1040,7 +1040,7 @@ indices, and there may be only one text:index-title element.
 <!ATTLIST text:linenumbering-configuration text:count-empty-lines %boolean; "true">
 <!ATTLIST text:linenumbering-configuration text:count-in-floating-frames %boolean; "false">
 <!ATTLIST text:linenumbering-configuration text:restart-numbering %boolean; "false">
-<!ATTLIST text:linenumbering-configuration text:offset %nonNegativeLength; #IMPLIED
+<!ATTLIST text:linenumbering-configuration text:offset %nonNegativeLength; #IMPLIED>
 <!ATTLIST text:linenumbering-configuration style:num-format (1|a|A|i|I) "1">
 <!ATTLIST text:linenumbering-configuration style:num-letter-sync %boolean; "false">
 <!ATTLIST text:linenumbering-configuration text:number-position (left|rigth|inner|outer) "left">
