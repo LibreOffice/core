@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-08 15:59:57 $
+ *  last change: $Author: ab $ $Date: 2001-06-25 15:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,6 +780,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Reference< XIdlClass >& xIdlTargetCl
         case TypeClass_FLOAT:           aRetVal <<= pVar->GetSingle(); break;
         case TypeClass_DOUBLE:          aRetVal <<= pVar->GetDouble(); break;
         //case TypeClass_OCTET:         break;
+
         case TypeClass_BYTE:
         {
             sal_Int16 nVal = pVar->GetInteger();
@@ -797,7 +798,8 @@ Any sbxToUnoValue( SbxVariable* pVar, const Reference< XIdlClass >& xIdlTargetCl
             if( bOverflow )
                    StarBASIC::Error( ERRCODE_BASIC_MATH_OVERFLOW );
 
-            aRetVal <<= nVal;
+            sal_Int8 nByteVal = (sal_Int8)nVal;
+            aRetVal <<= nByteVal;
             break;
         }
         //case TypeClass_INT:           break;
