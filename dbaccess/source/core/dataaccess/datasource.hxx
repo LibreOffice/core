@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 15:36:24 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,7 @@ protected:
     ::rtl::OUString                                     m_aPassword;    // transient !
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableFilter;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableTypeFilter;
+    ::com::sun::star::uno::Sequence< sal_Int8>          m_aLayoutInformation;
     sal_Int32                                           m_nLoginTimeout;
     sal_Bool                                            m_bReadOnly : 1;
     sal_Bool                                            m_bPasswordRequired : 1;
