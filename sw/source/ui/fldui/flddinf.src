@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddinf.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:09:41 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ TabPage TP_FLD_DOKINF
         TEXT = "~Inhalt fixieren" ;
         TEXT [ English ] = "Fixed content" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Fi~xed content" ;
+        Text [ english_us ] = "~Fixed content" ;
         Text [ portuguese_brazilian ] = "~Inhalt fixieren" ;
         Text [ swedish ] = "Fixera ~innehåll" ;
         Text [ danish ] = "Fast indhold" ;
@@ -420,5 +420,6 @@ TabPage TP_FLD_DOKINF
     Text[ catalan ] = "Información del documento";
     Text[ finnish ] = "Asiakirjatiedot";
 };
+
 
 
