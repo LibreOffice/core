@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblewrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:24:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,17 @@
 #ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 #include <algorithm>
 
 using namespace ::comphelper;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::reflection;
@@ -233,39 +233,39 @@ namespace comphelper
 
         switch ( _rEvent.EventId )
         {
-            case AccessibleEventId::ACCESSIBLE_CHILD_EVENT:
-            case AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT:
-            case AccessibleEventId::CONTROLLED_BY_EVENT:
-            case AccessibleEventId::CONTROLLER_FOR_EVENT:
-            case AccessibleEventId::LABEL_FOR_EVENT:
-            case AccessibleEventId::LABELED_BY_EVENT:
-            case AccessibleEventId::CONTENT_FLOWS_FROM_EVENT:
-            case AccessibleEventId::CONTENT_FLOWS_TO_EVENT:
+            case AccessibleEventId::CHILD:
+            case AccessibleEventId::ACTIVE_DESCENDANT_CHANGED:
+            case AccessibleEventId::CONTROLLED_BY_RELATION_CHANGED:
+            case AccessibleEventId::CONTROLLER_FOR_RELATION_CHANGED:
+            case AccessibleEventId::LABEL_FOR_RELATION_CHANGED:
+            case AccessibleEventId::LABELED_BY_RELATION_CHANGED:
+            case AccessibleEventId::CONTENT_FLOWS_FROM_RELATION_CHANGED:
+            case AccessibleEventId::CONTENT_FLOWS_TO_RELATION_CHANGED:
                 // these are events where both the old and the new value contain child references
                 implTranslateChildEventValue( _rEvent.OldValue, _rTranslatedEvent.OldValue );
                 implTranslateChildEventValue( _rEvent.NewValue, _rTranslatedEvent.NewValue );
                 break;
 
-            case AccessibleEventId::ACCESSIBLE_ACTION_EVENT:
-            case AccessibleEventId::ACCESSIBLE_CARET_EVENT:
-            case AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT:
-            case AccessibleEventId::ACCESSIBLE_HYPERTEXT_EVENT:
-            case AccessibleEventId::ACCESSIBLE_NAME_EVENT:
-            case AccessibleEventId::ACCESSIBLE_SELECTION_EVENT:
-            case AccessibleEventId::ACCESSIBLE_STATE_EVENT:
-            case AccessibleEventId::ACCESSIBLE_TABLE_CAPTION_EVENT:
-            case AccessibleEventId::ACCESSIBLE_TABLE_COLUMN_DESCRIPTION_EVENT:
-            case AccessibleEventId::ACCESSIBLE_TABLE_COLUMN_HEADER_EVENT:
-            case AccessibleEventId::ACCESSIBLE_TABLE_MODEL_EVENT:
-            case AccessibleEventId::ACCESSIBLE_TABLE_ROW_DESCRIPTION_EVENT:
-            case AccessibleEventId::ACCESSIBLE_TABLE_ROW_HEADER_EVENT:
-            case AccessibleEventId::ACCESSIBLE_TABLE_SUMMARY_EVENT:
-            case AccessibleEventId::ACCESSIBLE_TEXT_EVENT:
-            case AccessibleEventId::ACCESSIBLE_VALUE_EVENT:
-            case AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT:
-            case AccessibleEventId::MEMBER_OF_EVENT:
-            case AccessibleEventId::ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT:
-            case AccessibleEventId::ACCESSIBLE_BOUNDRECT_EVENT:
+            case AccessibleEventId::ACTION_CHANGED:
+            case AccessibleEventId::CARET_CHANGED:
+            case AccessibleEventId::DESCRIPTION_CHANGED:
+            case AccessibleEventId::HYPERTEXT_CHANGED:
+            case AccessibleEventId::NAME_CHANGED:
+            case AccessibleEventId::SELECTION_CHANGED:
+            case AccessibleEventId::STATE_CHANGED:
+            case AccessibleEventId::TABLE_CAPTION_CHANGED:
+            case AccessibleEventId::TABLE_COLUMN_DESCRIPTION_CHANGED:
+            case AccessibleEventId::TABLE_COLUMN_HEADER_CHANGED:
+            case AccessibleEventId::TABLE_MODEL_CHANGED:
+            case AccessibleEventId::TABLE_ROW_DESCRIPTION_CHANGED:
+            case AccessibleEventId::TABLE_ROW_HEADER_CHANGED:
+            case AccessibleEventId::TABLE_SUMMARY_CHANGED:
+            case AccessibleEventId::TEXT_CHANGED:
+            case AccessibleEventId::VALUE_CHANGED:
+            case AccessibleEventId::VISIBLE_DATA_CHANGED:
+            case AccessibleEventId::MEMBER_OF_RELATION_CHANGED:
+            case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
+            case AccessibleEventId::BOUNDRECT_CHANGED:
                 // nothing to translate
                 break;
 
@@ -278,11 +278,11 @@ namespace comphelper
     //-------------------------------------------------------------------------
     void OWrappedAccessibleChildrenManager::handleChildNotification( const AccessibleEventObject& _rEvent )
     {
-        if ( AccessibleEventId::ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT == _rEvent.EventId )
+        if ( AccessibleEventId::INVALIDATE_ALL_CHILDREN == _rEvent.EventId )
         {   // clear our child map
             invalidateAll( );
         }
-        else if ( AccessibleEventId::ACCESSIBLE_CHILD_EVENT == _rEvent.EventId )
+        else if ( AccessibleEventId::CHILD == _rEvent.EventId )
         {
             // check if the removed or replaced element is cached
             Reference< XAccessible > xRemoved;
@@ -451,7 +451,7 @@ namespace comphelper
         // determine if we're allowed to cache children
         Reference< XAccessibleStateSet > xStates( m_xInner->getAccessibleStateSet( ) );
         OSL_ENSURE( xStates.is(), "OAccessibleContextWrapper::OAccessibleContextWrapper: no inner state set!" );
-        m_pChildMapper->setTransientChildren( !xStates.is() || xStates->contains( AccessibleStateType::MANAGES_DESCENDANT ) );
+        m_pChildMapper->setTransientChildren( !xStates.is() || xStates->contains( AccessibleStateType::MANAGES_DESCENDANTS ) );
 
         m_pChildMapper->setOwningAccessible( m_xOwningAccessible );
     }
@@ -571,15 +571,15 @@ namespace comphelper
     void SAL_CALL OAccessibleContextWrapper::notifyEvent( const AccessibleEventObject& _rEvent ) throw (RuntimeException)
     {
 #if OSL_DEBUG_LEVEL > 0
-        if ( AccessibleEventId::ACCESSIBLE_STATE_EVENT == _rEvent.EventId )
+        if ( AccessibleEventId::STATE_CHANGED == _rEvent.EventId )
         {
             sal_Bool bChildTransienceChanged = sal_False;
             sal_Int16 nChangeState;
             if ( _rEvent.OldValue >>= nChangeState )
-                bChildTransienceChanged = bChildTransienceChanged || AccessibleStateType::MANAGES_DESCENDANT == nChangeState;
+                bChildTransienceChanged = bChildTransienceChanged || AccessibleStateType::MANAGES_DESCENDANTS == nChangeState;
             if ( _rEvent.NewValue >>= nChangeState )
-                bChildTransienceChanged = bChildTransienceChanged || AccessibleStateType::MANAGES_DESCENDANT == nChangeState;
-            OSL_ENSURE( !bChildTransienceChanged, "OAccessibleContextWrapper::notifyEvent: MANAGES_DESCENDANT is not expected to change during runtime!" );
+                bChildTransienceChanged = bChildTransienceChanged || AccessibleStateType::MANAGES_DESCENDANTS == nChangeState;
+            OSL_ENSURE( !bChildTransienceChanged, "OAccessibleContextWrapper::notifyEvent: MANAGES_DESCENDANTS is not expected to change during runtime!" );
                 // if this asserts, then we would need to update our m_bTransientChildren flag here,
                 // as well as (potentially) our child cache
         }
