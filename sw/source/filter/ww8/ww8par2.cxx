@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:50:01 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,14 +558,7 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
     aRes.pMemPos = 0;
     aRes.nEndPos = rStartCp;
 
-    while
-    (
-        (
-         (bVer67 && !pWwFib->fComplex) ||
-         (pPap->GetPCDIdx() < pPap->GetPCDIMax())
-        ) &&
-        pPap->HasFkp()
-    )
+    while (pPap->HasFkp() && rStartCp != LONG_MAX)
     {
         if (pPap->Where() != LONG_MAX)
         {
@@ -649,17 +642,29 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     bool bTestAllowed = !bTxbxFlySection && !bTableRowEnd;
     if (bTestAllowed)
     {
+        //Test is allowed if there is no table.
+        //Otherwise only allowed if we are in the
+        //first paragraph of the first cell of a row.
+        //(And only if the row we are inside is at the
+        //same level as the previous row, think tables
+        //in tables)
         if (nCellLevel == nInTable)
         {
-            //Test not allowed if there is a table, and we are in not in the
-            //first cell, or not in the first paragraph of the first cell
-            bTestAllowed = (!(
-                                nInTable && pTableDesc &&
-                                (
-                                  pTableDesc->GetAktCol() ||
-                                  !pTableDesc->InFirstParaInCell()
-                                )
-                           ));
+            if (!nInTable)
+                bTestAllowed = true;
+            else
+            {
+                if (!pTableDesc)
+                {
+                    ASSERT(pTableDesc, "What!");
+                    bTestAllowed = false;
+                }
+                else
+                {
+                    bTestAllowed = pTableDesc->GetAktCol() == 0  ||
+                        pTableDesc->InFirstParaInCell();
+                }
+            }
         }
     }
 
@@ -1650,6 +1655,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
     WW8TabBandDesc* pNewBand = new WW8TabBandDesc;
 
     wwSprmParser aSprmParser(pIo->GetFib().nVersion);
+    bool bCantSplit(false);
 
     // process pPap until end of table found
     do
@@ -1854,10 +1860,8 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
 
         //Are we at the end of available properties
         if (
-            (pPap->Where() == LONG_MAX) ||
-            (
-             (!bVer67 || bComplex) && (pPap->GetPCDIdx() >= pPap->GetPCDIMax())
-            )
+             !pPap->HasFkp() || pPap->Where() == LONG_MAX ||
+             aRes.nStartPos == LONG_MAX
            )
         {
             bOk = false;
@@ -1884,6 +1888,9 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
         aRes.pMemPos = 0;
         aRes.nStartPos = nStartCp;
 
+        // #114237 PlcxMan currently points too far ahead so we need to bring
+        // it back to where we are trying to make a table
+        pIo->pPlcxMan->GetPap()->nOrigStartPos = aRes.nStartPos;
         if (!(pPap->SeekPos(aRes.nStartPos)))
         {
             aRes.nEndPos = LONG_MAX;
@@ -2291,8 +2298,8 @@ void WW8TabDesc::CreateSwTable()
     // da sich die (identischen) Zeilen eines Bandes prima duplizieren lassen
     pTable = pIo->rDoc.InsertTable( *pTmpPos, nBands, nDefaultSwCols, eOri );
 
-    ASSERT(pTable, "insert table failed");
-    if (!pTable)
+    ASSERT(pTable && pTable->GetFrmFmt(), "insert table failed");
+    if (!pTable || !pTable->GetFrmFmt())
         return;
 
     SwTableNode* pTableNode = pTable->GetTableNode();
@@ -2337,7 +2344,7 @@ void WW8TabDesc::CreateSwTable()
 
     SvxFrameDirectionItem aDirection(
         bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP );
-    aItemSet.Put(aDirection);
+    pTable->GetFrmFmt()->SetAttr(aDirection);
 
     if (HORI_LEFT_AND_WIDTH == eOri)
     {
@@ -2853,6 +2860,9 @@ bool WW8TabDesc::InFirstParaInCell() const
         return false;
     }
 
+    if (!IsValidCell(GetAktCol()))
+        return false;
+
     if (pIo->pPaM->GetPoint()->nNode == pTabBox->GetSttIdx() + 1)
         return true;
 
@@ -2879,7 +2889,24 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     if (nCol >= pTabBoxes->Count())
     {
         if (bPam)
+        {
+            // The first paragraph in a cell with upper autospacing has upper
+            // spacing set to 0
+            if (
+                 pIo->bParaAutoBefore && pIo->bFirstPara &&
+                 !pIo->pWDop->fDontUseHTMLAutoSpacing
+               )
+            {
+                pIo->SetUpperSpacing(*pIo->pPaM, 0);
+            }
+
+            // The last paragraph in a cell with lower autospacing has lower
+            // spacing set to 0
+            if (pIo->bParaAutoAfter && !pIo->pWDop->fDontUseHTMLAutoSpacing)
+                pIo->SetLowerSpacing(*pIo->pPaM, 0);
+
             ParkPaM();
+        }
         return false;
     }
     pTabBox = (*pTabBoxes)[nCol];
@@ -2893,6 +2920,15 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     if (bPam)
     {
         pAktWWCell = &pActBand->pTCs[ nWwCol ];
+
+        // The first paragraph in a cell with upper autospacing has upper spacing set to 0
+        if(pIo->bParaAutoBefore && pIo->bFirstPara && !pIo->pWDop->fDontUseHTMLAutoSpacing)
+            pIo->SetUpperSpacing(*pIo->pPaM, 0);
+
+        // The last paragraph in a cell with lower autospacing has lower spacing set to 0
+        if(pIo->bParaAutoAfter && !pIo->pWDop->fDontUseHTMLAutoSpacing)
+            pIo->SetLowerSpacing(*pIo->pPaM, 0);
+
         //We need to set the pPaM on the first cell, invalid
         //or not so that we can collect paragraph proproties over
         //all the cells, but in that case on the valid cell we do not
@@ -2992,6 +3028,8 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
     if (pActBand->pNewSHDs && pActBand->pNewSHDs[nWwIdx] != COL_AUTO)
     {
         Color aColor(pActBand->pNewSHDs[nWwIdx]);
+        if (aColor.GetColor() == 0x00333333)
+            pIo->maTracer.Log(sw::log::eAutoColorBg);
         pBox->GetFrmFmt()->SetAttr(SvxBrushItem(aColor));
         bFound = true;
     }
@@ -3247,6 +3285,8 @@ void WW8TabDesc::SetNumRuleName( const String& rName )
 
 bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
 {
+    // Entering a table so make sure the the FirstPara flag gets set
+    bFirstPara = true;
     // keine rekursiven Tabellen Nicht bei EinfuegenDatei in Tabelle oder
     // Fussnote
     if (bReadNoTbl)
@@ -3309,6 +3349,7 @@ void SwWW8ImplReader::TabCellEnd()
 {
     if (nInTable && pTableDesc)
         pTableDesc->TableCellEnd();
+    bFirstPara = true;    // We have come to the end of a cell so FirstPara flag
 }
 
 void SwWW8ImplReader::Read_TabRowEnd( USHORT, const BYTE* pData, short nLen )   // Sprm25
@@ -3335,9 +3376,14 @@ void SwWW8ImplReader::PopTableDesc()
 void SwWW8ImplReader::StopTable()
 {
     maTracer.LeaveEnvironment(sw::log::eTable);
+
     ASSERT(pTableDesc, "Panic, stop table with no table!");
     if (!pTableDesc)
         return;
+
+    // We are leaving a table so make sure the next paragraph doesn't think
+    // it's the first paragraph
+    bFirstPara = false;
 
     pTableDesc->FinishSwTable();
     PopTableDesc();
