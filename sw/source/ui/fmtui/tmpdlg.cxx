@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 09:31:34 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _SVSTDARR_STRINGSISORTDTOR
-#define _SVSTDARR_STRINGSISORTDTOR
+#ifndef _SVSTDARR_STRINGSSORTDTOR
+#define _SVSTDARR_STRINGSSORTDTOR
 #include <svtools/svstdarr.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
@@ -526,7 +526,7 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
                 SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
                 pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
                 const SfxStyleSheetBase* pBase = pPool->First();
-                SvStringsISortDtor aNames;
+                SvStringsSortDtor aNames;
                 while(pBase)
                 {
                     aNames.Insert(new String(pBase->GetName()));
