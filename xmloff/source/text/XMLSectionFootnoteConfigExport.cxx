@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionFootnoteConfigExport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,9 @@ void XMLSectionFootnoteConfigExport::exportXML(
     // we only make an element if we have an own footnote/endnote numbering
     if (bEnd)
     {
+        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_NOTE_CLASS,
+                                 GetXMLToken( bEndnote ? XML_ENDNOTE
+                                                         : XML_FOOTNOTE ) );
         // start numbering
         OUStringBuffer sBuf;
         if (bNumRestart)
@@ -256,8 +259,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
 
         // and finally, the element
         SvXMLElementExport rElem(rExport, XML_NAMESPACE_TEXT,
-                                 (bEndnote ? XML_ENDNOTES_CONFIGURATION :
-                                             XML_FOOTNOTES_CONFIGURATION ),
+                                 XML_NOTES_CONFIGURATION,
                                  sal_True, sal_True);
     }
 }
