@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fehelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:56:59 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@ public:
     DeclaratorType  getDeclType()
         { return m_declType; }
 
-    sal_Bool checkType(AstDeclaration *pType);
-    AstType* compose(AstDeclaration* pDecl);
+    sal_Bool checkType(AstDeclaration const * pType);
+    AstType const * compose(AstDeclaration const * pDecl);
 private:
     AstDeclaration* m_pComplexPart;
     ::rtl::OString  m_name;
