@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 08:42:59 $
+#   last change: $Author: sj $ $Date: 2002-10-31 10:59:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,17 +61,16 @@
 #*************************************************************************
 
 PRJ=..$/..
-PRJNAME=pdf
+PRJNAME=filter
 TARGET=pdffilter
+GEN_HID=true
 
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
 # --- Settings ----------------------------------
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 
 # --- Files -------------------------------------
 
