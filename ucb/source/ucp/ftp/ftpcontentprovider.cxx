@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentprovider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 09:21:16 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 13:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,12 @@ FTPContentProvider::queryContent(
         }
     }
 
-    xContent = new FTPContent(m_xSMgr,this,xCanonicId);
+    try {
+        xContent = new FTPContent(m_xSMgr,this,xCanonicId);
+    } catch(const malformed_exception&) {
+        throw IllegalIdentifierException();
+    }
+
     // may throw IllegalIdentifierException
     return xContent;
 }

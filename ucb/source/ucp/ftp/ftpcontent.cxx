@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 09:21:15 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 13:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
+#include <com/sun/star/ucb/InteractiveNetworkResolveNameException.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 
@@ -267,7 +268,8 @@ public:
 enum ACTION { NOACTION,
               THROWAUTHENTICATIONREQUEST,
               THROWACCESSDENIED,
-              THROWINTERACTIVECONNECT };
+              THROWINTERACTIVECONNECT,
+              THROWRESOLVENAME };
 
 
 // virtual
@@ -291,6 +293,11 @@ Any SAL_CALL FTPContent::execute(
             if(action == THROWAUTHENTICATIONREQUEST) {
                 // try to get a continuation first
                 rtl::OUString aRealm,aPassword,aAccount;
+                m_pFCP->forHost(m_aFTPURL.host(),
+                                m_aFTPURL.port(),
+                                m_aFTPURL.username(),
+                                aPassword,
+                                aAccount);
                 rtl::Reference<ucbhelper::SimpleAuthenticationRequest>
                     p( new ucbhelper::SimpleAuthenticationRequest(
                         m_aFTPURL.host(),      // ServerName
@@ -360,6 +367,14 @@ Any SAL_CALL FTPContent::execute(
                     Environment);
             } else if(action == THROWINTERACTIVECONNECT) {
                 InteractiveNetworkConnectException
+                    excep;
+                excep.Server = m_aFTPURL.host();
+                aRet <<= excep;
+                ucbhelper::cancelCommandExecution(
+                    aRet,
+                    Environment);
+            } else if(action == THROWRESOLVENAME) {
+                InteractiveNetworkResolveNameException
                     excep;
                 excep.Server = m_aFTPURL.host();
                 aRet <<= excep;
@@ -462,6 +477,8 @@ Any SAL_CALL FTPContent::execute(
         } catch(const curl_exception& e) {
             if(e.code() == CURLE_COULDNT_CONNECT)
                 action = THROWINTERACTIVECONNECT;
+            else if(e.code() == CURLE_COULDNT_RESOLVE_HOST )
+                action = THROWRESOLVENAME;
             else if(e.code() == CURLE_FTP_USER_PASSWORD_INCORRECT ||
                     e.code() == CURLE_BAD_PASSWORD_ENTERED ||
                     e.code() == CURLE_FTP_WEIRD_PASS_REPLY )
@@ -507,7 +524,7 @@ rtl::OUString FTPContent::getParentURL()
 void FTPContent::insert(const InsertCommandArgument& aInsertCommand)
 {
 //      m_aFTPURL.insert(bool(aInsertCommand.ReplaceExisting),
-
+//                       aInsertCommand.Data);
 }
 
 

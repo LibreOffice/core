@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 09:21:17 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 13:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,9 @@ void FTPURL::parse(const rtl::OUString& url)
 
     const char* p2 = aIdent.getStr();
 
-    if(strncmp("ftp://",p2,6))
+    rtl::OString lower = aIdent.toAsciiLowerCase();
+    if(lower.getLength() >= 6 &&
+       strncmp("ftp://",lower.getStr(),6))
         throw malformed_exception();
 
     p2 += 6;
@@ -643,4 +645,30 @@ FTPDirentry FTPURL::direntry() const
         }
     }
     return aDirentry;
+}
+
+
+extern "C" {
+
+    size_t memory_read(void *ptr,size_t size,size_t nmemb, void  *stream)
+    {
+        return 0;
+    }
+
+}
+
+
+void FTPURL::insert(bool replaceExisting) const
+    throw(curl_exception)
+{
+    CURL *curl = m_pFCP->handle();
+
+    SET_CONTROL_CONTAINER;
+    curl_easy_setopt(curl,CURLOPT_NOBODY,TRUE);       // no data => no transfer
+
+    rtl::OUString url(ident(false,true));
+    SET_URL(url);
+    curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
+
+    CURLcode err;
 }
