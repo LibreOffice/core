@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabpagexslt.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:24:04 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,20 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ chinese_traditional ] = "檔案類型";
         Text[ slovak ] = "Doc typ";
         Text[ portuguese_brazilian ] = "DocType";
+        Text[ greek ] = "DocType";
+        Text[ dutch ] = "DocType";
+        Text[ finnish ] = "DocType";
+        Text[ czech ] = "DocType";
+        Text[ danish ] = "DocType";
+        Text[ arabic ] = "DocType";
+        Text[ hebrew ] = "DocType";
+        Text[ catalan ] = "DocType";
+        Text[ hindi ] = "DocType";
+        Text[ portuguese ] = "DocType";
+        Text[ russian ] = "DocType";
+        Text[ polish ] = "DocType";
+        Text[ turkish ] = "DocType";
+        Text[ thai ] = "DocType";
     };
 
     Edit ED_XML_DOCTYPE
@@ -135,6 +149,20 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ chinese_traditional ] = "DTD";
         Text[ slovak ] = "DTD";
         Text[ portuguese_brazilian ] = "DTD";
+        Text[ greek ] = "DTD";
+        Text[ dutch ] = "DTD";
+        Text[ finnish ] = "DTD";
+        Text[ czech ] = "DTD";
+        Text[ danish ] = "DTD";
+        Text[ arabic ] = "DTD";
+        Text[ hebrew ] = "DTD";
+        Text[ catalan ] = "DTD";
+        Text[ hindi ] = "DTD";
+        Text[ portuguese ] = "DTD";
+        Text[ russian ] = "DTD";
+        Text[ polish ] = "DTD";
+        Text[ turkish ] = "DTD";
+        Text[ thai ] = "DTD";
     };
 
     ComboBox ED_XML_DTD_SCHEMA
@@ -166,7 +194,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ greek ] = "���������...";
         Text[ dutch ] = "Bladeren...";
         Text[ finnish ] = "Selaa";
-        Text[ czech ] = "Prohlížet...";
+        Text[ czech ] = "Listovat...";
         Text[ danish ] = "Gennemse...";
         Text[ polish ] = "Przegl�daj...";
         Text[ portuguese_brazilian ] = "Navegar...";
@@ -176,6 +204,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ catalan ] = "Navega...";
         Text[ thai ] = "เรียกดู...";
         Text[ slovak ] = "Prehliadať...";
+        Text[ hindi ] = "ब्रउज़...";
     };
 
     // Export XSLT ----------------------------------------------------
@@ -196,6 +225,20 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ chinese_traditional ] = "用於匯出的 XSLT";
         Text[ slovak ] = "XSLT pre export";
         Text[ portuguese_brazilian ] = "XSLT para exportar";
+        Text[ greek ] = "XSLT for export";
+        Text[ dutch ] = "XSLT for export";
+        Text[ finnish ] = "XSLT for export";
+        Text[ czech ] = "XSLT pro export";
+        Text[ danish ] = "XSLT for export";
+        Text[ arabic ] = "XSLT for export";
+        Text[ hebrew ] = "XSLT for export";
+        Text[ catalan ] = "XSLT for export";
+        Text[ hindi ] = "XSLT for export";
+        Text[ portuguese ] = "XSLT for export";
+        Text[ russian ] = "XSLT for export";
+        Text[ polish ] = "XSLT for export";
+        Text[ turkish ] = "XSLT for export";
+        Text[ thai ] = "XSLT for export";
     };
 
     ComboBox ED_XML_EXPORT_XSLT
@@ -226,7 +269,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ greek ] = "���������...";
         Text[ dutch ] = "Bladeren...";
         Text[ finnish ] = "Selaa";
-        Text[ czech ] = "Prohlížet...";
+        Text[ czech ] = "Listovat...";
         Text[ danish ] = "Gennemse...";
         Text[ polish ] = "Przegl�daj...";
         Text[ portuguese_brazilian ] = "Navegar...";
@@ -236,6 +279,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ catalan ] = "Navega...";
         Text[ thai ] = "เรียกดู...";
         Text[ slovak ] = "Prehliadať...";
+        Text[ hindi ] = "ब्रउज़...";
     };
 
     // Import XSLT ----------------------------------------------------
@@ -256,6 +300,20 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ chinese_traditional ] = "用於匯入的 XSLT";
         Text[ slovak ] = "XSLT pre import";
         Text[ portuguese_brazilian ] = "XSLT para importar";
+        Text[ greek ] = "XSLT for import";
+        Text[ dutch ] = "XSLT for import";
+        Text[ finnish ] = "XSLT for import";
+        Text[ czech ] = "XSLT pro import";
+        Text[ danish ] = "XSLT for import";
+        Text[ arabic ] = "XSLT for import";
+        Text[ hebrew ] = "XSLT for import";
+        Text[ catalan ] = "XSLT for import";
+        Text[ hindi ] = "XSLT for import";
+        Text[ portuguese ] = "XSLT for import";
+        Text[ russian ] = "XSLT for import";
+        Text[ polish ] = "XSLT for import";
+        Text[ turkish ] = "XSLT for import";
+        Text[ thai ] = "XSLT for import";
     };
 
     ComboBox ED_XML_IMPORT_XSLT
@@ -286,7 +344,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ greek ] = "���������...";
         Text[ dutch ] = "Bladeren...";
         Text[ finnish ] = "Selaa";
-        Text[ czech ] = "Prohlížet...";
+        Text[ czech ] = "Listovat...";
         Text[ danish ] = "Gennemse...";
         Text[ polish ] = "Przegl�daj...";
         Text[ portuguese_brazilian ] = "Navegar...";
@@ -296,6 +354,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ catalan ] = "Navega...";
         Text[ thai ] = "เรียกดู...";
         Text[ slovak ] = "Prehliadať...";
+        Text[ hindi ] = "ब्रउज़...";
     };
 
     // Import Template ------------------------------------------------
@@ -316,6 +375,20 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ chinese_traditional ] = "用於匯入的文件樣式";
         Text[ slovak ] = "Šablóna pre import";
         Text[ portuguese_brazilian ] = "Modelo para importar";
+        Text[ greek ] = "Template for import";
+        Text[ dutch ] = "Template for import";
+        Text[ finnish ] = "Template for import";
+        Text[ czech ] = "Šablona pro import";
+        Text[ danish ] = "Template for import";
+        Text[ arabic ] = "Template for import";
+        Text[ hebrew ] = "Template for import";
+        Text[ catalan ] = "Template for import";
+        Text[ hindi ] = "Template for import";
+        Text[ portuguese ] = "Template for import";
+        Text[ russian ] = "Template for import";
+        Text[ polish ] = "Template for import";
+        Text[ turkish ] = "Template for import";
+        Text[ thai ] = "Template for import";
     };
 
     ComboBox ED_XML_IMPORT_TEMPLATE
@@ -346,7 +419,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ greek ] = "���������...";
         Text[ dutch ] = "Bladeren...";
         Text[ finnish ] = "Selaa";
-        Text[ czech ] = "Prohlížet...";
+        Text[ czech ] = "Listovat...";
         Text[ danish ] = "Gennemse...";
         Text[ polish ] = "Przegl�daj...";
         Text[ portuguese_brazilian ] = "Navegar...";
@@ -356,6 +429,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ catalan ] = "Navega...";
         Text[ thai ] = "เรียกดู...";
         Text[ slovak ] = "Prehliadať...";
+        Text[ hindi ] = "ब्रउज़...";
     };
     Text[ french ] = "Transformation";
     Text[ spanish ] = "Transformaci�n";
@@ -367,7 +441,23 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     Text[ chinese_traditional ] = "轉換";
     Text[ slovak ] = "Transformácia";
     Text[ portuguese_brazilian ] = "Transforma��o";
+    Text[ greek ] = "Transformation";
+    Text[ dutch ] = "Transformation";
+    Text[ finnish ] = "Transformation";
+    Text[ czech ] = "Transformace";
+    Text[ danish ] = "Transformation";
+    Text[ arabic ] = "Transformation";
+    Text[ hebrew ] = "Transformation";
+    Text[ catalan ] = "Transformation";
+    Text[ hindi ] = "Transformation";
+    Text[ portuguese ] = "Transformation";
+    Text[ russian ] = "Transformation";
+    Text[ polish ] = "Transformation";
+    Text[ turkish ] = "Transformation";
+    Text[ thai ] = "Transformation";
 };
+
+
 
 
 
