@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:54:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,8 +425,8 @@ void DrawViewShell::SelectionHasChanged()
 
     pDrView->UpdateSelectionClipboard( FALSE );
 
-    if (GetSubController() != NULL)
-        GetSubController()->FireSelectionChangeListener();
+    if (GetController() != NULL)
+        GetController()->FireSelectionChangeListener();
 }
 
 
@@ -553,7 +553,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
         USHORT nActualPageNum = 0;
 
         SdUnoDrawView* pController =
-            static_cast<SdUnoDrawView*>(GetSubController());
+            static_cast<SdUnoDrawView*>(GetController());
         if (pController != NULL)
         {
             pController->FireChangeEditMode (eEMode == EM_MASTERPAGE);
@@ -1190,7 +1190,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
             pDrView->HideAllPages();
             pDrView->ShowPage(pActualPage, Point(0, 0));
             SdUnoDrawView* pController =
-                static_cast<SdUnoDrawView*>(GetSubController());
+                static_cast<SdUnoDrawView*>(GetController());
             if (pController != NULL)
                 pController->FireSwitchCurrentPage (pActualPage);
 
@@ -1262,7 +1262,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
             pDrView->ShowMasterPagePgNum(nNum, Point(0, 0));
 
             SdUnoDrawView* pController =
-                static_cast<SdUnoDrawView*>(GetSubController());
+                static_cast<SdUnoDrawView*>(GetController());
             if (pController != NULL)
                 pController->FireSwitchCurrentPage (pMaster);
 
