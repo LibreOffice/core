@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: tbe $ $Date: 2001-03-16 13:45:26 $
+#   last change: $Author: tbe $ $Date: 2001-06-20 14:35:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,15 +129,11 @@ DEF1EXPORTFILE	= basctl.dxp
 
 LIB1TARGET      =$(SLB)$/basctl.lib
 LIB1FILES       = \
-            $(LIBPRE) $(SLB)$/dlged.lib   \
-            $(LIBPRE) $(SLB)$/vctrls.lib    \
-            $(LIBPRE) $(SLB)$/basicide.lib \
-            $(LIBPRE) $(SLB)$/ibrw.lib
+            $(LIBPRE) $(SLB)$/basicide.lib	\
+            $(LIBPRE) $(SLB)$/dlged.lib
 
 SRSFILELIST=\
-                $(SRS)$/vctrls.srs \
                 $(SRS)$/basicide.srs \
-                $(SRS)$/ibrw.srs \
                 $(SRS)$/dlged.srs
                 
 SRSFILELIST+=   $(SOLARVERSION)$/$(INPATH)$/res$(UPDMINOREXT)$/sfx.srs
