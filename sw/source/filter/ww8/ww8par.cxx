@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:39 $
+ *  last change: $Author: cmc $ $Date: 2002-05-15 10:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,11 +373,15 @@ void SwWW8FltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId, BOOL 
     //the real document
     if (rReader.pPlcxMan && rReader.pPlcxMan->GetDoingDrawTextBox())
     {
-        for (USHORT i=0; i < Count(); i++)
+        USHORT nCnt = Count();
+        for (USHORT i=0; i < nCnt; ++i)
         {
-            SwFltStackEntry* pEntry = (*this)[ i ];
-            if( nAttrId == pEntry->pAttr->Which())
-                DeleteAndDestroy(i);
+            SwFltStackEntry* pEntry = (*this)[i];
+            if (nAttrId == pEntry->pAttr->Which())
+            {
+                DeleteAndDestroy(i--);
+                --nCnt;
+            }
         }
     }
     else //Normal case, set the attribute into the document
