@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkit.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-20 11:40:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 
 #pragma hdrstop
 
