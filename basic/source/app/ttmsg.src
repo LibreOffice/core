@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 18:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ String S_NAME_NOT_THERE
     Text[ swedish ] = "Name doesn't exist: #($Arg1)";
     Text[ polish ] = "Nazwa nie istnieje: #($Arg1)";
     Text[ portuguese_brazilian ] = "Name nicht vorhanden: #($Arg1)";
-    Text[ japanese ] = "‚±‚Ì–¼‘O‚Í‘¶İ‚µ‚Ä‚¢‚Ü‚¹‚ñ: #($Arg1)";
+    Text[ japanese ] = "‚±‚Ì–¼‘O‚Í‚ ‚è‚Ü‚¹‚ñ: #($Arg1)";
     Text[ korean ] = "ÀÌ¸§ÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù: #($Arg1)";
     Text[ chinese_simplified ] = "Ãû³Æ²»´æÔÚ£º#($Arg1)";
     Text[ chinese_traditional ] = "¦WºÙ¤£¦s¦b¡G #($Arg1)";
@@ -176,7 +176,7 @@ String S_INVALID_LINE
     Text[ swedish ] = "Line \"($Arg1)\" is invalid.";
     Text[ polish ] = "Wiersz \"($Arg1)\" jest niewa¿ny.";
     Text[ portuguese_brazilian ] = "Zeile \"($Arg1)\" Ist ungültig.";
-    Text[ japanese ] = "s \"($Arg1)\" ‚Í–³Œø‚Å‚·B";
+    Text[ japanese ] = "\"($Arg1)\"s‚Í–³Œø‚Å‚·B";
     Text[ korean ] = "¼± \"($Arg1)\" Àº À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÎŞĞ§µÄĞĞ¡°($Arg1)¡±";
     Text[ chinese_traditional ] = "¦æ \"($Arg1)\" µL®Ä¡C";
@@ -616,7 +616,7 @@ String S_UNKNOWN_METHOD
     Text[ swedish ] = "Unknown method '($Arg1)' to ($Arg2)";
     Text[ polish ] = "Nieznana metoda do obiektu: ($Arg1).($Arg2)";
     Text[ portuguese_brazilian ] = "Unbekannte Methode an Objekt : ($Arg1).($Arg2)";
-    Text[ japanese ] = "Unknown method '($Arg1)' to ($Arg2)";
+    Text[ japanese ] = "Unknown method on object :($Arg1).($Arg2)";
     Text[ korean ] = "°³Ã¼¿¡ ¾Ë¼ö ¾ø´Â ¸Ş¼Òµå : ($Arg1).($Arg2)";
     Text[ chinese_simplified ] = "Unknown method on object:($Arg1).($Arg2)";
     Text[ chinese_traditional ] = "ª«¥ó¤è¦¡¤£©ú¡G ($Arg1).($Arg2)";
