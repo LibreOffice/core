@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mtrindlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: dr $ $Date: 2001-12-18 11:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,12 +162,14 @@ void ScMetricInputDlg::CalcPositions()
     Point   aNewPos;
 
     aFtSize.Width() = aFtEditTitle.GetTextWidth(aFtEditTitle.GetText());
+    // #95990# add mnemonic char width to fixed text width
+    aFtSize.Width() += aFtEditTitle.GetTextWidth(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("(W)")));
     aFtEditTitle.SetSizePixel( aFtSize );
 
     aNewPos.Y()  = aEdValue.GetPosPixel().Y();
     aNewPos.X()  = aFtEditTitle.GetPosPixel().X();
     aNewPos.X() += aFtEditTitle.GetSizePixel().Width();
-    aNewPos.X() += LogicToPixel( Point(6,0) ).X();
+    aNewPos.X() += LogicToPixel( Point(3,0) ).X();
     aEdValue.SetPosPixel( aNewPos );
 
     aNewPos.Y()  = aBtnDefVal.GetPosPixel().Y();
