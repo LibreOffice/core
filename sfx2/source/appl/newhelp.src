@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-04 08:22:11 $
+ *  last change: $Author: pb $ $Date: 2002-06-04 12:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1191,7 +1191,7 @@ Image IMG_HELP_TOOLBOX_L_PRINT
 };
 Image IMG_HELP_TOOLBOX_L_BOOKMARKS
 {
-    ImageBitmap = Bitmap { File = "favourite.bmp" ; };
+    ImageBitmap = Bitmap { File = "favourite_big.bmp" ; };
     MASKCOLOR_GREY
 };
 Image IMG_HELP_TOOLBOX_L_SEARCHDIALOG
@@ -1237,7 +1237,7 @@ Image IMG_HELP_TOOLBOX_HCL_PRINT
 };
 Image IMG_HELP_TOOLBOX_HCL_BOOKMARKS
 {
-    ImageBitmap = Bitmap { File = "favourite_h.bmp" ; };
+    ImageBitmap = Bitmap { File = "favourite_big_h.bmp" ; };
     MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_HCL_SEARCHDIALOG
