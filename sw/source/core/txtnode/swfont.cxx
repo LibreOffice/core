@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-24 15:56:32 $
+ *  last change: $Author: ama $ $Date: 2000-12-12 15:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,9 +589,9 @@ SwFont::SwFont( const SwAttrSet* pAttrSet )
         Size aTmpSize = aSub[SW_CTL].aSize;
         aTmpSize.Height() = pAttrSet->GetCJKSize().GetHeight();
         aSub[SW_CTL].SetSize( aTmpSize );
-        aSub[SW_CTL].SetItalic( pAttrSet->GetCJKPosture().GetPosture() );
-        aSub[SW_CTL].SetWeight( pAttrSet->GetCJKWeight().GetWeight() );
-        aSub[SW_CTL].SetLanguage( pAttrSet->GetCJKLanguage().GetLanguage() );
+        aSub[SW_CTL].SetItalic( pAttrSet->GetCTLPosture().GetPosture() );
+        aSub[SW_CTL].SetWeight( pAttrSet->GetCTLWeight().GetWeight() );
+        aSub[SW_CTL].SetLanguage( pAttrSet->GetCTLLanguage().GetLanguage() );
     }
 
     SetUnderline( pAttrSet->GetUnderline().GetUnderline() );
