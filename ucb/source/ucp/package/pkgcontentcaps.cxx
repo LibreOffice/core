@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontentcaps.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 10:10:29 $
+ *  last change: $Author: kso $ $Date: 2001-06-13 12:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,9 @@
     MediaType            (x)      x
     Title                 x       x
     Size                          x
-#if SUPD>614
     Compressed                    x
     Encrypted                     x
     HasEncryptedEntries   x (root folder only)
-#endif
 
     getCommandInfo        x       x
     getPropertySetInfo    x       x
@@ -88,6 +86,7 @@
     open                  x       x
     transfer              x
     flush                 x
+    split                 x (root folder only)
 
  *************************************************************************/
 
@@ -105,6 +104,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_SPLITCOMMANDARGUMENT_HPP_
+#include <com/sun/star/ucb/SplitCommandArgument.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
 #include <com/sun/star/ucb/TransferInfo.hpp>
@@ -190,7 +192,6 @@ Sequence< Property > Content::getProperties(
                     -1,
                     getCppuType( static_cast< const OUString * >( 0 ) ),
                     PropertyAttribute::BOUND
-#if SUPD>614
                 ),
                 ///////////////////////////////////////////////////////////////
                 // New properties
@@ -201,14 +202,9 @@ Sequence< Property > Content::getProperties(
                     -1,
                     getCppuBooleanType(),
                     PropertyAttribute::BOUND | PropertyAttribute::READONLY
-#endif
                 )
             };
-#if SUPD>614
             return Sequence< Property >( aRootFolderPropertyInfoTable, 6 );
-#else
-            return Sequence< Property >( aRootFolderPropertyInfoTable, 5 );
-#endif
         }
         else
         {
@@ -314,7 +310,6 @@ Sequence< Property > Content::getProperties(
                 -1,
                 getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-#if SUPD>614
             ),
             ///////////////////////////////////////////////////////////////
             // New properties
@@ -322,22 +317,17 @@ Sequence< Property > Content::getProperties(
             Property(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ),
                 -1,
-                getCppuType( static_cast< const sal_Bool * >( 0 ) ),
+                getCppuBooleanType(),
                 PropertyAttribute::BOUND
             ),
             Property(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "Encrypted" ) ),
                 -1,
-                getCppuType( static_cast< const sal_Bool * >( 0 ) ),
+                getCppuBooleanType(),
                 PropertyAttribute::BOUND
-#endif
             )
         };
-#if SUPD>614
         return Sequence< Property >( aStreamPropertyInfoTable, 8 );
-#else
-        return Sequence< Property >( aStreamPropertyInfoTable, 6 );
-#endif
     }
 }
 
@@ -350,71 +340,155 @@ Sequence< CommandInfo > Content::getCommands(
 
     if ( isFolder() )
     {
-        //=================================================================
-        //
-        // Folder: Supported commands
-        //
-        //=================================================================
-
-        static CommandInfo aFolderCommandInfoTable[] =
+        if ( m_aUri.getPath().compareToAscii( "/" ) == 0 )
         {
-            ///////////////////////////////////////////////////////////////
-            // Required commands
-            ///////////////////////////////////////////////////////////////
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
-                -1,
-                getCppuVoidType()
-            ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
-                -1,
-                getCppuVoidType()
-            ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
-                -1,
-                getCppuType( static_cast< Sequence< Property > * >( 0 ) )
-            ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
-                -1,
-                getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
-            ),
-            ///////////////////////////////////////////////////////////////
-            // Optional standard commands
-            ///////////////////////////////////////////////////////////////
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
-                -1,
-                getCppuBooleanType()
-            ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
-                -1,
-                getCppuVoidType()
-            ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
-                -1,
-                getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
-            ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
-                -1,
-                getCppuType( static_cast< TransferInfo * >( 0 ) )
-            ),
-            ///////////////////////////////////////////////////////////////
-            // New commands
-            ///////////////////////////////////////////////////////////////
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "flush" ) ),
-                -1,
-                getCppuVoidType()
-            )
-        };
+            //=============================================================
+            //
+            // Root Folder: Supported commands
+            //
+            //=============================================================
 
-        return Sequence< CommandInfo >( aFolderCommandInfoTable, 9 );
+            static CommandInfo aRootFolderCommandInfoTable[] =
+            {
+                ///////////////////////////////////////////////////////////
+                // Required commands
+                ///////////////////////////////////////////////////////////
+                CommandInfo(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+                    -1,
+                    getCppuVoidType()
+                ),
+                CommandInfo(
+                    OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+                    -1,
+                    getCppuVoidType()
+                ),
+                CommandInfo(
+                    OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+                    -1,
+                    getCppuType( static_cast< Sequence< Property > * >( 0 ) )
+                ),
+                CommandInfo(
+                    OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+                    -1,
+                    getCppuType(
+                        static_cast< Sequence< PropertyValue > * >( 0 ) )
+                ),
+                ///////////////////////////////////////////////////////////
+                // Optional standard commands
+                ///////////////////////////////////////////////////////////
+                CommandInfo(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+                    -1,
+                    getCppuBooleanType()
+                ),
+                CommandInfo(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
+                    -1,
+                    getCppuVoidType()
+                ),
+                CommandInfo(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+                    -1,
+                    getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
+                ),
+                CommandInfo(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
+                    -1,
+                    getCppuType( static_cast< TransferInfo * >( 0 ) )
+                ),
+                ///////////////////////////////////////////////////////////
+                // New commands
+                ///////////////////////////////////////////////////////////
+                CommandInfo(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "flush" ) ),
+                    -1,
+                    getCppuType( static_cast< SplitCommandArgument * >( 0 ) )
+                ),
+                CommandInfo(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "split" ) ),
+                    -1,
+                    getCppuType( static_cast< TransferInfo * >( 0 ) )
+                )
+            };
+
+            return Sequence< CommandInfo >( aRootFolderCommandInfoTable, 10 );
+        }
+        else
+        {
+            //=============================================================
+            //
+            // Folder: Supported commands
+            //
+            //=============================================================
+
+            static CommandInfo aFolderCommandInfoTable[] =
+            {
+                ///////////////////////////////////////////////////////////
+                // Required commands
+                ///////////////////////////////////////////////////////////
+                CommandInfo(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+                    -1,
+                    getCppuVoidType()
+                ),
+                CommandInfo(
+                    OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+                    -1,
+                    getCppuVoidType()
+                ),
+                CommandInfo(
+                    OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+                    -1,
+                    getCppuType( static_cast< Sequence< Property > * >( 0 ) )
+                ),
+                CommandInfo(
+                    OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+                    -1,
+                    getCppuType(
+                        static_cast< Sequence< PropertyValue > * >( 0 ) )
+                ),
+                ///////////////////////////////////////////////////////////
+                // Optional standard commands
+                ///////////////////////////////////////////////////////////
+                CommandInfo(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+                    -1,
+                    getCppuBooleanType()
+                ),
+                CommandInfo(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
+                    -1,
+                    getCppuVoidType()
+                ),
+                CommandInfo(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+                    -1,
+                    getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
+                ),
+                CommandInfo(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
+                    -1,
+                    getCppuType( static_cast< TransferInfo * >( 0 ) )
+                ),
+                ///////////////////////////////////////////////////////////
+                // New commands
+                ///////////////////////////////////////////////////////////
+                CommandInfo(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "flush" ) ),
+                    -1,
+                    getCppuVoidType()
+                )
+            };
+
+            return Sequence< CommandInfo >( aFolderCommandInfoTable, 9 );
+        }
     }
     else
     {

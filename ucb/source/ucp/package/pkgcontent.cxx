@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-17 12:51:39 $
+ *  last change: $Author: kso $ $Date: 2001-06-13 12:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
+#ifndef _COM_SUN_STAR_PACKAGES_XPACKAGESPLITTER_HPP_
+#include <com/sun/star/packages/XPackageSplitter.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -111,6 +114,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_SPLITCOMMANDARGUMENT_HPP_
+#include <com/sun/star/ucb/SplitCommandArgument.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
 #include <com/sun/star/ucb/TransferInfo.hpp>
@@ -144,6 +150,8 @@
 #include "pkgresultset.hxx"
 #endif
 
+using namespace com::sun;
+using namespace com::sun::star;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::io;
@@ -172,14 +180,10 @@ using namespace package_ucp;
 
 ContentProperties::ContentProperties( const OUString& rContentType )
 : aContentType( rContentType ),
-#if SUPD>614
   nSize( 0 ),
   bCompressed( sal_True ),
   bEncrypted( sal_False ),
   bHasEncryptedEntries( sal_False )
-#else
-  nSize( 0 )
-#endif
 {
     bIsFolder = ( rContentType.compareToAscii(
                                     PACKAGE_FOLDER_CONTENT_TYPE ) == 0 );
@@ -605,6 +609,29 @@ Any SAL_CALL Content::execute( const Command& aCommand,
 
         flushData();
     }
+    else if ( aCommand.Name.compareToAscii( "split" ) == 0 )
+    {
+        //////////////////////////////////////////////////////////////////
+        // split
+        //  ( Only available at root folder content )
+        //////////////////////////////////////////////////////////////////
+
+        star::ucb::SplitCommandArgument aArg;
+        if ( !( aCommand.Argument >>= aArg ) )
+        {
+            OSL_ENSURE( sal_False,
+                        "Content::execute - invalid parameter!" );
+            throw star::ucb::CommandAbortedException();
+        }
+
+        uno::Sequence< rtl::OUString > aSegments;
+        split( aArg, Environment, aSegments );
+
+        if ( aSegments.getLength() == 0 )
+            throw star::ucb::CommandAbortedException();
+
+        aRet <<= aSegments;
+    }
     else
     {
         //////////////////////////////////////////////////////////////////
@@ -741,8 +768,9 @@ Reference< XRow > Content::getPropertyValues(
         return getPropertyValues( rSMgr,
                                   rProperties,
                                   aData,
-                                  vos::ORef< ucb::ContentProviderImplHelper >(
-                                      pProvider ),
+                                  vos::ORef<
+                                    ::ucb::ContentProviderImplHelper >(
+                                        pProvider ),
                                   rContentId );
     }
     else
@@ -768,7 +796,7 @@ Reference< XRow > Content::getPropertyValues(
                 const Reference< XMultiServiceFactory >& rSMgr,
                 const Sequence< Property >& rProperties,
                 const ContentProperties& rData,
-                const vos::ORef< ucb::ContentProviderImplHelper >& rProvider,
+                const vos::ORef< ::ucb::ContentProviderImplHelper >& rProvider,
                 const OUString& rContentId )
 {
     // Note: Empty sequence means "get values of all supported properties".
@@ -809,7 +837,6 @@ Reference< XRow > Content::getPropertyValues(
             {
                 xRow->appendString ( rProp, rData.aMediaType );
             }
-#if SUPD>614
             else if ( rProp.Name.compareToAscii( "Size" ) == 0 )
             {
                 // Property only available for streams.
@@ -843,12 +870,6 @@ Reference< XRow > Content::getPropertyValues(
                 else
                     xRow->appendVoid( rProp );
             }
-#else
-            else if ( rProp.Name.compareToAscii( "Size" ) == 0 )
-            {
-                xRow->appendLong( rProp, rData.nSize );
-            }
-#endif
             else
             {
                 // Not a Core Property! Maybe it's an Additional Core Property?!
@@ -914,7 +935,6 @@ Reference< XRow > Content::getPropertyValues(
                       getCppuType( static_cast< const OUString * >( 0 ) ),
                       PropertyAttribute::BOUND ),
             rData.aMediaType );
-#if SUPD>614
         // Properties only available for streams.
         if ( rData.bIsDocument )
         {
@@ -952,15 +972,6 @@ Reference< XRow > Content::getPropertyValues(
                             | PropertyAttribute::READONLY ),
                 rData.bHasEncryptedEntries );
         }
-#else
-        xRow->appendLong   (
-            Property( OUString::createFromAscii( "Size" ),
-                      -1,
-                      getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
-                      PropertyAttribute::BOUND
-                          | PropertyAttribute::READONLY ),
-            rData.nSize );
-#endif
 
         // Append all Additional Core Properties.
 
@@ -1064,7 +1075,6 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
         {
             // Read-only property!
         }
-#if SUPD>614
         else if ( rValue.Name.compareToAscii( "Compressed" ) == 0 )
         {
             // Property only available for streams.
@@ -1155,7 +1165,6 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
                 }
             }
         }
-#endif
         else
         {
             // Not a Core Property! Maybe it's an Additional Core Property?!
@@ -1730,6 +1739,30 @@ void Content::transfer( const TransferInfo& rInfo,
 }
 
 //=========================================================================
+void Content::split( const star::ucb::SplitCommandArgument& rArg,
+                     const uno::Reference<
+                                star::ucb::XCommandEnvironment > & xEnv,
+                     uno::Sequence< rtl::OUString > & rResult )
+    throw( uno::Exception )
+{
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+    uno::Reference< container::XHierarchicalNameAccess > xNA = getPackage();
+    if ( !xNA.is() )
+        return;
+
+    uno::Reference< packages::XPackageSplitter > xSplitter(
+                                                    xNA, uno::UNO_QUERY );
+    OSL_ENSURE( xSplitter.is(),
+                "Content::split - Got no XPackageSplitter interface!" );
+
+    if ( xSplitter.is() )
+        rResult = xSplitter->split( rArg.SegmentSize,
+                                    rArg.TargetFolderURL,
+                                    rArg.SegmentNamePrefix );
+}
+
+//=========================================================================
 sal_Bool Content::exchangeIdentity(
                         const Reference< XContentIdentifier >& xNewId )
 {
@@ -1910,7 +1943,6 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
     if ( !rxPackage.is() )
         return sal_False;
 
-#if SUPD>614
     if ( rURI.getPath().compareToAscii( "/" ) == 0 )
     {
         // Properties available only from package
@@ -1953,7 +1985,6 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
 
         }
      }
-#endif
 
     if ( !rxPackage->hasByHierarchicalName( rURI.getPath() ) )
         return sal_False;
@@ -2023,7 +2054,6 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
                 rProps.bIsFolder = sal_False;
             }
 
-#if SUPD>614
             if ( rProps.bIsDocument )
             {
                 // Size ( only available for streams )
@@ -2104,33 +2134,6 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
                     return sal_False;
                 }
             }
-#else
-            // Size
-              try
-              {
-                  Any aSize
-                      = xPropSet->getPropertyValue(
-                          OUString::createFromAscii( "Size" ) );
-                  if ( !( aSize >>= rProps.nSize ) )
-                  {
-                      VOS_ENSURE( sal_False,
-                                  "Content::loadData - Got no Size value!" );
-                      return sal_False;
-                  }
-              }
-              catch ( UnknownPropertyException & )
-              {
-                  VOS_ENSURE( sal_False,
-                              "Content::loadData - Got no Size value!" );
-                  return sal_False;
-              }
-              catch ( WrappedTargetException & )
-              {
-                  VOS_ENSURE( sal_False,
-                              "Content::loadData - Got no Size value!" );
-                  return sal_False;
-              }
-#endif
             return sal_True;
         }
     }
@@ -2305,7 +2308,6 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
             m_nModifiedProps &= ~MEDIATYPE_MODIFIED;
         }
 
-#if SUPD>614
         if ( m_nModifiedProps & COMPRESSED_MODIFIED )
         {
             if ( !isFolder() )
@@ -2325,7 +2327,6 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
 
             m_nModifiedProps &= ~ENCRYPTED_MODIFIED;
         }
-#endif
 
         //////////////////////////////////////////////////////////////////
         // Store data stream...

@@ -63,6 +63,7 @@
     <type> com.sun.star.lang.XServiceInfo                      </type>
     <type> com.sun.star.lang.XSingleServiceFactory             </type>
     <type> com.sun.star.lang.XTypeProvider                     </type>
+    <type> com.sun.star.packages.XPackageSplitter              </type>
     <type> com.sun.star.registry.XRegistryKey                  </type>
     <type> com.sun.star.sdbc.XCloseable                        </type>
     <type> com.sun.star.sdbc.XColumnLocate                     </type>
@@ -75,6 +76,7 @@
     <type> com.sun.star.ucb.OpenCommandArgument2               </type>
     <type> com.sun.star.ucb.OpenMode                           </type>
     <type> com.sun.star.ucb.ResultSetException                 </type>
+    <type> com.sun.star.ucb.SplitCommandArgument               </type>
     <type> com.sun.star.ucb.TransferInfo                       </type>
     <type> com.sun.star.ucb.XCommandInfo                       </type>
     <type> com.sun.star.ucb.XCommandProcessor                  </type>

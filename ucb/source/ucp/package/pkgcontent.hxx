@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 10:10:29 $
+ *  last change: $Author: kso $ $Date: 2001-06-13 12:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ namespace com { namespace sun { namespace star {
     namespace ucb
     {
         struct OpenCommandArgument2;
+        struct SplitCommandArgument;
         struct TransferInfo;
     }
 } } }
@@ -129,21 +130,14 @@ struct ContentProperties
     sal_Bool         bIsFolder;             // IsFolder
     ::rtl::OUString  aMediaType;            // MediaType
     sal_Int64        nSize;                 // Size
-#if SUPD>614
     sal_Bool         bCompressed;           // Compressed
     sal_Bool         bEncrypted;            // Encrypted
     sal_Bool         bHasEncryptedEntries;  // HasEncryptedEntries
-#endif
 
-#if SUPD>614
     ContentProperties()
     : bIsDocument( sal_True ), bIsFolder( sal_False ), nSize( 0 ),
       bCompressed( sal_True ), bEncrypted( sal_False ),
       bHasEncryptedEntries( sal_False ) {}
-#else
-    ContentProperties()
-    : bIsDocument( sal_True ), bIsFolder( sal_False ), nSize( 0 ) {}
-#endif
 
     ContentProperties( const ::rtl::OUString& rContentType );
 };
@@ -277,6 +271,13 @@ private:
                     ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                 ::com::sun::star::ucb::InteractiveBadTransferURLException );
+
+
+    void split( const ::com::sun::star::ucb::SplitCommandArgument& rArg,
+                const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv,
+                ::com::sun::star::uno::Sequence< ::rtl::OUString > & rResult )
+        throw( ::com::sun::star::uno::Exception );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
     getInputStream();
