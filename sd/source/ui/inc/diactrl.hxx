@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diactrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:50 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,9 +130,6 @@ public:
 
 class DiaEffectControl : public Window
 {
-private:
-    SfxBindings&    rBindings;
-    FixedText       aFtDescr;
 public:
     FadeEffectLB    aLbEffect;
 
@@ -141,6 +138,17 @@ public:
                 ~DiaEffectControl();
 
     DECL_LINK( SelectDiaEffectHdl, void * );
+
+protected:
+    /** This method is called when the window gets the focus.  It grabs the
+        focus to this control so that it can be controlled with the
+        keyboard.
+    */
+    virtual void GetFocus (void);
+
+private:
+    SfxBindings&    rBindings;
+    FixedText       aFtDescr;
 };
 
 //========================================================================
@@ -148,9 +156,6 @@ public:
 
 class DiaSpeedControl : public Window
 {
-private:
-    SfxBindings&    rBindings;
-
 public:
     ListBox         aLbSpeed;
 
@@ -159,6 +164,16 @@ public:
                 ~DiaSpeedControl();
 
     DECL_LINK( SelectDiaSpeedHdl, void * );
+
+protected:
+    /** This method is called when the window gets the focus.  It grabs the
+        focus to this control so that it can be controlled with the
+        keyboard.
+    */
+    virtual void GetFocus (void);
+
+private:
+    SfxBindings&    rBindings;
 };
 
 //========================================================================
@@ -166,9 +181,6 @@ public:
 
 class DiaAutoControl : public Window
 {
-private:
-    SfxBindings&    rBindings;
-    FixedText       aFtDescr;
 public:
     ListBox         aLbAuto;
 
@@ -177,6 +189,17 @@ public:
                 ~DiaAutoControl();
 
     DECL_LINK( SelectDiaAutoHdl, void * );
+
+protected:
+    /** This method is called when the window gets the focus.  It grabs the
+        focus to this control so that it can be controlled with the
+        keyboard.
+    */
+    virtual void GetFocus (void);
+
+private:
+    SfxBindings&    rBindings;
+    FixedText       aFtDescr;
 };
 
 //========================================================================
