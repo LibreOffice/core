@@ -61,6 +61,33 @@ TYPEINIT1( UCBStorage, BaseStorage );
 #define COMMIT_RESULT_NOTHING_TO_DO     1
 #define COMMIT_RESULT_SUCCESS           2
 
+sal_Int32 GetFormatId_Impl( SvGlobalName aName )
+{
+    if ( aName == SvGlobalName( SO3_SW_CLASSID_60 ) )
+        return SOT_FORMATSTR_ID_STARWRITER_60;
+    if ( aName == SvGlobalName( SO3_SWWEB_CLASSID_60 ) )
+        return SOT_FORMATSTR_ID_STARWRITERWEB_60;
+    if ( aName == SvGlobalName( SO3_SWGLOB_CLASSID_60 ) )
+        return SOT_FORMATSTR_ID_STARWRITERGLOB_60;
+    if ( aName == SvGlobalName( SO3_SDRAW_CLASSID_60 ) )
+        return SOT_FORMATSTR_ID_STARDRAW_60;
+    if ( aName == SvGlobalName( SO3_SIMPRESS_CLASSID_60 ) )
+        return SOT_FORMATSTR_ID_STARIMPRESS_60;
+    if ( aName == SvGlobalName( SO3_SC_CLASSID_60 ) )
+        return SOT_FORMATSTR_ID_STARCALC_60;
+    if ( aName == SvGlobalName( SO3_SCH_CLASSID_60 ) )
+        return SOT_FORMATSTR_ID_STARCHART_60;
+    if ( aName == SvGlobalName( SO3_SM_CLASSID_60 ) )
+        return SOT_FORMATSTR_ID_STARMATH_60;
+    else
+    {
+        DBG_ERROR( "Unknown UCB storage format!" );
+        return 0;
+    }
+}
+
+
+
 SvGlobalName GetClassId_Impl( sal_Int32 nFormat )
 {
     switch ( nFormat )
@@ -162,7 +189,7 @@ public:
     BOOL                        m_bDirty;       // ???
     ULONG                       m_nFormat;
     String                      m_aUserTypeName;
-    ClsId                       m_aClassId;
+    SvGlobalName                m_aClassId;
 
     UCBStorageElementList_Impl  m_aChildrenList;
 
@@ -712,7 +739,7 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     , m_bModified( FALSE )
     , m_bCommited( FALSE )
     , m_bDirty( FALSE )
-    , m_aClassId( (const ClsId&) SvGlobalName().GetCLSID() )
+    , m_aClassId( SvGlobalName() )
 {
     String aName( rName );
     if( !aName.Len() )
@@ -720,7 +747,7 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
         // no name given = use temporary name!
         DBG_ASSERT( m_bIsRoot, "SubStorage must have a name!" );
         m_pTempFile = new ::utl::TempFile;
-        aName = m_pTempFile->GetURL();
+        m_aName = m_aOriginalName = aName = m_pTempFile->GetURL();
     }
 
     if ( m_bIsRoot )
@@ -748,7 +775,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL 
     , m_bDirty( FALSE )
     , m_bModified( FALSE )
     , m_bCommited( FALSE )
-    , m_aClassId( (const ClsId&) SvGlobalName().GetCLSID() )
+    , m_aClassId( SvGlobalName() )
 {
     // UCBStorages work on a content, so a temporary file for a content must be created, even if the stream is only
     // accessed readonly
@@ -774,7 +801,9 @@ void UCBStorage_Impl::Init()
 {
     // name is last segment in URL
     INetURLObject aObj( m_aURL );
-    m_aName = m_aOriginalName = aObj.GetLastName();
+    if ( !m_aName.Len() )
+        // if the name was not already set to a temp name
+        m_aName = m_aOriginalName = aObj.GetLastName();
 
     try
     {
@@ -806,7 +835,7 @@ void UCBStorage_Impl::Init()
             m_nFormat = SotExchange::GetFormat( aDataFlavor );
 
             // get the ClassId using the clipboard format ( internal table )
-            m_aClassId = (const ClsId& ) GetClassId_Impl( m_nFormat ).GetCLSID();
+            m_aClassId = GetClassId_Impl( m_nFormat );
 
             // get human presentable name using the clipboard format
             SotExchange::GetFormatDataFlavor( m_nFormat, aDataFlavor );
@@ -1167,10 +1196,12 @@ void UCBStorage::SetDirty()
 
 void UCBStorage::SetClass( const SvGlobalName & rClass, ULONG nOriginalClipFormat, const String & rUserTypeName )
 {
-    pImp->m_aClassId = (const ClsId&) rClass.GetCLSID();
+    pImp->m_aClassId = rClass;
     pImp->m_nFormat = nOriginalClipFormat;
     pImp->m_aUserTypeName = rUserTypeName;
 
+    // in UCB storages only the content type will be stored, all other information can be reconstructed
+    // ( see the UCBStorage_Impl::Init() method )
     ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
     SotExchange::GetFormatDataFlavor( pImp->m_nFormat, aDataFlavor );
     pImp->m_aContentType = aDataFlavor.MimeType;
@@ -1178,12 +1209,23 @@ void UCBStorage::SetClass( const SvGlobalName & rClass, ULONG nOriginalClipForma
 
 void UCBStorage::SetClassId( const ClsId& rClsId )
 {
-    pImp->m_aClassId = rClsId;
+    pImp->m_aClassId = SvGlobalName( (const CLSID&) pImp->m_aClassId );
+
+    // in OLE storages the clipboard format an the user name will be transferred when a storage is copied because both are
+    // stored in one the substreams
+    // UCB storages store the content type information as content type in the manifest file and so this information must be
+    // kept up to date, and also the other type information that is hold only at runtime because it can be reconstructed from
+    // the content type
+    pImp->m_nFormat = GetFormatId_Impl( pImp->m_aClassId );
+    ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+    SotExchange::GetFormatDataFlavor( pImp->m_nFormat, aDataFlavor );
+    pImp->m_aUserTypeName = aDataFlavor.HumanPresentableName;
+    pImp->m_aContentType = aDataFlavor.MimeType;
 }
 
 const ClsId& UCBStorage::GetClassId() const
 {
-    return pImp->m_aClassId;
+    return ( const ClsId& ) pImp->m_aClassId.GetCLSID();
 }
 
 void UCBStorage::SetConvertClass( const SvGlobalName & rConvertClass, ULONG nOriginalClipFormat, const String & rUserTypeName )
@@ -1199,7 +1241,7 @@ BOOL UCBStorage::ShouldConvert()
 
 SvGlobalName UCBStorage::GetClassName()
 {
-    return  SvGlobalName( (const CLSID&) pImp->m_aClassId );
+    return  pImp->m_aClassId;
 }
 
 ULONG UCBStorage::GetFormat()
