@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.166 $
+ *  $Revision: 1.167 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:03:37 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1555,6 +1555,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_CHAR_FONT_FAMILY), RES_CHRATR_FONT,     CPPU_E2T(CPPUTYPE_INT16),                   PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },
                     { SW_PROP_NMID(UNO_NAME_CHAR_FONT_CHAR_SET), RES_CHRATR_FONT,       CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },
                     { SW_PROP_NMID(UNO_NAME_CHAR_FONT_PITCH), RES_CHRATR_FONT,      CPPU_E2T(CPPUTYPE_INT16),                   PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },
+                    { SW_PROP_NMID(UNO_NAME_CHAR_FONT_NAME_ASIAN), RES_CHRATR_CJK_FONT,     CPPU_E2T(CPPUTYPE_OUSTRING),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },
                     { SW_PROP_NMID(UNO_NAME_CHAR_FONT_STYLE_NAME_ASIAN), RES_CHRATR_CJK_FONT,   CPPU_E2T(CPPUTYPE_OUSTRING),    PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },
                     { SW_PROP_NMID(UNO_NAME_CHAR_FONT_FAMILY_ASIAN), RES_CHRATR_CJK_FONT,   CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },
                     { SW_PROP_NMID(UNO_NAME_CHAR_FONT_CHAR_SET_ASIAN), RES_CHRATR_CJK_FONT, CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },
