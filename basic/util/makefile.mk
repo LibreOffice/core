@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: mh $ $Date: 2001-10-18 09:29:25 $
+#   last change: $Author: hjs $ $Date: 2002-04-08 14:24:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,7 +124,7 @@ DEF1DES		=StarBasic
 
 
 # Light basic
-
+.IF "$(SVXLIGHT)" != ""
 LIB2TARGET=$(SLB)$/sbl.lib
 LIB2FILES=		\
     $(SLB)$/basicmgr.lib   \
@@ -167,6 +167,7 @@ DEF2DEPN	=	\
 
 DEFLIB2NAME	=sbl
 DEF2DES		=StarBasic Light
+.ENDIF			# "$(SVXLIGHT)" != ""
 
 RES1TARGET=$(PRJNAME)
 SRS1FILES= \
