@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:34:12 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 10:41:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,52 +207,47 @@ void OComponentHelper::dispose()
         // Create an event with this as sender
         try
         {
-            Reference<XInterface > xSource( Reference<XInterface >::query( (XComponent *)this ) );
-            EventObject aEvt;
-            aEvt.Source = xSource;
-            // inform all listeners to release this object
-            // The listener container are automaticly cleared
-            rBHelper.aLC.disposeAndClear( aEvt );
-            // notify subclasses to do their dispose
-            disposing();
-        }
-        catch(::com::sun::star::uno::RuntimeException&)
-        {
-            // catch exception and throw again but signal that
-            // the object was disposed. Dispose should be called
-            // only once.
+            try
+            {
+                Reference<XInterface > xSource(
+                    Reference<XInterface >::query( (XComponent *)this ) );
+                EventObject aEvt;
+                aEvt.Source = xSource;
+                // inform all listeners to release this object
+                // The listener container are automaticly cleared
+                rBHelper.aLC.disposeAndClear( aEvt );
+                // notify subclasses to do their dispose
+                disposing();
+            }
+            catch (...)
+            {
+                MutexGuard aGuard( rBHelper.rMutex );
+                // bDispose and bInDisposing must be set in this order:
+                rBHelper.bDisposed = sal_True;
+                rBHelper.bInDispose = sal_False;
+                throw;
+            }
             MutexGuard aGuard( rBHelper.rMutex );
+            // bDispose and bInDisposing must be set in this order:
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
+        }
+        catch (RuntimeException &)
+        {
             throw;
         }
-        catch (::com::sun::star::uno::Exception & exc)
+        catch (Exception & exc)
         {
-            MutexGuard aGuard( rBHelper.rMutex );
-            rBHelper.bDisposed = sal_True;
-            rBHelper.bInDispose = sal_False;
             throw RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("unexpected UNO exception caught: ") ) +
+                OUString( RTL_CONSTASCII_USTRINGPARAM(
+                              "unexpected UNO exception caught: ") ) +
                 exc.Message, Reference< XInterface >() );
         }
-        catch (...)
-        {
-            MutexGuard aGuard( rBHelper.rMutex );
-            rBHelper.bDisposed = sal_True;
-            rBHelper.bInDispose = sal_False;
-            throw RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("unexpected non-UNO exception caught: ") ),
-                Reference< XInterface >() );
-        }
-
-        // the values bDispose and bInDisposing must set in this order.
-        MutexGuard aGuard( rBHelper.rMutex );
-        rBHelper.bDisposed = sal_True;
-        rBHelper.bInDispose = sal_False;
     }
     else
     {
-        // in a multithreaded environment, it can't be avoided, that dispose is called twice.
+        // in a multithreaded environment, it can't be avoided,
+        // that dispose is called twice.
         // However this condition is traced, because it MAY indicate an error.
         OSL_TRACE( "OComponentHelper::dispose() - dispose called twice" );
     }
