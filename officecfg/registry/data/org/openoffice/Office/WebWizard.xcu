@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WebWizard.xcu,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:48:01 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 13:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
                 <prop oor:name="Index">
                     <value>99</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Original file formal</value>
                     <value xml:lang="de">Original-Dateiformat</value>
                 </prop>
@@ -107,7 +107,7 @@
                 <prop oor:name="Index">
                     <value>0</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">HTML</value>
                     <value xml:lang="de">HTML</value>
                 </prop>
@@ -153,7 +153,7 @@
                 <prop oor:name="Index">
                     <value>1</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="de">HTML</value>
                     <value xml:lang="en-US">HTML</value>
                 </prop>
@@ -199,7 +199,7 @@
                 <prop oor:name="Index">
                     <value>2</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="de">HTML</value>
                     <value xml:lang="en-US">HTML</value>
                 </prop>
@@ -280,7 +280,7 @@
                 <prop oor:name="Index">
                     <value>3</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="de">HTML</value>
                     <value xml:lang="en-US">HTML</value>
                 </prop>
@@ -361,7 +361,7 @@
                 <prop oor:name="Index">
                     <value>10</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Print optimized</value>
                     <value xml:lang="de">PDF - Optimiert für Druck</value>
                 </prop>
@@ -407,7 +407,7 @@
                 <prop oor:name="Index">
                     <value>11</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Print optimized</value>
                     <value xml:lang="de">PDF - Optimiert für Druck</value>
                 </prop>
@@ -453,7 +453,7 @@
                 <prop oor:name="Index">
                     <value>12</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Print optimized</value>
                     <value xml:lang="de">PDF - Optimiert für Druck</value>
                 </prop>
@@ -499,7 +499,7 @@
                 <prop oor:name="Index">
                     <value>13</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Print optimized</value>
                     <value xml:lang="de">PDF - Optimiert für Druck</value>
                 </prop>
@@ -545,7 +545,7 @@
                 <prop oor:name="Index">
                     <value>20</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Press optimized</value>
                     <value xml:lang="de">PDF - Optimiert für Druckvorstufe</value>
                 </prop>
@@ -596,7 +596,7 @@
                 <prop oor:name="Index">
                     <value>21</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Press optimized</value>
                     <value xml:lang="de">PDF - Optimiert für Druckvorstufe</value>
                 </prop>
@@ -647,7 +647,7 @@
                 <prop oor:name="Index">
                     <value>22</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Press optimized</value>
                     <value xml:lang="de">PDF - Optimiert für Druckvorstufe</value>
                 </prop>
@@ -698,7 +698,7 @@
                 <prop oor:name="Index">
                     <value>23</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Press optimized</value>
                     <value xml:lang="de">PDF - Optimiert für Druckvorstufe</value>
                 </prop>
@@ -749,7 +749,7 @@
                 <prop oor:name="Index">
                     <value>30</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="de">Flash</value>
                     <value xml:lang="en-US">Flash</value>
                 </prop>
@@ -795,7 +795,7 @@
                 <prop oor:name="Index">
                     <value>31</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="de">Flash</value>
                     <value xml:lang="en-US">Flash</value>
                 </prop>
@@ -843,7 +843,7 @@
                 <prop oor:name="Index">
                     <value>0</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Table with 3 columns</value>
                     <value xml:lang="de">Tabelle mit 3 Spalten</value>
                 </prop>
@@ -855,7 +855,7 @@
                 <prop oor:name="Index">
                     <value>1</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Table with 2 columns</value>
                     <value xml:lang="de">Tabelle mit 2 Spalten</value>
                 </prop>
@@ -867,7 +867,7 @@
                 <prop oor:name="Index">
                     <value>2</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Simple</value>
                     <value xml:lang="de">Einfach</value>
                 </prop>
@@ -879,7 +879,7 @@
                 <prop oor:name="Index">
                     <value>3</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Diagonal</value>
                     <value xml:lang="de">Diagonal</value>
                 </prop>
@@ -891,7 +891,7 @@
                 <prop oor:name="Index">
                     <value>4</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Zigzag</value>
                     <value xml:lang="de">Zickzack</value>
                 </prop>
@@ -903,7 +903,7 @@
                 <prop oor:name="Index">
                     <value>5</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">HTML frameset, left</value>
                     <value xml:lang="de">HTML-Frameset, links</value>
                 </prop>
@@ -915,7 +915,7 @@
                 <prop oor:name="Index">
                     <value>6</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">HTML frameset, right</value>
                     <value xml:lang="de">HTML-Frameset, rechts</value>
                 </prop>
@@ -927,7 +927,7 @@
                 <prop oor:name="Index">
                     <value>7</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">HTML frameset, top</value>
                     <value xml:lang="de">HTML-Frameset, oben</value>
                 </prop>
@@ -939,7 +939,7 @@
                 <prop oor:name="Index">
                     <value>8</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">HTML frameset, bottom</value>
                     <value xml:lang="de">HTML-Frameset, unten</value>
                 </prop>
@@ -953,7 +953,7 @@
                 <prop oor:name="Index">
                     <value>0</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Beige</value>
                     <value xml:lang="de">Beige</value>
                 </prop>
@@ -971,7 +971,7 @@
                 <prop oor:name="Index">
                     <value>1</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Bright</value>
                     <value xml:lang="de">Hell</value>
                 </prop>
@@ -989,7 +989,7 @@
                 <prop oor:name="Index">
                     <value>2</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Bright Blue</value>
                     <value xml:lang="de">Hellblau</value>
                 </prop>
@@ -1007,7 +1007,7 @@
                 <prop oor:name="Index">
                     <value>3</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Gray</value>
                     <value xml:lang="de">Grau</value>
                 </prop>
@@ -1025,7 +1025,7 @@
                 <prop oor:name="Index">
                     <value>4</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Blue</value>
                     <value xml:lang="de">Blau</value>
                 </prop>
@@ -1043,7 +1043,7 @@
                 <prop oor:name="Index">
                     <value>5</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Contrast</value>
                     <value xml:lang="de">Kontrast</value>
                 </prop>
@@ -1059,7 +1059,7 @@
                 <prop oor:name="Index">
                     <value>6</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Blue &amp; Black</value>
                     <value xml:lang="de">Schwarz &amp; Blau</value>
                 </prop>
@@ -1077,7 +1077,7 @@
                 <prop oor:name="Index">
                     <value>7</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Dark Red</value>
                     <value xml:lang="de">Dunkelrot</value>
                 </prop>
@@ -1095,7 +1095,7 @@
                 <prop oor:name="Index">
                     <value>8</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Light Gray</value>
                     <value xml:lang="de">Hellgrau</value>
                 </prop>
@@ -1113,7 +1113,7 @@
                 <prop oor:name="Index">
                     <value>9</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="de">Wald</value>
                     <value xml:lang="en-US">Forest</value>
                 </prop>
@@ -1131,7 +1131,7 @@
                 <prop oor:name="Index">
                     <value>10</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Orange &amp; Blue</value>
                     <value xml:lang="de">Orange &amp; Blau</value>
                 </prop>
@@ -1149,7 +1149,7 @@
                 <prop oor:name="Index">
                     <value>11</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="de">Marine</value>
                     <value xml:lang="en-US">Marine</value>
                 </prop>
@@ -1167,7 +1167,7 @@
                 <prop oor:name="Index">
                     <value>12</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="de">Orange</value>
                     <value xml:lang="en-US">Orange</value>
                 </prop>
@@ -1185,7 +1185,7 @@
                 <prop oor:name="Index">
                     <value>13</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name"  >
                     <value xml:lang="de">Eisblau</value>
                     <value xml:lang="en-US">Ice Blue</value>
                 </prop>
@@ -1203,7 +1203,7 @@
                 <prop oor:name="Index">
                     <value>14</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name"  >
                     <value xml:lang="en-US">Blue &amp; Gray</value>
                     <value xml:lang="de">Blau &amp; Grau</value>
                 </prop>
@@ -1221,7 +1221,7 @@
                 <prop oor:name="Index">
                     <value>15</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="de">Wasser</value>
                     <value xml:lang="en-US">Water</value>
                 </prop>
@@ -1239,7 +1239,7 @@
                 <prop oor:name="Index">
                     <value>16</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name"  >
                     <value xml:lang="de">Rot</value>
                     <value xml:lang="en-US">Red</value>
                 </prop>
@@ -1257,7 +1257,7 @@
                 <prop oor:name="Index">
                     <value>17</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name"  >
                     <value xml:lang="en-US">Colorful</value>
                     <value xml:lang="de">Farbenfroh</value>
                 </prop>
@@ -1275,7 +1275,7 @@
                 <prop oor:name="Index">
                     <value>18</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Green &amp; Red</value>
                     <value xml:lang="de">Grün &amp; Rot</value>
                 </prop>
@@ -1293,7 +1293,7 @@
                 <prop oor:name="Index">
                     <value>19</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Violet</value>
                     <value xml:lang="de">Lila</value>
                 </prop>
@@ -1311,7 +1311,7 @@
                 <prop oor:name="Index">
                     <value>20</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="de">Grün</value>
                     <value xml:lang="en-US">Green</value>
                 </prop>
@@ -1348,7 +1348,7 @@
                 <prop oor:name="Index">
                     <value>0</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Round, 3D, blue &amp; gray</value>
                     <value xml:lang="de">3D, rund, blau &amp; grau</value>
                 </prop>
@@ -1363,7 +1363,7 @@
                 <prop oor:name="Index">
                     <value>1</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Round, 3D, blue &amp; green</value>
                     <value xml:lang="de">3D, rund, blau &amp; grün</value>
                 </prop>
@@ -1378,7 +1378,7 @@
                 <prop oor:name="Index">
                     <value>2</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Cubic, 3D, orange &amp; blue</value>
                     <value xml:lang="de">3D, Würfel, orange &amp; blau</value>
                 </prop>
@@ -1393,7 +1393,7 @@
                 <prop oor:name="Index">
                     <value>3</value>
                 </prop>
-                <prop oor:name="Name">
+                <prop oor:name="Name" >
                     <value xml:lang="en-US">Round, flat, black &amp; gray</value>
                     <value xml:lang="de">Flach, rund, schwarz &amp; grau</value>
                 </prop>
@@ -1406,6 +1406,56 @@
             </node>
         </node>
         <node oor:name="SavedSessions"/>
+        <node oor:name="Filters">
+            <node oor:name="OO_documents" oor:op="replace">
+                <prop oor:name="Index">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="Name" >
+                    <value xml:lang="en-US">%PRODNAME documents</value>
+                    <value xml:lang="de">%PRODNAME-Dokumente</value>
+                </prop>
+                <prop oor:name="Filter">
+                    <value>*.oxt;*.ott;*.oxg;*.oxs;*.ots;*.oxp;*.otp;*.oxd;*.otd;*.oxf;*.sxw;*.sxc;*.sxd;*.sxi;*.sdw;*.sdc;*.sdd;*.sdi;*.sda;*.sdp;</value>
+                </prop>
+            </node>
+            <node oor:name="ms_documents" oor:op="replace">
+                <prop oor:name="Index">
+                    <value>1</value>
+                </prop>
+                <prop oor:name="Name" >
+                    <value xml:lang="en-US">Microsoft Office documents</value>
+                    <value xml:lang="de">Microsoft Office-Dokumente</value>
+                </prop>
+                <prop oor:name="Filter">
+                    <value>*.doc;*.xls;*.ppt;*.pps</value>
+                </prop>
+            </node>
+            <node oor:name="graphic_files" oor:op="replace">
+                <prop oor:name="Index">
+                    <value>2</value>
+                </prop>
+                <prop oor:name="Name" >
+                    <value xml:lang="en-US">Graphics files</value>
+                    <value xml:lang="de">Grafikdateien</value>
+                </prop>
+                <prop oor:name="Filter">
+                    <value>*.jpg;*.gif;*.png;*.bmp;*.tiff;*.jpeg;*.jpe</value>
+                </prop>
+            </node>
+            <node oor:name="all_files" oor:op="replace">
+                <prop oor:name="Index">
+                    <value>3</value>
+                </prop>
+                <prop oor:name="Name" >
+                    <value xml:lang="en-US">All files</value>
+                    <value xml:lang="de">Alle Dateien</value>
+                </prop>
+                <prop oor:name="Filter">
+                    <value>*</value>
+                </prop>
+            </node>
+        </node>
         <node oor:name="DefaultSession">
             <prop oor:name="Index">
                 <value>1</value>
@@ -1435,7 +1485,7 @@
                     <value>table_3</value>
                 </prop>
                 <prop oor:name="Style">
-                    <value>style1</value>
+                    <value>style16</value>
                 </prop>
                 <prop oor:name="BackgroundImage">
                     <value/>
@@ -1453,13 +1503,13 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="DisplayAuthor">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
                 <prop oor:name="DisplayCreateDate">
                     <value>false</value>
                 </prop>
                 <prop oor:name="DisplayUpdateDate">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
                 <prop oor:name="DisplayFilename">
                     <value>false</value>
@@ -1474,20 +1524,15 @@
                     <value>false</value>
                 </prop>
                 <prop oor:name="DisplaySize">
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
             </node>
             <node oor:name="GeneralInfo">
                 <prop oor:name="Title"/>
                 <prop oor:name="Description"/>
-                <prop oor:name="Icon">
-                    <value/>
-                </prop>
                 <prop oor:name="Author"/>
-                <prop oor:name="Keywords"/>
                 <prop oor:name="CreationDate"/>
                 <prop oor:name="UpdateDate"/>
-                <prop oor:name="RevisitAfter"/>
                 <prop oor:name="Email"/>
                 <prop oor:name="Copyright"/>
             </node>
@@ -1497,7 +1542,7 @@
                         <value>true</value>
                     </prop>
                     <prop oor:name="URL">
-                        <value>$(work)</value>
+                        <value></value>
                     </prop>
                     <prop oor:name="Username">
                         <value/>
