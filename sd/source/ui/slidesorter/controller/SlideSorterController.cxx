@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:11:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 #include "ViewShellBase.hxx"
 #include "Window.hxx"
 #include "PreviewChildWindow.hxx"
-#include "SlideChangeChildWindow.hxx"
 #include "PreviewWindow.hxx"
 #include "FrameView.hxx"
 #include "DrawDocShell.hxx"
@@ -94,7 +93,7 @@
 #include "strings.hrc"
 #include "app.hrc"
 #include "glob.hrc"
-#include "fuslshow.hxx"
+#include "slideshow.hxx"
 #include "sdmod.hxx"
 #include "sdxfer.hxx"
 #ifndef SD_FRAME_VIEW_HXX
@@ -847,10 +846,6 @@ void SlideSorterController::SelectionHasChanged (
         MakeSelectionVisible();
 
     SlideSorterViewShell& rViewShell (GetViewShell());
-    rViewShell.Invalidate (SID_DIA_EFFECT);
-    rViewShell.Invalidate (SID_DIA_SPEED);
-    rViewShell.Invalidate (SID_DIA_AUTO);
-    rViewShell.Invalidate (SID_DIA_TIME);
     rViewShell.Invalidate (SID_EXPAND_PAGE);
     rViewShell.Invalidate (SID_SUMMARY_PAGE);
 
@@ -858,8 +853,17 @@ void SlideSorterController::SelectionHasChanged (
     rViewShell.Invalidate (SID_STATUS_PAGE);
     rViewShell.Invalidate (SID_STATUS_LAYOUT);
 
-    rViewShell.UpdateSlideChangeWindow ();
     rViewShell.UpdatePreview (GetActualPage());
+
+    // Tell the slection change listeners that the selection has changed.
+    ::std::vector<Link>::iterator iListener (
+        maSelectionChangeListeners.begin());
+    ::std::vector<Link>::iterator iEnd (
+        maSelectionChangeListeners.end());
+    for (; iListener!=iEnd; ++iListener)
+    {
+        iListener->Call(NULL);
+    }
     /*
     // fire accessible event
     uno::Reference<XAccessible> xAccessible(GetWindow()->GetAccessible(FALSE));
@@ -1079,6 +1083,25 @@ FuPoor* SlideSorterController::CreateSelectionFunction (SfxRequest& rRequest)
 
 
 
+void SlideSorterController::AddSelectionChangeListener (const Link& rListener)
+{
+    if (::std::find (
+        maSelectionChangeListeners.begin(),
+        maSelectionChangeListeners.end(),
+        rListener) == maSelectionChangeListeners.end())
+    {
+        maSelectionChangeListeners.push_back (rListener);
+    }
+}
+
+void SlideSorterController::RemoveSelectionChangeListener(const Link&rListener)
+{
+    maSelectionChangeListeners.erase (
+        ::std::find (
+            maSelectionChangeListeners.begin(),
+            maSelectionChangeListeners.end(),
+            rListener));
+}
 
 void SlideSorterController::PrepareEditModeChange (void)
 {
@@ -1191,6 +1214,5 @@ void SlideSorterController::ModelChangeLock::ModelHasChanged (void)
 {
     mrController.HandleModelChange ();
 }
-
 
 } } } // end of namespace ::sd::slidesorter
