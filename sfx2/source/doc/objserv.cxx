@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mba $ $Date: 2002-11-18 12:20:02 $
+ *  last change: $Author: obo $ $Date: 2002-11-20 11:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,13 +493,13 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             // get the filename by dialog ...
             // create the file dialog
             sal_Int16  aDialogMode = bAllowOptions ?
-                                        FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS :
-                                        FILESAVE_AUTOEXTENSION_PASSWORD;
+                                        ::sfx2::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS :
+                                        ::sfx2::FILESAVE_AUTOEXTENSION_PASSWORD;
             sal_uInt32 aDialogFlags = 0;
 
             if( bIsExport )
             {
-                aDialogMode  = FILESAVE_AUTOEXTENSION_SELECTION;
+                aDialogMode  = ::sfx2::FILESAVE_AUTOEXTENSION_SELECTION;
                 aDialogFlags = SFXWB_EXPORT;
             }
 
@@ -706,7 +706,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 
         // get the filename by dialog ...
         // create the file dialog
-        sfx2::FileDialogHelper aFileDlg( FILESAVE_AUTOEXTENSION_PASSWORD,
+        sfx2::FileDialogHelper aFileDlg( ::sfx2::FILESAVE_AUTOEXTENSION_PASSWORD,
                                          0L, GetFactory() );
 
         SfxItemSet* pTempSet = NULL;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2002-11-20 10:39:47 $
+ *  last change: $Author: obo $ $Date: 2002-11-20 11:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,7 +1444,7 @@ void SfxStatusBarConfigPage::Reset( const SfxItemSet& )
 String SfxConfigDialog::FileDialog_Impl( Window *pParent, WinBits nBits, const String& rTitle )
 {
     BOOL bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
-    short nDialogType = bSave? FILESAVE_SIMPLE : FILEOPEN_SIMPLE;
+    short nDialogType = bSave? ::sfx2::FILESAVE_SIMPLE : ::sfx2::FILEOPEN_SIMPLE;
 
     sfx2::FileDialogHelper aFileDlg( nDialogType, 0 );
     aFileDlg.SetTitle( rTitle );

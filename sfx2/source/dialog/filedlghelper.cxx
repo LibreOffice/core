@@ -2,6 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
+ *  $Revision: 1.99 $
+ *
+ *  last change: $Author: obo $ $Date: 2002-11-20 11:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,20 +234,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 using namespace ::cppu;
-
-//-----------------------------------------------------------------------------
-
-const short FILEOPEN_SIMPLE = TemplateDescription::FILEOPEN_SIMPLE;
-const short FILESAVE_SIMPLE = TemplateDescription::FILESAVE_SIMPLE;
-const short FILESAVE_AUTOEXTENSION_PASSWORD = TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD;
-const short FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS = TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS;
-const short FILESAVE_AUTOEXTENSION_SELECTION = TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
-const short FILESAVE_AUTOEXTENSION_TEMPLATE = TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE;
-const short FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE = TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE;
-const short FILEOPEN_PLAY = TemplateDescription::FILEOPEN_PLAY;
-const short FILEOPEN_READONLY_VERSION = TemplateDescription::FILEOPEN_READONLY_VERSION;
-const short FILEOPEN_LINK_PREVIEW = TemplateDescription::FILEOPEN_LINK_PREVIEW;
-const short FILESAVE_AUTOEXTENSION = TemplateDescription::FILESAVE_AUTOEXTENSION;
 
 //-----------------------------------------------------------------------------
 

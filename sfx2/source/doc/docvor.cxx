@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2002-11-14 14:24:24 $
+ *  last change: $Author: obo $ $Date: 2002-11-20 11:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1545,7 +1545,7 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
 {
     String aPath;
     String aExtension( DEFINE_CONST_UNICODE( "vor" ) );
-    short nDialogType = bOpen ? FILEOPEN_SIMPLE : FILESAVE_SIMPLE;
+    short nDialogType = bOpen ? ::sfx2::FILEOPEN_SIMPLE : ::sfx2::FILESAVE_SIMPLE;
     sfx2::FileDialogHelper aFileDlg( nDialogType, 0L );
 
     // add "All" filter

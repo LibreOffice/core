@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-10 08:46:54 $
+ *  last change: $Author: obo $ $Date: 2002-11-20 11:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,13 +733,13 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     INetURLObject aURL;
     aURL.SetSmartProtocol( INET_PROT_FILE );
     aURL.SetSmartURL( aFactory);
-    const String& rMainURL = aURL.GetMainURL();
+    const String& rMainURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
     aBmp1.SetImage( SvFileInformationManager::GetImage( aURL, TRUE ) );
 
     // Bestimmung von Groesse und Typ
     String aSizeText( aUnknownSize );
     if ( aURL.GetProtocol() == INET_PROT_FILE )
-        aSizeText = CreateSizeText( SfxContentHelper::GetSize( aURL.GetMainURL() ) );
+        aSizeText = CreateSizeText( SfxContentHelper::GetSize( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) );
     aShowSizeFT.SetText( aSizeText );
 
     String aDescription = SvFileInformationManager::GetDescription( rMainURL );
@@ -957,7 +957,7 @@ IMPL_LINK( SfxInternetPage, ClickHdlForward, Control*, pCtrl )
 
 IMPL_LINK( SfxInternetPage, ClickHdlBrowseURL, PushButton*, pButton )
 {
-    sfx2::FileDialogHelper aHelper( FILEOPEN_SIMPLE, WB_OPEN );
+    sfx2::FileDialogHelper aHelper( ::sfx2::FILEOPEN_SIMPLE, WB_OPEN );
     aHelper.SetDisplayDirectory( aEDForwardURL.GetText() );
 
     if( ERRCODE_NONE == aHelper.Execute() )
