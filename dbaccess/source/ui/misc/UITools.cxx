@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 06:52:53 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 12:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 #endif
 #ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
+#endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
@@ -424,8 +427,24 @@ const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             pTypeInfo = aIter->second;
     }
     else
-        OSL_ENSURE(sal_False, "getTypeInfoFromType: no type info found for this type!");
+    {
+        ::comphelper::TStringMixEqualFunctor aCase(sal_False);
+        // search for typeinfo where the typename is equal _sTypeName
+        OTypeInfoMap::const_iterator aFind = ::std::find_if(_rTypeInfo.begin(),
+                                                            _rTypeInfo.end(),
+                                                            ::std::compose1(
+                                                                ::std::bind2nd(aCase, _sTypeName),
+                                                                ::std::compose1(
+                                                                    ::std::mem_fun(&OTypeInfo::getDBName),
+                                                                    ::std::select2nd<OTypeInfoMap::value_type>())
+                                                                )
+                                                            );
+        if(aFind != _rTypeInfo.end())
+            pTypeInfo = aFind->second;
+    }
 
+
+    OSL_ENSURE(pTypeInfo, "getTypeInfoFromType: no type info found for this type!");
     return pTypeInfo;
 }
 // -----------------------------------------------------------------------------

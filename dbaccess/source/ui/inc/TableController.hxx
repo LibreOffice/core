@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 11:55:14 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 12:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ namespace dbaui
         ::rtl::OUString m_sSchemaName;      // schema for update data
         ::rtl::OUString m_sName;            // table for update data
         String          m_sTypeNames;       // these type names are the ones out of the resource file
+        OTypeInfo*      m_pTypeInfo;        // fall back when type is unkown because database driver has a failure
 
         sal_Bool        m_bEditable : 1;        // is the control readonly or not
         sal_Bool        m_bModified : 1;        // is the data modified

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeInfo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-29 11:56:58 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 12:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,8 @@ const sal_uInt16 TYPE_OTHER     = 30;
         {}
         sal_Bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
         sal_Bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
+        ::rtl::OUString getDBName() const { return aTypeName; }
+
     };
 
 
