@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:26:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,8 @@
 #ifndef _SW_XMLTEXTBLOCKS_HXX
 #define _SW_XMLTEXTBLOCKS_HXX
 
-#ifndef _EMBOBJ_HXX
-#include <so3/embobj.hxx>
-#endif
+#include <sfx2/objsh.hxx>
+
 #ifndef _SWBLOCKS_HXX
 #include <swblocks.hxx>
 #endif
@@ -83,21 +82,21 @@ class SwXMLTextBlocks : public SwImpBlocks
 protected:
     BOOL         bAutocorrBlock;
     BOOL         bBlock;
-    SvEmbeddedObjectRef xDocShellRef;
+    SfxObjectShellRef xDocShellRef;
     USHORT       nFlags;
     String       aPackageName;
 
     void ReadInfo();
     void WriteInfo();
-    void InitBlockMode ( SvStorageRef & rStorage );
+    void InitBlockMode ( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStorage );
     void ResetBlockMode();
 
 public:
-    SvStorageRef        xBlkRoot;
-    SvStorageRef        xRoot;
+    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xBlkRoot;
+    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xRoot;
     short               nCurBlk;
     SwXMLTextBlocks( const String& );
-    SwXMLTextBlocks( SvStorage& );
+    SwXMLTextBlocks( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& );
     void   AddName( const String&, const String&, const String&, BOOL bOnlyTxt = FALSE );
     virtual void   AddName( const String&, const String&, BOOL bOnlyTxt = FALSE );
     void GeneratePackageName ( const String& rShort, String& rPackageName );
