@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.2 2001-03-07 16:43:45 fs Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.3 2001-03-19 09:36:10 nf Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: fs $ $Date: 2001-03-07 16:43:45 $ $Revision: 1.2 $
+ //  $Author: nf $ $Date: 2001-03-19 09:36:10 $ $Revision: 1.3 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -36,8 +36,8 @@ ModalDialog DLG_REL_PROPERTIES
         Size = MAP_APPFONT ( 174 , 31 ) ;
         Text = "beteiligte Tabellen" ;
         Text [ English ] = "involved tables" ;
-        Text[ english_us ] = "tables involved";
-        Text[ portuguese ] = "Tabelas implicadas";
+        Text[ english_us ] = "Tables involved";
+        Text[ portuguese ] = "Tabelas consideradas";
         Text[ russian ] = "âêëş÷åííûå òàáëèöû";
         Text[ greek ] = "åìğëåêüìåíïé ğßíáêåò";
         Text[ dutch ] = "betrokken tabellen";
@@ -52,7 +52,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ korean ] = "°ü·Ã Å×ÀÌºí";
         Text[ chinese_simplified ] = "ÓĞ¹ØÁªµÄ±í¸ñ";
         Text[ chinese_traditional ] = "¬ÛÃöªºªí®æ";
-        Text[ arabic ] = "ÇáÌÏÇæá ÇáãÔÊÑßÉ";
+        Text[ arabic ] = "ÇáÌÏÇæá ÇáãÚäíÉ";
         Text[ turkish ] = "İlgili tablolar";
     };
 
@@ -80,8 +80,8 @@ ModalDialog DLG_REL_PROPERTIES
         Size = MAP_APPFONT ( 174 , 86 ) ;
         Text = "beteiligte Felder" ;
         Text [ English ] = "involved fields" ;
-        Text[ english_us ] = "fields involved";
-        Text[ portuguese ] = "Campos implicados";
+        Text[ english_us ] = "Fields involved";
+        Text[ portuguese ] = "Campos considerados";
         Text[ russian ] = "âêëş÷åííûå ïîëÿ";
         Text[ greek ] = "åìğëåêüìåíá ğåäßá";
         Text[ dutch ] = "betrokken velden";
@@ -96,7 +96,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ korean ] = "°ü·Ã ÇÊµå";
         Text[ chinese_simplified ] = "ÓĞ¹ØÁªµÄ×Ö¶Î";
         Text[ chinese_traditional ] = "¬ÛÃöªºÄæ¦ì";
-        Text[ arabic ] = "ÇáÍŞæá ÇáãÔÊÑßÉ";
+        Text[ arabic ] = "ÇáÍŞæá ÇáãÚäíÉ";
         Text[ turkish ] = "İlgili alanlar";
     };
 
@@ -113,10 +113,10 @@ ModalDialog DLG_REL_PROPERTIES
         Text [ italian ] = "Opzioni di aggiornamento" ;
         Text [ spanish ] = "Opciones de actualización" ;
         Text [ french ] = "Options de mise à jour" ;
-        Text [ dutch ] = "Ugdate opties" ;
+        Text [ dutch ] = "Update opties" ;
         Text [ portuguese ] = "Actualizar opções" ;
         Text[ chinese_simplified ] = "¸üĞÂÑ¡Ïî";
-        Text[ russian ] = "Ïàğàìåòğû àêòóàëèçàöèè";
+        Text[ russian ] = "Ïàğàìåòğû îáíîâëåíèÿ";
         Text[ polish ] = "Aktualizacja opcji";
         Text[ japanese ] = "XVµÌß¼®İ";
         Text[ chinese_traditional ] = "§ó·s¿ï¶µ";
@@ -134,21 +134,21 @@ ModalDialog DLG_REL_PROPERTIES
         Text = "~Keine Aktion" ;
         Text [ English ] = "No action" ;
         Text [ portuguese ] = "~Nenhuma acção" ;
-        Text [ english_us ] = "No action" ;
+        Text [ english_us ] = "~No action" ;
         Text [ portuguese_brazilian ] = "Keine Aktion" ;
-        Text [ swedish ] = "Ingen åtgärd" ;
+        Text [ swedish ] = "~Ingen åtgärd" ;
         Text [ danish ] = "Ingen handling" ;
         Text [ italian ] = "~Nessuna operazione" ;
         Text [ spanish ] = "~Ninguna acción" ;
-        Text [ french ] = "Aucune action" ;
+        Text [ french ] = "~Aucune action" ;
         Text [ dutch ] = "~Geen activiteit" ;
-        Text[ chinese_simplified ] = "ÎŞ²Ù×÷ÃüÁî";
+        Text[ chinese_simplified ] = "~ÎŞ²Ù×÷";
         Text[ russian ] = "Áåç äåéñòâèÿ";
         Text[ polish ] = "Bez akcji";
         Text[ japanese ] = "±¸¼®İ‚È‚µ";
-        Text[ chinese_traditional ] = "µL¾Ş§@";
+        Text[ chinese_traditional ] = "µL°Ê§@";
         Text[ arabic ] = "ÈÏæä ÅÌÑÇÁ";
-        Text[ greek ] = "ÊáìéÜ åíİñãåéá";
+        Text[ greek ] = "~ÊáìéÜ åíİñãåéá";
         Text[ korean ] = "½ÇÇà ¾øÀ½";
         Text[ turkish ] = "İşlem yok";
         Text[ language_user1 ] = " ";
@@ -160,13 +160,13 @@ ModalDialog DLG_REL_PROPERTIES
         Text = "K~ask. Update" ;
         Text [ English ] = "Cascading update" ;
         Text [ portuguese ] = "Actualizar ~cascata" ;
-        Text [ english_us ] = "Update cascade" ;
+        Text [ english_us ] = "~Update cascade" ;
         Text [ portuguese_brazilian ] = "Kask. Update" ;
         Text [ swedish ] = "Uppdatera k~askad" ;
         Text [ danish ] = "Opdater kaskade" ;
-        Text [ italian ] = "Aggiorna cascata" ;
+        Text [ italian ] = "~Aggiorna cascata" ;
         Text [ spanish ] = "Actualizar ~cascada" ;
-        Text [ french ] = "Mise à jour cascade" ;
+        Text [ french ] = "Mise à jour ~cascade" ;
         Text [ dutch ] = "~Casc. update" ;
         Text[ chinese_simplified ] = "¸üĞÂ²ãµş";
         Text[ russian ] = "Îáíîâëåíèå êàñêàäà";
@@ -185,14 +185,14 @@ ModalDialog DLG_REL_PROPERTIES
         Size = MAP_APPFONT ( 72 , 12 ) ;
         Text = "~Null setzen" ;
         Text [ English ] = "Set null" ;
-        Text [ portuguese ] = "Definir ~zero" ;
-        Text [ english_us ] = "Set Null" ;
+        Text [ portuguese ] = "Definir ~Null" ;
+        Text [ english_us ] = "~Set null" ;
         Text [ portuguese_brazilian ] = "Null setzen" ;
         Text [ swedish ] = "Sätt ~null" ;
         Text [ danish ] = "Angiv nul" ;
         Text [ italian ] = "Imposta ~zero" ;
         Text [ spanish ] = "Poner ~null" ;
-        Text [ french ] = "Mettre ~Null" ;
+        Text [ french ] = "Définir ~Null" ;
         Text [ dutch ] = "~Op nul zetten" ;
         Text[ chinese_simplified ] = "Éè¶¨Áã";
         Text[ russian ] = "Óñòàíîâèòü íóëü";
@@ -212,17 +212,17 @@ ModalDialog DLG_REL_PROPERTIES
         Text = "~Default setzen" ;
         Text [ English ] = "Set default" ;
         Text [ portuguese ] = "Definir ~padrão" ;
-        Text [ english_us ] = "Set default" ;
+        Text [ english_us ] = "Set ~default" ;
         Text [ portuguese_brazilian ] = "Default setzen" ;
-        Text [ swedish ] = "Sätt standard" ;
+        Text [ swedish ] = "Sätt stan~dard" ;
         Text [ danish ] = "Angiv standard" ;
         Text [ italian ] = "~Preimpostazione" ;
         Text [ spanish ] = "~Predeterminar" ;
-        Text [ french ] = "~Prédéfinir" ;
+        Text [ french ] = "~Définir par défaut" ;
         Text [ dutch ] = "Op ~standaard zetten" ;
         Text[ chinese_simplified ] = "Éè¶¨Ä¬ÈÏ";
-        Text[ russian ] = "Óñòàíîâèòü çíà÷åíèå ïî óìîë÷àíèş";
-        Text[ polish ] = "Ustaw domyœlne";
+        Text[ russian ] = "Óñòàíîâèòü ïî óìîë÷àíèş";
+        Text[ polish ] = "OsadŸ domyœlne";
         Text[ japanese ] = "ÃŞÌ«ÙÄ‚Ìİ’è";
         Text[ chinese_traditional ] = "³]©wÀq»{";
         Text[ arabic ] = "ÊÚííä ÇİÊÑÇÖí";
@@ -266,21 +266,21 @@ ModalDialog DLG_REL_PROPERTIES
         Text = "K~eine Aktion" ;
         Text [ English ] = "No action" ;
         Text [ portuguese ] = "N~enhuma acção" ;
-        Text [ english_us ] = "No action" ;
+        Text [ english_us ] = "~No action" ;
         Text [ portuguese_brazilian ] = "Keine Aktion" ;
         Text [ swedish ] = "Ing~en åtgärd" ;
         Text [ danish ] = "Ingen handling" ;
         Text [ italian ] = "~Nessua operazione" ;
         Text [ spanish ] = "Ninguna a~cción" ;
-        Text [ french ] = "Aucune action" ;
+        Text [ french ] = "A~ucune action" ;
         Text [ dutch ] = "G~een activiteit" ;
-        Text[ chinese_simplified ] = "ÎŞ²Ù×÷ÃüÁî";
+        Text[ chinese_simplified ] = "ÎŞ²Ù×÷";
         Text[ russian ] = "Áåç äåéñòâèÿ";
         Text[ polish ] = "Bez akcji";
         Text[ japanese ] = "±¸¼®İ‚È‚µ";
-        Text[ chinese_traditional ] = "µL¾Ş§@";
+        Text[ chinese_traditional ] = "µL°Ê§@";
         Text[ arabic ] = "ÈÏæä ÅÌÑÇÁ";
-        Text[ greek ] = "ÊáìéÜ åíİñãåéá";
+        Text[ greek ] = "ÊáìéÜ ~åíİñãåéá";
         Text[ korean ] = "½ÇÇà¾øÀ½";
         Text[ turkish ] = "İşlem yok";
         Text[ language_user1 ] = " ";
@@ -292,13 +292,13 @@ ModalDialog DLG_REL_PROPERTIES
         Text = "Ka~sk. Löschen" ;
         Text [ English ] = "Cascading delete" ;
         Text [ portuguese ] = "Eli~minar cascata" ;
-        Text [ english_us ] = "Delete cascade" ;
+        Text [ english_us ] = "Delete ~cascade" ;
         Text [ portuguese_brazilian ] = "Kask. L÷schen" ;
         Text [ swedish ] = "Radera ka~skad" ;
         Text [ danish ] = "Opdater kaskade" ;
-        Text [ italian ] = "Elimina cascata" ;
+        Text [ italian ] = "Elimina ca~scata" ;
         Text [ spanish ] = "Eliminar c~ascada" ;
-        Text [ french ] = "Supprimer la cascade" ;
+        Text [ french ] = "~Supprimer la cascade" ;
         Text [ dutch ] = "~Casc. wissen" ;
         Text[ chinese_simplified ] = "É¾³ı²ãµş";
         Text[ russian ] = "Óäàëèòü êàñêàä";
@@ -317,18 +317,18 @@ ModalDialog DLG_REL_PROPERTIES
         Size = MAP_APPFONT ( 72 , 12 ) ;
         Text = "Nu~ll setzen" ;
         Text [ English ] = "Set null" ;
-        Text [ portuguese ] = "Definir ~zero" ;
-        Text [ english_us ] = "Set Null" ;
+        Text [ portuguese ] = "Definir ~Null" ;
+        Text [ english_us ] = "~Set null" ;
         Text [ portuguese_brazilian ] = "Null setzen" ;
         Text [ swedish ] = "Sätt nu~ll" ;
         Text [ danish ] = "Angiv nul" ;
         Text [ italian ] = "~Imposta zero" ;
         Text [ spanish ] = "Poner ~null" ;
-        Text [ french ] = "Mettre ~Null" ;
+        Text [ french ] = "Définir N~ull" ;
         Text [ dutch ] = "Op n~ul zetten" ;
         Text[ chinese_simplified ] = "Éè¶¨Áã";
         Text[ russian ] = "Óñòàíîâèòü íóëü";
-        Text[ polish ] = "Wstaw zero";
+        Text[ polish ] = "OsadŸ zero";
         Text[ japanese ] = "¾ŞÛ‚Éİ’è";
         Text[ chinese_traditional ] = "³]©w¹s";
         Text[ arabic ] = "ÊÚííä ŞíãÉ ÎÇáíÉ";
@@ -344,16 +344,16 @@ ModalDialog DLG_REL_PROPERTIES
         Text = "De~fault setzen" ;
         Text [ English ] = "Set default" ;
         Text [ portuguese ] = "Definir ~padrão" ;
-        Text [ english_us ] = "Set default" ;
+        Text [ english_us ] = "Set ~default" ;
         Text [ portuguese_brazilian ] = "Default setzen" ;
-        Text [ swedish ] = "Sätt standard" ;
+        Text [ swedish ] = "Sätt standa~rd" ;
         Text [ danish ] = "Angiv standard" ;
         Text [ italian ] = "~Preimpostazione" ;
         Text [ spanish ] = "Pre~determinar" ;
-        Text [ french ] = "~Prédéfinir" ;
+        Text [ french ] = "Définir par dé~faut" ;
         Text [ dutch ] = "Op standaard ~zetten" ;
         Text[ chinese_simplified ] = "Éè¶¨Ä¬ÈÏ";
-        Text[ russian ] = "Óñòàíîâèòü çíà÷åíèå ïî óìîë÷àíèş";
+        Text[ russian ] = "Óñòàíîâèòü ïî óìîë÷àíèş";
         Text[ polish ] = "Ustaw domyœlne";
         Text[ japanese ] = "ÃŞÌ«ÙÄ‚Ìİ’è";
         Text[ chinese_traditional ] = "³]©wÀq»{";
