@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:35:08 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 07:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,11 +291,97 @@ BOOL ScValidationData::GetErrMsg( String& rTitle, String& rMsg,
     return bShowError;
 }
 
+BOOL ScValidationData::DoScript( const ScAddress& rPos, const String& rInput,
+                                ScFormulaCell* pCell, Window* pParent ) const
+{
+    ScDocument* pDocument = GetDocument();
+    SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
+    if ( !pDocSh || !pDocument->CheckMacroWarn() )
+        return FALSE;
+
+    BOOL bScriptReturnedFalse = FALSE;  // Standard: kein Abbruch
+
+    // Set up parameters
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aParams(2);
+
+    //  1) eingegebener / berechneter Wert
+    String aValStr = rInput;
+    double nValue;
+    BOOL bIsValue = FALSE;
+    if ( pCell )                // wenn Zelle gesetzt, aus Interpret gerufen
+    {
+        bIsValue = pCell->IsValue();
+        if ( bIsValue )
+            nValue  = pCell->GetValue();
+        else
+            pCell->GetString( aValStr );
+    }
+    if ( bIsValue )
+        aParams[0] = ::com::sun::star::uno::makeAny( nValue );
+    else
+        aParams[0] = ::com::sun::star::uno::makeAny( ::rtl::OUString( aValStr ) );
+
+    //  2) Position der Zelle
+    String aPosStr;
+    rPos.Format( aPosStr, SCA_VALID | SCA_TAB_3D, pDocument );
+    aParams[1] = ::com::sun::star::uno::makeAny( ::rtl::OUString( aPosStr ) );
+
+    //  use link-update flag to prevent closing the document
+    //  while the macro is running
+    BOOL bWasInLinkUpdate = pDocument->IsInLinkUpdate();
+    if ( !bWasInLinkUpdate )
+        pDocument->SetInLinkUpdate( TRUE );
+
+    if ( pCell )
+        pDocument->LockTable( rPos.Tab() );
+
+    ::com::sun::star::uno::Any aRet;
+    ::com::sun::star::uno::Sequence< sal_Int16 > aOutArgsIndex;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aOutArgs;
+
+    ErrCode eRet = pDocSh->CallXScript(
+        aErrorTitle, aParams, aRet, aOutArgsIndex, aOutArgs );
+
+    if ( pCell )
+        pDocument->UnlockTable( rPos.Tab() );
+
+    if ( !bWasInLinkUpdate )
+        pDocument->SetInLinkUpdate( FALSE );
+
+    // Check the return value from the script
+    // The contents of the cell get reset if the script returns false
+    BOOL bTmp;
+    if ( eRet == ERRCODE_NONE &&
+             aRet.getValueType() == getCppuBooleanType() &&
+             sal_True == ( aRet >>= bTmp ) &&
+             bTmp == FALSE )
+    {
+        bScriptReturnedFalse = TRUE;
+    }
+
+    if ( eRet == ERRCODE_BASIC_METHOD_NOT_FOUND && !pCell )
+    // Makro nicht gefunden (nur bei Eingabe)
+    {
+        //! andere Fehlermeldung, wenn gefunden, aber nicht bAllowed ??
+
+        ErrorBox aBox( pParent, WinBits(WB_OK),
+                        ScGlobal::GetRscString( STR_VALID_MACRONOTFOUND ) );
+        aBox.Execute();
+    }
+
+    return bScriptReturnedFalse;
+}
+
     // TRUE -> Abbruch
 
 BOOL ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
                                 ScFormulaCell* pCell, Window* pParent ) const
 {
+    if ( SfxApplication::IsXScriptURL( aErrorTitle ) )
+    {
+        return DoScript( rPos, rInput, pCell, pParent );
+    }
+
     ScDocument* pDocument = GetDocument();
     SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
     if ( !pDocSh || !pDocument->CheckMacroWarn() )
