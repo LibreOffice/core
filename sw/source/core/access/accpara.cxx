@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-09 13:42:53 $
+ *  last change: $Author: dvo $ $Date: 2002-04-09 15:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,11 @@
 #ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
+#include <com/sun/star/beans/PropertyState.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_UNKNOWNPROPERTYEXCEPTION_HPP_
-#include <com/sun/star/lang/UnknownPropertyException.hpp>
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
 #endif
 
 #ifndef _BREAKIT_HXX
@@ -198,6 +201,7 @@ using namespace ::rtl;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::XMultiPropertySet;
 using ::com::sun::star::beans::UnknownPropertyException;
+using ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
 using std::max;
 using std::min;
 using std::sort;
@@ -1003,8 +1007,11 @@ Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     PropertyValue* pValues = aValues.getArray();
     for( sal_Int32 i = 0; i < nLength; i++ )
     {
-        pValues[i].Name = pNames[i];
-        pValues[i].Value = pAnys[i];
+        PropertyValue& rValue = pValues[i];
+        rValue.Name = pNames[i];
+        rValue.Value = pAnys[i];
+        rValue.Handle = -1;                         // handle not supported
+        rValue.State = PropertyState_DIRECT_VALUE;  // states not supported
     }
 
     // adjust background color if we're in a gray portion
