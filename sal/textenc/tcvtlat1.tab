@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtlat1.tab,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:29 $
+ *  last change: $Author: th $ $Date: 2001-07-16 11:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,8 +314,9 @@ static ImplTextEncodingData const aImplIBM437TextEncodingData =
     437,
     0,
     (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"iso-8859-1",
+    (const sal_Char*)"ibm437",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME  |
     RTL_TEXTENCODING_INFO_DOS_OS2,
     SCRIPT_LATIN
 };
@@ -468,8 +469,9 @@ static ImplTextEncodingData const aImplIBM850TextEncodingData =
     850,
     0,
     (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"iso-8859-1",
+    (const sal_Char*)"ibm850",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME  |
     RTL_TEXTENCODING_INFO_DOS_OS2,
     SCRIPT_LATIN
 };
@@ -1371,8 +1373,9 @@ static ImplTextEncodingData const aImplMS1252TextEncodingData =
     850,
     0,
     (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"iso-8859-1",
+    (const sal_Char*)"windows-1252",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME  |
     RTL_TEXTENCODING_INFO_WIN,
     SCRIPT_LATIN
 };
@@ -2053,8 +2056,9 @@ static ImplTextEncodingData const aImplAPPLEROMANTextEncodingData =
     850,
     0,
     (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"iso-8859-1",
+    (const sal_Char*)"macintosh",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME  |
     RTL_TEXTENCODING_INFO_MAC,
     SCRIPT_LATIN
 };
