@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:09:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ private:
     long                    nFieldCount;    /// Count of existing fields.
     long                    nFieldSelected; /// Currently selected field.
 
-    com::sun::star::uno::WeakReference< ::drafts::com::sun::star::accessibility::XAccessible > xAccessible;
+    com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > xAccessible;
     ScAccessibleDataPilotControl* pAccessible;
 
     /** Initilize the object. */
@@ -166,7 +166,7 @@ protected:
     virtual void            KeyInput( const KeyEvent& rKEvt );
     virtual void            GetFocus();
     virtual void            LoseFocus();
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
 public:
                             ScDPFieldWindow(
