@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-17 08:35:01 $
+#   last change: $Author: vg $ $Date: 2003-05-27 14:19:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,13 +72,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:testjob by codegen.pl 
 SHL1OBJS=  \
-    $(SLO)$/osl_Thread.obj
-    
-SHL1TARGET= Thread
+    $(SLO)$/osl_Mutex.obj
+
+SHL1TARGET= Mutex
 SHL1STDLIBS=\
    $(SALLIB) 
 .IF "$(GUI)" == "WNT"
@@ -94,6 +93,10 @@ SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 DEF1NAME    =$(SHL1TARGET)
 DEF1EXPORTFILE= export.exp
 # END ------------------------------------------------------------------
+
+#------------------------------- All object files -------------------------------
+# do this here, so we get right dependencies
+SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
