@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-29 14:02:08 $
+ *  last change: $Author: dbo $ $Date: 2001-05-29 15:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ Reference< XComponentContext > SAL_CALL bootstrap_InitialComponentContext(
 //==================================================================================================
 
 
-static OUString findBoostrapArgument(const OUString & arg_name) SAL_THROW() {
+static OUString findBoostrapArgument(const OUString & arg_name) SAL_THROW(()) {
     OUString result;
 
     OUString prefixed_arg_name = OUString(RTL_CONSTASCII_USTRINGPARAM("UNO_"));
