@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colwd.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:29 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ ModalDialog DLG_COL_WIDTH
     Text [ ENGLISH ] = "Column width" ;
     Text [ norwegian ] = "Bredde p� kolonne " ;
     Text [ italian ] = "Larghezza colonna" ;
-    Text [ portuguese_brazilian ] = "Largura da coluna" ;
+    Text [ portuguese_brazilian ] = "Largura da Coluna" ;
     Text [ portuguese ] = "Largura da coluna" ;
     Text [ finnish ] = "Sarakkeen leveys" ;
     Text [ danish ] = "Kolonnebredde" ;
@@ -123,7 +123,7 @@ ModalDialog DLG_COL_WIDTH
         Left = TRUE ;
         Text[ chinese_simplified ] = "宽度(~W)";
         Text[ russian ] = "������";
-        Text[ polish ] = "Szer.";
+        Text[ polish ] = "~Szeroko��";
         Text[ japanese ] = "幅(~W)";
         Text[ chinese_traditional ] = "寬度(~W)";
         Text[ arabic ] = "�����";
@@ -133,6 +133,9 @@ ModalDialog DLG_COL_WIDTH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Amplada";
         Text[ thai ] = "ความ~กว้าง";
+        Text[ czech ] = "Šířka";
+        Text[ hebrew ] = "‮רוחב‬";
+        Text[ hindi ] = "~चौडाई";
     };
     MetricField ED_WIDTH
     {
@@ -181,6 +184,9 @@ ModalDialog DLG_COL_WIDTH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Llargada";
         Text[ thai ] = "ความกว้าง";
+        Text[ czech ] = "Šířka";
+        Text[ hebrew ] = "‮רוחב‬";
+        Text[ hindi ] = "चौड़ाई";
     };
     FixedText FT_COL
     {
@@ -202,7 +208,7 @@ ModalDialog DLG_COL_WIDTH
         Left = TRUE ;
         Text[ chinese_simplified ] = "栏(~C)";
         Text[ russian ] = "�������";
-        Text[ polish ] = "Kolumna";
+        Text[ polish ] = "~Kolumna";
         Text[ japanese ] = "列(~C)";
         Text[ chinese_traditional ] = "欄(~C)";
         Text[ arabic ] = "������";
@@ -212,6 +218,9 @@ ModalDialog DLG_COL_WIDTH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Columna";
         Text[ thai ] = "~คอลัมน์";
+        Text[ czech ] = "Sloupec";
+        Text[ hebrew ] = "~Spalte";
+        Text[ hindi ] = "~स्तंभ";
     };
     NumericField ED_COL
     {
@@ -237,7 +246,19 @@ ModalDialog DLG_COL_WIDTH
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Amplada de la columna";
     Text[ thai ] = "ความกว้างคอลัมน์";
+    Text[ czech ] = "Šířka sloupce";
+    Text[ hebrew ] = "Spaltenbreite";
+    Text[ hindi ] = "स्तंभ चौड़ाई";
 };
+
+
+
+
+
+
+
+
+
 
 
 
