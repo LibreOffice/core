@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jservices.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:23 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 11:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,9 @@ extern "C" void* SAL_CALL component_getFactory(
     }
 
     return pRet;
-};
+}
+
+
 
 
 

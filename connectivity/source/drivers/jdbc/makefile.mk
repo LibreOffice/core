@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: oj $ $Date: 2000-10-19 11:55:08 $
+#   last change: $Author: oj $ $Date: 2000-10-24 11:41:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,9 +64,6 @@ PRJ=..$/..$/..
 PRJINC=..$/..
 PRJNAME=connectivity
 TARGET=jdbc
-
-USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -156,8 +153,9 @@ SLOFILES=\
         $(SLO)$/String.obj							\
         $(SLO)$/Throwable.obj						\
         $(SLO)$/Timestamp.obj						\
-        $(SLO)$/tools.obj							\
-        $(SLO)$/jservices.obj
+        $(SLO)$/jservices.obj						\
+        $(SLO)$/tools.obj
+        
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
@@ -166,9 +164,12 @@ SLOFILES=\
 SLOFILES+=$(SLO)$/staticmbjdbc.obj
 .ENDIF
 
+
+SHL1VERSIONMAP= $(JDBC_TARGET).map
 # --- Library -----------------------------------
 
 SHL1TARGET=	$(JDBC_TARGET)$(JDBC_MAJOR)
+SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
@@ -183,7 +184,7 @@ SHL1STDLIBS+= icomphelp2.lib
 .ENDIF
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(SHL1TARGET)
+SHL1IMPLIB=	i$(JDBC_TARGET)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
