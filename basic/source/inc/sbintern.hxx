@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbintern.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:41:45 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 
 class ::utl::TransliterationWrapper;
 class SbUnoFactory;
+class SbTypeFactory;
+class SbOLEFactory;
 class SbiInstance;
 class SbModule;
 
@@ -100,6 +102,8 @@ struct SbiGlobals
     SbiInstance*    pInst;          // alle aktiven Runtime-Instanzen
     SbiFactory*     pSbFac;         // StarBASIC-Factory
     SbUnoFactory*   pUnoFac;        // Factory fuer Uno-Structs bei DIM AS NEW
+    SbTypeFactory*  pTypeFac;       // Factory for user defined types
+    SbOLEFactory*   pOLEFac;        // Factory for OLE types
     SbModule*       pMod;           // aktuell aktives Modul
     SbModule*       pCompMod;       // aktuell compiliertes Modul
     short           nInst;          // Anzahl BASICs
@@ -130,6 +134,8 @@ SbiGlobals* GetSbData();
 #define pCMOD       GetSbData()->pCompMod
 #define pSBFAC      GetSbData()->pSbFac
 #define pUNOFAC     GetSbData()->pUnoFac
+#define pTYPEFAC    GetSbData()->pTypeFac
+#define pOLEFAC     GetSbData()->pOLEFac
 
 #endif
 
