@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-19 09:00:42 $
+ *  last change: $Author: gt $ $Date: 2001-07-19 14:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1626,7 +1626,7 @@ void MyList::Insert( void* p, sal_uInt32 n )
         Grow();
 
         void**      pIns = pData + n;
-        memmove( pIns, pIns + 1, 1 );
+        memmove( pIns + 1, pIns, ( nNew - n ) * sizeof( void* ) );
 
         *pIns = p;
 
