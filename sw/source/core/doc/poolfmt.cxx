@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:22:51 $
+ *  last change: $Author: jp $ $Date: 2001-07-27 09:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2054,7 +2054,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetBulletFont(  &SwNumRule::GetDefBulletFont() );
-            aFmt.SetBulletChar( 0xF000 + 150 );
+            aFmt.SetBulletChar( 0x2013 );
 
             static const USHORT aAbsSpace[ MAXLEVEL ] =
                 {
@@ -2095,7 +2095,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
 
             for( n = 0; n < MAXLEVEL; ++n )
             {
-                aFmt.SetBulletChar( 0xF000 + ( n & 1 ? 37 : 52 ) );
+                aFmt.SetBulletChar( ( n & 1 ? 0x25a1 : 0x2611 ) );
                 aFmt.SetAbsLSpace( ((n & 1) +1) * nOffs );
                 pNewRule->Set( n, aFmt );
             }
@@ -2133,9 +2133,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
             {
                 switch( n )
                 {
-                case 0:     aFmt.SetBulletChar( 0xF000 + 47 );  break;
-                case 1:     aFmt.SetBulletChar( 0xF000 + 48 );  break;
-                default:    aFmt.SetBulletChar( 0xF000 + 45 );  break;
+                case 0:     aFmt.SetBulletChar( 0x27a2 );   break;
+                case 1:     aFmt.SetBulletChar( 0xE006 );   break;
+                default:    aFmt.SetBulletChar( 0xE004 );   break;
                 }
                 aFmt.SetAbsLSpace( *pArr );
                 pNewRule->Set( n, aFmt );
@@ -2149,7 +2149,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
-            aFmt.SetBulletChar( 0xF000 + 79 );
+            aFmt.SetBulletChar( 0x2717 );
             aFmt.SetBulletFont(  &SwNumRule::GetDefBulletFont() );
 
             static const USHORT aAbsSpace[ MAXLEVEL ] =
