@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:19:53 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,12 @@
 
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
@@ -100,9 +106,7 @@
 #ifndef _OUTLOBJ_HXX //autogen
 #include <svx/outlobj.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
 #endif
@@ -142,9 +146,11 @@
 #include <unotools/streamwrap.hxx>
 #endif
 
-#include <so3/outplace.hxx>
 #include <svx/unomodel.hxx>
 #include <svx/svditer.hxx>
+#include <sfx2/docfile.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <svtools/embedtransfer.hxx>
 
 #ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
@@ -168,6 +174,7 @@
 // - Namespaces -
 // --------------
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -231,7 +238,7 @@ SdTransferable::~SdTransferable()
 
     if( aDocShellRef.Is() )
     {
-        SvEmbeddedObject* pObj = aDocShellRef;
+        SfxObjectShell* pObj = aDocShellRef;
         ::sd::DrawDocShell* pDocSh = static_cast< ::sd::DrawDocShell*>(pObj);
         pDocSh->DoClose();
     }
@@ -264,10 +271,9 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 
         if( pObj->ISA( SdrOle2Obj ) )
         {
-            const SvInPlaceObjectRef& rOldObjRef = static_cast< SdrOle2Obj* >( pObj )->GetObjRef();
-
-            if( rOldObjRef.Is() )
-                pOLEDataHelper = new TransferableDataHelper( rOldObjRef->CreateTransferableSnapshot() );
+            uno::Reference < embed::XEmbeddedObject > xObj = static_cast< SdrOle2Obj* >( pObj )->GetObjRef();
+            if( xObj.is() )
+                pOLEDataHelper = new TransferableDataHelper( new SvEmbedTransferHelper( xObj ) );
         }
         else if( pObj->ISA( SdrGrafObj ) && !pSourceDoc->GetAnimationInfo( pObj ) )
         {
@@ -659,31 +665,42 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
 
         case( SDTRANSFER_OBJECTTYPE_DRAWOLE ):
         {
-            SvEmbeddedObject*   pEmbObj = (SvEmbeddedObject*) pObject;
+            SfxObjectShell*   pEmbObj = (SfxObjectShell*) pObject;
             ::utl::TempFile     aTempFile;
-            SvStorageRef        xWorkStore( new SvStorage( TRUE, aTempFile.GetURL() ) );
-
             aTempFile.EnableKillingFile();
 
-            // write document storage
-            pEmbObj->SetupStorage( xWorkStore );
-            bRet = pEmbObj->DoSaveAs( xWorkStore );
-            pEmbObj->DoSaveCompleted();
-            xWorkStore->Commit();
-            xWorkStore.Clear();
-
-            SvStream* pSrcStm = ::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), STREAM_READ );
-
-            if( pSrcStm )
+            try
             {
-                rxOStm->SetBufferSize( 0xff00 );
-                *rxOStm << *pSrcStm;
-                rxOStm->Commit();
-                delete pSrcStm;
-            }
+                uno::Reference< embed::XStorage > xWorkStore =
+                    ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
 
-            bRet = ( rxOStm->GetError() == ERRCODE_NONE );
+                // write document storage
+                pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT );
+                bRet = pEmbObj->DoSaveAs( xWorkStore );
+                pEmbObj->DoSaveCompleted();
+
+                uno::Reference< embed::XTransactedObject > xTransact( xWorkStore, uno::UNO_QUERY );
+                if ( xTransact.is() )
+                    xTransact->commit();
+
+                SvStream* pSrcStm = ::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), STREAM_READ );
+                if( pSrcStm )
+                {
+                    rxOStm->SetBufferSize( 0xff00 );
+                    *rxOStm << *pSrcStm;
+                    delete pSrcStm;
+                }
+
+                bRet = TRUE;
+                rxOStm->Commit();
+
+                xWorkStore->dispose();
+                xWorkStore = uno::Reference < embed::XStorage >();
+            }
+            catch ( Exception& )
+            {}
         }
+
         break;
 
         default:
