@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcol.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,23 @@
 #include <svtools/svstdarr.hxx>
 #endif
 
-class SwTabCols : public SvLongs
+#include <vector>
+
+struct SwTabColsEntry
+{
+    long    nPos;
+    long    nMin;
+    long    nMax;
+    BOOL    bHidden;    //Fuer jeden Eintrag ein Flag, Hidden oder nicht.
+                        //Wenn das Flag Hidden TRUE ist liegt der Spalten-
+                        //trenner nicht in der aktuellen Zeile; er muss
+                        //mit gepflegt werden, darf aber nicht angezeigt
+                        //werden.
+};
+
+typedef std::vector< SwTabColsEntry > SwTabColsEntries;
+
+class SwTabCols
 {
     long nLeftMin,      //Linker aeusserer Rand (Bezugspunkt) in
                         //Dokumentkordinaten.
@@ -76,27 +92,33 @@ class SwTabCols : public SvLongs
            nRight,      //Rechter Rand der Tabelle.
            nRightMax;   //Maximaler rechter Rand der Tabelle.
 
+    bool bLastRowAllowedToChange;       // if the last row of the table frame
+                                        // is split across pages, it may not
+                                        // change its size
 
+    SwTabColsEntries aData;
 
-    SvBools aHidden;    //Fuer jeden Eintrag ein Flag, Hidden oder nicht.
-                        //Wenn das Flag Hidden TRUE ist liegt der Spalten-
-                        //trenner nicht in der aktuellen Zeile; er muss
-                        //mit gepflegt werden, darf aber nicht angezeigt
-                        //werden.
+    //fuer den CopyCTor
+    const SwTabColsEntries& GetData() const { return aData; }
 
 public:
     SwTabCols( USHORT nSize = 0 );
     SwTabCols( const SwTabCols& );
     SwTabCols &operator=( const SwTabCols& );
     BOOL operator==( const SwTabCols& rCmp ) const;
+    long& operator[]( USHORT nPos ) { return aData[nPos].nPos; }
+    long operator[]( USHORT nPos ) const { return aData[nPos].nPos; }
+    USHORT Count() const { return aData.size(); }
 
-    BOOL IsHidden( USHORT nPos ) const         { return aHidden[nPos]; }
-    void SetHidden( USHORT nPos, BOOL bValue ) { aHidden[nPos] = bValue; }
-    inline void InsertHidden( USHORT nPos, BOOL bValue );
-    inline void DeleteHidden( USHORT nPos, USHORT nAnz = 1 );
+    BOOL IsHidden( USHORT nPos ) const         { return aData[nPos].bHidden; }
+    void SetHidden( USHORT nPos, BOOL bValue ) { aData[nPos].bHidden = bValue; }
 
-    //fuer den CopyCTor
-    const SvBools& GetHidden() const { return aHidden; }
+    void Insert( long nValue, BOOL bValue, USHORT nPos );
+    void Insert( long nValue, long nMin, long nMax, BOOL bValue, USHORT nPos );
+    void Remove( USHORT nPos, USHORT nAnz = 1 );
+
+    const SwTabColsEntry& GetEntry( USHORT nPos ) const { return aData[nPos]; }
+          SwTabColsEntry& GetEntry( USHORT nPos )  { return aData[nPos]; }
 
     long GetLeftMin() const { return nLeftMin; }
     long GetLeft()  const { return nLeft;    }
@@ -107,15 +129,9 @@ public:
     void SetLeft    ( long nNew )   { nLeft = nNew;    }
     void SetRight   ( long nNew )   { nRight = nNew;   }
     void SetRightMax( long nNew )   { nRightMax = nNew;}
-};
 
-inline void SwTabCols::InsertHidden( USHORT nPos, BOOL bValue )
-{
-    aHidden.Insert( bValue, nPos );
-}
-inline void SwTabCols::DeleteHidden( USHORT nPos, USHORT nAnz )
-{
-    aHidden.Remove( nPos, nAnz );
-}
+    bool IsLastRowAllowedToChange() const { return bLastRowAllowedToChange; }
+    void SetLastRowAllowedToChange( bool bNew ) { bLastRowAllowedToChange = bNew; }
+};
 
 #endif  //_TABCOL_HXX
