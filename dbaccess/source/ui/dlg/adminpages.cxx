@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-07 14:15:42 $
+ *  last change: $Author: fs $ $Date: 2000-12-07 14:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1657,6 +1657,7 @@ void OTableSubscriptionPage::ActivatePage(const SfxItemSet& _rSet)
             if (!m_pAdminDialog->getCurrentSettings(aConnectionParams))
             {
                 OGenericAdministrationPage::ActivatePage(_rSet);
+                m_aTablesList.Clear();
                 return;
             }
 
@@ -1823,6 +1824,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2000/12/07 14:15:42  oj
+ *  #81131# check installed adabas dbs
+ *
  *  Revision 1.19  2000/12/01 08:06:01  kso
  *  #80644# - ::ucb::ContentCreationException -> ::com::sun::star::ucb::ContentCreationException
  *
