@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:13:01 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 10:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1128,7 +1128,8 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
  * SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper()
  */
 SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
-                                                      OutputDevice& rOut )
+                                                      OutputDevice& rOut,
+                                                      bool bEditEngineOnly )
     : mrSh( rSh ), mrOut( rOut )
 {
     aLinkIdMap.clear();
@@ -1138,14 +1139,14 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
     aStructStack.clear();
 #endif
 
-    EnhancedPDFExport();
+    EnhancedPDFExport( bEditEngineOnly );
 }
 
 
 /*
  * SwEnhancedPDFExportHelper::EnhancedPDFExport()
  */
-void SwEnhancedPDFExportHelper::EnhancedPDFExport()
+void SwEnhancedPDFExportHelper::EnhancedPDFExport( bool bEditEngineOnly )
 {
     vcl::PDFExtOutDevData* pPDFExtOutDevData =
         PTR_CAST( vcl::PDFExtOutDevData, mrOut.GetExtOutDevData() );
@@ -1170,12 +1171,167 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
     const BOOL bOldLockView = mrSh.IsViewLocked();
     mrSh.LockView( TRUE );
 
-    //
-    // POSTITS
-    //
-    if ( pPDFExtOutDevData->GetIsExportNotes() )
+    if ( !bEditEngineOnly )
     {
-        SwFieldType* pType = mrSh.GetFldType( RES_POSTITFLD, aEmptyStr );
+        //
+        // POSTITS
+        //
+        if ( pPDFExtOutDevData->GetIsExportNotes() )
+        {
+            SwFieldType* pType = mrSh.GetFldType( RES_POSTITFLD, aEmptyStr );
+            SwClientIter aIter( *pType );
+            const SwClient * pFirst = aIter.GoStart();
+            while( pFirst )
+            {
+                if( ((SwFmtFld*)pFirst)->GetTxtFld() &&
+                    ((SwFmtFld*)pFirst)->IsFldInDoc())
+                {
+                    const SwTxtNode* pTNd =
+                        (SwTxtNode*)((SwFmtFld*)pFirst)->GetTxtFld()->GetpTxtNode();
+                    ASSERT( 0 != pTNd, "Enhanced pdf export - text node is missing" )
+
+                    // 1. Check if the whole paragraph is hidden
+                    // 2. Move to the field
+                    // 3. Check for hidden text attribute
+                    if ( !pTNd->IsHidden() &&
+                          mrSh.GotoFld( *(SwFmtFld*)pFirst ) &&
+                         !mrSh.SelectHiddenRange() )
+                    {
+
+                        // Link Note
+                        vcl::PDFNote aNote;
+
+                        // Use the NumberFormatter to get the date string:
+                        const SwPostItField* pField = (SwPostItField*)((SwFmtFld*)pFirst)->GetFld();
+                        SvNumberFormatter* pNumFormatter = pDoc->GetNumberFormatter();
+                        const Date aDateDiff( pField->GetDate() -
+                                             *pNumFormatter->GetNullDate() );
+                        const ULONG nFormat =
+                            pNumFormatter->GetStandardFormat( NUMBERFORMAT_DATE, pField->GetLanguage() );
+                        String sDate;
+                        Color* pColor;
+                        pNumFormatter->GetOutputString( aDateDiff.GetDate(), nFormat, sDate, &pColor );
+
+                        // The title should consist of the author and the date:
+                        String sTitle( pField->GetPar1() );
+                        sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+                        sTitle += sDate;
+                        aNote.Title = sTitle;
+                        // Guess what the contents contains...
+                        aNote.Contents = pField->GetTxt();
+
+                        // Link Rectangle
+                        const SwRect& rNoteRect = mrSh.GetCharRect();
+
+                        // Link PageNum
+                        const sal_Int32 nPageNum =
+                            mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rNoteRect );
+
+                        // Link Export
+                        pPDFExtOutDevData->CreateNote( rNoteRect.SVRect(), aNote, nPageNum );
+                    }
+                }
+                pFirst = aIter++;
+                mrSh.SwCrsrShell::ClearMark();
+            }
+        }
+
+        //
+        // HYPERLINKS
+        //
+        SwGetINetAttrs aArr;
+        const sal_uInt16 nHyperLinkCount = mrSh.GetINetAttrs( aArr );
+        for( sal_uInt16 n = 0; n < nHyperLinkCount; ++n )
+        {
+            SwGetINetAttr* p = aArr[ n ];
+            ASSERT( 0 != p, "Enhanced pdf export - SwGetINetAttr is missing" )
+
+            const SwTxtNode* pTNd = p->rINetAttr.GetpTxtNode();
+            ASSERT( 0 != pTNd, "Enhanced pdf export - text node is missing" )
+
+            // 1. Check if the whole paragraph is hidden
+            // 2. Move to the hyperlink
+            // 3. Check for hidden text attribute
+            if ( !pTNd->IsHidden() &&
+                  mrSh.GotoINetAttr( p->rINetAttr ) &&
+                 !mrSh.SelectHiddenRange() )
+            {
+                // Select the hyperlink:
+                mrSh.SwCrsrShell::Right( 1, CRSR_SKIP_CHARS );
+                if ( mrSh.SwCrsrShell::SelectTxtAttr( RES_TXTATR_INETFMT, sal_True ) )
+                {
+                    // First, we create the destination, because there may be more
+                    // than one link to this destination:
+                    String aURL( INetURLObject::decode(
+                        p->rINetAttr.GetINetFmt().GetValue(),
+                        INET_HEX_ESCAPE,
+                        INetURLObject::DECODE_UNAMBIGUOUS,
+                        RTL_TEXTENCODING_UTF8 ) );
+
+                    // We have to distinguish between intern and real URLs
+                    const bool bIntern = '#' == aURL.GetChar( 0 );
+
+                    // _GetCrsr() is a SwShellCrsr, which is derived from
+                    // SwSelPaintRects, therefore the rectangles of the current
+                    // selection can be easily obtained:
+                    // Note: We make a copy of the rectangles, because they may
+                    // be deleted again in JumpToSwMark.
+                    SwRects aTmp;
+                    aTmp.Insert( mrSh.SwCrsrShell::_GetCrsr(), 0 );
+                    ASSERT( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" )
+
+                    // Create the destination for internal links:
+                    sal_Int32 nDestId = 0;
+                    if ( bIntern )
+                    {
+                        aURL.Erase( 0, 1 );
+                        JumpToSwMark( &mrSh, aURL );
+
+                        // Destination Rectangle
+                        const SwRect& rDestRect = mrSh.GetCharRect();
+
+                        // Destination PageNum
+                        const sal_Int32 nDestPageNum =
+                            mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rDestRect );
+
+                        // Destination Export
+                        nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+                    }
+
+                    // Create links for all selected rectangles:
+                    const USHORT nNumOfRects = aTmp.Count();
+                    for ( int i = 0; i < nNumOfRects; ++i )
+                    {
+                        // Link Rectangle
+                        const SwRect& rLinkRect( aTmp[ i ] );
+
+                        // Link PageNum
+                        const sal_Int32 nLinkPageNum =
+                            mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rLinkRect );
+
+                        // Link Export
+                        const sal_Int32 nLinkId =
+                            pPDFExtOutDevData->CreateLink( rLinkRect.SVRect(), nLinkPageNum );
+
+                        // Store link info for tagged pdf output:
+                        const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
+                        aLinkIdMap.push_back( aLinkEntry );
+
+                        // Connect Link and Destination:
+                        if ( bIntern )
+                            pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
+                        else
+                            pPDFExtOutDevData->SetLinkURL( nLinkId, aURL );
+                    }
+                }
+            }
+            mrSh.SwCrsrShell::ClearMark();
+        }
+
+        //
+        // REFERENCES
+        //
+        SwFieldType* pType = mrSh.GetFldType( RES_GETREFFLD, aEmptyStr );
         SwClientIter aIter( *pType );
         const SwClient * pFirst = aIter.GoStart();
         while( pFirst )
@@ -1185,7 +1341,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             {
                 const SwTxtNode* pTNd =
                     (SwTxtNode*)((SwFmtFld*)pFirst)->GetTxtFld()->GetpTxtNode();
-                ASSERT( 0 != pTNd, "Enhanced pdf export - text node is missing" )
+               ASSERT( 0 != pTNd, "Enhanced pdf export - text node is missing" )
 
                 // 1. Check if the whole paragraph is hidden
                 // 2. Move to the field
@@ -1194,97 +1350,22 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                       mrSh.GotoFld( *(SwFmtFld*)pFirst ) &&
                      !mrSh.SelectHiddenRange() )
                 {
+                    // Select the field:
+                    mrSh.SwCrsrShell::SetMark();
+                    mrSh.SwCrsrShell::Right( 1, CRSR_SKIP_CHARS );
 
-                    // Link Note
-                    vcl::PDFNote aNote;
+                    // Link Rectangles
+                    SwRects aTmp;
+                    aTmp.Insert( mrSh.SwCrsrShell::_GetCrsr(), 0 );
+                    ASSERT( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" )
 
-                    // Use the NumberFormatter to get the date string:
-                    const SwPostItField* pField = (SwPostItField*)((SwFmtFld*)pFirst)->GetFld();
-                    SvNumberFormatter* pNumFormatter = pDoc->GetNumberFormatter();
-                    const Date aDateDiff( pField->GetDate() -
-                                         *pNumFormatter->GetNullDate() );
-                    const ULONG nFormat =
-                        pNumFormatter->GetStandardFormat( NUMBERFORMAT_DATE, pField->GetLanguage() );
-                    String sDate;
-                    Color* pColor;
-                    pNumFormatter->GetOutputString( aDateDiff.GetDate(), nFormat, sDate, &pColor );
-
-                    // The title should consist of the author and the date:
-                    String sTitle( pField->GetPar1() );
-                    sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
-                    sTitle += sDate;
-                    aNote.Title = sTitle;
-                    // Guess what the contents contains...
-                    aNote.Contents = pField->GetTxt();
-
-                    // Link Rectangle
-                    const SwRect& rNoteRect = mrSh.GetCharRect();
-
-                    // Link PageNum
-                    const sal_Int32 nPageNum =
-                        mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rNoteRect );
-
-                    // Link Export
-                    pPDFExtOutDevData->CreateNote( rNoteRect.SVRect(), aNote, nPageNum );
-                }
-            }
-            pFirst = aIter++;
-            mrSh.SwCrsrShell::ClearMark();
-        }
-    }
-
-    //
-    // HYPERLINKS
-    //
-    SwGetINetAttrs aArr;
-    const sal_uInt16 nHyperLinkCount = mrSh.GetINetAttrs( aArr );
-    for( sal_uInt16 n = 0; n < nHyperLinkCount; ++n )
-    {
-        SwGetINetAttr* p = aArr[ n ];
-        ASSERT( 0 != p, "Enhanced pdf export - SwGetINetAttr is missing" )
-
-        const SwTxtNode* pTNd = p->rINetAttr.GetpTxtNode();
-        ASSERT( 0 != pTNd, "Enhanced pdf export - text node is missing" )
-
-        // 1. Check if the whole paragraph is hidden
-        // 2. Move to the hyperlink
-        // 3. Check for hidden text attribute
-        if ( !pTNd->IsHidden() &&
-              mrSh.GotoINetAttr( p->rINetAttr ) &&
-             !mrSh.SelectHiddenRange() )
-        {
-            // Select the hyperlink:
-            mrSh.SwCrsrShell::Right( 1, CRSR_SKIP_CHARS );
-            if ( mrSh.SwCrsrShell::SelectTxtAttr( RES_TXTATR_INETFMT, sal_True ) )
-            {
-                // First, we create the destination, because there may be more
-                // than one link to this destination:
-                String aURL( INetURLObject::decode(
-                    p->rINetAttr.GetINetFmt().GetValue(),
-                    INET_HEX_ESCAPE,
-                    INetURLObject::DECODE_UNAMBIGUOUS,
-                    RTL_TEXTENCODING_UTF8 ) );
-
-                // We have to distinguish between intern and real URLs
-                bool bIntern = '#' == aURL.GetChar( 0 );
-
-                // _GetCrsr() is a SwShellCrsr, which is derived from
-                // SwSelPaintRects, therefore the rectangles of the current
-                // selection can be easily obtained:
-                // Note: We make a copy of the rectangles, because they may
-                // be deleted again in JumpToSwMark.
-                SwRects aTmp;
-                aTmp.Insert( mrSh.SwCrsrShell::_GetCrsr(), 0 );
-                ASSERT( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" )
-
-                // Create the destination for internal links:
-                sal_Int32 nDestId = 0;
-                if ( bIntern )
-                {
-                    aURL.Erase( 0, 1 );
-                    JumpToSwMark( &mrSh, aURL );
+                    mrSh.SwCrsrShell::ClearMark();
 
                     // Destination Rectangle
+                    const SwGetRefField* pField =
+                        (SwGetRefField*)((SwFmtFld*)pFirst)->GetFld();
+                    const String& rRefName = pField->GetSetRefName();
+                    mrSh.GotoRefMark( rRefName, pField->GetSubType(), pField->GetSeqNo() );
                     const SwRect& rDestRect = mrSh.GetCharRect();
 
                     // Destination PageNum
@@ -1292,77 +1373,169 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rDestRect );
 
                     // Destination Export
-                    nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
-                }
+                    const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
 
-                // Create links for all selected rectangles:
-                const USHORT nNumOfRects = aTmp.Count();
-                for ( int i = 0; i < nNumOfRects; ++i )
-                {
-                    // Link Rectangle
-                    const SwRect& rLinkRect( aTmp[ i ] );
+                    // Create links for all selected rectangles:
+                    const USHORT nNumOfRects = aTmp.Count();
+                    for ( int i = 0; i < nNumOfRects; ++i )
+                    {
+                        // Link rectangle
+                        const SwRect& rLinkRect( aTmp[ i ] );
 
-                    // Link PageNum
-                    const sal_Int32 nLinkPageNum =
-                        mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rLinkRect );
+                        // Link PageNum
+                        const sal_Int32 nLinkPageNum =
+                            mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rLinkRect );
 
-                    // Link Export
-                    const sal_Int32 nLinkId =
-                        pPDFExtOutDevData->CreateLink( rLinkRect.SVRect(), nLinkPageNum );
+                        // Link Export
+                        const sal_Int32 nLinkId =
+                            pPDFExtOutDevData->CreateLink( rLinkRect.SVRect(), nLinkPageNum );
 
-                    // Store link info for tagged pdf output:
-                    const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
-                    aLinkIdMap.push_back( aLinkEntry );
+                        // Store link info for tagged pdf output:
+                        const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
+                        aLinkIdMap.push_back( aLinkEntry );
 
-                    // Connect Link and Destination:
-                    if ( bIntern )
+                        // Connect Link and Destination:
                         pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
-                    else
-                        pPDFExtOutDevData->SetLinkURL( nLinkId, aURL );
+                    }
                 }
             }
+            pFirst = aIter++;
+            mrSh.SwCrsrShell::ClearMark();
         }
-        mrSh.SwCrsrShell::ClearMark();
-    }
 
-    //
-    // REFERENCES
-    //
-    SwFieldType* pType = mrSh.GetFldType( RES_GETREFFLD, aEmptyStr );
-    SwClientIter aIter( *pType );
-    const SwClient * pFirst = aIter.GoStart();
-    while( pFirst )
-    {
-        if( ((SwFmtFld*)pFirst)->GetTxtFld() &&
-            ((SwFmtFld*)pFirst)->IsFldInDoc())
+        //
+        // FOOTNOTES
+        //
+        const USHORT nFtnCount = pDoc->GetFtnIdxs().Count();
+        for ( USHORT nIdx = 0; nIdx < nFtnCount; ++nIdx )
         {
-            const SwTxtNode* pTNd =
-                (SwTxtNode*)((SwFmtFld*)pFirst)->GetTxtFld()->GetpTxtNode();
-           ASSERT( 0 != pTNd, "Enhanced pdf export - text node is missing" )
+            // Set cursor to text node that contains the footnote:
+            const SwTxtFtn* pTxtFtn = pDoc->GetFtnIdxs()[ nIdx ];
+            SwTxtNode& rTNd = const_cast<SwTxtNode&>(pTxtFtn->GetTxtNode());
+
+            mrSh._GetCrsr()->GetPoint()->nNode = rTNd;
+            mrSh._GetCrsr()->GetPoint()->nContent.Assign( &rTNd, *pTxtFtn->GetStart() );
 
             // 1. Check if the whole paragraph is hidden
-            // 2. Move to the field
-            // 3. Check for hidden text attribute
-            if ( !pTNd->IsHidden() &&
-                  mrSh.GotoFld( *(SwFmtFld*)pFirst ) &&
-                 !mrSh.SelectHiddenRange() )
+            // 2. Check for hidden text attribute
+            if ( static_cast<const SwTxtNode&>(rTNd).IsHidden() ||
+                 mrSh.SelectHiddenRange() )
+                continue;
+
+            SwCrsrSaveState aSaveState( *mrSh._GetCrsr() );
+
+            // Select the footnote:
+            mrSh.SwCrsrShell::SetMark();
+            mrSh.SwCrsrShell::Right( 1, CRSR_SKIP_CHARS );
+
+            // Link Rectangle
+            SwRects aTmp;
+            aTmp.Insert( mrSh.SwCrsrShell::_GetCrsr(), 0 );
+            ASSERT( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" )
+            const SwRect aLinkRect( aTmp[ 0 ] );
+
+            mrSh._GetCrsr()->RestoreSavePos();
+            mrSh.SwCrsrShell::ClearMark();
+
+            // Goto footnote text:
+            if ( mrSh.GotoFtnTxt() )
             {
-                // Select the field:
-                mrSh.SwCrsrShell::SetMark();
-                mrSh.SwCrsrShell::Right( 1, CRSR_SKIP_CHARS );
+                // Link PageNum
+                const sal_Int32 nLinkPageNum =
+                    mrSh.GetPageNumAndSetOffsetForPDF( mrOut, aLinkRect );
 
-                // Link Rectangles
-                SwRects aTmp;
-                aTmp.Insert( mrSh.SwCrsrShell::_GetCrsr(), 0 );
-                ASSERT( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" )
+                // Link Export
+                const sal_Int32 nLinkId =
+                    pPDFExtOutDevData->CreateLink( aLinkRect.SVRect(), nLinkPageNum );
 
-                mrSh.SwCrsrShell::ClearMark();
+                // Store link info for tagged pdf output:
+                const IdMapEntry aLinkEntry( aLinkRect, nLinkId );
+                aLinkIdMap.push_back( aLinkEntry );
 
                 // Destination Rectangle
-                const SwGetRefField* pField =
-                    (SwGetRefField*)((SwFmtFld*)pFirst)->GetFld();
-                const String& rRefName = pField->GetSetRefName();
-                mrSh.GotoRefMark( rRefName, pField->GetSubType(), pField->GetSeqNo() );
+                const SwRect& rDestRect = mrSh.GetCharRect();
+
+                // Destination PageNum
+                const sal_Int32 nDestPageNum =
+                     mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rDestRect );
+
+                // Destination Export
+                const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+
+                // Connect Link and Destination:
+                pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
+            }
+        }
+
+        //
+        // OUTLINE
+        //
+        typedef std::pair< sal_Int8, sal_Int32 > StackEntry;
+        std::stack< StackEntry > aOutlineStack;
+        aOutlineStack.push( StackEntry( -1, -1 ) ); // push default value
+
+        const sal_uInt16 nOutlineCount = mrSh.GetOutlineCnt();
+        for ( sal_uInt16 i = 0; i < nOutlineCount; ++i )
+        {
+            // Check if outline is hidden
+            const SwTxtNode* pTNd = mrSh.GetNodes().GetOutLineNds()[ i ]->GetTxtNode();
+            ASSERT( 0 != pTNd, "Enhanced pdf export - text node is missing" )
+
+            if ( pTNd->IsHidden() )
+                continue;
+
+            // Get parent id from stack:
+            const sal_Int8 nLevel = (sal_Int8)mrSh.GetOutlineLevel( i );
+            sal_Int8 nLevelOnTopOfStack = aOutlineStack.top().first;
+            while ( nLevelOnTopOfStack >= nLevel &&
+                    nLevelOnTopOfStack != -1 )
+            {
+                aOutlineStack.pop();
+                nLevelOnTopOfStack = aOutlineStack.top().first;
+            }
+            const sal_Int32 nParent = aOutlineStack.top().second;
+
+            // Destination rectangle
+            mrSh.GotoOutline(i);
+            const SwRect& rDestRect = mrSh.GetCharRect();
+
+            // Destination PageNum
+            const sal_Int32 nDestPageNum =
+                mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rDestRect );
+
+            // Destination Export
+            const sal_Int32 nDestId =
+                pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+
+            // Outline entry text
+            const String& rEntry = mrSh.GetOutlineText( i );
+
+            // Create a new outline item:
+            const sal_Int32 nOutlineId =
+                pPDFExtOutDevData->CreateOutlineItem( nParent, rEntry, nDestId );
+
+            // Push current level and nOutlineId on stack:
+            aOutlineStack.push( StackEntry( nLevel, nOutlineId ) );
+        }
+    }
+    else
+    {
+        //
+        // LINKS FROM EDITENGINE
+        //
+        std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
+        std::vector< vcl::PDFExtOutDevBookmarkEntry >::iterator aIBeg = rBookmarks.begin();
+        std::vector< vcl::PDFExtOutDevBookmarkEntry >::iterator aIEnd = rBookmarks.end();
+        while ( aIBeg != aIEnd )
+        {
+            String aBookmarkName( aIBeg->aBookmark );
+            const bool bIntern = '#' == aBookmarkName.GetChar( 0 );
+            if ( bIntern )
+            {
+                aBookmarkName.Erase( 0, 1 );
+                JumpToSwMark( &mrSh, aBookmarkName );
+
+                // Destination Rectangle
                 const SwRect& rDestRect = mrSh.GetCharRect();
 
                 // Destination PageNum
@@ -1370,149 +1543,18 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rDestRect );
 
                 // Destination Export
-                const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+                const sal_Int32 nDestId =
+                    pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
 
-                // Create links for all selected rectangles:
-                const USHORT nNumOfRects = aTmp.Count();
-                for ( int i = 0; i < nNumOfRects; ++i )
-                {
-                    // Link rectangle
-                    const SwRect& rLinkRect( aTmp[ i ] );
-
-                    // Link PageNum
-                    const sal_Int32 nLinkPageNum =
-                        mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rLinkRect );
-
-                    // Link Export
-                    const sal_Int32 nLinkId =
-                        pPDFExtOutDevData->CreateLink( rLinkRect.SVRect(), nLinkPageNum );
-
-                    // Store link info for tagged pdf output:
-                    const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
-                    aLinkIdMap.push_back( aLinkEntry );
-
-                    // Connect Link and Destination:
-                    pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
-                }
+                // Connect Link and Destination:
+                pPDFExtOutDevData->SetLinkDest( aIBeg->nLinkId, nDestId );
             }
+            else
+                pPDFExtOutDevData->SetLinkURL( aIBeg->nLinkId, aBookmarkName );
+
+            aIBeg++;
         }
-        pFirst = aIter++;
-        mrSh.SwCrsrShell::ClearMark();
-    }
-
-    //
-    // FOOTNOTES
-    //
-    const USHORT nFtnCount = pDoc->GetFtnIdxs().Count();
-    for ( USHORT nIdx = 0; nIdx < nFtnCount; ++nIdx )
-    {
-        // Set cursor to text node that contains the footnote:
-        const SwTxtFtn* pTxtFtn = pDoc->GetFtnIdxs()[ nIdx ];
-        SwTxtNode& rTNd = const_cast<SwTxtNode&>(pTxtFtn->GetTxtNode());
-
-        mrSh._GetCrsr()->GetPoint()->nNode = rTNd;
-        mrSh._GetCrsr()->GetPoint()->nContent.Assign( &rTNd, *pTxtFtn->GetStart() );
-
-        // 1. Check if the whole paragraph is hidden
-        // 2. Check for hidden text attribute
-        if ( static_cast<const SwTxtNode&>(rTNd).IsHidden() ||
-             mrSh.SelectHiddenRange() )
-            continue;
-
-        SwCrsrSaveState aSaveState( *mrSh._GetCrsr() );
-
-        // Select the footnote:
-        mrSh.SwCrsrShell::SetMark();
-        mrSh.SwCrsrShell::Right( 1, CRSR_SKIP_CHARS );
-
-        // Link Rectangle
-        SwRects aTmp;
-        aTmp.Insert( mrSh.SwCrsrShell::_GetCrsr(), 0 );
-        ASSERT( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" )
-        const SwRect aLinkRect( aTmp[ 0 ] );
-
-        mrSh._GetCrsr()->RestoreSavePos();
-        mrSh.SwCrsrShell::ClearMark();
-
-        // Goto footnote text:
-        if ( mrSh.GotoFtnTxt() )
-        {
-            // Link PageNum
-            const sal_Int32 nLinkPageNum =
-                mrSh.GetPageNumAndSetOffsetForPDF( mrOut, aLinkRect );
-
-            // Link Export
-            const sal_Int32 nLinkId =
-                pPDFExtOutDevData->CreateLink( aLinkRect.SVRect(), nLinkPageNum );
-
-            // Store link info for tagged pdf output:
-            const IdMapEntry aLinkEntry( aLinkRect, nLinkId );
-            aLinkIdMap.push_back( aLinkEntry );
-
-            // Destination Rectangle
-            const SwRect& rDestRect = mrSh.GetCharRect();
-
-            // Destination PageNum
-            const sal_Int32 nDestPageNum =
-                 mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rDestRect );
-
-            // Destination Export
-            const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
-
-            // Connect Link and Destination:
-            pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
-        }
-    }
-
-    //
-    // OUTLINE
-    //
-    typedef std::pair< sal_Int8, sal_Int32 > StackEntry;
-    std::stack< StackEntry > aOutlineStack;
-    aOutlineStack.push( StackEntry( -1, -1 ) ); // push default value
-
-    const sal_uInt16 nOutlineCount = mrSh.GetOutlineCnt();
-    for ( sal_uInt16 i = 0; i < nOutlineCount; ++i )
-    {
-        // Check if outline is hidden
-        const SwTxtNode* pTNd = mrSh.GetNodes().GetOutLineNds()[ i ]->GetTxtNode();
-        ASSERT( 0 != pTNd, "Enhanced pdf export - text node is missing" )
-
-        if ( pTNd->IsHidden() )
-            continue;
-
-        // Get parent id from stack:
-        const sal_Int8 nLevel = (sal_Int8)mrSh.GetOutlineLevel( i );
-        sal_Int8 nLevelOnTopOfStack = aOutlineStack.top().first;
-        while ( nLevelOnTopOfStack >= nLevel &&
-                nLevelOnTopOfStack != -1 )
-        {
-            aOutlineStack.pop();
-            nLevelOnTopOfStack = aOutlineStack.top().first;
-        }
-        const sal_Int32 nParent = aOutlineStack.top().second;
-
-        // Destination rectangle
-        mrSh.GotoOutline(i);
-        const SwRect& rDestRect = mrSh.GetCharRect();
-
-        // Destination PageNum
-        const sal_Int32 nDestPageNum =
-            mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rDestRect );
-
-        // Destination Export
-        const sal_Int32 nDestId =
-            pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
-
-        // Outline entry text
-        const String& rEntry = mrSh.GetOutlineText( i );
-
-        // Create a new outline item:
-        const sal_Int32 nOutlineId =
-            pPDFExtOutDevData->CreateOutlineItem( nParent, rEntry, nDestId );
-
-        // Push current level and nOutlineId on stack:
-        aOutlineStack.push( StackEntry( nLevel, nOutlineId ) );
+        rBookmarks.clear();
     }
 
     // Restore view, cursor, and outdev:
