@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatemerger.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-31 13:59:15 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 16:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,11 @@ void LayerUpdateMerger::flushUpdate()
     OSL_ENSURE(!BasicUpdateMerger::isHandling(), "LayerUpdateMerger: Unexpected: flushing data, while base implementation is active");
     OSL_ENSURE(m_xCurrentNode.is(),"LayerUpdateMerger: No data for flushing.");
 
-    if (m_xCurrentNode.is()) m_xCurrentNode->writeChildrenToLayer(getResultWriter().get());
+    if (m_xCurrentNode.is())
+    {
+        m_xCurrentNode->writeChildrenToLayer(getResultWriter().get());
+        m_xCurrentNode.clear();
+    }
 }
 // -----------------------------------------------------------------------------
 
@@ -112,13 +116,9 @@ void SAL_CALL LayerUpdateMerger::startLayer(  )
 void SAL_CALL LayerUpdateMerger::endLayer(  )
         throw (MalformedDataException, lang::IllegalAccessException, uno::RuntimeException)
 {
-    if (m_xCurrentNode.is())
-    {
-        OSL_ENSURE(false, "Path being updated not found in data");
-        m_xCurrentNode.clear();
-    }
-
     BasicUpdateMerger::endLayer();
+
+    OSL_ENSURE(!m_xCurrentNode.is(), "Path being updated not found in data - update not written");
 }
 // -----------------------------------------------------------------------------
 
@@ -336,7 +336,7 @@ void SAL_CALL LayerUpdateMerger::endProperty(  )
     // write unhandled so far values
     m_xCurrentProp->writeValuesToLayer( getResultWriter().get() );
 
-    getResultWriter()->endNode();
+    getResultWriter()->endProperty();
 
     m_xCurrentProp.clear();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-04 08:18:41 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 16:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,8 @@ LayerMergeHandler::LayerMergeHandler(ServiceFactory const & _xServiceFactory, Me
 , m_aLocale(_aLocale)
 , m_pProperty(NULL)
 , m_pConverter( new Converter(_xServiceFactory) )
+, m_nSkipping(0)
+, m_bSublayer(_aLocale.getLength() != 0)
 {
     OSL_ENSURE( m_rData.hasSchema(), "Creating layer merger without default data" );
 }
@@ -482,15 +484,20 @@ void SAL_CALL LayerMergeHandler::startLayer( )
     m_aContext.startActiveComponent(pSchema->getName());
 
     m_pProperty = NULL;
+    m_nSkipping = 0;
 
     OSL_POSTCOND( m_aContext.hasActiveComponent(),  "Layer merging: could not set active component");
     OSL_POSTCOND( m_aContext.isDone(),              "Layer merging: newly started component is not empty");
+    OSL_POSTCOND( !this->isSkipping(),              "Layer merging: newly started component is in skipping state");
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerMergeHandler::endLayer( )
     throw (MalformedDataException, lang::IllegalAccessException, uno::RuntimeException)
 {
+    if (this->isSkipping())
+        m_aContext.raiseMalformedDataException("Layer merging: Unmatched data being skipped was not terminated properly.");
+
     m_aContext.endActiveComponent();
 
     OSL_POSTCOND( !m_aContext.hasActiveComponent(), "Layer merging: could not clear active component");
@@ -508,31 +515,37 @@ void LayerMergeHandler::overrideLayerRoot( const OUString& aName, sal_Int16 aAtt
         m_aContext.raiseIllegalArgumentException("Layer merging: Name of layer being merged does not match component name",1);
 
     // check the argument
-    ISubtree * pSchema = m_rData.getSchemaTree();
-    OSL_ENSURE(pSchema,"No base data to merge layer into");
+    if (ISubtree * pSchema = m_rData.getSchemaTree())
+    {
+        OSL_ENSURE(pSchema->getName() == aName,"Schema name does not match active component");
 
-    if (!pSchema)
-        throw uno::RuntimeException(OUString::createFromAscii("Layer merging: No data to merge with"),*this);
+        ensureUnchanged(pSchema);
 
-    OSL_ENSURE(pSchema->getName() == aName,"Schema name does not match active component");
+        startOverride(pSchema);
 
-    ensureUnchanged(pSchema);
+        applyAttributes(pSchema,aAttributes);
 
-    startOverride(pSchema);
+        m_aContext.pushNode(pSchema);
 
-    applyAttributes(pSchema,aAttributes);
-
-    m_aContext.pushNode(pSchema);
-
-    OSL_POSTCOND( m_aContext.hasActiveComponent(),  "Layer merging: could not set active component");
-    OSL_POSTCOND( !m_aContext.isDone(),             "Layer merging: could not start component");
+        OSL_POSTCOND( m_aContext.hasActiveComponent(),  "Layer merging: could not set active component");
+        OSL_POSTCOND( !m_aContext.isDone(),             "Layer merging: could not start component");
+    }
+    else
+    {
+        OSL_ENSURE(false,"No base data to merge layer into");
+        this->skipNode();
+    }
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerMergeHandler::overrideNode( const OUString& aName, sal_Int16 aAttributes )
     throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    if (m_aContext.isDone())
+    if (this->isSkipping())
+    {
+        this->skipNode();
+    }
+    else if (m_aContext.isDone())
     {
         this->overrideLayerRoot(aName,aAttributes);
     }
@@ -546,8 +559,12 @@ void SAL_CALL LayerMergeHandler::overrideNode( const OUString& aName, sal_Int16 
 
         m_aContext.pushNode(pNode);
     }
-    else
-        m_aContext.raiseNoSuchElementException("Layer merging: The node to be overridden does not exist.",aName);
+    else // ignore non-matched data
+    {
+        OSL_ENSURE(false,"Layer merging: The node to be overridden does not exist.");
+        // m_aContext.raiseNoSuchElementException("Layer merging: The node to be overridden does not exist.",aName);
+        this->skipNode();
+    }
 }
 // -----------------------------------------------------------------------------
 
@@ -576,6 +593,12 @@ void LayerMergeHandler::implAddOrReplaceNode( const OUString& aName, const Templ
 void SAL_CALL LayerMergeHandler::addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
     throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
+    if (this->isSkipping())
+    {
+        this->skipNode();
+        return;
+    }
+
     implAddOrReplaceNode( aName, m_aContext.getCurrentItemType(), aAttributes);
 }
 // -----------------------------------------------------------------------------
@@ -583,6 +606,12 @@ void SAL_CALL LayerMergeHandler::addOrReplaceNode( const OUString& aName, sal_In
 void SAL_CALL LayerMergeHandler::addOrReplaceNodeFromTemplate( const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
     throw (MalformedDataException, container::NoSuchElementException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
+    if (this->isSkipping())
+    {
+        this->skipNode();
+        return;
+    }
+
     // TODO: correct argument position (from 2 to 3) for an illegal argument exception wrt attributes
     implAddOrReplaceNode( aName, m_aContext.getValidItemType(aTemplate), aAttributes);
 }
@@ -591,6 +620,9 @@ void SAL_CALL LayerMergeHandler::addOrReplaceNodeFromTemplate( const OUString& a
 void SAL_CALL LayerMergeHandler::endNode( )
     throw (MalformedDataException, uno::RuntimeException)
 {
+    if (this->leaveSkippedNode())
+        return;
+
     this->propagateAttributes(m_aContext.getCurrentParent());
 
     m_aContext.popNode();
@@ -600,6 +632,9 @@ void SAL_CALL LayerMergeHandler::endNode( )
 void SAL_CALL LayerMergeHandler::dropNode( const OUString& aName )
     throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
+    if (this->isSkipping())
+        return;
+
     if (!m_aContext.getCurrentParent().isSetNode())
         m_aContext.raiseMalformedDataException("Layer merging: Removing child nodes is only possible in set nodes.");
 
@@ -618,7 +653,11 @@ void SAL_CALL LayerMergeHandler::dropNode( const OUString& aName )
 void SAL_CALL LayerMergeHandler::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
     throw (MalformedDataException, beans::UnknownPropertyException, beans::IllegalTypeException,  lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    if (INode * pProp = m_aContext.findProperty(aName))
+    if (this->isSkipping())
+    {
+        this->skipNode();
+    }
+    else if (INode * pProp = m_aContext.findProperty(aName))
     {
         ensureUnchanged(pProp);
 
@@ -630,14 +669,21 @@ void SAL_CALL LayerMergeHandler::overrideProperty( const OUString& aName, sal_In
 
         checkPropertyType(aType);
     }
-    else
-        m_aContext.raiseUnknownPropertyException("Layer merging: The property to be overridden does not exist.",aName);
+    else // ignore non-matched data
+    {
+        OSL_ENSURE(false,"Layer merging: The property to be overridden does not exist.");
+        //   m_aContext.raiseUnknownPropertyException("Layer merging: The property to be overridden does not exist.",aName);
+        this->skipNode();
+    }
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerMergeHandler::endProperty( )
     throw (MalformedDataException, uno::RuntimeException)
 {
+    if (this->leaveSkippedNode())
+        return;
+
     if (!m_pProperty)
         m_aContext.raiseMalformedDataException("Layer merging: Invalid data: Ending a property that wasn't started.");
 
@@ -652,6 +698,9 @@ void SAL_CALL LayerMergeHandler::endProperty( )
 void SAL_CALL LayerMergeHandler::addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
     throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
 {
+    if (this->isSkipping())
+        return;
+
     // TODO: add type validation
     node::Attributes aValueAttributes = makePropertyAttributes(aAttributes & SchemaAttribute::MASK);
 
@@ -667,6 +716,9 @@ void SAL_CALL LayerMergeHandler::addProperty( const OUString& aName, sal_Int16 a
 void SAL_CALL LayerMergeHandler::addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
     throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
 {
+    if (this->isSkipping())
+        return;
+
     node::Attributes aValueAttributes = makePropertyAttributes(aAttributes & SchemaAttribute::MASK);
 
     std::auto_ptr<ValueNode> aPropertyValue =
@@ -681,6 +733,9 @@ void SAL_CALL LayerMergeHandler::addPropertyWithValue( const OUString& aName, sa
 void SAL_CALL LayerMergeHandler::setPropertyValue( const uno::Any& aValue )
     throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
 {
+    if (this->isSkipping())
+        return;
+
     if (!m_pProperty)
         m_aContext.raiseMalformedDataException("Layer merging: Invalid data: Overriding a value without a property.");
 
@@ -691,6 +746,9 @@ void SAL_CALL LayerMergeHandler::setPropertyValue( const uno::Any& aValue )
 void SAL_CALL LayerMergeHandler::setPropertyValueForLocale( const uno::Any& aValue, OUString const & aLocale )
     throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
 {
+    if (this->isSkipping())
+        return;
+
     if (!m_pProperty)
         m_aContext.raiseMalformedDataException("Layer merging: Invalid data: Overriding a (localized) value without a property.");
 

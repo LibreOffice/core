@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:44:53 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 16:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,10 @@ namespace configmgr
             void setValueAndCheck(ValueNode & _rValueNode, uno::Any const & _aValue)
                 CFG_UNO_THROW1( beans::IllegalTypeException );
        private:
+           void skipNode()          { ++m_nSkipping; }
+           bool isSkipping() const  { return m_nSkipping != 0; }
+           bool leaveSkippedNode()  { return m_nSkipping && m_nSkipping--; }
+       private:
             struct Converter;
             MergedComponentData &   m_rData;
             DataBuilderContext      m_aContext;
@@ -211,6 +215,9 @@ namespace configmgr
             OUString                m_aLocale;
             INode *                 m_pProperty;
             Converter *             m_pConverter;
+
+            sal_uInt32              m_nSkipping;
+            bool                    m_bSublayer;
         };
 // -----------------------------------------------------------------------------
 

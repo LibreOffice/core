@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatebuilder.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-04 08:18:42 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 16:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,8 @@ bool LayerUpdateBuilder::replaceNode(OUString const & _aName, sal_Int16 _nFlags,
     OSL_PRECOND(m_pCurrentNode && !m_pCurrentProp, "LayerUpdateBuilder: Illegal state for this operation");
 
     NodeUpdate * pNewNode = _pTemplate ?
-        new NodeReplace(m_pCurrentNode,_aName,_nFlags) :
-        new NodeReplace(m_pCurrentNode,_aName,_nFlags,_pTemplate->Name,_pTemplate->Component);
+        new NodeReplace(m_pCurrentNode,_aName,_nFlags,_pTemplate->Name,_pTemplate->Component) :
+        new NodeReplace(m_pCurrentNode,_aName,_nFlags);
 
     ElementUpdateRef xNewNode(pNewNode);
 

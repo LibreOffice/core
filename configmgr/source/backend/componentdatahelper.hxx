@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 10:56:07 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 16:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef CONFIGMGR_UTILITY_HXX_
 #include "utility.hxx"
 #endif
+#ifndef CONFIGMGR_STACK_HXX_
+#include "stack.hxx"
+#endif
 
 #include <drafts/com/sun/star/configuration/backend/TemplateIdentifier.hpp>
 #include <drafts/com/sun/star/configuration/backend/MalformedDataException.hpp>
@@ -103,10 +106,6 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
-#ifndef INCLUDED_STACK
-#include <stack>
-#define INCLUDED_STACK
-#endif
 #ifndef INCLUDED_MEMORY
 #include <memory>
 #define INCLUDED_MEMORY
@@ -135,7 +134,7 @@ namespace configmgr
 
         class DataBuilderContext
         {
-            std::stack< ISubtree * >    m_aParentStack;
+            Stack< ISubtree * >         m_aParentStack;
             OUString                    m_aActiveComponent;
             uno::XInterface *           m_pContext;
         public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicupdatemerger.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 16:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,7 @@ void SAL_CALL BasicUpdateMerger::endLayer(  )
     if (m_nNesting > 0)
         raiseMalformedDataException("UpdateMerger: Cannot end layer - data handling still in progress");
 
-    if (!m_aSearchPath.empty())
-        this->flushContext();
+    this->flushContext();
 
     m_xResultHandler->endLayer();
 }
@@ -150,7 +149,7 @@ void SAL_CALL BasicUpdateMerger::endLayer(  )
 void SAL_CALL BasicUpdateMerger::overrideNode( const OUString& aName, sal_Int16 aAttributes )
         throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    if (isSkipping())
+    if (!isSkipping())
         m_xResultHandler->overrideNode(aName, aAttributes);
 
     pushLevel(aName);
@@ -305,8 +304,9 @@ void BasicUpdateMerger::popLevel()
         if (--m_nNesting == 0)
             m_bSkipping = false;
     }
-    else if (m_nNesting == 0) // ending a context leve, but the context is not yet gone
+    else if (m_nNesting == 0) // ending a context level, but the context is not yet gone
     {
+        OSL_ENSURE( !m_aSearchPath.empty(), "BasicUpdateMerger: flushing a context that was already found");
         flushContext();
         leaveContext();
     }
@@ -341,8 +341,6 @@ void BasicUpdateMerger::leaveContext()
 
 void BasicUpdateMerger::flushContext()
 {
-    OSL_PRECOND( !m_aSearchPath.empty(), "BasicUpdateMerger: flushing a context that was already found");
-
     ContextPath::size_type nNesting = m_aSearchPath.size();
 
     while (!m_aSearchPath.empty())

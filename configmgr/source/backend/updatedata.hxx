@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-31 13:59:15 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 16:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ namespace configmgr
             bool addPropertyUpdate  (ElementUpdateRef const & _aProp);
             void removeNodeByName      (OUString const & _aName);
             void removePropertyByName  (OUString const & _aName);
-            void clear();
+            void clear(bool _bKeep);
 
             Op getOperation() const { return m_op; }
 
@@ -193,6 +193,7 @@ namespace configmgr
         private:
             ElementList m_aNodes;
             ElementList m_aProperties;
+            ElementList m_aRemovedElements;
             Op          m_op;
         };
 // -----------------------------------------------------------------------------

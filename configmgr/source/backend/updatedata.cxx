@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-31 13:59:15 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 16:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #include <drafts/com/sun/star/configuration/backend/XLayerHandler.hpp>
 
+#include <iterator>
+#include <algorithm>
+
 namespace configmgr
 {
 // -----------------------------------------------------------------------------
@@ -102,6 +105,7 @@ NodeUpdate::NodeUpdate(NodeUpdate * _pParent, OUString const & _aName, sal_Int16
 : ElementUpdate(_pParent,_aName,_nFlags, _nFlagsMask)
 , m_aNodes()
 , m_aProperties()
+, m_aRemovedElements()
 , m_op(_op)
 {
 }
@@ -116,6 +120,7 @@ NodeUpdate * NodeUpdate::asNodeUpdate(bool _bMerged)
 bool NodeUpdate::addNodeUpdate(ElementUpdateRef const & _aNode)
 {
     OSL_PRECOND( _aNode.is(), "ERROR: NodeUpdate: Trying to add NULL node.");
+    OSL_PRECOND( _aNode->getParent() == this, "ERROR: NodeUpdate: Node being added has wrong parent.");
     OSL_ENSURE(m_aNodes.find(_aNode->getName()) == m_aNodes.end(),
                 "NodeUpdate: Child node being added already exists in this node.");
 
@@ -126,6 +131,7 @@ bool NodeUpdate::addNodeUpdate(ElementUpdateRef const & _aNode)
 bool NodeUpdate::addPropertyUpdate(ElementUpdateRef const & _aProp)
 {
     OSL_PRECOND( _aProp.is(), "ERROR: NodeUpdate: Trying to add NULL property.");
+    OSL_PRECOND( _aProp->getParent() == this, "ERROR: NodeUpdate: Property being added has wrong parent.");
     OSL_ENSURE(m_aProperties.find(_aProp->getName()) == m_aProperties.end(),
                 "NodeUpdate: Property being added already exists in this node.");
 
@@ -135,24 +141,42 @@ bool NodeUpdate::addPropertyUpdate(ElementUpdateRef const & _aProp)
 
 void NodeUpdate::removeNodeByName(OUString const & _aName)
 {
-    OSL_ENSURE(m_aNodes.find(_aName) != m_aNodes.end(),
+    ElementList::iterator it = m_aNodes.find(_aName);
+    OSL_ENSURE(it != m_aNodes.end(),
                 "NodeUpdate: Child node being removed is not in this node.");
 
-    m_aNodes.erase(_aName);
+    if (it != m_aNodes.end())
+    {
+        m_aRemovedElements.insert(*it);
+        m_aNodes.erase(it);
+    }
 }
 // -----------------------------------------------------------------------------
 
 void NodeUpdate::removePropertyByName  (OUString const & _aName)
 {
-    OSL_ENSURE(m_aProperties.find(_aName) != m_aProperties.end(),
+    ElementList::iterator it = m_aProperties.find(_aName);
+    OSL_ENSURE(it != m_aProperties.end(),
                 "NodeUpdate: Property being removed is not in this node.");
 
-    m_aProperties.erase(_aName);
+    if (it != m_aNodes.end())
+    {
+        m_aRemovedElements.insert(*it);
+        m_aProperties.erase(it);
+    }
 }
 // -----------------------------------------------------------------------------
 
-void NodeUpdate::clear()
+void NodeUpdate::clear(bool _bKeep)
 {
+    if (_bKeep)
+    {
+        std::copy(m_aNodes.begin(),m_aNodes.end(),std::inserter(m_aRemovedElements,m_aRemovedElements.end()));
+        std::copy(m_aProperties.begin(),m_aProperties.end(),std::inserter(m_aRemovedElements,m_aRemovedElements.end()));
+    }
+    else
+        m_aRemovedElements.clear();
+
     m_aNodes.clear();
     m_aProperties.clear();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singlebackendadapter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-04 08:18:42 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 16:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,23 @@ SingleBackendAdapter::~SingleBackendAdapter(void) {}
 void SAL_CALL SingleBackendAdapter::initialize(
         const uno::Sequence<uno::Any>& aParameters)
     throw (uno::RuntimeException, uno::Exception) {
-    static const rtl::OUString kSingleBackend(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.backend.SingleBackend")) ;
 
-    mBackend = uno::Reference<backenduno::XSingleBackend>::query(
-        mFactory->createInstanceWithArguments(kSingleBackend, aParameters)) ;
+    uno::Any const * const pParams = aParameters.getConstArray();
+    sal_Int32 nCount = aParameters.getLength();
+
+    for (sal_Int32 ix = 0; ix < nCount; ++ix)
+    {
+        if (pParams[ix] >>= mBackend) break;
+    }
+
+    if (!mBackend.is())
+    {
+        const rtl::OUString kSingleBackend(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.backend.SingleBackend")) ;
+
+        mBackend.set( mFactory->createInstanceWithArguments(kSingleBackend, aParameters),
+                        uno::UNO_QUERY) ;
+    }
 }
 //------------------------------------------------------------------------------
 

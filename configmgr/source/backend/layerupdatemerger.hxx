@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatemerger.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 16:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,6 @@
 
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
-#endif
-
-#ifndef INCLUDED_STACK
-#include <stack>
-#define INCLUDED_STACK
 #endif
 // -----------------------------------------------------------------------------
 
