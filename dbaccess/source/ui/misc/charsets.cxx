@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charsets.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-15 13:38:09 $
+ *  last change: $Author: fs $ $Date: 2002-03-14 08:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ namespace dbaui
                 m_aDisplayNames.push_back( String( aLocalId ) );
             else
             {
-                DBG_ASSERT( !bAlreadyAsserted, "OCharsetDisplay::OCharsetDisplay: invalid resources!" );
+                DBG_ASSERT( bAlreadyAsserted, "OCharsetDisplay::OCharsetDisplay: invalid resources!" );
 #ifdef DBG_UTIL
                 bAlreadyAsserted = sal_True;
 #endif
@@ -251,6 +251,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/10/15 13:38:09  fs
+ *  #93204# new supported charset IBM866 (cyrillic)
+ *
  *  Revision 1.3  2001/05/10 12:02:10  fs
  *  #86849# be a little more tolerant when display names are missing
  *
