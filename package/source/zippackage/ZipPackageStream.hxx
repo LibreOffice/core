@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:22:12 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 
+#ifndef __MUTEXHOLDER_HXX_
+#include <mutexholder.hxx>
+#endif
+
 #define PACKAGE_STREAM_NOTSET           0
 #define PACKAGE_STREAM_PACKAGEMEMBER    1
 #define PACKAGE_STREAM_DETECT           2
@@ -99,6 +103,7 @@ class ZipPackageStream : public cppu::ImplInheritanceHelper2
     static com::sun::star::uno::Sequence < sal_Int8 > aImplementationId;
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
+    const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
     ZipPackage          &rZipPackage;
     sal_Bool            bToBeCompressed, bToBeEncrypted, bHaveOwnKey, bIsEncrypted;
     vos::ORef < EncryptionData > xEncryptionData;
@@ -106,6 +111,8 @@ protected:
     sal_uInt8   m_nStreamMode;
     sal_uInt32  m_nMagicalHackPos;
     sal_uInt32  m_nMagicalHackSize;
+
+    SotMutexHolderRef m_aSharedMutexRef;
 
 public:
     sal_Bool HasOwnKey ()        { return bHaveOwnKey;}
@@ -155,8 +162,11 @@ public:
     { xEncryptionData->nIterationCount = nNewCount;}
     void setSize (const sal_Int32 nNewSize);
 
-    ZipPackageStream (ZipPackage & rNewPackage);
+    ZipPackageStream ( ZipPackage & rNewPackage,
+                        const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xFactory );
     virtual ~ZipPackageStream( void );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > TryToGetRawFromDataStream();
 
     sal_Bool ParsePackageRawStream();
 
