@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:52:30 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,17 +266,18 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, AddLocPBHdl, void*, EMTYARG )
         if( ui::dialogs::ExecutableDialogResults::OK != nRet )
             return 0;
 
-        String aPathStr = xFolderPicker->getDirectory();
+        rtl::OUString aPathStr = xFolderPicker->getDirectory();
         INetURLObject aNewObj( aPathStr );
         aNewObj.removeFinalSlash();
 
         // then the new path also an URL else system path
-        String aNewPathStr = ( aNewObj.GetProtocol() != INET_PROT_NOT_VALID )? aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
+        ::rtl::OUString aSystemFileURL = ( aNewObj.GetProtocol() != INET_PROT_NOT_VALID ) ?
+            aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
 
-        ::rtl::OUString aSystemFileURL( aNewPathStr );
+        String aNewPathStr(aSystemFileURL);
+
         if ( osl::FileBase::getSystemPathFromFileURL( aSystemFileURL, aSystemFileURL ) == osl::FileBase::E_None )
             aNewPathStr = aSystemFileURL;
-
 
         if( maTrustFileLocLB.GetEntryPos( aNewPathStr ) == LISTBOX_ENTRY_NOTFOUND )
         {
