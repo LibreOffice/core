@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-26 16:46:18 $
+ *  last change: $Author: gt $ $Date: 2002-08-06 08:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1952,70 +1952,82 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox *, pLB )
         pPrev = &aChangedPreviewWN;
     }
 
-    SvxFont& rFont = pPrev->GetFont();
+    SvxFont&    rFont = pPrev->GetFont();
+    SvxFont&    rCJKFont = pPrev->GetCJKFont();
+
     rFont.SetWeight(WEIGHT_NORMAL);
+    rCJKFont.SetWeight(WEIGHT_NORMAL);
     rFont.SetItalic(ITALIC_NONE);
+    rCJKFont.SetItalic(ITALIC_NONE);
     rFont.SetUnderline(UNDERLINE_NONE);
+    rCJKFont.SetUnderline(UNDERLINE_NONE);
     rFont.SetStrikeout(STRIKEOUT_NONE);
+    rCJKFont.SetStrikeout(STRIKEOUT_NONE);
     rFont.SetCaseMap(SVX_CASEMAP_NOT_MAPPED);
-    pPrev->SetColor( GetBackground().GetColor() );
+    rCJKFont.SetCaseMap(SVX_CASEMAP_NOT_MAPPED);
 
-    USHORT nPos = pColorLB->GetSelectEntryPos();
+    USHORT      nPos = pColorLB->GetSelectEntryPos();
 
-    switch (nPos)
+    switch( nPos )
     {
         case 0:
-            rFont.SetColor(Color(COL_BLACK));
+            rFont.SetColor( Color( COL_BLACK ) );
+            rCJKFont.SetColor( Color( COL_BLACK ) );
             break;
         case 1:
         case LISTBOX_ENTRY_NOTFOUND:
-            rFont.SetColor(Color(COL_RED));
+            rFont.SetColor( Color( COL_RED ) );
+            rCJKFont.SetColor( Color( COL_RED ) );
             break;
         default:
-            rFont.SetColor(pColorLB->GetEntryColor(nPos));
+            rFont.SetColor( pColorLB->GetEntryColor( nPos ) );
+            rCJKFont.SetColor( pColorLB->GetEntryColor( nPos ) );
             break;
     }
 
     nPos = pLB->GetSelectEntryPos();
-    if (nPos == LISTBOX_ENTRY_NOTFOUND)
+    if( nPos == LISTBOX_ENTRY_NOTFOUND )
         nPos = 0;
 
-    CharAttr *pAttr = (CharAttr *)pLB->GetEntryData(nPos);
+    CharAttr*   pAttr = ( CharAttr* ) pLB->GetEntryData( nPos );
 
     switch (pAttr->nItemId)
     {
         case SID_ATTR_CHAR_WEIGHT:
-            rFont.SetWeight((FontWeight)pAttr->nAttr);
+            rFont.SetWeight( ( FontWeight ) pAttr->nAttr );
+            rCJKFont.SetWeight( ( FontWeight ) pAttr->nAttr );
             break;
 
         case SID_ATTR_CHAR_POSTURE:
-            rFont.SetItalic((FontItalic)pAttr->nAttr);
+            rFont.SetItalic( ( FontItalic ) pAttr->nAttr );
+            rCJKFont.SetItalic( ( FontItalic ) pAttr->nAttr );
             break;
 
         case SID_ATTR_CHAR_UNDERLINE:
-            rFont.SetUnderline((FontUnderline)pAttr->nAttr);
+            rFont.SetUnderline( ( FontUnderline ) pAttr->nAttr );
+            rCJKFont.SetUnderline( ( FontUnderline ) pAttr->nAttr );
             break;
 
         case SID_ATTR_CHAR_STRIKEOUT:
-            rFont.SetStrikeout((FontStrikeout)pAttr->nAttr);
+            rFont.SetStrikeout( ( FontStrikeout ) pAttr->nAttr );
+            rCJKFont.SetStrikeout( ( FontStrikeout ) pAttr->nAttr );
             break;
 
         case SID_ATTR_CHAR_CASEMAP:
-            rFont.SetCaseMap((SvxCaseMap)pAttr->nAttr);
+            rFont.SetCaseMap( ( SvxCaseMap ) pAttr->nAttr );
+            rCJKFont.SetCaseMap( ( SvxCaseMap ) pAttr->nAttr );
             break;
 
         case SID_ATTR_BRUSH:
         {
             nPos = pColorLB->GetSelectEntryPos();
-            if (nPos)
-            {
-                pPrev->SetColor(pColorLB->GetSelectEntryColor());
-            }
+            if( nPos )
+                pPrev->SetColor( pColorLB->GetSelectEntryColor() );
             else
-            {
-                pPrev->SetColor(Color(COL_LIGHTGRAY));
-            }
-            rFont.SetColor(Color(COL_BLACK));
+                pPrev->SetColor( Color( COL_LIGHTGRAY ) );
+
+            rFont.SetColor( Color( COL_BLACK ) );
+            rCJKFont.SetColor( Color( COL_BLACK ) );
         }
         break;
     }
@@ -2050,41 +2062,42 @@ IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, ColorListBox *, pColorLB )
         pPrev = &aChangedPreviewWN;
     }
 
-    SvxFont& rFont = pPrev->GetFont();
-    USHORT nPos = pLB->GetSelectEntryPos();
-    if (nPos == LISTBOX_ENTRY_NOTFOUND)
+    SvxFont&    rFont = pPrev->GetFont();
+    SvxFont&    rCJKFont = pPrev->GetCJKFont();
+    USHORT      nPos = pLB->GetSelectEntryPos();
+    if( nPos == LISTBOX_ENTRY_NOTFOUND )
         nPos = 0;
 
-    CharAttr *pAttr = (CharAttr *)pLB->GetEntryData(nPos);
+    CharAttr*   pAttr = ( CharAttr* ) pLB->GetEntryData( nPos );
 
-    if (pAttr->nItemId == SID_ATTR_BRUSH)
+    if( pAttr->nItemId == SID_ATTR_BRUSH )
     {
-        rFont.SetColor(Color(COL_BLACK));
+        rFont.SetColor( Color( COL_BLACK ) );
+        rCJKFont.SetColor( Color( COL_BLACK ) );
         nPos = pColorLB->GetSelectEntryPos();
-        if (nPos && nPos != LISTBOX_ENTRY_NOTFOUND)
-        {
-            pPrev->SetColor(pColorLB->GetSelectEntryColor());
-        }
+        if( nPos && nPos != LISTBOX_ENTRY_NOTFOUND )
+            pPrev->SetColor( pColorLB->GetSelectEntryColor() );
         else
-        {
-            pPrev->SetColor(Color(COL_LIGHTGRAY));
-        }
+            pPrev->SetColor( Color( COL_LIGHTGRAY ) );
     }
     else
     {
         nPos = pColorLB->GetSelectEntryPos();
 
-        switch (nPos)
+        switch( nPos )
         {
             case 0:
-                rFont.SetColor(Color(COL_BLACK));
+                rFont.SetColor( Color( COL_BLACK ) );
+                rCJKFont.SetColor( Color( COL_BLACK ) );
                 break;
             case 1:
             case LISTBOX_ENTRY_NOTFOUND:
-                rFont.SetColor(Color(COL_RED));
+                rFont.SetColor( Color( COL_RED ) );
+                rCJKFont.SetColor( Color( COL_RED ) );
                 break;
             default:
-                rFont.SetColor(pColorLB->GetEntryColor(nPos));
+                rFont.SetColor( pColorLB->GetEntryColor( nPos ) );
+                rCJKFont.SetColor( pColorLB->GetEntryColor( nPos ) );
                 break;
         }
     }
@@ -2114,22 +2127,34 @@ IMPL_LINK( SwRedlineOptionsTabPage, ChangedMaskPrevHdl, ListBox *, pLB )
 
 void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 {
-    Color aBackCol( GetBackground().GetColor() );
-    SvxFont& rFont = rExampleWin.GetFont();
-    Font aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SERIF,
-                Application::GetSettings().GetUILanguage(),
-                DEFAULTFONT_FLAGS_ONLYONE, &rExampleWin ));
-    aFont.SetSize( Size( 0, 12 ) );
+    const AllSettings&  rAllSettings = Application::GetSettings();
+    LanguageType        eLangType = rAllSettings.GetUILanguage();
+    Color               aBackCol( rAllSettings.GetStyleSettings().GetWindowColor() );
+    SvxFont&            rFont = rExampleWin.GetFont();
+    SvxFont&            rCJKFont = rExampleWin.GetCJKFont();
+    Font                aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SERIF, eLangType,
+                                                        DEFAULTFONT_FLAGS_ONLYONE, &rExampleWin ) );
+    Font                aCJKFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_TEXT, eLangType,
+                                                        DEFAULTFONT_FLAGS_ONLYONE, &rExampleWin ) );
+    const Size          aDefSize( 0, 12 );
+    aFont.SetSize( aDefSize );
+    aCJKFont.SetSize( aDefSize );
     aFont.SetFillColor( aBackCol );
-    aFont.SetWeight(WEIGHT_NORMAL);
+    aCJKFont.SetFillColor( aBackCol );
+    aFont.SetWeight( WEIGHT_NORMAL );
+    aCJKFont.SetWeight( WEIGHT_NORMAL );
     rFont = aFont;
-    const Size aLogSize( rExampleWin.GetOutputSize() );
-    rFont.SetSize(Size(0, aLogSize.Height() * 2 / 3));
-    rExampleWin.SetFont(rFont);
+    rCJKFont = aCJKFont;
+    const Size          aNewSize( 0, rExampleWin.GetOutputSize().Height() * 2 / 3 );
+    rFont.SetSize( aNewSize );
+    rCJKFont.SetSize( aNewSize );
+
+    rExampleWin.SetFont( rFont, rCJKFont );
+
     rExampleWin.UseResourceText();
 
-    Wallpaper aWall( aBackCol );
-    rExampleWin.SetBackground(aWall);
+    Wallpaper           aWall( aBackCol );
+    rExampleWin.SetBackground( aWall );
     rExampleWin.Invalidate();
 }
 
