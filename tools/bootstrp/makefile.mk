@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: nf $ $Date: 2001-05-21 13:28:36 $
+#   last change: $Author: nf $ $Date: 2001-10-16 14:21:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -147,7 +147,7 @@ APP4STDLIBS=$(STATIC_LIBS)
 APP4LIBS=       $(LB)$/bootstrp.lib
 APP4DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
-APP5TARGET= zipdep
+#APP5TARGET= zipdep
 APP5OBJS=	$(OBJ)$/zipdep.obj
 APP5LIBS=	$(LB)$/bootstrp.lib
 APP5STDLIBS=$(STATIC_LIBS) 
