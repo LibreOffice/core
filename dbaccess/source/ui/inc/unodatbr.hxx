@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 08:40:18 $
+ *  last change: $Author: fs $ $Date: 2001-06-19 10:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,7 @@ namespace dbaui
 
         sal_Bool isTableFormat();
         void    implAdministrate( SvLBoxEntry* _pApplyTo );
+        void    implDirectSQL( SvLBoxEntry* _pApplyTo );
         void    implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 _nAction );
         void    implRemoveQuery( SvLBoxEntry* _pApplyTo );
         void    implDropTable( SvLBoxEntry* _pApplyTo );

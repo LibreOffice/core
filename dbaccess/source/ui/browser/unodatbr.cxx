@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 09:37:11 $
+ *  last change: $Author: fs $ $Date: 2001-06-19 11:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,9 @@
 #endif
 #ifndef _DBAUI_LINKEDDOCUMENTS_HXX_
 #include "linkeddocuments.hxx"
+#endif
+#ifndef _DBACCESS_UI_DIRECTSQL_HXX_
+#include "directsql.hxx"
 #endif
 
 
@@ -2696,6 +2699,11 @@ sal_Bool SbaTableQueryBrowser::ensureConnection(SvLBoxEntry* _pDSEntry, void* pD
             _xConnection = Reference<XConnection>(pData->xObject,UNO_QUERY);
         if(!_xConnection.is() && pData)
         {
+            // show the "connecting to ..." status
+            String sConnecting(ModuleRes(STR_CONNECTING_DATASOURCE));
+            sConnecting.SearchAndReplaceAscii("$name$", aDSName);
+            BrowserViewStatusDisplay aShowStatus(static_cast<UnoDataBrowserView*>(getView()), sConnecting);
+
             _xConnection = connect(aDSName, sal_True);
             pData->xObject = _xConnection; // share the conenction with the querydesign
         }
@@ -2763,6 +2771,28 @@ IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortDa
         nCompareResult = sLeftText.CompareTo(sRightText);
 
     return nCompareResult;
+}
+
+// -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::implDirectSQL( SvLBoxEntry* _pApplyTo )
+{
+    try
+    {
+        Reference<XConnection> xConnection;
+        if(!ensureConnection(_pApplyTo, xConnection))
+            return;
+
+        DirectSQLDialog aDlg(getView(), xConnection);
+        aDlg.Execute();
+    }
+    catch(const SQLException& e)
+    {
+        showError(SQLExceptionInfo(e));
+    }
+    catch(const Exception&)
+    {
+        DBG_ERROR("SbaTableQueryBrowser::implDirectSQL: caught an (unknown) exception!");
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -3174,6 +3204,10 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
     {
         case ID_TREE_ADMINISTRATE:
             implAdministrate(pEntry);
+            break;
+
+        case ID_DIRECT_SQL:
+            implDirectSQL(pEntry);
             break;
 
         case ID_TREE_REBUILD_CONN:
