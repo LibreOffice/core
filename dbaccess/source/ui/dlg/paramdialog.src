@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:38:22 $
+ *  last change: $Author: kz $ $Date: 2001-06-15 21:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ ModalDialog DLG_PARAMETERS
         Text[ portuguese ] = "~Parâmetros";
         Text[ russian ] = "~Ïàðàìåòðû";
         Text[ greek ] = "~ÐáñÜìåôñïé";
-        Text[ dutch ] = "~Parameters";
+        Text[ dutch ] = "~Parameter";
         Text[ french ] = "~Paramètres";
         Text[ spanish ] = "~Parámetros";
         Text[ italian ] = "~Parametri";
@@ -243,6 +243,9 @@ ModalDialog DLG_PARAMETERS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/06/13 22:38:22  kz
+ *  Merge SRC633: 14.06.01 - 00:38:33
+ *
  *  Revision 1.11  2001/06/07 15:09:39  fs
  *  #87912# redesigned the dialog
  *
@@ -279,5 +282,6 @@ ModalDialog DLG_PARAMETERS
  *
  *  Revision 1.0 26.10.00 15:14:44  fs
  ************************************************************************/
+
 
 
