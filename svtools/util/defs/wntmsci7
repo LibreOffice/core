@@ -14359,3 +14359,9 @@ WriteJPEG
 ??0?$_Vector_base@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@V?$allocator@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@@_STL@@@_STL@@QAE@IABV?$allocator@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@@1@@Z
 ?_M_fill_assign@?$vector@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@V?$allocator@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@@_STL@@@_STL@@QAEXIABV?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@@Z
 ?deallocate@?$_STL_alloc_proxy@PAV?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@V12345@V?$allocator@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@@_STL@@@_STL@@QAEXPAV?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@I@Z
+??RFilterTitleMatch@?%O:\SRC641\src\svtools\source\filepicker\filepicker.cxx328315476@@QAE_NABUFilterEntry@@@Z
+?GetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1100424879@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1100424879@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1100424879@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1100424879@@YAXPAVControl@@JJAAJ@Z
+?lcl_getHomeDirectory@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1100424879@@YAEABVString@@AAV2@@Z
