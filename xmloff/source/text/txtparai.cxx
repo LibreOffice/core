@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:35:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 12:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1697,6 +1697,7 @@ XMLParaContext::XMLParaContext(
                     nOutlineLevel = (sal_Int8)nTmp;
                 }
             }
+            break;
         case XML_TOK_TEXT_P_ID:
             sId = rValue;
             break;
