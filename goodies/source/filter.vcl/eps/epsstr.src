@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epsstr.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:10:10 $
+ *  last change: $Author: sj $ $Date: 2001-04-26 13:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 
 #include "strings.hrc"
 
-// Key fuer den Dialog
+// configuration keys
 String KEY_PREVIEW
 {
     Text = "Preview";
@@ -78,6 +78,24 @@ String KEY_COLOR
 String KEY_COMPR
 {
     Text = "CompressionMode";
+};
+String KEY_TEXTMODE
+{
+    Text = "TextMode";
+};
+String KEY_TEXTRESOLUTIONS
+{
+    Text = "TextToBitmapResolutions";
+};
+String KEY_SELECTEDTEXTRESOLUTION
+{
+    Text = "SelectedTextToBitmapResolution";
+};
+
+String KEY_TEXTRESOLUTION_DPI
+{
+    Text = " DPI" ;
+    Text[ ENGLISH ] = " DPI" ;
 };
 
 String KEY_VERSION_CHECK

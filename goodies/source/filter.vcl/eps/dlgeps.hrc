@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:11 $
+ *  last change: $Author: sj $ $Date: 2001-04-26 13:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,14 @@
 #define GRP_VERSION 2
 #define GRP_COLOR 3
 #define GRP_COMPRESSION 4
+#define GRP_TEXT 5
 #define CB_PREVIEW_TIFF 1
 #define CB_PREVIEW_EPSI 2
-#define RB_LEVEL1 3
-#define RB_LEVEL2 4
-#define RB_COLOR  5
-#define RB_GRAYSCALE 6
-#define RB_COMPRESSION_LZW 7
-#define RB_COMPRESSION_NONE 8
+#define RB_LEVEL1 1
+#define RB_LEVEL2 2
+#define RB_COLOR  3
+#define RB_GRAYSCALE 4
+#define RB_COMPRESSION_LZW 5
+#define RB_COMPRESSION_NONE 6
+#define LB_TEXT_MODE 1
+#define LB_TEXT_RESOLUTION 2

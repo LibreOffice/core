@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 20:13:51 $
+ *  last change: $Author: sj $ $Date: 2001-04-26 13:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,9 @@
 #include <svtools/fltcall.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <vcl/group.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
+#include <vcl/lstbox.hxx>
 #include <svtools/stdctrl.hxx>
 
 
@@ -81,16 +82,19 @@ class ResMgr;
 class DlgExportEPS : public ModalDialog
 {
 private:
-    GroupBox            aGrpPreview;
+    FixedLine           aGrpPreview;
     CheckBox            aCBPreviewTiff;
     CheckBox            aCBPreviewEPSI;
-    GroupBox            aGrpVersion;
+    FixedLine           aGrpText;
+    ListBox             aLBTextMode;
+    ListBox             aLBTextResolution;
+    FixedLine           aGrpVersion;
     RadioButton         aRBLevel1;
     RadioButton         aRBLevel2;
-    GroupBox            aGrpColor;
+    FixedLine           aGrpColor;
     RadioButton         aRBColor;
     RadioButton         aRBGrayscale;
-    GroupBox            aGrpCompression;
+    FixedLine           aGrpCompression;
     RadioButton         aRBCompressionLZW;
     RadioButton         aRBCompressionNone;
     OKButton            aBtnOK;
@@ -103,6 +107,7 @@ private:
     DECL_LINK( OK, void * );
     DECL_LINK( LEVEL1, void* );
     DECL_LINK( LEVEL2, void* );
+    DECL_LINK( TEXTMODE, void* );
 
 public:
             DlgExportEPS( FltCallDialogParameter& rPara );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:02:12 $
+ *  last change: $Author: sj $ $Date: 2001-04-26 13:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@ ModalDialog DLG_EXPORT_EPS
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 149 , 198 ) ;
+    Size = MAP_APPFONT ( 251, 118 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text = "EPS Export Optionen" ;
@@ -85,28 +85,28 @@ ModalDialog DLG_EXPORT_EPS
     Text[ chinese_traditional ] = "EPS ¿é¥X¿ï¶µ";
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 93 , 6 ) ;
+        Pos = MAP_APPFONT ( 197 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 93 , 23 ) ;
+        Pos = MAP_APPFONT ( 197, 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 93 , 43 ) ;
+        Pos = MAP_APPFONT ( 197 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
 
-    GroupBox GRP_PREVIEW
+    FixedLine GRP_PREVIEW
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 80 , 42 ) ;
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Vorschau";
         Text [ ENGLISH ] = "Preview";
         Text[ italian ] = "Anteprima";
@@ -132,8 +132,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     CheckBox CB_PREVIEW_TIFF
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 71 , 10 ) ;
+        Pos = MAP_APPFONT ( 7, 14 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
         Text = "~Vorschau Bild (Tiff)" ;
         Text [ ENGLISH ] = "~Preview picture (Tiff)" ;
         TabStop = TRUE ;
@@ -160,8 +160,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     CheckBox CB_PREVIEW_EPSI
     {
-        Pos = MAP_APPFONT ( 12 , 30 ) ;
-        Size = MAP_APPFONT ( 71, 10 ) ;
+        Pos = MAP_APPFONT ( 7 , 28 ) ;
+        Size = MAP_APPFONT ( 84, 10 ) ;
         Text = "~Interchange (EPSI)" ;
         Text [ ENGLISH ] = "~Interchange (EPSI)" ;
         TabStop = TRUE ;
@@ -185,10 +185,47 @@ ModalDialog DLG_EXPORT_EPS
         Text[ turkish ] = "Interchange (EPSI)";
     };
 
-    GroupBox GRP_VERSION
+
+    FixedLine  GRP_TEXT
     {
-        Pos = MAP_APPFONT ( 6 , 51 ) ;
-        Size = MAP_APPFONT ( 80 , 42 ) ;
+        Pos = MAP_APPFONT ( 100 , 3 ) ;
+        Size = MAP_APPFONT ( 90, 8 ) ;
+        Text = "Text als Bitmap";
+        Text [ ENGLISH ] = "Text as Bitmap";
+    };
+    ListBox LB_TEXT_MODE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT( 103 , 14 );
+        Size = MAP_APPFONT( 84, 48 );
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Immer" ; > ;
+            < "Nie" ; > ;
+            < "nicht standard Fonts" ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "always" ; > ;
+            < "never" ; > ;
+            < "non standard fonts" ; > ;
+        };
+    };
+    ListBox LB_TEXT_RESOLUTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT( 103, 28 ) ;
+        Size = MAP_APPFONT( 84, 48 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    FixedLine GRP_VERSION
+    {
+        Pos = MAP_APPFONT ( 4, 41 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Version";
         Text [ ENGLISH ] = "Version";
         Text[ italian ] = "Versione";
@@ -214,8 +251,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     RadioButton RB_LEVEL1
     {
-        Pos = MAP_APPFONT ( 12 , 62 ) ;
-        Size = MAP_APPFONT ( 71 , 10 ) ;
+        Pos = MAP_APPFONT ( 7 , 52 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
         Text = "Level ~1" ;
         Text [ ENGLISH ] = "Level ~1" ;
         TabStop = TRUE ;
@@ -242,8 +279,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     RadioButton RB_LEVEL2
     {
-        Pos = MAP_APPFONT ( 12 , 78 ) ;
-        Size = MAP_APPFONT ( 71, 10 ) ;
+        Pos = MAP_APPFONT ( 7 , 66 ) ;
+        Size = MAP_APPFONT ( 84, 10 ) ;
         Text = "Level ~2" ;
         Text [ ENGLISH ] = "Level ~2" ;
         TabStop = TRUE ;
@@ -269,10 +306,10 @@ ModalDialog DLG_EXPORT_EPS
         Text[ turkish ] = "Düzey ~2";
     };
 
-    GroupBox GRP_COLOR
+    FixedLine GRP_COLOR
     {
-        Pos = MAP_APPFONT ( 6 , 99 ) ;
-        Size = MAP_APPFONT ( 80 , 42 ) ;
+        Pos = MAP_APPFONT ( 4 , 79 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Farb Format";
         Text [ ENGLISH ] = "Color Type";
         Text[ italian ] = "Formato colore";
@@ -298,8 +335,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     RadioButton RB_COLOR
     {
-        Pos = MAP_APPFONT ( 12 , 110 ) ;
-        Size = MAP_APPFONT ( 71, 10 ) ;
+        Pos = MAP_APPFONT ( 7 , 90 ) ;
+        Size = MAP_APPFONT ( 84, 10 ) ;
         Text = "~Farbe" ;
         Text [ ENGLISH ] = "~Color" ;
         TabStop = TRUE ;
@@ -326,8 +363,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     RadioButton RB_GRAYSCALE
     {
-        Pos = MAP_APPFONT ( 12 , 126 ) ;
-        Size = MAP_APPFONT ( 71, 10 ) ;
+        Pos = MAP_APPFONT ( 7 , 104 ) ;
+        Size = MAP_APPFONT ( 84, 10 ) ;
         Text = "~Graustufen" ;
         Text [ ENGLISH ] = "~Grayscale" ;
         TabStop = TRUE ;
@@ -353,10 +390,10 @@ ModalDialog DLG_EXPORT_EPS
         Text[ turkish ] = "Gri tonlarý";
     };
 
-    GroupBox GRP_COMPRESSION
+    FixedLine  GRP_COMPRESSION
     {
-        Pos = MAP_APPFONT ( 6 , 147 ) ;
-        Size = MAP_APPFONT ( 80 , 42 ) ;
+        Pos = MAP_APPFONT ( 100 , 79 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Kompression";
         Text [ ENGLISH ] = "Compression";
         Text[ italian ] = "Compressione";
@@ -382,8 +419,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     RadioButton RB_COMPRESSION_LZW
     {
-        Pos = MAP_APPFONT ( 12 , 158 );
-        Size = MAP_APPFONT ( 71, 10 ) ;
+        Pos = MAP_APPFONT ( 103, 90 );
+        Size = MAP_APPFONT ( 84, 10 ) ;
         Text = "LZW Kodierung" ;
         Text [ ENGLISH ] = "LZW Compression" ;
         TabStop = TRUE ;
@@ -410,8 +447,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     RadioButton RB_COMPRESSION_NONE
     {
-        Pos = MAP_APPFONT ( 12 , 174 ) ;
-        Size = MAP_APPFONT ( 71, 10 ) ;
+        Pos = MAP_APPFONT ( 103, 104 ) ;
+        Size = MAP_APPFONT ( 84, 10 ) ;
         Text = "Keine" ;
         Text [ ENGLISH ] = "None" ;
         TabStop = TRUE ;
@@ -436,6 +473,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ korean ] = "¾øÀ½";
         Text[ turkish ] = "Yok";
     };
+
     Text[ italian ] = "Opzioni d'esportazione EPS";
     Text[ portuguese_brazilian ] = "EPS Export Optionen";
     Text[ portuguese ] = "Opções exportação EPS";
