@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-24 14:58:41 $
+ *  last change: $Author: hr $ $Date: 2001-09-28 12:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,10 @@
 #ifndef _STRING_
 #include <string>
 #endif
-#ifndef _ALGORITHM_
-#include <algorithm>
+#ifdef min
+#undef min
 #endif
+#include <algorithm>
 
 using namespace ::com::sun::star::datatransfer;
 

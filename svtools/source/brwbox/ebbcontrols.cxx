@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ebbcontrols.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 12:49:36 $
+ *  last change: $Author: hr $ $Date: 2001-09-28 12:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,11 @@
 #ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
 #endif
+
+#ifdef max
+#undef max
+#endif
+#include <algorithm>
 
 // .......................................................................
 namespace svt
@@ -381,6 +386,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/06/15 12:49:36  fs
+ *  initial checkin - moved this herein from svx/source/fmcomp/dbchk*
+ *
  *
  *  Revision 1.0 15.06.01 14:09:52  fs
  ************************************************************************/
