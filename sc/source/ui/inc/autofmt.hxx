@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-19 13:31:19 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,63 +100,63 @@ enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 
 //========================================================================
 
-class ScAutoFormatDlg : public ModalDialog
-{
-public:
-            ScAutoFormatDlg( Window*                    pParent,
-                             ScAutoFormat*              pAutoFormat,
-                             const ScAutoFormatData*    pSelFormatData,
-                             ScDocument*                pDoc );
-            ~ScAutoFormatDlg();
-
-    USHORT GetIndex() const { return nIndex; }
-    String GetCurrFormatName();
-
-private:
-    FixedLine       aFlFormat;
-    ListBox         aLbFormat;
-    AutoFmtPreview* pWndPreview;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    PushButton      aBtnAdd;
-    PushButton      aBtnRemove;
-    MoreButton      aBtnMore;
-    FixedLine       aFlFormatting;
-    CheckBox        aBtnNumFormat;
-    CheckBox        aBtnBorder;
-    CheckBox        aBtnFont;
-    CheckBox        aBtnPattern;
-    CheckBox        aBtnAlignment;
-    CheckBox        aBtnAdjust;
-    PushButton      aBtnRename;
-    String          aStrTitle;
-    String          aStrLabel;
-    String          aStrClose;
-    String          aStrDelTitle;
-    String          aStrDelMsg;
-    String          aStrRename;
-
-    //------------------------
-    ScAutoFormat*           pFormat;
-    const ScAutoFormatData* pSelFmtData;
-    USHORT                  nIndex;
-    BOOL                    bCoreDataChanged;
-    BOOL                    bFmtInserted;
-
-    void Init           ();
-    void UpdateChecks   ();
-    //------------------------
-    DECL_LINK( CheckHdl, Button * );
-    DECL_LINK( AddHdl, void * );
-    DECL_LINK( RemoveHdl, void * );
-    DECL_LINK( SelFmtHdl, void * );
-    DECL_LINK( CloseHdl, PushButton * );
-    DECL_LINK( DblClkHdl, void * );
-    DECL_LINK( RenameHdl, void *);
-
-};
-
+//CHINA001 class ScAutoFormatDlg : public ModalDialog
+//CHINA001 {
+//CHINA001 public:
+//CHINA001 ScAutoFormatDlg( Window*                 pParent,
+//CHINA001 ScAutoFormat*                pAutoFormat,
+//CHINA001 const ScAutoFormatData*    pSelFormatData,
+//CHINA001 ScDocument*                pDoc );
+//CHINA001 ~ScAutoFormatDlg();
+//CHINA001
+//CHINA001 USHORT GetIndex() const { return nIndex; }
+//CHINA001 String GetCurrFormatName();
+//CHINA001
+//CHINA001 private:
+//CHINA001 FixedLine       aFlFormat;
+//CHINA001 ListBox          aLbFormat;
+//CHINA001 AutoFmtPreview*  pWndPreview;
+//CHINA001 OKButton     aBtnOk;
+//CHINA001 CancelButton aBtnCancel;
+//CHINA001 HelpButton       aBtnHelp;
+//CHINA001 PushButton       aBtnAdd;
+//CHINA001 PushButton       aBtnRemove;
+//CHINA001 MoreButton       aBtnMore;
+//CHINA001 FixedLine       aFlFormatting;
+//CHINA001 CheckBox     aBtnNumFormat;
+//CHINA001 CheckBox     aBtnBorder;
+//CHINA001 CheckBox     aBtnFont;
+//CHINA001 CheckBox     aBtnPattern;
+//CHINA001 CheckBox     aBtnAlignment;
+//CHINA001 CheckBox     aBtnAdjust;
+//CHINA001 PushButton       aBtnRename;
+//CHINA001 String           aStrTitle;
+//CHINA001 String           aStrLabel;
+//CHINA001 String           aStrClose;
+//CHINA001 String           aStrDelTitle;
+//CHINA001 String           aStrDelMsg;
+//CHINA001 String           aStrRename;
+//CHINA001
+//CHINA001 //------------------------
+//CHINA001 ScAutoFormat*            pFormat;
+//CHINA001 const ScAutoFormatData*  pSelFmtData;
+//CHINA001 USHORT                   nIndex;
+//CHINA001 BOOL                 bCoreDataChanged;
+//CHINA001 BOOL                 bFmtInserted;
+//CHINA001
+//CHINA001 void Init            ();
+//CHINA001 void UpdateChecks    ();
+//CHINA001 //------------------------
+//CHINA001 DECL_LINK( CheckHdl, Button * );
+//CHINA001 DECL_LINK( AddHdl, void * );
+//CHINA001 DECL_LINK( RemoveHdl, void * );
+//CHINA001 DECL_LINK( SelFmtHdl, void * );
+//CHINA001 DECL_LINK( CloseHdl, PushButton * );
+//CHINA001 DECL_LINK( DblClkHdl, void * );
+//CHINA001 DECL_LINK( RenameHdl, void *);
+//CHINA001
+//CHINA001 };
+//CHINA001
 //========================================================================
 
 class AutoFmtPreview : public Window
