@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:30:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7126,17 +7126,23 @@ BOOL SvxMSDffManager::ConvertToOle2( SvStream& rStm, UINT32 nReadLen,
 
 const char* GetInternalServerName_Impl( const SvGlobalName& aGlobName )
 {
-    if ( aGlobName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_60 ) )
+    if ( aGlobName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_60 )
+      || aGlobName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_8 ) )
         return "swriter";
-    else if ( aGlobName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_60 ) )
+    else if ( aGlobName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_60 )
+      || aGlobName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_8 ) )
         return "scalc";
-    else if ( aGlobName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_60 ) )
+    else if ( aGlobName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_60 )
+      || aGlobName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_8 ) )
         return "simpress";
-    else if ( aGlobName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_60 ) )
+    else if ( aGlobName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_60 )
+      || aGlobName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_8 ) )
         return "sdraw";
-    else if ( aGlobName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_60 ) )
+    else if ( aGlobName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_60 )
+      || aGlobName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_8 ) )
         return "smath";
-    else if ( aGlobName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_60 ) )
+    else if ( aGlobName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_60 )
+      || aGlobName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_8 ) )
         return "schart";
     return 0;
 }
