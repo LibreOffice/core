@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 09:36:33 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,10 @@ public:
 
     /** Sets the horizontal and vertical text alignment from the passed Excel TXO flags. */
     void                SetAlignment( sal_uInt16 nAlign );
+    /** Sets the rotation text alignment from the passed Excel TXO orientation flags. */
+    void                SetRotation( sal_uInt16 nOrient );
+    /** Gets the rotation text alignment. */
+    inline XclTxoRotation      GetRotation() const { return meRotation; }
 
     /** Sets the text of this Escher text object to the passed SdrObj, if it can take text. */
     void                ApplyTextOnSdrObj( SdrObject& rSdrObj ) const;
@@ -243,6 +247,7 @@ private:
     XclImpStringPtr     mxString;       /// Plain or rich string.
     XclTxoHorAlign      meHorAlign;     /// Horizontal alignment.
     XclTxoVerAlign      meVerAlign;     /// Vertical alignment.
+    XclTxoRotation      meRotation;     /// Text rotation.
 };
 
 // ----------------------------------------------------------------------------
