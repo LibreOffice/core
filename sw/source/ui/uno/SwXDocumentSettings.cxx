@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:02:43 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_IS_LABEL_DOC,
     HANDLE_IS_ADD_FLY_OFFSET,
     HANDLE_IS_ADD_EXTERNAL_LEADING,
+    HANDLE_OLD_NUMBERING, // #111955#
     /* Stampit It disable the print cancel button of the shown progress dialog. */
     HANDLE_ALLOW_PRINTJOB_CANCEL,
     // DVO, OD 12.01.2004 #i11859#
@@ -202,6 +203,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("IsLabelDocument"),            HANDLE_IS_LABEL_DOC,                    CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("AddFrameOffsets"),            HANDLE_IS_ADD_FLY_OFFSET,               CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("AddExternalLeading"),         HANDLE_IS_ADD_EXTERNAL_LEADING,         CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("UseOldNumbering"),            HANDLE_OLD_NUMBERING,               CPPUTYPE_BOOLEAN,           0,   0}, // #111955#
         /* Stampit It disable the print cancel button of the shown progress dialog. */
         { RTL_CONSTASCII_STRINGPARAM("AllowPrintJobCancel"),        HANDLE_ALLOW_PRINTJOB_CANCEL,           CPPUTYPE_BOOLEAN,           0,   0},
         // DVO, OD 12.01.2004 #i11859#
@@ -546,6 +548,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->SetAddExtLeading( bTmp );
         }
         break;
+        case HANDLE_OLD_NUMBERING: // #111955#
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetOldNumbering(bTmp);
+        }
+        break;
         case HANDLE_ALLOW_PRINTJOB_CANCEL:
         {
             sal_Bool bState;
@@ -737,6 +745,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_IS_ADD_EXTERNAL_LEADING:
         {
             sal_Bool bTmp = mpDoc->IsAddExtLeading();
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_OLD_NUMBERING: // #111955#
+        {
+            sal_Bool bTmp = mpDoc->IsOldNumbering();
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
