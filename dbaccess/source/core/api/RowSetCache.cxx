@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:59:21 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1154,6 +1154,9 @@ sal_Bool ORowSetCache::first(  )
     }
     else
     {
+        m_bRowCountFinal = m_bBeforeFirst = m_bAfterLast = sal_True;
+        m_nRowCount = m_nPosition = 0;
+
         OSL_ENSURE(m_bBeforeFirst || (m_bNew && m_bInserted),"ORowSetCache::first return false and BeforeFirst isn't true");
         m_aMatrixIter = m_pMatrix->end();
     }
@@ -1186,6 +1189,8 @@ sal_Bool ORowSetCache::last(  )
     }
     else
     {
+        m_bRowCountFinal = m_bBeforeFirst = m_bAfterLast = sal_True;
+        m_nRowCount = m_nPosition = 0;
         OSL_ENSURE(m_bBeforeFirst,"ORowSetCache::last return false and BeforeFirst isn't true");
         m_aMatrixIter = m_pMatrix->end();
     }
