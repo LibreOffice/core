@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 15:59:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ public:
 
 protected:
     friend class GlyphCache;
-    static long                 FetchFontList( ImplDevFontList* );
+    static void                 AnnounceFonts( ImplDevFontList* );
     static void                 ClearFontList();
 
     static VirtDevServerFont*   CreateFont( const ImplFontSelectData& );
