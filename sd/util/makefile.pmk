@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:48:46 $
+#   last change: $Author: rt $ $Date: 2004-08-23 08:24:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,3 +60,19 @@
 #
 #*************************************************************************
 INCPRE+=$(SOLARINCDIR)$/offuh
+
+# define SD_DLLIMPLEMENTATION (see @ sddllapi.h)
+CDEFS += -DSD_DLLIMPLEMENTATION
+
+# set default symbol visibility / scope to hidden
+.IF "$(COMNAME)" == "gcc3"
+.IF "$(CCNUMVER)" >= "000300040000"
+#CFLAGS += -fvisibility=hidden
+.ENDIF # 3.4.0
+.ENDIF # gcc3
+
+.IF "$(COMNAME)" == "sunpro5"
+.IF "$(CCNUMVER)" >= "00050005"
+CFLAGS += -xldscope=hidden
+.ENDIF # 5.5
+.ENDIF # sunpro5
