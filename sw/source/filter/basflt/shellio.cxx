@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:56:18 $
+ *  last change: $Author: rt $ $Date: 2005-02-07 14:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,6 @@ ULONG SwReader::Read( const Reader& rOptions )
     pDoc->InvalidateNumRules();
     pDoc->UpdateNumRule();
     pDoc->SetAllUniqueFlyNames();
-    adjustOutlineLevel(*pDoc);
 
     if( bReadPageDescs )
         pDoc->DoUndo( TRUE );
