@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-06 12:47:31 $
+ *  last change: $Author: mmaher $ $Date: 2002-12-06 14:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1311,14 +1311,10 @@ void SwRTFParser::ReadDocControls( int nToken )
             // StartNummer der Seiten setzen
             if( USHRT_MAX != nPgStart )
             {
-                const SfxPoolItem* pItem;
-                const SwCntntNode* pNd = pPam->GetCntntNode();
-                if( pNd && pNd->GetpSwAttrSet() && SFX_ITEM_SET ==
-                    pNd->GetpSwAttrSet()->GetItemState( RES_PAGEDESC,
-                    FALSE, &pItem ) )
+                SwFmtPageDesc* pCurPgDsc = GetCurrentPageDesc(pPam);
+                if(pCurPgDsc)
                 {
-                    // set a new PageNum
-                    ((SwFmtPageDesc*)pItem)->SetNumOffset( nPgStart );
+                    pCurPgDsc->SetNumOffset( nPgStart );
                 }
                 else
                 {
@@ -1480,6 +1476,24 @@ BOOL lcl_SetFmtCol( SwFmt& rFmt, USHORT nCols, USHORT nColSpace,
         bSet = TRUE;
     }
     return bSet;
+}
+
+// MM. Test to see if the current Document pointer is
+// pointing to a pages desc and if it is return it.
+SwFmtPageDesc* SwRTFParser::GetCurrentPageDesc(SwPaM *pPam)
+{
+    const SfxPoolItem* pItem;
+    const SwCntntNode* pNd = pPam->GetCntntNode();
+    SwFmtPageDesc* aFmtPageDsc = 0;
+
+    // If the current object is a page desc.
+    if( pNd && pNd->GetpSwAttrSet() && SFX_ITEM_SET ==
+        pNd->GetpSwAttrSet()->GetItemState( RES_PAGEDESC,
+        FALSE, &pItem ) )
+    {
+        aFmtPageDsc = (SwFmtPageDesc*)pItem;
+    }
+    return aFmtPageDsc;
 }
 
 // lese alle Section-Controls ein
@@ -1654,6 +1668,13 @@ void SwRTFParser::ReadSectControls( int nToken )
                     pFirst->GetMaster().ResetAttr( RES_COL );
 
                 nPgStart = USHRT_MAX;
+
+                SwFmtPageDesc* pCurPgDsc = GetCurrentPageDesc(pPam);
+                if(pCurPgDsc)
+                {
+                    nPgStart = pCurPgDsc->GetNumOffset();
+                }
+
                 nCols = USHRT_MAX;
                 nColSpace = USHRT_MAX;
                 aNumType.SetNumberingType(SVX_NUM_ARABIC);

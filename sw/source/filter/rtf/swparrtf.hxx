@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-18 12:22:53 $
+ *  last change: $Author: mmaher $ $Date: 2002-12-06 14:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,7 @@ class SwRTFParser : public SvxRTFParser
     virtual void MovePos( int bForward = TRUE );
     virtual void SetEndPrevPara( SvxNodeIdx*& rpNodePos, xub_StrLen& rCntPos );
 
+    SwFmtPageDesc* GetCurrentPageDesc(SwPaM *pPam);
     void CheckInsNewTblLine();
 
     // setze RTF-Werte auf Swg-Werte
@@ -303,6 +304,9 @@ public:
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2002/11/18 12:22:53  cmc
+      #i9243# you can't put tables in footnotes, the unfortunate rtf didn't know that
+
       Revision 1.4  2002/05/29 10:56:09  cmc
       #99290# I hate sunpro
 
