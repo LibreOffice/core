@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodefactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-12 15:04:12 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace
 
     NodeImplHolder ReadOnlyNodeFactory::makeValueNode(ValueNode& rOriginal)
     {
-        return new ReadOnlyValueNodeImpl(rOriginal);
+        return new ReadOnlyValueElementNodeImpl(rOriginal);
     }
     //-------------------------------------------------------------------------
 
@@ -132,7 +132,7 @@ namespace
 
     NodeImplHolder DirectNodeFactory::makeValueNode(ValueNode& rOriginal)
     {
-        return new DirectValueNodeImpl(rOriginal);
+        return new DirectValueElementNodeImpl(rOriginal);
     }
     //-------------------------------------------------------------------------
 
@@ -163,7 +163,7 @@ namespace
 
     NodeImplHolder DeferredNodeFactory::makeValueNode(ValueNode& rOriginal)
     {
-        return new DeferredValueNodeImpl(rOriginal);
+        return new DeferredValueElementNodeImpl(rOriginal);
     }
     //-------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef CONFIGMGR_SETNODEIMPL_HXX_
 #define CONFIGMGR_SETNODEIMPL_HXX_
 
-#include "nodeimpl.hxx"
+#include "setnodeimplbase.hxx"
 #include "treeimpl.hxx"
 
 #include <vos/ref.hxx>
@@ -77,6 +77,9 @@ namespace configmgr
 
     namespace configuration
     {
+//-----------------------------------------------------------------------------
+        class NodeChangeImpl;
+
 //-----------------------------------------------------------------------------
         struct NodeFactory;
 
@@ -203,7 +206,7 @@ namespace configmgr
         // new overrideables
             virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth) = 0;
 
-            virtual void doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange);
+            virtual void doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange) = 0;
 
             virtual NodeChangeImpl* doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement);
             virtual NodeChangeImpl* doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange);
@@ -245,6 +248,7 @@ namespace configmgr
 
             void doInsertElement(Name const& aName, SetEntry const& aNewEntry) = 0;
             void doRemoveElement(Name const& aName) = 0;
+            void doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange);
 
             void initHelper(NodeFactory& rFactory, ISubtree& rTree, TreeDepth nDepth);
             Element makeAdditionalElement(NodeFactory& rFactory, AddNode const& aAddNodeChange, TreeDepth nDepth);
@@ -267,6 +271,7 @@ namespace configmgr
 
             void doInsertElement(Name const& aName, SetEntry const& aNewEntry) = 0;
             void doRemoveElement(Name const& aName) = 0;
+            void doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange);
 
             void initHelper( NodeFactory& rFactory, ISubtree& rTree);
             Element makeAdditionalElement(NodeFactory& rFactory, AddNode const& aAddNodeChange);

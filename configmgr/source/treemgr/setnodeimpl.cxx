@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,14 @@
 
 #include "configpath.hxx"
 #include "treeimpl.hxx"
+#include "valuenodeimpl.hxx"
 
 #include "nodechange.hxx"
 #include "nodechangeimpl.hxx"
 
 #include "valuenode.hxx"
 #include "change.hxx"
+#include "treeactions.hxx" // for ONodeConverter
 
 #include <osl/diagnose.h>
 #include <vector>
@@ -392,17 +394,20 @@ void AbstractSetNodeImpl::implAdjustToElementChange(NodeChangesInformation& rLoc
         RemoveNode const& aRemoveNode = static_cast<RemoveNode const&>(aChange);
         pThisChange = doAdjustToRemovedElement(aName, aRemoveNode);
     }
-    else if (nDepth > 0)
-    {
-        doAdjustChangedElement(rLocalChanges,aName, aChange);
-    }
     else
     {
-        SetEntry aCheck = doFindElement(aName);
-
-        if (aCheck.isValid()) // found even beyond nDepth
+        if (nDepth > 0)
         {
             doAdjustChangedElement(rLocalChanges,aName, aChange);
+        }
+        else
+        {
+            SetEntry aCheck = doFindElement(aName);
+
+            if (aCheck.isValid()) // found even beyond nDepth
+            {
+                doAdjustChangedElement(rLocalChanges,aName, aChange);
+            }
         }
     }
 
@@ -413,22 +418,6 @@ void AbstractSetNodeImpl::implAdjustToElementChange(NodeChangesInformation& rLoc
 }
 
 // Default implementations
-//-------------------------------------------------------------------------
-
-void AbstractSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange)
-{
-    if (Element* pElement = getStoredElement(aName))
-    {
-        // recurse to element tree
-        OSL_ASSERT(pElement->isValid());
-        (*pElement)->adjustToChanges(rLocalChanges,aChange);
-    }
-    else
-    {
-        // could be changed to do an insert instead (?)
-        OSL_ENSURE( false, "Changed Element doesn't exist - (and not adding now)" );
-    }
-}
 //-------------------------------------------------------------------------
 
 NodeChangeImpl* AbstractSetNodeImpl::doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement)
@@ -477,7 +466,7 @@ NodeChangeImpl* AbstractSetNodeImpl::doCreateInsert(Name const& aName, Element c
     typedef SetInsertTreeImpl   SetInsertImpl;
     typedef SetInsertValueImpl  SetInsertImpl;
 
-    NodeChangeImpl* pRet = new SetInsertImpl(aName, aNewElement, true);
+    SetChangeImpl* pRet = new SetInsertImpl(aName, aNewElement, true);
     pRet->setTarget( getParentTree(), getContextOffset() );
     return pRet;
 }
@@ -489,7 +478,7 @@ NodeChangeImpl* AbstractSetNodeImpl::doCreateReplace(Name const& aName, Element 
     typedef SetReplaceTreeImpl  SetReplaceImpl;
     typedef SetReplaceValueImpl SetReplaceImpl;
 
-    NodeChangeImpl* pRet = new SetReplaceImpl(aName, aNewElement, aOldElement);
+    SetChangeImpl* pRet = new SetReplaceImpl(aName, aNewElement, aOldElement);
     pRet->setTarget( getParentTree(), getContextOffset() );
     return pRet;
 }
@@ -501,7 +490,7 @@ NodeChangeImpl* AbstractSetNodeImpl::doCreateRemove(Name const& aName, Element c
     typedef SetRemoveTreeImpl   SetRemoveImpl;
     typedef SetRemoveValueImpl  SetRemoveImpl;
 
-    NodeChangeImpl* pRet = new SetRemoveImpl(aName, aOldElement);
+    SetChangeImpl* pRet = new SetRemoveImpl(aName, aOldElement);
     pRet->setTarget( getParentTree(), getContextOffset() );
     return pRet;
 }
@@ -655,6 +644,67 @@ void ValueSetNodeImpl::doRemoveElement(Name const& aName)
 }
 //-------------------------------------------------------------------------
 
+void TreeSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange)
+{
+    if (Element* pElement = getStoredElement(aName))
+    {
+        OSL_ASSERT(pElement->isValid());
+
+        if (aChange.ISA(SubtreeChange))
+        {
+            SubtreeChange const& aSubtreeChange = static_cast<SubtreeChange const&>(aChange);
+            // recurse to element tree
+            (*pElement)->adjustToChanges(rLocalChanges,aSubtreeChange);
+        }
+        else
+            OSL_ENSURE( false, "Unexpected kind of change to set element" );
+    }
+    else
+    {
+        // could be changed to do an insert instead (?)
+        OSL_ENSURE( false, "Changed Element doesn't exist - (and not adding now)" );
+    }
+}
+//-------------------------------------------------------------------------
+
+void ValueSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange)
+{
+    if (Element* pElement = getStoredElement(aName))
+    {
+        OSL_ASSERT(pElement->isValid());
+
+        if ( aChange.ISA(ValueChange) )
+        {
+            ValueChange const& aValueChange = static_cast<ValueChange const&>(aChange);
+
+            // make an element for the old element
+            std::auto_ptr<ValueNode> aOldNode = ONodeConverter::createCorrespondingNode(aValueChange, getDefaultTreeNodeFactory());
+            aOldNode->setValue(aValueChange.getOldValue());
+
+            std::auto_ptr<INode> aOldNodeBase( aOldNode.release() );
+
+            Element aOldElement = new ElementTreeImpl(aOldNodeBase, getElementTemplate(), getTemplateProvider());
+
+            OSL_ASSERT(aOldNodeBase.get() == NULL); // the tree took ownership
+            OSL_ASSERT(aOldElement->isFree()); // the tree is free-floating
+
+            NodeChangeImpl* pThisChange = this->doCreateReplace(aName,*pElement,aOldElement);
+
+            if (pThisChange)
+                addLocalChangeHelper( rLocalChanges, NodeChange(pThisChange) );
+        }
+        else
+            OSL_ENSURE( false, "Unexpected kind of change to value set element" );
+
+    }
+    else
+    {
+        // could be changed to do an insert instead (?)
+        OSL_ENSURE( false, "Changed Element doesn't exist - (and not adding now)" );
+    }
+}
+//-------------------------------------------------------------------------
+
 void TreeSetNodeImpl::initHelper( NodeFactory& rFactory, ISubtree& rTree, TreeDepth nDepth)
 {
     CollectElementTrees aCollector( rFactory, getParentTree(), getContextOffset(),
@@ -788,7 +838,7 @@ ElementTreeHolder ValueSetNodeImpl::implMakeElement(ElementTreeHolder const& aNe
         }
 
         // checks that this is a value
-        ValueNodeImpl& rNode = aNewElement->node(aNewElement->root())->valueImpl();
+        ValueElementNodeImpl& rNode = aNewElement->node(aNewElement->root())->valueElementImpl();
 
         UnoType aElementType    = aTemplate->getInstanceType();
         UnoType aValueType      = rNode.getValueType();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,9 @@
 #define CONFIGMGR_NODEIMPLOBJECTS_HXX_
 
 #include "nodeimpl.hxx"
+#include "groupnodeimpl.hxx"
 #include "setnodeimpl.hxx"
+#include "valuenodeimpl.hxx"
 #include <memory>
 
 namespace configmgr
@@ -78,104 +80,99 @@ namespace configmgr
 // Value Nodes
 //-----------------------------------------------------------------------------
 
-        class ReadOnlyValueNodeImpl : public ValueNodeImpl
+        class ReadOnlyValueElementNodeImpl : public ValueElementNodeImpl
         {
         public:
             explicit
-            ReadOnlyValueNodeImpl(ValueNode& rOriginal)
-            : ValueNodeImpl(rOriginal)
+            ReadOnlyValueElementNodeImpl(ValueNode& rOriginal)
+            : ValueElementNodeImpl(rOriginal)
             {}
-
-            virtual bool    isDefault()         const;
-            virtual bool    canGetDefaultValue() const;
-            virtual UnoAny  getValue()          const;
-            virtual UnoAny  getDefaultValue()   const;
-
-            virtual UnoType getValueType()  const;
-
-            virtual void    setValue(UnoAny const& aNewValue);
-            virtual void    setDefault();
 
         protected:
         // NodeImpl implementation
             virtual Attributes doGetAttributes() const;
 
-            virtual bool doHasChanges() const;
-            virtual void doCommitChanges();
-            virtual void doMarkChanged();
             virtual NodeImplHolder doCloneIndirect(bool bIndirect);
         };
 //-----------------------------------------------------------------------------
-        class DeferredValueNodeImpl;
+        class DeferredValueElementNodeImpl;
 
-        class DirectValueNodeImpl : public ValueNodeImpl
+        class DirectValueElementNodeImpl : public ValueElementNodeImpl
         {
         public:
             explicit
-            DirectValueNodeImpl(ValueNode& rOriginal);
+            DirectValueElementNodeImpl(ValueNode& rOriginal);
 
             explicit
-            DirectValueNodeImpl(DeferredValueNodeImpl& rOriginal);
-
-            virtual bool    isDefault()         const;
-            virtual bool    canGetDefaultValue() const;
-            virtual UnoAny  getValue()          const;
-            virtual UnoAny  getDefaultValue()   const;
-
-            virtual UnoType getValueType()  const;
-
-            virtual void    setValue(UnoAny const& aNewValue);
-            virtual void    setDefault();
+            DirectValueElementNodeImpl(DeferredValueElementNodeImpl& rOriginal);
 
         protected:
         // NodeImpl implementation
-            virtual bool doHasChanges() const;
-            virtual void doCommitChanges();
-            virtual void doMarkChanged();
+            virtual Attributes doGetAttributes() const;
+
             virtual NodeImplHolder doCloneIndirect(bool bIndirect);
         };
 //-----------------------------------------------------------------------------
 
-        class DeferredValueNodeImpl : public ValueNodeImpl
+        class DeferredValueElementNodeImpl : public ValueElementNodeImpl
         {
         public:
             explicit
-            DeferredValueNodeImpl(ValueNode& rOriginal);
+            DeferredValueElementNodeImpl(ValueNode& rOriginal);
             explicit
-            DeferredValueNodeImpl(DirectValueNodeImpl& rOriginal);
+            DeferredValueElementNodeImpl(DirectValueElementNodeImpl& rOriginal);
 
-            ~DeferredValueNodeImpl();
-
-            virtual bool    isDefault()         const;
-            virtual bool    canGetDefaultValue() const;
-            virtual UnoAny  getValue()          const;
-            virtual UnoAny  getDefaultValue()   const;
-
-            virtual UnoType getValueType()  const;
-
-            virtual void    setValue(UnoAny const& aNewValue);
-            virtual void    setDefault();
-
-        protected:
-        // legacy commit support
-            virtual std::auto_ptr<ValueChange> doPreCommitChange();
-            virtual void doFinishCommit(ValueChange& rChange);
-            virtual void doRevertCommit(ValueChange& rChange);
-            virtual void doFailedCommit(ValueChange& rChange);
-
-            virtual NodeChangeImpl* doAdjustToChange(ValueChange const& rExternalChange);
         protected:
         // NodeImpl implementation
-            virtual bool doHasChanges() const;
-            virtual NodeChangeImpl* doCollectChange() const;
-            virtual void doCommitChanges();
-            virtual void doMarkChanged();
             virtual NodeImplHolder doCloneIndirect(bool bIndirect);
-        private:
-            UnoAny* m_pNewValue;
-            bool    m_bDefault;
         };
 //-----------------------------------------------------------------------------
+
+        class ValueMemberNode::DeferredImpl : public vos::OReference
+        {
+            ValueNode& m_rOriginal;
+
+            UnoAny      m_aNewValue;
+            bool        m_bToDefault;
+            bool        m_bChange;
+        public:
+            explicit DeferredImpl(ValueNode& rOriginal) ;
+
+            /// does this wrap a change
+            bool isChange() const   { return m_bChange; }
+
+            /// retrieve the underlying (original) node
+            ValueNode& getOriginalNode() const { return m_rOriginal; }
+
+            /// Does this node change to default
+            bool isToDefault()      const { return m_bToDefault; }
+
+            /// retrieve the current value of this node
+            UnoAny  getNewValue()   const { return m_aNewValue; }
+
+            /// Set this node to a new value
+            void    setValue(UnoAny const& aNewValue);
+
+            /// Set this node to assume its default value
+            void    setValueToDefault();
+
+        public:
+            // commit protocol
+            std::auto_ptr<ValueChange> preCommitChange();
+            void finishCommit(ValueChange& rChange);
+            void revertCommit(ValueChange& rChange);
+            void failedCommit(ValueChange& rChange);
+
+            void commitDirect();
+
+            ValueChangeImpl* collectChange();
+            ValueChangeImpl* adjustToChange(ValueChange const& rExternalChange);
+
+            // notification protocol
+            void adjustToChange(NodeChangesInformation& rLocalChange, ValueChange const& rExternalChange, TreeImpl& rParentTree, NodeOffset nParentPos, Name const& aName);
+        };
+//-----------------------------------------------------------------------------
+
 
 //-----------------------------------------------------------------------------
 
@@ -194,6 +191,7 @@ namespace configmgr
         private:
         // NodeImpl implementation
             virtual Attributes doGetAttributes() const;
+            virtual ValueMemberNode doGetValueMember(Name const& aName, bool bForUpdate);
 
             virtual bool doHasChanges() const;
             virtual void doCommitChanges();
@@ -215,6 +213,9 @@ namespace configmgr
         // Base obverrideables
         private:
         // NodeImpl implementation
+            virtual Attributes doGetAttributes() const;
+            virtual ValueMemberNode doGetValueMember(Name const& aName, bool bForUpdate);
+
             virtual bool doHasChanges() const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
@@ -233,22 +234,31 @@ namespace configmgr
             ~DeferredGroupNodeImpl();
 
         protected:
-        // legacy commit support
+        // commit protocol
             virtual std::auto_ptr<SubtreeChange> doPreCommitChanges();
             virtual void doFinishCommit(SubtreeChange& rChange);
             virtual void doRevertCommit(SubtreeChange& rChange);
             virtual void doFailedCommit(SubtreeChange& rChange);
 
+        // notification protocol
+            virtual ValueChangeImpl* doAdjustToValueChange(Name const& aName, ValueChange const& rExternalChange);
+
         // Base obverrideables
         private:
         // NodeImpl implementation
+            virtual ValueMemberNode doGetValueMember(Name const& aName, bool bForUpdate);
+
             virtual bool doHasChanges() const;
             virtual void doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
             virtual NodeImplHolder doCloneIndirect(bool bIndirect);
 
-            bool    m_bChanged;
+        private:
+            typedef ValueMemberNode::DeferredImplRef DeferredValueImplRef;
+            typedef std::map< Name, DeferredValueImplRef > ValueChanges;
+
+            ValueChanges    m_aChanges;
         };
 //-----------------------------------------------------------------------------
 
@@ -331,6 +341,8 @@ namespace configmgr
             virtual void doInitElements( ISubtree& rTree, TreeDepth nDepth);
             virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
 
+            virtual Attributes doGetAttributes() const;
+
             virtual bool doHasChanges() const;
             virtual void doCollectChanges(NodeChanges& rChanges) const;
             virtual void doCommitChanges();
@@ -357,6 +369,8 @@ namespace configmgr
 
             virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
             virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
+
+            virtual Attributes doGetAttributes() const;
 
             virtual bool doHasChanges() const;
             virtual void doCollectChanges(NodeChanges& rChanges) const;

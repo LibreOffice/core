@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #include <stdio.h>
 #include "nodeimpl.hxx"
 
+#include "valuenodeimpl.hxx"
+#include "groupnodeimpl.hxx"
+#include "setnodeimpl.hxx"
+
 #include "treeimpl.hxx"
 #include "nodechange.hxx"
 #include "nodechangeimpl.hxx"
@@ -82,14 +86,55 @@ namespace configmgr
 
 namespace
 {
-/*  inline void fillInfo(NodeInfo& rInfo,OUString const& sName, Attributes const& aAttributes)
-    {
-        rInfo.aName = Name(sName,Name::NoValidate());
-        rInfo.aAttributes = aAttributes;
-    }
-*/  inline Attributes fetchAttributes(INode const& rNode)
+    inline Attributes fetchAttributes(INode const& rNode)
     {
         return rNode.getAttributes();
+    }
+
+    struct GroupMemberDispatch : NodeAction
+    {
+        GroupMemberDispatch(GroupNodeImpl& rGroup, GroupMemberVisitor& rVisitor)
+        : m_rGroup(rGroup)
+        , m_rVisitor(rVisitor)
+        , m_aResult(GroupMemberVisitor::CONTINUE)
+        {}
+
+        bool done() const { return m_aResult == GroupMemberVisitor::DONE; }
+
+        bool test_value(INode const & rNode) const;
+
+        GroupMemberVisitor::Result result() const { return m_aResult; }
+
+        virtual void handle(ValueNode const& _rValue);
+        virtual void handle(ISubtree const& _rSubtree);
+
+        GroupNodeImpl&      m_rGroup;
+        GroupMemberVisitor& m_rVisitor;
+
+        GroupMemberVisitor::Result m_aResult;
+    };
+
+    bool GroupMemberDispatch::test_value(INode const& _rNode) const
+    {
+        Name aName( _rNode.getName(), Name::NoValidate() );
+
+        return m_rGroup.hasValue( aName );
+    }
+
+    void GroupMemberDispatch::handle(ValueNode const& _rValue)
+    {
+        OSL_ENSURE( test_value(_rValue), "ERROR: GroupMemberDispatch:Did not find a ValueMember for a value child.");
+        if ( !done() )
+        {
+            Name aValueName( _rValue.getName(), Name::NoValidate() );
+
+            m_aResult = m_rVisitor.visit( m_rGroup.getValue(aValueName) );
+        }
+    }
+
+    void GroupMemberDispatch::handle(ISubtree const& _rTree)
+    {
+        OSL_ENSURE( !test_value(_rTree), "ERROR: GroupMemberDispatch:Found a ValueMember for a subtree child.");
     }
 }
 
@@ -142,6 +187,37 @@ GroupNodeImpl::GroupNodeImpl(GroupNodeImpl& rOriginal)
 OUString GroupNodeImpl::getOriginalNodeName() const
 {
     return m_rOriginal.getName();
+}
+//-----------------------------------------------------------------------------
+
+bool GroupNodeImpl::hasValue(Name const& aName) const
+{
+    return this->getOriginalValueNode(aName) != NULL;
+}
+//-----------------------------------------------------------------------------
+
+ValueNode* GroupNodeImpl::getOriginalValueNode(Name const& aName) const
+{
+    OSL_ENSURE( !aName.isEmpty(), "Cannot get nameless child value");
+    INode* pChildNode = m_rOriginal.getChild(aName.toString());
+
+    return pChildNode ? pChildNode->asValueNode() : NULL;
+}
+//-----------------------------------------------------------------------------
+
+GroupMemberVisitor::Result GroupNodeImpl::dispatchToValues(GroupMemberVisitor& aVisitor)
+{
+    GroupMemberDispatch aDispatch(*this,aVisitor);
+
+    aDispatch.applyToChildren( m_rOriginal );
+
+    return aDispatch.result();
+}
+//-----------------------------------------------------------------------------
+
+ValueMemberNode GroupNodeImpl::doGetValueMember(Name const& aName, bool )
+{
+    return ValueMemberNode( getOriginalValueNode(aName) );
 }
 //-----------------------------------------------------------------------------
 
@@ -360,86 +436,81 @@ void SetNodeImpl::initElements(TemplateProvider const& aTemplateProvider,TreeImp
 }
 
 //-----------------------------------------------------------------------------
-// class ValueNodeImpl
+// class ValueElementNodeImpl
 //-----------------------------------------------------------------------------
 
-ValueNodeImpl::ValueNodeImpl(ValueNode& rOriginal)
+ValueElementNodeImpl::ValueElementNodeImpl(ValueNode& rOriginal)
 : m_rOriginal(rOriginal)
 {
 }
 //-----------------------------------------------------------------------------
 
-ValueNodeImpl::ValueNodeImpl(ValueNodeImpl& rOriginal)
+ValueElementNodeImpl::ValueElementNodeImpl(ValueElementNodeImpl& rOriginal)
 : m_rOriginal(rOriginal.m_rOriginal)
 {
 }
 //-----------------------------------------------------------------------------
 
-OUString ValueNodeImpl::getOriginalNodeName() const
+OUString ValueElementNodeImpl::getOriginalNodeName() const
 {
     return m_rOriginal.getName();
 }
 //-----------------------------------------------------------------------------
 
-bool ValueNodeImpl::isDefault() const
-{
-    return m_rOriginal.isDefault();
-}
-//-----------------------------------------------------------------------------
 
-bool ValueNodeImpl::canGetDefaultValue() const
-{
-    return m_rOriginal.hasDefault();
-}
-//-----------------------------------------------------------------------------
-
-UnoAny  ValueNodeImpl::getValue() const
+UnoAny  ValueElementNodeImpl::getValue() const
 {
     return m_rOriginal.getValue();
 }
 //-----------------------------------------------------------------------------
 
-UnoAny ValueNodeImpl::getDefaultValue() const
-{
-    return m_rOriginal.getDefault();
-}
-//-----------------------------------------------------------------------------
-
-UnoType ValueNodeImpl::getValueType() const
+UnoType ValueElementNodeImpl::getValueType() const
 {
     return m_rOriginal.getValueType();
 }
 //-----------------------------------------------------------------------------
 
-void ValueNodeImpl::setValue(UnoAny const& aNewValue)
-{
-    m_rOriginal.setValue(aNewValue);
-}
-//-----------------------------------------------------------------------------
-
-void ValueNodeImpl::setDefault()
-{
-    m_rOriginal.setDefault();
-}
-//-----------------------------------------------------------------------------
-
-Attributes ValueNodeImpl::doGetAttributes() const
+Attributes ValueElementNodeImpl::doGetAttributes() const
 {
     Attributes  aResult = fetchAttributes(m_rOriginal);
-    aResult.bDefaultable = m_rOriginal.hasDefault();
+    aResult.bDefaultable = false;
     return aResult;
 }
 //-----------------------------------------------------------------------------
 
-NodeType::Enum ValueNodeImpl::doGetType() const
+NodeType::Enum ValueElementNodeImpl::doGetType() const
 {
     return NodeType::eVALUE;
 }
 //-----------------------------------------------------------------------------
 
-void ValueNodeImpl::doDispatch(INodeHandler& rHandler)
+void ValueElementNodeImpl::doDispatch(INodeHandler& rHandler)
 {
     rHandler.handle(*this);
+}
+//-----------------------------------------------------------------------------
+
+bool ValueElementNodeImpl::doHasChanges()   const
+{
+    return false; // this is an immutable object
+}
+//-----------------------------------------------------------------------------
+
+void ValueElementNodeImpl::doMarkChanged()
+{
+    OSL_ENSURE(false,"WARNING: Cannot mark value element as changed");
+}
+//-----------------------------------------------------------------------------
+
+void ValueElementNodeImpl::doCommitChanges()
+{
+    OSL_ENSURE(!hasChanges(),"ERROR: Commit missing unexpected change of value element node");
+}
+//-----------------------------------------------------------------------------
+
+void ValueElementNodeImpl::doCollectChangesWithTarget(NodeChanges& , TreeImpl* , NodeOffset ) const
+{
+    OSL_ENSURE(!hasChanges(),"ERROR: Collection of changes missing unexpected change of value element node");
 }
 //-----------------------------------------------------------------------------
 
@@ -616,98 +687,70 @@ void GroupNodeImpl::doFailedCommit(SubtreeChange& rChange)
 
 void GroupNodeImpl::doCollectChangesWithTarget(NodeChanges& , TreeImpl* , NodeOffset ) const
 {
-    OSL_ENSURE(!hasChanges(),"ERROR: Some Pending changes may be missed by collection");
+//  OSL_ENSURE(!hasChanges(),"ERROR: Some Pending changes may be missed by collection");
 }
 //-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-std::auto_ptr<ValueChange> ValueNodeImpl::preCommitChange()
+void GroupNodeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChanges, TreeImpl& rParentTree, NodeOffset nPos)
 {
-    return doPreCommitChange();
-}
-//-----------------------------------------------------------------------------
-
-std::auto_ptr<ValueChange> ValueNodeImpl::doPreCommitChange()
-{
-    OSL_ENSURE(!hasChanges(),"ERROR: Committing to an old changes tree is not supported on this node");
-    return std::auto_ptr<ValueChange>();
-}
-//-----------------------------------------------------------------------------
-
-void ValueNodeImpl::doFinishCommit(ValueChange& )
-{
-    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes are lost");
-}
-//-----------------------------------------------------------------------------
-
-void ValueNodeImpl::doRevertCommit(ValueChange& )
-{
-    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not restored");
-}
-//-----------------------------------------------------------------------------
-
-void ValueNodeImpl::doFailedCommit(ValueChange& )
-{
-    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not recovered");
-}
-//-----------------------------------------------------------------------------
-
-void ValueNodeImpl::doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const
-{
-    if (NodeChangeImpl* pThisChange = doCollectChange())
+    for (SubtreeChange::ChildIterator it = rExternalChanges.begin(); it != rExternalChanges.end(); ++it)
     {
-        pThisChange->setTarget(pParent,nNode);
+        if (it->ISA(ValueChange))
+        {
+            ValueChange const& rValueChange = static_cast<ValueChange const&>(*it);
 
-        rChanges.add( NodeChange(pThisChange) );
+            Name aValueName( rValueChange.getNodeName(), Name::NoValidate() );
+
+            if (ValueChangeImpl* pThisChange = doAdjustToValueChange(aValueName, rValueChange))
+            {
+                pThisChange->setTarget(&rParentTree,nPos,aValueName);
+                addLocalChangeHelper(rLocalChanges, NodeChange(pThisChange));
+            }
+            else
+                OSL_TRACE("WARNING: Configuration: derived class hides an external value member change from listeners");
+        }
+        else
+            OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected change type within group");
     }
 }
 //-----------------------------------------------------------------------------
 
-NodeChangeImpl* ValueNodeImpl::doCollectChange() const
+ValueChangeImpl* GroupNodeImpl::doAdjustToValueChange(Name const& aName, ValueChange const& rExternalChange)
 {
-    OSL_ENSURE(!hasChanges(),"ERROR: Some Pending changes missed by collection");
-    return 0;
-}
-//-----------------------------------------------------------------------------
+    ValueChangeImpl* pChangeImpl = NULL;
 
-
-void ValueNodeImpl::adjustToChange(NodeChangesInformation& rLocalChanges, ValueChange const& rExternalChange, TreeImpl& rParentTree, NodeOffset nPos)
-{
-    if (NodeChangeImpl* pThisChange = doAdjustToChange(rExternalChange))
+    if (ValueNode* pLocalNode = getOriginalValueNode(aName))
     {
-        pThisChange->setTarget(&rParentTree,nPos);
-        addLocalChangeHelper(rLocalChanges, NodeChange(pThisChange));
+        switch( rExternalChange. getMode() )
+        {
+        case ValueChange::wasDefault:
+        case ValueChange::changeValue:
+        case ValueChange::typeIsAny:
+            pChangeImpl = new ValueReplaceImpl( rExternalChange.getNewValue(), rExternalChange.getOldValue() );
+            break;
+
+            break;
+
+        case ValueChange::setToDefault:
+            pChangeImpl = new ValueResetImpl( rExternalChange.getNewValue(), rExternalChange.getOldValue() );
+            break;
+
+        default: OSL_ENSURE(false, "Unknown change mode");
+            // fall thru to next case for somewhat meaningful return value
+        case ValueChange::changeDefault:
+            {
+                UnoAny aLocalValue = pLocalNode->getValue();
+
+                pChangeImpl = new ValueReplaceImpl( aLocalValue, aLocalValue );
+            }
+            break;
+        }
+        OSL_ASSERT( pChangeImpl );
     }
     else
-        OSL_TRACE("WARNING: Configuration: derived class hides an external value change from listeners");
-}
-//-----------------------------------------------------------------------------
-NodeChangeImpl* ValueNodeImpl::doAdjustToChange(ValueChange const& rExternalChange)
-{
-    // convert rExternalChange exactly to a NodeChange
-    ValueChangeImpl* pChangeImpl = 0;
-
-    switch( rExternalChange. getMode() )
     {
-    case ValueChange::wasDefault:
-    case ValueChange::changeValue:
-    case ValueChange::typeIsAny:
-        pChangeImpl = new ValueReplaceImpl( rExternalChange.getNewValue(), rExternalChange.getOldValue() );
-        break;
-
-        break;
-
-    case ValueChange::setToDefault:
-        pChangeImpl = new ValueResetImpl( rExternalChange.getNewValue(), rExternalChange.getOldValue() );
-        break;
-
-    default: OSL_ENSURE(false, "Unknown change mode");
-        // fall thru to next case for somewhat meaningful return value
-    case ValueChange::changeDefault:
-        pChangeImpl = new ValueReplaceImpl( getValue(), getValue() );
-        break;
+        OSL_ENSURE(false, "ERROR: Notification tries to change nonexistent value within group");
     }
-    OSL_ASSERT( pChangeImpl );
 
     return pChangeImpl;
 }
@@ -717,7 +760,7 @@ namespace
 {
     struct AbstractNodeCast : INodeHandler
     {
-        virtual void handle( ValueNodeImpl& rNode)
+        virtual void handle( ValueElementNodeImpl& rNode)
         {
             throw Exception( "INTERNAL ERROR: Node is not a value node. Cast failing." );
         }
@@ -755,9 +798,9 @@ namespace
 }
 //-----------------------------------------------------------------------------
 // domain-specific 'dynamic_cast' replacements
-ValueNodeImpl&  AsValueNode(NodeImpl& rNode)
+ValueElementNodeImpl&   AsValueNode(NodeImpl& rNode)
 {
-    return NodeCast<ValueNodeImpl>(rNode).get();
+    return NodeCast<ValueElementNodeImpl>(rNode).get();
 }
 GroupNodeImpl&  AsGroupNode(NodeImpl& rNode)
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include "nodefactory.hxx"
 
 #include "nodechange.hxx"
+#include "nodechangeinfo.hxx"
 #include "nodechangeimpl.hxx"
 
 #include "cmtreemodel.hxx"
@@ -86,6 +87,14 @@ Attributes forceReadOnly(Attributes aAttributes)
     aAttributes.bWritable = false;
     return aAttributes;
 }
+
+static
+inline
+Attributes adjustForDirectAccess(Attributes aAttributes)
+{
+    aAttributes.bWritable = true;
+    return aAttributes;
+}
 // Specific types of nodes for direct or read only access
 //-----------------------------------------------------------------------------
 
@@ -93,163 +102,44 @@ Attributes forceReadOnly(Attributes aAttributes)
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// class ReadOnlyValueNodeImpl
+// class ReadOnlyValueElementNodeImpl
 //-----------------------------------------------------------------------------
-
-bool ReadOnlyValueNodeImpl::isDefault() const
+Attributes ReadOnlyValueElementNodeImpl::doGetAttributes() const
 {
-    return ValueNodeImpl::isDefault();
+    return forceReadOnly( ValueElementNodeImpl::doGetAttributes() );
 }
 //-----------------------------------------------------------------------------
 
-bool ReadOnlyValueNodeImpl::canGetDefaultValue() const
-{
-    return ValueNodeImpl::canGetDefaultValue();
-}
-//-----------------------------------------------------------------------------
-
-UnoAny ReadOnlyValueNodeImpl::getValue() const
-{
-    return ValueNodeImpl::getValue();
-}
-//-----------------------------------------------------------------------------
-
-UnoAny ReadOnlyValueNodeImpl::getDefaultValue() const
-{
-    return ValueNodeImpl::getDefaultValue();
-}
-//-----------------------------------------------------------------------------
-
-
-UnoType ReadOnlyValueNodeImpl::getValueType() const
-{
-    return ValueNodeImpl::getValueType();
-}
-//-----------------------------------------------------------------------------
-
-
-void ReadOnlyValueNodeImpl::setValue(UnoAny const& )
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyValueNodeImpl::setDefault()
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-Attributes ReadOnlyValueNodeImpl::doGetAttributes() const
-{
-    return forceReadOnly( ValueNodeImpl::doGetAttributes() );
-}
-//-----------------------------------------------------------------------------
-
-bool ReadOnlyValueNodeImpl::doHasChanges()  const
-{
-    return false;
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyValueNodeImpl::doCommitChanges()
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyValueNodeImpl::doMarkChanged()
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-NodeImplHolder ReadOnlyValueNodeImpl::doCloneIndirect(bool)
+NodeImplHolder ReadOnlyValueElementNodeImpl::doCloneIndirect(bool)
 {
     return this;
 }
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// class DirectValueNodeImpl
+// class DirectValueElementNodeImpl
 //-----------------------------------------------------------------------------
 
-DirectValueNodeImpl::DirectValueNodeImpl(ValueNode& rOriginal)
-: ValueNodeImpl(rOriginal)
+DirectValueElementNodeImpl::DirectValueElementNodeImpl(ValueNode& rOriginal)
+: ValueElementNodeImpl(rOriginal)
 {}
 //-----------------------------------------------------------------------------
 
-DirectValueNodeImpl::DirectValueNodeImpl(DeferredValueNodeImpl& rOriginal)
-: ValueNodeImpl(rOriginal)
+DirectValueElementNodeImpl::DirectValueElementNodeImpl(DeferredValueElementNodeImpl& rOriginal)
+: ValueElementNodeImpl(rOriginal)
 {}
 //-----------------------------------------------------------------------------
 
-bool DirectValueNodeImpl::isDefault() const
+Attributes DirectValueElementNodeImpl::doGetAttributes() const
 {
-    return ValueNodeImpl::isDefault();
+    return adjustForDirectAccess( ValueElementNodeImpl::doGetAttributes() );
 }
 //-----------------------------------------------------------------------------
 
-bool DirectValueNodeImpl::canGetDefaultValue() const
-{
-    return ValueNodeImpl::canGetDefaultValue();
-}
-//-----------------------------------------------------------------------------
-
-UnoAny DirectValueNodeImpl::getValue() const
-{
-    return ValueNodeImpl::getValue();
-}
-//-----------------------------------------------------------------------------
-
-UnoAny DirectValueNodeImpl::getDefaultValue() const
-{
-    return ValueNodeImpl::getDefaultValue();
-}
-//-----------------------------------------------------------------------------
-
-
-UnoType DirectValueNodeImpl::getValueType() const
-{
-    return ValueNodeImpl::getValueType();
-}
-//-----------------------------------------------------------------------------
-
-
-void DirectValueNodeImpl::setValue(UnoAny const& aNewValue)
-{
-    ValueNodeImpl::setValue(aNewValue);
-}
-//-----------------------------------------------------------------------------
-
-void DirectValueNodeImpl::setDefault()
-{
-    ValueNodeImpl::setDefault();
-}
-//-----------------------------------------------------------------------------
-
-bool DirectValueNodeImpl::doHasChanges()    const
-{
-    return false;
-}
-//-----------------------------------------------------------------------------
-
-void DirectValueNodeImpl::doCommitChanges()
-{
-    OSL_ENSURE(false,"WARNING: Should not commit changes on object that hasn't any");
-}
-//-----------------------------------------------------------------------------
-
-void DirectValueNodeImpl::doMarkChanged()
-{
-    // Ignore
-}
-//-----------------------------------------------------------------------------
-
-NodeImplHolder DirectValueNodeImpl::doCloneIndirect(bool bIndirect)
+NodeImplHolder DirectValueElementNodeImpl::doCloneIndirect(bool bIndirect)
 {
     if (bIndirect)
-        return new DeferredValueNodeImpl(*this);
+        return new DeferredValueElementNodeImpl(*this);
     else
         return this;
 }
@@ -257,247 +147,29 @@ NodeImplHolder DirectValueNodeImpl::doCloneIndirect(bool bIndirect)
 
 
 //-----------------------------------------------------------------------------
-// class DeferredValueNodeImpl
+// class DeferredValueElementNodeImpl
 //-----------------------------------------------------------------------------
 
-DeferredValueNodeImpl::DeferredValueNodeImpl(ValueNode& rOriginal)
-: ValueNodeImpl(rOriginal)
-, m_pNewValue(0)
-, m_bDefault(false)
+DeferredValueElementNodeImpl::DeferredValueElementNodeImpl(ValueNode& rOriginal)
+: ValueElementNodeImpl(rOriginal)
 {
 }
 //-----------------------------------------------------------------------------
 
-DeferredValueNodeImpl::DeferredValueNodeImpl(DirectValueNodeImpl& rOriginal)
-: ValueNodeImpl(rOriginal)
-, m_pNewValue(0)
-, m_bDefault(false)
+DeferredValueElementNodeImpl::DeferredValueElementNodeImpl(DirectValueElementNodeImpl& rOriginal)
+: ValueElementNodeImpl(rOriginal)
 {
 }
 //-----------------------------------------------------------------------------
 
-DeferredValueNodeImpl::~DeferredValueNodeImpl()
-{
-    delete m_pNewValue;
-}
-//-----------------------------------------------------------------------------
-
-bool DeferredValueNodeImpl::isDefault() const
-{
-    if (m_pNewValue)
-        return m_bDefault;
-    else
-        return ValueNodeImpl::isDefault();
-}
-//-----------------------------------------------------------------------------
-
-bool DeferredValueNodeImpl::canGetDefaultValue() const
-{
-    return ValueNodeImpl::canGetDefaultValue();
-}
-//-----------------------------------------------------------------------------
-
-UnoAny DeferredValueNodeImpl::getValue() const
-{
-    if (m_pNewValue)
-        return *m_pNewValue;
-    else if (m_bDefault)
-        return ValueNodeImpl::getDefaultValue();
-    else
-        return ValueNodeImpl::getValue();
-}
-//-----------------------------------------------------------------------------
-
-UnoAny DeferredValueNodeImpl::getDefaultValue() const
-{
-    return ValueNodeImpl::getDefaultValue();
-}
-//-----------------------------------------------------------------------------
-
-UnoType DeferredValueNodeImpl::getValueType() const
-{
-    if (m_pNewValue && m_pNewValue->hasValue())
-        return m_pNewValue->getValueType();
-    else
-        return ValueNodeImpl::getValueType();
-}
-//-----------------------------------------------------------------------------
-
-
-void DeferredValueNodeImpl::setValue(UnoAny const& aNewValue)
-{
-    if (m_pNewValue)
-        *m_pNewValue = aNewValue;
-    else
-        m_pNewValue = new UnoAny(aNewValue);
-
-    m_bDefault = false;
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueNodeImpl::setDefault()
-{
-    if (m_bDefault)
-    {
-        OSL_ASSERT(!m_pNewValue);
-        OSL_ASSERT(!ValueNodeImpl::isDefault());
-    }
-    else if (ValueNodeImpl::isDefault())
-    {
-        delete m_pNewValue, m_pNewValue = 0;
-        m_bDefault = false;
-    }
-    else if (!ValueNodeImpl::canGetDefaultValue())
-    {
-        OSL_ENSURE(false, "ERROR: Cannot retrieve the necessary default value");
-        throw Exception("INTERNAL ERROR: Cannot retrieve the necessary default value");
-    }
-    else
-    {
-        delete m_pNewValue, m_pNewValue = 0;
-        m_bDefault = true;
-    }
-}
-//-----------------------------------------------------------------------------
-
-bool DeferredValueNodeImpl::doHasChanges() const
-{
-    return m_pNewValue || m_bDefault;
-}
-//-----------------------------------------------------------------------------
-
-NodeChangeImpl* DeferredValueNodeImpl::doCollectChange() const
-{
-    // TODO
-    if (m_bDefault)
-    {
-        OSL_ASSERT(!m_pNewValue);
-        return new ValueResetImpl(ValueNodeImpl::getDefaultValue(), ValueNodeImpl::getValue());
-    }
-
-    else if (m_pNewValue)
-    {
-        return new ValueReplaceImpl(*m_pNewValue, ValueNodeImpl::getValue());
-    }
-    else
-    {
-        return 0;
-    }
-}
-//-----------------------------------------------------------------------------
-
-NodeChangeImpl* DeferredValueNodeImpl::doAdjustToChange(ValueChange const& rExternalChange)
-{
-    if (m_bDefault && rExternalChange.getMode() == ValueChange::changeDefault)
-    {
-        OSL_ASSERT(!m_pNewValue);
-
-        return new ValueReplaceImpl(rExternalChange.getNewValue(), rExternalChange.getOldValue());
-    }
-    else if (m_pNewValue) // return Surrogate
-    {
-        return new ValueReplaceImpl(*m_pNewValue, *m_pNewValue);
-    }
-    else
-    {
-        return ValueNodeImpl::doAdjustToChange(rExternalChange);
-    }
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueNodeImpl::doCommitChanges()
-{
-    if (m_bDefault)
-    {
-        OSL_ASSERT(!m_pNewValue);
-        ValueNodeImpl::setDefault();
-    }
-
-    else if (m_pNewValue)
-    {
-        ValueNodeImpl::setValue(*m_pNewValue);
-
-        OSL_ENSURE(ValueNodeImpl::getValue() == *m_pNewValue, "ERROR: Inconsistent committed value");
-
-    }
-
-    delete m_pNewValue, m_pNewValue = 0;
-    m_bDefault = false;
-}
-//-----------------------------------------------------------------------------
-
-std::auto_ptr<ValueChange> DeferredValueNodeImpl::doPreCommitChange()
-{
-    // first find the mode of the change
-    // initial value is harmless (done locally) or produces an error elsewhere
-    ValueChange::Mode eMode = ValueChange::changeDefault;
-
-    if (m_bDefault)
-    {
-        OSL_ASSERT(!m_pNewValue);
-        eMode = ValueChange::setToDefault;
-    }
-    else if (m_pNewValue == 0)
-        OSL_ENSURE( false, "ERROR: Cannot make a change from no change !");
-
-    else if (!ValueNodeImpl::isDefault())
-        eMode = ValueChange::changeValue;
-
-    else if (ValueNodeImpl::getValueType().getTypeClass() == uno::TypeClass_ANY)
-        eMode = ValueChange::typeIsAny;
-
-    else
-        eMode = ValueChange::wasDefault;
-
-    // now make a ValueChange
-    ValueChange* pChange = new ValueChange( this->getOriginalNodeName(), getValue(),
-                                            this->getAttributes(), eMode, ValueNodeImpl::getValue());
-
-    return std::auto_ptr<ValueChange>( pChange);
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueNodeImpl::doFinishCommit(ValueChange& rChange)
-{
-    OSL_ENSURE(rChange.getNewValue() == this->getValue(),"Committed change does not match the intended value");
-
-    delete m_pNewValue, m_pNewValue = 0;
-    m_bDefault = false;
-
-    OSL_ENSURE(rChange.getNewValue() == this->getValue(),"Committed change does not match the actual value");
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueNodeImpl::doRevertCommit(ValueChange& rChange)
-{
-    OSL_ENSURE(rChange.getNewValue() == this->getValue(),"Reverted change does not match the intended value");
-    OSL_ENSURE(doHasChanges(), "DeferredValueNodeImpl: No Changes to restore");
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueNodeImpl::doFailedCommit(ValueChange& rChange)
-{
-    // discard the change
-    delete m_pNewValue, m_pNewValue = 0;
-    m_bDefault = false;
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueNodeImpl::doMarkChanged()
-{
-    // ignore
-}
-//-----------------------------------------------------------------------------
-
-NodeImplHolder DeferredValueNodeImpl::doCloneIndirect(bool bIndirect)
+NodeImplHolder DeferredValueElementNodeImpl::doCloneIndirect(bool bIndirect)
 {
     if (bIndirect)
         return this;
     else
-        return new DirectValueNodeImpl(*this);
+        return new DirectValueElementNodeImpl(*this);
 }
 //-----------------------------------------------------------------------------
-
 
 // Group Nodes
 //-----------------------------------------------------------------------------
@@ -509,6 +181,14 @@ NodeImplHolder DeferredValueNodeImpl::doCloneIndirect(bool bIndirect)
 Attributes ReadOnlyGroupNodeImpl::doGetAttributes() const
 {
     return forceReadOnly( GroupNodeImpl::doGetAttributes() );
+}
+//-----------------------------------------------------------------------------
+
+ValueMemberNode ReadOnlyGroupNodeImpl::doGetValueMember(Name const& aName, bool bForUpdate)
+{
+    if (bForUpdate) failReadOnly();
+
+    return GroupNodeImpl::doGetValueMember(aName, bForUpdate);
 }
 //-----------------------------------------------------------------------------
 
@@ -551,6 +231,12 @@ DirectGroupNodeImpl::DirectGroupNodeImpl(DeferredGroupNodeImpl& rOriginal)
 {}
 //-----------------------------------------------------------------------------
 
+ValueMemberNode DirectGroupNodeImpl::doGetValueMember(Name const& aName, bool bForUpdate)
+{
+    return GroupNodeImpl::doGetValueMember(aName, bForUpdate);
+}
+//-----------------------------------------------------------------------------
+
 bool DirectGroupNodeImpl::doHasChanges() const
 {
     return false;
@@ -569,6 +255,12 @@ void DirectGroupNodeImpl::doMarkChanged()
 }
 //-----------------------------------------------------------------------------
 
+Attributes DirectGroupNodeImpl::doGetAttributes() const
+{
+    return adjustForDirectAccess( GroupNodeImpl::doGetAttributes() );
+}
+//-----------------------------------------------------------------------------
+
 NodeImplHolder DirectGroupNodeImpl::doCloneIndirect(bool bIndirect)
 {
     if (bIndirect)
@@ -584,14 +276,14 @@ NodeImplHolder DirectGroupNodeImpl::doCloneIndirect(bool bIndirect)
 
 DeferredGroupNodeImpl::DeferredGroupNodeImpl(ISubtree& rOriginal)
 : GroupNodeImpl(rOriginal)
-, m_bChanged(false)
+, m_aChanges()
 {
 }
 //-----------------------------------------------------------------------------
 
 DeferredGroupNodeImpl::DeferredGroupNodeImpl(DirectGroupNodeImpl& rOriginal)
 : GroupNodeImpl(rOriginal)
-, m_bChanged(false)
+, m_aChanges()
 {
 }
 //-----------------------------------------------------------------------------
@@ -601,21 +293,122 @@ DeferredGroupNodeImpl::~DeferredGroupNodeImpl()
 }
 //-----------------------------------------------------------------------------
 
-bool DeferredGroupNodeImpl::doHasChanges() const
+ValueMemberNode DeferredGroupNodeImpl::doGetValueMember(Name const& aName, bool bForUpdate)
 {
-    return m_bChanged;
+    ValueChanges::iterator it = m_aChanges.find(aName);
+
+    if (it != m_aChanges.end())
+    {
+        if (it->second.isEmpty())
+            OSL_ENSURE(aName.isEmpty(), "ERROR: Found empty change reference");
+
+        else if (bForUpdate || it->second->isChange()) // found one
+            return ValueMemberNode(it->second);
+
+        else // leftover non-change
+            m_aChanges.erase(it);
+
+        // if not found continue with default
+    }
+
+    if (bForUpdate) // create a new change
+    {
+        if (ValueNode* pOriginal = getOriginalValueNode(aName))
+        {
+            DeferredValueImplRef aNewChange(new ValueMemberNode::DeferredImpl(*pOriginal));
+            m_aChanges[aName] = aNewChange;
+
+            return ValueMemberNode(aNewChange);
+       }
+    }
+
+    return GroupNodeImpl::doGetValueMember(aName, bForUpdate);
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::doCollectChangesWithTarget(NodeChanges& , TreeImpl* , NodeOffset ) const
+bool DeferredGroupNodeImpl::doHasChanges() const
 {
-    // TODO
+    for (ValueChanges::const_iterator it = m_aChanges.begin(); it != m_aChanges.end(); it)
+    {
+        if (!it->second.isValid())
+        {
+            // empty element is present -> marked as changed
+            OSL_ASSERT(it->first.isEmpty());
+            return true;
+        }
+
+        if (it->second->isChange())
+            return true;
+    }
+
+    return false;
+}
+//-----------------------------------------------------------------------------
+
+void DeferredGroupNodeImpl::doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParentTree, NodeOffset nNode) const
+{
+    for (ValueChanges::const_iterator it = m_aChanges.begin(); it != m_aChanges.end(); ++it)
+    {
+        if (it->second.isValid())
+        {
+            OSL_ASSERT(!it->first.isEmpty());
+            if (ValueChangeImpl* pValueChange = it->second->collectChange())
+            {
+                pValueChange->setTarget(pParentTree,nNode,it->first);
+
+                rChanges.add( NodeChange(pValueChange) );
+            }
+            else // leftover non-change
+                OSL_ENSURE(!it->second->isChange(), "Got no change from a changing value") ;
+        }
+        else
+            OSL_ASSERT(it->first.isEmpty());
+    }
+}
+//-----------------------------------------------------------------------------
+
+ValueChangeImpl* DeferredGroupNodeImpl::doAdjustToValueChange(Name const& aName, ValueChange const& rExternalChange)
+{
+    ValueChanges::iterator it = m_aChanges.find(aName);
+
+    if (it != m_aChanges.end())
+    {
+        if (it->second.isValid())
+        {
+            if (ValueChangeImpl* pValueChange = it->second->adjustToChange(rExternalChange))
+            {
+                OSL_ENSURE(it->second->isChange(), "Got an adjusted change from a non-changing value");
+            }
+
+            else // leftover non-change
+            {
+                OSL_ENSURE(!it->second->isChange(), "Got no adjusted change from a changing value") ;
+                m_aChanges.erase(it);
+                // then do as without deferred change
+            }
+        }
+        else
+            OSL_ENSURE(aName.isEmpty(), "ERROR: Found empty change reference");
+    }
+
+    return GroupNodeImpl::doAdjustToValueChange(aName, rExternalChange);
 }
 //-----------------------------------------------------------------------------
 
 void DeferredGroupNodeImpl::doCommitChanges()
 {
-    m_bChanged = false;
+    for (ValueChanges::iterator pos = m_aChanges.begin(); pos != m_aChanges.end(); )
+    {
+        ValueChanges::iterator it = pos++; // this is used to allow erasing below
+        if (it->second.isValid())
+        {
+            it->second->commitDirect();
+            m_aChanges.erase(it); // this goes here to ensure exception safety
+        }
+        else
+            OSL_ASSERT(it->first.isEmpty());
+    }
+    m_aChanges.clear();
 }
 //-----------------------------------------------------------------------------
 
@@ -623,42 +416,162 @@ std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::doPreCommitChanges()
 {
     std::auto_ptr<SubtreeChange> aRet;
 
-    if (m_bChanged)
+    if (!m_aChanges.empty())
     {
-        // get the name of this node
         aRet.reset( new SubtreeChange(this->getOriginalNodeName(),
                                       this->getAttributes()) );
+
+        for (ValueChanges::iterator pos = m_aChanges.begin(); pos != m_aChanges.end(); )
+        {
+            ValueChanges::iterator it = pos++; // this is used to allow erasing below
+
+            if (!it->second.isValid())
+            {
+                OSL_ASSERT(it->first.isEmpty());
+            }
+            else if (it->second->isChange())
+            {
+                std::auto_ptr<ValueChange> aValueChange = it->second->preCommitChange();
+                if (aValueChange.get())
+                {
+                    std::auto_ptr<Change> aBaseChange(aValueChange.release());
+                    aRet->addChange( aBaseChange );
+                }
+                else
+                    OSL_ENSURE(false, "Got no change from a changed member");
+            }
+            else // found left-over non-change
+                m_aChanges.erase(it);
+        }
+        if (m_aChanges.empty()) aRet.reset();
     }
+
     return aRet;
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::doFinishCommit(SubtreeChange& rChange)
+void DeferredGroupNodeImpl::doFinishCommit(SubtreeChange& rChanges)
 {
-    OSL_ENSURE(!rChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
-    m_bChanged = false;
+    OSL_ENSURE(!rChanges.isSetNodeChange(),"ERROR: Change type SET does not match group");
+
+    for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
+        it != stop;
+        ++it)
+    {
+        Name aValueName(it->getNodeName(), Name::NoValidate());
+
+        ValueChanges::iterator itStoredChange = m_aChanges.find(aValueName);
+
+        if (itStoredChange != m_aChanges.end())
+        {
+            OSL_ENSURE( it->ISA(ValueChange) , "Unexpected type of element change");
+            if (!it->ISA(ValueChange)) throw Exception("Unexpected type of element change");
+
+            ValueChange & rValueChange = static_cast<ValueChange&>(*it);
+
+            DeferredValueImplRef aStoredChange = itStoredChange->second;
+            OSL_ENSURE( aStoredChange.isValid(), "Found empty change object for Member value change");
+
+            if (aStoredChange.isValid())
+            {
+                aStoredChange->finishCommit(rValueChange);
+                OSL_ENSURE(!aStoredChange->isChange(),"ValueChange is not moot after finishCommit");
+            }
+
+            m_aChanges.erase( itStoredChange ); // remove finished change
+        }
+        else
+            OSL_ENSURE( !it->ISA(ValueChange) , "Value member change has no change data representation");
+
+    }
+
+    OSL_DEBUG_ONLY( m_aChanges.erase( Name() ) ); // remove change marker (if present)
+    OSL_ENSURE(m_aChanges.empty(), "Found unprocessed changes to values in group");
+
+    m_aChanges.clear(); // remove all pending stuff and marker
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::doRevertCommit(SubtreeChange& rChange)
+void DeferredGroupNodeImpl::doRevertCommit(SubtreeChange& rChanges)
 {
-    OSL_ENSURE(!rChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
-    OSL_ENSURE(m_bChanged, "DeferredGroupNodeImpl: No Changes to restore");
+    OSL_ENSURE(!rChanges.isSetNodeChange(),"ERROR: Change type SET does not match group");
+
+    for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
+        it != stop;
+        ++it)
+    {
+        Name aValueName(it->getNodeName(), Name::NoValidate());
+
+        ValueChanges::iterator itStoredChange = m_aChanges.find(aValueName);
+
+        if (itStoredChange != m_aChanges.end())
+        {
+            OSL_ENSURE( it->ISA(ValueChange) , "Unexpected type of element change");
+            if (!it->ISA(ValueChange)) continue;
+
+            ValueChange & rValueChange = static_cast<ValueChange&>(*it);
+
+            DeferredValueImplRef aStoredChange = itStoredChange->second;
+            OSL_ENSURE( aStoredChange.isValid(), "Cannot restore change: found empty change object for Member value change");
+
+            if (aStoredChange.isValid())
+            {
+                aStoredChange->revertCommit(rValueChange);
+                OSL_ENSURE(!aStoredChange->isChange(),"ValueChange is not moot after reverting - will be discarded nevertheless");
+            }
+            m_aChanges.erase( itStoredChange ); // remove change if it is moot
+        }
+        else
+            OSL_ENSURE( !it->ISA(ValueChange) , "Value member change has no change data representation");
+    }
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::doFailedCommit(SubtreeChange& rChange)
+void DeferredGroupNodeImpl::doFailedCommit(SubtreeChange& rChanges)
 {
-    OSL_ENSURE(!rChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
-    // discard the change
-    m_bChanged = false;
+    OSL_ENSURE(!rChanges.isSetNodeChange(),"ERROR: Change type SET does not match group");
+
+    for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
+        it != stop;
+        ++it)
+    {
+        Name aValueName(it->getNodeName(), Name::NoValidate());
+
+        ValueChanges::iterator itStoredChange = m_aChanges.find(aValueName);
+
+        if (itStoredChange != m_aChanges.end())
+        {
+            OSL_ENSURE( it->ISA(ValueChange) , "Unexpected type of element change");
+            if (!it->ISA(ValueChange)) continue;
+
+            ValueChange & rValueChange = static_cast<ValueChange&>(*it);
+
+            DeferredValueImplRef aStoredChange = itStoredChange->second;
+            OSL_ENSURE( aStoredChange.isValid(), "Cannot recover from failed change: found empty change object for Member value change");
+
+            if (aStoredChange.isValid())
+                 aStoredChange->failedCommit(rValueChange);
+           {
+                if (!aStoredChange->isChange())
+                    m_aChanges.erase( itStoredChange ); // remove change if it is moot
+            }
+        }
+        else
+            OSL_ENSURE( !it->ISA(ValueChange) , "Value member change has no change data representation");
+    }
+
+    OSL_DEBUG_ONLY( m_aChanges.erase( Name() ) ); // remove change marker (if present)
+    OSL_ENSURE(m_aChanges.empty(), "RevertCommit: Found unprocessed changes to values in group");
+
+    m_aChanges.clear(); // discard all pending stuff and marker
 }
 //-----------------------------------------------------------------------------
 
 
 void DeferredGroupNodeImpl::doMarkChanged()
 {
-    m_bChanged = true;
+    // special mark: a NULL DeferredImplRef at empty Name
+    m_aChanges.insert( ValueChanges::value_type() );
 }
 //-----------------------------------------------------------------------------
 
@@ -866,6 +779,12 @@ void DirectTreeSetNodeImpl::doMarkChanged()
 }
 //-----------------------------------------------------------------------------
 
+Attributes DirectTreeSetNodeImpl::doGetAttributes() const
+{
+    return adjustForDirectAccess( TreeSetNodeImpl::doGetAttributes() );
+}
+//-----------------------------------------------------------------------------
+
 NodeImplHolder DirectTreeSetNodeImpl::doCloneIndirect(bool bIndirect)
 {
     if (bIndirect)
@@ -937,6 +856,12 @@ void DirectValueSetNodeImpl::doCommitChanges()
 void DirectValueSetNodeImpl::doMarkChanged()
 {
     // Ignore
+}
+//-----------------------------------------------------------------------------
+
+Attributes DirectValueSetNodeImpl::doGetAttributes() const
+{
+    return adjustForDirectAccess( ValueSetNodeImpl::doGetAttributes() );
 }
 //-----------------------------------------------------------------------------
 
@@ -1145,7 +1070,7 @@ void DeferredTreeSetNodeImpl::doCommitChanges()
         if (m_aChangedData.getElement(it->first) == 0)
         {
             OSL_ASSERT(it->second.isValid());
-            it->second->commitChanges();
+            it->second->commitDirect();
         }
     }}
 
@@ -1183,7 +1108,7 @@ void DeferredTreeSetNodeImpl::doCommitChanges()
             if (pOriginal)
             {
                 OSL_ASSERT(pOriginal->isValid());
-                (*pOriginal)->commitChanges();
+                (*pOriginal)->commitDirect();
                 (*pOriginal)->makeIndirect(false);
             }
 
@@ -1216,9 +1141,12 @@ std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::doPreCommitChanges()
         {
             OSL_ASSERT(it->second.isValid());
 
-            std::auto_ptr<Change> pNewChange( it->second->legacyCommitChanges() );
+            std::auto_ptr<SubtreeChange> pNewChange( it->second->preCommitChanges() );
             if (pNewChange.get() != 0)
-                pSetChange->addChange(pNewChange);
+            {
+                std::auto_ptr<Change> pNewChangeBase( pNewChange.release() );
+                pSetChange->addChange(pNewChangeBase);
+            }
         }
     }}
 
@@ -1336,7 +1264,7 @@ void DeferredTreeSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
                 OSL_ENSURE(aRemovedNode.get(), "Cannot take over the removed node");
 
                 aOriginal->takeNodeFrom(aRemovedNode);
-                aOriginal->commitChanges(); // tree is detached => commit directly
+                aOriginal->commitDirect(); // tree is detached => commit directly
                 aOriginal->makeIndirect(false);
             }
             m_aChangedData.removeElement(aElementName);
@@ -1347,8 +1275,10 @@ void DeferredTreeSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
             OSL_ENSURE(pOriginal, "Changed Element is missing");
             OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected type of element change");
 
+            if (!it->ISA(SubtreeChange)) throw Exception("Unexpected type of element change");
+
             if (pOriginal)
-                (*pOriginal)->legacyFinishCommit(*it);
+                (*pOriginal)->finishCommit(static_cast<SubtreeChange&>(*it));
         }
     }
     m_bChanged = false;
@@ -1422,8 +1352,10 @@ void DeferredTreeSetNodeImpl::doRevertCommit(SubtreeChange& rChanges)
             OSL_ENSURE(pOriginal, "Changed Element is missing");
             OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected type of element change");
 
+            if (!it->ISA(SubtreeChange)) throw Exception("Unexpected type of element change");
+
             if (pOriginal)
-                (*pOriginal)->legacyRevertCommit(*it);
+                (*pOriginal)->revertCommit(static_cast<SubtreeChange&>(*it));
         }
     }
 }
@@ -1521,7 +1453,7 @@ void DeferredTreeSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
             if (aOriginal.isValid() && aRemovedNode.get())
             {
                 aOriginal->takeNodeFrom(aRemovedNode);
-                aOriginal->commitChanges(); // tree is detached => commit directly
+                aOriginal->commitDirect(); // tree is detached => commit directly
                 aOriginal->makeIndirect(false);
             }
             OSL_ENSURE(aRemovedNode.get() == 0, "Could not revert removed node: Nowhere to put ownership");
@@ -1534,8 +1466,10 @@ void DeferredTreeSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
             OSL_ENSURE(pOriginal, "Changed Element is missing");
             OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected type of element change");
 
+            if (!it->ISA(SubtreeChange)) throw Exception("Unexpected type of element change");
+
             if (pOriginal)
-                (*pOriginal)->legacyFailedCommit(*it);
+                (*pOriginal)->recoverFailedCommit(static_cast<SubtreeChange&>(*it));
         }
     }
     m_bChanged = false;
@@ -1606,6 +1540,29 @@ void DeferredTreeSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLo
 {
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
     {
+        if (Element* pElement = getStoredElement(aName))
+        {
+            OSL_ASSERT(pElement->isValid());
+
+            if (aChange.ISA(SubtreeChange))
+            {
+                SubtreeChange const& aSubtreeChange = static_cast<SubtreeChange const&>(aChange);
+
+                // recurse to element tree - but do not notify those changes (?)
+
+                NodeChangesInformation aIgnoredChanges;
+                (*pElement)->adjustToChanges(aIgnoredChanges,aSubtreeChange);
+            }
+            else
+            OSL_ENSURE( false, "Unexpected kind of change to set element" );
+
+        }
+        else
+        {
+            // could be changed to do an insert instead (?)
+            OSL_ENSURE( false, "Changed Element didn't exist before it was removed/replaced" );
+        }
+
         if (pLocalElement->isValid())
         {
             // we have a complete replacement for the changed node
@@ -1617,21 +1574,6 @@ void DeferredTreeSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLo
         else
         {
             // already removed locally - should be notified by different route (if applicable)
-        }
-
-        if (Element* pElement = getStoredElement(aName))
-        {
-            // recurse to element tree - but do not notify those changes (?)
-            //OSL_ENSURE(false, "Cannot properly notify this case - what can we do ?");
-
-            OSL_ASSERT(pElement->isValid());
-            //NodeChanges aIgnoredChanges;
-            (*pElement)->adjustToChanges(rLocalChanges/*aIgnoredChanges*/,aChange);
-        }
-        else
-        {
-            // could be changed to do an insert instead (?)
-            OSL_ENSURE( false, "Changed Element didn't exist before it was removed/replaced" );
         }
     }
     else
@@ -1903,7 +1845,7 @@ void DeferredValueSetNodeImpl::doCommitChanges()
         if (m_aChangedData.getElement(it->first) == 0)
         {
             OSL_ASSERT(it->second.isValid());
-            it->second->commitChanges();
+            it->second->commitDirect();
         }
     }}
 
@@ -1940,7 +1882,7 @@ void DeferredValueSetNodeImpl::doCommitChanges()
             if (pOriginal)
             {
                 OSL_ASSERT(pOriginal->isValid());
-                (*pOriginal)->commitChanges();
+                (*pOriginal)->commitDirect();
                 (*pOriginal)->makeIndirect(false);
             }
 
@@ -1970,9 +1912,9 @@ std::auto_ptr<SubtreeChange> DeferredValueSetNodeImpl::doPreCommitChanges()
         {
             OSL_ASSERT(it->second.isValid());
 
-            std::auto_ptr<Change> pNewChange( it->second->legacyCommitChanges() );
-            if (pNewChange.get() != 0)
-                pSetChange->addChange(pNewChange);
+            std::auto_ptr<SubtreeChange> pNewChange( it->second->preCommitChanges() );
+
+            OSL_ENSURE(pNewChange.get() == NULL, "Unexpected change generated by value set element - ignoring that change");
         }
     }}
 
@@ -2090,19 +2032,17 @@ void DeferredValueSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
                 OSL_ENSURE(aRemovedNode.get(), "Cannot take over the removed node");
 
                 aOriginal->takeNodeFrom(aRemovedNode);
-                aOriginal->commitChanges(); // tree is detached => commit directly
+                aOriginal->commitDirect(); // tree is detached => commit directly
                 aOriginal->makeIndirect(false);
             }
             m_aChangedData.removeElement(aElementName);
         }
         else
         {
-            // handle preexisting nodes
-            OSL_ENSURE(pOriginal, "Changed Element is missing");
-            OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected type of element change");
+            // cannot apply changes to preexisting nodes
+            OSL_ENSURE(false, "Unexpected: Cannot finish commit - unexpected change for value set element");
 
-            if (pOriginal)
-                (*pOriginal)->legacyFinishCommit(*it);
+            throw Exception("Unexpected value set element change");
         }
     }
     m_bChanged = false;
@@ -2172,12 +2112,10 @@ void DeferredValueSetNodeImpl::doRevertCommit(SubtreeChange& rChanges)
         }
         else
         {
-            // handle preexisting nodes
-            OSL_ENSURE(pOriginal, "Changed Element is missing");
-            OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected type of element change");
+            // cannot apply changes to preexisting nodes
+            OSL_ENSURE(false, "Unexpected: Cannot revert commit - unexpected change for value set element");
 
-            if (pOriginal)
-                (*pOriginal)->legacyRevertCommit(*it);
+            throw Exception("Unexpected value set element change");
         }
     }
 }
@@ -2275,7 +2213,7 @@ void DeferredValueSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
             if (aOriginal.isValid() && aRemovedNode.get())
             {
                 aOriginal->takeNodeFrom(aRemovedNode);
-                aOriginal->commitChanges(); // tree is detached => commit directly
+                aOriginal->commitDirect(); // tree is detached => commit directly
                 aOriginal->makeIndirect(false);
             }
             OSL_ENSURE(aRemovedNode.get() == 0, "Could not revert removed node: Nowhere to put ownership");
@@ -2284,12 +2222,10 @@ void DeferredValueSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
         }
         else
         {
-            // handle preexisting nodes
-            OSL_ENSURE(pOriginal, "Changed Element is missing");
-            OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected type of element change");
+            // cannot handle changes to preexisting nodes
+            OSL_ENSURE(false, "Unexpected: Cannot finish commit - unexpected change for value set element");
 
-            if (pOriginal)
-                (*pOriginal)->legacyFailedCommit(*it);
+            throw Exception("Unexpected value set element change");
         }
     }
     m_bChanged = false;
@@ -2360,6 +2296,18 @@ void DeferredValueSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rL
 {
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
     {
+        if (Element* pElement = getStoredElement(aName))
+        {
+            OSL_ASSERT(pElement->isValid());
+            OSL_ENSURE( aChange.ISA(ValueChange), "Unexpected kind of change to value set element" );
+
+        }
+        else
+        {
+            // could be changed to do an insert instead (?)
+            OSL_ENSURE( false, "Changed Element didn't exist before it was removed/replaced" );
+        }
+
         if (pLocalElement->isValid())
         {
             // we have a complete replacement for the changed node
@@ -2371,21 +2319,6 @@ void DeferredValueSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rL
         else
         {
             // already removed locally - should be notified by different route (if applicable)
-        }
-
-        if (Element* pElement = getStoredElement(aName))
-        {
-            // recurse to element tree - but do not notify those changes (?)
-            //OSL_ENSURE(false, "Cannot properly notify this case - what can we do ?");
-
-            OSL_ASSERT(pElement->isValid());
-            //NodeChanges aIgnoredChanges;
-            (*pElement)->adjustToChanges(rLocalChanges/*aIgnoredChanges*/,aChange);
-        }
-        else
-        {
-            // could be changed to do an insert instead (?)
-            OSL_ENSURE( false, "Changed Element didn't exist before it was removed/replaced" );
         }
     }
     else
