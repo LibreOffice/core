@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-04-29 13:08:30 $
+ *  last change: $Author: af $ $Date: 2002-05-06 09:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
 #include "ShapeTypeHandler.hxx"
+#endif
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
+#include "AccessibleShapeInfo.hxx"
 #endif
 
 using namespace ::rtl;
@@ -162,8 +165,10 @@ uno::Reference<XAccessible>
             // shape.
             AccessibleShape* pShape =
                 ShapeTypeHandler::Instance().CreateAccessibleObject (
-                    rChildDescriptor.mxShape,
-                    mxParent,
+                    AccessibleShapeInfo (
+                        rChildDescriptor.mxShape,
+                        mxParent,
+                        this),
                     *mpShapeTreeInfo);
             //            rChildDescriptor.mpAccessibleShape = pShape;
             rChildDescriptor.mxAccessibleShape = uno::Reference<XAccessible> (
@@ -240,11 +245,7 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
     // 6. Replace the current list of visible shapes with the new one.  Do
     // the same with the visible area.
     ::vos::OGuard aGuard (maMutex);
-
-    // Remember the new list of children.
     maVisibleChildren = aNewChildList;
-
-    // Remember the new list and visible area for later use.
     maVisibleArea = aVisibleArea;
 }
 
@@ -256,18 +257,33 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
 {
     ::vos::OGuard aGuard (maMutex);
 
+    Rectangle aVisibleArea = mpShapeTreeInfo->GetViewForwarder()->GetVisibleArea();
+
     // Add the visible shapes for wich the accessible objects already exist.
-    vector<AccessibleShape*>::iterator I;
+    AccessibleShapeList::iterator I;
     for (I=maAccessibleShapes.begin(); I!=maAccessibleShapes.end(); ++I)
     {
-        raDescriptorList.push_back (ChildDescriptor (*I));
+        uno::Reference<XAccessibleComponent> xComponent (
+            (*I)->getAccessibleContext(), uno::UNO_QUERY);
+        if (xComponent.is())
+        {
+            // The visible area is in internal coordinates.  Therefore,
+            // transform the bounding box of the accessible object into the
+            // same coordinate system.
+            awt::Rectangle aPixelBBox (xComponent->getBounds());
+            Rectangle aLogicBBox (
+                Point (aPixelBBox.X, aPixelBBox.Y),
+                Point (aPixelBBox.X+aPixelBBox.Width, aPixelBBox.Y+aPixelBBox.Height));
+            if (aLogicBBox.IsOver (aVisibleArea))
+                raDescriptorList.push_back (ChildDescriptor (*I));
+        }
     }
 
+    // Add the visible shapes for which only the XShapes exist.
     uno::Reference<container::XIndexAccess> xShapeAccess (mxShapeList, uno::UNO_QUERY);
     if (xShapeAccess.is())
     {
         sal_Int32 nShapeCount = xShapeAccess->getCount();
-        Rectangle aVisibleArea = mpShapeTreeInfo->GetViewForwarder()->GetVisibleArea();
         for (sal_Int32 i=0; i<nShapeCount; i++)
         {
             uno::Reference<drawing::XShape> xShape;
@@ -281,13 +297,6 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
             // the visible area.
             if (aBoundingBox.IsOver (aVisibleArea))
                 raDescriptorList.push_back (ChildDescriptor (xShape));
-            else
-                OSL_TRACE ("shape %d outside visible area (%d,%d,%d,%d)",
-                    i,
-                    xShape->getPosition().X,
-                    xShape->getPosition().Y,
-                    xShape->getSize().Width,
-                    xShape->getSize().Height);
         }
     }
 }
@@ -375,6 +384,7 @@ void ChildrenManagerImpl::SendVisibleAreaEvents (
 void ChildrenManagerImpl::CreateAccessibilityObjects (
     ChildDescriptorListType& raNewChildList)
 {
+    OSL_TRACE ("sending events for new shape");
     ChildDescriptorListType::iterator I;
     for (I=raNewChildList.begin(); I!=raNewChildList.end(); I++)
     {
@@ -384,16 +394,15 @@ void ChildrenManagerImpl::CreateAccessibilityObjects (
             GetChild (*I);
         if (I->mxAccessibleShape.is() && I->mbCreateEventPending)
         {
-            OSL_TRACE ("sending events for new shape");
             uno::Any aNewShape;
             aNewShape <<= I->mxAccessibleShape;
             mrContext.CommitChange (
                 AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
                 aNewShape,
                 uno::Any());
-            OSL_TRACE ("done sending events for new shape");
         }
     }
+    OSL_TRACE ("done sending events for new shape");
 }
 
 
@@ -419,7 +428,9 @@ void ChildrenManagerImpl::AddAccessibleShape (std::auto_ptr<AccessibleShape> pSh
 
 void ChildrenManagerImpl::ClearAccessibleShapeList (void)
 {
-    maAccessibleShapes.clear ();
+    // The objects in the list of visible shapes are take from one of the
+    // two lists the are cleared below.
+    maVisibleChildren.clear ();
 
     // Send events that tell the listeners that the current children are
     // removed.
@@ -436,10 +447,28 @@ void ChildrenManagerImpl::ClearAccessibleShapeList (void)
 
             // Dispose the object.
             Reference<lang::XComponent> xComponent (I->mxAccessibleShape, uno::UNO_QUERY);
-            xComponent->dispose ();
+            if (xComponent.is())
+                xComponent->dispose ();
             I->mxAccessibleShape = NULL;
         }
-    maVisibleChildren.clear ();
+
+    // Dispose all objects in the accessible shape list.
+    AccessibleShapeList::iterator J;
+    for (J=maAccessibleShapes.begin(); J!=maAccessibleShapes.end(); J++)
+        if (J->is())
+        {
+            mrContext.CommitChange (
+                AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                uno::Any(),
+                uno::makeAny (*J));
+
+            // Dispose the object.
+            Reference<lang::XComponent> xComponent (*J, uno::UNO_QUERY);
+            if (xComponent.is())
+                xComponent->dispose ();
+        }
+    maAccessibleShapes.clear ();
+
 }
 
 
@@ -548,6 +577,7 @@ long int ChildrenManagerImpl::GetChildIndex (const ::com::sun::star::uno::Refere
 
 
 //=====  IAccessibleViewForwarderListener  ====================================
+
 void ChildrenManagerImpl::ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder)
 {
@@ -568,10 +598,52 @@ void ChildrenManagerImpl::ViewForwarderChanged (ChangeType aChangeType,
 
 
 
+//=====  IAccessibleParent  ===================================================
+
+sal_Bool ChildrenManagerImpl::ReplaceChild (
+    AccessibleShape* pCurrentChild,
+    AccessibleShape* pReplacement)
+    throw (uno::RuntimeException)
+{
+    // Iterate over the visible children.  If one of them has an already
+    // created accessible object that matches pCurrentChild then replace
+    // it.  Otherwise the child to replace is either not in the list or has
+    // not ye been created (and is therefore not in the list, too) and a
+    // replacement is not necessary.
+    ChildDescriptorListType::iterator I;
+    for (I=maVisibleChildren.begin(); I!=maVisibleChildren.end(); I++)
+    {
+        if (I->GetAccessibleShape() == pCurrentChild)
+        {
+            // Dispose the current child and send an event about its deletion.
+            pCurrentChild->dispose();
+            mrContext.CommitChange (
+                AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                uno::Any(),
+                uno::makeAny (I->mxAccessibleShape));
+
+            // Replace with replacement and send an event about existance
+            // of the new child.
+            I->mxAccessibleShape = pReplacement;
+            mrContext.CommitChange (
+                AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                uno::makeAny (I->mxAccessibleShape),
+                uno::Any());
+
+            break;
+        }
+    }
+
+    // When not found among the visible children we have to search the list
+    // of accessible shapes.  This is not yet implemented.
+}
+
+
+
+
 //=====  AccessibleChildDescriptor  ===========================================
 
-ChildDescriptor::ChildDescriptor (const uno::Reference<
-        drawing::XShape>& xShape)
+ChildDescriptor::ChildDescriptor (const Reference<drawing::XShape>& xShape)
     : mxShape (xShape),
       mxAccessibleShape (NULL),
       mbCreateEventPending (true)
@@ -582,10 +654,9 @@ ChildDescriptor::ChildDescriptor (const uno::Reference<
 
 
 
-ChildDescriptor::ChildDescriptor (AccessibleShape* pShape)
+ChildDescriptor::ChildDescriptor (const Reference<XAccessible>& rxAccessibleShape)
     : mxShape (NULL),
-      //      mpAccessibleShape (pShape),
-      mxAccessibleShape (pShape),
+      mxAccessibleShape (rxAccessibleShape),
       mbCreateEventPending (true)
 {
     // Empty.
