@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-31 10:16:42 $
+ *  last change: $Author: cl $ $Date: 2001-06-01 10:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
         const sal_Int32 nBaseTypes = aBaseTypes.getLength();
         const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
 
-        const sal_Int32 nOwnTypes = mbImpressDoc ? 13 : 11;     // !DANGER! Keep this updated!
+        const sal_Int32 nOwnTypes = mbImpressDoc ? 14 : 11;     // !DANGER! Keep this updated!
 
         maTypeSequence.realloc(  nBaseTypes + nOwnTypes );
         uno::Type* pTypes = maTypeSequence.getArray();
@@ -374,7 +374,6 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
         *pTypes++ = ITYPE(drawing::XLayerSupplier);
         *pTypes++ = ITYPE(drawing::XMasterPagesSupplier);
         *pTypes++ = ITYPE(drawing::XDrawPagesSupplier);
-        *pTypes++ = ITYPE(presentation::XHandoutMasterSupplier);
         *pTypes++ = ITYPE(document::XLinkTargetSupplier);
         *pTypes++ = ITYPE(style::XStyleFamiliesSupplier);
         *pTypes++ = ITYPE(lang::XUnoTunnel);
@@ -383,6 +382,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
         {
             *pTypes++ = ITYPE(presentation::XPresentationSupplier);
             *pTypes++ = ITYPE(presentation::XCustomPresentationSupplier);
+            *pTypes++ = ITYPE(presentation::XHandoutMasterSupplier);
         }
 
         for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
