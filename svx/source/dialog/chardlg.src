@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2001-01-15 16:55:03 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         };
         StringList [ portuguese ] =
         {
-            "Padrγo" ;
+            "Normal" ;
             "Itαlico" ;
             "Negrito" ;
             "Negrito Itαlico" ;
@@ -2479,7 +2479,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Pos = MAP_APPFONT( 77, 15 );
         Size = MAP_APPFONT( 65, 10 );
         Text = "S~chriftschnitt";
-        Text [ english_us ] = "Type";
+        Text [ english_us ] = "~Typeface";
         Text[ portuguese ] = "Estilo";
         Text[ russian ] = "Νΰχεπςΰνθε";
         Text[ greek ] = "Τύπος";
@@ -2529,9 +2529,9 @@ TabPage RID_SVXPAGE_CHAR_NAME
     StringList [ portuguese ] =
     {
          "Normal" ;
-         "Kursiv" ;
-         "Fett" ;
-         "Fett Kursiv" ;
+         "Itαlico" ;
+         "Negrito" ;
+         "Itαlico negrito" ;
     };
     StringList [ russian ] =
     {
@@ -2772,7 +2772,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Pos = MAP_APPFONT( 77, 55 );
         Size = MAP_APPFONT( 65, 10 );
         Text = "Schri~ftschnitt";
-        Text [ english_us ] = "Type";
+        Text [ english_us ] = "T~ypeface";
         Text[ portuguese ] = "~Estilo";
         Text[ russian ] = "Νΰχεπςΰνθε";
         Text[ greek ] = "Τύπος γρα~φής";
@@ -2822,9 +2822,9 @@ TabPage RID_SVXPAGE_CHAR_NAME
     StringList [ portuguese ] =
     {
          "Normal" ;
-         "Kursiv" ;
-         "Fett" ;
-         "Fett Kursiv" ;
+         "Itαlico" ;
+         "Negrito" ;
+         "Itαlico negrito" ;
     };
     StringList [ russian ] =
     {
@@ -3035,7 +3035,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT ( 182 , 23 ) ;
         Text = "Beispiel";
         Text [ english_us ] = "Example";
-        Text[ portuguese ] = "Example";
+        Text[ portuguese ] = "Exemplo";
         Text[ russian ] = "Οπθμεπ";
         Text[ greek ] = "Παράδειγμα";
         Text[ dutch ] = "Voorbeeld";
@@ -3243,23 +3243,23 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ portuguese ] =
     {
-            < "(Ohne)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Einfach" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Doppelt" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Fett"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Punktiert" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Punktiert fett" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Strich"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Strich fett"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Strich lang"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Strich fett lang"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Punkt Strich"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Punkt Punkt Strich"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Punkt Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Welle"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Welle fett"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Welle doppelt"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+            < "(sem)" ; CHRDLG_UNDERLINE_NONE ; > ;
+        < "Simples" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+        < "Duplo" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+        < "Negrito"; CHRDLG_UNDERLINE_BOLD; > ;
+        < "Pontilhado" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+        < "Pontilhado (negrito)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+        < "Traηo"; CHRDLG_UNDERLINE_DASH; > ;
+        < "Traηo (negrito)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+        < "Traηo longo"; CHRDLG_UNDERLINE_LONGDASH; > ;
+        < "Traηo longo (negrito)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+        < "Ponto e traηo"; CHRDLG_UNDERLINE_DASHDOT; > ;
+        < "Ponto e traηo (negrito)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+        < "Ponto ponto traηo"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+        < "Ponto ponto traηo (negrito)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+        < "Ondulado"; CHRDLG_UNDERLINE_WAVE; > ;
+        < "Ondulado (negrito)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+        < "Ondulado duplo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
     };
     StringList [ russian ] =
     {
@@ -3674,12 +3674,12 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ portuguese ] =
     {
-            < "(Ohne)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Einfach" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Doppelt" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Fett" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Mit /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "Mit X" ; CHRDLG_STRIKEOUT_X ; > ;
+            < "(sem)" ; CHRDLG_STRIKEOUT_NONE ; > ;
+        < "Simples" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+        < "Duplo" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+        < "Negrito" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+        < "Com /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+        < "Com X" ; CHRDLG_STRIKEOUT_X ; > ;
     };
     StringList [ russian ] =
     {
@@ -3904,9 +3904,9 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ portuguese ] =
     {
-            < "(Ohne)" ; default ; > ;
-        < "°" ; default ; > ;
-        < "." ; default ; > ;
+            < "(sem)" ; default ; > ;
+        < "Ponto" ; default ; > ;
+        < "Cνrculo" ; default ; > ;
     };
     StringList [ russian ] =
     {
@@ -4001,8 +4001,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     StringList [ arabic ] =
     {
             < "(ΘΟζδ)" ; default ; > ;
-        < "°" ; default ; > ;
-        < "." ; default ; > ;
+        < "δήΨΙ" ; default ; > ;
+        < "ΟΗΖΡΙ" ; default ; > ;
     };
     };
     FixedText FT_POSITION
@@ -4053,8 +4053,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ portuguese ] =
     {
-            < "άber Text" ; CHRDLG_POSITION_OVER ; > ;
-        < "Unter Text" ; CHRDLG_POSITION_UNDER ; > ;
+            < "Superior ao texto" ; CHRDLG_POSITION_OVER ; > ;
+        < "Inferior ao texto" ; CHRDLG_POSITION_UNDER ; > ;
     };
     StringList [ russian ] =
     {
@@ -4201,11 +4201,11 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ portuguese ] =
     {
-            < "Keine" ; Default ; > ;
-        < "Versalien" ; Default ; > ;
-        < "Gemeine" ; Default ; > ;
-        < "Titelschrift" ; Default ; > ;
-        < "Kapitδlchen" ; Default ; > ;
+            < "Nenhum(a)" ; Default ; > ;
+        < "Versaletes" ; Default ; > ;
+        < "Minϊsculas" ; Default ; > ;
+        < "Tνtulo" ; Default ; > ;
+        < "Versaletes" ; Default ; > ;
     };
     StringList [ russian ] =
     {
@@ -4342,7 +4342,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Kontur" ;
         Text [ english_us ] = "Outline" ;
-        Text[ portuguese ] = "Outline";
+        Text[ portuguese ] = "~Contorno";
         Text[ russian ] = "Κξνςσπ";
         Text[ greek ] = "Διάρθρωση";
         Text[ dutch ] = "~Contour";
@@ -4366,7 +4366,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Schatten" ;
         Text [ english_us ] = "Shadow" ;
-        Text[ portuguese ] = "Shadow";
+        Text[ portuguese ] = "~Sombreado";
         Text[ russian ] = "Òενό";
         Text[ greek ] = "~Σκιά";
         Text[ dutch ] = "~Schaduw";
@@ -4439,7 +4439,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Size = MAP_APPFONT ( 248 , 23 ) ;
         Text = "Beispiel";
         Text [ english_us ] = "Example";
-        Text[ portuguese ] = "Example";
+        Text[ portuguese ] = "Exemplo";
         Text[ russian ] = "Οπθμεπ";
         Text[ greek ] = "Παράδειγμα";
         Text[ dutch ] = "Voorbeeld";
@@ -4466,7 +4466,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     {
         Text = "Transparent";
         Text [ english_us ] = "Transparent";
-        Text[ portuguese ] = "Transparent";
+        Text[ portuguese ] = "Transparente";
         Text[ russian ] = "Οπξηπΰχνϋι";
         Text[ greek ] = "Διαφανές";
         Text[ dutch ] = "Transparant";
@@ -4488,7 +4488,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     {
         Text = "Versalien";
         Text [ english_us ] = "Capitals" ;
-        Text[ portuguese ] = "Capitals";
+        Text[ portuguese ] = "Maiϊsculas";
         Text[ russian ] = "Οπξοθρνϋε";
         Text[ greek ] = "Κεφαλαία";
         Text[ dutch ] = "Hoofdletters";
@@ -4510,7 +4510,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     {
         Text = "Gemeine";
         Text [ english_us ] = "Lowercase" ;
-        Text[ portuguese ] = "Lowercase";
+        Text[ portuguese ] = "Minϊsculas";
         Text[ russian ] = "Ρςπξχνϋε";
         Text[ greek ] = "Πεζοί χαρακτήρες";
         Text[ dutch ] = "Kleine letters";
@@ -4532,7 +4532,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     {
         Text = "Titelschrift";
         Text [ english_us ] = "Title" ;
-        Text[ portuguese ] = "Title";
+        Text[ portuguese ] = "Tνtulo";
         Text[ russian ] = "Òθςσλόνϋι ψπθτς";
         Text[ greek ] = "Τίτλος";
         Text[ dutch ] = "Titel";
@@ -4554,7 +4554,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     {
         Text = "Kapitδlchen";
         Text [ english_us ] = "Small Capitals" ;
-        Text[ portuguese ] = "Small Capitals";
+        Text[ portuguese ] = "Versaletes";
         Text[ russian ] = "Κΰοθςελό";
         Text[ greek ] = "Μικρά κεφαλαία";
         Text[ dutch ] = "Klein-kapitaal";
@@ -4576,7 +4576,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     {
         Text = "Kontur" ;
         Text [ english_us ] = "Outline" ;
-        Text[ portuguese ] = "Outline";
+        Text[ portuguese ] = "Contorno";
         Text[ russian ] = "Κξνςσπ";
         Text[ greek ] = "Διάρθρωση";
         Text[ dutch ] = "Contour";
@@ -4598,7 +4598,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     {
         Text = "Schatten" ;
         Text [ english_us ] = "Shadow" ;
-        Text[ portuguese ] = "Shadow";
+        Text[ portuguese ] = "Sombreado";
         Text[ russian ] = "Òενό";
         Text[ greek ] = "Σκιά";
         Text[ dutch ] = "Schaduw";
@@ -4620,7 +4620,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     {
         Text = "Blinkend" ;
         Text [ english_us ] = "Blinking" ;
-        Text[ portuguese ] = "Blinking";
+        Text[ portuguese ] = "Intermitente";
         Text[ russian ] = "Μθγΰνθε";
         Text[ greek ] = "Εφέ φλας";
         Text[ dutch ] = "Knipperend";
@@ -4678,7 +4678,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text = "H~och";
         Text [ english_us ] = "Super" ;
         TabStop = TRUE;
-        Text[ portuguese ] = "Super";
+        Text[ portuguese ] = "A~cima";
         Text[ russian ] = "Ρβεπυσ";
         Text[ greek ] = "Εκθέτης";
         Text[ dutch ] = "S~uper";
@@ -4703,7 +4703,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text = "~Normal";
         Text [ english_us ] = "Normal" ;
         TabStop = TRUE;
-        Text[ portuguese ] = "Normal";
+        Text[ portuguese ] = "~Normal";
         Text[ russian ] = "Ρςΰνδΰπς";
         Text[ greek ] = "Κα~νονικά";
         Text[ dutch ] = "~Normal";
@@ -4728,7 +4728,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text = "~Tief";
         Text [ english_us ] = "Sub" ;
         TabStop = TRUE;
-        Text[ portuguese ] = "Sub";
+        Text[ portuguese ] = "A~baixo";
         Text[ russian ] = "Ρνθησ";
         Text[ greek ] = "Δείκ~της";
         Text[ dutch ] = "S~ub";
@@ -4901,9 +4901,9 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     StringList [ portuguese ] =
     {
-            < "Standard" ; Default ; > ;
-        < "Gesperrt" ; Default ; > ;
-        < "Schmal" ; Default ; > ;
+            < "Padrγo" ; Default ; > ;
+        < "Expandido" ; Default ; > ;
+        < "Condensado" ; Default ; > ;
     };
     StringList [ russian ] =
     {
@@ -5095,7 +5095,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 99 ) ;
         Size = MAP_APPFONT ( 248 , 23 ) ;
-        Text[ portuguese ] = "Example";
+        Text[ portuguese ] = "Exemplo";
         Text[ russian ] = "Οπθμεπ";
         Text[ greek ] = "Παράδειγμα";
         Text[ dutch ] = "Voorbeeld";
@@ -5180,7 +5180,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Size = MAP_APPFONT( 254, 10 );
         Text = "Einschlieίende Zeichen";
         Text [ english_us ] = "Enclosing character" ;
-        Text[ portuguese ] = "Enclose character";
+        Text[ portuguese ] = "Caracteres de inclusγo";
         Text[ russian ] = "Ξαβεδεννϋε ηνΰκθ";
         Text[ greek ] = "Περικλειόμενοι χαρακτήρες";
         Text[ dutch ] = "Omhullend teken";
@@ -5204,7 +5204,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Size = MAP_APPFONT( 90, 10 );
         Text = "A~nfangszeichen";
         Text [ english_us ] = "I~nitial character" ;
-        Text[ portuguese ] = "Beginning character";
+        Text[ portuguese ] = "Carαcter i~nicial";
         Text[ russian ] = "Νΰχΰλόνϋε ηνΰκθ";
         Text[ greek ] = "Αρχικός χαρακτήρας";
         Text[ dutch ] = "~Eerste teken";
@@ -5257,7 +5257,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     };
     StringList [ portuguese ] =
     {
-            < "(Keines)" ; CHRDLG_ENCLOSE_NONE ; > ;
+            < "(nenhum)" ; CHRDLG_ENCLOSE_NONE ; > ;
         < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
         < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
         < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
@@ -5415,7 +5415,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Size = MAP_APPFONT( 90, 10 );
         Text = "~Endzeichen";
         Text [ english_us ] = "Final charact~er" ;
-        Text[ portuguese ] = "End character";
+        Text[ portuguese ] = "Carαcter ~final";
         Text[ russian ] = "Κξνεχνϋε ηνΰκθ";
         Text[ greek ] = "Τ~ελικός χαρακτήρας";
         Text[ dutch ] = "~Laatste teken";
@@ -5468,12 +5468,12 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     };
     StringList [ portuguese ] =
     {
-            < "(Keines)" ; CHRDLG_ENCLOSE_NONE ; > ;
+            < "(Nenhum)" ; CHRDLG_ENCLOSE_NONE ; > ;
         < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
         < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
         < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
         < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        < "Outros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
     };
     StringList [ russian ] =
     {
@@ -5626,7 +5626,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Size = MAP_APPFONT( 254, 10 );
         Text = "Vorschau";
         Text [ english_us ] = "Preview" ;
-        Text[ portuguese ] = "Preview";
+        Text[ portuguese ] = "Previsualizar";
         Text[ russian ] = "Οπξρμξςπ";
         Text[ greek ] = "Προεπισκόπηση";
         Text[ dutch ] = "Voorbeeld";
@@ -5651,7 +5651,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Size = MAP_APPFONT ( 248 , 30 ) ;
         Text = "Beispiel";
         Text [ english_us ] = "Example" ;
-        Text[ portuguese ] = "Example";
+        Text[ portuguese ] = "Exemplo";
         Text[ russian ] = "Οπθμεπ";
         Text[ greek ] = "Παράδειγμα";
         Text[ dutch ] = "Voorbeeld";
