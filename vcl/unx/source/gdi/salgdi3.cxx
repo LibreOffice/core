@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-30 08:34:36 $
+ *  last change: $Author: cp $ $Date: 2001-04-02 12:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,6 +497,7 @@ SalDisplay::GetXlfdList()
         // flush the merged list into the global list
         mpFontList->Add( pScalableFont );
         mpFontList->Add( &aBitmapList );
+        mpFontList->Add( mpFallbackFactory );
 
         // cleanup the list of simple font information
         if ( pXlfdList != NULL )
@@ -686,6 +687,7 @@ SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
 
         if( mpServerSideFont )
             return;
+
 #endif //USE_BUILTIN_RASTERIZER
 
         ExtendedXlfd *pSysFont = (ExtendedXlfd*)pEntry->mpFontData->mpSysData;
