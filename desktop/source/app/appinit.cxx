@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 14:25:43 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 #include <tools/urlobj.hxx>
 
 #include <rtl/logfile.hxx>
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 #include <comphelper/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -165,8 +168,6 @@ namespace desktop
 {
 
 char const INSTALLER_INITFILENAME[] = "initialize.ini";
-
-static String aCurrentTempURL;
 
 // -----------------------------------------------------------------------------
 
@@ -375,17 +376,23 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
     }
 }
 
-AcceptorMap     Desktop::m_acceptorMap;
-osl::Mutex          Desktop::m_mtxAccMap;
+namespace
+{
+    struct acceptorMap : public rtl::Static< AcceptorMap, acceptorMap > {};
+    struct mtxAccMap : public rtl::Static< osl::Mutex, mtxAccMap > {};
+    struct CurrentTempURL : public rtl::Static< String, CurrentTempURL > {};
+}
+
 static sal_Bool bAccept = sal_False;
 
 void Desktop::createAcceptor(const OUString& aAcceptString)
 {
     // make sure nobody adds an acceptor whle we create one...
-    osl::MutexGuard aGuard(m_mtxAccMap);
+    osl::MutexGuard aGuard(mtxAccMap::get());
     // check whether the requested acceptor already exists
-    AcceptorMap::const_iterator pIter = m_acceptorMap.find(aAcceptString);
-    if (pIter == m_acceptorMap.end() ) {
+    AcceptorMap &rMap = acceptorMap::get();
+    AcceptorMap::const_iterator pIter = rMap.find(aAcceptString);
+    if (pIter == rMap.end() ) {
 
         Sequence< Any > aSeq( 2 );
         aSeq[0] <<= aAcceptString;
@@ -396,7 +403,7 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
         if ( rAcceptor.is() ) {
             try{
                 rAcceptor->initialize( aSeq );
-                m_acceptorMap.insert(AcceptorMap::value_type(aAcceptString, rAcceptor));
+                rMap.insert(AcceptorMap::value_type(aAcceptString, rAcceptor));
             } catch (com::sun::star::uno::Exception&) {
             // no error handling needed...
             // acceptor just won't come up
@@ -428,31 +435,33 @@ class enable
 void Desktop::enableAcceptors()
 {
     RTL_LOGFILE_CONTEXT(aLog, "desktop (lo119109) Desktop::enableAcceptors");
-    osl::MutexGuard aGuard(m_mtxAccMap);
+    osl::MutexGuard aGuard(mtxAccMap::get());
     if (!bAccept)
     {
         // from now on, all new acceptors are enabled
         bAccept = sal_True;
         // enable existing acceptors by calling initialize(true)
         // on all existing acceptors
-        std::for_each(m_acceptorMap.begin(), m_acceptorMap.end(), enable());
+        AcceptorMap &rMap = acceptorMap::get();
+        std::for_each(rMap.begin(), rMap.end(), enable());
     }
 }
 
 void Desktop::destroyAcceptor(const OUString& aAcceptString)
 {
-    osl::MutexGuard aGuard(m_mtxAccMap);
+    osl::MutexGuard aGuard(mtxAccMap::get());
     // special case stop all acceptors
+    AcceptorMap &rMap = acceptorMap::get();
     if (aAcceptString.compareToAscii("all") == 0) {
-        m_acceptorMap.clear();
+        rMap.clear();
 
     } else {
         // try to remove acceptor from map
-        AcceptorMap::const_iterator pIter = m_acceptorMap.find(aAcceptString);
-        if (pIter != m_acceptorMap.end() ) {
+        AcceptorMap::const_iterator pIter = rMap.find(aAcceptString);
+        if (pIter != rMap.end() ) {
             // remove reference from map
             // this is the last reference and the acceptor will be destructed
-            m_acceptorMap.erase(aAcceptString);
+            rMap.erase(aAcceptString);
         } else {
             OSL_ENSURE(sal_False, "Found no acceptor to remove");
         }
@@ -463,7 +472,7 @@ void Desktop::destroyAcceptor(const OUString& aAcceptString)
 void Desktop::DeregisterServices()
 {
     // stop all acceptors by clearing the map
-    m_acceptorMap.clear();
+    acceptorMap::get().clear();
 }
 
 void Desktop::CreateTemporaryDirectory()
@@ -510,7 +519,7 @@ void Desktop::CreateTemporaryDirectory()
     // set new current temporary directory
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTempPath, aRet );
     aInternalOpt.SetCurrentTempURL( aRet );
-    aCurrentTempURL = aRet;
+    CurrentTempURL::get() = aRet;
 }
 
 void Desktop::RemoveTemporaryDirectory()
@@ -518,9 +527,10 @@ void Desktop::RemoveTemporaryDirectory()
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::removeTemporaryDirectory" );
 
     // remove current temporary directory
-    if ( aCurrentTempURL.Len() > 0 )
+    String &rCurrentTempURL = CurrentTempURL::get();
+    if ( rCurrentTempURL.Len() > 0 )
     {
-        if ( ::utl::UCBContentHelper::Kill( aCurrentTempURL ) )
+        if ( ::utl::UCBContentHelper::Kill( rCurrentTempURL ) )
             SvtInternalOptions().SetCurrentTempURL( String() );
     }
 }
