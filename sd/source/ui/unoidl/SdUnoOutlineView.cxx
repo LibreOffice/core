@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:18:44 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,52 @@ Any SAL_CALL SdUnoOutlineView::getSelection()
 
 
 
+// XDrawView
+
+
+void SAL_CALL SdUnoOutlineView::setCurrentPage (
+    const Reference< drawing::XDrawPage >& xPage)
+    throw(RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    DBG_ASSERT (mpView!=NULL, "View is NULL in SdUnoDrawView::setCurrentPage");
+
+    if (mpViewShell != NULL)
+    {
+        SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
+        SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : NULL;
+
+        OutlineViewShell* pOutlineViewShell = GetDrawViewShell();
+        if (pSdrPage != NULL && pOutlineViewShell != NULL)
+            pOutlineViewShell->SetCurrentPage(dynamic_cast<SdPage*>(pSdrPage));
+    }
+}
+
+
+
+
+Reference< drawing::XDrawPage > SAL_CALL SdUnoOutlineView::getCurrentPage (void)
+    throw(RuntimeException)
+{
+    ThrowIfDisposed();
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    Reference<drawing::XDrawPage>  xPage;
+
+    if (mpViewShell != NULL)
+    {
+        SdPage* pPage = mpViewShell->getCurrentPage();
+         if (pPage != NULL)
+             xPage = Reference<drawing::XDrawPage>::query(pPage->getUnoPage());
+    }
+
+    return xPage;
+}
+
+
+
+
 /**
  * All Properties of this implementation. Must be sorted by name.
  */
@@ -277,14 +323,14 @@ void SdUnoOutlineView::setFastPropertyValue_NoBroadcast (
 
     switch( nHandle )
     {
-        /*      case PROPERTY_CURRENTPAGE:
-            {
-                Reference< drawing::XDrawPage > xPage;
-                rValue >>= xPage;
-                setCurrentPage( xPage );
-            }
-            break;
-        */
+        case PROPERTY_CURRENTPAGE:
+        {
+            Reference< drawing::XDrawPage > xPage;
+            rValue >>= xPage;
+            setCurrentPage( xPage );
+        }
+        break;
+
         default:
             DrawController::setFastPropertyValue_NoBroadcast (nHandle, rValue);
             break;
