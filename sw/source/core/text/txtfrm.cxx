@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-19 13:25:35 $
+ *  last change: $Author: ama $ $Date: 2002-10-18 14:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2080,22 +2080,21 @@ KSHORT SwTxtFrm::FirstLineHeight() const
 MSHORT SwTxtFrm::GetLineCount( xub_StrLen nPos )
 {
     MSHORT nRet = 0;
-    GetFormatted();
-    if( HasPara() )
+    SwTxtFrm *pFrm = this;
+    do
     {
-        SwTxtFrm *pFrm = this;
-        do
-        {
-            SwTxtSizeInfo aInf( pFrm );
-            SwTxtMargin aLine( pFrm, &aInf );
-            if( STRING_LEN == nPos )
-                aLine.Bottom();
-            else
-                aLine.CharToLine( nPos );
-            nRet += aLine.GetLineNr();
-            pFrm = pFrm->GetFollow();
-        } while ( pFrm && pFrm->GetOfst() <= nPos );
-    }
+        pFrm->GetFormatted();
+        if( !pFrm->HasPara() )
+            break;
+        SwTxtSizeInfo aInf( pFrm );
+        SwTxtMargin aLine( pFrm, &aInf );
+        if( STRING_LEN == nPos )
+            aLine.Bottom();
+        else
+            aLine.CharToLine( nPos );
+        nRet += aLine.GetLineNr();
+        pFrm = pFrm->GetFollow();
+    } while ( pFrm && pFrm->GetOfst() <= nPos );
     return nRet;
 }
 
