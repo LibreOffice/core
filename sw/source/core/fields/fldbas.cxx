@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:50:38 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,80 +293,6 @@ USHORT SwField::Which() const
     Beschreibung:
  --------------------------------------------------------------------*/
 
-USHORT SwField::GetResId(USHORT nTypeId, BOOL& bAmbigous)
-{
-    static USHORT __READONLY_DATA aTypeTab[] = {
-     RES_DATETIMEFLD   ,/*      TYP_DATEFLD,        */
-     RES_DATETIMEFLD   ,/*      TYP_TIMEFLD,        */
-     RES_FILENAMEFLD   ,/*      TYP_FILENAMEFLD,    */
-     RES_DBNAMEFLD     ,/*      TYP_DBNAMEFLD,      */
-     RES_CHAPTERFLD    ,/*      TYP_CHAPTERFLD,     */
-     RES_PAGENUMBERFLD ,/*      TYP_PAGENUMBERFLD,  */// dynamisch
-     RES_DOCSTATFLD    ,/*      TYP_DOCSTATFLD,     */
-     RES_AUTHORFLD     ,/*      TYP_AUTHORFLD,      */
-     RES_SETEXPFLD     ,/*      TYP_SETFLD,         */// dynamisch
-     RES_GETEXPFLD     ,/*      TYP_GETFLD,         */// dynamisch
-     RES_TABLEFLD      ,/*      TYP_FORMELFLD,      */
-     RES_HIDDENTXTFLD  ,/*      TYP_HIDDENTXTFLD,   */
-     RES_SETREFFLD     ,/*      TYP_SETREFFLD,      */
-     RES_GETREFFLD     ,/*      TYP_GETREFFLD,      */
-     RES_DDEFLD        ,/*      TYP_DDEFLD,         */
-     RES_MACROFLD      ,/*      TYP_MACROFLD,       */
-     RES_INPUTFLD      ,/*      TYP_INPUTFLD,       */
-     RES_HIDDENPARAFLD ,/*      TYP_HIDDENPARAFLD,  */
-     RES_DOCINFOFLD    ,/*      TYP_DOCINFOFLD,     */
-     RES_DBFLD         ,/*      TYP_DBFLD,          */
-     RES_USERFLD       ,/*      TYP_USERFLD,        */
-     RES_POSTITFLD     ,/*      TYP_POSTITFLD,      */
-     RES_TEMPLNAMEFLD  ,/*      TYP_TEMPLNAMEFLD,   */
-     RES_SETEXPFLD     ,/*      TYP_SEQFLD          */
-     RES_DBNEXTSETFLD  ,/*      TYP_DBNEXTSETFLD,   */
-     RES_DBNUMSETFLD   ,/*      TYP_DBNUMSETFLD,    */
-     RES_DBSETNUMBERFLD,/*      TYP_DBSETNUMBERFLD, */
-     RES_HIDDENTXTFLD  ,/*      TYP_CONDTXTFLD      */
-     RES_PAGENUMBERFLD ,/*      TYP_NEXTPAGEFLD     */
-     RES_PAGENUMBERFLD ,/*      TYP_PREVPAGEFLD     */
-     RES_EXTUSERFLD    ,/*      TYP_EXTUSERFLD      */
-     RES_DATETIMEFLD   ,/*      TYP_FIXDATEFLD,     */
-     RES_DATETIMEFLD   ,/*      TYP_FIXTIMEFLD,     */
-     RES_SETEXPFLD     ,/*      TYP_SETINPFLD       */
-     USHRT_MAX         ,/*      TYP_USRINPFLD       */
-     RES_REFPAGESETFLD ,/*      TYP_SETREFPAGEFLD   */
-     RES_REFPAGEGETFLD ,/*      TYP_GETREFPAGEFLD   */
-     RES_INTERNETFLD   ,/*      TYP_INTERNETFLD     */
-     RES_JUMPEDITFLD   ,/*      TYP_JUMPEDITFLD     */
-     RES_SCRIPTFLD,     /*      TYP_SCRIPTFLD       */
-     RES_AUTHORITY,     /*      TYP_AUTHORITY       */
-     RES_COMBINED_CHARS,/*      TYP_COMBINED_CHARS  */
-     RES_DROPDOWN       /*      TYP_DROPDOWN        */
-    };
-
-    switch( nTypeId )
-    {
-        case TYP_CONDTXTFLD:
-        case TYP_HIDDENTXTFLD:
-        case TYP_USRINPFLD:
-        case TYP_PAGENUMBERFLD:
-        case TYP_PREVPAGEFLD:
-        case TYP_NEXTPAGEFLD:
-        case TYP_SEQFLD:
-        case TYP_SETFLD:
-        case TYP_SETINPFLD:
-        case TYP_FORMELFLD:
-            bAmbigous = TRUE;
-            break;
-        default: bAmbigous = FALSE;
-    }
-
-    return aTypeTab[ nTypeId ];
-}
-
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 USHORT SwField::GetTypeId() const
 {
 
@@ -582,105 +508,6 @@ FASTBOOL SwField::IsFixed() const
         break;
     }
     return bRet;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung: Sortierte Feldliste aller Felder usw.
- --------------------------------------------------------------------*/
-
-SwFieldList::SwFieldList(SwEditShell* pShell)
-    : pSh(pShell)
-{
-    // Hier die Liste aller Eingabefelder sortiert erstellen
-    pSrtLst = new _SetGetExpFlds();
-}
-
-void SwFieldList::InsertFields(USHORT nTypeId, const String* pName)
-{
-    const USHORT nSize = pSh->GetFldTypeCount();
-
-    // Alle Typen abklappern
-
-    for(USHORT i=0; i < nSize; ++i)
-    {
-        SwFieldType* pFldType = pSh->GetFldType(i);
-        if( nTypeId == pFldType->Which() )
-        {
-            if( pName )
-            {
-                String aMacTmp( pFldType->GetName() );
-                if( *pName != aMacTmp )
-                    continue;
-            }
-
-            SwClientIter aIter( *pFldType );
-            for( SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
-                    pFld; pFld = (SwFmtFld*)aIter.Next() )
-                if( pFld->GetTxtFld() )
-                {
-                    const SwTxtFld* pTxtFld = pFld->GetTxtFld();
-                    const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
-                    if( rTxtNode.GetNodes().IsDocNodes() )
-                    {
-                        SwNodeIndex aIdx( rTxtNode );
-                        _SetGetExpFld* pNew = new _SetGetExpFld(aIdx, pTxtFld );
-                        pSrtLst->Insert( pNew );
-                    }
-                }
-        }
-    }
-}
-
-SwFieldList::~SwFieldList()
-{
-    delete pSrtLst;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung: Felder aus der Liste in sortierter Reihenfolge
- --------------------------------------------------------------------*/
-
-USHORT SwFieldList::Count() const
-{
-    return pSrtLst->Count();
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:   von der CursorPos das naechste und das Letzte Feld
-                    in der Liste anfahren
- --------------------------------------------------------------------*/
-
-SwField* SwFieldList::GetNextField() const
-{
-    SwPaM* pCrsr = pSh->GetCrsr();
-    ULONG nNdPos = pCrsr->GetPoint()->nNode.GetIndex();
-    USHORT nCntPos = pCrsr->GetPoint()->nContent.GetIndex();
-
-    const USHORT nSize = pSrtLst->Count();
-    for(USHORT i = 0; i < nSize; ++i )
-    {
-        _SetGetExpFld* pFnd = (*pSrtLst)[i];
-        if( pFnd->GetNode() > nNdPos || ( pFnd->GetNode() == nNdPos &&
-            pFnd->GetCntnt() >= nCntPos ))
-            return (SwField*)pFnd->GetFld()->GetFld().GetFld();
-    }
-    return 0;
-}
-
-SwField* SwFieldList::GetLastField() const
-{
-    SwPaM* pCrsr = pSh->GetCrsr();
-    ULONG nNdPos = pCrsr->GetPoint()->nNode.GetIndex();
-    USHORT nCntPos = pCrsr->GetPoint()->nContent.GetIndex();
-
-    for( USHORT n = pSrtLst->Count(); n; )
-    {
-        _SetGetExpFld* pFnd = (*pSrtLst)[ --n ];
-        if( pFnd->GetNode() < nNdPos || ( pFnd->GetNode() == nNdPos &&
-            pFnd->GetCntnt() <= nCntPos ))
-            return (SwField*)pFnd->GetFld()->GetFld().GetFld();
-    }
-    return 0;
 }
 
 /*--------------------------------------------------------------------
