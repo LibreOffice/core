@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLLineNumberingExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-24 13:40:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,8 @@ void XMLLineNumberingExport::Export()
             aAny >>= sTmp;
             if (sTmp.getLength() > 0)
             {
-                rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, sTmp);
+                rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                                     rExport.EncodeStyleName( sTmp ));
             }
 
             // enable
@@ -177,7 +178,7 @@ void XMLLineNumberingExport::Export()
             if (*(sal_Bool*)aAny.getValue())
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
-                                     XML_COUNT_IN_FLOATING_FRAMES, XML_TRUE);
+                                     XML_COUNT_IN_TEXT_BOXES, XML_TRUE);
             }
 
             // restart numbering
