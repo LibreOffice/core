@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.175 $
+ *  $Revision: 1.176 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:30:35 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 14:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8758,8 +8758,16 @@ BOOL Window::HasActiveChildFrame()
     {
         if( pFrameWin != mpFrameWindow )
         {
+            BOOL bDecorated = FALSE;
             Window *pChildFrame = pFrameWin->ImplGetWindow();
-            if( pFrameWin->mnStyle & (WB_MOVEABLE | WB_SIZEABLE) )
+            // #i15285# unfortunately WB_MOVEABLE is the same as WB_TABSTOP which can
+            // be removed for ToolBoxes to influence the keyboard accessibility
+            // thus WB_MOVEABLE is no indicator for decoration anymore
+            // but FloatingWindows carry this information in their TitleType...
+            // TODO: avoid duplicate WinBits !!!
+            if( pChildFrame && pChildFrame->ImplIsFloatingWindow() )
+                bDecorated = ((FloatingWindow*) pChildFrame)->GetTitleType() != FLOATWIN_TITLE_NONE;
+            if( bDecorated || (pFrameWin->mnStyle & (WB_MOVEABLE | WB_SIZEABLE) ) )
                 if( pChildFrame && pChildFrame->IsVisible() && pChildFrame->IsActive() )
                 {
                     if( ImplIsChild( pChildFrame, TRUE ) )
