@@ -4622,3 +4622,9 @@ _TI2?AVElementExistException@container@star@sun@com@@
 ?SetPaperSizeWarning@SfxMiscCfg@@QAEXE@Z
 ?SetYear2000@SfxMiscCfg@@QAEXJ@Z
 ?CreateTempFileNoCopy@SfxMedium@@QAEXXZ
+?DdeGetData@SfxApplication@@QAEJABVString@@0AAVAny@uno@star@sun@com@@@Z
+?DdeGetData@SfxObjectShell@@UAEJABVString@@0AAVAny@uno@star@sun@com@@@Z
+?DdeGetData@SfxViewFrame@@UAEJABVString@@0AAVAny@uno@star@sun@com@@@Z
+?DdeSetData@SfxApplication@@QAEJABVString@@0ABVAny@uno@star@sun@com@@@Z
+?DdeSetData@SfxObjectShell@@UAEJABVString@@0ABVAny@uno@star@sun@com@@@Z
+?DdeSetData@SfxViewFrame@@UAEJABVString@@0ABVAny@uno@star@sun@com@@@Z
