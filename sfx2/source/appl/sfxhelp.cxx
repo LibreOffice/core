@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-20 08:58:31 $
+ *  last change: $Author: pb $ $Date: 2001-04-23 11:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
+#define ERROR_TAG   String( DEFINE_CONST_UNICODE("Error: ") )
+#define PATH_TAG    String( DEFINE_CONST_UNICODE("\nPath: ") )
+
 // class SfxHelpDB_Impl --------------------------------------------------
 
 class SfxHelpDB_Impl
@@ -132,18 +135,20 @@ private:
     String      m_aDBPath;
     String      m_aModule;
     Db*         m_pDB;
+    sal_Bool    m_bIsDebug;
 
 public:
-    SfxHelpDB_Impl( const String& rPath );
+    SfxHelpDB_Impl( const String& rPath, sal_Bool bDebug );
     ~SfxHelpDB_Impl();
 
     String      GetHelpText( ULONG nHelpId, const String& rModule );
 };
 
-SfxHelpDB_Impl::SfxHelpDB_Impl( const String& rPath ) :
+SfxHelpDB_Impl::SfxHelpDB_Impl( const String& rPath, sal_Bool bDebug ) :
 
     m_aDBPath   ( rPath ),
-    m_pDB       ( NULL )
+    m_pDB       ( NULL ),
+    m_bIsDebug  ( bDebug )
 
 {
 }
@@ -155,7 +160,9 @@ SfxHelpDB_Impl::~SfxHelpDB_Impl()
 
 String SfxHelpDB_Impl::GetHelpText( ULONG nHelpId, const String& rModule )
 {
+    sal_Bool bOpenDB = sal_True;
     String aHelpText;
+    ByteString aPathStr;
 
     if ( !m_pDB )
         m_pDB = new Db( NULL, 0 );
@@ -166,26 +173,63 @@ String SfxHelpDB_Impl::GetHelpText( ULONG nHelpId, const String& rModule )
         INetURLObject aPath( m_aDBPath );
         aPath.insertName( rModule );
         aPath.setExtension( DEFINE_CONST_UNICODE("ht") );
-        ByteString aPathStr( aPath.getFSysPath( INetURLObject::FSYS_DETECT ), osl_getThreadTextEncoding() );
-        int nError = m_pDB->open( aPathStr.GetBuffer(), NULL, DB_BTREE, DB_RDONLY, 0664 );
-
-        if ( nError )
+        aPathStr = ByteString( aPath.getFSysPath( INetURLObject::FSYS_DETECT ), osl_getThreadTextEncoding() );
+        try
         {
+            int nError = m_pDB->open( aPathStr.GetBuffer(), NULL, DB_BTREE, DB_RDONLY, 0664 );
+
+            if ( nError )
+            {
+                bOpenDB = sal_False;
+                m_aModule.Erase();
+                if ( m_bIsDebug )
+                {
+                    aHelpText = ERROR_TAG;
+                    aHelpText += String::CreateFromInt32( nError );
+                }
+            }
+        }
+        catch( DbException& eDb )
+        {
+            bOpenDB = sal_False;
             m_aModule.Erase();
-            aHelpText = String( DEFINE_CONST_UNICODE("Error: ") );
-            aHelpText += String::CreateFromInt32( nError );
-            return aHelpText;
+            if ( m_bIsDebug )
+            {
+                aHelpText = ERROR_TAG;
+                aHelpText += String::CreateFromAscii( eDb.what() );
+            }
         }
     }
 
-    ByteString aKeyStr = ByteString::CreateFromInt32( nHelpId );
-    Dbt aKey( (void*)aKeyStr.GetBuffer(), aKeyStr.Len() );
-    Dbt aData;
-    aData.set_flags( DB_DBT_MALLOC );
-    if ( !m_pDB->get( NULL, &aKey, &aData, 0 ) )
+    if ( bOpenDB )
     {
-        ByteString aHelpStr( (sal_Char*)aData.get_data(), aData.get_size() );
-        aHelpText = String( aHelpStr, RTL_TEXTENCODING_UTF8 );
+        ByteString aKeyStr = ByteString::CreateFromInt32( nHelpId );
+        Dbt aKey( (void*)aKeyStr.GetBuffer(), aKeyStr.Len() );
+        Dbt aData;
+        aData.set_flags( DB_DBT_MALLOC );
+        try
+        {
+            if ( !m_pDB->get( NULL, &aKey, &aData, 0 ) )
+            {
+                ByteString aHelpStr( (sal_Char*)aData.get_data(), aData.get_size() );
+                aHelpText = String( aHelpStr, RTL_TEXTENCODING_UTF8 );
+            }
+        }
+        catch( DbException& eDb )
+        {
+            if ( m_bIsDebug )
+            {
+                aHelpText = ERROR_TAG;
+                aHelpText += String::CreateFromAscii( eDb.what() );
+                aHelpText += PATH_TAG;
+                aHelpText += String::CreateFromAscii( aPathStr.GetBuffer() );
+            }
+        }
+    }
+    else if ( m_bIsDebug )
+    {
+        aHelpText += PATH_TAG;
+        aHelpText += String::CreateFromAscii( aPathStr.GetBuffer() );
     }
 
     return aHelpText;
@@ -245,7 +289,7 @@ SfxHelp_Impl::SfxHelp_Impl() :
 
     INetURLObject aPath( SvtPathOptions().GetHelpPath(), INET_PROT_FILE );
     aPath.insertName( aLanguageStr );
-    pDB = new SfxHelpDB_Impl( aPath.GetMainURL() );
+    pDB = new SfxHelpDB_Impl( aPath.GetMainURL(), bIsDebug );
 }
 
 SfxHelp_Impl::~SfxHelp_Impl()
@@ -284,7 +328,11 @@ String SfxHelp_Impl::GetHelpModuleName( ULONG nHelpId )
     return aModuleName;
 }
 
+#if (SUPD < 630)
+BOOL SfxHelp_Impl::Start( ULONG nHelpId )
+#else
 BOOL SfxHelp_Impl::Start( ULONG nHelpId, const Window* pWindow )
+#endif
 {
     Reference < XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
                 DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
@@ -370,6 +418,8 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId, const Window* pWindow )
                 pHlpWin->setContainerWindow( xTask->getContainerWindow() );
                 pHlpWin->SetFactory( aHelpModuleName, sal_True );
                 xTask->getContainerWindow()->setVisible( sal_True );
+
+                pHlpWin->FirstOpenMessage();
             }
         }
     }
