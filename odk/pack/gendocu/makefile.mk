@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 17:21:23 $
+#   last change: $Author: rt $ $Date: 2005-03-29 12:19:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,7 +110,7 @@ AUTODOCPARAMS= -lg c++ \
         -p bridges $(INCOUT) -t bridges
 
 JAVADOCPARAMS= -use -splitindex -windowtitle "Java UNO Runtime Reference" -header $(JAVADOCREFNAME) -d $(DESTDIRGENJAVAREF) -sourcepath $(JAVA_SRC_DIR) -classpath $(SOLARBINDIR)$/ridl.jar -linkoffline ../../common/ref ./uno -linkoffline http://java.sun.com/j2se/1.4.1/docs/api ./java $(JAVA_PACKAGES)
-    
+
 JAVADOCLOG = $(MISC)$/javadoc_log.txt
 
 MY_AUTODOC=$(WRAPCMD) $(SOLARBINDIR)$/autodoc
@@ -126,6 +126,8 @@ all: $(CPP_DOCU_INDEX_FILE)
 $(CPP_DOCU_INDEX_FILE) : $(INCLUDELIST)
     +-$(MKDIRHIER) $(@:d)        
     +$(MY_AUTODOC) -html $(DESTDIRGENCPPREF) -name $(CPPDOCREFNAME) $(AUTODOCPARAMS)
+    +-rm $(@:d)$/cpp.css
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/docs$/cpp$/ref$/cpp.css $(MY_TEXTCOPY_TARGETPRE) $(@:d)$/cpp.css
 
 $(JAVA_SRC_DIR)$/%.zip : $(SOLARCOMMONBINDIR)$/%.zip
     +-$(MKDIRHIER) $(@:d)        
