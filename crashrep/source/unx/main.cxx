@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hro $ $Date: 2003-06-10 13:42:42 $
+ *  last change: $Author: hro $ $Date: 2003-06-10 15:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1074,7 +1074,7 @@ static bool get_accessibility_state()
 
         bAccessible = fgets( buffer, sizeof(buffer), fin ) && 0 == strcmp( buffer, "true" );
 
-        fclose( fin );
+        pclose( fin );
     }
 
     return bAccessible;
