@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:34:52 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,7 +884,7 @@ String STR_DBFLD
     TEXT[ greek ] = "����� ��������� ���������";
     TEXT[ korean ] = "편지지 양식 필드";
     TEXT[ turkish ] = "Standart mektup";
-    TEXT[ language_user1 ] = " ";
+    TEXT[ language_user1 ] = "German should be Seriendruck-Felder";
     TEXT[ catalan ] = "Camp de carta formulari";
     TEXT[ thai ] = "เขตข้อมูลแบบจดหมาย";
 };
@@ -3392,7 +3392,7 @@ String STR_INSTEXT
     TEXT[ polish ] = "Wstaw tekst";
     TEXT[ portuguese_brazilian ] = "Inserir texto";
     TEXT[ japanese ] = "隠しテキスト(~E)";
-    TEXT[ korean ] = "숨은 텍스트";
+    TEXT[ korean ] = "숨겨진 텍스트(~E)";
     TEXT[ chinese_simplified ] = "隐藏的文字";
     TEXT[ chinese_traditional ] = "隱藏的文字(~E)";
     TEXT[ turkish ] = "Metin ekle";
