@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:05:12 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class ToolBox;
 class SvxPopupWindowListBox;
 
@@ -99,7 +103,7 @@ public:
 
 /////////////////////////////////////////////////////////////////
 
-class SvxUndoRedoControl : public SvxListBoxControl
+class SVX_DLLPUBLIC SvxUndoRedoControl : public SvxListBoxControl
 {
     std::vector< ::rtl::OUString > aUndoRedoList;
 
