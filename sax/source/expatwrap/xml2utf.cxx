@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml2utf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2002-05-15 16:32:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 #include <string.h>
-#include <assert.h>
 
 #include <sal/types.h>
 
