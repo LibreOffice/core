@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-28 12:08:42 $
+ *  last change: $Author: fme $ $Date: 2001-12-05 09:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,15 @@ void SwTxtFrm::SwitchHorizontalToVertical( Point& rPoint ) const
         rPoint.X() = Frm().Left() + Frm().Width() - nOfstY;
 
     rPoint.Y() = Frm().Top() + nOfstX;
+}
+
+// Calculates the a limit value when switching from
+// horizontal to vertical layout.
+long SwTxtFrm::SwitchHorizontalToVertical( long nLimit ) const
+{
+    Point aTmp( 0, nLimit );
+    SwitchHorizontalToVertical( aTmp );
+    return aTmp.X();
 }
 
 // Calculates the coordinates of a rectangle when switching from
@@ -570,6 +579,11 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
 
 void SwTxtFrm::CalcLineSpace()
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! IsVertical() || ! IsSwapped(),
+            "SwTxtFrm::CalcLineSpace with swapped frame!" )
+#endif
+
     if( IsLocked() || !HasPara() )
         return;
 
@@ -583,6 +597,7 @@ void SwTxtFrm::CalcLineSpace()
     }
 
     Size aNewSize( Prt().SSize() );
+
     SwTxtFormatInfo aInf( this );
     SwTxtFormatter aLine( this, &aInf );
     if( aLine.GetDropLines() )
@@ -1134,6 +1149,10 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
     MSHORT nHave = nNeed;
 
     // Wir geben ein paar Zeilen ab und schrumpfen im CalcPreps()
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_NOT_SWAPPED( this )
+#endif
+
     SwTxtSizeInfo aInf( this );
     SwTxtMargin aLine( this, &aInf );
     aLine.Bottom();
@@ -1172,6 +1191,11 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
         _InvalidateSize();
         InvalidatePage();
     }
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP( this )
+#endif
+
 }
 
 /*************************************************************************
@@ -1204,6 +1228,10 @@ sal_Bool lcl_ErgoVadis( SwTxtFrm* pFrm, xub_StrLen &rPos, const PrepareHint ePre
 void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                         sal_Bool bNotify )
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! IsVertical() || ! IsSwapped(),
+            "SwTxtFrm::Prepare with swapped frame" )
+#endif
 #ifdef DEBUG
     const SwTwips nDbgY = Frm().Top();
 #endif
