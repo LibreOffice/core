@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmmodel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:43:12 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@ class SfxObjectShell;
 #ifndef _SVX_SVDOBJ_HXX
 #include "svdobj.hxx"
 #endif
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::container::XNameContainer;
 
 TYPEINIT1(FmFormModel, SdrModel);
 
@@ -332,35 +335,6 @@ void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 #endif
 
     SdrModel::InsertPage( pPage, nPos );
-
-#ifndef SVX_LIGHT
-    if ( !m_pImpl->bMovingPage )
-    {
-        // this flag here is kind of a hack.
-        // When a page is moved, the SdrModel::MovePage calls an InsertPage only, but
-        // no preceding RemovePage. Thus, we (as a derivee) don't have a chance to see
-        // that the page which is just being inserted is (in real) already a part of the
-        // model. Especially, we do not have a chance to notice that the UndoEnvironment
-        // already _knows_ the forms we're just going to add below.
-        //
-        // The real solution to this would have been to fix SdrModel::MovePage, which
-        // is buggy in it's current form (as it violates the semantics of InsertPage, which
-        // is: insert a page which /currently is not part of any model/).
-        // However, this change in the SdrModel is much too risky.
-        //
-        // Another solution to this would have been to track (in the UndoEnv) which pages
-        // we know, and ignore any AddForms calls which are for such a page.
-        // But I refuse to do this (much more) work to hack a bug in the SdrModel.
-        //
-        // The decision is to do this "small hack" here (which I don't consider really
-        // bad).
-        //
-        // 2002-01-10 - #i3235# - fs@openoffice.org
-        //
-        if ( pPage )
-            m_pImpl->pUndoEnv->AddForms( static_cast< FmFormPage* >( pPage )->GetForms() );
-    }
-#endif
 }
 
 /*************************************************************************
@@ -393,7 +367,11 @@ SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
 
 #ifndef SVX_LIGHT
     if (pPage)
-        m_pImpl->pUndoEnv->RemoveForms(pPage->GetForms());
+    {
+        Reference< XNameContainer > xForms( pPage->GetForms( false ) );
+        if ( xForms.is() )
+            m_pImpl->pUndoEnv->RemoveForms( xForms );
+    }
 #endif
 
     return pPage;
@@ -413,11 +391,6 @@ void FmFormModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
 #endif
 
     SdrModel::InsertMasterPage(pPage, nPos);
-
-#ifndef SVX_LIGHT
-    if (pPage)
-        m_pImpl->pUndoEnv->AddForms(((FmFormPage*)pPage)->GetForms());
-#endif
 }
 
 /*************************************************************************
@@ -430,8 +403,12 @@ SdrPage* FmFormModel::RemoveMasterPage(sal_uInt16 nPgNum)
     FmFormPage* pPage = (FmFormPage*)SdrModel::RemoveMasterPage(nPgNum);
 
 #ifndef SVX_LIGHT
-    if (pPage)
-        m_pImpl->pUndoEnv->RemoveForms(pPage->GetForms());
+    if ( pPage )
+    {
+        Reference< XNameContainer > xForms( pPage->GetForms( false ) );
+        if ( xForms.is() )
+            m_pImpl->pUndoEnv->RemoveForms( xForms );
+    }
 #endif
 
     return pPage;
@@ -502,7 +479,7 @@ void FmFormModel::SetObjectShell( SfxObjectShell* pShell )
 
     if (pObjShell)
     {
-        m_pImpl->pUndoEnv->SetReadOnly(pObjShell->IsReadOnly() || pObjShell->IsReadOnlyUI());
+        m_pImpl->pUndoEnv->SetReadOnly( pObjShell->IsReadOnly() || pObjShell->IsReadOnlyUI(), FmXUndoEnvironment::Accessor() );
 
         if (!m_pImpl->pUndoEnv->IsReadOnly())
              m_pImpl->pUndoEnv->StartListening(*this);
