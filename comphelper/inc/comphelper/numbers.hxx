@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numbers.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: fs $ $Date: 2002-04-09 14:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,14 @@ namespace comphelper
             const staruno::Reference<starutil::XNumberFormatter>& xFormatter,
             sal_Int16 nType,
             const starlang::Locale& _rLocale);
+
+    /** retrieves a the value of a given property for a given format key, relating to a given formatter
+    */
+    ::com::sun::star::uno::Any getNumberFormatProperty(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
+        sal_Int32 _nKey,
+        const rtl::OUString& _rPropertyName
+    );
 
 //.........................................................................
 }   // namespace comphelper

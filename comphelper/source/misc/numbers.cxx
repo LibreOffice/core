@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numbers.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 13:30:49 $
+ *  last change: $Author: fs $ $Date: 2002-04-09 14:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,41 @@ sal_Int32 getStandardFormat(
     OSL_ENSURE(xTypes.is(), "getStandardFormat : no format types !");
 
     return xTypes.is() ? xTypes->getStandardFormat(nType, _rLocale) : 0;
+}
+
+//------------------------------------------------------------------------------
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::beans;
+
+//------------------------------------------------------------------------------
+Any getNumberFormatProperty( const Reference< XNumberFormatter >& _rxFormatter, sal_Int32 _nKey, const rtl::OUString& _rPropertyName )
+{
+    Any aReturn;
+
+    OSL_ENSURE( _rxFormatter.is() && _rPropertyName.getLength(), "getNumberFormatProperty: invalid arguments!" );
+    try
+    {
+        Reference< XNumberFormatsSupplier > xSupplier;
+        Reference< XNumberFormats > xFormats;
+        Reference< XPropertySet > xFormatProperties;
+
+        if ( _rxFormatter.is() )
+            xSupplier = _rxFormatter->getNumberFormatsSupplier();
+        if ( xSupplier.is() )
+            xFormats = xSupplier->getNumberFormats();
+        if ( xFormats.is() )
+            xFormatProperties = xFormats->getByKey( _nKey );
+
+        if ( xFormatProperties.is() )
+            aReturn = xFormatProperties->getPropertyValue( _rPropertyName );
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "::getNumberFormatProperty: caught an exception (did you create the key with another formatter?)!" );
+    }
+
+    return aReturn;
 }
 
 //.........................................................................
