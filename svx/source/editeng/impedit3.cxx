@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-27 16:37:36 $
+ *  last change: $Author: mt $ $Date: 2001-02-28 18:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,11 +545,13 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     DBG_ASSERT( pParaPortion->IsVisible(), "Unsichtbare Absaetze nicht formatieren!" );
     DBG_ASSERT( pParaPortion->IsInvalid(), "CreateLines: Portion nicht invalid!" );
 
+    BOOL bProcessingEmptyLine = ( pParaPortion->GetNode()->Len() == 0 );
+    BOOL bEmptyNodeWithPolygon = ( pParaPortion->GetNode()->Len() == 0 ) && GetTextRanger();
 
     // ---------------------------------------------------------------
     // Schnelle Sonderbehandlung fuer leere Absaetze...
     // ---------------------------------------------------------------
-    if ( pParaPortion->GetNode()->Len() == 0 )
+    if ( ( pParaPortion->GetNode()->Len() == 0 ) && !GetTextRanger() )
     {
         // schnelle Sonderbehandlung...
         if ( pParaPortion->GetTextPortions().Count() )
@@ -591,35 +593,45 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     const short nInvalidDiff = pParaPortion->GetInvalidDiff();
     const sal_uInt16 nInvalidStart = pParaPortion->GetInvalidPosStart();
     const sal_uInt16 nInvalidEnd =  nInvalidStart + Abs( nInvalidDiff );
+
     sal_Bool bQuickFormat = sal_False;
-    if ( ( pParaPortion->IsSimpleInvalid() ) && ( nInvalidDiff > 0 ) &&
-         ( pNode->Search( CH_FEATURE, nInvalidStart ) > nInvalidEnd ) )
+    if ( !bEmptyNodeWithPolygon )
     {
-        bQuickFormat = sal_True;
-    }
-    else if ( ( pParaPortion->IsSimpleInvalid() ) && ( nInvalidDiff < 0 ) )
-    {
-        // pruefen, ob loeschen ueber Portiongrenzen erfolgte...
-        sal_uInt16 nStart = nInvalidStart;  // DOPPELT !!!!!!!!!!!!!!!
-        sal_uInt16 nEnd = nStart - nInvalidDiff;  // neg.
-        bQuickFormat = sal_True;
-        sal_uInt16 nPos = 0;
-        sal_uInt16 nPortions = pParaPortion->GetTextPortions().Count();
-        for ( sal_uInt16 nTP = 0; nTP < nPortions; nTP++ )
+        if ( ( pParaPortion->IsSimpleInvalid() ) && ( nInvalidDiff > 0 ) &&
+             ( pNode->Search( CH_FEATURE, nInvalidStart ) > nInvalidEnd ) )
         {
-            // Es darf kein Start/Ende im geloeschten Bereich liegen.
-            TextPortion* const pTP = pParaPortion->GetTextPortions()[ nTP ];
-            nPos += pTP->GetLen();
-            if ( ( nPos > nStart ) && ( nPos < nEnd ) )
+            bQuickFormat = sal_True;
+        }
+        else if ( ( pParaPortion->IsSimpleInvalid() ) && ( nInvalidDiff < 0 ) )
+        {
+            // pruefen, ob loeschen ueber Portiongrenzen erfolgte...
+            sal_uInt16 nStart = nInvalidStart;  // DOPPELT !!!!!!!!!!!!!!!
+            sal_uInt16 nEnd = nStart - nInvalidDiff;  // neg.
+            bQuickFormat = sal_True;
+            sal_uInt16 nPos = 0;
+            sal_uInt16 nPortions = pParaPortion->GetTextPortions().Count();
+            for ( sal_uInt16 nTP = 0; nTP < nPortions; nTP++ )
             {
-                bQuickFormat = sal_False;
-                break;
+                // Es darf kein Start/Ende im geloeschten Bereich liegen.
+                TextPortion* const pTP = pParaPortion->GetTextPortions()[ nTP ];
+                nPos += pTP->GetLen();
+                if ( ( nPos > nStart ) && ( nPos < nEnd ) )
+                {
+                    bQuickFormat = sal_False;
+                    break;
+                }
             }
         }
     }
 
     sal_uInt16 nRealInvalidStart = nInvalidStart;
-    if ( bQuickFormat )
+    if ( bEmptyNodeWithPolygon )
+    {
+        TextPortion* pDummyPortion = new TextPortion( 0 );
+        pParaPortion->GetTextPortions().Reset();
+        pParaPortion->GetTextPortions().Insert( pDummyPortion, 0 );
+    }
+    else if ( bQuickFormat )
     {
         // schnellere Methode:
         RecalcTextPortion( pParaPortion, nInvalidStart, nInvalidDiff );
@@ -677,8 +689,12 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     sal_Bool bSameLineAgain = sal_False;    // Fuer TextRanger, wenn sich die Hoehe aendert.
     TabInfo aCurrentTab;
 
-    while ( nIndex < pNode->Len() )
+    BOOL bForceOneRun = bEmptyNodeWithPolygon;
+
+    while ( ( nIndex < pNode->Len() ) || bForceOneRun )
     {
+        bForceOneRun = FALSE;
+
         sal_Bool bEOL = sal_False;
         sal_Bool bEOC = sal_False;
         sal_uInt16 nPortionStart = 0;
@@ -825,7 +841,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 pPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
             }
             DBG_ASSERT( pPortion->GetKind() != PORTIONKIND_HYPHENATOR, "CreateLines: Hyphenator-Portion!" );
-            DBG_ASSERT( pPortion->GetLen(), "Leere Portion in CreateLines ?!" );
+            DBG_ASSERT( pPortion->GetLen() || bProcessingEmptyLine, "Leere Portion in CreateLines ?!" );
             if ( pNextFeature && ( pNextFeature->GetStart() == nTmpPos ) )
             {
                 sal_uInt16 nWhich = pNextFeature->GetItem()->Which();
@@ -923,7 +939,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             }
             else
             {
-                DBG_ASSERT( pPortion->GetLen(), "Empty Portion - Extra Space?!" );
+                DBG_ASSERT( pPortion->GetLen() || bProcessingEmptyLine, "Empty Portion - Extra Space?!" );
                 SeekCursor( pNode, nTmpPos+1, aTmpFont );
                 aTmpFont.SetPhysFont( GetRefDevice() );
                 if ( bCalcCharPositions || !pPortion->HasValidSize() )
@@ -1339,10 +1355,24 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 nDelFromLine = nLine;
                 break;
             }
-            if ( !pLine && ( nIndex < pNode->Len() )  )
+            if ( !pLine )
             {
-                pLine = new EditLine;
-                pParaPortion->GetLines().Insert( pLine, ++nLine );
+                if ( nIndex < pNode->Len() )
+                {
+                    pLine = new EditLine;
+                    pParaPortion->GetLines().Insert( pLine, ++nLine );
+                }
+                else if ( nIndex && bLineBreak && GetTextRanger() )
+                {
+                    // normaly CreateAndInsertEmptyLine would be called, but I want to use
+                    // CreateLines, so I need Polygon code only here...
+                    TextPortion* pDummyPortion = new TextPortion( 0 );
+                    pParaPortion->GetTextPortions().Insert( pDummyPortion, pParaPortion->GetTextPortions().Count() );
+                    pLine = new EditLine;
+                    pParaPortion->GetLines().Insert( pLine, ++nLine );
+                    bForceOneRun = TRUE;
+                    bProcessingEmptyLine = TRUE;
+                }
             }
             if ( pLine )
             {
@@ -1375,6 +1405,8 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 
 void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uInt32 nStartPosY )
 {
+    DBG_ASSERT( !GetTextRanger(), "Don't use CreateAndInsertEmptyLine with a polygon!" );
+
     EditLine* pTmpLine = new EditLine;
     pTmpLine->SetStart( pParaPortion->GetNode()->Len() );
     pTmpLine->SetEnd( pParaPortion->GetNode()->Len() );
@@ -1426,43 +1458,6 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
         long nMaxLineWidth = !IsVertical() ? aPaperSize.Width() : aPaperSize.Height();
         nMaxLineWidth -= GetXValue( rLRItem.GetRight() );
         long nTextXOffset = 0;
-        if ( GetTextRanger() )
-        {
-            long nTextY = nStartPosY + GetEditCursor( pParaPortion, pTmpLine->GetStart() ).Top();
-            long nTextLineHeight = pDummyPortion->GetSize().Height();
-            long nTextExtraYOffset = 0;
-            long nXWidth = 0;
-            while ( !nXWidth )
-            {
-                SvLongsPtr pTextRanges = GetTextRanger()->GetTextRanges( Range( nTextY + nTextExtraYOffset, nTextY + nTextExtraYOffset + nTextLineHeight ) );
-                DBG_ASSERT( pTextRanges, "GetTextRanges?!" );
-                long nMaxRangeWidth = 0;
-                // Den breitesten Bereich verwenden...
-                for ( sal_uInt16 n = 0; n < pTextRanges->Count(); )
-                {
-                    long nA = pTextRanges->GetObject( n++ );
-                    long nB = pTextRanges->GetObject( n++ );
-                    DBG_ASSERT( nA <= nB, "TextRange verdreht?" );
-                    long nW = nB - nA;
-                    if ( nW > nMaxRangeWidth )
-                    {
-                        nMaxRangeWidth = nW;
-                        nTextXOffset = nA;
-                    }
-                }
-                nXWidth = nMaxRangeWidth;
-                if ( nXWidth )
-                    nMaxLineWidth = nXWidth - nStartX - GetXValue( rLRItem.GetRight() );
-                else
-                {
-                    // Weiter unten im Polygon versuchen.
-                    // Unterhalb des Polygons die Paperbreite verwenden.
-                    nTextExtraYOffset += Max( (long)(nTextLineHeight / 10), (long)1 );
-                    if ( ( nTextY + nTextExtraYOffset  ) > GetTextRanger()->GetBoundRect().Bottom() )
-                        nXWidth = !IsVertical() ? GetPaperSize().Width() : GetPaperSize().Height();
-                }
-            }
-        }
         if ( nMaxLineWidth < 0 )
             nMaxLineWidth = 1;
         if ( eJustification ==  SVX_ADJUST_CENTER )
@@ -1762,12 +1757,10 @@ sal_uInt16 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_uInt16 nP
         {
             if ( nTmpPos == nPos )  // dann braucht nichts geteilt werden
             {
-                // Skip Portions with 0 len, eg. ExtraSpace
-                while ( ( (nSplitPortion+1) < nPortions ) && !pPortion->GetTextPortions().GetObject(nSplitPortion+1)->GetLen() )
-                {
+                // Skip Portions with ExtraSpace
+                while ( ( (nSplitPortion+1) < nPortions ) && (pPortion->GetTextPortions().GetObject(nSplitPortion+1)->GetKind() == PORTIONKIND_EXTRASPACE ) )
                     nSplitPortion++;
-                    DBG_ASSERT( pPortion->GetTextPortions().GetObject(nSplitPortion)->GetKind() == PORTIONKIND_EXTRASPACE, "What am I skipping?" );
-                }
+
                 return nSplitPortion;
             }
             pTextPortion = pTP;
@@ -2666,13 +2659,19 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
 
         Paint( pVDev, aTmpRec, aStartPos );
 
+        sal_Bool bClipRegion;
+        Region aOldRegion;
         MapMode aOldMapMode;
         if ( GetTextRanger() )
         {
-            pOutWin->Push( PUSH_CLIPREGION );
+            // Some problems here with push/pop, why?!
+//          pOutWin->Push( PUSH_CLIPREGION|PUSH_MAPMODE );
+            bClipRegion = pOutWin->IsClipRegion();
+            aOldRegion = pOutWin->GetClipRegion();
             // Wie bekomme ich das Polygon an die richtige Stelle????
             // Das Polygon bezieht sich auf die View, nicht auf das Window
             // => Origin umsetzen...
+            aOldMapMode = pOutWin->GetMapMode();
             Point aOrigin = aOldMapMode.GetOrigin();
             Point aViewPos = pView->GetOutputArea().TopLeft();
             aOrigin.Move( aViewPos.X(), aViewPos.Y() );
@@ -2680,7 +2679,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
             MapMode aNewMapMode( aOldMapMode );
             aNewMapMode.SetOrigin( aOrigin );
             pOutWin->SetMapMode( aNewMapMode );
-            pOutWin->IntersectClipRegion( Region( GetTextRanger()->GetPolyPolygon() ) );
+            pOutWin->SetClipRegion( Region( GetTextRanger()->GetPolyPolygon() ) );
         }
 
         pOutWin->DrawOutDev( aClipRec.TopLeft(), aClipRec.GetSize(),
@@ -2688,8 +2687,14 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
 
         if ( GetTextRanger() )
         {
-            pOutWin->Pop();
+//          pOutWin->Pop();
+            if ( bClipRegion )
+                pOutWin->SetClipRegion( aOldRegion );
+            else
+                pOutWin->SetClipRegion();
+            pOutWin->SetMapMode( aOldMapMode );
         }
+
 
         pView->DrawSelection();
     }
