@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:45:37 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
             {
                 // und der Fly muss irgendwo angehaengt sein, also
                 // den befragen
-                pLayout = (SwLayoutFrm*)((SwFlyFrm*)pLayout)->GetAnchor();
+                pLayout = (SwLayoutFrm*)((SwFlyFrm*)pLayout)->GetAnchorFrm();
                 continue;
             }
             else if( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
@@ -297,8 +297,8 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
 
                 // noch nicht abbrechen, kann ja auch noch im
                 // Header/Footer/Footnote/Fly stehen !!
-                pLayout = ((SwFlyFrm*)pLayout)->GetAnchor()
-                            ? ((SwFlyFrm*)pLayout)->GetAnchor()->GetUpper() : 0;
+                pLayout = ((SwFlyFrm*)pLayout)->GetAnchorFrm()
+                            ? ((SwFlyFrm*)pLayout)->GetAnchorFrm()->GetUpper() : 0;
                 continue;
             }
             else
