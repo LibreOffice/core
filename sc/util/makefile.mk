@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 20:40:12 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:09:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ RESLIB1SRSFILES=\
 # --- StarClac DLL
 
 SHL1TARGET= sc$(UPD)$(DLLPOSTFIX)
-SHL1VERSIONMAP= sc.map
+#SHL1VERSIONMAP= sc.map
 SHL1IMPLIB= sci
 
 .IF "$(OS)"!="MACOSX"
@@ -140,13 +140,19 @@ SHL1STDLIBS+= $(SCHLIB)
 .ENDIF
 
 SHL1DEPN=   $(L)$/itools.lib
-SHL1LIBS=   $(LIB3TARGET) $(LIB4TARGET)
+#SHL1LIBS=   $(LIB3TARGET) $(LIB4TARGET)
+SHL1LIBS= $(LIB1TARGET)
+LIB1TARGET=$(SLB)$/scall.lib
+LIB1FILES = $(LIB3TARGET) $(LIB4TARGET)
 
 .IF "$(GUI)"!="UNX"
 SHL1OBJS=   $(SLO)$/scdll.obj
 .ENDIF
 
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1DEPN=$(MISC)$/$(SHL1TARGET).flt
+DEF1NAME=$(SHL1TARGET)
+DEFLIB1NAME= scall
 
 .IF "$(GUI)" == "WNT"
 SHL1RES=    $(RCTARGET)
@@ -155,6 +161,23 @@ SHL1RES=    $(RCTARGET)
 # --- Linken der Applikation ---------------------------------------
 
 LIB3TARGET=$(SLB)$/scalc3.lib
+#LIB3FILES=	\
+#	$(SLB)$/app.lib \
+#	$(SLB)$/docshell.lib \
+#	$(SLB)$/view.lib \
+#	$(SLB)$/undo.lib \
+#	$(SLB)$/attrdlg.lib \
+#	$(SLB)$/namedlg.lib \
+#	$(SLB)$/styleui.lib \
+#	$(SLB)$/miscdlgs.lib \
+#	$(SLB)$/formdlgs.lib \
+#	$(SLB)$/cctrl.lib \
+#	$(SLB)$/dbgui.lib \
+#	$(SLB)$/optdlg.lib \
+#	$(SLB)$/pagedlg.lib \
+#	$(SLB)$/drawfunc.lib \
+#	$(SLB)$/navipi.lib
+
 LIB3FILES=	\
     $(SLB)$/app.lib \
     $(SLB)$/docshell.lib \
@@ -162,16 +185,14 @@ LIB3FILES=	\
     $(SLB)$/undo.lib \
     $(SLB)$/attrdlg.lib \
     $(SLB)$/namedlg.lib \
-    $(SLB)$/styleui.lib \
     $(SLB)$/miscdlgs.lib \
     $(SLB)$/formdlgs.lib \
     $(SLB)$/cctrl.lib \
     $(SLB)$/dbgui.lib \
-    $(SLB)$/optdlg.lib \
     $(SLB)$/pagedlg.lib \
     $(SLB)$/drawfunc.lib \
     $(SLB)$/navipi.lib
-
+    
 LIB3FILES+= \
             $(SLB)$/unoobj.lib
 
@@ -221,42 +242,119 @@ SHL2OBJS=   $(SLO)$/scdetect.obj \
         $(SLO)$/detreg.obj
 SHL2DEPN+=	makefile.mk
 
+
+# add for scui
+SHL8TARGET= scui$(UPD)$(DLLPOSTFIX)
+SHL8IMPLIB= scuiimp
+SHL8VERSIONMAP= scui.map
+SHL8DEF=$(MISC)$/$(SHL8TARGET).def
+DEF8NAME=       $(SHL8TARGET)
+
+SHL8STDLIBS= \
+        $(ISCLIB)	\
+            $(SVXLIB) \
+            $(SFX2LIB) \
+            $(GOODIESLIB) \
+            $(SO2LIB) \
+            $(SVTOOLLIB) \
+            $(TKLIB) \
+            $(VCLLIB) \
+            $(SVLLIB) \
+            $(SOTLIB) \
+            $(UNOTOOLSLIB) \
+            $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
+            $(UCBHELPERLIB)	\
+            $(CPPUHELPERLIB)	\
+            $(CPPULIB) \
+            $(VOSLIB) \
+            $(SALLIB) \
+            $(ICUUCLIB)	\
+            $(BASICLIB)
+            
+SHL8LIBS=   $(SLB)$/scui.lib
+LIB8TARGET = $(SLB)$/scui.lib
+
+LIB8FILES=$(SLB)$/styleui.lib	\
+        $(SLB)$/optdlg.lib
+
+LIB8OBJFILES = \
+        $(SLO)$/scuiexp.obj     \
+            $(SLO)$/scdlgfact.obj	\
+             $(SLO)$/tpsubt.obj		\
+            $(SLO)$/tptable.obj	\
+             $(SLO)$/tpstat.obj	\
+            $(SLO)$/tabpages.obj	\
+            $(SLO)$/tpsort.obj		\
+            $(SLO)$/sortdlg.obj		\
+            $(SLO)$/validate.obj	\
+            $(SLO)$/textdlgs.obj		\
+            $(SLO)$/subtdlg.obj		\
+             $(SLO)$/tphf.obj		\
+            $(SLO)$/scuitphfedit.obj	\
+            $(SLO)$/hfedtdlg.obj	\
+            $(SLO)$/attrdlg.obj	\
+             $(SLO)$/scuiimoptdlg.obj	\
+            $(SLO)$/strindlg.obj		\
+            $(SLO)$/shtabdlg.obj		\
+             $(SLO)$/scendlg.obj		\
+             $(SLO)$/pvfundlg.obj	\
+            $(SLO)$/pfiltdlg.obj	\
+            $(SLO)$/namepast.obj		\
+            $(SLO)$/namecrea.obj		\
+            $(SLO)$/mvtabdlg.obj		\
+            $(SLO)$/mtrindlg.obj		\
+            $(SLO)$/linkarea.obj		\
+            $(SLO)$/lbseldlg.obj		\
+            $(SLO)$/instbdlg.obj		\
+            $(SLO)$/inscodlg.obj		\
+            $(SLO)$/inscldlg.obj		\
+            $(SLO)$/groupdlg.obj		\
+            $(SLO)$/filldlg.obj			\
+            $(SLO)$/delcodlg.obj		\
+            $(SLO)$/delcldlg.obj		\
+             $(SLO)$/dapitype.obj	\
+            $(SLO)$/dapidata.obj	\
+            $(SLO)$/crdlg.obj			\
+            $(SLO)$/scuiasciiopt.obj	\
+            $(SLO)$/scuiautofmt.obj
 # --- Targets -------------------------------------------------------------
 
 .IF "$(depend)" == ""
 
-APP1HEAP=	8192
-.IF "$(GUI)"!="WNT"
-.IF "$(GUI)"=="WIN"
+#APP1HEAP=	8192
+#.IF "$(GUI)"!="WNT"
+#.IF "$(GUI)"=="WIN"
 # DGROUP:  DATA<0x5000  HEAP==0x2000  => STACK:0x9000 (36k)
 # wenn das runtergesetz wird, muss evtl. in data\cell.cxx die
 # MAXRECURSION Tiefe angepasst werden !!! (leider ein PI mal Daumen Wert)
-APP1STACK=36864
-.ELSE
+#APP1STACK=36864
+#.ELSE
 # os2: ca. 2,3*win
-APP1STACK=81920
-.ENDIF
-.ENDIF
+#APP1STACK=81920
+#.ENDIF
+#.ENDIF
 .ENDIF
 
 
 .INCLUDE :  target.mk
-
+   
+    
 .IF "$(depend)" == ""
 
 
 .IF "$(GUI)" == "WNT"
 
-$(MISC)$/$(SHL1TARGET).def:  makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY     $(SHL1TARGET)                                  >$@
-    @echo DESCRIPTION 'SCALC3 DLL'                                 >>$@
-    @echo DATA        READ WRITE NONSHARED                          >>$@
-    @echo EXPORTS                                                   >>$@
-    @echo   component_getImplementationEnvironment @24             >>$@
-    @echo   component_writeInfo @25                                >>$@
-    @echo   component_getFactory @26                               >>$@
+#$(MISC)$/$(SHL1TARGET).def:  makefile.mk
+#    @echo ------------------------------
+#    @echo Making: $@
+#    @echo LIBRARY     $(SHL1TARGET)                                  >$@
+#    @echo DESCRIPTION 'SCALC3 DLL'                                 >>$@
+#    @echo DATA        READ WRITE NONSHARED                          >>$@
+#    @echo EXPORTS                                                   >>$@
+#    @echo   component_getImplementationEnvironment @24             >>$@
+#    @echo   component_writeInfo @25                                >>$@
+#    @echo   component_getFactory @26                               >>$@
 .ENDIF
 
 .IF "$(OPTLINKS)" == "YES"
@@ -265,11 +363,15 @@ $(MISC)$/$(SHL1TARGET).def:  makefile.mk
 
 .ENDIF
 
-$(MISCX)$/$(SHL1TARGET).flt:
+#$(MISCX)$/$(SHL1TARGET).flt:
+#    @echo ------------------------------
+#    @echo Making: $@
+#    @echo WEP>$@
+#    @echo LIBMAIN>>$@
+#    @echo LibMain>>$@
+
+
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
-    @echo WEP>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@
-
-
+    @+$(TYPE) sc.flt > $@
