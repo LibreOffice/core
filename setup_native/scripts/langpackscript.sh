@@ -1,4 +1,13 @@
 #!/bin/sh
+
+MYUID=`id | sed "s/(.*//g" | sed "s/.*=//"`
+
+if [ $MYUID -ne 0 ]
+then
+    echo You need to have super-user rights to install this language package
+    exit 1
+fi
+
 linenum=LINENUMBERPLACEHOLDER
 
 more << "EOF"
@@ -63,7 +72,7 @@ mkdir $outdir
 #fi
 
 trap 'rm -rf $outdir; exit 1' HUP INT QUIT TERM
-echo "Unpacking..."
+echo "Unpacking and installing..."
 
 #if [ -x /usr/bin/sum ] ; then
 #    echo "Checksumming..."
@@ -94,7 +103,7 @@ case $platform in
 SunOS)
   tail +$linenum $0 | gunzip | (cd $outdir; tar xvf -)
   adminfile=$outdir/admin.$$
-  echo "BASEDIR=$PRODUCTINSTALLLOCATION" > $adminfile
+  echo "basedir=$PRODUCTINSTALLLOCATION" > $adminfile
   /usr/sbin/pkgadd -d $outdir -a $adminfile PACKAGENAMEPLACEHOLDER
 
   ;;
