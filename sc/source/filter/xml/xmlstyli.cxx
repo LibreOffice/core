@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 10:43:37 $
+ *  last change: $Author: sab $ $Date: 2000-10-23 12:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,17 +632,17 @@ XMLTableStylesContext::~XMLTableStylesContext()
 {
 }
 
-SvXMLImportContext *XMLTableStylesContext::CreateChildContext( sal_uInt16 nPrefix,
+/*SvXMLImportContext *XMLTableStylesContext::CreateChildContext( sal_uInt16 nPrefix,
                                          const OUString& rLocalName,
                                          const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_OFFICE == nPrefix &&
-        rLocalName.compareToAscii( sXML_master_styles ) == 0L )
+        rLocalName.compareToAscii( sXML_master_page ) == 0L )
     {
-//      pContext = new ScXMLMasterStylesContext( GetImport(), nPrefix, rLocalName,
-//                                            xAttrList, GetScImport().GetAutoStyles() );
+        pContext = new ScMasterStylesContext( GetImport(), nPrefix, rLocalName,
+                                              xAttrList );
     }
 
     if (!pContext)
@@ -650,7 +650,7 @@ SvXMLImportContext *XMLTableStylesContext::CreateChildContext( sal_uInt16 nPrefi
                                                rLocalName, xAttrList );
 
     return pContext;
-}
+}*/
 
 void XMLTableStylesContext::EndElement()
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 10:43:37 $
+ *  last change: $Author: sab $ $Date: 2000-10-23 12:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,10 +220,10 @@ public:
     virtual ~XMLTableStylesContext();
 
     // Create child element.
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+/*  virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );*/
 
     virtual void EndElement();
 

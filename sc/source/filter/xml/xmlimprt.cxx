@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 10:43:37 $
+ *  last change: $Author: sab $ $Date: 2000-10-23 12:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,7 +647,8 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
         break;
         break;
     case XML_TOK_DOC_MASTERSTYLES:
-        pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, sal_False);
+        pContext = new ScXMLMasterStylesContext( GetImport(), nPrefix, rLocalName,
+                                              xAttrList );
         break;
     case XML_TOK_DOC_META:
         pContext = GetScImport().CreateMetaContext( rLocalName );
