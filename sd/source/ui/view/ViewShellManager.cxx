@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:07:07 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,9 +347,6 @@ void ViewShellManager::MoveToTop (const ViewShell* pShell)
         ViewShell* pNonConstViewShell = aI->mpViewShell;
         ShellId nId = aI->mnId;
         mpActiveViewShells->erase (aI);
-        mpActiveViewShells->insert(
-            mpActiveViewShells->begin(),
-            ActiveShellDescriptor(pNonConstViewShell,nId));
 
         // Find out whether to insert at the top or one below.
         ActiveShellList::iterator aInsertPosition (
