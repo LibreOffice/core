@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-17 14:24:01 $
+ *  last change: $Author: ka $ $Date: 2002-08-05 10:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,7 @@ void SdView::DoPaste( Window* pWindow )
 
 void SdView::StartDrag( const Point& rStartPos, Window* pWindow )
 {
-    if( HasMarkedObj() && IsAction() && pViewSh && pWindow )
+    if( HasMarkedObj() && IsAction() && pViewSh && pWindow && !pDragSrcMarkList )
     {
         BrkAction();
 
@@ -480,8 +480,10 @@ void SdView::DragFinished( sal_Int8 nDropAction )
     if( pDragTransferable )
         pDragTransferable->SetView( NULL );
 
-    if( ( nDropAction & DND_ACTION_MOVE ) && !pDragTransferable->IsInternalMove() &&
-        !IsPresObjSelected() && pDragSrcMarkList && pDragSrcMarkList->GetMarkCount() )
+    if( ( nDropAction & DND_ACTION_MOVE ) &&
+        pDragTransferable && !pDragTransferable->IsInternalMove() &&
+        pDragSrcMarkList && pDragSrcMarkList->GetMarkCount() &&
+        !IsPresObjSelected() )
     {
         pDragSrcMarkList->ForceSort();
         BegUndo();
@@ -503,8 +505,12 @@ void SdView::DragFinished( sal_Int8 nDropAction )
             SdrMark* pM=pDragSrcMarkList->GetMark(nm);
             SdrObject* pObj=pM->GetObj();
             UINT32 nOrdNum=pObj->GetOrdNumDirect();
-            SdrObject* pChkObj = pObj->GetPage()->RemoveObject(nOrdNum);
-            DBG_ASSERT(pChkObj==pObj,"DeleteMarked(MarkList): pChkObj!=pObj beim RemoveObject()");
+
+            if( pObj && pObj->GetPage() )
+            {
+                SdrObject* pChkObj = pObj->GetPage()->RemoveObject(nOrdNum);
+                DBG_ASSERT(pChkObj==pObj,"DeleteMarked(MarkList): pChkObj!=pObj beim RemoveObject()");
+            }
         }
 
         EndUndo();
