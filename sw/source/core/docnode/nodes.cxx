@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-17 10:20:56 $
+ *  last change: $Author: jp $ $Date: 2001-10-17 10:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,7 +563,7 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                         // dann bewege alle Start/End/ContentNodes. Loesche
                         // bei den ContentNodes auch die Frames !!
                         pTblNd->pStartOfSection = aIdx.GetNode().pStartOfSection;
-                        for( USHORT n = 0; n < nInsPos; ++n )
+                        for( ULONG n = 0; n < nInsPos; ++n )
                         {
                             SwNodeIndex aMvIdx( aRg.aEnd, 1 );
                             SwCntntNode* pCNd = 0;
@@ -806,7 +806,7 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     aRg.aEnd++;
                     {
                         SwNodeIndex aCntIdx( aRg.aEnd );
-                        for( register USHORT n = 0; n < nInsPos; n++, aCntIdx++)
+                        for( register ULONG n = 0; n < nInsPos; n++, aCntIdx++)
                             aCntIdx.GetNode().pStartOfSection = pTmpStt;
                     }
 
