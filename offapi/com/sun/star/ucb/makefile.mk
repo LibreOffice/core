@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: kso $ $Date: 2002-08-09 12:59:11 $
+#   last change: $Author: mav $ $Date: 2002-09-25 10:26:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,6 +146,7 @@ IDLFILES=\
     InteractiveBadTransferURLException.idl\
     InteractiveCHAOSException.idl\
     InteractiveIOException.idl\
+    InteractiveAppException.idl\
     InteractiveNetworkConnectException.idl\
     InteractiveNetworkException.idl\
     InteractiveNetworkGeneralException.idl\
