@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-27 16:28:47 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,15 @@
 #ifndef SC_CONDITIO_HXX
 #include "conditio.hxx"
 #endif
+#ifndef _COM_SUN_STAR_SHEET_TABLEVALIDATIONVISIBILITY_HPP_
+#include <com/sun/star/sheet/TableValidationVisibility.hpp>
+#endif
+
+namespace ValidListType = ::com::sun::star::sheet::TableValidationVisibility;
 
 class ScPatternAttr;
 class ScTokenArray;
+class TypedStrCollection;
 
 enum ScValidationMode
 {
@@ -101,6 +107,7 @@ class ScValidationData : public ScConditionEntry
     BOOL                bShowInput;
     BOOL                bShowError;
     ScValidErrorStyle   eErrorStyle;
+    sal_Int16           mnListType;         // selection list type: none, unsorted, sorted.
     String              aInputTitle;
     String              aInputMessage;
     String              aErrorTitle;
@@ -146,6 +153,18 @@ public:
 
     ScValidationMode GetDataMode() const    { return eDataMode; }
 
+    inline sal_Int16 GetListType() const                { return mnListType; }
+    inline void     SetListType( sal_Int16 nListType )  { mnListType = nListType; }
+
+    /** Returns true, if the validation cell will show a selection list.
+        @descr  Use this instead of GetListType() which returns the raw property
+        regardless of the validation type. */
+    bool            HasSelectionList() const;
+    /** Tries to fill the passed collection with list validation entries.
+        @descr  Fills the list only, if this is a list validation and IsShowList() is enabled.
+        @param rStrings  (out-param) The string list to fill with list validation entires.
+        @return  true = rStrings has been filled with at least one entry. */
+    bool            FillSelectionList( TypedStrCollection& rStrings, const ScAddress rPos ) const;
 
                     //  mit String: bei Eingabe, mit Zelle: fuer Detektiv / RC_FORCED
     BOOL            IsDataValid( const String& rTest, const ScPatternAttr& rPattern,
@@ -169,6 +188,20 @@ public:
     //  operator== nur fuer die Sortierung
     BOOL operator ==( const ScValidationData& r ) const { return nKey == r.nKey; }
     BOOL operator < ( const ScValidationData& r ) const { return nKey <  r.nKey; }
+
+private:
+    /** Tries to get a cell range from a list validation formula.
+        @descr  The formula may contain a cell reference, a defined name or a database range.
+        @param rRange  (out-param) The resulting cell range.
+        @param rBaseAddr  Base address for relative references.
+        @return  true = Cell range found, rRange is valid. */
+    bool            GetRangeFromFormula( ScRange& rRange, const ScAddress& rBaseAddr, ScTokenArray& rTokArr, int nRecCount = 0 ) const;
+
+    /** Tests, if pCell is equal to what the passed token array represents. */
+    bool            IsEqualToTokenArray( ScBaseCell* pCell, const ScAddress& rPos, const ScTokenArray& rTokArr ) const;
+
+    /** Tests, if contents of pCell occur in cell range referenced by own formula, or in a string list. */
+    bool            IsListValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
 };
 
 //
@@ -205,5 +238,4 @@ public:
 };
 
 #endif
-
 
