@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:55:08 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,9 @@
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
 #endif
+#undef private
 
-#define IS_NOTRTL_ENABLED() ( pOutDev && !pOutDev->IsRTLEnabled() )
-
+//#define USE_NEW_RTL_IMPLEMENTATION
 
 // ----------------------------------------------------------------------------
 // The only common SalFrame method
@@ -189,14 +189,20 @@ void SalGraphics::mirror( long& x, const OutputDevice *pOutDev )
 
     if( w )
     {
-        x = w-1-x;
-
         if( pOutDev && !pOutDev->IsRTLEnabled() )
         {
+            OutputDevice *pOutDevRef = (OutputDevice*) pOutDev;
+#ifdef USE_NEW_RTL_IMPLEMENTATION
+            if( pOutDev->meOutDevType == OUTDEV_WINDOW )
+                pOutDevRef = (OutputDevice*) ((Window *) pOutDev)->mpDummy4; // top of non-mirroring hierarchy
+#endif
+
             // mirror this window back
-            long devX = w-pOutDev->GetOutputWidthPixel()-pOutDev->GetOutOffXPixel();   // re-mirrored mnOutOffX
-            x = devX + ( pOutDev->GetOutputWidthPixel() - 1 - (x - devX) ) ;
+            long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
+            x = devX + (x - pOutDevRef->GetOutOffXPixel());
         }
+        else
+            x = w-1-x;
     }
 }
 
@@ -210,14 +216,21 @@ void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev )
 
     if( w )
     {
-        x = w-nWidth-x;
-
         if( pOutDev && !pOutDev->IsRTLEnabled() )
         {
+            OutputDevice *pOutDevRef = (OutputDevice*) pOutDev;
+#ifdef USE_NEW_RTL_IMPLEMENTATION
+            if( pOutDev->meOutDevType == OUTDEV_WINDOW )
+                pOutDevRef = (OutputDevice*) ((Window *) pOutDev)->mpDummy4; // top of non-mirroring hierarchy
+#endif
+
             // mirror this window back
-            long devX = w-pOutDev->GetOutputWidthPixel()-pOutDev->GetOutOffXPixel();   // re-mirrored mnOutOffX
-            x = devX + ( pOutDev->GetOutputWidthPixel() - nWidth - (x - devX) ) ;
+            long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
+            x = devX + (x - pOutDevRef->GetOutOffXPixel());
         }
+        else
+            x = w-nWidth-x;
+
     }
 }
 
@@ -235,12 +248,19 @@ BOOL SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
 
         if( pOutDev && !pOutDev->IsRTLEnabled() )
         {
+            OutputDevice *pOutDevRef = (OutputDevice*) pOutDev;
+#ifdef USE_NEW_RTL_IMPLEMENTATION
+            if( pOutDev->meOutDevType == OUTDEV_WINDOW )
+                pOutDevRef = (OutputDevice*) ((Window *) pOutDev)->mpDummy4; // top of non-mirroring hierarchy
+#endif
+
             // mirror this window back
-            long devX = w-pOutDev->GetOutputWidthPixel()-pOutDev->GetOutOffXPixel();   // re-mirrored mnOutOffX
+            long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
             for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
             {
-                long x = w-1-pPtAry[i].mnX;
-                pPtAry2[j].mnX = devX + ( pOutDev->GetOutputWidthPixel() - 1 - (x - devX) );
+                //long x = w-1-pPtAry[i].mnX;
+                //pPtAry2[j].mnX = devX + ( pOutDevRef->mnOutWidth - 1 - (x - devX) );
+                pPtAry2[j].mnX = devX + (pPtAry[i].mnX - pOutDevRef->GetOutOffXPixel());
                 pPtAry2[j].mnY = pPtAry[i].mnY;
             }
         }
