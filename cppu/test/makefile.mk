@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dbo $ $Date: 2000-12-21 16:16:13 $
+#   last change: $Author: dbo $ $Date: 2000-12-21 16:18:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -167,8 +167,6 @@ $(BIN)$/testcppu.rdb: $(ALLIDLFILES)
     +unoidl -I$(PRJ) -I$(SOLARIDLDIR) -Burd -OH$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     +regmerge $@ / $(UNOUCRRDB)
-    +regcomp -register -r $@ -c javaloader.dll
-    +regcomp -register -r $@ -c jen.dll
     touch $@
 
 # 	+regcomp -register -r $@ -c javaloader.dll
