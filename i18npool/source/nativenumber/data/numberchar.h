@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberchar.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-07 01:54:53 $
+ *  last change: $Author: khong $ $Date: 2002-08-13 06:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,10 +159,11 @@ const sal_Int16 Multiplier_Lower_zh     = 0;
 const sal_Int16 Multiplier_Upper_zh     = 1;
 const sal_Int16 Multiplier_Lower_zh_TW  = 2;
 const sal_Int16 Multiplier_Upper_zh_TW  = 3;
-const sal_Int16 Multiplier_Hangul_ko    = 4;
-const sal_Int16 Multiplier_Modern_ja    = 5;
-const sal_Int16 Multiplier_Traditional_ja = 6;
-const sal_Int16 Multiplier_Count    = 7;
+const sal_Int16 Multiplier_Lower_ko     = 4;
+const sal_Int16 Multiplier_Hangul_ko    = 5;
+const sal_Int16 Multiplier_Modern_ja    = 6;
+const sal_Int16 Multiplier_Traditional_ja = 7;
+const sal_Int16 Multiplier_Count    = 8;
 
 const sal_Int16 ExponentCount_CJK   = 6;
 
@@ -172,8 +173,9 @@ static sal_Int16 MultiplierExponent_CJK[ExponentCount_CJK] = {
 static sal_Unicode MultiplierChar_CJK[][ExponentCount_CJK] = {
     0x5146, 0x4EBF, 0x4E07, 0x5343, 0x767E, 0x5341, // S. Chinese Lower
     0x5146, 0x4EBF, 0x4E07, 0x4EDF, 0x4F70, 0x62FE, // S. Chinese Upper
-    0x5146, 0x5104, 0x842C, 0x5343, 0x767E, 0x5341, // T. Chinese & Korean Lower
+    0x5146, 0x5104, 0x842C, 0x5343, 0x767E, 0x5341, // T. Chinese Lower
     0x5146, 0x5104, 0x842C, 0x4EDF, 0x4F70, 0x62FE, // T. Chinese & Korean Upper
+    0x5146, 0x5104, 0x4E07, 0x5343, 0x767E, 0x5341, // Korean Lower
     0xC870, 0xC5B5, 0xB9CC, 0xCC9C, 0xBC31, 0xC2ED, // Korean Hangul
     0x5146, 0x5104, 0x4E07, 0x5343, 0x767E, 0x5341, // Japanese Modern
     0x5146, 0x5104, 0x842C, 0x9621, 0x767E, 0x62FE, // Japanese Traditional
@@ -188,8 +190,9 @@ static sal_Int16 MultiplierExponent_short_CJK[ExponentCount_short_CJK] = {
 static sal_Unicode MultiplierChar_short_CJK[][ExponentCount_short_CJK] = {
     0x4EBF, 0x4E07, // S. Chinese Lower
     0x4EBF, 0x4E07, // S. Chinese Upper
-    0x5104, 0x842C, // T. Chinese & Korean Lower
+    0x5104, 0x842C, // T. Chinese Lower
     0x5104, 0x842C, // T. Chinese & Korean Upper
+    0x5104, 0x4E07, // Korean Lower
     0xC5B5, 0xB9CC, // Korean Hangul
     0x5104, 0x4E07, // Japanese Modern
     0x5104, 0x842C, // Japanese Traditional

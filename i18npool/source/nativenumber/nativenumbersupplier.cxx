@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-07 01:54:06 $
+ *  last change: $Author: khong $ $Date: 2002-08-13 06:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ static Number natnum4[4] = {
                 ExponentCount_CJK, MultiplierExponent_CJK },
         { NumberChar_Modern_ja, MultiplierChar_CJK[Multiplier_Modern_ja], NUMBER_OMIT_ALL,
                 ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_Lower_ko, MultiplierChar_CJK[Multiplier_Upper_zh_TW], NUMBER_OMIT_ZERO,
+        { NumberChar_Lower_ko, MultiplierChar_CJK[Multiplier_Lower_ko], NUMBER_OMIT_ZERO,
                 ExponentCount_CJK, MultiplierExponent_CJK },
 };
 
@@ -379,7 +379,7 @@ static Number natnum7[4] = {
                 ExponentCount_CJK, MultiplierExponent_CJK },
         { NumberChar_Modern_ja, MultiplierChar_short_CJK[Multiplier_Modern_ja], NUMBER_OMIT_ALL,
                 ExponentCount_short_CJK, MultiplierExponent_short_CJK },
-        { NumberChar_Lower_ko, MultiplierChar_CJK[Multiplier_Upper_zh_TW], NUMBER_OMIT_ALL,
+        { NumberChar_Lower_ko, MultiplierChar_CJK[Multiplier_Lower_ko], NUMBER_OMIT_ALL,
                 ExponentCount_CJK, MultiplierExponent_CJK },
 };
 
