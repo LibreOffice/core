@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-07 12:24:42 $
+ *  last change: $Author: as $ $Date: 2000-11-07 15:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,6 +553,14 @@ void SvtInetOptions::SetDnsIpAddress(rtl::OUString const & rValue,
                                      bool bFlush)
 {
     m_xImpl->setProperty(Impl::INDEX_DNS_IP_ADDRESS,
+                         uno::makeAny(rValue),
+                         bFlush);
+}
+
+//============================================================================
+void SvtInetOptions::SetSmtpServerName(rtl::OUString const & rValue, bool bFlush)
+{
+    m_xImpl->setProperty(Impl::INDEX_SMTP_SERVER_NAME,
                          uno::makeAny(rValue),
                          bFlush);
 }
