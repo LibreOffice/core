@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 17:43:17 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "PresentationViewShell.hxx"
+
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
@@ -71,27 +73,44 @@
 
 #include <svx/svxids.hrc>
 #include <sfx2/app.hxx>
-#include "frmview.hxx"
+#ifndef SD_FRAME_VIEW
+#include "FrameView.hxx"
+#endif
 #include "sdresid.hxx"
-#include "docshell.hxx"
-#include "presvish.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
+#endif
 #include "sdattr.hxx"
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "app.hrc"
 #include "strings.hrc"
 #include "glob.hrc"
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#ifndef SD_SUB_SHELL_MANAGER_HXX
+#include "SubShellManager.hxx"
+#endif
+#ifndef SD_FACTORY_IDS_HXX
+#include "FactoryIds.hxx"
+#endif
 
-#define SdPresViewShell
+#define PresentationViewShell
+using namespace sd;
 #include "sdslots.hxx"
 
+namespace sd {
+
 // -------------------
-// - SdPresViewShell -
+// - PresentationViewShell -
 // -------------------
 
-SFX_IMPL_INTERFACE( SdPresViewShell, SdDrawViewShell, SdResId( STR_PRESVIEWSHELL ) )
+SFX_IMPL_INTERFACE( PresentationViewShell, DrawViewShell, SdResId( STR_PRESVIEWSHELL ) )
 {
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD |
                                 SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
@@ -106,43 +125,40 @@ SFX_IMPL_INTERFACE( SdPresViewShell, SdDrawViewShell, SdResId( STR_PRESVIEWSHELL
                                 SdResId(RID_DRAW_COMMONTASK_TOOLBOX));
 }
 
-// -----------------------------------------------------------------------------
 
-SFX_IMPL_VIEWFACTORY( SdPresViewShell, SdResId( STR_DEFAULTVIEW ) )
-{
-    SFX_VIEW_REGISTRATION( SdDrawDocShell );
-}
+TYPEINIT1( PresentationViewShell, DrawViewShell );
 
 // -----------------------------------------------------------------------------
 
-TYPEINIT1( SdPresViewShell, SdDrawViewShell );
-
-// -----------------------------------------------------------------------------
-
-SdPresViewShell::SdPresViewShell( SfxViewFrame* pFrame, SfxViewShell *pOldShell ) :
-    SdDrawViewShell( pFrame, pOldShell ),
+PresentationViewShell::PresentationViewShell (
+    SfxViewFrame* pFrame,
+    ViewShellBase& rViewShellBase,
+    FrameView* pFrameViewArgument)
+    : DrawViewShell (pFrame, rViewShellBase, PK_STANDARD, pFrameViewArgument),
     mbShowStarted( sal_False )
 {
-    if( pDocSh && pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-        maOldVisArea = pDocSh->GetVisArea( ASPECT_CONTENT );
+    if( GetDocSh() && GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        maOldVisArea = GetDocSh()->GetVisArea( ASPECT_CONTENT );
+    meShellType = ST_PRESENTATION;
 }
 
 // -----------------------------------------------------------------------------
 
-SdPresViewShell::SdPresViewShell( SfxViewFrame* pFrame, const SdDrawViewShell& rShell ) :
-    SdDrawViewShell( pFrame, rShell ),
+PresentationViewShell::PresentationViewShell( SfxViewFrame* pFrame, const DrawViewShell& rShell ) :
+    DrawViewShell( pFrame, rShell ),
     mbShowStarted( sal_False )
 {
-    if( pDocSh && pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-        maOldVisArea = pDocSh->GetVisArea( ASPECT_CONTENT );
+    if( GetDocSh() && GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        maOldVisArea = GetDocSh()->GetVisArea( ASPECT_CONTENT );
+    meShellType = ST_PRESENTATION;
 }
 
 // -----------------------------------------------------------------------------
 
-SdPresViewShell::~SdPresViewShell()
+PresentationViewShell::~PresentationViewShell()
 {
-    if( pDocSh && pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED && !maOldVisArea.IsEmpty() )
-        pDocSh->SetVisArea( maOldVisArea );
+    if( GetDocSh() && GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED && !maOldVisArea.IsEmpty() )
+        GetDocSh()->SetVisArea( maOldVisArea );
 
     if( GetViewFrame() && GetViewFrame()->GetTopFrame() )
     {
@@ -163,13 +179,13 @@ SdPresViewShell::~SdPresViewShell()
 
 // -----------------------------------------------------------------------------
 
-void SdPresViewShell::Activate( BOOL bIsMDIActivate )
+void PresentationViewShell::Activate( BOOL bIsMDIActivate )
 {
-    SfxViewShell::Activate( bIsMDIActivate );
+    DrawViewShell::Activate( bIsMDIActivate );
 
     if( bIsMDIActivate )
     {
-        SdView*     pView = GetView();
+        ::sd::View*     pView = GetView();
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
 
         GetViewFrame()->GetDispatcher()->Execute( SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
@@ -186,7 +202,7 @@ void SdPresViewShell::Activate( BOOL bIsMDIActivate )
 
     if( bIsMDIActivate )
         ReadFrameViewData( pFrameView );
-    pDocSh->Connect( this );
+    GetDocSh()->Connect( this );
 
     if( pFuSlideShow && !mbShowStarted )
     {
@@ -197,16 +213,16 @@ void SdPresViewShell::Activate( BOOL bIsMDIActivate )
 
 // -----------------------------------------------------------------------------
 
-void SdPresViewShell::Paint( const Rectangle& rRect, SdWindow* pWin )
+void PresentationViewShell::Paint( const Rectangle& rRect, ::sd::Window* pWin )
 {
     // allow paints only if show is already started
     if( mbShowStarted )
-        SdDrawViewShell::Paint( rRect, pWin );
+        DrawViewShell::Paint( rRect, pWin );
 }
 
 // -----------------------------------------------------------------------------
 
-void SdPresViewShell::CreateFullScreenShow( SdViewShell* pOriginShell, SfxRequest& rReq )
+void PresentationViewShell::CreateFullScreenShow( ViewShell* pOriginShell, SfxRequest& rReq )
 {
     SFX_REQUEST_ARG( rReq, pAlwaysOnTop, SfxBoolItem, ATTR_PRESENT_ALWAYS_ON_TOP, FALSE );
 
@@ -216,10 +232,18 @@ void SdPresViewShell::CreateFullScreenShow( SdViewShell* pOriginShell, SfxReques
     BOOL            bAlwaysOnTop = ( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) && pAlwaysOnTop ) ? pAlwaysOnTop->GetValue() : pDoc->GetPresAlwaysOnTop();
 
     pWorkWindow->StartPresentationMode( TRUE, bAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0 );
-    SfxTopFrame* pNewFrame = SfxTopFrame::Create( pDoc->GetDocSh(), pWorkWindow, 4, TRUE );
+    SfxTopFrame* pNewFrame = SfxTopFrame::Create (
+        pDoc->GetDocSh(), pWorkWindow, PRESENTATION_FACTORY_ID, TRUE );
     pNewFrame->SetPresentationMode( TRUE );
 
-    SdPresViewShell*    pShell = (SdPresViewShell*) pNewFrame->GetCurrentViewFrame()->GetViewShell();
+    ViewShellBase* pBase = static_cast<ViewShellBase*>(
+        pNewFrame->GetCurrentViewFrame()->GetViewShell());
+    PresentationViewShell *pShell = NULL;
+    if (pBase != NULL)
+        pShell = static_cast<PresentationViewShell*>(
+            pBase->GetSubShellManager().GetMainSubShell());
+    DBG_ASSERT(pShell!=NULL, "can not create presenation view shell");
+
     SfxUInt16Item       aId( SID_CONFIGITEMID, SID_NAVIGATOR );
     SfxBoolItem         aShowItem( SID_SHOWPOPUPS, FALSE );
     const USHORT        nCurSdPageNum = ( pActualPage->GetPageNum() - 1 ) / 2;
@@ -234,6 +258,8 @@ void SdPresViewShell::CreateFullScreenShow( SdViewShell* pOriginShell, SfxReques
 
     pShell->GetViewFrame()->GetDispatcher()->Execute( SID_SHOWPOPUPS, SFX_CALLMODE_SYNCHRON, &aShowItem, &aId, 0L );
     pShell->GetViewFrame()->Show();
-    pShell->pFuSlideShow = new FuSlideShow( pShell, pShell->pWindow, pShell->pDrView, pShell->pDoc, rReq );
+    pShell->pFuSlideShow = new FuSlideShow( pShell, pShell->pWindow, pShell->pDrView, pShell->GetDoc(), rReq );
     pShell->GetActiveWindow()->GrabFocus();
 }
+
+} // end of namespace sd
