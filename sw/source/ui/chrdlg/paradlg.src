@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:13:18 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ TabDialog DLG_PARA
                 Text[ czech ] = "Odsazení & vzdálenost";
                 Text[ hebrew ] = "‮שוליים ורווחים‬";
                 Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
+                Text[ slovak ] = "Odsadenie & vzdialenosť";
             };
             PageItem
             {
@@ -152,6 +153,7 @@ TabDialog DLG_PARA
                 Text[ czech ] = "Zarovnání";
                 Text[ hebrew ] = "‮ישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
+                Text[ slovak ] = "Zarovnanie";
             };
             PageItem
             {
@@ -186,6 +188,7 @@ TabDialog DLG_PARA
                 Text[ czech ] = "Tok textu";
                 Text[ hebrew ] = "‮זרימת טקסט‬";
                 Text[ hindi ] = "टेक्स्ट् धारा";
+                Text[ slovak ] = "Tok textu";
             };
             PageItem
             {
@@ -216,6 +219,7 @@ TabDialog DLG_PARA
                 Text[ czech ] = "Asijská typografie";
                 Text[ hebrew ] = "Asiatische Typographie";
                 Text[ hindi ] = "ऐशियन टइपोग्रफी";
+                Text[ slovak ] = "Ázijská typografia";
             };
             PageItem
             {
@@ -247,6 +251,7 @@ TabDialog DLG_PARA
                 Text[ czech ] = "Číslování";
                 Text[ hebrew ] = "‮מיספור‬";
                 Text[ hindi ] = "संख्या देना";
+                Text[ slovak ] = "Číslovanie";
             };
             PageItem
             {
@@ -280,6 +285,7 @@ TabDialog DLG_PARA
                 Text[ czech ] = "Tabulátory";
                 Text[ hebrew ] = "Tabulator";
                 Text[ hindi ] = "टॉब्स";
+                Text[ slovak ] = "Tabulátory";
             };
             PageItem
             {
@@ -313,6 +319,7 @@ TabDialog DLG_PARA
                 Text[ czech ] = "Iniciály";
                 Text[ hebrew ] = "‮השמטת אותיות גדולות‬";
                 Text[ hindi ] = "बड़े अक्षरों को मिटाओ";
+                Text[ slovak ] = "Stránkovanie veľkými písmenami";
             };
             PageItem
             {
@@ -346,6 +353,7 @@ TabDialog DLG_PARA
                 Text[ czech ] = "Okraje";
                 Text[ hebrew ] = "‮מסגרות‬";
                 Text[ hindi ] = "किनारें";
+                Text[ slovak ] = "Okraje";
             };
             PageItem
             {
@@ -379,6 +387,7 @@ TabDialog DLG_PARA
                 Text[ czech ] = "Pozadí";
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
+                Text[ slovak ] = "Pozadie";
             };
         };
     };
@@ -397,6 +406,7 @@ TabDialog DLG_PARA
     Text[ czech ] = "Odstavec";
     Text[ hebrew ] = "‮פסקאות‬";
     Text[ hindi ] = "परिच्छेद";
+    Text[ slovak ] = "Odstavec";
 };
 TabDialog DLG_DRAWPARA
 {
@@ -454,6 +464,7 @@ TabDialog DLG_DRAWPARA
                 Text[ czech ] = "Odsazení & vzdálenost";
                 Text[ hebrew ] = "‮שוליים ורווחים‬";
                 Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
+                Text[ slovak ] = "Odsadenie & vzdialenosť";
             };
 #if SUPD>352
             PageItem
@@ -487,6 +498,7 @@ TabDialog DLG_DRAWPARA
                 Text[ czech ] = "Zarovnání";
                 Text[ hebrew ] = "‮ישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
+                Text[ slovak ] = "Zarovnanie";
             };
 #endif
             PageItem
@@ -518,6 +530,7 @@ TabDialog DLG_DRAWPARA
                 Text[ czech ] = "Asijská typografie";
                 Text[ hebrew ] = "Asiatische Typographie";
                 Text[ hindi ] = "ऐशियन टइपोग्रफी";
+                Text[ slovak ] = "Ázijská typografia";
             };
             PageItem
             {
@@ -551,6 +564,7 @@ TabDialog DLG_DRAWPARA
                 Text[ czech ] = "Tabulátory";
                 Text[ hebrew ] = "Tabulator";
                 Text[ hindi ] = "टॉब्स";
+                Text[ slovak ] = "Tabulátory";
             };
         };
     };
@@ -569,7 +583,10 @@ TabDialog DLG_DRAWPARA
     Text[ czech ] = "Odstavec";
     Text[ hebrew ] = "‮פסקאות‬";
     Text[ hindi ] = "परिच्छेद";
+    Text[ slovak ] = "Odstavec";
 };
+
+
 
 
 
