@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:12:19 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,27 +137,28 @@ namespace xmloff
     {
         switch (_eAttrib)
         {
-            case faName:            return "name";
-            case faServiceName:     return "service-name";
-            case faAction:          return "href";      // the only special thing here: Action is represented by an xlink:href attribute
-            case faEnctype:         return "enctype";
-            case faMethod:          return "method";
-            case faTargetFrame:     return "target-frame";
-            case faAllowDeletes:    return "allow-deletes";
-            case faAllowInserts:    return "allow-inserts";
-            case faAllowUpdates:    return "allow-updates";
-            case faApplyFilter:     return "apply-filter";
-            case faCommand:         return "command";
-            case faCommandType:     return "command-type";
-            case faEscapeProcessing:return "escape-processing";
-            case faDatasource:      return "datasource";
-            case faDetailFiels:     return "detail-fields";
-            case faFilter:          return "filter";
-            case faIgnoreResult:    return "ignore-result";
-            case faMasterFields:    return "master-fields";
-            case faNavigationMode:  return "navigation-mode";
-            case faOrder:           return "order";
-            case faTabbingCycle:    return "tab-cycle";
+            case faName:                return "name";
+            case faServiceName:         return "service-name";
+            case faAction:              return "href";      // the only special thing here: Action is represented by an xlink:href attribute
+            case faEnctype:             return "enctype";
+            case faMethod:              return "method";
+            case faTargetFrame:         return "target-frame";
+            case faAllowDeletes:        return "allow-deletes";
+            case faAllowInserts:        return "allow-inserts";
+            case faAllowUpdates:        return "allow-updates";
+            case faApplyFilter:         return "apply-filter";
+            case faCommand:             return "command";
+            case faCommandType:         return "command-type";
+            case faEscapeProcessing:    return "escape-processing";
+            case faDatasource:          return "datasource";
+            case faConnectionResource:  return "connection-resource";
+            case faDetailFiels:         return "detail-fields";
+            case faFilter:              return "filter";
+            case faIgnoreResult:        return "ignore-result";
+            case faMasterFields:        return "master-fields";
+            case faNavigationMode:      return "navigation-mode";
+            case faOrder:               return "order";
+            case faTabbingCycle:        return "tab-cycle";
             default:
                 OSL_ENSURE(sal_False, "OAttributeMetaData::getFormAttributeName: invalid id!");
         }
