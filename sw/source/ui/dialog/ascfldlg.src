@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:51:30 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "विशेषतायें";
         Text[ slovak ] = "Vlastnosti";
+        Text[ hungarian ] = "Tulajdonságok";
+        Text[ slovenian ] = "Lastnosti";
     };
     FixedText FT_CHARSET
     {
@@ -118,7 +120,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ french ] = "~Jeu de caract�res";
         Text[ spanish ] = "~Juego de caracteres";
         Text[ italian ] = "Set di caratteri";
-        Text[ danish ] = "Tegns�t";
+        Text[ danish ] = "T~egns�t";
         Text[ swedish ] = "Teckenupps�ttning";
         Text[ polish ] = "Z~estaw znak�w";
         Text[ portuguese_brazilian ] = "~Conjunto de caracteres";
@@ -135,6 +137,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ hebrew ] = "Z~eichensatz";
         Text[ hindi ] = "~अक्षर";
         Text[ slovak ] = "~Znaková sada";
+        Text[ hungarian ] = "~Karakterkészlet";
+        Text[ slovenian ] = "~Nabor znakov";
     };
     ListBox LB_CHARSET
     {
@@ -175,6 +179,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ hebrew ] = "~Grundschrift";
         Text[ hindi ] = "अनुपस्थिति अक्षर";
         Text[ slovak ] = "Východzie písma";
+        Text[ hungarian ] = "Alapértelmezett betűkészletek";
+        Text[ slovenian ] = "Privzete pisave";
     };
     ListBox LB_FONT
     {
@@ -198,7 +204,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ french ] = "~Langue";
         Text[ spanish ] = "Idio~ma";
         Text[ italian ] = "Lin~gua";
-        Text[ danish ] = "Sprog";
+        Text[ danish ] = "S~prog";
         Text[ swedish ] = "Spr�k";
         Text[ polish ] = "J�~zyk";
         Text[ portuguese_brazilian ] = "Idio~ma";
@@ -216,6 +222,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ hebrew ] = "~Sprache";
         Text[ hindi ] = "भा~षा";
         Text[ slovak ] = "Ja~zyk";
+        Text[ hungarian ] = "~Nyelv";
+        Text[ slovenian ] = "~Jezik";
     };
     ListBox LB_LANGUAGE
     {
@@ -239,7 +247,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ french ] = "Saut de ~paragraphe";
         Text[ spanish ] = "Salt~o de p�rrafo";
         Text[ italian ] = "~Interruzione paragrafo";
-        Text[ danish ] = "Afsnitsskift";
+        Text[ danish ] = "~Afsnitsskift";
         Text[ swedish ] = "Styckebrytning";
         Text[ polish ] = "Podzia� ~akapitu";
         Text[ portuguese_brazilian ] = "~Quebra de par�grafo";
@@ -257,6 +265,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ hebrew ] = "~Absatzumbruch";
         Text[ hindi ] = "~परिच्छेद खण्डन";
         Text[ slovak ] = "Zalomenie o~dstavca";
+        Text[ hungarian ] = "~Bekezdéstörés";
+        Text[ slovenian ] = "~Prelom odstavka";
     };
     RadioButton RB_CRLF
     {
@@ -274,7 +284,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ french ] = "~CR & LF";
         Text[ spanish ] = "CR & LF";
         Text[ italian ] = "~CR & LF";
-        Text[ danish ] = "CR og LF";
+        Text[ danish ] = "~CR og LF";
         Text[ swedish ] = "~CR & LF";
         Text[ polish ] = "~CR i LF";
         Text[ portuguese_brazilian ] = "~CR & LF";
@@ -292,6 +302,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ hebrew ] = "~CR & LF";
         Text[ hindi ] = "~CR और LF";
         Text[ slovak ] = "~CR & LF";
+        Text[ hungarian ] = "~CR & LF";
+        Text[ slovenian ] = "~CR & LF";
     };
     RadioButton RB_CR
     {
@@ -326,6 +338,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ hebrew ] = "C~R";
         Text[ hindi ] = "C~R";
         Text[ slovak ] = "C~R";
+        Text[ hungarian ] = "C~R";
+        Text[ slovenian ] = "C~R";
     };
     RadioButton RB_LF
     {
@@ -342,7 +356,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ french ] = "~LF";
         Text[ spanish ] = "~LF";
         Text[ italian ] = "~LF";
-        Text[ danish ] = "LF";
+        Text[ danish ] = "~LF";
         Text[ swedish ] = "LF";
         Text[ polish ] = "~LF";
         Text[ portuguese_brazilian ] = "~LF";
@@ -360,6 +374,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ hebrew ] = "~LF";
         Text[ hindi ] = "~LF";
         Text[ slovak ] = "~LF";
+        Text[ hungarian ] = "~LF";
+        Text[ slovenian ] = "~LF";
     };
 
     OKButton PB_OK
@@ -411,6 +427,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ hebrew ] = "System";
         Text[ hindi ] = "सिस्टम";
         Text[ slovak ] = "Systém";
+        Text[ hungarian ] = "Rendszer";
+        Text[ slovenian ] = "Sistem";
     };
     Text[ english_us ] = "ASCII Filter Options";
     Text[ portuguese ] = "Op��es de filtro ASCII";
@@ -438,7 +456,10 @@ ModalDialog DLG_ASCII_FILTER
     Text[ hebrew ] = "ASCII Filter Optionen";
     Text[ hindi ] = "ASCII फिल्टर विकल्प";
     Text[ slovak ] = "Nastavenia pre ASCII filter";
+    Text[ hungarian ] = "ASCII-szűrő beállításai";
+    Text[ slovenian ] = "Možnosti filtra za ASCII";
 };
+
 
 
 
