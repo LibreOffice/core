@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-22 14:10:06 $
+ *  last change: $Author: dr $ $Date: 2002-08-14 12:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,6 +550,7 @@ class ScGlobal
     static SvxBrushItem*    pProtectedBrushItem;
 
     static ImageList*       pOutlineBitmaps;
+    static ImageList*       pOutlineBitmapsHC;
 
 //  static Bitmap*          pAnchorBitmap;
 //  static Bitmap*          pGrayAnchorBitmap;
@@ -622,7 +623,10 @@ public:
        static const String& GetEmptyString();
     static const String&    GetScDocString();
 
-    static ImageList*       GetOutlineBitmaps();
+    /** Returns the specified image list with outline symbols.
+        @param bHC  false = standard symbols; true = high contrast symbols. */
+    static ImageList*       GetOutlineSymbols( bool bHC );
+
 //  static const Bitmap&    GetAnchorBitmap();
 //  static const Bitmap&    GetGrayAnchorBitmap();
 

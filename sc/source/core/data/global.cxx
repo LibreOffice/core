@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-29 15:18:45 $
+ *  last change: $Author: dr $ $Date: 2002-08-14 12:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ SvxBrushItem*   ScGlobal::pEmbeddedBrushItem = NULL;
 SvxBrushItem*   ScGlobal::pProtectedBrushItem = NULL;
 
 ImageList*      ScGlobal::pOutlineBitmaps = NULL;
+ImageList*      ScGlobal::pOutlineBitmapsHC = NULL;
 
 ScFunctionList* ScGlobal::pStarCalcFunctionList = NULL;
 ScFunctionMgr*  ScGlobal::pStarCalcFunctionMgr  = NULL;
@@ -609,11 +610,12 @@ const String& ScGlobal::GetEmptyString()
     return *pEmptyString;
 }
 
-ImageList* ScGlobal::GetOutlineBitmaps()
+ImageList* ScGlobal::GetOutlineSymbols( bool bHC )
 {
-    if (!pOutlineBitmaps)
-        pOutlineBitmaps = new ImageList( ScResId(RID_OUTLINEBITMAPS) );
-    return pOutlineBitmaps;
+    ImageList*& rpImageList = bHC ? pOutlineBitmapsHC : pOutlineBitmaps;
+    if( !rpImageList )
+        rpImageList = new ImageList( ScResId( bHC ? RID_OUTLINEBITMAPS_H : RID_OUTLINEBITMAPS ) );
+    return rpImageList;
 }
 
 void ScGlobal::Init()
@@ -760,6 +762,7 @@ void ScGlobal::Clear()
     DELETEZ(pEmbeddedBrushItem);
     DELETEZ(pProtectedBrushItem);
     DELETEZ(pOutlineBitmaps);
+    DELETEZ(pOutlineBitmapsHC);
 //  DELETEZ(pAnchorBitmap);
 //  DELETEZ(pGrayAnchorBitmap);
     DELETEZ(pEnglishFormatter);

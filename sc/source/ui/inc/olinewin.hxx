@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinewin.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: dr $ $Date: 2002-08-14 12:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,13 @@ private:
     ScViewData*         pViewData;
 
     Color               aColor;
+    ImageList*          pSymbols;
 
     BOOL                bHitMode;               // Knopf gedrueckt ?
     USHORT              nHitLevel;
     USHORT              nHitEntry;
     BOOL                bHitHeader;
-    Rectangle           aInvRect;
+    Point               aImagePos;
     BOOL                bIsInverted;
 
 
@@ -96,12 +97,14 @@ private:
                                     long& rFirstEntry, long& rSecondEntry, long& rBitmapEntry,
                                     ScOutlineEntry* pPrevious );
     void            DoFunction( USHORT nLevel, USHORT nEntry, BOOL bHeader );
-    void            ToggleRect( const Rectangle& rRect );
     BOOL            ButtonHit( const Point& rPos, USHORT& rLevel, USHORT& rEntry, BOOL& rHeader,
-                                Rectangle& rInvRect );
+                                Point& rImagePos );
     BOOL            LineHit( const Point& rPos, USHORT& rLevel, USHORT& rEntry );
 
     BOOL            IsFirst(USHORT nPos);
+
+    void            ImplDrawImage( const Point& rPos, sal_uInt16 nId );
+    void            ImplDrawBorder( const Point& rPos, bool bPressed );
 
 protected:
     virtual void    Paint( const Rectangle& rRect );

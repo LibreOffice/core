@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinewin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-23 11:24:24 $
+ *  last change: $Author: dr $ $Date: 2002-08-14 12:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,10 @@
 
 #define SC_OL_BITMAPSIZE    12
 
-#define SC_OL_IMAGE_PLUS    9
-#define SC_OL_IMAGE_MINUS   10
+#define SC_OL_IMAGE_PLUS        9
+#define SC_OL_IMAGE_MINUS       10
+#define SC_OL_IMAGE_NOTPRESSED  11
+#define SC_OL_IMAGE_PRESSED     12
 
 //==================================================================
 
@@ -89,7 +91,8 @@ ScOutlineWindow::ScOutlineWindow( Window* pParent, ScOutlineMode eNewMode,
     eWhich( eNewWhich ),
     nHeaderSize( 0 ),
     bHitMode( FALSE ),
-    aColor( COL_BLACK )
+    aColor( COL_BLACK ),
+    pSymbols( NULL )
 {
     ImplInitSettings();
 }
@@ -212,13 +215,29 @@ BOOL ScOutlineWindow::GetEntryPos( ScOutlineEntry* pEntry,
     return bVisible;
 }
 
+
+void ScOutlineWindow::ImplDrawImage( const Point& rPos, sal_uInt16 nId )
+{
+    DBG_ASSERT( pSymbols, "ScOutlineWindow::ImplDrawImage - no images" );
+    const Image& rImage = pSymbols->GetImage( nId );
+    SetLineColor();
+    SetFillColor( GetBackground().GetColor() );
+    DrawRect( Rectangle( rPos, rImage.GetSizePixel() ) );
+    DrawImage( rPos, rImage );
+}
+
+void ScOutlineWindow::ImplDrawBorder( const Point& rPos, bool bPressed )
+{
+    DBG_ASSERT( pSymbols, "ScOutlineWindow::ImplDrawBorder - no images" );
+    DrawImage( rPos, pSymbols->GetImage( bPressed ? SC_OL_IMAGE_PRESSED : SC_OL_IMAGE_NOTPRESSED ) );
+}
+
+
 #define GETPREV(nLevel,nEntryNo) (nEntryNo ? pArray->GetEntry( nLevel, nEntryNo-1 ) : 0)
 
 
 void __EXPORT ScOutlineWindow::Paint( const Rectangle& rRect )
 {
-    ImageList* pBitmaps = ScGlobal::GetOutlineBitmaps();
-
     USHORT nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
@@ -237,7 +256,6 @@ void __EXPORT ScOutlineWindow::Paint( const Rectangle& rRect )
     long nDestPos = nAllSize - 1;
 
     SetLineColor( aColor );
-
     if (bHor)
         DrawLine(Point(0,nDestPos), Point(aSize.Width()-1,nDestPos));
     else
@@ -261,11 +279,12 @@ void __EXPORT ScOutlineWindow::Paint( const Rectangle& rRect )
 
         for (nLevel=0; nLevel<=nDepth; nLevel++)
         {
-            DrawImage( aFirstPos, pBitmaps->GetImage(nLevel+1) );
+            ImplDrawImage( aFirstPos, nLevel + 1 );
             nFirstLevel += SC_OL_BITMAPSIZE;
         }
 
         long nStart = nHeaderSize-1;
+        SetLineColor( aColor );
         if (bHor)
             DrawLine(Point(nStart,0),Point(nStart,nDestPos));
         else
@@ -326,6 +345,7 @@ void __EXPORT ScOutlineWindow::Paint( const Rectangle& rRect )
                 if (bDraw)
                 {
                     SetLineColor();
+                    SetFillColor( aColor );
 
                     nSecondLevel = nFirstLevel;
                     nSecondLevel += 1;
@@ -385,9 +405,9 @@ void __EXPORT ScOutlineWindow::Paint( const Rectangle& rRect )
                     }
 
                     if (pEntry->IsHidden())
-                        DrawImage( aFirstPos, pBitmaps->GetImage(SC_OL_IMAGE_PLUS) );
+                        ImplDrawImage( aFirstPos, SC_OL_IMAGE_PLUS );
                     else
-                        DrawImage( aFirstPos, pBitmaps->GetImage(SC_OL_IMAGE_MINUS) );
+                        ImplDrawImage( aFirstPos, SC_OL_IMAGE_MINUS );
 
                     if (bClip)
                         SetClipRegion();
@@ -402,16 +422,8 @@ void __EXPORT ScOutlineWindow::Paint( const Rectangle& rRect )
 }
 
 
-void ScOutlineWindow::ToggleRect( const Rectangle& rRect )
-{
-    Update();
-    Invert( Rectangle( rRect.Left()+1, rRect.Top()+1, rRect.Right()-2, rRect.Top()+1 ) );
-    Invert( Rectangle( rRect.Left()+1, rRect.Top()+2, rRect.Left()+1, rRect.Bottom()-2 ) );
-}
-
-
 BOOL ScOutlineWindow::ButtonHit( const Point& rPos, USHORT& rLevel, USHORT& rEntry, BOOL& rHeader,
-                                Rectangle& rInvRect )
+                                Point& rImagePos )
 {
     USHORT nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -462,11 +474,9 @@ BOOL ScOutlineWindow::ButtonHit( const Point& rPos, USHORT& rLevel, USHORT& rEnt
                     rEntry = 0;
                     rHeader = TRUE;
                     if (bHor)
-                        rInvRect = Rectangle( Point( nEntryPos, nLevelPos ),
-                                    Size( SC_OL_BITMAPSIZE, SC_OL_BITMAPSIZE ) );
+                        rImagePos = Point( nEntryPos, nLevelPos );
                     else
-                        rInvRect = Rectangle( Point( nLevelPos, nEntryPos ),
-                                    Size( SC_OL_BITMAPSIZE, SC_OL_BITMAPSIZE ) );
+                        rImagePos = Point( nLevelPos, nEntryPos );
                     return TRUE;
                 }
             }
@@ -493,11 +503,9 @@ BOOL ScOutlineWindow::ButtonHit( const Point& rPos, USHORT& rLevel, USHORT& rEnt
                                     rEntry = nEntryNo;
                                     rHeader = FALSE;
                                     if (bHor)
-                                        rInvRect = Rectangle( Point( nEntryPos, nLevelPos ),
-                                                    Size( SC_OL_BITMAPSIZE, SC_OL_BITMAPSIZE ) );
+                                        rImagePos = Point( nEntryPos, nLevelPos );
                                     else
-                                        rInvRect = Rectangle( Point( nLevelPos, nEntryPos ),
-                                                    Size( SC_OL_BITMAPSIZE, SC_OL_BITMAPSIZE ) );
+                                        rImagePos = Point( nLevelPos, nEntryPos );
                                     return TRUE;
                                 }
                             }
@@ -613,25 +621,25 @@ void __EXPORT ScOutlineWindow::MouseMove( const MouseEvent& rMEvt )
     USHORT nLevel;
     USHORT nEntry;
     BOOL bHeader;
-    Rectangle aDummyRect;
+    Point aDummy;
 
     if ( bHitMode )
     {
         BOOL bHit = FALSE;
-        if ( ButtonHit( rMEvt.GetPosPixel(), nLevel, nEntry, bHeader, aDummyRect ) )
+        if ( ButtonHit( rMEvt.GetPosPixel(), nLevel, nEntry, bHeader, aDummy ) )
             if ( nLevel == nHitLevel && nEntry == nHitEntry && bHeader == bHitHeader )
                 bHit = TRUE;
 
         if (bHit)
         {
             if (!bIsInverted)
-                ToggleRect( aInvRect );
+                ImplDrawBorder( aImagePos, true );
             bIsInverted = TRUE;
         }
         else
         {
             if (bIsInverted)
-                ToggleRect( aInvRect );
+                ImplDrawBorder( aImagePos, false );
             bIsInverted = FALSE;
         }
     }
@@ -643,14 +651,14 @@ void __EXPORT ScOutlineWindow::MouseButtonUp( const MouseEvent& rMEvt )
     USHORT nLevel;
     USHORT nEntry;
     BOOL bHeader;
-    Rectangle aDummyRect;
+    Point aDummy;
 
     if ( bHitMode )
     {
         if ( bIsInverted )
-            ToggleRect( aInvRect );
+            ImplDrawBorder( aImagePos, false );
 
-        if ( ButtonHit( rMEvt.GetPosPixel(), nLevel, nEntry, bHeader, aDummyRect ) )
+        if ( ButtonHit( rMEvt.GetPosPixel(), nLevel, nEntry, bHeader, aDummy ) )
             if ( nLevel == nHitLevel && nEntry == nHitEntry && bHeader == bHitHeader )
                 DoFunction( nLevel, nEntry, bHeader );
 
@@ -665,14 +673,14 @@ void __EXPORT ScOutlineWindow::MouseButtonDown( const MouseEvent& rMEvt )
     USHORT nEntry;
     BOOL bHeader;
 
-    if ( ButtonHit( rMEvt.GetPosPixel(), nLevel, nEntry, bHeader, aInvRect ) )
+    if ( ButtonHit( rMEvt.GetPosPixel(), nLevel, nEntry, bHeader, aImagePos ) )
     {
         bHitMode = TRUE;
         nHitLevel = nLevel;
         nHitEntry = nEntry;
         bHitHeader = bHeader;
 
-        ToggleRect( aInvRect );
+        ImplDrawBorder( aImagePos, true );
         bIsInverted = TRUE;
     }
     else if ( rMEvt.GetClicks() == 2 )
@@ -772,13 +780,12 @@ void ScOutlineWindow::ImplInitSettings()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     SetBackground( rStyleSettings.GetFaceColor() );
-    SetFillColor( rStyleSettings.GetButtonTextColor() );
     aColor = rStyleSettings.GetButtonTextColor();
+    pSymbols = ScGlobal::GetOutlineSymbols( GetBackground().GetColor().IsDark() );
 
     Invalidate();
-
-
 }
+
 // -----------------------------------------------------------------------
 
 void ScOutlineWindow::DataChanged( const DataChangedEvent& rDCEvt )
