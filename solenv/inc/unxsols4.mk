@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:11:47 $
+#   last change: $Author: rt $ $Date: 2004-05-03 15:44:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -204,10 +204,10 @@ DLLPOST=.so
 
 LDUMP=cppfilt /b /n /o /p
 
-CFLAGSCXXSLO += -instances=static
-CFLAGSCXXOBJ += -instances=static
+CFLAGSCXXSLO +=
+CFLAGSCXXOBJ +=
 
-LINKFLAGSAPPGUI+= -instances=static
-LINKFLAGSSHLGUI+= -instances=static
-LINKFLAGSAPPCUI+= -instances=static
-LINKFLAGSSHLCUI+= -instances=static
+LINKFLAGSAPPGUI+=
+LINKFLAGSSHLGUI+=
+LINKFLAGSAPPCUI+=
+LINKFLAGSSHLCUI+=
