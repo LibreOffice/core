@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:49:32 $
+ *  last change: $Author: os $ $Date: 2002-09-10 14:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ TabPage TP_MANAGE_STYLES
         Text [ english_us ] = "~Name" ;
         Text [ italian ] = "~Nome" ;
         Text [ spanish ] = "~Nombre" ;
-        Text [ french ] = "~Nom" ;
+        Text [ french ] = "Nom" ;
         Text [ dutch ] = "~Naam" ;
         Text [ swedish ] = "~Namn" ;
         Text [ danish ] = "Navn" ;
@@ -95,8 +95,9 @@ TabPage TP_MANAGE_STYLES
         Text[ korean ] = "ì´ë¦„(~N)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nombre";
+        Text[ catalan ] = "~Nom";
         Text[ finnish ] = "~Nimi";
+        Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­";
     };
     Edit ED_NAME
     {
@@ -115,7 +116,7 @@ TabPage TP_MANAGE_STYLES
         Text [ portuguese_brazilian ] = "~Autom. aktualisieren" ;
         Text [ swedish ] = "~Autom. uppdatering" ;
         Text [ danish ] = "Opdater automatisk" ;
-        Text [ italian ] = "~Aggiorna automaticamente" ;
+        Text [ italian ] = "Aggiorna automaticamente" ;
         Text [ spanish ] = "~Actualizar automáticamente" ;
         Text [ french ] = "Actualisation ~automatique" ;
         Text [ dutch ] = "~Autom. actualiseren" ;
@@ -130,8 +131,9 @@ TabPage TP_MANAGE_STYLES
         Text[ korean ] = "ìë™ ìƒˆë¡œê³ ì¹¨(~A)";
         Text[ turkish ] = "~Otomatik güncelleme";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Actualizar automáticamente";
+        Text[ catalan ] = "~Actualitza automàticament";
         Text[ finnish ] = "~Automaattinen päivitys";
+        Text[ thai ] = "à¸›à¸£à¸±à¸šà¸›à¸£à¸¸à¸‡~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
     FixedText FT_NEXT
     {
@@ -140,7 +142,7 @@ TabPage TP_MANAGE_STYLES
         Text = "~Folgevorlage" ;
         Text [ ENGLISH ] = "~Next" ;
         Text [ norwegian ] = "~Neste" ;
-        Text [ italian ] = "Modello ~successivo" ;
+        Text [ italian ] = "Modello successivo" ;
         Text [ portuguese_brazilian ] = "~Pr?imo" ;
         Text [ portuguese ] = "~Estilo seguinte" ;
         Text [ finnish ] = "Seu~raava tyyli" ;
@@ -153,14 +155,15 @@ TabPage TP_MANAGE_STYLES
         Text[ chinese_simplified ] = "ä¸‹ä¸€ä¸ªæ ·å¼(~X)";
         Text[ russian ] = "Ñëåäóşùèé ñòèëü";
         Text[ polish ] = "Nastêpny styl";
-        Text[ japanese ] = "æ¬¡ã«ç¶šãï½½ï¾€ï½²ï¾™(~X)";
+        Text[ japanese ] = "æ¬¡ã«ç¶šãã‚¹ã‚¿ã‚¤ãƒ«(~X)";
         Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹æ¨£å¼(~X)";
         Text[ arabic ] = "äãØ ÊÇáí";
         Text[ greek ] = "Åğüìåíï ğñüôõğï";
-        Text[ korean ] = "ë‹¤ìŒ ì„œì‹ íŒŒì¼(~X)";
+        Text[ korean ] = "ë‹¤ìŒ í…œí”Œë¦¿(~X)";
         Text[ turkish ] = "Sonraki biçim";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
-        Text[ catalan ] = "~Estilo siguiente";
+        Text[ catalan ] = "~Estil següent";
+        Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸–à¸±~à¸”à¹„à¸›";
     };
     ListBox LB_NEXT
     {
@@ -189,17 +192,18 @@ TabPage TP_MANAGE_STYLES
         Text [ dutch ] = "~Gebaseerd op" ;
         Text [ spanish ] = "~Vinculado con" ;
         Text [ english_us ] = "Linked with" ;
-        Text[ chinese_simplified ] = "é“¾æ¥åˆ°(~B)";
+        Text[ chinese_simplified ] = "é“¾æ¥åˆ°";
         Text[ russian ] = "Ñâÿçàí ñ";
         Text[ polish ] = "Po³¹czony z";
-        Text[ japanese ] = "åŸå‹ï½½ï¾€ï½²ï¾™(~B)";
-        Text[ chinese_traditional ] = "é€£çµåˆ°(~B)";
+        Text[ japanese ] = "åŸå‹ã‚¹ã‚¿ã‚¤ãƒ«";
+        Text[ chinese_traditional ] = "é€£çµåˆ°";
         Text[ arabic ] = "ãÑÊÈØ ÈÜ";
         Text[ greek ] = "~Óıíäåóç ìå";
-        Text[ korean ] = "ë¡œ ë§í¬(~B)";
+        Text[ korean ] = "ì—°ê²°(~B)";
         Text[ turkish ] = "~Bağlanılan";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Vinculado con";
+        Text[ catalan ] = "~Basat en";
+        Text[ thai ] = "à¸šà¸™~à¸à¸·à¹‰à¸™à¸à¸²à¸™";
     };
     ListBox LB_BASE
     {
@@ -216,13 +220,13 @@ TabPage TP_MANAGE_STYLES
         Text = "~Bereich" ;
         Text [ ENGLISH ] = "~Region" ;
         Text [ norwegian ] = "~Område" ;
-        Text [ italian ] = "~Area" ;
+        Text [ italian ] = "Area" ;
         Text [ portuguese_brazilian ] = "~Regi?o" ;
         Text [ portuguese ] = "~Categoria" ;
         Text [ finnish ] = "~Luokka" ;
         Text [ danish ] = "Område" ;
         Text [ french ] = "~Catégorie" ;
-        Text [ swedish ] = "~Område" ;
+        Text [ swedish ] = "~Kategori" ;
         Text [ dutch ] = "~Bereik" ;
         Text [ spanish ] = "~Área" ;
         Text [ english_us ] = "~Category" ;
@@ -233,10 +237,11 @@ TabPage TP_MANAGE_STYLES
         Text[ chinese_traditional ] = "åˆ†é¡(~C)";
         Text[ arabic ] = "ÇáäØÇŞ";
         Text[ greek ] = "Êáôçãïñßá";
-        Text[ korean ] = "êµ¬ì—­(~C)";
+        Text[ korean ] = "ì˜ì—­(~C)";
         Text[ turkish ] = "~Kategori";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Área";
+        Text[ catalan ] = "~Categoria";
+        Text[ thai ] = "~à¸›à¸£à¸°à¹€à¸ à¸—";
     };
     ListBox LB_REGION
     {
@@ -257,6 +262,7 @@ TabPage TP_MANAGE_STYLES
         Pos = MAP_APPFONT ( 12 , 88  ) ;
         Size = MAP_APPFONT ( 236 , 85 ) ;
         ReadOnly = TRUE ;
+        IgnoreTab = TRUE;
     };
     FixedLine GB_DESC
     {
@@ -268,7 +274,7 @@ TabPage TP_MANAGE_STYLES
         Text [ italian ] = "Contiene" ;
         Text [ portuguese_brazilian ] = "Contém" ;
         Text [ portuguese ] = "Contém" ;
-        Text [ finnish ] = "Sisältää" ;
+        Text [ finnish ] = "Sisältö" ;
         Text [ danish ] = "Indeholder" ;
         Text [ french ] = "Contient" ;
         Text [ swedish ] = "Innehåller" ;
@@ -285,21 +291,11 @@ TabPage TP_MANAGE_STYLES
         Text[ korean ] = "í¬í•¨";
         Text[ turkish ] = "İçerik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Contiene";
+        Text[ catalan ] = "Conté";
+        Text[ thai ] = "à¸¡à¸µ";
     };
 };
  // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
 
 
 
