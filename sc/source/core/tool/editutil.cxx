@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-11 19:16:07 $
+ *  last change: $Author: sab $ $Date: 2001-10-15 11:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,11 +340,16 @@ void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, BOOL bRememberC
     const SfxItemSet& rNewSet = bRememberCopy ? *pDefaults : rSet;
     BOOL bUndo = IsUndoEnabled();
     EnableUndo( FALSE );
+    BOOL bUpdateMode = GetUpdateMode();
+    if ( bUpdateMode )
+        SetUpdateMode( FALSE );
     USHORT nPara = GetParagraphCount();
     for ( USHORT j=0; j<nPara; j++ )
     {
         SetParaAttribs( j, rNewSet );
     }
+    if ( bUpdateMode )
+        SetUpdateMode( TRUE );
     if ( bUndo )
         EnableUndo( TRUE );
 }
@@ -375,39 +380,60 @@ void ScEditEngineDefaulter::SetDefaultItem( const SfxPoolItem& rItem )
 
 void ScEditEngineDefaulter::SetText( const EditTextObject& rTextObject )
 {
+    BOOL bUpdateMode = GetUpdateMode();
+    if ( bUpdateMode )
+        SetUpdateMode( FALSE );
     EditEngine::SetText( rTextObject );
     if ( pDefaults )
         SetDefaults( *pDefaults, FALSE );
+    if ( bUpdateMode )
+        SetUpdateMode( TRUE );
 }
-
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObject,
             const SfxItemSet& rSet, BOOL bRememberCopy )
 {
+    BOOL bUpdateMode = GetUpdateMode();
+    if ( bUpdateMode )
+        SetUpdateMode( FALSE );
     EditEngine::SetText( rTextObject );
     SetDefaults( rSet, bRememberCopy );
+    if ( bUpdateMode )
+        SetUpdateMode( TRUE );
 }
 
 
 void ScEditEngineDefaulter::SetText( const String& rText )
 {
+    BOOL bUpdateMode = GetUpdateMode();
+    if ( bUpdateMode )
+        SetUpdateMode( FALSE );
     EditEngine::SetText( rText );
     if ( pDefaults )
         SetDefaults( *pDefaults, FALSE );
+    if ( bUpdateMode )
+        SetUpdateMode( TRUE );
 }
-
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const String& rText,
             const SfxItemSet& rSet, BOOL bRememberCopy )
 {
+    BOOL bUpdateMode = GetUpdateMode();
+    if ( bUpdateMode )
+        SetUpdateMode( FALSE );
     EditEngine::SetText( rText );
     SetDefaults( rSet, bRememberCopy );
+    if ( bUpdateMode )
+        SetUpdateMode( TRUE );
 }
 
 
 void ScEditEngineDefaulter::RemoveParaAttribs()
 {
     SfxItemSet* pCharItems = NULL;
+    BOOL bUpdateMode = GetUpdateMode();
+    if ( bUpdateMode )
+        SetUpdateMode( FALSE );
     USHORT nParCount = GetParagraphCount();
     for (USHORT nPar=0; nPar<nParCount; nPar++)
     {
@@ -472,6 +498,8 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
             SetParaAttribs( nPar, SfxItemSet( *rParaAttribs.GetPool(), rParaAttribs.GetRanges() ) );
         }
     }
+    if ( bUpdateMode )
+        SetUpdateMode( TRUE );
 }
 
 //------------------------------------------------------------------------
