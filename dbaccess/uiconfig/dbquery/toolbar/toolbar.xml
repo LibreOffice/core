@@ -17,6 +17,4 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SbaExecuteSql" toolbar:helpid="helpid:10721" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:DBClearQuery" toolbar:helpid="helpid:12295" toolbar:text="" />
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SbaNativeSql" toolbar:helpid="helpid:10720" toolbar:text="" toolbar:style="" />
 </toolbar:toolbar>
