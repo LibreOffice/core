@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNamespaceMap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-16 09:19:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #include <set>
 
+#include "UnoNamespaceMap.hxx"
+
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
@@ -96,6 +98,7 @@
 #ifndef _SVX_XMLCNITM_HXX
 #include "xmlcnitm.hxx"
 #endif
+
 
 using namespace ::comphelper;
 using namespace ::osl;
@@ -139,13 +142,11 @@ namespace svx
     };
 
     Reference< XInterface > SAL_CALL NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool1, SfxItemPool* pPool2 )
-        throw( Exception )
     {
         return (XWeak*)new NamespaceMap( pWhichIds, pPool1 );
     }
 
     Reference< XInterface > SAL_CALL NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool )
-        throw( Exception )
     {
         return (XWeak*)new NamespaceMap( pWhichIds, pPool );
     }
