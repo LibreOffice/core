@@ -73,6 +73,7 @@ import org.openoffice.xmerge.util.Debug;
 public class Worksheet {
 
     private String name;
+    private Workbook wb;
     private Vector rows     = new Vector();
     private Vector colInfo  = new Vector();
     private Vector cells    = new Vector();
@@ -82,12 +83,24 @@ public class Worksheet {
     private Selection s     = new Selection();
     private BeginningOfFile bof;
     private Eof eof;
-/*
-    static {
-        bof     = new BeginningOfFile(true);
-        eof     = new Eof();
+
+    /**
+      * Writes the current workbook to the <code>Outputstream</code>
+      *
+      * @param  os The destination outputstream
+      */
+    public Worksheet(Workbook wb) {
+        this.wb = wb;
     }
-*/
+
+    /**
+      * Default Contructor
+      *
+      * @param  os The destination outputstream
+      */
+    public Worksheet() {
+    }
+
     /**
       * Writes the current workbook to the <code>Outputstream</code>
       *
@@ -157,9 +170,8 @@ public class Worksheet {
 
                 case PocketExcelBiffConstants.FORMULA_CELL:
                     Debug.log(Debug.TRACE,"FORMULA: Cell Formula (06h)");
-                    Formula f = new Formula(is);
-                    if(f.getString()!="")   // if it is a formula we can convert
-                        cells.add(f);       // i.e. no functions
+                    Formula f = new Formula(is, wb);
+                    cells.add(f);
                     break;
 
                  case PocketExcelBiffConstants.FORMULA_STRING:
@@ -185,7 +197,7 @@ public class Worksheet {
 
                 case PocketExcelBiffConstants.DEFINED_NAME:
                     Debug.log(Debug.TRACE,"NAME: Defined Name (18h)");
-                    DefinedName dn = new DefinedName(is);
+                    DefinedName dn = new DefinedName(is, wb);
                     break;
 
                 case PocketExcelBiffConstants.CURRENT_SELECTION:

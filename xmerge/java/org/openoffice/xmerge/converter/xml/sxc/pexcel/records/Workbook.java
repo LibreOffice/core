@@ -63,6 +63,7 @@ import java.util.Enumeration;
 
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
+import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.IntArrayList;
 
@@ -79,6 +80,7 @@ OfficeConstants {
     private Vector extendedFormats      = new Vector();
     private Vector worksheets           = new Vector();
     private Vector boundsheets          = new Vector();
+    private Vector definedNames         = new Vector();
     private static final CodePage cp;
     private static final Window1 win1;
     private static final BeginningOfFile bof;;
@@ -90,7 +92,6 @@ OfficeConstants {
         win1            = new Window1();
         bof             = new BeginningOfFile(true);
         eof             = new Eof();
-
     }
 
 
@@ -125,6 +126,10 @@ OfficeConstants {
     public void write(OutputStream os) throws IOException {
         bof.write(os);
         cp.write(os);
+        for(Enumeration e = definedNames.elements();e.hasMoreElements();) {
+            DefinedName dn = (DefinedName) e.nextElement();
+            dn.write(os);
+        }
         win1.write(os);
         for(Enumeration e = fonts.elements();e.hasMoreElements();) {
             FontDescription fd = (FontDescription) e.nextElement();
@@ -167,6 +172,12 @@ OfficeConstants {
 
             switch (b)
             {
+                case PocketExcelBiffConstants.DEFINED_NAME:
+                    Debug.log(Debug.TRACE,"NAME: Defined Name (18h)");
+                    DefinedName dn = new DefinedName(is, this);
+                    definedNames.add(dn);
+                    break;
+
                 case PocketExcelBiffConstants.BOF_RECORD:
                     Debug.log(Debug.TRACE,"BOF Record");
                     bof.read(is);
@@ -175,11 +186,10 @@ OfficeConstants {
                 case PocketExcelBiffConstants.EOF_MARKER:
                     Debug.log(Debug.TRACE,"EOF Marker");
                     eof.read(is);
-                    Worksheet ws = new Worksheet();
+                    Worksheet ws = new Worksheet(this);
                     while(ws.read(is)) {
                         worksheets.add(ws);
-                        // ws.reset();
-                        ws = new Worksheet();
+                        ws = new Worksheet(this);
                     }
                     break;
 
@@ -280,6 +290,15 @@ OfficeConstants {
     }
 
     /**
+      * Gets a worksheet at a particular index from mthe current workbook.
+     *
+      * @param  index the index of the worksheet to retrieve
+      */
+    public Enumeration getDefinedNames() {
+
+        return definedNames.elements();
+    }
+    /**
      * Returns a <code>Vector</code> containing all the worksheet Names
      *
      * @return a <code>Vector</code> containing all the worksheet Names
@@ -288,12 +307,22 @@ OfficeConstants {
 
         Vector wsNames = new Vector();
 
-        for(Enumeration e = boundsheets.elements();e.hasMoreElements();) {
-            BoundSheet bs = (BoundSheet) e.nextElement();
-            wsNames.add(bs.getSheetName());
+        for(int i = 0;i < boundsheets.size();i++) {
+            wsNames.add(getSheetName(i));
         }
 
         return wsNames;
+    }
+
+    /**
+     * Returns a <code>Vector</code> containing all the worksheet Names
+     *
+     * @return a <code>Vector</code> containing all the worksheet Names
+     */
+    public String getSheetName(int index) {
+        BoundSheet bs = (BoundSheet) boundsheets.elementAt(index);
+
+        return bs.getSheetName();
     }
 
     /**
@@ -330,7 +359,7 @@ OfficeConstants {
         Debug.log(Debug.TRACE,"Cell Format: " + fmt);
         if(cellContents.startsWith("=")) {
             try {
-                Formula f = new Formula(row, col, cellContents, ixfe, fmt);
+                Formula f = new Formula(row, col, cellContents, ixfe, fmt, this);
                 currentWS.addCell(f);
                 if(category.equalsIgnoreCase(CELLTYPE_STRING)) {
                     StringValue sv = new StringValue(fmt.getValue());
@@ -363,7 +392,17 @@ OfficeConstants {
         currentWS.addColInfo(columnWidths);
     }
 
+    /**
+      * Will create a number of ColInfo recrods based on the column widths
+     * based in.
+     *
+      * @param  an integer list representing the column widths
+      */
+    public void addNameDefinition(NameDefinition nameDefinition) throws IOException {
 
+        DefinedName dn = new DefinedName(nameDefinition, this);
+        definedNames.add(dn);
+    }
 
     /**
      * Return the filename of the pxl document without the file extension

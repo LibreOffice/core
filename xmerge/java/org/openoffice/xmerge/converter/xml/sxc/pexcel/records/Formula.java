@@ -70,6 +70,8 @@ import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula.FormulaHelper;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
+
 /**
  * Represents a BIFF Record describing a formula
  */
@@ -91,9 +93,9 @@ public class Formula extends CellValue implements OfficeConstants {
      * @param ixfe font index
      * @param value the value of the cell
       */
-    public Formula(int row, int column, String cellContents, int ixfe, Format fmt)
+    public Formula(int row, int column, String cellContents, int ixfe, Format fmt, Workbook wb)
     throws Exception {
-
+        fh.setWorkbook(wb);
         this.ixfe   = EndianConverter.writeShort((short)ixfe);
         setRow(row);
         setCol(column);
@@ -156,8 +158,9 @@ public class Formula extends CellValue implements OfficeConstants {
       *
       * @param  is InputStream containing a Pocket Excel Data file.
       */
-    public Formula(InputStream is) throws IOException {
+    public Formula(InputStream is, Workbook wb) throws IOException {
         read(is);
+        fh.setWorkbook(wb);
     }
 
     /**
