@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:40:56 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -798,23 +798,20 @@ void SwSelPaintRects::Get1PixelInLogic( const ViewShell& rSh,
 /*  */
 
 SwShellCrsr::SwShellCrsr( const SwCrsrShell& rCShell, const SwPosition &rPos )
-    : SwCursor( rPos ), SwSelPaintRects( rCShell ),
-    pPt( SwPaM::GetPoint() )
+    : SwCursor(rPos), SwSelPaintRects(rCShell), pPt(SwPaM::GetPoint())
 {}
 
 
 SwShellCrsr::SwShellCrsr( const SwCrsrShell& rCShell, const SwPosition &rPos,
                             const Point& rPtPos, SwPaM* pRing )
-    : SwCursor( rPos, pRing ), SwSelPaintRects( rCShell ),
-    pPt( SwPaM::GetPoint() ), aPtPt( rPtPos ), aMkPt( rPtPos )
+    : SwCursor(rPos, pRing), SwSelPaintRects(rCShell), aMkPt(rPtPos),
+    aPtPt(rPtPos), pPt(SwPaM::GetPoint())
 {}
 
 
 SwShellCrsr::SwShellCrsr( SwShellCrsr& rICrsr )
-    : SwCursor( rICrsr ), SwSelPaintRects( *rICrsr.GetShell() ),
-    pPt( SwPaM::GetPoint() ),
-    aPtPt( rICrsr.GetPtPos() ),
-    aMkPt( rICrsr.GetMkPos() )
+    : SwCursor(rICrsr), SwSelPaintRects(*rICrsr.GetShell()),
+    aMkPt(rICrsr.GetMkPos()), aPtPt(rICrsr.GetPtPos()), pPt(SwPaM::GetPoint())
 {}
 
 SwShellCrsr::~SwShellCrsr() {}
@@ -1034,16 +1031,14 @@ FASTBOOL SwShellCrsr::IsAtValidPos( BOOL bPoint ) const
 
 SwShellTableCrsr::SwShellTableCrsr( const SwCrsrShell& rCrsrSh,
                                     const SwPosition& rPos )
-    : SwTableCursor( rPos ), SwShellCrsr( rCrsrSh, rPos ),
-        SwCursor( rPos )
+    : SwCursor(rPos), SwShellCrsr(rCrsrSh, rPos), SwTableCursor(rPos)
 {
 }
 
 SwShellTableCrsr::SwShellTableCrsr( const SwCrsrShell& rCrsrSh,
                     const SwPosition& rMkPos, const Point& rMkPt,
                     const SwPosition& rPtPos, const Point& rPtPt )
-    : SwTableCursor( rPtPos ), SwShellCrsr( rCrsrSh, rPtPos ),
-        SwCursor( rPtPos )
+    : SwCursor(rPtPos), SwShellCrsr(rCrsrSh, rPtPos), SwTableCursor(rPtPos)
 {
     SetMark();
     *GetMark() = rMkPos;
