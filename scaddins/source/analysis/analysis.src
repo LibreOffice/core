@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-31 09:34:30 $
+ *  last change: $Author: vg $ $Date: 2002-06-05 08:51:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7965,7 +7965,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "傳回某一個定期付息的有價債券所累積的利息。";
             Text[ turkish ] = "Return the accrued interest for a security that pays periodic interest";
             Text[ arabic ] = "Return the accrued interest for a security that pays periodic interest";
-            Text[ catalan ] = "Torna l'inter�s acumulat per a un valor amb pagament peri�dics d'interessos" ; } ";
+            Text[ catalan ] = "Torna l'inter�s acumulat per a un valor amb pagament peri�dics d'interessos" ;
             Text[ thai ] = "ส่งกลับดอกเบี้ยที่เพิ่มพูนสำหรับเงินประกันที่จ่ายดอกเบี้ยเป็นรายงวด";
         };
 
