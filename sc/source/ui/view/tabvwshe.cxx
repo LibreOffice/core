@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-20 17:04:25 $
+ *  last change: $Author: nn $ $Date: 2001-08-21 18:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <svtools/stritem.hxx>
+#include <vcl/sound.hxx>
 
 #include "tabvwsh.hxx"
 #include "sc.hrc"
@@ -218,6 +219,13 @@ void ScTabViewShell::InsertURLField( const String& rName, const String& rURL, co
     BOOL bSelectFirst = FALSE;
     if ( !pScMod->IsEditMode() )
     {
+        if ( !SelectionEditable() )
+        {
+            // no error message (may be called from drag&drop)
+            Sound::Beep();
+            return;
+        }
+
         // single url in cell is shown in the dialog and replaced
         bSelectFirst = HasBookmarkAtCursor( NULL );
         pScMod->SetInputMode( SC_INPUT_TABLE );
