@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-20 13:55:18 $
+ *  last change: $Author: ka $ $Date: 2001-04-24 08:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
+#endif
+#ifndef _PERSIST_HXX
+#include <so3/persist.hxx>
 #endif
 #ifndef _SVDVIEW_HXX
 #include "svdview.hxx"
