@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIndexEntrySupplier.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-14 10:17:34 $
+ *  last change: $Author: jp $ $Date: 2001-06-29 13:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,14 @@ module com { module sun { module star { module i18n {
     /**
         returns the capital index key for sorting a table of indexes, to
         a given index entry, to
-        a given <type scope="com::sun::star::lang">Locale</type>.
+        a given <type scope="com::sun::star::lang">Locale</type> and
+        to a given sort algorithm.
         <p>By example in english locale it return
         <br>   "K"   for "keyboard"
     */
     string getIndexCharacter( [in]string IndexEntry,
-                              [in]com::sun::star::lang::Locale aLocale );
+                              [in]com::sun::star::lang::Locale aLocale,
+                              [in]string SortAlgorithm );
     /**
         returns the pagenumber word of an index entry, where one page
         or more pages are combined to one pagenumber entry, to
