@@ -33,6 +33,7 @@ mkdir: %_DEST%\ucr%_EXT%\vcl
 ..\%__SRC%\slo\salmain.o %_DEST%\lib%_EXT%\salmain.o
 ..\%__SRC%\slo\svdll.obj %_DEST%\lib%_EXT%\xsvdll.obj
 ..\%__SRC%\ucr\*.ucr %_DEST%\ucr%_EXT%\vcl\*.ucr
+..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
 
 hedabu: ..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\vcl\*.h
 hedabu: ..\%__SRC%\inc\*.hxx %_DEST%\inc%_EXT%\vcl\*.hxx
