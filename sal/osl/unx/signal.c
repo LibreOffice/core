@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obr $ $Date: 2002-10-11 08:12:27 $
+ *  last change: $Author: sb $ $Date: 2002-10-31 08:51:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,7 @@ static sal_Bool InitSignal()
 
                     ign.sa_handler = SIG_IGN;
                     ign.sa_flags   = 0;
+                    sigemptyset(&ign.sa_mask);
 
                     if (sigaction(Signals[i].Signal, &ign, &oact) == 0)
                         Signals[i].Handler = oact.sa_handler;
