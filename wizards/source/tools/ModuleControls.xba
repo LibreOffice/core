@@ -167,6 +167,9 @@ Dim oUcb as object
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	oFolderDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FolderPicker&quot;)
 	InitPath = ConvertToUrl(oRefModel.Text)
+	If InitPath = &quot;&quot; Then
+		InitPath = GetPathSettings(&quot;Work&quot;)
+	End If
 	If oUcb.Exists(InitPath) Then
 		oFolderDialog.SetDisplayDirectory(InitPath)
 	End If
@@ -193,8 +196,10 @@ Dim oUcb as object
 	&apos;ListAny(0) = com.sun.star.ui.dialogs.TemplateDescription.FILEOPEN_SIMPLE
 	&apos;oFileDialog.initialize(ListAny())
 	AddFiltersToDialog(FilterNames(), oFileDialog)
-
 	InitPath = ConvertToUrl(oRefModel.Text)
+	If InitPath = &quot;&quot; Then
+		InitPath = GetPathSettings(&quot;Work&quot;)
+	End If
 	If oUcb.Exists(InitPath) Then
 		oFileDialog.SetDisplayDirectory(InitPath)
 	End If
