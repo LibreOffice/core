@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 15:57:43 $
+ *  last change: $Author: fs $ $Date: 2001-08-07 16:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -955,7 +955,7 @@ namespace dbaui
         if ((DST_DBASE == m_eCurrentSelection) || (DST_TEXT == m_eCurrentSelection) || (DST_CALC == m_eCurrentSelection))
         {
             String sOldPath = m_aConnection.GetSavedValueNoPrefix();
-            String sURL = getURLNoPrefix();
+            String sURL = m_aConnection.GetTextNoPrefix();
             if ((sURL != sOldPath) && (0 != sURL.Len()))
             {   // the text changed since entering the control
 
@@ -1382,6 +1382,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2001/08/07 15:57:43  fs
+ *  #88431# centralized methods for setting/retrieving the URL in m_aConnection - this way we can translate URLs so that they're displayed in a decoded version
+ *
  *  Revision 1.19  2001/08/02 13:46:58  oj
  *  #90386# set user/pwd and other to zero
  *
