@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitledControl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:40:12 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #include "TitledControl.hxx"
 
 #include "AccessibleTitledControl.hxx"
-#include "Decorator.hxx"
 #include "ControlContainer.hxx"
 #include "TaskPaneFocusManager.hxx"
 
