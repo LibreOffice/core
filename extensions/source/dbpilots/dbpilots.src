@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:05:23 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ ModalDialog RID_DLG_GROUPBOXWIZARD
     Closeable       = TRUE ;
     Hide            = TRUE;
     Text[ catalan ] = "AutoPiloto - Elemento de grupo";
-    Text[ finnish ] = "AutoPilot Gruppenelement";
+    Text[ finnish ] = "Automaattinen ryhm‰elementtien ohjaus";
 };
 
 ModalDialog RID_DLG_LISTCOMBOWIZARD
@@ -136,7 +136,7 @@ ModalDialog RID_DLG_GRIDWIZARD
     Text [ korean ] = "¿⁄µø∆ƒ¿œ∑µ «• ø‰º“";
     Text [ turkish ] = "OtoPilot Tablo ˆesi";
     Text[ catalan ] = "AutoPiloto - Elemento de tabla";
-    Text[ finnish ] = "AutoPilot Tabellenelement";
+    Text[ finnish ] = "Automaattinen taulukkoelementin ohjaus";
 };
 
 String RID_STR_LISTWIZARD_TITLE
@@ -209,7 +209,7 @@ String RID_STR_COULDNOTOPENTABLE
     Text[ italian ] = "Impossibile realizzare il collegamento alla sorgente dati.";
     Text[ danish ] = "The connection to the data source could not be established.";
     Text[ swedish ] = "Det gick inte att uppr‰tta en tabellfˆrbindelse till datak‰llan.";
-    Text[ polish ] = "Po≥πczenie tabeli ze ürÛd≥em bazy danych nie powiod≥o siÍ.";
+    Text[ polish ] = "Po≥πczenie tabeli ze ?rÛd≥em bazy danych nie powiod≥o siÍ.";
     Text[ portuguese_brazilian ] = "The connection to the data source could not be established.";
     Text[ japanese ] = "√ﬁ∞¿ø∞ΩÇ÷ÇÃ√∞ÃﬁŸê⁄ë±ÇÕÇ≈Ç´Ç‹ÇπÇÒÇ≈ÇµÇΩÅB";
     Text[ korean ] = "The connection to the data source could not be established.";
@@ -224,6 +224,9 @@ String RID_STR_COULDNOTOPENTABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/05/10 06:05:23  kz
+ *  Merge SRC631: 05/10/01 - 08:05:30 (NoBranch)
+ *
  *  Revision 1.9  2001/05/04 20:12:13  kz
  *  Merge SRC630: 05/04/01 - 22:12:15 (NoBranch)
  *
