@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:27 $
+ *  last change: $Author: jsc $ $Date: 2000-11-06 15:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2859,8 +2859,7 @@ sal_Bool ExceptionType::dumpHFile(FileStream& o)
 
     o << "\n{\npublic:\n";
     inc();
-//  o << indent() << "inline " << m_name << "();\n\n";
-    o << indent() << "inline " << m_name << "() { }\n\n";
+    o << indent() << "inline " << m_name << "();\n\n";
 
     sal_uInt32      fieldCount = m_reader.getFieldCount();
     RTFieldAccess   access = RT_ACCESS_INVALID;
@@ -2949,10 +2948,7 @@ sal_Bool ExceptionType::dumpHxxFile(FileStream& o)
 
     dumpNameSpace(o);
     o << endl;
-//
-    OString superType(m_reader.getSuperTypeName());
-    sal_Bool first = sal_True;
-/*
+
     o << "inline " << m_name << "::" << m_name << "()\n";
     inc();
     OString superType(m_reader.getSuperTypeName());
@@ -2991,18 +2987,18 @@ sal_Bool ExceptionType::dumpHxxFile(FileStream& o)
         o << endl;
     }
     dec();
-    o << "{\n";
-    inc();
-    dumpCppuGetType(o, m_typeName, sal_True);
-    dec();
-    o << "}\n\n";
-*/
-    sal_uInt32      fieldCount = m_reader.getFieldCount();
-    RTFieldAccess   access = RT_ACCESS_INVALID;
-    OString         fieldName;
-    OString         fieldType;
-    sal_uInt16      i = 0;
-//
+    if ( !m_cppuTypeDynamic )
+    {
+        o << "{\n";
+        inc();
+        dumpCppuGetType(o, m_typeName, sal_True);
+        dec();
+        o << "}\n\n";
+    } else
+    {
+        o << "{ }\n\n";
+    }
+
     if (fieldCount > 0 || getInheritedMemberCount() > 0)
     {
         o << indent() << "inline " << m_name << "::" << m_name << "(";
@@ -3059,14 +3055,17 @@ sal_Bool ExceptionType::dumpHxxFile(FileStream& o)
         }
 
         dec();
-        o << "{ }\n\n";
-/*
-        o << "{\n";
-        inc();
-        dumpCppuGetType(o, m_typeName, sal_True);
-        dec();
-        o << "}\n\n";
-*/
+        if ( !m_cppuTypeDynamic )
+        {
+            o << "{\n";
+            inc();
+            dumpCppuGetType(o, m_typeName, sal_True);
+            dec();
+            o << "}\n\n";
+        } else
+        {
+            o << "{ }\n\n";
+        }
     }
 
     dumpNameSpace(o, sal_False);
