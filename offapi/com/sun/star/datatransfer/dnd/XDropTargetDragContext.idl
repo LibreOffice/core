@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDropTargetDragContext.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:19 $
+ *  last change: $Author: arellano $ $Date: 2001-07-27 18:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com { module sun { module star { module datatransfer { module dnd {
 
     <p>The DropTargetContext provides the mechanism for a potential receiver
     of a drop operation to both provide the end user with the appropriate drag
-    under feedback, but also to effect the subsequent data transfer if
+    under feedback and effect the subsequent data transfer, if
     appropriate. </p>
 
 */
@@ -95,7 +95,7 @@ interface XDropTargetDragContext: com::sun::star::uno::XInterface
 
         <p>This method should be called from the <type>XDropTargetListener</type>s
         <member>XDropTargetListener::dragEnter</member>,
-        <member>XDropTargetListener::dragOver</member> and
+        <member>XDropTargetListener::dragOver</member>, and
         <member>XDropTargetListener::dragActionChanged</member> methods if the
         implementation wishes to accept the drag operation with the specified
         action.</p>
@@ -115,6 +115,8 @@ interface XDropTargetDragContext: com::sun::star::uno::XInterface
         <p>Reject the drag as a result of examining either or the available
         <type scope="com::sun::star::datatransfer">DataFlavor</type> types
         received in the <member>XDropTargetListener::dragEnter</member>.
+
+    <!-- Editor: Something is missing between the "either or" -->
     */
 
     [oneway] void rejectDrag();
