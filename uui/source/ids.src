@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:11:30 $
+ *  last change: $Author: kz $ $Date: 2001-08-15 20:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: kz $ $Date: 2001-08-13 20:11:30 $ $Revision: 1.24 $
+// $Author: kz $ $Date: 2001-08-15 20:06:02 $ $Revision: 1.25 $
 //============================================================================
 
 #define __RSC
@@ -1171,6 +1171,7 @@ Resource RID_UUI_ERRHDL
         Text[ catalan ] = "Folder $(ARG1) does not exist";
     };
 };
+
 
 
 
