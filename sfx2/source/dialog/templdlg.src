@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ ModalDialog RID_STYLECATALOG
     Text [ italian ] = "Catalogo modelli" ;
     Text [ portuguese_brazilian ] = "Stylesheet Catalogue" ;
     Text [ portuguese ] = "Catálogo de estilos" ;
-    Text [ french ] = "Catalogue de styles" ;
+    Text [ french ] = "Catalogue des styles" ;
     Text [ dutch ] = "Catalogus opmaakprofielen" ;
     Text [ spanish ] = "Catálogo de estilos" ;
     Text [ danish ] = "Typografi-katalog" ;
@@ -182,7 +182,7 @@ ModalDialog RID_STYLECATALOG
         Text [ italian ] = "Mo~difica..." ;
         Text [ portuguese_brazilian ] = "~Change..." ;
         Text [ portuguese ] = "~Modificar..." ;
-        Text [ french ] = "~Personnaliser..." ;
+        Text [ french ] = "~Modifier..." ;
         Text [ dutch ] = "~Wijzigen..." ;
         Text [ spanish ] = "~Modificar..." ;
         Text [ danish ] = "Modificer..." ;
@@ -303,7 +303,7 @@ String STR_STYLE_FILTER_HIERARCHICAL
     TEXT [ portuguese ] = "Hierárquico" ;
     TEXT [ finnish ] = "Hierarchical" ;
     TEXT [ danish ] = "Hierarkisk" ;
-    TEXT [ french ] = "Hiérarchique" ;
+    TEXT [ french ] = "Hiérarchie" ;
     TEXT [ swedish ] = "Hierarkiskt" ;
     TEXT [ dutch ] = "Hiërarchisch" ;
     TEXT [ spanish ] = "Jerárquico" ;
