@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuvect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:46:08 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 13:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+
+#include "fuvect.hxx"
+
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
@@ -77,12 +80,20 @@
 
 #pragma hdrstop
 
-#include "sdview.hxx"
-#include "viewshel.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "strings.hrc"
 #include "sdresid.hxx"
 #include "vectdlg.hxx"
-#include "fuvect.hxx"
+
+namespace sd {
 
 TYPEINIT1( FuVectorize, FuPoor );
 
@@ -92,9 +103,13 @@ TYPEINIT1( FuVectorize, FuPoor );
 |*
 \************************************************************************/
 
-FuVectorize::FuVectorize( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                          SdDrawDocument* pDoc, SfxRequest& rReq ) :
-            FuPoor (pViewSh, pWin, pView, pDoc, rReq)
+FuVectorize::FuVectorize (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor (pViewSh, pWin, pView, pDoc, rReq)
 {
     const SdrMarkList& rMarkList = pView->GetMarkList();
 
@@ -104,7 +119,7 @@ FuVectorize::FuVectorize( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
         if( pObj && pObj->ISA( SdrGrafObj ) )
         {
-            SdVectorizeDlg aDlg( (Window*) pWin, ( (SdrGrafObj*) pObj )->GetGraphic().GetBitmap(), pDocSh );
+            SdVectorizeDlg aDlg(pWin, ( (SdrGrafObj*) pObj )->GetGraphic().GetBitmap(), pDocSh );
 
             if( aDlg.Execute() == RET_OK )
             {
@@ -128,3 +143,4 @@ FuVectorize::FuVectorize( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     }
 }
 
+} // end of namespace sd
