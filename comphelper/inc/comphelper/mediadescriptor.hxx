@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediadescriptor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:52:44 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //_______________________________________________
 // namespace
@@ -95,7 +98,7 @@ namespace comphelper{
 
     @attention  This class isnt threadsafe and must be guarded from outside!
  */
-class MediaDescriptor : public SequenceAsHashMap
+class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
 {
     //-------------------------------------------
     // const
@@ -227,7 +230,7 @@ class MediaDescriptor : public SequenceAsHashMap
             @throw  [css::uno::RuntimeException]
                     if the MediaDescriptor seems to be invalid!
          */
-        sal_Bool impl_openStreamWithPostData(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xPostData)
+        COMPHELPER_DLLPRIVATE sal_Bool impl_openStreamWithPostData(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xPostData)
             throw(::com::sun::star::uno::RuntimeException);
 
         //---------------------------------------
@@ -249,7 +252,7 @@ class MediaDescriptor : public SequenceAsHashMap
             @throw  [css::uno::RuntimeException]
                     if the MediaDescriptor seems to be invalid!
          */
-        sal_Bool impl_openStreamWithURL(const ::rtl::OUString& sURL)
+        COMPHELPER_DLLPRIVATE sal_Bool impl_openStreamWithURL(const ::rtl::OUString& sURL)
             throw(::com::sun::star::uno::RuntimeException);
 
         //---------------------------------------
@@ -262,7 +265,7 @@ class MediaDescriptor : public SequenceAsHashMap
             @return [string]
                     the "normalized" URL (e.g. without jumpmark)
          */
-        ::rtl::OUString impl_normalizeURL(const ::rtl::OUString& sURL);
+        COMPHELPER_DLLPRIVATE ::rtl::OUString impl_normalizeURL(const ::rtl::OUString& sURL);
 };
 
 } // namespace comphelper
