@@ -1,4 +1,4 @@
-ri	ridljar	:	udkapi NULL
+ri	ridljar	:	udkapi codemaker NULL
 ri	ridljar									usr1	-	all	ri_mkout NULL
 ri	ridljar									nmake	-	all	ri_genall NULL
 ri	ridljar\com\sun\star\lib\uno\typedesc	nmake	-	all	ri_typedesc ri_typeinfo ri_uno NULL
