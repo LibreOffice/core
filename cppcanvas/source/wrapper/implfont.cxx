@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implfont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:11 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,8 @@
  *
  ************************************************************************/
 
-#include "implfont.hxx"
+#include <implfont.hxx>
+#include <canvas/canvastools.hxx>
 
 
 using namespace ::drafts::com::sun::star;
@@ -81,10 +82,15 @@ namespace cppcanvas
             OSL_ENSURE( mxCanvas.is(), "ImplFont::ImplFont(): Invalid Canvas" );
 
             rendering::FontRequest aFontRequest;
-            aFontRequest.FamilyName = rFontName;
+            aFontRequest.FontDescription.FamilyName = rFontName;
             aFontRequest.CellSize = rCellSize;
 
-            mxFont = mxCanvas->queryFont( aFontRequest );
+            geometry::Matrix2D aFontMatrix;
+            ::canvas::tools::setIdentityMatrix2D( aFontMatrix );
+
+            mxFont = mxCanvas->createFont( aFontRequest,
+                                           uno::Sequence< beans::PropertyValue >(),
+                                           aFontMatrix );
         }
 
 
@@ -96,7 +102,7 @@ namespace cppcanvas
         {
             OSL_ENSURE( mxFont.is(), "ImplFont::getName(): Invalid Font" );
 
-            return mxFont->getFontRequest().FamilyName;
+            return mxFont->getFontRequest().FontDescription.FamilyName;
         }
 
         double ImplFont::getCellSize() const
