@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:25:45 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,15 +331,31 @@ namespace pcr
     #define PROPERTY_ID_XSD_MAX_LENGTH       159
     #define PROPERTY_ID_XSD_TOTAL_DIGITS     160
     #define PROPERTY_ID_XSD_FRACTION_DIGITS  161
-    #define PROPERTY_ID_XSD_MAX_INCLUSIVE    162
-    #define PROPERTY_ID_XSD_MAX_EXCLUSIVE    163
-    #define PROPERTY_ID_XSD_MIN_INCLUSIVE    164
-    #define PROPERTY_ID_XSD_MIN_EXCLUSIVE    165
-    #define PROPERTY_ID_UNCHECKEDREFVALUE    166
-    #define PROPERTY_ID_SUBMISSION_ID        167
-    #define PROPERTY_ID_XFORMS_BUTTONTYPE    168
-    #define PROPERTY_ID_LIST_BINDING         169
-    #define PROPERTY_ID_VERTICAL_ALIGN       170
+    #define PROPERTY_ID_XSD_MAX_INCLUSIVE_INT        162
+    #define PROPERTY_ID_XSD_MAX_EXCLUSIVE_INT        163
+    #define PROPERTY_ID_XSD_MIN_INCLUSIVE_INT        164
+    #define PROPERTY_ID_XSD_MIN_EXCLUSIVE_INT        165
+    #define PROPERTY_ID_XSD_MAX_INCLUSIVE_DOUBLE     166
+    #define PROPERTY_ID_XSD_MAX_EXCLUSIVE_DOUBLE     167
+    #define PROPERTY_ID_XSD_MIN_INCLUSIVE_DOUBLE     168
+    #define PROPERTY_ID_XSD_MIN_EXCLUSIVE_DOUBLE     169
+    #define PROPERTY_ID_XSD_MAX_INCLUSIVE_DATE       170
+    #define PROPERTY_ID_XSD_MAX_EXCLUSIVE_DATE       171
+    #define PROPERTY_ID_XSD_MIN_INCLUSIVE_DATE       172
+    #define PROPERTY_ID_XSD_MIN_EXCLUSIVE_DATE       173
+    #define PROPERTY_ID_XSD_MAX_INCLUSIVE_TIME       174
+    #define PROPERTY_ID_XSD_MAX_EXCLUSIVE_TIME       175
+    #define PROPERTY_ID_XSD_MIN_INCLUSIVE_TIME       176
+    #define PROPERTY_ID_XSD_MIN_EXCLUSIVE_TIME       177
+    #define PROPERTY_ID_XSD_MAX_INCLUSIVE_DATE_TIME  178
+    #define PROPERTY_ID_XSD_MAX_EXCLUSIVE_DATE_TIME  179
+    #define PROPERTY_ID_XSD_MIN_INCLUSIVE_DATE_TIME  180
+    #define PROPERTY_ID_XSD_MIN_EXCLUSIVE_DATE_TIME  181
+    #define PROPERTY_ID_UNCHECKEDREFVALUE    182
+    #define PROPERTY_ID_SUBMISSION_ID        183
+    #define PROPERTY_ID_XFORMS_BUTTONTYPE    184
+    #define PROPERTY_ID_LIST_BINDING         185
+    #define PROPERTY_ID_VERTICAL_ALIGN       186
 
 //............................................................................
 } // namespace pcr
