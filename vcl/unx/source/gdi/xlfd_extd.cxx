@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 14:48:49 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1187,7 +1187,7 @@ BitmapXlfdStorage::AddBitmapFont( const Xlfd *pXlfd )
     unsigned short nSize = pXlfd->mnPixelSize;
 
     for ( int i = 0; i < mnCount; i++ )
-        if ( nSize == ((BitmapXlfd*)mpList[i])->GetPixelSize() )
+        if ( nSize == ((BitmapXlfd*)mpList[i])->GetPixelSize( nSize ) )
         {
             const_cast<ExtendedXlfd*>(mpList[i])->AddEncoding( pXlfd );
             return;
