@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-18 09:49:53 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,9 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "openflag.hxx"
 #include "objshimp.hxx"
@@ -641,7 +643,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             // trotzdem nicht geht!
             if ( !pSh || !pSh->CanReload_Impl() )
                 break;
-            sal_uInt32 nErr = 0;
             SfxApplication* pApp = SFX_APP();
             SFX_REQUEST_ARG(rReq, pForceReloadItem, SfxBoolItem,
                             SID_FORCERELOAD, sal_False);
@@ -808,7 +809,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         pNewMedium->Close();
 
                     // wieder auf das alte Medium zurueck
+#ifdef DEBUG
                     const SfxFilter* pOldFilter = xOldObj->GetMedium()->GetFilter();
+#endif
                     if( bHandsOff )
                         xOldObj->DoSaveCompleted( xOldObj->GetMedium() );
 
@@ -939,7 +942,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
         // Ich bin gerade am Reloaden und Yielde so vor mich hin ...
         return;
 
-    SfxFrame *pParent = GetFrame()->GetParentFrame();
+    GetFrame()->GetParentFrame();
     SfxWhichIter aIter( rSet );
     for ( sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich() )
     {
@@ -1181,7 +1184,7 @@ void SfxViewFrame::SetObjectShell_Impl
     SwitchToViewShell_Impl( !IsRestoreView_Impl() ? (sal_uInt16) 0 : GetCurViewId() );
 
     // was so in Activate passiert w"are
-    SfxObjectShell *pDocSh = GetObjectShell();
+    GetObjectShell();
 #if SUPD<635
     if ( SfxViewFrame::Current() == this )
     {
@@ -1360,7 +1363,7 @@ String SfxViewFrame::UpdateTitle()
 
     const SfxMedium *pMedium = pObjSh->GetMedium();
     String aURL;
-    SfxFrame *pFrm = GetFrame();
+    GetFrame();  // -Wall required??
     if ( pObjSh->HasName() )
     {
         INetURLObject aTmp( pMedium->GetName() );
@@ -1425,7 +1428,7 @@ sal_Bool SfxViewFrame::Close()
 void SfxViewFrame::DoActivate( sal_Bool bUI, SfxViewFrame* pOldFrame )
 {
     DBG_CHKTHIS(SfxViewFrame, 0);
-    SfxApplication *pSfxApp = SFX_APP();
+    SFX_APP();
 
 #ifdef WIN
     pSfxApp->TestFreeResources_Impl();
@@ -1467,7 +1470,7 @@ void SfxViewFrame::DoActivate( sal_Bool bUI, SfxViewFrame* pOldFrame )
 void SfxViewFrame::DoDeactivate(sal_Bool bUI, SfxViewFrame* pNewFrame )
 {
     DBG_CHKTHIS(SfxViewFrame, 0);
-    SfxApplication *pSfxApp = SFX_APP();
+    SFX_APP();
     pDispatcher->DoDeactivate_Impl( bUI );
 
     // Wenn ich einen parent habe und dieser ist kein parent des neuen
@@ -3543,11 +3546,6 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 {
     DBG_MEMTEST();
 
-    int bSearchedMDI = FALSE;
-    int bFoundNormMDI = FALSE;
-    int bFoundMiniMDI = FALSE;
-    int bFoundNonDesktopMDI = FALSE;
-
     const USHORT *pRanges = rSet.GetRanges();
     DBG_ASSERT(pRanges && *pRanges, "Set ohne Bereich");
     while ( *pRanges )
@@ -3833,7 +3831,8 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
 void SfxViewFrame::ToolboxExec_Impl( SfxRequest &rReq )
 {
     // Object-Bar-Id ermitteln
-    sal_uInt16 nSID = rReq.GetSlot(), nTbxID;
+    sal_uInt16 nSID = rReq.GetSlot();
+    sal_uInt16 nTbxID = 0;
     SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, sal_False);
     BOOL bShow;
 
