@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 12:26:58 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ namespace connectivity
             ::rtl::OUString m_aTableName;
             sal_Bool        m_bFunction;
             sal_Bool        m_bDbasePrecisionChanged;
+            sal_Bool        m_bAggregateFunction;
         protected:
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
@@ -104,6 +105,7 @@ namespace connectivity
             void setRealName(const ::rtl::OUString& _rName)  { m_aRealName  = _rName; }
             void setTableName(const ::rtl::OUString& _rName) { m_aTableName = _rName; }
             void setFunction(sal_Bool _bFunction)            { m_bFunction  = _bFunction; }
+            void setAggregateFunction(sal_Bool _bFunction)   { m_bAggregateFunction = _bFunction; }
             void setDbasePrecisionChanged(sal_Bool _bDbasePrecisionChanged) { m_bDbasePrecisionChanged = _bDbasePrecisionChanged; }
 
             ::rtl::OUString getRealName() const { return  m_aRealName; }
