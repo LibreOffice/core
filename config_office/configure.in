@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2004-02-02 18:16:59 $
+dnl * Date: $Date: 2004-02-04 12:32:51 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.59 $ )
+AC_REVISION( $Revision: 1.60 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -139,7 +139,7 @@ AC_ARG_WITH(mspdb-path,
 [  --with-mspdb-path       For Microsoft C/C++ compiler users, please supply the path
                           pointing to the mspdb60.dll (MSVC 6) or mspdb60.dll (.NET). 
  
-                          Usage: --with-mspdb-path=<absolute path to mspdb60.dll/mspdb70.dll>
+                          Usage: --with-mspdb-path=<absolute path to mspdb60.dll/mspdb7x.dll>
 ],,)
 AC_ARG_WITH(midl-path,
 [  --with-midl-path        For Microsoft C/C++ .NET compiler users, please supply the path
@@ -732,6 +732,19 @@ if test "$_os" = "WINNT"; then
    			if test -e "$with_mspdb_path/mspdb60.dll"; then
 				MSPDB_PATH="$with_mspdb_path"
             fi
+      if test -z "$MSPDB_PATH"; then
+		dnl  Check for .Net 2003 Compiler
+			AC_PATH_PROG(MSPDB_PATH, mspdb71.dll)
+			if test -n "$MSPDB_PATH";then
+				MSPDB_PATH=`dirname "$MSPDB_PATH"`
+			fi
+   			if test -e "$with_mspdb_path/mspdb71.dll"; then
+				MSPDB_PATH="$with_mspdb_path"
+            fi
+			if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb71.dll"; then
+				MSPDB_PATH="$with_cl_home/../Common7/IDE"
+			fi
+		fi
 			if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common/msdev98/mspdb60.dll"; then
 				MSPDB_PATH="$with_cl_home/../Common/msdev98"
 			fi
@@ -772,18 +785,22 @@ if test "$_os" = "WINNT"; then
 							}
 							}"`
 			AC_MSG_RESULT([found Compiler version $CCNUMVER.])
-			if test $CCNUMVER -ge "001300000000"; then
-				COMEX=8
-			else
-				if test $CCNUMVER -ge "001200000000"; then
-					if test "$with_old_psdk" != "yes"; then
-						COMEX=9
-					else
-						COMEX=7
-					fi
-				else
-					AC_MSG_ERROR([Compiler too old.])
-				fi
+         if test $CCNUMVER -ge "001300103077"; then
+            COMEX=10
+         else
+			   if test $CCNUMVER -ge "001300000000"; then
+				   COMEX=8
+			   else
+				   if test $CCNUMVER -ge "001200000000"; then
+					   if test "$with_old_psdk" != "yes"; then
+						   COMEX=9
+					   else
+						   COMEX=7
+					   fi
+				   else
+					   AC_MSG_ERROR([Compiler too old.])
+				   fi
+            fi
 			fi
 		else
 			AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home or set path to cl.exe.])
@@ -803,7 +820,7 @@ AC_SUBST(MSPDB_PATH)
 dnl ===================================================================
 dnl  .NET needs special treatment
 dnl ===================================================================
-if test "$COMEX" = "8"; then
+if test "$COMEX" = "8" -o "$COMEX" = "10"; then
 	dnl Check midl.exe
 	AC_PATH_PROG(MIDL_PATH, midl.exe)
 	if test -n "$MIDL_PATH";then
@@ -882,13 +899,8 @@ dnl ===================================================================
 dnl Check if pam-appl.h is available on Linux or FreeBSD
 dnl ===================================================================
 if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "GNU"; then
-   AC_MSG_CHECKING([pam_appl.h])
-   if test -f "/usr/include/security/pam_appl.h"; then
-      AC_MSG_RESULT([yes])
-   else
-      AC_MSG_WARN([pam_appl.h could not be found in /usr/include/security])
-      echo "pam_appl.h could not be found in /usr/include/security" >> warn
-   fi
+    AC_CHECK_HEADER(security/pam_appl.h, [],
+                    [AC_MSG_ERROR([pam_appl.h could not be found. libpam-dev or pam-devel missing?])], [])
 fi
 
 dnl ===================================================================
@@ -1688,6 +1700,22 @@ Please copy the files to external/msvcp70.])
 fi
 
 dnl ===================================================================
+dnl Windows builds with .NET 2003 needs msvcp71.dll/msvcr71.dll in external/msvcp71
+dnl ===================================================================
+if test "$_os" = "WINNT" -a "$COMEX" = "10"; then
+   AC_MSG_CHECKING([msvcp71.dll])
+   if test -f ../external/msvcp71/msvcp71.dll -a -f ../external/msvcp71/msvcr71.dll; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([msvcp71.dll and/or msvcr71.dll are/is missing in external/msvcp71/.
+These dlls are part of the .NET installation and can be found in a directory
+similar to:
+"c:\\Program Files\\Microsoft Visual Studio .NET\\Visual C++ .NET Professional - English\\"
+Please copy the files to external/msvcp71.])
+   fi
+fi
+
+dnl ===================================================================
 dnl Test for the presence of the right polygon clipping code
 dnl ===================================================================
 
@@ -1818,6 +1846,7 @@ EOF
     cat conftest.java >&5
     cat conftest.xml >&5
     AC_MSG_WARN([Ant does not work - Some Java projects will not build!])
+    ANT_HOME=""
     echo "Ant does not work - Some Java projects will not build!" >>warn
   fi
 
@@ -1827,6 +1856,26 @@ if test -z "$ANT_HOME"; then
    ANT_HOME="NO_ANT_HOME"
 fi
 AC_SUBST(ANT_HOME)
+
+dnl Checking for ant.jar
+if test "$ANT_HOME" != "NO_ANT_HOME"; then
+   AC_MSG_CHECKING([Ant lib directory])
+   if test -f $ANT_HOME/lib/ant.jar; then
+	  ANT_LIB="$ANT_HOME/lib"
+   else
+      if test -f $ANT_HOME/ant.jar; then
+	     ANT_LIB="$ANT_HOME"
+      else
+          if test -f /usr/share/java/ant.jar; then
+              ANT_LIB=/usr/share/java
+          else
+              AC_MSG_ERROR([Ant libraries not found!])
+          fi
+      fi
+   fi
+   AC_MSG_RESULT([Ant lib directory found.])
+fi
+AC_SUBST(ANT_LIB)
 
 
 dnl ===================================================================
