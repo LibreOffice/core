@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: os $ $Date: 2003-05-08 08:51:08 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1592,12 +1592,12 @@ void SwXShape::dispose(void) throw( RuntimeException )
         if(pObj && pObj->IsInserted())
         {
             if( pFmt->GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
-                {
-                    const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
-                    SwTxtNode *pTxtNode = rPos.nNode.GetNode().GetTxtNode();
-                    const xub_StrLen nIdx = rPos.nContent.GetIndex();
-                    pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
-                }
+            {
+                const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
+                SwTxtNode *pTxtNode = rPos.nNode.GetNode().GetTxtNode();
+                const xub_StrLen nIdx = rPos.nContent.GetIndex();
+                pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
+            }
             else
                 pFmt->GetDoc()->DelLayoutFmt( pFmt );
         }
