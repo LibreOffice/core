@@ -1,0 +1,301 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dp_gui_dialog.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:03:48 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights andlp
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dp_gui.hrc"
+
+ModelessDialog RID_DLG_PACKAGE_MANAGER
+{
+    HelpId = HID_PACKAGE_MANAGER;
+    Text [ english_us ] = "Package Manager";
+    Text = "Package Manager";
+
+    Size = MAP_APPFONT( 300, 200 );
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Closeable = TRUE;
+    Sizeable = TRUE;
+    Hide = TRUE;
+
+    FixedText RID_FT_PACKAGES
+    {
+        Group = TRUE;
+        Left = TRUE;
+        Text [ english_us ] = "Browse packages";
+        Text = "Packages durchsuchen";
+    };
+
+    PushButton RID_BTN_ADD
+    {
+        TabStop = TRUE;
+        Text [ english_us ] = "~Add...";
+        Text = "~Hinzufügen...";
+    };
+    PushButton RID_BTN_REMOVE
+    {
+        TabStop = TRUE;
+        Text [ english_us ] = "~Remove...";
+        Text = "~Entfernen...";
+    };
+    PushButton RID_BTN_ENABLE
+    {
+        TabStop = TRUE;
+        Text [ english_us ] = "~Enable...";
+        Text = "~Aktivieren...";
+    };
+    PushButton RID_BTN_DISABLE
+    {
+        TabStop = TRUE;
+        Text [ english_us ] = "~Disable...";
+        Text = "~Deaktivieren...";
+    };
+    PushButton RID_BTN_EXPORT
+    {
+        TabStop = TRUE;
+        Text [ english_us ] = "E~xport...";
+        Text = "E~xportieren...";
+    };
+
+    OKButton RID_BTN_CLOSE
+    {
+        TabStop = TRUE;
+        DefButton = TRUE;
+        Text [ english_us ] = "Close";
+        Text = "Schließen";
+    };
+    HelpButton RID_BTN_HELP
+    {
+        TabStop = TRUE;
+    };
+
+    Image RID_IMG_PLUS
+    {
+        ImageBitmap = Bitmap { File = "plus.bmp"; };
+        MASKCOLOR
+    };
+    Image RID_IMG_PLUS_HC
+    {
+        ImageBitmap = Bitmap { File = "plus_sch.bmp"; };
+        MASKCOLOR
+    };
+    Image RID_IMG_MINUS
+    {
+        ImageBitmap = Bitmap { File = "minus.bmp"; };
+        MASKCOLOR
+    };
+    Image RID_IMG_MINUS_HC
+    {
+        ImageBitmap = Bitmap { File = "minus_sch.bmp"; };
+        MASKCOLOR
+    };
+};
+
+
+Image RID_IMG_DEF_INSTALLATION
+{
+    ImageBitmap = Bitmap { File = "harddisk_16.bmp"; };
+    MASKCOLOR
+};
+Image RID_IMG_DEF_INSTALLATION_HC
+{
+    ImageBitmap = Bitmap { File = "harddisk_16_h.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_IMG_DEF_DOCUMENT
+{
+    ImageBitmap = Bitmap { File = "sc05500.bmp"; };
+    MASKCOLOR
+};
+Image RID_IMG_DEF_DOCUMENT_HC
+{
+    ImageBitmap = Bitmap { File = "sch05500.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_IMG_DEF_PACKAGE
+{
+    ImageBitmap = Bitmap { File = "puzzleslice_16.bmp"; };
+    MASKCOLOR
+};
+Image RID_IMG_DEF_PACKAGE_HC
+{
+    ImageBitmap = Bitmap { File = "puzzleslice_16_h.bmp"; };
+    MASKCOLOR
+};
+
+
+String RID_STR_USER_INSTALLATION
+{
+    Text [ ENGLISH ] = "My Packages";
+    Text = "Meine Packages";
+};
+
+String RID_STR_SHARED_INSTALLATION
+{
+    Text [ ENGLISH ] = "%PRODUCTNAME Packages";
+    Text = "%PRODUCTNAME Packages";
+};
+
+String RID_STR_PACKAGE
+{
+    Text [ ENGLISH ] = "Package";
+    Text = "Package";
+};
+
+String RID_STR_PACKAGE_STATUS
+{
+    Text [ ENGLISH ] = "Status";
+    Text = "Status";
+};
+
+String RID_STR_ADD_PACKAGES
+{
+    Text [ ENGLISH ] = "Add Package(s)...";
+    Text = "Package(s) hinzufügen...";
+};
+
+String RID_STR_ENABLED
+{
+    Text [ ENGLISH ] = "Enabled";
+    Text = "aktiviert";
+};
+
+String RID_STR_DISABLED
+{
+    Text [ ENGLISH ] = "Disabled";
+    Text = "deaktiviert";
+};
+
+String RID_STR_UNKNOWN
+{
+    Text [ ENGLISH ] = "Unknown";
+    Text = "unbekannt";
+};
+
+String RID_CTX_ITEM_ADD
+{
+    Text [ english_us ] = "~Add...";
+    Text = "~Hinzufügen...";
+};
+String RID_CTX_ITEM_REMOVE
+{
+    Text [ english_us ] = "~Remove...";
+    Text = "~Entfernen...";
+};
+String RID_CTX_ITEM_ENABLE
+{
+    Text [ english_us ] = "~Enable...";
+    Text = "~Aktivieren...";
+};
+String RID_CTX_ITEM_DISABLE
+{
+    Text [ english_us ] = "~Disable...";
+    Text = "~Deaktivieren...";
+};
+String RID_CTX_ITEM_EXPORT
+{
+    Text [ english_us ] = "E~xport...";
+    Text = "E~xportieren...";
+};
+
+String RID_STR_EXPORT_PACKAGE
+{
+    Text [ ENGLISH ] = "Export Package...";
+    Text = "Package exportieren...";
+};
+
+String RID_STR_EXPORT_PACKAGES
+{
+    Text [ ENGLISH ] = "Export Packages to...";
+    Text = "Packages exportieren nach...";
+};
+
+String RID_STR_ADDING_PACKAGES
+{
+    Text [ ENGLISH ] = "Adding Package(s)...";
+    Text = "Package(s) werden hinzugefügt...";
+};
+
+String RID_STR_REMOVING_PACKAGES
+{
+    Text [ ENGLISH ] = "Removing Package(s)...";
+    Text = "Package(s) werden entfernt...";
+};
+
+String RID_STR_ENABLING_PACKAGES
+{
+    Text [ ENGLISH ] = "Enabling Package(s)...";
+    Text = "Package(s) werden aktiviert...";
+};
+
+String RID_STR_DISABLING_PACKAGES
+{
+    Text [ ENGLISH ] = "Disabling Package(s)...";
+    Text = "Package(s) werden deaktiviert...";
+};
+
+String RID_STR_EXPORTING_PACKAGES
+{
+    Text [ ENGLISH ] = "Exporting Package(s)...";
+    Text = "Package(s) werden exportiert...";
+};
+
