@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:34:52 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,9 @@ public:
 
     // Copy und Paste Methoden fuer das interne Clipboard
     BOOL Copy( SwDoc* pClpDoc, const String* pNewClpTxt = 0 );
-    BOOL Paste( SwDoc* pClpDoc );
+    BOOL Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames = sal_False);
+    //paste some pages into another doc - used in mailmerge
+    BOOL PastePages( SwFEShell& rToFill, USHORT nStartPage, USHORT nEndPage);
     // Copy-Methode fuer Drag&Drop
     BOOL Copy( SwFEShell*, const Point& rSttPt, const Point& rInsPt,
                 BOOL bIsMove = FALSE, BOOL bSelectInsert = TRUE );
