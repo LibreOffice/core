@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salfont.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.1.1.1 $  $Author: hr $  $Date: 2000-09-18 17:05:41 $              //
+// $Revision: 1.2 $  $Author: vg $  $Date: 2003-04-15 16:06:58 $              //
 //                                                                            //
 // $Workfile:   salfont.h  $                                                  //
 //  $Modtime:   06 Sep 1997 15:11:06  $                                       //
@@ -155,7 +155,7 @@ class SalFontStruct : public ImplFontMetricData
 
             SalFontCacheItem*pCache_;
 
-#if defined DEBUG || defined  DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || defined  DBG_UTIL
             ByteString      aFontName_;
 #endif
             USHORT          nHeightCount_;      // Anzahl der Hoehen-Eintraege
