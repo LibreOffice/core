@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
+ *  last change: $Author: er $ $Date: 2001-02-26 13:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2139,7 +2139,7 @@ void ScInterpreter::ScMacro()
     SbxBase::ResetError();
 
     BYTE nParamCount = GetByte();
-    String aMacro( pCur->GetString() );
+    String aMacro( pCur->GetExternal() );
 
     SfxObjectShell* pDocSh = pDok->GetDocumentShell();
     if ( !pDocSh || !pDok->CheckMacroWarn() )
