@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaFop.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-10 14:45:06 $
+ *  last change: $Author: tra $ $Date: 2001-07-11 09:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,19 @@
 using rtl::OUString;
 using osl::Condition;
 
+//--------------------------------------------------------
+// messages constants
+//--------------------------------------------------------
+
+const sal_uInt32 MSG_BROWSEFORFOLDER = WM_USER + 1;
+const sal_uInt32 MSG_SHUTDOWN        = WM_USER + 2;
+
+const sal_uInt32 MAX_WAITTIME        = 2000; // msec
+
+const sal_Bool MANUAL_RESET     = sal_True;
+const sal_Bool AUTO_RESET       = sal_False;
+const sal_Bool INIT_NONSIGNALED = sal_False;
+
 //----------------------------------------------------------------
 //  defines
 //----------------------------------------------------------------
@@ -104,20 +117,25 @@ namespace
         HANDLE   hEvent;
         sal_Bool bRet;
     } RequestContext;
+
+    inline sal_Bool InitializeRequestContext( RequestContext* aRequestContext )
+    {
+        OSL_ASSERT( aRequestContext );
+
+        aRequestContext->hEvent = CreateEventA(
+            0, AUTO_RESET, INIT_NONSIGNALED, NULL );
+
+        aRequestContext->bRet = sal_False;
+
+        return ( 0 != aRequestContext->hEvent );
+    }
+
+    inline DeinitializeRequestContext( RequestContext* aRequestContext )
+    {
+        OSL_ASSERT( aRequestContext && aRequestContext->hEvent );
+        CloseHandle( aRequestContext->hEvent );
+    }
 }
-
-//--------------------------------------------------------
-// messages constants
-//--------------------------------------------------------
-
-const sal_uInt32 MSG_BROWSEFORFOLDER = WM_USER + 1;
-const sal_uInt32 MSG_SHUTDOWN        = WM_USER + 2;
-
-const sal_uInt32 MAX_WAITTIME        = 2000; // msec
-
-const sal_Bool MANUAL_RESET     = sal_True;
-const sal_Bool AUTO_RESET       = sal_False;
-const sal_Bool INIT_NONSIGNALED = sal_False;
 
 //----------------------------------------------------------------
 //  static member initialization
@@ -143,6 +161,14 @@ CMtaFolderPicker::CMtaFolderPicker( sal_uInt32 Flags ) :
 
     ZeroMemory( &m_bi, sizeof( m_bi ) );
 
+    // !!!!!!!!!!!!!!!!!  IMPORTANT !!!!!!!!!!!!!!!!!!!
+    //
+    // Remember: This HACK prevents you from stepping
+    // through your code in the debugger because if you
+    // set a break point in the ctor here the debugger
+    // may become the owner of the FolderBrowse dialog
+    // and so it seems that the Visual Studio and the
+    // office are hanging
     m_bi.hwndOwner = GetForegroundWindow( );
 
     /*
@@ -261,21 +287,13 @@ sal_Bool CMtaFolderPicker::browseForFolder( )
         return sal_False;
     }
 
-    RequestContext  aReqCtx;
+    RequestContext aReqCtx;
 
-    aReqCtx.hEvent = CreateEventA(
-        0,
-        AUTO_RESET,
-        INIT_NONSIGNALED,
-        NULL );
-
-    if ( !aReqCtx.hEvent )
+    if ( !InitializeRequestContext( &aReqCtx ) )
     {
         OSL_ASSERT( sal_False );
         return sal_False;
     }
-
-    aReqCtx.bRet = sal_False;
 
     // marshall request into the sta thread
     PostMessageA(
@@ -284,11 +302,12 @@ sal_Bool CMtaFolderPicker::browseForFolder( )
         0,
         reinterpret_cast< LPARAM >( &aReqCtx ) );
 
-    sal_Bool bContinue = sal_True;
-
     // waiting for the event to be signaled or
     // window messages so that we don't block
     // our parent window
+
+    sal_Bool bContinue = sal_True;
+
     while ( bContinue )
     {
         DWORD dwResult = MsgWaitForMultipleObjects(
@@ -296,26 +315,36 @@ sal_Bool CMtaFolderPicker::browseForFolder( )
 
         switch ( dwResult )
         {
+        // the request context event is signaled
         case WAIT_OBJECT_0:
             bContinue = sal_False;
             break;
 
+        // a window message has arrived
         case WAIT_OBJECT_0 + 1:
             {
+                // dispatching all messages but we expect to
+                // receive only paint or timer messages that's
+                // why we don't need to call TranslateMessage or
+                // TranslateAccelerator, because keybord or
+                // mouse messages are for the FolderPicker which
+                // is in the foreground and should not arrive here
                 MSG msg;
-                while ( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
-                    DispatchMessage(&msg);
+                while ( PeekMessageA( &msg, NULL, 0, 0, PM_REMOVE ) )
+                    DispatchMessageA(&msg);
             }
             break;
 
+        // should not happen
         default:
             OSL_ASSERT( sal_False );
         }
     }
 
-    CloseHandle( aReqCtx.hEvent );
+    sal_Bool bRet = aReqCtx.bRet;
+    DeinitializeRequestContext( &aReqCtx );
 
-    return aReqCtx.bRet;
+    return bRet;
 }
 
 //--------------------------------------------------------------------
@@ -432,6 +461,7 @@ LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const rtl::OUStri
 
     IMallocPtr pIMalloc;
     SHGetMalloc( &pIMalloc );
+
     LPITEMIDLIST lpItemIdList = NULL;
 
     try
@@ -443,6 +473,7 @@ LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const rtl::OUStri
         {
             IShellFolderPtr pIShellFolder;
             SHGetDesktopFolder( &pIShellFolder );
+
             pIShellFolder->ParseDisplayName(
                 NULL,
                 NULL,
