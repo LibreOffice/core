@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmatrix.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-02-28 14:29:23 $
+ *  last change: $Author: er $ $Date: 2001-02-28 21:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,8 @@ ScMatrix* ScMatrix::Clone() const
 }
 
 //
-//  Dateiformat: USHORT Spalten, USHORT Zeilen, (Spalten*Zeilen) Eintraege:
-//  BYTE Typ ( CELLTYPE_NONE, CELLTYPE_VALUE, CELLTYPE_STRING ); nichts, double oder String
+//  File format: USHORT columns, USHORT rows, (columns*rows) entries:
+//  BYTE type ( CELLTYPE_NONE, CELLTYPE_VALUE, CELLTYPE_STRING ); nothing, double or String
 //
 
 ScMatrix::ScMatrix(SvStream& rStream)
@@ -148,13 +148,13 @@ ScMatrix::ScMatrix(SvStream& rStream)
             if ( pMat )
             {
                 if (!bIsString)
-                    ResetIsString();                // String-Flags initialisieren
-                bIsString[i] = ( CELLTYPE_NONE ? SC_MATVAL_EMPTY : SC_MATVAL_STRING );
+                    ResetIsString();        // init string flags
+                bIsString[i] = ( nType == CELLTYPE_NONE ? SC_MATVAL_EMPTY : SC_MATVAL_STRING );
 
                 if ( nType == CELLTYPE_STRING )
                     pMat[i].pS = new String(aMatStr);
                 else
-                    pMat[i].pS = new String;        // leer
+                    pMat[i].pS = NULL;
             }
         }
     }
@@ -162,11 +162,14 @@ ScMatrix::ScMatrix(SvStream& rStream)
 
 void ScMatrix::Store(SvStream& rStream) const
 {
-    if (!pMat)
+    ULONG nCount = (ULONG) nAnzCol * nAnzRow;
+    // Don't store matrix with more than USHORT max elements, old versions
+    // might get confused in loops for(USHORT i=0; i<nC*nR; i++)
+    if ( !pMat || nCount > ((USHORT)(~0)) )
     {
+        DBG_ASSERT( pMat, "ScMatrix::Store: pMat == NULL" );
         rStream << (USHORT) 0;
         rStream << (USHORT) 0;
-        DBG_ERRORFILE("ScMatrix::Store: pMat == NULL");
         return;
     }
 
@@ -175,7 +178,6 @@ void ScMatrix::Store(SvStream& rStream) const
 
     String aMatStr;
     rtl_TextEncoding eCharSet = rStream.GetStreamCharSet();
-    ULONG nCount = (ULONG) nAnzCol * nAnzRow;
     for (ULONG i=0; i<nCount; i++)
     {
         BYTE nType = CELLTYPE_VALUE;
