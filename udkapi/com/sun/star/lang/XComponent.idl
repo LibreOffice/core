@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponent.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 
 module com {  module sun {  module star {  module lang {
 
-interface XEventListener;
+ published interface XEventListener;
 
 //=============================================================================
 
@@ -87,7 +87,7 @@ interface XEventListener;
     EventListener at that object and release the reference when
     "disposing" is called.</p>
  */
-interface XComponent: com::sun::star::uno::XInterface
+published interface XComponent: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
