@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sctictac.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #ifdef TICTACTOE_SC
 class ScDocument;
 #include "global.hxx"
+#include "address.hxx"
 #else
 #include <tools/string.hxx>
 #endif
