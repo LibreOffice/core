@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:12:06 $
+ *  last change: $Author: fs $ $Date: 2000-10-24 15:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,7 @@ class FmXFormView : public ::cppu::WeakImplHelper2<
     SdrPageView*    m_pPageViewForActivation;
     sal_uInt32      m_nEvent;
     sal_uInt32      m_nErrorMessageEvent;
+    sal_uInt32      m_nAutoFocusEvent;
 
     String          m_sErrorMessage;
 
@@ -187,7 +188,9 @@ protected:
         :m_pView(_pView)
         ,m_pPageViewForActivation(NULL)
         ,m_nEvent(0)
-        ,m_nErrorMessageEvent(0) { }
+        ,m_nErrorMessageEvent(0)
+        ,m_nAutoFocusEvent(0)
+    { }
     ~FmXFormView();
 
 public:
@@ -221,7 +224,11 @@ protected:
     void Activate(SdrPageView* pPageView, sal_Bool bSync = sal_False);
     void Deactivate(SdrPageView* pPageView, BOOL bDeactivateController = TRUE);
 
+    /// the the auto focus to the first (in terms of the tab order) control
+    void AutoFocus();
+
     DECL_LINK(OnActivate, void* );
+    DECL_LINK(OnAutoFocus, void* );
     DECL_LINK(OnDelayedErrorMessage, void*);
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
+ *  last change: $Author: fs $ $Date: 2000-10-24 15:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,13 @@
 #ifndef _SVDPAGV_HXX
 #include "svdpagv.hxx"
 #endif
+#ifndef _SVDITER_HXX
+#include "svditer.hxx"
+#endif
 
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 #ifndef _COMPHELPER_ENUMHELPER_HXX_
 #include <comphelper/enumhelper.hxx>
 #endif
@@ -131,7 +137,10 @@
 #include <connectivity/dbtools.hxx>
 #endif
 
-//  SMART_UNO_IMPLEMENTATION(FmXPageViewWinRec, UsrObject);
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::container;
 
 DBG_NAME(FmXPageViewWinRec);
 //------------------------------------------------------------------------
@@ -383,6 +392,8 @@ FmXFormView::~FmXFormView()
         Application::RemoveUserEvent(m_nEvent);
     if (m_nErrorMessageEvent)
         Application::RemoveUserEvent(m_nErrorMessageEvent);
+    if (m_nAutoFocusEvent)
+        Application::RemoveUserEvent(m_nAutoFocusEvent);
 }
 
 //      EventListener
@@ -526,6 +537,62 @@ IMPL_LINK(FmXFormView, OnDelayedErrorMessage, void*, EMPTYTAG)
 }
 
 //------------------------------------------------------------------------------
+void FmXFormView::AutoFocus()
+{
+    if (m_nAutoFocusEvent)
+        Application::RemoveUserEvent(m_nAutoFocusEvent);
+    m_nAutoFocusEvent = Application::PostUserEvent(LINK(this, FmXFormView, OnAutoFocus));
+}
+
+//------------------------------------------------------------------------------
+IMPL_LINK(FmXFormView, OnAutoFocus, void*, EMPTYTAG)
+{
+    m_nAutoFocusEvent = 0;
+
+    // go to the first form of our page, examine it's TabController, go to it's first (in terms of the tab order)
+    // control, give it the focus
+
+    // get the forms collection of the page we belong to
+    FmFormPage* pPage = m_pView ? PTR_CAST(FmFormPage, m_pView->GetPageViewPvNum(0)->GetPage()) : NULL;
+    Reference< XIndexAccess > xForms;
+    if (pPage)
+        xForms = Reference< XIndexAccess >(pPage->GetForms(), UNO_QUERY);
+
+    FmXPageViewWinRec* pViewWinRec = m_aWinList.size() ? m_aWinList[0] : NULL;
+    if (pViewWinRec)
+    {
+        try
+        {
+            // go for the tab controller of the first form
+            sal_Int32 nObjects = xForms->getCount();
+            ::com::sun::star::uno::Reference< XForm > xForm;
+            if (nObjects)
+                ::cppu::extractInterface(xForm, xForms->getByIndex(0));
+            Reference< XTabController > xTabControllerModel(pViewWinRec->getController( xForm ), UNO_QUERY);
+
+            // go for the first control of the controller
+            Sequence< Reference< XControl > > aControls;
+            if (xTabControllerModel.is())
+                aControls = xTabControllerModel->getControls();
+            Reference< XControl > xFirstControl;
+            if (aControls.getLength())
+                xFirstControl = aControls[0];
+
+            // set the focus to this first control
+            Reference< XWindow > xControlWindow(xFirstControl, UNO_QUERY);
+            if (xControlWindow.is())
+                xControlWindow->setFocus();
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("FmXFormView::OnAutoFocus: could not activate the first control!");
+        }
+    }
+
+    return 0L;
+}
+
+//------------------------------------------------------------------------------
 IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
 {
     m_nEvent = 0;
@@ -550,6 +617,8 @@ IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
             if (::isLoadable(xForm) && !xForm->isLoaded())
                 xForm->load();
         }
+
+        LINK(this, FmXFormView, OnAutoFocus).Call(NULL);
 
         if (pModel)
             // unlock the environment

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
+ *  last change: $Author: fs $ $Date: 2000-10-24 15:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,8 +436,13 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
         {
             UnmarkAll();
 
-            // Erste ::com::sun::star::form aktivieren
+            // activate the first form
             pImpl->Activate(NULL);
+
+            // set the auto focus to the first control (if indicated by the model to do so)
+            sal_Bool bForceControlFocus = pModel ? pModel->GetAutoControlFocus() : sal_False;
+            if (bForceControlFocus)
+                pImpl->AutoFocus();
         }
     }
 
