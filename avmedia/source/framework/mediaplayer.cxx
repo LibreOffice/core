@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediaplayer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2004-08-23 09:04:41 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 15:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include "mediaitem.hxx"
 #include "mediamisc.hxx"
 #include "mediacontrol.hrc"
+#include "helpids.hrc"
 
 #include <svtools/stritem.hxx>
 #include <sfx2/app.hxx>
@@ -150,8 +151,15 @@ void MediaFloater::ToggleFloatingMode()
     SfxDockingWindow::ToggleFloatingMode();
 
     mpMediaWindow = new MediaWindow( this, true );
+
     mpMediaWindow->setPosSize( Rectangle( Point(), GetOutputSizePixel() ) );
     mpMediaWindow->executeMediaItem( aRestoreItem );
+
+    Window* pWindow = mpMediaWindow->getWindow();
+
+    if( pWindow )
+        pWindow->SetHelpId( HID_AVMEDIA_PLAYERWINDOW );
+
     mpMediaWindow->show();
 }
 
