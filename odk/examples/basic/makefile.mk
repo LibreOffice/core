@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:46:29 $
+#   last change: $Author: rt $ $Date: 2005-01-31 16:59:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,29 +76,29 @@ TARGET=copying
 
 DRAWING_FILES=\
     $(DESTDIRBASICEXAMPLES)$/drawing$/dirtree.txt \
-    $(DESTDIRBASICEXAMPLES)$/drawing$/importexportofasciifiles.sxd
+    $(DESTDIRBASICEXAMPLES)$/drawing$/importexportofasciifiles.odg
 
 FORMSANDCONTROLS_FILES=\
     $(DESTDIRBASICEXAMPLES)$/forms_and_controls$/beef.wmf \
     $(DESTDIRBASICEXAMPLES)$/forms_and_controls$/burger.wmf \
-    $(DESTDIRBASICEXAMPLES)$/forms_and_controls$/burger_factory.sxw \
+    $(DESTDIRBASICEXAMPLES)$/forms_and_controls$/burger_factory.odt \
     $(DESTDIRBASICEXAMPLES)$/forms_and_controls$/chicken.wmf \
     $(DESTDIRBASICEXAMPLES)$/forms_and_controls$/fish.wmf \
     $(DESTDIRBASICEXAMPLES)$/forms_and_controls$/vegetable.wmf
 
 SHEET_FILES=\
-    $(DESTDIRBASICEXAMPLES)$/sheet$/adapting_to_euroland.sxc
+    $(DESTDIRBASICEXAMPLES)$/sheet$/adapting_to_euroland.ods
 
 STOCKQUOTEUPDATER_FILES=\
-    $(DESTDIRBASICEXAMPLES)$/stock_quotes_updater$/stock.sxc
+    $(DESTDIRBASICEXAMPLES)$/stock_quotes_updater$/stock.ods
 
 TEXT_FILES=\
-    $(DESTDIRBASICEXAMPLES)$/text$/creating_an_index$/index.sxw \
+    $(DESTDIRBASICEXAMPLES)$/text$/creating_an_index$/index.odt \
     $(DESTDIRBASICEXAMPLES)$/text$/creating_an_index$/indexlist.txt \
-    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/changing_appearance.sxw \
-    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/inserting_bookmarks.sxw \
-    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/replacing_text.sxw \
-    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/using_regular_expressions.sxw
+    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/changing_appearance.odt \
+    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/inserting_bookmarks.odt \
+    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/replacing_text.odt \
+    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/using_regular_expressions.odt
 
 DIR_FILE_LIST= \
     $(DRAWING_FILES) \

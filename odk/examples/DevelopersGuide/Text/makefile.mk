@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:45:34 $
+#   last change: $Author: rt $ $Date: 2005-01-31 16:56:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,10 +76,10 @@ TARGET=copying
 
 TEXT_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/Text$/Makefile \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/Text$/PrintDemo.sxw \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Text$/PrintDemo.odt \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Text$/TextDocuments.java \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/Text$/TextTemplateWithUserFields.sxw \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/Text$/ViewCursorExample.sxw
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Text$/TextTemplateWithUserFields.odt
+#	$(DESTDIRDEVGUIDEEXAMPLES)$/Text$/ViewCursorExample.sxw
 
 DIR_FILE_LIST= \
     $(TEXT_FILES) \
