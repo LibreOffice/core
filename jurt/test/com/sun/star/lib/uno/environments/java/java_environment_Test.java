@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment_Test.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:55 $
+ *  last change: $Author: kr $ $Date: 2000-09-28 11:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,22 +79,22 @@ public class java_environment_Test {
         String oid[] = new String[1];
 
         System.err.println("\tregistering ordinary interface twice...");
-        Object obj2 = env.registerInterface(obj, oid, XInterface.class, null);
-        Object obj3 = env.registerInterface(obj, oid, XInterface.class, null);
+        Object obj2 = env.registerInterface(obj, oid, XInterface.class);
+        Object obj3 = env.registerInterface(obj, oid, XInterface.class);
 
         passed = passed && (obj == obj2) && (obj == obj3);
 
 //          env.list();
 
         System.err.println("\tasking for registered interface...");
-        passed = passed && (obj == env.getRegisteredInterface(oid[0], XInterface.class, null));
+        passed = passed && (obj == env.getRegisteredInterface(oid[0], XInterface.class));
 
 
         System.err.println("\trevoking interface...");
         env.revokeInterface(oid[0], XInterface.class);
         env.revokeInterface(oid[0], XInterface.class);
 
-        passed = passed && (null == env.getRegisteredInterface(oid[0], XInterface.class, null));
+        passed = passed && (null == env.getRegisteredInterface(oid[0], XInterface.class));
 
         System.err.println("java_environment - tests passed? " + passed);
 
