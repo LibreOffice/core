@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:54:49 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,14 +440,22 @@ namespace dbaui
         @param  _rList
             The list to fill.
         @param  _nImageId
-            The image id for the leaf elements which do not support a XNameAccess
+            For the leaf elements which do not support a XNameAccess, this denotes the resource id of the image to be used.
+        @param  _nHighContrastImageId
+            For the leaf elements which do not support a XNameAccess, this denotes the resource id of the high contrast image to be used.
         @param  _pParent
             The root entry.
         @param  _pContainerFoundListener
             Will be called if a sub container was found
     */
-    void fillTreeListNames(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer
-                        ,DBTreeListBox& _rList,USHORT _nImageId,SvLBoxEntry* _pParent = NULL,IContainerFoundListener* _pContainerFoundListener = NULL);
+    void fillTreeListNames(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer,
+            DBTreeListBox& _rList,
+            USHORT _nImageId,
+            USHORT _nHighContrastImageId,
+            SvLBoxEntry* _pParent,
+            IContainerFoundListener* _pContainerFoundListener
+        );
 
     /** opens a save dialog to store a form or report folder in the current hierachy.
         @param  _pParent
@@ -475,26 +483,6 @@ namespace dbaui
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent = ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>()
                             ,sal_Bool _bMove = sal_False);
 
-    /** deletes the objects in the name container. (forms or reports or queries)
-        @param  _pParent
-            The parent window.
-        @param  _xFactory
-            The factory
-        @param  _xNames
-            The container to remove from
-        @param  _rList
-            The list of names.
-        @param  _nTextResource
-            The text string to be shown.
-        @param  _bConfirm
-            If <TRUE/> a dialog appears to confirm the delete operation, otherwise not.
-    */
-    void deleteObjects(Window* _pParent
-                   ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory
-                   ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& _xNames
-                   ,const ::std::vector< ::rtl::OUString>& _rList
-                   ,sal_uInt16 _nTextResource
-                   ,sal_Bool _bConfirm = sal_True);
 // .........................................................................
 }
 // .........................................................................
