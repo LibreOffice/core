@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2000-11-17 13:28:23 $
+ *  last change: $Author: sb $ $Date: 2000-12-06 14:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,7 @@ BOOL SVMain()
         {
             delete pSVData->mpUserInfo;
         }
-        catch(...)
+        catch(::com::sun::star::uno::Exception&)
         {
         }
         pSVData->mpUserInfo = NULL;
@@ -469,7 +469,7 @@ BOOL SVMain()
         {
             delete pSVData->mpRemotePrinterList;
         }
-        catch(...)
+        catch(::com::sun::star::uno::Exception&)
         {
         }
         pSVData->mpRemotePrinterList = NULL;
@@ -480,7 +480,7 @@ BOOL SVMain()
         {
             delete pSVData->mpClientPrintersInfo;
         }
-        catch (...)
+        catch (::com::sun::star::uno::Exception&)
         {
         }
         pSVData->mpClientPrintersInfo;
@@ -491,7 +491,7 @@ BOOL SVMain()
         {
             pSVData->mxClientFactory = Reference < XMultiServiceFactory >();
         }
-        catch(...)
+        catch(::com::sun::star::uno::Exception&)
         {
         }
     }
@@ -502,7 +502,7 @@ BOOL SVMain()
         {
             pSVData->mxMultiFactory.clear();
         }
-        catch(...)
+        catch(::com::sun::star::uno::Exception&)
         {
         }
 
@@ -521,9 +521,9 @@ BOOL SVMain()
             pSVData->mxStatus->Quit();
             pSVData->mxStatus = Reference < ::com::sun::star::portal::client::XRmStatus >();
         }
-        catch(...)
-        {
-        }
+         catch(::com::sun::star::uno::Exception&)
+         {
+         }
     }
 
     // call deinit to deinitialize application class
