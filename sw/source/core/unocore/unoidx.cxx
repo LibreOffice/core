@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2000-12-09 14:04:08 $
+ *  last change: $Author: os $ $Date: 2000-12-09 14:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1191,6 +1191,11 @@ sal_Int64 SAL_CALL SwXDocumentIndexMark::getSomething( const uno::Sequence< sal_
 }
 
 TYPEINIT1(SwXDocumentIndexMark, SwClient)
+const sal_Char cBaseMark[] = "com.sun.star.text.BaseIndexMark";
+const sal_Char cContentMark[] = "com.sun.star.text.ContentIndexMark";
+const sal_Char cIdxMark[] = "com.sun.star.text.DocumentIndexMark";
+const sal_Char cUserMark[] = "com.sun.star.text.UserIndexMark";
+const sal_Char cTextContent[] = "com.sun.star.text.TextContent";
 /* -----------------------------06.04.00 15:07--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1203,18 +1208,27 @@ OUString SwXDocumentIndexMark::getImplementationName(void) throw( RuntimeExcepti
  ---------------------------------------------------------------------------*/
 BOOL SwXDocumentIndexMark::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii("com.sun.star.text.DocumentIndexMark")||
-        !rServiceName.compareToAscii("com.sun.star.text.TextContent");
+    return !rServiceName.compareToAscii(cBaseMark)||
+        !rServiceName.compareToAscii(cTextContent) ||
+        (eType == TOX_USER && !rServiceName.compareToAscii(cUserMark)) ||
+        (eType == TOX_CONTENT && !rServiceName.compareToAscii(cContentMark)) ||
+        (eType == TOX_INDEX && !rServiceName.compareToAscii(cIdxMark));
 }
 /* -----------------------------06.04.00 15:07--------------------------------
 
  ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXDocumentIndexMark::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    Sequence< OUString > aRet(1);
+    Sequence< OUString > aRet(3);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.DocumentIndexMark");
-    pArray[1] = C2U("com.sun.star.text.TextContent");
+    pArray[0] = C2U(cBaseMark);
+    pArray[1] = C2U(cTextContent);
+    switch(eType)
+    {
+        case TOX_USER:      pArray[2] = C2U(cUserMark); break;
+        case TOX_CONTENT:   pArray[2] = C2U(cContentMark);break;
+        case TOX_INDEX:     pArray[2] = C2U(cIdxMark);break;
+    }
     return aRet;
 }
 /*-- 14.12.98 10:25:43---------------------------------------------------
