@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scpzipfiles.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 14:58:58 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:46:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,46 @@ sub replace_all_ziplistvariables_in_file
             }
         }
     }
+}
+
+########################################################################################
+# Replacing all zip list variables in rtf files. In rtf files
+# the brackets are masked.
+########################################################################################
+
+sub replace_all_ziplistvariables_in_rtffile
+{
+    my ( $fileref, $variablesref, $onelanguage, $loggingdir ) = @_;
+
+    # installer::files::save_file($loggingdir . "license_" . $onelanguage . "_before.rtf", $fileref);
+
+    for ( my $i = 0; $i <= $#{$fileref}; $i++ )
+    {
+        my $line = ${$fileref}[$i];
+
+        if ( $line =~ /^.*\$\\\{\w+\\\}.*$/ )   # only occurence of $\{abc\}
+        {
+            for ( my $j = 0; $j <= $#{$variablesref}; $j++ )
+            {
+                my $variableline = ${$variablesref}[$j];
+
+                my ($key, $value);
+
+                if ( $variableline =~ /^\s*(\w+?)\s+(.*?)\s*$/ )
+                {
+                    $key = $1;
+                    $value = $2;
+                    $key = '$\{' . $key . '\}';
+                }
+
+                $line =~ s/\Q$key\E/$value/g;
+
+                ${$fileref}[$i] = $line;
+            }
+        }
+    }
+
+    # installer::files::save_file($loggingdir . "license_" . $onelanguage . "_after.rtf", $fileref);
 }
 
 #########################################################
