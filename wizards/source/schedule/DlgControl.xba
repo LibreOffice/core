@@ -69,7 +69,7 @@ End Sub
 Sub SelectState(aEvent as Object)
 Dim ListIndex as Integer
 	If aEvent.ClickCount &gt;= 1 Then
-		ListIndex = CalGetGermanLandAtMousePos(aEvent.X, aEvent.Y, Land$)
+		ListIndex = CalGetGermanLandAtMousePos(CInt(aEvent.X/fWidthCorrFactor), CInt(aEvent.Y/fHeightCorrFactor), Land$)
 		DlgCalendar.GetControl(&quot;lstHolidays&quot;).SelectItemPos(ListIndex, True)
 		bSelectByMouseMove = False
 	End If
