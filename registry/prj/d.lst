@@ -1,5 +1,4 @@
 mkdir: %_DEST%\inc%_EXT%\registry
-mkdir: %_DEST%\lib%_EXT%\libreg2.dylib.framework
 
 ..\inc\registry\*.h %_DEST%\inc%_EXT%\registry\*.h
 ..\inc\registry\*.hxx %_DEST%\inc%_EXT%\registry\*.hxx
@@ -9,7 +8,6 @@ mkdir: %_DEST%\lib%_EXT%\libreg2.dylib.framework
 ..\%__SRC%\lib\libreg*.so.* %_DEST%\lib%_EXT%\libreg*.so.*
 ..\%__SRC%\bin\reg*.dll %_DEST%\bin%_EXT%\reg*.dll
 ..\%__SRC%\lib\libreg*.dylib %_DEST%\lib%_EXT%\libreg*.dylib
-..\%__SRC%\lib\libreg2.dylib.framework\libreg*.dylib %_DEST%\lib%_EXT%\libreg2.dylib.framework\libreg*.dylib
 
 ..\%__SRC%\bin\regmerge.exe %_DEST%\bin%_EXT%\regmerge.exe
 ..\%__SRC%\bin\regview.exe %_DEST%\bin%_EXT%\regview.exe
@@ -17,4 +15,4 @@ mkdir: %_DEST%\lib%_EXT%\libreg2.dylib.framework
 ..\%__SRC%\bin\regview %_DEST%\bin%_EXT%\regview
 ..\version.mk %_DEST%\inc%_EXT%\registry\version.mk
 
-
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\libreg*.dylib; fi"
