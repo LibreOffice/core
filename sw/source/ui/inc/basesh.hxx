@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:45:49 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,6 @@ class SwFlyFrmAttrMgr;
 class SfxItemSet;
 class Graphic;
 
-extern void DisableAllItems(SfxItemSet &);
 struct DBTextStruct_Impl;
 class SwBaseShell: public SfxShell
 {
