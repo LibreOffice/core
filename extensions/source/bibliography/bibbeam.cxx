@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibbeam.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-24 08:57:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ namespace bib
     //---------------------------------------------------------------------
     void BibBeamer::createToolBar()
     {
-        pToolBar= new BibToolBar(this);
+        pToolBar= new BibToolBar(this, LINK( this, BibBeamer, RecalcLayout_Impl ));
         ::Size aSize=pToolBar->GetSizePixel();
         InsertItem(ID_TOOLBAR, pToolBar, aSize.Height(), 0, 0, SWIB_FIXED );
         if ( m_xController.is() )
@@ -377,10 +377,19 @@ namespace bib
 
     }
 
+    //---------------------------------------------------------------------
     void BibBeamer::GetFocus()
     {
         if( pGridWin )
             pGridWin->GrabFocus();
+    }
+
+    //---------------------------------------------------------------------
+    IMPL_LINK( BibBeamer, RecalcLayout_Impl, void*, pVoid )
+    {
+        long nHeight = pToolBar->GetSizePixel().Height();
+        SetItemSize( ID_TOOLBAR, pToolBar->GetSizePixel().Height() );
+        return 0L;
     }
 
 //.........................................................................
