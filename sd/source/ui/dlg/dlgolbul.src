@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-03 23:06:21 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,7 @@ TabDialog TAB_OUTLINEBULLET
     Text[ catalan ] = "Numeración/Viñetas";
     Text[ finnish ] = "Numerointi/luettelomerkit";
 };
+
 
 
 
