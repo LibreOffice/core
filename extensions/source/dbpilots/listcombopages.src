@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:14:28 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
         Text[ japanese ] = "狠嫩百";
         Text[ korean ] = "力绢";
         Text[ chinese_simplified ] = "控制";
-        Text[ chinese_traditional ] = "北兜";
+        Text[ chinese_traditional ] = "北籹兜";
         Text[ turkish ] = "Control";
         Text[ arabic ] = "Control";
         Text[ catalan ] = "Control";
@@ -388,8 +388,8 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text[ portuguese_brazilian ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
         Text[ japanese ] = "昞\帵台百霓偐傜抣偑昞\帵偝傟傞傛偆偵丄偦傟偲堦抳偡傞撪梕偺台百霓傪偙偙偱慖戰偟傑偡丅";
         Text[ korean ] = "叼胶敲饭捞 鞘靛俊 蔼阑 钎矫窍扁 困秦 郴侩捞 老摹秦具窍绰 鞘靛甫 急琶窍绞矫坷.";
-        Text[ chinese_simplified ] = "在这里选择的是内容必须相同的字段，以便于在显示框内显示相关的数值。";
-        Text[ chinese_traditional ] = "硂ń匡拒琌ず甧ゲ斗逆獽陪ボず陪ボ闽计";
+        Text[ chinese_simplified ] = "在这里选择的是内容必须相同的字段，以便在显示框内显示相关的数值。";
+        Text[ chinese_traditional ] = "硂柑匡拒ㄤず甧ゲ斗逆ノ陪ボ逆ず陪ボ闽计";
         Text[ turkish ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
         Text[ arabic ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
         Text[ catalan ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
@@ -515,6 +515,9 @@ String RID_STR_COMBOWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/07/13 21:14:28  kz
+ *  Merge SRC638: 13.07.01 - 23:13:32
+ *
  *  Revision 1.18  2001/07/04 14:32:51  kz
  *  Merge SRC633: 04.07.01 - 16:32:52
  *
@@ -533,6 +536,7 @@ String RID_STR_COMBOWIZ_DBFIELD
  *
  *  Revision 1.0 21.02.01 16:16:18  fs
  ************************************************************************/
+
 
 
 
