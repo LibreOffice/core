@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:46:06 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@ class SwAnchoredObject;
 #endif
 
 #define WEIT_WECH       LONG_MAX - 20000        //Initale Position der Flys.
-//#define BROWSE_HEIGHT   56700L * 10L               //10 Meter
-#define BROWSE_HEIGHT   1440L * 45L     // 45 inch, maximum size for pdf files
+#define BROWSE_HEIGHT   56700L * 10L               //10 Meter
+//#define BROWSE_HEIGHT   1440L * 45L     // 45 inch, maximum size for pdf files
 
 #define GRFNUM_NO 0
 #define GRFNUM_YES 1
