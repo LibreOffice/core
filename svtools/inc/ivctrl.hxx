@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-13 12:19:08 $
+ *  last change: $Author: pb $ $Date: 2002-09-16 07:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,6 +409,8 @@ public:
 
     Rectangle           GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const;
     Rectangle           GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const;
+
+    void                SetNoSelection();
 
     // ACCESSIBILITY ==========================================================
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-16 07:24:18 $
+ *  last change: $Author: pb $ $Date: 2002-09-16 07:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,6 +646,11 @@ Rectangle SvtIconChoiceCtrl::GetEntryCharacterBounds( const sal_Int32 _nEntryPos
     }
 
     return aRect;
+}
+
+void SvtIconChoiceCtrl::SetNoSelection()
+{
+    _pImp->SetNoSelection();
 }
 
 void SvtIconChoiceCtrl::AddEventListener( const Link& rEventListener )
