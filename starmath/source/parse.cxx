@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+ *  last change: $Author: jp $ $Date: 2001-05-11 16:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,8 +408,12 @@ static const SmTokenTableEntry * GetTokenTableEntry( const String &rName )
 
 ///////////////////////////////////////////////////////////////////////////
 
-static CharClass aCharClass( SvxCreateLocale(
+CharClass& GetCharClass()
+{
+    static CharClass aCharClass( SvxCreateLocale(
                         Application::GetAppInternational().GetLanguage() ) );
+    return aCharClass;
+}
 
 
 BOOL SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
@@ -429,7 +433,7 @@ BOOL SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
 
     BOOL bIsDelim = *pDelim != 0;
 
-    INT16 nTypJp = aCharClass.getType( rTxt, nPos );
+    INT16 nTypJp = ::GetCharClass().getType( rTxt, nPos );
     bIsDelim |= nTypJp == com::sun::star::i18n::UnicodeType::SPACE_SEPARATOR ||
                 nTypJp == com::sun::star::i18n::UnicodeType::CONTROL;
 
@@ -464,15 +468,16 @@ void SmParser::NextToken()
     ParseResult aRes;
     xub_StrLen  nRealStart;
     BOOL        bCont;
+    CharClass& rCC = ::GetCharClass();
     do
     {
         //?? does parseAnyToken handles Japanese (CJK) spaces correct ??
         // seems not to be so...
         while (UnicodeType::SPACE_SEPARATOR ==
-                         aCharClass.getType( BufferString, BufferIndex ))
+                         rCC.getType( BufferString, BufferIndex ))
             ++BufferIndex;
 
-        aRes = aCharClass.parseAnyToken( BufferString, BufferIndex,
+        aRes = rCC.parseAnyToken( BufferString, BufferIndex,
                                             coStartFlags, aEmptyStr,
                                             coContFlags, aEmptyStr );
 
@@ -703,7 +708,7 @@ void SmParser::NextToken()
                                 "unexpected comment start" );
 
                         // get identifier of user-defined character
-                        ParseResult aTmpRes = aCharClass.parseAnyToken(
+                        ParseResult aTmpRes = rCC.parseAnyToken(
                                 BufferString, rnEndPos,
                                 KParseTokens::ANY_LETTER,
                                 aEmptyStr,
