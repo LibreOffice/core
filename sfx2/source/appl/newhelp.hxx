@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-11 09:12:52 $
+ *  last change: $Author: pb $ $Date: 2000-12-11 12:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,11 +123,25 @@ public:
 
 // class SearchTabPage_Impl ----------------------------------------------
 
+class SearchBox_Impl : public ComboBox
+{
+private:
+    Link                aSearchLink;
+
+public:
+    SearchBox_Impl( Window* pParent, const ResId& rResId ) :
+        ComboBox( pParent, rResId ) {}
+
+    virtual long        PreNotify( NotifyEvent& rNEvt );
+
+    void                SetSearchLink( const Link& rLink ) { aSearchLink = rLink; }
+};
+
 class SearchTabPage_Impl : public TabPage
 {
 private:
     FixedText           aSearchFT;
-    ComboBox            aSearchED;
+    SearchBox_Impl      aSearchED;
     PushButton          aSearchBtn;
     ListBox             aResultsLB;
     PushButton          aOpenBtn;
