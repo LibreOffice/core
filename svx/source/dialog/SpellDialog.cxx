@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpellDialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:30:45 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,8 @@ SpellDialog::SpellDialog(
     aIgnoreOnceST   ( aIgnorePB.GetText()),
     rParent         ( *pChildWindow ),
     aDialogUndoLink( LINK (this, SpellDialog, DialogUndoHdl)),
-    bModified       ( sal_False )
+    bModified( false ),
+    bFocusLocked( false )
 {
     FreeResource();
 
@@ -462,12 +463,14 @@ IMPL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
     pThis->aSentenceED.ResetUndo();
     pThis->aUndoPB.Enable(FALSE);
 
+    pThis->LockFocusChanges(true);
     if( pThis->aChangePB.IsEnabled() )
         pThis->aChangePB.GrabFocus();
     else if( pThis->aIgnorePB.IsEnabled() )
         pThis->aIgnorePB.GrabFocus();
     else if( pThis->aClosePB.IsEnabled() )
         pThis->aClosePB.GrabFocus();
+    pThis->LockFocusChanges(false);
 
     return 0;
 };
@@ -561,7 +564,7 @@ IMPL_LINK( SpellDialog, ChangeHdl, Button *, EMPTYARG )
 
         aSentenceED.ChangeMarkedWord(aString, GetSelectedLang_Impl());
         SpellContinue_Impl();
-        bModified=sal_False;
+        bModified = false;
         aSentenceED.UndoActionEnd( SPELLUNDO_CHANGE_GROUP );
     }
     if(!aChangePB.IsEnabled())
@@ -603,7 +606,7 @@ IMPL_LINK( SpellDialog, ChangeAllHdl, Button *, EMPTYARG )
 
     aSentenceED.ChangeMarkedWord(aString, eLang);
     SpellContinue_Impl();
-    bModified=sal_False;
+    bModified = false;
     aSentenceED.UndoActionEnd( SPELLUNDO_CHANGE_GROUP );
     return 1;
 }
@@ -630,7 +633,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, EMPTYARG )
     }
 
     SpellContinue_Impl();
-    bModified=sal_False;
+    bModified = false;
     aSentenceED.UndoActionEnd( SPELLUNDO_CHANGE_GROUP );
     return 1;
 }
@@ -710,7 +713,7 @@ IMPL_LINK( SpellDialog, IgnoreHdl, Button *, EMPTYARG )
         aSentenceED.RestoreCurrentError();
         // the word is being ignored
         SpellContinue_Impl();
-        bModified=sal_False;
+        bModified = false;
     }
     return 1;
 }
@@ -900,7 +903,7 @@ IMPL_LINK(SpellDialog, ModifyHdl, SentenceEditWindow_Impl*, pEd)
 {
     if (&aSentenceED == pEd)
     {
-        bModified=sal_True;
+        bModified = true;
         aSuggestionLB.SetNoSelection();
         aSuggestionLB.Disable();
         String sNewText( aSentenceED.GetText() );
@@ -958,7 +961,7 @@ long SpellDialog::Notify( NotifyEvent& rNEvt )
     *   The only sensible thing would be to call the new Method differently,
     *   e.g. DialogGot/LostFocus or so.
     */
-    if( IsVisible() )
+    if( IsVisible() && !bFocusLocked )
     {
         if( rNEvt.GetType() ==  EVENT_GETFOCUS )
         {
