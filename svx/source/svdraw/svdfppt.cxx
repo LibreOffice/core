@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-25 17:17:09 $
+ *  last change: $Author: sj $ $Date: 2002-03-26 16:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,14 @@ using namespace uno                 ;
 using namespace beans               ;
 using namespace drawing             ;
 using namespace container           ;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+PowerPointImportParam::PowerPointImportParam( SvStream& rDocStrm, sal_uInt32 nFlags ) :
+    rDocStream      ( rDocStrm ),
+    nImportFlags    ( nFlags )
+{
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -753,8 +761,8 @@ PptSlidePersistEntry::~PptSlidePersistEntry()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrEscherImport::SdrEscherImport( SvStream& rDocStream_ ) :
-    SvxMSDffManager         ( rDocStream_ ),
+SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam ) :
+    SvxMSDffManager         ( rParam.rDocStream ),
     pFonts                  ( NULL ),
     nStreamLen              ( 0 ),
     nTextStylesIndex        ( 0xffff ),
@@ -764,6 +772,7 @@ SdrEscherImport::SdrEscherImport( SvStream& rDocStream_ ) :
     bMonotypeSortsAvailable ( FALSE ),
     bTimesNewRomanChecked   ( FALSE ),
     bTimesNewRomanAvailable ( FALSE ),
+    rImportParam            ( rParam ),
     eCharSetSystem          ( gsl_getSystemTextEncoding() )
 {
 }
@@ -1475,9 +1484,9 @@ void SdrEscherImport::CheckTimesNewRoman() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrPowerPointImport::SdrPowerPointImport( SvStream& rDocStream ) :
+SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
     bOk                 ( rStCtrl.GetErrorCode() == SVSTREAM_OK ),
-    SdrEscherImport     ( rDocStream ),
+    SdrEscherImport     ( rParam ),
     pDefaultSheet       ( NULL ),
     pPersistPtr         ( NULL ),
     nPersistPtrAnz      ( 0 ),
@@ -1611,7 +1620,18 @@ SdrPowerPointImport::SdrPowerPointImport( SvStream& rDocStream ) :
                 pEnvHd->SeekToContent( rStCtrl );
                 DffRecordHeader aTxSIStyleRecHd;
                 if ( SeekToRec( rStCtrl, PPT_PST_TxSIStyleAtom, pEnvHd->GetRecEndFilePos(), &aTxSIStyleRecHd ) )
+                {
                     aTxSIStyle.Read( rStCtrl, aTxSIStyleRecHd, PPT_PST_TxSIStyleAtom );
+#ifdef DBG_UTIL
+                    if ( !aTxSIStyle.bValid )
+                    {
+                        if (!(rImportParam.nImportFlags & PPT_IMPORTFLAGS_NO_TEXT_ASSERT ))
+                        {
+                            DBG_ERROR( "SdrTextSpecInfoAtomInterpreter::Ctor(): parsing error, this document needs to be analysed (SJ)" );
+                        }
+                    }
+#endif
+                }
             }
 
             // todo:: PPT_PST_TxPFStyleAtom
@@ -4413,7 +4433,12 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
             rIn >> maParaLevel[ nLevel ].mnLowerDist;
         if ( nPMask & 0x8000 )
         {
-            DBG_ERROR( "PPTParaSheet::Read - unknown attribute, send me this document (SJ)" );
+#ifdef DBG_UTIL
+            if (!(rManager.rImportParam.nImportFlags & PPT_IMPORTFLAGS_NO_TEXT_ASSERT))
+            {
+                DBG_ERROR( "PPTParaSheet::Read - unknown attribute, send me this document (SJ)" );
+            }
+#endif
             rIn >> nVal16;
         }
         if ( nPMask & 0x100 )
@@ -4448,7 +4473,12 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
         {
             if ( nPMask & 1 )
             {
-                DBG_ERROR( "PPTParaSheet::Read - unknown attribute, send me this document (SJ)" );
+#ifdef DBG_UTIL
+                if (!(rManager.rImportParam.nImportFlags & PPT_IMPORTFLAGS_NO_TEXT_ASSERT))
+                {
+                    DBG_ERROR( "PPTParaSheet::Read - unknown attribute, send me this document (SJ)" );
+                }
+#endif
                 rIn >> nVal16;
             }
         }
@@ -4564,30 +4594,33 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                 nLev++;
             }
 #ifdef DBG_UTIL
-            if ( rIn.GetError() == 0 )
+            if (!(rManager.rImportParam.nImportFlags & PPT_IMPORTFLAGS_NO_TEXT_ASSERT))
             {
-                ByteString aMsg;
-                if ( rIn.Tell() > aTxMasterStyleHd.GetRecEndFilePos() )
+                if ( rIn.GetError() == 0 )
                 {
-                    aMsg += "\n  ";
-                    aMsg += "reading too many bytes:";
-                    aMsg += ByteString::CreateFromInt32( rIn.Tell() - aTxMasterStyleHd.GetRecEndFilePos() );
+                    ByteString aMsg;
+                    if ( rIn.Tell() > aTxMasterStyleHd.GetRecEndFilePos() )
+                    {
+                        aMsg += "\n  ";
+                        aMsg += "reading too many bytes:";
+                        aMsg += ByteString::CreateFromInt32( rIn.Tell() - aTxMasterStyleHd.GetRecEndFilePos() );
+                    }
+                    if ( rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() )
+                    {
+                        aMsg += "\n  ";
+                        aMsg += "reading too less bytes:";
+                        aMsg += ByteString::CreateFromInt32( aTxMasterStyleHd.GetRecEndFilePos() - rIn.Tell() );
+                    }
+                    if ( aMsg.Len() != 0 )
+                    {
+                        aMsg.Insert( "]:", 0 );
+                        aMsg.Insert( "PptStyleSheet::operator>>[", 0 );
+                        DBG_ERROR(aMsg.GetBuffer());
+                    }
                 }
-                if ( rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() )
-                {
-                    aMsg += "\n  ";
-                    aMsg += "reading too less bytes:";
-                    aMsg += ByteString::CreateFromInt32( aTxMasterStyleHd.GetRecEndFilePos() - rIn.Tell() );
-                }
-                if ( aMsg.Len() != 0 )
-                {
-                    aMsg.Insert( "]:", 0 );
-                    aMsg.Insert( "PptStyleSheet::operator>>[", 0 );
-                    DBG_ERROR(aMsg.GetBuffer());
-                }
+                if ( rIn.Tell() != aTxMasterStyleHd.GetRecEndFilePos() )
+                    DBG_ASSERT(0, "SJ: Falsche Anzahl von Bytes gelesen beim Import der PPT-Formatvorlagen");
             }
-            if ( rIn.Tell() != aTxMasterStyleHd.GetRecEndFilePos() )
-                DBG_ASSERT(0, "SJ: Falsche Anzahl von Bytes gelesen beim Import der PPT-Formatvorlagen");
 #endif
         }
         aTxMasterStyleHd.SeekToEndOfRecord( rIn );
@@ -5096,7 +5129,6 @@ sal_Bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn,
                 default :
                 {
                     rIn.SeekRel( 2 );
-                    DBG_ERROR( "SdrTextSpecInfoAtomInterpreter::Ctor(): parsing error, this document needs to be analysed (SJ)" );
                 }
             }
             nFlags &= ~i;
@@ -5104,10 +5136,6 @@ sal_Bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn,
         aList.Insert( pEntry, LIST_APPEND );
     }
     bValid = rIn.Tell() == rRecHd.GetRecEndFilePos();
-#ifdef DBG_UTIL
-    if ( !bValid )
-        DBG_ERROR( "SdrTextSpecInfoAtomInterpreter::Ctor(): parsing error, this document needs to be analysed (SJ)" );
-#endif
     return bValid;
 }
 
@@ -6742,6 +6770,15 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         }
                                     }
                                 }
+#ifdef DBG_UTIL
+                                else
+                                {
+                                    if (!(rSdrPowerPointImport.rImportParam.nImportFlags & PPT_IMPORTFLAGS_NO_TEXT_ASSERT))
+                                    {
+                                        DBG_ERROR( "SdrTextSpecInfoAtomInterpreter::Ctor(): parsing error, this document needs to be analysed (SJ)" );
+                                    }
+                                }
+#endif
                             }
                             //
                             // now will search for possible textextensions such as date/time fields
