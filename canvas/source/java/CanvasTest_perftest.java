@@ -67,7 +67,7 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.awt.*;
 
 // Canvas
-import drafts.com.sun.star.rendering.*;
+import com.sun.star.rendering.*;
 
 // Java AWT
 import java.awt.*;
@@ -81,7 +81,7 @@ import sun.awt.*;
 public class CanvasTest
     extends CanvasBase
     implements com.sun.star.awt.XWindow,
-               drafts.com.sun.star.rendering.XSpriteCanvas,
+               com.sun.star.rendering.XSpriteCanvas,
                com.sun.star.lang.XServiceInfo,
                com.sun.star.lang.XInitialization
 {
@@ -439,13 +439,13 @@ public class CanvasTest
     // ==================
     //
 
-    public synchronized void copyRect( drafts.com.sun.star.rendering.XBitmapCanvas  sourceCanvas,
-                                       drafts.com.sun.star.rendering.Rectangle2D    sourceRect,
-                                       drafts.com.sun.star.rendering.ViewState      sourceViewState,
-                                       drafts.com.sun.star.rendering.RenderState    sourceRenderState,
-                                       drafts.com.sun.star.rendering.Rectangle2D    destRect,
-                                       drafts.com.sun.star.rendering.ViewState      destViewState,
-                                       drafts.com.sun.star.rendering.RenderState    destRenderState )
+    public synchronized void copyRect( com.sun.star.rendering.XBitmapCanvas sourceCanvas,
+                                       com.sun.star.rendering.Rectangle2D   sourceRect,
+                                       com.sun.star.rendering.ViewState         sourceViewState,
+                                       com.sun.star.rendering.RenderState   sourceRenderState,
+                                       com.sun.star.rendering.Rectangle2D   destRect,
+                                       com.sun.star.rendering.ViewState         destViewState,
+                                       com.sun.star.rendering.RenderState   destRenderState )
     {
         CanvasUtils.printLog( "CanvasTest.copyRect() called" );
 
@@ -490,14 +490,14 @@ public class CanvasTest
     // ==================
     //
 
-    public synchronized drafts.com.sun.star.rendering.XAnimatedSprite createSpriteFromAnimation( XAnimation animation )
+    public synchronized com.sun.star.rendering.XAnimatedSprite createSpriteFromAnimation( XAnimation animation )
     {
         CanvasUtils.printLog( "CanvasTest.createSpriteFromAnimation called" );
 
         return new CanvasSprite( animation, this, (Graphics2D)dummyFrame.frame.getGraphics() );
     }
 
-    public synchronized XAnimatedSprite createSpriteFromBitmaps( drafts.com.sun.star.rendering.XBitmap[] animationBitmaps,
+    public synchronized XAnimatedSprite createSpriteFromBitmaps( com.sun.star.rendering.XBitmap[] animationBitmaps,
                                                                  short interpolationMode )
     {
         return null;
@@ -665,7 +665,7 @@ public class CanvasTest
     //----------------------------------------------------------------------------------
 
     private static final String s_implName = "XCanvas.java.impl";
-    private static final String s_serviceName = "drafts.com.sun.star.rendering.Canvas";
+    private static final String s_serviceName = "com.sun.star.rendering.Canvas";
 
     //----------------------------------------------------------------------------------
 

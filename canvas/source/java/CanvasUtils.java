@@ -67,8 +67,8 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.awt.*;
 
 // Canvas
-import drafts.com.sun.star.rendering.*;
-import drafts.com.sun.star.geometry.*;
+import com.sun.star.rendering.*;
+import com.sun.star.geometry.*;
 
 // Java AWT
 import java.awt.*;
@@ -184,11 +184,11 @@ public class CanvasUtils
         return path;
     }
 
-    public static java.awt.geom.GeneralPath makeGenPathFromBezierPoly( drafts.com.sun.star.rendering.XBezierPolyPolygon2D poly )
+    public static java.awt.geom.GeneralPath makeGenPathFromBezierPoly( com.sun.star.rendering.XBezierPolyPolygon2D poly )
     {
         try
         {
-            drafts.com.sun.star.geometry.RealBezierSegment2D [][] points = poly.getPoints(0,-1,0,-1);
+            com.sun.star.geometry.RealBezierSegment2D [][] points = poly.getPoints(0,-1,0,-1);
 
             return makeGenPathFromBezierPoints( points );
         }
@@ -222,11 +222,11 @@ public class CanvasUtils
         return path;
     }
 
-    public static java.awt.geom.GeneralPath makeGenPathFromLinePoly( drafts.com.sun.star.rendering.XLinePolyPolygon2D poly )
+    public static java.awt.geom.GeneralPath makeGenPathFromLinePoly( com.sun.star.rendering.XLinePolyPolygon2D poly )
     {
         try
         {
-            drafts.com.sun.star.geometry.RealPoint2D [][] points = poly.getPoints(0,-1,0,-1);
+            com.sun.star.geometry.RealPoint2D [][] points = poly.getPoints(0,-1,0,-1);
 
             return makeGenPathFromLinePoints( points );
         }
@@ -237,7 +237,7 @@ public class CanvasUtils
         return new java.awt.geom.GeneralPath();
     }
 
-    public static java.awt.geom.GeneralPath makeGeneralPath( drafts.com.sun.star.rendering.XPolyPolygon2D poly )
+    public static java.awt.geom.GeneralPath makeGeneralPath( com.sun.star.rendering.XPolyPolygon2D poly )
     {
         if( poly instanceof BezierPolyPolygon )
         {
@@ -275,7 +275,7 @@ public class CanvasUtils
         return new GeneralPath();
     }
 
-    public static java.awt.image.BufferedImage getBufferedImage( drafts.com.sun.star.rendering.XBitmap bitmap )
+    public static java.awt.image.BufferedImage getBufferedImage( com.sun.star.rendering.XBitmap bitmap )
     {
         if( bitmap instanceof CanvasBitmap )
         {
@@ -332,62 +332,62 @@ public class CanvasUtils
         int rule = java.awt.AlphaComposite.SRC_OVER;
         switch( compositeOp )
         {
-            case drafts.com.sun.star.rendering.CompositeOperation.CLEAR:
+            case com.sun.star.rendering.CompositeOperation.CLEAR:
                 CanvasUtils.printLog( "javaRuleFromCompositeOp: clear selected" );
                 rule = java.awt.AlphaComposite.CLEAR;
                 break;
 
-            case drafts.com.sun.star.rendering.CompositeOperation.SOURCE:
+            case com.sun.star.rendering.CompositeOperation.SOURCE:
                 CanvasUtils.printLog( "javaRuleFromCompositeOp: src selected" );
                 rule = java.awt.AlphaComposite.SRC;
                 break;
 
-            case drafts.com.sun.star.rendering.CompositeOperation.DESTINATION:
+            case com.sun.star.rendering.CompositeOperation.DESTINATION:
                 CanvasUtils.printLog( "javaRuleFromCompositeOp: dst selected" );
                 rule = java.awt.AlphaComposite.DST;
                 break;
 
-            case drafts.com.sun.star.rendering.CompositeOperation.OVER:
+            case com.sun.star.rendering.CompositeOperation.OVER:
                 CanvasUtils.printLog( "javaRuleFromCompositeOp: over selected" );
                 rule = java.awt.AlphaComposite.SRC_OVER;
                 break;
 
-            case drafts.com.sun.star.rendering.CompositeOperation.UNDER:
+            case com.sun.star.rendering.CompositeOperation.UNDER:
                 CanvasUtils.printLog( "javaRuleFromCompositeOp: under selected" );
                 rule = java.awt.AlphaComposite.DST_OVER;
                 break;
 
-            case drafts.com.sun.star.rendering.CompositeOperation.INSIDE:
+            case com.sun.star.rendering.CompositeOperation.INSIDE:
                 CanvasUtils.printLog( "javaRuleFromCompositeOp: inside selected" );
                 rule = java.awt.AlphaComposite.CLEAR;
                 break;
 
-            case drafts.com.sun.star.rendering.CompositeOperation.INSIDE_REVERSE:
+            case com.sun.star.rendering.CompositeOperation.INSIDE_REVERSE:
                 CanvasUtils.printLog( "javaRuleFromCompositeOp: inReverse selected" );
                 rule = java.awt.AlphaComposite.CLEAR;
                 break;
 
-            case drafts.com.sun.star.rendering.CompositeOperation.OUTSIDE:
+            case com.sun.star.rendering.CompositeOperation.OUTSIDE:
                 CanvasUtils.printLog( "javaRuleFromCompositeOp: outside selected" );
                 rule = java.awt.AlphaComposite.CLEAR;
                 break;
 
-            case drafts.com.sun.star.rendering.CompositeOperation.OUTSIDE_REVERSE:
+            case com.sun.star.rendering.CompositeOperation.OUTSIDE_REVERSE:
                 CanvasUtils.printLog( "javaRuleFromCompositeOp: outReverse selected" );
                 rule = java.awt.AlphaComposite.CLEAR;
                 break;
 
-            case drafts.com.sun.star.rendering.CompositeOperation.XOR:
+            case com.sun.star.rendering.CompositeOperation.XOR:
                 CanvasUtils.printLog( "javaRuleFromCompositeOp: xor selected" );
                 rule = java.awt.AlphaComposite.CLEAR;
                 break;
 
-            case drafts.com.sun.star.rendering.CompositeOperation.ADD:
+            case com.sun.star.rendering.CompositeOperation.ADD:
                 CanvasUtils.printLog( "javaRuleFromCompositeOp: add selected" );
                 rule = java.awt.AlphaComposite.CLEAR;
                 break;
 
-            case drafts.com.sun.star.rendering.CompositeOperation.SATURATE:
+            case com.sun.star.rendering.CompositeOperation.SATURATE:
                 CanvasUtils.printLog( "javaRuleFromCompositeOp: saturate selected" );
                 rule = java.awt.AlphaComposite.CLEAR;
                 break;
@@ -548,7 +548,7 @@ public class CanvasUtils
     public static void setupGraphicsFont( java.awt.Graphics2D                           graphics,
                                           ViewState                                     viewState,
                                           RenderState                                   renderState,
-                                          drafts.com.sun.star.rendering.XCanvasFont     xFont           )
+                                          com.sun.star.rendering.XCanvasFont        xFont           )
     {
         if( xFont instanceof CanvasFont )
         {
