@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:49:02 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4321,6 +4321,12 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_FRAMEDIR*/                   OutRTF_SvxFrmDir,
 /* RES_FRMATR_DUMMY8 */             0, // Dummy:
 /* RES_FRMATR_DUMMY9 */             0, // Dummy:
+/* RES_FOLLOW_TEXT_FLOW */          0,
+/* RES_FRMATR_DUMMY1 */             0, // Dummy:
+/* RES_FRMATR_DUMMY2 */             0, // Dummy:
+/* RES_FRMATR_DUMMY3 */             0, // Dummy:
+/* RES_FRMATR_DUMMY4 */             0, // Dummy:
+/* RES_FRMATR_DUMMY5 */             0, // Dummy:
 
 /* RES_GRFATR_MIRRORGRF */          OutRTF_SwMirrorGrf,
 /* RES_GRFATR_CROPGRF   */          OutRTF_SwCropGrf,
