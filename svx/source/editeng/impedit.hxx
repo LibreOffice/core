@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-19 16:09:39 $
+ *  last change: $Author: mt $ $Date: 2001-03-23 08:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,6 +403,8 @@ private:
 
     InternalEditStatus  aStatus;
 
+    LanguageType        eDefLanguage;
+
     sal_Bool            bIsFormatting;
     sal_Bool            bFormatted;
     sal_Bool            bInSelection;
@@ -772,6 +774,10 @@ public:
                             ::com::sun::star::linguistic2::XHyphenator >  &xHyph )
                             { xHyphenator = xHyph; }
     SpellInfo*          GetSpellInfo() const { return pSpellInfo; }
+
+    void                SetDefaultLanguage( LanguageType eLang ) { eDefLanguage = eLang; }
+    LanguageType        GetDefaultLanguage() const { return eDefLanguage; }
+
 
     LanguageType        GetLanguage( const EditPaM& rPaM, USHORT* pEndPos = NULL ) const;
     ::com::sun::star::lang::Locale GetLocale( const EditPaM& rPaM ) const;

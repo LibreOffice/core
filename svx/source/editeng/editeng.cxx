@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-21 12:01:35 $
+ *  last change: $Author: mt $ $Date: 2001-03-23 08:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1763,17 +1763,14 @@ vos::ORef<SvxForbiddenCharactersTable> EditEngine::GetForbiddenCharsTable() cons
 
 void EditEngine::SetDefaultLanguage( LanguageType eLang )
 {
-#if SUPD >= 630
-//  DBG_ERROR( "DefaultLanguage not longer supported" );
-#endif
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->SetDefaultLanguage( eLang );
 }
 
 LanguageType EditEngine::GetDefaultLanguage() const
 {
-#if SUPD >= 630
-//  DBG_ERROR( "DefaultLanguage not longer supported" );
-#endif
-    return pImpEditEngine->GetLanguage( EditPaM( pImpEditEngine->GetEditDoc().SaveGetObject( 0 ), 0 ) );
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->GetDefaultLanguage();
 }
 
 sal_Bool __EXPORT EditEngine::SpellNextDocument()

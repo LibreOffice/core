@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-19 16:09:39 $
+ *  last change: $Author: mt $ $Date: 2001-03-23 08:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,8 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bUpdate             = TRUE;
     bUndoEnabled        = TRUE;
     bCallParaInsertedOrDeleted = TRUE;
+
+    eDefLanguage        = LANGUAGE_DONTKNOW;
 
 
     aStatus.GetControlWord() =  EE_CNTRL_USECHARATTRIBS | EE_CNTRL_DOIDLEFORMAT |
@@ -1344,7 +1346,7 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
 
 USHORT ImpEditEngine::GetScriptType( const EditPaM& rPaM, USHORT* pEndPos ) const
 {
-    USHORT nScriptType = i18n::ScriptType::LATIN;
+    USHORT nScriptType = 0;
 
     if ( pEndPos )
         *pEndPos = rPaM.GetNode()->Len();
@@ -1369,7 +1371,7 @@ USHORT ImpEditEngine::GetScriptType( const EditPaM& rPaM, USHORT* pEndPos ) cons
             }
         }
     }
-    return nScriptType;
+    return nScriptType ? nScriptType : GetScriptTypeOfLanguage( GetDefaultLanguage() );
 }
 
 USHORT ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
@@ -1411,7 +1413,7 @@ USHORT ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
             }
         }
     }
-    return nScriptType;
+    return nScriptType ? nScriptType : GetScriptTypeOfLanguage( GetDefaultLanguage() );
 }
 
 BOOL ImpEditEngine::IsScriptChange( const EditPaM& rPaM ) const
