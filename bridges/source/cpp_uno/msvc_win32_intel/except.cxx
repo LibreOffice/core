@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 13:15:18 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
 
-#include "bridges/cpp_uno/bridge.hxx"
 #include "com/sun/star/uno/Any.hxx"
 
 #include "msci.hxx"
