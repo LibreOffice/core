@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+#   last change: $Author: nn $ $Date: 2000-10-19 18:37:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ CXXFILES = \
         fuconstr.cxx \
         fuconrec.cxx \
         fuconarc.cxx \
-        fuconctl.cxx \
         fuconuno.cxx \
         fuconpol.cxx \
         fuins1.cxx \
@@ -126,7 +125,6 @@ SLOFILES =  \
         $(SLO)$/fuconstr.obj \
         $(SLO)$/fuconrec.obj \
         $(SLO)$/fuconarc.obj \
-        $(SLO)$/fuconctl.obj \
         $(SLO)$/fuconuno.obj \
         $(SLO)$/fuconpol.obj \
         $(SLO)$/fuins1.obj \
