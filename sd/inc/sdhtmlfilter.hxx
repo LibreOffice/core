@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdhtmlfilter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 15:01:59 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,18 +68,20 @@
 // - SdHTMLFilter -
 // ----------------
 
-class SdHTMLFilter : public SdFilter
+class SdHTMLFilter
+    : public SdFilter
 {
-private:
-
-                            DECL_LINK( IOProgressHdl, USHORT* );
-
 public:
-
-                            SdHTMLFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress );
-                            ~SdHTMLFilter();
+    SdHTMLFilter (
+        SfxMedium& rMedium,
+        ::sd::DrawDocShell& rDocShell,
+        sal_Bool bShowProgress);
+    virtual ~SdHTMLFilter (void);
 
     virtual sal_Bool        Export();
+
+private:
+    DECL_LINK( IOProgressHdl, USHORT* );
 };
 
 #endif // _SD_SDHTMLFILTER_HXX
