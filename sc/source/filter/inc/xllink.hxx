@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xllink.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:46:01 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 18:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,15 @@ const sal_uInt16 EXC_ID_SUPBOOK             = 0x01AE;
 const sal_uInt16 EXC_SUPB_SELF              = 0x0401;
 const sal_uInt16 EXC_SUPB_ADDIN             = 0x3A01;
 
+/** This enumeration specifies the type of a SUPBOOK record. */
+enum XclSupbookType
+{
+    EXC_SBTYPE_UNKNOWN,     /// unknown SUPBOOK record type.
+    EXC_SBTYPE_SELF,        /// SUPBOOK is used for internal references.
+    EXC_SBTYPE_EXTERN,      /// SUPBOOK is used for external references.
+    EXC_SBTYPE_ADDIN,       /// SUPBOOK contains add-in functions.
+    EXC_SBTYPE_SPECIAL      /// SUPBOOK is used for DDE or OLE links.
+};
 
 // ============================================================================
 
