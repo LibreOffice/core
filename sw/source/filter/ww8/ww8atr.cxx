@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:49:57 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,9 @@
 #endif
 #ifndef _SVX_BLNKITEM_HXX
 #include <svx/blnkitem.hxx>
+#endif
+#ifndef _SVX_CHARHIDDENITEM_HXX
+#include <svx/charhiddenitem.hxx>
 #endif
 
 #ifndef _FMTFLD_HXX //autogen
@@ -1004,8 +1007,8 @@ static Writer& OutWW8_SwBoldUSW(Writer& rWrt, BYTE nId, bool bVal)
 {
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
     if( rWrtWW8.bWrtWW8 )
-        rWrtWW8.InsUInt16( 7 == nId ? 0x2a53 : 0x0835 + nId );
-    else if( 7 == nId )
+        rWrtWW8.InsUInt16(8 == nId ? 0x2a53 : 0x0835 + nId);
+    else if (8 == nId )
         return rWrt;            // das Attribut gibt es im WW6 nicht
     else
         rWrtWW8.pO->Insert( 85 + nId, rWrtWW8.pO->Count() );
@@ -1175,12 +1178,12 @@ static Writer& OutWW8_SwCrossedOut( Writer& rWrt, const SfxPoolItem& rHt )
 {
     FontStrikeout eSt = ((const SvxCrossedOutItem&)rHt).GetStrikeout();
     if( STRIKEOUT_DOUBLE == eSt )
-        return OutWW8_SwBoldUSW(rWrt, 7, true);
+        return OutWW8_SwBoldUSW(rWrt, 8, true);
     if( STRIKEOUT_NONE != eSt )
         return OutWW8_SwBoldUSW(rWrt, 2, true);
 
     // dann auch beide ausschalten!
-    OutWW8_SwBoldUSW(rWrt, 7, false);
+    OutWW8_SwBoldUSW(rWrt, 8, false);
     return OutWW8_SwBoldUSW(rWrt, 2, false);
 }
 
@@ -1201,6 +1204,12 @@ static Writer& OutWW8_SwCaseMap( Writer& rWrt, const SfxPoolItem& rHt )
             OutWW8_SwBoldUSW(rWrt, 5, false);
             return OutWW8_SwBoldUSW(rWrt, 6, false);
     }
+    return rWrt;
+}
+
+static Writer& OutWW8_SvxCharHidden(Writer& rWrt, const SfxPoolItem& rHt )
+{
+    OutWW8_SwBoldUSW(rWrt, 7, (item_cast<SvxCharHiddenItem>(rHt)).GetValue());
     return rWrt;
 }
 
@@ -2686,6 +2695,36 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                 aCopy.ChangeExpansion(*pTxtNd, false);
                 WriteExpand(rWW8Wrt, aCopy);
                 bWriteExpand = false;
+            }
+        }
+        break;
+        case RES_HIDDENTXTFLD:
+        {
+            String sExpand(pFld->GetPar2());
+            if (sExpand.Len())
+            {
+                //replace LF 0x0A with VT 0x0B
+                sExpand.SearchAndReplaceAll(0x0A, 0x0B);
+                rWW8Wrt.pChpPlc->AppendFkpEntry(rWW8Wrt.Strm().Tell());
+                if (rWW8Wrt.IsUnicode())
+                {
+                    SwWW8Writer::WriteString16(rWW8Wrt.Strm(), sExpand, false);
+                    static BYTE aArr[] =
+                    {
+                        0x3C, 0x08, 0x1
+                    };
+                    rWW8Wrt.pChpPlc->AppendFkpEntry(rWW8Wrt.Strm().Tell(), sizeof(aArr), aArr);
+                }
+                else
+                {
+                    SwWW8Writer::WriteString8(rWW8Wrt.Strm(), sExpand, false,
+                        RTL_TEXTENCODING_MS_1252);
+                    static BYTE aArr[] =
+                    {
+                        92, 0x1
+                    };
+                    rWW8Wrt.pChpPlc->AppendFkpEntry(rWW8Wrt.Strm().Tell(), sizeof(aArr), aArr);
+                }
             }
         }
         break;
@@ -4668,8 +4707,8 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_CHRATR_EMPHASIS_MARK*/       OutWW8_EmphasisMark,
 /* RES_TXTATR_TWO_LINES */          OutWW8_SvxTwoLinesItem,
 /* RES_CHRATR_DUMMY4 */             OutWW8_ScaleWidth,
-/* RES_CHRATR_DUMMY5 */             OutWW8_Relief,
-/* RES_CHRATR_DUMMY1 */             0, // Dummy:
+/* RES_CHRATR_RELIEF*/              OutWW8_Relief,
+/* RES_CHRATR_HIDDEN */             OutWW8_SvxCharHidden,
 
 /* RES_TXTATR_INETFMT */            OutSwFmtINetFmt,
 /* RES_TXTATR_DUMMY4 */             0,
