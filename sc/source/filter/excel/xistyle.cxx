@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:45:50 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,12 +187,11 @@ void XclImpPalette::ReadPalette( XclImpStream& rStrm )
     DBG_ASSERT( rStrm.GetRecLeft() == 4UL * nCount, "XclImpPalette::ReadPalette - size mismatch" );
 
     maColorTable.resize( nCount );
+    Color aColor;
     for( sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex )
     {
-        sal_uInt8 nRed, nGreen, nBlue;
-        rStrm >> nRed >> nGreen >> nBlue;
-        rStrm.Ignore( 1 );
-        maColorTable[ nIndex ] = RGB_COLORDATA( nRed, nGreen, nBlue );
+        rStrm >> aColor;
+        maColorTable[ nIndex ] = aColor.GetColor();
     }
 }
 
@@ -242,22 +241,21 @@ void XclImpFont::ReadFont( XclImpStream& rStrm )
 {
     switch( GetBiff() )
     {
-        case xlBiff2:
+        case EXC_BIFF2:
             ReadFontData2( rStrm );
             ReadFontName2( rStrm );
         break;
-        case xlBiff3:
-        case xlBiff4:
+        case EXC_BIFF3:
+        case EXC_BIFF4:
             ReadFontData2( rStrm );
             rStrm >> maData.mnColor;
             ReadFontName2( rStrm );
         break;
-        case xlBiff5:
-        case xlBiff7:
+        case EXC_BIFF5:
             ReadFontData5( rStrm );
             ReadFontName2( rStrm );
         break;
-        case xlBiff8:
+        case EXC_BIFF8:
             ReadFontData5( rStrm );
             ReadFontName8( rStrm );
         break;
@@ -276,8 +274,8 @@ void XclImpFont::ReadEfont( XclImpStream& rStrm )
 
 void XclImpFont::ReadCFFontBlock( XclImpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( GetBiff() == xlBiff8 );
-    if( GetBiff() != xlBiff8 )
+    DBG_ASSERT_BIFF( GetBiff() == EXC_BIFF8 );
+    if( GetBiff() != EXC_BIFF8 )
         return;
 
     sal_uInt32 nHeight, nStyle, nColor, nFontFlags1, nFontFlags2, nFontFlags3;
@@ -298,7 +296,7 @@ void XclImpFont::ReadCFFontBlock( XclImpStream& rStrm )
         maData.mnWeight = static_cast< sal_uInt16 >( nWeight );
     if( (mbItalicUsed = !::get_flag( nFontFlags1, EXC_CF_FONT_STYLE )) == true )
         maData.mbItalic = ::get_flag( nStyle, EXC_CF_FONT_STYLE );
-    if( (mbUnderlUsed = !::get_flag( nFontFlags3, EXC_CF_FONT_UNDERL ) && (nUnderl <= 0x7FFF)) == true )
+    if( (mbUnderlUsed = !::get_flag( nFontFlags3, EXC_CF_FONT_UNDERL ) && (nUnderl <= 0x7F)) == true )
         maData.mnUnderline = nUnderl;
     if( (mbColorUsed = (nColor <= 0x7FFF)) == true )
         maData.mnColor = static_cast< sal_uInt16 >( nColor );
@@ -528,23 +526,22 @@ void XclImpNumFmtBuffer::ReadFormat( XclImpStream& rStrm )
     String aFormat;
     switch( GetBiff() )
     {
-        case xlBiff2:
-        case xlBiff3:
+        case EXC_BIFF2:
+        case EXC_BIFF3:
             aFormat = rStrm.ReadByteString( false );
         break;
 
-        case xlBiff4:
+        case EXC_BIFF4:
             rStrm.Ignore( 2 );  // in BIFF4 the index field exists, but is undefined
             aFormat = rStrm.ReadByteString( false );
         break;
 
-        case xlBiff5:
-        case xlBiff7:
+        case EXC_BIFF5:
             rStrm >> mnNextXclIdx;
             aFormat = rStrm.ReadByteString( false );
         break;
 
-        case xlBiff8:
+        case EXC_BIFF8:
             rStrm >> mnNextXclIdx;
             aFormat = rStrm.ReadUniString();
         break;
@@ -1093,12 +1090,11 @@ void XclImpXF::ReadXF( XclImpStream& rStrm )
 {
     switch( GetBiff() )
     {
-        case xlBiff2:   ReadXF2( rStrm );   break;
-        case xlBiff3:   ReadXF3( rStrm );   break;
-        case xlBiff4:   ReadXF4( rStrm );   break;
-        case xlBiff5:
-        case xlBiff7:   ReadXF5( rStrm );   break;
-        case xlBiff8:   ReadXF8( rStrm );   break;
+        case EXC_BIFF2: ReadXF2( rStrm );   break;
+        case EXC_BIFF3: ReadXF3( rStrm );   break;
+        case EXC_BIFF4: ReadXF4( rStrm );   break;
+        case EXC_BIFF5: ReadXF5( rStrm );   break;
+        case EXC_BIFF8: ReadXF8( rStrm );   break;
         default:        DBG_ERROR_BIFF();
     }
 }
@@ -1291,14 +1287,14 @@ void XclImpXFBuffer::ReadXF( XclImpStream& rStrm )
     pXF->ReadXF( rStrm );
     maXFList.Append( pXF );
 
-    if( (GetBiff() > xlBiff2) && (maXFList.Count() == 1) )
+    if( (GetBiff() >= EXC_BIFF3) && (maXFList.Count() == 1) )
         // set the name of the "Default" cell style (always the first XF in an Excel file)
         pXF->SetBuiltInStyleName( EXC_STYLE_NORMAL, 0 );
 }
 
 void XclImpXFBuffer::ReadStyle( XclImpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( GetBiff() > xlBiff2 );
+    DBG_ASSERT_BIFF( GetBiff() >= EXC_BIFF3 );
 
     sal_uInt16 nXFIndex;
     rStrm >> nXFIndex;
@@ -1315,7 +1311,7 @@ void XclImpXFBuffer::ReadStyle( XclImpStream& rStrm )
         else                                                // user-defined styles
         {
             String aStyleName;
-            if( GetBiff() < xlBiff8 )
+            if( GetBiff() <= EXC_BIFF5 )
                 aStyleName = rStrm.ReadByteString( false );    // 8 bit length
             else
                 aStyleName = rStrm.ReadUniString();
@@ -1353,7 +1349,7 @@ void XclImpXFBuffer::ApplyPattern(
     ULONG nForceScNumFmt = rXFIndex.IsBoolCell() ? GetNumFmtBuffer().GetStdScNumFmt() : NUMBERFORMAT_ENTRY_NOT_FOUND;
     // do nothing for default cell format without explicit number format
     // #i34061# but always for BIFF2
-    if( (GetBiff() == xlBiff2) || (nXFIndex != EXC_XF_DEFAULTCELL) || (nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND) )
+    if( (GetBiff() == EXC_BIFF2) || (nXFIndex != EXC_XF_DEFAULTCELL) || (nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND) )
         if( XclImpXF* pXF = GetXF( nXFIndex ) )
             pXF->ApplyPattern( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, nForceScNumFmt );
 }
@@ -1570,7 +1566,7 @@ XclImpXFRangeBuffer::~XclImpXFRangeBuffer()
     delete[] mppColumns;
 }
 
-void XclImpXFRangeBuffer::Clear()
+void XclImpXFRangeBuffer::Initialize()
 {
     for( SCCOL nScCol = 0; nScCol < EXC_XFBUFF_COLUMNS; ++nScCol )
         mppColumns[ nScCol ].reset();
@@ -1661,7 +1657,7 @@ void XclImpXFRangeBuffer::SetMerge( SCCOL nScCol1, SCROW nScRow1, SCCOL nScCol2,
     maMergeList.Append( ScRange( nScCol1, nScRow1, 0, nScCol2, nScRow2, 0 ) );
 }
 
-void XclImpXFRangeBuffer::Apply()
+void XclImpXFRangeBuffer::Finalize()
 {
     ScDocument& rDoc = GetDoc();
     SCTAB nScTab = GetCurrScTab();
@@ -1695,8 +1691,6 @@ void XclImpXFRangeBuffer::Apply()
             rDoc.DoMerge( nScTab, pRange->aStart.Col(), pRange->aStart.Row(),
                 pRange->aEnd.Col(), pRange->aEnd.Row() );
     }
-
-    Clear();
 }
 
 // ============================================================================
