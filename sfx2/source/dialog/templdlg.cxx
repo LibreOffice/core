@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-30 11:48:02 $
+ *  last change: $Author: pb $ $Date: 2002-06-04 12:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,9 +162,11 @@ SfxTemplateDialog::SfxTemplateDialog
     Gestalterklasse.
 */
     : SfxDockingWindow( pBindings, pCW, pParent, SfxResId(DLG_STYLE_DESIGNER) ),
-      pImpl(0)
+
+    pImpl( new SfxTemplateDialog_Impl( pParent, pBindings, this ) )
+
 {
-    pImpl=new SfxTemplateDialog_Impl(pParent, pBindings, this);
+    pImpl->updateNonFamilyImages();
 }
 
 //-------------------------------------------------------------------------
@@ -183,8 +185,12 @@ ISfxTemplateCommon* SfxTemplateDialog::GetISfxTemplateCommon()
 
 void SfxTemplateDialog::DataChanged( const DataChangedEvent& _rDCEvt )
 {
-    if ( ( DATACHANGED_SETTINGS == _rDCEvt.GetType() ) && ( 0 != ( SETTINGS_STYLE & _rDCEvt.GetFlags() ) ) )
+    if ( ( DATACHANGED_SETTINGS == _rDCEvt.GetType() ) &&
+         ( 0 != ( SETTINGS_STYLE & _rDCEvt.GetFlags() ) ) )
+    {
         pImpl->updateFamilyImages();
+        pImpl->updateNonFamilyImages();
+    }
 
     SfxDockingWindow::DataChanged( _rDCEvt );
 }
@@ -2221,30 +2227,30 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
 
     SfxCommonTemplateDialog_Impl( pB, pWindow ),
 
-    aActionTbL  ( pWindow ),
-    pFloat      ( pWindow ),
-    aActionTbR  ( pWindow, ResId( TB_ACTION ) ),
-    bZoomIn     ( FALSE )
+    m_pFloat            ( pWindow ),
+    m_bZoomIn           ( FALSE ),
+    m_aActionTbL        ( pWindow ),
+    m_aActionTbR        ( pWindow, ResId( TB_ACTION ) )
 
 {
 
     pWindow->FreeResource();
     Initialize();
 
-    aActionTbL.SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxLSelect));
-    aActionTbR.SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxRSelect));
-    aActionTbL.Show();
-    aActionTbR.Show();
+    m_aActionTbL.SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxLSelect));
+    m_aActionTbR.SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxRSelect));
+    m_aActionTbL.Show();
+    m_aActionTbR.Show();
     Font aFont=aFilterLb.GetFont();
     aFont.SetWeight( WEIGHT_NORMAL );
     aFilterLb.SetFont( aFont );
-    aActionTbL.SetHelpId( HID_TEMPLDLG_TOOLBOX_LEFT );
+    m_aActionTbL.SetHelpId( HID_TEMPLDLG_TOOLBOX_LEFT );
 
     SfxImageManager* pImgMgr = pBindings->GetImageManager();
     if ( pImgMgr )
     {
-        pImgMgr->RegisterToolBox( &aActionTbL, SFX_TOOLBOX_CHANGEOUTSTYLE );
-        pImgMgr->RegisterToolBox( &aActionTbR, SFX_TOOLBOX_CHANGEOUTSTYLE );
+        pImgMgr->RegisterToolBox( &m_aActionTbL, SFX_TOOLBOX_CHANGEOUTSTYLE );
+        pImgMgr->RegisterToolBox( &m_aActionTbR, SFX_TOOLBOX_CHANGEOUTSTYLE );
     }
 }
 
@@ -2252,7 +2258,7 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
 
 void SfxTemplateDialog_Impl::EnableFamilyItem( USHORT nId, BOOL bEnable )
 {
-    aActionTbL.EnableItem( nId, bEnable );
+    m_aActionTbL.EnableItem( nId, bEnable );
 }
 
 //-------------------------------------------------------------------------
@@ -2269,8 +2275,8 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(USHORT nId,const SfxStyleFamilyIte
         case SFX_STYLE_FAMILY_PSEUDO: nHelpId = SID_STYLE_FAMILY5; break;
         default: DBG_ERROR("unbekannte StyleFamily"); break;
     }
-    aActionTbL.InsertItem( nId, pItem->GetImage(), pItem->GetText(), 0, 0);
-    aActionTbL.SetHelpId( nId, nHelpId );
+    m_aActionTbL.InsertItem( nId, pItem->GetImage(), pItem->GetText(), 0, 0);
+    m_aActionTbL.SetHelpId( nId, nHelpId );
 }
 
 // ------------------------------------------------------------------------
@@ -2281,7 +2287,7 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
         return;
 
     // let the families collection update the images
-    sal_Bool bIsHighContrast = pFloat->GetDisplayBackground().GetColor().IsDark();
+    sal_Bool bIsHighContrast = m_pFloat->GetDisplayBackground().GetColor().IsDark();
     pStyleFamilies->updateImages( *m_pStyleFamiliesId, bIsHighContrast ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL );
 
     // and set the new images on our toolbox
@@ -2290,15 +2296,23 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
     {
         const SfxStyleFamilyItem *pItem = pStyleFamilies->GetObject( nLoop );
         USHORT nId = SfxFamilyIdToNId( (USHORT) pItem->GetFamily() );
-        aActionTbL.SetItemImage( nId, pItem->GetImage() );
+        m_aActionTbL.SetItemImage( nId, pItem->GetImage() );
     }
+}
+
+// ------------------------------------------------------------------------
+void SfxTemplateDialog_Impl::updateNonFamilyImages()
+{
+    m_aActionTbR.SetImageList( ImageList( SfxResId(
+        m_pFloat->GetDisplayBackground().GetColor().IsDark() ? IMG_LST_STYLE_DESIGNER_HC
+                                                             : DLG_STYLE_DESIGNER ) ) );
 }
 
 // ------------------------------------------------------------------------
 
 void SfxTemplateDialog_Impl::ClearFamilyList()
 {
-    aActionTbL.Clear();
+    m_aActionTbL.Clear();
 }
 
 //-------------------------------------------------------------------------
@@ -2324,8 +2338,8 @@ SfxTemplateDialog_Impl::~SfxTemplateDialog_Impl()
     SfxImageManager* pImgMgr = pBindings->GetImageManager();
     if ( pImgMgr )
     {
-        pImgMgr->ReleaseToolBox( &aActionTbL );
-        pImgMgr->ReleaseToolBox( &aActionTbR );
+        pImgMgr->ReleaseToolBox( &m_aActionTbL );
+        pImgMgr->ReleaseToolBox( &m_aActionTbR );
     }
 }
 
@@ -2343,53 +2357,53 @@ void SfxTemplateDialog_Impl::LoadedFamilies()
 // Die Groesse der Listboxen wird angepasst
 void SfxTemplateDialog_Impl::Resize()
 {
-    FloatingWindow *pF = pFloat->GetFloatingWindow();
+    FloatingWindow *pF = m_pFloat->GetFloatingWindow();
     if ( pF )
     {
-//      if(pF->IsZoomedIn() && bZoomIn==FALSE)
+//      if(pF->IsZoomedIn() && m_bZoomIn==FALSE)
 //          pF->SetText(String(SfxResId( DLG_STYLE_DESIGNER )));
-//      if(!pF->IsZoomedIn() && bZoomIn==TRUE && GetFamilyItem_Impl())
+//      if(!pF->IsZoomedIn() && m_bZoomIn==TRUE && GetFamilyItem_Impl())
 //          UpdateStyles_Impl(UPDATE_FAMILY); //Bereich wieder in Titel schreiben
-        bZoomIn = pF->IsRollUp();
-        if ( bZoomIn )
+        m_bZoomIn = pF->IsRollUp();
+        if ( m_bZoomIn )
             return;
     }
 
-    Size aDlgSize=pFloat->PixelToLogic(pFloat->GetOutputSizePixel());
-    Size aSizeATL=pFloat->PixelToLogic(aActionTbL.CalcWindowSizePixel());
-    Size aSizeATR=pFloat->PixelToLogic(aActionTbR.CalcWindowSizePixel());
+    Size aDlgSize=m_pFloat->PixelToLogic(m_pFloat->GetOutputSizePixel());
+    Size aSizeATL=m_pFloat->PixelToLogic(m_aActionTbL.CalcWindowSizePixel());
+    Size aSizeATR=m_pFloat->PixelToLogic(m_aActionTbR.CalcWindowSizePixel());
     Size aMinSize = GetMinOutputSizePixel();
 
-    long nListHeight = pFloat->PixelToLogic( aFilterLb.GetSizePixel() ).Height();
+    long nListHeight = m_pFloat->PixelToLogic( aFilterLb.GetSizePixel() ).Height();
     long nWidth = aDlgSize.Width()- 2 * SFX_TEMPLDLG_HFRAME;
 
-    aActionTbL.SetPosSizePixel(pFloat->LogicToPixel(Point(SFX_TEMPLDLG_HFRAME,SFX_TEMPLDLG_VTOPFRAME)),
-                                 pFloat->LogicToPixel(aSizeATL));
+    m_aActionTbL.SetPosSizePixel(m_pFloat->LogicToPixel(Point(SFX_TEMPLDLG_HFRAME,SFX_TEMPLDLG_VTOPFRAME)),
+                                 m_pFloat->LogicToPixel(aSizeATL));
 
     // Die Position der rechten Toolbox nur ver"andern, wenn das Fenster
     // breit genug ist
     Point aPosATR(aDlgSize.Width()-SFX_TEMPLDLG_HFRAME-aSizeATR.Width(),SFX_TEMPLDLG_VTOPFRAME);
     if(aDlgSize.Width() >= aMinSize.Width())
-        aActionTbR.SetPosPixel(pFloat->LogicToPixel(aPosATR));
+        m_aActionTbR.SetPosPixel(m_pFloat->LogicToPixel(aPosATR));
     else
-        aActionTbR.SetPosPixel( pFloat->LogicToPixel(
+        m_aActionTbR.SetPosPixel( m_pFloat->LogicToPixel(
             Point( SFX_TEMPLDLG_HFRAME + aSizeATL.Width() + SFX_TEMPLDLG_MIDHSPACE,
                    SFX_TEMPLDLG_VTOPFRAME ) ) );
 
-    aActionTbR.SetSizePixel(pFloat->LogicToPixel(aSizeATR));
+    m_aActionTbR.SetSizePixel(m_pFloat->LogicToPixel(aSizeATR));
 
     Point aFilterPos(
-        pFloat->LogicToPixel(Point(SFX_TEMPLDLG_HFRAME,
+        m_pFloat->LogicToPixel(Point(SFX_TEMPLDLG_HFRAME,
             aDlgSize.Height()-SFX_TEMPLDLG_VBOTFRAME-nListHeight)) );
 
     Size aFilterSize(
-        pFloat->LogicToPixel(Size(nWidth,SFX_TEMPLDLG_FILTERHEIGHT)) );
+        m_pFloat->LogicToPixel(Size(nWidth,SFX_TEMPLDLG_FILTERHEIGHT)) );
 
     Point aFmtPos(
-        pFloat->LogicToPixel(Point(SFX_TEMPLDLG_HFRAME, SFX_TEMPLDLG_VTOPFRAME +
+        m_pFloat->LogicToPixel(Point(SFX_TEMPLDLG_HFRAME, SFX_TEMPLDLG_VTOPFRAME +
                             SFX_TEMPLDLG_MIDVSPACE+aSizeATL.Height())) );
     Size aFmtSize(
-        pFloat->LogicToPixel(Size(nWidth,
+        m_pFloat->LogicToPixel(Size(nWidth,
                     aDlgSize.Height() - SFX_TEMPLDLG_VBOTFRAME -
                     SFX_TEMPLDLG_VTOPFRAME - 2*SFX_TEMPLDLG_MIDVSPACE-
                     nListHeight-aSizeATL.Height())) );
@@ -2417,8 +2431,8 @@ void SfxTemplateDialog_Impl::Resize()
 
 Size SfxTemplateDialog_Impl::GetMinOutputSizePixel()
 {
-    Size aSizeATL=pFloat->PixelToLogic(aActionTbL.CalcWindowSizePixel());
-    Size aSizeATR=pFloat->PixelToLogic(aActionTbR.CalcWindowSizePixel());
+    Size aSizeATL=m_pFloat->PixelToLogic(m_aActionTbL.CalcWindowSizePixel());
+    Size aSizeATR=m_pFloat->PixelToLogic(m_aActionTbR.CalcWindowSizePixel());
     Size aMinSize=Size(
         aSizeATL.Width()+aSizeATR.Width()+
         2*SFX_TEMPLDLG_HFRAME + SFX_TEMPLDLG_MIDHSPACE,
@@ -2431,9 +2445,9 @@ Size SfxTemplateDialog_Impl::GetMinOutputSizePixel()
 void SfxTemplateDialog_Impl::Command( const CommandEvent& rCEvt )
 {
     if(COMMAND_CONTEXTMENU  == rCEvt.GetCommand())
-        ExecuteContextMenu_Impl( rCEvt.GetMousePosPixel(), pFloat );
+        ExecuteContextMenu_Impl( rCEvt.GetMousePosPixel(), m_pFloat );
     else
-        pFloat->Command(rCEvt);
+        m_pFloat->Command(rCEvt);
 }
 
 //-------------------------------------------------------------------------
@@ -2448,7 +2462,7 @@ void SfxTemplateDialog_Impl::EnableItem(USHORT nMesId, BOOL bCheck)
             Execute_Impl(SID_STYLE_WATERCAN, aEmpty, aEmpty, 0);
       case SID_STYLE_NEW_BY_EXAMPLE:
       case SID_STYLE_UPDATE_BY_EXAMPLE:
-        aActionTbR.EnableItem(nMesId,bCheck);
+        m_aActionTbR.EnableItem(nMesId,bCheck);
         break;
     }
 }
@@ -2461,10 +2475,10 @@ void SfxTemplateDialog_Impl::CheckItem(USHORT nMesId, BOOL bCheck)
     {
         case SID_STYLE_WATERCAN :
             bIsWater=bCheck;
-            aActionTbR.CheckItem(SID_STYLE_WATERCAN,bCheck);
+            m_aActionTbR.CheckItem(SID_STYLE_WATERCAN,bCheck);
             break;
         default:
-            aActionTbL.CheckItem(nMesId,bCheck); break;
+            m_aActionTbL.CheckItem(nMesId,bCheck); break;
     }
 }
 
@@ -2475,9 +2489,9 @@ BOOL SfxTemplateDialog_Impl::IsCheckedItem(USHORT nMesId)
     switch(nMesId)
     {
         case SID_STYLE_WATERCAN :
-            return aActionTbR.GetItemState(SID_STYLE_WATERCAN)==STATE_CHECK;
+            return m_aActionTbR.GetItemState(SID_STYLE_WATERCAN)==STATE_CHECK;
         default:
-            return aActionTbL.GetItemState(nMesId)==STATE_CHECK;
+            return m_aActionTbL.GetItemState(nMesId)==STATE_CHECK;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdgi.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-27 09:55:47 $
+ *  last change: $Author: pb $ $Date: 2002-06-04 12:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,10 +310,10 @@ private:
     friend class SfxTemplateControllerItem;
     friend class SfxTemplateDialogWrapper;
 
-    SfxTemplateDialog*  pFloat;
-    BOOL                bZoomIn;
-    ToolBox             aActionTbL;
-    ToolBox             aActionTbR;
+    SfxTemplateDialog*  m_pFloat;
+    BOOL                m_bZoomIn;
+    ToolBox             m_aActionTbL;
+    ToolBox             m_aActionTbR;
 
     DECL_LINK( ToolBoxLSelect, ToolBox * );
     DECL_LINK( ToolBoxRSelect, ToolBox * );
@@ -333,6 +333,7 @@ protected:
     Size            GetMinOutputSizePixel();
 
     void            updateFamilyImages();
+    void            updateNonFamilyImages();
 
 public:
     friend class SfxTemplateDialog;
