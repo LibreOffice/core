@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-23 11:54:09 $
+ *  last change: $Author: os $ $Date: 2000-11-02 12:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,15 +376,16 @@ uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap )
         case  FN_TABLE_IS_RELATIVE_WIDTH:
         case  FN_TABLE_RELATIVE_WIDTH:
         {
-            sal_uInt16* nPercent = 0;
-            DBG_WARNING("not implemented")
-//          SwTwips nWidth = ::GetTableWidth(pFmt, TabCols?, &nPercent);
-//          if(FN_TABLE_WIDTH = pMap->nWID)
-//              aRet.setINT32(nWidth);
-//          else if(FN_TABLE_RELATIVE_WIDTH)
-//              aRet.setINT16(nPercent);
-//          else
-//              aRet.SetBOOL( 0 != nPercent);
+            const SwFmtFrmSize& rSz = pFmt->GetFrmSize();
+            if(FN_TABLE_WIDTH == pMap->nWID)
+                rSz.QueryValue(aRet, MID_FRMSIZE_WIDTH|CONVERT_TWIPS);
+            else if(FN_TABLE_RELATIVE_WIDTH == pMap->nWID)
+                rSz.QueryValue(aRet, MID_FRMSIZE_REL_WIDTH);
+            else
+            {
+                BOOL bTemp = 0 != rSz.GetWidthPercent();
+                aRet.setValue(&bTemp, ::getBooleanCppuType());
+            }
         }
         break;
         case RES_PAGEDESC:
