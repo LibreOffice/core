@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-11 14:56:52 $
+ *  last change: $Author: mba $ $Date: 2000-10-12 10:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,7 @@ void SAL_CALL SfxFrameLoader::load( const Reference < XFrame >& rFrame, const OU
 
 void SfxFrameLoader::cancel() throw( RUNTIME_EXCEPTION )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( pLoader )
         pLoader->CancelTransfers();
 }
@@ -324,6 +325,7 @@ IMPL_LINK( SfxFrameLoader, LoadDone_Impl, void*, pVoid )
         SfxFrame* pFrame = pLoader->GetFrame();
         if ( pFrame && !pFrame->GetCurrentDocument() )
         {
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
             pFrame->SetFrameInterface_Impl( Reference < XFrame >() );
             pFrame->DoClose();
         }
@@ -375,6 +377,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
         TransformParameters( SID_OPENDOC, aArgumentlist, *pSet );
 
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         SfxMedium aMedium( sURL, (STREAM_READ | STREAM_SHARE_DENYNONE), sal_False, sal_True, NULL, pSet );
         aMedium.DownLoad();
 /*      String aMime;
