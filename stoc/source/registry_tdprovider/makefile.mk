@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 16:14:36 $
+#   last change: $Author: obo $ $Date: 2004-06-04 02:32:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,8 @@ SLOFILES=	\
         $(SLO)$/tdsingleton.obj \
         $(SLO)$/rdbtdp_tdenumeration.obj \
         $(SLO)$/functiondescription.obj \
-        $(SLO)$/methoddescription.obj
+        $(SLO)$/methoddescription.obj \
+        $(SLO)$/structtypedescription.obj
 
 
 SHL1TARGET=	$(TARGET)
