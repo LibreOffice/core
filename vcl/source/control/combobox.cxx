@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:46:12 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,6 +334,11 @@ IMPL_LINK( ComboBox, ImplClickBtnHdl, void*, EMPTYARG )
     SetSelection( Selection( 0, SELECTION_MAX ) );
     mpFloatWin->StartFloat( TRUE );
     ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
+
+    ImplClearLayoutData();
+    if( mpImplLB )
+        mpImplLB->GetMainWindow()->ImplClearLayoutData();
+
     return 0;
 }
 
@@ -352,6 +357,10 @@ IMPL_LINK( ComboBox, ImplPopupModeEndHdl, void*, p )
             mpImplLB->SetTravelSelect( bTravelSelect );
         }
     }
+
+    ImplClearLayoutData();
+    if( mpImplLB )
+        mpImplLB->GetMainWindow()->ImplClearLayoutData();
 
     mpBtn->SetPressed( FALSE );
     ImplCallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
@@ -1494,4 +1503,39 @@ void ComboBox::SetBorderStyle( USHORT nBorderStyle )
         mpSubEdit->SetBorderStyle( nBorderStyle );
         mpImplLB->SetBorderStyle( nBorderStyle );
     }
+}
+// -----------------------------------------------------------------------------
+
+long ComboBox::GetIndexForPoint( const Point& rPoint, USHORT& rPos ) const
+{
+    if( ! mpLayoutData )
+        FillLayoutData();
+
+    // check whether rPoint fits at all
+    long nIndex = Control::GetIndexForPoint( rPoint );
+    if( nIndex != -1 )
+    {
+        // point must be either in main list window
+        // or in impl window (dropdown case)
+        ImplListBoxWindow* pMain = mpImplLB->GetMainWindow();
+
+        // convert coordinates to ImplListBoxWindow pixel coordinate space
+        Point aConvPoint = LogicToPixel( rPoint );
+        aConvPoint = OutputToAbsoluteScreenPixel( aConvPoint );
+        aConvPoint = pMain->AbsoluteScreenToOutputPixel( aConvPoint );
+        aConvPoint = pMain->PixelToLogic( aConvPoint );
+
+        // try to find entry
+        USHORT nEntry = pMain->GetEntryPosForPoint( aConvPoint );
+        if( nEntry == LISTBOX_ENTRY_NOTFOUND )
+            nIndex = -1;
+        else
+            rPos = nEntry;
+    }
+
+    // get line relative index
+    if( nIndex != -1 )
+        nIndex = ToRelativeLineIndex( nIndex );
+
+    return nIndex;
 }
