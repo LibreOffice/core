@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-16 15:41:29 $
+ *  last change: $Author: mh $ $Date: 2001-10-22 09:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #if defined( OS2 ) || defined( WIN ) || defined( UNX ) || defined( WNT )
 #include <stdlib.h>         //wegen fcvt
 #endif
-#if defined(MAC) || defined(NETBSD)
+#if defined(MAC) || defined(NETBSD) || defined (FREEBSD)
 #if defined(NETBSD)
 extern "C" {
 #endif
