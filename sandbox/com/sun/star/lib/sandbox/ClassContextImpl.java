@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClassContextImpl.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2002-07-19 09:02:19 $
+ *  last change: $Author: dbo $ $Date: 2002-11-11 13:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
     private ProtectionDomain protectionDomain;
     private boolean _bSecure;
     private java.util.Vector _cargoVector = new java.util.Vector();
+
+    private java.util.Vector m_class_path_jars;
 
     // HACKHACK!!!: java.lang.Thread fragt bei erzeugen eines Threads den
     // HACKHACK!!!: SECURITYMANAGER nach der THREADGROUP
@@ -228,34 +230,104 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
         catch(ClassNotFoundException e) {
         }
 
-        if(xClass == null) {
-            try {
-                ResourceProxy resourceProxy =
-                    ResourceProxy.load(new URL(codeBase, className.replace('.', '/') + ".class"), protectionDomain);
+        if(xClass == null)
+        {
+            try
+            {
+                try
+                {
+                    ResourceProxy resourceProxy = null;
+                    resourceProxy =
+                        ResourceProxy.load(
+                            new URL( codeBase, className.replace('.', '/') + ".class" ), protectionDomain );
+                    byte bytes[] = resourceProxy.getBytes();
+                    //                      if(DEBUG) printHeader(bytes);
 
-                byte bytes[] = resourceProxy.getBytes();
-                //                      if(DEBUG) printHeader(bytes);
+                    xClass = defineClass(className, bytes, 0, bytes.length);
+                    //                      xClass = defineClass(className, bytes, 0, bytes.length, protectionDomain);
+                }
+                catch (IOException exc) // if not found
+                {
+                    // try further Class-Path jars
+                    if (null == m_class_path_jars)
+                    {
+                        java.util.Vector class_path_jars = new java.util.Vector();
+                        try
+                        {
+                            java.net.URL manifest_url = new java.net.URL(
+                                codeBase, "META-INF/MANIFEST.MF" );
+                            // read Class-Path from manifest file
+                            ResourceProxy resource= ResourceProxy.load( manifest_url, null );
+                            java.io.InputStream inManifest = resource.getInputStream();
+                            java.util.jar.Manifest manifest =
+                                new java.util.jar.Manifest( inManifest );
+                            java.util.jar.Attributes attributes = manifest.getMainAttributes();
+                            String class_path = attributes.getValue( "Class-Path" );
 
-                xClass = defineClass(className, bytes, 0, bytes.length);
-                //                      xClass = defineClass(className, bytes, 0, bytes.length, protectionDomain);
+                            if (class_path != null)
+                            {
+                                System.err.println( "class-path read" + class_path );
+                                java.util.Enumeration tokens =
+                                    new java.util.StringTokenizer( class_path );
+                                while (tokens.hasMoreElements())
+                                {
+                                    try
+                                    {
+                                        java.net.URL url;
+                                        String str_url = (String)tokens.nextElement();
+                                        if (str_url.charAt( 0 ) != '/' &&
+                                            str_url.indexOf( ':' ) < 0)
+                                        {
+                                            // relative path
+                                            url = new java.net.URL( codeBase, str_url );
+                                        }
+                                        else
+                                        {
+                                            url = new java.net.URL( str_url );
+                                        }
+                                        ClassContext context =
+                                            ClassContextProxy.create(
+                                                url, protectionDomain, threadGroup, true );
+                                        Resource res = ResourceProxy.load(url, null);
+                                        res.loadJar(url);
+                                        context.addCargo( resource );
+                                        class_path_jars.add( context );
+                                    }
+                                    catch (MalformedURLException e) // ignoring
+                                    {
+                                    }
+                                }
+                            }
+                        }
+                        catch (IOException e2)
+                        {
+                        }
+                        m_class_path_jars = class_path_jars;
+                    }
+
+                    java.util.Enumeration enum = m_class_path_jars.elements();
+                    while (enum.hasMoreElements())
+                    {
+                        ClassContext context = (ClassContext)enum.nextElement();
+                        try
+                        {
+                            xClass = context.loadClass( className );
+                        }
+                        catch (ClassNotFoundException e) // if not found, try next
+                        {
+                        }
+                    }
+                    if (null == xClass)
+                    {
+                        throw new ClassNotFoundException(
+                            "ClassContext.loadClass - class not found: "
+                            + className + " " + codeBase );
+                    }
+                }
 
 //                  Object objects[] = new Object[2];
 //                  objects[0] = resourceProxy.getProtectionDomain();
 //                  setSigners(xClass, objects);
-            }
-            catch(MalformedURLException malformedURLException) {
-                if(DEBUG) System.err.println("#### ClassContext.loadClasss - URL exception:" + malformedURLException);
-                throw new ClassNotFoundException("ClassContext.loadClass - MalformedURLException:"
-                                                 + " " + malformedURLException
-                                                 + " " + className
-                                                 + " " + codeBase);
-            }
-            catch(IOException iOException) {
-                if(DEBUG) System.err.println("#### ClassContext.loadClasss - IO exception:" + iOException);
-                throw new ClassNotFoundException("ClassContext.loadClass - IOException:"
-                                                 + " " + iOException
-                                                 + " " + className
-                                                 + " " + codeBase);
             }
             catch(ClassFormatError classFormatError) {
                 if(DEBUG) System.err.println("#### ClassContext.loadClass - ClassFormat exception:" + classFormatError);
