@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:42:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,6 @@
 
 #include "scitems.hxx"
 #include <svtools/colorcfg.hxx>
-#ifndef _SVX_ADJITEM_HXX
-#include <svx/adjitem.hxx>
-#endif
 #include <svx/eeitem.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/sdshitm.hxx>
@@ -901,6 +898,7 @@ SdrObject* ScDetectiveFunc::DrawCaption( SCCOL nCol, SCROW nRow, const String& r
     else
     {
         pPage->InsertObject( pCaption );
+        pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
 
         // Keep the existing rectangle size.
         if(!bNewNote)
@@ -914,16 +912,8 @@ SdrObject* ScDetectiveFunc::DrawCaption( SCCOL nCol, SCROW nRow, const String& r
                 OutlinerParaObject* pOPO = new OutlinerParaObject( *pEditText );
                 pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
                 pCaption->NbcSetOutlinerParaObject( pOPO );
-                // EE_* items must be applied after NbcSetOutlinerParaObject()
-                const SfxPoolItem* pItem = NULL;
-                if (rAttrSet.GetItemState(EE_PARA_JUST,TRUE,&pItem) == SFX_ITEM_SET)
-                {
-                    SvxAdjust eEEAlign = static_cast< const SvxAdjustItem& >( rAttrSet.Get( EE_PARA_JUST ) ).GetAdjust() ;
-                    pCaption->SetMergedItem( SvxAdjustItem( eEEAlign, EE_PARA_JUST));
-                }
             }
         }
-        pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
      }
 
     if (bHasUserText)
