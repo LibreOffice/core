@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 10:59:15 $
+ *  last change: $Author: jp $ $Date: 2000-09-27 09:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,17 +67,20 @@
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include <hintids.hxx>
 
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
+#ifndef _DATE_HXX
+#include <tools/date.hxx>
+#endif
+#ifndef _TIME_HXX
+#include <tools/time.hxx>
+#endif
+#ifndef _TOOLS_TEMPFILE_HXX
+#include <tools/tempfile.hxx>
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
-#include <com/sun/star/util/DateTime.hpp>
-#endif
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
+#ifndef SVTOOLS_FSTATHELPER_HXX
+#include <svtools/fstathelper.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -98,9 +101,6 @@
 #include <svx/paperinf.hxx>
 #endif
 
-#ifndef _TOOLS_TEMPFILE_HXX
-#include <tools/tempfile.hxx>
-#endif
 #ifndef _NODE_HXX //autogen
 #include <node.hxx>
 #endif
@@ -572,29 +572,16 @@ SwDoc* Reader::GetTemplateDoc()
         // Minute nachschauen, ob es geaendert wurde.
         if( !pTemplate || aCurrDateTime >= aChkDateTime )
         {
-                try
-                {
-                    ::ucb::Content aTestContent(
-                        aTDir.GetMainURL(), uno::Reference< XCommandEnvironment > ());
-                    uno::Any aAny = aTestContent.getPropertyValue( OUString::createFromAscii("DateModified") );
-                    if(aAny.hasValue())
-                    {
-                         const util::DateTime* pDT = (util::DateTime*)aAny.getValue();
-                        Date aTestDate(pDT->Day, pDT->Month, pDT->Year);
-                        Time aTestTime(pDT->Hours, pDT->Minutes, pDT->Seconds, pDT->HundredthSeconds);
-
-                        if( !pTemplate || aDStamp != aTestDate ||
-                                            aTStamp != aTestTime )
-                        {
-                            bLoad = TRUE;
-                            aDStamp = aTestDate;
-                            aTStamp = aTestTime;
-                        }
-                    }
-                }
-                catch(...)
-                {
-                }
+            Date aTstDate;
+            Time aTstTime;
+            if( FStatHelper::GetModifiedDateTimeOfFile( aTDir.GetMainURL(),
+                                                &aTstDate, &aTstTime ) &&
+                ( !pTemplate || aDStamp != aTstDate || aTStamp != aTstTime ))
+            {
+                bLoad = TRUE;
+                aDStamp = aTstDate;
+                aTStamp = aTstTime;
+            }
 
             // Erst in einer Minute wieder mal nachschauen, ob sich die
             // Vorlage geaendert hat.
@@ -616,23 +603,10 @@ SwDoc* Reader::GetTemplateDoc()
             Sw3Io aIO( *pTemplate );
             aIO.LoadStyles( xStor );
         }
-#ifdef DBG_UTIL
-                BOOL bExist = FALSE;
-                try
-                {
-                    ::ucb::Content aTestContent(
-                        aTDir.GetMainURL(), uno::Reference< XCommandEnvironment > ());
-                        bExist = aTestContent.isDocument();
 
-                }
-                catch(...)
-                {
-                }
-
-        ASSERT( !pTemplate || bExist ||
-            aTemplateNm.EqualsAscii( "$$Dummy$$" ),
-            "TemplatePtr aber Template existiert nicht!" );
-#endif
+        ASSERT( !pTemplate || FStatHelper::IsDocument( aTDir.GetMainURL() ) ||
+                aTemplateNm.EqualsAscii( "$$Dummy$$" ),
+                "TemplatePtr but no template exist!" );
     }
 
     return pTemplate;
@@ -1123,6 +1097,9 @@ BOOL SetHTMLTemplate( SwDoc & rDoc )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/19 10:59:15  hr
+      initial import
+
       Revision 1.361  2000/09/18 16:04:40  willem.vandorp
       OpenOffice header added.
 
