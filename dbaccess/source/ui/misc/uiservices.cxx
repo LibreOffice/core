@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:11:49 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialog();
 extern "C" void SAL_CALL createRegistryInfo_OAdabasSettingsDialog();
 extern "C" void SAL_CALL createRegistryInfo_OColumnControlModel();
 extern "C" void SAL_CALL createRegistryInfo_OColumnControl();
+extern "C" void SAL_CALL createRegistryInfo_OToolboxController();
 
 //***************************************************************************************
 extern "C" void SAL_CALL createRegistryInfo_DBU()
@@ -131,6 +132,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
         createRegistryInfo_OAdabasSettingsDialog();
         createRegistryInfo_OColumnControlModel();
         createRegistryInfo_OColumnControl();
+        createRegistryInfo_OToolboxController();
         bInit = sal_True;
     }
 }
