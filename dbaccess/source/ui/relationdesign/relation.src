@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:19:17 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,7 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
     Text[ portuguese ] = "A base de dados nгo tem suporte para relaзхes. O esboзo de relaзхes serб fechado.";
     Text[ russian ] = "Эта база данных не поддерживает связей.";
     Text[ greek ] = "З вЬуз дедпмЭнщн ден хрпуфзсЯжей учЭуейт. П учедйбумьт фщн учЭуещн иб фесмбфйуфеЯ.";
-    Text[ dutch ] = "De database ondersteunt geen relaties. Het relatie-ontwerp wordt weer gesloten!";
+    Text[ dutch ] = "De database ondersteunt geen verbindingen! ";
     Text[ french ] = "La base de donnйes ne supporte pas les relations !";
     Text[ spanish ] = "La base de datos no apoya ninguna relaciуn. ЎEl diseсo de relaciуn se cerrarб!";
     Text[ italian ] = "Il database non supporta alcuna relazione.";
@@ -377,7 +377,7 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message[ portuguese ] = "The relation design has been changed.\nDo you want to save the changes?";
     Message[ russian ] = "Проект связей изменен.\nСохранить эти изменения?";
     Message[ greek ] = "The relation design has been changed.\nDo you want to save the changes?";
-    Message[ dutch ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ dutch ] = "Het ontwerp voor de verbinding werd gewijzigd.\nWilt u de wijzigingen opslaan?";
     Message[ french ] = "L'йbauche de relation a йtй modifiйe.\nVoulez-vous enregistrer les modifications ?";
     Message[ spanish ] = "The relation design has been changed.\nDo you want to save the changes?";
     Message[ italian ] = "La struttura relazione и stata cambiata.\nVolete salvare le modifiche?";
