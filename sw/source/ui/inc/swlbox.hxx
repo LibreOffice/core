@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swlbox.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:42 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,6 @@ public:
 
     virtual void            KeyInput( const KeyEvent& rKEvt );
 
-    void                    InsertNewEntry(const SwBoxEntry&);
     void                    InsertEntry(const SwBoxEntry&);
 
     void                    RemoveEntry(USHORT nPos);
@@ -180,9 +179,6 @@ public:
 
     USHORT                  GetRemovedCount() const;
     const SwBoxEntry&       GetRemovedEntry(USHORT nPos) const;
-
-    USHORT                  GetNewCount() const;
-    const SwBoxEntry&       GetNewEntry(USHORT nPos) const;
 
     USHORT                  GetStyle() const            { return nStyle;    }
     void                    SetStyle(const USHORT nSt)  { nStyle = nSt;     }
