@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-04 19:34:56 $
+ *  last change: $Author: jb $ $Date: 2000-12-13 12:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,7 @@ namespace configmgr
             }
             else
             {
-                OSL_ENSHURE(_rArgs.getLength() < 2, "Too many arguments for legacy parameters.");
+                OSL_ENSHURE(_rArgs.getLength() <= 2, "Too many arguments for legacy parameters.");
                 break;
             }
         }
