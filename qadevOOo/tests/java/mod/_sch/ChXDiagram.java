@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChXDiagram.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-05 10:59:09 $
+ *  last change:$Date: 2003-05-27 13:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ public class ChXDiagram extends TestCase {
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
         try {
             log.println( "creating a sheetdocument" );
@@ -396,7 +396,7 @@ public class ChXDiagram extends TestCase {
         tEnv.addObjRelation("ROWAMOUNT", new Integer(rows));
         tEnv.addObjRelation("COLAMOUNT", new Integer(cols));
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
         Object stock = SOF.createDiagram(xChartDoc,"StockDiagram");
         tEnv.addObjRelation("STOCK",stock);
 
