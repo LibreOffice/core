@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:08:20 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ namespace dbaui
         void            SelectField( ListBox& rBox, const String& rField );
         DECL_LINK( ListSelectHdl, ListBox * );
         DECL_LINK( ListSelectCompHdl, ListBox * );
+
         void            SetLine( USHORT nIdx,const ::com::sun::star::beans::PropertyValue& _rItem,sal_Bool _bOr );
         void            EnableLines();
         sal_Int32       GetOSQLPredicateType(USHORT nPos,USHORT nCount) const;
