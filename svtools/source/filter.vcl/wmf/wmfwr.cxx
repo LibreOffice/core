@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:47:40 $
+ *  last change: $Author: hr $ $Date: 2003-06-26 11:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
+#endif
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
 #endif
 
 
@@ -212,8 +215,21 @@
 #define W_SYMBOL_CHARSET        2
 #define W_SHIFTJIS_CHARSET    128
 #define W_HANGEUL_CHARSET     129
+#define W_GB2312_CHARSET      134
 #define W_CHINESEBIG5_CHARSET 136
 #define W_OEM_CHARSET         255
+/*WINVER >= 0x0400*/
+#define W_JOHAB_CHARSET      130
+#define W_HEBREW_CHARSET     177
+#define W_ARABIC_CHARSET     178
+#define W_GREEK_CHARSET      161
+#define W_TURKISH_CHARSET    162
+#define W_VIETNAMESE_CHARSET 163
+#define W_THAI_CHARSET       222
+#define W_EASTEUROPE_CHARSET 238
+#define W_RUSSIAN_CHARSET    204
+#define W_MAC_CHARSET        77
+#define W_BALTIC_CHARSET     186
 
 #define W_DEFAULT_PITCH       0x00
 #define W_FIXED_PITCH         0x01
@@ -443,26 +459,12 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
     if (rFont.GetUnderline()==UNDERLINE_NONE) *pWMF << (BYTE)0; else  *pWMF << (BYTE)1;
     if (rFont.GetStrikeout()==STRIKEOUT_NONE) *pWMF << (BYTE)0; else  *pWMF << (BYTE)1;
 
-    sal_uInt8   nCharSet;
     CharSet     eFontNameEncoding = rFont.GetCharSet();
-    switch ( eFontNameEncoding )
-    {
-        case RTL_TEXTENCODING_SHIFT_JIS :   nCharSet = W_SHIFTJIS_CHARSET; break;
-        case RTL_TEXTENCODING_BIG5      :   nCharSet = W_CHINESEBIG5_CHARSET; break;
-        case RTL_TEXTENCODING_MS_949    :   nCharSet = W_HANGEUL_CHARSET; break;
-        case RTL_TEXTENCODING_MS_932    :   nCharSet = 0x3c; break;
-        case RTL_TEXTENCODING_SYMBOL    :
-        {
-            nCharSet = W_SYMBOL_CHARSET;
-            eFontNameEncoding = RTL_TEXTENCODING_MS_1252;
-        }
-        break;
-        default:
-        {
-            nCharSet = W_ANSI_CHARSET;
-            eFontNameEncoding = RTL_TEXTENCODING_MS_1252;
-        }
-    }
+    sal_uInt8   nCharSet = rtl_getBestWindowsCharsetFromTextEncoding( eFontNameEncoding );
+    if ( eFontNameEncoding == RTL_TEXTENCODING_SYMBOL )
+        eFontNameEncoding = RTL_TEXTENCODING_MS_1252;
+    if ( nCharSet == 1 )
+        nCharSet = W_ANSI_CHARSET;
     *pWMF << nCharSet;
 
     *pWMF << (BYTE)0 << (BYTE)0 << (BYTE)0;
