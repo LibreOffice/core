@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-11 15:05:19 $
+ *  last change: $Author: cl $ $Date: 2001-02-26 14:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "FillGradientName",               XML_NAMESPACE_DRAW, sXML_fill_gradient_name,    XML_TYPE_STRING, CTF_FILLGRADIENTNAME },
     { "FillGradientStepCount",          XML_NAMESPACE_DRAW, sXML_gradient_step_count,   XML_TYPE_NUMBER, 0 },
     { "FillHatchName",                  XML_NAMESPACE_DRAW, sXML_fill_hatch_name,       XML_TYPE_STRING, CTF_FILLHATCHNAME },
+    { "FillBackground",                 XML_NAMESPACE_DRAW, sXML_fill_hatch_solid,      XML_TYPE_BOOL, 0 },
     { "FillBitmapName",                 XML_NAMESPACE_DRAW, sXML_fill_image_name,       XML_TYPE_STRING, CTF_FILLBITMAPNAME },
     { "FillTransparence",               XML_NAMESPACE_DRAW, sXML_transparency,          XML_TYPE_PERCENT16, 0 },
     { "FillTransparenceGradientName",   XML_NAMESPACE_DRAW, sXML_transparency_name,     XML_TYPE_STRING, CTF_FILLTRANSNAME },

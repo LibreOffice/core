@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.37 2001-02-15 17:30:12 cl Exp $
+	$Id: drawing.mod,v 1.38 2001-02-26 14:57:23 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -345,6 +345,7 @@
 <!ATTLIST style:properties draw:fill-gradient-name %styleName; #IMPLIED>
 <!ATTLIST style:properties draw:gradient-step-count CDATA #IMPLIED>
 <!ATTLIST style:properties draw:fill-hatch-name %styleName; #IMPLIED>
+<!ATTLIST style:properties draw:fill-hatch-solid %boolean; #IMPLIED>
 <!ATTLIST style:properties draw:fill-image-name %styleName; #IMPLIED>
 <!ATTLIST style:properties style:repeat (no-repeat|repeat|stretch) #IMPLIED>
 <!ATTLIST style:properties draw:fill-image-width %lengthOrPercentage; #IMPLIED>
@@ -443,8 +444,8 @@
 <!ATTLIST presentation:show presentation:pages CDATA #REQUIRED>
 
 <!ELEMENT presentation:settings (presentation:show)*>
-<!ATTLIST presentation:settings presentation:start-page %styleName #IMPLIED>
-<!ATTLIST presentation:settings presentation:show %styleName #IMPLIED>
+<!ATTLIST presentation:settings presentation:start-page %styleName; #IMPLIED>
+<!ATTLIST presentation:settings presentation:show %styleName; #IMPLIED>
 <!ATTLIST presentation:settings presentation:full-screen %boolean; "true">
 <!ATTLIST presentation:settings presentation:endless %boolean; "false">
 <!ATTLIST presentation:settings presentation:pause %timeDuration; #IMPLIED>
@@ -706,3 +707,5 @@
 <!ATTLIST presentation:event xlink:show (new|replace) #IMPLIED>
 <!ATTLIST presentation:event xlink:actuate (onRequest) #IMPLIED>
 <!ATTLIST presentation:event presentation:verb %nonNegativeInteger; #IMPLIED>
+
+<!-- view settings -->

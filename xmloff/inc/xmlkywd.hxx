@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 15:49:08 $
+ *  last change: $Author: cl $ $Date: 2001-02-26 15:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,6 +660,7 @@ XML_CONSTASCII_ACTION( sXML_fill, "fill" );
 XML_CONSTASCII_ACTION( sXML_fill_color , "fill-color" );
 XML_CONSTASCII_ACTION( sXML_fill_gradient_name, "fill-gradient-name" );
 XML_CONSTASCII_ACTION( sXML_fill_hatch_name, "fill-hatch-name" );
+XML_CONSTASCII_ACTION( sXML_fill_hatch_solid, "fill-hatch-solid" );
 XML_CONSTASCII_ACTION( sXML_fill_image, "fill-image" );
 XML_CONSTASCII_ACTION( sXML_fill_image_height, "fill-image-height" );
 XML_CONSTASCII_ACTION( sXML_fill_image_name, "fill-image-name" );
