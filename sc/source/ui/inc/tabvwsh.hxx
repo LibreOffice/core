@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:42:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ class ScDrawFormShell;
 class ScCellShell;
 class ScOleObjectShell;
 class ScGraphicShell;
+class ScMediaShell;
 class ScChartShell;
 class ScPageBreakShell;
 class ScDPObject;
@@ -135,7 +136,8 @@ enum ObjectSelectionType
     OST_Auditing,
     OST_OleObject,
     OST_Chart,
-    OST_Graphic
+    OST_Graphic,
+    OST_Media
 };
 
 //==================================================================
@@ -162,6 +164,7 @@ private:
     ScOleObjectShell*       pOleObjectShell;
     ScChartShell*           pChartShell;
     ScGraphicShell*         pGraphicShell;
+    ScMediaShell*           pMediaShell;
     ScPageBreakShell*       pPageBreakShell;
     svx::ExtrusionBar*      pExtrusionBarShell;
 
@@ -194,6 +197,7 @@ private:
     BOOL                    bActiveOleObjectSh;
     BOOL                    bActiveChartSh;
     BOOL                    bActiveGraphicSh;
+    BOOL                    bActiveMediaSh;
     BOOL                    bActiveEditSh;
 
     BOOL                    bFormShellAtTop;            // does the FormShell need to be on top?
@@ -359,6 +363,7 @@ public:
     void            SetOleObjectShell( BOOL bActive );
     void            SetChartShell( BOOL bActive );
     void            SetGraphicShell( BOOL bActive );
+    void            SetMediaShell( BOOL bActive );
 
 
     void            SetDrawShellOrSub();
