@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: tra $ $Date: 2000-11-22 14:16:03 $
+#   last change: $Author: mfe $ $Date: 2001-02-07 11:54:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,10 @@ USE_LDUMP2=TRUE
 
 .IF "$(GUI)"!="OS2"
 USE_DEFFILE=TRUE
+.ENDIF
+
+.IF "$(GUI)"=="UNX"
+TARGETTYPE=CUI
 .ENDIF
 
 # --- Settings -----------------------------------------------------
