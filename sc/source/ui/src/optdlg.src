@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-06 17:36:50 $
+ *  last change: $Author: nn $ $Date: 2001-02-26 15:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1989,7 +1989,7 @@ TabPage RID_SCPAGE_LAYOUT
         Pos = MAP_APPFONT ( 6 , 102 ) ;
         Size = MAP_APPFONT ( 120 , 28 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Maﬂeinheit : Maòeinheit */
-        Text = "Maﬂeinheit" ;
+        Text = "~Maﬂeinheit" ;
         Text [ ENGLISH ] = "Metric Units" ;
         Text [ norwegian ] = "Metriske Enheter" ;
         Text [ italian ] = "Unit‡ di misura" ;
@@ -2304,7 +2304,7 @@ TabPage RID_SCPAGE_LAYOUT
     {
         Pos = MAP_APPFONT ( 134 , 102 ) ;
         Size = MAP_APPFONT ( 120 , 28 ) ;
-        Text = "Tabulatorenabstand" ;
+        Text = "~Tabulatorenabstand" ;
         Text [ ENGLISH ] = "Default Tab distance" ;
         Text [ norwegian ] = "Standard tabulatoravstand" ;
         Text [ italian ] = "Posizioni di tabulazione" ;
