@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:02:24 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,7 +976,7 @@ void GalleryBrowser2::ImplExecute( USHORT nId )
             case( MN_ADD ):
             case( MN_ADD_LINK ):
             {
-                sal_uInt32 nFormat;
+                sal_uInt32 nFormat = 0;
 
                 mbCurActionIsLinkage = ( MN_ADD_LINK == nId );
 
