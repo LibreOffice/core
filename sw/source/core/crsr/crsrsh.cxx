@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:18:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1292,7 +1292,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 
         SwTabFrm *pTab = pTblFrm->FindTabFrm(), *pMarkTab;
 
-        if ( pTab && pTab->GetTable()->GetRowsToRepeat() > 0 )
+       if ( pTab && pTab->GetTable()->GetRowsToRepeat() > 0 )
         {
             if (  ( pTab->IsFollow() && pTab->IsInHeadline( *pTblFrm ) ) ||
                   ( (pMarkTab = (pMarkTblFrm = pITmpCrsr->GetCntntNode( FALSE )->
