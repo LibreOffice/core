@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:52:01 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ class OReadToolBoxDocumentHandler : public ::com::sun::star::xml::sax::XDocument
         sal_Int32                                                                       m_nHashCode_Style_AutoSize;
         sal_Int32                                                                       m_nHashCode_Style_DropDown;
         sal_Int32                                                                       m_nHashCode_Style_Repeat;
+        sal_Int32                                                                       m_nHashCode_Style_DropDownOnly;
 };
 
 
