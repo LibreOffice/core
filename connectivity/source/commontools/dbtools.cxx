@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:09:14 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 17:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,24 +572,29 @@ SQLContext prependContextInfo(SQLException& _rException, const Reference< XInter
         if (sCatalogSep.getLength())
             aSeparator = sCatalogSep[0];
 
-        if (aTableName.getTokenCount(aSeparator) >= 2)
+        sal_Int32 nIndex = 0;
+        ::rtl::OUString aFirstToken = aTableName.getToken(0, aSeparator, nIndex);
+        if( nIndex != -1 ) // one or more tokens follow
         {
-            ::rtl::OUString aDatabaseName(aTableName.getToken(0, aSeparator));
+            ::rtl::OUString aDatabaseName( aFirstToken );
             sQuotedName += quoteName(sQuote, aDatabaseName);
             sQuotedName = sQuotedName.concat(::rtl::OUString(&aSeparator, 1));
             aTableName = aTableName.replaceAt(0, aDatabaseName.getLength() + 1, s_sEmptyString);
-                // have no "erase" so simulate this with replaceAt
         }
+
     }
     if (_rxMeta->supportsSchemasInDataManipulation())
     {
-        if (aTableName.getTokenCount(aGenericSep) == 2)
+        sal_Int32 nIndex = 0;
+        ::rtl::OUString aFirstToken( aTableName.getToken( 0, aGenericSep, nIndex ) );
+        ::rtl::OUString aSecondToken( nIndex != -1 ? aTableName.getToken( 1, aGenericSep, nIndex ) : ::rtl::OUString() );
+        if (nIndex == -1 && aSecondToken.getLength())
         {
             static ::rtl::OUString s_aGenericSep(&aGenericSep, 1);
-                // need a method on the OUString to cancat a single unicode character ....
-            sQuotedName += quoteName(sQuote, aTableName.getToken(0, aGenericSep));
+            // need a method on the OUString to cancat a single unicode character ....
+            sQuotedName += quoteName(sQuote, aFirstToken);
             sQuotedName = sQuotedName.concat(s_aGenericSep);
-            sQuotedName += quoteName(sQuote, aTableName.getToken(1, aGenericSep));
+            sQuotedName += quoteName(sQuote, aSecondToken);
         }
         else
             sQuotedName += quoteName(sQuote, aTableName);
@@ -1257,6 +1262,9 @@ void showError(const SQLExceptionInfo& _rInfo,
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2001/04/27 10:09:14  oj
+ *  comment out the OSL_ESNURE in QualifiedNameComponents
+ *
  *  Revision 1.22  2001/04/20 13:33:25  oj
  *  #85736# if catalogseparator is empty don't append catalog
  *

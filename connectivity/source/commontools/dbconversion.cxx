@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-27 12:19:34 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 17:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException)
 {
     double fValue = 0;
-    if (rString.len())
+    if (rString.getLength())
     {
             // Muss der String formatiert werden?
         sal_Int16 nTypeClass = nKeyType & ~NumberFormat::DEFINED;
@@ -795,6 +795,9 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/03/27 12:19:34  jl
+ *  calls to sal_setInt64 hhave been removed
+ *
  *  Revision 1.12  2001/03/21 13:37:07  jl
  *  OSL_ENSHURE replaced by OSL_ENSURE
  *

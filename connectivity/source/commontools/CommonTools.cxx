@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:45:56 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 17:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
-#ifndef _RTL_CHAR_H_
-#include <rtl/char.h>
-#endif
 #ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
 #endif
@@ -86,6 +83,11 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+
+inline sal_Unicode rtl_ascii_toUpperCase( sal_Unicode ch )
+{
+    return ch >= 0x0061 && ch <= 0x007a ? ch + 0x20 : ch;
+}
 
 namespace connectivity
 {
@@ -149,7 +151,7 @@ namespace connectivity
                 default:
                     if (*pWild && (*pWild == cEscape) && ((*(pWild+1)== CHAR_PLACE) || (*(pWild+1) == CHAR_WILD)) )
                         pWild++;
-                    if ( rtl_char_toUpperCase(*pWild) != rtl_char_toUpperCase(*pStr) )
+                    if ( rtl_ascii_toUpperCase(*pWild) != rtl_ascii_toUpperCase(*pStr) )
                         if ( !pos )
                             return sal_False;
                         else
