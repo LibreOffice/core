@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-01 12:35:42 $
+ *  last change: $Author: ka $ $Date: 2002-03-01 15:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,7 +498,7 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
             {
                 BOOL bDrawn = FALSE;
 
-                if( nStyle & ( IMAGE_DRAW_HIGHCONTRAST | IMAGE_DRAW_HIGHLIGHT | IMAGE_DRAW_DEACTIVE ) )
+                if( nStyle & ( IMAGE_DRAW_COLORTRANSFORM | IMAGE_DRAW_HIGHLIGHT | IMAGE_DRAW_DEACTIVE ) )
                 {
                     Bitmap          aTmpBmp( aBmp ), aTmpMsk( aMask );
                     const Rectangle aCropRect( Rectangle( IPOS( nPos ), aSize ) );
@@ -506,7 +506,7 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
                     aTmpBmp.Crop( aCropRect );
                     aTmpMsk.Crop( aCropRect );
 
-                    if( nStyle & IMAGE_DRAW_HIGHCONTRAST )
+                    if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
                     {
                         Color*  pSrcColors = NULL;
                         Color*  pDstColors = NULL;
@@ -601,28 +601,6 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
                     }
 
                     pOutDev->DrawBitmapEx( aOutPos, BitmapEx( aTmpBmp, aTmpMsk ) );
-                    bDrawn = TRUE;
-                }
-                else if( nStyle & IMAGE_DRAW_HIGHCONTRAST )
-                {
-                    Bitmap          aTmpBmp( aBmp ), aTmpMsk( aMask );
-                    const Rectangle aCropRect( Rectangle( IPOS( nPos ), aSize ) );
-                    Color*          pSrcColors = NULL;
-                    Color*          pDstColors = NULL;
-                    ULONG           nColorCount = 0;
-
-                    aTmpBmp.Crop( aCropRect );
-                    aTmpMsk.Crop( aCropRect );
-
-                    Image::GetColorTransformArrays( IMAGECOLORTRANSFORM_HIGHCONTRAST, pSrcColors, pDstColors, nColorCount );
-
-                    if( nColorCount && pSrcColors && pDstColors )
-                        aTmpBmp.Replace( pSrcColors, pDstColors, nColorCount );
-
-                    pOutDev->DrawBitmapEx( aOutPos, BitmapEx( aTmpBmp, aTmpMsk ) );
-
-                    delete[] pSrcColors;
-                    delete[] pDstColors;
                     bDrawn = TRUE;
                 }
 
