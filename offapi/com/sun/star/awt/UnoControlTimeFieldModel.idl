@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlTimeFieldModel.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-23 14:40:26 $
+ *  last change: $Author: tbe $ $Date: 2002-09-24 13:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,26 +76,21 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoControlTimeFieldModel
-/** specifies the standard model of a time field control.
+/** specifies the standard model of an <type>UnoControlTimeField</type>.
  */
 service UnoControlTimeFieldModel
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlModel;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlTimeFieldModel::BackgroundColor
     /** specifies the background color (RGB) of the control.
      */
     [property] long BackgroundColor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlTimeFieldModel::Border
     /** specifies the border style of the control.
-
 
         <pre>
         0: No border
@@ -107,104 +102,29 @@ service UnoControlTimeFieldModel
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlTimeFieldModel::DefaultControl
-    /** specifies the service name of the default control for this model.
-     */
-    [property] string DefaultControl;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlTimeFieldModel::Enabled
-    /** determines whether a control is enabled or disabled.
+    /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlTimeFieldModel::TimeFormat
-    /** specifies the format of the time.
-
-
-        <pre>
-        0:   24h short
-        1:   24h long
-        2:   12h short
-        3:   12h long
-        4:   Duration short
-        5:  Duration long
-        </pre>
-     */
-    [property] short TimeFormat;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlTimeFieldModel::FontDescriptor
     /** specifies the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlTimeFieldModel::Printable
-    /** specifies that the control will be printed with the document.
+    /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
+        value of the text in the control.
      */
-    [property] boolean Printable;
+    [property] short FontEmphasisMark;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlTimeFieldModel::ReadOnly
-    /** specifies that the content of the control cannot be modified by the user.
+    /** specifies the <type scope="com::sun::star::text">FontRelief</type>
+        value of the text in the control.
      */
-    [property] boolean ReadOnly;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlTimeFieldModel::Spin
-    /** specifies that the control has a spin button.
-     */
-    [property] boolean Spin;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlTimeFieldModel::StrictFormat
-    /** specifies that the time is checked during the input.
-     */
-    [property] boolean StrictFormat;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlTimeFieldModel::Tabstop
-    /** specifies that the control can be reached with the tabulator key.
-     */
-    [property] boolean Tabstop;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlTimeFieldModel::TextColor
-    /** specifies the text color (RGB) of the control.
-     */
-    [property] long TextColor;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlTimeFieldModel::Time
-    /** specifies the time displayed in the control.
-     */
-    [property] long Time;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlTimeFieldModel::TimeMax
-    /** specifies the maximum time that can be entered.
-     */
-    [property] long TimeMax;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlTimeFieldModel::TimeMin
-    /** specifies the minimum time that can be entered.
-     */
-    [property] long TimeMin;
+    [property] short FontRelief;
 
     //-------------------------------------------------------------------------
 
@@ -214,9 +134,84 @@ service UnoControlTimeFieldModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the help id of the control.
+    /** specifies the help URL of the control.
      */
     [property] string HelpURL;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control will be printed with the document.
+     */
+    [property] boolean Printable;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the content of the control cannot be modified by the user.
+     */
+    [property] boolean ReadOnly;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control has a spin button.
+     */
+    [property] boolean Spin;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the date is checked during the user input.
+     */
+    [property] boolean StrictFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control can be reached with the TAB key.
+     */
+    [property] boolean Tabstop;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the text color (RGB) of the control.
+     */
+    [property] long TextColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the text line color (RGB) of the control.
+     */
+    [property] long TextLineColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the time displayed in the control.
+     */
+    [property] long Time;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the format of the displayed time.
+
+        <pre>
+        0:  24h short
+        1:  24h long
+        2:  12h short
+        3:  12h long
+        4:  Duration short
+        5:  Duration long
+        </pre>
+     */
+    [property] short TimeFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the maximum time that can be entered.
+     */
+    [property] long TimeMax;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the minimum time that can be entered.
+     */
+    [property] long TimeMin;
 
 };
 
@@ -224,27 +219,4 @@ service UnoControlTimeFieldModel
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:42:11  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:51  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:07  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/21 16:17:48  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/02/07 11:24:15  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif
