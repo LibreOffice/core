@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:10:43 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,13 @@ public:
     BOOL HasParaSpaceAtPages( BOOL bSct ) const;
     SwTwips CalcUpperSpace( const SwBorderAttrs *pAttrs = NULL,
                             const SwFrm* pPr = NULL ) const;
+    /** calculation of lower space
+
+        OD 2004-03-02 #106629#
+
+        @author OD
+    */
+    SwTwips CalcLowerSpace( const SwBorderAttrs* _pAttrs = 0L ) const;
 
     void CheckKeep();
 
