@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:26:25 $
+#   last change: $Author: obo $ $Date: 2004-03-17 13:15:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,9 @@ INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
 
 UNOTYPES= com.sun.star.bridge.ModelDependent \
           com.sun.star.lang.XMultiServiceFactory \
-          com.sun.star.bridge.XBridgeSupplier2
+          com.sun.star.bridge.XBridgeSupplier2 \
+    com.sun.star.uno.XComponentContext \
+    com.sun.star.lang.XMultiComponentFactory
 
 
 
@@ -104,7 +106,7 @@ UNOTYPES= com.sun.star.bridge.ModelDependent \
 
 APP1TARGET=	$(TARGET)
 APP1OBJS=	$(OBJ)$/convTest.obj
-LIBCMT=msvcrtd.lib
+#LIBCMT=msvcrtd.lib
 
 
 APP1STDLIBS= \
@@ -115,8 +117,10 @@ APP1STDLIBS= \
     kernel32.lib \
     ole32.lib	\
     oleaut32.lib	\
-    uuid.lib		\
-    comdlg32.lib
+    uuid.lib	\
+    comdlg32.lib	\
+    $(COMPATH)$/atlmfc$/lib$/atls.lib \
+    advapi32.lib    
 
 
 
