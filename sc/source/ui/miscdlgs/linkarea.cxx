@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-04 12:13:31 $
+ *  last change: $Author: nn $ $Date: 2001-06-27 15:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ ScLinkedAreaDlg::ScLinkedAreaDlg( Window* pParent ) :
 {
     FreeResource();
 
+    aCbUrl.SetHelpId( HID_SCDLG_LINKAREAURL );  // SfxURLBox ctor always sets SID_OPENURL
     aCbUrl.SetSelectHdl( LINK( this, ScLinkedAreaDlg, FileHdl ) );
     aBtnBrowse.SetClickHdl( LINK( this, ScLinkedAreaDlg, BrowseHdl ) );
     aLbRanges.SetSelectHdl( LINK( this, ScLinkedAreaDlg, RangeHdl ) );

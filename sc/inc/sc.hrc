@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-12 13:27:16 $
+ *  last change: $Author: nn $ $Date: 2001-06-27 15:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 #define HID_SC_DLG_START        (HID_SC_START + 1100)
 #define HID_SC_TOOLBOX_START    (HID_SC_START + 1170)
 #define HID_SC_MENU_START       (HID_SC_START + 1180)
+#define HID_SC_OTHER_START      (HID_SC_START + 1230)
 #define HID_SC_AAI_FUNCS_START  (HID_SC_START + 1300)       // Analysis Addin Functions
 
 // ---------------------------------------------------------------------------
@@ -346,6 +347,10 @@
 #define HID_DATAPILOT_DATABASE  ( HID_SC_MENU_START + 48 )
 #define HID_DATAPILOT_SERVICE   ( HID_SC_MENU_START + 49 )
 
+// Other help IDs (max.70) ---------------------------------------------------
+#define HID_SCDLG_LINKAREAURL   ( HID_SC_OTHER_START )
+
+// Analysis Addin Functions --------------------------------------------------
 #define HID_AAI_FUNC_WORKDAY        ( HID_SC_AAI_FUNCS_START )
 #define HID_AAI_FUNC_YEARFRAC       ( HID_SC_AAI_FUNCS_START + 1 )
 #define HID_AAI_FUNC_EDATE          ( HID_SC_AAI_FUNCS_START + 2 )
