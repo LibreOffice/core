@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iprcache.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-11-08 07:04:30 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 13:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 
-#define A2OU(x)     OUString::createFromAscii(x)
 
 namespace linguistic
 {
