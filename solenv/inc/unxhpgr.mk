@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxhpgr.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:46:38 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:28:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,12 +86,13 @@ CFLAGSWALL=-Wall
 CFLAGS=-nostdinc -c $(INCLUDE) -I/nw386/dev/s/solenv/unxhpgr/lib/gcc-lib/hppa1.1-hp-hpux10.20/egcs-2.91.57/include
 CFLAGSCC=-pipe -fguiding-decls
 CFLAGSCXX=-pipe -fguiding-decls
+PICSWITCH:=-fPIC
 CFLAGSOBJGUIST=
 CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
 CFLAGSOBJCUIMT=
-CFLAGSSLOGUIMT=-fPIC
-CFLAGSSLOCUIMT=-fPIC
+CFLAGSSLOGUIMT=$(PICSWITCH)
+CFLAGSSLOCUIMT=$(PICSWITCH)
 CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
