@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:34:55 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1330,15 +1330,11 @@ sal_uInt16 XclExpLinkManagerImpl::FindXti( sal_uInt16 nXclFirst, sal_uInt16 nXcl
 
 void XclExpLinkManagerImpl::StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 )
 {
-    if( (rRef1.nTab >= 0) && (rRef2.nTab >= 0) )
-    {
-        SCTAB nScFirst = rRef1.nTab;
-        SCTAB nScLast = rRef2.nTab;
-        for( SCTAB nScTab = nScFirst; nScTab <= nScLast; ++nScTab )
+    if( !rRef1.IsTabDeleted() && !rRef2.IsTabDeleted() )
+        for( SCTAB nScTab = rRef1.nTab, nLastScTab = rRef2.nTab; nScTab <= nLastScTab; ++nScTab )
             if( GetTabInfo().IsExternalTab( nScTab ) )
                 maSBBuffer.StoreCellRange( ScRange(
                     rRef1.nCol, rRef1.nRow, nScTab, rRef2.nCol, rRef2.nRow, nScTab ) );
-    }
 }
 
 void XclExpLinkManagerImpl::InsertAddIn( sal_uInt16& rnXti, sal_uInt16& rnExtName, const String& rName )
