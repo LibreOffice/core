@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-09 06:46:52 $
+ *  last change: $Author: pb $ $Date: 2001-02-22 10:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3602,8 +3602,11 @@ void SvxCharNamePage::ResetColor_Impl( const SfxItemSet& rSet )
         case SFX_ITEM_DEFAULT:
         case SFX_ITEM_SET:
         {
+            SvxFont& rFont = m_aPreviewWin.GetFont();
             const SvxColorItem& rItem = (SvxColorItem&)rSet.Get( nWhich );
             Color aColor = rItem.GetValue();
+            rFont.SetColor( aColor );
+            m_aPreviewWin.Invalidate();
             USHORT nSelPos = m_aColorLB.GetEntryPos( aColor );
             if ( nSelPos == LISTBOX_ENTRY_NOTFOUND && aColor == Color( COL_TRANSPARENT ) )
                 nSelPos = m_aColorLB.GetEntryPos( m_pImpl->m_aTransparentText );
@@ -3972,6 +3975,7 @@ void SvxCharEffectsPage::Initialize()
     m_aStrikeoutLB.SetSelectHdl( aLink );
     m_aEmphasisLB.SetSelectHdl( aLink );
     m_aPositionLB.SetSelectHdl( aLink );
+    m_aEffects2LB.SetSelectHdl( aLink );
 
     m_aUnderlineLB.SelectEntryPos( 0 );
     m_aStrikeoutLB.SelectEntryPos( 0 );
@@ -4005,6 +4009,9 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     rFont.SetEmphasisMark( eMark );
     rFont.SetOutline( StateToAttr( m_aOutlineBtn.GetState() ) );
     rFont.SetShadow( StateToAttr( m_aShadowBtn.GetState() ) );
+    USHORT nCapsPos = m_aEffects2LB.GetSelectEntryPos();
+    if ( nCapsPos != LISTBOX_ENTRY_NOTFOUND )
+        rFont.SetCaseMap( (SvxCaseMap)nCapsPos );
     m_aPreviewWin.Invalidate();
 }
 
@@ -4020,8 +4027,7 @@ void SvxCharEffectsPage::SetCaseMap_Impl( SvxCaseMap eCaseMap )
         eCaseMap = SVX_CASEMAP_NOT_MAPPED;
     }
 
-    m_aPreviewWin.GetFont().SetCaseMap( eCaseMap );
-    m_aPreviewWin.Invalidate();
+    UpdatePreview_Impl();
 }
 
 // -----------------------------------------------------------------------
@@ -4066,7 +4072,7 @@ void SvxCharEffectsPage::ActivatePage( const SfxItemSet& rSet )
     // Font
     USHORT nWhich = GetWhich( SID_ATTR_CHAR_FONT );
     const SvxFontItem* pFontItem = NULL;
-    if ( rSet.GetItemState( nWhich ) >= eState )
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
         pFontItem = (const SvxFontItem*)&rSet.Get( nWhich );
         rFont.SetFamily( pFontItem->GetFamily() );
@@ -4863,6 +4869,71 @@ void SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
     {
         const SvxColorItem& rItem = (SvxColorItem&)rSet.Get( nWhich );
         rFont.SetColor( rItem.GetValue() );
+    }
+
+    // Underline
+    nWhich = GetWhich( SID_ATTR_CHAR_UNDERLINE );
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxUnderlineItem& rItem = (SvxUnderlineItem&)rSet.Get( nWhich );
+        FontUnderline eUnderline = (FontUnderline)rItem.GetValue();
+        rFont.SetUnderline( eUnderline );
+    }
+    else
+        rFont.SetUnderline( UNDERLINE_NONE );
+
+    //  Strikeout
+    nWhich = GetWhich( SID_ATTR_CHAR_STRIKEOUT );
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxCrossedOutItem& rItem = (SvxCrossedOutItem&)rSet.Get( nWhich );
+        FontStrikeout eStrikeout = (FontStrikeout)rItem.GetValue();
+        rFont.SetStrikeout( eStrikeout );
+    }
+    else
+        rFont.SetStrikeout( STRIKEOUT_NONE );
+
+    // WordLineMode
+    nWhich = GetWhich( SID_ATTR_CHAR_WORDLINEMODE );
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxWordLineModeItem& rItem = (SvxWordLineModeItem&)rSet.Get( nWhich );
+        rFont.SetWordLineMode( rItem.GetValue() );
+    }
+
+    // Emphasis
+    nWhich = GetWhich( SID_ATTR_CHAR_EMPHASISMARK );
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxEmphasisMarkItem& rItem = (SvxEmphasisMarkItem&)rSet.Get( nWhich );
+        FontEmphasisMark eMark = rItem.GetEmphasisMark();
+        rFont.SetEmphasisMark( eMark );
+    }
+
+    // Effects
+    nWhich = GetWhich( SID_ATTR_CHAR_CASEMAP );
+
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxCaseMapItem& rItem = (const SvxCaseMapItem&)rSet.Get( nWhich );
+        SvxCaseMap eCaseMap = (SvxCaseMap)rItem.GetValue();
+        rFont.SetCaseMap( eCaseMap );
+    }
+
+    // Outline
+    nWhich = GetWhich( SID_ATTR_CHAR_CONTOUR );
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxContourItem& rItem = (SvxContourItem&)rSet.Get( nWhich );
+        rFont.SetOutline( rItem.GetValue() );
+    }
+
+    // Shadow
+    nWhich = GetWhich( SID_ATTR_CHAR_SHADOWED );
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxShadowedItem& rItem = (SvxShadowedItem&)rSet.Get( nWhich );
+        rFont.SetShadow( rItem.GetValue() );
     }
 
     m_aPreviewWin.Invalidate();
