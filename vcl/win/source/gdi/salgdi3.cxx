@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2000-12-08 18:37:14 $
+ *  last change: $Author: th $ $Date: 2001-02-27 15:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,6 +596,10 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     }
     else
         rLogFont.lfOutPrecision = OUT_DEFAULT_PRECIS;
+
+    // Disable Antialiasing
+    if ( pFont->mbNonAntialiased )
+        rLogFont.lfQuality = NONANTIALIASED_QUALITY;
 }
 
 // -----------------------------------------------------------------------
@@ -671,6 +675,10 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
         }
         else
             maGraphicsData.mpLogFont->lfOutPrecision = OUT_DEFAULT_PRECIS;
+
+        // Disable Antialiasing
+        if ( pFont->mbNonAntialiased )
+            maGraphicsData.mpLogFont->lfQuality = NONANTIALIASED_QUALITY;
 
         // Auf dem Bildschirm nehmen wir Courier New, wenn Courier nicht
         // skalierbar ist und wenn der Font skaliert oder rotiert werden

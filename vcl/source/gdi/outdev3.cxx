@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: th $ $Date: 2001-02-26 19:16:41 $
+ *  last change: $Author: th $ $Date: 2001-02-27 15:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2402,6 +2402,11 @@ void OutputDevice::ImplInitFont()
 
     if ( mbInitFont )
     {
+        // Set Antialisied Mode
+        BOOL bNonAntialiased = (GetAntialiasing() & ANTIALIASING_DISABLE_TEXT) != 0;
+        mpFontEntry->maFontSelData.mbNonAntialiased = bNonAntialiased;
+
+        // Select Font
         mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(mpFontEntry->maFontSelData) );
         mbInitFont = FALSE;
     }
@@ -4588,7 +4593,11 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
 
 void OutputDevice::SetAntialiasing( USHORT nMode )
 {
-    mnAntialiasing = nMode;
+    if ( mnAntialiasing != nMode )
+    {
+        mnAntialiasing = nMode;
+        mbInitFont = TRUE;
+    }
 }
 
 // -----------------------------------------------------------------------
