@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
+ *  last change: $Author: mib $ $Date: 2002-03-19 06:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,6 +464,21 @@ void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
         if( aIter != pMap->end() )
         {
             pMap->erase( aIter );
+
+            // Remove reference to old caret object
+            Reference < XAccessible > xOldAcc( pMap->xCaretContext );
+            if( xOldAcc.is() )
+            {
+                SwAccessibleContext *pOldAccImpl =
+                    static_cast< SwAccessibleContext *>( xOldAcc.get() );
+                ASSERT( pOldAccImpl->GetFrm(), "old caret context is disposed" );
+                if( pOldAccImpl->GetFrm() == pFrm )
+                {
+                    xOldAcc.clear();    // get an empty ref
+                    pMap->xCaretContext = xOldAcc;
+                }
+            }
+
             if( pMap->empty() )
             {
                 delete pMap;
@@ -637,16 +652,21 @@ void SwAccessibleMap::InvalidateCaretPosition( const SwFrm *pFrm )
         {
             SwAccessibleContext *pOldAccImpl =
                 static_cast< SwAccessibleContext *>( xOldAcc.get() );
-            if( GetShell()->ActionPend() )
+            ASSERT( pOldAccImpl->GetFrm(), "old caret context is disposed" );
+            // If there is no frame, then the object is disposed already
+            if( pOldAccImpl->GetFrm() )
             {
-                SwAccessibleEvent_Impl aEvent(
-                    SwAccessibleEvent_Impl::CARET_POS, pOldAccImpl,
-                    pOldAccImpl->GetFrm() );
-                AppendEvent( aEvent );
-            }
-            else
-            {
-                pOldAccImpl->InvalidateCaretPos();
+                if( GetShell()->ActionPend() )
+                {
+                    SwAccessibleEvent_Impl aEvent(
+                        SwAccessibleEvent_Impl::CARET_POS, pOldAccImpl,
+                        pOldAccImpl->GetFrm() );
+                    AppendEvent( aEvent );
+                }
+                else
+                {
+                    pOldAccImpl->InvalidateCaretPos();
+                }
             }
         }
         if( xAcc.is() )
