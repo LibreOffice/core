@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-07-11 07:28:30 $
+ *  last change: $Author: os $ $Date: 2001-07-13 09:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,10 +740,9 @@ IMPL_LINK( SwMailMergeDlg, InsertPathHdl, PushButton *, pBtn )
     {
         xFP = Reference< XFolderPicker >(
                 xMgr->createInstance(
-                    C2U( "com.sun.star.ui.FolderPicker" ) ),
+                    C2U( "com.sun.star.ui.dialogs.FolderPicker" ) ),
                 UNO_QUERY );
     }
-    DBG_ERROR("how to set help ids at com.sun.star.ui.FolderPicker")
 //    pFileDlg->SetHelpId(HID_FILEDLG_MAILMRGE1);
     xFP->setDisplayDirectory(sPath);
     if( xFP->execute() == RET_OK )
