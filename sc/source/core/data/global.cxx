@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:24:11 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ BOOL ScGlobal::CheckWidthInvalidate( BOOL& bNumFormatChanged,
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_CROSSEDOUT )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_CONTOUR )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_SHADOWED )
-        || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_ORIENTATION )
+        || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_STACKED )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_ROTATE_VALUE )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_ROTATE_MODE )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_LINEBREAK )
