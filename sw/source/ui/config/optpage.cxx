@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:47:49 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 12:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,6 +397,7 @@ BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     if(bRet)
         bRet = 0 != rSet.Put(aElem);
     USHORT nMPos = aMetricLB.GetSelectEntryPos();
+    USHORT nGlobalMetricPos = nMPos;
     if ( nMPos != aMetricLB.GetSavedValue() )
     {
         // Doppel-Cast fuer VA3.0
@@ -406,7 +407,7 @@ BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     }
 
     nMPos = aHMetric.GetSelectEntryPos();
-    if ( nMPos != aHMetric.GetSavedValue() )
+    if ( nMPos != aHMetric.GetSavedValue() || nMPos != nGlobalMetricPos )
     {
         // Doppel-Cast fuer VA3.0
         USHORT nFieldUnit = (USHORT)(long)aHMetric.GetEntryData( nMPos );
@@ -414,7 +415,7 @@ BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
         bRet = TRUE;
     }
     nMPos = aVMetric.GetSelectEntryPos();
-    if ( nMPos != aVMetric.GetSavedValue() )
+    if ( nMPos != aVMetric.GetSavedValue() || nMPos != nGlobalMetricPos )
     {
         // Doppel-Cast fuer VA3.0
         USHORT nFieldUnit = (USHORT)(long)aVMetric.GetEntryData( nMPos );
