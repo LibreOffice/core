@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:08:35 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 16:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,7 @@ ModalDialog DLG_START_PRESENTATION
         QuickHelpText[ russian ] = "Длительность паузы";
         QuickHelpText[ dutch ] = "Duur van de pauze";
         QuickHelpText[ french ] = "Durйe de la pause";
-        QuickHelpText[ spanish ] = "Duration of pause";
+        QuickHelpText[ spanish ] = "Duraciуn de pausa";
         QuickHelpText[ italian ] = "Duration of pause";
         QuickHelpText[ danish ] = "Pausetid";
         QuickHelpText[ swedish ] = "Pausens lдngd";
