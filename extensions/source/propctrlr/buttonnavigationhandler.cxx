@@ -2,9 +2,9 @@
  *
  *  $RCSfile: buttonnavigationhandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:02:21 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,18 +220,6 @@ namespace pcr
         }
 
         return aProperties;
-    }
-
-    //--------------------------------------------------------------------
-    ::std::vector< ::rtl::OUString > SAL_CALL ButtonNavigationHandler::getSupersededProperties( ) const
-    {
-        ::std::vector< ::rtl::OUString > aSuperseded;
-        if ( isNavigationCapableButton( m_xIntrospectee ) )
-        {
-            aSuperseded.push_back( PROPERTY_TARGET_URL );
-            aSuperseded.push_back( PROPERTY_BUTTONTYPE );
-        }
-        return aSuperseded;
     }
 
 //........................................................................
