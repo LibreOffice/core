@@ -204,14 +204,14 @@ STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog )
 
     IPropertyBag2* pPropBag2;
     HRESULT hr = pPropBag->QueryInterface( IID_IPropertyBag2, (void**)&pPropBag2 );
-    ATLASSERT( hr >= 0 );
+    //ATLASSERT( hr >= 0 );
 
     if( !SUCCEEDED( hr ) )
         return hr;
 
     unsigned long aNum;
     hr = pPropBag2->CountProperties( &aNum );
-    ATLASSERT( hr >= 0 );
+    //ATLASSERT( hr >= 0 );
     if( !SUCCEEDED( hr ) )
         return hr;
 
@@ -222,7 +222,7 @@ STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog )
                                      aNum,
                                      aPropNames,
                                      &aReaded );
-    ATLASSERT( hr >= 0 );
+    //ATLASSERT( hr >= 0 );
     if( !SUCCEEDED( hr ) )
     {
         delete[] aPropNames;
@@ -236,7 +236,7 @@ STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog )
                           NULL,
                           aVal,
                           hvs );
-    ATLASSERT( hr >= 0 );
+    //ATLASSERT( hr >= 0 );
     if( !SUCCEEDED( hr ) )
     {
         delete[] hvs;
@@ -732,7 +732,7 @@ STDMETHODIMP CSOActiveX::SetClientSite( IOleClientSite* aClientSite )
 
     if( !aClientSite )
     {
-        ATLASSERT( mWebBrowser2 );
+        //ATLASSERT( mWebBrowser2 );
         if( mWebBrowser2 )
             AtlUnadvise( mWebBrowser2, DIID_DWebBrowserEvents2, mCookie );
         return hr;
@@ -740,19 +740,19 @@ STDMETHODIMP CSOActiveX::SetClientSite( IOleClientSite* aClientSite )
 
     CComPtr<IOleContainer> aContainer;
     m_spClientSite->GetContainer( &aContainer );
-    ATLASSERT( aContainer );
+//  ATLASSERT( aContainer );
 
     if( SUCCEEDED( hr )  && aContainer )
     {
         CComQIPtr<IServiceProvider, &IID_IServiceProvider> aServiceProvider( aContainer );
-        ATLASSERT( aServiceProvider );
+        //ATLASSERT( aServiceProvider );
 
         if( aServiceProvider )
         {
             aServiceProvider->QueryService( SID_SInternetExplorer,
                                             IID_IWebBrowser,
                                             (void**)&mWebBrowser2 );
-            ATLASSERT( mWebBrowser2 );
+//          ATLASSERT( mWebBrowser2 );
             if( mWebBrowser2 )
                 AtlAdvise( mWebBrowser2, GetUnknown(), DIID_DWebBrowserEvents2, &mCookie );
         }
