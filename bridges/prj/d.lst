@@ -26,6 +26,7 @@ mkdir: %_DEST%\inc%_EXT%\bridges\java
 # ..\%__SRC%\lib\libc_uno.* %_DEST%\lib%_EXT%\libc_uno.*
 ..\%__SRC%\bin\msci_uno.* %_DEST%\bin%_EXT%\msci_uno.*
 ..\%__SRC%\lib\libgcc2_uno.* %_DEST%\lib%_EXT%\libgcc2_uno.*
+..\%__SRC%\lib\libgcc3_uno.* %_DEST%\lib%_EXT%\libgcc3_uno.*
 ..\%__SRC%\lib\libsunpro5_uno.* %_DEST%\lib%_EXT%\libsunpro5_uno.*
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
