@@ -38,3 +38,46 @@ de = "%PRODUCTNAME Tabelle"
 en-US = "%PRODUCTNAME Spreadsheet Template"
 de = "%PRODUCTNAME Tabellenvorlage"
 
+[oasis-text]
+en-US = "Open Office Text"
+de = "Open Office Text"
+
+[oasis-text-template]
+en-US = "Open Office Text Template"
+de = "Open Office Textdokumentvorlage"
+
+[oasis-master-document]
+en-US = "Open Office Master Document"
+de = "Open Office Globaldokument"
+
+[oasis-formula]
+en-US = "Open Office Formula"
+de = "Open Office Formel"
+
+[oasis-presentation]
+en-US = "Open Office Presentation"
+de = "Open Office Präsentation"
+
+[oasis-presentation-template]
+en-US = "Open Office Presentation Template"
+de = "Open Office Präsentationsdokumentvorlage"
+
+[oasis-drawing]
+en-US = "Open Office Drawing"
+de = "Open Office Zeichnung"
+
+[oasis-drawing-template]
+en-US = "Open Office Drawing Template"
+de = "Open Office Zeichnungsdokumentvorlage"
+
+[oasis-spreadsheet]
+en-US = "Open Office Spreadsheet"
+de = "Open Office Tabellendokument"
+
+[oasis-spreadsheet-template]
+en-US = "Open Office Spreadsheet Template"
+de = "Open Office Tabellendoukumentvorlage"
+
+[oasis-database]
+en-US = "Open Office Database"
+de = "Open Office Datenbank"
