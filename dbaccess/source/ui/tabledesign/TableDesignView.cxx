@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:44:32 $
+ *  last change: $Author: oj $ $Date: 2001-08-30 12:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,7 @@ OTableDesignView::~OTableDesignView()
     DBG_DTOR(OTableDesignView,NULL);
     m_pWin->Hide();
     delete m_pWin;
+    m_pWin = NULL;
 }
 // -----------------------------------------------------------------------------
 void OTableDesignView::initialize()
@@ -325,15 +326,45 @@ IMPL_LINK( OTableDesignView, SwitchHdl, Accelerator*, pAcc )
 //------------------------------------------------------------------------------
 long OTableDesignView::PreNotify( NotifyEvent& rNEvt )
 {
-    if (rNEvt.GetType() == EVENT_GETFOCUS)
+    BOOL bHandled = FALSE;
+    switch(rNEvt.GetType())
     {
-        if( GetDescWin()->HasChildPathFocus() )
-            m_eChildFocus = DESCRIPTION;
-        else
-            m_eChildFocus = EDITOR;
+        case EVENT_KEYINPUT:
+        {
+            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+            const KeyCode& rCode = pKeyEvent->GetKeyCode();
+            if (rCode.IsMod1() || rCode.IsMod2())
+                break;
+            if (rCode.GetCode() != KEY_F6)
+                break;
+
+            if (GetDescWin() && GetDescWin()->HasChildPathFocus())
+            {
+                if (GetEditorCtrl())
+                {
+                    GetEditorCtrl()->GrabFocus();
+                    bHandled = TRUE;
+                }
+            }
+            else if (GetEditorCtrl() && GetEditorCtrl()->HasChildPathFocus())
+            {
+                if (GetDescWin())
+                {
+                    GetDescWin()->GrabFocus();
+                    bHandled = TRUE;
+                }
+            }
+            break;
+        }
+        case EVENT_GETFOCUS:
+            if( GetDescWin()->HasChildPathFocus() )
+                m_eChildFocus = DESCRIPTION;
+            else
+                m_eChildFocus = EDITOR;
+            break;
     }
 
-    return ODataView::PreNotify(rNEvt);
+    return bHandled ? 1L : ODataView::PreNotify(rNEvt);
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableDesignView::isCopyAllowed()
