@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 13:09:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 
 #include <rtl/strbuf.hxx>
 
-#ifndef _BRIDGES_CPP_UNO_BRIDGE_HXX_
-#include <bridges/cpp_uno/bridge.hxx>
-#endif
 #ifndef _TYPELIB_TYPEDESCRIPTION_HXX_
 #include <typelib/typedescription.hxx>
 #endif
