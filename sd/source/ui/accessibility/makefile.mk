@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: thb $ $Date: 2002-08-12 15:38:52 $
+#   last change: $Author: rt $ $Date: 2003-09-16 14:35:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,9 +72,7 @@ AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
-#.INCLUDE :  sdpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
