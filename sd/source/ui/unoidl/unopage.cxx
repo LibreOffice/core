@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-17 08:28:34 $
+ *  last change: $Author: cl $ $Date: 2001-10-19 09:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1133,6 +1133,7 @@ void SdGenericDrawPage::SetLwrBorder( sal_Int32 nValue )
 
 static void refreshpage( SdDrawDocument* pDoc, const PageKind ePageKind )
 {
+#ifndef SVX_LIGHT
     SdDrawDocShell* pDocShell = pDoc->GetDocSh();
     if ( pDocShell )
     {
@@ -1157,6 +1158,7 @@ static void refreshpage( SdDrawDocument* pDoc, const PageKind ePageKind )
             pViewSh->UpdateScrollBars();
         }
     }
+#endif
 }
 
 void SdGenericDrawPage::SetWidth( sal_Int32 nWidth )
