@@ -223,8 +223,13 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
         /** Updates the accessible name and fires the appropriate PropertyChangedEvent */
         protected void handleNameChangedEvent(Object any) {
             try {
-//              Window.this.setTitle(AnyConverter.toString(any));
-                AnyConverter.toString(any);
+                // This causes the property change event to be fired in the VCL thread
+                // context. If this causes problems, it has to be deligated to the java
+                // dispatch thread ..
+                javax.accessibility.AccessibleContext ac = accessibleContext;
+                if (ac!= null) {
+                    ac.setAccessibleName(AnyConverter.toString(any));
+                }
             } catch (com.sun.star.lang.IllegalArgumentException e) {
             }
         }
@@ -503,7 +508,7 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
         /** Gets the location of this component in the form of a point specifying the component's top-left corner */
         public java.awt.Point getLocation() {
             try {
-                com.sun.star.awt.Point unoPoint = unoAccessibleComponent.getLocation();
+                com.sun.star.awt.Point unoPoint = unoAccessibleComponent.getLocationOnScreen();
                 return new java.awt.Point( unoPoint.X, unoPoint.Y );
             } catch (com.sun.star.uno.RuntimeException e) {
                 return null;
