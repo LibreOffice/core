@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:44:17 $
+ *  last change: $Author: jp $ $Date: 2001-05-16 12:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,7 +556,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     if( nPos < nMaxPos )
     {
         nPos = (xub_StrLen)pBreakIt->xBreak->endOfCharBlock( rOldText, nPos,
-            pBreakIt->GetLocale( eLng ), CharType::LOWER_CASE_CHAR );
+            pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN )
             nPos = nOldPos;
         else if( nPos > nMaxPos )
@@ -585,7 +585,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
             nOldPos = nPos;
         }
         nPos = (xub_StrLen)pBreakIt->xBreak->nextCharBlock( rOldText, nPos,
-               pBreakIt->GetLocale( eLng ), CharType::LOWER_CASE_CHAR );
+               pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
         ASSERT( nPos, "nextCharBlock not implemented?" );
@@ -656,7 +656,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
             } while( nOldPos != nPos );
         }
         nPos = (xub_StrLen)pBreakIt->xBreak->endOfCharBlock( rOldText, nPos,
-               pBreakIt->GetLocale( eLng ), CharType::LOWER_CASE_CHAR );
+               pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
         ASSERT( nPos, "endOfCharBlock not implemented?" );
