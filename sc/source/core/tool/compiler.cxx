@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:34:22 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2193,7 +2193,10 @@ BOOL ScCompiler::CompileTokenArray()
             pArr->nError = nErrorBeforePop;     // once an error, always an error
 
         if( pArr->nError && !bIgnoreErrors )
+    {
             pArr->DelRPN();
+            pArr->SetHyperLink(FALSE);
+    }
 
         if ( bWasForced )
             pArr->SetRecalcModeForced();
@@ -2312,6 +2315,9 @@ void ScCompiler::Factor()
                 // ocCell needs recalc on move for some possible type values.
             case ocCell :
                 pArr->SetRecalcModeOnRefMove();
+            break;
+            case ocHyperLink :
+                pArr->SetHyperLink(TRUE);
             break;
         }
         if( eOp > ocEndUnOp && eOp < ocEndNoPar)
