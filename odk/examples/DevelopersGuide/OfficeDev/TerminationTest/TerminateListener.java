@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TerminateListener.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:43:12 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,11 +40,6 @@
 
 import com.sun.star.frame.TerminationVetoException;
 import com.sun.star.frame.XTerminateListener;
-/*
- * TerminateListener.java
- *
- * Created on 11. Oktober 2002, 15:49
- */
 
 /**
  *
@@ -61,7 +56,7 @@ public class TerminateListener implements XTerminateListener {
 
         // test if we can terminate now
         if (TerminationTest.isAtWork() == true) {
-            System.out.println("Terminate while we are at work? Are you nuts ;-)?");
+            System.out.println("Terminate while we are at work? You can't mean it serious ;-)!");
             throw new TerminationVetoException();
         }
     }
