@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-09 14:50:49 $
+ *  last change: $Author: jp $ $Date: 2001-02-13 20:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,18 @@ double __READONLY_DATA nKorrVal[] = {
     9, 9e-1, 9e-2, 9e-3, 9e-4, 9e-5, 9e-6, 9e-7, 9e-8,
     9e-9, 9e-10, 9e-11, 9e-12, 9e-13, 9e-14
 };
+
+    // First character may be any alphabetic or underscore.
+const sal_Int32 coStartFlags =
+        ::com::sun::star::i18n::KParseTokens::ANY_LETTER_OR_NUMBER |
+        ::com::sun::star::i18n::KParseTokens::ASC_UNDERSCORE |
+        ::com::sun::star::i18n::KParseTokens::IGNORE_LEADING_WS;
+
+    // Continuing characters may be any alphanumeric or underscore or dot.
+const sal_Int32 coContFlags =
+    ( coStartFlags | ::com::sun::star::i18n::KParseTokens::ASC_DOT )
+        & ~::com::sun::star::i18n::KParseTokens::IGNORE_LEADING_WS;
+
 
 extern "C" {
 static int
@@ -798,36 +810,28 @@ if( !nUseOld )
 
     using namespace ::com::sun::star::i18n;
     {
-        // First character may be any alphabetic or underscore.
-        sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
-                                KParseTokens::ASC_UNDERSCORE |
-                                KParseTokens::IGNORE_LEADING_WS;
-        // Continuing characters may be any alphanumeric or underscore or dot.
-        sal_Int32 nContFlags = ( nStartFlags | KParseTokens::ASC_DOT )
-                                & ~KParseTokens::IGNORE_LEADING_WS;
-
         // Parse any token.
-        ParseResult rRes = pCharClass->parseAnyToken( sCommand, nCommandPos,
-                                                    nStartFlags, aEmptyStr,
-                                                    nContFlags, aEmptyStr );
+        ParseResult aRes = pCharClass->parseAnyToken( sCommand, nCommandPos,
+                                                    coStartFlags, aEmptyStr,
+                                                    coContFlags, aEmptyStr );
 
         BOOL bSetError = TRUE;
-        xub_StrLen nRealStt = nCommandPos + (xub_StrLen)rRes.LeadingWhiteSpace;
-        if( rRes.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER) )
+        xub_StrLen nRealStt = nCommandPos + (xub_StrLen)aRes.LeadingWhiteSpace;
+        if( aRes.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER) )
         {
-            nNumberValue.PutDouble( rRes.Value );
+            nNumberValue.PutDouble( aRes.Value );
             eCurrOper = CALC_NUMBER;
             bSetError = FALSE;
         }
-        else if( rRes.TokenType & KParseType::IDENTNAME )
+        else if( aRes.TokenType & KParseType::IDENTNAME )
         {
-            String aName( sCommand.Copy( nRealStt, rRes.EndPos - nRealStt ));
+            String aName( sCommand.Copy( nRealStt, aRes.EndPos - nRealStt ));
             pCharClass->toLower( aName );
 
             // Currency-Symbol abfangen
             if( aName == sCurrSym )
             {
-                nCommandPos = (xub_StrLen)rRes.EndPos;
+                nCommandPos = (xub_StrLen)aRes.EndPos;
                 return GetToken();  // also nochmal aufrufen
             }
 
@@ -842,22 +846,22 @@ if( !nUseOld )
                     case CALC_MIN  : eCurrListOper = CALC_MIN_IN;   break;
                     case CALC_MAX  : eCurrListOper = CALC_MAX_IN;   break;
                 }
-                nCommandPos = (xub_StrLen)rRes.EndPos;
+                nCommandPos = (xub_StrLen)aRes.EndPos;
                 return eCurrOper;
             }
             aVarName = aName;
             eCurrOper = CALC_NAME;
             bSetError = FALSE;
         }
-        else if ( rRes.TokenType & KParseType::DOUBLE_QUOTE_STRING )
+        else if ( aRes.TokenType & KParseType::DOUBLE_QUOTE_STRING )
         {
-            nNumberValue.PutString( String( rRes.DequotedNameOrString ));
+            nNumberValue.PutString( String( aRes.DequotedNameOrString ));
             eCurrOper = CALC_NUMBER;
             bSetError = FALSE;
         }
-        else if( rRes.TokenType & KParseType::ONE_SINGLE_CHAR )
+        else if( aRes.TokenType & KParseType::ONE_SINGLE_CHAR )
         {
-            String aName( sCommand.Copy( nRealStt, rRes.EndPos - nRealStt ));
+            String aName( sCommand.Copy( nRealStt, aRes.EndPos - nRealStt ));
             if( 1 == aName.Len() )
             {
                 bSetError = FALSE;
@@ -887,11 +891,11 @@ if( !nUseOld )
                             else
                                 eCurrOper = CALC_NOT, eTmp2 = CALC_NEQ;
 
-                            if( rRes.EndPos < sCommand.Len() &&
-                                '=' == sCommand.GetChar( (xub_StrLen)rRes.EndPos ) )
+                            if( aRes.EndPos < sCommand.Len() &&
+                                '=' == sCommand.GetChar( (xub_StrLen)aRes.EndPos ) )
                             {
                                 eCurrOper = eTmp2;
-                                ++rRes.EndPos;
+                                ++aRes.EndPos;
                             }
                         }
                         break;
@@ -901,10 +905,10 @@ if( !nUseOld )
                         break;
 
                 case '[':
-                        if( rRes.EndPos < sCommand.Len() )
+                        if( aRes.EndPos < sCommand.Len() )
                         {
                             aVarName.Erase();
-                            xub_StrLen nFndPos = (xub_StrLen)rRes.EndPos,
+                            xub_StrLen nFndPos = (xub_StrLen)aRes.EndPos,
                                         nSttPos = nFndPos;
 
                             do{
@@ -928,7 +932,7 @@ if( !nUseOld )
                                 if( nSttPos != nFndPos )
                                     aVarName += sCommand.Copy( nSttPos,
                                                     nFndPos - nSttPos );
-                                rRes.EndPos = nFndPos + 1;
+                                aRes.EndPos = nFndPos + 1;
                                 eCurrOper = CALC_NAME;
                             }
                             else
@@ -944,9 +948,9 @@ if( !nUseOld )
                 }
             }
         }
-        else if( rRes.TokenType & KParseType::BOOLEAN )
+        else if( aRes.TokenType & KParseType::BOOLEAN )
         {
-            String aName( sCommand.Copy( nRealStt, rRes.EndPos - nRealStt ));
+            String aName( sCommand.Copy( nRealStt, aRes.EndPos - nRealStt ));
             if( aName.Len() )
             {
                 bSetError = FALSE;
@@ -979,7 +983,7 @@ if( !nUseOld )
             eError = CALC_SYNTAX;
             eCurrOper = CALC_PRINT;
         }
-        nCommandPos = (xub_StrLen)rRes.EndPos;
+        nCommandPos = (xub_StrLen)aRes.EndPos;
     };
 
 #ifdef DEBUG
@@ -1646,6 +1650,33 @@ FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
     return 0 == nErrno && nCurrCmdPos != rCommandPos;
 }
 
+//------------------------------------------------------------------------------
+
+FASTBOOL SwCalc::IsValidVarName( const String& rStr,
+                                    String* pValidName )
+{
+    FASTBOOL bRet = FALSE;
+    using namespace ::com::sun::star::i18n;
+    {
+        // Parse any token.
+        ParseResult aRes = GetAppCharClass().parseAnyToken( rStr, 0,
+                                                    coStartFlags, aEmptyStr,
+                                                     coContFlags, aEmptyStr );
+
+        if( aRes.TokenType & KParseType::IDENTNAME )
+        {
+            bRet = aRes.EndPos == rStr.Len();
+            if( pValidName )
+            {
+                xub_StrLen nRealStt = (xub_StrLen)aRes.LeadingWhiteSpace;
+                *pValidName = rStr.Copy( nRealStt, aRes.EndPos - nRealStt );
+            }
+        }
+        else if( pValidName )
+            pValidName->Erase();
+    }
+    return bRet;
+}
 
 //------------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: jp $ $Date: 2001-02-13 20:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,11 +89,14 @@
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
 #endif
-#ifndef _SWDOCSH_HXX //autogen
+#ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _FRMFMT_HXX //autogen
+#ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
+#endif
+#ifndef _CALC_HXX
+#include <calc.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
@@ -410,11 +413,14 @@ IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, pEdit )
                 !xNameAccess.is() || !xNameAccess->hasByName(sNewName)));
     SwWrtShell &rSh = rView.GetWrtShell();
     String sFldTypeName = aCategoryBox.GetText();
-    SwFieldType* pType = sFldTypeName.Len() ? rSh.GetFldType(RES_SETEXPFLD, sFldTypeName) : 0;
-
-    aOKButton.Enable( bCorrectName &&
-                        (!pType || ((SwSetExpFieldType*)pType)->GetType() == GSE_SEQ)
-                                    && sFldTypeName.Len() != 0 );
+    sal_Bool bCorrectFldName = SwCalc::IsValidVarName( sFldTypeName );
+    SwFieldType* pType = bCorrectFldName
+                    ? rSh.GetFldType( RES_SETEXPFLD, sFldTypeName )
+                    : 0;
+    aOKButton.Enable( bCorrectName && bCorrectFldName &&
+                        (!pType ||
+                            ((SwSetExpFieldType*)pType)->GetType() == GSE_SEQ)
+                                && 0 != sFldTypeName.Len() );
     aOptionButton.Enable( aOKButton.IsEnabled() );
 
     if(pEdit != &aObjectNameED)
@@ -567,6 +573,9 @@ void SwSequenceOptionDialog::Apply()
 /*-----------------25.02.94 21:56-------------------
 
    $Log: not supported by cvs2svn $
+   Revision 1.1.1.1  2000/09/18 17:14:37  hr
+   initial import
+
    Revision 1.74  2000/09/18 16:05:32  willem.vandorp
    OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:44:09 $
+ *  last change: $Author: jp $ $Date: 2001-02-13 20:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #endif
 #ifndef _FLDVAR_HXX
 #include <fldvar.hxx>
+#endif
+#ifndef _CALC_HXX
+#include <calc.hxx>
 #endif
 
 #ifndef _GLOBALS_HRC
@@ -235,8 +238,8 @@ void __EXPORT SwFldVarPage::Reset(const SfxItemSet& rSet)
         if(!IsRefresh() && sUserData.GetToken(0, ';').EqualsIgnoreCaseAscii(USER_DATA_VERSION_1))
         {
             String sVal = sUserData.GetToken(1, ';');
-            USHORT nVal = sVal.ToInt32();
-            if(nVal != USHRT_MAX)
+            USHORT nVal = (USHORT)sVal.ToInt32();
+            if( USHRT_MAX != nVal )
             {
                 for(USHORT i = 0; i < aTypeLB.GetEntryCount(); i++)
                     if(nVal == (USHORT)(ULONG)aTypeLB.GetEntryData(i))
@@ -911,102 +914,105 @@ IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
     USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
     BOOL bInsert = FALSE, bApply = FALSE, bDelete = FALSE;
 
-    String sName(aNameED.GetText());
-    const USHORT nOldLen = sName.Len();
-    Selection aSel(aNameED.GetSelection());
+    String sName( aNameED.GetText() );
+    xub_StrLen nLen = sName.Len();
 
-    if( nTypeId == TYP_DDEFLD ||
-        nTypeId == TYP_USERFLD ||
-        nTypeId == TYP_SETFLD ||
-        nTypeId == TYP_SEQFLD)
+    switch( nTypeId )
     {
-        sName.EraseAllChars(' ');
-        sName.EraseAllChars('-');
+    case TYP_DDEFLD:
+    case TYP_USERFLD:
+    case TYP_SETFLD:
+    case TYP_SEQFLD:
+        SwCalc::IsValidVarName( sName, &sName );
+        if( sName.Len() != nLen )
+        {
+            nLen = sName.Len();
+            Selection aSel(aNameED.GetSelection());
+            aNameED.SetText( sName );
+            aNameED.SetSelection( aSel );   // Cursorpos restaurieren
+        }
+        break;
     }
-    const USHORT nLen = sName.Len();
 
-    if (nOldLen != nLen)
-    {
-        aNameED.SetText(sName);
-        aNameED.SetSelection(aSel); // Cursorpos restaurieren
-    }
 
     // Buttons ueberpruefen
     switch (nTypeId)
     {
-        case TYP_DDEFLD:
+    case TYP_DDEFLD:
+        if( nLen )
+        {
+            // Gibts schon einen entsprechenden Type
+            bInsert = bApply = TRUE;
+
+            SwFieldType* pType = GetFldMgr().GetFldType(RES_DDEFLD, sName);
+
+            if (pType)
+                bDelete = !::GetActiveView()->GetWrtShell().IsUsed( *pType );
+        }
+        break;
+
+    case TYP_USERFLD:
+        if( nLen )
+        {
+            // Gibts schon einen entsprechenden Type
+            SwFieldType* pType = GetFldMgr().GetFldType(RES_USERFLD, sName);
+
+            if (pType)
+                bDelete = !::GetActiveView()->GetWrtShell().IsUsed( *pType );
+
+            pType = GetFldMgr().GetFldType(RES_SETEXPFLD, sName);
+            if (!pType) // Kein Namenskonflikt mit Variablen
             {
-                // Gibts schon einen entsprechenden Type
-                bInsert = bApply = sName.Len() > 0;
-
-                SwFieldType* pType = GetFldMgr().GetFldType(RES_DDEFLD, sName);
-
-                if (pType)
-                    bDelete = !::GetActiveView()->GetWrtShell().IsUsed( *pType );
+                // Benutzerfelder duerfen auch ohne Inhalt eingefuegt werden!
+                // Bug #56845
+                bInsert = bApply = TRUE;
             }
-            break;
+        }
+        break;
 
-        case TYP_USERFLD:
+    default:
+        bInsert = TRUE;
+
+        if (nTypeId == TYP_SETFLD || nTypeId == TYP_SEQFLD)
+        {
+            SwSetExpFieldType* pFldType = (SwSetExpFieldType*)
+                GetFldMgr().GetFldType(RES_SETEXPFLD, sName);
+
+            if (pFldType)
             {
-                // Gibts schon einen entsprechenden Type
-                SwFieldType* pType = GetFldMgr().GetFldType(RES_USERFLD, sName);
 
-                if (pType)
-                    bDelete = !::GetActiveView()->GetWrtShell().IsUsed( *pType );
+                SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
+                const SwFldTypes* p = rSh.GetDoc()->GetFldTypes();
+                USHORT i;
 
-                pType = GetFldMgr().GetFldType(RES_SETEXPFLD, sName);
-                if (!pType) // Kein Namenskonflikt mit Variablen
+                for (i = 0; i < INIT_FLDTYPES; i++)
                 {
-                    // Benutzerfelder duerfen auch ohne Inhalt eingefuegt werden!
-                    // Bug #56845
-                    bInsert = bApply = sName.Len() > 0;
-                }
-            }
-            break;
-
-        default:
-            {
-                bInsert = TRUE;
-
-                if (nTypeId == TYP_SETFLD || nTypeId == TYP_SEQFLD)
-                {
-                    SwSetExpFieldType* pFldType = (SwSetExpFieldType*)
-                        GetFldMgr().GetFldType(RES_SETEXPFLD, sName);
-
-                    if (pFldType)
-                    {
-
-                        SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
-                        const SwFldTypes* p = rSh.GetDoc()->GetFldTypes();
-                        USHORT i;
-
-                        for (i = 0; i < INIT_FLDTYPES; i++)
-                        {
-                            SwFieldType* pType = (*p)[ i ];
-                            if (pType == pFldType)
-                                break;
-                        }
-
-                        if (i >= INIT_FLDTYPES && !rSh.IsUsed(*pFldType))
-                            bDelete = TRUE;
-
-                        if (nTypeId == TYP_SEQFLD && !(pFldType->GetType() & GSE_SEQ))
-                            bInsert = FALSE;
-
-                        if (nTypeId == TYP_SETFLD && (pFldType->GetType() & GSE_SEQ))
-                            bInsert = FALSE;
-                    }
-                    if (GetFldMgr().GetFldType(RES_USERFLD, sName))
-                        bInsert = FALSE;
+                    SwFieldType* pType = (*p)[ i ];
+                    if (pType == pFldType)
+                        break;
                 }
 
-                if (nLen == 0 && (nTypeId == TYP_SETFLD || (!IsFldEdit() && nTypeId == TYP_GETFLD)))
+                if (i >= INIT_FLDTYPES && !rSh.IsUsed(*pFldType))
+                    bDelete = TRUE;
+
+                if (nTypeId == TYP_SEQFLD && !(pFldType->GetType() & GSE_SEQ))
                     bInsert = FALSE;
 
-                if ((nTypeId == TYP_SETFLD || nTypeId == TYP_FORMELFLD) && !bHasValue)
+                if (nTypeId == TYP_SETFLD && (pFldType->GetType() & GSE_SEQ))
                     bInsert = FALSE;
             }
-            break;
+            if (GetFldMgr().GetFldType(RES_USERFLD, sName))
+                bInsert = FALSE;
+        }
+
+        if( !nLen && ( nTypeId == TYP_SETFLD ||
+                        (!IsFldEdit() && nTypeId == TYP_GETFLD ) ) )
+            bInsert = FALSE;
+
+        if( (nTypeId == TYP_SETFLD || nTypeId == TYP_FORMELFLD) &&
+            !bHasValue )
+            bInsert = FALSE;
+        break;
     }
 
     aNewDelTBX.EnableItem(BT_VARAPPLY, bApply);
@@ -1384,13 +1390,16 @@ void SwFldVarPage::FillUserData()
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;
     else
-        nTypeSel = (ULONG)aTypeLB.GetEntryData( nTypeSel );
+        nTypeSel = (USHORT)(ULONG)aTypeLB.GetEntryData( nTypeSel );
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
 }
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/02/09 07:44:09  os
+    TabPage size changed
+
     Revision 1.1.1.1  2000/09/18 17:14:37  hr
     initial import
 
