@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _TextSection.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:19 $
+ *  last change:$Date: 2003-02-10 13:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,9 @@ package ifc.text;
 
 import com.sun.star.text.XTextColumns;
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  * Testing <code>com.sun.star.text.TextSection</code>
@@ -112,8 +114,8 @@ public class _TextSection extends MultiPropertyTest {
     public void _BackGraphicURL() {
         log.println("Testing with custom Property tester") ;
         testProperty("BackGraphicURL",
-            util.utils.getFullTestURL("crazy-blue.jpg"),
-            util.utils.getFullTestURL("space-metal.jpg")) ;
+        util.utils.getFullTestURL("crazy-blue.jpg"),
+        util.utils.getFullTestURL("space-metal.jpg")) ;
     }
 
     /**
@@ -123,8 +125,8 @@ public class _TextSection extends MultiPropertyTest {
     public void _FootnoteNumberingType() {
         log.println("Testing with custom Property tester") ;
         testProperty("FootnoteNumberingType",
-            new Short(com.sun.star.text.FootnoteNumbering.PER_DOCUMENT),
-            new Short(com.sun.star.text.FootnoteNumbering.PER_PAGE)) ;
+        new Short(com.sun.star.text.FootnoteNumbering.PER_DOCUMENT),
+        new Short(com.sun.star.text.FootnoteNumbering.PER_PAGE)) ;
     }
 
 
@@ -138,31 +140,42 @@ public class _TextSection extends MultiPropertyTest {
         short val2set = 25;
 
         TC = (XTextColumns) tEnv.getObjRelation("TC");
-        val2set += ((XTextColumns) oldValue).getColumnCount();
+        try {
+            val2set += ((XTextColumns) AnyConverter.toObject(
+                new Type(XTextColumns.class),oldValue)).getColumnCount();
+        } catch (com.sun.star.lang.IllegalArgumentException iae) {
+            log.println("Couldn't change Column count");
+        }
         TC.setColumnCount(val2set);
 
         return TC;
         };
 
         protected boolean compare(Object obj1, Object obj2) {
-        short val1 = ((XTextColumns) obj1).getColumnCount();
-        short val2 = ((XTextColumns) obj2).getColumnCount();
-        return val1 == val2;
+            short val1 = 0;
+            short val2 = 1;
+            try {
+                val1 = ((XTextColumns) AnyConverter.toObject(
+                    new Type(XTextColumns.class),obj1)).getColumnCount();
+                val2 = ((XTextColumns) AnyConverter.toObject(
+                    new Type(XTextColumns.class),obj2)).getColumnCount();
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                log.println("comparing values failed");
+            }
+            return val1 == val2;
         }
 
         protected String toString(Object obj) {
-        return "XTextColumns: ColumnCount = "+((XTextColumns) obj).getColumnCount();
+            return "XTextColumns: ColumnCount = "+
+                        ((XTextColumns) obj).getColumnCount();
         }
 
     };
 
     public void _TextColumns() {
-    log.println("Testing with custom Property tester");
-    testProperty("TextColumns", TextColumnsTester);
+        log.println("Testing with custom Property tester");
+        testProperty("TextColumns", TextColumnsTester);
     }
 
 
 } //finish class _TextContent
-
-
-

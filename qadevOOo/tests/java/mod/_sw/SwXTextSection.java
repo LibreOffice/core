@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextSection.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-06 14:33:16 $
+ *  last change:$Date: 2003-02-10 13:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,8 +144,9 @@ public class SwXTextSection extends TestCase {
 
             //cleanup if necessary
             if (oTSSuppName.hasByName("SwXTextSection")) {
-                XTextSection old = (XTextSection)
-                        oTSSuppName.getByName("SwXTextSection");
+                XTextSection old = (XTextSection) AnyConverter.toObject(
+                    new Type(XTextSection.class),
+                        oTSSuppName.getByName("SwXTextSection"));
                 XComponent oldC = (XComponent)
                         UnoRuntime.queryInterface(XComponent.class,old);
                 oldC.dispose();
