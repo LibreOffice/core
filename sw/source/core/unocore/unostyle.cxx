@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-04-19 10:39:09 $
+ *  last change: $Author: dvo $ $Date: 2001-04-20 15:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2634,6 +2634,7 @@ void SwXPageStyle::setPropertyValues(
                                             case MID_LINE_FOOTNOTE_DIST:    rInfo.SetBottomDist(nSet32);break;
                                         }
                                     }
+                            break;
                             case MID_LINE_WEIGHT       :
                             {
                                 sal_Int16 nSet; pValues[nProp] >>= nSet;
