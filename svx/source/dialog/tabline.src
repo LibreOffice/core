@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:23:37 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ TabPage RID_SVXPAGE_LINE
     Text [ portuguese_brazilian ] = "Linhas" ;
     Text [ portuguese ] = "Linha" ;
     Text [ finnish ] = "Rivit" ;
-    Text [ danish ] = "Streg" ;
+    Text [ danish ] = "Streger" ;
     Text [ french ] = "Ligne" ;
     Text [ swedish ] = "Linje" ;
     Text [ dutch ] = "Lijn" ;
@@ -127,6 +127,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "Linieneigenschaften";
         Text[ hindi ] = "रेखा विशेषतायें";
         Text[ slovak ] = "Vlastnosti čiary";
+        Text[ hungarian ] = "Vonal tulajdonságai";
+        Text[ slovenian ] = "Lastnosti črte";
     };
     FixedText FT_LINE_STYLE
     {
@@ -139,7 +141,7 @@ TabPage RID_SVXPAGE_LINE
         Text [ portuguese_brazilian ] = "~Estilo" ;
         Text [ portuguese ] = "~Estilo" ;
         Text [ finnish ] = "Tyyl~i" ;
-        Text [ danish ] = "T~ype" ;
+        Text [ danish ] = "~Typografi" ;
         Text [ french ] = "Style" ;
         Text [ swedish ] = "~Stil" ;
         Text [ dutch ] = "~Type" ;
@@ -161,6 +163,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "~Stil";
         Text[ hindi ] = "~शैली";
         Text[ slovak ] = "Š~týl";
+        Text[ hungarian ] = "Stíl~us";
+        Text[ slovenian ] = "~Slog";
     };
     ListBox LB_LINE_STYLE
     {
@@ -182,7 +186,7 @@ TabPage RID_SVXPAGE_LINE
         Text [ portuguese_brazilian ] = "~Cor" ;
         Text [ portuguese ] = "~Cor" ;
         Text [ finnish ] = "V�~ri" ;
-        Text [ danish ] = "Farve" ;
+        Text [ danish ] = "F~arve" ;
         Text [ french ] = "Couleur" ;
         Text [ swedish ] = "~F�rg" ;
         Text [ dutch ] = "~Kleur" ;
@@ -204,6 +208,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "~Farbe";
         Text[ hindi ] = "रं~ग";
         Text[ slovak ] = "Fa~rba";
+        Text[ hungarian ] = "S~zín";
+        Text[ slovenian ] = "Ba~rva";
     };
     ListBox LB_COLOR
     {
@@ -225,7 +231,7 @@ TabPage RID_SVXPAGE_LINE
         Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "~Leveys" ;
-        Text [ danish ] = "Tyk~kelse" ;
+        Text [ danish ] = "~Bredde" ;
         Text [ french ] = "Largeur" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "B~reedte" ;
@@ -247,6 +253,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "~चौडाई";
         Text[ slovak ] = "Ší~rka";
+        Text[ hungarian ] = "~Vastagság";
+        Text[ slovenian ] = "~Širina";
     };
     MetricField MTR_FLD_LINE_WIDTH
     {
@@ -277,7 +285,7 @@ TabPage RID_SVXPAGE_LINE
         Text [ french ] = "~Transparence" ;
         Text [ dutch ] = "Tr~ansparantie" ;
         Text [ swedish ] = "~Transparens" ;
-        Text [ danish ] = "T~ransparens" ;
+        Text [ danish ] = "~Transparens" ;
         Text [ portuguese_brazilian ] = "~Transpar�ncia" ;
         Text [ portuguese ] = "~Transpar�ncia" ;
         Text[ chinese_simplified ] = "透明(~T)";
@@ -297,6 +305,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "~Transparenz";
         Text[ hindi ] = "~पारदर्शकता";
         Text[ slovak ] = "~Priehľadnosť";
+        Text[ hungarian ] = "Át~látszóság";
+        Text[ slovenian ] = "~Prosojnost";
     };
     MetricField MTR_LINE_TRANSPARENT
     {
@@ -330,7 +340,7 @@ TabPage RID_SVXPAGE_LINE
         Text [ portuguese_brazilian ] = "Estilos de setas" ;
         Text [ portuguese ] = "Estilos de setas" ;
         Text [ finnish ] = "Nuolityylit" ;
-        Text [ danish ] = "Pile" ;
+        Text [ danish ] = "Piletyper" ;
         Text [ french ] = "Extr�mit�s de ligne" ;
         Text [ swedish ] = "Linjeslut" ;
         Text [ dutch ] = "Lijnuiteinden" ;
@@ -352,6 +362,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "Linienenden";
         Text[ hindi ] = "तीर शैलियाँ";
         Text[ slovak ] = "Štýly šípky";
+        Text[ hungarian ] = "Nyílstílusok";
+        Text[ slovenian ] = "Slogi puščic";
     };
     FixedText FT_LINE_ENDS_STYLE
     {
@@ -364,7 +376,7 @@ TabPage RID_SVXPAGE_LINE
         Text [ portuguese_brazilian ] = "E~stilo" ;
         Text [ portuguese ] = "E~stilo" ;
         Text [ finnish ] = "T~yyli" ;
-        Text [ danish ] = "Typ~e" ;
+        Text [ danish ] = "St~il" ;
         Text [ french ] = "Style" ;
         Text [ swedish ] = "St~il" ;
         Text [ dutch ] = "Stij~l" ;
@@ -386,6 +398,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "St~il";
         Text[ hindi ] = "शै~ली";
         Text[ slovak ] = "Š~týl";
+        Text[ hungarian ] = "S~tílus";
+        Text[ slovenian ] = "Slo~g";
     };
     ListBox LB_START_STYLE
     {
@@ -416,7 +430,7 @@ TabPage RID_SVXPAGE_LINE
         Text [ portuguese_brazilian ] = "La~rgura" ;
         Text [ portuguese ] = "La~rgura" ;
         Text [ finnish ] = "Le~veys" ;
-        Text [ danish ] = "Tykkelse" ;
+        Text [ danish ] = "~Bredde" ;
         Text [ french ] = "Largeur" ;
         Text [ swedish ] = "B~redd" ;
         Text [ dutch ] = "~Breedte" ;
@@ -438,6 +452,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौ~ड़ाई";
         Text[ slovak ] = "Ší~rka";
+        Text[ hungarian ] = "Vasta~gság";
+        Text[ slovenian ] = "Ši~rina";
     };
     MetricField MTR_FLD_START_WIDTH
     {
@@ -484,7 +500,7 @@ TabPage RID_SVXPAGE_LINE
         Text [ portuguese_brazilian ] = "C~entro" ;
         Text [ portuguese ] = "c~entrado" ;
         Text [ finnish ] = "~Keskit�" ;
-        Text [ danish ] = "centreret" ;
+        Text [ danish ] = "Ce~ntreret" ;
         Text [ french ] = "Centr�" ;
         Text [ swedish ] = "~Centrerat" ;
         Text [ dutch ] = "~Centreren" ;
@@ -507,6 +523,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "~zentriert";
         Text[ hindi ] = "मध्य~भाग";
         Text[ slovak ] = "~Stred";
+        Text[ hungarian ] = "Közé~pre";
+        Text[ slovenian ] = "Sredi~na";
     };
     TriStateBox TSB_CENTER_END
     {
@@ -519,7 +537,7 @@ TabPage RID_SVXPAGE_LINE
         Text [ portuguese_brazilian ] = "~Centro" ;
         Text [ portuguese ] = "cent~rado" ;
         Text [ finnish ] = "K~eskit�" ;
-        Text [ danish ] = "centreret" ;
+        Text [ danish ] = "Ce~ntreret" ;
         Text [ french ] = "Centr�" ;
         Text [ swedish ] = "C~entrerat" ;
         Text [ dutch ] = "C~entreren" ;
@@ -542,6 +560,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "z~entriert";
         Text[ hindi ] = "मध्यभा~ग";
         Text[ slovak ] = "Str~ed";
+        Text[ hungarian ] = "Középr~e";
+        Text[ slovenian ] = "S~redina";
     };
     CheckBox CBX_SYNCHRONIZE
     {
@@ -577,6 +597,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "En~den synchronisieren";
         Text[ hindi ] = "अंतों का समीकर~ण";
         Text[ slovak ] = "Synchroni~zovať zakončenia";
+        Text[ hungarian ] = "Szélek sz~inkronizálása";
+        Text[ slovenian ] = "Sinhroni~ziraj konce";
     };
     Control CTL_PREVIEW
     {
@@ -601,7 +623,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ french ] = "Symbole";
         Text[ spanish ] = "S�mbolo";
         Text[ italian ] = "Simbolo";
-        Text[ danish ] = "Symbol";
+        Text[ danish ] = "Ikon";
         Text[ swedish ] = "Symbol";
         Text[ polish ] = "Ikona";
         Text[ portuguese_brazilian ] = "�cone";
@@ -620,6 +642,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "Symbol";
         Text[ hindi ] = "अइकॉन";
         Text[ slovak ] = "Ikona";
+        Text[ hungarian ] = "Ikon";
+        Text[ slovenian ] = "Ikona";
     };
 
     MenuButton MB_SYMBOL_BITMAP
@@ -665,6 +689,8 @@ TabPage RID_SVXPAGE_LINE
                     Text[ hebrew ] = "Kein Symbol";
                     Text[ hindi ] = "कोई संकेत नहीं";
                     Text[ slovak ] = "Bez symbolu";
+                    Text[ hungarian ] = "Nincs szimbólum";
+                    Text[ slovenian ] = "Brez simbola";
                 };
                 MenuItem
                 {
@@ -697,6 +723,8 @@ TabPage RID_SVXPAGE_LINE
                     Text[ hebrew ] = "‮אוטומטי‬";
                     Text[ hindi ] = "स्वचालित";
                     Text[ slovak ] = "Automaticky";
+                    Text[ hungarian ] = "Automatikus";
+                    Text[ slovenian ] = "Samodejno";
                 };
                 MenuItem
                 {
@@ -729,6 +757,8 @@ TabPage RID_SVXPAGE_LINE
                     Text[ hebrew ] = "‮מקובץ...‬";
                     Text[ hindi ] = "फाइल से...";
                     Text[ slovak ] = "Zo súboru...";
+                    Text[ hungarian ] = "Fájlból...";
+                    Text[ slovenian ] = "Iz datoteke...";
                 };
                 MenuItem
                 {
@@ -742,7 +772,7 @@ TabPage RID_SVXPAGE_LINE
                     Text[ french ] = "Gallery";
                     Text[ spanish ] = "Gallery";
                     Text[ italian ] = "Gallery";
-                    Text[ danish ] = "Gallery";
+                    Text[ danish ] = "Galleri";
                     Text[ swedish ] = "Gallery";
                     Text[ polish ] = "Galeria";
                     Text[ portuguese_brazilian ] = "Galeria";
@@ -761,6 +791,8 @@ TabPage RID_SVXPAGE_LINE
                     Text[ hebrew ] = "‮גלריה‬";
                     Text[ hindi ] = "गेलरी";
                     Text[ slovak ] = "Galéria";
+                    Text[ hungarian ] = "Képtár";
+                    Text[ slovenian ] = "Galerija";
                 };
                 MenuItem
                 {
@@ -793,6 +825,8 @@ TabPage RID_SVXPAGE_LINE
                     Text[ hebrew ] = "Symbole";
                     Text[ hindi ] = "संकेत";
                     Text[ slovak ] = "Symboly";
+                    Text[ hungarian ] = "Szimbólumok";
+                    Text[ slovenian ] = "Simboli";
                 };
             };
         };
@@ -822,6 +856,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "Aus~wahl...";
         Text[ hindi ] = "चुनो...";
         Text[ slovak ] = "Vybrať...";
+        Text[ hungarian ] = "Kiválasztás...";
+        Text[ slovenian ] = "Izberi...";
     };
     FixedText FT_SYMBOL_WIDTH
     {
@@ -856,6 +892,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौड़ाई";
         Text[ slovak ] = "Šírka";
+        Text[ hungarian ] = "Szélesség";
+        Text[ slovenian ] = "Širina";
     };
     MetricField MF_SYMBOL_WIDTH
     {
@@ -886,7 +924,7 @@ TabPage RID_SVXPAGE_LINE
         Text [ english_us ] = "Height" ;
         Text [ portuguese_brazilian ] = "Altura" ;
         Text [ swedish ] = "~H�jd" ;
-        Text [ danish ] = "H�~jde" ;
+        Text [ danish ] = "H�jde" ;
         Text [ italian ] = "Altezza" ;
         Text [ spanish ] = "A~ltura" ;
         Text [ french ] = "Hauteur" ;
@@ -909,6 +947,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँचाई";
         Text[ slovak ] = "Výška";
+        Text[ hungarian ] = "Magasság";
+        Text[ slovenian ] = "Višina";
     };
     MetricField MF_SYMBOL_HEIGHT
     {
@@ -939,7 +979,7 @@ TabPage RID_SVXPAGE_LINE
         Text [ english_us ] = "Keep ratio" ;
         Text [ portuguese_brazilian ] = "Manter propor��o" ;
         Text [ swedish ] = "Anpassa ~proportionellt" ;
-        Text [ danish ] = "Proportional" ;
+        Text [ danish ] = "Bevar st�rrelsesforhold" ;
         Text [ italian ] = "Sincronizza" ;
         Text [ spanish ] = "Proporcional" ;
         Text [ french ] = "Proportionnel" ;
@@ -962,6 +1002,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ hebrew ] = "Abg~leich";
         Text[ hindi ] = "अनुपात रखो";
         Text[ slovak ] = "Zachovať pomer";
+        Text[ hungarian ] = "Rögzített méretarány";
+        Text[ slovenian ] = "Ohrani razmerje";
     };
     Text[ turkish ] = "�izgi";
     Text[ language_user1 ] = " ";
@@ -971,6 +1013,8 @@ TabPage RID_SVXPAGE_LINE
     Text[ hebrew ] = "Linie";
     Text[ hindi ] = "रेखाएँ";
     Text[ slovak ] = "Riadky";
+    Text[ hungarian ] = "Sorok";
+    Text[ slovenian ] = "Črte";
 };
 
 // Defining LineStyles --------------------
@@ -987,7 +1031,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     Text [ portuguese_brazilian ] = "Definir estilos de linha" ;
     Text [ portuguese ] = "Definir estilos de linha" ;
     Text [ finnish ] = "M��rit� viivatyylit" ;
-    Text [ danish ] = "Definer stregtyper" ;
+    Text [ danish ] = "Definer linjetypografier" ;
     Text [ french ] = "D�finir les styles de ligne" ;
     Text [ swedish ] = "Definiera linjestilar" ;
     Text [ dutch ] = "Lijntypen defini�ren" ;
@@ -1027,6 +1071,8 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "विशेषतायें";
         Text[ slovak ] = "Vlastnosti";
+        Text[ hungarian ] = "Tulajdonságok";
+        Text[ slovenian ] = "Lastnosti";
     };
     FixedText FT_TYPE
     {
@@ -1039,7 +1085,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text [ portuguese_brazilian ] = "~Tipo" ;
         Text [ portuguese ] = "~Tipo" ;
         Text [ finnish ] = "~Tyyppi" ;
-        Text [ danish ] = "Typ~e" ;
+        Text [ danish ] = "~Type" ;
         Text [ french ] = "Type" ;
         Text [ swedish ] = "T~yp" ;
         Text [ dutch ] = "T~ype" ;
@@ -1061,6 +1107,8 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "~Typ";
+        Text[ hungarian ] = "Típ~us";
+        Text[ slovenian ] = "~Vrsta";
     };
     ListBox LB_TYPE_1
     {
@@ -1213,6 +1261,16 @@ TabPage RID_SVXPAGE_LINE_DEF
     {
          < "Bodka" ; Default ; > ;
         < "Čiarka" ; Default ; > ;
+    };
+    StringList [ hungarian ] =
+    {
+         < "Pont" ; Default ; > ;
+        < "Vonás" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Pika" ; Default ; > ;
+        < "Črtkano" ; Default ; > ;
     };
     };
     ListBox LB_TYPE_2
@@ -1367,6 +1425,16 @@ TabPage RID_SVXPAGE_LINE_DEF
          < "Bodka" ; Default ; > ;
         < "Čiarka" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Pont" ; Default ; > ;
+        < "Vonás" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Pika" ; Default ; > ;
+        < "Črtkano" ; Default ; > ;
+    };
     };
     FixedText FT_NUMBER
     {
@@ -1379,7 +1447,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text [ portuguese_brazilian ] = "~N�mero" ;
         Text [ portuguese ] = "~N�mero" ;
         Text [ finnish ] = "L~uku" ;
-        Text [ danish ] = "Antal" ;
+        Text [ danish ] = "~Antal" ;
         Text [ french ] = "~Nombre" ;
         Text [ swedish ] = "~Antal" ;
         Text [ dutch ] = "~Aantal" ;
@@ -1401,6 +1469,8 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ hebrew ] = "~Anzahl";
         Text[ hindi ] = "~संख्या";
         Text[ slovak ] = "Čí~slo";
+        Text[ hungarian ] = "S~zám";
+        Text[ slovenian ] = "Š~tevilo";
     };
     NumericField NUM_FLD_1
     {
@@ -1441,7 +1511,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text [ portuguese_brazilian ] = "~Comprimento" ;
         Text [ portuguese ] = "Com~primento" ;
         Text [ finnish ] = "P~ituus" ;
-        Text [ danish ] = "L�ngde" ;
+        Text [ danish ] = "~L�ngde" ;
         Text [ french ] = "Lon~gueur" ;
         Text [ swedish ] = "L�n~gd" ;
         Text [ dutch ] = "~Lengte" ;
@@ -1463,6 +1533,8 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ hebrew ] = "Län~ge";
         Text[ hindi ] = "~लम्बाई";
         Text[ slovak ] = "~Dĺžka";
+        Text[ hungarian ] = "H~ossz";
+        Text[ slovenian ] = "Do~lžina";
     };
     MetricField MTR_FLD_LENGTH_1
     {
@@ -1515,7 +1587,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text [ portuguese_brazilian ] = "~Afastamento" ;
         Text [ portuguese ] = "~Espa�amento" ;
         Text [ finnish ] = "Objekti~v�lit" ;
-        Text [ danish ] = "Afstand" ;
+        Text [ danish ] = "~Afstand" ;
         Text [ french ] = "�cart" ;
         Text [ swedish ] = "A~vst�nd" ;
         Text [ dutch ] = "A~fstand" ;
@@ -1537,6 +1609,8 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "~अंतर देना";
         Text[ slovak ] = "~Rozostup";
+        Text[ hungarian ] = "Tér~köz";
+        Text[ slovenian ] = "~Razmik";
     };
     MetricField MTR_FLD_DISTANCE
     {
@@ -1590,6 +1664,8 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ hebrew ] = "A~n Linienbreite anpassen";
         Text[ hindi ] = "रेखा के चौड़ाई केलिए ~योग्य";
         Text[ slovak ] = "~Prispôsobiť šírke čiary";
+        Text[ hungarian ] = "So~rszélességhez igazítás";
+        Text[ slovenian ] = "~Prilagodi širini črte";
     };
 
     // ----------------------------------------
@@ -1605,7 +1681,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text [ portuguese_brazilian ] = "Estilo da linha" ;
         Text [ portuguese ] = "Estilo de linha" ;
         Text [ finnish ] = "Viivatyyli" ;
-        Text [ danish ] = "St~regtype" ;
+        Text [ danish ] = "Stregtype" ;
         Text [ french ] = "Style de ligne" ;
         Text [ swedish ] = "Linje~stil" ;
         Text [ dutch ] = "Lijn~typen" ;
@@ -1627,6 +1703,8 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ hebrew ] = "‮סגנון קו‬";
         Text[ hindi ] = "रेखा शैली";
         Text[ slovak ] = "Štýl čiary";
+        Text[ hungarian ] = "Vonalstílus";
+        Text[ slovenian ] = "Slog črte";
     };
     ListBox LB_LINESTYLES
     {
@@ -1671,6 +1749,8 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ hebrew ] = "‮הוספה...‬";
         Text[ hindi ] = "~जोड़ो...";
         Text[ slovak ] = "Prid~ať...";
+        Text[ hungarian ] = "~Hozzáadás...";
+        Text[ slovenian ] = "~Dodaj...";
     };
     PushButton BTN_MODIFY
     {
@@ -1683,7 +1763,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text [ portuguese_brazilian ] = "~Modificar..." ;
         Text [ portuguese ] = "~Modificar..." ;
         Text [ finnish ] = "~Muuta..." ;
-        Text [ danish ] = "Modificer..." ;
+        Text [ danish ] = "~Modificer..." ;
         Text [ french ] = "~Modifier..." ;
         Text [ swedish ] = "~�ndra..." ;
         Text [ dutch ] = "W~ijzigen..." ;
@@ -1706,6 +1786,8 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ hebrew ] = "‮שינוי...‬";
         Text[ hindi ] = "~सुधारो...";
         Text[ slovak ] = "Z~meniť...";
+        Text[ hungarian ] = "~Módosítás...";
+        Text[ slovenian ] = "~Spremeni...";
     };
     PushButton BTN_DELETE
     {
@@ -1741,6 +1823,8 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ hebrew ] = "‮מחיקה...‬";
         Text[ hindi ] = "~मिटाओ...";
         Text[ slovak ] = "~Zmazať...";
+        Text[ hungarian ] = "~Törlés...";
+        Text[ slovenian ] = "~Izbriši...";
     };
     ImageButton BTN_LOAD
     {
@@ -1785,6 +1869,8 @@ TabPage RID_SVXPAGE_LINE_DEF
         QuickHelpText[ hebrew ] = "Linienstiltabelle laden";
         QuickHelpText[ hindi ] = "तीर शैलियों को लोड़ करो";
         QuickHelpText[ slovak ] = "Načítať štýly čiar";
+        QuickHelpText[ hungarian ] = "Vonalstílusok betöltése";
+        QuickHelpText[ slovenian ] = "Naloži sloge črt";
     };
     ImageButton BTN_SAVE
     {
@@ -1829,6 +1915,8 @@ TabPage RID_SVXPAGE_LINE_DEF
         QuickHelpText[ hebrew ] = "Linienstiltabelle sichern";
         QuickHelpText[ hindi ] = "रेखा शैलियों को संचित करो";
         QuickHelpText[ slovak ] = "Uložiť štýly čiar";
+        QuickHelpText[ hungarian ] = "Vonalstílusok mentése";
+        QuickHelpText[ slovenian ] = "Shrani sloge črt";
     };
     Control CTL_PREVIEW
     {
@@ -1853,6 +1941,8 @@ TabPage RID_SVXPAGE_LINE_DEF
     Text[ hebrew ] = "Linienstile definieren";
     Text[ hindi ] = "रेखा शैलियों को परिभाषा दो";
     Text[ slovak ] = "Definovať štýly čiar";
+    Text[ hungarian ] = "Vonalstílusok meghatározása";
+    Text[ slovenian ] = "Definiraj sloge črt";
 };
 
 // Defining LineEnds --------------------
@@ -1869,7 +1959,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
     Text [ portuguese_brazilian ] = "Pontas de Seta" ;
     Text [ portuguese ] = "Definir setas" ;
     Text [ finnish ] = "Nuolenk�rjet" ;
-    Text [ danish ] = "Definer piltype" ;
+    Text [ danish ] = "Pilespidser" ;
     Text [ french ] = "D�finir les extr�mit�s de lignes" ;
     Text [ swedish ] = "Definiera linjeslut" ;
     Text [ dutch ] = "Lijnuiteinden defini�ren" ;
@@ -1887,7 +1977,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text [ portuguese_brazilian ] = "Organizar estilos de seta" ;
         Text [ portuguese ] = "Gerir estilos de setas" ;
         Text [ finnish ] = "J�rjest� viivatyylit" ;
-        Text [ danish ] = "Administrer pile" ;
+        Text [ danish ] = "Administrer piletyper" ;
         Text [ french ] = "D�finition des extr�mit�s de ligne" ;
         Text [ swedish ] = "Administrera linjeslut" ;
         Text [ dutch ] = "Lijnuiteinden beheren" ;
@@ -1909,6 +1999,8 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ hebrew ] = "Linienenden verwalten";
         Text[ hindi ] = "तीर शैलियों को व्यवस्था करो";
         Text[ slovak ] = "Organizovať štýly šípiek";
+        Text[ hungarian ] = "Nyílstílusok átszervezése";
+        Text[ slovenian ] = "Organiziraj sloge puščic";
     };
     FixedText FI_TIP
     {
@@ -1923,7 +2015,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text [ french ] = "Ajoutez un objet s�lectionn� pour obtenir de nouvelles extr�mit�s de ligne." ;
         Text [ dutch ] = "Een nieuw lijnuiteinde krijgt u door het toevoegen van een geselecteerd object." ;
         Text [ spanish ] = "A�ada un objeto seleccionado para crear  nuevos fines de l�nea." ;
-        Text [ danish ] = "Du f�r nye pile ved at tilf�je et markeret objekt." ;
+        Text [ danish ] = "Tilf�j et markeret objekt for at oprette nye piltyper." ;
         Text [ swedish ] = "Nya linjeslut f�r du genom att l�gga till ett markerat objekt." ;
         Text [ finnish ] = "Luo uusia nuolityylej� lis��m�ll� valittu objekti." ;
         Text [ english_us ] = "Add a selected object to create new arrow styles." ;
@@ -1944,6 +2036,8 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ hebrew ] = "Neue Linienenden erhalten Sie durch Hinzufügen eines selektierten Objektes.";
         Text[ hindi ] = "नया तीर शैलियों को उत्पन्न करने केलिए चुने हुए वस्तु को जोड़ो ।";
         Text[ slovak ] = "Pridať zvolený objekt k vytvoreniu nových štýlov šípiek.";
+        Text[ hungarian ] = "Kiválasztott objektum hozzáadása új nyílstílus létrehozásához.";
+        Text[ slovenian ] = "Dodaj izbrani predmet za kreiranje novega sloga puščic";
     };
 
     FixedText FT_LINE_END_STYLE
@@ -1957,7 +2051,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text [ portuguese_brazilian ] = "Estilo de seta" ;
         Text [ portuguese ] = "E~stilo de setas" ;
         Text [ finnish ] = "Nuolityyli" ;
-        Text [ danish ] = "~Piltype" ;
+        Text [ danish ] = "Piltype" ;
         Text [ french ] = "Style des extr�mit�s de ligne" ;
         Text [ swedish ] = "Linj~eslutsstil" ;
         Text [ dutch ] = "Type lijn~uiteinde" ;
@@ -1979,6 +2073,8 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ hebrew ] = "Linien~endenstil";
         Text[ hindi ] = "तीर शैली";
         Text[ slovak ] = "Štýl šípky";
+        Text[ hungarian ] = "Nyíl stílusa";
+        Text[ slovenian ] = "Slog puščic";
     };
     Edit EDT_NAME
     {
@@ -1998,7 +2094,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text [ portuguese_brazilian ] = "~T�tulo" ;
         Text [ portuguese ] = "~T�tulo" ;
         Text [ finnish ] = "O~tsikko" ;
-        Text [ danish ] = "Tit~el" ;
+        Text [ danish ] = "~Titel" ;
         Text [ french ] = "Titre" ;
         Text [ swedish ] = "~Namn" ;
         Text [ dutch ] = "Tite~l" ;
@@ -2020,6 +2116,8 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ hebrew ] = "‮כותרת‬";
         Text[ hindi ] = "~शार्षक";
         Text[ slovak ] = "~Nadpis";
+        Text[ hungarian ] = "~Cím";
+        Text[ slovenian ] = "~Naslov";
     };
     ListBox LB_LINEENDS
     {
@@ -2064,6 +2162,8 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ hebrew ] = "‮הוספה...‬";
         Text[ hindi ] = "~जोड़ो...";
         Text[ slovak ] = "Prid~ať...";
+        Text[ hungarian ] = "~Hozzáadás...";
+        Text[ slovenian ] = "~Dodaj...";
     };
     PushButton BTN_MODIFY
     {
@@ -2076,7 +2176,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text [ portuguese_brazilian ] = "~Modificar..." ;
         Text [ portuguese ] = "~Modificar" ;
         Text [ finnish ] = "~Muuta..." ;
-        Text [ danish ] = "~Rediger..." ;
+        Text [ danish ] = "~Modificer..." ;
         Text [ french ] = "~Modifier..." ;
         Text [ swedish ] = "~�ndra" ;
         Text [ dutch ] = "Wij~zigen..." ;
@@ -2099,6 +2199,8 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ hebrew ] = "‮שינוי...‬";
         Text[ hindi ] = "~सुधारो...";
         Text[ slovak ] = "Z~meniť...";
+        Text[ hungarian ] = "~Módosítás...";
+        Text[ slovenian ] = "~Spremeni...";
     };
     PushButton BTN_DELETE
     {
@@ -2134,6 +2236,8 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ...";
         Text[ slovak ] = "~Zmazať...";
+        Text[ hungarian ] = "~Törlés...";
+        Text[ slovenian ] = "~Izbriši...";
     };
     ImageButton BTN_LOAD
     {
@@ -2178,6 +2282,8 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         QuickHelpText[ hebrew ] = "Linienendentabelle laden";
         QuickHelpText[ hindi ] = "तीर शैलियों को लोड़ करो";
         QuickHelpText[ slovak ] = "Načítať štýly šípiek";
+        QuickHelpText[ hungarian ] = "Nyílstílusok betöltése";
+        QuickHelpText[ slovenian ] = "Naloži sloge puščic";
     };
     ImageButton BTN_SAVE
     {
@@ -2222,6 +2328,8 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         QuickHelpText[ hebrew ] = "Linienendentabelle sichern";
         QuickHelpText[ hindi ] = "रेखा शैलियों को संचित करो";
         QuickHelpText[ slovak ] = "Uložiť štýly šípiek";
+        QuickHelpText[ hungarian ] = "Nyíl stílus mentése";
+        QuickHelpText[ slovenian ] = "Shrani sloge puščic";
     };
 
     Control CTL_PREVIEW
@@ -2247,6 +2355,8 @@ TabPage RID_SVXPAGE_LINEEND_DEF
     Text[ hebrew ] = "Linienenden definieren";
     Text[ hindi ] = "तीर की चोटी";
     Text[ slovak ] = "Kótovacie šípky";
+    Text[ hungarian ] = "Nyílhegyek";
+    Text[ slovenian ] = "Puščice";
 };
  // RID_SVXDLG_LINE ----------------------------------------------------------
 TabDialog RID_SVXDLG_LINE
@@ -2308,6 +2418,8 @@ TabDialog RID_SVXDLG_LINE
                 Text[ hebrew ] = "Linie";
                 Text[ hindi ] = "रेखा";
                 Text[ slovak ] = "Čiara";
+                Text[ hungarian ] = "Vonal";
+                Text[ slovenian ] = "Črta";
             };
             PageItem
             {
@@ -2342,6 +2454,8 @@ TabDialog RID_SVXDLG_LINE
                 Text[ hebrew ] = "Linienstile";
                 Text[ hindi ] = "रेखा शैलियाँ";
                 Text[ slovak ] = "Štýly čiar";
+                Text[ hungarian ] = "Vonalstílusok";
+                Text[ slovenian ] = "Slogi črt";
             };
             PageItem
             {
@@ -2353,7 +2467,7 @@ TabDialog RID_SVXDLG_LINE
                 Text [ portuguese_brazilian ] = "Estilos de Setas" ;
                 Text [ portuguese ] = "Estilos de setas" ;
                 Text [ finnish ] = "Nuolen tyylit" ;
-                Text [ danish ] = "Pile" ;
+                Text [ danish ] = "Piletyper" ;
                 Text [ french ] = "Extr�mit�s de ligne" ;
                 Text [ swedish ] = "Linjeslut" ;
                 Text [ dutch ] = "Lijnuiteinden" ;
@@ -2376,6 +2490,8 @@ TabDialog RID_SVXDLG_LINE
                 Text[ hebrew ] = "Linienenden";
                 Text[ hindi ] = "तीर शैलियाँ";
                 Text[ slovak ] = "Štýly šípiek";
+                Text[ hungarian ] = "Nyílstílusok";
+                Text[ slovenian ] = "Slogi puščic";
             };
         };
     };
@@ -2395,7 +2511,12 @@ TabDialog RID_SVXDLG_LINE
     Text[ hebrew ] = "Linie";
     Text[ hindi ] = "रेखा";
     Text[ slovak ] = "Čiara";
+    Text[ hungarian ] = "Vonal";
+    Text[ slovenian ] = "Črta";
 };
+
+
+
 
 
 
