@@ -5,8 +5,8 @@
 #*    Description       shell SfxApplication
 #*
 #*    Creation date     MI  01/31/1995
-#*    last change       $Author: pjunck $ $Date: 2004-11-03 08:25:10 $
-#*    $Revision: 1.18 $
+#*    last change       $Author: hr $ $Date: 2004-11-09 16:42:29 $
+#*    $Revision: 1.19 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -456,39 +456,6 @@ shell SfxApplication
 
     FN_BUSINESS_CARD  // status(final|play)
 
-    [
-        ExecMethod = OfaExec_Impl;
-        StateMethod = OfaState_Impl;
-    ]
-
-    //----------------------------------------------------------------------
-
-    SID_SW_AGENDA_WIZZARD  // status(final|play)
-
-    [
-        ExecMethod = OfaExec_Impl;
-        StateMethod = OfaState_Impl;
-    ]
-
-    //----------------------------------------------------------------------
-
-    SID_SW_FAX_WIZZARD    // status(final|play)
-    [
-        ExecMethod = OfaExec_Impl;
-        StateMethod = OfaState_Impl;
-    ]
-
-    //----------------------------------------------------------------------
-
-    SID_SW_LETTER_WIZZARD // status(final|play)
-    [
-        ExecMethod = OfaExec_Impl;
-        StateMethod = OfaState_Impl;
-    ]
-
-    //----------------------------------------------------------------------
-
-    SID_SW_MEMO_WIZZARD  //  status(final|play)
     [
         ExecMethod = OfaExec_Impl;
         StateMethod = OfaState_Impl;
