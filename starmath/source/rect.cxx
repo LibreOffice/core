@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-17 08:28:20 $
+ *  last change: $Author: tl $ $Date: 2001-08-03 13:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,11 @@ static xub_Unicode __READONLY_DATA aMathAlpha[] =
 {
     MS_ALEPH,               MS_IM,                  MS_RE,
     MS_WP,                  xub_Unicode(0xE070),    MS_EMPTYSET,
-    xub_Unicode(0x2113),    xub_Unicode(0xE0D6),    xub_Unicode(0xE0D7),
-    xub_Unicode(0xE0D8),    xub_Unicode(0x210A),    MS_HBAR,
+    xub_Unicode(0x2113),    xub_Unicode(0xE0D6),    xub_Unicode(0x2107),
+    xub_Unicode(0x2127),    xub_Unicode(0x210A),    MS_HBAR,
     MS_LAMBDABAR,           MS_SETN,                MS_SETZ,
     MS_SETQ,                MS_SETR,                MS_SETC,
-    xub_Unicode(0xE0A4),    xub_Unicode(0xE0A5),    xub_Unicode(0x2112),
+    xub_Unicode(0x2373),    xub_Unicode(0xE0A5),    xub_Unicode(0x2112),
     xub_Unicode(0x2130),    xub_Unicode(0x2131),
     xub_Unicode('\0')
 };

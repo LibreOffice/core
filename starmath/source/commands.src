@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commands.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:24:44 $
+ *  last change: $Author: tl $ $Date: 2001-08-03 13:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,8 +407,8 @@ Resource RID_XPP_LDBRACKET
 {
     ExtraData =
     {
-        // Zeichen: 0xE0A2    Font: StarSymbol
-        -23840;   17922;       0;   19459;       0;   15872;       0;  -19968;
+        // Zeichen: 0x301A    Font: StarSymbol
+          6704;   29185;       0;   19459;       0;   15872;       0;  -19968;
              0;  -13056;       0;   17155;       0;     512;    2304;   15872;
              0;   -3069;       0;   15872;       0;  -19968;       0;    2561;
              0;  -19968;       0;    2561;       0;  -15616;       0;  -19456;
@@ -426,8 +426,8 @@ Resource RID_XPP_RDBRACKET
 {
     ExtraData =
     {
-        // Zeichen: 0xE0A3    Font: StarSymbol
-        -23584;   17922;       0;   19459;       0;   15872;       0;  -19968;
+        // Zeichen: 0x301B    Font: StarSymbol
+          6960;   29185;       0;   19459;       0;   15872;       0;  -19968;
              0;  -13056;       0;   17155;       0;     512;    2304;    2561;
              0;   -3069;       0;   15872;       0;   -3069;       0;   15872;
              0;   -7421;       0;  -30208;       0;   -7421;       0;  -30208;

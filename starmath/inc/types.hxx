@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-17 08:28:19 $
+ *  last change: $Author: tl $ $Date: 2001-08-03 13:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ enum MathSymbol
     MS_MINUS        = (xub_Unicode) 0x2212,
     MS_MULTIPLY     = (xub_Unicode) 0x2217,
     MS_TIMES        = (xub_Unicode) 0x00D7,
-    MS_CDOT         = (xub_Unicode) 0x2219,
+    MS_CDOT         = (xub_Unicode) 0x22C5,
     MS_DIV          = (xub_Unicode) 0x00F7,
     MS_PLUSMINUS    = (xub_Unicode) 0x00B1,
     MS_MINUSPLUS    = (xub_Unicode) 0x2213,
@@ -172,10 +172,10 @@ enum MathSymbol
     MS_TILDE        = (xub_Unicode) 0xE096,
     MS_BAR          = (xub_Unicode) 0xE097,
     MS_VEC          = (xub_Unicode) 0xE098,
-    MS_DOT          = (xub_Unicode) 0xE099,
-    MS_DDOT         = (xub_Unicode) 0xE09A,
+    MS_DOT          = (xub_Unicode) 0x02D9,
+    MS_DDOT         = (xub_Unicode) 0x00A8,
     MS_DDDOT        = (xub_Unicode) 0xE09B,
-    MS_CIRCLE       = (xub_Unicode) 0xE09C,
+    MS_CIRCLE       = (xub_Unicode) 0x02DA,
     MS_AND          = (xub_Unicode) 0x2227,
     MS_OR           = (xub_Unicode) 0x2228,
     MS_NI           = (xub_Unicode) 0x220B,
@@ -190,8 +190,8 @@ enum MathSymbol
     MS_LBRACKET     = (xub_Unicode) 0x005B,
     MS_RBRACKET     = (xub_Unicode) 0x005D,
 
-    MS_LDBRACKET    = (xub_Unicode) 0xE0A2,
-    MS_RDBRACKET    = (xub_Unicode) 0xE0A3,
+    MS_LDBRACKET    = (xub_Unicode) 0x301A,
+    MS_RDBRACKET    = (xub_Unicode) 0x301B,
     MS_PLACE        = (xub_Unicode) 0xE0AA,
 
     MS_LCEIL        = (xub_Unicode) 0x2308,
@@ -202,7 +202,7 @@ enum MathSymbol
 
     MS_TOP          = (xub_Unicode) 0xE0D9,
     MS_HBAR         = (xub_Unicode) 0x210F,
-    MS_LAMBDABAR    = (xub_Unicode) 0xE0DA,
+    MS_LAMBDABAR    = (xub_Unicode) 0x019B,
     MS_LEFTARROW    = (xub_Unicode) 0xE0DB,
     MS_UPARROW      = (xub_Unicode) 0xE0DC,
     MS_DOWNARROW    = (xub_Unicode) 0xE0DD,
