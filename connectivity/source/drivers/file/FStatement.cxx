@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-03 12:11:40 $
+ *  last change: $Author: oj $ $Date: 2001-12-07 10:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,8 +651,18 @@ void OStatement_Base::GetAssignValues()
                         throwFunctionSequenceException(*this);
                     }
                 }
-                else
+                else if(pRow_Value_Const->isToken())
                     ParseAssignValues(aColumnNameList,pRow_Value_Const,i);
+                else
+                {
+                    if(pRow_Value_Const->count() == aColumnNameList.size())
+                    {
+                        for (sal_uInt32 j = 0; j < pRow_Value_Const->count(); ++j)
+                            ParseAssignValues(aColumnNameList,pRow_Value_Const->getChild(j),nIndex++);
+                    }
+                    else
+                        throwFunctionSequenceException(*this);
+                }
             }
             else
             {
