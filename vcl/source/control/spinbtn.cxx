@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinbtn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 11:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,15 +83,15 @@ void SpinButton::ImplInit( Window* pParent, WinBits nStyle )
     mbInitialUp   = FALSE;
     mbInitialDown = FALSE;
 
-    if ( nStyle & WB_REPEAT )
-    {
-        mbRepeat = TRUE;
+    mnMinRange  = 0;
+    mnMaxRange  = 100;
+    mnValue     = 0;
+    mnValueStep = 1;
 
-        maRepeatTimer.SetTimeout( SPIN_DELAY );
-        maRepeatTimer.SetTimeoutHdl( LINK( this, SpinButton, ImplTimeout ) );
-    }
-    else
-        mbRepeat = FALSE;
+    maRepeatTimer.SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
+    maRepeatTimer.SetTimeoutHdl( LINK( this, SpinButton, ImplTimeout ) );
+
+    mbRepeat = 0 != ( nStyle & WB_REPEAT );
 
     if ( nStyle & WB_HSCROLL )
         mbHorz = TRUE;
@@ -103,16 +103,18 @@ void SpinButton::ImplInit( Window* pParent, WinBits nStyle )
 
 // -----------------------------------------------------------------------
 
-SpinButton::SpinButton( Window* pParent, WinBits nStyle ) :
-    Control( WINDOW_SPINBUTTON )
+SpinButton::SpinButton( Window* pParent, WinBits nStyle )
+    :Control( WINDOW_SPINBUTTON )
+    ,mbUpperIsFocused( FALSE )
 {
     ImplInit( pParent, nStyle );
 }
 
 // -----------------------------------------------------------------------
 
-SpinButton::SpinButton( Window* pParent, const ResId& rResId ) :
-    Control( WINDOW_SPINBUTTON )
+SpinButton::SpinButton( Window* pParent, const ResId& rResId )
+    :Control( WINDOW_SPINBUTTON )
+    ,mbUpperIsFocused( FALSE )
 {
     rResId.SetRT( RSC_SPINBUTTON );
     ImplInit( pParent, ImplInitRes( rResId ) );
@@ -130,9 +132,9 @@ SpinButton::~SpinButton()
 
 IMPL_LINK( SpinButton, ImplTimeout, Timer*, pTimer )
 {
-    if ( pTimer->GetTimeout() == SPIN_DELAY )
+    if ( pTimer->GetTimeout() == GetSettings().GetMouseSettings().GetButtonStartRepeat() )
     {
-        pTimer->SetTimeout( SPIN_SPEED );
+        pTimer->SetTimeout( GetSettings().GetMouseSettings().GetButtonRepeat() );
         pTimer->Start();
     }
     else
@@ -150,6 +152,14 @@ IMPL_LINK( SpinButton, ImplTimeout, Timer*, pTimer )
 
 void SpinButton::Up()
 {
+    if ( ImplIsUpperEnabled() )
+    {
+        mnValue += mnValueStep;
+        StateChanged( STATE_CHANGE_DATA );
+
+        ImplMoveFocus( TRUE );
+    }
+
     ImplCallEventListeners( VCLEVENT_SPINBUTTON_UP );
     maUpHdlLink.Call( this );
 }
@@ -158,6 +168,14 @@ void SpinButton::Up()
 
 void SpinButton::Down()
 {
+    if ( ImplIsLowerEnabled() )
+    {
+        mnValue -= mnValueStep;
+        StateChanged( STATE_CHANGE_DATA );
+
+        ImplMoveFocus( FALSE );
+    }
+
     ImplCallEventListeners( VCLEVENT_SPINBUTTON_DOWN );
     maDownHdlLink.Call( this );
 }
@@ -173,8 +191,8 @@ void SpinButton::Resize()
     Rectangle aRect( aTmpPoint, aSize );
     if ( mbHorz )
     {
-        maUpperRect = Rectangle( 0, 0, aSize.Width()/2, aSize.Height()-1 );
-        maLowerRect = Rectangle( maUpperRect.TopRight(), aRect.BottomRight() );
+        maLowerRect = Rectangle( 0, 0, aSize.Width()/2, aSize.Height()-1 );
+        maUpperRect = Rectangle( maLowerRect.TopRight(), aRect.BottomRight() );
     }
     else
     {
@@ -182,29 +200,81 @@ void SpinButton::Resize()
         maLowerRect = Rectangle( maUpperRect.BottomLeft(), aRect.BottomRight() );
     }
 
+    ImplCalcFocusRect( ImplIsUpperEnabled() || !ImplIsLowerEnabled() );
+
     Invalidate();
 }
 
 // -----------------------------------------------------------------------
 
+void SpinButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
+{
+    Point       aPos  = pDev->LogicToPixel( rPos );
+    Size        aSize = pDev->LogicToPixel( rSize );
+
+    pDev->Push();
+    pDev->SetMapMode();
+    if ( !(nFlags & WINDOW_DRAW_MONO) )
+    {
+        // DecoView uses the FaceColor...
+        AllSettings aSettings = pDev->GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+        if ( IsControlBackground() )
+            aStyleSettings.SetFaceColor( GetControlBackground() );
+        else
+            aStyleSettings.SetFaceColor( GetSettings().GetStyleSettings().GetFaceColor() );
+
+        aSettings.SetStyleSettings( aStyleSettings );
+        pDev->SetSettings( aSettings );
+    }
+
+    Rectangle   aRect( Point( 0, 0 ), aSize );
+    Rectangle aLowerRect, aUpperRect;
+    if ( mbHorz )
+    {
+        aLowerRect = Rectangle( 0, 0, aSize.Width()/2, aSize.Height()-1 );
+        aUpperRect = Rectangle( aLowerRect.TopRight(), aRect.BottomRight() );
+    }
+    else
+    {
+        aUpperRect = Rectangle( 0, 0, aSize.Width()-1, aSize.Height()/2 );
+        aLowerRect = Rectangle( aUpperRect.BottomLeft(), aRect.BottomRight() );
+    }
+
+    aUpperRect += aPos;
+    aLowerRect += aPos;
+
+    ImplDrawSpinButton( pDev, aUpperRect, aLowerRect, FALSE, FALSE,
+                        IsEnabled() && ImplIsUpperEnabled(),
+                        IsEnabled() && ImplIsLowerEnabled(), mbHorz, TRUE );
+    pDev->Pop();
+}
+
+
 void SpinButton::Paint( const Rectangle& )
 {
+    HideFocus();
+
     BOOL bEnable = IsEnabled();
     ImplDrawSpinButton( this, maUpperRect, maLowerRect, mbUpperIn, mbLowerIn,
-                        bEnable, bEnable, mbHorz );
+                        bEnable && ImplIsUpperEnabled(),
+                        bEnable && ImplIsLowerEnabled(), mbHorz, TRUE );
+
+    if ( HasFocus() )
+        ShowFocus( maFocusRect );
 }
 
 // -----------------------------------------------------------------------
 
 void SpinButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( maUpperRect.IsInside( rMEvt.GetPosPixel() ) )
+    if ( maUpperRect.IsInside( rMEvt.GetPosPixel() ) && ( ImplIsUpperEnabled() ) )
     {
         mbUpperIn   = TRUE;
         mbInitialUp = TRUE;
         Invalidate( maUpperRect );
     }
-    else if ( maLowerRect.IsInside( rMEvt.GetPosPixel() ) )
+    else if ( maLowerRect.IsInside( rMEvt.GetPosPixel() ) && ( ImplIsLowerEnabled() ) )
     {
         mbLowerIn     = TRUE;
         mbInitialDown = TRUE;
@@ -246,7 +316,7 @@ void SpinButton::MouseButtonUp( const MouseEvent& )
     if ( mbRepeat )
     {
         maRepeatTimer.Stop();
-        maRepeatTimer.SetTimeout( SPIN_DELAY );
+        maRepeatTimer.SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
     }
 }
 
@@ -299,10 +369,37 @@ void SpinButton::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode aCode = rKEvt.GetKeyCode();
 
-    if ( aCode.GetCode() == KEY_UP )
-        Up();
-    else if( aCode.GetCode() == KEY_DOWN )
-        Down();
+    if ( !rKEvt.GetKeyCode().GetModifier() )
+    {
+        switch ( rKEvt.GetKeyCode().GetCode() )
+        {
+        case KEY_LEFT:
+        case KEY_RIGHT:
+        {
+            BOOL bUp = KEY_RIGHT == rKEvt.GetKeyCode().GetCode();
+            if ( mbHorz && !ImplMoveFocus( bUp ) )
+                bUp ? Up() : Down();
+        }
+        break;
+
+        case KEY_UP:
+        case KEY_DOWN:
+        {
+            BOOL bUp = KEY_UP == rKEvt.GetKeyCode().GetCode();
+            if ( !mbHorz && !ImplMoveFocus( KEY_UP == rKEvt.GetKeyCode().GetCode() ) )
+                bUp ? Up() : Down();
+        }
+        break;
+
+        case KEY_SPACE:
+            mbUpperIsFocused ? Up() : Down();
+            break;
+
+        default:
+            Control::KeyInput( rKEvt );
+            break;
+        }
+    }
     else
         Control::KeyInput( rKEvt );
 }
@@ -311,7 +408,136 @@ void SpinButton::KeyInput( const KeyEvent& rKEvt )
 
 void SpinButton::StateChanged( StateChangedType nType )
 {
-    if ( nType == STATE_CHANGE_ENABLE )
+    switch ( nType )
+    {
+    case STATE_CHANGE_DATA:
+    case STATE_CHANGE_ENABLE:
         Invalidate();
+        break;
+
+    case STATE_CHANGE_STYLE:
+    {
+        BOOL bNewRepeat = 0 != ( GetStyle() & WB_REPEAT );
+        if ( bNewRepeat != mbRepeat )
+        {
+            if ( maRepeatTimer.IsActive() )
+            {
+                maRepeatTimer.Stop();
+                maRepeatTimer.SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
+            }
+            mbRepeat = bNewRepeat;
+        }
+
+        BOOL bNewHorz = 0 != ( GetStyle() & WB_HSCROLL );
+        if ( bNewHorz != mbHorz )
+        {
+            mbHorz = bNewHorz;
+            Resize();
+        }
+    }
+    break;
+    }
+
     Control::StateChanged( nType );
+}
+
+// -----------------------------------------------------------------------
+
+void SpinButton::SetRangeMin( long nNewRange )
+{
+    SetRange( Range( nNewRange, GetRangeMax() ) );
+}
+
+// -----------------------------------------------------------------------
+
+void SpinButton::SetRangeMax( long nNewRange )
+{
+    SetRange( Range( GetRangeMin(), nNewRange ) );
+}
+
+// -----------------------------------------------------------------------
+
+void SpinButton::SetRange( const Range& rRange )
+{
+    // adjust rage
+    Range aRange = rRange;
+    aRange.Justify();
+    long nNewMinRange = aRange.Min();
+    long nNewMaxRange = aRange.Max();
+
+    // do something only if old and new range differ
+    if ( (mnMinRange != nNewMinRange) ||
+         (mnMaxRange != nNewMaxRange) )
+    {
+        mnMinRange = nNewMinRange;
+        mnMaxRange = nNewMaxRange;
+
+        // adjust value to new range, if necessary
+        if ( mnValue > mnMaxRange )
+            mnValue = mnMaxRange;
+        if ( mnValue < mnMinRange )
+            mnValue = mnMinRange;
+
+        StateChanged( STATE_CHANGE_DATA );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SpinButton::SetValue( long nValue )
+{
+    // adjust, if necessary
+    if ( nValue > mnMaxRange )
+        nValue = mnMaxRange;
+    if ( nValue < mnMinRange )
+        nValue = mnMinRange;
+
+    if ( mnValue != nValue )
+    {
+        mnValue = nValue;
+        StateChanged( STATE_CHANGE_DATA );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SpinButton::GetFocus()
+{
+    ShowFocus( maFocusRect );
+    Control::GetFocus();
+}
+
+// -----------------------------------------------------------------------
+
+void SpinButton::LoseFocus()
+{
+    HideFocus();
+    Control::LoseFocus();
+}
+
+// -----------------------------------------------------------------------
+
+BOOL SpinButton::ImplMoveFocus( BOOL _bUpper )
+{
+    if ( _bUpper == mbUpperIsFocused )
+        return FALSE;
+
+    HideFocus();
+    ImplCalcFocusRect( _bUpper );
+    if ( HasFocus() )
+        ShowFocus( maFocusRect );
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+void SpinButton::ImplCalcFocusRect( BOOL _bUpper )
+{
+    maFocusRect = _bUpper ? maUpperRect : maLowerRect;
+    // inflate by some pixels
+    maFocusRect.Left() += 2;
+    maFocusRect.Top() += 2;
+    maFocusRect.Right() -= 2;
+    maFocusRect.Bottom() -= 2;
+    mbUpperIsFocused = _bUpper;
 }
