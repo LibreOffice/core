@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-24 12:16:11 $
+ *  last change: $Author: ssa $ $Date: 2002-05-31 07:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,6 +865,16 @@ Rectangle ToolBox::GetItemRect( USHORT nItemId ) const
         ((ToolBox*)this)->ImplFormat();
 
     USHORT nPos = GetItemPos( nItemId );
+    return GetItemPosRect( nPos );
+}
+
+// -----------------------------------------------------------------------
+
+Rectangle ToolBox::GetItemPosRect( USHORT nPos ) const
+{
+    if ( mbCalc || mbFormat )
+        ((ToolBox*)this)->ImplFormat();
+
     if ( nPos != TOOLBOX_ITEM_NOTFOUND )
         return mpItemList->GetObject( nPos )->maRect;
     else
