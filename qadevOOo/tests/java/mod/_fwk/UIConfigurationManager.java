@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UIConfigurationManager.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2004-11-02 12:00:40 $
+ *  last change: $Date: 2005-02-24 17:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,12 +133,15 @@ public class UIConfigurationManager extends TestCase {
 
         // create a configuration storage
         try {
+            String sourceDeleteCfg = util.utils.getFullTestURL("delete.cfg");
+            String deleteCfg = util.utils.getFullURL(util.utils.getOfficeTemp(xMSF) + "delete.cfg");
+            util.utils.copyFile(xMSF, sourceDeleteCfg, deleteCfg);
             XStorage xSubStorage = null;
             Object o = (XInterface)xMSF.createInstance("com.sun.star.embed.StorageFactory");
             XSingleServiceFactory xSSF = (XSingleServiceFactory)UnoRuntime.queryInterface(
             XSingleServiceFactory.class, o);
             Object[] props = new Object[2];
-            props[0] = util.utils.getFullTestURL("delete.cfg");
+            props[0] = deleteCfg;
             props[1] = new Integer(ElementModes.READWRITE);
             XStorage xRootStorage = (XStorage)UnoRuntime.queryInterface(XStorage.class, xSSF.createInstanceWithArguments(props));
             xSubStorage = xRootStorage.openStorageElement("Configurations2", ElementModes.READWRITE);
