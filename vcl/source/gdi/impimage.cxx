@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-14 10:17:31 $
+ *  last change: $Author: ka $ $Date: 2002-08-21 08:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,7 +662,7 @@ void ImplImageBmp::ImplUpdateDisaBmp( USHORT nPos )
         const BitmapColor   aDisBlack( pDis->GetBestMatchingColor( aBlack ) );
         long                nLeft, nTop, nRight, nBottom;
         long                nCurLeft, nCurRight;
-        const long          nBlackThreshold = aSize.Width() * aSize.Height() / 15;
+        const long          nBlackThreshold = FRound( aSize.Width() * aSize.Height() * 0.10 );
 
         if( DISA_ALL != nPos )
         {
