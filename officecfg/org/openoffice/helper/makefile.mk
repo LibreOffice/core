@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jb $ $Date: 2002-03-28 14:24:14 $
+#   last change: $Author: hjs $ $Date: 2002-06-10 16:10:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,11 +71,9 @@ MAXPROCESS=1
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
-EXTRAJARFILES = jaxp.jar parser.jar
+JARFILES = jaxp.jar parser.jar
 
 JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/DefaultNamespaceRemover.class \

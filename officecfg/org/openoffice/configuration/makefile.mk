@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dg $ $Date: 2002-05-06 18:40:21 $
+#   last change: $Author: hjs $ $Date: 2002-06-10 16:09:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,11 +71,9 @@ MAXPROCESS=1
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
-EXTRAJARFILES = jaxp.jar parser.jar xt.jar
+JARFILES = jaxp.jar parser.jar xt.jar
 
 JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/XMLDefaultGenerator.class \
