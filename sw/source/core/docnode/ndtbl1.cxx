@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-05 15:49:38 $
+ *  last change: $Author: fme $ $Date: 2002-12-02 12:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,6 +658,30 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
             for ( USHORT j = 0; j < aCellArr.Count(); ++j )
             {
                 SwCellFrm *pCell = (SwCellFrm*)aCellArr[j];
+                const sal_Bool bVert = pCell->IsVertical();
+                const sal_Bool bRTL = pCell->IsRightToLeft();
+                sal_Bool bTopOver, bLeftOver, bRightOver, bBottomOver;
+                if ( bVert )
+                {
+                    bTopOver = pCell->Frm().Right() >= rUnion.Right();
+                    bLeftOver = pCell->Frm().Top() <= rUnion.Top();
+                    bRightOver = pCell->Frm().Bottom() >= rUnion.Bottom();
+                    bBottomOver = pCell->Frm().Left() <= rUnion.Left();
+                }
+                else
+                {
+                    bTopOver = pCell->Frm().Top() <= rUnion.Top();
+                    bLeftOver = pCell->Frm().Left() <= rUnion.Left();
+                    bRightOver = pCell->Frm().Right() >= rUnion.Right();
+                    bBottomOver = pCell->Frm().Bottom() >= rUnion.Bottom();
+                }
+
+                if ( bRTL )
+                {
+                    sal_Bool bTmp = bRightOver;
+                    bRightOver = bLeftOver;
+                    bLeftOver = bTmp;
+                }
 
                 //Grundsaetzlich nichts setzen in HeadlineRepeats.
                 if ( pTab->IsFollow() && pTab->GetTable()->IsHeadlineRepeat() &&
@@ -671,7 +695,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 //Obere Kante
                 if( bTopValid )
                 {
-                    if ( bFirst && (pCell->Frm().Top() <= rUnion.Top()) )
+                    if ( bFirst && bTopOver )
                     {
                         aBox.SetLine( pTop, BOX_LINE_TOP );
                         nType |= 0x0001;
@@ -684,7 +708,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 }
 
                 //Linke Kante
-                if ( pCell->Frm().Left() <= rUnion.Left() )
+                if ( bLeftOver )
                 {
                     if( bLeftValid )
                     {
@@ -701,7 +725,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 //Rechte Kante
                 if( bRightValid )
                 {
-                    if ( pCell->Frm().Right() >= rUnion.Right() )
+                    if ( bRightOver )
                     {
                         aBox.SetLine( pRight, BOX_LINE_RIGHT );
                         nType |= 0x0010;
@@ -714,7 +738,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 }
 
                 //Untere Kante
-                if ( bLast && (pCell->Frm().Bottom() >= rUnion.Bottom()) )
+                if ( bLast && bBottomOver )
                 {
                     if( bBottomValid )
                     {
@@ -906,11 +930,36 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
             for ( USHORT j = 0; j < aCellArr.Count(); ++j )
             {
                 const SwCellFrm *pCell = (const SwCellFrm*)aCellArr[j];
+                const sal_Bool bVert = pCell->IsVertical();
+                const sal_Bool bRTL = pCell->IsRightToLeft();
+                sal_Bool bTopOver, bLeftOver, bRightOver, bBottomOver;
+                if ( bVert )
+                {
+                    bTopOver = pCell->Frm().Right() >= rUnion.Right();
+                    bLeftOver = pCell->Frm().Top() <= rUnion.Top();
+                    bRightOver = pCell->Frm().Bottom() >= rUnion.Bottom();
+                    bBottomOver = pCell->Frm().Left() <= rUnion.Left();
+                }
+                else
+                {
+                    bTopOver = pCell->Frm().Top() <= rUnion.Top();
+                    bLeftOver = pCell->Frm().Left() <= rUnion.Left();
+                    bRightOver = pCell->Frm().Right() >= rUnion.Right();
+                    bBottomOver = pCell->Frm().Bottom() >= rUnion.Bottom();
+                }
+
+                if ( bRTL )
+                {
+                    sal_Bool bTmp = bRightOver;
+                    bRightOver = bLeftOver;
+                    bLeftOver = bTmp;
+                }
+
                 const SwFrmFmt  *pFmt  = pCell->GetFmt();
                 const SvxBoxItem  &rBox  = pFmt->GetBox();
 
                 //Obere Kante
-                if ( bFirst && pCell->Frm().Top() <= rUnion.Top() )
+                if ( bFirst && bTopOver )
                 {
                     if (aSetBoxInfo.IsValid(VALID_TOP))
                     {
@@ -929,7 +978,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                 }
 
                 //Linke Kante
-                if ( pCell->Frm().Left() <= rUnion.Left() )
+                if ( bLeftOver )
                 {
                     if (aSetBoxInfo.IsValid(VALID_LEFT))
                     {
@@ -964,7 +1013,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                 }
 
                 //Rechte Kante
-                if ( aSetBoxInfo.IsValid(VALID_RIGHT) && pCell->Frm().Right() >= rUnion.Right() )
+                if ( aSetBoxInfo.IsValid(VALID_RIGHT) && bRightOver )
                 {
                     if ( !bRightSet )
                     {   bRightSet = TRUE;
@@ -979,7 +1028,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                 }
 
                 //Untere Kante
-                if ( bLast && pCell->Frm().Bottom() >= rUnion.Bottom() )
+                if ( bLast && bBottomOver )
                 {
                     if ( aSetBoxInfo.IsValid(VALID_BOTTOM) )
                     {
