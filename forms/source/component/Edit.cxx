@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:33:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -798,7 +798,7 @@ sal_Bool OEditModel::commitControlValueToDbColumn( bool _bPostReset )
     m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) >>= sNewValue;
     if (sNewValue != m_aSaveValue)
     {
-        if (!sNewValue.getLength() && !m_bRequired && m_bEmptyIsNull)
+        if (!sNewValue.getLength() && !isRequired() && m_bEmptyIsNull)
             m_xColumnUpdate->updateNull();
         else
         {
