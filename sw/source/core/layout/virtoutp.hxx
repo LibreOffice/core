@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtoutp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-03 12:52:45 $
+ *  last change: $Author: od $ $Date: 2002-10-11 11:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,8 @@ public:
     SwLayVout() : pVirDev(NULL), pOut(0), aSize(0, VIRTUALHEIGHT), nCount(0) {}
     ~SwLayVout() { delete pVirDev; }
 
-    void Enter( ViewShell *pShell, const SwRect &rRect, BOOL bOn );
+    /// OD 27.09.2002 #103636# - change 2nd parameter <rRect> - no longer <const>
+    void Enter( ViewShell *pShell, SwRect &rRect, BOOL bOn );
     void Leave() { --nCount; Flush(); }
 
     void SetOrgRect( SwRect &rRect ) { aOrgRect = rRect; }
