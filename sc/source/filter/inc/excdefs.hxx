@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-29 09:15:20 $
+ *  last change: $Author: dr $ $Date: 2000-12-06 16:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,14 @@
 #define EXC_CRN_ERROR               0x10
 
 //_________________________________________________________
+// (0x007E) RK
+
+#define EXC_RK_DBL                  0x00000000
+#define EXC_RK_DBL100               0x00000001
+#define EXC_RK_INT                  0x00000002
+#define EXC_RK_INT100               0x00000003
+
+//_________________________________________________________
 // (0x0092) PALETTE (class ExcPalette2)
 
 // color types
@@ -300,6 +308,26 @@
 #define EXC_SXVDEX_COMMON           0x0A00141E
 #define EXC_SXVDEX_SHOWALL          0x00000001
 
+#define EXC_SXVI_HIDDEN             0x0001
+#define EXC_SXVI_HIDEDETAIL         0x0002
+#define EXC_SXVI_FORMULA            0x0004
+#define EXC_SXVI_MISSING            0x0008
+
+#define EXC_SXVS_EXCEL              0x0001
+#define EXC_SXVS_EXTERN             0x0002
+#define EXC_SXVS_MULTICONSR         0x0004
+#define EXC_SXVS_PIVOTTAB           0x0008
+#define EXC_SXVS_SCENMAN            0x0010
+
+#define EXC_SXIVD_IDDATA            0xFFFE
+
+// pivot cache record flags
+#define EXC_SXFIELD_COMMON          0x0001
+#define EXC_SXFIELD_READLATER       0x0002
+#define EXC_SXFIELD_16BIT           0x0200
+
+#define EXC_SXITEM_
+
 //_________________________________________________________
 // defines for change tracking
 
@@ -329,6 +357,7 @@
 #define EXC_CHTR_TYPE_FORMULA       0x0005
 
 // accept flags
+#define EXC_CHTR_NOTHING            0x0000
 #define EXC_CHTR_ACCEPT             0x0001
 #define EXC_CHTR_REJECT             0x0003
 
