@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 09:19:21 $
+ *  last change: $Author: oj $ $Date: 2000-11-24 08:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -954,8 +954,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
             // set the field selection back to the first
             pFieldNames = seqFieldNames.getArray();;
             DBG_ASSERT(nFoundIndex != -1, "FmSearchEngine::Init : Es wurden ungueltige Feldnamen angegeben !");
-            if(j < nLen)
-                m_arrFieldMapping.Insert(nFoundIndex, m_arrFieldMapping.Count());
+            m_arrFieldMapping.Insert(nFoundIndex, m_arrFieldMapping.Count());
         }
     }
     catch(Exception&)
