@@ -10,10 +10,6 @@ ODKCHECKFILE=..$/misc$/$(TARGET).txt
 
 all: checkit
 
-checkit .SETDIR=$(DESTDIR)$/.. :
-     $(MY_DIRCMP) $(ODKNAME)$/bin $(SOLARBINDIR) > $(ODKCHECKFILE)
-     +$(PERL) $(CHECKSCRIPT) $(ODKCHECKFILE)
-     +$(RM) $(ODKCHECKFILE) >$(NULLDEV)
-     $(MY_DIRCMP) $(ODKNAME)$/lib $(SOLARLIBDIR) > $(ODKCHECKFILE)
-     +$(PERL) $(CHECKSCRIPT) $(ODKCHECKFILE)
-     +$(RM) $(ODKCHECKFILE) >$(NULLDEV)
+checkit:
+    diff -r $(DESTDIRBIN)  $(SOLARBINDIR) |& $(PERL) $(PRJ)$/util$/checkdiff.pl
+     diff -r $(DESTDIRLIB)  $(SOLARLIBDIR) |& $(PERL) $(PRJ)$/util$/checkdiff.pl

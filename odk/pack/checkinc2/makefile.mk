@@ -10,22 +10,10 @@ ODKCHECKFILE=..$/misc$/$(TARGET).txt
 
 all : checkit
 
-checkit .SETDIR=$(DESTDIR)$/.. :
-      $(MY_DIRCMP) $(ODKNAME)$/include$/typelib $(SOLARINCDIR)$/typelib > $(ODKCHECKFILE)
-      +$(PERL) $(CHECKSCRIPT) $(ODKCHECKFILE)
-      +$(RM) $(ODKCHECKFILE) >$(NULLDEV)
-      $(MY_DIRCMP) $(ODKNAME)$/include$/uno $(SOLARINCDIR)$/uno > $(ODKCHECKFILE)
-      +$(PERL) $(CHECKSCRIPT) $(ODKCHECKFILE)
-      +$(RM) $(ODKCHECKFILE) >$(NULLDEV)
-      $(MY_DIRCMP) $(ODKNAME)$/include$/bridges $(SOLARINCDIR)$/bridges > $(ODKCHECKFILE)
-      +$(PERL) $(CHECKSCRIPT) $(ODKCHECKFILE)
-      +$(RM) $(ODKCHECKFILE) >$(NULLDEV)
-      $(MY_DIRCMP) $(ODKNAME)$/include$/com$/sun$/star$/uno $(SOLARINCDIR)$/com$/sun$/star$/uno > $(ODKCHECKFILE)
-      +$(PERL) $(CHECKSCRIPT) $(ODKCHECKFILE)
-      +$(RM) $(ODKCHECKFILE) >$(NULLDEV)
-      $(MY_DIRCMP) $(ODKNAME)$/include$/cppu $(SOLARINCDIR)$/cppu > $(ODKCHECKFILE)
-      +$(PERL) $(CHECKSCRIPT) $(ODKCHECKFILE)
-      +$(RM) $(ODKCHECKFILE) >$(NULLDEV)
-      $(MY_DIRCMP) $(ODKNAME)$/include$/cppuhelper $(SOLARINCDIR)$/cppuhelper > $(ODKCHECKFILE)
-      +$(PERL) $(CHECKSCRIPT) $(ODKCHECKFILE)
-      +$(RM) $(ODKCHECKFILE) >$(NULLDEV)
+checkit :
+    diff -r $(DESTDIRINC)$/typelib  $(SOLARINCDIR)$/typelib 	|& $(PERL) $(PRJ)$/util$/checkdiff.pl
+    diff -r $(DESTDIRINC)$/uno   	$(SOLARINCDIR)$/uno 		|& $(PERL) $(PRJ)$/util$/checkdiff.pl
+    diff -r $(DESTDIRINC)$/bridges  $(SOLARINCDIR)$/bridges 	|& $(PERL) $(PRJ)$/util$/checkdiff.pl
+    diff -r $(DESTDIRINC)$/cppu   	$(SOLARINCDIR)$/cppu 		|& $(PERL) $(PRJ)$/util$/checkdiff.pl
+    diff -r $(DESTDIRINC)$/com$/sun$/star$/uno   	$(SOLARINCDIR)$/com$/sun$/star$/uno 	|& $(PERL) $(PRJ)$/util$/checkdiff.pl
+    diff -r $(DESTDIRINC)$/cppuhelper 		$(SOLARINCDIR)$/cppuhelper 		|& $(PERL) $(PRJ)$/util$/checkdiff.pl

@@ -10,22 +10,10 @@ ODKCHECKFILE=..$/misc$/$(TARGET).txt
 
 all : checkit
 
-checkit .SETDIR=$(DESTDIR)$/.. :
-      $(MY_DIRCMP) $(ODKNAME)$/include$/osl $(SOLARINCDIR)$/osl > $(ODKCHECKFILE)
-      +$(PERL) $(CHECKSCRIPT) $(ODKCHECKFILE)
-      +$(RM) $(ODKCHECKFILE) >$(NULLDEV)
-      $(MY_DIRCMP) $(ODKNAME)$/include$/rtl $(SOLARINCDIR)$/rtl > $(ODKCHECKFILE)
-      +$(PERL) $(CHECKSCRIPT) $(ODKCHECKFILE)
-      +$(RM) $(ODKCHECKFILE) >$(NULLDEV)
-      $(MY_DIRCMP) $(ODKNAME)$/include$/sal $(SOLARINCDIR)$/sal > $(ODKCHECKFILE)
-      +$(PERL) $(CHECKSCRIPT) $(ODKCHECKFILE)
-      +$(RM) $(ODKCHECKFILE) >$(NULLDEV)
-#   	$(MY_DIRCMP) $(ODKNAME)$/include$/stl $(SOLARINCDIR)$/stl > $(ODKCHECKFILE)
-#   	+$(PERL) $(CHECKSCRIPT) $(ODKCHECKFILE)
-#   	+$(RM) $(ODKCHECKFILE) >$(NULLDEV)
-      $(MY_DIRCMP) $(ODKNAME)$/include$/store $(SOLARINCDIR)$/store > $(ODKCHECKFILE)
-      +$(PERL) $(CHECKSCRIPT) $(ODKCHECKFILE)
-      +$(RM) $(ODKCHECKFILE) >$(NULLDEV)
-      $(MY_DIRCMP) $(ODKNAME)$/include$/vos $(SOLARINCDIR)$/vos > $(ODKCHECKFILE)
-      +$(PERL) $(CHECKSCRIPT) $(ODKCHECKFILE)
-      +$(RM) $(ODKCHECKFILE) >$(NULLDEV)
+checkit :
+    diff -r $(DESTDIRINC)$/osl   $(SOLARINCDIR)$/osl |& $(PERL) $(PRJ)$/util$/checkdiff.pl
+       diff -r $(DESTDIRINC)$/rtl   $(SOLARINCDIR)$/rtl |& $(PERL) $(PRJ)$/util$/checkdiff.pl
+       diff -r $(DESTDIRINC)$/sal   $(SOLARINCDIR)$/sal |& $(PERL) $(PRJ)$/util$/checkdiff.pl
+#   	diff -r $(DESTDIRINC)$/stl   $(SOLARINCDIR)$/stl |& $(PERL) $(PRJ)$/util$/checkdiff.pl
+       diff -r $(DESTDIRINC)$/store $(SOLARINCDIR)$/store |& $(PERL) $(PRJ)$/util$/checkdiff.pl
+       diff -r $(DESTDIRINC)$/vos   $(SOLARINCDIR)$/vos |& $(PERL) $(PRJ)$/util$/checkdiff.pl
