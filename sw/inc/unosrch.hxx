@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosrch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:36:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,10 +124,11 @@ class SwXTextSearch : public cppu::WeakImplHelper3
     sal_Int16                   nLevRemove;
 
     sal_Bool                    bIsValueSearch :1;
-
+protected:
+    virtual ~SwXTextSearch();
 public:
     SwXTextSearch();
-    virtual ~SwXTextSearch();
+
 
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
