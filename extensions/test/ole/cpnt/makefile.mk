@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 17:13:38 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:26:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,13 +77,13 @@ NO_BSYMBOLIC=	TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=	\
-        $(SLO)$/cpnt.obj	
+        $(SLO)$/cpnt.obj
 
 UNOUCRDEP=	$(SOLARBINDIR)$/types.rdb $(BIN)$/oletest.rdb
 UNOUCRRDB=	$(SOLARBINDIR)$/types.rdb $(BIN)$/oletest.rdb
 
 UNOUCROUT=	$(OUT)$/inc
-INCPRE+=	$(OUT)$/inc -I$(SOLARINCDIR)$/external$/atl
+INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
 #INCPRE+= -I$(SOLARINCDIR)$/external$/atl
 
 UNOTYPES= oletest.XTestSequence oletest.XTestStruct	\
@@ -103,7 +103,7 @@ UNOTYPES= oletest.XTestSequence oletest.XTestStruct	\
     com.sun.star.lang.XEventListener	\
     com.sun.star.registry.XRegistryKey	\
     com.sun.star.script.XInvocation	\
-    com.sun.star.reflection.XIdlReflection	
+    com.sun.star.reflection.XIdlReflection
 
 
 SHL1TARGET= $(TARGET)
@@ -112,9 +112,9 @@ SHL1STDLIBS= \
         $(SALLIB)	\
         $(VOSLIB)	\
         $(CPPULIB) 	\
-        $(CPPUHELPERLIB) 
+        $(CPPUHELPERLIB)
 
-SHL1DEPN= 
+SHL1DEPN=
 SHL1IMPLIB=		i$(TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
@@ -123,13 +123,13 @@ DEF1NAME=		$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
 
-ALLIDLFILES:=	..$/idl$/oletest.idl 		
+ALLIDLFILES:=	..$/idl$/oletest.idl
 
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" == ""
 ALL : 	$(BIN)$/oletest.rdb	\
-        ALLTAR 
+        ALLTAR
 
 .ELSE
 ALL: 	ALLDEP
