@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sysplug.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-30 11:15:34 $
+ *  last change: $Author: dbo $ $Date: 2001-12-07 11:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,15 @@ extern NPNetscapeFuncs aNPNFuncs;
 
 using namespace rtl;
 
+#ifdef DEBUG
+void TRACE( char const * s );
+void TRACEN( char const * s, long n );
+#else
+#define TRACE(x)
+#define TRACEN(x,n)
+#endif
+
+
 //--------------------------------------------------------------------------------------------------
 PluginComm_Impl::PluginComm_Impl( const OUString& rMIME, const OUString& rName, HWND hWnd )
     : PluginComm( OUStringToOString( rName, RTL_TEXTENCODING_MS_1252 ) )
@@ -100,6 +109,18 @@ PluginComm_Impl::PluginComm_Impl( const OUString& rMIME, const OUString& rName, 
     _plDLL = ::LoadLibrary( aStr.getStr() );
 #endif
     DBG_ASSERT( _plDLL, "### loading plugin dll failed!" );
+
+    NPError nErr = NPERR_NO_ERROR;
+    NPError (WINAPI * pEntry)( NPPluginFuncs* );
+    retrieveFunction( _T("NP_GetEntryPoints"), (void**)&pEntry );
+
+    _NPPfuncs.size = sizeof( _NPPfuncs );
+    _NPPfuncs.version = 0;
+    nErr = (*pEntry)( &_NPPfuncs );
+
+    DBG_ASSERT( nErr == NPERR_NO_ERROR, "### NP_GetEntryPoints() failed!" );
+    DBG_ASSERT( (_NPPfuncs.version >> 8) >= NP_VERSION_MAJOR,
+                "### version failure!" );
 
     m_eCall = eNP_Initialize;
     execute();
@@ -145,32 +166,23 @@ long PluginComm_Impl::doIt()
     {
     case eNP_Initialize:
     {
-        NPError nErr = NPERR_NO_ERROR;
-        NPError (WINAPI * pEntry)( NPPluginFuncs* );
-        if (_plDLL && retrieveFunction( _T("NP_GetEntryPoints"), (void**)&pEntry ))
+        TRACE( "eNP_Initialize" );
+        NPError (WINAPI * pInit)( NPNetscapeFuncs* );
+        if ((_NPPfuncs.version >> 8) >= NP_VERSION_MAJOR &&
+            (retrieveFunction( _T("NP_Initialize"), (void**)&pInit ) ||
+             retrieveFunction( _T("NP_PluginInit"), (void**)&pInit )))
         {
-            _NPPfuncs.size = sizeof( _NPPfuncs );
-            _NPPfuncs.version = 0;
-            nErr = (*pEntry)( &_NPPfuncs );
-
-            DBG_ASSERT( nErr == NPERR_NO_ERROR, "### NP_GetEntryPoints() failed!" );
-            DBG_ASSERT( (_NPPfuncs.version >> 8) >= NP_VERSION_MAJOR,
-                        "### version failure!" );
-
-            NPError (WINAPI * pInit)( NPNetscapeFuncs* );
-            if (nErr == NPERR_NO_ERROR &&
-                (_NPPfuncs.version >> 8) >= NP_VERSION_MAJOR &&
-                (retrieveFunction( _T("NP_Initialize"), (void**)&pInit ) ||
-                 retrieveFunction( _T("NP_PluginInit"), (void**)&pInit )))
-            {
-                nErr = (*pInit)( &aNPNFuncs );
-                DBG_ASSERT( nErr == NPERR_NO_ERROR, "### NP_Initialize() failed!" );
-            }
+            nRet = (*pInit)( &aNPNFuncs );
         }
-        nRet = nErr;
+        else
+        {
+            nRet = NPERR_GENERIC_ERROR;
+        }
+        DBG_ASSERT( nRet == NPERR_NO_ERROR, "### NP_Initialize() failed!" );
     }
     break;
     case eNPP_Destroy:
+        TRACE( "eNPP_Destroy" );
         nRet = (_NPPfuncs.destroy
                 ? (*_NPPfuncs.destroy)(
                     (NPP)m_aArgs[0],
@@ -178,6 +190,7 @@ long PluginComm_Impl::doIt()
                 : NPERR_GENERIC_ERROR);
         break;
     case eNPP_DestroyStream:
+        TRACE( "eNPP_DestroyStream" );
         nRet =  (_NPPfuncs.destroystream
                  ? (*_NPPfuncs.destroystream)(
                      (NPP)m_aArgs[0],
@@ -186,6 +199,7 @@ long PluginComm_Impl::doIt()
                  : NPERR_GENERIC_ERROR);
         break;
     case eNPP_New:
+        TRACE( "eNPP_New" );
         nRet = (_NPPfuncs.newp
                 ? (*_NPPfuncs.newp)(
                     (NPMIMEType)m_aArgs[0],
@@ -198,6 +212,7 @@ long PluginComm_Impl::doIt()
                 : NPERR_GENERIC_ERROR);
         break;
     case eNPP_NewStream:
+        TRACE( "eNPP_NewStream" );
         nRet = (_NPPfuncs.newstream
                 ? (*_NPPfuncs.newstream)(
                     (NPP)m_aArgs[0],
@@ -208,19 +223,24 @@ long PluginComm_Impl::doIt()
                 : NPERR_GENERIC_ERROR);
         break;
     case eNPP_Print:
+        TRACE( "eNPP_Print" );
         if (_NPPfuncs.print)
             (*_NPPfuncs.print)(
                 (NPP)m_aArgs[0],
                 (NPPrint*)m_aArgs[1] );
         break;
     case eNPP_SetWindow:
+    {
+        TRACE( "eNPP_SetWindow" );
         nRet = (_NPPfuncs.setwindow
                 ? (*_NPPfuncs.setwindow)(
                     (NPP)m_aArgs[0],
                     (NPWindow*)m_aArgs[1] )
                 : NPERR_GENERIC_ERROR);
         break;
+    }
     case eNPP_StreamAsFile:
+        TRACE( "eNPP_StreamAsFile" );
         if (_NPPfuncs.asfile)
             (*_NPPfuncs.asfile)(
                 (NPP)m_aArgs[0],
@@ -228,6 +248,7 @@ long PluginComm_Impl::doIt()
                 (char*)m_aArgs[2] );
         break;
     case eNPP_URLNotify:
+        TRACE( "eNPP_URLNotify" );
         if (_NPPfuncs.urlnotify)
             (*_NPPfuncs.urlnotify)(
                 (NPP)m_aArgs[0],
@@ -236,6 +257,7 @@ long PluginComm_Impl::doIt()
                 m_aArgs[3] );
         break;
     case eNPP_Write:
+        TRACEN( "eNPP_Write n=", (int32)m_aArgs[3] );
         nRet = (_NPPfuncs.write
                 ? (*_NPPfuncs.write)(
                     (NPP)m_aArgs[0],
@@ -246,6 +268,7 @@ long PluginComm_Impl::doIt()
                 : 0);
         break;
     case eNPP_WriteReady:
+        TRACE( "eNPP_WriteReady" );
         nRet = (_NPPfuncs.writeready
                 ? (*_NPPfuncs.writeready)(
                     (NPP)m_aArgs[0],
@@ -253,6 +276,7 @@ long PluginComm_Impl::doIt()
                 : 0);
         break;
     case eNPP_GetValue:
+        TRACE( "eNPP_GetValue" );
         nRet = (_NPPfuncs.getvalue
                 ? (*_NPPfuncs.getvalue)(
                     (NPP)m_aArgs[0],
@@ -261,6 +285,7 @@ long PluginComm_Impl::doIt()
                 : NPERR_GENERIC_ERROR);
         break;
     case eNPP_SetValue:
+        TRACE( "eNPP_SetValue" );
         nRet = (_NPPfuncs.setvalue
                 ? (*_NPPfuncs.setvalue)(
                     (NPP)m_aArgs[0],
@@ -270,6 +295,7 @@ long PluginComm_Impl::doIt()
         break;
     case eNPP_Shutdown:
     {
+        TRACE( "eNPP_Shutdown" );
         NPP_ShutdownUPP pFunc;
         if (retrieveFunction( _T("NPP_Shutdown"), (void**)&pFunc ))
             (*pFunc)();
