@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propread.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:17:32 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,22 +658,25 @@ void PropRead::Read()
         sal_uInt32  nSections;
         sal_uInt32  nSectionOfs;
         sal_uInt32  nCurrent;
-        sal_uInt8*  pSectCLSID = new sal_uInt8[ 16 ];
         *mpSvStream >> mnByteOrder >> mnFormat >> mnVersionLo >> mnVersionHi;
-        mpSvStream->Read( mApplicationCLSID, 16 );
-        *mpSvStream >> nSections;
-        for ( sal_uInt32 i = 0; i < nSections; i++ )
+        if ( mnByteOrder == 0xfffe )
         {
-            mpSvStream->Read( pSectCLSID, 16 );
-            *mpSvStream >> nSectionOfs;
-            nCurrent = mpSvStream->Tell();
-            mpSvStream->Seek( nSectionOfs );
-            Section aSection( pSectCLSID );
-            aSection.Read( mpSvStream );
-            AddSection( aSection );
-            mpSvStream->Seek( nCurrent );
+            sal_uInt8*  pSectCLSID = new sal_uInt8[ 16 ];
+            mpSvStream->Read( mApplicationCLSID, 16 );
+            *mpSvStream >> nSections;
+            for ( sal_uInt32 i = 0; i < nSections; i++ )
+            {
+                mpSvStream->Read( pSectCLSID, 16 );
+                *mpSvStream >> nSectionOfs;
+                nCurrent = mpSvStream->Tell();
+                mpSvStream->Seek( nSectionOfs );
+                Section aSection( pSectCLSID );
+                aSection.Read( mpSvStream );
+                AddSection( aSection );
+                mpSvStream->Seek( nCurrent );
+            }
+            delete[] pSectCLSID;
         }
-        delete[] pSectCLSID;
     }
 }
 
