@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RecentMasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:09:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ RecentMasterPagesSelector::RecentMasterPagesSelector (
     TreeNode* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase)
-    : MasterPagesSelector (pParent, rDocument, rBase)
+    : MasterPagesContainerSelector (pParent, rDocument, rBase)
 {
     SetName (String(RTL_CONSTASCII_USTRINGPARAM("RecentMasterPagesSelector")));
 }
@@ -117,8 +117,9 @@ IMPL_LINK(RecentMasterPagesSelector,MasterPageListListener, void*, pUnused)
 void RecentMasterPagesSelector::Fill (void)
 {
     Clear ();
-    MasterPageObserver::MasterPageNameSet aCurrentNames;
+
     // Create a set of names of the master pages used by the given document.
+    MasterPageObserver::MasterPageNameSet aCurrentNames;
     USHORT nMasterPageCount = mrDocument.GetMasterSdPageCount(PK_STANDARD);
     USHORT nIndex;
     for (nIndex=0; nIndex<nMasterPageCount; nIndex++)
@@ -129,11 +130,17 @@ void RecentMasterPagesSelector::Fill (void)
     }
     MasterPageObserver::MasterPageNameSet::iterator aI;
 
+    // Insert the recently used master pages that are not currently used.
     int nPageCount = RecentlyUsedMasterPages::Instance().GetMasterPageCount();
     for (nIndex=0; nIndex<nPageCount; nIndex++)
     {
+        // Add the page when a) the style name is empty, i.e. it has not yet
+        // been loaded (and thus can not be in use) or otherwise b) the
+        // style name is not currently in use.
+        String sStyleName (RecentlyUsedMasterPages::Instance().GetMasterPageStyleName(nIndex));
         String sPageName (RecentlyUsedMasterPages::Instance().GetMasterPageName(nIndex));
-        if (aCurrentNames.find(sPageName) == aCurrentNames.end())
+        if (sStyleName.Len()==0
+            || aCurrentNames.find(sStyleName) == aCurrentNames.end())
         {
             AddItemForPage (
                 String(),
