@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:48:12 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,11 @@
 #ifndef CONFIGMGR_API_PROVIDER_HXX_
 #include "provider.hxx"
 #endif
-#ifndef _CONFIGMGR_TREECACHE_HXX_
-#include "treecache.hxx"
+#ifndef CONFIGMGR_TREEPROVIDER_HXX
+#include "treeprovider.hxx"
+#endif
+#ifndef CONFIGMGR_TREEMANAGER_HXX_
+#include "treemanager.hxx"
 #endif
 #ifndef CONFIGMGR_TREEACCESSOR_HXX
 #include "treeaccessor.hxx"
@@ -179,11 +182,11 @@ namespace configmgr
                   ,m_pSession(NULL)
                   ,m_pTreeMgr(NULL)
     {
-        uno::Reference< script::XTypeConverter > xConverter(
-            _xServiceFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" ))), uno::UNO_QUERY);
-        OSL_ENSURE(xConverter.is(), "Module::Module : could not create an instance of the type converter !");
+        m_xTypeConverter = m_xTypeConverter.query(
+            _xServiceFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" ))));
+        OSL_ENSURE(m_xTypeConverter.is(), "Module::Module : could not create an instance of the type converter !");
 
-        m_xDefaultOptions = new OOptions(xConverter);
+        m_xDefaultOptions = new OOptions();
     }
     //-----------------------------------------------------------------------------
     //-----------------------------------------------------------------------------
@@ -206,7 +209,7 @@ namespace configmgr
         this->implInitFromSettings(_rSettings,bNeedProfile);
 
         rtl::Reference< TreeManager > xNewTreeManager =
-            CacheFactory::instance().createCacheManager(_pSession, *m_xDefaultOptions);
+            CacheFactory::instance().createCacheManager(_pSession, m_xTypeConverter);
 
         m_pTreeMgr = xNewTreeManager.get();
         m_pTreeMgr->acquire();
@@ -417,9 +420,9 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::notifyUpdate(data::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges) CFG_UNO_THROW_RTE(  )
+    void OProviderImpl::saveAndNotifyUpdate(data::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  )
     {
-        m_pTreeMgr->notifyUpdate(_aChangedDataAccessor,aChanges);
+        m_pTreeMgr->saveAndNotifyUpdate(_aChangedDataAccessor,aChanges);
     }
 
     //-----------------------------------------------------------------------------

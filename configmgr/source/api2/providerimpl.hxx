@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,11 +189,17 @@ namespace configmgr
 
         };
 
-    protected:
+    private:
+        typedef uno::Reference< script::XTypeConverter > TypeConverterRef;
+        TypeConverterRef                    m_xTypeConverter;
         vos::ORef<OOptions>                 m_xDefaultOptions;
         configapi::ApiProviderInstances*    m_pNewProviders;    /// order depedency - this must be after the TreeManager
         TreeManager*                        m_pTreeMgr;         /// the tree cache. Will hold a reference to us as long as it life
         IConfigSession*                     m_pSession;
+
+    protected:
+        IConfigSession*   getSession() const
+        { return m_pSession; }
 
     public:
         OProviderImpl(OProvider* _pProvider,
@@ -209,7 +215,7 @@ namespace configmgr
         virtual void updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  );
 
         virtual void releaseSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions ) CFG_NOTHROW();
-        virtual void notifyUpdate(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges) CFG_UNO_THROW_RTE(  );
+        virtual void saveAndNotifyUpdate(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  );
         virtual void disposeData(const vos::ORef < OOptions >& _xOptions) CFG_NOTHROW();
         virtual void fetchSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels = ALL_LEVELS) CFG_NOTHROW();
         /// IDefaultableTreeManager
@@ -233,7 +239,7 @@ namespace configmgr
         virtual void SAL_CALL dispose() throw();
     public:
         const OOptions&     getDefaultOptions() const {return *m_xDefaultOptions;}
-        uno::Reference< script::XTypeConverter > getTypeConverter() const {return m_xDefaultOptions->getTypeConverter();}
+        TypeConverterRef getTypeConverter() const {return m_xTypeConverter;}
         configapi::Factory& getWriterFactory();
         IConfigBroadcaster* getNotifier();
         uno::XInterface*    getProviderInstance();
