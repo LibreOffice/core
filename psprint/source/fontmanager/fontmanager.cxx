@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 09:12:39 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1704,22 +1704,6 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
 
 // -------------------------------------------------------------------------
 
-static void normPath( ByteString& rPath )
-{
-    char buf[PATH_MAX];
-
-    // double slashes and slash at end are probably
-    // removed by realpath anyway, but since this runs
-    // on many different platforms let's play it safe
-    while( rPath.SearchAndReplace( "//", "/" ) != STRING_NOTFOUND )
-        ;
-    if( rPath.Len() > 0 && rPath.GetChar( rPath.Len()-1 ) == '/' )
-        rPath.Erase( rPath.Len()-1 );
-
-    if( realpath( rPath.GetBuffer(), buf ) )
-        rPath = buf;
-}
-
 void PrintFontManager::getServerDirectories()
 {
 #ifdef LINUX
@@ -1808,6 +1792,9 @@ void PrintFontManager::initialize( void* pInitDisplay )
     aStart = times( &tms );
 #endif
 
+    // first try fontconfig
+    bool bFontconfigSuccess = initFontconfig();
+
     // part one - look for downloadable fonts
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     const ::rtl::OUString &rSalPrivatePath = psp::getFontPath();
@@ -1816,89 +1803,95 @@ void PrintFontManager::initialize( void* pInitDisplay )
     // the TrueType fonts installed with the office
     if( rSalPrivatePath.getLength() )
     {
-        ByteString aPath = ::rtl::OUStringToOString( rSalPrivatePath, aEncoding );
-        int nTokens = aPath.GetTokenCount( ';' );
-        for( int i = 0; i < nTokens; i++ )
+        OString aPath = rtl::OUStringToOString( rSalPrivatePath, aEncoding );
+        sal_Int32 nIndex = 0;
+        do
         {
-            ByteString aToken( aPath.GetToken( i, ';' ) );
+            OString aToken = aPath.getToken( 0, ';', nIndex );
             normPath( aToken );
             m_aFontDirectories.push_back( aToken );
             m_aPrivateFontDirectories.push_back( getDirectoryAtom( aToken, true ) );
-        }
+        } while( nIndex >= 0 );
     }
 
-    Display *pDisplay = (Display*)pInitDisplay;
+    // don't search through many directories fontconfig already told us about
+    if( ! bFontconfigSuccess )
+    {
+        Display *pDisplay = (Display*)pInitDisplay;
 
-    if( ! pDisplay )
+        if( ! pDisplay )
         pDisplay = XOpenDisplay( NULL );
 
-    if( pDisplay )
-    {
-        // get font paths to look for fonts
-        int nPaths = 0, i;
-        char** pPaths = XGetFontPath( pDisplay, &nPaths );
-
-        int nPos = 0;
-        bool bServerDirs = false;
-        for( i = 0; i < nPaths; i++ )
+        if( pDisplay )
         {
-            ByteString aPath( pPaths[i] );
-            if( ! bServerDirs
-                && ( nPos = aPath.Search( ':' ) ) != STRING_NOTFOUND
-                && ( !aPath.Equals( ":unscaled", nPos, 9 ) ) )
+            // get font paths to look for fonts
+            int nPaths = 0, i;
+            char** pPaths = XGetFontPath( pDisplay, &nPaths );
+
+            bool bServerDirs = false;
+            for( i = 0; i < nPaths; i++ )
             {
-                bServerDirs = true;
-                getServerDirectories();
+                OString aPath( pPaths[i] );
+                sal_Int32 nPos = 0;
+                if( ! bServerDirs
+                    && ( nPos = aPath.indexOf( ':' ) ) > 0
+                    && ( !aPath.copy(nPos).equals( ":unscaled" ) ) )
+                {
+                    bServerDirs = true;
+                    getServerDirectories();
+                }
+                else
+                {
+                    normPath( aPath );
+                    m_aFontDirectories.push_back( aPath );
+                }
             }
-            else
-            {
-                normPath( aPath );
-                m_aFontDirectories.push_back( aPath );
-            }
+
+            if( nPaths )
+                XFreeFontPath( pPaths );
+
+            if( ! pInitDisplay )
+                XCloseDisplay( pDisplay );
         }
 
-        if( nPaths )
-            XFreeFontPath( pPaths );
-
-        if( ! pInitDisplay )
-            XCloseDisplay( pDisplay );
-    }
-
-    // insert some standard directories
-    m_aFontDirectories.push_back( "/usr/openwin/lib/X11/fonts/Type1" );
-    m_aFontDirectories.push_back( "/usr/openwin/lib/X11/fonts/Type1/sun" );
-    m_aFontDirectories.push_back( "/usr/X11R6/lib/X11/fonts/Type1" );
+        // insert some standard directories
+        m_aFontDirectories.push_back( "/usr/openwin/lib/X11/fonts/Type1" );
+        m_aFontDirectories.push_back( "/usr/openwin/lib/X11/fonts/Type1/sun" );
+        m_aFontDirectories.push_back( "/usr/X11R6/lib/X11/fonts/Type1" );
 
 #ifdef SOLARIS
-    /* cde specials, from /usr/dt/bin/Xsession: here are the good fonts,
-       the OWfontpath file may contain as well multiple lines as a comma
-       separated list of fonts in each line. to make it even more weird
-       environment variables are allowed as well */
+        /* cde specials, from /usr/dt/bin/Xsession: here are the good fonts,
+           the OWfontpath file may contain as well multiple lines as a comma
+           separated list of fonts in each line. to make it even more weird
+           environment variables are allowed as well */
 
-    const char* lang = getenv("LANG");
-    if ( lang != NULL )
-    {
-        String aOpenWinDir( String::CreateFromAscii( "/usr/openwin/lib/locale/" ) );
-        aOpenWinDir.AppendAscii( lang );
-        aOpenWinDir.AppendAscii( "/OWfontpath" );
-
-        SvFileStream aStream( aOpenWinDir, STREAM_READ );
-
-        // TODO: replace environment variables
-        while( aStream.IsOpen() && ! aStream.IsEof() )
+        const char* lang = getenv("LANG");
+        if ( lang != NULL )
         {
-            ByteString aLine;
-            aStream.ReadLine( aLine );
-            normPath( aLine );
-            // try to avoid bad fonts in some cases
-            static bool bAvoid = (strncasecmp( lang, "ar", 2 ) == 0) || (strncasecmp( lang, "iw", 2 ) == 0) || (strncasecmp( lang, "hi", 2 ) == 0);
-            if( bAvoid && aLine.Search( "iso_8859" ) != STRING_NOTFOUND )
-                continue;
-            m_aFontDirectories.push_back( aLine );
-        }
-    }
+            String aOpenWinDir( String::CreateFromAscii( "/usr/openwin/lib/locale/" ) );
+            aOpenWinDir.AppendAscii( lang );
+            aOpenWinDir.AppendAscii( "/OWfontpath" );
 
+            SvFileStream aStream( aOpenWinDir, STREAM_READ );
+
+            // TODO: replace environment variables
+            while( aStream.IsOpen() && ! aStream.IsEof() )
+            {
+                ByteString aLine;
+                aStream.ReadLine( aLine );
+                // need an OString for normpath
+                OString aNLine( aLine );
+                normPath( aNLine );
+                aLine = aNLine;
+                // try to avoid bad fonts in some cases
+                static bool bAvoid = (strncasecmp( lang, "ar", 2 ) == 0) || (strncasecmp( lang, "iw", 2 ) == 0) || (strncasecmp( lang, "hi", 2 ) == 0);
+                if( bAvoid && aLine.Search( "iso_8859" ) != STRING_NOTFOUND )
+                    continue;
+                m_aFontDirectories.push_back( aLine );
+            }
+        }
 #endif /* SOLARIS */
+    } // ! bFontconfigSuccess
 
     // search for font files in each path
     ::std::list< OString >::iterator dir_it;
