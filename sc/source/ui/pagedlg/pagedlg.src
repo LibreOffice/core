@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:52:38 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,16 +294,16 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "k¬!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò!";
+        QuickHelpText[ korean ] = "Ãà¼Ò";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä!";
+        QuickHelpText[ finnish ] = "Pienennä";
     };
     FixedLine FL_REPEATROW
     {
@@ -483,16 +483,16 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "k¬!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò!";
+        QuickHelpText[ korean ] = "Ãà¼Ò";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä!";
+        QuickHelpText[ finnish ] = "Pienennä";
     };
     FixedLine FL_REPEATCOL
     {
@@ -672,16 +672,16 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "k¬!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò!";
+        QuickHelpText[ korean ] = "Ãà¼Ò";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä!";
+        QuickHelpText[ finnish ] = "Pienennä";
     };
     Text [ swedish ] = "Redigera utskriftsområden" ;
     Text [ danish ] = "Rediger udskriftsområde" ;
@@ -1139,7 +1139,7 @@ TabPage RID_SCPAGE_TABLE
         Text = "Ausdruck auf Seitenzahl an~passen" ;
         Text [ ENGLISH ] = "~Fit printout on pages" ;
         TabStop = TRUE ;
-        Text[ english_us ] = "Adjust printout to nu~mber of pages";
+        Text[ english_us ] = "Fit printout on nu~mber of pages";
         Text[ portuguese ] = "A~justar impressão ao número de páginas";
         Text[ russian ] = "Ñîãëàñîâàòü ğàñïå÷àòêó ñ ÷èñëîì ñòğàíèö";
         Text[ greek ] = "ĞñïóáñìïãŞ åêôığùóçò ùò ğñïò ôïí áñéèìü óåëßäù~í";
@@ -1215,6 +1215,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ finnish ] = "Skaalaa";
     };
 };
+
 
 
 
