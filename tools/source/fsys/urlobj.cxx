@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-14 11:32:42 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,6 @@
 #endif
 #ifndef _RTL_USTRING_HXX_
 #include "rtl/ustring.hxx"
-#endif
-#ifndef INCLUDED_RTL_INSTANCE_HXX
-#include "rtl/instance.hxx"
 #endif
 #ifndef _SAL_TYPES_H_
 #include "sal/types.h"
@@ -1474,9 +1471,6 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
 }
 
 //============================================================================
-namespace { struct BaseURIRef : public rtl::Static< INetURLObject, BaseURIRef > {}; }
-
-//============================================================================
 bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
                                     bool bOctets,
                                     INetURLObject & rTheAbsURIRef,
@@ -1705,6 +1699,10 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
     {
         if (!getSchemeInfo().m_bHierarchical)
         {
+            // Detect cases where a relative input could not be made absolute
+            // because the given base URL is broken (most probably because it is
+            // empty):
+            OSL_ASSERT(!HasError());
             rWasAbsolute = false;
             return false;
         }
@@ -1827,6 +1825,10 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
     INetURLObject aNewURI(aSynAbsURIRef.makeStringAndClear());
     if (aNewURI.HasError())
     {
+        // Detect cases where a relative input could not be made absolute
+        // because the given base URL is broken (most probably because it is
+        // empty):
+        OSL_ASSERT(!HasError());
         rWasAbsolute = false;
         return false;
     }
@@ -3728,6 +3730,34 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
 }
 
 //============================================================================
+// static
+rtl::OUString INetURLObject::GetAbsURL(rtl::OUString const & rTheBaseURIRef,
+                                       rtl::OUString const & rTheRelURIRef,
+                                       bool bIgnoreFragment,
+                                       EncodeMechanism eEncodeMechanism,
+                                       DecodeMechanism eDecodeMechanism,
+                                       rtl_TextEncoding eCharset,
+                                       FSysStyle eStyle)
+{
+    // Backwards compatibility:
+    if (rTheRelURIRef.getLength() == 0 || rTheRelURIRef[0] == '#')
+        return rTheRelURIRef;
+
+    INetURLObject aTheAbsURIRef;
+    bool bWasAbsolute;
+    return INetURLObject(rTheBaseURIRef, eEncodeMechanism, eCharset).
+            convertRelToAbs(rTheRelURIRef, false, aTheAbsURIRef,
+                            bWasAbsolute, eEncodeMechanism,
+                            eCharset, bIgnoreFragment, false,
+                            false, eStyle)
+           || eEncodeMechanism != WAS_ENCODED
+           || eDecodeMechanism != DECODE_TO_IURI
+           || eCharset != RTL_TEXTENCODING_UTF8 ?
+               aTheAbsURIRef.GetMainURL(eDecodeMechanism, eCharset) :
+               rTheRelURIRef;
+}
+
+//============================================================================
 rtl::OUString INetURLObject::getExternalURL(DecodeMechanism eMechanism,
                                         rtl_TextEncoding eCharset) const
 {
@@ -5314,201 +5344,6 @@ bool INetURLObject::scanIPv6reference(sal_Unicode const *& rBegin,
         }
     }
     return false;
-}
-
-//============================================================================
-// static
-rtl::OUString INetURLObject::RelToAbs(ByteString const & rTheRelURIRef,
-                                  bool bIgnoreFragment,
-                                  EncodeMechanism eEncodeMechanism,
-                                  DecodeMechanism eDecodeMechanism,
-                                  rtl_TextEncoding eCharset,
-                                  FSysStyle eStyle)
-{
-    // Backwards compatibility:
-    if (rTheRelURIRef.Len() == 0 || rTheRelURIRef.GetChar(0) == '#')
-        return extend(rTheRelURIRef);
-
-    INetURLObject aTheAbsURIRef;
-    bool bWasAbsolute;
-    BaseURIRef::get().convertRelToAbs(extend(rTheRelURIRef), true, aTheAbsURIRef,
-                                  bWasAbsolute, eEncodeMechanism, eCharset,
-                                  bIgnoreFragment, false, false, eStyle);
-    return aTheAbsURIRef.GetMainURL(eDecodeMechanism, eCharset);
-}
-
-//============================================================================
-// static
-rtl::OUString INetURLObject::RelToAbs(rtl::OUString const & rTheRelURIRef,
-                                  bool bIgnoreFragment,
-                                  EncodeMechanism eEncodeMechanism,
-                                  DecodeMechanism eDecodeMechanism,
-                                  rtl_TextEncoding eCharset,
-                                  FSysStyle eStyle)
-{
-    // Backwards compatibility:
-    if (rTheRelURIRef.getLength() == 0 || rTheRelURIRef.getStr()[0] == '#')
-        return rTheRelURIRef;
-
-    INetURLObject aTheAbsURIRef;
-    bool bWasAbsolute;
-    return BaseURIRef::get().convertRelToAbs(rTheRelURIRef, false,
-                                         aTheAbsURIRef, bWasAbsolute,
-                                         eEncodeMechanism, eCharset,
-                                         bIgnoreFragment, false, false, eStyle)
-           || eEncodeMechanism != WAS_ENCODED
-           || eDecodeMechanism != DECODE_TO_IURI
-           || eCharset != RTL_TEXTENCODING_UTF8 ?
-               aTheAbsURIRef.GetMainURL(eDecodeMechanism, eCharset) :
-               rTheRelURIRef;
-}
-
-// #88865# a temporary hack, to be removed together with
-// INetURLObject::AbsToRel
-
-#include <ucbhelper/content.hxx>
-
-static star::uno::Any GetCasePreservedURL(const INetURLObject& aObj)
-{
-    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-
-    if(aObj.GetProtocol() == INET_PROT_FILE )
-    {
-        try
-        {
-            star::uno::Any aVoidArgument;
-            ucb::Content aCnt(
-                aObj.GetMainURL(INetURLObject::NO_DECODE),
-                star::uno::Reference<
-                star::ucb::XCommandEnvironment > () );
-
-            return aCnt.executeCommand(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("getCasePreservingURL")),
-                aVoidArgument);
-        }
-        catch( star::uno::Exception& )
-        {
-            DBG_WARNING( "Any other exception" );
-        }
-    }
-
-    return star::uno::Any();
-}
-
-
-
-//============================================================================
-// static
-rtl::OUString INetURLObject::AbsToRel(ByteString const & rTheAbsURIRef,
-                                  EncodeMechanism eEncodeMechanism,
-                                  DecodeMechanism eDecodeMechanism,
-                                  rtl_TextEncoding eCharset,
-                                  FSysStyle eStyle)
-{
-    rtl::OUString aTheRelURIRef;
-    const INetURLObject& rINetURLObject = BaseURIRef::get();
-    star::uno::Any aAny = GetCasePreservedURL(rINetURLObject);
-
-    rtl::OUString aBaseURL;
-    sal_Bool success = (aAny >>= aBaseURL);
-
-    if(success)
-    {
-        INetURLObject aAbsURIRef(rTheAbsURIRef,eEncodeMechanism,eCharset);
-
-        star::uno::Any aAny =
-            GetCasePreservedURL(aAbsURIRef);
-        rtl::OUString aAbsURL;
-        success = (aAny >>= aAbsURL);
-        if(success)
-            INetURLObject(aBaseURL).convertAbsToRel(
-                aAbsURL,false,aTheRelURIRef,
-                WAS_ENCODED,eDecodeMechanism,
-                RTL_TEXTENCODING_UTF8,eStyle);
-        else
-            INetURLObject(aBaseURL).convertAbsToRel(
-                extend(rTheAbsURIRef), true, aTheRelURIRef,
-                eEncodeMechanism, eDecodeMechanism,
-                eCharset, eStyle);
-    }
-    else
-        rINetURLObject.convertAbsToRel(
-            extend(rTheAbsURIRef), true, aTheRelURIRef,
-            eEncodeMechanism, eDecodeMechanism,
-            eCharset, eStyle);
-
-    return aTheRelURIRef;
-}
-
-//============================================================================
-// static
-rtl::OUString INetURLObject::AbsToRel(rtl::OUString const & rTheAbsURIRef,
-                                  EncodeMechanism eEncodeMechanism,
-                                  DecodeMechanism eDecodeMechanism,
-                                  rtl_TextEncoding eCharset,
-                                  FSysStyle eStyle)
-{
-    rtl::OUString aTheRelURIRef;
-
-    const INetURLObject& rINetURLObject = BaseURIRef::get();
-    star::uno::Any aAny = GetCasePreservedURL(rINetURLObject);
-
-    rtl::OUString aBaseURL;
-    sal_Bool success = (aAny >>= aBaseURL);
-
-    if(success)
-    {
-        INetURLObject aAbsURIRef(rTheAbsURIRef,eEncodeMechanism,eCharset);
-
-        star::uno::Any aAny =
-            GetCasePreservedURL(aAbsURIRef);
-        rtl::OUString aAbsURL;
-        success = (aAny >>= aAbsURL);
-        if(success)
-            INetURLObject(aBaseURL).convertAbsToRel(
-                aAbsURL,false,aTheRelURIRef,
-                WAS_ENCODED,eDecodeMechanism,
-                RTL_TEXTENCODING_UTF8,eStyle);
-        else
-            INetURLObject(aBaseURL).convertAbsToRel(
-                rTheAbsURIRef, false, aTheRelURIRef,
-                eEncodeMechanism, eDecodeMechanism,
-                eCharset, eStyle);
-    }
-    else
-        rINetURLObject.convertAbsToRel(
-            rTheAbsURIRef, false, aTheRelURIRef,
-            eEncodeMechanism, eDecodeMechanism,
-            eCharset, eStyle);
-
-    return aTheRelURIRef;
-}
-
-//============================================================================
-// static
-bool INetURLObject::SetBaseURL(ByteString const & rTheBaseURIRef,
-                               EncodeMechanism eMechanism,
-                               rtl_TextEncoding eCharset)
-{
-    return BaseURIRef::get().SetURL(rTheBaseURIRef, eMechanism, eCharset);
-}
-
-//============================================================================
-// static
-bool INetURLObject::SetBaseURL(rtl::OUString const & rTheBaseURIRef,
-                               EncodeMechanism eMechanism,
-                               rtl_TextEncoding eCharset)
-{
-    return BaseURIRef::get().SetURL(rTheBaseURIRef, eMechanism, eCharset);
-}
-
-//============================================================================
-// static
-rtl::OUString INetURLObject::GetBaseURL(DecodeMechanism eMechanism,
-                                    rtl_TextEncoding eCharset)
-{
-    return BaseURIRef::get().GetMainURL(eMechanism, eCharset);
 }
 
 //============================================================================
