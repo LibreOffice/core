@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-21 17:23:12 $
+ *  last change: $Author: mba $ $Date: 2001-03-28 16:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,6 +399,7 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
     if ( aReturn.hasValue() == sal_False )
     {
         aReturn = ::cppu::queryInterface(   rType                                           ,
+                                            static_cast< XVIEWDATASUPPLIER*      > ( this )  ,
                                                static_cast< XEVENTBROADCASTER*      > ( this )  ,
                                                static_cast< XEVENTSSUPPLIER*        > ( this )  ) ;
     }
@@ -473,6 +474,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
 #if SUPD>614
                                                       ::getCppuType(( const REFERENCE< XSTARBASICACCESS     >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XEVENTBROADCASTER        >*)NULL ) ,
+                                                    ::getCppuType(( const REFERENCE< XVIEWDATASUPPLIER      >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XEVENTSSUPPLIER      >*)NULL ) ) ;
 #else
                                                       ::getCppuType(( const REFERENCE< XSTARBASICACCESS     >*)NULL ) ) ;
@@ -1602,4 +1604,14 @@ void SfxBaseModel::postEvent_Impl( const SfxEventHint& rHint )
             ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
     }
 }
+
+::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData()
+{
+    return ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess >();
+}
+
+void SAL_CALL SfxBaseModel::setViewData( const ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess >& aData )
+{
+}
+
 #endif
