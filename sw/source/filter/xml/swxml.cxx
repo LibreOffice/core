@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+ *  last change: $Author: mib $ $Date: 2000-10-06 06:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP_
 #include <com/sun/star/xml/sax/XParser.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATACONTROL_HPP_
+#include <com/sun/star/io/XActiveDataControl.hpp>
 #endif
 
 #ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
@@ -267,6 +270,9 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:59  hr
+      initial import
+
       Revision 1.13  2000/09/18 16:05:04  willem.vandorp
       OpenOffice header added.
 
