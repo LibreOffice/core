@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 10:27:46 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 #ifndef _DBA_CORE_USERINFORMATION_HXX_
 #include "userinformation.hxx"
 #endif
-
+#ifndef _DBA_COREDATAACCESS_COMMANDCONTAINER_HXX_
+#include "commandcontainer.hxx"
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -93,30 +95,11 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
-#ifndef _COMPHELPER_STREAMSECTION_HXX_
-#include <comphelper/streamsection.hxx>
-#endif
-
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XObjectOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTINPUTSTREAM_HPP_
-#include <com/sun/star/io/XObjectInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
-#include <com/sun/star/io/XPersistObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
-#include <com/sun/star/io/XActiveDataSink.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERMANAGER_HPP_
 #include <com/sun/star/sdbc/XDriverManager.hpp>
@@ -142,12 +125,11 @@
 #ifndef _COMPHELPER_INTERACTION_HXX_
 #include <comphelper/interaction.hxx>
 #endif
-
+#ifndef DBA_COREDATAACCESS_COMMITLISTENER_HXX
+#include "commitlistener.hxx"
+#endif
 #ifndef _DBA_CORE_CONNECTION_HXX_
 #include "connection.hxx"
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
 #endif
 #ifndef _COMPHELPER_GUARDING_HXX_
 #include <comphelper/guarding.hxx>
@@ -158,6 +140,9 @@
 #ifndef _RTL_DIGEST_H_
 #include <rtl/digest.h>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
 #include <algorithm>
 
 using namespace ::com::sun::star::sdbc;
@@ -166,21 +151,19 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::reflection;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::vos;
-using namespace ::utl;
 using namespace ::dbtools;
 using namespace ::comphelper;
-
-// persistent tokens
-#define PT_SVFORMATTER      0x0001
 
 //........................................................................
 namespace dbaccess
@@ -351,9 +334,7 @@ namespace dbaccess
         Reference< XProxyFactory >  m_xProxyFactory;
 
     protected:
-        virtual ~OSharedConnectionManager()
-        {
-        }
+        virtual ~OSharedConnectionManager();
 
     public:
         OSharedConnectionManager(const Reference< XMultiServiceFactory >& _rxServiceFactory);
@@ -367,9 +348,16 @@ namespace dbaccess
         void addEventListener(const Reference<XConnection>& _rxConnection,TConnectionMap::iterator& _rIter);
     };
 
+    DBG_NAME(OSharedConnectionManager)
     OSharedConnectionManager::OSharedConnectionManager(const Reference< XMultiServiceFactory >& _rxServiceFactory)
     {
-        m_xProxyFactory = Reference< XProxyFactory >(_rxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),UNO_QUERY);
+        DBG_CTOR(OSharedConnectionManager,NULL);
+        m_xProxyFactory.set(_rxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),UNO_QUERY);
+    }
+
+    OSharedConnectionManager::~OSharedConnectionManager()
+    {
+        DBG_DTOR(OSharedConnectionManager,NULL);
     }
 
     void SAL_CALL OSharedConnectionManager::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
@@ -403,7 +391,7 @@ namespace dbaccess
         aInfoCopy[nPos].Name      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableFilter"));
         aInfoCopy[nPos++].Value <<= _pDataSource->m_aTableFilter;
         aInfoCopy[nPos].Name      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableTypeFilter"));
-        aInfoCopy[nPos++].Value <<= _pDataSource->m_aTableFilter;
+        aInfoCopy[nPos++].Value <<= _pDataSource->m_aTableTypeFilter; // #22377# OJ
 
         ::rtl::OUString sUser = user;
         ::rtl::OUString sPassword = password;
@@ -446,7 +434,70 @@ namespace dbaccess
         osl_incrementInterlockedCount(&_rIter->second.nALiveCount);
     }
 
+    namespace
+    {
+        Sequence< PropertyValue > lcl_filterDriverProperties(const Reference< XDriver >& _xDriver,const ::rtl::OUString& _sUrl,const Sequence< PropertyValue >& _aInfo)
+        {
+            if ( _xDriver.is() )
+            {
+                Sequence< DriverPropertyInfo > aDriverInfo(_xDriver->getPropertyInfo(_sUrl,_aInfo));
+                const char* pProperties[] = {
+                                             "JavaDriverClass","Extension"
+                                            ,"CharSet","HeaderLine"
+                                            ,"FieldDelimiter","StringDelimiter"
+                                            ,"DecimalDelimiter","ThousandDelimiter"
+                                            ,"ShowDeleted","IgnoreDriverPrivileges"
+                                            ,"NoNameLengthLimit","SystemDriverSettings"
+                                            ,"EnableSQL92Check","AutoIncrementCreation"
+                                            ,"AutoRetrievingStatement","IsAutoRetrievingEnabled"
+                                            ,"HostName","PortNumber"
+                                            ,"AppendTableAliasName","IgnoreDriverPrivileges"
+                                            ,"ParameterNameSubstitution","BooleanComparisonMode"
+                                            ,"ShutdownDatabase","DataCacheSizeIncrement"
+                                            ,"DataCacheSize","ControlUser"
+                                            ,"ControlPassword","UseCatalog"
+                                            ,"BaseDN","MaxRowCount","SuppressVersionColumns"
+                                            ,"FixedLength","AddIndexAppendix"
+                                            ,"UseSchemaInSelect","UseCatalogInSelect"
+                                        };
+                sal_Int32 nCount = sizeof(pProperties) / sizeof(pProperties[0]);
 
+                const PropertyValue* pSupported = _aInfo.getConstArray();
+                const PropertyValue* pEnd = pSupported + _aInfo.getLength();
+
+                ::std::vector< PropertyValue > aRet;
+
+                for ( ; pSupported != pEnd ; ++pSupported)
+                {
+                    sal_Bool bFound = sal_False;
+                    sal_Int32 i;
+                    for (i=0; i < nCount; ++i)
+                    {
+                        if ( !pSupported->Name.compareToAscii(pProperties[i]) )
+                        {
+                            const DriverPropertyInfo* pDriverInfoIter = aDriverInfo.getConstArray();
+                            const DriverPropertyInfo* pDriverInfoEnd = pDriverInfoIter + aDriverInfo.getLength();
+                            for ( ; pDriverInfoIter != pDriverInfoEnd ; ++pDriverInfoIter)
+                            {
+                                if ( !pDriverInfoIter->Name.compareToAscii(pProperties[i]) )
+                                {
+                                    bFound = sal_True;
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    if ( bFound || i == nCount)
+                    {
+                        aRet.push_back( *pSupported );
+                    }
+                }
+                return Sequence< PropertyValue >(aRet.begin(),aRet.size());
+            }
+            return Sequence< PropertyValue >();
+        }
+    }
 //============================================================
 //= ODatabaseContext
 //============================================================
@@ -463,9 +514,8 @@ Reference< XInterface > ODatabaseSource_CreateInstance(const Reference< XMultiSe
     return *(new ODatabaseSource(_rxFactory));
 }
 //--------------------------------------------------------------------------
-ODatabaseSource::ODatabaseSource(const Reference< XMultiServiceFactory >& _rxFactory)
+ODatabaseSource::ODatabaseSource(const Reference< XMultiServiceFactory >& _rxFactory,ODatabaseContext* _pDBContext)
             :OSubComponent(m_aMutex, Reference< XInterface >())
-            ,OConfigurationFlushable(m_aMutex)
             ,OPropertySetHelper(OComponentHelper::rBHelper)
             ,m_nLoginTimeout(0)
             ,m_xServiceFactory(_rxFactory)
@@ -473,24 +523,32 @@ ODatabaseSource::ODatabaseSource(const Reference< XMultiServiceFactory >& _rxFac
             ,m_bPasswordRequired(sal_False)
             ,m_bSuppressVersionColumns(sal_True)
             ,m_aBookmarks(*this, m_aMutex)
-            ,m_aCommandDefinitions(*this, m_aMutex)
             ,m_pSharedConnectionManager(NULL)
+            ,m_bModified(sal_False)
+            ,m_bDocumentReadOnly(sal_False)
+            ,m_aModifyListeners(m_aMutex)
+            ,m_aEventListeners(m_aMutex)
+            ,m_aCloseListener(m_aMutex)
+            ,m_aFlushListeners(m_aMutex)
+            ,m_pDBContext(_pDBContext)
+            ,m_nControllerLockCount(0)
 {
     // some kind of default
     DBG_CTOR(ODatabaseSource,NULL);
     m_sConnectURL = ::rtl::OUString::createFromAscii("jdbc:");
     m_aTableFilter.realloc(1);
     m_aTableFilter[0] = ::rtl::OUString::createFromAscii("%");
+    lateInit();
 }
 
 //--------------------------------------------------------------------------
 ODatabaseSource::ODatabaseSource(
                     OWeakObject& _rParent,
-                    const OConfigurationNode& _rConfigRoot,
                     const ::rtl::OUString& _rRegistrationName,
-                    const Reference< XMultiServiceFactory >& _rxFactory)
+                    const Reference< XMultiServiceFactory >& _rxFactory,
+                    ODatabaseContext* _pDBContext
+                    )
             :OSubComponent(m_aMutex, _rParent)
-            ,OConfigurationFlushable(m_aMutex)
             ,OPropertySetHelper(OComponentHelper::rBHelper)
             ,m_nLoginTimeout(0)
             ,m_sName(_rRegistrationName)
@@ -499,25 +557,45 @@ ODatabaseSource::ODatabaseSource(
             ,m_bPasswordRequired(sal_False)
             ,m_bSuppressVersionColumns(sal_True)
             ,m_aBookmarks(*this, m_aMutex)
-            ,m_aCommandDefinitions(*this, m_aMutex)
             ,m_pSharedConnectionManager(NULL)
+            ,m_bModified(sal_False)
+            ,m_bDocumentReadOnly(sal_False)
+            ,m_aModifyListeners(m_aMutex)
+            ,m_aEventListeners(m_aMutex)
+            ,m_aCloseListener(m_aMutex)
+            ,m_aFlushListeners(m_aMutex)
+            ,m_pDBContext(_pDBContext)
+            ,m_nControllerLockCount(0)
 {
-    m_aConfigurationNode = _rConfigRoot.cloneAsRoot();
-
     DBG_CTOR(ODatabaseSource,NULL);
-    DBG_ASSERT(m_aConfigurationNode.isValid(), "ODatabaseSource::ODatabaseSource : use ctor 1 if you can't supply a configuration location at the moment !");
-    if (m_aConfigurationNode.isValid())
-        initializeFromConfiguration();
     // adjust our readonly flag
-    m_bReadOnly = !m_aConfigurationNode.isValid() || m_aConfigurationNode.isReadonly();
+
+    lateInit();
 }
 
 //--------------------------------------------------------------------------
 ODatabaseSource::~ODatabaseSource()
 {
     DBG_DTOR(ODatabaseSource,NULL);
+    if ( !OComponentHelper::rBHelper.bInDispose && !OComponentHelper::rBHelper.bDisposed )
+    {
+        acquire();
+        dispose();
+    }
 }
-
+// -----------------------------------------------------------------------------
+void ODatabaseSource::lateInit()
+{
+    m_bReadOnly = sal_False;
+    m_aContainer.resize(4);
+    m_pChildCommitListen = NULL;
+}
+// -----------------------------------------------------------------------------
+void ODatabaseSource::setMeAsParent(const Reference< XNameAccess >& _xName)
+{
+    Reference<XChild> xChild(_xName,UNO_QUERY);
+    xChild->setParent(*this);
+}
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
 Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException)
@@ -529,15 +607,14 @@ Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException)
     return ::comphelper::concatSequences(
         ::comphelper::concatSequences(
             OSubComponent::getTypes(),
-            OConfigurationFlushable::getTypes(),
             aPropertyHelperTypes.getTypes()
         ),
-        ODatabaseSource_Base::getTypes()
+        ODatabaseSource_Base::getTypes(), ODatabaseSource_OfficeDocument::getTypes()
     );
 }
 
 //--------------------------------------------------------------------------
-Sequence< sal_Int8 > ODatabaseSource::getUnoTunnelImplementationId() throw (RuntimeException)
+Sequence< sal_Int8 > ODatabaseSource::getImplementationId() throw (RuntimeException)
 {
     static OImplementationId * pId = 0;
     if (! pId)
@@ -552,27 +629,25 @@ Sequence< sal_Int8 > ODatabaseSource::getUnoTunnelImplementationId() throw (Runt
     return pId->getImplementationId();
 }
 
-//--------------------------------------------------------------------------
-Sequence< sal_Int8 > ODatabaseSource::getImplementationId() throw (RuntimeException)
-{
-    return getUnoTunnelImplementationId();
-}
-
 // com::sun::star::uno::XInterface
 //--------------------------------------------------------------------------
 Any ODatabaseSource::queryInterface( const Type & rType ) throw (RuntimeException)
 {
     Any aIface = OSubComponent::queryInterface( rType );
     if (!aIface.hasValue())
+    {
         aIface = ODatabaseSource_Base::queryInterface( rType );
-    if (!aIface.hasValue())
-        aIface = OConfigurationFlushable::queryInterface( rType );
-    if (!aIface.hasValue())
-        aIface = ::cppu::queryInterface(
-                    rType,
-                    static_cast< XPropertySet* >( this ),
-                    static_cast< XFastPropertySet* >( this ),
-                    static_cast< XMultiPropertySet* >( this ));
+        if ( !aIface.hasValue() )
+        {
+            aIface = ODatabaseSource_OfficeDocument::queryInterface( rType );
+            if (!aIface.hasValue())
+                aIface = ::cppu::queryInterface(
+                            rType,
+                            static_cast< XPropertySet* >( this ),
+                            static_cast< XFastPropertySet* >( this ),
+                            static_cast< XMultiPropertySet* >( this ));
+        }
+    }
     return aIface;
 }
 
@@ -590,9 +665,10 @@ void ODatabaseSource::release() throw ()
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
 {
-    for (OWeakConnectionArray::iterator i = m_aConnections.begin(); m_aConnections.end() != i; i++)
+    OWeakConnectionArray::iterator aEnd = m_aConnections.end();
+    for (OWeakConnectionArray::iterator i = m_aConnections.begin(); aEnd != i; ++i)
     {
-        if(Source.Source == i->get())
+        if ( Source.Source == i->get() )
         {
             *i = OWeakConnection();
         }
@@ -627,8 +703,10 @@ Reference< XInterface > ODatabaseSource::Create(const Reference< XMultiServiceFa
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > ODatabaseSource::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSNS( 1 );
+    Sequence< ::rtl::OUString > aSNS( 3 );
     aSNS[0] = SERVICE_SDB_DATASOURCE;
+    aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseDocument"));
+    aSNS[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.OfficeDocument"));
     return aSNS;
 }
 
@@ -637,31 +715,24 @@ sal_Bool ODatabaseSource::supportsService( const ::rtl::OUString& _rServiceName 
 {
     return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
-
-// com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
-sal_Int64 ODatabaseSource::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
-{
-    if (rId.getLength() != 16)
-        return 0;
-
-    if (0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
-
-    if (0 == rtl_compareMemory(OContainerElement::getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)static_cast<OContainerElement*>(this);
-
-    return 0;
-}
 // -----------------------------------------------------------------------------
 void ODatabaseSource::clearConnections()
 {
     Reference< XConnection > xConn;
-    for (OWeakConnectionArray::iterator i = m_aConnections.begin(); m_aConnections.end() != i; i++)
+    for (OWeakConnectionArray::iterator i = m_aConnections.begin(); m_aConnections.end() != i; ++i)
     {
         xConn = *i;
-        if (xConn.is())
-            xConn->close();
+        if ( xConn.is() )
+        {
+            try
+            {
+                xConn->close();
+            }
+            catch(Exception)
+            {
+                OSL_ENSURE(0,"Exception catched while closing a connection!");
+            }
+        }
     }
     m_aConnections.clear();
 
@@ -672,20 +743,82 @@ void ODatabaseSource::clearConnections()
 //------------------------------------------------------------------------------
 void ODatabaseSource::disposing()
 {
+    OSubComponent::disposing();
     OPropertySetHelper::disposing();
-    OConfigurationFlushable::disposing();
 
     MutexGuard aGuard(m_aMutex);
 
-    if (m_aConfigurationNode.isValid())
-        flush();
-        // TODO : we need a mechanism for determining wheter we're modified and need that call or not
+    EventObject aDisposeEvent(static_cast<XWeak*>(this));
+    m_aModifyListeners.disposeAndClear( aDisposeEvent );
+    m_aEventListeners.disposeAndClear( aDisposeEvent );
+    m_aCloseListener.disposeAndClear( aDisposeEvent );
+
+    ::std::vector<TContentPtr>::iterator aIter = m_aContainer.begin();
+    ::std::vector<TContentPtr>::iterator aEnd = m_aContainer.end();
+    for (;aIter != aEnd ; ++aIter)
+    {
+        if ( aIter->get() )
+            (*aIter)->m_pDataSource = NULL;
+    }
+    m_aContainer.clear();
 
     clearConnections();
 
-    m_aRenameNode.clear();
-}
+    if ( m_pChildCommitListen )
+    {
+        m_pChildCommitListen->release();
+        m_pChildCommitListen = NULL;
+    }
 
+    disposeControllerFrames();
+
+    m_xCurrentController = NULL;
+    m_xNumberFormatsSupplier = NULL;
+    try
+    {
+        TStorages::iterator aFind = m_aStorages.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")));
+        if ( aFind != m_aStorages.end() )
+        {
+            Reference<XTransactedObject> xTrans(aFind->second,UNO_QUERY);
+            if ( xTrans.is() )
+                xTrans->commit();
+        }
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(0,"Exception Caught: Could not store embedded database!");
+    }
+    try
+    {
+        TStorages::iterator aIter = m_aStorages.begin();
+        TStorages::iterator aEnd = m_aStorages.end();
+        for (; aIter != aEnd ; ++aIter)
+        {
+            ::comphelper::disposeComponent(aIter->second);
+        }
+        m_aStorages.clear();
+        ::comphelper::disposeComponent(m_xStorage);
+    }
+    catch(Exception&)
+    {
+    }
+    m_xStorage = NULL;
+}
+// -----------------------------------------------------------------------------
+void ODatabaseSource::disposeControllerFrames()
+{
+    ::std::vector< Reference< XController> > aCopy = m_aControllers;
+    ::std::vector< Reference< XController> >::iterator aIter = aCopy.begin();
+    ::std::vector< Reference< XController> >::iterator aEnd = aCopy.end();
+    for (;aIter != aEnd ; ++aIter)
+    {
+        if ( aIter->is() )
+        {
+            Reference< XFrame> xFrame = (*aIter)->getFrame();
+            ::comphelper::disposeComponent(xFrame);
+        }
+    }
+}
 //------------------------------------------------------------------------------
 Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::OUString& _rUid, const ::rtl::OUString& _rPwd)
 {
@@ -724,28 +857,27 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
             aUserPwd[ nArgPos ].Name = ::rtl::OUString::createFromAscii("password");
             aUserPwd[ nArgPos ].Value <<= sPwd;
         }
-        if (nAdditionalArgs)
-            xReturn = xManager->getConnectionWithInfo(m_sConnectURL, ::comphelper::concatSequences(aUserPwd,m_aInfo));
-        else
-            xReturn = xManager->getConnectionWithInfo(m_sConnectURL,m_aInfo);
-
-        if ( !xReturn.is() )
+        Reference< XDriver > xDriver;
+        try
         {
-            // try to examine what went wrong
-            Reference< XDriver > xDriver;
-            try
-            {
-                Reference< XDriverAccess > xAccessDrivers( xManager, UNO_QUERY );
-                if ( xAccessDrivers.is() )
-                    xDriver = xAccessDrivers->getDriverByURL( m_sConnectURL );
-            }
-            catch( const Exception& )
-            {
-                DBG_ERROR( "ODatabaseSource::buildLowLevelConnection: got a strange exception while analyzing the error!" );
-            }
+            Reference< XDriverAccess > xAccessDrivers( xManager, UNO_QUERY );
+            if ( xAccessDrivers.is() )
+                xDriver = xAccessDrivers->getDriverByURL( m_sConnectURL );
+        }
+        catch( const Exception& )
+        {
+            DBG_ERROR( "ODatabaseSource::buildLowLevelConnection: got a strange exception while analyzing the error!" );
+        }
+        if ( !xDriver.is() )
+            nExceptionMessageId = RID_STR_COULDNOTCONNECT_NODRIVER;
+        else
+        {
+            Sequence< PropertyValue > aDriverInfo = lcl_filterDriverProperties(xDriver,m_sConnectURL,m_aInfo);
 
-            if ( !xDriver.is() )
-                nExceptionMessageId = RID_STR_COULDNOTCONNECT_NODRIVER;
+            if (nAdditionalArgs)
+                xReturn = xManager->getConnectionWithInfo(m_sConnectURL, ::comphelper::concatSequences(aUserPwd,aDriverInfo));
+            else
+                xReturn = xManager->getConnectionWithInfo(m_sConnectURL,aDriverInfo);
         }
     }
     else
@@ -796,17 +928,17 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo() throw (Runt
 ::cppu::IPropertyArrayHelper* ODatabaseSource::createArrayHelper( ) const
 {
     BEGIN_PROPERTY_HELPER(12)
-        DECL_PROP0(INFO,                        Sequence< PropertyValue >);
+        DECL_PROP1(INFO,                        Sequence< PropertyValue >,BOUND);
         DECL_PROP1_BOOL(ISPASSWORDREQUIRED,                                 BOUND);
         DECL_PROP1_BOOL(ISREADONLY,                                         READONLY);
-        DECL_PROP0(LAYOUTINFORMATION,           Sequence< sal_Int8 >);
+        DECL_PROP1(LAYOUTINFORMATION,           Sequence< ::com::sun::star::beans::PropertyValue >,BOUND);
         DECL_PROP1(NAME,                        ::rtl::OUString,            READONLY);
         DECL_PROP2_IFACE(NUMBERFORMATSSUPPLIER, XNumberFormatsSupplier,     READONLY, TRANSIENT);
         DECL_PROP1(PASSWORD,                    ::rtl::OUString,            TRANSIENT);
         DECL_PROP1_BOOL(SUPPRESSVERSIONCL,                                  BOUND);
         DECL_PROP1(TABLEFILTER,                 Sequence< ::rtl::OUString >,BOUND);
         DECL_PROP1(TABLETYPEFILTER,             Sequence< ::rtl::OUString >,BOUND);
-        DECL_PROP0(URL,                         ::rtl::OUString);
+        DECL_PROP1(URL,                         ::rtl::OUString,            BOUND);
         DECL_PROP1(USER,                        ::rtl::OUString,            BOUND);
     END_PROPERTY_HELPER();
 }
@@ -861,11 +993,27 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
             const PropertyValue* pBegin = aValues.getConstArray();
             const PropertyValue* pEnd   = pBegin + aValues.getLength();
             for (;pBegin != pEnd ; ++pBegin)
+            {
                 if ( !pBegin->Name.getLength() )
                     throw IllegalArgumentException();
+            }
 
-            bModified = sal_True;
-                // don't wan't to check the properties, it's seems more expensiv than just to set the same props again
+
+            bModified = m_aInfo.getLength() != aValues.getLength();
+            if ( !bModified )
+            {
+                const PropertyValue* pInfoIter = m_aInfo.getConstArray();
+                const PropertyValue* pBegin = aValues.getConstArray();
+                const PropertyValue* pEnd   = pBegin + aValues.getLength();
+                for (;!bModified && pBegin != pEnd ; ++pBegin,++pInfoIter)
+                {
+                    bModified = pBegin->Name != pInfoIter->Name;
+                    if ( !bModified )
+                    {
+                        bModified = !::comphelper::compare(pBegin->Value,pInfoIter->Value);
+                    }
+                }
+            }
 
             rConvertedValue = rValue;
             rOldValue <<= m_aInfo;
@@ -911,6 +1059,7 @@ void ODatabaseSource::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const
             rValue >>= m_aLayoutInformation;
             break;
     }
+    setModified(sal_True);
 }
 
 //------------------------------------------------------------------------------
@@ -1086,7 +1235,7 @@ Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const rtl::OUS
     if ( xSdbcConn.is() )
     {
         // build a connection server and return it (no stubs)
-        xConn = new OConnection(*this, m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_TABLES),m_aConfigurationNode,xSdbcConn, m_xServiceFactory);
+        xConn = new OConnection(*this, xSdbcConn, m_xServiceFactory);
     }
     return xConn;
 }
@@ -1123,161 +1272,44 @@ Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& use
     return xConn;
 }
 
-
-//------------------------------------------------------------------------------
-void ODatabaseSource::flush_NoBroadcast_NoCommit()
-{
-    flushToConfiguration();
-}
-
 //------------------------------------------------------------------------------
 Reference< XNameAccess > SAL_CALL ODatabaseSource::getBookmarks(  ) throw (RuntimeException)
 {
+    MutexGuard aGuard(m_aMutex);
     return static_cast< XNameContainer* >(&m_aBookmarks);
 }
 
 //------------------------------------------------------------------------------
 Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(RuntimeException)
 {
-    return static_cast< XNameContainer* >(&m_aCommandDefinitions);
+    MutexGuard aGuard(m_aMutex);
+    Reference< XNameAccess > xContainer = m_xCommandDefinitions;
+    if ( !xContainer.is() )
+    {
+        if ( !m_aContainer[E_QUERY].get() )
+        {
+            m_aContainer[E_QUERY] = TContentPtr(new ODefinitionContainer_Impl);
+        }
+        xContainer = new OCommandContainer(m_xServiceFactory,*this,m_aContainer[E_QUERY],sal_False);
+        m_xCommandDefinitions = xContainer;
+    }
+    return xContainer;
 }
 // -----------------------------------------------------------------------------
 class OConnectionNotifier //: public ::std::unary_function<OWeakConnection,void>
 {
-    ::utl::OConfigurationTreeRoot m_aConfigTreeNode;
 public:
     OConnectionNotifier()
-    {
-    }
-    OConnectionNotifier(const ::utl::OConfigurationTreeRoot& _rConfigTreeNode) : m_aConfigTreeNode(_rConfigTreeNode)
     {
     }
 
     void operator()(OWeakConnection& _xConnection)
     {
-        Reference<XConnection> xConn(_xConnection);
-        Reference< XUnoTunnel > xTunnel(xConn, UNO_QUERY);
-
-        OConnection* pObjectImpl = NULL;
-        if (xTunnel.is())
-        {
-            static Sequence<sal_Int8> aTunnelId = OConnection::getUnoTunnelImplementationId();
-            pObjectImpl = reinterpret_cast<OConnection*> (xTunnel->getSomething(aTunnelId));
-        }
-        if(pObjectImpl)
-        {
-            if (m_aConfigTreeNode.isValid())
-                pObjectImpl->setNewConfigNode(m_aConfigTreeNode);
-            else
-                pObjectImpl->flushMembers();
-        }
     }
 };
 // -----------------------------------------------------------------------------
-void ODatabaseSource::inserted(const Reference< XInterface >& _rxContainer, const ::rtl::OUString& _rRegistrationName, const OConfigurationTreeRoot& _rConfigRoot)
-{
-    MutexGuard aGuard(m_aMutex);
-
-    DBG_ASSERT(!m_aConfigurationNode.isValid(), "ODatabaseSource::inserted : you're not allowed to change the location if the current one is valid !");
-    DBG_ASSERT(_rConfigRoot.isValid(), "ODatabaseSource::inserted : invalid argument (the configuration root) !");
-    DBG_ASSERT(_rRegistrationName.getLength() != 0, "ODatabaseSource::inserted : invalid argument (the name) !");
-    DBG_ASSERT(!m_xParent.is(), "ODatabaseSource::inserted : already connected to a parent !");
-
-    m_aConfigurationNode = _rConfigRoot;
-    m_xParent = _rxContainer;
-    m_sName = _rRegistrationName;
-
-    if (m_aConfigurationNode.isValid())
-    {
-        // propagate the new location to our documents
-        // (Usually, we do this from within the ctor which gets a config node, but if we're here, we have been
-        // instantiated as service, so we didn't have any config location before, so the documents haven't any, too.)
-        initializeDocuments(sal_False);
-        // we now have to set the new confignode at our connections
-        ::std::for_each(m_aConnections.begin(),m_aConnections.end(),OConnectionNotifier(m_aConfigurationNode));
-        // and now flush
-        flushToConfiguration();
-    }
-
-    // adjust our readonly flag
-    m_bReadOnly = !m_aConfigurationNode.isValid() || m_aConfigurationNode.isReadonly();
-}
-
-//------------------------------------------------------------------------------
-void ODatabaseSource::removed()
-{
-    MutexGuard aGuard(m_aMutex);
-    DBG_ASSERT(m_xParent.is(), "ODatabaseSource::removed : not connected to a parent !");
-
-    // our datasource is removed, so we need to clear our connection
-    clearConnections();
-
-    // dispose the document containers so they release the documents and the configuration resources
-    m_aBookmarks.dispose();
-    m_aCommandDefinitions.dispose();
-
-    m_xParent = NULL;
-    m_aConfigurationNode.clear();
-    m_sName = ::rtl::OUString();
-
-    m_bReadOnly = sal_False;
-}
-
-//------------------------------------------------------------------------------
-void ODatabaseSource::initializeDocuments(sal_Bool _bRead)
-{
-    // initialize the document containers
-    m_aBookmarks.initialize(m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_BOOKMARKS).cloneAsRoot(), _bRead);
-    m_aCommandDefinitions.initialize(m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_QUERYDOCUMENTS).cloneAsRoot(), _bRead);
-}
-
-//------------------------------------------------------------------------------
-void ODatabaseSource::initializeFromConfiguration()
-{
-    if (!m_aConfigurationNode.isValid())
-    {
-        DBG_ERROR("ODatabaseSource::initializeFromConfiguration : invalid configuration key !");
-        return;
-    }
-
-    m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_CONNECTURL) >>= m_sConnectURL;
-    m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_USER) >>= m_sUser;
-    m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_TABLEFILTER) >>= m_aTableFilter;
-    m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_TABLETYEFILTER) >>= m_aTableTypeFilter;
-    m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_LOGINTIMEOUT) >>= m_nLoginTimeout;
-    m_bPasswordRequired = ::cppu::any2bool(m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_PASSWORDREQUIRED));
-    m_bSuppressVersionColumns = ::cppu::any2bool(m_aConfigurationNode.getNodeValue(CONFIGKEY_DBLINK_SUPPRESSVERSIONCL));
-    m_aConfigurationNode.getNodeValue(CONFIGKEY_LAYOUTINFORMATION) >>= m_aLayoutInformation;
-
-    // the property sequence in m_aInfo
-    OConfigurationNode aInfoNode = m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_INFO);
-    if (aInfoNode.isValid())
-    {
-        Sequence< ::rtl::OUString > aNodeNames = aInfoNode.getNodeNames();
-        m_aInfo.realloc(aNodeNames.getLength());
-        PropertyValue* pInfos = m_aInfo.getArray();
-
-        for (   const ::rtl::OUString* pNodeNames = aNodeNames.getConstArray() + aNodeNames.getLength() - 1;
-                pNodeNames >= aNodeNames.getConstArray();
-                --pNodeNames, ++pInfos
-            )
-        {
-            OConfigurationNode aItemSubNode = aInfoNode.openNode(*pNodeNames);
-            pInfos->Name = *pNodeNames;
-            pInfos->Value = aItemSubNode.getNodeValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")));
-        }
-    }
-
-    initializeDocuments();
-}
-
-//------------------------------------------------------------------------------
 void ODatabaseSource::flushDocuments()
 {
-    if ( m_aBookmarks.hasValidLocation() )
-        m_aBookmarks.flush();
-    if ( m_aCommandDefinitions.hasValidLocation() )
-        m_aCommandDefinitions.flush();
 }
 // -----------------------------------------------------------------------------
 void ODatabaseSource::flushTables()
@@ -1286,75 +1318,23 @@ void ODatabaseSource::flushTables()
     ::std::for_each(m_aConnections.begin(),m_aConnections.end(),OConnectionNotifier());
 }
 //------------------------------------------------------------------------------
-void ODatabaseSource::flushToConfiguration()
+// XTablesSupplier
+//------------------------------------------------------------------------------
+Reference< XNameAccess >  ODatabaseSource::getTables() throw( RuntimeException )
 {
-    if (!m_aConfigurationNode.isValid())
+    MutexGuard aGuard(m_aMutex);
+    Reference< XNameAccess > xContainer = m_xTableDefinitions;
+    if ( !xContainer.is() )
     {
-        DBG_ERROR("ODatabaseSource::flushToConfiguration : invalid configuration key !");
-        return;
-    }
-
-    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_CONNECTURL, makeAny(m_sConnectURL));
-    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_USER, makeAny(m_sUser));
-    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_TABLEFILTER, makeAny(m_aTableFilter));
-    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_TABLETYEFILTER, makeAny(m_aTableTypeFilter));
-    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_LOGINTIMEOUT, makeAny(m_nLoginTimeout));
-    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_PASSWORDREQUIRED, ::cppu::bool2any(m_bPasswordRequired));
-    m_aConfigurationNode.setNodeValue(CONFIGKEY_DBLINK_SUPPRESSVERSIONCL, ::cppu::bool2any(m_bSuppressVersionColumns));
-    m_aConfigurationNode.setNodeValue(CONFIGKEY_LAYOUTINFORMATION, makeAny(m_aLayoutInformation));
-
-    // write the additional info tags
-    OConfigurationNode aInfoNode = m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_INFO);
-    if (aInfoNode.isValid())
-    {
-        // stage 0: collect all names under the info node which currently exist
-        ::std::set< rtl::OUString > aExistentKeys;
-        Sequence< ::rtl::OUString > aNodeNames = aInfoNode.getNodeNames();
-        const ::rtl::OUString* pNodeNames       =                   aNodeNames.getConstArray();
-        const ::rtl::OUString* pNodeNamesEnd    = pNodeNames    +   aNodeNames.getLength();
-        for ( ; pNodeNames != pNodeNamesEnd; ++pNodeNames )
-            aExistentKeys.insert( *pNodeNames );
-
-
-        // stage 1: write all currently set info values
-        static ::rtl::OUString s_sValueConfigKey( RTL_CONSTASCII_USTRINGPARAM("Value") );
-        ::std::set< rtl::OUString > aUsedKeys;
-        const PropertyValue* pInfoValues = m_aInfo.getConstArray();
-        for (sal_Int32 i=0; i<m_aInfo.getLength(); ++i, ++pInfoValues)
+        if ( !m_aContainer[E_TABLE].get() )
         {
-            OConfigurationNode aSettingsItem;
-            if (aExistentKeys.end() == aExistentKeys.find(pInfoValues->Name))
-            {
-                // we do not have such a key -> create it
-                aSettingsItem = aInfoNode.createNode(pInfoValues->Name);
-            }
-            else
-            {
-                aSettingsItem = aInfoNode.openNode(pInfoValues->Name);
-                aExistentKeys.erase(pInfoValues->Name);
-                    // no need to delete this previously-existing node afterwards ....
-            }
-            aSettingsItem.setNodeValue(s_sValueConfigKey, pInfoValues->Value);
+            m_aContainer[E_TABLE] = TContentPtr(new ODefinitionContainer_Impl);
         }
-
-        // stage 2: delete all info values which may be present in the registry, but not used by the current values
-        for (   ::std::set< rtl::OUString >::const_iterator aErase = aExistentKeys.begin();
-                aErase != aExistentKeys.end();
-                ++aErase
-            )
-        {
-            aInfoNode.removeNode(*aErase);
-        }
+        xContainer = new OCommandContainer(m_xServiceFactory,*this,m_aContainer[E_TABLE]);
+        m_xTableDefinitions = xContainer;
     }
-
-    flushDocuments();
-    flushTables();
-    // TODO : flushing of queries/tables ?
-
-    m_aConfigurationNode.commit( );
+    return xContainer;
 }
-// -----------------------------------------------------------------------------
-
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
