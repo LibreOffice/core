@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 08:54:17 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,11 @@
 #include <svtools/ehdl.hxx>
 #endif
 
-class SvxErrorHandler : private SfxErrorHandler
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
+class SVX_DLLPUBLIC SvxErrorHandler : private SfxErrorHandler
 {
   public:
     SvxErrorHandler();
