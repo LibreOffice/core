@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:39:35 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ void OTasksWindow::Resize()
     m_aFL.SetPosSizePixel( Point(nHalfOutputWidth , 0), Size(aFLSize.Width(), nOutputHeight ) );
 }
 // -----------------------------------------------------------------------------
-void OTasksWindow::fillCreationNew(const TResourceStruct& _rList ,short _nImageType)
+void OTasksWindow::fillCreationNew( const TResourceStruct& _rList )
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
     Clear();
@@ -268,12 +268,22 @@ void OTasksWindow::fillCreationNew(const TResourceStruct& _rList ,short _nImageT
         }
 
         i = 0;
-        Sequence< Reference<XGraphic> > aImages = xImageMgr->getImages(_nImageType,aSeq);
+
+        Sequence< Reference< XGraphic> > aImages = xImageMgr->getImages( ImageType::SIZE_DEFAULT | ImageType::COLOR_NORMAL, aSeq );
+        Sequence< Reference< XGraphic> > aHCImages = xImageMgr->getImages( ImageType::SIZE_DEFAULT | ImageType::COLOR_HIGHCONTRAST, aSeq );
+
         for (TResourceStruct::const_iterator aIter = _rList.begin(); aIter != aEnd; ++aIter,++i)
         {
-            Image aImage(aImages[i]);
-            SvLBoxEntry* pEntry = m_aCreation.InsertEntry(aIter->first,aImage,aImage);
+            SvLBoxEntry* pEntry = m_aCreation.InsertEntry( aIter->first );
             pEntry->SetUserData(reinterpret_cast<void*>(new TResourcePair(aIter->second)));
+
+            Image aImage = Image( aImages[i] );
+            m_aCreation.SetExpandedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
+            m_aCreation.SetCollapsedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
+
+            Image aHCImage = Image( aHCImages[i] );
+            m_aCreation.SetExpandedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
+            m_aCreation.SetCollapsedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
         }
     }
     catch(Exception&)
@@ -379,7 +389,7 @@ void OApplicationDetailView::createTablesPage(const Reference< XConnection>& _xC
     aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_VIEW),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewView")),RID_STR_VIEWS_HELP_TEXT_DESIGN)));
     //  aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_VIEW_AUTO),TResourcePair(ID_NEW_VIEW_DESIGN_AUTO_PILOT,RID_STR_VIEWS_HELP_TEXT_WIZARD)));
 
-    static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->fillCreationNew(aList,ImageType::SIZE_DEFAULT | (GetBackground().GetColor().IsDark() ? ImageType::COLOR_HIGHCONTRAST : ImageType::COLOR_NORMAL));
+    static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->fillCreationNew( aList );
     static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->Enable(static_cast<OAppBorderWindow*>(GetParent())->getView()->getCommandController()->isCommandEnabled(ID_NEW_TABLE_DESIGN));
 
     m_pControlHelper->createTablesPage(_xConnection);
@@ -391,8 +401,6 @@ void OApplicationDetailView::createPage(ElementType _eType,const Reference< XNam
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     USHORT nTitleId = 0;
-    short nImageType = ImageType::SIZE_DEFAULT;
-    nImageType |= GetBackground().GetColor().IsDark() ? ImageType::COLOR_HIGHCONTRAST :ImageType::COLOR_NORMAL;
     TResourceStruct aList;
     aList.reserve(4);
     switch(_eType )
@@ -428,7 +436,7 @@ void OApplicationDetailView::createPage(ElementType _eType,const Reference< XNam
             OSL_ENSURE(0,"Illegal call!");
     }
 
-    static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->fillCreationNew(aList, nImageType);
+    static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->fillCreationNew( aList );
     m_pControlHelper->createPage(_eType,_xContainer);
     m_aContainer.setTitle(nTitleId);
     Resize();

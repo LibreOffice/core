@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:39:47 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,10 +142,8 @@ namespace dbaui
         /** fills the Creation listbox with the necessary strings and images
             @param  _rList
                 The strings and the id of the images and help texts to add.
-            @param  _nImageType
-                The image type.
         */
-        void fillCreationNew(const TResourceStruct& _rList, short _nImageType);
+        void fillCreationNew( const TResourceStruct& _rList );
 
         void Clear();
         void setHelpText(USHORT _nId);
