@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:01:01 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2314,7 +2314,9 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
 
     // and move to the field
     Reference< ::com::sun::star::container::XIndexAccess >  aColumnControls(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
-    for (sal_uInt16 nViewPos=0; nViewPos<aColumnControls->getCount(); ++nViewPos)
+    sal_uInt16 nViewPos;
+
+    for ( nViewPos = 0; nViewPos < aColumnControls->getCount(); ++nViewPos )
     {
         Reference< XInterface >  xCurrent;
         aColumnControls->getByIndex(nViewPos) >>= xCurrent;
