@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 16:23:23 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 12:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1229,15 +1229,23 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
             break;
         }
         case OWN_ATTR_FILLBMP_MODE:
-        {
-            sal_Int32 nMode;
-            if( rVal >>= nMode )
+            do
             {
-                pObj->SetItem( XFillBmpStretchItem( nMode == drawing::BitmapMode_STRETCH ) );
-                pObj->SetItem( XFillBmpTileItem( nMode == drawing::BitmapMode_REPEAT ) );
+                drawing::BitmapMode eMode;
+                if(!(rVal >>= eMode) )
+                {
+                    sal_Int32 nMode;
+                    if(!(rVal >>= nMode))
+                        break;
+
+                    eMode = (drawing::BitmapMode)nMode;
+                }
+                pObj->SetItem( XFillBmpStretchItem( eMode == drawing::BitmapMode_STRETCH ) );
+                pObj->SetItem( XFillBmpTileItem( eMode == drawing::BitmapMode_REPEAT ) );
             }
+            while(0);
             break;
-        }
+
         case SDRATTR_LAYERID:
         {
             sal_Int16 nLayerId;
