@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:23:08 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2770,6 +2770,12 @@ BOOL ScDocFunc::ChangeIndent( const ScMarkData& rMark, BOOL bIncrement, BOOL bAp
         pBindings->Invalidate( SID_ALIGNRIGHT );
         pBindings->Invalidate( SID_ALIGNBLOCK );
         pBindings->Invalidate( SID_ALIGNCENTERHOR );
+        // pseudo slots for Format menu
+        pBindings->Invalidate( SID_ALIGN_ANY_HDEFAULT );
+        pBindings->Invalidate( SID_ALIGN_ANY_LEFT );
+        pBindings->Invalidate( SID_ALIGN_ANY_HCENTER );
+        pBindings->Invalidate( SID_ALIGN_ANY_RIGHT );
+        pBindings->Invalidate( SID_ALIGN_ANY_JUSTIFIED );
     }
 
     return TRUE;
@@ -3458,6 +3464,7 @@ BOOL ScDocFunc::MergeCells( const ScRange& rRange, BOOL bContents, BOOL bRecord,
     {
         pBindings->Invalidate( FID_MERGE_ON );
         pBindings->Invalidate( FID_MERGE_OFF );
+        pBindings->Invalidate( FID_MERGE_TOGGLE );
     }
 
     return TRUE;
