@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:16:53 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,6 @@ SfxObjectShell::SfxObjectShell
     DBG_CTOR(SfxObjectShell, 0);
 
     bHasName = sal_False;
-    SfxShell::SetName( GetTitle() );
     nViewNo = 0;
 
     pImp->bWaitingForPicklist = sal_True;
