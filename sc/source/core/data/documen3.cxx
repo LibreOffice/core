@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:54 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@
 #include "bcaslot.hxx"
 #include "tablink.hxx"
 #include "markdata.hxx"
-#include "conditio.hxx"
+#include "validat.hxx"
 #include "dociter.hxx"
 #include "detdata.hxx"
 #include "detfunc.hxx"
@@ -1321,6 +1321,20 @@ BOOL ScDocument::GetFilterEntriesArea( USHORT nCol, USHORT nStartRow, USHORT nEn
 BOOL ScDocument::GetDataEntries( USHORT nCol, USHORT nRow, USHORT nTab,
                                     TypedStrCollection& rStrings, BOOL bLimit )
 {
+    if( !bLimit )
+    {
+        /*  Try to generate the list from list validation. This part is skipped,
+            if bLimit==TRUE, because in that case this function is called to get
+            cell values for auto completion on input. */
+        sal_uInt32 nValidation = static_cast< const SfxUInt32Item* >( GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA ) )->GetValue();
+        if( nValidation )
+        {
+            const ScValidationData* pData = GetValidationEntry( nValidation );
+            if( pData && pData->FillSelectionList( rStrings, ScAddress( nCol, nRow, nTab ) ) )
+                return TRUE;
+        }
+    }
+
     if (nTab<=MAXTAB && pTab[nTab])
         return pTab[nTab]->GetDataEntries( nCol, nRow, rStrings, bLimit );
 
