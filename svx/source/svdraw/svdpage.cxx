@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-27 14:14:51 $
+ *  last change: $Author: cl $ $Date: 2002-08-06 13:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2030,7 +2030,8 @@ FASTBOOL SdrPage::HasTransparentObjects( BOOL bCheckForAlphaChannel ) const
 /** returns an averaged background color of this page */
 Color SdrPage::GetBackgroundColor() const
 {
-    Color aColor( COL_WHITE );
+    svx::ColorConfig aColorConfig;
+    Color aColor( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
 
     // first, see if we have a background object
     SdrObject* pBackgroundObj = NULL;
