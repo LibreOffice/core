@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-21 08:33:47 $
+#   last change: $Author: kz $ $Date: 2005-03-01 18:39:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,16 +73,13 @@ PACKAGE=drafts$/com$/sun$/star$/form
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    IncompatibleTypesException.idl \
+    ListEntryEvent.idl \
     XBindableValue.idl  \
     XValueBinding.idl   \
-    IncompatibleTypesException.idl   \
-    ValueBinding.idl   \
     XListEntrySink.idl   \
     XListEntrySource.idl   \
     XListEntryListener.idl   \
-    ListEntryEvent.idl   \
-    ListEntrySource.idl   \
-    BindableDataAwareControlModel.idl   \
 
 # ------------------------------------------------------------------
 
