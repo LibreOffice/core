@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newppdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-04 16:24:50 $
+ *  last change: $Author: pl $ $Date: 2002-07-15 12:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,9 @@ PPDImportDialog::PPDImportDialog( Window* pParent ) :
     m_aSearchBtn.SetClickHdl( LINK( this, PPDImportDialog, ClickBtnHdl ) );
     m_aPathBox.SetSelectHdl( LINK( this, PPDImportDialog, SelectHdl ) );
     m_aPathBox.SetModifyHdl( LINK( this, PPDImportDialog, ModifyHdl ) );
+
+    if( m_aPathBox.GetText().Len() )
+        Import();
 }
 
 PPDImportDialog::~PPDImportDialog()
