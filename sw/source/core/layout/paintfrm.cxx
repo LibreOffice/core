@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: od $ $Date: 2002-11-05 13:50:22 $
+ *  last change: $Author: tl $ $Date: 2002-11-12 14:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4485,7 +4485,9 @@ BOOL SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
                 (rBack.GetColor() == COL_TRANSPARENT) &&
                 ///rBack.GetColor().GetTransparency() &&
                 rBack.GetGraphicPos() == GPOS_NONE &&
-                !pOpt->IsPagePreview() && !pOpt->IsReadonly() && SwViewOption::IsIndexShadings() &&
+                !pOpt->IsPagePreview() && !pOpt->IsReadonly() &&
+                SwViewOption::IsIndexShadings() &&
+                !pOpt->IsPDFExport() &&
                 pSh->GetOut()->GetOutDevType() != OUTDEV_PRINTER )
             {
                 rpCol = &SwViewOption::GetIndexShadingsColor();
