@@ -2,7 +2,7 @@
  *
  *  $RCSfile: SwAccessiblePageView.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
  *  last change: $Author: obo $
  *
@@ -76,6 +76,9 @@ import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleValue;
 import com.sun.star.awt.XWindow;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XEnumeration;
+import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
@@ -85,6 +88,8 @@ import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
@@ -110,30 +115,82 @@ public class SwAccessiblePageView extends TestCase {
         TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
+        XInterface port = null;
+        XInterface para = null;
+        XPropertySet paraP = null;
+        XPropertySet portP = null;
 
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
 
         log.println( "inserting some lines" );
         try {
-            for (int i=0; i<25; i++){
+            for (int i=0; i<2; i++){
                 oText.insertString( oCursor,"Paragraph Number: " + i, false);
                 oText.insertString( oCursor,
-                    " The quick brown fox jumps over the lazy Dog: SwAccessibleDocumentPageView",
-                    false);
+                " The quick brown fox jumps over the lazy Dog: SwXParagraph",
+                false);
                 oText.insertControlCharacter(
-                    oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
+                oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
                 oText.insertString( oCursor,
-                    "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG: SwAccessibleDocumentPageView",
-                    false);
+                "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG: SwXParagraph",
+                false);
                 oText.insertControlCharacter(oCursor,
-                    ControlCharacter.PARAGRAPH_BREAK, false );
+                ControlCharacter.PARAGRAPH_BREAK, false );
                 oText.insertControlCharacter(
-                    oCursor, ControlCharacter.LINE_BREAK, false );
+                oCursor, ControlCharacter.LINE_BREAK, false );
             }
         } catch ( com.sun.star.lang.IllegalArgumentException e ){
             e.printStackTrace(log);
             throw new StatusException( "Couldn't insert lines", e );
+        }
+
+        // Enumeration
+        XEnumerationAccess oEnumA = (XEnumerationAccess)
+        UnoRuntime.queryInterface(XEnumerationAccess.class, oText );
+        XEnumeration oEnum = oEnumA.createEnumeration();
+
+        try {
+            para = (XInterface) AnyConverter.toObject(
+            new Type(XInterface.class),oEnum.nextElement());
+            XEnumerationAccess oEnumB = (XEnumerationAccess)
+            UnoRuntime.queryInterface( XEnumerationAccess.class, para );
+            XEnumeration oEnum2 = oEnumB.createEnumeration();
+            port = (XInterface) AnyConverter.toObject(
+            new Type(XInterface.class),oEnum2.nextElement());
+        } catch ( com.sun.star.lang.WrappedTargetException e ) {
+            e.printStackTrace(log);
+            log.println("Error: exception occured...");
+        } catch ( com.sun.star.container.NoSuchElementException e ) {
+            e.printStackTrace(log);
+            log.println("Error: exception occured...");
+        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
+            e.printStackTrace(log);
+            log.println("Error: exception occured...");
+        }
+
+        try {
+            portP = (XPropertySet)
+            UnoRuntime.queryInterface(XPropertySet.class, port);
+            paraP = (XPropertySet)
+            UnoRuntime.queryInterface(XPropertySet.class, para);
+            paraP.setPropertyValue("BreakType",com.sun.star.style.BreakType.PAGE_AFTER);
+        } catch ( com.sun.star.lang.WrappedTargetException e ) {
+            log.println("Error, exception occured...");
+            e.printStackTrace(log);
+            throw new StatusException( "Couldn't get Paragraph", e );
+        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
+            log.println("Error, exception occured...");
+            e.printStackTrace(log);
+            throw new StatusException( "Couldn't get Paragraph", e );
+        } catch ( com.sun.star.beans.UnknownPropertyException e ) {
+            log.println("Error, exception occured...");
+            e.printStackTrace(log);
+            throw new StatusException( "Couldn't get Paragraph", e );
+        } catch ( com.sun.star.beans.PropertyVetoException e ) {
+            log.println("Error, exception occured...");
+            e.printStackTrace(log);
+            throw new StatusException( "Couldn't get Paragraph", e );
         }
 
         shortWait();
