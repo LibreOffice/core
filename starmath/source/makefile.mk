@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-29 13:16:22 $
+#   last change: $Author: hjs $ $Date: 2002-04-16 15:29:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -138,7 +138,7 @@ CDEFS+=-DUSE_POLYGON
 $(SLO)$/smlib.obj : $(INCCOM)$/dllname.hxx
 
 $(INCCOM)$/dllname.hxx: makefile.mk
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     $(RM) $@
     echo #define DLL_NAME \"libsm$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
