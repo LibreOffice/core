@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:56:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,12 +106,15 @@
 #ifndef SD_PREVIEW_VIEW_SHELL_HXX
 #include "PreviewViewShell.hxx"
 #endif
+#include <cppuhelper/proptypehlp.hxx>
 
 using namespace ::rtl;
 using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+
+
 
 namespace sd {
 
@@ -123,7 +126,8 @@ SdUnoOutlineView::SdUnoOutlineView(
     ViewShellBase& rBase,
     OutlineViewShell& rViewShell,
     View& rView) throw()
-    :   DrawController (rBase, rViewShell, rView)
+    :   DrawController (rBase, rViewShell, rView),
+        mpCurrentPage(NULL)
 {
 }
 
@@ -206,45 +210,141 @@ Any SAL_CALL SdUnoOutlineView::getSelection()
 
 
 
-inline const ::com::sun::star::uno::Type & getSelectionTypeIdentifier()
+/**
+ * All Properties of this implementation. Must be sorted by name.
+ */
+void SdUnoOutlineView::FillPropertyTable (
+    ::std::vector<beans::Property>& rProperties)
 {
-    return ::getCppuType( (Reference< view::XSelectionChangeListener > *)0 );
+    DrawController::FillPropertyTable (rProperties);
+
+    rProperties.push_back (
+        beans::Property( OUString(
+            RTL_CONSTASCII_USTRINGPARAM("CurrentPage") ),
+            PROPERTY_CURRENTPAGE,
+            ::getCppuType((const Reference< drawing::XDrawPage > *)0),
+            beans::PropertyAttribute::BOUND));
 }
 
 
 
-void SAL_CALL SdUnoOutlineView::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener )
-    throw(RuntimeException)
+
+// Return sal_True, value change
+sal_Bool SdUnoOutlineView::convertFastPropertyValue (
+    Any & rConvertedValue,
+    Any & rOldValue,
+    sal_Int32 nHandle,
+    const Any& rValue)
+    throw ( com::sun::star::lang::IllegalArgumentException)
 {
-    addListener( getSelectionTypeIdentifier(), xListener );
-}
+    sal_Bool bResult = sal_False;
 
+    OGuard aGuard( Application::GetSolarMutex() );
 
-
-void SAL_CALL SdUnoOutlineView::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener ) throw(RuntimeException)
-{
-    removeListener( getSelectionTypeIdentifier( ), xListener );
-}
-
-
-
-void SdUnoOutlineView::fireSelectionChangeListener() throw()
-{
-    OInterfaceContainerHelper * pLC = getContainer( getSelectionTypeIdentifier() );
-    if( pLC )
+    switch( nHandle )
     {
-        Reference< XInterface > xSource( (XWeak*)this );
-        const lang::EventObject aEvent( xSource );
+        case PROPERTY_CURRENTPAGE:
+            {
+                Reference< drawing::XDrawPage > xOldPage( getCurrentPage() );
+                Reference< drawing::XDrawPage > xNewPage;
+                ::cppu::convertPropertyValue( xNewPage, rValue );
+                if( xOldPage != xNewPage )
+                {
+                    rConvertedValue <<= xNewPage;
+                    rOldValue <<= xOldPage;
+                    bResult = sal_True;
+                }
+            }
+            break;
 
-        // Ueber alle Listener iterieren und Events senden
-        OInterfaceIteratorHelper aIt( *pLC);
-        while( aIt.hasMoreElements() )
-        {
-            view::XSelectionChangeListener * pL = (view::XSelectionChangeListener *)aIt.next();
-            pL->selectionChanged( aEvent );
-        }
+        default:
+            bResult = DrawController::convertFastPropertyValue
+                (rConvertedValue, rOldValue, nHandle, rValue);
+            break;
+    }
+
+    return bResult;
+}
+
+
+
+/**
+ * only set the value.
+ */
+void SdUnoOutlineView::setFastPropertyValue_NoBroadcast (
+    sal_Int32 nHandle,
+    const Any& rValue)
+    throw ( com::sun::star::uno::Exception)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    switch( nHandle )
+    {
+        /*      case PROPERTY_CURRENTPAGE:
+            {
+                Reference< drawing::XDrawPage > xPage;
+                rValue >>= xPage;
+                setCurrentPage( xPage );
+            }
+            break;
+        */
+        default:
+            DrawController::setFastPropertyValue_NoBroadcast (nHandle, rValue);
+            break;
     }
 }
+
+
+
+
+void SdUnoOutlineView::getFastPropertyValue(
+    Any & rRet,
+    sal_Int32 nHandle ) const
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    switch( nHandle )
+    {
+        case PROPERTY_CURRENTPAGE:
+        {
+            SdPage* pPage = const_cast<OutlineViewShell&>(
+                static_cast<const OutlineViewShell&>(mrViewShell)
+                ).GetActualPage();
+
+            if (pPage != NULL)
+                rRet <<= pPage->getUnoPage();
+        }
+        break;
+
+        default:
+            DrawController::getFastPropertyValue (rRet, nHandle);
+    }
+}
+
+
+
+
+void SdUnoOutlineView::FireSwitchCurrentPage (SdPage* pCurrentPage) throw()
+{
+    if (pCurrentPage != mpCurrentPage )
+    {
+        Reference< drawing::XDrawPage > xNewPage( pCurrentPage->getUnoPage(), UNO_QUERY );
+        Any aNewValue( makeAny( xNewPage ) );
+
+        Any aOldValue;
+        if( mpCurrentPage )
+        {
+            Reference< drawing::XDrawPage > xOldPage( mpCurrentPage->getUnoPage(), UNO_QUERY );
+            aOldValue <<= xOldPage;
+        }
+
+        FirePropertyChange (PROPERTY_CURRENTPAGE, aNewValue, aOldValue);
+
+        mpCurrentPage = pCurrentPage;
+    }
+}
+
+
 
 
 } // end of namespace sd
