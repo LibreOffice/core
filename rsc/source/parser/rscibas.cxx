@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscibas.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:55 $
+ *  last change: $Author: hjs $ $Date: 2001-07-13 12:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ RscEnum * RscTypCont::InitLangType()
     SETCONST( &aLangType, "LANGUAGE_USER6",             LANGUAGE_USER6 );
     SETCONST( &aLangType, "LANGUAGE_USER7",             LANGUAGE_USER7 );
     SETCONST( &aLangType, "LANGUAGE_USER8",             LANGUAGE_USER8 );
-    SETCONST( &aLangType, "LANGUAGE_USER9",             LANGUAGE_USER9 );
+    SETCONST( &aLangType, "EXTERN",                     LANGUAGE_USER9 );
 
     return( &aLangType );
 }
