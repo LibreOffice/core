@@ -2,9 +2,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,9 +431,7 @@ void SwUndoInsTbl::Redo( SwUndoIter& rUndoIter )
 
 void SwUndoInsTbl::Repeat( SwUndoIter& rUndoIter )
 {
-    // keine Tabelle in Tabelle
-    if( !rUndoIter.pAktPam->GetNode()->FindTableNode() )
-        rUndoIter.GetDoc().InsertTable( aInsTblOpts, *rUndoIter.pAktPam->GetPoint(),
+    rUndoIter.GetDoc().InsertTable( aInsTblOpts, *rUndoIter.pAktPam->GetPoint(),
                                         nRows, nCols, (SwHoriOrient)nAdjust,
                                         pAutoFmt, pColWidth );
 }
@@ -862,7 +860,7 @@ void SwUndoTxtToTbl::Redo( SwUndoIter& rUndoIter )
 
 void SwUndoTxtToTbl::Repeat( SwUndoIter& rUndoIter )
 {
-    // keine Tabelle in Tabelle
+    // keine TABLE IN TABLE
     if( !rUndoIter.pAktPam->GetNode()->FindTableNode() )
         rUndoIter.GetDoc().TextToTable( aInsTblOpts, *rUndoIter.pAktPam,
                                         cTrenner, (SwHoriOrient)nAdjust,
