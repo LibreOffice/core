@@ -7,6 +7,7 @@ ul	unoil\com\sun\star\frame			nmake	-	all	ul_frame ul_awt ul_cssutil ul_ucb NULL
 ul	unoil\com\sun\star\drawing			nmake	-	all	ul_drawing ul_awt NULL
 ul	unoil\com\sun\star\chart			nmake	-	all	ul_chart ul_drawing ul_frame NULL
 ul	unoil\com\sun\star\configuration		nmake	-	all	ul_configuration ul_cssutil NULL
+ul	unoil\com\sun\star\configuration\backend		nmake	-	all	ul_configbackend ul_configuration NULL
 ul	unoil\com\sun\star\datatransfer			nmake	-	all	ul_dattrans ul_genall NULL
 ul	unoil\com\sun\star\datatransfer\clipboard	nmake	-	all	ul_dattrans_clip ul_dattrans NULL
 ul	unoil\com\sun\star\datatransfer\dnd		nmake	-	all	ul_dattrans_dnd ul_dattrans NULL
@@ -19,6 +20,7 @@ ul	unoil\com\sun\star\form				nmake	-	all	ul_form ul_awt ul_sdb NULL
 ul	unoil\com\sun\star\formula			nmake	-	all	ul_formula ul_genall NULL
 ul	unoil\com\sun\star\i18n				nmake	-	all	ul_i18n ul_linguistic2 NULL
 ul	unoil\com\sun\star\installation			nmake	-	all	ul_installation ul_genall NULL
+ul	unoil\com\sun\star\ldap 			nmake	-	all	ul_ldap ul_genall NULL
 ul	unoil\com\sun\star\linguistic2			nmake	-	all	ul_linguistic2 ul_genall NULL
 ul	unoil\com\sun\star\mozilla			nmake	-	all	ul_mozilla ul_genall NULL
 ul	unoil\com\sun\star\packages\zip			nmake	-	all	ul_pck_zip ul_genall NULL
@@ -45,4 +47,4 @@ ul	unoil\com\sun\star\xml\sax			nmake	-	all	ul_xml_sax ul_genall NULL
 ul	unoil\drafts\com\sun\star\accessibility		nmake	-	all	ul_accessibility ul_awt ul_awt_drafts NULL
 ul	unoil\drafts\com\sun\star\accessibility\bridge nmake	-	all	ul_accessbridge ul_accessibility NULL
 ul	unoil\drafts\com\sun\star\awt		nmake	-	all	ul_awt_drafts ul_awt NULL
-ul	unoil\util					nmake	-	all	ul_util ul_chart ul_configuration ul_dattrans ul_dattrans_clip ul_dattrans_dnd ul_document ul_form ul_formula ul_installation ul_linguistic2 ul_mozilla ul_plugin ul_presentation ul_resource ul_scanner ul_setup ul_sheet ul_style ul_sync ul_sync2 ul_ui_dialogs ul_view ul_ui ul_xml_sax ul_i18n ul_pck_zip ul_pck_manifest ul_accessibility ul_accessbridge ul_awt_drafts NULL
+ul	unoil\util					nmake	-	all	ul_util ul_chart ul_configuration ul_configbackend ul_dattrans ul_dattrans_clip ul_dattrans_dnd ul_document ul_form ul_formula ul_installation ul_linguistic2 ul_mozilla ul_plugin ul_presentation ul_resource ul_scanner ul_setup ul_sheet ul_style ul_sync ul_sync2 ul_ui_dialogs ul_view ul_ui ul_xml_sax ul_i18n ul_pck_zip ul_pck_manifest ul_accessibility ul_accessbridge ul_awt_drafts NULL
