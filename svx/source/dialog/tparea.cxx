@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 07:24:32 $
+ *  last change: $Author: aw $ $Date: 2002-09-27 12:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,6 +383,10 @@ BOOL SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
     BOOL bGradActive = (eStateGradient == SFX_ITEM_SET && ((XFillFloatTransparenceItem*)pGradientItem)->IsEnabled());
     BOOL bLinearActive = (eStateLinear == SFX_ITEM_SET && ((XFillTransparenceItem*)pLinearItem)->GetValue() != 0);
 
+    // #103765#
+    BOOL bGradUsed = (eStateGradient == SFX_ITEM_DONTCARE);
+    BOOL bLinearUsed = (eStateLinear == SFX_ITEM_DONTCARE);
+
     BOOL bModified(FALSE);
     BOOL bSwitchOffLinear(FALSE);
     BOOL bSwitchOffGradient(FALSE);
@@ -449,7 +453,7 @@ BOOL SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
     }
 
     // disable unused XFillFloatTransparenceItem
-    if(bSwitchOffGradient && bGradActive)
+    if(bSwitchOffGradient && (bGradActive || bGradUsed))
     {
         Color aColor(COL_BLACK);
         XGradient aGrad(aColor, Color(COL_WHITE));
@@ -463,7 +467,7 @@ BOOL SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
     }
 
     // disable unused XFillFloatTransparenceItem
-    if(bSwitchOffLinear && bLinearActive)
+    if(bSwitchOffLinear && (bLinearActive || bLinearUsed))
     {
         XFillTransparenceItem aItem(0);
         SdrShadowTransparenceItem aShadowItem(0);
