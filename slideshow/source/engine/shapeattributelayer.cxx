@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeattributelayer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:56:21 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,7 @@ namespace presentation
             meCharPosture( awt::FontSlant_NONE ),
             mnUnderlineMode(),
 
+            maDimColor(),
             maFillColor(),
             maLineColor(),
             maCharColor(),
@@ -238,6 +239,7 @@ namespace presentation
             mbCharRotationAngleValid( false ),
             mbCharScaleValid( false ),
 
+            mbDimColorValid( false ),
             mbFillColorValid( false ),
             mbLineColorValid( false ),
             mbCharColorValid( false ),
@@ -543,6 +545,26 @@ namespace presentation
             maClip = rNewClip;
             mbClipValid = true;
             ++mnClipState;
+        }
+
+        bool ShapeAttributeLayer::isDimColorValid() const
+        {
+            return mbDimColorValid ? true : haveChild() ? mpChild->isDimColorValid() : false;
+        }
+
+        RGBColor ShapeAttributeLayer::getDimColor() const
+        {
+            return calcValue( maDimColor,
+                              mbDimColorValid,
+                              &ShapeAttributeLayer::isDimColorValid,
+                              &ShapeAttributeLayer::getDimColor );
+        }
+
+        void ShapeAttributeLayer::setDimColor( const RGBColor& nNewColor )
+        {
+            maDimColor = nNewColor;
+            mbDimColorValid = true;
+            ++mnContentState;
         }
 
         bool ShapeAttributeLayer::isFillColorValid() const
