@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscrange.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:50:30 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,20 +79,20 @@ class RscRange : public RscTop
 {
 protected:
     struct RscRangeInst {
-        USHORT  nValue; // nValue = Ausgangswert - nMin
+        sal_uInt16  nValue; // nValue = Ausgangswert - nMin
         BOOL    bDflt;  // Ist Default
     };
     INT32    nMin;   // Minimum des Bereiches
     INT32    nMax;   // Maximum des Bereiches
-    USHORT  nSize;
+    sal_uInt32  nSize;
 public:
-                    RscRange( HASHID nId, USHORT nTypId );
+                    RscRange( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, BOOL );
                     // Der zulaessige Bereich wird gesetzt
     ERRTYPE         SetRange( INT32 nMinimum, INT32 nMaximum );
                     // Gibt die Groesse der Klasse in Bytes
-    USHORT          Size(){ return nSize; }
+    sal_uInt32          Size(){ return nSize; }
                     // Eine Zuweisung an eine Variable
     virtual void    SetToDefault( const RSCINST & rInst )
                     {
@@ -107,9 +107,9 @@ public:
     ERRTYPE         SetNumber( const RSCINST &, INT32 );
     ERRTYPE         GetNumber( const RSCINST &, INT32 * );
     void            WriteSrc( const RSCINST &, FILE * fOutput,
-                              RscTypCont * pTC, USHORT nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, USHORT, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
     void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 };
@@ -125,15 +125,15 @@ protected:
     };
     INT32    nMin;   // Minimum des Bereiches
     INT32    nMax;   // Maximum des Bereiches
-    USHORT  nSize;
+    sal_uInt32  nSize;
 public:
-                    RscLongRange( HASHID nId, USHORT nTypId );
+                    RscLongRange( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, BOOL );
                     // Der zulaessige Bereich wird gesetzt
     ERRTYPE         SetRange( INT32 nMinimum, INT32 nMaximum );
                     // Gibt die Groesse der Klasse in Bytes
-    USHORT          Size(){ return nSize; }
+    sal_uInt32          Size(){ return nSize; }
                     // Eine Zuweisung an eine Variable
     virtual void    SetToDefault( const RSCINST & rInst )
                     {
@@ -148,9 +148,9 @@ public:
     ERRTYPE         SetNumber( const RSCINST &, INT32 );
     ERRTYPE         GetNumber( const RSCINST &, INT32 * );
     void            WriteSrc( const RSCINST &, FILE * fOutput,
-                              RscTypCont * pTC, USHORT nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, USHORT, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
     void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 
@@ -160,22 +160,21 @@ public:
 class RscLongEnumRange : public RscLongRange
 {
 public:
-                    RscLongEnumRange( HASHID nId, USHORT nTypId );
+                    RscLongEnumRange( Atom nId, sal_uInt32 nTypId );
 
-    ERRTYPE         SetConst( const RSCINST & rInst, HASHID nValueId,
+    ERRTYPE         SetConst( const RSCINST & rInst, Atom nValueId,
                               INT32 nValue );
 };
 
 /******************* R s c I d R a n g e ***********************************/
 class RscIdRange : public RscTop
 {
-    USHORT  nSize;
+    sal_uInt32  nSize;
 protected:
     INT32    nMin;   // Minimum des Bereiches
     INT32    nMax;   // Maximum des Bereiches
-    BOOL    bRcLong;// Binaere Resource 4 Byte statt 2
 public:
-                    RscIdRange( HASHID nId, USHORT nTypId, BOOL bRcL = FALSE );
+                    RscIdRange( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const;
                     // Der zulaessige Bereich wird gesetzt
     ERRTYPE         SetRange( INT32 nMinimum, INT32 nMaximum ){
@@ -185,7 +184,7 @@ public:
                     }
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, BOOL );
     void            Destroy( const RSCINST & rInst );
-    USHORT          Size(){ return nSize; }
+    sal_uInt32          Size(){ return nSize; }
     virtual void    SetToDefault( const RSCINST & rInst )
                     {
                         ((RscId*)rInst.pData)->aExp.cUnused = TRUE;
@@ -203,9 +202,9 @@ public:
     ERRTYPE         SetRef( const RSCINST &, const RscId & rRscId );
     ERRTYPE         GetRef( const RSCINST & rInst, RscId * );
     void            WriteSrc( const RSCINST &, FILE * fOutput,
-                              RscTypCont * pTC, USHORT nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, USHORT, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
     BOOL            IsConsistent( const RSCINST & rInst, RscInconsList * pList );
     void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
@@ -216,7 +215,7 @@ public:
 class RscBool : public RscRange
 {
 public:
-                    RscBool( HASHID nId, USHORT nTypId );
+                    RscBool( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const;
                     // Der zulaessige Bereich wird gesetzt
     ERRTYPE         SetRange( INT32, INT32 ){
@@ -232,7 +231,7 @@ public:
                         return( ERR_OK );
                     };
     void            WriteSrc( const RSCINST &, FILE * fOutput,
-                              RscTypCont * pTC, USHORT nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
     void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 
@@ -241,7 +240,7 @@ public:
 class RscBreakRange : public RscRange {
     INT32    nOutRange;
 public:
-                    RscBreakRange( HASHID nId, USHORT nTypId );
+                    RscBreakRange( Atom nId, sal_uInt32 nTypId );
     void            SetOutRange( INT32 nNumber ){
                         nOutRange = nNumber;
                     }
