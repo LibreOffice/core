@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-24 10:28:39 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,12 @@
 #ifndef _SFXRECTITEM_HXX //autogen
 #include <svtools/rectitem.hxx>
 #endif
+#ifndef _SFXAPP_HXX
+#include <sfx2/app.hxx>
+#endif
+#ifndef _SFXREQUEST_HXX
+#include <sfx2/request.hxx>
+#endif
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
@@ -106,6 +112,9 @@
 #endif
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
+#endif
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -409,8 +418,16 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
             SfxBoolItem aMinimized(SID_MINIMIZEWINS, TRUE);
             SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
             SfxStringItem aReferer( SID_REFERER, sReferer );
-            const SfxPoolItem* pRet = SfxViewFrame::Current()->GetDispatcher()->
-                Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aName, &aMinimized, &aReferer, &aTarget, 0L );
+
+            // #i14200# (DDE-link crashes wordprocessor)
+            SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+            aArgs.Put(aReferer);
+            aArgs.Put(aTarget);
+            aArgs.Put(aMinimized);
+            aArgs.Put(aName);
+            SfxRequest aRequest( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, aArgs );
+            SFX_APP()->ExecuteSlot( aRequest );
+            const SfxPoolItem*  pRet = aRequest.GetReturnValue();
 
             if( pRet && pRet->ISA( SfxViewFrameItem ) &&
                 ((SfxViewFrameItem*)pRet)->GetFrame() )
