@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2002-10-10 13:47:21 $
+#   last change: $Author: obo $ $Date: 2002-10-23 12:51:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,7 @@ LIB1FILES=  $(SLB)$/explorer.lib	\
             $(SLB)$/statbar.lib		\
             $(SLB)$/dialog.lib		\
             $(SLB)$/bastyp.lib		\
+        $(SLB)$/appl.lib 		\
             $(SLB)$/config.lib
 
 HELPIDFILES=\
@@ -97,7 +98,7 @@ HELPIDFILES=\
 
 .IF "$(GUI)"!="UNX"
 LIB2TARGET= $(LB)$/$(TARGET).lib
-LIB2FILES=   $(LB)$/isfx.lib
+LIB2FILES=   $(LB)$/isfx.lib 
 .ENDIF
 
 SHL1TARGET= sfx$(UPD)$(DLLPOSTFIX)
