@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:09:48 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,18 +309,18 @@ DockingWindow FID_FUNCTION_BOX
         };
     StringList [ chinese_simplified ] =
     {
-            < "ÉÏÒ»´ÎÊ¹ÓÃµÄ" ; Default ; > ;
-        < "È«²¿" ; Default ; > ;
-        < "Êı¾İ¿â" ; Default ; > ;
-        < "ÈÕÆÚºÍÊ±¼ä" ; Default ; > ;
-        < "²ÆÎñ" ; Default ; > ;
-        < "ĞÅÏ¢" ; Default ; > ;
-        < "Âß¼­" ; Default ; > ;
-        < "ÊıÑ§" ; Default ; > ;
-        < "¾ØÕó" ; Default ; > ;
-        < "Í³¼Æ" ; Default ; > ;
-        < "¹¤×÷±í" ; Default ; > ;
-        < "ÎÄ×Ö" ; Default ; > ;
+            < "ä¸Šä¸€æ¬¡ä½¿ç”¨çš„" ; Default ; > ;
+        < "å…¨éƒ¨" ; Default ; > ;
+        < "æ•°æ®åº“" ; Default ; > ;
+        < "æ—¥æœŸå’Œæ—¶é—´" ; Default ; > ;
+        < "è´¢åŠ¡" ; Default ; > ;
+        < "ä¿¡æ¯" ; Default ; > ;
+        < "é€»è¾‘" ; Default ; > ;
+        < "æ•°å­¦" ; Default ; > ;
+        < "çŸ©é˜µ" ; Default ; > ;
+        < "ç»Ÿè®¡" ; Default ; > ;
+        < "å·¥ä½œè¡¨" ; Default ; > ;
+        < "æ–‡å­—" ; Default ; > ;
         < "Add In" ; Default ; > ;
     };
     StringList [ russian ] =
@@ -357,34 +357,34 @@ DockingWindow FID_FUNCTION_BOX
     };
     StringList [ japanese ] =
     {
-            < "Å‹ßg—p‚µ‚½ŠÖ”" ; Default ; > ;
-        < "‚·‚×‚Ä" ; Default ; > ;
-        < "ÃŞ°ÀÍŞ°½" ; Default ; > ;
-        < "“ú•t‚Æ" ; Default ; > ;
-        < "à–±" ; Default ; > ;
-        < "î•ñ" ; Default ; > ;
-        < "˜_—" ; Default ; > ;
-        < "”Šw" ; Default ; > ;
-        < "ÏÄØ¸½" ; Default ; > ;
-        < "“Œv" ; Default ; > ;
-        < "•\\ŒvZ" ; Default ; > ;
-        < "•¶š" ; Default ; > ;
-        < "±ÄŞ²İ" ; Default ; > ;
+            < "æœ€è¿‘ä½¿ç”¨ã—ãŸé–¢æ•°" ; Default ; > ;
+        < "ã™ã¹ã¦" ; Default ; > ;
+        < "ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½" ; Default ; > ;
+        < "æ—¥ä»˜ã¨æ™‚åˆ»" ; Default ; > ;
+        < "è²¡å‹™" ; Default ; > ;
+        < "æƒ…å ±" ; Default ; > ;
+        < "è«–ç†" ; Default ; > ;
+        < "æ•°å­¦" ; Default ; > ;
+        < "ï¾ï¾„ï¾˜ï½¸ï½½" ; Default ; > ;
+        < "çµ±è¨ˆ" ; Default ; > ;
+        < "è¡¨è¨ˆç®—" ; Default ; > ;
+        < "æ–‡å­—" ; Default ; > ;
+        < "ï½±ï¾„ï¾ï½²ï¾" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "¤W¤@¦¸¨Ï¥Îªº" ; Default ; > ;
-        < "¥ş³¡" ; Default ; > ;
-        < "¸ê®Æ®w" ; Default ; > ;
-        < "¤é´Á©M®É¶¡" ; Default ; > ;
-        < "°]°È" ; Default ; > ;
-        < "¸ê°T" ; Default ; > ;
-        < "ÅŞ¿è" ; Default ; > ;
-        < "¼Æ¾Ç" ; Default ; > ;
-        < "¯x°}" ; Default ; > ;
-        < "²Î­p" ; Default ; > ;
-        < "¤u§@ªí" ; Default ; > ;
-        < "¤å¦r" ; Default ; > ;
+            < "ä¸Šä¸€æ¬¡ä½¿ç”¨çš„" ; Default ; > ;
+        < "å…¨éƒ¨" ; Default ; > ;
+        < "è³‡æ–™åº«" ; Default ; > ;
+        < "æ—¥æœŸå’Œæ™‚é–“" ; Default ; > ;
+        < "è²¡å‹™" ; Default ; > ;
+        < "è³‡è¨Š" ; Default ; > ;
+        < "é‚è¼¯" ; Default ; > ;
+        < "æ•¸å­¸" ; Default ; > ;
+        < "çŸ©é™£" ; Default ; > ;
+        < "çµ±è¨ˆ" ; Default ; > ;
+        < "å·¥ä½œè¡¨" ; Default ; > ;
+        < "æ–‡å­—" ; Default ; > ;
         < "Add-In" ; Default ; > ;
     };
     StringList [ arabic ] =
@@ -421,18 +421,18 @@ DockingWindow FID_FUNCTION_BOX
     };
     StringList [ chinese_simplified ] =
     {
-            < "ÉÏÒ»´ÎÊ¹ÓÃµÄ" ; Default ; > ;
-        < "È«²¿" ; Default ; > ;
-        < "Êı¾İ¿â" ; Default ; > ;
-        < "ÈÕÆÚºÍÊ±¼ä" ; Default ; > ;
-        < "²ÆÎñ" ; Default ; > ;
-        < "ĞÅÏ¢" ; Default ; > ;
-        < "Âß¼­" ; Default ; > ;
-        < "ÊıÑ§" ; Default ; > ;
-        < "¾ØÕó" ; Default ; > ;
-        < "Í³¼Æ" ; Default ; > ;
-        < "¹¤×÷±í" ; Default ; > ;
-        < "ÎÄ×Ö" ; Default ; > ;
+            < "ä¸Šä¸€æ¬¡ä½¿ç”¨çš„" ; Default ; > ;
+        < "å…¨éƒ¨" ; Default ; > ;
+        < "æ•°æ®åº“" ; Default ; > ;
+        < "æ—¥æœŸå’Œæ—¶é—´" ; Default ; > ;
+        < "è´¢åŠ¡" ; Default ; > ;
+        < "ä¿¡æ¯" ; Default ; > ;
+        < "é€»è¾‘" ; Default ; > ;
+        < "æ•°å­¦" ; Default ; > ;
+        < "çŸ©é˜µ" ; Default ; > ;
+        < "ç»Ÿè®¡" ; Default ; > ;
+        < "å·¥ä½œè¡¨" ; Default ; > ;
+        < "æ–‡å­—" ; Default ; > ;
         < "Add In" ; Default ; > ;
     };
     StringList [ greek ] =
@@ -453,19 +453,19 @@ DockingWindow FID_FUNCTION_BOX
     };
     StringList [ korean ] =
     {
-            < "¸¶Áö¸·À¸·Î »ç¿ëµÈ" ; Default ; > ;
-        < "ÀüÃ¼" ; Default ; > ;
-        < "µ¥ÀÌÅÍº£ÀÌ½º" ; Default ; > ;
-        < "³¯Â¥&½Ã°£" ; Default ; > ;
-        < "È¸°è" ; Default ; > ;
-        < "Á¤º¸" ; Default ; > ;
-        < "³í¸®Àû" ; Default ; > ;
-        < "¼öÇĞ" ; Default ; > ;
-        < "Çà·Ä" ; Default ; > ;
-        < "Åë°è" ; Default ; > ;
-        < "Ç¥" ; Default ; > ;
-        < "ÅØ½ºÆ®" ; Default ; > ;
-        < "Ãß°¡" ; Default ; > ;
+            < "ë§ˆì§€ë§‰ìœ¼ë¡œ ì‚¬ìš©ëœ" ; Default ; > ;
+        < "ì „ì²´" ; Default ; > ;
+        < "ë°ì´í„°ë² ì´ìŠ¤" ; Default ; > ;
+        < "ë‚ ì§œ&ì‹œê°„" ; Default ; > ;
+        < "íšŒê³„" ; Default ; > ;
+        < "ì •ë³´" ; Default ; > ;
+        < "ë…¼ë¦¬ì " ; Default ; > ;
+        < "ìˆ˜í•™" ; Default ; > ;
+        < "í–‰ë ¬" ; Default ; > ;
+        < "í†µê³„" ; Default ; > ;
+        < "í‘œ" ; Default ; > ;
+        < "í…ìŠ¤íŠ¸" ; Default ; > ;
+        < "ì¶”ê°€" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -581,14 +581,14 @@ DockingWindow FID_FUNCTION_BOX
         QuickHelpText [ portuguese ] = "Insere função na folha de cálculo" ;
     QuickHelpText[ russian ] = "Âñòàâèòü ôóíêöèş â ëèñò";
         QuickHelpText[ polish ] = "Wstaw funkcjê do arkusza";
-        QuickHelpText[ japanese ] = "•\\‚ÉŠÖ”‚ğ‘}“ü";
-        QuickHelpText[ chinese_simplified ] = "²åÈëº¯Êı";
-        QuickHelpText[ chinese_traditional ] = "´¡¤J¨ç¼Æ";
+        QuickHelpText[ japanese ] = "è¡¨ã«é–¢æ•°ã‚’æŒ¿å…¥";
+        QuickHelpText[ chinese_simplified ] = "æ’å…¥å‡½æ•°";
+        QuickHelpText[ chinese_traditional ] = "æ’å…¥å‡½æ•¸";
         QuickHelpText[ arabic ] = "ÅÏÑÇÌ ÏÇáÉ";
         QuickHelpText[ dutch ] = "Functie invoegen in werkblad";
-        QuickHelpText[ chinese_simplified ] = "²åÈëº¯Êı";
+        QuickHelpText[ chinese_simplified ] = "æ’å…¥å‡½æ•°";
         QuickHelpText[ greek ] = "ÅéóáãùãŞ óõíÜñôçóçò óå õğïëïãéóôéêü öıëëï";
-        QuickHelpText[ korean ] = "°è»ê¡¡½ÃÆ®¿¡¡¡ÇÔ¼ö¡¡»ğÀÔ";
+        QuickHelpText[ korean ] = "ê³„ì‚°ã€€ì‹œíŠ¸ì—ã€€í•¨ìˆ˜ã€€ì‚½ì…";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Funktion in Rechenblatt einfügen";
         QuickHelpText[ catalan ] = "Insertar la función en la hoja de cálculo";
@@ -603,22 +603,23 @@ DockingWindow FID_FUNCTION_BOX
     Text [ french ] = "Fonctions" ;
     Text [ dutch ] = "Functies" ;
     Text [ portuguese ] = "Funções" ;
-    Text[ chinese_simplified ] = "º¯Êı";
+    Text[ chinese_simplified ] = "å‡½æ•°";
     Text[ russian ] = "Ôóíêöèè";
     Text[ polish ] = "Funkcje";
-    Text[ japanese ] = "ŠÖ”";
-    Text[ chinese_traditional ] = "¨ç¼Æ";
+    Text[ japanese ] = "é–¢æ•°";
+    Text[ chinese_traditional ] = "å‡½æ•¸";
     Text[ arabic ] = "ÇáÏÇáÇÊ";
     Text[ dutch ] = "Functies";
-    Text[ chinese_simplified ] = "º¯Êı";
+    Text[ chinese_simplified ] = "å‡½æ•°";
     Text[ greek ] = "ÓõíáñôŞóåéò";
-    Text[ korean ] = "ÇÔ¼ö";
+    Text[ korean ] = "í•¨ìˆ˜";
     Text[ turkish ] = "Fonksiyon";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Funciones";
     Text[ finnish ] = "Toiminnot";
 };
  // ********************************************************************** EOF
+
 
 
 
