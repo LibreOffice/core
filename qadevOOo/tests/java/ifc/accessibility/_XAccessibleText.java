@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleText.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-13 15:19:57 $
+ *  last change:$Date: 2003-02-17 11:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,7 +444,7 @@ public class _XAccessibleText extends MultiMethodTest {
             } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
 
             }
-            int x = aRect.X+aRect.Width/2-1;
+            int x = aRect.X+aRect.Width/2;
             int y = bounds.Height/2;
             Point aPoint = new Point( x,y);
             int nIndex = oObj.getIndexAtPoint( aPoint );
