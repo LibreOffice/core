@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-10 09:31:26 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,9 @@
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 #define WWF_INVISIBLE 86            // Bit-Nummer fuer Invisible ( IniFlags )
 #define MAX_FIELDLEN 64000
 
@@ -2361,7 +2363,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
         {
             String aNm;
             //Take this as the base name
-            rDoc.GetPoolNm(RES_POOLCHR_RUBYTEXT,aNm);
+            SwStyleNameMapper::GetUIName(RES_POOLCHR_RUBYTEXT,aNm);
             aNm+=String::CreateFromInt32(aRubyCharFmts.Count()+1);
             pCharFmt = rDoc.MakeCharFmt(aNm,( SwCharFmt*)rDoc.GetDfltCharFmt());
             SvxFontHeightItem aHeightItem(nFontSize*10);
@@ -3159,12 +3161,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, const BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.21 2001-07-10 09:31:26 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.22 2001-07-20 10:32:14 mtg Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.21  2001/07/10 09:31:26  cmc
+      #89439# calculate style's even-byte offset relative to style start, not absolute
+
       Revision 1.20  2001/07/05 12:41:56  ama
       Chg #89181#: New data exchange methods
 

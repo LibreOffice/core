@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:09:54 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2129,7 +2129,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                 aFmt.GetNumberingType() == NumberingType::BITMAP && !aFmt.GetCharFmt()
                     && SwXNumberingRules::GetInvalidStyle() != sNewCharStyleNames[(sal_uInt16)nIndex])
         {
-            sNewCharStyleNames[(sal_uInt16)nIndex] = String(SW_RES(STR_POOLCHR_PRGM_BUL_LEVEL));
+            SwStyleNameMapper::GetProgName ( RES_POOLCHR_BUL_LEVEL, sNewCharStyleNames[(sal_uInt16)nIndex] );
         }
         delete pSetBrush;
         delete pSetSize;

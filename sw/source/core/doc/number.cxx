@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-07-09 13:35:49 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,9 @@
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 USHORT SwNumRule::nRefCount = 0;
 SwNumFmt* SwNumRule::aBaseFmts[ RULE_END ][ MAXLEVEL ] = {
@@ -187,7 +189,7 @@ SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc) :
         SwCharFmt* pCFmt = pDoc->FindCharFmtByName( rCharStyleName );
         if( !pCFmt )
         {
-            USHORT nId = pDoc->GetPoolId( rCharStyleName,
+            USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( rCharStyleName,
                                             GET_POOLID_CHRFMT );
             pCFmt = nId != USHRT_MAX
                         ? pDoc->GetCharFmtFromPool( nId )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-07-12 13:10:26 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,9 @@
 #endif
 #ifndef _FMTRUBY_HXX
 #include <fmtruby.hxx>
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -907,7 +910,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool bAutoma
         pValues[1].Value <<= OUString(rAttr.GetText());
         pValues[2].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_RUBY_CHAR_STYLE_NAME));
         pValues[2].Value <<= OUString(
-                SwXStyleFamilies::GetProgrammaticName(rAttr.GetCharFmtName(),SFX_STYLE_FAMILY_CHAR));
+                SwStyleNameMapper::GetProgName(rAttr.GetCharFmtName(), GET_POOLID_CHRFMT ));
         pValues[3].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_RUBY_ADJUST));
         pValues[3].Value <<= (sal_Int16)rAttr.GetAdjustment();
         pValues[4].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_RUBY_IS_ABOVE));
@@ -962,9 +965,9 @@ void SAL_CALL SwXTextView::setRubyList(
             {
                 if((pProperties[nProp].Value >>= sTmp))
                 {
-                    String sName(SwXStyleFamilies::GetUIName(sTmp, SFX_STYLE_FAMILY_CHAR));
+                    String sName(SwStyleNameMapper::GetUIName(sTmp, GET_POOLID_CHRFMT ));
                     sal_uInt16 nPoolId = sName.Len() ?
-                        SwDoc::GetPoolId( sName, GET_POOLID_CHRFMT ) : 0;
+                        SwStyleNameMapper::GetPoolIdFromUIName( sName, GET_POOLID_CHRFMT ) : 0;
 
                     pEntry->GetRubyAttr().SetCharFmtName( sName );
                     pEntry->GetRubyAttr().SetCharFmtId( nPoolId );
@@ -1229,6 +1232,17 @@ void SwXTextViewCursor::gotoRange(
         {
             aOwnPaM.SetMark();
             *aOwnPaM.GetMark() = *pShellCrsr->GetMark();
+        }
+
+        Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
+        SwXTextRange* pRange = 0;
+        SwXTextCursor* pCursor = 0;
+        if(xRangeTunnel.is())
+        {
+            pRange = (SwXTextRange*)xRangeTunnel->getSomething(
+                                    SwXTextRange::getUnoTunnelId());
+            pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
+                                    SwXTextCursor::getUnoTunnelId());
         }
 
         const sal_uInt16 nFrmType = rSh.GetFrmType(0,sal_True);

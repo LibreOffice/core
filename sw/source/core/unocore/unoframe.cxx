@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: os $ $Date: 2001-07-09 05:50:21 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,9 @@
 #endif
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
 #endif
 #ifndef _XMLOFF_XMLCNITM_HXX
 #include <xmloff/xmlcnitm.hxx>
@@ -958,7 +961,7 @@ SwFrmFmt *lcl_GetFrmFmt( const uno::Any& rValue, SwDoc *pDoc )
     {
         OUString uTemp;
         rValue >>= uTemp;
-        String sStyle(SwXStyleFamilies::GetUIName(uTemp, SFX_STYLE_FAMILY_FRAME));
+        String sStyle(SwStyleNameMapper::GetUIName(String (uTemp), GET_POOLID_FRMFMT) );
         SwDocStyleSheet* pStyle =
                 (SwDocStyleSheet*)pDocSh->GetStyleSheetPool()->Find(sStyle,
                                                     SFX_STYLE_FAMILY_FRAME);
@@ -1364,7 +1367,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         }
         else if(FN_UNO_FRAME_STYLE_NAME == pCur->nWID)
         {
-            aAny <<= OUString(SwXStyleFamilies::GetProgrammaticName(pFmt->DerivedFrom()->GetName(), SFX_STYLE_FAMILY_FRAME));
+            aAny <<= OUString(SwStyleNameMapper::GetProgName(pFmt->DerivedFrom()->GetName(), GET_POOLID_FRMFMT ) );
         }
         else if(eType == FLYCNTTYPE_GRF &&
                 (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ACTUAL_SIZE)) ||

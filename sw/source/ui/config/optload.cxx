@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 06:28:09 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@
 #endif
 #ifndef _CONFIG_HRC
 #include <config.hrc>
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
 #endif
 /* -----------------22.10.98 15:12-------------------
  *
@@ -496,10 +499,10 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     pMgr            (new SwFldMgr()),
     bHTMLMode(FALSE)
 {
-    GetDocPoolNm( RES_POOLCOLL_LABEL_ABB, sIllustration );
-    GetDocPoolNm( RES_POOLCOLL_LABEL_TABLE, sTable );
-    GetDocPoolNm( RES_POOLCOLL_LABEL_FRAME, sText );
-    GetDocPoolNm( RES_POOLCOLL_LABEL_DRAWING, sDrawing );
+    SwStyleNameMapper::GetUIName( RES_POOLCOLL_LABEL_ABB, sIllustration );
+    SwStyleNameMapper::GetUIName( RES_POOLCOLL_LABEL_TABLE, sTable );
+    SwStyleNameMapper::GetUIName( RES_POOLCOLL_LABEL_FRAME, sText );
+    SwStyleNameMapper::GetUIName( RES_POOLCOLL_LABEL_Drawing, sDrawing );
 
     USHORT i, nCount;
     SwWrtShell *pSh = ::GetActiveWrtShell();
