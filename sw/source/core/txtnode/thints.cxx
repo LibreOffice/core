@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-26 18:10:47 $
+ *  last change: $Author: ama $ $Date: 2001-01-30 13:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,7 +750,8 @@ void SwTxtNode::DelSoftHyph( const xub_StrLen nStart, const xub_StrLen nEnd )
             ( nFndPos = aText.Search( CHAR_SOFTHYPHEN, nFndPos )) &&
             nFndPos < nEndPos )
     {
-        aText.Erase( nFndPos, 1 );
+        const SwIndex aIdx( this, nFndPos );
+        Erase( aIdx, 1 );
         --nEndPos;
     }
 }
