@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-18 11:23:57 $
+ *  last change: $Author: aw $ $Date: 2001-05-04 13:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,6 +472,10 @@ void SAL_CALL Svx3DSceneObject::setPropertyValue( const OUString& aPropertyName,
             pScene->NbcSetTransform(aSceneTAR.maMat);
             pScene->FitSnapRectToBoundVol();
             pScene->NbcSetSnapRect(aSceneTAR.maRect);
+
+            // #86559# init transformation set to allow correct
+            // calculation of BoundRect
+            pScene->InitTransformationSet();
         }
     }
     else
