@@ -12,9 +12,9 @@
 #
 #   $RCSfile: linkoo,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-12 16:06:31 $
+#   last change: $Author: vg $ $Date: 2004-12-23 10:52:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,7 @@ sub sniff_target($)
 {
     my $build_dir = shift;
     my ($dirhandle, $fname);
-    my ($target, $libver, $lang, $dllsuffix) = ( 'unxlngi4.pro', '645', '01', 'li' ); # defaults
+    my ($target, $libver, $lang, $dllsuffix) = ( 'unxlngi4.pro', '680', 'en-US', 'li' ); # defaults
     
     opendir ($dirhandle, $build_dir) || die "Can't open $build_dir";
     while ($fname = readdir ($dirhandle)) {
@@ -118,10 +118,6 @@ sub sniff_target($)
     closedir ($dirhandle);
 
     print "Sniffed target: $target, $libver, $dllsuffix\n";
-
-    if ($libver >= 680) {
-	$lang = 'en-US';
-    }
 
     return ($target, $libver, $lang, $dllsuffix);
 }
@@ -238,27 +234,40 @@ sub scan_and_link_files($$$)
     print "\n";
 }
 
-if (@ARGV < 2) {
-    printf "Usage: linkoo </path/to/ooo/install> </path/to/ooo/build/tree> [--product]\n";
-    exit (1);
+my $a;
+my $usage = 0;
+for $a (@ARGV) {
+
+# options
+    if ($a =~ /--product/) {
+	$product = 1;
+    } elsif ($a =~ /--dry-run/) {
+        $dry_run = 1;
+    } elsif (($a eq '--help') || ($a eq '-h')) {
+	$usage = 1;
+
+# ordered arguments
+    } elsif (!defined $OOO_INSTALL) {
+	$OOO_INSTALL = $a;
+    } elsif (!defined $OOO_BUILD) {
+	$OOO_BUILD = $a;
+    } else {
+	print "Unknown argument '$a'\n";
+	$usage = 1;
+    }
 }
 
-$OOO_INSTALL = shift (@ARGV);
-$OOO_BUILD = shift (@ARGV);
+if (!defined $OOO_BUILD && defined $ENV{SRC_ROOT}) {
+    $OOO_BUILD = $ENV{SRC_ROOT};
+}
+
+if ($usage || !defined $OOO_INSTALL || !defined $OOO_BUILD) {
+    printf "Usage: linkoo </path/to/ooo/install> [</path/to/ooo/build/tree>] [--product] [--dry-run]\n";
+    exit (1);
+}
 
 substr ($OOO_INSTALL, 0, 1) eq '/' || die "linkoo requires absolute paths";
 substr ($OOO_BUILD, 0, 1)   eq '/' || die "linkoo requires absolute paths";
-
-my $a;
-for $a (@ARGV) {
-    $product = 1 if $a =~ /--product/;
-    $dry_run = 1 if $a =~ /--dry-run/;
-}
-
-if ($OOO_BUILD !~ m|^/|) {
-    printf "second argument must be an absolute path\n";
-    exit (1);
-}
 
 -d $OOO_INSTALL || die "No such directory $OOO_INSTALL";
 -w $OOO_INSTALL || die "You need write access to $OOO_INSTALL";
