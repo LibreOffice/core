@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jl $ $Date: 2000-10-05 14:34:14 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:26:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,8 +80,8 @@ BOOTSTRAP_SERVICE=FALSE
 
 # --- Files ---
 
-UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
+UNOUCRDEP=	$(SOLARBINDIR)$/types.rdb
+UNOUCRRDB=	$(SOLARBINDIR)$/types.rdb
 
 .IF "$(BOOTSTRAP_SERVICE)" == "TRUE"
 UNOUCROUT=	$(OUT)$/inc$/comprehensive
@@ -89,7 +89,7 @@ INCPRE+=	$(OUT)$/inc$/comprehensive
 CPPUMAKERFLAGS += -C
 .ELSE
 UNOUCROUT=	$(OUT)$/inc
-INCPRE+=	$(OUT)$/inc -I$(SOLARINCDIR)$/external$/atl
+INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
 .ENDIF
 
 UNOTYPES= com.sun.star.bridge.ModelDependent \
@@ -105,7 +105,7 @@ UNOTYPES= com.sun.star.bridge.ModelDependent \
 APP1TARGET=	$(TARGET)
 APP1OBJS=	$(OBJ)$/convTest.obj
 LIBCMT=msvcrtd.lib
-            
+
 
 APP1STDLIBS= \
     $(SALLIB) \
@@ -116,11 +116,11 @@ APP1STDLIBS= \
     ole32.lib	\
     oleaut32.lib	\
     uuid.lib		\
-    comdlg32.lib	
+    comdlg32.lib
 
-    
 
-#gdi32.lib winspool.lib  advapi32.lib shell32.lib    odbc32.lib odbccp32.lib 
+
+#gdi32.lib winspool.lib  advapi32.lib shell32.lib    odbc32.lib odbccp32.lib
 
 
 .IF "$(GUI)"=="WNT"
