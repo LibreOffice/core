@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:11 $
+#   last change: $Author: th $ $Date: 2001-07-06 13:58:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,26 +87,5 @@ OBJFILES=   $(OBJ)$/toolsdll.obj
 
 .INCLUDE :  target.mk
 
-.ELSE # "$(GUI)" == "WNT"
-
-# --- Files --------------------------------------------------------
-
-ASMFILES=   appdata.asm
-CXXFILES=   toolsdll.cxx
-
-SLOFILES=   $(SLO)$/toolsdll.obj \
-            $(SLO)$/appdata.obj
-
-OBJFILES=   $(OBJ)$/toolsdll.obj \
-            $(OBJ)$/appdata.obj
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-.IF "$(depend)" == ""
-appdata.asm:
 .ENDIF
-
-.ENDIF # "$(GUI)" == "WNT"
 
