@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:31:56 $
+ *  last change: $Author: obo $ $Date: 2004-11-22 11:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _GLOBLMN_HRC
-#include "globlmn.hrc"
+#include "globlmn_tmpl.hrc"
 #endif
 #ifndef _GLOBALACC_SRC
 #include "globlac.hrc"
@@ -86,439 +86,31 @@ ErrorBox RID_ERRBOX_MODULENOTINSTALLED
 
 #define IMAGE_ID_LIST\
     IdList = {\
-        SID_OPENURL;\
-        SID_BROWSE_BACKWARD;\
-        SID_BROWSE_FORWARD;\
-        SID_BROWSE_STOP;\
-        SID_BROWSE_HOME;\
-        SID_RELOAD;\
-        SID_EDITDOC;\
-        SID_SAVEDOC;\
-        SID_DOCINFO;\
-        SID_PRINTDOCDIRECT;\
-        SID_CUT;\
-        SID_COPY;\
-        SID_PASTE; \
-        SID_UNDO;\
-        SID_REDO;\
-        SID_EXPLORER;\
-        SID_NAVIGATOR;\
-        SID_STYLE_DESIGNER;\
-        SID_EXPLORER_CREATEFOLDER;\
-        SID_EXPLORER_CREATEBOOKMARK;\
-        SID_EXPLORER_CREATEWORKPLACE;\
-        SID_EXPLORER_CREATEDATABASE;\
-        SID_PROPERTIES;\
-        SID_EXPLORER_SHOWEXTENSION;\
-        SID_EXPLORER_MAIL_HEADER;\
-        SID_EXPLORER_MAIL_BODY;\
-        SID_EDIT_FRAMESET;\
-        SID_SPLIT_PARENT_HORIZONTAL;\
-        SID_SPLIT_PARENT_VERTICAL;\
-        SID_MODIFY_FRAME;\
-        SID_MAIL_DELETE;\
-        SID_MAIL_NEW;\
-        SID_MAIL_NEWWITHSERVER;\
-        SID_MAIL_FOLLOWUP;\
-        SID_MAIL_FILE;\
-        SID_MAIL_NEXTDELETE;\
-        SID_MAIL_PREVDELETE;\
-        SID_MAIL_ATTACH_FILE;\
-        SID_MAIL_ALLNEWSGROUPS;\
-        SID_MAIL_SIGNATURE;\
-        SID_BASICCOMPILE ; \
-        SID_BASICRUN ;     \
-        SID_BASICSTOP ;    \
-        SID_BASICSTEPINTO ;\
-        SID_BASICSTEPOVER ;\
-        SID_BASICSTEPOUT;  \
-        SID_BASICIDE_TOGGLEBRKPNT ; \
-        SID_BASICIDE_MANAGEBRKPNTS; \
-        SID_BASICIDE_ADDWATCH ;     \
-        SID_BASICIDE_OBJCAT ;       \
-        SID_BASICIDE_CHOOSEMACRO ;  \
-        SID_BASICIDE_MODULEDLG ;    \
-        SID_BASICIDE_MATCHGROUP ;   \
-        SID_BASICLOAD ; \
-        SID_BASICSAVEAS ; \
-        SID_CHOOSE_CONTROLS;        \
-        SID_INSERT_PUSHBUTTON;      \
-        SID_INSERT_CHECKBOX;        \
-        SID_INSERT_RADIOBUTTON;     \
-        SID_INSERT_FIXEDTEXT;       \
-        SID_INSERT_EDIT;            \
-        SID_INSERT_LISTBOX;         \
-        SID_INSERT_COMBOBOX;        \
-        SID_INSERT_HSCROLLBAR ;     \
-        SID_INSERT_VSCROLLBAR ;     \
-        SID_INSERT_GROUPBOX;        \
-        SID_SHOW_PROPERTYBROWSER;   \
-        SID_DIALOG_TESTMODE;        \
-        SID_SHOW_HIDDEN ;           \
-        SID_INSERT_IMAGECONTROL ;   \
-        SID_INSERT_PROGRESSBAR ;    \
-        SID_INSERT_HFIXEDLINE ;     \
-        SID_INSERT_VFIXEDLINE ;     \
-        SID_INSERT_DATEFIELD ;     \
-        SID_INSERT_TIMEFIELD ;     \
-        SID_INSERT_NUMERICFIELD ;     \
-        SID_INSERT_CURRENCYFIELD ;     \
-        SID_INSERT_FORMATTEDFIELD ;     \
-        SID_INSERT_PATTERNFIELD ;     \
-        SID_INSERT_FILECONTROL ;     \
-        SID_OBJECT_SELECT;          \
-        SID_INSERT_SELECT;          \
-        SID_RECORDMACRO;\
-        SID_WIN_FULLSCREEN;\
-        SID_PLUGINS_ACTIVE;\
-        SID_HYPERLINK_INSERT;\
-        SID_BROWSER_MODE;\
-        SID_IMAP;\
-        SID_SETUPPRINTER;\
-        SID_EXITANDRETURN;\
-        SID_HELPMENU;\
-        SID_NEWDOC;\
-        FN_FAX; \
-        SID_NEWDOCDIRECT;\
-        SID_OPENDOC;\
-        SID_SAVEASDOC;\
-        SID_CLOSEDOC;  \
-        SID_PRINTDOC;   \
-        SID_REPEAT;\
-        SID_DELETE;\
-        SID_ATTR_CHAR;    \
-        SID_ATTR_CHAR_POSTURE;\
-        SID_ATTR_CHAR_WEIGHT; \
-        SID_ATTR_CHAR_CONTOUR;\
-        SID_ATTR_CHAR_UNDERLINE;\
-        SID_ATTR_CHAR_COLOR;    \
-        SID_ATTR_PARA_ADJUST_LEFT;\
-        SID_ATTR_PARA_ADJUST_RIGHT;\
-        SID_ATTR_PARA_ADJUST_CENTER;\
-        SID_ATTR_PARA_ADJUST_BLOCK; \
-        SID_ATTR_PARA_LINESPACE_10;\
-        SID_ATTR_PARA_LINESPACE_15;\
-        SID_ATTR_PARA_LINESPACE_20;\
-        SID_ATTR_TRANSFORM;        \
-        SID_ZOOM_TOOLBOX;          \
-        SID_ZOOM_OUT;              \
-        SID_ZOOM_IN;               \
-        SID_SIZE_REAL;             \
-        SID_SIZE_PAGE;             \
-        SID_SIZE_ALL;              \
-        SID_DRAW_LINE;             \
-        SID_DRAW_XLINE;            \
-        SID_DRAW_RECT;             \
-        SID_DRAW_RECT_ROUND;       \
-        SID_DRAW_RECT_MOREROUND;   \
-        SID_DRAW_FULLRECT;         \
-        SID_DRAW_FULLRECT_ROUND;   \
-        SID_DRAW_FULLRECT_MOREROUND;\
-        SID_DRAW_ELLIPSE;           \
-        SID_DRAW_FULLELLIPSE;       \
-        SID_DRAW_PIE;               \
-        SID_DRAW_FULLPIE;           \
-        SID_DRAW_ARC;               \
-        SID_DRAW_CIRCLECUT;         \
-        SID_DRAW_FULLCIRCLECUT;     \
-        SID_DRAW_POLYGON;           \
-        SID_DRAW_POLYGON_NOFILL;    \
-        SID_DRAW_BEZIER_NOFILL;     \
-        SID_DRAW_BEZIER_FILL;       \
-        SID_DRAW_FREELINE_NOFILL;   \
-        SID_DRAW_SELECT;            \
-        SID_DRAW_TEXT;              \
-        SID_DRAW_TEXT_VERTICAL;     \
-        SID_DRAW_TEXT_MARQUEE;      \
-        SID_DRAW_CAPTION;           \
-        SID_DRAW_CAPTION_VERTICAL;  \
-        SID_BEZIER_INSERT;          \
-        SID_BEZIER_DELETE;          \
-        SID_BEZIER_MOVE;            \
-        SID_BEZIER_CLOSE;           \
-        SID_BEZIER_SMOOTH;          \
-        SID_BEZIER_APPEND;          \
-        SID_BEZIER_OPEN;            \
-        SID_BEZIER_EDIT;            \
-        SID_BEZIER_CUTLINE;         \
-        SID_BEZIER_CONVERT;         \
-        SID_BEZIER_EDGE;            \
-        SID_BEZIER_SYMMTR;          \
-        SID_BEZIER_ELIMINATE_POINTS;\
-        SID_OBJECT_ROTATE;          \
-        SID_OBJECT_ALIGN;           \
-        SID_OBJECT_ALIGN_LEFT;      \
-        SID_OBJECT_ALIGN_CENTER;    \
-        SID_OBJECT_ALIGN_RIGHT;     \
-        SID_OBJECT_ALIGN_UP;        \
-        SID_OBJECT_ALIGN_MIDDLE;    \
-        SID_OBJECT_ALIGN_DOWN;      \
-        SID_GROUP;                  \
-        SID_UNGROUP;                \
-        SID_ENTER_GROUP;            \
-        SID_LEAVE_GROUP;            \
-        SID_COPY_FORMAT;            \
-        SID_PASTE_FORMAT;           \
-        SID_INSERT_ORGANIGRAM;      \
-        SID_INSERT_DIAGRAM;         \
-        SID_INSERT_TABLE;           \
-        SID_ATTRIBUTES_AREA;        \
-        SID_ATTRIBUTES_LINE;        \
-        SID_ACTIVATE_CONTROLS;      \
-        SID_OUTLINE_UP;             \
-        SID_OUTLINE_DOWN;           \
-        SID_OUTLINE_LEFT;           \
-        SID_OUTLINE_RIGHT;          \
-        SID_OUTLINE_FORMAT;         \
-        SID_OUTLINE_BULLET;         \
-        SID_PRESENTATION;           \
-        SID_TIMER;                  \
-        SID_REHEARSE_TIMINGS;       \
-        SID_DIA;                    \
-        SID_HIDE_SLIDE;             \
-        SID_CHOOSE_POLYGON;         \
-        SID_FM_REMOVE_FILTER_SORT;  \
-        SID_FM_SORTUP;              \
-        SID_FM_SORTDOWN;            \
-        SID_FM_ORDERCRIT;           \
-        SID_FM_FILTERCRIT;          \
-        SID_FM_AUTOFILTER;          \
-        SID_FM_REFRESH;             \
-        SID_DEC_INDENT;             \
-        SID_INC_INDENT;             \
-        SID_INSERT_OBJECT;          \
-        SID_INSERT_PLUGIN;          \
-        SID_INSERT_APPLET;          \
-        SID_SOURCEVIEW;             \
-        SID_HELP_PI;                \
-        SID_HELP_SEARCH;            \
-        SID_HELP_ANNOTATE;          \
-        SID_HELP_BOOKMARK;          \
-        SID_HELP_ZOOMIN;            \
-        SID_HELP_ZOOMOUT;           \
-        SID_FM_PUSHBUTTON; \
-        SID_FM_RADIOBUTTON; \
-        SID_FM_CHECKBOX; \
-        SID_FM_FIXEDTEXT; \
-        SID_FM_GROUPBOX; \
-        SID_FM_EDIT; \
-        SID_FM_LISTBOX; \
-        SID_FM_COMBOBOX; \
-        SID_FM_CTL_PROPERTIES; \
-        SID_FM_PROPERTIES; \
-        SID_FM_TAB_DIALOG; \
-        SID_FM_CONFIG; \
+        SID_HLINKBAR_LINK; \
+        SID_HLINKBAR_SEARCH; \
+        SID_HLINKBAR_TARGET; \
+        SID_HYPERLINK_DIALOG; \
+        SID_FM_RECORD_ABSOLUTE; \
         SID_FM_RECORD_FIRST; \
         SID_FM_RECORD_PREV; \
         SID_FM_RECORD_NEXT; \
         SID_FM_RECORD_LAST; \
+        SID_FM_RECORD_SAVE; \
+        SID_FM_RECORD_UNDO; \
         SID_FM_RECORD_NEW; \
         SID_FM_RECORD_DELETE; \
-        SID_FM_ADD_FIELD; \
-        SID_FM_RECORD_SAVE; \
-        SID_FM_DESIGN_MODE; \
-        SID_FM_RECORD_UNDO; \
-        SID_FM_SHOW_FMEXPLORER; \
-        SID_FM_DBGRID;  \
-        SID_FM_IMAGEBUTTON; \
-        SID_FM_FILECONTROL; \
-        SID_FM_DATEFIELD; \
-        SID_FM_TIMEFIELD; \
-        SID_FM_NUMERICFIELD; \
-        SID_FM_CURRENCYFIELD; \
-        SID_FM_PATTERNFIELD; \
-        SID_FM_IMAGECONTROL; \
-        SID_FM_NAVIGATIONBAR; \
-        SID_HLINKBAR_LINK; \
-        SID_HLINKBAR_SEARCH; \
-        SID_HLINKBAR_TARGET; \
-        FN_NUM_BULLET_ON;    \
-        FN_NUM_NUMBERING_ON; \
-        SID_FM_SEARCH; \
-        SID_FM_OPEN_READONLY; \
-        SID_FM_USE_WIZARDS; \
-        SID_HELPLINES_MOVE; \
-        SID_GRID_USE; \
-        SID_GRID_VISIBLE; \
-        SID_PGP_DECODE; \
-        SID_FM_RECORD_ABSOLUTE; \
+        SID_FM_REFRESH; \
+        SID_FM_SORTUP; \
+        SID_FM_SORTDOWN; \
+        SID_FM_ORDERCRIT; \
+        SID_FM_AUTOFILTER; \
+        SID_FM_FILTERCRIT; \
         SID_FM_FORM_FILTERED; \
-        SID_FM_FORMATTEDFIELD; \
-        SID_FM_SCROLLBAR; \
-        SID_FM_SPINBUTTON; \
-        SID_FM_FILTER_START; \
-        SID_FM_FILTER_NAVIGATOR; \
-        SID_FM_FILTER_EXECUTE; \
-        SID_FM_FILTER_REMOVE; \
-        SID_FM_VIEW_AS_GRID; \
-        SID_HYPERLINK_DIALOG; \
-        SID_FM_AUTOCONTROLFOCUS;\
-        SID_GALLERY;\
-        SID_GRFFILTER;\
-        SID_GRFFILTER_INVERT;\
-        SID_GRFFILTER_SMOOTH;\
-        SID_GRFFILTER_SHARPEN;\
-        SID_GRFFILTER_REMOVENOISE;\
-        SID_GRFFILTER_SOBEL;\
-        SID_GRFFILTER_MOSAIC;\
-        SID_GRFFILTER_EMBOSS;\
-        SID_GRFFILTER_POSTER;\
-        SID_GRFFILTER_POPART;\
-        SID_GRFFILTER_SEPIA;\
-        SID_GRFFILTER_SOLARIZE;\
-        SID_ATTR_GRAF_CROP;\
-        SID_ATTR_GRAF_LUMINANCE;\
-        SID_ATTR_GRAF_CONTRAST;\
-        SID_ATTR_GRAF_RED;\
-        SID_ATTR_GRAF_GREEN;\
-        SID_ATTR_GRAF_BLUE;\
-        SID_ATTR_GRAF_GAMMA;\
-        SID_ATTR_GRAF_TRANSPARENCE;\
-        SID_ATTR_GRAF_INVERT;\
-        SID_ATTR_GRAF_MODE;\
-        SID_TEXTDIRECTION_LEFT_TO_RIGHT;\
-        SID_TEXTDIRECTION_TOP_TO_BOTTOM;\
-        SID_VIEW_DATA_SOURCE_BROWSER;\
-        SID_INSERT_SOUND;\
-        SID_INSERT_VIDEO;\
-        SID_QUITAPP;\
-        SID_SELECTALL;\
-        SID_ATTR_PARA_LEFT_TO_RIGHT;\
-        SID_ATTR_PARA_RIGHT_TO_LEFT;\
-        SID_DIRECTEXPORTDOCASPDF;\
-        SID_ADDONS;\
-        SID_EXTRUSION_TOOGLE;\
-        SID_EXTRUSION_TILT_DOWN;\
-        SID_EXTRUSION_TILT_UP;\
-        SID_EXTRUSION_TILT_LEFT;\
-        SID_EXTRUSION_TILT_RIGHT;\
-        SID_EXTRUSION_DEPTH_FLOATER;\
-        SID_EXTRUSION_DIRECTION_FLOATER;\
-        SID_EXTRUSION_LIGHTING_FLOATER;\
-        SID_EXTRUSION_SURFACE_FLOATER;\
-        SID_EXTRUSION_3D_COLOR;\
-        SID_SPELL_DIALOG;\
-        SID_SET_SUPER_SCRIPT;   \
-        SID_SET_SUB_SCRIPT;     \
-        SID_FM_SHOW_DATANAVIGATOR;\
-        SID_HELPINDEX; \
-        SID_EXTENDEDHELP; \
-        SID_AVMEDIA_PLAYER; \
+        SID_FM_REMOVE_FILTER_SORT; \
     };\
     IdCount = {\
-        318;\
+        21;\
     };
-
-#define OFFICE_ID_LIST\
-    IdList = {\
-        SID_EXPLORER_CREATELINK;\
-        SID_PLUGINS_ACTIVE;\
-        SID_HYPERLINK_INSERT;\
-        SID_BROWSER_MODE;\
-        SID_IMAP;\
-        SID_QUITAPP;\
-        SID_SETUPPRINTER;\
-        SID_EXITANDRETURN;\
-        SID_HELPMENU;\
-        SID_OPENDOC;\
-        SID_SAVEASDOC;\
-        SID_CLOSEDOC;  \
-        SID_PRINTDOC;   \
-        SID_REPEAT;\
-        SID_DELETE;\
-        SID_SELECTALL;\
-        SID_EDITMACRO;  \
-        SID_CONFIGTOOLBOX;\
-        SID_ATTR_CHAR;    \
-        SID_ATTR_CHAR_POSTURE;\
-        SID_ATTR_CHAR_WEIGHT; \
-        SID_ATTR_CHAR_CONTOUR;\
-        SID_ATTR_CHAR_UNDERLINE;\
-        SID_ATTR_CHAR_COLOR;    \
-        SID_ATTR_PARA_ADJUST_LEFT;\
-        SID_ATTR_PARA_ADJUST_RIGHT;\
-        SID_ATTR_PARA_ADJUST_CENTER;\
-        SID_ATTR_PARA_ADJUST_BLOCK; \
-        SID_ATTR_PARA_LINESPACE_10;\
-        SID_ATTR_PARA_LINESPACE_15;\
-        SID_ATTR_PARA_LINESPACE_20;\
-        SID_ATTR_TRANSFORM;        \
-        SID_ZOOM_TOOLBOX;          \
-        SID_ZOOM_OUT;              \
-        SID_ZOOM_IN;               \
-        SID_SIZE_REAL;             \
-        SID_SIZE_PAGE;             \
-        SID_SIZE_ALL;              \
-        SID_DRAW_LINE;             \
-        SID_DRAW_XLINE;            \
-        SID_DRAW_RECT;             \
-        SID_DRAW_RECT_ROUND;       \
-        SID_DRAW_RECT_MOREROUND;   \
-        SID_DRAW_FULLRECT;         \
-        SID_DRAW_FULLRECT_ROUND;   \
-        SID_DRAW_FULLRECT_MOREROUND;\
-        SID_DRAW_ELLIPSE;           \
-        SID_DRAW_FULLELLIPSE;       \
-        SID_DRAW_PIE;               \
-        SID_DRAW_FULLPIE;           \
-        SID_DRAW_ARC;               \
-        SID_DRAW_CIRCLECUT;         \
-        SID_DRAW_FULLCIRCLECUT;     \
-        SID_DRAW_POLYGON;           \
-        SID_DRAW_POLYGON_NOFILL;    \
-        SID_DRAW_BEZIER_NOFILL;     \
-        SID_DRAW_BEZIER_FILL;       \
-        SID_DRAW_FREELINE_NOFILL;   \
-        SID_DRAW_SELECT;            \
-        SID_DRAW_TEXT;              \
-        SID_DRAW_TEXT_VERTICAL;     \
-        SID_DRAW_TEXT_MARQUEE;      \
-        SID_DRAW_CAPTION;           \
-        SID_DRAW_CAPTION_VERTICAL;  \
-        SID_BEZIER_INSERT;          \
-        SID_BEZIER_DELETE;          \
-        SID_BEZIER_MOVE;            \
-        SID_BEZIER_CLOSE;           \
-        SID_BEZIER_SMOOTH;          \
-        SID_BEZIER_APPEND;          \
-        SID_BEZIER_OPEN;            \
-        SID_BEZIER_EDIT;            \
-        SID_BEZIER_CUTLINE;         \
-        SID_OBJECT_ROTATE;          \
-        SID_OBJECT_ALIGN;           \
-        SID_OBJECT_ALIGN_LEFT;      \
-        SID_OBJECT_ALIGN_CENTER;    \
-        SID_OBJECT_ALIGN_RIGHT;     \
-        SID_OBJECT_ALIGN_UP;        \
-        SID_OBJECT_ALIGN_MIDDLE;    \
-        SID_OBJECT_ALIGN_DOWN;      \
-        SID_COPY_FORMAT;            \
-        SID_PASTE_FORMAT;           \
-        SID_INSERT_ORGANIGRAM;      \
-        SID_INSERT_DIAGRAM;         \
-        SID_INSERT_TABLE;           \
-        SID_ATTRIBUTES_AREA;        \
-        SID_ATTRIBUTES_LINE;        \
-        SID_ACTIVATE_CONTROLS;      \
-        SID_OUTLINE_UP;             \
-        SID_OUTLINE_DOWN;           \
-        SID_OUTLINE_LEFT;           \
-        SID_OUTLINE_RIGHT;          \
-        SID_OUTLINE_FORMAT;         \
-        SID_OUTLINE_BULLET;         \
-        SID_PRESENTATION;           \
-        SID_TIMER;                  \
-        SID_REHEARSE_TIMINGS;       \
-        SID_DIA;                    \
-        SID_HIDE_SLIDE;             \
-        SID_CHOOSE_POLYGON;         \
-    };\
-    IdCount = {\
-        101;\
-    };
-#ifndef IMAGE_STDBTN_COLOR
-#define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
-#endif
 
 ImageList RID_DEFAULTIMAGELIST_SC
 {
@@ -532,20 +124,6 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Prefix = "lc";
     MASKCOLOR
     IMAGE_ID_LIST
-};
-
-ImageList RID_OFFICEIMAGELIST_SC
-{
-    Prefix = "sc";
-    MASKCOLOR
-    OFFICE_ID_LIST
-};
-
-ImageList RID_OFFICEIMAGELIST_LC
-{
-    Prefix = "lc";
-    MASKCOLOR
-    OFFICE_ID_LIST
 };
 
 ImageList RID_DEFAULTIMAGELIST_SCH
@@ -562,23 +140,7 @@ ImageList RID_DEFAULTIMAGELIST_LCH
     IMAGE_ID_LIST
 };
 
-ImageList RID_OFFICEIMAGELIST_SCH
-{
-    Prefix = "sch";
-    MASKCOLOR
-    OFFICE_ID_LIST
-};
-
-ImageList RID_OFFICEIMAGELIST_LCH
-{
-    Prefix = "lch";
-    MASKCOLOR
-    OFFICE_ID_LIST
-};
-
- // Strings ---------------------------------------------------------------
-
-
+// Strings ---------------------------------------------------------------
 
 #define MN_EDIT 20
 #define MN_VIEW 21
@@ -586,144 +148,6 @@ ImageList RID_OFFICEIMAGELIST_LCH
 #define MN_WIN 30
 #define MN_HELP 31
 #define MN_TEMPLATES 11
-
-/*
-Menu RID_DEFAULTMENU
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            ITEM_FILE_PICKLIST
-            SubMenu = Menu
-            {
-                ItemList =
-                {
-                    MenuItem
-                    {
-                        ITEM_FILE_NEWDOC
-                    };
-                    MenuItem
-                    {
-                        ITEM_FILE_OPENDOC
-                    };
-                    ITEM_FILE_AUTOPILOT
-                    MenuItem
-                    {
-                        Separator = TRUE ;
-                    };
-                    MenuItem
-                    {
-                        ITEM_FILE_CLOSEDOC
-                    };
-                    MenuItem
-                    {
-                        ITEM_FILE_SAVEDOC
-                    };
-                    MenuItem
-                    {
-                        ITEM_FILE_SAVEASDOC
-                    };
-                    MenuItem
-                    {
-                        ITEM_FILE_SAVEDOCS
-                    };
-                    MenuItem
-                    {
-                        ITEM_FILE_MAIL_SENDDOC
-                    };
-                    MenuItem
-                    {
-                        ITEM_FILE_DOCTEMPLATE
-                    };
-
-                    MenuItem
-                    {
-                        Separator = TRUE ;
-                    };
-                    MenuItem
-                    {
-                        ITEM_FILE_DOCINFO
-                    };
-                    MenuItem
-                    {
-                        Separator = TRUE ;
-                    };
-                    MenuItem
-                    {
-                        ITEM_FILE_PRINTDOC
-                    };
-                    MenuItem
-                    {
-                        ITEM_FILE_SETUPPRINTER
-                    };
-                    MenuItem
-                    {
-                        Separator = TRUE ;
-                    };
-                    MenuItem
-                    {
-                        ITEM_FILE_QUITAPP
-                    };
-                };
-            };
-        };
-        MenuItem
-        {
-            Identifier = MN_EDIT ;
-            Text [ de ] = "~Bearbeiten" ;
-            Text [ en-US ] = "~Edit" ;
-            SubMenu = Menu
-            {
-                ItemList =
-                {
-                    MenuItem
-                    {
-                        ITEM_EDIT_UNDO
-                    };
-                    MenuItem
-                    {
-                        Separator = TRUE ;
-                    };
-                    MenuItem
-                    {
-                        ITEM_EDIT_CUT
-                    };
-                    MenuItem
-                    {
-                        ITEM_EDIT_COPY
-                    };
-                    MenuItem
-                    {
-                        ITEM_EDIT_PASTE
-                    };
-                };
-            };
-            Text [ x-comment ] = " ";
-        };
-        MenuItem
-        {
-            Identifier = MN_EXTRA ;
-            Text [ de ] = "E~xtras" ;
-            Text [ en-US ] = "~Tools" ;
-            SubMenu = Menu
-            {
-                ItemList =
-                {
-                    MenuItem
-                    {
-                        ITEM_TOOLS_BASICCHOOSER
-                    };
-                    ITEM_MN_OPTIONS
-                };
-            };
-            Text [ x-comment ] = " ";
-        };
-        ITEM_WINDOW_MENU
-        ITEM_HELP_MENU
-    };
-};
-*/
 
 #define  ACC Accelerator
 #define ACCK AcceleratorItem
@@ -773,44 +197,3 @@ String STR_SD_STAROFFICE_XML_IMPRESS
     Text [ de ] = "%PRODUCTNAME XML (Impress)" ;
     Text [ en-US ] = "%PRODUCTNAME XML (Impress)";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
