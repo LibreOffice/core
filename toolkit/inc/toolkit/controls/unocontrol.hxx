@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:16:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,6 @@ protected:
                                         maAccessibleContext;    /// our most recent XAccessibleContext instance
 
     sal_Bool                            mbDisposePeer;
-    sal_Bool                            mbUpdatingModel;
     sal_Bool                            mbRefeshingPeer;
 #if SUPD >= 629
     sal_Bool                            mbCreatingPeer;
@@ -189,18 +188,17 @@ protected:
     sal_Bool                            mbDesignMode;
 
     UnoControlComponentInfos            maComponentInfos;
+    ::rtl::OUString                     msPropertyCurrentlyUpdating;
 
     ::osl::Mutex&                                                               GetMutex() { return maMutex; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >          getParentPeer() const;
     void                                                                        updateFromModel();
     void                                                                        peerCreated();
-    sal_Bool                                                                    IsUpdatingModel() const { return mbUpdatingModel; }
-    void                                                                        StartUpdatingModel()    { mbUpdatingModel = sal_True; }
-    void                                                                        EndUpdatingModel()      { mbUpdatingModel = sal_False; }
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >      ImplGetCompatiblePeer( sal_Bool bAcceptExistingPeer );
     virtual void                                                                ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
     virtual void                                                                PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc );
+    virtual void                                                                ImplModelPropertiesChanged( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& rEvents );
 
     void                                                                        disposeAccessibleContext();
 
@@ -229,9 +227,7 @@ public:
     void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
 
-
-    // ::com::sun::star::beans::XPropertiesChangeListener
-    void SAL_CALL propertiesChange( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& evt ) throw(::com::sun::star::uno::RuntimeException);
+    // XEventListener
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XWindow
@@ -285,6 +281,10 @@ public:
     virtual void SAL_CALL removeModeChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addModeChangeApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeApproveListener >& _rxListener ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeModeChangeApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeApproveListener >& _rxListener ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+
+private:
+    // ::com::sun::star::beans::XPropertiesChangeListener
+    void SAL_CALL propertiesChange( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& evt ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 
