@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localresaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 17:04:48 $
+ *  last change: $Author: fs $ $Date: 2002-05-24 16:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,15 +85,27 @@ namespace svt
         ResMgr*     m_pManager;
 
     public:
+        OLocalResourceAccess( const ResId& _rId )
+            :Resource( _rId.SetAutoRelease( sal_False ) )
+            ,m_pManager( _rId.GetResMgr() )
+        {
+        }
+
         OLocalResourceAccess(ResId& _rId, RESOURCE_TYPE _rType)
             :Resource(_rId.SetRT(_rType).SetAutoRelease(sal_False))
             ,m_pManager(_rId.GetResMgr())
         {
         }
+
         ~OLocalResourceAccess()
         {
             m_pManager->Increment(m_pManager->GetRemainSize());
             FreeResource();
+        }
+
+        inline BOOL IsAvailableRes( const ResId& _rId ) const
+        {
+            return Resource::IsAvailableRes( _rId );
         }
     };
 
@@ -106,6 +118,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/05 17:04:48  fs
+ *  initial checkin - accessing local resources
+ *
  *  Revision 1.1  2000/10/05 10:08:35  fs
  *  initial checkin
  *
