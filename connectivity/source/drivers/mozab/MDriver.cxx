@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDriver.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 14:39:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const ::rt
                     ,Sequence< ::rtl::OUString >())
                     );
         }
-        return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size());
+        return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
     ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
     // if you have somthing special to say return it here :-)
