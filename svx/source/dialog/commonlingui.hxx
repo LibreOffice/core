@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonlingui.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:45:16 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,15 @@
 #include <vcl/dialog.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 //=============================================================================
 // SvxClickInfoCtr
 //=============================================================================
 
-class SvxClickInfoCtr: public Control
+class SVX_DLLPUBLIC SvxClickInfoCtr: public Control
 {
 private:
     FixedInfo                   aFixedInfo;
@@ -113,7 +117,7 @@ protected:
 //=============================================================================
 // SvxCommonLinguisticControl
 //=============================================================================
-class SvxCommonLinguisticControl : public Window
+class SVX_DLLPUBLIC SvxCommonLinguisticControl : public Window
 {
 public:
     enum ButtonType
