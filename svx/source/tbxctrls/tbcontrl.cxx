@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: pb $ $Date: 2000-11-13 10:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,11 +105,11 @@
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
-#ifndef _SFX_INIMGR_HXX //autogen
-#include <sfx2/inimgr.hxx>
-#endif
 #ifndef _SFXISETHINT_HXX
 #include <svtools/isethint.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_FONTOPTIONS_HXX
+#include <svtools/fontoptions.hxx>
 #endif
 #pragma hdrstop
 
@@ -609,7 +609,7 @@ SvxFontNameBox::SvxFontNameBox( Window* pParent, SfxBindings& rBind, WinBits nSt
 
 {
     SetSizePixel( Size( 120, 180 ) );
-    BOOL bEnable = SFX_INIMANAGER()->Get( SFX_KEY_SHOW_FONTBOX_WYSIWYG ).ToInt32() > 0;
+    BOOL bEnable = SvtFontOptions().IsFontWYSIWYGEnabled();
     EnableWYSIWYG( bEnable );
     EnableSymbols( bEnable );
     EnableMRU_Impl();
@@ -710,7 +710,7 @@ void SvxFontNameBox::ReleaseFocus_Impl()
 
 void SvxFontNameBox::EnableMRU_Impl()
 {
-    BOOL bEnable = SFX_INIMANAGER()->Get( SFX_KEY_FONT_HISTORY ).ToInt32() > 0;
+    BOOL bEnable = SvtFontOptions().IsFontHistoryEnabled();;
     USHORT nEntries = bEnable ? MAX_MRU_FONTNAME_ENTRIES : 0;
     if ( GetMaxMRUCount() != nEntries )
     {
