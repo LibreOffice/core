@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: kz $ $Date: 2001-04-19 14:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1079,7 +1079,7 @@ void ODatabaseMetaDataResultSet::setColumnsMap()
     aMap[adFileTime]        = ADOS::MapADOType2Jdbc(adFileTime);
     aMap[adPropVariant]     = ADOS::MapADOType2Jdbc(adPropVariant);
     aMap[adVarNumeric]      = ADOS::MapADOType2Jdbc(adVarNumeric);
-    aMap[adArray]           = ADOS::MapADOType2Jdbc(adArray);
+//  aMap[adArray]           = ADOS::MapADOType2Jdbc(adArray);
 
     m_aValueRange[12] = aMap;
 
@@ -1332,7 +1332,7 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap()
     aMap[adFileTime]        = ADOS::MapADOType2Jdbc(adFileTime);
     aMap[adPropVariant]     = ADOS::MapADOType2Jdbc(adPropVariant);
     aMap[adVarNumeric]      = ADOS::MapADOType2Jdbc(adVarNumeric);
-    aMap[adArray]           = ADOS::MapADOType2Jdbc(adArray);
+//  aMap[adArray]           = ADOS::MapADOType2Jdbc(adArray);
 
     m_aValueRange[2] = aMap;
 
