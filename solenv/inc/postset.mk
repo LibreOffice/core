@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hjs $ $Date: 2001-12-14 19:05:35 $
+#   last change: $Author: hjs $ $Date: 2002-04-04 13:32:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -309,6 +309,18 @@ rescharset_35=$(finn$(LANG_GUI))
 RCLANGFLAGS_35+= -d FINNISH
 iso_35=fi
 .ENDIF          # "$(RES_FINN)"!="" || "$(give_me_all_languages)"!=""
+
+.IF "$(RES_THAI)"!="" || "$(give_me_all_languages)"!=""
+alllangext+=66
+thai$(LANG_GUI)*=$(default$(LANG_GUI))
+lang_66=thai
+longlang_66=thai
+langext_66=66
+rsclang_66=-lgTHAI $(UTF8)
+rescharset_66=$(thai$(LANG_GUI))
+RCLANGFLAGS_66+= -d THAI
+iso_66=th
+.ENDIF          # "$(RES_THAI)"!="" || "$(give_me_all_languages)"!=""
 
 .IF "$(L10N_framework)"!=""
 alllangext+=99
