@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-06 08:56:21 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,9 @@
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
 #endif
-
+#ifndef _GETPOOLIDFROMNAMEENUM_HXX
+#include <SwGetPoolIdFromName.hxx>
+#endif
 #include <limits.h>     //fuer LONG_MAX
 
 #ifdef PM20
@@ -187,18 +189,6 @@ const USHORT lBullIndent = 567 / 2;
 const short lBullFirstLineOffset = -567 / 2;
 const USHORT lNumIndent = 567 / 2;
 const short lNumFirstLineOffset = -567 / 2;
-
-
-    // Enum um am Doc abzufragen, ob es sich bei dem Namen um einem
-    // aus unserem Pool handelt.
-enum SwGetPoolIdFromName
-{
-    GET_POOLID_TXTCOLL  = 0x01,
-    GET_POOLID_CHRFMT   = 0x02,
-    GET_POOLID_FRMFMT   = 0x04,
-    GET_POOLID_PAGEDESC = 0x08,
-    GET_POOLID_NUMRULE  = 0x10
-};
 
 // Anzahl der SystemField-Types vom SwDoc
 #define INIT_FLDTYPES   31
