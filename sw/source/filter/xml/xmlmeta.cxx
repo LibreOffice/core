@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmeta.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-08 09:44:55 $
+ *  last change: $Author: mib $ $Date: 2001-01-18 12:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,48 +280,51 @@ void SwXMLExport::_ExportMeta()
 {
     SvXMLExport::_ExportMeta();
 
-    OUStringBuffer aOut(16);
-
-    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
-    Reference < XText > xText = xTextDoc->getText();
-    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-    ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
-    if( !xTextTunnel.is() )
-        return;
-
-    SwXText *pText = (SwXText *)xTextTunnel->getSomething(
-                                        SwXText::getUnoTunnelId() );
-    ASSERT( pText, "SwXText missing" );
-    if( !pText )
-        return;
-
-    SwDocStat aDocStat( pText->GetDoc()->GetDocStat() );
-    aOut.append( (sal_Int32)aDocStat.nTbl );
-    AddAttribute( XML_NAMESPACE_META, sXML_table_count,
-                  aOut.makeStringAndClear() );
-    aOut.append( (sal_Int32)aDocStat.nGrf );
-    AddAttribute( XML_NAMESPACE_META, sXML_image_count,
-                  aOut.makeStringAndClear() );
-    aOut.append( (sal_Int32)aDocStat.nOLE );
-    AddAttribute( XML_NAMESPACE_META, sXML_object_count,
-                  aOut.makeStringAndClear() );
-    if( aDocStat.nPage )
+    if( !IsBlockMode() )
     {
-        aOut.append( (sal_Int32)aDocStat.nPage );
-        AddAttribute( XML_NAMESPACE_META, sXML_page_count,
+        OUStringBuffer aOut(16);
+
+        Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
+        Reference < XText > xText = xTextDoc->getText();
+        Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
+        ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+        if( !xTextTunnel.is() )
+            return;
+
+        SwXText *pText = (SwXText *)xTextTunnel->getSomething(
+                                            SwXText::getUnoTunnelId() );
+        ASSERT( pText, "SwXText missing" );
+        if( !pText )
+            return;
+
+        SwDocStat aDocStat( pText->GetDoc()->GetDocStat() );
+        aOut.append( (sal_Int32)aDocStat.nTbl );
+        AddAttribute( XML_NAMESPACE_META, sXML_table_count,
                       aOut.makeStringAndClear() );
+        aOut.append( (sal_Int32)aDocStat.nGrf );
+        AddAttribute( XML_NAMESPACE_META, sXML_image_count,
+                      aOut.makeStringAndClear() );
+        aOut.append( (sal_Int32)aDocStat.nOLE );
+        AddAttribute( XML_NAMESPACE_META, sXML_object_count,
+                      aOut.makeStringAndClear() );
+        if( aDocStat.nPage )
+        {
+            aOut.append( (sal_Int32)aDocStat.nPage );
+            AddAttribute( XML_NAMESPACE_META, sXML_page_count,
+                          aOut.makeStringAndClear() );
+        }
+        aOut.append( (sal_Int32)aDocStat.nPara );
+        AddAttribute( XML_NAMESPACE_META, sXML_paragraph_count,
+                      aOut.makeStringAndClear() );
+        aOut.append( (sal_Int32)aDocStat.nWord );
+        AddAttribute( XML_NAMESPACE_META, sXML_word_count,
+                      aOut.makeStringAndClear() );
+        aOut.append( (sal_Int32)aDocStat.nChar );
+        AddAttribute( XML_NAMESPACE_META, sXML_character_count,
+                      aOut.makeStringAndClear() );
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_META,
+                                  sXML_document_statistic,
+                                  sal_True, sal_True );
     }
-    aOut.append( (sal_Int32)aDocStat.nPara );
-    AddAttribute( XML_NAMESPACE_META, sXML_paragraph_count,
-                  aOut.makeStringAndClear() );
-    aOut.append( (sal_Int32)aDocStat.nWord );
-    AddAttribute( XML_NAMESPACE_META, sXML_word_count,
-                  aOut.makeStringAndClear() );
-    aOut.append( (sal_Int32)aDocStat.nChar );
-    AddAttribute( XML_NAMESPACE_META, sXML_character_count,
-                  aOut.makeStringAndClear() );
-    SvXMLElementExport aElem( *this, XML_NAMESPACE_META,
-                              sXML_document_statistic,
-                              sal_True, sal_True );
 }
 

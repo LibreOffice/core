@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-17 10:55:19 $
+ *  last change: $Author: mib $ $Date: 2001-01-18 12:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ class SwXMLImport: public SvXMLImport
                                             // loaded only sal_False means that
                                             // existing styles will be
                                             // overwritten.
+    sal_Bool                bBlock : 1;     // Load text block
     sal_Bool                bAutoStylesValid : 1;
     sal_Bool                bProgressValid : 1;
     sal_Bool                bShowProgress : 1;
@@ -136,6 +137,7 @@ protected:
 public:
 
     SwXMLImport();
+#ifdef XML_CORE_API
     SwXMLImport( SwDoc& rDoc, const SwPaM& rPaM, sal_Bool bLoadDoc,
                  sal_Bool bInsertMode, sal_uInt16 nStyleFamMask,
                  const ::com::sun::star::uno::Reference<
@@ -143,6 +145,7 @@ public:
                  const ::com::sun::star::uno::Reference<
                     ::com::sun::star::document::XGraphicObjectResolver > &,
                    SvStorage *pPkg );
+#endif
 
     ~SwXMLImport();
 
@@ -151,6 +154,7 @@ public:
                         ::com::sun::star::text::XTextRange > & rInsertPos );
     void         setStyleInsertMode( sal_uInt16 nFamilies,
                                      sal_Bool bOverwrite );
+    void         setBlockMode();
 
     // ::com::sun::star::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument(void)
@@ -185,6 +189,7 @@ public:
     sal_uInt16 GetStyleFamilyMask() const { return nStyleFamilyMask; }
     sal_Bool IsInsertMode() const { return bInsert; }
     sal_Bool IsStylesOnlyMode() const { return !bLoadDoc; }
+    sal_Bool IsBlockMode() const { return bBlock; }
 
     inline const SvXMLUnitConverter& GetTwipUnitConverter() const;
     inline const SvXMLImportItemMapper& GetTableItemMapper() const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-17 10:55:19 $
+ *  last change: $Author: mib $ $Date: 2001-01-18 12:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,7 @@ SvXMLImportContext *SwXMLImport::CreateContext(
 SwXMLImport::SwXMLImport() :
     bLoadDoc( sal_True ),
     bInsert( sal_False ),
+    bBlock( sal_False ),
     nStyleFamilyMask( SFX_STYLE_FAMILY_ALL ),
     pDocElemTokenMap( 0 ),
     pTableElemTokenMap( 0 ),
@@ -277,6 +278,8 @@ SwXMLImport::SwXMLImport() :
     _InitItemImport();
 
 }
+
+#ifdef XML_CORE_API
 SwXMLImport::SwXMLImport(
         SwDoc& rDoc, const SwPaM& rPaM,
         sal_Bool bLDoc, sal_Bool bInsertMode, sal_uInt16 nStyleFamMask,
@@ -307,6 +310,7 @@ SwXMLImport::SwXMLImport(
         xText->createTextCursorByRange( xTextRange );
     GetTextImport()->SetCursor( xTextCursor );
 }
+#endif
 
 SwXMLImport::~SwXMLImport()
 {
@@ -333,6 +337,12 @@ void SwXMLImport::setStyleInsertMode( sal_uInt16 nFamilies,
     nStyleFamilyMask = nFamilies;
     bLoadDoc = sal_False;
 }
+
+void SwXMLImport::setBlockMode( )
+{
+    bBlock = sal_True;
+}
+
 
 const Sequence< sal_Int8 > & SwXMLImport::getUnoTunnelId() throw()
 {

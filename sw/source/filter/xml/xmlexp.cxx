@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-17 10:55:18 $
+ *  last change: $Author: mib $ $Date: 2001-01-18 12:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,7 @@ SwXMLExport::SwXMLExport() :
     bExportWholeDoc( bExpWholeDoc ),
     bExportFirstTableOnly( bExpFirstTableOnly ),
 #endif
+    bBlock( sal_False ),
     bShowProgress( sal_True ),
     sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
     sCell(RTL_CONSTASCII_USTRINGPARAM("Cell"))
@@ -217,10 +218,18 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
 }
 #endif
 
+void SwXMLExport::setBlockMode()
+{
+    bBlock = sal_True;
+
+}
+
 sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
 {
     if( !GetModel().is() )
         return ERR_SWG_WRITE_ERROR;
+
+    GetTextParagraphExport()->SetBlockMode( bBlock );
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-17 10:55:19 $
+ *  last change: $Author: mib $ $Date: 2001-01-18 12:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ class SwXMLExport : public SvXMLExport
 
     sal_Int32                   nContentProgressStart;
     sal_Bool                    bExportWholeDoc : 1;// export whole document?
+    sal_Bool                    bBlock : 1;         // export text block?
     sal_Bool                    bExportFirstTableOnly : 1;
     sal_Bool                    bShowProgress : 1;
 
@@ -175,6 +176,8 @@ public:
 #endif
     virtual ~SwXMLExport();
 
+    void setBlockMode();
+
     virtual sal_uInt32 exportDoc( const sal_Char *pClass=0 );
 
     inline const SvXMLUnitConverter& GetTwipUnitConverter() const;
@@ -189,6 +192,7 @@ public:
     }
 
     sal_Bool IsShowProgress() const { return bShowProgress; }
+    sal_Bool IsBlockMode() const { return bBlock; }
 };
 
 inline const SvXMLUnitConverter& SwXMLExport::GetTwipUnitConverter() const

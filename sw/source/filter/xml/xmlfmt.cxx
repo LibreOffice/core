@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 17:12:21 $
+ *  last change: $Author: mib $ $Date: 2001-01-18 12:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -985,7 +985,12 @@ sal_Bool SwXMLStylesContext_Impl::InsertStyleFamily( sal_uInt16 nFamily ) const
         bIns = (nStyleFamilyMask & SFX_STYLE_FAMILY_PSEUDO) != 0;
         break;
     case XML_STYLE_FAMILY_TEXT_OUTLINE:
-        bIns = !(rSwImport.IsInsertMode() || rSwImport.IsStylesOnlyMode());
+    case XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG:
+    case XML_STYLE_FAMILY_TEXT_ENDNOTECONFIG:
+    case XML_STYLE_FAMILY_TEXT_LINENUMBERINGCONFIG:
+    case XML_STYLE_FAMILY_TEXT_BIBLIOGRAPHYCONFIG:
+        bIns = !(rSwImport.IsInsertMode() || rSwImport.IsStylesOnlyMode() ||
+                 rSwImport.IsBlockMode());
         break;
     default:
         bIns = SvXMLStylesContext::InsertStyleFamily( nFamily );
