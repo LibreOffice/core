@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:18:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "core_pch.hxx"
 #endif
@@ -218,6 +217,8 @@ ScRangeData::ScRangeData
              bModified  (FALSE)
 
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rHdr.StartEntry();
 
     if( nVer >= SC_NEW_TOKEN_ARRAYS )
@@ -228,7 +229,11 @@ ScRangeData::ScRangeData
         rStream >> nPos >> eType >> nIndex >> nData;
         if( nData & 0x0F )
             rStream.SeekRel( nData & 0x0F );
+#if SC_ADDRESS_BITS_USED
         aPos = ScAddress( nPos );
+#else
+#error SC_ADDRESS_BITS_USED
+#endif
         pCode->Load( rStream, nVer, aPos );
     }
     else
@@ -242,22 +247,32 @@ ScRangeData::ScRangeData
     }
 
     rHdr.EndEntry();
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 BOOL ScRangeData::Store
     ( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rHdr.StartEntry();
 
     rStream.WriteByteString( aName, rStream.GetStreamCharSet() );
+#if SC_ADDRESS_BITS_USED
     rStream << (UINT32) aPos << eType << nIndex << (BYTE) 0x00;
+#else
+#error SC_ADDRESS_BITS_USED
+#endif
     pCode->Store( rStream, aPos );
 
     rHdr.EndEntry();
     return TRUE;
+#else
+    return FALSE;
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
-BOOL ScRangeData::IsBeyond( USHORT nMaxRow ) const
+BOOL ScRangeData::IsBeyond( SCROW nMaxRow ) const
 {
     if ( aPos.Row() > nMaxRow )
         return TRUE;
@@ -280,9 +295,9 @@ void ScRangeData::GuessPosition()
 
     DBG_ASSERT(aPos == ScAddress(), "die Position geht jetzt verloren");
 
-    INT16 nMinCol = 0;
-    INT16 nMinRow = 0;
-    INT16 nMinTab = 0;
+    SCsCOL nMinCol = 0;
+    SCsROW nMinRow = 0;
+    SCsTAB nMinTab = 0;
 
     ScToken* t;
     pCode->Reset();
@@ -308,11 +323,11 @@ void ScRangeData::GuessPosition()
         }
     }
 
-    aPos = ScAddress( (USHORT)(-nMinCol), (USHORT)(-nMinRow), (USHORT)(-nMinTab) );
+    aPos = ScAddress( (SCCOL)(-nMinCol), (SCROW)(-nMinRow), (SCTAB)(-nMinTab) );
 
     //! Test
-//  DBG_ERROR(String("Pos ")+String((USHORT)(-nMinCol))+String("/")+
-//          String((USHORT)(-nMinRow))+String("/")+String((USHORT)(-nMinTab)));
+//  DBG_ERROR(String("Pos ")+String((SCCOL)(-nMinCol))+String("/")+
+//          String((SCROW)(-nMinRow))+String("/")+String((SCTAB)(-nMinTab)));
 }
 
 void ScRangeData::GetSymbol (String& rSymbol) const
@@ -355,7 +370,7 @@ void ScRangeData::UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress& r
 
 void ScRangeData::UpdateReference(  UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
-                                    short nDx, short nDy, short nDz )
+                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     BOOL bChanged = FALSE;
 
@@ -407,7 +422,7 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
     bModified = bChanged;
 }
 
-void ScRangeData::UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY )
+void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
     BOOL bChanged = FALSE;
 
@@ -488,7 +503,7 @@ BOOL ScRangeData::IsReference( ScRange& rRange ) const
     return bIs;
 }
 
-void ScRangeData::UpdateTabRef(USHORT nOldTable, USHORT nFlag, USHORT nNewTable)
+void ScRangeData::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
 {
     pCode->Reset();
     if( pCode->GetNextReference() )
@@ -618,10 +633,10 @@ BOOL ScRangeData::HasReferences() const
 // bei TransferTab von einem in ein anderes Dokument anpassen,
 // um Referenzen auf die eigene Tabelle mitzubekommen
 
-void ScRangeData::TransferTabRef( USHORT nOldTab, USHORT nNewTab )
+void ScRangeData::TransferTabRef( SCTAB nOldTab, SCTAB nNewTab )
 {
-    short nTabDiff = nNewTab - nOldTab;
-    short nPosDiff = nNewTab - aPos.Tab();
+    long nTabDiff = (long)nNewTab - nOldTab;
+    long nPosDiff = (long)nNewTab - aPos.Tab();
     aPos.SetTab( nNewTab );
     ScToken* t;
     pCode->Reset();
@@ -678,8 +693,8 @@ void ScRangeData::ValidateTabRefs()
 
     //  find range of used tables
 
-    USHORT nMinTab = aPos.Tab();
-    USHORT nMaxTab = nMinTab;
+    SCTAB nMinTab = aPos.Tab();
+    SCTAB nMaxTab = nMinTab;
     ScToken* t;
     pCode->Reset();
     while ( t = pCode->GetNextReference() )
@@ -705,13 +720,13 @@ void ScRangeData::ValidateTabRefs()
         }
     }
 
-    USHORT nTabCount = pDoc->GetTableCount();
+    SCTAB nTabCount = pDoc->GetTableCount();
     if ( nMaxTab >= nTabCount && nMinTab > 0 )
     {
         //  move position and relative tab refs
         //  The formulas that use the name are not changed by this
 
-        USHORT nMove = nMinTab;
+        SCTAB nMove = nMinTab;
         aPos.SetTab( aPos.Tab() - nMove );
 
         pCode->Reset();
@@ -815,7 +830,7 @@ BOOL ScRangeName::Store( SvStream& rStream ) const
 
     USHORT i;
     USHORT nSaveCount = nCount;
-    USHORT nSaveMaxRow = pDoc->GetSrcMaxRow();
+    SCROW nSaveMaxRow = pDoc->GetSrcMaxRow();
     if ( nSaveMaxRow < MAXROW )
     {
         nSaveCount = 0;
@@ -842,7 +857,7 @@ BOOL ScRangeName::Store( SvStream& rStream ) const
 
 void ScRangeName::UpdateReference(  UpdateRefMode eUpdateRefMode,
                                     const ScRange& rRange,
-                                    short nDx, short nDy, short nDz )
+                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     for (USHORT i=0; i<nCount; i++)
         ((ScRangeData*)pItems[i])->UpdateReference(eUpdateRefMode, rRange,
@@ -855,7 +870,7 @@ void ScRangeName::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
         ((ScRangeData*)pItems[i])->UpdateTranspose( rSource, rDest );
 }
 
-void ScRangeName::UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY )
+void ScRangeName::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
     for (USHORT i=0; i<nCount; i++)
         ((ScRangeData*)pItems[i])->UpdateGrow( rArea, nGrowX, nGrowY );
@@ -924,7 +939,7 @@ ScRangeData* ScRangeName::GetRangeAtBlock( const ScRange& rBlock ) const
     return NULL;
 }
 
-void ScRangeName::UpdateTabRef(USHORT nOldTable, USHORT nFlag, USHORT nNewTable)
+void ScRangeName::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
 {
     for (USHORT i=0; i<nCount; i++)
         ((ScRangeData*)pItems[i])->UpdateTabRef(nOldTable, nFlag, nNewTable);
