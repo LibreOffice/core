@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:47:15 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 13:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,9 +544,10 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     // temp. Variablen, da die Shell nach dem Paste schon
                     // zerstoert sein kann
                     SwView* pView = &rView;
-                    sal_Int16 nFormatId = SwTransferable::PasteSpecial( rSh, aDataHelper );
-                    rReq.SetReturnValue( SfxInt16Item( nId, nFormatId ) );
-                    if ( rReq.IsRecording() )
+                    ULONG nFormatId = 0;
+                    int nRet = SwTransferable::PasteSpecial( rSh, aDataHelper, nFormatId );
+                    rReq.SetReturnValue( SfxInt16Item( nId, nRet ) );
+                    if ( nRet && rReq.IsRecording() )
                     {
                         rReq.Ignore();
                         SfxRequest aReq( rView.GetViewFrame(), SID_CLIPBOARD_FORMAT_ITEMS );

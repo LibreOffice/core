@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-29 10:41:07 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 13:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ public:
 
     static BOOL IsPasteSpecial( const SwWrtShell& rWrtShell,
                                 const TransferableDataHelper& );
-    static int PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& );
+    static int PasteSpecial( SwWrtShell& rSh, TransferableDataHelper&, ULONG& rFormatUsed );
     static int PasteFormat( SwWrtShell& rSh, TransferableDataHelper& rData,
                              ULONG nFormat );
 

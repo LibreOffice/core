@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-30 12:56:04 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 13:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2698,8 +2698,7 @@ static USHORT aPasteSpecialIds[] =
     0
 };
 
-int SwTransferable::PasteSpecial( SwWrtShell& rSh,
-                                    TransferableDataHelper& rData )
+int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData, ULONG& rFormatUsed )
 {
     int nRet = 0;
     SvPasteObjectDialog* pDlg = new SvPasteObjectDialog;
@@ -2766,6 +2765,9 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh,
 
     if( nFormat )
         nRet = SwTransferable::PasteFormat( rSh, rData, nFormat );
+
+    if ( nRet )
+        rFormatUsed = nFormat;
 
     delete pDlg;
     return nRet;
