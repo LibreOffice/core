@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:19:30 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONSPEED_HPP_
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_VERBDESCR_HPP_
+#include <com/sun/star/embed/VerbDescriptor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
 #ifndef _COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP_
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #endif
@@ -81,6 +87,9 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_VERBATTRIBUTES_HPP_
+#include <com/sun/star/embed/VerbAttributes.hpp>
 #endif
 
 #include "sdattr.hxx"
@@ -117,9 +126,7 @@
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SB_SBMETH_HXX //autogen
 #include <basic/sbmeth.hxx>
 #endif
@@ -357,19 +364,28 @@ void SdTPAction::Construct()
     }
     else if( pOleObj )
     {
-        SvInPlaceObjectRef aIPObj = pOleObj->GetObjRef();
-
-        if ( aIPObj.Is() )
+        uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
+        if ( xObj.is() )
         {
             bOLEAction = TRUE;
-            const SvVerbList* pList = &aIPObj->GetVerbList();
-            for( USHORT i = 0; i < pList->Count() ; i++ )
+            uno::Sequence < embed::VerbDescriptor > aVerbs;
+            try
             {
-                const SvVerb& rVerb = pList->GetObject( i );
-                if( rVerb.IsOnMenu() )
+                aVerbs = xObj->getSupportedVerbs();
+            }
+            catch ( embed::NeedsRunningStateException& )
+            {
+                xObj->changeState( embed::EmbedStates::RUNNING );
+                aVerbs = xObj->getSupportedVerbs();
+            }
+
+            for( sal_Int32 i=0; i<aVerbs.getLength(); i++ )
+            {
+                embed::VerbDescriptor aVerb = aVerbs[i];
+                if( aVerb.VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU )
                 {
-                    String aTmp( rVerb.GetName() );
-                    aVerbVector.push_back( rVerb.GetId() );
+                    String aTmp( aVerb.VerbName );
+                    aVerbVector.push_back( aVerb.VerbID );
                     aLbOLEAction.InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( aTmp ) );
                 }
             }
@@ -1172,17 +1188,15 @@ IMPL_LINK( SdTPAction, CheckFileHdl, void *, EMPTYARG )
 
             // ist es eine Draw-Datei?
             // mit READ oeffnen, sonst schreiben die Storages evtl. in die Datei!
+            uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
+            DBG_ASSERT( xStorage.is(), "Kein Storage!" );
 
-            SvStorage* pStorage = aMedium.GetStorage();
-            DBG_ASSERT( pStorage, "Kein Storage!" );
-
-            if( pStorage->IsStream( pStarDrawDoc ) ||
-                pStorage->IsStream( pStarDrawDoc3 ) ||
-                pStorage->IsStream( pStarDrawXMLContent ) ||
-                pStorage->IsStream( pStarDrawOldXMLContent ) )
+            uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
+            if( xAccess.is() &&
+                ( xAccess->hasByName( pStarDrawXMLContent ) ||
+                xAccess->hasByName( pStarDrawOldXMLContent ) ) )
             {
                 SdDrawDocument* pBookmarkDoc = pDoc->OpenBookmarkDoc( aFile );
-
                 if( pBookmarkDoc )
                 {
                     aLastFile = aFile;
