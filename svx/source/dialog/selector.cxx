@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-13 13:26:19 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,27 +117,27 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
-#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERSUPPLIER_HPP_
-#include <drafts/com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#ifndef  _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERSUPPLIER_HPP_
+#include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #endif
 
-#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
-#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
+#ifndef  _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
+#include <com/sun/star/script/provider/XScriptProvider.hpp>
 #endif
 
-#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_XBROWSENODE_HPP_
-#include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
+#ifndef  _COM_SUN_STAR_SCRIPT_BROWSE_XBROWSENODE_HPP_
+#include <com/sun/star/script/browse/XBrowseNode.hpp>
 #endif
 
-#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODETYPES_HPP_
-#include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
+#ifndef  _COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODETYPES_HPP_
+#include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #endif
 
-#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODEFACTORY_HPP_
-#include <drafts/com/sun/star/script/browse/XBrowseNodeFactory.hpp>
+#ifndef  _COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODEFACTORY_HPP_
+#include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
 #endif
-#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODEFACTORYVIEWTYPE_HPP_
-#include <drafts/com/sun/star/script/browse/BrowseNodeFactoryViewType.hpp>
+#ifndef  _COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODEFACTORYVIEWTYPE_HPP_
+#include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 #endif
 #include <drafts/com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -148,7 +148,7 @@
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::script;
+using namespace ::com::sun::star::script;
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -615,9 +615,9 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
                 ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
             xCtx.set( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
             Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
-                OUString::createFromAscii( "/singletons/drafts.com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
-            rootNode.set( xFac->getView( browse::BrowseNodeFactoryViewType::SCRIPTSELECTOR ) );
-            //rootNode.set( xFac->getView( browse::BrowseNodeFactoryViewType::SCRIPTORGANIZER ) );
+                OUString::createFromAscii( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
+            rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
+            //rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROORGANIZER ) );
         }
         catch( Exception& e )
         {
@@ -1109,7 +1109,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                                 try
                                 {
                                     value = xPropSet->getPropertyValue(
-                                        String::CreateFromAscii( "DESCRIPTION" ) );
+                                        String::CreateFromAscii( "Description" ) );
                                     value >>= description;
                                 }
                                 catch (Exception &e) {
@@ -1358,20 +1358,11 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                                 pNewEntry->SetUserData( pInfo );
                                 aArr.Insert( pInfo, aArr.Count() );
 
-                                if ( children[n]->hasChildNodes() )
-                                {
-                                    Sequence< Reference< browse::XBrowseNode > > grandchildren =
-                                        children[n]->getChildNodes();
-
-                                    for ( ULONG m = 0; m < grandchildren.getLength(); m++ )
-                                    {
-                                        if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
-                                        {
-                                            pNewEntry->EnableChildsOnDemand( TRUE );
-                                            m = grandchildren.getLength();
-                                        }
-                                    }
-                                }
+                                /* i30923 - Would be nice if there was a better
+                                 * way to determine if a basic lib had children
+                                 * without having to ask for them (which forces
+                                 * the library to be loaded */
+                                pNewEntry->EnableChildsOnDemand( TRUE );
                             }
                         }
                     }
