@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-10 12:34:28 $
+ *  last change: $Author: pw $ $Date: 2000-11-22 13:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,11 @@ IMPL_LINK ( SvxHyperlinkInternetTp, TimeoutHdl_Impl, Timer *, EMPTYARG )
 
         if ( !aStrURL.EqualsIgnoreCaseAscii( sHTTPScheme ) &&
              !aStrURL.EqualsIgnoreCaseAscii( sHTTPSScheme ) )
+        {
+            EnterWait();
             mpMarkWnd->RefreshTree ( aStrURL );
+            LeaveWait();
+        }
     }
 
     return( 0L );
@@ -860,7 +864,11 @@ IMPL_LINK ( SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl, void *, EMPTYARG )
     }
 
     if ( maRbtLinktypInternet.IsChecked() && aStrURL.Len()!=0 && IsMarkWndVisible() )
+    {
+        EnterWait();
         mpMarkWnd->RefreshTree ( maCbbTarget.GetText() );
+        LeaveWait();
+    }
 
     ModifiedTargetHdl_Impl ( NULL );
 
@@ -909,12 +917,14 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ClickTargetHdl_Impl, void *, EMPTYARG )
     if ( maRbtLinktypInternet.IsChecked() )
     {
         String aStrURL( maCbbTarget.GetText() );
+        EnterWait();
         if ( !aStrURL.EqualsIgnoreCaseAscii( sHTTPScheme )  &&
              !aStrURL.EqualsIgnoreCaseAscii(sHTTPSScheme ) &&
              aStrURL != aEmptyStr )
             mpMarkWnd->RefreshTree ( aStrURL );
         else
             mpMarkWnd->SetError( LERR_DOCNOTOPEN );
+        LeaveWait();
     }
 
     ShowMarkWnd ();

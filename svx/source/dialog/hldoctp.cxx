@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-10 12:33:43 $
+ *  last change: $Author: pw $ $Date: 2000-11-22 13:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,10 +433,14 @@ IMPL_LINK ( SvxHyperlinkDocTp, ClickTargetHdl_Impl, void *, EMPTYARG )
     {
         mpMarkWnd->SetError( LERR_NOERROR );
 
+        EnterWait();
+
         if ( maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
             mpMarkWnd->RefreshTree ( aEmptyStr );
         else
             mpMarkWnd->RefreshTree ( maStrURL );
+
+        LeaveWait();
     }
     else
         mpMarkWnd->SetError( LERR_DOCNOTOPEN );
@@ -479,10 +483,14 @@ IMPL_LINK ( SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, EMPTYARG )
                                   maStrURL == aEmptyStr                   ||
                                   maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) ) )
     {
+        EnterWait();
+
         if ( maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
             mpMarkWnd->RefreshTree ( aEmptyStr );
         else
             mpMarkWnd->RefreshTree ( maStrURL );
+
+        LeaveWait();
     }
 
     return( 0L );
