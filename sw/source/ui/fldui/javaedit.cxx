@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:28:45 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ void SwJavaEditDialog::Apply()
 void SwJavaEditDialog::CheckTravel()
 {
     BOOL bTravel = FALSE;
-    BOOL bNext, bPrev;
+    BOOL bNext(FALSE), bPrev(FALSE);
 
     if(!bNew)
     {
