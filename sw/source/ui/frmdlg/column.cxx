@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:24:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,7 @@ IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-#ifndef DEBUG
+#if OSL_DEBUG_LEVEL < 2
 inline
 #endif
 USHORT GetMaxWidth( SwColMgr* pColMgr, USHORT nCols )
