@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-28 09:37:31 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 09:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,12 +168,9 @@ void ODefinitionContainer::dispose()
             ++aLoop
         )
     {
-        Reference< XComponent > xComp(aLoop->xObject, UNO_QUERY);
-        if (xComp.is())
-        {
-            xComp->removeEventListener(static_cast<XPropertyChangeListener*>(this));
-            xComp->dispose();
-        }
+        removeObjectListener(aLoop->xObject);
+        Reference<XPropertySet> xProp = aLoop->xObject;
+        ::comphelper::disposeComponent(xProp);
     }
 
     // remove our elements
@@ -519,9 +516,7 @@ Reference< XPropertySet > ODefinitionContainer::implGetByName(const ::rtl::OUStr
             if (aSearch->sName.equals(_rName))
             {
                 aSearch->xObject = aMapPos->second;
-                Reference< XComponent > xComp(aSearch->xObject, UNO_QUERY);
-                if (xComp.is())
-                    xComp->addEventListener(static_cast<XPropertyChangeListener*>(this));
+                addObjectListener(aSearch->xObject);
                 break;
             }
         }
@@ -571,10 +566,7 @@ void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource ) thr
     {
         if (xSource.get() == aLoop->xObject.get())
         {
-            Reference< XComponent > xComp(aLoop->xObject, UNO_QUERY);
-            DBG_ASSERT(xComp.is(), "ODefinitionContainer::disposing : a 'disposing' call from a non-XCompoent object ?");
-            // stop all listening
-            xComp->removeEventListener(static_cast<XPropertyChangeListener*>(this));
+            removeObjectListener(aLoop->xObject);
             // and clear our document map/vector, so the object will be recreated on next access
             aLoop->xObject.clear();
             m_aDocumentMap[aLoop->sName].clear();
@@ -645,16 +637,18 @@ void ODefinitionContainer::implRemove(const ::rtl::OUString& _rName)
 void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxNewObject, const OConfigurationNode& _rObjectNode)
 {
     MutexGuard aGuard(m_rMutex);
+    OSL_ENSURE(_rxNewObject.is(),"Object is null!");
     try
     {
         // now update our structures
-        m_aDocuments.push_back(Document(_rName, _rxNewObject));
-        m_aDocumentMap[_rName] = _rxNewObject;
-        m_aDocumentObjectKeys[_rName] = _rObjectNode;
+        if(_rxNewObject.is())
+        {
+            m_aDocuments.push_back(Document(_rName, _rxNewObject));
+            m_aDocumentMap[_rName] = _rxNewObject;
+            m_aDocumentObjectKeys[_rName] = _rObjectNode;
 
-        Reference< XComponent > xComp(_rxNewObject, UNO_QUERY);
-        if (xComp.is())
-            xComp->addEventListener(static_cast<XPropertyChangeListener*>(this));
+            addObjectListener(_rxNewObject);
+        }
     }
     catch(Exception&)
     {
@@ -675,16 +669,9 @@ void ODefinitionContainer::implReplace(const ::rtl::OUString& _rName, const Refe
     {
         if (aSearch->sName.equals(_rName))
         {
-            Reference< XComponent > xComp(aSearch->xObject, UNO_QUERY);
-            if (xComp.is())
-                xComp->removeEventListener(static_cast<XPropertyChangeListener*>(this));
-
+            removeObjectListener(aSearch->xObject);
             aSearch->xObject = _rxNewObject;
-
-            xComp = Reference< XComponent >(_rxNewObject, UNO_QUERY);
-            if (xComp.is())
-                xComp->addEventListener(static_cast<XPropertyChangeListener*>(this));
-
+            addObjectListener(aSearch->xObject);
             break;
         }
     }
@@ -763,9 +750,8 @@ void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& e
             ::rtl::OUString sNewName,sOldName;
             evt.OldValue >>= sOldName;
             evt.NewValue >>= sNewName;
-            Reference< XComponent > xComp(evt.Source, UNO_QUERY);
-            if (xComp.is())
-                xComp->removeEventListener(static_cast<XPropertyChangeListener*>(this));
+            Reference<XPropertySet> xProp(evt.Source,UNO_QUERY);
+            removeObjectListener(xProp);
             implRemove(sOldName);
             implInsert(sNewName,makeAny(evt.Source));
         }
@@ -789,6 +775,20 @@ void SAL_CALL ODefinitionContainer::vetoableChange( const PropertyChangeEvent& a
         if(hasByName(sNewName))
             throw PropertyVetoException();
     }
+}
+// -----------------------------------------------------------------------------
+void ODefinitionContainer::addObjectListener(const Reference< XPropertySet >& _xNewObject)
+{
+    OSL_ENSURE(_xNewObject.is(),"ODefinitionContainer::addObjectListener: Object is null!");
+    _xNewObject->addPropertyChangeListener(PROPERTY_NAME, this);
+    _xNewObject->addVetoableChangeListener(PROPERTY_NAME, this);
+}
+// -----------------------------------------------------------------------------
+void ODefinitionContainer::removeObjectListener(const Reference< XPropertySet >& _xNewObject)
+{
+    OSL_ENSURE(_xNewObject.is(),"ODefinitionContainer::addObjectListener: Object is null!");
+    _xNewObject->removePropertyChangeListener(PROPERTY_NAME, this);
+    _xNewObject->removeVetoableChangeListener(PROPERTY_NAME, this);
 }
 // -----------------------------------------------------------------------------
 

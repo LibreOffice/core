@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commandcontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 09:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,20 +107,15 @@ OCommandContainer::~OCommandContainer()
 //--------------------------------------------------------------------------
 Reference< XPropertySet > OCommandContainer::createObject()
 {
-    Reference< XPropertySet > xProp = new OCommandDefinition(OCommandDefinition::AccessControl());
-    xProp->addPropertyChangeListener(PROPERTY_NAME, this);
-    xProp->addVetoableChangeListener(PROPERTY_NAME, this);
-    return xProp;
+    return new OCommandDefinition(OCommandDefinition::AccessControl());
 }
 
 //--------------------------------------------------------------------------
 Reference< XPropertySet > OCommandContainer::createObject( const ::rtl::OUString& _rName,  const OConfigurationNode& _rObjectNode)
 {
-    Reference< XPropertySet > xProp = new OCommandDefinition(static_cast<OWeakObject*>(this), _rName, _rObjectNode.cloneAsRoot());
-    xProp->addPropertyChangeListener(PROPERTY_NAME, this);
-    xProp->addVetoableChangeListener(PROPERTY_NAME, this);
-    return xProp;
+    return new OCommandDefinition(static_cast<OWeakObject*>(this), _rName, _rObjectNode.cloneAsRoot());
 }
+// -----------------------------------------------------------------------------
 
 //........................................................................
 }   // namespace dbaccess
