@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-20 10:24:28 $
+ *  last change: $Author: fme $ $Date: 2002-08-27 13:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
     {
         // case B1
         if( aGuess.HyphWord().is() && ( aGuess.BreakPos() > rInf.GetIdx() ||
-            !rInf.GetLast()->IsFlyPortion() ) )
+            ( rInf.GetLast() && ! rInf.GetLast()->IsFlyPortion() ) ) )
         {
             CreateHyphen( rInf, aGuess );
             if ( rInf.GetFly() )
@@ -438,11 +438,15 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
                  // this is weird: during formatting the follow of a field
                  // the values rInf.GetIdx and rInf.GetLineStart are replaced
                  // IsFakeLineStart indicates GetIdx > GetLineStart
-                 rInf.IsFakeLineStart() || rInf.GetFly() ||
-                 rInf.GetLast()->IsFlyPortion() || rInf.IsFirstMulti() ||
-                  (rInf.GetLast()->InFldGrp() && !rInf.GetLast()->InNumberGrp()
-                      && lcl_HasContent(*((SwFldPortion*)rInf.GetLast()),rInf) )
-                 )
+                 rInf.IsFakeLineStart() ||
+                 rInf.GetFly() ||
+                 rInf.IsFirstMulti() ||
+                 ( rInf.GetLast() &&
+                    ( rInf.GetLast()->IsFlyPortion() ||
+                        ( rInf.GetLast()->InFldGrp() &&
+                          ! rInf.GetLast()->InNumberGrp() &&
+                          ! rInf.GetLast()->IsErgoSumPortion() &&
+                          lcl_HasContent(*((SwFldPortion*)rInf.GetLast()),rInf ) ) ) ) )
         {
             if ( rInf.X() + aGuess.BreakWidth() <= rInf.Width() )
                 Width( aGuess.BreakWidth() );

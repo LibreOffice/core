@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-25 12:53:41 $
+ *  last change: $Author: fme $ $Date: 2002-08-27 13:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,9 @@ sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
         // KerningPortions at beginning of line, e.g., for grid layout
         // must be considered.
         const SwLinePortion* pLastPor = rInf.GetLast();
-        const USHORT nLeft = ( pLastPor && pLastPor->IsKernPortion() ) ?
+        const USHORT nLeft = ( pLastPor &&
+                                    ( pLastPor->IsKernPortion() ||
+                                      pLastPor->IsErgoSumPortion() ) ) ?
                                pLastPor->Width() :
                                0;
 

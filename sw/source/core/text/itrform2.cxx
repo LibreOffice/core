@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-07 11:21:55 $
+ *  last change: $Author: fme $ $Date: 2002-08-27 13:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1600,17 +1600,19 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     // Hier folgt bald die Unterlaufpruefung.
     while( bBuild )
     {
+        GetInfo().SetFtnInside( sal_False );
+
+        // These values must not be reset by FormatReset();
         sal_Bool bOldNumDone = GetInfo().IsNumDone();
         sal_Bool bOldArrowDone = GetInfo().IsArrowDone();
-        GetInfo().SetFtnInside( sal_False );
+        sal_Bool bOldErgoDone = GetInfo().IsErgoDone();
 
         // besides other things, this sets the repaint offset to 0
         FormatReset( GetInfo() );
 
-        if( bOldNumDone )
-            GetInfo().SetNumDone( sal_True );
-        if( bOldArrowDone )
-            GetInfo().SetArrowDone( sal_True );
+        GetInfo().SetNumDone( bOldNumDone );
+        GetInfo().SetArrowDone( bOldArrowDone );
+        GetInfo().SetErgoDone( bOldErgoDone );
 
         // build new portions for this line
         BuildPortions( GetInfo() );

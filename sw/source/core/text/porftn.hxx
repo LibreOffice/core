@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porftn.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-07 11:21:56 $
+ *  last change: $Author: fme $ $Date: 2002-08-27 13:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ public:
 
     inline void SetNumber( const XubString& rStr ) { aErgo = rStr; }
     inline const XubString &GetQuoTxt() const { return aExpand; }
+    inline const XubString &GetContTxt() const { return aErgo; }
 
     // Felder-Cloner fuer SplitGlue
     virtual SwFldPortion *Clone( const XubString &rExpand ) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-07 11:21:56 $
+ *  last change: $Author: fme $ $Date: 2002-08-27 13:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #endif
 #ifndef _PORRST_HXX
 #include <porrst.hxx>
+#endif
+#ifndef _PORFTN_HXX
+#include <porftn.hxx>   // SwFtnPortion
 #endif
 
 using namespace ::com::sun::star;
@@ -418,6 +421,10 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             // aExpand ist noch nicht gekuerzt worden, der neue Ofst
             // ergibt sich durch nRest.
             xub_StrLen nNextOfst = aExpand.Len() - nRest;
+
+            if ( IsQuoVadisPortion() )
+                nNextOfst += ((SwQuoVadisPortion*)this)->GetContTxt().Len();
+
             XubString aNew( aExpand, nNextOfst, STRING_LEN );
             aExpand.Erase( nNextOfst, STRING_LEN );
 
@@ -428,6 +435,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                             // kein break;
                 case ' ' :
                 case CH_TAB    :
+                case CHAR_HARDHYPHEN:               // non-breaking hyphen
                 {
                     aNew.Erase( 0, 1 );
                     ++nNextOfst;
@@ -436,7 +444,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 default: ;
             }
 
-            if( aNew.Len() )
+            if( aNew.Len() || IsQuoVadisPortion() )
             {
                 // sal_True, weil es ein FollowFeld ist
                 // SwFont *pFont = new SwFont( rInf.GetFont()->GetFnt() );

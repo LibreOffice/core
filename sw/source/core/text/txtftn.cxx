@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-07 11:21:57 $
+ *  last change: $Author: fme $ $Date: 2002-08-27 13:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1303,21 +1303,28 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
     pQuo->SetAscent( rInf.GetAscent()  );
     pQuo->Height( rInf.GetTxtHeight() );
     pQuo->Format( rInf );
+    USHORT nQuoWidth = pQuo->Width();
+    SwLinePortion* pCurrPor = pQuo;
 
-    // Wir nutzen das Recycling-Feature aus und suchen die Stelle,
-    // ab der wir den QuoVadis-Text einfuegen wollen.
-    nLastLeft = nOldRealWidth - pQuo->Width();
-    pPor = pCurr->GetFirstPortion();
-    while( pPor && nLastLeft > rInf.X() + pPor->Width() )
+    while ( rInf.GetRest() )
     {
-        pPor->Move( rInf );
-        pPor = pPor->GetPortion();
-    }
-    if( pPor )
-        rInf.GetParaPortion()->GetReformat()->Start() = rInf.GetIdx();
+        SwLinePortion* pFollow = rInf.GetRest();
+        rInf.SetRest( 0 );
+        pCurrPor->Move( rInf );
 
-    // Jetzt wird formatiert
-    Right( Right() - pQuo->Width() );
+        ASSERT( pFollow->IsQuoVadisPortion(),
+                "Quo Vadis, rest of QuoVadisPortion" )
+
+        // format the rest and append it to the other QuoVadis parts
+        pFollow->Format( rInf );
+        nQuoWidth += pFollow->Width();
+
+        pCurrPor->Append( pFollow );
+        pCurrPor = pFollow;
+    }
+
+    nLastLeft = nOldRealWidth - nQuoWidth;
+    Right( Right() - nQuoWidth );
 
 #ifdef VERTICAL_LAYOUT
     SWAP_IF_NOT_SWAPPED( pFrm )
@@ -1337,8 +1344,6 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
     ASSERT( nOldRealWidth == rInf.RealWidth() && nLastLeft >= pQuo->Width(),
             "SwTxtFormatter::FormatQuoVadis: crime doesn't pay" );
 #endif
-    if( pQuo->Width() > nLastLeft )
-        pQuo->Width( nLastLeft );
 
     // Es kann durchaus sein, dass am Ende eine Marginportion steht,
     // die beim erneuten Aufspannen nur Aerger bereiten wuerde.
@@ -1357,8 +1362,7 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
 
     // Luxus: Wir sorgen durch das Aufspannen von Glues dafuer,
     // dass der QuoVadis-Text rechts erscheint:
-    long nQuoWidth = pQuo->Width();
-    nLastLeft -= pQuo->Width();
+    nLastLeft -= nQuoWidth;
     if( nLastLeft )
     {
         if( nLastLeft > pQuo->GetAscent() ) // Mindestabstand
@@ -1411,7 +1415,17 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
     }
 
     // Jetzt aber: die QuoVadis-Portion wird angedockt:
-    pPor->Append( pQuo );
+    pCurrPor = pQuo;
+    while ( pCurrPor )
+    {
+        // pPor->Append deletes the pPortoin pointer of pPor. Therefore
+        // we have to keep a pointer to the next portion
+        pQuo = (SwQuoVadisPortion*)pCurrPor->GetPortion();
+        pPor->Append( pCurrPor );
+        pPor = pPor->GetPortion();
+        pCurrPor = pQuo;
+    }
+
     pCurr->Width( pCurr->Width() + KSHORT( nQuoWidth ) );
 
     // Und noch einmal adjustieren wegen des Adjustment und nicht zu Letzt
@@ -1621,6 +1635,7 @@ SwQuoVadisPortion::SwQuoVadisPortion( const XubString &rExp, const XubString& rS
 sal_Bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
 {
     // erster Versuch, vielleicht passt der Text
+    CheckScript( rInf );
     sal_Bool bFull = SwFldPortion::Format( rInf );
     SetLen( 0 );
 
@@ -1651,7 +1666,10 @@ sal_Bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
 sal_Bool SwQuoVadisPortion::GetExpTxt( const SwTxtSizeInfo &, XubString &rTxt ) const
 {
     rTxt = aExpand;
-    rTxt += aErgo;
+    // if this QuoVadisPortion has a follow, the follow is responsible for
+    // the ergo text.
+    if ( ! HasFollow() )
+        rTxt += aErgo;
     return sal_True;
 }
 
@@ -1678,6 +1696,7 @@ void SwQuoVadisPortion::Paint( const SwTxtPaintInfo &rInf ) const
     {
         rInf.DrawViewOpt( *this, POR_QUOVADIS );
         SwTxtSlotLen aDiffTxt( &rInf, this );
+        SwFontSave aSave( rInf, pFnt );
         rInf.DrawText( *this, rInf.GetLen(), sal_True );
     }
 }
@@ -1688,7 +1707,7 @@ void SwQuoVadisPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 SwFldPortion *SwErgoSumPortion::Clone( const XubString &rExpand ) const
 {
-    UniString aTmp = UniString::CreateFromInt32( 0 );
+    UniString aTmp; // = UniString::CreateFromInt32( 0 );
     return new SwErgoSumPortion( rExpand, aTmp );
 }
 
@@ -1716,15 +1735,18 @@ sal_Bool SwErgoSumPortion::Format( SwTxtFormatInfo &rInf )
 {
     sal_Bool bFull = SwFldPortion::Format( rInf );
     SetLen( 0 );
-    rInf.SetErgoDone( 0 != Width() );
+    rInf.SetErgoDone( sal_True );
 
     // 8317: keine mehrzeiligen Felder bei QuoVadis und ErgoSum
-    if( rInf.GetRest() )
+    if( bFull && rInf.GetRest() )
     {
         delete rInf.GetRest();
         rInf.SetRest( 0 );
     }
-    return bFull;
+
+    // We return false in order to get some text into the current line,
+    // even if it's full (better than looping)
+    return sal_False;
 }
 
 /*************************************************************************
