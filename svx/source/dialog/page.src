@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ma $ $Date: 2001-03-27 12:44:59 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,24 @@ TabPage RID_SVXPAGE_PAGE
         Size = MAP_APPFONT ( 34 , 8 ) ;
         Text = "~Format" ;
         Text [ ENGLISH ] = "~Format" ;
+        Text[ english_us ] = "~Format";
+        Text[ portuguese ] = "~Format";
+        Text[ russian ] = "~Format";
+        Text[ greek ] = "~Format";
+        Text[ dutch ] = "~Format";
+        Text[ french ] = "~Format";
+        Text[ spanish ] = "~Format";
+        Text[ italian ] = "~Format";
+        Text[ danish ] = "~Format";
+        Text[ swedish ] = "~Format";
+        Text[ polish ] = "~Format";
+        Text[ portuguese_brazilian ] = "~Format";
+        Text[ japanese ] = "~Format";
+        Text[ korean ] = "~Format";
+        Text[ chinese_simplified ] = "~Format";
+        Text[ chinese_traditional ] = "ÆÊ¶°";
+        Text[ turkish ] = "~Format";
+        Text[ arabic ] = "~Format";
     };
     ListBox LB_PAPER_SIZE
     {
@@ -154,8 +172,8 @@ TabPage RID_SVXPAGE_PAGE
         Text[ chinese_simplified ] = "∫·œÚ(~A)";
         Text[ russian ] = "¿Î¸·ÓÏÌ˚È";
         Text[ polish ] = "Poziomo";
-        Text[ japanese ] = "â°(~L)";
-        Text[ chinese_traditional ] = "æÓ¶V(~L)";
+        Text[ japanese ] = "â°(~A)";
+        Text[ chinese_traditional ] = "æÓ¶V(~A)";
         Text[ arabic ] = "»«·⁄—÷";
         Text[ greek ] = "œÒÈ~Ê¸ÌÙÈ·";
         Text[ korean ] = "∞°∑Œ(~A)";
@@ -404,10 +422,10 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ english_us ] =
         {
-            < "All" ; Default ; > ;
+            < "Right and left" ; Default ; > ;
             < "Mirrored" ; Default ; > ;
-            < "Right" ; Default ; > ;
-            < "Left" ; Default ; > ;
+            < "Only right" ; Default ; > ;
+            < "Only left" ; Default ; > ;
         };
         StringList [ chinese_simplified ] =
         {
@@ -439,10 +457,10 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ chinese_traditional ] =
         {
-                < "•˛≥°" ; Default ; > ;
+                < "•™©M•k" ; Default ; > ;
             < "¬Ω¬‡™∫" ; Default ; > ;
-            < "•k" ; Default ; > ;
-            < "•™" ; Default ; > ;
+            < "∂»•k" ; Default ; > ;
+            < "∂»•™" ; Default ; > ;
         };
         StringList [ arabic ] =
         {
@@ -718,6 +736,24 @@ TabPage RID_SVXPAGE_PAGE
         Size = MAP_APPFONT ( 34 , 8 ) ;
         Text = "For~mat" ;
         Text [ ENGLISH ] = "For~mat" ;
+        Text[ english_us ] = "For~mat";
+        Text[ portuguese ] = "For~mat";
+        Text[ russian ] = "For~mat";
+        Text[ greek ] = "For~mat";
+        Text[ dutch ] = "For~mat";
+        Text[ french ] = "For~mat";
+        Text[ spanish ] = "For~mat";
+        Text[ italian ] = "For~mat";
+        Text[ danish ] = "For~mat";
+        Text[ swedish ] = "For~mat";
+        Text[ polish ] = "For~mat";
+        Text[ portuguese_brazilian ] = "For~mat";
+        Text[ japanese ] = "For~mat";
+        Text[ korean ] = "For~mat";
+        Text[ chinese_simplified ] = "For~mat";
+        Text[ chinese_traditional ] = "ÆÊ¶°";
+        Text[ turkish ] = "For~mat";
+        Text[ arabic ] = "For~mat";
     };
     ListBox LB_NUMBER_FORMAT
     {
@@ -954,7 +990,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ russian ] = "ÕÛÏÂ‡ˆËˇ";
         Text[ polish ] = "Numeracja";
         Text[ japanese ] = "î‘çÜïtÇØ";
-        Text[ chinese_traditional ] = "≠∂ΩX";
+        Text[ chinese_traditional ] = "Ωs∏π";
         Text[ arabic ] = "«· —ﬁÌ„";
         Text[ greek ] = "¡ÒﬂËÏÁÛÁ";
         Text[ korean ] = "π¯»£ ∏≈±‚±‚";
@@ -1171,7 +1207,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ chinese_traditional ] = "∞—∑”§Â¨q∏®ºÀ¶°(~S)";
         Text[ arabic ] = "‰„ÿ ›ﬁ—… „—Ã⁄Ì";
         Text[ greek ] = "–Ò¸~ÙıÔ ·Ò·„Ò‹ˆÔı ·Ì·ˆÔÒ‹Ú";
-        Text[ korean ] = "¬¸¡∂ ¿Ø«¸";
+        Text[ korean ] = "¬¸¡∂ ¿Ø«¸(~S)";
         Text[ turkish ] = "Referans par~agraf biÁimi";
         Text[ language_user1 ] = " ";
     };
@@ -1306,7 +1342,7 @@ String RID_SVXSTR_CALC_PAGE
     Text [ danish ] = "Justering" ;
     Text [ french ] = "Alignement" ;
     Text [ swedish ] = "Orientering" ;
-    Text [ dutch ] = "OriÎntatie" ;
+    Text [ dutch ] = "Uitlijning" ;
     Text [ spanish ] = "OrientaciÛn" ;
     Text [ english_us ] = "Alignment" ;
     Text[ chinese_simplified ] = "∂‘∆Î";
