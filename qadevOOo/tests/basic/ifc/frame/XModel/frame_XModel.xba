@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: frame_XModel.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:50:13 $ 
+'*  last change:$Date: 2003-03-05 12:20:48 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -116,7 +116,7 @@ On Error Goto ErrHndl
     Test.StartMethod("getArgs()")
     bOK = true
     aArgs() = oObj.Args
-    bOK = bOK AND aArgs(0).Name = "XModel"
+    bOK = bOK AND NOT isNull(aArgs()) '(0).Name = "XModel"
     Test.MethodTested("getArgs()", bOK)
 
     Test.StartMethod("getCurrentController()")
