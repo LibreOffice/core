@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2001-11-30 15:22:01 $
+ *  last change: $Author: ssa $ $Date: 2001-11-30 17:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,7 +702,10 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
     aExampleContainerWIN.Show( bSetViewWindow );
     SetViewWindow( bSetViewWindow ? &aExampleContainerWIN  : 0 );
 
-    ::Rectangle aRect(GetWindowExtentsRelative(GetParent()));
+    Window *pTopmostParent = this;
+    while(pTopmostParent->GetParent())
+        pTopmostParent = pTopmostParent->GetParent();
+    ::Rectangle aRect(GetWindowExtentsRelative(pTopmostParent));
     ::Point aPos = aRect.TopLeft();
     Size aSize = GetSizePixel();
     if(pBox)
