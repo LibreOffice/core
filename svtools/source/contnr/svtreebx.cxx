@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2002-04-23 07:54:12 $
+ *  last change: $Author: pb $ $Date: 2002-04-25 06:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@ class TabBar;
 #endif
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 using namespace ::drafts::com::sun::star::accessibility;
@@ -2443,7 +2446,21 @@ void SvTreeListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rSt
 
 void SvTreeListBox::FillAccessibleEntryStateSet( SvLBoxEntry* pEntry, ::utl::AccessibleStateSetHelper& rStateSet ) const
 {
-    SvLBox::FillAccessibleStateSet( rStateSet );
+    DBG_ASSERT( pEntry, "SvTreeListBox::FillAccessibleEntryStateSet: invalid entry" );
+
+    // expandable if children exist
+    if ( GetChildCount( pEntry ) )
+    {
+        rStateSet.AddState( AccessibleStateType::EXPANDABLE );
+        sal_Int16 nState = IsExpanded( pEntry ) ? (sal_Int16)AccessibleStateType::EXPANDED
+                                                : (sal_Int16)AccessibleStateType::COLLAPSED;
+        rStateSet.AddState( nState );
+    }
+
+    if ( IsEntryVisible( pEntry ) )
+        rStateSet.AddState( AccessibleStateType::VISIBLE );
+    if ( IsSelected( pEntry ) )
+        rStateSet.AddState( AccessibleStateType::SELECTED );
 }
 
 Rectangle SvTreeListBox::GetBoundingRect( SvLBoxEntry* pEntry )
