@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockListContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-02 16:41:02 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 17:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,34 +63,6 @@
 
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLITMAP_HXX
-#include <xmloff/xmlitmap.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLIMP_HXX
-#include <xmloff/xmlimp.hxx>
-#endif
-
-#ifndef _XMLOFF_NMSPMAP_HXX
-#include <xmloff/nmspmap.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLNMSPE_HXX
-#include <xmloff/xmlnmspe.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
-#endif
-
-#ifndef _SW_XMLBLOCKIMPORT_HXX
-#include <SwXMLBlockImport.hxx>
-#endif
-
-#ifndef _SW_XMLTEXTBLOCKS_HXX
-#include <SwXMLTextBlocks.hxx>
 #endif
 
 class SwXMLBlockListImport;

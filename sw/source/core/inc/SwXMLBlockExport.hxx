@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockExport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:13:24 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 17:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,41 +61,11 @@
 #ifndef _SW_XMLBLOCKEXPORT_HXX
 #define _SW_XMLBLOCKEXPORT_HXX
 
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include <xmloff/xmlictxt.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLITMAP_HXX
-#include <xmloff/xmlitmap.hxx>
-#endif
-
 #ifndef _XMLOFF_XMLEXP_HXX
 #include <xmloff/xmlexp.hxx>
 #endif
 
-#ifndef _XMLOFF_NMSPMAP_HXX
-#include <xmloff/nmspmap.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLNMSPE_HXX
-#include <xmloff/xmlnmspe.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
-#endif
-
-#ifndef _SW_XMLBLOCKLIST_CONTEXT_HXX
-#include <SwXMLBlockListContext.hxx>
-#endif
-
-#ifndef _SW_XMLTEXTBLOCKS_HXX
-#include <SwXMLTextBlocks.hxx>
-#endif
+class SwXMLTextBlocks;
 
 class SwXMLBlockListExport : public SvXMLExport
 {

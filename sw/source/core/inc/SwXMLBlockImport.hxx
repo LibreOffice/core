@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockImport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-02 16:40:30 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 17:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,42 +61,11 @@
 #ifndef _SW_XMLBLOCKIMPORT_HXX
 #define _SW_XMLBLOCKIMPORT_HXX
 
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include <xmloff/xmlictxt.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLITMAP_HXX
-#include <xmloff/xmlitmap.hxx>
-#endif
-
 #ifndef _XMLOFF_XMLIMP_HXX
 #include <xmloff/xmlimp.hxx>
 #endif
 
-#ifndef _XMLOFF_NMSPMAP_HXX
-#include <xmloff/nmspmap.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLNMSPE_HXX
-#include <xmloff/xmlnmspe.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
-#endif
-
-#ifndef _SW_XMLBLOCKLIST_CONTEXT_HXX
-#include <SwXMLBlockListContext.hxx>
-#endif
-
-#ifndef _SW_XMLTEXTBLOCKS_HXX
-#include <SwXMLTextBlocks.hxx>
-#endif
-
+class SwXMLTextBlocks;
 class SwXMLBlockListImport : public SvXMLImport
 {
 private:
@@ -117,6 +86,7 @@ public:
     }
     ~SwXMLBlockListImport ( void );
 };
+
 class SwXMLTextBlockImport : public SvXMLImport
 {
 private:
@@ -141,6 +111,5 @@ public:
     ~SwXMLTextBlockImport ( void );
     virtual void SAL_CALL endDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-
 };
 #endif

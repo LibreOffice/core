@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLSectionList.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-16 09:31:43 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 17:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,33 +61,13 @@
 #ifndef _SW_XMLSECTIONLIST_HXX
 #define _SW_XMLSECTIONLIST_HXX
 
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
-
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
 #endif
-
-#ifndef _XMLOFF_XMLITMAP_HXX
-#include <xmloff/xmlitmap.hxx>
-#endif
-
 #ifndef _XMLOFF_XMLIMP_HXX
 #include <xmloff/xmlimp.hxx>
 #endif
 
-#ifndef _XMLOFF_NMSPMAP_HXX
-#include <xmloff/nmspmap.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLNMSPE_HXX
-#include <xmloff/xmlnmspe.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
-#endif
 class SvStrings;
 
 class SwXMLSectionList : public SvXMLImport
