@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CoordinateSequence.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:00:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ module com { module sun { module star { module drawing {
 //=============================================================================
 /**
 */
-typedef sequence<long> CoordinateSequence;
+published typedef sequence<long> CoordinateSequence;
 
 //=============================================================================
 
