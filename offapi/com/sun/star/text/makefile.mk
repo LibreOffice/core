@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: bustamam $ $Date: 2001-04-27 23:39:36 $
+#   last change: $Author: bustamam $ $Date: 2001-05-05 01:29:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,7 @@ IDLFILES=\
     ContentIndex.idl\
     ContentIndexMark.idl\
     ControlCharacter.idl\
-        DefaultNumberingProvider.idl\ 
+    DefaultNumberingProvider.idl\
     DependentTextField.idl\
     DocumentIndex.idl\
     DocumentIndexes.idl\
