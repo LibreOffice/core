@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:53:17 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,8 @@ protected:
     // link related stuff
     ::rtl::OUString m_aLinkURL;
     ::rtl::OUString m_aLinkFilterName;
+    sal_Bool        m_bLinkHasPassword;
+    ::rtl::OUString m_aLinkPassword;
 
 private:
     void CommonInit_Impl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObjectProps );
