@@ -7075,3 +7075,5 @@ FreeSpaceStr
 ?SelectClipPath@WinMtfMetaOutput@@UAEXJ@Z
 ?SelectClipPath@WinMtfOutput@@UAEXJ@Z
 ??0CommunicationManagerClient@@QAE@E@Z
+?getArray@?$Sequence@ULocale@lang@star@sun@com@@@uno@star@sun@com@@QAAPAULocale@lang@345@XZ
+?s_pType@?$Sequence@ULocale@lang@star@sun@com@@@uno@star@sun@com@@2PAU_typelib_TypeDescriptionReference@@A
