@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblewrapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:57:23 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,18 @@ namespace comphelper
 
     //--------------------------------------------------------------------
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleWrapper, OComponentProxyAggregation, OAccessibleWrapper_Base )
-    IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleWrapper, OComponentProxyAggregation, OAccessibleWrapper_Base )
+    IMPLEMENT_FORWARD_REFCOUNT( OAccessibleWrapper, OComponentProxyAggregation )
+
+    //--------------------------------------------------------------------
+    Any OAccessibleWrapper::queryInterface( const Type& _rType ) throw (RuntimeException)
+    {
+        // #111089# instead of the inner XAccessible the proxy XAccessible must be returned
+        Any aReturn = OAccessibleWrapper_Base::queryInterface( _rType );
+        if ( !aReturn.hasValue() )
+            aReturn = OComponentProxyAggregation::queryInterface( _rType );
+
+        return aReturn;
+    }
 
     //--------------------------------------------------------------------
     Reference< XAccessibleContext > OAccessibleWrapper::getContextNoCreate( ) const
