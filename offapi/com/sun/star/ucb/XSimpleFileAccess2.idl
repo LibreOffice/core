@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: SimpleFileAccess.idl,v $
+ *  $RCSfile: XSimpleFileAccess2.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: kso $ $Date: 2001-12-07 14:28:48 $
  *
@@ -58,28 +58,42 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_ucb_SimpleFileAccess_idl__
-#define __com_sun_star_ucb_SimpleFileAccess_idl__
 
 #ifndef __com_sun_star_ucb_XSimpleFileAccess2_idl__
-#include <com/sun/star/ucb/XSimpleFileAccess2.idl>
+#define __com_sun_star_ucb_XSimpleFileAccess2_idl__
+
+#ifndef __com_sun_star_ucb_XSimpleFileAccess_idl__
+#include <com/sun/star/ucb/XSimpleFileAccess.idl>
 #endif
 
+#ifndef __com_sun_star_io_XInputStream_idl__
+#include <com/sun/star/io/XInputStream.idl>
+#endif
+
+#ifndef __com_sun_star_uno_Exception_idl__
+#include <com/sun/star/uno/Exception.idl>
+#endif
 
 //=============================================================================
 
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** Offers a simple access to resources, like files and folders located in a
-local file system or on an WebDAV server.
-
-    @author Andreas Bregas
-    @version 1.0 07/25/2000
+/** This is the basic interface to read data from a stream.
 */
-service SimpleFileAccess
+interface XSimpleFileAccess2 : com::sun::star::ucb::XSimpleFileAccess
 {
-    interface com::sun::star::ucb::XSimpleFileAccess2;
+
+    //-------------------------------------------------------------------------
+    /** Overwrites the file content with the given data.
+
+        <p>If the file does not exist, it will be created.
+
+        @param data
+        A stream containing the data for the file to be (over-)written
+    */
+    void writeFile( [in] com::sun::star::io::XInputStream data )
+        raises( com::sun::star::uno::Exception );
 
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleFileAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
+ *  last change: $Author: kso $ $Date: 2001-12-07 14:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,13 +265,19 @@ interface XSimpleFileAccess: com::sun::star::uno::XInterface
         raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
 
     //-------------------------------------------------------------------------
-    /** Opens file to write
+    /** Opens file to write.
 
         @param FileURL
         File to open
 
         @return
         An XOutputStream, if the file can be opened for writing
+
+        @throws
+        <type>UnsupportedDataSinkException</type>, if the file cannot be
+        opened for random write access. Some resources do not allow random
+        write access. To write data for those resources
+        <method>XSimpleFileAccess2::writeFile</method> may be used.
     */
     com::sun::star::io::XOutputStream openFileWrite( [in] string FileURL )
         raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
@@ -284,6 +290,12 @@ interface XSimpleFileAccess: com::sun::star::uno::XInterface
 
         @return
         An XStream, if the file can be opened for reading and writing
+
+        @throws
+        <type>UnsupportedDataSinkException</type>, if the file cannot be
+        opened for random write access. Some resources do not allow random
+        write access. To write data for those resources
+        <method>XSimpleFileAccess2::writeFile</method> may be used.
     */
     com::sun::star::io::XStream openFileReadWrite( [in] string FileURL )
         raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );

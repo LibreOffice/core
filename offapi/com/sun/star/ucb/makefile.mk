@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: kso $ $Date: 2001-09-07 09:16:19 $
+#   last change: $Author: kso $ $Date: 2001-12-07 14:28:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -234,7 +234,7 @@ IDLFILES=\
     XCommandInfoChangeListener.idl\
     XCommandInfoChangeNotifier.idl\
     XCommandProcessor.idl\
-    XCommandProcessor2.idl\
+        XCommandProcessor2.idl\
     XContent.idl\
     XContentAccess.idl\
     XContentCreator.idl\
@@ -275,6 +275,7 @@ IDLFILES=\
     XRemoteContentProviderDoneListener.idl\
     XRemoteContentProviderSupplier.idl\
     XSimpleFileAccess.idl\
+        XSimpleFileAccess2.idl\
     XSortedDynamicResultSetFactory.idl\
     XSourceInitialization.idl
 
