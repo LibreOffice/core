@@ -7,7 +7,7 @@ mkdir: %_DEST%\inc%_EXT%\configmgr
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
 ..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
 
-
+..\%__SRC%\misc\cfgmgr2.xml %_DEST%\xml%_EXT%\cfgmgr2.xml
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
