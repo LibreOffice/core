@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-27 16:52:34 $
+ *  last change: $Author: oj $ $Date: 2001-08-30 13:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,8 +543,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const ::com::sun::star::beans::
                 {
                 }
             }
-            (*pCache)[xSet] = aNewEntry;
-            aSetPos = pCache->find(xSet);
+            aSetPos = pCache->insert(PropertySetInfoCache::value_type(xSet,aNewEntry)).first;
             DBG_ASSERT(aSetPos != pCache->end(), "FmXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
         }
         else
@@ -585,8 +584,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const ::com::sun::star::beans::
             }
 
             // insert the new entry
-            rPropInfos[evt.PropertyName] = aNewEntry;
-            aPropertyPos = rPropInfos.find(evt.PropertyName);
+            aPropertyPos = rPropInfos.insert(PropertySetInfo::AllProperties::value_type(evt.PropertyName,aNewEntry)).first;
             DBG_ASSERT(aPropertyPos != rPropInfos.end(), "FmXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
         }
 
