@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:27:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,7 +500,8 @@ void SwXTextCursor::getTextFromPam(SwPaM& aCrsr, OUString& rBuffer)
     aStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 #endif
     WriterRef xWrt;
-    SwIoSystem::GetWriter( C2S(FILTER_TEXT_DLG), xWrt );
+    // TODO/MBA: looks like a BaseURL doesn't make sense here
+    SwIoSystem::GetWriter( C2S(FILTER_TEXT_DLG), String(), xWrt );
     if( xWrt.Is() )
     {
         SwWriter aWriter( aStream, aCrsr );
