@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-12 03:49:12 $
+ *  last change: $Author: mba $ $Date: 2001-07-16 09:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,7 +727,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_CRASH :
         {
-            Exception( EXC_SYSTEM );
+            GetpApp()->Exception( EXC_SYSTEM );
             abort();
         }
 
