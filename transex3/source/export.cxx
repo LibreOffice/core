@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:16:42 $
+ *  last change: $Author: hr $ $Date: 2005-02-14 11:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1550,6 +1550,10 @@ ByteString Export::GetPairedListString( const ByteString& sText ){
     sString.EraseLeadingChars( ' ' );
     return sString;
 }
+ByteString Export::StripList( const ByteString& sText ){
+    ByteString s1 = sText.Copy( sText.Search( '\"' ) + 1 );
+    return s1.Copy( 0 , s1.SearchBackward( '\"' ) );
+}
 
 /*****************************************************************************/
 BOOL Export::WriteExportList( ResData *pResData, ExportList *pExportList,
@@ -1593,8 +1597,13 @@ BOOL Export::WriteExportList( ResData *pResData, ExportList *pExportList,
                             sText = GetPairedListString( sText );
                         }
                         else{
-                            if ((*pEntry)[ sCur ].Len())
-                                sText = (*pEntry)[ sCur ];
+                            if ((*pEntry)[ sCur ].Len()){
+                                if( sCur.EqualsIgnoreCaseAscii("de") ){
+                                    sText = StripList( (*pEntry)[ sCur ] );
+                                }
+                                else
+                                    sText = (*pEntry)[ sCur ];
+                            }
                         }
 
                         ByteString sOutput( sProject ); sOutput += "\t";
