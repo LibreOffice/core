@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:23:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1318,6 +1318,14 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
         // sollten wir schon wieder im Undo stehen?
         return ;
     }
+
+    // --> OD 2005-02-11 #i38810# - Due to possible existing signatures, the
+    // document has to be modified after updating a link.
+    pDoc->SetModified();
+    // set additional flag that links have been updated, in order to check this
+    // during load.
+    pDoc->SetLinksUpdated( sal_True );
+    // <--
 
     // Undo immer abschalten
     BOOL bWasUndo = pDoc->DoesUndo();
