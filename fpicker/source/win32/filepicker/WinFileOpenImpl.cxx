@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:52:55 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,9 +760,66 @@ void SAL_CALL CWinFileOpenImpl::onSelChanged(HWND hwndListBox)
     m_FilePicker->fileSelectionChanged(evt);
 }
 
-//-----------------------------------------------------------------
-//
-//-----------------------------------------------------------------
+// #i40865# The size of the standard labels 'File name'
+// and 'File type' is to short in some cases when the
+// label will be changed (e.g. in the Brazil version).
+// We just make sure that the labels are using the maximum
+// available space.
+void CWinFileOpenImpl::EnlargeStdControlLabels() const
+{
+    HWND hFilterBoxLabel = GetDlgItem(m_hwndFileOpenDlg, stc2);
+    HWND hFileNameBoxLabel = GetDlgItem(m_hwndFileOpenDlg, stc3);
+    HWND hFileNameBox = GetDlgItem(m_hwndFileOpenDlg, cmb13);
+    if (!hFileNameBox)
+        hFileNameBox = GetDlgItem(m_hwndFileOpenDlg, edt1); // under Win98 it is edt1 instead of cmb13
+
+    HWND hFilterBox = GetDlgItem(m_hwndFileOpenDlg, cmb1);
+    HWND hOkButton = GetDlgItem(m_hwndFileOpenDlg, IDOK);
+
+    // Move filter and file name box nearer to OK and Cancel button
+    RECT rcOkButton;
+    GetWindowRect(hOkButton, &rcOkButton);
+
+    const int MAX_GAP = IsWindows98() ? 5 : 10;
+    const int OFFSET = IsWindows98() ? 10 : 0;
+
+    RECT rcFileNameBox;
+    GetWindowRect(hFileNameBox, &rcFileNameBox);
+    int w = rcFileNameBox.right - rcFileNameBox.left;
+    int h = rcFileNameBox.bottom - rcFileNameBox.top;
+
+    int gap = rcOkButton.left - rcFileNameBox.right;
+    gap = (gap > MAX_GAP) ? gap - MAX_GAP : gap;
+
+    ScreenToClient(m_hwndFileOpenDlg, (LPPOINT)&rcFileNameBox);
+    MoveWindow(hFileNameBox, rcFileNameBox.left + gap + OFFSET, rcFileNameBox.top, w - OFFSET, h, true);
+
+    RECT rcFilterBox;
+    GetWindowRect(hFilterBox, &rcFilterBox);
+    w = rcFilterBox.right - rcFilterBox.left;
+    h = rcFilterBox.bottom, - rcFilterBox.top;
+    ScreenToClient(m_hwndFileOpenDlg, (LPPOINT)&rcFilterBox);
+    MoveWindow(hFilterBox, rcFilterBox.left + gap + OFFSET, rcFilterBox.top, w - OFFSET, h, true);
+
+    // get the new window rect
+    GetWindowRect(hFileNameBox, &rcFileNameBox);
+
+    RECT rcFilterBoxLabel;
+    GetWindowRect(hFilterBoxLabel, &rcFilterBoxLabel);
+    int offset = rcFileNameBox.left - rcFilterBoxLabel.right - 1;
+
+    w = rcFilterBoxLabel.right - rcFilterBoxLabel.left + offset;
+    h = rcFilterBoxLabel.bottom - rcFilterBoxLabel.top;
+    ScreenToClient(m_hwndFileOpenDlg, (LPPOINT)&rcFilterBoxLabel);
+    MoveWindow(hFilterBoxLabel, rcFilterBoxLabel.left, rcFilterBoxLabel.top, w, h, true);
+
+    RECT rcFileNameBoxLabel;
+    GetWindowRect(hFileNameBoxLabel, &rcFileNameBoxLabel);
+    w = rcFileNameBoxLabel.right - rcFileNameBoxLabel.left + offset;
+    h = rcFileNameBoxLabel.bottom - rcFileNameBoxLabel.top;
+    ScreenToClient(m_hwndFileOpenDlg, (LPPOINT)&rcFileNameBoxLabel);
+    MoveWindow(hFileNameBoxLabel, rcFileNameBoxLabel.left, rcFileNameBoxLabel.top, w, h, true);
+}
 
 void SAL_CALL CWinFileOpenImpl::onInitDone()
 {
@@ -770,6 +827,8 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
 
     // but now we have a valid parent handle
     m_HelpPopupWindow.setParent(m_hwndFileOpenDlg);
+
+    EnlargeStdControlLabels();
 
     // #99826
     // Set the online filepicker state before initializing
