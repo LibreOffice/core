@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 22:08:36 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,8 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ portuguese_brazilian ] = "~Subset";
         Text[ japanese ] = "í—Ş(~S)";
         Text[ korean ] = "¹üÀ§";
-        Text[ chinese_simplified ] = "ÖÖÀà(~S)";
-        Text[ chinese_traditional ] = "ºØÃş(~S)";
+        Text[ chinese_simplified ] = "×Ó¼¯(~S)";
+        Text[ chinese_traditional ] = "¤l¶°(~S)";
         Text[ turkish ] = "~Subset";
         Text[ arabic ] = "ãÌãæÚÉ ÌÒÆíÉ";
     };
@@ -1465,7 +1465,7 @@ String RID_SUBSETSTR_BOPOMOFO
         Text[ japanese ] = "’‰¹š•ê";
         Text[ korean ] = "Bopomofo";
         Text[ chinese_simplified ] = "¾ÉÊ½×¢Òô·ûºÅ";
-        Text[ chinese_traditional ] = "ª`­µ²Å¸¹";
+        Text[ chinese_traditional ] = "µù­µ²Å¸¹";
         Text[ turkish ] = "Bopomofo";
         Text[ arabic ] = "ÈæÈæãæİæ";
     };
