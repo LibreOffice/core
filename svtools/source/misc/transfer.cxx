@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 12:10:10 $
+ *  last change: $Author: jp $ $Date: 2001-08-06 11:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -815,10 +815,11 @@ sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjec
 
 //JP 24.7.2001: as I know was this only for the writer application and this
 //              writes now UTF16 format into the stream
+//JP 6.8.2001: and now it writes UTF8 because then exist no problem with
+//              little / big endians! - Bug 88121
         if( nLen && ( SotExchange::GetFormat( rFlavor ) == SOT_FORMAT_STRING ) )
-//          maAny <<= ::rtl::OUString( (const sal_Char*) aSeq.getConstArray(), nLen - 1, gsl_getSystemTextEncoding() );
-            maAny <<= ::rtl::OUString( (const sal_Unicode*) aSeq.getConstArray(),
-                                        (nLen - 1) / sizeof( sal_Unicode ) );
+            maAny <<= ::rtl::OUString( (const sal_Char*) aSeq.getConstArray(),
+                                        nLen - 1, RTL_TEXTENCODING_UTF8 );
         else
             maAny <<= aSeq;
     }
