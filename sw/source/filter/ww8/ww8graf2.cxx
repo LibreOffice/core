@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,7 +622,7 @@ bool SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
 
     if((aPic.lcb > 0x44) && !pDataStream->GetError() )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         pDataStream->SeekRel( 3 );
         const BYTE MAGIC_A[16] =
         {
