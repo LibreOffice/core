@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-10-31 10:24:21 $
+#   last change: $Author: mi $ $Date: 2002-11-20 15:16:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -173,10 +173,16 @@ ALL : ALLDEP
 
 .IF "$(BUILD_SOSL)"==""
 
-ALLTAR: $(REGISTRYCHECKFLAG)
+ALLTAR: $(REGISTRYCHECKFLAG) autodoc
 
 $(REGISTRYCHECKFLAG) : $(UNOIDLDBTARGET)
     +$(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UNOIDLDBTARGET)
     +$(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(UNOIDLDBTARGET) && echo > $(REGISTRYCHECKFLAG)
+
+autodoc: $(OUT)$/misc$/offapi.autodoc 
+
+$(OUT)$/misc$/offapi.autodoc: 
+    $(shell sed "p" $(OUT)$/misc$/*.idls | tr "[:cntrl:] " "\n\n" | sed -f autodoc.sed >$@)
+    echo "$@ done"
 
 .ENDIF
