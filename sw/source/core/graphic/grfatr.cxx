@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfatr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: os $ $Date: 2000-10-24 10:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,18 @@ int SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
             ((SwMirrorGrf&)rItem).IsGrfToggle() == IsGrfToggle();
 }
 
+BOOL lcl_IsHoriOnEvenPages(int nEnum, BOOL bToggle)
+{
+    BOOL bEnum = nEnum == RES_MIRROR_GRF_VERT ||
+                   nEnum == RES_MIRROR_GRF_BOTH;
+            return bEnum != bToggle;
+}
+BOOL lcl_IsHoriOnOddPages(int nEnum)
+{
+    BOOL bEnum = nEnum == RES_MIRROR_GRF_VERT ||
+                   nEnum == RES_MIRROR_GRF_BOTH;
+            return bEnum;
+}
 BOOL SwMirrorGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     sal_Bool bRet = sal_True,
@@ -151,16 +163,15 @@ BOOL SwMirrorGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     // Vertikal und Horizontal sind mal getauscht worden!
     switch ( nMemberId )
     {
-        case MID_MIRROR_HORZ:
-            bVal = GetValue() == RES_MIRROR_GRF_VERT ||
-                   GetValue() == RES_MIRROR_GRF_BOTH;
-            break;
+        case MID_MIRROR_HORZ_EVEN_PAGES:
+            bVal = lcl_IsHoriOnEvenPages(GetValue(), IsGrfToggle());
+        break;
+        case MID_MIRROR_HORZ_ODD_PAGES:
+            bVal = lcl_IsHoriOnOddPages(GetValue());
+        break;
         case MID_MIRROR_VERT:
             bVal = GetValue() == RES_MIRROR_GRF_HOR ||
                    GetValue() == RES_MIRROR_GRF_BOTH;
-            break;
-        case MID_MIRROR_HORZ_PAGETOGGLE:
-            bVal = IsGrfToggle();
             break;
         default:
             ASSERT( !this, "unknown MemberId" );
@@ -177,22 +188,23 @@ BOOL SwMirrorGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
     // Vertikal und Horizontal sind mal getauscht worden!
     switch ( nMemberId )
     {
-        case MID_MIRROR_HORZ:
-            if ( bVal )
-            {
-                if ( GetValue() == RES_MIRROR_GRF_HOR )
-                    SetValue( RES_MIRROR_GRF_BOTH );
-                else if ( GetValue() != RES_MIRROR_GRF_BOTH )
-                    SetValue( RES_MIRROR_GRF_VERT );
-            }
-            else
-            {
-                if ( GetValue() == RES_MIRROR_GRF_BOTH )
-                    SetValue( RES_MIRROR_GRF_HOR );
-                else if ( GetValue() == RES_MIRROR_GRF_VERT )
-                    SetValue( RES_DONT_MIRROR_GRF );
-            }
-            break;
+        case MID_MIRROR_HORZ_EVEN_PAGES:
+        case MID_MIRROR_HORZ_ODD_PAGES:
+        {
+            BOOL bIsVert = GetValue() == RES_MIRROR_GRF_HOR ||
+                                   GetValue() == RES_MIRROR_GRF_BOTH;
+            BOOL bOnOddPages = nMemberId == MID_MIRROR_HORZ_EVEN_PAGES ?
+                                    lcl_IsHoriOnOddPages(GetValue()) : bVal;
+            BOOL bOnEvenPages = nMemberId == MID_MIRROR_HORZ_ODD_PAGES ?
+                                       lcl_IsHoriOnEvenPages(GetValue(), IsGrfToggle()) : bVal;
+            GRFMIRROR nEnum = bOnOddPages ?
+                    bIsVert ? RES_MIRROR_GRF_BOTH : RES_MIRROR_GRF_VERT :
+                        bIsVert ? RES_MIRROR_GRF_HOR : RES_DONT_MIRROR_GRF;
+            BOOL bToggle = bOnOddPages != bOnEvenPages;
+            SetValue(nEnum);
+            SetGrfToggle( bToggle );
+        }
+        break;
         case MID_MIRROR_VERT:
             if ( bVal )
             {
@@ -208,9 +220,6 @@ BOOL SwMirrorGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 else if ( GetValue() == RES_MIRROR_GRF_HOR )
                     SetValue( RES_DONT_MIRROR_GRF );
             }
-            break;
-        case MID_MIRROR_HORZ_PAGETOGGLE:
-            SetGrfToggle( bVal );
             break;
         default:
             ASSERT( !this, "unknown MemberId" );
