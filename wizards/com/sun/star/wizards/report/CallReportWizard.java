@@ -12,6 +12,8 @@ import com.sun.star.lang.XSingleServiceFactory;
 
 import com.sun.star.uno.Type;
 
+import com.sun.star.awt.XDialog;
+
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -64,7 +66,7 @@ import java.util.*;
  * factory for creating the service (<CODE>__getServiceFactory</CODE>) and a
  * method, that writes the information into the given registry key
  * (<CODE>__writeRegistryServiceInfo</CODE>).
- * @version $Date: 2002-05-13 13:55:37 $
+ * @version $Date: 2002-05-13 15:55:58 $
  * @author Bertram Nolte
  */
 public class CallReportWizard {
@@ -84,7 +86,8 @@ public class CallReportWizard {
      */
     public static XSingleServiceFactory __getServiceFactory(String stringImplementationName, XMultiServiceFactory xMSF, XRegistryKey xregistrykey)
     {
-        XSingleServiceFactory xsingleservicefactory = null;
+                System.err.println("tomsfehler" + stringImplementationName);
+                XSingleServiceFactory xsingleservicefactory = null;
         if ( stringImplementationName.equals(
             ReportWizardImplementation.class.getName() ) )
             xsingleservicefactory = FactoryHelper.getServiceFactory(
@@ -92,6 +95,7 @@ public class CallReportWizard {
             ReportWizardImplementation.__serviceName,
             xMSF,
             xregistrykey );
+                        System.err.println("tomsfehler" + xsingleservicefactory);
             return xsingleservicefactory;
     }
 
@@ -114,11 +118,15 @@ public class CallReportWizard {
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    public static class ReportWizardImplementation implements XInitialization, XTypeProvider, XServiceInfo, XCallReportWizard
+    public static class ReportWizardImplementation implements XInitialization, XTypeProvider, XServiceInfo, XDialog
     {
+                public void setTitle( /*IN*/String Title ){}
+            public String getTitle(  ) {
+                    return "";
+                }
 
-        public void CallReportDialog()
-        {
+            public short execute(  )
+                {
             try
             {
                XComponentLoader xcomponentloader = ( XComponentLoader ) UnoRuntime.queryInterface(XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop" ));
@@ -128,12 +136,15 @@ public class CallReportWizard {
             catch( Exception exception )
             {
                 System.err.println( exception );
+                                return 0;
             }
-        }
+                        return 1;
+                }
+            public void endExecute(  ){}
 
         /** The service name, that must be used to get an instance of this service.
          */
-        private static final String __serviceName = "com.sun.star.wizards.ReportWizard";
+        private static final String __serviceName = "com.sun.star.report.wizards.CallReportWizard";
 
         /** The service manager, that gives access to all registered services.
          */
@@ -234,7 +245,7 @@ public class CallReportWizard {
         try
         {
             typeReturn = new Type[] {
-                new Type( XCallReportWizard.class),
+                new Type( XDialog.class ) ,
                 new Type( XTypeProvider.class ),
                 new Type( XServiceInfo.class ),
                 new Type( XInitialization.class )
