@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:12:51 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,9 +927,9 @@ void SwHTMLParser::InsertFloatingFrame()
     }
 
     // und jetzt die fuer den SfxFrame
-    SfxFrameDescriptor *pFrameDesc = new SfxFrameDescriptor( 0 );
+    SfxFrameDescriptor aFrameDesc(0);
 
-    SfxFrameHTMLParser::ParseFrameOptions( pFrameDesc, pOptions );
+    SfxFrameHTMLParser::ParseFrameOptions( &aFrameDesc, pOptions );
 
     // den Floating-Frame anlegen
     SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
@@ -937,7 +937,7 @@ void SwHTMLParser::InsertFloatingFrame()
     pFrame->DoInitNew( pStor );
 
     pFrame->EnableSetModified( FALSE );
-    pFrame->SetFrameDescriptor( pFrameDesc );
+    pFrame->SetFrameDescriptor( &aFrameDesc );
     pFrame->EnableSetModified( TRUE );
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
