@@ -95,6 +95,7 @@ Dim bDoSave as Boolean
 Dim sCurFileExists as String
 Dim oModel as Object
 Dim MaxFileIndex as Integer
+Dim FileCount as Integer
 Dim sOldExtension as String
 	bConversionIsRunnig = True
 	AbsTemplateFound = 0
@@ -119,6 +120,7 @@ Dim sOldExtension as String
 		OpenProperties(0).Value = True
 		OpenProperties(1).Name = &quot;AsTemplate&quot;
 		MaxFileIndex = Ubound(FilesList(),1)
+		FileCount = 0
 		For i = 0 To MaxFileIndex
 			If bCancelTask Or RetValue = 0 Then
 				bConversionIsRunnig = False
@@ -184,12 +186,14 @@ Dim sOldExtension as String
 					FileProperties(0).Name = &quot;FilterName&quot;
 					FileProperties(0).Value = CurFilterName
 					oDocument.StoreAsUrl(TargetFile,FileProperties())
+					FileCount = FileCount + 1
 					oDocument.Dispose()
 					On Local Error Goto 0
 				End If
 			End If
 		Next i
 	End If
+	AddLogStatistics(FileCount)
 	ImportDialog.cmdCancel.Label = sCloseButton
 	ImportDialog.cmdGoOn.Label = sReady
 	ImportDialog.cmdGoOn.Enabled = True
@@ -302,6 +306,7 @@ Dim bLogExists as Boolean
 		oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 4, NoArgs())&apos; HiddenProperties()) &apos; HiddenProperties())
 		oLogCursor = oLogDocument.Text.CreateTextCursor
 		oLogTable =  oLogDocument.CreateInstance(&quot;com.sun.star.text.TextTable&quot;)
+		oLogTable.RepeatHeadline = true
 		oLogCursor.Text.InsertTextContent(oLogCursor, oLogTable, True)
 		oLogCursor = oLogTable.GetCellbyPosition(0,0).createTextCursor
 		oLogCursor.SetString(sSourceDocuments)
@@ -350,6 +355,27 @@ Dim i as Integer
 			LocFileName = FileNameOutOfPath(LocUrl)
 			oCell.InsertString(oLogCursor, LocFileName,False)
 		Next i 
+		oLogDocument.Store()
+	End If
+End Sub
+
+
+Sub AddLogStatistics(FileCount as Integer)
+Dim oCell as Object
+Dim oLogCursor as Object
+Dim MaxRowIndex as Integer
+Dim oTableCursor as Object
+	If ImportDialog.chkLogfile.State = 1 Then
+		MaxRowIndex = oLogTable.Rows.Count
+		sLogSummary = ReplaceString(sLogSummary, FileCount, &quot;&lt;COUNT&gt;&quot;)
+		oLogTable.Rows.InsertByIndex(MaxRowIndex, 1)
+		oCell = oLogTable.GetCellbyPosition(0, MaxRowIndex)
+		oLogCursor = oCell.createTextCursor()
+		oCell.InsertString(oLogCursor, sLogSummary,False)
+		oTableCursor = oLogTable.createCursorByCellName(&quot;A1&quot;)
+		oTableCursor.goDown(MaxRowIndex, false)
+		oTableCursor.goRight(1, True)
+		oTableCursor.mergeRange()
 		oLogDocument.Store()
 	End If
 End Sub</script:module>

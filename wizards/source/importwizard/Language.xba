@@ -39,7 +39,7 @@ Public sSumSOTemplates(4) as String
 Public sSumMSDocuments(3) as String
 Public sSumMSTemplates(3) as String
 Public ModuleList(3) as String
-
+Public sLogSummary as String
 
 Sub LoadLanguage()
 	If InitResources(&quot;ImportWizard&quot;,&quot;imp&quot;) then
@@ -102,6 +102,7 @@ Sub LoadLanguage()
 		sReady = GetResText(1100)
 		sSourceDocuments = GetResText(2030)
 		sTargetDocuments = GetResText(2031)
+		sLogSummary = GetResText(2034)
 		sSumInclusiveSubDir = GetResText(3000)
 		sSumSaveDocuments = GetResText(3001)
 		&apos;StarOffice Applicationnames
