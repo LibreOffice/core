@@ -2,9 +2,9 @@
  *
  *  $RCSfile: supservs.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-24 14:54:26 $
+ *  last change: $Author: fs $ $Date: 2002-11-04 13:25:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,6 @@
 #endif
 #ifndef SVTOOLS_INSTRM_HXX
 #include "instrm.hxx"
-#endif
-#ifndef _UTL_CONFIGMGR_HXX_
-#include <unotools/configmgr.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -271,23 +268,12 @@ void SvNumberFormatsSupplierServiceObject::implEnsureFormatter()
     if (!m_pOwnFormatter)
     {
         // get the office's UI locale
-        Any aOfficeLocale = ConfigManager::GetDirectConfigProperty( ConfigManager::LOCALE );
-        ::rtl::OUString sOfficeLocale;
-#ifdef DBG_UTIL
-        sal_Bool bSuccess =
-#endif
-        aOfficeLocale >>= sOfficeLocale;
-        DBG_ASSERT( bSuccess, "SvNumberFormatsSupplierServiceObject::implEnsureFormatter: invalid Locale property!" );
-
-        // build an css.util.Locale
-        sal_Int32 nSepPos = sOfficeLocale.indexOf( '-' );
-        Locale aExtracted;
-        aExtracted.Language = sOfficeLocale.copy( 0, nSepPos );
-        aExtracted.Country = sOfficeLocale.copy( nSepPos + 1 );
+        SvtSysLocale aSysLocale;
+        Locale aOfficeLocale = aSysLocale.GetLocaleData().getLocale();
 
         // initi with this locale
         Sequence< Any > aFakedInitProps( 1 );
-        aFakedInitProps[0] <<= aExtracted;
+        aFakedInitProps[0] <<= aOfficeLocale;
 
         initialize( aFakedInitProps );
     }
