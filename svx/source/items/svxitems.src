@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:34:11 $
+ *  last change: $Author: pb $ $Date: 2001-08-17 07:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7641,8 +7641,8 @@ String RID_SVXITEMS_EMPHASIS_BELOW_POS
 
 String RID_SVXITEMS_TWOLINES_OFF
 {
-    Text = "Zweizeilig aus";
-    Text [ English ] = "Two lines off" ;
+    Text = "Doppelzeilig aus";
+    Text [ English ] = "Double lined off" ;
     Text[ english_us ] = "Double lined off";
     Text[ portuguese ] = "Desactivar linhas duplas";
     Text[ russian ] = "Откл. двустрочный";
@@ -7666,8 +7666,8 @@ String RID_SVXITEMS_TWOLINES_OFF
 };
 String RID_SVXITEMS_TWOLINES
 {
-    Text = "Zweizeilig";
-    Text [ English ] = "Two lines" ;
+    Text = "Doppelzeilig";
+    Text [ English ] = "Double lined" ;
     Text[ english_us ] = "Double lined";
     Text[ portuguese ] = "Linhas duplas";
     Text[ russian ] = "Двустрочный";
