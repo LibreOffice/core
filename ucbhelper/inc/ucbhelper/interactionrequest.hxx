@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interactionrequest.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-16 14:54:07 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 namespace ucbhelper {
 
@@ -123,7 +126,7 @@ struct InteractionRequest_Impl;
   * This class can also be used as base class for more specialized requests,
   * like authentication requests.
   */
-class InteractionRequest : public cppu::OWeakObject,
+class UCBHELPER_DLLPUBLIC InteractionRequest : public cppu::OWeakObject,
                            public com::sun::star::lang::XTypeProvider,
                            public com::sun::star::task::XInteractionRequest
 {
@@ -218,7 +221,7 @@ struct InteractionContinuation_Impl;
   * method the way that they simply call recordSelection() which is provided by
   * this class.
   */
-class InteractionContinuation : public cppu::OWeakObject
+class UCBHELPER_DLLPUBLIC InteractionContinuation : public cppu::OWeakObject
 {
     InteractionContinuation_Impl * m_pImpl;
 
@@ -244,7 +247,7 @@ public:
   * along with an interaction request to indicate the possiblity to abort
   * the operation that caused the request.
   */
-class InteractionAbort : public InteractionContinuation,
+class UCBHELPER_DLLPUBLIC InteractionAbort : public InteractionContinuation,
                          public com::sun::star::lang::XTypeProvider,
                          public com::sun::star::task::XInteractionAbort
 {
@@ -281,7 +284,7 @@ public:
   * along with an interaction request to indicate the possiblity to retry
   * the operation that caused the request.
   */
-class InteractionRetry : public InteractionContinuation,
+class UCBHELPER_DLLPUBLIC InteractionRetry : public InteractionContinuation,
                          public com::sun::star::lang::XTypeProvider,
                          public com::sun::star::task::XInteractionRetry
 {
@@ -392,7 +395,7 @@ public:
   * passed along with an authentication interaction request to enable the
   * interaction handler to supply the missing authentication data.
   */
-class InteractionSupplyAuthentication :
+class UCBHELPER_DLLPUBLIC InteractionSupplyAuthentication :
                   public InteractionContinuation,
                   public com::sun::star::lang::XTypeProvider,
                   public com::sun::star::ucb::XInteractionSupplyAuthentication
