@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-15 15:04:15 $
+ *  last change: $Author: mba $ $Date: 2002-01-09 16:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,15 @@
  *
  *
  ************************************************************************/
-#include "appdata.hxx"
+
+#include "progress.hxx"
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#endif
 
 #ifndef _SBX_HXX //autogen
 #include <svtools/sbx.hxx>
@@ -67,7 +75,9 @@
 
 #include <so3/transbnd.hxx>             // SvProgressArg
 
-#include "progress.hxx"
+#include "appdata.hxx"
+#include "request.hxx"
+#include "frame.hxx"
 #include "viewfrm.hxx"
 #include "ipfrm.hxx"
 #include "viewsh.hxx"
@@ -82,6 +92,10 @@
 #include "bastyp.hrc"
 
 #include <time.h>
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::task;
 
 void AddNumber_Impl( String& aNumber, sal_uInt32 nArg )
 {
@@ -147,6 +161,7 @@ String GetStatusString( const SvProgressArg* pArg )
 
 struct SfxProgress_Impl : public SfxCancellable
 {
+    Reference < XStatusIndicator > xStatusInd;
     String                  aText, aStateText;
     ULONG                   nMax;
     clock_t                 nCreate;
@@ -161,8 +176,10 @@ struct SfxProgress_Impl : public SfxCancellable
     SfxObjectShellRef       xObjSh;
     SfxStatusBarManager*    pMgr;
     SfxWorkWindow*          pWorkWin;
+    SfxViewFrame*           pView;
 
                             SfxProgress_Impl( const String& );
+    void                    Enable_Impl( BOOL );
 
 };
 
@@ -194,8 +211,9 @@ inline ULONG Get10ThSec()
 
 // -----------------------------------------------------------------------
 
-void Enable_Impl(SfxObjectShell *pDoc, BOOL bEnable)
+void SfxProgress_Impl::Enable_Impl( BOOL bEnable )
 {
+    SfxObjectShell* pDoc = bAllDocs ? xObjSh : NULL;
     SfxViewFrame *pFrame= SfxViewFrame::GetFirst(pDoc);
     while ( pFrame )
     {
@@ -203,6 +221,12 @@ void Enable_Impl(SfxObjectShell *pDoc, BOOL bEnable)
         if ( pDoc )
             pFrame->GetDispatcher()->Lock( !bEnable );
         pFrame = SfxViewFrame::GetNext(*pFrame, pDoc);
+    }
+
+    if ( pView )
+    {
+        pView->Enable( bEnable );
+        pView->GetDispatcher()->Lock( !bEnable );
     }
 
     if ( pDoc )
@@ -291,6 +315,7 @@ SfxProgress::SfxProgress
     pImp->bAllDocs = bAll;
     pImp->pMgr = 0;
     pImp->pWorkWin = 0;
+    pImp->pView = 0;
 
     pImp->pActiveProgress = GetActiveProgress( pObjSh );
     if ( pObjSh )
@@ -354,16 +379,7 @@ void SfxProgress::Stop()
     else
         SFX_APP()->SetProgress_Impl(0);
     if ( pImp->bLocked )
-    {
-        if ( pImp->xObjSh.Is() && !pImp->bAllDocs )
-        {
-            Enable_Impl(pImp->xObjSh, TRUE);
-        }
-        else
-        {
-            Enable_Impl(0, TRUE);
-        }
-    }
+        pImp->Enable_Impl(TRUE);
 }
 
 // -----------------------------------------------------------------------
@@ -386,6 +402,11 @@ void SfxProgress::SetText
         pImp->pMgr->EndProgressMode();
         pImp->aText = rText;
         pImp->pMgr->StartProgressMode( pImp->aText, pImp->nMax );
+    }
+    else if ( pImp->xStatusInd.is() )
+    {
+        pImp->xStatusInd->reset();
+        pImp->xStatusInd->start( pImp->aText, pImp->nMax );
     }
 }
 
@@ -513,24 +534,64 @@ BOOL SfxProgress::SetState
         bOver = TRUE;
     }
 
-    // noch kein StbManager eingestellt?
-    if ( !pImp->pMgr )
+    if ( !pImp->pMgr && !pImp->xStatusInd.is() )
     {
-        ULONG nTime = Get10ThSec();
-        ULONG nTimeDiff = nTime - pImp->nCreate;
-        ULONG nPercent = pImp->nMax ? nNewVal * 100 / pImp->nMax : 0;
-        DBG( DbgOutf( "SfxProgress: SetState invisible at %luds (%luds/%luds), %ld%%/%d%%",
-                      nTime, nTimeDiff, TIMEOUT_PROGRESS,
-                      nPercent, MAXPERCENT_PROGRESS ) );
-        if ( nTimeDiff > TIMEOUT_PROGRESS && nPercent <= MAXPERCENT_PROGRESS )
+        // get the active ViewFrame of the document this progress is working on
+        // if it doesn't work on a document, take the current ViewFrame
+        SfxObjectShell* pObjSh = pImp->xObjSh;
+        pImp->pView = SfxViewFrame::Current();
+        DBG_ASSERT( pImp->pView || pObjSh, "Can't make progress bar!");
+        if ( pObjSh && ( !pImp->pView || pObjSh != pImp->pView->GetObjectShell() ) )
         {
-            pImp->pWorkWin = SFX_APP()->GetWorkWindow_Impl( SfxViewFrame::Current() );
-            if( pImp->pWorkWin )
+            // current document does not belong to current ViewFrame; take it's first visible ViewFrame
+            SfxViewFrame* pDocView = SfxViewFrame::GetFirst( pObjSh );
+            if ( pDocView )
+                pImp->pView = pDocView;
+            else
             {
-                pImp->pWorkWin->SetTempStatusBar_Impl( TRUE );
-                pImp->pMgr = pImp->pWorkWin->GetStatusBarManager_Impl();
+                // not in a view, perhaps it's just loading
+                SfxFrame* pFrame = pObjSh->GetMedium()->GetLoadTargetFrame();
+                if ( pFrame && pFrame->GetCurrentViewFrame() )
+                {
+                    // recycling frame
+                    pImp->pView = pFrame->GetCurrentViewFrame();
+                }
+                else
+                {
+                    SfxItemSet* pSet = pObjSh->GetMedium()->GetItemSet();
+                    SFX_ITEMSET_ARG( pSet, pItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, sal_False );
+                    if ( pItem )
+                        pImp->xStatusInd = Reference < XStatusIndicator >( pItem->GetValue(), UNO_QUERY );
+                }
             }
-            DBG( DbgOutf( "SfxProgress: visible" ) );
+        }
+
+        if ( pImp->xStatusInd.is() )
+        {
+            pImp->xStatusInd->start( pImp->aText, pImp->nMax );
+            pImp->pView = NULL;
+        }
+        else
+        {
+            ULONG nTime = Get10ThSec();
+            ULONG nTimeDiff = nTime - pImp->nCreate;
+            ULONG nPercent = pImp->nMax ? nNewVal * 100 / pImp->nMax : 0;
+            DBG( DbgOutf( "SfxProgress: SetState invisible at %luds (%luds/%luds), %ld%%/%d%%",
+                        nTime, nTimeDiff, TIMEOUT_PROGRESS,
+                        nPercent, MAXPERCENT_PROGRESS ) );
+            if ( nTimeDiff > TIMEOUT_PROGRESS && nPercent <= MAXPERCENT_PROGRESS )
+            {
+                pImp->pWorkWin = SFX_APP()->GetWorkWindow_Impl( pImp->pView );
+                if( pImp->pWorkWin )
+                {
+                    if ( pImp->pView )
+                        pImp->pView->GetDispatcher()->Update_Impl();
+                    pImp->pWorkWin->SetTempStatusBar_Impl( TRUE );
+                    pImp->pMgr = pImp->pWorkWin->GetStatusBarManager_Impl();
+                }
+
+                DBG( DbgOutf( "SfxProgress: visible" ) );
+            }
         }
     }
 
@@ -572,6 +633,10 @@ BOOL SfxProgress::SetState
 
         Reschedule();
     }
+    else if ( pImp->xStatusInd.is() )
+    {
+        pImp->xStatusInd->setValue( nNewVal );
+    }
 
     return TRUE;
 }
@@ -598,6 +663,12 @@ void SfxProgress::Resume()
             pImp->pMgr->StartProgressMode( pImp->aText, pImp->nMax );
             pImp->pMgr->SetProgressState( nVal );
         }
+        else if ( pImp->xStatusInd.is() )
+        {
+            pImp->xStatusInd->start( pImp->aText, pImp->nMax );
+            pImp->xStatusInd->setValue( nVal );
+        }
+
         if ( pImp->bWaitMode )
         {
             if ( pImp->xObjSh.Is() && !pImp->bAllDocs )
@@ -653,6 +724,10 @@ void SfxProgress::Suspend()
                 pImp->pMgr->EndProgressMode();
             pImp->pMgr->ShowItems();
             pImp->pWorkWin->SetTempStatusBar_Impl( FALSE );
+        }
+        else if ( pImp->xStatusInd.is() )
+        {
+            pImp->xStatusInd->reset();
         }
 
         if ( pImp->xObjSh.Is() && !pImp->bAllDocs )
@@ -714,14 +789,7 @@ void SfxProgress::Lock()
         }
     }
 
-    if ( pImp->xObjSh.Is() && !pImp->bAllDocs )
-    {
-        Enable_Impl(pImp->xObjSh, FALSE);
-    }
-    else
-    {
-        Enable_Impl(0, FALSE);
-    }
+    pImp->Enable_Impl( FALSE );
 
     DBG( DbgOutf( "SfxProgress: locked" ) );
     pImp->bLocked = TRUE;
@@ -737,14 +805,7 @@ void SfxProgress::UnLock()
 
     DBG( DbgOutf( "SfxProgress: unlocked" ) );
     pImp->bLocked = FALSE;
-    if ( pImp->xObjSh.Is() && !pImp->bAllDocs )
-    {
-        Enable_Impl(pImp->xObjSh, TRUE);
-    }
-    else
-    {
-        Enable_Impl(0, TRUE);
-    }
+    pImp->Enable_Impl(TRUE);
 }
 
 // -----------------------------------------------------------------------
