@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cancelcommandexecution.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-19 09:16:41 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 07:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,52 @@ void cancelCommandExecution( const com::sun::star::uno::Any & rException,
  */
 void cancelCommandExecution( const com::sun::star::ucb::IOErrorCode eError,
                              const rtl::OUString & rArg,
+                             const com::sun::star::uno::Reference<
+                                com::sun::star::ucb::XCommandEnvironment > &
+                                    xEnv,
+                             const rtl::OUString & rMessage = rtl::OUString(),
+                             const com::sun::star::uno::Reference<
+                                com::sun::star::ucb::XCommandProcessor > &
+                                    xContext = 0 )
+    throw( com::sun::star::uno::Exception );
+
+/** Cancel the execution of a command by throwing the appropriate exception.
+    If an Interaction Handler is given with the command environment and the
+    handler handles the exception by selecting the supplied continuation,
+    then this function will put the original exception supplied into a
+    com::sun::star::ucb::CommandFailedException and throw the
+    CommandFailedException. If no handler was given or the handler was not
+    able to handle the exception, then the given exception will be thrown
+    directly.
+
+    NOTE THAT THIS FUNCTION NEVER RETURNS! IT ALWAYS THROWS AN EXCEPTION!
+
+    @param eError is an IO error code.
+
+    @param rArg1 is a string to pass as the first argument with the resulting
+           InteractivAugmentedIOException. Each IO error code can be combined
+           with one or more additional arguments. Refer to
+           com/sun/star/ucb/IOErroprCode.idl for details.
+
+    @param rArg2 is a string to pass as the second argument with the resulting
+           InteractivAugmentedIOException. Each IO error code can be combined
+           with one or more additional arguments. Refer to
+           com/sun/star/ucb/IOErroprCode.idl for details.
+
+    @param xEnv is the command environment that may contain an Interaction
+           Handler to use before throwing the appropriate exception.
+
+    @param rMessage is a text containing additional error information.
+           Used as debugging aid only. Passed to the member 'Message' of the
+           uno::Exception thrown by this function.
+
+    @param xContext is the command processor executing the command to cancel.
+           Used as debugging aid only. Passed to the member 'Context' of the
+           uno::Exception thrown by this function.
+ */
+void cancelCommandExecution( const com::sun::star::ucb::IOErrorCode eError,
+                             const rtl::OUString & rArg1,
+                             const rtl::OUString & rArg2,
                              const com::sun::star::uno::Reference<
                                 com::sun::star::ucb::XCommandEnvironment > &
                                     xEnv,
