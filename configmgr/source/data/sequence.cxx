@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:55:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,7 +514,8 @@ uno::Any readAnySequence(Accessor const& _anAccessor, TypeCode _aElementType, Se
 uno::Sequence<sal_Int8> readBinary(Accessor const& _anAccessor, Sequence _aSeq)
 {
     OSL_ENSURE(_aSeq, "ERROR: Trying to read from a NULL sequence");
-    if (_aSeq == 0) return NULL;
+    if (_aSeq == 0)
+        return 0;
 
     sal_Int32 const nElements = implGetSize(_anAccessor,_aSeq);
 
