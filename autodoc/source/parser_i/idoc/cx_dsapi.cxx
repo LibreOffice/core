@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_dsapi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:43:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ void
 Context_Docu::SetupStateMachine()
 {
     // Besondere Array-Stati (kein Tokenabschluss oder Kontextwechsel):
-    const INT16 bas = 0;        // Base-Status
+//  const INT16 bas = 0;        // Base-Status
     const INT16 wht = 1;        // Whitespace-overlook-Status
     const INT16 awd = 2;        // Any-Word-Read-Status
 
@@ -319,7 +319,7 @@ Context_Docu::SetupStateMachine()
     const INT16 finAnyWord = 13;
     const INT16 finAtTag = 14;
     const INT16 finEndSign = 15;
-    const INT16 finComma = 16;
+//  const INT16 finComma = 16;
 
     // Konstanten zur Benutzung in der Tabelle:
     const INT16 ght = goto_EoHtml;
