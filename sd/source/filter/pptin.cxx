@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-17 14:11:45 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 16:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@
 #include <svx/gallery.hxx>
 #endif
 #ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx
+#include <tools/urlobj.hxx>
 #endif
 
 #ifndef _SVX_NUMITEM_HXX
