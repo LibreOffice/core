@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:10:42 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,6 +790,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDataPilotFieldAttrTokenMap[] =
     { XML_NAMESPACE_TABLE, XML_IS_DATA_LAYOUT_FIELD,    XML_TOK_DATA_PILOT_FIELD_ATTR_IS_DATA_LAYOUT_FIELD  },
     { XML_NAMESPACE_TABLE, XML_FUNCTION,                XML_TOK_DATA_PILOT_FIELD_ATTR_FUNCTION              },
     { XML_NAMESPACE_TABLE, XML_ORIENTATION,             XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION           },
+    { XML_NAMESPACE_TABLE, XML_SELECTED_PAGE,           XML_TOK_DATA_PILOT_FIELD_ATTR_SELECTED_PAGE         },
     { XML_NAMESPACE_TABLE, XML_USED_HIERARCHY,          XML_TOK_DATA_PILOT_FIELD_ATTR_USED_HIERARCHY        },
     XML_TOKEN_MAP_END
 };
