@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XUIConfiguration.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-02-25 18:11:31 $
+ *  last change: $Date: 2005-03-01 20:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,9 @@ package ifc.ui;
 
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
-import drafts.com.sun.star.ui.XUIConfiguration;
-import drafts.com.sun.star.ui.XUIConfigurationListener;
+import com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
+import com.sun.star.ui.XUIConfiguration;
+import com.sun.star.ui.XUIConfigurationListener;
 import lib.MultiMethodTest;
 
 public class _XUIConfiguration extends MultiMethodTest {
