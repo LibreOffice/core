@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XClipboardFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:39 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 18:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,10 @@ interface XClipboardFactory: com::sun::star::uno::XInterface
         implementation.
 
         @param aName
-        the name the clipboard should have..
+        the name the clipboard should have.
 
         @throws com::sun::star::lang::IllegalArgumentException
-        if an empty string is passed in.
+        if an empty string is passed.
     */
     XClipboard createClipboard( [in] string aName )
         raises ( com::sun::star::lang::IllegalArgumentException );

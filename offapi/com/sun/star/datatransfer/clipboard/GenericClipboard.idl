@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GenericClipboard.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:39 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 18:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,12 +100,12 @@ service GenericClipboard
     interface XClipboardEx;
 
     //-------------------------------------------------------------------------
-    /** allows to request notifications on content changes.
+    /** provides the ability to request notifications on content changes.
     */
     interface XClipboardNotifier;
 
     //-------------------------------------------------------------------------
-    /** allows to initially set the name of the clipboard.
+    /** provides the ability to initially set the name of the clipboard.
     */
     interface com::sun::star::lang::XInitialization;
 
@@ -116,6 +116,8 @@ service GenericClipboard
 
     //-------------------------------------------------------------------------
     /** service should always support this interface.
+
+ <!-- Dennis: When is "service" written "Service"? -->
     */
     interface com::sun::star::lang::XServiceInfo;
 
