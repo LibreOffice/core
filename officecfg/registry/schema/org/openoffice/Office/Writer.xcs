@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $: vg $ $Date: 2004-09-20 12:33:14 $
+ *  last change: $: vg $ $Date: 2004-09-20 12:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,6 +383,52 @@
 				</info>
 			</prop>
 		</group>
+        <group oor:name="_DataSource">
+            <info>
+                <desc xml:lang="en-US">Contains the description of a data source.</desc>
+            </info>
+            <prop oor:name="DataSourceName" oor:type="xs:string">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Contains the name of the data source.</desc>
+                    <label xml:lang="en-US">Data source name</label>
+                </info>
+            </prop>
+            <prop oor:name="DataTableName" oor:type="xs:string">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Name of the database table or query.</desc>
+                    <label xml:lang="en-US">Data table or query name</label>
+                </info>
+            </prop>
+            <prop oor:name="DataCommandType" oor:type="xs:short">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">CommandType of the data source.</desc>
+                    <label xml:lang="en-US">Data CommandType</label>
+                </info>
+                <value>0</value>
+            </prop>
+        </group>
+        <group oor:name="AddressDataAssignment">
+            <info>
+                <desc xml:lang="en-US">Contains the assignments of programmatic address column names like FirstName, LastName to actual column names of the actual data base table.</desc>
+            </info>
+            <prop oor:name="DBColumnAssignments" oor:type="oor:string-list">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">List of all currently available assignments of programmatic to actual column names of data sources used in mail merge. The position in the list has to match the following order of columns: TITLE,FIRSTNAME,LASTNAME,COMPANY,ADDRESS_1,ADDRESS_2,CITY,REGION,ZIP,COUNTRY,PHONE_PRIVATE,PHONE_BUSINESS,E_MAIL,GENDER</desc>
+                    <label xml:lang="en-US">Column assignment list</label>
+                </info>
+            </prop>
+            <node-ref oor:name="DataSource" oor:node-type="_DataSource">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Contains the information of the data source that's been used the last time the wizard has been executed.</desc>
+                    <label xml:lang="en-US">Data Set</label>
+                </info>
+            </node-ref>
+        </group>
 		<group oor:name="BusinessLetterElementLocation" >
 			<info>
 				<author>TV</author>
@@ -734,7 +780,280 @@
 		</group>
 	</templates>
 	<component>
-		<group oor:name="Content">
+        <group oor:name="MailMergeWizard">
+            <info>
+                <desc xml:lang="en-US">Settings of the mail merge wizard.</desc>
+            </info>
+            <prop oor:name="OutputToLetter" oor:type="xs:boolean">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Determines whether the document output is a letter, not an e-mail.</desc>
+                    <label xml:lang="en-US">Output as letter</label>
+                </info>
+                <value>true</value>
+            </prop>
+            <prop oor:name="IncludeCountry" oor:type="xs:boolean">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Determines whether the country/region is included into the address block. If yes the ExcludeCountry property may never be included.</desc>
+                    <label xml:lang="en-US">Include country/region</label>
+                </info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="ExcludeCountry" oor:type="xs:string">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">If the property IncludeCountry is true it all countries/regions are included into the address block except for this country or region.</desc>
+                    <label xml:lang="en-US">ExcludeCountry</label>
+                </info>
+                <value></value>
+            </prop>
+            
+            <prop oor:name="SavedDocuments" oor:type="oor:string-list">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Contains a list of all documents previously used and saved as mailmerge source documents</desc>
+                    <label xml:lang="en-US">Saved documents</label>
+                </info>
+            </prop>
+            <prop oor:name="AddressBlockSettings" oor:type="oor:string-list">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Contains a list of settings for address blocks. It is a sequence of address column positions separated with breaks (\n) and spaces. The column positions start at 0 and after 9 follows a, b, c and they are equivalent to the following parts of an address: TITLE,FIRSTNAME,LASTNAME,COMPANY,ADDRESS_1,ADDRESS_2,CITY,REGION,ZIP,COUNTRY,PHONE_PRIVATE,PHONE_BUSINESS,E_MAIL</desc>
+                    <label xml:lang="en-US">Address block settings</label>
+                </info>
+                <value oor:separator=";">&lt;0&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;8&gt; &lt;6&gt;\n&lt;9&gt;;&lt;0&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;3&gt;\n&lt;8&gt; &lt;6&gt;\n&lt;5&gt;;&lt;0&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;8&gt; &lt;6&gt;\n&lt;9&gt;;&lt;0&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;5&gt;\n&lt;8&gt; &lt;6&gt;\n&lt;9&gt;</value>
+            </prop>
+            <prop oor:name="IsAddressBlock" oor:type="xs:boolean">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Determines whether the document should have an address block.</desc>
+                    <label xml:lang="en-US">Address Block</label>
+                </info>
+                <value>true</value>
+            </prop>
+            <prop oor:name="IsGreetingLine" oor:type="xs:boolean">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Determines whether the document should have a greeting line.</desc>
+                    <label xml:lang="en-US">Greeting line</label>
+                </info>
+                <value>true</value>
+            </prop>
+            <prop oor:name="IsEMailGreetingLine" oor:type="xs:boolean">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Determines whether an e-mail should have a greeting line.</desc>
+                    <label xml:lang="en-US">E-mail greeting line</label>
+                </info>
+                <value>true</value>
+            </prop>
+            <prop oor:name="IsIndividualGreetingLine" oor:type="xs:boolean">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Determines whether an individual greeting line is used instead of a neutral one.</desc>
+                    <label xml:lang="en-US">Use individual greeting line</label>
+                </info>
+                <value>true</value>
+            </prop>
+            <prop oor:name="IsEMailIndividualGreetingLine" oor:type="xs:boolean">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Determines whether in an e-mail an individual greeting line is used instead of a neutral one.</desc>
+                    <label xml:lang="en-US">Use individual greeting line in e-Mail</label>
+                </info>
+                <value>true</value>
+            </prop>
+            <prop oor:name="FemaleGreetingLines" oor:type="oor:string-list" oor:localized="true">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Contains a list of greeting lines, female.</desc>
+                    <label xml:lang="en-US">Greeting lines, female</label>
+                </info>
+            </prop>
+            <prop oor:name="MaleGreetingLines" oor:type="oor:string-list" oor:localized="true">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Contains a list of greeting lines, male.</desc>
+                    <label xml:lang="en-US">Greeting lines, male</label>
+                </info>
+            </prop>
+            <prop oor:name="NeutralGreetingLines" oor:type="oor:string-list">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Contains a list of greeting lines, neutral.</desc>
+                    <label xml:lang="en-US">Greeting lines, neutral</label>
+                </info>
+            </prop>
+            <prop oor:name="CurrentFemaleGreeting" oor:type="xs:long">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Contains the index of the current entry in list of female greeting lines.</desc>
+                    <label xml:lang="en-US">Current female Greeting line</label>
+                </info>
+            </prop>
+            <prop oor:name="CurrentMaleGreeting" oor:type="xs:long">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Contains the index of the current entry in list of male greeting lines.</desc>
+                    <label xml:lang="en-US">Current male Greeting line</label>
+                </info>
+            </prop>
+            <prop oor:name="CurrentNeutralGreeting" oor:type="xs:long">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Contains the index of the current entry in list of neutral greeting lines.</desc>
+                    <label xml:lang="en-US">Current neutral Greeting line</label>
+                </info>
+            </prop>
+            <prop oor:name="FemaleGenderValue" oor:type="xs:string">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Determines the value of the Gender column that marks a recipient as female.</desc>
+                    <label xml:lang="en-US">Female Gender Value</label>
+                </info>
+            </prop>
+            <prop oor:name="MailDisplayName" oor:type="xs:string">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Contains the display name of the mail address.</desc>
+                    <label xml:lang="en-US">e-Mail Name</label>
+                </info>
+            </prop>
+            <prop oor:name="MailAddress" oor:type="xs:string">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">e-Mail address.</desc>
+                    <label xml:lang="en-US">e-Mail address</label>
+                </info>
+            </prop>
+            <prop oor:name="IsMailReplyTo" oor:type="xs:boolean">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Determines if reply to is switched on.</desc>
+                    <label xml:lang="en-US">Is reply to</label>
+                </info>
+            </prop>
+            <prop oor:name="MailReplyTo" oor:type="xs:string">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Reply to address.</desc>
+                    <label xml:lang="en-US">Reply to</label>
+                </info>
+            </prop>
+            <prop oor:name="MailServer" oor:type="xs:string">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Name of the SMTP server.</desc>
+                    <label xml:lang="en-US">SMTP server</label>
+                </info>
+            </prop>
+            <prop oor:name="MailPort" oor:type="xs:short">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Port of the SMTP server.</desc>
+                    <label xml:lang="en-US">Port</label>
+                </info>
+            </prop>
+            <prop oor:name="IsSecureConnection" oor:type="xs:boolean">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Determines whether the connection to the SMTP server is done using SSL protocol.</desc>
+                    <label xml:lang="en-US">Is secure connection</label>
+                </info>
+            </prop>
+            <prop oor:name="IsAuthentication" oor:type="xs:boolean">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Determines whether authentication at the SMTP server is necessary.</desc>
+                    <label xml:lang="en-US">Is authentication</label>
+                </info>
+            </prop>
+            <prop oor:name="MailUserName" oor:type="xs:string">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">User name to authenticate at the SMTP server.</desc>
+                    <label xml:lang="en-US">User name</label>
+                </info>
+            </prop>
+            <prop oor:name="MailPassword" oor:type="xs:string">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Password to authenticate at the SMTP server.</desc>
+                    <label xml:lang="en-US">Password</label>
+                </info>
+            </prop>
+            <prop oor:name="IsSMPTAfterPOP" oor:type="xs:boolean">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">SMTP server requires authentication at the POP or IMAP server</desc>
+                    <label xml:lang="en-US">SMPT after POP</label>
+                </info>
+            </prop>
+            <prop oor:name="InServerName" oor:type="xs:string">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Name of the incoming mail server</desc>
+                    <label xml:lang="en-US">Incoming mail server</label>
+                </info>
+            </prop>
+            <prop oor:name="InServerPort" oor:type="xs:short">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Port of the incoming mail server</desc>
+                    <label xml:lang="en-US">Incoming server port</label>
+                </info>
+            </prop>
+            <prop oor:name="InServerIsPOP" oor:type="xs:boolean">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Determines whether the in server uses the POP3 or the IMAP protocol</desc>
+                    <label xml:lang="en-US">POP</label>
+                </info>
+            </prop>
+            <prop oor:name="InServerUserName" oor:type="xs:string">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">User name of the incoming mail server</desc>
+                    <label xml:lang="en-US">Incoming server user name</label>
+                </info>
+            </prop>
+            <prop oor:name="InServerPassword" oor:type="xs:string">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Password of the incoming mail server</desc>
+                    <label xml:lang="en-US">Incoming server password</label>
+                </info>
+            </prop>
+            <prop oor:name="Filter" oor:type="xs:string">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Contains a filter statement for the current data source.</desc>
+                    <label xml:lang="en-US">Filter</label>
+                </info>
+            </prop>
+            <prop oor:name="EMailSupported" oor:type="xs:boolean">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Determines whether e-Mail is supported.</desc>
+                    <label xml:lang="en-US">E-Mail supported</label>
+                </info>
+            </prop>
+            <set oor:name="AddressDataAssignments" oor:node-type="AddressDataAssignment">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">XXXXXX.</desc>
+                </info>
+            </set>
+            <node-ref oor:name="DataSource" oor:node-type="_DataSource">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Contains the information of the data source that's been used the last time the wizard has been executed.</desc>
+                    <label xml:lang="en-US">Data Set</label>
+                </info>
+            </node-ref>
+        </group>
+        <group oor:name="Content">
 			<info>
 				<desc>Contains settings for various content elements.</desc>
 			</info>
@@ -8123,6 +8442,13 @@
 					</info>
 					<value>false</value>
 				</prop>
+                <prop oor:name="AskForMerge" oor:type="xs:boolean">
+                    <info>
+                        <author>OS</author>
+                        <desc>Determines whether printing a document that contains database fields triggers a 'do you want to call mailmerge' query</desc>
+                    </info>
+                    <value>true</value>
+                </prop>
 			</group>
 			<group oor:name="MailingOutput">
 				<info>
