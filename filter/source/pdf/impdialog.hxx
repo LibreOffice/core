@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-17 12:59:50 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,6 @@ class ImpPDFDialog : public ModalDialog
 {
 private:
 
-      OKButton                          maBtnOK;
-    CancelButton                        maBtnCancel;
-    HelpButton                          maBtnHelp;
     FixedLine                           maFlPages;
     RadioButton                         maRbAll;
     RadioButton                         maRbRange;
@@ -91,6 +88,9 @@ private:
     RadioButton                         maRbScreen;
     RadioButton                         maRbPrint;
     RadioButton                         maRbPress;
+      OKButton                          maBtnOK;
+    CancelButton                        maBtnCancel;
+    HelpButton                          maBtnHelp;
 
     FilterConfigItem                    maConfigItem;
     Any                                 maSelection;
