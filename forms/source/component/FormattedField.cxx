@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:33:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,7 +687,7 @@ void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyCha
                     if ( m_xColumn.is() && m_xAggregateFastSet.is() )
                     {
                         ::osl::MutexGuard aGuard( m_aMutex );   // setControlValue expects that
-                        setControlValue( translateDbColumnToControlValue() );
+                        setControlValue( translateDbColumnToControlValue(), eOther );
                     }
                 }
                 catch(Exception&)
@@ -955,7 +955,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
         }
 
         aFmtKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
-        bVoidKey = (!xSupplier.is() || !aFmtKey.hasValue()) || (m_bLoaded && m_xOriginalFormatter.is());
+        bVoidKey = (!xSupplier.is() || !aFmtKey.hasValue()) || (isLoaded() && m_xOriginalFormatter.is());
             // (kein Fomatter und/oder Key) oder (loaded und faked Formatter)
     }
 
@@ -1114,7 +1114,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
 
                 // this property is only to be set if we have no control source : in all other cases the base class did a
                 // reset after it's read and this set the effective value to a default value
-                if (m_xAggregateSet.is() && (m_aControlSource.getLength() == 0))
+                if ( m_xAggregateSet.is() && ( getControlSource().getLength() == 0 ) )
                 {
                     try
                     {
@@ -1212,12 +1212,12 @@ sal_Bool OFormattedModel::commitControlValueToDbColumn( bool _bPostReset )
 //------------------------------------------------------------------------------
 Any OFormattedModel::translateExternalValueToControlValue( )
 {
-    OSL_PRECOND( m_xExternalBinding.is(),
+    OSL_PRECOND( hasExternalValueBinding(),
         "OFormattedModel::translateExternalValueToControlValue: precondition not met!" );
 
     Any aReturn;
-    if ( m_xExternalBinding.is() )
-        aReturn = m_xExternalBinding->getValue( ::getCppuType( static_cast< double* >( NULL ) ) );
+    if ( hasExternalValueBinding() )
+        aReturn = getExternalValueBinding()->getValue( ::getCppuType( static_cast< double* >( NULL ) ) );
     return aReturn;
 }
 
