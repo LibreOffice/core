@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:08:02 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 10:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,6 @@
 #endif
 #ifndef _PARHTML_HXX //autogen
 #include <svtools/parhtml.hxx>
-#endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
 #endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
@@ -508,6 +505,10 @@ BOOL SwReader::CheckPasswd( const String& rPasswd, const Reader& rOptions )
 
 ULONG ReadFilterFlags( const sal_Char* pName, const sal_Char* pAltName )
 {
+return 0;
+
+#if 0
+// must be changed to the new configiguration
     String sName( String::CreateFromAscii( pName ));
     String aStr( SFX_APP()->GetIniManager()->Get( SFX_GROUP_USER, sName ));   // aName suchen
 
@@ -539,6 +540,7 @@ ULONG ReadFilterFlags( const sal_Char* pName, const sal_Char* pAltName )
             nVal = aStr.ToInt32();
     }
     return nVal;
+#endif
 }
 
 /*  */
@@ -1514,6 +1516,9 @@ Color ConvertBrushStyle(const Color& rCol, const Color& rFillCol, BYTE nStyle)
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/06 13:08:02  jp
+      should changes: don't use IniManager
+
       Revision 1.1.1.1  2000/09/19 10:59:15  hr
       initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlbas.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 10:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,10 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"
-
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
 #endif
+
 #define _SVSTDARR_STRINGSSORTDTOR
 #include <svtools/svstdarr.hxx>
 #ifndef _SBXCLASS_HXX //autogen
@@ -397,11 +396,14 @@ void SwHTMLWriter::OutBasicBodyEvents()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlbas.cxx,v 1.1.1.1 2000-09-18 17:14:55 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlbas.cxx,v 1.2 2000-11-13 10:46:28 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:55  hr
+      initial import
+
       Revision 1.92  2000/09/18 16:04:43  willem.vandorp
       OpenOffice header added.
 

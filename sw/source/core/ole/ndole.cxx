@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:23 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 10:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
 #endif
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
@@ -543,11 +540,13 @@ SvInPlaceObjectRef SwOLEObj::GetOleRef()
         // Init Size besorgen
         if( !nLRU_InitSize )
         {
+#if 0
+//JP 13.11.00: must be change to the new configuration!
             nLRU_InitSize = SFX_APP()->GetIniManager()->Get(
                 SFX_GROUP_WORKINGSET_IMPL, String::CreateFromAscii(
                 RTL_CONSTASCII_STRINGPARAM( "MaxOLEObjectsInSWMemory" )))
                     .ToInt32();
-
+#endif
             if( 20 > nLRU_InitSize )
                 nLRU_InitSize = 20;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 09:19:24 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 10:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,6 @@
 #endif
 #ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
-#endif
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -679,6 +676,9 @@ void    SwGlossaryGroupTLB::Clear()
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/06 09:19:24  jp
+      must changes: tempfile
+
       Revision 1.2  2000/10/20 14:18:05  os
       use comphelper methods
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 12:21:48 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 10:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@
 #include <svx/spldlg.hxx>
 #endif
 
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
-#endif
 #ifndef _LINGU_LNGPROPS_HHX_
 #include <lingu/lngprops.hxx>
 #endif

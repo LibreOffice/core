@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 11:51:20 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 10:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 #include <offmgr/osplcfg.hxx>
 #endif
 
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
-#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
