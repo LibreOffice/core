@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportSharedData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-02 08:53:57 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ ScMySharedData::ScMySharedData(const sal_Int32 nTempTableCount) :
     pDrawPages(NULL),
     pShapesContainer(NULL),
     pDetectiveObjContainer(NULL),
+    pNoteShapes(NULL),
     nTableCount(nTempTableCount)
 {
     pDetectiveObjContainer = new ScMyDetectiveObjContainer();
@@ -101,6 +102,8 @@ ScMySharedData::~ScMySharedData()
         delete pDrawPages;
     if (pDetectiveObjContainer)
         delete pDetectiveObjContainer;
+    if (pNoteShapes)
+        delete pNoteShapes;
 }
 
 void ScMySharedData::SetLastColumn(const sal_Int32 nTable, const sal_Int32 nCol)
@@ -184,4 +187,20 @@ void ScMySharedData::AddTableShape(const sal_Int32 nTable, const uno::Reference<
     if (!pTableShapes)
         pTableShapes = new ScMyTableShapes(nTableCount);
     (*pTableShapes)[nTable].push_back(xShape);
+}
+
+void ScMySharedData::AddNoteObj(const uno::Reference<drawing::XShape>& xShape, const ScAddress& rPos)
+{
+    if (!pNoteShapes)
+        pNoteShapes = new ScMyNoteShapesContainer();
+    ScMyNoteShape aNote;
+    aNote.xShape = xShape;
+    aNote.aPos = rPos;
+    pNoteShapes->AddNewNote(aNote);
+}
+
+void ScMySharedData::SortNoteShapes()
+{
+    if (pNoteShapes)
+        pNoteShapes->Sort();
 }
