@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-18 14:30:50 $
+ *  last change: $Author: hdu $ $Date: 2002-11-22 17:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,7 +778,7 @@ static HFONT ImplSelectFontA( HDC hDC, LOGFONTA& rLogFont, HFONT* pNewFont )
     HFONT hOldFont = SelectFont( hDC, hNewFont );
 
     TEXTMETRICA aWinMetric;
-    // Font doesn't work, try a replacement
+    // when the font doesn't work try a replacement
     if ( !GetTextMetricsA( hDC, &aWinMetric ) )
     {
         strcpy( rLogFont.lfFaceName, "Courier New" );
@@ -799,10 +799,6 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
 {
     HFONT hNewFont = 0;
     HFONT hOldFont;
-
-    // TODO: use nFallbackLevel
-    if( nFallbackLevel > 0 )
-        return 0;
 
     if ( aSalShlData.mbWNT )
     {
@@ -880,24 +876,38 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
         hOldFont = ImplSelectFontA( maGraphicsData.mhDC, *maGraphicsData.mpLogFont, &hNewFont );
     }
 
-    // destory or save old font
-    if ( maGraphicsData.mhFont )
-        DeleteFont( maGraphicsData.mhFont );
-    else
-        maGraphicsData.mhDefFont = hOldFont;
-
-    // set new data
-    maGraphicsData.mhFont = hNewFont;
-    maGraphicsData.mbCalcOverhang = TRUE;
-
-    maGraphicsData.mnFontCharSetCount = 0;
-    maGraphicsData.mbFontKernInit = TRUE;
-    if ( maGraphicsData.mpFontKernPairs )
+    if( !maGraphicsData.mhDefFont )
     {
-        delete[] maGraphicsData.mpFontKernPairs;
-        maGraphicsData.mpFontKernPairs = NULL;
+        // keep default font
+        maGraphicsData.mhDefFont = hOldFont;
     }
-    maGraphicsData.mnFontKernPairCount = 0;
+    else
+    {
+        // dereference unused fonts
+        for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
+        {
+            if( maGraphicsData.mhFonts[i] )
+            {
+                DeleteFont( maGraphicsData.mhFonts[i] );
+                maGraphicsData.mhFonts[i] = 0;
+            }
+        }
+    }
+
+    // store new font in correct layer
+    maGraphicsData.mhFonts[ nFallbackLevel ] = hNewFont;
+
+    if( !nFallbackLevel )
+    {
+        maGraphicsData.mnFontCharSetCount = 0;
+        maGraphicsData.mbFontKernInit = TRUE;
+        if ( maGraphicsData.mpFontKernPairs )
+        {
+            delete[] maGraphicsData.mpFontKernPairs;
+            maGraphicsData.mpFontKernPairs = NULL;
+        }
+        maGraphicsData.mnFontKernPairCount = 0;
+    }
 
     // some printers have higher internal resolution, so their
     // text output would be different from what we calculated
@@ -1531,13 +1541,13 @@ TempFontList::~TempFontList()
 
 ImplFontData* SalGraphics::AddTempDevFont( const String& rFontFileURL, const String& rFontName )
 {
+    if( !rFontName.Len() )
+        return NULL;
     if( ::ImplIsFontAvailable( maGraphicsData.mhDC, rFontName ) )
-        return false;
+        return NULL;
     if( !aTempFontList.AddFont( rFontFileURL ) )
         return NULL;
 
-    if( !rFontName.Len() )
-        return NULL;
     ImplFontData* pFontData = new ImplFontData;
     pFontData->maName       = rFontName;
     pFontData->mnQuality    = 1000;
@@ -1547,7 +1557,7 @@ ImplFontData* SalGraphics::AddTempDevFont( const String& rFontFileURL, const Str
     pFontData->meFamily     = FAMILY_DONTKNOW;
     pFontData->meWidthType  = WIDTH_DONTKNOW;
     pFontData->meWeight     = WEIGHT_DONTKNOW;
-    pFontData->meItalic     = ITALIC_NONE;
+    pFontData->meItalic     = ITALIC_DONTKNOW;
     pFontData->mePitch      = PITCH_DONTKNOW;;
     pFontData->meType       = TYPE_SCALABLE;
     pFontData->mnWidth      = 0;
@@ -1890,19 +1900,19 @@ private:
 
 ScopedFont::ScopedFont(SalGraphicsData & rData): m_rData(rData)
 {
-    m_hOrigFont = m_rData.mhFont;
-    m_rData.mhFont = 0; // avoid deletion of current font
+    m_hOrigFont = m_rData.mhFonts[0];
+    m_rData.mhFonts[0] = 0; // avoid deletion of current font
 }
 
 ScopedFont::~ScopedFont()
 {
-    if (m_hOrigFont)
+    if( m_hOrigFont )
     {
         // restore original font, destroy temporary font
-        HFONT hTempFont = m_rData.mhFont;
-        m_rData.mhFont = m_hOrigFont;
-        SelectObject(m_rData.mhDC, m_hOrigFont);
-        DeleteObject(hTempFont);
+        HFONT hTempFont = m_rData.mhFonts[0];
+        m_rData.mhFonts[0] = m_hOrigFont;
+        SelectObject( m_rData.mhDC, m_hOrigFont );
+        DeleteObject( hTempFont );
     }
 }
 
