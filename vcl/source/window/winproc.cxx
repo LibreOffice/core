@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2000-11-28 14:34:59 $
+ *  last change: $Author: th $ $Date: 2000-11-28 14:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,6 +553,12 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
             if ( nSVEvent == EVENT_MOUSEMOVE )
                 ImplHandleMouseHelpRequest( pChild, aMousePos );
 
+            // Call the hook also, if Window is disabled
+            Point aChildPos = pChild->ImplFrameToOutput( aMousePos );
+            MouseEvent aMEvt( aChildPos, pWindow->mpFrameData->mnClickCount, nMode, nCode, nCode );
+            NotifyEvent aNEvt( nSVEvent, pChild, &aMEvt );
+            Application::CallEventHooks( aNEvt );
+
             if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
             {
                 Sound::Beep( SOUND_DISABLE, pChild );
@@ -560,17 +566,9 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
             }
             else
             {
+                // Set normal MousePointer for disabled windows
                 if ( nSVEvent == EVENT_MOUSEMOVE )
-                {
-                    // Call the hook also, if Window is disabled
-                    Point aChildPos = pChild->ImplFrameToOutput( aMousePos );
-                    MouseEvent aMEvt( aChildPos, pWindow->mpFrameData->mnClickCount, nMode, nCode, nCode );
-                    NotifyEvent aNEvt( EVENT_MOUSEMOVE, pChild, &aMEvt );
-                    Application::CallEventHooks( aNEvt );
-
-                    // Set normal MousePointer for disabled windows
                     ImplSetMousePointer( pChild );
-                }
 
                 return 0;
             }
