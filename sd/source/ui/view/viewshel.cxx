@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-21 13:48:09 $
+ *  last change: $Author: cl $ $Date: 2002-05-22 13:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1001,6 +1001,7 @@ void SdViewShell::AdjustPosSizePixel(const Point &rNewPos, const Size &rNewSize)
     aVSplit.SetDragRectPixel(
             Rectangle(Point(nPosX, nPosY), Size(nSizeX, nSizeY)),
             &GetViewFrame()->GetWindow());
+
     if ( !bIsVSplit || (bIsVSplit &&
         (aVSplitPos.Y() < nPosY + MIN_SCROLLBAR_SIZE ||
          aVSplitPos.Y() > nPosY + nSizeY - MIN_SCROLLBAR_SIZE)) )
@@ -1008,6 +1009,7 @@ void SdViewShell::AdjustPosSizePixel(const Point &rNewPos, const Size &rNewSize)
         aVSplitPos.Y() = nPosY + nSizeY - nSplitSize;
         bIsVSplit = FALSE;
     }
+
     CreateVSplitElems(aVSplitPos.Y() + nSplitSize);
     aVSplitSize.Width()  = aScrBarWH.Width();
     aVSplitSize.Height() = nSplitSize;
@@ -1023,11 +1025,13 @@ void SdViewShell::AdjustPosSizePixel(const Point &rNewPos, const Size &rNewSize)
     // Vertikaler Scrollbar
     aVBarSize = pVScrlArray[0]->GetSizePixel();
     aVBarSize.Height() = aVSplitPos.Y() - aVPos.Y();
+/*
     if ( aVBarSize.Height() < MIN_SCROLLBAR_SIZE )
     {
         aVPos.Y() = aVSplitPos.Y() - MIN_SCROLLBAR_SIZE;
         aVBarSize.Height() = MIN_SCROLLBAR_SIZE;
     }
+*/
     pVScrlArray[0]->SetPosSizePixel(aVPos, aVBarSize);
     aVPos.Y() += aVBarSize.Height() + nSplitSize;
 
