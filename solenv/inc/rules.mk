@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2000-10-30 18:32:23 $
+#   last change: $Author: hjs $ $Date: 2000-10-31 11:14:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -770,16 +770,6 @@ $(MISC)$/%.mk : %.xml
 #generate descriptions from xml
 $(MISC)$/%_description.cxx : %.xml 
     +xml2cmp -func $(MISC)$/$*_description.cxx $<
-
-.IF "$(SHL1TARGET)$(SHL2TARGET)$(SHL3TARGET)$(SHL4TARGET)$(SHL5TARGET)$(SHL6TARGET)$(SHL7TARGET)$(SHL8TARGET)$(SHL9TARGET)"!=""
-$(MISC)$/%_description.cxx : $(MISC)$/%.xml 
-    +xml2cmp -func $(MISC)$/$*_description.cxx $<
-    +$(RM) $<
-
-#fallback
-$(MISC)$/%.xml : $(SOLARENV)$/src$/default_description.xml
-    +$(COPY) $< $@
-.ENDIF			# "$(SHL1TARGET)$(SHL2TARGET)$(SHL3TARGET)$(SHL4TARGET)$(SHL5TARGET)$(SHL6TARGET)$(SHL7TARGET)$(SHL8TARGET)$(SHL9TARGET)"!=""
 
 #generate private rdb
 $(BIN)$/%.rdb: $(SOLARBINDIR)$/applicat.rdb $(MISC)$/%.mk
