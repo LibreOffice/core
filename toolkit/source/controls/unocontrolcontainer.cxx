@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-12 12:23:18 $
+ *  last change: $Author: mt $ $Date: 2001-03-27 14:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,9 +234,9 @@ void UnoControlContainer::ImplActivateTabControllers()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoControlContainer )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnoControlContainer>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer>* ) NULL ),
     UnoControlBase::getTypes()
 IMPL_XTYPEPROVIDER_END
 
