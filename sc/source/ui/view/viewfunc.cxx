@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: nn $ $Date: 2002-09-05 10:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,11 +956,18 @@ void ScViewFunc::GetSelectionFrame( SvxBoxItem&     rLineOuter,
                                     SvxBoxInfoItem& rLineInner )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
-    ScMarkData& rMark = GetViewData()->GetMarkData();
+    const ScMarkData& rMark = GetViewData()->GetMarkData();
 
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
     {
-        pDoc->GetSelectionFrame( rMark, rLineOuter, rLineInner );
+        if ( rMark.IsMultiMarked() )
+        {
+            ScMarkData aNewMark( rMark );   // use local copy for MarkToSimple
+            aNewMark.MarkToSimple();        // simple block is needed for GetSelectionFrame
+            pDoc->GetSelectionFrame( aNewMark, rLineOuter, rLineInner );
+        }
+        else
+            pDoc->GetSelectionFrame( rMark, rLineOuter, rLineInner );
     }
     else
     {
@@ -1142,6 +1149,8 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
 
     if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab,TRUE))
     {
+        rMark.MarkToSimple();   // not done by GetSimpleArea anymore
+
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
 
         ScDocShellModificator aModificator( *pDocSh );
