@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-07 08:44:51 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,8 +855,6 @@ static Size ImplCalcSize( const ToolBox* pThis,
     BOOL            bOldAssumeDocked = pThis->mpData->mbAssumeDocked;
     BOOL            bOldAssumeFloating = pThis->mpData->mbAssumeFloating;
 
-    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
-
     if ( nCalcMode )
     {
         BOOL bOldFloatingMode = pThis->ImplIsFloatingMode();
@@ -1697,6 +1695,9 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
 
     maTimer.SetTimeout( 50 );
     maTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplUpdateHdl ) );
+    // set timeout and handler for dropdown items
+    mpData->maDropdownTimer.SetTimeout( 250 );
+    mpData->maDropdownTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplDropdownLongClickHdl ) );
 
     DockingWindow::ImplInit( pParent, nStyle & ~(WB_BORDER) );
 
@@ -2899,6 +2900,30 @@ void ToolBox::ImplFormat( BOOL bResize )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( ToolBox, ImplDropdownLongClickHdl, ToolBox*, pThis )
+{
+    if( mnCurPos != TOOLBOX_ITEM_NOTFOUND &&
+        (mpData->m_aItems[ mnCurPos ].mnBits & TIB_DROPDOWN)
+        )
+    {
+        GetDropdownClickHdl().Call( this );
+
+        Deactivate();
+        ImplDrawItem( mnCurPos, FALSE );
+
+        mnCurPos         = TOOLBOX_ITEM_NOTFOUND;
+        mnCurItemId      = 0;
+        mnDownItemId     = 0;
+        mnMouseClicks    = 0;
+        mnMouseModifier  = 0;
+        mnHighItemId     = 0;
+    }
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( ToolBox, ImplUpdateHdl, void*, EMPTYARG )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
@@ -3901,6 +3926,13 @@ BOOL ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, BOOL bCancel )
 {
     ImplDisableFlatButtons();
 
+    // stop eventual running dropdown timer
+    if( mnCurPos < mpData->m_aItems.size() &&
+        (mpData->m_aItems[mnCurPos].mnBits & TIB_DROPDOWN ) )
+    {
+        mpData->maDropdownTimer.Stop();
+    }
+
     if ( mbDrag || mbSelection )
     {
         // Hier die MouseDaten setzen, wenn Selection-Modus, da dann kein
@@ -4347,22 +4379,26 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             else
             {
                 // was dropdown arrow pressed
-                if ( (it->mnBits & TIB_DROPDOWN) && it->GetDropDownRect( mbHorz ).IsInside( aMousePos ) )
+                if( (it->mnBits & TIB_DROPDOWN) )
                 {
-                    // the drop down arrow should not trigger the item action
-                    GetDropdownClickHdl().Call( this );
+                    if(it->GetDropDownRect( mbHorz ).IsInside( aMousePos ) )
+                    {
+                        // the drop down arrow should not trigger the item action
+                        GetDropdownClickHdl().Call( this );
 
-                    Deactivate();
-                    ImplDrawItem( mnCurPos, FALSE );
+                        Deactivate();
+                        ImplDrawItem( mnCurPos, FALSE );
 
-                    mnCurPos         = TOOLBOX_ITEM_NOTFOUND;
-                    mnCurItemId      = 0;
-                    mnDownItemId     = 0;
-                    mnMouseClicks    = 0;
-                    mnMouseModifier  = 0;
-                    mnHighItemId     = 0;
-
-                    return;
+                        mnCurPos         = TOOLBOX_ITEM_NOTFOUND;
+                        mnCurItemId      = 0;
+                        mnDownItemId     = 0;
+                        mnMouseClicks    = 0;
+                        mnMouseModifier  = 0;
+                        mnHighItemId     = 0;
+                        return;
+                    }
+                    else // activate long click timer
+                        mpData->maDropdownTimer.Start();
                 }
 
                 // Hier schon bDrag setzen, da in EndSelection ausgewertet wird
@@ -5475,8 +5511,6 @@ BOOL ToolBox::ImplOpenItem( KeyCode aKeyCode )
 
         mnDownItemId = mnCurItemId = mnHighItemId;
         mnLastFocusItemId = mnCurItemId; // save item id for possible later focus restore
-        ImplToolItem* pItem = ImplGetItem( mnHighItemId );
-
         mnMouseModifier = aKeyCode.GetModifier();
         mbIsShift = TRUE;
         mbIsKeyEvent = TRUE;
