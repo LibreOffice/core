@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh6.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-25 08:51:04 $
+ *  last change: $Author: nn $ $Date: 2001-11-12 12:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,20 @@ void __EXPORT ScDocShell::SetVisArea( const Rectangle & rVisArea )
 void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart )
 {
     Rectangle aArea = rVisArea;
-    if (!bModifyStart)
+    if (bModifyStart)
+    {
+        if ( aArea.Left() < 0 || aArea.Top() < 0 )
+        {
+            //  VisArea start position can't be negative.
+            //  Move the VisArea, otherwise only the upper left position would
+            //  be changed in SnapVisArea, and the size would be wrong.
+
+            Point aNewPos( Max( aArea.Left(), (long) 0 ),
+                           Max( aArea.Top(), (long) 0 ) );
+            aArea.SetPos( aNewPos );
+        }
+    }
+    else
         aArea.SetPos( SfxInPlaceObject::GetVisArea().TopLeft() );
 
     //      hier Position anpassen!
