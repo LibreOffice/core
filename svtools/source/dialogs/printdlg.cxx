@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-13 11:17:35 $
+ *  last change: $Author: os $ $Date: 2002-04-19 09:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,7 +437,7 @@ IMPL_LINK( PrintDialog, ImplBrowseHdl, void*, EMPTYARG )
                 INetURLObject aObj( aPathSeq[0] );
                 maFiPrintFile.SetText( aObj.PathToFileName() );
             }
-
+            ImplCheckOK();
             return 0;
         }
     }
@@ -457,7 +457,6 @@ IMPL_LINK( PrintDialog, ImplModifyControlHdl, void*, p )
             ImplBrowseHdl( &maBtnBrowse );
         maFiPrintFile.Enable( bCheck );
         maBtnBrowse.Enable( bCheck );
-        ImplCheckOK();
     }
 
     // Radiobuttons (Umfang)
