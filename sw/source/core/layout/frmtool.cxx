@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-02 10:54:01 $
+ *  last change: $Author: ama $ $Date: 2001-04-18 09:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -942,7 +942,9 @@ void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
                     if ( !pSdrObj->GetPage() )
                         pFmt->GetDoc()->GetDrawModel()->GetPage(0)->
                                 InsertObject(pSdrObj, pSdrObj->GetOrdNumDirect());
-                    pFrm->AppendDrawObj((SwDrawContact*)GetUserCall(pSdrObj) );
+                    SwDrawContact *pNew = (SwDrawContact*)GetUserCall(pSdrObj);
+                    if( !pNew->GetAnchor() )
+                        pFrm->AppendDrawObj( pNew );
                 }
                 else
                 {
@@ -1022,7 +1024,7 @@ void AppendAllObjs( const SwSpzFrmFmts *pTbl )
 BOOL MA_FASTCALL lcl_CheckInsertPage( SwFrm *pFrm, SwPageFrm *&rpPage,
                                       SwLayoutFrm *&rpLay,
                                       ULONG nParagraphCnt,
-                                      USHORT nMaxParaPerPage, BOOL &rbBreakAfter )
+                                      ULONG nMaxParaPerPage, BOOL &rbBreakAfter )
 {
     FASTBOOL bEnd = 0 == rpPage->GetNext();
     const SwAttrSet *pAttr = pFrm->GetAttrSet();

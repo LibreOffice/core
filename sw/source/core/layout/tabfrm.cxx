@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-13 14:36:37 $
+ *  last change: $Author: ama $ $Date: 2001-04-18 09:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 #include "htmltbl.hxx"
 #include "frmsh.hxx"
 #include "sectfrm.hxx"  //SwSectionFrm
+
+extern void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
+                        SwFrm *pFrm, SwPageFrm *pPage );
 
 /*************************************************************************
 |*
@@ -293,6 +296,22 @@ SwTwips SwTabFrm::Split( const SwTwips nCutPos )
                                     *GetTable()->GetTabLines()[0] );
             bDontCreateObjects = FALSE;
             pHeadline->InsertBefore( pFoll, 0 );
+
+            SwPageFrm *pPage = pHeadline->FindPageFrm();
+            const SwSpzFrmFmts *pTbl = GetFmt()->GetDoc()->GetSpzFrmFmts();
+            if( pTbl->Count() )
+            {
+                ULONG nIndex;
+                SwCntntFrm* pFrm = pHeadline->ContainsCntnt();
+                while( pFrm )
+                {
+                    nIndex = pFrm->GetNode()->GetIndex();
+                    AppendObjs( pTbl, nIndex, pFrm, pPage );
+                    pFrm = pFrm->GetNextCntntFrm();
+                    if( !pHeadline->IsAnLower( pFrm ) )
+                        break;
+                }
+            }
         }
     }
     SwTwips nRet = 0;
