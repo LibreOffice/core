@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mi $ $Date: 2001-09-21 09:42:03 $
+#   last change: $Author: dbo $ $Date: 2001-11-26 15:04:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ IDLFILES=\
     Exception.idl\
     NamingService.idl\
     RuntimeException.idl\
+    SecurityException.idl\
     TypeClass.idl\
     Uik.idl\
     XAdapter.idl\
