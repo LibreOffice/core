@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sourcecontext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:18 $
+ *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,26 +60,39 @@
  ************************************************************************/
 
 
-
-
-
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DNDCONSTANTS_HPP_
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#endif
 
 #include "sourcecontext.hxx"
 
-SourceContext::SourceContext( DragSource* pSource): m_pDragSource( pSource)
+using namespace com::sun::star::datatransfer::dnd;
+using namespace com::sun::star::datatransfer::dnd::DNDConstants;
+
+SourceContext::SourceContext( DragSource* pSource,
+                             const Reference<XDragSourceListener>& listener):
+        WeakComponentImplHelper1<XDragSourceContext>(m_mutex),
+        m_pDragSource( pSource),
+        m_dragSource( static_cast<XDragSource*>( m_pDragSource) )
 {
+#ifdef DEBUG
+    if( listener.is())
+#endif
+    rBHelper.addListener( ::getCppuType( &listener ), listener );
 }
 
 SourceContext::~SourceContext()
 {
 }
 
-void SAL_CALL SourceContext::addDragSourceListener( const Reference<XDragSourceListener >& dsl )
+void SAL_CALL SourceContext::addDragSourceListener(
+    const Reference<XDragSourceListener >& dsl )
     throw( RuntimeException)
 {
 }
 
-void SAL_CALL SourceContext::removeDragSourceListener( const Reference<XDragSourceListener >& dsl )
+void SAL_CALL SourceContext::removeDragSourceListener(
+     const Reference<XDragSourceListener >& dsl )
     throw( RuntimeException)
 {
 }
@@ -106,3 +119,63 @@ void SAL_CALL SourceContext::transferablesFlavorsChanged(  )
 }
 
 
+// non -interface functions
+// Fires XDragSourceListener::dragDropEnd events.
+void SourceContext::fire_dragDropEnd( sal_Bool success, sal_Int8 effect)
+{
+
+    DragSourceDropEvent e;
+
+    if( success == sal_True)
+    {
+        e.DropAction=  effect;
+        e.DropSuccess= sal_True;
+    }
+    else
+    {
+        e.DropAction= ACTION_NONE;
+        e.DropSuccess= sal_False;
+    }
+    e.DragSource= m_dragSource;
+    e.DragSourceContext= static_cast<XDragSourceContext*>( this);
+    e.Source= Reference<XInterface>( static_cast<XDragSourceContext*>( this), UNO_QUERY);
+
+    OInterfaceContainerHelper* pContainer= rBHelper.getContainer(
+        getCppuType( (Reference<XDragSourceListener>* )0 ) );
+
+    if( pContainer)
+    {
+        OInterfaceIteratorHelper iter( *pContainer);
+        while( iter.hasMoreElements())
+        {
+            Reference<XDragSourceListener> listener(
+                static_cast<XDragSourceListener*>( iter.next()));
+            listener->dragDropEnd( e);
+        }
+    }
+}
+
+
+void SourceContext::fire_dropActionChanged( sal_Int8 dropAction, sal_Int8 userAction)
+{
+    DragSourceDragEvent e;
+    e.DropAction= dropAction;
+    e.UserAction= userAction;
+    e.DragSource= m_dragSource;
+    e.DragSourceContext= static_cast<XDragSourceContext*>( this);
+    e.Source= Reference<XInterface>( static_cast<XDragSourceContext*>( this), UNO_QUERY);
+
+    OInterfaceContainerHelper* pContainer= rBHelper.getContainer(
+        getCppuType( (Reference<XDragSourceListener>* )0 ) );
+
+    if( pContainer)
+    {
+        OInterfaceIteratorHelper iter( *pContainer);
+        while( iter.hasMoreElements())
+        {
+            Reference<XDragSourceListener> listener(
+                static_cast<XDragSourceListener*>( iter.next()));
+            listener->dropActionChanged( e);
+        }
+    }
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sourcecontext.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:18 $
+ *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGSOURCECONTEXT_HPP_
 #include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>
 #endif
+#ifndef _CPPUHELPER_COMPBASE1_HXX_
+#include <cppuhelper/compbase1.hxx>
+#endif
+
 
 #include "source.hxx"
 
@@ -76,16 +80,24 @@ using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-class SourceContext: public WeakImplHelper1<XDragSourceContext>
+
+// This class fires events to XDragSourceListener implementations.
+// Of that interface only dragDropEnd and dropActionChanged are called.
+// The functions dragEnter, dragExit and dragOver are not supported
+// currently
+class SourceContext: public MutexDummy,
+                     public WeakComponentImplHelper1<XDragSourceContext>
 {
     DragSource* m_pDragSource;
+    Reference<XDragSource> m_dragSource;
 
 
     SourceContext();
     SourceContext( const SourceContext&);
     SourceContext &operator= (const SourceContext& );
+
 public:
-    SourceContext( DragSource* pSource);
+    SourceContext( DragSource* pSource, const Reference<XDragSourceListener>& listener);
     ~SourceContext();
 
     virtual void SAL_CALL addDragSourceListener( const Reference<XDragSourceListener >& dsl )
@@ -100,6 +112,12 @@ public:
         throw( IllegalArgumentException, RuntimeException);
     virtual void SAL_CALL transferablesFlavorsChanged(  )
         throw( RuntimeException);
+
+
+
+    // non - interface functions
+    void fire_dragDropEnd( sal_Bool success, sal_Int8 byte);
+    void fire_dropActionChanged( sal_Int8 dropAction, sal_Int8 userAction);
 
 };
 

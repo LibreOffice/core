@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:19 $
+ *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #endif
-
+#include <stdio.h>
 #include "target.hxx"
 #include "globals.hxx"
 #include "targetdropcontext.hxx"
@@ -80,20 +80,24 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 
-DropTarget::DropTarget( const Reference<XMultiServiceFactory>& sf, HWND hwin):
-                        m_hWnd( hwin),
+DropTarget::DropTarget( const Reference<XMultiServiceFactory>& sf):
+                        m_hWnd( NULL),
                         m_serviceFactory( sf),
-                        WeakComponentImplHelper1<XDropTarget>(m_mutex),
+                        WeakComponentImplHelper2<XInitialization,XDropTarget>(m_mutex),
                         m_bDropTargetRegistered(sal_False),
                         m_nDefaultActions(ACTION_COPY|ACTION_MOVE|ACTION_LINK),
                         m_nListenerDropAction( ACTION_NONE),
                         m_currentEventId(0)
 {
-    OSL_ASSERT( IsWindow(m_hWnd));
 }
 
 DropTarget::~DropTarget()
 {
+    if( m_bDropTargetRegistered)
+    {
+        RevokeDragDrop(m_hWnd);
+        CoLockObjectExternal( static_cast<IDropTarget*>(this), FALSE, TRUE);
+    }
 
 }
 
@@ -104,38 +108,24 @@ void SAL_CALL DropTarget::release()
     {
         int a = m_refCount;
     }
-    WeakComponentImplHelper1<XDropTarget>::release();
+    WeakComponentImplHelper2<XInitialization, XDropTarget>::release();
 
 }
 #endif
 
-void SAL_CALL DropTarget::disposing()
+
+void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
+        throw(Exception, RuntimeException)
 {
-    if( m_bDropTargetRegistered)
+    if( aArguments.getLength() > 0)
     {
-        RevokeDragDrop(m_hWnd);
-        CoLockObjectExternal( static_cast<IDropTarget*>(this), FALSE, TRUE);
+        m_hWnd= *(HWND*)aArguments[0].getValue();
+        OSL_ASSERT( IsWindow( m_hWnd) );
     }
 }
 
-// XInitialization
-//void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
-//      throw(Exception, RuntimeException)
-//{
-//
-//
-//  m_hWnd= *(HWND*)aArguments[0].getValue();
-//  OSL_ASSERT( IsWindow(m_hWnd));
-//
-//  if( ! IsWindow( m_hWnd))
-//      throw Exception( OUString::createFromAscii("Initialization of DropTarget ")
-//            + OUString( RTL_CONSTASCII_USTRINGPARAM( DNDTARGET_SERVICE_NAME) )
-//            + OUString::createFromAscii("service failed"),
-//            Reference<XInterface>((XInitialization*)this, UNO_QUERY));
-//
-//}
 
-// XDropTarget
+// XDropTarget ----------------------------------------------------------------
 void SAL_CALL DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& dtl )
         throw(RuntimeException)
 {
@@ -232,6 +222,11 @@ STDMETHODIMP DropTarget::DragEnter( IDataObject __RPC_FAR *pDataObj,
                                     POINTL pt,
                                     DWORD  *pdwEffect)
 {
+#if DBG_CONSOLE_OUT
+    printf("\nDropTarget::DragEnter state: %x effect %d", grfKeyState, *pdwEffect);
+#endif
+
+
     // Dont consider the allowed source action at this point. Because if pdwEffect is COPY
     // and grfKeyState is only MK_LBUTTON ( default is ACTION_MOVE ) than we  give the listener the chance to change
     // the action to COPY or something. Otherwise the source would display a NONE from the beginning.
@@ -271,6 +266,7 @@ STDMETHODIMP DropTarget::DragEnter( IDataObject __RPC_FAR *pDataObj,
     {
         *pdwEffect= DROPEFFECT_NONE;
     }
+
     return S_OK;
 }
 
@@ -278,6 +274,10 @@ STDMETHODIMP DropTarget::DragOver( DWORD grfKeyState,
                                    POINTL pt,
                                    DWORD  *pdwEffect)
 {
+#if DBG_CONSOLE_OUT
+    printf("\nDropTarget::DragOver");
+#endif
+
     // A listener can change this value during fire_dragOver
     m_nListenerDropAction= getFilteredActions( grfKeyState);
 
@@ -327,6 +327,10 @@ STDMETHODIMP DropTarget::DragOver( DWORD grfKeyState,
 
 STDMETHODIMP DropTarget::DragLeave( void)
 {
+#if DBG_CONSOLE_OUT
+    printf("\nDropTarget::DragLeave");
+#endif
+
     m_currentData=0;
     if( m_nDefaultActions != ACTION_NONE)
     {
@@ -343,6 +347,10 @@ STDMETHODIMP DropTarget::Drop( IDataObject  *pDataObj,
                    POINTL pt,
                    DWORD __RPC_FAR *pdwEffect)
 {
+#if DBG_CONSOLE_OUT
+    printf("\nDropTarget::Drop");
+#endif
+
     m_bDropComplete= sal_False;
 
     m_nListenerDropAction= getFilteredActions( grfKeyState);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:16 $
+ *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,23 @@
 #ifndef _GLOBALS_HXX_
 #define _GLOBALS_HXX_
 
+#ifndef _OSL_MUTEX_H_
+#include <osl/mutex.hxx>
+#endif
+
 #include <wtypes.h>
 #include <sal/types.h>
+
+
+#define DNDSOURCE_SERVICE_NAME  "com.sun.star.datatransfer.dnd.OleDragAndDropSource"
+#define DNDSOURCE_IMPL_NAME  "com.sun.star.comp.datatransfer.dnd.OleDragAndDropSource_V1"
+#define DNDSOURCE_REGKEY_NAME  "/com.sun.star.comp.datatransfer.dnd.OleDragAndDropSource_V1/UNO/SERVICES/com.sun.star.datatransfer.dnd.OleDragAndDropSource"
+
+#define DNDTARGET_SERVICE_NAME  "com.sun.star.datatransfer.dnd.OleDragAndDropTarget"
+#define DNDTARGET_IMPL_NAME  "com.sun.star.comp.datatransfer.dnd.OleDragAndDropTarget_V1"
+#define DNDTARGET_REGKEY_NAME  "/com.sun.star.comp.datatransfer.dnd.OleDragAndDropTarget_V1/UNO/SERVICES/com.sun.star.datatransfer.dnd.OleDragAndDropTarget"
+
+
 
 // This maps key states as occur as parameter, e.g. in IDropTarget::DragEnter,
 // IDropSource::QueryContinueDrag, to actions as are declared in
@@ -97,5 +112,13 @@ DWORD dndActionsToDropEffects( sal_Int8 actions);
 // why move is the default effect (no modifiers pressed, or right mouse button
 // or Alt).
 DWORD dndActionsToSingleDropEffect( sal_Int8 actions);
+
+
+
+struct MutexDummy
+{
+    osl::Mutex m_mutex;
+};
+
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:17 $
+ *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,32 +68,21 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETFACTORY_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTargetFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGSOURCECONTEXT_HPP_
+#include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
 #ifndef _OSL_MUTEX_H_
 #include <osl/mutex.hxx>
 #endif
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
 #endif
 
-
-
-#include <wtypes.h>
+#include "globals.hxx"
 #include <oleidl.h>
-// the service names
-#define DNDTARGET_SERVICE_NAME  "com.sun.star.datatransfer.dnd.OleDragAndDrop"
-
-// the implementation names
-#define DNDTARGET_IMPL_NAME  "com.sun.star.comp.datatransfer.dnd.OleDragAndDrop_V1"
-
-// the registry key names
-// a key under which this service will be registered, Format: -> "/ImplName/UNO/SERVICES/ServiceName"
-//                        <     Implementation-Name    ></UNO/SERVICES/><    Service-Name
-// TargetW32         >
-#define DNDTARGET_REGKEY_NAME  "/com.sun.star.comp.datatransfer.dnd.OleDragAndDrop_V1/UNO/SERVICES/com.sun.star.datatransfer.dnd.OleDragAndDrop"
-
 
 
 using namespace ::com::sun::star::lang;
@@ -103,28 +92,42 @@ using namespace osl;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
-struct MutexDummy
+
+struct DndParams
 {
-    Mutex m_mutex;
+    IDataObject* data;
+    IDropSource* source;
+    DWORD dwOkEffects;
+    DWORD dwEffect;
+    HRESULT hr;
+    DWORD threadIdCreator;
 };
 
 
+class SourceContext;
 // RIGHT MOUSE BUTTON drag and drop not supportet currently.
 // ALT modifier is considered to effect a user selection of effects
 class DragSource:
       public MutexDummy,
-      public WeakComponentImplHelper3<XInitialization, XDragSource,
-             XDropTargetFactory>,
+      public WeakComponentImplHelper2<XDragSource, XInitialization>,
       public IDropSource
 
 {
     Reference<XMultiServiceFactory> m_serviceFactory;
-    Reference<XDragSourceListener > m_sourceListener;
+    // only valid for one dnd operation
+    // The context notifies the XDragSourceListener s
+    Reference<XDragSourceContext>   m_currentContext;
+    SourceContext* m_pcurrentContext_impl;
+    // From com::sun::star::datatransfer::dnd::DNDConstants
     sal_Int8 m_sourceActions;
 
+    HWND m_hAppWindow;
+
+    // The mouse button that set off the drag and drop operation
+    short m_MouseButton;
 
 
-    DragSourcet();
+    DragSource();
     DragSource(const DragSource&);
     DragSource &operator= ( const DragSource&);
 
@@ -144,7 +147,7 @@ public:
     virtual sal_Bool SAL_CALL isDragImageSupported(  ) throw(RuntimeException);
     virtual sal_Int32 SAL_CALL getDefaultCursor( sal_Int8 dragAction )
         throw( IllegalArgumentException, RuntimeException);
-    virtual void SAL_CALL startDrag( const DragGestureEvent& trigger,
+    virtual void SAL_CALL executeDrag( const DragGestureEvent& trigger,
                                      sal_Int8 sourceActions,
                                      sal_Int32 cursor,
                                      sal_Int32 image,
@@ -152,7 +155,9 @@ public:
                                      const Reference<XDragSourceListener >& listener )
                 throw( InvalidDNDOperationException, RuntimeException);
 
-    // XDropTargetFactory
+
+
+
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             /* [in] */ REFIID riid,
             /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
@@ -161,8 +166,6 @@ public:
 
     virtual ULONG STDMETHODCALLTYPE Release( );
 
-    virtual Reference<XDropTarget > SAL_CALL createDropTarget( const Sequence< sal_Int8 >& windowId )
-            throw( RuntimeException);
 
     // IDropSource
     virtual HRESULT STDMETHODCALLTYPE QueryContinueDrag(
@@ -173,5 +176,6 @@ public:
         /* [in] */ DWORD dwEffect);
 
 };
+
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetdropcontext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:19 $
+ *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,11 @@
 
 #include "targetdropcontext.hxx"
 
+using namespace ::com::sun::star::datatransfer::dnd;
+using namespace ::cppu;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+
 TargetDropContext::TargetDropContext( DropTarget* p, sal_uInt32 id): m_id( id)
 {
     m_pDropTarget= p;
@@ -72,17 +77,30 @@ TargetDropContext::~TargetDropContext()
     m_pDropTarget->release();
 }
 
-void SAL_CALL TargetDropContext::acceptDrop( sal_Int8 dropOperation )
+void SAL_CALL TargetDropContext::accept( sal_Int8 dropOperation )
         throw(InvalidDNDOperationException, RuntimeException)
 {
     m_pDropTarget->_acceptDrop( dropOperation, m_id);
 }
-
-void SAL_CALL TargetDropContext::rejectDrop( )
+//
+void SAL_CALL TargetDropContext::reject( )
         throw(InvalidDNDOperationException, RuntimeException)
 {
     m_pDropTarget->_rejectDrop( m_id);
 }
+
+Sequence< DataFlavor > SAL_CALL TargetDropContext::getCurrentDataFlavors(  )
+    throw(RuntimeException)
+{
+    return m_pDropTarget->_getCurrentDataFlavors(  m_id);
+}
+
+sal_Bool SAL_CALL TargetDropContext::isDataFlavorSupported( const DataFlavor& df )
+    throw(RuntimeException)
+{
+    return m_pDropTarget->_isDataFlavorSupported( df, m_id);
+}
+
 
 void SAL_CALL TargetDropContext::dropComplete( sal_Bool success )
         throw(InvalidDNDOperationException, RuntimeException)

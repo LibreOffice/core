@@ -53,6 +53,8 @@
 <Type>   com.sun.star.uno.XWeak                             </Type>
 <Type>   com.sun.star.uno.XAggregation                      </Type>
 <Type>   com.sun.star.registry.XRegistryKey                 </Type>
+<Type>   com.sun.star.awt.MouseButton                       </Type>
+<Type>   com.sun.star.awt.MouseEvent                        </Type>
 
 </COMPONENTDESCRIPTION>
 

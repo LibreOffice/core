@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:19 $
+ *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE1_HXX_
-#include <cppuhelper/compbase1.hxx>
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
@@ -77,10 +77,8 @@
 #include <osl/mutex.hxx>
 #endif
 
-#include <wtypes.h>
 #include <oleidl.h>
-#include "source.hxx"
-// the service names
+#include "globals.hxx"
 
 
 using namespace ::com::sun::star::lang;
@@ -91,29 +89,22 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
 
-
-//struct MutexDummy
-//{
-//  Mutex m_mutex;
-//};
-
-
 // DropTarget is a singleton, that is one cannot count on its destructor
 // do do the cleanup because the factory will hold a reference. The client
 // has to call XComponent::dispose before the HWND becomes invalid.
 class DropTarget: public MutexDummy,
-                  public WeakComponentImplHelper1< XDropTarget>,
+                  public WeakComponentImplHelper2< XInitialization, XDropTarget>,
                   public IDropTarget
 {
 private:
+    // The native window for which acts as drop target.
     HWND m_hWnd; // set by initialize
-    IDataObject* m_pData;
     Reference<XMultiServiceFactory> m_serviceFactory;
     sal_Bool m_bDropTargetRegistered;
     sal_Int8    m_nDefaultActions;
 
-    // This value is set when a XDropTargetListener calls acceptDrop or rejectDrop on
-    // the XDropTargetDropContext or acceptDrag or rejectDrag on XDropTargetDragContext.
+    // This value is set when a XDropTargetListener calls accept or reject on
+    // the XDropTargetDropContext or  XDropTargetDragContext.
     // The values are from the DNDConstants group.
     sal_Int8 m_nListenerDropAction;
     Reference<XTransferable> m_currentData;
@@ -134,18 +125,16 @@ private:
     DropTarget &operator= (DropTarget&);
 
 public:
-    DropTarget(const Reference<XMultiServiceFactory>& sf, HWND);
+    DropTarget(const Reference<XMultiServiceFactory>& sf);
     virtual ~DropTarget();
 
 #ifdef DEBUG
     virtual void SAL_CALL release();
 #endif
-    // overriding WeakComponentImplHelper, called from XComponent::dispose
-    void SAL_CALL disposing();
 
    // XInitialization
-//    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
-//      throw(Exception, RuntimeException);
+    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
+        throw(Exception, RuntimeException);
 
     // XDropTarget
     virtual void SAL_CALL addDropTargetListener( const Reference< XDropTargetListener >& dtl )

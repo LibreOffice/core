@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mh $ $Date: 2001-01-31 15:37:17 $
+#   last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,11 @@ stoponerror=tr
 
 .INCLUDE : ..$/..$/cppumaker.mk
 
-CFLAGS+=/GR -DUNICODE -D_UNICODE
+#CFLAGS+=/GR -DUNICODE -D_UNICODE
+
+#DBG_CONSOLE_OUT: when IDropTarget or IDropSource are called we write to a console
+#DBG_CLIPBOARD_DATA: To provide DoDragDrop with an data object we call OleGetClipboard
+CFLAGS+= -DDBG_CONSOLE_OUT 
 
 SLOFILES=	$(OBJ)$/dndentry.obj	\
             $(OBJ)$/target.obj		\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndentry.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:15 $
+ *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-//______________________________________________________________________________________________________________
-//  includes of other projects
-//______________________________________________________________________________________________________________
 
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
@@ -75,33 +72,15 @@
 #endif
 
 #include "source.hxx"
-//-----------------------------------------------------------------
-// some defines
-//-----------------------------------------------------------------
-
-
-
-//-----------------------------------------------------------------------------------------------------------
-// namespace directives
-//-----------------------------------------------------------------------------------------------------------
+#include "target.hxx"
 
 using namespace ::rtl                       ;
 using namespace ::com::sun::star::uno       ;
 using namespace ::com::sun::star::registry  ;
 using namespace ::cppu                      ;
 using namespace ::com::sun::star::lang;
-//using namespace ::com::sun::star::datatransfer::clipboard;
-
-//-----------------------------------------------------------------
-// create a static object to initialize the shell9x library
-//-----------------------------------------------------------------
 
 
-//-----------------------------------------------------------------------------------------------------------
-// functions to create a new Clipboad instance; is needed by factory helper implementation
-// @param rServiceManager - service manager, useful if the component needs other uno services
-// so we should give it to every UNO-Implementation component
-//-----------------------------------------------------------------------------------------------------------
 
 Reference< XInterface > SAL_CALL createDragSource( const Reference< XMultiServiceFactory >& rServiceManager )
 {
@@ -109,10 +88,12 @@ Reference< XInterface > SAL_CALL createDragSource( const Reference< XMultiServic
     return Reference<XInterface>( static_cast<XInitialization*>(pSource), UNO_QUERY);
 }
 
+Reference< XInterface > SAL_CALL createDropTarget( const Reference< XMultiServiceFactory >& rServiceManager )
+{
+    DropTarget* pTarget= new DropTarget( rServiceManager );
+    return Reference<XInterface>( static_cast<XInitialization*>(pTarget), UNO_QUERY);
+}
 
-//-----------------------------------------------------------------------------------------------------------
-// the 3 important functions which will be exported
-//-----------------------------------------------------------------------------------------------------------
 
 extern "C"
 {
@@ -143,6 +124,10 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey
         try
         {
             Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
+            pXNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( DNDSOURCE_REGKEY_NAME ) ) );
+            bRetVal = sal_True;
+
+            pXNewKey=  static_cast< XRegistryKey* >( pRegistryKey );
             pXNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( DNDTARGET_REGKEY_NAME ) ) );
             bRetVal = sal_True;
         }
@@ -164,28 +149,37 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey
 void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* pRegistryKey )
 {
     void* pRet = 0;
+    Reference< XSingleServiceFactory > xFactory;
 
-    if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, DNDTARGET_IMPL_NAME ) ) )
+    if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, DNDSOURCE_IMPL_NAME ) ) )
+    {
+        Sequence< OUString > aSNS( 1 );
+        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( DNDSOURCE_SERVICE_NAME ) );
+
+        xFactory= createSingleFactory(
+            reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
+            OUString::createFromAscii( pImplName ),
+            createDragSource,
+            aSNS);
+
+    }
+    else if( pSrvManager && ( 0 == rtl_str_compare( pImplName, DNDTARGET_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
         aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( DNDTARGET_SERVICE_NAME ) );
 
-//      Reference< XSingleServiceFactory > xFactory ( createSingleFactory(
-//          reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
-//          OUString::createFromAscii( pImplName ),
-//          createDragSource,
-//          aSNS ) );
-        Reference< XSingleServiceFactory > xFactory ( createOneInstanceFactory(
+        xFactory= createSingleFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
             OUString::createFromAscii( pImplName ),
-            createDragSource,
-            aSNS));
+            createDropTarget,
+            aSNS);
 
-        if ( xFactory.is() )
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
+    }
+
+    if ( xFactory.is() )
+    {
+        xFactory->acquire();
+        pRet = xFactory.get();
     }
 
     return pRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetdragcontext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:19 $
+ *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,13 +74,13 @@ TargetDragContext::~TargetDragContext()
     m_pDropTarget->release();
 }
 
-void SAL_CALL TargetDragContext::acceptDrag( sal_Int8 dragOperation )
+void SAL_CALL TargetDragContext::accept( sal_Int8 dragOperation )
     throw(InvalidDNDOperationException, RuntimeException)
 {
     m_pDropTarget->_acceptDrag( dragOperation, m_id);
 
 }
-void SAL_CALL TargetDragContext::rejectDrag( )
+void SAL_CALL TargetDragContext::reject( )
     throw(InvalidDNDOperationException, RuntimeException)
 {
     m_pDropTarget->_rejectDrag( m_id);
