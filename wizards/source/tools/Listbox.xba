@@ -166,7 +166,6 @@ Dim iOldSourceSelect as Integer
 		lstSource.StringItemList() = NewSourceList()
 		lstTarget.StringItemList() = RemoveSelected(lstTarget)
 	End If
-&apos; Todo: Hier weitermachen:
 	SetNewSelection(lstSource, iOldSourceSelect)
 	SetNewSelection(lstTarget, iOldTargetSelect)
 

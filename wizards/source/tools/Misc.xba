@@ -17,7 +17,6 @@ Dim PropList(3,1)&apos; as String
 	PropList(2,1) = &quot;extra&quot;
 	PropList(3,0) = &quot;IsPasswordRequired&quot;
 	PropList(3,1) = True
-&apos;	RegisterNewDataSource(&quot;Doc_Erica_Test_Unicode&quot;, PropList())
 End Sub
 
 
@@ -31,7 +30,7 @@ Dim i as Integer
 	For i = 0 To Ubound(PropertyList(), 1)
 		sPropName = PropertyList(i,0)
 		sPropValue = PropertyList(i,1)
-		oDataSource.SetPropertyValue(sPropName,sPropValue) &apos;GetByName(sPropName) = sPropValue &apos;oPropInfo.GetPropertyByName(sPropName)) = sPropValue &apos;  PropertyList(i,0))) = PropertyList(i,1)
+		oDataSource.SetPropertyValue(sPropName,sPropValue)
 	Next i
 	If Not IsMissing(DriverProperties()) Then
 		oDataSource.Info() = DriverProperties()
@@ -270,7 +269,6 @@ End Function
 Function GetResText( nID as integer ) As string
 	On Error Goto ErrorOcurred
 	If Not IsNull(oResSrv) Then
-		&apos; eigentlich sollte hier stehen
 		GetResText = oResSrv.getString( nID )
 	Else
 		GetResText = &quot;&quot;
