@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-02 14:23:00 $
+ *  last change: $Author: rt $ $Date: 2001-10-11 20:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,11 +338,11 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ spanish ] = "Sólo pa~labras completas" ;
         Text [ english_us ] = "Whole wor~ds only" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "åªå…è®¸æ•´ä¸ªè¯(~D)";
+        Text[ chinese_simplified ] = "åªå…è®¸å•è¯(~D)";
         Text[ russian ] = "Òîëüêî âñå ñëîâî";
         Text[ polish ] = "Tylko ca³e s³owa";
         Text[ japanese ] = "å˜èªã¨ã—ã¦(~D)";
-        Text[ chinese_traditional ] = "åªå…è¨±æ•´å€‹å­—(~D)";
+        Text[ chinese_traditional ] = "åƒ…æ˜¯å–®è©(~D)";
         Text[ arabic ] = "ßáãÇÊ ßÇãáÉ İŞØ";
         Text[ greek ] = "Ìüíï ïëüêëçñåò ëİîåéò";
         Text[ korean ] = "ì „ì²´ ë‹¨ì–´ë§Œ(~D)";
@@ -542,6 +542,26 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text = "Zeichenbreite berücksichtigen" ;
         Text [ English ] = "Match character width" ;
+        Text[ english_us ] = "Match character width";
+        Text[ portuguese ] = "Formas de largura média e normal";
+        Text[ russian ] = "Íîğìàëüíûå/ïîëóøèğîêèå ôîğìû";
+        Text[ greek ] = "Öüñìåò ìå êáíïíéêü/ìéóü ğëÜôïò";
+        Text[ dutch ] = "Halve/normale breedte";
+        Text[ french ] = "Respecter la chasse";
+        Text[ spanish ] = "Formas con ancho medio o normal";
+        Text[ finnish ] = "Halb-/normalbreite Formen";
+        Text[ italian ] = "Considera la larghezza dei caratteri";
+        Text[ danish ] = "Match half/full width forms";
+        Text[ swedish ] = "Anpassa till teckenbredd";
+        Text[ polish ] = "Formy po³owy/zwyk³ej szerokoœci";
+        Text[ portuguese_brazilian ] = "Match half/full width forms";
+        Text[ japanese ] = "å…¨è§’ã¨åŠè§’";
+        Text[ korean ] = "ë°˜í­/ì „í­ í˜•ì‹";
+        Text[ chinese_simplified ] = "é¡¾å…¨å­—ç¬¦å®½åº¦";
+        Text[ chinese_traditional ] = "é¡§åŠå­—å…ƒå¯¬åº¦";
+        Text[ turkish ] = "Match half/full width forms";
+        Text[ arabic ] = "äãÇĞÌ äÕİ ÇáÚÑÖ/ÚÑÖ ÚÇÏí";
+        Text[ catalan ] = "Formas con ancho medio o normal";
     };
     CheckBox CB_JAP_SOUNDS_LIKE
     {
@@ -1198,6 +1218,7 @@ ModelessDialog RID_SVXDLG_SEARCH
 };
 
  // ********************************************************************** EOF
+
 
 
 
