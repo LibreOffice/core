@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-06 20:32:59 $
+ *  last change: $Author: kz $ $Date: 2001-09-24 20:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2820,7 +2820,7 @@ String STR_AUTOLAYOUT_CLIPTEXT
     Text [ finnish ] = "Otsikko, leikekuva, teksti" ;
     Text [ danish ] = "Titel, clipart, tekst" ;
     Text [ french ] = "Titre, clipart, texte" ;
-    Text [ swedish ] = "Rubrik, clipart, text" ;
+    Text [ swedish ] = "Rubrik, clip art, text" ;
     Text [ dutch ] = "Titel, clipart, tekst" ;
     Text [ spanish ] = "Título, clipart, texto" ;
     Text [ english_us ] = "Title, Clipart, Text" ;
@@ -2898,7 +2898,7 @@ String STR_AUTOLAYOUT_TEXTCLIP
     Text [ finnish ] = "Otsikko, teksti, leikekuva" ;
     Text [ danish ] = "Titel, tekst, clipart" ;
     Text [ french ] = "Titre, texte, clipart" ;
-    Text [ swedish ] = "Rubrik, text, clipart" ;
+    Text [ swedish ] = "Rubrik, text, clip art" ;
     Text [ dutch ] = "Titel, tekst, clipart" ;
     Text [ spanish ] = "Título, texto, clipart" ;
     Text [ english_us ] = "Title, Text, Clipart" ;
@@ -3188,7 +3188,7 @@ String STR_AL_TITLE_VERT_OUTLINE_CLIPART
     Text[ spanish ] = "Título, texto vertical, clipart";
     Text[ italian ] = "Titolo, testo verticale, clipart";
     Text[ danish ] = "Title, vertical text, clipart";
-    Text[ swedish ] = "Rubrik, vertikal text, clipart";
+    Text[ swedish ] = "Rubrik, vertikal text, clip art";
     Text[ polish ] = "Tytu³, tekst w pionie, klipart";
     Text[ portuguese_brazilian ] = "Title, vertical text, clipart";
     Text[ japanese ] = "ï¾€ï½²ï¾„ï¾™ã€ç¸¦æ›¸ãï¾ƒï½·ï½½ï¾„ã€ï½¸ï¾˜ï½¯ï¾Œï¾Ÿï½±ï½°ï¾„";
@@ -5727,10 +5727,10 @@ String STR_WARN_DEL_UNDO_STACK
     Text [ ENGLISH ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?" ;
     Text[ english_us ] = "This action deletes the list of undoable actions. Changes made to the document up till now remain, but cannot be undone anymore. Do you want to continue and assign the new page layout?";
     Text[ portuguese ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
-    Text[ russian ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
+    Text[ russian ] = "Äàííîå äåéñòâèå óäàëèò ñïèñîê øàãîâ, êîòîğûå ìîæíî îòìåíèòü. Âûïîëíåííûå äî ñèõ ïîğ èçìåíåíèÿ äîêóìåíòà áóäóò ñîõğàíåíû, íî èõ áîëøå íåëüçÿ áóäåò îòìåíèòü. Ïğîäîëæèòü è íàçíà÷èòü íîâûé ñòèëü ñòğàíèöû?";
     Text[ greek ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
-    Text[ dutch ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
-    Text[ french ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
+    Text[ dutch ] = "Hiermee wist u de lijst van commando's die ongedaan gemaakt kunnen worden. De tot dan toe aangebrachte wijzigingen in het document blijven behouden en kunnen niet meer ongedaan worden gemaakt. Wilt u doorgaan en de nieuwe sjabloon toewijzen?";
+    Text[ french ] = "Cette action supprime la liste des opérations pouvant être annulées. Ceci n'affecte pas les modifications apportées au document, mais empêche de les annuler. Voulez-vous poursuivre et assigner le nouveau style de page ?";
     Text[ spanish ] = "Esta acción elimina la lista de las acciones que se pueden deshacer. Se conservarán las modificaciones realizadas hasta ahora en el documento, pero no se podrán deshacer. ¿Desea continuar y asignar la nueva plantilla?";
     Text[ finnish ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
     Text[ italian ] = "Questo tipo di azione elimina l'elenco delle fasi di lavoro che si possono annullare. Le modifiche apportate fino a questo momento rimangono inalterate ma non si possono più annullare. Volete procedre comunque ed assegnare il nuovo modello di pagina?";
@@ -5738,9 +5738,9 @@ String STR_WARN_DEL_UNDO_STACK
     Text[ swedish ] = "Den här åtgärden raderar listan med arbetssteg som går att ångra. Ändringar som har gjorts hittills finns kvar, men de går inte att ångra. Vill du fortsätta och tilldela den nya sidformatmallen?";
     Text[ polish ] = "Akcja ta usuwa wykaz etapów operacji, które mo¿na cofn¹æ. Modyfikacje dokonane na dokumencie zostan¹ zachowane, cofniêcie ich nie bêdzie jednak mo¿liwe. Kontynuowaæ wybieraj¹c nowy styl strony?";
     Text[ portuguese_brazilian ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
-    Text[ japanese ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
+    Text[ japanese ] = "ã“ã®ï½±ï½¸ï½¼ï½®ï¾ã§å…ƒã«æˆ»ã™ã“ã¨ãŒã§ãã‚‹ä½œæ¥­éç¨‹ã®ï¾˜ï½½ï¾„ã‚’å‰Šé™¤ã—ã¾ã™ã€‚ã„ã¾ã¾ã§ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã§è¡Œã£ãŸå¤‰æ›´ã¯ãã®ã¾ã¾æ®‹ã‚Šã¾ã™ãŒã€å…ƒã«æˆ»ã™ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚ç¶šè¡Œã—ã¦æ–°ã—ã„ã„ï¾ï¾Ÿï½°ï½¼ï¾ï½½ï¾€ï½²ï¾™ã‚’é©ç”¨ã—ã¾ã™ã‹ã€‚";
     Text[ korean ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
-    Text[ chinese_simplified ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
+    Text[ chinese_simplified ] = "è¿™é¡¹æ“ä½œä¼šåˆ é™¤ç”¨æ¥æ’¤æ¶ˆå‘½ä»¤çš„å·¥ä½œæ­¥éª¤åˆ—å•ã€‚è‡³ä»Šä¸ºæ­¢æ‚¨å¯¹æ–‡æ¡£æ‰€åšçš„æ›´æ”¹ä¼šè¢«ä¿å­˜ï¼Œä½†æ˜¯æ‚¨æ— æ³•å†æ’¤æ¶ˆè¿™äº›æ›´æ”¹ã€‚è¦ç»§ç»­å¹¶ä½¿ç”¨æ–°çš„é¡µé¢æ ·å¼ï¼Ÿ";
     Text[ chinese_traditional ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
     Text[ turkish ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
     Text[ arabic ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
@@ -7417,7 +7417,7 @@ String STR_EFFECT_NONE
     Text [ finnish ] = "Ei tehostetta" ;
     Text [ danish ] = "ingen effekt" ;
     Text [ french ] = "Aucun effet" ;
-    Text [ swedish ] = "ingen effekt" ;
+    Text [ swedish ] = "Ingen effekt" ;
     Text [ dutch ] = "Geen effect" ;
     Text [ spanish ] = "Sin efecto" ;
     Text [ english_us ] = "No Effect" ;
@@ -7602,13 +7602,13 @@ String STR_EFFECT_DISCARD_FROM_L
     Text[ portuguese ] = "Tapar a partir da esquerda";
     Text[ russian ] = "Ïğîíèêíîâåíèå ñëåâà";
     Text[ greek ] = "ÁğïêÜëõøç áğü áñéóôåñÜ";
-    Text[ dutch ] = "Vertonen vanaf links";
+    Text[ dutch ] = "Binnenvliegen vanaf links";
     Text[ french ] = "Arrivée de la gauche";
     Text[ spanish ] = "Entrar desde la izquierda";
     Text[ finnish ] = "Poista peite vasemmalta";
     Text[ italian ] = "Sovrapponi da sinistra";
     Text[ danish ] = "Afdæk mod højre";
-    Text[ swedish ] = "Täck av från vänster";
+    Text[ swedish ] = "Flyg in från vänster";
     Text[ polish ] = "Przenikaj z lewej";
     Text[ portuguese_brazilian ] = "Descartar a partir da esquerda";
     Text[ japanese ] = "å·¦ã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7627,13 +7627,13 @@ String STR_EFFECT_DISCARD_FROM_UL
     Text[ portuguese ] = "Tapar a partir do topo esquerdo";
     Text[ russian ] = "Ïğîíèêíîâåíèå ñâåğõó ñëåâà";
     Text[ greek ] = "ÅìöÜíéóç áğü ğÜíù áñéóôåñÜ";
-    Text[ dutch ] = "Vertonen vanaf linksboven";
+    Text[ dutch ] = "Binnenvliegen vanaf linksboven";
     Text[ french ] = "Arrivée de la gauche en haut";
     Text[ spanish ] = "Entrar desde arriba izquierda";
     Text[ finnish ] = "Poista peite ylävasemmalta";
     Text[ italian ] = "Sovrapponi dall'alto a sinistra";
     Text[ danish ] = "Discard from Top Left";
-    Text[ swedish ] = "Täck av uppifrån vänster";
+    Text[ swedish ] = "Flyg in uppifrån vänster";
     Text[ polish ] = "Przenikaj z lewej od góry";
     Text[ portuguese_brazilian ] = "Discard from Top Left";
     Text[ japanese ] = "å·¦ä¸Šã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7652,13 +7652,13 @@ String STR_EFFECT_DISCARD_FROM_T
     Text[ portuguese ] = "Tapar a partir do topo";
     Text[ russian ] = "Ïğîíèêíîâåíèå ñâåğõó";
     Text[ greek ] = "ÅìöÜíéóç áğü ğÜíù";
-    Text[ dutch ] = "Vertonen vanaf boven";
+    Text[ dutch ] = "Binnenvliegen vanaf boven";
     Text[ french ] = "Arrivée du haut";
     Text[ spanish ] = "Entrar desde arriba";
     Text[ finnish ] = "Poista peite ylhäältä";
     Text[ italian ] = "Sovrapponi dall'alto";
     Text[ danish ] = "Discard from Top";
-    Text[ swedish ] = "Täck av uppifrån";
+    Text[ swedish ] = "Flyg in uppifrån";
     Text[ polish ] = "Przenikaj od góry";
     Text[ portuguese_brazilian ] = "Discard from Top";
     Text[ japanese ] = "ä¸Šã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7677,13 +7677,13 @@ String STR_EFFECT_DISCARD_FROM_UR
     Text[ portuguese ] = "Tapar a partir do topo direito";
     Text[ russian ] = "Ïğîíèêíîâåíèå ñâåğõó ñïğàâà";
     Text[ greek ] = "ÅìöÜíéóç áğü ğÜíù äåîéÜ";
-    Text[ dutch ] = "Vertonen vanaf boven";
+    Text[ dutch ] = "Binnenvliegen vanaf rechtsboven";
     Text[ french ] = "Arrivée de la droite en haut";
     Text[ spanish ] = "Entrar desde arriba a la derecha";
     Text[ finnish ] = "Poista peite yläoikealta";
     Text[ italian ] = "Sovrapponi dall'alto a destra";
     Text[ danish ] = "Discard from Upper Right";
-    Text[ swedish ] = "Täck av uppifrån höger";
+    Text[ swedish ] = "Flyg in uppifrån höger";
     Text[ polish ] = "Przenikaj z prawej od góry";
     Text[ portuguese_brazilian ] = "Discard from Upper Right";
     Text[ japanese ] = "å³ä¸Šã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7702,13 +7702,13 @@ String STR_EFFECT_DISCARD_FROM_R
     Text[ portuguese ] = "Tapar a partir da direita";
     Text[ russian ] = "Ïğîíèêíîâåíèå ñïğàâà";
     Text[ greek ] = "ÁğïêÜëõøç áğü äåîéÜ";
-    Text[ dutch ] = "Vertonen vanaf rechts";
+    Text[ dutch ] = "Binnenvliegen vanaf rechts";
     Text[ french ] = "Arrivée de la droite";
     Text[ spanish ] = "Entrar desde la derecha";
     Text[ finnish ] = "Poista peite oikealta";
     Text[ italian ] = "Sovrapponi da destra";
     Text[ danish ] = "Afdæk mod venstre";
-    Text[ swedish ] = "Täck av från höger";
+    Text[ swedish ] = "Flyg in från höger";
     Text[ polish ] = "Przenikaj z prawej";
     Text[ portuguese_brazilian ] = "Descartar a partir da direita";
     Text[ japanese ] = "å³ã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7727,13 +7727,13 @@ String STR_EFFECT_DISCARD_FROM_LR
     Text[ portuguese ] = "Tapar a partir da base direita";
     Text[ russian ] = "Ïğîíèêíîâåíèå ñíèçó ñïğàâà";
     Text[ greek ] = "ÅìöÜíéóç áğü êÜôù äåîéÜ";
-    Text[ dutch ] = "Vertonen vanaf rechtsonder";
+    Text[ dutch ] = "Binnenvliegen vanaf rechtsonder";
     Text[ french ] = "Arrivée de la droite en bas";
     Text[ spanish ] = "Entrar desde abajo a la derecha";
     Text[ finnish ] = "Poista peite alaoikealta";
     Text[ italian ] = "Sovrapponi dal basso a destra";
     Text[ danish ] = "Discard from Lower Right";
-    Text[ swedish ] = "Täck av nedifrån höger";
+    Text[ swedish ] = "Flyg in nedifrån höger";
     Text[ polish ] = "Przenikaj z prawej od do³u";
     Text[ portuguese_brazilian ] = "Discard from Lower Right";
     Text[ japanese ] = "å³ä¸‹ã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7752,13 +7752,13 @@ String STR_EFFECT_DISCARD_FROM_B
     Text[ portuguese ] = "Tapar a partir da base";
     Text[ russian ] = "Ïğîíèêíîâåíèå ñíèçó";
     Text[ greek ] = "ÁğïêÜëõøç áğü êÜôù";
-    Text[ dutch ] = "Vertonen vanaf beneden";
+    Text[ dutch ] = "Binnenvliegen vanaf beneden";
     Text[ french ] = "Arrivée du bas";
     Text[ spanish ] = "Entrar desde abajo";
     Text[ finnish ] = "Poista peite alhaalta";
     Text[ italian ] = "Sovrapponi dal basso";
     Text[ danish ] = "Afdæk opad";
-    Text[ swedish ] = "Täck av nedifrån";
+    Text[ swedish ] = "Flyg in nedifrån";
     Text[ polish ] = "Przenikaj z do³u";
     Text[ portuguese_brazilian ] = "Descartar a partir da base";
     Text[ japanese ] = "ä¸‹ã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7777,13 +7777,13 @@ String STR_EFFECT_DISCARD_FROM_LL
     Text[ portuguese ] = "Tapar a partir da base esquerda";
     Text[ russian ] = "Ïğîíèêíîâåíèå ñíèçó ñëåâà";
     Text[ greek ] = "ÅìöÜíéóç áğü êÜôù áñéóôåñÜ";
-    Text[ dutch ] = "Vertonen vanaf linksonder";
+    Text[ dutch ] = "Binnenvliegen vanaf linksonder";
     Text[ french ] = "Arrivée de la gauche en bas";
     Text[ spanish ] = "Entrar desde abajo a la izquierda";
     Text[ finnish ] = "Poista peite alavasemmalta";
     Text[ italian ] = "Sovrapponi dal basso a sinistra";
     Text[ danish ] = "Discard from Lower Left";
-    Text[ swedish ] = "Täck av nedifrån vänster";
+    Text[ swedish ] = "Flyg in nedifrån vänster";
     Text[ polish ] = "Przenikaj z lewej od do³u";
     Text[ portuguese_brazilian ] = "Discard from Lower Left";
     Text[ japanese ] = "å·¦ä¸‹ã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7902,7 +7902,7 @@ String STR_EFFECT_DISCARD_S_FROM_R
     Text[ portuguese ] = "Tapar a partir da direita";
     Text[ russian ] = "Ïğîíèêíîâåíèå èç ğàìêè îáúåêòà ñïğàâà";
     Text[ greek ] = "Óıíôïìç åìöÜíéóç áğü äåîéÜ";
-    Text[ dutch ] = "Kort uitrollen vanaf rechts";
+    Text[ dutch ] = "Kort binnenvliegen vanaf rechts";
     Text[ french ] = "Arrivée furtive de la droite";
     Text[ spanish ] = "Entrar localmente desde la derecha";
     Text[ finnish ] = "Poista objektin peite oikealta";
@@ -7952,7 +7952,7 @@ String STR_EFFECT_DISCARD_S_FROM_B
     Text[ portuguese ] = "Tapar a partir da base";
     Text[ russian ] = "Ïğîíèêíîâåíèå èç ğàìêè îáúåêòà ñíèçó";
     Text[ greek ] = "Óıíôïìç åìöÜíéóç áğü êÜôù";
-    Text[ dutch ] = "Kort uitrollen vanaf beneden";
+    Text[ dutch ] = "Kort binnenvliegen vanaf beneden";
     Text[ french ] = "Arrivée furtive du bas";
     Text[ spanish ] = "Entrar localmente desde abajo";
     Text[ finnish ] = "Poista objektin peite alhaalta";
@@ -8882,7 +8882,7 @@ String STR_EFFECT_MOVE_TO_L
     Text[ finnish ] = "Siirrä vasemmalle";
     Text[ italian ] = "Uscita a sinistra";
     Text[ danish ] = "Flyt mod venstre";
-    Text[ swedish ] = "Flytta till vänster";
+    Text[ swedish ] = "Flyg ut till vänster";
     Text[ polish ] = "Wysuñ w lewo";
     Text[ portuguese_brazilian ] = "Nach links bewegen";
     Text[ japanese ] = "å·¦ã«ï½½ï¾—ï½²ï¾„ï¾ï½±ï½³ï¾„";
@@ -8907,7 +8907,7 @@ String STR_EFFECT_MOVE_TO_UL
     Text[ finnish ] = "Siirrä ylävasemmalle";
     Text[ italian ] = "Uscita in alto a sinistra";
     Text[ danish ] = "Move to upper left";
-    Text[ swedish ] = "Flytta upp till vänster";
+    Text[ swedish ] = "Flyg ut uppe till vänster";
     Text[ polish ] = "Wysuñ w lewo do góry";
     Text[ portuguese_brazilian ] = "Move to upper left";
     Text[ japanese ] = "å·¦ä¸Šã«ï½½ï¾—ï½²ï¾„ï¾ï½±ï½³ï¾„";
@@ -8932,7 +8932,7 @@ String STR_EFFECT_MOVE_TO_T
     Text[ finnish ] = "Siirrä ylöspäin";
     Text[ italian ] = "Uscita in alto";
     Text[ danish ] = "Flyt opad";
-    Text[ swedish ] = "Flytta uppåt";
+    Text[ swedish ] = "Flyg ut uppåt";
     Text[ polish ] = "Wysuñ w górê";
     Text[ portuguese_brazilian ] = "Nach oben bewegen";
     Text[ japanese ] = "ä¸Šã«ï½½ï¾—ï½²ï¾„ï¾ï½±ï½³ï¾„";
@@ -8957,7 +8957,7 @@ String STR_EFFECT_MOVE_TO_UR
     Text[ finnish ] = "Siirrä yläoikealle";
     Text[ italian ] = "Uscita in alto a destra";
     Text[ danish ] = "Move to upper right";
-    Text[ swedish ] = "Flytta upp till höger";
+    Text[ swedish ] = "Flyg ut uppe till höger";
     Text[ polish ] = "Wysuñ w prawo do góry";
     Text[ portuguese_brazilian ] = "Move to upper right";
     Text[ japanese ] = "å³ä¸Šã«ï½½ï¾—ï½²ï¾„ï¾ï½±ï½³ï¾„";
@@ -8982,7 +8982,7 @@ String STR_EFFECT_MOVE_TO_R
     Text[ finnish ] = "Siirrä oikealle";
     Text[ italian ] = "Uscita a destra";
     Text[ danish ] = "Flyt mod højre";
-    Text[ swedish ] = "Flytta till höger";
+    Text[ swedish ] = "Flyg ut till höger";
     Text[ polish ] = "Wysuñ w prawo";
     Text[ portuguese_brazilian ] = "Nach rechts bewegen";
     Text[ japanese ] = "å³ã«ï½½ï¾—ï½²ï¾„ï¾ï½±ï½³ï¾„";
@@ -9007,7 +9007,7 @@ String STR_EFFECT_MOVE_TO_LR
     Text[ finnish ] = "Siirrä alaoikealle";
     Text[ italian ] = "Uscita in basso a destra";
     Text[ danish ] = "Move to lower right";
-    Text[ swedish ] = "Flytta ner till höger";
+    Text[ swedish ] = "Flyg ut nere till höger";
     Text[ polish ] = "Wysuñ w prawo na dó³";
     Text[ portuguese_brazilian ] = "Move to lower right";
     Text[ japanese ] = "å³ä¸‹ã«ï½½ï¾—ï½²ï¾„ï¾ï½±ï½³ï¾„";
@@ -9032,7 +9032,7 @@ String STR_EFFECT_MOVE_TO_B
     Text[ finnish ] = "Siirrä alaspäin";
     Text[ italian ] = "Uscita verso il basso";
     Text[ danish ] = "Flyt nedad";
-    Text[ swedish ] = "Flytta nedåt";
+    Text[ swedish ] = "Flyg ut nedåt";
     Text[ polish ] = "Wysuñ w dó³";
     Text[ portuguese_brazilian ] = "Nach unten bewegen";
     Text[ japanese ] = "ä¸‹ã«ï½½ï¾—ï½²ï¾„ï¾ï½±ï½³ï¾„";
@@ -9057,7 +9057,7 @@ String STR_EFFECT_MOVE_TO_LL
     Text[ finnish ] = "Siirrä alavasemmalle";
     Text[ italian ] = "Uscita in basso a sinistra";
     Text[ danish ] = "Move to lower left";
-    Text[ swedish ] = "Flytta ner till vänster";
+    Text[ swedish ] = "Flyg ut nere till vänster";
     Text[ polish ] = "Wysuñ w lewo na dó³";
     Text[ portuguese_brazilian ] = "Move to lower left";
     Text[ japanese ] = "å·¦ä¸‹ã«ï½½ï¾—ï½²ï¾„ï¾ï½±ï½³ï¾„";
@@ -9082,7 +9082,7 @@ String STR_EFFECT_MOVE_S_TO_L
     Text[ finnish ] = "Siirrä objektia vasemmalle";
     Text[ italian ] = "Uscita a sinistra da un punto interno";
     Text[ danish ] = "Move short to left";
-    Text[ swedish ] = "Flytta objekt till vänster";
+    Text[ swedish ] = "Flyg ut kort till vänster";
     Text[ polish ] = "Wysuñ z ramki obiektu w lewo";
     Text[ portuguese_brazilian ] = "Move short to left";
     Text[ japanese ] = "å·¦ã«ï¾‹ï¾Ÿï½°ï½¸ï½±ï½³ï¾„";
@@ -9107,7 +9107,7 @@ String STR_EFFECT_MOVE_S_TO_UL
     Text[ finnish ] = "Siirrä objektia ylävasemmalle";
     Text[ italian ] = "Uscita a sinistra in alto da un punto interno";
     Text[ danish ] = "Move short to upper left";
-    Text[ swedish ] = "Flytta objekt upp till vänster";
+    Text[ swedish ] = "Flyg ut kort uppe till vänster";
     Text[ polish ] = "Wysuñ z ramki obiektu w lewo do góry";
     Text[ portuguese_brazilian ] = "Move short to upper left";
     Text[ japanese ] = "å·¦ä¸Šã«ï¾‹ï¾Ÿï½°ï½¸ï½±ï½³ï¾„";
@@ -9132,7 +9132,7 @@ String STR_EFFECT_MOVE_S_TO_T
     Text[ finnish ] = "Siirrä objektia ylöspäin";
     Text[ italian ] = "Uscita in alto da un punto interno";
     Text[ danish ] = "Move short to top";
-    Text[ swedish ] = "Flytta objekt uppåt";
+    Text[ swedish ] = "Flyg ut kort uppåt";
     Text[ polish ] = "Wysuñ z ramki obiektu do góry";
     Text[ portuguese_brazilian ] = "Move short to top";
     Text[ japanese ] = "ä¸Šã«ï¾‹ï¾Ÿï½°ï½¸ï½±ï½³ï¾„";
@@ -9157,7 +9157,7 @@ String STR_EFFECT_MOVE_S_TO_UR
     Text[ finnish ] = "Siirrä objekti yläoikealle";
     Text[ italian ] = "Uscita a destra in alto da un punto interno";
     Text[ danish ] = "Move short to upper right";
-    Text[ swedish ] = "Flytta objekt upp till höger";
+    Text[ swedish ] = "Flyg ut kort uppe till höger";
     Text[ polish ] = "Wysuñ z ramki obiektu w prawo do góry";
     Text[ portuguese_brazilian ] = "Move short to upper right";
     Text[ japanese ] = "å³ä¸Šã«ï¾‹ï¾Ÿï½°ï½¸ï½±ï½³ï¾„";
@@ -9182,7 +9182,7 @@ String STR_EFFECT_MOVE_S_TO_R
     Text[ finnish ] = "Siirrä objekti oikealle";
     Text[ italian ] = "Uscita a destra da un punto interno";
     Text[ danish ] = "Move short to right";
-    Text[ swedish ] = "Flytta objekt till höger";
+    Text[ swedish ] = "Flyg ut kort till höger";
     Text[ polish ] = "Wysuñ z ramki obiektu w prawo";
     Text[ portuguese_brazilian ] = "Move short to right";
     Text[ japanese ] = "å³ã«ï¾‹ï¾Ÿï½°ï½¸ï½±ï½³ï¾„";
@@ -10570,7 +10570,7 @@ String STR_EFFECT_DISCARD
     Text[ finnish ] = "Poista peite";
     Text[ italian ] = "Sovrapporre";
     Text[ danish ] = "Afdæk";
-    Text[ swedish ] = "FLyg in";
+    Text[ swedish ] = "Flyg in";
     Text[ polish ] = "Przenikaj";
     Text[ portuguese_brazilian ] = "Aufdecken";
     Text[ japanese ] = "ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -13597,6 +13597,7 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transparencia";
     Text[ finnish ] = "Läpikuultavuus";
 };
+
 
 
 
