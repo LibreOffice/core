@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtextedt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-06 14:19:09 $
+ *  last change: $Author: mt $ $Date: 2001-03-09 10:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,16 @@
 #include <xtextedt.hxx>
 #include <vcl/svapp.hxx>  // International
 #include <unotools/textsearch.hxx>
+#ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
+#include <com/sun/star/util/SearchOptions.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
+#include <com/sun/star/util/SearchFlags.hpp>
+#endif
+
+using namespace ::com::sun::star;
+
+
 
 // -------------------------------------------------------------------------
 // class ExtTextEngine
@@ -173,15 +183,15 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
     return aSel;
 }
 
-BOOL ExtTextEngine::Search( TextSelection& rSel, const utl::SearchParam& rSearchParam, BOOL bForward )
+BOOL ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSearchOptions, BOOL bForward )
 {
     TextSelection aSel( rSel );
     aSel.Justify();
 
+    BOOL bSearchInSelection = rSearchOptions.searchFlag & util::SearchFlags::REG_NOT_BEGINOFLINE;
+
     TextPaM aStartPaM( aSel.GetEnd() );
-    if ( aSel.HasRange() && (
-         ( rSearchParam.IsSrchInSelection() && bForward ) ||
-         ( !rSearchParam.IsSrchInSelection() && !bForward ) ) )
+    if ( aSel.HasRange() && ( ( bSearchInSelection && bForward ) || ( !bSearchInSelection && !bForward ) ) )
     {
         aStartPaM = aSel.GetStart();
     }
@@ -189,13 +199,16 @@ BOOL ExtTextEngine::Search( TextSelection& rSel, const utl::SearchParam& rSearch
     BOOL bFound = FALSE;
     ULONG nStartNode, nEndNode;
 
-    if ( rSearchParam.IsSrchInSelection() )
+    if ( bSearchInSelection )
         nEndNode = bForward ? aSel.GetEnd().GetPara() : aSel.GetStart().GetPara();
     else
         nEndNode = bForward ? (GetParagraphCount()-1) : 0;
 
     nStartNode = aStartPaM.GetPara();
-    utl::TextSearch aSearcher( rSearchParam, Application::GetAppInternational().GetLanguage() );
+
+    util::SearchOptions aOptions( rSearchOptions );
+    aOptions.Locale = Application::GetSettings().GetLocale();
+    utl::TextSearch aSearcher( rSearchOptions );
 
     // ueber die Absaetze iterieren...
     for ( ULONG nNode = nStartNode;
@@ -212,7 +225,7 @@ BOOL ExtTextEngine::Search( TextSelection& rSel, const utl::SearchParam& rSearch
             else
                 nEndPos = aStartPaM.GetIndex();
         }
-        if ( ( nNode == nEndNode ) && rSearchParam.IsSrchInSelection() )
+        if ( ( nNode == nEndNode ) && bSearchInSelection )
         {
             if ( bForward )
                 nEndPos = aSel.GetEnd().GetIndex();
@@ -286,11 +299,11 @@ BOOL ExtTextView::MatchGroup()
     return aMatchSel.HasRange() ? TRUE : FALSE;
 }
 
-BOOL ExtTextView::Search( const utl::SearchParam& rSearchParam, BOOL bForward )
+BOOL ExtTextView::Search( const util::SearchOptions& rSearchOptions, BOOL bForward )
 {
     BOOL bFound = FALSE;
     TextSelection aSel( GetSelection() );
-    if ( ((ExtTextEngine*)GetTextEngine())->Search( aSel, rSearchParam, bForward ) )
+    if ( ((ExtTextEngine*)GetTextEngine())->Search( aSel, rSearchOptions, bForward ) )
     {
         bFound = TRUE;
         // Erstmal den Anfang des Wortes als Selektion einstellen,
@@ -309,7 +322,7 @@ BOOL ExtTextView::Search( const utl::SearchParam& rSearchParam, BOOL bForward )
     return bFound;
 }
 
-USHORT ExtTextView::Replace( const utl::SearchParam& rSearchParam, BOOL bAll, BOOL bForward )
+USHORT ExtTextView::Replace( const util::SearchOptions& rSearchOptions, BOOL bAll, BOOL bForward )
 {
     USHORT nFound = 0;
 
@@ -317,13 +330,13 @@ USHORT ExtTextView::Replace( const utl::SearchParam& rSearchParam, BOOL bAll, BO
     {
         if ( GetSelection().HasRange() )
         {
-            InsertText( rSearchParam.GetReplaceStr() );
+            InsertText( rSearchOptions.replaceString );
             nFound = 1;
-            Search( rSearchParam, bForward );   // gleich zum naechsten
+            Search( rSearchOptions, bForward ); // gleich zum naechsten
         }
         else
         {
-            if( Search( rSearchParam, bForward ) )
+            if( Search( rSearchOptions, bForward ) )
                 nFound = 1;
         }
     }
@@ -335,7 +348,8 @@ USHORT ExtTextView::Replace( const utl::SearchParam& rSearchParam, BOOL bAll, BO
 
         // HideSelection();
         TextSelection aSel;
-        if ( rSearchParam.IsSrchInSelection() )
+        BOOL bSearchInSelection = rSearchOptions.searchFlag & util::SearchFlags::REG_NOT_BEGINOFLINE;
+        if ( bSearchInSelection )
         {
             aSel = GetSelection();
             aSel.Justify();
@@ -343,17 +357,17 @@ USHORT ExtTextView::Replace( const utl::SearchParam& rSearchParam, BOOL bAll, BO
 
         TextSelection aSearchSel( aSel );
 
-        BOOL bFound = pTextEngine->Search( aSel, rSearchParam, TRUE );
+        BOOL bFound = pTextEngine->Search( aSel, rSearchOptions, TRUE );
         if ( bFound )
             pTextEngine->UndoActionStart( XTEXTUNDO_REPLACEALL );
         while ( bFound )
         {
             nFound++;
 
-            TextPaM aNewStart = pTextEngine->ImpInsertText( aSel, rSearchParam.GetReplaceStr() );
+            TextPaM aNewStart = pTextEngine->ImpInsertText( aSel, rSearchOptions.replaceString );
             aSel = aSearchSel;
             aSel.GetStart() = aNewStart;
-            bFound = pTextEngine->Search( aSel, rSearchParam, TRUE );
+            bFound = pTextEngine->Search( aSel, rSearchOptions, TRUE );
         }
         if ( nFound )
         {
