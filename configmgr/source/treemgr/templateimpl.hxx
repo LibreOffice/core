@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-    class ITemplateProvider;
+    struct ITemplateProvider;
 //-----------------------------------------------------------------------------
     namespace data { class SetNodeAccess; class TreeSegment; }
 //-----------------------------------------------------------------------------
