@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimagetree.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-02 14:59:14 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 09:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,13 @@ ImplImageTree::~ImplImageTree()
 
 void ImplImageTree::cleanup()
 {
+    ImplImageTreeSingletonRef aCleaner;
+
+    aCleaner->mxNameAcc.clear();
+    aCleaner->mxZipAcc.clear();
+    aCleaner->mxFileAccess.clear();
+    aCleaner->mxPathSettings.clear();
+
     BmpExHashMap aTmp;
     aBmpExHashMap.swap( aTmp );
 }
