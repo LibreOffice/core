@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: os $ $Date: 2001-05-30 08:57:14 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 12:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4346,8 +4346,21 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         m_aEmphasisLB.Disable( );
     }
 
-    SelectHdl_Impl( NULL );
-    SelectHdl_Impl( &m_aEmphasisLB );
+    // the select handler for the underline/strikeout list boxes
+//  SelectHdl_Impl( NULL );
+    DBG_ASSERT(m_aUnderlineLB.GetSelectHdl() == m_aStrikeoutLB.GetSelectHdl(),
+        "SvxCharEffectsPage::Reset: inconsistence (1)!");
+    m_aUnderlineLB.GetSelectHdl().Call(NULL);
+        // don't call SelectHdl_Impl directly!
+        // in DisableControls, we may have re-reouted the select handler
+        // 30.05.2001 - 86262 - frank.schoenheit@germany.sun.com
+
+    // the select handler for the emphasis listbox
+//  SelectHdl_Impl( &m_aEmphasisLB );
+    DBG_ASSERT(m_aEmphasisLB.GetSelectHdl() == LINK(this, SvxCharEffectsPage, SelectHdl_Impl),
+        "SvxCharEffectsPage::Reset: inconsistence (2)!");
+    m_aEmphasisLB.GetSelectHdl().Call( &m_aEmphasisLB );
+        // this is for consistency only. Here it would be allowed to call SelectHdl_Impl directly ...
 
     // Effects
     nWhich = GetWhich( SID_ATTR_CHAR_CASEMAP );
