@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCalculationSettingsContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-23 14:58:05 $
+ *  last change: $Author: sab $ $Date: 2000-12-04 14:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
     nIterationCount(100),
     bIsIterationEnabled(sal_False),
     bCalcAsShown(sal_False),
-    bIgnoreCase(sal_True),
+    bIgnoreCase(sal_False),
     bLookUpLabels(sal_True),
     bMatchWholeCell(sal_True)
 {
