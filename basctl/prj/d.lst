@@ -1,4 +1,7 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
+mkdir: %_DEST%\xml%_EXT%\uiconfig
+mkdir: %_DEST%\xml%_EXT%\uiconfig\basicide
+mkdir: %_DEST%\xml%_EXT%\uiconfig\basicide\menubar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\inc\basslots.ilb %_DEST%\inc%_EXT%\basslots.ilb
@@ -11,5 +14,7 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\inc%_EXT%\basctl
 
 ..\util\basctl.xml %_DEST%\xml%_EXT%\basctl.xml
+
+..\uiconfig\basicide\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\basicide\menubar\*.xml
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
