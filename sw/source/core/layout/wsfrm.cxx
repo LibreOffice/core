@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:48:15 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3504,7 +3504,11 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 ( !(Frm().*fnRect->fnGetHeight)() && pAny ) )
             {
                 long nTop = (this->*fnRect->fnGetTopMargin)();
-                (Frm().*fnRect->fnAddBottom)( nMaximum );
+                // --> OD 2004-11-01 #i23129# - correction: enlarge section
+                // to the calculated maximum height.
+                (Frm().*fnRect->fnAddBottom)( nMaximum -
+                                              (Frm().*fnRect->fnGetHeight)() );
+                // <--
                 if( nTop > nMaximum )
                     nTop = nMaximum;
                 (this->*fnRect->fnSetYMargins)( nTop, 0 );
@@ -3687,8 +3691,15 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         // Wenn der Freiraum in den Spalten groesser ist als nMinDiff und wir
                         // nicht dadurch wieder unter das Minimum rutschen, wollen wir ein wenig
                         // Luft herauslassen.
-                        if( !bNoBalance && ( nMaxFree >= nMinDiff && (!nAllFree
-                            || nMinimum < nPrtHeight - nMinDiff ) ) )
+                        if ( !bNoBalance &&
+                             // --> OD 2004-11-04 #i23129# - <nMinDiff> can be
+                             // big, because of an object at the beginning of
+                             // a column. Thus, decrease optimization here.
+                             //nMaxFree >= nMinDiff &&
+                             nMaxFree > 0 &&
+                             // <--
+                             ( !nAllFree ||
+                               nMinimum < nPrtHeight - nMinDiff ) )
                         {
                             nMaxFree /= nNumCols; // auf die Spalten verteilen
                             nDiff = nMaxFree < nMinDiff ? -nMinDiff : -nMaxFree; // mind. nMinDiff
