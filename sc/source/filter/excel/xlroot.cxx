@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:35:36 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef SC_EDITUTIL_HXX
 #include "editutil.hxx"
+#endif
+#ifndef SC_DRWLAYER_HXX
+#include "drwlayer.hxx"
 #endif
 
 #ifndef SC_XLSTYLE_HXX
@@ -278,6 +281,20 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
     }
     return *mrData.mpHFEditEngine;
+}
+
+EditEngine& XclRoot::GetDrawEditEngine() const
+{
+    if( !mrData.mpDrawEditEng.get() )
+    {
+        mrData.mpDrawEditEng.reset( new EditEngine( &GetDoc().GetDrawLayer()->GetItemPool() ) );
+        EditEngine& rEE = *mrData.mpDrawEditEng;
+        rEE.SetRefMapMode( MAP_100TH_MM );
+        rEE.SetUpdateMode( FALSE );
+        rEE.EnableUndo( FALSE );
+        rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
+    }
+    return *mrData.mpDrawEditEng;
 }
 
 bool XclRoot::CheckCellAddress( const ScAddress& rPos, const ScAddress rMaxPos ) const
