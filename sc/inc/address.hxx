@@ -2,9 +2,9 @@
  *
  *  $RCSfile: address.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $  $Date: 2005-03-08 11:26:44 $
+ *  last change: $Author: rt $  $Date: 2005-03-29 13:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,7 @@ public:
     inline void SetCol( SCCOL nColP ) { nCol = nColP; }
     inline void SetTab( SCTAB nTabP ) { nTab = nTabP; }
     inline void SetInvalid() { nRow = -1; nCol = -1; nTab = -1; }
+    inline bool IsValid() const { return (nRow >= 0) && (nCol >= 0) && (nTab >= 0); }
     inline void PutInOrder( ScAddress& r );
     inline void IncRow( SCsROW n=1 ) { nRow += n; }
     inline void IncCol( SCsCOL n=1 ) { nCol += n; }
@@ -594,6 +595,8 @@ public:
     { aStart = r.aStart; aEnd = r.aEnd; return *this; }
     inline ScRange& operator=( const ScAddress& rPos )
     { aStart = aEnd = rPos; return *this; }
+    inline void SetInvalid() { aStart.SetInvalid(); aEnd.SetInvalid(); }
+    inline bool IsValid() const { return aStart.IsValid() && aEnd.IsValid(); }
     inline bool In( const ScAddress& ) const;   // is Address& in Range?
     inline bool In( const ScRange& ) const;     // is Range& in Range?
     USHORT Parse( const String&, ScDocument* = NULL );
@@ -605,6 +608,7 @@ public:
     bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
     void Justify();
     void ExtendOne();
+    void ExtendTo( const ScRange& rRange );
     bool Intersects( const ScRange& ) const;    // do two ranges intersect?
     inline bool operator==( const ScRange& r ) const;
     inline bool operator!=( const ScRange& r ) const;
