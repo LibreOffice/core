@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:22:36 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2172,7 +2172,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
                 normPath( aNLine );
                 aLine = aNLine;
                 // try to avoid bad fonts in some cases
-                static bool bAvoid = (strncasecmp( lang, "ar", 2 ) == 0) || (strncasecmp( lang, "iw", 2 ) == 0) || (strncasecmp( lang, "hi", 2 ) == 0);
+                static bool bAvoid = (strncasecmp( lang, "ar", 2 ) == 0) || (strncasecmp( lang, "he", 2 ) == 0) || strncasecmp( lang, "iw", 2 ) == 0 || (strncasecmp( lang, "hi", 2 ) == 0);
                 if( bAvoid && aLine.Search( "iso_8859" ) != STRING_NOTFOUND )
                     continue;
                 m_aFontDirectories.push_back( aLine );
