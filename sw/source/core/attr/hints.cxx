@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hints.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: jp $ $Date: 2001-02-21 12:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -296,4 +299,69 @@ void SwFindNearestNode::CheckNode( const SwNode& rNd )
 
 
 
+USHORT GetWhichOfScript( USHORT nWhich, USHORT nScript )
+{
+    static const USHORT aLangMap[3] =
+        { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE };
+    static const USHORT aFontMap[3] =
+        { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,  RES_CHRATR_CTL_FONT};
+    static const USHORT aFontSizeMap[3] =
+        { RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE,  RES_CHRATR_CTL_FONTSIZE };
+    static const USHORT aWeightMap[3] =
+        { RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT,  RES_CHRATR_CTL_WEIGHT};
+    static const USHORT aPostureMap[3] =
+        { RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE,  RES_CHRATR_CTL_POSTURE};
 
+    const USHORT* pM;
+    switch( nWhich )
+    {
+    case RES_CHRATR_LANGUAGE:
+    case RES_CHRATR_CJK_LANGUAGE:
+    case RES_CHRATR_CTL_LANGUAGE:
+        pM = aLangMap;
+        break;
+
+    case RES_CHRATR_FONT:
+    case RES_CHRATR_CJK_FONT:
+    case RES_CHRATR_CTL_FONT:
+        pM = aFontMap;
+        break;
+
+    case RES_CHRATR_FONTSIZE:
+    case RES_CHRATR_CJK_FONTSIZE:
+    case RES_CHRATR_CTL_FONTSIZE:
+        pM = aFontSizeMap;
+        break;
+
+    case  RES_CHRATR_WEIGHT:
+    case  RES_CHRATR_CJK_WEIGHT:
+    case  RES_CHRATR_CTL_WEIGHT:
+        pM = aWeightMap;
+        break;
+    case RES_CHRATR_POSTURE:
+    case RES_CHRATR_CJK_POSTURE:
+    case RES_CHRATR_CTL_POSTURE:
+        pM = aPostureMap;
+        break;
+
+    default:
+        pM = 0;
+    }
+
+    USHORT nRet;
+    if( pM )
+    {
+        using namespace ::com::sun::star::i18n;
+        {
+            switch( nScript)
+            {
+            case ScriptType::COMPLEX:   ++pM;  // no break;
+            case ScriptType::ASIAN:     ++pM;  // no break;
+            default:                    nRet = *pM;
+            }
+        }
+    }
+    else
+        nRet = nWhich;
+    return nRet;
+}
