@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:22:47 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,22 +73,10 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
-#ifndef INCLUDED_STL_VECTOR
 #include <vector>
-#define INCLUDED_STL_VECTOR
-#endif
-#ifndef INCLUDED_STL_HASH_MAP
 #include <hash_map>
-#define INCLUDED_STL_HASH_MAP
-#endif
-#ifndef INCLUDED_STL_HASH_SET
 #include <hash_set>
-#define INCLUDED_STL_HASH_SET
-#endif
-#ifndef INCLUDED_STL_LIST
 #include <list>
-#define INCLUDED_STL_LIST
-#endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
