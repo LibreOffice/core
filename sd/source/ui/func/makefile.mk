@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cl $ $Date: 2000-10-26 12:45:44 $
+#   last change: $Author: ka $ $Date: 2000-11-18 11:45:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -155,7 +155,6 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         speedctl.cxx	\
         fuvect.cxx      \
         bulmaper.cxx	\
-        fugrfflt.cxx	\
         fupngdlg.cxx
 
 EXCEPTIONSFILES= \
@@ -238,7 +237,6 @@ SLOFILES = \
         $(SLO)$/speedctl.obj	\
         $(SLO)$/fuvect.obj		\
         $(SLO)$/bulmaper.obj	\
-        $(SLO)$/fugrfflt.obj	\
         $(SLO)$/fupngdlg.obj
 
 

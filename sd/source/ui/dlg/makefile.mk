@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+#   last change: $Author: ka $ $Date: 2000-11-18 11:44:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -126,8 +126,7 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         htmlattr.cxx	\
         vectdlg.cxx		\
         docprev.cxx     \
-        packgdlg.cxx	\
-        dlgflt.cxx		
+        packgdlg.cxx	
 
 SRCFILES =\
     ins_page.src\
@@ -162,8 +161,7 @@ SRCFILES =\
     brkdlg.src\
     vectdlg.src\
     dlgolbul.src\
-    packgdlg.src\
-    dlgflt.src	
+    packgdlg.src 
 
 
 SLOFILES =  \
@@ -215,8 +213,7 @@ SLOFILES =  \
         $(SLO)$/htmlattr.obj	\
         $(SLO)$/vectdlg.obj		\
         $(SLO)$/docprev.obj     \
-        $(SLO)$/packgdlg.obj	\
-        $(SLO)$/dlgflt.obj		
+        $(SLO)$/packgdlg.obj	
 
 .IF "$(GUI)" == "WIN"
 

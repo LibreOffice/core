@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:30 $
+ *  last change: $Author: ka $ $Date: 2000-11-18 11:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,8 @@ void SdDLL::RegisterControllers()
     SvxFontHeightToolBoxControl::RegisterControl(0, pMod);
     SvxFontColorToolBoxControl::RegisterControl(0, pMod);
 
-    SdTbxControl::RegisterControl( SID_GRAFTBX_FILTERS, pMod );
+    SvxGrafFilterToolBoxControl::RegisterControl( SID_GRFFILTER, pMod );
+    SvxGrafModeToolBoxControl::RegisterControl( SID_ATTR_GRAF_MODE, pMod );
     SvxGrafRedToolBoxControl::RegisterControl( SID_ATTR_GRAF_RED, pMod );
     SvxGrafGreenToolBoxControl::RegisterControl( SID_ATTR_GRAF_GREEN, pMod );
     SvxGrafBlueToolBoxControl::RegisterControl( SID_ATTR_GRAF_BLUE, pMod );
@@ -225,7 +226,6 @@ void SdDLL::RegisterControllers()
     SvxGrafContrastToolBoxControl::RegisterControl( SID_ATTR_GRAF_CONTRAST, pMod );
     SvxGrafGammaToolBoxControl::RegisterControl( SID_ATTR_GRAF_GAMMA, pMod );
     SvxGrafTransparenceToolBoxControl::RegisterControl( SID_ATTR_GRAF_TRANSPARENCE, pMod );
-    SvxGrafModeToolBoxControl::RegisterControl( SID_ATTR_GRAF_MODE, pMod );
 
     // StatusBarControls registrieren
     SvxZoomStatusBarControl::RegisterControl( SID_ATTR_ZOOM, pMod );

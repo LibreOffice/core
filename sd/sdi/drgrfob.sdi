@@ -1,61 +1,61 @@
 shell SdDrawGrafObjectBar
 {
-    SID_GRAFTBX_FILTERS // ole : no, status : ?
+    SID_GRFFILTER
+    [
+        ExecMethod = ExecuteFilter;
+        StateMethod = GetFilterState;
+    ]
+    SID_GRFFILTER_INVERT // ole : no, status : no
     [
         ExecMethod = ExecuteFilter;
         StateMethod = GetFilterState ;
     ]
-    SID_GRAFFILTER_INVERT // ole : no, status : no
+    SID_GRFFILTER_SMOOTH // ole : no, status : no
     [
         ExecMethod = ExecuteFilter;
         StateMethod = GetFilterState ;
     ]
-    SID_GRAFFILTER_SMOOTH // ole : no, status : no
+    SID_GRFFILTER_SHARPEN // ole : no, status : no
     [
         ExecMethod = ExecuteFilter;
         StateMethod = GetFilterState ;
     ]
-    SID_GRAFFILTER_SHARPEN // ole : no, status : no
+    SID_GRFFILTER_REMOVENOISE // ole : no, status : no
     [
         ExecMethod = ExecuteFilter;
         StateMethod = GetFilterState ;
     ]
-    SID_GRAFFILTER_REMOVENOISE // ole : no, status : no
-    [
-        ExecMethod = ExecuteFilter;
-        StateMethod = GetFilterState ;
-    ]
-    SID_GRAFFILTER_SOBEL // ole : no, status : no
+    SID_GRFFILTER_SOBEL // ole : no, status : no
     [
         ExecMethod = ExecuteFilter;
         StateMethod = GetFilterState;
     ]
-    SID_GRAFFILTER_MOSAIC // ole : no, status : no
+    SID_GRFFILTER_MOSAIC // ole : no, status : no
     [
         ExecMethod = ExecuteFilter;
         StateMethod = GetFilterState;
     ]
-    SID_GRAFFILTER_EMBOSS // ole : no, status : no
+    SID_GRFFILTER_EMBOSS // ole : no, status : no
     [
         ExecMethod = ExecuteFilter;
         StateMethod = GetFilterState;
     ]
-    SID_GRAFFILTER_POSTER // ole : no, status : no
+    SID_GRFFILTER_POSTER // ole : no, status : no
     [
         ExecMethod = ExecuteFilter;
         StateMethod = GetFilterState;
     ]
-    SID_GRAFFILTER_POPART // ole : no, status : no
+    SID_GRFFILTER_POPART // ole : no, status : no
     [
         ExecMethod = ExecuteFilter;
         StateMethod = GetFilterState;
     ]
-    SID_GRAFFILTER_SEPIA // ole : no, status : no
+    SID_GRFFILTER_SEPIA // ole : no, status : no
     [
         ExecMethod = ExecuteFilter;
         StateMethod = GetFilterState;
     ]
-    SID_GRAFFILTER_SOLARIZE // ole : no, status : no
+    SID_GRFFILTER_SOLARIZE // ole : no, status : no
     [
         ExecMethod = ExecuteFilter;
         StateMethod = GetFilterState;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 16:20:59 $
+ *  last change: $Author: ka $ $Date: 2000-11-18 11:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1334,106 +1334,5 @@ FloatingWindow RID_POSITION
     Text[ turkish ] = "Sýralama";
     Text[ language_user1 ] = " ";
 };
-FloatingWindow RID_GRAFFILTERS
-{
-    HelpId = HID_SD_FW_GRAFFILTERS ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Text = "Filter" ;
-    Text [ ENGLISH ] = "Filter" ;
-    Text [ english_us ] = "Filter" ;
-    ToolBox RID_GRAFFILTERS_TBX
-    {
-        SVLook = TRUE ;
-        MenuStrings = TRUE ;
-        Align = BOXALIGN_TOP;
-        LineCount = 3;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = SID_GRAFFILTER_INVERT ;
-                HelpID = SID_GRAFFILTER_INVERT ;
-            };
-            ToolBoxItem
-            {
-                Identifier = SID_GRAFFILTER_SMOOTH ;
-                HelpID = SID_GRAFFILTER_SMOOTH ;
-            };
-            ToolBoxItem
-            {
-                Identifier = SID_GRAFFILTER_SHARPEN ;
-                HelpID = SID_GRAFFILTER_SHARPEN ;
-            };
-            ToolBoxItem
-            {
-                Identifier = SID_GRAFFILTER_REMOVENOISE ;
-                HelpID = SID_GRAFFILTER_REMOVENOISE ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = SID_GRAFFILTER_SOLARIZE ;
-                HelpId = SID_GRAFFILTER_SOLARIZE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = SID_GRAFFILTER_SEPIA ;
-                HelpId = SID_GRAFFILTER_SEPIA ;
-            };
-            ToolBoxItem
-            {
-                Identifier = SID_GRAFFILTER_POSTER ;
-                HelpId = SID_GRAFFILTER_POSTER ;
-            };
-            ToolBoxItem
-            {
-                Identifier = SID_GRAFFILTER_POPART ;
-                HelpId = SID_GRAFFILTER_POPART ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = SID_GRAFFILTER_SOBEL ;
-                HelpId = SID_GRAFFILTER_SOBEL ;
-            };
-            ToolBoxItem
-            {
-                Identifier = SID_GRAFFILTER_EMBOSS ;
-                HelpId = SID_GRAFFILTER_EMBOSS ;
-            };
-            ToolBoxItem
-            {
-                Identifier = SID_GRAFFILTER_MOSAIC ;
-                HelpId = SID_GRAFFILTER_MOSAIC ;
-            };
-        };
-    };
-    Text[ portuguese ] = "Filtros";
-    Text[ russian ] = "Ôèëüòð";
-    Text[ greek ] = "Ößëôñï";
-    Text[ dutch ] = "Filter";
-    Text[ french ] = "Filtre";
-    Text[ spanish ] = "Filtros";
-    Text[ italian ] = "Filtri";
-    Text[ danish ] = "Filter";
-    Text[ swedish ] = "Filter";
-    Text[ polish ] = "Filtr";
-    Text[ portuguese_brazilian ] = "Filter";
-    Text[ japanese ] = "Ì¨ÙÀ";
-    Text[ korean ] = "ÇÊÅÍ";
-    Text[ chinese_simplified ] = "É¸Ñ¡";
-    Text[ chinese_traditional ] = "¹LÂo¾¹";
-    Text[ arabic ] = "ÝáÇÊÑ";
-    Text[ turkish ] = "Filtre";
-    Text[ language_user1 ] = " ";
-};
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:14:15 $
+ *  last change: $Author: ka $ $Date: 2000-11-18 11:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,20 +391,20 @@
             SID_ATTR_GRAF_INVERT;\
             SID_INSERT_SOUND;\
             SID_INSERT_VIDEO;\
-            SID_GRAFTBX_FILTERS;\
-            SID_GRAFFILTER_INVERT;\
-            SID_GRAFFILTER_SMOOTH;\
-            SID_GRAFFILTER_SHARPEN;\
-            SID_GRAFFILTER_REMOVENOISE;\
             SID_OBJECT_TRANSPARENCE;\
             SID_OBJECT_GRADIENT;\
-            SID_GRAFFILTER_SOBEL;\
-            SID_GRAFFILTER_MOSAIC;\
-            SID_GRAFFILTER_EMBOSS;\
-            SID_GRAFFILTER_POSTER;\
-            SID_GRAFFILTER_POPART;\
-            SID_GRAFFILTER_SEPIA;\
-            SID_GRAFFILTER_SOLARIZE;\
+            SID_GRFFILTER;\
+            SID_GRFFILTER_INVERT;\
+            SID_GRFFILTER_SMOOTH;\
+            SID_GRFFILTER_SHARPEN;\
+            SID_GRFFILTER_REMOVENOISE;\
+            SID_GRFFILTER_SOBEL;\
+            SID_GRFFILTER_MOSAIC;\
+            SID_GRFFILTER_EMBOSS;\
+            SID_GRFFILTER_POSTER;\
+            SID_GRFFILTER_POPART;\
+            SID_GRFFILTER_SEPIA;\
+            SID_GRFFILTER_SOLARIZE;\
             SID_ATTR_GRAF_CROP;\
     };\
     IdCount = {\

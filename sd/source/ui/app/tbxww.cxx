@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *  last change: $Author: ka $ $Date: 2000-11-18 11:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,7 @@ SdPopupWindowTbx::SdPopupWindowTbx( USHORT nId, WindowAlign eAlign,
 
     FreeResource();
 
-    if( ( SID_GRAFTBX_FILTERS != nId ) &&
-        ( ( eAlign == WINDOWALIGN_TOP ) || ( eAlign == WINDOWALIGN_BOTTOM ) ) )
+    if( ( eAlign == WINDOWALIGN_TOP ) || ( eAlign == WINDOWALIGN_BOTTOM ) )
     {
        aTbx.GetToolBox().SetAlign( WINDOWALIGN_LEFT );
        SetText( String() );
@@ -285,15 +284,6 @@ SfxPopupWindow* __EXPORT SdTbxControl::CreatePopupWindow()
                     SdResId( RID_INSERT_TBX ), GetBindings() );
         }
         break;
-
-        case SID_GRAFTBX_FILTERS:
-        {
-            pWin = new SdPopupWindowTbx( GetId(), this->GetToolBox().GetAlign(),
-                    SdResId( RID_GRAFFILTERS ),
-                    SdResId( RID_GRAFFILTERS_TBX ), GetBindings() );
-        }
-        break;
-
     }
     if( pWin )
     {
@@ -341,8 +331,7 @@ void __EXPORT SdTbxControl::StateChanged( USHORT nSId,
 
                     if( nSId != SID_ZOOM_TOOLBOX &&
                         nSId != SID_DRAWTBX_INSERT &&
-                        nSId != SID_POSITION &&
-                        nSId != SID_GRAFTBX_FILTERS )
+                        nSId != SID_POSITION )
                     {
                         if( nSId != SID_OBJECT_CHOOSE_MODE &&
                             rTbx.IsItemChecked( SID_OBJECT_CHOOSE_MODE ) )
