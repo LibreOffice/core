@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2001-08-08 09:52:46 $
+ *  last change: $Author: fs $ $Date: 2001-08-13 09:43:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,6 +807,13 @@ sal_Bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL 
     {
         ::rtl::OUString sTypeName = xDetection->queryTypeByURL( aURL.Complete );
         bLoadable = (sTypeName.getLength()>0);
+    }
+
+    if  (   ( sal_False == bLoadable )
+        &&  ( 0 == aURL.Complete.compareToAscii( "private:stream/", 15 ) )
+        )
+    {
+        bLoadable = sal_True;
     }
 
     return bLoadable;
