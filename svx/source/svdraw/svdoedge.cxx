@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-08 09:31:58 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1828,6 +1828,15 @@ void SdrEdgeObj::operator=(const SdrObject& rObj)
 void SdrEdgeObj::TakeObjNameSingul(XubString& rName) const
 {
     rName=ImpGetResStr(STR_ObjNameSingulEDGE);
+
+    String aName( GetName() );
+    if(aName.Len())
+    {
+        rName += sal_Unicode(' ');
+        rName += sal_Unicode('\'');
+        rName += aName;
+        rName += sal_Unicode('\'');
+    }
 }
 
 void SdrEdgeObj::TakeObjNamePlural(XubString& rName) const

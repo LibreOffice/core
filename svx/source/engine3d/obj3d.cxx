@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-08 15:25:52 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1455,6 +1455,15 @@ void E3dObject::CreateWireframe(Polygon3D& rWirePoly, const Matrix4D* pTf,
 void E3dObject::TakeObjNameSingul(XubString& rName) const
 {
     rName=ImpGetResStr(STR_ObjNameSingulObj3d);
+
+    String aName( GetName() );
+    if(aName.Len())
+    {
+        rName += sal_Unicode(' ');
+        rName += sal_Unicode('\'');
+        rName += aName;
+        rName += sal_Unicode('\'');
+    }
 }
 
 /*************************************************************************

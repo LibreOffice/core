@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 11:52:39 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,6 +418,15 @@ SdrObject* SdrUnoObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* 
 void SdrUnoObj::TakeObjNameSingul(XubString& rName) const
 {
     rName = ImpGetResStr(STR_ObjNameSingulUno);
+
+    String aName( GetName() );
+    if(aName.Len())
+    {
+        rName += sal_Unicode(' ');
+        rName += sal_Unicode('\'');
+        rName += aName;
+        rName += sal_Unicode('\'');
+    }
 }
 
 void SdrUnoObj::TakeObjNamePlural(XubString& rName) const

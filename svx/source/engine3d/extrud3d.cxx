@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrud3d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-12-04 14:13:17 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -758,6 +758,15 @@ void E3dExtrudeObj::PostItemChange(const sal_uInt16 nWhich)
 void E3dExtrudeObj::TakeObjNameSingul(XubString& rName) const
 {
     rName=ImpGetResStr(STR_ObjNameSingulExtrude3d);
+
+    String aName( GetName() );
+    if(aName.Len())
+    {
+        rName += sal_Unicode(' ');
+        rName += sal_Unicode('\'');
+        rName += aName;
+        rName += sal_Unicode('\'');
+    }
 }
 
 /*************************************************************************

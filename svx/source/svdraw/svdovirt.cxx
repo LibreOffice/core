@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdovirt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-28 08:07:23 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,15 @@ void SdrVirtObj::TakeObjNameSingul(XubString& rName) const
     rRefObj.TakeObjNameSingul(rName);
     rName.Insert(sal_Unicode('['), 0);
     rName += sal_Unicode(']');
+
+    String aName( GetName() );
+    if(aName.Len())
+    {
+        rName += sal_Unicode(' ');
+        rName += sal_Unicode('\'');
+        rName += aName;
+        rName += sal_Unicode('\'');
+    }
 }
 
 void SdrVirtObj::TakeObjNamePlural(XubString& rName) const

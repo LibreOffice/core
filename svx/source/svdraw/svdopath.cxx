@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-22 17:20:25 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,6 +509,15 @@ void SdrPathObj::TakeObjNameSingul(XubString& rName) const
             case OBJ_FREEFILL: rName=ImpGetResStr(STR_ObjNameSingulFREEFILL); break;
             case OBJ_SPLNFILL: rName=ImpGetResStr(STR_ObjNameSingulPERSPLN); break;
         }
+    }
+
+    String aName( GetName() );
+    if(aName.Len())
+    {
+        rName += sal_Unicode(' ');
+        rName += sal_Unicode('\'');
+        rName += aName;
+        rName += sal_Unicode('\'');
     }
 }
 

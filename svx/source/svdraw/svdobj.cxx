@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-31 11:17:21 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2385,6 +2385,15 @@ void SdrObject::operator=(const SdrObject& rObj)
 void SdrObject::TakeObjNameSingul(XubString& rName) const
 {
     rName=ImpGetResStr(STR_ObjNameSingulNONE);
+
+    String aName( GetName() );
+    if(aName.Len())
+    {
+        rName += sal_Unicode(' ');
+        rName += sal_Unicode('\'');
+        rName += aName;
+        rName += sal_Unicode('\'');
+    }
 }
 
 void SdrObject::TakeObjNamePlural(XubString& rName) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-08 10:27:24 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1192,6 +1192,15 @@ void E3dScene::RotateScene (const Point& rRef, long nWink, double sn, double cs)
 void E3dScene::TakeObjNameSingul(XubString& rName) const
 {
     rName=ImpGetResStr(STR_ObjNameSingulScene3d);
+
+    String aName( GetName() );
+    if(aName.Len())
+    {
+        rName += sal_Unicode(' ');
+        rName += sal_Unicode('\'');
+        rName += aName;
+        rName += sal_Unicode('\'');
+    }
 }
 
 /*************************************************************************

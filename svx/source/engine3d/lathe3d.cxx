@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-12-04 14:13:17 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1071,6 +1071,15 @@ void E3dLatheObj::PostItemChange(const sal_uInt16 nWhich)
 void E3dLatheObj::TakeObjNameSingul(XubString& rName) const
 {
     rName=ImpGetResStr(STR_ObjNameSingulLathe3d);
+
+    String aName( GetName() );
+    if(aName.Len())
+    {
+        rName += sal_Unicode(' ');
+        rName += sal_Unicode('\'');
+        rName += aName;
+        rName += sal_Unicode('\'');
+    }
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sphere3d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-19 16:59:49 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -834,6 +834,15 @@ void E3dSphereObj::PostItemChange(const sal_uInt16 nWhich)
 void E3dSphereObj::TakeObjNameSingul(XubString& rName) const
 {
     rName=ImpGetResStr(STR_ObjNameSingulSphere3d);
+
+    String aName( GetName() );
+    if(aName.Len())
+    {
+        rName += sal_Unicode(' ');
+        rName += sal_Unicode('\'');
+        rName += aName;
+        rName += sal_Unicode('\'');
+    }
 }
 
 /*************************************************************************

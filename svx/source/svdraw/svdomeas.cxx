@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-08 09:31:58 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,6 +919,15 @@ void SdrMeasureObj::operator=(const SdrObject& rObj)
 void SdrMeasureObj::TakeObjNameSingul(XubString& rName) const
 {
     rName=ImpGetResStr(STR_ObjNameSingulMEASURE);
+
+    String aName( GetName() );
+    if(aName.Len())
+    {
+        rName += sal_Unicode(' ');
+        rName += sal_Unicode('\'');
+        rName += aName;
+        rName += sal_Unicode('\'');
+    }
 }
 
 void SdrMeasureObj::TakeObjNamePlural(XubString& rName) const

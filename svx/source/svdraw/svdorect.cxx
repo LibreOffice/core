@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-06 11:09:04 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,8 +469,12 @@ SdrObject* SdrRectObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
 
 void SdrRectObj::TakeObjNameSingul(XubString& rName) const
 {
-    if (IsTextFrame()) SdrTextObj::TakeObjNameSingul(rName);
-    else {
+    if (IsTextFrame())
+    {
+        SdrTextObj::TakeObjNameSingul(rName);
+    }
+    else
+    {
         USHORT nResId=STR_ObjNameSingulRECT;
         if (aGeo.nShearWink!=0) {
             nResId+=4;  // Parallelogramm oder Raute
@@ -481,6 +485,15 @@ void SdrRectObj::TakeObjNameSingul(XubString& rName) const
         }
         if (GetEckenradius()!=0) nResId+=8; // abgerundet
         rName=ImpGetResStr(nResId);
+
+        String aName( GetName() );
+        if(aName.Len())
+        {
+            rName += sal_Unicode(' ');
+            rName += sal_Unicode('\'');
+            rName += aName;
+            rName += sal_Unicode('\'');
+        }
     }
 }
 

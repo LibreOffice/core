@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cube3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-19 16:59:49 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,6 +457,15 @@ void E3dCubeObj::SetSideFlags(UINT16 nNew)
 void E3dCubeObj::TakeObjNameSingul(XubString& rName) const
 {
     rName=ImpGetResStr(STR_ObjNameSingulCube3d);
+
+    String aName( GetName() );
+    if(aName.Len())
+    {
+        rName += sal_Unicode(' ');
+        rName += sal_Unicode('\'');
+        rName += aName;
+        rName += sal_Unicode('\'');
+    }
 }
 
 /*************************************************************************

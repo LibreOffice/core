@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-31 09:42:52 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1663,6 +1663,16 @@ void SdrTextObj::TakeObjNameSingul(XubString& rName) const
     }
 
     rName = aStr;
+
+    String aName( GetName() );
+    if(aName.Len())
+    {
+        rName += sal_Unicode(' ');
+        rName += sal_Unicode('\'');
+        rName += aName;
+        rName += sal_Unicode('\'');
+    }
+
 }
 
 void SdrTextObj::TakeObjNamePlural(XubString& rName) const

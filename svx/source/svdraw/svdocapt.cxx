@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-21 13:33:46 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 12:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,6 +378,15 @@ void SdrCaptionObj::operator=(const SdrObject& rObj)
 void SdrCaptionObj::TakeObjNameSingul(XubString& rName) const
 {
     rName=ImpGetResStr(STR_ObjNameSingulCAPTION);
+
+    String aName( GetName() );
+    if(aName.Len())
+    {
+        rName += sal_Unicode(' ');
+        rName += sal_Unicode('\'');
+        rName += aName;
+        rName += sal_Unicode('\'');
+    }
 }
 
 void SdrCaptionObj::TakeObjNamePlural(XubString& rName) const
