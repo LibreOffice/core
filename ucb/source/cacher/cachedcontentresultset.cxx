@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultset.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-12-05 13:03:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,7 +444,8 @@ class CCRS_PropertySetInfo :
                 public com::sun::star::lang::XTypeProvider,
                 public com::sun::star::beans::XPropertySetInfo
 {
-friend CachedContentResultSet;
+    friend class CachedContentResultSet;
+
     //my Properties
     Sequence< com::sun::star::beans::Property >*
                             m_pProperties;
@@ -800,7 +801,8 @@ sal_Bool SAL_CALL CachedContentResultSet
                 throw SQLException();
 
             sal_Int32 nN = nRow - nLastAppliedPos;
-            for( sal_Int32 nM = 0; nN--; nM++ )
+            sal_Int32 nM;
+            for( nM = 0; nN--; nM++ )
             {
                 if( !m_xResultSetOrigin->next() )
                     break;
@@ -849,7 +851,8 @@ sal_Bool SAL_CALL CachedContentResultSet
             if( !bAfterLastApplied && !bAfterLast && nRow > nLastAppliedPos && impl_isForwardOnly() )
             {
                 sal_Int32 nN = nRow - nLastAppliedPos;
-                for( sal_Int32 nM = 0; nN--; nM++ )
+                sal_Int32 nM;
+                for( nM = 0; nN--; nM++ )
                 {
                     if( !m_xResultSetOrigin->next() )
                         break;
