@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-07-12 13:10:26 $
+ *  last change: $Author: os $ $Date: 2001-10-01 13:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _UNODISPATCH_HXX
 #include <unodispatch.hxx>
 #endif
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
+#endif
 #ifndef _SWVIEW_HXX
 #include <view.hxx>
 #endif
@@ -108,9 +111,9 @@ const sal_Char* cInternalDBChangeNotification = ".uno::Writer/DataSourceChanged"
 
   -----------------------------------------------------------------------*/
 SwXDispatchProviderInterceptor::SwXDispatchProviderInterceptor(SwView& rVw) :
-    m_rView(rVw)
+    m_pView(&rVw)
 {
-    SfxFrame* pFrame = m_rView.GetViewFrame()->GetFrame();
+    SfxFrame* pFrame = m_pView->GetViewFrame()->GetFrame();
     Reference< XFrame> xUnoFrame = pFrame->GetFrameInterface();
     m_xIntercepted = Reference< XDispatchProviderInterception>(xUnoFrame, UNO_QUERY);
     if(m_xIntercepted.is())
@@ -141,7 +144,7 @@ Reference< XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
     ::osl::MutexGuard aGuard(m_aMutex);
     Reference< XDispatch> xResult;
     // create some dispatch ...
-    if(!aURL.Complete.compareToAscii(cURLStart, 23))
+    if(m_pView && !aURL.Complete.compareToAscii(cURLStart, 23))
     {
         if(!aURL.Complete.compareToAscii(cURLFormLetter) ||
             !aURL.Complete.compareToAscii(cURLInsertContent) ||
@@ -149,7 +152,7 @@ Reference< XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
                     !aURL.Complete.compareToAscii(cURLDocumentDataSource))
         {
             if(!m_xDispatch.is())
-                m_xDispatch = new SwXDispatch(m_rView);
+                m_xDispatch = new SwXDispatch(*m_pView);
             xResult = m_xDispatch;
         }
     }
@@ -229,6 +232,46 @@ void SwXDispatchProviderInterceptor::disposing( const EventObject& Source )
         m_xDispatch       = 0;
     }
     m_xIntercepted = NULL;
+}
+/* -----------------------------01.10.2001 14:31------------------------------
+
+ ---------------------------------------------------------------------------*/
+const Sequence< sal_Int8 > & SwXDispatchProviderInterceptor::getUnoTunnelId()
+{
+    static Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
+    return aSeq;
+}
+/* -----------------------------01.10.2001 14:31------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Int64 SwXDispatchProviderInterceptor::getSomething(
+    const Sequence< sal_Int8 >& aIdentifier )
+        throw(RuntimeException)
+{
+    if( aIdentifier.getLength() == 16
+        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+                                        aIdentifier.getConstArray(), 16 ) )
+    {
+            return (sal_Int64)this;
+    }
+    return 0;
+}
+/* -----------------------------01.10.2001 14:32------------------------------
+
+ ---------------------------------------------------------------------------*/
+void    SwXDispatchProviderInterceptor::Invalidate()
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    if (m_xIntercepted.is())
+    {
+        m_xIntercepted->releaseDispatchProviderInterceptor((XDispatchProviderInterceptor*)this);
+        Reference< XComponent> xInterceptedComponent(m_xIntercepted, UNO_QUERY);
+        if (xInterceptedComponent.is())
+            xInterceptedComponent->removeEventListener((XEventListener*)this);
+        m_xDispatch       = 0;
+    }
+    m_xIntercepted = NULL;
+    m_pView = 0;
 }
 /* -----------------------------07.11.00 14:26--------------------------------
 

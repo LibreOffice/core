@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-07-12 13:10:25 $
+ *  last change: $Author: os $ $Date: 2001-10-01 13:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,17 @@
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONCHANGELISTENER_HPP_
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 #include <list>
 #ifndef _OSL_MUTEX_HXX_
@@ -83,10 +89,11 @@
 
 class SwView;
 //---------------------------------------------------------------------------------------------------------------------
-class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper2
+class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper3
 <
     ::com::sun::star::frame::XDispatchProviderInterceptor,
-    ::com::sun::star::lang::XEventListener
+    ::com::sun::star::lang::XEventListener,
+    ::com::sun::star::lang::XUnoTunnel
 >
 {
     ::osl::Mutex                     m_aMutex;
@@ -100,7 +107,7 @@ class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper2
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch>                   m_xDispatch;
 
-    SwView& m_rView;
+    SwView* m_pView;
 
 public:
     SwXDispatchProviderInterceptor(SwView& rView);
@@ -118,6 +125,13 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+
+    //XUnoTunnel
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+
+    // view destroyed
+    void    Invalidate();
 };
 //---------------------------------------------------------------------------------------------------------------------
 struct StatusStruct_Impl

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-13 15:02:59 $
+ *  last change: $Author: os $ $Date: 2001-10-01 13:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,14 @@ SwView_Impl::SwView_Impl(SwView* pShell) :
 --------------------------------------------------*/
 SwView_Impl::~SwView_Impl()
 {
+    Reference<XUnoTunnel> xDispTunnel(xDisProvInterceptor, UNO_QUERY);
+    SwXDispatchProviderInterceptor* pInterceptor = 0;
+    if(xDispTunnel.is() &&
+        0 != (pInterceptor = (SwXDispatchProviderInterceptor*)xDispTunnel->getSomething(
+            SwXDispatchProviderInterceptor::getUnoTunnelId())))
+    {
+        pInterceptor->Invalidate();
+    }
     view::XSelectionSupplier* pTextView = pxXTextView->get();
     ((SwXTextView*)pTextView)->Invalidate();
     delete pxXTextView;
