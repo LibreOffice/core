@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbtdp_tdenumeration.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-09 10:24:08 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,6 @@
 #include "base.hxx"
 #endif
 
-class RegistryTypeReaderLoader;
-
 namespace stoc_rdbtdp
 {
 
@@ -122,7 +120,6 @@ public:
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::TypeClass > & rTypes,
         ::com::sun::star::reflection::TypeDescriptionSearchDepth eDepth,
-        const RegistryTypeReaderLoader & rLoader,
         const RegistryKeyList & rBaseKeys )
             throw ( ::com::sun::star::reflection::NoSuchTypeNameException,
                     ::com::sun::star::reflection::InvalidTypeNameException,
@@ -153,8 +150,7 @@ private:
         const RegistryKeyList & rModuleKeys,
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::TypeClass > & rTypes,
-        ::com::sun::star::reflection::TypeDescriptionSearchDepth eDepth,
-        const RegistryTypeReaderLoader & rLoader );
+        ::com::sun::star::reflection::TypeDescriptionSearchDepth eDepth );
 
     static bool match( ::RTTypeClass eType1,
                        ::com::sun::star::uno::TypeClass eType2 );
@@ -172,7 +168,6 @@ private:
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::TypeClass > m_aTypes;
     ::com::sun::star::reflection::TypeDescriptionSearchDepth m_eDepth;
-    RegistryTypeReaderLoader m_aLoader;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
         m_xContext;
     ::com::sun::star::uno::Reference<
