@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-30 16:44:44 $
+ *  last change: $Author: hdu $ $Date: 2002-09-04 17:36:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@ class FreetypeServerFont : public ServerFont
     virtual bool                GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const;
     virtual bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
     virtual bool                GetGlyphOutline( int nGlyphIndex, PolyPolygon& ) const;
+    virtual int                 GetGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const;
 
     const unsigned char*        GetTable( const char* pName, ULONG* pLength )
                                 { return mpFontInfo->GetTable( pName, pLength ); }
@@ -186,13 +187,9 @@ friend GlyphCache;
     int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* ) const;
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
     virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
-    virtual int                 GetGlyphKernValue( int, int ) const;
     virtual ULONG               GetFontCodeRanges( sal_uInt32* pCodes ) const;
     bool                        ApplyGSUB( const ImplFontSelectData& );
-
-#ifdef ENABLE_CTL
-    virtual bool                InitLayoutEngine();
-#endif // ENABLE_CTL
+    virtual ServerFontLayoutEngine* GetLayoutEngine();
 
 private:
     int                         mnWidth;
@@ -204,6 +201,9 @@ private:
     typedef ::std::hash_map<int,int> GlyphSubstitution;
     GlyphSubstitution           maGlyphSubstitution;
     rtl_UnicodeToTextConverter  maRecodeConverter;
+
+
+    ServerFontLayoutEngine*     mpLayoutEngine;
 };
 
 // -----------------------------------------------------------------------
