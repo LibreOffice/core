@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:22:01 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,9 @@ hidspecial HID_SVX_CONFIG_EVENT       { HelpId = HID_SVX_CONFIG_EVENT; };
 hidspecial HID_SELECTOR_DIALOG        { HelpId = HID_SELECTOR_DIALOG; };
 hidspecial HID_SVX_CONFIG_MENU        { HelpId = HID_SVX_CONFIG_MENU; };
 hidspecial HID_SVX_CONFIG_TOOLBAR     { HelpId = HID_SVX_CONFIG_TOOLBAR; };
-hidspecial HID_CONFIG_EVENT_OFFICE_BASED { HelpId = HID_CONFIG_EVENT_OFFICE_BASED; };
-hidspecial HID_CONFIG_EVENT_DOCUMENT_BASED { HelpId = HID_CONFIG_EVENT_DOCUMENT_BASED; };
 hidspecial HID_SVX_CONFIG_MENU_CONTENTS { HelpId = HID_SVX_CONFIG_MENU_CONTENTS; };
 hidspecial HID_SVX_CONFIG_TOOLBAR_CONTENTS { HelpId = HID_SVX_CONFIG_TOOLBAR_CONTENTS; };
+hidspecial HID_SVX_RUN_MACRO { HelpId = HID_SVX_RUN_MACRO; };
+hidspecial HID_SVX_BASIC_MACRO_ORGANIZER { HelpId = HID_SVX_BASIC_MACRO_ORGANIZER; };
+hidspecial HID_SVX_BASIC_DIALOG_ORGANIZER { HelpId = HID_SVX_BASIC_DIALOG_ORGANIZER; };
+hidspecial HID_SVX_COMMON_MACRO_ORGANIZER { HelpId = HID_SVX_COMMON_MACRO_ORGANIZER; };
