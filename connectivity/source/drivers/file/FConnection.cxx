@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-01 11:42:57 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 11:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,23 +160,22 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     nLen = url.indexOf(':',nLen+1);
     ::rtl::OUString aDSN(url.copy(nLen+1)),aUID,aPWD;
 
+    String aFileName = aDSN;
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
-    aURL.SetSmartURL(aDSN);
-
-
-    //  String aFileName = aURL.PathToFileName();
-    String aFileName = aURL.GetMainURL();
-
-    if(!aFileName.Len())
-        aFileName = aDSN;
-    String aWildcard;
-
-    if (aURL.GetProtocol() == INET_PROT_FILE)
     {
         SvtPathOptions aPathOptions;
         aFileName = aPathOptions.SubstituteVariable(aFileName);
     }
+    aURL.SetURL(aFileName);
+
+
+    //  String aFileName = aURL.PathToFileName();
+    //  String aFileName = aURL.GetMainURL();
+
+    if(!aFileName.Len())
+        aFileName = aDSN;
+    String aWildcard;
 
     ::rtl::OUString aExt;
     const PropertyValue *pBegin  = info.getConstArray();
