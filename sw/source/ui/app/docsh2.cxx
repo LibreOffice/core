@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-09 13:17:15 $
+ *  last change: $Author: mib $ $Date: 2001-02-26 07:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -841,7 +841,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                     ((WildCard&)pFlt->GetWildcard())(),
                                     pFlt->GetTypeName() );
 
-                    if( pFlt->GetUserData().EqualsAscii( FILTER_SW5 ))
+                    if( pFlt->GetUserData().EqualsAscii( FILTER_XML ))
                         pDlg->SetCurFilter( pFlt->GetUIName() );
                 }
 
@@ -1164,7 +1164,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     // Fuer Global-Dokumente bieten wir jetzt auch nur
                     // noch den aktuellen an.
                     pFlt = SwIoSystem::GetFilterOfFormat(
-                            String::CreateFromAscii(FILTER_SW5),
+                            String::CreateFromAscii(FILTER_XML),
                             SwGlobalDocShell::Factory().GetFilterContainer() );
                     nStrId = STR_LOAD_GLOBAL_DOC;
                 }
@@ -1645,9 +1645,10 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     SfxMedium aMed( rURL, STREAM_STD_READ, FALSE );
     if( aMed.IsStorage() )
     {
-        if( pFlt && pFlt->GetVersion() )
-            aMed.GetStorage()->SetVersion( (long)pFlt->GetVersion() );
-        pRead = ReadSw3;
+        ULONG nVersion = pFlt->GetVersion();
+        if( pFlt &&  nVersion )
+            aMed.GetStorage()->SetVersion( (long)nVersion );
+        pRead = pFlt->GetVersion() >= SOFFICE_FILEFORMAT_60 ? ReadXML : ReadSw3;
         // the SW3IO - Reader need the pam/wrtshell, because only then he
         // insert the styles!
         if( bUnoCall )
@@ -1664,7 +1665,7 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
         if( pFlt->GetUserData().EqualsAscii( FILTER_SWG ) ||
             pFlt->GetUserData().EqualsAscii( FILTER_SWGV ))
             pRead = ReadSwg;
-        else if( pFlt->GetUserData().EqualsAscii( FILTER_XML ))
+        else if( pFlt->GetUserData().EqualsAscii( FILTER_XMLP ))
             pRead = ReadXML;
         pReader = new SwReader( aMed, rURL, pDoc );
     }
@@ -1698,6 +1699,9 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.14  2001/02/09 13:17:15  mib
+    FillClass corrected
+
     Revision 1.13  2001/02/06 15:41:26  mib
     real 6.0 file format
 

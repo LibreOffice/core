@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-08 15:51:15 $
+ *  last change: $Author: mib $ $Date: 2001-02-26 07:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,6 +589,20 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
                     }
                     SwReader aRdr( *pStor, aEmptyStr, pDoc );
                     nErr = aRdr.Read( *pReader );
+
+                    // If a XML document is loaded, the global doc/web doc
+                    // flags have to be set, because they aren't loaded
+                    // by this formats.
+                    if( ISA( SwWebDocShell ) )
+                    {
+                        if( !pDoc->IsHTMLMode() )
+                            pDoc->SetHTMLMode( TRUE );
+                    }
+                    if( ISA( SwGlobalDocShell ) )
+                    {
+                        if( !pDoc->IsGlobalDoc() )
+                            pDoc->SetGlobalDoc( TRUE );
+                    }
                 }
 #ifndef PRODUCT
                 else
@@ -811,6 +825,9 @@ void SwDocShell::SubInitNew()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.11  2001/02/08 15:51:15  mtg
+    Added InvalidateModel/ReactivateModel
+
     Revision 1.10  2001/02/06 15:41:26  mib
     real 6.0 file format
 

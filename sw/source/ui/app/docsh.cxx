@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-02-12 11:14:09 $
+ *  last change: $Author: mib $ $Date: 2001-02-26 07:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,9 +402,9 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         }
         // Fuer's Dokument-Einfuegen noch die FF-Version, wenn's der
         // eigene Filter ist.
-        ASSERT( pRead != ReadSw3 || pFlt->GetVersion(),
+        ASSERT( pRead != ReadSw3 || pRead != ReadXML || pFlt->GetVersion(),
                 "Am Filter ist keine FF-Version gesetzt" );
-        if( pRead == ReadSw3 && pFlt->GetVersion() )
+        if( (pRead == ReadSw3 || pRead == ReadXML) && pFlt->GetVersion() )
             aStor->SetVersion( (long)pFlt->GetVersion() );
     }
     // beim Sw3-Reader noch den pIo-Pointer setzen
@@ -631,6 +631,24 @@ BOOL SwDocShell::SaveAs( SvStorage * pStor )
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     if( SfxInPlaceObject::SaveAs( pStor ) )
     {
+        if( GetDoc()->IsGlobalDoc() && !ISA( SwGlobalDocShell ) )
+        {
+            // This is to set the correct class id if SaveAs is
+            // called from SwDoc::SplitDoc to save a normal doc as
+            // global doc. In this case, SaveAs is called at a
+            // normal doc shell, therefore, SfxInplaceObject::SaveAs
+            // will set the wrong class id.
+            SvGlobalName aClassName;
+            ULONG nClipFormat;
+            String aAppName, aLongUserName, aUserName;
+            SfxObjectShellRef xDocSh =
+                new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL );
+            xDocSh->FillClass( &aClassName, &nClipFormat, &aAppName,
+                                &aLongUserName, &aUserName,
+                                pStor->GetVersion() );
+            pStor->SetClass( aClassName, nClipFormat, aUserName );
+        }
+
         if( pDoc->ContainsMSVBasic() )
         {
             SvxImportMSVBasic aTmp( *this, *pIo->GetStorage() );
@@ -760,7 +778,11 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         UpdateDocInfoForSave();
     }
 
-    if( xWriter->IsStgWriter() && xWriter->IsSw3Writer() )
+    if( xWriter->IsStgWriter() &&
+        ( xWriter->IsSw3Writer() ||
+          pFlt->GetUserData().EqualsAscii( FILTER_XML ) ||
+           pFlt->GetUserData().EqualsAscii( FILTER_XMLV ) ||
+           pFlt->GetUserData().EqualsAscii( FILTER_XMLVW ) ) )
     {
         // eigenen Typ ermitteln
         BYTE nMyType = 0;
@@ -772,11 +794,13 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         // gewuenschten Typ ermitteln
         BYTE nSaveType = 0;
         ULONG nSaveClipId = pFlt->GetFormat();
-        if( SOT_FORMATSTR_ID_STARWRITERWEB_50 == nSaveClipId ||
+        if( SOT_FORMATSTR_ID_STARWRITERWEB_60 == nSaveClipId ||
+            SOT_FORMATSTR_ID_STARWRITERWEB_50 == nSaveClipId ||
             SOT_FORMATSTR_ID_STARWRITERWEB_40 == nSaveClipId )
             nSaveType = 1;
-        else if( SOT_FORMATSTR_ID_STARWRITERGLOB_50 == nSaveClipId ||
-                    SOT_FORMATSTR_ID_STARWRITERGLOB_40 == nSaveClipId )
+        else if( SOT_FORMATSTR_ID_STARWRITERGLOB_60 == nSaveClipId ||
+                 SOT_FORMATSTR_ID_STARWRITERGLOB_50 == nSaveClipId ||
+                 SOT_FORMATSTR_ID_STARWRITERGLOB_40 == nSaveClipId )
             nSaveType = 2;
 
         // Flags am Dokument entsprechend umsetzen
@@ -787,7 +811,8 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         {
             GetDoc()->SetHTMLMode( 1 == nSaveType );
             GetDoc()->SetGlobalDoc( 2 == nSaveType );
-            GetDoc()->SetGlblDocSaveLinks( FALSE );
+            if( 2 != nSaveType )
+                GetDoc()->SetGlblDocSaveLinks( FALSE );
         }
 
         // Jetzt das Dokument normal speichern
