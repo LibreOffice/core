@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:29:55 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1161,7 +1161,8 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
             // JP 09.02.99: das zusaetzliche Zeichen immer per Insert einfuegen.
             //              Es ueberschreibt nichts!
             {
-                String s( 0xA0 );       // UNICODE code for no break space
+                String s( static_cast< sal_Unicode >(0xA0) );
+                    // UNICODE code for no break space
                 if( rDoc.Insert( bSttQuote ? nInsPos+1 : nInsPos, s ))
                 {
                     if( !bSttQuote )
