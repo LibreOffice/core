@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:52:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCE_HPP_
 #include <com/sun/star/drawing/PointSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
+#include <com/sun/star/graphic/XGraphic.hpp>
 #endif
 #ifndef _B2D_MATRIX3D_HXX
 #include <goodies/matrix3d.hxx>
@@ -1754,6 +1757,15 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
         ((SdrGrafObj*)pObj)->SetGrafStreamURL( aStreamURL );
         ((SdrGrafObj*)pObj)->ForceSwapOut();
     }
+    else if( pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAPHIC)))
+    {
+        Reference< graphic::XGraphic > xGraphic;
+
+        if( !( aValue >>= xGraphic ) )
+            throw lang::IllegalArgumentException();
+
+        static_cast< SdrGrafObj*>( pObj)->SetGraphic( xGraphic );
+    }
     else
     {
         SvxShape::setPropertyValue(aPropertyName, aValue);
@@ -1812,6 +1824,11 @@ uno::Any SAL_CALL SvxGraphicObject::getPropertyValue( const OUString& aPropertyN
             aAny <<= aStreamURL;
 
         return aAny;
+    }
+    else if( pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAPHIC)) )
+    {
+        Reference< graphic::XGraphic > xGraphic( static_cast< SdrGrafObj* >( pObj )->GetGraphic().GetXGraphic() );
+        return uno::Any( &xGraphic, ::getCppuType((const Reference<graphic::XGraphic>*)0) );
     }
     else
     {
