@@ -1,0 +1,8 @@
+#!/bin/sh
+JARFOLDER=$SOLARVERSION/$INPATH/bin$UPDMINOREXT
+echo $JARFOLDER
+RUNNER=$SOLARSRC/qadevOOo/$INPATH/class/OOoRunner.jar:$SOLARSRC/qadevOOo/$INPATH/class
+JARS=$JARFOLDER/ridl.jar:$JARFOLDER/unoil.jar:$JARFOLDER/sandbox.jar:$JARFOLDER/jurt.jar:$JARFOLDER/juh.jar:$JARFOLDER/java_uno.jar
+CLASSPATH=$JARS:$RUNNER
+echo $CLASSPATH
+java -Xmx120m -cp $CLASSPATH org.openoffice.Runner -tdoc $SOLARSRC/qadevOOo/testdocs $*
