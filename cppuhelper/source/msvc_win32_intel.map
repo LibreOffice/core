@@ -200,6 +200,22 @@ component_getDescriptionFunc;
 ?checkFilePermission@AccessControl@cppu@@QAAXABVOUString@rtl@@0@Z;
 ?checkSocketPermission@AccessControl@cppu@@QAAXABVOUString@rtl@@0@Z;
 
+??0UnoUrl@cppu@@QAE@ABV01@@Z;
+??0UnoUrl@cppu@@QAE@ABVOUString@rtl@@@Z;
+??0UnoUrlDescriptor@cppu@@QAE@ABV01@@Z;
+??0UnoUrlDescriptor@cppu@@QAE@ABVOUString@rtl@@@Z;
+??1UnoUrl@cppu@@QAE@XZ;
+??1UnoUrlDescriptor@cppu@@QAE@XZ;
+??4UnoUrl@cppu@@QAEAAV01@ABV01@@Z;
+??4UnoUrlDescriptor@cppu@@QAEAAV01@ABV01@@Z;
+?getConnection@UnoUrl@cppu@@QBEABVUnoUrlDescriptor@2@XZ;
+?getDescriptor@UnoUrlDescriptor@cppu@@QBEABVOUString@rtl@@XZ;
+?getName@UnoUrlDescriptor@cppu@@QBEABVOUString@rtl@@XZ;
+?getObjectName@UnoUrl@cppu@@QBEABVOUString@rtl@@XZ;
+?getParameter@UnoUrlDescriptor@cppu@@QBE?AVOUString@rtl@@ABV34@@Z;
+?getProtocol@UnoUrl@cppu@@QBEABVUnoUrlDescriptor@2@XZ;
+?hasParameter@UnoUrlDescriptor@cppu@@QBE_NABVOUString@rtl@@@Z;
+
     local:
         *;
 };
