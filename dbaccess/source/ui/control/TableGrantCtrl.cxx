@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-10 14:44:33 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #include "UITools.hxx"
 #endif
 
+using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
@@ -524,5 +525,25 @@ OTableGrantControl::TTablePrivilegeMap::const_iterator OTableGrantControl::findP
     return aFind;
 }
 // -----------------------------------------------------------------------------
+Reference< XAccessible > OTableGrantControl::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
+{
+    USHORT nColumnId = GetColumnId( _nColumnPos );
+    if(nColumnId != COL_TABLE_NAME)
+    {
+        TriState eState = STATE_NOCHECK;
+        BOOL bEnable = FALSE;
+        TTablePrivilegeMap::const_iterator aFind = findPrivilege(_nRow);
+        if(aFind != m_aPrivMap.end())
+        {
+            eState = isAllowed(nColumnId,aFind->second.nRights) ? STATE_CHECK : STATE_NOCHECK;
+            bEnable = isAllowed(nColumnId,aFind->second.nWithGrant);
+        }
+        else
+            eState = STATE_NOCHECK;
 
+        return EditBrowseBox::CreateAccessibleCheckBoxCell( _nRow, _nColumnPos,eState,bEnable );
+    }
+    return EditBrowseBox::CreateAccessibleCell( _nRow, _nColumnPos );
+}
+// -----------------------------------------------------------------------------
 
