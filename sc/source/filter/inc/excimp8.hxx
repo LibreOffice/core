@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-29 09:15:20 $
+ *  last change: $Author: dr $ $Date: 2000-11-29 11:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #ifndef _EXCSCEN_HXX
 #include "excscen.hxx"
 #endif
-#ifndef _EXCPIVOT_HXX
+#ifndef _SC_XCLIMPPIVOTTABLES_HXX
 #include "XclImpPivotTables.hxx"
 #endif
 #ifndef _EXCDEFS_HXX
