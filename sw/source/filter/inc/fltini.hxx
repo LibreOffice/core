@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-05 15:00:51 $
+ *  last change: $Author: jp $ $Date: 2001-11-14 16:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,11 @@ public:
     virtual int GetReaderType();
 
     XMLReader();
+
+    // read the sections of the document, which is equal to the medium.
+    // returns the count of it
+    virtual USHORT GetSectionList( SfxMedium& rMedium,
+                                SvStrings& rStrings ) const;
 };
 
 // die speziellen Writer

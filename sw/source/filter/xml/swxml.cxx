@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-03 16:21:37 $
+ *  last change: $Author: jp $ $Date: 2001-11-14 16:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 
 #pragma hdrstop
 
+
+#define _SVSTDARR_STRINGS
+
 #ifndef _RSCSFX_HXX
 #include <rsc/rscsfx.hxx>
 #endif
@@ -95,6 +98,8 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #endif
 
+#include <svtools/svstdarr.hxx>
+
 #ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
 #include <sfx2/docfile.hxx>
 #endif
@@ -103,6 +108,18 @@
 #endif
 #ifndef _UTL_STREAM_WRAPPER_HXX_
 #include <unotools/streamwrap.hxx>
+#endif
+#ifndef _XMLGRHLP_HXX
+#include <svx/xmlgrhlp.hxx>
+#endif
+#ifndef _XMLEOHLP_HXX
+#include <svx/xmleohlp.hxx>
+#endif
+#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
+#include <comphelper/genericpropertyset.hxx>
+#endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 #ifndef _SWSWERROR_H
@@ -126,24 +143,15 @@
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
-#ifndef _XMLGRHLP_HXX
-#include <svx/xmlgrhlp.hxx>
+#ifndef _SW_XMLSECTIONLIST_HXX
+#include <SwXMLSectionList.hxx>
 #endif
-#ifndef _XMLEOHLP_HXX
-#include <svx/xmleohlp.hxx>
-#endif
-#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
-#include <comphelper/genericpropertyset.hxx>
-#endif
-#ifndef _STATSTR_HRC
-#include <statstr.hrc>
-#endif
-#ifndef _RTL_LOGFILE_HXX_
-#include <rtl/logfile.hxx>
+#ifndef _XMLIMP_HXX
+#include <xmlimp.hxx>
 #endif
 
-#ifndef _XMLIMP_HXX
-#include "xmlimp.hxx"
+#ifndef _STATSTR_HRC
+#include <statstr.hrc>
 #endif
 
 #define LOGFILE_AUTHOR "mb93740"
@@ -732,3 +740,62 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 
     return nRet;
 }
+
+    // read the sections of the document, which is equal to the medium.
+    // returns the count of it
+USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
+                                    SvStrings& rStrings ) const
+{
+    SvStorage* pStg;
+    Reference< lang::XMultiServiceFactory > xServiceFactory =
+            comphelper::getProcessServiceFactory();
+    ASSERT( xServiceFactory.is(),
+            "XMLReader::Read: got no service manager" );
+    if( xServiceFactory.is() && 0 != ( pStg = rMedium.GetStorage() ) )
+    {
+        xml::sax::InputSource aParserInput;
+        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) );
+        aParserInput.sSystemId = sDocName;
+        SvStorageStreamRef xDocStream = pStg->OpenStream( sDocName,
+            ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE ) );
+        xDocStream->Seek( 0L );
+        xDocStream->SetBufferSize( 16*1024 );
+        aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
+
+        // get parser
+        Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
+            OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+        ASSERT( xXMLParser.is(),
+            "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
+        if( xXMLParser.is() )
+        {
+            // get filter
+            Reference< xml::sax::XDocumentHandler > xFilter =
+                                        new SwXMLSectionList( rStrings );
+
+            // connect parser and filter
+            Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
+            xParser->setDocumentHandler( xFilter );
+
+            // parse
+            try
+            {
+                xParser->parseStream( aParserInput );
+            }
+            catch( xml::sax::SAXParseException&  )
+            {
+                // re throw ?
+            }
+            catch( xml::sax::SAXException&  )
+            {
+                // re throw ?
+            }
+            catch( io::IOException& )
+            {
+                // re throw ?
+            }
+        }
+    }
+    return rStrings.Count();
+}
+

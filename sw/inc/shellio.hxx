@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-30 14:36:24 $
+ *  last change: $Author: jp $ $Date: 2001-11-14 16:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ class SvPtrarr;
 class SvStorage;
 class SvStorageStreamRef;
 class SvStream;
+class SvStrings;
 class SvStringsSortDtor;
 class SvxFontItem;
 class SvxMacroTableDtor;
@@ -308,6 +309,10 @@ public:
     virtual BOOL HasGlossaries() const;
     virtual BOOL ReadGlossaries( SwTextBlocks&, BOOL bSaveRelFiles ) const;
 
+    // read the sections of the document, which is equal to the medium.
+    // returns the count of it
+    virtual USHORT GetSectionList( SfxMedium& rMedium,
+                                    SvStrings& rStrings ) const;
 private:
     virtual ULONG Read(SwDoc &,SwPaM &,const String &)=0;
 
@@ -359,6 +364,11 @@ public:
           Sw3Io* GetSw3Io()                 { return pIO; }
     const Sw3Io* GetSw3Io() const           { return pIO; }
           void   SetSw3Io( Sw3Io* pIo )     { pIO = pIo; }
+
+    // read the sections of the document, which is equal to the medium.
+    // returns the count of it
+    virtual USHORT GetSectionList( SfxMedium& rMedium,
+                                SvStrings& rStrings ) const;
 };
 
 /*  */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-10-09 14:40:52 $
+ *  last change: $Author: jp $ $Date: 2001-11-14 16:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
 #endif
+
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
@@ -111,6 +112,9 @@
 #define ITEMID_SIZE 0
 #include <svx/sizeitem.hxx>
 #endif
+#ifndef _SVX_BACKGRND_HXX //autogen
+#include <svx/backgrnd.hxx>
+#endif
 #ifndef _OFA_HTMLCFG_HXX
 #include <offmgr/htmlcfg.hxx>
 #endif
@@ -126,12 +130,6 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>                      // fuers SwSectionFmt-Array
-#endif
-#ifndef _SW3IO_HXX
-#include <sw3io.hxx>                    //fuer lcl_ReadSections
-#endif
-#ifndef _SW_XMLSECTIONLIST_HXX
-#include <SwXMLSectionList.hxx>                 //fuer lcl_ReadSections
 #endif
 #ifndef _REGIONSW_HXX
 #include <regionsw.hxx>
@@ -160,10 +158,12 @@
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
 #endif
-#ifndef _SVX_BACKGRND_HXX //autogen
-#include <svx/backgrnd.hxx>
+#ifndef _SWUNODEF_HXX
+#include <swunodef.hxx>
 #endif
-
+#ifndef _SHELLIO_HXX
+#include <shellio.hxx>
+#endif
 
 #ifndef _HELPID_H
 #include <helpid.h>
@@ -180,25 +180,6 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_INPUTSOURCE_HPP_
-#include <com/sun/star/xml/sax/InputSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP_
-#include <com/sun/star/xml/sax/XParser.hpp>
-#endif
-#ifndef _UTL_STREAM_WRAPPER_HXX_
-#include <unotools/streamwrap.hxx>
-#endif
-
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
-using namespace ::rtl;
 
 #define FILE_NAME_LENGTH 17
 
@@ -469,7 +450,7 @@ BOOL SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
             if (aPasswdDlg.Execute())
             {
                 String sNewPasswd( aPasswdDlg.GetPassword() );
-                Sequence <sal_Int8 > aNewPasswd;
+                UNO_NMSPC::Sequence <sal_Int8 > aNewPasswd;
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                 if(aNewPasswd == pRepr->GetPasswd())
                 {
@@ -629,7 +610,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
     aHideCB     .Enable(TRUE);
     aProtectCB  .Enable(TRUE);
     aFileCB     .Enable(TRUE);
-    ::com::sun::star::uno::Sequence <sal_Int8> aCurPasswd;
+    UNO_NMSPC::Sequence <sal_Int8> aCurPasswd;
     if( 1 < pBox->GetSelectionCount() )
     {
         aHideCB.EnableTriState( TRUE );
@@ -830,7 +811,7 @@ IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
         SwSectionFmt* pFmt = aOrigArray[ pRepr->GetArrPos() ];
         if( !pRepr->GetSection().IsProtectFlag())
-            pRepr->GetSection().SetPasswd(Sequence <sal_Int8 >());
+            pRepr->GetSection().SetPasswd(UNO_NMSPC::Sequence <sal_Int8 >());
         USHORT nNewPos = rDocFmts.GetPos( pFmt );
         if( USHRT_MAX != nNewPos )
         {
@@ -1343,7 +1324,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
             pRepr->GetSection().SetPasswd(pRepr->GetTempPasswd());
         }
         else
-            pRepr->GetSection().SetPasswd(Sequence <sal_Int8 >());
+            pRepr->GetSection().SetPasswd(UNO_NMSPC::Sequence <sal_Int8 >());
         pEntry = aTree.NextSelected(pEntry);
     }
     return 0;
@@ -1545,93 +1526,32 @@ USHORT lcl_GetRegion( const String& rRegionName, SwWrtShell& rWrtShell )
 void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox )
 {
     rBox.Clear();
-    if( rMedium.IsStorage() )
+    SvStorage* pStg;
+    if( rMedium.IsStorage() && 0 != (pStg = rMedium.GetStorage() ) )
     {
-        SvStorageRef aStor = rMedium.GetStorage();
-        ULONG nFormat = aStor->GetFormat();
-
-            // ist das unser eigenes Format?
-        if( aStor.Is() && (
-            SOT_FORMATSTR_ID_STARWRITER_50 == nFormat ||
-            SOT_FORMATSTR_ID_STARWRITER_40 == nFormat ||
-            SOT_FORMATSTR_ID_STARWRITER_30 == nFormat ||
-            SOT_FORMATSTR_ID_STARWRITERGLOB_50 == nFormat ||
-            SOT_FORMATSTR_ID_STARWRITERGLOB_40 == nFormat ) )
+        SvStringsDtor aArr( 10, 10 );
+        switch( pStg->GetFormat() )
         {
-            // Dann noch die Fileformat-Version vom
-            // Filter abholen.
-            const SfxFilter* pFlt = rMedium.GetFilter();
-            ASSERT( pFlt && pFlt->GetVersion(),
-                    "Kein Filter oder Filter ohne FF-Version" );
-            if( pFlt && pFlt->GetVersion() )
-                aStor->SetVersion( (long)pFlt->GetVersion() );
-
-            Sw3Io& rIo = *rSh.GetView().GetDocShell()->GetIoSystem();
-            SvStringsDtor aArr( 10, 10 );
-            if( !rIo.GetSectionList( &aStor, (SvStrings&)aArr ) && aArr.Count() )
+        case SOT_FORMATSTR_ID_STARWRITER_50:
+        case SOT_FORMATSTR_ID_STARWRITER_40:
+        case SOT_FORMATSTR_ID_STARWRITER_30:
+        case SOT_FORMATSTR_ID_STARWRITERGLOB_50:
+        case SOT_FORMATSTR_ID_STARWRITERGLOB_40:
             {
-                for( USHORT n = 0; n < aArr.Count(); ++n )
-                    rBox.InsertEntry( *aArr[ n ] );
+                Sw3Reader* pRdr = (Sw3Reader*)ReadSw3;
+                Sw3Io* pOldIo = pRdr->GetSw3Io();
+                  pRdr->SetSw3Io( rSh.GetView().GetDocShell()->GetIoSystem() );
+                pRdr->GetSectionList( rMedium, (SvStrings&) aArr );
+                  pRdr->SetSw3Io( pOldIo );
             }
+            break;
+        case SOT_FORMATSTR_ID_STARWRITER_60:
+        case SOT_FORMATSTR_ID_STARWRITERGLOB_60:
+            ReadXML->GetSectionList( rMedium, (SvStrings&) aArr );
+            break;
         }
-        else if ( aStor.Is() &&
-                ( SOT_FORMATSTR_ID_STARWRITER_60 == nFormat ||
-                  SOT_FORMATSTR_ID_STARWRITERGLOB_60 == nFormat ) )
-        {
-            SvStringsDtor aArr( 10, 10 );
-            Reference< lang::XMultiServiceFactory > xServiceFactory =
-                    comphelper::getProcessServiceFactory();
-            ASSERT( xServiceFactory.is(),
-                    "XMLReader::Read: got no service manager" );
-            if( !xServiceFactory.is() )
-                return;
-
-            xml::sax::InputSource aParserInput;
-            OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) );
-            aParserInput.sSystemId = sDocName;
-            SvStorageStreamRef xDocStream = aStor->OpenStream( sDocName, ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE ) );
-            xDocStream->Seek( 0L );
-            xDocStream->SetBufferSize( 16*1024 );
-            aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
-
-            // get parser
-            Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
-            ASSERT( xXMLParser.is(),
-                "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
-            if( !xXMLParser.is() )
-                return;
-
-            // get filter
-            Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( (SvStrings&)aArr );
-
-            // connect parser and filter
-            Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
-            xParser->setDocumentHandler( xFilter );
-
-            // parse
-            try
-            {
-                xParser->parseStream( aParserInput );
-            }
-            catch( xml::sax::SAXParseException&  )
-            {
-                // re throw ?
-            }
-            catch( xml::sax::SAXException&  )
-            {
-                // re throw ?
-            }
-            catch( io::IOException& )
-            {
-                // re throw ?
-            }
-            if( aArr.Count() )
-            {
-                for( USHORT n = 0; n < aArr.Count(); ++n )
-                    rBox.InsertEntry( *aArr[ n ] );
-            }
-        }
+        for( USHORT n = 0; n < aArr.Count(); ++n )
+            rBox.InsertEntry( *aArr[ n ] );
     }
 }
 /* -----------------21.05.99 10:16-------------------
@@ -2391,197 +2311,4 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
         ((SwColumnPage&)rPage).ShowBalance(TRUE);
 }
 
-/*-------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.16  2001/08/07 09:27:19  os
-    #90616# reset password checkbox after cancel
-
-    Revision 1.15  2001/07/05 13:43:00  ama
-    Chg #89181#: New data exchange
-
-    Revision 1.14  2001/07/05 13:26:33  ama
-    Chg #89181#: New data exchange
-
-    Revision 1.13  2001/07/04 09:02:45  os
-    #89021# redesign
-
-    Revision 1.12  2001/06/20 11:20:01  os
-    #87139# use default font for tree
-
-    Revision 1.11  2001/06/03 14:04:38  fme
-    Fix #86988#: Redesign of dialogs
-
-    Revision 1.10  2001/05/30 07:35:37  os
-    #87559# password handling corrected
-
-    Revision 1.9  2001/05/16 08:31:52  os
-    #86819# invalid assertion removed
-
-    Revision 1.8  2001/04/27 12:10:09  os
-    password at each section
-
-    Revision 1.7  2001/03/07 17:18:52  mtg
-    Content.xml -> content.xml
-
-    Revision 1.6  2001/03/02 14:38:53  jp
-    password change: use sequence instead of string
-
-    Revision 1.5  2001/03/02 14:07:11  os
-    extended numbering types available
-
-    Revision 1.4  2001/02/23 15:05:32  os
-    Issue #413#: use unquoted URLs
-
-    Revision 1.3  2001/02/16 09:31:07  mtg
-    Added XML support for Section Lists
-
-    Revision 1.2  2000/10/20 13:40:42  jp
-    use correct INetURL-Decode enum
-
-    Revision 1.1.1.1  2000/09/18 17:14:34  hr
-    initial import
-
-    Revision 1.176  2000/09/18 16:05:21  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.175  2000/08/17 14:03:56  jp
-    UI with decode URL
-
-    Revision 1.174  2000/08/14 13:22:59  os
-    #77401# additional flag for 'Condition'
-
-    Revision 1.173  2000/08/01 16:55:55  jp
-    Bug #72901#: FillItemSet - ask the right control
-
-    Revision 1.172  2000/07/26 16:28:28  jp
-    Bug #77158#: InsertRegionDialog - take complete Itemset
-
-    Revision 1.171  2000/07/21 13:26:56  os
-    #77029# column dialog works again
-
-    Revision 1.170  2000/07/10 10:01:23  os
-    #76625# column item conversion
-
-    Revision 1.169  2000/07/03 08:08:35  os
-    #72742# resource warnings corrected
-
-    Revision 1.168  2000/06/26 13:10:14  os
-    INetURLObject::SmartRelToAbs removed
-
-    Revision 1.167  2000/06/20 14:49:49  os
-    #70060# less occurences of columns in HTML
-
-    Revision 1.166  2000/06/13 11:06:54  os
-    include is back
-
-    Revision 1.165  2000/06/07 13:19:48  os
-    include removed
-
-    Revision 1.164  2000/05/26 07:21:29  os
-    old SW Basic API Slots removed
-
-    Revision 1.163  2000/04/13 08:01:20  os
-    UNICODE
-
-    Revision 1.162  2000/03/03 15:16:59  os
-    StarView remainders removed
-
-    Revision 1.161  2000/02/25 13:46:57  jp
-    Bug #73596#: wrong name for regions
-
-    Revision 1.160  2000/02/11 14:44:46  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.159  2000/01/31 10:14:11  os
-    #72343# Background/Footnote/Endnote attributes - not from parent
-
-    Revision 1.158  2000/01/04 15:35:39  os
-    #71411# balanced columns
-
-    Revision 1.157  1999/12/01 09:09:42  os
-    #70321# dont show index sections
-
-    Revision 1.156  1999/11/17 14:58:57  os
-    no foot/endnotes in html
-
-    Revision 1.155  1999/11/08 19:35:39  jp
-    little bugfixes for Foot-/Endnote attributes
-
-    Revision 1.154  1999/11/08 18:07:13  jp
-    numberformat for Foot-/Endnotes at sectionend
-
-    Revision 1.153  1999/11/03 13:49:46  jp
-    SwFmtFtn-/-EndAtTxtEnd: change to EnumItem
-
-    Revision 1.152  1999/10/21 17:47:51  jp
-    have to change - SearchFile with SfxIniManager, dont use SwFinder for this
-
-    Revision 1.151  1999/10/21 12:45:50  os
-    CHG: SfxPasswordDialog
-
-    Revision 1.150  1999/09/15 09:58:34  os
-    footnotes and endnotes in sections
-
-    Revision 1.149  1999/07/30 11:32:26  OS
-    TOXBase in sections
-
-
-      Rev 1.148   30 Jul 1999 13:32:26   OS
-   TOXBase in sections
-
-      Rev 1.147   28 Jul 1999 13:03:48   OS
-   TOXBase in sections
-
-      Rev 1.146   13 Jul 1999 12:56:00   OS
-   default section names are indexed
-
-      Rev 1.145   08 Jul 1999 09:04:24   OS
-   #67441# WB_HSCROLL
-
-      Rev 1.144   25 Jun 1999 15:45:18   OS
-   #67229# HelpId for PasswordDialog in foramt/sections
-
-      Rev 1.143   07 Jun 1999 13:51:30   OS
-   #65686# Multiselektion beim Aufheben richtig behandeln
-
-      Rev 1.142   27 May 1999 12:54:44   OS
-   Einf?gen/Bearbeiten von Spalten ueberarbeitet
-
-      Rev 1.141   21 May 1999 15:25:04   OS
-   #66310# Bereiche mit Hintergrund, TabDialog fuers Einfuegen
-
-      Rev 1.140   19 Mar 1999 13:34:24   OS
-   #63701# unbenutztes Break-Attribut aus den Sections entfernt
-
-      Rev 1.139   05 Mar 1999 20:09:32   JP
-   Bug #62914#: Handling des Dialoges verbessert
-
-      Rev 1.138   03 Mar 1999 18:21:44   JP
-   Bug #57749#: Spalten nur setzen wenn sie im OutputSet des Dialoges vorhanden sind
-
-      Rev 1.137   05 Feb 1999 12:54:18   OS
-   #61096# nach dem letzten aufheben kommt der Fokus auf OK
-
-      Rev 1.136   28 Jan 1999 18:12:22   JP
-   Task #57749#: Undo von Bereichs-Attributen (Spalten, Hintergr...)
-
-      Rev 1.135   27 Jan 1999 15:48:50   AMA
-   Fix #57749#: Der Spaltendialog bekommt ein Gedaechtnis
-
-      Rev 1.134   30 Nov 1998 14:55:40   OS
-   #59995# richtige Abwahl verknuepfter Bereiche, auch in Mehrfachselektion
-
-      Rev 1.133   17 Nov 1998 22:18:22   JP
-   Task #59398#: ClipboardFormatId Umstellungen
-
-      Rev 1.132   12 Nov 1998 15:06:48   JP
-   Bug #54342#: auch bei GlobalDocs das Filepasswort an die Section uebertragen
-
-      Rev 1.131   28 Oct 1998 18:07:28   JP
-   Bug #54342#: File-Passwort von der Section merken und vom Medium besorgen
-
-      Rev 1.130   13 Oct 1998 12:47:28   OM
-   #57749# UI fuer spaltige Bereiche
-
--------------------------------------------------------------------------*/
 

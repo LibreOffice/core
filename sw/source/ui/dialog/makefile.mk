@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: os $ $Date: 2001-05-15 10:00:33 $
+#   last change: $Author: jp $ $Date: 2001-11-14 16:30:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,9 +102,6 @@ SLOFILES =  \
         $(SLO)$/ascfldlg.obj \
         $(SLO)$/docstdlg.obj \
         $(SLO)$/macassgn.obj \
-        $(SLO)$/regionsw.obj
-
-EXCEPTIONSFILES = \
         $(SLO)$/regionsw.obj
 
 # --- Tagets -------------------------------------------------------

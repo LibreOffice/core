@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-30 14:38:12 $
+ *  last change: $Author: jp $ $Date: 2001-11-14 16:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 
 #pragma hdrstop
 
+#define _SVSTDARR_STRINGS
+
 #include <string.h>
 #include <stdio.h>          // sscanf
 
@@ -80,6 +82,7 @@
 #ifndef _PARHTML_HXX //autogen
 #include <svtools/parhtml.hxx>
 #endif
+#include <svtools/svstdarr.hxx>
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
 #endif
@@ -394,6 +397,23 @@ ULONG Sw3Reader::Read( SwDoc &rDoc, SwPaM &rPam, const String & )
         nRet = ERR_SWG_READ_ERROR;
     }
     return nRet;
+}
+
+    // read the sections of the document, which is equal to the medium.
+    // returns the count of it
+USHORT Sw3Reader::GetSectionList( SfxMedium& rMedium,
+                                    SvStrings& rStrings ) const
+{
+    SvStorageRef aStg( rMedium.GetStorage() );
+    const SfxFilter* pFlt = rMedium.GetFilter();
+    ASSERT( pFlt && pFlt->GetVersion(),
+                                "Kein Filter oder Filter ohne FF-Version" );
+    if( pFlt && pFlt->GetVersion() )
+        aStg->SetVersion( (long)pFlt->GetVersion() );
+
+    if( pIO )
+        pIO->GetSectionList( &aStg, rStrings );
+    return rStrings.Count();
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-08 18:55:01 $
+ *  last change: $Author: jp $ $Date: 2001-11-14 16:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,6 +800,13 @@ void Reader::ResetFrmFmts( SwDoc& rDoc )
         pFrmFmt->ResetAttr( RES_UL_SPACE );
         pFrmFmt->ResetAttr( RES_BOX );
     }
+}
+
+    // read the sections of the document, which is equal to the medium.
+    // returns the count of it
+USHORT Reader::GetSectionList( SfxMedium&, SvStrings& ) const
+{
+    return 0;
 }
 
 // ------------------------------------------------
