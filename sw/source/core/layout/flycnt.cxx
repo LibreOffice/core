@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-30 14:58:48 $
+ *  last change: $Author: fme $ $Date: 2002-10-30 15:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1072,7 +1072,15 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
     //Eine derartige Situation tritt z.b. auf, wenn der Point nicht im Text-
     //fluss sondern in irgendwelchen Raendern steht.
     if ( nDownLst.nMain == LONG_MAX && nUpLst.nMain == LONG_MAX )
+    {
+        // #102861# If an OLE objects, which is contained in a fly frame
+        // is resized in inplace mode and the new Position is outside the
+        // fly frame, we do not want to leave our fly frame.
+        if ( pCnt->IsInFly() )
+            return pCnt;
+
         return ::lcl_FindCnt( aNew, pCnt, bBody, bFtn );
+    }
     else
         return nDownLst < nUpLst ? pDownLst : pUpLst;
 }
