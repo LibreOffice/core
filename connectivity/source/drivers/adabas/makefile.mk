@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: patrick.luby $ $Date: 2000-09-23 00:23:36 $
+#   last change: $Author: fs $ $Date: 2000-10-05 08:35:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -184,7 +184,12 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
     $(OSLLIB)					\
-    $(SALLIB)
+    $(SALLIB)					\
+    $(COMPHELPERLIB)
+
+.IF "$(COMPHELPERLIB)" == ""
+SHL1STDLIBS+= icomphelp2.lib
+.ENDIF
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)

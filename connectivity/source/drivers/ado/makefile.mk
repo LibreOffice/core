@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+#   last change: $Author: fs $ $Date: 2000-10-05 08:37:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -202,7 +202,12 @@ SHL1STDLIBS=\
     $(SALLIB)					\
     ole32.lib					\
     oleaut32.lib				\
-    uuid.lib
+    uuid.lib					\
+    $(COMPHELPERLIB)
+
+.IF "$(COMPHELPERLIB)" == ""
+SHL1STDLIBS+= icomphelp2.lib
+.ENDIF
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
