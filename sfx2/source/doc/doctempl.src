@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 20:43:42 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,16 +279,16 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ korean ] =
     {
-        < "Default" ; > ;
-        < "Business correspondence" ; > ;
-        < "Other business documents" ; > ;
-        < "Personal correspondence and documents" ; > ;
-        < "Forms and contracts" ; > ;
-        < "Finances" ; > ;
-        < "Education" ; > ;
-        < "Presentation backgrounds" ; > ;
-        < "Presentations" ; > ;
-        < "Miscellaneous" ; > ;
+        < "±βΊ»" ; > ;
+        < "ΎχΉ«Ώλ΅΅Ελ½Ε£΅" ; > ;
+        < "±βΕΈ΅΅ΎχΉ«΅΅Ή®Ό­" ; > ;
+        < "°³ΐΞ΅΅Ελ½Ε³»Ώλ°ϊ΅΅Ή®Ό­" ; > ;
+        < "Ύη½Δ°ϊ΅΅°θΎΰ" ; > ;
+        < "ΘΈ°θ" ; > ;
+        < "±³ΐ°" ; > ;
+        < "ΗΑΈ®Α¨ΕΧΐΜΌΗ΅΅Ήθ°ζ" ; > ;
+        < "ΗΑΈ®Α¨ΕΧΐΜΌΗ" ; > ;
+        < "±βΕΈ" ; > ;
     };
     ItemList[ chinese_simplified ] =
     {
@@ -378,7 +378,7 @@ String RID_CNT_STR_WAITING
     Text[ chinese_traditional ] = "¦wΈΛ§Ή¦¨«α­Ί¦Έªμ©l¤Ζ %PRODUCTNAME µ{¦΅³΅¥σ΅C";
     Text[ arabic ] = "ΜΗΡν ΗαΒδ ΚενΖΙ γίζδΗΚ %PRODUCTNAME ααγΡΙ ΗαΓζαμ ΘΪΟ ΗδΚεΗΑ ΪγανΙ ΗαΚΛΘνΚ.";
     Text[ greek ] = "Αρχικοποίηση των στοιχείων του %PRODUCTNAME για πρώτη φορά μετά την εγκατάσταση.";
-    Text[ korean ] = "%PRODUCTNAME ±ΈΌΊΏδΌÒ΄Β Ό³Δ΅ΗΡ ΘΔ Γ³ΐ½Ώ΅ ΗΡΉψ ΓΚ±βΘ­µΛ΄Ο΄Ω.";
+    Text[ korean ] = "%PRODUCTNAME ±ΈΌΊΏδΌÒ΄Β Ό³Δ΅ΗΡ ΘΔ ΐΜΑ¦ ΗΡΉψ ΓΚ±βΘ­µΛ΄Ο΄Ω.";
     Text[ turkish ] = "Kurulumdan sonra %PRODUCTNAME bileώenleri ώimdi yeniden baώlatύlacak.";
     Text[ language_user1 ] = " ";
 };
