@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:13:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,8 @@
 #include <flyfrm.hxx>
 #endif
 
+#include <set>
+
 SV_IMPL_PTRARR( SwPageFlyCache, SwFlyCachePtr )
 
 /*-----------------28.5.2001 10:06------------------
@@ -185,6 +187,12 @@ BOOL SwLayCacheImpl::Read( SvStream& rStream )
     SwLayCacheIoImpl aIo( rStream, FALSE );
     if( aIo.GetMajorVersion() > SW_LAYCACHE_IO_VERSION_MAJOR )
         return FALSE;
+
+    // Due to an evil bug in the layout cache (#102759#), we cannot trust the
+    // sizes of fly frames which have been written using the "old" layout cache.
+    // This flag should indicate that we do not want to trust the width and
+    // height of fly frames
+    bUseFlyCache = aIo.GetMinorVersion() >= 1;
 
     BYTE cFlags;
     UINT32 nIndex, nOffset;
@@ -777,17 +785,29 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
         nParagraphCnt += nRows;
         if( !pImpl && nParagraphCnt > nMaxParaPerPage + 10 )
         {
-            SwFrm *pTmp = ((SwTabFrm*)rpFrm)->Lower();
-            if( pTmp->GetNext() )
-                pTmp = pTmp->GetNext();
-            pTmp = ((SwRowFrm*)pTmp)->Lower();
-            USHORT nCnt = 0;
-            do
+            // OD 09.04.2003 #108698# - improve heuristics:
+            // Assume that a table, which has more than three times the quantity
+            // of maximal paragraphs per page rows, consists of rows, which have
+            // the height of a normal paragraph. Thus, allow as much rows per page
+            // as much paragraphs are allowed.
+            if ( nRows > ( 3*nMaxParaPerPage ) )
             {
-                ++nCnt;
-                pTmp = pTmp->GetNext();
-            } while( pTmp );
-            nMaxRowPerPage = Max( ULONG(2), nMaxParaPerPage / nCnt );
+                nMaxRowPerPage = nMaxParaPerPage;
+            }
+            else
+            {
+                SwFrm *pTmp = ((SwTabFrm*)rpFrm)->Lower();
+                if( pTmp->GetNext() )
+                    pTmp = pTmp->GetNext();
+                pTmp = ((SwRowFrm*)pTmp)->Lower();
+                USHORT nCnt = 0;
+                do
+                {
+                    ++nCnt;
+                    pTmp = pTmp->GetNext();
+                } while( pTmp );
+                nMaxRowPerPage = Max( ULONG(2), nMaxParaPerPage / nCnt );
+            }
             bLongTab = TRUE;
         }
     }
@@ -803,7 +823,10 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
     ULONG nBreakIndex = ( pImpl && nIndex < pImpl->Count() ) ?
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
 #endif
-    if( !bFirst )
+    // OD 09.04.2003 #108698# - always split a big tables.
+    if ( !bFirst ||
+         ( rpFrm->IsTabFrm() && bLongTab )
+       )
     {
         ULONG nRowCount = 0;
         do
@@ -953,6 +976,22 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
     return bRet;
 }
 
+struct SdrObjectCompare
+{
+  bool operator()( const SdrObject* pF1, const SdrObject* pF2 ) const
+  {
+    return pF1->GetOrdNum() < pF2->GetOrdNum();
+  }
+};
+
+struct FlyCacheCompare
+{
+  bool operator()( const SwFlyCache* pC1, const SwFlyCache* pC2 ) const
+  {
+    return pC1->nOrdNum < pC2->nOrdNum;
+  }
+};
+
  /*-----------------28.6.2001 14:40------------------
   * SwLayHelper::_CheckFlyCache(..)
   * If a new page is inserted, the last page is analysed.
@@ -970,6 +1009,18 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
     {
         SwSortDrawObjs &rObjs = *pPage->GetSortedObjs();
         USHORT nPgNum = pPage->GetPhyPageNum();
+
+/*
+
+        //
+        // NOTE: This code assumes that all objects have already been
+        // inserted into the drawing layout, so that the cached objects
+        // can be identified by their ordnum. Unfortunately this function
+        // is called with page n if page n+1 has been inserted. Thus
+        // not all the objects have been inserted and the ordnums cannot
+        // be used to identify the objects.
+        //
+
         for ( USHORT i = 0; i < rObjs.Count(); ++i )  // check objects
         {
             SdrObject *pO = rObjs[i];
@@ -1010,6 +1061,79 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
                 }
             }
         }
+ */
+
+        //
+        // NOTE: Here we do not use the absolute ordnums but
+        // relative ordnums for the objects on this page.
+
+        // skip fly frames from pages before the current page
+        SwFlyCache* pFlyC;
+        while( nFlyIdx < nFlyCount && ( pFlyC = pImpl->
+               GetFlyCache(nFlyIdx) )->nPageNum < nPgNum)
+            ++nFlyIdx;
+
+        // sort cached objects on this page by ordnum
+        std::set< const SwFlyCache*, FlyCacheCompare > aFlyCacheSet;
+        USHORT nIdx = nFlyIdx;
+
+        while( nIdx < nFlyCount && ( pFlyC = pImpl->
+               GetFlyCache( nIdx ) )->nPageNum == nPgNum )
+        {
+            aFlyCacheSet.insert( pFlyC );
+            ++nIdx;
+        }
+
+        // sort objects on this page by ordnum
+        std::set< const SdrObject*, SdrObjectCompare > aFlySet;
+        for ( USHORT i = 0; i < rObjs.Count(); ++i )
+        {
+            SdrObject* pO = rObjs[i];
+            if ( pO->IsWriterFlyFrame() )  // a text frame?
+            {
+                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                if( pFly->GetAnchor() &&
+                    !pFly->GetAnchor()->FindFooterOrHeader() )
+                {
+                    const SwContact *pC = (SwContact*)GetUserCall(pO);
+                    if( pC )
+                    {
+                        aFlySet.insert( pO );
+                    }
+                }
+            }
+        }
+
+        if ( aFlyCacheSet.size() == aFlySet.size() )
+        {
+            std::set< const SwFlyCache*, FlyCacheCompare >::iterator aFlyCacheSetIt =
+                    aFlyCacheSet.begin();
+            std::set< const SdrObject*, SdrObjectCompare >::iterator aFlySetIt =
+                    aFlySet.begin();
+
+            while ( aFlyCacheSetIt != aFlyCacheSet.end() )
+            {
+                const SwFlyCache* pFlyC = *aFlyCacheSetIt;
+                SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)*aFlySetIt)->GetFlyFrm();
+
+                if ( pFly->Frm().Left() == WEIT_WECH )
+                {
+                    // we get the stored information
+                    pFly->Frm().Pos().X() = pFlyC->Left() +
+                                            pPage->Frm().Left();
+                    pFly->Frm().Pos().Y() = pFlyC->Top() +
+                                            pPage->Frm().Top();
+                    if ( pImpl->IsUseFlyCache() )
+                    {
+                        pFly->Frm().Width( pFlyC->Width() );
+                        pFly->Frm().Height( pFlyC->Height() );
+                    }
+                }
+
+                ++aFlyCacheSetIt;
+                ++aFlySetIt;
+            }
+        }
     }
 }
 
@@ -1038,9 +1162,12 @@ BOOL SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
         USHORT nCnt = pCache->GetFlyCount();
         ULONG nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
         SwFlyCache* pFlyC;
+
+        // skip fly frames from pages before the current page
         while( nIdx < nCnt &&
                nPgNum > (pFlyC = pCache->GetFlyCache( nIdx ))->nPageNum )
             ++nIdx;
+
         while( nIdx < nCnt &&
                nOrdNum != (pFlyC = pCache->GetFlyCache( nIdx ))->nOrdNum )
             ++nIdx;
@@ -1054,8 +1181,11 @@ BOOL SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
                 rpPage = pPage;
                 pFly->Frm().Pos().X() = pFlyC->Left() + pPage->Frm().Left();
                 pFly->Frm().Pos().Y() = pFlyC->Top() + pPage->Frm().Top();
-                pFly->Frm().Width( pFlyC->Width() );
-                pFly->Frm().Height( pFlyC->Height() );
+                if ( pCache->IsUseFlyCache() )
+                {
+                    pFly->Frm().Width( pFlyC->Width() );
+                    pFly->Frm().Height( pFlyC->Height() );
+                }
                 bRet = TRUE;
             }
         }
