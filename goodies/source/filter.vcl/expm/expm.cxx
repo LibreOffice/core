@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 15:38:59 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,9 @@ public:
 //=================== Methoden von XPMWriter ==============================
 
 XPMWriter::XPMWriter() :
-    mpAcc       ( NULL ),
     mbStatus    ( TRUE ),
-    mbTrans     ( FALSE )
+    mbTrans     ( FALSE ),
+    mpAcc       ( NULL )
 {
 }
 
@@ -301,7 +301,9 @@ extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGrap
     return aXPMWriter.WriteXPM( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
 }
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 // ---------------
 // - Win16 trash -
