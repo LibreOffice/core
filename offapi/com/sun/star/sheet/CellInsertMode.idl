@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellInsertMode.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** is used to specify how cells are moved when new cells are inserted.
  */
-enum CellInsertMode
+published enum CellInsertMode
 {
     //-------------------------------------------------------------------------
 
