@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrfld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 13:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,9 +444,15 @@ BOOL SwUserFieldType::PutValue( const uno::Any& rAny, BYTE nMId )
         break;
     case FIELD_PROP_BOOL1:
         if(*(sal_Bool*)rAny.getValue())
+        {
             nType |= GSE_EXPR;
+            nType &= ~GSE_STRING;
+        }
         else
+        {
             nType &= ~GSE_EXPR;
+            nType |= GSE_STRING;
+        }
         break;
     default:
         DBG_ERROR("illegal property")
