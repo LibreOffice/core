@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:43:03 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 14:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,8 @@ FASTBOOL SwCrsrShell::SetCrsrInHdFt( USHORT nDescNo, FASTBOOL bInHeader )
         const SwPageFrm* pPage = GetCurrFrm()->FindPageFrm();
         if( pPage )
             for( USHORT i = 0; i < pDoc->GetPageDescCnt(); ++i )
-                if( pPage->GetPageDesc() == &pDoc->GetPageDesc( i ) )
+                if( pPage->GetPageDesc() ==
+                    &const_cast<const SwDoc *>(pDoc)->GetPageDesc( i ) )
                 {
                     nDescNo = i;
                     break;
@@ -362,7 +363,8 @@ FASTBOOL SwCrsrShell::SetCrsrInHdFt( USHORT nDescNo, FASTBOOL bInHeader )
     if( USHRT_MAX != nDescNo && nDescNo < pDoc->GetPageDescCnt() )
     {
         //dann teste mal, ob ueberhaupt das Attribut vorhanden ist.
-        const SwPageDesc& rDesc = pDoc->GetPageDesc( nDescNo );
+        const SwPageDesc& rDesc = const_cast<const SwDoc *>(pDoc)
+            ->GetPageDesc( nDescNo );
         const SwFmtCntnt* pCnt = 0;
         if( bInHeader )
         {
