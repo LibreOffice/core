@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddropdown.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:02:31 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 10:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,21 @@
 #ifndef _FLDDROPDOWN_HXX
 #define _FLDDROPDOWN_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
-#include <fldbas.hxx>
-#include <vector>
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX
+#include "com/sun/star/uno/Sequence.hxx"
+#endif
 
-using namespace ::com::sun::star::uno;
-using namespace rtl;
-using namespace std;
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+#ifndef _FLDBAS_HXX
+#include "fldbas.hxx"
+#endif
+
+#ifndef INCLUDED_VECTOR
+#include <vector>
+#define INCLUDED_VECTOR
+#endif
 
 /**
     Field type for dropdown boxes.
@@ -99,12 +107,12 @@ public:
    The dropdown field contains a list of strings. At most one of them
    can be selected.
 */
-class SwDropDownField : public SwField
+class SW_DLLPUBLIC SwDropDownField : public SwField
 {
     /**
        the possible values (aka items) of the dropdown box
     */
-    vector<String> aValues;
+    std::vector<String> aValues;
 
     /**
       the selected item
@@ -192,7 +200,7 @@ public:
 
        @param rItems the new items
     */
-    void SetItems(const vector<String> & rItems);
+    void SetItems(const std::vector<String> & rItems);
 
     /**
        Sets the items of the dropdown box.
@@ -201,14 +209,14 @@ public:
 
        @param rItems the new items
     */
-    void SetItems(const Sequence<OUString> & rItems);
+    void SetItems(const com::sun::star::uno::Sequence<rtl::OUString> & rItems);
 
     /**
         Returns the items of the dropdown box.
 
         @return the items of the dropdown box
     */
-    Sequence<OUString> GetItemSequence() const;
+    com::sun::star::uno::Sequence<rtl::OUString> GetItemSequence() const;
 
     /**
        Returns the selected item.
@@ -252,7 +260,7 @@ public:
           - FIELD_PROP_PAR1 Get selected item (String)
           - FIELD_PROP_STRINGS Get all items (Sequence)
     */
-    virtual BOOL QueryValue(Any &rVal, BYTE nMId) const;
+    virtual BOOL QueryValue(com::sun::star::uno::Any &rVal, BYTE nMId) const;
 
     /**
        API: Sets a property value on the dropdown field.
@@ -262,7 +270,7 @@ public:
           - FIELD_PROP_PAR1 Set selected item (String)
           - FIELD_PROP_STRINGS Set all items (Sequence)
     */
-        virtual BOOL PutValue(const Any &rVal, BYTE nMId);
+        virtual BOOL PutValue(const com::sun::star::uno::Any &rVal, BYTE nMId);
 };
 
 #endif
