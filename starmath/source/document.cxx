@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-20 08:54:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,8 +422,8 @@ void SmDocShell::ArrangeFormula()
     //! Nur für die Dauer der Existenz dieses Objekts sind am Drucker die
     //! richtigen Einstellungen garantiert.
     SmPrinterAccess  aPrtAcc(*this);
-
-    OutputDevice    *pOutDev = aPrtAcc.GetPrinter();
+//  OutputDevice    *pOutDev = aPrtAcc.GetPrinter();
+    OutputDevice* pOutDev = aPrtAcc.GetRefDev();
 
 #ifndef PRODUCT
     if (!pOutDev)
@@ -658,17 +658,45 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
             }
         }
     }
+    if ( 0 != (pRefDev = rDocShell.GetRefDev()) && pPrinter != pRefDev )
+    {
+        pRefDev->Push( PUSH_MAPMODE );
+        if ( rDocShell.GetProtocol().IsInPlaceActive() ||
+             SFX_CREATE_MODE_EMBEDDED == rDocShell.GetCreateMode() )
+        {
+            // if it is an embedded object (without it's own printer)
+            // we change the MapMode temporarily.
+            //!If it is a document with it's own printer the MapMode should
+            //!be set correct (once) elsewhere(!), in order to avoid numerous
+            //!superfluous pushing and poping of the MapMode when using
+            //!this class.
+
+            const MapUnit eOld = pRefDev->GetMapMode().GetMapUnit();
+            if ( MAP_100TH_MM != eOld )
+            {
+                MapMode aMap( pRefDev->GetMapMode() );
+                aMap.SetMapUnit( MAP_100TH_MM );
+                Point aTmp( aMap.GetOrigin() );
+                aTmp.X() = OutputDevice::LogicToLogic( aTmp.X(), eOld, MAP_100TH_MM );
+                aTmp.Y() = OutputDevice::LogicToLogic( aTmp.Y(), eOld, MAP_100TH_MM );
+                aMap.SetOrigin( aTmp );
+                pRefDev->SetMapMode( aMap );
+            }
+        }
+    }
 }
 
 SmPrinterAccess::~SmPrinterAccess()
 {
     if ( pPrinter )
         pPrinter->Pop();
+    if ( pRefDev && pRefDev != pPrinter )
+        pRefDev->Pop();
 }
 
 ////////////////////////////////////////
 
-Printer *SmDocShell::GetPrt()
+Printer* SmDocShell::GetPrt()
 {
     if ( GetProtocol().IsInPlaceActive() ||
           SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
@@ -679,7 +707,7 @@ Printer *SmDocShell::GetPrt()
         //OnDocumentPrinterChanged vom Server durchgereicht und dann temporaer
         //festgehalten.
         Printer *pPrt = GetDocumentPrinter();
-        if ( !pPrt )
+        if ( !pPrt && pTmpPrinter )
             pPrt = pTmpPrinter;
         return pPrt;
     }
@@ -701,6 +729,19 @@ Printer *SmDocShell::GetPrt()
         pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
     }
     return pPrinter;
+}
+
+OutputDevice* SmDocShell::GetRefDev()
+{
+    if ( GetProtocol().IsInPlaceActive() ||
+         SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
+    {
+        OutputDevice* pOutDev = GetDocumentRefDev();
+        if ( pOutDev )
+            return pOutDev;
+    }
+
+    return GetPrt();
 }
 
 
