@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:41:08 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             ;
 }
 
+#ifndef VERTICAL_LAYOUT
 /*************************************************************************
  *                    class SwPxlToTwips
  *************************************************************************/
@@ -265,7 +266,6 @@ SwPxlToTwips::~SwPxlToTwips()
 /*************************************************************************
  *                    SwPxlToTwips::DrawLine
  *************************************************************************/
-
 void SwPxlToTwips::DrawLine( const Point &rStart, const Point &rEnd )
 {
     if( pOut )
@@ -275,6 +275,7 @@ void SwPxlToTwips::DrawLine( const Point &rStart, const Point &rEnd )
         pOut->DrawLine( aStart, aEnd );
     }
 }
+#endif
 
 /*************************************************************************
  *                    SwViewOption::DrawRect()
@@ -314,8 +315,7 @@ void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
 /*************************************************************************
  *                    SwViewOption::PaintTab()
  *************************************************************************/
-#ifdef VERTICAL_LAYOUT
-#else
+#ifndef VERTICAL_LAYOUT
 void SwViewOption::PaintTab( OutputDevice *pOut, const SwRect &rRect ) const
 {
     SwPxlToTwips aSave( pOut, rRect, Size( TAB_SIZE ) );
@@ -359,22 +359,11 @@ void SwViewOption::PaintTab( OutputDevice *pOut, const SwRect &rRect ) const
     }
 }
 #endif
-/*************************************************************************
- *                    SwViewOption::GetLineBreakWidth()
- *************************************************************************/
-
-USHORT SwViewOption::GetLineBreakWidth( const OutputDevice *pOut ) const
-{
-    ASSERT( pOut, "no Outdev" );
-    const Size aSz( LINEBREAK_SIZE );
-    return USHORT(pOut->PixelToLogic( aSz ).Width());
-}
 
 /*************************************************************************
  *                    SwViewOption::PaintLineBreak()
  *************************************************************************/
-#ifdef VERTICAL_LAYOUT
-#else
+#ifndef VERTICAL_LAYOUT
 void SwViewOption::PaintLineBreak( OutputDevice *pOut, const SwRect &rRect ) const
 {
     const Size aSz( LINEBREAK_SIZE );
@@ -756,20 +745,7 @@ Color& SwViewOption::GetPageBreakColor()
 {
     return aPageBreakColor;
 }
-/*-- 24.04.2002 10:50:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-Color&   SwViewOption::GetNotesIndicatorColor()
-{
-    return aNotesIndicatorColor;
-}
-/*-- 24.04.2002 10:50:15---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-Color&   SwViewOption::GetScriptIndicatorColor()
-{
-    return aScriptIndicatorColor;
-}
 /* -----------------------------23.04.2002 17:41------------------------------
 
  ---------------------------------------------------------------------------*/
