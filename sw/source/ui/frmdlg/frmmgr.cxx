@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:51:23 $
+ *  last change: $Author: os $ $Date: 2002-09-16 08:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,9 +153,14 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, const SfxItemSet &
     bAbsPos( FALSE ),
     bNewFrm( bNew ),
     aSet( rSet ),
-    pOwnSh( pSh )
-
+    pOwnSh( pSh ),
+    bIsInVertical(FALSE)
 {
+    if(!bNew)
+    {
+        BOOL bRightToLeft;
+        bIsInVertical = pSh->IsFrmInVertical(TRUE, bRightToLeft);
+    }
 }
 
 
