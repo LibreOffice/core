@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-15 09:56:50 $
+ *  last change: $Author: os $ $Date: 2002-11-22 07:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,13 +994,17 @@ void SwTableShell::Execute(SfxRequest &rReq)
         {
             long nCount=0;
             BOOL bHorizontal=TRUE;
+            BOOL bProportional = FALSE;
             SFX_REQUEST_ARG( rReq, pSplit, SfxInt32Item, FN_TABLE_SPLIT_CELLS, sal_False );
             SFX_REQUEST_ARG( rReq, pHor, SfxBoolItem, FN_PARAM_1, sal_False );
+            SFX_REQUEST_ARG( rReq, pProp, SfxBoolItem, FN_PARAM_2, sal_False );
             if ( pSplit )
             {
                 nCount = pSplit->GetValue();
                 if ( pHor )
                     bHorizontal = pHor->GetValue();
+                if ( pProp )
+                    bProportional = pProp->GetValue();
             }
             else
             {
@@ -1009,8 +1013,10 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 {
                     nCount = pDlg->GetCount();
                     bHorizontal = pDlg->IsHorizontal();
+                    bProportional = pDlg->IsProportional();
                     rReq.AppendItem( SfxInt32Item( FN_TABLE_SPLIT_CELLS, nCount ) );
                     rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bHorizontal ) );
+                    rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bProportional ) );
                 }
 
                 delete pDlg;
@@ -1018,7 +1024,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             if ( nCount>1 )
             {
-                rSh.SplitTab(!bHorizontal, nCount-1, sal_True );
+                rSh.SplitTab(!bHorizontal, nCount-1, bProportional );
                 rReq.Done();
             }
             else

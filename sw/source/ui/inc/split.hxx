@@ -2,9 +2,9 @@
  *
  *  $RCSfile: split.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-19 11:14:52 $
+ *  last change: $Author: os $ $Date: 2002-11-22 07:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ class SwSplitTableDlg : public SvxStandardDialog
     FixedLine            aCountFL;
     ImageRadioButton    aHorzBox;
     ImageRadioButton    aVertBox;
+    CheckBox            aPropCB;
     FixedLine            aDirFL;
     OKButton            aOKBtn;
     CancelButton        aCancelBtn;
@@ -101,9 +102,10 @@ protected:
 
 public:
     SwSplitTableDlg(Window *pParent, SwWrtShell& rShell );
-    DECL_STATIC_LINK( SwSplitTableDlg, ClickHdl, Button * );
+    DECL_LINK( ClickHdl, Button * );
 
     BOOL                IsHorizontal() const { return aHorzBox.IsChecked(); }
+    BOOL                IsProportional() const { return aPropCB.IsChecked() && aHorzBox.IsChecked(); }
     long                GetCount() const { return aCountEdit.GetValue(); }
 };
 

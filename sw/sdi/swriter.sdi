@@ -7781,7 +7781,8 @@ SfxVoidItem Spelling FN_SPELLING_DLG
 
 //--------------------------------------------------------------------------
 SfxVoidItem SplitCell FN_TABLE_SPLIT_CELLS
-(SfxInt32Item Amount FN_TABLE_SPLIT_CELLS,SfxBoolItem Horizontal FN_PARAM_1)
+(SfxInt32Item Amount FN_TABLE_SPLIT_CELLS,SfxBoolItem Horizontal FN_PARAM_1,
+ SfxBoolItem Proportional FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
