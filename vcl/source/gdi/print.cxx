@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:23:25 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_PRINT_CXX
 #define _SPOOLPRINTER_EXT
 #define _RMPRINTER_EXT
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
