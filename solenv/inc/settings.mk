@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.129 $
+#   $Revision: 1.130 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:11 $
+#   last change: $Author: vg $ $Date: 2003-04-15 16:40:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -310,6 +310,11 @@ PROFILE=
 #profile=
 #REMOTE=
 #remote=
+
+# reset as setting those manually is no lonjger supported
+DBGUTIL=
+dbgutil=
+
 # ===========================================================================
 # unter NT werden Variablennamen an untergeordnete makefiles UPPERCASE
 # weitergereicht, aber case significant ausgewertet!
@@ -349,24 +354,17 @@ nopt*=$(NOPT)
 addopt*=$(ADDOPT)
 .ENDIF
 
-#.IF "$(DELOPT)"!=""
-#delopt*=$(DELOPT)
-#.ENDIF
-
-.IF "$(DEBUG)"!=""
-debug*=$(DEBUG)
-.ENDIF
-
-.IF "$(debug)"!=""
-DEBUG*=$(debug)
-.ENDIF
-
 .IF "$(GROUP)"!=""
 group*=$(GROUP)
 .ENDIF
 
 .IF "$(group)"!=""
 GROUP*=$(group)
+.ENDIF
+
+# override dbglevel if set manually
+.IF "$(dbglevel)"!=""
+DBG_LEVEL=$(dbglevel)
 .ENDIF
 
 .IF "$(NODEBUG)"!=""
@@ -379,10 +377,6 @@ HBTOOLKIT=$(hbtoolkit)
 
 .IF "$(REMOTE)"!=""
 remote=$(REMOTE)
-.ENDIF
-
-.IF "$(DBGUTIL)"!=""
-dbgutil=$(DBGUTIL)
 .ENDIF
 
 .IF "$(PRJPCH)"!=""
@@ -485,6 +479,10 @@ product=full
 .ENDIF
 .ENDIF
 
+.IF "$(debug)"!=""
+DBG_LEVEL*=2
+.ENDIF
+
 # Produkt auf einen Wert setzen (alles klein)
 .IF "$(product)" != ""
 optimize=true
@@ -497,9 +495,11 @@ product!=demo
 .IF "$(product)" == "compact" || "$(product)" == "Compact" || "$(product)" == "COMPACT"
 product!=compact
 .ENDIF
+DBG_LEVEL*=0
 .ELSE
 optimize!=true
 dbgutil!=true
+DBG_LEVEL*=1
 .ENDIF
 
 .IF "$(product)"==""
@@ -1280,24 +1280,22 @@ LINKFLAGS+= $(LINKFLAGSDEBUG)
 .IF "$(dbgutil)"!=""
 CDEFS+=$(CDEFSDBGUTIL)
 CFLAGS+=$(CFLAGSDBGUTIL)
-RSCDEFS+=-DDBG_UTIL -D_DEBUG
-.ENDIF
-
-.IF "$(dbgutil)$(debug)"!=""
-CDEFS+=-D_DEBUG
+RSCDEFS+=-DDBG_UTIL
 .ENDIF
 
 .IF "$(product)"!=""
-.IF "$(dbgutil)"==""
 CDEFS+= -DPRODUCT -DNDEBUG
 HDEFS+= -D:PRODUCT
-RSCDEFS+= -DPRODUCT
+RSCDEFS+= -DPRODUCT 
 CDEFS+=-DPRODUCT_FULL
 HDEFS+=-D:PRODUCT_FULL
 RSCDEFS+= -DPRODUCT_FULL -DNDEBUG
 .ENDIF
-.ENDIF
 
+.IF "$(DBG_LEVEL)"!=""
+CDEFS+=-DOSL_DEBUG_LEVEL=$(DBG_LEVEL)
+RSCDEFS+=-DOSL_DEBUG_LEVEL=$(DBG_LEVEL)
+.ENDIF
 
 .IF "$(svx_light)"!=""
 CDEFS+=-DSVX_LIGHT
