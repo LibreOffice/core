@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-12 13:02:20 $
+ *  last change: $Author: jl $ $Date: 2000-10-13 15:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1283,8 +1283,15 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(DISPID dispID,
                       ! (m_seqCurrentParamTypes[i] & PARAMFLAG_FOUT))
             {
                 if( m_seqCurrentVartypes[i] & VT_BYREF)
+                {
                     anyToVariant( &arRefArgs[revIndex],
                         Params.getConstArray()[i], m_seqCurrentVartypes[i]);
+                    arArgs[revIndex].vt= m_seqCurrentVartypes[i];
+                    if( (m_seqCurrentVartypes[i] & 0x0fff ) == VT_VARIANT)
+                        arArgs[revIndex].byref= &arRefArgs[revIndex];
+                    else
+                        arArgs[revIndex].byref= &arRefArgs[revIndex].byref;
+                }
                 else
                     anyToVariant( &arArgs[revIndex],
                         Params.getConstArray()[i], m_seqCurrentVartypes[i]);
@@ -1297,7 +1304,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(DISPID dispID,
     result = m_pDispatch->Invoke(dispID,
                                  IID_NULL,
                                  LOCALE_SYSTEM_DEFAULT,
-                                 DISPATCH_METHOD | DISPATCH_PROPERTYGET,
+                                 DISPATCH_METHOD,
                                  &dispparams,
                                  &varResult,
                                  &excepinfo,
@@ -1472,6 +1479,9 @@ sal_Bool IUnknownWrapper_Impl::getParameterInfo()
             {
                 sal_Int32 flags= funcDesc->lprgelemdescParam[iparams].paramdesc.wParamFlags;
                 m_seqCurrentParamTypes[iparams]= flags & ( PARAMFLAG_FIN | PARAMFLAG_FOUT);
+                // default is PARAMFLAG_IN
+                if( m_seqCurrentParamTypes[iparams] == 0)
+                    m_seqCurrentParamTypes[iparams]= PARAMFLAG_FIN;
 
                 if( ! getElementTypeDesc( & funcDesc->lprgelemdescParam[iparams].tdesc,
                                     m_seqCurrentVartypes[iparams]))
