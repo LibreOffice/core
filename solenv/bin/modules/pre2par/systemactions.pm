@@ -2,9 +2,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-29 11:50:29 $
+#   last change: $Author: kz $ $Date: 2004-01-30 17:36:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,7 @@ sub create_directory
 
     if (!(-d $directory))
     {
-        $returnvalue = mkdir($directory, 755);
+        $returnvalue = mkdir($directory, 0775);
 
         if ($returnvalue)
         {
@@ -88,7 +88,7 @@ sub create_directory
 
             if ($pre2par::globals::isunix)
             {
-                my $localcall = "chmod 755 $directory \>\/dev\/null 2\>\&1";
+                my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
                 system($localcall);
             }
         }
