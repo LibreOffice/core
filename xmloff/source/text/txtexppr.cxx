@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2002-09-09 17:12:19 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,7 +601,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
     if( pParaLeftMarginState && pParaLeftMarginRelState )
     {
-        sal_Int32 nTemp;
+        sal_Int32 nTemp = 0;
         pParaLeftMarginRelState->maValue >>= nTemp;
         if( nTemp == 100 )
         {
@@ -618,7 +618,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
     if( pParaRightMarginState && pParaRightMarginRelState )
     {
-        sal_Int32 nTemp;
+        sal_Int32 nTemp = 0;
         pParaRightMarginRelState->maValue >>= nTemp;
         if( nTemp == 100 )
         {
@@ -634,7 +634,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
     if( pParaFirstLineState && pParaFirstLineRelState )
     {
-        sal_Int32 nTemp;
+        sal_Int32 nTemp = 0;
         pParaFirstLineRelState->maValue >>= nTemp;
         if( nTemp == 100 )
         {
@@ -650,7 +650,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
     if( pParaTopMarginState && pParaTopMarginRelState )
     {
-        sal_Int32 nTemp;
+        sal_Int32 nTemp = 0;
         pParaTopMarginRelState->maValue >>= nTemp;
         if( nTemp == 100 )
         {
@@ -667,7 +667,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
     if( pParaBottomMarginState && pParaBottomMarginRelState )
     {
-        sal_Int32 nTemp;
+        sal_Int32 nTemp = 0;
         pParaBottomMarginRelState->maValue >>= nTemp;
         if( nTemp == 100 )
         {
