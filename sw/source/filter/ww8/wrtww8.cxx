@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 10:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,8 @@ SV_IMPL_PTRARR( WW8_WrPcPtrs, WW8_WrPcPtr )
 static void WriteDop( SwWW8Writer& rWrt )
 {
     WW8Dop& rDop = *rWrt.pDop;
+
+    rDop.fUsePrinterMetrics = !rWrt.pDoc->IsUseVirtualDevice();
 
     // default TabStop schreiben
     const SvxTabStopItem& rTabStop = (SvxTabStopItem& )rWrt.pDoc->
