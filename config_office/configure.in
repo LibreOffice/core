@@ -528,6 +528,9 @@ if test "$JAVA"; then
    if test "$_os" = "Linux" -a "$_machine_type" = "sparc"; then
       _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
    fi
+   if test "$_os" = "Linux" -a "$_machine_type" = "ppc"; then
+      _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
+   fi
    if test "$_os" = "WINNT"; then
       _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
    fi
@@ -543,6 +546,9 @@ if test "$JAVA"; then
             _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
          fi
          if test "$_machine_type" = "sparc"; then
+            _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
+         fi 
+         if test "$_machine_type" = "ppc"; then
             _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
          fi 
       fi
