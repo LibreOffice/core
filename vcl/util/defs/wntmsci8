@@ -8207,3 +8207,9 @@ _real@4020000000000000
 ?PreNotify@ScrollBar@@UAEJAAVNotifyEvent@@@Z
 ?PreNotify@SpinField@@UAEJAAVNotifyEvent@@@Z
 ?PreNotify@TabControl@@UAEJAAVNotifyEvent@@@Z
+?Append@String@@QAEAAV1@D@Z
+?GetHelpCommand@Menu@@QBEABVString@@G@Z
+?IsMenuBar@Menu@@QBEEXZ
+?SetHelpCommand@Menu@@QAEXGABVString@@@Z
+??YString@@QAEAAV0@D@Z
+?Assign@String@@QAEAAV1@D@Z
