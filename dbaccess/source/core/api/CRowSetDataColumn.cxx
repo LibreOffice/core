@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:59:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,9 +289,9 @@ ORowSetDataColumns::~ORowSetDataColumns()
     DBG_DTOR(ORowSetDataColumns ,NULL);
 }
 // -----------------------------------------------------------------------------
-Reference< ::com::sun::star::container::XNamed > ORowSetDataColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType ORowSetDataColumns::createObject(const ::rtl::OUString& _rName)
 {
-    Reference< ::com::sun::star::container::XNamed > xNamed;
+    connectivity::sdbcx::ObjectType xNamed;
 
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
     ::connectivity::OSQLColumns::const_iterator first =  ::connectivity::find(m_aColumns->begin(),m_aColumns->end(),_rName,aCase);
