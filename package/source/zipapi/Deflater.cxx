@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Deflater.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:16:11 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,11 @@
 #include <Deflater.hxx>
 #endif
 #ifndef _ZLIB_H
+#ifdef SYSTEM_ZLIB
+#include <zlib.h>
+#else
 #include <external/zlib/zlib.h>
+#endif
 #endif
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
@@ -150,7 +154,11 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
         pStream->avail_in  = nLength;
         pStream->avail_out = nNewLength;
 
+#ifdef SYSTEM_ZLIB
+        nResult = deflateParams(pStream, nLevel, nStrategy);
+#else
         nResult = z_deflateParams(pStream, nLevel, nStrategy);
+#endif
         switch (nResult)
         {
             case Z_OK:
@@ -174,7 +182,11 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
         pStream->avail_in  = nLength;
         pStream->avail_out = nNewLength;
 
+#ifdef SYSTEM_ZLIB
+        nResult = deflate(pStream, bFinish ? Z_FINISH : Z_NO_FLUSH);
+#else
         nResult = z_deflate(pStream, bFinish ? Z_FINISH : Z_NO_FLUSH);
+#endif
         switch (nResult)
         {
             case Z_STREAM_END:
@@ -220,7 +232,11 @@ void SAL_CALL Deflater::setDictionarySegment( const uno::Sequence< sal_Int8 >& r
     {
         // do error handling
     }
+#ifdef SYSTEM_ZLIB
+    sal_Int32 nResult = deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray()+nOffset, nLength);
+#else
     sal_Int32 nResult = z_deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray()+nOffset, nLength);
+#endif
 }
 void SAL_CALL Deflater::setDictionary( const uno::Sequence< sal_Int8 >& rBuffer )
 {
@@ -230,7 +246,11 @@ void SAL_CALL Deflater::setDictionary( const uno::Sequence< sal_Int8 >& rBuffer 
         VOS_DEBUG_ONLY("No stream!");
 
     }
+#ifdef SYSTEM_ZLIB
+    sal_Int32 nResult = deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray(), rBuffer.getLength());
+#else
     sal_Int32 nResult = z_deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray(), rBuffer.getLength());
+#endif
 }
 void SAL_CALL Deflater::setStrategy( sal_Int32 nNewStrategy )
 {
@@ -295,7 +315,11 @@ sal_Int32 SAL_CALL Deflater::getTotalOut(  )
 }
 void SAL_CALL Deflater::reset(  )
 {
+#ifdef SYSTEM_ZLIB
+    deflateReset(pStream);
+#else
     z_deflateReset(pStream);
+#endif
     bFinish = sal_False;
     bFinished = sal_False;
     nOffset = nLength = 0;
@@ -304,7 +328,11 @@ void SAL_CALL Deflater::end(  )
 {
     if (pStream != NULL)
     {
+#ifdef SYSTEM_ZLIB
+        deflateEnd(pStream);
+#else
         z_deflateEnd(pStream);
+#endif
         delete pStream;
     }
     pStream = NULL;

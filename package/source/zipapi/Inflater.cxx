@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inflater.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:17:02 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,11 @@
 #include <Inflater.hxx>
 #endif
 #ifndef _ZLIB_H
+#ifdef SYSTEM_ZLIB
+#include <zlib.h>
+#else
 #include <external/zlib/zlib.h>
+#endif
 #endif
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
@@ -133,8 +137,13 @@ void SAL_CALL Inflater::setDictionarySegment( const Sequence< sal_Int8 >& rBuffe
     {
         // do error handling
     }
+#ifdef SYSTEM_ZLIB
+    inflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray() + nNewOffset,
+                  nNewLength);
+#else
     z_inflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray() + nNewOffset,
                   nNewLength);
+#endif
 }
 
 void SAL_CALL Inflater::setDictionary( const Sequence< sal_Int8 >& rBuffer )
@@ -143,8 +152,13 @@ void SAL_CALL Inflater::setDictionary( const Sequence< sal_Int8 >& rBuffer )
     {
         // do error handling
     }
+#ifdef SYSTEM_ZLIB
+    inflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray(),
+                   rBuffer.getLength());
+#else
     z_inflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray(),
                    rBuffer.getLength());
+#endif
 }
 
 sal_Int32 SAL_CALL Inflater::getRemaining(  )
@@ -202,7 +216,11 @@ sal_Int32 SAL_CALL Inflater::getTotalOut(  )
 
 void SAL_CALL Inflater::reset(  )
 {
+#ifdef SYSTEM_ZLIB
+    inflateReset(pStream);
+#else
     z_inflateReset(pStream);
+#endif
     bFinish = bNeedDict = bFinished = sal_False;
     nOffset = nLength = 0;
 }
@@ -211,7 +229,11 @@ void SAL_CALL Inflater::end(  )
 {
     if (pStream != NULL)
     {
+#ifdef SYSTEM_ZLIB
+        inflateEnd(pStream);
+#else
         z_inflateEnd(pStream);
+#endif
         delete pStream;
     }
     pStream = NULL;
@@ -225,7 +247,11 @@ sal_Int32 Inflater::doInflateBytes (Sequence < sal_Int8 >  &rBuffer, sal_Int32 n
     pStream->next_out  = reinterpret_cast < unsigned char* > ( rBuffer.getArray() + nNewOffset );
     pStream->avail_out = nNewLength;
 
+#ifdef SYSTEM_ZLIB
+    nResult = ::inflate(pStream, bFinish ? Z_SYNC_FLUSH : Z_PARTIAL_FLUSH);
+#else
     nResult = ::z_inflate(pStream, bFinish ? Z_SYNC_FLUSH : Z_PARTIAL_FLUSH);
+#endif
 
     switch (nResult)
     {
