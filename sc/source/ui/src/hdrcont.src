@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:03:45 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 20:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ Menu RID_POPUP_ROWHEADER
             Text [ portuguese_brazilian ] = "Zeilenh?e..." ;
             Text[ chinese_simplified ] = "¸ß(~H)...";
             Text[ russian ] = "Âûñîòà ñòğîêè...";
-            Text[ polish ] = "Wysoko?æ linii...";
+            Text[ polish ] = "Wysokoœæ linii...";
             Text[ japanese ] = "s‚Ì‚‚³(~H)...";
             Text[ chinese_traditional ] = "¦C°ª(~H)...";
             Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİ...";
@@ -242,7 +242,7 @@ Menu RID_POPUP_ROWHEADER
             Text [ portuguese_brazilian ] = "Optimale Zeilenh?e..." ;
             Text[ chinese_simplified ] = "×î¼Ñ¸ß¶È(~R)...";
             Text[ russian ] = "Îïòèìàëüíàÿ âûñîòà ñòğîêè...";
-            Text[ polish ] = "Optymalna wysoko?æ wierszy...";
+            Text[ polish ] = "Optymalna wysokoœæ wierszy...";
             Text[ japanese ] = "Å“K‚Ès‚Ì‚‚³(~R)...";
             Text[ chinese_traditional ] = "³Ì¾A¦C°ª(~R)...";
             Text[ arabic ] = "...ÇáÇÑÊİÇÚ ÇáÃãËá ááÕİ";
@@ -336,7 +336,7 @@ Menu RID_POPUP_ROWHEADER
             /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Inhalte löschen (Formeln, Formate etc.) : Ausgewõhlte Inhalte l÷schen (Formeln, Formate etc.) */
             Text[ chinese_simplified ] = "É¾³ıÄÚÈİ(~L)...";
             Text[ russian ] = "Óäàëèòü ñîäåğæèìîå...";
-            Text[ polish ] = "Usuñ zawarto?æ...";
+            Text[ polish ] = "Usuñ zawartoœæ...";
             Text[ japanese ] = "“à—e‚Ìíœ(~L)...";
             Text[ chinese_traditional ] = "§R°£¤º®e(~L)...";
             Text[ arabic ] = "...ÍĞİ ãÍÊæíÇÊ";
@@ -428,7 +428,7 @@ Menu RID_POPUP_ROWHEADER
             Text [ spanish ] = "Peg~ado especial..." ;
             Text [ english_us ] = "Paste ~Special..." ;
             Text[ russian ] = "~Ñïåöèàëüíàÿ âñòàâêà...";
-            Text[ polish ] = "~Wklej zawarto?æ...";
+            Text[ polish ] = "~Wklej zawartoœæ...";
             Text[ japanese ] = "Œ`®‚ğ‘I‘ğ‚µ‚Ä“\\‚è•t‚¯(~S)...";
             Text[ chinese_traditional ] = "´¡¤J¤º®e(~S)...";
             Text[ arabic ] = "áÕŞ ÎÇÕ...";
@@ -470,7 +470,7 @@ Menu RID_POPUP_COLHEADER
             Text [ portuguese_brazilian ] = "Spaltenbreite..." ;
             Text[ chinese_simplified ] = "ÁĞ¿í(~U)...";
             Text[ russian ] = "Øèğèíà ñòîëáöîâ...";
-            Text[ polish ] = "Szeroko?æ kolumny...";
+            Text[ polish ] = "Szerokoœæ kolumny...";
             Text[ japanese ] = "—ñ•(~U)...";
             Text[ chinese_traditional ] = "Äæ¼e(~U)...";
             Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ...";
@@ -498,7 +498,7 @@ Menu RID_POPUP_COLHEADER
             Text [ portuguese_brazilian ] = "Optimale Spaltenbreite..." ;
             Text[ chinese_simplified ] = "×î¼ÑÁĞ¿í(~P)...";
             Text[ russian ] = "Îïòèìàëüíàÿ øèğèíà êîëîíêè...";
-            Text[ polish ] = "Optymalna szeroko?æ kolumny...";
+            Text[ polish ] = "Optymalna szerokoœæ kolumny...";
             Text[ japanese ] = "Å“K‚È—ñ•(~P)...";
             Text[ chinese_traditional ] = "³Ì¾AÄæ¼e(~P)...";
             Text[ arabic ] = "ÇáÚÑÖ ÇáÃãËá ááÚãæÏ...";
@@ -592,7 +592,7 @@ Menu RID_POPUP_COLHEADER
             /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Inhalte löschen (Formeln, Formate etc.) : Ausgewõhlte Inhalte l÷schen (Formeln, Formate etc.) */
             Text[ chinese_simplified ] = "É¾³ıÄÚÈİ(~E)...";
             Text[ russian ] = "Óäàëèòü ñîäåğæèìîå...";
-            Text[ polish ] = "Usuñ zawarto?æ...";
+            Text[ polish ] = "Usuñ zawartoœæ...";
             Text[ japanese ] = "“à—e‚Ìíœ(~E)...";
             Text[ chinese_traditional ] = "§R°£¤º®e(~E)...";
             Text[ arabic ] = "ÍĞİ ãÍÊæíÇÊ...";
@@ -684,7 +684,7 @@ Menu RID_POPUP_COLHEADER
             Text [ spanish ] = "Peg~ado especial..." ;
             Text [ english_us ] = "Paste ~Special..." ;
             Text[ russian ] = "~Ñïåöèàëüíàÿ âñòàâêà...";
-            Text[ polish ] = "~Wklej zawarto?æ...";
+            Text[ polish ] = "~Wklej zawartoœæ...";
             Text[ japanese ] = "Œ`®‚ğ‘I‘ğ‚µ‚Ä“\\‚è•t‚¯(~S)...";
             Text[ chinese_traditional ] = "´¡¤J¤º®e(~S)...";
             Text[ arabic ] = "áÕŞ ÎÇÕ...";
