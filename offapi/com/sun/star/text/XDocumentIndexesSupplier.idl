@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDocumentIndexesSupplier.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 
     <p>In general this interface is supported by a <type>TextDocument</type>.</p>
  */
-interface XDocumentIndexesSupplier: com::sun::star::uno::XInterface
+published interface XDocumentIndexesSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 

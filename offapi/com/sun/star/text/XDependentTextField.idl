@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDependentTextField.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 /** makes it possible to attach this <type>TextField</type> to a
     <type>TextFieldMaster</type>.
  */
-interface XDependentTextField: com::sun::star::text::XTextField
+published interface XDependentTextField: com::sun::star::text::XTextField
 {
     //-------------------------------------------------------------------------
 
