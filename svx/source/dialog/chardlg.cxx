@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: os $ $Date: 2001-06-26 09:15:27 $
+ *  last change: $Author: os $ $Date: 2001-07-10 11:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,13 +271,15 @@ struct SvxCharNamePage_Impl
     USHORT          m_nExtraEntryPos;
     BOOL            m_bMustDelete;
     BOOL            m_bInSearchMode;
+    BOOL            m_bPreviewBackgroundToCharacter;
 
     SvxCharNamePage_Impl() :
 
         m_pFontList     ( NULL ),
         m_nExtraEntryPos( LISTBOX_ENTRY_NOTFOUND ),
         m_bMustDelete   ( FALSE ),
-        m_bInSearchMode ( FALSE )
+        m_bInSearchMode ( FALSE ),
+        m_bPreviewBackgroundToCharacter( FALSE )
 
     {
         m_aUpdateTimer.SetTimeout( 350 );
@@ -504,6 +506,7 @@ void SvxCharNamePage::UpdatePreview_Impl()
     const FontList* pFontList = GetFontList();
     FontInfo aFontInfo( pFontList->Get( m_pWestFontNameLB->GetText(), m_pWestFontStyleLB->GetText() ) );
     // Size
+
     if ( m_pWestFontSizeLB->IsRelative() )
     {
         DBG_ASSERT( GetItemSet().GetParent(), "No parent set" );
@@ -1190,6 +1193,32 @@ void SvxCharNamePage::ActivatePage( const SfxItemSet& rSet )
         rFont.SetShadow( rItem.GetValue() );
     }
 
+    nWhich = GetWhich(m_pImpl->m_bPreviewBackgroundToCharacter ? SID_ATTR_BRUSH : SID_ATTR_BRUSH_CHAR);
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+         const SvxBrushItem& rBrush = (const SvxBrushItem&)( rSet.Get( nWhich ) );
+         const Color& rColor = rBrush.GetColor();
+         rFont.SetFillColor(rColor);
+         rFont.SetTransparent(rColor.GetTransparency() > 0);
+    }
+    else
+        rFont.SetTransparent(TRUE);
+
+    if(!m_pImpl->m_bPreviewBackgroundToCharacter)
+    {
+        nWhich = GetWhich(SID_ATTR_BRUSH);
+        if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+        {
+            const SvxBrushItem& rBrush = (const SvxBrushItem&)( rSet.Get( nWhich ) );
+            if(GPOS_NONE == rBrush.GetGraphicPos())
+                m_aPreviewWin.SetBackColor(rBrush.GetColor());
+            else
+                m_aPreviewWin.SetBackColor(COL_TRANSPARENT);
+        }
+        else
+            m_aPreviewWin.SetBackColor(COL_TRANSPARENT);
+    }
+
     m_aPreviewWin.Invalidate();
 }
 
@@ -1278,6 +1307,11 @@ void SvxCharNamePage::EnableSearchMode()
 {
     m_pImpl->m_bInSearchMode = TRUE;
 }
+// -----------------------------------------------------------------------
+void SvxCharNamePage::SetPreviewBackgroundToCharacter()
+{
+    m_pImpl->m_bPreviewBackgroundToCharacter = sal_True;
+}
 
 // class SvxCharEffectsPage ----------------------------------------------
 
@@ -1311,7 +1345,8 @@ SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSe
     m_aBlinkingBtn          ( this, ResId( CB_BLINKING ) ),
 
     m_aPreviewWin           ( this, ResId( WIN_EFFECTS_PREVIEW ) ),
-    m_aFontTypeFT           ( this, ResId( FT_EFFECTS_FONTTYPE ) )
+    m_aFontTypeFT           ( this, ResId( FT_EFFECTS_FONTTYPE ) ),
+    m_bPreviewBackgroundToCharacter(FALSE)
 
 {
     m_aEffectsLB.Hide();
@@ -1424,6 +1459,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     USHORT nCapsPos = m_aEffects2LB.GetSelectEntryPos();
     if ( nCapsPos != LISTBOX_ENTRY_NOTFOUND )
         rFont.SetCaseMap( (SvxCaseMap)nCapsPos );
+
     m_aPreviewWin.Invalidate();
 }
 
@@ -1549,6 +1585,32 @@ void SvxCharEffectsPage::ActivatePage( const SfxItemSet& rSet )
         const SvxColorItem& rItem = (SvxColorItem&)rSet.Get( nWhich );
         Color aCol( rItem.GetValue() );
         rFont.SetColor( COL_AUTO == aCol.GetColor() ? Color(COL_BLACK) : aCol);
+    }
+
+    nWhich = GetWhich(m_bPreviewBackgroundToCharacter ? SID_ATTR_BRUSH : SID_ATTR_BRUSH_CHAR);
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+         const SvxBrushItem& rBrush = (const SvxBrushItem&)( rSet.Get( nWhich ) );
+         const Color& rColor = rBrush.GetColor();
+         rFont.SetFillColor(rColor);
+         rFont.SetTransparent(rColor.GetTransparency() > 0);
+    }
+    else
+        rFont.SetTransparent(TRUE);
+
+    if(!m_bPreviewBackgroundToCharacter)
+    {
+        nWhich = GetWhich(SID_ATTR_BRUSH);
+        if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+        {
+            const SvxBrushItem& rBrush = (const SvxBrushItem&)( rSet.Get( nWhich ) );
+            if(GPOS_NONE == rBrush.GetGraphicPos())
+                m_aPreviewWin.SetBackColor(rBrush.GetColor());
+            else
+                m_aPreviewWin.SetBackColor(COL_TRANSPARENT);
+        }
+        else
+            m_aPreviewWin.SetBackColor(COL_TRANSPARENT);
     }
 
     m_aPreviewWin.Invalidate();
@@ -2087,6 +2149,12 @@ void SvxCharEffectsPage::EnableFlash()
         m_aBlinkingBtn.Show();
 }
 
+// -----------------------------------------------------------------------
+void SvxCharEffectsPage::SetPreviewBackgroundToCharacter()
+{
+    m_bPreviewBackgroundToCharacter = TRUE;
+}
+
 // class SvxCharPositionPage ---------------------------------------------
 
 SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rInSet ) :
@@ -2125,7 +2193,8 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
     m_nScaleWidthItemSetVal ( 100 ),
     m_nScaleWidthInitialVal ( 100 ),
     m_nSuperProp        ( (BYTE)DFLT_ESC_PROP ),
-    m_nSubProp          ( (BYTE)DFLT_ESC_PROP )
+    m_nSubProp          ( (BYTE)DFLT_ESC_PROP ),
+    m_bPreviewBackgroundToCharacter(FALSE)
 {
     FreeResource();
     Initialize();
@@ -2514,6 +2583,32 @@ void SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
     {
         const SvxShadowedItem& rItem = (SvxShadowedItem&)rSet.Get( nWhich );
         rFont.SetShadow( rItem.GetValue() );
+    }
+
+    nWhich = GetWhich(m_bPreviewBackgroundToCharacter ? SID_ATTR_BRUSH : SID_ATTR_BRUSH_CHAR);
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+         const SvxBrushItem& rBrush = (const SvxBrushItem&)( rSet.Get( nWhich ) );
+         const Color& rColor = rBrush.GetColor();
+         rFont.SetFillColor(rColor);
+         rFont.SetTransparent(rColor.GetTransparency() > 0);
+    }
+    else
+        rFont.SetTransparent(TRUE);
+
+    if(!m_bPreviewBackgroundToCharacter)
+    {
+        nWhich = GetWhich(SID_ATTR_BRUSH);
+        if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+        {
+            const SvxBrushItem& rBrush = (const SvxBrushItem&)( rSet.Get( nWhich ) );
+            if(GPOS_NONE == rBrush.GetGraphicPos())
+                m_aPreviewWin.SetBackColor(rBrush.GetColor());
+            else
+                m_aPreviewWin.SetBackColor(COL_TRANSPARENT);
+        }
+        else
+            m_aPreviewWin.SetBackColor(COL_TRANSPARENT);
     }
 
     m_aPreviewWin.Invalidate();
@@ -2939,6 +3034,11 @@ void SvxCharPositionPage::FillUserData()
     SetUserData( sUser );
 }
 
+// -----------------------------------------------------------------------
+void SvxCharPositionPage::SetPreviewBackgroundToCharacter()
+{
+    m_bPreviewBackgroundToCharacter = TRUE;
+}
 // class SvxCharTwoLinesPage ------------------------------------------------
 
 SvxCharTwoLinesPage::SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rInSet ) :
@@ -2955,7 +3055,8 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rIn
     m_aEndBracketLB     ( this, ResId( ED_ENDBRACKET ) ),
 
     m_aPreviewWin       ( this, ResId( WIN_TWOLINES_PREVIEW ) ),
-    m_aFontTypeFT       ( this, ResId( FT_TWOLINES_FONTTYPE ) )
+    m_aFontTypeFT       ( this, ResId( FT_TWOLINES_FONTTYPE ) ),
+    m_bPreviewBackgroundToCharacter(FALSE)
 
 {
     FreeResource();
@@ -3188,6 +3289,31 @@ void SvxCharTwoLinesPage::ActivatePage( const SfxItemSet& rSet )
         const SvxShadowedItem& rItem = (SvxShadowedItem&)rSet.Get( nWhich );
         rFont.SetShadow( rItem.GetValue() );
     }
+    nWhich = GetWhich(m_bPreviewBackgroundToCharacter ? SID_ATTR_BRUSH : SID_ATTR_BRUSH_CHAR);
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+         const SvxBrushItem& rBrush = (const SvxBrushItem&)( rSet.Get( nWhich ) );
+         const Color& rColor = rBrush.GetColor();
+         rFont.SetFillColor(rColor);
+         rFont.SetTransparent(rColor.GetTransparency() > 0);
+    }
+    else
+        rFont.SetTransparent(TRUE);
+
+    if(!m_bPreviewBackgroundToCharacter)
+    {
+        nWhich = GetWhich(SID_ATTR_BRUSH);
+        if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+        {
+            const SvxBrushItem& rBrush = (const SvxBrushItem&)( rSet.Get( nWhich ) );
+            if(GPOS_NONE == rBrush.GetGraphicPos())
+                m_aPreviewWin.SetBackColor(rBrush.GetColor());
+            else
+                m_aPreviewWin.SetBackColor(COL_TRANSPARENT);
+        }
+        else
+            m_aPreviewWin.SetBackColor(COL_TRANSPARENT);
+    }
 
     m_aPreviewWin.Invalidate();
 }
@@ -3282,3 +3408,9 @@ void    SvxCharTwoLinesPage::UpdatePreview_Impl()
     m_aPreviewWin.SetTwoLines(m_aTwoLinesBtn.IsChecked());
     m_aPreviewWin.Invalidate();
 }
+// -----------------------------------------------------------------------
+void SvxCharTwoLinesPage::SetPreviewBackgroundToCharacter()
+{
+    m_bPreviewBackgroundToCharacter = TRUE;
+}
+

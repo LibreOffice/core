@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-16 11:52:02 $
+ *  last change: $Author: os $ $Date: 2001-07-10 11:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ struct FontPrevWin_Impl
             bGetSelection   : 1,
             bUseResText     : 1;
     Color*  pColor;
+    Color*  pBackColor;
     String  aText;
 
     BOOL                bTwoLines;
@@ -94,6 +95,7 @@ struct FontPrevWin_Impl
 
     FontPrevWin_Impl() :
         bSelection( FALSE ), bGetSelection( FALSE ), bUseResText( FALSE ), pColor( NULL ),
+        pBackColor( 0 ),
         bTwoLines(FALSE), cStartBracket(0), cEndBracket(0) {}
 };
 
@@ -153,6 +155,7 @@ SvxFontPrevWindow::SvxFontPrevWindow( Window* pParent, const ResId& rId ) :
 SvxFontPrevWindow::~SvxFontPrevWindow()
 {
     delete pImpl->pColor;
+    delete pImpl->pBackColor;
     delete pImpl;
 
     if ( bDelPrinter )
@@ -197,6 +200,15 @@ void SvxFontPrevWindow::SetColor(const Color &rColor)
 {
     delete pImpl->pColor;
     pImpl->pColor = new Color( rColor );
+    Invalidate();
+}
+
+// -----------------------------------------------------------------------
+
+void SvxFontPrevWindow::SetBackColor(const Color &rColor)
+{
+    delete pImpl->pBackColor;
+    pImpl->pBackColor = new Color( rColor );
     Invalidate();
 }
 
@@ -248,6 +260,17 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
     if ( nY + aMetric.GetAscent() > aLogSize.Height() )
         nY = aLogSize.Height() - aMetric.GetAscent();
 
+    if ( pImpl->pBackColor )
+    {
+        Rectangle aRect( Point( 0, 0 ), aLogSize );
+        Color aLineCol = GetLineColor();
+        Color aFillCol = GetFillColor();
+        SetLineColor();
+        SetFillColor( *pImpl->pBackColor );
+        DrawRect( aRect );
+        SetLineColor( aLineCol );
+        SetFillColor( aFillCol );
+    }
     if ( pImpl->pColor )
     {
         Rectangle aRect( Point( nX, nY ), aTxtSize );
