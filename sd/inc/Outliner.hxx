@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 10:23:29 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ public:
 
     DECL_LINK( SpellError, void * );
 
-    enum ChangeHint { CH_VIEW_SHELL_INVALID, CH_VIEW_SHELL_VALID, };
+    enum ChangeHint { CH_VIEW_SHELL_INVALID, CH_VIEW_SHELL_VALID };
 
     /** Handle a change outside the outliner which may affect the outliner.
         At the moment this is restricted to changes of the main view shell
