@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-11 05:11:47 $
+ *  last change: $Author: rt $ $Date: 2001-05-16 14:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ String S_CANNOT_OPEN_FILE
     Text[ danish ] = "File cannot be opened: ($Arg1)";
     Text[ swedish ] = "File cannot be opened: ($Arg1)";
     Text[ polish ] = "Nie mo¿e otworzyæ pliku: ($Arg1)";
-    Text[ portuguese_brazilian ] = "Kann Datei nicht Öffnen: ($Arg1)";
+    Text[ portuguese_brazilian ] = "Kann Datei nicht ?ffnen: ($Arg1)";
     Text[ japanese ] = "Ì§²Ù‚ªŠJ‚¯‚ç‚ê‚Ü‚¹‚ñ: ($Arg1)";
     Text[ korean ] = "ÆÄÀÏÀÌ ¿­¸®Áö ¾Ê½À´Ï´Ù: ($Arg1)";
     Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÎÄ¼ş£º($Arg1)";
@@ -183,7 +183,7 @@ String S_INVALID_LINE
     Text[ danish ] = "Line \"($Arg1)\" is invalid.";
     Text[ swedish ] = "Line \"($Arg1)\" is invalid.";
     Text[ polish ] = "Wiersz \"($Arg1)\" jest niewa¿ny.";
-    Text[ portuguese_brazilian ] = "Zeile \"($Arg1)\" Ist ungültig.";
+    Text[ portuguese_brazilian ] = "Zeile \"($Arg1)\" Ist ung?tig.";
     Text[ japanese ] = "\"($Arg1)\"s‚Í–³Œø‚Å‚·B";
     Text[ korean ] = "Çà \"($Arg1)\" Àº À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÎŞĞ§µÄĞĞ¡°($Arg1)¡±";
@@ -220,22 +220,22 @@ String S_SHORTNAME_UNKNOWN
 String S_LONGNAME_UNKNOWN
 {
     Text = "Langname unbekannt: ($Arg1)";
-    Text[ english_us ] = "Short name unknown during copying: ($Arg1)";
-    Text[ portuguese ] = "Abreviatura desconhecida ao copiar: ($Arg1)";
-    Text[ russian ] = "Short name unknown during copying: ($Arg1)";
+    Text[ english_us ] = "Long name unknown: ($Arg1)";
+    Text[ portuguese ] = "Nome desconhecido: ($Arg1)";
+    Text[ russian ] = "Long name unknown: ($Arg1)";
     Text[ greek ] = "Short name unknown during copying: ($Arg1)";
     Text[ dutch ] = "Afkorting onbekend bij kopiëren: ($Arg1)";
-    Text[ french ] = "Abréviation inconnue lors de la copie : ($Arg1)";
-    Text[ spanish ] = "Abreviatura desconocida al copiar: ($Arg1)";
+    Text[ french ] = "Nom inconnu : ($Arg1)";
+    Text[ spanish ] = "Nombre largo desconocido: ($Arg1)";
     Text[ italian ] = "Short name unknown during copying: ($Arg1)";
     Text[ danish ] = "Short name unknown during copying: ($Arg1)";
-    Text[ swedish ] = "Short name unknown during copying: ($Arg1)";
-    Text[ polish ] = "Skrót nazwy nieznany podczas kopiowania: ($Arg1)";
+    Text[ swedish ] = "Long name unknown: ($Arg1)";
+    Text[ polish ] = "Pe³na nazwa nieznana: ($Arg1)";
     Text[ portuguese_brazilian ] = "Kurzname Unbekannt beim Kopieren: ($Arg1)";
-    Text[ japanese ] = "Short name unknown during copying: ($Arg1)";
+    Text[ japanese ] = "’·‚¢–¼‘O‚Í•s–¾: ($Arg1)";
     Text[ korean ] = "º¹»ç½Ã¿¡ ¾Ë¼ö ¾ø´Â ÂªÀº ÀÌ¸§: ($Arg1)";
-    Text[ chinese_simplified ] = "¸´ÖÆÊ±²»Ã÷µÄ¼ò³Æ£º($Arg1)";
-    Text[ chinese_traditional ] = "½Æ»s®ÉÀÉ®×µu¦WºÙ¤£©ú¡G($Arg1)";
+    Text[ chinese_simplified ] = "³¤Ãû³Æ²»Ã÷£º($Arg1)";
+    Text[ chinese_traditional ] = "ªøÀÉ®×¦WºÙ¤£©ú¡G($Arg1)";
     Text[ arabic ] = "Short name unknown during copying: ($Arg1)";
     Text[ turkish ] = "Short name unknown during copying: ($Arg1)";
     Text[ catalan ] = "Abreviatura desconocida al copiar: ($Arg1)";
@@ -255,7 +255,7 @@ String S_FIRST_SHORTNAME_REQ_ASTRX
     Text[ danish ] = "First short name must start with *. Ignore. ";
     Text[ swedish ] = "First short name must start with * . Ignore.";
     Text[ polish ] = "Pierwszy skrót nazwy musi siê zaczynaæ na * . Omiñ.";
-    Text[ portuguese_brazilian ] = "Erster Kurzname muß mit * beginnen. Überspringe.";
+    Text[ portuguese_brazilian ] = "Erster Kurzname mu? mit * beginnen. ?berspringe.";
     Text[ japanese ] = "First short name must start with * . Ignore.";
     Text[ korean ] = "Ã¹¹øÂ° ÂªÀº ÀÌ¸§Àº ¹İµå½Ã * ·Î ½ÃÀÛ µÇ¾î¾ß ÇÕ´Ï´Ù.°Ç³Ê¶Ù±â";
     Text[ chinese_simplified ] = "µÚÒ»¸ö¼ò³Æ±ØĞëÒÔ * ¿ªÍ·¡£Ê¡ÂÔ¡£";
@@ -278,7 +278,7 @@ String S_TIMOUT_WAITING
     Text[ italian ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
     Text[ danish ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
     Text[ swedish ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
-    Text[ polish ] = "Server Timeout podczas czekania na odpowiedŸ. Numer sekwencji: ($Arg1)";
+    Text[ polish ] = "Server Timeout podczas czekania na odpowied?. Numer sekwencji: ($Arg1)";
     Text[ portuguese_brazilian ] = "Server Timeout beim Warten auf Antwort. Sequenz Nr: ($Arg1)";
     Text[ japanese ] = "‰“š‘Ò‚¿‚ÌÛ‚Ì»°ÊŞ°‚ÌÀ²Ñ±³ÄB¼°¹İ½No.: ($Arg1)";
     Text[ korean ] = "ÀÀ´äÀ» ±â´Ù¸®´Â µ¿¾È ¼­¹ö Å¸ÀÓ¾Æ¿ô. ÀÏ·Ã ¹øÈ£: ($Arg1)";
@@ -614,7 +614,7 @@ String S_RETURNED_VALUE_ID_MISSMATCH
     Text[ italian ] = "Return value received but different Id expected";
     Text[ danish ] = "Return value received but different Id expected";
     Text[ swedish ] = "Return value received but different Id expected";
-    Text[ polish ] = "Odebrano wartoœæ return, ale oczekiwane jest inne ID";
+    Text[ polish ] = "Odebrano warto?æ return, ale oczekiwane jest inne ID";
     Text[ portuguese_brazilian ] = "Returnwert Empfangen aber andere Id erwartet";
     Text[ japanese ] = "ØÀ°İ’l‚ğó‚¯æ‚è‚Ü‚µ‚½‚ªA•Ê‚ÌId‚ª•K—v‚Å‚·B";
     Text[ korean ] = "¹İÈ¯°ª ¼ö½ÅÇÔ,  ÇÏÁö¸¸ ´Ù¸¥ Id¸¦ ±â´ëÇÔ";
@@ -638,8 +638,8 @@ String S_RETURNED_VALUE_NO_RECEIVER
     Text[ italian ] = "Return value received but receiver not defined";
     Text[ danish ] = "Return value received but receiver not defined";
     Text[ swedish ] = "Return value received but receiver not defined";
-    Text[ polish ] = "Odebrano wartoœæ return, ale brak zdefiniowanego odbiorcy";
-    Text[ portuguese_brazilian ] = "Returnwert Empfangen aber kein Empfänger definiert";
+    Text[ polish ] = "Odebrano warto?æ return, ale brak zdefiniowanego odbiorcy";
+    Text[ portuguese_brazilian ] = "Returnwert Empfangen aber kein Empf?nger definiert";
     Text[ japanese ] = "ØÀ°İ’l‚ğó‚¯æ‚è‚Ü‚µ‚½‚ªAóMÒ‚ªŒˆ’è‚Å‚«‚Ü‚¹‚ñB";
     Text[ korean ] = "¹İÈ¯°ª ¼ö½ÅÇÔ, ÇÏÁö¸¸ ¼ö½ÅÀÚ°¡  Á¤ÀÇµÇÁö ¾Ê¾ÒÀ½";
     Text[ chinese_simplified ] = "·µ»ØÖµ½ÓÊÕÃ»ÓĞÖ¸¶¨½ÓÊÕÕß";
