@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-16 09:31:33 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,22 +79,23 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text [ ENGLISH ] = "Treat as equal";
         Text[ english_us ] = "Treat as equal";
         Text[ portuguese ] = "Treat as equal";
-        Text[ russian ] = "Îáğàùàòüñÿ ğàâíîöåííî";
+        Text[ russian ] = "Îáğàùàòüñÿ êàê ñ ğàâíîöåííûìè";
         Text[ greek ] = "ºäéá ìåôá÷åßñéóç";
         Text[ dutch ] = "Treat as equal";
         Text[ french ] = "Treat as equal";
-        Text[ spanish ] = "Treat as equal";
+        Text[ spanish ] = "Tratar igual";
         Text[ italian ] = "Treat as equal";
         Text[ danish ] = "Treat as equal";
-        Text[ swedish ] = "Treat as equal";
-        Text[ polish ] = "Treat as equal";
+        Text[ swedish ] = "Behandla likvärdigt";
+        Text[ polish ] = "Traktuj w ten sam sposób";
         Text[ portuguese_brazilian ] = "Treat as equal";
-        Text[ japanese ] = "Treat as equal";
+        Text[ japanese ] = "‹æ•Ê‚µ‚È‚¢šíEš‘ÌE•\\‹L";
         Text[ korean ] = "Treat as equal";
-        Text[ chinese_simplified ] = "Treat as equal";
+        Text[ chinese_simplified ] = "µ±×÷ÏàµÈ´¦Àí";
         Text[ chinese_traditional ] = "·í§@¬Ûµ¥³B²z";
         Text[ turkish ] = "Treat as equal";
         Text[ arabic ] = "Treat as equal";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: Group box title. Use only one verb for the whole group box. Instead of saying \"Treat as equal - match...\" (dh gleichwertig behandeln und gleichstellen), just use \"treat as equal\" as title above all and no verb at check boxes (ie diff than English MS Word)";
     };
     CheckBox CB_MATCH_CASE
     {
@@ -102,24 +103,25 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Groß-/Kleinschreibung" ;
         Text [ ENGLISH ] = "Match case" ;
-        Text[ english_us ] = "Match case";
+        Text[ english_us ] = "uppercase/lowercase";
         Text[ portuguese ] = "Match case";
         Text[ russian ] = "Çàãëàâíûå/ñòğî÷íûå áóêâû";
         Text[ greek ] = "Êåöáëáßá/ĞåæÜ";
         Text[ dutch ] = "Match case";
         Text[ french ] = "Match case";
-        Text[ spanish ] = "Match case";
+        Text[ spanish ] = "Mayúsculas/minúsculas";
         Text[ italian ] = "Match case";
         Text[ danish ] = "Match case";
-        Text[ swedish ] = "Match case";
-        Text[ polish ] = "Match case";
+        Text[ swedish ] = "Stora/små bokstäver";
+        Text[ polish ] = "Wielkie i ma³e litery";
         Text[ portuguese_brazilian ] = "Match case";
-        Text[ japanese ] = "Match case";
+        Text[ japanese ] = "‘å•¶š/¬•¶š";
         Text[ korean ] = "Match case";
-        Text[ chinese_simplified ] = "Match case";
+        Text[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´";
         Text[ chinese_traditional ] = "¦r¥À¤j¤p¼g";
         Text[ turkish ] = "Match case";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_FULL_HALF_WIDTH
     {
@@ -127,24 +129,25 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Normale/halbbreite Formen" ;
         Text [ ENGLISH ] = "Match full/half width form" ;
-        Text[ english_us ] = "Match full/half width form";
+        Text[ english_us ] = "full-width/half-width forms";
         Text[ portuguese ] = "Match full/half width form";
         Text[ russian ] = "Íîğìàëüíûå/ïîëóøèğîêèå ôîğìû";
         Text[ greek ] = "Öüñìåò êáíïíéêïı/ìéóïı ğëÜôïõò";
         Text[ dutch ] = "Match full/half width form";
         Text[ french ] = "Match full/half width form";
-        Text[ spanish ] = "Match full/half width form";
+        Text[ spanish ] = "Formas normales/medio anchas";
         Text[ italian ] = "Match full/half width form";
         Text[ danish ] = "Match full/half width form";
-        Text[ swedish ] = "Match full/half width form";
-        Text[ polish ] = "Match full/half width form";
+        Text[ swedish ] = "Normala/halvbreda former";
+        Text[ polish ] = "Formy o zwyk³ej/o po³owie szerokoœci";
         Text[ portuguese_brazilian ] = "Match full/half width form";
-        Text[ japanese ] = "Match full/half width form";
+        Text[ japanese ] = "‘SŠp/”¼Šp";
         Text[ korean ] = "Match full/half width form";
-        Text[ chinese_simplified ] = "Match full/half width form";
+        Text[ chinese_simplified ] = "ÈÕÎÄÈ«½ÇºÍ°ë½Ç";
         Text[ chinese_traditional ] = "¥ş§Î©M¥b§Î¦r«¬";
         Text[ turkish ] = "Match full/half width form";
         Text[ arabic ] = "Match full/half width form";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_HIRAGANA_KATAKANA
     {
@@ -152,24 +155,25 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Hiragana/Katakana" ;
         Text [ ENGLISH ] = "Match hiragana/katakana" ;
-        Text[ english_us ] = "Match hiragana/katakana";
+        Text[ english_us ] = "hiragana/katakana";
         Text[ portuguese ] = "Match hiragana/katakana";
         Text[ russian ] = "Õèğàãàíà/êàòàêàíà";
         Text[ greek ] = "Hiragana/Katakana";
         Text[ dutch ] = "Match hiragana/katakana";
         Text[ french ] = "Match hiragana/katakana";
-        Text[ spanish ] = "Match hiragana/katakana";
+        Text[ spanish ] = "Hiragana/katakana";
         Text[ italian ] = "Match hiragana/katakana";
         Text[ danish ] = "Match hiragana/katakana";
-        Text[ swedish ] = "Match hiragana/katakana";
-        Text[ polish ] = "Match hiragana/katakana";
+        Text[ swedish ] = "Hiragana/katakana";
+        Text[ polish ] = "Hiragana/Katakana";
         Text[ portuguese_brazilian ] = "Match hiragana/katakana";
-        Text[ japanese ] = "Match hiragana/katakana";
+        Text[ japanese ] = "‚Ğ‚ç‚ª‚È/ƒJƒ^ƒJƒi";
         Text[ korean ] = "Match hiragana/katakana";
-        Text[ chinese_simplified ] = "Match hiragana/katakana";
+        Text[ chinese_simplified ] = "Æ½¼ÙÃûºÍÆ¬¼ÙÃû";
         Text[ chinese_traditional ] = "¥­°²¦W©M¤ù°²¦W";
         Text[ turkish ] = "Match hiragana/katakana";
-        Text[ arabic ] = "Match hiragana/katakana";
+        Text[ arabic ] = "åíÑÇÌÇäÇ/ßÇÊÇßÇäÇ";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_CONTRACTIONS
     {
@@ -177,24 +181,25 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Kontraktionen (yo-on, sokuon)" ;
         Text [ ENGLISH ] = "Match contractions (yo-on, sokuon)" ;
-        Text[ english_us ] = "Match contractions (yo-on, sokuon)";
+        Text[ english_us ] = "contractions (yo-on, sokuon)";
         Text[ portuguese ] = "Match contractions (yo-on, sokuon)";
         Text[ russian ] = "Êîíòğàêòàöèÿ ãëàñíûõ (yo-on, sokuon)";
         Text[ greek ] = "Óõíáßñåóç (yo-on, sokuon)";
         Text[ dutch ] = "Match contractions (yo-on, sokuon)";
         Text[ french ] = "Match contractions (yo-on, sokuon)";
-        Text[ spanish ] = "Match contractions (yo-on, sokuon)";
+        Text[ spanish ] = "Contracciones (yo-on, sokuon)";
         Text[ italian ] = "Match contractions (yo-on, sokuon)";
         Text[ danish ] = "Match contractions (yo-on, sokuon)";
-        Text[ swedish ] = "Match contractions (yo-on, sokuon)";
-        Text[ polish ] = "Match contractions (yo-on, sokuon)";
+        Text[ swedish ] = "Kontraktioner (yo-on, sokuon)";
+        Text[ polish ] = "Kontrakcje (yo-on, sokuon)";
         Text[ portuguese_brazilian ] = "Match contractions (yo-on, sokuon)";
-        Text[ japanese ] = "Match contractions (yo-on, sokuon)";
+        Text[ japanese ] = "X‰¹A‘£‰¹";
         Text[ korean ] = "Match contractions (yo-on, sokuon)";
-        Text[ chinese_simplified ] = "Match contractions (yo-on, sokuon)";
-        Text[ chinese_traditional ] = "Match contractions (yo-on, sokuon)";
+        Text[ chinese_simplified ] = "ÈÕÎÄËõĞ´Ê½(yo-on, sokuon)";
+        Text[ chinese_traditional ] = "¤é¤åÁY¼g¦¡(yo-on, sokuon)";
         Text[ turkish ] = "Match contractions (yo-on, sokuon)";
         Text[ arabic ] = "Match contractions (yo-on, sokuon)";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_MINUS_DASH_CHOON
     {
@@ -202,24 +207,25 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Minus/Bindestrich/cho-on" ;
         Text [ ENGLISH ] = "Match minus/dash/cho-on" ;
-        Text[ english_us ] = "Match minus/dash/cho-on";
+        Text[ english_us ] = "minus/dash/cho-on";
         Text[ portuguese ] = "Match minus/dash/cho-on";
         Text[ russian ] = "Äåôèñ/cho-on";
         Text[ greek ] = "Ìåßïí/ÓõíäåôéêŞ ãñáììŞ/cho-on";
         Text[ dutch ] = "Match minus/dash/cho-on";
         Text[ french ] = "Match minus/dash/cho-on";
-        Text[ spanish ] = "Match minus/dash/cho-on";
+        Text[ spanish ] = "Menos/Guión/cho-on";
         Text[ italian ] = "Match minus/dash/cho-on";
         Text[ danish ] = "Match minus/dash/cho-on";
-        Text[ swedish ] = "Match minus/dash/cho-on";
-        Text[ polish ] = "Match minus/dash/cho-on";
+        Text[ swedish ] = "Minus/bindestreck/cho-on";
+        Text[ polish ] = "Minus/myœlnik/cho-on";
         Text[ portuguese_brazilian ] = "Match minus/dash/cho-on";
-        Text[ japanese ] = "Match minus/dash/cho-on";
+        Text[ japanese ] = "ƒ}ƒCƒiƒX/ƒnƒCƒtƒ“/’·‰¹[|/]/[]";
         Text[ korean ] = "Match minus/dash/cho-on";
-        Text[ chinese_simplified ] = "Match minus/dash/cho-on";
-        Text[ chinese_traditional ] = "Match minus/dash/cho-on";
+        Text[ chinese_simplified ] = "¸ºÊı·ûºÅ/Á¬×Ö·û/ÈÕÎÄ³¤Òô";
+        Text[ chinese_traditional ] = "­t¼Æ²Å¸¹/³s¦r²Å/¤é¤åªø­µ";
         Text[ turkish ] = "Match minus/dash/cho-on";
         Text[ arabic ] = "Match minus/dash/cho-on";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_REPEAT_CHAR_MARKS
     {
@@ -227,24 +233,25 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Wiederholungszeichen" ;
         Text [ ENGLISH ] = "Match 'repeat character' marks" ;
-        Text[ english_us ] = "Match 'repeat character' marks";
+        Text[ english_us ] = "'repeat character' marks";
         Text[ portuguese ] = "Match 'repeat character' marks";
         Text[ russian ] = "Ïîâòîğÿşùèåñÿ çíàêè";
         Text[ greek ] = "×áñáêôŞñåò åğáíÜëçøçò";
         Text[ dutch ] = "Match 'repeat character' marks";
         Text[ french ] = "Match 'repeat character' marks";
-        Text[ spanish ] = "Match 'repeat character' marks";
+        Text[ spanish ] = "Carácter de repetición";
         Text[ italian ] = "Match 'repeat character' marks";
         Text[ danish ] = "Match 'repeat character' marks";
-        Text[ swedish ] = "Match 'repeat character' marks";
-        Text[ polish ] = "Match 'repeat character' marks";
+        Text[ swedish ] = "Upprepningstecken";
+        Text[ polish ] = "Znaki powtórki";
         Text[ portuguese_brazilian ] = "Match 'repeat character' marks";
-        Text[ japanese ] = "Match 'repeat character' marks";
+        Text[ japanese ] = "ŒJ‚è•Ô‚µ‹L†[RSTUX]";
         Text[ korean ] = "Match 'repeat character' marks";
-        Text[ chinese_simplified ] = "Match 'repeat character' marks";
+        Text[ chinese_simplified ] = "ÖØ¸´µÄ×Ö·û";
         Text[ chinese_traditional ] = "­«´_ªº¦r¤¸";
         Text[ turkish ] = "Match 'repeat character' marks";
-        Text[ arabic ] = "Match 'repeat character' marks";
+        Text[ arabic ] = "ÍÑİ ÇáÅÚÇÏÉ";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_VARIANT_FORM_KANJI
     {
@@ -252,24 +259,25 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Kanji Variante (itaiji)" ;
         Text [ ENGLISH ] = "Match variant-form kanji (itaiji)" ;
-        Text[ english_us ] = "Match variant-form kanji (itaiji)";
+        Text[ english_us ] = "variant-form kanji (itaiji)";
         Text[ portuguese ] = "Match variant-form kanji (itaiji)";
         Text[ russian ] = "Âàğèàíò êàíäçè (èòàèäçè)";
         Text[ greek ] = "Kanji Variante (itaiji)";
         Text[ dutch ] = "Match variant-form kanji (itaiji)";
         Text[ french ] = "Match variant-form kanji (itaiji)";
-        Text[ spanish ] = "Match variant-form kanji (itaiji)";
+        Text[ spanish ] = "Variante Kanji (itaiji)";
         Text[ italian ] = "Match variant-form kanji (itaiji)";
         Text[ danish ] = "Match variant-form kanji (itaiji)";
-        Text[ swedish ] = "Match variant-form kanji (itaiji)";
-        Text[ polish ] = "Match variant-form kanji (itaiji)";
+        Text[ swedish ] = "Kanji-variant (itaiji)";
+        Text[ polish ] = "Wariant kanji (itaiji)";
         Text[ portuguese_brazilian ] = "Match variant-form kanji (itaiji)";
-        Text[ japanese ] = "Match variant-form kanji (itaiji)";
+        Text[ japanese ] = "Š¿š•\\‹L‚Ì‚ä‚ê(ˆÙ‘Ìš)";
         Text[ korean ] = "Match variant-form kanji (itaiji)";
-        Text[ chinese_simplified ] = "Match variant-form kanji (itaiji)";
+        Text[ chinese_simplified ] = "ÈÕÎÄºº×Ö(ÒìÌå×Ö)";
         Text[ chinese_traditional ] = "Match variant-form kanji (itaiji)";
         Text[ turkish ] = "Match variant-form kanji (itaiji)";
         Text[ arabic ] = "Match variant-form kanji (itaiji)";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_OLD_KANA_FORMS
     {
@@ -277,24 +285,25 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Alte Kana-Formen" ;
         Text [ ENGLISH ] = "Match old kana forms" ;
-        Text[ english_us ] = "Match old kana forms";
+        Text[ english_us ] = "old kana forms";
         Text[ portuguese ] = "Match old kana forms";
         Text[ russian ] = "Ñòàğûå ôîğìû êàíû";
         Text[ greek ] = "Ğáëéİò ìïñöİò kana";
         Text[ dutch ] = "Match old kana forms";
         Text[ french ] = "Match old kana forms";
-        Text[ spanish ] = "Match old kana forms";
+        Text[ spanish ] = "Antiguas formas Kana";
         Text[ italian ] = "Match old kana forms";
         Text[ danish ] = "Match old kana forms";
-        Text[ swedish ] = "Match old kana forms";
-        Text[ polish ] = "Match old kana forms";
+        Text[ swedish ] = "Gamla kana-former";
+        Text[ polish ] = "Stare formy kana";
         Text[ portuguese_brazilian ] = "Match old kana forms";
-        Text[ japanese ] = "Match old kana forms";
+        Text[ japanese ] = "V‹Œ‚©‚Èš‘Ì";
         Text[ korean ] = "Match old kana forms";
-        Text[ chinese_simplified ] = "Match old kana forms";
+        Text[ chinese_simplified ] = "¾ÉÊ½ÈÕÎÄ¼ÙÃû";
         Text[ chinese_traditional ] = "ÂÂ¦¡¤é¤å°²¦W";
         Text[ turkish ] = "Match old kana forms";
         Text[ arabic ] = "Match old kana forms";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_DIZI_DUZU
     {
@@ -302,24 +311,25 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Di/zi, du/zu" ;
         Text [ ENGLISH ] = "Match di/zi, du/zu" ;
-        Text[ english_us ] = "Match di/zi, du/zu";
+        Text[ english_us ] = "di/zi, du/zu";
         Text[ portuguese ] = "Match di/zi, du/zu";
         Text[ russian ] = "Di/zi, du/zu";
         Text[ greek ] = "Di/zi, du/zu";
         Text[ dutch ] = "Match di/zi, du/zu";
         Text[ french ] = "Match di/zi, du/zu";
-        Text[ spanish ] = "Match di/zi, du/zu";
+        Text[ spanish ] = "Di/zi, du/zu";
         Text[ italian ] = "Match di/zi, du/zu";
         Text[ danish ] = "Match di/zi, du/zu";
-        Text[ swedish ] = "Match di/zi, du/zu";
-        Text[ polish ] = "Match di/zi, du/zu";
+        Text[ swedish ] = "Di/zi, du/zu";
+        Text[ polish ] = "Di/zi, du/zu";
         Text[ portuguese_brazilian ] = "Match di/zi, du/zu";
-        Text[ japanese ] = "Match di/zi, du/zu";
+        Text[ japanese ] = "ƒa/ƒWAƒd/ƒY";
         Text[ korean ] = "Match di/zi, du/zu";
-        Text[ chinese_simplified ] = "Match di/zi, du/zu";
-        Text[ chinese_traditional ] = "Match di/zi, du/zu";
+        Text[ chinese_simplified ] = "di/zi, du/zu (ÈÕÎÄ)";
+        Text[ chinese_traditional ] = "di/zi, du/zu ¤é¤å";
         Text[ turkish ] = "Match di/zi, du/zu";
         Text[ arabic ] = "Match di/zi, du/zu";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_BAVA_HAFA
     {
@@ -327,24 +337,25 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Ba/va, ha/fa" ;
         Text [ ENGLISH ] = "Match ba/va, ha/fa" ;
-        Text[ english_us ] = "Match ba/va, ha/fa";
+        Text[ english_us ] = "ba/va, ha/fa";
         Text[ portuguese ] = "Match ba/va, ha/fa";
         Text[ russian ] = "Ba/va, ha/fa";
         Text[ greek ] = "Ba/va, ha/fa";
         Text[ dutch ] = "Match ba/va, ha/fa";
         Text[ french ] = "Match ba/va, ha/fa";
-        Text[ spanish ] = "Match ba/va, ha/fa";
+        Text[ spanish ] = "Ba/va, ha/fa";
         Text[ italian ] = "Match ba/va, ha/fa";
         Text[ danish ] = "Match ba/va, ha/fa";
-        Text[ swedish ] = "Match ba/va, ha/fa";
-        Text[ polish ] = "Match ba/va, ha/fa";
+        Text[ swedish ] = "Ba/va, ha/fa";
+        Text[ polish ] = "Ba/va, ha/fa";
         Text[ portuguese_brazilian ] = "Match ba/va, ha/fa";
-        Text[ japanese ] = "Match ba/va, ha/fa";
+        Text[ japanese ] = "ƒo/ƒ”ƒ@Aƒn/ƒtƒ@";
         Text[ korean ] = "Match ba/va, ha/fa";
-        Text[ chinese_simplified ] = "Match ba/va, ha/fa";
-        Text[ chinese_traditional ] = "Match ba/va, ha/fa";
+        Text[ chinese_simplified ] = "ba/va, ha/fa (ÈÕÎÄ)";
+        Text[ chinese_traditional ] = "ba/va, ha/fa ¤é¤å";
         Text[ turkish ] = "Match ba/va, ha/fa";
         Text[ arabic ] = "Match ba/va, ha/fa";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_TSITHICHI_DHIZI
     {
@@ -352,24 +363,25 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Tsi/thi/chi, dhi/zi" ;
         Text [ ENGLISH ] = "Match tsi/thi/chi, dhi/zi" ;
-        Text[ english_us ] = "Match tsi/thi/chi, dhi/zi";
+        Text[ english_us ] = "tsi/thi/chi, dhi/zi";
         Text[ portuguese ] = "Match tsi/thi/chi, dhi/zi";
         Text[ russian ] = "Tsi/thi/chi, dhi/zi";
         Text[ greek ] = "Tsi/thi/chi, dhi/zi";
         Text[ dutch ] = "Match tsi/thi/chi, dhi/zi";
         Text[ french ] = "Match tsi/thi/chi, dhi/zi";
-        Text[ spanish ] = "Match tsi/thi/chi, dhi/zi";
+        Text[ spanish ] = "Tsi/thi/chi, dhi/zi";
         Text[ italian ] = "Match tsi/thi/chi, dhi/zi";
         Text[ danish ] = "Match tsi/thi/chi, dhi/zi";
-        Text[ swedish ] = "Match tsi/thi/chi, dhi/zi";
-        Text[ polish ] = "Match tsi/thi/chi, dhi/zi";
+        Text[ swedish ] = "Tsi/thi/chi, dhi/zi";
+        Text[ polish ] = "Tsi/thi/chi, dhi/zi";
         Text[ portuguese_brazilian ] = "Match tsi/thi/chi, dhi/zi";
-        Text[ japanese ] = "Match tsi/thi/chi, dhi/zi";
+        Text[ japanese ] = "ƒcƒB/ƒeƒB/ƒ`AƒfƒB/ƒW";
         Text[ korean ] = "Match tsi/thi/chi, dhi/zi";
-        Text[ chinese_simplified ] = "Match tsi/thi/chi, dhi/zi";
-        Text[ chinese_traditional ] = "Match tsi/thi/chi, dhi/zi";
+        Text[ chinese_simplified ] = "tsi/thi/chi, dhi/zi (ÈÕÎÄ)";
+        Text[ chinese_traditional ] = "tsi/thi/chi, dhi/zi ¤é¤å";
         Text[ turkish ] = "Match tsi/thi/chi, dhi/zi";
         Text[ arabic ] = "Match tsi/thi/chi, dhi/zi";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_HYUFYU_BYUVYU
     {
@@ -377,7 +389,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Hyu/fyu, byu/vyu" ;
         Text [ ENGLISH ] = "Match hyu/fyu, byu/vyu" ;
-        Text[ english_us ] = "Match hyu/fyu, byu/vyu";
+        Text[ english_us ] = "hyu/fyu, byu/vyu";
         Text[ portuguese ] = "Match hyu/fyu, byu/vyu";
         Text[ russian ] = "Hyu/fyu, byu/vyu";
         Text[ greek ] = "Hyu/fyu, byu/vyu";
@@ -386,15 +398,16 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Match hyu/fyu, byu/vyu";
         Text[ italian ] = "Match hyu/fyu, byu/vyu";
         Text[ danish ] = "Match hyu/fyu, byu/vyu";
-        Text[ swedish ] = "Match hyu/fyu, byu/vyu";
-        Text[ polish ] = "Match hyu/fyu, byu/vyu";
+        Text[ swedish ] = "Hyu/fyu, byu/vyu";
+        Text[ polish ] = "Hyu/fyu, byu/vyu";
         Text[ portuguese_brazilian ] = "Match hyu/fyu, byu/vyu";
-        Text[ japanese ] = "Match hyu/fyu, byu/vyu";
+        Text[ japanese ] = "ƒqƒ…/ƒtƒ…Aƒrƒ…/ƒ”ƒ…";
         Text[ korean ] = "Match hyu/fyu, byu/vyu";
-        Text[ chinese_simplified ] = "Match hyu/fyu, byu/vyu";
-        Text[ chinese_traditional ] = "Match hyu/fyu, byu/vyu";
+        Text[ chinese_simplified ] = "hyu/fyu, byu/vyu (ÈÕÎÄ)";
+        Text[ chinese_traditional ] = "hyu/fyu, byu/vyu ¤é¤å";
         Text[ turkish ] = "Match hyu/fyu, byu/vyu";
         Text[ arabic ] = "Match hyu/fyu, byu/vyu";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_SESHE_ZEJE
     {
@@ -402,24 +415,25 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Se/she, ze/je" ;
         Text [ ENGLISH ] = "Match se/she, ze/je" ;
-        Text[ english_us ] = "Match se/she, ze/je";
+        Text[ english_us ] = "se/she, ze/je";
         Text[ portuguese ] = "Match se/she, ze/je";
         Text[ russian ] = "Se/she, ze/je";
         Text[ greek ] = "Se/she, ze/je";
         Text[ dutch ] = "Match se/she, ze/je";
         Text[ french ] = "Match se/she, ze/je";
-        Text[ spanish ] = "Match se/she, ze/je";
+        Text[ spanish ] = "Se/she, ze/je";
         Text[ italian ] = "Match se/she, ze/je";
         Text[ danish ] = "Match se/she, ze/je";
-        Text[ swedish ] = "Match se/she, ze/je";
-        Text[ polish ] = "Match se/she, ze/je";
+        Text[ swedish ] = "Se/she, ze/je";
+        Text[ polish ] = "Se/she, ze/je";
         Text[ portuguese_brazilian ] = "Match se/she, ze/je";
-        Text[ japanese ] = "Match se/she, ze/je";
+        Text[ japanese ] = "ƒZ/ƒVƒFAƒ[/ƒWƒF";
         Text[ korean ] = "Match se/she, ze/je";
-        Text[ chinese_simplified ] = "Match se/she, ze/je";
-        Text[ chinese_traditional ] = "Match se/she, ze/je";
+        Text[ chinese_simplified ] = "se/she, ze/je (ÈÕÎÄ)";
+        Text[ chinese_traditional ] = "se/she, ze/je ¤é¤å";
         Text[ turkish ] = "Match se/she, ze/je";
         Text[ arabic ] = "Match se/she, ze/je";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_IAIYA
     {
@@ -427,24 +441,25 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Ia/iya (piano/piyano)" ;
         Text [ ENGLISH ] = "Match ia/iya (piano/piyano)" ;
-        Text[ english_us ] = "Match ia/iya (piano/piyano)";
+        Text[ english_us ] = "ia/iya (piano/piyano)";
         Text[ portuguese ] = "Match ia/iya (piano/piyano)";
         Text[ russian ] = "Ia/iya (piano/piyano)";
         Text[ greek ] = "Ia/iya (piano/piyano)";
         Text[ dutch ] = "Match ia/iya (piano/piyano)";
         Text[ french ] = "Match ia/iya (piano/piyano)";
-        Text[ spanish ] = "Match ia/iya (piano/piyano)";
+        Text[ spanish ] = "Ia/iya (piano/piyano)";
         Text[ italian ] = "Match ia/iya (piano/piyano)";
         Text[ danish ] = "Match ia/iya (piano/piyano)";
-        Text[ swedish ] = "Match ia/iya (piano/piyano)";
-        Text[ polish ] = "Match ia/iya (piano/piyano)";
+        Text[ swedish ] = "Ia/iya (piano/piyano)";
+        Text[ polish ] = "Ia/iya (piano/piyano)";
         Text[ portuguese_brazilian ] = "Match ia/iya (piano/piyano)";
-        Text[ japanese ] = "Match ia/iya (piano/piyano)";
+        Text[ japanese ] = "ƒC’iAƒG’i‚É‘±‚­ƒA/ƒ„(ƒsƒAƒm/ƒsƒ„ƒm)";
         Text[ korean ] = "Match ia/iya (piano/piyano)";
-        Text[ chinese_simplified ] = "Match ia/iya (piano/piyano)";
-        Text[ chinese_traditional ] = "Match ia/iya (piano/piyano)";
+        Text[ chinese_simplified ] = "ia/iya (piano/piyano)(ÈÕÎÄ)";
+        Text[ chinese_traditional ] = "ia/iya (piano/piyano)¤é¤å";
         Text[ turkish ] = "Match ia/iya (piano/piyano)";
         Text[ arabic ] = "Match ia/iya (piano/piyano)";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_KIKU
     {
@@ -452,24 +467,25 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Ki/ku (tekisuto/tekusuto)" ;
         Text [ ENGLISH ] = "Match ki/ku (tekisuto/tekusuto)" ;
-        Text[ english_us ] = "Match ki/ku (tekisuto/tekusuto)";
+        Text[ english_us ] = "ki/ku (tekisuto/tekusuto)";
         Text[ portuguese ] = "Match ki/ku (tekisuto/tekusuto)";
         Text[ russian ] = "Ki/ku (tekisuto/tekusuto)";
         Text[ greek ] = "Ki/ku (tekisuto/tekusuto)";
         Text[ dutch ] = "Match ki/ku (tekisuto/tekusuto)";
         Text[ french ] = "Match ki/ku (tekisuto/tekusuto)";
-        Text[ spanish ] = "Match ki/ku (tekisuto/tekusuto)";
+        Text[ spanish ] = "Ki/ku (tekisuto/tekusuto)";
         Text[ italian ] = "Match ki/ku (tekisuto/tekusuto)";
         Text[ danish ] = "Match ki/ku (tekisuto/tekusuto)";
-        Text[ swedish ] = "Match ki/ku (tekisuto/tekusuto)";
-        Text[ polish ] = "Match ki/ku (tekisuto/tekusuto)";
+        Text[ swedish ] = "Ki/ku (tekisuto/tekusuto)";
+        Text[ polish ] = "Ki/ku (tekisuto/tekusuto)";
         Text[ portuguese_brazilian ] = "Match ki/ku (tekisuto/tekusuto)";
-        Text[ japanese ] = "Match ki/ku (tekisuto/tekusuto)";
+        Text[ japanese ] = "ƒTs‚Ì‘O‚ÌƒL/ƒN (ƒeƒLƒXƒg/ƒeƒNƒXƒg)";
         Text[ korean ] = "Match ki/ku (tekisuto/tekusuto)";
-        Text[ chinese_simplified ] = "Match ki/ku (tekisuto/tekusuto)";
-        Text[ chinese_traditional ] = "Match ki/ku (tekisuto/tekusuto)";
+        Text[ chinese_simplified ] = "ki/ku (tekisuto/tekusuto)(ÈÕÎÄ)";
+        Text[ chinese_traditional ] = "ki/ku (tekisuto/tekusuto) ¤é¤å";
         Text[ turkish ] = "Match ki/ku (tekisuto/tekusuto)";
         Text[ arabic ] = "Match ki/ku (tekisuto/tekusuto)";
+        Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     FixedLine FL_IGNORE
     {
@@ -483,18 +499,18 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ greek ] = "ĞáñÜâëåøç";
         Text[ dutch ] = "Ignore";
         Text[ french ] = "Ignore";
-        Text[ spanish ] = "Ignore";
+        Text[ spanish ] = "Ignorar";
         Text[ italian ] = "Ignore";
         Text[ danish ] = "Ignore";
         Text[ swedish ] = "Ignorera";
-        Text[ polish ] = "Ignore";
+        Text[ polish ] = "Ignoruj";
         Text[ portuguese_brazilian ] = "Ignore";
-        Text[ japanese ] = "Ignore";
+        Text[ japanese ] = "–³‹‚·‚é‹L†E•¶š";
         Text[ korean ] = "Ignore";
-        Text[ chinese_simplified ] = "Ignore";
+        Text[ chinese_simplified ] = "ºöÂÔ";
         Text[ chinese_traditional ] = "©¿²¤";
         Text[ turkish ] = "Ignore";
-        Text[ arabic ] = "Ignore";
+        Text[ arabic ] = "ÊÌÇåá";
     };
     CheckBox CB_IGNORE_PUNCTUATION
     {
@@ -508,18 +524,18 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ greek ] = "Óçìåßá óôßîçò";
         Text[ dutch ] = "Punctuation characters";
         Text[ french ] = "Punctuation characters";
-        Text[ spanish ] = "Punctuation characters";
+        Text[ spanish ] = "Caracteres de puntuación";
         Text[ italian ] = "Punctuation characters";
         Text[ danish ] = "Punctuation characters";
-        Text[ swedish ] = "Punctuation characters";
-        Text[ polish ] = "Punctuation characters";
+        Text[ swedish ] = "Interpunktionstecken";
+        Text[ polish ] = "Znak interpunkcji";
         Text[ portuguese_brazilian ] = "Punctuation characters";
-        Text[ japanese ] = "Punctuation characters";
+        Text[ japanese ] = "‹æØ‚è‹L†";
         Text[ korean ] = "Punctuation characters";
-        Text[ chinese_simplified ] = "Punctuation characters";
+        Text[ chinese_simplified ] = "Æ´ÒôºÍ×¢Òô·ûºÅ";
         Text[ chinese_traditional ] = "ª`­µ²Å¸¹";
         Text[ turkish ] = "Punctuation characters";
-        Text[ arabic ] = "Punctuation characters";
+        Text[ arabic ] = "ÃÍÑİ ÚáÇãÇÊ ÇáÊäŞíØ";
     };
     CheckBox CB_IGNORE_WHITESPACES
     {
@@ -533,18 +549,18 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ greek ] = "×áñáêôŞñáò êåíïı";
         Text[ dutch ] = "Whitespace characters";
         Text[ french ] = "Whitespace characters";
-        Text[ spanish ] = "Whitespace characters";
+        Text[ spanish ] = "Carácter de espacio";
         Text[ italian ] = "Whitespace characters";
         Text[ danish ] = "Whitespace characters";
-        Text[ swedish ] = "Whitespace characters";
-        Text[ polish ] = "Whitespace characters";
+        Text[ swedish ] = "Tomrumstecken";
+        Text[ polish ] = "Znak spacji";
         Text[ portuguese_brazilian ] = "Whitespace characters";
-        Text[ japanese ] = "Whitespace characters";
+        Text[ japanese ] = "‹ó”’‚Æ‚µ‚Äg—p‚³‚ê‚é•¶š";
         Text[ korean ] = "Whitespace characters";
-        Text[ chinese_simplified ] = "Whitespace characters";
+        Text[ chinese_simplified ] = "¿Õ¸ñ×Ö·û";
         Text[ chinese_traditional ] = "ªÅ®æ¦r¤¸";
         Text[ turkish ] = "Whitespace characters";
-        Text[ arabic ] = "Whitespace characters";
+        Text[ arabic ] = "ÃÍÑİ ÇáãÓÇİÇÊ";
     };
     CheckBox CB_IGNORE_PROLONGED_SOUNDMARK
     {
@@ -552,22 +568,22 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Verlängerte Vokale (cho-on)" ;
         Text [ ENGLISH ] = "Prolonged soundmarks (cho-on)" ;
-        Text[ english_us ] = "Prolonged soundmarks (cho-on)";
+        Text[ english_us ] = "Prolonged vowels (cho-on)";
         Text[ portuguese ] = "Prolonged soundmarks (cho-on)";
         Text[ russian ] = "Äîëãèå ãëàñíûå (cho-on)";
         Text[ greek ] = "ÌáêñÜ óıìöùíá (cho-on)";
         Text[ dutch ] = "Prolonged soundmarks (cho-on)";
         Text[ french ] = "Prolonged soundmarks (cho-on)";
-        Text[ spanish ] = "Prolonged soundmarks (cho-on)";
+        Text[ spanish ] = "Vocales largas (cho-on)";
         Text[ italian ] = "Prolonged soundmarks (cho-on)";
         Text[ danish ] = "Prolonged soundmarks (cho-on)";
-        Text[ swedish ] = "Prolonged soundmarks (cho-on)";
-        Text[ polish ] = "Prolonged soundmarks (cho-on)";
+        Text[ swedish ] = "Förlängda vokaler (cho-on)";
+        Text[ polish ] = "Przed³u¿one samog³oski (cho-on)";
         Text[ portuguese_brazilian ] = "Prolonged soundmarks (cho-on)";
-        Text[ japanese ] = "Prolonged soundmarks (cho-on)";
+        Text[ japanese ] = "’·‰¹(•ê‰¹‚Å‚Ì‚Î‚·‰¹) [[]";
         Text[ korean ] = "Prolonged soundmarks (cho-on)";
-        Text[ chinese_simplified ] = "Prolonged soundmarks (cho-on)";
-        Text[ chinese_traditional ] = "Prolonged soundmarks (cho-on)";
+        Text[ chinese_simplified ] = "ÈÕÓï³¤Òô";
+        Text[ chinese_traditional ] = "¤é»yªºªø­µ";
         Text[ turkish ] = "Prolonged soundmarks (cho-on)";
         Text[ arabic ] = "Prolonged soundmarks (cho-on)";
     };
@@ -583,18 +599,18 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ greek ] = "ÊåíôñéêŞ ôåëåßá";
         Text[ dutch ] = "Middle dots";
         Text[ french ] = "Middle dots";
-        Text[ spanish ] = "Middle dots";
+        Text[ spanish ] = "Punto centrado";
         Text[ italian ] = "Middle dots";
         Text[ danish ] = "Middle dots";
-        Text[ swedish ] = "Middle dots";
-        Text[ polish ] = "Middle dots";
+        Text[ swedish ] = "Mittpunkt";
+        Text[ polish ] = "Kropka poœrodku";
         Text[ portuguese_brazilian ] = "Middle dots";
-        Text[ japanese ] = "Middle dots";
+        Text[ japanese ] = "’†•";
         Text[ korean ] = "Middle dots";
-        Text[ chinese_simplified ] = "Middle dots";
+        Text[ chinese_simplified ] = "ÖĞ¼äµã";
         Text[ chinese_traditional ] = "¤¤¶¡ÂI";
         Text[ turkish ] = "Middle dots";
-        Text[ arabic ] = "Middle dots";
+        Text[ arabic ] = "äŞØÉ æÓØíÉ";
     };
 };
 // end TabPage
