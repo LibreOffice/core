@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:04:50 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 class SvStorage;
 class SvNumberFormatter;
 class ScRangeName;
+class ScProgress;
 
 class NameBuffer;
 class RangeNameBufferWK3;
@@ -162,6 +163,10 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 
 //  const SvxURLField*  pLastHlink;             // last found hyperlink
     XclExpHyperlink*    pLastHlink;
+
+    // #113567# #114980# old static ExcCell members
+    UINT32              nCellCount;     // zaehlt DOPPELT: im Ctor und SaveCont
+    ScProgress*         pPrgrsBar;
 
     XclImpRoot*         pIR;
     XclExpRoot*         pER;
