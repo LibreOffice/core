@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileextensions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:02:17 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 22:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,11 @@
 //
 //------------------------------------
 
-const std::string WRITER_FILE_EXTENSIONS   = "sxwstwsxgootottoom";
-const std::string CALC_FILE_EXTENSIONS     = "sxcstcoosots";
-const std::string DRAW_FILE_EXTENSIONS     = "sxdstdoodotd";
-const std::string IMPRESS_FILE_EXTENSIONS  = "sxistioopotp";
-const std::string MATH_FILE_EXTENSIONS     = "sxmoof";
+const std::string WRITER_FILE_EXTENSIONS   = "sxwstwsxgodtottodm";
+const std::string CALC_FILE_EXTENSIONS     = "sxcstcodsots";
+const std::string DRAW_FILE_EXTENSIONS     = "sxdstdodgotg";
+const std::string IMPRESS_FILE_EXTENSIONS  = "sxistiodpotp";
+const std::string MATH_FILE_EXTENSIONS     = "sxmodf";
 const std::string WEB_FILE_EXTENSIONS      = "oth";
 const std::string DATABASE_FILE_EXTENSIONS = "odb";
 
@@ -86,18 +86,18 @@ FileExtensionEntry OOFileExtensionTable[] = {
     { ".std", L".std", "soffice.StarDrawTemplate.6"        },
     { ".sti", L".sti", "soffice.StarImpressTemplate.6"     },
     { ".stc", L".stc", "soffice.StarCalcTemplate.6"        },
-    { ".oot", L".oot", "openoffice.WriterDocument.1"       },
-    { ".ott", L".ott", "openoffice.WriterTemplate.1"       },
-    { ".oom", L".oom", "openoffice.WriterGlobalDocument.1" },
-    { ".oth", L".oth", "openoffice.WriterWebDocument.1"    },
-    { ".oos", L".oos", "openoffice.CalcDocument.1"         },
-    { ".ots", L".ots", "openoffice.CalcTemplate.1"         },
-    { ".ood", L".ood", "openoffice.DrawDocument.1"         },
-    { ".otd", L".otd", "openoffice.DrawTemplate.1"         },
-    { ".oop", L".oop", "openoffice.ImpressDocument.1"      },
-    { ".otp", L".otp", "openoffice.ImpressTemplate.1"      },
-    { ".oof", L".oof", "openoffice.MathDocument.1"         },
-    { ".odb", L".odb", "openoffice.DatabaseDocument.1"     }
+    { ".odt", L".odt", "opendocument.WriterDocument.1"       },
+    { ".ott", L".ott", "opendocument.WriterTemplate.1"       },
+    { ".odm", L".odm", "opendocument.WriterGlobalDocument.1" },
+    { ".oth", L".oth", "opendocument.WriterWebTemplate.1"    },
+    { ".ods", L".ods", "opendocument.CalcDocument.1"         },
+    { ".ots", L".ots", "opendocument.CalcTemplate.1"         },
+    { ".odg", L".odg", "opendocument.DrawDocument.1"         },
+    { ".otg", L".otg", "opendocument.DrawTemplate.1"         },
+    { ".odp", L".odp", "opendocument.ImpressDocument.1"      },
+    { ".otp", L".otp", "opendocument.ImpressTemplate.1"      },
+    { ".odf", L".odf", "opendocument.MathDocument.1"         },
+    { ".odb", L".odb", "opendocument.DatabaseDocument.1"     }
     };
 
 
