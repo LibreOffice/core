@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:14:59 $
+ *  last change: $Author: fs $ $Date: 2001-08-16 10:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,10 @@ sal_Bool OGenericUnoController::Construct(Window* pParent)
     ToolBox* pTB = CreateToolBox(getView());
     getView()->setToolBox(pTB);
     if (pTB) // we want to handle the select
-        pTB->SetSelectHdl(LINK(this, OGenericUnoController, OnToolBoxSelected));
+    {
+        pTB->SetSelectHdl( LINK( this, OGenericUnoController, OnToolBoxSelected ) );
+        pTB->SetClickHdl( LINK( this, OGenericUnoController, OnToolBoxClicked ) );
+    }
 
     AddSupportedFeatures();
 
@@ -831,10 +834,29 @@ sal_Bool OGenericUnoController::SaveModified(sal_Bool bCommit)
 
     return bResult;
 }
+
+//------------------------------------------------------------------------------
+void OGenericUnoController::onToolBoxSelected( sal_uInt16 _nSelectedItem )
+{
+    Execute( _nSelectedItem );
+}
+
+//------------------------------------------------------------------------------
+void OGenericUnoController::onToolBoxClicked( sal_uInt16 _nClickedItem )
+{
+}
+
+//------------------------------------------------------------------------------
+IMPL_LINK(OGenericUnoController, OnToolBoxClicked, ToolBox*, pToolBox)
+{
+    onToolBoxClicked( pToolBox->GetCurItemId() );
+    return 0L;
+}
+
 //------------------------------------------------------------------------------
 IMPL_LINK(OGenericUnoController, OnToolBoxSelected, ToolBox*, pToolBox)
 {
-    Execute(pToolBox->GetCurItemId());
+    onToolBoxSelected( pToolBox->GetCurItemId() );
     return 0L;
 }
 //------------------------------------------------------------------
