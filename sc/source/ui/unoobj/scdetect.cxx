@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 12:35:40 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,11 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
+#endif
+
+
 #ifndef __FRAMEWORK_DISPATCH_INTERACTION_HXX_
 #include <framework/interaction.hxx>
 #endif
@@ -140,9 +145,10 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/brokenpackageint.hxx>
+#include <sot/storage.hxx>
 
-//#include "document.hxx"
-
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::frame;
@@ -269,11 +275,16 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
     String aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
     String aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
 
+    ::rtl::OUString aDocumentTitle; // interesting only if set in this method
+
     // opening as template is done when a parameter tells to do so and a template filter can be detected
     // (otherwise no valid filter would be found) or if the detected filter is a template filter and
     // there is no parameter that forbids to open as template
     sal_Bool bOpenAsTemplate = sal_False;
     sal_Bool bWasReadOnly = sal_False, bReadOnly = sal_False;
+
+    sal_Bool bRepairPackage = sal_False;
+    sal_Bool bRepairAllowed = sal_False;
 
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
     // remember their indices in the case new values must be added to the array
@@ -283,6 +294,8 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
     sal_Int32 nIndexOfContent = -1;
     sal_Int32 nIndexOfReadOnlyFlag = -1;
     sal_Int32 nIndexOfTemplateFlag = -1;
+    sal_Int32 nIndexOfDocumentTitle = -1;
+
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
         // extract properties
@@ -323,6 +336,10 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
         }
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) )
             lDescriptor[nProperty].Value >>= xInteraction;
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("RapairPackage")) )
+            lDescriptor[nProperty].Value >>= bRepairPackage;
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle")) )
+            nIndexOfDocumentTitle = nProperty;
     }
 
     // can't check the type for external filters, so set the "dont" flag accordingly
@@ -371,7 +388,7 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
             // maybe that IsStorage() already created an error!
             if ( bIsStorage )
             {
-                SotStorageRef xStorage = aMedium.GetStorage();
+                uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium
@@ -396,341 +413,396 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                         catch ( Exception & ) {};
                     }
                 }
-                else if ( xStorage.Is() )
+                else if ( xStorage.is() )
                 {
-                    // Excel-5: detect through contained streams
-                    // there are some "excel" formats from 3rd party vendors that need to be distinguished
-                    String aStreamName;
-                    aStreamName = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Workbook"));
-                    BOOL bExcel97Stream = ( xStorage->IsContained( aStreamName ) && xStorage->IsStream( aStreamName ) );
-
-                    aStreamName = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Book"));
-                    BOOL bExcel5Stream = ( xStorage->IsContained( aStreamName ) && xStorage->IsStream( aStreamName ) );
-
-                    if ( !bExcel97Stream && !bExcel5Stream )
+                    try
                     {
-                        // if it's not Excel-5/97, it must be our own format
-                        if ( pFilter && !pFilter->GetFormat() )
-                            // preselected Filter has no ClipboardId -> doesn't match to own format
-                            pFilter = 0;
-
-                        // now the "real" type detection: check if the filter has the right ClipboardId
-                        if ( pFilter && pFilter->GetFormat() != xStorage->GetFormat() )
-                            // preselected Filter has different ClipboardId -> doesn't match
-                            pFilter = 0;
-
-                        if ( !pFilter )
-                            // not found until now, check all own formats for ClipboardId
-                            pFilter = aMatcher.GetFilter4ClipBoardId( xStorage->GetFormat() );
+                        String aFilterName;
+                        if ( pFilter )
+                            aFilterName = pFilter->GetName();
+                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, &aFilterName );
                     }
-                    else
+                    catch( lang::WrappedTargetException& aWrap )
                     {
-                        if ( bExcel97Stream )
+                        packages::zip::ZipIOException aZipException;
+
+                        // repairing is done only if this type is requested from outside
+                        if ( ( aWrap.TargetException >>= aZipException ) && aTypeName.Len() )
                         {
-                            String aOldName;
-                            BOOL bIsCalcFilter = TRUE;
-                            if ( pFilter )
+                            if ( xInteraction.is() )
                             {
-                                // cross filter; now this should be a type detection only, not a filter detection
-                                // we can simulate it by preserving the preselected filter if the type matches
-                                // example: Excel filters for Writer
-                                aOldName = pFilter->GetFilterName();
-                                bIsCalcFilter = pFilter->GetServiceName().EqualsAscii("com.sun.star.sheet.SpreadsheetDocument");
+                                // the package is broken one
+                                   aDocumentTitle = aMedium.GetURLObject().getName(
+                                                            INetURLObject::LAST_SEGMENT,
+                                                            true,
+                                                            INetURLObject::DECODE_WITH_CHARSET );
+
+                                if ( !bRepairPackage )
+                                {
+                                    // ask the user whether he wants to try to repair
+                                    RequestPackageReparation* pRequest = new RequestPackageReparation( aDocumentTitle );
+                                    uno::Reference< task::XInteractionRequest > xRequest ( pRequest );
+
+                                    xInteraction->handle( xRequest );
+
+                                    bRepairAllowed = pRequest->isApproved();
+                                }
+
+                                if ( !bRepairAllowed )
+                                {
+                                    // repair either not allowed or not successful
+                                    NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocumentTitle );
+                                    uno::Reference< task::XInteractionRequest > xRequest ( pNotifyRequest );
+                                       xInteraction->handle( xRequest );
+                                }
                             }
 
-                            if ( aOldName.EqualsAscii(pFilterEx97Temp) || !bIsCalcFilter )
-                            {
-                                //  Excel 97 template selected -> keep selection
-                            }
-                            else if ( bExcel5Stream &&
-                                        ( aOldName.EqualsAscii(pFilterExcel5) || aOldName.EqualsAscii(pFilterEx5Temp) ||
-                                          aOldName.EqualsAscii(pFilterExcel95) || aOldName.EqualsAscii(pFilterEx95Temp) ) )
-                            {
-                                //  dual format file and Excel 5 selected -> keep selection
-                            }
-                            else
-                            {
-                                //  else use Excel 97 filter
-                                pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterExcel97) );
-                            }
-                        }
-                        else if ( bExcel5Stream )
-                        {
-                            String aOldName;
-                            BOOL bIsCalcFilter = TRUE;
-                            if ( pFilter )
-                            {
-                                // cross filter; now this should be a type detection only, not a filter detection
-                                // we can simulate it by preserving the preselected filter if the type matches
-                                // example: Excel filters for Writer
-                                aOldName = pFilter->GetFilterName();
-                                bIsCalcFilter = pFilter->GetServiceName().EqualsAscii("com.sun.star.sheet.SpreadsheetDocument");
-                            }
-
-                            if ( aOldName.EqualsAscii(pFilterExcel95) || aOldName.EqualsAscii(pFilterEx95Temp) ||
-                                    aOldName.EqualsAscii(pFilterEx5Temp) || !bIsCalcFilter )
-                            {
-                                //  Excel 95 oder Vorlage (5 oder 95) eingestellt -> auch gut
-                            }
-                            else if ( aOldName.EqualsAscii(pFilterEx97Temp) )
-                            {
-                                // #101923# auto detection has found template -> return Excel5 template
-                                pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterEx5Temp) );
-                            }
-                            else
-                            {
-                                //  sonst wird als Excel 5-Datei erkannt
-                                pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterExcel5) );
-                            }
+                            if ( !bRepairAllowed )
+                                aTypeName.Erase();
                         }
                     }
+                    catch( uno::RuntimeException& )
+                    {
+                        throw;
+                    }
+                    catch( uno::Exception& )
+                    {
+                        aTypeName.Erase();
+                    }
+
+                       if ( aTypeName.Len() )
+                           pFilter = SfxFilterMatcher( String::CreateFromAscii("scalc") ).GetFilter4EA( aTypeName );
+
                 }
             }
             else
             {
-                SvStream &rStr = *aMedium.GetInStream();
-
-                // Tabelle mit Suchmustern
-                // Bedeutung der Sequenzen
-                // 0x00??: genau Byte 0x?? muss an dieser Stelle stehen
-                // 0x0100: ein Byte ueberlesen (don't care)
-                // 0x02nn: ein Byte aus 0xnn Alternativen folgt
-                // 0x8000: Erkennung abgeschlossen
-                //
-
-#define M_DC        0x0100
-#define M_ALT(ANZ)  0x0200+ANZ
-#define M_ENDE      0x8000
-
-                const UINT16 pLotus[] =         // Lotus 1/1A/2
-                    { 0x0000, 0x0000, 0x0002, 0x0000,
-                      M_ALT(2), 0x0004, 0x0006,
-                      0x0004, M_ENDE };
-
-                const UINT16 pExcel1[] =        // Excel Biff/3/4 Tabellen
-                    { 0x0009,
-                      M_ALT(2), 0x0002, 0x0004,
-                      0x0006, 0x0000, M_DC, M_DC, 0x0010, 0x0000,
-                      M_DC, M_DC, M_ENDE };
-
-                const UINT16 pExcel2[] =        // Excel Biff3/4 Workbooks
-                    { 0x0009,
-                      M_ALT(2), 0x0002, 0x0004,
-                      0x0006, 0x0000, M_DC, M_DC, 0x0000, 0x0001,
-                      M_DC, M_DC, M_ENDE };
-
-                const UINT16 pExcel3[] =        // Excel Biff2 Tabellen
-                    { 0x0009, 0x0000, 0x0004, 0x0000,
-                      M_DC, M_DC, 0x0010, 0x0000, M_ENDE };
-
-                const UINT16 pSc10[] =          // StarCalc 1.0 Dokumente
-                    { 'B', 'l', 'a', 'i', 's', 'e', '-', 'T', 'a', 'b', 'e', 'l', 'l',
-                      'e', 0x000A, 0x000D, 0x0000,    // Sc10CopyRight[16]
-                      M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC,
-                      M_DC, M_DC,                   // Sc10CopyRight[29]
-                      M_ALT(2), 0x0065, 0x0066,     // Versionsnummer 101 oder 102
-                      0x0000,
-                      M_ENDE };
-
-                const UINT16 pLotus2[] =        // Lotus >3
-                    { 0x0000, 0x0000, 0x001A, 0x0000,   // Rec# + Len (26)
-                      M_ALT(2), 0x0000, 0x0002,         // File Revision Code
-                      0x0010,
-                      0x0004, 0x0000,                   // File Revision Subcode
-                      M_ENDE };
-
-                const UINT16 pDIF1[] =          // DIF mit CR-LF
-                    {
-                    'T', 'A', 'B', 'L', 'E',
-                    M_DC, M_DC,
-                    '0', ',', '1',
-                    M_DC, M_DC,
-                    '\"',
-                    M_ENDE };
-
-                const UINT16 pDIF2[] =          // DIF mit CR oder LF
-                    {
-                    'T', 'A', 'B', 'L', 'E',
-                    M_DC,
-                    '0', ',', '1',
-                    M_DC,
-                    '\"',
-                    M_ENDE };
-
-                const UINT16 pSylk[] =          // Sylk
-                    {
-                    'I', 'D', ';', 'P',
-                    M_ENDE };
-
-#ifdef SINIX
-                const UINT16 nAnzMuster = 9;    // sollte fuer indiz. Zugriff stimmen...
-                UINT16 *ppMuster[ nAnzMuster ];         // Arrays mit Suchmustern
-                ppMuster[ 0 ] = pLotus;
-                ppMuster[ 1 ] = pExcel1;
-                ppMuster[ 2 ] = pExcel2;
-                ppMuster[ 3 ] = pExcel3;
-                ppMuster[ 4 ] = pSc10;
-                ppMuster[ 5 ] = pDIF1;
-                ppMuster[ 6 ] = pDIF2;
-                ppMuster[ 7 ] = pSylk;
-                ppMuster[ 8 ] = pLotus2;                // Lotus immer ganz hinten wegen Ini-Eintrag
-#else
-                const UINT16 *ppMuster[] =      // Arrays mit Suchmustern
-                    {
-                    pLotus,
-                    pExcel1,
-                    pExcel2,
-                    pExcel3,
-                    pSc10,
-                    pDIF1,
-                    pDIF2,
-                    pSylk,
-                    pLotus2
-                    };
-                const UINT16 nAnzMuster = sizeof(ppMuster) / sizeof(ppMuster[0]);
-#endif
-
-                const sal_Char* pFilterName[ nAnzMuster ] =     // zugehoerige Filter
-                    {
-                    pFilterLotus,
-                    pFilterExcel4,
-                    pFilterExcel4,
-                    pFilterExcel4,
-                    pFilterSc10,
-                    pFilterDif,
-                    pFilterDif,
-                    pFilterSylk,
-                    pFilterLotus
-                    };
-
-                const UINT16 nByteMask = 0xFF;
-
-                // suchen Sie jetzt!
-                // ... realisiert ueber 'Mustererkennung'
-
-                BYTE            nAkt;
-                BOOL            bSync;          // Datei und Muster stimmen ueberein
-                USHORT          nFilter;        // Zaehler ueber alle Filter
-                const UINT16    *pSearch;       // aktuelles Musterwort
-                UINT16          nFilterLimit = nAnzMuster;
-
-                // nur solange, bis es etwas Globales gibt
-                // funzt nur, solange Eintraege fuer WK3 letzte Muster-Tabelle ist!
-//!MBA              //ScLibOptions aLibOpt;
-                //if( !aLibOpt.GetWK3Flag() )
-                //  nFilterLimit--;
-
-                for ( nFilter = 0 ; nFilter < nFilterLimit ; nFilter++ )
+                SvStream* pStream = aMedium.GetInStream();
+                if ( !pStream )
                 {
-                    rStr.Seek( 0 ); // am Anfang war alles Uebel...
-                    rStr >> nAkt;
-                    pSearch = ppMuster[ nFilter ];
-                    bSync = TRUE;
-                    while( !rStr.IsEof() && bSync )
-                    {
-                        register UINT16 nMuster = *pSearch;
-
-                        if( nMuster < 0x0100 )
-                        { //                                direkter Byte-Vergleich
-                            if( ( BYTE ) nMuster != nAkt )
-                                bSync = FALSE;
-                        }
-                        else if( nMuster & M_DC )
-                        { //                                             don't care
-                        }
-                        else if( nMuster & M_ALT(0) )
-                        { //                                      alternative Bytes
-                            BYTE nAnzAlt = ( BYTE ) nMuster;
-                            bSync = FALSE;          // zunaechst unsynchron
-                            while( nAnzAlt > 0 )
-                            {
-                                pSearch++;
-                                if( ( BYTE ) *pSearch == nAkt )
-                                    bSync = TRUE;   // jetzt erst Synchronisierung
-                                nAnzAlt--;
-                            }
-                        }
-                        else if( nMuster & M_ENDE )
-                        { //                                        Format detected
-                            if ( pFilterName[nFilter] == pFilterExcel4 && pFilter &&
-                                ( (pFilter)->GetFilterName().EqualsAscii(pFilterEx4Temp) || pFilter->GetTypeName().EqualsAscii("calc_MS_Excel_40") ) )
-                            {
-                                //  Excel 4 erkannt, Excel 4 Vorlage eingestellt -> auch gut
-                                // oder Excel 4 Filter anderer Applikation (simulated type detection!)
-                            }
-                            else
-                            {   // gefundenen Filter einstellen
-                                pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterName[ nFilter ]) );
-                            }
-                        }
-                        else
-                        { //                                         Tabellenfehler
-                            DBG_ERROR( "-ScApplication::DetectFilter(): Fehler in Mustertabelle");
-                        }
-
-                        pSearch++;
-                        rStr >> nAkt;
-                    }
-                }
-
-                // ASCII cannot be recognized.
-                // #i3341# But if the Text/CSV filter was set (either by the user or
-                // file extension) it takes precedence over HTML and RTF and dBase
-                // detection. Otherwise something like, for example, "lala <SUP> gugu"
-                // would trigger HTML to be recognized.
-
-                if ( aPreselectedFilterName.EqualsAscii(pFilterAscii) && lcl_MayBeAscii( rStr ) )
-                {
-                    pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
+                    pFilter = 0;
                 }
                 else
                 {
-                    // get file header
-                    rStr.Seek( 0 );
-                    const int nTrySize = 80;
-                    ByteString aHeader;
-                    for ( int j = 0; j < nTrySize && !rStr.IsEof(); j++ )
+                    SotStorageRef aStorage = new SotStorage ( pStream, FALSE );
+                    if ( !aStorage->GetError() )
                     {
-                        sal_Char c;
-                        rStr >> c;
-                        aHeader += c;
-                    }
-                    aHeader += '\0';
+                        // Excel-5: detect through contained streams
+                        // there are some "excel" formats from 3rd party vendors that need to be distinguished
+                        String aStreamName = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Workbook"));
+                        BOOL bExcel97Stream = ( aStorage->IsStream( aStreamName ) );
 
-                    // test for HTML
-
-                    if ( HTMLParser::IsHTMLFormat( aHeader.GetBuffer() ) )
-                    {
-                        if ( aPreselectedFilterName.EqualsAscii(pFilterHtml) )
+                        aStreamName = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Book"));
+                        BOOL bExcel5Stream = ( aStorage->IsStream( aStreamName ) );
+                        if ( bExcel97Stream || bExcel5Stream )
                         {
-                             pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
+                            if ( bExcel97Stream )
+                            {
+                                String aOldName;
+                                BOOL bIsCalcFilter = TRUE;
+                                if ( pFilter )
+                                {
+                                    // cross filter; now this should be a type detection only, not a filter detection
+                                    // we can simulate it by preserving the preselected filter if the type matches
+                                    // example: Excel filters for Writer
+                                    aOldName = pFilter->GetFilterName();
+                                    bIsCalcFilter = pFilter->GetServiceName().EqualsAscii("com.sun.star.sheet.SpreadsheetDocument");
+                                }
+
+                                if ( aOldName.EqualsAscii(pFilterEx97Temp) || !bIsCalcFilter )
+                                {
+                                    //  Excel 97 template selected -> keep selection
+                                }
+                                else if ( bExcel5Stream &&
+                                            ( aOldName.EqualsAscii(pFilterExcel5) || aOldName.EqualsAscii(pFilterEx5Temp) ||
+                                            aOldName.EqualsAscii(pFilterExcel95) || aOldName.EqualsAscii(pFilterEx95Temp) ) )
+                                {
+                                    //  dual format file and Excel 5 selected -> keep selection
+                                }
+                                else
+                                {
+                                    //  else use Excel 97 filter
+                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterExcel97) );
+                                }
+                            }
+                            else if ( bExcel5Stream )
+                            {
+                                String aOldName;
+                                BOOL bIsCalcFilter = TRUE;
+                                if ( pFilter )
+                                {
+                                    // cross filter; now this should be a type detection only, not a filter detection
+                                    // we can simulate it by preserving the preselected filter if the type matches
+                                    // example: Excel filters for Writer
+                                    aOldName = pFilter->GetFilterName();
+                                    bIsCalcFilter = pFilter->GetServiceName().EqualsAscii("com.sun.star.sheet.SpreadsheetDocument");
+                                }
+
+                                if ( aOldName.EqualsAscii(pFilterExcel95) || aOldName.EqualsAscii(pFilterEx95Temp) ||
+                                        aOldName.EqualsAscii(pFilterEx5Temp) || !bIsCalcFilter )
+                                {
+                                    //  Excel 95 oder Vorlage (5 oder 95) eingestellt -> auch gut
+                                }
+                                else if ( aOldName.EqualsAscii(pFilterEx97Temp) )
+                                {
+                                    // #101923# auto detection has found template -> return Excel5 template
+                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterEx5Temp) );
+                                }
+                                else
+                                {
+                                    //  sonst wird als Excel 5-Datei erkannt
+                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterExcel5) );
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        SvStream &rStr = *pStream;
+
+                        // Tabelle mit Suchmustern
+                        // Bedeutung der Sequenzen
+                        // 0x00??: genau Byte 0x?? muss an dieser Stelle stehen
+                        // 0x0100: ein Byte ueberlesen (don't care)
+                        // 0x02nn: ein Byte aus 0xnn Alternativen folgt
+                        // 0x8000: Erkennung abgeschlossen
+                        //
+
+        #define M_DC        0x0100
+        #define M_ALT(ANZ)  0x0200+ANZ
+        #define M_ENDE      0x8000
+
+                        const UINT16 pLotus[] =         // Lotus 1/1A/2
+                            { 0x0000, 0x0000, 0x0002, 0x0000,
+                            M_ALT(2), 0x0004, 0x0006,
+                            0x0004, M_ENDE };
+
+                        const UINT16 pExcel1[] =        // Excel Biff/3/4 Tabellen
+                            { 0x0009,
+                            M_ALT(2), 0x0002, 0x0004,
+                            0x0006, 0x0000, M_DC, M_DC, 0x0010, 0x0000,
+                            M_DC, M_DC, M_ENDE };
+
+                        const UINT16 pExcel2[] =        // Excel Biff3/4 Workbooks
+                            { 0x0009,
+                            M_ALT(2), 0x0002, 0x0004,
+                            0x0006, 0x0000, M_DC, M_DC, 0x0000, 0x0001,
+                            M_DC, M_DC, M_ENDE };
+
+                        const UINT16 pExcel3[] =        // Excel Biff2 Tabellen
+                            { 0x0009, 0x0000, 0x0004, 0x0000,
+                            M_DC, M_DC, 0x0010, 0x0000, M_ENDE };
+
+                        const UINT16 pSc10[] =          // StarCalc 1.0 Dokumente
+                            { 'B', 'l', 'a', 'i', 's', 'e', '-', 'T', 'a', 'b', 'e', 'l', 'l',
+                            'e', 0x000A, 0x000D, 0x0000,    // Sc10CopyRight[16]
+                            M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC,
+                            M_DC, M_DC,                   // Sc10CopyRight[29]
+                            M_ALT(2), 0x0065, 0x0066,     // Versionsnummer 101 oder 102
+                            0x0000,
+                            M_ENDE };
+
+                        const UINT16 pLotus2[] =        // Lotus >3
+                            { 0x0000, 0x0000, 0x001A, 0x0000,   // Rec# + Len (26)
+                            M_ALT(2), 0x0000, 0x0002,         // File Revision Code
+                            0x0010,
+                            0x0004, 0x0000,                   // File Revision Subcode
+                            M_ENDE };
+
+                        const UINT16 pDIF1[] =          // DIF mit CR-LF
+                            {
+                            'T', 'A', 'B', 'L', 'E',
+                            M_DC, M_DC,
+                            '0', ',', '1',
+                            M_DC, M_DC,
+                            '\"',
+                            M_ENDE };
+
+                        const UINT16 pDIF2[] =          // DIF mit CR oder LF
+                            {
+                            'T', 'A', 'B', 'L', 'E',
+                            M_DC,
+                            '0', ',', '1',
+                            M_DC,
+                            '\"',
+                            M_ENDE };
+
+                        const UINT16 pSylk[] =          // Sylk
+                            {
+                            'I', 'D', ';', 'P',
+                            M_ENDE };
+
+        #ifdef SINIX
+                        const UINT16 nAnzMuster = 9;    // sollte fuer indiz. Zugriff stimmen...
+                        UINT16 *ppMuster[ nAnzMuster ];         // Arrays mit Suchmustern
+                        ppMuster[ 0 ] = pLotus;
+                        ppMuster[ 1 ] = pExcel1;
+                        ppMuster[ 2 ] = pExcel2;
+                        ppMuster[ 3 ] = pExcel3;
+                        ppMuster[ 4 ] = pSc10;
+                        ppMuster[ 5 ] = pDIF1;
+                        ppMuster[ 6 ] = pDIF2;
+                        ppMuster[ 7 ] = pSylk;
+                        ppMuster[ 8 ] = pLotus2;                // Lotus immer ganz hinten wegen Ini-Eintrag
+        #else
+                        const UINT16 *ppMuster[] =      // Arrays mit Suchmustern
+                            {
+                            pLotus,
+                            pExcel1,
+                            pExcel2,
+                            pExcel3,
+                            pSc10,
+                            pDIF1,
+                            pDIF2,
+                            pSylk,
+                            pLotus2
+                            };
+                        const UINT16 nAnzMuster = sizeof(ppMuster) / sizeof(ppMuster[0]);
+        #endif
+
+                        const sal_Char* pFilterName[ nAnzMuster ] =     // zugehoerige Filter
+                            {
+                            pFilterLotus,
+                            pFilterExcel4,
+                            pFilterExcel4,
+                            pFilterExcel4,
+                            pFilterSc10,
+                            pFilterDif,
+                            pFilterDif,
+                            pFilterSylk,
+                            pFilterLotus
+                            };
+
+                        const UINT16 nByteMask = 0xFF;
+
+                        // suchen Sie jetzt!
+                        // ... realisiert ueber 'Mustererkennung'
+
+                        BYTE            nAkt;
+                        BOOL            bSync;          // Datei und Muster stimmen ueberein
+                        USHORT          nFilter;        // Zaehler ueber alle Filter
+                        const UINT16    *pSearch;       // aktuelles Musterwort
+                        UINT16          nFilterLimit = nAnzMuster;
+
+                        // nur solange, bis es etwas Globales gibt
+                        // funzt nur, solange Eintraege fuer WK3 letzte Muster-Tabelle ist!
+        //!MBA              //ScLibOptions aLibOpt;
+                        //if( !aLibOpt.GetWK3Flag() )
+                        //  nFilterLimit--;
+
+                        for ( nFilter = 0 ; nFilter < nFilterLimit ; nFilter++ )
+                        {
+                            rStr.Seek( 0 ); // am Anfang war alles Uebel...
+                            rStr >> nAkt;
+                            pSearch = ppMuster[ nFilter ];
+                            bSync = TRUE;
+                            while( !rStr.IsEof() && bSync )
+                            {
+                                register UINT16 nMuster = *pSearch;
+
+                                if( nMuster < 0x0100 )
+                                { //                                direkter Byte-Vergleich
+                                    if( ( BYTE ) nMuster != nAkt )
+                                        bSync = FALSE;
+                                }
+                                else if( nMuster & M_DC )
+                                { //                                             don't care
+                                }
+                                else if( nMuster & M_ALT(0) )
+                                { //                                      alternative Bytes
+                                    BYTE nAnzAlt = ( BYTE ) nMuster;
+                                    bSync = FALSE;          // zunaechst unsynchron
+                                    while( nAnzAlt > 0 )
+                                    {
+                                        pSearch++;
+                                        if( ( BYTE ) *pSearch == nAkt )
+                                            bSync = TRUE;   // jetzt erst Synchronisierung
+                                        nAnzAlt--;
+                                    }
+                                }
+                                else if( nMuster & M_ENDE )
+                                { //                                        Format detected
+                                    if ( pFilterName[nFilter] == pFilterExcel4 && pFilter &&
+                                        ( (pFilter)->GetFilterName().EqualsAscii(pFilterEx4Temp) || pFilter->GetTypeName().EqualsAscii("calc_MS_Excel_40") ) )
+                                    {
+                                        //  Excel 4 erkannt, Excel 4 Vorlage eingestellt -> auch gut
+                                        // oder Excel 4 Filter anderer Applikation (simulated type detection!)
+                                    }
+                                    else
+                                    {   // gefundenen Filter einstellen
+                                        pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterName[ nFilter ]) );
+                                    }
+                                }
+                                else
+                                { //                                         Tabellenfehler
+                                    DBG_ERROR( "-ScApplication::DetectFilter(): Fehler in Mustertabelle");
+                                }
+
+                                pSearch++;
+                                rStr >> nAkt;
+                            }
+                        }
+
+                        // ASCII cannot be recognized.
+                        // #i3341# But if the Text/CSV filter was set (either by the user or
+                        // file extension) it takes precedence over HTML and RTF and dBase
+                        // detection. Otherwise something like, for example, "lala <SUP> gugu"
+                        // would trigger HTML to be recognized.
+
+                        if ( aPreselectedFilterName.EqualsAscii(pFilterAscii) && lcl_MayBeAscii( rStr ) )
+                        {
+                            pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
                         }
                         else
                         {
-                            pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterHtmlWeb) );
+                            // get file header
+                            rStr.Seek( 0 );
+                            const int nTrySize = 80;
+                            ByteString aHeader;
+                            for ( int j = 0; j < nTrySize && !rStr.IsEof(); j++ )
+                            {
+                                sal_Char c;
+                                rStr >> c;
+                                aHeader += c;
+                            }
+                            aHeader += '\0';
+
+                            // test for HTML
+
+                            if ( HTMLParser::IsHTMLFormat( aHeader.GetBuffer() ) )
+                            {
+                                if ( aPreselectedFilterName.EqualsAscii(pFilterHtml) )
+                                {
+                                    pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
+                                }
+                                else
+                                {
+                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterHtmlWeb) );
+                                }
+                            }
+
+                            // test for RTF
+
+                            if ( aHeader.CompareTo( "{\\rtf", 5 ) == COMPARE_EQUAL )
+                            {
+                                pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterRtf) );
+                            }
+
+                            // #97832#; we don't have a flat xml filter
+                    /*      if ( aHeader.CompareTo( "<?xml", 5 ) == COMPARE_EQUAL )
+                            {
+                                //  if XML template is set, don't modify
+                                if (!lcl_IsAnyXMLFilter(pFilter))
+                                    pFilter = SFX_APP()->GetFilter( ScDocShell::Factory(),
+                                                                    String::CreateFromAscii(pFilterXML) );
+                                return ERRCODE_NONE;
+                            }*/
+
+                            // dBase cannot safely be recognized - only test if the filter was set
+                            if ( aPreselectedFilterName.EqualsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
+                                pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
                         }
                     }
-
-                    // test for RTF
-
-                    if ( aHeader.CompareTo( "{\\rtf", 5 ) == COMPARE_EQUAL )
-                    {
-                        pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterRtf) );
-                    }
-
-                    // #97832#; we don't have a flat xml filter
-            /*      if ( aHeader.CompareTo( "<?xml", 5 ) == COMPARE_EQUAL )
-                    {
-                        //  if XML template is set, don't modify
-                        if (!lcl_IsAnyXMLFilter(pFilter))
-                            pFilter = SFX_APP()->GetFilter( ScDocShell::Factory(),
-                                                              String::CreateFromAscii(pFilterXML) );
-                        return ERRCODE_NONE;
-                    }*/
-
-                    // dBase cannot safely be recognized - only test if the filter was set
-                    if ( aPreselectedFilterName.EqualsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
-                        pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
                 }
             }
         }
@@ -765,6 +837,45 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
         }
         else
             lDescriptor[nIndexOfReadOnlyFlag].Value <<= bReadOnly;
+    }
+
+    if ( !bRepairPackage && bRepairAllowed )
+    {
+        lDescriptor.realloc( nPropertyCount + 1 );
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("RepairPackage");
+        lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
+        nPropertyCount++;
+
+        bOpenAsTemplate = sal_True;
+
+        // TODO/LATER: set progress bar that should be used
+    }
+
+    if ( bOpenAsTemplate )
+    {
+        if ( nIndexOfTemplateFlag == -1 )
+        {
+            lDescriptor.realloc( nPropertyCount + 1 );
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
+            lDescriptor[nPropertyCount].Value <<= bOpenAsTemplate;
+            nPropertyCount++;
+        }
+        else
+            lDescriptor[nIndexOfTemplateFlag].Value <<= bOpenAsTemplate;
+    }
+
+    if ( aDocumentTitle.getLength() )
+    {
+        // the title was set here
+        if ( nIndexOfDocumentTitle == -1 )
+        {
+            lDescriptor.realloc( nPropertyCount + 1 );
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("DocumentTitle");
+            lDescriptor[nPropertyCount].Value <<= aDocumentTitle;
+            nPropertyCount++;
+        }
+        else
+            lDescriptor[nIndexOfDocumentTitle].Value <<= aDocumentTitle;
     }
 
     if ( pFilter )
