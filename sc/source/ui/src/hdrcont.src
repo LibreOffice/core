@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 23:14:52 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:36:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
         Text[ chinese_traditional ] = "Àx¦s®æ®æ¦¡¤Æ(~F)...";\
         Text[ arabic ] = "...ÊäÓíŞ ÇáÎáÇíÇ";\
         Text[ greek ] = "Ìïñöï~ğïßçóç êåëéşí...";\
-        Text[ korean ] = "¼¿ Æ÷¸ËÆÃ...";\
+        Text[ korean ] = "¼¿ Æ÷¸ËÆÃ(~F)...";\
         Text[ turkish ] = "Hücreleri formatla...";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "~Formatear celdas...";\
@@ -111,7 +111,7 @@
         Text [ italian ] = "Taglia" ; \
         Text [ portuguese ] = "Cortar" ; \
         Text [ portuguese_brazilian ] = "Ausschneiden" ; \
-        Text[ chinese_simplified ] = "¼ô³ı(~T)";\
+        Text[ chinese_simplified ] = "¼ôÇĞ(~T)";\
         Text[ russian ] = "Âûğåçàòü";\
         Text[ polish ] = "Wytnij";\
         Text[ japanese ] = "Ø‚èæ‚è(~T)";\
@@ -217,7 +217,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ chinese_traditional ] = "¦C°ª(~H)...";
             Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİ...";
             Text[ greek ] = "¾øïò ãñá~ììŞò...";
-            Text[ korean ] = "Çà³ôÀÌ...";
+            Text[ korean ] = "Çà³ôÀÌ(~H)...";
             Text[ turkish ] = "Satır yüksekliği...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Altura de fila...";
@@ -247,7 +247,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ chinese_traditional ] = "³Ì¾A¦C°ª(~R)...";
             Text[ arabic ] = "...ÇáÇÑÊİÇÚ ÇáÃãËá ááÕİ";
             Text[ greek ] = "Âİëôéóô~ï ıøïò ãñáììŞò...";
-            Text[ korean ] = "ÃÖÀû  Çà ³ôÀÌ...";
+            Text[ korean ] = "ÃÖÀû  Çà ³ôÀÌ(~R)...";
             Text[ turkish ] = "~En uygun yükseklik...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Optimar altura de fila...";
@@ -280,7 +280,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ chinese_traditional ] = "´¡¤J¦C(~I)";
             Text[ arabic ] = "ÅÏÑÇÌ ÃÓØÑ";
             Text[ greek ] = "~ÅéóáãùãŞ ãñáììşí";
-            Text[ korean ] = "Çà »ğÀÔ";
+            Text[ korean ] = "Çà »ğÀÔ(~I)";
             Text[ turkish ] = "Satır ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Insertar filas";
@@ -309,7 +309,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ chinese_traditional ] = "§R°£¦C(~D)";
             Text[ arabic ] = "ÍĞİ ÃÓØÑ";
             Text[ greek ] = "ÄéáãñáöŞ ãñáììşí";
-            Text[ korean ] = "Çà »èÁ¦";
+            Text[ korean ] = "Çà »èÁ¦(~D)";
             Text[ turkish ] = "Satır sil";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Eliminar filas";
@@ -372,7 +372,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ chinese_traditional ] = "Áô¤J(~H)";
             Text[ arabic ] = "ÅÎİÇÁ";
             Text[ greek ] = "~Áğüêñõøç";
-            Text[ korean ] = "¼û±â±â";
+            Text[ korean ] = "¼û±â±â(~H)";
             Text[ turkish ] = "~Gizle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Ocultar";
@@ -400,7 +400,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ chinese_traditional ] = "Åã¥Ü(~S)";
             Text[ arabic ] = "ÅÙåÇÑ";
             Text[ greek ] = "Åì~öÜíéóç";
-            Text[ korean ] = "³ªÅ¸³»±â";
+            Text[ korean ] = "³ªÅ¸³»±â(~S)";
             Text[ turkish ] = "G~öster";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Mostrar";
@@ -475,7 +475,7 @@ Menu RID_POPUP_COLHEADER
             Text[ chinese_traditional ] = "Äæ¼e(~U)...";
             Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ...";
             Text[ greek ] = "ĞëÜôïò ó~ôŞëçò...";
-            Text[ korean ] = "¿­ ³Êºñ...";
+            Text[ korean ] = "¿­ ³Êºñ(~U)...";
             Text[ turkish ] = "Sütun genişliği...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Ancho de columna...";
@@ -503,7 +503,7 @@ Menu RID_POPUP_COLHEADER
             Text[ chinese_traditional ] = "³Ì¾AÄæ¼e(~P)...";
             Text[ arabic ] = "ÇáÚÑÖ ÇáÃãËá ááÚãæÏ...";
             Text[ greek ] = "Âİëôéóô~ï ğëÜôïò óôŞëçò...";
-            Text[ korean ] = "ÃÖÀû ¿­ ³Êºñ...";
+            Text[ korean ] = "ÃÖÀû ¿­ ³Êºñ(~P)...";
             Text[ turkish ] = "En uygun genişlik...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Optimar ancho de columna...";
@@ -536,7 +536,7 @@ Menu RID_POPUP_COLHEADER
             Text[ chinese_traditional ] = "´¡¤JÄæ(~I)";
             Text[ arabic ] = "ÅÏÑÇÌ ÃÚãÏÉ";
             Text[ greek ] = "~ÅéóáãùãŞ óôçëşí";
-            Text[ korean ] = "¿­ »ğÀÔ";
+            Text[ korean ] = "¿­ »ğÀÔ(~I)";
             Text[ turkish ] = "Sütun ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Insertar columnas";
@@ -565,7 +565,7 @@ Menu RID_POPUP_COLHEADER
             Text[ chinese_traditional ] = "§R°£Äæ(~D)";
             Text[ arabic ] = "ÍĞİ ÃÚãÏÉ";
             Text[ greek ] = "ÄéáãñáöŞ óôç~ëşí";
-            Text[ korean ] = "¿­ »èÁ¦";
+            Text[ korean ] = "¿­ »èÁ¦(~D)";
             Text[ turkish ] = "Sütun sil";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Eliminar columnas";
@@ -628,7 +628,7 @@ Menu RID_POPUP_COLHEADER
             Text[ chinese_traditional ] = "Áô¤J(~H)";
             Text[ arabic ] = "ÅÎİÇÁ";
             Text[ greek ] = "~Áğüêñõøç";
-            Text[ korean ] = "¼û±â±â";
+            Text[ korean ] = "¼û±â±â(~H)";
             Text[ turkish ] = "~Gizle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Ocultar";
@@ -656,7 +656,7 @@ Menu RID_POPUP_COLHEADER
             Text[ chinese_traditional ] = "Åã¥Ü(~S)";
             Text[ arabic ] = "ÅÙåÇÑ";
             Text[ greek ] = "Åì~öÜíéóç";
-            Text[ korean ] = "³ªÅ¸³»±â";
+            Text[ korean ] = "³ªÅ¸³»±â(~S)";
             Text[ turkish ] = "G~öster";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Mostrar";
@@ -696,6 +696,7 @@ Menu RID_POPUP_COLHEADER
         };
     };
 };
+
 
 
 
