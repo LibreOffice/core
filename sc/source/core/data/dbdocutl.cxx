@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocutl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-26 18:56:42 $
+ *  last change: $Author: nn $ $Date: 2000-11-03 19:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,9 +215,14 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, USHORT nCol, USHORT nRow, USH
     }
     else
     {
-        pCell = ScBaseCell::CreateTextCell( aString, pDoc );
-        if ( pSimpleFlag && pCell->GetCellType() == CELLTYPE_EDIT )
-            *pSimpleFlag = FALSE;
+        if (aString.Len())
+        {
+            pCell = ScBaseCell::CreateTextCell( aString, pDoc );
+            if ( pSimpleFlag && pCell->GetCellType() == CELLTYPE_EDIT )
+                *pSimpleFlag = FALSE;
+        }
+        else
+            pCell = NULL;
         pDoc->PutCell( nCol, nRow, nTab, pCell );
     }
 }
