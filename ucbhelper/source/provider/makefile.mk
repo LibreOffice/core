@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kso $ $Date: 2001-06-06 11:22:38 $
+#   last change: $Author: sb $ $Date: 2001-07-13 12:49:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +97,8 @@ SLOFILES=\
                 $(SLO)$/simpleauthenticationrequest.obj \
                 $(SLO)$/simplenameclashresolverequest.obj \
                 $(SLO)$/simpleioerrorrequest.obj        \
-                $(SLO)$/cancelcommandexecution.obj
+                $(SLO)$/cancelcommandexecution.obj \
+        $(SLO)$/handleinteractionrequest.obj
 
 .ENDIF
 
