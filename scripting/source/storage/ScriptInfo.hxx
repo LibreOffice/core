@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-31 08:40:48 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-31 11:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,9 @@ public:
         throw ( css::uno::RuntimeException );
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
         getLanguageProperties() throw ( css::uno::RuntimeException );
-    virtual css::uno::Sequence< ::rtl::OUString > getFileSetNames()
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getFileSetNames()
         throw ( css::uno::RuntimeException );
-    virtual css::uno::Sequence< ::rtl::OUString >
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL
         getFilesInFileSet( const ::rtl::OUString & fileSetName )
         throw ( css::uno::RuntimeException );
 

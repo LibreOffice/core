@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-31 08:40:48 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-31 11:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ Reference< beans::XPropertySet > SAL_CALL ScriptInfo::getLanguageProperties(  )
     return xPropSet;
 }
 //*************************************************************************
-css::uno::Sequence< ::rtl::OUString > ScriptInfo::getFileSetNames()
+css::uno::Sequence< ::rtl::OUString > SAL_CALL ScriptInfo::getFileSetNames()
 throw ( css::uno::RuntimeException )
 {
     OSL_TRACE("ScriptInfo::getFileSetNames");
@@ -382,7 +382,7 @@ throw ( css::uno::RuntimeException )
     return results;
 }
 //*************************************************************************
-css::uno::Sequence< ::rtl::OUString >
+css::uno::Sequence< ::rtl::OUString > SAL_CALL
 ScriptInfo::getFilesInFileSet( const ::rtl::OUString & fileSetName )
 throw ( css::uno::RuntimeException )
 {
