@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyprovider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-08 16:57:39 $
+ *  last change: $Author: kso $ $Date: 2000-12-10 15:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,11 @@ HierarchyContentProvider::~HierarchyContentProvider()
 //
 //=========================================================================
 
-XINTERFACE_IMPL_3( HierarchyContentProvider,
+XINTERFACE_IMPL_4( HierarchyContentProvider,
                    XTypeProvider,
                    XServiceInfo,
-                   XContentProvider );
+                   XContentProvider,
+                   XInitialization );
 
 //=========================================================================
 //
@@ -127,10 +128,11 @@ XINTERFACE_IMPL_3( HierarchyContentProvider,
 //
 //=========================================================================
 
-XTYPEPROVIDER_IMPL_3( HierarchyContentProvider,
+XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
                          XTypeProvider,
                          XServiceInfo,
-                         XContentProvider );
+                         XContentProvider,
+                      XInitialization );
 
 //=========================================================================
 //
@@ -200,10 +202,64 @@ Reference< XContent > SAL_CALL HierarchyContentProvider::queryContent(
 
 //=========================================================================
 //
+// XInitialization methods.
+//
+//=========================================================================
+
+// virtual
+void SAL_CALL HierarchyContentProvider::initialize(
+                                    const Sequence< Any >& aArguments )
+    throw( Exception, RuntimeException )
+{
+    if ( aArguments.getLength() > 0 )
+    {
+         // Extract config provider from service init args.
+         aArguments[ 0 ] >>= m_xConfigProvider;
+
+        VOS_ENSURE( m_xConfigProvider.is(),
+                    "HierarchyContentProvider::initialize - "
+                    "No config provider!" );
+    }
+}
+
+//=========================================================================
+//
 //  Non-interface methods.
 //
 //=========================================================================
 
+Reference< XMultiServiceFactory > HierarchyContentProvider::getConfigProvider()
+{
+    if ( !m_xConfigProvider.is() )
+    {
+        vos::OGuard aGuard( m_aMutex );
+        if ( !m_xConfigProvider.is() )
+        {
+            try
+            {
+               m_xConfigProvider = Reference< XMultiServiceFactory >(
+                    m_xSMgr->createInstance(
+                        OUString::createFromAscii( "com.sun.star.configuration."
+                                                   "ConfigurationProvider" ) ),
+                    UNO_QUERY );
+
+                VOS_ENSURE( m_xConfigProvider.is(),
+                            "HierarchyContentProvider::getConfigProvider - "
+                            "No config provider!" );
+            }
+            catch ( Exception& )
+            {
+                VOS_ENSURE( sal_False,
+                               "HierarchyContentProvider::getConfigProvider - "
+                               "caught exception!" );
+            }
+        }
+    }
+
+    return m_xConfigProvider;
+}
+
+//=========================================================================
 Reference< XHierarchicalNameAccess >
 HierarchyContentProvider::getRootConfigReadNameAccess()
 {
@@ -214,31 +270,23 @@ HierarchyContentProvider::getRootConfigReadNameAccess()
         {
             try
             {
-               Reference< XMultiServiceFactory > xConfigProvider(
-                    m_xSMgr->createInstance(
-                        OUString::createFromAscii(
-                            "com.sun.star.configuration.ConfigurationProvider" ) ),
-                    UNO_QUERY );
+                getConfigProvider();
 
-                if ( !xConfigProvider.is() )
+                if ( m_xConfigProvider.is() )
                 {
-                    VOS_ENSURE( sal_False,
-                        "HierarchyContentProvider::getRootConfigReadNameAccess - "
-                        "No config provider!" );
-                    return Reference< XHierarchicalNameAccess >();
-                }
-
-                Sequence< Any > aArguments( 1 );
-                aArguments[ 0 ] <<= OUString::createFromAscii(
+                    Sequence< Any > aArguments( 1 );
+                    aArguments[ 0 ] <<= OUString::createFromAscii(
                                         "/org.openoffice.ucb.Hierarchy/Root" );
 
-                m_xRootConfigReadNameAccess
-                    = Reference< XHierarchicalNameAccess >(
-                        xConfigProvider->createInstanceWithArguments(
-                            OUString::createFromAscii(
-                                "com.sun.star.configuration.ConfigurationAccess" ),
-                            aArguments ),
-                        UNO_QUERY );
+                    m_xRootConfigReadNameAccess
+                        = Reference< XHierarchicalNameAccess >(
+                            m_xConfigProvider->createInstanceWithArguments(
+                                OUString::createFromAscii(
+                                    "com.sun.star.configuration."
+                                    "ConfigurationAccess" ),
+                                aArguments ),
+                            UNO_QUERY );
+                }
             }
             catch ( RuntimeException& )
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstore.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-25 06:32:48 $
+ *  last change: $Author: kso $ $Date: 2000-12-10 15:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -121,7 +124,8 @@ class UcbStore :
                 public cppu::OWeakObject,
                 public com::sun::star::lang::XTypeProvider,
                 public com::sun::star::lang::XServiceInfo,
-                public com::sun::star::ucb::XPropertySetRegistryFactory
+                public com::sun::star::ucb::XPropertySetRegistryFactory,
+                public com::sun::star::lang::XInitialization
 {
     com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
@@ -148,8 +152,18 @@ public:
     createPropertySetRegistry( const rtl::OUString& URL )
         throw( com::sun::star::uno::RuntimeException );
 
+    // XInitialization
+    virtual void SAL_CALL
+    initialize( const ::com::sun::star::uno::Sequence<
+                        ::com::sun::star::uno::Any >& aArguments )
+        throw( ::com::sun::star::uno::Exception,
+               ::com::sun::star::uno::RuntimeException );
+
     // New
     void removeRegistry( const rtl::OUString& URL );
+
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&
+    getInitArgs() const;
 };
 
 //=========================================================================
@@ -170,6 +184,9 @@ class PropertySetRegistry :
     PropertySetRegistry_Impl* m_pImpl;
 
 private:
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+    getConfigProvider();
+
     void add   ( PersistentPropertySet* pSet );
     void remove( PersistentPropertySet* pSet );
 
@@ -227,7 +244,6 @@ public:
     getRootConfigReadAccess();
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
     getConfigWriteAccess( const rtl::OUString& rPath );
-
 };
 
 //=========================================================================

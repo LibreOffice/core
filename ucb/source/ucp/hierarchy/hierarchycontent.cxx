@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-08 19:45:23 $
+ *  last change: $Author: kso $ $Date: 2000-12-10 15:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,8 +709,7 @@ sal_Bool HierarchyContent::hasData(
         return sal_True;
     }
 
-    HierarchyEntry aEntry(
-            rxSMgr, pProvider->getRootConfigReadNameAccess(), aURL );
+    HierarchyEntry aEntry( rxSMgr, pProvider, aURL );
     HierarchyEntryData aData;
 
     return aEntry.hasData();
@@ -748,8 +747,7 @@ sal_Bool HierarchyContent::loadData(
     }
     else
     {
-        HierarchyEntry aEntry(
-            rxSMgr, pProvider->getRootConfigReadNameAccess(), aURL );
+        HierarchyEntry aEntry( rxSMgr, pProvider, aURL );
         if ( !aEntry.getData( rProps ) )
             return sal_False;
 
@@ -774,9 +772,8 @@ sal_Bool HierarchyContent::loadData(
 //=========================================================================
 sal_Bool HierarchyContent::storeData()
 {
-    HierarchyEntry aEntry( m_xSMgr,
-                           m_pProvider->getRootConfigReadNameAccess(),
-                           m_xIdentifier->getContentIdentifier() );
+    HierarchyEntry aEntry(
+            m_xSMgr, m_pProvider, m_xIdentifier->getContentIdentifier() );
     return aEntry.setData( m_aProps, sal_True );
 }
 
@@ -785,18 +782,16 @@ sal_Bool HierarchyContent::renameData(
                             const Reference< XContentIdentifier >& xOldId,
                              const Reference< XContentIdentifier >& xNewId )
 {
-    HierarchyEntry aEntry( m_xSMgr,
-                           m_pProvider->getRootConfigReadNameAccess(),
-                           xOldId->getContentIdentifier() );
+    HierarchyEntry aEntry(
+            m_xSMgr, m_pProvider, xOldId->getContentIdentifier() );
     return aEntry.move( xNewId->getContentIdentifier() );
 }
 
 //=========================================================================
 sal_Bool HierarchyContent::removeData()
 {
-    HierarchyEntry aEntry( m_xSMgr,
-                           m_pProvider->getRootConfigReadNameAccess(),
-                           m_xIdentifier->getContentIdentifier() );
+    HierarchyEntry aEntry(
+        m_xSMgr, m_pProvider, m_xIdentifier->getContentIdentifier() );
     return aEntry.remove();
 }
 
@@ -1596,9 +1591,8 @@ void HierarchyContent::transfer( const TransferInfo& rInfo )
 
         if ( xSource->isFolder() )
         {
-            HierarchyEntry aFolder( m_xSMgr,
-                                    m_pProvider->getRootConfigReadNameAccess(),
-                                    xId->getContentIdentifier() );
+            HierarchyEntry aFolder(
+                    m_xSMgr, m_pProvider, xId->getContentIdentifier() );
             HierarchyEntry::iterator it;
 
             while ( aFolder.next( it ) )

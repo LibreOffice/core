@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstore.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-08 12:24:09 $
+ *  last change: $Author: kso $ $Date: 2000-12-10 15:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,7 @@ public:
 struct UcbStore_Impl
 {
     osl::Mutex                        m_aMutex;
+    Sequence< Any >                   m_aInitArgs;
     Reference< XPropertySetRegistry > m_xTheRegistry;
 };
 
@@ -223,10 +224,11 @@ UcbStore::~UcbStore()
 //
 //=========================================================================
 
-XINTERFACE_IMPL_3( UcbStore,
+XINTERFACE_IMPL_4( UcbStore,
                    XTypeProvider,
                    XServiceInfo,
-                   XPropertySetRegistryFactory );
+                   XPropertySetRegistryFactory,
+                   XInitialization );
 
 //=========================================================================
 //
@@ -234,10 +236,11 @@ XINTERFACE_IMPL_3( UcbStore,
 //
 //=========================================================================
 
-XTYPEPROVIDER_IMPL_3( UcbStore,
+XTYPEPROVIDER_IMPL_4( UcbStore,
                          XTypeProvider,
                          XServiceInfo,
-                      XPropertySetRegistryFactory );
+                      XPropertySetRegistryFactory,
+                      XInitialization );
 
 //=========================================================================
 //
@@ -282,6 +285,20 @@ UcbStore::createPropertySetRegistry( const OUString& URL )
 
 //=========================================================================
 //
+// XInitialization methods.
+//
+//=========================================================================
+
+// virtual
+void SAL_CALL UcbStore::initialize( const Sequence< Any >& aArguments )
+    throw( Exception, RuntimeException )
+{
+    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    m_pImpl->m_aInitArgs = aArguments;
+}
+
+//=========================================================================
+//
 // New methods.
 //
 //=========================================================================
@@ -297,6 +314,12 @@ void UcbStore::removeRegistry( const OUString& URL )
 }
 
 //=========================================================================
+const Sequence< Any >& UcbStore::getInitArgs() const
+{
+    return m_pImpl->m_aInitArgs;
+}
+
+//=========================================================================
 //
 // PropertySetRegistry_Impl.
 //
@@ -308,6 +331,7 @@ struct PropertySetRegistry_Impl
     PropertySetMap_Impl               m_aPropSets;
     Reference< XMultiServiceFactory > m_xConfigProvider;
     Reference< XInterface >           m_xRootReadAccess;
+    Reference< XInterface >           m_xRootWriteAccess;
     osl::Mutex                        m_aMutex;
 
     PropertySetRegistry_Impl( UcbStore& rCreator )
@@ -1214,6 +1238,56 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
 }
 
 //=========================================================================
+Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
+{
+    if ( !m_pImpl->m_xConfigProvider.is() )
+    {
+        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+        if ( !m_pImpl->m_xConfigProvider.is() )
+        {
+            const Sequence< Any >& rInitArgs
+                = m_pImpl->m_pCreator->getInitArgs();
+
+            if ( rInitArgs.getLength() > 0 )
+            {
+                // Extract config provider from service init args.
+                rInitArgs[ 0 ] >>= m_pImpl->m_xConfigProvider;
+
+                OSL_ENSURE( m_pImpl->m_xConfigProvider.is(),
+                            "PropertySetRegistry::getConfigProvider - "
+                            "No config provider!" );
+            }
+            else
+            {
+                try
+                {
+                    m_pImpl->m_xConfigProvider
+                        = Reference< XMultiServiceFactory >(
+                            m_xSMgr->createInstance(
+                                OUString::createFromAscii(
+                                    "com.sun.star.configuration."
+                                    "ConfigurationProvider" ) ),
+                            UNO_QUERY );
+
+                    OSL_ENSURE( m_pImpl->m_xConfigProvider.is(),
+                                "PropertySetRegistry::getConfigProvider - "
+                                "No config provider!" );
+
+                }
+                catch ( Exception& )
+                {
+                    OSL_ENSURE( sal_False,
+                                "PropertySetRegistry::getConfigProvider - "
+                                "caught exception!" );
+                }
+            }
+        }
+    }
+
+    return m_pImpl->m_xConfigProvider;
+}
+
+//=========================================================================
 Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
 {
     try
@@ -1222,12 +1296,7 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
 
         if ( !m_pImpl->m_xRootReadAccess.is() )
         {
-            if ( !m_pImpl->m_xConfigProvider.is() )
-                m_pImpl->m_xConfigProvider = Reference< XMultiServiceFactory >(
-                    m_xSMgr->createInstance(
-                        OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
-                    UNO_QUERY );
+            getConfigProvider();
 
             if ( m_pImpl->m_xConfigProvider.is() )
             {
@@ -1274,48 +1343,67 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
     {
         osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-        if ( !m_pImpl->m_xConfigProvider.is() )
-            m_pImpl->m_xConfigProvider = Reference< XMultiServiceFactory >(
-                m_xSMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
-                UNO_QUERY );
-
-        if ( m_pImpl->m_xConfigProvider.is() )
+        if ( !m_pImpl->m_xRootWriteAccess.is() )
         {
-            OUString aConfigPath
-                = OUString::createFromAscii( STORE_CONTENTPROPERTIES_KEY );
+            getConfigProvider();
+
+            if ( m_pImpl->m_xConfigProvider.is() )
+            {
+                Sequence< Any > aArguments( 1 );
+                aArguments[ 0 ] <<= OUString::createFromAscii(
+                                                 STORE_CONTENTPROPERTIES_KEY );
+
+                m_pImpl->m_xRootWriteAccess =
+                    m_pImpl->m_xConfigProvider->createInstanceWithArguments(
+                        OUString::createFromAscii(
+                            "com.sun.star.configuration.ConfigurationUpdateAccess" ),
+                        aArguments );
+
+                OSL_ENSURE( m_pImpl->m_xRootWriteAccess.is(),
+                            "PropertySetRegistry::getConfigWriteAccess - "
+                            "No config update access!" );
+            }
+        }
+
+        if ( m_pImpl->m_xRootWriteAccess.is() )
+        {
             if ( rPath.getLength() )
             {
-                if ( rPath.compareToAscii( "/", 1 ) != 0 )
-                    aConfigPath += OUString::createFromAscii( "/" );
+                Reference< XHierarchicalNameAccess > xNA(
+                                m_pImpl->m_xRootWriteAccess, UNO_QUERY );
+                if ( xNA.is() )
+                {
+                    Reference< XInterface > xInterface;
+                    xNA->getByHierarchicalName( rPath ) >>= xInterface;
 
-                aConfigPath += rPath;
+                    if ( xInterface.is() )
+                        return xInterface;
+                }
             }
-
-            Sequence< Any > aArguments( 1 );
-            aArguments[ 0 ] <<= aConfigPath;
-
-            Reference< XInterface > xInterface(
-                m_pImpl->m_xConfigProvider->createInstanceWithArguments(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationUpdateAccess" ),
-                    aArguments ) );
-
-            if ( xInterface.is() )
-                return xInterface;
+            else
+                return m_pImpl->m_xRootWriteAccess;
         }
     }
     catch ( RuntimeException& )
     {
         throw;
     }
+    catch ( NoSuchElementException& )
+    {
+        // getByHierarchicalName
+
+        OSL_ENSURE( sal_False,
+            "PropertySetRegistry::getConfigWriteAccess - "
+            "caught NoSuchElementException!" );
+        return Reference< XInterface >();
+    }
     catch ( Exception& )
     {
         // createInstance, createInstanceWithArguments
 
         OSL_ENSURE( sal_False,
-            "PropertySetRegistry::getConfigWriteAccess - caught Exception!" );
+                    "PropertySetRegistry::getConfigWriteAccess - "
+                    "caught Exception!" );
         return Reference< XInterface >();
     }
 
@@ -1562,7 +1650,9 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
             Reference< XNameReplace > xNameReplace(
                     m_pImpl->m_pCreator->getConfigWriteAccess(
                                             aFullPropName ), UNO_QUERY );
-            Reference< XChangesBatch > xBatch( xNameReplace, UNO_QUERY );
+            Reference< XChangesBatch > xBatch(
+                    m_pImpl->m_pCreator->getConfigWriteAccess(
+                                            OUString() ), UNO_QUERY );
 
             if ( xNameReplace.is() && xBatch.is() )
             {
@@ -1836,8 +1926,10 @@ void SAL_CALL PersistentPropertySet::addProperty(
     Reference< XSingleServiceFactory > xFac(
                 m_pImpl->m_pCreator->getConfigWriteAccess( aFullValuesName ),
                 UNO_QUERY );
-    Reference< XChangesBatch >  xBatch( xFac, UNO_QUERY );
     Reference< XNameContainer > xContainer( xFac, UNO_QUERY );
+    Reference< XChangesBatch >  xBatch(
+                m_pImpl->m_pCreator->getConfigWriteAccess( OUString() ),
+                UNO_QUERY );
 
     OSL_ENSURE( xFac.is(),
                 "PersistentPropertySet::addProperty - No factory!" );
@@ -2012,10 +2104,12 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
 
         // Remove property...
 
-        Reference< XChangesBatch > xBatch(
+        Reference< XNameContainer > xContainer(
                 m_pImpl->m_pCreator->getConfigWriteAccess( aFullValuesName ),
                 UNO_QUERY );
-        Reference< XNameContainer > xContainer( xBatch, UNO_QUERY );
+        Reference< XChangesBatch > xBatch(
+                m_pImpl->m_pCreator->getConfigWriteAccess( OUString() ),
+                UNO_QUERY );
 
         OSL_ENSURE( xBatch.is(),
                     "PersistentPropertySet::removeProperty - No batch!" );
@@ -2325,7 +2419,9 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                 Reference< XNameReplace > xNameReplace(
                     m_pImpl->m_pCreator->getConfigWriteAccess(
                                             aFullPropName ), UNO_QUERY );
-                Reference< XChangesBatch > xBatch( xNameReplace, UNO_QUERY );
+                Reference< XChangesBatch > xBatch(
+                    m_pImpl->m_pCreator->getConfigWriteAccess(
+                                            OUString() ), UNO_QUERY );
 
                 if ( xNameReplace.is() && xBatch.is() )
                 {

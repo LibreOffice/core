@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-08 16:57:39 $
+ *  last change: $Author: kso $ $Date: 2000-12-10 15:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _UCBHELPER_PROVIDERHELPER_HXX
 #include <ucbhelper/providerhelper.hxx>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
 
 namespace com { namespace sun { namespace star { namespace container {
     class XHierarchicalNameAccess;
@@ -93,8 +96,12 @@ namespace hierarchy_ucp {
 
 //=========================================================================
 
-class HierarchyContentProvider : public ::ucb::ContentProviderImplHelper
+class HierarchyContentProvider : public ::ucb::ContentProviderImplHelper,
+                                 public com::sun::star::lang::XInitialization
 {
+    com::sun::star::uno::Reference<
+        com::sun::star::lang::XMultiServiceFactory >
+            m_xConfigProvider;
     com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameAccess >
             m_xRootConfigReadNameAccess;
@@ -122,11 +129,21 @@ public:
         throw( com::sun::star::ucb::IllegalIdentifierException,
                com::sun::star::uno::RuntimeException );
 
+    // XInitialization
+    virtual void SAL_CALL
+    initialize( const ::com::sun::star::uno::Sequence<
+                        ::com::sun::star::uno::Any >& aArguments )
+        throw( ::com::sun::star::uno::Exception,
+               ::com::sun::star::uno::RuntimeException );
+
     // Non-Interface methods
     static rtl::OUString encodeURL( const rtl::OUString& rURL );
     static rtl::OUString encodeSegment( const rtl::OUString& rSegment );
     static rtl::OUString decodeSegment( const rtl::OUString& rSegment );
 
+    com::sun::star::uno::Reference<
+        com::sun::star::lang::XMultiServiceFactory >
+    getConfigProvider();
     com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameAccess >
     getRootConfigReadNameAccess();

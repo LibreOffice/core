@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-08 19:45:23 $
+ *  last change: $Author: kso $ $Date: 2000-12-10 15:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,11 +137,16 @@ struct HierarchyEntry::iterator_Impl
 //=========================================================================
 HierarchyEntry::HierarchyEntry(
                 const Reference< XMultiServiceFactory >& rSMgr,
-                const Reference< XHierarchicalNameAccess >& rRootReadAccess,
+                HierarchyContentProvider* pProvider,
                 const OUString& rURL )
-: m_xSMgr( rSMgr ),
-  m_xRootReadAccess( rRootReadAccess )
+: m_xSMgr( rSMgr )
 {
+    if ( pProvider )
+    {
+        m_xConfigProvider = pProvider->getConfigProvider();
+          m_xRootReadAccess = pProvider->getRootConfigReadNameAccess();
+    }
+
     // Note: do not init m_aPath in init list. createPathFromHierarchyURL
     //       needs m_xSMgr and m_aMutex.
     m_aPath = createPathFromHierarchyURL( rURL );
@@ -1028,53 +1033,52 @@ OUString HierarchyEntry::createPathFromHierarchyURL( const OUString& rURL )
 //=========================================================================
 Reference< XHierarchicalNameAccess > HierarchyEntry::getRootReadAccess()
 {
-#if 0
-
- // always set in ctor.
-
-    try
+    if ( !m_xRootReadAccess.is() )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
         if ( !m_xRootReadAccess.is() )
         {
-            if ( !m_xConfigProvider.is() )
-                m_xConfigProvider = Reference< XMultiServiceFactory >(
-                    m_xSMgr->createInstance(
-                        OUString::createFromAscii(
-                            "com.sun.star.configuration.ConfigurationProvider" ) ),
-                    UNO_QUERY );
-
-            if ( m_xConfigProvider.is() )
+            try
             {
-                // Create Root object.
+                if ( !m_xConfigProvider.is() )
+                    m_xConfigProvider = Reference< XMultiServiceFactory >(
+                        m_xSMgr->createInstance(
+                            OUString::createFromAscii(
+                                "com.sun.star.configuration."
+                                "ConfigurationProvider" ) ),
+                        UNO_QUERY );
 
-                Sequence< Any > aArguments( 1 );
-                aArguments[ 0 ]
+                if ( m_xConfigProvider.is() )
+                {
+                    // Create Root object.
+
+                    Sequence< Any > aArguments( 1 );
+                    aArguments[ 0 ]
                         <<= OUString::createFromAscii( HIERARCHY_ROOT_DB_KEY );
 
-                m_xRootReadAccess = Reference< XHierarchicalNameAccess >(
-                    m_xConfigProvider->createInstanceWithArguments(
-                        OUString::createFromAscii(
-                            "com.sun.star.configuration.ConfigurationAccess" ),
-                        aArguments ),
-                    UNO_QUERY );
+                    m_xRootReadAccess = Reference< XHierarchicalNameAccess >(
+                        m_xConfigProvider->createInstanceWithArguments(
+                            OUString::createFromAscii(
+                                "com.sun.star.configuration."
+                                "ConfigurationAccess" ),
+                            aArguments ),
+                        UNO_QUERY );
+                }
+            }
+            catch ( RuntimeException& )
+            {
+                throw;
+            }
+            catch ( Exception& )
+            {
+                // createInstance, createInstanceWithArguments
+
+                VOS_ENSURE( sal_False,
+                            "HierarchyEntry::getRootReadAccess - "
+                            "caught Exception!" );
             }
         }
     }
-    catch ( RuntimeException& )
-    {
-        throw;
-    }
-    catch ( Exception& )
-    {
-        // createInstance, createInstanceWithArguments
-
-        VOS_ENSURE( sal_False,
-                    "HierarchyEntry::getRootReadAccess - "
-                    "caught Exception!" );
-    }
-#endif
     return m_xRootReadAccess;
 }
 

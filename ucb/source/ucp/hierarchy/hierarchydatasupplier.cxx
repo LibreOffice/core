@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydatasupplier.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-08 19:45:23 $
+ *  last change: $Author: kso $ $Date: 2000-12-10 15:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,8 +141,7 @@ struct DataSupplier_Impl
     : m_xContent( rContent ), m_xSMgr( rxSMgr ),
       m_aFolder( rxSMgr,
                  static_cast< HierarchyContentProvider * >(
-                    rContent->getProvider().getBodyPtr() )
-                        ->getRootConfigReadNameAccess(),
+                    rContent->getProvider().getBodyPtr() ),
                  rContent->getIdentifier()->getContentIdentifier() ),
       m_nOpenMode( nOpenMode ), m_bCountFinal( sal_False ) {}
     ~DataSupplier_Impl();

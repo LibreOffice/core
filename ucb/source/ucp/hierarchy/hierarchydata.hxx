@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-08 19:45:23 $
+ *  last change: $Author: kso $ $Date: 2000-12-10 15:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@ struct HierarchyEntryData
 
 //=========================================================================
 
+class HierarchyContentProvider;
+
 class HierarchyEntry
 {
     ::rtl::OUString m_aName;
@@ -124,9 +126,7 @@ private:
 public:
     HierarchyEntry( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
-                    const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::container::XHierarchicalNameAccess >&
-                            rRootReadAccess,
+                    HierarchyContentProvider* pProvider,
                     const ::rtl::OUString& rURL );
 
     sal_Bool hasData();
