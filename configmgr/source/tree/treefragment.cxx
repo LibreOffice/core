@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treefragment.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:55:53 $
+ *  last change: $Author: hr $ $Date: 2002-02-19 13:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,16 +122,16 @@ bool TreeFragment::isNew() const
 }
 //-----------------------------------------------------------------------------
 
-node::Attributes TreeFragment::getAttributes() const
+configmgr::node::Attributes TreeFragment::getAttributes() const
 {
-    node::Attributes aResult;
+    configmgr::node::Attributes aResult;
 
     switch (this->header.state & State::mask_state)
     {
-    case State::merged:     aResult.setState(node::isMerged);   break;
-    case State::defaulted:  aResult.setState(node::isDefault);  break;
-    case State::replaced:   aResult.setState(node::isReplaced); break;
-    case State::added:      aResult.setState(node::isAdded);    break;
+    case State::merged:     aResult.setState(configmgr::node::isMerged);   break;
+    case State::defaulted:  aResult.setState(configmgr::node::isDefault);  break;
+    case State::replaced:   aResult.setState(configmgr::node::isReplaced); break;
+    case State::added:      aResult.setState(configmgr::node::isAdded);    break;
     default: OSL_ASSERT(false); break; // not reachable
     }
 

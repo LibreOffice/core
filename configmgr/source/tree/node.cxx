@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:55:53 $
+ *  last change: $Author: hr $ $Date: 2002-02-19 13:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,9 @@ rtl::OUString NodeInfo::getName(memory::Accessor const & _aAccessor) const
 }
 //-----------------------------------------------------------------------------
 
-node::Attributes NodeInfo::getAttributes() const
+configmgr::node::Attributes NodeInfo::getAttributes() const
 {
-    node::Attributes aResult;
+    configmgr::node::Attributes aResult;
 
     aResult.bWritable   = ! (flags & Flags::readonly);
     aResult.bFinalized  = !!(flags & Flags::finalized);
@@ -120,9 +120,9 @@ node::Attributes NodeInfo::getAttributes() const
 //    aResult.bNotified   = !!(flags & Flags::notified);
 //    aResult.bConstrained= !!(flags & Flags::constrained);
 
-    node::State state = (flags & Flags::defaulted)   ? node::isDefault :
-                        (flags & Flags::defaultable) ? node::isMerged  :
-                                                       node::isReplaced;
+    configmgr::node::State state = (flags & Flags::defaulted)   ? configmgr::node::isDefault :
+                        (flags & Flags::defaultable) ? configmgr::node::isMerged  :
+                                                       configmgr::node::isReplaced;
     aResult.setState(state);
 
     return aResult;
@@ -444,7 +444,7 @@ rtl::OUString Node::getName(memory::Accessor const & _aAccessor) const
 }
 //-----------------------------------------------------------------------------
 
-node::Attributes Node::getAttributes() const
+configmgr::node::Attributes Node::getAttributes() const
 {
     return node.info.getAttributes();
 }
