@@ -2,9 +2,9 @@
 *
 *  $RCSfile: TextSectionHandler.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: obo $ $Date: 2004-09-08 14:05:55 $
+*  last change: $Author: vg $ $Date: 2005-02-21 14:02:52 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,17 +57,20 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.text;
 
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.SectionFileLink;
+import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextSectionsSupplier;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
@@ -77,21 +80,22 @@ public class TextSectionHandler {
     public XTextSectionsSupplier xTextSectionsSupplier;
     private XMultiServiceFactory xMSFDoc;
     private XTextDocument xTextDocument;
+    private XText xText;
 
     /** Creates a new instance of TextSectionHandler */
     public TextSectionHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument) {
         this.xMSFDoc = xMSF;
         this.xTextDocument = xTextDocument;
+        xText = xTextDocument.getText();
         xTextSectionsSupplier = (XTextSectionsSupplier) UnoRuntime.queryInterface(XTextSectionsSupplier.class, xTextDocument);
     }
 
     public void removeTextSectionbyName(String SectionName) {
         try {
-            com.sun.star.container.XNameAccess xAllTextSections = xTextSectionsSupplier.getTextSections();
+            XNameAccess xAllTextSections = xTextSectionsSupplier.getTextSections();
             if (xAllTextSections.hasByName(SectionName) == true) {
                 Object oTextSection = xTextSectionsSupplier.getTextSections().getByName(SectionName);
-                XTextContent xTextContentTextSection = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, oTextSection);
-                xTextDocument.getText().removeTextContent(xTextContentTextSection);
+                removeTextSection(oTextSection);
             }
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
@@ -111,28 +115,44 @@ public class TextSectionHandler {
         try {
             XIndexAccess xAllTextSections = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextSectionsSupplier.getTextSections());
             Object oTextSection = xAllTextSections.getByIndex(xAllTextSections.getCount() - 1);
-            XTextContent xTextContentTextSection = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, oTextSection);
-            xTextDocument.getText().removeTextContent(xTextContentTextSection);
+            removeTextSection(oTextSection);
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
     }
 
+
+    public void removeTextSection(Object _oTextSection){
+    try{
+        XTextContent xTextContentTextSection = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, _oTextSection);
+        xText.removeTextContent(xTextContentTextSection);
+    } catch (Exception exception) {
+        exception.printStackTrace(System.out);
+    }}
+
+
     public void removeAllTextSections() {
-        try {
-            Object oTextSection;
-            com.sun.star.text.XText xText = xTextDocument.getText();
-            XIndexAccess xAllTextSections = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextSectionsSupplier.getTextSections());
-            int TextSectionCount = xAllTextSections.getCount();
-            for (int i = TextSectionCount - 1; i >= 0; i--) {
-                oTextSection = xAllTextSections.getByIndex(i);
-                XTextContent xTextContentTextSection = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, oTextSection);
-                xText.removeTextContent(xTextContentTextSection);
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace(System.out);
-        }
+        removeAllTextSections(false);
     }
+
+    public void removeAllTextSections(boolean _bRemoveVisibleOnly) {
+    try {
+        boolean bRemoveTextSection = !_bRemoveVisibleOnly;
+        XIndexAccess xAllTextSections = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextSectionsSupplier.getTextSections());
+        int TextSectionCount = xAllTextSections.getCount();
+        for (int i = TextSectionCount - 1; i >= 0; i--) {
+            XTextContent xTextContentTextSection = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xAllTextSections.getByIndex(i));
+            if (_bRemoveVisibleOnly){
+                XPropertySet xTextSectionPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTextContentTextSection);
+                bRemoveTextSection = AnyConverter.toBoolean(xTextSectionPropertySet.getPropertyValue("IsVisible"));
+            }
+            if (bRemoveTextSection)
+                xText.removeTextContent(xTextContentTextSection);
+        }
+    } catch (Exception exception) {
+        exception.printStackTrace(System.out);
+    }}
+
 
     public void breakLinkofTextSections() {
         try {
@@ -161,15 +181,13 @@ public class TextSectionHandler {
             Object oTextSection = xTextSectionsSupplier.getTextSections().getByName(SectionName);
             linkSectiontoTemplate(oTextSection, TemplateName, SectionName);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
     }
 
     public void linkSectiontoTemplate(Object oTextSection, String TemplateName, String SectionName) {
         SectionFileLink oSectionLink = new SectionFileLink();
         oSectionLink.FileURL = TemplateName;
-        //Helper.setUnoPropertyValue(oTextSection, "FileLink", oSectionLink);
         Helper.setUnoPropertyValues(oTextSection, new String[] { "FileLink", "LinkRegion" }
         , new Object[] { oSectionLink, SectionName });
         XNamed xSectionName = (XNamed) UnoRuntime.queryInterface(XNamed.class, oTextSection);
@@ -179,7 +197,7 @@ public class TextSectionHandler {
     }
 
     public void insertTextSection(String GroupName, String TemplateName) {
-        com.sun.star.text.XTextCursor xTextCursor = xTextDocument.getText().createTextCursor();
+        XTextCursor xTextCursor = xText.createTextCursor();
         xTextCursor.gotoEnd(false);
         insertTextSection( GroupName, TemplateName, xTextCursor );
     }
