@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ganaya $ $Date: 2000-12-13 20:56:30 $
+ *  last change: $Author: pluby $ $Date: 2000-12-20 20:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,9 +321,6 @@ void SalFrame::SetPointer( PointerStyle ePointerStyle )
 
 void SalFrame::CaptureMouse( BOOL bCapture )
 {
-  if ( maFrameData.mhWnd ) {
-    VCLWindow_SetAcceptsMouseMovedEvents( maFrameData.mhWnd, bCapture );
-  }
 }
 
 // -----------------------------------------------------------------------
