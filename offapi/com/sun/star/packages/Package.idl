@@ -1,0 +1,151 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Package.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2001-03-09 15:49:17 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_packages_Package_idl__
+#define __com_sun_star_packages_Package_idl__
+
+#ifndef __com_sun_star_lang_XInitialization_idl__
+#include <com/sun/star/lang/XInitialization.idl>
+#endif
+
+#ifndef __com_sun_star_container_XHierarchicalNameAccess_idl__
+#include <com/sun/star/container/XHierarchicalNameAccess.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XSingleServiceFactory_idl__
+#include <com/sun/star/lang/XSingleServiceFactory.idl>
+#endif
+
+#ifndef __com_sun_star_util_XChangesBatch_idl__
+#include <com/sun/star/util/XChangesBatch.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module packages {
+
+//=============================================================================
+/** The <type>Package</type> is a service that provides access to a set of
+    files and folders contained within a Package. One instance of the
+    Package service exists for each Package file to be manipulated.
+
+    Each instance is created with an argument which specifies the URL of
+    the Package file to which the user requires access. If the instance is
+    created without arguments, it must be initialised with the
+    <type>XInitialization</type> service methods before it is a valid
+    instance of the service.
+*/
+service Package
+{
+    /**
+    This interface is used to obtain the package URL of the Package
+    file the instance is supposed to provide access to. It will throw
+    a css::uno::Exception if the package does not exist or has an invalid
+    format (for example, a corrupt central directory record if the file is
+    a ZIP file.
+    */
+    interface com::sun::star::lang::XInitialization;
+    /**
+    This interface is used to get access to any entry within the package
+    For example:
+        getByHierarchicalName ("/folder/subfolder/file1.txt");
+    This will return a PackageStream which refers to the specified stream.
+    This is also used to get access to a particular folder within the
+    Package. For example:
+        getByHierarchicalName ("/folder/subfolder/");
+    Will return a PackageFolder which describes the contents of the specified
+    folder.
+    */
+    interface com::sun::star::container::XHierarchicalNameAccess;
+    /**
+    This interface is used to create new PackageStream or PackageFolder
+    implementation objects for addition to the Package.
+
+    createInstance - creates a new stream implementation object (when first
+    created, the new object is not part of the Package. It must be added
+    to the PackageFolder in which it will reside using the methods in the
+    PackageFolder service.
+
+    createInstanceWithArguments - This accepts one boolean value as an
+    argument. If it set to true, we create a PackageFolder implementation,
+    if it is set to false, we create a PackageStream implementation.
+
+    Creating and inserting a new stream would be done as follows:
+
+        1. xNewStream = package->createInstanceWithArguments( false );
+        2. xDataStream = new MyStreamImpl(). (wherever the data comes from)
+        3. xNewStream->setInputStream( xDataStream );
+        4. parentFolder->insertByName( "image.png", xNewStream );
+
+    Replacing an existing stream would be very similar, except that the
+    call ->insertByName would be replaced by ->replaceByName.
+    */
+    interface com::sun::star::lang::XSingleServiceFactory;
+    /**
+    This interface is used to commit any changes to the Package. A new
+    Package file will be written with any new or changed streams/folders and
+    omitting any PackageStream or PackageFolder that have been removed.
+    */
+    interface com::sun::star::util::XChangesBatch;
+};
+}; }; }; };
+
+#endif
