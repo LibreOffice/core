@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:56:37 $
+#   last change: $Author: hr $ $Date: 2003-04-04 17:44:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,8 @@ IDLFILES=\
     InteractionClassification.idl\
     InteractionHandler.idl\
     JobExecutor.idl\
+    Job.idl\
+    AsyncJob.idl\
     MasterPasswordRequest.idl\
     NoMasterException.idl\
     PasswordContainer.idl\
