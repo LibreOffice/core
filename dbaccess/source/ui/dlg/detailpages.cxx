@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-25 08:28:43 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 15:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ namespace dbaui
                 if (!bAllowUTF8)
                     m_pCharset->RemoveEntry(sDisplayName);
                 else
-                    m_pCharset->RemoveEntry(sDisplayName);
+                    m_pCharset->InsertEntry(sDisplayName);
             }
         }
         return bAllowUTF8;
@@ -1160,6 +1160,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/06/25 08:28:43  oj
+ *  #88699# new control for ldap rowcount
+ *
  *  Revision 1.7  2001/05/31 11:37:57  oj
  *  #87149# correct ldap protocol
  *
