@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-19 08:01:13 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5512,7 +5512,8 @@ String ScCellObj::GetInputString_Impl(BOOL bEnglish) const      // fuer getFormu
             }
             else
             {
-                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                SvNumberFormatter* pFormatter = bEnglish ? pDoc->GetEnglishFormatTable() :
+                                                            pDoc->GetFormatTable();
                 ULONG nNumFmt = bEnglish ?
 //                      pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US) :
                         pDoc->GetStandardIndexEnglishUS() :
@@ -5537,9 +5538,7 @@ String ScCellObj::GetInputString_Impl(BOOL bEnglish) const      // fuer getFormu
                 if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
                 {
                     double fDummy;
-                    sal_Bool bIsNumberFormat(bEnglish ?
-                        pDoc->GetEnglishFormatTable()->IsNumberFormat(aVal, nNumFmt, fDummy) :
-                        pDoc->GetFormatTable()->IsNumberFormat(aVal, nNumFmt, fDummy));
+                    sal_Bool bIsNumberFormat(pFormatter->IsNumberFormat(aVal, nNumFmt, fDummy));
                     if ( bIsNumberFormat )
                         aVal.Insert('\'',0);
                     else if ( aVal.Len() && aVal.GetChar(0) == '\'' )
