@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-26 13:58:10 $
+ *  last change: $Author: ssa $ $Date: 2002-10-02 14:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,7 +784,9 @@ void Dialog::SetModalInputMode( BOOL bModal )
          Window* pParent = GetParent();
          if ( pParent )
          {
-             mpDialogParent = pParent->ImplGetFirstOverlapWindow();
+             //mpDialogParent = pParent->ImplGetFirstOverlapWindow();
+             // #103716# dialogs should always be modal to the whole frame window
+             mpDialogParent = pParent->mpFrameWindow;
              if ( mpDialogParent )
                  mpDialogParent->EnableInput( FALSE, TRUE, TRUE, this );
          }
