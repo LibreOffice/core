@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-28 12:45:50 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 17:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX
 #include <xmloff/families.hxx>
+#endif
+#ifndef _XMLOFF_XMLTEXTMASTERSTYLESCONTEXT_HXX
+#include <xmloff/XMLTextMasterStylesContext.hxx>
 #endif
 
 #ifndef _NUMRULE_HXX
@@ -1622,6 +1625,16 @@ SvXMLImportContext *SwXMLImport::CreateStylesContext(
     return pContext;
 }
 
+SvXMLImportContext *SwXMLImport::CreateMasterStylesContext(
+        const OUString& rLocalName,
+        const Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    SvXMLImportContext *pContext =
+        new XMLTextMasterStylesContext( *this, XML_NAMESPACE_OFFICE, rLocalName,
+                                          xAttrList );
+    return pContext;
+}
+
 void SwXMLImport::InsertStyles()
 {
     sal_Bool bStylesValid = xStyles.Is();
@@ -1687,11 +1700,14 @@ sal_Bool SwXMLImport::FindAutomaticStyle(
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlfmt.cxx,v 1.2 2000-09-28 12:45:50 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlfmt.cxx,v 1.3 2000-10-12 17:32:03 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/09/28 12:45:50  mib
+      Splitting and joining nodes in insert mode fixed
+
       Revision 1.1.1.1  2000/09/18 17:15:00  hr
       initial import
 

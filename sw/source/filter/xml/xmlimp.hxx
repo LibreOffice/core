@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-28 12:45:50 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 17:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,10 @@ public:
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
                 sal_Bool bAuto );
+    SvXMLImportContext *CreateMasterStylesContext(
+                const ::rtl::OUString& rLocalName,
+                const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     SvXMLImportContext *CreateBodyContext( const ::rtl::OUString& rLocalName );
     sal_uInt16 GetStyleFamilyMask() const { return nStyleFamilyMask; }
     sal_Bool IsInsertMode() const { return bInsert; }

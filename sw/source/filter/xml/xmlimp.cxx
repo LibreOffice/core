@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-28 12:45:50 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 17:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,8 +206,8 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
 //                                                       xAttrList );
 //      break;
     case XML_TOK_DOC_MASTERSTYLES:
-//      pContext = GetSwImport().CreateMasterStylesContext( rLocalName,
-//                                                       xAttrList );
+        pContext = GetSwImport().CreateMasterStylesContext( rLocalName,
+                                                            xAttrList );
         break;
     case XML_TOK_DOC_META:
         pContext = GetSwImport().CreateMetaContext( rLocalName );
