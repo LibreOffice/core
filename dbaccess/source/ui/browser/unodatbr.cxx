@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-23 06:46:37 $
+ *  last change: $Author: fs $ $Date: 2002-05-23 12:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1656,18 +1656,16 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                 break;
 
             case ID_BROWSER_PASTE:
+                aReturn.aState = makeAny( (sal_Bool)sal_False );
+                    // since fixing 99030, this is defined as meaning "please do not display a drop down
+                    // menu for the clipboard formats to paste".
+                    // 22.05.2002 - 99030 - fs@openoffice.org
+
                 // first look which side is active
                 if(m_pTreeView->HasChildPathFocus())
                 {
                     SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
                     aReturn.bEnabled = isEntryPasteAllowed(pEntry);
-
-                    aReturn.aState = makeAny( (sal_Bool)sal_True );
-                        // This is weird. Unfortunately, since we do not use our own toolbox items anymore,
-                        // but the ones of the application we're plugged into (at least for cut/copy/paste),
-                        // we depend on some SFX code, which, for some odd, not really fixable reason
-                        // asks for a boolean state for the PASTE slot. Okay, here it goes.
-                        // 22.05.2002 - 99030 - fs@openoffice.org
                     break;
                 }
                 else
