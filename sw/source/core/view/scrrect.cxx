@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-29 15:50:52 $
+ *  last change: $Author: fme $ $Date: 2002-09-16 10:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,7 +788,7 @@ void SwViewImp::_RefreshScrolledArea( const SwRect &rRect )
 
         GetShell()->pOut = pOld;
         delete pVout;
-        if( GetShell()->GetViewOptions()->IsControl() )
+        if( GetShell()->GetViewOptions()->IsControl() && HasDrawView() )
             PaintLayer( GetShell()->GetDoc()->GetControlsId(), aScRect );
     }
     else
@@ -1173,6 +1173,9 @@ void SwScrollArea::SmartInsert( SwStripes* pStripes )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/11/29 15:50:52  ama
+      Fix: Paragraph scrolling in vertical text
+
       Revision 1.3  2001/06/08 13:03:27  ama
       Fix #87926#: Don't paint outside the page frame
 
