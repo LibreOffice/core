@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ namespace xmloff
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         virtual void StartElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
         virtual void Characters(const ::rtl::OUString& _rChars);
@@ -232,7 +232,7 @@ namespace xmloff
 
         virtual void StartElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         virtual void Characters(const ::rtl::OUString& _rChars);
 #endif
         virtual void EndElement();
