@@ -154,7 +154,6 @@
             <include name="${package}/FontDescription.java"/>
             <include name="${package}/UnsupportedFormulaException.java"/>
             <include name="${package}/Formula.java"/>
-            <include name="${package}/FormulaParser.java"/>
             <include name="${package}/LabelCell.java"/>
             <include name="${package}/NumberFormat.java"/>
             <include name="${package}/Pane.java"/>
