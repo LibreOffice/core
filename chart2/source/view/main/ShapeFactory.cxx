@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-19 13:21:53 $
+ *  last change: $Author: iha $ $Date: 2003-12-04 15:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,7 @@ uno::Any createPolyPolygon_Cylinder(
 
 //     const double fWidth = fRadius;
 
+    fRoundedEdge = 0.0;
     const double fOffset = (fRadius * 2.0 * fRoundedEdge) * 1.05;   // increase by 5% for safety
     const bool bRoundEdges = fRoundedEdge && fOffset < fRadius && 2.0 * fOffset < fHeight;
     const sal_Int32 nPointCount = bRoundEdges ? 8 : 4;
@@ -699,8 +700,6 @@ uno::Reference<drawing::XShape>
             }
 
             //Segments
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_VERT_SEGS )
-                , uno::makeAny(CHART_3DOBJECT_SEGMENTCOUNT) );
             xProp->setPropertyValue( C2U( UNO_NAME_3D_HORZ_SEGS )
                 , uno::makeAny(nSegments) );
         }
@@ -1163,8 +1162,6 @@ uno::Reference< drawing::XShape >
             }
 
             //Segments
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_VERT_SEGS )
-                , uno::makeAny(CHART_3DOBJECT_SEGMENTCOUNT) );
             xProp->setPropertyValue( C2U( UNO_NAME_3D_HORZ_SEGS )
                 , uno::makeAny(CHART_3DOBJECT_SEGMENTCOUNT) );
         }
