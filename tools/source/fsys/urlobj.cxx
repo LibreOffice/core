@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sb $ $Date: 2001-12-03 12:44:13 $
+ *  last change: $Author: oj $ $Date: 2002-01-15 09:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,11 @@ using namespace com::sun;
    key = 1*parmchar
    value = *parmchar
    parmchar = unreserved / escaped / "$" / "&" / "+" / "/" / ":" / "?" / "@" / "[" / "]"
+
+
+   ; private
+   vnd-sun-star-url = "VND.SUN.STAR.ODMA:" ["/" *uric_no_slash]
+   uric_no_slash = unreserved / escaped / ";" / "?" / ":" / "@" / "&" / "=" / "+" / "$" / ","
  */
 
 //============================================================================
@@ -441,7 +446,10 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
         { "vnd.sun.star.cmd", "vnd.sun.star.cmd:", 0, false, false, false,
           false, false, false, false, false },
         { "vnd.sun.star.script", "vnd.sun.star.script:", 0, false, false,
-          false, false, false, false, false, false } };
+          false, false, false, false, false, false },
+
+        { "vnd.sun.star.odma", "vnd.sun.star.odma:", 0, false, false, false,
+          false, false, false, true, false }};
 
 inline INetURLObject::SchemeInfo const &
 INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
@@ -2031,6 +2039,8 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.hier:", 0, INET_PROT_VND_SUN_STAR_HIER,
               PrefixInfo::OFFICIAL },
+            { "vnd.sun.star.odma:", 0, INET_PROT_VND_SUN_STAR_ODMA,
+              PrefixInfo::OFFICIAL },
             { "vnd.sun.star.pkg:", 0, INET_PROT_VND_SUN_STAR_PKG,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.script:", 0, INET_PROT_VND_SUN_STAR_SCRIPT,
@@ -2748,6 +2758,27 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             }
             break;
         }
+
+        case INET_PROT_VND_SUN_STAR_ODMA:
+            if (pPos < pEnd)
+                if (*pPos == '/')
+                    ++pPos;
+                else
+                {
+                    setInvalid();
+                    return false;
+                }
+            aTheSynPath = '/';
+            while (pPos < pEnd && *pPos != nFragmentDelimiter)
+            {
+                EscapeType eEscapeType;
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
+                                             cEscapePrefix, eMechanism,
+                                             eCharset, eEscapeType);
+                appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
+                           PART_URIC_NO_SLASH, cEscapePrefix, eCharset, true);
+            }
+            break;
     }
 
     *pBegin = pPos;
