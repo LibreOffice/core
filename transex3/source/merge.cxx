@@ -2,9 +2,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:42:13 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 17:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ BOOL PFormEntrys::GetText( ByteString &rReturn,
     USHORT nTyp, const ByteString &nLangIndex, BOOL bDel )
 /*****************************************************************************/
 {
-    BOOL bReturn = false;
+    BOOL bReturn;
     switch ( nTyp ) {
         case STRING_TYP_TEXT :
             rReturn = sText[ nLangIndex ];
@@ -312,6 +312,11 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
     }
     aInputStream.Close();
     fprintf( stdout, "Merging ...\n" );
+/*   for( ByteStringSet::const_iterator pos = LanguagesBeginIter();
+    pos != LanguagesEndIter(); ++pos){
+      ByteString sCur = *pos;
+      printf(", %s ",sCur.GetBuffer());
+    }*/
 }
 
 /*****************************************************************************/
@@ -418,9 +423,8 @@ void MergeDataFile::InsertEntry(
                     const ByteString &rQHTEXT, const ByteString &rTITLE )
 /*****************************************************************************/
 {
-    MergeData *pData = NULL;
+    MergeData *pData;
     BOOL bFound = FALSE;
-    long int i;
 
     // search for MergeData
     ByteString sKey = CreateKey( rTYP , rGID , rLID );
