@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: mav $ $Date: 2002-08-07 13:33:27 $
+ *  last change: $Author: as $ $Date: 2002-08-22 10:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1181,7 +1181,7 @@ void SfxMedium::Transfer_Impl()
 
         // in case an output stream is provided from outside and the URL is correct
         // commit to the stream
-        if( aLogicName.CompareToAscii( "private:stream" ) == COMPARE_EQUAL )
+        if( aLogicName.CompareToAscii( "private:stream", 14 ) == COMPARE_EQUAL )
         {
                SFX_ITEMSET_ARG( pSet, pOutStreamItem, SfxUnoAnyItem, SID_OUTPUTSTREAM, sal_False);
              if( pOutStreamItem && ( pOutStreamItem->GetValue() >>= rOutStream ) )
@@ -1781,7 +1781,7 @@ void SfxMedium::Init_Impl()
     SFX_ITEMSET_ARG( pSet, pOutStreamItem, SfxUnoAnyItem, SID_OUTPUTSTREAM, sal_False);
     if( pOutStreamItem
      && ( !( pOutStreamItem->GetValue() >>= rOutStream )
-          || !aLogicName.CompareToAscii( "private:stream" ) == COMPARE_EQUAL ) )
+          || !aLogicName.CompareToAscii( "private:stream", 14 ) == COMPARE_EQUAL ) )
     {
         pSet->ClearItem( SID_OUTPUTSTREAM );
         DBG_ERROR( "Unexpected Output stream parameter!\n" );
