@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:14:41 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,7 @@ public:
     inline const SvxCharScaleWidthItem &GetCharScaleW( BOOL = TRUE ) const;
     inline const SvxCharRotateItem   &GetCharRotate( BOOL = TRUE ) const;
     inline const SvxCharReliefItem   &GetCharRelief( BOOL = TRUE ) const;
+    inline const SvxCharHiddenItem   &GetCharHidden( BOOL = TRUE ) const;
 
     // Frame-Attribute  - impl. steht im frmatr.hxx,
     INLINE const SwFmtFillOrder         &GetFillOrder( BOOL = TRUE ) const;
