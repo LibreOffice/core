@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:50:34 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,18 +904,6 @@ void __EXPORT ModulWindow::StoreData()
 BOOL __EXPORT ModulWindow::CanClose()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-    if ( GetEditEngine() && GetEditEngine()->IsModified() )
-    {
-        ULONG nLen = GetEditEngine()->GetTextLen();
-        if ( nLen > 0xFFFb )    // Maximale String-Laenge
-        {
-            String aError( CreateQualifiedName() );
-            aError += String( RTL_CONSTASCII_USTRINGPARAM( ":\n" ) );
-            aError += String( IDEResId( RID_STR_SOURCETOBIG ) );
-            ErrorBox( this, WB_OK | WB_DEF_OK, aError ).Execute();
-            return FALSE;
-        }
-    }
     return TRUE;
 }
 
@@ -936,12 +924,12 @@ void __EXPORT ModulWindow::UpdateData()
 
     if ( xModule.Is() )
     {
-        SetModule( ::rtl::OUString( xModule->GetSource() ) );
+        SetModule( xModule->GetSource32() );
 
         if ( GetEditView() )
         {
             TextSelection aSel = GetEditView()->GetSelection();
-            GetEditEngine()->SetText( xModule->GetSource() );
+            setTextEngineText( GetEditEngine(), xModule->GetSource32() );
             GetEditView()->SetSelection( aSel );
             GetEditEngine()->SetModified( FALSE );
             BasicIDE::MarkDocShellModified( GetBasic() );
