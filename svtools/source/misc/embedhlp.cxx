@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:07:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,12 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
+#include <com/sun/star/util/XModifyListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYiBLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
 #endif
@@ -83,53 +89,69 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #endif
 
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
+#endif
+
 using namespace com::sun::star;
 
 namespace svt
 {
 
-class EmbedEventListener_Impl : public ::cppu::WeakImplHelper3 < embed::XStateChangeListener,
+class EmbedEventListener_Impl : public ::cppu::WeakImplHelper4 < embed::XStateChangeListener,
                                                                  document::XEventListener,
+                                                                 util::XModifyListener,
                                                                  util::XCloseListener >
 {
-    EmbeddedObjectRef*          pObject;
-
 public:
+    EmbeddedObjectRef*          pObject;
+    sal_Int32                   nState;
+
                                 EmbedEventListener_Impl( EmbeddedObjectRef* p ) :
                                     pObject(p)
+                                    , nState(-1)
                                 {}
 
-    static uno::Reference < document::XEventListener > Create( EmbeddedObjectRef* );
+    static EmbedEventListener_Impl* Create( EmbeddedObjectRef* );
 
     virtual void SAL_CALL changingState( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState )
                                     throw (embed::WrongStateException, uno::RuntimeException);
     virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState )
                                     throw (uno::RuntimeException);
-
-    virtual void SAL_CALL       queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership )
+    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership )
                                     throw (util::CloseVetoException, uno::RuntimeException);
-    virtual void SAL_CALL       notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException);
-    virtual void SAL_CALL       notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException );
-    virtual void SAL_CALL       disposing( const lang::EventObject& aEvent ) throw( uno::RuntimeException );
+    virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException);
+    virtual void SAL_CALL notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException );
+    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw( uno::RuntimeException );
+    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 };
 
-uno::Reference < document::XEventListener > EmbedEventListener_Impl::Create( EmbeddedObjectRef* p )
+EmbedEventListener_Impl* EmbedEventListener_Impl::Create( EmbeddedObjectRef* p )
 {
-    uno::Reference < document::XEventListener > xRet = new EmbedEventListener_Impl( p );
+    EmbedEventListener_Impl* xRet = new EmbedEventListener_Impl( p );
     xRet->acquire();
 
     if ( p->GetObject().is() )
     {
-        p->GetObject()->addStateChangeListener( uno::Reference< embed::XStateChangeListener > ( xRet, uno::UNO_QUERY ) );
+        p->GetObject()->addStateChangeListener( xRet );
 
         uno::Reference < util::XCloseable > xClose( p->GetObject(), uno::UNO_QUERY );
         DBG_ASSERT( xClose.is(), "Object does not support XCloseable!" );
         if ( xClose.is() )
-            xClose->addCloseListener( uno::Reference < util::XCloseListener >( xRet, uno::UNO_QUERY ) );
+            xClose->addCloseListener( xRet );
 
         uno::Reference < document::XEventBroadcaster > xBrd( p->GetObject(), uno::UNO_QUERY );
         if ( xBrd.is() )
             xBrd->addEventListener( xRet );
+
+        xRet->nState = p->GetObject()->getCurrentState();
+        if ( xRet->nState == embed::EmbedStates::RUNNING )
+        {
+            uno::Reference < util::XModifiable > xMod( p->GetObject()->getComponent(), uno::UNO_QUERY );
+            if ( xMod.is() )
+                // listen for changes in running state (update replacements in case of changes)
+                xMod->addModifyListener( xRet );
+        }
     }
 
     return xRet;
@@ -148,12 +170,36 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject& aE
                                                     ::sal_Int32 nNewState )
     throw ( uno::RuntimeException )
 {
-    if ( pObject && nNewState == embed::EmbedStates::RUNNING && nOldState != embed::EmbedStates::LOADED )
+    nState = nNewState;
+    if ( !pObject )
+        return;
+
+    uno::Reference < util::XModifiable > xMod( pObject->GetObject()->getComponent(), uno::UNO_QUERY );
+    if ( nNewState == embed::EmbedStates::RUNNING )
     {
         // TODO/LATER: container must be set before!
         // When is this event created? Who sets the new container when it changed?
-        pObject->UpdateReplacement();
+        if( nOldState != embed::EmbedStates::LOADED )
+            // get new replacement after deactivation
+            pObject->UpdateReplacement();
+
+        if ( xMod.is() )
+            // listen for changes in running state (update replacements in case of changes)
+            xMod->addModifyListener( this );
     }
+    else
+    {
+        // in active state we don't need a listener (in loaded state we can't listen)
+        if ( xMod.is() )
+            xMod->removeModifyListener( this );
+    }
+}
+
+void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& aEvent ) throw (uno::RuntimeException)
+{
+    if ( pObject && nState == embed::EmbedStates::RUNNING )
+        // updates only necessary in non-active states
+        pObject->UpdateReplacement();
 }
 
 void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
@@ -174,13 +220,13 @@ void SAL_CALL EmbedEventListener_Impl::queryClosing( const lang::EventObject& So
     // An embedded object can be shared between several objects (f.e. for undo purposes)
     // the object will not be closed before the last "customer" is destroyed
     // Now the EmbeddedObjectRef helper class works like a "lock" on the object
-    if ( pObject && pObject->IsLocked() )
+    if ( pObject && pObject->IsLocked() && Source.Source == pObject->GetObject() )
         throw util::CloseVetoException();
 }
 
 void SAL_CALL EmbedEventListener_Impl::notifyClosing( const lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
 {
-    if ( pObject )
+    if ( pObject && Source.Source == pObject->GetObject() )
     {
         pObject->Clear();
         pObject = 0;
@@ -189,7 +235,7 @@ void SAL_CALL EmbedEventListener_Impl::notifyClosing( const lang::EventObject& S
 
 void SAL_CALL EmbedEventListener_Impl::disposing( const lang::EventObject& aEvent ) throw( uno::RuntimeException )
 {
-    if ( pObject )
+    if ( pObject && aEvent.Source == pObject->GetObject() )
     {
         pObject->Clear();
         pObject = 0;
@@ -198,7 +244,7 @@ void SAL_CALL EmbedEventListener_Impl::disposing( const lang::EventObject& aEven
 
 struct EmbeddedObjectRef_Impl
 {
-    uno::Reference < document::XEventListener > xListener;
+    EmbedEventListener_Impl*                    xListener;
     ::rtl::OUString                             aPersistName;
     ::rtl::OUString                             aMediaType;
     comphelper::EmbeddedObjectContainer*        pContainer;
@@ -286,17 +332,17 @@ void EmbeddedObjectRef::Assign( const NS_UNO::Reference < NS_EMBED::XEmbeddedObj
 
 void EmbeddedObjectRef::Clear()
 {
-    if ( mxObj.is() && mpImp->xListener.is() )
+    if ( mxObj.is() && mpImp->xListener )
     {
-        mxObj->removeStateChangeListener( (embed::XStateChangeListener*) mpImp->xListener.get() );
+        mxObj->removeStateChangeListener( mpImp->xListener );
 
         uno::Reference < util::XCloseable > xClose( mxObj, uno::UNO_QUERY );
         if ( xClose.is() )
-            xClose->removeCloseListener( (util::XCloseListener*) mpImp->xListener.get() );
+            xClose->removeCloseListener( mpImp->xListener );
 
         uno::Reference < document::XEventBroadcaster > xBrd( mxObj, uno::UNO_QUERY );
         if ( xBrd.is() )
-            xBrd->removeEventListener( (document::XEventListener*) mpImp->xListener.get() );
+            xBrd->removeEventListener( mpImp->xListener );
 
         if ( mpImp->bIsLocked )
         {
@@ -314,9 +360,10 @@ void EmbeddedObjectRef::Clear()
             }
         }
 
-        if ( mpImp->xListener.is() )
+        if ( mpImp->xListener )
         {
             mpImp->xListener->release();
+            mpImp->xListener->pObject = 0;
             mpImp->xListener = 0;
         }
 
@@ -572,6 +619,7 @@ void EmbeddedObjectRef::SetGraphicToContainer( const Graphic& rGraphic,
                                                 const ::rtl::OUString& aMediaType )
 {
     SvMemoryStream aStream;
+    aStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
     if ( rGraphic.ExportNative( aStream ) )
     {
         aStream.Seek( 0 );
