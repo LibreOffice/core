@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-17 14:24:01 $
+ *  last change: $Author: aw $ $Date: 2002-09-13 08:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,38 @@ SdrObject* ImpGetClone(Container& aConnectorContainer, SdrObject* pConnObj)
             return ((ImpRememberOrigAndClone*)aConnectorContainer.GetObject(a))->pClone;
     }
     return 0L;
+}
+
+// #90129# restrict movement to WorkArea
+void ImpCheckInsertPos(Point& rPos, const Size& rSize, const Rectangle& rWorkArea)
+{
+    if(!rWorkArea.IsEmpty())
+    {
+        Rectangle aMarkRect(rPos, rSize);
+
+        if(!aMarkRect.IsInside(rWorkArea))
+        {
+            if(aMarkRect.Left() < rWorkArea.Left())
+            {
+                rPos.X() += rWorkArea.Left() - aMarkRect.Left();
+            }
+
+            if(aMarkRect.Right() > rWorkArea.Right())
+            {
+                rPos.X() -= aMarkRect.Right() - rWorkArea.Right();
+            }
+
+            if(aMarkRect.Top() < rWorkArea.Top())
+            {
+                rPos.Y() += rWorkArea.Top() - aMarkRect.Top();
+            }
+
+            if(aMarkRect.Bottom() > rWorkArea.Bottom())
+            {
+                rPos.Y() -= aMarkRect.Bottom() - rWorkArea.Bottom();
+            }
+        }
+    }
 }
 
 BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
@@ -929,6 +961,10 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                 aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
             }
 
+            // #90129# restrict movement to WorkArea
+            Size aImageMapSize(aGraphic.GetPrefSize());
+            ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
+
             InsertGraphic( aGraphic, nAction, aInsertPos, NULL, pImageMap );
             bReturn = TRUE;
         }
@@ -956,6 +992,10 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                 aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
             }
 
+            // #90129# restrict movement to WorkArea
+            Size aImageMapSize(aMtf.GetPrefSize());
+            ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
+
             InsertGraphic( aMtf, nAction, aInsertPos, NULL, pImageMap );
             bReturn = TRUE;
         }
@@ -982,6 +1022,10 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                 aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                 aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
             }
+
+            // #90129# restrict movement to WorkArea
+            Size aImageMapSize(aBmp.GetPrefSize());
+            ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 
             InsertGraphic( aBmp, nAction, aInsertPos, NULL, pImageMap );
             bReturn = TRUE;
