@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ThreadPool_Test.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:55 $
+ *  last change: $Author: kr $ $Date: 2000-09-28 11:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ public class ThreadPool_Test {
                                                 finish ? null : (synchron ? "syncCall": "asyncCall"),
                                                 new Object[]{new Integer(myImpl.getNext())});
 
-            Job job = new Job(myReceiver, myMessage);
+            Job job = new Job(myImpl, myReceiver, myMessage);
 //              Job job = new Job(UnoRuntime.generateOid(myImpl),
 //                                myReceiver,      // receiver
 //                                threadID,        // threadID
@@ -322,8 +322,8 @@ public class ThreadPool_Test {
         int blockers = 0;
 
         SenderThread senderThread = new SenderThread(disposeId);
-        senderThread.start();
-
+//          senderThread.start();
+        boolean started = false;
         Vector threads = new Vector();
 
         do {
@@ -347,6 +347,12 @@ public class ThreadPool_Test {
 
             __threads.addElement(object);
             threads.addElement(object);
+
+            if(!started) {
+                started = true;
+                senderThread.start();
+            }
+
             Thread.sleep((int)(Math.random() * 1000));
         }
         while(Math.random() > 0.05);
@@ -375,8 +381,8 @@ public class ThreadPool_Test {
             else {
                 RemoteObject remoteObject = (RemoteObject)object;
                 synchronized(remoteObject) {
-                    while(!remoteObject._finished && !remoteObject._myImpl._block)
-                        remoteObject.wait();
+                    while(!remoteObject._finished && !remoteObject._myImpl._block && remoteObject._myImpl._send_requestId > 0)
+                        remoteObject.wait(100);
                 }
             }
         }
