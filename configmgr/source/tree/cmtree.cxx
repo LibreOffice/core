@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 09:17:34 $
+ *  last change: $Author: dg $ $Date: 2000-12-04 19:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,6 @@
 #include "treeactions.hxx"
 
 #include <com/sun/star/uno/Any.hxx>
-
-#ifndef _CONFIGMGR_TREEACCESS_HXX_
-#include "treeaccess.hxx"
-#endif
-
 
 // WISDOM
 // !!Never write same code twice!!
@@ -443,35 +438,14 @@ namespace configmgr
 // ---------------------------- Tree implementation ----------------------------
 
     Tree::Tree()
-            : m_pRoot(NULL), m_pLock(NULL)
+         :m_pRoot(NULL)
     {
         m_pRoot = new Subtree();
-        m_pLock = new OTreeAccessor;
     }
 
     Tree::~Tree()
     {
-        delete m_pLock;
-    }
-
-    void Tree::acquireReadAccess() const
-    {
-        m_pLock->acquireReadAccess();
-    }
-
-    void Tree::releaseReadAccess() const
-    {
-        m_pLock->releaseReadAccess();
-    }
-
-    void Tree::acquireWriteAccess()
-    {
-        m_pLock->acquireWriteAccess();
-    }
-
-    void Tree::releaseWriteAccess()
-    {
-        m_pLock->releaseWriteAccess();
+        delete m_pRoot;
     }
 
 // -----------------------------------------------------------------------------
@@ -512,8 +486,8 @@ namespace configmgr
 
         // if the tree is not complete: ALL_LEVELS != pSubtree->getLevel()
         // or not fetched with all requested levels, we have to refetch
-        bCompleteForRequest = pSubtree && (ALL_LEVELS == pSubtree->getLevel() ||
-                                          (ALL_LEVELS != nLevel && nLevel <= pSubtree->getLevel()));
+            bCompleteForRequest = pSubtree && (ITreeProvider::ALL_LEVELS == pSubtree->getLevel() ||
+                                              (ITreeProvider::ALL_LEVELS != nLevel && nLevel <= pSubtree->getLevel()));
 
         if (!bCompleteForRequest)
             pSubtree = 0;
