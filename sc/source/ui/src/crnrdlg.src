@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:53:59 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ chinese_traditional ] = "¥]§tÄæ¼ĞÃD(~C)";
         Text[ arabic ] = "íÊÖãä ÑÄæÓ ÃÚãÏÉ";
         Text[ greek ] = "ğåñéİ÷åé êåöáëßäåò óôçëşí";
-        Text[ korean ] = "¿­ ¸Ó¸®±Û Æ÷ÇÔ";
+        Text[ korean ] = "¿­ ¸Ó¸®±Û Æ÷ÇÔ(~C)";
         Text[ turkish ] = "Sütun başlıkları ~içeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -192,7 +192,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ chinese_traditional ] = "¥]§tÄæ¼ĞÃD(~R)";
         Text[ arabic ] = "íÊÖãä ÑÄæÓ Õİæİ";
         Text[ greek ] = "ğåñéİ÷åé êåöáëßäåò ãñáììşí";
-        Text[ korean ] = "Çà ¸Ó¸®±Û Æ÷ÇÔ";
+        Text[ korean ] = "Çà ¸Ó¸®±Û Æ÷ÇÔ(~R)";
         Text[ turkish ] = "Satır başlıkları  i~çeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -294,7 +294,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ chinese_traditional ] = "·s¼W(~A)";
         Text[ arabic ] = "ÅÖÇİÉ";
         Text[ greek ] = "ĞñïóèŞêç";
-        Text[ korean ] = "Ãß°¡";
+        Text[ korean ] = "Ãß°¡(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
     };
@@ -323,7 +323,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ chinese_traditional ] = "§R°£(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦";
+        Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
     };
