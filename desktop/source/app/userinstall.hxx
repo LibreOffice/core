@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 14:53:05 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 15:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,10 @@ public:
         E_Creation,             // error while creating user install
         E_InvalidBaseinstall,   // corrupt base installation
         E_SetupFailed,          // external setup did not run correctly
+        E_Configuration,        // error while accessing configuration
         E_Unknown               // unknown error
     };
 
     static UserInstallError finalize();
-    static LanguageType getUserInstallLanguage();
 };
 }
