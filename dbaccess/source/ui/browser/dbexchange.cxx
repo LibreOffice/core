@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 14:23:11 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 12:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     sal_Bool ODataClipboard::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
     {
-        if (nUserObjectId == SOT_FORMAT_RTF || nUserObjectId == SOT_FORMATSTR_ID_HTML)
+        if (nUserObjectId == SOT_FORMAT_RTF || nUserObjectId == SOT_FORMATSTR_ID_HTML || nUserObjectId == SOT_FORMATSTR_ID_HTML_SIMPLE)
         {
             ODatabaseImportExport* pExport = reinterpret_cast<ODatabaseImportExport*>(pUserObject);
             if(pExport)
@@ -288,7 +288,10 @@ namespace dbaui
 
         // HTML?
         if (DCF_HTML_TABLE == (m_nFormats & DCF_HTML_TABLE))
+        {
             AddFormat(SOT_FORMATSTR_ID_HTML);
+            AddFormat(SOT_FORMATSTR_ID_HTML_SIMPLE);
+        }
 
         // object descriptor?
         if (DCF_OBJECT_DESCRIPTOR == (m_nFormats & DCF_OBJECT_DESCRIPTOR))
@@ -331,6 +334,9 @@ namespace dbaui
             case SOT_FORMATSTR_ID_HTML:
                 m_pHtml->initialize();
                 return SetObject(m_pHtml,SOT_FORMATSTR_ID_HTML,rFlavor);
+            case SOT_FORMATSTR_ID_HTML_SIMPLE:
+                m_pHtml->initialize();
+                return SetObject(m_pHtml,SOT_FORMATSTR_ID_HTML_SIMPLE,rFlavor);
 
             case SOT_FORMATSTR_ID_DBACCESS_TABLE:
             case SOT_FORMATSTR_ID_DBACCESS_QUERY:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 12:19:25 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 12:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,7 +552,7 @@ namespace dbaui
                         ::comphelper::disposeComponent(xSrcConnection);
                 }
             }
-            else if(_rPasteData.HasFormat(SOT_FORMATSTR_ID_HTML) || _rPasteData.HasFormat(SOT_FORMAT_RTF))
+            else if(_rPasteData.HasFormat(SOT_FORMATSTR_ID_HTML) || _rPasteData.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE) || _rPasteData.HasFormat(SOT_FORMAT_RTF))
             {
                 // first get the dest connection
                 Reference<XConnection> xDestConnection;  // supports the service sdb::connection
@@ -646,6 +646,7 @@ namespace dbaui
             {
                 case SOT_FORMAT_RTF:                    // RTF data descriptions
                 case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
+                case SOT_FORMATSTR_ID_HTML_SIMPLE:      // HTML data descriptions
                 case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
                     if (etTableContainer == eEntryType)
                         return DND_ACTION_COPY;
@@ -713,6 +714,7 @@ namespace dbaui
             {
                 case SOT_FORMAT_RTF:                    // RTF data descriptions
                 case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
+                case SOT_FORMATSTR_ID_HTML_SIMPLE:      // HTML data descriptions
                 case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
                     bDoDrop = (etTableContainer == eEntryType);
                     break;
@@ -778,7 +780,8 @@ namespace dbaui
         bTableFormat    =   aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
                     ||  aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
                     ||  aTransferData.HasFormat(SOT_FORMAT_RTF)
-                    ||  aTransferData.HasFormat(SOT_FORMATSTR_ID_HTML);
+                    ||  aTransferData.HasFormat(SOT_FORMATSTR_ID_HTML)
+                    ||  aTransferData.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE);
 
         return bTableFormat;
     }
@@ -916,6 +919,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/07/05 12:19:25  oj
+ *  #87744# check for right HTML_TYPE
+ *
  *  Revision 1.17  2001/07/02 13:22:11  oj
  *  #88476# save name of object before recursive call
  *

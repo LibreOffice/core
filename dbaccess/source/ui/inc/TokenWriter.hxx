@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2001-03-30 12:08:44 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 12:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,15 +134,7 @@ namespace dbaui
         // import data
         ODatabaseImportExport(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
-                                :m_xConnection(_rxConnection)
-        ,m_pReader(NULL)
-        ,m_pRowMarker(NULL)
-        ,m_xFormatter(_rxNumberF)
-        ,m_xFactory(_rM)
-        ,m_nCommandType(::com::sun::star::sdb::CommandType::TABLE)
-        ,m_bDisposeConnection(sal_False)
-        {}
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
         virtual ~ODatabaseImportExport();
     public:
