@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 11:42:30 $
+ *  last change: $Author: sab $ $Date: 2001-01-19 15:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1077,6 +1077,7 @@ public:
     virtual                     ~ScChangeTrack();
             void                Clear();
 
+            ScChangeActionContent*  GetFirstGenerated() const { return pFirstGeneratedDelContent; }
             ScChangeAction*     GetFirst() const { return pFirst; }
             ScChangeAction*     GetLast() const { return pLast; }
             ULONG               GetActionMax() const { return nActionMax; }
