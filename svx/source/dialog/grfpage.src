@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:53:09 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ greek ] = "Προσαρμογή";
         Text[ korean ] = "΄Ωµλ±β";
         Text[ turkish ] = "Kύrp";
+        Text[ catalan ] = "Recortar";
     };
     FixedText FT_LEFT
     {
@@ -126,6 +127,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ greek ] = "Αριστερά";
         Text[ korean ] = "ΏήΒΚ(~L)";
         Text[ turkish ] = "So~l";
+        Text[ catalan ] = "~Izquierda";
     };
     MetricField MF_LEFT
     {
@@ -170,6 +172,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ greek ] = "Δεξιά";
         Text[ korean ] = "ΏΐΈ¥ΒΚ(~R)";
         Text[ turkish ] = "S~aπ";
+        Text[ catalan ] = "~Derecha";
     };
     MetricField MF_RIGHT
     {
@@ -212,6 +215,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ greek ] = "Πάνω";
         Text[ korean ] = "ΐ§(~T)";
         Text[ turkish ] = "ά~st";
+        Text[ catalan ] = "~Arriba";
     };
     MetricField MF_TOP
     {
@@ -256,6 +260,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ greek ] = "Κάτω";
         Text[ korean ] = "ΎΖ·΅(~B)";
         Text[ turkish ] = "A~lt";
+        Text[ catalan ] = "A~bajo";
     };
     MetricField MF_BOTTOM
     {
@@ -298,6 +303,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ greek ] = "Δια~τήρηση μεγέθους";
         Text[ korean ] = "Ε©±β ΐ―Αφ(~Z)";
         Text[ turkish ] = "Boyutu kor~u";
+        Text[ catalan ] = "~Mantener el tamaρo";
     };
     RadioButton RB_ZOOMCONST
     {
@@ -324,6 +330,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ greek ] = "Διατήρηση κλί~μακας";
         Text[ korean ] = "Ήθΐ² ΐ―Αφ(~S)";
         Text[ turkish ] = "~Orantύyύ koru";
+        Text[ catalan ] = "Mantener la ~escala";
     };
     GroupBox GB_EXAMPLE
     {
@@ -351,6 +358,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ greek ] = "Προεπισκόπηση";
         Text[ korean ] = "ΉΜΈ®ΊΈ±β";
         Text[ turkish ] = "Φnizleme";
+        Text[ catalan ] = "Previsualizaciσn";
     };
     Window WN_BSP
     {
@@ -381,6 +389,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ greek ] = "Κλίμακα";
         Text[ korean ] = "Ήθΐ²";
         Text[ turkish ] = "Φlηek";
+        Text[ catalan ] = "Escala";
     };
     FixedText FT_WIDTHZOOM
     {
@@ -409,6 +418,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ greek ] = "Πλάτος";
         Text[ korean ] = "³ΚΊρ(~W)";
         Text[ turkish ] = "G~eniώlik";
+        Text[ catalan ] = "A~ncho";
     };
     MetricField MF_WIDTHZOOM
     {
@@ -457,6 +467,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ greek ] = "Ύψος";
         Text[ korean ] = "³τΐΜ(~E)";
         Text[ turkish ] = "Y~όkseklik";
+        Text[ catalan ] = "A~ltura";
     };
     MetricField MF_HEIGHTZOOM
     {
@@ -503,6 +514,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ greek ] = "Μέγεθος";
         Text[ korean ] = "Ε©±β";
         Text[ turkish ] = "Boyut";
+        Text[ catalan ] = "Tamaρo";
     };
     FixedText FT_WIDTH
     {
@@ -531,6 +543,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ greek ] = "Πλάτος";
         Text[ korean ] = "³ΚΊρ(~W)";
         Text[ turkish ] = "~Geniώlik";
+        Text[ catalan ] = "A~ncho";
     };
     MetricField MF_WIDTH
     {
@@ -577,6 +590,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ greek ] = "Ύψος";
         Text[ korean ] = "³τΐΜ(~E)";
         Text[ turkish ] = "~Yόkseklik";
+        Text[ catalan ] = "A~ltura";
     };
     MetricField MF_HEIGHT
     {
@@ -626,6 +640,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ greek ] = "Αρχικό μέ~γεθος";
         Text[ korean ] = "Ώψ·΅ Ε©±β(~O)";
         Text[ turkish ] = "έ~lk boyut";
+        Text[ catalan ] = "Tamaρo ori~ginal";
     };
 };
 
