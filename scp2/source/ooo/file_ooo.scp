@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.14 $
+*  $Revision: 1.15 $
 *
-*  last change: $Author: rt $ $Date: 2004-05-28 10:20:08 $
+*  last change: $Author: obo $ $Date: 2004-06-01 09:05:59 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -163,31 +163,6 @@ End
 
 #endif
 
-#ifdef SOLAR_JAVA
-
-File gid_File_Bin_Jvmsetup
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = EXENAME(jvmsetup);
-End
-
-#endif
-
-#ifdef SOLAR_JAVA
-
-#ifdef UNX
-
-File gid_File_Bin_Jvmsetup_Bin
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = "jvmsetup.bin";
-End
-
-#endif
-
-#endif
 
 #ifdef UNX
 
@@ -1986,3 +1961,21 @@ File gid_File_Xsl_Userregistry
     Dir = gid_Dir_Program;
     Name = "user_registry.xsl";
 End
+
+#ifdef SOLAR_JAVA
+
+File gid_File_Xml_javavendors
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "javavendors.xml";
+    Styles = (PACKED);
+End
+
+File gid_File_Xml_javasettings
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "javasettings.xml";
+    Styles = (PACKED);
+End
+
+#endif 
