@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-10 16:07:48 $
+ *  last change: $Author: mtg $ $Date: 2001-10-22 13:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1212,12 +1212,21 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, Reference < XI
 
     File aFile ( rFileName );
     aRC = aFile.open ( osl_File_OpenFlag_Create | osl_File_OpenFlag_Write );
+    sal_Bool bExists = sal_False;
     if ( aRC == FileBase::E_EXIST )
+    {
         aRC = aFile.open ( osl_File_OpenFlag_Write );
+        bExists = sal_True;
+    }
     if ( aRC != FileBase::E_None )
     {
         if ( ! HandleError (  (oslFileError) aRC, EC_RETRY|EC_ABORT, rFileName ) )
             return e_Aborted;
+    }
+    else if ( bExists )
+    {
+        // truncate if necessary
+        aFile.setSize ( 0 );
     }
 
     aRC = aFile.write ( aBuffer.getConstArray(), nRead, nWritten );
