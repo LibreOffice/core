@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-14 17:56:47 $
+ *  last change: $Author: khong $ $Date: 2002-05-15 20:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@ IMPL_CREATEINSTANCE( Collator_ko_charset )
 IMPL_CREATEINSTANCE( Collator_zh_charset )
 IMPL_CREATEINSTANCE( Collator_ja_charset )
 IMPL_CREATEINSTANCE( Collator_zh_TW_charset )
+IMPL_CREATEINSTANCE( Collator_de_phonebook )
 
 IMPL_CREATEINSTANCE_MSF( CharacterClassificationImpl )
 IMPL_CREATEINSTANCE_MSF( cclass_Unicode )
@@ -485,6 +486,9 @@ static const struct InstancesArray {
         {       "com.sun.star.i18n.Collator_zh_TW_charset",
                 "com.sun.star.i18n.Collator_zh_TW_charset",
                 &Collator_zh_TW_charset_CreateInstance },
+        {       "com.sun.star.i18n.Collator_de_phonebook",
+                "com.sun.star.i18n.Collator_de_phonebook",
+                &Collator_de_phonebook_CreateInstance },
     {   "com.sun.star.i18n.ScriptTypeDetector",
         "com.sun.star.i18n.ScriptTypeDetector",
         &ScriptTypeDetector_CreateInstance },

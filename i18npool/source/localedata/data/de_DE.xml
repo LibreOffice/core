@@ -222,6 +222,7 @@
 </LC_FORMAT>
 <LC_COLLATION>
 <Collator unoid="alphanumeric" default="true"/>
+<Collator unoid="phonebook" default="false"/>
 <CollationOptions>
 <TransliterationModules>IGNORE_CASE</TransliterationModules>
 </CollationOptions>
