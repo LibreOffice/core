@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syslocaleoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-06-26 12:36:41 $
+ *  last change: $Author: dg $ $Date: 2001-09-26 15:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,17 +152,10 @@ public:
 };
 
 
-#ifdef TF_CFGDATA
 #define ROOTNODE_SYSLOCALE  OUString(RTL_CONSTASCII_USTRINGPARAM("Setup/L10N"))
 
 #define PROPERTYNAME_LOCALE         OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupSystemLocale"))
 #define PROPERTYNAME_CURRENCY       OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupCurrency"))
-#else
-#define ROOTNODE_SYSLOCALE  OUString(RTL_CONSTASCII_USTRINGPARAM("Setup/Product"))
-
-#define PROPERTYNAME_LOCALE         OUString(RTL_CONSTASCII_USTRINGPARAM("System_Locale"))
-#define PROPERTYNAME_CURRENCY       OUString(RTL_CONSTASCII_USTRINGPARAM("Currency"))
-#endif
 
 #define PROPERTYHANDLE_LOCALE       0
 #define PROPERTYHANDLE_CURRENCY     1

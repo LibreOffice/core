@@ -2,9 +2,9 @@
  *
  *  $RCSfile: startoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dg $ $Date: 2001-06-22 09:23:37 $
+ *  last change: $Author: dg $ $Date: 2001-09-26 15:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,16 +103,9 @@ using namespace ::com::sun::star::uno   ;
 #define DEFAULT_SHOWINTRO               sal_True
 #define DEFAULT_CONNECTIONURL           OUString()
 
-#ifdef TF_CFGDATA
 #define ROOTNODE_START                  OUString(RTL_CONSTASCII_USTRINGPARAM("Setup/Office" ))
 #define PROPERTYNAME_SHOWINTRO          OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupShowIntro" ))
 #define PROPERTYNAME_CONNECTIONURL      OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupConnectionURL" ))
-
-#else
-#define ROOTNODE_START                  OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Start"  ))
-#define PROPERTYNAME_SHOWINTRO          OUString(RTL_CONSTASCII_USTRINGPARAM("ShowIntro"            ))
-#define PROPERTYNAME_CONNECTIONURL      OUString(RTL_CONSTASCII_USTRINGPARAM("Connection"           ))
-#endif
 
 #define PROPERTYHANDLE_SHOWINTRO        0
 #define PROPERTYHANDLE_CONNECTIONURL    1

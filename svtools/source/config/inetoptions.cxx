@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-25 10:12:50 $
+ *  last change: $Author: dg $ $Date: 2001-09-26 15:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,13 +332,8 @@ SvtInetOptions::Impl::notifyListeners(
 
 //============================================================================
 SvtInetOptions::Impl::Impl():
-#if defined TF_CFGDATA
     ConfigItem(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Inet/Settings")))
-#else // TF_CFGDATA
-    ConfigItem(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Inet")))
-#endif // TF_CFGDATA
 {
-#if defined TF_CFGDATA
     m_aEntries[INDEX_DNS_SERVER].m_aName
         = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetDNSServer"));
     m_aEntries[INDEX_NO_PROXY].m_aName
@@ -357,26 +352,7 @@ SvtInetOptions::Impl::Impl():
         = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetSOCKSProxyName"));
     m_aEntries[INDEX_SOCKS_PROXY_PORT].m_aName
         = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetSOCKSProxyPort"));
-#else // TF_CFGDATA
-    m_aEntries[INDEX_DNS_SERVER].m_aName
-        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DNS/IP_Address"));
-    m_aEntries[INDEX_NO_PROXY].m_aName
-        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/NoProxy"));
-    m_aEntries[INDEX_PROXY_TYPE].m_aName
-        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/Type"));
-    m_aEntries[INDEX_FTP_PROXY_NAME].m_aName
-        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/FTP/Name"));
-    m_aEntries[INDEX_FTP_PROXY_PORT].m_aName
-        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/FTP/Port"));
-    m_aEntries[INDEX_HTTP_PROXY_NAME].m_aName
-        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/HTTP/Name"));
-    m_aEntries[INDEX_HTTP_PROXY_PORT].m_aName
-        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/HTTP/Port"));
-    m_aEntries[INDEX_SOCKS_PROXY_NAME].m_aName
-        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/SOCKS/Name"));
-    m_aEntries[INDEX_SOCKS_PROXY_PORT].m_aName
-        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/SOCKS/Port"));
-#endif // TF_CFGDATA
+
     star::uno::Sequence< rtl::OUString > aKeys(ENTRY_COUNT);
     for (sal_Int32 i = 0; i < ENTRY_COUNT; ++i)
         aKeys[i] = m_aEntries[i].m_aName;

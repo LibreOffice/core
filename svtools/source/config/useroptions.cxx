@@ -2,9 +2,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dg $ $Date: 2001-06-21 18:01:26 $
+ *  last change: $Author: dg $ $Date: 2001-09-26 15:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,6 @@ using namespace com::sun::star::uno;
 
 // define ----------------------------------------------------------------
 
-#ifdef TF_CFGDATA
-
     #define USER_CITY               0
     #define USER_COMPANY            1
     #define USER_COUNTRY            2
@@ -100,26 +98,6 @@ using namespace com::sun::star::uno;
     #define USER_ID                 13
     #define USER_ZIP                14
 
-#else
-
-    #define USER_CITY               0
-    #define USER_COMPANY            1
-    #define USER_COUNTRY            2
-    #define USER_CUSTOMERNUMBER     3
-    #define USER_EMAIL              4
-    #define USER_FAX                5
-    #define USER_FIRSTNAME          6
-    #define USER_LASTNAME           7
-    #define USER_POSITION           8
-    #define USER_STATE              9
-    #define USER_STREET             10
-    #define USER_TELEPHONEHOME      11
-    #define USER_TELEPHONEWORK      12
-    #define USER_TITLE              13
-    #define USER_ID                 14
-    #define USER_ZIP                15
-
-#endif
 
 // class SvtUserOptions_Impl ---------------------------------------------
 
@@ -227,7 +205,6 @@ static sal_Int32            nRefCount = 0;
 
 Sequence< OUString > GetUserPropertyNames()
 {
-#ifdef TF_CFGDATA
     static const char* aPropNames[] =
     {
         "Data/l",           // USER_CITY
@@ -246,29 +223,6 @@ Sequence< OUString > GetUserPropertyNames()
         "Data/initials",        // USER_ID
         "Data/postalcode",              // USER_ZIP
     };
-#else
-    static const char* aPropNames[] =
-    {
-        "Data/City",            // USER_CITY
-        "Data/Company",         // USER_COMPANY
-        "Data/Country",         // USER_COUNTRY
-        "Data/CustomerNumber",  // USER_CUSTOMERNUMBER
-        "Data/EMail",           // USER_EMAIL
-        "Data/Fax",             // USER_FAX
-        "Data/FirstName",       // USER_FIRSTNAME
-        "Data/LastName",        // USER_LASTNAME
-        "Data/Position",        // USER_POSITION
-        "Data/State",           // USER_STATE
-        "Data/Street",          // USER_STREET
-        "Data/TelephoneHome",   // USER_TELEPHONEHOME
-        "Data/TelephoneWork",   // USER_TELEPHONEWORK
-        "Data/Title",           // USER_TITLE
-        "Data/UserID",          // USER_ID
-        "Data/Zip",             // USER_ZIP
-    };
-#endif
-
-
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
     Sequence< OUString > aNames( nCount );
     OUString* pNames = aNames.getArray();
@@ -346,10 +300,6 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
                         case USER_TELEPHONEWORK:    m_aTelephoneWork = String( aTempStr );  break;
                         case USER_FAX:              m_aFax = String( aTempStr );            break;
                         case USER_EMAIL:            m_aEmail = String( aTempStr );          break;
-#ifndef TF_CFGDATA
-                        case USER_CUSTOMERNUMBER:   m_aCustomerNumber = String( aTempStr ); break;
-#endif
-
                         default:
                             DBG_ERRORFILE( "invalid index to load a user token" );
                     }
@@ -404,9 +354,6 @@ void SvtUserOptions_Impl::Commit()
             case USER_TELEPHONEWORK:    aTempStr = OUString( m_aTelephoneWork );    break;
             case USER_FAX:              aTempStr = OUString( m_aFax );              break;
             case USER_EMAIL:            aTempStr = OUString( m_aEmail );            break;
-#ifndef TF_CFGDATA
-            case USER_CUSTOMERNUMBER:   aTempStr = OUString( m_aCustomerNumber );   break;
-#endif
             default:
                 DBG_ERRORFILE( "invalid index to save a user token" );
         }

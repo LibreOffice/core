@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cjkoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dg $ $Date: 2001-06-22 10:59:04 $
+ *  last change: $Author: dg $ $Date: 2001-09-26 15:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,11 +133,7 @@ public:
 Sequence<OUString> SvtCJKOptions_Impl::aPropertyNames;
 
 SvtCJKOptions_Impl::SvtCJKOptions_Impl() :
-#ifdef TF_CFGDATA
     utl::ConfigItem(C2U("Office.Common/I18N/CJK")),
-#else
-    utl::ConfigItem(C2U("Setup/CJK/Enable")),
-#endif
     bIsLoaded(sal_False),
     bCJKFont(sal_True),
     bVerticalText(sal_True),
