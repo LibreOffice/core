@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 13:01:41 $
+#   last change: $Author: rt $ $Date: 2004-05-21 14:26:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,9 +122,11 @@ APP1_STDPOST=
 .ENDIF
 
 RESLIB1NAME=		dkt
+RESLIB1IMAGES=		$(PRJ)$/res
 RESLIB1SRSFILES=	$(SRS)$/desktop.srs
 
 RESLIB2NAME=		langselect
+RESLIB2IMAGES=		$(PRJ)$/res
 RESLIB2SRSFILES=	$(SRS)$/langselect.srs
 
 APP1TARGET=so$/$(TARGET)
