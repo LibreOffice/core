@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:19:56 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,18 @@ public:
     // Hidden
     sal_Bool IsHiddenNow() const;       // bHidden && pOut == pPrt
     void HideHidden();              // Anhaengsel entfernen wenn Hidden
+    void HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd );
+
+    /** method to hide/show objects
+
+        OD 2004-01-15 #110582#
+        method hides respectively shows objects, which are anchored at paragraph,
+        at/as a character of the paragraph, corresponding to the paragraph and
+        paragraph portion visibility.
+
+        @author OD
+    */
+    void HideAndShowObjects();
 
     // Ftn
     void RemoveFtn( const xub_StrLen nStart = 0,
