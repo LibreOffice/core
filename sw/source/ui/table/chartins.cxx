@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:31:26 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 16:03:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,8 @@ IMPL_LINK( SwInsertChartDlg, NextHdl, Button *, pBtn )
     if ( bUpdateChartData )
         UpdateData();
 
+    if( !pChartData )
+        return 0;
     if(!pChartDlg)
     {
         pChartDlg = SchDLL::CreateAutoPilotDlg( GetParent(),    pChartData,
@@ -390,7 +392,6 @@ IMPL_LINK( SwInsertChartDlg, ModifyHdl, Edit*, pEdit )
     String sContent = pEdit->GetText();
     if( !sContent.Len() )
     {
-        bCorrect = pWrtShell->IsCrsrInTbl() != 0;
         aAktTableName = sContent;
         bFinish = TRUE;
     }
