@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-30 13:20:03 $
+ *  last change: $Author: os $ $Date: 2001-04-04 14:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,11 +321,10 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
         aMergeDistCB.SaveValue();
         aMergeDistPageStartCB.SaveValue();
     }
-    else
-    {
+    if(GLOBALSETTING == nOldLinkMode)
         nOldLinkMode = pUsrPref->GetUpdateLinkMode();
+    if(AUTOUPD_GLOBALSETTING == nFldFlags)
         nFldFlags = pUsrPref->GetFldUpdateFlags();
-    }
 
     aAutoUpdateFields.Check(nFldFlags != AUTOUPD_OFF);
     aAutoUpdateCharts.Check(nFldFlags == AUTOUPD_FIELD_AND_CHARTS);

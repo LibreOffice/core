@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:32:30 $
+ *  last change: $Author: os $ $Date: 2001-04-04 14:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,7 @@ TabPage TP_CONTENT_OPT
     ListBox LB_VMETRIC
     {
         Pos = MAP_APPFONT ( 206 , 51 ) ;
-        Size = MAP_APPFONT ( 30 , 60 ) ;
+        Size = MAP_APPFONT ( 45 , 60 ) ;
         DropDown = TRUE;
     };
     CheckBox CB_SMOOTH_SCROLL
@@ -690,7 +690,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_FOOTBACK
     {
-        Pos = MAP_APPFONT ( 130 , 132 ) ;
+        Pos = MAP_APPFONT ( 136 , 132 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Fu~ßnoten" ;
         Text [ ENGLISH ] = "Footnotes" ;
@@ -716,7 +716,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_FLDBACK
     {
-        Pos = MAP_APPFONT ( 130 , 145 ) ;
+        Pos = MAP_APPFONT ( 136 , 145 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Felder" ;
         Text [ ENGLISH ] = "Fields" ;

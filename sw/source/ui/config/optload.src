@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:33:57 $
+ *  last change: $Author: os $ $Date: 2001-04-04 14:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ TabPage TP_OPTLOAD_PAGE
     FixedText FT_FIELD
     {
         Pos = MAP_APPFONT ( 130 , 14 ) ;
-        Size = MAP_APPFONT ( 100 , 81 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
         Text = "Felder und Diagramme" ;
         Text [ English ] = "Update" ;
         Text[ english_us ] = "Fields and charts";
@@ -312,7 +312,7 @@ TabPage TP_OPTLOAD_PAGE
     CheckBox CB_CAPTION
     {
         Pos = MAP_APPFONT ( 12 , 81 ) ;
-        Size = MAP_APPFONT ( 170 , 10 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Automatisch" ;
         Text [ ENGLISH ] = "Automatic" ;
         TabStop = TRUE ;
@@ -338,8 +338,8 @@ TabPage TP_OPTLOAD_PAGE
     };
     FixedText TXT_OPTIONS
     {
-        Pos = MAP_APPFONT ( 185 , 81 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 165 , 81 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "~Objektauswahl:" ;
         Text [ English ] = "~Object selection" ;
         Left = TRUE ;
@@ -424,7 +424,7 @@ TabPage TP_OPTLOAD_PAGE
     };
     ListBox LB_METRIC
     {
-        Pos = MAP_APPFONT ( 75, 98 ) ;
+        Pos = MAP_APPFONT ( 75, 108 ) ;
         Size = MAP_APPFONT ( 50 , 50 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
