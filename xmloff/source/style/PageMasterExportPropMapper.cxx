@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-01 14:09:06 $
+ *  last change: $Author: dvo $ $Date: 2001-05-11 13:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
     {
         sal_Int16 nContextId    = getPropertySetMapper()->GetEntryContextId( pProp->mnIndex );
         sal_Int16 nFlag         = nContextId & CTF_PM_FLAGMASK;
-        sal_Int16 nSimpleId     = nContextId & ~CTF_PM_FLAGMASK;
+        sal_Int16 nSimpleId     = nContextId & (~CTF_PM_FLAGMASK | XML_PM_CTF_START);
 
         XMLPropertyStateBuffer* pBuffer;
         switch( nFlag )
