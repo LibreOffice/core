@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-19 13:24:32 $
+ *  last change: $Author: od $ $Date: 2002-11-04 13:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,9 +253,13 @@ SwFrmNotify::~SwFrmNotify()
             pNxt->InvalidatePos();
         else
         {
+            // OD 04.11.2002 #104100# - correct condition for setting retouche
+            // flag for vertical layout.
             if( pFrm->IsRetoucheFrm() &&
-                (aFrm.*fnRect->fnGetTop)() > (pFrm->Frm().*fnRect->fnGetTop)() )
+                (aFrm.*fnRect->fnTopDist)( (pFrm->Frm().*fnRect->fnGetTop)() ) > 0 )
+            {
                 pFrm->SetRetouche();
+            }
 
             //Wenn ein TxtFrm gerade einen Follow erzeugt hat, so ist dieser
             //frisch formatiert und braucht nicht nocheinmal angestossen werden.
