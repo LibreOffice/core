@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-11 07:06:17 $
+ *  last change: $Author: ssa $ $Date: 2001-11-02 18:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,8 +487,7 @@ void SwView::Scroll( const Rectangle &rRect, USHORT nRangeX, USHORT nRangeY )
     if ( pCareWn )
     {
         Rectangle aDlgRect( GetEditWin().PixelToLogic(
-                    GetEditWin().ScreenToOutputPixel( pCareWn->GetPosPixel() ) ),
-                    GetEditWin().PixelToLogic( pCareWn->GetSizePixel() ) );
+                pCareWn->GetWindowExtentsRelative( &GetEditWin() ) ) );
         // Nur, wenn der Dialog nicht rechts oder links der VisArea liegt:
         if ( aDlgRect.Left() < aVisArea.Right() &&
              aDlgRect.Right() > aVisArea.Left() )
