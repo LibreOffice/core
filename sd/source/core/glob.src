@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:58:34 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ String STR_PAGE
     Text[ arabic ] = "ΗαΥέΝΙ";
     Text[ dutch ] = "Pagina";
     Text[ chinese_simplified ] = "ι΅µ";
-    Text[ greek ] = "Σελίδα";
+    Text[ greek ] = "Διαφάνεια";
     Text[ korean ] = "μ¬λΌμ΄λ“";
     Text[ turkish ] = "Slayt";
     Text[ language_user1 ] = " ";
@@ -732,7 +732,7 @@ String STR_PRESOBJ_MPNOTESTITLE
     Text[ arabic ] = "ΗδήΡ αΕÒΗΝΙ ΗαΥέΝΙ";
     Text[ dutch ] = "Klik om de pagina te verplaatsen";
     Text[ chinese_simplified ] = "θ―·ζ‚¨ζ‰ε‡»ιΌ ζ ‡οΌη§»ε¨ι΅µιΆγ€‚";
-    Text[ greek ] = "Κάντε κλικ εδώ για την μετακίνηση της σελίδας";
+    Text[ greek ] = "Κάντε κλικ εδώ για την μετακίνηση της διαφάνειας";
     Text[ korean ] = "μ¬λΌμ΄λ“λ¥Ό μ΄λ™ν•κΈ° μ„ν•΄ ν΄λ¦­ν•μ‹­μ‹μ¤.";
     Text[ turkish ] = "Slaytύ taώύmak iηin tύklayύn";
     Text[ language_user1 ] = " ";
@@ -935,7 +935,7 @@ String STR_PRESOBJ_GRAPHIC
     Text[ arabic ] = "ΗδήΡ δήΡΗπ γÒΟζΜΗπ αΕΦΗέΙ ΥζΡΙ";
     Text[ dutch ] = "Afbeelding door dubbelklikken toevoegen";
     Text[ chinese_simplified ] = "εε‡»ιΌ ζ ‡ζ’ε…¥ε›Ύε½Ά";
-    Text[ greek ] = "Κάντε διπλό κλικ για τη προσθήκη γραφικού";
+    Text[ greek ] = "Κάντε διπλό κλικ για την προσθήκη γραφικού";
     Text[ korean ] = "λ”λΈ” ν΄λ¦­μΌλ΅ κ·Έλ¦Ό μ¶”κ°€";
     Text[ turkish ] = "Grafik eklemek iηin ηift tύklayύn";
     Text[ language_user1 ] = " ";
@@ -1071,7 +1071,7 @@ String STR_PRESOBJ_TABLE
     Text[ arabic ] = "ΗδήΡ δήΡΗπ γÒΟζΜΗπ αΕΦΗέΙ ΜΟζα";
     Text[ dutch ] = "Dubbelklik om werkblad toe te voegen";
     Text[ chinese_simplified ] = "θ―·ζ‚¨εε‡»ιΌ ζ ‡ζ–°εΆε·¥δ½θ΅¨";
-    Text[ greek ] = "Προσθήκη πίνακα με διπλό κλικ";
+    Text[ greek ] = "Προσθήκη υπολογιστικού φύλλου με διπλό κλικ";
     Text[ korean ] = "λ”λΈ” ν΄λ¦­μΌλ΅ μ¤ν”„λ λ“μ‹νΈ μ¶”κ°€";
     Text[ turkish ] = "Tablo eklemek iηin ηift tύklayύn";
     Text[ language_user1 ] = " ";
@@ -1089,7 +1089,7 @@ String STR_SLIDEVIEWSHELL
     Text [ ENGLISH ] = "Slide Show mode" ;
     Text [ norwegian ] = "Slide Show mode" ;
     Text [ italian ] = "Modo diapositiva" ;
-    Text [ portuguese_brazilian ] = "Modo de Slide" ;
+    Text [ portuguese_brazilian ] = "Modo Slide" ;
     Text [ portuguese ] = "Modo Diapositivos" ;
     Text [ finnish ] = "Diatila" ;
     Text [ danish ] = "Diasmodus" ;
@@ -1123,7 +1123,7 @@ String STR_OUTLINEVIEWSHELL
     Text [ ENGLISH ] = "Outline mode" ;
     Text [ norwegian ] = "Outline mode" ;
     Text [ italian ] = "Modo struttura" ;
-    Text [ portuguese_brazilian ] = "Modo de Estrutura de Tσpicos" ;
+    Text [ portuguese_brazilian ] = "Modo Estrutura de Tσpicos" ;
     Text [ portuguese ] = "Modo Esquema" ;
     Text [ finnish ] = "Jδsennysnδkymδ" ;
     Text [ danish ] = "Dispositionsmodus" ;
@@ -1157,7 +1157,7 @@ String STR_DRAWVIEWSHELL
     Text [ ENGLISH ] = "Drawing mode" ;
     Text [ norwegian ] = "Drawing mode" ;
     Text [ italian ] = "Modo disegno" ;
-    Text [ portuguese_brazilian ] = "Modo de Desenho" ;
+    Text [ portuguese_brazilian ] = "Modo Desenho" ;
     Text [ portuguese ] = "Modo Desenho" ;
     Text [ finnish ] = "Piirrosnδkymδ" ;
     Text [ danish ] = "Tegnemodus" ;
@@ -1192,7 +1192,7 @@ String STR_PRESVIEWSHELL
     Text [ english_us ] = "Presentation mode" ;
     Text[ portuguese ] = "Modo de apresentaηγo";
     Text[ russian ] = "Πεζθμ οπεηενςΰφθθ";
-    Text[ greek ] = "Presentation mode";
+    Text[ greek ] = "Λειτουργία παρουσίασης";
     Text[ dutch ] = "Presentatiemodus";
     Text[ french ] = "Mode Prιsentation";
     Text[ spanish ] = "Modo presentaciσn";
@@ -1201,7 +1201,7 @@ String STR_PRESVIEWSHELL
     Text[ danish ] = "Prζsentationsmodus";
     Text[ swedish ] = "Presentationslδge";
     Text[ polish ] = "Tryb prezentacji";
-    Text[ portuguese_brazilian ] = "Modo de apresentaηγo";
+    Text[ portuguese_brazilian ] = "Modo Apresentaηγo";
     Text[ japanese ] = "γ‚Ήγƒ©γ‚¤γƒ‰γ‚·γƒ§γƒΌγƒΆγƒΌγƒ‰";
     Text[ korean ] = "ν”„λ μ  ν…μ΄μ… λª¨λ“";
     Text[ chinese_simplified ] = "ζΌ”η¤Ίζ–‡η¨Ώζ¨΅εΌ";
@@ -1222,7 +1222,7 @@ String STR_PREVIEWVIEWSHELL
     Text[ english_us ] = "Preview Window";
     Text[ portuguese ] = "Janela Previsualizar";
     Text[ russian ] = "Ξκνξ οπεδβΰπθςελόνξγξ οπξρμξςπΰ";
-    Text[ greek ] = "Preview Window";
+    Text[ greek ] = "Παράθυρο προεπισκόπησης";
     Text[ dutch ] = "Voorbeeldvenster";
     Text[ french ] = "Fenκtre d'aperηu";
     Text[ spanish ] = "Ventana de previsualizaciσn";
@@ -1251,7 +1251,7 @@ String STR_TEXTOBJECTBARSHELL
     Text [ ENGLISH ] = "Text mode" ;
     Text [ norwegian ] = "Text mode" ;
     Text [ italian ] = "Modo testo" ;
-    Text [ portuguese_brazilian ] = "Modo de Texto" ;
+    Text [ portuguese_brazilian ] = "Modo Texto" ;
     Text [ portuguese ] = "Modo Texto" ;
     Text [ finnish ] = "Tekstitila" ;
     Text [ danish ] = "Tekstmodus" ;
@@ -2018,7 +2018,7 @@ String STR_POOLSHEET_TITLE2
     Text [ dutch ] = "Titel2" ;
     Text [ swedish ] = "Titel2" ;
     Text [ danish ] = "Titel2" ;
-    Text [ portuguese_brazilian ] = "Tνtulo2" ;
+    Text [ portuguese_brazilian ] = "Tνtulo 2" ;
     Text [ portuguese ] = "Tνtulo5" ;
     Text[ chinese_simplified ] = "ζ ‡ιΆ 2";
     Text[ russian ] = "Ηΰγξλξβξκ 4";
@@ -2400,7 +2400,7 @@ String STR_GRAFOBJECTBARSHELL
     Text[ italian ] = "Modo immagine";
     Text[ danish ] = "Grafikmodus";
     Text[ polish ] = "Tryb graficzny";
-    Text[ portuguese_brazilian ] = "Modo de figuras";
+    Text[ portuguese_brazilian ] = "Modo Figuras";
     Text[ japanese ] = "ε›³γƒΆγƒΌγƒ‰";
     Text[ korean ] = "κ·Έλ¦Ό λª¨λ“";
     Text[ chinese_simplified ] = "ε›Ύε½Άζ¨΅εΌ";
@@ -2470,7 +2470,7 @@ String STR_PRESOBJ_IMAGE
     Text[ arabic ] = "ΗδήΡ δήΡΗπ γÒΟζΜΗπ αΕΦΗέΙ ΥζΡΙ";
     Text[ dutch ] = "Dubbelklik om afbeelding toe te voegen";
     Text[ chinese_simplified ] = "ι€θΏ‡εε‡»ζ’ε…¥ε›Ύεƒ";
-    Text[ greek ] = "Κάντε διπλό κλικ για τη προσθήκη της εικόνας";
+    Text[ greek ] = "Κάντε διπλό κλικ για την προσθήκη της εικόνας";
     Text[ korean ] = "λ”λΈ”ν΄λ¦­ν•μ—¬ μ΄λ―Έμ§€ μ¶”κ°€";
     Text[ turkish ] = "Gφrόntό eklemek iηin ηift-tύklayύn";
     Text[ language_user1 ] = " ";
@@ -2680,6 +2680,7 @@ Resource RID_SD_ERRHDL
         Text[ slovak ] = "ObjavenΓ΅ chyba formΓ΅tu v sΓΊbore v poddokumente $(ARG1) na pozΓ­cii $(ARG2)(riadok,stΔΊpec) ";
     };
 };
+
 
 
 
