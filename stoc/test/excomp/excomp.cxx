@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excomp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:15:07 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <sal/main.h>
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -112,11 +113,7 @@ OUString getExePath()
     return exe;
 }
 
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int _cdecl main( int argc, char * argv[] )
-#endif
+SAL_IMPLEMENT_MAIN()
 {
 #ifdef UNX
     OUString compName1(RTL_CONSTASCII_USTRINGPARAM("libexcomp1.so"));
