@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:04:46 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -977,6 +977,9 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_Bool            ImplCreateSummaryInformation();
         sal_Bool            ImplCreateDocumentSummaryInformation();
         sal_Bool            ImplCreateCurrentUserStream();
+        void                ImplCreateHeaderFooterStrings( SvStream& rOut,
+                                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet );
+        void                ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet );
         sal_Bool            ImplCreateDocument();
         sal_Bool            ImplCreateHyperBlob( SvMemoryStream& rStream );
         sal_uInt32          ImplInsertBookmarkURL( const String& rBookmark, const sal_uInt32 nType,
@@ -997,6 +1000,8 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_uInt32          ImplGetMasterIndex( PageType ePageType );
         void                ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt );
         sal_Bool            ImplGetText();
+        sal_Bool            ImplCreatePresentationPlaceholder( const sal_Bool bMaster, const PageType PageType,
+                                const sal_uInt32 StyleInstance, const sal_uInt8 PlaceHolderId );
         sal_Bool            ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                 ::com::sun::star::presentation::AnimationEffect& eEffect,
                                 ::com::sun::star::presentation::AnimationEffect& eTextEffect,
