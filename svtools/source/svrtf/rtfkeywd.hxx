@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkeywd.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: jp $ $Date: 2000-11-10 11:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1024,7 +1024,7 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_SPRSLNSP, "\\sprslnsp" 
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_SPRSTSM, "\\sprstsm" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_STATICVAL, "\\staticval" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_STEXTFLOW, "\\stextflow" );
-extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_STRIKEDL, "\\strikedl" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_STRIKED, "\\striked" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_SUBFONTBYSIZE, "\\subfontbysize" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TCELLD, "\\tcelld" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TIME, "\\time" );
@@ -1058,6 +1058,16 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ULTHDASHD, "\\ulthdashd
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ULTHDASHDD, "\\ulthdashdd" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ULHWAVE, "\\ulhwave" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ULULDBWAVE, "\\ululdbwave" );
+
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_LOCH,      "\\loch" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_HICH,      "\\hich" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_DBCH,      "\\dbch" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_LANGFE,    "\\langfe" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ADEFLANG,  "\\adeflang" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ADEFF,     "\\adeff" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ACCNONE,   "\\accnone" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ACCDOT,    "\\accdot" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ACCCOMMA,  "\\acccomma" );
 
 // SWG spezifische Attribute
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_GRFALIGNV, "\\grfalignv" );
@@ -1125,11 +1135,14 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_SOUTLVL, "\\soutlvl" );
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtfkeywd.hxx,v 1.1.1.1 2000-09-18 16:59:05 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtfkeywd.hxx,v 1.2 2000-11-10 11:23:04 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 16:59:05  hr
+      initial import
+
       Revision 1.19  2000/09/18 14:13:46  willem.vandorp
       OpenOffice header added.
 

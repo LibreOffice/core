@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftoken.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: jp $ $Date: 2000-11-10 11:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ enum RTF_TOKEN_RANGES {
     RTF_SPECCHAR                    = 0x0800,
     RTF_APOCTL                      = 0x0900,
     RTF_SHADINGDEF                  = 0x0A00,
-    RTF_ASSCHARPROP                 = 0x0B00,
+    // free                         = 0x0B00,
     RTF_DRAWOBJECTS                 = 0x0C00,
     RTF_OBJECTS                     = 0x0D00,
     RTF_NUMBULLETS                  = 0x0E00,
@@ -468,6 +468,9 @@ enum RTF_TOKEN_IDS {
     RTF_FTNNZODIACD,
     RTF_FTNNZODIACL,
 
+    RTF_ADEFLANG,
+    RTF_ADEFF,
+
 /*  */
 
     RTF_SECTD               = RTF_SECTFMT,
@@ -742,7 +745,7 @@ enum RTF_TOKEN_IDS {
     RTF_ULTH,
     RTF_EMBO,
     RTF_IMPR,
-    RTF_STRIKEDL,
+    RTF_STRIKED,
     RTF_CRDATE,
     RTF_CRAUTH,
     RTF_CHARSCALEX,
@@ -765,6 +768,35 @@ enum RTF_TOKEN_IDS {
     RTF_ULTHDASHDD,
     RTF_ULHWAVE,
     RTF_ULULDBWAVE,
+
+    // association control words
+    RTF_AB,
+    RTF_ACAPS,
+    RTF_ACF,
+    RTF_ADN,
+    RTF_AEXPND,
+    RTF_AF,
+    RTF_AFS,
+    RTF_AI,
+    RTF_ALANG,
+    RTF_AOUTL,
+    RTF_ASCAPS,
+    RTF_ASHAD,
+    RTF_ASTRIKE,
+    RTF_AUL,
+    RTF_AULD,
+    RTF_AULDB,
+    RTF_AULNONE,
+    RTF_AULW,
+    RTF_AUP,
+
+    RTF_LOCH,
+    RTF_HICH,
+    RTF_DBCH,
+    RTF_LANGFE,
+    RTF_ACCNONE,
+    RTF_ACCDOT,
+    RTF_ACCCOMMA,
 
     // Swg-Border-Tokens
     RTF_SWG_ESCPROP     = (RTF_CHRFMT|RTF_SWGDEFS),
@@ -944,25 +976,6 @@ enum RTF_TOKEN_IDS {
 
 /*  */
 
-    RTF_AB = RTF_ASSCHARPROP,
-    RTF_ACAPS,
-    RTF_ACF,
-    RTF_ADN,
-    RTF_AEXPND,
-    RTF_AF,
-    RTF_AFS,
-    RTF_AI,
-    RTF_ALANG,
-    RTF_AOUTL,
-    RTF_ASCAPS,
-    RTF_ASHAD,
-    RTF_ASTRIKE,
-    RTF_AUL,
-    RTF_AULD,
-    RTF_AULDB,
-    RTF_AULNONE,
-    RTF_AULW,
-    RTF_AUP,
 
 /*  */
 
@@ -1228,11 +1241,14 @@ enum RTF_TOKEN_IDS {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtftoken.h,v 1.1.1.1 2000-09-18 16:59:05 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtftoken.h,v 1.2 2000-11-10 11:23:04 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 16:59:05  hr
+      initial import
+
       Revision 1.20  2000/09/18 14:13:47  willem.vandorp
       OpenOffice header added.
 

@@ -1,10 +1,10 @@
-/*************************************************************************
+ /*************************************************************************
  *
  *  $RCSfile: rtfkeywd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: jp $ $Date: 2000-11-10 11:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1034,7 +1034,7 @@ sRTF_SPRSLNSP,      RTF_SPRSLNSP,
 sRTF_SPRSTSM,       RTF_SPRSTSM,
 sRTF_STATICVAL,     RTF_STATICVAL,
 sRTF_STEXTFLOW,     RTF_STEXTFLOW,
-sRTF_STRIKEDL,      RTF_STRIKEDL,
+sRTF_STRIKED,       RTF_STRIKED,
 sRTF_SUBFONTBYSIZE, RTF_SUBFONTBYSIZE,
 sRTF_TCELLD,        RTF_TCELLD,
 sRTF_TIME,          RTF_TIME,
@@ -1069,6 +1069,15 @@ sRTF_ULTHDASHDD,    RTF_ULTHDASHDD,
 sRTF_ULHWAVE,       RTF_ULHWAVE,
 sRTF_ULULDBWAVE,    RTF_ULULDBWAVE,
 
+sRTF_LOCH,          RTF_LOCH,
+sRTF_HICH,          RTF_HICH,
+sRTF_DBCH,          RTF_DBCH,
+sRTF_LANGFE,        RTF_LANGFE,
+sRTF_ADEFLANG,      RTF_ADEFLANG,
+sRTF_ADEFF,         RTF_ADEFF,
+sRTF_ACCNONE,       RTF_ACCNONE,
+sRTF_ACCDOT,        RTF_ACCDOT,
+sRTF_ACCCOMMA,      RTF_ACCCOMMA,
 
 // SWG spezifische Attribute
 sRTF_GRFALIGNV,     RTF_GRF_ALIGNV,

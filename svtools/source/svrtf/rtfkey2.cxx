@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkey2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: jp $ $Date: 2000-11-10 11:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1013,7 +1013,7 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_SPRSLNSP, "\\sprslnsp" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_SPRSTSM, "\\sprstsm" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_STATICVAL, "\\staticval" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_STEXTFLOW, "\\stextflow" );
-sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_STRIKEDL, "\\strikedl" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_STRIKED, "\\striked" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_SUBFONTBYSIZE, "\\subfontbysize" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TCELLD, "\\tcelld" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TIME, "\\time" );
@@ -1047,6 +1047,16 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ULTHDASHD, "\\ulthdashd" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ULTHDASHDD, "\\ulthdashdd" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ULHWAVE, "\\ulhwave" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ULULDBWAVE, "\\ululdbwave" );
+
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_LOCH,      "\\loch" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_HICH,      "\\hich" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_DBCH,      "\\dbch" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_LANGFE,    "\\langfe" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ADEFLANG,  "\\adeflang" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ADEFF,     "\\adeff" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ACCNONE,   "\\accnone" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ACCDOT,    "\\accdot" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ACCCOMMA,  "\\acccomma" );
 
 // SWG spezifische Attribute
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_GRFALIGNV, "\\grfalignv" );
@@ -1109,4 +1119,6 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TLSWG, "\\tlswg" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_PGBRK, "\\pgbrk" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_PGDSCNO, "\\pgdscno" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_SOUTLVL, "\\soutlvl" );
+
+
 
