@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 20:44:36 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ turkish ] = "Bu pencerede, belgenizdeki veritabaný alanlarý yoluyla eriþtiðiniz veritabanlarýný baþkalarý ile deðiþtirebilirsiniz. Her iþlemde yalnýzca tek bir deðiþiklik yapýlabilir. Soldaki listede birden fazla seçim yapýlabilir.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "En este diálogo puede intercambiar por otras las bases de datos a las que acceda a través de los campos. Se puede realizar solo un cambio por fase de trabajo. En la lista izquierda es posible hacer una selección múltiple.";
+        Text[ finnish ] = "Tämän valintaikkunan avulla voit vaihtaa asiakirjassa tietokantakenttien kautta käsiteltävän tietokannan toiseen tietokantaan. Voit tehdä kerralla vain yhden muutoksen. Monivalinta on mahdollista vasemmanpuoleisessa luettelossa.";
     };
     FixedText FT_USEDDB
     {
@@ -144,6 +145,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ turkish ] = "Kullanýlan veritabanlarý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Bases de datos utilizadas";
+        Text[ finnish ] = "Käytössä olevat tietokannat";
     };
     FixedText FT_AVAILDB
     {
@@ -175,6 +177,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ turkish ] = "Mevcut veritabanlarý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Bases de datos diponibles";
+        Text[ finnish ] = "Käytettävissä olevat tietokannat";
     };
     Control TLB_USEDDB
     {
@@ -234,6 +237,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ turkish ] = "Belge ile kullanýlan veritabaný:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Base de datos aplicada al doc.:";
+        Text[ finnish ] = "Asiakirjassa käytetty tietokanta:";
     };
     FixedText FT_DOCDBNAME
     {
@@ -264,6 +268,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ turkish ] = "Adresler.Adresler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Direcciones.Direcciones";
+        Text[ finnish ] = "Osoitteet.Osoitteet";
     };
 /*  PushButton BT_CHANGEDB
     {
@@ -320,6 +325,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ turkish ] = "Veritabanýnýn deðiþtirilmesi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cambiar Bases de Datos";
+        Text[ finnish ] = "Vaihda tietokannat";
     };
     OKButton BT_OK
     {
@@ -351,6 +357,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ korean ] = "Á¤ÀÇ";
         Text[ turkish ] = "Tanýmla";
         Text[ catalan ] = "Definir";
+        Text[ finnish ] = "Määritä";
     };
     CancelButton BT_CANCEL
     {
@@ -418,5 +425,6 @@ ModalDialog DLG_CHANGE_DB
     Text[ turkish ] = "Veritabanýnýn deðiþtirilmesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cambiar Bases de Datos";
+    Text[ finnish ] = "Vaihda tietokannat";
 };
 
