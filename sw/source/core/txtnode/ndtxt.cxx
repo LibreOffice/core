@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-05 09:40:27 $
+ *  last change: $Author: ama $ $Date: 2002-01-25 12:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -841,6 +841,7 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
         {
             xub_StrLen* pEnd;
             BOOL bNoExp = FALSE;
+            BOOL bResort = FALSE;
             const USHORT coArrSz = RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN +
                                 ( RES_UNKNOWNATR_END - RES_UNKNOWNATR_BEGIN );
 
@@ -885,6 +886,7 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
                         if( pHt->DontExpand() )
                         {
                             pHt->SetDontExpand( FALSE );
+                            bResort = TRUE;
                             if( pHt->IsCharFmtAttr() )
                             {
                                 bNoExp = TRUE;
@@ -930,6 +932,8 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
                                         *pHt->GetStart(), *pHt->GetEnd() );
                 }
             }
+            if( bResort )
+                ((SwpHintsArr*)pSwpHints)->Resort();
         }
     }
 
