@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:16:55 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,7 @@ public:
     sal_Int32 getLastPageNumber();
     bool isEndless();
     bool isDrawingPossible();
+    inline bool isInputFreezed() const;
 
     void activate();
     void deactivate();
@@ -305,6 +306,7 @@ public:
     void resize( const Size& rSize );
 
     DECL_LINK( updateHdl, Timer* );
+    DECL_LINK( ReadyForNextInputHdl, Timer* );
 
     // XShapeEventListener
     virtual void SAL_CALL click( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, ::sal_Int32 nSlideIndex, const ::com::sun::star::awt::MouseEvent& aOriginalEvent ) throw (::com::sun::star::uno::RuntimeException);
@@ -357,6 +359,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
 
     Timer maUpdateTimer;
+    Timer maInputFreezeTimer;
 
     ::sd::View* mpView;
     ViewShell* mpViewShell;
@@ -382,16 +385,18 @@ private:
     ::sd::Window*   mpOldActiveWindow;
     Link            maStarBASICGlobalErrorHdl;
     unsigned long   mnChildMask;
-    bool            mbGridVisible : 1;
-    bool            mbBordVisible : 1;
-    bool            mbPageBorderVisible : 1;
-    bool            mbSetOnlineSpelling : 1;
-    bool            mbDisposed : 1;
-    bool            mbMouseIsDrawing : 1;
-    bool            mbAutoSaveSuppressed : 1;
-    bool            mbRehearseTimings : 1;
-    bool            mbDesignMode : 1;
-    bool            mbIsPaused : 1;
+    bool            mbGridVisible;
+    bool            mbBordVisible;
+    bool            mbPageBorderVisible;
+    bool            mbSetOnlineSpelling;
+    bool            mbDisposed;
+    bool            mbMouseIsDrawing;
+    bool            mbAutoSaveSuppressed;
+    bool            mbRehearseTimings;
+    bool            mbDesignMode;
+    bool            mbIsPaused;
+    bool            mbInputFreeze;
+
     PresentationSettings maPresSettings;
 
     sal_Int32       mnLastPageNumber;
@@ -407,6 +412,11 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XManager > mxManager;
 };
+
+bool SlideshowImpl::isInputFreezed() const
+{
+    return mbInputFreeze;
+}
 
 } // namespace ::sd
 
