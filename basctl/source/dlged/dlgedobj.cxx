@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-01 09:47:01 $
+ *  last change: $Author: tbe $ $Date: 2001-03-02 14:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,29 +146,9 @@ DlgEdObj::DlgEdObj()
 
 //----------------------------------------------------------------------------
 
-DlgEdObj::DlgEdObj(DlgEdForm* pForm)
-          :SdrUnoObj(String(), sal_False)
-          ,bIsListening(sal_False)
-          ,pDlgEdForm(pForm)
-{
-    DBG_CTOR(DlgEdObj, NULL);
-}
-
-//----------------------------------------------------------------------------
-
 DlgEdObj::DlgEdObj(const ::rtl::OUString& rModelName)
           :SdrUnoObj(rModelName, sal_False)
           ,bIsListening(sal_False)
-{
-    DBG_CTOR(DlgEdObj, NULL);
-}
-
-//----------------------------------------------------------------------------
-
-DlgEdObj::DlgEdObj(const ::rtl::OUString& rModelName, DlgEdForm* pForm)
-          :SdrUnoObj(rModelName, sal_False)
-          ,bIsListening(sal_False)
-          ,pDlgEdForm(pForm)
 {
     DBG_CTOR(DlgEdObj, NULL);
 }
@@ -179,18 +159,6 @@ DlgEdObj::DlgEdObj(const ::rtl::OUString& rModelName,
                    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac)
           :SdrUnoObj(rModelName, rxSFac, sal_False)
           ,bIsListening(sal_False)
-{
-    DBG_CTOR(DlgEdObj, NULL);
-}
-
-//----------------------------------------------------------------------------
-
-DlgEdObj::DlgEdObj(const ::rtl::OUString& rModelName,
-                   const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac,
-                   DlgEdForm* pForm)
-          :SdrUnoObj(rModelName, rxSFac, sal_False)
-          ,bIsListening(sal_False)
-          ,pDlgEdForm(pForm)
 {
     DBG_CTOR(DlgEdObj, NULL);
 }
@@ -311,26 +279,29 @@ void DlgEdObj::SetPropsFromRect()
 
 void SAL_CALL DlgEdObj::SetNameFromProp( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException)
 {
-    // get old name
-    ::rtl::OUString aOldName;
-    evt.OldValue >>= aOldName;
-
-    // get new name
-    ::rtl::OUString aNewName;
-    evt.NewValue >>= aNewName;
-
-    // remove the control by the old name and insert the control by the new name in the container
-    uno::Reference< container::XNameAccess > xNameAcc((GetDlgEdForm()->GetUnoControlModel()), uno::UNO_QUERY);
-    if ( xNameAcc.is() && xNameAcc->hasByName(aOldName) )
+    if ( !ISA(DlgEdForm) )
     {
-        uno::Reference< container::XNameContainer > xCont(xNameAcc, uno::UNO_QUERY );
-        if ( xCont.is() )
+        // get old name
+        ::rtl::OUString aOldName;
+        evt.OldValue >>= aOldName;
+
+        // get new name
+        ::rtl::OUString aNewName;
+        evt.NewValue >>= aNewName;
+
+        // remove the control by the old name and insert the control by the new name in the container
+        uno::Reference< container::XNameAccess > xNameAcc((GetDlgEdForm()->GetUnoControlModel()), uno::UNO_QUERY);
+        if ( xNameAcc.is() && xNameAcc->hasByName(aOldName) )
         {
-            uno::Reference< awt::XControlModel > xCtrl(GetUnoControlModel(), uno::UNO_QUERY);
-            uno::Any aAny;
-            aAny <<= xCtrl;
-            xCont->removeByName( aOldName );
-            xCont->insertByName( aNewName , aAny );
+            uno::Reference< container::XNameContainer > xCont(xNameAcc, uno::UNO_QUERY );
+            if ( xCont.is() )
+            {
+                uno::Reference< awt::XControlModel > xCtrl(GetUnoControlModel(), uno::UNO_QUERY);
+                uno::Any aAny;
+                aAny <<= xCtrl;
+                xCont->removeByName( aOldName );
+                xCont->insertByName( aNewName , aAny );
+            }
         }
     }
 }
@@ -481,6 +452,9 @@ void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
 FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     sal_Bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
+
+    // set parent form
+    pDlgEdForm = ((DlgEdPage*)GetPage())->GetDlgEd()->GetDlgEdForm();
 
     // get unique name
     ::rtl::OUString aOUniqueName( GetUniqueName() );

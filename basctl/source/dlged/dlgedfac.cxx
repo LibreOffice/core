@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfac.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 10:40:01 $
+ *  last change: $Author: tbe $ $Date: 2001-03-02 14:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,42 +138,23 @@ IMPL_LINK( VCDlgEditFactory, MakeObject, SdrObjFactory *, pObjFactory )
         (pObjFactory->nIdentifier >=OBJ_DLG_CHECKBOX) &&
         (pObjFactory->nIdentifier <= OBJ_DLG_URLBUTTON)    )
     {
-        DlgEdForm*      pForm   = pDlgEditor->GetDlgEdForm();
-        StarBASIC*      pBasic   = pDlgEditor->GetBasic();
-
         switch( pObjFactory->nIdentifier )
         {
-            case OBJ_DLG_CHECKBOX:
-                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlCheckBoxModel")
-                                                     ,xDialogSFact, pForm);
-                 break;
-            case OBJ_DLG_RADIOBUTTON:
-                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlRadioButtonModel")
-                                                     ,xDialogSFact, pForm);
-                 break;
             case OBJ_DLG_PUSHBUTTON:
-                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlButtonModel")
-                                                     ,xDialogSFact, pForm);
+                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlButtonModel"), xDialogSFact);
                   break;
-            case OBJ_DLG_SPINBUTTON:
-                 //pControl = new VCSbxSpinButton( TRUE );
+            case OBJ_DLG_RADIOBUTTON:
+                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlRadioButtonModel"), xDialogSFact);
                  break;
-            case OBJ_DLG_FIXEDTEXT:
-                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFixedTextModel")
-                                                     ,xDialogSFact, pForm);
-                 break;
-            case OBJ_DLG_GROUPBOX:
-                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlGroupBoxModel")
-                                                     ,xDialogSFact, pForm);
+            case OBJ_DLG_CHECKBOX:
+                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlCheckBoxModel"), xDialogSFact);
                  break;
             case OBJ_DLG_LISTBOX:
-                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlListBoxModel")
-                                                     ,xDialogSFact, pForm);
+                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlListBoxModel"), xDialogSFact);
                  break;
             case OBJ_DLG_COMBOBOX:
             {
-                 DlgEdObj* pNew = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlComboBoxModel")
-                                                  ,xDialogSFact, pForm);
+                 DlgEdObj* pNew = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlComboBoxModel"), xDialogSFact);
                  pObjFactory->pNewObj = pNew;
                  try
                  {
@@ -188,20 +169,26 @@ IMPL_LINK( VCDlgEditFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  {
                  }
             }    break;
+            case OBJ_DLG_GROUPBOX:
+                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlGroupBoxModel"), xDialogSFact);
+                 break;
             case OBJ_DLG_EDIT:
-                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlEditModel")
-                                                     ,xDialogSFact, pForm);
+                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlEditModel"), xDialogSFact);
+                 break;
+            case OBJ_DLG_FIXEDTEXT:
+                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFixedTextModel"), xDialogSFact);
+                 break;
+            case OBJ_DLG_PREVIEW:
+                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlImageControlModel"), xDialogSFact);
+                 break;
+            case OBJ_DLG_SPINBUTTON:
+                 //pControl = new VCSbxSpinButton( TRUE );
                  break;
             case OBJ_DLG_HSCROLLBAR:
                  //pControl = new VCSbxHScrollBar( TRUE );
-                 //pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.form.component.CommandButton"));
                  break;
             case OBJ_DLG_VSCROLLBAR:
                  //pControl = new VCSbxVScrollBar( TRUE );
-                 //pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.form.component.CommandButton"));
-                 break;
-            case OBJ_DLG_PREVIEW:
-                 //pControl = new VCSbxPreview( TRUE );
                  break;
             case OBJ_DLG_URLBUTTON:
                  //pControl = new VCSbxURLButton( TRUE );
