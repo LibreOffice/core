@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFlushableClipboard.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com { module sun { module star { module datatransfer { module clipboard {
 */
 
 
-interface XFlushableClipboard: com::sun::star::uno::XInterface
+published interface XFlushableClipboard: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Renders the current content of the clipboard to the system so that it
