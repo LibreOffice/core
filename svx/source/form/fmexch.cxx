@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-27 12:36:17 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 11:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,11 +142,7 @@ namespace svxform
     //--------------------------------------------------------------------
     void SAL_CALL OLocalExchange::lostOwnership( const Reference< clipboard::XClipboard >& _rxClipboard, const Reference< XTransferable >& _rxTrans ) throw(RuntimeException)
     {
-#if SUPD>657
-        TransferableHelper::lostOwnership( _rxClipboard, _rxTrans );
-#else
         TransferableHelper::implCallOwnLostOwnership( _rxClipboard, _rxTrans );
-#endif
         m_bClipboardOwner = sal_False;
 
         if ( m_aClipboardListener.IsSet() )
