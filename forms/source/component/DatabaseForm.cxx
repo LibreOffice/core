@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:41:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1283,13 +1283,15 @@ sal_Bool ODatabaseForm::executeRowSet(ReusableMutexGuard& _rClearForNotifies, sa
     restoreInsertOnlyState( );
 
     // ensure the aggregated row set has the correct properties
-    sal_Int32 nConcurrency;
+    sal_Int32 nConcurrency = ResultSetConcurrency::READ_ONLY;
+
     // if we have a parent, who is not positioned on a valid row
     // we can't be updatable!
     if (m_bSubForm && !hasValidParent())
     {
-        // don't use any parameters if we don't have a valid parent
         nConcurrency = ResultSetConcurrency::READ_ONLY;
+
+        // don't use any parameters if we don't have a valid parent
         m_aParameterManager.setAllParametersNull();
 
         // switch to "insert only" mode
@@ -1301,10 +1303,8 @@ sal_Bool ODatabaseForm::executeRowSet(ReusableMutexGuard& _rClearForNotifies, sa
     else
         nConcurrency = ResultSetConcurrency::READ_ONLY;
 
-    m_xAggregateSet->setPropertyValue(PROPERTY_RESULTSET_CONCURRENCY, makeAny(nConcurrency));
-
-    sal_Int32 nResultSetType = ResultSetType::SCROLL_SENSITIVE;
-    m_xAggregateSet->setPropertyValue(PROPERTY_RESULTSET_TYPE, makeAny(nResultSetType));
+    m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_CONCURRENCY, makeAny( (sal_Int32)nConcurrency ) );
+    m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_TYPE, makeAny( (sal_Int32)ResultSetType::SCROLL_SENSITIVE ) );
 
     sal_Bool bSuccess = sal_False;
     try
@@ -1417,7 +1417,7 @@ void ODatabaseForm::disposing()
 }
 
 //------------------------------------------------------------------------------
-Reference< XConnection >  ODatabaseForm::getConnection()
+Reference< XConnection > ODatabaseForm::getConnection()
 {
     Reference< XConnection > xConn;
     m_xAggregateSet->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConn;
