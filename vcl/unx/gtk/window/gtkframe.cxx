@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:11:10 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,7 @@ void GtkSalFrame::doKeyCallback( guint state,
                                  guint16 hardware_keycode,
                                  guint8 group,
                                  guint32 time,
+                                 sal_Unicode aOrigCode,
                                  bool bDown,
                                  bool bSendRelease
                                  )
@@ -196,7 +197,7 @@ void GtkSalFrame::doKeyCallback( guint state,
 
     aEvent.mnTime           = time;
     aEvent.mnCode           = GetKeyCode( keyval ) | GetModCode( state );
-    aEvent.mnCharCode       = (USHORT)gdk_keyval_to_unicode( keyval );
+    aEvent.mnCharCode       = aOrigCode;
     aEvent.mnRepeat         = 0;
 
     vcl::DeletionListener aDel( this );
@@ -2205,7 +2206,14 @@ gboolean GtkSalFrame::signalKey( GtkWidget* pWidget, GdkEventKey* pEvent, gpoint
     }
     else
     {
-        pThis->doKeyCallback( pEvent->state, pEvent->keyval, pEvent->hardware_keycode, pEvent->group, pEvent->time, (pEvent->type == GDK_KEY_PRESS), false );
+        pThis->doKeyCallback( pEvent->state,
+                              pEvent->keyval,
+                              pEvent->hardware_keycode,
+                              pEvent->group,
+                              pEvent->time,
+                              sal_Unicode(gdk_keyval_to_unicode( pEvent->keyval )),
+                              (pEvent->type == GDK_KEY_PRESS),
+                              false );
         if( ! aDel.isDeleted() )
         {
             pThis->m_bSendModChangeOnRelease = false;
@@ -2316,7 +2324,7 @@ void GtkSalFrame::signalIMCommit( GtkIMContext* pContext, gchar* pText, gpointer
         const PreviousKeyPress& rKP = pThis->m_aPrevKeyPresses.back();
 
         pThis->m_bWasPreedit = false;
-        pThis->doKeyCallback( rKP.state, rKP.keyval, rKP.hardware_keycode, rKP.group, rKP.time, true, true );
+        pThis->doKeyCallback( rKP.state, rKP.keyval, rKP.hardware_keycode, rKP.group, rKP.time, aTextEvent.maText.GetChar(0), true, true );
         return;
     }
 
