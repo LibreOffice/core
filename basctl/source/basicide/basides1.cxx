@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:23:37 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,7 +693,7 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     if ( pObjShell )
                     {
                         SfxMedium* pMedium = pObjShell->GetMedium();
-                        if ( ( pMedium && aDocument == pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) ||
+                        if ( ( pMedium && aDocument == String(pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE )) ) ||
                                 aDocument == pObjShell->GetTitle( SFX_TITLE_FILENAME ) )
                         {
                             pShell = pObjShell;
