@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:37:52 $
+ *  last change: $Author: jp $ $Date: 2000-10-09 16:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
-#ifndef _MODCFG_HXX
-#include <modcfg.hxx>
+#ifndef _USRPREF_HXX
+#include <usrpref.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -151,9 +151,8 @@ SwTableHeightDlg::SwTableHeightDlg( Window *pParent, SwWrtShell &rS ) :
 {
     FreeResource();
 
-    const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-    FieldUnit eFieldUnit = pModOpt->GetMetric(0 != PTR_CAST( SwWebDocShell,
-                                rSh.GetView().GetDocShell() ));
+    FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( 0 != PTR_CAST( SwWebDocShell,
+                                rSh.GetView().GetDocShell() ) )->GetMetric();
     ::SetFieldUnit( aHeightEdit, eFieldUnit );
 
     aHeightEdit.SetMin(MINLAY, FUNIT_TWIP);
@@ -174,6 +173,9 @@ SwTableHeightDlg::SwTableHeightDlg( Window *pParent, SwWrtShell &rS ) :
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/06 13:37:52  jp
+    should changes: don't use IniManager
+
     Revision 1.1.1.1  2000/09/18 17:14:48  hr
     initial import
 

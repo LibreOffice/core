@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colwd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:37:52 $
+ *  last change: $Author: jp $ $Date: 2000-10-09 16:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _MODCFG_HXX
 #include <modcfg.hxx>
 #endif
+#ifndef _USRPREF_HXX
+#include <usrpref.hxx>
+#endif
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -137,7 +140,7 @@ SwTableWidthDlg::SwTableWidthDlg(Window *pParent, SwTableFUNC &rTableFnc ) :
                     ? 0 != PTR_CAST( SwWebDocShell,
                             rTableFnc.GetShell()->GetView().GetDocShell() )
                     : FALSE;
-    FieldUnit eFieldUnit = SW_MOD()->GetModuleConfig()->GetMetric( bIsWeb );
+    FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( bIsWeb )->GetMetric();
     ::SetFieldUnit(aWidthEdit, eFieldUnit );
 
     aColEdit.SetValue( rFnc.GetCurColNum() +1 );
@@ -164,6 +167,9 @@ void SwTableWidthDlg::Apply()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/06 13:37:52  jp
+    should changes: don't use IniManager
+
     Revision 1.1.1.1  2000/09/18 17:14:47  hr
     initial import
 
