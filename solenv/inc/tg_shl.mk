@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 18:20:44 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:47:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -435,7 +435,7 @@ $(SHL$(TNR)TARGETN) : \
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF
 .IF "$(OS)"=="IRIX"
-        $(CC) -c fpic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+        $(CC) -c -fpic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
         @+if ( ! -e $(SOLARLIBDIR) ) mkdir $(SOLARLIBDIR)
         @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
 .ENDIF			# "$(OS)"=="IRIX"
@@ -495,10 +495,6 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL$(TNR)OBJS) `cat /dev/null $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ)) $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(STDSHL$(TNR)) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
@@ -557,11 +553,7 @@ $(SHL9IMPLIBN) .NULL : SHL9IMP
 # MULTITARGET: SHLNIMP --- hier einfuegen
 
 SHL1IMP SHL2IMP SHL3IMP SHL4IMP SHL5IMP SHL6IMP SHL7IMP SHL8IMP SHL9IMP:
-.IF "$(GUI)" != "MAC"
     @dmake $(SHL$(TNR)IMPLIBN) MULTI_SHLIMP_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ELSE
-    @dmake "$(SHL$(TNR)IMPLIBN)" MULTI_SHLIMP_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ENDIF
 .ELSE
 
 
@@ -602,17 +594,9 @@ $(SHL$(TNR)IMPLIBN):	\
     +@echo build of $(SHL$(TNR)TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL$(TNR)DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL$(TNR)TARGETN)
-.ENDIF
-.ELSE
     @echo no ImportLibs on Mac and *ix
     @+-$(RM) $@
     @$(TOUCH) $@
-.ENDIF
 .ENDIF
 .ENDIF
 
