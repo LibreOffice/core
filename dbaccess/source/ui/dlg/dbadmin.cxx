@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 13:00:37 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 15:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,7 +731,7 @@ sal_Bool ODbAdminDialog::getCurrentSettings(Sequence< PropertyValue >& _rDriverP
 
     // user: DSID_USER -> "user"
     SFX_ITEMSET_GET(*GetExampleSet(), pUser, SfxStringItem, DSID_USER, sal_True);
-    if (pUser)
+    if (pUser && pUser->GetValue().Len())
         aReturn.push_back(
             PropertyValue(  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), 0,
                             makeAny(::rtl::OUString(pUser->GetValue())), PropertyState_DIRECT_VALUE));
@@ -2171,6 +2171,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2000/10/30 13:00:37  fs
+ *  #79823# ODatasourceSelector: +(WB_TABSTOP | WB_DIALOGCONTROL)
+ *
  *  Revision 1.12  2000/10/30 11:04:13  fs
  *  #79868# disable the Reset button when selecting deleted data sources
  *
