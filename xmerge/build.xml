@@ -162,6 +162,16 @@
         </ant>
     </target>
 
+
+    <!-- java package -->
+    <target name="xmrg_jooxcxs_pocketword" depends="prepare">
+        <ant dir="java/org/openoffice/xmerge/converter/xml/sxw/pocketword" target="main">
+            <property name="target" value="xmrg_jooxcxs_pocketword"/>
+            <property name="prj" value="../../../../../../../.."/>
+        </ant>
+    </target>
+
+
     <!-- java package -->
     <target name="xmrg_jooxcx_xslt" depends="prepare">
         <ant dir="java/org/openoffice/xmerge/converter/xml/xslt" target="main">
@@ -252,7 +262,7 @@
 
 
     <!-- util -->
-    <target name="xmrg_util" depends="prepare,xmrg_joo_xmerge,xmrg_jooxc_xml,xmrg_jooxcx_sxc,xmrg_jooxcx_sxw,xmrg_jooxcxs_aportisdoc,xmrg_jooxcx_xslt,xmrg_joox_merger,xmrg_jooxm_diff,xmrg_jooxm_merge,xmrg_joox_test,xmrg_joox_util,xmrg_jooxu_registry,xmrg_jooxc_palm,xmrg_jooxc_dom,xmrg_javadoc">
+    <target name="xmrg_util" depends="prepare,xmrg_joo_xmerge,xmrg_jooxc_xml,xmrg_jooxcx_sxc,xmrg_jooxcx_sxw,xmrg_jooxcxs_aportisdoc,xmrg_jooxcxs_pocketword,xmrg_jooxcx_xslt,xmrg_joox_merger,xmrg_jooxm_diff,xmrg_jooxm_merge,xmrg_joox_test,xmrg_joox_util,xmrg_jooxu_registry,xmrg_jooxc_palm,xmrg_jooxc_dom,xmrg_javadoc">
         <ant dir="util" target="main">
             <property name="target" value="xmrg_util"/>
                 <property name="prj" value="."/>
