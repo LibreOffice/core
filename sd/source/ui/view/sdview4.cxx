@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-10 10:43:34 $
+ *  last change: $Author: thb $ $Date: 2001-07-26 10:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,11 +382,8 @@ IMPL_LINK_INLINE_START( SdView, DropInsertFileHdl, Timer*, pTimer )
         String          aTmpStr;
         INetBookmark    aINetBookmark(aTmpStr, aTmpStr);
 
-#ifdef TF_SVDATA
+        // FIXME: was (( nAction && DND_ACTION_LINK ) || !INetBookmark::DragServerHasFormat(0) || !aINetBookmark.PasteDragServer(0)) before
         if( ( nAction && DND_ACTION_LINK ) )
-#else
-        if( ( nAction && DND_ACTION_LINK ) || !INetBookmark::DragServerHasFormat(0) || !aINetBookmark.PasteDragServer(0))
-#endif
         {
             ((SdDrawViewShell*) pViewSh)->InsertURLButton(aDropFile, aDropFile, String(), &aDropPos);
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-26 09:47:24 $
+ *  last change: $Author: thb $ $Date: 2001-07-26 10:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,13 +845,10 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
         String          aTmpStr;
         INetBookmark    aINetBookmark( aTmpStr, aTmpStr );
 
-#ifdef TF_SVDATA
+        // FIXME: was (!INetBookmark::DragServerHasFormat( 0 ) || !aINetBookmark.PasteDragServer( 0 )) before
         if( !aDataHelper.HasFormat( SOT_FORMATSTR_ID_SOLK ) &&
             !aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
             !aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILENAME ) )
-#else
-        if( !INetBookmark::DragServerHasFormat( 0 ) || !aINetBookmark.PasteDragServer( 0 ) )
-#endif
         {
             String aStr;
 
