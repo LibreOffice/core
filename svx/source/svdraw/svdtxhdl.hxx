@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:43:55 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ class DrawPortionInfo;
 class SdrTextObj;
 class SdrObjGroup;
 class SdrModel;
-class ExtOutputDevice;
+class XOutputDevice;
 
 //************************************************************
 //   ImpTextPortionHandler
@@ -95,7 +95,7 @@ class ImpTextPortionHandler
     Rectangle                   aFormTextBoundRect;
     SdrOutliner&                rOutliner;
     const SdrTextObj&           rTextObj;
-    ExtOutputDevice*            pXOut;
+    XOutputDevice*          pXOut;
 
     // Variablen fuer ConvertToPathObj
     SdrObjGroup*                pGroup;
@@ -127,8 +127,8 @@ public:
     ImpTextPortionHandler(SdrOutliner& rOutln, const SdrTextObj& rTxtObj);
 
     void ConvertToPathObj(SdrObjGroup& rGroup, FASTBOOL bToPoly);
-    void DrawFitText(ExtOutputDevice& rXOut, const Point& rPos, const Fraction& rXFact);
-    void DrawTextToPath(ExtOutputDevice& rXOut, FASTBOOL bDrawEffect=TRUE);
+    void DrawFitText(XOutputDevice& rXOut, const Point& rPos, const Fraction& rXFact);
+    void DrawTextToPath(XOutputDevice& rXOut, FASTBOOL bDrawEffect=TRUE);
 
     // wird von DrawTextToPath() gesetzt:
     const Rectangle& GetFormTextBoundRect() { return aFormTextBoundRect; }
