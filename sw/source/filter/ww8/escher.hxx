@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escher.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:47:46 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ class WinwordAnchoring : public EscherExClientRecord_Base
 {
 public:
     void WriteData(EscherEx& rEx) const;
-    void SetAnchoring(const SwFrmFmt& rFmt, bool bBROKEN = false);
+    void SetAnchoring(const SwFrmFmt& rFmt);
 private:
     bool mbInline;
     sal_uInt32 mnXAlign;
@@ -98,8 +98,9 @@ protected:
         EscherPropertyContainer& rPropOpt);
     void WriteBrushAttr(const SvxBrushItem &rBrush,
         EscherPropertyContainer& rPropOpt);
-    void WritePicture(EscherPropertyContainer &rPropOpt,
-        const Graphic &rGraphic, const SdrObject &rObj, sal_uInt32 nShapeId);
+    void WriteOLEPicture(EscherPropertyContainer &rPropOpt,
+        sal_uInt32 nShapeFlags, const Graphic &rGraphic, const SdrObject &rObj,
+        sal_uInt32 nShapeId);
     void WriteGrfAttr(const SwNoTxtNode& rNd,EscherPropertyContainer& rPropOpt);
 
     INT32 DrawModelToEmu(INT32 nVal) const
