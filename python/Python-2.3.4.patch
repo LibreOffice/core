@@ -1,3 +1,22 @@
+*** misc/Python-2.3.4/Include/pyport.h	Tue Sep 30 16:56:50 2003
+--- misc/build/Python-2.3.4/Include/pyport.h	Mon Feb 28 22:35:47 2005
+***************
+*** 346,352 ****
+  in platform-specific #ifdefs.
+  **************************************************************************/
+  
+! #ifdef SOLARIS
+  /* Unchecked */
+  extern int gethostname(char *, int);
+  #endif
+--- 346,352 ----
+  in platform-specific #ifdefs.
+  **************************************************************************/
+  
+! #if defined(SOLARIS) && !defined(__GNUC__)
+  /* Unchecked */
+  extern int gethostname(char *, int);
+  #endif
 *** misc/Python-2.3.4/Mac/OSX/Makefile	Tue Nov  4 23:45:16 2003
 --- misc/build/Python-2.3.4/Mac/OSX/Makefile	Fri Feb 18 21:10:43 2005
 ***************
