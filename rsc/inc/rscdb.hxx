@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:24:07 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,6 @@
 #ifndef _RSCDB_HXX
 #define _RSCDB_HXX
 
-#ifndef _TABLE_HXX //autogen
-#include <tools/table.hxx>
-#endif
-
 #ifndef _LANG_HXX //autogen
 #include <tools/lang.hxx>
 #endif
@@ -96,6 +92,7 @@
 #endif
 
 #include <vector>
+#include <map>
 
 class RscError;
 class REResourceList;
@@ -118,26 +115,26 @@ DECLARE_LIST( RscBaseList, RscTop * )
 // Tabelle fuer Systemabhaengige Resourcen
 struct RscSysEntry
 {
-    USHORT      nKey;
-    USHORT      nRscTyp;
+    sal_uInt32      nKey;
+    sal_uInt32      nRscTyp;
     ByteString  aFileName;
-    USHORT      nTyp;
-    USHORT      nRefId;
+    sal_uInt32      nTyp;
+    sal_uInt32      nRefId;
 };
 DECLARE_LIST( RscSysList, RscSysEntry * )
 
 class RscTypCont
 {
     CharSet             nSourceCharSet;
-    USHORT              nMachineId;         // Globaler Maschinentyp
+    sal_uInt32              nMachineId;         // Globaler Maschinentyp
     RSCBYTEORDER_TYPE   nByteOrder;         // Intel oder
     ByteString          aLanguage;          // output language
-    std::vector< USHORT > aLangFallbacks;   // language fallback list (entry 0 is language itself)
+    std::vector< sal_uInt32 > aLangFallbacks;   // language fallback list (entry 0 is language itself)
     ByteString          aSearchPath;        // Suchen der Bitmap, Icon, Pointer
     ByteString          aSysSearchPath;     // aSearchPath plus language specific paths
-    USHORT              nUniqueId;          // eindeutiger Id fuer Systemresourcen
+    sal_uInt32              nUniqueId;          // eindeutiger Id fuer Systemresourcen
     ULONG               nFilePos;           // Position in der Datei ( MTF )
-    USHORT              nPMId;              // eindeutiger Id fuer PM-Rseourcefile
+    sal_uInt32              nPMId;              // eindeutiger Id fuer PM-Rseourcefile
                                             // muss groesser als RSC_VERSIONCONTROL_ID sein
     RscTop  *           pRoot;              // Zeiger auf die Wurzel vom Typenbaum
     RSCINST             aVersion;           // Versionskontrollinstanz
@@ -145,64 +142,64 @@ class RscTypCont
     RscBaseList         aBaseLst;           // Liste der einfachen Resourceklasse
     RscSysList          aSysLst;            // Liste der Systemresourcen
 
-    HASHID              nWinBitVarId;       // Name der Winbitvariablen
-    HASHID              nBorderId;
-    HASHID              nHideId;
-    HASHID              nClipChildrenId;
-    HASHID              nSizeableId;
-    HASHID              nMoveableId;
-    HASHID              nMinimizeId;
-    HASHID              nMaximizeId;
-    HASHID              nCloseableId;
-    HASHID              nAppId;
-    HASHID              nTabstopId;
-    HASHID              nGroupId;
-    HASHID              nSysmodalId;
-    HASHID              nLeftId;
-    HASHID              nCenterId;
-    HASHID              nRightId;
-    HASHID              nHscrollId;
-    HASHID              nVscrollId;
-    HASHID              nSortId;
-    HASHID              nDefaultId;
-    HASHID              nSVLookId;
-    HASHID              nRepeatId;
-    HASHID              nDropDownId;
-    HASHID              nPassWordId;
-    HASHID              nReadOnlyId;
-    HASHID              nAutoSizeId;
-    HASHID              nSpinId;
-    HASHID              nTabControlId;
-    HASHID              nSimpleModeId;
-    HASHID              nDragId;
-    HASHID              nSaveAsId;
-    HASHID              nOpenId;
-    HASHID              nScrollId;
-    HASHID              nZoomableId;
-    HASHID              nHideWhenDeactivateId;
-    HASHID              nAutoHScrollId;
-    HASHID              nDDExtraWidthId;
-    HASHID              nWordBreakId;
-    HASHID              nLeftLabelId;
-    HASHID              nHasLinesId;
-    HASHID              nHasButtonsId;
-    HASHID              nRectStyleId;
-    HASHID              nLineSpacingId;
-    HASHID              nSmallStyleId;
-    HASHID              nEnableResizingId;
-    HASHID              nDockableId;
-    HASHID              nScaleId;
-    HASHID              nIgnoreTabId;
-    HASHID              nNoSplitDrawId;
-    HASHID              nTopImageId;
-    HASHID              nNoLabelId;
-    HASHID              nVertId;
-    HASHID              nSingleLineId;
-    HASHID              nSysWinId;
+    Atom                nWinBitVarId;       // Name der Winbitvariablen
+    Atom                nBorderId;
+    Atom                nHideId;
+    Atom                nClipChildrenId;
+    Atom                nSizeableId;
+    Atom                nMoveableId;
+    Atom                nMinimizeId;
+    Atom                nMaximizeId;
+    Atom                nCloseableId;
+    Atom                nAppId;
+    Atom                nTabstopId;
+    Atom                nGroupId;
+    Atom                nSysmodalId;
+    Atom                nLeftId;
+    Atom                nCenterId;
+    Atom                nRightId;
+    Atom                nHscrollId;
+    Atom                nVscrollId;
+    Atom                nSortId;
+    Atom                nDefaultId;
+    Atom                nSVLookId;
+    Atom                nRepeatId;
+    Atom                nDropDownId;
+    Atom                nPassWordId;
+    Atom                nReadOnlyId;
+    Atom                nAutoSizeId;
+    Atom                nSpinId;
+    Atom                nTabControlId;
+    Atom                nSimpleModeId;
+    Atom                nDragId;
+    Atom                nSaveAsId;
+    Atom                nOpenId;
+    Atom                nScrollId;
+    Atom                nZoomableId;
+    Atom                nHideWhenDeactivateId;
+    Atom                nAutoHScrollId;
+    Atom                nDDExtraWidthId;
+    Atom                nWordBreakId;
+    Atom                nLeftLabelId;
+    Atom                nHasLinesId;
+    Atom                nHasButtonsId;
+    Atom                nRectStyleId;
+    Atom                nLineSpacingId;
+    Atom                nSmallStyleId;
+    Atom                nEnableResizingId;
+    Atom                nDockableId;
+    Atom                nScaleId;
+    Atom                nIgnoreTabId;
+    Atom                nNoSplitDrawId;
+    Atom                nTopImageId;
+    Atom                nNoLabelId;
+    Atom                nVertId;
+    Atom                nSingleLineId;
+    Atom                nSysWinId;
 
     void        Init();         // Initialisiert Klassen und Tabelle
     void        SETCONST( RscConst *, char *, UINT32 );
-    void        SETCONST( RscConst *, HASHID, UINT32 );
+    void        SETCONST( RscConst *, Atom, UINT32 );
     RscEnum *   InitLangType();
     RscEnum *   InitDateFormatType();
     RscEnum *   InitTimeFormatType();
@@ -298,14 +295,14 @@ class RscTypCont
     RscTop *    InitClassPatternField( RscTop * pSuper );
     RscTop *    InitClassNumericField( RscTop * pSuper );
     RscTop *    InitClassMetricField( RscTop * pSuper );
-    RscTop *    InitClassCurrencyField( const char * pClassName, USHORT nRT,
+    RscTop *    InitClassCurrencyField( const char * pClassName, sal_uInt32 nRT,
                                         RscTop * pSuper );
     RscTop *    InitClassDateField( RscTop * pSuper, RscTop * pClassDate );
     RscTop *    InitClassTimeField( RscTop * pSuper, RscTop * pClassTime );
     RscTop *    InitClassPatternBox( RscTop * pSuper );
     RscTop *    InitClassNumericBox( RscTop * pSuper );
     RscTop *    InitClassMetricBox( RscTop * pSuper );
-    RscTop *    InitClassCurrencyBox( const char * pClassName, USHORT nRT,
+    RscTop *    InitClassCurrencyBox( const char * pClassName, sal_uInt32 nRT,
                                         RscTop * pSuper );
     RscTop *    InitClassDateBox( RscTop * pSuper, RscTop * pClassDate );
     RscTop *    InitClassTimeBox( RscTop * pSuper, RscTop * pClassTime );
@@ -334,7 +331,7 @@ class RscTypCont
     RscTop *    InitClassSfxSlotInfo( RscTop * pSuper );
 
     void        InsWinBit( RscTop * pClass, const ByteString & rName,
-                           HASHID nVal );
+                           Atom nVal );
     void        WriteInc( FILE * fOutput, ULONG lKey );
 
 public:
@@ -359,16 +356,16 @@ public:
     RscLangArray        aLangString;
     RscLangArray        aLangShort;
 
-    HASHID              nAcceleratorType;
+    Atom                nAcceleratorType;
 
     RscError*           pEH;        // Fehlerhandler
     RscNameTable        aNmTb;      // Tabelle fuer Namen
     RscFileTab          aFileTab;   // Tabelle der Dateinamen
-    USHORT              nFlags;
-    Table               aIdTranslator; //Ordnet Resourcetypen und Id's einen Id zu
+    sal_uInt32              nFlags;
+    std::map<sal_uInt64, ULONG> aIdTranslator; //Ordnet Resourcetypen und Id's einen Id zu
                                        //(unter PM), oder eine Dateiposition (MTF)
 
-    RscTypCont( RscError *, RSCBYTEORDER_TYPE, const ByteString & rSearchPath, USHORT nFlags );
+    RscTypCont( RscError *, RSCBYTEORDER_TYPE, const ByteString & rSearchPath, sal_uInt32 nFlags );
     ~RscTypCont();
 
     BOOL            IsPreload() const
@@ -380,7 +377,7 @@ public:
     BOOL            IsSrsDefault() const
                     { return (nFlags & SRSDEFAULT_FLAG) ? TRUE : FALSE; }
     ByteString      ChangeLanguage( const ByteString& rNewLang );
-    const std::vector< USHORT >& GetFallbacks() const
+    const std::vector< sal_uInt32 >& GetFallbacks() const
     { return aLangFallbacks; }
 
     RSCBYTEORDER_TYPE GetByteOrder() const { return nByteOrder; }
@@ -399,15 +396,15 @@ public:
                 {
                     aBaseLst.Insert( pType, LIST_APPEND );
                 }
-    RscTop  *   SearchType( HASHID nTypId );
-    RscTop  *   Search( HASHID typ );
-    CLASS_DATA  Search( HASHID typ, const RscId & rId );
-    void        Delete( HASHID typ, const RscId & rId );
+    RscTop  *   SearchType( Atom nTypId );
+    RscTop  *   Search( Atom typ );
+    CLASS_DATA  Search( Atom typ, const RscId & rId );
+    void        Delete( Atom typ, const RscId & rId );
                 // loescht alle Resourceobjekte diese Datei
     void        Delete( ULONG lFileKey );
     RscTop  *   GetRoot()         { return( pRoot ); };
-    USHORT      PutSysName( USHORT nRscTyp, char * pName, USHORT nConst,
-                            USHORT nId, BOOL bFirst );
+    sal_uInt32      PutSysName( sal_uInt32 nRscTyp, char * pName, sal_uInt32 nConst,
+                            sal_uInt32 nId, BOOL bFirst );
     void        ClearSysNames();
     ERRTYPE     WriteRc( WriteRcContext& rContext );
     void        WriteSrc( FILE * fOutput, ULONG nFileIndex,
@@ -419,7 +416,7 @@ public:
     void        WriteRcCtor( FILE * fOutput );
     void        FillNameIdList( REResourceList * pList, ULONG lFileKey );
     BOOL        MakeConsistent( RscInconsList * pList );
-    USHORT      PutTranslatorKey( ULONG nKey );
+    sal_uInt32      PutTranslatorKey( sal_uInt64 nKey );
     void        IncFilePos( ULONG nOffset ){ nFilePos += nOffset; }
 };
 
