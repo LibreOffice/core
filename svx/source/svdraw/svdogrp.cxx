@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:59:55 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -906,9 +906,19 @@ SdrObject* SdrObjGroup::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte
 
 void SdrObjGroup::operator=(const SdrObject& rObj)
 {
-    if (rObj.IsGroupObject()) {
+    if(rObj.IsGroupObject())
+    {
+        // copy SdrObject stuff
         SdrObject::operator=(rObj);
+
+        // #i36404#
+        // copy SubList, init model and page first
+        SdrObjList& rSourceSubList = *rObj.GetSubList();
+        pSub->SetPage(rSourceSubList.GetPage());
+        pSub->SetModel(rSourceSubList.GetModel());
         pSub->CopyObjects(*rObj.GetSubList());
+
+        // copy local paremeters
         nDrehWink  =((SdrObjGroup&)rObj).nDrehWink;
         nShearWink =((SdrObjGroup&)rObj).nShearWink;
         aName      =((SdrObjGroup&)rObj).aName;
