@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-21 14:20:11 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 09:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,6 @@ using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
-
-// uncomment to get a scale group in z-direction (for deep-stacking)
-// #define ENABLE_NODE_FOR_Z
 
 // ======================================================================
 
@@ -536,7 +533,6 @@ Reference< chart2::XDataSeriesTreeParent > ChartTypeTemplate::createDataSeriesTr
     Reference< chart2::XDataSeriesTreeNode > aCategoryNode(
         createScaleGroup( true, true, rCoordSys, 0, getXStackMode() ));
 
-#ifdef ENABLE_NODE_FOR_Z
     Reference< chart2::XDataSeriesTreeNode > aFirstCatNode( aCategoryNode );
 
     // 'z-axis' group for 3d-charts
@@ -548,7 +544,6 @@ Reference< chart2::XDataSeriesTreeParent > ChartTypeTemplate::createDataSeriesTr
         attachNodeToNode( aDepthNode, aCategoryNode );
         aFirstCatNode.set( aDepthNode );
     }
-#endif
 
     // 'y-axis' group
     Reference< chart2::XDataSeriesTreeNode > aValueNode(
@@ -562,11 +557,7 @@ Reference< chart2::XDataSeriesTreeParent > ChartTypeTemplate::createDataSeriesTr
     attachNodeToNode( aCategoryNode, aValueNode );
 
     // add category node to chart type node
-#ifdef ENABLE_NODE_FOR_Z
     attachNodeToNode( aChartTypeNode, aFirstCatNode );
-#else
-    attachNodeToNode( aChartTypeNode, aCategoryNode );
-#endif
 
     // add chart type node to root of tree
     aRoot->addChild( aChartTypeNode );

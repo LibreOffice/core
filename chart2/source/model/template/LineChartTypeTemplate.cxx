@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-21 14:20:12 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 09:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,16 +176,18 @@ LineChartTypeTemplate::LineChartTypeTemplate(
     uno::Reference<
         uno::XComponentContext > const & xContext,
     const ::rtl::OUString & rServiceName,
-    chart2::StackMode eStackMode,
+    chart2::StackMode eYStackMode,
     chart2::CurveStyle eCurveStyle,
     bool bSymbols,
-    sal_Int32 nDim /* = 2 */ ) :
+    sal_Int32 nDim /* = 2 */,
+    chart2::StackMode eZStackMode /* = NONE */ ) :
         ChartTypeTemplate( xContext, rServiceName ),
-        ::property::OPropertySet( m_aMutex ),
-    m_eStackMode( eStackMode ),
-    m_eCurveStyle( eCurveStyle ),
+                ::property::OPropertySet( m_aMutex ),
+        m_eYStackMode( eYStackMode ),
+        m_eCurveStyle( eCurveStyle ),
     m_bHasSymbols( bSymbols ),
-    m_nDim( nDim )
+        m_nDim( nDim ),
+        m_eZStackMode( eZStackMode )
 {}
 
 LineChartTypeTemplate::~LineChartTypeTemplate()
@@ -246,7 +248,7 @@ sal_Int32 LineChartTypeTemplate::getDimension() const
 
 chart2::StackMode LineChartTypeTemplate::getYStackMode() const
 {
-    return m_eStackMode;
+    return m_eYStackMode;
 }
 
 chart2::StackMode LineChartTypeTemplate::getZStackMode() const
@@ -254,7 +256,7 @@ chart2::StackMode LineChartTypeTemplate::getZStackMode() const
     if( m_nDim == 2 )
         return chart2::StackMode_NONE;
 
-    return chart2::StackMode_STACKED;
+    return m_eZStackMode;
 }
 
 uno::Reference< chart2::XChartType > LineChartTypeTemplate::getDefaultChartType()

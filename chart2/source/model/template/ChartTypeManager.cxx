@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeManager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-21 14:20:11 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 09:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
                 break;
             case TEMPLATE_THREEDLINE:
                 xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
-                    chart2::StackMode_NONE, chart2::CurveStyle_LINES, false, 3 ));
+                    chart2::StackMode_NONE, chart2::CurveStyle_LINES, false,
+                    3, chart2::StackMode_STACKED ));
                 break;
 
             // Bar/Column

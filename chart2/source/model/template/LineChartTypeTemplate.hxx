@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-21 14:20:12 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 09:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,11 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
         const ::rtl::OUString & rServiceName,
-        ::drafts::com::sun::star::chart2::StackMode eStackMode,
+        ::drafts::com::sun::star::chart2::StackMode eYStackMode,
         ::drafts::com::sun::star::chart2::CurveStyle eCurveStyle,
-        bool bSymbols, sal_Int32 nDim = 2 );
+        bool bSymbols, sal_Int32 nDim = 2,
+        ::drafts::com::sun::star::chart2::StackMode eZStackMode =
+            ::drafts::com::sun::star::chart2::StackMode_NONE );
     virtual ~LineChartTypeTemplate();
 
     /// XServiceInfo declarations
@@ -134,11 +136,15 @@ protected:
 
 private:
     ::drafts::com::sun::star::chart2::StackMode
-                       m_eStackMode;
+                       m_eYStackMode;
     ::drafts::com::sun::star::chart2::CurveStyle
                        m_eCurveStyle;
     bool               m_bHasSymbols;
     sal_Int32          m_nDim;
+
+    // only used if m_nDim == 3
+    ::drafts::com::sun::star::chart2::StackMode
+                       m_eZStackMode;
 };
 
 } //  namespace chart
