@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-11-18 18:20:56 $
+#   last change: $Author: dfoster $ $Date: 2002-11-22 11:50:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,7 +69,7 @@
   <property name="build.compiler"   value="classic"/>
   <property name="optimize"   value="on"/>
   <property name="debug"   value="on"/>
-  <property name="installerclasses" value="${out}/class/sframeworkinstall/"/>
+  <property name="installerclasses" value="${out}/class/sframeworkinstall"/>
   <property name="jardir" value="${out}/class"/>
   <property name="bindir" value="${out}/bin"/>
   <property name="sfversion" value="0.1"/>
@@ -115,6 +115,7 @@
        debug="${debug}" optimize="${optimize}" deprecation="on"/>
     <copy file="${prj}/examples/java/MemoryUsage.java" todir="${out}/class/examples/MemoryUsage/"/>
     <copy file="${prj}/examples/java/MemoryUsageParcel.xml" tofile="${out}/class/examples/MemoryUsage/parcel-descriptor.xml"/>
+    <copy file="${prj}/examples/java/MemoryUsage.java" todir="${out}/class/examples/MemoryUsage/"/>
     <copy file="${prj}/examples/java/ExampleSpreadSheet.sxc" todir="${out}/class/examples/MemoryUsage/"/>
   </target>
 
@@ -122,7 +123,7 @@
   <target name="buildunopackage">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
-    <copy file="${prj}/../offapi/wntmsci9${proext}/ucr/offapi.db"
+    <copy file="${prj}/../offapi/unxsols3${proext}/ucr/offapi.db"
         tofile="${out}/class/sframework/ScriptFramework.rdb"/>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
@@ -140,27 +141,30 @@
     </copy>
     <mkdir dir="${out}/class/sframework/windows.plt"/>
     <copy todir="${out}/class/sframework/windows.plt">
-        <fileset dir="${prj}/wntmsci9${proext}/bin/">
+        <fileset dir="${prj}/wntmsci7${proext}/bin/">
             <include name="**/*.dll"/>
         </fileset>
     </copy>
     <mkdir dir="${out}/class/sframework/skip_registration"/>
-    <copy file="${prj}/../unoil/wntmsci9${proext}/class/unoil.jar"
+    <copy file="${prj}/../unoil/unxsols3${proext}/class/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
     <zip destfile="${out}/class/sframeworkinstall/sframework/ooscriptframe.zip"
         basedir="${out}/class/sframework">
     </zip>
-    <copy file="${prj}/common/bin/scripting64401.res"
-        todir="${out}/class/sframeworkinstall/sframework/"/>
+    <copy todir="${out}/class/sframeworkinstall/sframework">
+        <fileset dir="${out}/bin/">
+            <include name="**/scripting64?01.res"/>
+        </fileset>
+    </copy>
   </target>
   <!-- ===================== Package regsingletons ========================= -->
   <target name="packagesingletons">
     <mkdir dir="${out}/class/sframeworkinstall/windows"/>
-    <copy file="${env.SOLARVER}/wntmsci9${proext}/bin${env.UPDMINOREXT}/regsingleton.exe" todir="${out}/class/sframeworkinstall/windows"/>
+    <copy file="rs_windows/regsingleton.exe" todir="${out}/class/sframeworkinstall/windows"/>
     <mkdir dir="${out}/class/sframeworkinstall/linux_x86"/>
-    <copy file="${env.SOLARVER}/unxlngi4${proext}/bin${env.UPDMINOREXT}/regsingleton" todir="${out}/class/sframeworkinstall/linux_x86"/>
+    <copy file="rs_linux/regsingleton" todir="${out}/class/sframeworkinstall/linux_x86"/>
     <mkdir dir="${out}/class/sframeworkinstall/solaris_sparc"/>
-    <copy file="${env.SOLARVER}/unxsols3${proext}/bin${env.UPDMINOREXT}/regsingleton" todir="${out}/class/sframeworkinstall/solaris_sparc"/>
+    <copy file="rs_solaris/regsingleton" todir="${out}/class/sframeworkinstall/solaris_sparc"/>
   </target>
   <!-- ===================== Package scripts, dialogs & examples =========== -->
   <target name="packagedialogsandexamples" depends="buildexamples">
@@ -175,29 +179,28 @@
         <fileset dir="${out}/class/examples/"/>
     </copy>
   </target>
-  <!-- ===================== Package IDE Jar files ========================= -->
-  <target name="packageidestuff">
+  <!-- ===================== Package scripts, dislogs & examples =========== -->
+  <target name="packageide">
     <mkdir dir="${out}/class/sframeworkinstall/ide"/>
     <copy todir="${out}/class/sframeworkinstall/ide">
-        <fileset dir="${out}/class/examples/">
+        <fileset dir="${out}/class/">
             <include name="**/OfficeScripting.jar"/>
-            <include name="**/office.jar.jar"/>
             <include name="**/idesupport.jar"/>
+            <include name="**/office.jar"/>
         </fileset>
     </copy>
   </target>
-
   <!-- ======================== Compile Classes ========================== -->
   <target name="compileinstaller">
     <mkdir dir="${installerclasses}"/>
     <javac srcdir="installer/" destdir="${installerclasses}"
               includes="**/*.java" classpathref="idlclasspath"
        debug="${debug}" optimize="${optimize}" deprecation="on"/>
-    <copy file="installer/sidebar.jpg" todir="${installerclasses}/installer"/>
+    <copy file="installer/sidebar.jpg" todir="${out}/class/sframeworkinstall/installer"/>
   </target>
 
   <!-- ===================== jar ========================= -->
-  <target name="jar" depends="compileinstaller,packagedialogsandexamples,packagesingletons,buildunopackage,packageidestuff">
+  <target name="jar" depends="compileinstaller,packagedialogsandexamples,packageide,packagesingletons,buildunopackage">
     <jar jarfile="${jardir}/${installerjarname}"
          basedir="${installerclasses}">
         <manifest>
