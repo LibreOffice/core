@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockListContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-08 15:59:55 $
+ *  last change: $Author: mtg $ $Date: 2001-05-02 16:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,13 +235,15 @@ SwXMLTextBlockParContext::SwXMLTextBlockParContext(
 
 void SwXMLTextBlockParContext::Characters( const ::rtl::OUString& rChars )
 {
-    if (!sContent.getLength())
-        sContent = rChars;
-    else
-        sContent +=rChars;
+    rLocalRef.m_rText.Append ( rChars.getStr());
 }
 SwXMLTextBlockParContext::~SwXMLTextBlockParContext ( void )
 {
-    sContent += OUString::createFromAscii("\015");
-    rLocalRef.getBlockList().SetCurrentText( sContent );
+    if (rLocalRef.bTextOnly)
+        rLocalRef.m_rText.AppendAscii( "\015" );
+    else
+    {
+        if (rLocalRef.m_rText.GetChar ( rLocalRef.m_rText.Len()) != ' ' )
+            rLocalRef.m_rText.AppendAscii( " " );
+    }
 }
