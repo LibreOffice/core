@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splittbl.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:16:35 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,7 @@ ModalDialog DLG_SPLIT_TABLE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 207 , 76 ) ;
-    Text = "Tabelle auftrennen" ;
-    Text [ ENGLISH ] = "Split table" ;
+    Text [ de ] = "Tabelle auftrennen" ;
     Moveable = TRUE ;
     OKButton PB_OK
     {
@@ -95,207 +94,46 @@ ModalDialog DLG_SPLIT_TABLE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 139 , 8 ) ;
-        Text = "Modus" ;
-        Text [ ENGLISH ] = "Mode" ;
-        Text [ english_us ] = "Mode" ;
-        Text [ portuguese_brazilian ] = "Modo" ;
-        Text [ swedish ] = "Läge" ;
-        Text [ danish ] = "Tilstand" ;
-        Text [ italian ] = "Modo" ;
-        Text [ spanish ] = "Modo" ;
-        Text [ french ] = "Mode" ;
-        Text [ dutch ] = "Modus" ;
-        Text [ portuguese ] = "Modo" ;
-        Text[ chinese_simplified ] = "æ¨¡å¼";
-        Text[ russian ] = "Ğåæèì";
-        Text[ polish ] = "Tryb";
-        Text[ japanese ] = "ãƒ¢ãƒ¼ãƒ‰";
-        Text[ chinese_traditional ] = "æ¨¡å¼";
-        Text[ arabic ] = "ÇáæÖÚ";
-        Text[ greek ] = "ÊáôÜóôáóç ëåéôïõñãßáò";
-        Text[ korean ] = "ëª¨ë“œ";
-        Text[ turkish ] = "Tür";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mode";
-        Text[ finnish ] = "Tila";
-        Text[ thai ] = "à¹‚à¸«à¸¡à¸”";
-        Text[ czech ] = "ReÅ¾im";
-        Text[ hebrew ] = "Modus";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤•à¤¾à¤°";
-        Text[ slovak ] = "ReÅ¾im";
-        Text[ hungarian ] = "MÃ³d";
-        Text[ slovenian ] = "NaÄin";
+        Text [ de ] = "Modus" ;
+        Text [ en-US ] = "Mode" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_CNTNT
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text = "~Überschrift kopieren" ;
-        Text [ ENGLISH ] = "~Copy Heading" ;
+        Text [ de ] = "~Überschrift kopieren" ;
         Check = TRUE ;
         TabStop = TRUE ;
-        Text [ portuguese ] = "~Copiar título" ;
-        Text [ english_us ] = "~Copy heading" ;
-        Text [ portuguese_brazilian ] = "~Copiar cabeçalho" ;
-        Text [ swedish ] = "Kopiera ~överskrift" ;
-        Text [ danish ] = "~Kopier overskrift" ;
-        Text [ italian ] = "~Copia intestazione" ;
-        Text [ spanish ] = "~Copiar encabezado" ;
-        Text [ french ] = "~Copier le titre" ;
-        Text [ dutch ] = "~Kop kopiëren" ;
-        Text[ chinese_simplified ] = "å¤åˆ¶æ ‡é¢˜(~C)";
-        Text[ russian ] = "Êîïèğîâàòü çàãîëîâîê";
-        Text[ polish ] = "~Kopiuj nag³ówek";
-        Text[ japanese ] = "è¦‹å‡ºã—ã®ã‚³ãƒ”ãƒ¼(~C)";
-        Text[ chinese_traditional ] = "è¤‡è£½æ¨™é¡Œ(~C)";
-        Text[ arabic ] = "äÓÎ ÇáÚäæÇä";
-        Text[ greek ] = "ÁíôéãñáöŞ åğéêåöáëßäáò";
-        Text[ korean ] = "ì œëª© ë³µì‚¬(~C)";
-        Text[ turkish ] = "~Başlığı kopyala";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Copia encapçalament";
-        Text[ finnish ] = "~Kopioi otsikko";
-        Text[ thai ] = "~à¸„à¸±à¸”à¸¥à¸­à¸à¸«à¸±à¸§à¸‚à¹‰à¸­";
-        Text[ czech ] = "KopÃ­rovat nadpis";
-        Text[ hebrew ] = "~Ãœberschrift kopieren";
-        Text[ hindi ] = "~à¤¶à¥€à¤°à¥à¤·à¤• à¤•à¥€ à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿";
-        Text[ slovak ] = "~KopÃ­rovaÅ¥ nadpis";
-        Text[ hungarian ] = "CÃ­msor ~mÃ¡solÃ¡sa";
-        Text[ slovenian ] = "~Kopiraj naslov";
+        Text [ en-US ] = "~Copy heading" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_BOX_PARA
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text = "~Eigene Überschrift, mit Vorlage" ;
-        Text [ ENGLISH ] = "New heading ~with style" ;
-        Text [ portuguese ] = "Título ~personalizado (com modelo)" ;
-        Text [ english_us ] = "C~ustom heading (apply Style)" ;
-        Text [ portuguese_brazilian ] = "Ca~beçalho personalizado (aplicar Estilo)" ;
-        Text [ swedish ] = "~Egen överskrift, med formatmall" ;
-        Text [ danish ] = "~Brugerdefineret overskrift (anvend typografi)" ;
-        Text [ italian ] = "~Propria intestazione con modello" ;
-        Text [ spanish ] = "~Encabezado propio (aplicar estilo)" ;
-        Text [ french ] = "Titre personnalisé, avec ~style" ;
-        Text [ dutch ] = "~Eigen kop, met opmaakprofiel" ;
-        Text[ chinese_simplified ] = "è‡ªå®šæ ‡é¢˜ï¼Œå¸¦æ ·å¼(~U)";
-        Text[ russian ] = "Çàãîëîâîê ïîëüçîâàòåëÿ (ïğèìåíèòü ñòèëü)";
-        Text[ polish ] = "~Nag³ówek niestandardowy (zastosuj styl)";
-        Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«ä»˜ããƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®è¦‹å‡ºã—(~U)";
-        Text[ chinese_traditional ] = "è‡ªè¨‚æ¨™é ­ï¼Œå¸¶æ¨£å¼(~U)";
-        Text[ arabic ] = "ÚäæÇä ÎÇÕ (ÊØÈíŞ ÇáäãØ)";
-        Text[ greek ] = "Ğñïóáñìïóìİíç åğéêåöáëßäá (ìå óôõë)";
-        Text[ korean ] = "ìŠ¤íƒ€ì¼ì„ ì ìš©í•œ ì‚¬ìš©ì ì •ì˜ ì œëª©(~U)";
-        Text[ turkish ] = "~Özel başlık (biçim uygula)";
-        Text[ language_user1 ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
-        Text[ catalan ] = "~Encapçalament propi, amb estils";
-        Text[ finnish ] = "~Mukautettu otsikko (käytä tyyliä)";
-        Text[ thai ] = "à¸à¸³~à¸«à¸™à¸”à¸«à¸±à¸§à¸‚à¹‰à¸­à¹€à¸­à¸‡ (à¹ƒà¸Šà¹‰à¸¥à¸±à¸à¸©à¸“à¸°)";
-        Text[ czech ] = "UÅ¾ivatelskÃ½ nadpis (pouÅ¾Ã­t styl)";
-        Text[ hebrew ] = "~Eigene Ãœberschrift, mit Vorlage";
-        Text[ hindi ] = "à¤¶à¥€~à¤°à¥à¤·à¤• à¤•à¥‹ à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤•à¤°à¥‹ (à¤¶à¥ˆà¤²à¥€ à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹)";
-        Text[ slovak ] = "UÅ¾Ã­~vateÄ¾skÃ½ nadpis (pouÅ¾iÅ¥ Å¡tÃ½l)";
-        Text[ hungarian ] = "EgyÃ©~ni fejlÃ©c (StÃ­lus felhasznÃ¡lÃ¡sÃ¡val)";
-        Text[ slovenian ] = "Naslov po ~meri (uporabi slog)";
+        Text [ de ] = "~Eigene Überschrift, mit Vorlage" ;
+        Text [ en-US ] = "C~ustom heading (apply Style)" ;
+        Text [ x-comment ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     };
     RadioButton RB_BOX_NOPARA
     {
         Pos = MAP_APPFONT ( 12 , 45 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text = "E~igene Überschrift" ;
-        Text [ ENGLISH ] = "~New heading" ;
-        Text [ portuguese ] = "Título ~personalizado" ;
-        Text [ english_us ] = "Cu~stom heading" ;
-        Text [ portuguese_brazilian ] = "Cabeça~lho personalizado" ;
-        Text [ swedish ] = "E~gen överskrift" ;
-        Text [ danish ] = "~Brugerdefineret overskrift" ;
-        Text [ italian ] = "Propria ~intestazione" ;
-        Text [ spanish ] = "Encabezado ~propio" ;
-        Text [ french ] = "Titre personnalisé" ;
-        Text [ dutch ] = "E~igen kop" ;
-        Text[ chinese_simplified ] = "è‡ªå®šæ ‡é¢˜(~S)";
-        Text[ russian ] = "Çàãîëîâîê ïîëüçîâàòåëÿ";
-        Text[ polish ] = "Nag³ówek nie~standardowy";
-        Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®è¦‹å‡ºã—(~S)";
-        Text[ chinese_traditional ] = "è‡ªè¨‚æ¨™é¡Œ(~S)";
-        Text[ arabic ] = "ÚäæÇä ÎÇÕ";
-        Text[ greek ] = "Ğñïóáñìïóìİíç åğéêåöáëßäá";
-        Text[ korean ] = "ì‚¬ìš©ì ì œëª©(~S)";
-        Text[ turkish ] = "Ö~zel başlık";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Encapçalament ~propi";
-        Text[ finnish ] = "Mukautettu otsikko";
-        Text[ thai ] = "à¸à¸³à¸«à¸™~à¸”à¸«à¸±à¸§à¸‚à¹‰à¸­à¹€à¸­à¸‡";
-        Text[ czech ] = "UÅ¾ivatelskÃ½ nadpis";
-        Text[ hebrew ] = "E~igene Ãœberschrift";
-        Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·~à¤• à¤•à¥‹ à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤•à¤°à¥‹";
-        Text[ slovak ] = "UÅ¾Ã­~vateÄ¾skÃ½ nadpis";
-        Text[ hungarian ] = "~EgyÃ©ni cÃ­msor";
-        Text[ slovenian ] = "Na~slov po meri";
+        Text [ de ] = "E~igene Überschrift" ;
+        Text [ en-US ] = "Cu~stom heading" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_BORDER
     {
         Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text = "~Keine Überschrift" ;
-        Text [ ENGLISH ] = "N~o heading" ;
-        Text [ portuguese ] = "~Sem título" ;
-        Text [ english_us ] = "~No heading" ;
-        Text [ portuguese_brazilian ] = "~Sem título" ;
-        Text [ swedish ] = "~Ingen överskrift" ;
-        Text [ danish ] = "~Ingen overskrift" ;
-        Text [ italian ] = "~Senza intestazione" ;
-        Text [ spanish ] = "~Sin encabezado" ;
-        Text [ french ] = "Aucun titre" ;
-        Text [ dutch ] = "~Geen kop" ;
-        Text[ chinese_simplified ] = "æ— æ ‡é¢˜(~N)";
-        Text[ russian ] = "Áåç çàãîëîâêà";
-        Text[ polish ] = "~Bez nag³ówka";
-        Text[ japanese ] = "è¦‹å‡ºã—ãªã—(~N)";
-        Text[ chinese_traditional ] = "ç„¡æ¨™é¡Œ(~N)";
-        Text[ arabic ] = "ÈÏæä ÚäæÇä";
-        Text[ greek ] = "×ùñßò åğéêåöáëßäá";
-        Text[ korean ] = "ì œëª© ì—†ìŒ(~N)";
-        Text[ turkish ] = "~Başlık yok";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Sense encapçalement";
-        Text[ finnish ] = "~Ei otsikkoa";
-        Text[ thai ] = "à¹„~à¸¡à¹ˆà¸¡à¸µà¸«à¸±à¸§à¸‚à¹‰à¸­";
-        Text[ czech ] = "Bez nadpisu";
-        Text[ hebrew ] = "~Keine Ãœberschrift";
-        Text[ hindi ] = "~à¤•à¥‹à¤ˆ à¤¶à¥€à¤°à¥à¤·à¤• à¤¨à¤¹à¥€à¤‚";
-        Text[ slovak ] = "Bez ~nadpisu";
-        Text[ hungarian ] = "~Nincs cÃ­msor";
-        Text[ slovenian ] = "~Brez naslova";
+        Text [ de ] = "~Keine Überschrift" ;
+        Text [ en-US ] = "~No heading" ;
+        Text [ x-comment ] = " ";
     };
-    Text [ english_us ] = "Split Table" ;
-    Text [ portuguese_brazilian ] = "Dividir a Tabela" ;
-    Text [ swedish ] = "Dela tabell" ;
-    Text [ danish ] = "Opdel tabel" ;
-    Text [ italian ] = "Dividi tabella" ;
-    Text [ spanish ] = "Dividir tabla" ;
-    Text [ french ] = "Scission de tableau" ;
-    Text [ dutch ] = "Tabel opsplitsen" ;
-    Text [ portuguese ] = "Dividir tabela" ;
-    Text[ chinese_simplified ] = "åˆ†éš”è¡¨æ ¼";
-    Text[ russian ] = "Ğàçáèòü òàáëèöó";
-    Text[ polish ] = "Podziel tabelê";
-    Text[ japanese ] = "è¡¨ã®åˆ†å‰²";
-    Text[ chinese_traditional ] = "åˆ†é–‹è¡¨æ ¼";
-    Text[ arabic ] = "İÕá ÇáÌÏæá";
-    Text[ greek ] = "Äéáßñåóç ğßíáêá";
-    Text[ korean ] = "í‘œ ë‚˜ëˆ„ê¸°";
-    Text[ turkish ] = "Tabloyu böl";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Divideix la taula";
-    Text[ finnish ] = "Jaa taulukko";
-    Text[ thai ] = "à¹à¸¢à¸à¸•à¸²à¸£à¸²à¸‡";
-    Text[ czech ] = "RozdÄ›lit tabulku";
-    Text[ hebrew ] = "â€®×¤×™×¦×•×œ ×˜×‘×œ×”â€¬";
-    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ à¤…à¤²à¤—à¤¾à¤¨à¤¾";
-    Text[ slovak ] = "RozdeliÅ¥ tabuÄ¾ku";
-    Text[ hungarian ] = "TÃ¡blÃ¡zat felosztÃ¡sa";
-    Text[ slovenian ] = "Razdeli tabelo";
+    Text [ en-US ] = "Split Table" ;
+    Text [ x-comment ] = " ";
 };
 
 
