@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_String_Const.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lwang $ $Date: 2003-01-03 09:50:18 $
+ *  last change: $Author: lwang $ $Date: 2003-01-10 02:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,38 @@ static const sal_Char *kTestStr139  = "-3.141592653589793238462643";
 static const sal_Char *kTestStr140  = "\50\3\5\7\11\13\15\17sun-3.141592653589793";
 static const sal_Char *kTestStr141  = "\50\3\5\7\11\13\15\17sun-3.14159265358979323";
 static const sal_Char *kTestStr142  = "\50\3\5\7\11\13\15\17sun-3.141592653589793238462643";
+static const sal_Char *kTestStr143  = "Sun \377";
+static const sal_Char *kTestStr144  = "\377";
+static const sal_Char *kTestStr145 = "\50\3\5\7\11\13\15\17sun\377";
+static const sal_Char *kTestStr146 = "Sun Java Technology";
+static const sal_Char *kTestStr147 = "Java Sun Technology";
+static const sal_Char *kTestStr148 = "Java TechnologySun ";
+static const sal_Char *kTestStr149 = "Java Sun Microsystems Technology";
+static const sal_Char *kTestStr150 = "Java TechnologySun Microsystems ";
+static const sal_Char *kTestStr151 = "Sun MicrosystemsJava Technology";
+static const sal_Char *kTestStr152 = "Java Sun MicrosystemsTechnology";
+static const sal_Char *kTestStr153 = "Java TechnologySun Microsystems";
+static const sal_Char *kTestStr154 = "Sun Sun Microsystems Java Technology"
+static const sal_Char *kTestStr155 = "Sun Sun Microsystems Java Technology"
+static const sal_Char *kTestStr156 = "Sun Microsystems Java TechnologySun "
+static const sal_Char *kTestStr157 = "Sun Microsystems Sun Microsystems Java Technology"
+static const sal_Char *kTestStr158 = "Sun Sun Microsystems Microsystems Java Technology"
+static const sal_Char *kTestStr159 = "Sun Microsystems Java TechnologySun Microsystems "
+static const sal_Char *kTestStr160 = "Sun MicrosystemsSun Microsystems Java Technology"
+static const sal_Char *kTestStr161 = "Sun Sun MicrosystemsMicrosystems Java Technology"
+static const sal_Char *kTestStr162 = "Sun Microsystems Java TechnologySun Microsystems"
+static const sal_Char *kTestStr163 = "Sun \50\3\5\7\11\13\15\17sun"
+static const sal_Char *kTestStr164 = "\50\3\5\7Sun \11\13\15\17sun"
+static const sal_Char *kTestStr165 = "\50\3\5\7\11\13\15\17sunSun "
+static const sal_Char *kTestStr166 = "Sun Microsystems \50\3\5\7\11\13\15\17sun"
+static const sal_Char *kTestStr167 = "\50\3\5\7\Sun Microsystems 11\13\15\17sun"
+static const sal_Char *kTestStr168 = "\50\3\5\7\11\13\15\17sunSun Microsystems "
+static const sal_Char *kTestStr169 = "Sun Microsystems\50\3\5\7\11\13\15\17sun"
+static const sal_Char *kTestStr170 = "\50\3\5\7Sun Microsystems\11\13\15\17sun"
+static const sal_Char *kTestStr171 = "\50\3\5\7\11\13\15\17sunSun Microsystems"
 static const sal_Char *kTestStr1PlusStr6  = "Sun Microsystems" "Java Technology";
+
+
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 
@@ -399,6 +430,35 @@ static const sal_Int32 kTestStr139Len = 27;
 static const sal_Int32 kTestStr140Len = 29;
 static const sal_Int32 kTestStr141Len = 31;
 static const sal_Int32 kTestStr142Len = 38;
+static const sal_Int32 kTestStr143Len = 5;
+static const sal_Int32 kTestStr144Len = 1;
+static const sal_Int32 kTestStr145Len = 12;
+static const sal_Int32 kTestStr146Len = 19;
+static const sal_Int32 kTestStr147Len = 19;
+static const sal_Int32 kTestStr148Len = 19;
+static const sal_Int32 kTestStr149Len = 32;
+static const sal_Int32 kTestStr150Len = 32;
+static const sal_Int32 kTestStr151Len = 31;
+static const sal_Int32 kTestStr152Len = 31;
+static const sal_Int32 kTestStr153Len = 31;
+static const sal_Int32 kTestStr154Len = 36;
+static const sal_Int32 kTestStr155Len = 36;
+static const sal_Int32 kTestStr156Len = 36;
+static const sal_Int32 kTestStr157Len = 49;
+static const sal_Int32 kTestStr158Len = 49;
+static const sal_Int32 kTestStr159Len = 49;
+static const sal_Int32 kTestStr160Len = 48;
+static const sal_Int32 kTestStr161Len = 48;
+static const sal_Int32 kTestStr162Len = 48;
+static const sal_Int32 kTestStr163Len = 15;
+static const sal_Int32 kTestStr164Len = 15;
+static const sal_Int32 kTestStr165Len = 15;
+static const sal_Int32 kTestStr166Len = 28;
+static const sal_Int32 kTestStr167Len = 28;
+static const sal_Int32 kTestStr168Len = 28;
+static const sal_Int32 kTestStr169Len = 27;
+static const sal_Int32 kTestStr170Len = 27;
+static const sal_Int32 kTestStr171Len = 27;
 static const sal_Int32 kTestStr1PlusStr6Len = kTestStr1Len + kTestStr6Len;
 
 //------------------------------------------------------------------------
@@ -545,6 +605,35 @@ static const sal_Int32 kTestStr1PlusStr6Len = kTestStr1Len + kTestStr6Len;
  static sal_Unicode aUStr140[kTestStr140Len+1];
  static sal_Unicode aUStr141[kTestStr141Len+1];
  static sal_Unicode aUStr142[kTestStr142Len+1];
+ static sal_Unicode aUStr143[kTestStr143Len+1];
+ static sal_Unicode aUStr144[kTestStr144Len+1];
+ static sal_Unicode aUStr145[kTestStr145Len+1];
+ static sal_Unicode aUStr146[kTestStr146Len+1];
+ static sal_Unicode aUStr147[kTestStr147Len+1];
+ static sal_Unicode aUStr148[kTestStr148Len+1];
+ static sal_Unicode aUStr149[kTestStr149Len+1];
+ static sal_Unicode aUStr150[kTestStr150Len+1];
+ static sal_Unicode aUStr151[kTestStr151Len+1];
+ static sal_Unicode aUStr152[kTestStr152Len+1];
+ static sal_Unicode aUStr153[kTestStr153Len+1];
+ static sal_Unicode aUStr154[kTestStr154Len+1];
+ static sal_Unicode aUStr155[kTestStr155Len+1];
+ static sal_Unicode aUStr156[kTestStr156Len+1];
+ static sal_Unicode aUStr157[kTestStr157Len+1];
+ static sal_Unicode aUStr158[kTestStr158Len+1];
+ static sal_Unicode aUStr159[kTestStr159Len+1];
+ static sal_Unicode aUStr160[kTestStr160Len+1];
+ static sal_Unicode aUStr161[kTestStr161Len+1];
+ static sal_Unicode aUStr162[kTestStr162Len+1];
+ static sal_Unicode aUStr163[kTestStr163Len+1];
+ static sal_Unicode aUStr164[kTestStr164Len+1];
+ static sal_Unicode aUStr165[kTestStr165Len+1];
+ static sal_Unicode aUStr166[kTestStr166Len+1];
+ static sal_Unicode aUStr167[kTestStr167Len+1];
+ static sal_Unicode aUStr168[kTestStr168Len+1];
+ static sal_Unicode aUStr169[kTestStr169Len+1];
+ static sal_Unicode aUStr170[kTestStr170Len+1];
+ static sal_Unicode aUStr171[kTestStr171Len+1];
  static sal_Unicode aUStr1PlusUStr6[kTestStr1Len + kTestStr6Len + 1];
 
 // we are already in "C"
@@ -839,8 +928,63 @@ static sal_Bool SAL_CALL test_ini_uString()
 
         iniResult &=AStringToUStringNCopy( aUStr142, kTestStr142, kTestStr142Len );
 
+        iniResult &=AStringToUStringNCopy( aUStr143, kTestStr143, kTestStr143Len );
 
+        iniResult &=AStringToUStringNCopy( aUStr144, kTestStr144, kTestStr144Len );
 
+        iniResult &=AStringToUStringNCopy( aUStr145, kTestStr145, kTestStr145Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr146, kTestStr146, kTestStr146Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr147, kTestStr147, kTestStr147Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr148, kTestStr148, kTestStr148Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr149, kTestStr149, kTestStr149Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr150, kTestStr150, kTestStr150Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr151, kTestStr151, kTestStr151Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr152, kTestStr152, kTestStr152Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr153, kTestStr153, kTestStr153Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr154, kTestStr154, kTestStr154Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr155, kTestStr155, kTestStr155Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr156, kTestStr156, kTestStr156Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr157, kTestStr157, kTestStr157Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr158, kTestStr158, kTestStr158Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr159, kTestStr159, kTestStr159Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr160, kTestStr160, kTestStr160Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr161, kTestStr161, kTestStr161Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr162, kTestStr162, kTestStr162Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr163, kTestStr163, kTestStr163Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr164, kTestStr164, kTestStr164Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr165, kTestStr165, kTestStr165Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr166, kTestStr166, kTestStr166Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr167, kTestStr167, kTestStr167Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr168, kTestStr168, kTestStr168Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr169, kTestStr169, kTestStr169Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr170, kTestStr170, kTestStr170Len );
+
+        iniResult &=AStringToUStringNCopy( aUStr171, kTestStr171, kTestStr171Len );
 
     return iniResult;
 
@@ -1266,6 +1410,7 @@ static const sal_Int32  expValStrLastNormal[nStrLastNormalCount] =
             0,-1,0,4,-1,-1,-1,-1,-1,3,15,11
         };
 //------------------------------------------------------------------------
+static const sal_Int32 kNonSInt64Max = LLONG_MIN;
 static const sal_Int32 kNonSInt32Max = INT_MIN;
 static const sal_Int32 kNonSInt16Max = SHRT_MIN;
 //------------------------------------------------------------------------
