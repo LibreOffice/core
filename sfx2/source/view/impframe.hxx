@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impframe.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:19:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #pragma hdrstop
 
 #include "frame.hxx"
+#include "loadenv.hxx"
+#include "viewfrm.hxx"                  // SvBorder
 
 class SfxViewFrame;
 class SfxObjectShell;
@@ -121,6 +123,7 @@ friend class SfxFrame;
     sal_Bool                bOwnsBindings : 1;
     sal_Bool                bReleasingComponent : 1;
     sal_Bool                bFocusLocked : 1;
+    sal_Bool                bInPlace : 1;
     sal_uInt16              nHasBrowser;
     SfxCancelManager*       pCancelMgr;
     SfxCancellable*         pLoadCancellable;
@@ -144,6 +147,7 @@ friend class SfxFrame;
                                 bOwnsBindings( sal_False ),
                                 bReleasingComponent( sal_False ),
                                 bFocusLocked( sal_False ),
+                                bInPlace( sal_False ),
                                 nLocks( 0 ),
                                 pBrowserCfg( NULL ),
                                 pDescr( NULL ),
