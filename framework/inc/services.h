@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:08 $
+ *  last change: $Author: as $ $Date: 2001-07-02 13:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@ namespace framework{
 #define SERVICENAME_CFGPROVIDER                             DECLARE_ASCII("com.sun.star.configuration.ConfigurationProvider"    )   // describe cfg-provider service for fatoffice, network installation
 #define SERVICENAME_ADMINPROVIDER                           DECLARE_ASCII("com.sun.star.configuration.AdministrationProvider"   )   // describe cfg-provider service for sun webtop
 #define SERVICENAME_CFGUPDATEACCESS                         DECLARE_ASCII("com.sun.star.configuration.ConfigurationUpdateAccess")
+#define SERVICENAME_SOUNDHANDLER                            DECLARE_ASCII("com.sun.star.comp.framework.SoundHandler"            )
+#define SERVICENAME_CONTENTHANDLERFACTORY                   DECLARE_ASCII("com.sun.star.document.ContentHandlerFactory"         )
+#define SERVICENAME_APPDISPATCHPROVIDER                     DECLARE_ASCII("com.sun.star.comp.sfx2.AppDispatchProvider"          )
 
 //_________________________________________________________________________________________________________________
 //  used implementationnames by framework
@@ -119,6 +122,8 @@ namespace framework{
 #define IMPLEMENTATIONNAME_LOGINDIALOG                      DECLARE_ASCII("com.sun.star.comp.framework.LoginDialog"             )
 #define IMPLEMENTATIONNAME_TYPEDETECTION                    DECLARE_ASCII("com.sun.star.comp.framework.TypeDetection"           )
 #define IMPLEMENTATIONNAME_DOCUMENTPROPERTIES               DECLARE_ASCII("com.sun.star.comp.framework.DocumentProperties"      )
+#define IMPLEMENTATIONNAME_SOUNDHANDLER                     DECLARE_ASCII("com.sun.star.comp.framework.SoundHandler"            )
+#define IMPLEMENTATIONNAME_CONTENTHANDLERFACTORY            DECLARE_ASCII("com.sun.star.comp.framework.ContentHandlerFactory"   )
 
 }       //  namespace framework
 
