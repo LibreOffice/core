@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-11 17:24:38 $
+ *  last change: $Author: khong $ $Date: 2002-07-31 21:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,6 +623,10 @@ LocaleData::getContinuousNumberingLevels( const lang::Locale& rLocale ) throw(Ru
                  rVal.Name = C2U("Transliteration");
                  rVal.Value <<= sVal;
                  break;
+            case 4:
+                 rVal.Name = C2U("NatNum");
+                 rVal.Value <<= (sal_Int16) sVal.toInt32();
+                 break;
             default:
                  assert(0);
             }
@@ -662,6 +666,7 @@ struct OutlineNumberingLevel_Impl
     sal_Int32       nSymbolTextDistance;
     sal_Int32       nFirstLineOffset;
     OUString    sTransliteration;
+    sal_Int32       nNatNum;
 };
 //-----------------------------------------------------------------------------
 class OutlineNumbering : public cppu::WeakImplHelper1 < container::XIndexAccess >
@@ -746,6 +751,7 @@ LocaleData::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(Runti
     //                           level[j].Value <<= (sal_Int16) style::HorizontalAlignment::LEFT;
                   break;
                  case 10: level[j].sTransliteration = tmp; break;
+                 case 11: level[j].nNatNum    = tmp.toInt32();   break;
                  default:
                   assert(0);
                  }
@@ -761,6 +767,7 @@ LocaleData::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(Runti
            level[j].nSymbolTextDistance = 0;
            level[j].nFirstLineOffset    = 0;
                level[j].sTransliteration    = aEmptyStr;
+           level[j].nNatNum    = 0;
            aRet[i] = new OutlineNumbering( level, nLevels );
           }
           return aRet;
@@ -930,7 +937,7 @@ Any OutlineNumbering::getByIndex( sal_Int32 nIndex )
     pTemp += nIndex;
     Any aRet;
 
-    Sequence<PropertyValue> aOutlineNumbering(11);
+    Sequence<PropertyValue> aOutlineNumbering(12);
     PropertyValue* pValues = aOutlineNumbering.getArray();
     pValues[0].Name = C2U( "Prefix");
     pValues[0].Value <<= OUString(&pTemp->cPrefix, 1);
@@ -954,6 +961,8 @@ Any OutlineNumbering::getByIndex( sal_Int32 nIndex )
     pValues[9].Value <<= (sal_Int16)HoriOrientation::LEFT;
     pValues[10].Name = C2U("Transliteration");
     pValues[10].Value <<= pTemp->sTransliteration;
+    pValues[11].Name = C2U("NatNum");
+    pValues[11].Value <<= pTemp->nNatNum;
     aRet <<= aOutlineNumbering;
     return aRet;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-11 00:01:31 $
+ *  last change: $Author: khong $ $Date: 2002-07-31 21:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #endif
 #include <localedata.hxx>
+#include <nativenumbersupplier.hxx>
 #include <stdio.h>
 #include <assert.h>
 #include <math.h>
@@ -364,12 +365,25 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
           case TRANSLITERATION:
            try {
-            OUString &tmp = OUString::valueOf( number );
-            OUString transliteration;
-            getPropertyByName(aProperties, "Transliteration", sal_True) >>= transliteration;
-            translit->loadModuleByImplName(transliteration, aLocale);
-            Sequence< long > offset;
-            result += translit->transliterate(tmp, 0, tmp.getLength(), offset);
+             OUString &tmp = OUString::valueOf( number );
+             OUString transliteration;
+             getPropertyByName(aProperties, "Transliteration", sal_True) >>= transliteration;
+             translit->loadModuleByImplName(transliteration, aLocale);
+             Sequence< long > offset;
+             result += translit->transliterate(tmp, 0, tmp.getLength(), offset);
+           } catch (Exception& ) {
+                    assert(0);
+                    throw IllegalArgumentException();
+           }
+               break;
+
+          case NATIVE_NUMBERING:
+           try {
+             OUString &tmp = OUString::valueOf( number );
+            NativeNumberSupplier sNatNum;
+            sal_Int16 nNatNum;
+            getPropertyByName(aProperties, "NatNum", sal_True) >>= nNatNum;
+            result += sNatNum.getNativeNumberString(tmp, aLocale, nNatNum);
            } catch (Exception& ) {
                     assert(0);
                     throw IllegalArgumentException();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-13 01:09:13 $
+ *  last change: $Author: khong $ $Date: 2002-07-31 21:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,8 +797,8 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of)
     }
 
      // hard code number of attributes per style.
-     const int   nAttributes = 4;
-     const char* attr[ nAttributes ] = { "Prefix", "NumType", "Suffix", "Transliteration" };
+     const int   nAttributes = 5;
+     const char* attr[ nAttributes ] = { "Prefix", "NumType", "Suffix", "Transliteration", "NatNum" };
 
      // record each attribute of each style in a static C++ variable.
      // determine number of styles on the fly.
@@ -868,7 +868,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of)
     }
 
      // hardcode number of attributes per level
-     const int   nAttributes = 10;
+     const int   nAttributes = 11;
      const char* attr[ nAttributes ] =
      {
           "Prefix",
@@ -881,6 +881,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of)
           "SymbolTextDistance",
           "FirstLineOffset",
           "Transliteration",
+          "NatNum",
      };
 
      // record each attribute of each level of each style in a static C++ variable.
