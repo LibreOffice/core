@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:16:47 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,11 @@
 #endif
 #ifndef _VOS_REF_HXX
 #include <vos/ref.hxx>
+#endif
+
+// OD 25.06.2003 #108784#
+#ifndef _SVDTYPES_HXX
+#include <svx/svdtypes.hxx>
 #endif
 
 class SvxForbiddenCharactersTable;
@@ -233,6 +238,8 @@ struct SwSortOptions;
 struct SwDefTOXBase_Impl;
 struct SwPrintData;
 struct SwTableEntry;
+// OD 26.06.2003 #108784#
+class SdrPageView;
 
 namespace com { namespace sun { namespace star {
 namespace i18n {
@@ -414,9 +421,17 @@ class SwDoc
     sal_Int8    nLinkCt;            // wieviele kennen das Dokument
     sal_Int8    nLockExpFld;        // Wenn != 0 hat UpdateExpFlds() keine Wirkung
 
-    sal_Int8    nHeaven;            // LayerIds, Heaven == ueber dem Dokument
-    sal_Int8    nHell;              //           Hell   == unter dem Dokument
-    sal_Int8    nControls;          //           Controls == ganz oben
+    SdrLayerID  nHeaven;            // LayerIds, Heaven == ueber dem Dokument
+    SdrLayerID  nHell;              //           Hell   == unter dem Dokument
+    SdrLayerID  nControls;          //           Controls == ganz oben
+    // OD 25.06.2003 #108784# - Layer IDs for invisible 'heaven', 'hell' and 'controls'.
+    // The corresponding layers will be permanently invisible and are corresponding
+    // to the visible ones.
+    // Needed for support of drawing objects in hidden header/footer and drawing
+    // objects in other hidden area, e.g. hidden section.
+    SdrLayerID  nInvisibleHeaven;
+    SdrLayerID  nInvisibleHell;
+    SdrLayerID  nInvisibleControls;
 
     sal_Bool    bGlossDoc       : 1;    //TRUE: ist ein Textbaustein Dokument
     sal_Bool    bModified       : 1;    //TRUE: Dokument ist veraendert
@@ -647,9 +662,68 @@ public:
     // SS fuer das Drawing, Model und LayerId's
     const SdrModel* GetDrawModel() const    { return pDrawModel; }
           SdrModel* GetDrawModel()          { return pDrawModel; }
-    sal_Int8 GetHeavenId() const            { return nHeaven; }
-    sal_Int8 GetHellId() const              { return nHell;   }
-    sal_Int8 GetControlsId() const          { return nControls;   }
+    SdrLayerID GetHeavenId() const           { return nHeaven; }
+    SdrLayerID GetHellId() const             { return nHell;   }
+    SdrLayerID GetControlsId() const         { return nControls;   }
+    // OD 25.06.2003 #108784# - accessor for layer IDs of invisible layers.
+    inline SdrLayerID GetInvisibleHeavenId() const    { return nInvisibleHeaven; }
+    inline SdrLayerID GetInvisibleHellId() const      { return nInvisibleHell; }
+    inline SdrLayerID GetInvisibleControlsId() const  { return nInvisibleControls; }
+
+    /** method to notify drawing page view about the invisible layers
+
+        OD 26.06.2003 #108784#
+
+        @author OD
+    */
+    void NotifyInvisibleLayers( SdrPageView& _rSdrPageView );
+
+    /** method to determine, if a layer ID belongs to the visible ones.
+
+        OD 25.06.2003 #108784#
+        Note: If given layer ID is unknown, method asserts and returns <false>.
+
+        @author OD
+
+        @param _nLayerId
+        input parameter - layer ID, which has to be checked, if it belongs to
+        the visible ones.
+
+        @return bool, indicating, if given layer ID belongs to the visible ones.
+    */
+    bool IsVisibleLayerId( const SdrLayerID& _nLayerId );
+
+    /** method to determine, if the corresponding visible layer ID for a invisible one.
+
+        OD 25.06.2003 #108784#
+        Note: If given layer ID is a visible one, method returns given layer ID.
+        Note: If given layer ID is unknown, method returns given layer ID.
+
+        @author OD
+
+        @param _nInvisibleLayerId
+        input parameter - invisible layer ID for which the corresponding
+        visible one has to be returned.
+
+        @return sal_Int8, visible layer ID corresponding to given layer ID
+    */
+    SdrLayerID GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId );
+
+    /** method to determine, if the corresponding invisible layer ID for a visible one.
+
+        OD 25.06.2003 #108784#
+        Note: If given layer ID is a invisible one, method returns given layer ID.
+        Note: If given layer ID is unknown, method returns given layer ID.
+
+        @author OD
+
+        @param _nVisibleLayerId
+        input parameter - visible layer ID for which the corresponding
+        invisible one has to be returned.
+
+        @return sal_Int8, invisible layer ID corresponding to given layer ID
+    */
+    SdrLayerID GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId );
 
     // liefert zu allen fliegenden Rahmen die Position im Dokument.
     // Wird ein Pam-Pointer uebergeben, muessen die absatzgebundenen
