@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 13:27:00 $
+ *  last change: $Author: tl $ $Date: 2002-12-10 11:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,18 +666,10 @@ void SmSymSetManager::Load()
     for (i = 0;  i < nCount;  ++i)
         ChangeSymbolSet( GetSymbolSet( i ) );
 
-
     if (0 == nCount)
     {
-        SmModule *pp = SM_MOD1();
-        if ( pp->GetConfig()->IsNoSymbolsWarning() )
-        {
-            ErrorBox aErrorBox( NULL, SmResId( RID_READSYMBOLERROR ) );
-            aErrorBox.Execute();
-
-            pImpl->Modified = FALSE;
-            pp->GetConfig()->SetNoSymbolsWarning(FALSE);
-        }
+        DBG_ERROR( "no symbol set found" );
+        pImpl->Modified = FALSE;
     }
 }
 

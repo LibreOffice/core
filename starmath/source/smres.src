@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:24:25 $
+ *  last change: $Author: tl $ $Date: 2002-12-10 11:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4600,63 +4600,6 @@ Menu RID_FONTMENU
             Text[ thai ] = "à¸„à¸‡à¸—à¸µà¹ˆ";
         };
     };
-};
-
-ErrorBox RID_WRITESYMBOLERROR
-{
-    Message = "Die Symboldatei '%FILE%' kann nicht gespeichert werden !" ;
-    Message [ ENGLISH ] = "The symbolfile '%FILE%' can not save!" ;
-    Message [ norwegian ] = "The symbolfile '%FILE%' can not save!" ;
-    Message [ italian ] = "Impossibile salvare il file dei simboli '%FILE%'." ;
-    Message [ portuguese_brazilian ] = "O arquivo s?mbolo '%FILE%' n?o pode gravar!" ;
-    Message [ portuguese ] = "O ficheiro de símbolos '%FILE%' não pode ser guardado!" ;
-    Message [ finnish ] = "Symbolitiedostoa '%FILE%' ei voitu tallentaa." ;
-    Message [ danish ] = "Det er ikke muligt at gemme symbolfilen '%FILE%'!" ;
-    Message [ french ] = "Impossible d'enregistrer le fichier de symboles '%FILE%' !" ;
-    Message [ swedish ] = "Symbolfilen '%FILE%' kan inte sparas !" ;
-    Message [ dutch ] = "Het symbolenbestand '%FILE%' kan niet worden opgeslagen!" ;
-    Message [ spanish ] = "¡No se puede guardar el archivo de símbolos '%FILE%'!" ;
-    Message [ english_us ] = "The symbol file '%FILE%' cannot be saved." ;
-    Message[ chinese_simplified ] = "æ— æ³•å­˜ç›˜å›¾æ ‡æ–‡ä»¶'%FILE%' ï¼";
-    Message[ russian ] = "Íåâîìîæíî ñîõğàíèòü ôàéë ñèìâîëîâ '%FILE%'.";
-    Message[ polish ] = "Pliku symboli '%FILE%' nie mo¿na zapisaæ!";
-    Message[ japanese ] = "'%FILE%' è¨˜å·ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¿å­˜ã§ãã¾ã›ã‚“ã€‚";
-    Message[ chinese_traditional ] = "ç„¡æ³•å„²å­˜æª”æ¡ˆ<%FILE%>ï¼";
-    Message[ arabic ] = "áÇ íãßä ÍİÙ ãáİ ÇáÑãæÒ '%FILE%'!";
-    Message[ greek ] = "Ôï áñ÷åßï óõìâüëùí '%FILE%' äåí åßíáé äõíáôüí íá áğïèçêåõôåß!";
-    Message[ korean ] = "ê¸°í˜¸ íŒŒì¼'%FILE%'ì„(ë¥¼) ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤!";
-    Message[ turkish ] = "Simge dosyası '%FILE%' kaydedilemiyor!";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "No es pot desar el fitxer de símbols '%FILE%'!";
-    Message[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸šà¸±à¸™à¸—à¸¶à¸à¹à¸Ÿà¹‰à¸¡à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œ '%FILE%' à¹„à¸”à¹‰";
-};
-ErrorBox RID_READSYMBOLERROR
-{
-    Message = "Die Symboldatei '%FILE%' kann nicht geladen werden !" ;
-    Message [ ENGLISH ] = "The symbolfile '%FILE%' can not load!" ;
-    Message [ norwegian ] = "The symbolfile '%FILE%' can not load!" ;
-    Message [ italian ] = "Impossibile caricare il file dei simboli '%FILE%'." ;
-    Message [ portuguese_brazilian ] = "O arquivo s?mbolo '%FILE%' n?o pode carregar!" ;
-    Message [ portuguese ] = "O ficheiro de símbolos '%FILE%' não pode ser carregado!" ;
-    Message [ finnish ] = "Symbolitiedostoa '%FILE%' ei voitu ladata." ;
-    Message [ danish ] = "Det er ikke muligt at indlæse symbolfilen '%FILE%'!" ;
-    Message [ french ] = "Impossible de charger le fichier de symboles '%FILE%' !" ;
-    Message [ swedish ] = "Symbolfilen '%FILE%' kan inte laddas !" ;
-    Message [ dutch ] = "Het symbolenbestand '%FILE%' kan niet worden geladen!" ;
-    Message [ spanish ] = "¡No se puede cargar el archivo de símbolos '%FILE%'!" ;
-    Message [ english_us ] = "The symbol file '%FILE%' cannot be loaded." ;
-    Message[ chinese_simplified ] = "æ— æ³•è£…å…¥å›¾æ ‡æ–‡ä»¶'%FILE%' ï¼";
-    Message[ russian ] = "Íåâîçìîæíî çàãğóçèòü ôàéë ñèìâîëîâ '%FILE%'.";
-    Message[ polish ] = "Pliku symboli '%FILE%' nie mo¿na za³adowaæ!";
-    Message[ japanese ] = "'%FILE%' è¨˜å·ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚ã¾ã›ã‚“ã€‚";
-    Message[ chinese_traditional ] = "ç„¡æ³•è¼‰å…¥åœ–ç¤ºæª”æ¡ˆ<%FILE%>ï¼";
-    Message[ arabic ] = "áÇ íãßä ÊÍãíá ãáİ ÇáÑãæÒ '%FILE%'!";
-    Message[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé öüñôùóç ôïõ áñ÷åßïõ óõìâüëùí '%FILE%'!";
-    Message[ korean ] = "ê¸°í˜¸ íŒŒì¼'%FILE%'ì„(ë¥¼) ë¡œë“œí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤!";
-    Message[ turkish ] = "Simge dosyası '%FILE%' yüklenemiyor!";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "No es pot carregar el fitxer de símbols '%FILE%'!";
-    Message[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹‚à¸«à¸¥à¸”à¹à¸Ÿà¹‰à¸¡à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œ '%FILE%' à¹„à¸”à¹‰";
 };
 
 FloatingWindow RID_TOOLBOXWINDOW
