@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-06 20:25:28 $
+ *  last change: $Author: fs $ $Date: 2001-09-13 14:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 //........................................................................
 ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
 {
-    Text                = "Autopilot Adress-Datenquelle" ;
+    Text                = "Autopilot Adressdatenquelle" ;
     Text [ english ]    = "Autopilot Address Book Data Source" ;
     Text [ english_us ] = "Address Data Source AutoPilot" ;
 
@@ -104,7 +104,7 @@ TabPage RID_PAGE_SELECTABTYPE
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
-    Text = "Willkommen zum Adress-Datenquellen AutoPiloten";
+    Text = "Willkommen zum AutoPiloten zur Einrichtung von Adressdatenquellen.";
     Text [ english ] = "Welcome to the Address Data Source AutoPilot";
     Text [ english_us ] = "Welcome to the Address Data Source AutoPilot";
 
@@ -114,9 +114,9 @@ TabPage RID_PAGE_SELECTABTYPE
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 40 ) ;
         WordBreak = TRUE;
 
-        Text = "%PRODUCTNAME bietet Ihnen die Möglichkeit, auf bereits in Ihrem System vorhandene Adress-Daten zuzugreifen.\n"
+        Text = "%PRODUCTNAME bietet Ihnen die Möglichkeit, auf bereits in Ihrem System vorhandene Adressdaten zuzugreifen."
             "Dazu wird eine %PRODUCTNAME Datenquelle angelegt, unter der Ihre Adressbücher als Tabellen zugänglich sind.\n\n"
-            "Dieser Auto-Pilot unterstützt Sie bei der Einrichtung dieser Datenquelle.";
+            "Dieser AutoPilot unterstützt Sie bei der Einrichtung dieser Datenquelle.";
         Text [ english ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\n"
             "For this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\n"
             "This auto pilot will assist you in the creation of this data source.";
@@ -349,9 +349,8 @@ TabPage RID_PAGE_ADMININVOKATION
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 48 ) ;
         WordBreak = TRUE;
 
-        Text = "Um die neue Datenquelle einzurichten, sind noch Weiter gehende Angaben notwendig.\n\n"
-            "Dafür wird, sobald Sie die unten befindliche Schaltfläche betätigen, ein weiterer Dialog geöffnet. "
-            "Nehmen Sie dort bitte die fehlenden Einstellungen vor.";
+        Text = "Zur Einrichtung der neuen Datenquelle sind noch weiter gehende Angaben notwendig.\n\n"
+            "Die folgende Schaltfläche öffnet einen weiteren Dialog, in dem Sie die fehlenden Einstellungen vornehmen können.";
         Text [ english ] = "To set up the new data source, some additional information is needed.\n\n"
             "For this, another dialog will be opened, as soon as you press the button below. "
             "There, please specify all missing settings.";
@@ -1029,6 +1028,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/09/06 20:25:28  kz
+ *  Merge SRC640: 06.09.01 - 22:26:44 (NoBranch)
+ *
  *  Revision 1.13  2001/08/30 12:28:35  fs
  *  #91359# spelling
  *
