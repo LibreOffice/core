@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:12:02 $
+ *  last change: $Author: cmc $ $Date: 2002-08-21 13:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4299,6 +4299,7 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
         //sprmPDxaLeft
         case     17:
         case 0x840F:
+        case 0x845E:
             if( !aLR.GetTxtFirstLineOfst() )
                 aLR.SetTxtFirstLineOfst( 1 );
 
@@ -4317,6 +4318,7 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
         //sprmPDxaLeft1
         case     19:
         case 0x8411:
+        case 0x8460:
             /*
             #94672# #99584#
             As part of an attempt to break my spirit ww 8+ formats can contain
@@ -4349,6 +4351,7 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
         //sprmPDxaRight
         case     16:
         case 0x840E:
+        case 0x845D:
             aLR.SetRight( nPara );
             break;
         default:
@@ -5656,10 +5659,14 @@ SprmReadInfo aSprmReadTab[] = {
     0x4873, &SwWW8ImplReader::Read_Language, //"sprmCRgLid3?" // chp.rglid[0];LID: for non-Far East text (like a duplicate of 486D);word;
     0x4874, (FNReadRecord)0, //undocumented
     0x6463, (FNReadRecord)0, //undocumented
-    0x2461, (FNReadRecord)0, //undoc, must be asian version of "sprmPJc"
-    0x845E, (FNReadRecord)0, //undoc, must be asian version of "sprmPDxaLeft"
-    0x8460, (FNReadRecord)0, //undoc, must be asian version of "sprmPDxaLeft1"
-    0x845D, (FNReadRecord)0, //undoc, must be asian version of "sprmPDxaRight"
+    //undoc, must be asian version of "sprmPJc"
+    0x2461, &SwWW8ImplReader::Read_Justify,
+    //undoc, must be asian version of "sprmPDxaLeft"
+    0x845E, &SwWW8ImplReader::Read_LR,
+    //undoc, must be asian version of "sprmPDxaLeft1"
+    0x8460, &SwWW8ImplReader::Read_LR,
+    //undoc, must be asian version of "sprmPDxaRight"
+    0x845D, &SwWW8ImplReader::Read_LR,
     0x3615, (FNReadRecord)0, //undocumented
     0x360D, (FNReadRecord)0, //undocumented
     0x940E, (FNReadRecord)0, //undocumented
