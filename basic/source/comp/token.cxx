@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:57:17 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,12 +92,14 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { BASE,     "Base" },
     { BINARY,   "Binary" },
     { TBOOLEAN, "Boolean" },
+    { BYREF,    "ByRef", },
     { BYVAL,    "ByVal", },
     { CALL,     "Call" },
     { CASE,     "Case" },
     { _CDECL_,  "Cdecl" },
     { CLOSE,    "Close" },
     { COMPARE,  "Compare" },
+    { COMPATIBLE,"Compatible" },
     { _CONST_,  "Const" },
     { TCURRENCY,"Currency" },
     { TDATE,    "Date" },
@@ -545,7 +547,7 @@ SbiToken SbiTokenizer::Next()
         } while( delta );
         // Symbol? Wenn nicht >= Token
         sal_Unicode ch = aSym.GetBuffer()[0];
-        if( !BasicSimpleCharClass::isAlpha( ch ) && !bSymbol )
+        if( !BasicSimpleCharClass::isAlpha( ch, bCompatible ) && !bSymbol )
             return eCurTok = (SbiToken) (ch & 0x00FF);
         return eCurTok = SYMBOL;
     }
