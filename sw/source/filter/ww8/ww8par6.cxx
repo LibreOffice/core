@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-11 15:14:59 $
+ *  last change: $Author: cmc $ $Date: 2002-01-14 10:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3722,10 +3722,11 @@ void SwWW8ImplReader::Read_Language( USHORT nId, const BYTE* pData, short nLen )
     switch( nId )
     {
         case 97:
-        case 0x486d:
+        case 0x486D:
+        case 0x4873: //Methinks, uncertain
             nId = RES_CHRATR_LANGUAGE;
             break;
-        case 0x486e:
+        case 0x486E:
             nId = RES_CHRATR_CJK_LANGUAGE;
             break;
         default:
@@ -5297,7 +5298,7 @@ SprmReadInfo aSprmReadTab[] = {
     0xC650, (FNReadRecord)0, //undocumented
     0xC651, (FNReadRecord)0, //undocumented
     0xF661, (FNReadRecord)0, //undocumented
-    0x4873, (FNReadRecord)0, //undocumented
+    0x4873, &SwWW8ImplReader::Read_Language, //"sprmCRgLid3?" // chp.rglid[0];LID: for non-Far East text (like a duplicate of 486D);word;
     0x4874, (FNReadRecord)0, //undocumented
     0x6463, (FNReadRecord)0, //undocumented
     0x6870, (FNReadRecord)0, //undocumented

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-11 17:03:43 $
+ *  last change: $Author: cmc $ $Date: 2002-01-14 10:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -908,21 +908,35 @@ static Writer& OutWW8_SwLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     USHORT nId = 0;
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
     if( rWrtWW8.bWrtWW8 )
+    {
         switch( rHt.Which() )
         {
-        case RES_CHRATR_LANGUAGE:       nId = 0x486D; break;
-        case RES_CHRATR_CJK_LANGUAGE:   nId = 0x486E; break;
+            case RES_CHRATR_LANGUAGE:
+                nId = 0x486D;
+                break;
+            case RES_CHRATR_CJK_LANGUAGE:
+                nId = 0x486E;
+                break;
         }
+    }
     else
         nId = 97;
 
-    if( nId )
+    if (nId)
     {
-        if( rWrtWW8.bWrtWW8 )
-            rWrtWW8.InsUInt16( nId );   // use sprmCRgLid0 rather than sprmCLid
+        if( rWrtWW8.bWrtWW8 ) // use sprmCRgLid0 rather than sprmCLid
+            rWrtWW8.InsUInt16( nId );
         else
             rWrtWW8.pO->Insert( (BYTE)nId, rWrtWW8.pO->Count() );
         rWrtWW8.InsUInt16( ((const SvxLanguageItem&)rHt).GetLanguage() );
+
+        //unknown as to why, but this seems to shadow the other paramater in
+        //word 2000 and without it spellchecking doesn't work
+        if (nId == 0x486D)
+        {
+            rWrtWW8.InsUInt16(0x4873);
+            rWrtWW8.InsUInt16( ((const SvxLanguageItem&)rHt).GetLanguage() );
+        }
     }
     return rWrt;
 }
