@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mtg $ $Date: 2001-01-17 13:42:26 $
+ *  last change: $Author: kz $ $Date: 2001-01-23 13:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,8 +353,11 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
 
             ManifestEntry *pMan = new ManifestEntry;
             pMan->sShortName = (*aCI).first;
-
+#if SUPD>617
+            uno::Any aAny = pStream->getPropertyValue(OUString::createFromAscii("Compressed"));
+#else
             uno::Any aAny = pStream->getPropertyValue(OUString::createFromAscii("Compress"));
+#endif
             sal_Bool bToBeCompressed;
             aAny >>= bToBeCompressed;
 
