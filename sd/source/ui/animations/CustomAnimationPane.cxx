@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:32:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,13 @@
 #include "undoanim.hxx"
 #endif
 
+#ifndef _SD_OPTSITEM_HXX
+#include "optsitem.hxx"
+#endif
+#ifndef _SDDLL_HXX
+#include "sddll.hxx"
+#endif
+
 #include "EventMultiplexer.hxx"
 
 #include "glob.hrc"
@@ -334,6 +341,7 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     mpPBMoveDown->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
     mpPBPlay->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
     mpPBSlideShow->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
+    mpCBAutoPreview->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
 
     maStrModify = mpFLEffect->GetText();
 
@@ -972,6 +980,8 @@ void CustomAnimationPane::updateControls()
     mpPBMoveUp->Enable(bEnableUp);
     mpPBMoveDown->Enable(bEnableDown);
 
+    SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+    mpCBAutoPreview->Check( pOptions->IsPreviewChangedEffects() == sal_True );
 }
 
 void CustomAnimationPane::onSelectionChanged()
@@ -2015,6 +2025,11 @@ IMPL_LINK( CustomAnimationPane, implControlHdl, Control*, pControl )
     else if( pControl == mpPBSlideShow )
     {
         mrBase.StartPresentation();
+    }
+    else if( pControl == mpCBAutoPreview )
+    {
+        SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+        pOptions->SetPreviewChangedEffects( mpCBAutoPreview->IsChecked() ? sal_True : sal_False );
     }
 
     updateControls();
