@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.168 $
+ *  $Revision: 1.169 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:45:00 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,6 +657,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     mbFullScreen                = false;
     mbMoved                     = false;
     mbSized                     = false;
+    mbWasGraphicsPaint          = false;
 
     mnIconID                    = 0; // ICON_DEFAULT
 
@@ -2184,7 +2185,18 @@ bool X11SalFrame::SetPluginParent( SystemParentData* pNewParent )
 // Sound
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::Beep( SoundType eSoundType ) // not fully suported
-{ GetDisplay()->Beep(); }
+{
+    switch( eSoundType )
+    {
+        case SOUND_DEFAULT:
+        case SOUND_ERROR:
+            GetDisplay()->Beep();
+            break;
+        default:
+            // Excessive beeping averted
+            break;
+    }
+}
 
 // Event Handling
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -2874,6 +2886,41 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+extern "C"
+{
+    static Bool GraphicsExposePredicate( Display* pDisplay, XEvent* pEvent, XPointer pSFrame )
+    {
+        Bool bRet = False;
+        X11SalFrame* pFrame = (X11SalFrame*)pSFrame;
+        if( (pEvent->type == GraphicsExpose || pEvent->type == NoExpose) &&
+            pEvent->xnoexpose.drawable == pFrame->GetWindow() )
+        {
+            bRet = True;
+        }
+        return bRet;
+    }
+}
+
+void X11SalFrame::YieldGraphicsExpose()
+{
+    XEvent aEvent;
+    do
+    {
+        while( XCheckTypedWindowEvent( GetXDisplay(), GetWindow(), Expose, &aEvent ) )
+            HandleExposeEvent( &aEvent );
+
+        XIfEvent( GetXDisplay(), &aEvent, GraphicsExposePredicate, (XPointer)this );
+        if( aEvent.type == NoExpose )
+            return;
+
+        HandleExposeEvent( &aEvent );
+    } while( aEvent.xgraphicsexpose.count != 0 );
+}
+
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
 {
     XRectangle  aRect;
@@ -2894,6 +2941,7 @@ long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
         aRect.width     = pEvent->xgraphicsexpose.width;
         aRect.height    = pEvent->xgraphicsexpose.height;
         nCount          = pEvent->xgraphicsexpose.count;
+        mbWasGraphicsPaint = true;
     }
 
     if( IsOverrideRedirect() && mbFullScreen &&
@@ -2905,7 +2953,9 @@ long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
     // width and height are extents, so they are of by one for rectangle
     maPaintRegion.Union( Rectangle( Point(aRect.x, aRect.y), Size(aRect.width+1, aRect.height+1) ) );
 
-    if( nCount || maResizeTimer.IsActive() ) // wait for last expose rectangle
+    if( nCount || (maResizeTimer.IsActive() && ! mbWasGraphicsPaint) )
+        // wait for last expose rectangle, do not wait for resize timer
+        // if a completed graphics expose sequence is available
         return 1;
 
     SalPaintEvent aPEvt;
@@ -2920,6 +2970,7 @@ long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
         aPEvt.mnBoundX = nWidth_-aPEvt.mnBoundWidth-aPEvt.mnBoundX;
 
      CallCallback( SALEVENT_PAINT, &aPEvt );
+    mbWasGraphicsPaint = false;
     maPaintRegion = Rectangle();
 
     return 1;
@@ -3089,6 +3140,7 @@ IMPL_LINK( X11SalFrame, HandleResizeTimer, void*, pDummy )
         aPEvt.mnBoundX = nWidth_-aPEvt.mnBoundWidth-aPEvt.mnBoundX;
 
     CallCallback( SALEVENT_PAINT, &aPEvt );
+    mbWasGraphicsPaint = false;
     maPaintRegion = Rectangle();
 
     return 0;
