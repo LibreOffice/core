@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cl $ $Date: 2001-07-24 12:16:55 $
+#   last change: $Author: rt $ $Date: 2004-11-26 19:48:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,12 @@ TARGET=filter
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
+
+# --- Common ----------------------------------------------------------
+
+.IF "$(dbg_anim_log)"!="" || "$(DBG_ANIM_LOG)"!=""
+CDEFS+= -DDBG_ANIM_LOG
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
