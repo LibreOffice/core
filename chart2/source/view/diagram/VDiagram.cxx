@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDiagram.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-10 18:05:04 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 10:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,41 +394,6 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
             }
         }
     }
-
-    //---------------------------
-    {//only test
-
-        //only test: create grey borders as replacement for axes
-        /*
-        uno::Reference< drawing::XShapes > xTarget( m_xCoordinateRegionShape, uno::UNO_QUERY );
-        m_pShapeFactory->createCube(xTarget,
-            DataPointGeometry( drawing::Position3D(FIXED_SIZE_FOR_3D_CHART_VOLUME/2,0,FIXED_SIZE_FOR_3D_CHART_VOLUME-50)
-                              ,drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,100,100) )
-            , ShapeAppearance( Color(COL_LIGHTGRAY).GetColor() ) );
-        m_pShapeFactory->createCube(xTarget,
-            DataPointGeometry( drawing::Position3D(50,0,FIXED_SIZE_FOR_3D_CHART_VOLUME/2)
-                              ,drawing::Direction3D(100,100,FIXED_SIZE_FOR_3D_CHART_VOLUME) )
-            , ShapeAppearance( Color(COL_LIGHTGRAY).GetColor() ) );
-        m_pShapeFactory->createCube(xTarget,
-            DataPointGeometry( drawing::Position3D(50,0,FIXED_SIZE_FOR_3D_CHART_VOLUME-50)
-                              ,drawing::Direction3D(100,FIXED_SIZE_FOR_3D_CHART_VOLUME,100) )
-            , ShapeAppearance( Color(COL_LIGHTGRAY).GetColor() ) );
-        m_pShapeFactory->createCube(xTarget,
-            DataPointGeometry( drawing::Position3D(50,0,50)
-                              ,drawing::Direction3D(100,FIXED_SIZE_FOR_3D_CHART_VOLUME,100) )
-            , ShapeAppearance( Color(COL_LIGHTGRAY).GetColor() ) );
-
-        m_pShapeFactory->createCube(xTarget,
-            DataPointGeometry( drawing::Position3D(FIXED_SIZE_FOR_3D_CHART_VOLUME-50,0,FIXED_SIZE_FOR_3D_CHART_VOLUME-50)
-                              ,drawing::Direction3D(100,FIXED_SIZE_FOR_3D_CHART_VOLUME,100) )
-            , ShapeAppearance( Color(COL_LIGHTGRAY).GetColor() ) );
-        m_pShapeFactory->createCube(xTarget,
-            DataPointGeometry( drawing::Position3D(FIXED_SIZE_FOR_3D_CHART_VOLUME-50,0,50)
-                              ,drawing::Direction3D(100,FIXED_SIZE_FOR_3D_CHART_VOLUME,100) )
-            , ShapeAppearance( Color(COL_LIGHTGRAY).GetColor() ) );
-        */
-    }
-
 }
 
 uno::Reference< drawing::XShapes > VDiagram::getCoordinateRegion()
