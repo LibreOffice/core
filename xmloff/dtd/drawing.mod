@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.73 2002-01-17 13:57:01 mib Exp $
+	$Id: drawing.mod,v 1.74 2002-01-17 14:11:54 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -643,13 +643,15 @@
 <!ATTLIST draw:contour-polygon svg:width %coordinate; #REQUIRED>
 <!ATTLIST draw:contour-polygon svg:height %coordinate; #REQUIRED>
 <!ATTLIST draw:contour-polygon %draw-viewbox;>
-<!ATTLIST draw:contour-polygon svg:points %points; #REQUIRED>
+<!ATTLIST draw:contour-polygon draw:points %points; #REQUIRED>
+<!ATTLIST draw:contour-polygon draw:recreate-on-edit %boolean; #IMPLIED>
 
 <!ELEMENT draw:contour-path EMPTY>
 <!ATTLIST draw:contour-path svg:width %coordinate; #REQUIRED>
 <!ATTLIST draw:contour-path svg:height %coordinate; #REQUIRED>
 <!ATTLIST draw:contour-path %draw-viewbox;>
 <!ATTLIST draw:contour-path svg:d %pathData; #REQUIRED>
+<!ATTLIST draw:contour-path draw:recreate-on-edit %boolean; #IMPLIED>
 
 <!-- hyperlink -->
 <!ELEMENT draw:a (draw:image|draw:text-box)>
