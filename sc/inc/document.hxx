@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-30 11:21:43 $
+ *  last change: $Author: sab $ $Date: 2001-07-31 15:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1351,6 +1351,7 @@ public:
                         { return bChartListenerCollectionNeedsUpdate; }
     void            SetChartListenerCollectionNeedsUpdate( BOOL bFlg )
                         { bChartListenerCollectionNeedsUpdate = bFlg; }
+    void            AddOLEObjectToCollection(const String& rName);
 
     ScChangeViewSettings* GetChangeViewSettings() const     { return pChangeViewSettings; }
     void                SetChangeViewSettings(const ScChangeViewSettings& rNew);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-22 19:59:53 $
+ *  last change: $Author: sab $ $Date: 2001-07-31 15:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,7 +591,12 @@ void ScDocument::UpdateChartListenerCollection()
     }
 }
 
-
+void ScDocument::AddOLEObjectToCollection(const String& rName)
+{
+    if (!pOtherObjects)
+        pOtherObjects = new StrCollection;
+    pOtherObjects->Insert( new StrData( rName ) );
+}
 
 
 
