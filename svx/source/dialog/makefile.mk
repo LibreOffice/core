@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
+#   last change: $Author: thb $ $Date: 2001-06-21 15:47:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,6 +146,7 @@ CXXFILES = \
         imapdlg.cxx \
         imapwnd.cxx \
         impgrf.cxx \
+        opengrf.cxx \
         labdlg.cxx \
         langbox.cxx \
         langtab.cxx \
@@ -300,6 +301,7 @@ SLOFILES=\
         $(SLO)$/hdft.obj     \
     $(SLO)$/hyphen.obj   \
         $(SLO)$/impgrf.obj   \
+        $(SLO)$/opengrf.obj   \
         $(SLO)$/labdlg.obj \
         $(SLO)$/langtab.obj \
         $(SLO)$/langbox.obj \
@@ -354,8 +356,9 @@ EXCEPTIONSFILES=\
         $(SLO)$/hltpbase.obj	\
         $(SLO)$/hldocntp.obj	\
         $(SLO)$/hlmarkwn.obj	\
+        $(SLO)$/opengrf.obj		\
         $(SLO)$/hyphen.obj		\
-        $(SLO)$/rubydialog.obj \
+        $(SLO)$/rubydialog.obj 	\
         $(SLO)$/thesdlg.obj		\
         $(SLO)$/spldlg.obj		\
         $(SLO)$/numpages.obj	\

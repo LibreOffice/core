@@ -142,6 +142,7 @@ hedabu: ..\inc\hyznitem.hxx %_DEST%\inc%_EXT%\svx\hyznitem.hxx
 hedabu: ..\inc\ifaceids.hxx %_DEST%\inc%_EXT%\svx\ifaceids.hxx
 hedabu: ..\inc\imapdlg.hxx %_DEST%\inc%_EXT%\svx\imapdlg.hxx
 hedabu: ..\inc\impgrf.hxx %_DEST%\inc%_EXT%\svx\impgrf.hxx
+hedabu: ..\inc\opengrf.hxx %_DEST%\inc%_EXT%\svx\opengrf.hxx
 hedabu: ..\inc\insctrl.hxx %_DEST%\inc%_EXT%\svx\insctrl.hxx
 hedabu: ..\inc\itemdata.hxx %_DEST%\inc%_EXT%\svx\itemdata.hxx
 hedabu: ..\inc\itemwin.hxx %_DEST%\inc%_EXT%\svx\itemwin.hxx
