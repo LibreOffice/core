@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:14:09 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 11:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #include <svx/svxgrahicitem.hxx> //CHINA001
 #ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
+#endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
 #endif
 
 #ifndef _EEITEMID_HXX //autogen
@@ -184,6 +187,11 @@ SdTabTemplateDlg::SdTabTemplateDlg( Window* pParent,
                     SvxParaAlignTabPage::GetRanges );
     AddTabPage( RID_SVXPAGE_TABULATOR, SvxTabulatorTabPage::Create,
                     SvxTabulatorTabPage::GetRanges );
+    SvtCJKOptions aCJKOptions;
+    if( aCJKOptions.IsAsianTypographyEnabled() )
+        AddTabPage( RID_SVXPAGE_PARA_ASIAN, SvxAsianTabPage::Create,0);
+    else
+        RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
 
     nDlgType = 1;
     nPageType = 0;
