@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undosqledit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-10 07:08:20 $
+ *  last change: $Author: oj $ $Date: 2001-01-11 07:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,3 +91,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_UNDOSQLEDIT_HXX
+
+
