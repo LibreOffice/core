@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opaqitem.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:57 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 16:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const International * = 0 ) const;
 
-    virtual BOOL             importXML( const NAMESPACE_RTL(OUString)& rValue, USHORT nMemberId, const SvXMLUnitConverter& rUnitConverter );
-    virtual BOOL             exportXML( NAMESPACE_RTL(OUString)& rValue, USHORT nMemberId, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual BOOL             importXML( const ::rtl::OUString& rValue, USHORT nMemberId, const SvXMLUnitConverter& rUnitConverter );
+    virtual BOOL             exportXML( ::rtl::OUString& rValue, USHORT nMemberId, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
 inline SvxOpaqueItem::SvxOpaqueItem( const USHORT nId, const BOOL bOpa )
