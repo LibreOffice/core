@@ -2,9 +2,9 @@
  *
  *  $RCSfile: supservs.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: fs $ $Date: 2000-11-07 17:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,11 @@ class SvNumberFormatsSupplierServiceObject
 
 protected:
     SvNumberFormatter*  m_pOwnFormatter;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                        m_xORB;
 
 public:
-    SvNumberFormatsSupplierServiceObject();
+    SvNumberFormatsSupplierServiceObject(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
     ~SvNumberFormatsSupplierServiceObject();
 
     // XInterface

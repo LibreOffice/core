@@ -2,9 +2,9 @@
  *
  *  $RCSfile: supservs.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: fs $ $Date: 2000-11-07 17:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,14 +99,15 @@ using namespace ::vos;
 #define PERSISTENT_SERVICE_NAME     ::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatsSupplier");
 
 //-------------------------------------------------------------------------
-Reference< XInterface > SAL_CALL SvNumberFormatsSupplierServiceObject_CreateInstance(const Reference< XMultiServiceFactory >& /* _rxFactory */)
+Reference< XInterface > SAL_CALL SvNumberFormatsSupplierServiceObject_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
 {
-    return static_cast< ::cppu::OWeakObject* >(new SvNumberFormatsSupplierServiceObject);
+    return static_cast< ::cppu::OWeakObject* >(new SvNumberFormatsSupplierServiceObject(_rxFactory));
 }
 
 //-------------------------------------------------------------------------
-SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject()
+SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
     :m_pOwnFormatter(NULL)
+    ,m_xORB(_rxORB)
 {
 }
 
@@ -173,7 +174,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
 #endif
     }
 
-    m_pOwnFormatter = new SvNumberFormatter(eNewFormatterLanguage);
+    m_pOwnFormatter = new SvNumberFormatter(m_xORB, eNewFormatterLanguage);
     SetNumberFormatter(m_pOwnFormatter);
 }
 
@@ -257,7 +258,7 @@ void SvNumberFormatsSupplierServiceObject::implEnsureFormatter()
     {
         DBG_ERROR("SvNumberFormatsSupplierServiceObject::implEnsureFormatter : forced to initialize with a default language !");
             // you should use XMultiServiceFactory::createInstanceWithArguments (with an Locale as parameter)
-        m_pOwnFormatter = new SvNumberFormatter(LANGUAGE_ENGLISH_US);
+        m_pOwnFormatter = new SvNumberFormatter(m_xORB, LANGUAGE_ENGLISH_US);
         SetNumberFormatter(m_pOwnFormatter);
     }
 }
