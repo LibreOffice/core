@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-25 12:10:48 $
+ *  last change: $Author: cd $ $Date: 2001-07-27 11:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,20 @@
 using namespace vos;
 using namespace rtl;
 using namespace desktop;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::frame;
+
 
 #define TERMINATION_SEQUENCE "InternalIPC::TerminateThread"
 #define TERMINATION_LENGTH 28
 
-OfficeIPCThread* OfficeIPCThread::pGlobalOfficeIPCThread = 0;
-OSecurity OfficeIPCThread::maSecurity;
+namespace desktop
+{
+
+OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
+OSecurity           OfficeIPCThread::maSecurity;
+::osl::Mutex*       OfficeIPCThread::pOfficeIPCThreadMutex = 0;
 
 
 class ImplForeignAppEventClass
@@ -94,6 +102,7 @@ public:
 void HandleAppEvent( const ApplicationEvent& rAppEvent );
 IMPL_STATIC_LINK( ImplForeignAppEventClass, CallEvent, void*, pEvent )
 {
+    // Application events are processed by the Desktop::HandleAppEvent implementation.
     Desktop::HandleAppEvent( *((ApplicationEvent*)pEvent) );
     delete (ApplicationEvent*)pEvent;
     return 0;
@@ -111,8 +120,120 @@ OSignalHandler::TSignalAction SAL_CALL SalMainPipeExchangeSignalHandler::signal(
     return (TAction_CallNextHandler);
 }
 
+// ----------------------------------------------------------------------------
+
+// The OfficeIPCThreadController implementation is a bookkeeper for all pending requests
+// that were created by the OfficeIPCThread. The requests are waiting to be processed by
+// our framework loadComponentFromURL function (e.g. open/print request).
+// During shutdown the framework is asking OfficeIPCThreadController about pending requests.
+// If there are pending requests framework has to stop the shutdown process. It is waiting
+// for these requests because framework is not able to handle shutdown and open a document
+// concurrently.
+
+
+// XServiceInfo
+OUString SAL_CALL OfficeIPCThreadController::getImplementationName()
+throw ( RuntimeException )
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.OfficeIPCThreadController" ));
+}
+
+sal_Bool SAL_CALL OfficeIPCThreadController::supportsService( const OUString& ServiceName )
+throw ( RuntimeException )
+{
+    return sal_False;
+}
+
+Sequence< OUString > SAL_CALL OfficeIPCThreadController::getSupportedServiceNames()
+throw ( RuntimeException )
+{
+    Sequence< OUString > aSeq( 0 );
+    return aSeq;
+}
+
+// XEventListener
+void SAL_CALL OfficeIPCThreadController::disposing( const EventObject& Source )
+throw( RuntimeException )
+{
+}
+
+// XTerminateListener
+void SAL_CALL OfficeIPCThreadController::queryTermination( const EventObject& aEvent )
+throw( TerminationVetoException, RuntimeException )
+{
+    // Desktop ask about pending request through our office ipc pipe. We have to
+    // be sure that no pending request is waiting because framework is not able to
+    // handle shutdown and open a document concurrently.
+
+    if ( OfficeIPCThread::AreRequestsPending() )
+        throw TerminationVetoException();
+    else
+        OfficeIPCThread::BlockAllRequests();
+}
+
+void SAL_CALL OfficeIPCThreadController::notifyTermination( const EventObject& aEvent )
+throw( RuntimeException )
+{
+}
+
+// ----------------------------------------------------------------------------
+
+::osl::Mutex&   OfficeIPCThread::GetMutex()
+{
+    // Get or create our mutex for thread-saftey
+    if ( !pOfficeIPCThreadMutex )
+    {
+        ::osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
+        if ( !pOfficeIPCThreadMutex )
+            pOfficeIPCThreadMutex = new osl::Mutex;
+    }
+
+    return *pOfficeIPCThreadMutex;
+}
+
+OfficeIPCThread* OfficeIPCThread::GetOfficeIPCThread()
+{
+    // Return the one and only OfficeIPCThread pointer
+    ::osl::MutexGuard   aGuard( GetMutex() );
+    return pGlobalOfficeIPCThread;
+}
+
+void OfficeIPCThread::BlockAllRequests()
+{
+    // We have the order to block all incoming requests. Framework
+    // wants to shutdown and we have to make sure that no loading/printing
+    // requests are executed anymore.
+    ::osl::MutexGuard   aGuard( GetMutex() );
+
+    if ( pGlobalOfficeIPCThread )
+        pGlobalOfficeIPCThread->mbBlockRequests = sal_True;
+}
+
+sal_Bool OfficeIPCThread::AreRequestsPending()
+{
+    // Give info about pending requests
+    ::osl::MutexGuard   aGuard( GetMutex() );
+    if ( pGlobalOfficeIPCThread )
+        return ( pGlobalOfficeIPCThread->mnPendingRequests > 0 );
+    else
+        return sal_False;
+}
+
+void OfficeIPCThread::RequestsCompleted( int nCount )
+{
+    // Remove nCount pending requests from our internal counter
+    ::osl::MutexGuard   aGuard( GetMutex() );
+    if ( pGlobalOfficeIPCThread )
+    {
+        if ( pGlobalOfficeIPCThread->mnPendingRequests > 0 )
+            pGlobalOfficeIPCThread->mnPendingRequests -= nCount;
+    }
+}
+
 BOOL OfficeIPCThread::EnableOfficeIPCThread()
 {
+    ::osl::MutexGuard   aGuard( GetMutex() );
+
     if( pGlobalOfficeIPCThread )
         return TRUE;
 
@@ -126,6 +247,8 @@ BOOL OfficeIPCThread::EnableOfficeIPCThread()
 
     pThread->maPipeIdent = OUString( RTL_CONSTASCII_USTRINGPARAM( "SingleOfficeIPC_" ) );
 
+    // The name of the named pipe is created with the hashcode of the user installation directory (without /user). We have to retrieve
+    // this information from a unotools implementation.
     ::utl::BootstrapRetVal aLocateResult = ::utl::bootstrap_locateUserInstallationPath( aOfficeInstallPath, aUserInstallPath, aLastIniFile );
     if ( aLocateResult == ::utl::BOOTSTRAP_OK )
     {
@@ -173,6 +296,8 @@ BOOL OfficeIPCThread::EnableOfficeIPCThread()
 
 void OfficeIPCThread::DisableOfficeIPCThread()
 {
+    ::osl::ClearableMutexGuard  aGuard( GetMutex() );
+
     if( pGlobalOfficeIPCThread )
     {
         // send thread a termination message
@@ -183,14 +308,18 @@ void OfficeIPCThread::DisableOfficeIPCThread()
         Pipe.close();
         // close the pipe so that the streampipe on the other
         // side produces EOF
+        aGuard.clear();
 
         // exit gracefully
         pGlobalOfficeIPCThread->join();
         delete pGlobalOfficeIPCThread;
+        pGlobalOfficeIPCThread = 0;
     }
 }
 
-OfficeIPCThread::OfficeIPCThread()
+OfficeIPCThread::OfficeIPCThread() :
+    mbBlockRequests( sal_False ),
+    mnPendingRequests( 0 )
 {
 }
 
@@ -207,77 +336,92 @@ void SAL_CALL OfficeIPCThread::run()
     {
         OPipe::TPipeError
             nError = maPipe.accept( maStreamPipe );
-        if( nError == OStreamPipe::E_None )
+
         {
-            ByteString aArguments;
-            char pBuf[ 2049 ];
-            int nBytes;
-            do
+            osl::MutexGuard aMutexGuard( GetMutex() );
+
+            if( nError == OStreamPipe::E_None )
             {
-                nBytes = maStreamPipe.read( pBuf, 2048 );
-                pBuf[ nBytes ] = 0;
-                aArguments += pBuf;
-            } while( ! maStreamPipe.isEof() || nBytes > 0 );
-            maStreamPipe.close();
+                ByteString aArguments;
+                char pBuf[ 2049 ];
+                int nBytes;
+                do
+                {
+                    nBytes = maStreamPipe.read( pBuf, 2048 );
+                    pBuf[ nBytes ] = 0;
+                    aArguments += pBuf;
+                } while( ! maStreamPipe.isEof() || nBytes > 0 );
+                maStreamPipe.close();
 
-            // is this a termination message ? if so, terminate
-            if( aArguments.CompareTo( TERMINATION_SEQUENCE,
-                                      TERMINATION_LENGTH ) == COMPARE_EQUAL )
-                return;
+                // is this a termination message ? if so, terminate
+                if(( aArguments.CompareTo( TERMINATION_SEQUENCE,
+                                          TERMINATION_LENGTH ) == COMPARE_EQUAL ) ||
+                    mbBlockRequests )
+                    return;
 
-            ::rtl::OUString aOpenList;
-            ::rtl::OUString aPrintList;
-            String          aEmpty;
-            CommandLineArgs aCmdLineArgs( OUString( aArguments.GetBuffer(), aArguments.Len(), gsl_getSystemTextEncoding() ));
+                ::rtl::OUString aOpenList;
+                ::rtl::OUString aPrintList;
+                String          aEmpty;
+                CommandLineArgs aCmdLineArgs( OUString( aArguments.GetBuffer(), aArguments.Len(), gsl_getSystemTextEncoding() ));
 
-            if ( aCmdLineArgs.IsQuickstart() )
-            {
-                // we have to use application event, because we have to start quickstart service in main thread!!
-                ApplicationEvent* pAppEvent =
-                    new ApplicationEvent( aEmpty, aEmpty,
-                                          "QUICKSTART", aEmpty );
-                ImplPostForeignAppEvent( pAppEvent );
+                if ( aCmdLineArgs.IsQuickstart() )
+                {
+                    // we have to use application event, because we have to start quickstart service in main thread!!
+                    ApplicationEvent* pAppEvent =
+                        new ApplicationEvent( aEmpty, aEmpty,
+                                              "QUICKSTART", aEmpty );
+                    ImplPostForeignAppEvent( pAppEvent );
+                }
+
+                aCmdLineArgs.GetOpenList( aOpenList );
+                aCmdLineArgs.GetPrintList( aPrintList );
+
+                if( aOpenList.getLength() )
+                {
+                    // open file(s)
+
+                    ApplicationEvent* pAppEvent =
+                        new ApplicationEvent( aEmpty, aEmpty,
+                                              APPEVENT_OPEN_STRING, aOpenList );
+                    ImplPostForeignAppEvent( pAppEvent );
+
+                    // We are sending a open request to the office. We have to increase our pending request counter!
+                    ++mnPendingRequests;
+                }
+
+                if ( aPrintList.getLength() )
+                {
+                    // print file(s)
+                    ApplicationEvent* pAppEvent =
+                        new ApplicationEvent( aEmpty, aEmpty,
+                                              APPEVENT_PRINT_STRING, aPrintList );
+                    ImplPostForeignAppEvent( pAppEvent );
+
+                    // We are sending a print request to the office. We have to increase our pending request counter!
+                    ++mnPendingRequests;
+                }
+
+                if ( aPrintList.getLength() == 0 && aOpenList.getLength() == 0 )
+                {
+                    // no document was send, just bring Office to front
+                    ApplicationEvent* pAppEvent =
+                        new ApplicationEvent( aEmpty, aEmpty,
+                                              "APPEAR", aEmpty );
+                    ImplPostForeignAppEvent( pAppEvent );
+                }
             }
-
-            aCmdLineArgs.GetOpenList( aOpenList );
-            aCmdLineArgs.GetPrintList( aPrintList );
-
-            if( aOpenList.getLength() )
+            else
             {
-                // open file(s)
-                ApplicationEvent* pAppEvent =
-                    new ApplicationEvent( aEmpty, aEmpty,
-                                          APPEVENT_OPEN_STRING, aOpenList );
-                ImplPostForeignAppEvent( pAppEvent );
-            }
-
-            if ( aPrintList.getLength() )
-            {
-                // print file(s)
-                ApplicationEvent* pAppEvent =
-                    new ApplicationEvent( aEmpty, aEmpty,
-                                          APPEVENT_PRINT_STRING, aPrintList );
-                ImplPostForeignAppEvent( pAppEvent );
-            }
-
-            if ( aPrintList.getLength() == 0 && aOpenList.getLength() == 0 )
-            {
-                // no document was send, just bring Office to front
-                ApplicationEvent* pAppEvent =
-                    new ApplicationEvent( aEmpty, aEmpty,
-                                          "APPEAR", aEmpty );
-                ImplPostForeignAppEvent( pAppEvent );
-            }
-        }
-        else
-        {
 #if defined DEBUG || defined DBG_UTIL
-            fprintf( stderr, "Error on accept: %d\n", (int)nError );
+                fprintf( stderr, "Error on accept: %d\n", (int)nError );
 #endif
-            TimeValue tval;
-            tval.Seconds = 1;
-            tval.Nanosec = 0;
-            sleep( tval );
+                TimeValue tval;
+                tval.Seconds = 1;
+                tval.Nanosec = 0;
+                sleep( tval );
+            }
         }
     }
+}
+
 }

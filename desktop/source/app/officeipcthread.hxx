@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
+ *  last change: $Author: cd $ $Date: 2001-07-27 11:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,13 @@
 #ifndef _DESKTOP_OFFICEIPCTHREAD_HXX_
 #define _DESKTOP_OFFICEIPCTHREAD_HXX_
 
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
+#include <com/sun/star/frame/XTerminateListener.hpp>
+#endif
+
 #ifndef _VOS_PIPE_HXX_
 #include <vos/pipe.hxx>
 #endif
@@ -77,6 +84,12 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
+#ifndef _CPPUHELPER_WEAKBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+
+namespace desktop
+{
 
 class SalMainPipeExchangeSignalHandler : public vos::OSignalHandler
 {
@@ -87,11 +100,16 @@ class OfficeIPCThread : public vos::OThread
 {
   private:
     static OfficeIPCThread*     pGlobalOfficeIPCThread;
+    static ::osl::Mutex*        pOfficeIPCThreadMutex;
 
     vos::OPipe                  maPipe;
     vos::OStreamPipe            maStreamPipe;
     static vos::OSecurity       maSecurity;
     rtl::OUString               maPipeIdent;
+    sal_Bool                    mbBlockRequests;
+    int                         mnPendingRequests;
+
+    static ::osl::Mutex&        GetMutex();
 
     OfficeIPCThread();
 
@@ -102,9 +120,45 @@ class OfficeIPCThread : public vos::OThread
   public:
     virtual ~OfficeIPCThread();
 
+    // controlling pipe communication during shutdown
+    static OfficeIPCThread*     GetOfficeIPCThread();
+    static void                 BlockAllRequests();
+    static sal_Bool             AreRequestsPending();
+    static void                 RequestsCompleted( int n = 1 );
+
     // return FALSE if second office
-    static sal_Bool EnableOfficeIPCThread();
-    static void     DisableOfficeIPCThread();
+    static sal_Bool             EnableOfficeIPCThread();
+    static void                 DisableOfficeIPCThread();
 };
+
+
+class OfficeIPCThreadController : public ::cppu::WeakImplHelper2<
+                                            ::com::sun::star::lang::XServiceInfo,
+                                            ::com::sun::star::frame::XTerminateListener >
+{
+    public:
+        OfficeIPCThreadController() {}
+        virtual ~OfficeIPCThreadController() {}
+
+        // XServiceInfo
+        virtual ::rtl::OUString SAL_CALL getImplementationName()
+            throw ( ::com::sun::star::uno::RuntimeException );
+        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+            throw ( ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+            throw ( ::com::sun::star::uno::RuntimeException );
+
+        // XEventListener
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
+            throw( ::com::sun::star::uno::RuntimeException );
+
+        // XTerminateListener
+        virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent )
+            throw( ::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent )
+            throw( ::com::sun::star::uno::RuntimeException );
+};
+
+}
 
 #endif // _DESKTOP_OFFICEIPCTHREAD_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-26 07:45:06 $
+ *  last change: $Author: cd $ $Date: 2001-07-27 11:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,18 +640,22 @@ void Desktop::Main()
 //          RemoteControl aControl;
             InitTestToolLib();
 
-            // the shutdown icon sits in the systray and allows the user to keep
-            // the office instance running for quicker restart
-            // this will only be activated if -quickstart was specified on cmdline
-            Reference < XComponent > xQuickstart;
             try
             {
+                // the shutdown icon sits in the systray and allows the user to keep
+                // the office instance running for quicker restart
+                // this will only be activated if -quickstart was specified on cmdline
+                RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) createInstance com.sun.star.office.Quickstart" );
+
+                sal_Bool bQuickstart = pCmdLineArgs->IsQuickstart();
+                Sequence< Any > aSeq( 1 );
+                aSeq[0] <<= bQuickstart;
+
                 // Try to instanciate quickstart service. This service is not mandatory, so
                 // do nothing if service is not available.
-                RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) createInstance com.sun.star.office.Quickstart" );
-                xQuickstart = Reference< XComponent >( xSMgr->createInstance( DEFINE_CONST_UNICODE(
-                                                                    "com.sun.star.office.Quickstart" )),
-                                                       UNO_QUERY );
+                Reference < XComponent > xQuickstart( xSMgr->createInstanceWithArguments(
+                                                        DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" ), aSeq ),
+                                                      UNO_QUERY );
             }
             catch( ::com::sun::star::uno::Exception& )
             {
@@ -685,6 +689,11 @@ void Desktop::Main()
                 Reference< XTypeDetection > xTypeDetection( xSMgr->createInstance(
                                                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))),
                                                             UNO_QUERY );
+                Reference< XDesktop > xDesktop( xSMgr->createInstance(
+                                                                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))),
+                                                            UNO_QUERY );
+                if ( xDesktop.is() )
+                    xDesktop->addTerminateListener( new OfficeIPCThreadController );
             }
 
             // Release solar mutex just before we wait for our client to connect
@@ -1044,6 +1053,9 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                     xComp->dispose();
             }
         }
+
+        // remove this pending request
+        OfficeIPCThread::RequestsCompleted( 1 );
     }
     else if ( rAppEvent.GetEvent() == "APPEAR" )
     {
@@ -1075,7 +1087,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
         if ( !pCmdLineArgs->IsQuickstart() )
         {
-            // If the office was started the second time its command line arguments are sent through a pipe
+            // If the office has been started the second time its command line arguments are sent through a pipe
             // connection to the first office. We want to reuse the quickstart option for the first office.
             // NOTICE: The quickstart service must be initialized inside the "main thread", so we use the
             // application events to do this (they are executed inside main thread)!!!
