@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-18 11:37:17 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 20:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,24 +295,24 @@ ModalDialog RID_MACROCHOOSER
         Text = "~Löschen" ;
         Text [ ENGLISH ] = "~Delete" ;
         Text [ norwegian ] = "~Slett..." ;
-        Text [ italian ] = "Elimina..." ;
+        Text [ italian ] = "~Elimina" ;
         Text [ portuguese_brazilian ] = "Apa~gar..." ;
         Text [ portuguese ] = "~Eliminar..." ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "~Slet..." ;
-        Text [ french ] = "~Supprimer..." ;
-        Text [ swedish ] = "R~adera..." ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ swedish ] = "Ra~dera..." ;
         Text [ dutch ] = "~Wissen..." ;
         Text [ spanish ] = "~Eliminar..." ;
-        Text [ english_us ] = "~Delete..." ;
+        Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "É¾³ı(~D)...";
-        Text[ russian ] = "Óäàëèòü...";
+        Text[ russian ] = "Óäàëèòü";
         Text[ polish ] = "Usuñ...";
-        Text[ japanese ] = "íœ(~D)...";
+        Text[ japanese ] = "íœ(~D)";
         Text[ chinese_traditional ] = "§R°£(~D)...";
         Text[ arabic ] = "ÍĞİ...";
-        Text[ greek ] = "ÄéáãñáöŞ...";
+        Text[ greek ] = "ÄéáãñáöŞ";
         Text[ korean ] = "»èÁ¦(~D)...";
         Text[ turkish ] = "Sil...";
         Text[ catalan ] = "~Eliminar...";
@@ -407,23 +407,23 @@ String RID_STR_BTNDEL
     Text = "~Löschen" ;
     Text [ ENGLISH ] = "~Delete" ;
     Text [ norwegian ] = "~Slett..." ;
-    Text [ italian ] = "Eli~mina..." ;
+    Text [ italian ] = "Eli~mina" ;
     Text [ portuguese_brazilian ] = "~Apagar..." ;
     Text [ portuguese ] = "E~liminar..." ;
     Text [ finnish ] = "~Poista" ;
     Text [ danish ] = "~Slet..." ;
-    Text [ french ] = "~Supprimer..." ;
-    Text [ swedish ] = "R~adera..." ;
+    Text [ french ] = "~Supprimer" ;
+    Text [ swedish ] = "Ra~dera..." ;
     Text [ dutch ] = "~Wissen..." ;
     Text [ spanish ] = "~Eliminar..." ;
-    Text [ english_us ] = "~Delete..." ;
+    Text [ english_us ] = "~Delete" ;
     Text[ chinese_simplified ] = "É¾³ı(~D)";
-    Text[ russian ] = "Óäàëèòü...";
+    Text[ russian ] = "Óäàëèòü";
     Text[ polish ] = "Usuñ...";
     Text[ japanese ] = "íœ(~D)";
     Text[ chinese_traditional ] = "§R°£(~D)";
     Text[ arabic ] = "ÍĞİ...";
-    Text[ greek ] = "ÄéáãñáöŞ...";
+    Text[ greek ] = "ÄéáãñáöŞ";
     Text[ korean ] = "»èÁ¦(~D)...";
     Text[ turkish ] = "Sil...";
     Text[ catalan ] = "~Eliminar...";
