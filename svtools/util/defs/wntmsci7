@@ -14086,3 +14086,9 @@ WriteJPEG
 ?m_aMutex@SourceViewConfig@svt@@0VMutex@osl@@A
 ?m_nRefCount@SourceViewConfig@svt@@0JA
 ?m_pImplConfig@SourceViewConfig@svt@@0PAVSourceViewConfig_Impl@2@A
+??RFilterTitleMatch@?%O:\SRC641\src\svtools\source\filepicker\filepicker.cxx1097824362@@QAE_NABUFilterEntry@@@Z
+?GetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx577320070@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx577320070@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx577320070@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx577320070@@YAXPAVControl@@JJAAJ@Z
+?lcl_getHomeDirectory@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx577320070@@YAEABVString@@AAV2@@Z
