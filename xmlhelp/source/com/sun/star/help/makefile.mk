@@ -3,9 +3,9 @@
 #*    $Workfile:$
 #*
 #*    Creation date     KR 28.06.99
-#*    last change       $Author: kz $ $Date: 2004-08-30 17:26:25 $
+#*    last change       $Author: obo $ $Date: 2005-01-25 15:29:28 $
 #*
-#*    $Revision: 1.18 $
+#*    $Revision: 1.19 $
 #*
 #*    $Logfile:$
 #*
@@ -44,7 +44,6 @@ JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/HelpDatabases.class                \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandlerFactory.class  \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandler.class         \
-    $(CLASSDIR)$/$(PACKAGE)$/FileURLStreamHandlerWithNotify.class  \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandlerWithJars.class \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLConnection.class            \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLConnectionWithJars.class    \
@@ -61,6 +60,14 @@ JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/CreateDb.class                     \
     $(CLASSDIR)$/$(PACKAGE)$/XSLData.class                      \
     $(CLASSDIR)$/$(PACKAGE)$/StringDbt.class 
+
+.IF "$(JDK)"=="gcj"
+JAVACLASSFILES += \
+    $(CLASSDIR)$/$(PACKAGE)$/GCJFileURLStreamHandlerWithNotify.class
+.ELSE
+JAVACLASSFILES += \
+    $(CLASSDIR)$/$(PACKAGE)$/FileURLStreamHandlerWithNotify.class
+.ENDIF
 
 JARCLASSDIRS	= com
 JARTARGET		= $(PRJNAME).jar
