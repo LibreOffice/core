@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cd $ $Date: 2001-06-07 08:07:40 $
+ *  last change: $Author: cd $ $Date: 2001-06-13 06:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1172,6 +1172,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         }
 
                         return;
+                    }
+                    else if ( aINetProtocol == INET_PROT_MAILTO )
+                    {
+                        // don't dispatch mailto hyperlink to desktop dispatcher
+                        rReq.RemoveItem( SID_TARGETNAME );
+                        rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_self") ) );
                     }
                 }
             }
