@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:43:57 $
+ *  last change: $Author: jp $ $Date: 2001-05-08 19:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,6 @@
 #ifndef _SV_PRINT_HXX //autogen
 #include <vcl/print.hxx>
 #endif
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
-#endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -136,6 +133,10 @@
 #ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
 #include <svtools/saveopt.hxx>
 #endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
+
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
@@ -773,17 +774,13 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             break;
             case SID_PASTE:
             {
-                SvDataObjectRef xObj;
-                BOOL bDisable = TRUE;
-                if( Clipboard::GetFormatCount() )
+                BOOL bDisable = 0 == SW_MOD()->pClipboard;
+                if( bDisable  )
                 {
-                    if( SW_MOD()->pClipboard )
-                        bDisable = FALSE;
-                    else
-                    {
-                        SvDataObjectRef xObj( SvDataObject::PasteClipboard());
-                        bDisable = !xObj.Is();
-                    }
+                    TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromSystemClipboard() );
+                    bDisable = !aDataHelper.GetTransferable().is() ||
+                                0 == aDataHelper.GetFormatCount();
                 }
                 if( bDisable )
                     rSet.DisableItem(nWhich);
