@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refupdat.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,8 +224,7 @@ BOOL lcl_MoveRefPart( short& rRef1Val, BOOL& rRef1Del,
         return FALSE;
 }
 
-
-#ifndef DEBUG
+#if OSL_DEBUG_LEVEL < 2
 inline
 #endif
 BOOL IsExpand( short n1, short n2, short nStart, short nD )
@@ -240,7 +239,7 @@ BOOL IsExpand( short n1, short n2, short nStart, short nD )
 }
 
 
-#ifndef DEBUG
+#if OSL_DEBUG_LEVEL < 2
 inline
 #endif
 void Expand( short& n1, short& n2, short nStart, short nD )
