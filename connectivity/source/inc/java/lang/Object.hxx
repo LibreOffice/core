@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:23:29 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #ifndef INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX
 #include <jvmaccess/virtualmachine.hxx>
 #endif // INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX
+#include <memory>
 
 //=====================================================================
 
@@ -104,7 +105,7 @@ namespace connectivity
 {
     class SDBThreadAttach
     {
-        jvmaccess::VirtualMachine::AttachGuard m_aGuard;
+        ::std::auto_ptr< jvmaccess::VirtualMachine::AttachGuard> m_aGuard;
         SDBThreadAttach(SDBThreadAttach&);
     public:
         SDBThreadAttach();
