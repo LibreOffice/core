@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.21 2001-06-12 16:11:23 bm Exp $
+	$Id: chart.mod,v 1.22 2001-06-22 11:55:26 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -64,6 +64,7 @@
 <!ATTLIST chart:chart
 		  chart:class %chart-class; #REQUIRED
 		  chart:add-in-name %string; #IMPLIED
+		  chart:table-number-list %string; #IMPLIED
 		  draw:name %string; #IMPLIED
 		  %draw-position;
 		  %draw-size;
@@ -246,3 +247,10 @@
 <!-- general text properties -->
 
 <!ATTLIST style:properties text:rotation-angle %integer; "0" >
+
+<!-- symbol properties -->
+
+<!ATTLIST style:properties
+		  chart:symbol-width %nonNegativeLength; #IMPLIED
+		  chart:symbol-height %nonNegativeLength; #IMPLIED
+		  chart:symbol-image-name %string; #IMPLIED >
