@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmhelp.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:14:21 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,18 +189,6 @@
 #define HID_PROP_ESCAPE_PROCESSING              (HID_FORMS_START +  113)
 #define HID_PROP_IMAGE_ALIGN                    (HID_FORMS_START +  114)
 
-
-//Unique Id's fuer Dialoge im Property-Editor
-#define UID_PROP_DLG                            (HID_FORMS_START +  180)
-#define UID_PROP_DLG_FONT_TYPE                  (UID_PROP_DLG    +    0)
-#define UID_PROP_DLG_IMAGE_URL                  (UID_PROP_DLG    +    1)
-#define UID_PROP_DLG_BACKGROUNDCOLOR            (UID_PROP_DLG    +    2)
-#define UID_PROP_DLG_GRAPHIC_IMPORT             (UID_PROP_DLG    +    3)
-#define UID_PROP_DLG_ATTR_DATASOURCE            (UID_PROP_DLG    +    4)
-#define UID_PROP_DLG_ATTR_TARGET_URL            (UID_PROP_DLG    +    5)
-#define UID_PROP_DLG_NUMBER_FORMAT              (UID_PROP_DLG    +    6)
-#define UID_PROP_DLG_CONTROLLABEL               (UID_PROP_DLG    +    7)
-#define UID_PROP_DLG_FILLCOLOR                  (UID_PROP_DLG    +    8)
 
 // Events
 #define HID_EVT_START                           (HID_FORMS_START +  200)
