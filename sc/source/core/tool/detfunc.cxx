@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:35:38 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,8 +323,7 @@ Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, BOOL bArrow )
 
     for (SCCOL i=0; i<nCol; i++)
         aPos.X() += pDoc->GetColWidth( i,nLocalTab );
-    for (SCROW j=0; j<nRow; j++)
-        aPos.Y() += pDoc->FastGetRowHeight( j,nLocalTab );
+    aPos.Y() += pDoc->FastGetRowHeight( 0, nRow-1, nLocalTab );
 
     if (bArrow)
     {
