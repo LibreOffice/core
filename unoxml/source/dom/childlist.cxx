@@ -2,9 +2,9 @@
  *
  *  $RCSfile: childlist.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ namespace DOM
             while (cur != NULL)
             {
                 if (index-- == 0)
-                    aNode = Reference< XNode >(CNode::get(cur));                
+                    aNode = Reference< XNode >(CNode::get(cur));
                 cur = cur->next;
             }
         }
