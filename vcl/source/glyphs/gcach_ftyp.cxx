@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.68 $
- *  last change: $Author: hdu $ $Date: 2001-12-21 16:33:40 $
+ *  $Revision: 1.69 $
+ *  last change: $Author: hdu $ $Date: 2002-01-02 10:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,7 +797,6 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
         nGlyphIndex = (*it).second;
         nGlyphFlags |= GF_GSUB;
     }
-/*###*/if(aChar>=0x3000&&aChar<0xF000)fprintf(stderr,"FTgsub[%04X] = %d\n",aChar,!!(nGlyphFlags&GF_GSUB));
 
     // CJK vertical writing needs special treatment
     if( GetFontSelData().mbVertical )
