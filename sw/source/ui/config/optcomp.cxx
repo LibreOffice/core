@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcomp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 10:00:28 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:01:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,15 +77,15 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-
+#ifndef _UTL__HXX_
+#include <unotools/configmgr.hxx>
+#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
@@ -109,6 +109,7 @@ using namespace ::std;
 #define ASCII_STR(s)        OUString( RTL_CONSTASCII_USTRINGPARAM( s ) )
 #define DEFAULT_ENTRY       COMPATIBILITY_DEFAULT_NAME
 #define USER_ENTRY          ASCII_STR( "_user" )
+#define BUTTON_BORDER       2
 
 // struct CompatibilityItem ----------------------------------------------
 
@@ -116,18 +117,30 @@ struct CompatibilityItem
 {
     String      m_sName;
     String      m_sModule;
-    sal_Int32   m_nOptions;
+    bool        m_bUsePrtMetrics;
+    bool        m_bAddSpacing;
+    bool        m_bAddSpacingAtPages;
+    bool        m_bUseOurTabStops;
+    bool        m_bNoExtLeading;
+    bool        m_bUseLineSpacing;
     bool        m_bIsDefault;
     bool        m_bIsUser;
 
     CompatibilityItem( const String& _rName, const String& _rModule,
-                       sal_Int32 _nOptions, bool _bIsDefault, bool _bIsUser ) :
+                       bool _bUsePrtMetrics, bool _bAddSpacing, bool _bAddSpacingAtPages,
+                       bool _bUseOurTabStops, bool _bNoExtLeading, bool _bUseLineSpacing,
+                       bool _bIsDefault, bool _bIsUser ) :
 
-        m_sName     ( _rName ),
-        m_sModule   ( _rModule ),
-        m_nOptions  ( _nOptions ),
-        m_bIsDefault( _bIsDefault ),
-        m_bIsUser   ( _bIsUser ) {}
+        m_sName             ( _rName ),
+        m_sModule           ( _rModule ),
+        m_bUsePrtMetrics    ( _bUsePrtMetrics ),
+        m_bAddSpacing       ( _bAddSpacing ),
+        m_bAddSpacingAtPages( _bAddSpacingAtPages ),
+        m_bUseOurTabStops   ( _bUseOurTabStops ),
+        m_bNoExtLeading     ( _bNoExtLeading ),
+        m_bUseLineSpacing   ( _bUseLineSpacing ),
+        m_bIsDefault        ( _bIsDefault ),
+        m_bIsUser           ( _bIsUser ) {}
 };
 
 #include <vector>
@@ -162,7 +175,10 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
     // init options strings with local resource ids -> so do it before FreeResource()
     for ( USHORT nResId = STR_COMP_OPTIONS_START; nResId < STR_COMP_OPTIONS_END; ++nResId )
     {
-        SvLBoxEntry* pEntry = m_aOptionsLB.SvTreeListBox::InsertEntry( String( ResId( nResId ) ) );
+        String sEntry = String( ResId( nResId ) );
+        if ( STR_TAB_ALIGNMENT == nResId || STR_LINE_SPACING == nResId )
+            ReplaceFormatName( sEntry );
+        SvLBoxEntry* pEntry = m_aOptionsLB.SvTreeListBox::InsertEntry( sEntry );
         if ( pEntry )
         {
             m_aOptionsLB.SetCheckButtonState( pEntry, SV_BUTTON_UNCHECKED );
@@ -193,6 +209,69 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
 SwCompatibilityOptPage::~SwCompatibilityOptPage()
 {
     delete m_pImpl;
+}
+
+// -----------------------------------------------------------------------
+
+void SwCompatibilityOptPage::ReplaceFormatName( String& rEntry )
+{
+    static const String sOpenOfficeName = String::CreateFromAscii("OpenOffice.org");
+    static const String sAsianName = String::CreateFromAscii("StarSuite");
+
+    Any aAny = ::utl::ConfigManager::
+        GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+    rtl::OUString sTmp;
+    if ( aAny >>= sTmp )
+    {
+        String sFormatName = sTmp;
+        String sFormatVersion;
+        bool bOpenOffice = ( sOpenOfficeName == sFormatName );
+        if ( bOpenOffice )
+            sFormatVersion = String::CreateFromAscii("1.1");
+        else
+            sFormatVersion = String::CreateFromAscii("6.0/7");
+        if ( !bOpenOffice && ( sAsianName != sFormatName ) )
+            sFormatName = String::CreateFromAscii("StarOffice");
+
+        rEntry.SearchAndReplace( String::CreateFromAscii("%FORMATNAME"), sFormatName );
+        rEntry.SearchAndReplace( String::CreateFromAscii("%FORMATVERSION"), sFormatVersion );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+ULONG convertBools2Ulong_Impl
+(
+    bool _bUsePrtMetrics,
+    bool _bAddSpacing,
+    bool _bAddSpacingAtPages,
+    bool _bUseOurTabStops,
+    bool _bNoExtLeading,
+    bool _bUseLineSpacing
+)
+{
+    ULONG nRet = 0;
+    ULONG nSetBit = 1;
+
+    if ( _bUsePrtMetrics )
+        nRet |= nSetBit;
+    nSetBit = nSetBit << 1;
+    if ( _bAddSpacing )
+        nRet |= nSetBit;
+    nSetBit = nSetBit << 1;
+    if ( _bAddSpacingAtPages )
+        nRet |= nSetBit;
+    nSetBit = nSetBit << 1;
+    if ( _bUseOurTabStops )
+        nRet |= nSetBit;
+    nSetBit = nSetBit << 1;
+    if ( _bNoExtLeading )
+        nRet |= nSetBit;
+    nSetBit = nSetBit << 1;
+    if ( _bUseLineSpacing )
+        nRet |= nSetBit;
+
+    return nRet;
 }
 
 // -----------------------------------------------------------------------
@@ -229,7 +308,12 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     Sequence< Sequence< PropertyValue > > aList = m_aConfigItem.GetList();
     OUString sName;
     OUString sModule;
-    sal_Int32 nOptions;
+    bool bUsePrtMetrics;
+    bool bAddSpacing;
+    bool bAddSpacingAtPages;
+    bool bUseOurTabStops;
+    bool bNoExtLeading;
+    bool bUseLineSpacing;
     int i, j, nCount = aList.getLength();
     for ( i = 0; i < nCount; ++i )
     {
@@ -242,12 +326,23 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
                 aValue.Value >>= sName;
             else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_MODULE )
                 aValue.Value >>= sModule;
-            else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_OPTIONS )
-                aValue.Value >>= nOptions;
+            else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_USEPRTMETRICS )
+                aValue.Value >>= bUsePrtMetrics;
+            else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_ADDSPACING )
+                aValue.Value >>= bAddSpacing;
+            else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_ADDSPACINGATPAGES )
+                aValue.Value >>= bAddSpacingAtPages;
+            else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_USEOURTABSTOPS )
+                aValue.Value >>= bUseOurTabStops;
+            else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_NOEXTLEADING )
+                aValue.Value >>= bNoExtLeading;
+            else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_USELINESPACING )
+                aValue.Value >>= bUseLineSpacing;
         }
 
         CompatibilityItem aItem(
-            sName, sModule, nOptions,
+            sName, sModule, bUsePrtMetrics, bAddSpacing,
+            bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading, bUseLineSpacing,
             ( sName.equals( DEFAULT_ENTRY ) != sal_False ),
             ( sName.equals( USER_ENTRY ) != sal_False ) );
         m_pImpl->m_aList.push_back( aItem );
@@ -269,10 +364,29 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             sNewEntry = sName;
 
         USHORT nPos = m_aFormattingLB.InsertEntry( sNewEntry );
+        ULONG nOptions = convertBools2Ulong_Impl(
+            bUsePrtMetrics, bAddSpacing, bAddSpacingAtPages,
+            bUseOurTabStops, bNoExtLeading, bUseLineSpacing );
         m_aFormattingLB.SetEntryData( nPos, (void*)(long)nOptions );
     }
 
     m_aFormattingLB.SetDropDownLineCount( m_aFormattingLB.GetEntryCount() );
+
+    // check if the default button text is not too wide otherwise we have to stretch the button
+    // and move its position and the position of the reset button
+    long nTxtWidth = m_aDefaultPB.GetTextWidth( m_aDefaultPB.GetText() );
+    Size aBtnSz = m_aDefaultPB.GetSizePixel();
+    if ( nTxtWidth > aBtnSz.Width() )
+    {
+        long nDelta = nTxtWidth - aBtnSz.Width() + 2 * BUTTON_BORDER;
+        aBtnSz.Width() += nDelta;
+        Point aBtnPnt = m_aDefaultPB.GetPosPixel();
+        aBtnPnt.X() -= nDelta;
+        m_aDefaultPB.SetPosSizePixel( aBtnPnt, aBtnSz );
+        aBtnPnt = m_aResetPB.GetPosPixel();
+        aBtnPnt.X() -= 2 * nDelta;
+        m_aResetPB.SetPosSizePixel( aBtnPnt, aBtnSz );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -307,7 +421,25 @@ IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
         {
             if ( pItem->m_bIsDefault )
             {
-                pItem->m_nOptions = GetCurrentOptions();
+                USHORT nCount = static_cast< USHORT >( m_aOptionsLB.GetEntryCount() );
+                for ( USHORT i = 0; i < nCount; ++i )
+                {
+                    bool bChecked = ( m_aOptionsLB.IsChecked(i) != FALSE );
+                    CompatibilityOptions eOption = static_cast< CompatibilityOptions >(i);
+                    switch ( eOption )
+                    {
+                        case COPT_USE_PRINTERDEVICE :   pItem->m_bUsePrtMetrics = bChecked; break;
+                        case COPT_ADD_SPACING :         pItem->m_bAddSpacing = bChecked; break;
+                        case COPT_ADD_SPACING_AT_PAGES :pItem->m_bAddSpacingAtPages = bChecked; break;
+                        case COPT_USE_OUR_TABSTOPS :    pItem->m_bUseOurTabStops = bChecked; break;
+                        case COPT_NO_EXTLEADING :       pItem->m_bNoExtLeading = bChecked; break;
+                        case COPT_USE_LINESPACING :     pItem->m_bUseLineSpacing = bChecked; break;
+                        default:
+                        {
+                            DBG_ERRORFILE( "SwCompatibilityOptPage::UseAsDefaultHdl(): wrong option" );
+                        }
+                    }
+                }
                 break;
             }
         }
@@ -327,9 +459,6 @@ void SwCompatibilityOptPage::SetCurrentOptions( ULONG nOptions )
     for ( USHORT i = 0; i < nCount; ++i )
     {
         BOOL bChecked = ( ( nOptions & 0x00000001 ) == 0x00000001 );
-        if ( COPT_USE_VIRTUALDEVICE == i || COPT_EXTLEADING == i )
-            // swap the value because this checklistbox entry means the opposite!
-            bChecked = !bChecked;
         m_aOptionsLB.CheckEntryPos( i, bChecked );
         nOptions = nOptions >> 1;
     }
@@ -337,58 +466,20 @@ void SwCompatibilityOptPage::SetCurrentOptions( ULONG nOptions )
 
 // -----------------------------------------------------------------------
 
-ULONG SwCompatibilityOptPage::GetCurrentOptions() const
-{
-    ULONG nRet = 0;
-    ULONG nSetBit = 1;
-    ULONG nCount = m_aOptionsLB.GetEntryCount();
-    DBG_ASSERT( nCount <= 32, "SwCompatibilityOptPage::GetCurrentOptions(): entry overflow" );
-    for ( USHORT i = 0; i < nCount; ++i )
-    {
-        BOOL bChecked = m_aOptionsLB.IsChecked(i);
-        if ( COPT_USE_VIRTUALDEVICE == i || COPT_EXTLEADING == i )
-            // swap the value because this checklistbox entry means the opposite!
-            bChecked = !bChecked;
-        if ( bChecked )
-            nRet |= nSetBit;
-        nSetBit = nSetBit << 1;
-    }
-    return nRet;
-}
-
-// -----------------------------------------------------------------------
-
-void SwCompatibilityOptPage::SetDocumentOptions( ULONG nOptions )
-{
-    //?!?
-}
-
-// -----------------------------------------------------------------------
-
 ULONG SwCompatibilityOptPage::GetDocumentOptions() const
 {
     ULONG nRet = 0;
-    ULONG nSetBit = 1;
-
     if ( m_pWrtShell )
     {
         short nPrtLayout = m_pWrtShell->IsUseVirtualDevice();
-        if ( PrinterIndependentLayout::DISABLED != nPrtLayout )
-            nRet |= nSetBit;
-        nSetBit = nSetBit << 1;
-        if ( m_pWrtShell->IsParaSpaceMax() )
-            nRet |= nSetBit;
-        nSetBit = nSetBit << 1;
-        if ( m_pWrtShell->IsParaSpaceMaxAtPages() )
-            nRet |= nSetBit;
-        nSetBit = nSetBit << 1;
-        if ( m_pWrtShell->IsTabCompat() )
-            nRet |= nSetBit;
-        nSetBit = nSetBit << 1;
-        if ( m_pWrtShell->IsAddExtLeading() )
-            nRet |= nSetBit;
+        nRet = convertBools2Ulong_Impl(
+            PrinterIndependentLayout::DISABLED == nPrtLayout,
+            m_pWrtShell->IsParaSpaceMax() != FALSE,
+            m_pWrtShell->IsParaSpaceMaxAtPages() != FALSE,
+            m_pWrtShell->IsTabCompat() == FALSE,
+            m_pWrtShell->IsAddExtLeading() == FALSE,
+            m_pWrtShell->IsFormerLineSpacing() != FALSE );
     }
-
     return nRet;
 }
 
@@ -399,7 +490,10 @@ void SwCompatibilityOptPage::WriteOptions()
     m_aConfigItem.Clear();
     for ( vector< CompatibilityItem >::const_iterator pItem = m_pImpl->m_aList.begin();
           pItem != m_pImpl->m_aList.end(); ++pItem )
-        m_aConfigItem.AppendItem( pItem->m_sName, pItem->m_sModule, pItem->m_nOptions );
+        m_aConfigItem.AppendItem(
+            pItem->m_sName, pItem->m_sModule, pItem->m_bUsePrtMetrics, pItem->m_bAddSpacing,
+            pItem->m_bAddSpacingAtPages, pItem->m_bUseOurTabStops,
+            pItem->m_bNoExtLeading, pItem->m_bUseLineSpacing );
 }
 
 // -----------------------------------------------------------------------
@@ -426,30 +520,32 @@ BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet& rSet )
         {
             CompatibilityOptions nOption = static_cast< CompatibilityOptions >(i);
             BOOL bChecked = m_aOptionsLB.IsChecked(i);
-            if ( COPT_USE_VIRTUALDEVICE == i || COPT_EXTLEADING == i )
-                // swap the value because this checklistbox entry means the opposite!
-                bChecked = !bChecked;
             BOOL bSavedChecked = ( ( nSavedOptions & 0x00000001 ) == 0x00000001 );
             if ( bChecked != bSavedChecked )
             {
-                if ( COPT_USE_VIRTUALDEVICE == nOption )
+                if ( COPT_USE_PRINTERDEVICE == nOption )
                 {
-                    short nUseVirtualDev = !bChecked
+                    short nUseVirtualDev = bChecked
                         ? PrinterIndependentLayout::DISABLED
                         : PrinterIndependentLayout::HIGH_RESOLUTION;
                     m_pWrtShell->SetUseVirtualDevice( nUseVirtualDev );
                     bModified = TRUE;
                 }
-                else if ( ( COPT_PARASPACE_MAX == nOption || COPT_PARASPACE_MAXATPAGES == nOption ) && !bSetParaSpaceMax )
+                else if ( ( COPT_ADD_SPACING == nOption || COPT_ADD_SPACING_AT_PAGES == nOption ) && !bSetParaSpaceMax )
                     bSetParaSpaceMax = true;
-                else if ( COPT_TABALIGNMENT == nOption )
+                else if ( COPT_USE_OUR_TABSTOPS == nOption )
                 {
-                    m_pWrtShell->SetTabCompat( bChecked );
+                    m_pWrtShell->SetTabCompat( !bChecked );
                     bModified = TRUE;
                 }
-                else if ( COPT_EXTLEADING == nOption )
+                else if ( COPT_NO_EXTLEADING == nOption )
                 {
-                    m_pWrtShell->SetAddExtLeading( bChecked );
+                    m_pWrtShell->SetAddExtLeading( !bChecked );
+                    bModified = TRUE;
+                }
+                else if ( COPT_USE_LINESPACING == nOption )
+                {
+                    m_pWrtShell->SetUseFormerLineSpacing( bChecked );
                     bModified = TRUE;
                 }
             }
@@ -459,8 +555,8 @@ BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet& rSet )
 
         if ( bSetParaSpaceMax )
         {
-            m_pWrtShell->SetParaSpaceMax( m_aOptionsLB.IsChecked( (USHORT)COPT_PARASPACE_MAX ),
-                                          m_aOptionsLB.IsChecked( (USHORT)COPT_PARASPACE_MAXATPAGES ) );
+            m_pWrtShell->SetParaSpaceMax( m_aOptionsLB.IsChecked( (USHORT)COPT_ADD_SPACING ),
+                                          m_aOptionsLB.IsChecked( (USHORT)COPT_ADD_SPACING_AT_PAGES ) );
             bModified = TRUE;
         }
     }
