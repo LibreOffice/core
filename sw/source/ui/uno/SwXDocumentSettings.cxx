@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-26 14:18:12 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 12:54:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS,
     HANDLE_CURRENT_DATABASE_DATA_SOURCE,
     HANDLE_CURRENT_DATABASE_COMMAND,
-    HANDLE_CURRENT_DATABASE_COMMAND_TYPE
+    HANDLE_CURRENT_DATABASE_COMMAND_TYPE,
+    HANDLE_SAVE_VERSION_ON_CLOSE
 };
 PropertySetInfo * lcl_createSettingsInfo()
 {
@@ -146,16 +147,17 @@ PropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("FieldAutoUpdate"),            HANDLE_FIELD_AUTO_UPDATE,               &::getBooleanCppuType(),                0,   0},
         { RTL_CONSTASCII_STRINGPARAM("ChartAutoUpdate"),            HANDLE_CHART_AUTO_UPDATE,               &::getBooleanCppuType(),                0,   0},
         { RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacing"),        HANDLE_ADD_PARA_TABLE_SPACING,          &::getBooleanCppuType(),                0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacingAtStart"),HANDLE_ADD_PARA_TABLE_SPACING_AT_START, &::getBooleanCppuType(),             0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacingAtStart"), HANDLE_ADD_PARA_TABLE_SPACING_AT_START, &::getBooleanCppuType(),                0,   0},
         { RTL_CONSTASCII_STRINGPARAM("PrinterName"),                HANDLE_PRINTER_NAME,                    &::getCppuType((const OUString*)0),     0,   0},
         { RTL_CONSTASCII_STRINGPARAM("PrinterSetup"),               HANDLE_PRINTER_SETUP,                   &::getCppuType((const uno::Sequence < sal_Int8 > *)0),  0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("IsKernAsianPunctuation"), HANDLE_IS_KERN_ASIAN_PUNCTUATION,       &::getBooleanCppuType(),                0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("IsKernAsianPunctuation"),     HANDLE_IS_KERN_ASIAN_PUNCTUATION,       &::getBooleanCppuType(),                0,   0},
         { RTL_CONSTASCII_STRINGPARAM("CharacterCompressionType"),   HANDLE_CHARACTER_COMPRESSION_TYPE,      &::getCppuType((sal_Int16*)0),          0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ApplyUserData"),          HANDLE_APPLY_USER_DATA,                 &::getBooleanCppuType(),                0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ApplyUserData"),              HANDLE_APPLY_USER_DATA,                 &::getBooleanCppuType(),                0,   0},
         { RTL_CONSTASCII_STRINGPARAM("SaveGlobalDocumentLinks"),    HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS,      &::getBooleanCppuType(),                0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseDataSource"), HANDLE_CURRENT_DATABASE_DATA_SOURCE,     &::getCppuType((const OUString*)0),     0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseDataSource"),  HANDLE_CURRENT_DATABASE_DATA_SOURCE,    &::getCppuType((const OUString*)0),     0,   0},
         { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommand"),     HANDLE_CURRENT_DATABASE_COMMAND,        &::getCppuType((const OUString*)0),     0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommandType"),HANDLE_CURRENT_DATABASE_COMMAND_TYPE,    &::getCppuType((const sal_Int16*)0),    0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommandType"), HANDLE_CURRENT_DATABASE_COMMAND_TYPE,   &::getCppuType((const sal_Int16*)0),    0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("SaveVersionOnClose"),         HANDLE_SAVE_VERSION_ON_CLOSE,           &::getBooleanCppuType(),                0,   0},
         { NULL, 0, 0, NULL, 0, 0 }
     };
 
@@ -371,6 +373,13 @@ void SwXDocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries
                     pDoc->ChgDBData( rData );
             }
             break;
+            case HANDLE_SAVE_VERSION_ON_CLOSE:
+            {
+                SfxDocumentInfo& rInfo = pDocSh->GetDocInfo();
+                sal_Bool bSaveVersion = *(sal_Bool*)(*pValues).getValue();
+                rInfo.SetSaveVersionOnClose ( bSaveVersion );
+            }
+            break;
             default:
                 throw UnknownPropertyException();
         }
@@ -488,6 +497,13 @@ void SwXDocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries
             {
                 const SwDBData& rData = pDoc->GetDBDesc();
                 *pValue <<= rData.nCommandType;
+            }
+            break;
+            case HANDLE_SAVE_VERSION_ON_CLOSE:
+            {
+                SfxDocumentInfo& rInfo = pDocSh->GetDocInfo();
+                sal_Bool bSaveVersion = rInfo.IsSaveVersionOnClose();
+                (*pValue).setValue(&bSaveVersion, ::getBooleanCppuType());
             }
             break;
             default:

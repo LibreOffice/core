@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 09:35:09 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 12:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,7 +579,7 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
 }
 #undef NUM_EXPORTED_VIEW_SETTINGS
 
-#define NUM_EXPORTED_CONFIGURATION_SETTINGS 15
+#define NUM_EXPORTED_CONFIGURATION_SETTINGS 16
 void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
 {
     Reference < XMultiServiceFactory > xCreate(GetModel(), UNO_QUERY);
@@ -604,6 +604,7 @@ void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::su
         const OUString sCurrentDatabaseDataSource ( RTL_CONSTASCII_USTRINGPARAM ( "CurrentDatabaseDataSource" ) );
         const OUString sCurrentDatabaseCommand ( RTL_CONSTASCII_USTRINGPARAM ( "CurrentDatabaseCommand" ) );
         const OUString sCurrentDatabaseCommandType ( RTL_CONSTASCII_USTRINGPARAM ( "CurrentDatabaseCommandType" ) );
+        const OUString sSaveVersionOnClose ( RTL_CONSTASCII_USTRINGPARAM ( "SaveVersionOnClose" ) );
 
         pValue[nIndex].Name = sLinkUpdateMode;
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sLinkUpdateMode );
@@ -653,6 +654,9 @@ void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::su
 
         pValue[nIndex].Name = sCurrentDatabaseCommandType;
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sCurrentDatabaseCommandType );
+
+        pValue[nIndex].Name = sSaveVersionOnClose;
+        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sSaveVersionOnClose );
 
         Reference < XText > xText;
         SwXText *pText = 0;
