@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:39:32 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 13:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@
 #include "imagemgr.hxx"
 #include "workwin.hxx"
 #include "imgmgr.hxx"
+#include "virtmenu.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -956,16 +957,16 @@ SfxAddonsToolBoxControl_Impl::~SfxAddonsToolBoxControl_Impl()
     delete pMenu;
 }
 
-void SfxAddonsToolBoxControl_Impl::RefreshMenuImages( Menu* pMenu )
+void SfxAddonsToolBoxControl_Impl::RefreshMenuImages( Menu* pSVMenu )
 {
     framework::AddonsOptions    aAddonOptions;
 
     Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame()->GetFrameInterface() );
-    USHORT nCount = pMenu->GetItemCount();
+    USHORT nCount = pSVMenu->GetItemCount();
     for ( USHORT nPos = 0; nPos < nCount; nPos++ )
     {
-        USHORT nId = pMenu->GetItemId( nPos );
-        if ( pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
+        USHORT nId = pSVMenu->GetItemId( nPos );
+        if ( pSVMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
         {
             if ( m_bShowMenuImages )
             {
@@ -973,7 +974,7 @@ void SfxAddonsToolBoxControl_Impl::RefreshMenuImages( Menu* pMenu )
                 ::rtl::OUString aImageId;
 
                 ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                    (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nId );
+                    (::framework::MenuConfiguration::Attributes*)pSVMenu->GetUserValue( nId );
 
                 if ( pMenuAttributes )
                     aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
@@ -984,25 +985,25 @@ void SfxAddonsToolBoxControl_Impl::RefreshMenuImages( Menu* pMenu )
                     if ( !!aImage )
                     {
                         bImageSet = sal_True;
-                        pMenu->SetItemImage( nId, aImage );
+                        pSVMenu->SetItemImage( nId, aImage );
                     }
                 }
 
                 if ( !bImageSet )
                 {
-                    rtl::OUString aMenuItemCommand = pMenu->GetItemCommand( nId );
+                    rtl::OUString aMenuItemCommand = pSVMenu->GetItemCommand( nId );
                     Image aImage = GetImage( aXFrame, aMenuItemCommand, FALSE, m_bWasHiContrastMode );
                     if ( !aImage )
                         aImage = aAddonOptions.GetImageFromURL( aMenuItemCommand, FALSE, m_bWasHiContrastMode );
 
-                    pMenu->SetItemImage( nId, aImage );
+                    pSVMenu->SetItemImage( nId, aImage );
                 }
             }
             else
-                pMenu->SetItemImage( nId, Image() );
+                pSVMenu->SetItemImage( nId, Image() );
 
             // Go recursive through the sub-menus
-            PopupMenu* pPopup = pMenu->GetPopupMenu( nId );
+            PopupMenu* pPopup = pSVMenu->GetPopupMenu( nId );
             if ( pPopup )
                 RefreshMenuImages( pPopup );
         }
@@ -1033,25 +1034,12 @@ void SfxAddonsToolBoxControl_Impl::Select( BOOL bMod1 )
     if ( !pMenu )
     {
         Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame()->GetFrameInterface() );
-        pMenu = framework::AddonMenuManager::CreateAddonMenu( aXFrame );
-        RefreshMenuImages( pMenu );
+        PopupMenu* pSVMenu = framework::AddonMenuManager::CreateAddonMenu( aXFrame );
+        RefreshMenuImages( pSVMenu );
+        pMenu = new SfxPopupMenuManager( pSVMenu, GetBindings() );
     }
 
     if( pMenu )
-    {
-        pMenu->SetSelectHdl( Link( &(this->GetBindings()), Select_Impl ) );
-        pMenu->SetActivateHdl( LINK( this, SfxAddonsToolBoxControl_Impl, Activate ));
-        rBox.SetItemDown( GetId(), TRUE );
-        pMenu->Execute( &rBox, aRect, POPUPMENU_EXECUTE_DOWN );
-        rBox.SetItemDown( GetId(), FALSE );
-    }
-}
-
-//--------------------------------------------------------------------
-
-IMPL_LINK( SfxAddonsToolBoxControl_Impl, Activate, Menu *, pMenu )
-{
-    if ( pMenu )
     {
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         BOOL bIsHiContrastMode  = rSettings.GetMenuColor().IsDark();
@@ -1062,11 +1050,13 @@ IMPL_LINK( SfxAddonsToolBoxControl_Impl, Activate, Menu *, pMenu )
         {
             m_bWasHiContrastMode = bIsHiContrastMode;
             m_bShowMenuImages    = bShowMenuImages;
-            RefreshMenuImages( pMenu );
+            RefreshMenuImages( pMenu->GetMenu()->GetSVMenu() );
         }
-    }
 
-    return TRUE;
+        rBox.SetItemDown( GetId(), TRUE );
+        ((PopupMenu*)pMenu->GetMenu()->GetSVMenu())->Execute( &rBox, aRect, POPUPMENU_EXECUTE_DOWN );
+        rBox.SetItemDown( GetId(), FALSE );
+    }
 }
 
 //--------------------------------------------------------------------
