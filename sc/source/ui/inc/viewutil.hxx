@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:11:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,15 @@
 #ifndef SC_VIEWUTIL_HXX
 #define SC_VIEWUTIL_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
+#endif
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
 #endif
 
 class String;
@@ -111,24 +118,24 @@ public:
 class ScUpdateRect
 {
 private:
-    USHORT  nOldStartX;
-    USHORT  nOldStartY;
-    USHORT  nOldEndX;
-    USHORT  nOldEndY;
-    USHORT  nNewStartX;
-    USHORT  nNewStartY;
-    USHORT  nNewEndX;
-    USHORT  nNewEndY;
-    USHORT  nContX1;
-    USHORT  nContY1;
-    USHORT  nContX2;
-    USHORT  nContY2;
+    SCCOL   nOldStartX;
+    SCROW   nOldStartY;
+    SCCOL   nOldEndX;
+    SCROW   nOldEndY;
+    SCCOL   nNewStartX;
+    SCROW   nNewStartY;
+    SCCOL   nNewEndX;
+    SCROW   nNewEndY;
+    SCCOL   nContX1;
+    SCROW   nContY1;
+    SCCOL   nContX2;
+    SCROW   nContY2;
 public:
-            ScUpdateRect( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 );
-    void    SetNew( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 );
-    BOOL    GetDiff( USHORT& rX1, USHORT& rY1, USHORT& rX2, USHORT& rY2 );
-    BOOL    GetXorDiff( USHORT& rX1, USHORT& rY1, USHORT& rX2, USHORT& rY2, BOOL& rCont );
-    void    GetContDiff( USHORT& rX1, USHORT& rY1, USHORT& rX2, USHORT& rY2 );
+            ScUpdateRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
+    void    SetNew( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
+    BOOL    GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
+    BOOL    GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, BOOL& rCont );
+    void    GetContDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
 };
 
 
