@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-20 18:52:24 $
+ *  last change: $Author: nn $ $Date: 2001-08-21 18:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,6 +404,10 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
             case SID_PRINTPREVIEW:
                 // #58924# Toggle-Slot braucht einen State
                 rSet.Put( SfxBoolItem( nWhich, FALSE ) );
+                break;
+
+            case SID_READONLY_MODE:
+                rSet.Put( SfxBoolItem( nWhich, GetViewData()->GetDocShell()->IsReadOnly() ) );
                 break;
 
         } // switch ( nWitch )
