@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:20:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,6 +438,17 @@ struct IMPL_SfxBaseController_DataContainer
     sal_Bool                                m_bGotOwnerShip;
     sal_Bool                                m_bHasKeyListeners;
     sal_Bool                                m_bHasMouseClickListeners;
+    /** When this flag is <true/> (the default) then in dispose() the frame
+        and with it the view shell are released together with the
+        controller.
+        A derived class can set the flag to <false/> when it wants to
+        exchange controllers that work on the same view shell.  One
+        application is the Impress Multi Pane GUI that changes shells that
+        are stacked on one view shell.  Controllers are associated with the
+        stacked shells and thus must not destroy the view shell which is not
+        affected by the switching.
+    */
+    sal_Bool                                m_bIsFrameReleasedWithController;
 
     IMPL_SfxBaseController_DataContainer(   MUTEX&              aMutex      ,
                                             SfxViewShell*       pViewShell  ,
@@ -452,6 +463,7 @@ struct IMPL_SfxBaseController_DataContainer
             ,   m_bGotOwnerShip         ( sal_False                                             )
             ,   m_bHasKeyListeners      ( sal_False                                             )
             ,   m_bHasMouseClickListeners( sal_False                                                )
+            ,   m_bIsFrameReleasedWithController( sal_True                                              )
     {
     }
 
@@ -951,6 +963,11 @@ SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL SfxBaseController::queryDispatches( 
 //  SfxBaseController -> XComponent
 //________________________________________________________________________________________________________
 
+void SfxBaseController::FrameIsReleasedWithController (sal_Bool bFlag)
+{
+    m_pData->m_bIsFrameReleasedWithController = bFlag;
+}
+
 void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -967,10 +984,14 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
     if ( m_pData->m_pViewShell )
     {
         SfxViewFrame* pFrame = m_pData->m_pViewShell->GetViewFrame() ;
-        if ( pFrame && pFrame->GetViewShell() == m_pData->m_pViewShell )
-            pFrame->GetFrame()->SetIsClosing_Impl();
-        m_pData->m_pViewShell->DiscardClients_Impl();
-        m_pData->m_pViewShell->pImp->bControllerSet = sal_False ;
+        if (m_pData->m_bIsFrameReleasedWithController)
+        {
+            if ( pFrame && pFrame->GetViewShell() == m_pData->m_pViewShell )
+                pFrame->GetFrame()->SetIsClosing_Impl();
+            m_pData->m_pViewShell->DiscardClients_Impl();
+            m_pData->m_pViewShell->pImp->bControllerSet = sal_False ;
+        }
+
         if ( pFrame )
         {
             EVENTOBJECT aObject;
@@ -986,7 +1007,7 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
                 pView = SfxViewFrame::GetNext( *pView, pDoc );
             }
 
-            if ( !pView )
+            if ( !pView && m_pData->m_bIsFrameReleasedWithController)
                 SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, pDoc) );
 
             REFERENCE< XMODEL > xModel = pDoc->GetModel();
@@ -1004,7 +1025,8 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
             m_pData->m_xListener->disposing( aObject );
             SfxViewShell *pShell = m_pData->m_pViewShell;
             m_pData->m_pViewShell = NULL;
-            if ( pFrame->GetViewShell() == pShell )
+            if ( pFrame->GetViewShell() == pShell
+                && m_pData->m_bIsFrameReleasedWithController)
             {
                 // Enter registrations only allowed if we are the owner!
                 if ( pFrame->GetFrame()->OwnsBindings_Impl() )
