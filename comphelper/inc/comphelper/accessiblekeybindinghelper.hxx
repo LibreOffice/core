@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblekeybindinghelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:25:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,14 @@
 #include <osl/mutex.hxx>
 #endif
 
+#ifndef INCLUDED_VECTOR
 #include <vector>
+#define INCLUDED_VECTOR
+#endif
 
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //..............................................................................
 namespace comphelper
@@ -89,7 +95,7 @@ namespace comphelper
 
     /** a helper class for implementing an accessible keybinding
      */
-    class OAccessibleKeyBindingHelper : public OAccessibleKeyBindingHelper_Base
+    class COMPHELPER_DLLPUBLIC OAccessibleKeyBindingHelper : public OAccessibleKeyBindingHelper_Base
     {
     private:
         typedef ::std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::awt::KeyStroke > > KeyBindings;
