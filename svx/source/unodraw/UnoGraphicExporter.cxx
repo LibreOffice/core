@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-12 15:09:06 $
+ *  last change: $Author: cl $ $Date: 2002-12-11 16:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,10 @@
 #include <svtools/FilterConfigItem.hxx>
 #endif
 
+#ifndef _SVX_NUMITEM_HXX
+#include <numitem.hxx>
+#endif
+
 #ifndef _SVDPAGV_HXX
 #include "svdpagv.hxx"
 #endif
@@ -175,6 +179,23 @@
 
 #ifndef _SVX_UNOWPAGE_HXX
 #include "unopage.hxx"
+#endif
+
+#ifndef _SVX_PAGEITEM_HXX
+#include "pageitem.hxx"
+#endif
+
+#ifndef _EEITEM_HXX
+#include "eeitem.hxx"
+#endif
+
+#ifndef _SVDOUTL_HXX
+#include "svdoutl.hxx"
+#endif
+
+#define ITEMID_FIELD EE_FEATURE_FIELD
+#ifndef _SVX_FLDITEM_HXX
+#include "flditem.hxx"
 #endif
 
 #define MAX_EXT_PIX         2048
@@ -226,12 +247,18 @@ namespace svx
 
         VirtualDevice* CreatePageVDev( SdrPage* pPage, ULONG nWidthPixel, ULONG nHeightPixel ) const;
 
+        DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
+
     private:
         Reference< XShape >     mxShape;
         Reference< XDrawPage >  mxPage;
         Reference< XShapes >    mxShapes;
 
         SvxDrawPage*        mpUnoPage;
+
+        Link                maOldCalcFieldValueHdl;
+        sal_Int32           mnPageNumber;
+        SdrModel*           mpDoc;
     };
 
     Reference< XInterface > SAL_CALL GraphicExporter_createInstance(const Reference< XMultiServiceFactory > & rSMgr)
@@ -333,12 +360,52 @@ namespace svx
 using namespace ::svx;
 
 GraphicExporter::GraphicExporter()
-: mpUnoPage( NULL )
+: mpUnoPage( NULL ), mpDoc( NULL ), mnPageNumber(-1)
 {
 }
 
 GraphicExporter::~GraphicExporter()
 {
+}
+
+IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
+{
+    if( pInfo && mnPageNumber != -1 )
+    {
+        const SvxFieldData* pField = pInfo->GetField().GetField();
+        if( pField && pField->ISA( SvxPageField ) )
+        {
+            String aPageNumValue;
+            BOOL bUpper = FALSE;
+
+            switch(mpDoc->GetPageNumType())
+            {
+                case SVX_CHARS_UPPER_LETTER:
+                    aPageNumValue += (sal_Unicode)(char)((mnPageNumber - 1) % 26 + 'A');
+                    break;
+                case SVX_CHARS_LOWER_LETTER:
+                    aPageNumValue += (sal_Unicode)(char)((mnPageNumber - 1) % 26 + 'a');
+                    break;
+                case SVX_ROMAN_UPPER:
+                    bUpper = TRUE;
+                case SVX_ROMAN_LOWER:
+                    aPageNumValue += SvxNumberFormat::CreateRomanString(mnPageNumber, bUpper);
+                    break;
+                case SVX_NUMBER_NONE:
+                    aPageNumValue.Erase();
+                    aPageNumValue += sal_Unicode(' ');
+                    break;
+                default:
+                    aPageNumValue += String::CreateFromInt32( (sal_Int32)mnPageNumber );
+            }
+
+            pInfo->SetRepresentation( aPageNumValue );
+
+            return(0);
+        }
+    }
+
+    return maOldCalcFieldValueHdl.Call( pInfo );
 }
 
 IMPL_LINK( GraphicExporter, PaintProc, SdrPaintProcRec *, pRecord )
@@ -367,8 +434,6 @@ IMPL_LINK( GraphicExporter, PaintProc, SdrPaintProcRec *, pRecord )
 */
 VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, ULONG nWidthPixel, ULONG nHeightPixel ) const
 {
-    SdrModel* pDoc = pPage->GetModel();
-
     VirtualDevice*  pVDev = new VirtualDevice();
     MapMode         aMM( MAP_100TH_MM );
 
@@ -403,7 +468,7 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, ULONG nWidthPixe
     BOOL bAbort = !pVDev->SetOutputSize(aPageSize);
     DBG_ASSERT(!bAbort, "virt. Device nicht korrekt erzeugt");
 
-    SdrView* pView = new SdrView(pDoc, pVDev);
+    SdrView* pView = new SdrView(mpDoc, pVDev);
     pView->SetPageVisible( FALSE );
     pView->SetBordVisible( FALSE );
     pView->SetGridVisible( FALSE );
@@ -445,14 +510,13 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
     GraphicFilter*              pFilter = GetGrfFilter();
     SdrPage*                    pPage = mpUnoPage->GetSdrPage();
-    SdrModel*                   pDoc = pPage->GetModel();
     Sequence< PropertyValue >   aFilterData;
 
     sal_Int32 nWidth = 0;
     sal_Int32 nHeight = 0;
     sal_Bool bExportOnlyBackground = false;
 
-    if( NULL == pFilter || NULL == pPage || NULL == pDoc )
+    if( NULL == pFilter || NULL == pPage || NULL == mpDoc )
         return sal_False;
 
     // get the arguments from the descriptor
@@ -528,6 +592,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                     {
                         pDataValues->Value >>= bExportOnlyBackground;
                     }
+                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageNumber" ) ) )
+                    {
+                        pDataValues->Value >>= mnPageNumber;
+                    }
 
                     pDataValues++;
                 }
@@ -541,12 +609,17 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
     Graphic             aGraphic;
     VirtualDevice       aVDev;
-    const Fraction      aFrac( pDoc->GetScaleFraction() );
-    const MapMode       aMap( pDoc->GetScaleUnit(), Point(), aFrac, aFrac );
+    const Fraction      aFrac( mpDoc->GetScaleFraction() );
+    const MapMode       aMap( mpDoc->GetScaleUnit(), Point(), aFrac, aFrac );
     const sal_uInt16    nFilter = aMediaType.getLength()
                             ? pFilter->GetExportFormatNumberForMediaType( aMediaType )
                             : pFilter->GetExportFormatNumberForShortName( aFilterName );
     sal_Bool            bVectorType = !pFilter->IsExportPixelFormat( nFilter );
+    bool bRet = true;
+
+    SdrOutliner& rOutl=mpDoc->GetDrawOutliner(NULL);
+    maOldCalcFieldValueHdl = rOutl.GetCalcFieldValueHdl();
+    rOutl.SetCalcFieldValueHdl( LINK(this, GraphicExporter, CalcFieldValueHdl) );
 
     std::vector< SdrObject* > aShapes;
 
@@ -590,13 +663,13 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 if( (nWidth > 0) && (nWidth <= MAX_EXT_PIX)  )
                     nWidthPix = nWidth;
 
-                if( PTR_CAST( FmFormModel, pDoc ) )
+                if( PTR_CAST( FmFormModel, mpDoc ) )
                 {
-                    pView = new FmFormView( PTR_CAST( FmFormModel, pDoc ), &aVDev );
+                    pView = new FmFormView( PTR_CAST( FmFormModel, mpDoc ), &aVDev );
                 }
                 else
                 {
-                    pView = new SdrView( pDoc, &aVDev );
+                    pView = new SdrView( mpDoc, &aVDev );
                 }
 
 
@@ -622,13 +695,13 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
                 SdrView*        pView;
 
-                if( PTR_CAST( FmFormModel, pDoc ) )
+                if( PTR_CAST( FmFormModel, mpDoc ) )
                 {
-                    pView = new FmFormView( PTR_CAST( FmFormModel, pDoc ), &aVDev );
+                    pView = new FmFormView( PTR_CAST( FmFormModel, mpDoc ), &aVDev );
                 }
                 else
                 {
-                    pView = new SdrView( pDoc, &aVDev );
+                    pView = new SdrView( mpDoc, &aVDev );
                 }
 
                 Size aNewSize;
@@ -708,10 +781,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         }
 
         if( 0 == aShapes.size() )
-            return sal_False;
+            bRet = false;
     }
 
-    if( aShapes.size() )
+    if( bRet && aShapes.size() )
     {
         // special treatment for only one SdrGrafObj that has text
         sal_Bool bSingleGraphic = sal_False;
@@ -798,17 +871,27 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         }
     }
 
-    // export graphic only if it has a size
-    const Size aGraphSize( aGraphic.GetPrefSize() );
-    if ( ( aGraphSize.Width() == 0 ) || ( aGraphSize.Height() == 0 ) )
-        return sal_False;
+    if( bRet )
+    {
+        // export graphic only if it has a size
+        const Size aGraphSize( aGraphic.GetPrefSize() );
+        if ( ( aGraphSize.Width() == 0 ) || ( aGraphSize.Height() == 0 ) )
+        {
+            bRet = false;
+        }
+        else
+        {
+            // now we have a graphic, so export it
+            INetURLObject aURLObject( aURL.Complete );
+            DBG_ASSERT( aURLObject.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
+            bRet = 0 == XOutBitmap::ExportGraphic( aGraphic, aURLObject, *pFilter, nFilter, FALSE, &aFilterData );
+        }
+    }
 
-    // now we have a graphic, so export it
-    INetURLObject aURLObject( aURL.Complete );
-    DBG_ASSERT( aURLObject.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+    rOutl.SetCalcFieldValueHdl( maOldCalcFieldValueHdl );
 
-    return 0 == XOutBitmap::ExportGraphic( aGraphic, aURLObject, *pFilter, nFilter, FALSE, &aFilterData );
+    return bRet;
 }
 
 void SAL_CALL GraphicExporter::cancel()
@@ -884,6 +967,8 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
 
         if( NULL == mpUnoPage || NULL == mpUnoPage->GetSdrPage() )
             break;
+
+        mpDoc = mpUnoPage->GetSdrPage()->GetModel();
 
         // Step 4:  If we got a generic XShapes test all contained shapes
         //          if they belong to the same XDrawPage
