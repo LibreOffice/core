@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-20 12:35:59 $
+ *  last change: $Author: aw $ $Date: 2001-03-20 12:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2114,16 +2114,14 @@ void SdrTextObj::SetVerticalWriting( BOOL bVertical )
         if(pOutlinerParaObject->IsVertical() != bVertical)
         {
             // get item settings
-            sal_Bool bAutoGrowWidth =
-                ((SdrTextAutoGrowWidthItem&)GetItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue();
-            sal_Bool bAutoGrowHeight =
-                ((SdrTextAutoGrowHeightItem&)GetItem(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
+            const SfxItemSet& rSet = GetItemSet();
+            sal_Bool bAutoGrowWidth = ((SdrTextAutoGrowWidthItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue();
+            sal_Bool bAutoGrowHeight = ((SdrTextAutoGrowHeightItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
 
             // rescue object size
             Rectangle aObjectRect = GetSnapRect();
 
             // prepare ItemSet to set exchanged width and height items
-            const SfxItemSet& rSet = GetItemSet();
             SfxItemSet aNewSet(*rSet.GetPool(),
                 SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
                 SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH,
