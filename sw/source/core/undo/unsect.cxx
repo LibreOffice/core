@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unsect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:32:06 $
+ *  last change: $Author: od $ $Date: 2002-10-10 09:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,11 @@
 
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
+#endif
+/// OD 04.10.2002 #102894#
+/// class Calc needed for calculation of the hidden condition of a section.
+#ifndef _CALC_HXX
+#include <calc.hxx>
 #endif
 
 
@@ -383,11 +388,35 @@ void SwUndoDelSection::Undo( SwUndoIter& rUndoIter )
         if( pAttr )
             pFmt->SetAttr( *pAttr );
 
-        rDoc.GetNodes().InsertSection( aStt, *pFmt, *pSection, &aEnd );
+        /// OD 04.10.2002 #102894#
+        /// remember inserted section node for further calculations
+        SwSectionNode* pInsertedSectNd =
+                rDoc.GetNodes().InsertSection( aStt, *pFmt, *pSection, &aEnd );
 
         if( SFX_ITEM_SET == pFmt->GetItemState( RES_FTN_AT_TXTEND ) ||
             SFX_ITEM_SET == pFmt->GetItemState( RES_END_AT_TXTEND ))
+        {
             rDoc.GetFtnIdxs().UpdateFtn( aStt );
+        }
+
+        /// OD 04.10.2002 #102894#
+        /// consider that section is hidden by condition.
+        /// If section is hidden by condition,
+        /// recalculate condition and update hidden condition flag.
+        /// Recalculation is necessary, because fields, on which the hide
+        /// condition depends, can be changed - fields changes aren't undoable.
+        /// NOTE: setting hidden condition flag also creates/deletes corresponding
+        ///     frames, if the hidden condition flag changes.
+        SwSection& aInsertedSect = pInsertedSectNd->GetSection();
+        if ( aInsertedSect.IsHidden() &&
+             aInsertedSect.GetCondition().Len() > 0 )
+        {
+            SwCalc aCalc( rDoc );
+            rDoc.FldsToCalc( aCalc, pInsertedSectNd->GetIndex() );
+            bool bRecalcCondHidden =
+                    aCalc.Calculate( aInsertedSect.GetCondition() ).GetBool() ? true : false;
+            aInsertedSect.SetCondHidden( bRecalcCondHidden );
+        }
 
     }
 }
