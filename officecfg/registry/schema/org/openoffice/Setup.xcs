@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:07:37 $
+ *  last change: $Author: obo $ $Date: 2004-11-24 11:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,8 +185,8 @@
 			<prop oor:name="ooSetupFactoryCmdCategoryConfigRef" oor:type="xs:string">
 				<info>
     				<author>CD</author>
-					<desc xml:lang="en-US">Refers to a configuration file which contains category definitions for user interface commands suitable for this module.</desc>
-					<desc xml:lang="x-comment">Refers to a configuration file which contains category definitions for user interface commands suitable for this module.</desc>
+					<desc>Refers to a configuration file which contains category definitions for user interface commands suitable for this module.</desc>
+					<desc>Refers to a configuration file which contains category definitions for user interface commands suitable for this module.</desc>
 				</info>
 			</prop>
 		</group>
