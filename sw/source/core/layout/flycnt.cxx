@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ama $ $Date: 2002-09-13 12:11:58 $
+ *  last change: $Author: ama $ $Date: 2002-09-13 15:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2179,15 +2179,21 @@ void SwFlyAtCntFrm::MakeFlyPos()
                 break;
             }
         }
-        SwTwips nRelPosX;
+        SwTwips nRelPosX = nAdd;
+        sal_Bool bR2L = GetAnchor()->IsRightToLeft();
         if ( aHori.GetHoriOrient() == HORI_NONE )
         {
             if( pAutoPos && REL_CHAR == aHori.GetRelationOrient() )
-                nRelPosX = aHori.GetPos() + nAdd;
-            else if( bToggle )
+            {
+                if( bR2L )
+                    nRelPosX -= aHori.GetPos();
+                else
+                    nRelPosX += aHori.GetPos();
+            }
+            else if( bToggle || ( !aHori.IsPosToggle() && bR2L ) )
                 nRelPosX = nWidth - aFrm.Width() - aHori.GetPos();
             else
-                nRelPosX = aHori.GetPos() + nAdd;
+                nRelPosX += aHori.GetPos();
             //Da die relative Position immer zum Anker relativ ist,
             //muss dessen Entfernung zum virtuellen Anker aufaddiert werden.
             if ( GetAnchor() != pOrient )
