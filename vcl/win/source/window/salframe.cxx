@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ssa $ $Date: 2002-01-10 08:07:19 $
+ *  last change: $Author: ssa $ $Date: 2002-01-17 16:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,6 +352,21 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     pFrame->maFrameData.mbDefPos = TRUE;
 
     UpdateFrameGeometry( hWnd, pFrame );
+
+    if( pFrame->maFrameData.mnShowState = SW_SHOWMAXIMIZED )
+    {
+        // #96084 set a useful internal window size because
+        // the window will not be maximized (and the size updated) before show()
+        RECT aRect;
+        SystemParametersInfo( SPI_GETWORKAREA, 0, &aRect, 0 );
+        AdjustWindowRectEx( &aRect, GetWindowStyle( hWnd ),
+                            FALSE,     GetWindowExStyle( hWnd ) );
+        pFrame->maGeometry.nX = aRect.left;
+        pFrame->maGeometry.nY = aRect.top;;
+        pFrame->maGeometry.nWidth = aRect.right - aRect.left + 1;
+        pFrame->maGeometry.nHeight = aRect.bottom - aRect.top + 1;
+    }
+
     return pFrame;
 }
 
