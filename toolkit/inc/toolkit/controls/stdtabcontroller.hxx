@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtabcontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-25 13:30:09 $
+ *  last change: $Author: mt $ $Date: 2001-09-04 08:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #define _TOOLKIT_CONTROLS_STDTABCONTROLLER_HXX_
 
 
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_XTABCONTROLLER_HPP_
 #include <com/sun/star/awt/XTabController.hpp>
 #endif
@@ -88,7 +91,17 @@
 #include <osl/mutex.hxx>
 #endif
 
+#ifndef _TOOLKIT_HELPER_MACROS_HXX_
+#include <toolkit/helper/macros.hxx>
+#endif
+
+#ifndef _TOOLKIT_HELPER_SERVICENAMES_HXX_
+#include <toolkit/helper/servicenames.hxx>
+#endif
+
+
 class StdTabController :    public ::com::sun::star::awt::XTabController,
+                            public ::com::sun::star::lang::XServiceInfo,
                             public ::com::sun::star::lang::XTypeProvider,
                             public ::cppu::OWeakAggObject
 {
@@ -130,6 +143,9 @@ public:
     void SAL_CALL activateTabOrder(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL activateFirst(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL activateLast(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
+    DECLIMPL_SERVICEINFO( StdTabController, ::rtl::OUString::createFromAscii( szServiceName2_TabController ) )
 };
 
 

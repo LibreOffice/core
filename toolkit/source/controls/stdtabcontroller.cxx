@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtabcontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-25 13:40:45 $
+ *  last change: $Author: mt $ $Date: 2001-09-04 08:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,13 +196,15 @@ void StdTabController::ImplActivateControl( sal_Bool bFirst ) const
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XTabController*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::lang::XServiceInfo*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ) );
     return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( StdTabController )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController>* ) NULL )
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>* ) NULL )
 IMPL_XTYPEPROVIDER_END
 
 void StdTabController::setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >& Model ) throw(::com::sun::star::uno::RuntimeException)
