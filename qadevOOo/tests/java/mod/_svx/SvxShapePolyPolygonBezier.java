@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapePolyPolygonBezier.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-10 09:30:50 $
+ *  last change:$Date: 2003-05-27 13:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ public class SvxShapePolyPolygonBezier extends TestCase {
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
         try {
             log.println( "creating a chartdocument" );
@@ -224,7 +224,7 @@ public class SvxShapePolyPolygonBezier extends TestCase {
 
         try {
 
-            SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
             XMultiServiceFactory xMSF = (XMultiServiceFactory)
                 UnoRuntime.queryInterface(XMultiServiceFactory.class, xDrawDoc) ;
@@ -268,7 +268,7 @@ public class SvxShapePolyPolygonBezier extends TestCase {
 
             shapeProps.setPropertyValue("PolyPolygonBezier",coords);
 
-            //SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF()) ;
+            //SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)tParam.getMSF()) ;
             oShape = SOF.createShape(xDrawDoc,5000,3500,7500,5000,"Line");
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape) ;
         }
