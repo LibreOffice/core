@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-10 11:01:40 $
+ *  last change: $Author: cd $ $Date: 2002-09-23 11:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTENTENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #endif
 
 #ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
@@ -270,6 +273,22 @@ void registerServices( Reference< XMultiServiceFactory >& xSMgr )
         Reference <XInterface> xRef =  xSMgr->createInstanceWithArguments(
             OUString::createFromAscii( "com.sun.star.portal.InstallUser" ),
             Sequence<Any>( &aAny, 1 ) );
+    }
+    else if ( pCmdLine->IsServer() )
+    {
+        // Check some mandatory environment states if "-server" is possible. Otherwise ignore
+        // this parameter.
+        Reference< com::sun::star::container::XContentEnumerationAccess > rContent( xSMgr , UNO_QUERY );
+        if( rContent.is() )
+        {
+            OUString sPortalService = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.portal.InstallUser" ) );
+            Reference < com::sun::star::container::XEnumeration > rEnum = rContent->createContentEnumeration( sPortalService );
+            if ( !rEnum.is() )
+            {
+                // Reset server parameter so it is ignored in the furthermore startup process
+                pCmdLine->SetBoolParam( CommandLineArgs::CMD_BOOLPARAM_SERVER, sal_False );
+            }
+        }
     }
 
     ::rtl::OUString aPortalConnect;
