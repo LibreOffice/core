@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:23:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,14 +119,17 @@ namespace {
                 case DataType::INTEGER:
                     bIsCompatible = (DataType::SMALLINT == _eType2)
                                 ||  (DataType::TINYINT  == _eType2)
-                                ||  (DataType::BIT      == _eType2);
+                                ||  (DataType::BIT      == _eType2)
+                                ||  (DataType::BOOLEAN  == _eType2);
                     break;
                 case DataType::SMALLINT:
                     bIsCompatible = (DataType::TINYINT  == _eType2)
-                                ||  (DataType::BIT      == _eType2);
+                                ||  (DataType::BIT      == _eType2)
+                                ||  (DataType::BOOLEAN  == _eType2);
                     break;
                 case DataType::TINYINT:
-                    bIsCompatible = (DataType::BIT      == _eType2);
+                    bIsCompatible = (DataType::BIT      == _eType2)
+                                ||  (DataType::BOOLEAN  == _eType2);
                     break;
 
                 case DataType::BLOB:
@@ -263,6 +266,7 @@ void ORowSetValue::setTypeKind(sal_Int32 _eType)
                     (*this) = getInt32();
                     break;
                 case DataType::BIT:
+                case DataType::BOOLEAN:
                     (*this) = getBool();
                     break;
                 case DataType::DATE:
@@ -440,6 +444,7 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 TRACE_ALLOC( Sequence_sal_Int8 )
                 break;
             case DataType::BIT:
+            case DataType::BOOLEAN:
                 m_aValue.m_bBool    = _rRH.m_aValue.m_bBool;
                 break;
             case DataType::TINYINT:
@@ -507,6 +512,7 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 (*this) = *(Sequence<sal_Int8>*)_rRH.m_aValue.m_pValue;
                 break;
             case DataType::BIT:
+            case DataType::BOOLEAN:
                 m_aValue.m_bBool    = _rRH.m_aValue.m_bBool;
                 break;
             case DataType::TINYINT:
@@ -699,7 +705,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int32& _rRH)
 
 ORowSetValue& ORowSetValue::operator=(const sal_Bool _rRH)
 {
-    if(m_eTypeKind != DataType::BIT)
+    if(m_eTypeKind != DataType::BIT && DataType::BOOLEAN != m_eTypeKind )
         free();
 
     m_aValue.m_bBool = _rRH;
@@ -849,6 +855,7 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
             }
             break;
         case DataType::BIT:
+        case DataType::BOOLEAN:
             bRet = m_aValue.m_bBool == _rRH.m_aValue.m_bBool;
             break;
         case DataType::DATE:
@@ -936,6 +943,7 @@ Any ORowSetValue::makeAny() const
                 rValue = getAny();
                 break;
             case DataType::BIT:
+            case DataType::BOOLEAN:
                 rValue.setValue( &m_aValue.m_bBool, ::getCppuBooleanType() );
                 break;
             case DataType::TINYINT:
@@ -1015,6 +1023,7 @@ Any ORowSetValue::makeAny() const
                 }
                 break;
             case DataType::BIT:
+            case DataType::BOOLEAN:
                 aRet = ::rtl::OUString::valueOf((sal_Int32)(sal_Bool)*this);
                 break;
             case DataType::TINYINT:
@@ -1073,6 +1082,7 @@ sal_Bool ORowSetValue::getBool()    const
                 OSL_ASSERT(!"getBool() for this type is not allowed!");
                 break;
             case DataType::BIT:
+            case DataType::BOOLEAN:
                 bRet = m_aValue.m_bBool;
                 break;
             case DataType::TINYINT:
@@ -1124,6 +1134,7 @@ sal_Int8 ORowSetValue::getInt8()    const
                 OSL_ASSERT(!"getInt8() for this type is not allowed!");
                 break;
             case DataType::BIT:
+            case DataType::BOOLEAN:
                 nRet = m_aValue.m_bBool;
                 break;
             case DataType::TINYINT:
@@ -1184,6 +1195,7 @@ sal_Int16 ORowSetValue::getInt16()  const
                 OSL_ASSERT(!"getInt16() for this type is not allowed!");
                 break;
             case DataType::BIT:
+            case DataType::BOOLEAN:
                 nRet = m_aValue.m_bBool;
                 break;
             case DataType::TINYINT:
@@ -1247,6 +1259,7 @@ sal_Int32 ORowSetValue::getInt32()  const
                 OSL_ASSERT(!"getInt32() for this type is not allowed!");
                 break;
             case DataType::BIT:
+            case DataType::BOOLEAN:
                 nRet = m_aValue.m_bBool;
                 break;
             case DataType::TINYINT:
@@ -1310,6 +1323,7 @@ sal_Int64 ORowSetValue::getLong()   const
                 OSL_ASSERT(!"getInt32() for this type is not allowed!");
                 break;
             case DataType::BIT:
+            case DataType::BOOLEAN:
                 nRet = m_aValue.m_bBool;
                 break;
             case DataType::TINYINT:
@@ -1377,6 +1391,7 @@ float ORowSetValue::getFloat()  const
                 OSL_ASSERT(!"getDouble() for this type is not allowed!");
                 break;
             case DataType::BIT:
+            case DataType::BOOLEAN:
                 nRet = m_aValue.m_bBool;
                 break;
             case DataType::TINYINT:
@@ -1446,6 +1461,7 @@ double ORowSetValue::getDouble()    const
                 OSL_ASSERT(!"getDouble() for this type is not allowed!");
                 break;
             case DataType::BIT:
+            case DataType::BOOLEAN:
                 nRet = m_aValue.m_bBool;
                 break;
             case DataType::TINYINT:
@@ -1529,6 +1545,7 @@ void ORowSetValue::setFromDouble(const double& _rVal,sal_Int32 _nDatatype)
             OSL_ASSERT(!"setFromDouble() for this type is not allowed!");
             break;
         case DataType::BIT:
+        case DataType::BOOLEAN:
             m_aValue.m_bBool = _rVal != 0.0;
             break;
         case DataType::TINYINT:
