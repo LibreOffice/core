@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-30 20:16:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,26 +373,26 @@ TabPage RID_SCPAGE_CALC
         Text [ swedish ] = "1899-12-30 ( ~Standard )" ;
         Text [ dutch ] = "30.12.1899 ( ~Standaard )" ;
         Text [ spanish ] = "30.12.1899 (~Estándar)" ;
-        Text [ ENGLISH_US ] = "12/30/1899 (Standa~rd)" ;
-        QuickHelpText [ english_us ] = "0 corresponds to 12/30/1899" ;
+        Text [ ENGLISH_US ] = "12/30/1899 (defa~ult)" ;
+        QuickHelpText [ english_us ] = "Value 0 corresponds to 12/30/1899!" ;
         QuickHelpText [ dutch ] = "0 komt overeen met 30.12.1899" ;
         QuickHelpText [ portuguese ] = "0 corresponde a 12/30/1899" ;
-        QuickHelpText [ swedish ] = "Värdet 0 motsvarar 1899-12-30" ;
-        QuickHelpText [ spanish ] = "El valor 0 corresponde al 30.12.1899" ;
+        QuickHelpText [ swedish ] = "Värdet 0 motsvarar 1899-12-30!" ;
+        QuickHelpText [ spanish ] = "El valor 0 corresponde al 30.12.1899!" ;
         Text[ chinese_simplified ] = "30.12.1899 ±ê×¼(~R)";
         Text[ russian ] = "30.12.1899 ( ~ñòàíäàğò )";
-        Text[ polish ] = "30.12.1899 ( Domyœlnie )";
+        Text[ polish ] = "30.12.1899 (~domyœlnie)";
         Text[ japanese ] = "12/30/1899 (•W€)(~R)";
         Text[ chinese_traditional ] = "30.12.1899 ¼Ğ·Ç(~R)";
         Text[ arabic ] = "12/30/1899 (ŞíÇÓí)";
-        QuickHelpText[ russian ] = "Çíà÷åíèå 0 ñîîòâåòñòâóåò 30.12.1899";
-        QuickHelpText[ french ] = "La valeur zéro correspond au 30.12.1899";
+        QuickHelpText[ russian ] = "Çíà÷åíèå 0 ñîîòâåòñòâóåò 30.12.1899!";
+        QuickHelpText[ french ] = "La valeur zéro correspond au 30.12.1899!";
         QuickHelpText[ polish ] = "Wartoœæ 0 odpowiada 30.12.1899!";
-        QuickHelpText[ japanese ] = "0’l‚ğ12/30/1899 ‚Æ‚·‚é!";
-        QuickHelpText[ chinese_simplified ] = "0 ±íÊ¾ 12/30/1899";
+        QuickHelpText[ japanese ] = "’l 0 ‚ğ 12/30/1899 ‚Æ‚İ‚È‚·!";
+        QuickHelpText[ chinese_simplified ] = "ÊıÖµ 0 ±íÊ¾ 30.12.1899!";
         QuickHelpText[ chinese_traditional ] = "0 ±íÊ¾ 12/30/1899";
         QuickHelpText[ arabic ] = "0 corresponds to 12/30/1899";
-        QuickHelpText[ italian ] = "Il valore 0 corrisponde a 30/12/1899";
+        QuickHelpText[ italian ] = "Il valore 0 corrisponde a 30/12/1899!";
         Text[ greek ] = "30/12/1899 (ĞñïåğéëïãŞ)";
         Text[ korean ] = "12/30/1899 (~Ç¥ÁØ)";
         QuickHelpText[ greek ] = "ÔéìŞ 0 áíôéóôïé÷åß óôçí ôéìŞ 30/12/1899";
@@ -424,25 +424,25 @@ TabPage RID_SCPAGE_CALC
         Text [ dutch ] = "01.01.1900 ( Star~Calc 1.0 )" ;
         Text [ spanish ] = "01.01.1900 (Star~Calc 1.0)" ;
         Text [ ENGLISH_US ] = "01/01/1900 (Star~Calc 1.0)" ;
-        QuickHelpText [ english_us ] = "0 corresponds to 01/01/1900" ;
+        QuickHelpText [ english_us ] = "Value 0 corresponds to 01/01/1900!" ;
         QuickHelpText [ dutch ] = "0 komt overeen met 01.01.1900" ;
         QuickHelpText [ portuguese ] = "0 corresponde a 01/01/1900" ;
-        QuickHelpText [ swedish ] = "Värdet 0 motsvarar 1900-01-01" ;
+        QuickHelpText [ swedish ] = "Värdet 0 motsvarar 1900-01-01!" ;
         Text[ chinese_simplified ] = "01.01.1900 ( Star~Calc 1.0 )";
         Text[ russian ] = "01.01.1900 ( Star~Calc 1.0 )";
-        Text[ polish ] = "01.01.1900 ( StarCalc 1.0 )";
+        Text[ polish ] = "01.01.1900 (Star~Calc 1.0)";
         Text[ japanese ] = "01/01/1900 (Star~Calc 1.0)";
         Text[ chinese_traditional ] = "01.01.1900 ( Star~Calc 1.0 )";
         Text[ arabic ] = "01/01/1900 ( Star~Calc 1.0)";
-        QuickHelpText[ russian ] = "Çíà÷åíèå 0 ñîîòâåòñòâóåò 01.01.1900";
-        QuickHelpText[ french ] = "La valeur zéro correspond au 01.01.1900";
+        QuickHelpText[ russian ] = "Çíà÷åíèå 0 ñîîòâåòñòâóåò 01.01.1900!";
+        QuickHelpText[ french ] = "La valeur zéro correspond au 01.01.1900!";
         QuickHelpText[ polish ] = "Wartoœæ 0 odpowiada 01.01.1900!";
-        QuickHelpText[ japanese ] = "0’l‚Í01.01.1900‚É‘Š“–!";
-        QuickHelpText[ chinese_simplified ] = "0 ±íÊ¾ 01/01/1900";
+        QuickHelpText[ japanese ] = "’l 0 ‚ğ 01/01/1900 ‚Æ‚İ‚È‚·!";
+        QuickHelpText[ chinese_simplified ] = "ÊıÖµ 0 ±íÊ¾ 01.01.1900!";
         QuickHelpText[ chinese_traditional ] = "0 ±íÊ¾ 01/01/1900";
         QuickHelpText[ arabic ] = "0 corresponds to 01/01/1900";
-        QuickHelpText[ spanish ] = "El valor 0 corresponde al 01.01.1900";
-        QuickHelpText[ italian ] = "Il valore 0 corrisponde a 01/01/1900";
+        QuickHelpText[ spanish ] = "El valor 0 corresponde al 01.01.1900!";
+        QuickHelpText[ italian ] = "Il valore 0 corrisponde a 01/01/1900!";
         Text[ greek ] = "01/01/1900 (Star~Calc 1.0)";
         Text[ korean ] = "01/01/1900 (Star~Calc 1.0)";
         QuickHelpText[ greek ] = "ÔéìŞ 0 áíôéóôïé÷åß óôçí ôéìŞ 01/01/1900";
@@ -600,7 +600,7 @@ TabPage RID_SCPAGE_CALC
         Text [ english_us ] = "Case se~nsitive" ;
         Text[ chinese_simplified ] = "Çø·Ö´óĞ¡Ğ´(~N)";
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
-        Text[ polish ] = "Uwzglêdnij du¿e i ma³e litery";
+        Text[ polish ] = "Uwzglêdnij wielkie i ma³e litery";
         Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~N)";
         Text[ chinese_traditional ] = "°Ï¤À¤j¤p¼g(~N)";
         Text[ arabic ] = "ãÑÇÚÇÉ ÇáÃÍÑİ ÇáßÈíÑÉ/ÇáÕÛíÑÉ";
@@ -673,19 +673,19 @@ TabPage RID_SCPAGE_CALC
         Size = MAP_APPFONT ( 239 , 10 ) ;
         Text = "Reguläre Ausdrücke in ~Formeln ermöglichen" ;
         Text [ ENGLISH ] = "Enable regular expressions in ~formulas" ;
-        Text [ english_us ] = "Enable regular expressions in formulas" ;
-        Text [ italian ] = "Enable regular expressions in formulas" ;
+        Text [ english_us ] = "~Enable regular expressions in formulas" ;
+        Text [ italian ] = "Permetti espressioni regolari nelle ~formule" ;
         Text [ spanish ] = "Permitir expresiones regulares en fórmulas" ;
-        Text [ french ] = "Autoriser les caractères génériques dans les formules" ;
+        Text [ french ] = "Autoriser les caractères génériques dans les ~formules" ;
         Text [ dutch ] = "Enable regular expressions in formulas" ;
-        Text [ swedish ] = "Tillåt reguljära uttryck i formler" ;
+        Text [ swedish ] = "Tillåt reguljära uttryck i ~formler" ;
         Text [ danish ] = "Enable regular expressions in formulas" ;
         Text [ portuguese_brazilian ] = "Enable regular expressions in formulas" ;
         Text [ portuguese ] = "Enable regular expressions in formulas" ;
         Text[ chinese_simplified ] = "ÔÊĞí¹«Ê½º¬ÓĞ³£¹æ±í´ïÊ½";
         Text[ russian ] = "Ïîçâîëèòü ğåãóëÿğíûå âûğàæåíèÿ â ôîğìóëàõ";
         Text[ polish ] = "Dopuœæ w formu³ach wyra¿enia regularne";
-        Text[ japanese ] = "”®‚Ì³‹K•\\Œ»‚ª‰Â”\\";
+        Text[ japanese ] = "”®‚Å³‹K•\\Œ»‚ğg‚¤";
         Text[ chinese_traditional ] = "¤¹³\\¤½¦¡§t¦³±`³Wªí¹F¦¡";
         Text[ arabic ] = "Enable regular expressions in formulas";
         Text[ greek ] = "Enable regular expressions in formulas";
@@ -1429,7 +1429,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ chinese_simplified ] = "±¸×¢±ê¼Ç(~N)";
         Text[ russian ] = "Ìåòêà ïğèìå÷àíèÿ";
         Text[ polish ] = "Zna~cznik notatek";
-        Text[ japanese ] = "ºÒİÄ‚Ì•\\¦(~N)";
+        Text[ japanese ] = "ºÒİÄ(~N)";
         Text[ chinese_traditional ] = "³Æµù¼Ğ°O(~N)";
         Text[ arabic ] = "ãõÈóíøöä ÇáãáÇÍÙÇÊ";
         Text[ greek ] = "Äåßêôçò óçìå~éşóåùí";
@@ -1475,7 +1475,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ ENGLISH ] = "Anchor" ;
         Text [ dutch ] = "~Anker" ;
         Text [ english_us ] = "~Anchor" ;
-        Text [ swedish ] = "~Ankare" ;
+        Text [ swedish ] = "An~kare" ;
         Text [ danish ] = "Anker" ;
         Text [ italian ] = "Ancoraggio" ;
         Text [ spanish ] = "~Ancla" ;
@@ -1529,7 +1529,7 @@ TabPage RID_SCPAGE_CONTENT
         Size = MAP_APPFONT ( 112 , 10 ) ;
         Text = "~Referenzen farbig anzeigen" ;
         Text [ ENGLISH ] = "Show r~eferences in color" ;
-        Text [ english_us ] = "Sho~w references in color" ;
+        Text [ english_us ] = "Show references in color" ;
         Text [ portuguese_brazilian ] = "~Referenzen farbig anzeigen" ;
         Text [ swedish ] = "Visa ~referenser i färg" ;
         Text [ danish ] = "Vis farvede referencer" ;
@@ -1593,13 +1593,13 @@ TabPage RID_SCPAGE_CONTENT
         Text [ finnish ] = "~Objektit/grafiikka" ;
         Text [ danish ] = "Objekter/grafik" ;
         Text [ french ] = "~Objets/Images" ;
-        Text [ swedish ] = "~Objekt/grafik" ;
+        Text [ swedish ] = "Ob~jekt/grafik" ;
         Text [ dutch ] = "~Objecten/afbeeldingen" ;
         Text [ spanish ] = "Objetos/~Imágenes" ;
         Text [ english_us ] = "Ob~jects/Graphics" ;
         Text[ chinese_simplified ] = "¶ÔÏó/Í¼ĞÎ(~O)";
         Text[ russian ] = "Îáúåêòû/Ğèñóíêè";
-        Text[ polish ] = "Obiekty/Rysunki";
+        Text[ polish ] = "Obiekty/Grafiki";
         Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Æ}(~O)";
         Text[ chinese_traditional ] = "ª«¥ó/¹Ï§Î(~O)";
         Text[ arabic ] = "ßÇÆäÇÊ/ÕæÑ";
@@ -1660,7 +1660,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ portuguese ] = "Objectos de ~desenho" ;
         Text [ finnish ] = "~Piirrosobjektit" ;
         Text [ danish ] = "Tegneobjekter" ;
-        Text [ french ] = "Objets de ~dessin" ;
+        Text [ french ] = "Objets de d~essin" ;
         Text [ swedish ] = "~Ritobjekt" ;
         Text [ dutch ] = "~Tekenobjecten" ;
         Text [ spanish ] = "~Objetos de dibujo" ;
@@ -1729,7 +1729,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ finnish ] = "Sar~akkeiden/rivien otsikot" ;
         Text [ danish ] = "Kolonne- og rækkeoverskrifter" ;
         Text [ french ] = "En-têtes de ~lignes et colonnes" ;
-        Text [ swedish ] = "~Kolumn- och radhuvuden" ;
+        Text [ swedish ] = "Kol~umn- och radhuvuden" ;
         Text [ dutch ] = "Kolo~m-/rijkoppen" ;
         Text [ spanish ] = "~Títulos de filas y columnas" ;
         Text [ english_us ] = "Colu~mn/row headers" ;
@@ -1793,7 +1793,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ english_us ] = "~Vertical scroll bar" ;
         Text[ chinese_simplified ] = "´¹Ö±¹ö¶¯Ìõ";
         Text[ russian ] = "Âåğòèêàëüíàÿ ïîëîñà ïğîêğóòêè";
-        Text[ polish ] = "Piono~wy pasek przesuwania obrazu";
+        Text[ polish ] = "Piono~wy pasek przewijania obrazu";
         Text[ japanese ] = "‚’¼½¸Û°ÙÊŞ°(~V)";
         Text[ chinese_traditional ] = "««ª½¦¡±²¶b";
         Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÑÃÓíÇğ";
@@ -1815,8 +1815,8 @@ TabPage RID_SCPAGE_CONTENT
         Text [ portuguese ] = "~Separadores de folhas" ;
         Text [ finnish ] = "Lomakkeen ~välilehdet" ;
         Text [ danish ] = "Regnearksfaner" ;
-        Text [ french ] = "~Onglets de classeur" ;
-        Text [ swedish ] = "Tabell~flik" ;
+        Text [ french ] = "~Onglets des feuilles" ;
+        Text [ swedish ] = "Ta~bellflik" ;
         Text [ dutch ] = "~Werkbladenregister" ;
         Text [ spanish ] = "Etiqueta de ~hoja" ;
         Text [ english_us ] = "Sh~eet tabs" ;
@@ -1888,11 +1888,11 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ russian ] = "Ìåòğèêè";
         Text[ greek ] = "~ÌåôñéêÜ";
         Text[ dutch ] = "~Metrieken";
-        Text[ french ] = "~Métriques";
-        Text[ spanish ] = "~Métricas";
+        Text[ french ] = "Métriques";
+        Text[ spanish ] = "Métricas";
         Text[ italian ] = "Metrici";
         Text[ danish ] = "Metrics";
-        Text[ swedish ] = "~Metriker";
+        Text[ swedish ] = "Metriker";
         Text[ polish ] = "Metryki";
         Text[ portuguese_brazilian ] = "Metrics";
         Text[ japanese ] = "ÒÄØ¯¸";
@@ -1910,21 +1910,21 @@ TabPage RID_SCPAGE_LAYOUT
         Size = MAP_APPFONT ( 48 , 8 ) ;
         Text = "~Maßeinheit" ;
         Text [ ENGLISH ] = "~Measurement unit" ;
-        Text[ english_us ] = "Measurement unit";
+        Text[ english_us ] = "Measurement ~unit";
         Text[ portuguese ] = "Unidade de medida";
         Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
         Text[ greek ] = "ÌïíÜäá ìİôñçóçò";
         Text[ dutch ] = "Measurement unit";
-        Text[ french ] = "Unité de mesure";
+        Text[ french ] = "~Unité de mesure";
         Text[ spanish ] = "Unidad de medida";
         Text[ italian ] = "Unità di misura";
         Text[ danish ] = "Measurement unit";
-        Text[ swedish ] = "Måttenhet";
+        Text[ swedish ] = "~Måttenhet";
         Text[ polish ] = "Jednostka miary";
         Text[ portuguese_brazilian ] = "Measurement unit";
         Text[ japanese ] = "g‚¤’PˆÊ";
         Text[ korean ] = "Ã´µµ";
-        Text[ chinese_simplified ] = "¼ÆÁ¿µ¥Î»";
+        Text[ chinese_simplified ] = "³ß´çµ¥Î»";
         Text[ chinese_traditional ] = "­p¶q³æ¦ì";
         Text[ turkish ] = "Measurement unit";
         Text[ arabic ] = "æÍÏÉ ÇáŞíÇÓ";
@@ -2236,16 +2236,16 @@ TabPage RID_SCPAGE_LAYOUT
         Size = MAP_APPFONT ( 48 , 8 ) ;
         Text = "~Tabulator" ;
         Text [ ENGLISH ] = "~Tab stops" ;
-        Text[ english_us ] = "Tab stops";
+        Text[ english_us ] = "~Tab stops";
         Text[ portuguese ] = "Tabulação";
         Text[ russian ] = "Òàáóëÿòîğ";
         Text[ greek ] = "Óôçëïèİôçò";
         Text[ dutch ] = "Tabstop";
-        Text[ french ] = "Tabulation";
+        Text[ french ] = "~Tabulation";
         Text[ spanish ] = "Tabulador";
         Text[ italian ] = "Tabulazione";
         Text[ danish ] = "Tab stops";
-        Text[ swedish ] = "Tabulator";
+        Text[ swedish ] = "~Tabulator";
         Text[ polish ] = "Tabulator";
         Text[ portuguese_brazilian ] = "Tab stops";
         Text[ japanese ] = "ÀÌŞŠÔŠu";
@@ -2708,7 +2708,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ ENGLISH ] = "Expand ~references if inserting columns/rows at their edges" ;
         Text [ english_us ] = "Expand ~references when new columns/rows are inserted" ;
         Text [ portuguese_brazilian ] = "Refere~nzen beim Spalten-/Zeileneinf?en an deren R?ndern ausdehnen" ;
-        Text [ swedish ] = "Utöka refere~nser i kanterna när kolumner/rader infogas" ;
+        Text [ swedish ] = "Utöka ~referenser i kanterna när kolumner/rader infogas" ;
         Text [ danish ] = "Udvid referencer ved kanterne, når kolonner/rækker indsættes" ;
         Text [ italian ] = "Amplia i riferimenti nell'inserimento di colonne/righe ai bordi di questi" ;
         Text [ spanish ] = "~Expandir referencias al insertar filas/columnas en los bordes" ;
@@ -2764,16 +2764,16 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ ENGLISH ] = "Use ~printer metrics for text formatting" ;
         Text[ english_us ] = "Use printer metrics for text formatting";
         Text[ portuguese ] = "Use printer metrics for text formatting";
-        Text[ russian ] = "Ïğèìåíèòü äëÿ ôîğìàòèğîâàíèÿ òåêñòà ğàçìåğû, ïğåäëàãàåìûå ïğèíòåğîì";
+        Text[ russian ] = "Ïğèìåíèòü äëÿ ôîğìàòèğîâàíèÿ òåêñòà ïàğàìåòğû ïğèíòåğà";
         Text[ greek ] = "Use printer metrics for text formatting";
         Text[ dutch ] = "Use printer metrics for text formatting";
         Text[ french ] = "Utiliser les paramètres de l'~imprimante pour le formatage du texte";
         Text[ spanish ] = "Usar los parámetros de la impresora para el formato de texto";
         Text[ finnish ] = "Use printer metrics for text formatting";
-        Text[ italian ] = "Use printer metrics for text formatting";
+        Text[ italian ] = "~Usa i parametri della stampante per la formattazione del testo";
         Text[ danish ] = "Use printer metrics for text formatting";
         Text[ swedish ] = "Använd s~krivarmått för textformatering";
-        Text[ polish ] = "Use printer metrics for text formatting";
+        Text[ polish ] = "Do sformatowania tekstu u¿yj parametrów drukarki";
         Text[ portuguese_brazilian ] = "Use printer metrics for text formatting";
         Text[ japanese ] = "•¶‘‘®İ’è‚Ìˆóü”ÍˆÍ‚ğg—p";
         Text[ korean ] = "Use printer metrics for text formatting";
@@ -2804,6 +2804,26 @@ TabPage RID_SCPAGE_PRINT
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Seiten" ;
         Text [ ENGLISH ] = "Pages" ;
+        Text[ english_us ] = "Pages";
+        Text[ portuguese ] = "Pages";
+        Text[ russian ] = "Ñòğàíèöû";
+        Text[ greek ] = "Pages";
+        Text[ dutch ] = "Pages";
+        Text[ french ] = "Pages";
+        Text[ spanish ] = "Páginas";
+        Text[ finnish ] = "Pages";
+        Text[ italian ] = "Pagine";
+        Text[ danish ] = "Pages";
+        Text[ swedish ] = "Sidor";
+        Text[ polish ] = "Strony";
+        Text[ portuguese_brazilian ] = "Pages";
+        Text[ japanese ] = "Íß°¼Ş";
+        Text[ korean ] = "Pages";
+        Text[ chinese_simplified ] = "Ò³";
+        Text[ chinese_traditional ] = "Pages";
+        Text[ turkish ] = "Pages";
+        Text[ arabic ] = "Pages";
+        Text[ catalan ] = "Pages";
     };
     CheckBox BTN_SKIPEMPTYPAGES
     {
@@ -2811,6 +2831,26 @@ TabPage RID_SCPAGE_PRINT
         Size = MAP_APPFONT ( 239 , 10 ) ;
         Text = "~Ausgabe leerer Seiten unterdrücken" ;
         Text [ ENGLISH ] = "~Suppress output of empty pages" ;
+        Text[ english_us ] = "~Suppress output of empty pages";
+        Text[ portuguese ] = "~Suppress output of empty pages";
+        Text[ russian ] = "~Ïîäàâëÿòü âûâîä ïóñòûõ ñòğàíèö";
+        Text[ greek ] = "~Suppress output of empty pages";
+        Text[ dutch ] = "~Suppress output of empty pages";
+        Text[ french ] = "~Ignorer les pages vides pour l'impression";
+        Text[ spanish ] = "~No imprimir páginas vacías";
+        Text[ finnish ] = "~Suppress output of empty pages";
+        Text[ italian ] = "~Elimina stampa di pagine vuote";
+        Text[ danish ] = "~Suppress output of empty pages";
+        Text[ swedish ] = "Undertryck utm~atning av tomma sidor";
+        Text[ polish ] = "~Nie drukuj pustych stron";
+        Text[ portuguese_brazilian ] = "~Suppress output of empty pages";
+        Text[ japanese ] = "‹ó”’‚ÌÍß°¼Ş‚ğo—Í—}~";
+        Text[ korean ] = "~Suppress output of empty pages";
+        Text[ chinese_simplified ] = "²»´òÓ¡¿Õ°×Ò³Ãæ";
+        Text[ chinese_traditional ] = "~Suppress output of empty pages";
+        Text[ turkish ] = "~Suppress output of empty pages";
+        Text[ arabic ] = "~Suppress output of empty pages";
+        Text[ catalan ] = "~Suppress output of empty pages";
     };
     FixedLine FL_SHEETS
     {
@@ -2818,6 +2858,26 @@ TabPage RID_SCPAGE_PRINT
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Tabellen" ;
         Text [ ENGLISH ] = "Sheets" ;
+        Text[ english_us ] = "Sheets";
+        Text[ portuguese ] = "Sheets";
+        Text[ russian ] = "Ëèñòû";
+        Text[ greek ] = "Sheets";
+        Text[ dutch ] = "Sheets";
+        Text[ french ] = "Feuilles";
+        Text[ spanish ] = "Hojas";
+        Text[ finnish ] = "Sheets";
+        Text[ italian ] = "Tabelle";
+        Text[ danish ] = "Sheets";
+        Text[ swedish ] = "Tabeller";
+        Text[ polish ] = "Arkusze";
+        Text[ portuguese_brazilian ] = "Sheets";
+        Text[ japanese ] = "•\\";
+        Text[ korean ] = "Sheets";
+        Text[ chinese_simplified ] = "¹¤×÷±í";
+        Text[ chinese_traditional ] = "Sheets";
+        Text[ turkish ] = "Sheets";
+        Text[ arabic ] = "Sheets";
+        Text[ catalan ] = "Sheets";
     };
     CheckBox BTN_SELECTEDSHEETS
     {
@@ -2825,6 +2885,27 @@ TabPage RID_SCPAGE_PRINT
         Size = MAP_APPFONT ( 239 , 10 ) ;
         Text = "~Nur ausgewählte Tabellen drucken" ;
         Text [ ENGLISH ] = "~Print only selected sheets" ;
+        Text[ english_us ] = "~Print only selected sheets";
+        Text[ portuguese ] = "~Print only selected sheets";
+        Text[ russian ] = "~Ïå÷àòü òîëüêî âûäåëåííûõ ëèñòîâ";
+        Text[ greek ] = "~Print only selected sheets";
+        Text[ dutch ] = "~Print only selected sheets";
+        Text[ french ] = "~Imprimer uniquement les feuilles sélectionnées";
+        Text[ spanish ] = "~Imprimir sólo tablas seleccionadas";
+        Text[ finnish ] = "~Print only selected sheets";
+        Text[ italian ] = "~Stampa solo tabelle selezionate";
+        Text[ danish ] = "~Print only selected sheets";
+        Text[ swedish ] = "Skriv ~bara ut markerade tabeller";
+        Text[ polish ] = "~Drukuj tylko zaznaczone tabele";
+        Text[ portuguese_brazilian ] = "~Print only selected sheets";
+        Text[ japanese ] = "‘I‘ğ‚µ‚½•\\‚Ì‚İˆóü";
+        Text[ korean ] = "~Print only selected sheets";
+        Text[ chinese_simplified ] = "Ö»´òÓ¡Ñ¡ÖĞµÄ¹¤×÷±í";
+        Text[ chinese_traditional ] = "~Print only selected sheets";
+        Text[ turkish ] = "~Print only selected sheets";
+        Text[ arabic ] = "~Print only selected sheets";
+        Text[ catalan ] = "~Print only selected sheets";
     };
 };
+
 
