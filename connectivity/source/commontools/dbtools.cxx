@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:27:17 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 13:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1040,6 +1040,10 @@ Reference< XSQLQueryComposer> getCurrentSettingsComposer(
             }
         }
     }
+    catch(SQLException&)
+    {
+        xReturn = NULL;
+    }
     catch(Exception&)
     {
         OSL_ENSHURE(sal_False, "::getCurrentSettingsComposer : catched an exception !");
@@ -1135,6 +1139,9 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2000/11/22 14:27:17  oj
+ *  dispose old connection when new is set
+ *
  *  Revision 1.10  2000/11/14 13:41:29  oj
  *  use of statis strings
  *
