@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-23 03:00:41 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 15:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,11 @@ void XMLSignatureHelper::ImplCreateSEInitializer()
 void XMLSignatureHelper::SetUriBinding( com::sun::star::uno::Reference< com::sun::star::xml::crypto::XUriBinding >& rxUriBinding )
 {
     mxUriBinding = rxUriBinding;
+}
+
+com::sun::star::uno::Reference< com::sun::star::xml::crypto::XUriBinding > XMLSignatureHelper::GetUriBinding() const
+{
+    return mxUriBinding;
 }
 
 void XMLSignatureHelper::SetStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStorage )

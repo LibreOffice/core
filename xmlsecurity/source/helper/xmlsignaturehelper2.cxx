@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-16 15:58:49 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 15:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,17 @@ uno::Reference < io::XStream > UriBindingHelper::OpenInputStream( uno::Reference
         // Cloning because of I can't keep all storage references open
         // MBA with think about a better API...
         xStream = rxStore->cloneStreamElement( rURI );
+        // Doesnt work, so better for EA to pass exception and not to sign the doc...
+        /*
+        try
+        {
+            xStream = rxStore->cloneStreamElement( rURI );
+        }
+        catch (packages::WrongPasswordException)
+        {
+            xStream = rxStore->cloneEncryptedStreamElement( rURI, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DUMMY")) );
+        }
+        */
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 07:29:31 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 15:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+
+#ifndef _COM_SUN_STAR_PACKAGES_WRONGPASSWORDEXCEPTION_HPP_
+#include <com/sun/star/packages/WrongPasswordException.hpp>
+#endif
 
 #include <tools/intn.hxx>
 #include <tools/date.hxx>
@@ -234,12 +238,27 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
             for ( sal_Int32 n = 0; n < nElements; n++ )
             {
                 bool bBinaryMode = true;
+                bool bEncrypted = false;
                 sal_Int32 nSep = aElements[n].lastIndexOf( '.' );
                 if ( nSep != (-1) )
                 {
                     ::rtl::OUString aExt = aElements[n].copy( nSep+1 );
                     if ( aExt.equalsIgnoreAsciiCase( aXMLExt ) )
+                    {
                         bBinaryMode = false;
+                        // if it's encrypted, we will get a packages::WrongPasswordException and must use binary mode.
+                        try
+                        {
+                            maSignatureHelper.GetUriBinding()->getUriBinding( aElements[n] );
+                        }
+                        catch (packages::WrongPasswordException)
+                        {
+                            bBinaryMode = true;
+                            // opening encrypted stream soesn't work, so don't sign ecncrypted docs in EA
+                            DBG_ERROR( "Can't open encrypted streams..." );
+                            return -1;
+                        }
+                    }
                 }
                 maSignatureHelper.AddForSigning( nSecurityId, aElements[n], aElements[n], bBinaryMode );
             }

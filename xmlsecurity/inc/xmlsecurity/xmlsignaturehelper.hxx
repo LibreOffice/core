@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 07:29:30 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 15:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,7 @@ public:
                 // Set UriBinding to create input streams to open files.
                 // Default implementation is capable to open files from disk.
     void        SetUriBinding( com::sun::star::uno::Reference< com::sun::star::xml::crypto::XUriBinding >& rxUriBinding );
+    com::sun::star::uno::Reference< com::sun::star::xml::crypto::XUriBinding > GetUriBinding() const;
 
                 // Set the storage which should be used by the default UriBinding
                 // Must be set before StatrtMission().
