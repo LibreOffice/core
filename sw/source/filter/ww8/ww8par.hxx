@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:50:53 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,9 +388,8 @@ class SwWW8FltRefStack : public SwFltEndStack
 {
 public:
     SwWW8FltRefStack(SwDoc* pDo, ULONG nFieldFl)
-        : SwFltEndStack( pDo, nFieldFl ), mnToggleVis(false)
+        : SwFltEndStack( pDo, nFieldFl )
     {}
-    virtual ~SwWW8FltRefStack();
     bool IsFtnEdnBkmField(const SwFmtFld& rFmtFld, USHORT& rBkmNo);
 
     struct ltstr
@@ -400,26 +399,15 @@ public:
             return r1.CompareIgnoreCaseToAscii(r2) == COMPARE_LESS;
         }
     };
-    void SetToggleVisFlag(bool bOn)
-    {
-        mnToggleVis = bOn;
-    }
-    bool GetToggleVisFlag() const
-    {
-        return mnToggleVis;
-    }
     //Keep track of variable names created with fields, and the bookmark
     //mapped to their position, hopefully the same, but very possibly
     //an additional pseudo bookmark
     std::map<String, String, ltstr> aFieldVarNames;
 protected:
     SwFltStackEntry *RefToVar(const SwField* pFld,SwFltStackEntry *pEntry);
-    bool RangeToHidden(SwField* pFld, SwFltStackEntry *pEntry, SwPaM &rPaM);
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
         SwFltStackEntry* pEntry);
 private:
-    std::deque<Position> maScheduledForDelete;
-    bool mnToggleVis;
     //No copying
     SwWW8FltRefStack(const SwWW8FltRefStack&);
     SwWW8FltRefStack& operator=(const SwWW8FltRefStack&);
@@ -1448,7 +1436,6 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_CColl(            USHORT, const BYTE*, short nLen );
     void Read_Kern(             USHORT, const BYTE* pData, short nLen );
     void Read_FontKern(         USHORT, const BYTE* pData, short nLen );
-    void Read_Invisible(USHORT, const BYTE* pData, short nLen);
     void Read_Emphasis(         USHORT, const BYTE* pData, short nLen );
     void Read_ScaleWidth(       USHORT, const BYTE* pData, short nLen );
     void Read_Relief(           USHORT, const BYTE* pData, short nLen);
