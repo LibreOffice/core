@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:55:10 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,11 +118,6 @@
 // #110094#
 #ifndef _SDR_CONTACT_VIEWCONTACTOFSDRPAGE_HXX
 #include <svx/sdr/contact/viewcontactofsdrpage.hxx>
-#endif
-
-// #110094#
-#ifndef _SDR_CONTACT_VIEWCONTACTOFMASTERPAGE_HXX
-#include <svx/sdr/contact/viewcontactofmasterpage.hxx>
 #endif
 
 // StandardCheckVisisbilityRedirector
@@ -1117,14 +1112,7 @@ void SdrPage::RemovePageUser(sdr::PageUser& rOldUser)
 
 sdr::contact::ViewContact* SdrPage::CreateObjectSpecificViewContact()
 {
-    if(IsMasterPage())
-    {
-        return new sdr::contact::ViewContactOfMasterPage(*this);
-    }
-    else
-    {
-        return new sdr::contact::ViewContactOfSdrPage(*this);
-    }
+    return new sdr::contact::ViewContactOfSdrPage(*this);
 }
 
 sdr::contact::ViewContact& SdrPage::GetViewContact() const
@@ -1481,10 +1469,12 @@ void SdrPage::TRG_SetMasterPageVisibleLayers(const SetOfByte& rNew)
 {
     DBG_ASSERT(mpMasterPageDescriptor != 0L, "TRG_SetMasterPageVisibleLayers(): No MasterPage available. Use TRG_HasMasterPage() before access (!)");
     mpMasterPageDescriptor->SetVisibleLayers(rNew);
+}
 
-    sdr::contact::ViewContact& rMasterPageViewContact = mpMasterPageDescriptor->GetUsedPage().GetViewContact();
-    rMasterPageViewContact.ActionChanged();
-    rMasterPageViewContact.SetVisibleLayers(rNew);
+sdr::contact::ViewContact& SdrPage::TRG_GetMasterPageDescriptorViewContact() const
+{
+    DBG_ASSERT(mpMasterPageDescriptor != 0L, "TRG_GetMasterPageDescriptorViewContact(): No MasterPage available. Use TRG_HasMasterPage() before access (!)");
+    return mpMasterPageDescriptor->GetViewContact();
 }
 
 // #115423# used from SdrModel::RemoveMasterPage
