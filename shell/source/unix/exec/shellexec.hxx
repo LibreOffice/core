@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellexec.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:06:56 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@
 class ShellExec : public ::cppu::WeakImplHelper2< com::sun::star::system::XSystemShellExecute, com::sun::star::lang::XServiceInfo >
 {
     ::rtl::OString m_aDesktopEnvironment;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    m_xContext;
 
 public:
     ShellExec(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext);
