@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-22 17:12:26 $
+ *  last change: $Author: dvo $ $Date: 2002-03-26 18:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _TOOLS_RESID_HXX
 #include <tools/resid.hxx>
 #endif
+#ifndef _VIEWOPT_HXX
+#include "viewopt.hxx"
+#endif
 
 // for GetWordBoundary(...), GetSentenceBoundary(...):
 #ifndef _BREAKIT_HXX
@@ -145,7 +148,6 @@
 
 
 
-
 using rtl::OUString;
 using com::sun::star::i18n::Boundary;
 
@@ -155,9 +157,11 @@ using com::sun::star::i18n::Boundary;
 
 
 SwAccessiblePortionData::SwAccessiblePortionData(
-    const SwTxtNode* pTxtNd ) :
+    const SwTxtNode* pTxtNd,
+    const SwViewOption* pViewOpt ) :
     SwPortionHandler(),
     pTxtNode( pTxtNd ),
+    pViewOptions( pViewOpt ),
     aBuffer(),
     nModelPosition( 0 ),
     bFinished( sal_False ),
@@ -200,6 +204,7 @@ void SwAccessiblePortionData::Text(USHORT nLength, USHORT nType)
     // store 'old' positions
     aModelPositions.push_back( nModelPosition );
     aAccessiblePositions.push_back( aBuffer.getLength() );
+    aGrayPortions.push_back( false );
 
     // update buffer + nModelPosition
     aBuffer.append( OUString(
@@ -249,7 +254,6 @@ void SwAccessiblePortionData::Special(
                     static_cast<const SwPostItField*>(pField)->GetTxt() );
                 sDisplay = SwAccessibleContext::GetResource(
                     STR_ACCESS_REPLACEMENT_POSTIT, &sPostItText );
-
             }
             else
                 sDisplay = rText;   // for non-Post-It
@@ -282,15 +286,35 @@ void SwAccessiblePortionData::Special(
             break;
     }
 
+    // gray portions?
+    // Compare with: inftxt.cxx, SwTxtPaintInfo::DrawViewOpt(...)
+    sal_Bool bGray = sal_False;
+    switch( nType )
+    {
+        case POR_FTN:       bGray = pViewOptions->IsFootNote();     break;
+        case POR_TOX:       bGray = pViewOptions->IsTox();          break;
+        case POR_REF:       bGray = pViewOptions->IsRef();          break;
+        case POR_QUOVADIS:
+        case POR_NUMBER:
+        case POR_FLD:
+        case POR_URL:
+        case POR_HIDDEN:    bGray = pViewOptions->IsField();        break;
+        case POR_TAB:       bGray = pViewOptions->IsTab();          break;
+        case POR_SOFTHYPH:  bGray = pViewOptions->IsSoftHyph();     break;
+        case POR_BLANK:     bGray = pViewOptions->IsHardBlank();    break;
+        default:
+            break; // bGray is false
+    }
+
     // special treatment for zero length portion at the beginning:
     // count as 'before' portion
     if( ( nLength == 0 ) && ( nModelPosition == 0 ) )
         nBeforePortions++;
 
-    // the default case: store the 'old' positions (and previous for
-    // zero-length portions)
+    // store the 'old' positions
     aModelPositions.push_back( nModelPosition );
     aAccessiblePositions.push_back( aBuffer.getLength() );
+    aGrayPortions.push_back( bGray ? true : false );
 
     // update buffer + nModelPosition
     aBuffer.append( OUString(sDisplay) );
@@ -331,12 +355,6 @@ void SwAccessiblePortionData::Finish()
 
     sAccessibleString = aBuffer.makeStringAndClear();
     bFinished = sal_True;
-}
-
-
-void SwAccessiblePortionData::AddAutoSpellPortions()
-{
-    // not implemented!
 }
 
 
@@ -395,6 +413,17 @@ void SwAccessiblePortionData::FillBoundary(
 {
     rBound.startPos = rPositions[nPos];
     rBound.endPos = rPositions[nPos+1];
+}
+
+
+sal_Bool SwAccessiblePortionData::IsSpecialPortion( size_t nPortionNo )
+{
+    sal_Int32 nAccPos = aAccessiblePositions[nPortionNo];
+    sal_Int32 nModelPos = aModelPositions[nPortionNo];
+    return ( (aAccessiblePositions[nPortionNo+1] - nAccPos) !=
+             (aModelPositions[nPortionNo+1] - nModelPos)   ) ||
+        ( sAccessibleString[nAccPos] !=
+          pTxtNode->GetTxt().GetChar( static_cast<USHORT>(nModelPos) ) );
 }
 
 
@@ -530,12 +559,7 @@ void SwAccessiblePortionData::GetAttributeBoundary(
 {
     DBG_ASSERT( pTxtNode != NULL, "Need SwTxtNode!" );
 
-    // include auto spell portions, if not already available
-    if( ! HasAutoSpellPortions() )
-        AddAutoSpellPortions();
-
     // attribute boundaries can only occur on portion boundaries
-    // (if autospell pseudo-portion are included)
     FillBoundary( rBound, aAccessiblePositions,
                   FindBreak( aAccessiblePositions, nPos ) );
 }
@@ -677,4 +701,9 @@ USHORT SwAccessiblePortionData::FillSpecialPos(
     }
 
     return static_cast<USHORT>( nModelPos );
+}
+
+sal_Bool SwAccessiblePortionData::IsInGrayPortion( sal_Int32 nPos )
+{
+    return aGrayPortions[ FindBreak( aAccessiblePositions, nPos ) ];
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-21 11:07:26 $
+ *  last change: $Author: dvo $ $Date: 2002-03-26 18:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 class String;
 class SwTxtNode;
 struct SwSpecialPos;
+class SwViewOption;
 namespace com { namespace sun { namespace star {
     namespace i18n { struct Boundary; }
 } } }
@@ -93,6 +94,7 @@ class SwAccessiblePortionData : public SwPortionHandler
     rtl::OUStringBuffer aBuffer;
     sal_Int32 nModelPosition;
     sal_Bool bFinished;
+    const SwViewOption* pViewOptions;
 
     // the accessible string
     rtl::OUString sAccessibleString;
@@ -107,12 +109,12 @@ class SwAccessiblePortionData : public SwPortionHandler
     Positions_t aModelPositions;    /// position of portion breaks in the model
     Positions_t aAccessiblePositions;   /// portion breaks in sAccessibleString
 
+    std::bit_vector aGrayPortions;  /// portions with gray background
+
     Positions_t* pSentences;    /// positions of sentence breaks
 
     size_t nBeforePortions;     /// # of portions before first model character
     sal_Bool bLastIsSpecial;    /// set if last portion was 'Special()'
-
-    sal_Bool bAutoSpellPortions;    /// are AutoSpell pseudo portions included?
 
     /// returns the index of the first position whose value is smaller
     /// or equal, and whose following value is equal or larger
@@ -126,12 +128,12 @@ class SwAccessiblePortionData : public SwPortionHandler
                       const Positions_t& rPositions,
                       size_t nPos );
 
-    // add pseudo-portions induced by auto-spell
-    void AddAutoSpellPortions( );
-
+    /// Is this portion a special portion?
+    sal_Bool IsSpecialPortion( size_t nPortionNo );
 
 public:
-    SwAccessiblePortionData( const SwTxtNode* pTxtNd );
+    SwAccessiblePortionData( const SwTxtNode* pTxtNd,
+                             const SwViewOption* pViewOpt = NULL );
     virtual ~SwAccessiblePortionData();
 
     // SwPortionHandler methods
@@ -179,12 +181,9 @@ public:
     void GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,
                                sal_Int32 nPos );
 
-    /// Have AutoSpell pseudo portions already been included in the
-    /// portions arrays?
-    sal_Bool HasAutoSpellPortions()
-    {
-        return bAutoSpellPortions;
-    }
+    /// Determine whether this portion should have a gray background
+    /// accoridng to the view options
+    sal_Bool IsInGrayPortion( sal_Int32 nPos );
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-26 15:23:20 $
+ *  last change: $Author: dvo $ $Date: 2002-03-26 18:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@
 #endif
 #ifndef _CRSSKIP_HXX
 #include "crsskip.hxx"
+#endif
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 
 #include <algorithm>
@@ -541,7 +544,8 @@ void SwAccessibleParagraph::UpdatePortionData()
 
     // build new portion data
     delete pPortionData;
-    pPortionData = new SwAccessiblePortionData( pFrm->GetTxtNode() );
+    pPortionData = new SwAccessiblePortionData(
+        pFrm->GetTxtNode(), GetMap()->GetShell()->GetViewOptions() );
     pFrm->VisitPortions( *pPortionData );
 
     DBG_ASSERT( pPortionData != NULL, "UpdatePortionData() failed" );
@@ -866,6 +870,9 @@ Sequence<OUString> getAttributeNames()
 
         // sorted list of strings
         sal_Int32 i = 0;
+
+#define CHAR_BACK_COLOR_POS 0
+
 #define STR(x) pStrings[i++] = OUString(RTL_CONSTASCII_USTRINGPARAM(x))
         STR("CharBackColor");
         STR("CharColor");
@@ -998,6 +1005,13 @@ Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
         pValues[i].Name = pNames[i];
         pValues[i].Value = pAnys[i];
     }
+
+    // adjust background color if we're in a gray portion
+    DBG_ASSERT( pValues[CHAR_BACK_COLOR_POS].Name.
+                equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CharBackColor")),
+                "Please adjust CHAR_BACK_COLOR_POS constant." );
+    if( GetPortionData().IsInGrayPortion( nIndex ) )
+        pValues[CHAR_BACK_COLOR_POS].Value <<= COL_LIGHTGRAY;
 
     return aValues;
 }
