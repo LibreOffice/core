@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: mba $ $Date: 2001-07-10 11:39:05 $
+#   last change: $Author: cd $ $Date: 2001-07-18 07:38:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,6 @@ SLOFILES =  \
                 $(SLO)$/imagemgr.obj\
         $(SLO)$/rmacceptor.obj\
         $(SLO)$/appuno.obj \
-        $(SLO)$/applicat.obj \
         $(SLO)$/appmail.obj \
         $(SLO)$/appmain.obj \
         $(SLO)$/appopen.obj \
@@ -143,7 +142,6 @@ EXCEPTIONSFILES=\
     $(SLO)$/appmisc.obj			\
     $(SLO)$/frstinit.obj		\
     $(SLO)$/appinit.obj			\
-    $(SLO)$/applicat.obj		\
     $(SLO)$/picklist.obj		\
     $(SLO)$/rmacceptor.obj		\
     $(SLO)$/appcfg.obj			\
