@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:41:25 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,10 +317,8 @@ public:
     void            ScrollViewSzChg();
     void            ScrollDocSzChg();
     void            ShowHScrollbar(sal_Bool bShow);
-    sal_Bool        IsHScrollbarVisible()const;
 
     void            ShowVScrollbar(sal_Bool bShow);
-    sal_Bool        IsVScrollbarVisible()const;
 
     USHORT          GetPageCount() const        { return mnPageCount; }
 
