@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
             aAny >>= sName;
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                       XML_MASTER_PAGE_NAME,
-                                      sName );
+                                      GetExport().EncodeStyleName( sName ) );
         }
     }
 
