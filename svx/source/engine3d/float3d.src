@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:07:03 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,22 +97,10 @@ DockingWindow RID_SVXFLOAT_3D
     Text [ en-US ] = "3D Effects" ;
     Closeable = TRUE ;
     Zoomable = TRUE ;
-    ImageButton BTN_FAVORITES
-    {
-        Pos = MAP_APPFONT ( 4 , BORDER ) ;
-        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-        QuickHelpText [ de ] = "Favoriten" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "3dfavor.bmp" ; };
-            MASKCOLOR
-        };
-        QuickHelpText [ en-US ] = "Favorites" ;
-    };
+
     ImageButton BTN_GEO
     {
-        Pos = MAP_APPFONT ( 22 , BORDER ) ;
+        Pos = MAP_APPFONT ( 4 , BORDER ) ;
         Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         QuickHelpText [ de ] = "Geometrie" ;
@@ -125,7 +113,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_REPRESENTATION
     {
-        Pos = MAP_APPFONT ( 40 , BORDER ) ;
+        Pos = MAP_APPFONT ( 22 , BORDER ) ;
         Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         QuickHelpText [ de ] = "Darstellung" ;
@@ -138,7 +126,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT
     {
-        Pos = MAP_APPFONT ( 58 , BORDER ) ;
+        Pos = MAP_APPFONT ( 40 , BORDER ) ;
         Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         QuickHelpText [ de ] = "Beleuchtung" ;
@@ -151,7 +139,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEXTURE
     {
-        Pos = MAP_APPFONT ( 76 , BORDER ) ;
+        Pos = MAP_APPFONT ( 58 , BORDER ) ;
         Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         QuickHelpText [ de ] = "Texturen" ;
         ButtonImage = Image
@@ -164,7 +152,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_MATERIAL
     {
-        Pos = MAP_APPFONT ( 94 , BORDER ) ;
+        Pos = MAP_APPFONT ( 76 , BORDER ) ;
         Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         QuickHelpText [ de ] = "Material" ;
@@ -258,49 +246,6 @@ DockingWindow RID_SVXFLOAT_3D
         Pos = MAP_APPFONT ( 66 , 124 ) ;
         Size = MAP_APPFONT ( 83 , 76 ) ;
         TabStop = TRUE ;
-    };
-     // Favoriten
-    Control CTL_FAVORITES
-    {
-         //HelpId = HID_SD_CTL_FAVORITES ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 9 , 28 ) ;
-        Size = MAP_APPFONT ( 140 , 89 ) ;
-        TabStop = TRUE ;
-        Hide = TRUE ;
-    };
-    FixedLine FL_FAVORITES
-    {
-        Pos = MAP_APPFONT ( BORDER , 19 ) ;
-        Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text [ de ] = "~Favoriten" ;
-        Text [ en-US ] = "Favorites" ;
-    };
-    ImageButton BTN_ONLY_3D
-    {
-        Pos = MAP_APPFONT ( 9 , 124 ) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        QuickHelpText [ de ] = "Nur 3D-Attribute zuweisen" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "only3d.bmp" ; };
-            MASKCOLOR
-        };
-        TabStop = TRUE ;
-        QuickHelpText [ en-US ] = "3D Attributes Only" ;
-    };
-    ImageButton BTN_ALL_ATTRIBUTES
-    {
-        Pos = MAP_APPFONT ( 9 + BUTTON_WIDTH , 124 ) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        QuickHelpText [ de ] = "Alle Attribute zuweisen" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "allattri.bmp" ; };
-            MASKCOLOR
-        };
-        TabStop = TRUE ;
-        QuickHelpText [ en-US ] = "Assign All Attributes" ;
     };
      // Geometrie
     FixedText FT_HORIZONTAL
