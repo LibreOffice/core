@@ -1,0 +1,42 @@
+    <node oor:name="calc_HTML_WebQuery" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>writer_web_HTML</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">Kwerenda stron WWW (%productname% Calc)</value>
+            <value xml:lang="hu">Weboldal-lekérdezés (%productname% Calc)</value>
+            <value xml:lang="ja">Webページのクエリー (%productname% Calc)</value>
+            <value xml:lang="es">Consulta de páginas web (%productname% Calc)</value>
+            <value xml:lang="tr">Web Sayfası Sorgulaması (%productname% Calc)</value>
+            <value xml:lang="ru">Запрос Web-страницы (%productname% Calc)</value>
+            <value xml:lang="th">แบบสอบถามเว็บเพจ (%productname% Calc)</value>
+            <value xml:lang="x-comment">Web Page Query (%productname% Calc)</value>
+            <value xml:lang="ca">Web Page Query (%productname% Calc)</value>
+            <value xml:lang="el">HTML WebQuery (StarOffice Calc)</value>
+            <value xml:lang="zh-CN">网页查询 (%productname% Calc)</value>
+            <value xml:lang="pt">Consulta de páginas Web (StarOffice Calc)</value>
+            <value xml:lang="cs">Webový dotaz (%productname% Calc)</value>
+            <value xml:lang="fr">Requête pages Web (%productname% Calc)</value>
+            <value xml:lang="ar">HTML WebQuery (StarOffice Calc)</value>
+            <value xml:lang="zh-TW">網頁查詢 (%productname% Calc)</value>
+            <value xml:lang="sl">Povpraševanje spletne strani (%productname% Calc)</value>
+            <value xml:lang="fi">HTML WebQuery (StarOffice Calc)</value>
+            <value xml:lang="hi-IN">Web Page Query (%productname% Calc)</value>
+            <value xml:lang="en-US">Web Page Query (%productname% Calc)</value>
+            <value xml:lang="sk">Webový dotaz (%productname% Calc)</value>
+            <value xml:lang="he">‮שאילתת ךף אינטרנט (%productname% Calc)‬</value>
+            <value xml:lang="sv">Webbsidessökning (%productname% Calc)</value>
+            <value xml:lang="da">Websideforespørgsel (%productname% Calc)</value>
+            <value xml:lang="de">Webseiten-Abfrage (%productname% Calc)</value>
+            <value xml:lang="ko">웹 페이지 쿼리 (%productname% Calc)</value>
+            <value xml:lang="nl">Webpagina-query (%productname% Calc)</value>
+            <value xml:lang="pt-BR">HTML WebQuery (StarOffice Calc)</value>
+            <value xml:lang="it">Ricerca pagina Web (%productname% Calc)</value>
+            <value xml:lang="x-translate">Web Page Query (%productname% Calc)</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT ALIEN</value></prop>
+    </node>
