@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-11 13:49:22 $
+ *  last change: $Author: nf $ $Date: 2001-07-04 13:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,7 @@ void Export::FillInFallbacks( ResData *pResData )
         if (( i != GERMAN_INDEX ) && ( i != ENGLISH_INDEX )) {
             USHORT nFallbackIndex =
                 GetLangIndex( GetFallbackLanguage( LangId[ i ] ));
-            if ( nFallbackIndex < LANGUAGES ) {
+            if (( nFallbackIndex < LANGUAGES)  && ( i != nFallbackIndex )) {
                 CharSet eSource =
                     Export::GetCharSet( Export::LangId[ nFallbackIndex ] );
                 CharSet eDest =

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-25 10:08:22 $
+ *  last change: $Author: nf $ $Date: 2001-07-04 13:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,18 +310,20 @@ void CfgStackData::FillInFallbacks()
             USHORT nFallbackIndex =
                 Export::GetLangIndex(
                     Export::GetFallbackLanguage( Export::LangId[ i ] ));
-            if (( nFallbackIndex < LANGUAGES ) && !sText[ i ].Len()) {
+            if (( nFallbackIndex < LANGUAGES ) && !sText[ i ].Len() && i != nFallbackIndex ) {
                 CharSet eSource =
                     Export::GetCharSet( Export::LangId[ nFallbackIndex ] );
                 CharSet eDest =
                     Export::GetCharSet( Export::LangId[ i ] );
 
-                ByteString sFallback =
-                    UTF8Converter::ConvertToUTF8( sText[ nFallbackIndex ],
-                        eSource );
-                sText[ i ] =
-                    UTF8Converter::ConvertFromUTF8( sFallback,
-                        eDest );
+                if ( eSource != eDest ) {
+                    ByteString sFallback =
+                        UTF8Converter::ConvertToUTF8( sText[ nFallbackIndex ],
+                            eSource );
+                    sText[ i ] =
+                        UTF8Converter::ConvertFromUTF8( sFallback,
+                            eDest );
+                }
             }
         }
     }

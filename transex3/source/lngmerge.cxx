@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-27 12:08:41 $
+ *  last change: $Author: nf $ $Date: 2001-07-04 13:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ void LngParser::FillInFallbacks( ByteString *Text )
             USHORT nFallbackIndex = Export::GetLangIndex(
                     Export::GetFallbackLanguage( Export::LangId[ i ] ));
 
-            if (( nFallbackIndex < LANGUAGES ) && !Text[ i ].Len()) {
+            if (( nFallbackIndex < LANGUAGES ) && !Text[ i ].Len() && ( i != nFallbackIndex )) {
                 CharSet eSource =
                     Export::GetCharSet( Export::LangId[ nFallbackIndex ] );
                 CharSet eDest =
