@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:40:59 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,16 +378,6 @@ String RID_STR_VIEWS_HELP_TEXT_WIZARD
 {
     Text [ de ] ="Öffnet den Ansichtswizard" ;
     Text [ en-US ] = "Opens the view wizard" ;
-};
-String STR_QUERY_DELETE_FORM
-{
-    Text [ de ] ="Soll das Formular '%1' gelöscht werden?" ;
-    Text [ en-US ] = "Do you want to delete the form '$name$'?" ;
-};
-String STR_QUERY_DELETE_REPORT
-{
-    Text [ de ] ="Soll der Bericht '%1' gelöscht werden?" ;
-    Text [ en-US ] = "Do you want to delete the report '$name$'?" ;
 };
 
 String STR_DATABASE
