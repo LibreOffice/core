@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:41:23 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#include <boost/scoped_ptr.hpp>
+#include <boost/scoped_array.hpp>
+
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
@@ -85,6 +88,9 @@
 #endif
 #ifndef _SV_GRAPH_HXX
 #include <graph.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <svapp.hxx>
 #endif
 #ifndef _SV_IMPIMAGETREE_H
 #include <impimagetree.hxx>
@@ -514,116 +520,54 @@ ImageList::ImageList( const ResId& rResId ) :
     {
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
-        static ImplImageTreeSingletonRef    aImageTree;
         ULONG                               nObjMask = pResMgr->ReadLong();
         const String                        aPrefix( pResMgr->ReadString() );
-        Color                               aMaskColor;
-        BitmapEx                            aBmpEx;
+        ::boost::scoped_ptr< Color >        spMaskColor;
 
         if( nObjMask & RSC_IMAGE_MASKCOLOR )
-               aMaskColor = Color( ResId( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
+            spMaskColor.reset( new Color( ResId( (RSHEADER_TYPE*)pResMgr->GetClass() ) ) );
 
         pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
 
         if( nObjMask & RSC_IMAGELIST_IDLIST )
         {
-            const ULONG nCount = pResMgr->ReadLong();
-            for( unsigned int i = 0; i < nCount; ++i )
+            for( sal_Int32 i = 0, nCount = pResMgr->ReadLong(); i < nCount; ++i )
                 pResMgr->ReadLong();
         }
 
-        ::rtl::OUString aResMgrName( pResMgr->GetFileName() ), aUserImage;
-        sal_Int32       nPos = aResMgrName.lastIndexOf( '\\' );
-        sal_Int32       nCount = pResMgr->ReadLong();
-        USHORT*         pIdAry = new USHORT[ nCount ];
-        String*         pStringAry = new String[ nCount ];
+        BitmapEx                           aBmpEx;
+        sal_Int32                          nCount = pResMgr->ReadLong();
+        ::boost::scoped_array< USHORT >    aIdArray( new USHORT[ nCount ] );
+        ::std::vector< ::rtl::OUString >   aImageNames( nCount );
+        ::rtl::OUString                    aResMgrName( pResMgr->GetFileName() );
+        ::rtl::OUString                    aUserImageName;
+        sal_Int32                          nPos = aResMgrName.lastIndexOf( '\\' );
 
         // load file entry list
         for( sal_Int32 i = 0; i < nCount; ++i )
         {
-            pStringAry[ i ] = pResMgr->ReadString();
-            pIdAry[ i ] = static_cast< USHORT >( pResMgr->ReadLong() );
+            aImageNames[ i ] = pResMgr->ReadString();
+            aIdArray[ i ] = static_cast< USHORT >( pResMgr->ReadLong() );
         }
 
-        // try to load cached image first
         if( -1 == nPos )
             nPos = aResMgrName.lastIndexOf( '/' );
 
         if( -1 != nPos++ )
         {
             const sal_Int32 nSecondPos = aResMgrName.lastIndexOf( '.' );
-            aUserImage = aResMgrName.copy( nPos, ( ( -1 != nSecondPos ) ? nSecondPos : aResMgrName.getLength() ) - nPos );
+            aUserImageName = aResMgrName.copy( nPos, ( ( -1 != nSecondPos ) ? nSecondPos : aResMgrName.getLength() ) - nPos );
         }
 
-        aUserImage += String::CreateFromInt32( rResId.GetId() );
-        aUserImage += String::CreateFromInt32( nCount );
+        aUserImageName += ::rtl::OUString::valueOf( static_cast< sal_Int32 >( rResId.GetId() ) );
+        aUserImageName += ::rtl::OUString::valueOf( nCount );
 
-        if( !aImageTree->loadImage( aUserImage, aBmpEx ) )
-        {
-            BitmapEx    aWorkBmpEx;
-            Size        aItemSizePixel;
-            bool        bInit = false;
-
-            for( sal_Int32 i = 0; i < nCount; ++i )
-            {
-                if( aImageTree->loadImage( pStringAry[ i ], aWorkBmpEx ) )
-                {
-                    const Size aWorkSizePixel( aWorkBmpEx.GetSizePixel() );
-
-                    if( !bInit )
-                    {
-                        aItemSizePixel = aWorkSizePixel;
-                        aBmpEx = Bitmap( Size( aWorkSizePixel.Width() * nCount, aWorkSizePixel.Height() ), 24 );
-                        bInit = true;
-                    }
-
-#ifdef DBG_UTIL
-                    if( aItemSizePixel != aWorkSizePixel )
-                    {
-                        ByteString aStr( "Differerent dimensions in ItemList images: " );
-
-                        aStr += ByteString( String( pStringAry[ i ] ), RTL_TEXTENCODING_ASCII_US );
-                        aStr += " is ";
-                        aStr += ByteString::CreateFromInt32( aWorkSizePixel.Width() );
-                        aStr += "x";
-                        aStr += ByteString::CreateFromInt32( aWorkSizePixel.Height() );
-                        aStr += " but needs to be ";
-                        aStr += ByteString::CreateFromInt32( aItemSizePixel.Width() );
-                        aStr += "x";
-                        aStr += ByteString::CreateFromInt32( aItemSizePixel.Height() );
-
-                        DBG_ERROR( aStr.GetBuffer() );
-                    }
-#endif
-
-                    const Rectangle aRectDst( Point( aItemSizePixel.Width() * i, 0 ), aItemSizePixel );
-                    const Rectangle aRectSrc( Point( 0, 0 ), aWorkSizePixel );
-
-                    aBmpEx.CopyPixel( aRectDst, aRectSrc, &aWorkBmpEx );
-                }
-#ifdef DBG_UTIL
-                else
-                {
-                    ByteString aErrorStr( "ImageList::ImageList( const ResId& rResId ): could not load image <" );
-                    DBG_ERROR( ( ( aErrorStr += ByteString( pStringAry[ i ], RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
-                }
-#endif
-            }
-
-            if( !aBmpEx.IsEmpty() )
-                aImageTree->addUserImage( aUserImage, aBmpEx );
-        }
-
-        if( !aBmpEx.IsEmpty() && !aBmpEx.IsTransparent() && ( nObjMask & RSC_IMAGE_MASKCOLOR ) )
-            aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskColor );
+        ImplInitBitmapEx( aUserImageName, aImageNames, aBmpEx, spMaskColor.get() );
 
         if( nObjMask & RSC_IMAGELIST_IDCOUNT )
             pResMgr->ReadShort();
 
-        ImplInit( aBmpEx, nCount, pIdAry, NULL, 4 );
-
-        delete[] pIdAry;
-        delete[] pStringAry;
+        ImplInit( aBmpEx, nCount, aIdArray.get(), NULL, 4 );
     }
 }
 
@@ -640,76 +584,18 @@ ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
 
     DBG_CTOR( ImageList, NULL );
 
-    static ImplImageTreeSingletonRef    aImageTree;
-    ::rtl::OUString                     aUserImage( rPrefix );
-    BitmapEx                            aBmpEx;
+    BitmapEx                           aBmpEx;
+    ::rtl::OUString                    aUserImageName( rPrefix );
+    ::std::vector< ::rtl::OUString >   aImageNames( rNameVector.size() );
+    const lang::Locale&                rLocale = Application::GetSettings().GetUILocale();
 
-    aUserImage = aUserImage.replace( '/', '_' );
+    for( sal_Int32 i = 0, nCount = rNameVector.size(); i < nCount; ++i )
+       ( aImageNames[ i ] = rPrefix ) += rNameVector[ i ];
 
-    if( !rPrefix.getLength() || !rNameVector.size() || !aImageTree->loadImage( aUserImage += String::CreateFromInt32( rNameVector.size() ), aBmpEx ) )
-    {
-        BitmapEx        aWorkBmpEx;
-        ::rtl::OUString aImageName;
-        Size            aItemSizePixel;
-        bool            bInit = false;
+    aUserImageName = ( ( aUserImageName += rLocale.Language ) += rLocale.Country ).replace( '/', '_' );
+    aUserImageName += ::rtl::OUString::valueOf( static_cast< sal_Int32 >( rNameVector.size() ) );
 
-        for( unsigned int i = 0; i < rNameVector.size(); ++i )
-        {
-            aImageName = rPrefix.getLength() ?
-                        ( ( aImageName = rPrefix ) += rNameVector[ i ] ) :
-                        rNameVector[ i ];
-
-            if( aImageTree->loadImage( aImageName, aWorkBmpEx, true ) )
-            {
-                const Size aWorkSizePixel( aWorkBmpEx.GetSizePixel() );
-
-                if( !bInit )
-                {
-                    aItemSizePixel = aWorkSizePixel;
-                    aBmpEx = Bitmap( Size( aWorkSizePixel.Width() * rNameVector.size(), aWorkSizePixel.Height() ), 24 );
-                    bInit = true;
-                }
-
-#ifdef DBG_UTIL
-                if( aItemSizePixel != aWorkSizePixel )
-                {
-                    ByteString aStr( "Differerent dimensions in ItemList images: " );
-
-                    aStr += ByteString( String( aImageName ), RTL_TEXTENCODING_ASCII_US );
-                    aStr += " is ";
-                    aStr += ByteString::CreateFromInt32( aWorkSizePixel.Width() );
-                    aStr += "x";
-                    aStr += ByteString::CreateFromInt32( aWorkSizePixel.Height() );
-                    aStr += " but needs to be ";
-                    aStr += ByteString::CreateFromInt32( aItemSizePixel.Width() );
-                    aStr += "x";
-                    aStr += ByteString::CreateFromInt32( aItemSizePixel.Height() );
-
-                    DBG_ERROR( aStr.GetBuffer() );
-                }
-#endif
-
-                const Rectangle aRectDst( Point( aItemSizePixel.Width() * i, 0 ), aItemSizePixel );
-                const Rectangle aRectSrc( Point( 0, 0 ), aWorkSizePixel );
-
-                aBmpEx.CopyPixel( aRectDst, aRectSrc, &aWorkBmpEx );
-            }
-#ifdef DBG_UTIL
-            else
-            {
-                ByteString aErrorStr( "ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector, const Color* pMaskColor  ): could not load image <" );
-                DBG_ERROR( ( ( aErrorStr += ByteString( String( aImageName ), RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
-            }
-#endif
-        }
-
-        if( !aBmpEx.IsEmpty() )
-            aImageTree->addUserImage( aUserImage, aBmpEx );
-    }
-
-    if( !aBmpEx.IsEmpty() && !aBmpEx.IsTransparent() && pMaskColor )
-        aBmpEx = BitmapEx( aBmpEx.GetBitmap(), *pMaskColor );
-
+    ImplInitBitmapEx( aUserImageName, aImageNames, aBmpEx, pMaskColor );
     ImplInit( aBmpEx, static_cast< USHORT >( rNameVector.size() ), NULL, &rNameVector, 4 );
 }
 
@@ -803,6 +689,84 @@ ImageList::~ImageList()
 
     if( mpImplData && ( 0 == --mpImplData->mnRefCount ) && ( 0 == mpImplData->mnIRefCount ) )
         delete mpImplData;
+}
+
+// -----------------------------------------------------------------------
+
+void ImageList::ImplInitBitmapEx( const ::rtl::OUString& rUserImageName,
+                                  const ::std::vector< ::rtl::OUString >& rImageNames,
+                                  BitmapEx& rBmpEx,
+                                  const Color* pMaskColor ) const
+{
+    static ImplImageTreeSingletonRef aImageTree;
+
+    if( !aImageTree->loadImage( rUserImageName, rBmpEx ) )
+    {
+        BitmapEx    aCurBmpEx;
+        Size        aItemSizePixel;
+        bool        bInit = false;
+
+        for( sal_Int32 i = 0, nCount = rImageNames.size(); i < nCount; ++i )
+        {
+            if( aImageTree->loadImage( rImageNames[ i ], aCurBmpEx, true ) )
+            {
+                const Size aCurSizePixel( aCurBmpEx.GetSizePixel() );
+
+                if( !bInit )
+                {
+                    const Size      aTotalSize( aCurSizePixel.Width() * nCount, aCurSizePixel.Height() );
+                    BYTE            cTransparent = 255;
+                    const Bitmap    aBmp( aTotalSize, 24 );
+                    const AlphaMask aAlphaMask( aTotalSize, &cTransparent );
+
+                    aItemSizePixel = aCurSizePixel;
+                    rBmpEx = BitmapEx( aBmp, aAlphaMask );
+
+                    bInit = true;
+                }
+
+#ifdef DBG_UTIL
+                if( ( aItemSizePixel.Width() < aCurSizePixel.Width() ) ||
+                    ( aItemSizePixel.Height() < aCurSizePixel.Height() ) )
+                {
+                    ByteString aStr( "Differerent dimensions in ItemList images: " );
+
+                    aStr += ByteString( String( rImageNames[ i ] ), RTL_TEXTENCODING_ASCII_US );
+                    aStr += " is ";
+                    aStr += ByteString::CreateFromInt32( aCurSizePixel.Width() );
+                    aStr += "x";
+                    aStr += ByteString::CreateFromInt32( aCurSizePixel.Height() );
+                    aStr += " but needs to be ";
+                    aStr += ByteString::CreateFromInt32( aItemSizePixel.Width() );
+                    aStr += "x";
+                    aStr += ByteString::CreateFromInt32( aItemSizePixel.Height() );
+
+                    DBG_ERROR( aStr.GetBuffer() );
+                }
+#endif
+
+                const Rectangle aRectDst( Point( aItemSizePixel.Width() * i, 0 ), aItemSizePixel );
+                const Rectangle aRectSrc( Point( 0, 0 ), aCurSizePixel );
+
+                rBmpEx.CopyPixel( aRectDst, aRectSrc, &aCurBmpEx );
+            }
+#ifdef DBG_UTIL
+            else
+            {
+                ByteString aErrorStr( "ImageList::ImplInitBitmapEx(...): could not load image <" );
+                DBG_ERROR( ( ( aErrorStr += ByteString( String( rImageNames[ i ] ), RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
+            }
+#endif
+        }
+
+        if( !rBmpEx.IsEmpty() )
+        {
+            if( !rBmpEx.IsTransparent() && pMaskColor )
+                rBmpEx = BitmapEx( rBmpEx.GetBitmap(), *pMaskColor );
+
+            aImageTree->addUserImage( rUserImageName, rBmpEx );
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
