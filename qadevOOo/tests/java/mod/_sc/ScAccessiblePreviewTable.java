@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePreviewTable.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2004-07-23 10:48:39 $
+ *  last change:$Date: 2004-12-10 17:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
+import util.PropertyName;
 
 /**
  * Object implements the following interfaces:
@@ -216,6 +217,8 @@ public class ScAccessiblePreviewTable extends TestCase {
         XWindow xWindow = at.getCurrentContainerWindow((XMultiServiceFactory)Param.getMSF(), xModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
+        at.printAccessibleTree(log,xRoot, Param.getBool(PropertyName.DEBUG_IS_ACTIVE));
+
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE);
 
         oObj = AccessibilityTools.SearchedContext;
@@ -224,15 +227,10 @@ public class ScAccessiblePreviewTable extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
-        XAccessible zoomIn = null;
-        try {
-            XAccessibleContext mainWin =
-                at.getAccessibleObjectForRole(xRoot,AccessibleRole.TOOL_BAR, "Page");
+        XAccessibleContext zoomIn =
+            at.getAccessibleObjectForRole(xRoot,AccessibleRole.PUSH_BUTTON, "Zoom In");
 
-            zoomIn = mainWin.getAccessibleChild(5);
-            log.println("Getting "+
-                            zoomIn.getAccessibleContext().getAccessibleName());
-        } catch (com.sun.star.lang.IndexOutOfBoundsException ibe) {}
+        log.println("Getting "+ zoomIn.getAccessibleName());
 
         final XAccessibleAction pressZoom = (XAccessibleAction)
                     UnoRuntime.queryInterface(XAccessibleAction.class, zoomIn);
