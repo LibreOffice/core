@@ -260,11 +260,19 @@ STDAPI DllUnregisterServerNative( BOOL bForAllUsers )
     if( ERROR_SUCCESS != SHDeleteKey( bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey ) )
            fErr = TRUE;
 
-    wsprintf( aSubKey, "%sso_activex.SOActiveX", aPrefix, aClassID );
+    wsprintf( aSubKey, "%sso_activex.SOActiveX", aPrefix );
     if( ERROR_SUCCESS != SHDeleteKey( bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey ) )
            fErr = TRUE;
 
-    wsprintf( aSubKey, "%sso_activex.SOActiveX.1", aPrefix, aClassID );
+    wsprintf( aSubKey, "%sso_activex.SOActiveX.1", aPrefix );
+    if( ERROR_SUCCESS != SHDeleteKey( bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey ) )
+           fErr = TRUE;
+
+    wsprintf( aSubKey, "%s\\TypeLib\\%s", aPrefix, aTypeLib );
+    if( ERROR_SUCCESS != SHDeleteKey( bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey ) )
+           fErr = TRUE;
+
+    wsprintf( aSubKey, "%s\\Interface\\%s", aPrefix, aInterIDWinPeer );
     if( ERROR_SUCCESS != SHDeleteKey( bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey ) )
            fErr = TRUE;
 
