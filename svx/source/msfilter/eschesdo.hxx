@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-11 14:35:41 $
+ *  last change: $Author: sj $ $Date: 2000-12-13 14:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,6 @@ class ImplEESdrObject
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >           mXShape;
 //  XTextRef            mXText; // TextRef des globalen Text
     ::com::sun::star::uno::Any              mAny;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   mXPropSet;
     Size                maSize;
     Point               maPosition;
     Rectangle           maRect;
@@ -217,13 +216,13 @@ class ImplEESdrObject
     UINT32              mnShapeId;
     UINT32              mnTextSize;
     INT32               mnAngle;
-    INT32               mnShadow;   // eq 0 if fillstyle && linestyle == None
     BOOL                mbValid : 1;
     BOOL                mbPresObj : 1;
     BOOL                mbEmptyPresObj : 1;
 
     void Init( ImplEESdrWriter& rEx );
 public:
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   mXPropSet;
 
     ImplEESdrObject( ImplEscherExSdr& rEx, const SdrObject& rObj );
     ImplEESdrObject( ImplEESdrWriter& rEx, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rShape );
@@ -248,9 +247,6 @@ public:
 
     INT32               GetAngle() const        { return mnAngle; }
     void                SetAngle( INT32 nVal )  { mnAngle = nVal; }
-
-    INT32               GetShadow() const       { return mnShadow; }
-    void                SetShadow( INT32 nVal ) { mnShadow = nVal; }
 
     UINT32              GetTextSize() const     { return mnTextSize; }
 
@@ -297,7 +293,6 @@ protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >        mXDrawPage;
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >          mXShapes;
         BOOL                mbStatusIndicator;
-        UINT32              mnTextStyle;
 
         UINT32              mnPagesWritten;
 
@@ -327,7 +322,6 @@ protected:
                                     ImplEESdrSolverContainer& rSolver,
                                     ImplEESdrPageType ePageType,
                                     BOOL bBackGround = FALSE );
-//          BOOL                ImplGetShapeByIndex( UINT32 nIndex, BOOL bGroup = FALSE );
 
             UINT32              ImplWriteShape( ImplEESdrObject& rObj,
                                     ImplEESdrSolverContainer& rSolver,
@@ -336,17 +330,10 @@ protected:
             void                ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
                                                     const Point& rRefPoint );
             BOOL                ImplGetText( ImplEESdrObject& rObj );
-            void                ImplWriteLineBundle( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
-                                                     BOOL bEdge );
-            void                ImplWriteFillBundle( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
-                                                     BOOL bEdge );
             void                ImplWriteTextBundle( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt );
             void                ImplWriteAny( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
                                                 UINT32 nFlags, BOOL bBezier,
                                                 Polygon* pPolygon = NULL );
-            BOOL                ImplIsMetaFile( ImplEESdrObject& rObj );
-            BOOL                ImplGetGraphic( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
-                                            const sal_Unicode*, BOOL bFillBitmap );
             void                ImplWriteAdditionalText(
                                                 ImplEESdrObject& rObj,
                                                 const Point& rTextRefPoint );
