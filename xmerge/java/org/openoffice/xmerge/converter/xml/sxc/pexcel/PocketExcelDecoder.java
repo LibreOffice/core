@@ -236,8 +236,8 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
      *  @return  The name of the current WorkSheet.
      */
     public String getSheetName() {
-        Vector v = wb.getWorksheetNames();
-        String wsName = (String) (v.elementAt(wsIndex));
+
+        String wsName = wb.getSheetName(wsIndex);
         Debug.log(Debug.TRACE,"The name of the current Worksheet is : " + wsName);
         return wsName;
     }
