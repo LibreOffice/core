@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:18:10 $
+ *  last change: $Author: os $ $Date: 2001-06-29 06:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1509,6 +1509,7 @@ SwView*  SwNavigationPI::GetCreateView() const
             if(&pView->GetViewFrame()->GetBindings() == &rBindings)
             {
                 ((SwNavigationPI*)this)->pCreateView = pView;
+                ((SwNavigationPI*)this)->StartListening(*pCreateView);
                 break;
             }
             pView = SwModule::GetNextView(pView);
