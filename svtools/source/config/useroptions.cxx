@@ -2,9 +2,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-10 11:27:31 $
+ *  last change: $Author: dg $ $Date: 2001-06-21 18:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,22 +82,44 @@ using namespace com::sun::star::uno;
 
 // define ----------------------------------------------------------------
 
-#define USER_CITY               0
-#define USER_COMPANY            1
-#define USER_COUNTRY            2
-#define USER_CUSTOMERNUMBER     3
-#define USER_EMAIL              4
-#define USER_FAX                5
-#define USER_FIRSTNAME          6
-#define USER_LASTNAME           7
-#define USER_POSITION           8
-#define USER_STATE              9
-#define USER_STREET             10
-#define USER_TELEPHONEHOME      11
-#define USER_TELEPHONEWORK      12
-#define USER_TITLE              13
-#define USER_ID                 14
-#define USER_ZIP                15
+#ifdef TF_CFGDATA
+
+    #define USER_CITY               0
+    #define USER_COMPANY            1
+    #define USER_COUNTRY            2
+    #define USER_EMAIL              3
+    #define USER_FAX                4
+    #define USER_FIRSTNAME          5
+    #define USER_LASTNAME           6
+    #define USER_POSITION           7
+    #define USER_STATE              8
+    #define USER_STREET             9
+    #define USER_TELEPHONEHOME      10
+    #define USER_TELEPHONEWORK      11
+    #define USER_TITLE              12
+    #define USER_ID                 13
+    #define USER_ZIP                14
+
+#else
+
+    #define USER_CITY               0
+    #define USER_COMPANY            1
+    #define USER_COUNTRY            2
+    #define USER_CUSTOMERNUMBER     3
+    #define USER_EMAIL              4
+    #define USER_FAX                5
+    #define USER_FIRSTNAME          6
+    #define USER_LASTNAME           7
+    #define USER_POSITION           8
+    #define USER_STATE              9
+    #define USER_STREET             10
+    #define USER_TELEPHONEHOME      11
+    #define USER_TELEPHONEWORK      12
+    #define USER_TITLE              13
+    #define USER_ID                 14
+    #define USER_ZIP                15
+
+#endif
 
 // class SvtUserOptions_Impl ---------------------------------------------
 
@@ -205,6 +227,26 @@ static sal_Int32            nRefCount = 0;
 
 Sequence< OUString > GetUserPropertyNames()
 {
+#ifdef TF_CFGDATA
+    static const char* aPropNames[] =
+    {
+        "Data/l",           // USER_CITY
+        "Data/o",           // USER_COMPANY
+        "Data/c",           // USER_COUNTRY
+        "Data/mail",            // USER_EMAIL
+        "Data/facsimiletelephonenumber",                // USER_FAX
+        "Data/givenname",       // USER_FIRSTNAME
+        "Data/sn",      // USER_LASTNAME
+        "Data/position",        // USER_POSITION
+        "Data/st",          // USER_STATE
+        "Data/street",          // USER_STREET
+        "Data/homephone",   // USER_TELEPHONEHOME
+        "Data/telephonenumber", // USER_TELEPHONEWORK
+        "Data/title",           // USER_TITLE
+        "Data/initials",        // USER_ID
+        "Data/postalcode",              // USER_ZIP
+    };
+#else
     static const char* aPropNames[] =
     {
         "Data/City",            // USER_CITY
@@ -224,6 +266,8 @@ Sequence< OUString > GetUserPropertyNames()
         "Data/UserID",          // USER_ID
         "Data/Zip",             // USER_ZIP
     };
+#endif
+
 
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
     Sequence< OUString > aNames( nCount );
@@ -302,7 +346,9 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
                         case USER_TELEPHONEWORK:    m_aTelephoneWork = String( aTempStr );  break;
                         case USER_FAX:              m_aFax = String( aTempStr );            break;
                         case USER_EMAIL:            m_aEmail = String( aTempStr );          break;
+#ifndef TF_CFGDATA
                         case USER_CUSTOMERNUMBER:   m_aCustomerNumber = String( aTempStr ); break;
+#endif
 
                         default:
                             DBG_ERRORFILE( "invalid index to load a user token" );
@@ -358,8 +404,9 @@ void SvtUserOptions_Impl::Commit()
             case USER_TELEPHONEWORK:    aTempStr = OUString( m_aTelephoneWork );    break;
             case USER_FAX:              aTempStr = OUString( m_aFax );              break;
             case USER_EMAIL:            aTempStr = OUString( m_aEmail );            break;
+#ifndef TF_CFGDATA
             case USER_CUSTOMERNUMBER:   aTempStr = OUString( m_aCustomerNumber );   break;
-
+#endif
             default:
                 DBG_ERRORFILE( "invalid index to save a user token" );
         }
