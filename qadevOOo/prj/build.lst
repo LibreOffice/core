@@ -47,6 +47,7 @@ qa  qadevOOo\tests\java\ifc\table                        nmake   -   all ifc_tab
 qa  qadevOOo\tests\java\ifc\task                         nmake   -   all ifc_task org_openoffice NULL
 qa  qadevOOo\tests\java\ifc\text                         nmake   -   all ifc_text org_openoffice NULL
 qa  qadevOOo\tests\java\ifc\ucb                          nmake   -   all ifc_ucb org_openoffice NULL
+qa  qadevOOo\tests\java\ifc\ui	                         nmake   -   all ifc_ui org_openoffice NULL
 qa  qadevOOo\tests\java\ifc\ui\dialogs                   nmake   -   all ifc_ui_dialogs org_openoffice NULL
 qa  qadevOOo\tests\java\ifc\uno                          nmake   -   all ifc_uno org_openoffice NULL
 qa  qadevOOo\tests\java\ifc\util                         nmake   -   all ifc_util org_openoffice NULL
@@ -81,7 +82,7 @@ qa  qadevOOo\tests\java\mod\_fop                         nmake   -   all mod__fo
 qa  qadevOOo\tests\java\mod\_forms                       nmake   -   all mod__forms ifc_awt ifc_form ifc_sdb ifc_sdbc org_openoffice NULL
 qa  qadevOOo\tests\java\mod\_fps                         nmake   -   all mod__fps org_openoffice NULL
 qa  qadevOOo\tests\java\mod\_ftransl                     nmake   -   all mod__ftransl org_openoffice NULL
-qa  qadevOOo\tests\java\mod\_fwk                         nmake   -   all mod__fwk org_openoffice NULL
+qa  qadevOOo\tests\java\mod\_fwk                         nmake   -   all mod__fwk ifc_ui ifc_frame org_openoffice NULL
 qa  qadevOOo\tests\java\mod\_fwl                         nmake   -   all mod__fwl org_openoffice NULL
 qa  qadevOOo\tests\java\mod\_i18n                        nmake   -   all mod__i18n org_openoffice NULL
 qa  qadevOOo\tests\java\mod\_implreg.uno                 nmake   -   all mod__implreguno org_openoffice NULL
