@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-26 07:57:37 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,12 @@
 
 #include <hash_map>
 
-#include <rtl/uuid.h>
-#include <osl/thread.h>
-#include <osl/mutex.hxx>
+#include "rtl/uuid.h"
+#include "osl/thread.h"
+#include "osl/mutex.hxx"
 
-#include <uno/environment.h>
-#include <uno/mapping.hxx>
-
-#include <com/sun/star/uno/XCurrentContext.hpp>
+#include "uno/environment.hxx"
+#include "uno/mapping.hxx"
 
 #include "current.hxx"
 
@@ -80,6 +78,76 @@ using namespace ::com::sun::star::uno;
 
 namespace cppu
 {
+
+//--------------------------------------------------------------------------------------------------
+class SAL_NO_VTABLE XInterface
+{
+public:
+    virtual void SAL_CALL slot_queryInterface() = 0;
+    virtual void SAL_CALL acquire() throw () = 0;
+    virtual void SAL_CALL release() throw () = 0;
+};
+//--------------------------------------------------------------------------------------------------
+static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
+{
+    static typelib_InterfaceTypeDescription * s_type_XCurrentContext = 0;
+    if (0 == s_type_XCurrentContext)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (0 == s_type_XCurrentContext)
+        {
+            OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XCurrentContext") );
+            typelib_InterfaceTypeDescription * pTD = 0;
+            typelib_TypeDescriptionReference * pMembers[1] = { 0 };
+            OUString sMethodName0(
+                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XCurrentContext::getValueByName") );
+            typelib_typedescriptionreference_new(
+                &pMembers[0],
+                (typelib_TypeClass)::com::sun::star::uno::TypeClass_INTERFACE_METHOD,
+                sMethodName0.pData );
+            typelib_typedescription_newInterface(
+                &pTD,
+                sTypeName.pData, 0x00000000, 0x0000, 0x0000, 0x00000000, 0x00000000,
+                * typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE ),
+                1,
+                pMembers );
+
+            typelib_typedescription_register( (typelib_TypeDescription**)&pTD );
+            typelib_typedescriptionreference_release( pMembers[0] );
+
+            typelib_InterfaceMethodTypeDescription * pMethod = 0;
+            typelib_Parameter_Init aParameters[1];
+            OUString sParamName0( RTL_CONSTASCII_USTRINGPARAM("Name") );
+            OUString sParamType0( RTL_CONSTASCII_USTRINGPARAM("string") );
+            aParameters[0].pParamName = sParamName0.pData;
+            aParameters[0].eTypeClass = typelib_TypeClass_STRING;
+            aParameters[0].pTypeName = sParamType0.pData;
+            aParameters[0].bIn = sal_True;
+            aParameters[0].bOut = sal_False;
+            rtl_uString * pExceptions[1];
+            OUString sExceptionName0(
+                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.RuntimeException") );
+            pExceptions[0] = sExceptionName0.pData;
+            OUString sReturnType0( RTL_CONSTASCII_USTRINGPARAM("any") );
+            typelib_typedescription_newInterfaceMethod(
+                &pMethod,
+                3, sal_False,
+                sMethodName0.pData,
+                typelib_TypeClass_ANY, sReturnType0.pData,
+                1, aParameters, 1, pExceptions );
+            typelib_typedescription_register( (typelib_TypeDescription**)&pMethod );
+            typelib_typedescription_release( (typelib_TypeDescription*)pMethod );
+#if ! defined CPPU_LEAK_STATIC_DATA
+            // another static ref
+            ++pTD->nStaticRefCount;
+#endif
+            s_type_XCurrentContext = pTD;
+        }
+    }
+    return s_type_XCurrentContext;
+}
+
+//##################################################################################################
 
 //==================================================================================================
 class ThreadKey
@@ -140,7 +208,7 @@ extern "C" void SAL_CALL delete_IdContainer( void * p )
             }
             else // current compiler used for context interface implementation
             {
-                reinterpret_cast< XInterface * >( pId->pCurrentContext )->release();
+                reinterpret_cast< ::cppu::XInterface * >( pId->pCurrentContext )->release();
             }
         }
         if (pId->bInit)
@@ -193,7 +261,7 @@ extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
         }
         else // current compiler used for context interface implementation
         {
-            reinterpret_cast< XInterface * >( pId->pCurrentContext )->release();
+            reinterpret_cast< ::cppu::XInterface * >( pId->pCurrentContext )->release();
         }
         pId->pCurrentContext = 0;
     }
@@ -201,17 +269,18 @@ extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
     if (pCurrentContext)
     {
         OUString const & rEnvTypeName = * reinterpret_cast< OUString const * >( &pEnvTypeName );
-        if (rEnvTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ))
+        if (rEnvTypeName.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ))
         {
-            reinterpret_cast< XInterface * >( pCurrentContext )->acquire();
+            reinterpret_cast< ::cppu::XInterface * >( pCurrentContext )->acquire();
             pId->pCurrentContext = pCurrentContext;
-            pId->pCurrentContextEnv = 0;
+            pId->pCurrentContextEnv = 0; // special for this compiler env
         }
         else
         {
             uno_Environment * pEnv = 0;
             ::uno_getEnvironment( &pEnv, pEnvTypeName, pEnvContext );
-            OSL_ENSURE( pEnv && pEnv->pExtEnv, "### cannot get env of current context!" );
+            OSL_ASSERT( pEnv && pEnv->pExtEnv );
             if (pEnv)
             {
                 if (pEnv->pExtEnv)
@@ -233,133 +302,97 @@ extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
             }
         }
     }
-
     return sal_True;
 }
 //##################################################################################################
 extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
-    void ** ppCurrentContext,
-    rtl_uString * pEnvTypeName, void * pEnvContext )
+    void ** ppCurrentContext, rtl_uString * pEnvTypeName, void * pEnvContext )
     SAL_THROW_EXTERN_C()
 {
     IdContainer * pId = getIdContainer();
     OSL_ASSERT( pId );
 
-    uno_Environment * pTargetEnv = 0;
+    ::com::sun::star::uno::Environment target_env;
     OUString const & rEnvTypeName = * reinterpret_cast< OUString const * >( &pEnvTypeName );
 
     // release inout parameter
     if (*ppCurrentContext)
     {
-        if (rEnvTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ))
+        if (rEnvTypeName.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ))
         {
-            reinterpret_cast< XInterface * >( *ppCurrentContext )->release();
+            reinterpret_cast< ::cppu::XInterface * >( *ppCurrentContext )->release();
         }
         else
         {
-            ::uno_getEnvironment( &pTargetEnv, pEnvTypeName, pEnvContext );
-            OSL_ENSURE( pTargetEnv, "### cannot get env of target current context!" );
-            if (pTargetEnv)
-            {
-                uno_ExtEnvironment * pEnv = pTargetEnv->pExtEnv;
-                OSL_ENSURE( pEnv, "### cannot release given interface, because of incomplete env!" );
-                if (pEnv)
-                {
-                    (*pEnv->releaseInterface)( pEnv, *ppCurrentContext );
-                }
-                else
-                {
-                    (*pTargetEnv->release)( pTargetEnv );
-                    return sal_False;
-                }
-            }
-            else
-            {
+            uno_getEnvironment( (uno_Environment **) &target_env, pEnvTypeName, pEnvContext );
+            OSL_ASSERT( target_env.is() );
+            if (! target_env.is())
                 return sal_False;
-            }
+            uno_ExtEnvironment * pEnv = target_env.get()->pExtEnv;
+            OSL_ASSERT( 0 != pEnv );
+            if (0 == pEnv)
+                return sal_False;
+            (*pEnv->releaseInterface)( pEnv, *ppCurrentContext );
         }
         *ppCurrentContext = 0;
     }
 
-    sal_Bool bRet = sal_False;
+    // case: null-ref
+    if (0 == pId->pCurrentContext)
+        return sal_True;
 
-    if (pId->pCurrentContext)
+    // case: same env (current compiler env)
+    if ((0 == pId->pCurrentContextEnv) &&
+        rEnvTypeName.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ) &&
+        (0 == pEnvContext))
     {
-        if (pId->pCurrentContextEnv)
-        {
-            if (::rtl_ustr_compare(
-                ((uno_Environment *)pId->pCurrentContextEnv)->pTypeName->buffer, pEnvTypeName->buffer ) &&
-                ((uno_Environment *)pId->pCurrentContextEnv)->pContext == pEnvContext) // same env
-            {
-                (*pId->pCurrentContextEnv->acquireInterface)(
-                    pId->pCurrentContextEnv, pId->pCurrentContext );
-                *ppCurrentContext = pId->pCurrentContext;
-                bRet = sal_True;
-            }
-            else // map from set context to target
-            {
-                if (! pTargetEnv)
-                {
-                    ::uno_getEnvironment( &pTargetEnv, pEnvTypeName, pEnvContext );
-                }
-                if (pTargetEnv)
-                {
-                    Mapping aMapping( (uno_Environment *)pId->pCurrentContextEnv, pTargetEnv );
-                    if (aMapping.is())
-                    {
-                        aMapping.mapInterface(
-                            ppCurrentContext, pId->pCurrentContext,
-                            ::getCppuType( (Reference< XCurrentContext > const *)0 ) );
-                        bRet = sal_True;
-                    }
-                }
-            }
-        }
-        else if (pTargetEnv ||
-                 !rEnvTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ) ||
-                 pEnvContext)
-            // mapping needed from current to target
-        {
-            if (! pTargetEnv)
-            {
-                ::uno_getEnvironment( &pTargetEnv, pEnvTypeName, pEnvContext );
-            }
-            if (pTargetEnv)
-            {
-                OUString aCurrentEnv( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-                uno_Environment * pCurrentEnv = 0;
-                ::uno_getEnvironment( &pCurrentEnv, aCurrentEnv.pData, 0 );
-                OSL_ASSERT( pCurrentEnv );
-                if (pCurrentEnv)
-                {
-                    Mapping aMapping( pCurrentEnv, pTargetEnv );
-                    (*pCurrentEnv->release)( pCurrentEnv );
-                    if (aMapping.is())
-                    {
-                        aMapping.mapInterface(
-                            ppCurrentContext, pId->pCurrentContext,
-                            ::getCppuType( (Reference< XCurrentContext > const *)0 ) );
-                        bRet = sal_True;
-                    }
-                }
-            }
-        }
-        else // set env is current env is target env => no mapping needed
-        {
-            reinterpret_cast< XInterface * >( pId->pCurrentContext )->acquire();
-            *ppCurrentContext = pId->pCurrentContext;
-            bRet = sal_True;
-        }
-
-        if (pTargetEnv)
-        {
-            (*pTargetEnv->release)( pTargetEnv );
-        }
+        reinterpret_cast< ::cppu::XInterface * >( pId->pCurrentContext )->acquire();
+        *ppCurrentContext = pId->pCurrentContext;
+        return sal_True;
     }
-    else // get null-ref is ok
+    // case: same env (!= current compiler env)
+    if ((0 != pId->pCurrentContextEnv) &&
+        (0 == ::rtl_ustr_compare(
+            ((uno_Environment *) pId->pCurrentContextEnv)->pTypeName->buffer,
+            pEnvTypeName->buffer )) &&
+        ((uno_Environment *) pId->pCurrentContextEnv)->pContext == pEnvContext)
     {
-        bRet = sal_True;
+        // target env == current env
+        (*pId->pCurrentContextEnv->acquireInterface)(
+            pId->pCurrentContextEnv, pId->pCurrentContext );
+        *ppCurrentContext = pId->pCurrentContext;
+        return sal_True;
+    }
+    // else: mapping needed
+
+    if (! target_env.is())
+    {
+        uno_getEnvironment( (uno_Environment **) &target_env, pEnvTypeName, pEnvContext );
+        OSL_ASSERT( target_env.is() );
+        if (! target_env.is())
+            return sal_False;
     }
 
-    return bRet;
+    ::com::sun::star::uno::Environment source_env;
+    uno_Environment * p_source_env = (uno_Environment *) pId->pCurrentContextEnv;
+    if (0 == p_source_env)
+    {
+        OUString current_env_name(
+            RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+        uno_getEnvironment( (uno_Environment **) &source_env, current_env_name.pData, 0 );
+        OSL_ASSERT( source_env.is() );
+        if (! source_env.is())
+            return sal_False;
+        p_source_env = source_env.get();
+    }
+
+    Mapping mapping( p_source_env, target_env.get() );
+    OSL_ASSERT( mapping.is() );
+    if (! mapping.is())
+        return sal_False;
+    mapping.mapInterface(
+        ppCurrentContext, pId->pCurrentContext, ::cppu::get_type_XCurrentContext() );
+    return sal_True;
 }
