@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unload.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-18 14:33:32 $
+ *  last change: $Author: jl $ $Date: 2001-06-07 09:18:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,48 +64,65 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
+#ifndef _OSL_INTERLOCK_H_
+#include <osl/interlck.h>
+#endif
+#ifndef _OSL_MODULE_H_
+#include <osl/module.h>
+#endif
+
+
+#define COMPONENT_CANUNLOAD         "component_canUnload"
+typedef sal_Bool (SAL_CALL * component_canUnloadFunc)( TimeValue* pTime);
+
 
 /** C-interface for a module reference counting
  */
-struct _rtl_ModuleCount
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+sal_Bool SAL_CALL rtl_registerModuleForUnloading( oslModule module);
+void SAL_CALL rtl_unregisterModuleForUnloading( oslModule module);
+void SAL_CALL rtl_unloadUnusedModules( TimeValue* libUnused);
+
+typedef void (SAL_CALL *rtl_unloadingListenerFunc)(void* id);
+sal_Int32 SAL_CALL rtl_addUnloadingListener( rtl_unloadingListenerFunc callback, void* _this);
+void SAL_CALL rtl_removeUnloadingListener( sal_Int32 cookie );
+
+
+
+typedef struct _rtl_ModuleCount
 {
     void ( SAL_CALL * acquire ) ( struct _rtl_ModuleCount * that );
     void ( SAL_CALL * release ) ( struct _rtl_ModuleCount * that );
-};
+}rtl_ModuleCount;
 
-typedef struct _rtl_ModuleCount rtl_ModuleCount;
+
+#define MODULE_COUNT_INIT \
+{ {rtl_moduleCount_acquire,rtl_moduleCount_release}, rtl_moduleCount_canUnload, 0, {0, 0}};
+
+typedef struct _rtl_StandardModuleCount
+{
+    rtl_ModuleCount modCnt;
+     sal_Bool ( *canUnload ) ( struct _rtl_StandardModuleCount* a, TimeValue* libUnused);
+    oslInterlockedCount counter;
+    TimeValue unusedSince;
+} rtl_StandardModuleCount;
+
+
+void rtl_moduleCount_acquire(rtl_ModuleCount * that );
+void rtl_moduleCount_release( rtl_ModuleCount * that );
+sal_Bool rtl_moduleCount_canUnload( rtl_StandardModuleCount * that, TimeValue* libUnused);
+
 
 #ifdef __cplusplus
-namespace rtl
-{
-    class ModuleCountReference
-    {
-        rtl_ModuleCount *_moduleCount;
-    public:
-        inline ModuleCountReference();
-        inline ModuleCountReference( rtl_ModuleCount * );
-        inline ~ModuleCountReference();
-    };
-
-    //____________________________________________________________________________________
-    inline ModuleCountReference::ModuleCountReference( )
-        : _moduleCount( 0 )
-    {}
-
-    //____________________________________________________________________________________
-    inline ModuleCountReference::ModuleCountReference( rtl_ModuleCount *pMod )
-        : _moduleCount( pMod )
-    {
-        if( _moduleCount )
-            _moduleCount->acquire( _moduleCount );
-    }
-
-    //____________________________________________________________________________________
-    inline ModuleCountReference::~ModuleCountReference()
-    {
-        if( _moduleCount )
-            _moduleCount->release( _moduleCount );
-    }
 }
 #endif
+
+
 #endif
