@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2000-10-10 16:54:06 $
+ *  last change: $Author: cmc $ $Date: 2001-01-29 10:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,30 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
         {
             if( !pFormImpl )
                 pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
+            /*
+            Here we have a small complication. This formula control contains
+            the default text that is displayed if you edit the form field in
+            the "default text" area. But MSOffice does not display that
+            information, instead it display the result of the field,
+            MSOffice just uses the default text of the control as its
+            initial value for the displayed default text. So we will swap in
+            the field result into the formula here in place of the default
+            text.
+            */
+            aFormula.sDefault = GetFieldResult(pF);
+
+            /*
+            And also a blank TextBox is indicated by 5 of these
+            placeholder chars, convert a field result of this stuff
+            into an empty string.
+            */
+            static sal_Unicode __READONLY_DATA aFormTextBoxBlank[] =
+            {
+                0x2002,0x2002,0x2002,0x2002,0x2002
+            };
+            if (aFormula.sDefault == aFormTextBoxBlank)
+                aFormula.sDefault.Erase();
+
             if (pFormImpl->InsertFormula(aFormula))
                 return F_OK;
         }
@@ -2085,12 +2109,15 @@ BOOL SwMSConvertControls::InsertControl(
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.2 2000-10-10 16:54:06 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.3 2001-01-29 10:17:21 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/10 16:54:06  cmc
+      MSOffice 97/2000 Controls {Im|Ex}port
+
       Revision 1.1.1.1  2000/09/18 17:14:58  hr
       initial import
 
