@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-24 12:27:17 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1351,58 +1351,168 @@ BOOL SwFlowFrm::HasParaSpaceAtPages( BOOL bSct ) const
     return pTmp && !pTmp->GetPrev();
 }
 
-SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
-    const SwFrm* pPr ) const
+/** helper method to determine previous frame for calculation of the
+    upper space
+
+    OD 2004-03-10 #i11860#
+
+    @author OD
+*/
+const SwFrm* SwFlowFrm::_GetPrevFrmForUpperSpaceCalc( const SwFrm* _pProposedPrevFrm ) const
 {
-    const SwFrm *pPre = pPr ? pPr : rThis.GetPrev();
-    BOOL bInFtn = rThis.IsInFtn();
-    do {
-        while( pPre &&
-               ( ( pPre->IsTxtFrm() && ((SwTxtFrm*)pPre)->IsHiddenNow() ) ||
-                 ( pPre->IsSctFrm() && !((SwSectionFrm*)pPre)->GetSection() ) ) )
-            pPre = pPre->GetPrev();
-        if( !pPre && bInFtn )
+    const SwFrm* pPrevFrm = _pProposedPrevFrm
+                            ? _pProposedPrevFrm
+                            : rThis.GetPrev();
+
+    // Skip hidden paragraphs and empty sections
+    while ( pPrevFrm &&
+            ( ( pPrevFrm->IsTxtFrm() &&
+                static_cast<const SwTxtFrm*>(pPrevFrm)->IsHiddenNow() ) ||
+              ( pPrevFrm->IsSctFrm() &&
+                !static_cast<const SwSectionFrm*>(pPrevFrm)->GetSection() ) ) )
+    {
+        pPrevFrm = pPrevFrm->GetPrev();
+    }
+
+    // Special case: no direct previous frame is found but frame is in footnote
+    // Search for a previous frame in previous footnote,
+    // if frame isn't in a section, which is also in the footnote
+    if ( !pPrevFrm && rThis.IsInFtn() &&
+         ( rThis.IsSctFrm() ||
+           !rThis.IsInSct() || !rThis.FindSctFrm()->IsInFtn() ) )
+    {
+        const SwFtnFrm* pPrevFtnFrm =
+                static_cast<const SwFtnFrm*>(rThis.FindFtnFrm()->GetPrev());
+        if ( pPrevFtnFrm )
         {
-            bInFtn = FALSE;
-            if( !rThis.IsInSct() || rThis.IsSctFrm() ||
-                !rThis.FindSctFrm()->IsInFtn() )
-                pPre = rThis.FindFtnFrm()->GetPrev();
-            if( pPre )
+            pPrevFrm = pPrevFtnFrm->Lower();
+            while ( pPrevFrm && pPrevFrm->GetNext() )
             {
-                pPre = ((SwFtnFrm*)pPre)->Lower();
-                if( pPre )
-                    while( pPre->GetNext() )
-                        pPre = pPre->GetNext();
-                continue;
+                pPrevFrm = pPrevFrm->GetNext();
+            }
+            // Skip hidden paragraphs and empty sections
+            while ( pPrevFrm &&
+                    ( ( pPrevFrm->IsTxtFrm() &&
+                        static_cast<const SwTxtFrm*>(pPrevFrm)->IsHiddenNow() ) ||
+                      ( pPrevFrm->IsSctFrm() &&
+                        !static_cast<const SwSectionFrm*>(pPrevFrm)->GetSection() ) ) )
+            {
+                pPrevFrm = pPrevFrm->GetPrev();
             }
         }
-        if( pPre && pPre->IsSctFrm() )
+    }
+    // Special case: found previous frame is a section
+    // Search for the last content in the section
+    if( pPrevFrm && pPrevFrm->IsSctFrm() )
+    {
+        const SwSectionFrm* pPrevSectFrm =
+                                    static_cast<const SwSectionFrm*>(pPrevFrm);
+        pPrevFrm = pPrevSectFrm->FindLastCntnt();
+        // If the last content is in a table _inside_ the section,
+        // take the table herself.
+        // OD 2004-02-18 #106629# - correction:
+        // Check directly, if table is inside table, instead of indirectly
+        // by checking, if section isn't inside a table
+        if ( pPrevFrm && pPrevFrm->IsInTab() )
         {
-            SwSectionFrm* pSect = (SwSectionFrm*)pPre;
-            pPre = pSect->FindLastCntnt();
-            // If the last content is in a table _inside_ the section,
-            // take the table herself.
-            // OD 2004-02-18 #106629# - correction:
-            // Check directly, if table is inside table, instead of indirectly
-            // by checking, if section isn't inside a table
-            if ( pPre && pPre->IsInTab() )
+            const SwTabFrm* pTableFrm = pPrevFrm->FindTabFrm();
+            if ( pPrevSectFrm->IsAnLower( pTableFrm ) )
             {
-                const SwTabFrm* pTableFrm = pPre->FindTabFrm();
-                if ( pSect->IsAnLower( pTableFrm ) )
-                {
-                    pPre = pTableFrm;
-                }
-            }
-            // OD 2004-02-18 #106629# correction: skip hidden text frames
-            while ( pPre &&
-                    pPre->IsTxtFrm() &&
-                    static_cast<const SwTxtFrm*>(pPre)->IsHiddenNow() )
-            {
-                pPre = pPre->GetPrev();
+                pPrevFrm = pTableFrm;
             }
         }
-        break;
-    } while( pPre );
+        // OD 2004-02-18 #106629# correction: skip hidden text frames
+        while ( pPrevFrm &&
+                pPrevFrm->IsTxtFrm() &&
+                static_cast<const SwTxtFrm*>(pPrevFrm)->IsHiddenNow() )
+        {
+            pPrevFrm = pPrevFrm->GetPrev();
+        }
+    }
+
+    return pPrevFrm;
+}
+
+/** method to determine the spacing values of previous frame
+
+    OD 2004-03-10 #i11860#
+    Note: line spacing value is only determined for text frames
+
+    @author OD
+*/
+void SwFlowFrm::_GetSpacingValuesOfFrm( const SwFrm& _rFrm,
+                                       SwTwips& _roLowerSpacing,
+                                       SwTwips& _roLineSpacing ) const
+{
+    const SvxULSpaceItem& rULSpace = _rFrm.GetAttrSet()->GetULSpace();
+    _roLowerSpacing = rULSpace.GetLower();
+
+    _roLineSpacing = 0;
+    if ( _rFrm.IsTxtFrm() )
+    {
+        _roLineSpacing = static_cast<const SwTxtFrm&>(_rFrm).GetLineSpace();
+    }
+
+    ASSERT( _roLowerSpacing >= 0 && _roLineSpacing >= 0,
+            "<SwFlowFrm::GetSpacingValuesOfFrm(..)> - spacing values aren't positive!" );
+}
+
+// OD 2004-03-12 #i11860# - add 3rd parameter <_bConsiderGrid>
+SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
+                                   const SwFrm* pPr,
+                                   const bool _bConsiderGrid ) const
+{
+    // OD 2004-03-10 #i11860# - use new method <GetPrevFrmForUpperSpaceCalc(..)>
+    const SwFrm* pPrevFrm = _GetPrevFrmForUpperSpaceCalc( pPr );
+//    const SwFrm *pPre = pPr ? pPr : rThis.GetPrev();
+//    BOOL bInFtn = rThis.IsInFtn();
+//    do {
+//        while( pPre && ( (pPre->IsTxtFrm() && ((SwTxtFrm*)pPre)->IsHiddenNow())
+//               || ( pPre->IsSctFrm() && !((SwSectionFrm*)pPre)->GetSection() ) ) )
+//            pPre = pPre->GetPrev();
+//        if( !pPre && bInFtn )
+//        {
+//            bInFtn = FALSE;
+//            if( !rThis.IsInSct() || rThis.IsSctFrm() ||
+//                !rThis.FindSctFrm()->IsInFtn() )
+//                pPre = rThis.FindFtnFrm()->GetPrev();
+//            if( pPre )
+//            {
+//                pPre = ((SwFtnFrm*)pPre)->Lower();
+//                if( pPre )
+//                    while( pPre->GetNext() )
+//                        pPre = pPre->GetNext();
+//                continue;
+//            }
+//        }
+//        if( pPre && pPre->IsSctFrm() )
+//        {
+//            SwSectionFrm* pSect = (SwSectionFrm*)pPre;
+//            pPre = pSect->FindLastCntnt();
+//            // If the last content is in a table _inside_ the section,
+//            // take the table herself.
+//            // OD 2004-02-18 #106629# - correction:
+//            // Check directly, if table is inside table, instead of indirectly
+//            // by checking, if section isn't inside a table
+//            if ( pPre && pPre->IsInTab() )
+//            {
+//                const SwTabFrm* pTableFrm = pPre->FindTabFrm();
+//                if ( pSect->IsAnLower( pTableFrm ) )
+//                {
+//                    pPre = pTableFrm;
+//                }
+//            }
+//            // OD 2004-02-18 #106629# correction: skip hidden text frames
+//            while ( pPre &&
+//                    pPre->IsTxtFrm() &&
+//                    static_cast<const SwTxtFrm*>(pPre)->IsHiddenNow() )
+//            {
+//                pPre = pPre->GetPrev();
+//            }
+//        }
+//        break;
+//    } while( pPre );
+
     SwBorderAttrAccess *pAccess;
     SwFrm* pOwn;
     if( !pAttrs )
@@ -1433,22 +1543,26 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
         const SvxLineSpacingItem &rSpace = pSet->GetLineSpacing();
         const SwDoc* pDoc = pSet->GetDoc();
         const bool bUseFormerLineSpacing = pDoc->IsFormerLineSpacing();
-        if( pPre )
+        if( pPrevFrm )
         {
-            const SvxULSpaceItem &rPrevUL = pPre->GetAttrSet()->GetULSpace();
+            // OD 2004-03-10 #i11860# - use new method to determine needed spacing
+            // values of found previous frame and use these values.
+            SwTwips nPrevLowerSpace = 0;
+            SwTwips nPrevLineSpacing = 0;
+            _GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing );
             if( pDoc->IsParaSpaceMax() )
             {
-                nUpper = rPrevUL.GetLower() + pAttrs->GetULSpace().GetUpper();
-                SwTwips nAdd = 0;
+                nUpper = nPrevLowerSpace + pAttrs->GetULSpace().GetUpper();
+                SwTwips nAdd = nPrevLineSpacing;
                 // OD 07.01.2004 #i11859# - consideration of the line spacing
                 //      for the upper spacing of a text frame
                 if ( bUseFormerLineSpacing )
                 {
                     // former consideration
                     if ( pOwn->IsTxtFrm() )
+                    {
                         nAdd = Max( nAdd, static_cast<SwTxtFrm&>(rThis).GetLineSpace() );
-                    if ( pPre->IsTxtFrm() )
-                        nAdd = Max( nAdd, static_cast<const SwTxtFrm*>(pPre)->GetLineSpace() );
+                    }
                     nUpper += nAdd;
                 }
                 else
@@ -1459,15 +1573,16 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                     //      the line spacing values are add up instead of
                     //      building its maximum.
                     if ( pOwn->IsTxtFrm() )
+                    {
                         nAdd += static_cast<SwTxtFrm&>(rThis).GetLineSpace( true );
-                    if ( pPre->IsTxtFrm() )
-                        nAdd += static_cast<const SwTxtFrm*>(pPre)->GetLineSpace();
+                    }
                     nUpper += nAdd;
                 }
             }
             else
             {
-                nUpper = Max( rPrevUL.GetLower(), pAttrs->GetULSpace().GetUpper() );
+                nUpper = Max( static_cast<long>(nPrevLowerSpace),
+                              static_cast<long>(pAttrs->GetULSpace().GetUpper()) );
                 // OD 07.01.2004 #i11859# - consideration of the line spacing
                 //      for the upper spacing of a text frame
                 if ( bUseFormerLineSpacing )
@@ -1475,8 +1590,10 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                     // former consideration
                     if ( pOwn->IsTxtFrm() )
                         nUpper = Max( nUpper, ((SwTxtFrm*)pOwn)->GetLineSpace() );
-                    if ( pPre->IsTxtFrm() )
-                        nUpper = Max( nUpper, ((SwTxtFrm*)pPre)->GetLineSpace() );
+                    if ( nPrevLineSpacing != 0 )
+                    {
+                        nUpper = Max( nUpper, nPrevLineSpacing );
+                    }
                 }
                 else
                 {
@@ -1486,11 +1603,11 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                     //      the line spacing values are add up and added to
                     //      the paragraph spacing instead of building the
                     //      maximum of the line spacings and the paragraph spacing.
-                    SwTwips nAdd = 0;
+                    SwTwips nAdd = nPrevLineSpacing;
                     if ( pOwn->IsTxtFrm() )
+                    {
                         nAdd += static_cast<SwTxtFrm&>(rThis).GetLineSpace( true );
-                    if ( pPre->IsTxtFrm() )
-                        nAdd += static_cast<const SwTxtFrm*>(pPre)->GetLineSpace();
+                    }
                     nUpper += nAdd;
                 }
             }
@@ -1502,46 +1619,165 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
         }
     }
 
-    // OD 2004-02-26 #i25029# - pass previous frame <pPre> to method <GetTopLine(..)>,
-    // if parameter <pPr> is set.
+    // OD 2004-02-26 #i25029# - pass previous frame <pPrevFrm>
+    // to method <GetTopLine(..)>, if parameter <pPr> is set.
     // Note: parameter <pPr> is set, if method is called from <SwTxtFrm::WouldFit(..)>
-    nUpper += pAttrs->GetTopLine( rThis, (pPr ? pPre : 0L) );
+    nUpper += pAttrs->GetTopLine( rThis, (pPr ? pPrevFrm : 0L) );
 
-    if( rThis.IsInDocBody() && rThis.GetAttrSet()->GetParaGrid().GetValue() )
+    // OD 2004-03-12 #i11860# - consider value of new parameter <_bConsiderGrid>
+    // and use new method <GetUpperSpaceAmountConsideredForPageGrid(..)>
+    if ( _bConsiderGrid )
     {
-        const SwPageFrm* pPg = rThis.FindPageFrm();
-        GETGRID( pPg )
+        nUpper += _GetUpperSpaceAmountConsideredForPageGrid( nUpper );
+    }
+//    if ( rThis.IsInDocBody() && rThis.GetAttrSet()->GetParaGrid().GetValue() )
+//    {
+//        const SwPageFrm* pPg = rThis.FindPageFrm();
+//        GETGRID( pPg )
+//        if( pGrid )
+//        {
+//            const SwFrm* pBody = pPg->FindBodyCont();
+//            if( pBody )
+//            {
+//                long nSum = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
+//                SWRECTFN( (&rThis) )
+//                SwTwips nOrig = (pBody->*fnRect->fnGetPrtTop)();
+//                SwTwips nTop = (rThis.Frm().*fnRect->fnGetTop)();
+//                if( bVert )
+//                {
+//                    nTop -= nUpper;
+//                    SwTwips nY = nOrig - nSum *( ( nOrig - nTop ) / nSum );
+//                    if( nY > nTop )
+//                        nY -= nSum;
+//                    nUpper = nTop + nUpper - nY;
+//                }
+//                else
+//                {
+//                    nTop += nUpper;
+//                    SwTwips nY = nOrig + nSum *( ( nTop - nOrig ) / nSum );
+//                    if( nY < nTop )
+//                        nY += nSum;
+//                    nUpper = nY - rThis.Frm().Top();
+//                }
+//            }
+//        }
+//    }
+
+    delete pAccess;
+    return nUpper;
+}
+
+/** method to detemine the upper space amount, which is considered for
+    the page grid
+
+    OD 2004-03-12 #i11860#
+    Precondition: Position of frame is valid.
+
+    @author OD
+*/
+SwTwips SwFlowFrm::_GetUpperSpaceAmountConsideredForPageGrid(
+                            const SwTwips _nUpperSpaceWithoutGrid ) const
+{
+    SwTwips nUpperSpaceAmountConsideredForPageGrid = 0;
+
+    if ( rThis.IsInDocBody() && rThis.GetAttrSet()->GetParaGrid().GetValue() )
+    {
+        const SwPageFrm* pPageFrm = rThis.FindPageFrm();
+        GETGRID( pPageFrm )
         if( pGrid )
         {
-            const SwFrm* pBody = pPg->FindBodyCont();
-            if( pBody )
+            const SwFrm* pBodyFrm = pPageFrm->FindBodyCont();
+            if ( pBodyFrm )
             {
-                long nSum = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
+                const long nGridLineHeight =
+                        pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
+
                 SWRECTFN( (&rThis) )
-                SwTwips nOrig = (pBody->*fnRect->fnGetPrtTop)();
-                SwTwips nTop = (rThis.Frm().*fnRect->fnGetTop)();
-                if( bVert )
+                const SwTwips nBodyPrtTop = (pBodyFrm->*fnRect->fnGetPrtTop)();
+                const SwTwips nProposedPrtTop =
+                        (*fnRect->fnYInc)( (rThis.Frm().*fnRect->fnGetTop)(),
+                                           _nUpperSpaceWithoutGrid );
+
+                const SwTwips nSpaceAbovePrtTop =
+                        (*fnRect->fnYDiff)( nProposedPrtTop, nBodyPrtTop );
+                const SwTwips nSpaceOfCompleteLinesAbove =
+                        nGridLineHeight * ( nSpaceAbovePrtTop / nGridLineHeight );
+                SwTwips nNewPrtTop =
+                        (*fnRect->fnYInc)( nBodyPrtTop, nSpaceOfCompleteLinesAbove );
+                if ( (*fnRect->fnYDiff)( nProposedPrtTop, nNewPrtTop ) > 0 )
                 {
-                    nTop -= nUpper;
-                    SwTwips nY = nOrig - nSum *( ( nOrig - nTop ) / nSum );
-                    if( nY > nTop )
-                        nY -= nSum;
-                    nUpper = nTop + nUpper - nY;
+                    nNewPrtTop = (*fnRect->fnYInc)( nNewPrtTop, nGridLineHeight );
                 }
-                else
-                {
-                    nTop += nUpper;
-                    SwTwips nY = nOrig + nSum *( ( nTop - nOrig ) / nSum );
-                    if( nY < nTop )
-                        nY += nSum;
-                    nUpper = nY - rThis.Frm().Top();
-                }
+
+                const SwTwips nNewUpperSpace =
+                        (*fnRect->fnYDiff)( nNewPrtTop,
+                                            (rThis.Frm().*fnRect->fnGetTop)() );
+
+                nUpperSpaceAmountConsideredForPageGrid =
+                        nNewUpperSpace - _nUpperSpaceWithoutGrid;
+
+                ASSERT( nUpperSpaceAmountConsideredForPageGrid >= 0,
+                        "<SwFlowFrm::GetUpperSpaceAmountConsideredForPageGrid(..)> - negative space considered for page grid!" );
+            }
+        }
+    }
+    return nUpperSpaceAmountConsideredForPageGrid;
+}
+
+/** method to determent the upper space amount, which is considered for
+    the previous frame
+
+    OD 2004-03-11 #i11860#
+
+    @author OD
+*/
+SwTwips SwFlowFrm::_GetUpperSpaceAmountConsideredForPrevFrm() const
+{
+    SwTwips nUpperSpaceAmountOfPrevFrm = 0;
+
+    const SwFrm* pPrevFrm = _GetPrevFrmForUpperSpaceCalc();
+    if ( pPrevFrm )
+    {
+        SwTwips nPrevLowerSpace = 0;
+        SwTwips nPrevLineSpacing = 0;
+        _GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing );
+        if ( nPrevLowerSpace > 0 || nPrevLineSpacing > 0 )
+        {
+            if ( rThis.GetAttrSet()->GetDoc()->IsParaSpaceMax() ||
+                 !rThis.GetAttrSet()->GetDoc()->IsFormerLineSpacing() )
+            {
+                nUpperSpaceAmountOfPrevFrm = nPrevLowerSpace + nPrevLineSpacing;
+            }
+            else
+            {
+                nUpperSpaceAmountOfPrevFrm = Max( nPrevLowerSpace, nPrevLineSpacing );
             }
         }
     }
 
-    delete pAccess;
-    return nUpper;
+    return nUpperSpaceAmountOfPrevFrm;
+}
+
+/** method to determine the upper space amount, which is considered for
+    the previous frame and the page grid, if option 'Use former object
+    positioning' is OFF
+
+    OD 2004-03-18 #i11860#
+
+    @author OD
+*/
+SwTwips SwFlowFrm::GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() const
+{
+    SwTwips nUpperSpaceAmountConsideredForPrevFrmAndPageGrid = 0;
+
+    if ( !rThis.GetAttrSet()->GetDoc()->IsFormerObjectPositioning() )
+    {
+        nUpperSpaceAmountConsideredForPrevFrmAndPageGrid =
+            _GetUpperSpaceAmountConsideredForPrevFrm() +
+            _GetUpperSpaceAmountConsideredForPageGrid( CalcUpperSpace( 0L, 0L, false ) );
+    }
+
+    return nUpperSpaceAmountConsideredForPrevFrmAndPageGrid;
 }
 
 /** calculation of lower space
