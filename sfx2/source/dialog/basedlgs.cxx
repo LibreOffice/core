@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:09:33 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,7 +523,7 @@ void SfxModelessDialog::FillInfo(SfxChildWinInfo& rInfo) const
     damit sie in die INI-Datei geschrieben werden koennen.
     Es wird angenommen, da\s rInfo alle anderen evt. relevanten Daten in
     der ChildWindow-Klasse erh"alt.
-    ModelessDialogs haben keine spezifischen Informationen, so daá die
+    ModelessDialogs haben keine spezifischen Informationen, so dass die
     Basisimplementierung nichts tut und daher nicht gerufen werden mu\s.
 */
 
