@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 10:19:18 $
+ *  last change: $Author: fs $ $Date: 2001-01-25 11:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,7 @@ void SAL_CALL OComboBoxModel::write(const Reference<stario::XObjectOutputStream>
 
     // Maskierung fuer any
     sal_uInt16 nAnyMask = 0;
-        if (m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT)
+    if (m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT)
         nAnyMask |= BOUNDCOLUMN;
     _rxOutStream << nAnyMask;
 
@@ -477,7 +477,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
     if (m_aListSource.len() && m_xAggregateSet.is())
     {
         StringSequence aSequence;
-                m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, makeAny(aSequence));
+        m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, makeAny(aSequence));
     }
 
     if (nVersion > 0x0004)
@@ -498,22 +498,23 @@ void OComboBoxModel::loadData()
     DBG_ASSERT(m_eListSourceType != ListSourceType_VALUELIST, "OComboBoxModel::loadData : do not call for a value list !");
     ////
     // Connection holen
-        Reference<XRowSet> xForm(m_xCursor, UNO_QUERY);
+    Reference<XRowSet> xForm(m_xCursor, UNO_QUERY);
     if (!xForm.is())
         return;
-        Reference<XConnection> xConnection = getConnection(xForm);
+    Reference<XConnection> xConnection = getConnection(xForm);
     if (!xConnection.is())
         return;
 
     // we need a com::sun::star::sdb::Connection for some of the code below ...
-        Reference<XServiceInfo> xServiceInfo(xConnection, UNO_QUERY);
+    Reference<XServiceInfo> xServiceInfo(xConnection, UNO_QUERY);
     if (!xServiceInfo.is() || !xServiceInfo->supportsService(SRV_SDB_CONNECTION))
     {
         DBG_ERROR("OComboBoxModel::loadData : invalid connection !");
         return;
     }
 
-        Reference<XResultSet> xListCursor;
+    Reference<XStatement> xStmt;
+    Reference<XResultSet> xListCursor;
 
     if (!m_aListSource.len() || m_eListSourceType == ListSourceType_VALUELIST)
         return;
@@ -531,8 +532,8 @@ void OComboBoxModel::loadData()
                 // if we use an alias for the bound field, we won't find it
                 // in that case we use the first field of the table
 
-                                Reference<XNameAccess> xFieldsByName = getTableFields(xConnection, m_aListSource);
-                                Reference<XIndexAccess> xFieldsByIndex(xFieldsByName, UNO_QUERY);
+                Reference<XNameAccess> xFieldsByName = getTableFields(xConnection, m_aListSource);
+                Reference<XIndexAccess> xFieldsByIndex(xFieldsByName, UNO_QUERY);
 
                 ::rtl::OUString aFieldName;
                 if (xFieldsByName.is() && xFieldsByName->hasByName(m_aControlSource))
@@ -578,7 +579,7 @@ void OComboBoxModel::loadData()
                 if (!aFieldName.len())
                     break;
 
-                                Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
+                Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
                 ::rtl::OUString aQuote = xMeta->getIdentifierQuoteString();
                 ::rtl::OUString aStatement = ::rtl::OUString::createFromAscii("SELECT DISTINCT ");
 
@@ -586,14 +587,14 @@ void OComboBoxModel::loadData()
                 aStatement += ::rtl::OUString::createFromAscii(" FROM ");
                 aStatement += quoteTableName(xMeta, m_aListSource);
 
-                                Reference<XStatement> xStmt = xConnection->createStatement();
+                xStmt = xConnection->createStatement();
                 xListCursor = xStmt->executeQuery(aStatement);
             }   break;
             case ListSourceType_QUERY:
             {
                 Reference<XQueriesSupplier> xSupplyQueries(xConnection, UNO_QUERY);
                 Reference<XPropertySet> xQuery(*(InterfaceRef*)xSupplyQueries->getQueries()->getByName(m_aListSource).getValue(), UNO_QUERY);
-                Reference<XStatement> xStmt = xConnection->createStatement();
+                xStmt = xConnection->createStatement();
                 Reference<XPropertySet>(xStmt, UNO_QUERY)->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING));
 
                 ::rtl::OUString sStatement;
@@ -602,7 +603,7 @@ void OComboBoxModel::loadData()
             }   break;
             default:
             {
-                                Reference<XStatement> xStmt = xConnection->createStatement();
+                xStmt = xConnection->createStatement();
                 if (ListSourceType_SQLPASSTHROUGH == m_eListSourceType)
                 {
                     Reference<XPropertySet> xStatementProps(xStmt, UNO_QUERY);
@@ -616,12 +617,14 @@ void OComboBoxModel::loadData()
     {
         onError(eSQL, FRM_RES_STRING(RID_BASELISTBOX_ERROR_FILLLIST));
         disposeComponent(xListCursor);
+        disposeComponent(xStmt);
         return;
     }
-        catch(Exception& eUnknown)
+    catch(Exception& eUnknown)
     {
         eUnknown;
         disposeComponent(xListCursor);
+        disposeComponent(xStmt);
         return;
     }
 
@@ -641,17 +644,17 @@ void OComboBoxModel::loadData()
             case ListSourceType_QUERY:
             {
                 // die XDatabaseVAriant der ersten Spalte
-                                Reference<XColumnsSupplier> xSupplyCols(xListCursor, UNO_QUERY);
+                Reference<XColumnsSupplier> xSupplyCols(xListCursor, UNO_QUERY);
                 DBG_ASSERT(xSupplyCols.is(), "OComboBoxModel::loadData : cursor supports the row set service but is no column supplier ??!");
-                                Reference<XIndexAccess> xColumns;
+                Reference<XIndexAccess> xColumns;
                 if (xSupplyCols.is())
                 {
-                                        xColumns = Reference<XIndexAccess>(xSupplyCols->getColumns(), UNO_QUERY);
+                    xColumns = Reference<XIndexAccess>(xSupplyCols->getColumns(), UNO_QUERY);
                     DBG_ASSERT(xColumns.is(), "OComboBoxModel::loadData : no columns supplied by the row set !");
                 }
-                                Reference<XColumn> xDataField;
+                Reference<XColumn> xDataField;
                 if (xColumns.is())
-                                        xDataField = Reference<XColumn>(*(InterfaceRef*)xColumns->getByIndex(0).getValue(), UNO_QUERY);
+                    xDataField = Reference<XColumn>(*(InterfaceRef*)xColumns->getByIndex(0).getValue(), UNO_QUERY);
                 if (!xDataField.is())
                 {
                     disposeComponent(xListCursor);
@@ -674,7 +677,7 @@ void OComboBoxModel::loadData()
             break;
             case ListSourceType_TABLEFIELDS:
             {
-                                Reference<XNameAccess> xFieldNames = getTableFields(xConnection, m_aListSource);
+                Reference<XNameAccess> xFieldNames = getTableFields(xConnection, m_aListSource);
                 if (xFieldNames.is())
                 {
                     StringSequence seqNames = xFieldNames->getElementNames();
@@ -692,12 +695,14 @@ void OComboBoxModel::loadData()
     {
         onError(eSQL, FRM_RES_STRING(RID_BASELISTBOX_ERROR_FILLLIST));
         disposeComponent(xListCursor);
+        disposeComponent(xStmt);
         return;
     }
-        catch(Exception& eUnknown)
+    catch(Exception& eUnknown)
     {
         eUnknown;
         disposeComponent(xListCursor);
+        disposeComponent(xStmt);
         return;
     }
 
@@ -707,11 +712,12 @@ void OComboBoxModel::loadData()
     for (sal_Int32 i = 0; i<aStringSeq.getLength(); ++i)
         pStringAry[i] = aStringList[i];
 
-        // String-Sequence an ListBox setzen
-        m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, makeAny(aStringSeq));
+    // String-Sequence an ListBox setzen
+    m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, makeAny(aStringSeq));
 
-    // Statement + Cursor zerstoeren
+    // destroy cursor & statement
     disposeComponent(xListCursor);
+    disposeComponent(xStmt);
 }
 
 //------------------------------------------------------------------------------
@@ -740,6 +746,8 @@ void OComboBoxModel::_loaded(const EventObject& rEvent)
         }
     }
 
+    m_xAggregateSet->getPropertyValue(PROPERTY_STRINGITEMLIST) >>= m_aDesignModeStringItems;
+
     // Daten nur laden, wenn eine Listenquelle angegeben wurde
     if (m_aListSource.len() && m_xCursor.is())
         loadData();
@@ -757,12 +765,8 @@ void OComboBoxModel::_unloaded()
         m_aNullDate  = DBTypeConversion::getStandardDate();
     }
 
-    // Zuruecksetzen der Inhalte (s.o)
-    if (m_aListSource.len() && m_xCursor.is())
-    {
-        StringSequence aSequence;
-                m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, makeAny(aSequence));
-    }
+    // reset the string item list
+    m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, makeAny(m_aDesignModeStringItems));
 }
 
 //------------------------------------------------------------------------------
