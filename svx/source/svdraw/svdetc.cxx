@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:16:17 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ SdrGlobalData::SdrGlobalData() :
     pOutliner(NULL),
     pDefaults(NULL),
     pResMgr(NULL),
-    pStrCache(NULL),
+//BFS06 pStrCache(NULL),
     nExchangeFormat(0)
 {
     pSysLocale = new SvtSysLocale;
@@ -201,7 +201,7 @@ SdrGlobalData::~SdrGlobalData()
     delete pOutliner;
     delete pDefaults;
     delete pResMgr;
-    delete [] pStrCache;
+//BFS06 delete [] pStrCache;
     //! do NOT delete pCharClass and pLocaleData
     delete pSysLocale;
 }
@@ -677,10 +677,10 @@ void SdrEngineDefaults::LanguageHasChanged()
         delete rGlobalData.pResMgr;
         rGlobalData.pResMgr=NULL;
     }
-    if (rGlobalData.pStrCache!=NULL) {
-        delete [] rGlobalData.pStrCache;
-        rGlobalData.pStrCache=NULL;
-    }
+//BFS06 if (rGlobalData.pStrCache!=NULL) {
+//BFS06     delete [] rGlobalData.pStrCache;
+//BFS06     rGlobalData.pStrCache=NULL;
+//BFS06 }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -761,11 +761,11 @@ ResMgr* ImpGetResMgr()
 
     if(!rGlobalData.pResMgr)
     {
-#ifndef SVX_LIGHT
+//BFS06#ifndef SVX_LIGHT
         ByteString aName("svx");
-#else
-        ByteString aName("svl");
-#endif
+//BFS06#else
+//BFS06     ByteString aName("svl");
+//BFS06#endif
         INT32 nSolarUpd(SOLARUPD);
         aName += ByteString::CreateFromInt32( nSolarUpd );
         rGlobalData.pResMgr =
@@ -777,31 +777,37 @@ ResMgr* ImpGetResMgr()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const XubString& ImpGetResStr(USHORT nResID)
+//BFS06
+String ImpGetResStr(sal_uInt16 nResID)
 {
-    SdrGlobalData& rGlobalData=GetSdrGlobalData();
-    if (rGlobalData.pStrCache==NULL) {
-        USHORT nAnz=SDR_StringCacheEnd-SDR_StringCacheBegin+1;
-        rGlobalData.pStrCache=new XubString[nAnz];
-        XubString* pStr=rGlobalData.pStrCache;
-        ResMgr* pResMgr=ImpGetResMgr();
-        for (USHORT i=0; i<nAnz; i++) {
-            USHORT nResNum=SDR_StringCacheBegin+i;
-            {
-                pStr[i]=XubString(ResId(nResNum,pResMgr));
-            }
-        }
-    }
-    if (nResID>=SDR_StringCacheBegin && nResID<=SDR_StringCacheEnd) {
-        return rGlobalData.pStrCache[nResID-SDR_StringCacheBegin];
-    } else {
-#ifdef DBG_UTIL
-        DBG_ERROR("ImpGetResStr(): ResourceID outside of cache range!");
-#endif
-        static String aEmpty;
-        return aEmpty;
-    }
+    return String(ResId(nResID, ImpGetResMgr()));
 }
+
+//BFS06const XubString& ImpGetResStr(USHORT nResID)
+//BFS06{
+//BFS06 SdrGlobalData& rGlobalData=GetSdrGlobalData();
+//BFS06 if (rGlobalData.pStrCache==NULL) {
+//BFS06     USHORT nAnz=SDR_StringCacheEnd-SDR_StringCacheBegin+1;
+//BFS06     rGlobalData.pStrCache=new XubString[nAnz];
+//BFS06     XubString* pStr=rGlobalData.pStrCache;
+//BFS06     ResMgr* pResMgr=ImpGetResMgr();
+//BFS06     for (USHORT i=0; i<nAnz; i++) {
+//BFS06         USHORT nResNum=SDR_StringCacheBegin+i;
+//BFS06         {
+//BFS06             pStr[i]=XubString(ResId(nResNum,pResMgr));
+//BFS06         }
+//BFS06     }
+//BFS06 }
+//BFS06 if (nResID>=SDR_StringCacheBegin && nResID<=SDR_StringCacheEnd) {
+//BFS06     return rGlobalData.pStrCache[nResID-SDR_StringCacheBegin];
+//BFS06 } else {
+//BFS06#ifdef DBG_UTIL
+//BFS06     DBG_ERROR("ImpGetResStr(): ResourceID outside of cache range!");
+//BFS06#endif
+//BFS06     static String aEmpty;
+//BFS06     return aEmpty;
+//BFS06 }
+//BFS06}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
