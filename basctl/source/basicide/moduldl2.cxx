@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-27 14:00:31 $
+ *  last change: $Author: tbe $ $Date: 2001-10-11 10:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,10 +256,10 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
     if ( pButton == &aEditButton )
     {
         //ActivateCurrentLibSettings();
-        SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-        DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-        SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
-        if( pDispatcher )
+        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        DBG_ASSERT( pViewFrame != NULL, "No current view frame!" );
+        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+        if ( pDispatcher )
         {
             pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
         }
@@ -267,7 +267,10 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         DBG_ASSERT( pCurEntry, "Entry?!" );
         String aLib( CreateMgrAndLibStr( aCurBasMgr, aLibBox.GetEntryText( pCurEntry, 0 ) ) );
         SfxStringItem aLibName( SID_BASICIDE_ARG_LIBNAME, aLib );
-        if( pDispatcher )
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+        pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+        if ( pDispatcher )
         {
             pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
                                     SFX_CALLMODE_ASYNCHRON, &aLibName, 0L );
