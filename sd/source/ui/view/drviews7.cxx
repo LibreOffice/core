@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:04:13 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,8 +176,8 @@
 #ifndef SD_PREVIEW_CHILD_WINDOW_HXX
 #include "PreviewChildWindow.hxx"
 #endif
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
@@ -192,6 +192,8 @@
 #include "ViewShellBase.hxx"
 #endif
 #include "LayerTabBar.hxx"
+#include "fupoor.hxx"
+#include "Window.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -239,9 +241,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     ViewShell::GetMenuState(rSet);
     BOOL bDisableVerticalText = !SvtLanguageOptions().IsVerticalTextEnabled();
 
-    if (pFuSlideShow)
-        rSet.Put(SfxBoolItem(SID_LIVE_PRESENTATION, pFuSlideShow->IsLivePresentation()));
-
     if ( bDisableVerticalText )
     {
         rSet.DisableItem( SID_DRAW_FONTWORK_VERTICAL );
@@ -252,6 +251,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     SfxApplication* pApp = SFX_APP();
 
+/*
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) )
     {
         SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow(
@@ -266,6 +266,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem( SID_PRESENTATION );
         }
     }
+*/
 
     FASTBOOL bConvertToPathPossible = pDrView->IsConvertToPathObjPossible(FALSE);
 
@@ -596,9 +597,10 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         if ( !pClipEvtLstnr )
         {
-            // SSA: #108717# avoid clipboard initialization for read-only presentation views (workaround for NT4.0 clipboard prob...)
-            if( !ISA(PresentationViewShell)
-                || ( pFuSlideShow && pFuSlideShow->IsLivePresentation())  )
+            // SSA: #108717# avoid clipboard initialization for
+            // read-only presentation views (workaround for NT4.0
+            // clipboard prob...)
+            if( !ISA(PresentationViewShell) )
             {
                 // create listener
                 pClipEvtLstnr = new TransferableClipboardListener( LINK( this, DrawViewShell, ClipboardChanged ) );
@@ -727,15 +729,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.Put(SfxBoolItem(SID_PIXELMODE, FALSE));
     }
 
-    if (pDrView->GetSlideShow())
-    {
-        rSet.Put(SfxBoolItem(SID_ANIMATIONMODE, TRUE));
-    }
-    else
-    {
-        rSet.Put(SfxBoolItem(SID_ANIMATIONMODE, FALSE));
-    }
-
     if (pDrView->IsActionMode())
     {
         rSet.Put(SfxBoolItem(SID_ACTIONMODE, TRUE));
@@ -755,13 +748,11 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     if (ePageKind == PK_HANDOUT)
     {
-        rSet.DisableItem(SID_ANIMATIONMODE);
         rSet.DisableItem(SID_PRESENTATION_LAYOUT);
     }
 
     if (ePageKind == PK_NOTES)
     {
-        rSet.DisableItem(SID_ANIMATIONMODE);
         rSet.DisableItem(SID_INSERTPAGE);
         rSet.DisableItem(SID_RENAMEPAGE);
         rSet.DisableItem(SID_RENAMEPAGE_QUICK);
@@ -1372,7 +1363,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_MATH );
     }
 
-    if ( pFuSlideShow || GetDocSh()->IsPreview() || bInEffectAssignment )
+    if( (mpSlideShow && (mpSlideShow->getAnimationMode() != ANIMATIONMODE_PREVIEW) ) ||
+        GetDocSh()->IsPreview() || bInEffectAssignment )
     {
         // Eigene Slots
         rSet.DisableItem( SID_PRESENTATION );
@@ -1394,56 +1386,49 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_DELETE_PAGE );
         rSet.DisableItem( SID_PAGESETUP );
 
-        if( pFuSlideShow || bInEffectAssignment )
+        if( mpSlideShow || bInEffectAssignment )
         {
-            if( pFuSlideShow && pFuSlideShow->IsLivePresentation())
-            {
-                rSet.DisableItem(SID_ANIMATION_OBJECTS);
-            }
-            else
-            {
-                rSet.ClearItem(SID_OBJECT_ALIGN);
-                rSet.ClearItem(SID_ZOOM_TOOLBOX);
-                rSet.ClearItem(SID_OBJECT_CHOOSE_MODE);
-                rSet.ClearItem(SID_DRAWTBX_TEXT);
-                rSet.ClearItem(SID_DRAWTBX_RECTANGLES);
-                rSet.ClearItem(SID_DRAWTBX_ELLIPSES);
-                rSet.ClearItem(SID_DRAWTBX_LINES);
-                rSet.ClearItem(SID_DRAWTBX_ARROWS);
-                rSet.ClearItem(SID_DRAWTBX_3D_OBJECTS);
-                rSet.ClearItem(SID_DRAWTBX_CONNECTORS);
-                rSet.ClearItem(SID_OBJECT_CHOOSE_MODE );
-                rSet.ClearItem(SID_DRAWTBX_INSERT);
-                rSet.ClearItem(SID_INSERTFILE);
-                rSet.ClearItem(SID_OBJECT_ROTATE);
-                rSet.ClearItem(SID_OBJECT_ALIGN);
-                rSet.ClearItem(SID_POSITION);
-                rSet.ClearItem(SID_FM_CONFIG);
-                rSet.ClearItem(SID_ANIMATION_EFFECTS);
-                rSet.ClearItem(SID_ANIMATION_OBJECTS);
-                rSet.ClearItem(SID_3D_WIN);
+            rSet.ClearItem(SID_OBJECT_ALIGN);
+            rSet.ClearItem(SID_ZOOM_TOOLBOX);
+            rSet.ClearItem(SID_OBJECT_CHOOSE_MODE);
+            rSet.ClearItem(SID_DRAWTBX_TEXT);
+            rSet.ClearItem(SID_DRAWTBX_RECTANGLES);
+            rSet.ClearItem(SID_DRAWTBX_ELLIPSES);
+            rSet.ClearItem(SID_DRAWTBX_LINES);
+            rSet.ClearItem(SID_DRAWTBX_ARROWS);
+            rSet.ClearItem(SID_DRAWTBX_3D_OBJECTS);
+            rSet.ClearItem(SID_DRAWTBX_CONNECTORS);
+            rSet.ClearItem(SID_OBJECT_CHOOSE_MODE );
+            rSet.ClearItem(SID_DRAWTBX_INSERT);
+            rSet.ClearItem(SID_INSERTFILE);
+            rSet.ClearItem(SID_OBJECT_ROTATE);
+            rSet.ClearItem(SID_OBJECT_ALIGN);
+            rSet.ClearItem(SID_POSITION);
+            rSet.ClearItem(SID_FM_CONFIG);
+            rSet.ClearItem(SID_ANIMATION_EFFECTS);
+            rSet.ClearItem(SID_ANIMATION_OBJECTS);
+            rSet.ClearItem(SID_3D_WIN);
 
-                rSet.DisableItem(SID_OBJECT_ALIGN);
-                rSet.DisableItem(SID_ZOOM_TOOLBOX);
-                rSet.DisableItem(SID_OBJECT_CHOOSE_MODE);
-                rSet.DisableItem(SID_DRAWTBX_TEXT);
-                rSet.DisableItem(SID_DRAWTBX_RECTANGLES);
-                rSet.DisableItem(SID_DRAWTBX_ELLIPSES);
-                rSet.DisableItem(SID_DRAWTBX_LINES);
-                rSet.DisableItem(SID_DRAWTBX_ARROWS);
-                rSet.DisableItem(SID_DRAWTBX_3D_OBJECTS);
-                rSet.DisableItem(SID_DRAWTBX_CONNECTORS);
-                rSet.DisableItem(SID_OBJECT_CHOOSE_MODE );
-                rSet.DisableItem(SID_DRAWTBX_INSERT);
-                rSet.DisableItem(SID_INSERTFILE);
-                rSet.DisableItem(SID_OBJECT_ROTATE);
-                rSet.DisableItem(SID_OBJECT_ALIGN);
-                rSet.DisableItem(SID_POSITION);
-                rSet.DisableItem(SID_FM_CONFIG);
-                rSet.DisableItem(SID_ANIMATION_EFFECTS);
-                rSet.DisableItem(SID_ANIMATION_OBJECTS);
-                rSet.DisableItem(SID_3D_WIN);
-            }
+            rSet.DisableItem(SID_OBJECT_ALIGN);
+            rSet.DisableItem(SID_ZOOM_TOOLBOX);
+            rSet.DisableItem(SID_OBJECT_CHOOSE_MODE);
+            rSet.DisableItem(SID_DRAWTBX_TEXT);
+            rSet.DisableItem(SID_DRAWTBX_RECTANGLES);
+            rSet.DisableItem(SID_DRAWTBX_ELLIPSES);
+            rSet.DisableItem(SID_DRAWTBX_LINES);
+            rSet.DisableItem(SID_DRAWTBX_ARROWS);
+            rSet.DisableItem(SID_DRAWTBX_3D_OBJECTS);
+            rSet.DisableItem(SID_DRAWTBX_CONNECTORS);
+            rSet.DisableItem(SID_OBJECT_CHOOSE_MODE );
+            rSet.DisableItem(SID_DRAWTBX_INSERT);
+            rSet.DisableItem(SID_INSERTFILE);
+            rSet.DisableItem(SID_OBJECT_ROTATE);
+            rSet.DisableItem(SID_OBJECT_ALIGN);
+            rSet.DisableItem(SID_POSITION);
+            rSet.DisableItem(SID_FM_CONFIG);
+            rSet.DisableItem(SID_ANIMATION_EFFECTS);
+            rSet.DisableItem(SID_ANIMATION_OBJECTS);
+            rSet.DisableItem(SID_3D_WIN);
         }
     }
 
@@ -1652,7 +1637,6 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
     rSet.Put(SfxBoolItem(SID_OUTLINEMODE, FALSE));
     if (ePageKind == PK_NOTES)
     {
-        rSet.DisableItem(SID_ANIMATIONMODE);
         rSet.Put(SfxBoolItem(SID_DRAWINGMODE, FALSE));
         rSet.Put(SfxBoolItem(SID_NOTESMODE, TRUE));
         rSet.Put(SfxBoolItem(SID_HANDOUTMODE, FALSE));
@@ -1674,7 +1658,7 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
     // clause because the current function of the docshell can only be
     // search and replace or spell checking and in that case switching the
     // view mode is allowed.
-    if (GetViewFrame()->GetFrame()->IsInPlace() || pFuSlideShow)
+    if (GetViewFrame()->GetFrame()->IsInPlace() || mpSlideShow)
     {
         if ( !GetViewFrame()->GetFrame()->IsInPlace() )
         {
@@ -1745,8 +1729,7 @@ void DrawViewShell::GetState (SfxItemSet& rSet)
 
 void DrawViewShell::Execute (SfxRequest& rReq)
 {
-    FuSlideShow* pFuSlideShow = GetSlideShow();
-    if (pFuSlideShow!=NULL && !pFuSlideShow->IsLivePresentation())
+    if(GetSlideShow())
     {
         // Do not execute anything during a native slide show.
         return;
