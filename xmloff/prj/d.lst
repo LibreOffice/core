@@ -16,7 +16,6 @@ hedabu: ..\inc\xmlbrshi.hxx %_DEST%\inc%_EXT%\xmloff\xmlbrshi.hxx
 hedabu: ..\inc\xmlbrshe.hxx %_DEST%\inc%_EXT%\xmloff\xmlbrshe.hxx
 hedabu: ..\inc\xmlcnitm.hxx %_DEST%\inc%_EXT%\xmloff\xmlcnitm.hxx
 hedabu: ..\inc\xmlement.hxx %_DEST%\inc%_EXT%\xmloff\xmlement.hxx
-hedabu: ..\inc\xmlexpit.hxx %_DEST%\inc%_EXT%\xmloff\xmlexpit.hxx
 hedabu: ..\inc\xmlictxt.hxx %_DEST%\inc%_EXT%\xmloff\xmlictxt.hxx
 hedabu: ..\inc\xmlimp.hxx %_DEST%\inc%_EXT%\xmloff\xmlimp.hxx
 hedabu: ..\inc\xmlitmap.hxx %_DEST%\inc%_EXT%\xmloff\xmlitmap.hxx
@@ -33,9 +32,6 @@ hedabu: ..\inc\xmlnmspe.hxx %_DEST%\inc%_EXT%\xmloff\xmlnmspe.hxx
 hedabu: ..\inc\xmlnumfi.hxx %_DEST%\inc%_EXT%\xmloff\xmlnumfi.hxx
 hedabu: ..\inc\xmlnumfe.hxx %_DEST%\inc%_EXT%\xmloff\xmlnumfe.hxx
 hedabu: ..\inc\xmlexp.hxx %_DEST%\inc%_EXT%\xmloff\xmlexp.hxx
-hedabu: ..\inc\xmlastpl.hxx %_DEST%\inc%_EXT%\xmloff\xmlastpl.hxx
-hedabu: ..\inc\xmlitem.hxx %_DEST%\inc%_EXT%\xmloff\xmlitem.hxx
-hedabu: ..\inc\xmlimpit.hxx %_DEST%\inc%_EXT%\xmloff\xmlimpit.hxx
 hedabu: ..\inc\xmlnumi.hxx %_DEST%\inc%_EXT%\xmloff\xmlnumi.hxx
 hedabu: ..\inc\xmlnume.hxx %_DEST%\inc%_EXT%\xmloff\xmlnume.hxx
 hedabu: ..\inc\xmltabi.hxx %_DEST%\inc%_EXT%\xmloff\xmltabi.hxx

@@ -580,6 +580,7 @@ hedabu: ..\inc\srchcfg.hxx %_DEST%\inc%_EXT%\svx\srchcfg.hxx
 hedabu: ..\inc\UnoForbiddenCharsTable.hxx %_DEST%\inc%_EXT%\svx\UnoForbiddenCharsTable.hxx
 hedabu: ..\inc\forbiddencharacterstable.hxx %_DEST%\inc%_EXT%\svx\forbiddencharacterstable.hxx
 hedabu: ..\inc\dataaccessdescriptor.hxx %_DEST%\inc%_EXT%\svx\dataaccessdescriptor.hxx
+hedabu: ..\inc\xmlcnitm.hxx %_DEST%\inc%_EXT%\svx\xmlcnitm.hxx
 
 ..\xml\SvxDrawPage.xml %_DEST%\xml%_EXT%\SvxDrawPage.xml
 ..\xml\SvxGraphicObject.xml %_DEST%\xml%_EXT%\SvxGraphicObject.xml

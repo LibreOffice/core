@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2001-04-10 17:43:48 $
+#   last change: $Author: mib $ $Date: 2001-07-04 14:11:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,13 +109,15 @@ SLOFILES=	\
         $(SLO)$/numitem.obj \
         $(SLO)$/grfitem.obj \
         $(SLO)$/clipfmtitem.obj \
-        $(SLO)$/svxempty.obj
+        $(SLO)$/svxempty.obj \
+        $(SLO)$/xmlcnitm.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/paraitem.obj \
         $(OBJ)$/sxl_paraitem.obj\
         $(SLO)$/numitem.obj\
-                $(OBJ)$/sxl_numitem.obj
+        $(OBJ)$/sxl_numitem.obj \
+        $(SLO)$/xmlcnitm.obj
 
 SVXLIGHTOBJFILES=	\
         $(OBJ)$/frmitems.obj \
