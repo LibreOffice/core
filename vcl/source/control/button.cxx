@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:12:18 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,6 +743,49 @@ BOOL Button::IsTextDisplayEnabled()
 {
     return (mpButtonData->mnButtonState & BUTTON_DRAW_NOTEXT) == 0;
 }
+
+// -----------------------------------------------------------------------
+void Button::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Control::DataChanged( rDCEvt );
+
+    // The flag SETTINGS_IN_UPDATE_SETTINGS is set when the settings changed due to a
+    // Application::SettingsChanged event. In this scenario we want to keep the style settings
+    // of our radio buttons and our check boxes.
+    if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) &&
+         ( rDCEvt.GetFlags() & SETTINGS_IN_UPDATE_SETTINGS ) )
+
+    {
+        const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
+        if ( pOldSettings )
+        {
+            BOOL bResetStyleSettings = FALSE;
+            AllSettings aAllSettings = GetSettings();
+            StyleSettings aStyleSetting = aAllSettings.GetStyleSettings();
+
+            USHORT nCheckBoxStyle = aStyleSetting.GetCheckBoxStyle();
+            if ( nCheckBoxStyle != pOldSettings->GetStyleSettings().GetCheckBoxStyle() )
+            {
+                aStyleSetting.SetCheckBoxStyle( pOldSettings->GetStyleSettings().GetCheckBoxStyle() );
+                bResetStyleSettings = TRUE;
+            }
+
+            USHORT nRadioButtonStyle = aStyleSetting.GetRadioButtonStyle();
+            if ( nRadioButtonStyle != pOldSettings->GetStyleSettings().GetRadioButtonStyle() )
+            {
+                aStyleSetting.SetRadioButtonStyle( pOldSettings->GetStyleSettings().GetRadioButtonStyle() );
+                bResetStyleSettings = TRUE;
+            }
+
+            if ( bResetStyleSettings )
+            {
+                aAllSettings.SetStyleSettings( pOldSettings->GetStyleSettings() );
+                SetSettings( aAllSettings );
+            }
+        }
+    }
+}
+
 
 // =======================================================================
 
