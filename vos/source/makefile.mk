@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obr $ $Date: 2000-10-23 10:08:10 $
+#   last change: $Author: obr $ $Date: 2000-11-06 14:09:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,17 +66,8 @@ PRJNAME=vos
 TARGET=cppvos
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
+
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
-# wenn, dann in cflags
-#
-#ENVCFLAGS+= -D_VOS_LITENDIAN
-#
-
-CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
-CDEFS += -DCOM_STR=\"$(COM)\"
 
 # --- Files --------------------------------------------------------
 
@@ -103,12 +94,9 @@ SLOFILES=       $(SLO)$/acceptor.obj    \
                 $(SLO)$/security.obj    \
                 $(SLO)$/signal.obj      \
                 $(SLO)$/pipe.obj        \
-                $(SLO)$/daemon.obj		\
-                $(SLO)$/daemmgr.obj		\
                 $(SLO)$/dynload.obj		\
                 $(SLO)$/xception.obj	\
-                $(SLO)$/evtque.obj		\
-                $(SLO)$/channel.obj
+                $(SLO)$/evtque.obj
 
 
 # $(SLO)$/evtque.obj
@@ -141,12 +129,9 @@ OBJFILES=       $(OBJ)$/acceptor.obj    \
                 $(OBJ)$/security.obj    \
                 $(OBJ)$/signal.obj      \
                 $(OBJ)$/pipe.obj        \
-                $(OBJ)$/daemon.obj		\
-                $(OBJ)$/daemmgr.obj		\
                 $(OBJ)$/dynload.obj		\
                 $(OBJ)$/xception.obj	\
-                $(OBJ)$/evtque.obj		\
-                $(OBJ)$/channel.obj
+                $(OBJ)$/evtque.obj
 
 # $(SLO)$/evtque.obj
 .ENDIF
