@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:29:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,17 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
 #endif
 
     // Here starts the good old "Look for blanks and add space to them" part.
+    // Note: We do not want to add space to an isolated latin blank in front
+    // of some complex characters in RTL environment
+    const sal_Bool bDoNotAddSpace =
+            LATIN == nScript && ( nEnd == nPos + 1 ) && pSI &&
+            ( ::com::sun::star::i18n::ScriptType::COMPLEX ==
+              pSI->ScriptType( nPos + 1 ) ) &&
+            rInf.GetTxtFrm() && rInf.GetTxtFrm()->IsRightToLeft();
+
+    if ( bDoNotAddSpace )
+        return nCnt;
+
     for ( ; nPos < nEnd; ++nPos )
     {
         if( CH_BLANK == pStr->GetChar( nPos ) )
@@ -457,7 +468,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
             ASSERT( aGuess.BreakStart() >= aGuess.FieldDiff(),
                     "Trouble with expanded field portions during line break" );
             const xub_StrLen nRealStart = aGuess.BreakStart() - aGuess.FieldDiff();
-            if( aGuess.BreakPos() < nRealStart && !InFldGrp() )
+            if( aGuess.BreakPos() < nRealStart && !InExpGrp() )
             {
                 SwHolePortion *pNew = new SwHolePortion( *this );
                 pNew->SetLen( nRealStart - aGuess.BreakPos() );
