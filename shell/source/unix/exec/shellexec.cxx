@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellexec.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-27 06:38:56 $
+ *  last change: $Author: obr $ $Date: 2001-08-29 09:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,11 +299,15 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 
             // due to a possible convertion to file url,
             // rebuild command line from scratch
-            OUStringBuffer aBuffer( aHandler.getLength() + aURL.getLength() + 1 );
+            OUStringBuffer aBuffer( aHandler.getLength() + aURL.getLength() + 5 );
 
+            aBuffer.append( (sal_Unicode) '\"' );
             aBuffer.append( aHandler );
+            aBuffer.append( (sal_Unicode) '\"' );
             aBuffer.append( (sal_Unicode) ' ' );
+            aBuffer.append( (sal_Unicode) '\'' );
             aBuffer.append( aURL );
+            aBuffer.append( (sal_Unicode) '\'' );
 
             aCommandLine = OUStringToOString( aBuffer.makeStringAndClear(), osl_getThreadTextEncoding() );
         }
