@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-11-03 16:05:15 $
+ *  last change: $Author: er $ $Date: 2000-11-03 20:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,18 +182,18 @@ void LocaleDataWrapper::invalidateData()
 }
 
 
-::com::sun::star::i18n::LCInfo LocaleDataWrapper::getLCInfo() const
+::com::sun::star::i18n::LanguageCountryInfo LocaleDataWrapper::getLanguageCountryInfo() const
 {
     try
     {
         if ( xLD.is() )
-            return xLD->getLCInfo( aLocale );
+            return xLD->getLanguageCountryInfo( aLocale );
     }
     catch ( Exception& e )
     {
-        DBG_ERRORFILE( "getLCInfo: Exception caught!" );
+        DBG_ERRORFILE( "getLanguageCountryInfo: Exception caught!" );
     }
-    return ::com::sun::star::i18n::LCInfo();
+    return ::com::sun::star::i18n::LanguageCountryInfo();
 }
 
 
@@ -710,4 +710,11 @@ void LocaleDataWrapper::getCurrFormatsImpl()
             }
         }
     }
+}
+
+
+const ::com::sun::star::lang::Locale LocaleDataWrapper::getLoadedLocale() const
+{
+    LanguageCountryInfo aLCInfo = getLanguageCountryInfo();
+    return lang::Locale( aLCInfo.Language, aLCInfo.Country, aLCInfo.Variant );
 }

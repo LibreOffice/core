@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-11-03 16:03:49 $
+ *  last change: $Author: er $ $Date: 2000-11-03 20:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,16 +128,19 @@ public:
                                 ~LocaleDataWrapper();
 
 
-    /// set a new Locale
+    /// set a new Locale to request
             void                setLocale( const ::com::sun::star::lang::Locale& rLocale );
 
-    /// get current Locale
+    /// get current requested Locale
     const ::com::sun::star::lang::Locale& getLocale() const { return aLocale; }
+
+    /// get current loaded Locale, which might differ from the requested Locale
+    const ::com::sun::star::lang::Locale getLoadedLocale() const;
 
 
     // Wrapper implementations of class LocaleData
 
-    ::com::sun::star::i18n::LCInfo getLCInfo() const;
+    ::com::sun::star::i18n::LanguageCountryInfo getLanguageCountryInfo() const;
     ::com::sun::star::i18n::LocaleDataItem getLocaleItem() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar > getAllCalendars() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency > getAllCurrencies() const;
