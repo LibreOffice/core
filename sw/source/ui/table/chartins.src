@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:01:32 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ arabic ] = "ΗαΥέ ΗαΓζα ίΪδζΗδ";
         Text[ dutch ] = "Eerste ~rij als kop";
         Text[ chinese_simplified ] = "η¬¬δΈ€θ΅δ½δΈΊζ ‡ιΆ(~F)";
-        Text[ greek ] = "Πρώτη γραμμή ως επιγραφή";
+        Text[ greek ] = "Πρώτη γραμμή ως λεζάντα";
         Text[ korean ] = "μ²«λ²μ§Έ ν–‰μ„ μΊ΅μ…μΌλ΅(~F)";
         Text[ turkish ] = "Baώlύklar ~birinci satύrda";
         Text[ catalan ] = "La ~primera fila com a llegenda";
@@ -208,7 +208,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ arabic ] = "ΗαΪγζΟ ΗαΓζα ίΪδζΗδ";
         Text[ dutch ] = "Eerste ~kolom als kop";
         Text[ chinese_simplified ] = "η¬¬δΈ€ε—δ½δΈΊζ ‡ιΆ(~C)";
-        Text[ greek ] = "Πρώτη στήλη ως επιγραφή";
+        Text[ greek ] = "Πρώτη στήλη ως λεζάντα";
         Text[ korean ] = "μ²«λ²μ§Έ μ—΄μ„ μΊ΅μ…μΌλ΅(~C)";
         Text[ turkish ] = "Baώlύklar ~birinci sόtunda";
         Text[ catalan ] = "La primera ~columna com a llegenda";
@@ -244,7 +244,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ arabic ] = "ΕΠΗ ίΗδΚ ΗαΞαΗνΗ ΗαγΝΟΟΙ αΗ ΚΝΚζν Ϊαμ ΗαΘνΗδΗΚ ΗαγΨαζΘΙ΅ ήγ ΘΚΝΟνΟ ΗαδΨΗή\n\nΘγΗ έν Παί ΗαΞαΗνΗ΅ ΗαΚν ΚΝΚζν Ϊαμ ΪδΗζνδ Υέζέ Γζ ΓΪγΟΙ΅ ζΠαί ΕΠ";
         Text[ dutch ] = "Als de gemarkeerde cellen niet de gewenste gegevens bevatten, markeert u nu het bereik.\n\nMarkeer eveneens de cellen met de kolom- of de rijlabels als u deze in uw afbeelding wilt weergeven.";
         Text[ chinese_simplified ] = "ε¦‚ζι€‰δΈ­η„ε•ε…ƒζ Όζ²΅ζ‰ζ•°ζ®οΌι‚£δΉθ―·ζ‚¨ι€‰ζ‹©εΊεγ€‚\n\nζ‚¨ε―δ»¥δΉι€‰δΈ­ε—ζ ‡ιΆε’θ΅ζ ‡ιΆοΌε¦‚ζ­¤θΏ™δΊ›θµ„ζ–™δΉδΌθΆ«ζΎη¤Ίε¨ε›Ύθ΅¨ε†…γ€‚";
-        Text[ greek ] = "Στην περίπτωση που τα επιλεγμένα κελιά δεν περιέχουν τα δεδομένα που επιθυμείτε, επιλέξτε εσείς την σωστή περιοχή.\n\n Αν θέλετε να εμφανιστούν στο γραφικό σας και οι επιγραφές των στηλών και των γραμμών, τότε θα πρέπει να συμπεριληφθούν και αυτά τα δεδομένα στην περιοχή της επιλογής σας.";
+        Text[ greek ] = "Στην περίπτωση που τα επιλεγμένα κελιά δεν περιέχουν τα δεδομένα που επιθυμείτε, επιλέξτε εσείς την σωστή περιοχή.\n\n Αν θέλετε να εμφανιστούν στο γραφικό σας και οι ετικέτες των στηλών και των γραμμών, τότε θα πρέπει να συμπεριληφθούν και αυτά τα δεδομένα στην περιοχή της επιλογής σας.";
         Text[ korean ] = "μ„ νƒλ μ…€μ΄ μ›ν•λ” λ°μ΄ν„°λ¥Ό ν¬ν•¨ν•κ³  μμ§€ μ•μ„ κ²½μ° μ§€κΈ λ°μ΄ν„° λ²”μ„λ¥Ό μ„ νƒν•μ‹­μ‹μ¤.\n\nμ—΄ λ‚΄μ§€ ν–‰ λ μ΄λΈ”μ„ κ·Έλν”½μ— ν‘μ‹ν•λ ¤λ©΄ μ—΄ λ° ν–‰ λ μ΄λΈ”μ΄ μλ” μ…€μ„ ν•¨κ» ν¬ν•¨μ‹ν‚¤μ‹­μ‹μ¤.";
         Text[ turkish ] = "Eπer seηilen hόcreler istenen verileri iηermiyorsa, ώimdi veri alanύ seη. \n\nSόtun ve satύr etiketlerinin grafiπinize dahil olmasύnύ isterseniz, satύr ve sόtun etiketi iηeren hόcreleri dahil edin. ";
         Text[ catalan ] = "En cas que les cel.les marcades no tinguin les dades desitjades, marqueu ara l'ΰrea.\n\nHeu d'incloure les cel.les amb els noms de les columnes i files si voleu que apareguin al grΰfic.";
@@ -331,7 +331,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ russian ] = "Δΰλεε >>";
         Text[ polish ] = "~Dalej >>";
         Text[ japanese ] = "ζ¬΅γΈ(~N) >>";
-        Text[ chinese_traditional ] = "ηΉΌηΊ(~N)";
+        Text[ chinese_traditional ] = "δΈ‹δΈ€ζ­¥(~N)";
         Text[ arabic ] = "ΗαΚΗαν <<";
         Text[ dutch ] = "~Volgende >>";
         Text[ chinese_simplified ] = "η»§η»­(~N) >>";
@@ -397,7 +397,7 @@ ModelessDialog DLG_INSERT_CHART
     Text[ arabic ] = "ΚδΣνή ΚαήΗΖν αΡΣγ ΘνΗδν (1ά4)";
     Text[ dutch ] = "AutoOpmaak diagram (1-4)";
     Text[ chinese_simplified ] = "θ‡ªε¨ζ ΌεΌε›Ύθ΅¨(1-4)";
-    Text[ greek ] = "ΑυτοΜορφή Διάγραμμα (1-4)";
+    Text[ greek ] = "Αυτόματη μορφοποίηση διαγράμματος (1-4)";
     Text[ korean ] = "μλ™ μ„μ‹ μ°¨νΈ (1-4)";
     Text[ turkish ] = "Otomatik ώema formatlama (1-4)";
     Text[ catalan ] = "AutoFormat diagrama (1-4)";
@@ -408,6 +408,7 @@ ModelessDialog DLG_INSERT_CHART
     Text[ hindi ] = "ΰ¤Έΰ¥ΰ¤µΰ¤ΰ¤Ύΰ¤²ΰ¤Ώΰ¤¤ ΰ¤°ΰ¤ΰ¤¨ΰ¤Ύ ΰ¤•ΰ¤Ύ ΰ¤ΰ¤Ύΰ¤°ΰ¥ΰ¤ (1-4)";
     Text[ slovak ] = "AutomatickΓ½ formΓ΅t grafu (1-4)";
 };
+
 
 
 
