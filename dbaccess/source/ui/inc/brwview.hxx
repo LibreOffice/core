@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:23:57 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 12:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,12 @@
 #include "dataview.hxx"
 #endif
 
+namespace com { namespace sun { namespace star { namespace awt {
+    class XControl;
+    class XControlContainer;
+    class XControlModel;
+}}}}
+
 // =========================================================================
 class ResMgr;
 class Splitter;
@@ -108,7 +114,9 @@ namespace dbaui
         SbaGridControl*         getVclControl() const   { return m_pVclControl; }
 
     public:
-        UnoDataBrowserView(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+        UnoDataBrowserView( Window* pParent,
+                            IController* _pController,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
         virtual ~UnoDataBrowserView();
 
         /// late construction

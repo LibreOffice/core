@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnection.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 12:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ namespace dbaui
     class OJoinTableView;
     class OConnectionLine;
 
-    DBG_NAMEEX(OTableConnection);
+    DBG_NAMEEX(OTableConnection)
     class OTableConnection
     {
         ::std::vector<OConnectionLine*> m_vConnLine;

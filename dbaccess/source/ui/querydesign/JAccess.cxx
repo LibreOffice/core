@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JAccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 12:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ namespace dbaui
         return nChildCount;
     }
     // -----------------------------------------------------------------------------
-    Reference< XAccessible > SAL_CALL OJoinDesignViewAccess::getAccessibleChild( sal_Int32 i ) throw (RuntimeException)
+    Reference< XAccessible > SAL_CALL OJoinDesignViewAccess::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException,RuntimeException)
     {
         Reference< XAccessible > aRet;
         ::osl::MutexGuard aGuard( m_aMutex  );

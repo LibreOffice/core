@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleBaseIFace.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 09:10:00 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 12:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ namespace dbaui
             @param  _aOldValue  the old value
             @param  _aNewValue  the new value
         */
-        virtual void notifyAccesibleEvent(  sal_Int16 _nEventId,
+        virtual void notifyAccessibleEvent( sal_Int16 _nEventId,
                                             const ::com::sun::star::uno::Any& _aOldValue,
                                             const ::com::sun::star::uno::Any& _aNewValue) = 0;
     };

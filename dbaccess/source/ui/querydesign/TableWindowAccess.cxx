@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowAccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 12:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     sal_Int16 SAL_CALL OTableWindowAccess::getAccessibleRole(  ) throw (RuntimeException)
     {
-        return AccessibleRole::LABEL; // ? or may be an AccessibleRole::WINDOW
+        return AccessibleRole::PANEL; // ? or may be an AccessibleRole::WINDOW
     }
     // -----------------------------------------------------------------------------
     Reference< XAccessibleRelationSet > SAL_CALL OTableWindowAccess::getAccessibleRelationSet(  ) throw (RuntimeException)
