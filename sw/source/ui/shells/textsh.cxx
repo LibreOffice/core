@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:28:55 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,8 +364,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             sal_Unicode cIns = FN_INSERT_HARD_SPACE == nSlot ? CHAR_HARDBLANK
                                                              : CHAR_HARDHYPHEN;
 
-            SvxAutoCorrect* pACorr = OFF_APP()->GetAutoCorrConfig()->GetAutoCorrect();
-            if( pACorr && pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
+            OfaAutoCorrCfg* pACfg = OFF_APP()->GetAutoCorrConfig();
+            SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
+            if( pACorr && pACfg->IsAutoFmtByInput() &&
+                    pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                                 ChgFractionSymbol | ChgOrdinalNumber |
                                 ChgToEnEmDash | SetINetAttr | Autocorrect ))
                 rSh.AutoCorrect( *pACorr, cIns );
