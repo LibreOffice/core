@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:41:27 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ String RID_GALLERYSTR_THEME_3D
     Text[ czech ] = "3D efekty";
     Text[ hebrew ] = "‮פעלולים תלת מימדיים‬";
     Text[ hindi ] = "3D प्रभाव";
+    Text[ slovak ] = "3D efekty";
 };
 
 // -----------------------------------------------------------------------------
@@ -125,6 +126,7 @@ String RID_GALLERYSTR_THEME_ANIMATIONS
     Text[ czech ] = "Animace";
     Text[ hebrew ] = "‮אנימציות‬";
     Text[ hindi ] = "हुलास";
+    Text[ slovak ] = "Animácie";
 };
 
 // -----------------------------------------------------------------------------
@@ -158,6 +160,7 @@ String RID_GALLERYSTR_THEME_BULLETS
     Text[ czech ] = "Odrážky";
     Text[ hebrew ] = "‮נקודות כותרה (תבליטים)‬";
     Text[ hindi ] = "बुल्लेट्स";
+    Text[ slovak ] = "Odrážky";
 };
 
 // -----------------------------------------------------------------------------
@@ -191,6 +194,7 @@ String RID_GALLERYSTR_THEME_OFFICE
     Text[ czech ] = "Kancelář";
     Text[ hebrew ] = "‮משרד‬";
     Text[ hindi ] = "ओफीस";
+    Text[ slovak ] = "Kancelária";
 };
 
 // -----------------------------------------------------------------------------
@@ -224,6 +228,7 @@ String RID_GALLERYSTR_THEME_FLAGS
     Text[ czech ] = "Vlajky";
     Text[ hebrew ] = "‮דגלים‬";
     Text[ hindi ] = "फ्लाग्स";
+    Text[ slovak ] = "Značky";
 };
 
 // -----------------------------------------------------------------------------
@@ -257,6 +262,7 @@ String RID_GALLERYSTR_THEME_FLOWCHARTS
     Text[ czech ] = "Grafy toku";
     Text[ hebrew ] = "‮תרשימי זרימה‬";
     Text[ hindi ] = "फ्लो चार्ट";
+    Text[ slovak ] = "Plávajúce grafy";
 };
 
 // -----------------------------------------------------------------------------
@@ -290,6 +296,7 @@ String RID_GALLERYSTR_THEME_EMOTICONS
     Text[ czech ] = "Emotikony";
     Text[ hebrew ] = "‮חיוכונים‬";
     Text[ hindi ] = "इमोटअइकॉन्स";
+    Text[ slovak ] = "Emotikony";
 };
 
 // -----------------------------------------------------------------------------
@@ -323,6 +330,7 @@ String RID_GALLERYSTR_THEME_PHOTOS
     Text[ czech ] = "Obrázky";
     Text[ hebrew ] = "‮תמונות‬";
     Text[ hindi ] = "चित्र";
+    Text[ slovak ] = "Obrázky";
 };
 
 // -----------------------------------------------------------------------------
@@ -356,6 +364,7 @@ String RID_GALLERYSTR_THEME_BACKGROUNDS
     Text[ czech ] = "Pozadí";
     Text[ hebrew ] = "‮רקעים‬";
     Text[ hindi ] = "पृष्ठभाग";
+    Text[ slovak ] = "Pozadie";
 };
 
 // -----------------------------------------------------------------------------
@@ -389,6 +398,7 @@ String RID_GALLERYSTR_THEME_HOMEPAGE
     Text[ czech ] = "Domovská stránka";
     Text[ hebrew ] = "‮דף בית‬";
     Text[ hindi ] = "होमपेज ";
+    Text[ slovak ] = "Domáca stránka";
 };
 
 // -----------------------------------------------------------------------------
@@ -422,6 +432,7 @@ String RID_GALLERYSTR_THEME_INTERACTION
     Text[ czech ] = "Interakce";
     Text[ hebrew ] = "‮אינטרקטיבי‬";
     Text[ hindi ] = "इन्टराक्शन्";
+    Text[ slovak ] = "Interakcia";
 };
 
 // -----------------------------------------------------------------------------
@@ -455,6 +466,7 @@ String RID_GALLERYSTR_THEME_MAPS
     Text[ czech ] = "Mapy";
     Text[ hebrew ] = "‮מפות‬";
     Text[ hindi ] = "नक्शा";
+    Text[ slovak ] = "Mapy";
 };
 
 // -----------------------------------------------------------------------------
@@ -488,6 +500,7 @@ String RID_GALLERYSTR_THEME_PEOPLE
     Text[ czech ] = "Lidé";
     Text[ hebrew ] = "‮אנשים‬";
     Text[ hindi ] = "जन";
+    Text[ slovak ] = "Ľudia";
 };
 
 // -----------------------------------------------------------------------------
@@ -521,6 +534,7 @@ String RID_GALLERYSTR_THEME_SURFACES
     Text[ czech ] = "Povrchy";
     Text[ hebrew ] = "‮משטחים‬";
     Text[ hindi ] = "तल";
+    Text[ slovak ] = "Povrchy";
 };
 
 // -----------------------------------------------------------------------------
@@ -570,6 +584,7 @@ String RID_GALLERYSTR_THEME_RULERS
     Text[ czech ] = "Vodorovné čáry";
     Text[ hebrew ] = "‮סרגלים‬";
     Text[ hindi ] = "रूलर";
+    Text[ slovak ] = "Pravítka";
 };
 
 // -----------------------------------------------------------------------------
@@ -603,6 +618,7 @@ String RID_GALLERYSTR_THEME_SOUNDS
     Text[ czech ] = "Zvuky";
     Text[ hebrew ] = "‮קולות‬";
     Text[ hindi ] = "ध्वनि";
+    Text[ slovak ] = "Zvuky";
 };
 
 // -----------------------------------------------------------------------------
@@ -636,6 +652,7 @@ String RID_GALLERYSTR_THEME_SYMBOLS
     Text[ czech ] = "Symboly";
     Text[ hebrew ] = "‮סמלים‬";
     Text[ hindi ] = "संकेत";
+    Text[ slovak ] = "Symboly";
 };
 
 // -----------------------------------------------------------------------------
@@ -668,6 +685,7 @@ String RID_GALLERYSTR_THEME_MYTHEME
     Text[ czech ] = "Moje téma";
     Text[ hebrew ] = "‮הנושא שלי‬";
     Text[ hindi ] = "मेरा प्रकरण";
+    Text[ slovak ] = "Moja téma";
 };
 
 // -----------------------------------------------------------------------------
@@ -708,6 +726,7 @@ String RID_GALLERYSTR_THEME_ARROWS
     Text[ czech ] = "Šipky";
     Text[ hebrew ] = "‮חיצים‬";
     Text[ hindi ] = "तीर";
+    Text[ slovak ] = "Šípky";
 };
 
 // -----------------------------------------------------------------------------
@@ -740,6 +759,7 @@ String RID_GALLERYSTR_THEME_BALLOONS
     Text[ czech ] = "Bubliny";
     Text[ hebrew ] = "‮בלונים‬";
     Text[ hindi ] = "बलून";
+    Text[ slovak ] = "Bubliny";
 };
 
 // -----------------------------------------------------------------------------
@@ -772,6 +792,7 @@ String RID_GALLERYSTR_THEME_KEYBOARD
     Text[ czech ] = "Klávesnice";
     Text[ hebrew ] = "‮מקלדת‬";
     Text[ hindi ] = "कीबोर्ड";
+    Text[ slovak ] = "Klávesnica";
 };
 
 // -----------------------------------------------------------------------------
@@ -804,6 +825,7 @@ String RID_GALLERYSTR_THEME_TIME
     Text[ czech ] = "Čas";
     Text[ hebrew ] = "‮שעה‬";
     Text[ hindi ] = "समय";
+    Text[ slovak ] = "Čas";
 };
 
 // -----------------------------------------------------------------------------
@@ -836,6 +858,7 @@ String RID_GALLERYSTR_THEME_PRESENTATION
     Text[ czech ] = "Prezentace";
     Text[ hebrew ] = "‮מצגת‬";
     Text[ hindi ] = "प्रस्तुति";
+    Text[ slovak ] = "Prezentácia";
 };
 
 // -----------------------------------------------------------------------------
@@ -868,6 +891,7 @@ String RID_GALLERYSTR_THEME_CALENDAR
     Text[ czech ] = "Kalendář";
     Text[ hebrew ] = "‮לוח שנה‬";
     Text[ hindi ] = "केलन्डर";
+    Text[ slovak ] = "Kalendár";
 };
 
 // -----------------------------------------------------------------------------
@@ -900,6 +924,7 @@ String RID_GALLERYSTR_THEME_NAVIGATION
     Text[ czech ] = "Navigace";
     Text[ hebrew ] = "‮ניווט‬";
     Text[ hindi ] = "नाविगेशन";
+    Text[ slovak ] = "Navigácia";
 };
 
 // -----------------------------------------------------------------------------
@@ -932,6 +957,7 @@ String RID_GALLERYSTR_THEME_COMMUNICATION
     Text[ czech ] = "Komunikace";
     Text[ hebrew ] = "‮תקשורת‬";
     Text[ hindi ] = "बातचीत";
+    Text[ slovak ] = "Komunikácia";
 };
 
 // -----------------------------------------------------------------------------
@@ -964,6 +990,7 @@ String RID_GALLERYSTR_THEME_FINANCES
     Text[ czech ] = "Finance";
     Text[ hebrew ] = "‮כספים‬";
     Text[ hindi ] = "आर्थिक व्यवस्था";
+    Text[ slovak ] = "Financie";
 };
 
 // -----------------------------------------------------------------------------
@@ -996,6 +1023,7 @@ String RID_GALLERYSTR_THEME_COMPUTER
     Text[ czech ] = "Počítače";
     Text[ hebrew ] = "‮מחשבים‬";
     Text[ hindi ] = "गणक यंत्र";
+    Text[ slovak ] = "Počítače";
 };
 
 // -----------------------------------------------------------------------------
@@ -1028,6 +1056,7 @@ String RID_GALLERYSTR_THEME_CLIMA
     Text[ czech ] = "Podnebí";
     Text[ hebrew ] = "‮אכלים‬";
     Text[ hindi ] = "त्रृतु";
+    Text[ slovak ] = "Podnebie";
 };
 
 // -----------------------------------------------------------------------------
@@ -1060,6 +1089,7 @@ String RID_GALLERYSTR_THEME_EDUCATION
     Text[ czech ] = "Škola a univerzita";
     Text[ hebrew ] = "‮בית ספר ואוניברסיטה‬";
     Text[ hindi ] = "स्कूल और विश्वविद्यालय";
+    Text[ slovak ] = "Škola a univerzita";
 };
 
 // -----------------------------------------------------------------------------
@@ -1092,6 +1122,7 @@ String RID_GALLERYSTR_THEME_TROUBLE
     Text[ czech ] = "Řešení problému";
     Text[ hebrew ] = "‮פתרון בעיות‬";
     Text[ hindi ] = "समस्या का उत्तर निकालना";
+    Text[ slovak ] = "Riešenie problému";
 };
 
 // -----------------------------------------------------------------------------
@@ -1125,6 +1156,7 @@ String RID_GALLERYSTR_THEME_SCREENBEANS
     Text[ czech ] = "Ozdoby na obrazovku";
     Text[ hebrew ] = "‮פולי מסך (Screen Beans)‬";
     Text[ hindi ] = "स्क्रीन बीन्स";
+    Text[ slovak ] = "Screen Beans";
 };
 
 // -----------------------------------------------------------------------------
@@ -1134,6 +1166,8 @@ String RID_GALLERYSTR_THEME_DUMMY5
     // !!! Don't translate, please !!!
     Text = "Dummy 5";
 };
+
+
 
 
 
