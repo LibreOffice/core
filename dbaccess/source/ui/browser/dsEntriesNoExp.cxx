@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsEntriesNoExp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 09:29:32 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include "dbtreemodel.hxx"
 #endif
 
+using namespace ::com::sun::star::frame;
 using namespace ::dbtools;
 using namespace ::svx;
 
@@ -178,28 +179,28 @@ sal_Bool SbaTableQueryBrowser::isSelected(SvLBoxEntry* _pEntry) const
     return sal_False;
 }
 //------------------------------------------------------------------------------
-void SbaTableQueryBrowser::AddSupportedFeatures()
+void SbaTableQueryBrowser::describeSupportedFeatures()
 {
-    SbaXDataBrowserController::AddSupportedFeatures();
+    SbaXDataBrowserController::describeSupportedFeatures();
 
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Title"))]                               = ID_BROWSER_TITLE;
+    implDescribeSupportedFeature( ".uno:Title",                             ID_BROWSER_TITLE );
     if ( !m_bShowMenu )
     {
-        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DSBrowserExplorer"))]                   = ID_BROWSER_EXPLORER;
+        implDescribeSupportedFeature( ".uno:DSBrowserExplorer",                 ID_BROWSER_EXPLORER, CommandGroup::VIEW );
 
-        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DSBFormLetter"))]                       = ID_BROWSER_FORMLETTER;
-        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DSBInsertColumns"))]                    = ID_BROWSER_INSERTCOLUMNS;
-        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DSBInsertContent"))]                    = ID_BROWSER_INSERTCONTENT;
-        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DSBDocumentDataSource"))]               = ID_BROWSER_DOCUMENT_DATASOURCE;
+        implDescribeSupportedFeature( ".uno:DSBFormLetter",                     ID_BROWSER_FORMLETTER, CommandGroup::DOCUMENT );
+        implDescribeSupportedFeature( ".uno:DSBInsertColumns",                  ID_BROWSER_INSERTCOLUMNS, CommandGroup::INSERT );
+        implDescribeSupportedFeature( ".uno:DSBInsertContent",                  ID_BROWSER_INSERTCONTENT, CommandGroup::INSERT );
+        implDescribeSupportedFeature( ".uno:DSBDocumentDataSource",             ID_BROWSER_DOCUMENT_DATASOURCE, CommandGroup::VIEW );
 
-        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DataSourceBrowser/FormLetter"))]        = ID_BROWSER_FORMLETTER;
-        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DataSourceBrowser/InsertColumns"))]     = ID_BROWSER_INSERTCOLUMNS;
-        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DataSourceBrowser/InsertContent"))]     = ID_BROWSER_INSERTCONTENT;
-        m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DataSourceBrowser/DocumentDataSource"))]= ID_BROWSER_DOCUMENT_DATASOURCE;
+        implDescribeSupportedFeature( ".uno:DataSourceBrowser/FormLetter",          ID_BROWSER_FORMLETTER );
+        implDescribeSupportedFeature( ".uno:DataSourceBrowser/InsertColumns",       ID_BROWSER_INSERTCOLUMNS );
+        implDescribeSupportedFeature( ".uno:DataSourceBrowser/InsertContent",       ID_BROWSER_INSERTCONTENT );
+        implDescribeSupportedFeature( ".uno:DataSourceBrowser/DocumentDataSource",  ID_BROWSER_DOCUMENT_DATASOURCE );
     }
 
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin"))]                            = ID_BROWSER_CLOSE;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBRebuildData"))]                       = ID_BROWSER_REFRESH_REBUILD;
+    implDescribeSupportedFeature( ".uno:CloseWin",      ID_BROWSER_CLOSE, CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:DBRebuildData", ID_BROWSER_REFRESH_REBUILD, CommandGroup::DATA );
 }
 // -------------------------------------------------------------------------
 String SbaTableQueryBrowser::getURL() const
