@@ -57,6 +57,7 @@ CHANELLIB=$(L)$/libcha$(UPD)$(DLLPOSTFIX).x
 .ENDIF
 BASICLIB=$(L)$/libsb$(UPD)$(DLLPOSTFIX).x
 SDBLIB=$(L)$/libsdb$(UPD)$(DLLPOSTFIX).x
+DBTOOLSLIB=$(L)$/libdbt$(UPD)$(DLLPOSTFIX).x
 HM2LIBSH=$(L)$/libhmwrpdll.x
 HM2LIBST=$(L)$/libhmwrap.x
 LINGULIB=$(L)$/$(HM2LIBST).x
@@ -177,6 +178,7 @@ CHANELLIB=-lcha$(UPD)$(DLLPOSTFIX)
 .ENDIF
 BASICLIB=-lsb$(UPD)$(DLLPOSTFIX)
 SDBLIB=-lsdb$(UPD)$(DLLPOSTFIX)
+DBTOOLSLIB=-ldbt$(UPD)$(DLLPOSTFIX)
 HM2LIBSH=-lhmwrpdll
 HM2LIBST=-lhmwrap
 LINGULIB=$(HM2LIBST)
@@ -377,6 +379,7 @@ SVXLIB+=$(LIBPRE) dl.lib
 BASCTLLIB=$(LIBPRE) basctl.lib
 SVXLLIB=$(LIBPRE) svxl.lib
 SDBLIB=$(LIBPRE) sdb.lib
+DBTOOLSLIB=$(LIBPRE) idbtools.lib
 HM2LIBSH=$(LIBPRE) hmwrpdll.lib
 HM2LIBST=$(LIBPRE) hmwrap.lib
 LINGULIB=$(HM2LIBST)
