@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsersvc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-22 09:21:01 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 12:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #endif
 #ifndef CONFIGMGR_XML_LAYERPARSER_HXX
 #include "layerparser.hxx"
+#endif
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #include <drafts/com/sun/star/configuration/backend/XSchema.hpp>
@@ -225,12 +229,24 @@ void ParserService<BackendInterface>::parse(uno::Reference< sax::XDocumentHandle
     catch (sax::SAXException & e)
     {
         uno::Any aWrapped = e.WrappedException.hasValue() ? e.WrappedException : uno::makeAny( e );
+        OUString sSAXMessage = e.Message;
 
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Parser: a ") );
-        sMessage += aWrapped.getValueTypeName();
-        sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM(" occurred while parsing:"));
-        sMessage += e.Message;
-        throw lang::WrappedTargetRuntimeException(sMessage,*this,aWrapped);
+        // Expatwrap SAX service doubly wraps its errors ??
+        sax::SAXException eInner;
+        if (aWrapped >>= eInner)
+        {
+            if (eInner.WrappedException.hasValue()) aWrapped = eInner.WrappedException;
+
+            rtl::OUStringBuffer sMsgBuf(eInner.Message);
+            sMsgBuf.appendAscii("- {Parser Error: ").append(sSAXMessage).appendAscii(" }.");
+            sSAXMessage = sMsgBuf.makeStringAndClear();
+        }
+
+        rtl::OUStringBuffer sMessage;
+        sMessage.appendAscii("Configuration Parser: a ").append( aWrapped.getValueTypeName() );
+        sMessage.appendAscii(" occurred while parsing: ");
+        sMessage.append(sSAXMessage);
+        throw lang::WrappedTargetRuntimeException(sMessage.makeStringAndClear(),*this,aWrapped);
     }
 }
 
