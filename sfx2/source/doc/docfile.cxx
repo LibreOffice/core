@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:31:11 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,13 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SECURITY_DOCUMENTSIGNATURESINFORMATION_HPP_
+#include <com/sun/star/security/DocumentSignaturesInformation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SECURITY_XDOCUMENTDIGITALSIGNATURES_HPP_
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#endif
+
 #ifndef _ZCODEC_HXX
 #include <tools/zcodec.hxx>
 #endif
@@ -185,6 +192,7 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
@@ -210,6 +218,8 @@ using namespace ::com::sun::star::io;
 #include <unotools/progresshandlerwrap.hxx>
 #include <ucbhelper/content.hxx>
 #include <sot/stg.hxx>
+
+#include <storagehelper.hxx>
 
 #include "helper.hxx"
 #include "request.hxx"      // SFX_ITEMSET_SET
@@ -2925,6 +2935,47 @@ void SfxMedium::SetCharset( ::rtl::OUString aChs )
 {
     pImp->bIsCharsetInitialized = sal_True;
     pImp->aCharset = aChs;
+}
+
+void SfxMedium::SignContents_Impl( sal_Bool bScriptingContent )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xD(
+        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), ::com::sun::star::uno::UNO_QUERY );
+
+    if ( xD.is() )
+    {
+        sal_Bool bSigned = sal_False;
+
+        if ( !pImp->pTempFile )
+            CreateTempFile();
+
+        if ( pImp->pTempFile )
+        {
+            // HACK: No Storage API before CWS MAV09
+            uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
+                    pImp->pTempFile->GetURL(), embed::ElementModes::READWRITE, comphelper::getProcessServiceFactory() );
+            if ( xStore.is() )
+            {
+                if ( bScriptingContent )
+                {
+                    if ( !IsReadOnly() )
+                        bSigned = xD->SignScriptingContent( xStore );
+                    else
+                        xD->ShowScriptingContentSignatures( xStore );
+                }
+                else
+                {
+                    if ( !IsReadOnly() )
+                        bSigned = xD->SignDocumentContent( xStore );
+                    else
+                        xD->ShowDocumentContentSignatures( xStore );
+                }
+            }
+        }
+
+        if ( bSigned )
+            Commit();
+    }
 }
 
 //----------------------------------------------------------------
