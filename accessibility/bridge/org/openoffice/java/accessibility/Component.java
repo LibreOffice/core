@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Component.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 15:48:18 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,12 @@ public abstract class Component extends java.awt.Component {
 
     protected void fireStatePropertyChange(AccessibleState state, boolean set) {
         PropertyChangeBroadcaster broadcaster;
+
+//      if (Build.DEBUG) {
+//          System.err.println("[" + AccessibleRoleAdapter.getAccessibleRole(unoAccessibleContext.getAccessibleRole()) + "] " +
+//                  unoAccessibleContext.getAccessibleName() + " is " + (set ? "now " : "no longer ") + state);
+//      }
+
         if (set) {
             broadcaster = new PropertyChangeBroadcaster(
                 accessibleContext.ACCESSIBLE_STATE_PROPERTY,
@@ -364,7 +370,7 @@ public abstract class Component extends java.awt.Component {
                     handleDescriptionChangedEvent(event.NewValue);
                     break;
                 case AccessibleEventId.ACCESSIBLE_CHILD_EVENT:
-                    if(Build.DEBUG) {
+                    if (Build.DEBUG) {
                         System.out.println("Unexpected child event for object of role " + getAccessibleContext().getAccessibleRole());
                     }
                     break;
@@ -685,6 +691,9 @@ public abstract class Component extends java.awt.Component {
         public java.awt.Point getLocationOnScreen() {
             try {
                 com.sun.star.awt.Point unoPoint = unoAccessibleComponent.getLocationOnScreen();
+//              if (Build.DEBUG) {
+//                  System.err.println("Returning location on screen( " + unoPoint.X + ", " + unoPoint.Y + " )" );
+//              }
                 return new java.awt.Point(unoPoint.X, unoPoint.Y);
             } catch (com.sun.star.uno.RuntimeException e) {
                 return null;
