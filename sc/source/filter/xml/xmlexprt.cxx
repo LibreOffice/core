@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-08 14:42:50 $
+ *  last change: $Author: sab $ $Date: 2000-12-18 17:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ void ScXMLExport::_ExportMeta()
                                                                 awt::Point aPoint = xShape->getPosition();
                                                                 awt::Size aSize = xShape->getSize();
                                                                 Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
-                                                                ScRange aRange = pDoc->GetRange(nTable, aRectangle);
+                                                                ScRange aRange = pDoc->GetRange(static_cast<USHORT>(nTable), aRectangle);
                                                                 ScMyShape aMyShape;
                                                                 aMyShape.aAddress = aRange.aStart;
                                                                 aMyShape.aEndAddress = aRange.aEnd;
@@ -538,12 +538,12 @@ void ScXMLExport::GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp )
     ScDetOpList* pOpList = pDoc->GetDetOpList();
     if( pOpList )
     {
-        sal_Int32 nCount = pOpList->Count();
-        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+        sal_uInt32 nCount = pOpList->Count();
+        for( sal_uInt32 nIndex = 0; nIndex < nCount; nIndex++ )
         {
-            ScDetOpData* pDetData = pOpList->GetObject( nIndex );
+            ScDetOpData* pDetData = pOpList->GetObject( static_cast<USHORT>(nIndex) );
             if( pDetData )
-                rDetOp.AddOperation( pDetData->GetOperation(), pDetData->GetPos() );
+                rDetOp.AddOperation( pDetData->GetOperation(), pDetData->GetPos(), nIndex );
         }
         rDetOp.Sort();
     }
@@ -853,12 +853,12 @@ void ScXMLExport::OpenRow(const sal_Int16 nTable, const sal_Int32 nStartRow, con
             if (nRow == nStartRow)
             {
                 nPrevIndex = aRowStyles.GetStyleNameIndex(nTable, nRow);
-                nPrevFlag = (pDoc->GetRowFlags(nRow, nTable)) & (CR_HIDDEN | CR_FILTERED);
+                nPrevFlag = (pDoc->GetRowFlags(static_cast<USHORT>(nRow), nTable)) & (CR_HIDDEN | CR_FILTERED);
             }
             else
             {
                 nIndex = aRowStyles.GetStyleNameIndex(nTable, nRow);
-                nFlag = (pDoc->GetRowFlags(nRow, nTable)) & (CR_HIDDEN | CR_FILTERED);
+                nFlag = (pDoc->GetRowFlags(static_cast<USHORT>(nRow), nTable)) & (CR_HIDDEN | CR_FILTERED);
                 if (nIndex == nPrevIndex && nFlag == nPrevFlag &&
                     !(bHasRowHeader && nRow == aRowHeaderRange.StartRow) &&
                     !(aGroupRows.IsGroupStart(nRow)) &&
@@ -878,7 +878,7 @@ void ScXMLExport::OpenRow(const sal_Int16 nTable, const sal_Int32 nStartRow, con
     else
     {
         sal_Int32 nIndex = aRowStyles.GetStyleNameIndex(nTable, nStartRow);
-        sal_Int8 nFlag = (pDoc->GetRowFlags(nStartRow, nTable)) & (CR_HIDDEN | CR_FILTERED);
+        sal_Int8 nFlag = (pDoc->GetRowFlags(static_cast<USHORT>(nStartRow), nTable)) & (CR_HIDDEN | CR_FILTERED);
         OpenNewRow(nIndex, nFlag, nStartRow, 1);
     }
     nOpenRow = nStartRow + nRepeatRow - 1;
@@ -1016,13 +1016,13 @@ void ScXMLExport::FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRow
     sal_Int32 nDepth = pFields->GetDepth();
     for(sal_Int32 i = 0; i < nDepth; i++)
     {
-        sal_Int32 nFields = pFields->GetCount(i);
+        sal_Int32 nFields = pFields->GetCount(static_cast<USHORT>(i));
         for (sal_Int32 j = 0; j < nFields; j++)
         {
             ScMyColumnRowGroup aGroup;
-            ScOutlineEntry* pEntry = pFields->GetEntry(i, j);
+            ScOutlineEntry* pEntry = pFields->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j));
             aGroup.nField = pEntry->GetStart();
-            aGroup.nLevel = i;
+            aGroup.nLevel = static_cast<sal_Int16>(i);
             aGroup.bDisplay = !(pEntry->IsHidden());
             rGroups.AddGroup(aGroup, pEntry->GetEnd());
         }
@@ -1083,7 +1083,7 @@ void ScXMLExport::_ExportContent()
             if (nTableCount > 0)
                 aValidationsContainer.WriteValidations(*this);
             WriteTheLabelRanges( xSpreadDoc );
-            for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
+            for (sal_uInt16 nTable = 0; nTable < nTableCount; nTable++)
             {
                 uno::Any aTable = xIndex->getByIndex(nTable);
                 uno::Reference<sheet::XSpreadsheet> xTable;
@@ -1248,7 +1248,7 @@ void ScXMLExport::_ExportAutoStyles()
             sal_Int32 nTableCount = xIndex->getCount();
             aCellStyles.AddNewTable(nTableCount - 1);
             aTableShapes.resize(nTableCount);
-            for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
+            for (sal_uInt16 nTable = 0; nTable < nTableCount; nTable++)
             {
                 uno::Any aTable = xIndex->getByIndex(nTable);
                 uno::Reference<sheet::XSpreadsheet> xTable;
@@ -1323,50 +1323,14 @@ void ScXMLExport::_ExportAutoStyles()
                                                     SetLastColumn(nTable, aRangeAddress.EndColumn);
                                                     SetLastRow(nTable, aRangeAddress.EndRow);
                                                     aCellStyles.AddRangeStyleName(aRangeAddress, nIndex, bIsAutoStyle, nValidationIndex);
-                                                    uno::Reference<sheet::XSheetCellRange> xSheetCellRange(xCellRange, uno::UNO_QUERY);
-                                                    if (xSheetCellRange.is())
-                                                    {
-                                                        uno::Reference<sheet::XSheetCellCursor> xCursor = xTable->createCursorByRange(xSheetCellRange);
-                                                        if(xCursor.is())
-                                                        {
-                                                            uno::Reference<sheet::XCellRangeAddressable> xCellAddress (xCursor, uno::UNO_QUERY);
-                                                            table::CellRangeAddress aCellAddress = xCellAddress->getRangeAddress();
-                                                            xCursor->collapseToMergedArea();
-                                                            table::CellRangeAddress aCellAddress2 = xCellAddress->getRangeAddress();
-                                                            if (aCellAddress2.EndColumn > aCellAddress.EndColumn ||
-                                                                aCellAddress2.EndRow > aCellAddress.EndRow)
-                                                            {
-                                                                SetLastColumn(nTable, aCellAddress2.EndColumn);
-                                                                SetLastRow(nTable, aCellAddress2.EndRow);
-                                                                aMergedRangesContainer.AddRange(aCellAddress2);
-                                                            }
-                                                        }
-                                                    }
+                                                    GetMerged(xCellRange, xTable);
                                                 }
                                                 else
                                                 {
-                                                    uno::Reference<sheet::XSheetCellRange> xSheetCellRange(xCellRange, uno::UNO_QUERY);
-                                                    if (xSheetCellRange.is())
-                                                    {
-                                                        uno::Reference<sheet::XSheetCellCursor> xCursor = xTable->createCursorByRange(xSheetCellRange);
-                                                        if(xCursor.is())
-                                                        {
-                                                            uno::Reference<sheet::XCellRangeAddressable> xCellAddress (xCursor, uno::UNO_QUERY);
-                                                            table::CellRangeAddress aCellAddress = xCellAddress->getRangeAddress();
-                                                            xCursor->collapseToMergedArea();
-                                                            table::CellRangeAddress aCellAddress2 = xCellAddress->getRangeAddress();
-                                                            if (aCellAddress2.EndColumn > aCellAddress.EndColumn ||
-                                                                aCellAddress2.EndRow > aCellAddress.EndRow)
-                                                            {
-                                                                SetLastColumn(nTable, aCellAddress2.EndColumn);
-                                                                SetLastRow(nTable, aCellAddress2.EndRow);
-                                                                aMergedRangesContainer.AddRange(aCellAddress2);
-                                                            }
-                                                            rtl::OUString* pTemp = new rtl::OUString(sStyleName);
-                                                            sal_Int32 nIndex = aCellStyles.AddStyleName(pTemp, sal_False);
-                                                            aCellStyles.AddRangeStyleName(aCellAddress, nIndex, sal_False, nValidationIndex);
-                                                        }
-                                                    }
+                                                    GetMerged(xCellRange, xTable);
+                                                    rtl::OUString* pTemp = new rtl::OUString(sStyleName);
+                                                    sal_Int32 nIndex = aCellStyles.AddStyleName(pTemp, sal_False);
+                                                    aCellStyles.AddRangeStyleName(aRangeAddress, nIndex, sal_False, nValidationIndex);
                                                 }
                                             }
                                             if (nProgressValue < nOldProgressValue + nProgressObjects)
@@ -1427,7 +1391,7 @@ void ScXMLExport::_ExportAutoStyles()
                                         }
                                     }
                                     sal_Int32 nOld = nColumn;
-                                    nColumn = pDoc->GetNextDifferentFlaggedCol(nTable, nColumn);
+                                    nColumn = pDoc->GetNextDifferentFlaggedCol(nTable, static_cast<USHORT>(nColumn));
                                     if (nColumn == MAXCOL)
                                         nColumn++;
                                     for (sal_Int32 i = nOld + 1; (i < nColumn) && (i <= nColumns) ; i++)
@@ -1484,7 +1448,7 @@ void ScXMLExport::_ExportAutoStyles()
                                         }
                                     }
                                     sal_Int32 nOld = nRow;
-                                    nRow = pDoc->GetNextDifferentFlaggedRow(nTable, nRow);
+                                    nRow = pDoc->GetNextDifferentFlaggedRow(nTable, static_cast<USHORT>(nRow));
                                     if (nRow == MAXROW)
                                         nRow++;
                                     for (sal_Int32 i = nOld + 1; (i < nRow) && (i <= nRows) ; i++)
@@ -1586,29 +1550,70 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape
     }
 }
 
-sal_Bool ScXMLExport::IsMerged (const uno::Reference <table::XCellRange>& xCellRange, const sal_Int32 nCol, const sal_Int32 nRow,
-                            table::CellRangeAddress& aCellAddress) const
+sal_Bool ScXMLExport::GetMerge (const uno::Reference <sheet::XSpreadsheet>& xTable,
+                            const sal_Int32 nCol, const sal_Int32 nRow,
+                            table::CellRangeAddress& aCellAddress)
 {
-    uno::Reference <table::XCellRange> xMergeCellRange = xCellRange->getCellRangeByPosition(nCol,nRow,nCol,nRow);
-    uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
-    if (xMergeable.is())
-        if (xMergeable->getIsMerged())
+    uno::Reference<table::XCellRange> xCellRange = xTable->getCellRangeByPosition(nCol, nRow, nCol, nRow);
+    if (xCellRange.is())
+    {
+        uno::Reference<sheet::XSheetCellRange> xSheetCellRange(xCellRange, uno::UNO_QUERY);
+        if (xSheetCellRange.is())
         {
-            uno::Reference<sheet::XSheetCellRange> xMergeSheetCellRange (xMergeCellRange, uno::UNO_QUERY);
-            uno::Reference<sheet::XSpreadsheet> xTable = xMergeSheetCellRange->getSpreadsheet();
-            uno::Reference<sheet::XSheetCellCursor> xMergeSheetCursor = xTable->createCursorByRange(xMergeSheetCellRange);
-            if (xMergeSheetCursor.is())
+            uno::Reference<sheet::XSheetCellCursor> xCursor = xTable->createCursorByRange(xSheetCellRange);
+            if(xCursor.is())
             {
-                xMergeSheetCursor->collapseToMergedArea();
-                uno::Reference<sheet::XCellRangeAddressable> xMergeCellAddress (xMergeSheetCursor, uno::UNO_QUERY);
-                if (xMergeCellAddress.is())
-                {
-                    aCellAddress = xMergeCellAddress->getRangeAddress();
-                    return sal_True;
-                }
+                uno::Reference<sheet::XCellRangeAddressable> xCellAddress (xCursor, uno::UNO_QUERY);
+                xCursor->collapseToMergedArea();
+                aCellAddress = xCellAddress->getRangeAddress();
+                return sal_True;
             }
         }
+    }
     return sal_False;
+}
+
+void ScXMLExport::GetMerged (const uno::Reference <table::XCellRange>& xCellRange,
+                            const uno::Reference <sheet::XSpreadsheet>& xTable)
+{
+    uno::Reference<sheet::XSheetCellRange> xSheetCellRange(xCellRange, uno::UNO_QUERY);
+    if (xSheetCellRange.is())
+    {
+        uno::Reference<sheet::XSheetCellCursor> xCursor = xTable->createCursorByRange(xSheetCellRange);
+        if(xCursor.is())
+        {
+            uno::Reference<sheet::XCellRangeAddressable> xCellAddress (xCursor, uno::UNO_QUERY);
+            table::CellRangeAddress aCellAddress = xCellAddress->getRangeAddress();
+            xCursor->collapseToMergedArea();
+            table::CellRangeAddress aCellAddress2 = xCellAddress->getRangeAddress();
+            if (aCellAddress2.StartRow != aCellAddress.StartRow ||
+                aCellAddress2.EndRow != aCellAddress.EndRow ||
+                aCellAddress2.StartColumn != aCellAddress.StartColumn ||
+                aCellAddress2.EndColumn != aCellAddress.EndColumn)
+            {
+                table::CellRangeAddress aCellAddress3;
+                sal_Int32 nNextRow (MAXROW);
+                for (sal_Int32 j = aCellAddress2.StartRow; j <= aCellAddress2.EndRow; j++)
+                {
+                    for (sal_Int32 i = aCellAddress2.StartColumn; i <= aCellAddress2.EndColumn; i++)
+                    {
+                        nNextRow = MAXROW;
+                        if (GetMerge(xTable, i, j, aCellAddress3) &&
+                            (aCellAddress3.EndColumn > i || aCellAddress3.EndRow > j))
+                        {
+                            aMergedRangesContainer.AddRange(aCellAddress3);
+                            i = aCellAddress3.EndColumn;
+                            if (aCellAddress3.EndRow < nNextRow)
+                                nNextRow = aCellAddress3.EndRow;
+                        }
+                    }
+                    j = nNextRow;
+                }
+                SetLastColumn(aCellAddress2.Sheet, aCellAddress2.EndColumn);
+                SetLastRow(aCellAddress2.Sheet, aCellAddress2.EndRow);
+            }
+        }
+    }
 }
 
 sal_Bool ScXMLExport::IsMatrix (const uno::Reference <table::XCellRange>& xCellRange,
@@ -1929,8 +1934,8 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
     if( rMyCell.bHasShape && xCurrentShapes.is() && rMyCell.aShapeVec.size() && pDoc )
     {
         awt::Point aPoint;
-        Rectangle aRec = pDoc->GetMMRect(rMyCell.aCellAddress.Column, rMyCell.aCellAddress.Row,
-            rMyCell.aCellAddress.Column, rMyCell.aCellAddress.Row, rMyCell.aCellAddress.Sheet);
+        Rectangle aRec = pDoc->GetMMRect(static_cast<USHORT>(rMyCell.aCellAddress.Column), static_cast<USHORT>(rMyCell.aCellAddress.Row),
+            static_cast<USHORT>(rMyCell.aCellAddress.Column), static_cast<USHORT>(rMyCell.aCellAddress.Row), rMyCell.aCellAddress.Sheet);
         aPoint.X = aRec.Left();
         aPoint.Y = aRec.Top();
         awt::Point* pPoint = &aPoint;
@@ -1967,7 +1972,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
 
 void ScXMLExport::WriteTableShapes()
 {
-    DBG_ASSERT(aTableShapes.size() > nCurrentTable, "wrong Table");
+    DBG_ASSERT(aTableShapes.size() > static_cast<sal_uInt32>(nCurrentTable), "wrong Table");
     if (aTableShapes[nCurrentTable].size())
     {
         SvXMLElementExport aShapesElem(*this, XML_NAMESPACE_TABLE, sXML_shapes, sal_True, sal_False);

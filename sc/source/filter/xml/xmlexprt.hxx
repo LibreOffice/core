@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-08 14:42:50 $
+ *  last change: $Author: sab $ $Date: 2000-12-18 17:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,9 +171,11 @@ class ScXMLExport : public SvXMLExport
     void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup& rGroups);
     void FillColumnRowGroups();
 
-    sal_Bool IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
-        const sal_Int32 nCol, const sal_Int32 nRow,
-        com::sun::star::table::CellRangeAddress& aCellAddress) const;
+    sal_Bool GetMerge (const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable,
+        sal_Int32 nCol, sal_Int32 nRow,
+        com::sun::star::table::CellRangeAddress& aCellAddress);
+    void GetMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
+        const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable);
 
     sal_Bool GetCellText (const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell,
         rtl::OUString& sOUTemp) const;
