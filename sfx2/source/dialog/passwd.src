@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:48:04 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 05:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ ModalDialog DLG_PASSWD
     Text [ italian ] = "Digita password" ;
     Text [ portuguese_brazilian ] = "Digitar senha" ;
     Text [ portuguese ] = "Digitar senha" ;
-    Text [ finnish ] = "Kirjoita salasana" ;
+    Text [ finnish ] = "Anna salasana" ;
     Text [ danish ] = "Indtast adgangskode" ;
     Text [ french ] = "Saisie du mot de passe" ;
     Text [ swedish ] = "Mata in lösenord" ;
@@ -119,6 +119,7 @@ ModalDialog DLG_PASSWD
         Text[ turkish ] = "~Kullanýcý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Usuar~io";
+        Text[ finnish ] = "~Käyttäjä";
     };
     Edit ED_PASSWD_USER
     {
@@ -152,6 +153,7 @@ ModalDialog DLG_PASSWD
         Text[ turkish ] = "~Þifre";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Contraseña";
+        Text[ finnish ] = "~Salasana";
     };
     Edit ED_PASSWD_PASSWORD
     {
@@ -185,6 +187,7 @@ ModalDialog DLG_PASSWD
         Text[ arabic ] = "ÊÃßíÏ";
         Text[ turkish ] = "~Onayla";
         Text[ catalan ] = "~Confirmar";
+        Text[ finnish ] = "~Vahvista";
     };
     Edit ED_PASSWD_CONFIRM
     {
@@ -247,7 +250,7 @@ ModalDialog DLG_PASSWD
         Text [ italian ] = "Conferma password" ;
         Text [ portuguese_brazilian ] = "Confirmar senha" ;
         Text [ portuguese ] = "Confirmar senha" ;
-        Text [ finnish ] = "Varmista salasana" ;
+        Text [ finnish ] = "Vahvista salasana" ;
         Text [ danish ] = "Bekræft adgangskode" ;
         Text [ french ] = "Confirmer le mot de passe" ;
         Text [ swedish ] = "Bekräfta lösenord" ;
