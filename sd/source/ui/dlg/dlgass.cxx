@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 08:21:00 $
+ *  last change: $Author: af $ $Date: 2002-09-11 13:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,10 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
+#endif
+
 #ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
 #include <svtools/historyoptions.hxx>
 #endif
@@ -183,9 +187,10 @@
 #include "dlgctrls.hxx"
 #include "strings.hrc"
 #include "dlgassim.hxx"
-#include "TemplateThread.hxx"
+#include "TemplateScanner.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::sd;
 
 
 void InterpolateFixedBitmap( FixedBitmap * pBitmap )
@@ -228,35 +233,49 @@ public:
     AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BOOL bAutoPilot  );
     ~AssistentDlgImpl();
 
+    /// Local mutex used to serialize concurrent method calls.
+    ::osl::Mutex m_aMutex;
+
     SfxObjectShellLock GetDocument();
 
     /** closes the current preview docshell */
     void CloseDocShell();
 
-    /** @descr  Extract form the history list of recently used files the
-            impress files and insert them into a listbox.
+    /** Extract form the history list of recently used files the impress
+        files and insert them into a listbox.
     */
     void    ScanDocmenu         (void);
 
-    /** @descr  Extract from the list of template files the impress templates
-            and layouts and store them for later use in m_aPresentList.
+    /** When the list of templates has not been scanned already this is done
+        when this method is called.  That includes requesting the whole list
+        of templates from UCB and extracting from that list the impress
+        templates and layouts and storing them for later use in
+        <member>m_aPresentList</member>.  Note that the first call to this
+        method after installing a new Office may take some time.
     */
-    void    ScanTemplates       (void);
+    void ProvideTemplates (void);
 
-    /** @desrc  This callback is called from the thread that scans the
-            template files to update the dialog in order to display the
-            found impress templates.  This sets the flag m_bTemplatesReady
-            to TRUE.
+    /** This method transfers the template folders from the template scanner
+        to the internal structures of this class.  On termination it sets
+        the flag <member>m_bTemplatesReady</member> to <TRUE/> to indicate
+        that the templates are available.
         @param rTemplateFolders
-            This is a list of template folders that has been created by the
-            template thread.
+            This is a list of template folders.  This method takes ownership
+            of the supplied entries by removing them from the list and
+            transferring them to an internal structure.
     */
     void TemplateScanDone (std::vector<TemplateDir*>& rTemplateFolders);
 
-    /** @descr  Flag that is set to TRUE after the impress templates have been
-            scanned.
+    /** Flag that is set to TRUE after the impress templates have been
+        scanned.
     */
     BOOL m_bTemplatesReady;
+
+    /** Flag used to prevent nested or concurrent calls to the
+        <member>UpdatePreview</memember> method.  A <TRUE/> value indicates
+        that a preview update is currently active.
+    */
+    BOOL m_bPreviewUpdating;
 
     Window* m_pWindow;
 
@@ -273,16 +292,16 @@ public:
     String GetDocFileName();
     String GetLayoutFileName();
 
-    /// @descr  List of URLs of recently used impress files.
-    std::vector<String*>    m_aOpenFilesList;
+    /// List of URLs of recently used impress files.
+    std::vector<String*> m_aOpenFilesList;
 
-    /// @descr  The thread that scans the template files for impress templates
-    TemplateThread * m_aThread;
-    /// @descr  List of folders containing data about impress templates.
-    std::vector<TemplateDir*>   m_aPresentList;
-    /// @descr  Currently selected template folder.
+    /// List of folders containing data about impress templates.
+    std::vector<TemplateDir*> m_aPresentList;
+
+    /// Currently selected template folder.
     TemplateDir* m_pTemplateRegion;
-    /// @descr  Currently selected layout folder.
+
+    /// Currently selected layout folder.
     TemplateDir* m_pLayoutRegion;
 
     // preview
@@ -402,6 +421,7 @@ public:
     FixedText*          m_pPage5PageListFT;
     SdPageListControl*  m_pPage5PageListCT;
     CheckBox*           m_pPage5SummaryCB;
+
 };
 
 
@@ -426,11 +446,11 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
 //  m_aPageListFile('?'),
     m_bUserDataDirty(FALSE),
     m_aAssistentFunc(5),
-    m_aThread (NULL),
     xDocShell (NULL)
 {
     m_aPageListFile += sal_Unicode('?'),
     m_bTemplatesReady = FALSE;
+    m_bPreviewUpdating = FALSE;
 
     m_pWindow = pWindow;
 
@@ -632,10 +652,6 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
 
     SetStartType( ST_EMPTY );
 
-    m_aStartScanTimer.SetTimeout(5);
-    m_aStartScanTimer.SetTimeoutHdl( LINK( this, AssistentDlgImpl, StartScanHdl ));
-    m_aStartScanTimer.Start();
-
     ChangePage();
 }
 
@@ -647,19 +663,6 @@ AssistentDlgImpl::~AssistentDlgImpl()
     CloseDocShell();
 
     DeletePassords();
-
-    // #89432#
-    //  Terminate or join the thread for scanning the template files.
-    if (m_aThread != NULL)
-    {
-        if (m_aThread->isRunning())
-            m_aThread->terminate ();
-        else
-            m_aThread->join ();
-        //  Tell the thread that is now on its own and may delete itself
-        //  at will.
-        m_aThread->detach ();
-    }
 
     //  Delete the template file infos.
     std::vector<TemplateDir*>::iterator I;
@@ -757,16 +760,6 @@ void AssistentDlgImpl::EndDialog( long nResult )
 
 
 
-void TemplateScanDoneCallback (void* pObject,
-    std::vector<TemplateDir*>& rTemplateFolder)
-{
-    reinterpret_cast<AssistentDlgImpl*>(pObject)->TemplateScanDone (
-        rTemplateFolder);
-}
-
-
-
-
 void    AssistentDlgImpl::ScanDocmenu   (void)
 {
     uno::Sequence<uno::Sequence<beans::PropertyValue> > aHistory =
@@ -823,18 +816,28 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
 
 
 
-void    AssistentDlgImpl::ScanTemplates (void)
+void AssistentDlgImpl::ProvideTemplates (void)
 {
-    m_aThread = new TemplateThread (
-        TemplateScanDoneCallback,
-        this);
-    //  This starts the thread.  It exists until it is, depending on wether
-    //  it has finished by then, either joined or terminated in the destructor.
-    m_aThread->create ();
+    if ( ! m_bTemplatesReady)
+    {
+        ScanDocmenu ();
+
+        TemplateScanner aScanner;
+        aScanner.Scan ();
+        TemplateScanDone (aScanner.GetFolderList());
+
+        try
+        {
+            UpdatePreview(TRUE);
+        }
+        catch (uno::RuntimeException& e)
+        {
+            // Ignore all exceptions.
+        }
+    }
 }
 
-
-void    AssistentDlgImpl::TemplateScanDone  (
+void AssistentDlgImpl::TemplateScanDone (
     std::vector<TemplateDir*>& rTemplateFolder)
 {
     //  This method is called from a thread.  Therefore we get the solar mutex.
@@ -1060,7 +1063,7 @@ void AssistentDlgImpl::UpdatePage()
         {
             // Elemente auf der ersten Seite abhaengig vom Starttype Zeigen
             SetStartType( GetStartType() );
-            m_pPage1TemplateRB->Enable(m_bTemplatesReady);
+            m_pPage1TemplateRB->Enable(TRUE /*m_bTemplatesReady*/);
             break;
         }
 
@@ -1110,16 +1113,6 @@ void AssistentDlgImpl::UpdatePage()
 // ********************************************************************
 // UI-Handler
 // ********************************************************************
-
-IMPL_LINK( AssistentDlgImpl, StartScanHdl, void *, EMPTYARG )
-{
-    ScanDocmenu ();
-    ScanTemplates ();
-
-    UpdatePreview(TRUE);
-
-    return 0;
-}
 
 IMPL_LINK( AssistentDlgImpl, SelectRegionHdl, ListBox *, pLB )
 {
@@ -1210,6 +1203,10 @@ IMPL_LINK( AssistentDlgImpl, UpdatePreviewHdl, void *, EMPTYARG )
 IMPL_LINK( AssistentDlgImpl, StartTypeHdl, RadioButton *, pButton )
 {
     StartType eType = pButton == m_pPage1EmptyRB?ST_EMPTY:pButton == m_pPage1TemplateRB?ST_TEMPLATE:ST_OPEN;
+
+    if(eType == ST_TEMPLATE)
+        ProvideTemplates();
+
     SetStartType( eType );
 
     if(eType == ST_TEMPLATE)
@@ -1227,6 +1224,14 @@ IMPL_LINK( AssistentDlgImpl, StartTypeHdl, RadioButton *, pButton )
 
 IMPL_LINK( AssistentDlgImpl, NextPageHdl, PushButton *, EMPTYARG )
 {
+    // When changing from the first to the second page make sure that the
+    // templates are present.
+    if (m_aAssistentFunc.GetCurrentPage() == 1)
+    {
+        ProvideTemplates();
+    }
+
+    // Change to the next page.
     LeavePage();
     m_aAssistentFunc.NextPage();
     ChangePage();
@@ -1402,10 +1407,18 @@ void AssistentDlgImpl::UpdatePageList()
 
 void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
 {
+    // Guard against multiple concurrent execution to this method caused either
+    // by calls from different threads or recursion.
+    ::osl::MutexGuard aGuard (m_aMutex);
+    if (m_bPreviewUpdating)
+        return;
+    m_bPreviewUpdating = TRUE;
+
     if(!m_bPreview && bDocPreview)
     {
         m_aPreview.Invalidate();
         m_aPreview.SetObjectShell(0);
+        m_bPreviewUpdating = FALSE;
         return;
     }
 
@@ -1549,6 +1562,8 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
         m_aPreview.SetObjectShell( 0 );
     else
         m_aPreview.SetObjectShell( xDocShell, m_nShowPage );
+
+    m_bPreviewUpdating = FALSE;
 }
 
 void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const String& rPath )
