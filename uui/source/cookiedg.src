@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cookiedg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:49:05 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ ModalDialog DLG_COOKIES
         Text[ czech ] = "Odeslat";
         Text[ hebrew ] = "‮שליחה‬";
         Text[ hindi ] = "~भेजो";
+        Text[ slovak ] = "Odo~slať";
     };
     RadioButton RB_INFUTURE_IGNORE
     {
@@ -157,6 +158,7 @@ ModalDialog DLG_COOKIES
         Text[ czech ] = "Ignorovat";
         Text[ hebrew ] = "‮התעלמות‬";
         Text[ hindi ] = "I~gnore";
+        Text[ slovak ] = "I~gnorovať";
     };
     RadioButton RB_INFUTURE_INTERACTIVE
     {
@@ -188,6 +190,7 @@ ModalDialog DLG_COOKIES
         Text[ czech ] = "Interaktivní";
         Text[ hebrew ] = "‮גומליני (אינטראקטיבי)‬";
         Text[ hindi ] = "इ~न्टरॉक्टिव्";
+        Text[ slovak ] = "I~nteraktívny";
     };
     //TODO! If this dialog is ever used again (and it should definitely be
     // redesigned then!), get rid of the following group box (see #88883#):
@@ -221,6 +224,7 @@ ModalDialog DLG_COOKIES
         Text[ czech ] = "Zacházení s dalšími cookies";
         Text[ hebrew ] = "‮טיפול עתידי בעוגיות‬";
         Text[ hindi ] = "भविष्य् में कुकी का प्रबन्ध करना";
+        Text[ slovak ] = "Narábanie s ďalšími cookies";
     };
     PushButton BTN_COOKIES_CANCEL
     {
@@ -252,6 +256,7 @@ ModalDialog DLG_COOKIES
         Text[ czech ] = "Ignorovat";
         Text[ hebrew ] = "‮התעלמות‬";
         Text[ hindi ] = "~उपेक्षा";
+        Text[ slovak ] = "~Ignorovať";
     };
     PushButton BTN_COOKIES_OK
     {
@@ -284,6 +289,7 @@ ModalDialog DLG_COOKIES
         Text[ czech ] = "Odeslat";
         Text[ hebrew ] = "‮שליחה‬";
         Text[ hindi ] = "~भेजो";
+        Text[ slovak ] = "Odo~slať";
     };
 };
 
@@ -315,6 +321,7 @@ String STR_COOKIES_RECV_START
     Text[ czech ] = "Server '${HOST}' si přeje nastavit jedno či více cookies.\nCookies obsahují informace vztahující se k určitým třídám URL. Pokud se později %PRODUCTNAME dotáže na dokument s URL, které souhlasí se třídou dříve nastaveného cookie, %PRODUCTNAME odešle tuto informaci na server. Toto umožňuje webovému serveru rozpoznat stav WWW aplikace, např. při online nákupech.\n\nBudou nastaveny tyto cookies:\n\n";
     Text[ hebrew ] = "‮השרת '${HOST}' מבקש לשלוח עוגיה אחת או יותר.\n עוגיות מכילות מידע על מחלקות URL. הן נשלחות על ידי שרתים שונים ל %PRODUCTNAME אשר שומרת אותן בעת גישה למסמכים שונים. אם %PRODUCTNAME טוען מסמך שלפי הURL שלו מתאים למחלקה של עוגיה שנשמרה קודם לכן, אזי %PRODUCTNAME ישלח את תוכן העוגיה אל השרת. תפקוד זה מאפשר לשרת לעקוב אחרי התקדמות המשמתמש ביישום רשת כגון סל קניות מקוון. יש לשלוח את העוגיות הבאות:\n\n‬";
     Text[ hindi ] = "'${HOST}' सर्वर एक अथवा एक से अधिक कुकीस सेट्ट करना चाहता है ।\nकुकीस में जो विषय है वह कुछ URL वर्ग के बारे में है । अगर %PRODUCTNAME बाद में एक लेखपत्र को URL के साथ माँग कियेगा जिसका कुकी पहिले से ही सेट्ट है तो, %PRODUCTNAME इस सूचना को सर्वर के लिए भेजेगा । यह सर्वर को  WWW कार्यक्रम की वस्तुस्थिति को पहचानने में उपयोगी है,उदाहरण केलिए, ऑनलैन खरीदि के समय ।\n\nनिम्नलिखित कुकीस को सेट्ट करना चाहिए:\n\n";
+    Text[ slovak ] = "Server '${HOST}' si praje nastaviť jeden či viac cookies.\nCookies obsahujú informácie, ktoré sa vzťahujú na určité triedy URL. Ak sa neskôr %PRODUCTNAME spýta na dokument s URL, ktoré súhlasí s triedou predtým nastaveného cookie, %PRODUCTNAME odošle túto informáciu na server. Toto umožňuje webovému serveru rozpoznať stav WWW aplikácie, napr. pri online nákupoch.\n\nBudú nastavené tieto cookies:\n\n";
 };
 
 String STR_COOKIES_RECV_COOKIES
@@ -345,6 +352,7 @@ String STR_COOKIES_RECV_COOKIES
     Text[ czech ] = "Doména: ${DOMAIN}, Cesta: ${PATH}, Cookie: ${COOKIE}.\n";
     Text[ hebrew ] = "‮מתחם: ${DOMAIN},  מסלול: ${PATH},  עוגיה: ${COOKIE}.\n‬";
     Text[ hindi ] = "सीमा: ${DOMAIN}, मार्ग: ${PATH}, कुकी: ${COOKIE}.\n";
+    Text[ slovak ] = "Doména: ${DOMAIN}, Cesta: ${PATH}, Cookie: ${COOKIE}.\n";
 };
 
 String STR_COOKIES_RECV_TITLE
@@ -375,6 +383,7 @@ String STR_COOKIES_RECV_TITLE
     Text[ czech ] = "Příjem cookie";
     Text[ hebrew ] = "‮קבלת עוגיות‬";
     Text[ hindi ] = "कुकी का स्वागत";
+    Text[ slovak ] = "Príjem cookie";
 };
 
 String STR_COOKIES_SEND_START
@@ -405,6 +414,7 @@ String STR_COOKIES_SEND_START
     Text[ czech ] = "%PRODUCTNAME uložil cookies pro server '${HOST}', které budou odeslány při požadavku na dokument ${PATH}.\nCookies obsahují informace, které se vztahují k určitým třídám URL. Jsou odesílány do programu %PRODUCTNAME, kde jsou uloženy, pokud je přistupováno k určitým dokumentům. Když %PRODUCTNAME načítá dokument, jehož URL se shoduje s třídou dříve přijatého cookie, odešle se tato informace na tento server. Toto umožňuje udržovat stav WWW aplikace, například při online nakupování.\n\nMají být nastaveny tyto cookies:\n\n";
     Text[ hebrew ] = "‮%PRODUCTNAME שמר עוגיות עבור השרת '${HOST}' אשר תשלחנה בעת בקשת המסמך${PATH}.\n עוגיות מכילות מידע על מחלקות URL. הן נשלחות על ידי שרתים שונים ל %PRODUCTNAME אשר שומרת אותן בעת גישה למסמכים שונים. אם %PRODUCTNAME טוען מסמך שלפי הURL שלו מתאים לקלאס של עוגיה שנשמרה קודם לכן, אזי %PRODUCTNAME ישלח את תוכן העוגיה אל השרת. תפקוד זה מאפשר לשרת לעקוב אחרי התקדמות המשמתמש ביישום רשת כגון סל קניות מקוון. יש לשלוח את העוגיות הבאות:\n\n‬";
     Text[ hindi ] = "'${HOST}' सर्वर के लिए %PRODUCTNAME ने कुकीस को संचित किया है क्योंकि ${PATH} लेखपत्र की माँग किया जाने पर इसको भेजा जाएगा ।\nकुकीस में जो विषय है वह कुछ URL वर्ग के बारे में है । इनको कुछ सर्वरों ने %PRODUCTNAME के लिए भेजा है और वहाँ कुछ लेखपत्र को प्रविष्ट करने पर इनको संचित किया जाएगा । अगर %PRODUCTNAME एक लेखपत्र को लोड़ करता है तो, URL के अनुसार, पहिले से ही प्राप्त कुकीस के वर्ग के लिए, %PRODUCTNAME इस सूचना को सर्वर के लिए भेजेगा । यह सर्वर को  WWW कार्यक्रम की वस्तुस्थिति के बारे में जानकारी रखने के लिए उपयोगी है, उदाहरण केलिए, ऑनलैन खरीदि के समय ।\n\nनिम्नलिखित कुकीस को सेट्ट करना चाहिए:\n\n";
+    Text[ slovak ] = "%PRODUCTNAME uložil cookies pre server '${HOST}', ktoré budú odoslané pri požiadavke o dokument ${PATH}.\n Cookies obsahujú informácie, ktoré sa vzťahujú k určitým triedam URL.  Sú odosielané do programu %PRODUCTNAME, kde sú uložené, pokiaľ sa  pristupuje k určitým dokumentom. Keď %PRODUCTNAME načíta dokument, ktorého URL sa zhoduje s triedou predtým prijatého cookie, odošle sa táto  informácia na tento server. Toto umožňuje udržovať stav WWW aplikácie,  napríklad pri online nakupovaní.\n\n Majú byť nastavené tieto cookies:\n\n";
 };
 
 String STR_COOKIES_SEND_COOKIES
@@ -435,6 +445,7 @@ String STR_COOKIES_SEND_COOKIES
     Text[ czech ] = "Doména: ${DOMAIN}, Cesta: ${PATH}, Cookie: ${COOKIE}.\n";
     Text[ hebrew ] = "‮מתחם: ${DOMAIN},  מסלול: ${PATH},  עוגיה: ${COOKIE}.\n‬";
     Text[ hindi ] = "सीमा: ${DOMAIN}, मार्ग: ${PATH}, कुकी: ${COOKIE}.\n";
+    Text[ slovak ] = "Doména: ${DOMAIN}, Cesta: ${PATH}, Cookie: ${COOKIE}.\n";
 };
 
 String STR_COOKIES_SEND_TITLE
@@ -465,7 +476,10 @@ String STR_COOKIES_SEND_TITLE
     Text[ czech ] = "Odeslat cookies";
     Text[ hebrew ] = "‮שליחת עוגיות‬";
     Text[ hindi ] = "कुकीस भेजो";
+    Text[ slovak ] = "Odoslať cookies";
 };
+
+
 
 
 
