@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 17:19:48 $
+ *  last change: $Author: gh $ $Date: 2000-11-08 17:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,18 @@
 #include <com/sun/star/util/XCollator.hpp>
 #endif
 
+#ifdef DBG_UTIL
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
@@ -123,6 +135,11 @@ Reference< XSingleServiceFactory > ImplLoadLibComponentFactory(
     Reference< XSingleServiceFactory > xRet;
 
     oslModule lib = osl_loadModule( rLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
+#ifdef DBG_UTIL
+    ByteString aMsg( "Cannot load module " );
+    aMsg += ByteString( String( rLibName ), osl_getThreadTextEncoding() );
+    DBG_ASSERT( lib, aMsg.GetBuffer() )
+#endif
     if (lib)
     {
         void * pSym;
