@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2001-03-12 12:30:12 $
+ *  last change: $Author: mib $ $Date: 2001-03-13 15:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,8 +432,8 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet)
         if(GetProperty(C2S(UNO_NAME_ANCHOR_TYPE), pAnchorType))
             bRet &= ((SfxPoolItem&)aAnchor).PutValue(*pAnchorType, MID_ANCHOR_ANCHORTYPE);
     }
-    if(aAnchor.GetAnchorId() == FLY_PAGE && !aAnchor.GetPageNum())
-        aAnchor.SetPageNum(1);
+//  if(aAnchor.GetAnchorId() == FLY_PAGE && !aAnchor.GetPageNum())
+//      aAnchor.SetPageNum(1);
     rSet.Put(aAnchor);
     {
         uno::Any* pCol = 0;
@@ -1948,14 +1948,24 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
         }
 
         const SfxPoolItem* pItem;
-        if(SFX_ITEM_SET == aFrmSet.GetItemState(RES_ANCHOR, sal_False, &pItem) &&
-            FLY_AT_FLY ==((const SwFmtAnchor*)pItem)->GetAnchorId() &&
-            !aPam.GetNode()->FindFlyStartNode())
+        if(SFX_ITEM_SET == aFrmSet.GetItemState(RES_ANCHOR, sal_False, &pItem) )
         {
-            //rahmengebunden geht nur dort, wo ein Rahmen ist!
-            SwFmtAnchor aAnchor(FLY_AT_CNTNT);
-            aFrmSet.Put(aAnchor);
+            if( FLY_AT_FLY ==((const SwFmtAnchor*)pItem)->GetAnchorId() &&
+                !aPam.GetNode()->FindFlyStartNode())
+            {
+                //rahmengebunden geht nur dort, wo ein Rahmen ist!
+                SwFmtAnchor aAnchor(FLY_AT_CNTNT);
+                aFrmSet.Put(aAnchor);
+            }
+            else if( FLY_PAGE ==((const SwFmtAnchor*)pItem)->GetAnchorId() &&
+                     0 == ((const SwFmtAnchor*)pItem)->GetPageNum() )
+            {
+                SwFmtAnchor aAnchor( *((const SwFmtAnchor*)pItem) );
+                aAnchor.SetAnchor( aPam.GetPoint() );
+                aFrmSet.Put(aAnchor);
+            }
         }
+
         uno::Any* pStyle;
         SwFrmFmt *pParentFrmFmt = 0;
         if(pProps->GetProperty(C2S(UNO_NAME_FRAME_STYLE_NAME), pStyle))
