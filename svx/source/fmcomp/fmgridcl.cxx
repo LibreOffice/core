@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-20 09:27:55 $
+ *  last change: $Author: fs $ $Date: 2000-12-20 14:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::container;
 using namespace ::cppu;
 using namespace ::svxform;
 
@@ -1028,10 +1029,20 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             else
             {
                 // Standardlabel setzen
-                String aLabel(SVX_RES(RID_STR_COLUMN));
-                aLabel += String::CreateFromInt32(static_cast<FmGridControl*>(GetParent())->GetModelColCount() + 1);
-                xCol->setPropertyValue(FM_PROP_LABEL, XUB2ANY(aLabel));
-                xCol->setPropertyValue(FM_PROP_NAME, XUB2ANY(aLabel));
+                ::rtl::OUString sLabelBase(SVX_RES(RID_STR_COLUMN));
+                // disambiguate the name
+                Reference< XNameAccess > xColNames(xCols, UNO_QUERY);
+                ::rtl::OUString sLabel;
+                for (sal_Int32 i=1; i<65535; ++i)
+                {
+                    sLabel = sLabelBase;
+                    sLabel += ::rtl::OUString::valueOf((sal_Int32)i);
+                    if (!xColNames->hasByName(sLabel))
+                        break;
+                }
+                // no fallback in case the name is not unique (which is rather improbable) ....
+                xCol->setPropertyValue(FM_PROP_LABEL, makeAny(sLabel));
+                xCol->setPropertyValue(FM_PROP_NAME, makeAny(sLabel));
                 xCols->insertByIndex(nPos, aNew);
             }
 
