@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hdu $ $Date: 2001-12-06 18:01:33 $
+ *  last change: $Author: hdu $ $Date: 2002-04-23 07:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,15 @@
 #ifndef _SV_FONT_HXX
 #include <font.hxx>
 #endif
+
+#ifdef ENABLE_CTL
+#ifndef _SV_SALLAYOUT_HXX
+#include <sallayout.hxx>
+#endif // _SV_SALLAYOUT_HXX
+#ifndef _SV_POLY_HXX
+#include <poly.hxx>
+#endif // _SV_POLY_HXX
+#endif // ENABLE_CTL
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -703,6 +712,7 @@ static HFONT ImplSelectFontW( HDC hDC, LOGFONTW& rLogFont, HFONT* pNewFont )
         HFONT hNewFont2 = CreateFontIndirectW( &rLogFont );
         SelectFont( hDC, hNewFont2 );
         DeleteFont( hNewFont );
+        hNewFont = hNewFont2;
     }
 
     *pNewFont = hNewFont;
@@ -725,6 +735,7 @@ static HFONT ImplSelectFontA( HDC hDC, LOGFONTA& rLogFont, HFONT* pNewFont )
         HFONT hNewFont2 = CreateFontIndirectA( &rLogFont );
         SelectFont( hDC, hNewFont2 );
         DeleteFont( hNewFont );
+        hNewFont = hNewFont2;
     }
 
     *pNewFont = hNewFont;
@@ -842,6 +853,7 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
 
 // -----------------------------------------------------------------------
 
+//TODO: replace for ENABLE_CTL, because only needed to get font width factor
 long SalGraphics::GetCharWidth( sal_Unicode nChar1, sal_Unicode nChar2, long* pWidthAry )
 {
     SIZE        aExtent;
@@ -1441,6 +1453,7 @@ void SalGraphics::GetDevFontList( ImplDevFontList* pList )
 
 // -----------------------------------------------------------------------
 
+#ifndef ENABLE_CTL
 void SalGraphics::DrawText( long nX, long nY,
                             const xub_Unicode* pStr, xub_StrLen nLen )
 {
@@ -1449,9 +1462,11 @@ void SalGraphics::DrawText( long nX, long nY,
     ::ExtTextOutW( maGraphicsData.mhDC, (int)nX, (int)nY,
                    0, NULL, pStr, nLen, NULL );
 }
+#endif // ENABLE_CTL
 
 // -----------------------------------------------------------------------
 
+#ifndef ENABLE_CTL
 void SalGraphics::DrawTextArray( long nX, long nY,
                                  const xub_Unicode* pStr, xub_StrLen nLen,
                                  const long* pDXAry )
@@ -1477,7 +1492,7 @@ void SalGraphics::DrawTextArray( long nX, long nY,
         // Breite vom letzten Zeichen ermitteln, da wir dieses auch
         // beim Windows-XArray in der richtigen Breite reingeben
         // muessen, um nicht auf Probleme bei einigen
-        // Grafikkarten oder Druckertreibern zu stossen
+        // Grafikkarten oder Druckertreibern zu stossen ###
         SIZE aExtent;
         if ( GetTextExtentPointW( maGraphicsData.mhDC, pStr+nLen-1, 1, &aExtent ) )
             pWinDXAry[nLen-1] = aExtent.cx;
@@ -1491,6 +1506,7 @@ void SalGraphics::DrawTextArray( long nX, long nY,
             delete pWinDXAry;
     }
 }
+#endif // ENABLE_CTL
 
 // -----------------------------------------------------------------------
 
@@ -1615,8 +1631,7 @@ static BOOL ImplGetGlyphChar( SalGraphicsData* pData, sal_Unicode c,
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::GetGlyphBoundRect( xub_Unicode cChar, long* pX, long* pY,
-                                     long* pWidth, long* pHeight )
+BOOL SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
 {
     HDC             hDC = maGraphicsData.mhDC;
     BYTE            nPitchAndFamily;
@@ -1626,232 +1641,207 @@ BOOL SalGraphics::GetGlyphBoundRect( xub_Unicode cChar, long* pX, long* pY,
     if ( !(nPitchAndFamily & TMPF_TRUETYPE) )
         return FALSE;
 
-    GLYPHMETRICS    aGlyphMetrics;
+    // use unity matrix
     MAT2            aMat;
-    DWORD           nSize;
-    BOOL            bOK;
-    HFONT           hOldFont = 0;
+    aMat.eM11 = FixedFromDouble( 1.0 );
+    aMat.eM12 = FixedFromDouble( 0.0 );
+    aMat.eM21 = FixedFromDouble( 0.0 );
+    aMat.eM22 = FixedFromDouble( 1.0 );
 
-    // Einheitsmatrix erzeugen
-    aMat.eM11 = FixedFromDouble(1.);
-    aMat.eM12 = FixedFromDouble(0.);
-    aMat.eM21 = FixedFromDouble(0.);
-    aMat.eM22 = FixedFromDouble(1.);
+    GLYPHMETRICS aGM;
+    DWORD nSize;
     if ( aSalShlData.mbWNT )
-        nSize = ::GetGlyphOutlineW( hDC, cChar, GGO_METRICS, &aGlyphMetrics, 0, NULL, &aMat );
+        nSize = ::GetGlyphOutlineW( hDC, nGlyphIndex, GGO_METRICS | GGO_GLYPH_INDEX,
+            &aGM, 0, NULL, &aMat );
     else
-    {
-        WORD nChar;
-        if ( ImplGetGlyphChar( &maGraphicsData, cChar, nChar, hOldFont ) )
-            nSize = ::GetGlyphOutlineA( hDC, nChar, GGO_METRICS, &aGlyphMetrics, 0, NULL, &aMat );
-        else
-            nSize = 0;
-    }
-    bOK = (nSize != GDI_ERROR) && nSize;
-    if ( bOK )
-    {
-        *pX = aGlyphMetrics.gmptGlyphOrigin.x;
-        *pY = nAscent - aGlyphMetrics.gmptGlyphOrigin.y;
-        *pWidth = aGlyphMetrics.gmBlackBoxX;
-        *pHeight = aGlyphMetrics.gmBlackBoxY;
-    }
+        nSize = ::GetGlyphOutlineA( hDC, nGlyphIndex, GGO_METRICS | GGO_GLYPH_INDEX,
+            &aGM, 0, NULL, &aMat );
 
-    if ( hOldFont )
-    {
-        HFONT hNewFont = SelectFont( maGraphicsData.mhDC, hOldFont );
-        DeleteFont( hNewFont );
-    }
+    BOOL bOK = (nSize != GDI_ERROR) && nSize;
+    if( bOK )
+        rRect = Rectangle( Point( aGM.gmptGlyphOrigin.x, nAscent-aGM.gmptGlyphOrigin.y ),
+            Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
 
     return bOK;
 }
 
 // -----------------------------------------------------------------------
 
-ULONG SalGraphics::GetGlyphOutline( xub_Unicode cChar, USHORT** ppPolySizes,
-                                    SalPoint** ppPoints, BYTE** ppFlags )
+BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, PolyPolygon& rPolyPoly )
 {
-    HDC             hDC = maGraphicsData.mhDC;
-    BYTE            nPitchAndFamily;
-    long            nAscent;
+    BOOL bRet = FALSE;
 
+    HDC     hDC = maGraphicsData.mhDC;
+    BYTE    nPitchAndFamily;
+    long    nAscent;
     ImplGetFamilyAndAscents( hDC, nPitchAndFamily, nAscent );
-    if ( !(nPitchAndFamily & TMPF_TRUETYPE) )
-        return 0;
+    if( !(nPitchAndFamily & TMPF_TRUETYPE) )
+        return FALSE;
 
-    GLYPHMETRICS    aGlyphMetrics;
-    MAT2            aMat;
-    DWORD           nSize;
-    USHORT          nChar = cChar;
-    HFONT           hOldFont = 0;
-    ULONG           nPolyCount = 0;
+    // use unity matrix
+    MAT2 aMat;
+    aMat.eM11 = FixedFromDouble( 1.0 );
+    aMat.eM12 = FixedFromDouble( 0.0 );
+    aMat.eM21 = FixedFromDouble( 0.0 );
+    aMat.eM22 = FixedFromDouble( 1.0 );
 
-    // Einheitsmatrix erzeugen
-    aMat.eM11 = FixedFromDouble(1.);
-    aMat.eM12 = FixedFromDouble(0.);
-    aMat.eM21 = FixedFromDouble(0.);
-    aMat.eM22 = FixedFromDouble(1.);
-
+    GLYPHMETRICS aGlyphMetrics;
+    DWORD nSize1;
     if ( aSalShlData.mbWNT )
-        nSize = ::GetGlyphOutlineW( hDC, nChar, GGO_NATIVE, &aGlyphMetrics, 0, NULL, &aMat );
+        nSize1 = ::GetGlyphOutlineW( hDC, nGlyphIndex, GGO_NATIVE | GGO_GLYPH_INDEX,
+            &aGlyphMetrics, 0, NULL, &aMat );
     else
-    {
-        if ( ImplGetGlyphChar( &maGraphicsData, cChar, nChar, hOldFont ) )
-            nSize = ::GetGlyphOutlineA( hDC, nChar, GGO_NATIVE, &aGlyphMetrics, 0, NULL, &aMat );
-        else
-            nSize = 0;
-    }
+        nSize1 = ::GetGlyphOutlineA( hDC, nGlyphIndex, GGO_NATIVE | GGO_GLYPH_INDEX,
+            &aGlyphMetrics, 0, NULL, &aMat );
 
-    if ( (nSize != GDI_ERROR) && nSize )
+    if ( (nSize1 != GDI_ERROR) && nSize1 )
     {
-        BYTE*   pData = new BYTE[ nSize ];
+        BYTE*   pData = new BYTE[ nSize1 ];
         ULONG   nTotalCount = 0;
         DWORD   nSize2;
         if ( aSalShlData.mbWNT )
-            nSize2 = ::GetGlyphOutlineW( hDC, nChar, GGO_NATIVE, &aGlyphMetrics, nSize, pData, &aMat );
+            nSize2 = ::GetGlyphOutlineW( hDC, nGlyphIndex, GGO_NATIVE | GGO_GLYPH_INDEX,
+                &aGlyphMetrics, nSize1, pData, &aMat );
         else
-            nSize2 = ::GetGlyphOutlineA( hDC, nChar, GGO_NATIVE, &aGlyphMetrics, nSize, pData, &aMat );
-        if ( nSize == nSize2 )
+            nSize2 = ::GetGlyphOutlineA( hDC, nGlyphIndex, GGO_NATIVE | GGO_GLYPH_INDEX,
+                &aGlyphMetrics, nSize1, pData, &aMat );
+
+        if( nSize1 == nSize2 )
         {
-            ULONG               nPtSize = GLYPH_INC;
-            SalPoint*           pPoints = new SalPoint[ GLYPH_INC ];
-            SalPoint*           pTotalPoints = NULL;
-            BYTE*               pFlags = new BYTE[ GLYPH_INC ];
-            BYTE*               pTotalFlags = NULL;
-            TTPOLYGONHEADER*    pHeader = (TTPOLYGONHEADER*)pData;
-            TTPOLYCURVE*        pCurve;
-            *ppPolySizes = new USHORT[ MAX_POLYCOUNT ];
-            memset( *ppPolySizes, 0, MAX_POLYCOUNT * sizeof( USHORT ) );
+            bRet = TRUE;
 
-            while ( ((BYTE*)pHeader < pData+nSize) && (nPolyCount < (MAX_POLYCOUNT - 1)) )
+            ULONG   nPtSize = GLYPH_INC;
+            Point*  pPoints = new Point[ nPtSize ];
+            BYTE*   pFlags = new BYTE[ nPtSize ];
+
+            TTPOLYGONHEADER* pHeader = (TTPOLYGONHEADER*)pData;
+            while( (BYTE*)pHeader < pData+nSize2 )
             {
-                if ( pHeader->dwType == TT_POLYGON_TYPE )
+                // only outline data is interesting
+                if( pHeader->dwType != TT_POLYGON_TYPE )
+                    continue;
+
+                // get start point; next start points are end points
+                // of previous segment
+                int nPnt = 0;
+
+                long nX = IntFromFixed( pHeader->pfxStart.x );
+                long nY = IntFromFixed( pHeader->pfxStart.y );
+                pPoints[ nPnt ] = Point( nX, nY );
+                pFlags[ nPnt++ ] = POLY_NORMAL;
+
+                bool bHasOfflinePoints = false;
+                TTPOLYCURVE* pCurve = (TTPOLYCURVE*)( pHeader + 1 );
+                pHeader = (TTPOLYGONHEADER*)( (BYTE*)pHeader + pHeader->cb );
+                while( (BYTE*)pCurve < (BYTE*)pHeader )
                 {
-                    USHORT  nPnt = 0;
-                    USHORT  i;
-
-                    memset( pPoints, 0, nPtSize * sizeof( SalPoint ) );
-                    memset( pFlags, 0, nPtSize );
-
-                    // ersten Startpunkt holen; die folgenden Startpunkte sind
-                    // die Endpunkte der vorhergehenden Kurven
-                    pPoints[ nPnt ].mnX = IntFromFixed( pHeader->pfxStart.x );
-                    pPoints[ nPnt++ ].mnY = IntFromFixed( pHeader->pfxStart.y );
-
-                    pCurve = (TTPOLYCURVE*) ( pHeader + 1 );
-
-                    while ( (BYTE*)pCurve < (BYTE*)pHeader+pHeader->cb )
+                    int nNeededSize = nPnt + 16 + 3 * pCurve->cpfx;
+                    if( nPtSize < nNeededSize )
                     {
-                        if ( TT_PRIM_LINE == pCurve->wType )
+                        Point* pOldPoints = pPoints;
+                        BYTE* pOldFlags = pFlags;
+                        nPtSize = nNeededSize;
+                        pPoints = new Point[ nPtSize ];
+                        pFlags = new BYTE[ nPtSize ];
+                        for( int i = 0; i < nPnt; ++i )
                         {
-                            for( i = 0; i < pCurve->cpfx; i++ )
-                            {
-                                CHECKPOINTS( nPnt );
-                                pPoints[ nPnt ].mnX = IntFromFixed( pCurve->apfx[ i ].x );
-                                pPoints[ nPnt++ ].mnY = IntFromFixed( pCurve->apfx[ i ].y );
-                            }
+                            pPoints[ i ] = pOldPoints[ i ];
+                            pFlags[ i ] = pOldFlags[ i ];
                         }
-                        else if ( pCurve->wType == TT_PRIM_QSPLINE )
-                        {
-                            for ( i = 0; i < pCurve->cpfx; )
-                            {
-                                // Punkt B, der Kontrollpunkt der Kurve
-                                CHECKPOINTS( nPnt );
-                                pPoints[ nPnt ].mnX = IntFromFixed( pCurve->apfx[ i ].x );
-                                pPoints[ nPnt ].mnY = IntFromFixed( pCurve->apfx[ i++ ].y );
-
-                                // Punkt verdoppeln fuer Bezier-Wandlung
-                                CHECKPOINTS( nPnt + 1UL );
-                                pPoints[ nPnt + 1 ] = pPoints[ nPnt ];
-                                nPnt += 2;
-
-                                // Endpunkt der Kurve bestimmen
-                                if ( i == (pCurve->cpfx - 1) )
-                                {
-                                    // entweder letzter Punkt
-                                    CHECKPOINTS( nPnt );
-                                    pPoints[ nPnt ].mnX = IntFromFixed( pCurve->apfx[ i ].x );
-                                    pPoints[ nPnt++].mnY = IntFromFixed( pCurve->apfx[ i++ ].y );
-                                }
-                                else
-                                {
-                                    // oder die Mitte zwischen den Kontrollpunkten
-                                    // dieser und der naechsten Kurce
-                                    CHECKPOINTS( nPnt );
-                                    pPoints[ nPnt ].mnX = IntFromFixed( fxDiv2( pCurve->apfx[ i - 1 ].x,
-                                                                                pCurve->apfx[ i ].x ) );
-                                    pPoints[ nPnt++ ].mnY = IntFromFixed( fxDiv2( pCurve->apfx[ i - 1 ].y,
-                                                                                  pCurve->apfx[ i ].y ) );
-                                }
-
-                                // Umrechnung in Bezier ( PQ = TrueType-Controlpunkt):
-                                // P1 = 1/3 * (P0 + 2 * PQ) / P2 = 1/3 * (P3 + 2 * PQ)
-                                pPoints[ nPnt - 3 ].mnX = ( pPoints[ nPnt - 4 ].mnX +
-                                                          ( pPoints[ nPnt - 3 ].mnX << 1 ) ) / 3;
-                                pPoints[ nPnt - 3 ].mnY = ( pPoints[ nPnt - 4 ].mnY +
-                                                          ( pPoints[ nPnt - 3 ].mnY << 1 ) ) / 3;
-
-                                pPoints[ nPnt - 2 ].mnX = ( pPoints[ nPnt - 1 ].mnX +
-                                                          ( pPoints[ nPnt - 2 ].mnX << 1 ) ) / 3;
-                                pPoints[ nPnt - 2 ].mnY = ( pPoints[ nPnt - 1 ].mnY +
-                                                          ( pPoints[ nPnt - 2 ].mnY << 1 ) ) / 3;
-
-                                pFlags[ nPnt - 3 ] = pFlags[ nPnt - 2 ] = 2;
-                            }
-                        }
-
-                        // weiter mit naechstem Kurvensegment
-                        pCurve = (TTPOLYCURVE*) &pCurve->apfx[ i ];
+                        delete[] pOldPoints;
+                        delete[] pOldFlags;
                     }
 
-                    CHECKPOINTS( nPnt );
-                    pPoints[nPnt++] = pPoints[0];
-
-                    if ( nPnt )
+                    int i = 0;
+                    if( TT_PRIM_LINE == pCurve->wType )
                     {
-                        (*ppPolySizes)[ nPolyCount++ ] = nPnt;
-                        ImplIncreaseArrays( nTotalCount, &pTotalPoints, &pTotalFlags, nPnt );
-
-                        // Polygon senkrecht kippen: TrueType-Y-Koordinaten verlaufen von unten nach oben
-                        for ( i = 0; i < nPnt; i++ )
+                        while( i < pCurve->cpfx )
                         {
-                            pTotalPoints[ nTotalCount ].mnX = pPoints[i].mnX;
-                            pTotalPoints[ nTotalCount ].mnY = nAscent - pPoints[i].mnY;
-                            pTotalFlags[ nTotalCount++ ] = pFlags[i];
+                            nX = IntFromFixed( pCurve->apfx[ i ].x );
+                            nY = IntFromFixed( pCurve->apfx[ i ].y );
+                            ++i;
+                            pPoints[ nPnt ] = Point( nX, nY );
+                            pFlags[ nPnt ] = POLY_NORMAL;
+                            ++nPnt;
+                        }
+                    }
+                    else if( TT_PRIM_QSPLINE == pCurve->wType )
+                    {
+                        bHasOfflinePoints = true;
+                        while( i < pCurve->cpfx )
+                        {
+                            // get control point of quadratic bezier spline
+                            nX = IntFromFixed( pCurve->apfx[ i ].x );
+                            nY = IntFromFixed( pCurve->apfx[ i ].y );
+                            ++i;
+                            Point aControlP( nX, nY );
+
+                            // calculate first cubic control point
+                            // P0 = 1/3 * (PBeg + 2 * PQControl)
+                            nX = pPoints[ nPnt-1 ].X() + 2 * aControlP.X();
+                            nY = pPoints[ nPnt-1 ].Y() + 2 * aControlP.Y();
+                            pPoints[ nPnt+0 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
+                            pFlags[ nPnt+0 ] = POLY_CONTROL;
+
+                            // calculate endpoint of segment
+                            nX = IntFromFixed( pCurve->apfx[ i ].x );
+                            nY = IntFromFixed( pCurve->apfx[ i ].y );
+
+                            if ( i+1 >= pCurve->cpfx )
+                            {
+                                // endpoint is either last point in segment => advance
+                                ++i;
+                            }
+                            else
+                            {
+                                // or is in the mid of two control points
+                                nX += IntFromFixed( pCurve->apfx[ i-1 ].x );
+                                nY += IntFromFixed( pCurve->apfx[ i-1 ].y );
+                                nX = (nX + 1) / 2;
+                                nY = (nY + 1) / 2;
+                                // no need to advance, because the current point
+                                // is the control point in next bezier spline
+                            }
+
+                            pPoints[ nPnt+2 ] = Point( nX, nY );
+                            pFlags[ nPnt+2 ] = POLY_NORMAL;
+
+                            // calculate second cubic control point
+                            // P1 = 1/3 * (PEnd + 2 * PQControl)
+                            nX = pPoints[ nPnt+2 ].X() + 2 * aControlP.X();
+                            nY = pPoints[ nPnt+2 ].Y() + 2 * aControlP.Y();
+                            pPoints[ nPnt+1 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
+                            pFlags[ nPnt+1 ] = POLY_CONTROL;
+
+                            nPnt += 3;
                         }
                     }
 
-                    // naechstes Polygon
-                    pHeader = (TTPOLYGONHEADER*) ( (BYTE*) pHeader + pHeader->cb );
+                    // next curve segment
+                    pCurve = (TTPOLYCURVE*)&pCurve->apfx[ i ];
                 }
+
+                // end point is start point for closed contour
+// disabled, because Polygon class closes the contour itself
+//                pPoints[nPnt++] = pPoints[0];
+
+                // convert y-coordinates W32 -> VCL
+                for( int i = 0; i < nPnt; ++i )
+                    pPoints[i].Y() = nAscent - pPoints[i].Y();
+
+                // insert into polypolygon
+                Polygon aPoly( nPnt, pPoints, (bHasOfflinePoints ? pFlags : NULL) );
+                rPolyPoly.Insert( aPoly );
             }
 
             delete[] pPoints;
             delete[] pFlags;
-
-            if ( !nPolyCount )
-            {
-                delete[] pTotalPoints;
-                *ppPoints = NULL;
-                delete[] pTotalFlags;
-                *ppFlags = NULL;
-                delete[] *ppPolySizes;
-                *ppPolySizes = NULL;
-            }
-            else
-            {
-                *ppPoints = pTotalPoints;
-                *ppFlags = pTotalFlags;
-            }
         }
 
         delete [] pData;
     }
 
-    if ( hOldFont )
-    {
-        HFONT hNewFont = SelectFont( maGraphicsData.mhDC, hOldFont );
-        DeleteFont( hNewFont );
-    }
-
-    return nPolyCount;
+    return bRet;
 }
+
+// -----------------------------------------------------------------------
