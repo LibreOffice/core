@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:15:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,15 +60,13 @@
  ************************************************************************/
 
 #include <svtools/solar.hrc>
-#include <sfx2/sfxsids.hrc>
+#include <svx/svxids.hrc>
 #ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
 #endif
 #ifndef _GLOBALACC_SRC
 #include <svx/globlac.hrc>
 #endif
-#include <offmgr/ofaids.hrc>
-#include <offmgr/sbasltid.hrc>
 #include <extensio.hrc>
 
 #include "bib.hrc"
