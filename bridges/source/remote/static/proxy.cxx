@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxy.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:42:31 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #endif
 #include <assert.h>
 #include <sal/alloca.h>
-
 #include <bridges/remote/proxy.hxx>
 #include <bridges/remote/context.h>
 
@@ -327,14 +326,14 @@ Remote2UnoProxy::Remote2UnoProxy( remote_Interface *pRemoteI,
                                   typelib_InterfaceTypeDescription *pType,
                                   uno_Environment *pEnvUno,
                                   uno_Environment *pEnvRemote ) :
+    m_sOid( pOid ),
     m_pType( pType ),
     m_pRemoteI( pRemoteI ),
     m_pEnvUno( pEnvUno ),
     m_pEnvRemote( pEnvRemote ),
-    m_sOid( pOid ),
-    m_nRef( 1 ),
     m_mapRemote2Uno( pEnvRemote, pEnvUno ),
-    m_mapUno2Remote( pEnvUno , pEnvRemote )
+    m_mapUno2Remote( pEnvUno , pEnvRemote ),
+    m_nRef( 1 )
 {
     typelib_typedescription_acquire( (typelib_TypeDescription * ) m_pType );
     m_pEnvUno->acquire( m_pEnvUno );
