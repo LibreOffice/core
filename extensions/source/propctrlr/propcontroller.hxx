@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 11:32:48 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 14:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XINTROSPECTIONACCESS_HPP_
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
 #endif
@@ -123,7 +125,12 @@
 #ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
 #include <comphelper/propertycontainer.hxx>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
 #endif
@@ -181,6 +188,9 @@ namespace pcr
                             m_xFrame;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
                             m_xView;
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+                            m_xRowsetConnection;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                             m_xIntrospecteeAsProperty;
@@ -340,7 +350,11 @@ namespace pcr
         void SetListSource(sal_Bool _bInit = sal_False);
         void SetStringSeq(const ::com::sun::star::beans::Property& rProperty, OLineDescriptor& _rUIData);
 
-        void recalcConnection();
+
+        void        connectRowset();
+        void        cleanupRowsetConnection();
+        sal_Bool    haveRowsetConnection( ) const { return m_xRowsetConnection.is(); }
+
 
         sal_uInt32 GetPropertyPos(const ::rtl::OUString& _rPropName);
         ::rtl::OUString GetPropertyValue(const ::rtl::OUString& _rPropName);
@@ -391,6 +405,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/06/11 11:32:48  fs
+ *  #86096# changed the property ids
+ *
  *  Revision 1.9  2001/06/06 08:14:28  fs
  *  #86096# +implGetInt32FontProperty / +implInvalidateItem
  *

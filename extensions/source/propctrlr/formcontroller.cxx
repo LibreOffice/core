@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-23 13:33:33 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 14:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -987,20 +987,47 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::recalcConnection()
+    void OPropertyBrowserController::cleanupRowsetConnection()
     {
+        Reference< XComponent > xConnComp( m_xRowsetConnection, UNO_QUERY );
+        if ( xConnComp.is() )
+            xConnComp->dispose();
+        m_xRowsetConnection.clear();
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::connectRowset()
+    {
+        // if we have a previous connection, dispose it
+        if ( haveRowsetConnection() )
+            cleanupRowsetConnection();
+
         SQLExceptionInfo aErrorInfo;
         try
         {
+            // the rowset
             Reference< XRowSet > xRowSet(m_xPropValueAccess, UNO_QUERY);
             if (xRowSet.is())
-            if (m_pView)
             {
-                WaitObject aWaitCursor(m_pView);
-                ::dbtools::calcConnection(xRowSet,m_xORB);
+                // does the rowset already have a connection?
+                Reference< XConnection > xConnection = ::dbtools::getConnection( xRowSet );
+
+                if ( !xConnection.is() )
+                {   // no -> calculate one
+                    if (m_pView)
+                    {
+                        WaitObject aWaitCursor(m_pView);
+                        xConnection = ::dbtools::connectRowset( xRowSet, m_xORB, sal_False );
+                    }
+                    else
+                    {
+                        xConnection = ::dbtools::connectRowset( xRowSet, m_xORB, sal_False );
+                    }
+                    // remember for later disposal
+                    // (we opened the connection, thus we own it)
+                    m_xRowsetConnection = xConnection;
+                }
             }
-            else
-                ::dbtools::calcConnection(xRowSet,m_xORB);
         }
         catch (SQLContext& e) { aErrorInfo = e; }
         catch (SQLWarning& e) { aErrorInfo = e; }
@@ -1049,7 +1076,7 @@ namespace pcr
                 aProperty.sValue = String();
 
             if (bInit)
-                recalcConnection();
+                connectRowset();
 
             ////////////////////////////////////////////////////////////
             // Enums setzen
@@ -2488,7 +2515,7 @@ namespace pcr
 
                 // try to open a connection for the new data source. Needed for filling the table list etc., but the methods doing this
                 // don't display errors, and we want to have an error message.
-                recalcConnection();
+                connectRowset();
 
                 SetCursorSource(sal_False);
                 SetListSource();
@@ -2519,6 +2546,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.37  2001/07/23 13:33:33  fs
+ *  #900071# correctly call XFilePickerControlAccess::setValue
+ *
  *  Revision 1.36  2001/06/15 10:26:46  fs
  *  #86986# moved css/ui/* to css/ui/dialogs/*
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 11:33:04 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 14:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,6 +696,9 @@ namespace pcr
         m_nClassId = 0;
 
         m_bHasListSource = m_bHasCursorSource =  sal_False;
+
+        // and some heavily form specific stuff, again
+        cleanupRowsetConnection();
     }
 
     //------------------------------------------------------------------------
@@ -1047,6 +1050,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/06/11 11:33:04  fs
+ *  #86096# changed the implementation name for consistency
+ *
  *  Revision 1.13  2001/05/30 13:41:46  fs
  *  #86838# be a focus listener on the container window, forward the focus to the property box
  *
