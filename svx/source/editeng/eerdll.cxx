@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-25 16:08:00 $
+ *  last change: $Author: mt $ $Date: 2002-07-18 12:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@
 #include <langitem.hxx>
 #include <charscaleitem.hxx>
 #include <charreliefitem.hxx>
+#include <writingmodeitem.hxx>
 #include <xmlcnitm.hxx>
 
 #include <forbiddencharacterstable.hxx>
@@ -136,71 +137,70 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         // Absatzattribute:
         SvxNumRule aTmpNumRule( 0, 0, FALSE );
 
+        ppDefItems[0]  = new SvxWritingModeItem( com::sun::star::text::WritingMode_LR_TB, EE_PARA_WRITINGDIR );
 #ifndef SVX_LIGHT
-        ppDefItems[0]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );
+        ppDefItems[1]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );
 #else
-        // no need to have alien attributes persistent
-        ppDefItems[0]  = new SfxVoidItem( EE_PARA_XMLATTRIBS );
+        ppDefItems[1]  = new SfxVoidItem( EE_PARA_XMLATTRIBS );
 #endif // #ifndef SVX_LIGHT
-
-        ppDefItems[1]  = new SfxBoolItem( EE_PARA_HANGINGPUNCTUATION, FALSE );
-        ppDefItems[2]  = new SfxBoolItem( EE_PARA_FORBIDDENRULES, TRUE );
-        ppDefItems[3]  = new SvxScriptSpaceItem( TRUE, EE_PARA_ASIANCJKSPACING );
-        ppDefItems[4]  = new SvxNumBulletItem( aTmpNumRule, EE_PARA_NUMBULLET );
-        ppDefItems[5]  = new SfxBoolItem( EE_PARA_HYPHENATE, FALSE );
-        ppDefItems[6]  = new SfxUInt16Item( EE_PARA_BULLETSTATE, 0 );
-        ppDefItems[7]  = new SvxLRSpaceItem( EE_PARA_OUTLLRSPACE );
-        ppDefItems[8]  = new SfxUInt16Item( EE_PARA_OUTLLEVEL );
-        ppDefItems[9]  = new SvxBulletItem( EE_PARA_BULLET );
-        ppDefItems[10]  = new SvxLRSpaceItem( EE_PARA_LRSPACE );
-        ppDefItems[11]  = new SvxULSpaceItem( EE_PARA_ULSPACE );
-        ppDefItems[12]  = new SvxLineSpacingItem( 0, EE_PARA_SBL );
-        ppDefItems[13]  = new SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST );
-        ppDefItems[14]  = new SvxTabStopItem( 0, 0, SVX_TAB_ADJUST_LEFT, EE_PARA_TABS );
+        ppDefItems[2]  = new SfxBoolItem( EE_PARA_HANGINGPUNCTUATION, FALSE );
+        ppDefItems[3]  = new SfxBoolItem( EE_PARA_FORBIDDENRULES, TRUE );
+        ppDefItems[4]  = new SvxScriptSpaceItem( TRUE, EE_PARA_ASIANCJKSPACING );
+        ppDefItems[5]  = new SvxNumBulletItem( aTmpNumRule, EE_PARA_NUMBULLET );
+        ppDefItems[6]  = new SfxBoolItem( EE_PARA_HYPHENATE, FALSE );
+        ppDefItems[7]  = new SfxUInt16Item( EE_PARA_BULLETSTATE, 0 );
+        ppDefItems[8]  = new SvxLRSpaceItem( EE_PARA_OUTLLRSPACE );
+        ppDefItems[9]  = new SfxUInt16Item( EE_PARA_OUTLLEVEL );
+        ppDefItems[10]  = new SvxBulletItem( EE_PARA_BULLET );
+        ppDefItems[11]  = new SvxLRSpaceItem( EE_PARA_LRSPACE );
+        ppDefItems[12]  = new SvxULSpaceItem( EE_PARA_ULSPACE );
+        ppDefItems[13]  = new SvxLineSpacingItem( 0, EE_PARA_SBL );
+        ppDefItems[14]  = new SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST );
+        ppDefItems[15]  = new SvxTabStopItem( 0, 0, SVX_TAB_ADJUST_LEFT, EE_PARA_TABS );
 
         // Zeichenattribute:
-        ppDefItems[15]  = new SvxColorItem( Color( COL_AUTO ), EE_CHAR_COLOR );
-        ppDefItems[16]  = new SvxFontItem( EE_CHAR_FONTINFO );
-        ppDefItems[17] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT );
-        ppDefItems[18] = new SvxCharScaleWidthItem( 100, EE_CHAR_FONTWIDTH );
-        ppDefItems[19] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT );
-        ppDefItems[20] = new SvxUnderlineItem( UNDERLINE_NONE, EE_CHAR_UNDERLINE );
-        ppDefItems[21] = new SvxCrossedOutItem( STRIKEOUT_NONE, EE_CHAR_STRIKEOUT );
-        ppDefItems[22] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC );
-        ppDefItems[23] = new SvxContourItem( FALSE, EE_CHAR_OUTLINE );
-        ppDefItems[24] = new SvxShadowedItem( FALSE, EE_CHAR_SHADOW );
-        ppDefItems[25] = new SvxEscapementItem( 0, 100, EE_CHAR_ESCAPEMENT );
-        ppDefItems[26] = new SvxAutoKernItem( FALSE, EE_CHAR_PAIRKERNING );
-        ppDefItems[27] = new SvxKerningItem( 0, EE_CHAR_KERNING );
-        ppDefItems[28] = new SvxWordLineModeItem( FALSE, EE_CHAR_WLM );
-        ppDefItems[29] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE );
-        ppDefItems[30] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CJK );
-        ppDefItems[31] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CTL );
-        ppDefItems[32] = new SvxFontItem( EE_CHAR_FONTINFO_CJK );
-        ppDefItems[33] = new SvxFontItem( EE_CHAR_FONTINFO_CTL );
-        ppDefItems[34] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CJK );
-        ppDefItems[35] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CTL );
-        ppDefItems[36] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK );
-         ppDefItems[37] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL );
-        ppDefItems[38] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK );
-        ppDefItems[39] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL );
-        ppDefItems[40] = new SvxEmphasisMarkItem( EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK );
-        ppDefItems[41] = new SvxCharReliefItem( RELIEF_NONE, EE_CHAR_RELIEF );
-        ppDefItems[42] = new SfxVoidItem( EE_CHAR_RUBI_DUMMY );
+        ppDefItems[16]  = new SvxColorItem( Color( COL_AUTO ), EE_CHAR_COLOR );
+        ppDefItems[17]  = new SvxFontItem( EE_CHAR_FONTINFO );
+        ppDefItems[18] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT );
+        ppDefItems[19] = new SvxCharScaleWidthItem( 100, EE_CHAR_FONTWIDTH );
+        ppDefItems[20] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT );
+        ppDefItems[21] = new SvxUnderlineItem( UNDERLINE_NONE, EE_CHAR_UNDERLINE );
+        ppDefItems[22] = new SvxCrossedOutItem( STRIKEOUT_NONE, EE_CHAR_STRIKEOUT );
+        ppDefItems[23] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC );
+        ppDefItems[24] = new SvxContourItem( FALSE, EE_CHAR_OUTLINE );
+        ppDefItems[25] = new SvxShadowedItem( FALSE, EE_CHAR_SHADOW );
+        ppDefItems[26] = new SvxEscapementItem( 0, 100, EE_CHAR_ESCAPEMENT );
+        ppDefItems[27] = new SvxAutoKernItem( FALSE, EE_CHAR_PAIRKERNING );
+        ppDefItems[28] = new SvxKerningItem( 0, EE_CHAR_KERNING );
+        ppDefItems[29] = new SvxWordLineModeItem( FALSE, EE_CHAR_WLM );
+        ppDefItems[30] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE );
+        ppDefItems[31] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CJK );
+        ppDefItems[32] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CTL );
+        ppDefItems[33] = new SvxFontItem( EE_CHAR_FONTINFO_CJK );
+        ppDefItems[34] = new SvxFontItem( EE_CHAR_FONTINFO_CTL );
+        ppDefItems[35] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CJK );
+        ppDefItems[36] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CTL );
+        ppDefItems[37] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK );
+         ppDefItems[38] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL );
+        ppDefItems[39] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK );
+        ppDefItems[40] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL );
+        ppDefItems[41] = new SvxEmphasisMarkItem( EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK );
+        ppDefItems[42] = new SvxCharReliefItem( RELIEF_NONE, EE_CHAR_RELIEF );
+        ppDefItems[43] = new SfxVoidItem( EE_CHAR_RUBI_DUMMY );
 #ifndef SVX_LIGHT
-        ppDefItems[43] = new SvXMLAttrContainerItem( EE_CHAR_XMLATTRIBS );
+        ppDefItems[44] = new SvXMLAttrContainerItem( EE_CHAR_XMLATTRIBS );
 #else
         // no need to have alien attributes persistent
-        ppDefItems[43] = new SfxVoidItem( EE_CHAR_XMLATTRIBS );
+        ppDefItems[44] = new SfxVoidItem( EE_CHAR_XMLATTRIBS );
 #endif // #ifndef SVX_LIGHT
 
         // Features
-        ppDefItems[44] = new SfxVoidItem( EE_FEATURE_TAB );
-        ppDefItems[45] = new SfxVoidItem( EE_FEATURE_LINEBR );
-        ppDefItems[46] = new SvxCharSetColorItem( Color( COL_RED ), RTL_TEXTENCODING_DONTKNOW, EE_FEATURE_NOTCONV );
-        ppDefItems[47] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
+        ppDefItems[45] = new SfxVoidItem( EE_FEATURE_TAB );
+        ppDefItems[46] = new SfxVoidItem( EE_FEATURE_LINEBR );
+        ppDefItems[47] = new SvxCharSetColorItem( Color( COL_RED ), RTL_TEXTENCODING_DONTKNOW, EE_FEATURE_NOTCONV );
+        ppDefItems[48] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
 
-        DBG_ASSERT( EDITITEMCOUNT == 48, "ITEMCOUNT geaendert, DefItems nicht angepasst!" );
+        DBG_ASSERT( EDITITEMCOUNT == 49, "ITEMCOUNT geaendert, DefItems nicht angepasst!" );
 
         // Init DefFonts:
         GetDefaultFonts( *(SvxFontItem*)ppDefItems[EE_CHAR_FONTINFO - EE_ITEMS_START],

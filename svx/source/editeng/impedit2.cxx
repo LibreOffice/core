@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 13:27:37 $
+ *  last change: $Author: mt $ $Date: 2002-07-18 12:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include <udlnitem.hxx>
 #include <adjitem.hxx>
 #include <scripttypeitem.hxx>
+#include <writingmodeitem.hxx>
 
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
@@ -1491,7 +1492,15 @@ void ImpEditEngine::InitWritingDirections( USHORT nPara )
 
 BOOL ImpEditEngine::IsRightToLeft( USHORT nPara )
 {
-    return FALSE;
+    BOOL bR2L = FALSE;
+
+    if ( !IsVertical() )
+    {
+        const SvxWritingModeItem& rWritingMode = (const SvxWritingModeItem&)GetParaAttrib( nPara, EE_PARA_WRITINGDIR );
+        bR2L = rWritingMode.GetValue() == com::sun::star::text::WritingMode_RL_TB;
+    }
+
+    return bR2L;
 }
 
 BYTE ImpEditEngine::GetRightToLeft( USHORT nPara, USHORT nPos, USHORT* pStart, USHORT* pEnd )

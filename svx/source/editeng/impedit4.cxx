@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-03 13:53:11 $
+ *  last change: $Author: mt $ $Date: 2002-07-18 12:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,6 +786,9 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
     sal_uInt16 nWhich = rItem.Which();
     switch ( nWhich )
     {
+        case EE_PARA_WRITINGDIR:
+            DBG_ERROR( "rtf export: EE_PARA_WRITINGDIR not implemented yet!" );
+        break;
         case EE_PARA_OUTLLEVEL:
         {
             rOutput << "\\level";

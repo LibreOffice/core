@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-17 10:01:18 $
+ *  last change: $Author: mt $ $Date: 2002-07-18 12:17:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #include <langitem.hxx>
 #include <scriptspaceitem.hxx>
 #include <charscaleitem.hxx>
+
 
 #include <forbiddencharacterstable.hxx>
 
