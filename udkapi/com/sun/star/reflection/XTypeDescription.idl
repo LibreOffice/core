@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTypeDescription.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:25 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
     @see XArrayTypeDescription
     @see XIndirectTypeDescription
     @see XEnumTypeDescription
-    @see XInterfaceTypeDescription
+    @see XInterfaceTypeDescription2
     @see XInterfaceMemberTypeDescription
 */
 interface XTypeDescription : com::sun::star::uno::XInterface
