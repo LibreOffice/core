@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-29 11:08:44 $
+ *  last change: $Author: bm $ $Date: 2001-03-29 16:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART_XCHARTDATAARRAY_HPP_
+#include <com/sun/star/chart/XChartDataArray.hpp>
 #endif
 
 using namespace com::sun::star;
@@ -283,29 +286,46 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
         }
     }
 
-    if( aServiceName.getLength())
+    // resize chart to zero data, because data will only be enlarged later
+    uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
+    DBG_ASSERT( xDoc.is(), "No valid document!" );
+    uno::Reference< chart::XChartDataArray > xArray( xDoc->getData(), uno::UNO_QUERY );
+    if( xArray.is())
     {
-        uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
-        if( xDoc.is())
-        {
-            uno::Reference< lang::XMultiServiceFactory > xFact( xDoc, uno::UNO_QUERY );
-            if( xFact.is())
-            {
-                uno::Reference< chart::XDiagram > xDia( xFact->createInstance( aServiceName ), uno::UNO_QUERY );
-                if( xDia.is())
-                {
-                    xDoc->setDiagram( xDia );
+        double fNan = 0.0;
 
-                    // set data row source for pie charts to ROWS
-                    if( bSetSwitchData )
+        uno::Reference< chart::XChartData > xData( xDoc->getData(), uno::UNO_QUERY );
+        if( xData.is())
+            fNan = xData->getNotANumber();
+
+        // attention: the data must at least be 1 x 1,
+        // otherwise BuildChart doesn't perform much.
+        uno::Sequence< uno::Sequence< double > > aAlmostEmptySeq( 1 );
+        aAlmostEmptySeq[ 0 ].realloc( 1 );
+        aAlmostEmptySeq[ 0 ][ 0 ] = fNan;
+        xArray->setData( aAlmostEmptySeq );
+    }
+
+    if( aServiceName.getLength() &&
+        xDoc.is())
+    {
+        uno::Reference< lang::XMultiServiceFactory > xFact( xDoc, uno::UNO_QUERY );
+        if( xFact.is())
+        {
+            uno::Reference< chart::XDiagram > xDia( xFact->createInstance( aServiceName ), uno::UNO_QUERY );
+            if( xDia.is())
+            {
+                xDoc->setDiagram( xDia );
+
+                // set data row source for pie charts to ROWS
+                if( bSetSwitchData )
+                {
+                    uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
+                    if( xDiaProp.is())
                     {
-                        uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
-                        if( xDiaProp.is())
-                        {
-                            uno::Any aAny;
-                            aAny <<= chart::ChartDataRowSource( chart::ChartDataRowSource_ROWS );
-                            xDiaProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )), aAny );
-                        }
+                        uno::Any aAny;
+                        aAny <<= chart::ChartDataRowSource( chart::ChartDataRowSource_ROWS );
+                        xDiaProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )), aAny );
                     }
                 }
             }
