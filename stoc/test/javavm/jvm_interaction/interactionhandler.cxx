@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interactionhandler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-07-23 14:02:28 $
+ *  last change: $Author: jl $ $Date: 2002-07-24 12:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <osl/thread.h>
 
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -157,15 +158,24 @@ void SAL_CALL InteractionHandler::handle( const Reference< XInteractionRequest >
             break;
     }
 
-    if( abort.is())
-        abort->select();
+//     if( abort.is())
+//         abort->select();
 
-     if( retry.is())
+    static int cRetry= 0;
+
+    if( cRetry++ == 5)
+    {
+        if( abort.is())
+            abort->select();
+        return;
+    }
+    if( retry.is())
          retry->select();
 }
 
 sal_Bool test1(const Reference< XMultiServiceFactory > & xMgr )
 {
+    sal_Bool retVal= sal_True;
     setCurrentContext( Reference<XCurrentContext>( static_cast<XWeak*>(new Context()), UNO_QUERY));
 
       OUString sVMService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"));
@@ -175,13 +185,11 @@ sal_Bool test1(const Reference< XMultiServiceFactory > & xMgr )
     Reference<XJavaVM> xVM( xXInt, UNO_QUERY);
     if( ! xVM.is())
         return sal_False;
-    Reference<XJavaThreadRegister_11> xreg11(xVM, UNO_QUERY);
-    if( ! xreg11.is())
-        return sal_False;
 
 
     sal_Int8 arId[16];
     rtl_getGlobalProcessId((sal_uInt8*) arId);
+
     Any anyVM;
     try
     {
@@ -189,37 +197,31 @@ sal_Bool test1(const Reference< XMultiServiceFactory > & xMgr )
     }
     catch (JavaNotConfiguredException& e)
     {
-        printf("JavaNotConfiguredException: %S",(const sal_Unicode*) e.Message);
+        OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
+        printf("JavaNotConfiguredException: %s\n", msg.getStr());
     }
     catch (JavaVMCreationFailureException& e)
     {
-        printf("JavaVMCreationFailureException: %S",e.Message.getStr());
+        OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
+        printf("JavaVMCreationFailureException: %s\n", msg.getStr());
     }
     catch (MissingJavaRuntimeException& e)
     {
-        printf("MissingJavaRuntimeException: %S",e.Message.getStr());
+        OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
+        printf("MissingJavaRuntimeException: %s\n", msg.getStr());
     }
     catch (JavaDisabledException& e)
     {
-        printf("JavaDisabledException: %S",e.Message.getStr());
+        OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
+        printf("JavaDisabledException: %s\n", msg.getStr());
     }
-
-    JavaVM* _jvm= *(JavaVM**) anyVM.getValue();
-    if( _jvm)
+    catch (RuntimeException & e)
     {
-        xreg11->registerThread();
-
-        JNIEnv *p_env;
-
-        if( _jvm->AttachCurrentThread((void**) &p_env, 0))
-        return sal_False;
-
-
-
-        _jvm->DetachCurrentThread();
+        OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
+        printf("###RuntimeException: %s\n", msg.getStr());
+        retVal= sal_False;
     }
-    xreg11->revokeThread();
-    return sal_True;
+    return retVal;
 }
 
 extern
@@ -238,22 +240,9 @@ int __cdecl main( int argc, char * argv[] )
     Reference<XMultiServiceFactory> xMgr( fac, UNO_QUERY);
 
     sal_Bool bSucc = sal_False;
-    try
-    {
-        bSucc= test1(xMgr);
-    }
-    catch (Exception & rExc)
-    {
-        OSL_ENSURE( sal_False, "### exception occured!" );
-        OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "### exception occured: " );
-        OSL_TRACE( aMsg.getStr() );
-        OSL_TRACE( "\n" );
-    }
-
+    bSucc= test1(xMgr);
     Reference< XComponent > xCompContext( context, UNO_QUERY );
     xCompContext->dispose();
-    printf("javavm %s", bSucc ? "succeeded" : "failed");
     return (bSucc ? 0 : -1);
 }
 
