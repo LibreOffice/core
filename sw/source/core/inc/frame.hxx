@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-14 14:13:23 $
+ *  last change: $Author: ama $ $Date: 2001-04-19 09:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,7 +701,7 @@ inline void SwFrm::InvalidateAll()
 
 inline void SwFrm::InvalidateNextPos( BOOL bNoFtn )
 {
-    if ( pNext )
+    if ( pNext && !pNext->IsSctFrm() )
         pNext->InvalidatePos();
 #ifndef C30 // vielleicht geht es ja bei C40 ?
     else
