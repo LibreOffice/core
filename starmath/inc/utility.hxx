@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:25 $
+ *  last change: $Author: tl $ $Date: 2000-11-02 15:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 #endif
 #ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _STREAM_HXX //autogen
-#include <tools/stream.hxx>
 #endif
 #ifndef _FRACT_HXX //autogen
 #include <tools/fract.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:27 $
+ *  last change: $Author: tl $ $Date: 2000-11-02 15:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
 #endif
 #ifndef _SFX_INIMGR_HXX //autogen
 #include <sfx2/inimgr.hxx>
@@ -554,14 +557,19 @@ void SmSymSetManager::Load(const String &rURL)
         catch(...){}
         if (bExist)
         {
-            SvFileStream aStream(aStreamName, STREAM_READ);
+            // get stream to use
+            SfxMedium aMedium( aStreamName,
+                    STREAM_READ | STREAM_SHARE_DENYWRITE, FALSE );
+            aMedium.SetTransferPriority( SFX_TFPRIO_SYNCHRON );
+            SvStream *pStream = aMedium.GetInStream();
 
-            if (aStream.IsOpen())
+            if (pStream)
             {
-                aStream >> *this;
+                *pStream >> *this;
                 Modified = FALSE;
                 return;
             }
+            aMedium.Commit();
         }
 
         SfxModule *p = SM_MOD1();
@@ -586,11 +594,14 @@ void SmSymSetManager::Save()
 {
     if (Modified)
     {
-        SvFileStream    aStream(aStreamName, STREAM_WRITE);
+        SfxMedium   aMedium( aStreamName,
+                STREAM_WRITE | STREAM_TRUNC | STREAM_SHARE_DENYALL, FALSE );
+        aMedium.CreateTempFile();   // use temp file to write to...
+        SvStream *pStream = aMedium.GetOutStream();
 
-        if (aStream.IsOpen())
+        if (pStream)
         {
-            aStream << *this;
+            *pStream << *this;
             Modified = FALSE;
         }
         else
@@ -604,6 +615,7 @@ void SmSymSetManager::Save()
             aErrorBox.SetMessText(aString);
             aErrorBox.Execute();
         }
+        aMedium.Commit();
     }
 }
 

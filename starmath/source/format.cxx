@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:26 $
+ *  last change: $Author: tl $ $Date: 2000-11-02 15:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #pragma hdrstop
 
+#ifndef _STREAM_HXX
+#include <tools/stream.hxx>
+#endif
 
 #ifndef FORMAT_HXX
 #include "format.hxx"
