@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:19:46 $
+ *  last change: $Author: oj $ $Date: 2001-11-12 10:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,8 +470,10 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         {
             if(xTables->hasByName(m_sName))
             {
-                Reference<XDrop> xNameCont(xTable,UNO_QUERY);
-                xNameCont->dropByName(m_sName);
+                Reference<XDrop> xNameCont(xTables,UNO_QUERY);
+                OSL_ENSURE(xNameCont.is(),"No drop interface for tables!");
+                if(xNameCont.is())
+                    xNameCont->dropByName(m_sName);
             }
 
             Reference<XDataDescriptorFactory> xFact(xTables,UNO_QUERY);
@@ -511,53 +513,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
                 assignTable();
             }
             // now check if our datasource has set a tablefilter and if append the new table name to it
-            Reference< XChild> xChild(getConnection(),UNO_QUERY);
-            if(xChild.is())
-            {
-                Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
-                if(xProp.is())
-                {
-
-                    Sequence< ::rtl::OUString > aFilter;
-                    xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
-                    // first check if we have something like SCHEMA.%
-                    sal_Bool bHasToInsert = sal_True;
-                    static ::rtl::OUString sPattern = ::rtl::OUString::createFromAscii("%");
-                    const ::rtl::OUString* pBegin = aFilter.getConstArray();
-                    const ::rtl::OUString* pEnd = pBegin + aFilter.getLength();
-                    for (;pBegin != pEnd; ++pBegin)
-                    {
-                        if(pBegin->indexOf('%') != -1)
-                        {
-                            sal_Int32 nLen;
-                            if((nLen = pBegin->lastIndexOf('.')) != -1 && !pBegin->compareTo(m_sName,nLen))
-                                bHasToInsert = sal_False;
-                            else if(pBegin->getLength() == 1)
-                                bHasToInsert = sal_False;
-                        }
-                    }
-                    if(bHasToInsert)
-                    {
-                        if(! ::dbaui::checkDataSourceAvailable(::comphelper::getString(xProp->getPropertyValue(PROPERTY_NAME)),getORB()))
-                        {
-                            String aMessage(ModuleRes(STR_TABLEDESIGN_DATASOURCE_DELETED));
-                            String sTitle(ModuleRes(STR_STAT_WARNING));
-                            OSQLMessageBox aMsg(getView(),sTitle,aMessage);
-                            aMsg.Execute();
-                            return sal_False;
-                        }
-                        else
-                        {
-                            aFilter.realloc(aFilter.getLength()+1);
-                            aFilter.getArray()[aFilter.getLength()-1] = m_sName;
-                            xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aFilter));
-                            Reference<XFlushable> xFlush(xProp,UNO_QUERY);
-                            if(xFlush.is())
-                                xFlush->flush();
-                        }
-                    }
-                }
-            }
+            ::dbaui::appendToFilter(getConnection(),m_sName,getORB(),getView()); // we are not interessted in the return value
         }
         else if(m_xTable.is())
         {
