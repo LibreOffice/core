@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-22 07:59:53 $
+ *  last change: $Author: pl $ $Date: 2002-08-02 15:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7694,26 +7694,39 @@ USHORT Window::GetAccessibleChildWindowCount()
 
 USHORT Window::GetAccessibleChildWindowCount()
 {
-    USHORT nChildren = GetChildCount();
+    USHORT nChildren = 0;
+    Window* pChild = mpFirstChild;
+    while( pChild )
+    {
+        if( pChild->IsVisible() )
+            nChildren++;
+        pChild = pChild->mpNext;
+    }
 
     // Search also for SystemWindows.
     Window* pOverlap = GetWindow( WINDOW_OVERLAP );
     pOverlap = pOverlap->GetWindow( WINDOW_FIRSTOVERLAP );
     while ( pOverlap )
     {
-        nChildren++;
+        if( pOverlap->IsVisible() )
+            nChildren++;
         pOverlap = pOverlap->GetWindow( WINDOW_NEXT );
     }
 
     // report the menubarwindow as a child of THE workwindow
     if( GetType() == WINDOW_BORDERWINDOW )
     {
-        if( ((ImplBorderWindow *) this)->mpMenuBarWindow )
+        if( ((ImplBorderWindow *) this)->mpMenuBarWindow &&
+            ((ImplBorderWindow *) this)->mpMenuBarWindow->IsVisible()
+            )
             --nChildren;
     }
     else if( GetType() == WINDOW_WORKWINDOW )
     {
-        if( ((WorkWindow *) this)->GetMenuBar() )
+        if( ((WorkWindow *) this)->GetMenuBar() &&
+            ((WorkWindow *) this)->GetMenuBar()->GetWindow() &&
+            ((WorkWindow *) this)->GetMenuBar()->GetWindow()->IsVisible()
+            )
             ++nChildren;
     }
 
@@ -7740,33 +7753,49 @@ Window* Window::GetAccessibleChildWindow( USHORT n )
     // report the menubarwindow as a the first child of THE workwindow
     if( GetType() == WINDOW_WORKWINDOW && ((WorkWindow *) this)->GetMenuBar() )
     {
-        if( n == 0)
+        if( n == 0 )
         {
             MenuBar *pMenuBar = ((WorkWindow *) this)->GetMenuBar();
-            return pMenuBar->GetWindow();
+            if( pMenuBar->GetWindow() && pMenuBar->GetWindow()->IsVisible() )
+                return pMenuBar->GetWindow();
         }
         else
             --n;
     }
 
-    Window* pChild = GetChild( n );
-    // report the menubarwindow as a child of THE workwindow
-    if( GetType() == WINDOW_BORDERWINDOW && pChild->GetType() == WINDOW_MENUBARWINDOW )
+    // transform n to child number including invisible children
+    USHORT nChildren = n;
+    Window* pChild = mpFirstChild;
+    while( pChild )
     {
+        if( pChild->IsVisible() )
+        {
+            if( ! nChildren )
+                break;
+            nChildren--;
+        }
         pChild = pChild->mpNext;
+    }
+
+    if( GetType() == WINDOW_BORDERWINDOW && pChild && pChild->GetType() == WINDOW_MENUBARWINDOW )
+    {
+        do pChild = pChild->mpNext; while( pChild && ! pChild->IsVisible() );
         DBG_ASSERT( pChild, "GetAccessibleChildWindow(): wrong index in border window");
     }
-    if ( !pChild && ( n >= GetChildCount() ) )
+    if ( !pChild )
     {
-        USHORT n2 = n - GetChildCount();
         Window* pOverlap = GetWindow( WINDOW_OVERLAP );
         pOverlap = pOverlap->GetWindow( WINDOW_FIRSTOVERLAP );
         while ( !pChild && pOverlap )
         {
-            if ( !n2 )
+            if ( !nChildren && pOverlap->IsVisible() )
+            {
                 pChild = pOverlap;
-            pOverlap = n2 ? pOverlap->GetWindow( WINDOW_NEXT ) : NULL;
-            n2--;
+                break;
+            }
+            pOverlap = pOverlap->GetWindow( WINDOW_NEXT );
+            if( pOverlap && pOverlap->IsVisible() )
+                nChildren--;
         }
 
     }
