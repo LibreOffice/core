@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-11 12:41:11 $
+ *  last change: $Author: cmc $ $Date: 2002-06-11 12:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1310,7 +1310,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 /*  */
 
 USHORT SwWW8Writer::StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
-    SwTwips &rTblOffset)
+    SwTwips &rPageSize, SwTwips &rTblOffset)
 
 {
     //Tell the undocumented table hack that everything between here and
@@ -1336,34 +1336,25 @@ USHORT SwWW8Writer::StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
         rAt.Insert( aTabLineAttr, sizeof( aTabLineAttr ), rAt.Count() );
     }
 
-    ASSERT(pFmt, "No pFmt!");
-    if (pFmt)
+    SwHoriOrient eHOri = pFmt->GetHoriOrient().GetHoriOrient();
+    switch( eHOri )
     {
-        SwHoriOrient eHOri = pFmt->GetHoriOrient().GetHoriOrient();
-        switch( eHOri )
+    case HORI_CENTER:
+    case HORI_RIGHT:
+        if( bWrtWW8 )
+            InsUInt16( rAt, 0x5400 );
+        else
+            rAt.Insert( 182, rAt.Count() );
+        InsUInt16( rAt, (HORI_RIGHT == eHOri ? 2 : 1 ));
+        break;
+    case HORI_NONE:
+    case HORI_LEFT_AND_WIDTH:
         {
-            case HORI_CENTER:
-            case HORI_RIGHT:
-                if( bWrtWW8 )
-                    InsUInt16( rAt, 0x5400 );
-                else
-                    rAt.Insert( 182, rAt.Count() );
-                InsUInt16( rAt, (HORI_RIGHT == eHOri ? 2 : 1 ));
-                break;
-            default:
-#if 1
-                Point aOffset = pFmt->FindLayoutRect().Pos();
-                rTblOffset = aOffset.X();
-
-#else
-                {
-                    const SvxLRSpaceItem& rLRSp = pFmt->GetLRSpace();
-                    rTblOffset = rLRSp.GetLeft();
-                    rPageSize -= rTblOffset + rLRSp.GetRight();
-                }
-#endif
-                break;
+            const SvxLRSpaceItem& rLRSp = pFmt->GetLRSpace();
+            rTblOffset = rLRSp.GetLeft();
+            rPageSize -= rTblOffset + rLRSp.GetRight();
         }
+        break;
     }
     return rAt.Count();
 }
@@ -1406,8 +1397,8 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     BOOL bRelBoxSize = TRUE;
     SwTwips nTblSz = rTbl.GetFrmFmt()->GetFrmSize().GetWidth();
     WW8Bytes aAt( 128, 128 );   // Attribute fuer's Tabellen-Zeilenende
-    USHORT nStdAtLen = rWW8Wrt.StartTableFromFrmFmt(aAt,rTbl.GetFrmFmt(),
-        nTblOffset);
+    USHORT nStdAtLen = rWW8Wrt.StartTableFromFrmFmt(
+        aAt,rTbl.GetFrmFmt(),nPageSize, nTblOffset);
     static BYTE __READONLY_DATA aNullBytes[] = { 0, 0, 0, 0 };
 
     SwWriteTable* pTableWrt;

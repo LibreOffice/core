@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:55 $
+ *  last change: $Author: cmc $ $Date: 2002-06-11 12:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
+#endif
+#ifndef __SGI_STL_FUNCTIONAL
+#include <functional>
 #endif
 
 #define _SVSTDARR_STRINGSSORTDTOR
