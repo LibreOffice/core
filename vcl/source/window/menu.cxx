@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:51:30 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,12 @@
 
 #define _SV_MENU_CXX
 
+#ifndef _SV_SVSYS_HXX
+#include <svsys.h>
+#endif
+#ifndef _SV_SALINST_HXX
+#include <salinst.hxx>
+#endif
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
@@ -143,7 +149,12 @@
 #include <toolbox.hxx>
 #endif
 #include <tools/stream.hxx>
-
+#ifndef _SV_SALMENU_HXX
+#include <salmenu.hxx>
+#endif
+#ifndef _SV_SALFRAME_HXX
+#include <salframe.hxx>
+#endif
 #pragma hdrstop
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
@@ -225,14 +236,25 @@ struct MenuItemData
     XubString       aAccessibleName;        // accessible name
     XubString       aAccessibleDescription; // accessible description
 
-                    MenuItemData() {}
+    SalMenuItem*    pSalMenuItem;           // access to native menu
+
+                    MenuItemData() :
+                        pSalMenuItem ( NULL )
+                    {}
                     MenuItemData( const XubString& rStr, const Image& rImage ) :
                         aText( rStr ),
-                        aImage( rImage )
+                        aImage( rImage ),
+                        pSalMenuItem ( NULL )
                     {}
-                    ~MenuItemData() { delete pAutoSubMenu; }
+                    ~MenuItemData();
 };
 
+MenuItemData::~MenuItemData()
+{
+    delete pAutoSubMenu;
+    if( pSalMenuItem )
+        ImplGetSVData()->mpDefInst->DestroyMenuItem( pSalMenuItem );
+}
 
 class MenuItemList : public List
 {
@@ -291,6 +313,18 @@ MenuItemData* MenuItemList::Insert( USHORT nId, MenuItemType eType,
     pData->bIsTemporary     = FALSE;
     pData->bMirrorMode      = FALSE;
     pData->nItemImageAngle  = 0;
+
+    SalItemParams aSalMIData;
+    aSalMIData.nId = nId;
+    aSalMIData.eType = eType;
+    aSalMIData.nBits = nBits;
+    aSalMIData.pMenu = pMenu;
+    aSalMIData.aText = rStr;
+    aSalMIData.aImage = rImage;
+
+    // Native-support: returns NULL if not supported
+    pData->pSalMenuItem = ImplGetSVData()->mpDefInst->CreateMenuItem( &aSalMIData );
+
     List::Insert( (void*)pData, nPos );
     return pData;
 }
@@ -310,6 +344,18 @@ void MenuItemList::InsertSeparator( USHORT nPos )
     pData->bIsTemporary     = FALSE;
     pData->bMirrorMode      = FALSE;
     pData->nItemImageAngle  = 0;
+
+    SalItemParams aSalMIData;
+    aSalMIData.nId = 0;
+    aSalMIData.eType = MENUITEM_SEPARATOR;
+    aSalMIData.nBits = 0;
+    aSalMIData.pMenu = NULL;
+    aSalMIData.aText = XubString();
+    aSalMIData.aImage = Image();
+
+    // Native-support: returns NULL if not supported
+    pData->pSalMenuItem = ImplGetSVData()->mpDefInst->CreateMenuItem( &aSalMIData );
+
     List::Insert( (void*)pData, nPos );
 }
 
@@ -624,6 +670,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     void SetAutoPopup( BOOL bAuto ) { mbAutoPopup = bAuto; }
+    void            ImplLayoutChanged();
 };
 
 
@@ -718,6 +765,16 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
 Menu::Menu()
 {
     DBG_CTOR( Menu, NULL );
+    bIsMenuBar = FALSE;
+    ImplInit();
+}
+
+// this constructor makes sure we're creating the native menu
+// with the correct type (ie, MenuBar vs. PopupMenu)
+Menu::Menu( BOOL bMenubar )
+{
+    DBG_CTOR( Menu, NULL );
+    bIsMenuBar = bMenubar;
     ImplInit();
 }
 
@@ -747,13 +804,18 @@ Menu::~Menu()
     delete pItemList;
     delete pLogo;
     delete mpLayoutData;
+
+    // Native-support: destroy SalMenu
+    ImplSetSalMenu( NULL );
 }
 
 void Menu::ImplInit()
 {
+    mnHighlightedItemPos = ITEMPOS_INVALID;
+    mpSalMenu       = NULL;
     nMenuFlags      = 0;
     nDefaultItem    = 0;
-    bIsMenuBar      = FALSE;
+    //bIsMenuBar      = FALSE;  // this is now set in the ctor, must not be changed here!!!
     nSelectedId     = 0;
     pItemList       = new MenuItemList;
     pLogo           = NULL;
@@ -764,6 +826,9 @@ void Menu::ImplInit()
     bInCallback     = FALSE;
     bKilled         = FALSE;
     mpLayoutData    = NULL;
+
+    // Native-support: returns NULL if not supported
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu( bIsMenuBar );
 }
 
 void Menu::ImplLoadRes( const ResId& rResId )
@@ -949,13 +1014,17 @@ void Menu::InsertItem( USHORT nItemId, const XubString& rStr, MenuItemBits nItem
     DBG_ASSERT( GetItemPos( nItemId ) == MENU_ITEM_NOTFOUND,
                 "Menu::InsertItem(): ItemId already exists" );
 
-    // Falls Position > ItemCount, dann anheangen
+    // if Position > ItemCount, append
     if ( nPos >= (USHORT)pItemList->Count() )
         nPos = MENU_APPEND;
 
-    // Item in die MenuItemListe aufnehmen
+    // put Item in MenuItemList
     MenuItemData* pData = pItemList->Insert( nItemId, MENUITEM_STRING,
                              nItemBits, rStr, Image(), this, nPos );
+
+    // update native menu
+    if( ImplGetSalMenu() && pData->pSalMenuItem )
+        ImplGetSalMenu()->InsertItem( pData->pSalMenuItem, nPos );
 
     Window* pWin = ImplGetWindow();
     delete mpLayoutData, mpLayoutData = NULL;
@@ -1084,16 +1153,23 @@ void Menu::InsertItem( const ResId& rResId, USHORT nPos )
 
 void Menu::InsertSeparator( USHORT nPos )
 {
-    // Handelt es sich um einen MenuBar, dann mache nichts
+    // do nothing if its a menu bar
     if ( bIsMenuBar )
         return;
 
-    // Falls Position > ItemCount, dann anheangen
+    // if position > ItemCount, append
     if ( nPos >= (USHORT)pItemList->Count() )
         nPos = MENU_APPEND;
 
-    // Separator in die Item-Liste einfuegen
+    // put separator in item list
     pItemList->InsertSeparator( nPos );
+
+    // update native menu
+    USHORT itemPos = nPos != MENU_APPEND ? nPos : (USHORT)pItemList->Count() - 1;
+    MenuItemData *pData = pItemList->GetDataFromPos( itemPos );
+    if( ImplGetSalMenu() && pData && pData->pSalMenuItem )
+        ImplGetSalMenu()->InsertItem( pData->pSalMenuItem, nPos );
+
     delete mpLayoutData, mpLayoutData = NULL;
 
     ImplCallEventListeners( VCLEVENT_MENU_INSERTITEM, nPos );
@@ -1105,6 +1181,10 @@ void Menu::RemoveItem( USHORT nPos )
 
     if ( nPos < GetItemCount() )
     {
+        // update native menu
+        if( ImplGetSalMenu() )
+            ImplGetSalMenu()->RemoveItem( nPos );
+
         pItemList->Remove( nPos );
         bRemove = TRUE;
     }
@@ -1155,6 +1235,7 @@ void ImplCopyItem( Menu* pThis, const Menu& rMenu, USHORT nPos, USHORT nNewPos,
         pThis->SetHelpId( nId, pData->nHelpId );
         pThis->SetHelpText( nId, pData->aHelpText );
         pThis->SetAccelKey( nId, pData->aAccelKey );
+        pThis->SetItemCommand( nId, pData->aCommandStr );
 
         PopupMenu* pSubMenu = rMenu.GetPopupMenu( nId );
         if ( pSubMenu )
@@ -1299,16 +1380,23 @@ void Menu::SetPopupMenu( USHORT nItemId, PopupMenu* pMenu )
     USHORT          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
-    // Item nicht vorhanden, dann NULL zurueckgeben
+    // Item does not exist -> return NULL
     if ( !pData )
         return;
 
-    // Gleiches Menu, danmn brauchen wir nichts machen
+    // same menu, nothing to do
     if ( (PopupMenu*)pData->pSubMenu == pMenu )
         return;
 
-    // Daten austauschen
+    // data exchange
     pData->pSubMenu = pMenu;
+
+    // set native submenu
+    if( ImplGetSalMenu() && pData->pSalMenuItem )
+        if( pMenu )
+            ImplGetSalMenu()->SetSubMenu( pData->pSalMenuItem, pMenu->ImplGetSalMenu(), nPos );
+        else
+            ImplGetSalMenu()->SetSubMenu( pData->pSalMenuItem, NULL, nPos );
 
     ImplCallEventListeners( VCLEVENT_MENU_SUBMENUCHANGED, nPos );
 }
@@ -1335,6 +1423,10 @@ void Menu::SetAccelKey( USHORT nItemId, const KeyCode& rKeyCode )
         return;
 
     pData->aAccelKey = rKeyCode;
+
+    // update native menu
+    if( ImplGetSalMenu() && pData->pSalMenuItem )
+        ImplGetSalMenu()->SetAccelerator( nPos, pData->pSalMenuItem, rKeyCode, rKeyCode.GetName() );
 }
 
 KeyCode Menu::GetAccelKey( USHORT nItemId ) const
@@ -1430,6 +1522,10 @@ void Menu::CheckItem( USHORT nItemId, BOOL bCheck )
 
     pData->bChecked = bCheck;
 
+    // update native menu
+    if( ImplGetSalMenu() )
+        ImplGetSalMenu()->CheckItem( nPos, bCheck );
+
     ImplCallEventListeners( bCheck ? VCLEVENT_MENU_ITEMCHECKED : VCLEVENT_MENU_ITEMUNCHECKED, nPos );
 }
 
@@ -1470,6 +1566,10 @@ void Menu::EnableItem( USHORT nItemId, BOOL bEnable )
                 nX += pData->aSz.Width();
             }
         }
+        // update native menu
+        if( ImplGetSalMenu() )
+            ImplGetSalMenu()->EnableItem( nPos, bEnable );
+
         ImplCallEventListeners( bEnable ? VCLEVENT_MENU_ENABLE : VCLEVENT_MENU_DISABLE, nPos );
     }
 }
@@ -1497,6 +1597,10 @@ void Menu::SetItemText( USHORT nItemId, const XubString& rStr )
     {
         pData->aText = rStr;
         ImplSetMenuItemData( pData, nPos );
+        // update native menu
+        if( ImplGetSalMenu() && pData->pSalMenuItem )
+            ImplGetSalMenu()->SetItemText( nPos, pData->pSalMenuItem, rStr );
+
         ImplCallEventListeners( VCLEVENT_MENU_ITEMTEXTCHANGED, nPos );
     }
 }
@@ -1522,6 +1626,10 @@ void Menu::SetItemImage( USHORT nItemId, const Image& rImage )
 
     pData->aImage = rImage;
     ImplSetMenuItemData( pData, nPos );
+
+    // update native menu
+    if( ImplGetSalMenu() && pData->pSalMenuItem )
+        ImplGetSalMenu()->SetItemImage( nPos, pData->pSalMenuItem, rImage );
 }
 
 static inline Image ImplRotImage( const Image& rImage, long nAngle10 )
@@ -1933,7 +2041,11 @@ Size Menu::ImplCalcSize( Window* pWin )
                     aSz.Width() += pData->aSz.Width();
                 }
                 else
+#if (_MSC_VER < 1300)
                     pData->aSz.Height() = std::max( std::max( nTextHeight, pData->aSz.Height() ), nMinMenuItemHeight );
+#else
+                    pData->aSz.Height() = max( max( nTextHeight, pData->aSz.Height() ), nMinMenuItemHeight );
+#endif
             }
 
             // Accel
@@ -1952,7 +2064,11 @@ Size Menu::ImplCalcSize( Window* pWin )
                 if ( nFontHeight > nMaxAccWidth )
                     nMaxAccWidth = nFontHeight;
 
+#if (_MSC_VER < 1300)
                 pData->aSz.Height() = std::max( std::max( nFontHeight, pData->aSz.Height() ), nMinMenuItemHeight );
+#else
+                pData->aSz.Height() = max( max( nFontHeight, pData->aSz.Height() ), nMinMenuItemHeight );
+#endif
 
 //                if ( nFontHeight > pData->aSz.Height() )
 //                    pData->aSz.Height() = nFontHeight;
@@ -1967,7 +2083,11 @@ Size Menu::ImplCalcSize( Window* pWin )
 
     if ( !bIsMenuBar )
     {
+#if (_MSC_VER < 1300)
         USHORT gfxExtra = std::max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
+#else
+        USHORT gfxExtra = max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
+#endif
         nCheckPos = (USHORT)nExtra;
         nImagePos = (USHORT)(nCheckPos + nFontHeight/2 + gfxExtra );
         nTextPos = (USHORT)(nImagePos+aMaxImgSz.Width());
@@ -2233,6 +2353,23 @@ Menu* Menu::ImplFindSelectMenu()
     return pSelMenu;
 }
 
+Menu* Menu::ImplFindMenu( USHORT nItemId )
+{
+    Menu* pSelMenu = NULL;
+
+    for ( ULONG n = GetItemList()->Count(); n && !pSelMenu; )
+    {
+        MenuItemData* pData = GetItemList()->GetDataFromPos( --n );
+
+        if( pData->nId == nItemId )
+            pSelMenu = this;
+        else if ( pData->pSubMenu )
+            pSelMenu = pData->pSubMenu->ImplFindMenu( nItemId );
+    }
+
+    return pSelMenu;
+}
+
 void Menu::RemoveDisabledEntries( BOOL bCheckPopups, BOOL bRemoveEmptyPopups )
 {
     for ( USHORT n = 0; n < GetItemCount(); n++ )
@@ -2487,21 +2624,42 @@ XubString Menu::GetAccessibleDescription( USHORT nItemId ) const
         return ImplGetSVEmptyStr();
 }
 
+void Menu::ImplSetSalMenu( SalMenu *pSalMenu )
+{
+    if( mpSalMenu )
+        ImplGetSVData()->mpDefInst->DestroyMenu( mpSalMenu );
+    mpSalMenu = pSalMenu;
+}
+
+BOOL Menu::GetSystemMenuData( SystemMenuData* pData ) const
+{
+    Menu* pMenu = (Menu*)this;
+    if( pData && pMenu->ImplGetSalMenu() )
+    {
+        pMenu->ImplGetSalMenu()->GetSystemMenuData( pData );
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+
+
 // -----------
 // - MenuBar -
 // -----------
 
-MenuBar::MenuBar()
+MenuBar::MenuBar() : Menu( TRUE )
 {
-    bIsMenuBar          = TRUE;
+    mbDisplayable       = TRUE;
     mbCloserVisible     = FALSE;
     mbFloatBtnVisible   = FALSE;
     mbHideBtnVisible    = FALSE;
 }
 
-MenuBar::MenuBar( const MenuBar& rMenu )
+MenuBar::MenuBar( const MenuBar& rMenu ) : Menu( TRUE )
 {
-    bIsMenuBar          = TRUE;
+    mbDisplayable       = TRUE;
     mbCloserVisible     = FALSE;
     mbFloatBtnVisible   = FALSE;
     mbHideBtnVisible    = FALSE;
@@ -2509,9 +2667,9 @@ MenuBar::MenuBar( const MenuBar& rMenu )
     bIsMenuBar          = TRUE;
 }
 
-MenuBar::MenuBar( const ResId& rResId )
+MenuBar::MenuBar( const ResId& rResId ) : Menu ( TRUE )
 {
-    bIsMenuBar          = TRUE;
+    mbDisplayable       = TRUE;
     mbCloserVisible     = FALSE;
     mbFloatBtnVisible   = FALSE;
     mbHideBtnVisible    = FALSE;
@@ -2552,6 +2710,17 @@ void MenuBar::ShowButtons( BOOL bClose, BOOL bFloat, BOOL bHide )
     }
 }
 
+void MenuBar::SetDisplayable( BOOL bDisplayable )
+{
+    if( bDisplayable != mbDisplayable )
+    {
+        mbDisplayable = bDisplayable;
+        MenuBarWindow* pMenuWin = (MenuBarWindow*) ImplGetWindow();
+        if( pMenuWin )
+            pMenuWin->ImplLayoutChanged();
+    }
+}
+
 Window* MenuBar::ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu )
 {
     if ( !pWindow )
@@ -2562,6 +2731,13 @@ Window* MenuBar::ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu )
     ((MenuBarWindow*)pWindow)->SetMenu( pMenu );
     long nHeight = pMenu->ImplCalcSize( pWindow ).Height();
     if( nHeight < 20 ) nHeight = 20;   // leave enough space for closer
+
+    // depending on the native implementation or the displayable flag
+    // the menubar windows is supressed (ie, height=0)
+    if( !((MenuBar*) pMenu)->IsDisplayable() ||
+        ( pMenu->ImplGetSalMenu() && SalMenu::VisibleMenuBar() ) )
+        nHeight = 0;
+
     pWindow->SetPosSizePixel( 0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT );
     return pWindow;
 }
@@ -2580,6 +2756,12 @@ void MenuBar::ImplDestroy( MenuBar* pMenu, BOOL bDelete )
 BOOL MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu )
 {
     BOOL bDone = FALSE;
+
+    // No keyboard processing when system handles the menu or our menubar is invisible
+    if( !IsDisplayable() ||
+        ( ImplGetSalMenu() && SalMenu::VisibleMenuBar() ) )
+        return bDone;
+
     // Enabled-Abfragen, falls diese Methode von einem anderen Fenster gerufen wurde...
     Window* pWin = ImplGetWindow();
     if ( pWin && pWin->IsEnabled() && pWin->IsInputEnabled() )
@@ -2609,6 +2791,70 @@ void MenuBar::SelectEntry( USHORT nId )
             pMenuWin->ChangeHighlightItem( nId, FALSE );
     }
 }
+
+// -----------------------------------------------------------------------
+
+// handler for native menu selection and command events
+
+BOOL MenuBar::HandleMenuActivateEvent( Menu *pMenu ) const
+{
+    if( pMenu )
+    {
+        pMenu->pStartedFrom = (Menu*)this;
+        pMenu->bInCallback = TRUE;
+        pMenu->Activate();
+        pMenu->bInCallback = FALSE;
+    }
+    return TRUE;
+}
+
+BOOL MenuBar::HandleMenuDeActivateEvent( Menu *pMenu ) const
+{
+    if( pMenu )
+    {
+        pMenu->pStartedFrom = (Menu*)this;
+        pMenu->bInCallback = TRUE;
+        pMenu->Deactivate();
+        pMenu->bInCallback = FALSE;
+    }
+    return TRUE;
+}
+
+BOOL MenuBar::HandleMenuHighlightEvent( Menu *pMenu, USHORT nEventId ) const
+{
+    if( !pMenu )
+        pMenu = ((Menu*) this)->ImplFindMenu( nEventId );
+    if( pMenu )
+    {
+        if( mnHighlightedItemPos != ITEMPOS_INVALID )
+            pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, mnHighlightedItemPos );
+
+        pMenu->mnHighlightedItemPos = pMenu->GetItemPos( nEventId );
+        pMenu->nSelectedId = nEventId;
+        pMenu->pStartedFrom = (Menu*)this;
+        pMenu->ImplCallHighlight( pMenu->mnHighlightedItemPos );
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+BOOL MenuBar::HandleMenuCommandEvent( Menu *pMenu, USHORT nEventId ) const
+{
+    if( !pMenu )
+        pMenu = ((Menu*) this)->ImplFindMenu( nEventId );
+    if( pMenu )
+    {
+        pMenu->nSelectedId = nEventId;
+        pMenu->pStartedFrom = (Menu*)this;
+        pMenu->ImplSelect();
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+// -----------------------------------------------------------------------
 
 // BOOL PopupMenu::bAnyPopupInExecute = FALSE;
 
@@ -2701,6 +2947,7 @@ USHORT PopupMenu::Execute( Window* pWindow, const Rectangle& rRect, USHORT nFlag
 
 USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupModeFlags, Menu* pSFrom, BOOL bPreSelectFirst )
 {
+
     // #59614# Mit TH abgesprochen dass die ASSERTION raus kommt,
     // weil es evtl. legitim ist...
 //  DBG_ASSERT( !PopupMenu::IsInExecute() || pSFrom, "PopupMenu::Execute() called in PopupMenu::Execute()" );
@@ -4119,6 +4366,15 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
         aHideBtn.Show( pMen->HasHideButton() );
     }
     Invalidate();
+
+    // show and connect native menubar
+    if( pMenu && pMenu->ImplGetSalMenu() )
+    {
+        if( SalMenu::VisibleMenuBar() )
+            ImplGetFrame()->SetMenu( pMenu->ImplGetSalMenu() );
+
+        pMenu->ImplGetSalMenu()->SetFrame( ImplGetFrame() );
+    }
 }
 
 void MenuBarWindow::ShowButtons( BOOL bClose, BOOL bFloat, BOOL bHide )
@@ -4557,6 +4813,13 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
 
 void MenuBarWindow::Paint( const Rectangle& rRect )
 {
+    // no VCL paint if native menus
+    if( pMenu->ImplGetSalMenu() && SalMenu::VisibleMenuBar() )
+    {
+        ImplGetFrame()->DrawMenuBar();
+        return;
+    }
+
     pMenu->ImplPaint( this, 0 );
     if ( nHighlightedItem != ITEMPOS_INVALID )
         HighlightItem( nHighlightedItem, TRUE );
@@ -4679,6 +4942,27 @@ void MenuBarWindow::StateChanged( StateChangedType nType )
 
 }
 
+void MenuBarWindow::ImplLayoutChanged()
+{
+    ImplInitMenuWindow( this, TRUE, TRUE );
+    // Falls sich der Font geaendert hat.
+    long nHeight = pMenu->ImplCalcSize( this ).Height();
+    if( nHeight < 20 ) nHeight = 20;   // leave enough space for closer
+
+    // depending on the native implementation or the displayable flag
+    // the menubar windows is supressed (ie, height=0)
+    if( !((MenuBar*) pMenu)->IsDisplayable() ||
+        ( pMenu->ImplGetSalMenu() && SalMenu::VisibleMenuBar() ) )
+        nHeight = 0;
+
+    SetPosSizePixel( 0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT );
+    GetParent()->Resize();
+    Invalidate();
+    Resize();
+    if( pMenu )
+        pMenu->ImplKillLayoutData();
+}
+
 void MenuBarWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -4688,16 +4972,7 @@ void MenuBarWindow::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplInitMenuWindow( this, TRUE, TRUE );
-        // Falls sich der Font geaendert hat.
-        long nHeight = pMenu->ImplCalcSize( this ).Height();
-        if( nHeight < 20 ) nHeight = 20;   // leave enough space for closer
-        SetPosSizePixel( 0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT );
-        GetParent()->Resize();
-        Invalidate();
-        Resize();
-        if( pMenu )
-            pMenu->ImplKillLayoutData();
+        ImplLayoutChanged();
     }
 }
 
