@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:39:09 $
+ *  last change: $Author: hr $ $Date: 2001-09-13 09:14:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1953,7 +1953,8 @@ void OQueryDesignView::InitFromParseNode()
             ::connectivity::OSQLParseNode* pTree = pParseTree->getChild(1);
 
             const OSQLTables& aMap = aIterator.getTables();
-            ::comphelper::UStringMixEqual aKeyComp(static_cast< ::comphelper::UStringMixLess*>(&aMap.key_comp())->isCaseSensitive());
+            ::comphelper::UStringMixLess aTmp(aMap.key_comp());
+            ::comphelper::UStringMixEqual aKeyComp(static_cast< ::comphelper::UStringMixLess*>(&aTmp)->isCaseSensitive());
 
             Reference< XConnection> xConnection = static_cast<OQueryController*>(getController())->getConnection();
             if(xConnection.is())
