@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:07:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ struct ScPivotParam;
 struct ScImportSourceDesc;
 struct ScSheetSourceDesc;
 class TypedStrCollection;
+struct PivotField;
 
 
 struct ScDPServiceDesc
@@ -204,8 +205,19 @@ public:
     BOOL                StoreNew(SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
     BOOL                LoadNew(SvStream& rStream, ScMultipleReadHeader& rHdr );
     BOOL                FillOldParam(ScPivotParam& rParam, BOOL bForFile) const;
-    BOOL                FillLabelData(ScPivotParam& rParam, BOOL* pShowAll, SCSIZE nShowAllMax) const;
+    BOOL                FillLabelData(ScPivotParam& rParam);
     void                InitFromOldPivot(const ScPivot& rOld, ScDocument* pDoc, BOOL bSetSource);
+
+    BOOL                GetHierarchiesNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xHiers );
+    BOOL                GetHierarchies( sal_Int32 nDim, com::sun::star::uno::Sequence< rtl::OUString >& rHiers );
+
+    sal_Int32           GetUsedHierarchy( sal_Int32 nDim );
+
+    BOOL                GetMembersNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
+    BOOL                GetMembers( sal_Int32 nDim, com::sun::star::uno::Sequence< rtl::OUString >& rMembers, com::sun::star::uno::Sequence< sal_Bool >* pVisible = 0 );
+
+    BOOL                GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
+    BOOL                GetMembers( sal_Int32 nDim, sal_Int32 nHier, com::sun::star::uno::Sequence< rtl::OUString >& rMembers, com::sun::star::uno::Sequence< sal_Bool >* pVisible = 0 );
 
     void                UpdateReference( UpdateRefMode eUpdateRefMode,
                                          const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
@@ -228,7 +240,8 @@ public:
                                 com::sun::star::sheet::XDimensionsSupplier>& xSource,
                             BOOL bOldDefaults,
                             PivotField* pRefColFields = NULL, SCSIZE nRefColCount = 0,
-                            PivotField* pRefRowFields = NULL, SCSIZE nRefRowCount = 0 );
+                            PivotField* pRefRowFields = NULL, SCSIZE nRefRowCount = 0,
+                            PivotField* pRefPageFields = NULL, SCSIZE nRefPageCount = 0 );
 };
 
 
