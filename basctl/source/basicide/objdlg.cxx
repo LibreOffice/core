@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:07:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifndef _SFX_IPFRM_HXX
-#include <sfx2/ipfrm.hxx>
-#endif
 
 #include <ide_pch.hxx>
 
@@ -230,23 +226,16 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
         case TBITEM_SHOW:
         {
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-            SfxDispatcher* pDispatcher = ( pViewFrame && !pViewFrame->ISA( SfxInPlaceFrame ) ) ? pViewFrame->GetDispatcher() : NULL;
-            if ( pDispatcher )
-            {
-                pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
-            }
-            else
-            {
-                SfxAllItemSet aArgs( SFX_APP()->GetPool() );
-                SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
-                SFX_APP()->ExecuteSlot( aRequest );
-            }
+            SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+            SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
+            SFX_APP()->ExecuteSlot( aRequest );
+
             SvLBoxEntry* pCurEntry = aMacroTreeList.GetCurEntry();
             DBG_ASSERT( pCurEntry, "Entry?!" );
             BasicEntryDescriptor aDesc( aMacroTreeList.GetEntryDescriptor( pCurEntry ) );
             BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
             pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-            pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+            SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if ( aDesc.GetType() == OBJ_TYPE_MODULE ||
                  aDesc.GetType() == OBJ_TYPE_DIALOG ||
                  aDesc.GetType() == OBJ_TYPE_METHOD )
