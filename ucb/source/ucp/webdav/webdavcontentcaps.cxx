@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontentcaps.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 09:42:13 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 10:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,20 +361,32 @@ bool ContentProvider::getProperty(
 uno::Sequence< beans::Property > Content::getProperties(
     const uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    sal_Bool bTransient;
+    std::auto_ptr< DAVResourceAccess > xResAccess;
+    std::auto_ptr< ContentProperties > xCachedProps;
+    rtl::Reference< ContentProvider >  xProvider;
+
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+        bTransient = m_bTransient;
+        xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
+        xCachedProps.reset( new ContentProperties( *m_xCachedProps.get() ) );
+        xProvider.set( m_pProvider );
+    }
 
     typedef std::set< rtl::OUString > StringSet;
     StringSet aPropSet;
 
     // No server access for just created (not yet committed) objects.
     // Only a minimal set of properties supported at this stage.
-    if ( !m_bTransient )
+    if ( !bTransient )
     {
         // Obtain all properties supported for this resource from server.
         try
         {
             std::vector< DAVResourceInfo > props;
-            m_xResAccess->PROPFIND( DAVZERO, props, xEnv );
+            xResAccess->PROPFIND( DAVZERO, props, xEnv );
 
             // Note: vector always contains exactly one resource info, because
             //       we used a depth of DAVZERO for PROPFIND.
@@ -532,13 +544,13 @@ uno::Sequence< beans::Property > Content::getProperties(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ) );
 
     // Add cached properties, if present and still missing.
-    if ( m_xCachedProps.get() )
+    if ( xCachedProps.get() )
     {
         const std::set< rtl::OUString >::const_iterator set_end
             = aPropSet.end();
 
         const std::auto_ptr< PropertyValueMap > & xProps
-            = m_xCachedProps->getProperties();
+            = xCachedProps->getProperties();
 
         PropertyValueMap::const_iterator       map_it  = xProps->begin();
         const PropertyValueMap::const_iterator map_end = xProps->end();
@@ -561,7 +573,7 @@ uno::Sequence< beans::Property > Content::getProperties(
 
     for ( sal_Int32 n = 0; n < nCount; ++n, ++it )
     {
-        m_pProvider->getProperty( (*it), aProp );
+        xProvider->getProperty( (*it), aProp );
         aProperties[ n ] = aProp;
     }
 
