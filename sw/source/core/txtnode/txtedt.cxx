@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,20 +463,33 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 XubString SwTxtNode::GetCurWord( xub_StrLen nPos )
 {
     ASSERT( nPos<=aText.Len() , "SwTxtNode::GetCurWord: Pos hinter String?");
-    if( !aText.Len() )
+    if (!aText.Len())
         return aText;
 
     Boundary aBndry;
-    if( pBreakIt->xBreak.is() )
-        aBndry = pBreakIt->xBreak->getWordBoundary(
-                    aText, nPos, pBreakIt->GetLocale( GetLang( nPos ) ),
-                    WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/, TRUE );
+    const Reference< XBreakIterator > &rxBreak = pBreakIt->xBreak;
+    if (rxBreak.is())
+    {
+        sal_Int16 nWordType = WordType::DICTIONARY_WORD;
+        lang::Locale aLocale( pBreakIt->GetLocale( GetLang( nPos ) ) );
+#ifdef DEBUG
+        BOOL bBegin = rxBreak->isBeginWord( aText, nPos, aLocale, nWordType );
+        BOOL bEnd   = rxBreak->isEndWord  ( aText, nPos, aLocale, nWordType );
+#endif
+        aBndry = rxBreak->getWordBoundary( aText, nPos, aLocale, nWordType, TRUE );
 
-    if( aBndry.endPos != aBndry.startPos &&
-        IsSymbol( (xub_StrLen)aBndry.startPos ) )
+        // if no word was found use previous word (if any)
+        if (aBndry.startPos == aBndry.endPos)
+            aBndry = rxBreak->previousWord( aText, nPos, aLocale, nWordType );
+    }
+
+    // check if word was found and if it uses a symbol font, if so
+    // enforce returning an empty string
+    if (aBndry.endPos != aBndry.startPos && IsSymbol( (xub_StrLen)aBndry.startPos ))
         aBndry.endPos = aBndry.startPos;
-    return aText.Copy( (xub_StrLen)aBndry.startPos,
-                        (xub_StrLen)(aBndry.endPos - aBndry.startPos) );
+
+    return aText.Copy( (xub_StrLen) aBndry.startPos,
+                       (xub_StrLen) (aBndry.endPos - aBndry.startPos) );
 }
 
 
