@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:42:28 $
+ *  last change: $Author: fs $ $Date: 2000-11-06 17:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #ifndef _TYPELIB_TYPEDESCRIPTION_HXX_
 #include <typelib/typedescription.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 
 #ifndef _DBA_CORE_CONNECTION_HXX_
 #include "connection.hxx"
@@ -129,6 +132,7 @@ using namespace ::com::sun::star::io;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::vos;
+using namespace ::dbtools;
 
 // persistent tokens
 #define PT_SVFORMATTER      0x0001
@@ -586,7 +590,7 @@ Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& use
     Reference< XConnection > xSdbcConn = buildLowLevelConnection(user, password);
     if (!xSdbcConn.is())
         // something went heavily wrong, for instance the driver manager could not be instantiated
-        throw RuntimeException();
+        throwGenericSQLException(::rtl::OUString::createFromAscii("Could not connect to the data source. Un unspecified error occured."), static_cast< XDataSource* >(this));
 
     Reference< XConnection > xConn;
 
