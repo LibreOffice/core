@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwordcontainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-31 11:27:37 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,9 +161,9 @@ class StorageItem : public ::utl::ConfigItem {
     ::rtl::OUString     mEncoded;
 public:
     StorageItem( PasswordContainer* point, const ::rtl::OUString& path ) :
+        ConfigItem( path, CONFIG_MODE_IMMEDIATE_UPDATE ),
         mainCont( point ),
-        hasEncoded( sal_False ),
-        ConfigItem( path, CONFIG_MODE_IMMEDIATE_UPDATE )
+        hasEncoded( sal_False )
     {
         ::com::sun::star::uno::Sequence< ::rtl::OUString > aNode( 1 );
         *aNode.getArray()  = path;
