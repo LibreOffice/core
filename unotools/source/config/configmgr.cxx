@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:29:10 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,6 +412,30 @@ rtl::OUString ConfigManager::GetConfigBaseURL()
  ---------------------------------------------------------------------------*/
 Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 {
+    switch(eProp)
+    {
+        case INSTALLPATH:
+            OSL_ENSURE( false,
+                        "ConfigManager::GetDirectConfigProperty: "
+                        "INSTALLPATH no longer supported." );
+            return Any();
+        case USERINSTALLURL:
+            OSL_ENSURE( false,
+                        "ConfigManager::GetDirectConfigProperty: "
+                        "USERINSTALLURL no longer supported." );
+            return Any();
+        case OFFICEINSTALL:
+            OSL_ENSURE( false,
+                        "ConfigManager::GetDirectConfigProperty: "
+                        "OFFICEINSTALL no longer supported." );
+            return Any();
+        case OFFICEINSTALLURL:
+            OSL_ENSURE( false,
+                        "ConfigManager::GetDirectConfigProperty: "
+                        "OFFICEINSTALLURL no longer supported." );
+            return Any();
+    }
+
     ConfigManager * pTheConfigManager = GetConfigManager();
 
     Any aRet;
@@ -442,18 +466,12 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
     OUString sPath = C2U(cConfigBaseURL);
     switch(eProp)
     {
-        case INSTALLPATH:
-        case USERINSTALLURL:                sPath += C2U("Setup/Office"); break;
-
         case LOCALE:                        sPath += C2U("Setup/L10N"); break;
 
         case PRODUCTNAME:
         case PRODUCTVERSION:
         case PRODUCTEXTENSION:
         case PRODUCTXMLFILEFORMATVERSION:   sPath += C2U("Setup/Product"); break;
-
-        case OFFICEINSTALL:
-        case OFFICEINSTALLURL:              sPath += C2U("Office.Common/Path/Current"); break;
 
         case DEFAULTCURRENCY:               sPath += C2U("Setup/L10N"); break;
     }
@@ -477,15 +495,11 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         OUString sProperty;
         switch(eProp)
         {
-            case USERINSTALLURL:                sProperty = C2U("ooSetupInstallURL"); break;
-            case INSTALLPATH:                   sProperty = C2U("ooSetupInstallPath"); break;
             case LOCALE:                        sProperty = C2U("ooLocale"); break;
             case PRODUCTNAME:                   sProperty = C2U("ooName"); break;
             case PRODUCTVERSION:                sProperty = C2U("ooSetupVersion"); break;
             case PRODUCTEXTENSION:              sProperty = C2U("ooSetupExtension"); break;
             case PRODUCTXMLFILEFORMATVERSION:   sProperty = C2U("ooXMLFileFormatVersion"); break;
-            case OFFICEINSTALL:                 sProperty = C2U("OfficeInstall"); break;
-            case OFFICEINSTALLURL:              sProperty = C2U("OfficeInstallURL"); break;
             case DEFAULTCURRENCY:               sProperty = C2U("ooSetupCurrency"); break;
         }
         try
