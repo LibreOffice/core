@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 16:35:54 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ SlideSorterView::SlideSorterView (
         new cache::PageCache(*this, mrModel, nMaxCacheSize))),
     mpViewOverlay (new ViewOverlay(rViewShell)),
     mnFirstVisiblePageIndex(0),
-    mnLastVisiblePageIndex(0)
+    mnLastVisiblePageIndex(-1)
 {
     // Hide the page that contains the page objects.
     SetPageVisible (FALSE);
