@@ -148,27 +148,38 @@ sub get_module_name_description
 {
     my ($modulesarrayref, $onelanguage, $gid, $type) = @_;
 
+    my $found = 0;
+
     my $newstring = "";
 
     for ( my $i = 0; $i <= $#{$modulesarrayref}; $i++ )
     {
         my $onemodule = ${$modulesarrayref}[$i];
 
-        my $found = 0;
-
         if ( $onemodule->{'gid'} eq $gid )
         {
-            if ( $onemodule->{'ismultilingual'} )
+            my $typestring = $type . " " . "(" . $onelanguage . ")";
+            $newstring = $onemodule->{$typestring };
+            $found = 1;
+        }
+
+        if ( $found ) { last; }
+    }
+
+    # defaulting to english
+
+    if ( ! $found )
+    {
+        my $defaultlanguage = "en-US";
+
+        for ( my $i = 0; $i <= $#{$modulesarrayref}; $i++ )
+        {
+            my $onemodule = ${$modulesarrayref}[$i];
+
+            if ( $onemodule->{'gid'} eq $gid )
             {
-                if ( $onemodule->{'specificlanguage'} eq $onelanguage )
-                {
-                    $newstring = $onemodule->{$type};
-                    $found = 1;
-                }
-            }
-            else
-            {
-                $newstring = $onemodule->{$type};
+                my $typestring = $type . " " . "(" . $defaultlanguage . ")";
+                $newstring = $onemodule->{$typestring};
                 $found = 1;
             }
 
@@ -199,7 +210,7 @@ sub set_productname_and_productversion
         ${$templatefile}[$i] =~ s/\{PRODUCTVERSION\}/$productversion/g;
     }
 
-    $infoline = "End of: Setting component names and description in Java template file\n\n";
+    $infoline = "End of: Setting product name and product version in Java template file\n\n";
     push( @installer::globals::logfileinfo, $infoline);
 }
 
@@ -239,7 +250,7 @@ sub set_component_name_and_description
 
             my $newstring = get_module_name_description($modulesarrayref, $onelanguage, $gid, $type);
 
-            $infoline = "\tReplacing: OLDSTRING: $oldstring NEWSTRING $newstring\n";
+            $infoline = "\tReplacing (language $onelanguage): OLDSTRING: $oldstring NEWSTRING $newstring\n";
             push( @installer::globals::logfileinfo, $infoline);
 
             ${$templatefile}[$i] =~ s/$oldstring/$newstring/;   # always substitute, even if $newstring eq ""
