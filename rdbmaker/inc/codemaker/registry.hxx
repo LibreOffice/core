@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,8 @@
 #ifndef _REGISTRY_REGISTRY_HXX_
 #include    <registry/registry.hxx>
 #endif
-#ifndef __REGISTRY_REFLREAD_HXX__
-#include    <registry/reflread.hxx>
-#endif
+#include "registry/reader.hxx"
+#include "registry/version.h"
 
 #ifndef _CODEMAKER_OPTIONS_HXX_
 #include    <codemaker/options.hxx>
@@ -83,8 +82,7 @@
 
 struct TypeReader_Impl
 {
-    TypeReader_Impl(const RegistryTypeReaderLoader& rLoader,
-                       const sal_uInt8* buffer,
+    TypeReader_Impl(const sal_uInt8* buffer,
                        sal_uInt32 bufferLen,
                        sal_Bool copyData)
         : m_refCount(0)
@@ -102,7 +100,8 @@ struct TypeReader_Impl
                 m_pBlop = buffer;
             }
 
-            m_pReader = new RegistryTypeReader( rLoader, m_pBlop, m_blopSize, sal_False);
+            m_pReader = new typereg::Reader(
+                m_pBlop, m_blopSize, false, TYPEREG_VERSION_1);
         }
 
     ~TypeReader_Impl()
@@ -117,7 +116,7 @@ struct TypeReader_Impl
     sal_Bool            m_copyData;
     sal_Int32           m_blopSize;
     const sal_uInt8*    m_pBlop;
-    RegistryTypeReader* m_pReader;
+    typereg::Reader*    m_pReader;
 };
 
 class TypeReader
@@ -133,12 +132,11 @@ public:
         : m_pImpl(NULL)
     {}
 
-    inline TypeReader(const RegistryTypeReaderLoader& rLoader,
-                              const sal_uInt8* buffer,
+    inline TypeReader(        const sal_uInt8* buffer,
                               sal_uInt32 bufferLen,
                               sal_Bool copyData)
     {
-        m_pImpl = new TypeReader_Impl(rLoader, buffer, bufferLen, copyData);
+        m_pImpl = new TypeReader_Impl(buffer, bufferLen, copyData);
         acquire();
     }
 
@@ -178,20 +176,16 @@ public:
                 return sal_False;
         }
 
-    inline sal_uInt16               getMinorVersion() const
-        { return m_pImpl->m_pReader->getMinorVersion(); }
-    inline sal_uInt16               getMajorVersion() const
-        { return m_pImpl->m_pReader->getMajorVersion(); }
     inline RTTypeClass              getTypeClass() const
         { return m_pImpl->m_pReader->getTypeClass(); }
     inline const ::rtl::OString     getTypeName() const
         { return inGlobalSet( m_pImpl->m_pReader->getTypeName() ); }
-    inline const ::rtl::OString     getSuperTypeName() const
-        { return inGlobalSet( m_pImpl->m_pReader->getSuperTypeName() ); }
-    inline void                     getUik(RTUik& uik) const
-        { m_pImpl->m_pReader->getUik(uik); }
+    inline sal_uInt16 getSuperTypeCount() const
+        { return m_pImpl->m_pReader->getSuperTypeCount(); }
+    inline const ::rtl::OString     getSuperTypeName(sal_uInt16 index) const
+        { return inGlobalSet( m_pImpl->m_pReader->getSuperTypeName(index) ); }
     inline const ::rtl::OString     getDoku() const
-        { return inGlobalSet( m_pImpl->m_pReader->getDoku() ); }
+        { return inGlobalSet( m_pImpl->m_pReader->getDocumentation() ); }
     inline const ::rtl::OString     getFileName() const
         { return inGlobalSet( m_pImpl->m_pReader->getFileName() ); }
     inline sal_uInt32               getFieldCount() const
@@ -199,13 +193,13 @@ public:
     inline const ::rtl::OString     getFieldName( sal_uInt16 index ) const
         { return inGlobalSet( m_pImpl->m_pReader->getFieldName(index) ); }
     inline const ::rtl::OString     getFieldType( sal_uInt16 index ) const
-        { return inGlobalSet( m_pImpl->m_pReader->getFieldType(index) ); }
+        { return inGlobalSet( m_pImpl->m_pReader->getFieldTypeName(index) ); }
     inline RTFieldAccess            getFieldAccess( sal_uInt16 index ) const
-        { return m_pImpl->m_pReader->getFieldAccess(index); }
+        { return m_pImpl->m_pReader->getFieldFlags(index); }
     inline RTConstValue             getFieldConstValue( sal_uInt16 index ) const
-        { return m_pImpl->m_pReader->getFieldConstValue(index); }
+        { return m_pImpl->m_pReader->getFieldValue(index); }
     inline const ::rtl::OString     getFieldDoku( sal_uInt16 index ) const
-        { return inGlobalSet( m_pImpl->m_pReader->getFieldDoku(index) ); }
+        { return inGlobalSet( m_pImpl->m_pReader->getFieldDocumentation(index) ); }
     inline const ::rtl::OString     getFieldFileName( sal_uInt16 index ) const
         { return inGlobalSet( m_pImpl->m_pReader->getFieldFileName(index) ); }
     inline sal_uInt32               getMethodCount() const
@@ -213,32 +207,32 @@ public:
     inline const ::rtl::OString     getMethodName( sal_uInt16 index ) const
         { return inGlobalSet( m_pImpl->m_pReader->getMethodName(index) ); }
     inline sal_uInt32               getMethodParamCount( sal_uInt16 index ) const
-        { return m_pImpl->m_pReader->getMethodParamCount(index); }
+        { return m_pImpl->m_pReader->getMethodParameterCount(index); }
     inline const ::rtl::OString     getMethodParamType( sal_uInt16 index, sal_uInt16 paramIndex ) const
-        { return inGlobalSet( m_pImpl->m_pReader->getMethodParamType(index,paramIndex) ); }
+        { return inGlobalSet( m_pImpl->m_pReader->getMethodParameterTypeName(index,paramIndex) ); }
     inline const ::rtl::OString     getMethodParamName( sal_uInt16 index, sal_uInt16 paramIndex ) const
-        { return inGlobalSet( m_pImpl->m_pReader->getMethodParamName(index,paramIndex) ); }
+        { return inGlobalSet( m_pImpl->m_pReader->getMethodParameterName(index,paramIndex) ); }
     inline RTParamMode              getMethodParamMode( sal_uInt16 index, sal_uInt16 paramIndex ) const
-        { return m_pImpl->m_pReader->getMethodParamMode(index,paramIndex); }
+        { return m_pImpl->m_pReader->getMethodParameterFlags(index,paramIndex); }
     inline sal_uInt32               getMethodExcCount( sal_uInt16 index ) const
-        { return m_pImpl->m_pReader->getMethodExcCount(index); }
+        { return m_pImpl->m_pReader->getMethodExceptionCount(index); }
     inline const ::rtl::OString     getMethodExcType( sal_uInt16 index, sal_uInt16 excIndex ) const
-        { return inGlobalSet( m_pImpl->m_pReader->getMethodExcType(index,excIndex) ); }
+        { return inGlobalSet( m_pImpl->m_pReader->getMethodExceptionTypeName(index,excIndex) ); }
     inline const ::rtl::OString     getMethodReturnType( sal_uInt16 index ) const
-        { return inGlobalSet( m_pImpl->m_pReader->getMethodReturnType(index) ); }
+        { return inGlobalSet( m_pImpl->m_pReader->getMethodReturnTypeName(index) ); }
     inline RTMethodMode             getMethodMode( sal_uInt16 index ) const
-        { return m_pImpl->m_pReader->getMethodMode(index); }
+        { return m_pImpl->m_pReader->getMethodFlags(index); }
     inline const ::rtl::OString     getMethodDoku( sal_uInt16 index ) const
-        { return inGlobalSet( m_pImpl->m_pReader->getMethodDoku(index) ); }
+        { return inGlobalSet( m_pImpl->m_pReader->getMethodDocumentation(index) ); }
 
     inline sal_uInt32               getReferenceCount() const
         { return m_pImpl->m_pReader->getReferenceCount(); }
     inline const ::rtl::OString     getReferenceName( sal_uInt16 index ) const
-        { return inGlobalSet( m_pImpl->m_pReader->getReferenceName(index) ); }
+        { return inGlobalSet( m_pImpl->m_pReader->getReferenceTypeName(index) ); }
     inline RTReferenceType          getReferenceType( sal_uInt16 index ) const
-        { return m_pImpl->m_pReader->getReferenceType(index); }
+        { return m_pImpl->m_pReader->getReferenceSort(index); }
     inline const ::rtl::OString     getReferenceDoku( sal_uInt16 index ) const
-        { return inGlobalSet( m_pImpl->m_pReader->getReferenceDoku(index) ); }
+        { return inGlobalSet( m_pImpl->m_pReader->getReferenceDocumentation(index) ); }
 
     inline sal_uInt32 getBlopSize() const
         { return m_pImpl->m_blopSize; }
