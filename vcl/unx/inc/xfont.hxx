@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,10 @@ class ExtendedFontStruct : public SvRefBase
         ExtendedXlfd*       mpXlfd;
         XFontStruct**       mpXFontStruct;
 
+        // unicode range cache
+        mutable sal_uInt32* mpRangeCodes;
+        mutable int         mnRangeCount;
+
         int                 LoadEncoding( rtl_TextEncoding nEncoding );
         FontPitch           GetSpacing( rtl_TextEncoding nEncoding );
         Bool                GetFontBoundingBox( XCharStruct *pCharStruct,
@@ -174,7 +178,8 @@ class ExtendedFontStruct : public SvRefBase
         rtl_TextEncoding    GetAsciiEncoding( int *pAsciiRange = NULL ) const;
         sal_Size            GetCharWidth( sal_Unicode nFrom, sal_Unicode nTo,
                                     long *pWidthArray, ExtendedFontStruct *pFallback );
-        ULONG               GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
+        int                 GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
+        bool                HasUnicodeChar( sal_Unicode ) const;
 };
 
 // Declaration and Implementation for ExtendedFontStructRef: Add RefCounting
@@ -187,9 +192,8 @@ class X11FontLayout : public GenericSalLayout
 public:
                     X11FontLayout( ExtendedFontStruct& );
     virtual bool    LayoutText( ImplLayoutArgs& );
+    virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
-
-    virtual bool    IsNotdefGlyph( long nGlyphIndex ) const;
 
 private:
     ExtendedFontStruct& mrFont;
