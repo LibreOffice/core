@@ -54,7 +54,7 @@ SV_DECL_IMPL_REF( UCB_Link_Helper )
 #define NS_IO ::com::sun::star::io
 #define NS_UCB ::com::sun::star::ucb
 
-SV_DECL_REF( UcbLockBytes );
+SV_DECL_REF( UcbLockBytes )
 
 
 class CommandThread_Impl;
