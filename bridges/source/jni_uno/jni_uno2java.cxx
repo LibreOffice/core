@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_uno2java.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:42:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ void Bridge::handle_java_exc(
         jni, uno_data.get(), val, td.get()->pWeakRef, 0,
         false /* no assign */, false /* no out param */ );
 
-#if defined _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     // patch Message, append stack trace
     reinterpret_cast< ::com::sun::star::uno::Exception * >( uno_data.get() )->Message +=
         jni.get_stack_trace( jo_exc.get() );
@@ -147,7 +147,7 @@ void Bridge::handle_java_exc(
     uno_exc->pType = td.get()->pWeakRef;
     uno_exc->pData = uno_data.release();
 
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OUStringBuffer trace_buf( 128 );
     trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("exception occured uno->java: [") );
     trace_buf.append( exc_name );
@@ -215,7 +215,7 @@ void Bridge::call_java(
 
     jmethodID method_id = info->m_methods[ function_pos ];
 
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OUStringBuffer trace_buf( 128 );
     trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("calling ") );
     JLocalAutoRef jo_method( jni, jni->ToReflectedMethod( info->m_class, method_id, JNI_FALSE ) );
@@ -427,7 +427,7 @@ inline void UNO_proxy::acquire() const
             m_bridge->m_uno_env, &that,
             UNO_proxy_free, m_oid.pData,
             (typelib_InterfaceTypeDescription *)m_type_info->m_td.get() );
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OSL_ASSERT( this == (void const * const)that );
 #endif
     }
@@ -490,7 +490,7 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     Bridge const * bridge = that->m_bridge;
 
     OSL_ASSERT( env == bridge->m_uno_env );
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OString cstr_msg(
         OUStringToOString(
             OUSTR("freeing binary uno proxy: ") + that->m_oid, RTL_TEXTENCODING_ASCII_US ) );
@@ -508,7 +508,7 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     }
     catch (BridgeRuntimeError & err)
     {
-#if defined _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OString cstr_msg( OUStringToOString( err.m_message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_ENSURE( 0, cstr_msg.getStr() );
 #endif
@@ -519,7 +519,7 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     }
 
     bridge->release();
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
     *(int *)that = 0xdeadcafe;
 #endif
     delete that;
@@ -548,7 +548,7 @@ void SAL_CALL UNO_proxy_dispatch(
     UNO_proxy const * that = static_cast< UNO_proxy const * >( pUnoI );
     Bridge const * bridge = that->m_bridge;
 
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OUStringBuffer trace_buf( 64 );
     trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("uno->java call: ") );
     trace_buf.append( *reinterpret_cast< OUString const * >( &member_td->pTypeName ) );
@@ -663,7 +663,7 @@ void SAL_CALL UNO_proxy_dispatch(
                     {
                         if (jo_ret.is())
                         {
-#if defined _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                             JLocalAutoRef jo_oid( jni, compute_oid( jni, jo_ret.get() ) );
                             OUString oid( jstring_to_oustring( jni, (jstring)jo_oid.get() ) );
                             OSL_ENSURE( oid.equals( that->m_oid ), "### different oids!" );
@@ -749,7 +749,7 @@ void SAL_CALL UNO_proxy_dispatch(
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
         ::com::sun::star::uno::Type const & exc_type = ::getCppuType( &exc );
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), 0 );
-#if defined _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OString cstr_msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_ENSURE( 0, cstr_msg.getStr() );
 #endif
@@ -762,7 +762,7 @@ void SAL_CALL UNO_proxy_dispatch(
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
         ::com::sun::star::uno::Type const & exc_type = ::getCppuType( &exc );
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), 0 );
-#if defined _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OString cstr_msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_ENSURE( 0, cstr_msg.getStr() );
 #endif
