@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-12 10:56:21 $
+ *  last change: $Author: mav $ $Date: 2002-09-19 10:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,7 +832,15 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         pImp->bIsSaving = sal_False; // here it's already clear
 
         // ggf. DocInfo Dialog
-        UpdateDocInfoForSave();
+        if( bCopyTo && IsEnableSetModified() )
+        {
+            EnableSetModified( sal_False );
+            UpdateDocInfoForSave();
+            EnableSetModified( sal_True );
+        }
+        else
+            UpdateDocInfoForSave();
+
         if (  eCreateMode == SFX_CREATE_MODE_STANDARD && 0 == ( pImp->eFlags & SFXOBJECTSHELL_NODOCINFO ) )
         {
             SvtSaveOptions aOptions;
