@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:55 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,6 +656,11 @@ void ScDocument::FindConditionalFormat( ULONG nKey, ScRangeList& rRanges )
         pTab[i]->FindConditionalFormat( nKey, rRanges );
 }
 
+void ScDocument::FindConditionalFormat( ULONG nKey, ScRangeList& rRanges, USHORT nTab )
+{
+    if(VALIDTAB(nTab) && pTab[nTab])
+        pTab[nTab]->FindConditionalFormat( nKey, rRanges );
+}
 
 void ScDocument::ConditionalChanged( ULONG nKey )
 {
