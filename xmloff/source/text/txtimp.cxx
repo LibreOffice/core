@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 20:32:24 $
+ *  last change: $Author: mtg $ $Date: 2001-02-23 14:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,9 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_DRAW, sXML_image, XML_TOK_TEXT_IMAGE },
     { XML_NAMESPACE_DRAW, sXML_object, XML_TOK_TEXT_OBJECT },
     { XML_NAMESPACE_DRAW, sXML_object_ole, XML_TOK_TEXT_OBJECT_OLE },
+    { XML_NAMESPACE_DRAW, sXML_applet,          XML_TOK_TEXT_APPLET },
+    { XML_NAMESPACE_DRAW, sXML_floating_frame,  XML_TOK_TEXT_FLOATING_FRAME },
+    { XML_NAMESPACE_DRAW, sXML_plugin,          XML_TOK_TEXT_PLUGIN },
     { XML_NAMESPACE_DRAW, sXML_a,               XML_TOK_DRAW_A },
 
     // index marks
@@ -464,6 +467,12 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
     { XML_NAMESPACE_DRAW, sXML_zindex, XML_TOK_TEXT_FRAME_Z_INDEX },
     { XML_NAMESPACE_SVG, sXML_transform, XML_TOK_TEXT_FRAME_TRANSFORM },
     { XML_NAMESPACE_DRAW, sXML_class_id, XML_TOK_TEXT_FRAME_CLASS_ID },
+    { XML_NAMESPACE_DRAW,   sXML_code,          XML_TOK_TEXT_FRAME_CODE },
+    { XML_NAMESPACE_DRAW,   sXML_object,        XML_TOK_TEXT_FRAME_OBJECT },
+    { XML_NAMESPACE_DRAW,   sXML_archive,       XML_TOK_TEXT_FRAME_ARCHIVE },
+    { XML_NAMESPACE_OFFICE, sXML_name,          XML_TOK_TEXT_FRAME_OFFICE_NAME },
+    { XML_NAMESPACE_DRAW,   sXML_may_script,    XML_TOK_TEXT_FRAME_MAY_SCRIPT },
+    { XML_NAMESPACE_DRAW,   sXML_mime_type,     XML_TOK_TEXT_FRAME_MIME_TYPE },
     XML_TOKEN_MAP_END
 };
 
@@ -1566,6 +1575,44 @@ Reference< XPropertySet> XMLTextImportHelper::createAndInsertOLEObject(
 }
 
 
+Reference< XPropertySet> XMLTextImportHelper::createApplet(
+                                        const OUString& rCode,
+                                          const OUString& rName,
+                                          sal_Bool bMayScript,
+                                          const OUString& rHRef,
+                                        sal_Int32 nWidth, sal_Int32 nHeight )
+{
+    Reference< XPropertySet> xPropSet;
+    return xPropSet;
+}
+Reference< XPropertySet> XMLTextImportHelper::createPlugin(
+                                          const OUString& rMimeType,
+                                          const OUString& rHRef,
+                                        sal_Int32 nWidth, sal_Int32 nHeight )
+{
+    Reference< XPropertySet> xPropSet;
+    return xPropSet;
+}
+Reference< XPropertySet> XMLTextImportHelper::createFloatingFrame(
+                                          const OUString& rHRef,
+                                        sal_Int32 nWidth, sal_Int32 nHeight )
+{
+    Reference< XPropertySet> xPropSet;
+    return xPropSet;
+}
+
+void XMLTextImportHelper::addParam( const OUString &rName, const OUString &rValue, sal_Bool bApplet)
+{
+}
+void XMLTextImportHelper::setAlternateText( const OUString &rAlt, sal_Bool bApplet )
+{
+}
+void XMLTextImportHelper::endApplet( )
+{
+}
+void XMLTextImportHelper::endPlugin( )
+{
+}
 // redline helper: dummy implementation to be overridden in sw/filter/xml
 void XMLTextImportHelper::RedlineAdd(
     const OUString& rType,
