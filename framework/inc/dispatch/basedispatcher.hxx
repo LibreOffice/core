@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedispatcher.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-07-06 13:24:08 $
+ *  last change: $Author: hr $ $Date: 2001-07-11 09:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ class LoaderThreads : private ::std::vector< LoadBinding >
         }
 
         //---------------------------------------------------------------------------------------------------------
-        inline append( const LoadBinding& aBinding )
+        inline void append( const LoadBinding& aBinding )
         {
             ResetableGuard aGuard( m_aLock );
             push_back( aBinding );
