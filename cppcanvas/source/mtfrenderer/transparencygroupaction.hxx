@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transparencygroupaction.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:27:14 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,6 @@
 #ifndef _CPPCANVAS_TRANSPARENCYGROUPACTION_HXX
 #define _CPPCANVAS_TRANSPARENCYGROUPACTION_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <com/sun/star/rendering/RenderState.hpp>
-#endif
-
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/renderer.hxx>
 #include <action.hxx>
@@ -81,12 +73,8 @@ class Size;
 class GDIMetaFile;
 class Gradient;
 
-namespace com { namespace sun { namespace star { namespace rendering
-{
-    class   XBitmap;
-} } } }
 
-/* Definition of internal::BitmapAction class */
+/* Definition of internal::TransparencyGroupActionFactory class */
 
 namespace cppcanvas
 {
@@ -103,14 +91,14 @@ namespace cppcanvas
             rendered with the given transparency setting against the
             background.
 
-            Encapsulated converter between GDIMetaFile and
+            Creates encapsulated converters between GDIMetaFile and
             XCanvas. The Canvas argument is deliberately placed at the
             constructor, to force reconstruction of this object for a
             new canvas. This considerably eases internal state
-            handling, since a lot of the internal state
-            (e.g. deviceColor) is Canvas-dependent.
+            handling, since a lot of the internal state (e.g. fonts,
+            text layout) is Canvas-dependent.
          */
-        class TransparencyGroupAction : public Action
+        class TransparencyGroupActionFactory
         {
         public:
             /** Create new transparency group action.
@@ -133,13 +121,13 @@ namespace cppcanvas
                 @param nAlpha
                 Alpha value, must be in the range [0,1]
              */
-            TransparencyGroupAction( MtfAutoPtr&                    rGroupMtf,
-                                     const Renderer::Parameters&    rParms,
-                                     const ::Point&                 rDstPoint,
-                                     const ::Size&                  rDstSize,
-                                     double                         nAlpha,
-                                     const CanvasSharedPtr&         rCanvas,
-                                     const OutDevState&             rState );
+            static ActionSharedPtr createTransparencyGroupAction( MtfAutoPtr&                   rGroupMtf,
+                                                                  const Renderer::Parameters&   rParms,
+                                                                  const ::Point&                rDstPoint,
+                                                                  const ::Size&                 rDstSize,
+                                                                  double                        nAlpha,
+                                                                  const CanvasSharedPtr&        rCanvas,
+                                                                  const OutDevState&            rState );
 
             /** Create new transparency group action.
 
@@ -162,37 +150,20 @@ namespace cppcanvas
                 Size of the transparency group object, in current
                 state coordinate system.
              */
-            TransparencyGroupAction( MtfAutoPtr&                    rGroupMtf,
-                                     GradientAutoPtr&               rAlphaGradient,
-                                     const Renderer::Parameters&    rParms,
-                                     const ::Point&                 rDstPoint,
-                                     const ::Size&                  rDstSize,
-                                     const CanvasSharedPtr&         rCanvas,
-                                     const OutDevState&             rState );
-            virtual ~TransparencyGroupAction();
-
-            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+            static ActionSharedPtr createTransparencyGroupAction( MtfAutoPtr&                   rGroupMtf,
+                                                                  GradientAutoPtr&              rAlphaGradient,
+                                                                  const Renderer::Parameters&   rParms,
+                                                                  const ::Point&                rDstPoint,
+                                                                  const ::Size&                 rDstSize,
+                                                                  const CanvasSharedPtr&        rCanvas,
+                                                                  const OutDevState&            rState );
 
         private:
-            // default: disabled copy/assignment
-            TransparencyGroupAction(const TransparencyGroupAction&);
-            TransparencyGroupAction& operator = ( const TransparencyGroupAction& );
-
-            MtfAutoPtr                                          mpGroupMtf;
-            GradientAutoPtr                                     mpAlphaGradient;
-
-            const Renderer::Parameters                          maParms;
-
-            const ::Size                                        maDstSize;
-
-            mutable ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XBitmap >  mxBufferBitmap; // contains last rendered version
-            mutable ::basegfx::B2DHomMatrix                     maLastTransformation; // contains active
-                                                                                      // transformation for
-                                                                                      // mxBufferBitmap content
-            CanvasSharedPtr                                     mpCanvas;
-            ::com::sun::star::rendering::RenderState    maState;
-            const double                                        mnAlpha;
+            // static factory, disable big four
+            TransparencyGroupActionFactory();
+            ~TransparencyGroupActionFactory();
+            TransparencyGroupActionFactory(const TransparencyGroupActionFactory&);
+            TransparencyGroupActionFactory& operator=( const TransparencyGroupActionFactory& );
         };
     }
 }
