@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:37:38 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 07:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
@@ -126,12 +123,12 @@ protected:
         scheme for "DefinitionSettings" - which has yet to be defined :)
         @param      _rxConfigLocation       the configuration node. must not be readonly
     */
-    virtual void    storeTo(const ::utl::OConfigurationNode& _rConfigLocation) const;
+    void    storeTo(const ::utl::OConfigurationNode& _rConfigLocation) const;
 
     /** load all configuration relevant informations from the given configuration node.
         @param      _rxConfigLocation       the configuration node. must not be readonly
     */
-    virtual void    loadFrom(const ::utl::OConfigurationNode& _rConfigLocation);
+    void    loadFrom(const ::utl::OConfigurationNode& _rConfigLocation);
 
 };
 //==========================================================================

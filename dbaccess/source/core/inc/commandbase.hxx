@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commandbase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:37:38 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 07:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBA_CORE_COMMANDBASE_HXX_
 #define _DBA_CORE_COMMANDBASE_HXX_
 
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
 #endif
 
 namespace utl
@@ -99,12 +99,12 @@ protected:
     /** store all configuration relevant informations under the given configuration node
         @param      _rConfigLocation        the configuration node. must not be readonly
     */
-    virtual void    storeTo(const ::utl::OConfigurationNode& _rConfigLocation);
+    void    storeTo(const ::utl::OConfigurationNode& _rConfigLocation);
 
     /** initialize with the informations stored under the given configuration node
         @param      _rConfigLocation        the configuration node.
     */
-    virtual void    initializeFrom(const ::utl::OConfigurationNode& _rConfigLocation);
+    void    loadFrom(const ::utl::OConfigurationNode& _rConfigLocation);
 };
 
 //........................................................................
