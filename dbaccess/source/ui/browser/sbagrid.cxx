@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 07:55:25 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 15:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,6 +570,8 @@ void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< ::com::sun:
 //---------------------------------------------------------------------------------------
 void SAL_CALL SbaXGridControl::dispose(void) throw( RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     EventObject aEvt;
     aEvt.Source = *this;
 
@@ -738,6 +740,7 @@ void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< ::com::sun::st
 //---------------------------------------------------------------------------------------
 void SAL_CALL SbaXGridPeer::selectionChanged(const EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
     FmXGridPeer::selectionChanged(aEvent);
 
     SbaGridControl* pGrid = (SbaGridControl*) GetWindow();
