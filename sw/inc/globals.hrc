@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:53:37 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,5 +325,11 @@
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 
-
+//CHINA001 for PageCreated
+#define SID_PREVIEWFLAG_TYPE                    (RC_GLOBALS_BEGIN +  114)
+#define SID_FONTMODE_TYPE               (RC_GLOBALS_BEGIN +  115)
+#define SID_FAX_LIST               (RC_GLOBALS_BEGIN +  116)
+#define SID_WRT_SHELL               (RC_GLOBALS_BEGIN +  117)
+//CHINA001 for SwLineNumberingDlg
+#define DLG_LINE_NUMBERING               (RC_GLOBALS_BEGIN +  118)
 #endif // _GLOBALS_HRC
