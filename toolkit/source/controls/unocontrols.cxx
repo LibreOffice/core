@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-05 15:25:14 $
+ *  last change: $Author: mt $ $Date: 2001-02-12 15:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,6 +578,19 @@ sal_Bool UnoDialogControl::setModel( const ::com::sun::star::uno::Reference< ::c
             xC->addContainerListener( (container::XContainerListener*)this );
     }
     return bRet;
+}
+
+void UnoDialogControl::setDesignMode( sal_Bool bOn ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    UnoControl::setDesignMode( bOn );
+
+    uno::Sequence< uno::Reference< awt::XControl > > xCtrls = getControls();
+    sal_Int32 nControls = xCtrls.getLength();
+    uno::Reference< awt::XControl >* pControls = xCtrls.getArray();
+    for ( sal_Int32 n = 0; n < nControls; n++ )
+        pControls[n]->setDesignMode( bOn );
 }
 
 void UnoDialogControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)

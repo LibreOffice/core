@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-25 16:15:57 $
+ *  last change: $Author: mt $ $Date: 2001-02-12 15:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,7 @@ public:
 
     // ::com::sun::star::awt::XControl
     sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setDesignMode( sal_Bool bOn ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO( UnoDialogControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDialog ) )
