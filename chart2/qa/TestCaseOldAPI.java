@@ -282,6 +282,11 @@ public class TestCaseOldAPI extends ComplexTestCase {
             xProp.setPropertyValue( "CharHeight", new Float( fNewCharHeight ));
             assure( "Property CharHeight",
                     AnyConverter.toFloat( xProp.getPropertyValue( "CharHeight" )) == fNewCharHeight );
+
+            int nNewTextRotation = 700; // in 1/100 degrees
+            xProp.setPropertyValue( "TextRotation", new Integer( nNewTextRotation ));
+            assure( "Property TextRotation",
+                    AnyConverter.toInt( xProp.getPropertyValue( "TextRotation" )) == nNewTextRotation );
         }
         catch( Exception ex )
         {
