@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxwiz.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
+ *  last change: $Author: fs $ $Date: 2001-03-06 09:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,7 @@ namespace dbp
         // and initialize the values
         OOptionGroupSettings& rSettings = getSettings();
         rSettings.aLabels.clear();
+        rSettings.aValues.clear();
         rSettings.aLabels.reserve(m_aExistingRadios.GetEntryCount());
         rSettings.aValues.reserve(m_aExistingRadios.GetEntryCount());
         for (sal_uInt16 i=0; i<m_aExistingRadios.GetEntryCount(); ++i)
@@ -588,6 +589,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/03/05 14:53:13  fs
+ *  finished the grid control wizard
+ *
  *  Revision 1.4  2001/03/02 09:42:40  fs
  *  #84540# #84541# corrected the Next button behaviour on the first and last tab page
  *
