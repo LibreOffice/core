@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeTypeHandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-03-06 16:09:46 $
+ *  last change: $Author: af $ $Date: 2002-03-18 10:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,14 @@
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
 #endif
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
@@ -78,13 +86,13 @@ ShapeTypeHandler* ShapeTypeHandler::instance = NULL;
 
 
 // Create an empty reference to an accessible object.
-uno::Reference<XAccessible>
-    createEmptyShapeReference (const uno::Reference<XAccessible>& rxParent,
+AccessibleShape*
+    CreateEmptyShapeReference (const uno::Reference<XAccessible>& rxParent,
         const uno::Reference<drawing::XShape>& rxShape,
-        const uno::Reference<document::XEventBroadcaster>& rxBroadcaster,
+        AccessibleShapeTreeInfo& rShapeTreeInfo,
         ShapeTypeId nId)
 {
-    return uno::Reference<XAccessible>();
+    return NULL;
 }
 
 
@@ -96,7 +104,7 @@ ShapeTypeHandler& ShapeTypeHandler::Instance (void)
     // the shape type handler is instantiated.
     if (instance == NULL)
     {
-        ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
+        ::vos::OGuard aGuard (::Application::GetSolarMutex());
         if (instance == NULL)
         {
             // Create the single instance of the shape type handler.
@@ -117,7 +125,7 @@ ShapeTypeHandler& ShapeTypeHandler::Instance (void)
     identifies the place of the type descriptor.  From that descriptor the
     shape type id is returned.
 */
-ShapeTypeId ShapeTypeHandler::getTypeId (const OUString& aServiceName) const
+ShapeTypeId ShapeTypeHandler::GetTypeId (const OUString& aServiceName) const
 {
     tServiceNameToSlotId::iterator I (maServiceNameToSlotId.find (aServiceName));
     if (I != maServiceNameToSlotId.end())
@@ -134,11 +142,11 @@ ShapeTypeId ShapeTypeHandler::getTypeId (const OUString& aServiceName) const
 /** Extract the specified shape's service name and forward the request to
     the appropriate method.
 */
-ShapeTypeId ShapeTypeHandler::getTypeId (const uno::Reference<drawing::XShape>& rxShape) const
+ShapeTypeId ShapeTypeHandler::GetTypeId (const uno::Reference<drawing::XShape>& rxShape) const
 {
     uno::Reference<drawing::XShapeDescriptor> xDescriptor (rxShape, uno::UNO_QUERY);
     if (xDescriptor.is())
-        return getTypeId (xDescriptor->getShapeType());
+        return GetTypeId (xDescriptor->getShapeType());
     else
         return -1;
 }
@@ -146,7 +154,7 @@ ShapeTypeId ShapeTypeHandler::getTypeId (const uno::Reference<drawing::XShape>& 
 
 
 
-const OUString& ShapeTypeHandler::getServiceName (ShapeTypeId aTypeId) const
+const OUString& ShapeTypeHandler::GetServiceName (ShapeTypeId aTypeId) const
 {
     return maShapeTypeDescriptorList[aTypeId].msServiceName;
 }
@@ -158,16 +166,16 @@ const OUString& ShapeTypeHandler::getServiceName (ShapeTypeId aTypeId) const
     given shape and then calls the descriptor's create function.
 */
 uno::Reference<XAccessible>
-    ShapeTypeHandler::createAccessibleObject (
+    ShapeTypeHandler::CreateAccessibleObject (
         const uno::Reference<drawing::XShape>& rxShape,
         const uno::Reference<XAccessible>& rxParent,
-        const uno::Reference<document::XEventBroadcaster>& rxBroadcaster) const
+        AccessibleShapeTreeInfo& rShapeTreeInfo) const
 {
-    ShapeTypeId nSlotId (getSlotId (rxShape));
+    ShapeTypeId nSlotId (GetSlotId (rxShape));
     return maShapeTypeDescriptorList[nSlotId].maCreateFunction (
         rxParent,
         rxShape,
-        rxBroadcaster,
+        rShapeTreeInfo,
         maShapeTypeDescriptorList[nSlotId].mnShapeTypeId);
 }
 
@@ -180,12 +188,12 @@ uno::Reference<XAccessible>
 ShapeTypeHandler::ShapeTypeHandler (void)
     : maShapeTypeDescriptorList (1)
 {
-    //  Make sure that at least the UNKNOWN entry is present.
+    // Make sure that at least the UNKNOWN entry is present.
     // Resize the list, if necessary, so that the new type can be inserted.
     maShapeTypeDescriptorList[0].mnShapeTypeId = UNKNOWN_SHAPE_TYPE;
     maShapeTypeDescriptorList[0].msServiceName =
         OUString::createFromAscii ("UNKNOWN_SHAPE_TYPE");
-    maShapeTypeDescriptorList[0].maCreateFunction = createEmptyShapeReference;
+    maShapeTypeDescriptorList[0].maCreateFunction = CreateEmptyShapeReference;
     maServiceNameToSlotId[maShapeTypeDescriptorList[0].msServiceName] = 0;
 }
 
@@ -226,10 +234,10 @@ ShapeTypeHandler& ShapeTypeHandler::operator= (const ShapeTypeHandler& aHandler)
 
 
 
-bool ShapeTypeHandler::addShapeTypeList (int nDescriptorCount,
+bool ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
     ShapeTypeDescriptor aDescriptorList[])
 {
-    ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
+    ::vos::OGuard aGuard (::Application::GetSolarMutex());
 
     // Determine first id of new type descriptor(s).
     int nFirstId = maShapeTypeDescriptorList.size();
@@ -256,7 +264,10 @@ bool ShapeTypeHandler::addShapeTypeList (int nDescriptorCount,
 
 
 
-long ShapeTypeHandler::getSlotId (const OUString& aServiceName) const
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+long ShapeTypeHandler::GetSlotId (const OUString& aServiceName) const
 {
     tServiceNameToSlotId::iterator I (maServiceNameToSlotId.find (aServiceName));
     if (I != maServiceNameToSlotId.end())
@@ -270,11 +281,11 @@ long ShapeTypeHandler::getSlotId (const OUString& aServiceName) const
 
 // Extract the given shape's service name and forward request to appropriate
 // method.
-long ShapeTypeHandler::getSlotId (const uno::Reference<drawing::XShape>& rxShape) const
+long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& rxShape) const
 {
     uno::Reference<drawing::XShapeDescriptor> xDescriptor (rxShape, uno::UNO_QUERY);
     if (xDescriptor.is())
-        return getSlotId (xDescriptor->getShapeType());
+        return GetSlotId (xDescriptor->getShapeType());
     else
         return 0;
 }

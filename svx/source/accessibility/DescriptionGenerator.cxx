@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DescriptionGenerator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-03-08 12:34:37 $
+ *  last change: $Author: af $ $Date: 2002-03-18 10:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,12 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #include <com/sun/star/uno/Exception.hpp>
 
@@ -151,17 +157,38 @@ DescriptionGenerator::~DescriptionGenerator (void)
 
 
 
-void DescriptionGenerator::initialize (::rtl::OUString sPrefix)
+void DescriptionGenerator::Initialize (sal_Int32 nResourceId)
+{
+    // Get the string from the resource for the specified id.
+    OUString sPrefix;
+    {
+        ::vos::OGuard aGuard (::Application::GetSolarMutex());
+        sPrefix = OUString (SVX_RESSTR (nResourceId));
+    }
+
+    // Forward the call with the resulting string.
+    Initialize (sPrefix);
+}
+
+
+
+
+void DescriptionGenerator::Initialize (::rtl::OUString sPrefix)
 {
     msDescription = sPrefix;
     if (mxSet.is())
     {
-        msDescription.append (sal_Unicode (' '));
-        msDescription.append (OUString (SVX_RESSTR(RID_SVXSTR_A11Y_WITH)));
-        msDescription.append (sal_Unicode (' '));
+        {
+            ::vos::OGuard aGuard (::Application::GetSolarMutex());
 
-        msDescription.append (OUString (SVX_RESSTR (RID_SVXSTR_A11Y_STYLE)));
-        msDescription.append (sal_Unicode ('='));
+            msDescription.append (sal_Unicode (' '));
+            msDescription.append (OUString (SVX_RESSTR(RID_SVXSTR_A11Y_WITH)));
+            msDescription.append (sal_Unicode (' '));
+
+            msDescription.append (OUString (SVX_RESSTR (RID_SVXSTR_A11Y_STYLE)));
+            msDescription.append (sal_Unicode ('='));
+        }
+
         try
         {
             if (mxSet.is())
@@ -195,7 +222,24 @@ void DescriptionGenerator::initialize (::rtl::OUString sPrefix)
 
 
 
-void DescriptionGenerator::addProperty (const OUString& sPropertyName,
+void DescriptionGenerator::AddProperty (
+    const OUString& sPropertyName,
+    PropertyType aType,
+    const sal_Int32 nLocalizedNameId,
+    long nWhichId)
+{
+    OUString sLocalizedName;
+    {
+        ::vos::OGuard aGuard (::Application::GetSolarMutex());
+        sLocalizedName = SVX_RESSTR (nLocalizedNameId);
+    }
+    AddProperty (sPropertyName, aType, sLocalizedName, nWhichId);
+}
+
+
+
+
+void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
     PropertyType aType, const OUString& sLocalizedName, long nWhichId)
 {
     uno::Reference<beans::XPropertyState> xState (mxShape, uno::UNO_QUERY);
@@ -208,6 +252,8 @@ void DescriptionGenerator::addProperty (const OUString& sPropertyName,
                 msDescription.append (sal_Unicode (','));
             else
             {
+                ::vos::OGuard aGuard (::Application::GetSolarMutex());
+
                 msDescription.append (sal_Unicode (' '));
                 msDescription.append (OUString (SVX_RESSTR(RID_SVXSTR_A11Y_AND)));
                 msDescription.append (sal_Unicode (' '));
@@ -218,16 +264,16 @@ void DescriptionGenerator::addProperty (const OUString& sPropertyName,
             switch (aType)
             {
                 case COLOR:
-                    addColor (sPropertyName, sLocalizedName);
+                    AddColor (sPropertyName, sLocalizedName);
                     break;
                 case INTEGER:
-                    addInteger (sPropertyName, sLocalizedName);
+                    AddInteger (sPropertyName, sLocalizedName);
                     break;
                 case STRING:
-                    addString (sPropertyName, sLocalizedName, nWhichId);
+                    AddString (sPropertyName, sLocalizedName, nWhichId);
                     break;
                 case FILL_STYLE:
-                    addFillStyle (sPropertyName, sLocalizedName);
+                    AddFillStyle (sPropertyName, sLocalizedName);
                     break;
             }
         }
@@ -236,7 +282,7 @@ void DescriptionGenerator::addProperty (const OUString& sPropertyName,
 
 
 
-void DescriptionGenerator::appendString (const ::rtl::OUString& sString)
+void DescriptionGenerator::AppendString (const ::rtl::OUString& sString)
 {
     msDescription.append (sString);
 }
@@ -244,18 +290,18 @@ void DescriptionGenerator::appendString (const ::rtl::OUString& sString)
 
 
 
-void DescriptionGenerator::addLineProperties (void)
+void DescriptionGenerator::AddLineProperties (void)
 {
-    addProperty (OUString::createFromAscii ("LineColor"),
+    AddProperty (OUString::createFromAscii ("LineColor"),
         DescriptionGenerator::COLOR,
-        SVX_RESSTR(RID_SVXSTR_A11Y_LINE_COLOR));
-    addProperty (OUString::createFromAscii ("LineDashName"),
+        RID_SVXSTR_A11Y_LINE_COLOR);
+    AddProperty (OUString::createFromAscii ("LineDashName"),
         DescriptionGenerator::STRING,
-        SVX_RESSTR(RID_SVXSTR_A11Y_LINE_DASH_NAME),
+        RID_SVXSTR_A11Y_LINE_DASH_NAME,
         XATTR_LINEDASH);
-    addProperty (OUString::createFromAscii ("LineWidth"),
+    AddProperty (OUString::createFromAscii ("LineWidth"),
         DescriptionGenerator::INTEGER,
-        SVX_RESSTR(RID_SVXSTR_A11Y_LINE_WIDTH));
+        RID_SVXSTR_A11Y_LINE_WIDTH);
 }
 
 
@@ -264,33 +310,33 @@ void DescriptionGenerator::addLineProperties (void)
 /** The fill style is described by the property "FillStyle".  Depending on
     its value a hatch-, gradient-, or bitmap name is appended.
 */
-void DescriptionGenerator::addFillProperties (void)
+void DescriptionGenerator::AddFillProperties (void)
 {
-    addProperty (OUString::createFromAscii ("FillStyle"),
+    AddProperty (OUString::createFromAscii ("FillStyle"),
         DescriptionGenerator::FILL_STYLE,
-        SVX_RESSTR(RID_SVXSTR_A11Y_FILL_STYLE));
+        RID_SVXSTR_A11Y_FILL_STYLE);
 }
 
 
 
 
-void DescriptionGenerator::add3DProperties (void)
+void DescriptionGenerator::Add3DProperties (void)
 {
-    addProperty (OUString::createFromAscii ("D3DMaterialColor"),
+    AddProperty (OUString::createFromAscii ("D3DMaterialColor"),
         DescriptionGenerator::COLOR,
-        SVX_RESSTR(RID_SVXSTR_A11Y_3D_MATERIAL_COLOR));
-    addLineProperties ();
-    addFillProperties ();
+        RID_SVXSTR_A11Y_3D_MATERIAL_COLOR);
+    AddLineProperties ();
+    AddFillProperties ();
 }
 
 
 
 
-void DescriptionGenerator::addTextProperties (void)
+void DescriptionGenerator::AddTextProperties (void)
 {
-    addProperty (OUString::createFromAscii ("CharColor"),
+    AddProperty (OUString::createFromAscii ("CharColor"),
         DescriptionGenerator::COLOR);
-    addFillProperties ();
+    AddFillProperties ();
 }
 
 
@@ -299,7 +345,7 @@ void DescriptionGenerator::addTextProperties (void)
 /** Search for the given color in the global color table.  If found append
     its name to the description.  Otherwise append its RGB tuple.
 */
-void DescriptionGenerator::addColor (const OUString& sPropertyName,
+void DescriptionGenerator::AddColor (const OUString& sPropertyName,
     const OUString& sLocalizedName)
 {
     msDescription.append (sLocalizedName);
@@ -359,7 +405,7 @@ void DescriptionGenerator::addColor (const OUString& sPropertyName,
 
 
 
-void DescriptionGenerator::addUnknown (const OUString& sPropertyName,
+void DescriptionGenerator::AddUnknown (const OUString& sPropertyName,
     const OUString& sLocalizedName)
 {
     //        uno::Any aValue = mxSet->getPropertyValue (sPropertyName);
@@ -369,7 +415,7 @@ void DescriptionGenerator::addUnknown (const OUString& sPropertyName,
 
 
 
-void DescriptionGenerator::addInteger (const OUString& sPropertyName,
+void DescriptionGenerator::AddInteger (const OUString& sPropertyName,
     const OUString& sLocalizedName)
 {
     msDescription.append (sLocalizedName);
@@ -395,7 +441,7 @@ void DescriptionGenerator::addInteger (const OUString& sPropertyName,
 
 
 
-void DescriptionGenerator::addString (const OUString& sPropertyName,
+void DescriptionGenerator::AddString (const OUString& sPropertyName,
     const OUString& sLocalizedName, long nWhichId)
 {
     msDescription.append (sLocalizedName);
@@ -411,6 +457,7 @@ void DescriptionGenerator::addString (const OUString& sPropertyName,
 
             if (nWhichId >= 0)
             {
+                ::vos::OGuard aGuard (::Application::GetSolarMutex());
                 String sLocalizedValue;
                 SvxUnogetInternalNameForItem (nWhichId, sValue, sLocalizedValue);
                 msDescription.append (sLocalizedValue);
@@ -429,7 +476,7 @@ void DescriptionGenerator::addString (const OUString& sPropertyName,
 
 
 
-void DescriptionGenerator::addFillStyle (const OUString& sPropertyName,
+void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
     const OUString& sLocalizedName)
 {
     msDescription.append (sLocalizedName);
@@ -443,45 +490,60 @@ void DescriptionGenerator::addFillStyle (const OUString& sPropertyName,
             drawing::FillStyle aFillStyle;
             aValue >>= aFillStyle;
 
+            // Get the fill style name from the resource.
             OUString sFillStyleName;
+            {
+                ::vos::OGuard aGuard (::Application::GetSolarMutex());
+                switch (aFillStyle)
+                {
+                    case drawing::FillStyle_NONE:
+                        sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_NONE);
+                        break;
+                    case drawing::FillStyle_SOLID:
+                        sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_SOLID);
+                        break;
+                    case drawing::FillStyle_GRADIENT:
+                        sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT);
+                        break;
+                    case drawing::FillStyle_HATCH:
+                        sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_HATCH);
+                        break;
+                    case drawing::FillStyle_BITMAP:
+                        sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_BITMAP);
+                        break;
+                }
+            }
+            msDescription.append (sFillStyleName);
+
+            // Append the appropriate properties.
             switch (aFillStyle)
             {
                 case drawing::FillStyle_NONE:
-                    sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_NONE);
-                    msDescription.append (sFillStyleName);
                     break;
                 case drawing::FillStyle_SOLID:
-                    sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_SOLID);
-                    msDescription.append (sFillStyleName);
-                    addProperty (OUString::createFromAscii ("FillColor"),
+                    AddProperty (OUString::createFromAscii ("FillColor"),
                         COLOR,
-                        SVX_RESSTR(RID_SVXSTR_A11Y_FILL_COLOR));
+                        RID_SVXSTR_A11Y_FILL_COLOR);
                     break;
                 case drawing::FillStyle_GRADIENT:
-                    sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT);
-                    msDescription.append (sFillStyleName);
-                    addProperty (OUString::createFromAscii ("FillGradientName"),
+                    AddProperty (OUString::createFromAscii ("FillGradientName"),
                         STRING,
-                        SVX_RESSTR(RID_SVXSTR_A11Y_FILL_GRADIENT_NAME),
+                        RID_SVXSTR_A11Y_FILL_GRADIENT_NAME,
                         XATTR_FILLGRADIENT);
                     break;
                 case drawing::FillStyle_HATCH:
-                    sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_HATCH);
-                    msDescription.append (sFillStyleName);
-                    addProperty (OUString::createFromAscii ("FillColor"),
+                    AddProperty (OUString::createFromAscii ("FillColor"),
                         COLOR,
-                        SVX_RESSTR(RID_SVXSTR_A11Y_FILL_COLOR));
-                    addProperty (OUString::createFromAscii ("FillHatchName"),
+                        RID_SVXSTR_A11Y_FILL_COLOR);
+                    AddProperty (OUString::createFromAscii ("FillHatchName"),
                         STRING,
-                        SVX_RESSTR(RID_SVXSTR_A11Y_FILL_HATCH_NAME),
+                        RID_SVXSTR_A11Y_FILL_HATCH_NAME,
                         XATTR_FILLHATCH);
                     break;
                 case drawing::FillStyle_BITMAP:
-                    sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_BITMAP);
-                    msDescription.append (sFillStyleName);
-                    addProperty (OUString::createFromAscii ("FillBitmapName"),
+                    AddProperty (OUString::createFromAscii ("FillBitmapName"),
                         STRING,
-                        SVX_RESSTR(RID_SVXSTR_A11Y_FILL_BITMAP_NAME),
+                        RID_SVXSTR_A11Y_FILL_BITMAP_NAME,
                         XATTR_FILLBITMAP);
                     break;
             }
@@ -497,7 +559,7 @@ void DescriptionGenerator::addFillStyle (const OUString& sPropertyName,
 
 
 
-void DescriptionGenerator::addPropertyNames (void)
+void DescriptionGenerator::AddPropertyNames (void)
 {
     if (mxSet.is())
     {
