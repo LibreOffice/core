@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-27 08:15:56 $
+ *  last change: $Author: dl $ $Date: 2001-05-16 08:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,8 @@ SdTabTemplateDlg::SdTabTemplateDlg( Window* pParent,
                                     SvxTransparenceTabPage::GetRanges );
     AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create,
                                     SvxCharNamePage::GetRanges );
+    AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create,
+                                    SvxCharEffectsPage::GetRanges );
     AddTabPage( RID_SVXPAGE_STD_PARAGRAPH,
                     SvxStdParagraphTabPage::Create,
                     SvxStdParagraphTabPage::GetRanges );
@@ -165,12 +167,10 @@ SdTabTemplateDlg::SdTabTemplateDlg( Window* pParent,
                     SvxMeasurePage::GetRanges );
     AddTabPage( RID_SVXPAGE_CONNECTION, SvxConnectionPage::Create,
                     SvxConnectionPage::GetRanges );
-
     AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH, SvxParaAlignTabPage::Create,
                     SvxParaAlignTabPage::GetRanges );
     AddTabPage( RID_SVXPAGE_TABULATOR, SvxTabulatorTabPage::Create,
                     SvxTabulatorTabPage::GetRanges );
-
 
     nDlgType = 1;
     nPageType = 0;
@@ -190,7 +190,7 @@ SdTabTemplateDlg::~SdTabTemplateDlg()
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SdTabTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SdTabTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     switch( nId )
     {
@@ -244,6 +244,10 @@ void __EXPORT SdTabTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         }
         break;
 
+        case RID_SVXPAGE_CHAR_EFFECTS:
+            ( (SvxCharEffectsPage&) rPage ).DisableControls( DISABLE_CASEMAP );
+        break;
+
         case RID_SVXPAGE_STD_PARAGRAPH:
         break;
 
@@ -278,7 +282,7 @@ void __EXPORT SdTabTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 // -----------------------------------------------------------------------
 
-const SfxItemSet* __EXPORT SdTabTemplateDlg::GetRefreshedSet()
+const SfxItemSet* SdTabTemplateDlg::GetRefreshedSet()
 {
     delete GetInputSetImpl();
 

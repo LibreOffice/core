@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:07:02 $
+ *  last change: $Author: dl $ $Date: 2001-05-16 08:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@
 |*
 \************************************************************************/
 
-__EXPORT SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
+SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
                                 Window* pParent,
                                 SdResId DlgId,
                                 SfxStyleSheetBase& rStyleBase,
@@ -233,12 +233,15 @@ __EXPORT SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocS
     switch( DlgId.GetId() )
     {
         case TAB_PRES_LAYOUT_TEMPLATE:
+        {
             AddTabPage( RID_SVXPAGE_LINE, SvxLineTabPage::Create, 0);
             AddTabPage( RID_SVXPAGE_AREA, SvxAreaTabPage::Create, 0);
             AddTabPage( RID_SVXPAGE_SHADOW, SvxShadowTabPage::Create, 0);
             AddTabPage( RID_SVXPAGE_TRANSPARENCE, SvxTransparenceTabPage::Create, 0);
             AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0);
+            AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, 0);
             AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0);
+        }
         break;
 
         case TAB_PRES_LAYOUT_TEMPLATE_1:
@@ -250,7 +253,9 @@ __EXPORT SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocS
         break;
 
         case TAB_PRES_LAYOUT_TEMPLATE_3:
+        {
             AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0);
+            AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, 0);
             AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0);
             if(IS_OUTLINE(ePO))
             {
@@ -266,6 +271,7 @@ __EXPORT SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocS
                 RemoveTabPage( RID_SVXPAGE_PICK_BMP );
                 RemoveTabPage( RID_SVXPAGE_NUM_OPTIONS );
             }
+        }
         break;
     }
     // Titel setzen und
@@ -334,7 +340,7 @@ SdPresLayoutTemplateDlg::~SdPresLayoutTemplateDlg()
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SdPresLayoutTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SdPresLayoutTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     switch( nId )
     {
@@ -391,6 +397,10 @@ void __EXPORT SdPresLayoutTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPag
 
             ( (SvxCharNamePage&) rPage ).SetFontList( aItem );
         }
+        break;
+
+        case RID_SVXPAGE_CHAR_EFFECTS:
+            ( (SvxCharEffectsPage&) rPage ).DisableControls( DISABLE_CASEMAP );
         break;
 
         case RID_SVXPAGE_STD_PARAGRAPH:
