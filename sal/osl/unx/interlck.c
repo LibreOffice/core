@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interlck.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-03-13 14:55:08 $
+ *  last change: $Author: hr $ $Date: 2001-03-13 19:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,17 +112,15 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
     oslInterlockedCount nCount;
 
     __asm__ __volatile__ (
-        "      li     4,1\n\t"
-        "loop: lwarx  5,0,%1\n\t"
-        "      add    6,4,5\n\t"
-        "      stwcx. 6,0,%1\n\t"
-        "      bne-   loop\n\t"
-        "      mr %0,6\n\t"
-    :   "=r" (nCount)
-    :   "r" (pCount)
-    :   "memory", "4", "5","6" );
+        "1: lwarx   %0,0,%2\n\t"
+        "   addic   %0,%0,1\n\t"
+        "   stwcx.  %0,0,%2\n\t"
+        "   bne-    1b"
+        : "=r" (nCount), "=m" (*pCount)
+        : "r" (pCount)
+        : "cc", "memory");
 
-        return nCount;
+    return nCount;
 }
 
 oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
@@ -130,15 +128,13 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
     oslInterlockedCount nCount;
 
     __asm__ __volatile__ (
-        "       li     4,1\n\t"
-        "loop1: lwarx  5,0,%1\n\t"
-        "       subf   6,4,5\n\t"
-        "       stwcx. 6,0,%1\n\t"
-        "       bne-   loop1\n\t"
-        "       mr     %0,6\n\t"
-    :   "=r" (nCount)
-    :   "r" (pCount)
-    :   "memory", "4", "5","6" );
+        "1: lwarx   %0,0,%2\n\t"
+        "   subic   %0,%0,1\n\t"
+        "   stwcx.  %0,0,%2\n\t"
+        "   bne-    1b"
+        : "=r" (nCount), "=m" (*pCount)
+        : "r" (pCount)
+        : "cc", "memory");
 
     return nCount;
 }
