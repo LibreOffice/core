@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawingDemo.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:53:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,24 +40,23 @@
 
 // __________ Imports __________
 
-// base classes
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.*;
+import com.sun.star.lang.XComponent;
 
-// property access
-import com.sun.star.beans.*;
+import com.sun.star.awt.Point;
+import com.sun.star.awt.Size;
 
-// name access
-import com.sun.star.container.*;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 
-// application specific classes
-import com.sun.star.drawing.*;
+import com.sun.star.container.XNamed;
 
-// presentation specific classes
-import com.sun.star.presentation.*;
-
-// Point, Size, ..
-import com.sun.star.awt.*;
+import com.sun.star.drawing.PolygonFlags;
+import com.sun.star.drawing.PolyPolygonBezierCoords;
+import com.sun.star.drawing.XShape;
+import com.sun.star.drawing.XShapes;
+import com.sun.star.drawing.XShapeGrouper;
+import com.sun.star.drawing.XDrawPage;
 
 import java.util.Random;
 
@@ -75,7 +74,7 @@ import java.util.Random;
 // describes if a document is to create or load: "draw" creates a
 // draw document, "impress" creates an impress document, any other
 // parameter is interpreted as URL and loads the corresponding
-// document. ( example for a URL is: "file:///c:/test.sxi" )
+// document. ( example for a URL is: "file:///c:/test.odp" )
 // The second parameter is the connection that is to use. If no parameter
 // is given a standard impress document is created by using following
 // connection: "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
@@ -87,13 +86,9 @@ public class DrawingDemo
         XComponent xDrawDoc = null;
         try
         {
-            String sConnection;
-            if ( args.length >= 2 )
-                sConnection = args[ 1 ];
-            else
-                sConnection = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
-            XMultiServiceFactory xServiceFactory =
-                Helper.connect( sConnection );
+            // get the remote office context of a running office (a new office
+            // instance is started if necessary)
+            com.sun.star.uno.XComponentContext xOfficeContext = Helper.connect();
 
             String sURL;
             if ( args.length == 0 )
@@ -107,13 +102,14 @@ public class DrawingDemo
                 sURL = "private:factory/simpress";
 
             // suppress Presentation Autopilot when opening the document
-            // properties are the same as described for com.sun.star.document.MediaDescriptor
+            // properties are the same as described for
+            // com.sun.star.document.MediaDescriptor
             PropertyValue[] pPropValues = new PropertyValue[ 1 ];
             pPropValues[ 0 ] = new PropertyValue();
             pPropValues[ 0 ].Name = "Silent";
             pPropValues[ 0 ].Value = new Boolean( true );
 
-            xDrawDoc = Helper.createDocument( xServiceFactory,
+            xDrawDoc = Helper.createDocument( xOfficeContext,
                 sURL, "_blank", 0, pPropValues );
         }
         catch( Exception ex )
@@ -156,13 +152,14 @@ public class DrawingDemo
             for ( i = 0; i < nDrawPages; i++ )
             {
                 XDrawPage xDrawPage = PageHelper.getDrawPageByIndex( xDrawDoc, i );
-                XDrawPage xMasterPage = PageHelper.getMasterPageByIndex( xDrawDoc, i / 2 );
+                XDrawPage xMasterPage = PageHelper.getMasterPageByIndex(
+                    xDrawDoc, i / 2 );
                 PageHelper.setMasterPage( xDrawPage, xMasterPage );
             }
         }
         catch( Exception ex )
         {
-            System.out.println( "Demo_PageCreation: I have a page creation problem" );
+            System.out.println("Demo_PageCreation: I have a page creation problem");
         }
     }
 
@@ -217,17 +214,21 @@ public class DrawingDemo
 
             // insert handout page
             if ( bIsImpressDocument )
-                pPages[ nCurrentPageIndex++ ] = PageHelper.getHandoutMasterPage( xDrawDoc );
+                pPages[ nCurrentPageIndex++ ] = PageHelper.getHandoutMasterPage(
+                    xDrawDoc );
 
             // inserting all master pages
             for( i = 0; i < nMasterPages; i++ )
             {
-                XDrawPage xMasterPage = PageHelper.getMasterPageByIndex( xDrawDoc, i );
+                XDrawPage xMasterPage = PageHelper.getMasterPageByIndex(
+                    xDrawDoc, i );
                 pPages[ nCurrentPageIndex++ ] = xMasterPage;
 
-                // if the document is an impress, get the corresponding notes master page
+                // if the document is an impress, get the corresponding notes
+                // master page
                 if ( bIsImpressDocument )
-                    pPages[ nCurrentPageIndex++ ] = PageHelper.getNotesPage( xMasterPage );
+                    pPages[ nCurrentPageIndex++ ] = PageHelper.getNotesPage(
+                        xMasterPage );
             }
             for ( i = 0; i < nDrawingPages; i++ )
             {
@@ -236,7 +237,8 @@ public class DrawingDemo
 
                 // if the document is an impress, get the corresponding notes page
                 if ( bIsImpressDocument )
-                    pPages[ nCurrentPageIndex++ ] = PageHelper.getNotesPage( xDrawPage );
+                    pPages[ nCurrentPageIndex++ ] = PageHelper.getNotesPage(
+                        xDrawPage );
             }
 
             // Now a complete list of pages is available in pPages.
@@ -252,7 +254,8 @@ public class DrawingDemo
                 int nRndObjHeight = aRndGen.nextInt( nHalfHeight );
 
                 int nRndObjPosX = aRndGen.nextInt( nHalfWidth - nRndObjWidth );
-                int nRndObjPosY = aRndGen.nextInt( nHalfHeight - nRndObjHeight ) + nHalfHeight;
+                int nRndObjPosY = aRndGen.nextInt( nHalfHeight - nRndObjHeight )
+                    + nHalfHeight;
 
                 XShapes xShapes = (XShapes)
                     UnoRuntime.queryInterface( XShapes.class, pPages[ i ] );
