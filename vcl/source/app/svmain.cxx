@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-28 13:32:57 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,11 +418,6 @@ void DeInitVCL()
         delete pSVData->mpDefaultWin;
         pSVData->mpDefaultWin = NULL;
     }
-    if ( pSVData->mpResMgr )
-    {
-        delete pSVData->mpResMgr;
-        pSVData->mpResMgr = NULL;
-    }
 
     if( pSVData->mpApp )
         // call deinit to deinitialize application class
@@ -460,11 +455,6 @@ void DeInitVCL()
         delete pSVData->maAppData.mpDisplayName;
         pSVData->maAppData.mpDisplayName = NULL;
     }
-    if ( pSVData->maAppData.mpResPath )
-    {
-        delete pSVData->maAppData.mpResPath;
-        pSVData->maAppData.mpResPath = NULL;
-    }
     if ( pSVData->maAppData.mpEventListeners )
     {
         delete pSVData->maAppData.mpEventListeners;
@@ -494,6 +484,12 @@ void DeInitVCL()
     delete pSVData->maGDIData.mpScreenFontCache;
     pSVData->maGDIData.mpScreenFontCache = NULL;
     ImplFreeOutDevFontData();
+
+    if ( pSVData->mpResMgr )
+    {
+        delete pSVData->mpResMgr;
+        pSVData->mpResMgr = NULL;
+    }
 
     ResMgr::DestroyAllResMgr();
 
