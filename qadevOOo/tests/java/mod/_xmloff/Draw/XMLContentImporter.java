@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLContentImporter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:12:12 $
+ *  last change:$Date: 2003-09-08 13:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,20 +61,21 @@
 
 package mod._xmloff.Draw;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+
 import com.sun.star.container.XNamed;
-import com.sun.star.document.XImporter;
 import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
 
 /**
  * Test for object which is represented by service
@@ -154,7 +155,6 @@ public class XMLContentImporter extends TestCase {
 
         XInterface oObj = null;
         Object oInt = null ;
-        final String impValue = "XMLImporter_test" ;
 
         // creation of testobject here
         // first we write what we are intend to do to log file
@@ -165,8 +165,7 @@ public class XMLContentImporter extends TestCase {
         try {
             oInt = xMSF.createInstance
                 ("com.sun.star.comp.Draw.XMLContentImporter") ;
-            XImporter imp = (XImporter)
-                UnoRuntime.queryInterface(XImporter.class, oInt) ;
+
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create component.", e) ;
