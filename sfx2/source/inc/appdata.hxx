@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 10:06:48 $
+ *  last change: $Author: mba $ $Date: 2001-09-18 11:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,7 @@ public:
     void                                UpdateApplicationSettings( BOOL bDontHide );
     SfxDocumentTemplates*               GetDocumentTemplates();
     DECL_STATIC_LINK(                   SfxAppData_Impl, CreateDocumentTemplates, void* );
+    void                                DeInitDDE();
 };
 
 #endif // #ifndef _SFX_APPDATA_HXX

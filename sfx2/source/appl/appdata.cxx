@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-13 11:41:48 $
+ *  last change: $Author: mba $ $Date: 2001-09-18 11:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,10 +170,7 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
 SfxAppData_Impl::~SfxAppData_Impl()
 {
 //#ifdef DBG_UTIL
-    delete pTriggerTopic;
-    delete pDdeService2;
-    delete pDdeService;
-    delete pDocTopics;
+    DeInitDDE();
     delete pTopFrames;
     delete pCancelMgr;
     delete pFilterIni;
