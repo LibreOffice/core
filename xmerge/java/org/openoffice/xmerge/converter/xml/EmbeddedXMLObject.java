@@ -229,28 +229,11 @@ public class EmbeddedXMLObject extends EmbeddedObject {
 
                 factory.setValidating(false);
                 builder = factory.newDocumentBuilder();
-
-                // Disable processing of the DTD
-                // Attempts to process the DTD return an empty XML file which
-                // prevents any further validation.
-                builder.setEntityResolver(
-                    new EntityResolver() {
-                        public InputSource resolveEntity(String publicId, String systemId)
-                            throws SAXException, IOException {
-                                if (publicId.indexOf("-//OpenOffice.org//DTD") != -1) {
-                                    return new InputSource(new ByteArrayInputStream("<?xml version='1.0' encoding='UTF-8'?>".getBytes()));
-                                }
-                                else {
-                                    return null;
-                                }
-                        }
-                });
             }
 
             byte[] data = zipFile.getNamedBytes(new String(objName + "/" + name));
             if (data != null) {
-                ByteArrayInputStream domData = new ByteArrayInputStream(data);
-                return builder.parse(domData);
+                return OfficeDocument.parse(builder, data);
             }
             else {
                 return null;
