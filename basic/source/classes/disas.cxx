@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:05:09 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,8 @@ static const char* pOp2[] = {
     "CLOSE",            // (+Kanal/0)
     "PRCHAR",           // (+char)
     // Objekte
-    "CLASS",            // Klassennamen testen (+StringId)
+    "SETCLASS",         // Set + Klassennamen testen (+StringId)
+    "TESTCLASS",        // Check TOS class (+StringId)
     "LIB",              // Libnamen fuer Declare-Procs setzen (+StringId)
     // Neues ab Beta 3
     "BASED",            // TOS wird um BASE erhoeht, BASE davor gepusht
@@ -208,6 +209,7 @@ static const Func pOperand2[] = {
     MEMBER(SbiDisas::CharOp),   // (+char)
     // Objekte
     MEMBER(SbiDisas::StrOp),    // Klassennamen testen (+StringId)
+    MEMBER(SbiDisas::StrOp),    // TESTCLASS, Check TOS class (+StringId)
     MEMBER(SbiDisas::StrOp),    // Libnamen fuer Declare-Procs setzen (+StringId)
     MEMBER(SbiDisas::ImmOp),    // TOS wird um BASE erhoeht, BASE davor gepusht
     MEMBER(SbiDisas::TypeOp),   // Letzten Parameter in Argv konvertieren (+Typ)
@@ -238,6 +240,7 @@ static const Func pOperand3[] = {
                                 // nicht ueberschrieben wird, P=PERSIST (+StringID+Typ)
     MEMBER(SbiDisas::VarOp),    // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
     MEMBER(SbiDisas::Str2Op),   // User defined Objekt-Array redimensionieren (+StringId+StringId)
+    MEMBER(SbiDisas::VarOp),    // FIND_CM
 };
 
 
