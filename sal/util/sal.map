@@ -330,6 +330,7 @@ UDK_2_0_0 {
         rtl_getTextEncodingFromMimeCharset;
         rtl_getBestWindowsCharsetFromTextEncoding;
         rtl_getBestMimeCharsetFromTextEncoding;
+        rtl_getBestUnixCharsetFromTextEncoding;
         rtl_allocateZeroMemory;
         rtl_freeZeroMemory;
         rtl_crc32;
