@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XServiceConstructorDescription.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:56:23 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,15 +70,23 @@ interface XCompoundTypeDescription;
 interface XParameter;
 
 /**
-   Reflects an (explicit) service constructor.
+   Reflects a service constructor.
 
    @since #i21150#
  */
 interface XServiceConstructorDescription {
     /**
+       Returns whether the constructor is a default constructor.
+
+       @return <TRUE/> if the constructor is a default constructor
+     */
+    boolean isDefaultConstructor();
+
+    /**
        Returns the constructor's name.
 
-       @return the constructor's name
+       @return the constructor's name; for a default constructor, an empty
+           <atom>string</atom> is returned
      */
     string getName();
 
@@ -86,7 +94,8 @@ interface XServiceConstructorDescription {
        Returns the constructor's parameters.
 
        @return the reflections of all the constructor's parameters, in their
-           lexical order
+           lexical order; for a default constructor, an empty sequence is
+           returned
      */
     sequence<XParameter> getParameters();
 
@@ -96,7 +105,9 @@ interface XServiceConstructorDescription {
        @return the reflections of all the exceptions that are listed in the
        constructor's <code>raises</code> specification, in no particular order;
        all elements of the returned sequence will be reflections of exception
-       types
+       types; for a default constructor, an empty sequence is returned (even
+       though the mapping of a default constructor in a particular language
+       binding may well raise certain UNO exceptions)
      */
     sequence<XCompoundTypeDescription> getExceptions();
 };
