@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: pl $ $Date: 2002-12-09 17:44:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
+#endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
 #endif
 #ifndef _PSPRINT_STRHELPER_HXX_
 #include <psprint/strhelper.hxx>
@@ -768,7 +771,6 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     m_pMetrics->m_bKernPairsQueried = true;
 
     freeFontInfo( pInfo );
-    rManager.m_pFontCache->updateFontCacheEntry( this, rManager.m_bFlushFontCache );
     return true;
 }
 
@@ -800,8 +802,7 @@ PrintFontManager::PrintFontManager() :
         m_pAtoms( new MultiAtomProvider() ),
         m_nNextFontID( 1 ),
         m_nNextDirAtom( 1 ),
-        m_pFontCache( NULL ),
-        m_bFlushFontCache( true )
+        m_pFontCache( NULL )
 {
     for( int i = 0; i < sizeof( aAdobeCodes )/sizeof( aAdobeCodes[0] ); i++ )
     {
@@ -882,6 +883,7 @@ int PrintFontManager::addFontFile( const ::rtl::OString& rFileName, int nFaceNum
             {
                 m_aFonts[ nFontId = m_nNextFontID++ ] = *it;
                 m_aFontFileToFontID[ aName ].insert( nFontId );
+                m_pFontCache->updateFontCacheEntry( *it, true );
             }
         }
     }
@@ -897,8 +899,13 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
 
     OString aDir( getDirectory( nDirID ) );
 
-    if( m_pFontCache->getFontCacheFile( nDirID, aDir, rFontFile, rNewFonts ) )
-        return true;
+    OString aFullPath( aDir );
+    aFullPath += "/";
+    aFullPath += rFontFile;
+
+    // #i1872# reject unreadable files
+    if( access( aFullPath.getStr(), R_OK ) )
+        return false;
 
     ByteString aExt( rFontFile.copy( rFontFile.lastIndexOf( '.' )+1 ) );
     if( aExt.EqualsIgnoreCaseAscii( "pfb" ) || aExt.EqualsIgnoreCaseAscii( "pfa" ) )
@@ -915,21 +922,19 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
         aFilePath.Append( aName );
 
         ByteString aAfmFile;
-        if( access( aFilePath.GetBuffer(), F_OK ) )
+        if( access( aFilePath.GetBuffer(), R_OK ) )
         {
             // try in subdirectory afm instead
             aFilePath = aDir;
             aFilePath.Append( "/afm/" );
             aFilePath.Append( aName );
 
-            if( ! access( aFilePath.GetBuffer(), F_OK ) )
+            if( ! access( aFilePath.GetBuffer(), R_OK ) )
             {
                 aAfmFile = "afm/";
                 aAfmFile += aName;
             }
         }
-        else
-            aAfmFile = aName;
 
         if( aAfmFile.Len() )
         {
@@ -983,10 +988,6 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
     }
     else if( aExt.EqualsIgnoreCaseAscii( "ttc" ) )
     {
-        OString aFullPath( aDir );
-        aFullPath += "/";
-        aFullPath += rFontFile;
-
         // get number of ttc entries
         int nLength = CountTTCFonts( aFullPath.getStr() );
         if( nLength )
@@ -1487,9 +1488,6 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
         fprintf( stderr, "could not OpenTTFont \"%s\"\n", aFile.GetBuffer() );
 #endif
 
-    if( bSuccess )
-        m_pFontCache->updateFontCacheEntry( pFont, m_bFlushFontCache );
-
     return bSuccess;
 }
 
@@ -1572,11 +1570,9 @@ void PrintFontManager::initialize( void* pInitDisplay )
         m_pFontCache = new FontCache();
 #ifdef DEBUG
         clock_t aStop = times( &tms );
-        fprintf( stderr, "done in %lf s\n", (double)(aStop - aStart)/(double)CLK_TCK );
+        fprintf( stderr, "done in %lf s\n", (double)(aStop - aStart)/(double)sysconf( _SC_CLK_TCK ) );
 #endif
     }
-
-    m_bFlushFontCache = false;
 
     // initialize may be called twice in the future
     {
@@ -1594,6 +1590,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
     clock_t aStep2;
     clock_t aStep3;
     int nBuiltinFonts = 0;
+    int nCached = 0;
 
     struct tms tms;
 
@@ -1697,32 +1694,62 @@ void PrintFontManager::initialize( void* pInitDisplay )
         OString aPath( *dir_it );
         // there may be ":unscaled" directories (see XFree86)
         // it should be safe to ignore them since they should not
-        // contain any of our recognbizeable fonts
+        // contain any of our recognizeable fonts
 
-        // read fonts.dir if possible
-        ::std::hash_map< OString, ::std::list<OString>, OStringHash > aFontsDir;
-        int nDirID = getDirectoryAtom( aPath, true );
-        ByteString aGccDummy( aPath );
-        String aFontsDirPath( aGccDummy, aEncoding );
-        aFontsDirPath.AppendAscii( "/fonts.dir" );
-        SvFileStream aStream( aFontsDirPath, STREAM_READ );
-        if( aStream.IsOpen() )
+        // ask the font cache whether it handles this directory
+        std::list< PrintFont* > aCacheFonts;
+        if( m_pFontCache->listDirectory( aPath, aCacheFonts ) )
         {
-            ByteString aLine;
-            while( ! aStream.IsEof() )
+#ifdef DEBUG
+            fprintf( stderr, "adding cache directory: %s\n", aPath.getStr() );
+#endif
+            for( ::std::list< PrintFont* >::iterator it = aCacheFonts.begin(); it != aCacheFonts.end(); ++it )
             {
-                aStream.ReadLine( aLine );
-                ByteString aFileName( GetCommandLineToken( 0, aLine ) );
-                ByteString aXLFD( aLine.Copy( aFileName.Len() ) );
-                if( aFileName.Len() && aXLFD.Len() )
-                    aFontsDir[ aFileName ].push_back(aXLFD);
+                fontID aFont = m_nNextFontID++;
+                m_aFonts[ aFont ] = *it;
+                if( (*it)->m_eType == fonttype::Type1 )
+                    m_aFontFileToFontID[ static_cast<Type1FontFile*>(*it)->m_aFontFile ].insert( aFont );
+                else if( (*it)->m_eType == fonttype::TrueType )
+                    m_aFontFileToFontID[ static_cast<TrueTypeFontFile*>(*it)->m_aFontFile ].insert( aFont );
+                else if( (*it)->m_eType == fonttype::Builtin )
+                    m_aFontFileToFontID[ static_cast<BuiltinFont*>(*it)->m_aMetricFile ].insert( aFont );
+#ifdef DEBUG
+                if( (*it)->m_eType == fonttype::Builtin )
+                    nBuiltinFonts++;
+                nCached++;
+                fprintf( stderr, "adding cached font %d: \"%s\" from %s\n", aFont,
+                         OUStringToOString( getFontFamily( aFont ), RTL_TEXTENCODING_MS_1252 ).getStr(),
+                         getFontFileSysPath( aFont ).getStr() );
+#endif
             }
+            continue;
         }
 
         DIR* pDIR = opendir( aPath.getStr() );
         struct dirent* pEntry = (struct dirent*)aDirEntBuffer;
         if( pDIR )
         {
+            // read fonts.dir if possible
+            ::std::hash_map< OString, ::std::list<OString>, OStringHash > aFontsDir;
+            int nDirID = getDirectoryAtom( aPath, true );
+            ByteString aGccDummy( aPath );
+            String aFontsDirPath( aGccDummy, aEncoding );
+            aFontsDirPath.AppendAscii( "/fonts.dir" );
+            SvFileStream aStream( aFontsDirPath, STREAM_READ );
+            if( aStream.IsOpen() )
+            {
+                ByteString aLine;
+                while( ! aStream.IsEof() )
+                {
+                    aStream.ReadLine( aLine );
+                    ByteString aFileName( GetCommandLineToken( 0, aLine ) );
+                    ByteString aXLFD( aLine.Copy( aFileName.Len() ) );
+                    if( aFileName.Len() && aXLFD.Len() )
+                        aFontsDir[ aFileName ].push_back(aXLFD);
+                }
+            }
+
+            int nDirFonts = 0;
             while( ! readdir_r( pDIR, (struct dirent*)aDirEntBuffer, &pEntry ) && pEntry )
             {
                 OString aFileName( pEntry->d_name );
@@ -1757,6 +1784,8 @@ void PrintFontManager::initialize( void* pInitDisplay )
                                 fontID aFont = m_nNextFontID++;
                                 m_aFonts[ aFont ] = *it;
                                 m_aFontFileToFontID[ aFileName ].insert( aFont );
+                                m_pFontCache->updateFontCacheEntry( *it, false );
+                                nDirFonts++;
                                 if( bUpdateFont && isPrivateFontFile( aFont ) )
                                     changeFontProperties( aFont, OStringToOUString( getXLFD( *it ), RTL_TEXTENCODING_UTF8 ) );
 #ifdef DEBUG
@@ -1770,6 +1799,8 @@ void PrintFontManager::initialize( void* pInitDisplay )
                 }
             }
             closedir( pDIR );
+            if( ! nDirFonts )
+                m_pFontCache->markEmptyDir( nDirID );
         }
     }
 
@@ -1778,20 +1809,51 @@ void PrintFontManager::initialize( void* pInitDisplay )
 #endif
 
     // part two - look for metrics for builtin printer fonts
-    OString aPath( OUStringToOString( getPrinterPath(), aEncoding ) );
-    sal_Int32 nIndex = 0;
-    ::std::list< OString > aEmptyFontsDir;
-    do
+    std::list< OUString > aMetricDirs;
+    psp::getPrinterPathList( aMetricDirs, PRINTER_METRICDIR );
+
+    std::list< OString > aEmptyFontsDir;
+    for( std::list< OUString >::const_iterator met_dir_it = aMetricDirs.begin(); met_dir_it != aMetricDirs.end(); ++met_dir_it )
     {
-        OString aDir( aPath.getToken( 0, ':', nIndex ) );
-        aDir += "/"PRINTER_METRICDIR;
+        OString aDir = OUStringToOString( *met_dir_it, aEncoding );
+
+        // ask the font cache whether it handles this directory
+        std::list< PrintFont* > aCacheFonts;
+
+        if( m_pFontCache->listDirectory( aDir, aCacheFonts ) )
+        {
+#ifdef DEBUG
+            fprintf( stderr, "adding cache directory: %s\n", aDir.getStr() );
+#endif
+            for( ::std::list< PrintFont* >::iterator it = aCacheFonts.begin(); it != aCacheFonts.end(); ++it )
+            {
+                fontID aFont = m_nNextFontID++;
+                m_aFonts[ aFont ] = *it;
+                if( (*it)->m_eType == fonttype::Type1 )
+                    m_aFontFileToFontID[ static_cast<Type1FontFile*>(*it)->m_aFontFile ].insert( aFont );
+                else if( (*it)->m_eType == fonttype::TrueType )
+                    m_aFontFileToFontID[ static_cast<TrueTypeFontFile*>(*it)->m_aFontFile ].insert( aFont );
+                else if( (*it)->m_eType == fonttype::Builtin )
+                    m_aFontFileToFontID[ static_cast<BuiltinFont*>(*it)->m_aMetricFile ].insert( aFont );
+#ifdef DEBUG
+                if( (*it)->m_eType == fonttype::Builtin )
+                    nBuiltinFonts++;
+                nCached++;
+                fprintf( stderr, "adding cached font %d: \"%s\" from %s\n", aFont,
+                         OUStringToOString( getFontFamily( aFont ), RTL_TEXTENCODING_MS_1252 ).getStr(),
+                         getFontFileSysPath( aFont ).getStr() );
+#endif
+            }
+            continue;
+        }
+
         DIR* pDIR = opendir( aDir.getStr() );
         if( pDIR )
         {
             struct dirent* pDirEntry = (struct dirent*)aDirEntBuffer;
-            int nDirAtom = getDirectoryAtom( aDir, true );
+            int nDirID = getDirectoryAtom( aDir, true );
+            int nDirFonts = 0;
 
-            // get cache information
             while( ! readdir_r( pDIR, (struct dirent*)aDirEntBuffer, &pDirEntry ) && pDirEntry )
             {
                 ByteString aFile( aDir );
@@ -1808,13 +1870,14 @@ void PrintFontManager::initialize( void* pInitDisplay )
                     {
                         ::std::list< PrintFont* > aNewFonts;
 
-                        analyzeFontFile( nDirAtom, aFileName, true, aEmptyFontsDir, aNewFonts );
+                        analyzeFontFile( nDirID, aFileName, true, aEmptyFontsDir, aNewFonts );
                         for( ::std::list< PrintFont* >::iterator it = aNewFonts.begin(); it != aNewFonts.end(); ++it )
                         {
                             if( findFontBuiltinID( (*it)->m_nPSName ) == 0 )
                             {
                                 m_aFontFileToFontID[ aFileName ].insert( m_nNextFontID );
                                 m_aFonts[ m_nNextFontID++ ] = *it;
+                                m_pFontCache->updateFontCacheEntry( *it, false );
 #ifdef DEBUG
                                 nBuiltinFonts++;
 #endif
@@ -1826,8 +1889,10 @@ void PrintFontManager::initialize( void* pInitDisplay )
                 }
             }
             closedir( pDIR );
+            if( ! nDirFonts )
+                m_pFontCache->markEmptyDir( nDirID );
         }
-    } while( nIndex != -1 );
+    }
 
 #ifdef DEBUG
     aStep2 = times( &tms );
@@ -1849,13 +1914,13 @@ void PrintFontManager::initialize( void* pInitDisplay )
 
 #ifdef DEBUG
     aStep3 = times( &tms );
-    fprintf( stderr, "PrintFontManager::initialize: collected %d fonts (%d builtin)\n", m_aFonts.size(), nBuiltinFonts );
-    fprintf( stderr, "Step 1 took %lf seconds\n", (double)(aStep1 - aStart)/(double)CLK_TCK );
-    fprintf( stderr, "Step 2 took %lf seconds\n", (double)(aStep2 - aStep1)/(double)CLK_TCK );
-    fprintf( stderr, "Step 3 took %lf seconds\n", (double)(aStep3 - aStep2)/(double)CLK_TCK );
+    fprintf( stderr, "PrintFontManager::initialize: collected %d fonts (%d builtin, %d cached)\n", m_aFonts.size(), nBuiltinFonts, nCached );
+    double fTick = (double)sysconf( _SC_CLK_TCK );
+    fprintf( stderr, "Step 1 took %lf seconds\n", (double)(aStep1 - aStart)/fTick );
+    fprintf( stderr, "Step 2 took %lf seconds\n", (double)(aStep2 - aStep1)/fTick );
+    fprintf( stderr, "Step 3 took %lf seconds\n", (double)(aStep3 - aStep2)/fTick );
 #endif
 
-    m_bFlushFontCache = true;
     m_pFontCache->flush();
 }
 
@@ -2694,6 +2759,8 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
                 {
                     m_aFontFileToFontID[ aFileName ].insert( m_nNextFontID );
                     m_aFonts[ m_nNextFontID++ ] = *it;
+                    m_pFontCache->updateFontCacheEntry( *it, false );
+
                     aLine = ByteString( aTo.GetName(), aEncoding );
                     aLine += ' ';
                     aLine += getXLFD( *it );
@@ -2738,6 +2805,8 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
                 XFreeFontPath( pFontPaths );
             XCloseDisplay( pDisplay );
         }
+        m_pFontCache->updateDirTimestamp( nDirID );
+        m_pFontCache->flush();
     }
     else if( pCallback )
         pCallback->importFontsFailed( ImportFontCallback::NoWritableDirectory );
