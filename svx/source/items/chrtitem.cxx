@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrtitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:30 $
+ *  last change: $Author: rt $ $Date: 2004-02-11 09:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef _UNOTOOLS_INTLWRAPPER_HXX
 #include <unotools/intlwrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CHART_CHARTAXISARRANGEORDERTYPE_HPP_
+#include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #endif
 
 #ifdef MAC
@@ -242,6 +245,67 @@ SfxPoolItem* SvxChartTextOrderItem::Clone(SfxItemPool* pPool) const
 SfxPoolItem* SvxChartTextOrderItem::Create(SvStream& rIn, USHORT nVer) const
 {
     return new SvxChartTextOrderItem(rIn, Which());
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SvxChartTextOrderItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+{
+    // the order of the two enums is not equal, so a mapping is required
+    ::com::sun::star::chart::ChartAxisArrangeOrderType eAO;
+    SvxChartTextOrder eOrder( GetValue());
+
+    switch( eOrder )
+    {
+        case CHTXTORDER_SIDEBYSIDE:
+            eAO = ::com::sun::star::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE; break;
+        case CHTXTORDER_UPDOWN:
+            eAO = ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_ODD; break;
+        case CHTXTORDER_DOWNUP:
+            eAO = ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_EVEN; break;
+        case CHTXTORDER_AUTO:
+            eAO = ::com::sun::star::chart::ChartAxisArrangeOrderType_AUTO; break;
+    }
+
+    rVal <<= eAO;
+
+    return sal_True;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
+{
+    // the order of the two enums is not equal, so a mapping is required
+    ::com::sun::star::chart::ChartAxisArrangeOrderType eAO;
+    SvxChartTextOrder eOrder;
+
+    if(!(rVal >>= eAO))
+    {
+        // also try an int (for Basic)
+        sal_Int32 nAO;
+        if(!(rVal >>= nAO))
+            return sal_False;
+        eAO = static_cast< ::com::sun::star::chart::ChartAxisArrangeOrderType >( nAO );
+    }
+
+    switch( eAO )
+    {
+        case ::com::sun::star::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE:
+            eOrder = CHTXTORDER_SIDEBYSIDE; break;
+        case ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_ODD:
+            eOrder = CHTXTORDER_UPDOWN; break;
+        case ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_EVEN:
+            eOrder = CHTXTORDER_DOWNUP; break;
+        case ::com::sun::star::chart::ChartAxisArrangeOrderType_AUTO:
+            eOrder = CHTXTORDER_AUTO; break;
+        default:
+            return sal_False;
+    }
+
+    SetValue( eOrder );
+
+    return sal_True;
 }
 
 /*************************************************************************
