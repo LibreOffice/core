@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-29 20:28:09 $
+ *  last change: $Author: nn $ $Date: 2001-08-20 17:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,7 +609,8 @@ BOOL ScViewFunc::PasteBookmark( ULONG nFormatId,
 }
 
 void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
-                                    USHORT nPosX, USHORT nPosY, const String* pTarget )
+                                    USHORT nPosX, USHORT nPosY, const String* pTarget,
+                                    BOOL bTryReplace )
 {
     ScViewData* pViewData = GetViewData();
     if ( pViewData->HasEditView( pViewData->GetActivePart() ) &&
@@ -654,6 +655,14 @@ void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
         --nPara;
     xub_StrLen nTxtLen = aEngine.GetTextLen(nPara);
     ESelection aInsSel( nPara, nTxtLen, nPara, nTxtLen );
+
+    if ( bTryReplace && HasBookmarkAtCursor( NULL ) )
+    {
+        //  if called from hyperlink slot and cell contains only a URL,
+        //  replace old URL with new one
+
+        aInsSel = ESelection( 0, 0, 0, 1 );     // replace first character (field)
+    }
 
     SvxURLField aField( rURL, rDescription, SVXURLFORMAT_APPDEFAULT );
     if (pTarget)
