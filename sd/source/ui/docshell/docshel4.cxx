@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-14 16:15:53 $
+ *  last change: $Author: cl $ $Date: 2001-02-15 09:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,13 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
             if( bBinary )
                 pFilter = new SdBINFilter( aMedium, *this, sal_True );
             else if( bXML )
+            {
+                pDoc->NewOrLoadCompleted( NEW_DOC );
+                pDoc->CreateFirstPages();
+                pDoc->StopWorkStartupDelay();
+
                 pFilter = new SdXMLFilter( aMedium, *this, sal_True );
+            }
 
             bRet = pFilter ? pFilter->Import() : FALSE;
             delete pFilter;
