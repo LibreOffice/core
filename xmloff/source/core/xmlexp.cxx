@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-18 11:40:33 $
+ *  last change: $Author: sab $ $Date: 2000-10-19 04:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,6 @@
 #ifndef _XMLOFF_PAGEMASTEREXPORTPROPMAPPER_HXX
 #include "PageMasterExportPropMapper.hxx"
 #endif
-#ifndef _XMLOFF_XMLPAGEEXPORT_HXX
-#include "XMLPageExport.hxx"
-#endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -184,7 +181,6 @@ void SvXMLExport::_InitCtor()
                                   sXML_n_number, XML_NAMESPACE_NUMBER );
 
     xAttrList = (xml::sax::XAttributeList*)pAttrList;
-    pPageExport = new XMLPageExport( *this );
 }
 
 SvXMLExport::SvXMLExport(
@@ -200,7 +196,6 @@ SvXMLExport::SvXMLExport(
     pAttrList( new SvXMLAttributeList ),
     pPageMasterPropHdlFactory( NULL ),
     pPageMasterPropSetMapper( NULL ),
-    pPageExport( NULL ),
     bExtended( sal_False ),
     xHandler( rHandler ),
     xExtHandler( rHandler, uno::UNO_QUERY )
@@ -227,7 +222,6 @@ SvXMLExport::SvXMLExport(
     pNumExport(0L),
     pPageMasterPropHdlFactory( NULL ),
     pPageMasterPropSetMapper( NULL ),
-    pPageExport( NULL ),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY)
 {
     _InitCtor();
@@ -249,7 +243,6 @@ SvXMLExport::~SvXMLExport()
         pPageMasterPropSetMapper->release();
         pPageMasterPropSetMapper = NULL;
     }
-    delete pPageExport;
 }
 
 void SvXMLExport::AddAttributeASCII( sal_uInt16 nPrefixKey,
@@ -647,6 +640,11 @@ SvXMLAutoStylePoolP* SvXMLExport::CreateAutoStylePool()
     return new SvXMLAutoStylePoolP();
 }
 
+XMLPageExport* SvXMLExport::CreatePageExport()
+{
+    return new XMLPageExport( *this );
+}
+
 void SvXMLExport::AddPageMasterFamily()
 {
     pPageMasterPropHdlFactory = new XMLPageMasterPropHdlFactory;
@@ -679,7 +677,7 @@ OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat) const
 
 void SvXMLExport::exportPageMaster()
 {
-    pPageExport->collectAutoStyles( sal_True );
+    GetPageExport()->collectAutoStyles( sal_True );
 
     const UniReference< XMLPropertySetMapper > aPageMasterMapperRef = GetPageMasterPropSetMapper();
     XMLPageMasterExportPropMapper* pPageMasterExportPropMapper = new XMLPageMasterExportPropMapper(aPageMasterMapperRef);
