@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-18 09:01:51 $
+#   last change: $Author: rt $ $Date: 2004-11-26 19:26:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -186,18 +186,8 @@ SCP1FILES += \
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)"=="WNT"
-.IF "$(ENABLE_DIRECTX)" != ""
-SCP1FILES += \
-             directxcanvas.par
-.ELSE # IF "$(ENABLE_DIRECTX)" != ""
 SCP1FILES += \
              vclcanvas.par
-.ENDIF # IF "$(ENABLE_DIRECTX)" != ""
-.ELSE # IF "$(GUI)"=="WNT"
-SCP1FILES += \
-             vclcanvas.par
-.ENDIF #IF "$(GUI)"=="WNT"
 
 
 # --- target -------------------------------------------------------------
