@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:02:16 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3901,39 +3901,6 @@ static const mso_CustomShape msoHorizontalScroll =
     NULL, 0
 };
 
-static const SvxMSDffVertPair mso_sptWaveVert[] =   // adjustment1 : 0 - 4459
-{                                                   // adjustment2 : 8640 - 12960
-    { 0, 0 }, { 21600, 21600 }
-};
-static const SvxMSDffCalculationData mso_sptWaveCalc[] =
-{
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
-};
-static const sal_uInt16 mso_sptWaveSegm[] =
-{
-    0x4000, 0x0001, 0x8000
-};
-static const sal_Int32 mso_sptWaveDefault[] =
-{
-    2, 2700, 10800
-};
-static const SvxMSDffTextRectangles mso_sptWaveTextRect[] =
-{
-    { { 0, 0 }, { 21600, 21600 } }
-};
-static const mso_CustomShape msoWave =
-{
-    (SvxMSDffVertPair*)mso_sptWaveVert, sizeof( mso_sptWaveVert ) / sizeof( SvxMSDffVertPair ),
-    (sal_uInt16*)mso_sptWaveSegm, sizeof( mso_sptWaveSegm ) >> 1,
-    (SvxMSDffCalculationData*)mso_sptWaveCalc, sizeof( mso_sptWaveCalc ) / sizeof( SvxMSDffCalculationData ),
-    (sal_Int32*)mso_sptWaveDefault,
-    (SvxMSDffTextRectangles*)mso_sptWaveTextRect, sizeof( mso_sptWaveTextRect ) / sizeof( SvxMSDffTextRectangles ),
-    21600, 21600,
-    0x80000000, 0x80000000,
-    NULL, 0
-};
-
 static const SvxMSDffVertPair mso_sptFlowChartProcessVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 }, { 0, 0 }
@@ -4768,18 +4735,167 @@ static const mso_CustomShape msoWedgeRectCallout =
     (SvxMSDffVertPair*)mso_sptWedgeRectCalloutGluePoints, sizeof( mso_sptWedgeRectCalloutGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
+static const SvxMSDffVertPair mso_sptWaveVert[] =   // adjustment1 : 0 - 4460
+{                                                   // adjustment2 : 8640 - 12960
+    { 7 MSO_I, 0 MSO_I }, { 15 MSO_I, 9 MSO_I }, { 16 MSO_I, 10 MSO_I }, { 12 MSO_I, 0 MSO_I },
+    { 24 MSO_I, 1 MSO_I }, { 25 MSO_I, 26 MSO_I }, { 27 MSO_I, 28 MSO_I }, { 29 MSO_I, 1 MSO_I }
+};
+static const SvxMSDffCalculationData mso_sptWaveCalc[] =
+{
+    { 0x2000, DFF_Prop_adjustValue, 0, 0 }, //400 (vert.adj)
+    { 0x8000, 21600, 0, 0x400 },            //401
+    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },//402 (horz.adj)
+    { 0x2000, 0x402, 0, 10800 },            //403 -2160 -> 2160 (horz.adj)
+    { 0x2001, 0x403, 2, 1 },                //404 -4320 -> 4320 (horz.adj)
+    { 0x2003, 0x404, 0, 0 },                //405 abs( 0x404 )  (horz.adj)
+    { 0x8000, 4320, 0, 0x405 },             //406
+    { 0xa006, 0x403, 0, 0x405 },            //407
+    { 0x4001, 15800, 0x400, 4460 },         //408 0 -> 15800    (vert.adj)
+    { 0xa000, 0x400, 0, 0x408 },            //409
+    { 0x6000, 0x400, 0x408, 0 },            //40a
+    { 0x8000, 21600, 0, 0x404 },            //40b
+    { 0x6006, 0x403, 0x40b, 21600 },        //40c
+    { 0xa000, 0x40c, 0, 0x407 },            //40d width between p0 and p1
+    { 0x2001, 0x405, 1, 2 },                //40e
+    { 0xa000, 0x407, 7200, 0x40e },         //40f
+    { 0x6000, 0x40c, 0x40e, 7200 },         //410
+    { 0x2001, 0x40d, 1, 2 },                //411 1/2 width
+    { 0x6000, 0x407, 0x411, 0 },            //412 top center glue xpos
+    { 0x8000, 21600, 0, 0x412 },            //413 bottom center glue xpos
+    { 0x2001, 0x405, 1, 2 },                //414 left glue x pos
+    { 0x8000, 21600, 0, 0x414 },            //415 right glue x pos
+    { 0x2001, 0x400, 2, 1 },                //416 y1 (textbox)
+    { 0x8000, 21600, 0, 0x416 },            //417 y2 (textbox)
+
+    { 0x8000, 21600, 0, 0x407 },            //418 p2
+
+    { 0x8000, 21600, 0, 0x40f },            //419 c
+    { 0x6000, 0x401, 0x408, 0 },            //41a
+
+    { 0x8000, 21600, 0, 0x410 },            //41b c
+    { 0xa000, 0x401, 0, 0x408 },            //41c
+
+    { 0x8000, 21600, 0, 0x40c }             //41d p3
+};
+static const SvxMSDffVertPair mso_sptWaveGluePoints[] =
+{
+    { 0x12 MSO_I, 0 MSO_I }, { 0x14 MSO_I, 10800 }, { 0x13 MSO_I, 1 MSO_I }, { 0x15 MSO_I, 10800 }
+};
+static const sal_uInt16 mso_sptWaveSegm[] =
+{
+    0x4000, 0x2001, 0x0001, 0x2001, 0x6000, 0x8000
+};
+static const sal_Int32 mso_sptWaveDefault[] =
+{
+    2, 1400, 10800
+};
+static const SvxMSDffTextRectangles mso_sptWaveTextRect[] =
+{
+    { { 5 MSO_I, 22 MSO_I }, { 11 MSO_I, 23 MSO_I } }
+};
+static const mso_CustomShape msoWave =
+{
+    (SvxMSDffVertPair*)mso_sptWaveVert, sizeof( mso_sptWaveVert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptWaveSegm, sizeof( mso_sptWaveSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptWaveCalc, sizeof( mso_sptWaveCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptWaveDefault,
+    (SvxMSDffTextRectangles*)mso_sptWaveTextRect, sizeof( mso_sptWaveTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    21600, 21600,
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptWaveGluePoints, sizeof( mso_sptWaveGluePoints ) / sizeof( SvxMSDffVertPair )
+};
+static const SvxMSDffVertPair mso_sptDoubleWaveVert[] = // adjustment1 : 0 - 2230
+{                                                       // adjustment2 : 8640 - 12960
+    { 7 MSO_I, 0 MSO_I }, { 15 MSO_I, 9 MSO_I }, { 0x1e MSO_I, 10 MSO_I }, { 0x12 MSO_I, 0 MSO_I }, { 0x1f MSO_I, 9 MSO_I }, { 16 MSO_I, 10 MSO_I }, { 12 MSO_I, 0 MSO_I },
+    { 24 MSO_I, 1 MSO_I }, { 25 MSO_I, 26 MSO_I }, { 0x21 MSO_I, 28 MSO_I }, { 0x13 MSO_I, 1 MSO_I }, { 0x20 MSO_I, 26 MSO_I }, { 27 MSO_I, 28 MSO_I }, { 29 MSO_I, 1 MSO_I }
+};
+static const SvxMSDffCalculationData mso_sptDoubleWaveCalc[] =
+{
+    { 0x2000, DFF_Prop_adjustValue, 0, 0 }, //400 (vert.adj)
+    { 0x8000, 21600, 0, 0x400 },            //401
+    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },//402 (horz.adj)
+    { 0x2000, 0x402, 0, 10800 },            //403 -2160 -> 2160 (horz.adj)
+    { 0x2001, 0x403, 2, 1 },                //404 -4320 -> 4320 (horz.adj)
+    { 0x2003, 0x404, 0, 0 },                //405 abs( 0x404 )  (horz.adj)
+    { 0x8000, 4320, 0, 0x405 },             //406 -> not used
+    { 0xa006, 0x403, 0, 0x405 },            //407
+    { 0x4001, 7900, 0x400, 2230 },          //408 0 -> 7900 (vert.adj)
+    { 0xa000, 0x400, 0, 0x408 },            //409
+    { 0x6000, 0x400, 0x408, 0 },            //40a
+    { 0x8000, 21600, 0, 0x404 },            //40b
+    { 0x6006, 0x403, 0x40b, 21600 },        //40c
+    { 0xa000, 0x40c, 0, 0x407 },            //40d width between p0 and p1
+    { 0x2001, 0x405, 1, 2 },                //40e
+    { 0xa000, 0x407, 3600, 0x40e },         //40f
+    { 0x6000, 0x40c, 0x40e, 3600 },         //410
+    { 0x2001, 0x40d, 1, 2 },                //411 1/2 width
+    { 0x6000, 0x407, 0x411, 0 },            //412 top center glue xpos
+    { 0x8000, 21600, 0, 0x412 },            //413 bottom center glue xpos
+    { 0x2001, 0x405, 1, 2 },                //414 left glue x pos
+    { 0x8000, 21600, 0, 0x414 },            //415 right glue x pos
+    { 0x2001, 0x400, 2, 1 },                //416 y1 (textbox)
+    { 0x8000, 21600, 0, 0x416 },            //417 y2 (textbox)
+
+    { 0x8000, 21600, 0, 0x407 },            //418 p2
+
+    { 0x8000, 21600, 0, 0x40f },            //419 c
+    { 0x6000, 0x401, 0x408, 0 },            //41a
+
+    { 0x8000, 21600, 0, 0x410 },            //41b c
+    { 0xa000, 0x401, 0, 0x408 },            //41c
+
+    { 0x8000, 21600, 0, 0x40c },            //41d p3
+    { 0xa000, 0x412, 0, 0x40e },            //41e
+    { 0x6000, 0x412, 0x40e, 0 },            //41f
+    { 0xa000, 0x413, 0, 0x40e },            //420
+    { 0x6000, 0x413, 0x40e, 0 }             //421
+};
+static const SvxMSDffVertPair mso_sptDoubleWaveGluePoints[] =
+{
+    { 0x12 MSO_I, 0 MSO_I }, { 0x14 MSO_I, 10800 }, { 0x13 MSO_I, 1 MSO_I }, { 0x15 MSO_I, 10800 }
+};
+static const sal_uInt16 mso_sptDoubleWaveSegm[] =
+{
+    0x4000, 0x2002, 0x0001, 0x2002, 0x6000, 0x8000
+};
+static const sal_Int32 mso_sptDoubleWaveDefault[] =
+{
+    2, 1400, 10800
+};
+static const SvxMSDffTextRectangles mso_sptDoubleWaveTextRect[] =
+{
+    { { 5 MSO_I, 22 MSO_I }, { 11 MSO_I, 23 MSO_I } }
+};
+static const mso_CustomShape msoDoubleWave =
+{
+    (SvxMSDffVertPair*)mso_sptDoubleWaveVert, sizeof( mso_sptDoubleWaveVert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptDoubleWaveSegm, sizeof( mso_sptDoubleWaveSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptDoubleWaveCalc, sizeof( mso_sptDoubleWaveCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDoubleWaveDefault,
+    (SvxMSDffTextRectangles*)mso_sptDoubleWaveTextRect, sizeof( mso_sptDoubleWaveTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    21600, 21600,
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptDoubleWaveGluePoints, sizeof( mso_sptDoubleWaveGluePoints ) / sizeof( SvxMSDffVertPair )
+};
 static const SvxMSDffVertPair mso_sptWedgeRRectCalloutVert[] =
 {
-    { 0, 3100 }, { 3100, 0 }, { 18500, 0 }, { 21600, 3100 }, { 21600, 18500 }, { 18500, 21600 },
-    { 9100, 21600 }, { 1300, 25930 }, { 3500, 21600 }, { 0, 18600 }
+    { 3590, 0 },
+    { 0, 3590 },
+    { 2 MSO_I, 3 MSO_I }, { 0, 8970 },
+    { 0, 12630 },{ 4 MSO_I, 5 MSO_I }, { 0, 18010 },
+    { 3590, 21600 },
+    { 6 MSO_I, 7 MSO_I }, { 8970, 21600 },
+    { 12630, 21600 }, { 8 MSO_I, 9 MSO_I }, { 18010, 21600 },
+    { 21600, 18010 },
+    { 10 MSO_I, 11 MSO_I }, { 21600, 12630 },
+    { 21600, 8970 }, { 12 MSO_I, 13 MSO_I }, { 21600, 3590 },
+    { 18010, 0 },
+    { 14 MSO_I, 15 MSO_I }, { 12630, 0 },
+    { 8970, 0 }, { 16 MSO_I, 17 MSO_I }
 };
 static const sal_uInt16 mso_sptWedgeRRectCalloutSegm[] =
 {
-    0x4000, 0xa801, 0x0001, 0xa701, 0x0001, 0xa801, 0x0003, 0xa701, 0x6001, 0x8000
-};
-static const sal_Int32 mso_sptWedgeRRectCalloutDefault[] =
-{
-    2, 1350, 25920
+    0x4000, 0xa701, 0x0005, 0xa801, 0x0005, 0xa701, 0x0005, 0xa801, 0x0004, 0x6001, 0x8000
 };
 static const SvxMSDffTextRectangles mso_sptWedgeRRectCalloutTextRect[] =
 {
@@ -4789,8 +4905,8 @@ static const mso_CustomShape msoWedgeRRectCallout =
 {
     (SvxMSDffVertPair*)mso_sptWedgeRRectCalloutVert, sizeof( mso_sptWedgeRRectCalloutVert ) / sizeof( SvxMSDffVertPair ),
     (sal_uInt16*)mso_sptWedgeRRectCalloutSegm, sizeof( mso_sptWedgeRRectCalloutSegm ) >> 1,
-    NULL, 0,
-    (sal_Int32*)mso_sptWedgeRRectCalloutDefault,
+    (SvxMSDffCalculationData*)mso_sptWedgeRectCalloutCalc, sizeof( mso_sptWedgeRectCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptWedgeRectCalloutDefault,
     (SvxMSDffTextRectangles*)mso_sptWedgeRRectCalloutTextRect, sizeof( mso_sptWedgeRRectCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
     0x80000000, 0x80000000,
@@ -4799,15 +4915,46 @@ static const mso_CustomShape msoWedgeRRectCallout =
 
 static const SvxMSDffVertPair mso_sptWedgeEllipseCalloutVert[] =
 {
-    { 0, 0 }, { 21600, 21600 }, { 3300, 18730 }, { 6900 , 20730 }, { 1300, 25930 }
+    { 0, 0 }, { 21600, 21600 }, { 0x16 MSO_I, 0x17 MSO_I }, { 0x12 MSO_I, 0x13 MSO_I }, { 0xe MSO_I, 0xf MSO_I }
 };
 static const sal_uInt16 mso_sptWedgeEllipseCalloutSegm[] =
 {
-    0xb504, 0x6001, 0x0001, 0x8000
+    0xa504, 0x0001, 0x6001, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptWedgeEllipseCalloutCalc[] =
+{
+    { 0x2000, DFF_Prop_adjustValue, 0, 10800 },     // 00 rad x
+    { 0x2000, DFF_Prop_adjust2Value, 0, 10800 },    // 01 rad y
+    { 0x6001, 0x400, 0x400, 1 },                    // 02 rad x^2
+    { 0x6001, 0x401, 0x401, 1 },                    // 03 rad y^2
+    { 0x6000, 0x402, 0x403, 0 },                    // 04
+    { 0x200d, 0x404, 0, 0 },                        // 05
+    { 0x2000, 0x405, 0, 10800 },                    // 06 > 0 ? spur needs to be drawn : 10800
+    { 0x6008, 0x400, 0x401, 0 },                    // 07 atan2 -> angle
+    { 0x2000, 0x407, 0, 10 },                       // 08
+    { 0x2000, 0x407, 10, 0 },                       // 09
+    { 0x400a, 10800, 0x407, 0 },                    // 0a
+    { 0x4009, 10800, 0x407, 0 },                    // 0b
+    { 0x2000, 0x40a, 10800, 0 },                    // 0c
+    { 0x2000, 0x40b, 10800, 0 },                    // 0d
+    { 0xe006, 0x406, DFF_Prop_adjustValue, 0x40c }, // 0e
+    { 0xe006, 0x406, DFF_Prop_adjust2Value, 0x40d },// 0f
+    { 0x400a, 10800, 0x408, 0 },                    // 10
+    { 0x4009, 10800, 0x408, 0 },                    // 11
+    { 0x2000, 0x410, 10800, 0 },                    // 12
+    { 0x2000, 0x411, 10800, 0 },                    // 13
+    { 0x400a, 10800, 0x409, 0 },                    // 14
+    { 0x4009, 10800, 0x409, 0 },                    // 15
+    { 0x2000, 0x414, 10800, 0 },                    // 16
+    { 0x2000, 0x415, 10800, 0 },                    // 17
 };
 static const sal_Int32 mso_sptWedgeEllipseCalloutDefault[] =
 {
     2, 1350, 25920
+};
+static const SvxMSDffVertPair mso_sptWedgeEllipseCalloutGluePoints[] =
+{
+    { 10800, 0 }, { 3160, 3160 }, { 0, 10800 }, { 3160, 18440 }, { 10800, 21600 }, { 18440, 18440 }, { 21600, 10800 }, { 18440, 3160 }, { 0xe MSO_I, 0xf MSO_I }
 };
 static const SvxMSDffTextRectangles mso_sptWedgeEllipseCalloutTextRect[] =
 {
@@ -4817,12 +4964,12 @@ static const mso_CustomShape msoWedgeEllipseCallout =
 {
     (SvxMSDffVertPair*)mso_sptWedgeEllipseCalloutVert, sizeof( mso_sptWedgeEllipseCalloutVert ) / sizeof( SvxMSDffVertPair ),
     (sal_uInt16*)mso_sptWedgeEllipseCalloutSegm, sizeof( mso_sptWedgeEllipseCalloutSegm ) >> 1,
-    NULL, 0,
+    (SvxMSDffCalculationData*)mso_sptWedgeEllipseCalloutCalc, sizeof( mso_sptWedgeEllipseCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
     (sal_Int32*)mso_sptWedgeEllipseCalloutDefault,
     (SvxMSDffTextRectangles*)mso_sptWedgeEllipseCalloutTextRect, sizeof( mso_sptWedgeEllipseCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
     0x80000000, 0x80000000,
-    NULL, 0
+    (SvxMSDffVertPair*)mso_sptWedgeEllipseCalloutGluePoints, sizeof( mso_sptWedgeEllipseCalloutGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptCloudCalloutVert[] =
@@ -4861,30 +5008,46 @@ static const SvxMSDffVertPair mso_sptCloudCalloutVert[] =
     { 14240, 18310 }, { 14320, 17980 }, { 14350, 17680 }, { 14370, 17360 }, // pccp
     { 8220, 19510 }, { 8060, 19250 }, { 7960, 18950 }, { 7860, 18640 },     // pccp
     { 2900, 17640 }, { 3090, 17600 }, { 3280, 17540 }, { 3460, 17450 },     // pccp
-    { 1070, 12640 }, { 1400, 12900 }, { 1780, 13130 }, { 2330, 13040 },     // pccp
-
-    { 2220, 19800 }, { 5820, 23400 },                                       // circ1
-    { 1170, 23070 }, { 3570, 25470 },                                       // circ2
-    { 730, 25320 }, { 1930, 26520 }                                         // circ3
-
+    { 1070, 12640 }, { 1400, 12900 }, { 1780, 13130 }, { 2330, 13040 }      // pccp
 };
 static const sal_uInt16 mso_sptCloudCalloutSegm[] =
 {
     0x4000, 0x2016, 0x6001, 0x8000,
-    0x4000, 0x2001, 0x8000,
-    0x4000, 0x2001, 0x8000,
-    0x4000, 0x2001, 0x8000,
-    0x4000, 0x2001, 0x8000,
-    0x4000, 0x2001, 0x8000,
-    0x4000, 0x2001, 0x8000,
-    0x4000, 0x2001, 0x8000,
-    0x4000, 0x2001, 0x8000,
-    0x4000, 0x2001, 0x8000,
-    0x4000, 0x2001, 0x8000,
-    0x4000, 0x2001, 0x8000,
-    0xb502, 0x6001, 0x8000,
-    0xb502, 0x6001, 0x8000,
-    0xb502, 0x6001, 0x8000
+    0x4000, 0x2001, 0xaa00, 0x8000,
+    0x4000, 0x2001, 0xaa00, 0x8000,
+    0x4000, 0x2001, 0xaa00, 0x8000,
+    0x4000, 0x2001, 0xaa00, 0x8000,
+    0x4000, 0x2001, 0xaa00, 0x8000,
+    0x4000, 0x2001, 0xaa00, 0x8000,
+    0x4000, 0x2001, 0xaa00, 0x8000,
+    0x4000, 0x2001, 0xaa00, 0x8000,
+    0x4000, 0x2001, 0xaa00, 0x8000,
+    0x4000, 0x2001, 0xaa00, 0x8000,
+    0x4000, 0x2001, 0xaa00, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptCloudCalloutCalc[] =
+{
+    { 0x2000, DFF_Prop_adjustValue, 0, 10800 },
+    { 0x2000, DFF_Prop_adjust2Value, 0, 10800 },
+    { 0x6008, 0x400, 0x401, 0 },
+    { 0x400a, 10800, 0x402, 0 },                    // 3
+    { 0x4009, 10800, 0x402, 0 },                    // 4
+    { 0x2000, 0x403, 10800, 0 },                    // 5
+    { 0x2000, 0x404, 10800, 0 },                    // 6
+    { 0xa000, DFF_Prop_adjustValue, 0, 0x405 },     // 7
+    { 0xa000, DFF_Prop_adjust2Value,0, 0x406 },     // 8
+    { 0x2001, 0x407, 1, 3 },                        // 9
+    { 0x2001, 0x408, 1, 3 },                        // 0xa
+    { 0x2001, 0x407, 2, 3 },                        // 0xb
+    { 0x2001, 0x408, 2, 3 },                        // 0xc
+    { 0x2000, DFF_Prop_adjustValue, 0, 0 },         // 0xd
+    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },        // 0xe
+    { 0x2001, 0x403, 1, 10800 / 900 },              // 0xf  taking half x distance of the radius from the first bobble
+    { 0x2001, 0x404, 1, 10800 / 900 },              // 0x10
+    { 0xe000, 0x409, 0x405, 0x40f },                // 0x11
+    { 0xe000, 0x40a, 0x406, 0x410 },                // 0x12
+    { 0x6000, 0x40b, 0x405, 0 },                    // 0x13
+    { 0x6000, 0x40c, 0x406, 0 }                     // 0x14
 };
 static const sal_Int32 mso_sptCloudCalloutDefault[] =
 {
@@ -4898,13 +5061,14 @@ static const mso_CustomShape msoCloudCallout =
 {
     (SvxMSDffVertPair*)mso_sptCloudCalloutVert, sizeof( mso_sptCloudCalloutVert ) / sizeof( SvxMSDffVertPair ),
     (sal_uInt16*)mso_sptCloudCalloutSegm, sizeof( mso_sptCloudCalloutSegm ) >> 1,
-    NULL, 0,
+    (SvxMSDffCalculationData*)mso_sptCloudCalloutCalc, sizeof( mso_sptCloudCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
     (sal_Int32*)mso_sptCloudCalloutDefault,
     (SvxMSDffTextRectangles*)mso_sptCloudCalloutTextRect, sizeof( mso_sptCloudCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
     0x80000000, 0x80000000,
     NULL, 0
 };
+
 
 class SvxMSDffAdjustmentHandle
 {
@@ -5040,11 +5204,13 @@ const mso_CustomShape* GetCustomShapeContent2( MSO_SPT eSpType )
         case mso_sptFlowChartMagneticDisk :     pCustomShape = &msoFlowChartMagneticDisk; break;
         case mso_sptFlowChartMagneticDrum :     pCustomShape = &msoFlowChartMagneticDrum; break;
         case mso_sptFlowChartDisplay :          pCustomShape = &msoFlowChartDisplay; break;
+        case mso_sptWave :                      pCustomShape = &msoWave; break;
+        case mso_sptDoubleWave :                pCustomShape = &msoDoubleWave; break;
         case mso_sptWedgeRectCallout :          pCustomShape = &msoWedgeRectCallout; break;
+        case mso_sptBalloon :
         case mso_sptWedgeRRectCallout :         pCustomShape = &msoWedgeRRectCallout; break;
         case mso_sptWedgeEllipseCallout :       pCustomShape = &msoWedgeEllipseCallout; break;
         case mso_sptCloudCallout :              pCustomShape = &msoCloudCallout; break;
-//      case mso_sptWave :                      pCustomShape = &msoWave; break;
 
         default :
         break;
