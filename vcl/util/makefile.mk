@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-12 10:47:58 $
+#   last change: $Author: rt $ $Date: 2004-09-08 15:14:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -295,6 +295,8 @@ SHL2STDLIBS += -lXinerama
 
 .IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
 SHL2STDLIBS += -laudio
+# some nas versions need -lXt, too
+SHL2STDLIBS += -lXt
 .IF "$(OS)"=="SOLARIS"
 # needed by libaudio.a
 SHL2STDLIBS += -ldl -lnsl -lsocket
