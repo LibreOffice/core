@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: sb $ $Date: 2004-09-30 13:52:36 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3847,6 +3847,10 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin,
                               EncodeMechanism eMechanism,
                               rtl_TextEncoding eCharset, UniString & rCanonic)
 {
+    // RFC 2373 is inconsistent about how to write an IPv6 address in which an
+    // IPv4 address directly follows the abbreviating "::".  The ABNF in
+    // Appendix B suggests ":::13.1.68.3", while an example in 2.2/3 explicitly
+    // mentions "::13:1.68.3".  This algorithm accepts both variants:
     enum State { STATE_INITIAL, STATE_LABEL, STATE_LABEL_HYPHEN,
                  STATE_LABEL_DOT, STATE_TOPLABEL, STATE_TOPLABEL_HYPHEN,
                  STATE_TOPLABEL_DOT, STATE_IP4, STATE_IP4_DOT, STATE_IP6,
@@ -4004,6 +4008,12 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin,
                     aTheCanonic += ':';
                     eState = STATE_IP6_3COLON;
                 }
+                else if (INetMIME::isDigit(*p))
+                {
+                    nNumber = INetMIME::getWeight(*p);
+                    nDigits = 1;
+                    eState = STATE_IP6_HEXSEQ2_MAYBE_IP4;
+                }
                 else if (INetMIME::isHexDigit(*p))
                 {
                     nNumber = INetMIME::getHexWeight(*p);
@@ -4050,7 +4060,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin,
             case STATE_IP6_HEXSEQ1_COLON:
                 if (*p == ':')
                 {
-                    aTheCanonic.AppendAscii(RTL_CONSTASCII_STRINGPARAM("::"));
+                    aTheCanonic += ':';
                     eState = STATE_IP6_2COLON;
                 }
                 else if (INetMIME::isDigit(*p))
@@ -5234,10 +5244,21 @@ sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
 //============================================================================
 // static
 bool INetURLObject::scanIPv6reference(sal_Unicode const *& rBegin,
-                                      sal_Unicode const * pEnd,
-                                      bool bEager)
+                                      sal_Unicode const * pEnd)
 {
-    return false; //@@@
+    if (rBegin != pEnd && *rBegin == '[') {
+        sal_Unicode const * p = rBegin + 1;
+        //TODO: check for valid IPv6address (RFC 2373):
+        while (p != pEnd && INetMIME::isHexDigit(*p) || *p == ':' || *p == '.')
+        {
+            ++p;
+        }
+        if (p != pEnd && *p == ']') {
+            rBegin = p + 1;
+            return true;
+        }
+    }
+    return false;
 }
 
 //============================================================================
