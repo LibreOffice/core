@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.32 2003-04-29 17:21:43 hr Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.33 2003-06-13 12:51:42 hr Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: hr $ $Date: 2003-04-29 17:21:43 $ $Revision: 1.32 $
+ //  $Author: hr $ $Date: 2003-06-13 12:51:42 $ $Revision: 1.33 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -69,6 +69,7 @@ ModalDialog DLG_REL_PROPERTIES
             Text[ czech ] = "Použité tabulky";
             Text[ hebrew ] = "beteiligte Tabellen";
             Text[ hindi ] = "Tables involved";
+            Text[ slovak ] = "Zahrnuté tabuľky";
         };
 
         ListBox LB_LEFT_TABLE
@@ -121,6 +122,7 @@ ModalDialog DLG_REL_PROPERTIES
             Text[ czech ] = "Použitá pole";
             Text[ hebrew ] = "beteiligte Felder";
             Text[ hindi ] = "Fields involved";
+            Text[ slovak ] = "Zahrnuté polia";
         };
     };
 
@@ -158,6 +160,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ czech ] = "Aktualizovat volby";
         Text[ hebrew ] = "Update Optionen";
         Text[ hindi ] = "विकल्पों को अपडेट् करो";
+        Text[ slovak ] = "Aktualizovať voľby";
     };
     RadioButton RB_NO_CASC_UPD
     {
@@ -192,6 +195,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ czech ] = "Žádná akce";
         Text[ hebrew ] = "~Keine Aktion";
         Text[ hindi ] = "~No action";
+        Text[ slovak ] = "~Nekonať";
     };
     RadioButton RB_CASC_UPD
     {
@@ -225,6 +229,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ czech ] = "Kaskádová aktualizace";
         Text[ hebrew ] = "K~ask. Update";
         Text[ hindi ] = "~Update cascade";
+        Text[ slovak ] = "Akt~ualizovať kaskádu";
     };
     RadioButton RB_CASC_UPD_NULL
     {
@@ -258,6 +263,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ czech ] = "Nastavit prázdný";
         Text[ hebrew ] = "~Null setzen";
         Text[ hindi ] = "~Set null";
+        Text[ slovak ] = "Na~staviť null";
     };
     RadioButton RB_CASC_UPD_DEFAULT
     {
@@ -291,6 +297,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ czech ] = "Nastavit výchozí";
         Text[ hebrew ] = "~Default setzen";
         Text[ hindi ] = "Set ~default";
+        Text[ slovak ] = "Nastaviť ako výcho~dzie";
     };
 // zweite FixedLine
     FixedLine FL_CASC_DEL
@@ -324,6 +331,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ czech ] = "Zrušit volby";
         Text[ hebrew ] = "Löschoptionen";
         Text[ hindi ] = "विकल्प मिटाओ";
+        Text[ slovak ] = "Zrušiť voľby";
     };
     RadioButton RB_NO_CASC_DEL
     {
@@ -358,6 +366,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ czech ] = "Žádná akce";
         Text[ hebrew ] = "K~eine Aktion";
         Text[ hindi ] = "~No action";
+        Text[ slovak ] = "~Nekonať";
     };
     RadioButton RB_CASC_DEL
     {
@@ -391,6 +400,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ czech ] = "Kaskádové rušení";
         Text[ hebrew ] = "Ka~sk. Löschen";
         Text[ hindi ] = "Delete ~cascade";
+        Text[ slovak ] = "Zmazať k~askády";
     };
     RadioButton RB_CASC_DEL_NULL
     {
@@ -424,6 +434,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ czech ] = "Nastavit prázdný";
         Text[ hebrew ] = "Nu~ll setzen";
         Text[ hindi ] = "~Set null";
+        Text[ slovak ] = "Na~staviť null";
     };
     RadioButton RB_CASC_DEL_DEFAULT
     {
@@ -457,6 +468,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ czech ] = "Nastavit výchozí";
         Text[ hebrew ] = "De~fault setzen";
         Text[ hindi ] = "Set ~default";
+        Text[ slovak ] = "Nastaviť ako výcho~dzie";
     };
 
     OKButton PB_OK
@@ -504,7 +516,10 @@ ModalDialog DLG_REL_PROPERTIES
     Text[ czech ] = "Relace";
     Text[ hebrew ] = "Relationen";
     Text[ hindi ] = "सम्बन्धें";
+    Text[ slovak ] = "Relácie";
 };
+
+
 
 
 
