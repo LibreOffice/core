@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:17:26 $
+ *  last change: $Author: od $ $Date: 2003-05-08 08:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1029,7 +1029,8 @@ void SwLayAction::InternalAction()
                     XCHECKPAGE;
                 }
                 if ( mbFormatCntntOnInterrupt &&
-                     pPg->IsInvalidCntnt() && (!IS_FLYS || (IS_FLYS && !IS_INVAFLY))
+                     pPg->IsInvalidCntnt() &&
+                     (!IS_FLYS || (IS_FLYS && !IS_INVAFLY))
                    )
                 {
                     pPg->ValidateFlyInCnt();
@@ -2150,7 +2151,8 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
                 // OD 14.04.2003 #106346# - consider interrupt formatting.
                 if ( ( IsInterrupt() && !mbFormatCntntOnInterrupt ) ||
                      ( !bBrowse && pPage->IsInvalidLayout() ) ||
-                     ( IS_FLYS && IS_INVAFLY )
+                     // OD 07.05.2003 #109435# - consider interrupt formatting
+                     ( IS_FLYS && IS_INVAFLY && !mbFormatCntntOnInterrupt )
                    )
                     return FALSE;
             }
@@ -2165,7 +2167,11 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
                 if ( !IsCalcLayout() && pPage->GetPhyPageNum() > nCurNum+1 )
                 {
                     SetNextCycle( TRUE );
-                    return FALSE;
+                    // OD 07.05.2003 #109435# - consider interrupt formatting
+                    if ( !mbFormatCntntOnInterrupt )
+                    {
+                        return FALSE;
+                    }
                 }
             }
             //Wenn der Frame die Seite vorwaerts gewechselt hat, so lassen wir
