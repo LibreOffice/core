@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 10:47:12 $
+#   last change: $Author: rt $ $Date: 2004-11-26 17:46:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,6 +103,7 @@ IDLFILES=\
     SortFieldType.idl\
     TextSearch.idl\
     Time.idl\
+    TriState.idl\
     URL.idl\
     URLTransformer.idl\
     XArchiver.idl\
@@ -142,8 +143,8 @@ IDLFILES=\
     XRefreshListener.idl\
     XReplaceable.idl\
     XReplaceDescriptor.idl\
-       XSearchable.idl\
-       XSearchDescriptor.idl\
+    XSearchable.idl\
+    XSearchDescriptor.idl\
     XSimpleErrorHandler.idl\
     XSortable.idl\
     XStringAbbreviation.idl\
