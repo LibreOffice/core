@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-29 07:25:20 $
+ *  last change: $Author: cl $ $Date: 2001-04-06 13:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,14 +168,13 @@ SD_CONSTASCII_ACTION( sUNO_Service_ImageMapCircleObject, UNO_PREFIX "image.Image
 SD_CONSTASCII_ACTION( sUNO_Service_ImageMapPolygonObject, UNO_PREFIX "image.ImageMapPolygonObject" );
 
 // properties
-SD_CONSTASCII_ACTION( sUNO_Prop_Background, "Background" );
-SD_CONSTASCII_ACTION( sUNO_Prop_VisibleArea, "VisibleArea" );
-SD_CONSTASCII_ACTION( sUNO_Prop_MapUnit, "MapUnit" );
-SD_CONSTASCII_ACTION( sUNO_Prop_CharLocale, "CharLocale" );
-SD_CONSTASCII_ACTION( sUNO_Prop_TabStop, "TabStop" );
-SD_CONSTASCII_ACTION( sUNO_Prop_AutomContFocus, "AutomaticControlFocus" );
-SD_CONSTASCII_ACTION( sUNO_Prop_ApplyFrmDsgnMode, "ApplyFormDesignMode" );
-
-
+SD_CONSTASCII_ACTION( sUNO_Prop_Background,             "Background" );
+SD_CONSTASCII_ACTION( sUNO_Prop_ForbiddenCharacters,    "ForbiddenCharacters" );
+SD_CONSTASCII_ACTION( sUNO_Prop_MapUnit,                "MapUnit" );
+SD_CONSTASCII_ACTION( sUNO_Prop_VisibleArea,            "VisibleArea" );
+SD_CONSTASCII_ACTION( sUNO_Prop_TabStop,                "TabStop" );
+SD_CONSTASCII_ACTION( sUNO_Prop_CharLocale,             "CharLocale" );
+SD_CONSTASCII_ACTION( sUNO_Prop_AutomContFocus,         "AutomaticControlFocus" );
+SD_CONSTASCII_ACTION( sUNO_Prop_ApplyFrmDsgnMode,       "ApplyFormDesignMode" );
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:51:20 $
+ *  last change: $Author: cl $ $Date: 2001-04-06 13:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #ifndef _COM_SUN_STAR_UCB_XANYCOMPAREFACTORY_HPP_
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
+#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
+#endif
 
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
@@ -177,6 +180,7 @@ private:
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameContainer > mxCustomPresentationAccess;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::presentation::XPresentation > mxPresentation;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess > mxStyleFamilies;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::i18n::XForbiddenCharacters > mxForbidenCharacters;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDashTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxGradientTable;
@@ -203,6 +207,8 @@ public:
     sal_Bool IsImpressDocument() const { return mbImpressDoc; }
 
     void SetModified( sal_Bool bModified = sal_True ) throw();
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XForbiddenCharacters > getForbiddenCharsTable();
 
     // SfxListener
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
