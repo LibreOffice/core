@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:33:38 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ BOOL ExtSheetBuffer::GetScTabIndex( UINT16 nExcIndex, UINT16& rScIndex )
             }
             else if( pExcRoot->pDoc->GetDocumentShell() )
             {// Tabelle ist 'echt' extern
-                if( pExcRoot->pExtDocOpt->nLinkCnt < 1 )
+                if( pExcRoot->pIR->GetExtDocOptions().nLinkCnt < 1 )
                 {
                     String      aURL( ScGlobal::GetAbsDocName( pCur->aFile,
                                         pExcRoot->pDoc->GetDocumentShell() ) );
