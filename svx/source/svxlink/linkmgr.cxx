@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:20:02 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ public:
     virtual BOOL Connect( sfx2::SvBaseLink* );
 };
 
-SvxLinkManager::SvxLinkManager( SfxObjectShell * pPersist )
+SvxLinkManager::SvxLinkManager( SfxObjectShell* pPersist )
 {
     SvLinkManager::SetPersist( pPersist );
 }
@@ -316,14 +316,14 @@ BOOL SvxLinkManager::GetGraphicFromAny( const String& rMimeType,
 
 
 // ----------------------------------------------------------------------
-String lcl_DDE_RelToAbs( const String& rTopic, const String& rReferer )
+String lcl_DDE_RelToAbs( const String& rTopic, const String& rBaseURL )
 {
     String sRet;
     INetURLObject aURL( rTopic );
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-        utl::LocalFileHelper::ConvertSystemPathToURL( rTopic, rReferer.Len() ? rtl::OUString(rReferer) : INetURLObject::GetBaseURL(), sRet );
+        utl::LocalFileHelper::ConvertSystemPathToURL( rTopic, rBaseURL, sRet );
     if( !sRet.Len() )
-        sRet = URIHelper::SmartRelToAbs( rTopic );
+        sRet = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), rTopic, URIHelper::GetMaybeFileHdl(), true );
     return sRet;
 }
 
@@ -346,17 +346,8 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
         BOOL bFirst = TRUE;
         SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
-        if( pShell )
-        {
-            // sch... SFX: das gerade gelesen Doc hat noch keinen Namen und
-            // steht noch nicht in der Doc. Liste
-            if( pShell->GetMedium() )
-            {
-                sReferer = pShell->GetMedium()->GetName();
-                if( !pShell->HasName()  )
-                    sTmp = sReferer;
-            }
-        }
+        if( pShell && pShell->GetMedium() )
+            sReferer = pShell->GetMedium()->GetBaseURL();
 
         String sNmURL( lcl_DDE_RelToAbs( sTopic, sReferer ) );
         aCC.toLower( sNmURL );
@@ -372,7 +363,7 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             if( !sTmp.Len() )
             {
                 sTmp = pShell->GetTitle( SFX_TITLE_FULLNAME );
-                sTmp = lcl_DDE_RelToAbs(sTmp, sReferer);
+                sTmp = lcl_DDE_RelToAbs(sTmp, sReferer );
             }
 
 
