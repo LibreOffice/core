@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrls.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-02 13:04:56 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,6 @@
  *
  ************************************************************************/
 
-#ifndef _COM_SUN_STAR_PRESENTATION_FADEEFFECT_HPP_
-#include <com/sun/star/presentation/FadeEffect.hpp>
-#endif
-
 #include <tools/ref.hxx>
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -72,113 +68,59 @@
 #include "dlgctrls.hxx"
 #include "sdresid.hxx"
 #include "fadedef.h"
+#include "sdpage.hxx"
 
-using namespace ::com::sun::star;
+using namespace ::sd;
+using namespace ::rtl;
 
-// -----------------------
-// - FadeEffectPair list -
-// -----------------------
-
-struct FadeEffectPair
+struct FadeEffectLBImpl
 {
-    presentation::FadeEffect    meFE;
-    USHORT                      mnResId;
+    std::vector< TransitionPresetPtr > maPresets;
 };
 
-// -----------------------------------------------------------------------------
-
-static FadeEffectPair aEffects[] =
+FadeEffectLB::FadeEffectLB( Window* pParent, SdResId Id )
+:   ListBox( pParent, Id ),
+    mpImpl( new FadeEffectLBImpl )
 {
-    { presentation::FadeEffect_NONE, STR_EFFECT_NONE },
+}
 
-    { presentation::FadeEffect_FADE_FROM_LEFT, STR_EFFECT_FADE_FROM_L },
-    { presentation::FadeEffect_FADE_FROM_UPPERLEFT, STR_EFFECT_FADE_FROM_UL },
-    { presentation::FadeEffect_FADE_FROM_TOP, STR_EFFECT_FADE_FROM_T },
-    { presentation::FadeEffect_FADE_FROM_UPPERRIGHT, STR_EFFECT_FADE_FROM_UR },
-    { presentation::FadeEffect_FADE_FROM_RIGHT, STR_EFFECT_FADE_FROM_R },
-    { presentation::FadeEffect_FADE_FROM_LOWERRIGHT, STR_EFFECT_FADE_FROM_LR },
-    { presentation::FadeEffect_FADE_FROM_BOTTOM, STR_EFFECT_FADE_FROM_B },
-    { presentation::FadeEffect_FADE_FROM_LOWERLEFT, STR_EFFECT_FADE_FROM_LL },
+FadeEffectLB::FadeEffectLB( Window* pParent, WinBits aWB )
+:   ListBox( pParent, aWB ),
+    mpImpl( new FadeEffectLBImpl )
+{
+}
 
-    { presentation::FadeEffect_MOVE_FROM_LEFT, STR_EFFECT_DISCARD_FROM_L },
-    { presentation::FadeEffect_MOVE_FROM_UPPERLEFT, STR_EFFECT_DISCARD_FROM_UL },
-    { presentation::FadeEffect_MOVE_FROM_TOP, STR_EFFECT_DISCARD_FROM_T },
-    { presentation::FadeEffect_MOVE_FROM_UPPERRIGHT, STR_EFFECT_DISCARD_FROM_UR },
-    { presentation::FadeEffect_MOVE_FROM_RIGHT, STR_EFFECT_DISCARD_FROM_R },
-    { presentation::FadeEffect_MOVE_FROM_LOWERRIGHT, STR_EFFECT_DISCARD_FROM_LR },
-    { presentation::FadeEffect_MOVE_FROM_BOTTOM, STR_EFFECT_DISCARD_FROM_B },
-    { presentation::FadeEffect_MOVE_FROM_LOWERLEFT, STR_EFFECT_DISCARD_FROM_LL },
-
-    { presentation::FadeEffect_UNCOVER_TO_LEFT, STR_EFFECT_UNCOVER_TO_L },
-    { presentation::FadeEffect_UNCOVER_TO_UPPERLEFT, STR_EFFECT_UNCOVER_TO_UL },
-    { presentation::FadeEffect_UNCOVER_TO_TOP, STR_EFFECT_UNCOVER_TO_T },
-    { presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT, STR_EFFECT_UNCOVER_TO_UR },
-    { presentation::FadeEffect_UNCOVER_TO_RIGHT, STR_EFFECT_UNCOVER_TO_R },
-    { presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT, STR_EFFECT_UNCOVER_TO_LR },
-    { presentation::FadeEffect_UNCOVER_TO_BOTTOM, STR_EFFECT_UNCOVER_TO_B },
-    { presentation::FadeEffect_UNCOVER_TO_LOWERLEFT, STR_EFFECT_UNCOVER_TO_LL },
-
-    { presentation::FadeEffect_ROLL_FROM_LEFT, STR_EFFECT_ROLL_FROM_L },
-    { presentation::FadeEffect_ROLL_FROM_TOP, STR_EFFECT_ROLL_FROM_T },
-    { presentation::FadeEffect_ROLL_FROM_RIGHT, STR_EFFECT_ROLL_FROM_R },
-    { presentation::FadeEffect_ROLL_FROM_BOTTOM, STR_EFFECT_ROLL_FROM_B },
-
-    { presentation::FadeEffect_STRETCH_FROM_LEFT, STR_EFFECT_STRETCH_FROM_L },
-    { presentation::FadeEffect_STRETCH_FROM_TOP, STR_EFFECT_STRETCH_FROM_T },
-    { presentation::FadeEffect_STRETCH_FROM_RIGHT, STR_EFFECT_STRETCH_FROM_R },
-    { presentation::FadeEffect_STRETCH_FROM_BOTTOM, STR_EFFECT_STRETCH_FROM_B },
-
-    { presentation::FadeEffect_WAVYLINE_FROM_LEFT, STR_EFFECT_WAVYLINE_FROM_L },
-    { presentation::FadeEffect_WAVYLINE_FROM_TOP, STR_EFFECT_WAVYLINE_FROM_T },
-    { presentation::FadeEffect_WAVYLINE_FROM_RIGHT, STR_EFFECT_WAVYLINE_FROM_R },
-    { presentation::FadeEffect_WAVYLINE_FROM_BOTTOM, STR_EFFECT_WAVYLINE_FROM_B },
-
-    { presentation::FadeEffect_FADE_TO_CENTER, STR_EFFECT_FADE_TO_CENTER },
-    { presentation::FadeEffect_FADE_FROM_CENTER, STR_EFFECT_FADE_FROM_CENTER },
-
-    { presentation::FadeEffect_HORIZONTAL_STRIPES, STR_EFFECT_HORIZONTAL_STRIPES },
-    { presentation::FadeEffect_VERTICAL_STRIPES, STR_EFFECT_VERTICAL_STRIPES },
-
-    { presentation::FadeEffect_HORIZONTAL_LINES, STR_EFFECT_HORIZONTAL_LINES },
-    { presentation::FadeEffect_VERTICAL_LINES, STR_EFFECT_VERTICAL_LINES },
-
-    { presentation::FadeEffect_HORIZONTAL_CHECKERBOARD, STR_EFFECT_HORIZONTAL_CHECKERBOARD },
-    { presentation::FadeEffect_VERTICAL_CHECKERBOARD, STR_EFFECT_VERTICAL_CHECKERBOARD },
-
-    { presentation::FadeEffect_CLOCKWISE, STR_EFFECT_CLOCKWISE },
-    { presentation::FadeEffect_COUNTERCLOCKWISE, STR_EFFECT_COUNTERCLOCKWISE },
-
-    { presentation::FadeEffect_OPEN_HORIZONTAL, STR_EFFECT_OPEN_HORIZONTAL },
-    { presentation::FadeEffect_OPEN_VERTICAL, STR_EFFECT_OPEN_VERTICAL },
-
-    { presentation::FadeEffect_CLOSE_HORIZONTAL, STR_EFFECT_CLOSE_HORIZONTAL },
-    { presentation::FadeEffect_CLOSE_VERTICAL, STR_EFFECT_CLOSE_VERTICAL },
-
-    { presentation::FadeEffect_SPIRALIN_LEFT, STR_EFFECT_SPIRALIN_L },
-    { presentation::FadeEffect_SPIRALIN_RIGHT, STR_EFFECT_SPIRALIN_R },
-
-    { presentation::FadeEffect_SPIRALOUT_LEFT, STR_EFFECT_SPIRALOUT_L },
-    { presentation::FadeEffect_SPIRALOUT_RIGHT, STR_EFFECT_SPIRALOUT_R },
-
-    { presentation::FadeEffect_DISSOLVE, STR_EFFECT_DISSOLVE },
-
-    { presentation::FadeEffect_RANDOM, STR_EFFECT_RANDOM }
-};
-
-/*************************************************************************
-|*
-|*  FadeEffectLB: Fuellt die Listbox mit Strings
-|*
-\************************************************************************/
+FadeEffectLB::~FadeEffectLB()
+{
+    delete mpImpl;
+}
 
 void FadeEffectLB::Fill()
 {
-    for( long i = 0, nCount = sizeof( aEffects ) / sizeof( FadeEffectPair ); i < nCount; i++ )
-        InsertEntry( SdResId( aEffects[ i ].mnResId ) );
+    TransitionPresetPtr pPreset;
+
+    InsertEntry( String( SdResId( STR_EFFECT_NONE ) ) );
+    mpImpl->maPresets.push_back( pPreset );
+
+    const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
+    TransitionPresetList::const_iterator aIter;
+    for( aIter = rPresetList.begin(); aIter != rPresetList.end(); aIter++ )
+    {
+        pPreset = (*aIter);
+        const OUString aUIName( pPreset->getUIName() );
+        if( aUIName.getLength() )
+        {
+            InsertEntry( aUIName );
+            mpImpl->maPresets.push_back( pPreset );
+        }
+    }
+
+    SelectEntryPos(0);
 }
 
 // -----------------------------------------------------------------------------
 
+/*
 void FadeEffectLB::SelectEffect( presentation::FadeEffect eFE )
 {
     BOOL bFound = FALSE;
@@ -192,18 +134,28 @@ void FadeEffectLB::SelectEffect( presentation::FadeEffect eFE )
         }
     }
 }
+*/
 
 // -----------------------------------------------------------------------------
 
-presentation::FadeEffect FadeEffectLB::GetSelectedEffect() const
+void FadeEffectLB::applySelected( SdPage* pSlide ) const
 {
-    presentation::FadeEffect    eFE;
-    const USHORT                nPos = GetSelectEntryPos();
+    const USHORT nPos = GetSelectEntryPos();
 
-    if( ( LISTBOX_ENTRY_NOTFOUND != nPos ) && ( nPos < ( sizeof( aEffects ) / sizeof( FadeEffectPair ) ) ) )
-        eFE = aEffects[ nPos ].meFE;
-    else
-        eFE = presentation::FadeEffect_FADE_FROM_LEFT;
+    if( pSlide && (nPos >= 0) && (nPos < mpImpl->maPresets.size() ) )
+    {
+        TransitionPresetPtr pPreset( mpImpl->maPresets[nPos] );
 
-    return eFE;
+        if( pPreset.get() )
+        {
+            pPreset->apply( pSlide );
+        }
+        else
+        {
+            pSlide->setTransitionType( 0 );
+            pSlide->setTransitionSubtype( 0 );
+            pSlide->setTransitionDirection( sal_True );
+            pSlide->setTransitionFadeColor( 0 );
+        }
+    }
 }
