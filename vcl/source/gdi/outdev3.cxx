@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hdu $ $Date: 2002-06-21 12:27:35 $
+ *  last change: $Author: ssa $ $Date: 2002-06-26 16:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5794,9 +5794,8 @@ void OutputDevice::DrawText( const Rectangle& rRect,
             // was typically already reset
             aCol = GetSettings().GetStyleSettings().GetFaceColor();
 
-        USHORT lum = aCol.GetLuminance();
-        bHighContrastBlack = (lum <= 25);
-        bHighContrastWhite = (lum >= 225) && GetSettings().GetStyleSettings().GetHighContrastMode();
+        bHighContrastBlack = aCol.IsDark();
+        bHighContrastWhite = aCol.IsBright() && GetSettings().GetStyleSettings().GetHighContrastMode();
 
         aOldTextColor = GetTextColor();
         if ( IsTextFillColor() )
@@ -6340,9 +6339,8 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         {
             Wallpaper aWall = GetBackground();
             Color aCol = aWall.GetColor();
-            USHORT lum = aCol.GetLuminance();
-            bHighContrastBlack = (lum <= 25);
-            bHighContrastWhite = (lum >= 225) && GetSettings().GetStyleSettings().GetHighContrastMode();
+            bHighContrastBlack = aCol.IsDark();
+            bHighContrastWhite = aCol.IsBright() && GetSettings().GetStyleSettings().GetHighContrastMode();
         }
         aOldTextColor = GetTextColor();
         if ( IsTextFillColor() )
