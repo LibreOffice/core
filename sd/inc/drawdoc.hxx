@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:06:52 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,13 +100,15 @@
 #ifndef _SVDUNDO_HXX
 #include <svx/svdundo.hxx>
 #endif
+#include <memory>
 
+namespace sd {
+class FrameView;
+class Outliner;
+}
 class Timer;
 class SfxObjectShell;
 class SdPage;
-class FrameView;
-class SdDrawDocShell;
-class SdOutliner;
 class SdAnimationInfo;
 class SdIMapInfo;
 class IMapObject;
@@ -123,10 +125,16 @@ struct SpellCallbackInfo;
 struct StyleRequestData;
 class SdDrawDocument;
 
-#ifndef SV_DECL_SDDRAWDOCSHELL_DEFINED
-#define SV_DECL_SDDRAWDOCSHELL_DEFINED
-SV_DECL_REF(SdDrawDocShell)
+namespace sd {
+#ifndef SV_DECL_DRAW_DOC_SHELL_DEFINED
+#define SV_DECL_DRAW_DOC_SHELL_DEFINED
+SV_DECL_REF(DrawDocShell)
 #endif
+class DrawDocShell;
+}
+
+class ImpDrawPageListWatcher;
+class ImpMasterPageListWatcher;
 
 struct StyleReplaceData
 {
@@ -161,74 +169,18 @@ public:
     virtual void Redo();
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// #109538#
-
-class ImpPageListWatcher
-{
-protected:
-    // typedefs for a vector of SdPages
-    typedef ::std::vector< SdPage* > SdPageVector;
-
-    const SdrModel&                 mrModel;
-
-    SdPageVector                    maPageVectorStandard;
-    SdPageVector                    maPageVectorNotes;
-    SdPage*                         mpHandoutPage;
-
-    sal_Bool                        mbPageListValid;
-
-    void ImpRecreateSortedPageListOnDemand();
-    virtual sal_uInt32 ImpGetPageCount() const = 0;
-    virtual SdPage* ImpGetPage(sal_uInt32 nIndex) const = 0;
-
-public:
-    ImpPageListWatcher(const SdrModel& rModel);
-    virtual ~ImpPageListWatcher();
-
-    void Invalidate() { mbPageListValid = sal_False; }
-    SdPage* GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum = 0L);
-    sal_uInt32 GetSdPageCount(PageKind ePgKind);
-};
-
-//////////////////////////////////////////////////////////////////////////////
-
-class ImpDrawPageListWatcher : public ImpPageListWatcher
-{
-protected:
-    virtual sal_uInt32 ImpGetPageCount() const;
-    virtual SdPage* ImpGetPage(sal_uInt32 nIndex) const;
-
-public:
-    ImpDrawPageListWatcher(const SdrModel& rModel);
-    virtual ~ImpDrawPageListWatcher();
-};
-
-//////////////////////////////////////////////////////////////////////////////
-
-class ImpMasterPageListWatcher : public ImpPageListWatcher
-{
-protected:
-    virtual sal_uInt32 ImpGetPageCount() const;
-    virtual SdPage* ImpGetPage(sal_uInt32 nIndex) const;
-
-public:
-    ImpMasterPageListWatcher(const SdrModel& rModel);
-    virtual ~ImpMasterPageListWatcher();
-};
-
-//////////////////////////////////////////////////////////////////////////////
 
 // ------------------
 // - SdDrawDocument -
 // ------------------
 
-class SdDrawDocument : public FmFormModel
+class SdDrawDocument
+    : public FmFormModel
 {
 private:
 
-    SdOutliner*         pOutliner;          // local outliner for outline mode
-    SdOutliner*         pInternalOutliner;  // internal outliner for creation of text objects
+    ::sd::Outliner* pOutliner;          // local outliner for outline mode
+    ::sd::Outliner* pInternalOutliner;  // internal outliner for creation of text objects
     Timer*              pWorkStartupTimer;
     Timer*              pOnlineSpellingTimer;
     List*               pOnlineSpellingList;
@@ -236,12 +188,12 @@ private:
     SvxSearchItem*      pOnlineSearchItem;
     List*               pFrameViewList;
     List*               pCustomShowList;
-    SdDrawDocShell*     pDocSh;
+    ::sd::DrawDocShell*     pDocSh;
     SdTransferable *    pCreatingTransferable;
     BOOL                bHasOnlineSpellErrors;
     BOOL                bInitialOnlineSpellingEnabled;
     String              aBookmarkFile;
-    SdDrawDocShellRef   xBookmarkDocShRef;
+    ::sd::DrawDocShellRef   xBookmarkDocShRef;
     String              aPresPage;
     BOOL                bNewOrLoadCompleted;
     BOOL                bPresAll;
@@ -268,7 +220,7 @@ private:
     LanguageType        eLanguageCTL;
     SvxNumType          ePageNumType;
     Link                aOldNotifyUndoActionHdl;
-    SdDrawDocShellRef   xAllocedDocShRef;   // => AllocModel()
+    ::sd::DrawDocShellRef   xAllocedDocShRef;   // => AllocModel()
     BOOL                bAllocDocSh;        // => AllocModel()
     DocumentType        eDocType;
     UINT16              nFileFormatVersion;
@@ -280,8 +232,8 @@ private:
     ::com::sun::star::lang::Locale* mpLocale;
 
     // #109538#
-    ImpDrawPageListWatcher*                     mpDrawPageListWatcher;
-    ImpMasterPageListWatcher*                   mpMasterPageListWatcher;
+    ::std::auto_ptr<ImpDrawPageListWatcher> mpDrawPageListWatcher;
+    ::std::auto_ptr<ImpMasterPageListWatcher> mpMasterPageListWatcher;
 
     void                UpdatePageObjectsInNotes(USHORT nStartPos);
     void                FillOnlineSpellingList(SdPage* pPage);
@@ -316,10 +268,10 @@ public:
 
     SfxItemPool&        GetPool() { return( *pItemPool ); }
 
-    SdOutliner*         GetOutliner(BOOL bCreateOutliner=TRUE);
-    SdOutliner*         GetInternalOutliner(BOOL bCreateOutliner=TRUE);
+    ::sd::Outliner* GetOutliner(BOOL bCreateOutliner=TRUE);
+    ::sd::Outliner* GetInternalOutliner(BOOL bCreateOutliner=TRUE);
 
-    SdDrawDocShell*     GetDocSh() const { return(pDocSh) ; }
+    ::sd::DrawDocShell*     GetDocSh() const { return(pDocSh) ; }
 
     LanguageType        GetLanguage( const USHORT nId ) const;
     void                SetLanguage( const LanguageType eLang, const USHORT nId );
@@ -349,7 +301,7 @@ public:
     SdDrawDocument*     OpenBookmarkDoc(SfxMedium& rMedium);
     BOOL                InsertBookmark(List* pBookmarkList, List* pExchangeList, BOOL bLink,
                                         BOOL bReplace, USHORT nPgPos, BOOL bNoDialogs,
-                                        SdDrawDocShell* pBookmarkDocSh, BOOL bCopy,
+                                        ::sd::DrawDocShell* pBookmarkDocSh, BOOL bCopy,
                                         Point* pObjPos);
 
     bool IsStartWithPresentation() const;
@@ -402,11 +354,11 @@ public:
      */
     BOOL                InsertBookmarkAsPage(List* pBookmarkList, List* pExchangeList,
                                               BOOL bLink, BOOL bReplace, USHORT nPgPos,
-                                              BOOL bNoDialogs, SdDrawDocShell* pBookmarkDocSh,
+                                              BOOL bNoDialogs, ::sd::DrawDocShell* pBookmarkDocSh,
                                               BOOL bCopy, BOOL bMergeMasterPages,
                                               BOOL bPreservePageNames);
     BOOL                InsertBookmarkAsObject(List* pBookmarkList, List* pExchangeListL,
-                                                BOOL bLink, SdDrawDocShell* pBookmarkDocSh,
+                                                BOOL bLink, ::sd::DrawDocShell* pBookmarkDocSh,
                                                 Point* pObjPos);
     void                IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* pBookmarkList,
                                               USHORT nBMSdPageCount,
@@ -526,7 +478,9 @@ public:
     void                NewOrLoadCompleted(DocCreationMode eMode);
     BOOL                IsNewOrLoadCompleted() const {return bNewOrLoadCompleted; }
 
-    FrameView*          GetFrameView(ULONG nPos) { return (FrameView*) pFrameViewList->GetObject(nPos); }
+    ::sd::FrameView* GetFrameView(ULONG nPos) {
+        return static_cast< ::sd::FrameView*>(
+            pFrameViewList->GetObject(nPos));}
 
     SdAnimationInfo*    GetAnimationInfo(SdrObject* pObject) const;
 
