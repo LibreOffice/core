@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:15:30 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1157,7 +1157,9 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
                 m_xParser = xFactory->createQueryComposer();
 
                 rtl::OUString aString(C2U("SELECT * FROM "));
-                aString += ::dbtools::quoteTableName(xMetaData,aActiveDataTable,::dbtools::eInDataManipulation);
+                sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
+                sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
+                aString += ::dbtools::quoteTableName(xMetaData,aActiveDataTable,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
                 m_xParser->setQuery(aString);
                 BibConfig* pConfig = BibModul::GetConfig();
                 pConfig->setQueryField(getQueryField());
@@ -1352,7 +1354,9 @@ void BibDataManager::setActiveDataSource(const rtl::OUString& rURL)
             // quote the table name which may contain catalog.schema.table
             Reference<XDatabaseMetaData> xMetaData(xConnection->getMetaData(),UNO_QUERY);
             aQuoteChar = xMetaData->getIdentifierQuoteString();
-            aString += ::dbtools::quoteTableName(xMetaData,aActiveDataTable,::dbtools::eInDataManipulation);
+            sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
+            sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
+            aString += ::dbtools::quoteTableName(xMetaData,aActiveDataTable,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
             m_xParser->setQuery(aString);
             BibConfig* pConfig = BibModul::GetConfig();
             pConfig->setQueryField(getQueryField());
@@ -1419,7 +1423,9 @@ void BibDataManager::setActiveDataTable(const rtl::OUString& rTable)
                 m_xParser = xFactory->createQueryComposer();
 
                 rtl::OUString aString(C2U("SELECT * FROM "));
-                aString += ::dbtools::quoteTableName(xMetaData,aActiveDataTable,::dbtools::eInDataManipulation);
+                sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
+                sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
+                aString += ::dbtools::quoteTableName(xMetaData,aActiveDataTable,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
                 m_xParser->setQuery(aString);
 
                 BibConfig* pConfig = BibModul::GetConfig();
