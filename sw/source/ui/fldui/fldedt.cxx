@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldedt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:45:38 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SVX_ADRITEM_HXX //autogen
-#include <svx/adritem.hxx>
 #endif
 #ifndef _SVX_OPTGENRL_HXX //autogen
 #include <svx/optgenrl.hxx>
@@ -407,12 +404,9 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, pButton )
     SwField *pCurFld = rMgr.GetCurFld();
 
     SfxItemSet aSet( pSh->GetAttrPool(),
-                        SID_ATTR_ADDRESS, SID_ATTR_ADDRESS,
                         SID_FIELD_GRABFOCUS, SID_FIELD_GRABFOCUS,
                         0L );
-    SvxAddressItem aAddress;
-    aAddress.SetWhich(SID_ATTR_ADDRESS);
-    aSet.Put( aAddress );
+
     USHORT nEditPos = UNKNOWN_EDIT;
 
     switch(pCurFld->GetSubType())
@@ -438,16 +432,8 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, pButton )
     }
     aSet.Put(SfxUInt16Item(SID_FIELD_GRABFOCUS, nEditPos));
     SwAddrDlg aDlg( this, aSet );
-    aDlg.Execute();
-
-    const SfxItemSet* pSfxItemSet = aDlg.GetOutputItemSet();
-    const SfxPoolItem* pItem;
-    if( pSfxItemSet && SFX_ITEM_SET == pSfxItemSet->GetItemState(
-            SID_ATTR_ADDRESS, FALSE, &pItem ) )
-    {
-        ((SvxAddressItem*)pItem)->Store();
+    if(RET_OK == aDlg.Execute())
         pSh->UpdateFlds( *pCurFld );
-    }
 
     return 0;
 }
