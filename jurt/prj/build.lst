@@ -2,7 +2,7 @@ ju	jurt	:	ridljar sandbox NULL
 ju	jurt									usr1	-	all	ju_mkout NULL
 ju	jurt\com\sun\star\lib\util				nmake	-	all	ju_libutil NULL
 ju	jurt\com\sun\star\uno					nmake	-	all	ju_uno ju_libutil NULL
-ju	jurt\com\sun\star\comp\loader			nmake	-	all	ju_co_loader ju_uno NULL
+ju	jurt\com\sun\star\comp\loader			nmake	-	all	ju_co_loader ju_uno ju_libutil NULL
 ju	jurt\com\sun\star\comp\bridgefactory	nmake	-	all	ju_co_bfactr ju_co_loader NULL
 ju  jurt\com\sun\star\lib\uno               nmake   -   all ju_cssl_uno NULL
 ju	jurt\com\sun\star\lib\uno\environments\java			nmake	-	all	ju_env_java ju_uno ju_cssl_uno NULL
