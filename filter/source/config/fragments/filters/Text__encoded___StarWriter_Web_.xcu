@@ -1,0 +1,42 @@
+    <node oor:name="Text (encoded) (StarWriter/Web)" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>writer_Text</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.WebDocument</value></prop>
+        <prop oor:name="UIComponent"><value>com.sun.star.comp.Writer.FilterOptionsDialog</value></prop>
+        <prop oor:name="UserData"><value>TEXT_DLG</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">Tekst zakodowany (%productname% Writer/Web)</value>
+            <value xml:lang="hu">Kódolt szöveg (%productname% Writer/Web)</value>
+            <value xml:lang="ja">エンコードされたテキスト (%productname% Writer/Web)</value>
+            <value xml:lang="es">Texto codificado (%productname% Writer/Web)</value>
+            <value xml:lang="tr">Kodlanmış Metin (%productname% Writer/Web)</value>
+            <value xml:lang="ru">Текст кодированный (%productname% Writer/Web)</value>
+            <value xml:lang="th">Text Encoded (%productname% Writer/Web)</value>
+            <value xml:lang="x-comment">Text Kodiert (%productname% Writer/Web)</value>
+            <value xml:lang="ca">Text Encoded (%productname% Writer/Web)</value>
+            <value xml:lang="el">Κείμενο Κωδικοποιημένο (%productname% Writer/Web)</value>
+            <value xml:lang="zh-CN">文字 使用编码的（%productname% Writer/Web）</value>
+            <value xml:lang="pt">Texto codificado (%productname% Writer/Web)</value>
+            <value xml:lang="cs">Kódovaný text (%productname% Writer/Web)</value>
+            <value xml:lang="fr">Texte codé (%productname% Writer/Web)</value>
+            <value xml:lang="ar">Text (encoded)</value>
+            <value xml:lang="zh-TW">文字 使用編碼的 (%productname% Writer/Web)</value>
+            <value xml:lang="sl">Besedilo Encoded (%productname% Writer/Web)</value>
+            <value xml:lang="fi">Text (encoded)</value>
+            <value xml:lang="hi-IN">Text Encoded (%productname% Writer/Web)</value>
+            <value xml:lang="en-US">Text Encoded (%productname% Writer/Web)</value>
+            <value xml:lang="sk">Kódovaný text (%productname% Writer/Web)</value>
+            <value xml:lang="he">‮טקסט מקודד (%productname% Writer/Web)‬</value>
+            <value xml:lang="sv">Text - kodad (%productname% Writer/Web)</value>
+            <value xml:lang="da">Tekst encoded (%productname% Writer/Web)</value>
+            <value xml:lang="de">Text Kodiert (%productname% Writer/Web)</value>
+            <value xml:lang="ko">인코드된 텍스트 (%productname% Writer/Web)</value>
+            <value xml:lang="nl">Tekst gecodeerd (%productname% Writer/Web)</value>
+            <value xml:lang="pt-BR">Text (encoded)</value>
+            <value xml:lang="it">Testo codificato (%productname% Writer/Web)</value>
+            <value xml:lang="x-translate">Text Kodiert (%productname% Writer/Web)</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN</value></prop>
+    </node>
