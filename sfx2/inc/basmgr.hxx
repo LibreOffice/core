@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:22 $
+ *  last change: $Author: ab $ $Date: 2000-11-13 12:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,20 @@
 #include <basic/basmgr.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SCRIPT_XSTARBASICACCESS_HPP_
+#include <com/sun/star/script/XStarBasicAccess.hpp>
+#endif
+
+
+// Basic XML Import/Export
+com::sun::star::uno::Reference< com::sun::star::script::XStarBasicAccess >
+    getStarBasicAccess( BasicManager* pMgr );
+
+
 class SfxBasicManager : public BasicManager
 {
+    friend class LibraryContainer_Impl;
+
 private:
     BasicLibs*          pLibs;
     BasicErrorManager*  pErrorMgr;
@@ -140,6 +152,9 @@ public:
     BOOL            IsExtern( USHORT nLib );
 
     StarBASIC*      CreateLib( const String& rLibName );
+    // For XML import/export:
+    StarBASIC*      CreateLib( const String& rLibName, const String& Password,
+                               const String& ExternalSourceURL, const String& LinkTargetURL );
     StarBASIC*      AddLib( SvStorage& rStorage, const String& rLibName, BOOL bReference );
     void            AddLib( StarBASIC* pLib );
     BOOL            MoveLib( USHORT nLib, USHORT nNewPos );
