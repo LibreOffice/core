@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:34:33 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XLINKAGESUPPORT_HPP_
+#include <com/sun/star/embed/XLinkageSupport.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ENTRYINITMODES_HPP_
 #include <com/sun/star/embed/EntryInitModes.hpp>
@@ -2907,11 +2910,43 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
     return pImp->m_xDocStorage;
 }
 
+void InsertStreamIntoPicturesStorage_Impl( const uno::Reference< embed::XStorage >& xDocStor,
+                                            const uno::Reference< io::XInputStream >& xInStream,
+                                            const ::rtl::OUString& aStreamName )
+{
+    OSL_ENSURE( aStreamName.getLength() && xInStream.is() && xDocStor.is(), "Misuse of the method!\n" );
+
+    try
+    {
+        uno::Reference< embed::XStorage > xPictures = xDocStor->openStorageElement(
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ),
+                                    embed::ElementModes::READWRITE );
+        uno::Reference< io::XStream > xObjReplStr = xPictures->openStreamElement(
+                                    aStreamName,
+                                    embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+        uno::Reference< io::XOutputStream > xOutStream(
+                                    xObjReplStr->getInputStream(), uno::UNO_QUERY_THROW );
+
+        ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xOutStream );
+        xOutStream->closeOutput();
+
+        uno::Reference< embed::XTransactedObject > xTransact( xPictures, uno::UNO_QUERY );
+        if ( xTransact.is() )
+            xTransact->commit();
+    }
+    catch( uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "The pictures storage is not available!\n" );
+    }
+}
+
 sal_Bool SfxObjectShell::SaveChildren()
 {
     sal_Bool bResult = sal_True;
 
     uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+    sal_Bool bOasis = ( SotStorage::GetVersion( GetStorage() ) > SOFFICE_FILEFORMAT_60 );
+
     for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
     {
         uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
@@ -2933,6 +2968,26 @@ sal_Bool SfxObjectShell::SaveChildren()
                     break;
                 }
             }
+
+            if ( !bOasis )
+            {
+                // copy replacement images for linked objects
+                try
+                {
+                    uno::Reference< embed::XLinkageSupport > xLink( xObj, uno::UNO_QUERY );
+                    if ( xLink.is() && xLink->isLink() )
+                    {
+                        ::rtl::OUString aMediaType;
+                        uno::Reference < io::XInputStream > xInStream =
+                                GetEmbeddedObjectContainer().GetGraphicStream( xObj, &aMediaType );
+                        if ( xInStream.is() )
+                            InsertStreamIntoPicturesStorage_Impl( GetStorage(), xInStream, aNames[n] );
+                    }
+                }
+                catch( uno::Exception& )
+                {
+                }
+            }
         }
     }
 
@@ -2940,7 +2995,6 @@ sal_Bool SfxObjectShell::SaveChildren()
     {
         try
         {
-            sal_Bool bOasis = ( SotStorage::GetVersion( GetStorage() ) > SOFFICE_FILEFORMAT_60 );
             ::rtl::OUString aObjReplElement( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
             if ( !bOasis && GetStorage()->hasByName( aObjReplElement ) && GetStorage()->isStorageElement( aObjReplElement ) )
             {
@@ -2978,7 +3032,8 @@ sal_Bool SfxObjectShell::SaveAsChildren( const uno::Reference< embed::XStorage >
             OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
             if ( xObj.is() )
             {
-                if ( bOasis )
+                uno::Reference< embed::XLinkageSupport > xLink( xObj, uno::UNO_QUERY );
+                if ( bOasis || xLink.is() && xLink->isLink() )
                 {
                     // copy replacement image from old to new container
                     ::rtl::OUString aMediaType;
@@ -3012,7 +3067,15 @@ sal_Bool SfxObjectShell::SaveAsChildren( const uno::Reference< embed::XStorage >
                     }
 
                     if ( xStream.is() )
-                        aCnt.InsertGraphicStream( xStream, aNames[n], aMediaType );
+                    {
+                        if ( bOasis )
+                            aCnt.InsertGraphicStream( xStream, aNames[n], aMediaType );
+                        else
+                        {
+                            // it is a linked object exported into SO7 format
+                            InsertStreamIntoPicturesStorage_Impl( xStorage, xStream, aNames[n] );
+                        }
+                    }
                 }
 
                 uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
