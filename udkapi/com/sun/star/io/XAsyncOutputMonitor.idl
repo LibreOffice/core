@@ -1,0 +1,129 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XAsyncOutputMonitor.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2005-01-27 12:20:52 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2004 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_io_XAsyncOutputMonitor_idl__
+#define __com_sun_star_io_XAsyncOutputMonitor_idl__
+
+#ifndef __com_sun_star_io_IOException_idl__
+#include "com/sun/star/io/IOException.idl"
+#endif
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include "com/sun/star/uno/XInterface.idl"
+#endif
+
+module com { module sun { module star { module io {
+
+/**
+   An optional companion interface to
+   <type scope="com::sun::star::io">XOutputStream</type> that supports scenarios
+   where <member scope="com::sun::star::io">XOutputStream::writeBytes</member>
+   operates asynchronously and does not necessarily report any errors.
+
+   <p>A typical scenario where this interface is useful is when an
+   <type scope="com::sun::star::io">XOutputStream</type> is used to write to a
+   file via NFS.  Normally, any calls to
+   <member scope="com::sun::star::io">XOutputStream::writeBytes</member> will
+   execute asynchronously then, in that any potential errors might only be
+   reported by later calls to
+   <member scope="com::sun::star::io">XOutputStream::writeBytes</member> or
+   <member scope="com::sun::star::io">XOutputStream::closeOutput</member>.  If
+   such an output stream shall not be closed immediately after one or more calls
+   to <member scope="com::sun::star::io">XOutputStream::writeBytes</member>, but
+   the client wants to know as soon as possible whether writing was successful,
+   then <member
+   scope="com::sun::star::io">XAsyncOutputMonitor::waitForCompletion</member>
+   should be called after the series of calls to
+   <member scope="com::sun::star::io">XOutputStream::writeBytes</member>.</p>
+
+   @since OOo2.0.0
+*/
+interface XAsyncOutputMonitor {
+    /**
+       waits for the completion of any previous calls to
+       <member scope="com::sun::star::io">XOutputStream::writeBytes</member>,
+       and reports potentially pending errors.
+
+       <p>Calling this method is potentially expensive (even if the associated
+       <type scope="com::sun::star::io">XOutputStream</type> represents a local
+       file not accessed via NFS, for example).  This method has a similar
+       description to
+       <member scope="com::sun::star::io">XOutputStream::flush</member>.
+       However, where the semantics of <code>flush</code> are rather vague,
+       <code>waitForCompletion</code> has very specific semantics&mdash;it just
+       blocks long enough so that any errors encountered during previous calls
+       to <member scope="com::sun::star::io">XOutputStream::writeBytes</member>
+       can reliably be reported.  It specificially does not guarantee that any
+       data have savely been stored on a stable physical medium, like a hard
+       disk (and it is completely unspecified whether <code>flush</code> should
+       give this guarantee).</p>
+
+       @throws com::sun::star::io::IOException
+       if any previous call to <member
+       scope="com::sun::star::io">XOutputStream::writeBytes</member> encountered
+       such an error, but has not yet reported it (in cases where
+       <code>writeBytes</code> operates asynchronously).
+    */
+    void waitForCompletion() raises (IOException);
+};
+
+}; }; }; };
+
+#endif
