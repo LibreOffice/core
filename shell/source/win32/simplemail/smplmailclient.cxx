@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smplmailclient.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-15 10:50:05 $
+ *  last change: $Author: tra $ $Date: 2001-12-07 12:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,7 +407,9 @@ void CSmplMailClient::initMapiSendMailFlags( sal_Int32 aFlags, FLAGS& aMapiFlags
     // #93077#
     OSL_ASSERT( !( aFlags & NO_LOGON_DIALOG ), "Flag NO_LOGON_DIALOG has currently no effect" );
 
-    aMapiFlags = MAPI_UNICODE; // #93077# MAPI_NEW_SESSION
+    aMapiFlags = 0; // we should not use MAPI_UNICODE else
+                    // Netscape interprets all string as UNICODE!
+                    // #93077# MAPI_NEW_SESSION
 
     if ( !( aFlags & NO_USER_INTERFACE ) )
         aMapiFlags |= MAPI_DIALOG;
