@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementinfo.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 11:00:28 $
+ *  last change: $Author: jb $ $Date: 2002-05-17 11:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ namespace configmgr
 
                 other
             };
-        };
+        }
 // -----------------------------------------------------------------------------
         namespace Operation
         {
@@ -117,7 +117,7 @@ namespace configmgr
 
                 unknown
             };
-        };
+        }
 // -----------------------------------------------------------------------------
         struct ElementInfo
         {
