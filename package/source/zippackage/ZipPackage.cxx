@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-22 19:17:49 $
+ *  last change: $Author: mtg $ $Date: 2001-08-22 19:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,6 @@
 #include <InteractionRequest.hxx>
 #endif
 #include <memory>
-
-#define MTG_DEBUG
 
 using namespace rtl;
 using namespace ucb;
