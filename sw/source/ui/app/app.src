@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-12 10:11:13 $
+ *  last change: $Author: rt $ $Date: 2002-09-13 08:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2035,7 +2035,7 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE [ swedish ] = "Felaktigt lösenord." ;
     MESSAGE [ dutch ] = "Wachtwoord niet correct." ;
     MESSAGE [ spanish ] = "Contraseña errónea" ;
-    MESSAGE [ english_us ] = "Invalid password." ;
+    MESSAGE [ english_us ] = "Invalid password" ;
     MESSAGE[ chinese_simplified ] = "å¯†ç æ— æ•ˆã€‚";
     MESSAGE[ russian ] = "Îøèáêà â ïàğîëå.";
     MESSAGE[ polish ] = "Nieprawid³owe has³o.";
@@ -3173,20 +3173,20 @@ String STR_FDLG_TEMPLATE_NAME
     Text [ swedish ] = "Formatmallar: " ;
     Text [ danish ] = "Aktuel skabelon: " ;
     Text [ italian ] = "Modello corrente: " ;
-    Text [ spanish ] = "Estilo actual: " ;
+    Text [ spanish ] = "Estilos: " ;
     Text [ french ] = "Modèle actif : " ;
     Text [ dutch ] = "Actuele sjabloon  " ;
     Text [ portuguese ] = "Modelo actual: " ;
     Text[ chinese_simplified ] = "æ ¼å¼æ ·å¼ï¼š";
     Text[ russian ] = "Òåêóùèé øàáëîí:  ";
     Text[ polish ] = "Aktualny szablon  ";
-    Text[ japanese ] = "ç¾åœ¨ã®ã‚¹ã‚¿ã‚¤ãƒ«ï¼š ";
+    Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«: ";
     Text[ chinese_traditional ] = "æ ¼å¼ç¯„æœ¬ï¼š ";
     Text[ arabic ] = "ÇáäãØ ÇáÍÇáí: ";
     Text[ dutch ] = "Actuele sjabloon  ";
     Text[ chinese_simplified ] = "æ ¼å¼æ ·å¼ï¼š";
     Text[ greek ] = "Ôñİ÷ùí ğñüôõğï:  ";
-    Text[ korean ] = "í˜„ì¬ ì„œì‹ íŒŒì¼: ";
+    Text[ korean ] = "ìŠ¤íƒ€ì¼: ";
     Text[ turkish ] = "Yürürlükteki biçim: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estil actual:";
