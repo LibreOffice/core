@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeSettings.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-16 11:42:47 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-20 11:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 
 import org.openoffice.idesupport.SVersionRCFile;
+import org.openoffice.idesupport.OfficeInstallation;
 
 /** Options for something or other.
  *
@@ -87,34 +88,27 @@ public class OfficeSettings extends SystemOption {
 
     protected void initialize() {
         super.initialize();
+
         setWarnBeforeDocDeploy(true);
         setWarnAfterDirDeploy(true);
         setWarnBeforeMount(true);
 
-        SVersionRCFile sversion = SVersionRCFile.createInstance();
+        if (getOfficeDirectory() == null) {
+            SVersionRCFile sversion = SVersionRCFile.createInstance();
 
-        try {
-            Hashtable versions = sversion.getVersions();
-            Enumeration enum = versions.elements();
-            String path;
+            try {
+                Enumeration enum = sversion.getVersions();
+                OfficeInstallation oi;
 
-            while (enum.hasMoreElements()) {
-                path = (String)enum.nextElement();
-                File f = new File(path);
-
-                if (f.exists()) {
-                    setOfficeDirectory(path);
+                while (enum.hasMoreElements()) {
+                    oi = (OfficeInstallation)enum.nextElement();
+                    setOfficeDirectory(oi);
                     return;
                 }
             }
+            catch (IOException ioe) {
+            }
         }
-        catch (IOException ioe) {
-            /* do nothing a default will be used */
-        }
-
-        // if no office version is found try a default value
-        setOfficeDirectory(System.getProperty("user.home") +
-            System.getProperty("file.separator") + "OpenOffice.org643");
     }
 
     public String displayName() {
@@ -129,12 +123,12 @@ public class OfficeSettings extends SystemOption {
         return (OfficeSettings)findObject(OfficeSettings.class, true);
     }
 
-    public String getOfficeDirectory() {
-        return (String)getProperty(OFFICE_DIRECTORY);
+    public OfficeInstallation getOfficeDirectory() {
+        return (OfficeInstallation)getProperty(OFFICE_DIRECTORY);
     }
 
-    public void setOfficeDirectory(String path) {
-        putProperty(OFFICE_DIRECTORY, path, true);
+    public void setOfficeDirectory(OfficeInstallation oi) {
+        putProperty(OFFICE_DIRECTORY, oi, true);
     }
 
     public boolean getWarnBeforeDocDeploy() {
