@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 13:28:26 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ arabic ] = "Ä†∆ëôÈ ‡";
         Text[ turkish ] = "~X konumu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posici¢n ~X";
     };
     FixedText FT_POS_Y
     {
@@ -133,6 +134,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ arabic ] = "Ä†∆ëôÈ Â";
         Text[ turkish ] = "~Y konumu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posici¢n ~Y";
     };
     MetricField MTR_FLD_POS_X
     {
@@ -191,6 +193,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ arabic ] = "Ä†∆ëôÈ";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posici¢n";
     };
     Control CTL_RECT
     {
@@ -221,6 +224,7 @@ TabPage RID_SVXPAGE_POSITION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Basispunkt";
+        QuickHelpText[ catalan ] = "Punto base";
     };
     GroupBox GB_ANCHOR
     {
@@ -248,6 +252,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ arabic ] = "è•‡Äµ";
         Text[ turkish ] = "Sabitleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Anclaje";
     };
     FixedText FT_ANCHOR
     {
@@ -275,6 +280,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ arabic ] = "∆•‡Äê";
         Text[ turkish ] = "~Sabitleyici";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ancla";
     };
     ListBox LB_ANCHOR
     {
@@ -429,6 +435,13 @@ TabPage RID_SVXPAGE_POSITION
         < " " ; > ;
         < " " ; > ;
         < " " ; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "Al p†rrafo" ; > ;
+        < "Como car†cter" ; > ;
+        < "A la p†gina" ; > ;
+        < "Al marco" ; > ;
     };
     };
     FixedText FT_ORIENT
@@ -717,6 +730,19 @@ TabPage RID_SVXPAGE_POSITION
         < " " ; > ;
         < " " ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Desde arriba" ; > ;
+        < "Arriba" ; > ;
+        < "Centrado" ; > ;
+        < "Abajo" ; > ;
+        < "Car†cter arriba" ; > ;
+        < "Car†cter centrado" ; > ;
+        < "Car†cter abajo" ; > ;
+        < "L°nea superior" ; > ;
+        < "L°nea centrada" ; > ;
+        < "L°nea inferior" ; > ;
+    };
     };
     TriStateBox TSB_PROTECT
     {
@@ -748,6 +774,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ arabic ] = "÷∆Ä°ê";
         Text[ turkish ] = "~Koru";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Proteger";
     };
     Text[ russian ] = "ÿåáäîäò";
     Text[ greek ] = "‘Ì¢á";
@@ -759,6 +786,7 @@ TabPage RID_SVXPAGE_POSITION
     Text[ arabic ] = "Ä†∆ëôÈ";
     Text[ turkish ] = "Konum";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Posici¢n";
 };
  // RID_SVXPAGE_SIZE ---------------------------------------------------------
 TabPage RID_SVXPAGE_SIZE
@@ -808,6 +836,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ arabic ] = "Ä†È•ô";
         Text[ turkish ] = "~GeniÁlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ncho";
     };
     FixedText FT_HEIGHT
     {
@@ -838,6 +867,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ arabic ] = "Ä†Ä•“ÌÄÈ";
         Text[ turkish ] = "~YÅkseklik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ltura";
     };
     MetricField MTR_FLD_WIDTH
     {
@@ -898,6 +928,7 @@ TabPage RID_SVXPAGE_SIZE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Basispunkt";
+        QuickHelpText[ catalan ] = "Punto base";
     };
     CheckBox CBX_SCALE
     {
@@ -925,6 +956,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ arabic ] = "“„Ä∆Ñ";
         Text[ turkish ] = "~EÁitle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Igualar";
     };
     GroupBox GRP_SIZE
     {
@@ -955,6 +987,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ arabic ] = "Ä†÷ﬁ∆";
         Text[ turkish ] = "Boyut";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tama§o";
     };
     TriStateBox TSB_PROTECT
     {
@@ -986,6 +1019,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ arabic ] = "÷∆Ä°ê";
         Text[ turkish ] = "~Koru";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Proteger";
     };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
@@ -1013,6 +1047,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ arabic ] = "∆†Äµ∆ê Ä†È•ô ††ÑÂ";
         Text[ turkish ] = "GeniÁli–i, metne gîre aya~rla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ajustar ~ancho al texto";
     };
     TriStateBox TSB_AUTOGROW_HEIGHT
     {
@@ -1042,6 +1077,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ arabic ] = "∆†Äµ∆ê Ä†Ä•“ÌÄÈ ††ÑÂ";
         Text[ turkish ] = "YÅksekli–i, metne gîre a~yarla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ajustar altura al texto";
     };
     Text[ russian ] = "—ÖáçÜ–";
     Text[ greek ] = "ﬁÌ∆Üäãï";
@@ -1053,6 +1089,7 @@ TabPage RID_SVXPAGE_SIZE
     Text[ arabic ] = "Ä†÷ﬁ∆";
     Text[ turkish ] = "Boyut";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tama§o";
 };
  // RID_SVXPAGE_ANGLE --------------------------------------------------------
 TabPage RID_SVXPAGE_ANGLE
@@ -1100,6 +1137,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ arabic ] = "Ä†∆ëôÈ ‡";
         Text[ turkish ] = "~X konumu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posici¢n ~X";
     };
     FixedText FT_POS_Y
     {
@@ -1128,6 +1166,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ arabic ] = "Ä†∆ëôÈ Â";
         Text[ turkish ] = "~Y konumu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posici¢n ~Y";
     };
     MetricField MTR_FLD_POS_X
     {
@@ -1186,6 +1225,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ arabic ] = "Ä†„Äë°ê";
         Text[ turkish ] = "~AáÏ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "An~gulo";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -1222,6 +1262,7 @@ TabPage RID_SVXPAGE_ANGLE
         CustomUnitText[ arabic ] = "ÿ•ﬁê";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
+        CustomUnitText[ catalan ] = "grados";
     };
     Control CTL_RECT
     {
@@ -1252,6 +1293,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Rotationspunkt";
+        QuickHelpText[ catalan ] = "Punto de rotaci¢n";
     };
     Control CTL_ANGLE
     {
@@ -1288,6 +1330,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ arabic ] = "ÑËùê ∆÷ë•°ê";
         Text[ turkish ] = "Eksen noktasÏ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Punto de rotaci¢n";
     };
     GroupBox GRP_ANGLE
     {
@@ -1316,6 +1359,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ arabic ] = "„Äë°ê Ä†Ä‡“ÿÄ•ê";
         Text[ turkish ] = "DînÅÁ aáÏsÏ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "µngulo de rotaci¢n";
     };
     Text[ russian ] = "‡∆åâ";
     Text[ greek ] = "«ó°·†";
@@ -1327,6 +1371,7 @@ TabPage RID_SVXPAGE_ANGLE
     Text[ arabic ] = "Ä†„Äë°ê";
     Text[ turkish ] = "AáÏ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "µngulo";
 };
  // RID_SVXPAGE_SLANT -----------------------------------------------------
 TabPage RID_SVXPAGE_SLANT
@@ -1372,6 +1417,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ arabic ] = "ÑÂÌ Ä†Ëù•";
         Text[ turkish ] = "~Äap";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ra~dio";
     };
     MetricField MTR_FLD_RADIUS
     {
@@ -1413,6 +1459,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ arabic ] = "Ä†„Äë°ê";
         Text[ turkish ] = "~AáÏ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "µ~ngulo";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -1451,6 +1498,7 @@ TabPage RID_SVXPAGE_SLANT
         CustomUnitText[ arabic ] = "ÿ•ﬁê";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
+        CustomUnitText[ catalan ] = "grados";
     };
     /*
     Control CTL_ANGLE
@@ -1486,6 +1534,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ arabic ] = "ÑÂÌ Ëù• Ä†„Äë°ê";
         Text[ turkish ] = "KîÁe áapÏ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Radio de †ngulo";
     };
     GroupBox GRP_SLANT
     {
@@ -1514,6 +1563,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ arabic ] = "∆Äí†";
         Text[ turkish ] = "DuruÁ e–imi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Inclinar";
     };
     /*
     TriStateBox TSB_VERTICAL
@@ -1535,6 +1585,7 @@ TabPage RID_SVXPAGE_SLANT
     Text[ arabic ] = "∆Äí† / ÑÂÌ Ëù• Ä†„Äë°ê";
     Text[ turkish ] = "DuruÁ e–imi / KîÁe áapÏ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Inclinaci¢n/Radio de †ngulo";
 };
  // RID_SVXDLG_TRANSFORM -----------------------------------------------------
 TabDialog RID_SVXDLG_TRANSFORM
@@ -1593,6 +1644,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ arabic ] = "Ä†∆ëôÈ";
                 Text[ turkish ] = "Konum";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Posici¢n";
             };
             PageItem
             {
@@ -1623,6 +1675,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ arabic ] = "Ä†÷ﬁ∆";
                 Text[ turkish ] = "Boyut";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Tama§o";
             };
             PageItem
             {
@@ -1651,6 +1704,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ arabic ] = "Ä†Ä‡“ÿÄ•ê";
                 Text[ turkish ] = "DînÅÁ";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Rotaci¢n";
             };
             PageItem
             {
@@ -1679,6 +1733,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ arabic ] = "∆Äí† / ÑÂÌ Ëù• Ä†„Äë°ê";
                 Text[ turkish ] = "DuruÁ e–imi / KîÁe áapÏ";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Inclinaci¢n/Radio de †ngulo";
             };
         };
     };
@@ -1692,5 +1747,6 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ arabic ] = "Ä†∆ëôÈ ëÄ†÷ﬁ∆";
     Text[ turkish ] = "Konum ve boyut";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Posici¢n y tama§o";
 };
  // ********************************************************************** EOF
