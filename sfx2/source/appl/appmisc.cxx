@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:31:33 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,45 +438,6 @@ SfxProgress* SfxApplication::GetProgress() const
 
 void SfxApplication::ToolboxExec_Impl( SfxRequest &rReq )
 {
-    // Object-Bar-Id ermitteln
-    sal_uInt16 nSID = rReq.GetSlot(), nTbxID;
-    switch ( nSID )
-    {
-        case SID_TOGGLEFUNCTIONBAR:     nTbxID = SFX_OBJECTBAR_APPLICATION; break;
-        case SID_TOGGLEOBJECTBAR:       nTbxID = SFX_OBJECTBAR_OBJECT; break;
-        case SID_TOGGLETOOLBAR:         nTbxID = SFX_OBJECTBAR_TOOLS; break;
-        case SID_TOGGLEMACROBAR:        nTbxID = SFX_OBJECTBAR_MACRO; break;
-        case SID_TOGGLEOPTIONBAR:       nTbxID = SFX_OBJECTBAR_OPTIONS; break;
-        case SID_TOGGLECOMMONTASKBAR:   nTbxID = SFX_OBJECTBAR_COMMONTASK; break;
-        case SID_TOGGLENAVBAR:          nTbxID = SFX_OBJECTBAR_NAVIGATION; break;
-        //case SID_TOGGLERECORDINGBAR:  nTbxID = SFX_OBJECTBAR_RECORDING; break;
-        //case SID_TOGGLEFULLSCREENBAR: nTbxID = SFX_OBJECTBAR_FULLSCREEN; break;
-        default:
-            DBG_ERROR( "invalid ObjectBar`s SID" );
-    }
-
-    // Parameter auswerten
-    SfxToolBoxConfig *pTbxConfig = pViewFrame->GetBindings().GetToolBoxConfig();
-    SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, sal_False);
-    sal_Bool bShow = pShowItem ? pShowItem->GetValue() : !pTbxConfig->IsToolBoxPositionVisible(nTbxID);
-
-    // ausfuehren
-    pTbxConfig->SetToolBoxPositionVisible(nTbxID, bShow);
-    Invalidate( nSID );
-
-    SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
-    while ( pViewFrame )
-    {
-        // update all "final" dispatchers
-        if ( !pViewFrame->GetActiveChildFrame_Impl() )
-            pViewFrame->GetDispatcher()->Update_Impl(sal_True);
-        pViewFrame = SfxViewFrame::GetNext(*pViewFrame);
-    }
-
-    // ggf. recorden
-    if ( !rReq.IsAPI() )
-        rReq.AppendItem( SfxBoolItem( nSID, bShow ) );
-    rReq.Done();
 }
 
 //------------------------------------------------------------------------
@@ -484,51 +445,6 @@ void SfxApplication::ToolboxExec_Impl( SfxRequest &rReq )
 
 void SfxApplication::ToolboxState_Impl( SfxItemSet &rSet )
 {
-    SfxWhichIter aIter(rSet);
-    for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
-    {
-        SfxToolBoxConfig *pTbxConfig = pViewFrame->GetBindings().GetToolBoxConfig();
-        switch ( nSID )
-        {
-            case SID_TOGGLEFUNCTIONBAR:
-                    rSet.Put( SfxBoolItem( nSID, pTbxConfig->
-                        IsToolBoxPositionVisible(SFX_OBJECTBAR_APPLICATION)));
-                break;
-
-            case SID_TOGGLEOBJECTBAR:
-                    rSet.Put( SfxBoolItem( nSID, pTbxConfig->
-                        IsToolBoxPositionVisible(SFX_OBJECTBAR_OBJECT)));
-                break;
-
-            case SID_TOGGLEOPTIONBAR:
-                    rSet.Put( SfxBoolItem( nSID, pTbxConfig->
-                        IsToolBoxPositionVisible(SFX_OBJECTBAR_OPTIONS)));
-                break;
-
-            case SID_TOGGLETOOLBAR:
-                    rSet.Put( SfxBoolItem( nSID, pTbxConfig->
-                        IsToolBoxPositionVisible(SFX_OBJECTBAR_TOOLS)));
-                break;
-
-            case SID_TOGGLEMACROBAR:
-                    rSet.Put( SfxBoolItem( nSID, pTbxConfig->
-                        IsToolBoxPositionVisible(SFX_OBJECTBAR_MACRO)));
-                break;
-
-            case SID_TOGGLECOMMONTASKBAR:
-                    rSet.Put( SfxBoolItem( nSID, pTbxConfig->
-                        IsToolBoxPositionVisible(SFX_OBJECTBAR_COMMONTASK)));
-                break;
-
-            case SID_TOGGLENAVBAR:
-                    rSet.Put( SfxBoolItem( nSID, pTbxConfig->
-                        IsToolBoxPositionVisible(SFX_OBJECTBAR_NAVIGATION)));
-                break;
-
-            default:
-                DBG_ERROR( "invalid ObjectBar`s SID" );
-        }
-    }
 }
 
 //------------------------------------------------------------------------
