@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 08:06:09 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@
 
 using namespace dbtools;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
@@ -111,7 +112,6 @@ using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
-using namespace ::utl;
 
 //........................................................................
 namespace dbaccess
@@ -124,43 +124,35 @@ namespace dbaccess
 DBG_NAME(OQueryContainer)
 //------------------------------------------------------------------------------
 OQueryContainer::OQueryContainer(
-                OWeakObject& _rConnection, Mutex& _rMutex, const Reference< XNameContainer >& _rxCommandDefinitions,
-                const OConfigurationTreeRoot& _rRootConfigNode, const Reference< XMultiServiceFactory >& _rxORB,
+                  const Reference< XNameContainer >& _rxCommandDefinitions
+                , const Reference< XConnection >& _rxConn
+                , const Reference< XMultiServiceFactory >& _rxORB,
                 IWarningsContainer* _pWarnings)
-    :OConfigurationFlushable(_rMutex)
-    ,m_rParent(_rConnection)
+    :ODefinitionContainer(_rxORB,NULL,TContentPtr(new ODefinitionContainer_Impl))
     ,m_pWarnings( _pWarnings )
-    ,m_rMutex(_rMutex)
-    ,m_aContainerListeners(_rMutex)
     ,m_xCommandDefinitions(_rxCommandDefinitions)
-    ,m_xORB(_rxORB)
+    ,m_xConnection(_rxConn)
 {
     DBG_CTOR(OQueryContainer, NULL);
 
-    m_aConfigurationNode = _rRootConfigNode;
+    increment(m_refCount);
 
     m_pCommandsListener = new OCommandsListener(this);
     m_pCommandsListener->acquire();
 
-    DBG_ASSERT(m_aConfigurationNode.isValid() && m_xORB.is(), "OQueryContainer::OQueryContainer : invalid arguments !");
-    m_aConfigurationNode.setEscape(m_aConfigurationNode.isSetNode());
-
-    increment(m_refCount);
     {
         Reference< XContainer > xContainer(m_xCommandDefinitions, UNO_QUERY);
         DBG_ASSERT(xContainer.is(), "OQueryContainer::OQueryContainer : the CommandDefinitions container is invalid !");
         xContainer->addContainerListener(m_pCommandsListener);
 
-        // fill my structures with dummies
-        OQuery* pDummyObject = NULL;
-
-        Sequence< ::rtl::OUString > sDefinitionNames = m_xCommandDefinitions->getElementNames();
-        const ::rtl::OUString* pDefinitionNames = sDefinitionNames.getConstArray();
-        for (sal_Int32 i=0; i<sDefinitionNames.getLength(); ++i, ++pDefinitionNames)
-        {
-            m_aQueriesIndexed.push_back(m_aQueries.insert(Queries::value_type(*pDefinitionNames, pDummyObject)).first);
-        }
-        // (they will be filled as soon as they are accessed)
+//      // fill my structures with dummies
+//      Sequence< ::rtl::OUString > sDefinitionNames = m_xCommandDefinitions->getElementNames();
+//      const ::rtl::OUString* pIter = sDefinitionNames.getConstArray();
+//      const ::rtl::OUString* pEnd = pIter + sDefinitionNames.getLength();
+//      for (;pIter != pEnd; ++pIter)
+//      {
+//          implAppend(*pIter,Reference< XContent >());
+//      }
     }
     decrement(m_refCount);
 }
@@ -172,58 +164,15 @@ OQueryContainer::~OQueryContainer()
     //  dispose();
         //  maybe we're already disposed, but this should be uncritical
 }
-
+// -----------------------------------------------------------------------------
+IMPLEMENT_FORWARD_XINTERFACE2( OQueryContainer,ODefinitionContainer,OQueryContainer_Base)
 //------------------------------------------------------------------------------
-void SAL_CALL OQueryContainer::acquire() throw()
+void OQueryContainer::disposing()
 {
-    m_rParent.acquire();
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OQueryContainer::release() throw()
-{
-    m_rParent.release();
-}
-
-//------------------------------------------------------------------------------
-Any SAL_CALL OQueryContainer::queryInterface( const Type& _rType ) throw(RuntimeException)
-{
-    Any aReturn = OQueryContainer_Base::queryInterface(_rType);
-    if (!aReturn.hasValue())
-        aReturn = OConfigurationFlushable::queryInterface(_rType);
-    return aReturn;
-}
-
-//------------------------------------------------------------------------------
-Sequence< Type > SAL_CALL OQueryContainer::getTypes() throw (RuntimeException)
-{
-    return concatSequences(OQueryContainer_Base::getTypes(), OConfigurationFlushable::getTypes());
-}
-
-//------------------------------------------------------------------------------
-void OQueryContainer::dispose()
-{
-    MutexGuard aGuard(m_rMutex);
-
-    OConfigurationFlushable::disposing();
+    ODefinitionContainer::disposing();
+    MutexGuard aGuard(m_aMutex);
 
     // say our listeners goobye
-    EventObject aEvt(*this);
-    m_aContainerListeners.disposeAndClear(aEvt);
-
-    for (ConstQueriesIterator i = m_aQueries.begin(); i != m_aQueries.end(); ++i)
-    {
-        OQuery* pQuery = i->second;
-        if(pQuery)
-        {
-            pQuery->dispose();
-            pQuery->release();
-        }
-    }
-    m_aQueriesIndexed.clear();
-        //  !!! do this before clearing the map which the vector elements refer to !!!
-    m_aQueries.clear();
-
     Reference< XContainer > xContainer(m_xCommandDefinitions, UNO_QUERY);
     if (xContainer.is())
         xContainer->removeContainerListener(m_pCommandsListener);
@@ -231,6 +180,7 @@ void OQueryContainer::dispose()
         m_pCommandsListener->release();
     m_pCommandsListener     = NULL;
     m_xCommandDefinitions   = NULL;
+    m_xConnection           = NULL;
 }
 
 // XServiceInfo
@@ -248,10 +198,10 @@ Reference< XPropertySet > SAL_CALL OQueryContainer::createDataDescriptor(  ) thr
 //------------------------------------------------------------------------------
 void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet >& _rxDesc ) throw(SQLException, ElementExistException, RuntimeException)
 {
-    Reference< XPropertySet > xNewObject;
+    Reference< XContent> xNewObject;
     ::rtl::OUString sNewObjectName;
     {
-        MutexGuard aGuard(m_rMutex);
+        MutexGuard aGuard(m_aMutex);
 
         OQueryDescriptor* pImpl = NULL;
                 comphelper::getImplementation(pImpl, Reference< XInterface >(_rxDesc.get()));
@@ -266,8 +216,7 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
                 // TODO : resource
         }
 
-        Reference< XPropertySet > xCommandDefinitionPart(m_xORB->createInstance(
-            SERVICE_SDB_QUERYDEFINITION), UNO_QUERY);
+        Reference< XPropertySet > xCommandDefinitionPart(m_xORB->createInstance(SERVICE_SDB_QUERYDEFINITION), UNO_QUERY);
         if (!xCommandDefinitionPart.is())
         {
             DBG_ERROR("OQueryContainer::appendByDescriptor : could not create a CommandDefinition object !");
@@ -277,7 +226,6 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
 
         ::comphelper::copyProperties(_rxDesc, xCommandDefinitionPart);
         // and insert it into the CommDef container
-        ::rtl::OUString sNewObjectName;
         _rxDesc->getPropertyValue(PROPERTY_NAME) >>= sNewObjectName;
         {
             m_eDoingCurrently = INSERTING;
@@ -289,8 +237,7 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
         // check if the object was really inserted
         try
         {
-            Reference< XPropertySet > xNewEl;
-            ::cppu::extractInterface(xNewEl, m_xCommandDefinitions->getByName(sNewObjectName));
+            Reference< XPropertySet > xNewEl(m_xCommandDefinitions->getByName(sNewObjectName),UNO_QUERY);
             DBG_ASSERT(xNewEl.get() == xCommandDefinitionPart.get(), "OQueryContainer::appendByDescriptor : the CommandDefinition container worked as it had a descriptor !");
                 // normally should not have changed after inserting
         }
@@ -300,48 +247,24 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
         }
 #endif
         // TODO : the columns part of the descriptor has to be copied
-        OQuery* pNewObject = implCreateWrapper(xCommandDefinitionPart);
-        if(pNewObject)
-        {
-            // object is new so no columns are set so we have to set some
-            // we are not interessted in the result
-            pNewObject->getColumns();
-            OConfigurationNode aQueryNode = implGetObjectKey(sNewObjectName, sal_True);
-            pNewObject->storeTo( aQueryNode );
-        }
-            // need this new object only if we have listeners, else it will be created on request
-        m_aQueriesIndexed.push_back(m_aQueries.insert(Queries::value_type(sNewObjectName, pNewObject)).first);
-        xNewObject = m_aQueriesIndexed[m_aQueriesIndexed.size() - 1]->second;
+        xNewObject = implCreateWrapper(Reference< XContent>(xCommandDefinitionPart,UNO_QUERY));
     }
-    m_aConfigurationNode.commit();
 
-    // notify our listeners
-    ContainerEvent aEvent(*this, makeAny(sNewObjectName), makeAny(xNewObject), Any());
-    OInterfaceIteratorHelper aListenerIterator(m_aContainerListeners);
-    while (aListenerIterator.hasMoreElements())
-        static_cast< XContainerListener* >(aListenerIterator.next())->elementInserted(aEvent);
+    ClearableMutexGuard aGuard(m_aMutex);
+    implAppend(sNewObjectName, xNewObject);
+
+    notifyByName(aGuard,sNewObjectName,xNewObject,NULL,E_INSERTED);
 }
 
 // XDrop
 //------------------------------------------------------------------------------
 void SAL_CALL OQueryContainer::dropByName( const ::rtl::OUString& _rName ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
-    sal_Int32 nIndex = implGetIndex(_rName);
-    if (-1 == nIndex)
-        throw NoSuchElementException(_rName, *this);
+    MutexGuard aGuard(m_aMutex);
+    if ( !checkExistence(_rName) )
+        throw NoSuchElementException(_rName,*this);
 
-    dropByIndex(nIndex);
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OQueryContainer::dropByIndex( sal_Int32 _nIndex ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    MutexGuard aGuard(m_rMutex);
-    if ((_nIndex<0) || (_nIndex>getCount()))
-        throw IndexOutOfBoundsException();
-
-    if (!m_xCommandDefinitions.is())
+    if ( !m_xCommandDefinitions.is() )
     {
         DBG_ERROR("OQueryContainer::dropByIndex : have no CommandDefinition container anymore !");
             // perhaps somebody modified the DataSource, so all connections were separated
@@ -351,229 +274,79 @@ void SAL_CALL OQueryContainer::dropByIndex( sal_Int32 _nIndex ) throw(SQLExcepti
 
     // now simply forward the remove request to the CommandDefinition container, we're a listener for the removal
     // and thus we do everything neccessary in ::elementRemoved
-    m_xCommandDefinitions->removeByName(m_aQueriesIndexed[_nIndex]->first);
-}
-
-// ::com::sun::star::container::XElementAccess
-//------------------------------------------------------------------------------
-Type OQueryContainer::getElementType(  ) throw(RuntimeException)
-{
-    return::getCppuType(static_cast<Reference<XPropertySet>*>(NULL));
-}
-
-
-//------------------------------------------------------------------------------
-sal_Bool OQueryContainer::hasElements(void) throw( RuntimeException )
-{
-    return !m_aQueriesIndexed.empty();
-}
-
-// ::com::sun::star::container::XEnumerationAccess
-//------------------------------------------------------------------------------
-Reference< ::com::sun::star::container::XEnumeration >  OQueryContainer::createEnumeration(void) throw( RuntimeException )
-{
-    MutexGuard aGuard(m_rMutex);
-    return new OEnumerationByIndex( static_cast< ::com::sun::star::container::XIndexAccess* >(this));
-}
-
-// ::com::sun::star::container::XIndexAccess
-//------------------------------------------------------------------------------
-sal_Int32 OQueryContainer::getCount(void) throw( RuntimeException )
-{
-    return m_aQueriesIndexed.size();
+    m_xCommandDefinitions->removeByName(_rName);
 }
 
 //------------------------------------------------------------------------------
-Any OQueryContainer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+void SAL_CALL OQueryContainer::dropByIndex( sal_Int32 _nIndex ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
 {
-    if ((_nIndex < 0) || (_nIndex > (sal_Int32)m_aQueriesIndexed.size()))
+    MutexGuard aGuard(m_aMutex);
+    if ((_nIndex<0) || (_nIndex>getCount()))
         throw IndexOutOfBoundsException();
 
-    Reference< XPropertySet > xReturn = m_aQueriesIndexed[_nIndex]->second;
-    if (!xReturn.is())
-    {   // the object was never accessed before -> create and store it
-        xReturn = m_aQueriesIndexed[_nIndex]->second = implCreateWrapper(m_aQueriesIndexed[_nIndex]->first);
-    }
-    return makeAny(xReturn);
+    ::rtl::OUString sName;
+    Reference<XPropertySet> xProp(Reference<XIndexAccess>(m_xCommandDefinitions,UNO_QUERY)->getByIndex(_nIndex),UNO_QUERY);
+    if ( xProp.is() )
+        xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
+
+    dropByName(sName);
 }
-
-// ::com::sun::star::container::XNameAccess
-//------------------------------------------------------------------------------
-Any OQueryContainer::getByName(const rtl::OUString& _rName) throw( NoSuchElementException, WrappedTargetException, RuntimeException )
-{
-    QueriesIterator aPos = m_aQueries.find(_rName);
-    if (aPos == m_aQueries.end())
-        throw NoSuchElementException();
-
-    Reference< XPropertySet > xReturn = aPos->second;
-    if (!xReturn.is())
-    {   // the object was never accessed before -> create and store it
-        aPos->second = implCreateWrapper(aPos->first);
-        xReturn = aPos->second;
-    }
-    return makeAny(xReturn);
-}
-
-//------------------------------------------------------------------------------
-sal_Bool SAL_CALL OQueryContainer::hasByName( const ::rtl::OUString& _rName ) throw(::com::sun::star::uno::RuntimeException)
-{
-    return m_aQueries.find(_rName) != m_aQueries.end();
-}
-
-//------------------------------------------------------------------------------
-Sequence< rtl::OUString > OQueryContainer::getElementNames(void) throw( RuntimeException )
-{
-    Sequence< rtl::OUString > aReturn(m_aQueries.size());
-    ::rtl::OUString* pReturn = aReturn.getArray();
-
-    for (   ConstQueriesIterator aLoop = m_aQueries.begin();
-            aLoop != m_aQueries.end();
-            ++aLoop, ++pReturn
-        )
-    {
-        *pReturn = aLoop->first;
-    }
-
-    return aReturn;
-}
-
 //------------------------------------------------------------------------------
 void SAL_CALL OQueryContainer::elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException)
 {
-    Reference< XPropertySet > xNewElement;
-    sal_Int32 nAccessor = -1;
+    Reference< XContent > xNewElement;
+    ::rtl::OUString sElementName;
+    _rEvent.Accessor >>= sElementName;
     {
-        MutexGuard aGuard(m_rMutex);
-
+        MutexGuard aGuard(m_aMutex);
         if (INSERTING == m_eDoingCurrently)
             // nothing to do, we're inserting via an "appendByDescriptor"
             return;
 
-        // get the object
-        Reference< XPropertySet > xProps;
-        extractInterface(xProps, _rEvent.Element);
-        ::rtl::OUString sElementName;
-        xProps->getPropertyValue(PROPERTY_NAME) >>= sElementName;
         DBG_ASSERT(sElementName.getLength(), "OQueryContainer::elementInserted : invalid name !");
         DBG_ASSERT(!hasByName(sElementName), "OQueryContainer::elementInserted : oops .... we're inconsistent with our master container !");
         if (!sElementName.getLength() || hasByName(sElementName))
             return;
 
         // insert an own new element
-        m_aQueriesIndexed.push_back(m_aQueries.insert(Queries::value_type(sElementName, implCreateWrapper(sElementName))).first);
-
-        // notify our own listeners
-        nAccessor = m_aQueriesIndexed.size() - 1;
-        xNewElement = m_aQueriesIndexed[nAccessor]->second;
+        xNewElement = implCreateWrapper(sElementName);
     }
-
-    ContainerEvent aEvent(*this, makeAny((sal_Int32)nAccessor), makeAny(xNewElement), Any());
-    OInterfaceIteratorHelper aListenerIterator(m_aContainerListeners);
-    while (aListenerIterator.hasMoreElements())
-        static_cast< XContainerListener* >(aListenerIterator.next())->elementInserted(aEvent);
+    insertByName(sElementName,makeAny(xNewElement));
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL OQueryContainer::elementRemoved( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException)
 {
-    Reference< XPropertySet > xRemovedElement;
     ::rtl::OUString sAccessor;
-    OQuery* pRemoved = NULL;
+    _rEvent.Accessor >>= sAccessor;
     {
-        MutexGuard aGuard(m_rMutex);
-
-        // get the object
-        Reference< XPropertySet > xProps;
-        extractInterface(xProps, _rEvent.Element);
-        _rEvent.Accessor >>= sAccessor;
-
         DBG_ASSERT(sAccessor.getLength(), "OQueryContainer::elementRemoved : invalid name !");
         DBG_ASSERT(hasByName(sAccessor), "OQueryContainer::elementRemoved : oops .... we're inconsistent with our master container !");
-        if (!sAccessor.getLength() || !hasByName(sAccessor))
+        if ( !sAccessor.getLength() || !hasByName(sAccessor) )
             return;
-
-        // the index within my structures
-        sal_Int32 nMyIndex = implGetIndex(sAccessor);
-        QueriesIterator aMapPos = m_aQueriesIndexed[nMyIndex];
-
-        if (!aMapPos->second && m_aContainerListeners.getLength())
-            // need this object for notifications
-            aMapPos->second = implCreateWrapper(xProps);
-
-        pRemoved = aMapPos->second;
-        xRemovedElement = pRemoved;
-
-        // remove all my refs
-        implRemove( nMyIndex );
     }
-
-    // notify our own listeners
-    ContainerEvent aEvent(*this, makeAny(sAccessor), makeAny(xRemovedElement), Any());
-    OInterfaceIteratorHelper aListenerIterator(m_aContainerListeners);
-    while (aListenerIterator.hasMoreElements())
-        static_cast< XContainerListener* >(aListenerIterator.next())->elementRemoved(aEvent);
-
-    if (pRemoved)
-    {
-        pRemoved->dispose();
-        pRemoved->release();
-    }
+    removeByName(sAccessor);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL OQueryContainer::elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException)
 {
     Reference< XPropertySet > xReplacedElement;
-    Reference< XPropertySet > xNewElement;
-    OQuery* pReplaced = NULL;
+    Reference< XContent > xNewElement;
     ::rtl::OUString sAccessor;
+    _rEvent.Accessor >>= sAccessor;
+
     {
-        MutexGuard aGuard(m_rMutex);
-
-        // get the object
-        Reference< XPropertySet > xNewElementProps;
-        extractInterface(xNewElementProps, _rEvent.Element);
-        xNewElementProps->getPropertyValue(PROPERTY_NAME) >>= sAccessor;
-
+        MutexGuard aGuard(m_aMutex);
         DBG_ASSERT(sAccessor.getLength(), "OQueryContainer::elementReplaced : invalid name !");
         DBG_ASSERT(hasByName(sAccessor), "OQueryContainer::elementReplaced : oops .... we're inconsistent with our master container !");
         if (!sAccessor.getLength() || !hasByName(sAccessor))
             return;
 
-        // the index within my structures
-        sal_Int32 nMyIndex = implGetIndex(sAccessor);
-        QueriesIterator aMapPos = m_aQueriesIndexed[nMyIndex];
-
-        pReplaced = aMapPos->second;
-        xReplacedElement = pReplaced;
-        if (!xReplacedElement.is() && m_aContainerListeners.getLength())
-        {   // need this object for notifications
-            pReplaced = implCreateWrapper(xNewElementProps);
-                // don't use the version taking a string, it would ask the CommandDescription container ....
-            xReplacedElement = pReplaced;
-        }
-
-        // remove all my refs to the replaced element's wrapper
-        implRemove( nMyIndex );
-
-        // insert an own new element
-        m_aQueriesIndexed.push_back(m_aQueries.insert(Queries::value_type(sAccessor, implCreateWrapper(xNewElementProps))).first);
-
-        // our own new element
-        xNewElement = m_aQueriesIndexed[m_aQueriesIndexed.size() - 1]->second;
+        xNewElement = implCreateWrapper(sAccessor);
     }
 
-    // notify our own listeners
-    ContainerEvent aEvent(*this, makeAny(sAccessor), makeAny(xNewElement), makeAny(xReplacedElement));
-    OInterfaceIteratorHelper aListenerIterator(m_aContainerListeners);
-    while (aListenerIterator.hasMoreElements())
-        static_cast< XContainerListener* >(aListenerIterator.next())->elementReplaced(aEvent);
-
-    if (pReplaced)
-    {
-        pReplaced->dispose();
-        pReplaced->release();
-    }
+    replaceByName(sAccessor,makeAny(xNewElement));
 }
 
 //------------------------------------------------------------------------------
@@ -586,160 +359,92 @@ void SAL_CALL OQueryContainer::disposing( const ::com::sun::star::lang::EventObj
     }
     else
     {
-        QueriesIndexAccessIterator aIter = m_aQueriesIndexed.begin();
-        for(;aIter != m_aQueriesIndexed.end();++aIter)
+        Reference< XContent > xSource(_rSource.Source, UNO_QUERY);
+        // it's one of our documents ....
+        Documents::iterator aIter = m_aDocumentMap.begin();
+        Documents::iterator aEnd = m_aDocumentMap.end();
+        for (;aIter != aEnd;++aIter )
         {
-            if(Reference<XInterface>(static_cast< ::cppu::OWeakObject*>((*aIter)->second),UNO_QUERY) == _rSource.Source)
+            if ( xSource == aIter->second.get() )
             {
-                m_xCommandDefinitions->removeByName((*aIter)->first);
+                m_xCommandDefinitions->removeByName(aIter->first);
                 break;
             }
         }
+        ODefinitionContainer::disposing(_rSource);
     }
-}
-
-//--------------------------------------------------------------------------
-void SAL_CALL OQueryContainer::addContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
-{
-    MutexGuard aGuard(m_rMutex);
-    if (_rxListener.is())
-        m_aContainerListeners.addInterface(_rxListener);
-}
-
-//--------------------------------------------------------------------------
-void SAL_CALL OQueryContainer::removeContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
-{
-    MutexGuard aGuard(m_rMutex);
-    if (_rxListener.is())
-        m_aContainerListeners.removeInterface(_rxListener);
 }
 // -----------------------------------------------------------------------------
-// XPropertyChangeListener
-void SAL_CALL OQueryContainer::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
+Reference< XContent > OQueryContainer::implCreateWrapper(const ::rtl::OUString& _rName)
 {
-    MutexGuard aGuard(m_rMutex);
-
-    ::rtl::OUString sNewName,sOldName;
-    evt.OldValue >>= sOldName;
-    evt.NewValue >>= sNewName;
-    // the index within my structures
-    sal_Int32 nMyIndex = implGetIndex(sOldName);
-    QueriesIterator aMapPos = m_aQueriesIndexed[ nMyIndex ];
-    OQuery* pQuery = aMapPos->second;
-    implRemove(nMyIndex);
-    pQuery->setWarningsContainer( m_pWarnings );
-    pQuery->setConfigurationNode(implGetObjectKey(sNewName,sal_True).cloneAsRoot());
-
-    // insert an own new element
-    m_aQueriesIndexed.push_back(m_aQueries.insert(Queries::value_type(sNewName, pQuery)).first);
-}
-//--------------------------------------------------------------------------
-void OQueryContainer::flush_NoBroadcast_NoCommit()
-{
-    MutexGuard aGuard(m_rMutex);
-
-    DBG_ASSERT(m_aConfigurationNode.isValid(), "ODefinitionContainer::flush : need a starting point within the configuration !");
-
-    OConfigurationNode aQueryNode;
-    OConfigurationTreeRoot aQueryRootNode;
-
-    for (   ConstQueriesIterator aLoop = m_aQueries.begin();
-            aLoop != m_aQueries.end();
-            ++aLoop
-        )
-    {
-        if (aLoop->second)
-        {
-            aQueryNode = implGetObjectKey(aLoop->first, sal_True);
-            aLoop->second->storeTo( aQueryNode );
-        }
-    }
-}
-
-//--------------------------------------------------------------------------
-void OQueryContainer::implRemove( sal_Int32 _nIndex )
-{
-    OSL_ENSURE( _nIndex >= 0 && _nIndex < (sal_Int32)m_aQueriesIndexed.size(), "OQueryContainer::implRemove: invalid index!" );
-
-    QueriesIterator aMapPos = m_aQueriesIndexed[ _nIndex ];
-    if ( aMapPos->second )
-        aMapPos->second->setWarningsContainer( NULL );
-
-    m_aQueriesIndexed.erase( m_aQueriesIndexed.begin() + _nIndex );
-    m_aQueries.erase( aMapPos );
-}
-
-//--------------------------------------------------------------------------
-OQuery* OQueryContainer::implCreateWrapper(const ::rtl::OUString& _rName)
-{
-    Reference< XPropertySet > xObject;
-    extractInterface(xObject, m_xCommandDefinitions->getByName(_rName));
+    Reference< XContent > xObject(m_xCommandDefinitions->getByName(_rName),UNO_QUERY);
     return implCreateWrapper(xObject);
 }
 
 //--------------------------------------------------------------------------
-OQuery* OQueryContainer::implCreateWrapper(const Reference< XPropertySet >& _rxCommandDesc)
+Reference< XContent > OQueryContainer::implCreateWrapper(const Reference< XContent >& _rxCommandDesc)
 {
-    Reference< XConnection > xConn( &m_rParent, UNO_QUERY );
-    OQuery* pNewObject = new OQuery(_rxCommandDesc, xConn);
-
-    pNewObject->acquire();
-    pNewObject->setWarningsContainer( m_pWarnings );
-
-    ::rtl::OUString sName;
-    pNewObject->getPropertyValue(PROPERTY_NAME) >>= sName;
-    pNewObject->loadFrom( implGetObjectKey( sName, sal_True ) );
-
-    pNewObject->addPropertyChangeListener(PROPERTY_NAME, this);
-
-    return pNewObject;
-}
-
-//--------------------------------------------------------------------------
-OConfigurationNode OQueryContainer::implGetObjectKey(const ::rtl::OUString& _rName, sal_Bool _bCreate)
-{
-    if (m_aConfigurationNode.hasByName(_rName))
-        return m_aConfigurationNode.openNode(_rName);
-
-    if (_bCreate)
+    Reference<XNameContainer> xContainer(_rxCommandDesc,UNO_QUERY);
+    Reference< XContent > xReturn;
+    if ( xContainer .is() )
     {
-        // the configuration does not support different types of operations in one transaction, so we must commit
-        // before and after we create the new node, to ensure, that every transaction we ever do contains only
-        // one type of operation (insert, remove, update)
-        OSL_VERIFY(m_aConfigurationNode.commit());
-        OConfigurationNode aNode = m_aConfigurationNode.createNode(_rName);
-        OSL_VERIFY(m_aConfigurationNode.commit());
-        return aNode;
+        xReturn = new OQueryContainer(xContainer,m_xConnection,m_xORB,m_pWarnings);
+    }
+    else
+    {
+        OQuery* pNewObject = new OQuery(Reference<XPropertySet>(_rxCommandDesc,UNO_QUERY), m_xConnection,m_xORB);
+        xReturn = pNewObject;
+
+        pNewObject->setWarningsContainer( m_pWarnings );
+        pNewObject->getColumns();
     }
 
-    return OConfigurationNode();
+    return xReturn;
 }
-
 //--------------------------------------------------------------------------
-sal_Int32 OQueryContainer::implGetIndex(const ::rtl::OUString& _rName)
+Reference< XContent > OQueryContainer::createObject( const ::rtl::OUString& _rName)
 {
-    for (   ConstQueriesIndexAccessIterator aSearch = m_aQueriesIndexed.begin();
-            aSearch < m_aQueriesIndexed.end();
-            ++aSearch
-        )
-        if ((*aSearch)->first.equals(_rName))
-            return aSearch - m_aQueriesIndexed.begin();
-
-
-    return -1;
+    return implCreateWrapper(_rName);
 }
 // -----------------------------------------------------------------------------
-void OQueryContainer::setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfigTreeNode)
+sal_Bool OQueryContainer::checkExistence(const ::rtl::OUString& _rName)
 {
-    m_aConfigurationNode = _aConfigTreeNode;
-    Queries::iterator aIter = m_aQueries.begin();
-    for(;aIter != m_aQueries.end();++aIter)
+    sal_Bool bRet = sal_False;
+    if ( !m_bInPropertyChange )
     {
-        if(aIter->second)
-            aIter->second->setConfigurationNode(implGetObjectKey(aIter->first,sal_True).cloneAsRoot());
+        bRet = m_xCommandDefinitions->hasByName(_rName);
+        Documents::iterator aFind = m_aDocumentMap.find(_rName);
+        if ( !bRet && aFind != m_aDocumentMap.end() )
+        {
+            m_aDocuments.erase( ::std::find(m_aDocuments.begin(),m_aDocuments.end(),aFind));
+            m_aDocumentMap.erase(aFind);
+        }
+        else if ( bRet && aFind == m_aDocumentMap.end() )
+        {
+            implAppend(_rName,NULL);
+        }
     }
+    return bRet;
 }
+//--------------------------------------------------------------------------
+sal_Bool SAL_CALL OQueryContainer::hasElements( ) throw (RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    return m_xCommandDefinitions->hasElements();
+}
+// -----------------------------------------------------------------------------
+sal_Int32 SAL_CALL OQueryContainer::getCount(  ) throw(RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    return Reference<XIndexAccess>(m_xCommandDefinitions,UNO_QUERY)->getCount();
+}
+// -----------------------------------------------------------------------------
+Sequence< ::rtl::OUString > SAL_CALL OQueryContainer::getElementNames(  ) throw(RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
 
+    return m_xCommandDefinitions->getElementNames();
+}
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
