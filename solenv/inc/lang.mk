@@ -2,9 +2,9 @@
 #
 #   $RCSfile: lang.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: nf $ $Date: 2001-06-21 13:59:38 $
+#   last change: $Author: nf $ $Date: 2001-08-07 11:11:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,13 +82,13 @@ slov$(LANG_GUI)=-CHARSET_microsoft-cp1250
 russ$(LANG_GUI)=-CHARSET_microsoft-cp1251
 cz$(LANG_GUI)=-CHARSET_microsoft-cp1250
 hung$(LANG_GUI)=-CHARSET_microsoft-cp1250
-japn$(LANG_GUI)=-CHARSET_microsoft-cp932
-chinsim$(LANG_GUI)=-CHARSET_microsoft-cp936
-chintrad$(LANG_GUI)=-CHARSET_microsoft-cp950
+japn$(LANG_GUI)=-CHARSET_UTF8
+chinsim$(LANG_GUI)=-CHARSET_UTF8
+chintrad$(LANG_GUI)=-CHARSET_UTF8
 arab$(LANG_GUI)=-CHARSET_microsoft-cp1256
 greek$(LANG_GUI)=-CHARSET_microsoft-cp1253
 turk$(LANG_GUI)=-CHARSET_microsoft-cp1254
-korean$(LANG_GUI)=-CHARSET_microsoft-cp949
+korean$(LANG_GUI)=-CHARSET_UTF8
 extern$(LANG_GUI)=-CHARSET_UTF8
 
 .ELSE			# "$(USE_NEW_RSC)" != ""

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: nf $ $Date: 2001-07-12 10:41:07 $
+#   last change: $Author: nf $ $Date: 2001-08-07 11:12:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -167,7 +167,7 @@ japn$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_81=japn
 longlang_81=japanese
 langext_81=81
-rsclang_81=-lgJAPANESE
+rsclang_81=-lgJAPANESE $(UTF8)
 rescharset_81=$(japn$(LANG_GUI))
 RCLANGFLAGS_81+= -d JAPAN
 .ENDIF
@@ -178,7 +178,7 @@ chinsim$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_86=chinsim
 longlang_86=chinese_simplified
 langext_86=86
-rsclang_86=-lgCHINESE_SIMPLIFIED
+rsclang_86=-lgCHINESE_SIMPLIFIED $(UTF8)
 rescharset_86=$(chinsim$(LANG_GUI))
 RCLANGFLAGS_86+= -d CHINA
 .ENDIF 
@@ -190,7 +190,7 @@ cmd_chintrad:=chintrad 88 -lgCHINESE_TRADITIONAL $(chintrad$(LANG_GUI))
 lang_88=chintrad
 longlang_88=chinese_traditional
 langext_88=88
-rsclang_88=-lgCHINESE_TRADITIONAL
+rsclang_88=-lgCHINESE_TRADITIONAL $(UTF8)
 rescharset_88=$(chintrad$(LANG_GUI))
 .ENDIF 
 
@@ -261,7 +261,7 @@ cmd_korean:=korean 82 -lgKOREAN $(IBM_PC_852) $(korean$(LANG_GUI))
 lang_82=korean
 longlang_82=korean
 langext_82=82
-rsclang_82=-lgKOREAN $(IBM_PC_852)
+rsclang_82=-lgKOREAN $(UTF8)
 rescharset_82=$(korean$(LANG_GUI))
 RCLANGFLAGS_82+= -d KOREAN
 .ENDIF 
