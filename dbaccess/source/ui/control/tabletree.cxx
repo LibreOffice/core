@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:37:10 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,12 +179,9 @@ void OTableTreeListBox::notifyHiContrastChanged()
     }
 }
 //------------------------------------------------------------------------
-Reference< XConnection > OTableTreeListBox::UpdateTableList( const ::rtl::OUString& _rConnectionURL,
-    const Sequence< PropertyValue > _rProperties, Reference< XDriver >& _rxCreator ) throw(SQLException)
+void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _xConnection ) throw(SQLException)
 {
     Reference< XDatabaseMetaData > xMetaData;
-    Reference< XConnection > xConnection;
-    _rxCreator.clear();
 
     Sequence< ::rtl::OUString > sTables, sViews;
     DBG_ASSERT(m_xORB.is(), "OTableTreeListBox::UpdateTableList : please use setServiceFactory to give me a service factory !");
@@ -195,148 +192,41 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList( const ::rtl::OUStri
     {
         if (m_xORB.is())
         {
-            // get the global DriverManager
-            Reference< XDriverAccess > xDriverManager;
-            sCurrentActionError = String(ModuleRes(STR_COULDNOTCREATE_DRIVERMANAGER));
-                // in case an error occures
-            sCurrentActionError.SearchAndReplaceAscii("#servicename#", (::rtl::OUString)SERVICE_SDBC_CONNECTIONPOOL);
-            try
-            {
-                xDriverManager = Reference< XDriverAccess >(m_xORB->createInstance(SERVICE_SDBC_CONNECTIONPOOL), UNO_QUERY);
-                DBG_ASSERT(xDriverManager.is(), "OTableTreeListBox::UpdateTableList : could not instantiate the driver manager, or it does not provide the necessary interface!");
-            }
-            catch (Exception& e)
-            {
-                // wrap the exception into an SQLException
-                SQLException aSQLWrapper(e.Message, m_xORB, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
-                throw aSQLWrapper;
-            }
-            if (!xDriverManager.is())
-                throw Exception();
 
-
-            sCurrentActionError = String(ModuleRes(STR_NOREGISTEREDDRIVER));
-            _rxCreator = xDriverManager->getDriverByURL(_rConnectionURL);
-            if (!_rxCreator.is())
-                // will be caught and translated into an SQLContext exception
-                throw Exception();
-
-            sCurrentActionError = String(ModuleRes(STR_COULDNOTCONNECT));
-            sCurrentActionDetails = String(ModuleRes(STR_COULDNOTCONNECT_PLEASECHECK));
-            xConnection = _rxCreator->connect(_rConnectionURL, _rProperties);
-                // exceptions thrown by connect will be caught and re-routed
-            DBG_ASSERT(xConnection.is(), "OTableTreeListBox::UpdateTableList : got an invalid connection!");
-                // if no exception was thrown, the connection should be no-NULL)
-            if (!xConnection.is())
-                throw Exception();
             sCurrentActionDetails = String();
-            xMetaData = xConnection->getMetaData();
+            xMetaData = _xConnection->getMetaData();
 
-            // get the (very necessary) interface XDataDefinitionSupplier
-            Reference< XDataDefinitionSupplier > xDefinitionAccess(_rxCreator, UNO_QUERY);
-            if (!xDefinitionAccess.is())
-            {
-                // okay, the driver's programmer was lazy :)
-                // let's do it on foot .... (ask the meta data for a result set describing the tables)
-                Reference< XResultSet > xTables;
+            Reference< XTablesSupplier > xTableSupp(_xConnection,UNO_QUERY);
+            Reference< XViewsSupplier > xViewSupp(_xConnection,UNO_QUERY);
+            sCurrentActionError = String(ModuleRes(STR_NOTABLEINFO));
 
-                static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
-                static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+            Reference< XNameAccess > xTables, xViews;
 
-                if (xMetaData.is())
-                {
-                    // we want all catalogues, all schemas, all tables
-                    Sequence< ::rtl::OUString > sTableTypes(3);
-                    static const ::rtl::OUString sWildcard = ::rtl::OUString::createFromAscii("%");
-                    sTableTypes[0] = s_sTableTypeView;
-                    sTableTypes[1] = s_sTableTypeTable;
-                    sTableTypes[2] = sWildcard; // just to be sure to include anything else ....
+            xTables = xTableSupp->getTables();
 
-                    xTables = xMetaData->getTables(Any(), sWildcard, sWildcard, sTableTypes);
-                }
-                Reference< XRow > xCurrentRow(xTables, UNO_QUERY);
-                if (xCurrentRow.is())
-                {
-                    StringBag aTableNames, aViewNames;
-                    ::rtl::OUString sCatalog, sSchema, sName, sType, sComposedName;
-                    while (xTables->next())
-                    {
-                        // after creation the set is positioned before the first record, per definitionem
-                        sCatalog    = xCurrentRow->getString(1);
-                        sSchema     = xCurrentRow->getString(2);
-                        sName       = xCurrentRow->getString(3);
-                        sType       = xCurrentRow->getString(4);
-                        ::dbtools::composeTableName(xMetaData, sCatalog, sSchema, sName, sComposedName, sal_False,::dbtools::eInDataManipulation);
-                        if (s_sTableTypeView.equals(sType))
-                            aViewNames.insert(sComposedName);
-                        else
-                            aTableNames.insert(sComposedName);
-                    }
+            // get the views supplier and the views
+            xViewSupp.set(xTableSupp,UNO_QUERY);
+            if (xViewSupp.is())
+                xViews = xViewSupp->getViews();
 
-                    // copy the names into the sequence
-                    // tables
-                    sTables.realloc(aTableNames.size());
-                    ::rtl::OUString* pTables = sTables.getArray();
-                    ConstStringBagIterator aCopy = aTableNames.begin();
-                    for (; aCopy != aTableNames.end(); ++aCopy, ++pTables)
-                        *pTables = *aCopy;
-                    // views
-                    sViews.realloc(aViewNames.size());
-                    pTables = sViews.getArray();
-                    for (aCopy = aViewNames.begin(); aCopy != aViewNames.end(); ++aCopy, ++pTables)
-                        *pTables = *aCopy;
-                }
-                disposeComponent(xTables);
-            }
-            else
-            {
-                Reference< XTablesSupplier > xTableSupp;
-                Reference< XViewsSupplier > xViewSupp;
-                sCurrentActionError = String(ModuleRes(STR_NOTABLEINFO));
-
-                // get the table supplier and the tables
-                xTableSupp = xDefinitionAccess->getDataDefinitionByConnection(xConnection);
-                if (!xTableSupp.is())
-                    throw Exception();
-
-                Reference< XNameAccess > xTables, xViews;
-
-                xTables = xTableSupp->getTables();
-
-                // get the views supplier and the views
-                xViewSupp.set(xTableSupp,UNO_QUERY);
-                if (xViewSupp.is())
-                    xViews = xViewSupp->getViews();
-
-                if (xTables.is())
-                    sTables = xTables->getElementNames();
-                if (xViews.is())
-                    sViews = xViews->getElementNames();
-            }
+            if (xTables.is())
+                sTables = xTables->getElementNames();
+            if (xViews.is())
+                sViews = xViews->getElementNames();
         }
     }
     catch(RuntimeException&)
     {
         DBG_ERROR("OTableTreeListBox::UpdateTableList : caught an RuntimeException!");
     }
-    catch(SQLException& e)
-    {
-        sCurrentActionError.SearchAndReplaceAscii("#connurl#", _rConnectionURL);
-        // prepend a string stating what we were doing and throw again
-        SQLContext aExtendedInfo = prependContextInfo(e, NULL, sCurrentActionError.GetBuffer(), sCurrentActionDetails.GetBuffer());
-        throw aExtendedInfo;
-    }
     catch(Exception&)
     {
-        sCurrentActionError.SearchAndReplaceAscii("#connurl#", _rConnectionURL);
         // a non-SQLException exception occured ... simply throw an SQLContext
         SQLContext aExtendedInfo;
-        aExtendedInfo.Message = sCurrentActionError.GetBuffer();
         throw aExtendedInfo;
     }
 
     UpdateTableList(xMetaData, sTables, sViews);
-    return xConnection;
 }
 
 //------------------------------------------------------------------------
