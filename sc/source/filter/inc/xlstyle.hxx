@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:40:41 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,16 @@
 
 #ifndef SC_XLSTYLE_HXX
 #define SC_XLSTYLE_HXX
+
+#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
+#include <com/sun/star/awt/FontSlant.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP_
+#include <com/sun/star/awt/FontUnderline.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTSTRIKEOUT_HPP_
+#include <com/sun/star/awt/FontStrikeout.hpp>
+#endif
 
 #ifndef _VCL_VCLENUM_HXX
 #include <vcl/vclenum.hxx>
@@ -172,6 +182,8 @@ struct XclFontData
     /** Fills all members (except color) from the passed font. */
     void                        FillFromFont( const Font& rFont );
 
+// *** conversion of VCL/SVX constants *** ------------------------------------
+
     /** Returns the Calc font family. */
     FontFamily                  GetScFamily( CharSet eDefCharSet ) const;
     /** Returns the Calc font character set. */
@@ -203,6 +215,19 @@ struct XclFontData
     void                        SetScEscapement( SvxEscapement eScEscapem );
     /** Sets the Calc strike-out style. */
     void                        SetScStrikeout( FontStrikeout eScStrikeout );
+
+// *** conversion of API constants *** ----------------------------------------
+
+    /** Returns the API font height. */
+    float                       GetApiHeight() const;
+    /** Returns the API font posture. */
+    ::com::sun::star::awt::FontSlant GetApiPosture() const;
+    /** Returns the API font weight. */
+    float                       GetApiWeight() const;
+    /** Returns the API font underline style. */
+    sal_Int16                   GetApiUnderline() const;
+    /** Returns the API font strike-out style. */
+    sal_Int16                   GetApiStrikeout() const;
 };
 
 bool operator==( const XclFontData& rLeft, const XclFontData& rRight );
