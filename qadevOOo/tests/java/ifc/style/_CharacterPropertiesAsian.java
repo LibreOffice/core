@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _CharacterPropertiesAsian.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:52 $
+ *  last change:$Date: 2003-09-08 11:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@ package ifc.style;
 
 import lib.MultiPropertyTest;
 
-import lib.MultiPropertyTest;
 import com.sun.star.awt.FontSlant;
 import com.sun.star.awt.FontWeight;
 

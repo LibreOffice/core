@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _CharacterPropertiesComplex.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:51 $
+ *  last change:$Date: 2003-09-08 11:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,22 @@ import lib.MultiPropertyTest;
 */
 public class _CharacterPropertiesComplex extends MultiPropertyTest {
 
+    public void _CharWeightComplex() {
+        testProperty("CharWeightComplex", new Float(com.sun.star.awt.FontWeight.BOLD),
+            new Float(com.sun.star.awt.FontWeight.THIN)) ;
+    }
+
+    public void _CharPostureComplex() {
+        testProperty("CharPostureComplex", com.sun.star.awt.FontSlant.ITALIC,
+            com.sun.star.awt.FontSlant.NONE) ;
+    }
+
+    /**
+    * Forces environment recreation.
+    */
+    protected void after() {
+        disposeEnvironment();
+    }
 
 } //finish class _CharacterPropertiesComplex
 

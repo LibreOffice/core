@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _ParagraphProperties.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:51 $
+ *  last change:$Date: 2003-09-08 11:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,14 +58,16 @@
  *
  *
  ************************************************************************/
-
 package ifc.style;
 
-import com.sun.star.table.BorderLine;
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
-import lib.MultiPropertyTest$PropertyValueSwitcher;
 import util.utils;
+
+import com.sun.star.container.XNameContainer;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import com.sun.star.xml.AttributeData;
+
 
 /**
 * Testing <code>com.sun.star.style.ParagraphProperties</code>
@@ -131,19 +133,20 @@ import util.utils;
 * @see com.sun.star.style.ParagraphProperties
 */
 public class _ParagraphProperties extends MultiPropertyTest {
-
     /**
      * Custom tester for numbering style properties. Switches between
      * 'Numbering 1' and 'Numbering 2' styles.
      */
     protected PropertyTester NumberingStyleTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue)
-                throws java.lang.IllegalArgumentException {
-            if ((oldValue != null) && (oldValue.equals("Numbering 1")))
-                return "Numbering 2"; else
+                              throws java.lang.IllegalArgumentException {
+            if ((oldValue != null) && (oldValue.equals("Numbering 1"))) {
+                return "Numbering 2";
+            } else {
                 return "Numbering 1";
+            }
         }
-    } ;
+    };
 
     /**
      * Custom tester for paragraph style properties. Switches between
@@ -151,11 +154,13 @@ public class _ParagraphProperties extends MultiPropertyTest {
      */
     protected PropertyTester charStyleTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue) {
-            if (!utils.isVoid(oldValue) && (oldValue.equals("Example")))
-                return "Emphasis"; else
+            if (!utils.isVoid(oldValue) && (oldValue.equals("Example"))) {
+                return "Emphasis";
+            } else {
                 return "Example";
+            }
         }
-    } ;
+    };
 
     /**
      * Custom tester for paragraph style properties. Switches between
@@ -163,11 +168,13 @@ public class _ParagraphProperties extends MultiPropertyTest {
      */
     protected PropertyTester ParaStyleTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue) {
-            if (!utils.isVoid(oldValue) && (oldValue.equals("Heading")))
-                return "Salutation"; else
+            if (!utils.isVoid(oldValue) && (oldValue.equals("Heading"))) {
+                return "Salutation";
+            } else {
                 return "Heading";
+            }
         }
-    } ;
+    };
 
     /**
      * Custom tester for PageDescName properties. Switches between
@@ -175,11 +182,14 @@ public class _ParagraphProperties extends MultiPropertyTest {
      */
     protected PropertyTester PageDescTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue) {
-            if (!util.utils.isVoid(oldValue) && (oldValue.equals("Default")))
-                return "HTML"; else
+            if (!util.utils.isVoid(oldValue) &&
+                    (oldValue.equals("Default"))) {
+                return "HTML";
+            } else {
                 return "Default";
+            }
         }
-    } ;
+    };
 
     /**
      * Custom tester for properties which have <code>short</code> type
@@ -188,11 +198,14 @@ public class _ParagraphProperties extends MultiPropertyTest {
      */
     protected PropertyTester ShortTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue) {
-            if ((oldValue != null) && (oldValue.equals(new Short((short) 0))))
-                return new Short((short) 2); else
+            if ((oldValue != null) &&
+                    (oldValue.equals(new Short((short) 0)))) {
+                return new Short((short) 2);
+            } else {
                 return new Short((short) 0);
+            }
         }
-    } ;
+    };
 
     /**
      * Custom tester for properties which contains image URLs.
@@ -200,13 +213,15 @@ public class _ParagraphProperties extends MultiPropertyTest {
      */
     protected PropertyTester URLTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue) {
-            if (oldValue.equals(util.utils.getFullTestURL("space-metal.jpg")))
-                return util.utils.getFullTestURL("crazy-blue.jpg"); else
+            if (oldValue.equals(util.utils.getFullTestURL("space-metal.jpg"))) {
+                return util.utils.getFullTestURL("crazy-blue.jpg");
+            } else {
                 return util.utils.getFullTestURL("space-metal.jpg");
+            }
         }
-    } ;
+    };
 
-    protected PropertyTester rules = null ;
+    protected PropertyTester rules = null;
 
     /**
      * Creates tester for 'NumberingRules' depending on relation.
@@ -219,15 +234,17 @@ public class _ParagraphProperties extends MultiPropertyTest {
                 protected Object getNewValue(String propName, Object oldValue) {
                     return nRules;
                 }
-            } ;
+            };
+
         } else {
-            Object rules1 = null ;
-            Object rules2 = null ;
+            Object rules1 = null;
+            Object rules2 = null;
+
             try {
                 oObj.setPropertyValue("NumberingStyleName", "Numbering 1");
-                rules1 = oObj.getPropertyValue("NumberingRules") ;
+                rules1 = oObj.getPropertyValue("NumberingRules");
                 oObj.setPropertyValue("NumberingStyleName", "Numbering 2");
-                rules2 = oObj.getPropertyValue("NumberingRules") ;
+                rules2 = oObj.getPropertyValue("NumberingRules");
             } catch (com.sun.star.lang.WrappedTargetException e) {
                 log.println("WARNING !!! Exception getting numbering rules :");
                 e.printStackTrace(log);
@@ -240,7 +257,8 @@ public class _ParagraphProperties extends MultiPropertyTest {
             } catch (com.sun.star.beans.UnknownPropertyException e) {
                 log.println("Property 'NumberingStyleName' is not supported.");
             }
-            rules = new PropertyValueSwitcher(rules1, rules2) ;
+
+            rules = new PropertyValueSwitcher(rules1, rules2);
         }
     }
 
@@ -248,32 +266,32 @@ public class _ParagraphProperties extends MultiPropertyTest {
      * Tested with custom property tester.
      */
     public void _NumberingStyleName() {
-        log.println("Testing with custom Property tester") ;
-        testProperty("NumberingStyleName", NumberingStyleTester) ;
+        log.println("Testing with custom Property tester");
+        testProperty("NumberingStyleName", NumberingStyleTester);
     }
 
     /**
      * Tested with custom property tester.
      */
     public void _DropCapCharStyleName() {
-        log.println("Testing with custom Property tester") ;
-        testProperty("DropCapCharStyleName", charStyleTester) ;
+        log.println("Testing with custom Property tester");
+        testProperty("DropCapCharStyleName", charStyleTester);
     }
 
     /**
      * Tested with custom property tester.
      */
     public void _ParaStyleName() {
-        log.println("Testing with custom Property tester") ;
-        testProperty("ParaStyleName", ParaStyleTester) ;
+        log.println("Testing with custom Property tester");
+        testProperty("ParaStyleName", ParaStyleTester);
     }
 
     /**
      * Tested with custom property tester.
      */
     public void _PageDescName() {
-        log.println("Testing with custom Property tester") ;
-        testProperty("PageDescName", PageDescTester) ;
+        log.println("Testing with custom Property tester");
+        testProperty("PageDescName", PageDescTester);
     }
 
     /**
@@ -283,10 +301,11 @@ public class _ParagraphProperties extends MultiPropertyTest {
      * makes sense only in this case.
      */
     public void _ParaLastLineAdjust() {
-        log.println("Testing with custom Property tester") ;
+        log.println("Testing with custom Property tester");
+
         try {
             oObj.setPropertyValue("ParaAdjust",
-                com.sun.star.style.ParagraphAdjust.BLOCK);
+                                  com.sun.star.style.ParagraphAdjust.BLOCK);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception occured setting property 'ParagraphAdjust'" + e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
@@ -296,15 +315,16 @@ public class _ParagraphProperties extends MultiPropertyTest {
         } catch (com.sun.star.beans.PropertyVetoException e) {
             log.println("Exception occured setting property 'ParagraphAdjust'" + e);
         }
-        testProperty("ParaLastLineAdjust", ShortTester) ;
+
+        testProperty("ParaLastLineAdjust", ShortTester);
     }
 
     /**
      * Tested with custom property tester.
      */
     public void _ParaBackGraphicURL() {
-        log.println("Testing with custom Property tester") ;
-        testProperty("ParaBackGraphicURL", URLTester) ;
+        log.println("Testing with custom Property tester");
+        testProperty("ParaBackGraphicURL", URLTester);
     }
 
     /**
@@ -317,16 +337,16 @@ public class _ParagraphProperties extends MultiPropertyTest {
      */
     public void _NumberingLevel() {
         requiredMethod("NumberingStyleName");
-        log.println("Testing with custom Property tester") ;
-        testProperty("NumberingLevel", ShortTester) ;
+        log.println("Testing with custom Property tester");
+        testProperty("NumberingLevel", ShortTester);
     }
 
     /**
      * Tested with custom property tester.
      */
     public void _ParaVertAlignment() {
-        log.println("Testing with custom Property tester") ;
-        testProperty("ParaVertAlignment", ShortTester) ;
+        log.println("Testing with custom Property tester");
+        testProperty("ParaVertAlignment", ShortTester);
     }
 
     /**
@@ -339,7 +359,56 @@ public class _ParagraphProperties extends MultiPropertyTest {
      */
     public void _NumberingRules() {
         requiredMethod("NumberingStyleName");
-        testProperty("NumberingRules",rules);
+        testProperty("NumberingRules", rules);
     }
-}  // finish class _ParagraphProperties
 
+    public void _ParaUserDefinedAttributes() {
+        XNameContainer uda = null;
+        boolean res = false;
+
+        try {
+            uda = (XNameContainer) AnyConverter.toObject(
+                          new Type(XNameContainer.class),
+                          oObj.getPropertyValue("ParaUserDefinedAttributes"));
+
+            AttributeData attr = new AttributeData();
+            attr.Namespace = "http://www.sun.com/staroffice/apitest/Cellprop";
+            attr.Type = "CDATA";
+            attr.Value = "true";
+            uda.insertByName("Cellprop:has-first-alien-attribute", attr);
+
+            String[] els = uda.getElementNames();
+            oObj.setPropertyValue("ParaUserDefinedAttributes", uda);
+            uda = (XNameContainer) AnyConverter.toObject(
+                          new Type(XNameContainer.class),
+                          oObj.getPropertyValue("ParaUserDefinedAttributes"));
+            els = uda.getElementNames();
+
+            Object obj = uda.getByName("Cellprop:has-first-alien-attribute");
+            res = true;
+        } catch (com.sun.star.beans.UnknownPropertyException upe) {
+            if (isOptional("ParaUserDefinedAttributes")) {
+                log.println("Property is optional and not supported");
+                res = true;
+            } else {
+                log.println("Don't know the Property 'UserDefinedAttributes'");
+            }
+        } catch (com.sun.star.lang.WrappedTargetException wte) {
+            log.println(
+                    "WrappedTargetException while getting Property 'UserDefinedAttributes'");
+        } catch (com.sun.star.container.NoSuchElementException nee) {
+            log.println("added Element isn't part of the NameContainer");
+        } catch (com.sun.star.lang.IllegalArgumentException iae) {
+            log.println(
+                    "IllegalArgumentException while getting Property 'UserDefinedAttributes'");
+        } catch (com.sun.star.beans.PropertyVetoException pve) {
+            log.println(
+                    "PropertyVetoException while getting Property 'UserDefinedAttributes'");
+        } catch (com.sun.star.container.ElementExistException eee) {
+            log.println(
+                    "ElementExistException while getting Property 'UserDefinedAttributes'");
+        }
+
+        tRes.tested("ParaUserDefinedAttributes", res);
+    }
+} // finish class _ParagraphProperties
