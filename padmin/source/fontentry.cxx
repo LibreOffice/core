@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:44:23 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,6 +478,8 @@ FontImportDialog::FontImportDialog( Window* pParent ) :
         m_aFromFL( this, PaResId( RID_FIMP_FL_FROM ) ),
         m_aFromDirEdt( this, PaResId( RID_FIMP_EDT_FROM ) ),
         m_aFromBtn( this, PaResId( RID_FIMP_BTN_FROM ) ),
+        m_aSubDirsBox( this, PaResId( RID_FIMP_BOX_SUBDIRS ) ),
+        m_aTargetOptFL( this, PaResId( RID_FIMP_FL_TARGETOPTS ) ),
         m_aLinkOnlyBox( this, PaResId( RID_FIMP_BOX_LINKONLY ) ),
         m_aFixedText( this, PaResId( RID_FIMP_TXT_HELP ) ),
         m_bOverwriteAll( false ),
@@ -505,6 +507,8 @@ FontImportDialog::FontImportDialog( Window* pParent ) :
     m_aRefreshTimer.SetTimeoutHdl( LINK( this, FontImportDialog, RefreshTimeoutHdl ) );
     m_aRefreshTimer.SetTimeout( 2000 );
     m_aLinkOnlyBox.Check( FALSE );
+    m_aSubDirsBox.Check( TRUE );
+    m_aSubDirsBox.SetToggleHdl( LINK( this, FontImportDialog, ToggleHdl ) );
 
     Config& rPadminRC( getPadminRC() );
     rPadminRC.SetGroup( "FontImport" );
@@ -604,10 +608,10 @@ IMPL_LINK( FontImportDialog, ModifyHdl, Edit*,pEdit )
 IMPL_LINK( FontImportDialog, RefreshTimeoutHdl, void*, pDummy )
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    ::std::list< String > aFiles;
+    std::list< String > aFiles;
     m_aNewFonts.clear();
     OUString aDirectory( m_aFromDirEdt.GetText() );
-    FindFiles( aDirectory, aFiles, String( RTL_CONSTASCII_USTRINGPARAM( "PFA;PFB;TTF;TTC" ) ) );
+    FindFiles( aDirectory, aFiles, String( RTL_CONSTASCII_USTRINGPARAM( "PFA;PFB;TTF;TTC" ) ), m_aSubDirsBox.IsChecked() );
     OString aDir( OUStringToOString( aDirectory, aEncoding ) );
     aDir += "/";
     while( aFiles.begin() != aFiles.end() )
@@ -706,5 +710,15 @@ IMPL_LINK( FontImportDialog, ClickBtnHdl, Button*, pButton )
             m_aNewFontsBox.SelectEntryPos( i, TRUE );
         m_aNewFontsBox.SetUpdateMode( TRUE );
     }
+    return 0;
+}
+
+IMPL_LINK( FontImportDialog, ToggleHdl, CheckBox*, pBox )
+{
+    if( pBox == &m_aSubDirsBox )
+    {
+        RefreshTimeoutHdl( NULL );
+    }
+
     return 0;
 }
