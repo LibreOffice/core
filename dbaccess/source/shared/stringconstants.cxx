@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 12:43:55 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DEFAULTTEXT, "DefaultText");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_EFFECTIVEDEFAULT, "EffectiveDefault");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_AUTOINCREMENTCREATION, "AutoIncrementCreation");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ORIGINAL, "Original");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_OUTERJOINESCAPE, "EnableOuterJoinEscape");
 
 //============================================================
 //= service names
