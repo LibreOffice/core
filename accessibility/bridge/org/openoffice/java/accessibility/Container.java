@@ -58,7 +58,6 @@
 package org.openoffice.java.accessibility;
 
 import javax.accessibility.AccessibleContext;
-import javax.accessibility.AccessibleRole;
 import javax.accessibility.AccessibleState;
 
 import com.sun.star.uno.*;
@@ -70,16 +69,18 @@ public class Container extends java.awt.Container implements javax.accessibility
     protected XAccessibleContext unoAccessibleContext;
     protected XAccessibleComponent unoAccessibleComponent = null;
 
-    protected AccessibleRole accessibleRole;
+    protected javax.accessibility.AccessibleRole accessibleRole;
+    protected javax.accessibility.AccessibleText accessibleText;
     protected boolean disposed = false;
 
-    protected Container(AccessibleRole role, XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+    protected Container(javax.accessibility.AccessibleRole role,
+        XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
         accessibleRole = role;
-
         unoAccessible = xAccessible;
         unoAccessibleContext = xAccessibleContext;
         unoAccessibleComponent = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class, xAccessibleContext);
+            UnoRuntime.queryInterface(XAccessibleComponent.class,
+            xAccessibleContext);
 
         // Add the event listener right away, because the global focus notification doesn't
         // work yet ..
@@ -320,6 +321,11 @@ public class Container extends java.awt.Container implements javax.accessibility
                     // Update the internal state set and fire the appropriate PropertyChangedEvent
                     handleStateChangedEvent(event.OldValue, event.NewValue);
                     break;
+                case AccessibleEventId.TEXT_CHANGED:
+                    firePropertyChange(AccessibleContext.ACCESSIBLE_TEXT_PROPERTY,
+                                            AccessibleTextImpl.convertTextSegment(event.OldValue),
+                                            AccessibleTextImpl.convertTextSegment(event.NewValue));
+                    break;
                 case AccessibleEventId.CHILD:
                     if (AnyConverter.isObject(event.OldValue)) {
                         AccessibleObjectFactory.removeChild(Container.this, event.OldValue);
@@ -359,51 +365,46 @@ public class Container extends java.awt.Container implements javax.accessibility
 
     protected javax.accessibility.AccessibleContext accessibleContext = null;
 
+    /** This method actually creates the AccessibleContext object returned by
+     * getAccessibleContext().
+     */
+    protected javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleContainer();
+    }
+
     /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
+    public final javax.accessibility.AccessibleContext getAccessibleContext() {
         if (accessibleContext == null) {
-            accessibleContext = new AccessibleContainer();
+            try {
+                AccessibleContext ac = createAccessibleContext();
+                if (ac != null) {
+                    // Set accessible name and description here to avoid
+                    // unnecessary property change events later ..
+                    ac.setAccessibleName(unoAccessibleContext.getAccessibleName());
+                    ac.setAccessibleDescription(unoAccessibleContext.getAccessibleDescription());
+                    accessibleContext = ac;
+                }
+            } catch (com.sun.star.uno.RuntimeException e) {
+            }
         }
         return accessibleContext;
     }
 
     protected class AccessibleContainer extends java.awt.Container.AccessibleAWTContainer {
 
-        /**
-        * Though the class is abstract, this should be called by all sub-classes
-        */
         protected AccessibleContainer() {
-            super();
-            // Set accessible name and description here to avoid unnecessary property change
-            // events later ..
-            XAccessibleContext unoAccessibleContext = unoAccessible.getAccessibleContext();
-            String s = unoAccessibleContext.getAccessibleName();
-            if (s != null && s.length() > 0) {
-                setAccessibleName(s);
-            }
-            s = unoAccessibleContext.getAccessibleDescription();
-            if (s != null && s.length() > 0) {
-                setAccessibleDescription(s);
-            }
-/*
-            try {
-                XAccessibleContext unoAccessibleContext = (XAccessibleContext)
-                    UnoRuntime.queryInterface(XAccessibleContext.class, unoAccessibleComponent);
+            /* Since getAccessibleText() is heavily used by the java access
+             * bridge for gnome and the gnome at-tools, we do a query interface
+             * here and remember the result.
+             */
+            accessibleText = AccessibleTextImpl.get(unoAccessibleContext);
+        }
 
-                if (unoAccessibleContext!= null) {
-                    String s = unoAccessibleContext.getAccessibleName();
-                    if (s != null && s.length() > 0) {
-                        setAccessibleName(s);
-                    }
-                    s = unoAccessibleContext.getAccessibleDescription();
-                    if (s != null && s.length() > 0) {
-                        setAccessibleDescription(s);
-                    }
-                }
-            } catch (com.sun.star.uno.RuntimeException e) {
-                System.err.println("RuntimeException caught");
-            }
-*/
+        protected AccessibleContainer(boolean query) {
+            /* This constructor is explicitly for subclasses that implement
+             * AccessibleHypertext and therefor the default constructor would
+             * bring unnecessary overhead.
+             */
         }
 
         /** Check if the parent of an selectable object supports AccessibleSelection */
@@ -586,6 +587,11 @@ public class Container extends java.awt.Container implements javax.accessibility
         /** Gets the role of this object */
         public javax.accessibility.AccessibleRole getAccessibleRole() {
             return accessibleRole;
+        }
+
+        /** Gets the AccessibleText associated with this object presenting text on the display */
+        public javax.accessibility.AccessibleText getAccessibleText() {
+            return accessibleText;
         }
 
         /**
