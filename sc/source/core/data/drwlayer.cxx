@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:22:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2115,7 +2115,7 @@ SvStream* __EXPORT ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStream
         return NULL;
 
     uno::Reference< embed::XStorage > xStorage = pDoc->GetDocumentShell() ?
-                                                        pDoc->GetDocumentShell()->GetMedium()->GetStorage() :
+                                                        pDoc->GetDocumentShell()->GetStorage() :
                                                         NULL;
     SvStream*   pRet = NULL;
 
