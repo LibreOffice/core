@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-07 14:47:49 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 08:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ const long MIN_WIN_SIZE_Y = 50;
 const long LISTBOX_BORDER = 2;
 
 using namespace ::com::sun::star::sdbc;
-
+using namespace ::svxform;
 
 //==================================================================
 // class FmFieldWinListBox
