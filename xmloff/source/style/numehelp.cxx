@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-06-08 12:05:54 $
+ *  last change: $Author: dvo $ $Date: 2001-06-12 16:32:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,11 +346,11 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
                 uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
                 uno::Any aIsStandardFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT)));
                 aIsStandardFormat >>= bIsStandard;
-                uno::Any aNumberFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE)));
-                sal_Int16 nNumberFormat;
-                if ( aNumberFormat >>= nNumberFormat )
+                uno::Any aNumberType = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE)));
+                sal_Int16 nNumberType;
+                if ( aNumberType >>= nNumberType )
                 {
-                    return nNumberFormat;
+                    return nNumberType;
                 }
             }
             catch ( uno::Exception& )

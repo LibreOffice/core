@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-31 18:15:39 $
+ *  last change: $Author: dvo $ $Date: 2001-06-12 16:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2138,10 +2138,14 @@ void XMLTextFieldExport::ProcessValueAndType(
 
             if (bExportStyle)
             {
-                GetExport().AddAttribute(XML_NAMESPACE_STYLE,
-                                         sXML_data_style_name,
-                                         GetExport().getDataStyleName(
-                                             nFormatKey, bTimeStyle));
+                OUString sDataStyleName =
+                    GetExport().getDataStyleName(nFormatKey, bTimeStyle);
+                if( sDataStyleName.getLength() > 0 )
+                {
+                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                              sXML_data_style_name,
+                                              sDataStyleName );
+                } // else: ignore (no valid number format)
             }  // else: ignore (no number format)
         }
     }
