@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semnode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:51 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,7 @@ class SemanticNode : private TokenProcessing_Types
                         SemanticNode();
     void                EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::n22::Repository &
-                                                io_rRepository,
+                            ary::idl::Gate &    io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~SemanticNode();
@@ -125,6 +124,8 @@ class SemanticNode : private TokenProcessing_Types
                             UnoIDL_PE *         i_pParseEnv2Push = 0 );
     UnoIDL_PE *         Parent() const          { return pParentPE; }
     ary::idl::Gate &    AryGate() const         { return *pAryGate; }
+    TokenProcessing_Result &
+                        TokenResult() const     { return *pTokenResult; }
 
   private:
     // DATA

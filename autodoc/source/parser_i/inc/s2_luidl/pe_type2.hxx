@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_type2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ class PE_Type : public UnoIDL_PE,
   public:
                          PE_Type(
                             ary::idl::Type_id & o_rResult );
-                        ~PE_Type();
+    virtual             ~PE_Type();
 
     virtual void        ProcessToken(
                             const Token &       i_rToken );
@@ -111,10 +111,12 @@ class PE_Type : public UnoIDL_PE,
         e_none = 0,
         expect_type,
         expect_quname_part,
-        expect_quname_separator
+        expect_quname_separator,
+        in_template_type
     };
 
     void                Finish();
+    PE_Type &           MyTemplateType();
 
     virtual void        InitData();
     virtual void        TransferData();
@@ -124,11 +126,15 @@ class PE_Type : public UnoIDL_PE,
     ary::idl::Type_id * pResult;
 
     uintt               nIsSequenceCounter;
+    uintt               nSequenceDownCounter;
     bool                bIsUnsigned;
     ary::QualifiedName  sFullType;
 
     E_State             eState;
     String              sLastPart;
+
+    Dyn<PE_Type>        pPE_TemplateType;   /// @attention Recursion, only initiate, if needed!
+    ary::idl::Type_id   nTemplateType;
 };
 
 
@@ -136,9 +142,7 @@ class PE_Type : public UnoIDL_PE,
 // IMPLEMENTATION
 
 
-
 }   // namespace uidl
 }   // namespace csi
 
 #endif
-
