@@ -9,7 +9,7 @@ Public HeaderPreviews(4) as Object
 Public ImportDialog as Object
 Public ImportDialogArea as Object
 Public bSetFonts as Boolean
-&apos; If the ProgressPage ist already on Top The Dialog will be immediately closed when this flag is 
+&apos; If the ProgressPage ist already on Top The Dialog will be immediately closed when this flag is
 &apos; set to False
 Public bCallCancelMsg as Boolean
 
@@ -37,7 +37,7 @@ Sub Main()
 	FillStep_Welcome()
 	RepaintHeaderPreview()
 	SetStates()
-	ImportDialogArea.SetVisible(True) &apos;Execute()
+        ImportDialogArea.Execute()
 	ImportDialog.cbGoOn.DefaultButton = True
 	Exit Sub
 RTError:
@@ -86,7 +86,7 @@ Dim iCurStep as Integer
 			End Select
 		Case 4
 	End Select
-	ImportDialog.cbGoOn.DefaultButton = True		
+	ImportDialog.cbGoOn.DefaultButton = True
 	Exit Sub
 RTError:
 	Msgbox sRTErrorDesc, 16, sRTErrorHeader
@@ -98,7 +98,7 @@ Dim iCurStep as Integer
 	If Not bDebugWizard Then
 		On Error Goto RTError
 	End If
-	bCallCancelMsg = False	
+	bCallCancelMsg = False
 	iCurStep = ImportDialog.Step
 	Select Case iCurStep
 		Case 4
