@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-30 09:59:26 $
+ *  last change: $Author: ama $ $Date: 2001-02-06 15:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ private:
 
 protected:
     // fuer FormatQuoVadis
-    inline void Right( const KSHORT nNew ) { nRight = nNew; }
+    inline void Right( const SwTwips nNew ) { nRight = nNew; }
     // fuer CalcFlyAdjust
     inline void SetDropLeft( const KSHORT nNew ) { nDropLeft = nNew; }
 
@@ -208,6 +208,7 @@ public:
     inline sal_Bool IsLastBlock() const { return bLastBlock; }
     inline sal_Bool IsLastCenter() const { return bLastCenter; }
     inline MSHORT GetAdjust() const { return nAdjust; }
+    inline void SetAdjust( const MSHORT nNew ) { nAdjust = nNew; }
     inline KSHORT GetLineWidth() const
            { return KSHORT( Right() - GetLeftMargin() + 1 ); }
     inline SwTwips GetLeftMin() const { return nFirst < nLeft ? nFirst : nLeft; }
@@ -291,6 +292,7 @@ class SwTxtCursor : public SwTxtAdjuster
 
     // 1170: Mehrdeutigkeiten
     static sal_Bool bRightMargin;
+    void _GetCharRect(SwRect *, const xub_StrLen, SwCrsrMoveState* );
 protected:
     void CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
     inline SwTxtCursor() { }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-02 09:46:26 $
+ *  last change: $Author: ama $ $Date: 2001-02-06 15:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,39 +258,45 @@ SwDoubleLinePortion::SwDoubleLinePortion( SwDoubleLinePortion& rDouble,
  * internetstyle, which contains the 2-line-attribute.
  * --------------------------------------------------*/
 
-SwDoubleLinePortion::SwDoubleLinePortion( const SwTxtAttr& rAttr,
+SwDoubleLinePortion::SwDoubleLinePortion( const SwMultiCreator& rCreate,
     xub_StrLen nEnd ) : SwMultiPortion( nEnd ), pBracket( new SwBracket() )
 {
     SetDouble();
-    pBracket->nStart = *rAttr.GetStart();
-
-    if( RES_CHRATR_TWO_LINES == rAttr.Which() )
+    const SvxTwoLinesItem* pTwo = (SvxTwoLinesItem*)rCreate.pItem;
+    if( pTwo )
+        pBracket->nStart = 0;
+    else
     {
-        pBracket->cPre = rAttr.Get2Lines().GetStartBracket();
-        pBracket->cPost = rAttr.Get2Lines().GetEndBracket();
+        const SwTxtAttr& rAttr = *rCreate.pAttr;
+        pBracket->nStart = *rAttr.GetStart();
+
+        if( RES_CHRATR_TWO_LINES == rAttr.Which() )
+            pTwo = &rAttr.Get2Lines();
+        else
+        {
+            SwCharFmt* pFmt = NULL;
+            if( RES_TXTATR_INETFMT == rAttr.Which() )
+                pFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
+            else if( RES_TXTATR_CHARFMT == rAttr.Which() )
+                pFmt = rAttr.GetCharFmt().GetCharFmt();
+            if ( pFmt )
+            {
+                const SfxPoolItem* pItem;
+                if( SFX_ITEM_SET == pFmt->GetAttrSet().
+                    GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pItem ) )
+                    pTwo = (SvxTwoLinesItem*)pItem;
+            }
+        }
+    }
+    if( pTwo )
+    {
+        pBracket->cPre = pTwo->GetStartBracket();
+        pBracket->cPost = pTwo->GetEndBracket();
     }
     else
     {
-        SwCharFmt* pFmt = NULL;
-        if( RES_TXTATR_INETFMT == rAttr.Which() )
-            pFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
-        else if( RES_TXTATR_CHARFMT == rAttr.Which() )
-            pFmt = rAttr.GetCharFmt().GetCharFmt();
-        if ( pFmt )
-        {
-            const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == pFmt->GetAttrSet().
-                GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pItem ) )
-            {
-                pBracket->cPre = ((SvxTwoLinesItem*)pItem)->GetStartBracket();
-                pBracket->cPost = ((SvxTwoLinesItem*)pItem)->GetEndBracket();
-            }
-        }
-        else
-        {
-            pBracket->cPre = 0;
-            pBracket->cPost = 0;
-         }
+        pBracket->cPre = 0;
+        pBracket->cPost = 0;
     }
     BYTE nTmp = SW_SCRIPTS;
     if( pBracket->cPre )
@@ -557,16 +563,17 @@ SwDoubleLinePortion::~SwDoubleLinePortion()
  * beside the main text, e.g. phonetic characters.
  * --------------------------------------------------*/
 
-SwRubyPortion::SwRubyPortion( const SwTxtAttr& rAttr,  const SwFont& rFnt,
+SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     xub_StrLen nEnd, xub_StrLen nOffs ) : SwMultiPortion( nEnd )
 {
     SetRuby();
-    ASSERT( RES_TXTATR_CJK_RUBY == rAttr.Which(), "Wrong attribute" );
-    const SwFmtRuby& rRuby = rAttr.GetRuby();
+    ASSERT( SW_MC_RUBY == rCreate.nId, "Ruby exspected" );
+    ASSERT( RES_TXTATR_CJK_RUBY == rCreate.pAttr->Which(), "Wrong attribute" );
+    const SwFmtRuby& rRuby = rCreate.pAttr->GetRuby();
     nAdjustment = rRuby.GetAdjustment();
     nRubyOffset = nOffs;
     SetTop( !rRuby.GetPosition() );
-    const SwCharFmt* pFmt = ((SwTxtRuby&)rAttr).GetCharFmt();
+    const SwCharFmt* pFmt = ((SwTxtRuby*)rCreate.pAttr)->GetCharFmt();
     SwFont *pRubyFont;
     if( pFmt )
     {
@@ -719,9 +726,9 @@ void SwRubyPortion::CalcRubyOffset()
 }
 
 /*-----------------13.10.00 16:22-------------------
- * SwTxtSizeInfo::GetMultiAttr(..)
+ * SwTxtSizeInfo::GetMultiCreator(..)
  * If we (e.g. the position rPos) are inside a two-line-attribute or
- * a ruby-attribute, the attribute will be returned,
+ * a ruby-attribute, the attribute will be returned in a SwMultiCreator-struct,
  * otherwise the function returns zero.
  * The rPos parameter is set to the end of the multiportion,
  * normally this is the end of the attribute,
@@ -733,7 +740,7 @@ void SwRubyPortion::CalcRubyOffset()
 
 /*-----------------13.11.00 15:38-------------------
  * lcl_Has2Lines(..)
- * is a little help function for GetMultiAttr(..)
+ * is a little help function for GetMultiCreator(..)
  * It extracts the 2-line-format from a 2-line-attribute or a character style.
  * The rValue is set to TRUE, if the 2-line-attribute's value is set and
  * no 2-line-format reference is passed. If there is a 2-line-format reference,
@@ -779,16 +786,24 @@ sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
     return sal_False;
 }
 
-const SwTxtAttr* SwTxtSizeInfo::GetMultiAttr( xub_StrLen &rPos ) const
+SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
 {
-    const SwpHints *pHints = pFrm->GetTxtNode()->GetpSwpHints();
-    if( !pHints )
-        return NULL;
-    const SwTxtAttr *pRet = NULL;
     const SvxTwoLinesItem* p2Lines = NULL;
+    const SfxPoolItem* pItem;
+    if( SFX_ITEM_SET == pFrm->GetTxtNode()->GetSwAttrSet().
+        GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pItem ) &&
+        ((SvxTwoLinesItem*)pItem)->GetValue() )
+        p2Lines = (SvxTwoLinesItem*)pItem;
+    else
+        pItem = NULL;
+
+    const SwpHints *pHints = pFrm->GetTxtNode()->GetpSwpHints();
+    if( !pHints && !p2Lines )
+        return NULL;
+    const SwTxtAttr *pRuby = NULL;
     sal_Bool bTwo = sal_False;
     USHORT n2Lines = USHRT_MAX;
-    USHORT nCount = pHints->Count();
+    USHORT nCount = pHints ? pHints->Count() : 0;
     USHORT i;
     for( i = 0; i < nCount; ++i )
     {
@@ -799,7 +814,7 @@ const SwTxtAttr* SwTxtSizeInfo::GetMultiAttr( xub_StrLen &rPos ) const
         if( *pTmp->GetAnyEnd() > rPos )
         {
             if( RES_TXTATR_CJK_RUBY == pTmp->Which() )
-                pRet = pTmp;
+                pRuby = pTmp;
             else
             {
                 const SvxTwoLinesItem* p2Tmp = NULL;
@@ -811,16 +826,51 @@ const SwTxtAttr* SwTxtSizeInfo::GetMultiAttr( xub_StrLen &rPos ) const
             }
         }
     }
-    if( pRet )
+    if( pRuby )
     {   // The winner is ... a ruby attribute and so
         // the end of the multiportion is the end of the ruby attribute.
-        rPos = *pRet->GetEnd();
+        rPos = *pRuby->GetEnd();
+        SwMultiCreator *pRet = new SwMultiCreator;
+        pRet->pItem = NULL;
+        pRet->pAttr = pRuby;
+        pRet->nId = SW_MC_RUBY;
         return pRet;
     }
-    if( n2Lines < nCount )
+    if( n2Lines < nCount || ( pItem && pItem == p2Lines &&
+        rPos < GetTxt().Len() ) )
     {   // The winner is a 2-line-attribute,
         // the end of the multiportion depends on the following attributes...
-        pRet = (*pHints)[n2Lines];
+        SwMultiCreator *pRet = new SwMultiCreator;
+
+        // We note the endpositions of the 2-line attributes in aEnd as stack
+        SvXub_StrLens aEnd;
+
+        // The bOn flag signs the state of the last 2-line attribute in the
+        // aEnd-stack, it is compatible with the winner-attribute or
+        // it interrupts the other attribute.
+        sal_Bool bOn = sal_True;
+
+        if( n2Lines < nCount )
+        {
+            pRet->pItem = NULL;
+            pRet->pAttr = (*pHints)[n2Lines];
+            aEnd.Insert( *pRet->pAttr->GetEnd(), 0 );
+            if( pItem )
+            {
+                aEnd[ 0 ] = GetTxt().Len();
+                bOn = ((SvxTwoLinesItem*)pItem)->GetEndBracket() ==
+                        p2Lines->GetEndBracket() &&
+                      ((SvxTwoLinesItem*)pItem)->GetStartBracket() ==
+                        p2Lines->GetStartBracket();
+            }
+        }
+        else
+        {
+            pRet->pItem = pItem;
+            pRet->pAttr = NULL;
+            aEnd.Insert( GetTxt().Len(), 0 );
+        }
+        pRet->nId = SW_MC_DOUBLE;
         // n2Lines is the index of the last 2-line-attribute, which contains
         // the actual position.
         i = 0;
@@ -834,15 +884,6 @@ const SwTxtAttr* SwTxtSizeInfo::GetMultiAttr( xub_StrLen &rPos ) const
         //   these attributes may interrupt the winner, but they could be
         //   neutralized by another 2-line-attribute starting at the same
         //   position with the same brackets as the winner-attribute.
-
-        // We note the endpositions of the 2-line attributes in aEnd as stack
-        SvXub_StrLens aEnd;
-        aEnd.Insert( *pRet->GetEnd(), 0 );
-
-        // The bOn flag signs the state of the last 2-line attribute in the
-        // aEnd-stack, it is compatible with the winner-attribute or
-        // it interrupts the other attribute.
-        sal_Bool bOn = sal_True;
 
         // In the following loop rPos is the critical position and it will be
         // evaluated, if at rPos starts a interrupting or a maintaining
@@ -907,8 +948,9 @@ const SwTxtAttr* SwTxtSizeInfo::GetMultiAttr( xub_StrLen &rPos ) const
         }
         if( bOn && aEnd.Count() )
             rPos = aEnd[ aEnd.Count()-1 ];
+        return pRet;
     }
-    return pRet;
+    return NULL;
 }
 
 /*-----------------01.11.00 14:52-------------------
@@ -1544,10 +1586,9 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         pFld = NULL;
 
     SwLinePortion *pRest = NULL;
-    const SwTxtAttr *pHint;
     if( pFld )
     {
-        pHint = GetAttr( nPos - 1 );
+        const SwTxtAttr *pHint = GetAttr( nPos - 1 );
         if( pHint && pHint->Which() == RES_TXTATR_FIELD )
         {
             pRest = NewFldPortion( GetInfo(), pHint );
@@ -1564,22 +1605,26 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         return pRest;
 
     nPos = nMultiPos + pMulti->GetLen();
-    pHint = GetInfo().GetMultiAttr( nMultiPos );
-    ASSERT( pHint, "Multiportion without attribut?" );
+    SwMultiCreator* pCreate = GetInfo().GetMultiCreator( nMultiPos );
+    ASSERT( pCreate, "Multiportion without attribut?" );
 
     if( pRest || nMultiPos > nPos || ( pMulti->IsRuby() &&
         ((SwRubyPortion*)pMulti)->GetRubyOffset() < STRING_LEN ) )
     {
         SwMultiPortion* pTmp;
         if( pMulti->IsDouble() )
-            pTmp = new SwDoubleLinePortion( *pHint, nMultiPos );
+            pTmp = new SwDoubleLinePortion( *pCreate, nMultiPos );
         else if( pMulti->IsRuby() )
-            pTmp = new SwRubyPortion( *pHint, *GetInfo().GetFont(), nMultiPos,
+            pTmp = new SwRubyPortion( *pCreate, *GetInfo().GetFont(), nMultiPos,
                                 ((SwRubyPortion*)pMulti)->GetRubyOffset() );
         else if( pMulti->GetDirection() )
             pTmp = new SwRotatedPortion( nMultiPos, pMulti->GetDirection() );
         else
+        {
+            delete pCreate;
             return pRest;
+        }
+        delete pCreate;
         pTmp->SetFollowFld();
         if( pRest )
         {

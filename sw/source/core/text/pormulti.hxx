@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-01 14:42:39 $
+ *  last change: $Author: ama $ $Date: 2001-02-06 15:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,28 @@ class SwTxtCursor;
 class SwLineLayout;
 class SwBlankPortion;
 class SwTxtPaintInfo;
+class SwTxtAttr;
+class SfxPoolItem;
+class SwFont;
+
+/*-----------------02.02.01 15:01-------------------
+ * SwMultiCreator is a small structur to create a multiportion.
+ * It contains the kind of multiportion and a textattribute
+ * or a poolitem.
+ * The GetMultiCreator-function fills this structur and
+ * the Ctor of the SwMultiPortion uses it.
+ * --------------------------------------------------*/
+
+#define SW_MC_DOUBLE    0
+#define SW_MC_RUBY      1
+#define SW_MC_ROTATE    2
+
+struct SwMultiCreator
+{
+    const SwTxtAttr* pAttr;
+    const SfxPoolItem* pItem;
+    BYTE nId;
+};
 
 /*-----------------25.10.00 16:19-------------------
  * A two-line-portion (SwMultiPortion) could have surrounding brackets,
@@ -169,7 +191,7 @@ class SwDoubleLinePortion : public SwMultiPortion
     xub_StrLen nBlank2;     // Number of blanks in the second line
 public:
     SwDoubleLinePortion( SwDoubleLinePortion& rDouble, xub_StrLen nEnd );
-    SwDoubleLinePortion( const SwTxtAttr& rAttr, xub_StrLen nEnd );
+    SwDoubleLinePortion( const SwMultiCreator& rCreate, xub_StrLen nEnd );
     ~SwDoubleLinePortion();
 
     inline SwBracket* GetBrackets() const { return pBracket; }
@@ -205,8 +227,8 @@ public:
     SwRubyPortion( xub_StrLen nEnd, USHORT nAdj, USHORT nPos, xub_StrLen nOfst )
         : SwMultiPortion( nEnd ), nRubyOffset( nOfst ), nAdjustment( nAdj )
         { SetRuby(); SetTop(!nPos); }
-    SwRubyPortion( const SwTxtAttr& rAttr, const SwFont& rFnt, xub_StrLen nEnd,
-        xub_StrLen nOffs = 0 );
+    SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
+        xub_StrLen nEnd, xub_StrLen nOffs = 0 );
     void CalcRubyOffset();
     inline void Adjust( SwTxtFormatInfo &rInf )
         { if(nAdjustment && GetRoot().GetNext()) _Adjust(rInf); }

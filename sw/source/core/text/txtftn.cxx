@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-07 08:59:26 $
+ *  last change: $Author: ama $ $Date: 2001-02-06 15:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1118,7 +1118,7 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
         rInf.GetParaPortion()->GetReformat()->Start() = rInf.GetIdx();
 
     // Jetzt wird formatiert
-    Right( KSHORT(Right()) - pQuo->Width() );
+    Right( Right() - pQuo->Width() );
     const xub_StrLen nRet = FormatLine( nStart );
     Right( rInf.Left() + nOldRealWidth - 1 );
 

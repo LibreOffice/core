@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-01-29 12:34:40 $
+ *  last change: $Author: ama $ $Date: 2001-02-06 15:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,27 +331,14 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 }
 
 /*************************************************************************
- *                      SwTxtCursor::GetCharRect()
- *
- * Tabs: Ist das aktuelle Zeichen das Tabzeichen, dann liefert
- * GetCharRect() das SwRect hinter dem letzten Character in
- * der vorhergehenden Portion. Ist das aktuelle Zeichen das
- * Zeichen nach dem Tabzeichen, so wird das SwRect am Anfang
- * der Portion-Box geliefert, weil das Tabzeichen selber
- * unsichtbar ist. Oder andersherum: Wenn eine Portion mit einem
- * Tabzeichen beginnt, dann darf dieses Tabzeichen bei der
- * Berechnung des x-Offset der Characterbox innerhalb der Portion
- * nicht beruecksichtigt werden.
- *
+ * void SwTxtCursor::_GetCharRect(..)
+ * internal function, called by SwTxtCursor::GetCharRect() to calculate
+ * the relative character position in the current line.
  *************************************************************************/
-sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
-                               SwCrsrMoveState* pCMS, const long nMax )
+
+void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
+    SwCrsrMoveState* pCMS )
 {
-    CharCrsrToLine(nOfst);
-
-    // Adjustierung ggf. nachholen
-    GetAdjusted();
-
     const XubString &rText = GetInfo().GetTxt();
     SwTxtSizeInfo aInf( GetInfo(), rText, nStart );
     if( GetPropFont() )
@@ -359,10 +346,9 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     KSHORT nTmpAscent, nTmpHeight;  // Zeilenhoehe
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
     const Size  aCharSize( 1, nTmpHeight );
-    const Point aCharPos( GetTopLeft() );
+    const Point aCharPos;
     pOrig->Pos( aCharPos );
     pOrig->SSize( aCharSize );
-    sal_Bool bRet = sal_True;
     sal_Bool bWidth = pCMS && pCMS->bRealWidth;
     if( !pCurr->GetLen() && !pCurr->Width() )
     {
@@ -487,7 +473,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 {
                     if( pPor->IsMultiPortion() )
                     {
-                        nY += nTmpAscent - nPorAscent;
+                        pOrig->Pos().Y() += nTmpAscent - nPorAscent;
                         if( ( ((SwMultiPortion*)pPor)->IsDouble() ||
                               ((SwMultiPortion*)pPor)->HasRotation() )
                              && pCMS && pCMS->b2Lines )
@@ -507,7 +493,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             if( nSpaceAdd )
                                 nTmpWidth += pPor->CalcSpacing(nSpaceAdd, aInf);
                             pCMS->p2Lines->aPortion =
-                                SwRect( Point( aCharPos.X() + nX, Y() ),
+                                SwRect( Point(aCharPos.X() + nX, pOrig->Top()),
                                         Size( nTmpWidth, pPor->Height() ) );
                         }
 
@@ -521,12 +507,16 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         pCurr = &((SwMultiPortion*)pPor)->GetRoot();
                         if( ((SwMultiPortion*)pPor)->IsDouble() )
                             SetPropFont( 50 );
-                        if( nStart + pCurr->GetLen() <= nOfst )
+                        if( nStart + pCurr->GetLen() <= nOfst && GetNext() )
+                        {
+                            pOrig->Pos().Y() += GetLineHeight();
                             Next();
+                        }
+
                         sal_Bool bSpaceChg = ((SwMultiPortion*)pPor)->
                                                 ChgSpaceAdd( pCurr, nSpaceAdd );
                         Point aOldPos = pOrig->Pos();
-                        bRet = GetCharRect( pOrig, nOfst, pCMS, nMax );
+                        _GetCharRect( pOrig, nOfst, pCMS );
                         if( ((SwMultiPortion*)pPor)->HasRotation() )
                         {
                             long nTmp = pOrig->Width();
@@ -535,17 +525,16 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             nTmp = pOrig->Left() - aOldPos.X();
                             pOrig->Pos().X() = nX + aOldPos.X();
                             if( ((SwMultiPortion*)pPor)->IsRevers() )
-                                pOrig->Pos().Y() = aOldPos.Y() + nTmpAscent
-                                    - pPor->GetAscent() + nTmp;
+                                pOrig->Pos().Y() = aOldPos.Y() + nTmp;
                             else
-                                pOrig->Pos().Y() = aOldPos.Y() + nTmpAscent
-                                    + pPor->Height() - pPor->GetAscent() - nTmp
-                                    - pOrig->Height();
+                                pOrig->Pos().Y() = aOldPos.Y()
+                                    + pPor->Height() - nTmp - pOrig->Height();
                             if ( pCMS && pCMS->bRealHeight )
                                 pCMS->aRealHeight.Y() = -pCMS->aRealHeight.Y();
                         }
                         else
                         {
+                            pOrig->Pos().Y() += aOldPos.Y();
                             pOrig->Pos().X() += nX;
                             if( ((SwMultiPortion*)pPor)->HasBrackets() )
                                 pOrig->Pos().X() +=
@@ -557,7 +546,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         nStart = nOldStart;
                         bPrev = sal_False;
                         SetPropFont( nOldProp );
-                        return bRet;
+                        return;
                     }
                     if ( pPor->PrtWidth() )
                     {
@@ -596,86 +585,67 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
         if( pPor )
         {
-            // Bei manchen Portions gibts es kein links (Number, DropCap)
-            if( pPor->InNumberGrp() )
+            ASSERT( !pPor->InNumberGrp(), "Number surprise" );
+            sal_Bool bEmptyFld = sal_False;
+            if( pPor->InFldGrp() && pPor->GetLen() )
             {
-                nX += pPor->Width();
-                if( pPor->GetPortion() && pPor->GetPortion()->IsMarginPortion() )
+                SwFldPortion *pTmp = (SwFldPortion*)pPor;
+                while( pTmp->HasFollow() && !pTmp->GetExp().Len() )
                 {
-                    nX += pPor->GetPortion()->Width();
-                    nPorHeight = pPor->GetPortion()->Height();
-                    nPorAscent = pPor->GetPortion()->GetAscent();
+                    KSHORT nAddX = pTmp->Width();
+                    SwLinePortion *pNext = pTmp->GetPortion();
+                    while( pNext && !pNext->InFldGrp() )
+                    {
+                        ASSERT( !pNext->GetLen(), "Where's my field follow?" );
+                        nAddX += pNext->Width();
+                        pNext = pNext->GetPortion();
+                    }
+                    if( !pNext )
+                        break;
+                    pTmp = (SwFldPortion*)pNext;
+                    nPorHeight = pTmp->Height();
+                    nPorAscent = pTmp->GetAscent();
+                    nX += nAddX;
+                    bEmptyFld = sal_True;
                 }
-                else
-                    bRet = sal_False;
             }
-            else
+            // 8513: Felder im Blocksatz, ueberspringen
+            while( pPor && !pPor->GetLen() && ( pPor->IsFlyPortion() ||
+                   pPor->IsKernPortion() ||
+                   ( !bEmptyFld && pPor->InFldGrp() ) ) )
             {
-                sal_Bool bEmptyFld = sal_False;
-                if( pPor->InFldGrp() && pPor->GetLen() )
+                if ( pPor->InSpaceGrp() && nSpaceAdd )
+                    nX += pPor->PrtWidth() +
+                          pPor->CalcSpacing( nSpaceAdd, aInf );
+                else
                 {
-                    SwFldPortion *pTmp = (SwFldPortion*)pPor;
-                    while( pTmp->HasFollow() && !pTmp->GetExp().Len() )
+                    if( pPor->InFixMargGrp() && pSpaceAdd )
                     {
-                        KSHORT nAddX = pTmp->Width();
-                        SwLinePortion *pNext = pTmp->GetPortion();
-                        while( pNext && !pNext->InFldGrp() )
-                        {
-                            if( pNext->GetLen() )
-                                pNext = NULL; // Gibt's das ueberhaupt?
-                            else
-                            {
-                                nAddX += pNext->Width();
-                                pNext = pNext->GetPortion();
-                            }
-                        }
-                        if( !pNext )
-                            break;
-                        pTmp = (SwFldPortion*)pNext;
-                        nPorHeight = pTmp->Height();
-                        nPorAscent = pTmp->GetAscent();
-                        nX += nAddX;
-                        bEmptyFld = sal_True;
-                    }
-                }
-                // 8513: Felder im Blocksatz, ueberspringen
-                while( pPor && !pPor->GetLen() && ( pPor->IsFlyPortion() ||
-                       pPor->IsKernPortion() ||
-                       ( !bEmptyFld && pPor->InFldGrp() ) ) )
-                {
-                    if ( pPor->InSpaceGrp() && nSpaceAdd )
-                        nX += pPor->PrtWidth() +
-                              pPor->CalcSpacing( nSpaceAdd, aInf );
-                    else
-                    {
-                        if( pPor->InFixMargGrp() && pSpaceAdd )
-                        {
-                            if( nSpaceAdd < 0 )
-                                nX += nSpaceAdd;
-                            if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                                nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
-                            else
-                                nSpaceAdd = 0;
-                        }
-                        if ( !pPor->IsFlyPortion() || ( pPor->GetPortion() &&
-                                !pPor->GetPortion()->IsMarginPortion() ) )
-                            nX += pPor->PrtWidth();
-                    }
-                    if( pPor->IsMultiPortion() && pSpaceAdd &&
-                        ((SwMultiPortion*)pPor)->HasTabulator() )
-                    {
+                        if( nSpaceAdd < 0 )
+                            nX += nSpaceAdd;
                         if ( ++nSpaceIdx < pSpaceAdd->Count() )
                             nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
                         else
                             nSpaceAdd = 0;
                     }
-                    if( !pPor->IsFlyPortion() )
-                    {
-                        nPorHeight = pPor->Height();
-                        nPorAscent = pPor->GetAscent();
-                    }
-                    pPor = pPor->GetPortion();
+                    if ( !pPor->IsFlyPortion() || ( pPor->GetPortion() &&
+                            !pPor->GetPortion()->IsMarginPortion() ) )
+                        nX += pPor->PrtWidth();
                 }
+                if( pPor->IsMultiPortion() && pSpaceAdd &&
+                    ((SwMultiPortion*)pPor)->HasTabulator() )
+                {
+                    if ( ++nSpaceIdx < pSpaceAdd->Count() )
+                        nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                    else
+                        nSpaceAdd = 0;
+                }
+                if( !pPor->IsFlyPortion() )
+                {
+                    nPorHeight = pPor->Height();
+                    nPorAscent = pPor->GetAscent();
+                }
+                pPor = pPor->GetPortion();
             }
 
             if( aInf.GetIdx() == nOfst && pPor && pPor->InHyphGrp() &&
@@ -747,17 +717,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 }
             }
         }
-        // Es darf nicht vorzeitig returnt werden.
-        // 6798: nicht auf pOrig->Right() rumhuehnern.
         pOrig->Pos().X() += nX;
-
-        // Hier muesste eigentlich "-1 LogicToPixel" stehen, dies erscheint
-        // mir aber zu teuer, deshalb ein Wert (-12), mit dem es sich hoffentlich
-        // leben laesst?
-        const SwTwips nRight = Right() - 12;
-
-        if( pOrig->Left() > nRight )
-            pOrig->Pos().X() = nRight;
 
         if ( pCMS && pCMS->bRealHeight )
         {
@@ -772,6 +732,41 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 pCMS->aRealHeight.Y() = nTmpHeight;
         }
     }
+}
+
+/*************************************************************************
+ *                      SwTxtCursor::GetCharRect()
+ *************************************************************************/
+
+sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
+                               SwCrsrMoveState* pCMS, const long nMax )
+{
+    CharCrsrToLine(nOfst);
+
+    // Adjustierung ggf. nachholen
+    GetAdjusted();
+
+    const Point aCharPos( GetTopLeft() );
+    sal_Bool bRet = sal_True;
+
+    _GetCharRect( pOrig, nOfst, pCMS );
+
+    const SwTwips nRight = Right() - 12;
+
+    pOrig->Pos().X() += aCharPos.X();
+    pOrig->Pos().Y() += aCharPos.Y();
+
+    if( pCMS && pCMS->b2Lines && pCMS->p2Lines )
+    {
+        pCMS->p2Lines->aLine.Pos().X() += aCharPos.X();
+        pCMS->p2Lines->aLine.Pos().Y() += aCharPos.Y();
+        pCMS->p2Lines->aPortion.Pos().X() += aCharPos.X();
+        pCMS->p2Lines->aPortion.Pos().Y() += aCharPos.Y();
+    }
+
+    if( pOrig->Left() > nRight )
+        pOrig->Pos().X() = nRight;
+
     if( nMax )
     {
         if( pOrig->Bottom() > nMax )
@@ -780,7 +775,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 pOrig->Top( nMax );
             pOrig->Bottom( nMax );
         }
-        if ( pCMS && pCMS->bRealHeight )
+        if ( pCMS && pCMS->bRealHeight && pCMS->aRealHeight.Y() >= 0 )
         {
             long nTmp = pCMS->aRealHeight.X() + pOrig->Top();
             if( nTmp >= nMax )

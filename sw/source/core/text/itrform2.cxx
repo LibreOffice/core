@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-01 14:01:34 $
+ *  last change: $Author: ama $ $Date: 2001-02-06 15:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1229,12 +1229,12 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
         {   // We open a multiportion part, if we enter a multi-line part
             // of the paragraph.
             xub_StrLen nEnd = rInf.GetIdx();
-            const SwTxtAttr* pTwoLines = rInf.GetMultiAttr( nEnd );
-            if( pTwoLines )
+            SwMultiCreator* pCreate = rInf.GetMultiCreator( nEnd );
+            if( pCreate )
             {
                 SwMultiPortion* pTmp = NULL;
-                if( RES_TXTATR_CJK_RUBY == pTwoLines->Which() )
-                     pTmp = new SwRubyPortion( *pTwoLines,*rInf.GetFont(),nEnd );
+                if( SW_MC_RUBY == pCreate->nId )
+                     pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(), nEnd );
                 else
 #ifdef ROTATION_TEST
                 {
@@ -1245,12 +1245,13 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                         case 3 : pTmp = new SwRotatedPortion( nEnd, nTst );
                                  break;
                         default:
-                        pTmp = new SwDoubleLinePortion( *pTwoLines, nEnd );
+                        pTmp = new SwDoubleLinePortion( *pCreate, nEnd );
                     }
                 }
 #else
-                    pTmp = new SwDoubleLinePortion( *pTwoLines, nEnd );
+                    pTmp = new SwDoubleLinePortion( *pCreate, nEnd );
 #endif
+                delete pCreate;
                 return pTmp;
             }
         }
