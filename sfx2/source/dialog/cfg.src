@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:44:30 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,301 +65,52 @@
  // pragma ----------------------------------------------------------------
 
 #define PUSHBUTTON_TEXT_SAVE \
-    Text = "~Speichern..." ; \
-    Text [ ENGLISH ] = "~Save" ; \
-    Text [ dutch ] = "O~pslaan..." ; \
-    Text [ english_us ] = "~Save..." ; \
-    Text [ italian ] = "~Salva..." ; \
-    Text [ spanish ] = "~Guardar..." ; \
-    Text [ french ] = "~Enregistrer..." ; \
-    Text [ swedish ] = "Spara..." ; \
-    Text [ danish ] = "~Gem..." ; \
-    Text [ portuguese_brazilian ] = "~Salvar" ; \
-    Text [ portuguese ] = "~Guardar..." ; \
-    Text[ chinese_simplified ] = "å­˜ç›˜(~S)...";   \
-    Text[ russian ] = "Ñîõğàíèòü...";   \
-    Text[ polish ] = "~Zapisz...";  \
-    Text[ japanese ] = "ä¿å­˜(~S)..."; \
-    Text[ chinese_traditional ] = "å„²å­˜(~S)...";  \
-    Text[ arabic ] = "ÍİÙ...";  \
-    Text[ greek ] = "ÁğïèŞêåõ~óç...";   \
-    Text[ korean ] = "ì €ì¥(~S)...";   \
-    Text[ turkish ] = "~Kaydet..."; \
-    Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Desa...";   \
-    Text[ finnish ] = "~Tallenna...";   \
-    Text[ thai ] = "~à¸šà¸±à¸™à¸—à¸¶à¸...";    \
-    Text[ czech ] = "UloÅ¾it...";   \
-    Text[ hebrew ] = "â€®×©××™×¨×”...â€¬"; \
-    Text[ hindi ] = "~à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹...";    \
-    Text[ slovak ] = "~UloÅ¾iÅ¥..."; \
-    Text[ hungarian ] = "~MentÃ©s..."; \
-    Text[ slovenian ] = "~Shrani...";
+    Text [ de ] = "~Speichern..." ; \
+    Text [ en-US ] = "~Save..." ; \
+    Text [ x-comment ] = " ";
 
 #define PUSHBUTTON_TEXT_RESET \
-    Text = "Zur~ücksetzen" ; \
-    Text [ ENGLISH ] = "R~eset" ; \
-    Text [ dutch ] = "Hers~tellen" ; \
-    Text [ english_us ] = "R~eset" ; \
-    Text [ italian ] = "Ripris~tina" ; \
-    Text [ spanish ] = "Restablecer" ; \
-    Text [ french ] = "Re~staurer" ; \
-    Text [ swedish ] = "~Återställ" ; \
-    Text [ danish ] = "~Nulstil" ; \
-    Text [ portuguese_brazilian ] = "~Restaurar" ; \
-    Text [ portuguese ] = "~Restaurar" ; \
-    Text[ chinese_simplified ] = "é‡è®¾(~E)";  \
-    Text[ russian ] = "Âîññòàíîâèòü";   \
-    Text[ polish ] = "Rese~tuj";    \
-    Text[ japanese ] = "ãƒªã‚»ãƒƒãƒˆ(~E)";  \
-    Text[ chinese_traditional ] = "é‡è¨­(~E)"; \
-    Text[ arabic ] = "ÅÚÇÏÉ ÊÚííä"; \
-    Text[ greek ] = "Åğáíáö~ïñÜ";   \
-    Text[ korean ] = "ì›ë˜ëŒ€ë¡œ(~E)";    \
-    Text[ turkish ] = "~Başa al";   \
-    Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "R~einicialitza"; \
-    Text[ finnish ] = "P~alauta";   \
-    Text[ thai ] = "à¸•à¸±à¹‰~à¸‡à¸„à¹ˆà¸²à¹ƒà¸«à¸¡à¹ˆ";    \
-    Text[ czech ] = "Obnovit";  \
-    Text[ hebrew ] = "â€®××ª×—×•×œâ€¬";    \
-    Text[ hindi ] = "à¤°à¤¿~à¤¸à¥‡à¤Ÿà¥à¤Ÿ à¤•à¤°à¥‹"; \
-    Text[ slovak ] = "O~bnoviÅ¥"; \
-    Text[ hungarian ] = "A~lapÃ¡llapot"; \
-    Text[ slovenian ] = "P~onastavi";
+    Text [ de ] = "Zur~ücksetzen" ; \
+    Text [ en-US ] = "R~eset" ; \
+    Text [ x-comment ] = " ";
 
 #define PUSHBUTTON_TEXT_LOAD \
 /* ### ACHTUNG: Neuer Text in Resource? La~den... : ~Laden... */\
-    Text = "La~den..." ; \
-    Text [ ENGLISH ] = "~Load..." ; \
-    Text [ english_us ] = "~Load..." ; \
-    Text [ italian ] = "Ca~rica..." ; \
-    Text [ spanish ] = "~Cargar..." ; \
-    Text [ french ] = "~Charger..." ; \
-    Text [ dutch ] = "~Laden..." ; \
-    Text [ swedish ] = "La~dda..." ; \
-    Text [ danish ] = "Ind~læs..." ; \
-    Text [ portuguese_brazilian ] = "~Carregar..." ; \
-    Text [ portuguese ] = "~Carregar..." ; \
-    Text[ chinese_simplified ] = "è£…å…¥(~L)...";   \
-    Text[ russian ] = "Çàãğóçèòü...";   \
-    Text[ polish ] = "Za³adu~j..."; \
-    Text[ japanese ] = "èª­ã¿è¾¼ã¿(~L)...";   \
-    Text[ chinese_traditional ] = "è¼‰å…¥(~L)...";  \
-    Text[ arabic ] = "ÊÍãíá...";    \
-    Text[ greek ] = "Öüñ~ôùóç...";  \
-    Text[ korean ] = "ë¡œë“œ(~L)...";   \
-    Text[ turkish ] = "~Yükle...";  \
-    Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Carrega...";    \
-    Text[ finnish ] = "L~ataa...";  \
-    Text[ thai ] = "à¹‚~à¸«à¸¥à¸”...";  \
-    Text[ czech ] = "NaÄÃ­st...";  \
-    Text[ hebrew ] = "â€®×˜×¢×™× ×”...â€¬"; \
-    Text[ hindi ] = "~à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¥‹...";   \
-    Text[ slovak ] = "~NaÄÃ­taÅ¥..."; \
-    Text[ hungarian ] = "~BetÃ¶ltÃ©s..."; \
-    Text[ slovenian ] = "~NaloÅ¾i...";
+    Text [ de ] = "La~den..." ; \
+    Text [ en-US ] = "~Load..." ; \
+    Text [ x-comment ] = " ";
 
 #define PUSHBUTTON_TEXT_REMOVE \
 /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
-    Text = "~Löschen" ; \
-    Text [ ENGLISH ] = "~Remove" ; \
-    Text [ norwegian ] = "~Fjern" ; \
-    Text [ italian ] = "~Elimina" ; \
-    Text [ portuguese_brazilian ] = "Exc~luir" ; \
-    Text [ portuguese ] = "E~liminar" ; \
-    Text [ finnish ] = "~Poista" ; \
-    Text [ danish ] = "~Slet" ; \
-    Text [ french ] = "~Supprimer" ; \
-    Text [ swedish ] = "~Radera" ; \
-    Text [ dutch ] = "~Wissen" ; \
-    Text [ spanish ] = "~Borrar" ; \
-    Text [ english_us ] = "~Delete" ; \
-    Text[ chinese_simplified ] = "åˆ é™¤(~D)";  \
-    Text[ russian ] = "Óäàëèòü";    \
-    Text[ polish ] = "~Usuñ";   \
-    Text[ japanese ] = "å‰Šé™¤(~D)";    \
-    Text[ chinese_traditional ] = "åˆªé™¤(~D)"; \
-    Text[ arabic ] = "ÍĞİ"; \
-    Text[ greek ] = "~ÄéáãñáöŞ";    \
-    Text[ korean ] = "ì‚­ì œ(~D)";  \
-    Text[ turkish ] = "~Sil";   \
-    Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Suprimeix"; \
-    Text[ thai ] = "~à¸¥à¸š";   \
-    Text[ czech ] = "Smazat";   \
-    Text[ hebrew ] = "â€®××—×™×§×”â€¬";    \
-    Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“"; \
-    Text[ slovak ] = "~ZmazaÅ¥"; \
-    Text[ hungarian ] = "~TÃ¶rlÃ©s"; \
-    Text[ slovenian ] = "~IzbriÅ¡i";
+    Text [ de ] = "~Löschen" ; \
+    Text [ en-US ] = "~Delete" ; \
+    Text [ x-comment ] = " ";
 
 #define PUSHBUTTON_TEXT_CHANGE \
 /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~ndern */\
-    Text = "~Ändern" ; \
-    Text [ ENGLISH ] = "~Change" ; \
-    Text [ norwegian ] = "~Endre" ; \
-    Text [ italian ] = "~Cambia" ; \
-    Text [ portuguese_brazilian ] = "~Modificar" ; \
-    Text [ portuguese ] = "~Modificar" ; \
-    Text [ finnish ] = "~Muuta" ; \
-    Text [ danish ] = "~Modificer" ; \
-    Text [ french ] = "~Modifier" ; \
-    Text [ swedish ] = "~Ändra" ; \
-    Text [ dutch ] = "Wij~zigen" ; \
-    Text [ spanish ] = "~Modificar" ; \
-    Text [ english_us ] = "~Modify" ; \
-    Text[ chinese_simplified ] = "æ›´æ”¹(~M)";  \
-    Text[ russian ] = "Èçìåíèòü";   \
-    Text[ polish ] = "Mody~fikuj";  \
-    Text[ japanese ] = "å¤‰æ›´(~M)";    \
-    Text[ chinese_traditional ] = "è®Šæ›´(~M)"; \
-    Text[ arabic ] = "ÊÚÏíá";   \
-    Text[ greek ] = "~Ôñïğïğïßçóç"; \
-    Text[ korean ] = "ìˆ˜ì •(~M)";  \
-    Text[ turkish ] = "~Değiştir";  \
-    Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Modifica";  \
-    Text[ thai ] = "~à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚"; \
-    Text[ czech ] = "ZmÄ›nit";  \
-    Text[ hebrew ] = "â€®×©×™× ×•×™â€¬";    \
-    Text[ hindi ] = "~à¤¸à¥à¤§à¤¾à¤°à¥‹";  \
-    Text[ slovak ] = "Z~meniÅ¥"; \
-    Text[ hungarian ] = "MÃ³~dosÃ­tÃ¡s"; \
-    Text[ slovenian ] = "~Spremeni";
+    Text [ de ] = "~Ändern" ; \
+    Text [ en-US ] = "~Modify" ; \
+    Text [ x-comment ] = " ";
 
 #define PUSHBUTTON_TEXT_NEW \
-    Text = "~Neu" ; \
-    Text [ ENGLISH ] = "~New" ; \
-    Text [ norwegian ] = "~New" ; \
-    Text [ italian ] = "~Nuovo" ; \
-    Text [ portuguese_brazilian ] = "~Novo" ; \
-    Text [ portuguese ] = "~Novo" ; \
-    Text [ finnish ] = "~Uusi" ; \
-    Text [ danish ] = "~Ny" ; \
-    Text [ french ] = "Nou~veau" ; \
-    Text [ swedish ] = "~Nytt" ; \
-    Text [ dutch ] = "~Nieuw" ; \
-    Text [ spanish ] = "~Nuevo" ; \
-    Text [ english_us ] = "~New" ; \
-    Text[ chinese_simplified ] = "æ–°å»º(~N)";  \
-    Text[ russian ] = "Ñîçä~àòü ïóíêò"; \
-    Text[ polish ] = "~Nowy";   \
-    Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)";  \
-    Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”(~N)";   \
-    Text[ arabic ] = "ÌÏíÏ";    \
-    Text[ greek ] = "Äç~ìéïõñãßá";  \
-    Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)";    \
-    Text[ turkish ] = "~Yeni";  \
-    Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Nou";   \
-    Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ"; \
-    Text[ czech ] = "NovÃ½";    \
-    Text[ hebrew ] = "â€®×—×“×©â€¬";    \
-    Text[ hindi ] = "~à¤¨à¤¯à¤¾";   \
-    Text[ slovak ] = "~NovÃ½"; \
-    Text[ hungarian ] = "Ãš~j"; \
-    Text[ slovenian ] = "~Nov";
+    Text [ de ] = "~Neu" ; \
+    Text [ en-US ] = "~New" ; \
+    Text [ x-comment ] = " ";
 
 #define FIXEDTEXT_TEXT_GROUP \
-    Text = "~Bereich" ; \
-    Text [ ENGLISH ] = "~Group" ; \
-    Text [ norwegian ] = "~Gruppe" ; \
-    Text [ italian ] = "Area" ; \
-    Text [ portuguese_brazilian ] = "~Categoria" ; \
-    Text [ portuguese ] = "~Categoria" ; \
-    Text [ finnish ] = "~Luokka" ; \
-    Text [ danish ] = "~Kategori" ; \
-    Text [ french ] = "~Catégorie" ; \
-    Text [ swedish ] = "~Kategori" ; \
-    Text [ dutch ] = "~Bereik" ; \
-    Text [ spanish ] = "~Categoría" ; \
-    Text [ english_us ] = "~Category" ; \
-    Text[ chinese_simplified ] = "èŒƒå›´(~C)";  \
-    Text[ russian ] = "Êàòåãîğèÿ";  \
-    Text[ polish ] = "~Kategoria";  \
-    Text[ japanese ] = "ç¯„å›²(~C)";    \
-    Text[ chinese_traditional ] = "ç¯„åœ(~C)"; \
-    Text[ arabic ] = "ÇáİÆÉ";   \
-    Text[ greek ] = "~Êáôçãïñßá";   \
-    Text[ korean ] = "ì˜ì—­(~C)";  \
-    Text[ turkish ] = "Ka~tegori";  \
-    Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Categoria"; \
-    Text[ thai ] = "~à¸›à¸£à¸°à¹€à¸ à¸—";   \
-    Text[ czech ] = "Kategorie";    \
-    Text[ hebrew ] = "â€®×¡×™×•×•×’â€¬";    \
-    Text[ hindi ] = "~à¤µà¤°à¥à¤—";    \
-    Text[ slovak ] = "~KategÃ³ria"; \
-    Text[ hungarian ] = "~KategÃ³ria"; \
-    Text[ slovenian ] = "~Kategorija";
+    Text [ de ] = "~Bereich" ; \
+    Text [ en-US ] = "~Category" ; \
+    Text [ x-comment ] = " ";
 
 #define FIXEDTEXT_TEXT_FUNCTION \
-    Text = "~Funktion" ; \
-    Text [ ENGLISH ] = "~Function" ; \
-    Text [ norwegian ] = "~Function" ; \
-    Text [ italian ] = "~Funzione" ; \
-    Text [ portuguese_brazilian ] = "~Função" ; \
-    Text [ portuguese ] = "~Função" ; \
-    Text [ finnish ] = "Toiminto" ; \
-    Text [ danish ] = "Funktion" ; \
-    Text [ french ] = "~Fonction" ; \
-    Text [ swedish ] = "~Funktion" ; \
-    Text [ dutch ] = "~Functie" ; \
-    Text [ spanish ] = "~Función" ; \
-    Text [ english_us ] = "Function" ; \
-    Text[ chinese_simplified ] = "åŠŸèƒ½";  \
-    Text[ russian ] = "Ôóíêöèÿ";    \
-    Text[ polish ] = "Funkcja"; \
-    Text[ japanese ] = "æ©Ÿèƒ½";    \
-    Text[ chinese_traditional ] = "åŠŸèƒ½"; \
-    Text[ arabic ] = "ãåãÉ";    \
-    Text[ greek ] = "~ÓõíÜñôçóç";   \
-    Text[ korean ] = "ê¸°ëŠ¥";  \
-    Text[ turkish ] = "İşlev";  \
-    Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Funció";    \
-    Text[ thai ] = "à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";   \
-    Text[ czech ] = "Funkce";   \
-    Text[ hebrew ] = "â€®×¤×¢×•×œ×”â€¬";    \
-    Text[ hindi ] = "à¤«à¤‚à¤•à¥à¤¶à¤¨à¥";    \
-    Text[ slovak ] = "Funkcia"; \
-    Text[ hungarian ] = "FÃ¼ggvÃ©ny"; \
-    Text[ slovenian ] = "Funkcija";
+    Text [ de ] = "~Funktion" ; \
+    Text [ en-US ] = "Function" ; \
+    Text [ x-comment ] = " ";
 
 #define GROUPBOX_TEXT_FUNCTIONS \
-    Text = "Funktionen" ; \
-    Text [ ENGLISH ] = "Functions" ; \
-    Text [ norwegian ] = "Funksjoner" ; \
-    Text [ italian ] = "Funzioni" ; \
-    Text [ portuguese_brazilian ] = "Funções" ; \
-    Text [ portuguese ] = "Funções" ; \
-    Text [ finnish ] = "Toiminnot" ; \
-    Text [ danish ] = "Funktioner" ; \
-    Text [ french ] = "Fonctions" ; \
-    Text [ swedish ] = "Funktioner" ; \
-    Text [ dutch ] = "Functies" ; \
-    Text [ spanish ] = "Funciones" ; \
-    Text [ english_us ] = "Functions" ; \
-    Text[ chinese_simplified ] = "åŠŸèƒ½";  \
-    Text[ russian ] = "Ôóíêöèè";    \
-    Text[ polish ] = "Funkcje"; \
-    Text[ japanese ] = "æ©Ÿèƒ½";    \
-    Text[ chinese_traditional ] = "åŠŸèƒ½"; \
-    Text[ arabic ] = "ãåÇã";    \
-    Text[ greek ] = "Ëåéôïõñãßåò";  \
-    Text[ korean ] = "ê¸°ëŠ¥ ëª¨ìŒ";   \
-    Text[ turkish ] = "Fonksiyon";  \
-    Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "Funcions";   \
-    Text[ thai ] = "à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";   \
-    Text[ czech ] = "Funkce";   \
-    Text[ hebrew ] = "â€®×ª×¤×§×•×“×™×â€¬";    \
-    Text[ hindi ] = "à¤«à¤‚à¤•à¥à¤¶à¤¨à¥à¤¸"; \
-    Text[ slovak ] = "Funkcie"; \
-    Text[ hungarian ] = "FÃ¼ggvÃ©nyek"; \
-    Text[ slovenian ] = "Funkcije";
+    Text [ de ] = "Funktionen" ; \
+    Text [ en-US ] = "Functions" ; \
+    Text [ x-comment ] = " ";
 
  // TP_CONFIG_MENU --------------------------------------------------------
 TabPage TP_CONFIG_MENU
@@ -371,35 +122,8 @@ TabPage TP_CONFIG_MENU
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 214 , 8 ) ;
-        Text = "Menüeinträge" ;
-        Text [ ENGLISH ] = "Menu entries" ;
-        Text[ english_us ] = "Menu entries";
-        Text[ portuguese ] = "Entradas de menu";
-        Text[ russian ] = "İëåìåíòû ìåíş";
-        Text[ greek ] = "Êáôá÷ùñßóåéò ìåíïı";
-        Text[ dutch ] = "Menuopties";
-        Text[ french ] = "Entrées de menu";
-        Text[ spanish ] = "Entradas de menú";
-        Text[ finnish ] = "Valikon merkinnät";
-        Text[ italian ] = "Voci del menu";
-        Text[ danish ] = "Menupunkter";
-        Text[ swedish ] = "Menyposter";
-        Text[ polish ] = "Pozycje menu";
-        Text[ portuguese_brazilian ] = "Entradas do menu";
-        Text[ japanese ] = "ãƒ¡ãƒ‹ãƒ¥ãƒ¼é …ç›®";
-        Text[ korean ] = "ë©”ë‰´ í•­ëª©";
-        Text[ chinese_simplified ] = "èœå•æ¡ç›®";
-        Text[ chinese_traditional ] = "åŠŸèƒ½è¡¨é …ç›®";
-        Text[ turkish ] = "Menü girişleri";
-        Text[ arabic ] = "Menu entries";
-        Text[ catalan ] = "Entrades del menú";
-        Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£à¹€à¸¡à¸™à¸¹";
-        Text[ czech ] = "PoloÅ¾ky menu";
-        Text[ hebrew ] = "â€®×¢×¨×›×™ ×ª×¤×¨×™×˜â€¬";
-        Text[ hindi ] = "à¤®à¥‡à¤¨à¥ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿à¤¯à¤¾à¤";
-        Text[ slovak ] = "PoloÅ¾ky menu";
-        Text[ hungarian ] = "MenÃ¼pontok";
-        Text[ slovenian ] = "Vnosi v meni";
+        Text [ de ] = "Menüeinträge" ;
+        Text [ en-US ] = "Menu entries";
     };
     PushButton BTN_MN_NEW
     {
@@ -412,36 +136,9 @@ TabPage TP_CONFIG_MENU
     {
         Pos = MAP_APPFONT ( 226 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "Neues ~Menü" ;
-        Text [ ENGLISH ] = "New ~menu" ;
-        Text [ english_us ] = "New Men~u" ;
-        Text [ swedish ] = "Ny ~meny" ;
-        Text [ danish ] = "Ny menu" ;
-        Text [ italian ] = "Nuovo ~Menu" ;
-        Text [ spanish ] = "Nue~vo menú" ;
-        Text [ french ] = "Nouveau menu" ;
-        Text [ dutch ] = "Nieuw ~menu" ;
-        Text [ portuguese_brazilian ] = "Novo ~menu" ;
-        Text [ portuguese ] = "Novo ~menu" ;
-        Text[ chinese_simplified ] = "æ–°èœå•(~U)";
-        Text[ russian ] = "Ñîçäàòü ìåíş";
-        Text[ polish ] = "No~we menu";
-        Text[ japanese ] = "æ–°ã—ã„ãƒ¡ãƒ‹ãƒ¥ãƒ¼(~U)";
-        Text[ chinese_traditional ] = "æ–°åŠŸèƒ½è¡¨(~U)";
-        Text[ arabic ] = "ŞÇÆãÉ ÌÏíÏÉ";
-        Text[ greek ] = "Íİï ~ìåíïı";
-        Text[ korean ] = "ìƒˆ ë©”ë‰´(~U)";
-        Text[ turkish ] = "Yeni menü";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "N~ou menú";
-        Text[ finnish ] = "Uusi ~valikko";
-        Text[ thai ] = "à¹€à¸¡~à¸™à¸¹à¹ƒà¸«à¸¡à¹ˆ";
-        Text[ czech ] = "NovÃ© menu";
-        Text[ hebrew ] = "â€®×ª×¤×¨×™×˜ ×—×“×©â€¬";
-        Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤®à¥‡~à¤¨à¥";
-        Text[ slovak ] = "NovÃ© men~u";
-        Text[ hungarian ] = "Ãšj m~enÃ¼";
-        Text[ slovenian ] = "Nov ~meni";
+        Text [ de ] = "Neues ~Menü" ;
+        Text [ en-US ] = "New Men~u" ;
+        Text [ x-comment ] = " ";
     };
     PushButton BTN_MN_CHANGE
     {
@@ -510,35 +207,9 @@ TabPage TP_CONFIG_MENU
         Size = MAP_APPFONT ( 214 , 8 ) ;
         Group = TRUE ;
         GROUPBOX_TEXT_FUNCTIONS
-        Text [ portuguese ] = "Funções" ;
-        Text [ english_us ] = "Functions" ;
-        Text [ portuguese_brazilian ] = "Funções" ;
-        Text = "Funktionen" ;
-        Text [ swedish ] = "Funktioner" ;
-        Text [ danish ] = "Funktioner" ;
-        Text [ italian ] = "Funzioni" ;
-        Text [ spanish ] = "Funciones" ;
-        Text [ french ] = "Fonctions" ;
-        Text [ dutch ] = "Functies" ;
-        Text[ chinese_simplified ] = "åŠŸèƒ½";
-        Text[ russian ] = "Ôóíêöèè";
-        Text[ polish ] = "Funkcje";
-        Text[ japanese ] = "æ©Ÿèƒ½";
-        Text[ chinese_traditional ] = "åŠŸèƒ½";
-        Text[ arabic ] = "ãåÇã";
-        Text[ greek ] = "ÓõíáñôŞóåéò";
-        Text[ korean ] = "ê¸°ëŠ¥ ëª¨ìŒ";
-        Text[ turkish ] = "Fonksiyonlar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Funcions";
-        Text[ finnish ] = "Toiminnot";
-        Text[ thai ] = "à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
-        Text[ czech ] = "Funkce";
-        Text[ hebrew ] = "â€®×ª×¤×§×•×“×™×â€¬";
-        Text[ hindi ] = "à¤«à¤‚à¤•à¥à¤¶à¤¨à¥à¤¸";
-        Text[ slovak ] = "Funkcie";
-        Text[ hungarian ] = "FÃ¼ggvÃ©nyek";
-        Text[ slovenian ] = "Funkcije";
+        Text [ en-US ] = "Functions" ;
+        Text [ de ] = "Funktionen" ;
+        Text [ x-comment ] = " ";
     };
     FixedText TXT_MN_GROUP
     {
@@ -547,35 +218,9 @@ TabPage TP_CONFIG_MENU
         Group = TRUE ;
         Left = TRUE ;
         FIXEDTEXT_TEXT_GROUP
-        Text [ english_us ] = "C~ategory" ;
-        Text [ portuguese_brazilian ] = "~Categoria" ;
-        Text = "~Bereich" ;
-        Text [ swedish ] = "~Kategori" ;
-        Text [ danish ] = "~Kategori" ;
-        Text [ italian ] = "Area" ;
-        Text [ spanish ] = "~Categoría" ;
-        Text [ french ] = "~Catégorie" ;
-        Text [ dutch ] = "~Bereik" ;
-        Text [ portuguese ] = "~Categoria" ;
-        Text[ chinese_simplified ] = "åŒºåŸŸ(~A)";
-        Text[ russian ] = "Êàòåãîğèÿ";
-        Text[ polish ] = "K~ategoria";
-        Text[ japanese ] = "ç¯„å›²(~A)";
-        Text[ chinese_traditional ] = "å€åŸŸ(~A)";
-        Text[ arabic ] = "ÇáäØÇŞ";
-        Text[ greek ] = "Êáôçãïñßá";
-        Text[ korean ] = "ì˜ì—­(~A)";
-        Text[ turkish ] = "Ka~tegori";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "C~ategoria";
-        Text[ finnish ] = "L~uokka";
-        Text[ thai ] = "à¸›~à¸£à¸°à¹€à¸ à¸—";
-        Text[ czech ] = "Kategorie";
-        Text[ hebrew ] = "â€®×¡×™×•×•×’â€¬";
-        Text[ hindi ] = "à¤µ~à¤°à¥à¤—";
-        Text[ slovak ] = "K~ategÃ³ria";
-        Text[ hungarian ] = "~KategÃ³ria";
-        Text[ slovenian ] = "K~ategorija";
+        Text [ en-US ] = "C~ategory" ;
+        Text [ de ] = "~Bereich" ;
+        Text [ x-comment ] = " ";
     };
     Control BOX_MN_GROUP
     {
@@ -638,36 +283,9 @@ TabPage TP_CONFIG_ACCEL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 214 , 8 ) ;
-        Text = "Tastenkombinationen" ;
-        Text [ ENGLISH ] = "Keyboard shortcuts" ;
+        Text [ de ] = "Tastenkombinationen" ;
         Group = TRUE ;
-        Text[ english_us ] = "Shortcut keys";
-        Text[ portuguese ] = "Teclas de atalho";
-        Text[ russian ] = "Êîìáèíàöèè êëàâèø";
-        Text[ greek ] = "ĞëŞêôñá óõíôüìåõóçò";
-        Text[ dutch ] = "Toetsencombinaties";
-        Text[ french ] = "Raccourcis clavier";
-        Text[ spanish ] = "Combinación de teclas";
-        Text[ finnish ] = "Pikanäppäimet";
-        Text[ italian ] = "Combinazione tasti";
-        Text[ danish ] = "Genvejstaster";
-        Text[ swedish ] = "Tangentkombinationer";
-        Text[ polish ] = "Skróty klawiaturowe";
-        Text[ portuguese_brazilian ] = "Teclas de atalho";
-        Text[ japanese ] = "ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚­ãƒ¼";
-        Text[ korean ] = "í‚¤ë³´ë“œ ë‹¨ì¶•í‚¤";
-        Text[ chinese_simplified ] = "ç»„åˆé”®";
-        Text[ chinese_traditional ] = "çµ„åˆéµ";
-        Text[ turkish ] = "Kısayol tuşları";
-        Text[ arabic ] = "Keyboard shortcuts";
-        Text[ catalan ] = "Dreceres de teclat";
-        Text[ thai ] = "à¸›à¸¸à¹ˆà¸¡à¸—à¸²à¸‡à¸¥à¸±à¸”";
-        Text[ czech ] = "Zkratky";
-        Text[ hebrew ] = "â€®××§×©×™ ×§×™×¦×•×¨â€¬";
-        Text[ hindi ] = "à¤¸à¤°à¤²à¤µà¤¿à¤§à¤¿ à¤•à¥€";
-        Text[ slovak ] = "KlÃ¡vesovÃ© skratky";
-        Text[ hungarian ] = "GyorsbillentyÅ±k";
-        Text[ slovenian ] = "Tipke za bliÅ¾njico";
+        Text [ en-US ] = "Shortcut keys";
     };
     Control BOX_ACC_ENTRIES
     {
@@ -720,38 +338,10 @@ TabPage TP_CONFIG_ACCEL
     {
         Pos = MAP_APPFONT ( 164 , 121 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text = "~Tasten" ;
-        Text [ ENGLISH ] = "~Keys" ;
-        Text [ norwegian ] = "~Taster" ;
-        Text [ italian ] = "Tasti" ;
-        Text [ portuguese_brazilian ] = "~Teclas" ;
-        Text [ portuguese ] = "~Teclas" ;
-        Text [ finnish ] = "~Näppäimet" ;
-        Text [ danish ] = "T~aster" ;
-        Text [ french ] = "~Clavier" ;
-        Text [ swedish ] = "~Tangenter" ;
-        Text [ dutch ] = "T~oetsen" ;
-        Text [ spanish ] = "~Teclas" ;
-        Text [ english_us ] = "~Keys" ;
+        Text [ de ] = "~Tasten" ;
+        Text [ en-US ] = "~Keys" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "é”®(~K)";
-        Text[ russian ] = "Êëàâèøè";
-        Text[ polish ] = "Kl~awisze";
-        Text[ japanese ] = "ã‚­ãƒ¼(~K)";
-        Text[ chinese_traditional ] = "éµ(~K)";
-        Text[ arabic ] = "ãİÇÊíÍ";
-        Text[ greek ] = "ĞëŞê~ôñá";
-        Text[ korean ] = "í‚¤(~K)";
-        Text[ turkish ] = "T~uşlar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tecles";
-        Text[ thai ] = "~à¸›à¸¸à¹ˆà¸¡";
-        Text[ czech ] = "KlÃ¡vesy";
-        Text[ hebrew ] = "â€®××§×©×™×â€¬";
-        Text[ hindi ] = "~à¤•à¥€";
-        Text[ slovak ] = "~KlÃ¡vesy";
-        Text[ hungarian ] = "Bill~entyÅ±k";
-        Text[ slovenian ] = "~Tipke";
+        Text [ x-comment ] = " ";
     };
     ListBox BOX_ACC_KEY
     {
@@ -796,37 +386,9 @@ TabPage TP_CONFIG_STATBAR
         Group = TRUE ;
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 214 , 8 ) ;
-        Text = "Statusleiste " ;
-        Text [ ENGLISH ] = "Statusbar " ;
-        Text [ norwegian ] = "Statuslinje" ;
-        Text [ italian ] = "Barra di stato " ;
-        Text [ portuguese_brazilian ] = "Barra de Status " ;
-        Text [ portuguese ] = "Barra de estado " ;
-        Text [ finnish ] = "Tilarivi " ;
-        Text [ danish ] = "Statuslinje " ;
-        Text [ french ] = "Barre d'état " ;
-        Text [ swedish ] = "Statuslist " ;
-        Text [ dutch ] = "Statusbalk" ;
-        Text [ spanish ] = "Barra de estado " ;
-        Text [ english_us ] = "Status bar " ;
-        Text[ chinese_simplified ] = "çŠ¶æ€æ  ";
-        Text[ russian ] = "Ñòğîêà ñîñòîÿíèÿ ";
-        Text[ polish ] = "Pasek stanu ";
-        Text[ japanese ] = "ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼";
-        Text[ chinese_traditional ] = "ç‹€æ…‹åˆ— ";
-        Text[ arabic ] = "ÔÑíØ ÇáãÚáæãÇÊ ";
-        Text[ greek ] = "ÃñáììŞ êáôÜóôáóçò ";
-        Text[ korean ] = "ìƒíƒœ í‘œì‹œì¤„ ";
-        Text[ turkish ] = "Durum çubuğu";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Barra d'estat ";
-        Text[ thai ] = "à¹à¸–à¸šà¹à¸ªà¸”à¸‡à¸ªà¸–à¸²à¸™à¸° ";
-        Text[ czech ] = "StavovÃ½ panel";
-        Text[ hebrew ] = "â€®×¡×¨×’×œ ××¦×‘ â€¬";
-        Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥à¤¸à¥à¤¥à¤¿à¤¤à¤¿ à¤ªà¤Ÿà¥à¤Ÿà¥€ ";
-        Text[ slovak ] = "StavovÃ½ panel";
-        Text[ hungarian ] = "Ãllapotsor";
-        Text[ slovenian ] = "Vrstica stanja";
+        Text [ de ] = "Statusleiste " ;
+        Text [ en-US ] = "Status bar " ;
+        Text [ x-comment ] = " ";
     };
     Control BOX_STATBAR_ENTRIES
     {
@@ -872,19 +434,8 @@ TabPage TP_CONFIG_STATBAR
 TabDialog DLG_CONFIG
 {
     OutputSize = TRUE ;
-    Text = "Anpassen" ;
-    Text [ English ] = "Configuration" ;
-    Text [ norwegian ] = "Konfigurasjon" ;
-    Text [ italian ] = "Configura" ;
-    Text [ portuguese_brazilian ] = "Configuração" ;
-    Text [ portuguese ] = "Configuração" ;
-    Text [ finnish ] = "Kokoonpano" ;
-    Text [ danish ] = "Konfiguration" ;
-    Text [ french ] = "Adaptation" ;
-    Text [ swedish ] = "Anpassa" ;
-    Text [ dutch ] = "Aanpassen" ;
-    Text [ spanish ] = "Configuración" ;
-    Text [ english_us ] = "Configuration" ;
+    Text [ de ] = "Anpassen" ;
+    Text [ en-US ] = "Configuration" ;
     Moveable = TRUE ;
     SvLook = TRUE ;
     TabControl 1
@@ -897,687 +448,139 @@ TabDialog DLG_CONFIG
                 Identifier = TP_CONFIG_MENU ;
                 /* ### ACHTUNG: Neuer Text in Resource? Menü : Men³ */
                 /* ### ACHTUNG: Neuer Text in Resource? Menü : Men³ */
-                Text = "Menü" ;
-                Text [ English ] = "Menu" ;
+                Text [ de ] = "Menü" ;
                 PageResID = 300 ;
-                Text [ dutch ] = "Menu" ;
-                Text [ english_us ] = "Menu" ;
-                Text [ italian ] = "Menu" ;
-                Text [ spanish ] = "Menú" ;
-                Text [ french ] = "Menu" ;
-                Text [ swedish ] = "Meny" ;
-                Text [ danish ] = "Menu" ;
-                Text [ portuguese_brazilian ] = "Menu" ;
-                Text [ portuguese ] = "Menu" ;
-                Text[ chinese_simplified ] = "èœå•";
-                Text[ russian ] = "Ìåíş";
-                Text[ polish ] = "Menu";
-                Text[ japanese ] = "ãƒ¡ãƒ‹ãƒ¥ãƒ¼";
-                Text[ chinese_traditional ] = "åŠŸèƒ½è¡¨";
-                Text[ arabic ] = "ÇáŞÇÆãÉ";
-                Text[ greek ] = "Ìåíïı";
-                Text[ korean ] = "ë©”ë‰´";
-                Text[ turkish ] = "Menü";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Menú";
-                Text[ finnish ] = "Valikko";
-                Text[ thai ] = "à¹€à¸¡à¸™à¸¹";
-                Text[ czech ] = "Menu";
-                Text[ hebrew ] = "â€®×ª×¤×¨×™×˜â€¬";
-                Text[ hindi ] = "à¤®à¥‡à¤¨à¥";
-                Text[ slovak ] = "Menu";
-                Text[ hungarian ] = "MenÃ¼";
-                Text[ slovenian ] = "Meni";
+                Text [ en-US ] = "Menu" ;
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_CONFIG_ACCEL ;
-                Text = "Tastatur" ;
-                Text [ English ] = "Keyboard" ;
-                Text [ norwegian ] = "Tastatur" ;
-                Text [ italian ] = "Tastiera" ;
-                Text [ portuguese_brazilian ] = "Teclado" ;
-                Text [ portuguese ] = "Teclado" ;
-                Text [ finnish ] = "Näppäimistö" ;
-                Text [ danish ] = "Tastatur" ;
-                Text [ french ] = "Clavier" ;
-                Text [ swedish ] = "Tangentbord" ;
-                Text [ dutch ] = "Toetsenbord" ;
-                Text [ spanish ] = "Teclado" ;
-                Text [ english_us ] = "Keyboard" ;
+                Text [ de ] = "Tastatur" ;
+                Text [ en-US ] = "Keyboard" ;
                 PageResID = 301 ;
-                Text[ chinese_simplified ] = "é”®ç›˜";
-                Text[ russian ] = "Êëàâèàòóğà";
-                Text[ polish ] = "Klawiatura";
-                Text[ japanese ] = "ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰";
-                Text[ chinese_traditional ] = "éµç›¤";
-                Text[ arabic ] = "áæÍÉ ÇáãİÇÊíÍ";
-                Text[ greek ] = "Ğëçêôñïëüãéï";
-                Text[ korean ] = "í‚¤ë³´ë“œ";
-                Text[ turkish ] = "Klavye";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Teclat";
-                Text[ thai ] = "à¹à¸›à¹‰à¸™à¸à¸´à¸¡à¸à¹Œ";
-                Text[ czech ] = "KlÃ¡vesnice";
-                Text[ hebrew ] = "â€®××§×œ×“×ªâ€¬";
-                Text[ hindi ] = "à¤•à¥€à¤¬à¥‹à¤°à¥à¤¡";
-                Text[ slovak ] = "KlÃ¡vesnica";
-                Text[ hungarian ] = "BillentyÅ±zet";
-                Text[ slovenian ] = "Tipkovnica";
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_CONFIG_STATBAR ;
-                Text = "Statusleiste" ;
-                Text [ English ] = "Statusbar" ;
-                Text [ norwegian ] = "Statuslinje" ;
-                Text [ italian ] = "Barra di stato" ;
-                Text [ portuguese_brazilian ] = "Barra de status " ;
-                Text [ portuguese ] = "Barra de estado" ;
-                Text [ finnish ] = "Tilarivi" ;
-                Text [ danish ] = "Statuslinje" ;
-                Text [ french ] = "Barre d'état" ;
-                Text [ swedish ] = "Statuslist" ;
-                Text [ dutch ] = "Statusbalk" ;
-                Text [ spanish ] = "Barra de estado" ;
-                Text [ english_us ] = "Status Bar" ;
+                Text [ de ] = "Statusleiste" ;
+                Text [ en-US ] = "Status Bar" ;
                 PageResID = 302 ;
-                Text[ chinese_simplified ] = "çŠ¶æ€æ ";
-                Text[ russian ] = "Ñòğîêà ñîñòîÿíèÿ";
-                Text[ polish ] = "Pasek stanu";
-                Text[ japanese ] = "ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼";
-                Text[ chinese_traditional ] = "ç‹€æ…‹åˆ—";
-                Text[ arabic ] = "ÔÑíØ ÇáãÚáæãÇÊ";
-                Text[ greek ] = "ÃñáììŞ êáôÜóôáóçò";
-                Text[ korean ] = "ìƒíƒœ í‘œì‹œì¤„";
-                Text[ turkish ] = "Durum çubuğu";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Barra d'estat";
-                Text[ thai ] = "à¹à¸–à¸šà¹à¸ªà¸”à¸‡à¸ªà¸–à¸²à¸™à¸°";
-                Text[ czech ] = "StavovÃ½ panel";
-                Text[ hebrew ] = "â€®×¡×¨×’×œ ××¦×‘â€¬";
-                Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥à¤¸à¥à¤¥à¤¿à¤¤à¤¿ à¤ªà¤Ÿà¥à¤Ÿà¥€";
-                Text[ slovak ] = "StavovÃ½ riadok";
-                Text[ hungarian ] = "Ãllapotsor";
-                Text[ slovenian ] = "Vrstica stanja";
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_CONFIG_OBJECTBAR ;
-                Text = "Symbolleisten" ;
-                Text [ ENGLISH ] = "Toolbox Options" ;
-                Text [ norwegian ] = "Verktøyalternativer" ;
-                Text [ italian ] = "Barre dei simboli" ;
-                Text [ portuguese_brazilian ] = "Barras de ferramentas" ;
-                Text [ portuguese ] = "Barras de ferramentas" ;
-                Text [ finnish ] = "Työkalurivit" ;
-                Text [ danish ] = "Værktøjslinjer" ;
-                Text [ french ] = "Barres d'outils" ;
-                Text [ swedish ] = "Symbollister" ;
-                Text [ dutch ] = "Werkbalken" ;
-                Text [ spanish ] = "Barras de símbolos" ;
-                Text [ english_us ] = "Toolbars" ;
+                Text [ de ] = "Symbolleisten" ;
+                Text [ en-US ] = "Toolbars" ;
                 PageResID = 303 ;
-                Text[ chinese_simplified ] = "å›¾æ ‡æ ";
-                Text[ russian ] = "Ïàíåëè èíñòğóìåíòîâ";
-                Text[ polish ] = "Paski narzêdzi";
-                Text[ japanese ] = "ãƒ„ãƒ¼ãƒ«ãƒãƒ¼";
-                Text[ chinese_traditional ] = "åœ–ç¤ºåˆ—";
-                Text[ arabic ] = "ÃÔÑØÉ ÇáÑãæÒ";
-                Text[ greek ] = "Ãñáììİò åñãáëåßùí";
-                Text[ korean ] = "ë„êµ¬ ëª¨ìŒ";
-                Text[ turkish ] = "Araç çubukları";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Barres d'eines";
-                Text[ thai ] = "à¹à¸–à¸šà¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­";
-                Text[ czech ] = "Panely nÃ¡strojÅ¯";
-                Text[ hebrew ] = "â€®×¡×¨×’×œ×™ ×›×œ×™×â€¬";
-                Text[ hindi ] = "à¤”à¤œà¤¼à¤¾à¤° à¤ªà¤Ÿà¥à¤Ÿà¥€";
-                Text[ slovak ] = "Panely nÃ¡strojov";
-                Text[ hungarian ] = "EszkÃ¶ztÃ¡rak";
-                Text[ slovenian ] = "Orodne vrstice";
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_CONFIG_EVENT ;
-                Text = "Ereignisse" ;
-                Text [ ENGLISH ] = "Events" ;
-                Text [ norwegian ] = "+++Events" ;
-                Text [ italian ] = "Eventi" ;
-                Text [ portuguese_brazilian ] = "Eventos" ;
-                Text [ portuguese ] = "Eventos" ;
-                Text [ finnish ] = "Tapahtumat" ;
-                Text [ danish ] = "Hændelser" ;
-                Text [ french ] = "Événements" ;
-                Text [ swedish ] = "Händelser" ;
-                Text [ dutch ] = "Gebeurtenissen" ;
-                Text [ spanish ] = "Acciones" ;
-                Text [ english_us ] = "Events" ;
+                Text [ de ] = "Ereignisse" ;
+                Text [ en-US ] = "Events" ;
                 PageResID = 304 ;
-                Text[ chinese_simplified ] = "äº‹ä»¶";
-                Text[ russian ] = "Ñîáûòèÿ";
-                Text[ polish ] = "Wydarzenia";
-                Text[ japanese ] = "ã‚¤ãƒ™ãƒ³ãƒˆ";
-                Text[ chinese_traditional ] = "äº‹ä»¶";
-                Text[ arabic ] = "ÇáÃÍÏÇË";
-                Text[ greek ] = "ÓõìâÜíôá";
-                Text[ korean ] = "ì´ë²¤íŠ¸";
-                Text[ turkish ] = "İşlemler";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Esdeveniments";
-                Text[ thai ] = "à¹€à¸«à¸•à¸¸à¸à¸²à¸£à¸“à¹Œ";
-                Text[ czech ] = "UdÃ¡losti";
-                Text[ hebrew ] = "â€®××¨×•×¢×™×â€¬";
-                Text[ hindi ] = "à¤˜à¤Ÿà¤¨à¤¾";
-                Text[ slovak ] = "Udalosti";
-                Text[ hungarian ] = "EsemÃ©nyek";
-                Text[ slovenian ] = "Dogodki";
+                Text [ x-comment ] = " ";
             };
         };
     };
-    Text[ chinese_simplified ] = "è°ƒæ•´";
-    Text[ russian ] = "Íàñòğîéêà";
-    Text[ polish ] = "Konfiguracja";
-    Text[ japanese ] = "è¨­å®š";
-    Text[ chinese_traditional ] = "èª¿æ•´";
-    Text[ arabic ] = "ÊÎÕíÕ";
-    Text[ greek ] = "Äéáìüñöùóç";
-    Text[ korean ] = "ì„¤ì •";
-    Text[ turkish ] = "Özelleştir";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Configura";
-    Text[ thai ] = "à¹‚à¸„à¸£à¸‡à¹à¸šà¸š";
-    Text[ czech ] = "Konfigurace";
-    Text[ hebrew ] = "â€®×ª×¦×•×¨×”â€¬";
-    Text[ hindi ] = "à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾";
-    Text[ slovak ] = "KonfigurÃ¡cia";
-    Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡s";
-    Text[ slovenian ] = "Konfiguracija";
+    Text [ x-comment ] = " ";
 };
  // Strings ---------------------------------------------------------------
 String STR_NEW
 {
-    Text = "Neu" ;
-    Text [ ENGLISH ] = "New" ;
-    Text [ norwegian ] = "Ny" ;
-    Text [ italian ] = "Nuovo" ;
-    Text [ portuguese_brazilian ] = "Novo" ;
-    Text [ portuguese ] = "Novo" ;
-    Text [ finnish ] = "Uusi" ;
-    Text [ danish ] = "Ny(t)" ;
-    Text [ french ] = "Nouveau" ;
-    Text [ swedish ] = "Nytt" ;
-    Text [ dutch ] = "Nieuw" ;
-    Text [ spanish ] = "Nuevo" ;
-    Text [ english_us ] = "New" ;
-    Text[ chinese_simplified ] = "æ–°å»º";
-    Text[ russian ] = "Ñîçäàòü";
-    Text[ polish ] = "Nowy";
-    Text[ japanese ] = "æ–°è¦ä½œæˆ";
-    Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”";
-    Text[ arabic ] = "ÌÏíÏ";
-    Text[ greek ] = "Äçìéïõñãßá";
-    Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°";
-    Text[ turkish ] = "Yeni";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Nou";
-    Text[ thai ] = "à¹ƒà¸«à¸¡à¹ˆ";
-    Text[ czech ] = "NovÃ½";
-    Text[ hebrew ] = "â€®×—×“×©â€¬";
-    Text[ hindi ] = "à¤¨à¤¯à¤¾";
-    Text[ slovak ] = "NovÃ½";
-    Text[ hungarian ] = "Ãšj";
-    Text[ slovenian ] = "Nov";
+    Text [ de ] = "Neu" ;
+    Text [ en-US ] = "New" ;
+    Text [ x-comment ] = " ";
 };
 String STR_OPEN
 {
     /* ### ACHTUNG: Neuer Text in Resource? Öffnen : Íffnen */
     /* ### ACHTUNG: Neuer Text in Resource? Öffnen : Íffnen */
-    Text = "Öffnen" ;
-    Text [ ENGLISH ] = "Open" ;
-    Text [ norwegian ] = "Åpne" ;
-    Text [ italian ] = "Apri" ;
-    Text [ portuguese_brazilian ] = "Abrir" ;
-    Text [ portuguese ] = "Abrir" ;
-    Text [ finnish ] = "Avaa" ;
-    Text [ danish ] = "Åbn" ;
-    Text [ french ] = "Ouvrir" ;
-    Text [ swedish ] = "Öppna" ;
-    Text [ dutch ] = "Openen" ;
-    Text [ spanish ] = "Abrir" ;
-    Text [ english_us ] = "Open" ;
-    Text[ chinese_simplified ] = "æ‰“å¼€";
-    Text[ russian ] = "Îòêğûòü";
-    Text[ polish ] = "Otwórz";
-    Text[ japanese ] = "é–‹ã";
-    Text[ chinese_traditional ] = "é–‹å•ŸèˆŠæª”";
-    Text[ arabic ] = "İÊÍ";
-    Text[ greek ] = "¢íïéãìá";
-    Text[ korean ] = "ì—´ê¸°";
-    Text[ turkish ] = "Aç";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Obre";
-    Text[ thai ] = "à¹€à¸›à¸´à¸”";
-    Text[ czech ] = "OtevÅ™Ã­t";
-    Text[ hebrew ] = "â€®×¤×ª×™×—×”â€¬";
-    Text[ hindi ] = "à¤–à¥‹à¤²à¥‹";
-    Text[ slovak ] = "OtvoriÅ¥";
-    Text[ hungarian ] = "MegnyitÃ¡s";
-    Text[ slovenian ] = "Odpri";
+    Text [ de ] = "Öffnen" ;
+    Text [ en-US ] = "Open" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SAVE
 {
-    Text = "Speichern" ;
-    Text [ ENGLISH ] = "Save" ;
-    Text [ norwegian ] = "Save" ;
-    Text [ italian ] = "Salva" ;
-    Text [ portuguese_brazilian ] = "Salvar" ;
-    Text [ portuguese ] = "Guardar" ;
-    Text [ finnish ] = "Tallenna" ;
-    Text [ danish ] = "Gem" ;
-    Text [ french ] = "Enregistrer" ;
-    Text [ swedish ] = "Spara" ;
-    Text [ dutch ] = "Opslaan" ;
-    Text [ spanish ] = "Guardar" ;
-    Text [ english_us ] = "Save" ;
-    Text[ chinese_simplified ] = "å­˜ç›˜";
-    Text[ russian ] = "Ñîõğàíèòü";
-    Text[ polish ] = "Zapisz";
-    Text[ japanese ] = "ä¿å­˜";
-    Text[ chinese_traditional ] = "å„²å­˜";
-    Text[ arabic ] = "ÍİÙ";
-    Text[ greek ] = "ÁğïèŞêåõóç";
-    Text[ korean ] = "ì €ì¥";
-    Text[ turkish ] = "Kaydet";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Desa";
-    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸";
-    Text[ czech ] = "UloÅ¾it";
-    Text[ hebrew ] = "â€®×©××™×¨×”â€¬";
-    Text[ hindi ] = "à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
-    Text[ slovak ] = "UloÅ¾iÅ¥";
-    Text[ hungarian ] = "MentÃ©s";
-    Text[ slovenian ] = "Shrani";
+    Text [ de ] = "Speichern" ;
+    Text [ en-US ] = "Save" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SAVEAS
 {
-    Text = "Speichern als" ;
-    Text [ ENGLISH ] = "Save as" ;
-    Text [ norwegian ] = "Lagre som" ;
-    Text [ italian ] = "Salva con nome" ;
-    Text [ portuguese_brazilian ] = "Salvar como" ;
-    Text [ portuguese ] = "Guardar como" ;
-    Text [ finnish ] = "Tallenna nimellä" ;
-    Text [ danish ] = "Gem som" ;
-    Text [ french ] = "Enregistrer comme" ;
-    Text [ swedish ] = "Spara som" ;
-    Text [ dutch ] = "Opslaan als" ;
-    Text [ spanish ] = "Guardar como" ;
-    Text [ english_us ] = "Save As" ;
-    Text[ chinese_simplified ] = "å¦å­˜ä¸º";
-    Text[ russian ] = "Ñîõğàíèòü êàê";
-    Text[ polish ] = "Zapisz jako";
-    Text[ japanese ] = "åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜";
-    Text[ chinese_traditional ] = "å¦å­˜æ–°æª”";
-    Text[ arabic ] = "ÍİÙ ßÜ";
-    Text[ greek ] = "ÁğïèŞêåõóç ùò";
-    Text[ korean ] = "ë‹¤ë¥¸ ì´ë¦„ìœ¼ë¡œ ì €ì¥";
-    Text[ turkish ] = "Farklı kaydet";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Anomena i desa";
-    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸›à¹‡à¸™";
-    Text[ czech ] = "UloÅ¾it jako";
-    Text[ hebrew ] = "â€®×©××™×¨×” ×‘×©×â€¬";
-    Text[ hindi ] = "à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹ à¤œà¥ˆà¤¸à¥‡";
-    Text[ slovak ] = "UloÅ¾iÅ¥ ako";
-    Text[ hungarian ] = "MentÃ©s mÃ¡skÃ©nt";
-    Text[ slovenian ] = "Shrani kot";
+    Text [ de ] = "Speichern als" ;
+    Text [ en-US ] = "Save As" ;
+    Text [ x-comment ] = " ";
 };
 String STR_PRINT
 {
-    Text = "Drucken" ;
-    Text [ ENGLISH ] = "Print" ;
-    Text [ norwegian ] = "Skriv ut" ;
-    Text [ italian ] = "Stampa" ;
-    Text [ portuguese_brazilian ] = "Imprimir" ;
-    Text [ portuguese ] = "Imprimir" ;
-    Text [ finnish ] = "Tulosta" ;
-    Text [ danish ] = "Udskriv" ;
-    Text [ french ] = "Imprimer" ;
-    Text [ swedish ] = "Skriv ut" ;
-    Text [ dutch ] = "Afdrukken" ;
-    Text [ spanish ] = "Imprimir" ;
-    Text [ english_us ] = "Print" ;
-    Text[ chinese_simplified ] = "æ‰“å°";
-    Text[ russian ] = "Ïå÷àòü";
-    Text[ polish ] = "Drukuj";
-    Text[ japanese ] = "å°åˆ·";
-    Text[ chinese_traditional ] = "åˆ—å°";
-    Text[ arabic ] = "ØÈÇÚÉ";
-    Text[ greek ] = "Åêôığùóç";
-    Text[ korean ] = "ì¸ì‡„";
-    Text[ turkish ] = "Yazdır";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imprimeix";
-    Text[ thai ] = "à¸à¸´à¸¡à¸à¹Œ";
-    Text[ czech ] = "Tisk";
-    Text[ hebrew ] = "â€®×”×“×¤×¡×”â€¬";
-    Text[ hindi ] = "à¤›à¤ªà¤¾à¤ˆ";
-    Text[ slovak ] = "TlaÄ";
-    Text[ hungarian ] = "NyomtatÃ¡s";
-    Text[ slovenian ] = "Natisni";
+    Text [ de ] = "Drucken" ;
+    Text [ en-US ] = "Print" ;
+    Text [ x-comment ] = " ";
 };
 String STR_QUIT
 {
-    Text = "Beenden" ;
-    Text [ ENGLISH ] = "Quit" ;
-    Text [ norwegian ] = "Avslutt" ;
-    Text [ italian ] = "Esci" ;
-    Text [ portuguese_brazilian ] = "Sair" ;
-    Text [ portuguese ] = "Sair" ;
-    Text [ finnish ] = "Lopeta" ;
-    Text [ danish ] = "Afslut" ;
-    Text [ french ] = "Quitter" ;
-    Text [ swedish ] = "Avsluta" ;
-    Text [ dutch ] = "Sluiten" ;
-    Text [ spanish ] = "Terminar" ;
-    Text [ english_us ] = "Exit" ;
-    Text[ chinese_simplified ] = "ç»“æŸ";
-    Text[ russian ] = "Âûõîä";
-    Text[ polish ] = "Zakoñcz";
-    Text[ japanese ] = "çµ‚äº†";
-    Text[ chinese_traditional ] = "çµæŸ";
-    Text[ arabic ] = "ÅäåÇÁ";
-    Text[ greek ] = "¸îïäïò";
-    Text[ korean ] = "ì¢…ë£Œ";
-    Text[ turkish ] = "Kapat";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Surt";
-    Text[ thai ] = "à¸­à¸­à¸";
-    Text[ czech ] = "Konec";
-    Text[ hebrew ] = "â€®×™×¦×™××”â€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤°à¥à¤—à¤®";
-    Text[ slovak ] = "UkonÄiÅ¥";
-    Text[ hungarian ] = "KilÃ©pÃ©s";
-    Text[ slovenian ] = "Izhod";
+    Text [ de ] = "Beenden" ;
+    Text [ en-US ] = "Exit" ;
+    Text [ x-comment ] = " ";
 };
 String STR_CUT
 {
-    Text = "Ausschneiden" ;
-    Text [ ENGLISH ] = "Cut" ;
-    Text [ norwegian ] = "Cut" ;
-    Text [ italian ] = "Taglia" ;
-    Text [ portuguese_brazilian ] = "Cortar" ;
-    Text [ portuguese ] = "Cortar" ;
-    Text [ finnish ] = "Leikkaa" ;
-    Text [ danish ] = "Klip" ;
-    Text [ french ] = "Couper" ;
-    Text [ swedish ] = "Klipp ut" ;
-    Text [ dutch ] = "Knippen" ;
-    Text [ spanish ] = "Cortar" ;
-    Text [ english_us ] = "Cut" ;
-    Text[ chinese_simplified ] = "å‰ªåˆ‡";
-    Text[ russian ] = "Âûğåçàòü";
-    Text[ polish ] = "Wytnij";
-    Text[ japanese ] = "åˆ‡ã‚Šå–ã‚Š";
-    Text[ chinese_traditional ] = "å‰ªä¸‹";
-    Text[ arabic ] = "ŞÕ";
-    Text[ greek ] = "ÁğïêïğŞ";
-    Text[ korean ] = "ì˜ë¼ë‚´ê¸°";
-    Text[ turkish ] = "Kes";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Retalla";
-    Text[ thai ] = "à¸•à¸±à¸”";
-    Text[ czech ] = "Vyjmout";
-    Text[ hebrew ] = "â€®×’×–×™×¨×”â€¬";
-    Text[ hindi ] = "à¤•à¤¾à¤Ÿà¥‹";
-    Text[ slovak ] = "VybraÅ¥";
-    Text[ hungarian ] = "KivÃ¡gÃ¡s";
-    Text[ slovenian ] = "IzreÅ¾i";
+    Text [ de ] = "Ausschneiden" ;
+    Text [ en-US ] = "Cut" ;
+    Text [ x-comment ] = " ";
 };
 String STR_COPY
 {
-    Text = "Kopieren" ;
-    Text [ ENGLISH ] = "Copy" ;
-    Text [ norwegian ] = "Kopi" ;
-    Text [ italian ] = "Copia" ;
-    Text [ portuguese_brazilian ] = "Copiar" ;
-    Text [ portuguese ] = "Copiar" ;
-    Text [ finnish ] = "Kopioi" ;
-    Text [ danish ] = "Kopier" ;
-    Text [ french ] = "Copier" ;
-    Text [ swedish ] = "Kopiera" ;
-    Text [ dutch ] = "Kopiëren" ;
-    Text [ spanish ] = "Copiar" ;
-    Text [ english_us ] = "Copy" ;
-    Text[ chinese_simplified ] = "å¤åˆ¶";
-    Text[ russian ] = "Êîïèğîâàòü";
-    Text[ polish ] = "Kopiuj";
-    Text[ japanese ] = "ã‚³ãƒ”ãƒ¼";
-    Text[ chinese_traditional ] = "è¤‡è£½";
-    Text[ arabic ] = "äÓÎ";
-    Text[ greek ] = "ÁíôéãñáöŞ";
-    Text[ korean ] = "ë³µì‚¬";
-    Text[ turkish ] = "Kopyala";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Copia";
-    Text[ thai ] = "à¸„à¸±à¸”à¸¥à¸­à¸";
-    Text[ czech ] = "KopÃ­rovat";
-    Text[ hebrew ] = "â€®×”×¢×ª×§×”â€¬";
-    Text[ hindi ] = "à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿";
-    Text[ slovak ] = "KopÃ­rovaÅ¥";
-    Text[ hungarian ] = "MÃ¡solÃ¡s";
-    Text[ slovenian ] = "Kopiraj";
+    Text [ de ] = "Kopieren" ;
+    Text [ en-US ] = "Copy" ;
+    Text [ x-comment ] = " ";
 };
 String STR_PASTE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
     /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
-    Text = "Einfügen" ;
-    Text [ ENGLISH ] = "Paste" ;
-    Text [ norwegian ] = "Paste" ;
-    Text [ italian ] = "Incolla" ;
-    Text [ portuguese_brazilian ] = "Colar" ;
-    Text [ portuguese ] = "Colar" ;
-    Text [ finnish ] = "Liitä" ;
-    Text [ danish ] = "Sæt ind" ;
-    Text [ french ] = "Coller" ;
-    Text [ swedish ] = "Klistra in" ;
-    Text [ dutch ] = "Invoegen" ;
-    Text [ spanish ] = "Pegar" ;
-    Text [ english_us ] = "Paste" ;
-    Text[ chinese_simplified ] = "ç²˜è´´";
-    Text[ russian ] = "Âñòàâèòü";
-    Text[ polish ] = "Wklej";
-    Text[ japanese ] = "è²¼ã‚Šä»˜ã‘";
-    Text[ chinese_traditional ] = "è²¼ä¸Š";
-    Text[ arabic ] = "áÕŞ";
-    Text[ greek ] = "Åğéêüëëçóç";
-    Text[ korean ] = "ë¶™ì—¬ë„£ê¸°";
-    Text[ turkish ] = "Yapıştır";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Enganxa";
-    Text[ thai ] = "à¸§à¸²à¸‡";
-    Text[ czech ] = "VloÅ¾it";
-    Text[ hebrew ] = "â€®×”×“×‘×§×”â€¬";
-    Text[ hindi ] = "à¤›à¤¿à¤ªà¤•à¤¾à¤“";
-    Text[ slovak ] = "VloÅ¾iÅ¥";
-    Text[ hungarian ] = "BeillesztÃ©s";
-    Text[ slovenian ] = "Prilepi";
+    Text [ de ] = "Einfügen" ;
+    Text [ en-US ] = "Paste" ;
+    Text [ x-comment ] = " ";
 };
 String STR_DELETE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Löschen : L÷schen */
     /* ### ACHTUNG: Neuer Text in Resource? Löschen : L÷schen */
-    Text = "Löschen" ;
-    Text [ ENGLISH ] = "Delete" ;
-    Text [ norwegian ] = "Slett" ;
-    Text [ italian ] = "Elimina" ;
-    Text [ portuguese_brazilian ] = "Excluir" ;
-    Text [ portuguese ] = "Eliminar" ;
-    Text [ finnish ] = "Poista" ;
-    Text [ danish ] = "Slet" ;
-    Text [ french ] = "Supprimer" ;
-    Text [ swedish ] = "Radera" ;
-    Text [ dutch ] = "Wissen" ;
-    Text [ spanish ] = "Borrar" ;
-    Text [ english_us ] = "Delete" ;
-    Text[ chinese_simplified ] = "åˆ é™¤";
-    Text[ russian ] = "Óäàëèòü";
-    Text[ polish ] = "Usuñ";
-    Text[ japanese ] = "å‰Šé™¤";
-    Text[ chinese_traditional ] = "åˆªé™¤";
-    Text[ arabic ] = "ÍĞİ";
-    Text[ greek ] = "ÄéáãñáöŞ";
-    Text[ korean ] = "ì‚­ì œ";
-    Text[ turkish ] = "Sil";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Suprimeix";
-    Text[ thai ] = "à¸¥à¸š";
-    Text[ czech ] = "Smazat";
-    Text[ hebrew ] = "â€®××—×™×§×”â€¬";
-    Text[ hindi ] = "à¤®à¤¿à¤Ÿà¤¾à¤“";
-    Text[ slovak ] = "ZmazaÅ¥";
-    Text[ hungarian ] = "TÃ¶rlÃ©s";
-    Text[ slovenian ] = "IzbriÅ¡i";
+    Text [ de ] = "Löschen" ;
+    Text [ en-US ] = "Delete" ;
+    Text [ x-comment ] = " ";
 };
 String STR_FIND
 {
-    Text = "Suchen" ;
-    Text [ ENGLISH ] = "Find" ;
-    Text [ norwegian ] = "Søke" ;
-    Text [ italian ] = "Cerca" ;
-    Text [ portuguese_brazilian ] = "Pesquisar" ;
-    Text [ portuguese ] = "Procurar" ;
-    Text [ finnish ] = "Etsi" ;
-    Text [ danish ] = "Søg" ;
-    Text [ french ] = "Rechercher" ;
-    Text [ swedish ] = "Sök" ;
-    Text [ dutch ] = "Zoeken" ;
-    Text [ spanish ] = "Buscar" ;
-    Text [ english_us ] = "Search" ;
-    Text[ chinese_simplified ] = "æœå¯»";
-    Text[ russian ] = "Íàéòè";
-    Text[ polish ] = "Szukaj";
-    Text[ japanese ] = "æ¤œç´¢";
-    Text[ chinese_traditional ] = "æœå°‹";
-    Text[ arabic ] = "ÈÍË";
-    Text[ greek ] = "ÁíáæŞôçóç";
-    Text[ korean ] = "ê²€ìƒ‰";
-    Text[ turkish ] = "Ara";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cerca";
-    Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²";
-    Text[ czech ] = "Hledat";
-    Text[ hebrew ] = "â€®×—×™×¤×•×©â€¬";
-    Text[ hindi ] = "à¤–à¥‹à¤œ";
-    Text[ slovak ] = "HÄ¾adaÅ¥";
-    Text[ hungarian ] = "KeresÃ©s";
-    Text[ slovenian ] = "IÅ¡Äi";
+    Text [ de ] = "Suchen" ;
+    Text [ en-US ] = "Search" ;
+    Text [ x-comment ] = " ";
 };
 String STR_FINDBACKWARD
 {
     /* ### ACHTUNG: Neuer Text in Resource? Rückwärts suchen : R³ckwõrts suchen */
     /* ### ACHTUNG: Neuer Text in Resource? Rückwärts suchen : R³ckwõrts suchen */
-    Text = "Rückwärts suchen" ;
-    Text [ ENGLISH ] = "Find backward" ;
-    Text [ norwegian ] = "Søk bakover" ;
-    Text [ italian ] = "Cerca all'indietro" ;
-    Text [ portuguese_brazilian ] = "Pesquisa para trás" ;
-    Text [ portuguese ] = "Localizar para trás" ;
-    Text [ finnish ] = "Etsi taaksepäin" ;
-    Text [ danish ] = "Søg baglæns" ;
-    Text [ french ] = "Recherche vers le haut" ;
-    Text [ swedish ] = "Sök bakåt" ;
-    Text [ dutch ] = "Achterwaarts zoeken" ;
-    Text [ spanish ] = "Buscar hacia atrás" ;
-    Text [ english_us ] = "Search backward" ;
-    Text[ chinese_simplified ] = "å‘åæœå¯»";
-    Text[ russian ] = "Èñêàòü â îáğàòíîì ïîğÿäêå";
-    Text[ polish ] = "Szukaj wstecz";
-    Text[ japanese ] = "æ¤œç´¢ æˆ»ã‚‹";
-    Text[ chinese_traditional ] = "å‘å¾Œæœå°‹";
-    Text[ arabic ] = "ÇáÈÍË Åáì ÇáÎáİ";
-    Text[ greek ] = "ÁíáæŞôçóç ğßóù";
-    Text[ korean ] = "ë’¤ë¡œ ì°¾ê¸°";
-    Text[ turkish ] = "Geriye doğru ara";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cerca cap enrere";
-    Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²à¸¢à¹‰à¸­à¸™à¸à¸¥à¸±à¸š";
-    Text[ czech ] = "Hledat zpÄ›tnÄ›";
-    Text[ hebrew ] = "â€®×—×™×¤×•×© ×œ××—×•×¨â€¬";
-    Text[ hindi ] = "à¤ªà¥€à¤›à¥‡ à¤•à¥€ à¤“à¤° à¤–à¥‹à¤œ";
-    Text[ slovak ] = "SpÃ¤tnÃ© vyhÄ¾adÃ¡vanie";
-    Text[ hungarian ] = "KeresÃ©s visszafelÃ©";
-    Text[ slovenian ] = "IÅ¡Äi nazaj";
+    Text [ de ] = "Rückwärts suchen" ;
+    Text [ en-US ] = "Search backward" ;
+    Text [ x-comment ] = " ";
 };
 String STR_PROPERTIES
 {
-    Text = "Eigenschaften" ;
-    Text [ ENGLISH ] = "Properties" ;
-    Text [ norwegian ] = "Egenskaper" ;
-    Text [ italian ] = "Proprietà" ;
-    Text [ portuguese_brazilian ] = "Propriedades" ;
-    Text [ portuguese ] = "Propriedades" ;
-    Text [ finnish ] = "Ominaisuudet" ;
-    Text [ danish ] = "Egenskaber" ;
-    Text [ french ] = "Propriétés" ;
-    Text [ swedish ] = "Egenskaper" ;
-    Text [ dutch ] = "Eigenschappen" ;
-    Text [ spanish ] = "Propiedades" ;
-    Text [ english_us ] = "Properties" ;
-    Text[ chinese_simplified ] = "å±æ€§";
-    Text[ russian ] = "Ñâîéñòâà";
-    Text[ polish ] = "W³aœciwoœci";
-    Text[ japanese ] = "ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£";
-    Text[ chinese_traditional ] = "å±¬æ€§";
-    Text[ arabic ] = "ÎÕÇÆÕ";
-    Text[ greek ] = "Éäéüôçôåò";
-    Text[ korean ] = "ë“±ë¡ ì •ë³´";
-    Text[ turkish ] = "Özellikler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Propietats";
-    Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´";
-    Text[ czech ] = "Vlastnosti";
-    Text[ hebrew ] = "â€®×××¤×™×™× ×™×â€¬";
-    Text[ hindi ] = "à¤µà¤¿à¤¶à¥‡à¤·à¤¤à¤¾à¤¯à¥‡à¤‚";
-    Text[ slovak ] = "Vlastnosti";
-    Text[ hungarian ] = "TulajdonsÃ¡gok";
-    Text[ slovenian ] = "Lastnosti";
+    Text [ de ] = "Eigenschaften" ;
+    Text [ en-US ] = "Properties" ;
+    Text [ x-comment ] = " ";
 };
 String STR_FRONT
 {
-    Text = "Nach vorn" ;
-    Text [ ENGLISH ] = "Front" ;
-    Text [ norwegian ] = "Foran" ;
-    Text [ italian ] = "In avanti" ;
-    Text [ portuguese_brazilian ] = "Para a frente" ;
-    Text [ portuguese ] = "Para a frente" ;
-    Text [ finnish ] = "Eteen" ;
-    Text [ danish ] = "Forrest" ;
-    Text [ french ] = "Premier plan" ;
-    Text [ swedish ] = "Framåt" ;
-    Text [ dutch ] = "Naar voren" ;
-    Text [ spanish ] = "Hacia delante" ;
-    Text [ english_us ] = "To front" ;
-    Text[ chinese_simplified ] = "å‘å‰";
-    Text[ russian ] = "Íà ïåğåäíèé ïëàí";
-    Text[ polish ] = "Do przodu";
-    Text[ japanese ] = "å‰ã¸";
-    Text[ chinese_traditional ] = "å‘å‰";
-    Text[ arabic ] = "Åáì ÇáÃãÇã";
-    Text[ greek ] = "Óå ğñşôï ğëÜíï";
-    Text[ korean ] = "ì•ìœ¼ë¡œ";
-    Text[ turkish ] = "İleri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Al davant";
-    Text[ thai ] = "à¹„à¸›à¸¢à¸±à¸‡à¸”à¹‰à¸²à¸™à¸«à¸™à¹‰à¸²";
-    Text[ czech ] = "Na popÅ™edÃ­";
-    Text[ hebrew ] = "â€®×§×“×™××”â€¬";
-    Text[ hindi ] = "à¤†à¤—à¥‡ à¤•à¥€ à¤“à¤°";
-    Text[ slovak ] = "Na popredie";
-    Text[ hungarian ] = "ElÅ‘re";
-    Text[ slovenian ] = "V ospredje";
+    Text [ de ] = "Nach vorn" ;
+    Text [ en-US ] = "To front" ;
+    Text [ x-comment ] = " ";
 };
  // MessageBoxes ----------------------------------------------------------
 QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
@@ -1586,37 +589,9 @@ QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
     DefButton = WB_DEF_NO ;
     /* ### ACHTUNG: Neuer Text in Resource? Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem übernehmen? : Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem ³bernehmen? */
     /* ### ACHTUNG: Neuer Text in Resource? Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem übernehmen? : Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem ³bernehmen? */
-    Message = "Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem übernehmen?" ;
-    Message [ ENGLISH ] = "There are still undefined functions (???).\n\nContinue anyway?" ;
-    Message [ norwegian ] = "Det er fremdeles udefinerte funksjoner are still undefined functions (???).\n\nFortsett likevel?" ;
-    Message [ italian ] = "Vi sono ancora funzioni non definite (???).\n\nContinuare lo stesso?" ;
-    Message [ portuguese_brazilian ] = "Algumas funções não foram definidas (???).\n\nDeseja continuar mesmo assim?" ;
-    Message [ portuguese ] = "Ainda existem funções indefinidas (???).\n\nDeseja continuar?" ;
-    Message [ finnish ] = "Osa toiminnoista on vielä määrittämättä (???).\n\nHyväksytäänkö kokoonpano?" ;
-    Message [ danish ] = "Der eksisterer stadig udefinerede funktioner (???).\n\nVil du overtage konfigurationen alligevel?" ;
-    Message [ french ] = "Certaines fonctions n'ont pas été définies (???).\n\nPoursuivre malgré tout ?" ;
-    Message [ swedish ] = "Det finns fortfarande odefinierade funktioner (???). \n\nVill du ändå använda den här konfigurationen?" ;
-    Message [ dutch ] = "Er zijn nog ongedefinieerde functies (???).\n\nWilt u deze configuratie toch overnemen?" ;
-    Message [ spanish ] = "Todavía hay funciones no definidas (???).\n\n¿Desea de todas formas aceptar esta configuración?" ;
-    Message [ english_us ] = "There are still undefined functions (???).\n\nDo you want to accept the configuration anyway?" ;
-    Message[ chinese_simplified ] = "è¿˜å­˜åœ¨æœªå®šä¹‰çš„åŠŸèƒ½ã€‚\n\næ‚¨è¿˜æ˜¯è¦æ¥å—è¿™ä¸ªé…ç½®å—ï¼Ÿ";
-    Message[ russian ] = "Ñóùåñòâóşò ôóíêöèè, êîòîğûå åùå íå îïğåäåëåíû (???).\n\nÏğèíÿòü êîíôèãóğàöèè, íåñìîòğÿ íà ıòî?";
-    Message[ polish ] = "Nadal s¹ niezdefiniowane funkcje (???).\n\nCzy mimo to akceptujesz tê konfiguracjê?";
-    Message[ japanese ] = "ã¾ã å®šç¾©ã•ã‚Œã¦ã„ãªã„æ©Ÿèƒ½ãŒã‚ã‚Šã¾ã™(???)ï½¡\n\nã“ã®è¨­å®šã‚’é©å¿œã—ã¦ã‚‚ã„ã„ã§ã™ã‹ï¼Ÿ";
-    Message[ chinese_traditional ] = "é‚„å­˜åœ¨æœªå®šç¾©çš„åŠŸèƒ½ã€‚\n\né‚„æ˜¯è¦æ¥å—é€™å€‹é…ç½®ï¼Ÿ";
-    Message[ arabic ] = "ãÇÒÇáÊ åäÇáß ãåÇã ÛíÑ ãÚÑİÉ (???).\n\nåá ÊÑíÏ ŞÈæá åĞÇ ÇáÊßæíä Úáì ÇáÑÛã ãä Ğáß¿";
-    Message[ greek ] = "ÕğÜñ÷ïõí áêüìç ëåéôïõñãßåò ğïõ äåí İ÷ïõí ïñéóôåß (???).\n\nÈİëåôå íá áğïäå÷ôåßôå ôç äéáìüñöùóç áõôŞ;";
-    Message[ korean ] = "ì •ì˜ë˜ì§€ ì•Šì€ ê¸°ëŠ¥ì´ ì•„ì§ ìˆìŠµë‹ˆë‹¤(???).\n\nê·¸ë˜ë„ ì´ ì„¤ì •ì„ ì ìš©í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Message[ turkish ] = "Hala tanımlanmamış işlevler mevcut (???).\n\nBu konfigürasyonu yine de kabul etmek istiyor musunuz?";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Encara hi ha funcions no definides (???).\n\nVoleu acceptar aquesta configuració de totes maneres?";
-    Message[ thai ] = "à¸¡à¸µà¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™à¸—à¸µà¹ˆà¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸à¸³à¸«à¸™à¸” (???).\n\nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¢à¸­à¸¡à¸£à¸±à¸šà¹‚à¸„à¸£à¸‡à¹à¸šà¸šà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-    Message[ czech ] = "NÄ›kterÃ© funkce stÃ¡le nebyly definovÃ¡ny (???)-\n\nPÅ™ejete si pÅ™esto pÅ™ijmout tuto konfiguraci?";
-    Message[ hebrew ] = "â€®×™×©× × ×¢×“×™×™×Ÿ ×ª×¤×§×•×“×™× ×œ× ××•×’×“×¨×™× (???).\n\n×”×× ××›×Ÿ ×œ××©×¨ ××ª ×”×ª×¦×•×¨×” ×‘×›×œ ×–××ª?â€¬";
-    Message[ hindi ] = "à¤…à¤­à¥€ à¤­à¥€ à¤¬à¤¿à¤¨à¤¾ à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¾ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤¬à¤¹à¥à¤¤ à¤«à¤‚à¤•à¥à¤¶à¤¨à¥ à¤¹à¥ˆ (???)à¥¤\n\nà¤†à¤ª à¤•à¤¿à¤¸à¥€ à¤¤à¤°à¤¹ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤•à¥‹ à¤¸à¥à¤µà¥€à¤•à¤¾à¤° à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
-    Message[ slovak ] = "NiektorÃ© funkcie stÃ¡le neboli definovanÃ© (???)-\n\nPrajete si i napriek tomu prijaÅ¥ tÃºto konfigurÃ¡ciu?";
-    Message[ hungarian ] = "Vannak mÃ©g nem definiÃ¡lt fÃ¼ggvÃ©nyek (???). \n \nEnnek ellenÃ©re elfogadja a beÃ¡llÃ­tÃ¡sokat?";
-    Message[ slovenian ] = "Å e vedno obstajajo nedefinirane funkcije (???).\n\nAli Å¾elite vseeno sprejeti konfiguracijo?";
+    Message [ de ] = "Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem übernehmen?" ;
+    Message [ en-US ] = "There are still undefined functions (???).\n\nDo you want to accept the configuration anyway?" ;
+    Message [ x-comment ] = " ";
 };
 QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
 {
@@ -1624,399 +599,73 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     DefButton = WB_DEF_NO ;
     /* ### ACHTUNG: Neuer Text in Resource? Es existieren noch Einträge mit Funktionen, die nur Popups zugewiesen werden können.\n\nWollen Sie diese Konfiguration trotzdem übernehmen? : Es existieren noch Eintrõge mit Funktionen, die nur Popups zugewiesen werden k÷nnen.\n\nWollen Sie diese Konfiguration trotzdem ³bernehmen? */
     /* ### ACHTUNG: Neuer Text in Resource? Es existieren noch Einträge mit Funktionen, die nur Popups zugewiesen werden können.\n\nWollen Sie diese Konfiguration trotzdem übernehmen? : Es existieren noch Eintrõge mit Funktionen, die nur Popups zugewiesen werden k÷nnen.\n\nWollen Sie diese Konfiguration trotzdem ³bernehmen? */
-    Message = "Es existieren noch Einträge mit Funktionen, die nur Popups zugewiesen werden können.\n\nWollen Sie diese Konfiguration trotzdem übernehmen?" ;
-    Message [ ENGLISH ] = "There are still entries with functions that can only be assigned to popups.\n\nContinue anyway?" ;
-    Message [ norwegian ] = "Det er fremdeles oppføringer med funksjoner som bare kan tilordnes tilleggsmenyenps.\n\nFortsett likevel?" ;
-    Message [ italian ] = "Vi sono ancora voci con funzioni che possono essere assegnate solo a menu di scelta rapida.\n\nContinuare lo stesso?" ;
-    Message [ portuguese_brazilian ] = "Ainda existem entradas com funções que só podem ser atribuídas a janelas pop-up.\n\nDeseja continuar mesmo assim?" ;
-    Message [ portuguese ] = "Existem ainda entradas com funções que só podem ser atribuídas a janelas instantâneas.\n\nContinuar?" ;
-    Message [ finnish ] = "Osa merkintöjen toiminnoista voidaan yhä liittää vain ponnahdusobjekteihin.\n\nJatketaanko?" ;
-    Message [ danish ] = "Der findes stadig elementer med funktioner, som kun kan tildeles popups.\n\nVil du overtage konfigurationen alligevel?" ;
-    Message [ french ] = "Certaines entrées sont encore associées à des fonctions réservées à des menus déroulants\n\nPoursuivre malgré tout ?" ;
-    Message [ swedish ] = "Det finns fortfarande poster med funktioner som bara kan tilldelas popups.\n\nVill du ändå använda den här konfigurationen?" ;
-    Message [ dutch ] = "Er zijn nog items met functies die alleen aan popup's kunnen worden toegewezen.\n\nWilt u deze configuratie toch overnemen?" ;
-    Message [ spanish ] = "Todavía hay entradas con funciones que solo pueden ser asignadas a emergentes.\n\n¿Desea continuar de todos modos?" ;
-    Message [ english_us ] = "There are still entries with functions that can only be assigned to pop-ups.\n\nContinue anyway?" ;
-    Message[ chinese_simplified ] = "è¿˜å­˜åœ¨ä¸€äº›åªèƒ½è®©ç»™å¼¹å‡ºå¼èœå•æ‰§è¡Œçš„æ¡ç›®ã€‚\næ‚¨è¿˜æ˜¯è¦æ¥å—è¿™ä¸ªé…ç½®å—ï¼Ÿ";
-    Message[ russian ] = "Ñóùåñòâóşò çàïèñè ñ ôóíêöèÿìè, êîòîğûå ìîãóò áûòü ïğèñâîåíû òîëüêî âñïëûâàşùèì ìåíş.\n\nÏğèíÿòü ıòè êîíôèãóğàöèè, íåñìîòğÿ íà ıòî?";
-    Message[ polish ] = "Nadal s¹ wpisy z funkcjami, które mo¿na przypisaæ tylko do menu podrêcznych.\n\nCzy chcesz mimo to kontynuowaæ?";
-    Message[ japanese ] = "ã¾ã ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®ã¿ã«å‰²ã‚Šå½“ã¦ã‚‰ã‚Œã‚‹æ©Ÿèƒ½ã®é …ç›®ãŒã‚ã‚Šã¾ã™ã€‚\n\nã“ã®è¨­å®šã‚’é©ç”¨ã—ã¦ã‚‚ã„ã„ã§ã™ã‹?";
-    Message[ chinese_traditional ] = "é‚„å­˜åœ¨ä¸€äº›åªèƒ½è®“çµ¦å¿«é¡¯åŠŸèƒ½è¡¨åŸ·è¡Œçš„é …ç›®ã€‚\næ‚¨é‚„æ˜¯è¦æ¥å—é€™å€‹é…ç½®ï¼Ÿ";
-    Message[ arabic ] = "ãÇÒÇáÊ åäÇáß ÅÏÎÇáÇÊ ÈåÇ ãåÇã áÇ íãßä ÊÚííäåÇ ÅáÇ áŞæÇÆã ÇäÈËÇŞíÉ İŞØ.\n\nåá ÊÑíÏ ŞÈæá ÇáÊßæíä Úáì ÇáÑÛã ãä Ğáß¿";
-    Message[ greek ] = "ÕğÜñ÷ïõí áêüìá êáôá÷ùñßóåéò ìå óõíáñôŞóåéò ğïõ ìğïñïıí íá áíáôåèïıí ìüíï óå áíáäõüìåíá ìåíïı.\n\nÅßóôå âİâáéïé üôé èİëåôå íá óõíå÷ßóåôå;";
-    Message[ korean ] = "íŒì—…ì—ë§Œ ì§€ì •í•  ìˆ˜ ìˆëŠ” ê¸°ëŠ¥ì„ ê°€ì§„ í•­ëª©ì´ ì•„ì§ ìˆìŠµë‹ˆë‹¤.\n\nê·¸ë˜ë„ ì´ êµ¬ì„±ì„ ì ìš©í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Message[ turkish ] = "Yalnızca açılan mönülere atanabilen işlevleri olan girişler mevcut.\n\nBu konfigürasyon ile devam etmek istiyor musunuz?";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Encara hi ha entrades amb funcions que només poden ser assignades a emergents.\n\nVoleu continuar de totes maneres?";
-    Message[ thai ] = "à¸¡à¸µà¸£à¸²à¸¢à¸à¸²à¸£à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™à¸—à¸µà¹ˆà¸¢à¸±à¸‡à¸„à¸‡à¸ªà¸²à¸¡à¸²à¸£à¸–à¸à¸³à¸«à¸™à¸”à¹„à¸›à¸¢à¸±à¸‡à¸•à¸±à¸§à¸œà¸¸à¸”à¸‚à¸¶à¹‰à¸™\n\nà¸—à¸³à¸•à¹ˆà¸­à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-    Message[ czech ] = "StÃ¡le existujÃ­ poloÅ¾ky s funkcemi, kterÃ© mohou bÃ½t pÅ™iÅ™azeny pouze k pop-ups.\n\nPÅ™esto pokraÄovat?";
-    Message[ hebrew ] = "â€®×™×©× × ×¢×“×™×™×Ÿ ×¢×¨×›×™× ×¢× ×ª×¤×§×•×“×™× ×©× ×™×ª× ×™× ×œ×”×©××” ×¨×§ ×œ pop-ups.\n\n×”×× ×‘×›×œ ×–××ª ×œ×”××©×™×š?â€¬";
-    Message[ hindi ] = "à¤…à¤­à¥€ à¤­à¥€ à¤«à¤‚à¤•à¥à¤¶à¤¨à¥ à¤®à¥‡à¤‚ à¤•à¥à¤› à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿à¤¯à¤¾à¤ à¤¹à¥ˆ à¤œà¤¿à¤¨à¤•à¥‹ à¤¸à¤¿à¤°à¥à¤«à¤¼ à¤ªà¥‰à¤ªà¥-à¤…à¤ªà¥ à¤•à¥‡à¤²à¤¿à¤ à¤¨à¤¿à¤°à¥à¤¦à¤¿à¤·à¥à¤Ÿ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤\n\nà¤•à¤¿à¤¸à¥€ à¤¤à¤°à¤¹ à¤œà¤¾à¤°à¥€ à¤°à¤–à¤¨à¤¾ à¤¹à¥ˆ?";
-    Message[ slovak ] = "StÃ¡le existujÃº poloÅ¾ky s funkciami, ktorÃ© mÃ´Å¾u byÅ¥ priradenÃ© iba ku kontextovÃ©mu menu.\n\nChcete i napriek tomu pokraÄovaÅ¥?";
-    Message[ hungarian ] = "MÃ©g mindig vannak olyan bejegyzÃ©sek, amelyek mÅ±veletei csak elÅ‘ugrÃ³ ablakokhoz rendelhetÅ‘k.\n\nMindenkÃ©ppen folytatja?";
-    Message[ slovenian ] = "Å e vedno so nekateri vnosi s funkcijami, ki se jih lahko pripiÅ¡e le pojavnim oknom.\n\nVseeno nadaljujem?";
+    Message [ de ] = "Es existieren noch Einträge mit Funktionen, die nur Popups zugewiesen werden können.\n\nWollen Sie diese Konfiguration trotzdem übernehmen?" ;
+    Message [ en-US ] = "There are still entries with functions that can only be assigned to pop-ups.\n\nContinue anyway?" ;
+    Message [ x-comment ] = " ";
 };
 InfoBox IBX_MNUCFG_ALREADY_INCLUDED
 {
-    Message = "Die Funktion ist bereits in diesem Popup enthalten." ;
-    Message [ ENGLISH ] = "Function is already included in this popup." ;
-    Message [ norwegian ] = "Funksjon er allerede inkludert i denne tilleggsmenyen." ;
-    Message [ italian ] = "Funzione già inclusa in questo elenco." ;
-    Message [ portuguese_brazilian ] = "A função já está incluída neste menu pop-up." ;
-    Message [ portuguese ] = "A função já está incluída neste menu instantâneo." ;
-    Message [ finnish ] = "Toiminto on jo tässä valikossa." ;
-    Message [ danish ] = "Funktionen er allerede indeholdt i denne popup." ;
-    Message [ french ] = "Cette fonction est déjà incluse dans ce Pop-up." ;
-    Message [ swedish ] = "Funktionen ingår redan i denna snabbmeny." ;
-    Message [ dutch ] = "Deze functie komt al voor in dit menu." ;
-    Message [ spanish ] = "La función ya está incluida en este emergente." ;
-    Message [ english_us ] = "Function is already included in this popup." ;
-    Message[ chinese_simplified ] = "è¿™ä¸ªå¼¹å‡ºå¼èœå•å·²ç»åŒ…å«äº†è¿™ä¸ªåŠŸèƒ½ã€‚";
-    Message[ russian ] = "İòà ôóíêöèÿ óæå ñîäåğæèòñÿ âî âñïëûâàşùåì ìåíş.";
-    Message[ polish ] = "Funkcja jest ju¿ w tym menu podrêcznym.";
-    Message[ japanese ] = "æ©Ÿèƒ½ã¯ã™ã§ã«ã“ã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã«å«ã¾ã‚Œã¦ã„ã¾ã™ã€‚";
-    Message[ chinese_traditional ] = "é€™å€‹å¿«é€ŸåŠŸèƒ½è¡¨å·²ç¶“åŒ…å«äº†é€™å€‹åŠŸèƒ½ã€‚";
-    Message[ arabic ] = "ÇáãåãÉ ãæÌæÏÉ ãÓÈŞÇğ İí åĞå ÇáŞÇÆãÉ ÇáãäÈËŞÉ.";
-    Message[ greek ] = "Ç óõíÜñôçóç ğåñéİ÷åôáé Şäç óå áõôü ôï áíáäõüìåíï êåßìåíï.";
-    Message[ korean ] = "ê¸°ëŠ¥ì´ ì´ë¯¸ ì´ íŒì—…ì— í¬í•¨ë˜ì–´ ìˆìŠµë‹ˆë‹¤.";
-    Message[ turkish ] = "İşlev zaten bu açılan mönüde mevcut.";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "La funció ja està inclosa en aquest emergent.";
-    Message[ thai ] = "à¸£à¸§à¸¡à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™à¹ƒà¸™à¸à¸²à¸£à¸œà¸¸à¸”à¸‚à¸¶à¹‰à¸™à¸™à¸µà¹‰à¹à¸¥à¹‰à¸§";
-    Message[ czech ] = "Funkce uÅ¾ byla zahrnuta v tomto kontextovÃ©m menu.";
-    Message[ hebrew ] = "â€®×”×¤×•×¤××¤ ×›×‘×¨ ××›×™×œ ×ª×¤×§×•×“ ×–×”â€¬";
-    Message[ hindi ] = "à¤«à¤‚à¤•à¥à¤¶à¤¨à¥ à¤•à¥‹ à¤‡à¤¸ à¤ªà¥‰à¤ªà¥-à¤…à¤ªà¥ à¤®à¥‡à¤‚ à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ à¥¤";
-    Message[ slovak ] = "Funkcia uÅ¾ bola zahrnutÃ¡ v tomto kontextovom menu.";
-    Message[ hungarian ] = "Az elÅ‘ugrÃ³ menÃ¼ mÃ¡r tartalmazza a fÃ¼ggvÃ©nyt.";
-    Message[ slovenian ] = "Funkcija je Å¾e vkljuÄena v to pojavno okno.";
+    Message [ de ] = "Die Funktion ist bereits in diesem Popup enthalten." ;
+    Message [ en-US ] = "Function is already included in this popup." ;
+    Message [ x-comment ] = " ";
 };
 String STR_LOADMENUCONFIG
 {
     /* ### ACHTUNG: Neuer Text in Resource? Menükonfiguration laden : Men³konfiguration laden */
     /* ### ACHTUNG: Neuer Text in Resource? Menükonfiguration laden : Men³konfiguration laden */
-    Text = "Menükonfiguration laden" ;
-    Text [ ENGLISH ] = "Load Menu Configuration" ;
-    Text [ english_us ] = "Load Menu Configuration" ;
-    Text [ italian ] = "Carica configurazione menu" ;
-    Text [ spanish ] = "Cargar configuración del menú" ;
-    Text [ french ] = "Charger la configuration du menu" ;
-    Text [ dutch ] = "Menuconfiguratie laden" ;
-    Text [ swedish ] = "Ladda menykonfiguration" ;
-    Text [ danish ] = "Indlæs menukonfiguration" ;
-    Text [ portuguese_brazilian ] = "Carregar a configuração do menu" ;
-    Text [ portuguese ] = "Carregar configuração do menu" ;
-    Text[ chinese_simplified ] = "è£…å…¥èœå•é…ç½®";
-    Text[ russian ] = "Çàãğóçèòü êîíôèãóğàöèş ìåíş";
-    Text[ polish ] = "£aduj konfiguracjê menu";
-    Text[ japanese ] = "ãƒ¡ãƒ‹ãƒ¥ãƒ¼è¨­å®šã®èª­ã¿è¾¼ã¿";
-    Text[ chinese_traditional ] = "è¼‰å…¥åŠŸèƒ½è¡¨é…ç½®";
-    Text[ arabic ] = "ÊÍãíá Êßæíä ÇáŞÇÆãÉ";
-    Text[ greek ] = "Öüñôùóç äéáìüñöùóçò ìåíïı";
-    Text[ korean ] = "ë©”ë‰´ ì„¤ì •ì„ ë¡œë“œ";
-    Text[ turkish ] = "Menü konfigürasyonunu yükle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Carrega la configuració del menú";
-    Text[ finnish ] = "Lataa valikkomääritys";
-    Text[ thai ] = "à¹‚à¸«à¸¥à¸”à¹‚à¸„à¸£à¸‡à¹à¸šà¸šà¹€à¸¡à¸™à¸¹";
-    Text[ czech ] = "NaÄÃ­st konfiguraci menu";
-    Text[ hebrew ] = "â€®×˜×¢×™× ×ª ×ª×¦×•×¨×ª ×ª×¤×¨×™×˜â€¬";
-    Text[ hindi ] = "à¤®à¥‡à¤¨à¥ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¥‹";
-    Text[ slovak ] = "NaÄÃ­taÅ¥ konfigurÃ¡ciu menu";
-    Text[ hungarian ] = "MenÃ¼beÃ¡llÃ­tÃ¡sok betÃ¶ltÃ©se";
-    Text[ slovenian ] = "NaloÅ¾i konfiguracijo menija";
+    Text [ de ] = "Menükonfiguration laden" ;
+    Text [ en-US ] = "Load Menu Configuration" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SAVEMENUCONFIG
 {
-    Text = "Menükonfiguration speichern" ;
-    Text [ ENGLISH ] = "Save Menu Configuration" ;
-    Text [ english_us ] = "Save Menu Configuration" ;
-    Text [ italian ] = "Salva configurazione menu" ;
-    Text [ spanish ] = "Guardar configuración del menú" ;
-    Text [ french ] = "Enregistrer la configuration du menu" ;
-    Text [ dutch ] = "Menuconfiguratie opslaan" ;
-    Text [ swedish ] = "Spara menykonfiguration" ;
-    Text [ danish ] = "Gem menukonfiguration" ;
-    Text [ portuguese_brazilian ] = "Salvar configuração do menu" ;
-    Text [ portuguese ] = "Guardar configuração do menu" ;
-    Text[ chinese_simplified ] = "å­˜ç›˜èœå•é…ç½®";
-    Text[ russian ] = "Ñîõğàíèòü êîíôèãóğàöèş ìåíş";
-    Text[ polish ] = "Zapisz konfiguracjê menu";
-    Text[ japanese ] = "ãƒ¡ãƒ‹ãƒ¥ãƒ¼è¨­å®šã®ä¸Šæ›¸ãä¿å­˜";
-    Text[ chinese_traditional ] = "å„²å­˜èœå–®é…ç½®";
-    Text[ arabic ] = "ÍİÙ Êßæíä ÇáŞÇÆãÉ";
-    Text[ greek ] = "ÁğïèŞêåõóç äéáìüñöùóçò ìåíïı";
-    Text[ korean ] = "ë©”ë‰´ ì„¤ì • ì €ì¥";
-    Text[ turkish ] = "Menü konfigürasyonunu kaydet";
-    Text[ catalan ] = "Desa la configuració del menú";
-    Text[ finnish ] = "Tallenna valikkomääritys";
-    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹‚à¸„à¸£à¸‡à¹à¸šà¸šà¹€à¸¡à¸™à¸¹";
-    Text[ czech ] = "UloÅ¾it konfiguraci menu";
-    Text[ hebrew ] = "â€®×©××™×¨×ª ×ª×¦×•×¨×ª ×ª×¤×¨×™×˜â€¬";
-    Text[ hindi ] = "à¤®à¥‡à¤¨à¥ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
-    Text[ slovak ] = "UloÅ¾iÅ¥ konfigurÃ¡ciu menu";
-    Text[ hungarian ] = "MenÃ¼beÃ¡llÃ­tÃ¡sok mentÃ©se";
-    Text[ slovenian ] = "Shrani konfiguracijo menija";
+    Text [ de ] = "Menükonfiguration speichern" ;
+    Text [ en-US ] = "Save Menu Configuration" ;
 };
 String STR_LOADACCELCONFIG
 {
-    Text = "Tastaturkonfiguration laden" ;
-    Text [ ENGLISH ] = "Load Keyboard Configuration" ;
-    Text [ dutch ] = "Toetsenbordconfiguratie laden" ;
-    Text [ english_us ] = "Load Keyboard Configuration" ;
-    Text [ italian ] = "Carica configurazione tastiera" ;
-    Text [ spanish ] = "Cargar configuración del teclado" ;
-    Text [ french ] = "Charger configuration du clavier" ;
-    Text [ swedish ] = "Ladda tangentbordskonfiguration" ;
-    Text [ danish ] = "Indlæs tastaturkonfiguration" ;
-    Text [ portuguese_brazilian ] = "Carregar a configuração do teclado" ;
-    Text [ portuguese ] = "Carregar configuração do teclado" ;
-    Text[ chinese_simplified ] = "è£…å…¥é”®ç›˜é…ç½®";
-    Text[ russian ] = "Çàãğóçèòü êîíôèãóğàöèş êëàâèàòóğû";
-    Text[ polish ] = "£aduj konfiguracjê klawiatury";
-    Text[ japanese ] = "ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰è¨­å®šã®èª­ã¿è¾¼ã¿";
-    Text[ chinese_traditional ] = "è¼‰å…¥éµç›¤é…ç½®";
-    Text[ arabic ] = "ÊÍãíá Êßæíä áæÍÉ ÇáãİÇÊíÍ";
-    Text[ greek ] = "Öüñôùóç äéáìüñöùóçò ğëçêôñïëïãßïõ";
-    Text[ korean ] = "í‚¤ë³´ë“œ ì„¤ì • ë¡œë“œ";
-    Text[ turkish ] = "Klavye konfigürasyonunu yükle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Carrega la configuració del teclat";
-    Text[ finnish ] = "Lataa näppäimistömääritys";
-    Text[ thai ] = "à¹‚à¸«à¸¥à¸”à¹‚à¸„à¸£à¸‡à¹à¸šà¸šà¹à¸›à¹‰à¸™à¸à¸´à¸¡à¸à¹Œ";
-    Text[ czech ] = "NaÄÃ­st konfiguraci klÃ¡vesnice";
-    Text[ hebrew ] = "â€®×˜×¢×™× ×ª ×ª×¦×•×¨×ª ××§×œ×“×ªâ€¬";
-    Text[ hindi ] = "à¤•à¤¿à¤¬à¥‹à¤°à¥à¤¡ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤•à¥‹ à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¥‹";
-    Text[ slovak ] = "NaÄÃ­taÅ¥ konfigurÃ¡ciu klÃ¡vesnice";
-    Text[ hungarian ] = "BillentyÅ±zetbeÃ¡llÃ­tÃ¡sok betÃ¶ltÃ©se";
-    Text[ slovenian ] = "NaloÅ¾i konfiguracijo tipkovnice";
+    Text [ de ] = "Tastaturkonfiguration laden" ;
+    Text [ en-US ] = "Load Keyboard Configuration" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SAVEACCELCONFIG
 {
-    Text = "Tastaturkonfiguration speichern" ;
-    Text [ ENGLISH ] = "Save Keyboard Configuration" ;
-    Text [ english_us ] = "Save Keyboard Configuration" ;
-    Text [ italian ] = "Salva configurazione tastiera" ;
-    Text [ spanish ] = "Guardar configuración del teclado" ;
-    Text [ french ] = "Enregistrer la configuration du clavier" ;
-    Text [ dutch ] = "Toetsenbordconfiguratie opslaan" ;
-    Text [ swedish ] = "Spara tangentbordskonfiguration" ;
-    Text [ danish ] = "Gem tastaturkonfiguration" ;
-    Text [ portuguese_brazilian ] = "Salvar configuração do teclado" ;
-    Text [ portuguese ] = "Guardar configuração do teclado" ;
-    Text[ chinese_simplified ] = "å­˜ç›˜é”®ç›˜é…ç½®";
-    Text[ russian ] = "Ñîõğàíèòü êîíôèãóğàöèş êëàâèàòóğû";
-    Text[ polish ] = "Zapisz konfiguracjê klawiatury";
-    Text[ japanese ] = "ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰è¨­å®šã®ä¸Šæ›¸ãä¿å­˜";
-    Text[ chinese_traditional ] = "å„²å­˜éµç›¤é…ç½®";
-    Text[ arabic ] = "ÍİÙ Êßæíä áæÍÉ ÇáãİÇÊíÍ";
-    Text[ greek ] = "ÁğïèŞêåõóç äéáìüñöùóçò ğëçêôñïëïãßïõ";
-    Text[ korean ] = "í‚¤ë³´ë“œ ì„¤ì • ì €ì¥";
-    Text[ turkish ] = "Klavye konfigürasyonunu kaydet";
-    Text[ catalan ] = "Desa la configuració del teclat";
-    Text[ finnish ] = "Tallenna näppäimistömääritys";
-    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹‚à¸„à¸£à¸‡à¹à¸šà¸šà¹à¸›à¹‰à¸™à¸à¸´à¸¡à¸à¹Œ";
-    Text[ czech ] = "UloÅ¾it konfiguraci klÃ¡vesnice";
-    Text[ hebrew ] = "â€®×©××™×¨×ª ×ª×¦×•×¨×ª ××§×œ×“×ªâ€¬";
-    Text[ hindi ] = "à¤•à¤¿à¤¬à¥‹à¤°à¥à¤¡ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤•à¥‹ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
-    Text[ slovak ] = "UloÅ¾iÅ¥ konfigurÃ¡ciu klÃ¡vesnice";
-    Text[ hungarian ] = "BillentyÅ±zetbeÃ¡llÃ­tÃ¡sok mentÃ©se";
-    Text[ slovenian ] = "Shrani konfiguracijo tipkovnice";
+    Text [ de ] = "Tastaturkonfiguration speichern" ;
+    Text [ en-US ] = "Save Keyboard Configuration" ;
 };
 String STR_LOADSTATBARCONFIG
 {
-    Text = "Statusleistenkonfiguration laden" ;
-    Text [ ENGLISH ] = "Load Statusbar Configuration" ;
-    Text [ dutch ] = "Statusbalkconfiguratie laden" ;
-    Text [ english_us ] = "Load Status Bar Configuration" ;
-    Text [ italian ] = "Carica configurazione barra di stato" ;
-    Text [ spanish ] = "Cargar configuración de la barra de estado" ;
-    Text [ french ] = "Chargement de la configuration de la barre d'état" ;
-    Text [ swedish ] = "Ladda statuslistkonfiguration" ;
-    Text [ danish ] = "Indlæs statuslinjekonfiguration" ;
-    Text [ portuguese_brazilian ] = "Carregar Configuração da Barra de Status" ;
-    Text [ portuguese ] = "Carregar configuração da barra de estado" ;
-    Text[ chinese_simplified ] = "è£…å…¥çŠ¶æ€æ é…ç½®";
-    Text[ russian ] = "Çàãğóçèòü êîíôèãóğàöèş ñòğîêè ñîñòîÿíèÿ";
-    Text[ polish ] = "£aduj konfiguracjê paska stanu";
-    Text[ japanese ] = "ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ ãƒãƒ¼è¨­å®šã®èª­ã¿è¾¼ã¿";
-    Text[ chinese_traditional ] = "è¼‰å…¥ç‹€æ…‹åˆ—é…ç½®";
-    Text[ arabic ] = "ÊÍãíá Êßæíä ÔÑíØ ÇáãÚáæãÇÊ";
-    Text[ greek ] = "Öüñôùóç äéáìüñöùóçò ãñáììŞò êáôÜóôáóçò";
-    Text[ korean ] = "ìƒíƒœ í‘œì‹œì¤„ ì„¤ì • ë¡œë“œ";
-    Text[ turkish ] = "Durum çubuğu konfigürasyonunu yükle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Carrega la configuració de la barra d'estat";
-    Text[ finnish ] = "Lataa tilarivimääritys";
-    Text[ thai ] = "à¹‚à¸«à¸¥à¸”à¹‚à¸„à¸£à¸‡à¹à¸šà¸šà¹à¸–à¸šà¹à¸ªà¸”à¸‡à¸ªà¸–à¸²à¸™à¸°";
-    Text[ czech ] = "NaÄÃ­st konfiguraci stavovÃ©ho panelu";
-    Text[ hebrew ] = "â€®×˜×¢×™× ×ª ×ª×¦×•×¨×ª ×¡×¨×’×œ ×”××¦×‘â€¬";
-    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥à¤¸à¥à¤¥à¤¿à¤¤à¤¿ à¤ªà¤Ÿà¥à¤Ÿà¥€ à¤•à¤¾ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¥‹";
-    Text[ slovak ] = "NaÄÃ­taÅ¥ konfigurÃ¡ciu stavovÃ©ho panelu";
-    Text[ hungarian ] = " Ãllapotsor beÃ¡llÃ­tÃ¡sainak betÃ¶ltÃ©se";
-    Text[ slovenian ] = "NaloÅ¾i konfiguracijo vrstice stanja";
+    Text [ de ] = "Statusleistenkonfiguration laden" ;
+    Text [ en-US ] = "Load Status Bar Configuration" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SAVESTATBARCONFIG
 {
-    Text = "Statusleistenkonfiguration speichern" ;
-    Text [ ENGLISH ] = "Save Statusbar Configuration" ;
-    Text [ english_us ] = "Save Status Bar Configuration" ;
-    Text [ italian ] = "Salva configurazione barra di stato" ;
-    Text [ spanish ] = "Guardar configuración de la barra de estado" ;
-    Text [ french ] = "Enregistrer la configuration de la barre d'état" ;
-    Text [ dutch ] = "Statusbalkconfiguratie opslaan" ;
-    Text [ swedish ] = "Spara statuslistkonfiguration" ;
-    Text [ danish ] = "Gem statuslinjekonfiguration" ;
-    Text [ portuguese_brazilian ] = "Salvar configuração da barra de status" ;
-    Text [ portuguese ] = "Guardar configuração da barra de estado" ;
-    Text[ chinese_simplified ] = "å­˜ç›˜çŠ¶æ€æ é…ç½®";
-    Text[ russian ] = "Ñîõğàíèòü êîíôèãóğàöèş ñòğîêè ñîñòîÿíèÿ";
-    Text[ polish ] = "Zapisz konfiguracjê paska stanu";
-    Text[ japanese ] = "ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ ãƒãƒ¼è¨­å®šã®ä¸Šæ›¸ãä¿å­˜";
-    Text[ chinese_traditional ] = "å„²å­˜ç‹€æ…‹æ¬„é…ç½®";
-    Text[ arabic ] = "ÍİÙ Êßæíä ÔÑíØ ÇáãÚáæãÇÊ";
-    Text[ greek ] = "ÁğïèŞêåõóç äéáìüñöùóçò ãñáììŞò êáôÜóôáóçò";
-    Text[ korean ] = "ìƒíƒœ í‘œì‹œì¤„ ì„¤ì • ì €ì¥";
-    Text[ turkish ] = "Durum çubuğu konfigürasyonunu kaydet";
-    Text[ catalan ] = "Desa la configuració de la barra d'estat";
-    Text[ finnish ] = "Tallenna tilarivin määritykset";
-    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹‚à¸„à¸£à¸‡à¹à¸šà¸šà¹à¸ªà¸”à¸‡à¸ªà¸–à¸²à¸™à¸°";
-    Text[ czech ] = "UloÅ¾it konfiguraci stavovÃ©ho panelu";
-    Text[ hebrew ] = "â€®×©××™×¨×ª ×ª×¦×•×¨×ª ×¡×¨×’×œ ×”××¦×‘â€¬";
-    Text[ hindi ] = "Save Status Bar Configuration";
-    Text[ slovak ] = "UloÅ¾iÅ¥ konfigurÃ¡ciu stavovÃ©ho panelu";
-    Text[ hungarian ] = "Ãllapotsor beÃ¡llÃ­tÃ¡sainak mentÃ©se";
-    Text[ slovenian ] = "Shrani konfiguracijo vrstice stanja";
+    Text [ de ] = "Statusleistenkonfiguration speichern" ;
+    Text [ en-US ] = "Save Status Bar Configuration" ;
 };
 String STR_MENU
 {
-    Text = "Menü" ;
-    Text [ ENGLISH ] = "Menu" ;
-    Text [ english_us ] = "Menu" ;
-    Text [ swedish ] = "Meny" ;
-    Text [ danish ] = "Menu" ;
-    Text [ italian ] = "Menu" ;
-    Text [ spanish ] = "Menú" ;
-    Text [ french ] = "Menu" ;
-    Text [ dutch ] = "Menu" ;
-    Text [ portuguese_brazilian ] = "Menu" ;
-    Text [ portuguese ] = "Menu" ;
-    Text[ chinese_simplified ] = "èœå•";
-    Text[ russian ] = "Ìåíş";
-    Text[ polish ] = "Menu";
-    Text[ japanese ] = "ãƒ¡ãƒ‹ãƒ¥ãƒ¼";
-    Text[ chinese_traditional ] = "åŠŸèƒ½è¡¨";
-    Text[ arabic ] = "ÇáŞÇÆãÉ";
-    Text[ greek ] = "Ìåíïı";
-    Text[ korean ] = "ë©”ë‰´";
-    Text[ turkish ] = "Menü";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Menú";
-    Text[ finnish ] = "Valikko";
-    Text[ thai ] = "à¹€à¸¡à¸™à¸¹";
-    Text[ czech ] = "Menu";
-    Text[ hebrew ] = "â€®×ª×¤×¨×™×˜â€¬";
-    Text[ hindi ] = "à¤®à¥‡à¤¨à¥";
-    Text[ slovak ] = "Menu";
-    Text[ hungarian ] = "MenÃ¼";
-    Text[ slovenian ] = "Meni";
+    Text [ de ] = "Menü" ;
+    Text [ en-US ] = "Menu" ;
+    Text [ x-comment ] = " ";
 };
 String STR_TOOLBAR_SEPARATOR
 {
-    Text = "Trenner" ;
-    Text [ ENGLISH ] = "Separator" ;
-    Text[ english_us ] = "Separator";
-    Text[ portuguese ] = "Separador";
-    Text[ russian ] = "Ğàçäåëèòåëü";
-    Text[ greek ] = "Äéá÷ùñéóôéêü";
-    Text[ dutch ] = "Scheidingsteken";
-    Text[ french ] = "Séparateur";
-    Text[ spanish ] = "Separador";
-    Text[ finnish ] = "Erotin";
-    Text[ italian ] = "Separatore";
-    Text[ danish ] = "Skilletegn";
-    Text[ swedish ] = "Avgränsare";
-    Text[ polish ] = "Separator";
-    Text[ portuguese_brazilian ] = "Separador";
-    Text[ japanese ] = "åŒºåˆ‡ã‚Šè¨˜å·";
-    Text[ korean ] = "êµ¬ë¶„ ê¸°í˜¸";
-    Text[ chinese_simplified ] = "åˆ†éš”ç¬¦";
-    Text[ chinese_traditional ] = "åˆ†éš”ç¬¦";
-    Text[ turkish ] = "Ayraç";
-    Text[ arabic ] = "ÇáİÇÕá";
-    Text[ catalan ] = "Separator";
-    Text[ thai ] = "à¸•à¸±à¸§à¹à¸¢à¸";
-    Text[ czech ] = "OddÄ›lovaÄ";
-    Text[ hebrew ] = "â€®××¤×¨×™×“â€¬";
-    Text[ hindi ] = "Separator";
-    Text[ slovak ] = "OddeÄ¾ovaÄ";
-    Text[ hungarian ] = "ElvÃ¡lasztÃ³";
-    Text[ slovenian ] = "LoÄilo";
+    Text [ de ] = "Trenner" ;
+    Text [ en-US ] = "Separator";
 };
 
 String STR_TOOLBAR_SPACE
 {
-    Text = "Unsichtbarer Trenner" ;
-    Text [ ENGLISH ] = "Invisible separator" ;
-    Text[ english_us ] = "Invisible separator";
-    Text[ portuguese ] = "Invisible separator";
-    Text[ russian ] = "Invisible separator";
-    Text[ greek ] = "Áüñáôï äéá÷ùñéóôéêü";
-    Text[ dutch ] = "Invisible separator";
-    Text[ french ] = "Séparateur invisible";
-    Text[ spanish ] = "Separador invisible";
-    Text[ finnish ] = "Invisible separator";
-    Text[ italian ] = "Separatore invisibile";
-    Text[ danish ] = "Usynligt skilletegn";
-    Text[ swedish ] = "Osynlig avgränsare";
-    Text[ polish ] = "Invisible separator";
-    Text[ portuguese_brazilian ] = "Separador invisível";
-    Text[ japanese ] = "éš ã—åŒºåˆ‡ã‚Šè¨˜å·";
-    Text[ korean ] = "ìˆ¨ê²¨ì§„ êµ¬ë¶„ ê¸°í˜¸";
-    Text[ chinese_simplified ] = "éšè—çš„åˆ†éš”ç¬¦";
-    Text[ chinese_traditional ] = "éš±è—çš„åˆ†éš”ç¬¦";
-    Text[ turkish ] = "Görünmez ayraç";
-    Text[ arabic ] = "Invisible separator";
-    Text[ catalan ] = "Invisible separator";
-    Text[ thai ] = "Invisible separator";
-    Text[ czech ] = "NeviditelnÃ½ oddÄ›lovaÄ";
-    Text[ hebrew ] = "â€®××—×™×¦×” ×‘×œ×ª×™ × ×¨××™×ªâ€¬";
-    Text[ hindi ] = "Invisible separator";
-    Text[ slovak ] = "NeviditeÄ¾nÃ½ oddeÄ¾ovaÄ";
-    Text[ hungarian ] = "LÃ¡thatatlan elvÃ¡lasztÃ³";
-    Text[ slovenian ] = "Nevidno loÄilo";
+    Text [ de ] = "Unsichtbarer Trenner" ;
+    Text [ en-US ] = "Invisible separator";
 };
 
 String STR_FUNCTION_ALREADY_IN_TOOLBOX
 {
-    Text = "Die gewünschte Funktion ist bereits in der aktuellen Symbolleiste vorhanden." ;
-    Text [ ENGLISH ] = "The selected function is already in the current toolbox." ;
-    Text[ english_us ] = "The selected function is already on the current toolbar.";
-    Text[ portuguese ] = "The selected function is already in the current toolbox.";
-    Text[ russian ] = "The selected function is already in the current toolbox.";
-    Text[ greek ] = "The selected function is already in the current toolbox.";
-    Text[ dutch ] = "The selected function is already in the current toolbox.";
-    Text[ french ] = "La fonction sélectionnée existe déjà dans la barre d'outils active.";
-    Text[ spanish ] = "La función seleccionada ya se encuentra disponible en la barra de símbolos actual. ";
-    Text[ finnish ] = "The selected function is already in the current toolbox.";
-    Text[ italian ] = "La funzione selezionata è già presente nella barra dei simboli.";
-    Text[ danish ] = "Den valgte funktion findes allerede på den nuværende værktøjslinje.";
-    Text[ swedish ] = "Den önskade funktionen finns redan på den aktuella symbollisten.";
-    Text[ polish ] = "The selected function is already in the current toolbox.";
-    Text[ portuguese_brazilian ] = "A função selecionada já está na caixa de ferramentas atual.";
-    Text[ japanese ] = "é¸æŠã—ãŸæ©Ÿèƒ½ã¯ã™ã§ã«ç¾åœ¨ã®ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã«ã‚ã‚Šã¾ã™ã€‚";
-    Text[ korean ] = "ì„ íƒí•˜ì‹  ê¸°ëŠ¥ì€ ì´ë¯¸ í˜„ì¬ ë³´ì‹œëŠ” ë„êµ¬ ìƒì ì•ˆì— ìˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "ä½ éœ€è¦çš„åŠŸèƒ½å·²ç»åœ¨å½“å‰çš„å›¾è¡¨æ ä¹‹ä¸­ã€‚";
-    Text[ chinese_traditional ] = "æ‚¨éœ€è¦çš„åŠŸèƒ½å·²ç¶“åœ¨ç•¶å‰çš„åœ–ç¤ºåˆ—ä¹‹ä¸­ã€‚";
-    Text[ turkish ] = "Seçilen fonksiyon güncel araç çubuğunda zaten var.";
-    Text[ arabic ] = "The selected function is already in the current toolbox.";
-    Text[ catalan ] = "The selected function is already on the current toolbar.";
-    Text[ thai ] = "The selected function is already on the current toolbar.";
-    Text[ czech ] = "VybranÃ¡ funkce se jiÅ¾ nachÃ¡zÃ­ na souÄasnÃ©m panelu nÃ¡strojÅ¯.";
-    Text[ hebrew ] = "â€®×¡×¨×’×œ ×”×›×œ×™× ×›×‘×¨ ××›×™×œ ××ª ×”×ª×¤×§×•×“ ×©× ×‘×—×¨.â€¬";
-    Text[ hindi ] = "The selected function is already on the current toolbar.";
-    Text[ slovak ] = "VybranÃ¡ funkcia sa uÅ¾ nachÃ¡dza na paneli nÃ¡strojov.";
-    Text[ hungarian ] = "A kijelÃ¶lt fÃ¼ggvÃ©ny mÃ¡r szerepel az aktuÃ¡lis eszkÃ¶ztÃ¡ron.";
-    Text[ slovenian ] = "Izbrana funkcija je Å¾e v trenutni orodni vrstici.";
+    Text [ de ] = "Die gewünschte Funktion ist bereits in der aktuellen Symbolleiste vorhanden." ;
+    Text [ en-US ] = "The selected function is already on the current toolbar.";
 };
  // ********************************************************************** EOF
 
