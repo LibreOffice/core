@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:34:27 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text [ swedish ] = "Medelvärde" ;
             Text [ danish ] = "Middel" ;
             Text [ portuguese_brazilian ] = "Mittelwert" ;
-            Text [ portuguese ] = "Valor médio" ;
+            Text [ portuguese ] = "Média" ;
             Text[ chinese_simplified ] = "Æ½¾ùÖµ";
             Text[ russian ] = "Ñðåäíåå çíà÷åíèå";
             Text[ polish ] = "Œrednia wartoœæ";
