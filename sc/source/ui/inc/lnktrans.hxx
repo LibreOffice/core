@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: drwtrans.hxx,v $
+ *  $RCSfile: lnktrans.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-03 17:39:58 $
+ *  last change: $Author: nn $ $Date: 2001-04-03 17:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,75 +59,30 @@
  *
  ************************************************************************/
 
-#ifndef SC_DRWTRANS_HXX
-#define SC_DRWTRANS_HXX
+#ifndef SC_LNKTRANS_HXX
+#define SC_LNKTRANS_HXX
 
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
 
-#ifndef _IPOBJ_HXX
-#include <so3/ipobj.hxx>
-#endif
 
-#ifndef SC_SCGLOB_HXX
-#include "global.hxx"
-#endif
-
-
-class SdrModel;
-class ScDocShell;
-class INetBookmark;
-class SdrObject;
-class SdrView;
-class ScDrawView;
-
-class ScDrawTransferObj : public TransferableHelper
+class ScLinkTransferObj : public TransferableHelper
 {
 private:
-    SdrModel*                       pModel;
-    TransferableDataHelper          aOleData;
-    TransferableObjectDescriptor    aObjDesc;
-    SvEmbeddedObjectRef             aDocShellRef;
-                                    // extracted from model in ctor:
-    Size                            aSrcSize;
-    INetBookmark*                   pBookmark;
-    BOOL                            bGraphic;
-    BOOL                            bGrIsBit;
-    BOOL                            bOleObj;
-                                    // source information for drag&drop:
-                                    // (view is needed to handle drawing obejcts)
-    SdrView*                        pDragSourceView;
-    USHORT                          nDragSourceFlags;
-    BOOL                            bDragWasInternal;
-
-
-    void                InitDocShell();
-    SvInPlaceObjectRef  GetSingleObject();
+    String  aLinkURL;
+    String  aLinkText;
 
 public:
-            ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContainerShell,
-                                const TransferableObjectDescriptor& rDesc );
-    virtual ~ScDrawTransferObj();
+            ScLinkTransferObj();
+    virtual ~ScLinkTransferObj();
+
+    void                SetLinkURL( const String& rURL, const String& rText );
 
     virtual void        AddSupportedFormats();
     virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
-                                        const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     virtual void        ObjectReleased();
     virtual void        DragFinished( sal_Int8 nDropAction );
-
-    SdrModel*           GetModel()  { return pModel; }
-
-    void                SetDragSource( ScDrawView* pView );
-    void                SetDragSourceObj( SdrObject* pObj, USHORT nTab );
-    void                SetDragSourceFlags( USHORT nFlags );
-    void                SetDragWasInternal();
-
-    SdrView*            GetDragSourceView()             { return pDragSourceView; }
-    USHORT              GetDragSourceFlags() const      { return nDragSourceFlags; }
-
-    static ScDrawTransferObj* GetOwnClipboard();
 };
 
 #endif

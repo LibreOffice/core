@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-30 19:14:11 $
+ *  last change: $Author: nn $ $Date: 2001-04-03 17:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     bGrIsBit( FALSE ),
     bOleObj( FALSE ),
     pDragSourceView( NULL ),
+    nDragSourceFlags( 0 ),
     bDragWasInternal( FALSE )
 {
     //
@@ -437,7 +438,7 @@ void ScDrawTransferObj::ObjectReleased()
 
 void ScDrawTransferObj::DragFinished( sal_Int8 nDropAction )
 {
-    if ( nDropAction == DND_ACTION_MOVE && !bDragWasInternal )
+    if ( nDropAction == DND_ACTION_MOVE && !bDragWasInternal && !(nDragSourceFlags & SC_DROP_NAVIGATOR) )
     {
         //  move: delete source objects
 
@@ -478,6 +479,22 @@ void ScDrawTransferObj::SetDragSource( ScDrawView* pView )
     lcl_InitMarks( *pDragSourceView, *pView, pView->GetTab() );
 
     //! add as listener with document, delete pDragSourceView if document gone
+}
+
+void ScDrawTransferObj::SetDragSourceObj( SdrObject* pObj, USHORT nTab )
+{
+    DELETEZ( pDragSourceView );
+    pDragSourceView = new SdrView( pObj->GetModel() );
+    pDragSourceView->ShowPagePgNum( nTab, Point() );
+    SdrPageView* pPV = pDragSourceView->GetPageViewPvNum(0);
+    pDragSourceView->MarkObj(pObj, pPV);
+
+    //! add as listener with document, delete pDragSourceView if document gone
+}
+
+void ScDrawTransferObj::SetDragSourceFlags( USHORT nFlags )
+{
+    nDragSourceFlags = nFlags;
 }
 
 void ScDrawTransferObj::SetDragWasInternal()

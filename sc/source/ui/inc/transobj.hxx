@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-30 19:12:07 $
+ *  last change: $Author: nn $ $Date: 2001-04-03 17:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ private:
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRanges> xDragSourceRanges;
     USHORT                          nDragHandleX;
     USHORT                          nDragHandleY;
+    USHORT                          nDragSourceFlags;
     BOOL                            bDragWasInternal;
 
     void        InitDocShell();
@@ -121,12 +122,14 @@ public:
     const ScRange&      GetRange() const        { return aBlock; }
     USHORT              GetDragHandleX() const  { return nDragHandleX; }
     USHORT              GetDragHandleY() const  { return nDragHandleY; }
+    USHORT              GetDragSourceFlags() const  { return nDragSourceFlags; }
     ScDocShell*         GetSourceDocShell();
     ScDocument*         GetSourceDocument();
     ScMarkData          GetSourceMarkData();
 
     void                SetDragHandlePos( USHORT nX, USHORT nY );
     void                SetDragSource( ScDocShell* pSourceShell, const ScMarkData& rMark );
+    void                SetDragSourceFlags( USHORT nFlags );
     void                SetDragWasInternal();
 
     static ScTransferObj* GetOwnClipboard();

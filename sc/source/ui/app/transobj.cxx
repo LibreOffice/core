@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-30 19:14:11 $
+ *  last change: $Author: nn $ $Date: 2001-04-03 17:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     pDoc( pClipDoc ),
     nDragHandleX( 0 ),
     nDragHandleY( 0 ),
+    nDragSourceFlags( 0 ),
     bDragWasInternal( FALSE )
 {
     DBG_ASSERT(pDoc->IsClipboard(), "wrong document");
@@ -435,7 +436,7 @@ void ScTransferObj::ObjectReleased()
 
 void ScTransferObj::DragFinished( sal_Int8 nDropAction )
 {
-    if ( nDropAction == DND_ACTION_MOVE && !bDragWasInternal )
+    if ( nDropAction == DND_ACTION_MOVE && !bDragWasInternal && !(nDragSourceFlags & SC_DROP_NAVIGATOR) )
     {
         //  move: delete source data
         ScDocShell* pSourceSh = GetSourceDocShell();
@@ -466,6 +467,11 @@ void ScTransferObj::SetDragSource( ScDocShell* pSourceShell, const ScMarkData& r
     ScRangeList aRanges;
     rMark.FillRangeListWithMarks( &aRanges, FALSE );
     xDragSourceRanges = new ScCellRangesObj( pSourceShell, aRanges );
+}
+
+void ScTransferObj::SetDragSourceFlags( USHORT nFlags )
+{
+    nDragSourceFlags = nFlags;
 }
 
 void ScTransferObj::SetDragWasInternal()

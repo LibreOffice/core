@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: nn $ $Date: 2001-04-03 17:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,14 @@ class ScContentTree : public SvTreeListBox
     DECL_STATIC_LINK( ScContentTree, ExecDragHdl, void* );
 
 protected:
-    virtual BOOL    Drop( const DropEvent& rEvt );
-    virtual BOOL    QueryDrop( DropEvent& rEvt );
+//  virtual BOOL    Drop( const DropEvent& rEvt );
+//  virtual BOOL    QueryDrop( DropEvent& rEvt );
+
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual void        DragFinished();
+
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 

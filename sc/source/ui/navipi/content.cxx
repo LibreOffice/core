@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:51:06 $
+ *  last change: $Author: nn $ $Date: 2001-04-03 17:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,10 @@
 #include "tablink.hxx"          // fuer Loader
 #include "popmenu.hxx"
 #include "drwlayer.hxx"
-#include "dataobj.hxx"
+//#include "dataobj.hxx"
+#include "transobj.hxx"
+#include "drwtrans.hxx"
+#include "lnktrans.hxx"
 #include "cell.hxx"
 #include "dociter.hxx"
 #include "scresid.hxx"
@@ -365,6 +368,8 @@
 #include "navipi.hrc"
 #include "arealink.hxx"
 #include "navicfg.hxx"
+
+using namespace com::sun::star;
 
 //  Reihenfolge der Kategorien im Navigator -------------------------------------
 
@@ -691,14 +696,33 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput(rKEvt);
 }
 
-BOOL __EXPORT ScContentTree::Drop( const DropEvent& rEvt )
+//BOOL __EXPORT ScContentTree::Drop( const DropEvent& rEvt )
+//{
+//  return pParentWindow->Drop(rEvt);           // Drop auf Navigator
+//}
+
+//BOOL __EXPORT ScContentTree::QueryDrop( DropEvent& rEvt )
+//{
+//  return pParentWindow->QueryDrop(rEvt);      // Drop auf Navigator
+//}
+
+sal_Int8 ScContentTree::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    return pParentWindow->Drop(rEvt);           // Drop auf Navigator
+    return DND_ACTION_NONE;
 }
 
-BOOL __EXPORT ScContentTree::QueryDrop( DropEvent& rEvt )
+sal_Int8 ScContentTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    return pParentWindow->QueryDrop(rEvt);      // Drop auf Navigator
+    return DND_ACTION_NONE;
+}
+
+void ScContentTree::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+{
+    DoDrag();
+}
+
+void ScContentTree::DragFinished()
+{
 }
 
 void __EXPORT ScContentTree::Command( const CommandEvent& rCEvt )
@@ -1310,8 +1334,9 @@ BOOL lcl_GetRange( ScDocument* pDoc, USHORT nType, const String& rName, ScRange&
     return bFound;
 }
 
-void lcl_DoDragObject( ScDocument* pSrcDoc, const String& rName, USHORT nType, Window* pWin )
+void lcl_DoDragObject( ScDocShell* pSrcShell, const String& rName, USHORT nType, Window* pWin )
 {
+    ScDocument* pSrcDoc = pSrcShell->GetDocument();
     ScDrawLayer* pModel = pSrcDoc->GetDrawLayer();
     if (pModel)
     {
@@ -1321,8 +1346,6 @@ void lcl_DoDragObject( ScDocument* pSrcDoc, const String& rName, USHORT nType, W
         SdrObject* pObject = pModel->GetNamedObject( rName, nDrawId, nTab );
         if (pObject)
         {
-            ScModule* pScMod = SC_MOD();
-
             SdrView aEditView( pModel );
             aEditView.ShowPagePgNum( nTab, Point() );
             SdrPageView* pPV = aEditView.GetPageViewPvNum(0);
@@ -1330,17 +1353,53 @@ void lcl_DoDragObject( ScDocument* pSrcDoc, const String& rName, USHORT nType, W
 
             SdrModel* pDragModel = aEditView.GetAllMarkedModel();
 
-            SvDataObjectRef pDragServer = new ScDataObject( pDragModel,
-                                                (ScDocShell*)pSrcDoc->GetDocumentShell(), bOle );
-            pScMod->SetDragObject(pDragModel, &aEditView, SC_DROP_NAVIGATOR);
-            pWin->ReleaseMouse();
-            DropAction eDropAction = pDragServer->ExecuteDrag(pWin,
-                                        POINTER_COPYDATA, POINTER_COPYDATA, POINTER_LINKDATA,
-                                        DRAG_ALL);
-            BOOL bIntern = pScMod->GetDragIntern();
-            pScMod->ResetDragObject();
-            pDragServer.Clear();
+            TransferableObjectDescriptor aObjDesc;
+            pSrcShell->FillTransferableObjectDescriptor( aObjDesc );
+            aObjDesc.maDisplayName = pSrcShell->GetMedium()->GetURLObject().GetURLNoPass();
+            // maSize is set in ScDrawTransferObj ctor
+
+            ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pDragModel, pSrcShell, aObjDesc );
+            uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+
+            pTransferObj->SetDragSourceObj( pObject, nTab );
+            pTransferObj->SetDragSourceFlags( SC_DROP_NAVIGATOR );
+
+            SC_MOD()->SetDragObject( NULL, pTransferObj );
+            pTransferObj->StartDrag( pWin, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
         }
+    }
+}
+
+void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, USHORT nFlags, Window* pWin )
+{
+    ScMarkData aMark;
+    aMark.SelectTable( rRange.aStart.Tab(), TRUE );
+    aMark.SetMarkArea( rRange );
+
+    ScDocument* pSrcDoc = pSrcShell->GetDocument();
+    if ( !pSrcDoc->HasSelectedBlockMatrixFragment( rRange.aStart.Col(), rRange.aStart.Row(),
+                                                   rRange.aEnd.Col(),   rRange.aEnd.Row(),
+                                                   aMark ) )
+    {
+        ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
+        pSrcDoc->CopyToClip( rRange.aStart.Col(), rRange.aStart.Row(),
+                             rRange.aEnd.Col(),   rRange.aEnd.Row(),
+                             FALSE, pClipDoc, FALSE, &aMark );
+        // pClipDoc->ExtendMerge( rRange, TRUE );
+
+        TransferableObjectDescriptor aObjDesc;
+        pSrcShell->FillTransferableObjectDescriptor( aObjDesc );
+        aObjDesc.maDisplayName = pSrcShell->GetMedium()->GetURLObject().GetURLNoPass();
+        // maSize is set in ScTransferObj ctor
+
+        ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
+        uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+
+        pTransferObj->SetDragSource( pSrcShell, aMark );
+        pTransferObj->SetDragSourceFlags( nFlags );
+
+        SC_MOD()->SetDragObject( pTransferObj, NULL );      // for internal D&D
+        pTransferObj->StartDrag( pWin, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
     }
 }
 
@@ -1349,8 +1408,6 @@ void ScContentTree::DoDrag()
     ScDocumentLoader* pDocLoader = NULL;
     bIsInDrag = TRUE;
 
-    DragServer::Clear();
-    BOOL bOk = FALSE;
     ScModule* pScMod = SC_MOD();
 
     String aText;
@@ -1374,6 +1431,10 @@ void ScContentTree::DoDrag()
             }
         }
 
+        BOOL bDoLinkTrans = FALSE;      // use ScLinkTransferObj
+        String aLinkURL;                // for ScLinkTransferObj
+        String aLinkText;
+
         USHORT nDropMode = pParentWindow->GetDropMode();
         switch ( nDropMode )
         {
@@ -1387,33 +1448,34 @@ void ScContentTree::DoDrag()
 
                     if (aDocName.Len())
                     {
-                        //  URL nur nach aussen geben, wenn das Doc einen Namen hat
-                        //  (ohne Namen nur intern, ueber SetDragJump)
-                        INetBookmark aBmk(aUrl, aText);
-                        aBmk.CopyDragServer();
+                        //  provide URL to outside only if the document has a name
+                        //  (without name, only internal D&D via SetDragJump)
+
+                        aLinkURL = aUrl;
+                        aLinkText = aText;
                     }
-                    bOk = TRUE;
+                    bDoLinkTrans = TRUE;
                 }
                 break;
             case SC_DROPMODE_LINK:
                 {
-                    if ( aDocName.Len() )           // Verknuepfung nur mit benannten Docs
+                    if ( aDocName.Len() )           // link only to named documents
                     {
-                        // fuer Drop im Calc Flag setzen, dass Verknuepfung eingefuegt wird
+                        // for internal D&D, set flag to insert a link
 
                         switch ( nType )
                         {
                             case SC_CONTENT_TABLE:
                                 pScMod->SetDragLink( aDocName, aText, EMPTY_STRING );
-                                bOk = TRUE;
+                                bDoLinkTrans = TRUE;
                                 break;
                             case SC_CONTENT_RANGENAME:
                             case SC_CONTENT_DBAREA:
                                 pScMod->SetDragLink( aDocName, EMPTY_STRING, aText );
-                                bOk = TRUE;
+                                bDoLinkTrans = TRUE;
                                 break;
 
-                            // andere koennen nicht gelinkt werden
+                            // other types cannot be linked
                         }
                     }
                 }
@@ -1439,10 +1501,7 @@ void ScContentTree::DoDrag()
                             ScRange aRange;
                             if ( lcl_GetRange( pSrcDoc, nType, aText, aRange ) )
                             {
-                                // @ 05.01.98
-                                // sollte noch ueberarbeitet werden
-                                pScMod->SetDragObject(ScMarkData(), aRange, 0,0, pSrcDoc, SC_DROP_NAVIGATOR );
-                                bOk = TRUE;
+                                lcl_DoDragCells( pSrcShell, aRange, SC_DROP_NAVIGATOR, this );
                             }
                         }
                         else if ( nType == SC_CONTENT_TABLE )
@@ -1451,20 +1510,12 @@ void ScContentTree::DoDrag()
                             if ( pSrcDoc->GetTable( aText, nTab ) )
                             {
                                 ScRange aRange( 0,0,nTab, MAXCOL,MAXROW,nTab );
-
-                                ScMarkData aMarkData;
-
-                                aMarkData.SetMarkArea(aRange);
-                                aMarkData.SelectTable(nTab, TRUE);
-
-                                pScMod->SetDragObject( aMarkData, aRange, 0,0, pSrcDoc,
-                                                        SC_DROP_NAVIGATOR | SC_DROP_TABLE );
-                                bOk = TRUE;
+                                lcl_DoDragCells( pSrcShell, aRange, SC_DROP_NAVIGATOR | SC_DROP_TABLE, this );
                             }
                         }
                         else if ( nType == SC_CONTENT_GRAPHIC || nType == SC_CONTENT_OLEOBJECT )
                         {
-                            lcl_DoDragObject( pSrcDoc, aText, nType, this );
+                            lcl_DoDragObject( pSrcShell, aText, nType, this );
 
                             //  in ExecuteDrag kann der Navigator geloescht worden sein
                             //  -> nicht mehr auf Member zugreifen !!!
@@ -1474,21 +1525,17 @@ void ScContentTree::DoDrag()
                 break;
         }
 
-        if (bOk)
+        if (bDoLinkTrans)
         {
-            //  #41821# Unter OS/2 muss fuer ExecuteDrag immer etwas im DragServer sein
-            //  #45443# dito mit VCL, CopyPrivateData geht mit VCL auch nicht
-            if (!DragServer::GetFormatCount(0))
-                DragServer::CopyRequest(FORMAT_PRIVATE);
+            ScLinkTransferObj* pTransferObj = new ScLinkTransferObj;
+            uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-            Pointer aCopy(POINTER_COPYDATA);
-            ReleaseMouse();
-            ExecuteDrag( aCopy, aCopy, DROP_LINK );
+            if ( aLinkURL.Len() )
+                pTransferObj->SetLinkURL( aLinkURL, aLinkText );
 
-            //  in ExecuteDrag kann der Navigator geloescht worden sein
-            //  -> nicht mehr auf Member zugreifen !!!
+            //  SetDragJump / SetDragLink has been done above
 
-            pScMod->ResetDragObject();
+            pTransferObj->StartDrag( this, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
         }
     }
 

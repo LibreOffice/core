@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-30 19:14:44 $
+ *  last change: $Author: nn $ $Date: 2001-04-03 17:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2478,11 +2478,11 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
 //!             rEvt.SetAction( DROP_COPY );                    // different doc: default=COPY
 
 
-//!     if ( rData.nFlags & SC_DROP_TABLE )                     // whole sheet?
-//!     {
-//!         BOOL bOk = pThisDoc->IsDocEditable();
-//!         return bOk ? rEvt.mnAction : 0;                     // don't draw selection frame
-//!     }
+        if ( rData.pCellTransfer->GetDragSourceFlags() & SC_DROP_TABLE )        // whole sheet?
+        {
+            BOOL bOk = pThisDoc->IsDocEditable();
+            return bOk ? rEvt.mnAction : 0;                     // don't draw selection frame
+        }
 
         short   nPosX;
         short   nPosY;
@@ -2785,7 +2785,7 @@ sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
     ScDocument* pSourceDoc = pTransObj->GetSourceDocument();
     ScDocument* pThisDoc   = pViewData->GetDocument();
     ScViewFunc* pView      = pViewData->GetView();
-    USHORT nFlags = 0;  //! rData.nFlags
+    USHORT nFlags = pTransObj->GetDragSourceFlags();
 
     BOOL bIsNavi = ( nFlags & SC_DROP_NAVIGATOR ) != 0;
     BOOL bIsMove = ( rEvt.mnAction == DND_ACTION_MOVE && !bIsNavi );
@@ -2976,7 +2976,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     if (rData.pDrawTransfer)
     {
-        USHORT nFlags = 0;  //! rData.nFlags
+        USHORT nFlags = rData.pDrawTransfer->GetDragSourceFlags();
 
         BOOL bIsNavi = ( nFlags & SC_DROP_NAVIGATOR ) != 0;
         BOOL bIsMove = ( rEvt.mnAction == DND_ACTION_MOVE && !bIsNavi );
