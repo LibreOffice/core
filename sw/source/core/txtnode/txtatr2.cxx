@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 10:43:55 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 12:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,7 +652,7 @@ SwTxtLanguage::SwTxtLanguage( const SvxLanguageItem& rAttr,
 void SwTxtLanguage::ChgFnt( SwFont *pFont )
 {
     ePrevLang = pFont->GetLanguage( nScript );
-    pFont->SetLanguage( GetLanguage().GetLanguage(), nScript );
+    pFont->SetLanguage( ((SvxLanguageItem&)GetAttr()).GetLanguage(), nScript );
 }
 
 void SwTxtLanguage::RstFnt( SwFont *pFont )
