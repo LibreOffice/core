@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-02 02:33:11 $
+ *  last change: $Author: pluby $ $Date: 2000-12-08 01:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ SalFrame::SalFrame()
 {
     SalData* pSalData = GetSalData();
 
-    maFrameData.mhWnd               = 0;
+    maFrameData.mhWnd               = NULL;
     maFrameData.mpGraphics          = NULL;
     maFrameData.mpInst              = NULL;
     maFrameData.mpProc              = ImplSalFrameCallbackDummy;
@@ -238,135 +238,6 @@ void SalFrame::Show( BOOL bVisible )
         if ( maFrameData.mhWnd )
             VCLWindow_Close( maFrameData.mhWnd );
     } // else
-
-#ifdef 0
-    // This is temporary code for testing only and should be removed
-    // when development of the SalObject class is complete. This code
-    // allows us to test our SalGraphics drawing methods.
-
-    RGBColor  rectFillColor = { 65535, 25000, 25000 }; // shade of red
-    RGBColor  polyFillColor = { 25000, 25000, 65535 }; // shade of blue
-    RGBColor  linePenColor  = { 25000, 65535, 25000 }; // shade of green
-    RGBColor  pixelColor    = { 60000, 40000, 20000 }; // shade of orange
-
-    ULONG    polyVertexCount = 7;
-    long      polyVertexXCoors[polyVertexCount];
-    long      polyVertexYCoors[polyVertexCount];
-    long      pixelXCoor;
-    long      pixelYCoor;
-    long      pixelXCnt;
-    long      pixelYCnt;
-
-    // Get this window's cached handle to its native content view
-
-    VCLVIEW hView = VCLWindow_ContentView ( maFrameData.mhWnd );
-
-    // Draw a line on the native content view (no color)
-
-    VCLGraphics_DrawLine ( hView, 15L, 15L, 150L, 150L );
-
-    // Draw a line on the native content view (color)
-
-    VCLGraphics_DrawColorLine ( hView, 55L, 15L, 190L, 150L, &linePenColor );
-
-    // Draw a rectangle on the native content view (no color)
-
-    VCLGraphics_DrawRect ( hView, 200L, 15L, 100L, 150L );
-
-    // Draw a rectangle on the native content view (color)
-
-    VCLGraphics_DrawColorRect ( hView, 325L, 15L, 100L, 150L, &rectFillColor );
-
-    // Draw a polygon on the native content view (no color)
-
-    polyVertexXCoors[0] = 350;
-    polyVertexYCoors[0] = 250;
-
-    polyVertexXCoors[1] = 450;
-    polyVertexYCoors[1] = 250;
-
-    polyVertexXCoors[2] = 375;
-    polyVertexYCoors[2] = 350;
-
-    polyVertexXCoors[3] = 400;
-    polyVertexYCoors[3] = 200;
-
-    polyVertexXCoors[4] = 425;
-    polyVertexYCoors[4] = 350;
-
-    polyVertexCount = 5;
-
-    VCLGraphics_DrawPolygon ( hView,
-                              polyVertexCount,
-                              polyVertexXCoors,
-                              polyVertexYCoors
-                            );
-
-    // Draw a polygon on the native content view (color)
-
-    polyVertexXCoors[0] = 15;
-    polyVertexYCoors[0] = 250;
-
-    polyVertexXCoors[1] = 145;
-    polyVertexYCoors[1] = 250;
-
-    polyVertexXCoors[2] = 165;
-    polyVertexYCoors[2] = 200;
-
-    polyVertexXCoors[3] = 185;
-    polyVertexYCoors[3] = 250;
-
-    polyVertexXCoors[4] = 325;
-    polyVertexYCoors[4] = 250;
-
-    polyVertexXCoors[5] = 215;
-    polyVertexYCoors[5] = 320;
-
-    polyVertexXCoors[6] = 125;
-    polyVertexYCoors[6] = 320;
-
-    polyVertexCount = 7;
-
-    VCLGraphics_DrawColorPolygon ( hView,
-                                   polyVertexCount,
-                                   polyVertexXCoors,
-                                   polyVertexYCoors,
-                                   &polyFillColor
-                                 );
-
-    // Draw a polygon on the native content view (no color)
-
-    pixelXCnt = 235;
-    pixelYCnt = 390;
-
-    for ( pixelXCoor = 135; pixelXCoor < pixelXCnt; pixelXCoor++ )
-    {
-        for ( pixelYCoor = 355; pixelYCoor < pixelYCnt; pixelYCoor++ )
-        {
-            VCLGraphics_DrawPixel ( hView, pixelXCoor, pixelYCoor );
-        } // for
-    } // for
-
-    // Draw a polygon on the native content view (color)
-
-    pixelXCnt = 115;
-
-    for ( pixelXCoor = 15; pixelXCoor < pixelXCnt; pixelXCoor++ )
-    {
-        for ( pixelYCoor = 355; pixelYCoor < pixelYCnt; pixelYCoor++ )
-        {
-            pixelColor.red   = pixelYCoor + pixelXCoor + pixelColor.red;
-            pixelColor.green = pixelYCoor + pixelXCoor + pixelColor.green;
-            pixelColor.blue  = pixelYCoor + pixelXCoor + pixelColor.blue;
-
-            VCLGraphics_DrawColorPixel ( hView,
-                                           pixelXCoor,
-                                           pixelYCoor,
-                                           &pixelColor
-                                         );
-        } // for
-    } // for
-#endif // 0
 } // SalFrame::Show
 
 // -----------------------------------------------------------------------

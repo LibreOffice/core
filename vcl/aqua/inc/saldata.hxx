@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-06 03:11:31 $
+ *  last change: $Author: pluby $ $Date: 2000-12-08 01:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,6 @@ struct SalData
     long*                   mpDitherDiff;           // Dither mapping table
     BYTE*                   mpDitherLow;            // Dither mapping table
     BYTE*                   mpDitherHigh;           // Dither mapping table
-    double                  mnTimerExpiration;      // Current expiration time (in seconds) of the Timer
-    double                  mnTimerInterval;        // Current interval (in seconds) of the Timer
     SALTIMERPROC            mpTimerProc;            // timer callback proc
     VCLWINDOW               mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
     AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-04 00:10:12 $
+ *  last change: $Author: pluby $ $Date: 2000-12-08 01:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,56 +61,28 @@
 
 #define _SV_SALTIMER_CXX
 
-#ifndef _SV_SALDATA_HXX
-#include <saldata.hxx>
-#endif
 #ifndef _SV_SALTIMER_HXX
 #include <saltimer.hxx>
 #endif
-#ifndef _SV_SALTIMER_HXX
-#include <saltimer.h>
+#ifndef _SV_SALDATA_HXX
+#include <saldata.hxx>
 #endif
-#ifndef _SV_VCLDATE_H
-#include <VCLDate.h>
+#ifndef _SV_VCLEVENT_H
+#include <VCLEvent.h>
 #endif
-
-// =======================================================================
-
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-
-void CallSalTimerCallbackProc()
-{
-    SalData* pSalData = GetSalData();
-
-    if ( pSalData->mpTimerProc )
-        pSalData->mpTimerProc();
-}
-
-#ifdef __cplusplus
-}
-#endif // __cplusplus
 
 // =======================================================================
 
 void SalTimer::Start( ULONG nMS )
 {
-    SalData* pSalData = GetSalData();
-
-    pSalData->mnTimerInterval = (double)nMS / 1000;
-    pSalData->mnTimerExpiration =
-        VCLDate_TimeIntervalSince1970() + pSalData->mnTimerInterval;
+    VCLApplication_StartPeriodicEvents( nMS );
 }
 
 // -----------------------------------------------------------------------
 
 void SalTimer::Stop()
 {
-    SalData* pSalData = GetSalData();
-
-    pSalData->mnTimerInterval = 0;
-    pSalData->mnTimerExpiration = 0;
+    VCLApplication_StopPeriodicEvents();
 }
 
 // -----------------------------------------------------------------------
