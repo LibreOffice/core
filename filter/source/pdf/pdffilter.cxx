@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdffilter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-13 11:55:25 $
+ *  last change: $Author: ka $ $Date: 2002-08-16 15:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ Reference< XInterface > SAL_CALL PDFFilter_createInstance( const Reference< XMul
 
 // -----------------------------------------------------------------------------
 
-OUString SAL_CALL PDFFilter::getImplementationName(  )
+OUString SAL_CALL PDFFilter::getImplementationName()
     throw (RuntimeException)
 {
     return PDFFilter_getImplementationName();

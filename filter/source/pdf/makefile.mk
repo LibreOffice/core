@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: ka $ $Date: 2002-08-13 11:55:23 $
+#   last change: $Author: ka $ $Date: 2002-08-16 15:57:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,11 +76,18 @@ USE_DEFFILE=TRUE
 
 # --- Files -------------------------------------
 
+SRCFILES =	impdialog.src				
+
 SLOFILES=	$(SLO)$/pdfuno.obj			\
+            $(SLO)$/pdfdialog.obj		\
+            $(SLO)$/impdialog.obj		\
             $(SLO)$/pdffilter.obj		\
             $(SLO)$/pdfexport.obj		
 
 # --- Library -----------------------------------
+
+RESLIB1NAME=$(TARGET)
+RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
@@ -94,6 +101,7 @@ SHL1STDLIBS=\
     $(VCLLIB)			\
     $(UNOTOOLSLIB)		\
     $(SVLLIB)			\
+    $(SVTOOLLIB)		\
     $(TKLIB)		
 
 SHL1DEPN=

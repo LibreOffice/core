@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdffilter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-13 11:55:25 $
+ *  last change: $Author: ka $ $Date: 2002-08-16 15:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,26 @@
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
 
 #include <osl/diagnose.h>
@@ -145,23 +160,23 @@ public:
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString PDFFilter_getImplementationName ()
-    throw ( ::com::sun::star::uno::RuntimeException );
+OUString PDFFilter_getImplementationName ()
+    throw ( RuntimeException );
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL PDFFilter_supportsService( const ::rtl::OUString& ServiceName )
-    throw ( ::com::sun::star::uno::RuntimeException );
+sal_Bool SAL_CALL PDFFilter_supportsService( const OUString& ServiceName )
+    throw ( RuntimeException );
 
 // -----------------------------------------------------------------------------
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  )
-    throw ( ::com::sun::star::uno::RuntimeException );
+Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  )
+    throw ( RuntimeException );
 
 // -----------------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL PDFFilter_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
-    throw ( ::com::sun::star::uno::Exception );
+Reference< XInterface >
+SAL_CALL PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+    throw ( Exception );
 
 #endif // PDFFILTER_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfuno.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-13 11:55:25 $
+ *  last change: $Author: ka $ $Date: 2002-08-16 15:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #endif
 
 #include <pdffilter.hxx>
+#include <pdfdialog.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -92,14 +93,22 @@ extern "C"
         {
             try
             {
-                Reference< XRegistryKey > xNewKey(
-                    reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PDFFilter_getImplementationName() ) );
-                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+                Reference< XRegistryKey >   xNewKey;
+                sal_Int32                   nPos;
 
-                const Sequence< OUString > & rSNL = PDFFilter_getSupportedServiceNames();
-                const OUString * pArray = rSNL.getConstArray();
-                for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                    xNewKey->createKey( pArray[nPos] );
+                xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PDFFilter_getImplementationName() );
+                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+                const Sequence< OUString > & rSNL1 = PDFFilter_getSupportedServiceNames();
+                const OUString * pArray1 = rSNL1.getConstArray();
+                for ( nPos = rSNL1.getLength(); nPos--; )
+                    xNewKey->createKey( pArray1[nPos] );
+
+                xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PDFDialog_getImplementationName() );
+                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+                const Sequence< OUString > & rSNL2 = PDFDialog_getSupportedServiceNames();
+                const OUString * pArray2 = rSNL2.getConstArray();
+                for ( nPos = rSNL2.getLength(); nPos--; )
+                    xNewKey->createKey( pArray2[nPos] );
 
                 return sal_True;
             }
@@ -115,17 +124,29 @@ extern "C"
 
     void* SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
     {
-        OUString    implName = OUString::createFromAscii( pImplName );
+        OUString    aImplName( OUString::createFromAscii( pImplName ) );
         void*       pRet = 0;
 
-        if( pServiceManager && implName.equals(PDFFilter_getImplementationName()) )
+        if( pServiceManager )
         {
-            Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-                OUString::createFromAscii( pImplName ),
-                PDFFilter_createInstance, PDFFilter_getSupportedServiceNames() ) );
+            Reference< XSingleServiceFactory > xFactory;
 
-            if (xFactory.is())
+            if( aImplName.equals( PDFFilter_getImplementationName() ) )
+            {
+                xFactory = createSingleFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
+                                                OUString::createFromAscii( pImplName ),
+                                                PDFFilter_createInstance, PDFFilter_getSupportedServiceNames() );
+
+            }
+            else if( aImplName.equals( PDFDialog_getImplementationName() ) )
+            {
+                xFactory = createSingleFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
+                                                OUString::createFromAscii( pImplName ),
+                                                PDFDialog_createInstance, PDFDialog_getSupportedServiceNames() );
+
+            }
+
+            if( xFactory.is() )
             {
                 xFactory->acquire();
                 pRet = xFactory.get();
