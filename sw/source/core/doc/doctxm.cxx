@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-02 12:32:50 $
+ *  last change: $Author: jp $ $Date: 2001-11-02 18:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1543,7 +1543,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eType,
                 {
                     SwOLENode* pOLENode = pNd->GetOLENode();
                     long nOLEOptions = GetOLEOptions();
-                    const SwOLEObj& rOLEObj = pOLENode->GetOLEObj();
+                    SwOLEObj& rOLEObj = pOLENode->GetOLEObj();
 
                     if( rOLEObj.IsOleRef() )    //Noch nicht geladen
                     {
