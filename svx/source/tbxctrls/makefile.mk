@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-02 10:07:01 $
+#   last change: $Author: hr $ $Date: 2004-10-12 10:17:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,7 +96,8 @@ SLOFILES=	\
         $(SLO)$/tbxdraw.obj		\
         $(SLO)$/tbxdrctl.obj    \
         $(SLO)$/verttexttbxctrl.obj \
-        $(SLO)$/toolbarmenu.obj
+        $(SLO)$/toolbarmenu.obj \
+        $(SLO)$/tbxcolor.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \
