@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:33:45 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, USHORT nIcon, USHORT iconSize,
     // call custom function to read icon
     char customIconFn[256];
 
-    sprintf( customIconFn, "%s%d", VCL_CUSTOM_ICON_BASE, nIcon );
+    snprintf( customIconFn, sizeof(customIconFn), "%s%d", VCL_CUSTOM_ICON_BASE, nIcon );
     static void* pAppHdl = dlopen( NULL, RTLD_LAZY );
     if ( ( pCustomIcon = ( VCL_CUSTOM_ICON_FN* ) dlsym( pAppHdl, customIconFn ) )
              != NULL )
