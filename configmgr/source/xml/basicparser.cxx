@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicparser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-03 14:07:19 $
+ *  last change: $Author: jb $ $Date: 2002-10-01 16:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,9 +445,14 @@ uno::Any BasicParser::getCurrentValue()
     uno::Any aResult;
 
     if (m_pValueData->isTypeSet())
-    {
-        aResult = m_pValueData->convertToAny();
-    }
+        try
+        {
+            aResult = m_pValueData->convertToAny();
+        }
+        catch (script::CannotConvertException & e)
+        {
+            this->raiseParseException(uno::makeAny(e),"Configuration XML Parser - Invalid Data: Cannot convert value to type of property" );
+        }
     else if (m_pValueData->isNull())
     {
         // nothing to do
