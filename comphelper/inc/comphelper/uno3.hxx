@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno3.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-23 11:06:59 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,8 @@ namespace comphelper
         _rxOut = static_cast<iface*>(NULL);
         if (_rxAggregate.is())
         {
-            ::com::sun::star::uno::Any aCheck = _rxAggregate->queryAggregation(::getCppuType((::com::sun::star::uno::Reference<iface>*)NULL));
+            ::com::sun::star::uno::Any aCheck = _rxAggregate->queryAggregation(
+                iface::static_type());
             if (aCheck.hasValue())
                 _rxOut = *(::com::sun::star::uno::Reference<iface>*)aCheck.getValue();
         }
@@ -225,7 +226,8 @@ namespace comphelper
         _rxOut = static_cast<iface*>(NULL);
         if (_rxObject.is())
         {
-            ::com::sun::star::uno::Any aCheck = _rxObject->queryInterface(::getCppuType((::com::sun::star::uno::Reference<iface>*)NULL));
+            ::com::sun::star::uno::Any aCheck = _rxObject->queryInterface(
+                iface::static_type());
             if(aCheck.hasValue())
             {
                 _rxOut = *(::com::sun::star::uno::Reference<iface>*)aCheck.getValue();
