@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-26 16:22:48 $
+ *  last change: $Author: ka $ $Date: 2001-07-27 13:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,12 +818,9 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
 
     if( OUTDEV_PRINTER == meOutDevType )
     {
-        Bitmap aBmp( aBmpEx.GetBitmap() );
-        Bitmap aMask( aBmpEx.GetMask() );
-
-           aBmp.Replace( aMask = aBmpEx.GetMask(), Color( COL_WHITE ) );
+        Bitmap aBmp( aBmpEx.GetBitmap() ), aMask( aBmpEx.GetMask() );
+           aBmp.Replace( aMask, Color( COL_WHITE ) );
         ImplPrintTransparent( aBmp, aMask, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
-
         return;
     }
 #ifndef REMOTE_APPSERVER
