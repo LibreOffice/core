@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polypolyaction.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:06 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,19 @@
  *
  ************************************************************************/
 
-#include "polypolyaction.hxx"
-#include "outdevstate.hxx"
+#include <polypolyaction.hxx>
+#include <outdevstate.hxx>
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP_
+#include <drafts/com/sun/star/rendering/XCanvas.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_TEXTURINGMODE_HPP_
+#include <drafts/com/sun/star/rendering/TexturingMode.hpp>
+#endif
 
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
@@ -76,7 +87,7 @@
 #include <canvas/canvastools.hxx>
 #endif
 
-#include "mtftools.hxx"
+#include <mtftools.hxx>
 
 
 using namespace ::com::sun::star;
@@ -93,6 +104,30 @@ namespace cppcanvas
                                                                       rPolyPoly ) ),
             mpCanvas( rCanvas ),
             maState(),
+            maTexture(),
+            maFillColor(),
+            maStrokeColor(),
+            mbFill( rState.isFillColorSet ),
+            mbStroke( rState.isLineColorSet )
+        {
+            tools::initRenderState(maState,rState);
+
+            if( mbFill )
+                maFillColor = rState.fillColor;
+
+            if( mbStroke )
+                maStrokeColor = rState.lineColor;
+        }
+
+        PolyPolyAction::PolyPolyAction( const ::PolyPolygon&        rPolyPoly,
+                                        const CanvasSharedPtr&      rCanvas,
+                                        const OutDevState&          rState,
+                                        const rendering::Texture&   rTexture    ) :
+            mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
+                                                                      rPolyPoly ) ),
+            mpCanvas( rCanvas ),
+            maState(),
+            maTexture( rTexture ),
             maFillColor(),
             maStrokeColor(),
             mbFill( rState.isFillColorSet ),
@@ -115,6 +150,7 @@ namespace cppcanvas
                                                                       rPolyPoly ) ),
             mpCanvas( rCanvas ),
             maState(),
+            maTexture(),
             maFillColor(),
             maStrokeColor(),
             mbFill( false ),
@@ -134,6 +170,7 @@ namespace cppcanvas
                                                                       rPolyPoly ) ),
             mpCanvas( rCanvas ),
             maState(),
+            maTexture(),
             maFillColor(),
             maStrokeColor(),
             mbFill( rState.isFillColorSet ),
@@ -145,7 +182,7 @@ namespace cppcanvas
             {
                 maFillColor = rState.fillColor;
 
-                // TODO: Color management
+                // TODO(F1): Color management
                 // adapt fill color transparency
                 maFillColor[3] = 1.0 - nTransparency / 100.0;
             }
@@ -154,7 +191,7 @@ namespace cppcanvas
             {
                 maStrokeColor = rState.lineColor;
 
-                // TODO: Color management
+                // TODO(F1): Color management
                 // adapt fill color transparency
                 maStrokeColor[3] = 1.0 - nTransparency / 100.0;
             }
@@ -164,30 +201,45 @@ namespace cppcanvas
         {
         }
 
-        bool PolyPolyAction::render() const
+        bool PolyPolyAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
         {
-            if( mbFill )
-            {
-                // don't want to have full maState mutable, thus
-                // selectively casting away const here.
-                const_cast<PolyPolyAction*>(this)->maState.DeviceColor = maFillColor;
+            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::render()" );
+            RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PolyPolyAction: 0x%X", this );
 
-                // TODO: implement caching
-                mpCanvas->getUNOCanvas()->fillPolyPolygon( mxPolyPoly,
-                                                           mpCanvas->getViewState(),
-                                                           maState );
+            rendering::RenderState aLocalState( maState );
+            ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
+            if( maTexture.Gradient.is() )
+            {
+                uno::Sequence< rendering::Texture > aSeq(1);
+                aSeq[0] = maTexture;
+
+                mpCanvas->getUNOCanvas()->fillTexturedPolyPolygon( mxPolyPoly,
+                                                                   mpCanvas->getViewState(),
+                                                                   aLocalState,
+                                                                   aSeq );
             }
-
-            if( mbStroke )
+            else
             {
-                // don't want to have full maState mutable, thus
-                // selectively casting away const here.
-                const_cast<PolyPolyAction*>(this)->maState.DeviceColor = maStrokeColor;
+                if( mbFill )
+                {
+                    aLocalState.DeviceColor = maFillColor;
 
-                // TODO: implement caching
-                mpCanvas->getUNOCanvas()->drawPolyPolygon( mxPolyPoly,
-                                                           mpCanvas->getViewState(),
-                                                           maState );
+                    // TODO(P1): implement caching
+                    mpCanvas->getUNOCanvas()->fillPolyPolygon( mxPolyPoly,
+                                                               mpCanvas->getViewState(),
+                                                               aLocalState );
+                }
+
+                if( mbStroke )
+                {
+                    aLocalState.DeviceColor = maStrokeColor;
+
+                    // TODO(P1): implement caching
+                    mpCanvas->getUNOCanvas()->drawPolyPolygon( mxPolyPoly,
+                                                               mpCanvas->getViewState(),
+                                                               aLocalState );
+                }
             }
 
             return true;
