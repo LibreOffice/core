@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:50:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ void OResultSet::allocBuffer()
     sal_Int32 nLen = xMeta->getColumnCount();
 
     m_aBindVector.reserve(nLen+1);
-    m_aBindVector.push_back(NULL); // the first is reserved for the bookmark
+    m_aBindVector.push_back(0); // the first is reserved for the bookmark
     m_aRow.resize(nLen+1);
 
     for(sal_Int32 i = 1;i<=nLen;++i)
@@ -321,7 +321,7 @@ void OResultSet::allocBuffer()
                 break;
             default:
                 OSL_ENSURE(0,"Unknown type");
-                m_aBindVector.push_back(NULL);
+                m_aBindVector.push_back(0);
         }
     }
     m_aLengthVector.resize(nLen + 1);
