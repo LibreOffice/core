@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:51:57 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1637,7 +1637,13 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
                 pWindow->ImplSetClipFlag();
             if ( pWindow->IsVisible() || pWindow->ImplGetWindow()->mbAllResize ||
                 ( pWindow->mbFrame && pWindow->mpClientWindow ) )   // propagate resize for system border windows
-                pWindow->ImplCallResize();                                  // otherwise menues cannot be positioned
+            {
+                // use resize buffering for user resizes
+                if( pWindow->mbFrame && (pWindow->GetStyle() & WB_SIZEABLE) )
+                    pWindow->mpFrameData->maResizeTimer.Start();
+                else
+                    pWindow->ImplCallResize(); // otherwise menues cannot be positioned
+            }
             else
                 pWindow->mbCallResize = TRUE;
         }
