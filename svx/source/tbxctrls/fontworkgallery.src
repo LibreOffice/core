@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkgallery.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:09:04 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ ModalDialog RID_SVX_MDLG_FONTWORK_GALLERY
 FloatingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
 {
     Border = TRUE ;
-    Hide = FALSE ;
+    Hide = TRUE ;
     SVLook = TRUE ;
     Sizeable = FALSE ;
     Moveable = TRUE ;
@@ -272,7 +272,7 @@ FloatingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
 FloatingWindow RID_SVXFLOAT_FONTWORK_CHARSPACING
 {
     Border = TRUE ;
-    Hide = FALSE ;
+    Hide = TRUE ;
     SVLook = TRUE ;
     Sizeable = FALSE ;
     Moveable = TRUE ;
