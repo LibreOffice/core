@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MediaDescriptor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-22 17:25:56 $
+ *  last change: $Author: arellano $ $Date: 2001-04-16 21:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com { module sun { module star { module document {
 
 //=============================================================================
 
-/** describes properties of a document, regarding the relationsship
+/** describes properties of a document, regarding the relationship
     between the loaded document and the resource the document is
     loaded from / stored to.
 
@@ -91,89 +91,89 @@ module com { module sun { module star { module document {
 service MediaDescriptor
 {
     //-------------------------------------------------------------------------
-    /** document is a template
+    /** document is a template.
      */
     [property] boolean AsTemplate;
 
     //-------------------------------------------------------------------------
-    /** identifier of used character set
+    /** identifier of used character set.
      */
     [property] string CharacterSet;
 
     //-------------------------------------------------------------------------
-    /** internal filter name
+    /** internal filter name.
      */
     [property] string FilterName;
 
     //-------------------------------------------------------------------------
-    /** name of target frame
+    /** name of target frame.
      */
     [property] string FrameName;
 
     //-------------------------------------------------------------------------
-    /** load doucment unvisible
+    /** load doucment unvisible.
      */
     [property] boolean Hidden;
 
     //-------------------------------------------------------------------------
-    /** content of document
+    /** content of document.
      */
     [property] com::sun::star::io::XInputStream InputStream;
 
     //-------------------------------------------------------------------------
     /** specifies the name of a mark within the document where the first
-        view is to position to.
+        view is to position itself.
 
         <p>This is the same as the text behind a '#' in a http URL. But
-        this syntax with a '#' is not specified in most other URL schemas.
+        this syntax with a '#' is not specified in most URL schemas.
         </p>
      */
     [property] string JumpMark;
     //-------------------------------------------------------------------------
-    /** mime type
+    /** mime type.
      */
     [property] string MediaType;
 
     //-------------------------------------------------------------------------
-    /** open a new view for already loaded document
+    /** opens a new view for an already loaded document.
      */
     [property] boolean OpenNewView;
 
     //-------------------------------------------------------------------------
-    /** position and size of document window
+    /** position and size of document window.
      */
     [property] com::sun::star::awt::Rectangle PosSize;
 
     //-------------------------------------------------------------------------
-    /** contains the data for HTTP post method as a sequence of byte.
+    /** contains the data for HTTP post method as a sequence of bytes.
 
-        <p>This is for example the data from a web form. This property
+        <p>An example would be the data from a web form. This property
         is actually handled, not <member>MediaDescriptor::PostString</member>,
         which is for convienience. </p>
      */
     [property] sequence<byte> PostData;
 
     //-------------------------------------------------------------------------
-    /** contains the data for HTTP post method as a sequence of byte.
+    /** contains the data for HTTP post method as a sequence of bytes.
 
-        <p>This is for example the data from a web form. This property
+        <p>For example, this is the data from a web form. This property
         is actually only for convienience and the data will interally processed
         as <member>MediaDescriptor::PostData</member>. </p>
      */
     [property] string PostString;
 
     //-------------------------------------------------------------------------
-    /** show preview
+    /** show preview.
      */
     [property] boolean Preview;
 
     //-------------------------------------------------------------------------
-    /** open document readonly
+    /** open document readonly.
      */
     [property] boolean ReadOnly;
 
     //-------------------------------------------------------------------------
-    /** name of document referrer
+    /** name of document referrer.
      */
     [property] string Referer;
 
@@ -203,12 +203,12 @@ service MediaDescriptor
     [property] string TemplateRegionName;
 
     //-------------------------------------------------------------------------
-    /** url of the document
+    /** URL of the document.
      */
     [property] com::sun::star::util::URL URL;// FileName
 
     //-------------------------------------------------------------------------
-    /** storage version
+    /** storage version.
      */
     [property] short Version;
 
