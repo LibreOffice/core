@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 18:58:20 $
+#   last change: $Author: kso $ $Date: 2001-02-12 11:56:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,11 +90,12 @@ SLOFILES=\
         $(SLO)$/resultsetmetadata.obj  \
         $(SLO)$/resultset.obj          \
         $(SLO)$/resultsethelper.obj    \
-        $(SLO)$/provconf.obj
+        $(SLO)$/provconf.obj	       \
+        $(SLO)$/commandenvironmentproxy.obj
 
 .ENDIF
 
-# SCO and MACOSX: the linker does know about weak 
+# SCO and MACOSX: the linker does know about weak
 # symbols, but we can't ignore multiple defined symbols
 
 .IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
