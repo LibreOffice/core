@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:56:52 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,16 +86,203 @@
 #endif
 
 
+// Constants and Enumerations =================================================
+
+// (0x001E, 0x041E) FORMAT ----------------------------------------------------
+
+const sal_uInt16 EXC_ID_FORMAT              = 0x041E;
+
+const sal_uInt16 EXC_FORMAT_OFFSET5         = 164;
+const sal_uInt16 EXC_FORMAT_OFFSET8         = 164;
+
+
+// (0x0031) FONT --------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_FONT                = 0x0031;
+
+const sal_uInt16 EXC_FONT_APP               = 0;        /// Application font index.
+const sal_uInt16 EXC_FONT_NOTFOUND          = 0xFFFF;
+
+const sal_uInt32 EXC_FONT_MAXCOUNT4         = 0x00FF;
+const sal_uInt32 EXC_FONT_MAXCOUNT5         = 0x00FF;
+const sal_uInt32 EXC_FONT_MAXCOUNT8         = 0xFFFF;
+
+// families
+const sal_uInt8 EXC_FONTFAM_DONTKNOW        = 0x00;
+const sal_uInt8 EXC_FONTFAM_ROMAN           = 0x01;
+const sal_uInt8 EXC_FONTFAM_SWISS           = 0x02;
+const sal_uInt8 EXC_FONTFAM_SYSTEM          = EXC_FONTFAM_SWISS;
+const sal_uInt8 EXC_FONTFAM_MODERN          = 0x03;
+const sal_uInt8 EXC_FONTFAM_SCRIPT          = 0x04;
+const sal_uInt8 EXC_FONTFAM_DECORATIVE      = 0x05;
+
+// charsets
+const sal_uInt8 EXC_FONTCSET_ANSI_LATIN     = 0x00;
+
+// attributes
+const sal_uInt16 EXC_FONTATTR_NONE          = 0x0000;
+const sal_uInt16 EXC_FONTATTR_BOLD          = 0x0001;
+const sal_uInt16 EXC_FONTATTR_ITALIC        = 0x0002;
+const sal_uInt16 EXC_FONTATTR_UNDERLINE     = 0x0004;
+const sal_uInt16 EXC_FONTATTR_STRIKEOUT     = 0x0008;
+const sal_uInt16 EXC_FONTATTR_OUTLINE       = 0x0010;
+const sal_uInt16 EXC_FONTATTR_SHADOW        = 0x0020;
+
+// weight
+const sal_uInt16 EXC_FONTWGHT_DONTKNOW      = 0;
+const sal_uInt16 EXC_FONTWGHT_THIN          = 100;
+const sal_uInt16 EXC_FONTWGHT_ULTRALIGHT    = 200;
+const sal_uInt16 EXC_FONTWGHT_LIGHT         = 300;
+const sal_uInt16 EXC_FONTWGHT_SEMILIGHT     = 350;
+const sal_uInt16 EXC_FONTWGHT_NORMAL        = 400;
+const sal_uInt16 EXC_FONTWGHT_MEDIUM        = 500;
+const sal_uInt16 EXC_FONTWGHT_SEMIBOLD      = 600;
+const sal_uInt16 EXC_FONTWGHT_BOLD          = 700;
+const sal_uInt16 EXC_FONTWGHT_ULTRABOLD     = 800;
+const sal_uInt16 EXC_FONTWGHT_BLACK         = 900;
+
+// underline
+const sal_uInt8 EXC_FONTUNDERL_NONE         = 0x00;
+const sal_uInt8 EXC_FONTUNDERL_SINGLE       = 0x01;
+const sal_uInt8 EXC_FONTUNDERL_DOUBLE       = 0x02;
+const sal_uInt8 EXC_FONTUNDERL_SINGLE_ACC   = 0x21;
+const sal_uInt8 EXC_FONTUNDERL_DOUBLE_ACC   = 0x22;
+
+// escapement
+const sal_uInt16 EXC_FONTESC_NONE           = 0x00;
+const sal_uInt16 EXC_FONTESC_SUPER          = 0x01;
+const sal_uInt16 EXC_FONTESC_SUB            = 0x02;
+
+
+// (0x0043, 0x0243, 0x0443, 0x00E0) XF ----------------------------------------
+
+const sal_uInt16 EXC_ID2_XF                 = 0x0043;
+const sal_uInt16 EXC_ID3_XF                 = 0x0243;
+const sal_uInt16 EXC_ID4_XF                 = 0x0443;
+const sal_uInt16 EXC_ID_XF                  = 0x00E0;
+
+const sal_uInt32 EXC_XF_MAXCOUNT            = 4050;     /// Maximum number of all XF records.
+const sal_uInt32 EXC_XF_MAXSTYLECOUNT       = 1536;     /// Arbitrary maximum number of style XFs.
+const sal_uInt16 EXC_XF_USEROFFSET          = 23;       /// Index to first user defined record.
+const sal_uInt16 EXC_XF_DEFAULTSTYLE        = 0;        /// Excel index to default style XF.
+const sal_uInt16 EXC_XF_DEFAULTCELL         = 15;       /// Excel index to default cell XF.
+
+const sal_uInt16 EXC_XF_LOCKED              = 0x0001;
+const sal_uInt16 EXC_XF_HIDDEN              = 0x0002;
+const sal_uInt16 EXC_XF_STYLE               = 0x0004;
+const sal_uInt16 EXC_XF_STYLEPARENT         = 0x0FFF;   /// Syles don't have a parent.
+const sal_uInt16 EXC_XF_WRAPPED             = 0x0008;   /// Automatic line break.
+const sal_uInt16 EXC_XF_SHRINK              = 0x0010;   /// Shrink to fit into cell.
+
+const sal_uInt8 EXC_XF_DIFF_VALFMT          = 0x01;
+const sal_uInt8 EXC_XF_DIFF_FONT            = 0x02;
+const sal_uInt8 EXC_XF_DIFF_ALIGN           = 0x04;
+const sal_uInt8 EXC_XF_DIFF_BORDER          = 0x08;
+const sal_uInt8 EXC_XF_DIFF_AREA            = 0x10;
+const sal_uInt8 EXC_XF_DIFF_PROT            = 0x20;
+
+const sal_uInt8 EXC_XF2_VALFMT_MASK         = 0x3F;
+const sal_uInt8 EXC_XF2_LOCKED              = 0x40;
+const sal_uInt8 EXC_XF2_HIDDEN              = 0x80;
+const sal_uInt8 EXC_XF2_LEFTLINE            = 0x08;
+const sal_uInt8 EXC_XF2_RIGHTLINE           = 0x10;
+const sal_uInt8 EXC_XF2_TOPLINE             = 0x20;
+const sal_uInt8 EXC_XF2_BOTTOMLINE          = 0x40;
+const sal_uInt8 EXC_XF2_BACKGROUND          = 0x80;
+
+const sal_uInt16 EXC_XF8_SHRINKTOFIT        = 0x0010;
+const sal_uInt16 EXC_XF8_MERGE              = 0x0020;
+
+const sal_uInt8 EXC_XF8_STACKED             = 0xFF;     /// Special rotation angle.
+
+/** Horizontal alignment of cell contents. */
+enum XclHorAlign
+{
+    xlHAlignGeneral                         = 0x00,
+    xlHAlignLeft                            = 0x01,
+    xlHAlignCenter                          = 0x02,
+    xlHAlignRight                           = 0x03,
+    xlHAlignFill                            = 0x04,
+    xlHAlignJustify                         = 0x05,
+    xlHAlignCenterAcrSel                    = 0x06,
+    xlHAlignDistrib                         = 0x07,
+    xlHAlign_Default                        = xlHAlignGeneral
+
+};
+
+/** Vertical alignment of cell contents. */
+enum XclVerAlign
+{
+    xlVAlignTop                             = 0x00,
+    xlVAlignCenter                          = 0x01,
+    xlVAlignBottom                          = 0x02,
+    xlVAlignJustify                         = 0x03,
+    xlVAlignDistrib                         = 0x04,
+    xlVAlign_Default                        = xlVAlignBottom
+};
+
+/** Text orientation. */
+enum XclTextOrient
+{
+    xlTextOrientNoRot                       = 0x00,
+    xlTextOrientTopBottom                   = 0x01,
+    xlTextOrient90ccw                       = 0x02,
+    xlTextOrient90cw                        = 0x03,
+    xlTextOrient_Default                    = xlTextOrientNoRot
+};
+
+/** CTL text direction. */
+enum XclTextDirection
+{
+    xlTextDirContext                        = 0x00,
+    xlTextDirLTR                            = 0x01,
+    xlTextDirRTL                            = 0x02,
+    xlTextDir_Default                       = xlTextDirContext
+};
+
+
+// (0x0092) PALETTE -----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_PALETTE             = 0x0092;
+
+const sal_uInt16 EXC_COLOR_BIFF2_BLACK      = 0;
+const sal_uInt16 EXC_COLOR_BIFF2_WHITE      = 1;
+
+const sal_uInt16 EXC_COLOR_USEROFFSET       = 8;        ///First user defined color.
+const sal_uInt16 EXC_COLOR_WINDOWTEXT       = 64;       /// System window text color.
+const sal_uInt16 EXC_COLOR_WINDOWBACK       = 65;       /// System window background color.
+const sal_uInt16 EXC_COLOR_FONTAUTO         = 0x7FFF;   /// Font auto color (system window text color).
+
+// (0x0293) STYLE -------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_STYLE               = 0x0293;
+
+const sal_uInt16 EXC_STYLE_BUILTIN          = 0x8000;
+const sal_uInt16 EXC_STYLE_XFMASK           = 0x0FFF;
+
+const sal_uInt8 EXC_STYLE_NORMAL            = 0x00;         /// "Normal" style.
+const sal_uInt8 EXC_STYLE_ROWLEVEL          = 0x01;         /// "RowLevel_*" styles.
+const sal_uInt8 EXC_STYLE_COLLEVEL          = 0x02;         /// "ColLevel_*" styles.
+const sal_uInt8 EXC_STYLE_COMMA             = 0x03;         /// "Comma" style.
+const sal_uInt8 EXC_STYLE_CURRENCY          = 0x04;         /// "Currency" style.
+const sal_uInt8 EXC_STYLE_PERCENT           = 0x05;         /// "Percent" style.
+const sal_uInt8 EXC_STYLE_COMMA_0           = 0x06;         /// "Comma [0]" style.
+const sal_uInt8 EXC_STYLE_CURRENCY_0        = 0x07;         /// "Currency [0]" style.
+const sal_uInt8 EXC_STYLE_HYPERLINK         = 0x08;         /// "Hyperlink" style.
+const sal_uInt8 EXC_STYLE_FOLLOWED_HYPERLINK= 0x09;         /// "Followed_Hyperlink" style.
+const sal_uInt8 EXC_STYLE_USERDEF           = 0xFF;         /// No built-in style.
+
+const sal_uInt8 EXC_STYLE_LEVELCOUNT        = 7;            /// Number of outline level styles.
+const sal_uInt8 EXC_STYLE_NOLEVEL           = 0xFF;         /// Default value for unused level.
+
+
+// ============================================================================
+
 // Color data =================================================================
 
 /** Stores all default colors for a specific BIFF version. */
 class XclDefaultPalette
 {
-private:
-    const ColorData*            mpColorTable;       /// The table with RGB values.
-    sal_uInt32                  mnTableSize;        /// The color table size.
-    sal_uInt16                  mnIndexOffset;      /// The Excel index of the first color.
-
 public:
     explicit                    XclDefaultPalette( XclBiff eBiff = xlBiffUnknown );
 
@@ -103,54 +290,26 @@ public:
     void                        SetDefaultColors( XclBiff eBiff );
 
     /** Returns the color count in the current palette. */
-    inline sal_uInt32           GetColorCount() const { return mnTableSize; }
+    inline sal_uInt32           GetColorCount() const { return mnTableSize - EXC_COLOR_USEROFFSET; }
 
-    /** Returns the Excel index of the first color. */
-    inline sal_uInt32           GetIndexOffset() const { return mnIndexOffset; }
-    /** Returns the Excel index of a 0-based color index. */
-    inline sal_uInt16           GetXclIndex( sal_uInt32 nIndex ) const;
+    /** Returns the default RGB color data for a (non-zero-based) Excel color or COL_AUTO on error. */
+    ColorData                   GetDefColorData( sal_uInt16 nXclIndex ) const;
+    /** Returns the default color for a (non-zero-based) Excel color or COL_AUTO on error. */
+    inline Color                GetDefColor( sal_uInt16 nXclIndex ) const
+                                    { return Color( GetDefColorData( nXclIndex ) ); }
 
-    /** Returns the default RGB color data for a (non-zero-based) Excel color or nDefault on error. */
-    ColorData                   GetDefColorData( sal_uInt16 nXclIndex, ColorData nDefault = COL_AUTO ) const;
-    /** Returns the default color for a (non-zero-based) Excel color or nDefault on error. */
-    inline Color                GetDefColor( sal_uInt16 nXclIndex, ColorData nDefault = COL_AUTO ) const;
+private:
+    const ColorData*            mpColorTable;       /// The table with RGB values.
+    ColorData                   mnWindowText;       /// System window text color.
+    ColorData                   mnWindowBack;       /// System window background color.
+    sal_uInt32                  mnTableSize;        /// The color table size.
 };
-
-inline sal_uInt16 XclDefaultPalette::GetXclIndex( sal_uInt32 nIndex ) const
-{
-    return static_cast< sal_uInt16 >( nIndex + GetIndexOffset() );
-}
-
-inline Color XclDefaultPalette::GetDefColor( sal_uInt16 nXclIndex, ColorData nDefault ) const
-{
-    return Color( GetDefColorData( nXclIndex, nDefault ) );
-}
 
 
 // Font data ==================================================================
 
-/** Text underline style. */
-enum XclUnderline
-{
-    xlUnderlNone                    = 0x00,
-    xlUnderlSingle                  = 0x01,
-    xlUnderlDouble                  = 0x02,
-    xlUnderlSingleAcc               = 0x21,
-    xlUnderlDoubleAcc               = 0x22
-};
-
-/** Super-/subscript type. */
-enum XclEscapement
-{
-    xlEscNone                       = 0x00,
-    xlEscSuper                      = 0x01,
-    xlEscSub                        = 0x02
-};
-
-
-// ----------------------------------------------------------------------------
-
 class Font;
+class SvxFont;
 
 /** This struct helps reading and writing Excel fonts.
     @descr  It stores all Excel compatible properties of a font. In detail this is the
@@ -160,13 +319,13 @@ struct XclFontData
 {
     String                      maName;         /// Font name.
     String                      maStyle;        /// String with styles (bold, italic).
-    XclUnderline                meUnderline;    /// Underline style.
-    XclEscapement               meEscapem;      /// Super-/subscript.
     sal_uInt16                  mnHeight;       /// Font height in twips (1/20 of a point).
     sal_uInt16                  mnColor;        /// Index to color palette.
     sal_uInt16                  mnWeight;       /// Boldness: 400=normal, 700=bold.
+    sal_uInt16                  mnEscapem;      /// Escapement type.
     sal_uInt8                   mnFamily;       /// Windows font family.
     sal_uInt8                   mnCharSet;      /// Windows character set.
+    sal_uInt8                   mnUnderline;    /// Underline style.
     bool                        mbItalic;       /// true = Italic.
     bool                        mbStrikeout;    /// true = Struck out.
     bool                        mbOutline;      /// true = Outlined.
@@ -176,11 +335,15 @@ struct XclFontData
     explicit                    XclFontData();
     /** Constructs a font data structure and fills it with the passed font attributes (except color). */
     explicit                    XclFontData( const Font& rFont );
+    /** as directly above but also fills in the escapement member. */
+    explicit                    XclFontData( const SvxFont& rFont );
 
     /** Resets all members to default (empty) values. */
     void                        Clear();
-    /** Fills all members (except color) from the passed font. */
+    /** Fills all members (except color and escapement) from the passed font. */
     void                        FillFromFont( const Font& rFont );
+    /** Fills all members (except color) from the passed SVX font. */
+    void                        FillFromSvxFont( const SvxFont& rFont );
 
 // *** conversion of VCL/SVX constants *** ------------------------------------
 
@@ -212,7 +375,7 @@ struct XclFontData
     /** Sets the Calc underline style. */
     void                        SetScUnderline( FontUnderline eScUnderl );
     /** Sets the Calc escapement style. */
-    void                        SetScEscapement( SvxEscapement eScEscapem );
+    void                        SetScEscapement( short nScEscapem );
     /** Sets the Calc strike-out style. */
     void                        SetScStrikeout( FontStrikeout eScStrikeout );
 
@@ -267,51 +430,6 @@ bool operator==( const XclCellProt& rLeft, const XclCellProt& rRight );
 
 
 // ----------------------------------------------------------------------------
-
-/** Horizontal alignment of cell contents. */
-enum XclHorAlign
-{
-    xlHAlignGeneral             = 0x00,
-    xlHAlignLeft                = 0x01,
-    xlHAlignCenter              = 0x02,
-    xlHAlignRight               = 0x03,
-    xlHAlignFill                = 0x04,
-    xlHAlignJustify             = 0x05,
-    xlHAlignCenterAcrSel        = 0x06,
-    xlHAlignDistrib             = 0x07,
-    xlHAlign_Default            = xlHAlignGeneral
-
-};
-
-/** Vertical alignment of cell contents. */
-enum XclVerAlign
-{
-    xlVAlignTop                 = 0x00,
-    xlVAlignCenter              = 0x01,
-    xlVAlignBottom              = 0x02,
-    xlVAlignJustify             = 0x03,
-    xlVAlignDistrib             = 0x04,
-    xlVAlign_Default            = xlVAlignBottom
-};
-
-/** Text orientation. */
-enum XclTextOrient
-{
-    xlTextOrientNoRot           = 0x00,
-    xlTextOrientTopBottom       = 0x01,
-    xlTextOrient90ccw           = 0x02,
-    xlTextOrient90cw            = 0x03,
-    xlTextOrient_Default        = xlTextOrientNoRot
-};
-
-/** CTL text direction. */
-enum XclTextDirection
-{
-    xlTextDirContext            = 0x00,
-    xlTextDirLTR                = 0x01,
-    xlTextDirRTL                = 0x02,
-    xlTextDir_Default           = xlTextDirContext
-};
 
 /** Contains all cell alignment attributes. */
 struct XclCellAlign
@@ -376,16 +494,6 @@ bool operator==( const XclCellArea& rLeft, const XclCellArea& rRight );
     attribute groups (true = user has changed the attributes). */
 class XclXFBase
 {
-protected:
-    sal_uInt16                  mnParent;           /// Index to parent style XF.
-    bool                        mbCellXF;           /// true = cell XF, false = style XF.
-    bool                        mbProtUsed;         /// true = cell protection used.
-    bool                        mbFontUsed;         /// true = font index used.
-    bool                        mbFmtUsed;          /// true = number format used.
-    bool                        mbAlignUsed;        /// true = alignment used.
-    bool                        mbBorderUsed;       /// true = border data used.
-    bool                        mbAreaUsed;         /// true = area data used.
-
 public:
     explicit                    XclXFBase( bool bCellXF );
 
@@ -398,6 +506,16 @@ public:
 protected:
     /** Returns true, if this object is equal to the passed. */
     bool                        Equals( const XclXFBase& rCmp ) const;
+
+protected:
+    sal_uInt16                  mnParent;           /// Index to parent style XF.
+    bool                        mbCellXF;           /// true = cell XF, false = style XF.
+    bool                        mbProtUsed;         /// true = cell protection used.
+    bool                        mbFontUsed;         /// true = font index used.
+    bool                        mbFmtUsed;          /// true = number format used.
+    bool                        mbAlignUsed;        /// true = alignment used.
+    bool                        mbBorderUsed;       /// true = border data used.
+    bool                        mbAreaUsed;         /// true = area data used.
 };
 
 
