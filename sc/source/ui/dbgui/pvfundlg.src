@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:54:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,511 +60,12 @@
  ************************************************************************/
 
 #include "pvfundlg.hrc"
-ModalDialog RID_SCDLG_PIVOTSUBT
+
+StringArray SCSTR_DPFUNCLISTBOX
 {
-    OutputSize = TRUE ;
-    HelpId = HID_SC_PIVOTSUBT ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 220 , 190 ) ;
-    Text = "Datenfeld" ;
-    Text [ ENGLISH ] = "Data Field" ;
-    Text [ norwegian ] = "Data Field" ;
-    Text [ italian ] = "Campo di dati" ;
-    Text [ portuguese_brazilian ] = "Campo de Dados" ;
-    Text [ portuguese ] = "Campo de dados" ;
-    Text [ english_us ] = "Data Field" ;
-    Moveable = TRUE ;
-    Closeable = FALSE ;
-    Hide = TRUE ;
-    RadioButton BTN_NONE
+    ItemList =
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 143 , 10 ) ;
-        Text = "~Keine" ;
-        Text [ ENGLISH ] = "~None" ;
-        Text [ norwegian ] = "~Ingen " ;
-        Text [ italian ] = "~Nessuna" ;
-        Text [ portuguese_brazilian ] = "~Nenhum" ;
-        Text [ portuguese ] = "~Nenhum" ;
-        Text [ finnish ] = "~Ei mit‰‰n" ;
-        Text [ danish ] = "Ing~en" ;
-        Text [ french ] = "Aucun(e)" ;
-        Text [ swedish ] = "~Inga" ;
-        Text [ dutch ] = "~Geen" ;
-        Text [ spanish ] = "~Ning˙n" ;
-        Text [ english_us ] = "~None" ;
-        TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Êó†(~N)";
-        Text[ russian ] = "ÕÂÚ";
-        Text[ polish ] = "~Brak";
-        Text[ japanese ] = "„Å™„Åó(~N)";
-        Text[ chinese_traditional ] = "ÁÑ°(~N)";
-        Text[ arabic ] = "»œÊ‰";
-        Text[ greek ] = " ·Ì›Ì·";
-        Text[ korean ] = "ÏóÜÏùå(~N)";
-        Text[ turkish ] = "~Yok";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cap";
-        Text[ thai ] = "‡πÑ~‡∏°‡πà‡∏°‡∏µ";
-        Text[ czech ] = "≈Ω√°dn√Ω";
-        Text[ hebrew ] = "‚ÄÆ◊ú◊ú◊ê‚Ä¨";
-        Text[ hindi ] = "~‡§ï‡•ã‡§à ‡§®‡§π‡•Ä‡§Ç";
-        Text[ slovak ] = "~Niƒç";
-        Text[ hungarian ] = "~Egyik sem";
-        Text[ slovenian ] = "~Brez";
-    };
-    RadioButton BTN_AUTO
-    {
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
-        Size = MAP_APPFONT ( 143 , 10 ) ;
-        Text = "~Automatisch" ;
-        Text [ ENGLISH ] = "~Auto" ;
-        Text [ norwegian ] = "~Auto" ;
-        Text [ italian ] = "Automatico" ;
-        Text [ portuguese_brazilian ] = "~Autom·tico" ;
-        Text [ portuguese ] = "~Automaticamente" ;
-        Text [ finnish ] = "~Automaattinen" ;
-        Text [ danish ] = "~Automatisk" ;
-        Text [ french ] = "Automatique" ;
-        Text [ swedish ] = "~Automatiskt" ;
-        Text [ dutch ] = "~Automatisch" ;
-        Text [ spanish ] = "~Autom·tico" ;
-        Text [ english_us ] = "~Automatic" ;
-        TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Ëá™Âä®(~A)";
-        Text[ russian ] = "¿‚ÚÓÏ‡ÚË˜ÂÒÍË";
-        Text[ polish ] = "~Automatycznie";
-        Text[ japanese ] = "Ëá™Âãï(~A)";
-        Text[ chinese_traditional ] = "Ëá™Âãï(~A)";
-        Text[ arabic ] = " ·ﬁ«∆Ì";
-        Text[ greek ] = "¡ıÙ¸Ï·Ù·";
-        Text[ korean ] = "ÏûêÎèô(~A)";
-        Text[ turkish ] = "~Otomatik";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Autom‡tic";
-        Text[ thai ] = "~‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥";
-        Text[ czech ] = "Automaticky";
-        Text[ hebrew ] = "‚ÄÆ◊ê◊ï◊ò◊ï◊û◊ò◊ô‚Ä¨";
-        Text[ hindi ] = "~‡§∏‡•ç‡§µ‡§ö‡§æ‡§≤‡§ø‡§§";
-        Text[ slovak ] = "~Automaticky";
-        Text[ hungarian ] = "~Automatikus";
-        Text[ slovenian ] = "S~amodejno";
-    };
-    RadioButton BTN_USER
-    {
-        Pos = MAP_APPFONT ( 12 , 42 ) ;
-        Size = MAP_APPFONT ( 143 , 10 ) ;
-        Text = "~Benutzerdefiniert" ;
-        Text [ ENGLISH ] = "~Userdefined" ;
-        Text [ norwegian ] = "~Brukerdefinert " ;
-        Text [ italian ] = "Definito dall'utente" ;
-        Text [ portuguese_brazilian ] = "Definido pelo ~usu·rio" ;
-        Text [ portuguese ] = "Definido pelo ~utilizador" ;
-        Text [ finnish ] = "~K‰ytt‰j‰n m‰‰ritt‰m‰t" ;
-        Text [ danish ] = "~Brugerdefineret" ;
-        Text [ french ] = "DÈfini par l'utilisateur" ;
-        Text [ swedish ] = "~Anv‰ndardefinierade" ;
-        Text [ dutch ] = "Ge~bruikergedefinieerd" ;
-        Text [ spanish ] = "Definido por el ~usuario" ;
-        Text [ english_us ] = "~User-defined" ;
-        TabStop = TRUE ;
-        Text[ chinese_simplified ] = "‰ΩøÁî®ËÄÖËá™ËÆæ(~U)";
-        Text[ russian ] = "ŒÔÂ‰ÂÎˇÂÏ˚È ÔÓÎ¸ÁÓ‚‡ÚÂÎÂÏ";
-        Text[ polish ] = "Definiowane przez ~uøytkownika";
-        Text[ japanese ] = "„É¶„Éº„Ç∂„ÉºÂÆöÁæ©(~U)";
-        Text[ chinese_traditional ] = "‰ΩøÁî®ËÄÖËá™Ë®Ç(~U)";
-        Text[ arabic ] = "„⁄—› „‰ ﬁ»· «·„” Œœ„";
-        Text[ greek ] = "œÒÈÊ¸ÏÂÌÔ ·¸ ÙÔÌ ˜ÒﬁÛÙÁ";
-        Text[ korean ] = "ÏÇ¨Ïö©Ïûê Ï†ïÏùò(~U)";
-        Text[ turkish ] = "~Kullan˝c˝~tan˝ml˝";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Definit per l'~usuari";
-        Text[ thai ] = "‡∏£‡∏∞‡∏ö‡∏∏~‡∏ú‡∏π‡πâ‡πÉ‡∏ä‡πâ";
-        Text[ czech ] = "U≈æivatelem definovan√©";
-        Text[ hebrew ] = "~Benutzerdefiniert";
-        Text[ hindi ] = "~‡§â‡§™‡§≠‡•ã‡§ï‡•ç‡§§‡§æ ‡§∏‡•á ‡§™‡§∞‡§ø‡§≠‡§æ‡§∑‡§æ ‡§ï‡§ø‡§Ø‡§æ ‡§π‡•Å‡§Ü";
-        Text[ slovak ] = "~U≈æ√≠vateƒæom definovan√©";
-        Text[ hungarian ] = "~Egy√©ni";
-        Text[ slovenian ] = "~Uporabni≈°ko doloƒçeno";
-    };
-    MultiListBox LB_FUNC
-    {
-        Disable = TRUE ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 56 ) ;
-        Size = MAP_APPFONT ( 143 , 100 ) ;
-        TabStop = TRUE ;
-        AutoHScroll = TRUE ;
-        StringList =
-        {
-            < "Summe" ; Default ; > ;
-            < "Anzahl" ; Default ; > ;
-            < "Mittelwert" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 7 : Anzahl (nur Zahlen)*/
-            < "Anzahl (nur Zahlen)" ; Default ; > ;
-            < "StAbw (Stichprobe)" ; Default ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 9 : StAbwN (Grundgesamtheit)*/
-            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
-            < "Varianz (Stichprobe)" ; Default ; > ;
-            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
-        };
-        StringList [ ENGLISH ] =
-        {
-            < "Summe" ; Default ; > ;
-            < "Anzahl" ; Default ; > ;
-            < "Mittelwert" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            < "Anzahl (nur Zahlen)" ; Default ; > ;
-            < "StAbw (Stichprobe)" ; Default ; > ;
-            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
-            < "Varianz (Stichprobe)" ; Default ; > ;
-            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
-        };
-        StringList [ norwegian ] =
-        {
-            < "Summe" ; Default ; > ;
-            < "Anzahl" ; Default ; > ;
-            < "Mittelwert" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            < "Anzahl (nur Zahlen)" ; Default ; > ;
-            < "StAbw (Stichprobe)" ; Default ; > ;
-            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
-            < "Varianz (Stichprobe)" ; Default ; > ;
-            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
-        };
-        StringList [ italian ] =
-        {
-            < "Somma" ; Default ; > ;
-            < "Numero" ; Default ; > ;
-            < "Media" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Prodotto" ; Default ; > ;
-            < "Numero (solo numeri)" ; Default ; > ;
-            < "DevSt (campione)" ; Default ; > ;
-            < "DevStP (popolazione)" ; Default ; > ;
-            < "Varianza (campione)" ; Default ; > ;
-            < "VarP (popolazione)" ; Default ; > ;
-        };
-        StringList [ portuguese_brazilian ] =
-        {
-            < "Soma" ; Default ; > ;
-            < "Contagem" ; Default ; > ;
-            < "MÈdia" ; Default ; > ;
-            < "M·x" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produto" ; Default ; > ;
-            < "Contagem  (somente n˙meros)" ; Default ; > ;
-            < "DesvPad (Amostra)" ; Default ; > ;
-            < "DesvPadP (populaÁ„o)" ; Default ; > ;
-            < "Var (amostra)" ; Default ; > ;
-            < "VarP (populaÁ„o)" ; Default ; > ;
-        };
-        StringList [ portuguese ] =
-        {
-            < "Total" ; Default ; > ;
-            < "Contar" ; Default ; > ;
-            < "MÈdia" ; Default ; > ;
-            < "M·x." ; Default ; > ;
-            < "Min." ; Default ; > ;
-            < "Produto" ; Default ; > ;
-            < "Contar (sÛ n˙meros)" ; Default ; > ;
-            < "DesvPad (amostra)" ; Default ; > ;
-            < "DesvPadN (populaÁ„o)" ; Default ; > ;
-            < "Vari‚ncia (amostra)" ; Default ; > ;
-            < "Vari‚ncia P (populaÁ„o)" ; Default ; > ;
-        };
-        StringList [ finnish ] =
-        {
-            < "Summa" ; Default ; > ;
-            < "LASKE" ; Default ; > ;
-            < "Keskiarvo" ; Default ; > ;
-            < "MAKS" ; Default ; > ;
-            < "MIN" ; Default ; > ;
-            < "Tulo" ; Default ; > ;
-            < "LASKE (vain luvut)" ; Default ; > ;
-            < "KESKIHAJONTA (otos)" ; Default ; > ;
-            < "KESKIHAJONTA (populaatio)" ; Default ; > ;
-            < "Var (Otos)" ; Default ; > ;
-            < "VarP (populaatio)" ; Default ; > ;
-        };
-        StringList [ danish ] =
-        {
-            < "Sum" ; Default ; > ;
-            < "Antal" ; Default ; > ;
-            < "Middel" ; Default ; > ;
-            < "Maks" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            < "Antal (kun tal)" ; Default ; > ;
-            < "Stdafv (stikpr¯ve)" ; Default ; > ;
-            < "StdafvP (population)" ; Default ; > ;
-            < "Varians (stikpr¯ve)" ; Default ; > ;
-            < "VariansP (population)" ; Default ; > ;
-        };
-        StringList [ french ] =
-        {
-            < "Somme" ; Default ; > ;
-            < "Nombre" ; Default ; > ;
-            < "Moyenne" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produit" ; Default ; > ;
-            < "Nombre (uniquement les nombres)" ; Default ; > ;
-            < "Ecartype (Èchantillon)" ; Default ; > ;
-            < "EcarTypeP (population)" ; Default ; > ;
-            < "Variance (Èchantillon)" ; Default ; > ;
-            < "VarP (population)" ; Default ; > ;
-        };
-        StringList [ swedish ] =
-        {
-            < "Summa" ; Default ; > ;
-            < "Antal" ; Default ; > ;
-            < "Medelv‰rde" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            < "Antal (endast tal)" ; Default ; > ;
-            < "StdAv (stickprov)" ; Default ; > ;
-            < "StdAvP (population)" ; Default ; > ;
-            < "Varians (stickprov)" ; Default ; > ;
-            < "VariansP (population)" ; Default ; > ;
-        };
-        StringList [ dutch ] =
-        {
-            < "Som" ; Default ; > ;
-            < "Aantal" ; Default ; > ;
-            < "Gemiddelde waarde" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Product" ; Default ; > ;
-            < "Aantal (alleen getallen)" ; Default ; > ;
-            < "StAfw (steekproef)" ; Default ; > ;
-            < "StAfwN (populatie)" ; Default ; > ;
-            < "Variantie (steekproef)" ; Default ; > ;
-            < "VarP (steekproef)" ; Default ; > ;
-        };
-        StringList [ spanish ] =
-        {
-            < "Suma" ; Default ; > ;
-            < "Cantidad" ; Default ; > ;
-            < "Promedio" ; Default ; > ;
-            < "M·x" ; Default ; > ;
-            < "MÌn" ; Default ; > ;
-            < "Producto" ; Default ; > ;
-            < "Cantidad2 (solo n˙meros)" ; Default ; > ;
-            < "DesvEst (Muestra)" ; Default ; > ;
-            < "DesvEstP (PoblaciÛn)" ; Default ; > ;
-            < "Variancia (muestra)" ; Default ; > ;
-            < "VarP (poblaciÛn)" ; Default ; > ;
-        };
-        StringList [ english_us ] =
-        {
-            < "Sum" ; Default ; > ;
-            < "Count" ; Default ; > ;
-            < "Average" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Product" ; Default ; > ;
-            < "Count (Numbers only)" ; Default ; > ;
-            < "StDev (Sample)" ; Default ; > ;
-            < "StDevP (Population)" ; Default ; > ;
-            < "Var (Sample)" ; Default ; > ;
-            < "VarP (Population)" ; Default ; > ;
-        };
-        SimpleMode = TRUE ;
-    StringList [ chinese_simplified ] =
-    {
-            < "ÊÄªËÆ°" ; Default ; > ;
-        < "Êï∞ÁõÆ" ; Default ; > ;
-        < "Âπ≥ÂùáÂÄº" ; Default ; > ;
-        < "ÊúÄÂ§ß" ; Default ; > ;
-        < "ÊúÄÂ∞è" ; Default ; > ;
-        < "‰πòÁßØ" ; Default ; > ;
-        < "Êï∞ÁõÆ(Âè™Êï∞Â≠ó)" ; Default ; > ;
-        < "Ê†áÂáÜÂÅèÂ∑Æ(ÊäΩÊ†∑)" ; Default ; > ;
-        < "Ê†áÂáÜÂÅèÂ∑Æ(ÂÖ®ÈÉ®Âü∫Êï∞)" ; Default ; > ;
-        < "ÊñπÂ∑Æ(ÊäΩÊ†∑)" ; Default ; > ;
-        < "ÊñπÂ∑Æ(ÂÖ®ÈÉ®Âü∫Êï∞)" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "—ÛÏÏ‡" ; Default ; > ;
-        < " ÓÎË˜ÂÒÚ‚Ó" ; Default ; > ;
-        < "—Â‰ÌÂÂ ÁÌ‡˜ÂÌËÂ" ; Default ; > ;
-        < "Ã‡ÍÒËÏÛÏ" ; Default ; > ;
-        < "ÃËÌËÏÛÏ" ; Default ; > ;
-        < "œÓËÁ‚Â‰ÂÌËÂ" ; Default ; > ;
-        < " ÓÎË˜ÂÒÚ‚Ó (ÚÓÎ¸ÍÓ ˜ËÒÎ‡)" ; Default ; > ;
-        < "—ÏÂ˘ÂÌÌÓÂ ÓÚÍÎÓÌÂÌËÂ (Œ·‡ÁÂˆ)" ; Default ; > ;
-        < "ÕÂÒÏÂ˘ÂÌÌÓÂ ÓÚÍÎÓÌÂÌËÂ (—Ó‚ÓÍÛÔÌÓÒÚ¸)" ; Default ; > ;
-        < "—ÏÂ˘ÂÌÌ‡ˇ ‰ËÒÔÂÒËˇ (Œ·‡ÁÂˆ)" ; Default ; > ;
-        < "ÕÂÒÏÂ˘ÂÌÌ‡ˇ ‰ËÒÔÂÒËˇ (—Ó‚ÓÍÛÔÌÓÒÚ¸)" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Suma" ; Default ; > ;
-        < "Liczba" ; Default ; > ;
-        < "årednia" ; Default ; > ;
-        < "Maks" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Iloczyn" ; Default ; > ;
-        < "Liczba (tylko liczby)" ; Default ; > ;
-        < "Odchylenie standardowe (PrÛbka)" ; Default ; > ;
-        < "Odch.stdc (populacja)" ; Default ; > ;
-        < "Wariancja (PrÛbka)" ; Default ; > ;
-        < "Wariancja (populacja)" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "ÂêàË®à" ; Default ; > ;
-        < "Á∑èÊï∞" ; Default ; > ;
-        < "Âπ≥ÂùáÂÄ§" ; Default ; > ;
-        < "ÊúÄÂ§ßÂÄ§" ; Default ; > ;
-        < "ÊúÄÂ∞èÂÄ§" ; Default ; > ;
-        < "Á©ç" ; Default ; > ;
-        < "Á∑èÊï∞(Êï∞ÂÄ§„ÅÆ„Åø)" ; Default ; > ;
-        < "StDev(Ê®ôÊú¨)" ; Default ; > ;
-        < "StDevP(ÊØçÈõÜÂõ£)" ; Default ; > ;
-        < "ÂàÜÊï£(Ê®ôÊú¨)" ; Default ; > ;
-        < "ÂàÜÊï£(ÊØçÈõÜÂõ£)" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "Â∞èË®à" ; Default ; > ;
-        < "Êï∏ÁõÆ" ; Default ; > ;
-        < "Âπ≥ÂùáÂÄº" ; Default ; > ;
-        < "ÊúÄÂ§ß" ; Default ; > ;
-        < "ÊúÄÂ∞è" ; Default ; > ;
-        < "‰πòÁ©ç" ; Default ; > ;
-        < "Êï∏ÁõÆ(Âè™ÊòØÊï∏Â≠ó)" ; Default ; > ;
-        < "Ê®ôÊ∫ñÂÅèÂ∑Æ(ÊäΩÊ®£)" ; Default ; > ;
-        < "Ê®ôÊ∫ñÂÅèÂ∑Æ(ÂÖ®ÈÉ®Âü∫Êï∏)" ; Default ; > ;
-        < "ÊñπÂ∑Æ(ÊäΩÊ®£)" ; Default ; > ;
-        < "ÊñπÂ∑Æ(ÂÖ®ÈÉ®Âü∫Êï∏)" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "Sum" ; Default ; > ;
-        < "Count" ; Default ; > ;
-        < "Average" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Product" ; Default ; > ;
-        < "Count (√—ﬁ«„ ›ﬁÿ)" ; Default ; > ;
-        < "StDev (⁄Ì‰…)" ; Default ; > ;
-        < "StDevP («·„Ã „⁄)" ; Default ; > ;
-        < "VAR (⁄‰Ì…)" ; Default ; > ;
-        < "VarP («·„Ã „⁄)" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "¢ËÒÔÈÛÏ·" ; Default ; > ;
-        < "¡ÒÈËÏ¸Ú" ; Default ; > ;
-        < "Ã›ÛÁ ÙÈÏﬁ" ; Default ; > ;
-        < "ÃÂ„." ; Default ; > ;
-        < "≈Î·˜." ; Default ; > ;
-        < "√ÈÌ¸ÏÂÌÔ" ; Default ; > ;
-        < "–ÎﬁËÔÚ (Ï¸ÌÔ ·ÒÈËÏÔﬂ)" ; Default ; > ;
-        < "StDev (ƒÂﬂ„Ï·)" ; Default ; > ;
-        < "StDevP (–ÎÁËıÛÏÔ˝)" ; Default ; > ;
-        < "Var (ƒÂﬂ„Ï·)" ; Default ; > ;
-        < "VarP (–ÎÁËıÛÏÔ˝)" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "Ìï©Í≥Ñ" ; Default ; > ;
-        < "Í∞í" ; Default ; > ;
-        < "ÌèâÍ∑†Í∞í" ; Default ; > ;
-        < "ÏµúÎåÄ" ; Default ; > ;
-        < "ÏµúÏÜå" ; Default ; > ;
-        < "Í≥±" ; Default ; > ;
-        < "Í∞í(Ïà´ÏûêÎßå)" ; Default ; > ;
-        < "StDev(ÏÉòÌîå)" ; Default ; > ;
-        < "Ôº≥tDevP(Î™®ÏßëÎã®)" ; Default ; > ;
-        < "Î∂ÑÏÇ∞(ÏÉòÌîå)" ; Default ; > ;
-        < "Î∂ÑÏÇ∞(Î™®ÏßëÎã®)" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Toplam" ; Default ; > ;
-        < "Say" ; Default ; > ;
-        < "Ortalama " ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "«arp˝m" ; Default ; > ;
-        < "Say (yaln˝zca say˝lar)" ; Default ; > ;
-        < "StSapma (ˆrnek)" ; Default ; > ;
-        < "StSapmaP (pop¸lasyon)" ; Default ; > ;
-        < "Dei˛ken (ˆrnek)" ; Default ; > ;
-        < "Dei˛kenP (Pop¸lasyon)" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "Suma" ; Default ; > ;
-        < "Compta" ; Default ; > ;
-        < "Mitjana" ; Default ; > ;
-        < "M‡x." ; Default ; > ;
-        < "MÌn." ; Default ; > ;
-        < "Producte" ; Default ; > ;
-        < "Compta (nomÈs els n˙meros)" ; Default ; > ;
-        < "StDev (mostra)" ; Default ; > ;
-        < "StDevP (poblaciÛ)" ; Default ; > ;
-        < "Var (mostra)" ; Default ; > ;
-        < "VarP (poblaciÛ)" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "‡∏ú‡∏•‡∏£‡∏ß‡∏°" ; Default ; > ;
-        < "‡∏ô‡∏±‡∏ö" ; Default ; > ;
-        < "‡πÄ‡∏â‡∏•‡∏µ‡πà‡∏¢" ; Default ; > ;
-        < "‡∏°‡∏≤‡∏Å‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î" ; Default ; > ;
-        < "‡∏ô‡πâ‡∏≠‡∏¢‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î" ; Default ; > ;
-        < "‡∏ú‡∏•‡∏¥‡∏ï‡∏†‡∏±‡∏ì‡∏ë‡πå" ; Default ; > ;
-        < "‡∏ô‡∏±‡∏ö (‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏Ç‡πÄ‡∏ó‡πà‡∏≤‡∏ô‡∏±‡πâ‡∏ô)" ; Default ; > ;
-        < "StDev (‡∏ï‡∏±‡∏ß‡∏≠‡∏¢‡πà‡∏≤‡∏á)" ; Default ; > ;
-        < "StDevP (‡∏õ‡∏£‡∏∞‡∏ä‡∏≤‡∏Å‡∏£)" ; Default ; > ;
-        < "Var (‡∏ï‡∏±‡∏ß‡∏≠‡∏¢‡πà‡∏≤‡∏á)" ; Default ; > ;
-        < "VarP (‡∏õ‡∏£‡∏∞‡∏ä‡∏≤‡∏Å‡∏£)" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "Souƒçet" ; Default ; > ;
-        < "Poƒçet" ; Default ; > ;
-        < "Pr≈Ømƒõr" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Produkt" ; Default ; > ;
-        < "Poƒçet (pouze ƒç√≠sla)" ; Default ; > ;
-        < "StDev (v√Ωbƒõr)" ; Default ; > ;
-        < "StDevP (Populace)" ; Default ; > ;
-        < "Var (v√Ωbƒõr)" ; Default ; > ;
-        < "VarP (z√°kladn√≠ soubor)" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "‚ÄÆ◊°◊õ◊ï◊ù‚Ä¨" ; Default ; > ;
+        < "Summe" ; Default ; > ;
         < "Anzahl" ; Default ; > ;
         < "Mittelwert" ; Default ; > ;
         < "Max" ; Default ; > ;
@@ -576,9 +77,345 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         < "Varianz (Stichprobe)" ; Default ; > ;
         < "Varianzen (Grundgesamtheit)" ; Default ; > ;
     };
-    StringList [ hindi ] =
+    ItemList [ norwegian ] =
     {
-         < "‡§ú‡•ã‡§°" ; Default ; > ;
+        < "Summe" ; Default ; > ;
+        < "Anzahl" ; Default ; > ;
+        < "Mittelwert" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produkt" ; Default ; > ;
+        < "Anzahl (nur Zahlen)" ; Default ; > ;
+        < "StAbw (Stichprobe)" ; Default ; > ;
+        < "StAbwN (Grundgesamtheit)" ; Default ; > ;
+        < "Varianz (Stichprobe)" ; Default ; > ;
+        < "Varianzen (Grundgesamtheit)" ; Default ; > ;
+    };
+    ItemList [ italian ] =
+    {
+        < "Somma" ; Default ; > ;
+        < "Numero" ; Default ; > ;
+        < "Media" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Prodotto" ; Default ; > ;
+        < "Numero (solo numeri)" ; Default ; > ;
+        < "DevSt (campione)" ; Default ; > ;
+        < "DevStP (popolazione)" ; Default ; > ;
+        < "Varianza (campione)" ; Default ; > ;
+        < "VarP (popolazione)" ; Default ; > ;
+    };
+    ItemList [ portuguese_brazilian ] =
+    {
+        < "Soma" ; Default ; > ;
+        < "Contagem" ; Default ; > ;
+        < "MÈdia" ; Default ; > ;
+        < "M·x" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produto" ; Default ; > ;
+        < "Contagem  (somente n˙meros)" ; Default ; > ;
+        < "DesvPad (Amostra)" ; Default ; > ;
+        < "DesvPadP (populaÁ„o)" ; Default ; > ;
+        < "Var (amostra)" ; Default ; > ;
+        < "VarP (populaÁ„o)" ; Default ; > ;
+    };
+    ItemList [ portuguese ] =
+    {
+        < "Total" ; Default ; > ;
+        < "Contar" ; Default ; > ;
+        < "MÈdia" ; Default ; > ;
+        < "M·x." ; Default ; > ;
+        < "Min." ; Default ; > ;
+        < "Produto" ; Default ; > ;
+        < "Contar (sÛ n˙meros)" ; Default ; > ;
+        < "DesvPad (amostra)" ; Default ; > ;
+        < "DesvPadN (populaÁ„o)" ; Default ; > ;
+        < "Vari‚ncia (amostra)" ; Default ; > ;
+        < "Vari‚ncia P (populaÁ„o)" ; Default ; > ;
+    };
+    ItemList [ finnish ] =
+    {
+        < "Summa" ; Default ; > ;
+        < "LASKE" ; Default ; > ;
+        < "Keskiarvo" ; Default ; > ;
+        < "MAKS" ; Default ; > ;
+        < "MIN" ; Default ; > ;
+        < "Tulo" ; Default ; > ;
+        < "LASKE (vain luvut)" ; Default ; > ;
+        < "KESKIHAJONTA (otos)" ; Default ; > ;
+        < "KESKIHAJONTA (populaatio)" ; Default ; > ;
+        < "Var (Otos)" ; Default ; > ;
+        < "VarP (populaatio)" ; Default ; > ;
+    };
+    ItemList [ danish ] =
+    {
+        < "Sum" ; Default ; > ;
+        < "Antal" ; Default ; > ;
+        < "Middel" ; Default ; > ;
+        < "Maks" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produkt" ; Default ; > ;
+        < "Antal (kun tal)" ; Default ; > ;
+        < "Stdafv (stikpr¯ve)" ; Default ; > ;
+        < "StdafvP (population)" ; Default ; > ;
+        < "Varians (stikpr¯ve)" ; Default ; > ;
+        < "VariansP (population)" ; Default ; > ;
+    };
+    ItemList [ french ] =
+    {
+        < "Somme" ; Default ; > ;
+        < "Nombre" ; Default ; > ;
+        < "Moyenne" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produit" ; Default ; > ;
+        < "Nombre (uniquement les nombres)" ; Default ; > ;
+        < "Ecartype (Èchantillon)" ; Default ; > ;
+        < "EcarTypeP (population)" ; Default ; > ;
+        < "Variance (Èchantillon)" ; Default ; > ;
+        < "VarP (population)" ; Default ; > ;
+    };
+    ItemList [ swedish ] =
+    {
+        < "Summa" ; Default ; > ;
+        < "Antal" ; Default ; > ;
+        < "Medelv‰rde" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produkt" ; Default ; > ;
+        < "Antal (endast tal)" ; Default ; > ;
+        < "StdAv (stickprov)" ; Default ; > ;
+        < "StdAvP (population)" ; Default ; > ;
+        < "Varians (stickprov)" ; Default ; > ;
+        < "VariansP (population)" ; Default ; > ;
+    };
+    ItemList [ dutch ] =
+    {
+        < "Som" ; Default ; > ;
+        < "Aantal" ; Default ; > ;
+        < "Gemiddelde waarde" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Product" ; Default ; > ;
+        < "Aantal (alleen getallen)" ; Default ; > ;
+        < "StAfw (steekproef)" ; Default ; > ;
+        < "StAfwN (populatie)" ; Default ; > ;
+        < "Variantie (steekproef)" ; Default ; > ;
+        < "VarP (steekproef)" ; Default ; > ;
+    };
+    ItemList [ spanish ] =
+    {
+        < "Suma" ; Default ; > ;
+        < "Cantidad" ; Default ; > ;
+        < "Promedio" ; Default ; > ;
+        < "M·x" ; Default ; > ;
+        < "MÌn" ; Default ; > ;
+        < "Producto" ; Default ; > ;
+        < "Cantidad2 (solo n˙meros)" ; Default ; > ;
+        < "DesvEst (Muestra)" ; Default ; > ;
+        < "DesvEstP (PoblaciÛn)" ; Default ; > ;
+        < "Variancia (muestra)" ; Default ; > ;
+        < "VarP (poblaciÛn)" ; Default ; > ;
+    };
+    ItemList [ english_us ] =
+    {
+        < "Sum" ; Default ; > ;
+        < "Count" ; Default ; > ;
+        < "Average" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Product" ; Default ; > ;
+        < "Count (Numbers only)" ; Default ; > ;
+        < "StDev (Sample)" ; Default ; > ;
+        < "StDevP (Population)" ; Default ; > ;
+        < "Var (Sample)" ; Default ; > ;
+        < "VarP (Population)" ; Default ; > ;
+    };
+    ItemList [ chinese_simplified ] =
+    {
+        < "ÊÄªËÆ°" ; Default ; > ;
+        < "Êï∞ÁõÆ" ; Default ; > ;
+        < "Âπ≥ÂùáÂÄº" ; Default ; > ;
+        < "ÊúÄÂ§ß" ; Default ; > ;
+        < "ÊúÄÂ∞è" ; Default ; > ;
+        < "‰πòÁßØ" ; Default ; > ;
+        < "Êï∞ÁõÆ(Âè™Êï∞Â≠ó)" ; Default ; > ;
+        < "Ê†áÂáÜÂÅèÂ∑Æ(ÊäΩÊ†∑)" ; Default ; > ;
+        < "Ê†áÂáÜÂÅèÂ∑Æ(ÂÖ®ÈÉ®Âü∫Êï∞)" ; Default ; > ;
+        < "ÊñπÂ∑Æ(ÊäΩÊ†∑)" ; Default ; > ;
+        < "ÊñπÂ∑Æ(ÂÖ®ÈÉ®Âü∫Êï∞)" ; Default ; > ;
+    };
+    ItemList [ russian ] =
+    {
+        < "—ÛÏÏ‡" ; Default ; > ;
+        < " ÓÎË˜ÂÒÚ‚Ó" ; Default ; > ;
+        < "—Â‰ÌÂÂ ÁÌ‡˜ÂÌËÂ" ; Default ; > ;
+        < "Ã‡ÍÒËÏÛÏ" ; Default ; > ;
+        < "ÃËÌËÏÛÏ" ; Default ; > ;
+        < "œÓËÁ‚Â‰ÂÌËÂ" ; Default ; > ;
+        < " ÓÎË˜ÂÒÚ‚Ó (ÚÓÎ¸ÍÓ ˜ËÒÎ‡)" ; Default ; > ;
+        < "—ÏÂ˘ÂÌÌÓÂ ÓÚÍÎÓÌÂÌËÂ (Œ·‡ÁÂˆ)" ; Default ; > ;
+        < "ÕÂÒÏÂ˘ÂÌÌÓÂ ÓÚÍÎÓÌÂÌËÂ (—Ó‚ÓÍÛÔÌÓÒÚ¸)" ; Default ; > ;
+        < "—ÏÂ˘ÂÌÌ‡ˇ ‰ËÒÔÂÒËˇ (Œ·‡ÁÂˆ)" ; Default ; > ;
+        < "ÕÂÒÏÂ˘ÂÌÌ‡ˇ ‰ËÒÔÂÒËˇ (—Ó‚ÓÍÛÔÌÓÒÚ¸)" ; Default ; > ;
+    };
+    ItemList [ polish ] =
+    {
+        < "Suma" ; Default ; > ;
+        < "Liczba" ; Default ; > ;
+        < "årednia" ; Default ; > ;
+        < "Maks" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Iloczyn" ; Default ; > ;
+        < "Liczba (tylko liczby)" ; Default ; > ;
+        < "Odchylenie standardowe (PrÛbka)" ; Default ; > ;
+        < "Odch.stdc (populacja)" ; Default ; > ;
+        < "Wariancja (PrÛbka)" ; Default ; > ;
+        < "Wariancja (populacja)" ; Default ; > ;
+    };
+    ItemList [ japanese ] =
+    {
+        < "ÂêàË®à" ; Default ; > ;
+        < "Á∑èÊï∞" ; Default ; > ;
+        < "Âπ≥ÂùáÂÄ§" ; Default ; > ;
+        < "ÊúÄÂ§ßÂÄ§" ; Default ; > ;
+        < "ÊúÄÂ∞èÂÄ§" ; Default ; > ;
+        < "Á©ç" ; Default ; > ;
+        < "Á∑èÊï∞(Êï∞ÂÄ§„ÅÆ„Åø)" ; Default ; > ;
+        < "StDev(Ê®ôÊú¨)" ; Default ; > ;
+        < "StDevP(ÊØçÈõÜÂõ£)" ; Default ; > ;
+        < "ÂàÜÊï£(Ê®ôÊú¨)" ; Default ; > ;
+        < "ÂàÜÊï£(ÊØçÈõÜÂõ£)" ; Default ; > ;
+    };
+    ItemList [ chinese_traditional ] =
+    {
+        < "Â∞èË®à" ; Default ; > ;
+        < "Êï∏ÁõÆ" ; Default ; > ;
+        < "Âπ≥ÂùáÂÄº" ; Default ; > ;
+        < "ÊúÄÂ§ß" ; Default ; > ;
+        < "ÊúÄÂ∞è" ; Default ; > ;
+        < "‰πòÁ©ç" ; Default ; > ;
+        < "Êï∏ÁõÆ(Âè™ÊòØÊï∏Â≠ó)" ; Default ; > ;
+        < "Ê®ôÊ∫ñÂÅèÂ∑Æ(ÊäΩÊ®£)" ; Default ; > ;
+        < "Ê®ôÊ∫ñÂÅèÂ∑Æ(ÂÖ®ÈÉ®Âü∫Êï∏)" ; Default ; > ;
+        < "ÊñπÂ∑Æ(ÊäΩÊ®£)" ; Default ; > ;
+        < "ÊñπÂ∑Æ(ÂÖ®ÈÉ®Âü∫Êï∏)" ; Default ; > ;
+    };
+    ItemList [ arabic ] =
+    {
+        < "Sum" ; Default ; > ;
+        < "Count" ; Default ; > ;
+        < "Average" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Product" ; Default ; > ;
+        < "Count (√—ﬁ«„ ›ﬁÿ)" ; Default ; > ;
+        < "StDev (⁄Ì‰…)" ; Default ; > ;
+        < "StDevP («·„Ã „⁄)" ; Default ; > ;
+        < "VAR (⁄‰Ì…)" ; Default ; > ;
+        < "VarP («·„Ã „⁄)" ; Default ; > ;
+    };
+    ItemList [ greek ] =
+    {
+        < "¢ËÒÔÈÛÏ·" ; Default ; > ;
+        < "¡ÒÈËÏ¸Ú" ; Default ; > ;
+        < "Ã›ÛÁ ÙÈÏﬁ" ; Default ; > ;
+        < "ÃÂ„." ; Default ; > ;
+        < "≈Î·˜." ; Default ; > ;
+        < "√ÈÌ¸ÏÂÌÔ" ; Default ; > ;
+        < "–ÎﬁËÔÚ (Ï¸ÌÔ ·ÒÈËÏÔﬂ)" ; Default ; > ;
+        < "StDev (ƒÂﬂ„Ï·)" ; Default ; > ;
+        < "StDevP (–ÎÁËıÛÏÔ˝)" ; Default ; > ;
+        < "Var (ƒÂﬂ„Ï·)" ; Default ; > ;
+        < "VarP (–ÎÁËıÛÏÔ˝)" ; Default ; > ;
+    };
+    ItemList [ korean ] =
+    {
+        < "Ìï©Í≥Ñ" ; Default ; > ;
+        < "Í∞í" ; Default ; > ;
+        < "ÌèâÍ∑†Í∞í" ; Default ; > ;
+        < "ÏµúÎåÄ" ; Default ; > ;
+        < "ÏµúÏÜå" ; Default ; > ;
+        < "Í≥±" ; Default ; > ;
+        < "Í∞í(Ïà´ÏûêÎßå)" ; Default ; > ;
+        < "StDev(ÏÉòÌîå)" ; Default ; > ;
+        < "Ôº≥tDevP(Î™®ÏßëÎã®)" ; Default ; > ;
+        < "Î∂ÑÏÇ∞(ÏÉòÌîå)" ; Default ; > ;
+        < "Î∂ÑÏÇ∞(Î™®ÏßëÎã®)" ; Default ; > ;
+    };
+    ItemList [ turkish ] =
+    {
+        < "Toplam" ; Default ; > ;
+        < "Say" ; Default ; > ;
+        < "Ortalama " ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "«arp˝m" ; Default ; > ;
+        < "Say (yaln˝zca say˝lar)" ; Default ; > ;
+        < "StSapma (ˆrnek)" ; Default ; > ;
+        < "StSapmaP (pop¸lasyon)" ; Default ; > ;
+        < "Dei˛ken (ˆrnek)" ; Default ; > ;
+        < "Dei˛kenP (Pop¸lasyon)" ; Default ; > ;
+    };
+    ItemList [ catalan ] =
+    {
+        < "Suma" ; Default ; > ;
+        < "Compta" ; Default ; > ;
+        < "Mitjana" ; Default ; > ;
+        < "M‡x." ; Default ; > ;
+        < "MÌn." ; Default ; > ;
+        < "Producte" ; Default ; > ;
+        < "Compta (nomÈs els n˙meros)" ; Default ; > ;
+        < "StDev (mostra)" ; Default ; > ;
+        < "StDevP (poblaciÛ)" ; Default ; > ;
+        < "Var (mostra)" ; Default ; > ;
+        < "VarP (poblaciÛ)" ; Default ; > ;
+    };
+    ItemList [ thai ] =
+    {
+        < "‡∏ú‡∏•‡∏£‡∏ß‡∏°" ; Default ; > ;
+        < "‡∏ô‡∏±‡∏ö" ; Default ; > ;
+        < "‡πÄ‡∏â‡∏•‡∏µ‡πà‡∏¢" ; Default ; > ;
+        < "‡∏°‡∏≤‡∏Å‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î" ; Default ; > ;
+        < "‡∏ô‡πâ‡∏≠‡∏¢‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î" ; Default ; > ;
+        < "‡∏ú‡∏•‡∏¥‡∏ï‡∏†‡∏±‡∏ì‡∏ë‡πå" ; Default ; > ;
+        < "‡∏ô‡∏±‡∏ö (‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏Ç‡πÄ‡∏ó‡πà‡∏≤‡∏ô‡∏±‡πâ‡∏ô)" ; Default ; > ;
+        < "StDev (‡∏ï‡∏±‡∏ß‡∏≠‡∏¢‡πà‡∏≤‡∏á)" ; Default ; > ;
+        < "StDevP (‡∏õ‡∏£‡∏∞‡∏ä‡∏≤‡∏Å‡∏£)" ; Default ; > ;
+        < "Var (‡∏ï‡∏±‡∏ß‡∏≠‡∏¢‡πà‡∏≤‡∏á)" ; Default ; > ;
+        < "VarP (‡∏õ‡∏£‡∏∞‡∏ä‡∏≤‡∏Å‡∏£)" ; Default ; > ;
+    };
+    ItemList [ czech ] =
+    {
+        < "Souƒçet" ; Default ; > ;
+        < "Poƒçet" ; Default ; > ;
+        < "Pr≈Ømƒõr" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produkt" ; Default ; > ;
+        < "Poƒçet (pouze ƒç√≠sla)" ; Default ; > ;
+        < "StDev (v√Ωbƒõr)" ; Default ; > ;
+        < "StDevP (Populace)" ; Default ; > ;
+        < "Var (v√Ωbƒõr)" ; Default ; > ;
+        < "VarP (z√°kladn√≠ soubor)" ; Default ; > ;
+    };
+    ItemList [ hebrew ] =
+    {
+        < "‚ÄÆ◊°◊õ◊ï◊ù‚Ä¨" ; Default ; > ;
+        < "Anzahl" ; Default ; > ;
+        < "Mittelwert" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produkt" ; Default ; > ;
+        < "Anzahl (nur Zahlen)" ; Default ; > ;
+        < "StAbw (Stichprobe)" ; Default ; > ;
+        < "StAbwN (Grundgesamtheit)" ; Default ; > ;
+        < "Varianz (Stichprobe)" ; Default ; > ;
+        < "Varianzen (Grundgesamtheit)" ; Default ; > ;
+    };
+    ItemList [ hindi ] =
+    {
+        < "‡§ú‡•ã‡§°" ; Default ; > ;
         < "‡§ó‡§ø‡§®‡§§‡•Ä" ; Default ; > ;
         < "‡§Æ‡§æ‡§ß‡•ç‡§Ø" ; Default ; > ;
         < "‡§Ö‡§ß‡§ø‡§ï‡§§‡§Æ" ; Default ; > ;
@@ -590,9 +427,9 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         < "Var (‡§®‡§Æ‡•Ç‡§®‡§æ)" ; Default ; > ;
         < "VarP (‡§ú‡§®‡§∏‡§Ç‡§ñ‡•ç‡§Ø‡§æ)" ; Default ; > ;
     };
-    StringList [ slovak ] =
+    ItemList [ slovak ] =
     {
-         < "S√∫ƒçet" ; Default ; > ;
+        < "S√∫ƒçet" ; Default ; > ;
         < "Poƒçet" ; Default ; > ;
         < "Priemer" ; Default ; > ;
         < "Max" ; Default ; > ;
@@ -604,9 +441,9 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         < "Var (vzorka)" ; Default ; > ;
         < "VarP (popul√°cia)" ; Default ; > ;
     };
-    StringList [ hungarian ] =
+    ItemList [ hungarian ] =
     {
-         < "Sum" ; Default ; > ;
+        < "Sum" ; Default ; > ;
         < "Count" ; Default ; > ;
         < "Average" ; Default ; > ;
         < "Max" ; Default ; > ;
@@ -618,9 +455,9 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         < "Var (minta)" ; Default ; > ;
         < "VarP (sokas√°g)" ; Default ; > ;
     };
-    StringList [ slovenian ] =
+    ItemList [ slovenian ] =
     {
-         < "Vsota" ; Default ; > ;
+        < "Vsota" ; Default ; > ;
         < "Se≈°tevek" ; Default ; > ;
         < "Povpreƒçje" ; Default ; > ;
         < "Maks" ; Default ; > ;
@@ -632,51 +469,67 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         < "Varianca (vzorec)" ; Default ; > ;
         < "Varianca pop. (celotna populacija)" ; Default ; > ;
     };
-    };
+};
+
+// ----------------------------------------------------------------------------
+
+ModalDialog RID_SCDLG_DPDATAFIELD
+{
+    OutputSize = TRUE ;
+    HelpId = HID_SC_DPDATAFIELD ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 220 , 99 ) ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Hide = TRUE ;
     FixedLine FL_FUNC
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
-    };
-    CheckBox CB_SHOWALL
-    {
-        Pos = MAP_APPFONT ( 12 , 160 ) ;
-        Size = MAP_APPFONT ( 143 , 10 ) ;
-        Text = "~Elemente ohne Daten anzeigen" ;
-        Text [ ENGLISH ] = "Show elements without data" ;
-        TabStop = TRUE ;
-        Text[ english_us ] = "Show ~elements without data";
-        Text[ portuguese ] = "Mostrar ~elementos sem dados";
-        Text[ russian ] = "œÓÍ‡Á‡Ú¸ ˝ÎÂÏÂÌÚ˚ ·ÂÁ ‰‡ÌÌ˚ı";
-        Text[ greek ] = "≈Ïˆ‹ÌÈÛÁ ÛÙÔÈ˜Âﬂ˘Ì ‰ﬂ˜˘Ú ‰Â‰ÔÏ›Ì·";
-        Text[ dutch ] = "~Elementen weergeven zonder gegevens";
-        Text[ french ] = "Afficher les ~ÈlÈments sans donnÈes";
-        Text[ spanish ] = "~Mostrar elementos sin datos";
-        Text[ italian ] = "Mostra ~elementi senza dati";
-        Text[ danish ] = "Vis ~elementer uden data";
-        Text[ swedish ] = "Visa objekt utan data";
-        Text[ polish ] = "Pokaø ~elementy bez danych";
-        Text[ portuguese_brazilian ] = "Mostrar ~elementos sem dados";
-        Text[ japanese ] = "„Éá„Éº„Çø„ÅÆ„Å™„ÅÑË¶ÅÁ¥†„ÇíË°®Á§∫„Åô„Çã(~E)";
-        Text[ korean ] = "Îç∞Ïù¥ÌÑ∞ ÏóÜÏù¥ ÏöîÏÜå Î≥¥Í∏∞(~E)";
-        Text[ chinese_simplified ] = "ÊòæÁ§∫‰∏çÂê´Êï∞ÊçÆÁöÑÊù°ÁõÆ(~E)";
-        Text[ chinese_traditional ] = "È°ØÁ§∫ÁÑ°Êï∏ÊìöÁöÑÂñÆÂÖÉ(~E)";
-        Text[ arabic ] = "≈ŸÂ«— «·⁄‰«’— »œÊ‰ »Ì«‰« ";
-        Text[ turkish ] = "~÷geleri veriler olmadan gˆr¸nt¸le";
+        Text = "~Funktion" ;
+        Text [ ENGLISH ] = "~Function" ;
+        Text [ norwegian ] = "Funksjon" ;
+        Text [ italian ] = "Funzione" ;
+        Text [ portuguese_brazilian ] = "FunÁ„o" ;
+        Text [ portuguese ] = "FunÁ„o" ;
+        Text [ finnish ] = "Funktio" ;
+        Text [ danish ] = "Funktion" ;
+        Text [ french ] = "Fonction" ;
+        Text [ swedish ] = "Funktion" ;
+        Text [ dutch ] = "Functie" ;
+        Text [ spanish ] = "FunciÛn" ;
+        Text [ english_us ] = "~Function" ;
+        Text[ chinese_simplified ] = "ÂáΩÊï∞";
+        Text[ russian ] = "‘ÛÌÍˆËˇ";
+        Text[ polish ] = "Funkcja";
+        Text[ japanese ] = "Ë®àÁÆóÊñπÊ≥ï";
+        Text[ chinese_traditional ] = "ÂáΩÊï∏";
+        Text[ arabic ] = "Function";
+        Text[ greek ] = "”ıÌ‹ÒÙÁÛÁ";
+        Text[ korean ] = "Í≥ÑÏÇ∞ Î∞©Î≤ï";
+        Text[ turkish ] = "Fonksiyon";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mostra els ~elements sense dades";
-        Text[ finnish ] = "N‰yt‰ ~elementit ilman tietoja";
-        Text[ thai ] = "‡πÅ‡∏™‡∏î‡∏á~‡∏≠‡∏á‡∏Ñ‡πå‡∏õ‡∏£‡∏∞‡∏Å‡∏≠‡∏ö‡∏ó‡∏µ‡πà‡πÑ‡∏°‡πà‡∏°‡∏µ‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
-        Text[ czech ] = "Zobrazit prvky bez dat";
-        Text[ hebrew ] = "~Elemente ohne Daten anzeigen";
-        Text[ hindi ] = "‡§°‡§º‡•â‡§ü‡§æ ‡§ï‡•á ‡§¨‡§ø‡§®‡§æ ~‡§ê‡§≤‡§ø‡§Æ‡•á‡§®‡•ç‡§ü‡•ç ‡§ï‡•ã ‡§¶‡§ø‡§ñ‡§æ‡§ì";
-        Text[ slovak ] = "Zobraz prvky b~ez d√°t";
-        Text[ hungarian ] = "Minta ~mutat√°sa adat n√©lk√ºl";
-        Text[ slovenian ] = "Poka≈æi ~elemente brez podatkov";
+        Text[ catalan ] = "FunciÛ";
+        Text[ thai ] = "‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô";
+        Text[ czech ] = "Funkce";
+        Text[ hebrew ] = "Funktion";
+        Text[ hindi ] = "‡§´‡§Ç‡§ï‡•ç‡§∂‡§®‡•ç";
+        Text[ slovak ] = "Funkcia";
+        Text[ hungarian ] = "F√ºggv√©ny";
+        Text[ slovenian ] = "Funkcija";
+    };
+    MultiListBox LB_FUNC
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 140 , 65 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+        SimpleMode = TRUE ;
     };
     FixedText FT_NAMELABEL
     {
-        Pos = MAP_APPFONT ( 6 , 176 ) ;
+        Pos = MAP_APPFONT ( 6 , 85 ) ;
         Size = MAP_APPFONT ( 25 , 8 ) ;
         Text = "Name:" ;
         Text [ ENGLISH ] = "Name:" ;
@@ -712,8 +565,94 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     };
     FixedText FT_NAME
     {
-        Pos = MAP_APPFONT ( 32 , 176 ) ;
+        Pos = MAP_APPFONT ( 32 , 85 ) ;
         Size = MAP_APPFONT ( 126 , 8 ) ;
+    };
+    FixedLine FL_DISPLAY
+    {
+        Pos = MAP_APPFONT( 6, 99 );
+        Size = MAP_APPFONT( 152, 8 );
+        Text = "Angezeigter Wert";
+        Text [ english_us ] = "Displayed value";
+    };
+    FixedText FT_TYPE
+    {
+        Pos = MAP_APPFONT( 12, 112 );
+        Size = MAP_APPFONT( 60, 8 );
+        Text = "~Typ";
+        Text [ english_us ] = "~Type";
+    };
+    ListBox LB_TYPE
+    {
+        Pos = MAP_APPFONT( 75, 110 );
+        Size = MAP_APPFONT( 77, 120 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList =
+        {
+            < "Standard"; Default; >;
+            < "Differenz von"; Default; >;
+            < "% von"; Default; >;
+            < "% Differenz von"; Default; >;
+            < "Ergebnis in"; Default; >;
+            < "% der Zeile"; Default; >;
+            < "% der Spalte"; Default; >;
+            < "% des Ergebnisses"; Default; >;
+            < "Index"; Default; >;
+        };
+        StringList [ english_us ] =
+        {
+            < "Normal"; Default; >;
+            < "Difference from"; Default; >;
+            < "% of"; Default; >;
+            < "% difference from"; Default; >;
+            < "Running total in"; Default; >;
+            < "% of row"; Default; >;
+            < "% of column"; Default; >;
+            < "% of total"; Default; >;
+            < "Index"; Default; >;
+        };
+    };
+    FixedText FT_BASEFIELD
+    {
+        Pos = MAP_APPFONT( 12, 128 );
+        Size = MAP_APPFONT( 60, 8 );
+        Text = "~Basisfeld";
+        Text [ english_us ] = "~Base field";
+    };
+    ListBox LB_BASEFIELD
+    {
+        Pos = MAP_APPFONT( 75, 126 );
+        Size = MAP_APPFONT( 77, 120 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+    };
+    FixedText FT_BASEITEM
+    {
+        Pos = MAP_APPFONT( 12, 144 );
+        Size = MAP_APPFONT( 60, 8 );
+        Text = "Ba~siselement";
+        Text [ english_us ] = "Ba~se item";
+    };
+    ListBox LB_BASEITEM
+    {
+        Pos = MAP_APPFONT( 75, 142 );
+        Size = MAP_APPFONT( 77, 120 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList =
+        {
+            < "- vorhergehendes Element -"; Default; >;
+            < "- n‰chstes Element -"; Default; >;
+        };
+        StringList [ english_us ] =
+        {
+            < "- previous item -"; Default; >;
+            < "- next item -"; Default; >;
+        };
     };
     OKButton BTN_OK
     {
@@ -734,8 +673,189 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    String STR_SUBTOTALS
+    MoreButton BTN_MORE
     {
+        Pos = MAP_APPFONT ( 164 , 79 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        MapUnit = MAP_APPFONT ;
+        Delta = 61 ;
+    };
+    Text = "Datenfeld" ;
+    Text [ ENGLISH ] = "Data Field" ;
+    Text [ norwegian ] = "Data Field" ;
+    Text [ italian ] = "Campo di dati" ;
+    Text [ portuguese_brazilian ] = "Campo de Dados" ;
+    Text [ portuguese ] = "Campo de dados" ;
+    Text [ english_us ] = "Data Field" ;
+    Text [ spanish ] = "Campo de datos" ;
+    Text [ french ] = "Champ de donnÈes" ;
+    Text [ dutch ] = "Gegevensveld" ;
+    Text [ swedish ] = "Dataf‰lt" ;
+    Text [ danish ] = "Datafelt" ;
+    Text[ chinese_simplified ] = "Êï∞ÊçÆÂ≠óÊÆµ";
+    Text[ russian ] = "œÓÎÂ ‰‡ÌÌ˚ı";
+    Text[ polish ] = "Pole danych";
+    Text[ japanese ] = "„Éá„Éº„Çø„Éï„Ç£„Éº„É´„Éâ";
+    Text[ chinese_traditional ] = "Ë≥áÊñôÊ¨Ñ‰Ωç";
+    Text[ arabic ] = "Õﬁ· »Ì«‰« ";
+    Text[ greek ] = "–Â‰ﬂÔ ‰Â‰ÔÏ›Ì˘Ì";
+    Text[ korean ] = "Îç∞Ïù¥ÌÑ∞ ÌïÑÎìú";
+    Text[ turkish ] = "Veri alan˝";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Camp de dades";
+    Text[ finnish ] = "Tietokentt‰";
+    Text[ thai ] = "‡πÄ‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡∏Ç‡∏≠‡∏á‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
+    Text[ czech ] = "Datov√© pole";
+    Text[ hebrew ] = "Datenfeld";
+    Text[ hindi ] = "‡§°‡§º‡•â‡§ü‡§æ ‡§ï‡•ç‡§∑‡•á‡§§‡•ç‡§∞";
+    Text[ slovak ] = "D√°tov√© pole";
+    Text[ hungarian ] = "Adatmez≈ë";
+    Text[ slovenian ] = "Podatkovno polje";
+};
+
+// ----------------------------------------------------------------------------
+
+ModalDialog RID_SCDLG_PIVOTSUBT
+{
+    OutputSize = TRUE ;
+    HelpId = HID_SC_PIVOTSUBT ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 220 , 155 ) ;
+    Text = "Datenfeld" ;
+    Text [ ENGLISH ] = "Data Field" ;
+    Text [ norwegian ] = "Data Field" ;
+    Text [ italian ] = "Campo di dati" ;
+    Text [ portuguese_brazilian ] = "Campo de Dados" ;
+    Text [ portuguese ] = "Campo de dados" ;
+    Text [ english_us ] = "Data Field" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Hide = TRUE ;
+    RadioButton RB_NONE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 140 , 10 ) ;
+        Text = "~Keine" ;
+        Text [ ENGLISH ] = "~None" ;
+        Text [ norwegian ] = "~Ingen " ;
+        Text [ italian ] = "~Nessuna" ;
+        Text [ portuguese_brazilian ] = "~Nenhum" ;
+        Text [ portuguese ] = "~Nenhum" ;
+        Text [ finnish ] = "~Ei mit‰‰n" ;
+        Text [ danish ] = "Ing~en" ;
+        Text [ french ] = "Aucun(e)" ;
+        Text [ swedish ] = "~Inga" ;
+        Text [ dutch ] = "~Geen" ;
+        Text [ spanish ] = "~Ning˙n" ;
+        Text [ english_us ] = "~None" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Êó†(~N)";
+        Text[ russian ] = "ÕÂÚ";
+        Text[ polish ] = "~Brak";
+        Text[ japanese ] = "„Å™„Åó(~N)";
+        Text[ chinese_traditional ] = "ÁÑ°(~N)";
+        Text[ arabic ] = "»œÊ‰";
+        Text[ greek ] = " ·Ì›Ì·";
+        Text[ korean ] = "ÏóÜÏùå(~N)";
+        Text[ turkish ] = "~Yok";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Cap";
+        Text[ thai ] = "‡πÑ~‡∏°‡πà‡∏°‡∏µ";
+        Text[ czech ] = "≈Ω√°dn√Ω";
+        Text[ hebrew ] = "‚ÄÆ◊ú◊ú◊ê‚Ä¨";
+        Text[ hindi ] = "~‡§ï‡•ã‡§à ‡§®‡§π‡•Ä‡§Ç";
+        Text[ slovak ] = "~Niƒç";
+        Text[ hungarian ] = "~Egyik sem";
+        Text[ slovenian ] = "~Brez";
+    };
+    RadioButton RB_AUTO
+    {
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 140 , 10 ) ;
+        Text = "~Automatisch" ;
+        Text [ ENGLISH ] = "~Auto" ;
+        Text [ norwegian ] = "~Auto" ;
+        Text [ italian ] = "Automatico" ;
+        Text [ portuguese_brazilian ] = "~Autom·tico" ;
+        Text [ portuguese ] = "~Automaticamente" ;
+        Text [ finnish ] = "~Automaattinen" ;
+        Text [ danish ] = "~Automatisk" ;
+        Text [ french ] = "Automatique" ;
+        Text [ swedish ] = "~Automatiskt" ;
+        Text [ dutch ] = "~Automatisch" ;
+        Text [ spanish ] = "~Autom·tico" ;
+        Text [ english_us ] = "~Automatic" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Ëá™Âä®(~A)";
+        Text[ russian ] = "¿‚ÚÓÏ‡ÚË˜ÂÒÍË";
+        Text[ polish ] = "~Automatycznie";
+        Text[ japanese ] = "Ëá™Âãï(~A)";
+        Text[ chinese_traditional ] = "Ëá™Âãï(~A)";
+        Text[ arabic ] = " ·ﬁ«∆Ì";
+        Text[ greek ] = "¡ıÙ¸Ï·Ù·";
+        Text[ korean ] = "ÏûêÎèô(~A)";
+        Text[ turkish ] = "~Otomatik";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Autom‡tic";
+        Text[ thai ] = "~‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥";
+        Text[ czech ] = "Automaticky";
+        Text[ hebrew ] = "‚ÄÆ◊ê◊ï◊ò◊ï◊û◊ò◊ô‚Ä¨";
+        Text[ hindi ] = "~‡§∏‡•ç‡§µ‡§ö‡§æ‡§≤‡§ø‡§§";
+        Text[ slovak ] = "~Automaticky";
+        Text[ hungarian ] = "~Automatikus";
+        Text[ slovenian ] = "S~amodejno";
+    };
+    RadioButton RB_USER
+    {
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Size = MAP_APPFONT ( 140 , 10 ) ;
+        Text = "~Benutzerdefiniert" ;
+        Text [ ENGLISH ] = "~Userdefined" ;
+        Text [ norwegian ] = "~Brukerdefinert " ;
+        Text [ italian ] = "Definito dall'utente" ;
+        Text [ portuguese_brazilian ] = "Definido pelo ~usu·rio" ;
+        Text [ portuguese ] = "Definido pelo ~utilizador" ;
+        Text [ finnish ] = "~K‰ytt‰j‰n m‰‰ritt‰m‰t" ;
+        Text [ danish ] = "~Brugerdefineret" ;
+        Text [ french ] = "DÈfini par l'utilisateur" ;
+        Text [ swedish ] = "~Anv‰ndardefinierade" ;
+        Text [ dutch ] = "Ge~bruikergedefinieerd" ;
+        Text [ spanish ] = "Definido por el ~usuario" ;
+        Text [ english_us ] = "~User-defined" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "‰ΩøÁî®ËÄÖËá™ËÆæ(~U)";
+        Text[ russian ] = "ŒÔÂ‰ÂÎˇÂÏ˚È ÔÓÎ¸ÁÓ‚‡ÚÂÎÂÏ";
+        Text[ polish ] = "Definiowane przez ~uøytkownika";
+        Text[ japanese ] = "„É¶„Éº„Ç∂„ÉºÂÆöÁæ©(~U)";
+        Text[ chinese_traditional ] = "‰ΩøÁî®ËÄÖËá™Ë®Ç(~U)";
+        Text[ arabic ] = "„⁄—› „‰ ﬁ»· «·„” Œœ„";
+        Text[ greek ] = "œÒÈÊ¸ÏÂÌÔ ·¸ ÙÔÌ ˜ÒﬁÛÙÁ";
+        Text[ korean ] = "ÏÇ¨Ïö©Ïûê Ï†ïÏùò(~U)";
+        Text[ turkish ] = "~Kullan˝c˝~tan˝ml˝";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Definit per l'~usuari";
+        Text[ thai ] = "‡∏£‡∏∞‡∏ö‡∏∏~‡∏ú‡∏π‡πâ‡πÉ‡∏ä‡πâ";
+        Text[ czech ] = "U≈æivatelem definovan√©";
+        Text[ hebrew ] = "~Benutzerdefiniert";
+        Text[ hindi ] = "~‡§â‡§™‡§≠‡•ã‡§ï‡•ç‡§§‡§æ ‡§∏‡•á ‡§™‡§∞‡§ø‡§≠‡§æ‡§∑‡§æ ‡§ï‡§ø‡§Ø‡§æ ‡§π‡•Å‡§Ü";
+        Text[ slovak ] = "~U≈æ√≠vateƒæom definovan√©";
+        Text[ hungarian ] = "~Egy√©ni";
+        Text[ slovenian ] = "~Uporabni≈°ko doloƒçeno";
+    };
+    MultiListBox LB_FUNC
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Size = MAP_APPFONT ( 140 , 65 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+        SimpleMode = TRUE ;
+    };
+    FixedLine FL_FUNC
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 152 , 8 ) ;
         Text = "Teilergebnisse" ;
         Text [ ENGLISH ] = "Sub Totals" ;
         Text [ norwegian ] = "Sum" ;
@@ -768,39 +888,109 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ hungarian ] = "R√©sz√∂sszegek";
         Text[ slovenian ] = "Delne vsote";
     };
-    String STR_DATAFUNC
+    CheckBox CB_SHOWALL
     {
-        Text = "Funktion" ;
-        Text [ ENGLISH ] = "Function" ;
-        Text [ norwegian ] = "Funksjon" ;
-        Text [ italian ] = "Funzione" ;
-        Text [ portuguese_brazilian ] = "FunÁ„o" ;
-        Text [ portuguese ] = "FunÁ„o" ;
-        Text [ finnish ] = "Funktio" ;
-        Text [ danish ] = "Funktion" ;
-        Text [ french ] = "Fonction" ;
-        Text [ swedish ] = "Funktion" ;
-        Text [ dutch ] = "Functie" ;
-        Text [ spanish ] = "FunciÛn" ;
-        Text [ english_us ] = "Function" ;
-        Text[ chinese_simplified ] = "ÂáΩÊï∞";
-        Text[ russian ] = "‘ÛÌÍˆËˇ";
-        Text[ polish ] = "Funkcja";
-        Text[ japanese ] = "Ë®àÁÆóÊñπÊ≥ï";
-        Text[ chinese_traditional ] = "ÂáΩÊï∏";
-        Text[ arabic ] = "Function";
-        Text[ greek ] = "”ıÌ‹ÒÙÁÛÁ";
-        Text[ korean ] = "Í≥ÑÏÇ∞ Î∞©Î≤ï";
-        Text[ turkish ] = "Fonksiyon";
+        Pos = MAP_APPFONT ( 12 , 127 ) ;
+        Size = MAP_APPFONT ( 140 , 10 ) ;
+        Text = "~Elemente ohne Daten anzeigen" ;
+        Text [ ENGLISH ] = "Show elements without data" ;
+        TabStop = TRUE ;
+        Text[ english_us ] = "Show it~ems without data";
+        Text[ portuguese ] = "Mostrar ~elementos sem dados";
+        Text[ russian ] = "œÓÍ‡Á‡Ú¸ ˝ÎÂÏÂÌÚ˚ ·ÂÁ ‰‡ÌÌ˚ı";
+        Text[ greek ] = "≈Ïˆ‹ÌÈÛÁ ÛÙÔÈ˜Âﬂ˘Ì ‰ﬂ˜˘Ú ‰Â‰ÔÏ›Ì·";
+        Text[ dutch ] = "~Elementen weergeven zonder gegevens";
+        Text[ french ] = "Afficher les ~ÈlÈments sans donnÈes";
+        Text[ spanish ] = "~Mostrar elementos sin datos";
+        Text[ italian ] = "Mostra ~elementi senza dati";
+        Text[ danish ] = "Vis ~elementer uden data";
+        Text[ swedish ] = "Visa objekt utan data";
+        Text[ polish ] = "Pokaø ~elementy bez danych";
+        Text[ portuguese_brazilian ] = "Mostrar ~elementos sem dados";
+        Text[ japanese ] = "„Éá„Éº„Çø„ÅÆ„Å™„ÅÑË¶ÅÁ¥†„ÇíË°®Á§∫„Åô„Çã(~E)";
+        Text[ korean ] = "Îç∞Ïù¥ÌÑ∞ ÏóÜÏù¥ ÏöîÏÜå Î≥¥Í∏∞(~E)";
+        Text[ chinese_simplified ] = "ÊòæÁ§∫‰∏çÂê´Êï∞ÊçÆÁöÑÊù°ÁõÆ(~E)";
+        Text[ chinese_traditional ] = "È°ØÁ§∫ÁÑ°Êï∏ÊìöÁöÑÂñÆÂÖÉ(~E)";
+        Text[ arabic ] = "≈ŸÂ«— «·⁄‰«’— »œÊ‰ »Ì«‰« ";
+        Text[ turkish ] = "~÷geleri veriler olmadan gˆr¸nt¸le";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "FunciÛ";
-        Text[ thai ] = "‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô";
-        Text[ czech ] = "Funkce";
-        Text[ hebrew ] = "Funktion";
-        Text[ hindi ] = "‡§´‡§Ç‡§ï‡•ç‡§∂‡§®‡•ç";
-        Text[ slovak ] = "Funkcia";
-        Text[ hungarian ] = "F√ºggv√©ny";
-        Text[ slovenian ] = "Funkcija";
+        Text[ catalan ] = "Mostra els ~elements sense dades";
+        Text[ finnish ] = "N‰yt‰ ~elementit ilman tietoja";
+        Text[ thai ] = "‡πÅ‡∏™‡∏î‡∏á~‡∏≠‡∏á‡∏Ñ‡πå‡∏õ‡∏£‡∏∞‡∏Å‡∏≠‡∏ö‡∏ó‡∏µ‡πà‡πÑ‡∏°‡πà‡∏°‡∏µ‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
+        Text[ czech ] = "Zobrazit prvky bez dat";
+        Text[ hebrew ] = "~Elemente ohne Daten anzeigen";
+        Text[ hindi ] = "‡§°‡§º‡•â‡§ü‡§æ ‡§ï‡•á ‡§¨‡§ø‡§®‡§æ ~‡§ê‡§≤‡§ø‡§Æ‡•á‡§®‡•ç‡§ü‡•ç ‡§ï‡•ã ‡§¶‡§ø‡§ñ‡§æ‡§ì";
+        Text[ slovak ] = "Zobraz prvky b~ez d√°t";
+        Text[ hungarian ] = "Minta ~mutat√°sa adat n√©lk√ºl";
+        Text[ slovenian ] = "Poka≈æi ~elemente brez podatkov";
+    };
+    FixedText FT_NAMELABEL
+    {
+        Pos = MAP_APPFONT ( 6 , 141 ) ;
+        Size = MAP_APPFONT ( 25 , 8 ) ;
+        Text = "Name:" ;
+        Text [ ENGLISH ] = "Name:" ;
+        Text [ norwegian ] = "Navn:" ;
+        Text [ italian ] = "Nome:" ;
+        Text [ portuguese_brazilian ] = "Nome:" ;
+        Text [ portuguese ] = "Nome:" ;
+        Text [ finnish ] = "Nimi:" ;
+        Text [ danish ] = "Navn:" ;
+        Text [ french ] = "Nom :" ;
+        Text [ swedish ] = "Namn:" ;
+        Text [ dutch ] = "Naam:" ;
+        Text [ spanish ] = "Nombre:" ;
+        Text [ english_us ] = "Name:" ;
+        Text[ chinese_simplified ] = "ÂêçÁß∞Ôºö";
+        Text[ russian ] = "»Ïˇ:";
+        Text[ polish ] = "Nazwa:";
+        Text[ japanese ] = "ÂêçÂâç:";
+        Text[ chinese_traditional ] = "ÂêçÁ®±Ôºö";
+        Text[ arabic ] = "«·«”„:";
+        Text[ greek ] = "ºÌÔÏ·:";
+        Text[ korean ] = "Ïù¥Î¶Ñ:";
+        Text[ turkish ] = "Ad:";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nom:";
+        Text[ thai ] = "‡∏ä‡∏∑‡πà‡∏≠:";
+        Text[ czech ] = "Jm√©no:";
+        Text[ hebrew ] = "Name:";
+        Text[ hindi ] = "‡§®‡§æ‡§Æ:";
+        Text[ slovak ] = "N√°zov:";
+        Text[ hungarian ] = "N√©v:";
+        Text[ slovenian ] = "Ime:";
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 32 , 141 ) ;
+        Size = MAP_APPFONT ( 126 , 8 ) ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 164 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 164 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 164 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 164 , 135 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "~Optionen...";
+        Text [ english_us ] = "~Options...";
     };
     Text [ spanish ] = "Campo de datos" ;
     Text [ french ] = "Champ de donnÈes" ;
@@ -828,40 +1018,224 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     Text[ slovenian ] = "Podatkovno polje";
 };
 
+// ----------------------------------------------------------------------------
 
+ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
+{
+    OutputSize = TRUE;
+    HelpId = HID_SC_DPSUBT_OPT;
+    SVLook = TRUE;
+    Size = MAP_APPFONT( 266, 240 );
+    Moveable = TRUE;
+    Closeable = FALSE;
+    Hide = TRUE;
+    FixedLine FL_SORT_BY
+    {
+        Pos = MAP_APPFONT( 6, 3 );
+        Size = MAP_APPFONT( 198, 8 );
+        Text = "~Sortieren nach";
+        Text [ english_us ] = "Sort ~by";
+    };
+    ListBox LB_SORT_BY
+    {
+        Pos = MAP_APPFONT( 12, 26 );
+        Size = MAP_APPFONT( 96, 120 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+    };
+    RadioButton RB_SORT_ASC
+    {
+        Pos = MAP_APPFONT( 114, 14 );
+        Size = MAP_APPFONT( 84, 10 );
+        TabStop = TRUE;
+        Text = "~Aufsteigend";
+        Text [ english_us ] = "~Ascending";
+    };
+    RadioButton RB_SORT_DESC
+    {
+        Pos = MAP_APPFONT( 114, 28 );
+        Size = MAP_APPFONT( 84, 10 );
+        TabStop = TRUE;
+        Text = "A~bsteigend";
+        Text [ english_us ] = "~Descending";
+    };
+    RadioButton RB_SORT_MAN
+    {
+        Pos = MAP_APPFONT( 114, 42 );
+        Size = MAP_APPFONT( 84, 10 );
+        TabStop = TRUE;
+        Text = "~Manuell";
+        Text [ english_us ] = "~Manual";
+    };
+    FixedLine FL_LAYOUT
+    {
+        Pos = MAP_APPFONT( 6, 56 );
+        Size = MAP_APPFONT( 198, 8 );
+        Text = "Anzeigeoptionen";
+        Text [ english_us ] = "Display options";
+    };
+    FixedText FT_LAYOUT
+    {
+        Pos = MAP_APPFONT( 12, 69 );
+        Size = MAP_APPFONT( 70, 8 );
+        Text = "~Layout";
+        Text [ english_us ] = "~Layout";
+    };
+    ListBox LB_LAYOUT
+    {
+        Pos = MAP_APPFONT( 84, 67 );
+        Size = MAP_APPFONT( 114, 120 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList =
+        {
+            < "Tabellarisches Layout"; Default; >;
+            < "Gliederungsansicht mit Teilergebnissen oben"; Default; >;
+            < "Gliederungsansicht mit Teilergebnissen unten"; Default; >;
+        };
+        StringList [ english_us ] =
+        {
+            < "Tabular layout"; Default; >;
+            < "Outline layout with subtotals at the top"; Default; >;
+            < "Outline layout with subtotals at the bottom"; Default; >;
+        };
+    };
+    CheckBox CB_LAYOUT_EMPTY
+    {
+        Pos = MAP_APPFONT( 12, 85 );
+        Size = MAP_APPFONT( 186, 10 );
+        TabStop = TRUE;
+        Text = "L~eerzeile nach jedem Element";
+        Text[ english_us ] = "~Empty line after each item";
+    };
+    FixedLine FL_AUTOSHOW
+    {
+        Pos = MAP_APPFONT( 6, 99 );
+        Size = MAP_APPFONT( 198, 8 );
+        Text = "Automatisch anzeigen";
+        Text [ english_us ] = "Show automatically";
+    };
+    CheckBox CB_SHOW
+    {
+        Pos = MAP_APPFONT( 12, 112 );
+        Size = MAP_APPFONT( 70, 10 );
+        TabStop = TRUE;
+        Text = "An~zeigen";
+        Text[ english_us ] = "~Show";
+    };
+    NumericField NF_SHOW
+    {
+        Pos = MAP_APPFONT( 84, 110 );
+        Size = MAP_APPFONT( 30, 12 );
+        TabStop = TRUE;
+        Border = TRUE;
+        Repeat = TRUE;
+        Spin = TRUE;
+        Minimum = 1;
+        Maximum = 999;
+        SpinSize = 1;
+        StrictFormat = TRUE;
+    };
+    FixedText FT_SHOW
+    {
+        Pos = MAP_APPFONT( 118, 112 );
+        Size = MAP_APPFONT( 80, 8 );
+        Text = "Elemente";
+        Text [ english_us ] = "items";
+    };
+    FixedText FT_SHOW_FROM
+    {
+        Pos = MAP_APPFONT( 22, 128 );
+        Size = MAP_APPFONT( 60, 8 );
+        Text = "~Von";
+        Text [ english_us ] = "~From";
+    };
+    ListBox LB_SHOW_FROM
+    {
+        Pos = MAP_APPFONT( 84, 126 );
+        Size = MAP_APPFONT( 114, 50 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList =
+        {
+            < "Oben"; Default; >;
+            < "Unten"; Default; >;
+        };
+        StringList [ english_us ] =
+        {
+            < "Top"; Default; >;
+            < "Bottom"; Default; >;
+        };
+    };
+    FixedText FT_SHOW_USING
+    {
+        Pos = MAP_APPFONT( 22, 144 );
+        Size = MAP_APPFONT( 60, 8 );
+        Text = "~Feld verwenden";
+        Text [ english_us ] = "~Using field";
+    };
+    ListBox LB_SHOW_USING
+    {
+        Pos = MAP_APPFONT( 84, 142 );
+        Size = MAP_APPFONT( 114, 120 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+    };
+    FixedLine FL_HIDE
+    {
+        Pos = MAP_APPFONT( 6, 160 );
+        Size = MAP_APPFONT( 198, 8 );
+        Text = "Vers~teckte Elemente";
+        Text [ english_us ] = "Hide i~tems";
+    };
+    Control CT_HIDE
+    {
+        Pos = MAP_APPFONT( 12, 171 );
+        Size = MAP_APPFONT( 186, 45 );
+        TabStop = TRUE;
+        Border = TRUE;
+    };
+    FixedText FT_HIERARCHY
+    {
+        Pos = MAP_APPFONT( 6, 224 );
+        Size = MAP_APPFONT( 76, 8 );
+        Text = "H~ierarchie";
+        Text [ english_us ] = "Hierarch~y";
+    };
+    ListBox LB_HIERARCHY
+    {
+        Pos = MAP_APPFONT( 84, 222 );
+        Size = MAP_APPFONT( 114, 120 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT( 210, 6 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+        DefButton = TRUE;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT( 210, 23 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT( 210, 43 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+    };
+    Text = "Datenfeld-Optionen";
+    Text [ english_us ] = "Data Field Options";
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// ----------------------------------------------------------------------------
 
