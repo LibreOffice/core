@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-25 13:27:43 $
+ *  last change: $Author: sab $ $Date: 2002-03-01 08:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
 #endif
+#ifndef _RTL_UUID_H_
+#include <rtl/uuid.h>
+#endif
 
 #include <float.h>
 
@@ -107,7 +110,7 @@ using namespace ::drafts::com::sun::star::accessibility;
 ScAccessibleCellBase::ScAccessibleCellBase(
         const uno::Reference<XAccessible>& rxParent,
         ScDocument* pDoc,
-        ScAddress& rCellAddress,
+        const ScAddress& rCellAddress,
         sal_Int32 nIndex)
     :
     ScAccessibleContextBase(rxParent, AccessibleRole::TABLE_CELL),
@@ -156,7 +159,7 @@ void SAL_CALL
 sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
         throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard();
+     ScUnoGuard aGuard;
     // test whether the cell is hidden (column/row - hidden/filtered)
     sal_Bool bVisible(sal_True);
     if (mpDoc)
@@ -176,8 +179,15 @@ sal_Int32
     ScAccessibleCellBase::getAccessibleIndexInParent(void)
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     return mnIndex;
+}
+
+lang::Locale SAL_CALL getLocale(void)
+        throw (uno::RuntimeException, IllegalAccessibleComponentStateException)
+{
+    lang::Locale aLocale;
+    return aLocale;
 }
 
 ::rtl::OUString SAL_CALL
@@ -217,7 +227,7 @@ uno::Any SAL_CALL
     ScAccessibleCellBase::getCurrentValue(  )
     throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard();
+     ScUnoGuard aGuard;
     uno::Any aAny;
     if (mpDoc)
         aAny <<= mpDoc->GetValue(maCellAddress);
@@ -229,7 +239,7 @@ sal_Bool SAL_CALL
     ScAccessibleCellBase::setCurrentValue( const uno::Any& aNumber )
     throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard();
+     ScUnoGuard aGuard;
     double fValue;
     sal_Bool bResult(sal_False);
     if((aNumber >>= fValue) && mpDoc && mpDoc->GetDocumentShell())
@@ -283,7 +293,7 @@ uno::Any SAL_CALL
 uno::Sequence< uno::Type> SAL_CALL ScAccessibleCellBase::getTypes(void)
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     uno::Sequence< uno::Type>
         aTypeSequence = ScAccessibleContextBase::getTypes();
     sal_Int32 nOldSize(aTypeSequence.getLength());
@@ -296,6 +306,19 @@ uno::Sequence< uno::Type> SAL_CALL ScAccessibleCellBase::getTypes(void)
     return aTypeSequence;
 }
 
+uno::Sequence<sal_Int8> SAL_CALL
+    ScAccessibleCellBase::getImplementationId(void)
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    static uno::Sequence<sal_Int8> aId;
+    if (aId.getLength() == 0)
+    {
+        aId.realloc (16);
+        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
+    }
+    return aId;
+}
 
 sal_Bool ScAccessibleCellBase::IsEditable(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)

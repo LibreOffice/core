@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-25 13:27:43 $
+ *  last change: $Author: sab $ $Date: 2002-03-01 08:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,15 @@ ScAccessibleContextBase::ScAccessibleContextBase(
 
 ScAccessibleContextBase::~ScAccessibleContextBase(void)
 {
+}
+
+void ScAccessibleContextBase::SetDefunc()
+{
+    CommitDefunc();
+
+    // hold reference to make sure that the destructor is not called
+    uno::Reference< XAccessibleContext > xOwnContext(this);
+
     if (mpEventListeners || mpFocusListeners)
     {
         lang::EventObject aEvent;
@@ -125,25 +134,14 @@ ScAccessibleContextBase::~ScAccessibleContextBase(void)
         if (mpEventListeners)
         {
             mpEventListeners->disposeAndClear(aEvent);
-            delete mpEventListeners;
+            DELETEZ( mpEventListeners );
         }
         if (mpFocusListeners)
         {
             mpFocusListeners->disposeAndClear(aEvent);
-            delete mpFocusListeners;
+            DELETEZ( mpFocusListeners );
         }
     }
-    if (mxParent.is())
-    {
-        uno::Reference< XAccessibleEventBroadcaster > xBroadcaster (mxParent->getAccessibleContext(), uno::UNO_QUERY);
-        if (xBroadcaster.is())
-            xBroadcaster->removeEventListener(this);
-    }
-}
-
-void ScAccessibleContextBase::SetDefunc()
-{
-    CommitDefunc();
 
     if (mxParent.is())
     {
@@ -174,7 +172,7 @@ uno::Reference< XAccessibleContext> SAL_CALL
 sal_Bool SAL_CALL ScAccessibleContextBase::contains(const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     Rectangle aBounds(GetBoundingBox());
     return !((rPoint.X < aBounds.getX()) || (rPoint.X > (aBounds.getX() + aBounds.getWidth())) ||
             (rPoint.Y < aBounds.getY()) || (rPoint.Y > (aBounds.getY() + aBounds.getHeight())));
@@ -191,7 +189,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAt(
 awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     Rectangle aCoreBounds(GetBoundingBox());
     awt::Rectangle aBounds;
     aBounds.X = aCoreBounds.getX();
@@ -204,7 +202,7 @@ awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
 awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     awt::Point aLocation;
     Rectangle aRect(GetBoundingBox());
     aLocation.X = aRect.getX();
@@ -215,7 +213,7 @@ awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
 awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     awt::Point aPoint;
     Rectangle aRect(GetBoundingBoxOnScreen());
     aPoint.X = aRect.getX();
@@ -226,7 +224,7 @@ awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
 awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     awt::Size aSize;
     Rectangle aRect(GetBoundingBox());
     aSize.Width = aRect.getWidth();
@@ -237,7 +235,7 @@ awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
 sal_Bool SAL_CALL ScAccessibleContextBase::isShowing(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     sal_Bool bShowing(sal_False);
     uno::Reference<XAccessibleComponent> xParentComponent (mxParent->getAccessibleContext(), uno::UNO_QUERY);
     if (xParentComponent.is())
@@ -269,7 +267,7 @@ void SAL_CALL ScAccessibleContextBase::addFocusListener(
     const uno::Reference< awt::XFocusListener >& xListener )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     if (xListener.is())
     {
         if (!mpFocusListeners)
@@ -282,7 +280,7 @@ void SAL_CALL ScAccessibleContextBase::removeFocusListener(
     const uno::Reference< awt::XFocusListener >& xListener )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     if (xListener.is() && mpFocusListeners)
         mpFocusListeners->removeInterface(xListener);
 }
@@ -329,7 +327,7 @@ sal_Int32 SAL_CALL
        ScAccessibleContextBase::getAccessibleIndexInParent(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     //  Use a simple but slow solution for now.  Optimize later.
    //   Return -1 to indicate that this object's parent does not know about the
    //   object.
@@ -370,7 +368,7 @@ sal_Int16 SAL_CALL
        ScAccessibleContextBase::getAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     if (!msDescription.getLength())
     {
         OUString sDescription(createAccessibleDescription());
@@ -392,7 +390,7 @@ OUString SAL_CALL
        ScAccessibleContextBase::getAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     if (!msName.getLength())
     {
         OUString sName(createAccessibleName());
@@ -429,7 +427,7 @@ lang::Locale SAL_CALL
     throw (IllegalAccessibleComponentStateException,
         uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     if (mxParent.is())
     {
         uno::Reference<XAccessibleContext> xParentContext (
@@ -450,7 +448,7 @@ void SAL_CALL
            const uno::Reference<XAccessibleEventListener>& xListener)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     if (xListener.is())
     {
         if (!mpEventListeners)
@@ -464,7 +462,7 @@ void SAL_CALL
         const uno::Reference<XAccessibleEventListener>& xListener)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     if (xListener.is() && mpEventListeners)
         mpEventListeners->removeInterface(xListener);
 }
@@ -554,7 +552,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleContextBase::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {

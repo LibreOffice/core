@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-25 11:45:34 $
+ *  last change: $Author: sab $ $Date: 2002-03-01 08:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ public:
         const ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         ScDocument* pDoc,
-        ScAddress& rCellAddress,
+        const ScAddress& rCellAddress,
         sal_Int32 nIndex);
 protected:
     virtual ~ScAccessibleCellBase();
@@ -121,6 +121,13 @@ public:
     virtual sal_Int32 SAL_CALL
         getAccessibleIndexInParent(void)
         throw (::com::sun::star::uno::RuntimeException);
+
+    /** Return the locale of the cell.
+    */
+    virtual ::com::sun::star::lang::Locale SAL_CALL
+        getLocale(void)
+        throw (::com::sun::star::uno::RuntimeException,
+            ::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException);
 
 protected:
     /// Return this object's description.
@@ -166,6 +173,12 @@ public:
     */
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
         getTypes(void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Returns a implementation id.
+    */
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
+        getImplementationId(void)
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:

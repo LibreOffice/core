@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-25 11:45:34 $
+ *  last change: $Author: sab $ $Date: 2002-03-01 08:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #endif
 
 class ScTabViewShell;
+class SvxAccessibleTextHelper;
 
 /** @descr
         This base class provides an implementation of the
@@ -104,9 +105,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
         SAL_CALL getAccessibleAt(
         const ::com::sun::star::awt::Point& rPoint )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL isVisible(  )
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL grabFocus(  )
@@ -156,8 +154,18 @@ public:
         getSupportedServiceNames(void)
         throw (::com::sun::star::uno::RuntimeException);
 
+    ///=====  XTypeProvider  ===================================================
+
+    /** Returns a implementation id.
+    */
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
+        getImplementationId(void)
+        throw (::com::sun::star::uno::RuntimeException);
+
 private:
     ScTabViewShell* mpViewShell;
+
+    SvxAccessibleTextHelper* mpTextHelper;
 
     ScSplitPos meSplitPos;
 
@@ -175,6 +183,8 @@ private:
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 
     ScDocument* GetDocument(ScTabViewShell* mpViewShell);
+
+    void CreateTextHelper();
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-25 11:45:34 $
+ *  last change: $Author: sab $ $Date: 2002-03-01 08:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,14 @@ public:
     */
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
         getSupportedServiceNames(void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    ///=====  XTypeProvider  ===================================================
+
+    /** Returns a implementation id.
+    */
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
+        getImplementationId(void)
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-25 13:27:43 $
+ *  last change: $Author: sab $ $Date: 2002-03-01 08:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAt(
         const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     uno::Reference<XAccessible> xAccessible = NULL;
     SdrPage* pDrawPage = GetDrawPage();
     if (pDrawPage)
@@ -216,7 +216,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAt(
 void SAL_CALL ScAccessibleDocument::grabFocus(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -241,7 +241,7 @@ long SAL_CALL
     ScAccessibleDocument::getAccessibleChildCount(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     sal_Int32 nShapes (0);
     SdrPage* pDrawPage = GetDrawPage();
     if (pDrawPage)
@@ -263,7 +263,7 @@ uno::Reference<XAccessible> SAL_CALL
     throw (uno::RuntimeException,
         lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     uno::Reference<XAccessible> xAccessible;// = GetChild(nIndex);
     if (!xAccessible.is())
     {
@@ -286,7 +286,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleDocument::getAccessibleStateSet(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {
@@ -330,6 +330,22 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     return aSequence;
 }
 
+//=====  XTypeProvider  =======================================================
+
+uno::Sequence<sal_Int8> SAL_CALL
+    ScAccessibleDocument::getImplementationId(void)
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    static uno::Sequence<sal_Int8> aId;
+    if (aId.getLength() == 0)
+    {
+        aId.realloc (16);
+        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
+    }
+    return aId;
+}
+
     //=====  internal  ========================================================
 
 ::rtl::OUString SAL_CALL
@@ -343,7 +359,7 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     ScAccessibleDocument::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM ("Spreadsheet Document View "));
     sal_Int32 nNumber(sal_Int32(meSplitPos) + 1);
     sName += rtl::OUString::valueOf(nNumber);

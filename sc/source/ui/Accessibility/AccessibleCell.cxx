@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-25 13:27:43 $
+ *  last change: $Author: sab $ $Date: 2002-03-01 08:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 
 #include "AccessibleCell.hxx"
+#ifndef _SC_ACCESSIBLETEXT_HXX
+#include "AccessibleText.hxx"
+#endif
 #ifndef SC_TABVWSH_HXX
 #include "tabvwsh.hxx"
 #endif
@@ -78,6 +81,9 @@
 #endif
 #ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
+#endif
+#ifndef SC_EDITSRC_HXX
+#include "editsrc.hxx"
 #endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
@@ -99,6 +105,9 @@
 #ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
 #endif
+#ifndef _SVX_UNOEDACC_HXX_
+#include <svx/unoedacc.hxx>
+#endif
 
 #include <float.h>
 
@@ -116,12 +125,15 @@ ScAccessibleCell::ScAccessibleCell(
     :
     ScAccessibleCellBase(rxParent, GetDocument(pViewShell), rCellAddress, nIndex),
     mpViewShell(pViewShell),
-    meSplitPos(eSplitPos)
+    meSplitPos(eSplitPos),
+    mpTextHelper(NULL)
 {
 }
 
 ScAccessibleCell::~ScAccessibleCell()
 {
+    if (mpTextHelper)
+        delete mpTextHelper;
 }
 
     //=====  XAccessibleComponent  ============================================
@@ -130,32 +142,17 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAt(
         const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-    uno::Reference< XAccessible > xAccessible = NULL;
-    // should be implemented in the Accessible Text helper
-    return xAccessible;
-}
+     ScUnoGuard aGuard;
+    if(!mpTextHelper)
+        CreateTextHelper();
 
-sal_Bool SAL_CALL ScAccessibleCell::isVisible(  )
-        throw (uno::RuntimeException)
-{
-     ScUnoGuard aGuard();
-    // test whether the cell is hidden (column/row - hidden/filtered)
-    sal_Bool bVisible(sal_True);
-    if (mpDoc)
-    {
-        BYTE nColFlags = mpDoc->GetColFlags(maCellAddress.Col(), maCellAddress.Tab());
-        BYTE nRowFlags = mpDoc->GetRowFlags(maCellAddress.Row(), maCellAddress.Tab());
-        if (((nColFlags & CR_HIDDEN) == CR_HIDDEN) || ((nColFlags & CR_FILTERED) == CR_FILTERED) ||
-            ((nRowFlags & CR_HIDDEN) == CR_HIDDEN) || ((nRowFlags & CR_FILTERED) == CR_FILTERED))
-            bVisible = sal_False;
-    }
-    return bVisible;
+    return mpTextHelper->GetAt(rPoint);
 }
 
 void SAL_CALL ScAccessibleCell::grabFocus(  )
         throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard();
+     ScUnoGuard aGuard;
     if (getAccessibleParent().is() && mpViewShell)
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -205,9 +202,10 @@ sal_Int32 SAL_CALL
     ScAccessibleCell::getAccessibleChildCount(void)
                     throw (uno::RuntimeException)
 {
-    sal_Int32 nCount(0);
-    // should call the Helper class of Thorsten Behrens to get the child count
-    return nCount;
+    ScUnoGuard aGuard;
+    if (!mpTextHelper)
+        CreateTextHelper();
+    return mpTextHelper->GetChildCount();
 }
 
 uno::Reference< XAccessible > SAL_CALL
@@ -215,15 +213,18 @@ uno::Reference< XAccessible > SAL_CALL
         throw (uno::RuntimeException,
         lang::IndexOutOfBoundsException)
 {
-    DBG_ERROR("not implemented yet");
-    return uno::Reference< XAccessible >();
+    ScUnoGuard aGuard;
+    if (!mpTextHelper)
+        CreateTextHelper();
+    return mpTextHelper->GetChild(nIndex);
+//  return uno::Reference< XAccessible >();
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleCell::getAccessibleStateSet(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {
@@ -276,6 +277,22 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     return aSequence;
 }
 
+//=====  XTypeProvider  =======================================================
+
+uno::Sequence<sal_Int8> SAL_CALL
+    ScAccessibleCell::getImplementationId(void)
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    static uno::Sequence<sal_Int8> aId;
+    if (aId.getLength() == 0)
+    {
+        aId.realloc (16);
+        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
+    }
+    return aId;
+}
+
     //====  internal  =========================================================
 
 sal_Bool ScAccessibleCell::IsDefunc(
@@ -311,7 +328,7 @@ sal_Bool ScAccessibleCell::IsOpaque(
     {
         const SvxBrushItem* pItem = (const SvxBrushItem*)mpDoc->GetAttr(
             maCellAddress.Col(), maCellAddress.Row(),
-            maCellAddress.Tab(), ATTR_PROTECTION);
+            maCellAddress.Tab(), ATTR_BACKGROUND);
         if (pItem)
             bOpaque = pItem->GetColor() != COL_TRANSPARENT;
     }
@@ -331,3 +348,14 @@ ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
     return pDoc;
 }
 
+void ScAccessibleCell::CreateTextHelper()
+{
+    if (!mpTextHelper)
+    {
+        ::std::auto_ptr < ScAccessibleCellTextData > pAccessibleCellTextData
+            (new ScAccessibleCellTextData(mpViewShell, maCellAddress, meSplitPos));
+        ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleCellTextData));
+
+        mpTextHelper = new SvxAccessibleTextHelper(this, pEditSource );
+    }
+}

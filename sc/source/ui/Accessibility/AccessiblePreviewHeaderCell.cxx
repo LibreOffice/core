@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2002-02-28 19:34:29 $
+ *  last change: $Author: sab $ $Date: 2002-03-01 08:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,22 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePreviewHeaderCell::getSupporte
     pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.AccessibleCell"));
 
     return aSequence;
+}
+
+//=====  XTypeProvider  =======================================================
+
+uno::Sequence<sal_Int8> SAL_CALL
+    ScAccessiblePreviewHeaderCell::getImplementationId(void)
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    static uno::Sequence<sal_Int8> aId;
+    if (aId.getLength() == 0)
+    {
+        aId.realloc (16);
+        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
+    }
+    return aId;
 }
 
 //====  internal  =========================================================

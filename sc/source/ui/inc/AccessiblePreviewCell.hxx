@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2002-02-27 19:34:18 $
+ *  last change: $Author: sab $ $Date: 2002-03-01 08:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,14 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
+
+    ///=====  XTypeProvider  ===================================================
+
+    /** Returns a implementation id.
+    */
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
+        getImplementationId(void)
+        throw (::com::sun::star::uno::RuntimeException);
 
 protected:
     virtual Rectangle GetBoundingBoxOnScreen(void) throw(::com::sun::star::uno::RuntimeException);
