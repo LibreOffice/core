@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:39:02 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@ class ImportExcel8 : public ImportExcel
 
         BOOL                    bObjSection;
         BOOL                    bHasBasic;
-        BOOL                    bFirstScl;          // only one Scl-Record has to be read per chart!
 
         void                    RecString( void );              // 0x07
         void                    Calccount( void );              // 0x0C
@@ -128,17 +127,12 @@ class ImportExcel8 : public ImportExcel
         void                    Codename( BOOL bWBGlobals );    // 0x01BA
         void                    Dimensions( void );             // 0x0200
 
-        void                    ChartEof( void );               // 0x000A
-        void                    ChartScl( void );               // 0x00A0
-
         void                    EndSheet( void );
         virtual void            EndAllChartObjects( void );     // -> excobj.cxx
         virtual void            PostDocLoad( void );
 
         /** Post processes all Escher objects, and inserts them into the document. */
         void                    ApplyEscherObjects();
-
-        virtual FltError        ReadChart8( ScfSimpleProgressBar&, const BOOL bOwnTab );
 
     public:
                                 ImportExcel8( XclImpRootData& rImpData );
