@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-07 14:02:37 $
+#   last change: $Author: hjs $ $Date: 2002-03-07 17:38:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -321,7 +321,7 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ELSE
-            cl -D_$(TARGETTHREAD) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+            cl -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(SHL$(TNR)DEFAULTRES)"!=""
