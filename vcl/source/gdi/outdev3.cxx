@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-12 11:44:06 $
+ *  last change: $Author: hdu $ $Date: 2002-04-12 12:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5138,9 +5138,9 @@ void OutputDevice::SetFont( const Font& rNewFont )
 
 void OutputDevice::SetLayoutMode( ULONG nLayoutMode )
 {
-     DBG_TRACE( "OutputDevice::SetLayoutMode()" );
- 
-     mnLayoutMode = nLayoutMode;
+    DBG_TRACE( "OutputDevice::SetLayoutMode()" );
+
+    mnLayoutMode = nLayoutMode;
 }
 
 // -----------------------------------------------------------------------
