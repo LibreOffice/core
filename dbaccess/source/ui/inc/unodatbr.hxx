@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-07 18:37:34 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 07:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
@@ -103,6 +106,9 @@ namespace dbaui
         DECLARE_STL_STDKEY_MAP( sal_Int32, sal_Bool, SpecialSlotStates);
         SpecialSlotDispatchers  m_aDispatchers;         // external dispatchers for slots we do not execute ourself
         SpecialSlotStates       m_aDispatchStates;      // states of the slots handled by external dispatchers
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+                                m_xDatabaseContext;
 
     // attribute access
     public:
@@ -168,8 +174,12 @@ namespace dbaui
         // check the state of the external slot given, update any UI elements if necessary
         void implCheckExternalSlot(sal_Int32 _nId);
 
+        sal_Bool    populateTree(const ::com::sun::star::uno::Reference<::com::sun::star::container::XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, const Image& _rImage);
+        void        initializeTreeModel();
+
         // is called when a table or a query was selected
         DECL_LINK( OnSelectEntry, SvLBoxEntry* );
+        DECL_LINK( OnExpandEntry, SvLBoxEntry* );
     };
 }
 #endif // _SBA_UNODATBR_HXX_
