@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:57:18 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2304,6 +2304,11 @@ namespace xmloff { namespace token {
         TOKEN( "3d" ),                          // XML_3D
         TOKEN( "image-position" ),              // XML_IMAGE_POSITION
         TOKEN( "image-align" ),                 // XML_IMAGE_ALIGN
+
+        // OD 2004-05-05 #i28701#
+        TOKEN( "wrap-influence-on-position" ),      // XML_WRAP_INFLUENCE_ON_POSITION
+        TOKEN( "none-successive-positioned" ),      // XML_NONE_SUCCESSIVE_POSITIONED
+        TOKEN( "none-concurrent-positioned" ),      // XML_NONE_CONCURRENT_POSITIONED
 
         // Names for OOo format only
         TOKEN( "http://openoffice.org/2000/office" ), // XML_n_office
