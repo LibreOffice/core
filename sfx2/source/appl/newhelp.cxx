@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:34:20 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1754,6 +1754,11 @@ void SfxHelpIndexWindow_Impl::Initialize()
 void SfxHelpIndexWindow_Impl::SetActiveFactory()
 {
     DBG_ASSERT( pIPage, "index page not initialized" );
+    if ( !aActiveLB.GetEntryCount() )
+    {
+        aTimer.Stop();
+        Initialize();
+    }
 
     for ( USHORT i = 0; i < aActiveLB.GetEntryCount(); ++i )
     {
