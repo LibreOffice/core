@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDocumentTemplates.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: dv $ $Date: 2001-03-23 14:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,11 @@ interface XDocumentTemplates:  com::sun::star::uno::XInterface
      */
     boolean                         removeTemplate( [in] string GroupName, [in] string TemplateName );
 
+    /** is called when the status of the feature changes.
+     */
+    boolean                         renameTemplate( [in] string GroupName, [in] string OldTemplateName,
+                                                    [in] string NewTemplateName );
+
     /** Creates a new Group
 
         @param GroupName
@@ -116,6 +121,10 @@ interface XDocumentTemplates:  com::sun::star::uno::XInterface
 
     /** is called when the status of the feature changes.
      */
+    boolean                         renameGroup( [in] string OldGroupName, [in] string NewGroupName );
+
+    /** is called when the status of the feature changes.
+     */
     [oneway] void                   update();
 };
 
@@ -126,6 +135,9 @@ interface XDocumentTemplates:  com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/03/16 16:41:25  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.1  2001/03/09 15:06:21  dv
     First checkin
 
