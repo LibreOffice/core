@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:03:37 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,10 @@ public:
 
     void        SetSvxRule(const SvxNumRule&, SwDoc* pDoc);
     SvxNumRule  MakeSvxNumRule() const;
+    // #i23726#, #i23725#
+    void        Indent(short aAmount, int nLevel = -1,
+                       int nReferenceLevel = -1, BOOL bRelative = TRUE,
+                       BOOL bFirstLine = TRUE, BOOL bCheckGtZero = TRUE);
 };
 
 
