@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Button.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:43:39 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,13 +430,13 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
             }
         }
         else
-            actionPerformed_Impl( sal_False, MouseEvent() );
+            actionPerformed_Impl( sal_False, ::com::sun::star::awt::MouseEvent() );
     }
     return 0L;
 }
 
 //------------------------------------------------------------------------------
-void OButtonControl::actionPerformed_Impl( sal_Bool _bNotifyListener, const MouseEvent& _rEvt )
+void OButtonControl::actionPerformed_Impl( sal_Bool _bNotifyListener, const ::com::sun::star::awt::MouseEvent& _rEvt )
 {
     {
         sal_Int32 nFeatureId = -1;
