@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:53:00 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XIROOT_HXX
 #include "xiroot.hxx"
 #endif
@@ -111,52 +109,52 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     XclRoot( rImpRootData ),
     mrImpData( rImpRootData )
 {
-    mrImpData.mpPalette.reset( new XclImpPalette( GetRoot() ) );
-    mrImpData.mpFontBuffer.reset( new XclImpFontBuffer( GetRoot() ) );
-    mrImpData.mpNumFmtBuffer.reset( new XclImpNumFmtBuffer( GetRoot() ) );
-    mrImpData.mpXFBuffer.reset( new XclImpXFBuffer( GetRoot() ) );
-    mrImpData.mpXFIndexBuffer.reset( new XclImpXFIndexBuffer( GetRoot() ) );
-    mrImpData.mpPageSettings.reset( new XclImpPageSettings( GetRoot() ) );
-    mrImpData.mpTabInfo.reset( new XclImpTabInfo );
-    mrImpData.mpNameBuffer.reset( new XclImpNameBuffer( GetRoot() ) );
-    mrImpData.mpLinkManager.reset( new XclImpLinkManager( GetRoot() ) );
+    mrImpData.mxPalette.reset( new XclImpPalette( GetRoot() ) );
+    mrImpData.mxFontBfr.reset( new XclImpFontBuffer( GetRoot() ) );
+    mrImpData.mxNumFmtBfr.reset( new XclImpNumFmtBuffer( GetRoot() ) );
+    mrImpData.mpXFBfr.reset( new XclImpXFBuffer( GetRoot() ) );
+    mrImpData.mxXFRangeBfr.reset( new XclImpXFRangeBuffer( GetRoot() ) );
+    mrImpData.mxPageSettings.reset( new XclImpPageSettings( GetRoot() ) );
+    mrImpData.mxTabInfo.reset( new XclImpTabInfo );
+    mrImpData.mxNameBfr.reset( new XclImpNameBuffer( GetRoot() ) );
+    mrImpData.mxLinkMgr.reset( new XclImpLinkManager( GetRoot() ) );
 }
 
 XclImpSst& XclImpRoot::GetSst() const
 {
-    if( !mrImpData.mpSst.get() )
-        mrImpData.mpSst.reset( new XclImpSst( GetRoot() ) );
-    return *mrImpData.mpSst;
+    if( !mrImpData.mxSst.get() )
+        mrImpData.mxSst.reset( new XclImpSst( GetRoot() ) );
+    return *mrImpData.mxSst;
 }
 
 XclImpPalette& XclImpRoot::GetPalette() const
 {
-    return *mrImpData.mpPalette;
+    return *mrImpData.mxPalette;
 }
 
 XclImpFontBuffer& XclImpRoot::GetFontBuffer() const
 {
-    return *mrImpData.mpFontBuffer;
+    return *mrImpData.mxFontBfr;
 }
 
 XclImpNumFmtBuffer& XclImpRoot::GetNumFmtBuffer() const
 {
-    return *mrImpData.mpNumFmtBuffer;
+    return *mrImpData.mxNumFmtBfr;
 }
 
 XclImpXFBuffer& XclImpRoot::GetXFBuffer() const
 {
-    return *mrImpData.mpXFBuffer;
+    return *mrImpData.mpXFBfr;
 }
 
-XclImpXFIndexBuffer& XclImpRoot::GetXFIndexBuffer() const
+XclImpXFRangeBuffer& XclImpRoot::GetXFRangeBuffer() const
 {
-    return *mrImpData.mpXFIndexBuffer;
+    return *mrImpData.mxXFRangeBfr;
 }
 
 XclImpPageSettings& XclImpRoot::GetPageSettings() const
 {
-    return *mrImpData.mpPageSettings;
+    return *mrImpData.mxPageSettings;
 }
 
 _ScRangeListTabs& XclImpRoot::GetPrintAreaBuffer() const
@@ -171,31 +169,31 @@ _ScRangeListTabs& XclImpRoot::GetTitleAreaBuffer() const
 
 XclImpTabInfo& XclImpRoot::GetTabInfo() const
 {
-    return *mrImpData.mpTabInfo;
+    return *mrImpData.mxTabInfo;
 }
 
 XclImpNameBuffer& XclImpRoot::GetNameBuffer() const
 {
-    return *mrImpData.mpNameBuffer;
+    return *mrImpData.mxNameBfr;
 }
 
 XclImpLinkManager& XclImpRoot::GetLinkManager() const
 {
-    return *mrImpData.mpLinkManager;
+    return *mrImpData.mxLinkMgr;
 }
 
 XclImpObjectManager& XclImpRoot::GetObjectManager() const
 {
-    if( !mrImpData.mpObjManager.get() )
-        mrImpData.mpObjManager.reset( new XclImpObjectManager( GetRoot() ) );
-    return *mrImpData.mpObjManager;
+    if( !mrImpData.mxObjMgr.get() )
+        mrImpData.mxObjMgr.reset( new XclImpObjectManager( GetRoot() ) );
+    return *mrImpData.mxObjMgr;
 }
 
 XclImpCondFormatManager& XclImpRoot::GetCondFormatManager() const
 {
-    if( !mrImpData.mpCondFmtManager.get() )
-        mrImpData.mpCondFmtManager.reset( new XclImpCondFormatManager( GetRoot() ) );
-    return *mrImpData.mpCondFmtManager;
+    if( !mrImpData.mxCondFmtMgr.get() )
+        mrImpData.mxCondFmtMgr.reset( new XclImpCondFormatManager( GetRoot() ) );
+    return *mrImpData.mxCondFmtMgr;
 }
 
 XclImpAutoFilterBuffer& XclImpRoot::GetFilterManager() const
@@ -208,16 +206,16 @@ XclImpAutoFilterBuffer& XclImpRoot::GetFilterManager() const
 
 XclImpWebQueryBuffer& XclImpRoot::GetWebQueryBuffer() const
 {
-    if( !mrImpData.mpWebQBuffer.get() )
-        mrImpData.mpWebQBuffer.reset( new XclImpWebQueryBuffer( GetRoot() ) );
-    return *mrImpData.mpWebQBuffer;
+    if( !mrImpData.mxWebQueryBfr.get() )
+        mrImpData.mxWebQueryBfr.reset( new XclImpWebQueryBuffer( GetRoot() ) );
+    return *mrImpData.mxWebQueryBfr;
 }
 
 XclImpPivotTableManager& XclImpRoot::GetPivotTableManager() const
 {
-    if( !mrImpData.mpPTManager.get() )
-        mrImpData.mpPTManager.reset( new XclImpPivotTableManager( GetRoot() ) );
-    return *mrImpData.mpPTManager;
+    if( !mrImpData.mxPTableMgr.get() )
+        mrImpData.mxPTableMgr.reset( new XclImpPivotTableManager( GetRoot() ) );
+    return *mrImpData.mxPTableMgr;
 }
 
 ExcelToSc& XclImpRoot::GetFmlaConverter() const
