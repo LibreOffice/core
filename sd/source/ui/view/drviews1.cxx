@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:41:23 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,8 +543,10 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
             /******************************************************************
             * PAGEMODE
             ******************************************************************/
-            aPageBtn.Check(TRUE);
+            // Emulate radio button behaviour.  Order of checking buttons on
+            // or off is important for accessibility.
             aMasterPageBtn.Check(FALSE);
+            aPageBtn.Check(TRUE);
 
             aTabControl.Clear();
 
@@ -564,7 +566,7 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
                 }
             }
 
-            //          aTabControl.SetCurPageId(nActualPageNum + 1);
+            aTabControl.SetCurPageId(nActualPageNum + 1);
 
             SwitchPage(nActualPageNum);
 
@@ -579,6 +581,8 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
             ******************************************************************/
             GetViewFrame()->SetChildWindow(SdAnimationChildWindow::GetChildWindowId(), FALSE );
 
+            // Emulate radio button behaviour.  Order of checking buttons on
+            // or off is important for accessibility.
             aPageBtn.Check(FALSE);
             aMasterPageBtn.Check(TRUE);
 
@@ -633,7 +637,10 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
             aTabControl.Show();
             aLayerTab.Hide();
             aLayerBtn.Check(FALSE);
-            aTabControl.SetCurPageId (nActualPageNum + 1);
+            // Set the tab control only for draw pages.  For master page
+            // this has been done already above.
+            if (eEditMode == EM_PAGE)
+                aTabControl.SetCurPageId (nActualPageNum + 1);
         }
 
         ResetActualLayer();
