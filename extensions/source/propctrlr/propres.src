@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propres.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:47:37 $
+ *  last change: $Author: vg $ $Date: 2002-11-27 16:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ String RID_STR_STANDARD
     Text [ french ] = "Par défaut" ;
     Text [ dutch ] = "Standaard" ;
     Text[ chinese_simplified ] = "æ ‡å‡†";
-    Text[ russian ] = "Ñòàíäàðò";
+    Text[ russian ] = "Ïî óìîë÷àíèþ";
     Text[ polish ] = "Domyœlnie";
     Text[ japanese ] = "æ¨™æº–";
     Text[ chinese_traditional ] = "æ¨™æº–";
@@ -87,7 +87,7 @@ String RID_STR_STANDARD
     Text[ turkish ] = "Standart";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Per defecte";
-    Text[ finnish ] = "Oletusarvo";
+    Text[ finnish ] = "Oletus";
     Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
 };
 String RID_STR_PROPPAGE_DEFAULT
@@ -114,7 +114,7 @@ String RID_STR_PROPPAGE_DEFAULT
     Text[ turkish ] = "Genel";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "General";
-    Text[ finnish ] = "Yleistä";
+    Text[ finnish ] = "Yleiset";
     Text[ thai ] = "à¸—à¸±à¹ˆà¸§à¹„à¸›";
 };
 String RID_STR_PROPPAGE_DATA
@@ -175,6 +175,9 @@ String RID_STR_BOOL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2002/08/05 20:47:37  kz
+ *  Merge SRX643: 05.08.02 - 22:44:01
+ *
  *  Revision 1.16  2002/08/02 20:20:59  kz
  *  Merge SRX643: 02.08.02 - 22:17:43
  *
