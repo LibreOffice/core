@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-16 10:13:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,10 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+namespace {
+static const ::rtl::OUString MASTER_VIEW_TOOL_BAR_NAME(
+    ::rtl::OUString::createFromAscii("masterviewtoolbar"));
+}
 
 namespace sd {
 
@@ -604,13 +608,17 @@ void DrawViewShell::Init (void)
     // allow the switching of object bars and switch to the default object
     // bar.
     ObjectBarManager& rObjectBarManager (GetObjectBarManager());
-    if (GetShellType() == ViewShell::ST_DRAW)
-        rObjectBarManager.SetDefaultObjectBarId(RID_DRAW_OBJ_TOOLBOX);
-    else
-        rObjectBarManager.SetDefaultObjectBarId(RID_DRAW_TEXT_TOOLBOX);
+    rObjectBarManager.SetDefaultObjectBarId(RID_DRAW_OBJ_TOOLBOX);
     rObjectBarManager.EnableObjectBarSwitching();
     rObjectBarManager.SwitchObjectBar (
         rObjectBarManager.GetDefaultObjectBarId());
+
+    // Determine whether to show the master view toolbar.  The master page
+    // mode has to be active and the shell must not be a handout view.
+    if (IsMainViewShell() && eEditMode==EM_MASTERPAGE && GetShellType()!=ViewShell::ST_HANDOUT)
+        GetObjectBarManager().ShowToolBar (MASTER_VIEW_TOOL_BAR_NAME);
+    else
+        GetObjectBarManager().HideToolBar (MASTER_VIEW_TOOL_BAR_NAME);
 }
 
 
