@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-15 09:58:14 $
+ *  last change: $Author: mba $ $Date: 2002-04-15 11:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,28 +261,31 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 
     sal_Int32 nCount = rArgs.getLength();
     const ::com::sun::star::beans::PropertyValue* pPropsVal = rArgs.getConstArray();
-    if ( pSlot->GetType()->Type() != TYPE(SfxVoidItem) )
+    if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
     {
         // slot is a property
-        SfxPoolItem* pItem = pSlot->GetType()->CreateItem();
-        pItem->SetWhich( nSlotId );
         const SfxType* pType = pSlot->GetType();
+        SfxPoolItem* pItem = pType->CreateItem();
+        pItem->SetWhich( nSlotId );
         USHORT nSubCount = pType->nAttribs;
         if ( nSubCount == 0 )
         {
             // simple property
             DBG_ASSERT( nCount==1, "Wrong number of parameters!" );
-            const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[0];
-            String aName = rProp.Name;
-            if ( aName.CompareToAscii( pSlot->pUnoName ) == COMPARE_EQUAL )
+            if ( nCount )
             {
-                if( pItem->PutValue( rProp.Value ) )
-                    rSet.Put( *pItem );
+                const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[0];
+                String aName = rProp.Name;
+                if ( aName.CompareToAscii( pSlot->pUnoName ) == COMPARE_EQUAL )
+                {
+                    if( pItem->PutValue( rProp.Value ) )
+                        rSet.Put( *pItem );
+                    else
+                        DBG_ERROR("Property not convertable!");
+                }
                 else
-                    DBG_ERROR("Property not convertable!");
+                    DBG_ERROR("Property name does not match!");
             }
-            else
-                DBG_ERROR("Property name does not match!");
         }
         else
         {
