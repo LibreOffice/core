@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 08:17:43 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 15:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -878,9 +878,15 @@ void SbaGridHeader::MouseButtonDown( const MouseEvent& _rMEvt )
 {
     if (_rMEvt.IsLeft())
         if (_rMEvt.GetClicks() != 2)
+        {
             // the base class will start a column move here, which we don't want to allow
             // (at the moment. If we store relative positions with the columns, we can allow column moves ....)
-            return;
+
+//          sal_uInt16  nPos(0);
+//          sal_uInt16  nHitTest = ImplHitTest( _rMEvt.GetPosPixel(), mnMouseOff, nPos );
+//          if (!nHitTest & HEAD_HITTEST_DIVIDER)
+//              return;
+        }
 
     FmGridHeader::MouseButtonDown(_rMEvt);
 }
@@ -899,6 +905,9 @@ sal_Bool SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMo
     }
     if (!bResizingCol)
     {
+        // force the the base class to end it's drag mode
+        EndTracking(ENDTRACK_CANCEL | ENDTRACK_END);
+
         // because we have 3d-buttons the select handler is called from MouseButtonUp, but StartDrag
         // occures earlier (while the mouse button is down)
         // so for optical reasons we select the column before really starting the drag operation.
@@ -1713,71 +1722,13 @@ void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
 {
     Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
     DBG_ASSERT(xDataSource.is(), "SbaGridControl::DoRowDrag : invalid data source !");
-    // collect some data source properties
-    sal_Int32               nDataType;
-    String              sDataSource;
-    String              sDBAlias;
 
-    try
-    {
-        nDataType = ::comphelper::getINT32(xDataSource->getPropertyValue(PROPERTY_COMMANDTYPE));
-        sDataSource = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_COMMAND));
-        sDBAlias = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_DATASOURCENAME));
-    }
-    catch(Exception&)
-    {
-        DBG_ERROR("SbaGridControl::DoRowDrag : could not collect essential data source attributes !");
-        return;
-    }
-
-    sal_Bool bIsStatement = CommandType::COMMAND == nDataType;
-    String sObjectKind = (CommandType::TABLE == nDataType) ? String('1') : String('0');
-
-    // check if the SQL-statement is modified
-    sal_Bool bHasFilterOrSort(sal_False);
-    String sCompleteStatement;
-    try
-    {
-        ::rtl::OUString sFilter;
-        if (::comphelper::getBOOL(xDataSource->getPropertyValue(PROPERTY_APPLYFILTER)))
-            sFilter = ::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_FILTER));
-        ::rtl::OUString sSort = ::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_ORDER));
-        bHasFilterOrSort = (sFilter.len()>0) || (sSort.len()>0);
-
-        if (m_xComposer.is())
-        {
-            m_xComposer->setQuery(::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_ACTIVECOMMAND)));
-            m_xComposer->setFilter(sFilter);
-            m_xComposer->setOrder(sSort);
-            sCompleteStatement = (const sal_Unicode*)m_xComposer->getComposedQuery();
-        }
-        else
-            sCompleteStatement = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_ACTIVECOMMAND));
-    }
-    catch(Exception&)
-    {
-        DBG_ERROR("SbaGridControl::DoRowDrag : could not collect essential data source attributes (part two) !");
-        return;
-    }
-
-
-    String aCopyData = sDBAlias;
-    aCopyData   += char(11);
-    aCopyData   += bIsStatement ? String() : sDataSource;
-    aCopyData   += char(11);
-    aCopyData   += sObjectKind;
-    aCopyData   += char(11);
-    aCopyData   += (CommandType::QUERY == nDataType) && !bHasFilterOrSort
-        ? String()
-        : sCompleteStatement;
-        // compatibility says : always add the statement, but don't if it is a "pure" query
-    aCopyData   += char(11);
+    ODataClipboard* pTransfer = new ODataClipboard(xDataSource, m_xComposer);
 
     // collect the affected rows
     if ((GetSelectRowCount() == 0) && (nRowPos >= 0))
     {
-        aCopyData += String::CreateFromInt32(nRowPos + 1);
-        aCopyData += char(11);
+        pTransfer->addRow(nRowPos + 1);
     }
     else if (!IsAllSelected())
     {
@@ -1785,23 +1736,12 @@ void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
              nIdx >= 0;
              nIdx = NextSelectedRow())
         {
-                 aCopyData += String::CreateFromInt32(nIdx + 1);
-                 aCopyData += char(11);
+            pTransfer->addRow(nIdx + 1);
         }
     }
 
-    aCopyData.EraseTrailingChars(char(11));
-
-    Pointer aMovePtr(POINTER_COPYDATA),
-            aCopyPtr(POINTER_COPYDATA),
-            aLinkPtr(POINTER_LINKDATA);
-
-    // send the data to clipboard
-    // TODO
-    // ODataExchange* pDataExchange = new ODataExchange(aCopyData);
-    // pDataExchange->ExecuteDrag( this, aMovePtr, aCopyPtr, aLinkPtr, DRAG_COPYABLE | DRAG_LINKABLE );
-
-    return;
+    Reference< XTransferable > xEnsureDelete = pTransfer;
+    pTransfer->StartDrag(this, DND_ACTION_COPY | DND_ACTION_LINK);
 }
 
 // -----------------------------------------------------------------------
