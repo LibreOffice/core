@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestDefines.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-05 19:19:12 $
+ *  last change: $Author: mtg $ $Date: 2001-10-02 22:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,5 +84,6 @@
 #define ATTRIBUTE_KEY_DERIVATION_NAME "manifest:key-derivation-name"
 #define ATTRIBUTE_SALT "manifest:salt"
 #define ATTRIBUTE_ITERATION_COUNT "manifest:iteration-count"
+#define CHECKSUM_TYPE "SHA1/1K"
 
 #endif
