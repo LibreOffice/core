@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-26 14:44:48 $
+ *  last change: $Author: ab $ $Date: 2002-11-07 14:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2718,7 +2718,8 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
 
                                 // Namen der potentiellen Property
                                 sal_Int32 nStrLen = aMethName.getLength();
-                                OUString aEndStr = aMethName.copy( nStrLen - aListenerStr.getLength() );
+                                sal_Int32 nCopyLen = nStrLen - aListenerStr.getLength();
+                                OUString aEndStr = aMethName.copy( nCopyLen > 0 ? nCopyLen : 0 );
 
                                 // Endet das Teil auf Listener?
                                 // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
@@ -2746,7 +2747,9 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
 
                                     // Name holen und auswerten
                                     OUString aMethName2 = rxMethod_k->getName();
-                                    OUString aStartStr2 = aMethName2.copy( 0, 6 );
+                                    sal_Int32 nNameLen = aMethName2.getLength();
+                                    sal_Int32 nCopyLen = (nNameLen < 6) ? nNameLen : 6;
+                                    OUString aStartStr2 = aMethName2.copy( 0, nCopyLen );
                                     OUString aRemoveStr( RTL_CONSTASCII_USTRINGPARAM("remove" ) );
                                     // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
                                     if( !( aStartStr2 == aRemoveStr ) )
