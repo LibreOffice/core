@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-29 11:46:47 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 18:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,7 +425,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ swedish ] = "Område innehåller ~kolumnhuvuden" ;
         Text [ dutch ] = "Bereik bevat ~kolomkoppen" ;
         Text [ spanish ] = "Area contiene encabezamientos de ~columnas" ;
-        Text [ english_us ] = "Range contains column ~headers" ;
+        Text [ english_us ] = "Range contains column la~bels" ;
         Text[ chinese_simplified ] = "åŒºåŸŸå«æœ‰åˆ—æ ‡ç­¾(~H)";
         Text[ russian ] = "Çàãîëîâêè ñòîëáöîâ â îáëàñòè";
         Text[ polish ] = "Obszar zawiera nag³ówki kolumn";
@@ -453,7 +453,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ swedish ] = "Område innehåller radh~uvuden" ;
         Text [ dutch ] = "Bereik bevat ~rijkoppen" ;
         Text [ spanish ] = "Área contiene títulos de ~filas" ;
-        Text [ english_us ] = "Range contains ~row headers" ;
+        Text [ english_us ] = "Range contains ~row labels" ;
         Text[ chinese_simplified ] = "åŒºåŸŸå«æœ‰è¡Œæ ‡ç­¾(~R)";
         Text[ russian ] = "Çàãîëîâêè ñòğîê â îáëàñòè";
         Text[ polish ] = "Obszar zawiera nag³ówki wierszy";
@@ -723,7 +723,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Pos = MAP_APPFONT ( 12 , 158 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text = "Von ~links nach rechts (Spalten sortieren)" ;
+        Text = "Von ~Links-nach-rechts (Spalten sortieren)" ;
         Text [ ENGLISH ] = "~Left to right (sort columns)" ;
         Text [ norwegian ] = "~Venstre til høyre (sorter kolonner)" ;
         Text [ italian ] = "~Da sinistra a destra (ordina colonne)" ;
@@ -735,7 +735,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ swedish ] = "Från vänster til~l höger (sortera kolumner)" ;
         Text [ dutch ] = "Van ~links naar rechts (kolommen sorteren)" ;
         Text [ spanish ] = "De ~izquierda a derecha (ordenar columnas)" ;
-        Text [ english_us ] = "L~eft-to-right (sort columns)" ;
+        Text [ english_us ] = "L~eft to right (sort columns)" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ä»å·¦å‘å³(åˆ—æ’åº)(~E)";
         Text[ russian ] = "Ñëåâà íàïğàâî (ñîğòèğîâêà ñòîëáöîâ)";
