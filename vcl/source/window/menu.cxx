@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-31 19:34:56 $
+ *  last change: $Author: ssa $ $Date: 2001-11-01 10:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2550,8 +2550,9 @@ void MenuFloatingWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     // TH macht ein ToTop auf dieses Fenster, aber das aktive Popup
     // soll oben bleiben...
-    if ( pActivePopup && pActivePopup->ImplGetWindow() && !pActivePopup->ImplGetFloatingWindow()->pActivePopup )
-        pActivePopup->ImplGetFloatingWindow()->ToTop();
+    // due to focus chage this would close all menues -> don't do it (#94123)
+    //if ( pActivePopup && pActivePopup->ImplGetWindow() && !pActivePopup->ImplGetFloatingWindow()->pActivePopup )
+    //    pActivePopup->ImplGetFloatingWindow()->ToTop( TOTOP_NOGRABFOCUS );
 
 //  if ( !ImplIsMouseFollow() ) // Issuezilla#591
     {
