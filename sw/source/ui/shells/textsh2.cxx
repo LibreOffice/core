@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:24:32 $
+ *  last change: $Author: os $ $Date: 2000-11-13 08:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,6 @@
 #include "cmdid.h"
 #include "swevent.hxx"
 #include "shells.hrc"
-#include "mailmrge.hxx"
 #include "textsh.hxx"
 #include "dbinsdlg.hxx"
 
@@ -158,60 +157,6 @@ using namespace com::sun::star::beans;
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 #define DB_DD_DELIM 0x0b
 
-#ifdef DEBUG
-// the addressbook doesn't support the new api yet (593)
-void lcl_ReplaceDataSource(String& sDBName, String& sTblName, String& sStatmnt)
-{
-    Reference<XNameAccess> xDBContext;
-    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    if( xMgr.is() )
-    {
-        Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
-        xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
-    }
-    DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available")
-    if(!xDBContext.is())
-        return;
-    Sequence<OUString> aDBNames = xDBContext->getElementNames();
-    const OUString* pDBNames = aDBNames.getConstArray();
-    long nCount = aDBNames.getLength();
-    DBG_ASSERT(nCount, "no data source available")
-    if(!nCount)
-        return;
-    sDBName = pDBNames[0];
-
-    Any aDBSource = xDBContext->getByName(sDBName);
-    Reference<XDataSource>* pxSource = (Reference<XDataSource>*)aDBSource.getValue();
-
-    Reference<sdbc::XConnection> xConnection;
-    try
-    {
-        OUString sDummy;
-        xConnection = (*pxSource)->getConnection(sDummy, sDummy);
-    }
-    catch(...) {}
-    DBG_ASSERT(xConnection.is(), "no connection found")
-    if (xConnection.is())
-    {
-        Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
-        DBG_ASSERT(xTSupplier.is(), "no tables found")
-        if(xTSupplier.is())
-        {
-            Reference<XNameAccess> xTbls = xTSupplier->getTables();
-            Sequence<OUString> aTblNames = xTbls->getElementNames();
-            long nCount = aTblNames.getLength();
-            DBG_ASSERT(nCount, "no table found")
-            const OUString* pTblNames = aTblNames.getConstArray();
-            sTblName = pTblNames[2];
-            sStatmnt = String::CreateFromAscii("select * from ");
-            String sQuote = xConnection->getMetaData()->getIdentifierQuoteString();
-            sStatmnt += sQuote;
-            sStatmnt += sTblName;
-            sStatmnt += sQuote;
-        }
-    }
-}
-#endif // DEBUG
 
 inline void AddSelList( List& rLst, long nRow )
 {
@@ -239,11 +184,6 @@ void lcl_QRY_UPDATE( const SfxItemSet *pArgs, SwNewDBMgr *pNewDBMgr,
         String sTableName(rTableNameItem.GetValue());
         String sStatement(rStatementItem.GetValue());
 
-#ifdef DEBUG
-// the addressbook doesn't support the new api yet (593)
-        lcl_ReplaceDataSource(sDBName, sTableName, sStatement);
-#endif // DEBUG
-
         pNewDBMgr->SetMergeType( DBMGR_MERGE );
         pNewDBMgr->Merge(DBMGR_MERGE, &rSh,
                         sStatement, pSelectionList, sDBName, sTableName);
@@ -261,53 +201,6 @@ void SwBaseShell::ExecDB(SfxRequest &rReq)
 
     switch (nSlot)
     {
-        case SID_SBA_BRW_MERGE:
-        {
-            String sDBName;
-            String sTableName;
-            String sStatement;
-            SbaSelectionListRef xSelectionList;
-            if (pArgs)
-            {
-                const SfxStringItem &rDBNameItem = (const SfxStringItem&) pArgs->Get(SID_ATTR_SBA_DATABASE);
-                sDBName = rDBNameItem.GetValue();
-                const SfxStringItem &rTableNameItem = (const SfxStringItem&) pArgs->Get(SID_ATTR_SBA_DBOBJ_NAME);
-                sTableName = rTableNameItem.GetValue();
-                sStatement = ((const SfxStringItem&) pArgs->Get(SID_ATTR_SBA_STATEMENT)).GetValue();
-                const SbaSelectionItem &rSelectionItem = (const SbaSelectionItem&) pArgs->Get(SID_ATTR_SBA_SELECTION);
-                xSelectionList = rSelectionItem.GetSelectionList();
-            }
-#ifdef DEBUG
-            {
-                sDBName = C2S("Nordwind");
-                sTableName = C2S("Artikel");
-                sStatement = C2S("select * from Artikel");
-            }
-#endif //DEBUG
-            if ( !xSelectionList.Is() )
-                xSelectionList = new SbaSelectionList;
-
-            SwMailMergeDlg* pDlg = new SwMailMergeDlg(
-                    NULL, GetShellPtr(),
-                    sDBName,
-                    sTableName,
-                    sStatement, xSelectionList );
-
-            if (pDlg->Execute() == RET_OK)
-            {
-                pNewDBMgr->SetMergeType(  pDlg->GetMergeType() );
-
-                OFF_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, GetView().GetViewFrame()->GetObjectShell()));
-
-                pNewDBMgr->Merge(pNewDBMgr->GetMergeType(),
-                                    GetShellPtr(), sStatement,
-                                    xSelectionList,
-                                    sDBName,
-                                    sTableName);
-                delete(pDlg);
-            }
-        }
-        break;
 
         case SID_SBA_BRW_UPDATE:
             lcl_QRY_UPDATE( pArgs, pNewDBMgr, GetShell(), nSlot );
@@ -325,11 +218,6 @@ void SwBaseShell::ExecDB(SfxRequest &rReq)
                                         SID_ATTR_SBA_STATEMENT)).GetValue();
                 SbaSelectionListRef xSelectionList( ((SbaSelectionItem&)
                     pArgs->Get(SID_ATTR_SBA_SELECTION)).GetSelectionList());
-
-#ifdef DEBUG
-// the addressbook doesn't support the new api yet (593)
-        lcl_ReplaceDataSource(sDBName, sTblName, sStatmnt);
-#endif // DEBUG
 
                 String* pDataStr = new String( sDBName );
                 ((((((*pDataStr) += char(DB_DD_DELIM) )
@@ -456,11 +344,15 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, String*, pString )
                     aDBData );
             if( RET_OK == pDlg->Execute() )
             {
+                Sequence<sal_Int32> aSelection(pString->GetTokenCount(DB_DD_DELIM) - 4 );
+                sal_Int32* pSelection = aSelection.getArray();
                 SbaSelectionList aSelectionList;
-                while( nTokenPos < pString->Len() )
-                    AddSelList( aSelectionList,
-                                pString->GetToken( 0, DB_DD_DELIM, nTokenPos ).ToInt32() );
-                pDlg->DataToDoc( &aSelectionList , xSource, xConnection);
+                for(sal_Int32 nPos = 0; nPos < aSelection.getLength(); nPos++)
+                {
+                    pSelection[nPos] = pString->GetToken( 0, DB_DD_DELIM, nTokenPos ).ToInt32();
+                }
+                Reference <XResultSet> xResSet;
+                pDlg->DataToDoc( aSelection, xSource, xConnection, xResSet);
             }
             delete pDlg;
         }
