@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.26 2001-03-01 15:33:58 sab Exp $
+	$Id: table.mod,v 1.27 2001-03-07 15:51:09 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -174,7 +174,7 @@
 	xlink:actuate (onRequest) "onRequest"
 	xlink:href %uriReference; #REQUIRED
 	table:filter-name CDATA #IMPLIED
-	table:table-name CDATA #REQUIRED
+	table:table-name CDATA #IMPLIED
 	table:filter-options CDATA #IMPLIED
 >
 <!ELEMENT table:scenario EMPTY>
