@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:09 $
+ *  last change: $Author: tbe $ $Date: 2001-04-12 08:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,8 +174,8 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin") ) );
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":maxlength") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("LineCount") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":linecount") ) );
+    readShortAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("LineCount") ),
+                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":linecount") ) );
 
     // string item list
     Sequence< OUString > itemValues;
@@ -231,8 +231,8 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Dropdown") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("LineCount") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":linecount") ) );
+    readShortAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("LineCount") ),
+                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":linecount") ) );
 
     // string item list
     Sequence< OUString > itemValues;
