@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2001-11-06 17:54:36 $
+ *  last change: $Author: ssa $ $Date: 2002-07-02 14:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ class RscTypCont
     HASHID              nNoLabelId;
     HASHID              nVertId;
     HASHID              nSingleLineId;
+    HASHID              nSysWinId;
 
     void        Init();         // Initialisiert Klassen und Tabelle
     void        SETCONST( RscConst *, char *, UINT32 );
