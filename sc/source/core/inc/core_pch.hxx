@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_pch.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:54:39 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,6 @@
 #include <so3/so2defs.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/window.hxx>
-#include <sfx2/cfgitem.hxx>
 #include <svtools/confitem.hxx>
 #include <vcl/syswin.hxx>
 #include <sc.hrc>
