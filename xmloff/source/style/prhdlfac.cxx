@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: dvo $ $Date: 2002-02-04 18:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_HORIZONTALADJUST_HPP_
 #include <com/sun/star/text/HorizontalAdjust.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE2_HPP_
+#include <com/sun/star/text/WritingMode2.hpp>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -176,6 +179,22 @@ SvXMLEnumMapEntry __READONLY_DATA aXML_HorizontalAdjust_Enum[] =
     { XML_LEFT,     text::HorizontalAdjust_LEFT },
     { XML_CENTER,   text::HorizontalAdjust_CENTER },
     { XML_RIGHT,    text::HorizontalAdjust_RIGHT },
+    { XML_TOKEN_INVALID, 0 }
+};
+
+// aXML_WritingDirection_Enum is used with and without 'page'
+// attribute, so you'll find uses of aXML_WritingDirection_Enum as
+// well as &(aXML_WritingDirection_Enum[1])
+SvXMLEnumMapEntry __READONLY_DATA aXML_WritingDirection_Enum[] =
+{
+    { XML_PAGE,     text::WritingMode2_PAGE },
+    { XML_LR_TB,    text::WritingMode2_LR_TB },
+    { XML_RL_TB,    text::WritingMode2_LR_TB },
+    { XML_TB_RL,    text::WritingMode2_TB_RL },
+    { XML_TB_LR,    text::WritingMode2_TB_LR },
+    { XML_LR,       text::WritingMode2_LR_TB },
+    { XML_RL,       text::WritingMode2_LR_TB },
+    { XML_TB,       text::WritingMode2_TB_RL },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -429,6 +448,16 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 
                 break;
             case XML_TYPE_TEXT_DRAW_ASPECT:
                 pPropHdl = new DrawAspectHdl;
+                break;
+            case XML_TYPE_TEXT_WRITING_MODE:
+                pPropHdl = new XMLEnumPropertyHdl(
+                    &(aXML_WritingDirection_Enum[1]),
+                    ::getCppuType((const text::WritingMode2*)0) );
+                break;
+            case XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT:
+                pPropHdl = new XMLEnumPropertyHdl(
+                    aXML_WritingDirection_Enum,
+                    ::getCppuType((const text::WritingMode2*)0) );
                 break;
         }
 

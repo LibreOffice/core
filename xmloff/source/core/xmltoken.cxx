@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: bm $ $Date: 2001-12-17 10:22:11 $
+ *  last change: $Author: dvo $ $Date: 2002-02-04 18:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2086,6 +2086,12 @@ namespace xmloff { namespace token {
         TOKEN( "stock-loss-marker" ),          // XML_STOCK_LOSS_MARKER
         TOKEN( "stock-gain-marker" ),          // XML_STOCK_GAIN_MARKER
         TOKEN( "stock-range-line" ),           // XML_STOCK_RANGE_LINE
+
+        TOKEN( "rl-tb" ),                      // XML_RL_TB
+        TOKEN( "tb-lr" ),                      // XML_TB_LR
+        TOKEN( "lr" ),                         // XML_LR
+        TOKEN( "rl" ),                         // XML_RL
+        TOKEN( "tb" ),                         // XML_TB
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
