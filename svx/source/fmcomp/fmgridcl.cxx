@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-08 15:05:33 $
+ *  last change: $Author: fs $ $Date: 2002-10-23 12:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,13 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
 #include <com/sun/star/io/XPersistObject.hpp>
+#endif
+// #100312# ---------------------------
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _SV_HELP_HXX //autogen
@@ -1289,6 +1296,13 @@ void FmGridControl::DeleteSelectedRows()
     {
         ::com::sun::star::util::URL aUrl;
         aUrl.Complete = FMURL_CONFIRM_DELETION;
+        // #100312# ------------
+        Reference< ::com::sun::star::util::XURLTransformer > xTransformer(
+            ::comphelper::getProcessServiceFactory()->createInstance(
+            ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")), UNO_QUERY);
+        if( xTransformer.is() )
+            xTransformer->parseStrict( aUrl );
+
         Reference< ::com::sun::star::frame::XDispatch >  xDispatch = xDispatcher->queryDispatch(aUrl, rtl::OUString(), 0);
         Reference< ::com::sun::star::form::XConfirmDeleteListener >  xConfirm(xDispatch, UNO_QUERY);
         if (xConfirm.is())
