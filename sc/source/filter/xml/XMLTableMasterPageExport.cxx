@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableMasterPageExport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-24 14:09:22 $
+ *  last change: $Author: sab $ $Date: 2000-10-24 15:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,6 @@ void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Ref
 {
     if( xHeaderFooter.is() )
     {
-        if( !bDisplay )
-            GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE,
-                                            sXML_display, sXML_false );
         Reference < XText > xCenter = xHeaderFooter->getCenterText();
         Reference < XText > xLeft = xHeaderFooter->getLeftText();
         Reference < XText > xRight = xHeaderFooter->getRightText();
@@ -124,6 +121,9 @@ void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Ref
 
             if (sCenter.getLength() || sLeft.getLength() || sRight.getLength())
             {
+                if( !bDisplay )
+                    GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE,
+                                                    sXML_display, sXML_false );
                 SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                             pName, sal_True, sal_True );
                 if (sCenter.getLength() && !sLeft.getLength() && !sRight.getLength())
@@ -173,7 +173,7 @@ void XMLTableMasterPageExport::exportMasterPageContent(
     aAny >>= xFooter;
 
     Reference < sheet::XHeaderFooterContent > xFooterLeft;
-    aAny = rPropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PAGE_RIGHTFTRCON ) ) );
+    aAny = rPropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PAGE_LEFTFTRCONT ) ) );
     aAny >>= xFooterLeft;
 
     if( bAutoStyles )
