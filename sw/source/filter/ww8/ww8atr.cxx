@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-15 11:21:11 $
+ *  last change: $Author: cmc $ $Date: 2002-01-16 09:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3078,8 +3078,7 @@ static Writer& OutWW8_SwFmtBackground( Writer& rWrt, const SfxPoolItem& rHt )
 WW8_BRC SwWW8Writer::TranslateBorderLine( const SvxBorderLine& rLine,
     USHORT nDist, BOOL bShadow )
 {
-    WW8_BRC aBrc;
-    aBrc.clear();
+    WW8_BRC aBrc={0};
     UINT16 nWidth = rLine.GetInWidth() + rLine.GetOutWidth();
     BYTE brcType = 0, nColCode = 0;
 
@@ -3164,12 +3163,10 @@ void SwWW8Writer::Out_BorderLine( WW8Bytes& rO, const SvxBorderLine* pLine,
             ((0x702b - 0x6424) <= nOffset && nOffset <= (0x702e - 0x6424)),
                 "SprmOffset ausserhalb des Bereichs" );
 
-    WW8_BRC aBrc;
+    WW8_BRC aBrc={0};
 
     if (pLine)
         aBrc = TranslateBorderLine( *pLine, nDist, bShadow );
-    else
-        aBrc.clear();
 
     if( bWrtWW8 )
     {
