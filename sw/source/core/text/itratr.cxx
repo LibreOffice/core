@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:26:57 $
+ *  last change: $Author: vg $ $Date: 2003-07-14 12:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,10 +565,26 @@ public:
 sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
 {
     const SwFmtAnchor& rFmtA = ((SwFrmFmt*)rpNd)->GetAnchor();
-    if ( (FLY_AT_CNTNT == rFmtA.GetAnchorId() ||
-          FLY_AUTO_CNTNT == rFmtA.GetAnchorId()) &&
-        ((SwMinMaxNodeArgs*)pArgs)->nIndx ==
-            rFmtA.GetCntntAnchor()->nNode.GetIndex() )
+
+    bool bCalculate = false;
+    if (
+        (FLY_AT_CNTNT == rFmtA.GetAnchorId()) ||
+        (FLY_AUTO_CNTNT == rFmtA.GetAnchorId())
+       )
+    {
+        bCalculate = true;
+    }
+
+    if (bCalculate)
+    {
+        const SwMinMaxNodeArgs *pIn = (const SwMinMaxNodeArgs*)pArgs;
+        const SwPosition *pPos = rFmtA.GetCntntAnchor();
+        ASSERT(pPos && pIn, "Unexpected NULL arguments");
+        if (!pPos || !pIn || pIn->nIndx != pPos->nNode.GetIndex())
+            bCalculate = false;
+    }
+
+    if (bCalculate)
     {
         long nMin, nMax;
         SwHTMLTableLayout *pLayout = 0;
