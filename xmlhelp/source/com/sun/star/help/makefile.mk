@@ -3,9 +3,9 @@
 #*    $Workfile:$
 #*
 #*    Creation date     KR 28.06.99
-#*    last change       $Author: obo $ $Date: 2000-12-13 16:16:06 $
+#*    last change       $Author: mt $ $Date: 2000-12-15 09:11:20 $
 #*
-#*    $Revision: 1.9 $
+#*    $Revision: 1.10 $
 #*
 #*    $Logfile:$
 #*
@@ -65,6 +65,7 @@ JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/HelpResultSet.class                \
     $(CLASSDIR)$/$(PACKAGE)$/HelpResultSetForRoot.class         \
     $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class                  \
+    $(CLASSDIR)$/$(PACKAGE)$/PreTransformer.class                  \
     $(CLASSDIR)$/$(PACKAGE)$/CreateDb.class                     \
     $(CLASSDIR)$/$(PACKAGE)$/XSLData.class                      \
     $(CLASSDIR)$/$(PACKAGE)$/StringDbt.class 
