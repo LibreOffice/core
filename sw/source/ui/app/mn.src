@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-10-25 09:02:06 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,8 @@ String MN_TEXT_POPUPMENU
     Text[ greek ] = "Κείμενο";
     Text[ korean ] = "ν…μ¤νΈ";
     Text[ turkish ] = "Metin";
-    Text[ catalan ] = "Texto";
+    Text[ catalan ] = "Text";
+    Text[ thai ] = "ΰΈ‚ΰΉ‰ΰΈ­ΰΈ„ΰΈ§ΰΈ²ΰΈ΅";
 };
 
 
@@ -122,7 +123,8 @@ String MN_TAB_POPUPMENU
     Text[ greek ] = "Πίνακας";
     Text[ korean ] = "μ‹νΈ";
     Text[ turkish ] = "Tablo";
-    Text[ catalan ] = "Tabla";
+    Text[ catalan ] = "Taula";
+    Text[ thai ] = "ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
 
 Menu MN_TAB_POPUPMENU
@@ -174,7 +176,8 @@ Menu MN_TAB_POPUPMENU
             Text[ greek ] = "Ό~ρια πίνακα";
             Text[ korean ] = "ν‘ κ²½κ³„";
             Text[ turkish ] = "Tablo sύnύrlamalarύ";
-            Text[ catalan ] = "~Lνmites de la tabla";
+            Text[ catalan ] = "~Lνmits de la taula";
+            Text[ thai ] = "ΰΈ‚ΰΈµΰΈ”ΰΈΰΈ³ΰΈΰΈ±ΰΈ”ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
         };
         MenuItem
         {
@@ -200,8 +203,9 @@ Menu MN_TAB_POPUPMENU
             Text[ chinese_traditional ] = "θ­ε¥ζ•Έε­—(~N)";
             Text[ arabic ] = "ΚΪΡνέ ΗαΓΡήΗγ";
             Text[ turkish ] = "Sayύ tanύma";
-            Text[ catalan ] = "~Reconocimiento de nϊmero";
+            Text[ catalan ] = "~Reconeixement de nϊmero";
             Text[ finnish ] = "~Numeroiden tunnistus";
+            Text[ thai ] = "ΰΈΰΈ”ΰΈΰΈ³~ΰΈ•ΰΈ±ΰΈ§ΰΉ€ΰΈ¥ΰΈ‚";
         };
         SEPARATOR ;
         _DEFAULT_TEXT_EDIT_ELEMENTS
@@ -233,7 +237,8 @@ String MN_FRM_POPUPMENU
     Text[ greek ] = "Περίγραμμα";
     Text[ korean ] = "ν”„λ μ„";
     Text[ turkish ] = "Ηerηeve";
-    Text[ catalan ] = "Marco";
+    Text[ catalan ] = "Marc";
+    Text[ thai ] = "ΰΈΰΈ£ΰΈ­ΰΈ";
 };
 
 Menu MN_FRM_POPUPMENU
@@ -273,7 +278,8 @@ String MN_DRAW_POPUPMENU
     Text[ greek ] = "Γραφικό";
     Text[ korean ] = "κ·Έλν”½";
     Text[ turkish ] = "Grafik";
-    Text[ catalan ] = "Imagen";
+    Text[ catalan ] = "Imatge";
+    Text[ thai ] = "ΰΈΰΈ£ΰΈ²ΰΈΰΈ΄ΰΈ„";
 };
 
 Menu MN_DRAW_POPUPMENU
@@ -319,8 +325,9 @@ String MN_DRAWFORM_POPUPMENU
     Text[ greek ] = "Πεδίο ελέγχου";
     Text[ korean ] = "μ»¨νΈλ΅¤";
     Text[ turkish ] = "Komut alanύ";
-    Text[ catalan ] = "Campo de control";
+    Text[ catalan ] = "Control";
     Text[ finnish ] = "Ohjain";
+    Text[ thai ] = "ΰΈ„ΰΈ§ΰΈΰΈ„ΰΈΈΰΈ΅";
 };
 
 Menu MN_DRAWFORM_POPUPMENU
@@ -364,8 +371,9 @@ String MN_DRWTXT_POPUPMENU
     Text[ greek ] = "Κείμενο αντικειμένου σχεδίασης";
     Text[ korean ] = "κ·Έλ¦¬κΈ° κ°μ²΄ ν…μ¤νΈ";
     Text[ turkish ] = "Ηizim nesnesi metni";
-    Text[ catalan ] = "Texto del objeto de dibujo";
+    Text[ catalan ] = "Text de l'objecte de dibuix";
     Text[ finnish ] = "Piirrosobjektin teksti";
+    Text[ thai ] = "ΰΈ§ΰΈ²ΰΈ”ΰΈ‚ΰΉ‰ΰΈ­ΰΈ„ΰΈ§ΰΈ²ΰΈ΅ΰΈ§ΰΈ±ΰΈ•ΰΈ–ΰΈΈ";
 };
 
 Menu MN_DRWTXT_POPUPMENU
@@ -407,7 +415,8 @@ String MN_GRF_POPUPMENU
     Text[ greek ] = "Γραφικό";
     Text[ korean ] = "κ·Έλν”½";
     Text[ turkish ] = "Grafik";
-    Text[ catalan ] = "Imagen";
+    Text[ catalan ] = "Imatge";
+    Text[ thai ] = "ΰΈΰΈ£ΰΈ²ΰΈΰΈ΄ΰΈ„";
 };
 
 Menu MN_GRF_POPUPMENU
@@ -453,7 +462,8 @@ String MN_OLE_POPUPMENU
     Text[ greek ] = "Αντικείμενο";
     Text[ korean ] = "κ°μ²΄";
     Text[ turkish ] = "Nesne";
-    Text[ catalan ] = "Objeto";
+    Text[ catalan ] = "Objecte";
+    Text[ thai ] = "ΰΈ§ΰΈ±ΰΈ•ΰΈ–ΰΈΈ";
 };
 
 
@@ -494,8 +504,9 @@ String MN_PPREVIEW_POPUPMENU
     Text[ greek ] = "Κείμενο αντικειμένου σχεδίασης";
     Text[ korean ] = "κ·Έλ¦¬κΈ° κ°μ²΄ ν…μ¤νΈ";
     Text[ turkish ] = "Ηizim nesnesi metni";
-    Text[ catalan ] = "Texto del objeto de dibujo";
+    Text[ catalan ] = "Text de l'objecte de dibuix";
     Text[ finnish ] = "Piirrosobjektin teksti";
+    Text[ thai ] = "ΰΈ§ΰΈ²ΰΈ”ΰΈ§ΰΈ±ΰΈ•ΰΈ–ΰΈΈΰΈ‚ΰΉ‰ΰΈ­ΰΈ„ΰΈ§ΰΈ²ΰΈ΅";
 };
 
 Menu MN_PPREVIEW_POPUPMENU
@@ -526,8 +537,9 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ greek ] = "Προηγούμενη σελίδα";
             Text[ korean ] = "μ΄μ „ νμ΄μ§€";
             Text[ turkish ] = "Φnceki sayfa";
-            Text[ catalan ] = "Pαgina anterior";
+            Text[ catalan ] = "Pΰgina anterior";
             Text[ finnish ] = "Edellinen sivu";
+            Text[ thai ] = "ΰΈ«ΰΈ™ΰΉ‰ΰΈ²ΰΈΰΉΰΈ­ΰΈ™";
         };
         MenuItem
         {
@@ -554,8 +566,9 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ greek ] = "Στην επόμενη σελίδα";
             Text[ korean ] = "λ‹¤μ νμ΄μ§€";
             Text[ turkish ] = "Sonraki sayfa";
-            Text[ catalan ] = "Pαgina siguiente";
+            Text[ catalan ] = "Pΰgina segόent";
             Text[ finnish ] = "Seuraava sivu";
+            Text[ thai ] = "ΰΈ«ΰΈ™ΰΉ‰ΰΈ²ΰΈ–ΰΈ±ΰΈ”ΰΉ„ΰΈ›";
         };
         MenuItem
         {
@@ -588,8 +601,9 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ greek ] = "Εκτύπωση προεπισκόπησης";
             Text[ korean ] = "νμ΄μ§€λ―Έλ¦¬λ³΄κΈ°γ€€μΈμ‡„";
             Text[ turkish ] = "Yazdύr";
-            Text[ catalan ] = "Imprimir vista preliminar";
+            Text[ catalan ] = "Imprimeix";
             Text[ finnish ] = "Tulosta";
+            Text[ thai ] = "ΰΈΰΈ΄ΰΈ΅ΰΈΰΉ";
         };
         MenuItem
         {
@@ -615,8 +629,9 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ greek ] = "Επιλογές εκτύπωσης";
             Text[ korean ] = "μΈμ‡„ μµμ…";
             Text[ turkish ] = "Yazdύrma seηenekleri";
-            Text[ catalan ] = "Opciones de impresiσn";
+            Text[ catalan ] = "Opcions de impressiσ";
             Text[ finnish ] = "Tulostusasetukset";
+            Text[ thai ] = "ΰΈ•ΰΈ±ΰΈ§ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈΰΈ²ΰΈ£ΰΈΰΈ΄ΰΈ΅ΰΈΰΉ";
         };
         SEPARATOR ;
         MenuItem
@@ -625,6 +640,26 @@ Menu MN_PPREVIEW_POPUPMENU
             HelpID =  SID_PRINTPREVIEW;
             Text = "Seitenansicht schlieίen" ;
             Text [ english_us ] = "Close Preview" ;
+            Text[ portuguese ] = "Close Preview";
+            Text[ russian ] = "Close Preview";
+            Text[ greek ] = "Close Preview";
+            Text[ dutch ] = "Close Preview";
+            Text[ french ] = "Close Preview";
+            Text[ spanish ] = "Close Preview";
+            Text[ finnish ] = "Close Preview";
+            Text[ italian ] = "Close Preview";
+            Text[ danish ] = "Close Preview";
+            Text[ swedish ] = "Close Preview";
+            Text[ polish ] = "Close Preview";
+            Text[ portuguese_brazilian ] = "Close Preview";
+            Text[ japanese ] = "Close Preview";
+            Text[ korean ] = "Close Preview";
+            Text[ chinese_simplified ] = "Close Preview";
+            Text[ chinese_traditional ] = "Close Preview";
+            Text[ turkish ] = "Close Preview";
+            Text[ arabic ] = "Close Preview";
+            Text[ catalan ] = "Close Preview";
+            Text[ thai ] = "Close Preview";
         };
     };
 };
