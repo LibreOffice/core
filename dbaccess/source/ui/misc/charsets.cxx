@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charsets.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:08:39 $
+ *  last change: $Author: fs $ $Date: 2000-11-29 22:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,137 +71,158 @@
 #ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
 #endif
+#include <rtl/tencinfo.h>
 
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
+    using namespace ::dbtools;
 
-//=========================================================================
-//= OCharsetCollection
-//=========================================================================
-//-------------------------------------------------------------------------
-OCharsetCollection::OCharsetCollection()
-    :Resource(RSC_CHARSETS)
-#ifdef DBG_UTIL
-    ,m_nLivingIterators(0)
-#endif
-{
-    String aNameList = String(ResId(STR_CHARSETKEYS));
-    String aKeyList = String(ResId(STR_CHARSETNAMES));
-
-    DBG_ASSERT(aNameList.GetTokenCount(';') == aKeyList.GetTokenCount(';'),
-        "OCharsetCollection::OCharsetCollection : invalid resources !");
-    String sCurrentType;
-    for (sal_Int32 i=0; i<aKeyList.GetTokenCount(); ++i)
+    //=========================================================================
+    //= OCharsetDisplay
+    //=========================================================================
+    //-------------------------------------------------------------------------
+    OCharsetDisplay::OCharsetDisplay()
+        :OCharsetMap()
+        ,Resource(RSC_CHARSETS)
     {
-        m_aNameList.push_back(aNameList.GetToken(i));
-        m_aKeyList.push_back(aKeyList.GetToken(i));
+        String aNameList = String(ResId(STR_CHARSETNAMES));
+        for (sal_Int32 i=0; i<aNameList.GetTokenCount(); ++i)
+            m_aDisplayNames.push_back(aNameList.GetToken(i));
+
+        FreeResource();
+
+        DBG_ASSERT(m_aDisplayNames.size() == m_aNames.size(),
+            "OCharsetDisplay::OCharsetDisplay: invalid number of display names!");
     }
 
-    FreeResource();
-}
+    //-------------------------------------------------------------------------
+    OCharsetDisplay::const_iterator OCharsetDisplay::begin() const
+    {
+        return const_iterator(this, OCharsetMap::begin(), 0);
+    }
 
-//-------------------------------------------------------------------------
-OCharsetCollection::~OCharsetCollection()
-{
-    DBG_ASSERT(0 == m_nLivingIterators, "OCharsetCollection::~OCharsetCollection : there are still living iterator objects!");
-}
+    //-------------------------------------------------------------------------
+    OCharsetDisplay::const_iterator OCharsetDisplay::end() const
+    {
+        return const_iterator(this, OCharsetMap::end(), size());
+    }
 
-//-------------------------------------------------------------------------
-OCharsetCollection::CharsetIterator OCharsetCollection::begin() const
-{
-    return CharsetIterator(this, 0);
-}
+    //-------------------------------------------------------------------------
+    OCharsetDisplay::const_iterator OCharsetDisplay::find(const rtl_TextEncoding _eEncoding) const
+    {
+        OCharsetMap::const_iterator aBaseIter = OCharsetMap::find(_eEncoding);
+        return const_iterator(this, aBaseIter, aBaseIter - OCharsetMap::begin());
+    }
 
-//-------------------------------------------------------------------------
-OCharsetCollection::CharsetIterator OCharsetCollection::end() const
-{
-    return CharsetIterator(this, m_aNameList.size());
-}
+    //-------------------------------------------------------------------------
+    OCharsetDisplay::const_iterator OCharsetDisplay::find(const ::rtl::OUString& _rIanaName, const IANA&) const
+    {
+        OCharsetMap::const_iterator aBaseIter = OCharsetMap::find(_rIanaName, OCharsetMap::IANA());
+        return const_iterator(this, aBaseIter, aBaseIter - OCharsetMap::begin());
+    }
 
-// -----------------------------------------------------------------------
-String OCharsetCollection::implLookUp(const String& _rKey, const StringVector& _rKeys, const StringVector& _rValues) const
-{
-    DBG_ASSERT(_rKeys.size() == _rValues.size(), "OCharsetCollection::implLookUp : invalid arrays!");
-    ConstStringVectorIterator aKeySearch = _rKeys.begin();
-    ConstStringVectorIterator aValue = _rValues.begin();
-    for (;aKeySearch != _rKeys.end(); ++aKeySearch, ++aValue)
-        if (aKeySearch->EqualsIgnoreCaseAscii(*aValue))
-            return *aValue;
+    //-------------------------------------------------------------------------
+    OCharsetDisplay::const_iterator OCharsetDisplay::find(const ::rtl::OUString& _rLogicalName, const Logical&) const
+    {
+        OCharsetMap::const_iterator aBaseIter = OCharsetMap::find(_rLogicalName, OCharsetMap::Logical());
+        return const_iterator(this, aBaseIter, aBaseIter - OCharsetMap::begin());
+    }
 
-    return String();
-}
+    //-------------------------------------------------------------------------
+    OCharsetDisplay::const_iterator OCharsetDisplay::find(const ::rtl::OUString& _rDisplayName, const Display&) const
+    {
+        OCharsetMap::CharsetIterator aBasePos = OCharsetMap::begin();
+        sal_Int32 nIndex = 0;
+        for (   ConstStringVectorIterator aSearch = m_aDisplayNames.begin();
+                aSearch != m_aDisplayNames.end();
+                ++aSearch, ++aBasePos, ++nIndex
+            )
+            if (*aSearch == _rDisplayName)
+                break;
 
-//=========================================================================
-//= OCharsetCollection::CharsetIterator
-//=========================================================================
-//-------------------------------------------------------------------------
-OCharsetCollection::CharsetIterator::CharsetIterator(const OCharsetCollection* _pContainer, sal_Int32 _nInitialPos)
-    :m_pContainer(_pContainer)
-    ,m_nPosition(_nInitialPos)
-{
-    DBG_ASSERT(m_pContainer, "OCharsetCollection::CharsetIterator::CharsetIterator : invalid container!");
-#ifdef DBG_UTIL
-    ++const_cast<OCharsetCollection*>(m_pContainer)->m_nLivingIterators;
-#endif
-}
+        return const_iterator(this, aBasePos, nIndex);
+    }
 
-//-------------------------------------------------------------------------
-OCharsetCollection::CharsetIterator::CharsetIterator(const CharsetIterator& _rSource)
-    :m_pContainer(_rSource.m_pContainer)
-    ,m_nPosition(_rSource.m_nPosition)
-{
-#ifdef DBG_UTIL
-    ++const_cast<OCharsetCollection*>(m_pContainer)->m_nLivingIterators;
-#endif
-}
+    //=========================================================================
+    //= CharsetDisplayDerefHelper
+    //=========================================================================
+    //-------------------------------------------------------------------------
+    CharsetDisplayDerefHelper::CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper& _rSource)
+        :CharsetDisplayDerefHelper_Base(_rSource)
+        ,m_sDisplayName(m_sDisplayName)
+    {
+    }
 
-//-------------------------------------------------------------------------
-OCharsetCollection::CharsetIterator::~CharsetIterator()
-{
-#ifdef DBG_UTIL
-    --const_cast<OCharsetCollection*>(m_pContainer)->m_nLivingIterators;
-#endif
-}
+    //-------------------------------------------------------------------------
+    CharsetDisplayDerefHelper::CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper_Base& _rBase, const ::rtl::OUString& _rDisplayName)
+        :CharsetDisplayDerefHelper_Base(_rBase)
+        ,m_sDisplayName(_rDisplayName)
+    {
+    }
 
-//-------------------------------------------------------------------------
-String OCharsetCollection::CharsetIterator::getKey() const
-{
-    DBG_ASSERT(m_nPosition < m_pContainer->m_aKeyList.size(), "OCharsetCollection::CharsetIterator::getKey : invalid position!");
-    return m_pContainer->m_aKeyList[m_nPosition];
-}
+    //-------------------------------------------------------------------------
+    CharsetDisplayDerefHelper::CharsetDisplayDerefHelper()
+    {
+    }
 
-//-------------------------------------------------------------------------
-String OCharsetCollection::CharsetIterator::getName() const
-{
-    DBG_ASSERT(m_nPosition < m_pContainer->m_aNameList.size(), "OCharsetCollection::CharsetIterator::getName : invalid position!");
-    return m_pContainer->m_aNameList[m_nPosition];
-}
+    //=========================================================================
+    //= OCharsetDisplay::ExtendedCharsetIterator
+    //=========================================================================
+    //-------------------------------------------------------------------------
+    OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator(const OCharsetDisplay* _pContainer, const base_iterator& _rPosition, const sal_Int32 _nPosition)
+        :m_pContainer(_pContainer)
+        ,m_aPosition(_rPosition)
+        ,m_nPosition(_nPosition)
+    {
+        DBG_ASSERT(m_pContainer, "OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator : invalid container!");
+    }
 
-//-------------------------------------------------------------------------
-const OCharsetCollection::CharsetIterator&  OCharsetCollection::CharsetIterator::operator++()
-{
-    DBG_ASSERT(m_nPosition < m_pContainer->m_aKeyList.size(), "OCharsetCollection::CharsetIterator::operator++ : invalid position!");
-    if (m_nPosition < m_pContainer->m_aKeyList.size())
-        ++m_nPosition;
-    return *this;
-}
+    //-------------------------------------------------------------------------
+    OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator(const ExtendedCharsetIterator& _rSource)
+        :m_pContainer(_rSource.m_pContainer)
+        ,m_aPosition(_rSource.m_aPosition)
+        ,m_nPosition(_rSource.m_nPosition)
+    {
+    }
 
-//-------------------------------------------------------------------------
-const OCharsetCollection::CharsetIterator&  OCharsetCollection::CharsetIterator::operator--()
-{
-    DBG_ASSERT(m_nPosition >= 0, "OCharsetCollection::CharsetIterator::operator-- : invalid position!");
-    if (m_nPosition >= 0)
-        --m_nPosition;
-    return *this;
-}
+    //-------------------------------------------------------------------------
+    CharsetDisplayDerefHelper OCharsetDisplay::ExtendedCharsetIterator::operator*() const
+    {
+        DBG_ASSERT(m_nPosition < m_pContainer->m_aDisplayNames.size(), "OCharsetDisplay::ExtendedCharsetIterator::operator* : invalid position!");
+        return CharsetDisplayDerefHelper(*m_aPosition, m_pContainer->m_aDisplayNames[m_nPosition]);
+    }
 
-//-------------------------------------------------------------------------
-bool operator==(const OCharsetCollection::CharsetIterator& lhs, const OCharsetCollection::CharsetIterator& rhs)
-{
-    return (lhs.m_pContainer == rhs.m_pContainer) && (lhs.m_nPosition == rhs.m_nPosition);
-}
+    //-------------------------------------------------------------------------
+    const OCharsetDisplay::ExtendedCharsetIterator& OCharsetDisplay::ExtendedCharsetIterator::operator++()
+    {
+        DBG_ASSERT(m_nPosition < m_pContainer->m_aDisplayNames.size(), "OCharsetDisplay::ExtendedCharsetIterator::operator++ : invalid position!");
+        if (m_nPosition < m_pContainer->m_aDisplayNames.size())
+        {
+            ++m_nPosition;
+            ++m_aPosition;
+        }
+        return *this;
+    }
+
+    //-------------------------------------------------------------------------
+    const OCharsetDisplay::ExtendedCharsetIterator& OCharsetDisplay::ExtendedCharsetIterator::operator--()
+    {
+        DBG_ASSERT(m_nPosition >= 0, "OCharsetDisplay::ExtendedCharsetIterator::operator-- : invalid position!");
+        if (m_nPosition >= 0)
+        {
+            --m_nPosition;
+            --m_aPosition;
+        }
+        return *this;
+    }
+
+    //-------------------------------------------------------------------------
+    bool operator==(const OCharsetDisplay::ExtendedCharsetIterator& lhs, const OCharsetDisplay::ExtendedCharsetIterator& rhs)
+    {
+        return (lhs.m_pContainer == rhs.m_pContainer) && (lhs.m_nPosition == rhs.m_nPosition);
+    }
 
 //.........................................................................
 }   // namespace dbaui
@@ -210,6 +231,9 @@ bool operator==(const OCharsetCollection::CharsetIterator& lhs, const OCharsetCo
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:08:39  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 26.09.00 12:18:36  fs
  ************************************************************************/

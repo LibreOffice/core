@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charsets.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:31:54 $
+ *  last change: $Author: fs $ $Date: 2000-11-29 22:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _TOOLS_RC_HXX
 #include <tools/rc.hxx>
 #endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
+#ifndef _DBHELPER_DBCHARSET_HXX_
+#include <connectivity/dbcharset.hxx>
 #endif
 
 //.........................................................................
@@ -77,73 +77,101 @@ namespace dbaui
 {
 //.........................................................................
 
-//=========================================================================
-//= OCharsetCollection
-//=========================================================================
-class OCharsetCollection : public Resource
-{
-private:
-    DECLARE_STL_VECTOR(String, StringVector);
-    StringVector    m_aKeyList;
-    StringVector    m_aNameList;
+    //=========================================================================
+    //= OCharsetDisplay
+    //=========================================================================
+    typedef ::dbtools::OCharsetMap OCharsetDisplay_Base;
+    class OCharsetDisplay
+            :protected OCharsetDisplay_Base
+            ,public Resource
+    {
+    private:
+        StringVector    m_aDisplayNames;
 
-#ifdef DBG_UTIL
-    sal_Int32       m_nLivingIterators;         /// just for debugging reasons, counts the living iterators
-#endif
+    public:
+        class ExtendedCharsetIterator;
+        friend class OCharsetDisplay::ExtendedCharsetIterator;
 
-protected:
-    String implLookUp(const String& _rKey, const StringVector& _rKeys, const StringVector& _rValues) const;
+        typedef ExtendedCharsetIterator iterator;
+        typedef ExtendedCharsetIterator const_iterator;
 
-public:
-    class CharsetIterator;
-    friend class OCharsetCollection::CharsetIterator;
+        OCharsetDisplay();
 
-    OCharsetCollection();
-    ~OCharsetCollection();
+        struct IANA     { };
+        struct Logical  { };
+        struct Display  { };
 
-    String KeyToName(const String& _rKey) const { return implLookUp(_rKey, m_aKeyList, m_aNameList); }
-    String NameToKey(const String& _rName) const { return implLookUp(_rName, m_aNameList, m_aKeyList); }
+        // various find operations
+        const_iterator find(const rtl_TextEncoding _eEncoding) const;
+        const_iterator find(const ::rtl::OUString& _rIanaName, const IANA&) const;
+        const_iterator find(const ::rtl::OUString& _rLogicalName, const Logical&) const;
+        const_iterator find(const ::rtl::OUString& _rDisplayName, const Display&) const;
 
-    /// get access to the first element of the charset collection
-    CharsetIterator begin() const;
-    /// get access to the (last + 1st) element of the charset collection
-    CharsetIterator end() const;
-};
+        /// get access to the first element of the charset collection
+        ExtendedCharsetIterator begin() const;
+        /// get access to the (last + 1st) element of the charset collection
+        ExtendedCharsetIterator end() const;
+    };
 
-//-------------------------------------------------------------------------
-//- OCharsetCollection::CharsetIterator
-//-------------------------------------------------------------------------
-class OCharsetCollection::CharsetIterator
-{
-    friend class OCharsetCollection;
+    //-------------------------------------------------------------------------
+    //- CharsetDisplayDerefHelper
+    //-------------------------------------------------------------------------
+    typedef ::dbtools::CharsetIteratorDerefHelper CharsetDisplayDerefHelper_Base;
+    class CharsetDisplayDerefHelper : protected CharsetDisplayDerefHelper_Base
+    {
+        friend class OCharsetDisplay::ExtendedCharsetIterator;
 
-    friend bool operator==(const CharsetIterator& lhs, const CharsetIterator& rhs);
-    friend bool operator!=(const CharsetIterator& lhs, const CharsetIterator& rhs) { return !(lhs == rhs); }
+        ::rtl::OUString                         m_sDisplayName;
 
-protected:
-    const OCharsetCollection*   m_pContainer;
-    sal_Int32                   m_nPosition;
+    public:
+        CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper& _rSource);
 
-public:
-    CharsetIterator(const CharsetIterator& _rSource);
-    ~CharsetIterator();
+        rtl_TextEncoding    getEncoding() const         { return CharsetDisplayDerefHelper_Base::getEncoding(); }
+        ::rtl::OUString     getIanaName() const         { return CharsetDisplayDerefHelper_Base::getIanaName(); }
+        ::rtl::OUString     getName() const             { return CharsetDisplayDerefHelper_Base::getName(); }
+        ::rtl::OUString     getDisplayName() const      { return m_sDisplayName; }
 
-    String  getKey() const;
-    String  getName() const;
+    protected:
+        CharsetDisplayDerefHelper();
+        CharsetDisplayDerefHelper(const ::dbtools::CharsetIteratorDerefHelper& _rBase, const ::rtl::OUString& _rDisplayName);
+    };
 
-    /// prefix increment
-    const CharsetIterator&  operator++();
-    /// postfix increment
-    const CharsetIterator   operator++(int) { CharsetIterator hold(*this); ++*this; return hold; }
+    //-------------------------------------------------------------------------
+    //- OCharsetDisplay::ExtendedCharsetIterator
+    //-------------------------------------------------------------------------
+    class OCharsetDisplay::ExtendedCharsetIterator
+    {
+        friend class OCharsetDisplay;
 
-    /// prefix decrement
-    const CharsetIterator&  operator--();
-    /// postfix decrement
-    const CharsetIterator   operator--(int) { CharsetIterator hold(*this); --*this; return hold; }
+        friend bool operator==(const ExtendedCharsetIterator& lhs, const ExtendedCharsetIterator& rhs);
+        friend bool operator!=(const ExtendedCharsetIterator& lhs, const ExtendedCharsetIterator& rhs) { return !(lhs == rhs); }
 
-protected:
-    CharsetIterator(const OCharsetCollection* _pContainer, sal_Int32 _nInitialPos = 0);
-};
+        typedef ::dbtools::OCharsetMap      container;
+        typedef container::CharsetIterator  base_iterator;
+
+    protected:
+        const OCharsetDisplay*      m_pContainer;
+        base_iterator               m_aPosition;
+        sal_Int32                   m_nPosition;    // redundant
+
+    public:
+        ExtendedCharsetIterator(const ExtendedCharsetIterator& _rSource);
+
+        CharsetDisplayDerefHelper operator*() const;
+
+        /// prefix increment
+        const ExtendedCharsetIterator&  operator++();
+        /// postfix increment
+        const ExtendedCharsetIterator   operator++(int) { ExtendedCharsetIterator hold(*this); ++*this; return hold; }
+
+        /// prefix decrement
+        const ExtendedCharsetIterator&  operator--();
+        /// postfix decrement
+        const ExtendedCharsetIterator   operator--(int) { ExtendedCharsetIterator hold(*this); --*this; return hold; }
+
+    protected:
+        ExtendedCharsetIterator(const OCharsetDisplay* _pContainer, const base_iterator& _rPosition, const sal_Int32 _nPosition);
+    };
 
 //.........................................................................
 }   // namespace dbaui
@@ -154,6 +182,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/11 11:31:54  fs
+ *  replace unotools with comphelper
+ *
  *  Revision 1.1  2000/10/05 10:07:57  fs
  *  initial checkin
  *
