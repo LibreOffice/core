@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MPreparedStatement.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:38:05 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,11 +146,12 @@ void SAL_CALL OPreparedStatement::disposing()
 }
 // -----------------------------------------------------------------------------
 
-void OPreparedStatement::parseSql( const ::rtl::OUString& sql ) throw (
+sal_Bool OPreparedStatement::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted ) throw (
      ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
 {
     OSL_TRACE("In/Out :: OPreparedStatement::parseSql()");
-    OStatement_Base::parseSql( sql );
+    if (!OStatement_Base::parseSql( sql ))
+        return sal_False;
 
     m_xParamColumns = new OSQLColumns();
 
@@ -214,9 +215,11 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    sal_Bool bReadOnly= sal_True;
+    if (m_pResultSet)
+        bReadOnly = m_pResultSet->determineReadOnly();
     if(!m_xMetaData.is())
-        m_xMetaData = new OResultSetMetaData( m_aSQLIterator.getSelectColumns(), m_aSQLIterator.getTables().begin()->first ,m_pTable );
+        m_xMetaData = new OResultSetMetaData( m_aSQLIterator.getSelectColumns(), m_aSQLIterator.getTables().begin()->first ,m_pTable,bReadOnly );
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------
