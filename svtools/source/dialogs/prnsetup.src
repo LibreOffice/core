@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-01 07:54:04 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 10:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -928,7 +928,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ chinese_traditional ] = "ª`¸Ñ";
         Text[ arabic ] = "ÊÚáíÞ";
         Text[ greek ] = "Ó÷üëéï";
-        Text[ korean ] = "¸Þ¸ð";
+        Text[ korean ] = "ÁÖ";
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
     };
