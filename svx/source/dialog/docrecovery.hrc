@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docrecovery.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:44:19 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,25 +66,26 @@
 
 // general
 
-#define PROGR_HEIGHT                (RSC_CD_TEXTBOX_HEIGHT)
+#define PROGR_HEIGHT                (RSC_CD_PUSHBUTTON_HEIGHT)
 
 // TabDialog
-#define TABDLG_WIDTH                260
+#define TABDLG_WIDTH                290
 #define TABDLG_HEIGHT               278
 
 // TabPage CrashSave
 
 #define WIN_SAVE_TITLE              1
 #define FT_SAVE_TITLE               2
-#define FT_SAVE_DESCR               3
-#define FT_SAVE_FILELIST            4
-#define LB_SAVE_FILELIST            5
-#define CB_SAVE_LAUNCHAUTO          6
-#define FL_SAVE_BOTTOM              7
-#define BT_SAVE_OK                  8
+#define FL_SAVE_TITLE               3
+#define FT_SAVE_DESCR               4
+#define FT_SAVE_FILELIST            5
+#define LB_SAVE_FILELIST            6
+#define CB_SAVE_LAUNCHAUTO          7
+#define FL_SAVE_BOTTOM              8
+#define BT_SAVE_OK                  9
 
 
-#define SAVE_WIDTH                  260
+#define SAVE_WIDTH                  290
 #define SAVE_HEIGHT                 278
 #define SAVE_TITLEWINHEIGHT         36
 #define SAVE_DESCRHEIGHT            48
@@ -124,32 +125,34 @@
 
 #define WIN_RECOV_TITLE             1
 #define FT_RECOV_TITLE              2
-#define FT_RECOV_DESCR              3
-#define FT_RECOV_PROGR              4
-#define WIN_RECOV_PROGR             5
-#define FT_RECOV_FILELIST           6
-#define LB_RECOV_FILELIST           7
-#define FL_RECOV_BOTTOM             8
-#define BTN_RECOV_PREV              9
-#define BTN_RECOV_NEXT              10
-#define BTN_RECOV_CANCEL            11
-#define STR_HEADERBAR               12
-#define IMG_GREENCHECK              13
-#define IMG_YELLOWCHECK             14
-#define IMG_REDCROSS                15
-#define IMG_GREENCHECK_HC           16
-#define IMG_YELLOWCHECK_HC          17
-#define IMG_REDCROSS_HC             18
-#define STR_SUCCESSRECOV            19
-#define STR_ORIGDOCRECOV            20
-#define STR_RECOVFAILED             21
-#define STR_RECOVINPROGR            22
-#define STR_NOTRECOVYET             23
+#define FL_RECOV_TITLE              3
+#define FT_RECOV_DESCR              4
+#define FT_RECOV_PROGR              5
+#define WIN_RECOV_PROGR             6
+#define FT_RECOV_FILELIST           7
+#define LB_RECOV_FILELIST           8
+#define FL_RECOV_BOTTOM             9
+#define BTN_RECOV_PREV              10
+#define BTN_RECOV_NEXT              11
+#define BTN_RECOV_CANCEL            12
+#define STR_HEADERBAR               13
+#define IMG_GREENCHECK              14
+#define IMG_YELLOWCHECK             15
+#define IMG_REDCROSS                16
+#define IMG_GREENCHECK_HC           17
+#define IMG_YELLOWCHECK_HC          18
+#define IMG_REDCROSS_HC             19
+#define STR_SUCCESSRECOV            20
+#define STR_ORIGDOCRECOV            21
+#define STR_RECOVFAILED             22
+#define STR_RECOVINPROGR            23
+#define STR_NOTRECOVYET             24
+#define STR_RECOVERY_NEXT           25
 
 #define RECOV_WIDTH                 SAVE_WIDTH
 #define RECOV_HEIGHT                SAVE_HEIGHT
 #define RECOV_TITLEWINHEIGHT        SAVE_TITLEWINHEIGHT
-#define RECOV_DESCRHEIGHT           5*RSC_CD_FIXEDTEXT_HEIGHT
+#define RECOV_DESCRHEIGHT           6*RSC_CD_FIXEDTEXT_HEIGHT
 #define RECOV_COL1                  (RSC_SP_DLG_INNERBORDER_LEFT)
 #define RECOV_COL2                  40
 #define RECOV_COL3                  (RECOV_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
@@ -179,33 +182,32 @@
 #define FT_BROKEN_DESCR             1
 #define FT_BROKEN_FILELIST          2
 #define LB_BROKEN_FILELIST          3
-#define BTN_BROKEN_SAVE             4
-#define FL_BROKEN_BOTTOM            5
-#define BTN_BROKEN_OK               5
-#define BTN_BROKEN_CANCEL           6
+#define FT_BROKEN_SAVEDIR           4
+#define ED_BROKEN_SAVEDIR           5
+#define BTN_BROKEN_SAVEDIR          6
+#define FL_BROKEN_BOTTOM            7
+#define BTN_BROKEN_OK               8
+#define BTN_BROKEN_CANCEL           9
 
-#define BROKEN_WIDTH                200
+#define BROKEN_WIDTH                210
 #define BROKEN_HEIGHT               160
 #define BROKEN_COL0                 (RSC_SP_DLG_INNERBORDER_LEFT)
-#define BROKEN_COL1                 (BROKEN_COL0+RSC_CD_PUSHBUTTON_WIDTH)
-#define BROKEN_COL7                 (BROKEN_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
-#define BROKEN_COL6                 (BROKEN_COL7-RSC_CD_PUSHBUTTON_WIDTH)
-#define BROKEN_COL5                 (BROKEN_COL6-RSC_SP_CTRL_X)
-#define BROKEN_COL4                 (BROKEN_COL5-RSC_CD_PUSHBUTTON_WIDTH)
-#define BROKEN_COL3                 (BROKEN_COL4-RSC_SP_CTRL_X)
-#define BROKEN_COL2                 (BROKEN_COL3-RSC_CD_PUSHBUTTON_WIDTH)
+#define BROKEN_COL4                 (BROKEN_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
+#define BROKEN_COL3                 (BROKEN_COL4-RSC_CD_PUSHBUTTON_WIDTH)
+#define BROKEN_COL2                 (BROKEN_COL3-RSC_SP_CTRL_GROUP_X)
+#define BROKEN_COL1                 (BROKEN_COL2-RSC_CD_PUSHBUTTON_WIDTH)
 
 #define BROKEN_ROW0                 (RSC_SP_DLG_INNERBORDER_TOP)
-#define BROKEN_ROW1                 (BROKEN_ROW0+3*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define BROKEN_ROW1                 (BROKEN_ROW0+5*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_GROUP_Y)
 #define BROKEN_ROW2                 (BROKEN_ROW1+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_GROUP_Y)
 #define BROKEN_ROW8                 (BROKEN_HEIGHT-RSC_SP_DLG_INNERBORDER_BOTTOM)
 #define BROKEN_ROW7                 (BROKEN_ROW8-RSC_CD_PUSHBUTTON_HEIGHT)
-#define BROKEN_ROW6                 (BROKEN_ROW7-RSC_SP_CTRL_GROUP_Y-RSC_CD_FIXEDLINE_HEIGHT)
-#define BROKEN_ROW5                 (BROKEN_ROW6-RSC_SP_CTRL_GROUP_Y)
-#define BROKEN_ROW4                 (BROKEN_ROW5-RSC_CD_PUSHBUTTON_HEIGHT)
-#define BROKEN_ROW3                 (BROKEN_ROW4-RSC_SP_CTRL_Y)
+#define BROKEN_ROW6                 (BROKEN_ROW7-RSC_SP_FLGR_INNERBORDER_BOTTOM-RSC_CD_FIXEDLINE_HEIGHT)
+#define BROKEN_ROW5                 (BROKEN_ROW6-RSC_SP_FLGR_INNERBORDER_TOP-RSC_CD_PUSHBUTTON_HEIGHT)
+#define BROKEN_ROW4                 (BROKEN_ROW5-RSC_SP_CTRL_GROUP_Y-RSC_CD_FIXEDTEXT_HEIGHT)
+#define BROKEN_ROW3                 (BROKEN_ROW4-RSC_SP_CTRL_GROUP_Y)
 
-#define BROKEN_CONTROLWIDTH         (BROKEN_COL7-BROKEN_COL0)
+#define BROKEN_CONTROLWIDTH         (BROKEN_COL4-BROKEN_COL0)
 
 // TabPage Error Report Welcome
 // most defines equal to TabPage Recovery
@@ -267,9 +269,6 @@
 #define ERROPT_WIDTH    220
 #define ERROPT_HEIGHT   180
 
-#define ERROPT_SERVER_WIDTH 150
-#define ERROPT_PORT_WIDTH   35
-
 #define FL_ERROPT_PROXY         1
 #define BTN_ERROPT_SYSTEM       2
 #define BTN_ERROPT_DIRECT       3
@@ -302,6 +301,9 @@
 #define ERROPT_ROW9             (ERROPT_HEIGHT - RSC_SP_DLG_INNERBORDER_BOTTOM - RSC_CD_PUSHBUTTON_HEIGHT)
 #define ERROPT_ROW8             (ERROPT_ROW9 - RSC_SP_CTRL_DESC_Y - RSC_CD_FIXEDLINE_HEIGHT)
 #define ERROPT_ROW7             (ERROPT_ROW8 - RSC_SP_CTRL_DESC_Y)
+
+#define ERROPT_SERVER_WIDTH     150
+#define ERROPT_PORT_WIDTH       (ERROPT_COLF-ERROPT_COLC-RSC_SP_CTRL_GROUP_X-ERROPT_SERVER_WIDTH)
 
 // Error Report Preview Dialog
 
