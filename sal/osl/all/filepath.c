@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filepath.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2001-11-27 18:34:27 $
+ *  last change: $Author: mh $ $Date: 2001-11-27 18:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,13 @@
 
 /*---------------------------------------------------------------------------*/
 
+static sal_uInt32 SAL_CALL osl_defCalcTextWidthEx( rtl_uString *ustrText, void *pvContext )
+{
+    return ustrText ? ustrText->length : 0;
+}
+
+/*---------------------------------------------------------------------------*/
+
 static sal_uInt32 SAL_CALL osl_calcTextWidthWrapper( rtl_uString *ustrText, void *pvContext )
 {
     if ( pvContext )
@@ -72,13 +79,6 @@ static sal_uInt32 SAL_CALL osl_calcTextWidthWrapper( rtl_uString *ustrText, void
     }
     else
         return osl_defCalcTextWidthEx( ustrText, NULL );
-}
-
-/*---------------------------------------------------------------------------*/
-
-static sal_uInt32 SAL_CALL osl_defCalcTextWidthEx( rtl_uString *ustrText, void *pvContext )
-{
-    return ustrText ? ustrText->length : 0;
 }
 
 
