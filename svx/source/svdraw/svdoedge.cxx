@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:48:43 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,19 +595,27 @@ sal_Bool SdrEdgeObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec
     aEmptySet.Put(XLineStyleItem(XLINE_NONE));
     aEmptySet.Put(XFillStyleItem(XFILL_NONE));
 
+    // #b4899532# if not filled but fill draft, avoid object being invisible in using
+    // a hair linestyle and COL_LIGHTGRAY
+    SfxItemSet aItemSet(rSet);
+    if(bIsFillDraft && XLINE_NONE == ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue())
+    {
+        ImpPrepareLocalItemSetForDraftLine(aItemSet);
+    }
+
     // #103692# prepare ItemSet for shadow fill attributes
-    SfxItemSet aShadowSet(rSet);
+    SfxItemSet aShadowSet(aItemSet);
 
     // prepare line geometry
-    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
+    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet, bIsLineDraft) );
 
     // Shadows
-    if(!bHideContour && ImpSetShadowAttributes(rSet, aShadowSet))
+    if(!bHideContour && ImpSetShadowAttributes(aItemSet, aShadowSet))
     {
         rXOut.SetFillAttr(aEmptySet);
 
-        UINT32 nXDist=((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
-        UINT32 nYDist=((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
+        UINT32 nXDist=((SdrShadowXDistItem&)(aItemSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
+        UINT32 nYDist=((SdrShadowYDistItem&)(aItemSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
         XPolygon aXP(*pEdgeTrack);
         aXP.Move(nXDist,nYDist);
 
@@ -620,7 +628,7 @@ sal_Bool SdrEdgeObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec
         if( pLineGeometry.get() )
         {
             // draw the line geometry
-            ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
+            ImpDrawShadowLineGeometry(rXOut, aItemSet, *pLineGeometry);
         }
     }
 
@@ -636,7 +644,7 @@ sal_Bool SdrEdgeObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec
     {
         if(bHideContour)
         {
-            rXOut.SetFillAttr(rSet);
+            rXOut.SetFillAttr(aItemSet);
         }
     }
 
@@ -649,7 +657,7 @@ sal_Bool SdrEdgeObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec
     if(!bHideContour && pLineGeometry.get() )
     {
         // draw the line geometry
-        ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
+        ImpDrawColorLineGeometry(rXOut, aItemSet, *pLineGeometry);
     }
 
     sal_Bool bOk(sal_True);
@@ -2690,6 +2698,22 @@ void SdrEdgeObj::NbcSetAnchorPos(const Point& rPnt)
 
     // Additionally, invalidate edge track
     bEdgeTrackDirty = TRUE;
+}
+
+// #i32600#
+BOOL SdrEdgeObj::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPolygon) const
+{
+    // use base method from SdrObject, it's not rotatable and
+    // a call to GetSnapRect() is used. That's what we need for Connector.
+    return SdrObject::TRGetBaseGeometry(rMat, rPolyPolygon);
+}
+
+// #i32600#
+void SdrEdgeObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPolyPolygon)
+{
+    // evtl. take care for existing connections. For now, just use the
+    // implementation from SdrObject.
+    SdrObject::TRSetBaseGeometry(rMat, rPolyPolygon);
 }
 
 // eof
