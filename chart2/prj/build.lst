@@ -27,5 +27,3 @@ ch  chart2\source\controller\chartapiwrapper	nmake   -   all ch_source_controlle
 ch	chart2\source\controller\main				nmake	-	all	ch_source_controller_main ch_uno NULL
 ch	chart2\prj									get		-	all	ch_prj NULL
 ch	chart2\genjava								nmake	-	all	ch_java ch_uno NULL
-ch	chart2\genjava\com\sun\star\layout			nmake	-	all	ch_class_layout ch_java NULL
-ch	chart2\genjava\com\sun\star\chart2			nmake	-	all	ch_class_chart2 ch_class_layout ch_java NULL
