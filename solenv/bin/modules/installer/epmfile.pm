@@ -1358,6 +1358,13 @@ sub put_childprojects_into_installset
         installer::systemactions::copy_one_file($sourcefile, $destdir);
     }
 
+    if ( $installer::globals::javafilename3 ne "" )
+    {
+        $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "jre" . $installer::globals::separator . $installer::globals::javafilename3;
+        if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java file not found: $sourcefile !", "put_childprojects_into_installset"); }
+        installer::systemactions::copy_one_file($sourcefile, $destdir);
+    }
+
     # adding Ada
 
     if ( $installer::globals::adafilename ne "" )
