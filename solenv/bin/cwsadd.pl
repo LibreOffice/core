@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsadd.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-11 14:06:17 $
+#   last change: $Author: hr $ $Date: 2004-12-10 18:02:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,7 @@ use strict;
 use Getopt::Long;
 use Cwd;
 use IO::Handle;
+use File::Copy;
 
 #### module lookup
 my @lib_dirs;
@@ -101,7 +102,7 @@ use CvsModule;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.5 $ ';
+my $id_str = ' $Revision: 1.6 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -113,8 +114,10 @@ my $force_checkout = '';
 my $allow_modified = 0;
 my $is_debug = 0;
 my $opt_dir  = '';  # dir option
-my $vcsid = "unkown";
+my $vcsid = "unknown";
 my $add_output_tree = 1;
+my $keep_output_trees = 0;
+my $force_output_tree_copy = 0;
 my @found_platforms = ();
 
 my @args_bak = @ARGV;
@@ -183,7 +186,7 @@ sub update_modules {
         print "\tUpdating '$module' ...\n";
         my $result = $cvs_module->update($stand_dir, $master_tag);
         my ($updated, $merged, $conflicts) =
-            $cvs_module->handle_update_infomation($result);
+            $cvs_module->handle_update_information($result);
         if ( ( $merged && ! $allow_modified ) || $conflicts ) {
             push(@rejected_modules, $module);
             next;
@@ -242,8 +245,19 @@ sub parse_options
         print_error("Sorry! not for non-cygwin Windows environment",2);
     }
     my $help;
-    my $success = GetOptions('-h' => \$help, '-a' => \$force_checkout,
-                 '-f' => \$allow_modified);
+    my $success = GetOptions(
+                '-h' => \$help,
+                '-a' => \$force_checkout,
+                '-f' => \$allow_modified,
+                '-o' => \$force_output_tree_copy,
+                '-k' => \$keep_output_trees
+            );
+    if ( $force_checkout && $force_output_tree_copy ) {
+        print_error ("Can't copy output trees with checkout forced!", 2);
+    }
+    if ( $keep_output_trees && $force_output_tree_copy ) {
+        print_error ("Can't copy output trees but keep existing...", 2);
+    }
     if ( $help || !$success || $#ARGV < 0 ) {
         usage();
         exit(1);
@@ -297,37 +311,6 @@ sub check_modules
     return @new_modules;
 }
 
-sub copyprj_module_output
-{
-    return if ($force_checkout);
-
-    my $module_name = shift;
-    my $src_dest = shift;
-    print "copyprj $module_name\n";
-
-    # hash, that should contain all the
-    # data needed by CopyPrj module
-    my %ENVHASH = ();
-    my %projects_to_copy = ();
-    $ENVHASH{'projects_hash'} = \%projects_to_copy;
-    $ENVHASH{'no_otree'} = 0;
-    $ENVHASH{'no_path'} = 1;
-    $ENVHASH{'only_otree'} = 1;
-    $ENVHASH{'only_update'} = 1;
-    $ENVHASH{'last_minor'} = 0;
-    $ENVHASH{'spec_src'} = 0;
-    $ENVHASH{'dest'} = "$src_dest";
-    $ENVHASH{'prj_to_copy'} = '';
-    $ENVHASH{'i_server'} = '';
-    $ENVHASH{'current_dir'} = cwd();
-    $ENVHASH{'remote'} = '';
-
-    $projects_to_copy{$module_name}++;
-
-    CopyPrj::copy_projects(\%ENVHASH);
-
-};
-
 sub copyprj_module_sourcetree
 {
     my $module_name = shift;
@@ -344,7 +327,7 @@ sub copyprj_module_sourcetree
     };
     my %projects_to_copy = ();
     $ENVHASH{'projects_hash'} = \%projects_to_copy;
-    $ENVHASH{'no_otree'} = 1;
+    $ENVHASH{'no_otree'} = 1; # does this match with %platforms_to_copy???
     $ENVHASH{'no_path'} = 1;
     $ENVHASH{'only_otree'} = 0;
     $ENVHASH{'only_update'} = 1;
@@ -403,7 +386,7 @@ sub copy_modules
         print_error("Cannot change to $dir!", 1);
     }
 
-    # assume that every valid platform on child "solver" has to be coppied
+    # assume that every valid platform on child "solver" has to be copied
     $result = opendir( SOLVER, "$cws_solver");
     if ( !$result ){ print_error ("Root dir of child workspace not accessible: $!", 1) };
     my @found_dirs = readdir( SOLVER );
@@ -454,8 +437,8 @@ sub copy_modules
         if ( ! -l $one_module && -e $one_module ) {
             $result ||= rename($one_module, "$one_module.backup");
             # if it is no link, assume incompatible build
-            # -> don't copy output tree
-            $add_output_tree = 0;
+            # -> don't copy output tree unless required
+            $add_output_tree = 0 if ( !$force_output_tree_copy );
         }
         $result ||= rename("$one_module.lnk", "$one_module.backup.lnk") if ( -e "$one_module.lnk" );
         $result = 0 if ( -e $one_module || -e "$one_module.lnk" );
@@ -485,7 +468,7 @@ sub copy_modules
             {
                 $result = rename("$one_module.backup.lnk", "$one_module.lnk");
             }
-            print_error("Restoring link for $one_module failed! Cleanup is in your hand now", 1) if ( ! $result );
+            print_error("Restoring link for $one_module failed! Cleanup is in your hands now", 1) if ( ! $result );
             # fail for this module
             next;
         }
@@ -496,11 +479,26 @@ sub copy_modules
         # or backuped directory...
         if ( -d "$one_module.backup" )
         {
+            my $keep_this_module = 0;
             if ( $^O =~ "MSWin32" || $^O =~ "cygwin" )
             {
                 print_error("Sorry! not for windows, nobody should ever get here!",2);
             }
-            $result = system("rm -rf $one_module.backup");
+            if ( $keep_output_trees ) {
+                # copy output trees from backup to added module
+                foreach my $i ( @found_platforms ) {
+
+                    if ( ! move "$one_module.backup/$i", "$one_module/$i" ) {
+                        print_warning("Could not keep \"$one_module/$i\" autommatically.");
+                        print_warning("Keeping backuped module \"$one_module.back\" to allow manual copying...");
+                        $keep_this_module = 1;
+                    }
+                }
+            }
+            if ( ! $keep_this_module ) {
+                $result = system("rm -rf $one_module.backup");
+                print_warning("Couldn't remove backuped module \"$one_module.backup\".") if $result;
+            }
         }
 
         # insert module in list of successfull copied modules
@@ -627,7 +625,7 @@ sub print_warning
     my $message     = shift;
 
     print STDERR "$script_name: ";
-    print STDERR "WARNING $message\n";
+    print STDERR "WARNING: $message\n";
     return;
 }
 
@@ -649,11 +647,13 @@ sub print_error
 
 sub usage
 {
-    print STDERR "Usage: cwsadd [-h] [-a] <module> ... \n";
+    print STDERR "Usage: cwsadd [-h] [-a] [-f ] [-o|-k] <module> ... \n";
     print STDERR "Add one or more modules to child workspace.\n";
     print STDERR "Options:\n";
     print STDERR "    -a    use cvs checkout instead of copying\n";
     print STDERR "    -f    incorporate modified files into cws\n";
+    print STDERR "    -o    force copying output trees (in copy mode only)\n";
+    print STDERR "    -k    keep existing output trees\n";
     print STDERR "    -h    print this help\n";
 
 }
