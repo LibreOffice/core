@@ -1,6 +1,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
@@ -17,6 +20,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
+using namespace com::sun::star::container;
 
 
 
@@ -141,11 +145,38 @@ TVFactory::createInstanceWithArguments(
 {
     if( ! m_xHDS.is() )
     {
-        cppu::OWeakObject* p = new TVChildTarget( m_xMSF,Arguments );
+        cppu::OWeakObject* p = new TVChildTarget( m_xMSF );
         m_xHDS = Reference< XInterface >( p );
     }
 
-    return m_xHDS;
+    Reference< XInterface > ret = m_xHDS;
+
+    rtl::OUString hierview;
+    for( int i = 0; i < Arguments.getLength(); ++i )
+    {
+        PropertyValue pV;
+        if( ! ( Arguments[i] >>= pV ) )
+            continue;
+
+        if( pV.Name.compareToAscii( "nodepath" ) )
+            continue;
+
+        if( ! ( pV.Value >>= hierview ) )
+            continue;
+
+        break;
+    }
+
+    if( hierview.getLength() )
+    {
+        Reference< XHierarchicalNameAccess > xhieraccess( m_xHDS,UNO_QUERY );
+        Any aAny = xhieraccess->getByHierarchicalName( hierview );
+        Reference< XInterface > xInterface;
+        aAny >>= xInterface;
+        return xInterface;
+    }
+    else
+        return m_xHDS;
 }
 
 

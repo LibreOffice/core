@@ -43,6 +43,15 @@
 namespace treeview {
 
 
+    struct ConfigData
+    {
+        sal_uInt64 filelen;
+        rtl::OUString fileurl,locale,system;
+        rtl::OUString appendix;
+    };
+
+
+    class TVDom;
     class TVChildTarget;
 
 
@@ -58,10 +67,9 @@ namespace treeview {
 
     public:
 
-        TVRead( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF,
-                const rtl::OUString& aTitle,
-                const rtl::OUString& aTargetURL,
-                const rtl::Reference< TVChildTarget > aTargetRef = rtl::Reference< TVChildTarget >(0) );
+        TVRead();
+
+        TVRead( const ConfigData& configData,TVDom* tvDom = 0 );
 
         ~TVRead();
 
@@ -178,8 +186,6 @@ namespace treeview {
         rtl::OUString                    Title;
         rtl::OUString                    TargetURL;
         rtl::Reference< TVChildTarget >  Children;
-
-        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >  m_xMSF;
     };
 
 
@@ -189,12 +195,13 @@ namespace treeview {
     {
     public:
 
-        TVChildTarget( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF,
-                       const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aSeq );
+        TVChildTarget( const ConfigData& configData,TVDom* tvDom );
+
+        TVChildTarget( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
 
         ~TVChildTarget();
 
-                virtual com::sun::star::uno::Any SAL_CALL
+        virtual com::sun::star::uno::Any SAL_CALL
         getByName( const rtl::OUString& aName )
             throw( com::sun::star::container::NoSuchElementException,
                    com::sun::star::lang::WrappedTargetException,
@@ -224,6 +231,9 @@ namespace treeview {
 
     private:
         std::vector< rtl::Reference< TVRead > >   Elements;
+
+        ConfigData
+        init( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
     };
 
 }
