@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.87 2004-06-17 14:59:51 rt Exp $
+	$Id: drawing.mod,v 1.88 2005-01-27 11:06:13 rt Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -234,7 +234,7 @@
 <!ATTLIST draw:enhanced-geometry draw:extrusion-auto-rotation-center %boolean; "false">
 <!ATTLIST draw:enhanced-geometry draw:extrusion-background-depth %length; "36pt">
 <!ATTLIST draw:enhanced-geometry draw:extrusion-brightness %percentage; #IMPLIED>
-<!ATTLIST draw:enhanced-geometry draw:extrusion-diffusity %percentage; "0%">
+<!ATTLIST draw:enhanced-geometry draw:extrusion-diffusity %percentage; "0&#37;">
 <!ATTLIST draw:enhanced-geometry draw:extrusion-edge %integer; "1">
 <!ATTLIST draw:enhanced-geometry draw:extrusion-facet %integer; "30">
 <!ATTLIST draw:enhanced-geometry draw:extrusion-foreground-depth %length; "0">
@@ -250,13 +250,13 @@
 <!ATTLIST draw:enhanced-geometry draw:extrusion-render-mode (solid|wireframe|boundingcube) "solid">
 <!ATTLIST draw:enhanced-geometry draw:extrusion-rotation-angle-x %float; "0">
 <!ATTLIST draw:enhanced-geometry draw:extrusion-rotation-angle-y %float; "0">
-<!ATTLIST draw:enhanced-geometry draw:extrusion-rotation-center-x %percentage; "50%">
-<!ATTLIST draw:enhanced-geometry draw:extrusion-rotation-center-y %percentage; "50%">
-<!ATTLIST draw:enhanced-geometry draw:extrusion-rotation-center-z %percentage; "50%">
-<!ATTLIST draw:enhanced-geometry draw:extrusion-shininess %percentage; "50%">
-<!ATTLIST draw:enhanced-geometry draw:extrusion-skew %percentage; "50%">
+<!ATTLIST draw:enhanced-geometry draw:extrusion-rotation-center-x %percentage; "50&#37;">
+<!ATTLIST draw:enhanced-geometry draw:extrusion-rotation-center-y %percentage; "50&#37;">
+<!ATTLIST draw:enhanced-geometry draw:extrusion-rotation-center-z %percentage; "50&#37;">
+<!ATTLIST draw:enhanced-geometry draw:extrusion-shininess %percentage; "50&#37;">
+<!ATTLIST draw:enhanced-geometry draw:extrusion-skew %percentage; "50&#37;">
 <!ATTLIST draw:enhanced-geometry draw:extrusion-skew-angle %float; "45">
-<!ATTLIST draw:enhanced-geometry draw:extrusion-specularity %percentage; "0%">
+<!ATTLIST draw:enhanced-geometry draw:extrusion-specularity %percentage; "0&#37;">
 <!ATTLIST draw:enhanced-geometry draw:extrusion-parallel %boolean; "true">
 <!ATTLIST draw:enhanced-geometry draw:extrusion-viewpoint %point3D; #IMPLIED>
 <!ATTLIST draw:enhanced-geometry draw:extrusion-origin-x %percentage; "0">
@@ -558,7 +558,7 @@
 <!ATTLIST presentation:show-shape presentation:effect %presentationEffects; "none">
 <!ATTLIST presentation:show-shape presentation:direction %presentationEffectDirections; "none">
 <!ATTLIST presentation:show-shape presentation:speed %presentationSpeeds; "medium">
-<!ATTLIST presentation:show-shape presentation:start-scale %percentage; "100%">
+<!ATTLIST presentation:show-shape presentation:start-scale %percentage; "100&#37;">
 <!ATTLIST presentation:show-shape presentation:path-id CDATA #IMPLIED >
 
 <!ELEMENT presentation:show-text (presentation:sound)?>
@@ -566,7 +566,7 @@
 <!ATTLIST presentation:show-text presentation:effect %presentationEffects; "none">
 <!ATTLIST presentation:show-text presentation:direction %presentationEffectDirections; "none">
 <!ATTLIST presentation:show-text presentation:speed %presentationSpeeds; "medium">
-<!ATTLIST presentation:show-text presentation:start-scale %percentage; "100%">
+<!ATTLIST presentation:show-text presentation:start-scale %percentage; "100&#37;">
 <!ATTLIST presentation:show-text presentation:path-id CDATA #IMPLIED >
 
 <!ELEMENT presentation:hide-shape (presentation:sound)?>
@@ -574,7 +574,7 @@
 <!ATTLIST presentation:hide-shape presentation:effect %presentationEffects; "none">
 <!ATTLIST presentation:hide-shape presentation:direction %presentationEffectDirections; "none">
 <!ATTLIST presentation:hide-shape presentation:speed %presentationSpeeds; "medium">
-<!ATTLIST presentation:hide-shape presentation:start-scale %percentage; "100%">
+<!ATTLIST presentation:hide-shape presentation:start-scale %percentage; "100&#37;">
 <!ATTLIST presentation:hide-shape presentation:path-id CDATA #IMPLIED >
 
 <!ELEMENT presentation:hide-text (presentation:sound)?>
@@ -582,7 +582,7 @@
 <!ATTLIST presentation:hide-text presentation:effect %presentationEffects; "none">
 <!ATTLIST presentation:hide-text presentation:direction %presentationEffectDirections; "none">
 <!ATTLIST presentation:hide-text presentation:speed %presentationSpeeds; "medium">
-<!ATTLIST presentation:hide-text presentation:start-scale %percentage; "100%">
+<!ATTLIST presentation:hide-text presentation:start-scale %percentage; "100&#37;">
 <!ATTLIST presentation:hide-text presentation:path-id CDATA #IMPLIED >
 
 <!ELEMENT presentation:dim (presentation:sound)?>
@@ -888,7 +888,7 @@
 <!ATTLIST presentation:event presentation:effect %presentationEffects; "none">
 <!ATTLIST presentation:event presentation:direction %presentationEffectDirections; "none">
 <!ATTLIST presentation:event presentation:speed %presentationSpeeds; "medium">
-<!ATTLIST presentation:event presentation:start-scale %percentage; "100%">
+<!ATTLIST presentation:event presentation:start-scale %percentage; "100&#37;">
 <!ATTLIST presentation:event xlink:href %uriReference; #IMPLIED>
 <!ATTLIST presentation:event xlink:type (simple) #IMPLIED>
 <!ATTLIST presentation:event xlink:show (embed) #IMPLIED>
