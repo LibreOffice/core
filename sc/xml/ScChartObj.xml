@@ -8,7 +8,7 @@
     This component provides ...
 </Description>
 
-<SupportedService>com.sun.star.sheet.SheetChart</SupportedService>
+<SupportedService>com.sun.star.table.TableChart</SupportedService>
 
 <Language>c++</Language>
 
