@@ -43,7 +43,7 @@ original target interfaces on queryInterface() calls.
 <Type>  com.sun.star.registry.XRegistryKey                  </Type>
 <Type>  com.sun.star.uno.XAggregation                       </Type>
 <Type>  com.sun.star.uno.XWeak                              </Type>
-<Type>  com.sun.star.util.XProxyFactory </Type>
+<Type>  com.sun.star.reflection.XProxyFactory   </Type>
 
 </COMPONENTDESCRIPTION>
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxyfac.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:35 $
+ *  last change: $Author: jsc $ $Date: 2000-11-13 16:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/util/XProxyFactory.hpp>
+#include <com/sun/star/reflection/XProxyFactory.hpp>
 
 using namespace std;
 using namespace rtl;
@@ -87,11 +87,11 @@ using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::util;
+using namespace com::sun::star::reflection;
 using namespace com::sun::star::registry;
 
-#define SERVICENAME "com.sun.star.util.ProxyFactory"
-#define IMPLNAME    "com.sun.star.comp.util.ProxyFactory"
+#define SERVICENAME "com.sun.star.reflection.ProxyFactory"
+#define IMPLNAME    "com.sun.star.comp.reflection.ProxyFactory"
 
 namespace stoc_proxyfac
 {
