@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: os $ $Date: 2001-01-17 15:54:52 $
+#   last change: $Author: jp $ $Date: 2001-02-06 09:35:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,12 +74,15 @@ PACKAGE=com$/sun$/star$/i18n
 
 IDLFILES=\
     AmPmValue.idl \
+    BreakIterator.idl \
     Calendar.idl \
     CalendarDisplayIndex.idl \
     CalendarFieldIndex.idl \
     CalendarItem.idl \
     CharacterClassification.idl \
+    CJKBreakIterator.idl \
     Currency.idl \
+    JAJPBreakIterator.idl \
     LanguageCountryInfo.idl \
     LocaleData.idl \
     LocaleItem.idl \
@@ -95,7 +98,9 @@ IDLFILES=\
     XForbiddenCharacters.idl \
     XLocaleData.idl \
     XNumberFormatCode.idl \
-    XTransliteration.idl
+    XTransliteration.idl \
+    ZHCNBreakIterator.idl \
+    ZHTWBreakIterator.idl
 
 # ------------------------------------------------------------------
 
