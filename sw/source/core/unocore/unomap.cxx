@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-23 11:22:24 $
+ *  last change: $Author: os $ $Date: 2000-11-27 11:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1236,6 +1236,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { MAP_CHAR_LEN("FrameWidthAbsolute"),           RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, MID_FRMSIZE_WIDTH|CONVERT_TWIPS          },
                     { MAP_CHAR_LEN("FrameWidthPercent"),                RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0),         PROPERTY_NONE, MID_FRMSIZE_REL_WIDTH    },
                     { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aFramePropertyMap_Impl;
@@ -1308,6 +1309,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_LINK_DISPLAY_NAME),          FN_PARAM_LINK_DISPLAY_NAME,     &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0xff},
                     { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, &::getCppuType((PointSequenceSequence*)0), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aGraphicPropertyMap_Impl;

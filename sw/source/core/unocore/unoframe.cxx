@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-20 12:10:03 $
+ *  last change: $Author: os $ $Date: 2000-11-27 11:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _DOCSTYLE_HXX //autogen
 #include <docstyle.hxx>
 #endif
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
+#endif
 #ifndef _FMTCNCT_HXX //autogen
 #include <fmtcnct.hxx>
 #endif
@@ -152,7 +155,12 @@
 #ifndef _UNOSTYLE_HXX
 #include <unostyle.hxx>
 #endif
-
+#ifndef _SVDMODEL_HXX
+#include <svx/svdmodel.hxx>
+#endif
+#ifndef _SVDPAGE_HXX
+#include <svx/svdpage.hxx>
+#endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
@@ -285,9 +293,10 @@ const SfxItemPropertyMap* GetFrameDescMap()
         { SW_PROP_NAME(UNO_NAME_TOP_BORDER),                RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, TOP_BORDER   |CONVERT_TWIPS },
         { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER),         RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, BOTTOM_BORDER|CONVERT_TWIPS },
         { SW_PROP_NAME(UNO_NAME_BORDER_DISTANCE),         RES_BOX,              &::getCppuType((const sal_Int32*)0),    0, BORDER_DISTANCE|CONVERT_TWIPS },
+        { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
         {0,0,0,0}
     };
-    #define FRM_PROP_COUNT 49
+    #define FRM_PROP_COUNT 50
     return aFrameDescPropertyMap_Impl;
 }
 // unterscheidet sich von der Rahmenbeschreibung durch eine XTextPosition
@@ -349,9 +358,10 @@ const SfxItemPropertyMap* GetGraphicDescMap()
         { SW_PROP_NAME(UNO_NAME_GRAPHIC_URL),               0,                      &::getCppuType((const OUString*)0), 0, 0 },
         { SW_PROP_NAME(UNO_NAME_GRAPHIC_FILTER),            0,                      &::getCppuType((const OUString*)0), 0, 0 },
         { SW_PROP_NAME(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, &::getCppuType((PointSequenceSequence*)0), PropertyAttribute::MAYBEVOID, 0 },
+        { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
         {0,0,0,0}
     };
-    #define GRPH_PROP_COUNT 54
+    #define GRPH_PROP_COUNT 55
     return aGraphicDescPropertyMap_Impl;
 }
 
@@ -1186,6 +1196,18 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 }
             }
         }
+        else if(FN_UNO_Z_ORDER == pCur->nWID)
+        {
+            sal_Int32 nZOrder = - 1;
+            aValue >>= nZOrder;
+            const SwContact* pContact = pFmt->FindContactObj();
+            if(pContact && nZOrder >= 0)
+            {
+                const SdrObject* pObj = pContact->GetMaster();
+                pFmt->GetDoc()->GetDrawModel()->GetPage(0)->
+                            SetObjectOrdNum(pObj->GetOrdNum(), nZOrder);
+            }
+        }
         else
         {
             SfxItemSet aSet( pDoc->GetAttrPool(),
@@ -1307,9 +1329,18 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 }
             }
         }
-        else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_LINK_DISPLAY_NAME))
+        else if(FN_PARAM_LINK_DISPLAY_NAME == pCur->nWID)
         {
             aAny <<= OUString(pFmt->GetName());
+        }
+        else if(FN_UNO_Z_ORDER == pCur->nWID)
+        {
+            const SwContact* pContact = pFmt->FindContactObj();
+            if(pContact)
+            {
+                const SdrObject* pObj = pContact->GetMaster();
+                aAny <<= (sal_Int32)pObj->GetOrdNum();
+            }
         }
         else
         {
@@ -1687,7 +1718,6 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             SwFmtAnchor aAnchor(FLY_AT_CNTNT);
             aFrmSet.Put(aAnchor);
         }
-
         SwFlyFrmFmt* pFmt = 0;
         if( eType == FLYCNTTYPE_FRM)
         {
@@ -1753,6 +1783,12 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             DBG_ERROR("EmbeddedObject: not implemented")
             throw RuntimeException();
         }
+        uno::Any* pOrder;
+        if(pProps->GetProperty(C2S(UNO_NAME_Z_ORDER), pOrder))
+        {
+            setPropertyValue(C2U(UNO_NAME_Z_ORDER), *pOrder);
+        }
+
     }
     else
         throw IllegalArgumentException();
@@ -1765,7 +1801,10 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
   -----------------------------------------------------------------------*/
 awt::Point SwXFrame::getPosition(void) throw( RuntimeException )
 {
-    throw RuntimeException();
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    RuntimeException aRuntime;
+    aRuntime.Message = C2U("position cannot be determined with this method");
+    throw aRuntime;
     return awt::Point();
 }
 /*-- 22.04.99 08:03:21---------------------------------------------------
@@ -1773,7 +1812,10 @@ awt::Point SwXFrame::getPosition(void) throw( RuntimeException )
   -----------------------------------------------------------------------*/
 void SwXFrame::setPosition(const awt::Point& aPosition) throw( RuntimeException )
 {
-    throw RuntimeException();
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    RuntimeException aRuntime;
+    aRuntime.Message = C2U("position cannot be changed with this method");
+    throw aRuntime;
 }
 /*-- 22.04.99 08:03:21---------------------------------------------------
 
@@ -2650,132 +2692,4 @@ sal_uInt16 SwXOLEListener::FindEntry( const EventObject& rEvent,SwOLENode** ppNd
     }
     return nRet;
 }
-/******************************************************************
- *
- ******************************************************************/
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.9  2000/11/16 12:49:04  mib
-    TextWrap, SurroundContour and ContourOutside to work now
-
-    Revision 1.8  2000/11/15 15:00:48  os
-    chg: use optimized SfxItemPropertySet::get/setPropertyValue - methods
-
-    Revision 1.7  2000/11/08 14:56:39  os
-    #80121# createTextCursor in frames: skip tables
-
-    Revision 1.6  2000/10/27 13:52:45  mib
-    #79648#: Conversion to twip for crop property
-
-    Revision 1.5  2000/10/24 14:26:56  os
-    #79738# new graphic property: ContourPolyPolygon
-
-    Revision 1.4  2000/10/24 10:11:48  os
-    graphic mirror properties changed
-
-    Revision 1.3  2000/10/23 11:52:34  os
-    property defines according to the expansion
-
-    Revision 1.2  2000/10/16 13:28:50  os
-    #78595# deprecated interface XTextEmbeddedObject no longer supported
-
-    Revision 1.1.1.1  2000/09/19 00:08:28  hr
-    initial import
-
-    Revision 1.89  2000/09/18 16:04:31  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.88  2000/09/18 11:44:20  mib
-    bug fix for getPropertySetInfo
-
-    Revision 1.87  2000/09/15 08:42:29  os
-    FrameStyle->FrameStyleName
-
-    Revision 1.86  2000/09/15 07:21:16  os
-    service of graphic: ...text.GraphicObject
-
-    Revision 1.85  2000/09/12 13:24:45  os
-    #78602# XPropertyState implemented
-
-    Revision 1.84  2000/09/11 14:05:07  os
-     data type
-
-    Revision 1.83  2000/09/05 15:14:11  os
-    string length available again
-
-    Revision 1.82  2000/09/04 07:14:44  os
-    #78413# graphic descriptor properties corrected
-
-    Revision 1.81  2000/08/18 11:15:48  os
-    #77775# set default size of frames
-
-    Revision 1.80  2000/07/21 14:14:03  os
-    #76829# getTypes corrected
-
-    Revision 1.79  2000/07/11 13:43:42  os
-    #76708# insert/remove paragraphs before/behind tables
-
-    Revision 1.78  2000/07/10 12:32:17  os
-    chg: acquire/release don't throw exceptions
-
-    Revision 1.77  2000/06/27 12:10:33  os
-    #76423# programmatic style names
-
-    Revision 1.76  2000/06/20 12:28:31  os
-    new/delete completed
-
-    Revision 1.75  2000/06/20 08:08:31  os
-    operator new/delete
-
-    Revision 1.74  2000/05/25 09:54:36  hr
-    ?: operator
-
-    Revision 1.73  2000/05/16 17:21:28  jp
-    Changes for Unicode
-
-    Revision 1.72  2000/04/27 10:46:56  os
-    UNICODE
-
-    Revision 1.71  2000/04/26 11:35:19  os
-    GetName() returns String&
-
-    Revision 1.70  2000/04/11 08:31:03  os
-    UNICODE
-
-    Revision 1.69  2000/03/27 10:21:10  os
-    UNO III
-
-    Revision 1.68  2000/03/21 15:42:24  os
-    UNOIII
-
-    Revision 1.67  2000/02/11 14:35:38  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.66  2000/01/28 15:18:18  os
-    #72213# Chg: XSimpleText;
-
-    Revision 1.65  1999/11/25 15:43:26  os
-    headers corrected
-
-    Revision 1.64  1999/11/19 16:40:18  os
-    modules renamed
-
-    Revision 1.63  1999/11/11 16:42:57  jp
-    Bug #67026#: register as listener in OLE Objects and repaint/-size them by modification
-
-    Revision 1.62  1999/11/02 11:07:56  os
-    hyperlink interface completed
-
-    Revision 1.61  1999/10/26 14:35:33  os
-    LinkTargetSupplier
-
-    Revision 1.60  1999/07/22 07:34:26  OS
-    #65519# AnchorTypes in TextFrame and GraphicObject
-
-
-
-------------------------------------------------------------------------*/
 
