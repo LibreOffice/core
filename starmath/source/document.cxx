@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-04 08:04:42 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 12:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,7 +501,7 @@ EditEngine& SmDocShell::GetEditEngine()
         {
             // info to get western font to be used
             {   LANGUAGE_ENGLISH_US,    LANGUAGE_NONE,
-                DEFAULTFONT_SERIF,      EE_CHAR_FONTINFO },
+                DEFAULTFONT_FIXED,      EE_CHAR_FONTINFO },
             // info to get CJK font to be used
             {   LANGUAGE_JAPANESE,      LANGUAGE_NONE,
                 DEFAULTFONT_CJK_TEXT,   EE_CHAR_FONTINFO_CJK },
@@ -529,7 +529,7 @@ EditEngine& SmDocShell::GetEditEngine()
         // set font heights
         SvxFontHeightItem aFontHeigt(
                         Application::GetDefaultDevice()->LogicToPixel(
-                        Size( 0, 10 ), MapMode( MAP_POINT ) ).Height(), 100,
+                        Size( 0, 11 ), MapMode( MAP_POINT ) ).Height(), 100,
                         EE_CHAR_FONTHEIGHT );
         pEditEngineItemPool->SetPoolDefaultItem( aFontHeigt );
         aFontHeigt.SetWhich( EE_CHAR_FONTHEIGHT_CJK );
