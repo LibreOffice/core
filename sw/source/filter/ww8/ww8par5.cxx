@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:28:13 $
+ *  last change: $Author: vg $ $Date: 2003-06-11 16:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2192,6 +2192,28 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr )
     return FLD_OK;
 }
 
+bool CanUseRemoteLink(const String &rGrfName)
+{
+    bool bUseRemote = false;
+    try
+    {
+        ::ucb::Content aCnt(rGrfName,
+            ::com::sun::star::uno::Reference<
+            ::com::sun::star::ucb::XCommandEnvironment >() );
+        rtl::OUString   aTitle;
+
+        aCnt.getPropertyValue(rtl::OUString::createFromAscii("Title" ))
+            >>= aTitle;
+        bUseRemote = (aTitle.getLength() > 0);
+    }
+    catch ( ... )
+    {
+        // this file did not exist, so we will not set this as graphiclink
+        bUseRemote = false;
+    }
+    return bUseRemote;
+}
+
 // "EINF"UGENGRAFIK"
 eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
 {
@@ -2220,24 +2242,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
     }
 
     if (!bEmbedded)
-    {
-        try
-        {
-            ::ucb::Content aCnt(aGrfName,
-                ::com::sun::star::uno::Reference<
-                ::com::sun::star::ucb::XCommandEnvironment >() );
-            rtl::OUString   aTitle;
-
-            aCnt.getPropertyValue(rtl::OUString::createFromAscii("Title" ))
-                >>= aTitle;
-            bEmbedded = (aTitle.getLength() <= 0);
-        }
-        catch( ... )
-        {
-            // this file did not exist, so we will not set this as graphiclink
-            bEmbedded = true;
-        }
-    }
+        bEmbedded = !CanUseRemoteLink(aGrfName);
 
     if (!bEmbedded)
     {
@@ -2252,7 +2257,8 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
             erkannt, dass wir soeben einen Grafik-Link inserted haben und
             das passende SwAttrSet wird ins Frame-Format eingesetzt.
         */
-        SfxItemSet aFlySet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
+        SfxItemSet aFlySet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
+            RES_FRMATR_END-1 );
         aFlySet.Put( SwFmtAnchor( FLY_IN_CNTNT ) );
         aFlySet.Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ));
         pFlyFmtOfJustInsertedGraphic = rDoc.Insert( *pPaM,
