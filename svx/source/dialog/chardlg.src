@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:39:00 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ korean ] = "Åõ¸í";
         Text[ turkish ] = "Saydam";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Transparente";
     };
     String STR_NOSTYLE
     {
@@ -142,6 +143,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ greek ] = "×ùñßò %s";
         Text[ korean ] = "%s ¾Æ´Ô";
         Text[ turkish ] = "%s deðil";
+        Text[ catalan ] = "No %s";
     };
 
     FixedText FT_FONT
@@ -172,6 +174,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ korean ] = "±Û²Ã(~F)";
         Text[ turkish ] = "T~ür";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "T~ipo";
     };
     ComboBox LB_FONT
     {
@@ -210,6 +213,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ korean ] = "½ºÅ¸ÀÏ(~S)";
         Text[ turkish ] = "~Biçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Estilo";
     };
     ComboBox LB_STYLE
     {
@@ -378,6 +382,13 @@ TabPage RID_SVXPAGE_CHAR_STD
         "Kalýn" ;
         "Kalýn italik" ;
     };
+    StringList [ catalan ] =
+    {
+            < "Normal" ;
+        < "Cursiva" ;
+        < "Negrita" ;
+        < "Cursiva negrita" ;
+    };
     };
     FixedText FT_SIZE
     {
@@ -409,6 +420,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ korean ] = "Å©±â(~I)";
         Text[ turkish ] = "~Boy";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tamaño";
     };
     MetricBox LB_SIZE
     {
@@ -445,6 +457,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ korean ] = "À±°û(~O)";
         Text[ turkish ] = "~Kontur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Contorno";
     };
     TriStateBox BTN_SHADOW
     {
@@ -473,6 +486,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ korean ] = "À½¿µ(~A)";
         Text[ turkish ] = "Gö~lge";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Sombra";
     };
     TriStateBox BTN_UNDERLINE
     {
@@ -501,6 +515,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ korean ] = "¹ØÁÙ(~U)";
         Text[ turkish ] = "~Altý çizili";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Su~brayado";
     };
     TriStateBox BTN_STRIKEOUT
     {
@@ -529,6 +544,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ korean ] = "Ãë¼Ò¼±(~T)";
         Text[ turkish ] = "~Üstü çizili";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "T~achado";
     };
     GroupBox GB_CASEMAP
     {
@@ -557,6 +573,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ korean ] = "È¿°ú";
         Text[ turkish ] = "Efektler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Efectos";
     };
     FixedText FT_COLOR
     {
@@ -586,6 +603,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ korean ] = "»ö(~C)";
         Text[ turkish ] = "~Renk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Co~lor";
     };
     ListBox LB_COLOR
     {
@@ -623,6 +641,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ korean ] = "¹è°æ»ö(~F)";
         Text[ turkish ] = "~Artalan rengi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Color de fondo";
     };
     ListBox LB_FILLCOLOR
     {
@@ -661,6 +680,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ korean ] = "¾ð¾î(~L)";
         Text[ turkish ] = "D~il";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "I~dioma";
     };
     ListBox LB_LANGUAGE
     {
@@ -701,6 +721,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ korean ] = "¿¹";
         Text[ turkish ] = "Örnek";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ejemplo";
     };
     GroupBox GB_EXAMPLE
     {
@@ -730,7 +751,9 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ korean ] = "¹Ì¸® º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Previsualización";
     };
+    Text[ catalan ] = "Fuente";
 };
  // RID_SVXPAGE_CHAR_EXT --------------------------------------------------
 TabPage RID_SVXPAGE_CHAR_EXT
@@ -934,6 +957,14 @@ TabPage RID_SVXPAGE_CHAR_EXT
         < "ÎØ ÚäæÇä" ; Default ; > ;
         < "ÍÑÝ ÈÏÇíÉ ÃßÈÑ" ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Ninguno" ; Default ; > ;
+        < "Mayúsculas" ; Default ; > ;
+        < "Minúsculas" ; Default ; > ;
+        < "Carácter título" ; Default ; > ;
+        < "Versalitas" ; Default ; > ;
+    };
     };
     RadioButton BTN_NONE
     {
@@ -962,6 +993,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "¾øÀ½(~N)";
         Text[ turkish ] = "~Yok";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nin~guno";
     };
     RadioButton BTN_CAPS
     {
@@ -990,6 +1022,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "¸ðµÎ ´ë¹®ÀÚ(~A)";
         Text[ turkish ] = "~Büyük harflerle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ma~yúsculas";
     };
     RadioButton BTN_LOWERCASE
     {
@@ -1018,6 +1051,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "¼Ò¹®ÀÚ(~L)";
         Text[ turkish ] = "~Küçük harflerle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Minúsculas";
     };
     RadioButton BTN_SMALLCAPS
     {
@@ -1048,6 +1082,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "¼Ò¹®ÀÚ(~M)";
         Text[ turkish ] = "Kü~çük büyük harf";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Versalitas";
     };
     RadioButton BTN_TITEL
     {
@@ -1076,6 +1111,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "Á¦¸ñ(~T)";
         Text[ turkish ] = "~Ýlk harf büyük";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Carácter títu~lo";
     };
     CheckBox CB_FLASH
     {
@@ -1108,6 +1144,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "±ô¹ÚÀÓ(~B)";
         Text[ turkish ] = "~Yanýp sönen metin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Intermitente";
     };
     GroupBox GB_EFFECT
     {
@@ -1136,6 +1173,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "±âÅ¸ È¿°ú";
         Text[ turkish ] = "Diðer efektler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Más efectos";
     };
     RadioButton BTN_HIGH
     {
@@ -1164,6 +1202,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "À§(~E)";
         Text[ turkish ] = "Ü~st simge";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Superínd~ice";
     };
     RadioButton BTN_NORMAL
     {
@@ -1192,6 +1231,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "º¸Åë(~O)";
         Text[ turkish ] = "No~rmal";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "N~ormal";
     };
     RadioButton BTN_DEEP
     {
@@ -1220,6 +1260,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "¾Æ·¡(~U)";
         Text[ turkish ] = "A~lt simge";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Subíndic~e";
     };
     GroupBox GB_POSITION
     {
@@ -1246,6 +1287,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "À§Ä¡";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posición";
     };
     FixedText FT_ESCDEEPHIGH
     {
@@ -1274,6 +1316,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "¿Ã¸²/³»¸² Á¤µµ(~W)";
         Text[ turkish ] = "Yük~seklik/Derinlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Super/subíndice e~n";
     };
     MetricField ED_ESCDEEPHIGH
     {
@@ -1319,6 +1362,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "»ó´ëÀû ±Û²Ã Å©±â(~E)";
         Text[ turkish ] = "~Gör. karakter boyu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tama~ño relativo";
     };
     MetricField ED_ESCRELSIZE
     {
@@ -1360,6 +1404,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "ÀÚµ¿(~C)";
         Text[ turkish ] = "O~tomatik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Automático";
     };
     GroupBox GB_POSEXT
     {
@@ -1390,6 +1435,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "À§Ä¡ ¿É¼Ç";
         Text[ turkish ] = "Konum seçenekleri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones de posición";
     };
     ListBox LB_KERNING
     {
@@ -1535,6 +1581,12 @@ TabPage RID_SVXPAGE_CHAR_EXT
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Predeterminado" ; Default ; > ;
+        < "Expandido" ; Default ; > ;
+        < "Condensado" ; Default ; > ;
+    };
     };
     FixedText FT_KERNING
     {
@@ -1563,6 +1615,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "¸¸Å­(~B)";
         Text[ turkish ] = "->";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~de";
     };
     MetricField ED_KERNING
     {
@@ -1603,6 +1656,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "Ä¿´×, ½Ö(~P)";
         Text[ turkish ] = "~Aralýk azalt";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~juste par entre caracteres";
     };
     GroupBox GB_KERNING
     {
@@ -1631,6 +1685,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "°£°Ý";
         Text[ turkish ] = "Karakter aralýðý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Espacios";
     };
     FixedText FT_UNDERLINECNT
     {
@@ -1659,6 +1714,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "¹ØÁÙ";
         Text[ turkish ] = "Altý ~çizili";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Su~brayado";
     };
     ListBox LB_UNDERLINECNT
     {
@@ -2078,6 +2134,25 @@ TabPage RID_SVXPAGE_CHAR_EXT
         < "Welle fett"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
         < "Welle doppelt"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Sencillo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Doble"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Punteado"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Punteado negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Trazo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Trazo negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Trazo largo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Trazo negrita largo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Punto trazo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Punto trazo negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Punto punto trazo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Punto punto trazo negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Ondulada"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Ondulada negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Ondulada doble"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+    };
     };
     FixedText FT_STRIKEOUTCNT
     {
@@ -2106,6 +2181,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "Ãë¼Ò¼±(~K)";
         Text[ turkish ] = "~Üstü çizili";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ta~chado";
     };
     ListBox LB_STRIKEOUTCNT
     {
@@ -2291,6 +2367,14 @@ TabPage RID_SVXPAGE_CHAR_EXT
         < "Mit /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
         < "Mit X" ; CHRDLG_STRIKEOUT_X ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Sencillo" ; CHRDLG_STRIKEOUT_X ; > ;
+        < "Doble" ; CHRDLG_STRIKEOUT_X ; > ;
+        < "Negrita" ; CHRDLG_STRIKEOUT_X ; > ;
+        < "Con /" ; CHRDLG_STRIKEOUT_X ; > ;
+        < "Con X" ; CHRDLG_STRIKEOUT_X ; > ;
+    };
     };
     CheckBox CB_WORD
     {
@@ -2319,6 +2403,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "´Ü¾îº°(~I)";
         Text[ turkish ] = "~Yalnýzca sözcükler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Solo pa~labras";
     };
     FixedText FT_FONTTYPE
     {
@@ -2351,6 +2436,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "¿¹";
         Text[ turkish ] = "Örnek";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ejemplo";
     };
     GroupBox GB_EXAMPLE
     {
@@ -2380,7 +2466,9 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ korean ] = "¹Ì¸® º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Previsualización";
     };
+    Text[ catalan ] = "Efectos de fuente";
 };
 
  // unbekannte Zeichenfarbe
@@ -2409,6 +2497,7 @@ String RID_SVXSTR_COLOR_USER
     Text[ korean ] = "»ç¿ëÀÚ";
     Text[ turkish ] = "Kullanýcý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Usuario";
 };
 
 // RID_SVXPAGE_CHAR_NAME ----------------------------------------------------
@@ -2441,6 +2530,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ chinese_traditional ] = "¦è¤å¦r«¬";
         Text[ turkish ] = "Schriftart für westlichen Text";
         Text[ arabic ] = "ÎØ ÇáäÕ ÇáÛÑÈí";
+        Text[ catalan ] = "Fuente para texto occidental";
     };
     FixedText FT_WEST_NAME
     {
@@ -2465,6 +2555,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ chinese_traditional ] = "¦r«¬";
         Text[ turkish ] = "Font";
         Text[ arabic ] = "äæÚ ÇáÎØ";
+        Text[ catalan ] = "Fuente";
     };
     ComboBox LB_WEST_NAME
     {
@@ -2497,6 +2588,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ chinese_traditional ] = "¦r«¬§Îª¬(~T)";
         Text[ turkish ] = "Type";
         Text[ arabic ] = "äãØ ÇáÎØ";
+        Text[ catalan ] = "Estilo";
     };
     ComboBox LB_WEST_STYLE
     {
@@ -2645,6 +2737,13 @@ TabPage RID_SVXPAGE_CHAR_NAME
          "ÚÑíÖ" ;
          "ÚÑíÖ ãÇÆá" ;
     };
+    StringList [ catalan ] =
+    {
+            < "Normal" ;
+        < "Cursiva" ;
+        < "Negrita" ;
+        < "Negrita cursiva" ;
+    };
     };
     FixedText FT_WEST_SIZE
     {
@@ -2669,6 +2768,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ chinese_traditional ] = "¦r«¬¤j¤p";
         Text[ turkish ] = "Size";
         Text[ arabic ] = "ÍÌã ÇáÎØ";
+        Text[ catalan ] = "Tamaño";
     };
     MetricBox LB_WEST_SIZE
     {
@@ -2701,6 +2801,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ chinese_traditional ] = "»y¨¥";
         Text[ turkish ] = "Language";
         Text[ arabic ] = "ÇááÛÉ";
+        Text[ catalan ] = "Idioma";
     };
     ListBox LB_WEST_LANG
     {
@@ -2734,6 +2835,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ chinese_traditional ] = "¤¤¤éÁú¦r«¬";
         Text[ turkish ] = "Schriftart für asiatischen Text";
         Text[ arabic ] = "ÎØ ÇáäÕ ÇáÂÓíæí";
+        Text[ catalan ] = "Fuente para texto asiático";
     };
     FixedText FT_EAST_NAME
     {
@@ -2758,6 +2860,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ chinese_traditional ] = "¦r«¬Ãþ«¬";
         Text[ turkish ] = "Font";
         Text[ arabic ] = "äæÚ ÇáÎØ";
+        Text[ catalan ] = "Fuente";
     };
     ComboBox LB_EAST_NAME
     {
@@ -2790,6 +2893,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ chinese_traditional ] = "¦r«¬§Îª¬(~Y)";
         Text[ turkish ] = "Type";
         Text[ arabic ] = "äãØ ÇáÎØ";
+        Text[ catalan ] = "Estilo";
     };
     ComboBox LB_EAST_STYLE
     {
@@ -2938,6 +3042,13 @@ TabPage RID_SVXPAGE_CHAR_NAME
          "ÚÑíÖ" ;
          "ÚÑíÖ ãÇÆá" ;
     };
+    StringList [ catalan ] =
+    {
+            < "Normal" ;
+        < "Cursiva" ;
+        < "Negrita" ;
+        < "Negrita cursiva" ;
+    };
     };
     FixedText FT_EAST_SIZE
     {
@@ -2962,6 +3073,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ chinese_traditional ] = "¦r«¬¤j¤p";
         Text[ turkish ] = "Size";
         Text[ arabic ] = "ÍÌã ÇáÎØ";
+        Text[ catalan ] = "Tamaño";
     };
     MetricBox LB_EAST_SIZE
     {
@@ -2994,6 +3106,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ chinese_traditional ] = "»y¨¥";
         Text[ turkish ] = "Language";
         Text[ arabic ] = "ÇááÛÉ";
+        Text[ catalan ] = "Idioma";
     };
     ListBox LB_EAST_LANG
     {
@@ -3027,6 +3140,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ chinese_traditional ] = "¹wÄý";
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "ÇáãÚÇíäÉ";
+        Text[ catalan ] = "Previsualización";
     };
     Window WIN_CHAR_PREVIEW
     {
@@ -3052,6 +3166,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ chinese_traditional ] = "¥Ü¨Ò";
         Text[ turkish ] = "Example";
         Text[ arabic ] = "ãËÇá";
+        Text[ catalan ] = "Ejemplo";
     };
     FixedText FT_CHAR_FONTTYPE
     {
@@ -3086,6 +3201,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ chinese_traditional ] = "¦r«¬ÃC¦â(~C)";
         Text[ turkish ] = "Font ~Color";
         Text[ arabic ] = "áæä ÇáÎØ";
+        Text[ catalan ] = "Color de fuente";
     };
     ListBox LB_COLOR2
     {
@@ -3117,6 +3233,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ greek ] = "×ùñßò %s";
         Text[ korean ] = "%s ¾Æ´Ô";
         Text[ turkish ] = "%s deðil";
+        Text[ catalan ] = "No %s";
     };
     String STR_CHARNAME_TRANSPARENT
     {
@@ -3140,6 +3257,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ greek ] = "ÄéáöáíÝò";
         Text[ korean ] = "Åõ¸í";
         Text[ turkish ] = "Saydam";
+        Text[ catalan ] = "Transparente";
     };
 };
 
@@ -3173,6 +3291,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "¤U¦E½u";
         Text[ turkish ] = "Underlining";
         Text[ arabic ] = "ÎØ ÊÍÊí";
+        Text[ catalan ] = "Subrayado";
     };
     ListBox LB_UNDERLINE
     {
@@ -3581,6 +3700,26 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "ãæÌÉ ÚÑíÖÉ"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
         < "ãæÌÉ ãÒÏæÌÉ"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "(Sin)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Sencillo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Doble"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Punteado"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Punteado negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Trazo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Trazo negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Trazo largo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Trazo negrita largo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Punto trazo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Punto trazo negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Punto punto trazo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Punto punto trazo negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Ondulada"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Ondulada negrita"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        < "Ondulada doble"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+    };
     };
     FixedText FT_UNDERLINE_COLOR
     {
@@ -3605,6 +3744,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "ÃC¦â";
         Text[ turkish ] = "Color";
         Text[ arabic ] = "Çááæä";
+        Text[ catalan ] = "Color";
     };
     ListBox LB_UNDERLINE_COLOR
     {
@@ -3637,6 +3777,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "§R°£½u";
         Text[ turkish ] = "Strikethrough";
         Text[ arabic ] = "ÔØÈ";
+        Text[ catalan ] = "Tachado";
     };
     ListBox LB_STRIKEOUT
     {
@@ -3825,6 +3966,15 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "ÈÜ /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
         < "ÈÜ X" ; CHRDLG_STRIKEOUT_X ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "(Sin)" ; CHRDLG_STRIKEOUT_X ; > ;
+        < "Sencillo" ; CHRDLG_STRIKEOUT_X ; > ;
+        < "Doble" ; CHRDLG_STRIKEOUT_X ; > ;
+        < "Negrita" ; CHRDLG_STRIKEOUT_X ; > ;
+        < "Con /" ; CHRDLG_STRIKEOUT_X ; > ;
+        < "Con X" ; CHRDLG_STRIKEOUT_X ; > ;
+    };
     };
     CheckBox CB_INDIVIDUALWORDS
     {
@@ -3850,6 +4000,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "³v¦r(~W)";
         Text[ turkish ] = "Individual words";
         Text[ arabic ] = "ÇáßáãÇÊ ÝÞØ";
+        Text[ catalan ] = "Por palabras";
     };
     FixedText FT_EMPHASIS
     {
@@ -3874,6 +4025,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "­«­µ²Å¸¹(~H)";
         Text[ turkish ] = "Emphasis character";
         Text[ arabic ] = "ÃÍÑÝ ÅÈÑÇÒ";
+        Text[ catalan ] = "Carácter de entonación";
     };
     ListBox LB_EMPHASIS
     {
@@ -4050,6 +4202,14 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "ÞÑÕ" ; default ; > ;
         < "Akzent" ; default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "(Sin)" ; default ; > ;
+        < "Dot" ; default ; > ;
+        < "Círculo" ; default ; > ;
+        < "Scheibe" ; default ; > ;
+        < "Akzent" ; default ; > ;
+    };
     };
     FixedText FT_POSITION
     {
@@ -4074,6 +4234,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "¦ì¸m";
         Text[ turkish ] = "Position";
         Text[ arabic ] = "ÇáãæÖÚ";
+        Text[ catalan ] = "Posición";
     };
     ListBox LB_POSITION
     {
@@ -4182,6 +4343,11 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
             < "ÝæÞ ÇáäÕ" ; CHRDLG_POSITION_OVER ; > ;
         < "ÊÍÊ ÇáäÕ" ; CHRDLG_POSITION_UNDER ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Sobre texto" ; CHRDLG_POSITION_UNDER ; > ;
+        < "Debajo de texto" ; CHRDLG_POSITION_UNDER ; > ;
+    };
     };
     FixedText FT_EFFECTS
     {
@@ -4206,6 +4372,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "¿ô¥Ø¦r«¬";
         Text[ turkish ] = "Effects";
         Text[ arabic ] = "ÇáÊÃËíÑÇÊ";
+        Text[ catalan ] = "Efectos";
     };
     ListBox LB_EFFECTS2
     {
@@ -4372,6 +4539,14 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
             < "ÎØ ÚäæÇä" ; Default ; > ;
             < "ÍÑÝ ÈÏÇíÉ ÃßÈÑ" ; Default ; > ;
         };
+    StringList [ catalan ] =
+    {
+            < "Ninguno" ; Default ; > ;
+        < "Mayúsculas" ; Default ; > ;
+        < "Minúsculas" ; Default ; > ;
+        < "Título" ; Default ; > ;
+        < "Versalitas" ; Default ; > ;
+    };
     };
     FixedText FT_RELIEF
     {
@@ -4397,6 +4572,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "¯BÀJ(~R)";
         Text[ turkish ] = "Relief";
         Text[ arabic ] = "äÞÔ";
+        Text[ catalan ] = "Relief";
     };
     ListBox LB_RELIEF
     {
@@ -4466,8 +4642,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     StringList [ italian ] =
     {
             < "Nessuno" ; Default ; > ;
-        < "Rialzato" ; Default ; > ;
-        < "Scavato" ; Default ; > ;
+        < "In rilievo" ; Default ; > ;
+        < "Incavato" ; Default ; > ;
     };
     StringList [ danish ] =
     {
@@ -4529,6 +4705,12 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "ãÒÎÑÝ" ; Default ; > ;
         < "ãÍÝæÑ" ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Keine" ; Default ; > ;
+        < "Erhaben" ; Default ; > ;
+        < "Vertieft" ; Default ; > ;
+    };
     };
     TriStateBox CB_OUTLINE
     {
@@ -4553,6 +4735,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "½ü¹ø";
         Text[ turkish ] = "Outline";
         Text[ arabic ] = "ÎØ ßöÝÇÝí";
+        Text[ catalan ] = "Contorno";
     };
     TriStateBox CB_SHADOW
     {
@@ -4577,6 +4760,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "³±¼v";
         Text[ turkish ] = "Shadow";
         Text[ arabic ] = "Ùá";
+        Text[ catalan ] = "Sombra";
     };
     CheckBox CB_BLINKING
     {
@@ -4602,6 +4786,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "°{°Ê(~B)";
         Text[ turkish ] = "Blinking";
         Text[ arabic ] = "æãíÖ";
+        Text[ catalan ] = "Intermitente";
     };
     FixedLine FL_EFFECTS_PREVIEW
     {
@@ -4626,6 +4811,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "¹wÄý";
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "ÇáãÚÇíäÉ";
+        Text[ catalan ] = "Previsualización";
     };
     Window WIN_EFFECTS_PREVIEW
     {
@@ -4651,6 +4837,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "¥Ü¨Ò";
         Text[ turkish ] = "Example";
         Text[ arabic ] = "ãËÇá";
+        Text[ catalan ] = "Ejemplo";
     };
     FixedText FT_EFFECTS_FONTTYPE
     {
@@ -4678,6 +4865,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "¤j¼g¦r¥À";
         Text[ turkish ] = "Capitals";
         Text[ arabic ] = "ÃÍÑÝ ßÈíÑÉ";
+        Text[ catalan ] = "Mayúsculas";
     };
     String STR_EFFECTS_LOWERCASE
     {
@@ -4700,6 +4888,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "¤p¼g¦r¥À";
         Text[ turkish ] = "Lowercase";
         Text[ arabic ] = "ÃÍÑÝ ÕÛíÑÉ";
+        Text[ catalan ] = "Minúsculas";
     };
     String STR_EFFECTS_TITLE
     {
@@ -4722,6 +4911,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "¼ÐÃD¤å¦r";
         Text[ turkish ] = "Title";
         Text[ arabic ] = "ÎØ ÚäæÇä";
+        Text[ catalan ] = "Título";
     };
     String STR_EFFECTS_SMALL
     {
@@ -4744,6 +4934,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "¤p«¬¤j¼g¦r¥À";
         Text[ turkish ] = "Small Capitals";
         Text[ arabic ] = "ÍÑÝ ÈÏÇíÉ ÃßÈÑ";
+        Text[ catalan ] = "Versalitas";
     };
     String STR_EFFECTS_OUTLINE
     {
@@ -4766,6 +4957,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "½ü¹ø";
         Text[ turkish ] = "Outline";
         Text[ arabic ] = "ÎØ ßöÝÇÝí";
+        Text[ catalan ] = "Contorno";
     };
     String STR_EFFECTS_SHADOW
     {
@@ -4788,6 +4980,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "³±¼v";
         Text[ turkish ] = "Shadow";
         Text[ arabic ] = "Ùá";
+        Text[ catalan ] = "Sombra";
     };
     String STR_EFFECTS_BLINKING
     {
@@ -4810,6 +5003,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ chinese_traditional ] = "°{°Ê";
         Text[ turkish ] = "Blinking";
         Text[ arabic ] = "æãíÖ";
+        Text[ catalan ] = "Intermitente";
     };
 };
 
@@ -4843,6 +5037,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "¦ì¸m";
         Text[ turkish ] = "Position";
         Text[ arabic ] = "ÇáãæÖÚ";
+        Text[ catalan ] = "Posición";
     };
     RadioButton RB_HIGHPOS
     {
@@ -4868,6 +5063,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "¦V¤W";
         Text[ turkish ] = "Super";
         Text[ arabic ] = "ãÑÊÝÚ";
+        Text[ catalan ] = "Superíndice";
     };
     RadioButton RB_NORMALPOS
     {
@@ -4893,6 +5089,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "´¶³q";
         Text[ turkish ] = "Normal";
         Text[ arabic ] = "ÚÇÏí";
+        Text[ catalan ] = "Normal";
     };
     RadioButton RB_LOWPOS
     {
@@ -4918,6 +5115,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "¦V¤U";
         Text[ turkish ] = "Sub";
         Text[ arabic ] = "ãäÎÝÖ";
+        Text[ catalan ] = "Subíndice";
     };
     FixedText FT_HIGHLOW
     {
@@ -4942,6 +5140,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "¤Wª@/¤U­°­È";
         Text[ turkish ] = "Raise/lower by";
         Text[ arabic ] = "ãÑÊÝÚ/ãäÎÝÖ ÈãÞÏÇÑ";
+        Text[ catalan ] = "Super/subíndice";
     };
     MetricField ED_HIGHLOW
     {
@@ -4983,6 +5182,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "¦Û°Ê(~U)";
         Text[ turkish ] = "Automatic";
         Text[ arabic ] = "ÊáÞÇÆí";
+        Text[ catalan ] = "Automático";
     };
     FixedText FT_FONTSIZE
     {
@@ -5007,6 +5207,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "¬Û¹ïªº¦r«¬¤j¤p";
         Text[ turkish ] = "Relative font size";
         Text[ arabic ] = "ÇáÍÌã ÇáäÓÈí ááÎØ";
+        Text[ catalan ] = "Tamaño relativo";
     };
     MetricField ED_FONTSIZE
     {
@@ -5047,6 +5248,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "±ÛÂà/Åã¥Ü¤ñ¨Ò";
         Text[ turkish ] = "Rotation / scaling";
         Text[ arabic ] = "ÇÓÊÏÇÑÉ / ÊÍÌíã";
+        Text[ catalan ] = "Rotación / Escala";
     };
     FixedLine FL_SCALING
     {
@@ -5071,6 +5273,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "Åã¥Ü¤ñ¨Ò";
         Text[ turkish ] = "Scaling";
         Text[ arabic ] = "Scaling";
+        Text[ catalan ] = "Scaling";
     };
     RadioButton RB_0_DEG
     {
@@ -5096,6 +5299,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "0 «×";
         Text[ turkish ] = "0 degree";
         Text[ arabic ] = "0 ÏÑÌÉ";
+        Text[ catalan ] = "0 grados";
     };
     RadioButton RB_90_DEG
     {
@@ -5121,6 +5325,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "90 «×";
         Text[ turkish ] = "90 degree";
         Text[ arabic ] = "90 ÏÑÌÉ";
+        Text[ catalan ] = "90 grados";
     };
     RadioButton RB_270_DEG
     {
@@ -5146,6 +5351,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "270 «×";
         Text[ turkish ] = "270 degree";
         Text[ arabic ] = "270 ÏÑÌÉ";
+        Text[ catalan ] = "270 grados";
     };
     CheckBox CB_FIT_TO_LINE
     {
@@ -5171,6 +5377,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "©M¦æ¹ï»ô";
         Text[ turkish ] = "Fit to line";
         Text[ arabic ] = "ãáÇÁãÉ ááÓØÑ";
+        Text[ catalan ] = "Ajustar a fila";
     };
     FixedText FT_SCALE_WIDTH
     {
@@ -5195,6 +5402,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "±Ä¥Î¼e«×Åã¥Ü¤ñ¨Ò";
         Text[ turkish ] = "Scale width";
         Text[ arabic ] = "ÊÍÌíã ÇáÚÑÖ";
+        Text[ catalan ] = "Tamaño del ancho";
     };
     MetricField MF_SCALE_WIDTH
     {
@@ -5235,6 +5443,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "¶¡¹j";
         Text[ turkish ] = "Spacing";
         Text[ arabic ] = "ÊÈÇÚÏ ÇáÃÍÑÝ";
+        Text[ catalan ] = "Espacios";
     };
     ListBox LB_KERNING2
     {
@@ -5362,6 +5571,12 @@ TabPage RID_SVXPAGE_CHAR_POSITION
             < "ãæÓÚ" ; Default ; > ;
             < "ãßËÝ" ; Default ; > ;
         };
+    StringList [ catalan ] =
+    {
+            < "Estándar" ; Default ; > ;
+        < "Expandido" ; Default ; > ;
+        < "Condensado" ; Default ; > ;
+    };
     };
     FixedText FT_KERNING2
     {
@@ -5386,6 +5601,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "¶¡¹j";
         Text[ turkish ] = "by";
         Text[ arabic ] = "ÈãÞÏÇÑ";
+        Text[ catalan ] = "de";
     };
     MetricField ED_KERNING2
     {
@@ -5424,6 +5640,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "¦r¶Z½Õ¾ã(~P)";
         Text[ turkish ] = "~Pair kerning";
         Text[ arabic ] = "ÊÞäíä ÃÍÑÝ ÒæÌí";
+        Text[ catalan ] = "~Ajuste par entre caracteres";
     };
     FixedLine FL_POS_PREVIEW
     {
@@ -5448,6 +5665,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "¹wÄý";
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "ÇáãÚÇíäÉ";
+        Text[ catalan ] = "Previsualización";
     };
     Window WIN_POS_PREVIEW
     {
@@ -5473,6 +5691,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ chinese_traditional ] = "¥Ü¨Ò";
         Text[ turkish ] = "Example";
         Text[ arabic ] = "ãËÇá";
+        Text[ catalan ] = "Ejemplo";
     };
     FixedText FT_POS_FONTTYPE
     {
@@ -5509,6 +5728,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ chinese_traditional ] = "Âù¦æ";
         Text[ turkish ] = "Two lines";
         Text[ arabic ] = "ÓØÑíä";
+        Text[ catalan ] = "Doble";
     };
     CheckBox CB_TWOLINES
     {
@@ -5534,6 +5754,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ chinese_traditional ] = "¥Î¤@¦æªºªÅ¶¡¿é¤J¨â¦æ¦r(~W)";
         Text[ turkish ] = "Two lines each line";
         Text[ arabic ] = "ÇáßÊÇÈÉ Ýí ÓØÑíä";
+        Text[ catalan ] = "Dos líneas por renglón";
     };
     FixedLine FL_ENCLOSE
     {
@@ -5558,6 +5779,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ chinese_traditional ] = "±a¬A¸¹ªº¦r¤¸";
         Text[ turkish ] = "Enclose character";
         Text[ arabic ] = "ÃÍÑÝ ÅÍÇØÉ";
+        Text[ catalan ] = "Caracteres de inclusión";
     };
     FixedText FT_STARTBRACKET
     {
@@ -5582,6 +5804,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ chinese_traditional ] = "°_©l¦r¤¸(~N)";
         Text[ turkish ] = "Beginning character";
         Text[ arabic ] = "ÃÍÑ Ý ÈÏÇíÉ";
+        Text[ catalan ] = "Carácter inicial";
     };
     ListBox ED_STARTBRACKET
     {
@@ -5769,6 +5992,15 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
         < "ÃÍÑÝ ÃÎÑì..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "(Ninguno)" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        < "(" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        < "[" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        < "<" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        < "{" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        < "Otros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+    };
     };
     FixedText FT_ENDBRACKET
     {
@@ -5793,6 +6025,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ chinese_traditional ] = "µ²§À¦r¤¸(~E)";
         Text[ turkish ] = "End character";
         Text[ arabic ] = "ÃÍÑÝ äåÇíÉ";
+        Text[ catalan ] = "Carácter final";
     };
     ListBox ED_ENDBRACKET
     {
@@ -5980,6 +6213,15 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
         < "ÃÍÑÝ ÃÎÑì..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "(Ninguno)" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        < ")" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        < "]" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        < ">" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        < "}" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        < "Otros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+    };
     };
     FixedLine FL_TWOLINES_PREVIEW
     {
@@ -6004,6 +6246,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ chinese_traditional ] = "¹wÄý";
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "ÇáãÚÇíäÉ";
+        Text[ catalan ] = "Previsualización";
     };
     Window WIN_TWOLINES_PREVIEW
     {
@@ -6029,6 +6272,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ chinese_traditional ] = "¥Ü¨Ò";
         Text[ turkish ] = "Example";
         Text[ arabic ] = "ãËÇá";
+        Text[ catalan ] = "Ejemplo";
     };
     FixedText FT_TWOLINES_FONTTYPE
     {
