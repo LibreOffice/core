@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 15:06:08 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ ModelessDialog DLG_REDLINE_ACCEPT
     Text [ portuguese_brazilian ] = "Redlining" ;
     Text [ swedish ] = "Acceptera eller avslå ändringar" ;
     Text [ danish ] = "Accepter eller forkast ændringer" ;
-    Text [ italian ] = "Accettare o rifiutare le modifiche" ;
+    Text [ italian ] = "Accetta o rifiuta le modifiche" ;
     Text [ spanish ] = "Aceptar o rechazar modificaciones" ;
     Text [ french ] = "Accepter ou rejeter les modifications" ;
     Text [ dutch ] = "Wijzigingen accepteren of verwerpen" ;
@@ -102,7 +102,7 @@ ModelessDialog DLG_REDLINE_ACCEPT
     Text[ chinese_simplified ] = "½ÓÊÜ»òÕßÈ¡Ïû¸ü¸Ä";
     Text[ russian ] = "Ïğèíÿòü èëè îòêëîíèòü èçìåíåíèÿ";
     Text[ polish ] = "Zaakceptuj albo odrzuæ zmiany";
-    Text[ japanese ] = "•ÏX‰ÓŠ‚ÌŠm”F";
+    Text[ japanese ] = "•ÏX‚Ì“K—p‚Æ·¬İ¾Ù";
     Text[ chinese_traditional ] = "±µ¨ü©Î¨ú®øÅÜ§ó";
     Text[ arabic ] = "ŞÈæá Ãæ ÑİÖ ÇáÊÛííÑÇÊ";
     Text[ greek ] = "Áğïäï÷Ş Ş áğüññéøç áëëáãşí";
@@ -122,18 +122,18 @@ ModalDialog DLG_MOD_REDLINE_ACCEPT
     Text[ portuguese ] = "AutoFormato: aceitar ou rejeitar modificações";
     Text[ danish ] = "Accepter eller forkast AutoFormat ændringer";
     Text[ french ] = "Revoir les modifications de l'AutoFormat";
-    Text[ swedish ] = "Acceptera eller avslå AutoFormat-ändringar";
+    Text[ swedish ] = "Acceptera eller avslå autoformat-ändringar";
     Text[ dutch ] = "AutoOpmaak: Wijzigingen accepteren of verwerpen";
     Text[ spanish ] = "AutoFormato: Aceptar o rechazar cambios";
-    Text[ english_us ] = "Accept or reject AutoFormat changes";
+    Text[ english_us ] = "Accept or Reject AutoFormat Changes";
     Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½: ½ÓÊÜ»òÕß¾Ü¾ø¸ü¸Ä";
     Text[ russian ] = "Àâòîôîğìàò: ïğèíÿòü èëè îòêëîíèòü èçìåíåíèÿ";
     Text[ polish ] = "Autoformatowanie: Zaakceptuj lub odrzuæ zmiany";
-    Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä: •ÏX‚ğó‚¯“ü‚ê‚é‚©Aó‚¯“ü‚ê‚È‚¢‚©B";
+    Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä: •ÏX‚Ì“K—p‚Æ·¬İ¾Ù";
     Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡: ±µ¨ü©Î©Úµ´ÅÜ§ó";
     Text[ arabic ] = "ŞÈæá Ãæ ÑİÖ ÊÛííÑÇÊ ÇáÊäÓíŞ ÇáÊáŞÇÆí";
     Text[ greek ] = "ÁõôïÌïñöŞ:Áğïäï÷Ş Ş áğüññéøç áëëáãşí";
-    Text[ korean ] = "ÀÚµ¿ ¼­½Ä  º¯°æ»çÇ×  Àû¿ë ¶Ç´Â Ãë¼Ò";
+    Text[ korean ] = "ÀÚµ¿¼­½Ä£º  º¯°æ»çÇ×  Àû¿ë ¶Ç´Â Ãë¼Ò";
     Text[ turkish ] = "Otomatik formatlama: Değişiklikleri onayla ya da reddet";
     Text[ language_user1 ] = " ";
 };
@@ -162,10 +162,10 @@ Menu MN_REDLINE_POPUP
             Text[ polish ] = "Edytuj komentarz...";
             Text[ japanese ] = "ºÒİÄ‚Ì•ÒW...";
             Text[ language_user1 ] = " ";
-            Text[ chinese_traditional ] = "½s¿èª`¸Ñ...";
+            Text[ chinese_traditional ] = "½s¿èµù¸Ñ...";
             Text[ arabic ] = "ÊÍÑíÑ ÇáÊÚáíŞ...";
             Text[ greek ] = "Åğåîåñãáóßá ó÷ïëßïõ...";
-            Text[ korean ] = "ÁÖ  ÆíÁı...";
+            Text[ korean ] = "ÁÖ¼®  ÆíÁı...";
             Text[ turkish ] = "Açıklamaları düzenle...";
         };
         MenuItem
@@ -199,7 +199,7 @@ Menu MN_REDLINE_POPUP
                         Text[ polish ] = "Akcja";
                         Text[ japanese ] = "±¸¼®İ";
                         Text[ language_user1 ] = " ";
-                        Text[ chinese_traditional ] = "¾Ş§@";
+                        Text[ chinese_traditional ] = "°Ê§@";
                         Text[ arabic ] = "ÅÌÑÇÁ";
                         Text[ greek ] = "Åíİñãåéá";
                         Text[ korean ] = "µ¿ÀÛ";
@@ -331,7 +331,7 @@ Menu MN_REDLINE_POPUP
             Text[ chinese_traditional ] = "±Æ§Ç";
             Text[ arabic ] = "İÑÒ";
             Text[ greek ] = "Ôáîéíüìçóç";
-            Text[ korean ] = "Á¤¿­";
+            Text[ korean ] = "Á¤·Ä";
             Text[ turkish ] = "Sırala";
             Text[ language_user1 ] = " ";
         };
