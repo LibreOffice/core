@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:56:44 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 16:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,11 +250,10 @@ using namespace ::svxform;
             nClassNameResourceId = RID_STR_PROPTITLE_IMAGECONTROL; break;
         case FormComponentType::HIDDENCONTROL:
             nClassNameResourceId = RID_STR_HIDDEN_CLASSNAME; break;
-/*      case FormComponentType::SCROLLBAR:
+        case FormComponentType::SCROLLBAR:
             nClassNameResourceId = RID_STR_PROPTITLE_SCROLLBAR; break;
         case FormComponentType::SPINBUTTON:
             nClassNameResourceId = RID_STR_PROPTITLE_SPINBUTTON; break;
-*/
         case FormComponentType::NAVIGATIONBAR:
             nClassNameResourceId = RID_STR_PROPTITLE_NAVBAR; break;
         case FormComponentType::CONTROL:
