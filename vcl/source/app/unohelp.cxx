@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2000-10-19 16:59:33 $
+ *  last change: $Author: obo $ $Date: 2000-10-25 09:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ uno::Reference < util::XCollator > vcl::unohelper::CreateCollator()
     if( !xB.is() )
     {
         uno::Reference< lang::XSingleServiceFactory > xSSF = ImplLoadLibComponentFactory(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.Collator" ) ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.GNUcollator" ) ),
             Reference< XMultiServiceFactory >(), Reference< XRegistryKey >() );
 
         uno::Reference < uno::XInterface > xI = xSSF->createInstance();
