@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 14:04:26 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1675,7 +1675,6 @@ const BYTE *HasTabCellSprm(WW8PLCFx_Cp_FKP* pPap, bool bVer67)
 }
 
 WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
-<<<<<<< ww8par2.cxx
     : mpOldRedlineStack(0), pIo(pIoClass), pFirstBand(0), pActBand(0),
     pTmpPos(0), pTblNd(0), pTabLines(0), pTabLine(0), pTabBoxes(0), pTabBox(0),
     pMergeGroups(0), pAktWWCell(0), nRows(0), nDefaultSwCols(0), nBands(0),
@@ -1683,15 +1682,6 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
     bHeader(false), bClaimLineFmt(false), eOri(HORI_NONE), bIsBiDi(false),
     nAktRow(0), nAktBandRow(0), nAktCol(0), pTable(0), pParentPos(0),
     pFlyFmt(0),
-=======
-    : mpOldRedlineStack(0), pIo(pIoClass), pFirstBand(0), pActBand(0),
-    pTmpPos(0), pTblNd(0), pTabLines(0), pTabLine(0), pTabBoxes(0), pTabBox(0),
-    pMergeGroups(0), pAktWWCell(0), nRows(0), nDefaultSwCols(0), nBands(0),
-    nMinLeft(0), nConvertedLeft(0), nMaxRight(0), nSwWidth(0), bOk(true),
-    nRowsToRepeat(0), bClaimLineFmt(false), eOri(HORI_NONE), bIsBiDi(false),
-    nAktRow(0), nAktBandRow(0), nAktCol(0), pTable(0), pParentPos(0),
-    pFlyFmt(0),
->>>>>>> 1.96.74.7
     aItemSet(pIo->rDoc.GetAttrPool(),RES_FRMATR_BEGIN,RES_FRMATR_END-1)
 {
     pIo->bAktAND_fNumberAcross = false;
