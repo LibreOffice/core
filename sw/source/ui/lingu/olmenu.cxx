@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:11:56 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,7 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Rectangle& rWordPos )
                         Reference<XDictionaryList> xDictionaryList( SvxGetDictionaryList() );
                         SvxDicListChgClamp aClamp( xDictionaryList );
                         pSh->GetView().GetViewFrame()->GetDispatcher()->
-                            Execute( FN_SPELLING_DLG, SFX_CALLMODE_ASYNCHRON );
+                            Execute( SID_SPELL_DIALOG, SFX_CALLMODE_ASYNCHRON );
                     }
                 }
                 break;
