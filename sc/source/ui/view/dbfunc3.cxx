@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 12:46:58 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDGROUPBY_HPP_
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#endif
 
 #include "dbfunc.hxx"
 #include "global.hxx"
@@ -827,7 +830,7 @@ BOOL ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
                         //  of days with a "Number of days" value.
 
                         rOldInfo = pNumGroupDim->GetInfo();
-                        rParts = SC_DP_DATE_DAYS;               // not found in CollectDateParts
+                        rParts = com::sun::star::sheet::DataPilotFieldGroupBy::DAYS;               // not found in CollectDateParts
                         bFoundParts = TRUE;
                         bFound = TRUE;
                     }
@@ -961,13 +964,13 @@ String lcl_GetDatePartName( sal_Int32 nPart )
     switch (nPart)
     {
         //! use translated strings from globstr.src
-        case SC_DP_DATE_SECONDS:  aRet = String::CreateFromAscii("Seconds");  break;
-        case SC_DP_DATE_MINUTES:  aRet = String::CreateFromAscii("Minutes");  break;
-        case SC_DP_DATE_HOURS:    aRet = String::CreateFromAscii("Hours");    break;
-        case SC_DP_DATE_DAYS:     aRet = String::CreateFromAscii("Days");     break;
-        case SC_DP_DATE_MONTHS:   aRet = String::CreateFromAscii("Months");   break;
-        case SC_DP_DATE_QUARTERS: aRet = String::CreateFromAscii("Quarters"); break;
-        case SC_DP_DATE_YEARS:    aRet = String::CreateFromAscii("Years");    break;
+        case com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS:  aRet = String::CreateFromAscii("Seconds");  break;
+        case com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES:  aRet = String::CreateFromAscii("Minutes");  break;
+        case com::sun::star::sheet::DataPilotFieldGroupBy::HOURS:    aRet = String::CreateFromAscii("Hours");    break;
+        case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:     aRet = String::CreateFromAscii("Days");     break;
+        case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:   aRet = String::CreateFromAscii("Months");   break;
+        case com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS: aRet = String::CreateFromAscii("Quarters"); break;
+        case com::sun::star::sheet::DataPilotFieldGroupBy::YEARS:    aRet = String::CreateFromAscii("Years");    break;
         default:
             DBG_ERROR("invalid date part");
     }
@@ -1052,7 +1055,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
                             // innermost part: create NumGroupDimension (replacing original values)
                             // Dimension name is left unchanged
 
-                            if ( nParts == SC_DP_DATE_DAYS && rInfo.Step != 0.0 )
+                            if ( nParts == com::sun::star::sheet::DataPilotFieldGroupBy::DAYS && rInfo.Step != 0.0 )
                             {
                                 // only days, and a step value specified: use numerical grouping
                                 // with DateValues flag, not date grouping
