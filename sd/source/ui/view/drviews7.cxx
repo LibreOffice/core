@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:21:15 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1620,6 +1620,27 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 #ifndef SOLAR_JAVA
     rSet.DisableItem( SID_INSERT_APPLET );
 #endif
+
+    // Set the state of two entries in the 'Slide' context sub-menu
+    // concerning the visibility of master page background and master page
+    // shapes.
+    if (rSet.GetItemState(SID_DISPLAY_MASTER_BACKGROUND) == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_DISPLAY_MASTER_OBJECTS) == SFX_ITEM_AVAILABLE)
+    {
+        SdPage* pPage = GetActualPage();
+        if (pPage != NULL
+            && GetDoc() != NULL)
+        {
+            SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
+            SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
+            BYTE aBackgroundId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
+            BYTE aObjectId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
+            rSet.Put(SfxBoolItem(SID_DISPLAY_MASTER_BACKGROUND,
+                    aVisibleLayers.IsSet(aBackgroundId)));
+            rSet.Put(SfxBoolItem(SID_DISPLAY_MASTER_OBJECTS,
+                    aVisibleLayers.IsSet(aObjectId)));
+        }
+    }
 
     GetModeSwitchingMenuState (rSet);
 }
