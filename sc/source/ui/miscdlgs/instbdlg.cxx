@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:47:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 11:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,12 @@
 #define SC_INSTBDLG_CXX
 #include "instbdlg.hxx"
 
-
+const long SC_DLG_BROWSE_OK     = 0;
+const long SC_DLG_BROWSE_CANCEL = 1;
 
 //==================================================================
 
-ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nTabCount)
+ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile )
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_INSERT_TABLE ) ),
         //
@@ -115,7 +116,7 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nT
         nSelTabIndex    ( 0 ),
         nTableCount     (nTabCount)
 {
-    Init_Impl();
+    Init_Impl( bFromFile );
     FreeResource();
 }
 
@@ -129,7 +130,7 @@ __EXPORT ScInsertTableDlg::~ScInsertTableDlg()
 
 //------------------------------------------------------------------------
 
-void ScInsertTableDlg::Init_Impl()
+void ScInsertTableDlg::Init_Impl( bool bFromFile )
 {
     aBtnBrowse      .SetClickHdl( LINK( this, ScInsertTableDlg, BrowseHdl_Impl ) );
     aBtnNew         .SetClickHdl( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
@@ -138,8 +139,6 @@ void ScInsertTableDlg::Init_Impl()
     aNfCount        .SetModifyHdl( LINK( this, ScInsertTableDlg, CountHdl_Impl));
     aBtnOk          .SetClickHdl( LINK( this, ScInsertTableDlg, DoEnterHdl ));
     aBtnBefore.Check();
-    aBtnNew.Check();
-    SetNewTable_Impl();
 
     ScMarkData& rMark    = rViewData.GetMarkData();
     SCTAB   nTabSelCount = rMark.GetSelectCount();
@@ -161,6 +160,17 @@ void ScInsertTableDlg::Init_Impl()
         aFtName.Disable();
         aEdName.Disable();
     }
+
+    if( bFromFile )
+    {
+        aBtnFromFile.Check();
+        SetFromTo_Impl();
+    }
+    else
+    {
+        aBtnNew.Check();
+        SetNewTable_Impl();
+    }
 }
 
 //------------------------------------------------------------------------
@@ -172,7 +182,11 @@ short __EXPORT ScInsertTableDlg::Execute()
     Window* pOldDefParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
 
-    short nRet = ModalDialog::Execute();
+    bool bExecute = true;
+    if( aBtnFromFile.IsChecked() )
+        bExecute = BrowseHdl_Impl( &aBtnBrowse ) == SC_DLG_BROWSE_OK;
+
+    short nRet = bExecute ? ModalDialog::Execute() : RET_CANCEL;
 
     Application::SetDefDialogParent( pOldDefParent );
 
@@ -345,7 +359,11 @@ IMPL_LINK( ScInsertTableDlg, BrowseHdl_Impl, PushButton*, EMPTYARG )
 
         pDocShTables = new ScDocShell;
         aDocShTablesRef = pDocShTables;
+
+        Pointer aOldPtr( GetPointer() );
+        SetPointer( Pointer( POINTER_WAIT ) );
         pDocShTables->DoLoad( pMed );
+        SetPointer( aOldPtr );
 
         ULONG nErr = pDocShTables->GetErrorCode();
         if (nErr)
@@ -368,7 +386,7 @@ IMPL_LINK( ScInsertTableDlg, BrowseHdl_Impl, PushButton*, EMPTYARG )
     }
 
     DoEnable_Impl();
-    return 0;
+    return pMed ? SC_DLG_BROWSE_OK : SC_DLG_BROWSE_CANCEL;
 }
 
 //------------------------------------------------------------------------
