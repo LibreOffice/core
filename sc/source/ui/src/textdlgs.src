@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdlgs.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:09:29 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ TabDialog RID_SCDLG_PARAGRAPH
     Text [ ENGLISH ] = "Paragraph" ;
     Text [ norwegian ] = "Avsnitt" ;
     Text [ italian ] = "Paragrafo" ;
-    Text [ portuguese_brazilian ] = "Parágrafo" ;
+    Text [ portuguese_brazilian ] = "Par?grafo" ;
     Text [ portuguese ] = "Parágrafo" ;
     Text [ finnish ] = "Kappale" ;
     Text [ danish ] = "Afsnit" ;
@@ -268,7 +268,7 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text [ ENGLISH ] = "Indent and Spacing" ;
                 Text [ norwegian ] = "Indent and Spacing" ;
                 Text [ italian ] = "Rientri e distanze" ;
-                Text [ portuguese_brazilian ] = "Indentar e Espaçar" ;
+                Text [ portuguese_brazilian ] = "Indentar e Espa?ar" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
                 Text [ finnish ] = "Sisennykset ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -370,7 +370,7 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text [ ENGLISH ] = "Paragraph (Tabs)" ;
                 Text [ norwegian ] = "Avsnitt (Tabulatorer)" ;
                 Text [ italian ] = "Tabulazione" ;
-                Text [ portuguese_brazilian ] = "Parágrafo (Tabs)" ;
+                Text [ portuguese_brazilian ] = "Par?grafo (Tabs)" ;
                 Text [ portuguese ] = "Tabulação" ;
                 Text [ finnish ] = "Sarkain" ;
                 Text [ danish ] = "Tabulator" ;
