@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-23 09:43:15 $
+ *  last change: $Author: ssa $ $Date: 2002-10-11 08:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,9 +529,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     aTokenStr = rStr.GetToken( 0, ';', nIndex );
     if ( aTokenStr.Len() )
     {
+        // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - ignore Minimize
         ULONG nState = (ULONG)aTokenStr.ToInt32();
-        nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
+        //nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
         rData.SetState( nState );
         nValidMask |= WINDOWSTATE_MASK_STATE;
     }
@@ -562,9 +563,10 @@ static void ImplWindowStateToStr( const WindowStateData& rData, ByteString& rStr
     rStr.Append( ';' );
     if ( nValidMask & WINDOWSTATE_MASK_STATE )
     {
+        // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - ignore Minimize
         ULONG nState = rData.GetState();
-        nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
+        //nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
         rStr.Append( ByteString::CreateFromInt32( (long)nState ) );
     }
     rStr.Append( ';' );
@@ -595,8 +597,9 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         aState.mnY      = rData.GetY();
         aState.mnWidth  = rData.GetWidth();
         aState.mnHeight = rData.GetHeight();
+        // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - ignore Minimize
-        nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
+        //nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
         aState.mnState  = nState & SAL_FRAMESTATE_SYSTEMMASK;
         mpFrame->SetWindowState( &aState );
 #else
@@ -687,8 +690,9 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
                 rData.SetHeight( aState.mnHeight );
             if ( nValidMask & WINDOWSTATE_MASK_STATE )
             {
+                // #94144# allow Minimize again, should be masked out when read from configuration
                 // 91625 - ignore Minimize
-                aState.mnState &= ~(WINDOWSTATE_STATE_MINIMIZED);
+                //aState.mnState &= ~(WINDOWSTATE_STATE_MINIMIZED);
                 rData.SetState( aState.mnState );
             }
         }

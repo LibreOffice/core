@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-09 13:48:33 $
+ *  last change: $Author: ssa $ $Date: 2002-10-11 08:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1633,9 +1633,10 @@ BOOL SalFrame::GetWindowState( SalFrameState* pState )
     if ( maFrameData.maState.mnWidth && maFrameData.maState.mnHeight )
     {
         *pState = maFrameData.maState;
+        // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - Don't save minimize
-        // if ( !(pState->mnState & (SAL_FRAMESTATE_MINIMIZED | SAL_FRAMESTATE_MAXIMIZED)) )
-        if ( !(pState->mnState & SAL_FRAMESTATE_MAXIMIZED) )
+        //if ( !(pState->mnState & SAL_FRAMESTATE_MAXIMIZED) )
+        if ( !(pState->mnState & (SAL_FRAMESTATE_MINIMIZED | SAL_FRAMESTATE_MAXIMIZED)) )
             pState->mnState |= SAL_FRAMESTATE_NORMAL;
         return TRUE;
     }
