@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:30:28 $
+ *  last change: $Author: obo $ $Date: 2004-08-13 14:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,10 +392,9 @@ ErrorBox RID_ERRBOX_MODULENOTINSTALLED
         SID_HELPINDEX; \
         SID_EXTENDEDHELP; \
         SID_AVMEDIA_PLAYER; \
-        SID_INSERT_AVMEDIA; \
     };\
     IdCount = {\
-        307;\
+        306;\
     };
 
 #define OFFICE_ID_LIST\
