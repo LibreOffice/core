@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -880,7 +880,7 @@ ModalDialog DLG_MERGE_CREATE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "Erstellen aus" ;
+        Text = "Erstellen" ;
         Text [ english_us ] = "Create" ;
         Text[ portuguese ] = "Create from";
         Text[ russian ] = "Create from";
@@ -909,7 +909,7 @@ ModalDialog DLG_MERGE_CREATE
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Check = TRUE;
         TabStop = TRUE ;
-        Text = "~Diesem Dokument" ;
+        Text = "aus diesem ~Dokument" ;
         Text [ english_us ] = "From this ~document" ;
         Text[ portuguese ] = "~This document";
         Text[ russian ] = "~This document";
@@ -937,7 +937,7 @@ ModalDialog DLG_MERGE_CREATE
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         TabStop = TRUE ;
-        Text = "~Vorlage" ;
+        Text = "aus einer ~Vorlage" ;
         Text [ english_us ] = "From a ~template" ;
         Text[ language_user1 ] = "chg German to \"aus einer ~Dokumentvorlage\"";
         Text[ portuguese ] = "~Use template";
