@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Basic.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2002-03-12 13:25:19 $
+ *  last change: $Author: jl $ $Date: 2002-06-03 09:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ STDMETHODIMP CBasic::inShort(short val)
 {
     USES_CONVERSION;
     char buf[256];
-    sprintf( buf, "inByte: value= %d", val);
+    sprintf( buf, "inShort: value= %d", val);
     MessageBox( NULL, _T(A2T(buf)), _T("AxTestComponents.Basic"), MB_OK);
 
     return S_OK;
@@ -217,7 +217,18 @@ STDMETHODIMP CBasic::inoutLong(long *val)
 
 STDMETHODIMP CBasic::inoutString(BSTR *val)
 {
-    MessageBoxW( NULL, *val, L"AxTestComponents.Basic", MB_OK);
+//  MessageBoxW( NULL, *val, L"AxTestComponents.Basic", MB_OK);
+
+    // str contains now a different string
+    CComBSTR str;
+    str.Attach(*val);
+    str.Append(L"out");
+
+    SysFreeString(*val);
+//  BSTR s= SysAllocString(L"out");
+
+    *val= str;
+    str.Detach();
     return S_OK;
 }
 
@@ -237,20 +248,54 @@ STDMETHODIMP CBasic::inoutDouble(double *val)
 
 STDMETHODIMP CBasic::inoutVariant(VARIANT *val)
 {
+    CComBSTR str;
     if( val->vt & VT_BSTR)
     {
-        MessageBoxW( NULL, val->bstrVal, L"AxTestComponents.Basic", MB_OK);
-        SysFreeString( val->bstrVal);
-        val->bstrVal= SysAllocString(L" a string from AxTestComponents.Basic");
+        str= val->bstrVal;
+        str.Append("out");
     }
+
+    VariantClear(val);
+    CComVariant var(str);
+    var.Detach(val);
     return S_OK;
 }
 
+/* The array contains VARIANT according to IDL.
+    If the VARIANTs contain strings then we append "out" to each string.
+*/
 STDMETHODIMP CBasic::inoutArray(LPSAFEARRAY *val)
 {
-    inArray(*val);
-    SafeArrayDestroy(*val);
-    outArray( val);
+//  inArray(*val);
+    // we assume dimension is one
+    HRESULT hr= S_OK;
+    long nLBound= 0;
+    long nUBound= 0;
+
+    hr= SafeArrayGetLBound(*val, 1, &nLBound);
+    hr= SafeArrayGetUBound(*val, 1, &nUBound);
+
+
+     long ix= 0;
+    for(int i= nLBound; i <= nUBound; i++)
+    {
+        CComVariant var;
+        hr= SafeArrayGetElement(*val, &ix, &var);
+
+        if(var.vt == VT_BSTR)
+        {
+            CComBSTR s= var.bstrVal;
+            s.Append("out");
+            var.bstrVal= s;
+            s.Detach();
+
+            hr= SafeArrayPutElement(*val, &ix, &var);
+        }
+        ix++;
+    }
+
+//  SafeArrayDestroy(*val);
+//  outArray( val);
     return S_OK;
 }
 
@@ -283,7 +328,7 @@ STDMETHODIMP CBasic::outLong(long *val)
 
 STDMETHODIMP CBasic::outString(BSTR *val)
 {
-    *val= SysAllocString(L" a string as out value");
+    *val= SysAllocString(L"out");
     return S_OK;
 }
 
@@ -302,7 +347,7 @@ STDMETHODIMP CBasic::outDouble(double *val)
 STDMETHODIMP CBasic::outVariant(VARIANT *val)
 {
     val->vt = VT_BSTR;
-    val->bstrVal= SysAllocString(L"This is a string in a VARIANT");
+    val->bstrVal= SysAllocString(L"out");
     return S_OK;
 }
 
@@ -311,11 +356,11 @@ STDMETHODIMP CBasic::outArray(LPSAFEARRAY *val)
     HRESULT hr= S_OK;
     SAFEARRAY* ar= SafeArrayCreateVector( VT_VARIANT, 0, 3);
     CComVariant arStrings[3]; //BSTR arStrings[3];
-    arStrings[0].bstrVal= SysAllocString(L" out string 0");
+    arStrings[0].bstrVal= SysAllocString(L"out1");
     arStrings[0].vt= VT_BSTR;
-    arStrings[1].bstrVal= SysAllocString( L"out string 1");
+    arStrings[1].bstrVal= SysAllocString( L"out2");
     arStrings[1].vt= VT_BSTR;
-    arStrings[2].bstrVal= SysAllocString( L" outstring 2");
+    arStrings[2].bstrVal= SysAllocString( L"out3");
     arStrings[2].vt= VT_BSTR;
     for( long i= 0; i < 3; i++)
     {
@@ -331,8 +376,10 @@ STDMETHODIMP CBasic::outObject(IDispatch* *val)
     CComPtr< IUnknown > spUnk;
     hr= spUnk.CoCreateInstance(L"AxTestComponents.Basic");
     CComDispatchDriver disp( spUnk);
-    CComVariant varVal( L"This is the property prp String");
+    CComVariant varVal( L"out");
     hr= disp.PutPropertyByName( L"prpString", &varVal);
+    if(*val)
+        (*val)->Release();
     *val= disp;
     (*val)->AddRef();
     return S_OK;
@@ -460,7 +507,8 @@ STDMETHODIMP CBasic::get_prpObject(IDispatch **pVal)
     if( !pVal)
         return E_POINTER;
     *pVal= m_PrpObject;
-    (*pVal)->AddRef();
+    if( *pVal != NULL)
+        (*pVal)->AddRef();
     return S_OK;
 }
 
@@ -970,3 +1018,5 @@ STDMETHODIMP CBasic::outMore(long* val1, long* val2)
     *val2= 112;
     return S_OK;
 }
+
+//VT_BYREF BSTR
