@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-14 15:06:05 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_simplified ] = "å­—æ®µåç§°";
         Text[ russian ] = "Èìÿ ïîëÿ";
         Text[ polish ] = "Nazwa pola";
-        Text[ japanese ] = "ï¾Œï½¨ï½°ï¾™ï¾„ï¾å";
+        Text[ japanese ] = "é …ç›®å";
         Text[ chinese_traditional ] = "æ¬„ä½åç¨±";
         Text[ arabic ] = "ÇÓã ÇáÍŞá";
         Text[ greek ] = "¼íïìá ğåäßïõ";
@@ -1622,17 +1622,17 @@ ModelessDialog RID_SCDLG_FILTER
         TabStop = TRUE ;
         Text [ english_us ] = "~Keep filter criteria" ;
         Text [ portuguese_brazilian ] = "~Persistent" ;
-        Text [ swedish ] = "~Behålla filterkriterier" ;
+        Text [ swedish ] = "~Behåll filterkriterier" ;
         Text [ danish ] = "Persistent" ;
         Text [ italian ] = "Mantieni criteri" ;
-        Text [ spanish ] = "Ma~ntener criterios" ;
+        Text [ spanish ] = "~Persistente" ;
         Text [ french ] = "~Conserver les critères de filtre" ;
         Text [ dutch ] = "~Persistent" ;
         Text [ portuguese ] = "~Manter critérios" ;
         Text[ chinese_simplified ] = "ä¿ç•™ç­›é€‰æ¡ä»¶(~K)";
         Text[ russian ] = "Ñîõğàíèòü óñëîâèÿ ôèëüòğà";
         Text[ polish ] = "Zachowaj kryteria";
-        Text[ japanese ] = "ï¾Œï½¨ï¾™ï¾€æ¡ä»¶ã‚’ä¿ã¤(~K)";
+        Text[ japanese ] = "ï½¿ï½°ï½½ç¯„å›²ã¨ï¾˜ï¾ï½¸ã™ã‚‹(~K)";
         Text[ chinese_traditional ] = "ä¿ç•™ç¯©é¸æ¢ä»¶(~K)";
         Text[ arabic ] = "ÇÓÊãÑÇÑ ãÚÇííÑ ÇáİáÊÑ";
         Text[ greek ] = "ÄéáôŞñçóç ~êñéôçñßùí ößëôñïõ";
@@ -2084,17 +2084,17 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         TabStop = TRUE ;
         Text [ english_us ] = "~Keep filter criteria" ;
         Text [ portuguese_brazilian ] = "~Persistent" ;
-        Text [ swedish ] = "~Behålla filterkriterier" ;
+        Text [ swedish ] = "~Behåll filterkriterier" ;
         Text [ danish ] = "Persistent" ;
         Text [ italian ] = "Mantieni criteri" ;
-        Text [ spanish ] = "Ma~ntener criterios" ;
+        Text [ spanish ] = "~Persistente" ;
         Text [ french ] = "~Conserver les critères de filtre" ;
         Text [ dutch ] = "~Persistent" ;
         Text [ portuguese ] = "~Manter critérios" ;
         Text[ chinese_simplified ] = "ä¿ç•™ç­›é€‰æ¡ä»¶(~K)";
         Text[ russian ] = "Õğàíèòü óñëîâèÿ ôèëüòğà";
         Text[ polish ] = "Zachowaj kryteria";
-        Text[ japanese ] = "ï¾Œï½¨ï¾™ï¾€æ¡ä»¶ã‚’ä¿ã¤(~K)";
+        Text[ japanese ] = "ï½¿ï½°ï½½ç¯„å›²ã¨ï¾˜ï¾ï½¸ã™ã‚‹(~K)";
         Text[ chinese_traditional ] = "ä¿ç•™ç¯©é¸æ¢ä»¶(~K)";
         Text[ arabic ] = "ÇÓÊãÑÇÑ ãÚÇííÑ ÇáİáÊÑ";
         Text[ greek ] = "ÄéáôŞñçóç ~êñéôçñßùí ößëôñïõ";
@@ -2354,7 +2354,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_simplified ] = "å­—æ®µåç§°";
         Text[ russian ] = "Èìÿ ïîëÿ";
         Text[ polish ] = "Nazwa pola";
-        Text[ japanese ] = "ï¾Œï½¨ï½°ï¾™ï¾„ï¾å";
+        Text[ japanese ] = "é …ç›®å";
         Text[ chinese_traditional ] = "æ¬„ä½åç¨±";
         Text[ arabic ] = "ÇÓã ÇáÍŞá";
         Text[ greek ] = "¼íïìá ğåäßïõ";
@@ -3646,6 +3646,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filtro";
 };
+
 
 
 
