@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 17:54:21 $
+ *  last change: $Author: af $ $Date: 2002-04-22 14:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,7 @@ void SAL_CALL
             OSL_TRACE ("  disposing frame");
 
             // Unregister as frame action listener at the frame of the controller.
-            uno::Reference<frame::XFrame> xFrame (mxController->getFrame());
+            xFrame = mxController->getFrame();
             if (xFrame.is())
                 xFrame->removeFrameActionListener (static_cast<frame::XFrameActionListener*>(this));
         }
