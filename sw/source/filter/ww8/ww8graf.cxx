@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:12:11 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1399,6 +1399,8 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     delete[] pP;
 
     SdrCaptionObj* pObj = new SdrCaptionObj( Rectangle( aP0, aP1 ), aP2 );
+    pObj->SetModel( pDrawModel );
+    pObj->NbcSetSnapRect(Rectangle(aP0, aP1));
     Size aSize( (INT16)SVBT16ToShort( aCallB.dpheadTxbx.dxa ),
                            (INT16)SVBT16ToShort(  aCallB.dpheadTxbx.dya ) );
     bool bEraseThisObject;
@@ -1437,10 +1439,13 @@ SdrObject *SwWW8ImplReader::ReadGroup( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     for (int i = 0; i < nGrouped; i++)
     {
         SfxAllItemSet aSet(pDrawModel->GetItemPool());
-        if (SdrObject *pObject = ReadGrafPrimitive( nLeft, pDo, aSet ))
+        if (SdrObject *pObject = ReadGrafPrimitive(nLeft, pDo, aSet))
         {
             pObject->SetMergedItemSetAndBroadcast(aSet);
-            pObj->GetSubList()->InsertObject(pObject, 0);
+            SdrObjList *pSubGroup = pObj->GetSubList();
+            ASSERT(pSubGroup, "Why no sublist available?");
+            if (pSubGroup)
+                pSubGroup->InsertObject(pObject, 0);
         }
     }
 
@@ -2770,6 +2775,11 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     if (!pRecord)
         return 0;
 
+    //#i21847#
+    //Some shapes are set to *hidden*, don't import those ones.
+    if (pRecord->bHidden)
+        return 0;
+
     //If we are to be "below text" then we are not to be opaque
     if (pF->bBelowText || pRecord->bDrawHell)
         aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
@@ -2804,7 +2814,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
         if (!bDone)
         {
-            sw::hack::SetLayer aSetLayer(rDoc);
+            sw::util::SetLayer aSetLayer(rDoc);
             if (pF->bBelowText || pRecord->bDrawHell)
                 aSetLayer.SendObjectToHell(*pObject);
             else
@@ -2842,10 +2852,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 /*
                 #i17086#  SHAPE field contents are anchored as character
                 */
+                aFlySet.Put(WW8FlySet(*this, pPaM));
                 eAnchor = FLY_IN_CNTNT;
-                SwFmtAnchor aAnchor(eAnchor);
-                aAnchor.SetAnchor(pPaM->GetPoint());
-                aFlySet.Put(aAnchor);
                 pWWZOrder->InsertTextLayerObject(pObject);
             }
 
@@ -2865,15 +2873,16 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                     pRecord = aData.GetRecord(nTxbx);
                     if (pRecord && pRecord->pObj && pRecord->aTextId.nTxBxS)
                     {
-                        pRetFrmFmt = MungeTextIntoDrawBox(pRecord->pObj, pRecord,
-                            nGrafAnchorCp, pRetFrmFmt);
+                        pRetFrmFmt = MungeTextIntoDrawBox(pRecord->pObj,
+                            pRecord, nGrafAnchorCp, pRetFrmFmt);
                     }
                 }
             }
         }
     }
 
-    MapWrapIntoFlyFmt(pRecord, pRetFrmFmt);
+    if (!IsInlineEscherHack())
+        MapWrapIntoFlyFmt(pRecord, pRetFrmFmt);
     return AddAutoAnchor(pRetFrmFmt);
 }
 
@@ -3120,20 +3129,18 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
             pRecord->eShapeType, aInnerDist );
     }
 
-    String aObjectName( rpObject->GetName() );
+    String aObjectName(rpObject->GetName());
     if (OBJ_OLE2 == SdrObjKind(rpObject->GetObjIdentifier()))
         pRetFrmFmt = InsertOle(*((SdrOle2Obj*)rpObject), rFlySet);
     else
     {
-        SdrGrafObj *pGrf= (SdrGrafObj*)rpObject;
-        const Graphic& rGraph = pGrf->GetGraphic();
+        const SdrGrafObj *pGrf= (const SdrGrafObj*)rpObject;
         bool bDone = false;
-
         if (pGrf->IsLinkedGraphic() && pGrf->GetFileName().Len())
         {
+            GraphicType eType = pGrf->GetGraphicType();
             String aGrfName(URIHelper::SmartRelToAbs(pGrf->GetFileName()));
-
-            if (GRAPHIC_NONE == rGraph.GetType() && CanUseRemoteLink(aGrfName))
+            if (GRAPHIC_NONE == eType && CanUseRemoteLink(aGrfName))
             {
                 pRetFrmFmt = rDoc.Insert(*pPaM, aGrfName, aEmptyStr, 0,
                     &rFlySet, 0);
@@ -3142,6 +3149,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
         }
         if (!bDone)
         {
+            const Graphic& rGraph = pGrf->GetGraphic();
             pRetFrmFmt = rDoc.Insert(*pPaM, aEmptyStr, aEmptyStr, &rGraph,
                 &rFlySet, 0);
         }
@@ -3205,7 +3213,7 @@ void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
         */
         pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(), pPaM);
 
-        pWWZOrder = new wwZOrderer(sw::hack::SetLayer(rDoc), pDrawPg,
+        pWWZOrder = new wwZOrderer(sw::util::SetLayer(rDoc), pDrawPg,
             pMSDffManager ? pMSDffManager->GetShapeOrders() : 0);
     }
 }
