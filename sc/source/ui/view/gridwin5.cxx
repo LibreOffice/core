@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin5.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:17:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,13 +140,13 @@ ScHideTextCursor::~ScHideTextCursor()
 
 // -----------------------------------------------------------------------
 
-BOOL ScGridWindow::ShowNoteMarker( short nPosX, short nPosY, BOOL bKeyboard )
+BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
 {
     BOOL bDone = FALSE;
 
     ScPostIt    aNote;
     ScDocument* pDoc = pViewData->GetDocument();
-    USHORT      nTab = pViewData->GetTabNo();
+    SCTAB       nTab = pViewData->GetTabNo();
     ScAddress   aCellPos( nPosX, nPosY, nTab );
 
     String aTrackText;
@@ -313,7 +313,8 @@ void __EXPORT ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
     if ( bHelpEnabled && !bDrawTextEdit )
     {
         Point       aPosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
-        short       nPosX, nPosY;
+        SCsCOL nPosX;
+        SCsROW nPosY;
         pViewData->GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
 
         if ( ShowNoteMarker( nPosX, nPosY, FALSE ) )
@@ -383,8 +384,9 @@ void __EXPORT ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                     INetURLObject::DECODE_UNAMBIGUOUS );
 
                 ScDocument* pDoc = pViewData->GetDocument();
-                short       nPosX, nPosY;
-                USHORT      nTab = pViewData->GetTabNo();
+                SCsCOL nPosX;
+                SCsROW nPosY;
+                SCTAB       nTab = pViewData->GetTabNo();
                 pViewData->GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
                 const ScPatternAttr* pPattern = pDoc->GetPattern( nPosX, nPosY, nTab );
 
