@@ -2,9 +2,9 @@
  *
  *  $RCSfile: e3dcompoundproperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:09:55 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,13 @@ namespace sdr
 
             switch(nWhich)
             {
+                // #i28528#
+                // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
+                case SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY:
+                {
+                    rObj.InvalidateGeometry();
+                    break;
+                }
                 case SDRATTR_3DOBJ_DOUBLE_SIDED:
                 {
                     rObj.InvalidateGeometry();
