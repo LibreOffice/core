@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:38:42 $
+ *  last change: $Author: as $ $Date: 2002-08-23 08:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,6 +454,14 @@ class FilterCache   :   private ThreadHelpBase
         static sal_Bool implcp_queryFilters                         (   const   ::rtl::OUString&                                    sQuery              );
 
     #endif  //  #ifdef ENABLE_ASSERTIONS
+
+    #ifdef ENABLE_COMPONENT_SELF_CHECK
+
+    private:
+
+        void impldbg_dumpCache();
+
+    #endif // ENABLE_COMPONENT_SELF_CHECK
 
     //-------------------------------------------------------------------------------------------------------------
     //  private variables
