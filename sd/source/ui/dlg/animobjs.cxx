@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:35 $
+ *  last change: $Author: hjs $ $Date: 2000-11-07 11:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include <string>
+#include <algorithm>
 
 #ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONEFFECT_HPP_
 #include <com/sun/star/presentation/AnimationEffect.hpp>
@@ -727,7 +730,7 @@ Fraction SdAnimationWin::GetScale()
         aBmpSize.Width() += 10;
         aBmpSize.Height() += 10;
 
-        aFrac = Fraction( min( (double)aDisplaySize.Width() / (double)aBmpSize.Width(),
+        aFrac = Fraction( std::min( (double)aDisplaySize.Width() / (double)aBmpSize.Width(),
                              (double)aDisplaySize.Height() / (double)aBmpSize.Height() ) );
     }
     // Liste wieder auf alten Stand bringen
