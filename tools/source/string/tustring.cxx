@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tustring.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:09 $
+ *  last change: $Author: th $ $Date: 2001-03-16 15:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,10 +98,6 @@ DBG_NAMEEX( ByteString );
 #include <strimp.cxx>
 #include <strucvt.cxx>
 #include <strascii.cxx>
-
-#ifndef NOOLDSTRING
-#include <struold.cxx>
-#endif
 
 // -----------------------------------------------------------------------
 

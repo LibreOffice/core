@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tstring.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:09 $
+ *  last change: $Author: th $ $Date: 2001-03-16 15:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,6 @@ xub_StrLen ImplStringLen( const sal_Unicode* pStr )
 
 #include <strimp.cxx>
 #include <strcvt.cxx>
-
-#ifndef NOOLDSTRING
-#include <strold.cxx>
-#endif
 
 // -----------------------------------------------------------------------
 

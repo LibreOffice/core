@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-25 18:58:44 $
+ *  last change: $Author: th $ $Date: 2001-03-16 15:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,15 +530,7 @@ STRING& STRING::Assign( const STRCODE* pCharStr )
     DBG_ASSERT( pCharStr, "String::Assign() - pCharStr is NULL" );
 
     // Stringlaenge ermitteln
-#ifdef NOOLDSTRING
     xub_StrLen nLen = ImplStringLen( pCharStr );
-#else
-    xub_StrLen nLen;
-    if ( pCharStr )
-        nLen = ImplStringLen( pCharStr );
-    else
-        nLen = 0;
-#endif
 
     if ( !nLen )
     {
@@ -675,15 +667,7 @@ STRING& STRING::Append( const STRCODE* pCharStr )
 
     // Stringlaenge ermitteln
     xub_StrLen nLen = mpData->mnLen;
-#ifdef NOOLDSTRING
     xub_StrLen nCopyLen = ImplStringLen( pCharStr );
-#else
-    xub_StrLen nCopyLen;
-    if ( pCharStr )
-        nCopyLen = ImplStringLen( pCharStr );
-    else
-        nCopyLen = 0;
-#endif
 
     // Ueberlauf abfangen
     nCopyLen = ImplGetCopyLen( nLen, nCopyLen );
@@ -2266,41 +2250,3 @@ STRCODE* STRING::AllocBuffer( xub_StrLen nLen )
     // Pointer auf den angelegten Buffer zurueckgeben
     return mpData->maStr;
 }
-
-// -----------------------------------------------------------------------
-#ifndef NOOLDSTRING
-STRING operator + ( const STRING& rStr1, const STRING& rStr2 )
-{
-    DBG_CHKOBJ( &rStr1, STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr2, STRING, DBGCHECKSTRING );
-    DBG_WARNING( "String::operator+(): Use String::operator+=() for better performence and smaller code" );
-
-    STRING aTmpStr( rStr1 );
-    aTmpStr += rStr2;
-    return aTmpStr;
-}
-
-// -----------------------------------------------------------------------
-
-STRING operator + ( const STRING& rStr, const STRCODE* pCharStr )
-{
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-    DBG_WARNING( "String::operator+(): Use String::operator+=() for better performence and smaller code" );
-
-    STRING aTmpStr( rStr );
-    aTmpStr += pCharStr;
-    return aTmpStr;
-}
-
-// -----------------------------------------------------------------------
-
-STRING operator + ( const STRCODE* pCharStr, const STRING& rStr )
-{
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-    DBG_WARNING( "String::operator+(): - Use String::operator+=() for better performence and smaller code" );
-
-    STRING aTmpStr( pCharStr );
-    aTmpStr += rStr;
-    return aTmpStr;
-}
-#endif
