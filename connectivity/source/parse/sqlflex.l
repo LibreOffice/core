@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.3 2000-10-24 15:42:07 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.4 2001-01-26 12:05:56 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2000-10-24 15:42:07 $ $Revision: 1.3 $
+//	$Author: oj $ $Date: 2001-01-26 12:05:56 $ $Revision: 1.4 $
 //
 // Description:
 //
@@ -70,13 +70,13 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 #define SQL_NEW_KEYWORD(token)						\
 		SQLyylval.pParseNode = new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, (token));		
 
-#define SQL_NEW_NAME 		SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_NAME)
-#define SQL_NEW_INTNUM 		SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_INTNUM)
-#define SQL_NEW_APPROXNUM 	SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_APPROXNUM)
-#define SQL_NEW_STRING 		SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_STRING)
-#define SQL_NEW_COMPARISON 	SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_COMPARISON)
-#define SQL_NEW_AMMSC 		SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_AMMSC)
-#define SQL_NEW_DATE 		SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_ACCESS_DATE)
+#define SQL_NEW_NAME 		SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NAME)
+#define SQL_NEW_INTNUM 		SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_INTNUM)
+#define SQL_NEW_APPROXNUM 	SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_APPROXNUM)
+#define SQL_NEW_STRING 		SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_STRING)
+#define SQL_NEW_COMPARISON 	SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_COMPARISON)
+#define SQL_NEW_AMMSC 		SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_AMMSC)
+#define SQL_NEW_DATE 		SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE)
 
 #define YY_INPUT(buf,result,max_size) 				\
 {													\
@@ -268,13 +268,13 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 
 [Zz][Oo][Nn][Ee]								{SQL_NEW_KEYWORD(SQL_TOKEN_ZONE); return SQL_TOKEN_ZONE; }
 
-"<"					{ SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_LESS);return LESS;}
-">"					{ SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_GREAT);return GREAT;}
-"="					{ SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_EQUAL);return EQUAL;}
-"<="				{ SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_LESSEQ);return LESSEQ;}
-">="				{ SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_GREATEQ);return GREATEQ;}
-"<>"				{ SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_NOTEQUAL);return NOTEQUAL;}
-"!="				{ SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_NOTEQUAL);return NOTEQUAL;}
+"<"					{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_LESS);return LESS;}
+">"					{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_GREAT);return GREAT;}
+"="					{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_EQUAL);return EQUAL;}
+"<="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_LESSEQ);return LESSEQ;}
+">="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_GREATEQ);return GREATEQ;}
+"<>"				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return NOTEQUAL;}
+"!="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return NOTEQUAL;}
 
 
 [-+*/:(),.;?{}]    { return SQLyytext[0]; }
@@ -447,7 +447,7 @@ sal_Int32 gatherName(const sal_Char* text)
 			SQL_NEW_KEYWORD(nToken); 
 			return nToken;
 		default:
-			SQL_NEW_NODE(::rtl::OUString::createFromAscii(text), SQL_NODE_NAME); 
+			SQL_NEW_NODE(::rtl::OUString(text,strlen(text),RTL_TEXTENCODING_UTF8), SQL_NODE_NAME); 
 			return SQL_TOKEN_NAME; 
 	}
 }
@@ -482,12 +482,12 @@ sal_Int32 gatherNamePre(const sal_Char* text)
 			// we need a special handling for parameter
 			if (yy_hold_char == ':')
 			{
-				SQL_NEW_NODE(::rtl::OUString::createFromAscii(text), SQL_NODE_NAME); 
+				SQL_NEW_NODE(::rtl::OUString(text,strlen(text),RTL_TEXTENCODING_UTF8), SQL_NODE_NAME); 
 				return SQL_TOKEN_NAME; 				
 			}
 			else
 			{
-				SQL_NEW_NODE(::rtl::OUString::createFromAscii(text), SQL_NODE_STRING);
+				SQL_NEW_NODE(::rtl::OUString(text,strlen(text),RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
 				return SQL_TOKEN_STRING;			
 			}
 	}															   	
@@ -521,13 +521,50 @@ OSQLScanner::~OSQLScanner()
 void OSQLScanner::SQLyyerror(sal_Char *fmt)
 {
 	OSL_ENSHURE(m_pContext, "OSQLScanner::SQLyyerror: No Context set");	
-	m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_GENERAL);
+	m_sErrorMessage = ::rtl::OUString(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
 	if (m_nCurrentPos < m_sStatement.getLength())
 	{
 		m_sErrorMessage += ::rtl::OUString::createFromAscii(": ");
-		m_sErrorMessage += m_pContext->getErrorMessage(OParseContext::ERROR_GENERAL_HINT);
 		
-		m_sErrorMessage.replaceAt(m_sErrorMessage.indexOf('#',0),1,::rtl::OUString::createFromAscii(SQLyytext));	
+		::rtl::OUString aError;
+		static sal_Int32 BUFFERSIZE = 256;
+		static sal_Char* Buffer = 0;
+		if(!Buffer)
+			Buffer = new sal_Char[BUFFERSIZE];
+
+		sal_Char *s = Buffer;
+		sal_Int32 nPos = 1;
+		sal_Int32 ch = SQLyytext ? SQLyytext[0] : ' ';
+		*s++ = ch;
+		while ((ch = yyinput()) != EOF) 
+		{
+			if (ch == ' ') 
+			{
+				if ((ch = yyinput()) != ' ') 
+				{
+					if (ch != EOF)
+						unput(ch);
+				}
+				*s = '\0';
+				aError = ::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8);
+				break;
+			}
+			else
+			{
+				*s++ = ch;
+				if (++nPos == BUFFERSIZE)
+				{
+					::rtl::OString aBuf(Buffer);
+					delete Buffer;
+					BUFFERSIZE *=2;
+					Buffer = new sal_Char[BUFFERSIZE];
+					for(sal_Int32 i=0;i<aBuf.getLength();++i,++Buffer)
+						*Buffer = aBuf.getStr()[i];
+					s = &Buffer[nPos];
+				}
+			}
+		}
+		m_sErrorMessage += aError;
 	}
 }
 

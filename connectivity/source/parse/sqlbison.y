@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.10 2001-01-10 12:56:33 vg Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.11 2001-01-26 12:05:55 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: vg $ $Date: 2001-01-10 12:56:33 $ $Revision: 1.10 $
+//	$Author: oj $ $Date: 2001-01-26 12:05:55 $ $Revision: 1.11 $
 //
 // Description:
 //
@@ -2948,7 +2948,7 @@ struct _ConstAsciiString_
 	_ConstAsciiString_ const name = { sizeof(string)-1, string }
 
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_GENERAL, "Syntax error in SQL expression");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_GENERAL_HINT,	"before \"#\" expression." );
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_GENERAL_HINT,	"in front of \"#\" expression." );
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_VALUE_NO_LIKE, "The value # can not be used with LIKE!");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_FIELD_NO_LIKE, "LIKE can not be used with this field!");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_COMPARE, "The entered criterion can not be compared with this field!");
@@ -4138,8 +4138,13 @@ void OSQLParser::error(sal_Char *fmt)
 	{
 		m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_GENERAL);
 		m_sErrorMessage += ::rtl::OUString::createFromAscii(": ");
-		m_sErrorMessage += m_pContext->getErrorMessage(OParseContext::ERROR_GENERAL_HINT);
-		m_sErrorMessage.replaceAt(m_sErrorMessage.indexOf('#'),1,::rtl::OUString::createFromAscii(fmt));
+		m_sErrorMessage += ::rtl::OUString(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
+		::rtl::OUString aError = s_pScanner->getErrorMessage();
+		if(aError.getLength())
+		{
+			m_sErrorMessage += ::rtl::OUString::createFromAscii(", ");
+			m_sErrorMessage += aError;
+		}
 	}
 }
 // -------------------------------------------------------------------------
