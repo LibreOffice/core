@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_DatagramSocket.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-05 21:21:34 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ public:
     {
         if ( isRunning( ) )
         {
-            printf( "# error: CloseSocketThread not terminated.\n" );
+            t_print("# error: CloseSocketThread not terminated.\n" );
         }
     }
 };
@@ -202,7 +202,7 @@ public:
     ~TalkerThread( )
     {
         if ( isRunning( ) )
-            printf( "# error: TalkerThread not terminated normally.\n" );
+            t_print("# error: TalkerThread not terminated normally.\n" );
     }
 };
 
@@ -220,12 +220,12 @@ protected:
         dsSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
         if ( dsSocket.bind( saLocalSocketAddr ) == sal_False )
         {
-            printf("# DatagramSocket bind failed \n");
+            t_print("DatagramSocket bind failed \n");
             return;
         }
         //blocking mode: default
         sal_Int32 nRecv = dsSocket.recvFrom( pRecvBuffer, 30, &saTargetSocketAddr); //strlen( pTestString2 ) + 1
-        printf("# After recvFrom, nRecv is %d\n", nRecv);
+        t_print("After recvFrom, nRecv is %d\n", nRecv);
     }
 
     void SAL_CALL onTerminated( )
@@ -243,7 +243,7 @@ public:
     ~ListenerThread( )
     {
         if ( isRunning( ) )
-            printf( "# error: ListenerThread not terminated normally.\n" );
+            t_print("# error: ListenerThread not terminated normally.\n" );
     }
 
 };
@@ -271,7 +271,7 @@ public:
             myTalkThread.create();
             sal_Int32 nRecv = dsSocket.recvFrom( pReadBuffer, 30, &saLocalSocketAddr);
             myTalkThread.join();
-            //printf("#received buffer is %s# \n", pReadBuffer);
+            //t_print("#received buffer is %s# \n", pReadBuffer);
 
             sal_Bool bOk = ( strcmp(pReadBuffer, pTestString1) == 0 );
 
@@ -295,7 +295,7 @@ public:
             CPPUNIT_ASSERT_MESSAGE( "DatagramSocket sendTo failed: nSend <= 0.", nSend > 0);
 
             myListenThread.join();
-            //printf("#received buffer is %s# \n", myListenThread.pRecvBuffer);
+            //t_print("#received buffer is %s# \n", myListenThread.pRecvBuffer);
 
             sal_Bool bOk = ( strcmp( myListenThread.pRecvBuffer, pTestString2) == 0 );
 
@@ -330,7 +330,7 @@ public:
             myThread.create();
             sal_Int32 nRecv2 = dsSocket.recvFrom( pReadBuffer, 30, &saListenSocketAddr1 );
             myThread.join();
-            //printf("#nRecv1 is %d nRecv2 is %d\n", nRecv1, nRecv2 );
+            //t_print("#nRecv1 is %d nRecv2 is %d\n", nRecv1, nRecv2 );
             CPPUNIT_ASSERT_MESSAGE( "DatagramSocket sendTo should fail: nSend <= 0.",
                  nRecv2 == -1 );
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Socket2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-05 21:22:19 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,13 +142,13 @@ protected:
         sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
         if  ( sal_True != bOK1 )
         {
-            printf( "# AcceptorSocket bind address failed.\n" ) ;
+            t_print("# AcceptorSocket bind address failed.\n" ) ;
             return;
         }
         sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
         if  ( sal_True != bOK2 )
         {
-            printf( "# AcceptorSocket listen address failed.\n" ) ;
+            t_print("# AcceptorSocket listen address failed.\n" ) ;
             return;
         }
 
@@ -158,7 +158,7 @@ protected:
         if (eResult != osl_Socket_Ok )
         {
             bOK = sal_True;
-            printf("# AcceptorThread: acceptConnection failed! \n");
+            t_print("AcceptorThread: acceptConnection failed! \n");
         }
     }
 public:
@@ -175,7 +175,7 @@ public:
         if ( isRunning( ) )
         {
             asAcceptorSocket.shutdown();
-            printf( "# error: Acceptor thread not terminated.\n" );
+            t_print("# error: Acceptor thread not terminated.\n" );
         }
     }
 };
@@ -271,7 +271,7 @@ namespace osl_Socket
             oslSocket sHandleIpx = osl_createSocket( osl_Socket_FamilyIpx, osl_Socket_TypeStream, osl_Socket_ProtocolIp );
             CPPUNIT_ASSERT_MESSAGE( " family osl_Socket_FamilyIpx socket create failed! ", sHandleIpx != NULL);
             ::osl::Socket sSocket( sHandleIpx );        //, SAL_NO_ACQUIRE );
-            printf("#Type is %d \n", sSocket.getType( ) );
+            t_print("#Type is %d \n", sSocket.getType( ) );
 
             CPPUNIT_ASSERT_MESSAGE(" test for create new Socket instance that family is osl_Socket_FamilyIpx",
                                     osl_Socket_TypeStream == sSocket.getType( ) );
@@ -1182,7 +1182,7 @@ namespace osl_Socket
             // on Linux, the value of option is 1, on Solaris, it's 16, but it's not important the exact value,
             // just judge it is zero or not!
             sal_Bool bOK = ( 0  !=  *pGetBuffer );
-            printf("#setOption_001: getOption is %d \n", *pGetBuffer);
+            t_print("#setOption_001: getOption is %d \n", *pGetBuffer);
 
             // toggle check, set to 0
             *pbDontRouteSet = 0;
@@ -1194,7 +1194,7 @@ namespace osl_Socket
 
             sal_Bool bOK2 = ( 0  ==  *pGetBuffer );
 
-            printf("#setOption_001: getOption is %d \n", *pGetBuffer);
+            t_print("#setOption_001: getOption is %d \n", *pGetBuffer);
 
 // LLA:             sal_Bool * pbDontTouteSet = ( sal_Bool * )malloc( sizeof ( sal_Bool ) );
 // LLA:             *pbDontTouteSet = sal_True;
@@ -1237,7 +1237,7 @@ namespace osl_Socket
             sal_Int32 n1 = asAcceptorSocket.getOption( osl_Socket_OptionLinger,  &aLingerGet, nBufferLen );
                     CPPUNIT_ASSERT_MESSAGE( "getOption (SO_LINGER) function failed.", ( n1 == nBufferLen ) );
 
-            //printf("#setOption_002: getOption is %d \n", aLingerGet.l_linger);
+            //t_print("#setOption_002: getOption is %d \n", aLingerGet.l_linger);
             sal_Bool bOK = ( 7  ==  aLingerGet.l_linger );
             CPPUNIT_ASSERT_MESSAGE( "test for setOption function: set option of a socket and then check. ",
                 sal_True == bOK );
@@ -1263,7 +1263,7 @@ namespace osl_Socket
             asAcceptorSocket.setOption( osl_Socket_OptionDontRoute, 1 ); //sal_True );
             sal_Bool bOK = ( 0  !=  asAcceptorSocket.getOption( osl_Socket_OptionDontRoute ) );
 
-            printf("# setOption_simple_001(): getoption is %d \n", asAcceptorSocket.getOption( osl_Socket_OptionDontRoute ) );
+            t_print("setOption_simple_001(): getoption is %d \n", asAcceptorSocket.getOption( osl_Socket_OptionDontRoute ) );
             CPPUNIT_ASSERT_MESSAGE( "test for setOption function: set option of a socket and then check.",
                                       ( sal_True == bOK ) );
         }

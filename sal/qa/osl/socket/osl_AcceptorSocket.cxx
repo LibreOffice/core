@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_AcceptorSocket.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-05 21:20:55 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,13 +133,13 @@ protected:
         sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
         if  ( sal_True != bOK1 )
         {
-            printf( "# AcceptorSocket bind address failed.\n" ) ;
+            t_print("# AcceptorSocket bind address failed.\n" ) ;
             return;
         }
         sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
         if  ( sal_True != bOK2 )
         {
-            printf( "# AcceptorSocket listen address failed.\n" ) ;
+            t_print("# AcceptorSocket listen address failed.\n" ) ;
             return;
         }
 
@@ -149,7 +149,7 @@ protected:
         if (eResult != osl_Socket_Ok )
         {
             bOK = sal_True;
-            printf("# AcceptorThread: acceptConnection failed! \n");
+            t_print("AcceptorThread: acceptConnection failed! \n");
         }
     }
 public:
@@ -166,7 +166,7 @@ public:
         if ( isRunning( ) )
         {
             asAcceptorSocket.shutdown();
-            printf( "# error: Acceptor thread not terminated.\n" );
+            t_print("# error: Acceptor thread not terminated.\n" );
         }
     }
 };
@@ -220,7 +220,7 @@ namespace osl_AcceptorSocket
             //when accepting, assign another socket to the socket, the thread will not be closed, so is blocking
             asSocketAssign = asSocket;
 
-            printf("#asSocketAssign port number is %d\n", asSocketAssign.getLocalPort() );
+            t_print("#asSocketAssign port number is %d\n", asSocketAssign.getLocalPort() );
 
             asSocketAssign.shutdown();
             myAcceptorThread.join();
