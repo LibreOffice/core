@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:51:57 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,26 +128,17 @@ namespace dbaccess
         ::rtl::OUString getComposedTableName( const ::rtl::OUString& _sCatalog,
                                               const ::rtl::OUString& _sSchema,
                                               const ::rtl::OUString& _sTable);
-        /**
-            fetchValue fetches a single value out of the current row
-            @param _nPos    the current column position
-            @param _nType   the type of the current column
-            @param _xRow    the row where to fetch the data from
 
-            @param _rValue  out - value which was fetched
-        */
-        void fetchValue(sal_Int32 _nPos,
-                        sal_Int32 _nType,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow,
-                        ::connectivity::ORowSetValue& _rValue);
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getKeyColumns() const;
         void fillAllRows();
         sal_Bool fetchRow();
+    protected:
+        virtual ~OKeySet();
     public:
         OKeySet(const connectivity::OSQLTable& _xTable,
                 const ::rtl::OUString& _rUpdateTableName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >& _xComposer);
-        ~OKeySet();
+
         // late ctor which can throw exceptions
         virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
 
