@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibilityTools.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2004-07-23 10:43:42 $
+ *  last change:$Date: 2004-11-02 11:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ import java.io.PrintWriter;
 public class AccessibilityTools {
     public static XAccessibleContext SearchedContext = null;
     public static XAccessible SearchedAccessible = null;
+    private static boolean debug = false;
 
     public AccessibilityTools() {
         //done = false;
@@ -325,6 +326,11 @@ public class AccessibilityTools {
         return null;
     }
 
+    public static void printAccessibleTree(PrintWriter log, XAccessible xacc, boolean debugIsActive) {
+        debug = debugIsActive;
+        printAccessibleTree(log, xacc, "");
+    }
+
     public static void printAccessibleTree(PrintWriter log, XAccessible xacc) {
         printAccessibleTree(log, xacc, "");
     }
@@ -333,7 +339,7 @@ public class AccessibilityTools {
                                               XAccessible xacc, String indent) {
         XAccessibleContext ac = xacc.getAccessibleContext();
 
-        log.println(indent + ac.getAccessibleRole() + "," +
+        logging(log,indent + ac.getAccessibleRole() + "," +
                     ac.getAccessibleName() + "(" +
                     ac.getAccessibleDescription() + "):" +
                     utils.getImplName(ac));
@@ -347,12 +353,12 @@ public class AccessibilityTools {
                             aComp.getBounds().Width + "," +
                             aComp.getBounds().Height + ")";
             bounds = "The boundary Rectangle is " + bounds;
-            log.println(indent + indent + bounds);
+            logging(log,indent + indent + bounds);
         }
 
         boolean isShowing = ac.getAccessibleStateSet()
                               .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
-        log.println(indent + indent + "StateType contains SHOWING: " +
+        logging(log,indent + indent + "StateType contains SHOWING: " +
                     isShowing);
 
         int k = ac.getAccessibleChildCount();
@@ -374,7 +380,7 @@ public class AccessibilityTools {
             k = ac.getAccessibleChildCount();
 
             int st = ac.getAccessibleChildCount() - 50;
-            log.println(indent + "  " + " ...... [skipped] ......");
+            logging(log,indent + "  " + " ...... [skipped] ......");
 
             for (int i = st; i < k; i++) {
                 try {
@@ -444,4 +450,8 @@ public class AccessibilityTools {
         return AccessibilityTools.equals(c1.getAccessibleParent(),
                                          c2.getAccessibleParent());
     }
+
+  private static void logging(PrintWriter log, String content){
+      if (debug) log.println(content);
+  }
 }
