@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopback.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 22:38:10 $
+ *  last change: $Author: cl $ $Date: 2000-12-20 15:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,13 @@
 #include <cppuhelper/extract.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
+
+#ifndef _SVX_XFLBSTIT_HXX
+#include <svx/xflbstit.hxx>
+#endif
+#ifndef _SVX_XFLBMTIT_HXX
+#include <svx/xflbmtit.hxx>
+#endif
 
 #ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
@@ -235,6 +242,18 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
     {
         if( mpSet )
         {
+            if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
+            {
+                sal_Int32 nMode;
+                if( aValue >>= nMode )
+                {
+                    mpSet->Put( XFillBmpStretchItem( nMode == 1 ) );
+                    mpSet->Put( XFillBmpTileItem( nMode == 0 ) );
+                    return;
+                }
+                throw lang::IllegalArgumentException();
+            }
+
             SfxItemPool& rPool = *mpSet->GetPool();
             SfxItemSet aSet( rPool, pMap->nWID, pMap->nWID);
             aSet.Put( *mpSet );
@@ -281,15 +300,33 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
     {
         if( mpSet )
         {
-            SfxItemPool& rPool = *mpSet->GetPool();
-            SfxItemSet aSet( rPool, pMap->nWID, pMap->nWID);
-            aSet.Put( *mpSet );
+            if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
+            {
+                XFillBmpStretchItem* pStretchItem = (XFillBmpStretchItem*)mpSet->GetItem(XATTR_FILLBMP_STRETCH);
+                XFillBmpTileItem* pTileItem = (XFillBmpTileItem*)mpSet->GetItem(XATTR_FILLBMP_TILE);
 
-            if( !aSet.Count() )
-                aSet.Put( rPool.GetDefaultItem( pMap->nWID ) );
+                if( pStretchItem && pTileItem )
+                {
+                    if( pTileItem->GetValue() )
+                        aAny <<= (sal_Int32)0;
+                    else if( pStretchItem->GetValue() )
+                        aAny <<= (sal_Int32)1;
+                    else
+                        aAny <<= (sal_Int32)2;
+                }
+            }
+            else
+            {
+                SfxItemPool& rPool = *mpSet->GetPool();
+                SfxItemSet aSet( rPool, pMap->nWID, pMap->nWID);
+                aSet.Put( *mpSet );
 
-            // Hole Wert aus ItemSet
-            aAny = maPropSet.getPropertyValue( pMap, aSet );
+                if( !aSet.Count() )
+                    aSet.Put( rPool.GetDefaultItem( pMap->nWID ) );
+
+                // Hole Wert aus ItemSet
+                aAny = maPropSet.getPropertyValue( pMap, aSet );
+            }
         }
         else
         {
@@ -318,6 +355,19 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
 
     if( mpSet )
     {
+        if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
+        {
+            if( mpSet->GetItemState( XATTR_FILLBMP_STRETCH, false ) == SFX_ITEM_SET ||
+                mpSet->GetItemState( XATTR_FILLBMP_TILE, false ) == SFX_ITEM_SET )
+            {
+                return beans::PropertyState_DIRECT_VALUE;
+            }
+            else
+            {
+                return beans::PropertyState_AMBIGUOUS_VALUE;
+            }
+        }
+
         switch( mpSet->GetItemState( pMap->nWID, sal_False ) )
         {
         case SFX_ITEM_READONLY:
@@ -368,7 +418,17 @@ void SAL_CALL SdUnoPageBackground::setPropertyToDefault( const OUString& Propert
         throw beans::UnknownPropertyException();
 
     if( mpSet )
-        mpSet->ClearItem( pMap->nWID );
+    {
+        if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
+        {
+            mpSet->ClearItem( XATTR_FILLBMP_STRETCH );
+            mpSet->ClearItem( XATTR_FILLBMP_TILE );
+        }
+        else
+        {
+            mpSet->ClearItem( pMap->nWID );
+        }
+    }
 }
 
 uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aPropertyName )
@@ -383,11 +443,18 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
     uno::Any aAny;
     if( mpSet )
     {
-        SfxItemPool& rPool = *mpSet->GetPool();
-        SfxItemSet aSet( rPool, pMap->nWID, pMap->nWID);
-        aSet.Put( rPool.GetDefaultItem( pMap->nWID ) );
+        if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
+        {
+            aAny <<= (sal_Int32)0;
+        }
+        else
+        {
+            SfxItemPool& rPool = *mpSet->GetPool();
+            SfxItemSet aSet( rPool, pMap->nWID, pMap->nWID);
+            aSet.Put( rPool.GetDefaultItem( pMap->nWID ) );
 
-        aAny = maPropSet.getPropertyValue( pMap, aSet );
+            aAny = maPropSet.getPropertyValue( pMap, aSet );
+        }
     }
     return aAny;
 }
