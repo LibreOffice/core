@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-07 14:05:16 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 10:03:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,8 +467,6 @@ ULONG SwReader::Read( const Reader& rOptions )
     }
 
     pDoc->bInReading = FALSE;
-
-    pDoc->PropagateOutlineRule();
 
     pDoc->InvalidateNumRules();
     pDoc->UpdateNumRule();
