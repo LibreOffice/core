@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2000-10-16 11:32:59 $
+ *  last change: $Author: lla $ $Date: 2000-11-03 08:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,37 +75,37 @@
 
 namespace configmgr
 {
-    namespace staruno = ::com::sun::star::uno;
-    namespace starscript = ::com::sun::star::script;
+    namespace uno = ::com::sun::star::uno;
+    namespace script = ::com::sun::star::script;
 
     // UNO Type handling
-    staruno::Type getSequenceElementType(staruno::Type const& rSequenceType);
+    uno::Type getSequenceElementType(uno::Type const& rSequenceType);
 
-    staruno::Type getBasicType(staruno::Type const& rType, bool& bSequence);
+    uno::Type getBasicType(uno::Type const& rType, bool& bSequence);
     inline
-    staruno::Type getBasicType(staruno::Type const& rType)
+    uno::Type getBasicType(uno::Type const& rType)
     { bool dummy; return getBasicType(rType,dummy); }
 
     // Any Conversion
-    staruno::Any toAny(const staruno::Reference< starscript::XTypeConverter >& xTypeConverter, const ::rtl::OUString& _rValue,const staruno::TypeClass& _rTypeClass) throw( starscript::CannotConvertException );
-    rtl::OUString toString(const staruno::Reference< starscript::XTypeConverter >& xTypeConverter, const staruno::Any& rValue) throw( starscript::CannotConvertException );
+    uno::Any toAny(const uno::Reference< script::XTypeConverter >& xTypeConverter, const ::rtl::OUString& _rValue,const uno::TypeClass& _rTypeClass) throw( script::CannotConvertException );
+    rtl::OUString toString(const uno::Reference< script::XTypeConverter >& xTypeConverter, const uno::Any& rValue) throw( script::CannotConvertException );
 
     // Type conversion
-    staruno::TypeClass toTypeClass(const ::rtl::OUString& _rType);
-    ::rtl::OUString toTypeName(const staruno::TypeClass& _rTypeClass);
+    uno::TypeClass toTypeClass(const ::rtl::OUString& _rType);
+    ::rtl::OUString toTypeName(const uno::TypeClass& _rTypeClass);
 
-    staruno::Type toType(const ::rtl::OUString& _rsType);
-    staruno::Type toListType(const ::rtl::OUString& _rsElementType);
-    ::rtl::OUString toTypeName(const staruno::Type& _rType);
+    uno::Type toType(const ::rtl::OUString& _rsType);
+    uno::Type toListType(const ::rtl::OUString& _rsElementType);
+    ::rtl::OUString toTypeName(const uno::Type& _rType);
 
     inline
-    staruno::Type toType(const ::rtl::OUString& _rsSimpleType, bool isList)
+    uno::Type toType(const ::rtl::OUString& _rsSimpleType, bool isList)
     {
         return isList ? toListType(_rsSimpleType) : toType(_rsSimpleType);
     }
 
-    inline staruno::Type getBinaryType()    { return ::getCppuType(static_cast<staruno::Sequence<sal_Int8> const*>(0)); }
-    inline staruno::Type getAnyType()       { return ::getCppuType(static_cast<staruno::Any const*>(0)); }
+    inline uno::Type getBinaryType()    { return ::getCppuType(static_cast<uno::Sequence<sal_Int8> const*>(0)); }
+    inline uno::Type getAnyType()       { return ::getCppuType(static_cast<uno::Any const*>(0)); }
 
 
 } // namespace configmgr

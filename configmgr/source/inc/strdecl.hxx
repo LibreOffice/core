@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strdecl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2000-10-16 11:32:59 $
+ *  last change: $Author: lla $ $Date: 2000-11-03 08:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,11 @@ namespace configmgr
     DECLARE_CONSTASCII_USTRING(ATTR_DERIVED_LIST);
     DECLARE_CONSTASCII_USTRING(ATTR_VALUE_ADD);
     DECLARE_CONSTASCII_USTRING(ATTR_VALUE_REMOVE);
+    DECLARE_CONSTASCII_USTRING(ATTR_LOCALIZE);
+    DECLARE_CONSTASCII_USTRING(ATTR_LANG);
+    DECLARE_CONSTASCII_USTRING(ATTR_SEPARATOR);
+    DECLARE_CONSTASCII_USTRING(ATTR_NULL);
+    DECLARE_CONSTASCII_USTRING(ATTR_NULLABLE);
 
     DECLARE_CONSTASCII_USTRING(PARAM_OBJECT);
     DECLARE_CONSTASCII_USTRING(PARAM_NAME);

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:13:41 $
+#   last change: $Author: lla $ $Date: 2000-11-03 08:51:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,7 @@ SLOFILES=	\
         $(SLO)$/filehelper.obj	\
         $(SLO)$/strimpl.obj	\
         $(SLO)$/strconverter.obj	\
+        $(SLO)$/treemap.obj	\
 
 # --- Targets ----------------------------------
 

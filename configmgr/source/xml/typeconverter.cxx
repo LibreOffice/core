@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: lla $ $Date: 2000-10-16 11:33:02 $
+ *  last change: $Author: lla $ $Date: 2000-11-03 08:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,80 +85,80 @@
 #include <osl/diagnose.h>
 #endif
 
-namespace staruno = ::com::sun::star::uno;
-namespace starscript = ::com::sun::star::script;
-namespace starlang = ::com::sun::star::lang;
+namespace uno = ::com::sun::star::uno;
+namespace script = ::com::sun::star::script;
+namespace lang = ::com::sun::star::lang;
 
 namespace configmgr
 {
 
 //--------------------------------------------------------------------------------------------------
-    rtl::OUString toString(const staruno::Reference< starscript::XTypeConverter >& xTypeConverter, const staruno::Any& rValue) throw( starscript::CannotConvertException )
+    rtl::OUString toString(const uno::Reference< script::XTypeConverter >& xTypeConverter, const uno::Any& rValue) throw( script::CannotConvertException )
     {
         rtl::OUString aRes;
-        ::staruno::TypeClass aDestinationClass = rValue.getValueType().getTypeClass();
+        ::uno::TypeClass aDestinationClass = rValue.getValueType().getTypeClass();
 
         switch (aDestinationClass)
         {
-        case ::staruno::TypeClass_BOOLEAN:
-        case ::staruno::TypeClass_CHAR:
-        case ::staruno::TypeClass_BYTE:
-        case ::staruno::TypeClass_SHORT:
-        case ::staruno::TypeClass_LONG:
-        case ::staruno::TypeClass_HYPER:
-        case ::staruno::TypeClass_FLOAT:
-        case ::staruno::TypeClass_DOUBLE:
+        case ::uno::TypeClass_BOOLEAN:
+        case ::uno::TypeClass_CHAR:
+        case ::uno::TypeClass_BYTE:
+        case ::uno::TypeClass_SHORT:
+        case ::uno::TypeClass_LONG:
+        case ::uno::TypeClass_HYPER:
+        case ::uno::TypeClass_FLOAT:
+        case ::uno::TypeClass_DOUBLE:
             if (!xTypeConverter.is())
             {
-                throw( starscript::CannotConvertException( ::rtl::OUString::createFromAscii("stardiv.script.Converter!"), ::staruno::Reference< ::staruno::XInterface > (),
-                                                           aDestinationClass, starscript::FailReason::UNKNOWN, 0 ) );
+                throw( script::CannotConvertException( ::rtl::OUString::createFromAscii("stardiv.script.Converter!"), ::uno::Reference< ::uno::XInterface > (),
+                                                           aDestinationClass, script::FailReason::UNKNOWN, 0 ) );
             }
-            xTypeConverter->convertToSimpleType(rValue, ::staruno::TypeClass_STRING) >>= aRes;
+            xTypeConverter->convertToSimpleType(rValue, ::uno::TypeClass_STRING) >>= aRes;
             break;
-        case ::staruno::TypeClass_STRING:
+        case ::uno::TypeClass_STRING:
             rValue >>= aRes;
             break;
         default:
-            throw( starscript::CannotConvertException( ::rtl::OUString::createFromAscii("TYPE is not supported!"), staruno::Reference< ::staruno::XInterface > (),
-                                                       aDestinationClass, starscript::FailReason::TYPE_NOT_SUPPORTED, 0 ) );
+            throw( script::CannotConvertException( ::rtl::OUString::createFromAscii("TYPE is not supported!"), uno::Reference< ::uno::XInterface > (),
+                                                       aDestinationClass, script::FailReason::TYPE_NOT_SUPPORTED, 0 ) );
 
         }
         return aRes;
     }
 
-    staruno::Any toAny(const staruno::Reference< starscript::XTypeConverter >& xTypeConverter, const ::rtl::OUString& _rValue,const staruno::TypeClass& _rTypeClass) throw( starscript::CannotConvertException )
+    uno::Any toAny(const uno::Reference< script::XTypeConverter >& xTypeConverter, const ::rtl::OUString& _rValue,const uno::TypeClass& _rTypeClass) throw( script::CannotConvertException )
     {
-        staruno::Any aRes;
+        uno::Any aRes;
         try
         {
-            aRes = xTypeConverter->convertToSimpleType(staruno::makeAny(_rValue), _rTypeClass);
+            aRes = xTypeConverter->convertToSimpleType(uno::makeAny(_rValue), _rTypeClass);
         }
-        catch (starscript::CannotConvertException&)
+        catch (script::CannotConvertException&)
         {
             if (_rValue.getLength() != 0)
                 OSL_ENSHURE(sal_False, "toAny : could not convert !");
         }
-        catch (starlang::IllegalArgumentException&)
+        catch (lang::IllegalArgumentException&)
         {
             OSL_ENSHURE(sal_False, "toAny : could not convert !");
         }
         return aRes;
     }
 
-    ::rtl::OUString toTypeName(const staruno::TypeClass& _rTypeClass)
+    ::rtl::OUString toTypeName(const uno::TypeClass& _rTypeClass)
     {
         ::rtl::OUString aRet;
         switch(_rTypeClass)
         {
-        case staruno::TypeClass_BOOLEAN:  aRet = ::rtl::OUString::createFromAscii("boolean"); break;
-        case staruno::TypeClass_SHORT:    aRet = ::rtl::OUString::createFromAscii("short"); break;
-        case staruno::TypeClass_LONG:     aRet = ::rtl::OUString::createFromAscii("integer"); break;
-        case staruno::TypeClass_HYPER:    aRet = ::rtl::OUString::createFromAscii("long"); break;
-        case staruno::TypeClass_DOUBLE:   aRet = ::rtl::OUString::createFromAscii("double"); break;
-        case staruno::TypeClass_STRING:   aRet = ::rtl::OUString::createFromAscii("string"); break;
-        case staruno::TypeClass_SEQUENCE: aRet = ::rtl::OUString::createFromAscii("binary"); break;
+        case uno::TypeClass_BOOLEAN:  aRet = ::rtl::OUString::createFromAscii("boolean"); break;
+        case uno::TypeClass_SHORT:    aRet = ::rtl::OUString::createFromAscii("short"); break;
+        case uno::TypeClass_LONG:     aRet = ::rtl::OUString::createFromAscii("integer"); break;
+        case uno::TypeClass_HYPER:    aRet = ::rtl::OUString::createFromAscii("long"); break;
+        case uno::TypeClass_DOUBLE:   aRet = ::rtl::OUString::createFromAscii("double"); break;
+        case uno::TypeClass_STRING:   aRet = ::rtl::OUString::createFromAscii("string"); break;
+        case uno::TypeClass_SEQUENCE: aRet = ::rtl::OUString::createFromAscii("binary"); break;
 
-        case staruno::TypeClass_ANY: aRet = ::rtl::OUString::createFromAscii("any"); break;
+        case uno::TypeClass_ANY: aRet = ::rtl::OUString::createFromAscii("any"); break;
         default:
         {
             ::rtl::OString aStr("Wrong typeclass! ");
@@ -169,20 +169,20 @@ namespace configmgr
         return aRet;
     }
 
-    staruno::TypeClass toTypeClass(const ::rtl::OUString& _rType)
+    uno::TypeClass toTypeClass(const ::rtl::OUString& _rType)
     {
-        staruno::TypeClass aRet = staruno::TypeClass_VOID;
+        uno::TypeClass aRet = uno::TypeClass_VOID;
 
-        if     (_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("boolean")))  aRet = staruno::TypeClass_BOOLEAN;
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("short")))    aRet = staruno::TypeClass_SHORT;
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("int")))      aRet = staruno::TypeClass_LONG;
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("integer")))  aRet = staruno::TypeClass_LONG;
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("long")))     aRet = staruno::TypeClass_HYPER;
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("double")))   aRet = staruno::TypeClass_DOUBLE;
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("string")))   aRet = staruno::TypeClass_STRING;
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("binary")))   aRet = staruno::TypeClass_SEQUENCE;
+        if     (_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("boolean")))  aRet = uno::TypeClass_BOOLEAN;
+        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("short")))    aRet = uno::TypeClass_SHORT;
+        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("int")))      aRet = uno::TypeClass_LONG;
+        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("integer")))  aRet = uno::TypeClass_LONG;
+        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("long")))     aRet = uno::TypeClass_HYPER;
+        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("double")))   aRet = uno::TypeClass_DOUBLE;
+        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("string")))   aRet = uno::TypeClass_STRING;
+        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("binary")))   aRet = uno::TypeClass_SEQUENCE;
 
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("any")))   aRet = staruno::TypeClass_ANY;
+        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("any")))   aRet = uno::TypeClass_ANY;
         else
         {
             ::rtl::OString aStr("Wrong typeclass! ");
@@ -198,54 +198,54 @@ namespace configmgr
     namespace
     {
 
-        inline staruno::Type getBooleanType() { return ::getBooleanCppuType(); }
+        inline uno::Type getBooleanType() { return ::getBooleanCppuType(); }
 
-        inline staruno::Type getShortType()     { return ::getCppuType(static_cast<sal_Int16 const*>(0)); }
-        inline staruno::Type getIntType()       { return ::getCppuType(static_cast<sal_Int32 const*>(0)); }
-        inline staruno::Type getLongType()      { return ::getCppuType(static_cast<sal_Int64 const*>(0)); }
+        inline uno::Type getShortType()     { return ::getCppuType(static_cast<sal_Int16 const*>(0)); }
+        inline uno::Type getIntType()       { return ::getCppuType(static_cast<sal_Int32 const*>(0)); }
+        inline uno::Type getLongType()      { return ::getCppuType(static_cast<sal_Int64 const*>(0)); }
 
-        inline staruno::Type getDoubleType()    { return ::getCppuType(static_cast<double const*>(0)); }
+        inline uno::Type getDoubleType()    { return ::getCppuType(static_cast<double const*>(0)); }
 
-        inline staruno::Type getStringType()    { return ::getCppuType(static_cast<rtl::OUString const*>(0)); }
+        inline uno::Type getStringType()    { return ::getCppuType(static_cast<rtl::OUString const*>(0)); }
 
 // *************************************************************************
 /*
-  ::rtl::OUString findXMLTypeName(const staruno::Type& _rType)
+  ::rtl::OUString findXMLTypeName(const uno::Type& _rType)
   {
   ::rtl::OUString aRet;
   switch(_rType.getTypeClass())
   {
-  case staruno::TypeClass_BOOLEAN:
+  case uno::TypeClass_BOOLEAN:
   OSL_ASSERT( _rType == getBooleanType() );
   aRet = ::rtl::OUString::createFromAscii("boolean");
   break;
 
-  case staruno::TypeClass_SHORT:
+  case uno::TypeClass_SHORT:
   OSL_ASSERT( _rType == getShortType() );
   aRet = ::rtl::OUString::createFromAscii("short");
   break;
 
-  case staruno::TypeClass_LONG:
+  case uno::TypeClass_LONG:
   OSL_ASSERT( _rType == getIntType() );
   aRet = ::rtl::OUString::createFromAscii("int");
   break;
 
-  case staruno::TypeClass_HYPER:
+  case uno::TypeClass_HYPER:
   OSL_ASSERT( _rType == getLongType() );
   Ret = ::rtl::OUString::createFromAscii("long");
   break;
 
-  case staruno::TypeClass_DOUBLE:
+  case uno::TypeClass_DOUBLE:
   OSL_ASSERT( _rType == getDoubleType() );
   aRet = ::rtl::OUString::createFromAscii("double");
   break;
 
-  case staruno::TypeClass_STRING:
+  case uno::TypeClass_STRING:
   OSL_ASSERT( _rType == getStringType() );
   aRet = ::rtl::OUString::createFromAscii("string");
   break;
 
-  case staruno::TypeClass_SEQUENCE:
+  case uno::TypeClass_SEQUENCE:
   if ( _rType == getStringType() );
   aRet = ::rtl::OUString::createFromAscii("sequence");
   break;
@@ -263,9 +263,9 @@ namespace configmgr
     } // unamed namespace
 // *************************************************************************
 
-    staruno::Type toType(const ::rtl::OUString& _rType)
+    uno::Type toType(const ::rtl::OUString& _rType)
     {
-        staruno::Type aRet;
+        uno::Type aRet;
 
         if     (_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("boolean")))  aRet = getBooleanType();
 
@@ -278,7 +278,7 @@ namespace configmgr
 
         else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("string")))   aRet = getStringType();
         else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("binary")))   aRet = getBinaryType();
-//  else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("sequence"))) aRet = staruno::TypeClass_SEQUENCE;
+//  else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("sequence"))) aRet = uno::TypeClass_SEQUENCE;
 
         else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("any")))   aRet = getAnyType();
         else
@@ -290,34 +290,34 @@ namespace configmgr
 
         return aRet;
     }
-    staruno::Type toListType(const ::rtl::OUString& _rsElementType)
+    uno::Type toListType(const ::rtl::OUString& _rsElementType)
     {
-        staruno::Type aRet;
+        uno::Type aRet;
 
         if     (_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("boolean")))
-            aRet = ::getCppuType(static_cast<staruno::Sequence<sal_Bool> const*>(0));
+            aRet = ::getCppuType(static_cast<uno::Sequence<sal_Bool> const*>(0));
 
         else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("short")))
-            aRet = ::getCppuType(static_cast<staruno::Sequence<sal_Int16> const*>(0));
+            aRet = ::getCppuType(static_cast<uno::Sequence<sal_Int16> const*>(0));
 
         else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("int")))
-            aRet = ::getCppuType(static_cast<staruno::Sequence<sal_Int32> const*>(0));
+            aRet = ::getCppuType(static_cast<uno::Sequence<sal_Int32> const*>(0));
         else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("integer")))
-            aRet = ::getCppuType(static_cast<staruno::Sequence<sal_Int32> const*>(0));
+            aRet = ::getCppuType(static_cast<uno::Sequence<sal_Int32> const*>(0));
 
         else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("long")))
-            aRet = ::getCppuType(static_cast<staruno::Sequence<sal_Int64> const*>(0));
+            aRet = ::getCppuType(static_cast<uno::Sequence<sal_Int64> const*>(0));
 
         else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("double")))
-            aRet = ::getCppuType(static_cast<staruno::Sequence<double> const*>(0));
+            aRet = ::getCppuType(static_cast<uno::Sequence<double> const*>(0));
 
         else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("string")))
-            aRet = ::getCppuType(static_cast<staruno::Sequence<rtl::OUString> const*>(0));
+            aRet = ::getCppuType(static_cast<uno::Sequence<rtl::OUString> const*>(0));
 
         else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("binary")))
-            aRet = ::getCppuType(static_cast<staruno::Sequence<staruno::Sequence<sal_Int8> > const*>(0));
+            aRet = ::getCppuType(static_cast<uno::Sequence<uno::Sequence<sal_Int8> > const*>(0));
 
-//  else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("sequence"))) aRet = staruno::TypeClass_SEQUENCE;
+//  else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("sequence"))) aRet = uno::TypeClass_SEQUENCE;
         else
         {
             ::rtl::OString aStr("Unknown type! ");
@@ -328,15 +328,15 @@ namespace configmgr
         return aRet;
     }
 
-    staruno::Type getSequenceElementType(staruno::Type const& rSequenceType)
+    uno::Type getSequenceElementType(uno::Type const& rSequenceType)
     {
-        OSL_ENSHURE(rSequenceType.getTypeClass() == staruno::TypeClass_SEQUENCE,
+        OSL_ENSHURE(rSequenceType.getTypeClass() == uno::TypeClass_SEQUENCE,
                     "getSequenceElementType() must be called with a  sequence type");
 
-        if (!(rSequenceType.getTypeClass() == staruno::TypeClass_SEQUENCE))
-            return staruno::Type();
+        if (!(rSequenceType.getTypeClass() == uno::TypeClass_SEQUENCE))
+            return uno::Type();
 
-        staruno::TypeDescription aTD(rSequenceType);
+        uno::TypeDescription aTD(rSequenceType);
         typelib_IndirectTypeDescription* pSequenceTD =
             reinterpret_cast< typelib_IndirectTypeDescription* >(aTD.get());
 
@@ -350,18 +350,18 @@ namespace configmgr
             // a decimal number
 
 #if ( SUPD >= 601 )
-            return staruno::Type(pSequenceTD->pType);
+            return uno::Type(pSequenceTD->pType);
 #else
             OSL_ASSERT(pSequenceTD->pType);
-            return staruno::Type(pSequenceTD->pType->pWeakRef);
+            return uno::Type(pSequenceTD->pType->pWeakRef);
 #endif
         } //if
 
-        return staruno::Type();
+        return uno::Type();
     }
-    staruno::Type getBasicType(staruno::Type const& rType, bool& bSequence)
+    uno::Type getBasicType(uno::Type const& rType, bool& bSequence)
     {
-        bSequence = rType.getTypeClass() == staruno::TypeClass_SEQUENCE &&
+        bSequence = rType.getTypeClass() == uno::TypeClass_SEQUENCE &&
                     rType != getBinaryType();
 
         if (!bSequence)

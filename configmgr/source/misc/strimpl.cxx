@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2000-10-16 11:33:01 $
+ *  last change: $Author: lla $ $Date: 2000-11-03 08:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ namespace configmgr
     IMPLEMENT_CONSTASCII_USTRING(ATTR_TYPE,     "cfg:type");
 
     IMPLEMENT_CONSTASCII_USTRING(ATTR_GROUP,    "group");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_DERIVED,  "derived");
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_DERIVED,  "cfg:derivedBy");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_INSTANCE, "cfg:element-type");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_ENCODING, "encoding");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_MODE,     "mode");
@@ -110,6 +110,12 @@ namespace configmgr
     IMPLEMENT_CONSTASCII_USTRING(ATTR_DERIVED_LIST, "list");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_VALUE_ADD,    "add");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_VALUE_REMOVE, "remove");
+
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_LANG, "xml:lang");
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_LOCALIZE, "cfg:localized");
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_SEPARATOR, "cfg:separator");
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_NULL,      "xsi:null");
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_NULLABLE,  "cfg:nullable");
 
     // Parameter
     IMPLEMENT_CONSTASCII_USTRING(PARAM_OBJECT, "Object");

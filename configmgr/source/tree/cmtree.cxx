@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-27 15:03:05 $
+ *  last change: $Author: lla $ $Date: 2000-11-03 08:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -905,7 +905,7 @@ namespace configmgr
     }
 
 
-    void Tree::updateTree( TreeChangeList& aTree) throw (starlang::WrappedTargetException, uno::RuntimeException)
+    void Tree::updateTree( TreeChangeList& aTree) throw (lang::WrappedTargetException, uno::RuntimeException)
     {
         ConfigurationName aSubtreeName(aTree.pathToRoot, aTree.root.getNodeName());
         ISubtree *pSubtree = NULL;
@@ -916,9 +916,9 @@ namespace configmgr
         }
         catch(container::NoSuchElementException&e)
         {
-            starlang::WrappedTargetException aError;
+            lang::WrappedTargetException aError;
             aError.TargetException <<= e;
-            throw starlang::WrappedTargetException(aError);
+            throw lang::WrappedTargetException(aError);
         }
 
 #ifdef DEBUG
