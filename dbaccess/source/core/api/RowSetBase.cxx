@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-05 14:10:09 $
+ *  last change: $Author: obo $ $Date: 2002-12-10 12:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,12 +831,16 @@ sal_Bool SAL_CALL ORowSetBase::move(    ::std::mem_fun_t<sal_Bool,ORowSetBase>& 
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
 {
-    return move(::std::mem_fun(&ORowSetBase::isOnFirst),::std::mem_fun(&ORowSetCache::first));
+    ::std::mem_fun_t<sal_Bool,ORowSetBase> ioF_tmp(&ORowSetBase::isOnFirst);
+    ::std::mem_fun_t<sal_Bool,ORowSetCache> F_tmp(&ORowSetCache::first);
+    return move(ioF_tmp,F_tmp);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
 {
-    return move(::std::mem_fun(&ORowSetBase::isOnLast),::std::mem_fun(&ORowSetCache::last));
+    ::std::mem_fun_t<sal_Bool,ORowSetBase> ioL_tmp(&ORowSetBase::isOnLast);
+    ::std::mem_fun_t<sal_Bool,ORowSetCache> L_tmp(&ORowSetCache::last);
+    return move(ioL_tmp,L_tmp);
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ORowSetBase::getRow(  ) throw(SQLException, RuntimeException)
