@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-04-19 12:51:22 $
+ *  last change: $Author: gt $ $Date: 2002-08-07 14:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,12 +227,16 @@ class SvxRubyDialog : public SfxModelessDialog
             aApplyPB.Enable(bEnable);
         }
 
-        void    GetCurrentText(String& rBase, String& rRuby);
+    void                GetCurrentText(String& rBase, String& rRuby);
+
+    void                UpdateColors( void );
+protected:
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 public:
 
                         SvxRubyDialog( SfxBindings *pBindings, SfxChildWindow *pCW,
                                     Window* pParent, const ResId& rResId );
-                        ~SvxRubyDialog();
+    virtual             ~SvxRubyDialog();
 
     virtual void        Activate();
     virtual void        Deactivate();
