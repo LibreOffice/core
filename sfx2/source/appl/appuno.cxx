@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
+ *  last change: $Author: as $ $Date: 2000-12-06 12:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             static const String sHidden         = String::CreateFromAscii( "Hidden"         );
             static const String sPreview        = String::CreateFromAscii( "Preview"        );
             static const String sSilent         = String::CreateFromAscii( "Silent"         );
+            static const String sJumpMark       = String::CreateFromAscii( "JumpMark"       );
 
             if ( aName == sInputStream && rProp.Value.getValueType() == ::getCppuType( (Reference < XInputStream >*)0 ) )
                 rSet.Put( SfxUsrAnyItem( SID_INPUTSTREAM, rProp.Value ) );
@@ -296,6 +297,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 
             else if ( aName == sTemplateRegionName && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
                 rSet.Put( SfxStringItem( SID_TEMPLATE_REGIONNAME, *((::rtl::OUString*)rProp.Value.getValue()) ) );
+
+            else if ( aName == sJumpMark && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                rSet.Put( SfxStringItem( SID_JUMPMARK, *((::rtl::OUString*)rProp.Value.getValue()) ) );
 
             else if ( aName == sPostData && rProp.Value.getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence<sal_Int8>*)0) )
             {
@@ -382,6 +386,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             nItems++;
         if ( rSet.GetItemState( SID_SILENT ) == SFX_ITEM_SET )
             nItems++;
+        if ( rSet.GetItemState( SID_JUMPMARK ) == SFX_ITEM_SET )
+            nItems++;
     }
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> aSequ( nItems );
@@ -416,6 +422,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         static const String sHidden         = String::CreateFromAscii( "Hidden"         );
         static const String sPreview        = String::CreateFromAscii( "Preview"        );
         static const String sSilent         = String::CreateFromAscii( "Silent"         );
+        static const String sJumpMark       = String::CreateFromAscii( "JumpMark"       );
 
         const SfxPoolItem *pItem=0;
         if ( rSet.GetItemState( SID_INPUTSTREAM, sal_False, &pItem ) == SFX_ITEM_SET )
@@ -486,6 +493,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         if ( rSet.GetItemState( SID_TEMPLATE_REGIONNAME, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             pValue[nItems].Name = sTemplateRegionName;
+            pValue[nItems++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
+        }
+        if ( rSet.GetItemState( SID_JUMPMARK, sal_False, &pItem ) == SFX_ITEM_SET )
+        {
+            pValue[nItems].Name = sJumpMark;
             pValue[nItems++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
         }
 
