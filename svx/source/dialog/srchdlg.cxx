@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-04 11:56:43 $
+ *  last change: $Author: pb $ $Date: 2002-06-24 08:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,105 +361,124 @@ void SvxJSearchOptionsDialog::SetTransliterationFlags( INT32 nSettings )
     pPage->SetTransliterationFlags( nSettings );
 }
 
+#ifdef INI_LIST
+#undef INI_LIST
+#endif
+#define INI_LIST() \
+    aSearchText     ( this, ResId( FT_SEARCH ) ),                           \
+    aSearchLB       ( this, ResId( ED_SEARCH ) ),                           \
+    aSearchTmplLB   ( this, ResId( LB_SEARCH ) ),                           \
+    aSearchAttrText ( this, ResId( FT_SEARCH_ATTR ) ),                      \
+    aReplaceText    ( this, ResId( FT_REPLACE ) ),                          \
+    aReplaceLB      ( this, ResId( ED_REPLACE ) ),                          \
+    aReplaceTmplLB  ( this, ResId( LB_REPLACE ) ),                          \
+    aReplaceAttrText( this, ResId( FT_REPLACE_ATTR ) ),                     \
+    aSearchAllBtn   ( this, ResId( BTN_SEARCH_ALL ) ),                      \
+    aSearchBtn      ( this, ResId( BTN_SEARCH ) ),                          \
+    aReplaceAllBtn  ( this, ResId( BTN_REPLACE_ALL ) ),                     \
+    aReplaceBtn     ( this, ResId( BTN_REPLACE ) ),                         \
+    aAttributeBtn   ( this, ResId( BTN_ATTRIBUTE ) ),                       \
+    aCloseBtn       ( this, ResId( BTN_CLOSE ) ),                           \
+    aFormatBtn      ( this, ResId( BTN_FORMAT ) ),                          \
+    aHelpBtn        ( this, ResId( BTN_HELP ) ),                            \
+    aNoFormatBtn    ( this, ResId( BTN_NOFORMAT ) ),                        \
+    pMoreBtn        ( new MoreButton( this, ResId( BTN_MORE ) ) ),          \
+    aWordBtn        ( this, ResId( BTN_CELLS ) ),                           \
+    aMatchCaseCB    ( this, ResId( CB_MATCH_CASE ) ),                       \
+    aBackwardsBtn   ( this, ResId( BTN_BACKWARDS ) ),                       \
+    aSelectionBtn   ( this, ResId( BTN_SELECTIONS ) ),                      \
+    aRegExpBtn      ( this, ResId( BTN_REGEXP ) ),                          \
+    aLayoutBtn      ( this, ResId( BTN_LAYOUTS ) ),                         \
+    aSimilarityBox  ( this, ResId( CB_SIMILARITY) ),                        \
+    aSimilarityBtn  ( this, ResId( PB_SIMILARITY) ),                        \
+    aJapMatchFullHalfWidthCB( this, ResId( CB_JAP_MATCH_FULL_HALF_WIDTH ) ),\
+    aJapOptionsCB   ( this, ResId( CB_JAP_SOUNDS_LIKE ) ),                  \
+    aJapOptionsBtn  ( this, ResId( PB_JAP_OPTIONS ) ),                      \
+    aOptionsFL      ( this, ResId( FL_OPTIONS ) ),                          \
+    aFormulasBtn    ( this, ResId( BTN_FORMULAS ) ),                        \
+    aValuesBtn      ( this, ResId( BTN_VALUES ) ),                          \
+    aNotesBtn       ( this, ResId( BTN_NOTES ) ),                           \
+    aSearchFL       ( this, ResId( FL_SEARCH ) ),                           \
+    aSearchVertFL   ( this, ResId( FL_SEARCH_VERT ) ),                      \
+    aRowsBtn        ( this, ResId( BTN_ROWS ) ),                            \
+    aColumnsBtn     ( this, ResId( BTN_COLUMNS ) ),                         \
+    aSearchDirFL    ( this, ResId( FL_SEARCHDIR ) ),                        \
+    aSearchDirVertFL( this, ResId( FL_SEARCHDIR_VERT ) ),                   \
+    aAllTablesCB    ( this, ResId( CB_ALLTABLES ) ),                        \
+    aCalcExtrasFL   ( this, ResId( FL_CALCEXTRAS ) ),                       \
+    aCalcStr        (       ResId( STR_WORDCALC ) ),                        \
+    rBindings       ( rBind ),                                              \
+    bWriter         ( FALSE ),                                              \
+    bSearch         ( TRUE ),                                               \
+    bFormat         ( FALSE ),                                              \
+    nOptions        ( USHRT_MAX ),                                          \
+    bSet            ( FALSE ),                                              \
+    bReadOnly       ( FALSE ),                                              \
+    bConstruct      ( TRUE ),                                               \
+    nModifyFlag     ( 0 ),                                                  \
+    pImpl           ( NULL ),                                               \
+    pSearchList     ( NULL ),                                               \
+    pReplaceList    ( NULL ),                                               \
+    pSearchItem     ( NULL ),                                               \
+    pSearchController       ( NULL ),                                       \
+    pOptionsController      ( NULL ),                                       \
+    pFamilyController       ( NULL ),                                       \
+    pSearchSetController    ( NULL ),                                       \
+    pReplaceSetController   ( NULL ),                                       \
+    nTransliterationFlags   ( 0x00000000 )
 
 // class SvxSearchDialog -------------------------------------------------
 
 SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
 
-    ModelessDialog( pParent, SVX_RES( RID_SVXDLG_SEARCH ) ),
+    SfxModelessDialog( &rBind, NULL, pParent, SVX_RES( RID_SVXDLG_SEARCH ) ),
 
-    aSearchText     ( this, ResId( FT_SEARCH ) ),
-    aSearchLB       ( this, ResId( ED_SEARCH ) ),
-    aSearchTmplLB   ( this, ResId( LB_SEARCH ) ),
-    aSearchAttrText ( this, ResId( FT_SEARCH_ATTR ) ),
-#if SUPD < 641 || defined( GT_DEBUG )
-    aSearchFormatsED( this, ResId( ED_SEARCH_FORMATS ) ),
-#endif
-
-    aReplaceText    ( this, ResId( FT_REPLACE ) ),
-    aReplaceLB      ( this, ResId( ED_REPLACE ) ),
-    aReplaceTmplLB  ( this, ResId( LB_REPLACE ) ),
-    aReplaceAttrText( this, ResId( FT_REPLACE_ATTR ) ),
-#if SUPD < 641 || defined( GT_DEBUG )
-    aReplaceFormatsED( this, ResId( ED_REPLACE_FORMATS ) ),
-#endif
-
-    aSearchAllBtn   ( this, ResId( BTN_SEARCH_ALL ) ),
-    aSearchBtn      ( this, ResId( BTN_SEARCH ) ),
-    aReplaceAllBtn  ( this, ResId( BTN_REPLACE_ALL ) ),
-    aReplaceBtn     ( this, ResId( BTN_REPLACE ) ),
-    aAttributeBtn   ( this, ResId( BTN_ATTRIBUTE ) ),
-    aCloseBtn       ( this, ResId( BTN_CLOSE ) ),
-    aFormatBtn      ( this, ResId( BTN_FORMAT ) ),
-    aHelpBtn        ( this, ResId( BTN_HELP ) ),
-    aNoFormatBtn    ( this, ResId( BTN_NOFORMAT ) ),
-    pMoreBtn        ( new MoreButton( this, ResId( BTN_MORE ) ) ),
-
-    aWordBtn        ( this, ResId( BTN_CELLS ) ),
-    aMatchCaseCB    ( this, ResId( CB_MATCH_CASE ) ),
-    aBackwardsBtn   ( this, ResId( BTN_BACKWARDS ) ),
-    aSelectionBtn   ( this, ResId( BTN_SELECTIONS ) ),
-    aRegExpBtn      ( this, ResId( BTN_REGEXP ) ),
-    aLayoutBtn      ( this, ResId( BTN_LAYOUTS ) ),
-    aSimilarityBox  ( this, ResId( CB_SIMILARITY) ),
-    aSimilarityBtn  ( this, ResId( PB_SIMILARITY) ),
-    aJapMatchFullHalfWidthCB( this, ResId( CB_JAP_MATCH_FULL_HALF_WIDTH ) ),
-    aJapOptionsCB   ( this, ResId( CB_JAP_SOUNDS_LIKE ) ),
-    aJapOptionsBtn  ( this, ResId( PB_JAP_OPTIONS ) ),
-    aOptionsFL      ( this, ResId( FL_OPTIONS ) ),
-
-    aFormulasBtn    ( this, ResId( BTN_FORMULAS ) ),
-    aValuesBtn      ( this, ResId( BTN_VALUES ) ),
-    aNotesBtn       ( this, ResId( BTN_NOTES ) ),
-    aSearchFL       ( this, ResId( FL_SEARCH ) ),
-    aSearchVertFL   ( this, ResId( FL_SEARCH_VERT ) ),
-
-    aRowsBtn        ( this, ResId( BTN_ROWS ) ),
-    aColumnsBtn     ( this, ResId( BTN_COLUMNS ) ),
-    aSearchDirFL    ( this, ResId( FL_SEARCHDIR ) ),
-    aSearchDirVertFL ( this, ResId( FL_SEARCHDIR_VERT ) ),
-
-    aAllTablesCB    ( this, ResId( CB_ALLTABLES ) ),
-    aCalcExtrasFL   ( this, ResId( FL_CALCEXTRAS ) ),
-
-    aCalcStr        (       ResId( STR_WORDCALC ) ),
-
-    rBindings       ( rBind ),
-    bWriter         ( FALSE ),
-    bSearch         ( TRUE ),
-    bFormat         ( FALSE ),
-    nOptions        ( USHRT_MAX ),
-    bSet            ( FALSE ),
-    bReadOnly       ( FALSE ),
-    bConstruct      ( TRUE ),
-    nModifyFlag     ( 0 ),
-
-    pImpl           ( NULL ),
-    pSearchList     ( NULL ),
-    pReplaceList    ( NULL ),
-    pSearchItem     ( NULL ),
-
-    pSearchController       ( NULL ),
-    pOptionsController      ( NULL ),
-    pFamilyController       ( NULL ),
-    pSearchSetController    ( NULL ),
-    pReplaceSetController   ( NULL ),
-    nTransliterationFlags   ( 0x00000000 )
+    INI_LIST()
 
 {
-    // temporary to avoid incompatibility
-#if SUPD < 641 || defined( GT_DEBUG )
-    aSearchFormatsED.Hide();
-    aReplaceFormatsED.Hide();
+    Construct_Impl();
+}
 
-    Wallpaper aBackground = GetBackground();
-    aSearchFormatsED.SetBackground( aBackground );
-    aReplaceFormatsED.SetBackground( aBackground );
-    FixedInfo* pInfo = new FixedInfo( this );
-    aSearchFormatsED.SetFont( pInfo->GetFont() );
-    aReplaceFormatsED.SetFont( pInfo->GetFont() );
-    delete pInfo;
-#endif
+// -----------------------------------------------------------------------
+
+SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind ) :
+
+    SfxModelessDialog( &rBind, pChildWin, pParent, SVX_RES( RID_SVXDLG_SEARCH ) ),
+
+    INI_LIST()
+
+{
+    Construct_Impl();
+}
+
+#undef INI_LIST
+
+// -----------------------------------------------------------------------
+
+SvxSearchDialog::~SvxSearchDialog()
+{
+    Hide();
+
+    rBindings.EnterRegistrations();
+    delete pSearchController;
+    delete pOptionsController;
+    delete pFamilyController;
+    delete pSearchSetController;
+    delete pReplaceSetController;
+    rBindings.LeaveRegistrations();
+
+    delete pSearchItem;
+    delete pImpl;
+    delete pSearchList;
+    delete pReplaceList;
+    delete pMoreBtn;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxSearchDialog::Construct_Impl()
+{
+    // temporary to avoid incompatibility
     pImpl = new SearchDlg_Impl( this );
     pImpl->aSelectionTimer.SetTimeout( 500 );
     pImpl->aSelectionTimer.SetTimeoutHdl(
@@ -467,16 +486,6 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
 
     EnableControls_Impl( 0 );
 
-#ifdef OS2
-#if SUPD < 641 || defined( GT_DEBUG )
-    aSearchFormatsED.Hide();
-#endif
-    aSearchAttrText.Show();
-#if SUPD < 641 || defined( GT_DEBUG )
-    aReplaceFormatsED.Hide();
-#endif
-    aReplaceAttrText.Show();
-#endif
     // alten Text des aWordBtn's merken
     ( aCalcStr += sal_Unicode('#') ) += aWordBtn.GetText();
 
@@ -542,27 +551,6 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
 
 // -----------------------------------------------------------------------
 
-SvxSearchDialog::~SvxSearchDialog()
-{
-    Hide();
-
-    rBindings.EnterRegistrations();
-    delete pSearchController;
-    delete pOptionsController;
-    delete pFamilyController;
-    delete pSearchSetController;
-    delete pReplaceSetController;
-    rBindings.LeaveRegistrations();
-
-    delete pSearchItem;
-    delete pImpl;
-    delete pSearchList;
-    delete pReplaceList;
-    delete pMoreBtn;
-}
-
-// -----------------------------------------------------------------------
-
 BOOL SvxSearchDialog::Close()
 {
     // remember strings speichern
@@ -586,6 +574,7 @@ BOOL SvxSearchDialog::Close()
     const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
     rBindings.GetDispatcher()->Execute( FID_SEARCH_OFF, SFX_CALLMODE_SLOT, ppArgs );
     rBindings.Execute( SID_SEARCH_DLG );
+
     return TRUE;
 }
 
@@ -692,8 +681,6 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
     DBG_ASSERT( pSearchItem, "SearchItem == 0" );
     bWriter = ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_WRITER );
 
-#ifndef OS2
-    // bei VCL kein MultiLineEdit mehr fuer die Format-Texte
     pImpl->bMultiLineEdit = FALSE;
 
     if ( !pImpl->bMultiLineEdit )
@@ -718,7 +705,6 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
             pImpl->aReplaceFormats.SetText( aText );
         pImpl->aReplaceFormats.Show();
     }
-#endif
 
     if ( ( nModifyFlag & MODIFY_WORD ) == 0 )
          aWordBtn.Check( pSearchItem->GetWordOnly() );
@@ -2187,10 +2173,9 @@ SvxSearchDialogWrapper::SvxSearchDialogWrapper( Window* pParent, USHORT nId,
     SfxChildWindow( pParent, nId )
 
 {
-    pWindow = new SvxSearchDialog( pParent, *pBindings );
+    pWindow = new SvxSearchDialog( pParent, this, *pBindings );
+    ( (SvxSearchDialog*)pWindow )->Initialize( pInfo );
 
-    if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 )
-        pWindow->SetPosPixel( pInfo->aPos );
     pBindings->Update( SID_SEARCH_ITEM );
     pBindings->Update( SID_SEARCH_OPTIONS );
     pBindings->Update( SID_SEARCH_SEARCHSET );
@@ -2203,7 +2188,8 @@ SvxSearchDialogWrapper::SvxSearchDialogWrapper( Window* pParent, USHORT nId,
 
 SfxChildWinInfo SvxSearchDialogWrapper::GetInfo() const
 {
-    return SfxChildWindow::GetInfo();
+    SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
+    aInfo.bVisible = sal_False;
+    return aInfo;
 }
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-04 11:17:11 $
+ *  last change: $Author: pb $ $Date: 2002-06-24 08:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,14 +182,15 @@ public:
     <SvxSearchItem><SID_ATTR_SEARCH>
 */
 
-class SvxSearchDialog : public ModelessDialog
+class SvxSearchDialog : public SfxModelessDialog
 {
-    friend class SvxSearchController;
-    friend class SvxSearchDialogWrapper;
-    friend class SvxJSearchOptionsDialog;
+friend class SvxSearchController;
+friend class SvxSearchDialogWrapper;
+friend class SvxJSearchOptionsDialog;
 
 public:
     SvxSearchDialog( Window* pParent, SfxBindings& rBind );
+    SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind );
     ~SvxSearchDialog();
 
     virtual BOOL    Close();
@@ -310,6 +311,7 @@ private:
     DECL_LINK( AttributeHdl_Impl, Button* );
     DECL_LINK( TimeoutHdl_Impl, Timer* );
 
+    void            Construct_Impl();
     void            InitControls_Impl();
     void            Init_Impl( int bHasItemSet );
     void            InitAttrList_Impl( const SfxItemSet* pSSet,
