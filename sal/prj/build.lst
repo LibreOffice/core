@@ -4,12 +4,9 @@ sa	sal\cpprt								nmake	-	u	sa_cpprt sa_util NULL
 sa	sal\systools\macxp_extras\x11osx			nmake	-	u	sa_mxpext_x11osx NULL
 sa	sal\rtl\source							nmake	-	all	sa_rtl NULL
 sa	sal\textenc								nmake	-	all	sa_textenc NULL
-sa	sal\osl\w16								nmake	-	d	sa_osld NULL
 sa	sal\systools\win32\uwinapi				nmake	-	n	sa_uwinapi NULL
 sa	sal\systools\win32\guistdio				nmake	-	n	sa_guistdio sa_uwinapi.n NULL
 sa	sal\osl\w32								nmake	-	n	sa_osln NULL
-sa	sal\osl\os2								nmake	-	p	sa_oslp NULL
 sa	sal\osl\unx								nmake	-	u	sa_oslu NULL
-sa	sal\osl\mac								nmake	-	m	sa_oslm NULL
 sa	sal\osl\all								nmake	-	all	sa_oslall NULL
-sa	sal\util								nmake	-	all	sa_util sa_oslall sa_osld.d sa_oslm.m sa_uwinapi.n sa_guistdio.n sa_osln.n sa_oslp.p sa_oslu.u sa_rtl  sa_textenc  NULL
+sa	sal\util								nmake	-	all	sa_util sa_oslall sa_uwinapi.n sa_guistdio.n sa_osln.n sa_oslu.u sa_rtl sa_textenc NULL
