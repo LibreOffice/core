@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangelst.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-24 14:44:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "core_pch.hxx"
 #endif
@@ -102,7 +101,7 @@ USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask )
         USHORT nResult = (USHORT)~0;    // alle Bits setzen
         ScRange aRange;
         String aOne;
-        USHORT nTab = 0;
+        SCTAB nTab = 0;
         if ( pDoc )
         {
             //! erste markierte Tabelle gibts nicht mehr am Dokument
@@ -155,12 +154,12 @@ void ScRangeList::Join( const ScRange& r, BOOL bIsInList )
         Append( r );
         return ;
     }
-    USHORT nCol1 = r.aStart.Col();
-    USHORT nRow1 = r.aStart.Row();
-    USHORT nTab1 = r.aStart.Tab();
-    USHORT nCol2 = r.aEnd.Col();
-    USHORT nRow2 = r.aEnd.Row();
-    USHORT nTab2 = r.aEnd.Tab();
+    SCCOL nCol1 = r.aStart.Col();
+    SCROW nRow1 = r.aStart.Row();
+    SCTAB nTab1 = r.aStart.Tab();
+    SCCOL nCol2 = r.aEnd.Col();
+    SCROW nRow2 = r.aEnd.Row();
+    SCTAB nTab2 = r.aEnd.Tab();
     ScRangePtr pOver = (ScRangePtr) &r;     // fies aber wahr wenn bInList
     ULONG nOldPos;
     if ( bIsInList )
@@ -260,6 +259,8 @@ BOOL ScRangeList::Store( SvStream& rStream ) const
     ULONG nCount = Count();
     ULONG nBytes = sizeof(UINT32) + nCount * sizeof(ScRange);
     ScWriteHeader aHdr( rStream, nBytes );
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStream << (UINT32) nCount;
     for ( ULONG j = 0; j < nCount && bOk; j++ )
     {
@@ -268,6 +269,9 @@ BOOL ScRangeList::Store( SvStream& rStream ) const
             bOk = FALSE;
     }
     return bOk;
+#else
+    return FALSE;
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 
@@ -275,6 +279,8 @@ BOOL ScRangeList::Load( SvStream& rStream, USHORT nVer )
 {
     BOOL bOk = TRUE;
     ScReadHeader aHdr( rStream );
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     ScRange aRange;
     UINT32 n;
     rStream >> n;
@@ -287,21 +293,34 @@ BOOL ScRangeList::Load( SvStream& rStream, USHORT nVer )
             bOk = FALSE;
     }
     return bOk;
+#else
+    return FALSE;
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 
 BOOL ScRangeList::UpdateReference( UpdateRefMode eUpdateRefMode,
                                     ScDocument* pDoc, const ScRange& rWhere,
-                                    short nDx, short nDy, short nDz )
+                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     BOOL bChanged = FALSE;
     if ( Count() )
     {
-        USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+        SCCOL nCol1;
+        SCROW nRow1;
+        SCTAB nTab1;
+        SCCOL nCol2;
+        SCROW nRow2;
+        SCTAB nTab2;
         rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         for ( ScRange* pR = First(); pR; pR = Next() )
         {
-            USHORT theCol1, theRow1, theTab1, theCol2, theRow2, theTab2;
+            SCCOL theCol1;
+            SCROW theRow1;
+            SCTAB theTab1;
+            SCCOL theCol2;
+            SCROW theRow2;
+            SCTAB theTab2;
             pR->GetVars( theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 );
             if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
                     nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
@@ -426,12 +445,12 @@ void ScRangePairList::Join( const ScRangePair& r, BOOL bIsInList )
     }
     const ScRange& r1 = r.GetRange(0);
     const ScRange& r2 = r.GetRange(1);
-    USHORT nCol1 = r1.aStart.Col();
-    USHORT nRow1 = r1.aStart.Row();
-    USHORT nTab1 = r1.aStart.Tab();
-    USHORT nCol2 = r1.aEnd.Col();
-    USHORT nRow2 = r1.aEnd.Row();
-    USHORT nTab2 = r1.aEnd.Tab();
+    SCCOL nCol1 = r1.aStart.Col();
+    SCROW nRow1 = r1.aStart.Row();
+    SCTAB nTab1 = r1.aStart.Tab();
+    SCCOL nCol2 = r1.aEnd.Col();
+    SCROW nRow2 = r1.aEnd.Row();
+    SCTAB nTab2 = r1.aEnd.Tab();
     ScRangePair* pOver = (ScRangePair*) &r;     // fies aber wahr wenn bInList
     ULONG nOldPos;
     if ( bIsInList )
@@ -549,6 +568,8 @@ BOOL ScRangePairList::Store( SvStream& rStream ) const
     BOOL bOk = TRUE;
     ULONG nCount = Count();
     ULONG nBytes = sizeof(UINT32) + nCount * sizeof(ScRangePair);
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     ScWriteHeader aHdr( rStream, nBytes );
     rStream << (UINT32) nCount;
     for ( ULONG j = 0; j < nCount && bOk; j++ )
@@ -558,6 +579,9 @@ BOOL ScRangePairList::Store( SvStream& rStream ) const
             bOk = FALSE;
     }
     return bOk;
+#else
+    return FALSE;
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 
@@ -565,6 +589,8 @@ BOOL ScRangePairList::Load( SvStream& rStream, USHORT nVer )
 {
     BOOL bOk = TRUE;
     ScReadHeader aHdr( rStream );
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     ScRangePair aRangePair;
     ScRange aRange;
     UINT32 n;
@@ -578,16 +604,17 @@ BOOL ScRangePairList::Load( SvStream& rStream, USHORT nVer )
             aRangePair.GetRange(0) = aRange;
             ScRange& r = aRangePair.GetRange(1);
             r = aRange;
-            USHORT nCol2 = aRange.aEnd.Col();
-            USHORT nRow2 = aRange.aEnd.Row();
-            if ( nCol2 - aRange.aStart.Col() >= nRow2 - aRange.aStart.Row() )
+            SCCOL nCol2 = aRange.aEnd.Col();
+            SCROW nRow2 = aRange.aEnd.Row();
+            if ( static_cast<SCCOLROW>(nCol2 - aRange.aStart.Col()) >=
+                    (nRow2 - aRange.aStart.Row()) )
             {   // ColNames
-                r.aStart.SetRow( (USHORT) Min( (ULONG)nRow2 + 1, (ULONG)MAXROW ) );
+                r.aStart.SetRow( Min( static_cast<SCROW>(nRow2 + 1), MAXROW ) );
                 r.aEnd.SetRow( MAXROW );
             }
             else
             {   // RowNames
-                r.aStart.SetCol( (USHORT) Min( (ULONG)(nCol2 + 1), (ULONG)MAXCOL ) );
+                r.aStart.SetCol( Min( static_cast<SCCOL>(nCol2 + 1), MAXCOL ) );
                 r.aEnd.SetCol( MAXCOL );
             }
         }
@@ -598,24 +625,37 @@ BOOL ScRangePairList::Load( SvStream& rStream, USHORT nVer )
             bOk = FALSE;
     }
     return bOk;
+#else
+    return FALSE;
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 
 BOOL ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
                                     ScDocument* pDoc, const ScRange& rWhere,
-                                    short nDx, short nDy, short nDz )
+                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     BOOL bChanged = FALSE;
     if ( Count() )
     {
-        USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+        SCCOL nCol1;
+        SCROW nRow1;
+        SCTAB nTab1;
+        SCCOL nCol2;
+        SCROW nRow2;
+        SCTAB nTab2;
         rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         for ( ScRangePair* pR = First(); pR; pR = Next() )
         {
             for ( USHORT j=0; j<2; j++ )
             {
                 ScRange& rRange = pR->GetRange(j);
-                USHORT theCol1, theRow1, theTab1, theCol2, theRow2, theTab2;
+                SCCOL theCol1;
+                SCROW theRow1;
+                SCTAB theTab1;
+                SCCOL theCol2;
+                SCROW theRow2;
+                SCTAB theTab2;
                 rRange.GetVars( theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 );
                 if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
                         nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
