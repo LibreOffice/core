@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animexp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-29 15:36:20 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,8 +362,9 @@ void XMLAnimationsExporter::prepare( Reference< XShape > xShape )
             {
                 Reference< XShape > xPath;
                 xProps->getPropertyValue( mpImpl->msAnimPath ) >>= xPath;
-                if( xPath.is() )
-                    mpImpl->mxShapeExp->createShapeId( xPath );
+// strip        if( xPath.is() )
+// strip            mrExport.getInterfaceToIdentifierMapper()->registerReference( xShape );
+// strip            mpImpl->mxShapeExp->createShapeId( xPath );
             }
         }
     }
@@ -409,8 +410,8 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape )
             {
                 aEffect.meKind = XMLE_PLAY;
 
-                mpImpl->mxShapeExp->createShapeId( xShape );
-                aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
+// strip        mpImpl->mxShapeExp->createShapeId( xShape );
+// strip        aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
 
                 mpImpl->maEffects.push_back( aEffect );
             }
@@ -425,8 +426,8 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape )
 
                     aEffect.meKind = bIn ? XMLE_SHOW : XMLE_HIDE;
 
-                    mpImpl->mxShapeExp->createShapeId( xShape );
-                    aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
+// strip            mpImpl->mxShapeExp->createShapeId( xShape );
+// strip            aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
 
                     if( eEffect == AnimationEffect_PATH )
                     {
@@ -434,8 +435,8 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape )
                         xProps->getPropertyValue( mpImpl->msAnimPath ) >>= xPath;
                         if( xPath.is() )
                         {
-                            mpImpl->mxShapeExp->createShapeId( xPath );
-                            aEffect.mnPathShapeId = mpImpl->mxShapeExp->getShapeId( xPath );
+// strip                    mpImpl->mxShapeExp->createShapeId( xPath );
+// strip                    aEffect.mnPathShapeId = mpImpl->mxShapeExp->getShapeId( xPath );
                         }
                     }
                     mpImpl->maEffects.push_back( aEffect );
@@ -454,8 +455,8 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape )
 
                     if( aEffect.mnShapeId == -1 )
                     {
-                        mpImpl->mxShapeExp->createShapeId( xShape );
-                        aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
+// strip                mpImpl->mxShapeExp->createShapeId( xShape );
+// strip                aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
                     }
 
                     mpImpl->maEffects.push_back( aEffect );
@@ -482,8 +483,8 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape )
 
                     if( aEffect.mnShapeId == -1 )
                     {
-                        mpImpl->mxShapeExp->createShapeId( xShape );
-                        aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
+// strip                mpImpl->mxShapeExp->createShapeId( xShape );
+// strip                aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
                     }
 
                     mpImpl->maEffects.push_back( aEffect );
