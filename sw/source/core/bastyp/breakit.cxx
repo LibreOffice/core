@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakit.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:41:31 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,7 @@
  *
  ************************************************************************/
 
-
-#pragma hdrstop
+#include "breakit.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -68,12 +67,11 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
+
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
+
 #ifndef _SVX_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
@@ -81,68 +79,90 @@
 #include <svx/scripttypeitem.hxx>
 #endif
 
-#ifndef _BREAKIT_HXX
-#include <breakit.hxx>
-#endif
-#ifndef _VIEWSH_HXX
-#include <viewsh.hxx>
+#ifndef _SWTYPES_HXX
+#include "swtypes.hxx"
 #endif
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::i18n;
+namespace css = com::sun::star;
 
+SwBreakIt * pBreakIt = 0;
 
-SwBreakIt::SwBreakIt()
-    : pLocale( NULL ), pForbidden( NULL )
+void SwBreakIt::_Create(
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & rxMSF)
 {
-    _GetLocale( (LanguageType)GetAppLanguage() );
-    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    Reference < XInterface > xI = xMSF->createInstance(
-        ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
-    if ( xI.is() )
+    delete pBreakIt, pBreakIt = new SwBreakIt( rxMSF );
+}
+
+void SwBreakIt::_Delete()
+{
+    delete pBreakIt, pBreakIt = 0;
+}
+
+SwBreakIt * SwBreakIt::Get()
+{
+    return pBreakIt;
+}
+
+SwBreakIt::SwBreakIt(
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & rxMSF)
+    : m_xMSF( rxMSF ),
+      m_pLocale( NULL ),
+      m_pForbidden( NULL ),
+      aLast( LANGUAGE_DONTKNOW ),
+      aForbiddenLang( LANGUAGE_DONTKNOW)
+{
+    DBG_ASSERT( m_xMSF.is(), "SwBreakIt: no MultiServiceFactory" );
+    if ( m_xMSF.is() )
     {
-        Any x = xI->queryInterface( ::getCppuType((const Reference< XBreakIterator >*)0) );
-        x >>= xBreak;
+        xBreak = css::uno::Reference< css::i18n::XBreakIterator >(
+            m_xMSF->createInstance(
+                rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),
+            css::uno::UNO_QUERY);
     }
+}
+
+SwBreakIt::~SwBreakIt()
+{
+    delete m_pLocale;
+    delete m_pForbidden;
 }
 
 void SwBreakIt::_GetLocale( const LanguageType aLang )
 {
     aLast = aLang;
-    delete pLocale;
-    pLocale = new Locale( SvxCreateLocale( aLast ) );
+    delete m_pLocale;
+    m_pLocale = new css::lang::Locale( SvxCreateLocale( aLast ) );
 }
 
 void SwBreakIt::_GetForbidden( const LanguageType aLang )
 {
+    LocaleDataWrapper aWrap( m_xMSF, GetLocale( aLang ) );
+
     aForbiddenLang = aLang;
-    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    LocaleDataWrapper aWrap( xMSF, GetLocale( aLang ) );
-    delete pForbidden;
-    pForbidden = new ForbiddenCharacters( aWrap.getForbiddenCharacters() );
+    delete m_pForbidden;
+    m_pForbidden = new css::i18n::ForbiddenCharacters( aWrap.getForbiddenCharacters() );
 }
 
 USHORT SwBreakIt::GetRealScriptOfText( const String& rTxt,
                                         xub_StrLen nPos ) const
 {
-    USHORT nScript = ScriptType::WEAK;
+    USHORT nScript = css::i18n::ScriptType::WEAK;
     if( xBreak.is() && rTxt.Len() )
     {
         if( nPos && nPos == rTxt.Len() )
             --nPos;
         nScript = xBreak->getScriptType( rTxt, nPos );
         sal_Int32 nChgPos;
-        if( ScriptType::WEAK == nScript && nPos &&
+        if( css::i18n::ScriptType::WEAK == nScript && nPos &&
             0 < (nChgPos = xBreak->beginOfScript( rTxt, nPos, nScript )) )
             nScript = xBreak->getScriptType( rTxt, nChgPos-1 );
 
-        if( ScriptType::WEAK == nScript && rTxt.Len() >
+        if( css::i18n::ScriptType::WEAK == nScript && rTxt.Len() >
             ( nChgPos = xBreak->endOfScript( rTxt, nPos, nScript ) ) &&
             0 <= nChgPos )
             nScript = xBreak->getScriptType( rTxt, nChgPos );
     }
-    if( ScriptType::WEAK == nScript )
+    if( css::i18n::ScriptType::WEAK == nScript )
         nScript = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
     return nScript;
 }
@@ -162,10 +182,10 @@ USHORT SwBreakIt::GetAllScriptsOfText( const String& rTxt ) const
         {
             switch( nScript = xBreak->getScriptType( rTxt, n ) )
             {
-            case ScriptType::LATIN:     nRet |= SCRIPTTYPE_LATIN;   break;
-            case ScriptType::ASIAN:     nRet |= SCRIPTTYPE_ASIAN;   break;
-            case ScriptType::COMPLEX:   nRet |= SCRIPTTYPE_COMPLEX; break;
-            case ScriptType::WEAK:
+            case css::i18n::ScriptType::LATIN:      nRet |= SCRIPTTYPE_LATIN;   break;
+            case css::i18n::ScriptType::ASIAN:      nRet |= SCRIPTTYPE_ASIAN;   break;
+            case css::i18n::ScriptType::COMPLEX:    nRet |= SCRIPTTYPE_COMPLEX; break;
+            case css::i18n::ScriptType::WEAK:
                     if( !nRet )
                         nRet |= coAllScripts;
                     break;
