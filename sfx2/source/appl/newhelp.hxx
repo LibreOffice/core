@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-25 07:52:58 $
+ *  last change: $Author: pb $ $Date: 2001-10-29 07:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,6 +492,9 @@ public:
                                         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > xDisp );
     void                OpenKeyword( const String& rKeyword ) { pIndexWin->OpenKeyword( rKeyword ); }
     String              GetFactory() const { return pIndexWin->GetFactory(); }
+
+    sal_Bool            HasHistoryPredecessor() const;      // forward to interceptor
+    sal_Bool            HasHistorySuccessor() const;        // forward to interceptor
 };
 
 class SfxAddHelpBookmarkDialog_Impl : public ModalDialog
