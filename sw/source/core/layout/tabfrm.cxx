@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:47:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2167,7 +2167,15 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
     BOOL bInvalidatePrtArea = FALSE;
     const SwPageFrm *pPage = FindPageFrm();
     const SwFlyFrm* pMyFly = FindFlyFrm();
-    if ( pPage->GetSortedObjs() )
+
+    // --> #108724# Page header/footer content doesn't have to wrap around
+    //              floating screen objects
+    const SwDoc* pDoc = GetFmt()->GetDoc();
+    const sal_Bool bWrapAllowed = pDoc->IsFormerTextWrapping() ||
+                                ( !IsInFtn() && 0 == FindFooterOrHeader() );
+    // <--
+
+    if ( pPage->GetSortedObjs() && bWrapAllowed )
     {
         SWRECTFN( this )
         long nPrtPos = (Frm().*fnRect->fnGetTop)();
