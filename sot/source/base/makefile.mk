@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mm $ $Date: 2001-02-07 09:59:35 $
+#   last change: $Author: svesik $ $Date: 2001-05-14 15:46:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,10 +92,6 @@ SLOFILES=                                                           \
 
 .IF "$(TF_SVDATA)"==""
 SLOFILES+=$(SLO)$/dtrans.obj
-.ENDIF
-
-.IF "$(OS)"=="NETBSD"
-SLOFILES	+= $(SLO)$/netbsd.obj
 .ENDIF
 
 EXCEPTIONSFILES=	$(SLO)$/formats.obj							
