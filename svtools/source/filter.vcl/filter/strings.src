@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:12:08 $
+ *  last change: $Author: rt $ $Date: 2001-08-08 09:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,14 @@ String EXPORT_DIALOG_TITLE
     Text [ danish ] = " Alternativer" ;
     Text [ portuguese_brazilian ] = " Optionen" ;
     Text [ portuguese ] = " Opções" ;
-    Text[ chinese_simplified ] = " Ñ¡Ïî";
+    Text[ chinese_simplified ] = " é€‰é¡¹";
     Text[ russian ] = "  Ïàğàìåòğû";
     Text[ polish ] = " Opcje";
-    Text[ japanese ] = " µÌß¼®İ";
-    Text[ chinese_traditional ] = " ¿ï¶µ";
+    Text[ japanese ] = " ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+    Text[ chinese_traditional ] = " é¸é …";
     Text[ arabic ] = " ÇáÎíÇÑÇÊ";
     Text[ greek ] = " Åğéëïãİò";
-    Text[ korean ] = " ¿É¼Ç";
+    Text[ korean ] = " ì˜µì…˜";
     Text[ turkish ] = " Seçenekler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "  Opciones";
@@ -112,5 +112,6 @@ String KEY_RLE_CODING
 {
     Text = "RLE_Coding" ;
 };
+
 
 
