@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:40:01 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_STATUS_CXX
-
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
@@ -69,7 +67,7 @@
 #endif
 
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
@@ -497,10 +495,6 @@ void StatusBar::ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL
 
 // -----------------------------------------------------------------------
 
-#ifdef _MSC_VER
-#pragma optimize( "", off )
-#endif
-
 void DrawProgress( Window* pWindow, const Point& rPos,
                    long nOffset, long nPrgsWidth, long nPrgsHeight,
                    USHORT nPercent1, USHORT nPercent2, USHORT nPercentCount )
@@ -569,10 +563,6 @@ void DrawProgress( Window* pWindow, const Point& rPos,
         pWindow->Flush();
     }
 }
-
-#ifdef _MSC_VER
-#pragma optimize( "", on )
-#endif
 
 // -----------------------------------------------------------------------
 
