@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-13 11:01:10 $
+ *  last change: $Author: cmc $ $Date: 2002-03-27 10:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,6 +746,15 @@ ULONG SwASCIIParser::ReadChars()
                         rInput.Read( pArr + nArrOffset,
                                      ASC_BUFFLEN - nArrOffset )))
                 break;      // aus der WHILE-Schleife heraus
+
+            /*
+            #98380#
+            If there was some unconverted bytes on the last cycle then they
+            were put at the beginning of the array, so total bytes available
+            to convert this cycle includes them. If we found 0 following bytes
+            then we ignore the previous partial character.
+            */
+            lGCount+=nArrOffset;
 
             if( hConverter )
             {
