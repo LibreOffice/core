@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastp1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: dr $ $Date: 2000-10-18 11:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,10 @@ XMLFamilyData_Impl::XMLFamilyData_Impl(
         sal_Int32 nFamily,
         const ::rtl::OUString& rStrName,
         const UniReference < XMLPropertySetMapper > &rMapper,
-        const OUString& rStrPrefix )
+        const OUString& rStrPrefix,
+        sal_Bool bAsFam )
     : mnFamily( nFamily ), maStrFamilyName( rStrName), mxMapper( rMapper ), maStrPrefix( rStrPrefix ),
-      mnCount( 0 ), mnName( 0 )
+      mnCount( 0 ), mnName( 0 ), bAsFamily( bAsFam )
 {
     mpParentList = new SvXMLAutoStylePoolParentsP_Impl( 5, 5 );
     mpNameList   = new SvXMLAutoStylePoolNamesP_Impl( 5, 5 );

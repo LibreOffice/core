@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: dr $ $Date: 2000-10-18 11:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,11 +115,12 @@ public:
     sal_uInt32                          mnCount;
     sal_uInt32                          mnName;
     ::rtl::OUString                     maStrPrefix;
+    sal_Bool                            bAsFamily;
 
 public:
     XMLFamilyData_Impl( sal_Int32 nFamily, const ::rtl::OUString& rStrName,
             const UniReference < XMLPropertySetMapper > &  rMapper,
-            const ::rtl::OUString& rStrPrefix );
+            const ::rtl::OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
     XMLFamilyData_Impl( sal_Int32 nFamily )
         : mnFamily( nFamily ), mpParentList( NULL ),
           mpNameList( NULL ), mnCount( 0 ), mnName( 0 )
@@ -223,8 +224,7 @@ public:
 
     void AddFamily( sal_Int32 nFamily, const ::rtl::OUString& rStrName,
         const UniReference < XMLPropertySetMapper > & rMapper,
-        const ::rtl::OUString& rStrPrefix );
-
+        const ::rtl::OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
     void RegisterName( sal_Int32 nFamily, const ::rtl::OUString& rName );
 
     ::rtl::OUString Add( sal_Int32 nFamily, const ::rtl::OUString& rParent,

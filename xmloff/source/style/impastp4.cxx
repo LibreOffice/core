@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-22 13:42:53 $
+ *  last change: $Author: dr $ $Date: 2000-10-18 11:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,11 +124,12 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
         sal_Int32 nFamily,
         const OUString& rStrName,
         const UniReference < XMLPropertySetMapper > & rMapper,
-           const OUString& rStrPrefix )
+           const OUString& rStrPrefix,
+        sal_Bool bAsFamily )
 {
     // store family in a list if not already stored
     sal_uInt32 nPos;
-    XMLFamilyData_Impl *pFamily = new XMLFamilyData_Impl( nFamily, rStrName, rMapper, rStrPrefix );
+    XMLFamilyData_Impl *pFamily = new XMLFamilyData_Impl( nFamily, rStrName, rMapper, rStrPrefix, bAsFamily );
     if( !maFamilyList.Seek_Entry( pFamily, &nPos ) )
         maFamilyList.Insert( pFamily );
     else
@@ -322,15 +323,22 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                 OUString sName( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii(sXML_name) ) );
                 mpAttrList->AddAttribute( sName, msCDATA, aExpStyles[i].mpProperties->GetName() );
 
-                sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii(sXML_family) );
-                mpAttrList->AddAttribute( sName, msCDATA, aStrFamilyName );
+                if( pFamily->bAsFamily )
+                {
+                    sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii(sXML_family) );
+                    mpAttrList->AddAttribute( sName, msCDATA, aStrFamilyName );
+                }
 
                 if( aExpStyles[i].mpParent->getLength() )
                 {
                     sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii(sXML_parent_style_name) );
                     mpAttrList->AddAttribute( sName, msCDATA, *aExpStyles[i].mpParent );
                 }
-                sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii(sXML_style) );
+
+                if( pFamily->bAsFamily )
+                    sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii(sXML_style) );
+                else
+                    sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, pFamily->maStrFamilyName );
 
                 pAntiImpl->exportStyleAttributes( *mpAttrList, nFamily,
                         aExpStyles[i].mpProperties->GetProperties(),
@@ -346,7 +354,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
 
                 pAntiImpl->exportStyleContent( rHandler, nFamily,
                         aExpStyles[i].mpProperties->GetProperties(),
-                        rUnitConverter, rNamespaceMap );
+                        rPropExp, rUnitConverter, rNamespaceMap );
 
                 rHandler->ignorableWhitespace( msWS );
                 rHandler->endElement( sName );
