@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:47:25 $
+ *  last change: $Author: oj $ $Date: 2001-03-15 13:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,12 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getTypeInfo(  ) throw(S
     aRow.push_back(ORowSetValue());
     aRow.push_back(ORowSetValue());
     aRow.push_back(ORowSetValue((sal_Int32)10));
+
+    // bound row
+    ORow::iterator aIter = aRow.begin();
+    for(;aIter != aRow.end();++aIter)
+        aIter->setBound(sal_True);
+
     aRows.push_back(aRow);
 
     aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("VARCHAR"));
@@ -231,6 +237,11 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
 
     ORows aRows;
     ORow aRow(19);
+    // bound row
+    ORow::iterator aIter = aRow.begin();
+    for(;aIter != aRow.end();++aIter)
+        aIter->setBound(sal_True);
+
     aRow[10] = (sal_Int32)10;
     Sequence< ::rtl::OUString> aTabNames(xNames->getElementNames());
     const ::rtl::OUString* pTabBegin    = aTabNames.getConstArray();
@@ -369,6 +380,11 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
 
     ORows aRows;
     ORow aRow(14);
+    // bound row
+    ORow::iterator aIter = aRow.begin();
+    for(;aIter != aRow.end();++aIter)
+        aIter->setBound(sal_True);
+
     aRow[5]     = ::rtl::OUString();
     aRow[10]    = ::rtl::OUString::createFromAscii("A");
 

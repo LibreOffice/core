@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-21 11:35:24 $
+ *  last change: $Author: oj $ $Date: 2001-03-15 13:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,12 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTypeInfo(  ) throw(SQ
     aRow.push_back(ORowSetValue());
     aRow.push_back(ORowSetValue());
     aRow.push_back(ORowSetValue((sal_Int32)10));
+
+    // bound row
+    ORow::iterator aIter = aRow.begin();
+    for(;aIter != aRow.end();++aIter)
+        aIter->setBound(sal_True);
+
     aRows.push_back(aRow);
 
     aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("DECIMAL"));
@@ -246,6 +252,10 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
 
     ORows aRows;
     ORow aRow(19);
+    // bound row
+    ORow::iterator aIter = aRow.begin();
+    for(;aIter != aRow.end();++aIter)
+        aIter->setBound(sal_True);
     aRow[10] = (sal_Int32)10;
     Sequence< ::rtl::OUString> aTabNames(xNames->getElementNames());
     const ::rtl::OUString* pTabBegin    = aTabNames.getConstArray();
@@ -630,6 +640,10 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
             aRow.push_back(ORowSetValue(aName));
             aRow.push_back(ORowSetValue(aTable));
             aRow.push_back(ORowSetValue());
+            // bound row
+            ORow::iterator aIter = aRow.begin();
+            for(;aIter != aRow.end();++aIter)
+                aIter->setBound(sal_True);
             aRows.push_back(aRow);
         }
     }
@@ -654,6 +668,10 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
                     aRow.push_back(ORowSetValue(aName));
                     aRow.push_back(ORowSetValue(aTable));
                     aRow.push_back(ORowSetValue());
+                    // bound row
+                    ORow::iterator aIter = aRow.begin();
+                    for(;aIter != aRow.end();++aIter)
+                        aIter->setBound(sal_True);
                     aRows.push_back(aRow);
                 }
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:53:01 $
+ *  last change: $Author: oj $ $Date: 2001-03-15 13:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLExc
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)
 {
-    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setCatalogsMap();
+    return xRef;
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
@@ -146,21 +149,31 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLExc
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  ) throw(SQLException, RuntimeException)
 {
-    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setSchemasMap();
+    return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
         const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
-    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setColumnPrivilegesMap();
+    return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern,
         const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
-    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
+    OSL_ENSURE(0,"Should be overloaded!");
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setColumnsMap();
+    return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
@@ -269,6 +282,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         {
             aRow.push_back(ORowSetValue(aTable));
             aRow.push_back(ORowSetValue());
+            // bound row
+            ORow::iterator aIter = aRow.begin();
+            for(;aIter != aRow.end();++aIter)
+                aIter->setBound(sal_True);
             aRows.push_back(aRow);
         }
     }
@@ -282,20 +299,29 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
         const Any& catalog, const ::rtl::OUString& schemaPattern,
         const ::rtl::OUString& procedureNamePattern, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
-    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setProcedureColumnsMap();
+    return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
         const Any& catalog, const ::rtl::OUString& schemaPattern,
         const ::rtl::OUString& procedureNamePattern ) throw(SQLException, RuntimeException)
 {
-    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setProceduresMap();
+    return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setVersionColumnsMap();
+    return xRef;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
@@ -385,33 +411,48 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLExceptio
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setExportedKeysMap();
+    return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setImportedKeysMap();
+    return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setPrimaryKeysMap();
+    return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
         sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
 {
-    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setIndexInfoMap();
+    return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, sal_Int32 scope,
         sal_Bool nullable ) throw(SQLException, RuntimeException)
 {
-    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setBestRowIdentifierMap();
+    return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
@@ -445,7 +486,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
                 aRow[5] = ORowSetValue();
                 aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("SELECT"));
                 aRow[7] = ORowSetValue(::rtl::OUString::createFromAscii("NO"));
-
+                // bound row
+                ORow::iterator aIter = aRow.begin();
+                for(;aIter != aRow.end();++aIter)
+                    aIter->setBound(sal_True);
                 aRows.push_back(aRow);
 
                 Reference< XPropertySet> xTable;
@@ -494,7 +538,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
         const ::rtl::OUString& primaryTable, const Any& foreignCatalog,
         const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable ) throw(SQLException, RuntimeException)
 {
-    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setCrossReferenceMap();
+    return xRef;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw(SQLException, RuntimeException)
@@ -767,6 +814,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     ORow aRow;
     aRow.push_back(ORowSetValue());
     aRow.push_back(ORowSetValue(::rtl::OUString::createFromAscii("TABLE")));
+    // bound row
+    ORow::iterator aIter = aRow.begin();
+    for(;aIter != aRow.end();++aIter)
+        aIter->setBound(sal_True);
     aRows.push_back(aRow);
     pResult->setRows(aRows);
     return xRef;
