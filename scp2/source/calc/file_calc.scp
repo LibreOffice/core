@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_calc.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:43:21 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 17:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,13 +125,13 @@ File gid_File_Oo_Office_Ui_Calccommands_Xcu
     Name = "/registry/data/org/openoffice/Office/UI/CalcCommands.xcu";
 End
 
-#ifdef UNX
-
 File gid_File_Exe_Scalc
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = EXENAME(scalc);
+  #ifdef WNT
+    Styles = (PACKED, PATCH_SO_NAME);
+  #else
     Styles = (PACKED);
+  #endif
 End
-
-#endif
