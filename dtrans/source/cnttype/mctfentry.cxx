@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mctfentry.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-13 13:04:11 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 14:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey
         }
         catch( InvalidRegistryException& )
         {
-            OSL_ENSHURE(sal_False, "InvalidRegistryException caught");
+            OSL_ENSURE(sal_False, "InvalidRegistryException caught");
             bRetVal = sal_False;
         }
     }

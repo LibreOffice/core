@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtrans.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:36:59 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 14:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * pRegistryKe
         }
         catch (InvalidRegistryException &)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wcbentry.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 15:36:46 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 14:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey
         }
         catch( InvalidRegistryException& )
         {
-            OSL_ENSHURE(sal_False, "InvalidRegistryException caught");
+            OSL_ENSURE(sal_False, "InvalidRegistryException caught");
             bRetVal = sal_False;
         }
     }

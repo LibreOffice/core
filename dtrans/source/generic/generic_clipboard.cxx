@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generic_clipboard.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:00 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 14:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,8 +216,8 @@ void SAL_CALL OClipboard::addClipboardListener( const Reference< XClipboardListe
     throw(RuntimeException)
 {
     MutexGuard aGuard( rBHelper.rMutex );
-    OSL_ENSHURE( !rBHelper.bInDispose, "do not add listeners in the dispose call" );
-    OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" );
+    OSL_ENSURE( !rBHelper.bInDispose, "do not add listeners in the dispose call" );
+    OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
     if (!rBHelper.bInDispose && !rBHelper.bDisposed)
         rBHelper.aLC.addInterface( getCppuType( (const ::com::sun::star::uno::Reference< XClipboardListener > *) 0), listener );
 }
@@ -228,7 +228,7 @@ void SAL_CALL OClipboard::removeClipboardListener( const Reference< XClipboardLi
     throw(RuntimeException)
 {
     MutexGuard aGuard( rBHelper.rMutex );
-    OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" );
+    OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
     if (!rBHelper.bInDispose && !rBHelper.bDisposed)
         rBHelper.aLC.removeInterface( getCppuType( (const Reference< XClipboardListener > *) 0 ), listener ); \
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aqua_service.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-16 16:50:18 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 14:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey
         }
         catch( InvalidRegistryException& )
         {
-            OSL_ENSHURE(sal_False, "InvalidRegistryException caught");
+            OSL_ENSURE(sal_False, "InvalidRegistryException caught");
             bRetVal = sal_False;
         }
     }
