@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:01:41 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,25 +484,19 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
     FontMetric aFontMetric(aVDev.GetFontMetric());
     sal_Int32 nLineLen(0L);
 
-    if(!nHochTief)
+    Font aFont( pInfo->rFont );
+
+    if( nHochTief)
     {
-        // Normalstellung
-        aVDev.SetFont(pInfo->rFont);
-    }
-    else
-    {
-        // Fuer Hoch-Tiefstellung den Font verkleinern
+        // shrink the font for sub-/superscripting
         long nPercent(pInfo->rFont.GetPropr());
 
         if(nPercent != 100)
         {
-            Font aFont(pInfo->rFont);
             Size aSize(aFont.GetSize());
-
             aSize.Height() = (aSize.Height() * nPercent +50) / 100;
             aSize.Width() = (aSize.Width() * nPercent +50) / 100;
             aFont.SetSize(aSize);
-            aVDev.SetFont(aFont);
         }
 
         sal_Bool bNeg(nHochTief < 0);
@@ -515,6 +509,9 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         if(bNeg)
             nHochTief = -nHochTief;
     }
+
+aFont.SetOrientation( 0 );
+aVDev.SetFont( aFont );
 
     if(bIsVertical)
         // #83068#
@@ -539,7 +536,6 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
     // #100318# convert in a single step
     // #101499# Use GetTextOutlines and a PolyPolyVector now
     PolyPolyVector aPolyPolyVector;
-
     if(aVDev.GetTextOutlines(aPolyPolyVector, pInfo->rText, pInfo->nTextStart, pInfo->nTextStart, pInfo->nTextLen)
         && aPolyPolyVector.size())
     {
@@ -553,8 +549,8 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
                 XPolyPolygon aXPP(aPolyPoly);
 
                 // rotate 270 degree if vertical since result is unrotated
-                if(bIsVertical)
-                    aXPP.Rotate(Point(), 2700);
+                if( pInfo->rFont.GetOrientation() )
+                    aXPP.Rotate( Point(), pInfo->rFont.GetOrientation() );
 
                 // result is baseline oriented, thus move one line height, too
                 if(bIsVertical)
