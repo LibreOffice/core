@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-02 23:13:42 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 21:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "¶W∫Ÿ(~N)";
         Text[ arabic ] = "«·«”„";
         Text[ greek ] = "ºÌÔÏ·";
-        Text[ korean ] = "¿Ã∏ß(~N)";
+        Text[ korean ] = "¿Ã∏ß";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
@@ -168,7 +168,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "ƒ›© (~I)...";
         Text[ arabic ] = "Œ’«∆’...";
         Text[ greek ] = "…‰È¸ÙÁÙÂÚ...";
-        Text[ korean ] = "µÓ∑œ¡§∫∏(~I)...";
+        Text[ korean ] = "µÓ∑œ¡§∫∏...";
         Text[ turkish ] = "~÷zellikler...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Propiedades...";
@@ -604,7 +604,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "±∆ß«(~L)";
         Text[ arabic ] = " — Ì» «·‰”Œ";
         Text[ greek ] = "‘·ÓÈÌ¸ÏÁÛÁ";
-        Text[ korean ] = "¡§∑ƒ(~L)";
+        Text[ korean ] = "∫–∑˘";
         Text[ turkish ] = "S~˝rala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ordenar";
@@ -657,7 +657,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "®‰•L(~O)...";
         Text[ arabic ] = "ŒÌ«—« ...";
         Text[ greek ] = "–Ò¸ÛËÂÙ·...";
-        Text[ korean ] = "ø…º«(~O)...";
+        Text[ korean ] = "ø…º«...";
         Text[ turkish ] = "~SeÁenekler...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Opciones...";
@@ -692,6 +692,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     Text[ catalan ] = "Imprimir";
     Text[ finnish ] = "Tulosta";
 };
+
 
 
 
