@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-24 18:50:16 $
+ *  last change: $Author: ka $ $Date: 2000-12-07 10:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1310,9 +1310,8 @@ BOOL SdOptionsPrint::operator==( const SdOptionsPrint& rOpt ) const
 
 void SdOptionsPrint::GetPropNameArray( const char**& ppNames, ULONG& rCount ) const
 {
-    static const char* aPropNames[] =
+    static const char* aDrawPropNames[] =
     {
-        "Content/Drawing",
         "Other/Date",
         "Other/Time",
         "Other/PageName",
@@ -1328,15 +1327,41 @@ void SdOptionsPrint::GetPropNameArray( const char**& ppNames, ULONG& rCount ) co
         // bCutPage
         "Other/FromPrinterSetup",
         "Other/Quality",
-
-        // just for Impress
+        "Content/Drawing",
+    };
+    static const char* aImpressPropNames[] =
+    {
+        "Other/Date",
+        "Other/Time",
+        "Other/PageName",
+        "Other/HiddenPage",
+        "Page/PageSize",
+        "Page/PageTile",
+        // bWarningPrinter
+        // bWarningSize
+        // bWarningOrientation
+        "Page/Booklet",
+        "Page/BookletFront",
+        "Page/BookletFront",
+        // bCutPage
+        "Other/FromPrinterSetup",
+        "Other/Quality",
+        "Content/Presentation",
         "Content/Note",
         "Content/Handout",
         "Content/Outline"
     };
 
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 15 : 12 );
-    ppNames = aPropNames;
+    if( GetConfigId() == SDCFG_IMPRESS )
+    {
+        rCount = 15;
+        ppNames = aImpressPropNames;
+    }
+    else
+    {
+        rCount = 12;
+        ppNames = aDrawPropNames;
+    }
 }
 
 // -----------------------------------------------------------------------------
