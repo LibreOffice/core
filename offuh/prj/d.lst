@@ -56,6 +56,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\util\logging
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\view
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\linguistic2
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\input
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\sax
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\loader
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\task
@@ -185,6 +186,8 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\i18n
 ..\%__SRC%\inc\com\sun\star\linguistic2\*.hpp %_DEST%\inc%_EXT%\com\sun\star\linguistic2\*.hpp
 ..\%__SRC%\inc\com\sun\star\xml\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\*.hdl
 ..\%__SRC%\inc\com\sun\star\xml\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\*.hpp
+..\%__SRC%\inc\com\sun\star\xml\input\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\input\*.hdl
+..\%__SRC%\inc\com\sun\star\xml\input\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\input\*.hpp
 ..\%__SRC%\inc\com\sun\star\xml\sax\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\sax\*.hdl
 ..\%__SRC%\inc\com\sun\star\xml\sax\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\sax\*.hpp
 ..\%__SRC%\inc\com\sun\star\loader\*.hdl %_DEST%\inc%_EXT%\com\sun\star\loader\*.hdl
