@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-17 15:14:32 $
+#   last change: $Author: is $ $Date: 2004-09-02 15:10:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -895,9 +895,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if (!($packagename eq ""))
             {
                 installer::packagelist::resolve_packagevariables(\$packagename, $allvariableshashref, 1);
-                $packagename =~ s/\-\-/\-/g;    # making "--" to "-", if %SHORT_PRODUCTEXTENSION is empty
-                $packagename =~ s/\-\./\./g;    # making "-." to ".", if %SHORT_PRODUCTEXTENSION is empty
-                $packagename =~ s/\.org//g;     # openoffice.org -> openoffice
+                installer::packagelist::adapt_name(\$packagename);
+                # $packagename =~ s/\-\-/\-/g;  # making "--" to "-", if %SHORT_PRODUCTEXTENSION is empty
+                # $packagename =~ s/\-\./\./g;  # making "-." to ".", if %SHORT_PRODUCTEXTENSION is empty
+                # $packagename =~ s/\.org//g;       # openoffice.org -> openoffice
             }
 
             #############################################################################
@@ -917,7 +918,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             {
                 $packagerootpath = $onepackage->{'destpath'};
                 installer::packagelist::resolve_packagevariables(\$packagerootpath, $allvariableshashref, 1);
-                $packagerootpath =~ s/\.org//g; # openoffice.org -> openoffice
+                installer::packagelist::adapt_name(\$packagerootpath);
+                # $packagerootpath =~ s/\.org//g;   # openoffice.org -> openoffice
             }
             else
             {

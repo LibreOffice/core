@@ -2,9 +2,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 08:28:31 $
+#   last change: $Author: is $ $Date: 2004-09-02 15:10:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -350,6 +350,7 @@ sub create_epm_header
     {
         my $providesstring = $onepackage->{$provides};
         installer::packagelist::resolve_packagevariables(\$providesstring, $variableshashref, 1);
+        installer::packagelist::adapt_name(\$providesstring);
         $line = "%provides" . " " . $providesstring . "\n";
         push(@epmheader, $line);
     }
@@ -358,6 +359,7 @@ sub create_epm_header
     {
         my $requiresstring = $onepackage->{$requires};
         installer::packagelist::resolve_packagevariables(\$requiresstring, $variableshashref, 1);
+        installer::packagelist::adapt_name(\$requiresstring);
         $line = "%requires" . " " . $requiresstring . "\n";
         push(@epmheader, $line);
     }
