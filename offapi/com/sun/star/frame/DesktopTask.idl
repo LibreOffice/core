@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DesktopTask.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:10 $
+ *  last change: $Author: arellano $ $Date: 2001-04-13 20:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ service DesktopTask
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::frame::DesktopTask::Position
-    /** contains the position in pixel relative to the desktop window.
+    /** contains the position in pixels relative to the desktop window.
      */
     [property] com::sun::star::awt::Point Position;
 
@@ -174,6 +174,9 @@ service DesktopTask
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:10  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:14  mi
     moved from api
 
