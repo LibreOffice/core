@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pcrunodialogs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:05:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 #ifndef _EXTENSIONS_FORMSCTRLR_PCRSTRINGS_HXX_
 #include "pcrstrings.hxx"
 #endif
-#ifndef _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
-#include "propcontroller.hxx"
-#endif
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_TABORDER_HXX
 #include "taborder.hxx"
+#endif
+#ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
+#include "pcrcommon.hxx"
 #endif
 
 extern "C" void SAL_CALL createRegistryInfo_OTabOrderDialog()
