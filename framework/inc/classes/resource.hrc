@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-17 14:07:42 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 18:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,23 @@
  *
  ************************************************************************/
 
-#define RID_STR_START        2000
+#define RID_STR_START       2000
+#define RID_MENU_START      10000
 #define RID_FWK_DIALOG_START 0
 
-#define STR_MENU_ADDONS         (RID_STR_START+0)
-#define STR_MENU_ADDONHELP      (RID_STR_START+1)
-#define STR_MENU_HEADFOOTALL    (RID_STR_START+2)
-#define STR_UPDATEDOC           (RID_STR_START+3)
-#define STR_CLOSEDOC_ANDRETURN  (RID_STR_START+4)
-#define STR_SAVECOPYDOC         (RID_STR_START+5)
+#define STR_MENU_ADDONS                         (RID_STR_START+0)
+#define STR_MENU_ADDONHELP                      (RID_STR_START+1)
+#define STR_MENU_HEADFOOTALL                    (RID_STR_START+2)
+#define STR_UPDATEDOC                           (RID_STR_START+3)
+#define STR_CLOSEDOC_ANDRETURN                  (RID_STR_START+4)
+#define STR_SAVECOPYDOC                         (RID_STR_START+5)
+#define POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION    (RID_MENU_START+0)
+
+#define MENUITEM_TOOLBAR_VISIBLEBUTTON          1
+#define MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR       2
+#define MENUITEM_TOOLBAR_DOCKTOOLBAR            3
+#define MENUITEM_TOOLBAR_DOCKALLTOOLBAR         4
+#define MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION    5
 
 // License Dialog
 #define DLG_LICENSE                         (RID_FWK_DIALOG_START+256)
@@ -84,4 +92,3 @@
 #define LICENSE_NOTACCEPT                   (RID_FWK_DIALOG_START+21)
 #define PB_DECLINE                          (RID_FWK_DIALOG_START+22)
 #define PB_ACCEPT                           (RID_FWK_DIALOG_START+23)
-
