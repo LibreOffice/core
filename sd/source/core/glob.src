@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:33:37 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2833,51 +2833,14 @@ Resource RID_SD_ERRHDL
     };
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String STR_3DOBJECTBARSHELL
+{
+    Text = "3-D Einstellungen" ;
+    Text [ ENGLISH ] = "3-D Settings" ;
+};
+String STR_FONTWORKOBJECTBARSHELL
+{
+    Text = "FontWork" ;
+    Text [ ENGLISH ] = "FontWork" ;
+};
 
