@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navtoolbar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:23:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 09:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef FORMS_SOLAR_CONTROL_NAVTOOLBAR_HXX
 #include "navtoolbar.hxx"
 #endif
@@ -391,7 +390,7 @@ namespace frm
 
         // the image of the item
         ::std::auto_ptr< SfxImageManager > pImageManager( new SfxImageManager( NULL ) );
-        pImageManager->SetImagesForceSize( *m_pToolbar, NULL, FALSE, m_eImageSize == eLarge );
+        pImageManager->SetImagesForceSize( *m_pToolbar, FALSE, m_eImageSize == eLarge );
     }
 
     //---------------------------------------------------------------------
@@ -401,7 +400,7 @@ namespace frm
         {
             m_eImageSize = _eSize;
             ::std::auto_ptr< SfxImageManager > pImageManager( new SfxImageManager( NULL ) );
-            pImageManager->SetImagesForceSize( *m_pToolbar, NULL, lcl_isHighContrast( GetBackground().GetColor() ), m_eImageSize == eLarge );
+            pImageManager->SetImagesForceSize( *m_pToolbar, lcl_isHighContrast( GetBackground().GetColor() ), m_eImageSize == eLarge );
 
             // parts of our layout is dependent on the size of our icons
             Resize();
