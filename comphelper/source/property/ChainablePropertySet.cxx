@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChainablePropertySet.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-24 20:36:11 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@ using ::vos::IMutex;
 ChainablePropertySet::ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, vos::IMutex *pMutex )
     throw()
 : mpInfo ( pInfo )
-, mxInfo ( pInfo )
 , mpMutex ( pMutex )
+, mxInfo ( pInfo )
 {
 }
 
