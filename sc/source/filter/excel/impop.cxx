@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-17 07:41:26 $
+ *  last change: $Author: dr $ $Date: 2002-04-17 10:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1914,15 +1914,15 @@ void ImportExcel::Window2_5( void )
     if( nOpt & EXC_WIN2_FROZEN )        // Frozen
         pColRowBuff->SetFrozen( TRUE );
 
-    if( !( nOpt & EXC_WIN2_DEFAULTCOLOR ) )
-    {
-        const SvxColorItem* pColorItem = pExcRoot->pColor->GetColor( (UINT16) nColorIndex );
-        if( pColorItem )
-            rExtOpt.SetGridCol( pColorItem->GetValue() );
-    }
-
     if( nTab == nFirstVisTab )     // import from first visible sheet
     {
+        if( !( nOpt & EXC_WIN2_DEFAULTCOLOR ) )
+        {
+            const SvxColorItem* pColorItem = pExcRoot->pColor->GetColor( (UINT16) nColorIndex );
+            if( pColorItem )
+                rExtOpt.SetGridCol( pColorItem->GetValue() );
+        }
+
         ScViewOptions aOpts( pD->GetViewOptions() );
         aOpts.SetOption( VOPT_FORMULAS, TRUEBOOL( nOpt & EXC_WIN2_SHOWFORMULAS ) );
         aOpts.SetOption( VOPT_GRID, TRUEBOOL( nOpt & EXC_WIN2_SHOWGRID ) );
