@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: er $ $Date: 2002-07-17 17:13:16 $
+ *  last change: $Author: sab $ $Date: 2002-09-25 09:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ class ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxList
     BOOL                bIsInUndo;
     BOOL                bDocumentModifiedPending;
     USHORT              nDocumentLock;
+    sal_Int16           nCanUpdate;  // stores the UpdateDocMode from loading a document till update links
 
     ScSbxDocHelper*     pDocHelper;
 
