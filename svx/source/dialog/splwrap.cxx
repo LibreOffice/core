@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splwrap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-14 11:44:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,31 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
+
+// misc functions ---------------------------------------------
+
+void SvxPrepareAutoCorrect( String &rOldText, String &rNewText )
+{
+    // This function should be used to strip (or add) trailing '.' from
+    // the strings before passing them on to the autocorrect function in
+    // order that the autocorrect function will hopefully
+    // works properly with normal words and abbreviations (with trailing '.')
+    // independ of if they are at the end of the sentence or not.
+    //
+    // rOldText: text to be replaced
+    // rNewText: replacement text
+
+    xub_StrLen  nOldLen = rOldText.Len(),
+                nNewLen = rNewText.Len();
+    if (nOldLen && nNewLen)
+    {
+        sal_Bool bOldHasDot = sal_Unicode( '.' ) == rOldText.GetChar( nOldLen - 1 ),
+             bNewHasDot = sal_Unicode( '.' ) == rNewText.GetChar( nNewLen - 1 );
+        if (bOldHasDot && !bNewHasDot
+            /*this is: !(bOldHasDot && bNewHasDot) && bOldHasDot*/)
+            rOldText.Erase( nOldLen - 1 );
+    }
+}
 
 // -----------------------------------------------------------------------
 
@@ -747,3 +772,21 @@ sal_Bool SvxSpellWrapper::FindSpellError()
 }
 
 
+// -----------------------------------------------------------------------
+String SvxSpellWrapper::GetNewEditWord()
+{
+    String sReturn;
+
+    DBG_ASSERT( IsDialog(), "SvxSpellWrapper::GetNewEditWord: do not have the dialog!" );
+    if ( IsDialog() )
+        sReturn = static_cast< SvxSpellCheckDialog* >( pWin )->GetNewEditWord();
+    return sReturn;
+}
+
+// -----------------------------------------------------------------------
+void SvxSpellWrapper::SetNewEditWord( const String& _rNew )
+{
+    DBG_ASSERT( IsDialog(), "SvxSpellWrapper::SetNewEditWord: do not have the dialog!" );
+    if ( IsDialog() )
+        static_cast< SvxSpellCheckDialog* >( pWin )->SetNewEditWord( _rNew );
+}
