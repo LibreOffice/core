@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-03 12:51:20 $
+ *  last change: $Author: pl $ $Date: 2001-04-06 10:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,7 +408,7 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
                     // lieber schmaler als breiter
                     if ( nSWidth<0 ) { nSWidth *= -2; }
                     if ( nPWidth<0 ) { nPWidth *= -2; }
-                    if ( nSWidth < nPWidth )
+                    if ( nSWidth <= nPWidth )
                         pOut->SetFont( aFont ); // ohne Abgleich
                     else
                         bRet = TRUE; // mit Abgleich
