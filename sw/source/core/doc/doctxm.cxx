@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-02 18:43:34 $
+ *  last change: $Author: ama $ $Date: 2002-06-06 16:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1958,7 +1958,9 @@ void SwTOXBaseSection::UpdatePageNum()
                 if( rTOXSource.pNd )
                 {
                     SwCntntFrm* pFrm = rTOXSource.pNd->GetFrm();
-                    ASSERT( pFrm, "TOX, no Frame found" );
+                    ASSERT( pFrm || pDoc->IsUpdateTOX(), "TOX, no Frame found");
+                    if( !pFrm )
+                        continue;
                     if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->HasFollow() )
                     {
                         // dann suche den richtigen heraus
