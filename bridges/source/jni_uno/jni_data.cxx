@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_data.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:35:26 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1586,7 +1586,7 @@ void Bridge::map_to_java(
             *reinterpret_cast< OUString const * >( &type->pTypeName );
         OString class_name(
             OUStringToOString(
-                type_name.replace( '.', '/' ), RTL_TEXTENCODING_ASCII_US ) );
+                type_name.replace( '.', '/' ), RTL_TEXTENCODING_JAVA_UTF8 ) );
         JLocalAutoRef jo_enum_class(
             jni, find_class( jni, class_name.getStr() ) );
 
@@ -1953,7 +1953,7 @@ void Bridge::map_to_java(
             OString class_name(
                 OUStringToOString(
                     element_type_name.replace( '.', '/' ),
-                    RTL_TEXTENCODING_ASCII_US ) );
+                    RTL_TEXTENCODING_JAVA_UTF8 ) );
             JLocalAutoRef jo_enum_class(
                 jni, find_class( jni, class_name.getStr() ) );
 
