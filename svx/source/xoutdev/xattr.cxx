@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-19 16:53:06 $
+ *  last change: $Author: aw $ $Date: 2001-04-25 16:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@
 #ifndef _SVDMODEL_HXX
 #include "svdmodel.hxx"
 #endif
+
+using namespace ::rtl;
+using namespace ::com::sun::star;
 
 #define GLOBALOVERFLOW
 
@@ -3951,6 +3954,34 @@ USHORT XFormTextStyleItem::GetValueCount() const
     return 5;
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\*************************************************************************/
+
+// #FontWork#
+sal_Bool XFormTextStyleItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+{
+    rVal <<= (sal_Int32)GetValue();
+    return sal_True;
+}
+
+/*************************************************************************
+|*
+|*
+|*
+\*************************************************************************/
+
+// #FontWork#
+sal_Bool XFormTextStyleItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+{
+    sal_Int32 nValue;
+    rVal >>= nValue;
+    SetValue((XFormTextStyle)nValue);
+
+    return sal_True;
+}
 
 //-------------------------
 // class XFormTextAdjustItem
@@ -4028,6 +4059,34 @@ USHORT XFormTextAdjustItem::GetValueCount() const
     return 4;
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\*************************************************************************/
+
+// #FontWork#
+sal_Bool XFormTextAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+{
+    rVal <<= (sal_Int32)GetValue();
+    return sal_True;
+}
+
+/*************************************************************************
+|*
+|*
+|*
+\*************************************************************************/
+
+// #FontWork#
+sal_Bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+{
+    sal_Int32 nValue;
+    rVal >>= nValue;
+    SetValue((XFormTextAdjust)nValue);
+
+    return sal_True;
+}
 
 //----------------------------
 // class XFormTextDistanceItem
@@ -4361,6 +4420,34 @@ USHORT XFormTextShadowItem::GetValueCount() const
     return 3;
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\*************************************************************************/
+
+// #FontWork#
+sal_Bool XFormTextShadowItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+{
+    rVal <<= (sal_Int32)GetValue();
+    return sal_True;
+}
+
+/*************************************************************************
+|*
+|*
+|*
+\*************************************************************************/
+
+// #FontWork#
+sal_Bool XFormTextShadowItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+{
+    sal_Int32 nValue;
+    rVal >>= nValue;
+    SetValue((XFormTextShadow)nValue);
+
+    return sal_True;
+}
 
 // -------------------------------
 // class XFormTextShadowColorItem
@@ -4651,6 +4738,34 @@ USHORT XFormTextStdFormItem::GetValueCount() const
     return 3;
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\*************************************************************************/
+
+// #FontWork#
+sal_Bool XFormTextStdFormItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+{
+    rVal <<= (sal_Int32)GetValue();
+    return sal_True;
+}
+
+/*************************************************************************
+|*
+|*
+|*
+\*************************************************************************/
+
+// #FontWork#
+sal_Bool XFormTextStdFormItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+{
+    sal_Int32 nValue;
+    rVal >>= nValue;
+    SetValue((XFormTextStdForm)nValue);
+
+    return sal_True;
+}
 
 // --------------------------
 // class XFormTextHideFormItem
