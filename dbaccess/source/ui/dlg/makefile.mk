@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.5 $
+ #  $Revision: 1.6 $
  #
- #  last change: $Author: fs $ $Date: 2000-10-26 18:07:11 $
+ #  last change: $Author: oj $ $Date: 2000-11-10 16:12:36 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -77,19 +77,23 @@ ENABLE_EXCEPTIONS=TRUE
 BMP_IN=$(PRJ)$/res
 
 SRCFILES =	\
+        queryorder.src	\
+        queryfilter.src	\
         paramdialog.src	\
         dsselect.src	\
-        dbadmin.src	\
+        dbadmin.src		\
         dbfindex.src	\
         sqlmessage.src
 
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/queryorder.obj	\
+        $(SLO)$/queryfilter.obj	\
         $(SLO)$/paramdialog.obj	\
         $(SLO)$/odbcconfig.obj	\
         $(SLO)$/dsselect.obj	\
-        $(SLO)$/dbadmin.obj	\
+        $(SLO)$/dbadmin.obj		\
         $(SLO)$/adminpages.obj	\
         $(SLO)$/sqlmessage.obj	\
         $(SLO)$/dbfindex.obj
@@ -102,6 +106,9 @@ SLOFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.5  2000/10/26 18:07:11  fs
+ #	added parameterdialog source/resource
+ #	
  #	Revision 1.4  2000/10/25 13:01:00  fs
  #	moved three files to ..\uno
  #	
