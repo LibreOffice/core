@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-06 18:04:46 $
+ *  last change: $Author: pl $ $Date: 2002-11-08 11:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,8 +463,8 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
                 y = rGeom.nY;
                 w = rGeom.nWidth;
                 h = rGeom.nHeight;
-                if( x+w+40 <= pDisplay_->GetScreenSize().Width() &&
-                    y+h+40 <= pDisplay_->GetScreenSize().Height()
+                if( x+(int)w+40 <= (int)pDisplay_->GetScreenSize().Width() &&
+                    y+(int)h+40 <= (int)pDisplay_->GetScreenSize().Height()
                     )
                 {
                     y += 40;
@@ -935,8 +935,8 @@ void SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
         if( ! bWasIntroBitmap && maFrameData.IsOverrideRedirect() )
         {
             const Size& rScreenSize( maFrameData.pDisplay_->GetScreenSize() );
-            if( maGeometry.nWidth < rScreenSize.Width()-30 ||
-                maGeometry.nHeight < rScreenSize.Height()-30 )
+            if( (int)maGeometry.nWidth < rScreenSize.Width()-30 ||
+                (int)maGeometry.nHeight < rScreenSize.Height()-30 )
             {
                 bWasIntroBitmap = true;
                 pIntroBitmap = this;
@@ -976,8 +976,8 @@ void SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
 
         if( maGeometry.nWidth > 0
             && maGeometry.nHeight > 0
-            && (   maFrameData.nWidth_  != maGeometry.nWidth
-                || maFrameData.nHeight_ != maGeometry.nHeight ) )
+            && (   maFrameData.nWidth_  != (int)maGeometry.nWidth
+                || maFrameData.nHeight_ != (int)maGeometry.nHeight ) )
         {
             maFrameData.nWidth_  = maGeometry.nWidth;
             maFrameData.nHeight_ = maGeometry.nHeight;
@@ -1080,8 +1080,6 @@ void SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::ToTop( USHORT nFlags )
 {
-    int i;
-
     if( ( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
         && ! ( maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT )
         && maFrameData.nShowState_ != SHOWSTATE_HIDDEN
@@ -1150,8 +1148,6 @@ void SalFrameData::SetWindowGravity (int nGravity, const Point& rPosition) const
 
 void SalFrameData::Center( )
 {
-
-    XLIB_Window     aDummy;
     int             nX, nY, nScreenWidth, nScreenHeight;
     int             nRealScreenWidth, nRealScreenHeight;
     int             nScreenX = 0, nScreenY = 0;
@@ -1265,12 +1261,16 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT n
 
     aPosSize = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
 
-    if( maFrameData.bDefaultPosition_
-        && ! ( nFlags & ( SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y ) ) )
+    if( ! ( nFlags & ( SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y ) ) )
     {
-        maGeometry.nWidth = aPosSize.GetWidth();
-        maGeometry.nHeight = aPosSize.GetHeight();
-        maFrameData.Center();
+        if( maFrameData.bDefaultPosition_ )
+        {
+            maGeometry.nWidth = aPosSize.GetWidth();
+            maGeometry.nHeight = aPosSize.GetHeight();
+            maFrameData.Center();
+        }
+        else
+            maFrameData.SetSize( Size( nWidth, nHeight ) );
     }
     else
         maFrameData.SetPosSize( aPosSize );
@@ -1580,8 +1580,8 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
          || !values.height
          || ( pFrame_->maGeometry.nX == rPosSize.Left()
               && pFrame_->maGeometry.nY == rPosSize.Top()
-              && pFrame_->maGeometry.nWidth == rPosSize.GetWidth()
-              && pFrame_->maGeometry.nHeight == rPosSize.GetHeight() )
+              && (int)pFrame_->maGeometry.nWidth == rPosSize.GetWidth()
+              && (int)pFrame_->maGeometry.nHeight == rPosSize.GetHeight() )
          )
         return;
 
@@ -1605,7 +1605,7 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
     bool bSized = false;
     if( values.x != pFrame_->maGeometry.nX || values.y != pFrame_->maGeometry.nY )
         bMoved = true;
-    if( values.width != pFrame_->maGeometry.nWidth || values.height != pFrame_->maGeometry.nHeight )
+    if( values.width != (int)pFrame_->maGeometry.nWidth || values.height != (int)pFrame_->maGeometry.nHeight )
         bSized = true;
 
     if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) )
@@ -2111,7 +2111,7 @@ ULONG SalFrame::GetCurrentModButtons()
 long SalFrameData::HandleMouseEvent( XEvent *pEvent )
 {
     SalMouseEvent       aMouseEvt;
-    USHORT              nEvent;
+    USHORT              nEvent = 0;
     static ULONG        nLines = 0;
 
     if( nVisibleFloats && pEvent->type == EnterNotify )
@@ -2197,8 +2197,8 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
         if( nVisibleFloats > 0 && mpParent )
         {
             XLIB_Cursor aCursor = mpParent->maFrameData.GetCursor();
-            if( pEvent->xmotion.x >= 0 && pEvent->xmotion.x < pFrame_->maGeometry.nWidth &&
-                pEvent->xmotion.y >= 0 && pEvent->xmotion.y < pFrame_->maGeometry.nHeight )
+            if( pEvent->xmotion.x >= 0 && pEvent->xmotion.x < (int)pFrame_->maGeometry.nWidth &&
+                pEvent->xmotion.y >= 0 && pEvent->xmotion.y < (int)pFrame_->maGeometry.nHeight )
                 aCursor = None;
 
             XChangeActivePointerGrab( GetXDisplay(),
@@ -2222,9 +2222,9 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
                 if( ( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT )                     &&
                     pFrame->maFrameData.bMapped_                                                &&
                     pEvent->xbutton.x_root >= pFrame->maGeometry.nX                             &&
-                    pEvent->xbutton.x_root < pFrame->maGeometry.nX + pFrame->maGeometry.nWidth  &&
+                    pEvent->xbutton.x_root < pFrame->maGeometry.nX + (int)pFrame->maGeometry.nWidth &&
                     pEvent->xbutton.y_root >= pFrame->maGeometry.nY                             &&
-                    pEvent->xbutton.y_root < pFrame->maGeometry.nY + pFrame->maGeometry.nHeight )
+                    pEvent->xbutton.y_root < pFrame->maGeometry.nY + (int)pFrame->maGeometry.nHeight )
                 {
                     bInside = true;
                     break;
@@ -2306,10 +2306,6 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
         return Call( nEvent, &aMouseEvt );
     }
 
-#ifdef DBG_UTIL
-    fprintf( stderr, "SalFrameData::HandleMouseEvent %d size=%d*%d event=%d.%d\n",
-             pEvent->type, nWidth_, nHeight_, aMouseEvt.mnX, aMouseEvt.mnY );
-#endif
     return 0;
 }
 
@@ -2881,8 +2877,8 @@ IMPL_LINK( SalFrameData, HandleResizeTimer, void*, pDummy )
     if( maResizeBuffer.Left() != pFrame_->maGeometry.nX ||
         maResizeBuffer.Top() != pFrame_->maGeometry.nY )
         bMoved = true;
-    if( maResizeBuffer.GetWidth() != pFrame_->maGeometry.nWidth ||
-        maResizeBuffer.GetHeight() != pFrame_->maGeometry.nHeight )
+    if( maResizeBuffer.GetWidth() != (int)pFrame_->maGeometry.nWidth ||
+        maResizeBuffer.GetHeight() != (int)pFrame_->maGeometry.nHeight )
         bSized = true;
 
     maResizeBuffer = Rectangle();
@@ -2919,7 +2915,7 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
     Display        *pDisplay   = pEvent->display;
     XLIB_Window     hWM_Parent;
     XLIB_Window     hRoot, *Children, hDummy;
-    unsigned int    nChildren, n;
+    unsigned int    nChildren;
     BOOL            bNone = pDisplay_->GetProperties()
                             & PROPERTY_SUPPORT_WM_Parent_Pixmap_None;
     BOOL            bAccessParentWindow = ! (pDisplay_->GetProperties()
@@ -3183,12 +3179,12 @@ long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
              && ! ( nStyle_ & SAL_FRAME_STYLE_FLOAT )
              )
     {
-        if( pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_DELETE_WINDOW ) )
+        if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_DELETE_WINDOW ) )
         {
             Close();
             return 1;
         }
-        else if( pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_SAVE_YOURSELF ) )
+        else if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_SAVE_YOURSELF ) )
         {
             SalFrame* pLast = GetSalData()->pFirstFrame_;
             while( pLast->maFrameData.pNextFrame_ )
