@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctloptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 14:08:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,7 @@ void SvtCTLOptions_Impl::Load()
     if ( !m_bCTLFontEnabled && ( nType & SCRIPTTYPE_COMPLEX ) )
     {
         m_bCTLFontEnabled = sal_True;
+        Commit();
     }
 
     m_bIsLoaded = sal_True;
