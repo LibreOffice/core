@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 12:24:09 $
+#   last change: $Author: obo $ $Date: 2004-11-19 09:21:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,5 @@ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/images_tt.zip .PHONY:
     +$(COPY) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SOLARRESDIR))$/img$/svt*.ilst $(MISC) 
     +$(COPY) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SOLARRESDIR))$/img$/vcl*.ilst $(MISC) 
     +-$(MKDIR) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))
-    +-$(RM) $@ $@.$(INPATH)
-    +$(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC) -m $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SOLARRESDIR))$/img -c . -l $(MISC) -o $@.$(INPATH)
-    +$(RENAME) $@.$(INPATH) $@
+    +$(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(SOLARSRC)$/$(RSCCUSTOMIMG) -l $(MISC) -o $@
+
