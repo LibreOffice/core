@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:53:41 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ namespace
         }
     };
 
-    long CalcHdFtDist(const SwFrmFmt& rFmt, long nSpacing)
+    SwTwips CalcHdFtDist(const SwFrmFmt& rFmt, sal_uInt16 nSpacing)
     {
         /*
         #98506#
@@ -181,12 +181,12 @@ namespace
         return nDist;
     }
 
-    long CalcHdDist(const SwFrmFmt& rFmt)
+    SwTwips CalcHdDist(const SwFrmFmt& rFmt)
     {
         return CalcHdFtDist(rFmt, rFmt.GetULSpace().GetUpper());
     }
 
-    long CalcFtDist(const SwFrmFmt& rFmt)
+    SwTwips CalcFtDist(const SwFrmFmt& rFmt)
     {
         return CalcHdFtDist(rFmt, rFmt.GetULSpace().GetLower());
     }
@@ -486,18 +486,20 @@ namespace sw
             dyaTop = dyaHdrTop;
             dyaBottom = dyaHdrBottom;
 
+            using sw::types::msword_cast;
+
             const SwFmtHeader *pHd = HasItem<SwFmtHeader>(rPage, RES_HEADER);
             if (pHd && pHd->IsActive() && pHd->GetHeaderFmt())
             {
                 mbHasHeader = true;
-                dyaTop += CalcHdDist(*(pHd->GetHeaderFmt()));
+                dyaTop += (CalcHdDist(*(pHd->GetHeaderFmt())));
             }
 
             const SwFmtFooter *pFt = HasItem<SwFmtFooter>(rPage, RES_FOOTER);
             if (pFt && pFt->IsActive() && pFt->GetFooterFmt())
             {
                 mbHasFooter = true;
-                dyaBottom += CalcFtDist(*(pFt->GetFooterFmt()));
+                dyaBottom += (CalcFtDist(*(pFt->GetFooterFmt())));
             }
         }
 
