@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-03 15:20:49 $
+ *  last change: $Author: cl $ $Date: 2001-08-06 12:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,8 @@ using namespace ::rtl;
 using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
+
+extern uno::Reference< uno::XInterface > SdUnoCreatePool( SdDrawDocument* pDrawModel );
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -752,7 +754,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Defaults") ) )
     {
         if( !mxDrawingPool.is() )
-            mxDrawingPool = (uno::XAggregation*)new SvxUnoDrawPool( pDoc );
+            mxDrawingPool = SdUnoCreatePool( pDoc );
 
         return mxDrawingPool;
     }
