@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:55:45 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:04:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1261,19 +1261,37 @@ ULONG WinSalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
     int nOffset = 0;
     int nFormat = -1;
 
-    // find suitable subtable
+    // find best subtable
+    int nBestVal = 0;
     int nSubTables = GetUShort( pCmap + 2 );
     for( const unsigned char* p = pCmap + 4; --nSubTables >= 0; p += 8 )
     {
         int nPlatform = GetUShort( p );
         int nEncoding = GetUShort( p+2 );
-        // ignore non-unicode encodings
-        if( nEncoding!=0 && nEncoding!=1 )
-            continue;
-        nOffset = GetUInt( p+4 );
-        nFormat = GetUShort( pCmap + nOffset );
-        if( (nFormat == 4) || (nFormat == 12) )
-            break;
+        int nTmpOffset = GetUInt( p+4 );
+        int nTmpFormat = GetUShort( pCmap + nTmpOffset );
+
+        int nValue;
+        if( nPlatform==3 && nEncoding==1 )      // Win Unicode
+            nValue = 3;
+        else if( nPlatform==1 && nEncoding==3 ) // Mac Unicode>2.0
+            nValue = 2;
+        else if( nPlatform==1 && nEncoding==0 ) // Mac Unicode<2.0
+            nValue = 1;
+        else
+            continue;                           // ignore non-unicode tables
+
+        if( nTmpFormat == 12 )                  // 32bit unicode mappings
+            nValue += 3;
+        else if( nTmpFormat != 4 )              // 16bit unicode mappings
+            continue;                           // ignore other formats
+
+        if( nBestVal < nValue )
+        {
+            nBestVal = nValue;
+            nOffset = nTmpOffset;
+            nFormat = nTmpFormat;
+        }
     }
 
     sal_uInt32* pCP = pCodePairs;
