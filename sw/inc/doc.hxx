@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-15 09:22:30 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-21 12:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1798,6 +1798,22 @@ public:
     sal_Int8 GetByteDummy2() const { return n8Dummy2; }
     const String& GetStringDummy1() const { return sDummy1; }
     const String& GetStringDummy2() const { return sDummy2; }
+
+    // #102505# ->
+    /**
+       Append a new temporary auto correction.
+
+       @param aWrong the wrong word
+       @param aCorrect the correct word
+    */
+    void AppendTmpCorr(const String & aWrong, const String & aCorrect);
+
+    /** Remove a temporary auto correction.
+
+        @param aWrong the wrong word whose correction shall be removed
+    */
+    void RemoveTmpCorr(const String & aWrong);
+    // <- #102505#
 
     // call back for API wrapper
     SwModify*   GetUnoCallBack() const;
