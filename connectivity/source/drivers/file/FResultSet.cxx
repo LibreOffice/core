@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-19 08:08:32 $
+ *  last change: $Author: oj $ $Date: 2001-02-21 10:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,9 +397,13 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
         throw DisposedException();
 
     sal_Int32 nPos = (sal_Int32)(*m_aRow)[0];
-    ::std::map<sal_Int32,sal_Int32>::const_iterator aIter = m_aBookmarkToPos.find(nPos);
-    OSL_ENSHURE(aIter != m_aBookmarkToPos.end(),"OResultSet::getRow() invalid bookmark!");
-    return aIter != m_aBookmarkToPos.end() ? aIter->second : 0;
+    ::std::map<sal_Int32,sal_Int32>::const_iterator aFind = m_aBookmarkToPos.find(nPos);
+    OSL_ENSURE(aFind != m_aBookmarkToPos.end(),"OResultSet::getRow() invalid bookmark!");
+    sal_Int32 nRowPos = 1;
+    ::std::map<sal_Int32,sal_Int32>::const_iterator aIter = m_aBookmarkToPos.begin();
+    for(;aIter != aFind;++aIter,++nRowPos)
+        ;
+    return nRowPos;
 }
 // -------------------------------------------------------------------------
 
@@ -1066,7 +1070,7 @@ void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any&
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
     columnIndex = mapColumn(columnIndex);
-    OSL_ENSHURE(0,"OResultSet::updateNumericObject: NYI");
+    OSL_ENSURE(0,"OResultSet::updateNumericObject: NYI");
 }
 // -------------------------------------------------------------------------
 IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
@@ -1124,7 +1128,7 @@ again:
                 !m_aSQLAnalyzer.evaluateRestriction()))      // Auswerten der Bedingungen
         {                                                // naechsten Satz auswerten
             // aktuelle Zeile loeschen im Keyset
-            OSL_ENSHURE(!m_pFileSet ||
+            OSL_ENSURE(!m_pFileSet ||
                        //   !m_pFileSet->IsFrozen() ||
                         eCursorPosition == OFileTable::FILE_NEXT, "Falsche CursorPosition!");
 
@@ -1140,7 +1144,7 @@ again:
             }
             else if (m_pFileSet)
             {
-                OSL_ENSHURE(//!m_pFileSet->IsFrozen() &&
+                OSL_ENSURE(//!m_pFileSet->IsFrozen() &&
                             eCursorPosition == OFileTable::FILE_NEXT, "Falsche CursorPosition!");
                 eCursorPosition = OFileTable::FILE_NEXT;
                 nOffset = 1;
@@ -1186,7 +1190,7 @@ again:
         }
         else if (m_pFileSet)
         {
-            //  OSL_ENSHURE(!m_pFileSet->IsFrozen() , "Falsche CursorPosition!");
+            //  OSL_ENSURE(!m_pFileSet->IsFrozen() , "Falsche CursorPosition!");
             sal_uInt32 nBookmarkValue = Abs((sal_Int32)(*m_aEvaluateRow)[0]);
             m_pFileSet->push_back(nBookmarkValue);
         }
@@ -1259,7 +1263,7 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
                     m_nRowPos = 0;
                     break;
                 case OFileTable::FILE_LAST:
-                    //  OSL_ENSHURE(IsRowCountFinal(), "Fehler im Keyset!");    // muß eingefroren sein, sonst Fehler beim SQLCursor
+                    //  OSL_ENSURE(IsRowCountFinal(), "Fehler im Keyset!"); // muß eingefroren sein, sonst Fehler beim SQLCursor
                     m_nRowPos = m_pFileSet->size() - 1;
                     break;
                 case OFileTable::FILE_RELATIVE:
@@ -1437,7 +1441,7 @@ Error:
 BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOffset, BOOL bRetrieveData)
 {
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
-    OSL_ENSHURE(eCursorPosition != OFileTable::FILE_BOOKMARK,"OResultSet::SkipDeleted can't be called for BOOKMARK");
+    OSL_ENSURE(eCursorPosition != OFileTable::FILE_BOOKMARK,"OResultSet::SkipDeleted can't be called for BOOKMARK");
 
     OFileTable::FilePosition eDelPosition = eCursorPosition;
     INT32 nDelOffset = abs(nOffset);
@@ -1477,7 +1481,7 @@ BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOf
         else
         {
             bDataFound = Move(OFileTable::FILE_BOOKMARK, m_aBookmarkToPos.rbegin()->first, bRetrieveData);
-            OSL_ENSHURE(!m_aRow->isDeleted(),"A bookmark should not be deleted!");
+            OSL_ENSURE(!m_aRow->isDeleted(),"A bookmark should not be deleted!");
             nCurPos    = m_aBookmarkToPos.rbegin()->second;
         }
 
@@ -1592,7 +1596,7 @@ sal_Bool OResultSet::moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData)
     else
     {
         bDataFound = Move(OFileTable::FILE_BOOKMARK, nNewOffset, _bRetrieveData);
-        OSL_ENSHURE(!m_aRow->isDeleted(),"moveAbsolute row can't be deleted!");
+        OSL_ENSURE(!m_aRow->isDeleted(),"moveAbsolute row can't be deleted!");
     }
     return bDataFound;
 }
@@ -1668,7 +1672,7 @@ BOOL OFILESortIndex::AddKeyValue(OFILEKeyValue * pKeyValue)
         if (bFrozen)                            // wenn der Index schon eingefroren
                                                 // dann wird der Key einfach ans Ende gehaengt
         {
-            OSL_ENSHURE(pKeyValue != NULL,"OFILESortIndex::Freeze: pKeyValue == NULL");
+            OSL_ENSURE(pKeyValue != NULL,"OFILESortIndex::Freeze: pKeyValue == NULL");
             INT32 nValue = pKeyValue->GetValue();       // Wert holen ...
 
             // Strings in KeyValue freigeben!
@@ -1692,7 +1696,7 @@ BOOL OFILESortIndex::AddKeyValue(OFILEKeyValue * pKeyValue)
 //------------------------------------------------------------------
 void OFILESortIndex::Freeze()
 {
-    OSL_ENSHURE(! bFrozen,"OFILESortIndex::Freeze: already frozen!");
+    OSL_ENSURE(! bFrozen,"OFILESortIndex::Freeze: already frozen!");
 
     // Kritischer Bereich: Hinterlegung von this in statischer Variable.
     // Zugriff auf diese Variable von der OFILECompare-Funktion aus.
@@ -1718,7 +1722,7 @@ void OFILESortIndex::Freeze()
     {
         OFILEKeyValuePtr pKeyValue = ppKeyValueArray[i];
 
-        OSL_ENSHURE(pKeyValue != NULL,"OFILESortIndex::Freeze: pKeyValue == NULL");
+        OSL_ENSURE(pKeyValue != NULL,"OFILESortIndex::Freeze: pKeyValue == NULL");
         INT32 nValue = pKeyValue->GetValue();       // Wert holen ...
 
         // Strings in KeyValue freigeben!
@@ -1737,10 +1741,10 @@ void OFILESortIndex::Freeze()
 //------------------------------------------------------------------
 INT32 OFILESortIndex::GetValue(INT32 nPos) const
 {
-    OSL_ENSHURE(nPos > 0,"OFILESortIndex::GetValue: nPos == 0");
-    OSL_ENSHURE(nPos <= nCount,"OFILESortIndex::GetValue: Zugriff ausserhalb der Array-Grenzen");
+    OSL_ENSURE(nPos > 0,"OFILESortIndex::GetValue: nPos == 0");
+    OSL_ENSURE(nPos <= nCount,"OFILESortIndex::GetValue: Zugriff ausserhalb der Array-Grenzen");
 
-//  OSL_ENSHURE(ppKeyValueArray[nPos-1] != NULL,"OFILESortIndex::GetValue: interner Fehler: kein KeyValue an dieser Stelle");
+//  OSL_ENSURE(ppKeyValueArray[nPos-1] != NULL,"OFILESortIndex::GetValue: interner Fehler: kein KeyValue an dieser Stelle");
 //  return ppKeyValueArray[nPos-1]->GetValue();
 
     if (!bFrozen)
@@ -1763,7 +1767,7 @@ INT32 OFILESortIndex::GetValue(INT32 nPos) const
 OKeySet* OFILESortIndex::CreateKeySet()
 {
 
-    OSL_ENSHURE(! bFrozen,"OFILESortIndex::Freeze: already frozen!");
+    OSL_ENSURE(! bFrozen,"OFILESortIndex::Freeze: already frozen!");
 
     // Kritischer Bereich: Hinterlegung von this in statischer Variable.
     // Zugriff auf diese Variable von der OFILECompare-Funktion aus.
@@ -1790,7 +1794,7 @@ OKeySet* OFILESortIndex::CreateKeySet()
     {
         OFILEKeyValuePtr pKeyValue = ppKeyValueArray[i];
 
-        OSL_ENSHURE(pKeyValue != NULL,"OFILESortIndex::Freeze: pKeyValue == NULL");
+        OSL_ENSURE(pKeyValue != NULL,"OFILESortIndex::Freeze: pKeyValue == NULL");
         (*aIter) = pKeyValue->GetValue();       // Wert holen ...
 
         // Strings in KeyValue freigeben!
@@ -1860,7 +1864,7 @@ connectivity::file::OFILEKeyCompare(const void * elem1, const void * elem2)
 BOOL OResultSet::OpenImpl()
 {
     const OSQLTables& xTabs = m_aSQLIterator.getTables();
-    OSL_ENSHURE(xTabs.begin() != xTabs.end(),"NO table in statement!");
+    OSL_ENSURE(xTabs.begin() != xTabs.end(),"NO table in statement!");
 
     OSQLTable xTable = xTabs.begin()->second;
     m_xColumns = m_aSQLIterator.getSelectColumns();
@@ -1954,7 +1958,7 @@ BOOL OResultSet::OpenImpl()
         }
         catch (Exception&)
         {
-            OSL_ENSHURE(sal_False, "OResultSet::OpenImpl: caught an Exception!");
+            OSL_ENSURE(sal_False, "OResultSet::OpenImpl: caught an Exception!");
         }
     }
 
@@ -2072,7 +2076,7 @@ BOOL OResultSet::OpenImpl()
                 //  if (!HasRestriction() && !IsSorted() && bShowDeleted)
                     //  SetRowCount(MaxRowCount());
 
-                OSL_ENSHURE(sizeof nOrderbyColumnNumber / sizeof (* nOrderbyColumnNumber) == SQL_ORDERBYKEYS,"Maximale Anzahl der ORDER BY Columns muss derzeit genau 3 sein!");
+                OSL_ENSURE(sizeof nOrderbyColumnNumber / sizeof (* nOrderbyColumnNumber) == SQL_ORDERBYKEYS,"Maximale Anzahl der ORDER BY Columns muss derzeit genau 3 sein!");
                 OKeyType eKeyType[SQL_ORDERBYKEYS];
                 aRowIter = m_aRow->begin()+1;
                 for (int i = 0; i < SQL_ORDERBYKEYS; i++)
@@ -2194,7 +2198,7 @@ BOOL OResultSet::OpenImpl()
                            m_pFileSet->push_back(i + 1);
                     }
                 }
-                OSL_ENSHURE(m_pFileSet,"Kein KeySet vorhanden! :-(");
+                OSL_ENSURE(m_pFileSet,"Kein KeySet vorhanden! :-(");
     DISTINCT:   if(bDistinct && m_pFileSet)   // sicher ist sicher
                 {
                     OValueRow aSearchRow = new OValueVector(m_aRow->size());
@@ -2347,13 +2351,13 @@ void OResultSet::anylizeSQL()
     if(pOrderbyClause)
     {
         OSQLParseNode * pOrderingSpecCommalist = pOrderbyClause->getChild(2);
-        OSL_ENSHURE(SQL_ISRULE(pOrderingSpecCommalist,ordering_spec_commalist),"OResultSet: Fehler im Parse Tree");
+        OSL_ENSURE(SQL_ISRULE(pOrderingSpecCommalist,ordering_spec_commalist),"OResultSet: Fehler im Parse Tree");
 
         for (sal_uInt32 m = 0; m < pOrderingSpecCommalist->count(); m++)
         {
             OSQLParseNode * pOrderingSpec = pOrderingSpecCommalist->getChild(m);
-            OSL_ENSHURE(SQL_ISRULE(pOrderingSpec,ordering_spec),"OResultSet: Fehler im Parse Tree");
-            OSL_ENSHURE(pOrderingSpec->count() == 2,"OResultSet: Fehler im Parse Tree");
+            OSL_ENSURE(SQL_ISRULE(pOrderingSpec,ordering_spec),"OResultSet: Fehler im Parse Tree");
+            OSL_ENSURE(pOrderingSpec->count() == 2,"OResultSet: Fehler im Parse Tree");
 
             OSQLParseNode * pColumnRef = pOrderingSpec->getChild(0);
             if(!SQL_ISRULE(pColumnRef,column_ref))
@@ -2458,11 +2462,11 @@ void OResultSet::GetAssignValues()
         // Liste der Columns-Namen, die in der column_commalist vorkommen (mit ; getrennt):
         ::std::vector<String> aColumnNameList;
 
-        OSL_ENSHURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");
+        OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");
 
         OSQLParseNode * pOptColumnCommalist = m_pParseTree->getChild(3);
-        OSL_ENSHURE(pOptColumnCommalist != NULL,"OResultSet: Fehler im Parse Tree");
-        OSL_ENSHURE(SQL_ISRULE(pOptColumnCommalist,opt_column_commalist),"OResultSet: Fehler im Parse Tree");
+        OSL_ENSURE(pOptColumnCommalist != NULL,"OResultSet: Fehler im Parse Tree");
+        OSL_ENSURE(SQL_ISRULE(pOptColumnCommalist,opt_column_commalist),"OResultSet: Fehler im Parse Tree");
         if (pOptColumnCommalist->count() == 0)
         {
             const Sequence< ::rtl::OUString>& aNames = m_xColNames->getElementNames();
@@ -2471,18 +2475,18 @@ void OResultSet::GetAssignValues()
         }
         else
         {
-            OSL_ENSHURE(pOptColumnCommalist->count() == 3,"OResultSet: Fehler im Parse Tree");
+            OSL_ENSURE(pOptColumnCommalist->count() == 3,"OResultSet: Fehler im Parse Tree");
 
             OSQLParseNode * pColumnCommalist = pOptColumnCommalist->getChild(1);
-            OSL_ENSHURE(pColumnCommalist != NULL,"OResultSet: Fehler im Parse Tree");
-            OSL_ENSHURE(SQL_ISRULE(pColumnCommalist,column_commalist),"OResultSet: Fehler im Parse Tree");
-            OSL_ENSHURE(pColumnCommalist->count() > 0,"OResultSet: Fehler im Parse Tree");
+            OSL_ENSURE(pColumnCommalist != NULL,"OResultSet: Fehler im Parse Tree");
+            OSL_ENSURE(SQL_ISRULE(pColumnCommalist,column_commalist),"OResultSet: Fehler im Parse Tree");
+            OSL_ENSURE(pColumnCommalist->count() > 0,"OResultSet: Fehler im Parse Tree");
 
             // Alle Columns in der column_commalist ...
             for (sal_uInt32 i = 0; i < pColumnCommalist->count(); i++)
             {
                 OSQLParseNode * pCol = pColumnCommalist->getChild(i);
-                OSL_ENSHURE(pCol != NULL,"OResultSet: Fehler im Parse Tree");
+                OSL_ENSURE(pCol != NULL,"OResultSet: Fehler im Parse Tree");
                 aColumnNameList.push_back(pCol->getTokenValue());
             }
         }
@@ -2491,20 +2495,20 @@ void OResultSet::GetAssignValues()
 
         // Werte ...
         OSQLParseNode * pValuesOrQuerySpec = m_pParseTree->getChild(4);
-        OSL_ENSHURE(pValuesOrQuerySpec != NULL,"OResultSet: pValuesOrQuerySpec darf nicht NULL sein!");
-        OSL_ENSHURE(SQL_ISRULE(pValuesOrQuerySpec,values_or_query_spec),"OResultSet: ! SQL_ISRULE(pValuesOrQuerySpec,values_or_query_spec)");
-        OSL_ENSHURE(pValuesOrQuerySpec->count() > 0,"OResultSet: pValuesOrQuerySpec->count() <= 0");
+        OSL_ENSURE(pValuesOrQuerySpec != NULL,"OResultSet: pValuesOrQuerySpec darf nicht NULL sein!");
+        OSL_ENSURE(SQL_ISRULE(pValuesOrQuerySpec,values_or_query_spec),"OResultSet: ! SQL_ISRULE(pValuesOrQuerySpec,values_or_query_spec)");
+        OSL_ENSURE(pValuesOrQuerySpec->count() > 0,"OResultSet: pValuesOrQuerySpec->count() <= 0");
 
         // nur "VALUES" ist erlaubt ...
         if (! SQL_ISTOKEN(pValuesOrQuerySpec->getChild(0),VALUES))
             throw SQLException();
 
-        OSL_ENSHURE(pValuesOrQuerySpec->count() == 2,"OResultSet: pValuesOrQuerySpec->count() != 2");
+        OSL_ENSURE(pValuesOrQuerySpec->count() == 2,"OResultSet: pValuesOrQuerySpec->count() != 2");
 
         // Liste von Werten
         OSQLParseNode * pInsertAtomCommalist = pValuesOrQuerySpec->getChild(1);
-        OSL_ENSHURE(pInsertAtomCommalist != NULL,"OResultSet: pInsertAtomCommalist darf nicht NULL sein!");
-        OSL_ENSHURE(pInsertAtomCommalist->count() > 0,"OResultSet: pInsertAtomCommalist <= 0");
+        OSL_ENSURE(pInsertAtomCommalist != NULL,"OResultSet: pInsertAtomCommalist darf nicht NULL sein!");
+        OSL_ENSURE(pInsertAtomCommalist->count() > 0,"OResultSet: pInsertAtomCommalist <= 0");
 
         String aColumnName;
         OSQLParseNode * pRow_Value_Const;
@@ -2515,7 +2519,7 @@ void OResultSet::GetAssignValues()
             if(pRow_Value_Const->count() == 3)  // '(' row_value_const_list ')'
             {
                 pRow_Value_Const = pRow_Value_Const->getChild(1); // row_value_const_list
-                OSL_ENSHURE(pRow_Value_Const != NULL,"OResultSet: pRow_Value_Const darf nicht NULL sein!");
+                OSL_ENSURE(pRow_Value_Const != NULL,"OResultSet: pRow_Value_Const darf nicht NULL sein!");
                 if(pRow_Value_Const->count() == 0)
                 {
                     if(pRow_Value_Const->count() == (aColumnNameList.size()-1))
@@ -2559,28 +2563,28 @@ void OResultSet::GetAssignValues()
     {
         m_aAssignValues = new OAssignValues(Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount());
 
-        OSL_ENSHURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");
+        OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");
 
         OSQLParseNode * pAssignmentCommalist = m_pParseTree->getChild(3);
-        OSL_ENSHURE(pAssignmentCommalist != NULL,"OResultSet: pAssignmentCommalist == NULL");
-        OSL_ENSHURE(SQL_ISRULE(pAssignmentCommalist,assignment_commalist),"OResultSet: Fehler im Parse Tree");
-        OSL_ENSHURE(pAssignmentCommalist->count() > 0,"OResultSet: pAssignmentCommalist->count() <= 0");
+        OSL_ENSURE(pAssignmentCommalist != NULL,"OResultSet: pAssignmentCommalist == NULL");
+        OSL_ENSURE(SQL_ISRULE(pAssignmentCommalist,assignment_commalist),"OResultSet: Fehler im Parse Tree");
+        OSL_ENSURE(pAssignmentCommalist->count() > 0,"OResultSet: pAssignmentCommalist->count() <= 0");
 
         // Alle Zuweisungen (Kommaliste) bearbeiten ...
         ::std::vector< String> aList(1);
         for (sal_uInt32 i = 0; i < pAssignmentCommalist->count(); i++)
         {
             OSQLParseNode * pAssignment = pAssignmentCommalist->getChild(i);
-            OSL_ENSHURE(pAssignment != NULL,"OResultSet: pAssignment == NULL");
-            OSL_ENSHURE(SQL_ISRULE(pAssignment,assignment),"OResultSet: Fehler im Parse Tree");
-            OSL_ENSHURE(pAssignment->count() == 3,"OResultSet: pAssignment->count() != 3");
+            OSL_ENSURE(pAssignment != NULL,"OResultSet: pAssignment == NULL");
+            OSL_ENSURE(SQL_ISRULE(pAssignment,assignment),"OResultSet: Fehler im Parse Tree");
+            OSL_ENSURE(pAssignment->count() == 3,"OResultSet: pAssignment->count() != 3");
 
             OSQLParseNode * pCol = pAssignment->getChild(0);
-            OSL_ENSHURE(pCol != NULL,"OResultSet: pCol == NULL");
+            OSL_ENSURE(pCol != NULL,"OResultSet: pCol == NULL");
 
             OSQLParseNode * pComp = pAssignment->getChild(1);
-            OSL_ENSHURE(pComp != NULL,"OResultSet: pComp == NULL");
-            OSL_ENSHURE(pComp->getNodeType() == SQL_NODE_EQUAL,"OResultSet: pComp->getNodeType() != SQL_NODE_COMPARISON");
+            OSL_ENSURE(pComp != NULL,"OResultSet: pComp == NULL");
+            OSL_ENSURE(pComp->getNodeType() == SQL_NODE_EQUAL,"OResultSet: pComp->getNodeType() != SQL_NODE_COMPARISON");
             if (pComp->getTokenValue().toChar() != '=')
             {
                 //  aStatus.SetInvalidStatement();
@@ -2588,7 +2592,7 @@ void OResultSet::GetAssignValues()
             }
 
             OSQLParseNode * pVal = pAssignment->getChild(2);
-            OSL_ENSHURE(pVal != NULL,"OResultSet: pVal == NULL");
+            OSL_ENSURE(pVal != NULL,"OResultSet: pVal == NULL");
             aList[0] = pCol->getTokenValue();
             ParseAssignValues(aList,pVal,0);
         }
@@ -2598,10 +2602,10 @@ void OResultSet::GetAssignValues()
 // -------------------------------------------------------------------------
 void OResultSet::ParseAssignValues(const ::std::vector< String>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex)
 {
-    OSL_ENSHURE(nIndex <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
+    OSL_ENSURE(nIndex <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
     String aColumnName(aColumnNameList[nIndex]);
-    OSL_ENSHURE(aColumnName.Len() > 0,"OResultSet: Column-Name nicht gefunden");
-    OSL_ENSHURE(pRow_Value_Constructor_Elem != NULL,"OResultSet: pRow_Value_Constructor_Elem darf nicht NULL sein!");
+    OSL_ENSURE(aColumnName.Len() > 0,"OResultSet: Column-Name nicht gefunden");
+    OSL_ENSURE(pRow_Value_Constructor_Elem != NULL,"OResultSet: pRow_Value_Constructor_Elem darf nicht NULL sein!");
 
     if (pRow_Value_Constructor_Elem->getNodeType() == SQL_NODE_STRING ||
         pRow_Value_Constructor_Elem->getNodeType() == SQL_NODE_INTNUM ||
@@ -2731,8 +2735,8 @@ UINT32 OResultSet::AddParameter(OSQLParseNode * pParameter, const Reference<XPro
     // Nr. des neu hinzuzufuegenden Parameters:
     UINT32 nParameter = m_xParamColumns->size()+1;
 
-    OSL_ENSHURE(SQL_ISRULE(pParameter,parameter),"OResultSet::AddParameter: Argument ist kein Parameter");
-    OSL_ENSHURE(pParameter->count() > 0,"OResultSet: Fehler im Parse Tree");
+    OSL_ENSURE(SQL_ISRULE(pParameter,parameter),"OResultSet::AddParameter: Argument ist kein Parameter");
+    OSL_ENSURE(pParameter->count() > 0,"OResultSet: Fehler im Parse Tree");
     OSQLParseNode * pMark = pParameter->getChild(0);
 
     String aParameterName;
