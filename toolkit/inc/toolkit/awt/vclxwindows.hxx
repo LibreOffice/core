@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-17 10:01:18 $
+ *  last change: $Author: tbe $ $Date: 2002-05-27 16:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1107,14 +1107,22 @@ public:
 class VCLXMenuWindow :  public VCLXWindow
 {
 private:
-    Menu*               mpMenu;
+    Menu*               m_pMenu;
+    sal_Int32           m_nIndexInParent;
+
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >    m_xParent;
 
 protected:
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
 public:
-                        VCLXMenuWindow( Menu* pMenu );
+                        VCLXMenuWindow( Menu* pMenu, sal_Int32 nIndexInParent, const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rxParent );
                         ~VCLXMenuWindow();
+
+    Menu*               GetMenu() { return m_pMenu; }
+
+    void                SetAccessibleParent( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rxParent ) { m_xParent = rxParent; }
+    void                SetIndexInParent( sal_Int32 nIndexInParent ) { m_nIndexInParent = nIndexInParent; }
 };
 
 

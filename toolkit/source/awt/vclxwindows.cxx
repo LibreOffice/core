@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-17 10:03:01 $
+ *  last change: $Author: tbe $ $Date: 2002-05-27 16:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLELISTBOX_HXX_
 #include <toolkit/awt/vclxaccessiblelistbox.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEMENU_HXX_
+#include <toolkit/awt/vclxaccessiblemenu.hxx>
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLERADIOBUTTON_HXX_
 #include <toolkit/awt/vclxaccessibleradiobutton.hxx>
@@ -4352,8 +4355,11 @@ void VCLXPatternField::setProperty( const ::rtl::OUString& PropertyName, const :
 //  ----------------------------------------------------
 //  class VCLXMenuWindow
 //  ----------------------------------------------------
-VCLXMenuWindow::VCLXMenuWindow( Menu* pMenu )
-    :mpMenu( pMenu )
+
+VCLXMenuWindow::VCLXMenuWindow( Menu* pMenu, sal_Int32 nIndexInParent, const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rxParent )
+    :m_pMenu( pMenu )
+    ,m_nIndexInParent( nIndexInParent )
+    ,m_xParent( rxParent )
 {
 }
 
@@ -4363,5 +4369,5 @@ VCLXMenuWindow::~VCLXMenuWindow()
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXMenuWindow::CreateAccessibleContext()
 {
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleMenu( this, m_pMenu, m_nIndexInParent, m_xParent );
 }
