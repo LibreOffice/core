@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cd $ $Date: 2002-05-30 15:26:00 $
+ *  last change: $Author: cd $ $Date: 2002-05-31 05:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1245,8 +1245,7 @@ SfxStatusBarConfigListBox::SfxStatusBarConfigListBox( Window* pParent, const Res
  , bDefault(TRUE)
 {
 
-    pButton = new SvLBoxButtonData();
-    pButton->SetDefaultImages( NULL );
+    pButton = new SvLBoxButtonData( this );
     EnableCheckButton(pButton);
 
     DragDropMode aDDMode = SV_DRAGDROP_CTRL_MOVE;
@@ -1257,6 +1256,11 @@ SfxStatusBarConfigListBox::SfxStatusBarConfigListBox( Window* pParent, const Res
     aTimer.SetTimeout( 200 );
     aTimer.SetTimeoutHdl(
         LINK( this, SfxStatusBarConfigListBox, TimerHdl ) );
+}
+
+SfxStatusBarConfigListBox::~SfxStatusBarConfigListBox()
+{
+    delete pButton;
 }
 
 void SfxStatusBarConfigListBox::KeyInput( const KeyEvent& rKEvt )
