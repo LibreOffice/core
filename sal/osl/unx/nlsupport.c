@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: svesik $ $Date: 2001-11-12 21:27:52 $
+ *  last change: $Author: mh $ $Date: 2001-11-22 14:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -839,7 +839,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
             snprintf(env_buf, sizeof(env_buf), "LC_CTYPE=%s", locale_buf);
             env_buf[sizeof(env_buf)] = '\0';
             putenv(env_buf);
-#elif defined( FREEBAD ) || defined( NETBSD )
+#elif defined( FREEBSD ) || defined( NETBSD )
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LC_CTYPE", locale_buf );
@@ -851,7 +851,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
             snprintf(env_buf, sizeof(env_buf), "LANG=%s", locale_buf);
             env_buf[sizeof(env_buf)] = '\0';
             putenv(env_buf);
-#elif defined( FREEBAD ) || defined( NETBSD )
+#elif defined( FREEBSD ) || defined( NETBSD )
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LANG", locale_buf );
