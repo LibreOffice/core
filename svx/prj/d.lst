@@ -82,6 +82,7 @@ hedabu: ..\inc\ctredlin.hxx %_DEST%\inc%_EXT%\svx\ctredlin.hxx
 hedabu: ..\inc\backgrnd.hxx %_DEST%\inc%_EXT%\svx\backgrnd.hxx
 #hedabu: ..\inc\bbdlg.hxx %_DEST%\inc%_EXT%\svx\bbdlg.hxx
 hedabu: ..\inc\blnkitem.hxx %_DEST%\inc%_EXT%\svx\blnkitem.hxx
+hedabu: ..\inc\charhiddenitem.hxx %_DEST%\inc%_EXT%\svx\charhiddenitem.hxx
 hedabu: ..\inc\bmpmask.hxx %_DEST%\inc%_EXT%\svx\bmpmask.hxx
 hedabu: ..\inc\bolnitem.hxx %_DEST%\inc%_EXT%\svx\bolnitem.hxx
 hedabu: ..\inc\border.hxx %_DEST%\inc%_EXT%\svx\border.hxx
