@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:13:29 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,6 +895,36 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
         }
     }
 
+    // #i37313# check if Fontspecific is not rather some character encoding
+    if( nAdobeEncoding == 3 && m_aEncoding == RTL_TEXTENCODING_SYMBOL )
+    {
+        bool bYFound = false;
+        bool bQFound = false;
+        CharMetricInfo* pChar = pInfo->cmi;
+        for( int i = 0; i < pInfo->numOfChars && ! (bYFound && bQFound); i++ )
+        {
+            if( pChar[i].name )
+            {
+                if( pChar[i].name[0] == 'Y' && pChar[i].name[1] == 0 )
+                    bYFound = true;
+                else if( pChar[i].name[0] == 'Q' && pChar[i].name[1] == 0 )
+                    bQFound = true;
+            }
+        }
+        if( bQFound && bYFound )
+        {
+            #if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "setting FontSpecific font %s (file %s) to unicode\n",
+                     pInfo->gfi->fontName,
+                     rFileName.getStr()
+                     );
+            #endif
+            nAdobeEncoding = 4;
+            m_aEncoding = RTL_TEXTENCODING_UNICODE;
+            bFillEncodingvector = false; // will be filled anyway, don't do the work twice
+        }
+    }
+
     // ascend
     m_nAscend = pInfo->gfi->fontBBox.ury;
 
@@ -937,7 +967,26 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
 
     for( i = 0; i < pInfo->numOfChars; i++, pChar++ )
     {
-        if( pChar->code != -1 )
+        if( nAdobeEncoding == 4 )
+        {
+            if( pChar->name )
+            {
+                pUnicodes[i] = 0;
+                std::list< sal_Unicode > aCodes = rManager.getUnicodeFromAdobeName( pChar->name );
+                for( std::list< sal_Unicode >::const_iterator it = aCodes.begin(); it != aCodes.end(); ++it )
+                {
+                    if( *it != 0 )
+                    {
+                        m_aEncodingVector[ *it ] = pChar->code;
+                        if( pChar->code == -1 )
+                            m_aNonEncoded[ *it ] = pChar->name;
+                        if( ! pUnicodes[i] ) // map the first
+                            pUnicodes[i] = *it;
+                    }
+                }
+            }
+        }
+        else if( pChar->code != -1 )
         {
             if( nAdobeEncoding == 3 && m_aEncoding == RTL_TEXTENCODING_SYMBOL )
             {
@@ -1016,7 +1065,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
                 }
             }
         }
-        else if( nAdobeEncoding == 1 || nAdobeEncoding == 2 )
+        else if( nAdobeEncoding == 1 || nAdobeEncoding == 2 || nAdobeEncoding == 4)
         {
             if( pChar->name )
             {
