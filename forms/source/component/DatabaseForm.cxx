@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 15:28:38 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 08:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3803,9 +3803,22 @@ void SAL_CALL ODatabaseForm::deleteRow() throw( SQLException, RuntimeException )
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::cancelRowUpdates() throw( SQLException, RuntimeException )
 {
-    Reference<XResultSetUpdate>  xUpdate;
-    if (query_aggregation( m_xAggregate, xUpdate))
-        xUpdate->cancelRowUpdates();
+    try
+    {
+        Reference<XResultSetUpdate>  xUpdate;
+        if (query_aggregation( m_xAggregate, xUpdate))
+            xUpdate->cancelRowUpdates();
+    }
+    catch(RowSetVetoException& eVeto)
+    {
+        eVeto;
+        throw;
+    }
+    catch(SQLException& eDb)
+    {
+        onError(eDb, FRM_RES_STRING(RID_STR_ERR_INSERTRECORD));
+        throw;
+    }
 }
 
 //------------------------------------------------------------------------------
