@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
 
- *  last change: $Author: hr $ $Date: 2004-05-11 11:32:43 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -977,20 +977,29 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
         if( aTmp.IsOver( rInf.GetPaintRect() ) && !bDraw )
         {
             rInf.NoteAnimation();
-            ViewShell* pViewShell = 0;
-            if( OUTDEV_VIRDEV == rInf.GetOut()->GetOutDevType() )
+            const ViewShell* pViewShell = rInf.GetVsh();
+
+            // virtual device, not pdf export
+            if( OUTDEV_VIRDEV == rInf.GetOut()->GetOutDevType() &&
+                pViewShell && pViewShell->GetWin()  )
             {
                 ( (Graphic*) pBrush->GetGraphic() )->StopAnimation(0,nId);
                 rInf.GetTxtFrm()->GetShell()->InvalidateWindows( aTmp );
             }
-            // first check accessibility options before starting animation
-            else if ( 0 != (pViewShell = rInf.GetTxtFrm()->GetShell()) &&
-                     ! pViewShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
-                      ! pViewShell->IsPreView() )
+
+
+            else if ( pViewShell &&
+                     !pViewShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
+                     !pViewShell->IsPreView() &&
+                      // --> FME 2004-06-21 #i9684# Stop animation during printing/pdf export.
+                      pViewShell->GetWin() )
+                      // <--
             {
                 ( (Graphic*) pBrush->GetGraphic() )->StartAnimation(
                     (OutputDevice*)rInf.GetOut(), aPos, aSize, nId );
             }
+
+            // pdf export, printing, preview, stop animations...
             else
                 bDraw = sal_True;
         }
