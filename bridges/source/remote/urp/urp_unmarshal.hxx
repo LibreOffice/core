@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_unmarshal.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2002-10-18 09:27:19 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,12 +170,24 @@ inline sal_Bool Unmarshal::setSize( sal_Int32 nSize )
 {
     if( nSize > m_nBufferSize )
     {
-        m_nBufferSize = nSize;
-        m_base = (sal_Int8 * ) rtl_reallocateMemory( (sal_uInt8*) m_base , m_nBufferSize );
+        // adjust buffer size and length.
+        sal_Int8 * base =
+            (sal_Int8*)rtl_reallocateMemory (m_base, sal_Size(nSize));
+        if (base != 0)
+        {
+            m_base = base;
+            m_nLength = m_nBufferSize = nSize;
+        }
     }
+    else
+    {
+        // adjust buffer length, only.
+        m_nLength = nSize;
+    }
+
+    // reset buffer position, and leave.
     m_pos = m_base;
-    m_nLength = nSize;
-    return ( 0 != m_base );
+    return (m_nLength == nSize);
 }
 
 inline sal_Bool Unmarshal::checkOverflow( sal_Int32 nNextMem )
