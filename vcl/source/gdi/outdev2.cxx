@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:23 $
+ *  last change: $Author: ssa $ $Date: 2002-09-11 16:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,9 @@
 #ifdef REMOTE_APPSERVER
 #include <rmoutdev.hxx>
 #endif
-
+#ifndef _SV_SALLAYOUT_HXX
+#include <sallayout.hxx>
+#endif
 #define BAND_MAX_SIZE 512000
 
 // =======================================================================
@@ -314,7 +316,18 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoi
                 pPosAry->mnDestHeight = pPosAry->mnDestHeight * pPosAry->mnSrcHeight / nOldHeight;
             }
 
-            mpGraphics->CopyBits( pPosAry, pGraphics2, this, pSrcDev );
+            // --- RTL --- if this is no window, but pSrcDev is a window
+            // mirroring may be required
+            // because only windows have a SalGraphicsLayout
+            // mirroring is performed here
+            if( (GetOutDevType() != OUTDEV_WINDOW) && pGraphics2 && (pGraphics2->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+            {
+                SalTwoRect pPosAry2 = *pPosAry;
+                ((SalGraphicsLayout*)pGraphics2)->mirror( pPosAry2.mnSrcX, pPosAry2.mnSrcWidth, pSrcDev );
+                mpGraphics->CopyBits( &pPosAry2, pGraphics2, this, pSrcDev );
+            }
+            else
+                mpGraphics->CopyBits( pPosAry, pGraphics2, this, pSrcDev );
         }
     }
 }
