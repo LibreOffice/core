@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:09:13 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 
 class MetricFormatter;
 class SfxItemSet;
@@ -87,23 +90,23 @@ class SwTabCols;
 class DateTime;
 
 // Umschalten einer Metric
-void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit);
+SW_DLLPUBLIC void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit);
 
 // BoxInfoAttribut fuellen
-void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh);
+SW_DLLPUBLIC void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh);
 
 // SfxItemSets <-> PageDesc
 void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc );
 void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet);
 
 // Auffuellen der Tabs mit DefaultTabs
-void    MakeDefTabs(SwTwips nDefDist, SvxTabStopItem& rTabs);
+SW_DLLPUBLIC void   MakeDefTabs(SwTwips nDefDist, SvxTabStopItem& rTabs);
 
 // DefaultTabs loeschen aus dem TabStopArray
 //void  EraseDefTabs(SvxTabStopItem& rTabs);
 
 // Abstand zwischen dem 1. und zweitem Element ermitteln
-USHORT  GetTabDist(const SvxTabStopItem& rTabs);
+SW_DLLPUBLIC USHORT     GetTabDist(const SvxTabStopItem& rTabs);
 
 // erfrage ob im Set eine Sfx-PageDesc-Kombination vorliegt
 // und setze diesen im Set und loesche die Transport Items
@@ -111,19 +114,20 @@ USHORT  GetTabDist(const SvxTabStopItem& rTabs);
 void SwToSfxPageDescAttr( SfxItemSet& rSet );
 void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet );
 
-FieldUnit   GetDfltMetric(BOOL bWeb);
+SW_DLLPUBLIC FieldUnit  GetDfltMetric(BOOL bWeb);
 void        SetDfltMetric(FieldUnit eMetric, BOOL bWeb);
 
 // besorge einen Filenamen/Filternamen. Wird ppMed uebergeben, wird das
 // erzeugte Medium returnt. Auch das FilePassword kann returnt werden.
-BOOL GetFileFilterNameDlg( Window& rParent, String& rFileName,
-                            String* pFilePassword =0, String* pFilterName =0,
-                            SfxMedium** ppMed = 0 );
+SW_DLLPUBLIC BOOL GetFileFilterNameDlg( Window& rParent, String& rFileName,
+                                        String* pFilePassword =0, String* pFilterName =0,
+                                        SfxMedium** ppMed = 0 );
 
 // ListBox mit allen Zeichenvorlagen fuellen - ausser Standard!
-void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted = FALSE, BOOL bWithDefault = FALSE);
+SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted = FALSE, BOOL bWithDefault = FALSE);
+
 //inserts a string sorted into a ListBox,
-USHORT InsertStringSorted(const String& rEntry, ListBox& rToFill, USHORT nOffset);
+SW_DLLPUBLIC USHORT InsertStringSorted(const String& rEntry, ListBox& rToFill, USHORT nOffset);
 
 // Tabellenbreite und Ausrichtung ermitteln
 SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,
