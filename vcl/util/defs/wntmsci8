@@ -7958,3 +7958,5 @@ _real@4096800000000000
 ??0UniscribeLayout@@QAE@PAUHDC__@@AAPAX@Z
 ??1UniscribeLayoutCache@@UAE@XZ
 ?flush@UniscribeLayoutCache@@UAEXH@Z
+?__lower_bound@_STL@@YAPBUFontNameAttr@FontSubstConfigItem@vcl@@PBU234@0ABU234@UStrictStringSort@@PAH@Z
+?lower_bound@_STL@@YAPBUFontNameAttr@FontSubstConfigItem@vcl@@PBU234@0ABU234@UStrictStringSort@@@Z
