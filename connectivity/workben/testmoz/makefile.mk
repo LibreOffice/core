@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dkenny $ $Date: 2001-05-09 12:37:14 $
+#   last change: $Author: dkenny $ $Date: 2001-05-23 10:55:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,17 @@ OBJFILES=       $(OBJ)$/main.obj
 
 APP1TARGET= $(TARGET)
 APP1OBJS=       $(OBJFILES)
+.IF $(GUI) = "WNT"
+APPSTDLIBS=$(SALLIB) \
+            $(VOSLIB) \
+            $(CPPULIB)	\
+            $(CPPUHELPERLIB)	\
+            $(UCBHELPERLIB)	\
+            $(DBTOOLSLIB)	\
+            $(COMPHELPERLIB)	\
+            isdbc2.lib icalc.lib imozab.lib icomphelp2.lib \
+            $(SLB)$/sql.lib 
+.ELSE
 APPSTDLIBS=$(SALLIB) \
             $(VOSLIB) \
             $(CPPULIB)	\
@@ -87,6 +98,7 @@ APPSTDLIBS=$(SALLIB) \
             $(DBTOOLSLIB)	\
             -lsdbc2 -lcalc$(UPD)$(DLLSUFFIX) -lmozab$(UPD)$(DLLSUFFIX) \
             `grep -v '^$$' $(SLB)$/sql.lib | sed -e "s@^@$(PRJ)/@"`
+.ENDIF
             
 #			-lsdbc2 -lcalc619li -lmozab619li \
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-05-09 12:37:14 $
+ *  last change: $Author: dkenny $ $Date: 2001-05-23 10:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@
 
 #include <rtl/ustring>
 
+#include <stdio.h>
+
 using namespace connectivity;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdb;
@@ -127,7 +129,7 @@ void printXResultSet( Reference<XResultSet> &xRes )
         for(sal_Int32 i=1;i<=xMeta->getColumnCount();++i)
         {
             // printf(aPat.getStr(), xMeta->getColumnName(i).getStr());
-            char *str = OUtoCStr(xMeta->getColumnName(i));
+            const char *str = OUtoCStr(xMeta->getColumnName(i));
 //           if ( i < 3 ) {
 //               printf( aPat_Short, str );
 //           } else {
@@ -141,7 +143,7 @@ void printXResultSet( Reference<XResultSet> &xRes )
         {
             for(sal_Int32 j=1;j<=xMeta->getColumnCount();++j)
                 try {
-                    char *str = OUtoCStr(xRow->getString(j));
+                    const char *str = OUtoCStr(xRow->getString(j));
 //                   if ( j < 3 ) {
 //                       printf( aPat_Short, str );
 //                   } else {
