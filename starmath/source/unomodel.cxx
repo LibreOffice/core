@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:25:29 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,10 +262,10 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "FontSansIsItalic"),   HANDLE_CUSTOM_FONT_SANS_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_SANS},
         { RTL_CONSTASCII_STRINGPARAM( "FontSerifIsBold"),    HANDLE_CUSTOM_FONT_SERIF_WEIGHT    ,  &::getBooleanCppuType(),             PROPERTY_NONE,  FNT_SERIF},
         { RTL_CONSTASCII_STRINGPARAM( "FontSerifIsItalic"),   HANDLE_CUSTOM_FONT_SERIF_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_SERIF},
-        { RTL_CONSTASCII_STRINGPARAM( "FontTextIsBold"),     HANDLE_FONT_TEXT_WEIGHT    ,  &::getBooleanCppuType(),             PROPERTY_NONE, },
-        { RTL_CONSTASCII_STRINGPARAM( "FontTextIsItalic"),   HANDLE_FONT_TEXT_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, },
-        { RTL_CONSTASCII_STRINGPARAM( "FontVariablesIsBold"),    HANDLE_FONT_VARIABLES_WEIGHT    ,  &::getBooleanCppuType(),            PROPERTY_NONE, },
-        { RTL_CONSTASCII_STRINGPARAM( "FontVariablesIsItalic"),   HANDLE_FONT_VARIABLES_POSTURE,  &::getBooleanCppuType(),  PROPERTY_NONE, },
+        { RTL_CONSTASCII_STRINGPARAM( "FontTextIsBold"),     HANDLE_FONT_TEXT_WEIGHT    ,  &::getBooleanCppuType(),             PROPERTY_NONE, FNT_TEXT},
+        { RTL_CONSTASCII_STRINGPARAM( "FontTextIsItalic"),   HANDLE_FONT_TEXT_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_TEXT},
+        { RTL_CONSTASCII_STRINGPARAM( "FontVariablesIsBold"),    HANDLE_FONT_VARIABLES_WEIGHT    ,  &::getBooleanCppuType(),            PROPERTY_NONE, FNT_VARIABLE},
+        { RTL_CONSTASCII_STRINGPARAM( "FontVariablesIsItalic"),   HANDLE_FONT_VARIABLES_POSTURE,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_VARIABLE},
         { RTL_CONSTASCII_STRINGPARAM( "Formula"                           ),    HANDLE_FORMULA                             ,        &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM( "IsScaleAllBrackets"              ), HANDLE_IS_SCALE_ALL_BRACKETS              ,      &::getBooleanCppuType(),    PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM( "IsTextMode"                       ), HANDLE_IS_TEXT_MODE                       ,         &::getBooleanCppuType(),    PROPERTY_NONE, 0},
@@ -477,7 +477,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
     if ( NULL == pDocSh )
         throw UnknownPropertyException();
 
-    SmFormat & aFormat = pDocSh->GetFormat();
+    SmFormat aFormat = pDocSh->GetFormat();
 
     for (; *ppEntries; ppEntries++, pValues++ )
     {
@@ -724,6 +724,8 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             // <--
         }
     }
+
+    pDocSh->SetFormat( aFormat );
 }
 
 void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValue )
@@ -734,7 +736,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
     if ( NULL == pDocSh )
         throw UnknownPropertyException();
 
-    SmFormat & aFormat = pDocSh->GetFormat();
+    const SmFormat & aFormat = pDocSh->GetFormat();
 
     for (; *ppEntries; ppEntries++, pValue++ )
     {
@@ -764,7 +766,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_POSTURE        :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                BOOL bVal = (rFace.GetItalic() != ITALIC_NONE);
+                BOOL bVal = (rFace.GetItalic() > ITALIC_NONE);
                 (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
             }
             break;
@@ -777,7 +779,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_WEIGHT         :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                BOOL bVal = (rFace.GetWeight() == WEIGHT_BOLD);
+                BOOL bVal = (rFace.GetWeight() > WEIGHT_NORMAL); // bold?
                 (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
             }
             break;
@@ -1040,10 +1042,10 @@ void SAL_CALL SmModel::render(
                 {
                     aPrtPaperSize = lcl_GuessPaperSize();
                     // factors from Windows DIN A4
-                    aOutputSize    = Size( aPrtPaperSize.Width()  * 0.941,
-                                           aPrtPaperSize.Height() * 0.961);
-                    aPrtPageOffset = Point( aPrtPaperSize.Width()  * 0.0250,
-                                            aPrtPaperSize.Height() * 0.0214);
+                    aOutputSize    = Size( (long)(aPrtPaperSize.Width()  * 0.941),
+                                           (long)(aPrtPaperSize.Height() * 0.961));
+                    aPrtPageOffset = Point( (long)(aPrtPaperSize.Width()  * 0.0250),
+                                            (long)(aPrtPaperSize.Height() * 0.0214));
                 }
                 Point   aZeroPoint;
                 Rectangle OutputRect( aZeroPoint, aOutputSize );
