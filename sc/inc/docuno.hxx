@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:03:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ class ScTableSheetsObj : public cppu::WeakImplHelper4<
 private:
     ScDocShell*             pDocShell;
 
-    ScTableSheetObj*        GetObjectByIndex_Impl(USHORT nIndex) const;
+    ScTableSheetObj*        GetObjectByIndex_Impl(sal_Int32 nIndex) const;
     ScTableSheetObj*        GetObjectByName_Impl(const ::rtl::OUString& aName) const;
 
 public:
@@ -537,7 +537,7 @@ private:
     SCCOL                   nStartCol;
     SCCOL                   nEndCol;
 
-    ScTableColumnObj*       GetObjectByIndex_Impl(USHORT nIndex) const;
+    ScTableColumnObj*       GetObjectByIndex_Impl(sal_Int32 nIndex) const;
     ScTableColumnObj*       GetObjectByName_Impl(const ::rtl::OUString& aName) const;
 
 public:
@@ -643,7 +643,7 @@ private:
     SCROW                   nStartRow;
     SCROW                   nEndRow;
 
-    ScTableRowObj*          GetObjectByIndex_Impl(USHORT nIndex) const;
+    ScTableRowObj*          GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
 public:
                             ScTableRowsObj(ScDocShell* pDocSh, SCTAB nT,
@@ -801,7 +801,7 @@ private:
     SCTAB                   nTab;           // Collection haengt am Sheet
 
     BOOL                    GetAddressByIndex_Impl( ULONG nIndex, ScAddress& rPos ) const;
-    ScAnnotationObj*        GetObjectByIndex_Impl(USHORT nIndex) const;
+    ScAnnotationObj*        GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
 public:
                             ScAnnotationsObj(ScDocShell* pDocSh, SCTAB nT);
@@ -854,7 +854,7 @@ private:
     SCTAB                   nTab;
 
     BOOL                    GetScenarioIndex_Impl( const ::rtl::OUString& rName, SCTAB& rIndex );
-    ScTableSheetObj*        GetObjectByIndex_Impl(USHORT nIndex);
+    ScTableSheetObj*        GetObjectByIndex_Impl(sal_Int32 nIndex);
     ScTableSheetObj*        GetObjectByName_Impl(const ::rtl::OUString& aName);
 
 public:
