@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-08 15:11:09 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 16:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,15 +58,6 @@
  *
  *
  ************************************************************************/
-/***************************************************************
-*
-*   rscdep.cxx
-*
-*   (c) Martin Hollmichel 1998
-*   added intern simple_getopt Vladimir Glazounov 2002
-*
-***************************************************************/
-
 #ifdef UNX
 #include <unistd.h>
 #endif
