@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-02-12 12:38:46 $
+ *  last change: $Author: os $ $Date: 2001-03-19 15:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,9 +882,10 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                 OUString* pSetNames = aSetNames.getArray();
                 Sequence< Any> aSetValues(rValues.getLength());
                 Any* pSetValues = aSetValues.getArray();
+                sal_Bool bEmptyNode = rNode.getLength() == 0;
                 for(sal_Int32 k = 0; k < rValues.getLength(); k++)
                 {
-                    pSetNames[k] =  pProperties[k].Name;
+                    pSetNames[k] =  pProperties[k].Name.copy( bEmptyNode ? 1 : 0);
                     pSetValues[k] = pProperties[k].Value;
                 }
                 bRet = PutProperties(aSetNames, aSetValues);
