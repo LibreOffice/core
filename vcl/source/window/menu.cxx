@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-11 15:21:37 $
+ *  last change: $Author: ssa $ $Date: 2002-06-13 16:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,6 +449,8 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
     BOOL            IsTopmostApplicationMenu();
+    BOOL            registerAccessibleParent();
+    void            revokeAccessibleParent();
 };
 
 
@@ -724,7 +726,6 @@ void Menu::Deactivate()
 void Menu::Highlight()
 {
     Menu* pStartMenu = ImplGetStartMenu();
-    ImplCallEventListeners( VCLEVENT_MENU_HIGHLIGHT );
     if ( !aHighlightHdl.Call( this ) )
     {
         if ( pStartMenu && ( pStartMenu != this ) )
@@ -1986,6 +1987,7 @@ void Menu::ImplCallHighlight( USHORT nHighlightedItem )
     MenuItemData* pData = pItemList->GetDataFromPos( nHighlightedItem );
     if ( pData )
         nSelectedId = pData->nId;
+    ImplCallEventListeners( VCLEVENT_MENU_HIGHLIGHT );
     Highlight();
     nSelectedId = 0;
 }
@@ -2514,10 +2516,8 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     pWin->GrabFocus();
     if ( GetItemCount() )
     {
-        BOOL bRegisterParent = pWin->IsTopmostApplicationMenu();
-        if( bRegisterParent )
-            bNativeFrameRegistered = pWin->mpBorderWindow->ImplRegisterAccessibleNativeFrame();
         pWin->StartPopupMode( aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS );
+        bNativeFrameRegistered = pWin->registerAccessibleParent();
     }
     if ( bPreSelectFirst )
     {
@@ -2537,7 +2537,7 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
         pWin->Execute();
 
         if( bNativeFrameRegistered )
-            pWin->mpBorderWindow->ImplRevokeAccessibleNativeFrame();
+            pWin->revokeAccessibleParent();
 
         // Focus wieder herstellen (kann schon im Select wieder
         // hergestellt wurden sein
@@ -3646,6 +3646,33 @@ BOOL MenuFloatingWindow::IsTopmostApplicationMenu()
     return (!pMenu->pStartedFrom) ? TRUE : FALSE;
 }
 
+BOOL MenuFloatingWindow::registerAccessibleParent()
+{
+    if( !IsTopmostApplicationMenu() )
+        return FALSE;
+    {
+        // register frame and make sure our top-window listeners are notified,
+        // otherwise AT tools cannot register to the frame (they rely on an windowOpened
+        // after registration which is triggered by VCLEVENT_WINDOW_SHOW)
+        // we must register after the menu window is visible (StartPopupMode), otherwise it cannot
+        // answer important accessibility request
+        if( mpBorderWindow && mpBorderWindow->ImplRegisterAccessibleNativeFrame() )
+        {
+            ImplCallEventListeners( VCLEVENT_WINDOW_SHOW );
+            return TRUE;
+        }
+        else
+            return FALSE;
+    }
+}
+
+void MenuFloatingWindow::revokeAccessibleParent()
+{
+    if( !IsTopmostApplicationMenu() || !mpBorderWindow )
+        return;
+    else
+        mpBorderWindow->ImplRevokeAccessibleNativeFrame();
+}
 
 MenuBarWindow::MenuBarWindow( Window* pParent ) :
     Window( pParent, 0 ),
