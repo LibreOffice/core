@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.162 $
+#   $Revision: 1.163 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-28 16:05:45 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:26:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1328,6 +1328,8 @@ STDSHL=$(STDSHLCUIST)
 
 .ENDIF
 
+.EXPORT : PICSWITCH
+
 .IF "$(NO_DEFAULT_STL)"==""
 STDLIB+=$(LIBSTLPORT)
 STDSHL+=$(LIBSTLPORT)
@@ -1475,4 +1477,3 @@ $(COMP9TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP9TYP
 # if the previous block was a rule or a target, "\#" isn't recognized
 # as an escaped "#". if it was an assignment, escaping works...
 some_unique_variable_name:=1
-
