@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ public:
                  const ::com::sun::star::uno::Reference<
                      ::com::sun::star::frame::XModel > & rModel,
                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::container::XIndexContainer > &,
+                    ::com::sun::star::document::XGraphicObjectResolver > &,
                    SvStorage *pPkg );
 
     ~SwXMLImport();

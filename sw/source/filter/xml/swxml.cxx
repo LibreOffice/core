@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 09:58:11 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
      xml::sax::InputSource aParserInput;
     aParserInput.sSystemId = rName;
 
-    Reference< XIndexContainer > xEmbeddedGraphicExport;
+    Reference< document::XGraphicObjectResolver > xEmbeddedGraphicExport;
     SvXMLGraphicHelper *pGraphicHelper = 0;
     SvStorageStreamRef xDocStream;
     SvStorage *pStorage = pMedium->GetStorage();
@@ -282,6 +282,9 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/01/05 09:58:11  mib
+      default styles
+
       Revision 1.7  2001/01/03 11:40:56  mib
       support for OLE objects in XML files
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-08 09:44:55 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
     Reference< io::XActiveDataSource > xSrc( xWriter, UNO_QUERY );
     xSrc->setOutputStream( xOut );
 
-    Reference< XIndexContainer > xEmbeddedGraphicExport;
+    Reference< document::XGraphicObjectResolver > xEmbeddedGraphicExport;
     SvXMLGraphicHelper *pGraphicHelper = 0;
     if( pStorage )
     {
@@ -199,6 +199,8 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
                                          bWriteAll, bWriteOnlyFirstTable,
                                          bShowProgress );
 
+    Reference< document::XExporter > xExporter( pExp );
+
     sal_uInt32 nRet = pExp->exportDoc( sXML_text );
     if( xDocStream.Is() )
         xDocStream->Commit();
@@ -210,7 +212,7 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
     xEmbeddedGraphicExport = 0;
-    delete pExp;
+//  delete pExp;
 
     ResetWriter();
 
@@ -230,11 +232,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.10 2001-01-08 09:44:55 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.11 2001-01-12 16:34:01 cl Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/01/08 09:44:55  mib
+      Removed SwDoc and SvStorage members from SwXMLExport
+
       Revision 1.9  2001/01/03 11:40:56  mib
       support for OLE objects in XML files
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 21:01:48 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
 
 #ifdef XML_CORE_API
 void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
@@ -165,7 +166,7 @@ void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
 SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
              const OUString& rFileName,
              const Reference< XDocumentHandler > & rHandler,
-             const Reference< XIndexContainer > & rEmbeddedGrfObjs,
+             const Reference< XGraphicObjectResolver > & rEmbeddedGrfObjs,
              sal_Bool bExpWholeDoc, sal_Bool bExpFirstTableOnly,
              sal_Bool bShowProg ) :
     SvXMLExport( rFileName, rHandler, rModel, rEmbeddedGrfObjs,

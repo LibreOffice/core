@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-08 09:44:55 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ public:
                  const ::com::sun::star::uno::Reference<
                      ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::container::XIndexContainer > &,
+                    ::com::sun::star::document::XGraphicObjectResolver > &,
                  sal_Bool bExpWholeDoc, sal_Bool bExpFirstTableOnly,
                  sal_Bool bShowProgr );
     virtual ~SwXMLExport();

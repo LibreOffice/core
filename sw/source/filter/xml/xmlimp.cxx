@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:15:11 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ SwXMLImport::SwXMLImport(
         const ::com::sun::star::uno::Reference<
                  ::com::sun::star::frame::XModel > & rModel,
         const ::com::sun::star::uno::Reference<
-                ::com::sun::star::container::XIndexContainer > & rEGO,
+                ::com::sun::star::document::XGraphicObjectResolver > & rEGO,
         SvStorage *pPkg ) :
     SvXMLImport( rModel, rEGO ),
     bLoadDoc( bLDoc ),
