@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-26 14:55:49 $
+ *  last change: $Author: dvo $ $Date: 2001-07-27 12:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,10 +641,6 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
         delete pNumImport;
         pNumImport = 0;
     }
-    xNumberFormatsSupplier = Reference < XNumberFormatsSupplier > ( xModel,
-                                                                    UNO_QUERY );
-    if (xNumberFormatsSupplier.is())
-        pNumImport = new SvXMLNumFmtHelper(xNumberFormatsSupplier);
 }
 
 // XInitialize
