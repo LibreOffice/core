@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:51:17 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 14:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,7 +521,7 @@ void ToolBox::InsertItem( const ResId& rResId, USHORT nPos )
 
     // Notify
     USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nNewPos );
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
 // -----------------------------------------------------------------------
@@ -541,7 +541,7 @@ void ToolBox::InsertItem( USHORT nItemId, const Image& rImage,
 
     // Notify
     USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nNewPos );
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >(nNewPos ) );
 }
 
 // -----------------------------------------------------------------------
@@ -562,7 +562,7 @@ void ToolBox::InsertItem( USHORT nItemId, const Image& rImage,
 
     // Notify
     USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nNewPos );
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
 // -----------------------------------------------------------------------
@@ -582,7 +582,7 @@ void ToolBox::InsertItem( USHORT nItemId, const XubString& rText,
 
     // Notify
     USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nNewPos );
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
 // -----------------------------------------------------------------------
@@ -610,7 +610,7 @@ void ToolBox::InsertWindow( USHORT nItemId, Window* pWindow,
 
     // Notify
     USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nNewPos );
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
 // -----------------------------------------------------------------------
@@ -628,7 +628,7 @@ void ToolBox::InsertSpace( USHORT nPos )
 
     // Notify
     USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nNewPos );
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
 // -----------------------------------------------------------------------
@@ -648,7 +648,7 @@ void ToolBox::InsertSeparator( USHORT nPos, USHORT nPixSize )
 
     // Notify
     USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nNewPos );
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
 // -----------------------------------------------------------------------
@@ -666,7 +666,7 @@ void ToolBox::InsertBreak( USHORT nPos )
 
     // Notify
     USHORT nNewPos = ( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos;
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nNewPos );
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
 // -----------------------------------------------------------------------
@@ -699,7 +699,7 @@ void ToolBox::RemoveItem( USHORT nPos )
         mpData->ImplClearLayoutData();
 
         // Notify
-        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMREMOVED, (void*) nPos );
+        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMREMOVED, reinterpret_cast< void* >( nPos ) );
     }
 }
 
@@ -729,11 +729,11 @@ void ToolBox::MoveItem( USHORT nItemId, USHORT nNewPos )
 
         // Notify
         if( nPos < nNewPos )    // only send one event, all indices above this item are invalid anyway
-            ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMREMOVED, (void*) nPos );
+            ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMREMOVED, reinterpret_cast< void* >( nPos ) );
         else
         {
             USHORT nNewPos2 = ( nNewPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nNewPos;
-            ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nNewPos2 );
+            ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos2 ) );
         }
     }
 }
@@ -764,7 +764,7 @@ void ToolBox::CopyItem( const ToolBox& rToolBox, USHORT nItemId,
 
         // Notify
         USHORT nNewPos2 = ( nNewPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nNewPos;
-        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nNewPos2 );
+        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos2 ) );
     }
 }
 
@@ -1077,28 +1077,12 @@ void ToolBox::SetImageList( const ImageList& rImageList )
 
 static Image ImplRotImage( const Image& rImage, long nAngle10 )
 {
-    Image aRet;
+    Image       aRet;
+    BitmapEx    aRotBitmapEx( rImage.GetBitmapEx() );
 
-    // rotate the image to the new angle
-    Bitmap aRotBitmap = rImage.GetBitmap();
-    if( rImage.HasMaskColor() )
-    {
-        aRotBitmap.Rotate( nAngle10, rImage.GetMaskColor() );
-        aRet = Image( aRotBitmap, rImage.GetMaskColor() );
-    }
-    else if( rImage.HasMaskBitmap() )
-    {
-        aRotBitmap.Rotate( nAngle10, Color( COL_WHITE ) );
-        Bitmap aRotMask = rImage.GetMaskBitmap();
-        aRotMask.Rotate( nAngle10, Color( COL_WHITE ) );
-        aRet = Image( aRotBitmap, aRotMask );
-    }
-    else
-    {
-        aRotBitmap.Rotate( nAngle10, Color( COL_WHITE ) );
-        aRet = Image( aRotBitmap );
-    }
-    return aRet;
+    aRotBitmapEx.Rotate( nAngle10, Color( COL_WHITE ) );
+
+    return Image( aRotBitmapEx );
 }
 
 void ToolBox::SetItemImageAngle( USHORT nItemId, long nAngle10 )
@@ -1136,26 +1120,12 @@ void ToolBox::SetItemImageAngle( USHORT nItemId, long nAngle10 )
 
 static Image ImplMirrorImage( const Image& rImage )
 {
-    Image aRet;
+    Image       aRet;
+    BitmapEx    aMirrBitmapEx( rImage.GetBitmapEx() );
 
-    // rotate the image to the new angle
-    Bitmap aMirrorBitmap = rImage.GetBitmap();
-    aMirrorBitmap.Mirror( BMP_MIRROR_HORZ );
-    if( rImage.HasMaskColor() )
-    {
-        aRet = Image( aMirrorBitmap, rImage.GetMaskColor() );
-    }
-    else if( rImage.HasMaskBitmap() )
-    {
-        Bitmap aMirrorMask = rImage.GetMaskBitmap();
-        aMirrorMask.Mirror( BMP_MIRROR_HORZ );
-        aRet = Image( aMirrorBitmap, aMirrorMask );
-    }
-    else
-    {
-        aRet = Image( aMirrorBitmap );
-    }
-    return aRet;
+    aMirrBitmapEx.Mirror( BMP_MIRROR_HORZ );
+
+    return Image( aMirrBitmapEx );
 }
 
 void ToolBox::SetItemImageMirrorMode( USHORT nItemId, BOOL bMirror )
@@ -1270,7 +1240,7 @@ void ToolBox::SetItemText( USHORT nItemId, const XubString& rText )
             pItem->maText = ImplConvertMenuString( rText );
 
         // Notify
-        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMTEXTCHANGED, (void*) nPos );
+        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMTEXTCHANGED, reinterpret_cast< void* >( nPos ) );
     }
 }
 
@@ -1299,7 +1269,7 @@ void ToolBox::SetItemWindow( USHORT nItemId, Window* pNewWindow )
         if ( pNewWindow )
             pNewWindow->Hide();
         ImplInvalidate( TRUE );
-        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED, (void*) nPos );
+        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED, reinterpret_cast< void* >( nPos ) );
     }
 }
 
@@ -1465,7 +1435,7 @@ void ToolBox::SetItemState( USHORT nItemId, TriState eState )
             pItem->meState = eState;
             ImplUpdateItem( nPos );
             // Notify
-            ImplCallEventListeners( VCLEVENT_TOOLBOX_CLICK, (void*) nPos );
+            ImplCallEventListeners( VCLEVENT_TOOLBOX_CLICK, reinterpret_cast< void* >( nPos ) );
         }
     }
 }
@@ -1506,7 +1476,7 @@ void ToolBox::EnableItem( USHORT nItemId, BOOL bEnable )
 
             ImplUpdateInputEnable();
 
-            ImplCallEventListeners( bEnable ? VCLEVENT_TOOLBOX_ITEMENABLED : VCLEVENT_TOOLBOX_ITEMDISABLED, (void*)nPos );
+            ImplCallEventListeners( bEnable ? VCLEVENT_TOOLBOX_ITEMENABLED : VCLEVENT_TOOLBOX_ITEMDISABLED, reinterpret_cast< void* >( nPos ) );
         }
     }
 }
@@ -1809,4 +1779,3 @@ USHORT ToolBox::GetDisplayItemId( long nText ) const
         nItemId = mpData->m_pLayoutData->m_aLineItemIds[nText];
     return nItemId;
 }
-
