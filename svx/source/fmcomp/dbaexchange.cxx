@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 09:22:38 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 15:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
+#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
+#endif
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif
@@ -89,6 +92,9 @@
 #ifndef _COMPHELPER_PROPERTSETINFO_HXX_
 #include <comphelper/propertysetinfo.hxx>
 #endif
+#ifndef _SVX_FMPROP_HRC
+#include "fmprop.hrc"
+#endif
 
 //........................................................................
 namespace svx
@@ -99,6 +105,7 @@ namespace svx
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
+    using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::datatransfer;
@@ -376,13 +383,275 @@ namespace svx
     }
 
     //====================================================================
-    //= ORowsetTransferable
+    //= ODataAccessObjectTransferable
     //====================================================================
     //--------------------------------------------------------------------
-//  ORowsetTransferable::ORowsetTransferable(const String&  _rDatasource, const String& _rName,
-//      ObjectType _eObject, const IntArray* _pSelectionList)
-//  {
-//  }
+    ODataAccessObjectTransferable::ODataAccessObjectTransferable(
+                    const ::rtl::OUString&  _rDatasource,
+                    const sal_Int32         _nCommandType,
+                    const ::rtl::OUString&  _rCommand,
+                    const Reference< XConnection >& _rxConnection)
+    {
+        // build the descriptor (the property sequence)
+        m_aDescriptor[daDataSource]     <<= _rDatasource;
+        m_aDescriptor[daConnection]     <<= _rxConnection;
+        m_aDescriptor[daCommand]        <<= _rCommand;
+        m_aDescriptor[daCommandType]    <<= _nCommandType;
+
+        // extract the single values from the sequence
+        ::rtl::OUString sDatasourceName;
+        ::rtl::OUString sObjectName;
+        sal_Bool bEscapeProcessing = sal_True;
+        sDatasourceName = _rDatasource;
+        sObjectName = _rCommand;
+
+        // for compatibility: create a string which can be used for the SOT_FORMATSTR_ID_SBA_DATAEXCHANGE format
+
+        sal_Bool bTreatAsStatement = (CommandType::COMMAND == _nCommandType);
+            // statements are - in this old and ugly format - described as queries
+
+        const sal_Unicode       cSeparator = sal_Unicode(11);
+        const ::rtl::OUString   sSeparator(&cSeparator, 1);
+
+        const sal_Unicode       cTableMark = '1';
+        const sal_Unicode       cQueryMark = '0';
+
+        // build the descriptor string
+        m_sCompatibleObjectDescription += sDatasourceName;
+        m_sCompatibleObjectDescription += sSeparator;
+        m_sCompatibleObjectDescription += bTreatAsStatement ? ::rtl::OUString() : sObjectName;
+        m_sCompatibleObjectDescription += sSeparator;
+        switch (_nCommandType)
+        {
+            case CommandType::TABLE:
+                m_sCompatibleObjectDescription += ::rtl::OUString(&cTableMark, 1);
+                break;
+            case CommandType::QUERY:
+                m_sCompatibleObjectDescription += ::rtl::OUString(&cQueryMark, 1);
+                break;
+            case CommandType::COMMAND:
+                m_sCompatibleObjectDescription += ::rtl::OUString(&cQueryMark, 1);
+                // think of it as a query
+                break;
+        }
+        m_sCompatibleObjectDescription += sSeparator;
+        m_sCompatibleObjectDescription += bTreatAsStatement ? sObjectName : ::rtl::OUString();
+        m_sCompatibleObjectDescription += sSeparator;
+    }
+
+    // -----------------------------------------------------------------------------
+    ODataAccessObjectTransferable::ODataAccessObjectTransferable(const Reference< XPropertySet >& _rxLivingForm)
+    {
+        // collect some properties of the form
+        ::rtl::OUString sDatasourceName;
+        sal_Int32       nObjectType = CommandType::COMMAND;
+        ::rtl::OUString sObjectName;
+        Reference< XConnection > xConnection;
+        try
+        {
+            _rxLivingForm->getPropertyValue(FM_PROP_COMMANDTYPE) >>= nObjectType;
+            _rxLivingForm->getPropertyValue(FM_PROP_COMMAND) >>= sObjectName;
+            _rxLivingForm->getPropertyValue(FM_PROP_DATASOURCE) >>= sDatasourceName;
+            _rxLivingForm->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) >>= xConnection;
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(sal_False, "ODataAccessObjectTransferable::ODataAccessObjectTransferable: could not collect essential form attributes !");
+            return;
+        }
+
+        m_aDescriptor[daDataSource]     <<= sDatasourceName;
+        m_aDescriptor[daCommandType]    <<= nObjectType;
+        m_aDescriptor[daCommand]        <<= sObjectName;
+
+        sal_Bool bIsStatement = CommandType::COMMAND == nObjectType;
+        String sObjectKind = (CommandType::TABLE == nObjectType) ? String('1') : String('0');
+
+        // check if the SQL-statement is modified
+        sal_Bool bHasFilterOrSort(sal_False);
+        ::rtl::OUString sCompleteStatement;
+        try
+        {
+            ::rtl::OUString sFilter, sSort;
+            if (::cppu::any2bool(_rxLivingForm->getPropertyValue(FM_PROP_APPLYFILTER)))
+                _rxLivingForm->getPropertyValue(FM_PROP_FILTER_CRITERIA) >>= sFilter;
+            _rxLivingForm->getPropertyValue(FM_PROP_SORT) >>= sSort;
+            bHasFilterOrSort = (sFilter.getLength()>0) || (sSort.getLength()>0);
+
+            _rxLivingForm->getPropertyValue(FM_PROP_ACTIVECOMMAND) >>= sCompleteStatement;
+
+            // create a composer
+            Reference< XSQLQueryComposerFactory > xFactory( xConnection, UNO_QUERY );
+            Reference< XSQLQueryComposer > xComposer;
+            if (xFactory.is())
+                xComposer = xFactory->createQueryComposer();
+
+            // let the composer compose
+            if (xComposer.is())
+            {
+                xComposer->setQuery(sCompleteStatement);
+                xComposer->setFilter(sFilter);
+                xComposer->setOrder(sSort);
+                sCompleteStatement = xComposer->getComposedQuery();
+            }
+            // Usually, I would expect the result of the composing to be the same as the ActiveCommand property
+            // But this code here is pretty old, and I don't know wha the side effects are if I remove it now ...
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(sal_False, "ODataAccessObjectTransferable::ODataAccessObjectTransferable: could not collect essential form attributes (part two) !");
+            return;
+        }
+
+        // build the object description (as string)
+        const sal_Unicode       cSeparator(11);
+        const ::rtl::OUString   sSeparator(&cSeparator, 1);
+
+        m_sCompatibleObjectDescription = sDatasourceName;
+        m_sCompatibleObjectDescription  += sSeparator;
+        m_sCompatibleObjectDescription  += bIsStatement ? ::rtl::OUString() : sObjectName;
+        m_sCompatibleObjectDescription  += sSeparator;
+        m_sCompatibleObjectDescription  += sObjectKind;
+        m_sCompatibleObjectDescription  += sSeparator;
+        m_sCompatibleObjectDescription  +=
+                (CommandType::QUERY == nObjectType) && !bHasFilterOrSort
+                ? ::rtl::OUString()
+            : sCompleteStatement;
+            // compatibility says : always add the statement, but don't if it is a "pure" query
+        m_sCompatibleObjectDescription  += sSeparator;
+    }
+
+    // -----------------------------------------------------------------------------
+    void ODataAccessObjectTransferable::AddSupportedFormats()
+    {
+        sal_Int32 nObjectType = CommandType::COMMAND;
+        m_aDescriptor[daCommandType] >>= nObjectType;
+        switch (nObjectType)
+        {
+            case CommandType::TABLE:
+                AddFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE);
+                break;
+            case CommandType::QUERY:
+                AddFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
+                break;
+            case CommandType::COMMAND:
+                AddFormat(SOT_FORMATSTR_ID_DBACCESS_COMMAND);
+                break;
+        }
+
+        sal_Int32 nDescriptorLen = m_sCompatibleObjectDescription.getLength();
+        if (nDescriptorLen)
+        {
+            if (m_sCompatibleObjectDescription.getStr()[nDescriptorLen] == 11)
+                m_sCompatibleObjectDescription = m_sCompatibleObjectDescription.copy(0, nDescriptorLen - 1);
+
+            if (nDescriptorLen)
+                AddFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE);
+        }
+    }
+
+    // -----------------------------------------------------------------------------
+    sal_Bool ODataAccessObjectTransferable::GetData( const DataFlavor& rFlavor )
+    {
+        ULONG nFormat = SotExchange::GetFormat(rFlavor);
+        switch (nFormat)
+        {
+            case SOT_FORMATSTR_ID_DBACCESS_TABLE:
+            case SOT_FORMATSTR_ID_DBACCESS_QUERY:
+            case SOT_FORMATSTR_ID_DBACCESS_COMMAND:
+                return SetAny( makeAny(m_aDescriptor.createPropertyValueSequence()), rFlavor );
+
+            case SOT_FORMATSTR_ID_SBA_DATAEXCHANGE:
+                return SetString(m_sCompatibleObjectDescription, rFlavor);
+        }
+        return sal_False;
+    }
+
+    // -----------------------------------------------------------------------------
+    sal_Bool ODataAccessObjectTransferable::canExtractObjectDescriptor(const DataFlavorExVector& _rFlavors)
+    {
+        for (   DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
+                aCheck != _rFlavors.end();
+                ++aCheck
+            )
+        {
+            if (SOT_FORMATSTR_ID_DBACCESS_TABLE == aCheck->mnSotId)
+                return sal_True;
+            if (SOT_FORMATSTR_ID_DBACCESS_QUERY == aCheck->mnSotId)
+                return sal_True;
+            if (SOT_FORMATSTR_ID_DBACCESS_COMMAND == aCheck->mnSotId)
+                return sal_True;
+        }
+        return sal_False;
+    }
+
+    // -----------------------------------------------------------------------------
+    ODataAccessDescriptor ODataAccessObjectTransferable::extractObjectDescriptor(const TransferableDataHelper& _rData)
+    {
+        sal_Int32 nKnownFormatId = 0;
+        if ( _rData.HasFormat( SOT_FORMATSTR_ID_DBACCESS_TABLE ) )
+            nKnownFormatId = SOT_FORMATSTR_ID_DBACCESS_TABLE;
+        if ( _rData.HasFormat( SOT_FORMATSTR_ID_DBACCESS_QUERY ) )
+            nKnownFormatId = SOT_FORMATSTR_ID_DBACCESS_QUERY;
+        if ( _rData.HasFormat( SOT_FORMATSTR_ID_DBACCESS_COMMAND ) )
+            nKnownFormatId = SOT_FORMATSTR_ID_DBACCESS_COMMAND;
+
+        if (0 != nKnownFormatId)
+        {
+            // extract the any from the transferable
+            DataFlavor aFlavor;
+#ifdef _DEBUG
+            sal_Bool bSuccess =
+#endif
+            SotExchange::GetFormatDataFlavor(nKnownFormatId, aFlavor);
+            OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
+
+            Any aDescriptor = _rData.GetAny(aFlavor);
+
+            // extract the property value sequence
+            Sequence< PropertyValue > aDescriptorProps;
+#ifdef _DEBUG
+            bSuccess =
+#endif
+            aDescriptor >>= aDescriptorProps;
+            OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid clipboard format!");
+
+            // build the real descriptor
+            return ODataAccessDescriptor(aDescriptorProps);
+        }
+
+        OSL_ENSURE( sal_False, "OColumnTransferable::extractColumnDescriptor: unsupported formats only!" );
+        return ODataAccessDescriptor();
+    }
+
+    // -----------------------------------------------------------------------------
+    void ODataAccessObjectTransferable::addCompatibleSelectionDescription( const Sequence< Any >& _rSelRows )
+    {
+        const sal_Unicode       cSeparator(11);
+        const ::rtl::OUString   sSeparator(&cSeparator, 1);
+
+        const Any* pSelRows = _rSelRows.getConstArray();
+        const Any* pSelRowsEnd = pSelRows + _rSelRows.getLength();
+        for (pSelRows; pSelRows<pSelRowsEnd; ++pSelRows)
+        {
+            sal_Int32 nSelectedRow;
+#ifdef _DEBUG
+            sal_Bool bSuccess =
+#endif
+            *pSelRows >>= nSelectedRow;
+            OSL_ENSURE( bSuccess, "ODataAccessObjectTransferable::addCompatibleSelectionDescription: invalid row number!" );
+
+            m_sCompatibleObjectDescription += ::rtl::OUString::valueOf((sal_Int32)nSelectedRow);
+            m_sCompatibleObjectDescription += sSeparator;
+        }
+    }
+
+    // -----------------------------------------------------------------------------
+    void ODataAccessObjectTransferable::ObjectReleased()
+    {
+        m_aDescriptor.clear();
+    }
+
 
 //........................................................................
 }   // namespace svx
@@ -391,6 +660,9 @@ namespace svx
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/04/27 09:22:38  fs
+ *  #86303# use another content type for the own clipboard format
+ *
  *  Revision 1.4  2001/04/18 10:42:09  fs
  *  added connection to the ctor
  *
