@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-11 11:53:15 $
+ *  last change: $Author: aw $ $Date: 2001-01-12 16:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2098,40 +2098,41 @@ void E3dScene::ImpResetToSceneItems()
     {
         SfxItemSet aNew(*mpObjectItemSet->GetPool(), SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST);
         aNew.Put(*mpObjectItemSet);
-        mpObjectItemSet->ClearItem(0L);
+        mpObjectItemSet->ClearItem();
         mpObjectItemSet->Put(aNew);
     }
-
-//  ImpForceItemSet();
-//  mpObjectItemSet->SetRanges(mnSceneRangeData);
-//  mpObjectItemSet->SetRanges(mnAllRangeData);
+    else
+        ImpForceItemSet();
 }
 
 const SfxItemSet& E3dScene::GetItemSet() const
 {
-    // collect all ItemSets in mpGroupItemSet
-    ((E3dScene*)this)->ImpResetToSceneItems();
+    // prepare ItemSet
+    if(mpObjectItemSet)
+    {
+        SfxItemSet aNew(*mpObjectItemSet->GetPool(), SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST);
+        aNew.Put(*mpObjectItemSet);
+        mpObjectItemSet->ClearItem();
+        mpObjectItemSet->Put(aNew);
+    }
+    else
+        ((E3dScene*)this)->ImpForceItemSet();
 
+    // collect all ItemSets in mpGroupItemSet
     sal_uInt32 nCount(pSub->GetObjCount());
     for(sal_uInt32 a(0); a < nCount; a++)
     {
-//-/        mpObjectItemSet->MergeValues(pSub->GetObj(a)->GetItemSet(), TRUE);
         const SfxItemSet& rSet = pSub->GetObj(a)->GetItemSet();
         SfxWhichIter aIter(rSet);
         sal_uInt16 nWhich(aIter.FirstWhich());
 
         while(nWhich)
         {
-            const SfxPoolItem* pItem = NULL;
-            rSet.GetItemState(nWhich, TRUE, &pItem);
+            if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, FALSE))
+                mpObjectItemSet->InvalidateItem(nWhich);
+            else
+                mpObjectItemSet->MergeValue(rSet.Get(nWhich), TRUE);
 
-            if(pItem)
-            {
-                if(pItem == (SfxPoolItem *)-1)
-                    mpObjectItemSet->InvalidateItem(nWhich);
-                else
-                    mpObjectItemSet->MergeValue(*pItem, TRUE);
-            }
             nWhich = aIter.NextWhich();
         }
     }
