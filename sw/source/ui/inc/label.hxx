@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 09:05:18 $
+ *  last change: $Author: os $ $Date: 2002-09-09 08:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ class SwLabDlg : public SfxTabDialog
     String          sFormat;
     String          sMedium;
     BOOL            m_bLabel;
-    void          _ReplaceGroup( const String &rMake, SwLabItem *pItem );
+    void          _ReplaceGroup( const String &rMake );
 
     virtual void PageCreated( USHORT nId, SfxTabPage &rPage );
 public:
@@ -122,7 +122,8 @@ public:
     const SvStringsDtor  &Makes()   const { return aMakes;   }
 
     Printer *GetPrt();
-    inline void ReplaceGroup( const String &rMake, SwLabItem *pItem );
+    inline void ReplaceGroup( const String &rMake );
+    void UpdateGroup( const String &rMake ) {_ReplaceGroup( rMake );}
     static void UpdateFieldInformation(::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& xModel,
                                                                                 const SwLabItem& rItem);
     const String& GetBusinessCardStr() const {return sBusinessCardDlg;}
@@ -131,10 +132,10 @@ public:
 
 };
 
-inline void SwLabDlg::ReplaceGroup( const String &rMake, SwLabItem *pItem )
+inline void SwLabDlg::ReplaceGroup( const String &rMake )
 {
     if ( rMake != aLstGroup )
-        _ReplaceGroup( rMake, pItem );
+        _ReplaceGroup( rMake );
 }
 
 #endif

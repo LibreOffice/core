@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-14 16:34:12 $
+ *  last change: $Author: os $ $Date: 2002-09-09 08:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ void SwLabRec::FillItem( SwLabItem& rItem ) const
 }
 
 // --------------------------------------------------------------------------
-void SwLabDlg::_ReplaceGroup( const String &rMake, SwLabItem *pItem )
+void SwLabDlg::_ReplaceGroup( const String &rMake )
 {
     //Die alten Eintraege vernichten.
     pRecs->Remove( 1, pRecs->Count() - 1 );
@@ -255,7 +255,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
     }
 
     if ( aMakes.Count() )
-        _ReplaceGroup( *aMakes[nLstGroup], &aItem );
+        _ReplaceGroup( *aMakes[nLstGroup] );
     if (pExampleSet)
         pExampleSet->Put(aItem);
 }
@@ -553,7 +553,7 @@ IMPL_LINK( SwLabPage, MakeHdl, ListBox *, EMPTYARG )
     GetParent()->TypeIds().Remove( 0, GetParent()->TypeIds().Count() );
 
     const String aMake = aMakeBox.GetSelectEntry();
-    GetParent()->ReplaceGroup( aMake, &aItem );
+    GetParent()->ReplaceGroup( aMake );
     aItem.aLstMake = aMake;
 
     const sal_Bool   bCont    = aContButton.IsChecked();
@@ -757,6 +757,9 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
     String sType(aItem.aType);
     aMakeBox.GetSelectHdl().Call( &aMakeBox );
     aItem.aType = sType;
+    //#102806# a newly added make may not be in the type ListBox already
+    if (aTypeBox.GetEntryPos(String(aItem.aType)) == LISTBOX_ENTRY_NOTFOUND && aItem.aMake.getLength())
+        GetParent()->UpdateGroup( aItem.aMake );
     if (aTypeBox.GetEntryPos(String(aItem.aType)) != LISTBOX_ENTRY_NOTFOUND)
     {
         aTypeBox.SelectEntry(aItem.aType);
