@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-07 10:09:33 $
+ *  last change: $Author: er $ $Date: 2000-11-18 18:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,12 +85,17 @@
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_I18N_KNUMBERFORMATTYPE_HPP_
+#include <com/sun/star/i18n/KNumberFormatType.hpp>
+#endif
+
 #pragma hdrstop
 
 
 #define LOCALEDATA_LIBRARYNAME "int"
 #define LOCALEDATA_SERVICENAME "com.sun.star.i18n.LocaleData"
 
+static const int nDateFormatInvalid = -1;
 static const USHORT nCurrFormatInvalid = 0xffff;
 static const USHORT nCurrFormatDefault = 0;
 
@@ -119,7 +124,11 @@ LocaleDataWrapper::LocaleDataWrapper(
         }
         catch ( Exception& e )
         {
-            DBG_ERRORFILE( "LocaleDataWrapper ctor: Exception caught!" );
+#ifndef PRODUCT
+            ByteString aMsg( "LocaleDataWrapper ctor: Exception caught\n" );
+            aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+            DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
         }
     }
     else
@@ -138,7 +147,11 @@ LocaleDataWrapper::LocaleDataWrapper(
         }
         catch ( Exception& e )
         {
-            DBG_ERRORFILE( "getComponentInstance: Exception caught!" );
+#ifndef PRODUCT
+            ByteString aMsg( "getComponentInstance: Exception caught\n" );
+            aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+            DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
         }
     }
 }
@@ -160,6 +173,7 @@ void LocaleDataWrapper::invalidateData()
 {
     aCurrSymbol.Erase();
     aCurrBankSymbol.Erase();
+    nDateFormat = nLongDateFormat = nDateFormatInvalid;
     nCurrPositiveFormat = nCurrNegativeFormat = nCurrDigits = nCurrFormatInvalid;
     if ( bLocaleDataItemValid )
     {
@@ -178,7 +192,6 @@ void LocaleDataWrapper::invalidateData()
         bReservedWordValid = FALSE;
     }
     // dummies
-    aLongDateDayOfWeekSep.AssignAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
     cCurrZeroChar = '0';
 }
 
@@ -192,7 +205,11 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-        DBG_ERRORFILE( "getLanguageCountryInfo: Exception caught!" );
+#ifndef PRODUCT
+        ByteString aMsg( "getLanguageCountryInfo: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
     }
     return ::com::sun::star::i18n::LanguageCountryInfo();
 }
@@ -207,7 +224,11 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-        DBG_ERRORFILE( "getLocaleItem: Exception caught!" );
+#ifndef PRODUCT
+        ByteString aMsg( "getLocaleItem: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
     }
     return ::com::sun::star::i18n::LocaleDataItem();
 }
@@ -222,7 +243,11 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-        DBG_ERRORFILE( "getAllCalendars: Exception caught!" );
+#ifndef PRODUCT
+        ByteString aMsg( "getAllCalendars: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar >(0);
 }
@@ -237,7 +262,11 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-        DBG_ERRORFILE( "getAllCurrencies: Exception caught!" );
+#ifndef PRODUCT
+        ByteString aMsg( "getAllCurrencies: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency >(0);
 }
@@ -252,7 +281,11 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-        DBG_ERRORFILE( "getAllFormats: Exception caught!" );
+#ifndef PRODUCT
+        ByteString aMsg( "getAllFormats: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement >(0);
 }
@@ -267,7 +300,11 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-        DBG_ERRORFILE( "getCollatorImplementations: Exception caught!" );
+#ifndef PRODUCT
+        ByteString aMsg( "getCollatorImplementations: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Implementation >(0);
 }
@@ -282,7 +319,11 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-        DBG_ERRORFILE( "getTransliterations: Exception caught!" );
+#ifndef PRODUCT
+        ByteString aMsg( "getTransliterations: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
     }
     return ::com::sun::star::uno::Sequence< ::rtl::OUString >(0);
 }
@@ -297,7 +338,11 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-        DBG_ERRORFILE( "getForbiddenCharacters: Exception caught!" );
+#ifndef PRODUCT
+        ByteString aMsg( "getForbiddenCharacters: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
     }
     return ::com::sun::star::i18n::ForbiddenCharacters();
 }
@@ -312,7 +357,11 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( Exception& e )
     {
-        DBG_ERRORFILE( "getReservedWord: Exception caught!" );
+#ifndef PRODUCT
+        ByteString aMsg( "getReservedWord: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
     }
     return ::com::sun::star::uno::Sequence< ::rtl::OUString >(0);
 }
@@ -383,6 +432,18 @@ void LocaleDataWrapper::getOneLocaleItemImpl( sal_Int16 nItem )
         case LocaleItem::TIME_PM :
             aLocaleItem[nItem] = aLocaleDataItem.timePM;
         break;
+        case LocaleItem::LONG_DATE_DAY_OF_WEEK_SEPARATOR :
+            aLocaleItem[nItem] = aLocaleDataItem.LongDateDayOfWeekSeparator;
+        break;
+        case LocaleItem::LONG_DATE_DAY_SEPARATOR :
+            aLocaleItem[nItem] = aLocaleDataItem.LongDateDaySeparator;
+        break;
+        case LocaleItem::LONG_DATE_MONTH_SEPARATOR :
+            aLocaleItem[nItem] = aLocaleDataItem.LongDateMonthSeparator;
+        break;
+        case LocaleItem::LONG_DATE_YEAR_SEPARATOR :
+            aLocaleItem[nItem] = aLocaleDataItem.LongDateYearSeparator;
+        break;
         default:
             DBG_ERRORFILE( "getOneLocaleItemImpl: which one?" );
     }
@@ -426,6 +487,8 @@ MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( const String& r
     return MEASURE_US;
 }
 
+
+// --- currencies -----------------------------------------------------
 
 const String& LocaleDataWrapper::getCurrSymbol() const
 {
@@ -539,7 +602,7 @@ void LocaleDataWrapper::scanCurrFormat( const String& rCode,
                         {
                             if ( rCode.Equals( rDecSep, (p-pStr)+1, rDecSep.Len() ) )
                             {
-                                nCurrDigits = 1;
+                                nCurrDigits = 0;
                                 const sal_Unicode* pc = p + rDecSep.Len() + 1;
                                 while ( pc < pStop && (*pc == '0' || *pc == '#') )
                                 {
@@ -723,6 +786,155 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     }
 }
 
+
+// --- date -----------------------------------------------------------
+
+DateFormat LocaleDataWrapper::getDateFormat() const
+{
+    if ( nDateFormat == nDateFormatInvalid )
+        ((LocaleDataWrapper*)this)->getDateFormatsImpl();
+    return (DateFormat) nDateFormat;
+}
+
+
+DateFormat LocaleDataWrapper::getLongDateFormat() const
+{
+    if ( nLongDateFormat == nDateFormatInvalid )
+        ((LocaleDataWrapper*)this)->getDateFormatsImpl();
+    return (DateFormat) nLongDateFormat;
+}
+
+
+DateFormat LocaleDataWrapper::scanDateFormat( const String& rCode )
+{
+    // Only some european versions were translated, the ones with different
+    // keyword combinations are:
+    // English DMY, German TMJ, Spanish DMA, French JMA, Italian GMA,
+    // Dutch DMJ, Finnish PKV
+
+    // default is English keywords for every other language
+    xub_StrLen nDay = rCode.Search( 'D' );
+    xub_StrLen nMonth = rCode.Search( 'M' );
+    xub_StrLen nYear = rCode.Search( 'Y' );
+    if ( nDay == STRING_NOTFOUND || nMonth == STRING_NOTFOUND || nYear == STRING_NOTFOUND )
+    {   // This algorithm assumes that all three parts (DMY) are present
+        if ( nMonth == STRING_NOTFOUND )
+        {   // only Finnish has something else than 'M' for month
+            nMonth = rCode.Search( 'K' );
+            if ( nMonth != STRING_NOTFOUND )
+            {
+                nDay = rCode.Search( 'P' );
+                nYear = rCode.Search( 'V' );
+            }
+        }
+        else if ( nDay == STRING_NOTFOUND )
+        {   // We have a month 'M' if we reach this branch.
+            // Possible languages containing 'M' but no 'D':
+            // German, French, Italian
+            nDay = rCode.Search( 'T' );         // German
+            if ( nDay != STRING_NOTFOUND )
+                nYear = rCode.Search( 'J' );
+            else
+            {
+                nYear = rCode.Search( 'A' );    // French, Italian
+                if ( nYear != STRING_NOTFOUND )
+                {
+                    nDay = rCode.Search( 'J' ); // French
+                    if ( nDay == STRING_NOTFOUND )
+                        nDay = rCode.Search( 'G' ); // Italian
+                }
+            }
+        }
+        else
+        {   // We have a month 'M' and a day 'D'.
+            // Possible languages containing 'D' and 'M' but not 'Y':
+            // Spanish, Dutch
+            nYear = rCode.Search( 'A' );        // Spanish
+            if ( nYear == STRING_NOTFOUND )
+                nYear = rCode.Search( 'J' );    // Dutch
+        }
+        if ( nDay == STRING_NOTFOUND || nMonth == STRING_NOTFOUND || nYear == STRING_NOTFOUND )
+        {
+            DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "scanDateFormat: not all DMY present" ) ) ).GetBuffer() );
+            if ( nDay == STRING_NOTFOUND )
+                nDay = rCode.Len();
+            if ( nMonth == STRING_NOTFOUND )
+                nMonth = rCode.Len();
+            if ( nYear == STRING_NOTFOUND )
+                nYear = rCode.Len();
+        }
+    }
+    // compare with <= because each position may equal rCode.Len()
+    if ( nDay <= nMonth && nMonth <= nYear )
+        return DMY;     // also if every position equals rCode.Len()
+    else if ( nMonth <= nDay && nDay <= nYear )
+        return MDY;
+    else if ( nYear <= nMonth && nMonth <= nDay )
+        return YMD;
+    else
+    {
+        DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "scanDateFormat: no magic applyable" ) ) ).GetBuffer() );
+        return DMY;
+    }
+}
+
+
+void LocaleDataWrapper::getDateFormatsImpl()
+{
+    NumberFormatCodeWrapper aNumberFormatCode( xSMgr, getLocale() );
+    uno::Sequence< NumberFormatCode > aFormatSeq
+        = aNumberFormatCode.getAllFormatCode( KNumberFormatUsage::DATE );
+    sal_Int32 nCnt = aFormatSeq.getLength();
+    if ( !nCnt )
+    {   // bad luck
+        DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "getDateFormatsImpl: no date formats" ) ) ).GetBuffer() );
+        nDateFormat = nLongDateFormat = DMY;
+        return ;
+    }
+    // find a default, a medium, and a long
+    sal_Int32 nDef, nMedium, nLong;
+    nDef = nMedium = nLong = -1;
+    sal_Int32 nElem;
+    for ( nElem = 0; nElem < nCnt; nElem++ )
+    {
+        if ( nDef == -1 && aFormatSeq[nElem].Default )
+            nDef = nElem;
+        if ( nMedium == -1 && aFormatSeq[nElem].Type == KNumberFormatType::MEDIUM )
+            nMedium = nElem;
+        if ( nLong == -1 && aFormatSeq[nElem].Type == KNumberFormatType::LONG )
+            nLong = nElem;
+    }
+    if ( nDef == -1 )
+    {
+        DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "getDateFormatsImpl: no default" ) ) ).GetBuffer() );
+        if ( nMedium != -1 )
+            nDef = nMedium;
+        else if ( nLong != -1 )
+            nDef = nLong;
+        else
+            nDef = 0;
+    }
+    DateFormat nDF = scanDateFormat( aFormatSeq[nDef].Code );
+    if ( aFormatSeq[nDef].Type == KNumberFormatType::LONG )
+    {
+        nLongDateFormat = nDF;
+        if ( nMedium == -1 )
+            nDateFormat = nDF;
+        else
+            nDateFormat = scanDateFormat( aFormatSeq[nMedium].Code );
+    }
+    else
+    {
+        nDateFormat = nDF;
+        if ( nLong == -1 )
+            nLongDateFormat = nDF;
+        else
+            nLongDateFormat = scanDateFormat( aFormatSeq[nLong].Code );
+    }
+}
+
+
+// --- mixed ----------------------------------------------------------
 
 ::com::sun::star::lang::Locale LocaleDataWrapper::getLoadedLocale() const
 {
