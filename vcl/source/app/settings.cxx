@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-16 06:35:38 $
+ *  last change: $Author: pl $ $Date: 2002-10-18 13:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,6 +479,7 @@ ImplStyleData::ImplStyleData()
     mnSelectionOptions          = 0;
     mnDisplayOptions            = 0;
     mnOptions                   = 0;
+    mnAutoMnemonic              = 1;
 
     SetStandardStyles();
 }
@@ -567,7 +568,8 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnOptions                   = rData.mnOptions;
     mnHighContrast              = rData.mnHighContrast;
     mnUseSystemUIFonts          = rData.mnUseSystemUIFonts;
-    }
+    mnAutoMnemonic              = rData.mnAutoMnemonic;
+}
 
 // -----------------------------------------------------------------------
 
@@ -999,6 +1001,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
         return TRUE;
 
     if ( (mpData->mnOptions                 == rSet.mpData->mnOptions)                  &&
+         (mpData->mnAutoMnemonic            == rSet.mpData->mnAutoMnemonic)             &&
          (mpData->mnLogoDisplayTime         == rSet.mpData->mnLogoDisplayTime)          &&
          (mpData->mnDragFullOptions         == rSet.mpData->mnDragFullOptions)          &&
          (mpData->mnAnimationOptions        == rSet.mpData->mnAnimationOptions)         &&

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-02 14:12:40 $
+ *  last change: $Author: pl $ $Date: 2002-10-18 13:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@ static ByteString ImplGetDialogText( Dialog* pDialog )
 
 static BOOL ImplIsMnemonicCtrl( Window* pWindow )
 {
+    if( ! pWindow->GetSettings().GetStyleSettings().GetAutoMnemonic() )
+        return FALSE;
+
     if ( (pWindow->GetType() == WINDOW_RADIOBUTTON) ||
          (pWindow->GetType() == WINDOW_CHECKBOX) ||
          (pWindow->GetType() == WINDOW_TRISTATEBOX) ||
@@ -522,7 +525,7 @@ void Dialog::StateChanged( StateChangedType nType )
 
     if ( nType == STATE_CHANGE_INITSHOW )
     {
-        if ( Application::IsAutoMnemonicEnabled() )
+        if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
             ImplWindowAutoMnemonic( this );
 
         if ( IsDefaultPos() && !mbFrame )

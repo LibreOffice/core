@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-09 11:26:21 $
+ *  last change: $Author: pl $ $Date: 2002-10-18 13:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1494,14 +1494,18 @@ BOOL Application::IsAutoHelpIdEnabled()
 
 void Application::EnableAutoMnemonic( BOOL bEnabled )
 {
-    ImplGetSVData()->maAppData.mbAutoMnemonics = bEnabled;
+    AllSettings aSettings = GetSettings();
+    StyleSettings aStyle = aSettings.GetStyleSettings();
+    aStyle.SetAutoMnemonic( bEnabled );
+    aSettings.SetStyleSettings( aStyle );
+    SetSettings( aSettings );
 }
 
 // -----------------------------------------------------------------------
 
 BOOL Application::IsAutoMnemonicEnabled()
 {
-    return ImplGetSVData()->maAppData.mbAutoMnemonics;
+    return GetSettings().GetStyleSettings().GetAutoMnemonic();
 }
 
 // -----------------------------------------------------------------------

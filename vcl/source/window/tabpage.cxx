@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-19 16:01:07 $
+ *  last change: $Author: pl $ $Date: 2002-10-18 13:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ void TabPage::StateChanged( StateChangedType nType )
 
     if ( nType == STATE_CHANGE_INITSHOW )
     {
-        if ( Application::IsAutoMnemonicEnabled() )
+        if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
             ImplWindowAutoMnemonic( this );
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-10 13:25:22 $
+ *  last change: $Author: pl $ $Date: 2002-10-18 13:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2695,7 +2695,7 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
             0xFFFF, MENUITEM_STRING, 0, aTmpEntryText, Image(), NULL, 0xFFFF );
         pData->bIsTemporary = TRUE;
     }
-    else if ( pSVData->maAppData.mbAutoMnemonics && !( nMenuFlags & MENU_FLAG_NOAUTOMNEMONICS ) )
+    else if ( Application::GetSettings().GetStyleSettings().GetAutoMnemonic() && !( nMenuFlags & MENU_FLAG_NOAUTOMNEMONICS ) )
     {
         CreateAutoMnemonics();
     }
