@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: aw $ $Date: 2000-11-25 18:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,30 @@ TYPEINIT1( SwVirtFlyDrawObj, SdrVirtObj )
 SwFlyDrawObj::SwFlyDrawObj()
 {
     bNotPersistent = TRUE;
+    mpLocalItemSet = NULL;
+}
+
+SwFlyDrawObj::~SwFlyDrawObj()
+{
+    if(mpLocalItemSet)
+        delete mpLocalItemSet;
+}
+
+SfxItemSet* SwFlyDrawObj::CreateNewItemSet(SfxItemPool& rPool)
+{
+    return new SfxItemSet(rPool);
+}
+
+const SfxItemSet& SwFlyDrawObj::GetItemSet() const
+{
+    if(!mpLocalItemSet)
+    {
+        ((SwFlyDrawObj*)this)->mpLocalItemSet =
+        ((SwFlyDrawObj*)this)->CreateNewItemSet((SfxItemPool&)(*GetItemPool()));
+        DBG_ASSERT(mpLocalItemSet, "Could not create an SfxItemSet(!)");
+    }
+
+    return *mpLocalItemSet;
 }
 
 /*************************************************************************

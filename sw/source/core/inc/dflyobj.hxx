@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: aw $ $Date: 2000-11-25 19:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,19 @@ const UINT16 SwDrawFirst            = 0x0001;
 
 class SwFlyDrawObj : public SdrObject
 {
+    SfxItemSet*                 mpLocalItemSet;
+
 public:
     TYPEINFO();
 
     SwFlyDrawObj();
+    ~SwFlyDrawObj();
 
     virtual FASTBOOL Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
+
+    // ItemSet access
+    virtual const SfxItemSet& GetItemSet() const;
+    virtual SfxItemSet* CreateNewItemSet(SfxItemPool& rPool);
 
     //Damit eine Instanz dieser Klasse beim laden erzeugt werden kann
     //(per Factory).
