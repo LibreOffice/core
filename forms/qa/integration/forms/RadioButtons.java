@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButtons.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:53:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@ import com.sun.star.beans.*;
 import complexlib.ComplexTestCase;
 import integration.forms.dbfTools;
 import integration.forms.DocumentHelper;
+import integration.forms.SpreadsheetDocument;
 
 import util.utils;
 import java.util.*;
@@ -125,7 +126,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     private XPropertySet insertRadio( int nXPos, int nYPos, String label, String name, String refValue, XPropertySet parentForm ) throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        XIndexContainer parentContainer = dbfTools.queryXIndexContainer( parentForm );
+        XIndexContainer parentContainer = dbfTools.queryIndexContainer( parentForm );
         XPropertySet xRadio = m_formLayer.createControlAndShape( "DatabaseRadioButton", nXPos, nYPos, 25, 6, parentContainer );
         xRadio.setPropertyValue( "Label", label );
         xRadio.setPropertyValue( "RefValue", refValue );
@@ -224,7 +225,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
         insertRadio( 20, 38,  "group 1 (b)", "group 1", "b" );
         insertRadio( 20, 46,  "group 1 (c)", "group 1", "c" );
 
-        m_secondaryForm = dbfTools.queryXPropertySet( m_document.createSiblingForm( m_primaryForm, "secondary" ) );
+        m_secondaryForm = dbfTools.queryPropertySet( m_document.createSiblingForm( m_primaryForm, "secondary" ) );
 
         insertRadio( 70, 30,  "group 2 (a)", "group 2", "a", m_secondaryForm );
         insertRadio( 70, 38,  "group 2 (b)", "group 2", "b", m_secondaryForm );
@@ -322,7 +323,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     {
         m_primaryForm = null;
 
-        m_document = useSpreadsheetDocument ? DocumentHelper.blankSpreadsheetDocument( m_orb ) : DocumentHelper.blankTextDocument( m_orb );
+        m_document = useSpreadsheetDocument ? new SpreadsheetDocument( m_orb ) : DocumentHelper.blankTextDocument( m_orb );
         m_formLayer = new FormLayer( m_document );
     }
 
@@ -349,11 +350,6 @@ public class RadioButtons extends complexlib.ComplexTestCase
         XAccessible accessible = (XAccessible)UnoRuntime.queryInterface(
             XAccessible.class, m_document.getCurrentView().getControl( xRadio ) );
 
-        XAccessibleContext context = accessible.getAccessibleContext();
-        XServiceInfo si = (XServiceInfo)UnoRuntime.queryInterface( XServiceInfo.class,
-            accessible.getAccessibleContext() );
-        String test = si.getImplementationName();
-
         XAccessibleValue xValue = (XAccessibleValue)UnoRuntime.queryInterface(
             XAccessibleValue.class, accessible.getAccessibleContext() );
 
@@ -369,7 +365,7 @@ public class RadioButtons extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     private XPropertySet getRadioModel( String name, String refValue, XPropertySet form ) throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        return m_formLayer.getRadioModel( form, name, refValue );
+        return m_formLayer.getRadioModelByRefValue( form, name, refValue );
     }
 
     /* ------------------------------------------------------------------ */
