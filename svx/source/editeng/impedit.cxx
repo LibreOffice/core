@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-23 12:46:44 $
+ *  last change: $Author: mt $ $Date: 2001-11-23 13:02:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1630,7 +1630,6 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
     DBG_ASSERT( pDragAndDropInfo, "Drop - No Drag&Drop info?!" );
-    DBG_ASSERT( pDragAndDropInfo->bDragAccepted, "Drop? Drag was not accepted!" );
 
     if ( pDragAndDropInfo->bDragAccepted )
     {
