@@ -1,15 +1,10 @@
     <node oor:name="StarOffice XML (Impress)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN ALIEN PREFERRED</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value>XML</value></prop>
         <prop oor:name="FileFormatVersion"><value>6200</value></prop>
         <prop oor:name="Type"><value>impress_StarOffice_XML_Impress</value></prop>
-        <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
-        <prop oor:name="UIComponent"/>
-        <prop oor:name="UserData"><value>XML</value></prop>
-        <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
-        <prop oor:name="UIName">
-            <value xml:lang="de">%productname% %formatversion% Präsentation</value>
-            <value xml:lang="en-US">%productname% %formatversion% Presentation</value>
-            <value xml:lang="x-translate">%productname% %formatversion% Presentation</value>
-        </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN ALIEN PREFERRED</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
     </node>
