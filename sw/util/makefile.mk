@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:58:28 $
+#   last change: $Author: obo $ $Date: 2003-09-01 12:45:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,7 +154,8 @@ SHL2STDLIBS+= \
     $(CPPULIB) \
     $(VOSLIB) \
     $(SALLIB) \
-    $(ICUUCLIB)
+        $(ICUUCLIB) \
+    $(I18NUTILLIB)
 
 .IF "$(OS)"=="MACOSX"
 # static libraries at end for OS X
