@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 10:28:32 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
