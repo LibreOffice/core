@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-27 13:57:43 $
+ *  last change: $Author: hr $ $Date: 2001-09-28 09:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,8 +169,8 @@ class ClassName : public ListenerMultiplexerBase, public InterfaceName \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException); \
-    void                        SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)   { ListenerMultiplexerBase::acquire(); } \
-    void                        SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)   { ListenerMultiplexerBase::release(); } \
+    void                        SAL_CALL acquire() throw()  { ListenerMultiplexerBase::acquire(); } \
+    void                        SAL_CALL release() throw()  { ListenerMultiplexerBase::release(); } \
     void                        SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
 // -------------------------------------------------------------------------------------
