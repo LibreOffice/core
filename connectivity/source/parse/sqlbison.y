@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.16 2001-02-06 08:14:11 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.17 2001-02-14 10:29:29 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-02-06 08:14:11 $ $Revision: 1.16 $
+//	$Author: oj $ $Date: 2001-02-14 10:29:29 $ $Revision: 1.17 $
 //
 // Description:
 //
@@ -3168,7 +3168,7 @@ OSQLScanner*		OSQLParser::s_pScanner = 0;
 OSQLParseNodes*		OSQLParser::s_pGarbageCollector = 0;
 
 //-----------------------------------------------------------------------------
-OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,OParseContext* _pContext)
+OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,const OParseContext* _pContext)
 		   :m_pContext(_pContext)
 		   ,m_pParseTree(NULL)
 		   ,m_pLocale(NULL)
@@ -3424,7 +3424,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 }
 
 //-----------------------------------------------------------------------------
-::rtl::OString OSQLParser::TokenIDToStr(sal_uInt32 nTokenID, OParseContext* pContext)
+::rtl::OString OSQLParser::TokenIDToStr(sal_uInt32 nTokenID, const OParseContext* pContext)
 {
 	::rtl::OString aStr;
 	if (pContext)

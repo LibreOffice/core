@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-01 13:27:28 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,7 @@ void OSQLParseNode::append(OSQLParseNode* pNewNode)
 //-----------------------------------------------------------------------------
 void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
                                    const Reference< XDatabaseMetaData > & xMeta,
-                                   OParseContext* pContext,
+                                   const OParseContext* pContext,
                                    sal_Bool _bIntl,
                                    sal_Bool _bQuote) const
 {
@@ -374,7 +374,7 @@ void OSQLParseNode::parseNodeToPredicateStr(::rtl::OUString& rString,
                                               const Reference< XNumberFormatter > & xFormatter,
                                               const ::com::sun::star::lang::Locale& rIntl,
                                               sal_Char _cDec,
-                                              OParseContext* pContext ) const
+                                              const OParseContext* pContext ) const
 {
 
     OSL_ENSHURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
@@ -390,7 +390,7 @@ void OSQLParseNode::parseNodeToPredicateStr(::rtl::OUString& rString,
                                               const Reference< XPropertySet > & _xField,
                                               const ::com::sun::star::lang::Locale& rIntl,
                                               sal_Char _cDec,
-                                              OParseContext* pContext ) const
+                                              const OParseContext* pContext ) const
 {
 
     OSL_ENSHURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
@@ -405,7 +405,7 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
                       const Reference< XNumberFormatter > & xFormatter,
                       const Reference< XPropertySet > & _xField,
                       const ::com::sun::star::lang::Locale& rIntl,
-                      OParseContext* pContext,
+                      const OParseContext* pContext,
                       sal_Bool _bIntl,
                       sal_Bool _bQuote,
                       sal_Char _cDecSep,
@@ -583,7 +583,7 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString, const SQLParseNodeP
                     rString += ::rtl::OUString::createFromAscii(" ");
 
                 rString += ::rtl::OUString::createFromAscii(
-                            OSQLParser::TokenIDToStr(m_nNodeID, &const_cast<OParseContext&>(rParam.rContext)).getStr());
+                            OSQLParser::TokenIDToStr(m_nNodeID, &rParam.rContext).getStr());
             }   break;
             case SQL_NODE_STRING:
                 if (rString.getLength())

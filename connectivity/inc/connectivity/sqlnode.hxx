@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 13:11:07 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 10:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ namespace connectivity
 
         void parseNodeToStr(::rtl::OUString& rString,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > & xMeta,
-                            OParseContext* pContext = NULL,
+                            const OParseContext* pContext = NULL,
                             sal_Bool _bIntl = sal_False,
                             sal_Bool _bQuote= sal_True) const;
 
@@ -297,7 +297,7 @@ namespace connectivity
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
                                      const ::com::sun::star::lang::Locale& rIntl,
                                      sal_Char _cDec,
-                                     OParseContext* pContext = NULL ) const;
+                                     const OParseContext* pContext = NULL ) const;
 
         void parseNodeToPredicateStr(::rtl::OUString& rString,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > & xMeta,
@@ -305,7 +305,7 @@ namespace connectivity
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xField,
                                      const ::com::sun::star::lang::Locale& rIntl,
                                      sal_Char _cDec,
-                                     OParseContext* pContext = NULL ) const;
+                                     const OParseContext* pContext = NULL ) const;
 
         OSQLParseNode* getByRule(OSQLParseNode::Rule eRule) const;
 
@@ -372,7 +372,7 @@ namespace connectivity
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xField,
                             const ::com::sun::star::lang::Locale& rIntl,
-                            OParseContext* pContext,
+                            const OParseContext* pContext,
                             sal_Bool _bIntl,
                             sal_Bool _bQuote,
                             sal_Char _cDecSep,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlparse.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 16:47:30 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 10:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ namespace connectivity
         static sal_Int32            s_nRefCount;
 
     // informations on the current parse action
-        OParseContext*              m_pContext;
+        const OParseContext*        m_pContext;
         OSQLParseNode*              m_pParseTree;   // result from parsing
         ::com::sun::star::lang::Locale* m_pLocale;      // current locale settings for parsing
         ::rtl::OUString                     m_sFieldName;   // current field name for a predicate
@@ -210,7 +210,7 @@ namespace connectivity
     public:
         // if NULL, a default context will be used
         // the context must live as long as the parser
-        OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,OParseContext* _pContext = NULL);
+        OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,const OParseContext* _pContext = NULL);
         ~OSQLParser();
 
         // Parsing an SQLStatement
@@ -227,7 +227,7 @@ namespace connectivity
         const OParseContext& getContext() const {return *m_pContext;}
 
         // TokenIDToStr: Token-Name zu einer Token-Nr.
-        static ::rtl::OString TokenIDToStr(sal_uInt32 nTokenID, OParseContext* pContext = NULL);
+        static ::rtl::OString TokenIDToStr(sal_uInt32 nTokenID, const OParseContext* pContext = NULL);
 
         // StrToTokenID: Token-Nr. zu einem Token-Namen.
         // static sal_uInt32 StrToTokenID(const ::rtl::OString & rName);

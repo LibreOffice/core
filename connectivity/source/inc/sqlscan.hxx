@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlscan.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:45:18 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 10:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,13 +73,13 @@ namespace connectivity
     */
     class OSQLScanner
     {
-        OParseContext*  m_pContext;                 // context for parse, knows all international stuff
-        ::rtl::OString  m_sStatement;               // statement to parse
-        ::rtl::OUString m_sErrorMessage;
+        const OParseContext*    m_pContext;                 // context for parse, knows all international stuff
+        ::rtl::OString          m_sStatement;               // statement to parse
+        ::rtl::OUString         m_sErrorMessage;
 
-        sal_Int32       m_nCurrentPos;             // next position to read from the statement
-        sal_Bool        m_bInternational;          // do we have a statement which may uses
-        sal_Int32       m_nRule;                   // rule to be set
+        sal_Int32               m_nCurrentPos;             // next position to read from the statement
+        sal_Bool                m_bInternational;          // do we have a statement which may uses
+        sal_Int32               m_nRule;                   // rule to be set
 
     public:
         OSQLScanner();
@@ -92,7 +92,7 @@ namespace connectivity
         virtual sal_Int32 getInternationalTokenID(const char* sToken) const;
 
         // setting the new information before scanning
-        void prepareScan(const ::rtl::OUString & rNewStatement, OParseContext* pContext, sal_Bool bInternational);
+        void prepareScan(const ::rtl::OUString & rNewStatement, const OParseContext* pContext, sal_Bool bInternational);
         const ::rtl::OUString& getErrorMessage() const {return m_sErrorMessage;}
 
         sal_Int32 SQLlex();
