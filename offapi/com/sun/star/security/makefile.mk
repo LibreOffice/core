@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-31 09:52:20 $
+#   last change: $Author: rt $ $Date: 2005-03-29 13:39:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,8 @@ IDLFILES=\
     CertificateCharacters.idl           \
     CertificateValidity.idl             \
     XCertificateExtension.idl           \
-    XDocumentDigitalSignatures.idl
+    XDocumentDigitalSignatures.idl	\
+    KeyUsage.idl
 
 # ------------------------------------------------------------------
 
