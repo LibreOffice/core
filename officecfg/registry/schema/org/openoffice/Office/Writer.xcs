@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-03 10:53:24 $
+ *  last change: $Author: tl $ $Date: 2002-07-22 06:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,15 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="Writer" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+  <info>
+    <desc xml:lang="en-US">Contains settings for the Writer application.</desc>
+  </info>
   <import oor:component="org.openoffice.Office.Common"/>
   <templates>
     <group oor:name="AgendaType">
+      <info>
+        <desc xml:lang="en-US">Settings for a single agenda entry.</desc>
+      </info>
       <prop oor:name="Author" oor:type="xs:string">
         <info>
           <desc xml:lang="en-US">Responsible person for the topic</desc>
@@ -84,6 +90,9 @@
       </prop>
     </group>
     <group oor:name="StyleType">
+      <info>
+          <desc xml:lang="en-US">A type for the preferred style of templates.</desc>
+      </info>
       <prop oor:name="PreferredStyle" oor:type="xs:int">
         <info>
           <desc xml:lang="en-US">Preferred style for the template</desc>
@@ -228,6 +237,9 @@
       </prop>
     </group>
     <group oor:name="DataSetType">
+      <info>
+        <desc xml:lang="en-US">Specifies a data set from a database table or query to be inserted.</desc>
+      </info>
       <prop oor:name="DataSource" oor:type="xs:string">
         <info>
           <desc xml:lang="en-US">Specifies the datasource</desc>
@@ -319,8 +331,17 @@
     </group>
   </templates>
   <component>
+    <info>
+      <desc xml:lang="en-US">Contains the settings for the Writer application.</desc>
+    </info>
     <group oor:name="Content">
+      <info>
+        <desc xml:lang="en-US">Contains settings for various content elements.</desc>
+      </info>
       <group oor:name="Display">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the visibility of various elements.</desc>
+        </info>
         <prop oor:name="GraphicObject" oor:type="xs:boolean">
           <!-- OldPath: Writer/Contents/Display -->
           <!-- OldLocation: Soffice.cfg -->
@@ -387,6 +408,9 @@
         </prop>
       </group>
       <group oor:name="NonprintingCharacter">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the visibility of various non-printing characters.</desc>
+        </info>
         <prop oor:name="MetaCharacters" oor:type="xs:boolean">
           <!-- Responsible: OS -->
           <!-- UIHints: View - Nonprinting Characters -->
@@ -486,6 +510,9 @@
         </prop>
       </group>
       <group oor:name="Update">
+        <info>
+          <desc xml:lang="en-US">Contains settings for automatic update of some elements.</desc>
+        </info>
         <prop oor:name="Link" oor:type="xs:int">
           <!-- OldPath: Writer/Other/Update -->
           <!-- OldLocation: Soffice.cfg -->
@@ -948,6 +975,9 @@
       </group>
     </group>
     <group oor:name="DefaultFont">
+      <info>
+        <desc xml:lang="en-US">Specifies the basic western fonts used.</desc>
+      </info>
       <prop oor:name="Standard" oor:type="xs:string">
         <!-- OldPath: Writer/Default_Fonts -->
         <!-- OldLocation: Soffice.cfg -->
@@ -1016,6 +1046,9 @@
       </prop>
     </group>
     <group oor:name="DefaultFontCJK">
+      <info>
+        <desc xml:lang="en-US">Specifies the basic CJK fonts used.</desc>
+      </info>
       <prop oor:name="Standard" oor:type="xs:string">
         <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Asian) -->
@@ -1072,6 +1105,9 @@
       </prop>
     </group>
     <group oor:name="DefaultFontCTL">
+      <info>
+        <desc xml:lang="en-US">Specifies the basic CTL fonts used.</desc>
+      </info>
       <prop oor:name="Standard" oor:type="xs:string">
         <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL) -->
@@ -1430,7 +1466,13 @@
       </group>
     </group>
     <group oor:name="Cursor">
+      <info>
+        <desc xml:lang="en-US">Contains cursor settings.</desc>
+      </info>
       <group oor:name="DirectCursor">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the Direct Cursor.</desc>
+        </info>
         <prop oor:name="UseDirectCursor" oor:type="xs:boolean">
           <!-- OldPath: Writer/Cursor/DirectCursor -->
           <!-- OldLocation: Soffice.cfg -->
@@ -1477,6 +1519,9 @@
         </prop>
       </group>
       <group oor:name="Option">
+        <info>
+          <desc xml:lang="en-US">Contains miscellaneous options.</desc>
+        </info>
         <prop oor:name="ProtectedArea" oor:type="xs:boolean">
           <!-- OldPath: Writer/Cursor/Options -->
           <!-- OldLocation: Soffice.cfg -->
@@ -1764,12 +1809,17 @@
       </group>
     </group>
     <group oor:name="Insert">
+      <info>
+        <desc xml:lang="en-US">Settings for insertion of various object types.</desc>
+      </info>
       <group oor:name="Caption">
         <!-- OldLocation: Soffice.cfg -->
         <!-- OldPath: Writer/Insert/Caption -->
         <!-- Responsible: OS -->
-        <!--UIHints:
-Tools - Options - Text document  Insert - [Section] Caption  -->
+        <!--UIHints: Tools - Options - Text document  Insert - [Section] Caption  -->
+        <info>
+          <desc xml:lang="en-US">Settings for insertion of captions for various object types.</desc>
+        </info>
         <prop oor:name="Automatic" oor:type="xs:boolean">
           <value>false</value>
           <info>
@@ -1778,8 +1828,14 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </info>
         </prop>
         <group oor:name="WriterObject">
+          <info>
+            <desc xml:lang="en-US">Settings for insertion of captions for Writer objects.</desc>
+          </info>
           <group oor:name="Table">
             <!--OldPath: Writer/Insert/Caption/Object/StarWriter_Table-->
+            <info>
+              <desc xml:lang="en-US">Settings for insertion of captions for tables.</desc>
+            </info>
             <prop oor:name="Enable" oor:type="xs:boolean">
               <value>false</value>
               <info>
@@ -1788,6 +1844,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               </info>
             </prop>
             <group oor:name="Settings">
+              <info>
+                <desc xml:lang="en-US">Specifies the caption settings</desc>
+              </info>
               <prop oor:name="Category" oor:type="xs:string" oor:localized="true">
                 <info>
                   <desc xml:lang="en-US">Category of the caption field</desc>
@@ -1881,13 +1940,13 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
                   <label xml:lang="en-US">Separator</label>
                 </info>
               </prop>
-              <info>
-                <desc xml:lang="en-US">Specifies the caption settings</desc>
-              </info>
             </group>
           </group>
           <group oor:name="Frame">
             <!-- OldPath: Writer/Insert/Caption/Object/StarWriter_Frame -->
+            <info>
+              <desc xml:lang="en-US">Settings for insertion of captions for frames.</desc>
+            </info>
             <prop oor:name="Enable" oor:type="xs:boolean">
               <value>false</value>
               <info>
@@ -1896,6 +1955,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               </info>
             </prop>
             <group oor:name="Settings">
+              <info>
+                <desc xml:lang="en-US">Specifies the caption settings</desc>
+              </info>
               <prop oor:name="Category" oor:type="xs:string" oor:localized="true">
                 <info>
                   <desc xml:lang="en-US">Category of the caption field</desc>
@@ -1989,13 +2051,13 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
                   <label xml:lang="en-US">Separator</label>
                 </info>
               </prop>
-              <info>
-                <desc xml:lang="en-US">Specifies the caption settings</desc>
-              </info>
             </group>
           </group>
           <group oor:name="Graphic">
             <!-- OldPath: Writer/Insert/Caption/Object/StarWriter_Graphic -->
+            <info>
+              <desc xml:lang="en-US">Settings for insertion of captions for graphics.</desc>
+            </info>
             <prop oor:name="Enable" oor:type="xs:boolean">
               <value>false</value>
               <info>
@@ -2004,6 +2066,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               </info>
             </prop>
             <group oor:name="Settings">
+              <info>
+                <desc xml:lang="en-US">Specifies the caption settings</desc>
+              </info>
               <prop oor:name="Category" oor:type="xs:string" oor:localized="true">
                 <info>
                   <desc xml:lang="en-US">Category of the caption field</desc>
@@ -2078,15 +2143,18 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
                   <label xml:lang="en-US">Separator</label>
                 </info>
               </prop>
-              <info>
-                <desc xml:lang="en-US">Specifies the caption settings</desc>
-              </info>
             </group>
           </group>
         </group>
         <group oor:name="OfficeObject">
+          <info>
+            <desc xml:lang="en-US">Settings for insertion of captions for office objects.</desc>
+          </info>
           <group oor:name="Calc">
             <!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Calc -->
+            <info>
+              <desc xml:lang="en-US">Settings for insertion of captions for Calc documents.</desc>
+            </info>
             <prop oor:name="Enable" oor:type="xs:boolean">
               <value>false</value>
               <info>
@@ -2095,6 +2163,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               </info>
             </prop>
             <group oor:name="Settings">
+              <info>
+                <desc xml:lang="en-US">Specifies the caption settings</desc>
+              </info>
               <prop oor:name="Category" oor:type="xs:string" oor:localized="true">
                 <info>
                   <desc xml:lang="en-US">Category of the caption field</desc>
@@ -2188,13 +2259,13 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
                   <label xml:lang="en-US">Separator</label>
                 </info>
               </prop>
-              <info>
-                <desc xml:lang="en-US">Specifies the caption settings</desc>
-              </info>
             </group>
           </group>
           <group oor:name="Draw">
             <!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Draw -->
+            <info>
+              <desc xml:lang="en-US">Settings for insertion of captions for Draw documents.</desc>
+            </info>
             <prop oor:name="Enable" oor:type="xs:boolean">
               <value>false</value>
               <info>
@@ -2203,6 +2274,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               </info>
             </prop>
             <group oor:name="Settings">
+              <info>
+                <desc xml:lang="en-US">Specifies the caption settings</desc>
+              </info>
               <prop oor:name="Category" oor:type="xs:string" oor:localized="true">
                 <info>
                   <desc xml:lang="en-US">Category of the caption field</desc>
@@ -2296,13 +2370,13 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
                   <label xml:lang="en-US">Separator</label>
                 </info>
               </prop>
-              <info>
-                <desc xml:lang="en-US">Specifies the caption settings</desc>
-              </info>
             </group>
           </group>
           <group oor:name="Chart">
             <!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Chart -->
+            <info>
+              <desc xml:lang="en-US">Settings for insertion of captions for Chart documents.</desc>
+            </info>
             <prop oor:name="Enable" oor:type="xs:boolean">
               <value>false</value>
               <info>
@@ -2311,6 +2385,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               </info>
             </prop>
             <group oor:name="Settings">
+              <info>
+                <desc xml:lang="en-US">Specifies the caption settings</desc>
+              </info>
               <prop oor:name="Category" oor:type="xs:string" oor:localized="true">
                 <info>
                   <desc xml:lang="en-US">Category of the caption field</desc>
@@ -2404,13 +2481,13 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
                   <label xml:lang="en-US">Separator</label>
                 </info>
               </prop>
-              <info>
-                <desc xml:lang="en-US">Specifies the caption settings</desc>
-              </info>
             </group>
           </group>
           <group oor:name="Image">
             <!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Image -->
+            <info>
+              <desc xml:lang="en-US">Settings for insertion of captions for Image documents.</desc>
+            </info>
             <prop oor:name="Enable" oor:type="xs:boolean">
               <value>false</value>
               <info>
@@ -2419,6 +2496,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               </info>
             </prop>
             <group oor:name="Settings">
+              <info>
+                <desc xml:lang="en-US">Specifies the caption settings</desc>
+              </info>
               <prop oor:name="Category" oor:type="xs:string" oor:localized="true">
                 <info>
                   <desc xml:lang="en-US">Category of the caption field</desc>
@@ -2519,6 +2599,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </group>
           <group oor:name="Formula">
             <!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Formula -->
+            <info>
+              <desc xml:lang="en-US">Settings for insertion of captions formula documents.</desc>
+            </info>
             <prop oor:name="Enable" oor:type="xs:boolean">
               <value>false</value>
               <info>
@@ -2527,6 +2610,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               </info>
             </prop>
             <group oor:name="Settings">
+              <info>
+                <desc xml:lang="en-US">Specifies the caption settings</desc>
+              </info>
               <prop oor:name="Category" oor:type="xs:string" oor:localized="true">
                 <info>
                   <desc xml:lang="en-US">Category of the caption field</desc>
@@ -2620,13 +2706,13 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
                   <label xml:lang="en-US">Separator</label>
                 </info>
               </prop>
-              <info>
-                <desc xml:lang="en-US">Specifies the caption settings</desc>
-              </info>
             </group>
           </group>
           <group oor:name="Impress">
             <!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Impress -->
+            <info>
+              <desc xml:lang="en-US">Settings for insertion of captions for Impress objects.</desc>
+            </info>
             <prop oor:name="Enable" oor:type="xs:boolean">
               <value>false</value>
               <info>
@@ -2635,6 +2721,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               </info>
             </prop>
             <group oor:name="Settings">
+              <info>
+                <desc xml:lang="en-US">Specifies the caption settings</desc>
+              </info>
               <prop oor:name="Category" oor:type="xs:string" oor:localized="true">
                 <info>
                   <desc xml:lang="en-US">Category of the caption field</desc>
@@ -2728,13 +2817,13 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
                   <label xml:lang="en-US">Separator</label>
                 </info>
               </prop>
-              <info>
-                <desc xml:lang="en-US">Specifies the caption settings</desc>
-              </info>
             </group>
           </group>
           <group oor:name="OLEMisc">
             <!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_OLEMisc -->
+            <info>
+              <desc xml:lang="en-US">Settings for insertion of captions for other OLE objects.</desc>
+            </info>
             <prop oor:name="Enable" oor:type="xs:boolean">
               <value>false</value>
               <info>
@@ -2743,6 +2832,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               </info>
             </prop>
             <group oor:name="Settings">
+              <info>
+                <desc xml:lang="en-US">Specifies the caption settings</desc>
+              </info>
               <prop oor:name="Category" oor:type="xs:string" oor:localized="true">
                 <info>
                   <desc xml:lang="en-US">Category of the caption field</desc>
@@ -2836,9 +2928,6 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
                   <label xml:lang="en-US">Separator</label>
                 </info>
               </prop>
-              <info>
-                <desc xml:lang="en-US">Specifies the caption settings</desc>
-              </info>
             </group>
           </group>
         </group>
@@ -2848,6 +2937,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <!-- OldPath: Writer/Insert/Tables -->
         <!-- Responsible: OS -->
         <!-- UIHints: Tools - Options - Text document - Insert - [Section] Tables -->
+        <info>
+          <desc xml:lang="en-US">Default settings for tables to be inserted.</desc>
+        </info>
         <prop oor:name="Header" oor:type="xs:boolean">
           <value>true</value>
           <info>
@@ -2879,7 +2971,13 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       </group>
     </group>
     <group oor:name="Compatibility">
+      <info>
+        <desc xml:lang="en-US">Contains various compatibility settings.</desc>
+      </info>
       <group oor:name="MS_Word">
+        <info>
+          <desc xml:lang="en-US">Contains settings for compatibility with MS Word.</desc>
+        </info>
         <prop oor:name="AddBetween" oor:type="xs:boolean">
           <!-- OldPath: Writer/Other/Compatibility -->
           <!-- OldLocation: Soffice.cfg -->
@@ -2905,7 +3003,13 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       </group>
     </group>
     <group oor:name="AutoFunction">
+      <info>
+        <desc xml:lang="en-US">Contains setting for the 'Auto Text', 'Auto Correct/AutoFormat' functionality.</desc>
+      </info>
       <group oor:name="Text">
+        <info>
+          <desc xml:lang="en-US">Specifies settings for the 'Auto Text'.</desc>
+        </info>
         <prop oor:name="FileLinks" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/AutoText -->
           <!-- OldLocation: Soffice.cfg -->
@@ -2952,7 +3056,13 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         </prop>
       </group>
       <group oor:name="Format">
+        <info>
+          <desc xml:lang="en-US">Specifies settings for the 'Auto Correct/Auto Format'.</desc>
+        </info>
         <group oor:name="Option">
+          <info>
+            <desc xml:lang="en-US">Specifies options for the 'Auto Correct/Auto Format' functionality.</desc>
+          </info>
           <prop oor:name="UseReplacementTable" oor:type="xs:boolean">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
@@ -3117,6 +3227,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </info>
           </prop>
           <group oor:name="ChangeToBullets">
+            <info>
+              <desc xml:lang="en-US">Settings for automatic replacement of enumeration characters (like dash, plus, ...) into bullets.</desc>
+            </info>
             <prop oor:name="Enable" oor:type="xs:boolean">
               <!-- OldPath: Writer/AutoFormat/Options -->
               <!-- OldLocation: Soffice.cfg -->
@@ -3129,6 +3242,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               </info>
             </prop>
             <group oor:name="SpecialCharacter">
+              <info>
+                <desc xml:lang="en-US">Specifies the character to be used.</desc>
+              </info>
               <prop oor:name="Char" oor:type="xs:int">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
@@ -3186,6 +3302,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </group>
         </group>
         <group oor:name="ByInput">
+          <info>
+            <desc xml:lang="en-US">Contains those settings than can be applied while typing text.</desc>
+          </info>
           <prop oor:name="Enable" oor:type="xs:boolean">
             <!-- OldPath: AutoCorrect/Options/All -->
             <!-- OldLocation: Soffice.cfg -->
@@ -3262,6 +3381,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             </info>
           </prop>
           <group oor:name="ApplyNumbering">
+            <info>
+              <desc xml:lang="en-US">Contains settings for automatic numbering.</desc>
+            </info>
             <prop oor:name="Enable" oor:type="xs:boolean">
               <!-- OldPath: Writer/AutoFormat/ByInput -->
               <!-- OldLocation: Soffice.cfg -->
@@ -3274,6 +3396,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               </info>
             </prop>
             <group oor:name="SpecialCharacter">
+              <info>
+                <desc xml:lang="en-US">Defines the character to be used.</desc>
+              </info>
               <prop oor:name="Char" oor:type="xs:int">
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
@@ -3332,6 +3457,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         </group>
       </group>
       <group oor:name="Completion">
+        <info>
+          <desc xml:lang="en-US">Contains settings relevant for the word completion ('Auto Completion').</desc>
+        </info>
         <prop oor:name="Enable" oor:type="xs:boolean">
           <!-- OldPath: Writer/AutoComplete/Words -->
           <!-- OldLocation: Soffice.cfg -->
@@ -3649,7 +3777,13 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       </group>
     </group>
     <group oor:name="BusinessCard">
+      <info>
+        <desc xml:lang="en-US">Contains settings for business cards.</desc>
+      </info>
       <group oor:name="Medium">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the media type used.</desc>
+        </info>
         <prop oor:name="Continous" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/BusinessCards/Medium -->
           <!-- OldLocation: Soffice.cfg -->
@@ -3683,6 +3817,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         </prop>
       </group>
       <group oor:name="Format">
+        <info>
+          <desc xml:lang="en-US">Contains settings about the page format.</desc>
+        </info>
         <prop oor:name="Column" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/BusinessCards/Format -->
           <!-- OldLocation: Soffice.cfg -->
@@ -3772,7 +3909,10 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </info>
         </prop>
       </group>
-      <group oor:name="Option">
+      <group oor:name="Option">miscellaneous
+        <info>
+          <desc xml:lang="en-US">Contains miscellaneous settings.</desc>
+        </info>
         <prop oor:name="Synchronize" oor:type="xs:boolean">
           <!-- OldPath: Writer/Dialog/BusinessCards/Options -->
           <!-- OldLocation: Soffice.cfg -->
@@ -3819,6 +3959,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         </prop>
       </group>
       <group oor:name="AutoText">
+        <info>
+          <desc xml:lang="en-US">Contains settings about the AutoText used.</desc>
+        </info>
         <prop oor:name="Group" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/Content -->
           <!-- OldLocation: Soffice.cfg -->
@@ -3842,6 +3985,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         </prop>
       </group>
       <group oor:name="PrivateAddress">
+        <info>
+          <desc xml:lang="en-US">Private address data.</desc>
+        </info>
         <prop oor:name="FirstName" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
           <!-- OldLocation: Soffice.cfg -->
@@ -3849,7 +3995,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">Your first name.</desc>
             <label xml:lang="en-US">First name</label>
           </info>
         </prop>
@@ -3860,7 +4006,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">Your last name.</desc>
             <label xml:lang="en-US">Last name</label>
           </info>
         </prop>
@@ -3871,7 +4017,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">Your initials.</desc>
             <label xml:lang="en-US">Initials</label>
           </info>
         </prop>
@@ -3882,7 +4028,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">Your first name (2nd entry).</desc>
             <label xml:lang="en-US">First name 2</label>
           </info>
         </prop>
@@ -3893,7 +4039,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">Your last name (2nd entry).</desc>
             <label xml:lang="en-US">Last name 2</label>
           </info>
         </prop>
@@ -3904,7 +4050,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">Your initials (2nd entry).</desc>
             <label xml:lang="en-US">Initials 2</label>
           </info>
         </prop>
@@ -3915,7 +4061,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">The name of the street where you live.</desc>
             <label xml:lang="en-US">Street</label>
           </info>
         </prop>
@@ -3926,7 +4072,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">The ZIP code.</desc>
             <label xml:lang="en-US">Zip</label>
           </info>
         </prop>
@@ -3937,7 +4083,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">The city where you live.</desc>
             <label xml:lang="en-US">City</label>
           </info>
         </prop>
@@ -3948,7 +4094,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">The country where you live.</desc>
             <label xml:lang="en-US">Country</label>
           </info>
         </prop>
@@ -3959,7 +4105,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">The state where you live.</desc>
             <label xml:lang="en-US">State</label>
           </info>
         </prop>
@@ -3970,7 +4116,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">The title of yours.</desc>
             <label xml:lang="en-US">Title</label>
           </info>
         </prop>
@@ -3981,7 +4127,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">Your profession.</desc>
             <label xml:lang="en-US">Profession</label>
           </info>
         </prop>
@@ -3992,7 +4138,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">Your phone number.</desc>
             <label xml:lang="en-US">Phone</label>
           </info>
         </prop>
@@ -4003,7 +4149,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">Your mobile number.</desc>
             <label xml:lang="en-US">Mobile</label>
           </info>
         </prop>
@@ -4014,7 +4160,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">Your fax number.</desc>
             <label xml:lang="en-US">Fax</label>
           </info>
         </prop>
@@ -4025,7 +4171,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">Your homepages web-address.</desc>
             <label xml:lang="en-US">Homepage</label>
           </info>
         </prop>
@@ -4036,12 +4182,15 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Private -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Private address data</desc>
+            <desc xml:lang="en-US">Your e-mail address.</desc>
             <label xml:lang="en-US">E-mail</label>
           </info>
         </prop>
       </group>
       <group oor:name="BusinessAddress">
+        <info>
+          <desc xml:lang="en-US">Business address data.</desc>
+        </info>
         <prop oor:name="Company" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
           <!-- OldLocation: Soffice.cfg -->
@@ -4049,7 +4198,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Business address data</desc>
+            <desc xml:lang="en-US">The company name, 1st line.</desc>
             <label xml:lang="en-US">Company</label>
           </info>
         </prop>
@@ -4060,7 +4209,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Business address data</desc>
+            <desc xml:lang="en-US">The company name, 2nd line.</desc>
             <label xml:lang="en-US">CompanyExt</label>
           </info>
         </prop>
@@ -4071,7 +4220,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Business address data</desc>
+            <desc xml:lang="en-US">The company slogan.</desc>
             <label xml:lang="en-US">Slogan</label>
           </info>
         </prop>
@@ -4082,7 +4231,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Business address data</desc>
+            <desc xml:lang="en-US">The name of the street.</desc>
             <label xml:lang="en-US">Street</label>
           </info>
         </prop>
@@ -4093,7 +4242,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Business address data</desc>
+            <desc xml:lang="en-US">The ZIP code.</desc>
             <label xml:lang="en-US">Zip</label>
           </info>
         </prop>
@@ -4104,7 +4253,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Business address data</desc>
+            <desc xml:lang="en-US">The name of the city.</desc>
             <label xml:lang="en-US">City</label>
           </info>
         </prop>
@@ -4115,7 +4264,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Business address data</desc>
+            <desc xml:lang="en-US">The country where the company is located in.</desc>
             <label xml:lang="en-US">Country</label>
           </info>
         </prop>
@@ -4126,7 +4275,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Business address data</desc>
+            <desc xml:lang="en-US">The state where the company is located in.</desc>
             <label xml:lang="en-US">State</label>
           </info>
         </prop>
@@ -4137,7 +4286,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Business address data</desc>
+            <desc xml:lang="en-US">Your position in the company.</desc>
             <label xml:lang="en-US">Position</label>
           </info>
         </prop>
@@ -4148,7 +4297,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Business address data</desc>
+            <desc xml:lang="en-US">Your phone number.</desc>
             <label xml:lang="en-US">Phone</label>
           </info>
         </prop>
@@ -4159,7 +4308,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Business address data</desc>
+            <desc xml:lang="en-US">Your mobile number.</desc>
             <label xml:lang="en-US">Mobile</label>
           </info>
         </prop>
@@ -4170,7 +4319,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Business address data</desc>
+            <desc xml:lang="en-US">Your fax number.</desc>
             <label xml:lang="en-US">Fax</label>
           </info>
         </prop>
@@ -4181,7 +4330,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Business address data</desc>
+            <desc xml:lang="en-US">The companies homepage.</desc>
             <label xml:lang="en-US">WebAddress</label>
           </info>
         </prop>
@@ -4192,18 +4341,25 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- UIHints: File  New  BusinessCards  Business -->
           <value xsi:nil="true"/>
           <info>
-            <desc xml:lang="en-US">Business address data</desc>
+            <desc xml:lang="en-US">Your e-mail address.</desc>
             <label xml:lang="en-US">Email</label>
           </info>
         </prop>
       </group>
     </group>
     <group oor:name="ObjectBar">
+      <!-- Responsible: OS -->
+      <info>
+        <desc xml:lang="en-US">Specifies the settings for the object bar.</desc>
+      </info>
       <group oor:name="Selection">
         <!-- OldPath: Writer/Toolbars/ObjectBar -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- Responsible: OS -->
         <!-- UIHints: Right mouse click to the toolbar with object selection-->
+        <info>
+          <desc xml:lang="en-US">Specifies which type of object bars should be visible.</desc>
+        </info>
         <prop oor:name="Graphic" oor:type="xs:int">
           <value>-1</value>
           <info>
@@ -4335,7 +4491,13 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       </prop>
     </group>
     <group oor:name="Envelope">
+      <info>
+        <desc xml:lang="en-US">Contains settings for envelopes.</desc>
+      </info>
       <group oor:name="Inscription">
+        <info>
+          <desc xml:lang="en-US">Contains inscription specific settings.</desc>
+        </info>
         <prop oor:name="Addressee" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/Envelope/Envelope -->
           <!-- OldLocation: Soffice.cfg -->
@@ -4380,6 +4542,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         </prop>
       </group>
       <group oor:name="Format">
+        <info>
+          <desc xml:lang="en-US">Contains format specific settings.</desc>
+        </info>
         <prop oor:name="AddresseeFromLeft" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Envelope/Format -->
           <!-- OldLocation: Soffice.cfg -->
@@ -4448,6 +4613,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         </prop>
       </group>
       <group oor:name="Print">
+        <info>
+          <desc xml:lang="en-US">Contains printing specific settings.</desc>
+        </info>
         <prop oor:name="Alignment" oor:type="xs:int">
           <!-- OldPath: Writer/Dialog/Envelope/Print -->
           <!-- OldLocation: Soffice.cfg -->
@@ -4527,10 +4695,17 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       </group>
     </group>
     <group oor:name="InsertData">
+      <!-- Responsible: OS -->
+      <info>
+        <desc xml:lang="en-US">Contains settings for the insertion of data from a data base.</desc>
+      </info>
       <set oor:name="DataSet" oor:node-type="DataSetType">
         <!-- OldLocation: Soffice.cfg -->
         <!-- Responsible: OS -->
         <!-- UIHints: Dialog Insert Database Columns -->
+        <info>
+          <desc xml:lang="en-US">The data set to be inserted.</desc>
+        </info>
       </set>
     </group>
     <group oor:name="Wizard">
@@ -4540,6 +4715,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page1-->
+            <info>
+              <desc xml:lang="en-US">The template for the preferred style.</desc>
+            </info>
           </node-ref>
         </group>
         <group oor:name="Logo">
@@ -4717,6 +4895,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           </prop>
         </group>
         <group oor:name="AgendaTopics">
+          <info>
+            <desc xml:lang="en-US">Defines the agenda topics list.</desc>
+          </info>
           <prop oor:name="Number" oor:type="xs:int">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -4724,7 +4905,7 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             <!-- Notice: This must be generic, as it depends on the number of entries defined by the user. -->
             <value xsi:nil="true"/>
             <info>
-              <desc xml:lang="en-US">Total number of the specified agenda topics</desc>
+              <desc xml:lang="en-US">Total number of the specified agenda topics.</desc>
               <label xml:lang="en-US">-</label>
             </info>
             <constraints>
@@ -4735,9 +4916,15 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Agenda / Page4-->
+            <info>
+              <desc xml:lang="en-US">The set of specified agenda topics.</desc>
+            </info>
           </set>
         </group>
         <group oor:name="Save">
+          <info>
+            <desc xml:lang="en-US">Options for saving the agenda document and template.</desc>
+          </info>
           <prop oor:name="DocInfoTitle" oor:type="xs:string">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
@@ -4748,22 +4935,86 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <label xml:lang="en-US">Title</label>
             </info>
             <constraints>
-              <enumeration oor:value="None"/>
-              <enumeration oor:value="Weekly Project Meeting"/>
-              <enumeration oor:value="~Date"/>
-              <enumeration oor:value="~Time"/>
-              <enumeration oor:value="Location"/>
-              <enumeration oor:value="Occasion"/>
-              <enumeration oor:value="Bring ~along"/>
-              <enumeration oor:value="Please prepare"/>
-              <enumeration oor:value="No~tes"/>
-              <enumeration oor:value="Co~nvened by"/>
-              <enumeration oor:value="~Presiding"/>
-              <enumeration oor:value="~Minutes"/>
-              <enumeration oor:value="P~articipants"/>
-              <enumeration oor:value="~Guests"/>
-              <enumeration oor:value="~Experts"/>
-              <enumeration oor:value="~Follow-up"/>
+              <enumeration oor:value="None">
+                <info>
+                  <desc xml:lang="en-US">The entry will not be filled.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Weekly Project Meeting">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the title of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Date">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Time">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the time of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Location">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the location of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Occasion">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the occasion of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Bring ~along">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the items which are to be brought to the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Please prepare">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the things to prepare for the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="No~tes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain notes of the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Co~nvened by">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who convened the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Presiding">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who presides the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Minutes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the meeting minutes.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="P~articipants">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the participants.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Guests">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the guests.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Experts">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the experts.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Follow-up">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the follow-up meetings.</desc>
+                </info>
+              </enumeration>
             </constraints>
           </prop>
           <prop oor:name="DocInfoSubject" oor:type="xs:string">
@@ -4776,22 +5027,86 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <label xml:lang="en-US">Subject</label>
             </info>
             <constraints>
-              <enumeration oor:value="None"/>
-              <enumeration oor:value="Weekly Project Meeting"/>
-              <enumeration oor:value="~Date"/>
-              <enumeration oor:value="~Time"/>
-              <enumeration oor:value="Location"/>
-              <enumeration oor:value="Occasion"/>
-              <enumeration oor:value="Bring ~along"/>
-              <enumeration oor:value="Please prepare"/>
-              <enumeration oor:value="No~tes"/>
-              <enumeration oor:value="Co~nvened by"/>
-              <enumeration oor:value="~Presiding"/>
-              <enumeration oor:value="~Minutes"/>
-              <enumeration oor:value="P~articipants"/>
-              <enumeration oor:value="~Guests"/>
-              <enumeration oor:value="~Experts"/>
-              <enumeration oor:value="~Follow-up"/>
+              <enumeration oor:value="None">
+                <info>
+                  <desc xml:lang="en-US">The entry will not be filled.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Weekly Project Meeting">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the title of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Date">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Time">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the time of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Location">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the location of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Occasion">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the occasion of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Bring ~along">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the items which are to be brought to the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Please prepare">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the things to prepare for the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="No~tes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain notes of the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Co~nvened by">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who convened the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Presiding">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who presides the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Minutes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the meeting minutes.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="P~articipants">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the participants.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Guests">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the guests.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Experts">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the experts.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Follow-up">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the follow-up meetings.</desc>
+                </info>
+              </enumeration>
             </constraints>
           </prop>
           <prop oor:name="TemplateName" oor:type="xs:string">
@@ -4863,6 +5178,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Letter / Page1-->
+            <info>
+              <desc xml:lang="en-US">The template for the preferred style.</desc>
+            </info>
           </node-ref>
         </group>
         <group oor:name="Logo">
@@ -5411,22 +5729,86 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <label xml:lang="en-US">Title</label>
             </info>
             <constraints>
-              <enumeration oor:value="None"/>
-              <enumeration oor:value="Weekly Project Meeting"/>
-              <enumeration oor:value="~Date"/>
-              <enumeration oor:value="~Time"/>
-              <enumeration oor:value="Location"/>
-              <enumeration oor:value="Occasion"/>
-              <enumeration oor:value="Bring ~along"/>
-              <enumeration oor:value="Please prepare"/>
-              <enumeration oor:value="No~tes"/>
-              <enumeration oor:value="Co~nvened by"/>
-              <enumeration oor:value="~Presiding"/>
-              <enumeration oor:value="~Minutes"/>
-              <enumeration oor:value="P~articipants"/>
-              <enumeration oor:value="~Guests"/>
-              <enumeration oor:value="~Experts"/>
-              <enumeration oor:value="~Follow-up"/>
+              <enumeration oor:value="None">
+                <info>
+                  <desc xml:lang="en-US">The entry will not be filled.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Weekly Project Meeting">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the title of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Date">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Time">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the time of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Location">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the location of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Occasion">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the occasion of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Bring ~along">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the items which are to be brought to the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Please prepare">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the things to prepare for the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="No~tes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain notes of the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Co~nvened by">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who convened the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Presiding">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who presides the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Minutes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the meeting minutes.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="P~articipants">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the participants.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Guests">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the guests.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Experts">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the experts.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Follow-up">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the follow-up meetings.</desc>
+                </info>
+              </enumeration>
             </constraints>
           </prop>
           <prop oor:name="DocInfoSubject" oor:type="xs:string">
@@ -5439,22 +5821,86 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <label xml:lang="en-US">Subject</label>
             </info>
             <constraints>
-              <enumeration oor:value="None"/>
-              <enumeration oor:value="Weekly Project Meeting"/>
-              <enumeration oor:value="~Date"/>
-              <enumeration oor:value="~Time"/>
-              <enumeration oor:value="Location"/>
-              <enumeration oor:value="Occasion"/>
-              <enumeration oor:value="Bring ~along"/>
-              <enumeration oor:value="Please prepare"/>
-              <enumeration oor:value="No~tes"/>
-              <enumeration oor:value="Co~nvened by"/>
-              <enumeration oor:value="~Presiding"/>
-              <enumeration oor:value="~Minutes"/>
-              <enumeration oor:value="P~articipants"/>
-              <enumeration oor:value="~Guests"/>
-              <enumeration oor:value="~Experts"/>
-              <enumeration oor:value="~Follow-up"/>
+              <enumeration oor:value="None">
+                <info>
+                  <desc xml:lang="en-US">The entry will not be filled.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Weekly Project Meeting">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the title of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Date">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Time">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the time of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Location">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the location of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Occasion">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the occasion of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Bring ~along">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the items which are to be brought to the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Please prepare">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the things to prepare for the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="No~tes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain notes of the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Co~nvened by">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who convened the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Presiding">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who presides the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Minutes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the meeting minutes.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="P~articipants">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the participants.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Guests">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the guests.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Experts">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the experts.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Follow-up">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the follow-up meetings.</desc>
+                </info>
+              </enumeration>
             </constraints>
           </prop>
           <prop oor:name="TemplateName" oor:type="xs:string">
@@ -5619,18 +6065,45 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <label xml:lang="en-US">Please enter the fax title</label>
             </info>
             <constraints>
-              <enumeration oor:value="Fax Note"/>
-              <enumeration oor:value="Fax Cover"/>
-              <enumeration oor:value="Fax Letter"/>
-              <enumeration oor:value="Fax Message"/>
-              <enumeration oor:value="Telefax"/>
-              <enumeration oor:value="User Title"/>
+              <enumeration oor:value="Fax Note">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the note that has been entered for the fax.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Fax Cover">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the fax cover that has been selected for the fax.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Fax Letter">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the fax letter that has been selected for the fax.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Fax Message">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the fax message that has been selected for the fax.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Telefax">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the text 'Telefax'.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="User Title">
+                <info>
+                  <desc xml:lang="en-US">The entry will contains the user defined title.</desc>
+                </info>
+              </enumeration>
             </constraints>
           </prop>
           <node-ref oor:name="Style" oor:node-type="StyleType">
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Fax/ Page1-->
+            <info>
+              <desc xml:lang="en-US">The template for the preferred style.</desc>
+            </info>
           </node-ref>
           <group oor:name="Format">
             <prop oor:name="Width" oor:type="xs:int">
@@ -6034,22 +6507,86 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <label xml:lang="en-US">Title</label>
             </info>
             <constraints>
-              <enumeration oor:value="None"/>
-              <enumeration oor:value="Weekly Project Meeting"/>
-              <enumeration oor:value="~Date"/>
-              <enumeration oor:value="~Time"/>
-              <enumeration oor:value="Location"/>
-              <enumeration oor:value="Occasion"/>
-              <enumeration oor:value="Bring ~along"/>
-              <enumeration oor:value="Please prepare"/>
-              <enumeration oor:value="No~tes"/>
-              <enumeration oor:value="Co~nvened by"/>
-              <enumeration oor:value="~Presiding"/>
-              <enumeration oor:value="~Minutes"/>
-              <enumeration oor:value="P~articipants"/>
-              <enumeration oor:value="~Guests"/>
-              <enumeration oor:value="~Experts"/>
-              <enumeration oor:value="~Follow-up"/>
+              <enumeration oor:value="None">
+                <info>
+                  <desc xml:lang="en-US">The entry will not be filled.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Weekly Project Meeting">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the title of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Date">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Time">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the time of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Location">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the location of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Occasion">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the occasion of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Bring ~along">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the items which are to be brought to the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Please prepare">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the things to prepare for the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="No~tes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain notes of the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Co~nvened by">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who convened the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Presiding">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who presides the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Minutes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the meeting minutes.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="P~articipants">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the participants.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Guests">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the guests.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Experts">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the experts.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Follow-up">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the follow-up meetings.</desc>
+                </info>
+              </enumeration>
             </constraints>
           </prop>
           <prop oor:name="DocInfoSubject" oor:type="xs:string" oor:localized="true">
@@ -6061,22 +6598,86 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <label xml:lang="en-US">Subject</label>
             </info>
             <constraints>
-              <enumeration oor:value="None"/>
-              <enumeration oor:value="Weekly Project Meeting"/>
-              <enumeration oor:value="~Date"/>
-              <enumeration oor:value="~Time"/>
-              <enumeration oor:value="Location"/>
-              <enumeration oor:value="Occasion"/>
-              <enumeration oor:value="Bring ~along"/>
-              <enumeration oor:value="Please prepare"/>
-              <enumeration oor:value="No~tes"/>
-              <enumeration oor:value="Co~nvened by"/>
-              <enumeration oor:value="~Presiding"/>
-              <enumeration oor:value="~Minutes"/>
-              <enumeration oor:value="P~articipants"/>
-              <enumeration oor:value="~Guests"/>
-              <enumeration oor:value="~Experts"/>
-              <enumeration oor:value="~Follow-up"/>
+              <enumeration oor:value="None">
+                <info>
+                  <desc xml:lang="en-US">The entry will not be filled.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Weekly Project Meeting">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the title of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Date">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Time">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the time of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Location">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the location of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Occasion">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the occasion of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Bring ~along">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the items which are to be brought to the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Please prepare">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the things to prepare for the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="No~tes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain notes of the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Co~nvened by">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who convened the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Presiding">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who presides the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Minutes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the meeting minutes.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="P~articipants">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the participants.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Guests">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the guests.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Experts">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the experts.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Follow-up">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the follow-up meetings.</desc>
+                </info>
+              </enumeration>
             </constraints>
           </prop>
           <prop oor:name="TemplateName" oor:type="xs:string">
@@ -6136,6 +6737,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
             <!-- OldLocation: wizard.ini -->
             <!-- Responsible: OS -->
             <!-- UIHints: File / AutoPilot / Memo / Page1-->
+            <info>
+              <desc xml:lang="en-US">The template for the preferred style.</desc>
+            </info>
           </node-ref>
           <group oor:name="Title">
             <prop oor:name="Text" oor:type="xs:string" oor:localized="true">
@@ -6146,9 +6750,21 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
                 <desc xml:lang="en-US">Title of the memo</desc>
               </info>
               <constraints>
-                <enumeration oor:value="Internal Memo"/>
-                <enumeration oor:value="Interoffice Memo"/>
-                <enumeration oor:value="Memorandum"/>
+                <enumeration oor:value="Internal Memo">
+                  <info>
+                    <desc xml:lang="en-US">The entry will contain the text 'Internal Memo'.</desc>
+                  </info>
+                </enumeration>
+                <enumeration oor:value="Interoffice Memo">
+                  <info>
+                    <desc xml:lang="en-US">The entry will contain the text 'Interoffice Memo'.</desc>
+                  </info>
+                </enumeration>
+                <enumeration oor:value="Memorandum">
+                  <info>
+                    <desc xml:lang="en-US">The entry will contain the text 'Memorandum'.</desc>
+                  </info>
+                </enumeration>
               </constraints>
             </prop>
             <prop oor:name="IsGraphic" oor:type="xs:boolean">
@@ -6363,22 +6979,86 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <label xml:lang="en-US">Title</label>
             </info>
             <constraints>
-              <enumeration oor:value="None"/>
-              <enumeration oor:value="Weekly Project Meeting"/>
-              <enumeration oor:value="~Date"/>
-              <enumeration oor:value="~Time"/>
-              <enumeration oor:value="Location"/>
-              <enumeration oor:value="Occasion"/>
-              <enumeration oor:value="Bring ~along"/>
-              <enumeration oor:value="Please prepare"/>
-              <enumeration oor:value="No~tes"/>
-              <enumeration oor:value="Co~nvened by"/>
-              <enumeration oor:value="~Presiding"/>
-              <enumeration oor:value="~Minutes"/>
-              <enumeration oor:value="P~articipants"/>
-              <enumeration oor:value="~Guests"/>
-              <enumeration oor:value="~Experts"/>
-              <enumeration oor:value="~Follow-up"/>
+              <enumeration oor:value="None">
+                <info>
+                  <desc xml:lang="en-US">The entry will not be filled.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Weekly Project Meeting">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the title of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Date">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Time">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the time of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Location">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the location of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Occasion">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the occasion of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Bring ~along">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the items which are to be brought to the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Please prepare">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the things to prepare for the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="No~tes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain notes of the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Co~nvened by">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who convened the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Presiding">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who presides the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Minutes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the meeting minutes.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="P~articipants">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the participants.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Guests">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the guests.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Experts">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the experts.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Follow-up">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the follow-up meetings.</desc>
+                </info>
+              </enumeration>
             </constraints>
           </prop>
           <prop oor:name="DocInfoSubject" oor:type="xs:string" oor:localized="true">
@@ -6390,22 +7070,86 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
               <label xml:lang="en-US">Subject</label>
             </info>
             <constraints>
-              <enumeration oor:value="None"/>
-              <enumeration oor:value="Weekly Project Meeting"/>
-              <enumeration oor:value="~Date"/>
-              <enumeration oor:value="~Time"/>
-              <enumeration oor:value="Location"/>
-              <enumeration oor:value="Occasion"/>
-              <enumeration oor:value="Bring ~along"/>
-              <enumeration oor:value="Please prepare"/>
-              <enumeration oor:value="No~tes"/>
-              <enumeration oor:value="Co~nvened by"/>
-              <enumeration oor:value="~Presiding"/>
-              <enumeration oor:value="~Minutes"/>
-              <enumeration oor:value="P~articipants"/>
-              <enumeration oor:value="~Guests"/>
-              <enumeration oor:value="~Experts"/>
-              <enumeration oor:value="~Follow-up"/>
+              <enumeration oor:value="None">
+                <info>
+                  <desc xml:lang="en-US">The entry will not be filled.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Weekly Project Meeting">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the title of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Date">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Time">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the time of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Location">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the location of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Occasion">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the occasion of the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Bring ~along">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the items which are to be brought to the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Please prepare">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the things to prepare for the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="No~tes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain notes of the Meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="Co~nvened by">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who convened the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Presiding">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the person who presides the meeting.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Minutes">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the name of the meeting minutes.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="P~articipants">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the participants.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Guests">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the guests.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Experts">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the number of the experts.</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="~Follow-up">
+                <info>
+                  <desc xml:lang="en-US">The entry will contain the date of the follow-up meetings.</desc>
+                </info>
+              </enumeration>
             </constraints>
           </prop>
           <prop oor:name="TemplateName" oor:type="xs:string">
@@ -6461,8 +7205,17 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       </group>
     </group>
     <group oor:name="Filter">
+      <info>
+        <desc xml:lang="en-US">Contains filter settings.</desc>
+      </info>
       <group oor:name="Import">
+        <info>
+          <desc xml:lang="en-US">Contains settings for import.</desc>
+        </info>
         <group oor:name="VBA">
+          <info>
+            <desc xml:lang="en-US">Contains settings for VBA Basic import.</desc>
+          </info>
           <prop oor:name="Load" oor:type="xs:boolean">
             <!-- OldPath: Filter/MS_Office/Basic/Word -->
             <!-- OldLocation: soffice.cfg -->
@@ -6527,7 +7280,13 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
       </prop>
     </group>
     <group oor:name="FormLetter">
+      <info>
+        <desc xml:lang="en-US">Settings for form letter output.</desc>
+      </info>
       <group oor:name="PrintOutput">
+        <info>
+          <desc xml:lang="en-US">Settings for form letter output to printer.</desc>
+        </info>
         <prop oor:name="SinglePrintJobs" oor:type="xs:boolean">
           <!-- OldLocation: Soffice.cfg -->
           <!-- Responsible: OS -->
@@ -6539,6 +7298,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         </prop>
       </group>
       <group oor:name="MailingOutput">
+        <info>
+          <desc xml:lang="en-US">Settings for form letter output as mail.</desc>
+        </info>
         <prop oor:name="Format" oor:type="xs:int">
           <!-- OldLocation: Soffice.cfg -->
           <!-- Responsible: OS -->
@@ -6571,6 +7333,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         </prop>
       </group>
       <group oor:name="FileOutput">
+        <info>
+          <desc xml:lang="en-US">Settings for form letter output to file.</desc>
+        </info>
         <prop oor:name="Path" oor:type="xs:string">
           <!-- OldLocation: Soffice.cfg -->
           <!-- Responsible: OS -->
@@ -6584,6 +7349,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
           <!-- OldPath: Writer/Insert/Tables -->
           <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - Insert - [Section] Tables -->
+          <info>
+            <desc xml:lang="en-US">Specifies how the file name is build.</desc>
+          </info>
           <prop oor:name="Generation" oor:type="xs:boolean">
             <!--UI hints: Form letter - File output - Generate file name from - Database field / Manual setting-->
             <value xsi:nil="true"/>
@@ -6623,6 +7391,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         <desc xml:lang="en-US">These filter flags are only valid for specific filters and mostly refer to importing documents. As default all settings are off-state (0) and should only be changed by an experienced administrator. To create a parameter the values have to be combined by using the OR operator.</desc>
       </info>
       <group oor:name="Excel_Lotus">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the Excel/Lotus filter.</desc>
+        </info>
         <prop oor:name="MinRow" oor:type="xs:long">
           <value>0</value>
           <info>
@@ -6649,6 +7420,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         </prop>
       </group>
       <group oor:name="W4W">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the Word4Word filter.</desc>
+        </info>
         <prop oor:name="W4WHD" oor:type="xs:long">
           <value>0</value>
           <info>
@@ -6746,6 +7520,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         </prop>
       </group>
       <group oor:name="WinWord">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the WinWord filter.</desc>
+        </info>
         <prop oor:name="WW1F" oor:type="xs:long">
           <value>0</value>
           <info>
@@ -7067,6 +7844,9 @@ Tools - Options - Text document  Insert - [Section] Caption  -->
         </prop>
       </group>
       <group oor:name="Writer">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the Writer filter.</desc>
+        </info>
         <prop oor:name="SW3Imp" oor:type="xs:long">
           <value>0</value>
           <info>
