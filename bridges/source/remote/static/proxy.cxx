@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxy.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:28:29 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,7 @@
 #define NDEBUG
 #endif
 #include <assert.h>
-#ifdef SOLARIS
-#include <alloca.h>
-#elif defined MACOSX
-#include <sys/types.h>
-#include <sys/malloc.h>
-#else
-#include <malloc.h>
-#endif
+#include <sal/alloca.h>
 
 #include <bridges/remote/proxy.hxx>
 #include <bridges/remote/context.h>
