@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:15:14 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,7 +614,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ arabic ] = " д”нё  бё«∆н...";
         Text[ dutch ] = "Aut~oOpmaak...";
         Text[ chinese_simplified ] = "„‘ґѓЄс љ(~O)...";
-        Text[ greek ] = "Ѕхфпћпсцпрпязуз...";
+        Text[ greek ] = "Ѕхф~пћпсцё...";
         Text[ korean ] = "јЏµњ Љ≠љƒ(~O)...";
         Text[ turkish ] = "Otomatik formatla...";
     };
@@ -653,7 +653,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text [ dutch ] = "Database-kolommen invoegen" ;
     Text [ portuguese ] = "Inserir colunas para bases de dados" ;
     Text[ chinese_simplified ] = "≤е»л эЊЁњвјЄ";
-    Text[ russian ] = "¬ставка колонки базы данных";
+    Text[ russian ] = "¬ставка колонок базы данных";
     Text[ polish ] = "Wstaw kolumny w bazie danych";
     Text[ japanese ] = "√ё∞јЌё∞љВћЧсВћС}Уь";
     Text[ chinese_traditional ] = "і°§JЄкЃ∆Ѓwƒж";
