@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-05 11:28:25 $
+ *  last change: $Author: tl $ $Date: 2001-06-05 13:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ class LngSvcMgr;
 class SeqLangSvcEntry_Spell
 {
     friend class SpellCheckerDispatcher;
-    friend static BOOL SvcListHasLanguage(
+    friend BOOL SvcListHasLanguage(
                             const SeqLangSvcEntry_Spell &rEntry,
                             INT16 nLanguage );
 
