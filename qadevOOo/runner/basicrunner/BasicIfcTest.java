@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BasicIfcTest.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:01:18 $
+ *  last change:$Date: 2004-03-19 14:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,12 @@ public class BasicIfcTest {
         LogWriter log = xTestedEntry.Logger;
 
         // Get Handler, that was created during object creation.
-        oBasicHandler = (BasicHandler)tEnv.getObjRelation("BasicHandler");
+        try {
+            oBasicHandler = (BasicHandler)tEnv.getObjRelation("BasicHandler");
+        } catch (java.lang.NullPointerException e) {
+            log.println("No Component created");
+            return null;
+        }
 
         if (!oBasicHandler.isUptodate((XMultiServiceFactory)tParam.getMSF())) {
             // If Handler uses old MSF (in case of Office's GPF) then don't test
