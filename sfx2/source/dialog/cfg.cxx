@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:49:09 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 11:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,14 +161,202 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 
+#ifndef  _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::script;
+namespace css = ::com::sun::star;
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 #include <svtools/imagemgr.hxx>
 #include <tools/urlobj.hxx>
+#include <rtl/ustrbuf.hxx>
+
+USHORT SfxStylesInfo_Impl::START_ID_STYLES = 33000;
+
+SfxStylesInfo_Impl::SfxStylesInfo_Impl()
+    : m_nIDPool( 0 )
+{}
+
+void SfxStylesInfo_Impl::setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel)
+{
+    m_xDoc = xModel;
+}
+
+USHORT SfxStylesInfo_Impl::cacheStyle(const ::rtl::OUString& sCommand)
+{
+    // command already cached?
+    TCommand2IDMap::const_iterator pStyle = m_lCommand2IDs.find(sCommand);
+    if (pStyle != m_lCommand2IDs.end())
+        // yes - return ID
+        return pStyle->second;
+
+    // otherwise cache it as new item
+    USHORT nOffset = m_nIDPool;
+    USHORT nID     = (SfxStylesInfo_Impl::START_ID_STYLES + nOffset);
+    m_lCommand2IDs[sCommand] = nID;
+    m_lID2Commands.push_back(sCommand);
+    m_nIDPool++;
+    return nID;
+}
+
+static ::rtl::OUString FAMILY_CHARACTERSTYLE = ::rtl::OUString::createFromAscii("CharacterStyles");
+static ::rtl::OUString FAMILY_PARAGRAPHSTYLE = ::rtl::OUString::createFromAscii("ParagraphStyles");
+static ::rtl::OUString FAMILY_FRAMESTYLE     = ::rtl::OUString::createFromAscii("FrameStyles"    );
+static ::rtl::OUString FAMILY_PAGESTYLE      = ::rtl::OUString::createFromAscii("PageStyles"     );
+static ::rtl::OUString FAMILY_NUMBERINGSTYLE = ::rtl::OUString::createFromAscii("NumberingStyles");
+
+static ::rtl::OUString CMDURL_SPART  = ::rtl::OUString::createFromAscii(".uno:StyleApply?Style:string=");
+static ::rtl::OUString CMDURL_FPART2 = ::rtl::OUString::createFromAscii("&FamilyName:string=");
+
+sal_Bool SfxStylesInfo_Impl::parseStyleCommand(const ::rtl::OUString&   sCommand,
+                                                     SfxStyleInfo_Impl& aStyle  )
+{
+    sal_Int32 i1  = sCommand.indexOf(CMDURL_SPART);
+    sal_Int32 i2  = sCommand.indexOf(CMDURL_FPART2);
+    sal_Int32 i3  = CMDURL_SPART.getLength();
+    sal_Int32 i4  = CMDURL_FPART2.getLength();
+    sal_Int32 i5  = i2+i4;
+
+    // not a style command in general!
+    if (i1!=0)
+        return sal_False;
+
+    if (i2>i3)
+    {
+        aStyle.sStyle  = sCommand.copy(i3,i2-i3);
+        aStyle.sFamily = sCommand.copy(i5);
+    }
+
+    if (!aStyle.sFamily.getLength() || !aStyle.sStyle.getLength())
+    {
+        DBG_ERROR("SfxStylesInfo_Impl::parseCommand()\nWrong format of command detected.\n");
+        return sal_False;
+    }
+
+    aStyle.nId = cacheStyle(sCommand);
+    aStyle.sLabel = aStyle.sStyle; // writer does the same!
+    return sal_True;
+}
+
+::rtl::OUString SfxStylesInfo_Impl::generateCommand(const ::rtl::OUString sFamily, ::rtl::OUString sStyle)
+{
+    ::rtl::OUStringBuffer sCommand(1024);
+    sCommand.append(CMDURL_SPART );
+    sCommand.append(sStyle       );
+    sCommand.append(CMDURL_FPART2);
+    sCommand.append(sFamily      );
+    return sCommand.makeStringAndClear();
+}
+
+::rtl::OUString SfxStylesInfo_Impl::getStyle(USHORT nID)
+{
+    if (nID < SfxStylesInfo_Impl::START_ID_STYLES)
+        return ::rtl::OUString();
+
+    USHORT nOffset = (nID - SfxStylesInfo_Impl::START_ID_STYLES);
+    USHORT nSize   = (USHORT)m_lID2Commands.size();
+
+    if (nSize > nOffset)
+        return m_lID2Commands[nOffset];
+
+    DBG_ERROR("SfxStylesInfo_Impl::getStyle()\nID of style does not firt range of cache!");
+    return ::rtl::OUString();
+}
+
+::std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies()
+{
+    static ::rtl::OUString PROP_UINAME = ::rtl::OUString::createFromAscii("DisplayName");
+
+    // Its an optional interface!
+    css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY);
+    if (!xModel.is())
+        return ::std::vector< SfxStyleInfo_Impl >();
+
+    css::uno::Reference< css::container::XNameAccess > xCont = xModel->getStyleFamilies();
+    css::uno::Sequence< ::rtl::OUString > lFamilyNames = xCont->getElementNames();
+    ::std::vector< SfxStyleInfo_Impl > lFamilies;
+    sal_Int32 c = lFamilyNames.getLength();
+    sal_Int32 i = 0;
+    for(i=0; i<c; ++i)
+    {
+        SfxStyleInfo_Impl aFamilyInfo;
+        aFamilyInfo.sFamily = lFamilyNames[i];
+        aFamilyInfo.nId     = (USHORT)i;
+
+        try
+        {
+            css::uno::Reference< css::beans::XPropertySet > xFamilyInfo;
+            xCont->getByName(aFamilyInfo.sFamily) >>= xFamilyInfo;
+            if (!xFamilyInfo.is())
+            {
+                // TODO_AS currently there is no support for an UIName property .. use internal family name instead
+                aFamilyInfo.sLabel = aFamilyInfo.sFamily;
+            }
+            else
+                xFamilyInfo->getPropertyValue(PROP_UINAME) >>= aFamilyInfo.sLabel;
+        }
+        catch(const css::uno::RuntimeException& exRun)
+            { throw exRun; }
+        catch(const css::uno::Exception&)
+            { return ::std::vector< SfxStyleInfo_Impl >(); }
+
+        lFamilies.push_back(aFamilyInfo);
+    }
+
+    return lFamilies;
+}
+
+::std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const ::rtl::OUString& sFamily)
+{
+    static ::rtl::OUString PROP_UINAME = ::rtl::OUString::createFromAscii("DisplayName");
+
+    css::uno::Sequence< ::rtl::OUString > lStyleNames;
+    css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::container::XNameAccess > xFamilies = xModel->getStyleFamilies();
+    css::uno::Reference< css::container::XNameAccess > xStyleSet;
+    try
+    {
+        xFamilies->getByName(sFamily) >>= xStyleSet;
+        lStyleNames = xStyleSet->getElementNames();
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        { return ::std::vector< SfxStyleInfo_Impl >(); }
+
+    ::std::vector< SfxStyleInfo_Impl > lStyles;
+    sal_Int32                          c      = lStyleNames.getLength();
+    sal_Int32                          i      = 0;
+    for (i=0; i<c; ++i)
+    {
+        SfxStyleInfo_Impl aStyleInfo;
+        aStyleInfo.sFamily  = sFamily;
+        aStyleInfo.sStyle   = lStyleNames[i];
+        aStyleInfo.sCommand = SfxStylesInfo_Impl::generateCommand(aStyleInfo.sFamily, aStyleInfo.sStyle);
+        aStyleInfo.nId      = cacheStyle(aStyleInfo.sCommand);
+
+        try
+        {
+            css::uno::Reference< css::beans::XPropertySet > xStyle;
+            xStyleSet->getByName(aStyleInfo.sStyle) >>= xStyle;
+            if (!xStyle.is())
+                continue;
+            xStyle->getPropertyValue(PROP_UINAME) >>= aStyleInfo.sLabel;
+        }
+        catch(const css::uno::RuntimeException& exRun)
+            { throw exRun; }
+        catch(const css::uno::Exception&)
+            { continue; }
+
+        lStyles.push_back(aStyleInfo);
+    }
+    return lStyles;
+}
 /*
 struct SfxStatBarInfo_Impl
 {
@@ -238,6 +426,7 @@ SfxConfigFunctionListBox_Impl::SfxConfigFunctionListBox_Impl( Window* pParent, c
 */
     : SvTreeListBox( pParent, rResId )
     , pCurEntry( 0 )
+    , pStylesInfo( 0 )
 {
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     GetModel()->SetSortMode( SortAscending );
@@ -395,21 +584,40 @@ String SfxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
     SfxGroupInfo_Impl *pInfo = pEntry ? (SfxGroupInfo_Impl*) pEntry->GetUserData(): 0;
     if ( pInfo )
     {
-        if ( pInfo->nKind == SFX_CFGFUNCTION_SLOT )
+        switch ( pInfo->nKind )
         {
-            // Eintrag ist eine Funktion, Hilfe aus der Office-Hilfe
-            USHORT nId = pInfo->nOrd;
-            String aText = Application::GetHelp()->GetHelpText( nId, this );
+            case SFX_CFGGROUP_FUNCTION :
+            case SFX_CFGFUNCTION_SLOT :
+            {
+                // Eintrag ist eine Funktion, Hilfe aus der Office-Hilfe
+                USHORT nId = pInfo->nOrd;
+                String aText = Application::GetHelp()->GetHelpText( nId, this );
 
-            if ( !aText.Len() )
-                aText = SFX_SLOTPOOL().GetSlotHelpText_Impl( nId );
-            return aText;
-        }
-        else
-        {
-            // Eintrag ist ein Macro, Hilfe aus der MacroInfo
-            SfxMacroInfo *pMacInfo = (SfxMacroInfo*) pInfo->pObject;
-            return pMacInfo->GetHelpText();
+                if ( !aText.Len() )
+                    aText = SFX_SLOTPOOL().GetSlotHelpText_Impl( nId );
+                return aText;
+            }
+            break;
+
+            case SFX_CFGGROUP_SCRIPTCONTAINER :
+            case SFX_CFGFUNCTION_SCRIPT :
+            case SFX_CFGGROUP_BASICMGR :
+            case SFX_CFGGROUP_DOCBASICMGR :
+            case SFX_CFGGROUP_BASICLIB :
+            case SFX_CFGGROUP_BASICMOD :
+            case SFX_CFGFUNCTION_MACRO :
+            {
+                // Eintrag ist ein Macro, Hilfe aus der MacroInfo
+                SfxMacroInfo *pMacInfo = (SfxMacroInfo*) pInfo->pObject;
+                return pMacInfo->GetHelpText();
+            }
+            break;
+
+            case SFX_CFGGROUP_STYLES :
+            {
+                return String();
+            }
+            break;
         }
     }
 
@@ -423,6 +631,11 @@ void SfxConfigFunctionListBox_Impl::FunctionSelected()
 */
 {
     Help::ShowBalloon( this, Point(), String() );
+}
+
+void SfxConfigFunctionListBox_Impl::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
+{
+    pStylesInfo = pStyles;
 }
 
 SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
@@ -531,6 +744,11 @@ void SfxConfigGroupListBox_Impl::SetScriptType( const String& rScriptType )
 
         pEntry = (SvLBoxEntry*) GetModel()->GetEntryAtAbsPos( nPos++ );
     }
+}
+
+void SfxConfigGroupListBox_Impl::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
+{
+    pStylesInfo = pStyles;
 }
 
 String SfxConfigGroupListBox_Impl::GetGroup()
@@ -851,6 +1069,17 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
             }
         }
     }
+
+    // add styles
+    {
+        String sStyle( SfxResId( STR_GROUP_STYLES ) );
+        SvLBoxEntry *pEntry = InsertEntry( sStyle, 0 );
+        SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, 0 ); // TODO last parameter should contain user data
+        aArr.Insert( pInfo, aArr.Count() );
+        pEntry->SetUserData( pInfo );
+        pEntry->EnableChildsOnDemand( TRUE );
+    }
+
     MakeVisible( GetEntry( 0,0 ) );
     SetUpdateMode( TRUE );
 }
@@ -1069,7 +1298,8 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
     pFunctionListBox->ClearAll();
     if ( pInfo->nKind != SFX_CFGGROUP_FUNCTION &&
              pInfo->nKind != SFX_CFGGROUP_BASICMOD &&
-             pInfo->nKind != SFX_CFGGROUP_SCRIPTCONTAINER )
+             pInfo->nKind != SFX_CFGGROUP_SCRIPTCONTAINER &&
+             pInfo->nKind != SFX_CFGGROUP_STYLES )
     {
         pFunctionListBox->SetUpdateMode(TRUE);
         return;
@@ -1208,6 +1438,27 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                 }
                 catch (RuntimeException &e) {
                     // do nothing, the entry will not be displayed in the UI
+                }
+            }
+            break;
+        }
+
+        case SFX_CFGGROUP_STYLES :
+        {
+            SfxStyleInfo_Impl* pFamily = (SfxStyleInfo_Impl*)(pInfo->pObject);
+            if (pFamily)
+            {
+                const ::std::vector< SfxStyleInfo_Impl > lStyles = pStylesInfo->getStyles(pFamily->sFamily);
+                ::std::vector< SfxStyleInfo_Impl >::const_iterator pIt;
+                for (  pIt  = lStyles.begin();
+                       pIt != lStyles.end()  ;
+                     ++pIt                   )
+                {
+                    SfxStyleInfo_Impl* pStyle = new SfxStyleInfo_Impl(*pIt);
+                    SvLBoxEntry* pFuncEntry = pFunctionListBox->InsertEntry( pStyle->sLabel, NULL );
+                    SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, pStyle->nId, pStyle );
+                    pFunctionListBox->aArr.Insert( pInfo, pFunctionListBox->aArr.Count() );
+                    pFuncEntry->SetUserData( pInfo );
                 }
             }
             break;
@@ -1431,6 +1682,27 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                 }
                 catch (RuntimeException &e) {
                     // do nothing, the entry will not be displayed in the UI
+                }
+            }
+            break;
+        }
+
+        case SFX_CFGGROUP_STYLES:
+        {
+            if ( !GetChildCount( pEntry ) )
+            {
+                const ::std::vector< SfxStyleInfo_Impl >                 lStyleFamilies = pStylesInfo->getStyleFamilies();
+                      ::std::vector< SfxStyleInfo_Impl >::const_iterator pIt;
+                for (  pIt  = lStyleFamilies.begin();
+                       pIt != lStyleFamilies.end()  ;
+                     ++pIt                          )
+                {
+                    SfxStyleInfo_Impl* pFamily = new SfxStyleInfo_Impl(*pIt);
+                    SvLBoxEntry* pStyleEntry = InsertEntry( pFamily->sLabel, pEntry );
+                    SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, pFamily->nId, pFamily );
+                    aArr.Insert( pInfo, aArr.Count() );
+                    pStyleEntry->SetUserData( pInfo );
+                    pStyleEntry->EnableChildsOnDemand( FALSE );
                 }
             }
             break;
