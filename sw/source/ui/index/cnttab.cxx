@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-09 12:44:58 $
+ *  last change: $Author: jp $ $Date: 2001-08-24 16:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,46 +713,34 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
         if(!pExampleFrame && !bExampleCreated)
         {
             bExampleCreated = sal_True;
-            const sal_Unicode  cSearch = SVT_SEARCHPATH_DELIMITER;
-            const String  sAccess = INET_PATH_TOKEN;
-            SvtPathOptions aPathOpt;
+            String sTemplate( String::CreateFromAscii(
+                                RTL_CONSTASCII_STRINGPARAM("internal")) );
+            sTemplate += INET_PATH_TOKEN;
+            sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM("idxexample") );
+            String sTemplateWithoutExt( sTemplate );
+#ifndef MAC_WITHOUT_EXT
+            sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".sxw") );
+#endif
 
-            String sPath( aPathOpt.GetTemplatePath() );
-            sal_uInt16 nTokenCount = sPath.GetTokenCount(cSearch);
-            sal_uInt16 nToken = 0;
-            sal_Bool bExist = sal_False;
-            String sFile = sAccess;
-            sFile.AppendAscii( RTL_CONSTASCII_STRINGPARAM("internal"));
-            sFile += sAccess;
-            sFile.AppendAscii( RTL_CONSTASCII_STRINGPARAM("idxexample.sdw"));
-            String sURL;
-            do
+            SvtPathOptions aOpt;
+            // 6.0 (extension .sxw)
+            BOOL bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
+
+#ifndef MAC_WITHOUT_EXT
+            if( !bExist )
             {
-                sURL = sPath.GetToken(nToken, cSearch);
-                sURL = URIHelper::SmartRelToAbs(sURL);
-                sURL += sFile;
-                nToken++;
-                try
-                {
-                    ::ucb::Content aTestContent(
-                        sURL,
-                        uno::Reference< XCommandEnvironment >());
-
-                    uno::Any aAny = aTestContent.getPropertyValue( OUString::createFromAscii("IsDocument") );
-                    bExist = aAny.hasValue() ? *(sal_Bool*)aAny.getValue() : FALSE;
-                }
-                catch(Exception&)
-                {
-                    bExist = FALSE;
-                }
-
-            }while(!bExist && nToken < nTokenCount);
+                // 5.0 (extension .vor)
+                sTemplate = sTemplateWithoutExt;
+                sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".sdw") );
+                bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
+            }
+#endif
 
             if(!bExist)
             {
                 String sInfo(SW_RES(STR_FILE_NOT_FOUND));
-                sInfo.SearchAndReplaceAscii("%1", sFile);
-                sInfo.SearchAndReplaceAscii("%2", sPath);
+                sInfo.SearchAndReplaceAscii( "%1", sTemplate );
+                sInfo.SearchAndReplaceAscii( "%2", aOpt.GetTemplatePath() );
                 InfoBox aInfo(GetParent(), sInfo);
                 aInfo.Execute();
             }
@@ -760,7 +748,7 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
             {
                 Link aLink(LINK(this, SwMultiTOXTabDialog, CreateExample_Hdl));
                 pExampleFrame = new SwOneExampleFrame(
-                            aExampleWIN, EX_SHOW_ONLINE_LAYOUT, &aLink, &sURL);
+                        aExampleWIN, EX_SHOW_ONLINE_LAYOUT, &aLink, &sTemplate);
 
                 if(!pExampleFrame->IsServiceAvailable())
                 {
