@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-19 10:21:06 $
+ *  last change: $Author: jp $ $Date: 2001-04-03 11:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,7 +633,16 @@ void SwGetRefFieldType::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                         pFld; pFld = (SwFmtFld*)aIter.Next() )
         {
             // nur die GetRef-Felder Updaten
-            ((SwGetRefField*)pFld->GetFld())->UpdateField();
+            //JP 3.4.2001: Task 71231 - we need the correct language
+            SwGetRefField* pGRef = (SwGetRefField*)pFld->GetFld();
+            const SwTxtFld* pTFld;
+            if( !pGRef->GetLanguage() &&
+                0 != ( pTFld = pFld->GetTxtFld()) &&
+                pTFld->GetpTxtNode() )
+                pGRef->SetLanguage( pTFld->GetpTxtNode()->GetLang(
+                                                *pTFld->GetStart() ) );
+
+            pGRef->UpdateField();
         }
     }
     // weiter an die Text-Felder, diese "Expandieren" den Text
