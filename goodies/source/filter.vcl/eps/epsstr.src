@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epsstr.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:25:10 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,38 +64,10 @@
 
 String KEY_VERSION_CHECK
 {
-    Text =  "Achtung: Es konnten nicht alle importierte EPS-Grafiken in Level1 abgespeichert werden,\n"
+    Text [ de ] =   "Achtung: Es konnten nicht alle importierte EPS-Grafiken in Level1 abgespeichert werden,\n"
             "da einige in einem höherem Level vorliegen !";
-    Text[ ENGLISH ] = "Attention: It was not possible to save all imported EPS graphics in level1,"
-            "because some of them already attend to a higher level !";
-    Text[ italian ] = "Attenzione: non è stato possibile salvare tutte le immagini EPS importate nel livello1\nin quanto ne esistono alcune in un livello superiore!";
-    Text[ portuguese_brazilian ] = "Aviso: Não foi possível salvar todas as imagens EPS importadas no nível1,\npois algumas estão em um nível superior!!";
-    Text[ portuguese ] = "Atenção: foi impossível guardar todas as imagens EPS importadas no nível 1,\numa vez que algumas se encontram num nível superior!";
-    Text[ danish ] = "Advarsel: Det var ikke muligt at gemme alle importerede EPS-billeder på niveau1,\nfordi nogle foreligger på et højere niveau!";
-    Text[ french ] = "Attention : Les graphiques EPS importés n'ont pas tous pu être enregistrés au niveau1\ncar certains d'entre eux sont d'un niveau supérieur !";
-    Text[ swedish ] = "OBS: All importerad EPS-grafik kunde inte sparas på Level1,\neftersom en del finns på en högre nivå !";
-    Text[ dutch ] = "Let op: niet alle geïmporteerde EPS-afbeeldingen kunnen onder Niveau1 worden opgeslagen,\nomdat enkele zich op een hoger niveau bevinden!";
-    Text[ spanish ] = "¡Atención: No todos los gráficos EPS importados se han podido guardar en el Level1\nya que algunos son de un nivel superior!";
-    Text[ english_us ] = "Warning: Not all of the imported EPS graphics could be saved at level1\nas some are at a higher level!";
-    Text[ chinese_simplified ] = "æ³¨æ„: æ— æ³•å°†æ‰€æœ‰çš„è¾“å…¥å›¾å½¢ä»¥\"çº§åˆ« 1\"å­˜ç›˜ï¼Œ\nå› ä¸ºä¸€äº›å›¾å½¢æ˜¯é«˜äº\"çº§åˆ« 1\" ï¼";
-    Text[ russian ] = "Ïğåäóïğåæäåíèå! Ñîõğàíèòü âñå èìïîğòèğîâàííûå ãğàôè÷åñêèå îáúåêòû EPS íà óğîâíå 1 íåâîçìîæíî,\nòàê êàê íåêîòîğûå èç íèõ íàõîäÿòñÿ íà áîëåå âûñîêîì óğîâíå!";
-    Text[ polish ] = "Ostrze¿enie: Nie wszystkie importowane grafiki EPS mog³y zostaæ zapisane na poziomie 1,\nponiewa¿ niektóre znajduj¹ siê na wy¿szym poziomie!";
-    Text[ japanese ] = "æ³¨æ„: ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚ŒãŸ EPS ç”»åƒã®ã„ãã¤ã‹ã¯ã€ä¸€ã¤ä¸Šã®ãƒ¬ãƒ™ãƒ«ã«ã‚ã‚Š\nã«ã™ã¹ã¦ã‚’ãƒ¬ãƒ™ãƒ«ï¼‘æ ¼ç´ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
-    Text[ greek ] = "Ğñïåéäïğïßçóç: Äåí Şôáí äõíáôŞ ç áğïèŞêåõóç üëùí ôùí åéóá÷èİíôùí\nãñáöéêşí EPS óå åğßğåäï 1 êáèşò ìåñéêÜ áíŞêïõí óå áíşôåñï åğßğåäï!";
-    Text[ korean ] = "ì£¼ì˜: ì¼ë¶€ ê·¸ë¦¼ì´ ìƒìœ„ ìˆ˜ì¤€ì— ìˆì–´ \nê°€ì ¸ì˜¨ EPS ê·¸ë¦¼ ëª¨ë‘ë¥¼ ìˆ˜ì¤€ 1ì— ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_traditional ] = "è¨»æ„ï¼šç„¡æ³•å°‡æ‰€æœ‰çš„åŒ¯å…¥åœ–å½¢ä»¥ level 1 å„²å­˜ï¹\nå› ç‚ºä¸€äº›åœ–å½¢é«˜æ–¼ level 1 ï¼";
-    Text[ arabic ] = "ÊÍĞíÑ: ÊÚĞÑ ÍİÙ ßá ÕæÑ EPS ÇáãÓÊæÑÏÉ İí ÇáãÓÊæì 1¡\náÊæÇÌÏ ÈÚÖ ãäåÇ İí ãÓÊæì ÃÚáì!";
-    Text[ turkish ] = "Dikkat: Bazı EPS grafikleri daha üst düzeyde olduğu için, içe aktarılan tüm grafikler düzey 1'e kaydedilemedi.";
-    Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Varoitus: Kaikkien tuotujen EPS-kuvien tallentaminen ei onnistunut tasolla 1,\nkoska joidenkin kuvien taso on korkeampi.";
-    Text[ catalan ] = "Advertiment: No s'han pogut desar al nivell1 tots els gràfics EPS importats\nja que alguns són a un nivell superior!";
-    Text[ thai ] = "à¸„à¸³à¹€à¸•à¸·à¸­à¸™: à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¸™à¸³à¹€à¸‚à¹‰à¸²à¸à¸£à¸²à¸Ÿà¸´à¸„ EPS à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸£à¸°à¸”à¸±à¸š1\n à¹€à¸›à¹‡à¸™à¸šà¸²à¸‡à¸ªà¹ˆà¸§à¸™à¸—à¸µà¹ˆà¸£à¸°à¸”à¸±à¸šà¸ªà¸¹à¸‡à¸‚à¸¶à¹‰à¸™!";
-    Text[ czech ] = "VarovÃ¡nÃ­: v Level 1 nenÃ­ moÅ¾nÃ© uloÅ¾it kompletnÃ­ importovanÃ½\nobrÃ¡zek ve formÃ¡tu EPS, protoÅ¾e ÄÃ¡sti jsou v Level 2.";
-    Text[ hebrew ] = "â€®××–×”×¨×”: ×œ× × ×™×ª×Ÿ ×œ×©××•×¨ ××ª ×›×œ ×”×’×¨×¤×™×§×” ×” EPS ×‘×¨××” 1\n×›×™ ×—×œ×§ ××”× ×‘×¨××” ×’×‘×•×”×” ×™×•×ª×¨â€¬";
-    Text[ hindi ] = "à¤šà¥‡à¤¤à¤¾à¤µà¤¨à¥€: à¤†à¤¯à¤¾à¤¤ à¤•à¥€ à¤¹à¥à¤¯à¥€ à¤¸à¤­à¥€ EPS à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤•à¥‹ à¤¸à¤¤à¤¹1 à¤®à¥‡à¤‚ à¤¸à¤‚à¤šà¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ\nà¤•à¥à¤¯à¥‹à¤‚à¤•à¤¿ à¤‰à¤¨à¤®à¥‡à¤‚ à¤¸à¥‡ à¤•à¥à¤› à¤‰à¤šà¥à¤š à¤¸à¤¤à¤¹ à¤•à¤¾ à¤¹à¥ˆ!";
-    Text[ slovak ] = "Upozornenie: Nie vÅ¡etky importovanÃ© EPS obrÃ¡zky mohli byÅ¥ uloÅ¾enÃ© na Ãºrovni1\npreto sÃº niektorÃ© na vyÅ¡Å¡Ã­ch Ãºrovniach!";
-    Text[ hungarian ] = "FigyelmeztetÃ©s: Nem minden importÃ¡lt EPS-Ã¡bra menthetÅ‘ el 1. szintÅ±kÃ©nt, \nmert vannak kÃ¶ztÃ¼k magasabb szintÅ±ek is!";
-    Text[ slovenian ] = "Opozorilo: Vseh uvoÅ¾enih EPS grafik ni mogoÄe shraniti na ravni 1,\nker so nekatere na viÅ¡ji ravni!";
+    Text [ en-US ] = "Warning: Not all of the imported EPS graphics could be saved at level1\nas some are at a higher level!";
+    Text [ x-comment ] = " ";
 };
 
 
