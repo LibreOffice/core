@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cd $ $Date: 2002-09-23 11:05:07 $
+ *  last change: $Author: cd $ $Date: 2002-10-18 06:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,9 +247,10 @@ void registerServices( Reference< XMultiServiceFactory >& xSMgr )
         conDcp = aTmpString;
     pCmdLine->GetUserDir( aUserDir );
 
+    // Headless mode for FAT Office
+    bHeadlessMode   = pCmdLine->IsHeadless();
     if ( Application::IsRemoteServer() )
     {
-        bHeadlessMode   = pCmdLine->IsHeadless();
         pCmdLine->GetClientDisplay( aClientDisplay );
     }
 
