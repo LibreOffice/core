@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node2lay.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:57:38 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,8 +364,15 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, ULONG nStt, ULONG nEnd )
         SwFrm* pTmp = (SwFrm*)(*pUpperFrms)[++x];
         if( pTmp->IsFtnFrm() )
             ((SwFtnFrm*)pTmp)->ColUnlock();
-        else if( pTmp->IsInSct() )
-            pTmp->FindSctFrm()->ColUnlock();
+        else if ( pTmp->IsInSct() )
+        {
+            SwSectionFrm* pSctFrm = pTmp->FindSctFrm();
+            pSctFrm->ColUnlock();
+            // OD 26.08.2003 #i18103# - invalidate size of section in order to
+            // assure, that the section is formatted, unless it was 'Collocked'
+            // from its 'collection' until its 'restoration'.
+            pSctFrm->_InvalidateSize();
+        }
     }
 }
 
