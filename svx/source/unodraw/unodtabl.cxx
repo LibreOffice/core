@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodtabl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: pw $ $Date: 2000-10-12 12:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,6 @@ DECLARE_LIST( ItemSetArray_Impl, SfxItemSet* )
 class SvxUnoDashTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
 private:
-    XGradientList*  mpGradientList;
     SdrModel*       mpModel;
     SfxItemPool*    mpPool;
 
@@ -145,7 +144,6 @@ public:
 
 SvxUnoDashTable::SvxUnoDashTable( SdrModel* pModel ) throw()
 : mpModel( pModel ),
-  mpGradientList( pModel ? pModel->GetGradientList() : NULL ),
   mpPool( pModel ? &pModel->GetItemPool() : (SfxItemPool*)NULL )
 {
 }
@@ -275,11 +273,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDashTable::getElementNames(  )
         {
             pStrings[nSurrogate] = pItem->GetName();
 
-            if( !pStrings[nSurrogate].getLength() )
-            {
-                CreateName( pStrings[nSurrogate] );
-                pItem->SetName( String( pStrings[nSurrogate] ) );
-            }
+            DBG_ASSERT( pStrings[nSurrogate].getLength(), "XLineDashItem in pool should have a name !");
         }
     }
 
