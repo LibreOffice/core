@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-13 12:27:55 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+/** @HTML */
 
 #ifndef _OSL_FILE_HXX_
 #define _OSL_FILE_HXX_
@@ -147,7 +148,8 @@ public:
         E_USERS        = osl_File_E_USERS,
         E_OVERFLOW     = osl_File_E_OVERFLOW,
         E_NOTREADY     = osl_File_E_NOTREADY,
-        E_invalidError = osl_File_E_invalidError    /* unmapped error: always last entry in enum! */
+        E_invalidError = osl_File_E_invalidError,   /* unmapped error: always last entry in enum! */
+        E_TIMEDOUT     = osl_File_E_TIMEDOUT
     };
 
 
@@ -1254,6 +1256,42 @@ public:
         return (RC) osl_readLine( _pData, reinterpret_cast<sal_Sequence**>(&aSeq) );
     }
 
+    /** Synchronize the memory representation of a file with that on the physical medium.
+
+    The function ensures that all modified data and attributes of the file associated with
+    the given file handle have been written to the physical medium.
+    In case the hard disk has a write cache enabled, the data may not really be on
+    permanent storage when osl_syncFile returns.
+
+    @return
+    <dl>
+    <dt>E_None</dt>
+    <dd>On success</dd>
+    <dt>E_INVAL</dt>
+    <dd>The value of the input parameter is invalid</dd>
+    </dl>
+    <br><p><strong>In addition to these error codes others may occur as well, for instance:</strong></p><br>
+    <dt>E_BADF</dt>
+    <dd>The file is not open for writing</dd>
+    <dt>E_IO</dt>
+    <dd>An I/O error occurred</dd>
+    <dt>E_NOSPC</dt>
+    <dd>There is no enough space on the target device</dd>
+    <dt>E_ROFS</dt>
+    <dd>The file is located on a read only file system</dd>
+    <dt>E_TIMEDOUT</dt>
+    <dd>A remote connection timed out. This may happen when a file is on a remote location</dd>
+    </dl>
+
+    @see osl_syncFile()
+    @see open()
+    @see write()
+    */
+    inline RC sync() const
+    {
+        OSL_PRECOND(_pData, "File::sync(): File not open");
+        return (RC)osl_syncFile(_pData);
+    }
 
     /** Copy a file to a new destination.
 
