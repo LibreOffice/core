@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:21:02 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,6 @@ static const ResIdToResName pToolBarResToName[] =
     { 30001,    "objectbar"            },      //chart
     { 30513,    "toolbar"              },      //chart
     { 25005,    "textobjectbar"        },      //calc
-    { 25047,    "formsobjectbar"       },
     { 25053,    "drawobjectbar"        },
     { 25054,    "graphicobjectbar"     },
     { 25001,    "formatobjectbar"      },
@@ -137,7 +136,6 @@ static const ResIdToResName pToolBarResToName[] =
     { 23014,    "slideviewobjectbar"   },
     { 23283,    "bezierobjectbar"      },      //writer
     { 23269,    "drawingobjectbar"     },
-    { 23299,    "formsobjectbar"       },
     { 23270,    "drawtextobjectbar"    },
     { 23267,    "frameobjectbar"       },
     { 23268,    "graphicobjectbar"     },
@@ -163,15 +161,9 @@ static const ResIdToResName pToolBarResToName[] =
     { 23031,    "mediaobjectbar"       },      //draw/impress
     { 25060,    "mediaobjectbar"       },      //calc
     { 23311,    "mediaobjectbar"       },      //writer
-    { 18004,    "databasecontrols"     },
-    { 18005,    "xformcontrols"        },
-    { 18006,    "formcontrols"         },
-    { 18007,    "moredatabasecontrols" },
-    { 18008,    "morexformcontrols"    },
-    { 18009,    "moreformcontrols"     },
-    { 18010,    "databaseformdesign"   },
-    { 18011,    "xformdesign"          },
-    { 18012,    "formdesign"           },
+    { 18004,    "formcontrols"         },
+    { 18005,    "moreformcontrols"     },
+    { 18006,    "formdesign"           },
     { 0,        ""                     }
 };
 
