@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: mt $ $Date: 2002-04-18 14:58:07 $
+ *  last change: $Author: ssa $ $Date: 2002-04-18 15:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3749,7 +3749,7 @@ void Window::ImplGrabFocus( USHORT nFlags )
             {
                 // Hier setzen wir schon den Focus um, da ToTop() den Focus
                 // nicht auf ein anderes Fenster setzen darf
-                DBG_WARNING( "Window::GrabFocus() - Frame doesn't have the focus" );
+                //DBG_WARNING( "Window::GrabFocus() - Frame doesn't have the focus" );
 #ifndef REMOTE_APPSERVER
                 mpFrame->ToTop( SAL_FRAME_TOTOP_GRABFOCUS );
 #else
