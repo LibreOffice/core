@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:07:56 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "sortdlg.hrc"
 TabPage RID_SCPAGE_SORT_FIELDS
 {
@@ -486,7 +485,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ dutch ] = "Bereik bevat ~kolomkoppen" ;
         Text [ spanish ] = "El área contiene los títulos de las ~columnas" ;
         Text [ english_us ] = "Range contains column la~bels" ;
-        Text[ chinese_simplified ] = "åŒºåŸŸå«æœ‰åˆ—æ ‡é¢˜(~B)";
+        Text[ chinese_simplified ] = "åŒºåŸŸå«æœ‰åˆ—æ ‡ç­¾";
         Text[ russian ] = "Çàãîëîâêè ñòîëáöîâ â îáëàñòè";
         Text[ polish ] = "~Zakres zawiera nag³ówki kolumn";
         Text[ japanese ] = "ç¯„å›²ã«åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~B)";
@@ -520,7 +519,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ dutch ] = "Bereik bevat ~rijkoppen" ;
         Text [ spanish ] = "El área contiene los títulos de las ~filas" ;
         Text [ english_us ] = "Range contains ~row labels" ;
-        Text[ chinese_simplified ] = "åŒºåŸŸå«æœ‰è¡Œæ ‡é¢˜(~R)";
+        Text[ chinese_simplified ] = "åŒºåŸŸå«æœ‰è¡Œæ ‡ç­¾";
         Text[ russian ] = "Çàãîëîâêè ñòğîê â îáëàñòè";
         Text[ polish ] = "Z~akres zawiera nag³ówki wierszy";
         Text[ japanese ] = "ç¯„å›²ã«è¡Œã®é …ç›®æ¬„ã‚’å«ã‚€(~R)";
