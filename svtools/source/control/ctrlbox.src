@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-25 20:57:34 $
+ *  last change: $Author: kz $ $Date: 2001-10-12 20:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ String STR_SVT_COLLATE_STROKE
     Text[ spanish ] = "Trazo";
     Text[ italian ] = "Stroke";
     Text[ danish ] = "Stroke";
-    Text[ swedish ] = "Streck";
+    Text[ swedish ] = "Stroke";
     Text[ polish ] = "Kreski (stroke)";
     Text[ portuguese_brazilian ] = "Stroke";
     Text[ japanese ] = "総画数";
@@ -321,7 +321,7 @@ String STR_SVT_COLLATE_UNICODE
     Text[ polish ] = "Unicode";
     Text[ portuguese_brazilian ] = "Unicode";
     Text[ japanese ] = "ﾕﾆｺｰﾄﾞ";
-    Text[ korean ] = "Unicode";
+    Text[ korean ] = "유니코드";
     Text[ chinese_simplified ] = "统一码";
     Text[ chinese_traditional ] = "統一碼";
     Text[ turkish ] = "Unicode";
@@ -355,6 +355,7 @@ String STR_SVT_COLLATE_ZHUYIN
     Text[ catalan ] = "Zhuyin";
     Text[ finnish ] = "Zhuyin";
 };
+
 
 
 
