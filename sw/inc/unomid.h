@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomid.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 10:16:07 $
+ *  last change: $Author: mba $ $Date: 2002-06-17 14:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #define MID_DROPCAP_FORMAT                      0
 #define MID_DROPCAP_WHOLE_WORD                  1
 #define MID_DROPCAP_CHAR_STYLE_NAME             2
+#define MID_DROPCAP_LINES                       3
+#define MID_DROPCAP_COUNT                       4
+#define MID_DROPCAP_DISTANCE                    5
 
 #define MID_FRMSIZE_SIZE                        0
 #define MID_FRMSIZE_REL_HEIGHT                  1
