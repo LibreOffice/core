@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-04 14:47:00 $
+ *  last change: $Author: abi $ $Date: 2001-07-09 11:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,6 @@
 #ifndef _COM_SUN_STAR_UCB_CONTENTINFOATTRIBUTE_HPP_
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #endif
-
 #ifndef _FILGLOB_HXX_
 #include "filglob.hxx"
 #endif
@@ -412,7 +411,7 @@ BaseContent::execute( const Command& aCommand,
             m_pMyShell->installError( CommandId,
                                       TASKHANDLING_WRONG_SETPROPERTYVALUES_ARGUMENT );
         else
-            setPropertyValues( CommandId,sPropertyValues );
+            aAny <<= setPropertyValues( CommandId,sPropertyValues );  // calls endTask by itself
     }
     else if( ! aCommand.Name.compareToAscii( "getPropertyValues" ) )
     {
@@ -905,15 +904,15 @@ BaseContent::getPropertyValues(
 }
 
 
-void SAL_CALL
+Sequence< Any > SAL_CALL
 BaseContent::setPropertyValues(
     sal_Int32 nMyCommandIdentifier,
     const Sequence< beans::PropertyValue >& Values )
-    throw( RuntimeException )
+    throw()
 {
     if( m_nState & Deleted )
-    {
-        return;
+    {   //  To do
+        return Sequence< Any >( Values.getLength() );
     }
 
     rtl::OUString Title = rtl::OUString::createFromAscii( "Title" );
@@ -941,39 +940,63 @@ BaseContent::setPropertyValues(
                 }
             }
         }
+
+        return Sequence< Any >( Values.getLength() );
     }
     else
     {
-        m_pMyShell->setv( nMyCommandIdentifier,      // Does not handle Title
-                          m_aUncPath,
-                          Values );
+        Sequence< Any > ret = m_pMyShell->setv( nMyCommandIdentifier,  // Does not handle Title
+                                                m_aUncPath,
+                                                Values );
 
         // Special handling Title: Setting Title is equivalent to a renaming of the underlying file
         for( sal_Int32 i = 0; i < Values.getLength(); ++i )
         {
-            if( Values[i].Name == Title )
+            if( Values[i].Name != Title )
+                continue;                  // handled by setv
+
+            rtl::OUString NewTitle;
+            if( !( Values[i].Value >>= NewTitle ) )
             {
-                rtl::OUString NewTitle;
-                if( Values[i].Value >>= NewTitle  )
-                {
-                    rtl::OUString aDstName = getParentName( m_aUncPath );
-                    if( aDstName.lastIndexOf( sal_Unicode('/') ) != aDstName.getLength() - 1 )
-                        aDstName += rtl::OUString::createFromAscii("/");
-
-                    aDstName += rtl::Uri::encode( NewTitle,
-                                                  rtl_UriCharClassPchar,
-                                                  rtl_UriEncodeIgnoreEscapes,
-                                                  RTL_TEXTENCODING_UTF8 );
-
-                    m_pMyShell->move( nMyCommandIdentifier,     // move notifies the childs also;
-                                      m_aUncPath,
-                                      aDstName,
-                                      NameClash::KEEP );
-                }
-                // NameChanges come back trough a ContentEvent
-                break; // only handling Title
+                ret[i] <<= beans::IllegalTypeException();
+                break;
             }
+            else if( ! NewTitle.getLength() )
+            {
+                ret[i] <<= lang::IllegalArgumentException();
+                break;
+            }
+
+
+            rtl::OUString aDstName = getParentName( m_aUncPath );
+            if( aDstName.lastIndexOf( sal_Unicode('/') ) != aDstName.getLength() - 1 )
+                aDstName += rtl::OUString::createFromAscii("/");
+
+            aDstName += rtl::Uri::encode( NewTitle,
+                                          rtl_UriCharClassPchar,
+                                          rtl_UriEncodeIgnoreEscapes,
+                                          RTL_TEXTENCODING_UTF8 );
+
+            m_pMyShell->move( nMyCommandIdentifier,     // move notifies the childs also;
+                              m_aUncPath,
+                              aDstName,
+                              NameClash::KEEP );
+
+            try
+            {
+                m_pMyShell->endTask( nMyCommandIdentifier,
+                                     m_aUncPath );
+            }
+            catch( const Exception& e )
+            {
+                ret[i] <<= e;
+            }
+
+            // NameChanges come back trough a ContentEvent
+            break; // only handling Title
         } // end for
+
+        return ret;
     }
 }
 

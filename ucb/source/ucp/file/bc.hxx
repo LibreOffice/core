@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-04 14:47:00 $
+ *  last change: $Author: abi $ $Date: 2001-07-09 11:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,11 +406,11 @@ namespace fileaccess {
             const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& PropertySet )
             throw( com::sun::star::uno::RuntimeException );
 
-        void SAL_CALL
+        com::sun::star::uno::Sequence< com::sun::star::uno::Any > SAL_CALL
         setPropertyValues(
             sal_Int32 nMyCommandIdentifier,
             const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& Values )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( );
 
         com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSet > SAL_CALL
         open(

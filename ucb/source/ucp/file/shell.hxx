@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-04 14:47:00 $
+ *  last change: $Author: abi $ $Date: 2001-07-09 11:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,9 +384,10 @@ namespace fileaccess {
          *  Sets the values of the properties belonging to fileURL aUnqPath
          */
 
-        void SAL_CALL setv( sal_Int32 CommandId,
-                            const rtl::OUString& aUnqPath,
-                            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& values )
+        com::sun::star::uno::Sequence< com::sun::star::uno::Any > SAL_CALL
+        setv( sal_Int32 CommandId,
+              const rtl::OUString& aUnqPath,
+              const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& values )
             throw();
 
 

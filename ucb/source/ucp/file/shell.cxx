@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-04 14:47:00 $
+ *  last change: $Author: abi $ $Date: 2001-07-09 11:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALACCESSEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalAccessException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_ILLEGALTYPEEXCEPTION_HPP_
+#include <com/sun/star/beans/IllegalTypeException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
@@ -833,7 +839,7 @@ shell::info_p( sal_Int32 CommandId,
 //
 
 
-void SAL_CALL
+uno::Sequence< uno::Any > SAL_CALL
 shell::setv( sal_Int32 CommandId,
              const rtl::OUString& aUnqPath,
              const uno::Sequence< beans::PropertyValue >& values )
@@ -842,6 +848,7 @@ shell::setv( sal_Int32 CommandId,
     vos::OGuard aGuard( m_aMutex );
 
     sal_Int32 propChanged = 0;
+    uno::Sequence< uno::Any > ret( values.getLength() );
     uno::Sequence< beans::PropertyChangeEvent > seqChanged( values.getLength() );
 
     shell::ContentMap::iterator it = m_aContent.find( aUnqPath );
@@ -853,10 +860,21 @@ shell::setv( sal_Int32 CommandId,
     {
         MyProperty toset( values[i].Name );
         it1 = properties.find( toset );
-        if( it1 == properties.end() ) continue;
+        if( it1 == properties.end() )
+        {
+            ret[i] <<= beans::UnknownPropertyException();
+            continue;
+        }
 
         aAny = it1->getValue();
-        if( aAny == values[i].Value ) continue;
+        if( aAny == values[i].Value )
+            continue;  // nothing needs to be changed
+
+        if( it1->getAttributes() & beans::PropertyAttribute::READONLY )
+        {
+            ret[i] <<= lang::IllegalAccessException();
+            continue;
+        }
 
         seqChanged[ propChanged   ].PropertyName = values[i].Name;
         seqChanged[ propChanged   ].PropertyHandle   = -1;
@@ -864,7 +882,7 @@ shell::setv( sal_Int32 CommandId,
         seqChanged[ propChanged   ].OldValue <<= aAny;
         seqChanged[ propChanged++ ].NewValue = values[i].Value;
 
-        it1->setValue( values[i].Value );
+        it1->setValue( values[i].Value );  // Put the new value into the local cash
 
         if( ! it1->IsNative() )
         {
@@ -872,17 +890,25 @@ shell::setv( sal_Int32 CommandId,
             if( !it->second.xS.is() )
                 load( it,true );
 
-            // Special logic for ContentType
             if( ( values[i].Name == ContentType ) &&
                 it1->getState() == beans::PropertyState_DEFAULT_VALUE )
-            {
+            {   // Special logic for ContentType
+                //  09.07.01: Not reached anymore, because ContentType is readonly
                 it1->setState( beans::PropertyState_DIRECT_VALUE );
                 it->second.xC->addProperty( values[i].Name,
                                             beans::PropertyAttribute::MAYBEVOID,
                                             values[i].Value );
             }
 
-            it->second.xS->setPropertyValue( values[i].Name,values[i].Value );
+            try
+            {
+                it->second.xS->setPropertyValue( values[i].Name,values[i].Value );
+            }
+            catch( const uno::Exception& e )
+            {
+                --propChanged; // unsuccessful setting
+                ret[i] <<= e;
+            }
         }
         else
         {
@@ -892,26 +918,33 @@ shell::setv( sal_Int32 CommandId,
                 sal_Bool readonly ;
                 if( values[i].Value >>= readonly )
                 {
-                    // err value not used here, since method is not allowed to
-                    // throw an exception
+                    osl::FileBase::RC err;
                     if( readonly )
-                        osl::File::setAttributes( aUnqPath,Attribute_ReadOnly );
+                        err = osl::File::setAttributes( aUnqPath,Attribute_ReadOnly );
                     else
-                        osl::File::setAttributes( aUnqPath,
-                                                  Attribute_GrpWrite    |
-                                                  Attribute_GrpRead     |
-                                                  Attribute_OwnWrite    |
-                                                  Attribute_OwnRead );
+                        err = osl::File::setAttributes( aUnqPath,
+                                                        Attribute_GrpWrite    |
+                                                        Attribute_GrpRead     |
+                                                        Attribute_OwnWrite    |
+                                                        Attribute_OwnRead );
+                    if( err != osl::FileBase::E_None )
+                    {
+                        --propChanged; // unsuccessful setting
+                    }
                 }
+                else
+                    ret[i] <<= beans::IllegalTypeException();
             }
         }
-    }
+    }   // end for
 
     if( propChanged )
     {
         seqChanged.realloc( propChanged );
         notifyPropertyChanges( getPropertyChangeNotifier( aUnqPath ),seqChanged );
     }
+
+    return ret;
 }
 
 
