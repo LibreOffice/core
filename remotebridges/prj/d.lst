@@ -2,6 +2,7 @@
 ..\%__SRC%\bin\*.rdb %_DEST%\rdb%_EXT%\*
 ..\source\factory\brdgfctr.xml %_DEST%\xml%_EXT%\brdgfctr.xml
 ..\source\bridge\remotebridge.xml %_DEST%\xml%_EXT%\remotebridge.xml
+..\source\dynamicloader\dynamicloader.xml %_DEST%\xml%_EXT%\dynamicloader.xml
 ..\source\unourl_resolver\uuresolver.xml %_DEST%\xml%_EXT%\uuresolver.xml
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*
