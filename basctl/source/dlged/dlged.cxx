@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 12:25:06 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,7 +627,13 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
     // #114282# unbuffered paint
     SdrPageView* pPgView = pDlgEdView->GetPageViewPvNum(0);
     if ( pPgView )
+    {
         pPgView->DrawLayer( 0, aPaintRect, pWindow );
+
+        // #i32773#
+        // Handles need to be painted in paint method, too.
+        (pPgView->GetView()).RefreshAllIAOManagers();
+    }
 
     nInPaint = FALSE;
 
