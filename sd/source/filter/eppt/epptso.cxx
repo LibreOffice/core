@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-31 14:53:08 $
+ *  last change: $Author: ka $ $Date: 2001-09-13 10:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4822,7 +4822,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 else
                 {
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "LinkDisplayName" ) ) ) )
+                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ) ) )
                     {
                         String  aString( *(::rtl::OUString*)mAny.getValue() );
                         if ( aString.Len() )
