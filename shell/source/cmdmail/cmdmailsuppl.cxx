@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdmailsuppl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:54:22 $
+ *  last change: $Author: hr $ $Date: 2004-06-21 13:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
     WeakImplHelper3< XSimpleMailClientSupplier, XSimpleMailClient, XServiceInfo >()
 {
     Reference< XMultiComponentFactory > xServiceManager = xContext->getServiceManager();
+    m_xContext = xContext;
 
     if ( xServiceManager.is() ) {
         m_xConfigurationProvider = Reference< XMultiServiceFactory > (
@@ -193,6 +194,7 @@ Reference< XSimpleMailClient > SAL_CALL CmdMailSuppl::querySimpleMailClient(  )
 Reference< XSimpleMailMessage > SAL_CALL CmdMailSuppl::createSimpleMailMessage(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
+#if 0
     //TODO  Instead of obtaining the component context from the service manager
     // here, it would be better if the CmdMailSuppl service were instantiated
     // with a component context, from which it would obtain a service manager:
@@ -202,6 +204,8 @@ Reference< XSimpleMailMessage > SAL_CALL CmdMailSuppl::createSimpleMailMessage( 
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
         UNO_QUERY_THROW );
     return Reference< XSimpleMailMessage >( new CmdMailMsg( xContext ) );
+#endif
+    return Reference< XSimpleMailMessage >( new CmdMailMsg( m_xContext ) );
 }
 
 //------------------------------------------------
