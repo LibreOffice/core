@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:46:21 $
+ *  last change: $Author: fs $ $Date: 2000-11-06 17:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,6 +497,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
         m_pContent = NULL;
         return sal_False;
     }
+    m_pContent->Show();
 
     AddSupportedFeatures();
 
@@ -1114,6 +1115,9 @@ Reference< ::com::sun::star::frame::XDispatch >  SbaXDataBrowserController::quer
 
     if (m_aSupportedFeatures.find(aURL.Complete) != m_aSupportedFeatures.end())
         return (::com::sun::star::frame::XDispatch*)this;
+
+    if (m_xSlaveDispatcher.is())
+        return m_xSlaveDispatcher->queryDispatch(aURL, aTargetFrameName, nSearchFlags);
 
     return Reference< ::com::sun::star::frame::XDispatch > ();
 }
