@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: mh $ $Date: 2001-05-30 13:10:27 $
+#   last change: $Author: hjs $ $Date: 2001-06-01 17:12:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,6 +108,7 @@ SUBDIRSDEPS=$(RC_SUBDIRSDEPS)
 
 .INCLUDE : pstrules.mk
 
+.IF "$(nodep)"==""
 .IF "$(TESTOBJECTS)"!=""
 DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB1OBJFILES:s/.obj/.dpcc/)))
 DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB2OBJFILES:s/.obj/.dpcc/)))
@@ -157,6 +158,7 @@ DEPFILESx+=$(foreach,i,$(alllangext) $(MISC)$/$i$/$(TARGET).dprc)
 .ENDIF			# "$(RESNAME)"!=""
 .ENDIF			# "$(RCFILES)"!=""
 DEPFILES=$(uniq $(DEPFILESx))
+.ENDIF			# "$(nodep)"==""
 
 .IF "$(TESTOBJECTS)"!=""
 .IF "$(strip $(DEPFILES_TEST))"!=""
