@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-15 15:03:58 $
+ *  last change: $Author: dv $ $Date: 2001-08-21 15:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -907,32 +907,43 @@ ANY SfxEventConfiguration::CreateEventData_Impl( const SvxMacro *pMacro )
     values for EventType ar StarBasic, JavaScript, ...
     The Script property should contain the URL to the macro and looks
     like "macro://./standard.module1.main()"
+
+    If pMacro is NULL, we return an empty property sequence, so PropagateEvent_Impl
+    can delete an event binding.
 */
     ANY aEventData;
 
-    if ( pMacro->GetScriptType() == STARBASIC )
+    if ( pMacro )
     {
-        SEQUENCE < PROPERTYVALUE > aProperties(3);
-        PROPERTYVALUE  *pValues = aProperties.getArray();
+        if ( pMacro->GetScriptType() == STARBASIC )
+        {
+            SEQUENCE < PROPERTYVALUE > aProperties(3);
+            PROPERTYVALUE  *pValues = aProperties.getArray();
 
-        OUSTRING    aType   = OUSTRING::createFromAscii( STAR_BASIC );;
-        OUSTRING    aLib    = pMacro->GetLibName();
-        OUSTRING    aMacro  = pMacro->GetMacName();
+            OUSTRING    aType   = OUSTRING::createFromAscii( STAR_BASIC );;
+            OUSTRING    aLib    = pMacro->GetLibName();
+            OUSTRING    aMacro  = pMacro->GetMacName();
 
-        pValues[ 0 ].Name = OUSTRING::createFromAscii( PROP_EVENT_TYPE );
-        pValues[ 0 ].Value <<= aType;
+            pValues[ 0 ].Name = OUSTRING::createFromAscii( PROP_EVENT_TYPE );
+            pValues[ 0 ].Value <<= aType;
 
-        pValues[ 1 ].Name = OUSTRING::createFromAscii( PROP_LIBRARY );
-        pValues[ 1 ].Value <<= aLib;
+            pValues[ 1 ].Name = OUSTRING::createFromAscii( PROP_LIBRARY );
+            pValues[ 1 ].Value <<= aLib;
 
-        pValues[ 2 ].Name = OUSTRING::createFromAscii( PROP_MACRO_NAME );
-        pValues[ 2 ].Value <<= aMacro;
+            pValues[ 2 ].Name = OUSTRING::createFromAscii( PROP_MACRO_NAME );
+            pValues[ 2 ].Value <<= aMacro;
 
-        aEventData <<= aProperties;
+            aEventData <<= aProperties;
+        }
+        else
+        {
+            DBG_ERRORFILE( "CreateEventData_Impl(): ScriptType not supported!");
+        }
     }
     else
     {
-        DBG_ERRORFILE( "CreateEventData_Impl(): ScriptType not supported!");
+        SEQUENCE < PROPERTYVALUE > aProperties;
+        aEventData <<= aProperties;
     }
 
     return aEventData;
