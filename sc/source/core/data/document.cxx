@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-03 09:10:34 $
+ *  last change: $Author: nn $ $Date: 2001-07-04 18:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1389,8 +1389,17 @@ void ScDocument::CopyBlockFromClip( USHORT nCol1, USHORT nRow1,
                 {
                     while (!ppClipTab[nClipTab]) nClipTab = (nClipTab+1) % (MAXTAB+1);
                     short nDz = ((short)i) - nClipTab;
-                    UpdateReference(URM_MOVE, nCol1, nRow1, i, nCol2, nRow2, i, nDx, nDy, nDz, pCBFCP->pRefUndoDoc);
-                    nClipTab = (nClipTab+1) % (MAXTAB+1);
+
+                    //  #89081# ranges of consecutive selected tables (in clipboard and dest. doc)
+                    //  must be handled in one UpdateReference call
+                    USHORT nFollow = 0;
+                    while ( i + nFollow < nTabEnd && rMark.GetTableSelect( i + nFollow + 1 ) &&
+                            nClipTab + nFollow < MAXTAB && ppClipTab[nClipTab + nFollow + 1] )
+                        ++nFollow;
+
+                    UpdateReference(URM_MOVE, nCol1, nRow1, i, nCol2, nRow2, i+nFollow, nDx, nDy, nDz, pCBFCP->pRefUndoDoc);
+                    nClipTab = (nClipTab+nFollow+1) % (MAXTAB+1);
+                    i += nFollow;
                 }
     }
 }
