@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2004-01-05 11:34:43 $
+#   last change: $Author: hr $ $Date: 2004-02-03 19:45:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,7 @@ SHL4OBJS= \
         $(SLO)$/cuiexp.obj     \
         $(SLO)$/dlgfact.obj
 
-SHL4STDLIBS = \
+SHL4STDLIBS= \
             $(SVXLIB) \
             $(SFX2LIB) \
             $(GOODIESLIB) \
@@ -107,7 +107,6 @@ SHL4STDLIBS = \
             $(VOSLIB) \
             $(SALLIB) \
             $(ICUUCLIB)
-
 
 # --- Svx - DLL ----------
 
@@ -336,6 +335,11 @@ $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     +$(TYPE) dl.flt >$@
+
+$(MISC)$/$(SHL4TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    +$(TYPE) cui.flt >$@
 
 .INCLUDE :  target.mk
 
