@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-30 12:06:04 $
+#   last change: $Author: hjs $ $Date: 2001-09-05 15:15:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2725,6 +2725,22 @@ killobj:
 .IF "$(OBJFILES)" != ""
     +-$(RM) $(OBJFILES)
     +-$(RM) $(OBJFILES:s/.obj/.o/)
+.ENDIF
+.IF "$(REAL_SVXLIGHTSLOFILES)" != ""
+    +-$(RM) $(REAL_SVXLIGHTSLOFILES)
+    +-$(RM) $(REAL_SVXLIGHTSLOFILES:s/.obj/.o/)
+.ENDIF
+.IF "$(REAL_SVXLIGHTOBJFILES)" != ""
+    +-$(RM) $(REAL_SVXLIGHTOBJFILES)
+    +-$(RM) $(REAL_SVXLIGHTOBJFILES:s/.obj/.o/)
+.ENDIF
+.IF "$(REAL_$(SECOND_BUILD)_SLOFILES)" != ""
+    +-$(RM) $(REAL_$(SECOND_BUILD)_SLOFILES)
+    +-$(RM) $(REAL_$(SECOND_BUILD)_SLOFILES:s/.obj/.o/)
+.ENDIF
+.IF "$(REAL_$(SECOND_BUILD)_OBJFILES)" != ""
+    +-$(RM) $(REAL_$(SECOND_BUILD)_OBJFILES)
+    +-$(RM) $(REAL_$(SECOND_BUILD)_OBJFILES:s/.obj/.o/)
 .ENDIF
 .IF "$(DEPOBJFILES)" != ""
     +-$(RM) $(DEPOBJFILES)
