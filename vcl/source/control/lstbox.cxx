@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-19 11:43:32 $
+ *  last change: $Author: pl $ $Date: 2002-04-19 12:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1267,6 +1267,13 @@ USHORT ListBox::GetMaxMRUCount() const
 USHORT ListBox::GetDisplayLineCount() const
 {
     return mpImplLB->GetDisplayLineCount();
+}
+
+// -----------------------------------------------------------------------
+
+Rectangle ListBox::GetDropDownPosSizePixel() const
+{
+    return mpFloatWin ? mpFloatWin->GetWindowExtentsRelative( const_cast<ListBox*>(this) ) : Rectangle();
 }
 
 // =======================================================================
