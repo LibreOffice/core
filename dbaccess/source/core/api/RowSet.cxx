@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 10:12:41 $
+ *  last change: $Author: oj $ $Date: 2001-06-26 11:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2105,9 +2105,9 @@ void SAL_CALL ORowSet::clearParameters(  ) throw(SQLException, RuntimeException)
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    m_aParameterRow.clear();
     // this is the real clear
     m_aParameterRow = connectivity::ORowVector< ORowSetValue >();
+    m_aParameterRow.clear();
 }
 // -------------------------------------------------------------------------
 void ORowSet::firePropertyChange(sal_Int32 _nPos,const Any& _rOldValue)
