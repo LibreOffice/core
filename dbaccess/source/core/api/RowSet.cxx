@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:40:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2241,7 +2241,7 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
         else // the connection is no table supplier so I make it myself
         {
             if(!m_xActiveConnection.is())
-                throw SQLException(::rtl::OUString(DBACORE_RESSTRING(RID_STR_CONNECTION_INVALID)),*this,SQLSTATE_GENERAL,1000,Any() );
+                throw SQLException(DBACORE_RESSTRING(RID_STR_CONNECTION_INVALID),*this,SQLSTATE_GENERAL,1000,Any() );
             m_pTables = new OTableContainer(OConfigurationNode(),OConfigurationTreeRoot(),*this,m_aMutex,m_xActiveConnection);
             _rxRetTables = m_pTables;
             Sequence< ::rtl::OUString> aTableFilter(1);

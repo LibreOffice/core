@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:09:11 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
         throw ElementExistException(aName,*this);
     else if(m_xMasterTables.is() && m_xMasterTables->hasByName(aName))
     {
-        String sMessage(::dba::ResourceManager::loadString(RID_STR_TABLE_IS_FILTERED));
+        String sMessage(DBACORE_RESSTRING(RID_STR_TABLE_IS_FILTERED));
         sMessage.SearchAndReplaceAscii("$name$", aName);
         throw SQLException(sMessage,*this,SQLSTATE_GENERAL,1000,Any());
     }
