@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:42 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -920,22 +920,37 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
     nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_UPDATE,SQL_LOCK_NO_CHANGE);
     if( nRet == SQL_NEED_DATA)
     {
-        void * pData = NULL;
-        nRet = N3SQLParamData(m_aStatementHandle,&pData);
+        void* pColumnIndex = 0;
+        nRet = N3SQLParamData(m_aStatementHandle,&pColumnIndex);
+
         do
         {
             if (nRet != SQL_SUCCESS && nRet != SQL_SUCCESS_WITH_INFO && nRet != SQL_NEED_DATA)
                 break;
 
-            TVoidVector::const_iterator aFound = ::std::find(m_aBindVector.begin(),m_aBindVector.end(),(sal_Int64)pData);
-            sal_Int32 nPos = m_aBindVector.size() - (m_aBindVector.end() - aFound);
-
-            // TODO transfer long data
-            // N3SQLPutData(m_aStatementHandle,,);
-            nRet = N3SQLParamData(m_aStatementHandle,&pData);
+            sal_Int32 nColumnIndex ( reinterpret_cast<sal_Int32>(pColumnIndex));
+            Sequence< sal_Int8 > aSeq;
+            switch(m_aRow[nColumnIndex].getTypeKind())
+            {
+                case DataType::BINARY:
+                case DataType::VARBINARY:
+                case DataType::LONGVARBINARY:
+                    aSeq = m_aRow[nColumnIndex];
+                    N3SQLPutData (m_aStatementHandle, aSeq.getArray(), aSeq.getLength());
+                    break;
+                case DataType::LONGVARCHAR:
+                {
+                    ::rtl::OUString sRet;
+                    sRet = m_aRow[nColumnIndex].getString();
+                    N3SQLPutData (m_aStatementHandle, (SQLPOINTER)sRet.getStr(), sizeof(sal_Unicode)*sRet.getLength());
+                    break;
+                }
+                default:
+                    OSL_ENSURE(0,"Not supported at the moment!");
+            }
+            nRet = N3SQLParamData(m_aStatementHandle,&pColumnIndex);
         }
         while (nRet == SQL_NEED_DATA);
-
     }
     OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     // now unbind all columns so we can fetch all columns again with SQLGetData
@@ -1063,12 +1078,16 @@ void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
 {
-    updateValue(columnIndex,SQL_VARCHAR,(void*)&x);
+    SQLSMALLINT nOdbcType = static_cast<SQLSMALLINT>(OTools::jdbcTypeToOdbc(m_aRow[columnIndex].getTypeKind()));
+    m_aRow[columnIndex] = x;
+    updateValue(columnIndex,nOdbcType,(void*)&x);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
 {
-    updateValue(columnIndex,SQL_BINARY,(void*)&x);
+    SQLSMALLINT nOdbcType = static_cast<SQLSMALLINT>(OTools::jdbcTypeToOdbc(m_aRow[columnIndex].getTypeKind()));
+    m_aRow[columnIndex] = x;
+    updateValue(columnIndex,nOdbcType,(void*)&x);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const Date& x ) throw(SQLException, RuntimeException)
