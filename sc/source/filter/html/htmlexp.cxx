@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-02-02 13:00:16 $
+ *  last change: $Author: er $ $Date: 2001-03-07 17:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,29 +306,28 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, ScDocument* pDocP,
     bTabHasGraphics( FALSE ),
     bCalcAsShown( pDocP->GetDocOptions().IsCalcAsShown() )
 {
-    const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( gsl_getSystemTextEncoding() );
-    eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
-
     strcpy( sIndent, sIndentSource );
     sIndent[0] = 0;
+
+    // set HTML configuration
+    OfaHtmlOptions* pHtmlOptions = ((OfficeApplication*)SFX_APP())->GetHtmlOptions();
+    eDestEnc = pHtmlOptions->GetTextEncoding();
+    bCopyLocalFileToINet = pHtmlOptions->IsSaveGraphicsLocal();
+    for ( USHORT j=0; j < SC_HTML_FONTSIZES; j++ )
+    {
+        USHORT nSize = pHtmlOptions->GetFontSize( j );
+        // remember in Twips, like our SvxFontHeightItem
+        if ( nSize )
+            nFontSize[j] = nSize * 20;
+        else
+            nFontSize[j] = nDefaultFontSize[j] * 20;
+    }
+
     const USHORT nCount = pDoc->GetTableCount();
     for ( USHORT nTab = 0; nTab < nCount; nTab++ )
     {
         if ( !IsEmptyTable( nTab ) )
             nUsedTables++;
-    }
-
-    // neue Konfiguration setzen
-    OfaHtmlOptions* pHtmlOptions = ((OfficeApplication*)SFX_APP())->GetHtmlOptions();
-    bCopyLocalFileToINet = pHtmlOptions->IsSaveGraphicsLocal();
-    for ( USHORT j=0; j < SC_HTML_FONTSIZES; j++ )
-    {
-        USHORT nSize = pHtmlOptions->GetFontSize( j );
-        // in Twips merken, wie unser SvxFontHeightItem
-        if ( nSize )
-            nFontSize[j] = nSize * 20;
-        else
-            nFontSize[j] = nDefaultFontSize[j] * 20;
     }
 
     // Content-Id fuer Mail-Export?
