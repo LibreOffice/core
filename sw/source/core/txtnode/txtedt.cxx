@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:39:42 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,6 +701,8 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
     // Die Aehnlichkeiten zu SwTxtFrm::_AutoSpell sind beabsichtigt ...
     // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
 
+    //!! please check SwTxtNode::Convert when modifying this one !!
+
     Reference<beans::XPropertySet> xProp( GetLinguPropertySet() );
     BOOL bReverse = xProp.is() ?
         *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_WRAP_REVERSE) ).getValue() : FALSE;
@@ -841,9 +843,8 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 
 USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
 {
-    // mofified version of SwTxtNode::Spell.
-
-    BOOL bReverse = FALSE;  // bReverse is (currently) not wanted
+    //!! mofified version of SwTxtNode::Spell.          !!
+    //!! please check the above when modifying this one !!
 
     xub_StrLen nBegin, nEnd;
 
@@ -898,8 +899,8 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
         // the words in the wrong list have to be checked
         SwScanner aScanner( *this, NULL,
                             WordType::DICTIONARY_WORD,
-                            nBegin, nEnd, bReverse, TRUE );
-        while( !rArgs.bConvTextFound && aScanner.NextWord( eActLang ) )
+                            nBegin, nEnd, FALSE, TRUE );
+        while( !rArgs.bConvTextFound && aScanner.NextWord() )
         {
             const XubString& rWord = aScanner.GetWord();
 
@@ -914,14 +915,16 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
                 // results to that selection
                 xub_StrLen nRealBegin = aScanner.GetBegin();
                 xub_StrLen nRealEnd   = aScanner.GetEnd();
-/*
                 if (nRealBegin < nBegin)
                     nRealBegin = nBegin;
                 if (nRealEnd > nEnd)
                     nRealEnd = nEnd;
-*/
+
                 rArgs.bConvTextFound = sal_True;
-                rArgs.aConvText = rWord.Copy( nRealBegin - aScanner.GetBegin(), nRealEnd - nRealBegin );
+                xub_StrLen nCpStart, nCpLen;
+                nCpStart = nRealBegin - aScanner.GetBegin();
+                nCpLen = nRealEnd - nRealBegin;
+                rArgs.aConvText = rWord.Copy( nCpStart, nCpLen );
                 rArgs.pStartNode = this;
                 rArgs.pEndNode = this;
                 rArgs.rStartIdx.Assign(this, nRealEnd );
@@ -929,22 +932,11 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
             }
 
             // get next language in order to find next or previous word
-            xub_StrLen nNextBegin;
-            short nInc;
-
-            if ( bReverse )
-            {
-                nNextBegin = aScanner.GetBegin() ? aScanner.GetBegin() - 1 : 0;
-                nInc = -1;
-            }
-            else
-            {
-                nNextBegin = aScanner.GetBegin() + rWord.Len();
-                nInc = 1;
-            }
+            xub_StrLen nNextBegin = aScanner.GetBegin() + rWord.Len();
 
             // first we have to skip some whitespace characters
-            while ( ( bReverse ? nNextBegin : ( nNextBegin < aText.Len() ) ) &&
+            short nInc = 1;
+            while ( nNextBegin < aText.Len() &&
                     lcl_IsSkippableWhiteSpace( aText.GetChar( nNextBegin ) ) )
             {
                 nNextBegin += nInc;
