@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:23:12 $
+ *  last change: $Author: sb $ $Date: 2000-11-09 13:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,11 @@
 
 #include "app.hxx"
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
-#include <com/sun/star/uno/Reference.h>
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -108,41 +105,20 @@
 #include <svtools/ehdl.hxx>
 #endif
 #include <svtools/inethist.hxx>
-#ifndef _COM_SUN_STAR_INSTALLATION_XPROTOCOLHANDLERCHECK_HPP_
-#include <com/sun/star/installation/XProtocolHandlerCheck.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSTALLATION_PROTOCOLS_HPP_
-#include <com/sun/star/installation/protocols.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSTALLATION_PROTDLGRES_HPP_
-#include <com/sun/star/installation/ProtDlgRes.hpp>
-#endif
 #ifndef _COM_SUN_STAR_INSTALLATION_XINSTALLATIONCHECK_HPP_
 #include <com/sun/star/installation/XInstallationCheck.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LOADER_XIMPLEMENTATIONLOADER_HPP_
-#include <com/sun/star/loader/XImplementationLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LOADER_CANNOTACTIVATEFACTORYEXCEPTION_HPP_
-#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDERMANAGER_HPP_
-#include <com/sun/star/ucb/XContentProviderManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XPARAMETERIZEDCONTENTPROVIDER_HPP_
-#include <com/sun/star/ucb/XParameterizedContentProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSTALLATION_PROTDLGRES_HPP_
-#include <com/sun/star/installation/ProtDlgRes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BRIDGE_XUNOURLRESOLVER_HPP_
-#include <com/sun/star/bridge/XUnoUrlResolver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XDIALOG_HPP_
-#include <com/sun/star/awt/XDialog.hpp>
-#endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _VOS_SECURITY_HXX_
+#include <vos/security.hxx>
+#endif
+#ifndef _UCBHELPER_CONFIGURATIONKEYS_HXX_
+#include <ucbhelper/configurationkeys.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -179,9 +155,6 @@
 #include "picklist.hxx"
 #include "plugobj.hxx"
 #include "progress.hxx"
-#if SUPD<608
-#include "saveopt.hxx"
-#endif
 #include "sfxhelp.hxx"
 #include "sfxresid.hxx"
 #include "sfxtypes.hxx"
@@ -246,396 +219,56 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 
 //====================================================================
 
-static bool configureUcb(String const & rUcbUrl)
+static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
 {
     Reference< XMultiServiceFactory >
-        xFactory(comphelper::getProcessServiceFactory());
-    if (!xFactory.is())
+        xServiceFactory(comphelper::getProcessServiceFactory());
+    if (!xServiceFactory.is())
     {
-        DBG_ERROR("configureUcb: No XMultiServiceFactory");
+        DBG_ERROR("configureUcb(): No XMultiServiceFactory");
         return false;
     }
 
-    // Create (local) UCB configured as specified in the registry (it should
-    // be configured to have no content providers, otherwise the rUcbUrl
-    // (i.e., the '-ucb=...' command line argument) will be ignored:
-    Reference< ucb::XContentProviderManager > xUcb;
-    Sequence< Any > aArgs(1);
-    aArgs[0] <<= sal_True;
+    rtl::OUStringBuffer aPipe;
+    aPipe.appendAscii(RTL_CONSTASCII_STRINGPARAM("ucb_plugin"));
+    rtl::OUString aUserIdent;
+    vos::OSecurity().getUserIdent(aUserIdent);
+    aPipe.append(aUserIdent);
+
+    rtl::OUStringBuffer aPortal;
+    if (rPortalConnect.getLength() != 0)
+    {
+        aPortal.append(sal_Unicode(','));
+        aPortal.append(rPortalConnect);
+    }
+
+    Sequence< Any > aArgs(6);
+    aArgs[0]
+        <<= rtl::OUString::createFromAscii(bServer ?
+                                               UCB_CONFIGURATION_KEY1_SERVER :
+                                               UCB_CONFIGURATION_KEY1_LOCAL);
+    aArgs[1]
+        <<= rtl::OUString::createFromAscii(UCB_CONFIGURATION_KEY2_OFFICE);
+    aArgs[2] <<= rtl::OUString::createFromAscii("PIPE");
+    aArgs[3] <<= aPipe.makeStringAndClear();
+    aArgs[4] <<= rtl::OUString::createFromAscii("PORTAL");
+    aArgs[5] <<= aPortal.makeStringAndClear();
+
+    bool bSuccess = false;
     try
     {
-        xUcb
-            = Reference< ucb::XContentProviderManager >(
-                  xFactory->
-                      createInstanceWithArguments(
+        bSuccess
+            = xServiceFactory->
+                  createInstanceWithArguments(
                           rtl::OUString(
                               RTL_CONSTASCII_USTRINGPARAM(
                                   "com.sun.star.ucb.UniversalContentBroker")),
-                          aArgs),
-                  UNO_QUERY);
+                          aArgs).
+                      is()
+                  != false;
     }
-    catch (RuntimeException const &) { throw; }
     catch (Exception const &) {}
-    if (!xUcb.is())
-    {
-        DBG_ERROR("configureUcb(): No UniversalContentBroker service");
-        return false;
-    }
-
-    // If there's already any content providers registered, ignore rUcbUrl:
-    if (xUcb->queryContentProviders().getLength() != 0)
-    {
-        DBG_WARNING(
-            "configureUcb(): Configured UCB and -ucb command line arg");
-        return true;
-    }
-
-    // Modify rUcbUrl with user supplied information until connecting to this
-    // URL succeeds:
-    Reference< bridge::XUnoUrlResolver > xResolver;
-    try
-    {
-        xResolver
-            = Reference< bridge::XUnoUrlResolver >(
-                  xFactory->
-                      createInstance(
-                          rtl::OUString(
-                              RTL_CONSTASCII_USTRINGPARAM(
-                                  "com.sun.star.bridge.UnoUrlResolver"))),
-                  UNO_QUERY);
-    }
-    catch (RuntimeException const &) { throw; }
-    catch (Exception const &) {}
-    if (!xResolver.is())
-    {
-        DBG_ERROR("configureUcb(): No UnoUrlResolver service");
-        return false;
-    }
-    String aTheUcbUrl(rUcbUrl);
-    Reference< awt::XDialog > xDialog;
-    Reference< beans::XPropertySet > xPropertySet;
-    for (;;)
-    {
-        bool bSuccess = false;
-        try
-        {
-            bSuccess = xResolver->resolve(aTheUcbUrl).is() != false;
-        }
-        catch (connection::NoConnectException const &) {}
-        catch (connection::ConnectionSetupException const &) {}
-        catch (IllegalArgumentException const &) {}
-        if (bSuccess)
-            break;
-
-        // Get the login dialog:
-        if (!xDialog.is())
-        {
-            try
-            {
-                xDialog
-                    = Reference< awt::XDialog >(
-                          xFactory->
-                              createInstance(
-                                  rtl::OUString(
-                                      RTL_CONSTASCII_USTRINGPARAM(
-                                          "com.sun.star.framework."
-                                              "LoginDialog"))),
-                          UNO_QUERY);
-            }
-            catch (RuntimeException const &) { throw; }
-            catch (Exception const &) {}
-            xPropertySet
-                = Reference< beans::XPropertySet >(xDialog, UNO_QUERY);
-            if (!(xDialog.is() && xPropertySet.is()))
-            {
-                DBG_ERROR("configureUcb(): No LoginDialog service");
-                return false;
-            }
-        }
-
-        // Identify the authentication data within the URL:
-        enum Parameter
-        {
-            PARAM_NONE = 0,
-            PARAM_HOST = 2,
-            PARAM_PORT = 4,
-            PARAM_USER = 6,
-            PARAM_PASSWORD = 8,
-            PARAM_TICKET = 9
-        };
-        struct Occurence
-        {
-            xub_StrLen m_nStart;
-            xub_StrLen m_nValue;
-            xub_StrLen m_nEnd;
-            Parameter m_eParam;
-        };
-        Occurence aParams[4];
-        int nParamCount = 0;
-        xub_StrLen nEnd = aTheUcbUrl.Len();
-        xub_StrLen nPos = 0;
-        while (nPos != nEnd && aTheUcbUrl.GetChar(nPos++) != ':');
-            // skip <scheme> part...
-        while (nPos != nEnd && aTheUcbUrl.GetChar(nPos) != ',')
-            ++nPos; // skip 'name' of <connection> part...
-        xub_StrLen nInsert = nPos;
-        if (nPos != nEnd && aTheUcbUrl.GetChar(nPos) == ',')
-            ++nPos;
-        while (nPos != nEnd && aTheUcbUrl.GetChar(nPos) != ';')
-        {
-            xub_StrLen nStart = nPos;
-            while (nPos != nEnd
-                   && aTheUcbUrl.GetChar(nPos) != '='
-                   && aTheUcbUrl.GetChar(nPos) != ','
-                   && aTheUcbUrl.GetChar(nPos) != ';')
-                ++nPos;
-            if (nPos != nEnd && aTheUcbUrl.GetChar(nPos) == '=')
-            {
-                String aName(aTheUcbUrl, nStart, nPos - nStart);
-                Parameter eParam
-                    = aName.EqualsIgnoreCaseAscii("host") ? PARAM_HOST :
-                      aName.EqualsIgnoreCaseAscii("port") ? PARAM_PORT :
-                      aName.EqualsIgnoreCaseAscii("user") ? PARAM_USER :
-                      aName.EqualsIgnoreCaseAscii("password") ?
-                           PARAM_PASSWORD :
-                      aName.EqualsIgnoreCaseAscii("ticket") ? PARAM_TICKET :
-                           PARAM_NONE;
-                if (int(eParam) != int(PARAM_NONE))
-                    // work around compiler bug...
-                {
-                    bool bNew = true;
-                    for (int i = 0; i != nParamCount; ++i)
-                        if ((aParams[i].m_eParam & ~1) == (eParam & ~1))
-                            // treat 'password' and 'ticket' the same...
-                        {
-                            bNew = false;
-                            break;
-                        }
-                    if (bNew)
-                    {
-                        aParams[nParamCount].m_eParam = eParam;
-                        aParams[nParamCount].m_nStart = nStart - 1;
-                        aParams[nParamCount].m_nValue = ++nPos;
-                        while (nPos != nEnd
-                               && aTheUcbUrl.GetChar(nPos) != ','
-                               && aTheUcbUrl.GetChar(nPos) != ';')
-                            ++nPos;
-                        aParams[nParamCount].m_nEnd = nPos;
-                        ++nParamCount;
-                    }
-                }
-            }
-            while (nPos != nEnd
-                   && aTheUcbUrl.GetChar(nPos) != ','
-                   && aTheUcbUrl.GetChar(nPos) != ';')
-                ++nPos;
-            if (nPos != nEnd && aTheUcbUrl.GetChar(nPos) == ',')
-                ++nPos;
-        }
-
-        // Copy the authentication data from the URL to the dialog:
-        try
-        {
-            String aHostPort;
-            for (int i = 0; i < nParamCount; ++i)
-            {
-                String aValue(INetURLObject::decode(
-                                  aTheUcbUrl.Copy(aParams[i].m_nValue,
-                                                  aParams[i].m_nEnd
-                                                      - aParams[i].m_nValue),
-                                  '%', INetURLObject::DECODE_WITH_CHARSET));
-                if (aValue.Len() != 0)
-                    switch (aParams[i].m_eParam)
-                    {
-                        case PARAM_HOST:
-                            aHostPort.Insert(aValue, 0);
-                            break;
-
-                        case PARAM_PORT:
-                            aHostPort.Append(':');
-                            aHostPort.Append(aValue);
-                            break;
-
-                        case PARAM_USER:
-                            xPropertySet->
-                                setPropertyValue(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                      "UserName")),
-                                    makeAny(rtl::OUString(aValue)));
-                            break;
-
-                        case PARAM_PASSWORD:
-                            xPropertySet->
-                                setPropertyValue(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                      "Password")),
-                                    makeAny(rtl::OUString(aValue)));
-                            break;
-                    }
-            }
-            if (aHostPort.Len() != 0)
-                xPropertySet->
-                    setPropertyValue(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Server")),
-                        makeAny(rtl::OUString(aHostPort)));
-        }
-        catch (beans::UnknownPropertyException const &) {}
-        catch (beans::PropertyVetoException const &) {}
-        catch (IllegalArgumentException const &) {}
-        catch (WrappedTargetException const &) {}
-
-        if (xDialog->execute() == 0)
-            return false;
-
-        // Copy the authentication data back from the dialog into the URL:
-        rtl::OUString aHost;
-        rtl::OUString aUser;
-        rtl::OUString aPassword;
-        bSuccess = false;
-        try
-        {
-            bSuccess
-                = (xPropertySet->
-                           getPropertyValue(
-                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                 "Server")))
-                       >>= aHost)
-                && (xPropertySet->
-                            getPropertyValue(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                  "UserName")))
-                        >>= aUser)
-                && (xPropertySet->
-                            getPropertyValue(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                  "Password")))
-                        >>= aPassword);
-        }
-        catch (beans::UnknownPropertyException const &) {}
-        catch (WrappedTargetException const &) {}
-        if (!bSuccess)
-        {
-            DBG_ERROR("configureUcb(): Bad LoginDialog service");
-            return false;
-        }
-        sal_Int32 nColon = aHost.indexOf(':');
-        if (nColon == -1)
-            nColon = aHost.getLength();
-        while (nParamCount-- > 0)
-            aTheUcbUrl.Erase(aParams[nParamCount].m_nStart,
-                             aParams[nParamCount].m_nEnd
-                                 - aParams[nParamCount].m_nStart);
-        if (aPassword.getLength() != 0)
-        {
-            aTheUcbUrl.InsertAscii(",password=", nInsert);
-            aTheUcbUrl.Insert(INetURLObject::encode(
-                                  aPassword,
-                                  INetURLObject::PART_UNO_PARAM_VALUE,
-                                  '%',
-                                  INetURLObject::ENCODE_ALL),
-                              nInsert + RTL_CONSTASCII_LENGTH(",password="));
-        }
-        if (aUser.getLength() != 0)
-        {
-            aTheUcbUrl.InsertAscii(",user=", nInsert);
-            aTheUcbUrl.Insert(INetURLObject::encode(
-                                  aUser,
-                                  INetURLObject::PART_UNO_PARAM_VALUE,
-                                  '%',
-                                  INetURLObject::ENCODE_ALL),
-                              nInsert + RTL_CONSTASCII_LENGTH(",user="));
-        }
-        if (aHost.getLength() - nColon > 1)
-        {
-            aTheUcbUrl.InsertAscii(",port=", nInsert);
-            aTheUcbUrl.Insert(INetURLObject::encode(
-                                  aHost.copy(nColon + 1),
-                                  INetURLObject::PART_UNO_PARAM_VALUE,
-                                  '%',
-                                  INetURLObject::ENCODE_ALL),
-                              nInsert + RTL_CONSTASCII_LENGTH(",port="));
-        }
-        if (nColon > 0)
-        {
-            aTheUcbUrl.InsertAscii(",host=", nInsert);
-            aTheUcbUrl.Insert(INetURLObject::encode(
-                                  aHost.copy(0, nColon),
-                                  INetURLObject::PART_UNO_PARAM_VALUE,
-                                  '%',
-                                  INetURLObject::ENCODE_ALL),
-                              nInsert + RTL_CONSTASCII_LENGTH(",host="));
-        }
-    }
-
-    // Get the (local) RemoteAccessUCP:
-    Reference< ucb::XParameterizedContentProvider > xRemoteAccessUcp;
-    try
-    {
-        xRemoteAccessUcp
-            = Reference< ucb::XParameterizedContentProvider >(
-                  xFactory->
-                      createInstance(
-                          rtl::OUString(
-                              RTL_CONSTASCII_USTRINGPARAM(
-                                  "com.sun.star.ucb."
-                                      "RemoteAccessContentProvider"))),
-                  UNO_QUERY);
-    }
-    catch (RuntimeException const &) { throw; }
-    catch (Exception const &) {}
-    if (!xRemoteAccessUcp.is())
-    {
-        DBG_ERROR("configureUcb(): No RemoteAccessContentProvider service");
-        return false;
-    }
-
-    // Create an instance of the RemoteAccessUCP specialized on the
-    // (template, url) pair:
-    rtl::OUString aTemplate(RTL_CONSTASCII_USTRINGPARAM(".*"));
-    Reference< ucb::XContentProvider > xInstance;
-    try
-    {
-        xInstance
-            = xRemoteAccessUcp->registerInstance(aTemplate, aTheUcbUrl, false);
-    }
-    catch (IllegalArgumentException const &)
-    {
-        DBG_ERROR("configureUcb(): Can't registerInstance()");
-        return false;
-    }
-    if (!xInstance.is())
-    {
-        DBG_ERROR("configureUcb(): Bad registerInstance()");
-        return false;
-    }
-
-    // Register the specialized RemoteAccessUCP instance at the (local) UCB:
-    try
-    {
-        xUcb->registerContentProvider(xInstance, aTemplate, false);
-    }
-    catch (ucb::DuplicateProviderException const &)
-    {
-        DBG_ERROR("configureUcb(): Bad registerContentProvider()");
-        try
-        {
-            xRemoteAccessUcp->deregisterInstance(aTemplate, aTheUcbUrl);
-        }
-        catch (lang::IllegalArgumentException const &) {}
-        return false;
-    }
-    catch (uno::RuntimeException const &)
-    {
-        DBG_ERROR("configureUcb(): Bad registerContentProvider()");
-        try
-        {
-            xRemoteAccessUcp->deregisterInstance(aTemplate, aTheUcbUrl);
-        }
-        catch (lang::IllegalArgumentException const &) {}
-        throw;
-    }
-
-    return true;
+    return bSuccess;
 }
 
 //====================================================================
@@ -812,10 +445,9 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pAppData_Impl->pPool = NoChaos::GetItemPool();
     SetPool( pAppData_Impl->pPool );
 
-    // If '-ucb=...' was specified on the command line, configure the UCB now:
-    if (pAppData_Impl->aUcbUrl.Len() != 0
-        && !configureUcb(pAppData_Impl->aUcbUrl))
+    if (!configureUcb(pAppData_Impl->bServer, pAppData_Impl->aPortalConnect))
     {
+        DBG_ERROR("SfxApplication::Initialize_Impl(): Can't configure UCB");
         exit(-1);
         return FALSE;
     }
