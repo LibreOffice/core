@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:47:17 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 21:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,6 +670,7 @@ String STR_ADD
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Añadir";
 };
+
 
 
 
