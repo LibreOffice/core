@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:06:35 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1322,7 +1322,9 @@ void SwCntntFrm::MakeAll()
             // force a format. The format will check in its method
             // <SwTxtFrm::CalcPreps()>, if the already formatted lines still
             // fit and if not, performs necessary actions.
-            if ( bValidSize && nOldH != (Frm().*fnRect->fnGetHeight)() )
+            // --> OD 2005-01-10 #i40150# - no check, if frame is undersized.
+            if ( bValidSize && !IsUndersized() &&
+                 nOldH != (Frm().*fnRect->fnGetHeight)() )
             {
                 // --> OD 2004-11-25 #115759# - no PREP_ADJUST_FRM and size
                 // invalidation, if height decreases only by the additional
