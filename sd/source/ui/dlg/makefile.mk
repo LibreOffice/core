@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: ka $ $Date: 2002-04-29 10:35:36 $
+#   last change: $Author: hr $ $Date: 2002-04-30 17:25:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,53 +76,6 @@ AUTOSEG=true
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES = $(PRJ)$/util$/sd.cxx \
-        inspage.cxx \
-        inspagob.cxx \
-        ins_paste.obj \
-        present.cxx \
-        dlgctrls.cxx \
-        dlgchar.cxx \
-        paragr.cxx \
-        newfoil.cxx \
-        tabtempl.cxx \
-        dlgpage.cxx  \
-        diactrl.cxx  \
-        gluectrl.cxx  \
-        sdtreelb.cxx \
-        tpaction.cxx \
-        animobjs.cxx \
-        prltempl.cxx \
-        prntopts.cxx \
-        dlgsnap.cxx  \
-        copydlg.cxx  \
-        dlgolbul.cxx \
-        tpoption.cxx \
-        filedlg.cxx   \
-        unchss.cxx   \
-        dlgassim.cxx	\
-        dlgass.cxx   \
-        assclass.cxx \
-        graphpro.cxx    \
-        navigatr.cxx    \
-        sdpreslt.cxx	\
-        preview.cxx    \
-        effect.cxx    \
-        effcthdl.cxx    \
-        effcthlp.cxx    \
-        tlborder.cxx    \
-        slidechg.cxx    \
-        slchghdl.cxx    \
-        slchghlp.cxx    \
-        morphdlg.cxx	\
-        printdlg.cxx	\
-        dlgfield.cxx	\
-        custsdlg.cxx	\
-        brkdlg.cxx      \
-        vectdlg.cxx		\
-        docprev.cxx     \
-        TemplateThread.cxx
 
 SRCFILES =\
     ins_page.src\
