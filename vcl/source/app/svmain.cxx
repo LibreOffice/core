@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:14:28 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 #endif
 #ifndef _SV_SETTINGS_HXX
 #include <settings.hxx>
+#endif
+#ifndef _VCL_UNOWRAP_HXX
+#include <unowrap.hxx>
 #endif
 
 #include <vos/process.hxx>
@@ -342,16 +345,6 @@ void DeInitVCL()
     // Debug Daten zuruecksetzen
     DBGGUI_DEINIT();
 
-    // Access list
-    List* pList = pSVData->maAppData.mpAccessList;
-    if( pList )
-    {
-        for( void* pLink = pList->First(); pLink; pLink = pList->Next() )
-            delete (Link*) pLink;
-        delete pList;
-        pSVData->maAppData.mpAccessList = NULL;
-    }
-
     // free global data
     delete pSVData->maGDIData.mpGrfConverter;
 
@@ -473,6 +466,13 @@ void DeInitVCL()
         ImplFreeHotKeyData();
     if ( pSVData->maAppData.mpFirstEventHook )
         ImplFreeEventHookData();
+
+    // #114285# Moved here from ImplDeInitSVData...
+    if ( pSVData->mpUnoWrapper )
+    {
+        pSVData->mpUnoWrapper->Destroy();
+        pSVData->mpUnoWrapper = NULL;
+    }
 
     ImplDeletePrnQueueList();
     delete pSVData->maGDIData.mpScreenFontList;
