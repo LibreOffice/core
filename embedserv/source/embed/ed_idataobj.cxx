@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_idataobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-12 15:37:57 $
+ *  last change: $Author: mav $ $Date: 2003-03-25 08:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,8 @@ STDMETHODIMP EmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIUM * pM
             pMedium->tymed = TYMED_MFPICT;
             pMedium->hMetaFilePict = hMeta;
             pMedium->pUnkForRelease = NULL;
+
+            return S_OK;
         }
 
         return STG_E_MEDIUMFULL;
@@ -183,7 +185,8 @@ STDMETHODIMP EmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIUM * pM
     else
     {
         CLIPFORMAT cf_embSource = RegisterClipboardFormatA( "Embed Source" );
-        if ( pFormatetc->cfFormat == cf_embSource )
+        CLIPFORMAT cf_embObj = RegisterClipboardFormatA( "Embedded Object" );
+        if ( pFormatetc->cfFormat == cf_embSource || pFormatetc->cfFormat == cf_embObj )
         {
             if ( !( pFormatetc->tymed & TYMED_ISTORAGE ) )
                 return DV_E_TYMED;
@@ -221,7 +224,9 @@ STDMETHODIMP EmbedDocument_Impl::GetDataHere( FORMATETC * pFormatetc, STGMEDIUM 
         return DV_E_DVASPECT;
 
     CLIPFORMAT cf_embSource = RegisterClipboardFormatA( "Embed Source" );
-    if ( pFormatetc->cfFormat == cf_embSource )
+    CLIPFORMAT cf_embObj = RegisterClipboardFormatA( "Embedded Object" );
+
+    if ( pFormatetc->cfFormat == cf_embSource || pFormatetc->cfFormat == cf_embObj )
     {
         if ( !( pFormatetc->tymed & TYMED_ISTORAGE ) )
             return DV_E_TYMED;
@@ -266,7 +271,8 @@ STDMETHODIMP EmbedDocument_Impl::QueryGetData( FORMATETC * pFormatetc )
         else
         {
             CLIPFORMAT cf_embSource = RegisterClipboardFormatA( "Embed Source" );
-            if ( pFormatetc->cfFormat == cf_embSource )
+            CLIPFORMAT cf_embObj = RegisterClipboardFormatA( "Embedded Object" );
+            if ( pFormatetc->cfFormat == cf_embSource || pFormatetc->cfFormat == cf_embObj )
             {
                 if ( !( pFormatetc->tymed & TYMED_ISTORAGE ) )
                     return DV_E_TYMED;
@@ -302,7 +308,8 @@ STDMETHODIMP EmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pFormatetcIn
     else
     {
         CLIPFORMAT cf_embSource = RegisterClipboardFormatA( "Embed Source" );
-        if ( pFormatetcIn->cfFormat == cf_embSource )
+        CLIPFORMAT cf_embObj = RegisterClipboardFormatA( "Embedded Object" );
+        if ( pFormatetcIn->cfFormat == cf_embSource || pFormatetcIn->cfFormat == cf_embObj )
         {
             pFormatetcOut->tymed = TYMED_ISTORAGE;
             return S_OK;
