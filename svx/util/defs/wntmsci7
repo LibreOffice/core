@@ -24068,3 +24068,5 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?scaleFontWidth@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx195101965@@YAXAAVFont@@ABVOutputDevice@@AAJ@Z
 ?setFont@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx195101965@@YAXABVSvxFont@@AAV2@@Z
 ?setFontSize@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx195101965@@YAXAAVFont@@@Z
+?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx2241623578@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx319298657@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
