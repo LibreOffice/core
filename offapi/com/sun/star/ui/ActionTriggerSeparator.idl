@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActionTriggerSeparator.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-29 07:31:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ module com {  module sun {  module star {  module ui {
 /** describes a separator entry. Such entries are of interest
     for components rendering an <service>ActionTriggerContainer</service>.
 */
-service ActionTriggerSeparator
+published service ActionTriggerSeparator
 {
     /** determins the type of the separator using constants from
         <type>ActionTriggerSeparatorType</type>.
