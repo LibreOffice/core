@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-19 10:01:22 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 07:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,7 +440,7 @@ void SAL_CALL OViewContainer::elementInserted( const ContainerEvent& Event ) thr
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     ::rtl::OUString sName;
-    if((Event.Accessor >>= sName) && !hasByName(sName) && m_xMasterViews->hasByName(sName))
+    if((Event.Accessor >>= sName) && !hasByName(sName) && m_xMasterViews.is() && m_xMasterViews->hasByName(sName))
     {
         Reference<XPropertySet> xProp(createObject(sName),UNO_QUERY);
         OCollection::appendByDescriptor(xProp);
@@ -451,7 +451,7 @@ void SAL_CALL OViewContainer::elementRemoved( const ContainerEvent& Event ) thro
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     ::rtl::OUString sName;
-    if((Event.Accessor >>= sName) && hasByName(sName) && !m_xMasterViews->hasByName(sName))
+    if((Event.Accessor >>= sName) && hasByName(sName) && m_xMasterViews.is() && !m_xMasterViews->hasByName(sName))
         OCollection::dropByName(sName);
 }
 // -----------------------------------------------------------------------------
