@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:02:36 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 14:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1012,7 +1012,7 @@ TabPage TP_CONFIG_STATBAR
         Text[ chinese_traditional ] = "ª¬ºA¦C ";
         Text[ arabic ] = "ÔÑíØ ÇáãÚáæãÇÊ ";
         Text[ greek ] = "ÃñáììŞ êáôÜóôáóçò ";
-        Text[ korean ] = "»óÅÂ ¸ğÀ½ ";
+        Text[ korean ] = "»óÅÂÇ¥½ÃÁÙ ";
         Text[ turkish ] = "Durum çubuğu ";
         Text[ language_user1 ] = " ";
     };
