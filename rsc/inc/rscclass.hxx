@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscclass.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ protected:
     BOOL                IsValueDflt( CLASS_DATA pData, USHORT nEle );
     void                SetVarDflt( CLASS_DATA pData, USHORT nEle,
                                     BOOL bSet );
-    long                GetCorrectValues( const RSCINST & rInst, USHORT nVarPos,
+    INT32               GetCorrectValues( const RSCINST & rInst, USHORT nVarPos,
                                         USHORT nTupelIdx, RscTypCont * pTC );
 public:
                     RscClass( HASHID nId, USHORT nTypId, RscTop * pSuperCl );

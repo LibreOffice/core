@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscarray.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ public:
     virtual RscTop *    GetTypeClass() const;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, BOOL );
     void            Destroy( const RSCINST & rInst );
-    virtual ERRTYPE GetValueEle( const RSCINST & rInst, long lValue,
+    virtual ERRTYPE GetValueEle( const RSCINST & rInst, INT32 lValue,
                                 RscTop * pCreateClass,
                                 RSCINST * pGetInst );
     virtual ERRTYPE GetArrayEle( const RSCINST & rInst, HASHID nId,
