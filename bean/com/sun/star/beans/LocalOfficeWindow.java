@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalOfficeWindow.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-18 07:15:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:56:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ import com.sun.star.uno.Exception;
 
 /**
  * This class represents a local office window.
+ * @deprecated
  */
 public class LocalOfficeWindow
     extends java.awt.Canvas
@@ -198,6 +199,7 @@ public class LocalOfficeWindow
     }
 
        /// callback handler to get to know when we become visible
+        //@deprecated
        class ComponentEventHandler
                extends java.awt.event.ComponentAdapter
        {
@@ -297,6 +299,7 @@ public class LocalOfficeWindow
 
         //---------------------------------------------------------------------------
         /** Helper class to watch calls into OOo with a timeout.
+         * @deprecated
          */
         class CallWatchThread extends Thread
         {
