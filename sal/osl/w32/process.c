@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-08 14:16:54 $
+ *  last change: $Author: hro $ $Date: 2001-05-08 14:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,18 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
 
     if ( dwLen )
     {
-        rtl_uString_newFromStr_WithLength( pustrWorkingDir, szBuffer, dwLen );
+        oslFileError    eError;
+        rtl_uString     *ustrTemp = NULL;;
 
-        return osl_Process_E_None;
+        rtl_uString_newFromStr_WithLength( &ustrTemp, szBuffer, dwLen );
+        eError = osl_getFileURLFromSystemPath( ustrTemp, pustrWorkingDir );
+
+        rtl_uString_release( ustrTemp );
+
+        if ( osl_File_E_None != eError )
+            return osl_Process_E_Unknown;
+        else
+            return osl_Process_E_None;
     }
     else
         return osl_Process_E_Unknown;
