@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-12 12:19:13 $
+ *  last change: $Author: er $ $Date: 2001-02-16 17:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2232,7 +2232,7 @@ void ScChangeActionContent::GetFormulaString( String& rStr,
         const ScFormulaCell* pCell ) const
 {
     ScAddress aPos( aBigRange.aStart.MakeAddress() );
-    if ( aPos == pCell->aPos )
+    if ( aPos == pCell->aPos || IsDeletedIn() )
         pCell->GetFormula( rStr );
     else
     {
