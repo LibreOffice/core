@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-14 08:55:33 $
+ *  last change: $Author: fme $ $Date: 2002-11-18 12:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1027,34 +1027,11 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
         // no nested bidi portion required
         nCurrLevel = GetTxtFrm()->IsRightToLeft() ? 1 : 0;
 
-    // check if there is a field at rPos:
-    BYTE nNextLevel = nCurrLevel;
-    sal_Bool bFldBidi = sal_False;
-
-    if ( CH_TXTATR_BREAKWORD == GetChar( rPos ) )
-    {
-        // examining the script of the field text should be sufficient
-        // for 99% of all cases
-        XubString aTxt = GetTxtFrm()->GetTxtNode()->GetExpandTxt( rPos, 1 );
-
-        if ( pBreakIt->xBreak.is() && aTxt.Len() )
-        {
-            sal_Bool bFldDir = ( ::com::sun::star::i18n::ScriptType::COMPLEX ==
-                                 pBreakIt->GetRealScriptOfText( aTxt, 0 ) );
-            sal_Bool bCurrDir = ( 0 != ( nCurrLevel % 2 ) );
-            if ( bFldDir != bCurrDir )
-            {
-                nNextLevel = nCurrLevel + 1;
-                bFldBidi = sal_True;
-            }
-        }
-    }
-    else
-        nNextLevel = rSI.DirType( rPos );
+    const BYTE nNextLevel = rSI.DirType( rPos );
 
     if ( GetTxt().Len() != rPos && nNextLevel > nCurrLevel )
     {
-        rPos = bFldBidi ? rPos + 1 : rSI.NextDirChg( rPos, &nCurrLevel );
+        rPos = rSI.NextDirChg( rPos, &nCurrLevel );
         if ( STRING_LEN == rPos )
             return NULL;
         SwMultiCreator *pRet = new SwMultiCreator;

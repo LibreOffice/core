@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porexp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-23 14:54:06 $
+ *  last change: $Author: fme $ $Date: 2002-11-18 12:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,12 @@ void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
     // do we have to repaint a post it portion?
     if( rInf.OnWin() && pPortion && !pPortion->Width() )
         pPortion->PrePaint( rInf, this );
+
+    // The contents of field portions is not considered during the
+    // calculation of the directions. Therefore we let vcl handle
+    // the calculation by removing the BIDI_STRONG_FLAG temporarily.
+    SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
+    aLayoutModeModifier.SetAuto();
 
     rInf.DrawText( *this, rInf.GetLen(), sal_False );
 }

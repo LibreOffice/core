@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2002-11-01 13:30:42 $
+ *  last change: $Author: fme $ $Date: 2002-11-18 12:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,6 +355,9 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
     long nTxtRest = rInf.GetTxt().Len() - rInf.GetIdx();
     {
         SwFldSlot aDiffTxt( &rInf, this );
+        SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
+        aLayoutModeModifier.SetAuto();
+
         const xub_StrLen nOldFullLen = rInf.GetLen();
         const MSHORT nFollow = IsFollow() ? 0 : 1;
         xub_StrLen nFullLen;
@@ -704,7 +707,9 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
             bPaintSpace = bPaintSpace && nFixWidth < nOldWidth;
             KSHORT nSpaceOffs = nFixWidth;
             pThis->Width( nFixWidth );
-            if( IsLeft() )
+
+            if( ( IsLeft() && ! rInf.GetTxtFrm()->IsRightToLeft() ) ||
+                ( ! IsLeft() && ! IsCenter() && rInf.GetTxtFrm()->IsRightToLeft() ) )
                 SwExpandPortion::Paint( rInf );
             else
             {
@@ -881,7 +886,12 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
     long nTmpWidth = Max( (long)0, (long)(nFixWidth - 2 * GRFNUM_SECURE) );
     Size aSize( nTmpWidth, GetGrfHeight() - 2 * GRFNUM_SECURE );
 
-    if( nFixWidth < Width() && !IsLeft() )
+
+    const sal_Bool bLeft = ( IsLeft() && ! rInf.GetTxtFrm()->IsRightToLeft() ) ||
+                           ( ! IsLeft() && ! IsCenter() && rInf.GetTxtFrm()->IsRightToLeft() );
+
+
+    if( nFixWidth < Width() && !bLeft )
     {
         KSHORT nOffset = Width() - nFixWidth;
         if( nOffset < nMinDist )
