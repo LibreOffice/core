@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XNamedRanges.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:24 $
+ *  last change:$Date: 2003-09-08 11:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 
 package ifc.sheet;
 
+import java.util.Random;
+import java.util.StringTokenizer;
+
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.sheet.Border;
 import com.sun.star.sheet.NamedRangeFlag;
@@ -74,11 +81,6 @@ import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
 import com.sun.star.text.XTextRange;
 import com.sun.star.uno.UnoRuntime;
-import java.util.Random;
-import java.util.StringTokenizer;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.sheet.XNamedRanges</code>

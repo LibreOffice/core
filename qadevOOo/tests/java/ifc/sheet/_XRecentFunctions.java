@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XRecentFunctions.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:24 $
+ *  last change:$Date: 2003-09-08 11:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,15 @@
 
 package ifc.sheet;
 
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.sheet.XRecentFunctions;
 import java.util.Random;
+
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
+
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.sheet.XRecentFunctions;
 
 /**
 * Testing <code>com.sun.star.sheet.XRecentFunctions</code>
@@ -94,7 +96,6 @@ public class _XRecentFunctions extends MultiMethodTest {
     * Has <b> OK </b> status if returned value isn't equal to zero. <p>
     */
     public void _getMaxRecentFunctions() {
-        boolean bResult = true;
 
         iMaxNumber = oObj.getMaxRecentFunctions();
         log.println("Maximum recent functions : " + iMaxNumber);
@@ -152,7 +153,6 @@ public class _XRecentFunctions extends MultiMethodTest {
 
         boolean bResult = true;
         int[] IDs = new int[0];
-        int iNumber = 0;
         XNameAccess functionList = null;
 
         log.println("First, get the set of available functions.");
