@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-10 15:38:23 $
+ *  last change: $Author: mba $ $Date: 2002-04-26 15:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,6 +425,7 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
             {
                 const SfxStamp& rStamp = _pInfo->GetPrinted();
                 _pInfo->SetPrinted( SfxStamp( aStrVal, rStamp.GetTime() ) );
+                break;
             }
             case MID_DOCINFO_MODIFICATIONAUTHOR:
             {
