@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salshl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-09 14:33:27 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
 #include <tools/svwin.h>
 #endif
 
-#define _SV_SALSHL_CXX
-
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
 #endif
@@ -76,34 +74,6 @@
 // =======================================================================
 
 SalShlData aSalShlData;
-
-// =======================================================================
-
-#ifdef WIN
-
-extern "C"
-{
-
-int CALLBACK LibMain( HINSTANCE hInst, WORD, WORD nHeap, LPSTR )
-{
-    if ( nHeap )
-        UnlockData( 0 );
-
-    aSalShlData.mhInst = hInst;
-
-    return 1;
-}
-
-// -----------------------------------------------------------------------
-
-int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-}
-
-#endif
 
 // =======================================================================
 
@@ -124,14 +94,12 @@ WIN_BOOL WINAPI LibMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
     if ( nReason == DLL_PROCESS_ATTACH )
         aSalShlData.mhInst = hInst;
 
-#if !defined ( __BORLANDC__ )
 #ifdef ICC
     if ( _CRT_init() == -1 )
 #else
     if ( !_CRT_INIT( hInst, nReason, pReserved ) )
 #endif
         return 0;
-#endif
 
     return 1;
 }
