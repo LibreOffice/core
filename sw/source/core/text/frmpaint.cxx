@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-10 14:38:04 $
+ *  last change: $Author: fme $ $Date: 2001-04-23 08:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,6 +546,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                     pFnt->SetStyleName( aEmptyStr, SW_LATIN );
                     pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, SW_LATIN );
                 }
+                pFnt->SetVertical( 0 );
                 pFnt->Invalidate();
                 pFnt->ChgPhysFnt( pSh, pSh->GetOut() );
                 Point aPos = Frm().Pos() + Prt().Pos();
