@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:47:13 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,9 +405,18 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
 {
     DBG_CTOR(OConnection,NULL);
 
+    osl_incrementInterlockedCount(&m_refCount);
     try
     {
-        m_pTables = new OTableContainer(_rTablesConfig,_rCommitLocation,*this, m_aMutex, this, this);
+        sal_Bool bCase = sal_True;
+        try
+        {
+            bCase = getMetaData()->storesMixedCaseQuotedIdentifiers();
+        }
+        catch(SQLException&)
+        {
+        }
+        m_pTables = new OTableContainer(_rTablesConfig,_rCommitLocation,*this, m_aMutex, this,bCase, this);
         // check if we supports types
         Reference<XResultSet> xRes = _rxMaster->getMetaData()->getTableTypes();
         if(xRes.is())
@@ -439,7 +448,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
         }
         if(m_bSupportsViews)
         {
-            m_pViews = new OViewContainer(*this, m_aMutex, this, this);
+            m_pViews = new OViewContainer(*this, m_aMutex, this, bCase,this);
             m_pViews->addContainerListener(m_pTables);
             m_pTables->addContainerListener(m_pViews);
         }
@@ -449,6 +458,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
     }
     // initialize the queries
     DBG_ASSERT(_rDB.m_aConfigurationNode.isValid(), "OConnection::OConnection : invalid configuration location of my parent !");
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 //--------------------------------------------------------------------------
@@ -648,15 +658,22 @@ Reference< XNameAccess >  OConnection::getTables() throw( RuntimeException )
 
     if (!m_pTables->isInitialized())
     {
+
         // check if out "master connection" can supply tables
         if(!m_xMasterTables.is())
         {
-            Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-            Reference< XDriver > xDriver = xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL());
-            OSL_ENSURE(xDriver.is(),"NO driver found for url already connected to!");
-            Reference< XDataDefinitionSupplier > xSupp(xDriver,UNO_QUERY);
-            if(xSupp.is())
-                m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
+            try
+            {
+                Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+                Reference< XDriver > xDriver = xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL());
+                OSL_ENSURE(xDriver.is(),"NO driver found for url already connected to!");
+                Reference< XDataDefinitionSupplier > xSupp(xDriver,UNO_QUERY);
+                if(xSupp.is())
+                    m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
+            }
+            catch(SQLException&)
+            {
+            }
         }
 
 
@@ -684,12 +701,18 @@ Reference< XNameAccess > SAL_CALL OConnection::getViews(  ) throw(RuntimeExcepti
         Reference< XViewsSupplier > xMaster(m_xMasterTables,UNO_QUERY);
         if(!m_xMasterTables.is())
         {
-            Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-            Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL()),UNO_QUERY);
+            try
+            {
+                Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+                Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL()),UNO_QUERY);
 
-            if(xSupp.is())
-                m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
-            xMaster = Reference< XViewsSupplier >(m_xMasterTables,UNO_QUERY);
+                if(xSupp.is())
+                    m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
+                xMaster = Reference< XViewsSupplier >(m_xMasterTables,UNO_QUERY);
+            }
+            catch(SQLException&)
+            {
+            }
         }
 
         if (xMaster.is() && xMaster->getViews().is())
