@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:31:20 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,10 @@ TabPage TP_CONDCOLL
         Text = "Optionen" ;
         Text [ English ] = "Settings" ;
         Text[ english_us ] = "Options";
-        Text[ portuguese ] = "Settings";
+        Text[ portuguese ] = "Opções";
         Text[ russian ] = "Ïàðàìåòðû";
         Text[ greek ] = "ÅðéëïãÝò";
-        Text[ dutch ] = "Settings";
+        Text[ dutch ] = "Opties";
         Text[ french ] = "Options";
         Text[ spanish ] = "Opciones";
         Text[ italian ] = "Opzioni";
@@ -195,14 +195,14 @@ TabPage TP_CONDCOLL
         Text = "A~bsatzvorlagen" ;
         Text [ English ] = "Styles" ;
         Disable = TRUE ;
-        Text [ dutch ] = "Alineaprofielen" ;
+        Text [ dutch ] = "~Alineaprofielen" ;
         Text [ english_us ] = "~Paragraph Styles" ;
         Text [ italian ] = "Modelli di paragrafo" ;
         Text [ spanish ] = "Es~tilos de párrafo" ;
         Text [ french ] = "Styles de ~paragraphe" ;
         Text [ swedish ] = "St~yckeformatmallar" ;
         Text [ danish ] = "Afsnitstypografier" ;
-        Text [ portuguese ] = "Estilos de parágrafo" ;
+        Text [ portuguese ] = "E~stilos de parágrafo" ;
         Text [ portuguese_brazilian ] = "Absatzvorlagen" ;
         Text[ chinese_simplified ] = "¶ÎÂäÑùÊ½(~P)";
         Text[ russian ] = "Ñòèëè àáçàöà";
