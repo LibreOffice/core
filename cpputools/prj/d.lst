@@ -1,10 +1,3 @@
-mkdir: %_DEST%\inc%_EXT%\cpputools
-..\inc\cpputools\jenv.hxx %_DEST%\inc%_EXT%\cpputools\jenv.hxx
-..\inc\cpputools\javainfo.hxx %_DEST%\inc%_EXT%\cpputools\javainfo.hxx
-..\%__SRC%\lib\jenv.lib %_DEST%\lib%_EXT%\jenv.lib
-..\%__SRC%\lib\libjenv.so %_DEST%\lib%_EXT%\libjenv.so
-..\%__SRC%\lib\ijenv.lib %_DEST%\lib%_EXT%\ijenv.lib
-..\%__SRC%\bin\jenv.dll %_DEST%\bin%_EXT%\jenv.dll
 ..\%__SRC%\bin\regcomp.exe %_DEST%\bin%_EXT%\regcomp.exe
 ..\%__SRC%\bin\regcomp %_DEST%\bin%_EXT%\regcomp
 ..\%__SRC%\bin\uno.exe %_DEST%\bin%_EXT%\uno.exe

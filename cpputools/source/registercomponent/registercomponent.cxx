@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jbu $ $Date: 2002-10-02 13:16:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 17:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,8 +328,8 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                             // the pointer
                             sal_Char * p = (sal_Char *) rtl_allocateMemory( 13+ strlen( av[i] ) );
                             p[0] = 0;
-                            strcat( p, "CLASSPATH=" );
-                            strcat( p, av[i] );
+                            strcat( p, "CLASSPATH=" ); // #100211# - checked
+                            strcat( p, av[i] );        // #100211# - checked
 
                             putenv( p );
                         }
@@ -461,7 +461,7 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                             buf.append( "." );
                             throw IllegalArgument( buf.makeStringAndClear() );
                         }
-                        strcpy( rargv[rargc] , buffer );
+                        strcpy( rargv[rargc] , buffer ); // #100211# - checked
                         rargc++;
                     }
                     fclose(cmdFile);

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-02 12:00:25 $
+#   last change: $Author: hr $ $Date: 2003-03-19 17:31:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,7 @@ APP1OBJS=   $(OBJ)$/registercomponent.obj
 
 APP1STDLIBS=\
             $(SALLIB) \
+            $(TOOLSLIB) \
             $(CPPULIB)	\
             $(CPPUHELPERLIB)
 
