@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:07:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,16 +125,12 @@ namespace connectivity {
         // top-level address book which will display whatever is in the preferences
         // file of Mozilla.
         static sal_Char*    MOZ_SCHEME_MOZILLA          = "moz-abdirectory://";
-        static sal_Bool     USES_FACTORY_MOZILLA        = sal_False ;
         // This one is a base uri which will be completed with the connection data.
         static sal_Char*    MOZ_SCHEME_LDAP             = "moz-abldapdirectory://";
-        static sal_Bool     USES_FACTORY_LDAP           = sal_False ;
         // These two uris will be used to obtain directory factories to access all
         // address books of the given type.
         static sal_Char*    MOZ_SCHEME_OUTLOOK_MAPI     = "moz-aboutlookdirectory://op/";
-        static sal_Bool     USES_FACTORY_OUTLOOK_MAPI   = sal_True ;
         static sal_Char*    MOZ_SCHEME_OUTLOOK_EXPRESS  = "moz-aboutlookdirectory://oe/";
-        static sal_Bool     USES_FACTORY_OUTLOOK_EXPRESS= sal_True ;
     }
 }
 // -----------------------------------------------------------------------------
@@ -174,10 +170,8 @@ OConnection::OConnection(MozabDriver*   _pDriver)
                          m_xMetaData(NULL),
                          m_nAnonABCount( 0 ),
                          m_nMaxResultRecords( -1 ),
-                         m_UsesFactory(sal_False),
-                         m_IsLDAP(sal_False),
-                         m_aNameMapper(NULL),
-                         m_bOutlookExpress(sal_False)
+                         m_eSDBCAddressType(SDBCAddress::Unknown),
+                         m_aNameMapper(NULL)
 {
     m_pDriver->acquire();
 
@@ -248,10 +242,9 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     // * for windows system address book
     //      "sdbc:address:outlookexp:"     -> aboutlookdirectory://oe/
     //
-    m_IsLDAP = sal_False ;
     if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_MOZILLA() ) == 0 ) {
         m_sMozillaURI = rtl::OUString::createFromAscii( MOZ_SCHEME_MOZILLA );
-        m_UsesFactory = USES_FACTORY_MOZILLA ;
+        m_eSDBCAddressType = SDBCAddress::Mozilla;
     }
     else if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_LDAP() ) == 0 ) {
         rtl::OUString sHostName;
@@ -259,8 +252,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         sal_Int32     nPortNumber = -1;
 
         m_sMozillaURI = rtl::OUString::createFromAscii( MOZ_SCHEME_LDAP );
-        m_UsesFactory = USES_FACTORY_LDAP ;
-        m_IsLDAP = sal_True ;
+        m_eSDBCAddressType = SDBCAddress::LDAP;
 
         const PropertyValue* pInfo = info.getConstArray();
         const PropertyValue* pInfoEnd = pInfo + info.getLength();
@@ -313,12 +305,11 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     }
     else if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_OUTLOOK_MAPI() ) == 0 ) {
         m_sMozillaURI       = ::rtl::OUString::createFromAscii( MOZ_SCHEME_OUTLOOK_MAPI );
-        m_UsesFactory       = USES_FACTORY_OUTLOOK_MAPI ;
+        m_eSDBCAddressType = SDBCAddress::Outlook;
     }
     else if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_OUTLOOK_EXPRESS() ) == 0 ) {
         m_sMozillaURI       = rtl::OUString::createFromAscii( MOZ_SCHEME_OUTLOOK_EXPRESS );
-        m_UsesFactory       = USES_FACTORY_OUTLOOK_EXPRESS ;
-        m_bOutlookExpress   = sal_True;
+        m_eSDBCAddressType = SDBCAddress::OutlookExp;
     }
     else
     {
@@ -327,7 +318,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
                     ::rtl::OUString::createFromAscii("Invalid subschema provided"),NULL);
     }
 
-    OSL_TRACE("Moz URI = %s, %s\n", ((OUtoCStr(m_sMozillaURI)) ? (OUtoCStr(m_sMozillaURI)):("NULL")),m_UsesFactory ? "uses factory" : "no factory");
+    OSL_TRACE("Moz URI = %s, %s\n", ((OUtoCStr(m_sMozillaURI)) ? (OUtoCStr(m_sMozillaURI)):("NULL")), usesFactory() ? "uses factory" : "no factory");
     OSL_TRACE( "\tOUT OConnection::construct()\n" );
 
     MDatabaseMetaDataHelper     _aDbHelper;
@@ -335,7 +326,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     // The creation of the nsIAbDirectory i/f for LDAP doesn't actually test
     // the validity of the connection, it's normally delayed until the query
     // is executed, but it's a bit late then to fail...
-    if ( m_IsLDAP ) {
+    if ( isLDAP() ) {
         if ( !_aDbHelper.testLDAPConnection( this ) ) {
             OSL_TRACE("testLDAPConnection : FAILED\n" );
             ::dbtools::throwGenericSQLException( _aDbHelper.getErrorString(), NULL);
