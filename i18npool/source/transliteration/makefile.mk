@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.5 $
+#*  $Revision: 1.6 $
 #*
-#*  last change: $Author: hr $ $Date: 2003-07-16 17:43:39 $
+#*  last change: $Author: hr $ $Date: 2004-02-02 19:24:01 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -111,11 +111,6 @@ SLOFILES=   \
                         $(SLO)$/numtotext_cjk.obj \
                         $(SLO)$/chartonum.obj \
                         $(SLO)$/texttonum.obj
-
-# MACOSX: manually initialization some static data members
-.IF "$(OS)$(CVER)"=="MACOSXC295"
-SLOFILES+=$(SLO)$/staticmbtransliteration.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
