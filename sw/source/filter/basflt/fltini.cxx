@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-28 10:56:55 $
+ *  last change: $Author: fme $ $Date: 2001-07-26 06:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SV_EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
 #endif
 #ifndef _PARHTML_HXX //autogen
 #include <svtools/parhtml.hxx>
@@ -1578,6 +1575,9 @@ Color ConvertBrushStyle(const Color& rCol, const Color& rFillCol, BYTE nStyle)
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/05/28 10:56:55  jp
+      Bug #82963#: set correct paragraph indent
+
       Revision 1.9  2001/04/06 19:32:17  jp
       Bug #85813#: no GPF and no ASSERT by reading/writing with the W4W filters
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wdocsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 15:47:38 $
+ *  last change: $Author: fme $ $Date: 2001-07-26 06:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,6 @@
 #endif
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
-
-#ifndef _SV_EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
 #endif
 
 #ifndef _SO_CLSIDS_HXX
@@ -175,6 +171,9 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/07/05 15:47:38  jp
+    changes for TF_DATA
+
     Revision 1.3  2001/02/09 13:20:43  mib
     FILEFORMAT_NOW -> FILEFORMAT_50
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 15:48:07 $
+ *  last change: $Author: fme $ $Date: 2001-07-26 06:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,6 @@
 #endif
 
 #pragma hdrstop
-
-#ifndef _SV_EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
-#endif
 
 #ifndef _SO_CLSIDS_HXX
 #include <so3/clsids.hxx>
@@ -136,6 +132,9 @@ void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/07/05 15:48:07  jp
+    changes for TF_DATA
+
     Revision 1.3  2001/02/09 13:20:13  mib
     FILEFORMAT_NOW -> FILEFORMAT_50
 
