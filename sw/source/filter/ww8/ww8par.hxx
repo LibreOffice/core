@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:36:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,11 +846,19 @@ private:
     sw::util::RedlineStack *mpRedlineStack;
 
     /*
+    This stack is for fields that get referneced later, e.g. BookMarks and TOX.
+    They get inserted at the end of the document, it is the same stack for
+    headers/footers/main text/textboxes/tables etc...
+    */
+    SwFltEndStack *pReffedStck;
+
+    /*
     This stack is for fields whose true conversion cannot be determined until
     the end of the document, it is the same stack for headers/footers/main
-    text/textboxes/tables etc...
+    text/textboxes/tables etc... They are things that reference other things
+    e.g. NoteRef and Ref, they are processed after pReffedStck
     */
-    SwWW8FltRefStack *pRefStck;
+    SwWW8FltRefStack *pReffingStck;
 
     /*
     For graphics anchors. Determines the graphics whose anchors are in the
@@ -1104,7 +1112,13 @@ private:
 
     void DeleteStk(SwFltControlStack* prStck);
     void DeleteCtrlStk()    { DeleteStk( pCtrlStck  ); pCtrlStck   = 0; }
-    void DeleteRefStk()     { DeleteStk( pRefStck ); pRefStck = 0; }
+    void DeleteRefStks()
+    {
+        DeleteStk( pReffedStck );
+        pReffedStck = 0;
+        DeleteStk( pReffingStck );
+        pReffingStck = 0;
+    }
     void DeleteAnchorStk()  { DeleteStk( pAnchorStck ); pAnchorStck = 0; }
     bool AddTextToParagraph(const String& sAddString);
     bool HandlePageBreakChar();
