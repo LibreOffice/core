@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 11:40:37 $
+ *  last change: $Author: kz $ $Date: 2005-03-22 13:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,7 +543,7 @@ OUString GetModuleName( const OUString& aModuleId )
     return ::rtl::OUString();
 }
 
-OUString GetUIModuleName( const OUString& aModuleId, const uno::Reference< dcss::frame::XModuleManager >& rModuleManager )
+OUString GetUIModuleName( const OUString& aModuleId, const uno::Reference< css::frame::XModuleManager >& rModuleManager )
 {
     OUString aModuleUIName;
 
