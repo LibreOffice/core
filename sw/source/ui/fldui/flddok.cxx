@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:12:16 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,129 +773,4 @@ void    SwFldDokPage::FillUserData()
     SetUserData(sData);
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2001/04/23 13:13:57  os
-    #86144# PageNumberField: selection of format corrected
-
-    Revision 1.2  2001/02/09 07:44:09  os
-    TabPage size changed
-
-    Revision 1.1.1.1  2000/09/18 17:14:36  hr
-    initial import
-
-    Revision 1.36  2000/09/18 16:05:28  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.35  2000/08/23 11:33:25  os
-    CreateFromInt32
-
-    Revision 1.34  2000/06/30 08:52:52  os
-    #76541# string assertions removed
-
-    Revision 1.33  2000/05/23 18:36:41  jp
-    Bugfixes for Unicode
-
-    Revision 1.32  2000/04/18 15:17:31  os
-    UNICODE
-
-    Revision 1.31  2000/02/24 17:57:26  hr
-    #73447#: removed temporary
-
-    Revision 1.30  2000/02/11 14:46:18  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.29  1999/03/23 09:51:34  OS
-    #61673# Reihenfolge der Seitenfelder besser
-
-
-      Rev 1.28   23 Mar 1999 10:51:34   OS
-   #61673# Reihenfolge der Seitenfelder besser
-
-      Rev 1.27   25 Feb 1999 17:24:50   JP
-   Bug #62438#: UserData nur auswerten, wenn kein Refresh ist
-
-      Rev 1.26   21 Jan 1999 09:50:36   OS
-   #59900# Fussnoten im Dialog korrekt sortieren; keine prot. Member
-
-      Rev 1.25   12 Jan 1999 11:42:24   OS
-   #60579# ausgewaehlten Typ in den UserData speichern
-
-      Rev 1.24   17 Nov 1998 10:50:38   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.23   04 Nov 1998 12:11:06   OM
-   #58851# Fixe Dateinamenfelder bearbeiten
-
-      Rev 1.22   27 Oct 1998 15:53:24   OM
-   #58427# Fixes FilenameField
-
-      Rev 1.21   10 Aug 1998 16:39:58   JP
-   Bug #54796#: neue NumerierungsTypen (WW97 kompatibel)
-
-      Rev 1.20   20 May 1998 15:59:52   OM
-   Kombinierte DateTime-Formate verarbeiten
-
-      Rev 1.19   20 May 1998 13:24:22   OM
-   Offset fuer DateTimeFields
-
-      Rev 1.18   03 Apr 1998 13:16:48   OM
-   #49062 Spinbutton fuer Kapitelebenen
-
-      Rev 1.17   26 Mar 1998 17:00:28   OM
-   Feldbefehl: Seitenanzahl im Html-Mode
-
-      Rev 1.16   26 Mar 1998 16:43:10   OM
-   Feldbefehl: Seitenanzahl im Html-Mode
-
-      Rev 1.15   06 Mar 1998 15:38:30   OM
-   Nur bei Aenderung Feld aktualisieren
-
-      Rev 1.14   25 Feb 1998 16:47:58   OM
-   Fixe Author- und ExtUser-Felder
-
-      Rev 1.13   16 Feb 1998 10:10:22   OM
-   Fuer Solaris nicht direkt von void* auf ushort casten
-
-      Rev 1.12   12 Feb 1998 13:58:24   OM
-   #47262# Offset loeschen
-
-      Rev 1.11   14 Jan 1998 10:30:26   OM
-   Kapitelfeldebene bearbeiten
-
-      Rev 1.10   09 Jan 1998 16:56:50   OM
-   Bei Dok-Wechsel updaten
-
-      Rev 1.9   08 Jan 1998 14:58:24   OM
-   Traveling
-
-      Rev 1.8   07 Jan 1998 17:17:42   OM
-   Referenzen editieren
-
-      Rev 1.7   05 Jan 1998 17:44:34   OM
-   DB-Feldbefehl bearbeiten
-
-      Rev 1.6   19 Dec 1997 18:24:30   OM
-   Feldbefehl-bearbeiten Dlg
-
-      Rev 1.5   12 Dec 1997 16:10:06   OM
-   AutoUpdate bei FocusWechsel u.a.
-
-      Rev 1.4   11 Dec 1997 16:58:00   OM
-   Feldumstellung
-
-      Rev 1.3   20 Nov 1997 17:01:22   OM
-   Neuer Felddialog
-
-      Rev 1.2   07 Nov 1997 16:39:32   OM
-   NumberFormat-Listbox
-
-      Rev 1.1   05 Nov 1997 15:35:40   OM
-   Neuer Feldbefehldialog
-
-      Rev 1.0   04 Nov 1997 10:07:18   OM
-   Initial revision.
-
-------------------------------------------------------------------------*/
 

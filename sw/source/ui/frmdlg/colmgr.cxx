@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colmgr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,66 +224,6 @@ SwColMgr::~SwColMgr() {}
 
 
 
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.43  2000/09/18 16:05:32  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.42  1997/11/24 16:40:12  MA
-    include
-
-
-      Rev 1.41   24 Nov 1997 17:40:12   MA
-   include
-
-      Rev 1.40   03 Nov 1997 13:19:46   MA
-   precomp entfernt
-
-      Rev 1.39   12 Aug 1997 15:58:08   OS
-   frmitems/textitem/paraitem aufgeteilt
-
-      Rev 1.38   07 Aug 1997 14:59:18   OM
-   Headerfile-Umstellung
-
-      Rev 1.37   24 Oct 1996 17:59:50   OS
-   unterschiedliche Spaltenabstaende einstellen
-
-      Rev 1.36   28 Aug 1996 11:52:52   OS
-   includes
-
-      Rev 1.35   19 Apr 1996 16:59:00   MA
-   chg: Vorbereitung fuer kleine Rahmen
-
-      Rev 1.34   18 Apr 1996 11:47:06   OM
-   Unbenutzte Fkt entfernt
-
-      Rev 1.33   24 Nov 1995 16:58:10   OM
-   PCH->PRECOMPILED
-
-      Rev 1.32   13 Jul 1995 22:45:20   JP
-   Spaltenbreiten richtig berechnen
-
-      Rev 1.31   21 May 1995 18:55:28   OS
-   Trennlinienhoehe gerichtet
-
-      Rev 1.30   03 May 1995 14:09:24   OM
-   DEF_GUTTER_WIDTH fuer Default-Spaltenabstand
-
-      Rev 1.29   03 Apr 1995 17:13:08   OM
-   Bug in Spaltenpage gefixt
-
-      Rev 1.28   28 Mar 1995 15:38:56   OS
-   Pre-Fix fuer leere Breite
-
-      Rev 1.27   13 Mar 1995 16:19:44   MS
-   neu: Spalten im Bsp
-
-      Rev 1.26   08 Mar 1995 12:54:28   MS
-   Aktuelle Breite einstellen
-
-------------------------------------------------------------------------*/
 
 
 

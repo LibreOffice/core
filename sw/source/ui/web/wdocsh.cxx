@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wdocsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-26 06:40:19 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,89 +169,4 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
 }
 
 
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/07/05 15:47:38  jp
-    changes for TF_DATA
-
-    Revision 1.3  2001/02/09 13:20:43  mib
-    FILEFORMAT_NOW -> FILEFORMAT_50
-
-    Revision 1.2  2001/02/06 15:42:27  mib
-    real 6.0 file format
-
-    Revision 1.1.1.1  2000/09/18 17:14:51  hr
-    initial import
-
-    Revision 1.22  2000/09/18 16:06:20  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.21  2000/05/10 11:54:44  os
-    Basic API removed
-
-    Revision 1.20  2000/04/19 11:21:44  os
-    UNICODE
-
-    Revision 1.19  2000/02/11 15:01:21  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.18  1998/11/18 14:18:18  JP
-    Task #59398#: ClipboardFormatId Umstellungen
-
-
-      Rev 1.17   18 Nov 1998 15:18:18   JP
-   Task #59398#: ClipboardFormatId Umstellungen
-
-      Rev 1.16   21 Apr 1998 11:56:28   TJ
-   include
-
-      Rev 1.15   17 Feb 1998 11:40:38   OS
-   HelpFile: Name gesetzt #47036#
-
-      Rev 1.14   14 Jan 1998 09:05:22   MIB
-   neu: GetSw4/5WebClipId
-
-      Rev 1.13   07 Jan 1998 18:39:38   MIB
-   5.0 Fileformat
-
-      Rev 1.12   21 Nov 1997 11:33:20   MA
-   includes
-
-      Rev 1.11   03 Sep 1997 10:50:06   MBA
-   swslots.hxx statt wswslots.hxx
-
-      Rev 1.10   01 Sep 1997 13:10:58   OS
-   DLL-Umstellung
-
-      Rev 1.9   05 Aug 1997 16:47:22   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.8   05 Aug 1997 16:41:48   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.7   02 Jul 1997 08:04:44   OS
-   Zeile in der SourceView merken
-
-      Rev 1.6   10 Feb 1997 15:02:30   MA
-   ueberfluessigen CTor entfernt
-
-      Rev 1.5   31 Jan 1997 08:53:32   MA
-   Parent fuer Interface ist nicht die SwDocShell
-
-      Rev 1.4   28 Jan 1997 08:45:34   MA
-   Syntax
-
-      Rev 1.3   27 Jan 1997 16:12:04   MA
-   Icon
-
-      Rev 1.2   27 Jan 1997 12:46:02   MA
-   Filter fuer web
-
-      Rev 1.1   24 Jan 1997 10:32:30   OS
-   FillRegInfo sollte sich nicht selbst aufrufen
-
-      Rev 1.0   23 Jan 1997 16:19:32   OS
-   Initial revision.
-
-------------------------------------------------------------------------*/
 

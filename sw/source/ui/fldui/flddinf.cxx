@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddinf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:12:16 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,82 +508,5 @@ void    SwFldDokInfPage::FillUserData()
     SetUserData(sData);
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2002/07/19 14:52:21  gt
-    #101523# node default images for SwFldDokInfPage
-
-    Revision 1.1.1.1  2000/09/18 17:14:36  hr
-    initial import
-
-    Revision 1.21  2000/09/18 16:05:28  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.20  2000/06/30 08:52:52  os
-    #76541# string assertions removed
-
-    Revision 1.19  2000/05/23 18:36:37  jp
-    Bugfixes for Unicode
-
-    Revision 1.18  2000/04/18 15:17:31  os
-    UNICODE
-
-    Revision 1.17  2000/02/11 14:46:08  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.16  1999/02/19 07:48:26  MA
-    #61949# CurrShell gibt es nicht mehr
-
-
-      Rev 1.15   19 Feb 1999 08:48:26   MA
-   #61949# CurrShell gibt es nicht mehr
-
-      Rev 1.14   21 Jan 1999 09:46:24   OS
-   #59900# Fussnoten im Dialog korrekt sortieren; keine prot. Member
-
-      Rev 1.13   12 Jan 1999 11:42:24   OS
-   #60579# ausgewaehlten Typ in den UserData speichern
-
-      Rev 1.12   06 Mar 1998 14:53:52   OM
-   Nur bei Aenderung Feld aktualisieren
-
-      Rev 1.11   25 Feb 1998 16:47:58   OM
-   Fixe Author- und ExtUser-Felder
-
-      Rev 1.10   16 Feb 1998 10:10:22   OM
-   Fuer Solaris nicht direkt von void* auf ushort casten
-
-      Rev 1.9   12 Feb 1998 11:06:02   OM
-   Zahlenformat fuer Docinfofelder
-
-      Rev 1.8   03 Feb 1998 12:21:38   OM
-   #46621# HelpIDs fuer Feldbefehl-Dlg
-
-      Rev 1.7   19 Dec 1997 18:24:30   OM
-   Feldbefehl-bearbeiten Dlg
-
-      Rev 1.6   12 Dec 1997 16:10:06   OM
-   AutoUpdate bei FocusWechsel u.a.
-
-      Rev 1.5   11 Dec 1997 16:58:00   OM
-   Feldumstellung
-
-      Rev 1.4   10 Dec 1997 14:42:08   OM
-   Fixe DocInfoFelder
-
-      Rev 1.3   21 Nov 1997 17:19:46   OM
-   Feldbefehl-Umstellung: DocInfo
-
-      Rev 1.2   20 Nov 1997 17:01:22   OM
-   Neuer Felddialog
-
-      Rev 1.1   05 Nov 1997 15:35:38   OM
-   Neuer Feldbefehldialog
-
-      Rev 1.0   30 Oct 1997 14:30:02   OM
-   Initial revision.
-
-------------------------------------------------------------------------*/
 
 

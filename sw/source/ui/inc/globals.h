@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,16 +68,4 @@ enum SwChangeState
     STATE_TOGGLE = 2
 };
 
-/*-------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2000/09/18 16:05:42  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.1  1994/09/20 12:07:48  MS
-    Initial revision.
-
-
-      Rev 1.0   20 Sep 1994 14:07:48   MS
-   Initial revision.
- -------------------------------------------------------------------------*/
 #endif

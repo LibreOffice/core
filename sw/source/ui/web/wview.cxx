@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 15:55:23 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,151 +376,6 @@ void SwWebView::SelectShell()
         GetWrtShell().UpdateTable();
 }
 
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2000/10/23 10:54:54  tbe
-    idetemp.hxx include removed
-
-    Revision 1.1.1.1  2000/09/18 17:14:51  hr
-    initial import
-
-    Revision 1.45  2000/09/18 16:06:20  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.44  2000/09/07 15:59:35  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.43  2000/09/04 11:46:58  tbe
-    basicide, isetbrw, si, vcdlged moved from svx to basctl
-
-    Revision 1.42  2000/08/08 13:47:37  os
-    #77423# separate graphic shell
-
-    Revision 1.41  2000/05/10 11:54:44  os
-    Basic API removed
-
-    Revision 1.40  1999/09/10 13:19:16  os
-    Chg: resource types removed
-
-    Revision 1.39  1999/08/05 17:25:16  JP
-    have to change: FmFormShell
-
-
-      Rev 1.38   05 Aug 1999 19:25:16   JP
-   have to change: FmFormShell
-
-      Rev 1.37   05 May 1999 11:23:30   OS
-   #63790# Tabellen-Update nur bei Bedarf rufen
-
-      Rev 1.36   08 Mar 1999 13:39:02   MA
-   #62792# OLE-Printer-Benachrichtigung vervollstaendigt
-
-      Rev 1.35   08 Feb 1999 12:51:58   OS
-   #61377# falsche DBG_ERRORs entsorgt
-
-      Rev 1.34   02 Feb 1999 13:16:28   JP
-   Bug #61335#: Schnistelle zu SwView geaendert
-
-      Rev 1.33   21 Oct 1998 11:40:00   OS
-   #58243# Objectbar aus der richtigen Konfiguration lesen
-
-      Rev 1.32   30 Jun 1998 13:02:08   MA
-   das war wohl grad etwas zu gruendlich
-
-      Rev 1.30   09 Jun 1998 15:33:32   OM
-   VC-Controls entfernt
-
-      Rev 1.29   08 Jun 1998 18:09:42   OM
-   Forms im HTML-Mode
-
-      Rev 1.28   12 May 1998 19:00:54   MA
-   schon mal Praeventiv die FormShell pushen
-
-      Rev 1.27   02 Apr 1998 10:07:18   MA
-   new: ToolbarCfg
-
-      Rev 1.26   11 Feb 1998 10:34:04   MA
-   #47035# und CopyCtor entfernt
-
-      Rev 1.25   16 Dec 1997 12:11:26   OS
-   Impl-Pointer fuer UNO
-
-      Rev 1.24   28 Nov 1997 14:46:38   MA
-   includes
-
-      Rev 1.23   21 Nov 1997 11:33:20   MA
-   includes
-
-      Rev 1.22   03 Nov 1997 14:00:14   MA
-   precomp entfernt
-
-      Rev 1.21   18 Sep 1997 14:02:04   OS
-   Pointer::GetPosPixel fuer VCL ersetzt
-
-      Rev 1.20   05 Sep 1997 12:36:00   MH
-   chg: header
-
-      Rev 1.19   03 Sep 1997 14:52:36   MBA
-   Neue WebShells
-
-      Rev 1.18   03 Sep 1997 10:51:30   MBA
-   swslots.hxx statt wswslots.hxx
-
-      Rev 1.17   05 Aug 1997 16:41:48   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.16   08 Jul 1997 12:08:06   OM
-   Draw-Selektionsmodi aufgeraeumt
-
-      Rev 1.15   25 Jun 1997 13:35:52   OM
-   #40966# DrawBaseShell-Ptr wieder eingefuehrt
-
-      Rev 1.14   19 Jun 1997 16:39:24   MA
-   fix: reste vom DrawText-Umbau
-
-      Rev 1.13   18 Jun 1997 17:27:36   HJS
-   alte segmentierung raus
-
-      Rev 1.12   17 Jun 1997 15:43:12   MA
-   DrawTxtShell nicht von BaseShell ableiten + Opts
-
-      Rev 1.11   14 Apr 1997 16:18:00   OS
-   Search/ReplaceAttributes
-
-      Rev 1.10   10 Apr 1997 10:18:58   TRI
-   includes
-
-      Rev 1.9   09 Apr 1997 08:15:38   MA
-   includes
-
-      Rev 1.8   23 Feb 1997 15:06:26   OS
-   GetIcon ueberladen
-
-      Rev 1.7   03 Feb 1997 15:03:36   MA
-   chg: ListShell nach unten
-
-      Rev 1.6   31 Jan 1997 13:35:16   OS
-   neu: SwWebFrameShell
-
-      Rev 1.5   30 Jan 1997 11:07:24   OS
-   erweiterter View-Ctor
-
-      Rev 1.4   29 Jan 1997 12:52:18   OS
-   SelectShell: DrawCtrlShell nachgetragen
-
-      Rev 1.3   24 Jan 1997 14:54:28   OS
-   RID_WEBTOOLS_TOOLBOX
-
-      Rev 1.2   23 Jan 1997 17:37:24   OS
-   GetDispatcher nicht an der SwView aufrufen
-
-      Rev 1.1   23 Jan 1997 17:25:20   OS
-   Cast fuer SetDrawBaseShell
-
-      Rev 1.0   23 Jan 1997 16:17:26   OS
-   Initial revision.
-
-------------------------------------------------------------------------*/
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wformsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:51 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,33 +114,4 @@ __EXPORT SwWebDrawFormShell::~SwWebDrawFormShell()
 {
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/09/18 16:06:20  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.3  2000/05/10 11:54:44  os
-    Basic API removed
-
-    Revision 1.2  1998/11/02 14:25:34  AWO
-    svxids.hrc wg. unbek. Defines includet
-
-
-      Rev 1.1   02 Nov 1998 15:25:34   AWO
-   svxids.hrc wg. unbek. Defines includet
-
-      Rev 1.0   08 Jun 1998 18:07:52   OM
-   Initial revision.
-
-      Rev 1.2   21 Nov 1997 11:33:20   MA
-   includes
-
-      Rev 1.1   03 Nov 1997 14:00:14   MA
-   precomp entfernt
-
-      Rev 1.0   03 Sep 1997 14:50:16   MBA
-   Initial revision.
-
-------------------------------------------------------------------------*/
 

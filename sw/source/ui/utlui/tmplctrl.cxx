@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmplctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,95 +212,5 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
     }
 }
 
-/*************************************************************************
-
-
-      $Log: not supported by cvs2svn $
-      Revision 1.27  2000/09/18 16:06:19  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.26  2000/09/07 15:59:35  os
-      change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-      Revision 1.25  2000/02/11 15:01:09  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.24  1998/11/11 15:16:02  OS
-      #59267# include
-
-
-      Rev 1.23   11 Nov 1998 16:16:02   OS
-   #59267# include
-
-      Rev 1.22   10 Nov 1998 15:14:20   OS
-   #59267# Vorlagenmenue nur ohne Selektion
-
-      Rev 1.21   03 Sep 1998 12:30:32   OS
-   #56005# Alle Seitenvorlagen in der Statuszeile anbieten
-
-      Rev 1.20   21 Nov 1997 12:10:14   MA
-   includes
-
-      Rev 1.19   03 Nov 1997 13:59:22   MA
-   precomp entfernt
-
-      Rev 1.18   29 Aug 1997 15:57:30   OS
-   PopupMenu::Execute mit Window* fuer VCL
-
-      Rev 1.17   29 Aug 1997 13:58:50   OS
-   DLL-Umbau
-
-      Rev 1.16   08 Aug 1997 17:25:18   OM
-   Headerfile-Umstellung
-
-      Rev 1.15   09 Jul 1997 17:45:32   HJS
-   includes
-
-      Rev 1.14   14 Jan 1997 09:39:00   TRI
-   includes wegen Internal Compiler Error
-
-      Rev 1.13   28 Aug 1996 15:42:38   OS
-   includes
-
-      Rev 1.12   26 Jun 1996 15:04:04   OS
-   Aufruf von Dispatcher.Execute an 324 angepasst
-
-      Rev 1.11   22 Mar 1996 15:18:38   HJS
-   umstellung 311
-
-      Rev 1.10   24 Nov 1995 16:57:24   OM
-   PCH->PRECOMPILED
-
-      Rev 1.9   17 Nov 1995 15:16:22   MA
-   Segmentierung
-
-      Rev 1.8   07 Nov 1995 18:04:04   MA
-   opt/fix/chg: statics und segs
-
-      Rev 1.7   30 Oct 1995 18:46:50   OM
-   GetActiveView entfernt
-
-      Rev 1.6   06 Oct 1995 00:20:14   HJS
-   pState => eState
-
-      Rev 1.5   05 Oct 1995 18:41:14   OM
-   StateChanged umgestellt
-
-      Rev 1.4   09 Aug 1995 19:15:18   OS
-   Umstellung auf CommandHdl
-
-      Rev 1.3   20 Jul 1995 19:00:20   OS
-   kein Absturz ohne View
-
-      Rev 1.2   17 Jul 1995 15:19:58   ER
-   wie waer's mit exports?
-
-      Rev 1.1   17 Jul 1995 14:51:48   ER
-   wie waer's mit exports?
-
-      Rev 1.0   14 Jul 1995 18:17:30   OS
-   Initial revision.
-
-*************************************************************************/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-26 06:39:57 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,49 +130,4 @@ void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
 }
 
 
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/07/05 15:48:07  jp
-    changes for TF_DATA
 
-    Revision 1.3  2001/02/09 13:20:13  mib
-    FILEFORMAT_NOW -> FILEFORMAT_50
-
-    Revision 1.2  2001/02/06 15:43:16  mib
-    real 6.0 file format
-
-    Revision 1.1.1.1  2000/09/18 17:14:38  hr
-    initial import
-
-    Revision 1.9  2000/09/18 16:05:35  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.8  2000/04/18 15:32:07  os
-    UNICODE
-
-    Revision 1.7  2000/02/11 14:47:35  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.6  1999/09/10 13:19:20  os
-    Chg: resource types removed
-
-    Revision 1.5  1998/11/18 14:16:34  JP
-    Task #59398#: ClipboardFormatId Umstellungen
-
-
-      Rev 1.4   18 Nov 1998 15:16:34   JP
-   Task #59398#: ClipboardFormatId Umstellungen
-
-      Rev 1.3   07 Jan 1998 18:38:32   MIB
-   5.0 Fileformat
-
-      Rev 1.2   28 Nov 1997 19:52:58   MA
-   includes
-
-      Rev 1.1   01 Sep 1997 13:11:20   OS
-   DLL-Umstellung
-
-      Rev 1.0   12 Jun 1997 16:14:44   MA
-   Initial revision.
-
-------------------------------------------------------------------------*/

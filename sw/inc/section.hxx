@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,143 +321,6 @@ inline SwSection* SwSectionFmt::GetParentSection() const
     return pRet;
 }
 
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.3  2001/03/02 14:35:07  jp
-      password change: use sequence instead of string
-
-      Revision 1.2  2001/02/27 18:46:19  jp
-      new: Password for single section
-
-      Revision 1.1.1.1  2000/09/18 17:14:27  hr
-      initial import
-
-      Revision 1.40  2000/09/18 16:03:26  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.39  2000/09/08 13:24:23  willem.vandorp
-      Header and footer replaced
-
-      Revision 1.38  2000/04/19 15:41:58  jp
-      Unicode changes
-
-      Revision 1.37  2000/02/11 14:26:27  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.36  1999/11/18 17:52:28  jp
-      new: GetTOXBase
-
-      Revision 1.35  1999/07/27 18:20:18  JP
-      replace class SwTOXBaseRange with SwTOXBaseSection - TOX use now SwSections
-
-
-      Rev 1.34   27 Jul 1999 20:20:18   JP
-   replace class SwTOXBaseRange with SwTOXBaseSection - TOX use now SwSections
-
-      Rev 1.33   23 Jul 1999 15:53:40   JP
-   Bug #67465#: SwSectionFrm CTOR have to change the hiddenflag
-
-      Rev 1.32   21 Jun 1999 10:08:44   JP
-   new enums for new TOXs
-
-      Rev 1.31   25 Mar 1999 21:20:34   JP
-   Bug #63929#: autom. erzeugen von Tabs im Inhaltsverzeichnis
-
-      Rev 1.30   29 Oct 1998 14:26:18   JP
-   Task #58637#: neu Is-/SetConnectFlag
-
-      Rev 1.29   26 Oct 1998 17:29:44   JP
-   Bug #54342#: Section merkt sich das Passwort der Datei
-
-      Rev 1.28   12 Jun 1998 14:33:16   JP
-   Bug #51097#: im DTOR des SectionFormates ggfs. die ChildLinks sichbar machen
-
-      Rev 1.27   27 Apr 1998 21:16:44   JP
-   Set-/SetCondition: Flag fuers Convertieren entfernt
-
-      Rev 1.26   04 Aug 1997 16:43:06   MH
-   chg: header
-
-      Rev 1.25   23 Jun 1997 15:44:16   JP
-   neu: GetGlobalDocSection
-
-      Rev 1.24   13 Jun 1997 14:54:10   JP
-   neu: CalcHiddenFlag
-
-      Rev 1.23   29 Oct 1996 16:17:58   MA
-   includes
-
-      Rev 1.22   16 Oct 1996 16:31:22   JP
-   unbenutzte Methoden entfernt
-
-      Rev 1.21   10 Jul 1996 17:58:54   OM
-   LocalizeDBName in Expfld verschoben
-
-      Rev 1.20   10 Jul 1996 17:49:02   OM
-   LocalizeDBName in Expfld verschoben
-
-      Rev 1.19   25 Jun 1996 12:24:14   MA
-   headerfiles
-
-      Rev 1.18   11 Jun 1996 16:56:56   JP
-   GetLinkFileName: nicht mehr als Inline muessen ggfs. auf den Link zugreifen
-
-      Rev 1.17   24 May 1996 15:42:14   OM
-   Bedingungen in Bereichen wandeln
-
-      Rev 1.16   07 Mar 1996 18:11:16   JP
-   IsConnect - auf Is() abfragen
-
-      Rev 1.15   12 Feb 1996 18:16:18   JP
-   Erweiterung: gelinkte Bereiche
-
-      Rev 1.14   08 Feb 1996 19:14:26   JP
-   Erweiterung fuer gelinkte Bereiche
-
-      Rev 1.13   30 Nov 1995 12:54:36   JP
-   _SetHiddenFlag - beide Flags ueber geben (Hidden&CondHidden)
-
-      Rev 1.12   08 Nov 1995 10:03:06   OS
-   ChangeCondition => SetCondition
-
-      Rev 1.11   11 Jul 1995 18:39:46   JP
-   neu: GetSectionNode, Set-/IsCondHidden - Bedingung auswerten
-
-      Rev 1.10   29 Jun 1995 21:11:06   JP
-   Section mit Servier-Funktionalitaet
-
-      Rev 1.9   19 Jun 1995 16:45:16   MA
-   Umbau fuer daemliche Compiler
-
-      Rev 1.8   14 Jun 1995 16:07:46   JP
-   inline vor den inline Methoden
-
-      Rev 1.7   06 Apr 1995 12:42:24   JP
-   neu: Member & Methoden fuer den 'gelinkten' Filenamen
-
-      Rev 1.6   23 Feb 1995 17:38:46   JP
-   neu: SetName - setze neuen Namen an der Section
-
-      Rev 1.5   03 Feb 1995 18:17:30   JP
-   IsProtect jetzt inline
-
-      Rev 1.4   01 Feb 1995 10:52:32   JP
-   neu: erfrage/setze Bedingung
-
-      Rev 1.3   26 Jan 1995 18:47:56   JP
-   GetChildSection: erweitert fuer UI
-
-      Rev 1.2   26 Jan 1995 11:35:18   JP
-   SectionNode als friend der Section - zum Pfegen des HiddenFlags
-
-      Rev 1.1   24 Jan 1995 20:03:12   JP
-   neu: IsInNodesArr - abfrage, ob Section nicht im UndoNodes-Array steht
-
-      Rev 1.0   18 Jan 1995 19:22:58   JP
-   Initial revision.
-
-*************************************************************************/
 
 #endif
     //_SECTION_HXX

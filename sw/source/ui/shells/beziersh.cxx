@@ -2,9 +2,9 @@
  *
  *  $RCSfile: beziersh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,76 +413,5 @@ void SwBezierShell::GetState(SfxItemSet &rSet)
     }
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.21  2000/09/18 16:06:03  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.20  2000/09/07 15:59:28  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.19  2000/05/26 07:21:32  os
-    old SW Basic API Slots removed
-
-    Revision 1.18  2000/05/10 11:53:01  os
-    Basic API removed
-
-    Revision 1.17  2000/04/18 14:58:23  os
-    UNICODE
-
-    Revision 1.16  1997/11/29 14:51:26  MA
-    includes
-
-
-      Rev 1.15   29 Nov 1997 15:51:26   MA
-   includes
-
-      Rev 1.14   24 Nov 1997 09:46:54   MA
-   includes
-
-      Rev 1.13   03 Nov 1997 13:55:46   MA
-   precomp entfernt
-
-      Rev 1.12   05 Sep 1997 12:02:00   MH
-   chg: header
-
-      Rev 1.11   05 Aug 1997 16:18:42   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.10   01 Aug 1997 11:45:44   MH
-   chg: header
-
-      Rev 1.9   08 Jul 1997 12:07:10   OM
-   Draw-Selektionsmodi aufgeraeumt
-
-      Rev 1.8   16 Jun 1997 15:30:24   OM
-   GPF behoben: Backspace wie Delete behandeln
-
-      Rev 1.7   07 Apr 1997 17:50:00   MH
-   chg: header
-
-      Rev 1.6   21 Feb 1997 13:25:14   MA
-   #35942# Hack: CheckUnboundObjects
-
-      Rev 1.5   23 Jan 1997 16:07:44   OM
-   Aufgeraeumt
-
-      Rev 1.4   22 Jan 1997 11:20:48   OM
-   Neue Shells: DrawBaseShell und DrawControlShell
-
-      Rev 1.3   16 Jan 1997 14:46:24   OM
-   Zweistufiges Escape
-
-      Rev 1.2   14 Jan 1997 15:37:38   OM
-   Statusmethode fuer Bezier-Fkts
-
-      Rev 1.1   13 Jan 1997 15:56:10   OM
-   Bezier-Punkte loeschen
-
-      Rev 1.0   08 Jan 1997 12:46:44   OM
-   Initial revision.
-
-------------------------------------------------------------------------*/
 
 

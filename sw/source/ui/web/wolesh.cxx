@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wolesh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:51 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,75 +109,4 @@ __EXPORT SwWebOleShell::~SwWebOleShell()
 {
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.8  2000/09/18 16:06:20  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.7  2000/05/10 11:54:44  os
-    Basic API removed
-
-    Revision 1.6  2000/04/19 11:21:44  os
-    UNICODE
-
-    Revision 1.5  1999/01/04 14:02:18  OS
-    #59918# Kein Vorlagencontroller fuer Rahmen+Grafiken im HTML
-
-
-      Rev 1.4   04 Jan 1999 15:02:18   OS
-   #59918# Kein Vorlagencontroller fuer Rahmen+Grafiken im HTML
-
-      Rev 1.3   21 Nov 1997 11:33:20   MA
-   includes
-
-      Rev 1.2   03 Nov 1997 14:00:16   MA
-   precomp entfernt
-
-      Rev 1.1   05 Sep 1997 12:36:00   MH
-   chg: header
-
-      Rev 1.0   03 Sep 1997 14:51:06   MBA
-   Initial revision.
-
-      Rev 1.21   01 Aug 1997 11:45:44   MH
-   chg: header
-
-      Rev 1.20   11 Nov 1996 13:37:34   MA
-   ResMgr
-
-      Rev 1.19   28 Aug 1996 15:55:14   OS
-   includes
-
-      Rev 1.18   13 Aug 1996 12:38:40   OS
-   neue Shellnamen im IDL-Interface
-
-      Rev 1.17   25 Jun 1996 19:51:50   HJS
-   includes
-
-      Rev 1.16   20 Mar 1996 12:41:14   HJS
-   funcdefs muessen unique sein!
-
-      Rev 1.15   06 Feb 1996 15:16:22   OS
-   neu: Activate/Deactivate fuer Objekte
-
-      Rev 1.14   26 Jan 1996 10:54:12   OS
-   neu: GetState - Ole-Objekt dem Basic herausreichen
-
-      Rev 1.13   03 Dec 1995 11:22:08   OS
-   +include itemdef.hxx
-
-      Rev 1.12   29 Nov 1995 13:47:54   OS
-   -slotadd.hxx
-
-      Rev 1.11   27 Nov 1995 19:40:06   OM
-   swslots->303a
-
-      Rev 1.10   24 Nov 1995 16:59:36   OM
-   PCH->PRECOMPILED
-
-      Rev 1.9   17 Nov 1995 13:03:40   MA
-   Segmentierung
-
-------------------------------------------------------------------------*/
 

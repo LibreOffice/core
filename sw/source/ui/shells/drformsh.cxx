@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:40:02 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,78 +303,5 @@ SwDrawFormShell::~SwDrawFormShell()
 {
 }
 
-/*************************************************************************
-
-      Source Code Control System - History
-
-      $Log: not supported by cvs2svn $
-      Revision 1.2  2001/08/13 21:12:30  jp
-      Bug #90815#: Execute - use hasPropertyState
-
-      Revision 1.1.1.1  2000/09/18 17:14:46  hr
-      initial import
-
-      Revision 1.19  2000/09/18 16:06:03  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.18  2000/05/26 07:21:32  os
-      old SW Basic API Slots removed
-
-      Revision 1.17  2000/05/16 09:15:13  os
-      project usr removed
-
-      Revision 1.16  2000/05/10 11:53:01  os
-      Basic API removed
-
-      Revision 1.15  2000/04/18 14:58:23  os
-      UNICODE
-
-      Revision 1.14  2000/03/23 07:49:14  os
-      UNO III
-
-      Revision 1.13  2000/02/11 14:57:20  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.12  1999/11/19 16:40:24  os
-      modules renamed
-
-      Revision 1.11  1999/09/24 14:38:32  os
-      hlnkitem.hxx now in SVX
-
-      Revision 1.10  1999/03/29 08:31:06  OS
-      #64017# vor getPropertyValue immer hasPropertyByName rufen
-
-
-      Rev 1.9   29 Mar 1999 10:31:06   OS
-   #64017# vor getPropertyValue immer hasPropertyByName rufen
-
-      Rev 1.8   26 Jan 1999 14:48:26   OS
-   #56371# TF_ONE51
-
-      Rev 1.7   26 Nov 1998 15:19:44   MA
-   #59896# Raster usw jetzt an der Application
-
-      Rev 1.6   02 Nov 1998 09:22:10   MA
-   #58294# Slots fuer Raster
-
-      Rev 1.5   07 Oct 1998 10:58:48   JP
-   Bug #57153#: in allen GetStates einer DrawShell die MarkListe aktualisieren
-
-      Rev 1.4   07 Jul 1998 14:03:54   OM
-   #51853# URL-Button wiederbelebt
-
-      Rev 1.3   06 Jul 1998 14:18:44   OM
-   #51853# URL-Button einfuegen
-
-      Rev 1.2   19 May 1998 12:45:50   OM
-   SvxMacro-Umstellung
-
-      Rev 1.1   08 Apr 1998 13:46:58   OM
-   #42505 Keine URL-Buttons in Html-Dokumenten
-
-      Rev 1.0   11 Mar 1998 17:06:02   OM
-   Initial revision.
-
-*************************************************************************/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wgrfsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:51 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,38 +110,5 @@ SwWebGrfShell::~SwWebGrfShell()
 {
 }
 
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.8  2000/09/18 16:06:20  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.7  2000/05/10 11:54:44  os
-    Basic API removed
-
-    Revision 1.6  2000/04/26 15:06:50  os
-    include
-
-    Revision 1.5  2000/04/19 11:21:44  os
-    UNICODE
-
-    Revision 1.4  1998/11/05 12:10:36  OS
-    #59004# Kein Vorlagencontroller fuer Rahmen+Grafiken im HTML
-
-
-      Rev 1.3   05 Nov 1998 13:10:36   OS
-   #59004# Kein Vorlagencontroller fuer Rahmen+Grafiken im HTML
-
-      Rev 1.2   21 Nov 1997 10:55:12   MA
-   includes
-
-      Rev 1.1   03 Nov 1997 14:00:14   MA
-   precomp entfernt
-
-      Rev 1.0   03 Sep 1997 14:50:40   MBA
-   Initial revision.
-
-------------------------------------------------------------------------*/
 
 

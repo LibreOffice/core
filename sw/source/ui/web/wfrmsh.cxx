@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wfrmsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:51 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,38 +132,6 @@ SwWebFrameShell::~SwWebFrameShell()
 
 
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.8  2000/09/18 16:06:20  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.7  2000/05/10 11:54:44  os
-    Basic API removed
-
-    Revision 1.6  1997/11/21 10:00:48  MA
-    includes
-
-
-      Rev 1.5   21 Nov 1997 11:00:48   MA
-   includes
-
-      Rev 1.4   03 Nov 1997 14:00:14   MA
-   precomp entfernt
-
-      Rev 1.3   03 Sep 1997 10:51:06   MBA
-   swslots.hxx statt wswslots.hxx
-
-      Rev 1.2   05 Aug 1997 16:41:48   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.1   31 Jul 1997 14:19:22   MH
-   chg: header
-
-      Rev 1.0   31 Jan 1997 13:31:56   OS
-   Initial revision.
-
-------------------------------------------------------------------------*/
 
 
 

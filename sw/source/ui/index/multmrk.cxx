@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multmrk.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-21 12:28:15 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,103 +125,5 @@ void SwMultiTOXMarkDlg::Apply()
 
 SwMultiTOXMarkDlg::~SwMultiTOXMarkDlg() {}
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:44  hr
-    initial import
-
-    Revision 1.28  2000/09/18 16:05:53  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.27  1997/11/05 11:43:50  OS
-    Segmentierung entfernt
-
-
-      Rev 1.26   05 Nov 1997 12:43:50   OS
-   Segmentierung entfernt
-
-      Rev 1.25   03 Nov 1997 13:20:56   MA
-   precomp entfernt
-
-      Rev 1.24   14 Nov 1996 15:34:12   TRI
-   includes
-
-      Rev 1.23   11 Nov 1996 10:55:34   MA
-   ResMgr
-
-      Rev 1.22   26 Jul 1996 21:04:22   MA
-   includes
-
-      Rev 1.21   06 Feb 1996 15:20:48   JP
-   Link Umstellung 305
-
-      Rev 1.20   24 Nov 1995 16:59:04   OM
-   PCH->PRECOMPILED
-
-      Rev 1.19   08 Nov 1995 13:47:00   OM
-   Change->Set
-
-      Rev 1.18   30 Aug 1995 14:07:02   MA
-   fix: sexport'iert
-
-      Rev 1.17   21 Aug 1995 09:36:02   MA
-   chg: swstddlg -> svxstandarddialog, Optimierungen
-
-      Rev 1.16   25 Oct 1994 18:18:46   ER
-   add: PCH
-
-      Rev 1.15   26 Feb 1994 02:03:52   ER
-   virt. dtor mit export
-
-      Rev 1.14   25 Feb 1994 22:07:08   ER
-   virtuellen dtor wegen export ueberladen
-
-      Rev 1.13   22 Feb 1994 14:39:38   ER
-   EXPORT --> SEXPORT
-
-      Rev 1.12   21 Feb 1994 22:39:20   ER
-   LINK EXPORT
-
-      Rev 1.11   17 Feb 1994 08:46:28   MI
-   SEG_FUNCDEFS ausgefuellt
-
-      Rev 1.10   16 Feb 1994 20:07:06   MI
-   SEG_FUNCDEFS ausgefuellt
-
-      Rev 1.9   16 Feb 1994 16:46:26   MI
-   Pragmas zurechtgerueckt
-
-      Rev 1.8   28 Jan 1994 11:43:50   MI
-   TCOV() entfernt, SW_... nach SEG_... umbenannt
-
-      Rev 1.7   13 Jan 1994 08:44:40   MI
-   Segmentierung per #define ermoeglicht
-
-      Rev 1.6   09 Jan 1994 21:12:12   MI
-   Provisorische Segmentierung
-
-      Rev 1.5   26 Sep 1993 18:42:02   MI
-   Segmentierung
-
-      Rev 1.4   28 May 1993 11:48:22   VB
-   Umstellung Precompiled Headers
-
-      Rev 1.3   26 May 1993 10:36:32   MS
-   Anpassung SwTOXMgr
-
-      Rev 1.2   27 Apr 1993 08:37:28   OK
-   NEU: #pragma hdrstop
-
-      Rev 1.1   26 Apr 1993 11:49:12   MS
-   Markentraveling aktiviert
-
-      Rev 1.0   25 Feb 1993 14:47:06   MS
-   Initial revision.
-
-      Rev 1.12   23 Feb 1993 13:42:18   MS
-   Form auswerten
-
-------------------------------------------------------------------------*/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatbase.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-27 15:49:44 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,122 +465,5 @@ inline const SvxCharReliefItem& SwTxtAttr::GetCharRelief() const
 }
 
 
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.13  2001/03/15 15:47:26  ama
-      Opt.: The new attribute handler makes a lot of code superfluous
-
-      Revision 1.12  2001/03/12 09:54:12  ama
-      New: Fontattribute relief
-
-      Revision 1.11  2001/03/06 16:05:31  ama
-      Chg by FME: Attribute handler
-
-      Revision 1.10  2001/03/05 13:50:48  jp
-      new: SvxCharReliefItem
-
-      Revision 1.9  2001/02/28 11:16:12  ama
-      New: RedlineAttr-flag public
-
-      Revision 1.8  2001/02/28 10:58:56  ama
-      New: RedlineAttr-flag
-
-      Revision 1.7  2001/02/15 20:10:39  jp
-      new character attribute: rotate and scalewidth
-
-      Revision 1.6  2000/11/16 21:29:02  jp
-      SwFmt2Lines moved to SVX and renamed
-
-      Revision 1.5  2000/11/06 10:46:50  jp
-      new flags for the SwTxtAttr
-
-      Revision 1.4  2000/11/02 17:26:48  jp
-      TwoLines as char and not as text attribute
-
-      Revision 1.3  2000/10/30 12:49:30  jp
-      new: EmphasisItem
-
-      Revision 1.2  2000/10/23 11:58:55  jp
-      new attributes Ruby and 2Lines
-
-      Revision 1.1.1.1  2000/09/18 17:14:28  hr
-      initial import
-
-      Revision 1.23  2000/09/18 16:03:31  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.22  2000/09/08 13:24:29  willem.vandorp
-      Header and footer replaced
-
-      Revision 1.21  2000/05/10 12:47:25  ama
-      Unicode changes
-
-      Revision 1.20  1999/12/07 21:09:51  jp
-      Task #70258#: textattr for XMLAttrContainer
-
-      Revision 1.19  1998/01/23 16:39:36  AMA
-      New: Redlining + Zeichenattribute
-
-
-      Rev 1.18   23 Jan 1998 17:39:36   AMA
-   New: Redlining + Zeichenattribute
-
-      Rev 1.17   04 Aug 1997 16:43:08   MH
-   chg: header
-
-      Rev 1.16   27 Sep 1996 14:21:12   JP
-   bDontExpand Flag in die TxtAttr-Basisklasse verschoben
-
-      Rev 1.15   17 Sep 1996 19:16:44   HJS
-   add: forward
-
-      Rev 1.14   17 Sep 1996 16:51:12   AMA
-   Chg: Zeichenhintergrund als Zeichenattribut
-
-      Rev 1.13   02 Aug 1996 14:50:20   AMA
-   New: INet-Felder werden zu attributiertem Text.
-
-      Rev 1.12   15 Jul 1996 17:16:24   AMA
-   Umbau: NoBlink -> Blink TXTATR -> CHRATR ...
-
-      Rev 1.11   04 Jul 1996 16:33:46   AMA
-   New: Aus dem NoLinebreak wird ein NoBlink-Attribut
-
-      Rev 1.10   24 Jun 1996 18:37:26   MA
-   includes
-
-      Rev 1.9   08 Aug 1995 17:23:26   AMA
-   Umbau: GetPresentation statt GetValueText
-
-      Rev 1.8   19 Jun 1995 16:50:54   MA
-   Umbau fuer daemliche Compiler
-
-      Rev 1.7   27 Jan 1995 17:39:36   AMA
-   Neues Textattribut: SvxAutoKernItem
-
-      Rev 1.6   06 Jan 1995 18:42:36   AMA
-   SEXPORT wg. DLL
-
-      Rev 1.5   02 Nov 1994 12:18:16   AMA
-   Reimport Absatzattr. als Svx (paraitem.hxx)
-   SvxSizeItem->SvxFontHeight (textitem.hxx)
-
-      Rev 1.4   14 Oct 1994 14:18:34   AMA
-   Umstellung auf SvxItems
-
-      Rev 1.3   07 Sep 1994 17:45:02   SWG
-   Umstellung Attribute
-
-      Rev 1.2   29 Aug 1994 19:30:38   JP
-   DTOR muss virtual sein.
-
-      Rev 1.1   29 Aug 1994 10:02:48   JP
-   Ist der Return-Wert eine Referenz, muss auch dereferenziert werden!
-
-      Rev 1.0   25 Aug 1994 16:54:32   JP
-   Umstellung Attribute (von SwHint -> SfxPoolItem)
-
-*************************************************************************/
     // #ifndef _TXATBASE_HXX
 #endif

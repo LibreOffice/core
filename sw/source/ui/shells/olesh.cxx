@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olesh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,90 +135,4 @@ SwOleShell::SwOleShell(SwView &rView) :
     SetHelpId(SW_OLESHELL);
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.35  2000/09/18 16:06:04  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.34  2000/05/26 07:21:32  os
-    old SW Basic API Slots removed
-
-    Revision 1.33  2000/05/16 09:15:14  os
-    project usr removed
-
-    Revision 1.32  2000/05/10 11:53:02  os
-    Basic API removed
-
-    Revision 1.31  2000/05/09 14:41:35  os
-    BASIC interface partially removed
-
-    Revision 1.30  2000/04/18 14:58:24  os
-    UNICODE
-
-    Revision 1.29  2000/02/11 14:57:36  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.28  1998/11/03 10:53:02  JP
-    Task #57916#: Vorbereitungen fuer den Selektionshandler vom Chart
-
-
-      Rev 1.27   03 Nov 1998 11:53:02   JP
-   Task #57916#: Vorbereitungen fuer den Selektionshandler vom Chart
-
-      Rev 1.26   24 Nov 1997 09:46:52   MA
-   includes
-
-      Rev 1.25   03 Nov 1997 13:55:48   MA
-   precomp entfernt
-
-      Rev 1.24   26 Aug 1997 16:31:10   TRI
-   VCL Anpassungen
-
-      Rev 1.23   08 Aug 1997 17:29:08   OM
-   Headerfile-Umstellung
-
-      Rev 1.22   05 Aug 1997 16:29:12   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.21   01 Aug 1997 11:45:44   MH
-   chg: header
-
-      Rev 1.20   11 Nov 1996 13:37:34   MA
-   ResMgr
-
-      Rev 1.19   28 Aug 1996 15:55:14   OS
-   includes
-
-      Rev 1.18   13 Aug 1996 12:38:40   OS
-   neue Shellnamen im IDL-Interface
-
-      Rev 1.17   25 Jun 1996 19:51:50   HJS
-   includes
-
-      Rev 1.16   20 Mar 1996 12:41:14   HJS
-   funcdefs muessen unique sein!
-
-      Rev 1.15   06 Feb 1996 15:16:22   OS
-   neu: Activate/Deactivate fuer Objekte
-
-      Rev 1.14   26 Jan 1996 10:54:12   OS
-   neu: GetState - Ole-Objekt dem Basic herausreichen
-
-      Rev 1.13   03 Dec 1995 11:22:08   OS
-   +include itemdef.hxx
-
-      Rev 1.12   29 Nov 1995 13:47:54   OS
-   -slotadd.hxx
-
-      Rev 1.11   27 Nov 1995 19:40:06   OM
-   swslots->303a
-
-      Rev 1.10   24 Nov 1995 16:59:36   OM
-   PCH->PRECOMPILED
-
-      Rev 1.9   17 Nov 1995 13:03:40   MA
-   Segmentierung
-
-------------------------------------------------------------------------*/
 

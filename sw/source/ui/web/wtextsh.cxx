@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wtextsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:51 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,64 +144,4 @@ SwWebTextShell::~SwWebTextShell()
 }
 
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.17  2000/09/18 16:06:20  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.16  2000/05/10 11:54:44  os
-    Basic API removed
-
-    Revision 1.15  2000/05/09 14:43:32  os
-    BASIC interface partially removed
-
-    Revision 1.14  2000/04/19 11:21:44  os
-    UNICODE
-
-    Revision 1.13  2000/02/01 10:00:38  os
-    #72282# SwWebBaseShell removed
-
-    Revision 1.12  2000/02/01 09:50:54  os
-    #72282# SwWebBaseShell removed
-
-    Revision 1.11  2000/01/31 20:19:38  jp
-    Bug #72455#,#72456# Text-PopupMenue moved into swmn.hrc, Web-Textshell with own PopupMenu
-
-    Revision 1.10  2000/01/18 11:57:17  os
-    #71740# interface inheritance corrected
-
-    Revision 1.9  1997/11/21 10:33:20  MA
-    includes
-
-
-      Rev 1.8   21 Nov 1997 11:33:20   MA
-   includes
-
-      Rev 1.7   03 Nov 1997 14:00:14   MA
-   precomp entfernt
-
-      Rev 1.6   03 Sep 1997 10:50:40   MBA
-   swslots.hxx statt wswslots.hxx
-
-      Rev 1.5   29 Aug 1997 12:05:54   MH
-   chg: header
-
-      Rev 1.4   05 Aug 1997 16:41:48   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.3   31 Jul 1997 14:19:20   MH
-   chg: header
-
-      Rev 1.2   28 Jan 1997 16:33:40   OS
-   Name der Shell geaendert
-
-      Rev 1.1   24 Jan 1997 14:55:54   OS
-   eigene TextToolBox
-
-      Rev 1.0   23 Jan 1997 16:18:08   OS
-   Initial revision.
-
-
-------------------------------------------------------------------------*/
 

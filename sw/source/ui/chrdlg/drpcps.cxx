@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-23 14:27:20 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,144 +655,5 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 }
 
 
-/*--------------------------------------------------
-  $Log: not supported by cvs2svn $
-  Revision 1.4  2002/07/23 10:36:23  oj
-  #101510# change colors to HC
-
-  Revision 1.3  2001/10/19 08:41:38  fme
-  Fix #92507#: Script and attribute changes inside drop caps
-
-  Revision 1.2  2001/05/30 16:28:21  fme
-  Fix #86988#: Redesign of dialogs
-
-  Revision 1.1.1.1  2000/09/18 17:14:32  hr
-  initial import
-
-  Revision 1.100  2000/09/18 16:05:14  willem.vandorp
-  OpenOffice header added.
-
-  Revision 1.99  2000/08/25 10:13:51  os
-  style listbox sorted
-
-  Revision 1.98  2000/07/03 10:33:17  os
-  #72742# resource warnings corrected
-
-  Revision 1.97  2000/07/03 08:04:44  os
-  #72742# resource warnings corrected
-
-  Revision 1.96  2000/04/20 12:54:31  os
-  GetName() returns String&
-
-  Revision 1.95  2000/04/11 08:03:22  os
-  UNICODE
-
-  Revision 1.94  2000/03/03 15:16:58  os
-  StarView remainders removed
-
-  Revision 1.93  2000/02/11 14:43:37  hr
-  #70473# changes for unicode ( patched by automated patchtool )
-
-  Revision 1.92  1999/11/16 17:11:59  os
-  use FillCharStyleListBox
-
-  Revision 1.91  1998/09/08 14:49:16  OS
-  #56134# Metric fuer Text und HTML getrennt
-
-
-      Rev 1.90   08 Sep 1998 16:49:16   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-      Rev 1.89   03 Apr 1998 17:06:10   OM
-   #49189 Korrekte Initialenvorschau
-
-      Rev 1.88   03 Apr 1998 16:59:36   OM
-   #49189 Korrekte Initialenvorschau
-
-      Rev 1.87   20 Mar 1998 17:43:28   OM
-   Ganzes Wort als Initialie
-
-      Rev 1.86   12 Sep 1997 10:35:36   OS
-   ITEMID_* definiert
-
-      Rev 1.85   09 Sep 1997 13:33:42   OS
-   lokale class
-
-      Rev 1.84   04 Sep 1997 17:16:22   MA
-   includes
-
-      Rev 1.83   01 Sep 1997 13:25:16   OS
-   DLL-Umstellung
-
-      Rev 1.82   15 Aug 1997 12:12:34   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.81   09 Aug 1997 13:01:26   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.80   08 Aug 1997 17:29:40   OM
-   Headerfile-Umstellung
-
-      Rev 1.79   09 Jul 1997 17:20:50   HJS
-   includes
-
-      Rev 1.78   24 Feb 1997 17:19:44   OS
-   #36936# -> keine PoolId benutzen
-
-      Rev 1.77   19 Feb 1997 19:11:54   MA
-   fix: DropCap, Text per Item
-
-      Rev 1.76   11 Feb 1997 16:35:04   OS
-   Vorlagen in SvStringsISortDtor sortieren
-
-      Rev 1.75   11 Dec 1996 15:46:50   JP
-   neu: holen der HTML-CharVorlagen
-
-      Rev 1.74   11 Nov 1996 09:16:38   MA
-   ResMgr
-
-      Rev 1.73   30 Oct 1996 08:12:10   MA
-   includes
-
-      Rev 1.72   29 Oct 1996 17:36:42   HJS
-   includes
-
-      Rev 1.71   24 Oct 1996 17:07:14   JP
-   Optimierung: Find...ByName
-
-      Rev 1.70   23 Oct 1996 13:49:12   JP
-   SVMEM -> SVSTDARR Umstellung
-
-      Rev 1.69   02 Oct 1996 08:36:14   MA
-   Umstellung Enable/Disable
-
-      Rev 1.68   28 Aug 1996 08:59:10   OS
-   includes
-
-      Rev 1.67   25 Jun 1996 13:57:34   MA
-   atrpafnchxx entfernt
-
-      Rev 1.66   04 Apr 1996 13:38:54   OS
-   Bug 26699: neue Methode FillSet, die keine Aenderungen an der Shell vornimmt
-
-      Rev 1.65   22 Feb 1996 08:28:36   OS
-   Text beim Ausschalten zuruecksetzen
-
-      Rev 1.64   21 Feb 1996 12:41:44   OS
-   Dialog verschoenert, disable ist nicht mehr gleichbedeutend mit Inhalt loeschen
-
-      Rev 1.63   06 Feb 1996 15:18:40   JP
-   Link Umstellung 305
-
-      Rev 1.62   30 Jan 1996 22:52:14   JP
-   Bug #24974#: DropCaps-Text nie bei Vorlagen austauschen
-
-      Rev 1.61   23 Jan 1996 11:27:38   OS
-   richtige Reaktion auf Standard-Button im Formatdialog
-
-      Rev 1.60   28 Nov 1995 21:15:16   JP
-   UiSystem-Klasse aufgehoben, in initui/swtype aufgeteilt
-
---------------------------------------------------*/
 
 

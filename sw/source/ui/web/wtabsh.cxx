@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wtabsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:51 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,38 +117,5 @@ __EXPORT SwWebTableShell::~SwWebTableShell()
 {
 }
 
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.8  2000/09/18 16:06:20  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.7  2000/05/10 11:54:44  os
-    Basic API removed
-
-    Revision 1.6  2000/04/19 11:21:44  os
-    UNICODE
-
-    Revision 1.5  1997/11/21 10:33:20  MA
-    includes
-
-
-      Rev 1.4   21 Nov 1997 11:33:20   MA
-   includes
-
-      Rev 1.3   13 Nov 1997 11:38:44   TRI
-   includes wegen Internal Compiler Error umgestellt
-
-      Rev 1.2   03 Nov 1997 14:00:16   MA
-   precomp entfernt
-
-      Rev 1.1   05 Sep 1997 12:36:00   MH
-   chg: header
-
-      Rev 1.0   03 Sep 1997 14:51:20   MBA
-   Initial revision.
-
-------------------------------------------------------------------------*/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,86 +206,5 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
         ReleaseMouse();
     }
 }
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.30  2000/09/18 16:06:17  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.29  2000/09/07 15:59:34  os
-      change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-      Revision 1.28  2000/02/11 15:00:22  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.27  1998/03/10 14:35:06  OS
-      Textmarkenindex wieder selbst feststellen #47718#
-
-
-      Rev 1.26   10 Mar 1998 15:35:06   OS
-   Textmarkenindex wieder selbst feststellen #47718#
-
-      Rev 1.25   23 Feb 1998 07:20:24   OS
-   GetBookmark/ Cnt mit Bookmark-Flag
-
-      Rev 1.24   21 Nov 1997 12:10:14   MA
-   includes
-
-      Rev 1.23   03 Nov 1997 13:59:22   MA
-   precomp entfernt
-
-      Rev 1.22   29 Aug 1997 15:57:30   OS
-   PopupMenu::Execute mit Window* fuer VCL
-
-      Rev 1.21   29 Aug 1997 13:36:12   OS
-   DLL-Umbau
-
-      Rev 1.20   08 Aug 1997 17:25:24   OM
-   Headerfile-Umstellung
-
-      Rev 1.19   09 Jul 1997 17:45:30   HJS
-   includes
-
-      Rev 1.18   14 Jan 1997 09:37:30   TRI
-   includes
-
-      Rev 1.17   23 Oct 1996 13:49:32   JP
-   SVMEM -> SVSTDARR Umstellung
-
-      Rev 1.16   28 Aug 1996 15:42:46   OS
-   includes
-
-      Rev 1.15   24 Jul 1996 13:49:56   OS
-   PCH nachgeruestet
-
-      Rev 1.14   26 Jun 1996 15:04:02   OS
-   Aufruf von Dispatcher.Execute an 324 angepasst
-
-      Rev 1.13   01 Feb 1996 19:07:02   JP
-   BookmarkControl::Command: ans PopUp die Pos im Bookmark-Array uebergeben, nicht die laufende!
-
-      Rev 1.12   17 Nov 1995 12:47:52   MA
-   Segmentierung
-
-      Rev 1.11   13 Nov 1995 20:46:10   JP
-   Ptrarr gegen SvUShortArr ausgetauscht
-
-      Rev 1.10   07 Nov 1995 18:04:16   MA
-   opt/fix/chg: statics und segs
-
-      Rev 1.9   17 Oct 1995 20:54:14   JP
-   IsMark oder IsBookmark am Bookmark benutzen
-
-      Rev 1.8   06 Oct 1995 00:20:14   HJS
-   pState => eState
-
-      Rev 1.7   05 Oct 1995 18:41:12   OM
-   StateChanged umgestellt
-
-      Rev 1.6   09 Aug 1995 19:15:18   OS
-   Umstellung auf CommandHdl
-
-*************************************************************************/
 
 

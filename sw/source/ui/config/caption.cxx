@@ -2,9 +2,9 @@
  *
  *  $RCSfile: caption.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,26 +213,4 @@ SvStream& operator<<( SvStream& rOStream, const InsCaptionOpt& rCapOpt )
     return rOStream;
 }
 
-/*--------------------------------------------------------------------
 
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2000/09/18 16:05:15  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.4  2000/04/11 08:02:23  os
-    UNICODE
-
-    Revision 1.3  1999/06/09 08:49:44  OS
-    #66732# Insert caption: copy border and shadow optionally
-
-
-      Rev 1.2   09 Jun 1999 10:49:44   OS
-   #66732# Insert caption: copy border and shadow optionally
-
-      Rev 1.1   17 Nov 1998 10:50:12   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.0   06 Nov 1998 17:01:32   OM
-   Initial revision.
-
- --------------------------------------------------------------------*/

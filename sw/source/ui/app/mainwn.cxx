@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mainwn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,139 +205,5 @@ void RescheduleProgress( SwDocShell *pDocShell )
             pProgress->pProgress->Reschedule();
     }
 }
-
-/************************************************************************
-    $Log: not supported by cvs2svn $
-    Revision 1.44  2000/09/18 16:05:11  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.43  2000/02/11 14:42:46  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.42  2000/01/17 14:06:30  jp
-    Bug #71812#: SetProgress call operator==() and not operator=()
-
-    Revision 1.41  2000/01/05 18:21:57  jp
-    Bug #71524#: EndProgress call operator==() and not operator=()
-
-    Revision 1.40  1999/06/29 07:43:54  MA
-    enable wait cursor
-
-
-      Rev 1.39   29 Jun 1999 09:43:54   MA
-   enable wait cursor
-
-      Rev 1.38   28 Jun 1999 14:15:00   MA
-   Blocking of Progress limited to one Document
-
-      Rev 1.37   29 Jun 1998 17:16:14   MA
-   #46809# Nachdem der SFX seinen Service noch immer nicht liefert der
-   Hack jetzt auch in der aktuellen Version.
-
-      Rev 1.36   28 Nov 1997 11:02:30   TJ
-   include
-
-      Rev 1.35   24 Nov 1997 14:22:44   MA
-   includes
-
-      Rev 1.34   09 Sep 1997 11:35:58   OS
-   SwMainWin ueberfluessig
-
-      Rev 1.33   01 Sep 1997 13:08:08   OS
-   DLL-Umstellung
-
-      Rev 1.32   08 Aug 1997 17:26:58   OM
-   Headerfile-Umstellung
-
-      Rev 1.31   06 Aug 1997 11:02:24   TRI
-   GetpApp statt pApp
-
-      Rev 1.30   13 Feb 1997 10:27:38   TRI
-   includes
-
-      Rev 1.29   10 Jan 1997 18:37:58   MA
-   fix: Progress nicht zerstoren fuer Embedded
-
-      Rev 1.28   14 Nov 1996 15:15:26   TRI
-   includes
-
-      Rev 1.27   08 Nov 1996 19:39:32   MA
-   ResMgr
-
-      Rev 1.26   09 Oct 1996 17:55:28   MA
-   Progress
-
-      Rev 1.25   29 Jul 1996 19:37:40   MA
-   includes
-
-      Rev 1.24   29 Feb 1996 12:55:52   OS
-   im Close wird jetzt auch der ChartAutoPilot geschlossen
-
-      Rev 1.23   14 Dec 1995 19:55:54   MIB
-   neue Funktion Reschedule
-
-      Rev 1.22   24 Nov 1995 16:56:50   OM
-   PCH->PRECOMPILED
-
-      Rev 1.21   22 Aug 1995 20:22:14   JP
-   ueberfluessige includes entfernt
-
-      Rev 1.20   15 Aug 1995 19:20:54   JP
-   neu: IsEmbeddedFlag an SwWriterApp - keinen Progressbar anzeigen
-
-      Rev 1.19   14 Aug 1995 18:26:44   MD
-   SfxProgress-ctor erhaelt keinen ViewFrame mehr
-
-      Rev 1.18   09 Aug 1995 21:41:34   ER
-   static vor seg_eofglobals
-
-      Rev 1.17   01 Aug 1995 19:35:22   OS
-   StartWert fuer Progress auf 0 normalisieren
-
-      Rev 1.16   20 Jul 1995 12:01:02   OS
-   RechenleistenChildWindow im Close abschalten
-
-      Rev 1.15   19 Jul 1995 17:31:12   OS
-   Rechenleiste nicht mehr am Doc
-
-      Rev 1.14   11 Jul 1995 15:43:58   OS
-   Close ueberladen, um rechenleiste zu schliessen
-
-      Rev 1.13   09 May 1995 11:29:44   OS
-   -Disable/EnableCmdInterface
-
-      Rev 1.12   08 May 1995 11:59:44   JP
-   StatLineSetPercent: auf 0 - Pointer abfragen
-
-      Rev 1.11   21 Apr 1995 19:04:10   JP
-   BugId 12042: doppeltes Loeschen vom Pointer verhindern!
-
-      Rev 1.10   11 Apr 1995 12:44:00   OS
-   noch ein paar Kleinigkeiten
-
-      Rev 1.9   07 Apr 1995 18:10:12   OS
-   Rest auskommentiert
-
-      Rev 1.8   07 Apr 1995 14:30:22   OS
-   +SfxProgress
-
-      Rev 1.7   26 Feb 1995 18:49:44   MA
-   Laufbalken reanimiert.
-
-      Rev 1.6   23 Feb 1995 22:18:00   ER
-   sexport
-
-      Rev 1.5   09 Jan 1995 16:06:34   ER
-    del: globals hrc, app hrc
-
-      Rev 1.4   25 Oct 1994 14:38:28   ER
-   add: PCH
-
-      Rev 1.3   20 Sep 1994 11:34:06   VB
-   GetStarWriter inline, Flags nach swapp
-
-      Rev 1.2   19 Sep 1994 15:25:00   MS
-   Fix fuers Update
-************************************************************************/
 
 

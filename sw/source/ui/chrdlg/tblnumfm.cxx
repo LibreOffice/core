@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblnumfm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-12 17:51:14 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,32 +102,4 @@ SwNumFmtDlg::~SwNumFmtDlg()
 {
 }
 
-/*************************************************************************
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:32  hr
-      initial import
-
-      Revision 1.5  2000/09/18 16:05:15  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.4  1998/02/25 11:39:14  TJ
-      include
-
-
-      Rev 1.3   25 Feb 1998 12:39:14   TJ
-   include
-
-      Rev 1.2   21 Nov 1997 12:24:36   MA
-   includes
-
-      Rev 1.1   03 Nov 1997 13:10:22   MA
-   precomp entfernt
-
-      Rev 1.0   14 Feb 1997 18:05:02   OM
-   Initial revision.
-
-*************************************************************************/
 

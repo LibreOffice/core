@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-07 09:45:31 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1227,115 +1227,5 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         }
     }
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.22  2002/10/25 10:49:23  os
-    #104489# enable Ctrl+Enter to insert a columned frame via keyboard
-
-    Revision 1.21  2002/10/18 13:33:36  gt
-    #90974# SwTextShell::ExecInsert(): set context @ SvxPluginFileDlg for SID_INSERT_SOUND & SID_INSERT_VIDEO
-
-    Revision 1.20  2002/09/11 12:40:19  os
-    #101516# set correct default border distance
-
-    Revision 1.19  2002/08/08 14:20:54  os
-    #98614# insert default frame via Ctrl+Return
-
-    Revision 1.18  2002/08/07 11:39:35  os
-    #100781# insert/frame recordable
-
-    Revision 1.17  2002/07/03 16:58:10  mba
-    #100782#: recording for InsertTable
-
-    Revision 1.16  2002/07/01 09:07:34  mba
-    #100784#: recording paramaters
-
-    Revision 1.15  2002/06/14 07:56:50  mba
-    #100266#: recording
-
-    Revision 1.14  2002/05/06 07:15:01  os
-    #98428# recording of text input re-implemented
-
-    Revision 1.13  2002/04/05 14:18:34  os
-    #96840# decrease use of open files
-
-    Revision 1.12  2002/02/01 12:47:56  jp
-    Task #92291#: add new character skip modifier
-
-    Revision 1.11  2001/10/25 15:37:10  ka
-    #93596#: SvxPluginFileDialog returns an error code
-
-    Revision 1.10  2001/10/08 13:02:30  jp
-    Task #87333#: remove unused code
-
-    Revision 1.9  2001/09/28 16:53:33  jp
-    Bug #85610#: InsertSymbol - set always the attributes for all scripts of the inserted text
-
-    Revision 1.8  2001/07/24 07:53:46  os
-    #90122# ruby dialog registered at the thext shell instead of the view
-
-    Revision 1.7  2001/05/15 09:59:40  os
-    #86986# SfxFileDialog/SvxImportGraphicDialog removed
-
-    Revision 1.6  2001/02/27 14:38:37  jp
-    move transliteration menu into SVX
-
-    Revision 1.5  2001/01/04 17:22:20  hr
-    #65293#: typo
-
-    Revision 1.4  2000/12/21 13:01:55  jp
-    new: transliteration
-
-    Revision 1.3  2000/11/14 18:32:27  jp
-    use moduleoptions
-
-    Revision 1.2  2000/10/05 12:27:50  jp
-    should change: remove image
-
-    Revision 1.1.1.1  2000/09/18 17:14:47  hr
-    initial import
-
-    Revision 1.356  2000/09/18 16:06:06  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.355  2000/09/08 08:12:52  os
-    Change: Set/Toggle/Has/Knows/Show/GetChildWindow
-
-    Revision 1.354  2000/08/17 11:40:16  jp
-    remove the SW graphicmanager
-
-    Revision 1.353  2000/08/07 20:40:21  jp
-    ExectInsert: don't insert a softhyphen behind/befor another sofhyphen
-
-    Revision 1.352  2000/08/04 10:54:23  jp
-    Soft-/HardHyphens & HardBlanks changed from attribute to unicode character; remove unused methods
-
-    Revision 1.351  2000/07/26 16:27:20  jp
-    Bug #77158#: remove the unused code
-
-    Revision 1.350  2000/07/07 13:24:57  jp
-    must changes VCL
-
-    Revision 1.349  2000/06/27 17:43:21  jp
-    Bug #76332#: internal SplitNode don't insert a new node before a table
-
-    Revision 1.348  2000/06/26 13:17:56  os
-    INetURLObject::SmartRelToAbs removed
-
-    Revision 1.347  2000/06/20 14:49:23  os
-    #70060# less occurences of columns in HTML
-
-    Revision 1.346  2000/05/26 07:21:33  os
-    old SW Basic API Slots removed
-
-    Revision 1.345  2000/05/10 11:53:02  os
-    Basic API removed
-
-    Revision 1.344  2000/05/09 14:41:35  os
-    BASIC interface partially removed
-
-------------------------------------------------------------------------*/
 
 

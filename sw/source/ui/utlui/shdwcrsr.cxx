@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shdwcrsr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,32 +165,6 @@ Rectangle SwShadowCursor::GetRect() const
     return pWin->PixelToLogic( Rectangle( aPt, aSz ) );
 }
 
-/*************************************************************************
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.5  2000/09/18 16:06:19  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.4  2000/02/11 15:00:59  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.3  1999/09/20 10:45:53  os
-      Color changes
-
-      Revision 1.2  1997/11/03 15:10:26  JP
-      neu: Optionen/-Page/Basic-Schnittst. fuer ShadowCursor
-
-
-      Rev 1.1   03 Nov 1997 16:10:26   JP
-   neu: Optionen/-Page/Basic-Schnittst. fuer ShadowCursor
-
-      Rev 1.0   24 Oct 1997 18:31:58   JP
-   Cursor fuers Einfuegen an beliebiger Position
-
-
-*************************************************************************/
 
 
 

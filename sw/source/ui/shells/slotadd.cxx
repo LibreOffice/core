@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 08:16:51 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,141 +325,5 @@
 #pragma code_seg()
 #endif
 
-/*-------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.13  2002/07/01 09:04:55  mba
-    #100784#: recording paramaters
-
-    Revision 1.12  2002/06/27 08:47:16  mba
-    #100714#: macro recording
-
-    Revision 1.11  2002/06/14 07:56:03  mba
-    #100081#: some new slots for attributes
-
-    Revision 1.10  2002/06/10 17:07:37  mba
-    #100118#: new items used for recording
-
-    Revision 1.9  2002/05/27 14:48:39  mba
-    #98405#: Slots reorganized
-
-    Revision 1.8  2002/04/25 14:56:31  os
-    #97499# support for SID_IMAGE_ORIENTATION implemented
-
-    Revision 1.7  2001/04/09 07:28:09  tl
-    include for SfxStringListItem added
-
-    Revision 1.6  2001/03/30 14:56:18  tl
-    include for clipfmtitem.hxx added
-
-    Revision 1.5  2000/12/02 15:23:54  jp
-    Task #80752#: integrate the grafik filter
-
-    Revision 1.4  2000/11/10 15:46:52  tbe
-    removed outcommented basctl include file idetemp.hxx
-
-    Revision 1.3  2000/10/31 16:06:37  hr
-    #65293#: includes
-
-    Revision 1.2  2000/10/23 10:51:17  tbe
-    idetemp.hxx include removed
-
-    Revision 1.1.1.1  2000/09/18 17:14:47  hr
-    initial import
-
-    Revision 1.36  2000/09/18 16:06:05  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.35  2000/09/04 11:44:07  tbe
-    basicide, isetbrw, si, vcdlged moved from svx to basctl
-
-    Revision 1.34  2000/08/02 08:04:34  jp
-    changes for graphic attributes
-
-    Revision 1.33  2000/07/31 19:25:39  jp
-    new attributes for CJK/CTL and graphic
-
-    Revision 1.32  1999/09/24 14:38:32  os
-    hlnkitem.hxx now in SVX
-
-    Revision 1.31  1998/04/23 10:30:04  OS
-    PageLeft/Right/Top/BottomMargin #49761#
-
-
-      Rev 1.30   23 Apr 1998 12:30:04   OS
-   PageLeft/Right/Top/BottomMargin #49761#
-
-      Rev 1.29   29 Nov 1997 15:52:54   MA
-   includes
-
-      Rev 1.28   24 Nov 1997 09:47:06   MA
-   includes
-
-      Rev 1.27   03 Nov 1997 13:55:42   MA
-   precomp entfernt
-
-      Rev 1.26   15 Aug 1997 11:48:38   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.25   11 Aug 1997 10:06:46   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.24   05 Aug 1997 16:29:08   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.23   11 Apr 1997 10:34:48   TRI
-   includes
-
-      Rev 1.22   07 Apr 1997 16:45:24   OM
-   HyperlinkItem recorden
-
-      Rev 1.21   28 Feb 1997 12:47:12   MH
-   Segmentierug mit WorkingSetTuner nun moeglich
-
-      Rev 1.20   18 Feb 1997 16:56:40   OM
-   dbcoll.hxx eingetragen
-
-      Rev 1.19   11 Dec 1996 20:12:26   NF
-   SvxDrawBezierItem dazu...
-
-      Rev 1.18   19 Sep 1996 14:07:24   JP
-   eigenes Segment fuer statische Objecte
-
-      Rev 1.17   28 Aug 1996 15:55:04   OS
-   includes
-
-      Rev 1.16   15 Aug 1996 18:17:16   OS
-   URL als Attribut - auch fuer die API
-
-      Rev 1.15   26 Mar 1996 10:07:22   OS
-   neu: SvxGraphicSizeItem-dummy
-
-      Rev 1.14   25 Mar 1996 13:35:36   OS
-   dummy SwPageSizeItem definiert
-
-      Rev 1.13   21 Mar 1996 11:41:56   MA
-   Umstellung SV311
-
-      Rev 1.12   07 Mar 1996 08:08:54   OS
-   jetzt auch mit PCH
-
-      Rev 1.11   26 Jan 1996 11:20:40   OS
-   +include sfxshobj.hxx
-
-      Rev 1.10   16 Jan 1996 16:26:56   OS
-   neu: SwShadowItem(nur ueberdefiniertes SvxShadowItem)
-
-      Rev 1.9   08 Jan 1996 15:14:08   OS
-   +include frmatr.hxx
-
-      Rev 1.8   22 Dec 1995 15:09:20   OS
-   +include adritem.hxx
-
-      Rev 1.7   07 Dec 1995 18:25:56   OM
-   Define fuer Enum-Slot
-
-      Rev 1.6   04 Dec 1995 16:09:40   OS
-   includes geaendert
-
- -------------------------------------------------------------------------*/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-05-27 13:02:31 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,152 +296,6 @@ void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
     else
         rSet.Put(pSdrView->GetDefaultAttr());
 }
-
-/*************************************************************************
-
-      Source Code Control System - History
-
-      $Log: not supported by cvs2svn $
-      Revision 1.2  2001/06/12 10:10:21  os
-      #87794# action block moved behind Execute()
-
-      Revision 1.1.1.1  2000/09/18 17:14:46  hr
-      initial import
-
-      Revision 1.85  2000/09/18 16:06:03  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.84  2000/09/07 15:59:28  os
-      change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-      Revision 1.83  2000/07/14 14:41:26  ama
-      Fix #75805#: Start/EndAction prevents from performanceproblems
-
-      Revision 1.82  2000/05/26 07:21:32  os
-      old SW Basic API Slots removed
-
-      Revision 1.81  2000/02/11 14:57:07  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.80  1999/06/21 13:20:24  JP
-      Interface changes: SdrView::GetAttributes
-
-
-      Rev 1.79   21 Jun 1999 15:20:24   JP
-   Interface changes: SdrView::GetAttributes
-
-      Rev 1.78   29 Nov 1997 15:54:02   MA
-   includes
-
-      Rev 1.77   24 Nov 1997 09:46:54   MA
-   includes
-
-      Rev 1.76   02 Sep 1997 13:23:16   OS
-   includes
-
-      Rev 1.75   01 Sep 1997 13:27:30   OS
-   DLL-Umstellung
-
-      Rev 1.74   26 Aug 1997 16:13:08   TRI
-   VCL Anpassungen
-
-      Rev 1.73   07 Apr 1997 17:42:54   MH
-   chg: header
-
-      Rev 1.72   23 Jan 1997 10:45:50   OM
-   Neue Shells: Control- und DrawBaseShell
-
-      Rev 1.71   22 Jan 1997 11:35:56   OM
-   Neuer Parameter fuer SvxAreaTabDialog
-
-      Rev 1.70   22 Jan 1997 11:20:50   OM
-   Neue Shells: DrawBaseShell und DrawControlShell
-
-      Rev 1.69   13 Jan 1997 15:56:10   OM
-   Bezier-Punkte loeschen
-
-      Rev 1.68   08 Jan 1997 12:48:56   OM
-   Neue Segs
-
-      Rev 1.67   08 Jan 1997 12:47:20   OM
-   Aenderungen fuer Bezier-Shell
-
-      Rev 1.66   20 Dec 1996 13:22:18   MA
-   includes
-
-      Rev 1.65   13 Dec 1996 12:19:10   OM
-   Bezier-Controller Status und Execute
-
-      Rev 1.64   29 Nov 1996 10:57:42   OM
-   #33865# Fehlende Draw-Attribute gesetzt
-
-      Rev 1.63   28 Nov 1996 16:32:32   OM
-   Malattribute nur ohne selektiertes Objekt als Default setzen
-
-      Rev 1.62   28 Nov 1996 13:07:44   OM
-   #33823# Dok-Switch bei Draw-Dialogen unterbunden
-
-      Rev 1.61   27 Nov 1996 16:15:08   OM
-   #33427# Zeichenobjekte: automatischer Layerwechsel je nach Umlaufart
-
-      Rev 1.60   27 Nov 1996 10:05:18   OM
-   #33627# SetGeoAttr durch SetAttributes ersetzt
-
-      Rev 1.59   19 Nov 1996 15:55:20   NF
-   clooks...
-
-      Rev 1.58   15 Nov 1996 13:34:00   OS
-   SvxTextTabDialog angebunden
-
-      Rev 1.57   08 Nov 1996 15:59:24   OM
-   Schuetzen neu organisiert, transparenz im Draw-Mode
-
-      Rev 1.56   29 Oct 1996 17:21:48   OM
-   Abstaende auch im Drawmode
-
-      Rev 1.55   23 Oct 1996 20:04:46   OM
-   Drawobjekt Textumfluss-Dlg
-
-      Rev 1.54   23 Oct 1996 13:04:46   OS
-   DontDeleteColorTable am SvxAreaTabDialog ruen
-
-      Rev 1.53   01 Oct 1996 16:54:00   OM
-   Hyperlinks editieren
-
-      Rev 1.52   28 Aug 1996 15:55:02   OS
-   includes
-
-      Rev 1.51   15 Aug 1996 13:44:20   JP
-   svdraw.hxx entfernt
-
-      Rev 1.50   31 May 1996 11:01:36   NF
-   CLOOKS
-
-      Rev 1.49   29 May 1996 13:05:26   OS
-   headerstop wieder vor den Win31-defines
-
-      Rev 1.48   29 May 1996 09:49:00   TRI
-   CLOOKS
-
-      Rev 1.47   21 May 1996 16:57:12   AMA
-   Fix: Start+EndAction nach dem DrawDialog.
-
-      Rev 1.46   21 May 1996 08:50:42   NF
-   CLOOKS
-
-      Rev 1.45   14 May 1996 15:17:06   HJS
-   CLOOKS
-
-      Rev 1.44   10 May 1996 15:57:18   OS
-   Zeichenbindung an Drawobjekten
-
-      Rev 1.43   30 Apr 1996 13:45:18   OS
-   veraenderter TransformDlg ab 315
-
-      Rev 1.42   07 Mar 1996 14:55:58   HJS
-   2 defines zu viel
-
-*************************************************************************/
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshdrw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-18 15:56:56 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,71 +129,5 @@ void  SwDocShell::InitDraw()
         PutItem( SvxColorTableItem( OFF_APP()->GetStdColorTable() ));
 }
 
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2001/06/26 14:16:04  jp
-    Bug #87795#: remove old code
-
-    Revision 1.1.1.1  2000/09/18 17:14:31  hr
-    initial import
-
-    Revision 1.18  2000/09/18 16:05:10  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.17  2000/02/09 10:14:12  os
-    #72716# set hyphenator and language at the DrawOutliner
-
-    Revision 1.16  1997/11/29 15:04:46  MA
-    includes
-
-
-      Rev 1.15   29 Nov 1997 16:04:46   MA
-   includes
-
-      Rev 1.14   24 Nov 1997 14:22:50   MA
-   includes
-
-      Rev 1.13   03 Sep 1997 15:53:54   OS
-   DLL-Umbau
-
-      Rev 1.12   14 Aug 1996 12:00:56   JP
-   svdraw.hxx entfernt
-
-      Rev 1.11   29 Jul 1996 19:37:38   MA
-   includes
-
-      Rev 1.10   07 Mar 1996 12:09:58   HJS
-   2 defines zu viel
-
-      Rev 1.9   07 Dec 1995 08:07:08   SWG
-   clooks
-
-      Rev 1.8   05 Dec 1995 09:17:10   JP
-   InitDraw: keine Parameter mehr
-
-      Rev 1.7   24 Nov 1995 16:56:52   OM
-   PCH->PRECOMPILED
-
-      Rev 1.6   17 Nov 1995 19:15:50   OS
-   ColorTable immer von der App
-
-      Rev 1.5   07 Nov 1995 15:25:50   AMA
-   Fix: ColorTable an der DocShell setzen.
-
-      Rev 1.4   03 Nov 1995 19:27:56   AMA
-   Opt.StartUp: DrawView/Model erst bei Bedarf.
-
-      Rev 1.3   22 Aug 1995 09:00:00   MA
-   svxitems-header entfernt
-
-      Rev 1.2   09 Aug 1995 16:39:14   MA
-   drawing-undo-header rein
-
-      Rev 1.1   21 Mar 1995 02:23:32   ER
-   _svdorect_hxx definiert => _svdcapt_hxx definieren
-
-      Rev 1.0   13 Feb 1995 12:20:30   MS
-   Initial revision.
-------------------------------------------------------------------------*/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoomctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,41 +135,6 @@ void SwZoomControl::Command( const CommandEvent& rCEvt )
         SvxZoomStatusBarControl::Command(rCEvt);
 }
 
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.9  2000/09/18 16:06:19  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.8  2000/02/11 15:01:17  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.7  1997/11/21 11:10:18  MA
-      includes
-
-
-      Rev 1.6   21 Nov 1997 12:10:18   MA
-   includes
-
-      Rev 1.5   03 Nov 1997 13:59:24   MA
-   precomp entfernt
-
-      Rev 1.4   05 Sep 1997 12:23:06   MH
-   chg: header
-
-      Rev 1.3   06 Aug 1997 11:13:02   MH
-   chg: header
-
-      Rev 1.2   18 Jun 1996 16:59:44   OS
-   ui_pch includen
-
-      Rev 1.1   20 Mar 1996 13:42:54   HJS
-   einmal segmentc.hxx reicht
-
-      Rev 1.0   14 Jan 1996 15:30:32   OS
-   Initial revision.
-
-*************************************************************************/
 
 
 

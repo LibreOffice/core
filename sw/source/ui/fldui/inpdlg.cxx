@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:58:15 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,87 +246,4 @@ IMPL_LINK(SwFldInputDlg, NextHdl, PushButton*, EMPTYARG)
     return 0;
 }
 
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.2  2000/10/24 11:38:19  jp
-      must change: use charclass instead of international
-
-      Revision 1.1.1.1  2000/09/18 17:14:37  hr
-      initial import
-
-      Revision 1.48  2000/09/18 16:05:30  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.47  2000/08/21 09:11:38  os
-      Set expression input fields: show formula or Expand() depending on the formula content
-
-      Revision 1.46  2000/03/31 08:00:44  jp
-      Bug #74639#: allow changes on InputFields in readonly regions
-
-      Revision 1.45  2000/02/11 14:46:53  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.44  1999/01/20 15:56:58  JP
-      Task #58677#: Crsr in Readonly Bereichen zulassen
-
-
-      Rev 1.43   20 Jan 1999 16:56:58   JP
-   Task #58677#: Crsr in Readonly Bereichen zulassen
-
-      Rev 1.42   17 Dec 1997 17:58:46   OM
-   Datumsformate fuer SetExpFields
-
-      Rev 1.41   03 Nov 1997 13:18:10   MA
-   precomp entfernt
-
-      Rev 1.40   02 Oct 1997 15:21:44   OM
-   Feldumstellung
-
-      Rev 1.39   23 Jul 1997 20:25:54   HJS
-   includes
-
-      Rev 1.38   11 Nov 1996 09:56:08   MA
-   ResMgr
-
-      Rev 1.37   24 Oct 1996 13:36:22   JP
-   String Umstellung: [] -> GetChar()
-
-      Rev 1.36   30 Aug 1996 12:43:16   OS
-   InputFldDlg mit Next-Button
-
-      Rev 1.35   28 Aug 1996 12:10:58   OS
-   includes
-
-      Rev 1.34   01 Aug 1996 10:59:16   AMA
-   New: Eingabe-Felder mit Zeilenumbruechen
-
-      Rev 1.33   04 Jun 1996 18:41:52   JP
-   bei GetFldType wurden die Parameter getauscht
-
-      Rev 1.32   02 Apr 1996 14:32:34   OS
-   *_cxx - define hinter hdrstop
-
-      Rev 1.31   24 Nov 1995 16:57:42   OM
-   PCH->PRECOMPILED
-
-      Rev 1.30   08 Nov 1995 13:45:34   OM
-   Change->Set
-
-      Rev 1.29   30 Aug 1995 13:53:30   MA
-   fix: sexport'iert
-
-      Rev 1.28   21 Aug 1995 09:24:36   MA
-   chg: swstddlg -> svxstandarddialog, Optimierungen
-
-      Rev 1.27   18 Jan 1995 18:54:20   ER
-   fld.hxx -> *fld*.hxx
-
-      Rev 1.26   25 Oct 1994 17:57:02   ER
-   add: PCH
-
-      Rev 1.25   17 Oct 1994 16:24:58   PK
-   ausgeboxtes wieder reingeboxt
-
-*************************************************************************/
 

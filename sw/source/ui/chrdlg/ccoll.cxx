@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 08:25:36 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,85 +520,5 @@ const CommandStruct* SwCondCollItem::GetCmds()
 }
 
 
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.3  2001/06/01 10:35:45  fme
-      Fix #86988#: Redesign of dialogs
-
-      Revision 1.2  2001/02/09 07:43:05  os
-      TabPage size changed
-
-      Revision 1.1.1.1  2000/09/18 17:14:32  hr
-      initial import
-
-      Revision 1.21  2000/09/18 16:05:13  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.20  2000/04/20 12:54:31  os
-      GetName() returns String&
-
-      Revision 1.19  2000/02/11 14:43:33  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.18  1999/05/06 07:52:58  OS
-      #65847# Font an der TabListBox nicht aendern
-
-
-      Rev 1.17   06 May 1999 09:52:58   OS
-   #65847# Font an der TabListBox nicht aendern
-
-      Rev 1.16   10 Jul 1998 13:46:30   MH
-   internal comp.err
-
-      Rev 1.15   21 Jan 1998 17:57:38   JP
-   neu: neue Bedinung - Endnote
-
-      Rev 1.14   17 Jan 1998 09:45:14   OS
-   Numerierung und Gliederung bis 10.
-
-      Rev 1.13   30 Sep 1997 15:53:30   TJ
-   include
-
-      Rev 1.12   01 Sep 1997 13:25:28   OS
-   DLL-Umstellung
-
-      Rev 1.11   09 Jul 1997 17:20:50   HJS
-   includes
-
-      Rev 1.10   06 Jun 1997 16:25:54   OS
-   im Reset ::Clear auch an der Vorlagen-Box rufen
-
-      Rev 1.9   05 Feb 1997 10:18:52   OM
-   FillItemSet in DeactivatePage rufen
-
-      Rev 1.8   14 Nov 1996 12:44:36   OS
-   DLG_STYLE_DESIGNER
-
-      Rev 1.7   14 Nov 1996 08:39:04   SWG
-   neu: RES_TEMPLATE_FAMILIES
-
-      Rev 1.6   11 Nov 1996 09:16:40   MA
-   ResMgr
-
-      Rev 1.5   02 Oct 1996 08:35:56   MA
-   Umstellung Enable/Disable
-
-      Rev 1.4   25 Sep 1996 11:20:32   PL
-   IRIX
-
-      Rev 1.3   23 Sep 1996 08:23:44   OS
-   keine GroupBox fuer Bedingungs-TabPage
-
-      Rev 1.2   18 Sep 1996 19:01:38   OS
-   neu: HScrollBars, Disable/Enable-Bug behoben
-
-      Rev 1.1   17 Sep 1996 16:19:18   OS
-   UI-Anpassung bedingte Vorlagen
-
-      Rev 1.0   06 Sep 1996 19:01:44   JP
-   TabPage fuer bedingte Vorlagen
-
-*************************************************************************/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-11-06 10:34:02 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,115 +718,5 @@ IMPL_LINK( SwFldFuncPage, ModifyHdl, Edit *, EMPTYARG )
 }
 
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2001/09/20 12:49:58  jp
-    Bug #89582#: handle field dialog activation correct
-
-    Revision 1.5  2001/07/17 08:48:51  tbe
-    #87307# remove external basctl dependencies
-
-    Revision 1.4  2001/07/11 17:08:58  jp
-    #89582#: look for the dropped content flag at ConditionEdit controls
-
-    Revision 1.3  2001/07/05 18:41:36  jp
-    changes for TF_DATA
-
-    Revision 1.2  2001/01/18 14:01:38  jp
-    new Field/-Type: combined character
-
-    Revision 1.1.1.1  2000/09/18 17:14:36  hr
-    initial import
-
-    Revision 1.28  2000/09/18 16:05:28  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.27  2000/09/04 11:43:02  tbe
-    basicide, isetbrw, si, vcdlged moved from svx to basctl
-
-    Revision 1.26  2000/06/30 08:52:52  os
-    #76541# string assertions removed
-
-    Revision 1.25  2000/05/23 18:36:44  jp
-    Bugfixes for Unicode
-
-    Revision 1.24  2000/04/18 15:17:31  os
-    UNICODE
-
-    Revision 1.23  2000/03/03 15:17:01  os
-    StarView remainders removed
-
-    Revision 1.22  1999/02/25 16:24:50  JP
-    Bug #62438#: UserData nur auswerten, wenn kein Refresh ist
-
-
-      Rev 1.21   25 Feb 1999 17:24:50   JP
-   Bug #62438#: UserData nur auswerten, wenn kein Refresh ist
-
-      Rev 1.20   21 Jan 1999 09:50:36   OS
-   #59900# Fussnoten im Dialog korrekt sortieren; keine prot. Member
-
-      Rev 1.19   12 Jan 1999 11:42:26   OS
-   #60579# ausgewaehlten Typ in den UserData speichern
-
-      Rev 1.18   10 Aug 1998 16:39:58   JP
-   Bug #54796#: neue NumerierungsTypen (WW97 kompatibel)
-
-      Rev 1.17   24 Jul 1998 13:57:08   OM
-   #53246# Makros vorselektieren
-
-      Rev 1.16   20 Jul 1998 11:31:00   OM
-   #53244# Makros beim Bearbeiten nicht zersemmeln
-
-      Rev 1.15   20 Jul 1998 09:38:52   OM
-   #53278# Flackern vermeiden
-
-      Rev 1.14   29 May 1998 16:41:18   OM
-   #50667# Makrofelder bearbeiten
-
-      Rev 1.13   18 May 1998 14:52:42   OM
-   #50001 Keine eckigen Klammern in DB-Condition-Fields
-
-      Rev 1.12   13 Mar 1998 16:30:42   OM
-   #48197# Focus nach MacroDlg greppen
-
-      Rev 1.11   07 Mar 1998 14:38:46   OM
-   Feld nur bei Aenderung aktualisieren
-
-      Rev 1.10   04 Mar 1998 08:37:50   MH
-   chg: Syntax
-
-      Rev 1.9   03 Feb 1998 09:24:58   OM
-   Test
-
-      Rev 1.8   02 Feb 1998 15:04:36   OM
-   #46781# Macrofelder auch ausfuehren, wenn Dateiname mehr als 1 Punkt enthaelt
-
-      Rev 1.7   09 Jan 1998 16:56:52   OM
-   Bei Dok-Wechsel updaten
-
-      Rev 1.6   08 Jan 1998 14:58:26   OM
-   Traveling
-
-      Rev 1.5   06 Jan 1998 18:12:54   OM
-   Felbefehl-Dlg
-
-      Rev 1.4   12 Dec 1997 16:10:06   OM
-   AutoUpdate bei FocusWechsel u.a.
-
-      Rev 1.3   11 Dec 1997 16:58:02   OM
-   Feldumstellung
-
-      Rev 1.2   25 Nov 1997 12:59:28   OM
-   Funktionen-TP
-
-      Rev 1.1   25 Nov 1997 12:38:42   OM
-   Funktionen-TP
-
-      Rev 1.0   04 Nov 1997 10:07:18   OM
-   Initial revision.
-
-------------------------------------------------------------------------*/
 
 

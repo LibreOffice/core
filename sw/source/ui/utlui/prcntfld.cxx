@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prcntfld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-16 09:35:39 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,89 +398,4 @@ long PercentField::Convert(long nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
     return ConvertValue(nValue, 0, nOldDigits, eInUnit, eOutUnit);
 }
 
-/*************************************************************************
-
-      Source Code Control System - History
-
-      $Log: not supported by cvs2svn $
-      Revision 1.2  2001/03/15 10:44:53  os
-      change: MetricFormatter::SetVaolue now virtual
-
-      Revision 1.1.1.1  2000/09/18 17:14:50  hr
-      initial import
-
-      Revision 1.21  2000/09/18 16:06:19  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.20  1997/11/07 15:38:34  OM
-      Aufgeraeumt
-
-
-      Rev 1.19   07 Nov 1997 16:38:34   OM
-   Aufgeraeumt
-
-      Rev 1.18   19 Sep 1997 11:06:54   OM
-   VCL: SetBaseValue an Basisklasse rufen!
-
-      Rev 1.17   06 Aug 1997 15:00:48   TRI
-   VCL: Anpassungen
-
-      Rev 1.16   04 Dec 1996 15:56:46   OS
-   SetValue stimmt wieder
-
-      Rev 1.15   02 Dec 1996 10:33:50   OS
-   im SetValue immer runden
-
-      Rev 1.14   28 Nov 1996 15:24:54   OM
-   #32021# Bei zu spaetem RefValue setzen: MetricField neu berechnen und anzeigen
-
-      Rev 1.13   07 Nov 1996 11:48:18   OM
-   Rundung verbessert
-
-      Rev 1.12   29 Oct 1996 17:21:02   OM
-   Rundung verbessert
-
-      Rev 1.11   11 Sep 1996 15:10:10   OM
-   SetMin korrigiert
-
-      Rev 1.10   10 Sep 1996 17:03:00   OM
-   Prozentfelder
-
-      Rev 1.9   09 Sep 1996 16:57:26   OM
-   Prozentuale Spalten
-
-      Rev 1.8   07 Sep 1996 13:47:38   OS
-   HACK fuer SetValue
-
-      Rev 1.7   17 Jul 1996 15:32:40   OM
-   Aufgeraeumt
-
-      Rev 1.6   17 Jul 1996 15:22:58   OM
-   Anfangswert in Prozent konvertieren
-
-      Rev 1.5   25 Jun 1996 17:11:50   OM
-   Relative Grafiken
-
-      Rev 1.4   20 Jun 1996 18:07:00   OM
-   Relative Rahmen
-
-      Rev 1.3   19 Jun 1996 17:46:02   OM
-   Relative Tabellenbreite
-
-      Rev 1.2   18 Jun 1996 16:27:54   OM
-   Neue Segs
-
-      Rev 1.1   18 Jun 1996 16:27:10   OM
-   Relative Tabellenbreite
-
-      Rev 1.0   17 Jun 1996 15:07:32   OM
-   Initial revision.
-
-      Rev 1.1   17 Jun 1996 15:03:54   OM
-   Neue Segs
-
-      Rev 1.0   17 Jun 1996 15:02:10   OM
-   Initial revision.
-
-*************************************************************************/
 
