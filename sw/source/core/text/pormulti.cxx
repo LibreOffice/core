@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-18 12:17:03 $
+ *  last change: $Author: fme $ $Date: 2002-11-18 14:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2537,7 +2537,7 @@ SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
 
         // For a BidiPortion we have to calculate the offset from the
         // end of the portion
-        if ( pMulti->IsBidi() )
+        if ( nX && pMulti->IsBidi() )
             nX = pTxtCursor->pCurr->Width() - nX;
     }
 #else
