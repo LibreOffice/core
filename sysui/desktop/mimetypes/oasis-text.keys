@@ -1,10 +1,10 @@
-application/x-vnd.oasis.openoffice.text
-	description=Open Office Text
+application/vnd.oasis.opendocument.text
+	description=OpenDocument Text
 	default_action_type=application
 	short_list_application_ids_for_novice_user_level=openoffice,staroffice,starsuite
 	short_list_application_ids_for_intermediate_user_level=openoffice,staroffice,starsuite
 	short_list_application_ids_for_advanced_user_level=openoffice,staroffice,starsuite
 	category=Documents/Word Processor
 	use_category_default=yes
-	icon_filename=text
+	icon_filename=oasis-text
 

@@ -2,8 +2,8 @@
 Version=1.0
 Encoding=UTF-8
 Hidden=false
-Icon=text
+Icon=oasis-text
 Type=MimeType
-Patterns=*.oot
-MimeType=application/x-vnd.oasis.openoffice.text
-Comment=Open Office Text
+Patterns=*.odt
+MimeType=application/vnd.oasis.opendocument.text
+Comment=OpenDocument Text
