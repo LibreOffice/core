@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 13:18:02 $
+ *  last change: $Author: fs $ $Date: 2001-12-10 14:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,7 +626,6 @@ void OStatement_Base::setMaxRows(sal_Int32 _par0) throw(SQLException, RuntimeExc
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-
     m_nMaxRows = _par0;
 }
 //------------------------------------------------------------------------------
@@ -634,7 +633,6 @@ void OStatement_Base::setResultSetConcurrency(sal_Int32 _par0) throw(SQLExceptio
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
 
     switch(_par0)
     {
@@ -734,32 +732,50 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
                             const Any& rValue )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
-    switch(nHandle)
+    sal_Bool bModified = sal_False;
+
+    sal_Bool bValidAdoRS = m_RecordSet.IsValid();
+        // some of the properties below, when set, are remembered in a member, and applied in the next execute
+        // For these properties, the record set does not need to be valid to allow setting them.
+        // For all others (where the values are forwarded to the ADO RS directly), the recordset must be valid.
+
+    try
     {
-        case PROPERTY_ID_QUERYTIMEOUT:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getQueryTimeOut());
-        case PROPERTY_ID_MAXFIELDSIZE:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxFieldSize());
-        case PROPERTY_ID_MAXROWS:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxRows());
-        case PROPERTY_ID_CURSORNAME:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getCursorName());
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetConcurrency());
-        case PROPERTY_ID_RESULTSETTYPE:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetType());
-        case PROPERTY_ID_FETCHDIRECTION:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
-        case PROPERTY_ID_FETCHSIZE:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchSize());
-        case PROPERTY_ID_ESCAPEPROCESSING:
-            //  return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
-        case PROPERTY_ID_USEBOOKMARKS:
-            //  return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
-        default:
-            ;
+        switch(nHandle)
+        {
+            case PROPERTY_ID_MAXROWS:
+                bModified = ::comphelper::tryPropertyValue( rConvertedValue, rOldValue, rValue, bValidAdoRS ? getMaxRows() : m_nMaxRows );
+                break;
+
+            case PROPERTY_ID_RESULTSETTYPE:
+                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetType());
+                break;
+            case PROPERTY_ID_FETCHSIZE:
+                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchSize());
+                break;
+            case PROPERTY_ID_RESULTSETCONCURRENCY:
+                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetConcurrency());
+                break;
+            case PROPERTY_ID_QUERYTIMEOUT:
+                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getQueryTimeOut());
+                break;
+            case PROPERTY_ID_MAXFIELDSIZE:
+                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxFieldSize());
+                break;
+            case PROPERTY_ID_CURSORNAME:
+                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getCursorName());
+                break;
+            case PROPERTY_ID_FETCHDIRECTION:
+                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
+                break;
+        }
     }
-    return sal_False;
+    catch( const Exception& e )
+    {
+        bModified = sal_True;   // will ensure that the property is set
+        OSL_ENSURE( sal_False, "OStatement_Base::convertFastPropertyValue: caught something strange!" );
+    }
+    return bModified;
 }
 // -------------------------------------------------------------------------
 void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
