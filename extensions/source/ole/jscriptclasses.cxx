@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jscriptclasses.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-10-22 14:38:53 $
+ *  last change: $Author: jl $ $Date: 2001-12-06 08:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ STDMETHODIMP JScriptValue::Get( VARIANT *val)
 STDMETHODIMP JScriptValue::InitOutParam()
 {
     Lock();
+    m_varValue.Clear();
     m_bOutParam= true;
     m_bInOutParam= false;
     Unlock();

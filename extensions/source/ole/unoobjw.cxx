@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2001-12-03 18:28:51 $
+ *  last change: $Author: jl $ $Date: 2001-12-06 08:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,18 +559,7 @@ HRESULT InterfaceOleWrapper_Impl::convertDispparamsArgs(  DISPID id, unsigned sh
                 else if( bTypesAvailable && info.eMemberType == MemberType_PROPERTY)
                     convOk= variantToAny2( & varParam,theParam, info.aType);
                 else
-                {
-//                      if(0)
-//                      {
-//                      VARIANT* data;
-//                      for( long i=0; i < 2; i++)
-//                      {
-//                      HRESULT hr= SafeArrayGetElement( *pdispparams->rgvarg[0].pparray, &i ,(void**)data);
-
-//                      }
-//                      }
                     convOk = variantToAny( & varParam, theParam);
-                }
 
                 if( convOk)
                     pParams[countArgs - (i + 1)]= theParam;
@@ -700,39 +689,43 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
     HRESULT hr;
 
     // Handle JScriptValue objects and JScript out params ( Array object )
-    if( (pDest->vt ==  VT_DISPATCH) ||
-        (pDest->vt == (VT_VARIANT | VT_BYREF) &&
-        pDest->pvarVal->vt == VT_DISPATCH) )
-    {
-        CComPtr<IDispatch> spDisp;
-        if( pDest->vt == VT_DISPATCH)
-            spDisp= pDest->pdispVal;
-        else
-            spDisp= pDest->pvarVal->pdispVal;
+    CComVariant varDest( *pDest);
 
-        CComPtr <IJScriptValueObject> spValue;
+    if( SUCCEEDED( varDest.ChangeType(VT_DISPATCH)))
+
+//      if( (pDest->vt ==  VT_DISPATCH) ||
+//          (pDest->vt == (VT_VARIANT | VT_BYREF) &&
+//          pDest->pvarVal->vt == VT_DISPATCH) )
+    {
+        CComPtr<IDispatch> spDispDest(varDest.pdispVal);
+//          if( pDest->vt == VT_DISPATCH)
+//              spDispDest= pDest->pdispVal;
+//          else
+//              spDispDest= pDest->pvarVal->pdispVal;
+
+//      CComPtr <IJScriptValueObject> spValueDest;
 
         // special Handling for a JScriptValue object
-        if( SUCCEEDED( spDisp->QueryInterface( __uuidof( IJScriptValueObject),
-            reinterpret_cast<void**> (&spValue))))
+        CComQIPtr<IJScriptValueObject> spValueDest(spDispDest);
+        if (spValueDest)
         {
             VARIANT_BOOL varBool= VARIANT_FALSE;
-            if( SUCCEEDED( hr= spValue->IsOutParam( &varBool) )
+            if( SUCCEEDED( hr= spValueDest->IsOutParam( &varBool) )
                 && varBool == VARIANT_TRUE  ||
-                SUCCEEDED(hr= spValue->IsInOutParam( &varBool) )
+                SUCCEEDED(hr= spValueDest->IsInOutParam( &varBool) )
                 && varBool == VARIANT_TRUE )
             {
-                if( SUCCEEDED( spValue->Set( CComVariant(), *pSource)))
+                if( SUCCEEDED( spValueDest->Set( CComVariant(), *pSource)))
                     ret= sal_True;
             }
         }
-        else// VT_DISPATCH -> JScript out param
+        else if (pDest->vt == VT_DISPATCH)// VT_DISPATCH -> JScript out param
         {
             // We use IDispatchEx because its GetDispID function causes the creation
             // of a property if it does not exist already. This is convenient for
             // out parameters in JScript. Then the user must not specify propery "0"
             // explicitly
-            CComQIPtr<IDispatchEx> spDispEx( spDisp);
+            CComQIPtr<IDispatchEx> spDispEx( spDispDest);
             if( spDispEx)
             {
                 CComBSTR nullProp(L"0");
@@ -756,6 +749,8 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
                 }
             }
         }
+        else
+            ret= writeBackOutParameter( pDest, pSource);
     }
     else // The param can't be a JScript out-parameter ( an Array object), it could be a VBScript
     {   // param. The function checks itself for correct VBScript params
@@ -1169,9 +1164,9 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
         CComObject< JScriptValue>* pValue;
         if( SUCCEEDED( CComObject<JScriptValue>::CreateInstance( &pValue)))
         {
-            pvarResult->vt= VT_UNKNOWN;
-            pvarResult->punkVal= pValue->GetUnknown();
-            pvarResult->punkVal->AddRef();
+            pValue->AddRef();
+            pvarResult->vt= VT_DISPATCH;
+            pvarResult->pdispVal= CComQIPtr<IDispatch>(pValue->GetUnknown());
             ret= S_OK;
         }
         else
