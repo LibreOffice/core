@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicrange.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-15 14:27:35 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ namespace basegfx
                     if(mnMinimum > mnMaximum)
                     {
                         // if yes, collapse to center
-                        mnMinimum = mnMaximum = (mnMinimum + mnMaximum) / 2.0;
+                        mnMinimum = mnMaximum = (mnMinimum + mnMaximum) / 2;
                     }
                 }
             }
