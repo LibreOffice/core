@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-13 14:44:44 $
+ *  last change: $Author: tl $ $Date: 2002-08-15 09:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,17 +195,21 @@ class SmCmdBoxWindow : public SfxDockingWindow
     SmEditController    aController;
     Timer               aGrabTimer;
 
-    virtual void Resize();
-    virtual void Paint(const Rectangle& rRect);
-    virtual Size CalcDockingSize(SfxChildAlignment eAlign);
-    virtual SfxChildAlignment CheckAlignment(SfxChildAlignment eActual,
-                                             SfxChildAlignment eWish);
 
 protected :
     DECL_LINK(UpdateTimeoutHdl, Timer *);
 
     // Window
     virtual void    GetFocus();
+    virtual void Resize();
+    virtual void Paint(const Rectangle& rRect);
+    virtual void StateChanged( StateChangedType nStateChange );
+
+    virtual Size CalcDockingSize(SfxChildAlignment eAlign);
+    virtual SfxChildAlignment CheckAlignment(SfxChildAlignment eActual,
+                                             SfxChildAlignment eWish);
+
+    virtual void    ToggleFloatingMode();
 
 public:
     SmCmdBoxWindow(SfxBindings    *pBindings,
@@ -224,11 +228,6 @@ public:
         aGrabTimer.SetTimeout (100);
         aGrabTimer.Start ();
     }
-
-    virtual void    ToggleFloatingMode();
-
-    // Window
-    virtual void    StateChanged( StateChangedType nStateChange );
 
     void Grab ();
 };

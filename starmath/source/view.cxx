@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-22 13:22:22 $
+ *  last change: $Author: tl $ $Date: 2002-08-15 09:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,7 +593,6 @@ SmViewShell * SmCmdBoxWindow::GetView()
     return PTR_CAST(SmViewShell, pView);
 }
 
-
 void SmCmdBoxWindow::Resize()
 {
     Rectangle aRect = Rectangle(Point(0, 0), GetOutputSizePixel());
@@ -707,9 +706,15 @@ SfxChildAlignment SmCmdBoxWindow::CheckAlignment(SfxChildAlignment eActual,
 
 void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
 {
-    // set initial position of window in floating mode
-    if (TRUE == IsFloatingMode()  &&  STATE_CHANGE_INITSHOW == nStateChange)
-        AdjustPosition();   //! don't change pos in docking-mode !
+    if (STATE_CHANGE_INITSHOW == nStateChange)
+    {
+        Resize();   // #98848# avoid SmEditWindow not being painted correctly
+
+        // set initial position of window in floating mode
+        if (TRUE == IsFloatingMode())
+            AdjustPosition();   //! don't change pos in docking-mode !
+    }
+
     SfxDockingWindow::StateChanged( nStateChange );
 }
 
