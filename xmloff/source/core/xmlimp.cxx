@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-28 10:28:16 $
+ *  last change: $Author: dvo $ $Date: 2001-03-28 10:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ SvXMLImport::~SvXMLImport() throw ()
     delete pUnitConv;
     delete pContexts;
     delete pEventImportHelper;
-    delete pImageMapImportHelper;
+//  delete pImageMapImportHelper;
     if (pNumImport)
         delete pNumImport;
     if (pProgressBarHelper)
