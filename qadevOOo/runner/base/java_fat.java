@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_fat.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-05-27 12:00:43 $
+ *  last change:$Date: 2003-10-06 12:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,8 @@ import lib.TestCase;
 import lib.Status;
 import lib.MultiMethodTest;
 import lib.TestEnvironment;
-import lib.DynamicClassLoader;
+import stats.OutProducerFactory;
+import util.DynamicClassLoader;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -86,6 +87,7 @@ import share.DescEntry;
 import share.DescGetter;
 import helper.APIDescGetter;
 import helper.OfficeProvider;
+import helper.AppProvider;
 import base.TestBase;
 
 import share.LogWriter;
@@ -100,10 +102,12 @@ public class java_fat implements TestBase {
     public static boolean debug = false;
 
     public boolean executeTest(lib.TestParameters param) {
+        DynamicClassLoader dcl = new DynamicClassLoader();
+
         DescGetter dg = new APIDescGetter();
         String job = (String) param.get("TestJob");
         boolean retValue = true;
-        debug = ((Boolean) param.get("DebugIsActive")).booleanValue();
+        debug = param.getBool("DebugIsActive");
 
         //get Job-Descriptions
         System.out.print("Getting Descriptions for Job: "+job+" from ");
@@ -115,12 +119,13 @@ public class java_fat implements TestBase {
             return false;
         }
 
-        String conStr = (String) param.get("ConnectionString");
-        System.out.println("> ");
-        System.out.print("Connecting the Office");
-        System.out.println(" With "+conStr);
-
-        OfficeProvider office = new OfficeProvider();
+        String officeProviderName = (String)param.get("OfficeProvider");
+        AppProvider office = (AppProvider)dcl.getInstance(officeProviderName);
+        if ( office == null ) {
+            System.out.println("ERROR: Wrong parameter 'OfficeProvider', " +
+                               " it cannot be instantiated.");
+            System.exit(-1);
+        }
 
         for (int l=0;l<entries.length;l++) {
 
@@ -145,7 +150,6 @@ public class java_fat implements TestBase {
 
             //get some helper classes
             Summarizer sumIt = new Summarizer();
-            DynamicClassLoader dcl = new DynamicClassLoader();
 
             TestCase tCase = null;
 
@@ -164,8 +168,8 @@ public class java_fat implements TestBase {
                 sumIt.summarizeDown(entry,entry.ErrorMsg);
                 LogWriter sumObj = (LogWriter) dcl.getInstance(
                                                 (String)param.get("OutProducer"));
-                sumObj.initialize(entry,true);
                 entry.UserDefinedParams = param;
+                sumObj.initialize(entry,true);
                 sumObj.summary(entry);
                 continue;
             }
@@ -198,8 +202,8 @@ public class java_fat implements TestBase {
                 sumIt.summarizeDown(entry,"Couldn't create "+tCase.getObjectName());
                 LogWriter sumObj = (LogWriter) dcl.getInstance(
                                                 (String)param.get("OutProducer"));
-                sumObj.initialize(entry,true);
                 entry.UserDefinedParams = param;
+                sumObj.initialize(entry,true);
                 sumObj.summary(entry);
                 continue;
             }
@@ -221,7 +225,8 @@ public class java_fat implements TestBase {
                     helper.ProcessHandler ph =
                                 (helper.ProcessHandler) param.get("AppProvider");
                     if (ph != null) {
-                        ph.kill();
+                        office.closeExistingOffice(param, true);
+//                        ph.kill();
                         shortWait(5000);
                     }
                     tEnv = getEnv(entry,param);
@@ -245,7 +250,9 @@ public class java_fat implements TestBase {
                     helper.ProcessHandler ph =
                                 (helper.ProcessHandler) param.get("AppProvider");
                     if (ph != null) {
-                        ph.kill();
+                        office.closeExistingOffice(param, true);
+
+//                        ph.kill();
                         shortWait(5000);
                     }
                     tEnv = getEnv(entry,param);
@@ -268,8 +275,8 @@ public class java_fat implements TestBase {
                 LogWriter sumIfc = (LogWriter) dcl.getInstance(
                                                 (String)param.get("OutProducer"));
 
-                sumIfc.initialize(entry.SubEntries[j],true);
                 entry.SubEntries[j].UserDefinedParams = param;
+                sumIfc.initialize(entry.SubEntries[j],true);
                 sumIfc.summary(entry.SubEntries[j]);
             }
             try {
@@ -280,8 +287,8 @@ public class java_fat implements TestBase {
                 System.out.println("couldn't cleanup");
             }
             sumIt.summarizeUp(entry);
-            LogWriter sumObj = (LogWriter) dcl.getInstance(
-                                                (String)param.get("OutProducer"));
+            LogWriter sumObj = OutProducerFactory.createOutProducer(param);
+
             sumObj.initialize(entry,true);
             sumObj.summary(entry);
         }
@@ -300,64 +307,72 @@ public class java_fat implements TestBase {
         helper.ProcessHandler ph =
                                 (helper.ProcessHandler) param.get("AppProvider");
         if (ph != null) {
-            ph.kill();
+            office.closeExistingOffice(param, true);
+//            ph.kill();
             shortWait(5000);
         }
         return retValue;
     }
 
     protected TestEnvironment getEnv(DescEntry entry, TestParameters param) {
-            OfficeProvider office = new OfficeProvider();
-            XMultiServiceFactory msf = (XMultiServiceFactory)
-                                            office.getManager(param);
-            if (msf == null) return null;
-            param.put("ServiceFactory",msf);
+        DynamicClassLoader dcl = new DynamicClassLoader();
+        String officeProviderName = (String)param.get("OfficeProvider");
+        AppProvider office = (AppProvider)dcl.getInstance(officeProviderName);
+        if ( office == null ) {
+            System.out.println("ERROR: Wrong parameter 'OfficeProvider', " +
+                               " it cannot be instantiated.");
+            System.exit(-1);
+        }
+        XMultiServiceFactory msf = (XMultiServiceFactory)
+                                        office.getManager(param);
+        if (msf == null) return null;
+        param.put("ServiceFactory",msf);
 
-            DynamicClassLoader dcl = new DynamicClassLoader();
+        TestCase tCase = null;
 
-            TestCase tCase = null;
+        try {
+            tCase = (TestCase)
+                        dcl.getInstance("mod._"+entry.entryName);
+        } catch (java.lang.IllegalArgumentException ie) {
+            entry.ErrorMsg=ie.getMessage();
+            entry.hasErrorMsg=true;
+        } catch (java.lang.NoClassDefFoundError ie) {
+            entry.ErrorMsg=ie.getMessage();
+            entry.hasErrorMsg=true;
+        }
 
-            try {
-                tCase = (TestCase)
-                            dcl.getInstance("mod._"+entry.entryName);
-            } catch (java.lang.IllegalArgumentException ie) {
-                entry.ErrorMsg=ie.getMessage();
-                entry.hasErrorMsg=true;
-            } catch (java.lang.NoClassDefFoundError ie) {
-                entry.ErrorMsg=ie.getMessage();
-                entry.hasErrorMsg=true;
+        System.out.println("Creating: "+tCase.getObjectName());
+        LogWriter log = (LogWriter) dcl.getInstance(
+                                        (String)param.get("LogWriter"));
+        log.initialize(entry,true);
+        entry.UserDefinedParams = param;
+        tCase.setLogWriter((PrintWriter) log);
+        TestEnvironment tEnv = null;
+        try {
+            tCase.initializeTestCase(param);
+            tEnv = tCase.getTestEnvironment(param);
+        } catch (com.sun.star.lang.DisposedException de) {
+            System.out.println("Office disposed");
+            helper.ProcessHandler ph =
+                            (helper.ProcessHandler) param.get("AppProvider");
+            if (ph != null) {
+                office.closeExistingOffice(param, true);
+//                ph.kill();
+                shortWait(5000);
             }
-
-            System.out.println("Creating: "+tCase.getObjectName());
-            LogWriter log = (LogWriter) dcl.getInstance(
-                                            (String)param.get("LogWriter"));
-            log.initialize(entry,true);
-            entry.UserDefinedParams = param;
-            tCase.setLogWriter((PrintWriter) log);
-            TestEnvironment tEnv = null;
-            try {
-                tCase.initializeTestCase(param);
-                tEnv = tCase.getTestEnvironment(param);
-            } catch (com.sun.star.lang.DisposedException de) {
-                System.out.println("Office disposed");
-                helper.ProcessHandler ph =
-                                (helper.ProcessHandler) param.get("AppProvider");
-                if (ph != null) {
-                    ph.kill();
-                    shortWait(5000);
-                }
-            } catch (lib.StatusException e) {
-                System.out.println(e.getMessage());
-                helper.ProcessHandler ph =
-                                (helper.ProcessHandler) param.get("AppProvider");
-                if (ph != null) {
-                    ph.kill();
-                    shortWait(5000);
-                }
-                entry.ErrorMsg = e.getMessage();
-                entry.hasErrorMsg = true;
+        } catch (lib.StatusException e) {
+            System.out.println(e.getMessage());
+            helper.ProcessHandler ph =
+                            (helper.ProcessHandler) param.get("AppProvider");
+            if (ph != null) {
+                office.closeExistingOffice(param, true);
+//                ph.kill();
+                shortWait(5000);
             }
-            return tEnv;
+            entry.ErrorMsg = e.getMessage();
+            entry.hasErrorMsg = true;
+        }
+        return tEnv;
     }
 
     protected void shortWait(int millis) {
