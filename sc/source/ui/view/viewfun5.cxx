@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:44:11 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,11 +180,13 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromInputStream( xStm );
 
                 // mba: BaseURL doesn't make sense for clipboard
-                SfxMedium aMedium( xStore, String() );
+                // #i43716# Medium must be allocated with "new".
+                // DoLoad stores the pointer and deletes it with the SfxObjectShell.
+                SfxMedium* pMedium = new SfxMedium( xStore, String() );
 
                 //  TODO/LATER: is it a problem that we don't support binary formats here?
                 ScDocShellRef xDocShRef = new ScDocShell(SFX_CREATE_MODE_EMBEDDED);
-                if (xDocShRef->DoLoad(&aMedium))
+                if (xDocShRef->DoLoad(pMedium))
                 {
                     ScDocument* pSrcDoc = xDocShRef->GetDocument();
                     SCTAB nSrcTab = pSrcDoc->GetVisibleTab();
@@ -499,7 +501,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 ScRange aSource;
                 const ScExtDocOptions* pExtOpt = pInsDoc->GetExtDocOptions();
                 const ScExtTabSettings* pTabSett = pExtOpt ? pExtOpt->GetTabSettings( nSrcTab ) : 0;
-                if( pTabSett && (pTabSett->maUsedArea.aStart.Col() >= 0) )
+                if( pTabSett && pTabSett->maUsedArea.IsValid() )
                 {
                     aSource = pTabSett->maUsedArea;
                     // ensure correct sheet indexes
