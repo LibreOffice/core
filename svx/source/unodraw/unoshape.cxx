@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:09:46 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1979,7 +1979,6 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                 uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObj)->GetObjRef();
                 if( xObj.is() )
                 {
-                    svt::EmbeddedObjectRef::TryRunningState( xObj );
                     try
                     {
                         xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, aTmp );
@@ -2341,8 +2340,6 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                     uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef() );
                     if ( xObj.is() )
                     {
-                        svt::EmbeddedObjectRef::TryRunningState( xObj );
-
                         try
                         {
                             awt::Size aTmp = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
@@ -2364,7 +2361,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 if( pObj->ISA(SdrOle2Obj))
                 {
                     uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef() );
-                    if( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+                    if( xObj.is() ) // && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
                         aSize = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
                 }
                 aAny <<= aSize;
