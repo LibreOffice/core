@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-17 13:45:37 $
+ *  last change: $Author: rt $ $Date: 2004-06-02 14:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 
 #include <cstdio>
 #include <unistd.h>
-#include <dlfcn.h>
 
 using namespace rtl;
 
@@ -94,13 +93,6 @@ static oslModule pCloseModule = NULL;
 #define DESKTOP_CDE 4
 
 static const char * desktop_strings[5] = { "none", "unknown", "GNOME", "KDE", "CDE" };
-
-// NETBSD has no RTLD_GLOBAL
-#ifndef RTLD_GLOBAL
-#define DLOPEN_MODE (RTLD_LAZY)
-#else
-#define DLOPEN_MODE (RTLD_GLOBAL | RTLD_LAZY)
-#endif
 
 static SalInstance* tryInstance( const OUString& rModuleBase )
 {
@@ -127,7 +119,10 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
                      OUStringToOString( aModule, RTL_TEXTENCODING_ASCII_US ).getStr(),
                      pInst );
 #endif
-            pCloseModule = aMod;
+            if( pInst )
+                pCloseModule = aMod;
+            else
+                osl_unloadModule( aMod );
         }
         else
         {
@@ -341,9 +336,10 @@ static bool is_cde_desktop( Display* pDisplay )
     void* pLibrary = NULL;
 
     Atom nDtAtom = XInternAtom( pDisplay, "_DT_WM_READY", True );
-    if( nDtAtom && ( pLibrary = dlopen( "/usr/dt/lib/libDtSvc.so", DLOPEN_MODE ) ) )
+    OUString aPathName( RTL_CONSTASCII_USTRINGPARAM( "file:///usr/dt/lib/libDtSvc.so" ) );
+    if( nDtAtom && ( pLibrary = osl_loadModule( aPathName.pData, SAL_LOADMODULE_DEFAULT ) ) )
     {
-        dlclose( pLibrary );
+        osl_unloadModule( pLibrary );
         return true;
     }
 
