@@ -16,7 +16,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:helpid="helpid:10593" toolbar:text="" toolbar:style="dropdown" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:EditGlossary" toolbar:helpid="helpid:20620" toolbar:text="" toolbar:style="dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:Spelling" toolbar:helpid="helpid:20622" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:SpellDialog" toolbar:helpid="helpid:20622" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:helpid="helpid:12021" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:Hyphenate" toolbar:helpid="helpid:20605" toolbar:text="" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:ThesaurusDialog" toolbar:helpid="helpid:20603" toolbar:text="" toolbar:visible="false" />
