@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:07 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#include "View.hxx"
 
 #include <vector>
 
@@ -137,20 +139,31 @@
 #include "navigatr.hxx"
 #include "anminfo.hxx"
 #include "strings.hrc"
-#include "sdview.hxx"
 #include "sdxfer.hxx"
 #include "sdresid.hxx"
 #include "sdmod.hxx"
-#include "drviewsh.hxx"
-#include "docshell.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#include "DrawDocShell.hxx"
+#ifndef SD_FU_DRAW_HXX
 #include "fudraw.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "sdpage.hxx"
 #include "unoaprms.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#include "slidview.hxx"
+#endif
+#ifndef SD_SLIDE_VIEW_HXX
+#include "SlideView.hxx"
+#endif
 #include "helpids.h"
+
+namespace sd {
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -170,22 +183,27 @@ using namespace ::com::sun::star;
 struct SdNavigatorDropEvent : public ExecuteDropEvent
 {
     DropTargetHelper&       mrTargetHelper;
-    SdWindow*               mpTargetWindow;
+    ::sd::Window* mpTargetWindow;
     USHORT                  mnPage;
     USHORT                  mnLayer;
 
-                SdNavigatorDropEvent( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                      SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer ) :
-                    ExecuteDropEvent( rEvt ),
-                    mrTargetHelper( rTargetHelper ),
-                    mpTargetWindow( pTargetWindow ),
-                    mnPage( nPage ),
-                    mnLayer( nLayer ) {}
+    SdNavigatorDropEvent (
+        const ExecuteDropEvent& rEvt,
+        DropTargetHelper& rTargetHelper,
+        ::sd::Window* pTargetWindow,
+        USHORT nPage,
+        USHORT nLayer )
+        : ExecuteDropEvent( rEvt ),
+          mrTargetHelper( rTargetHelper ),
+          mpTargetWindow( pTargetWindow ),
+          mnPage( nPage ),
+          mnLayer( nLayer )
+    {}
 };
 
 // -----------------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SdView::CreateClipboardDataObject( SdView* pWorkView, Window& rWindow )
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateClipboardDataObject( View* pWorkView, ::Window& rWindow )
 {
     // since SdTransferable::CopyToClipboard is called, this
     // dynamically created object ist destroyed automatically
@@ -239,7 +257,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
 // -----------------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SdView::CreateDragDataObject( SdView* pWorkView, Window& rWindow, const Point& rDragPos )
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateDragDataObject( View* pWorkView, ::Window& rWindow, const Point& rDragPos )
 {
     SdTransferable* pTransferable = new SdTransferable( pDoc, pWorkView, FALSE );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
@@ -280,7 +298,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
 // -----------------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SdView::CreateSelectionDataObject( SdView* pWorkView, Window& rWindow )
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateSelectionDataObject( View* pWorkView, ::Window& rWindow )
 {
     SdTransferable*                 pTransferable = new SdTransferable( pDoc, pWorkView, TRUE );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
@@ -307,7 +325,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
 // -----------------------------------------------------------------------------
 
-void SdView::UpdateSelectionClipboard( BOOL bForceDeselect )
+void View::UpdateSelectionClipboard( BOOL bForceDeselect )
 {
     if( pViewSh && pViewSh->GetActiveWindow() )
     {
@@ -323,7 +341,7 @@ void SdView::UpdateSelectionClipboard( BOOL bForceDeselect )
 
 // -----------------------------------------------------------------------------
 
-void SdView::DoCut(Window* pWindow)
+void View::DoCut (::Window* pWindow)
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
@@ -342,7 +360,7 @@ void SdView::DoCut(Window* pWindow)
 
 // -----------------------------------------------------------------------------
 
-void SdView::DoCopy(Window* pWindow)
+void View::DoCopy (::Window* pWindow)
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
@@ -357,7 +375,7 @@ void SdView::DoCopy(Window* pWindow)
 
 // -----------------------------------------------------------------------------
 
-void SdView::DoPaste( Window* pWindow )
+void View::DoPaste (::Window* pWindow)
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
@@ -367,7 +385,7 @@ void SdView::DoPaste( Window* pWindow )
 
         SdrObject*  pObj = GetTextEditObject();
         SdPage*     pPage = (SdPage*)( pObj ? pObj->GetPage() : NULL );
-        Outliner*   pOutliner = pOLV->GetOutliner();
+        ::Outliner* pOutliner = pOLV->GetOutliner();
 
         if( pOutliner)
         {
@@ -416,7 +434,7 @@ void SdView::DoPaste( Window* pWindow )
 
             if( !InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
             {
-                SdDrawViewShell* pDrViewSh = (SdDrawViewShell*) pDocSh->GetViewShell();
+                DrawViewShell* pDrViewSh = (DrawViewShell*) pDocSh->GetViewShell();
 
                 if( pDrViewSh )
                 {
@@ -440,7 +458,7 @@ void SdView::DoPaste( Window* pWindow )
 
 // -----------------------------------------------------------------------------
 
-void SdView::StartDrag( const Point& rStartPos, Window* pWindow )
+void View::StartDrag( const Point& rStartPos, Window* pWindow )
 {
     if( HasMarkedObj() && IsAction() && pViewSh && pWindow && !pDragSrcMarkList )
     {
@@ -449,11 +467,11 @@ void SdView::StartDrag( const Point& rStartPos, Window* pWindow )
         if( IsTextEdit() )
             EndTextEdit();
 
-        SdViewShell* pViewShell= pDocSh->GetViewShell();
+        ViewShell* pViewShell= pDocSh->GetViewShell();
 
-        if( pViewShell && pViewShell->ISA( SdDrawViewShell ) )
+        if( pViewShell && pViewShell->ISA( DrawViewShell ) )
         {
-            FuPoor* pFunc = ( (SdDrawViewShell*) pViewShell )->GetActualFunction();
+            FuPoor* pFunc = ( (DrawViewShell*) pViewShell )->GetActualFunction();
 
             if( pFunc && pFunc->ISA( FuDraw ) )
                 ( (FuDraw*) pFunc)->ForcePointer( NULL );
@@ -472,7 +490,7 @@ void SdView::StartDrag( const Point& rStartPos, Window* pWindow )
 
 // -----------------------------------------------------------------------------
 
-void SdView::DragFinished( sal_Int8 nDropAction )
+void View::DragFinished( sal_Int8 nDropAction )
 {
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
 
@@ -525,8 +543,8 @@ void SdView::DragFinished( sal_Int8 nDropAction )
 
 // -----------------------------------------------------------------------------
 
-sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                             SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
+sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
+                             ::sd::Window* pTargetWindow, USHORT nPage, USHORT nLayer )
 {
     String          aLayerName( GetActiveLayer() );
     SdrPageView*    pPV = GetPageViewPvNum(0);
@@ -567,7 +585,7 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTar
 
             if( pDragTransferable )
             {
-                const SdView* pSourceView = pDragTransferable->GetView();
+                const View* pSourceView = pDragTransferable->GetView();
 
                 if( pDragTransferable->IsPageTransferable() )
                 {
@@ -622,8 +640,9 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTar
                 {
                     SdrObject*      pPickObj = NULL;
                     SdrPageView*    pPV = NULL;
-                    SdWindow*       pWindow = pViewSh->GetActiveWindow();
-                    USHORT          nHitLog = (USHORT) pWindow->PixelToLogic( Size( HITPIX, 0 ) ).Width();
+                    ::sd::Window* pWindow = pViewSh->GetActiveWindow();
+                    USHORT nHitLog = (USHORT) pWindow->PixelToLogic(
+                        Size(FuPoor::HITPIX, 0 ) ).Width();
                     Point           aPos( pWindow->PixelToLogic( rEvt.maPosPixel ) );
                     const BOOL      bHasPickObj = PickObj( aPos, pPickObj, pPV );
                     BOOL            bIsPresTarget = FALSE;
@@ -693,8 +712,8 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTar
 
 // -----------------------------------------------------------------------------
 
-sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                              SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
+sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
+                              ::sd::Window* pTargetWindow, USHORT nPage, USHORT nLayer )
 {
     SdrPageView*    pPV = GetPageViewPvNum( 0 );
     String          aActiveLayer = GetActiveLayer();
@@ -736,7 +755,7 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rT
         if( !bIsInsideOutlinerView )
         {
             Point                   aPos;
-            SdDrawViewShell*        pDrViewSh = (SdDrawViewShell*) pDocSh->GetViewShell();
+            DrawViewShell*      pDrViewSh = (DrawViewShell*) pDocSh->GetViewShell();
             SdrPage*                pPage = NULL;
             TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
 
@@ -795,7 +814,7 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rT
                           NAVIGATOR_DRAGTYPE_EMBEDDED == pPageObjsTransferable->GetDragType() ) )
                     {
                         // insert bookmark from own navigator (handled async. due to possible message box )
-                        Application::PostUserEvent( LINK( this, SdView, ExecuteNavigatorDrop ),
+                        Application::PostUserEvent( LINK( this, View, ExecuteNavigatorDrop ),
                                                     new SdNavigatorDropEvent( rEvt, rTargetHelper, pTargetWindow,
                                                                               nPage, nLayer ) );
                         nRet = nDropAction;
@@ -804,8 +823,9 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rT
                     {
                         SdrObject*      pPickObj = NULL;
                         SdrPageView*    pPV = NULL;
-                        SdWindow*       pWindow = pViewSh->GetActiveWindow();
-                        USHORT          nHitLog = USHORT(pWindow->PixelToLogic(Size(HITPIX,0)).Width());
+                        ::sd::Window* pWindow = pViewSh->GetActiveWindow();
+                        USHORT nHitLog = USHORT(pWindow->PixelToLogic(
+                            Size(FuPoor::HITPIX,0)).Width());
 
                         if( PickObj( aPos, pPickObj, pPV ) )
                         {
@@ -865,10 +885,10 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rT
                                 nRet = nDropAction;
                             }
                         }
-                        else if( pViewSh->ISA( SdDrawViewShell ) )
+                        else if( pViewSh->ISA( DrawViewShell ) )
                         {
                             // insert as normal URL button
-                            ( (SdDrawViewShell*) pViewSh )->InsertURLButton( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), String(), &aPos );
+                            ( (DrawViewShell*) pViewSh )->InsertURLButton( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), String(), &aPos );
                             nRet = nDropAction;
                         }
                     }
@@ -882,7 +902,7 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rT
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( SdView, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEvent )
+IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEvent )
 {
     TransferableDataHelper                  aDataHelper( pSdNavigatorDropEvent->maDropEvent.Transferable );
     SdPageObjsTLB::SdPageObjsTransferable*  pPageObjsTransferable = SdPageObjsTLB::SdPageObjsTransferable::getImplementation( aDataHelper.GetXTransferable() );
@@ -957,7 +977,7 @@ IMPL_LINK( SdView, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDrop
 |*
 \************************************************************************/
 
-BOOL SdView::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT nType )
+BOOL View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT nType )
 {
     DBG_ASSERT( !rpExchangeList, "ExchangeList muss NULL sein!");
 
@@ -975,7 +995,8 @@ BOOL SdView::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT
             String* pNewName = new String( *pString );
 
             if( nType == 0  || nType == 2 )
-                bNameOK = pDocSh->CheckPageName( pViewSh->GetWindow(), *pNewName );
+                bNameOK = pDocSh->CheckPageName (
+                    pViewSh->GetWindow(), *pNewName);
 
             if( bNameOK && ( nType == 1  || nType == 2 ) )
             {
@@ -1046,7 +1067,7 @@ void ImplProcessObjectList(SdrObject* pObj, SdrObjectVector& rVector )
 }
 
 /** this method restores all connections between shapes with animations along a path and theire path */
-SdrModel* SdView::GetMarkedObjModel() const
+SdrModel* View::GetMarkedObjModel() const
 {
     // this vector holds the index of all shapes with animations along a path and the index
     // of theire corresponding path. The index is a flat index
@@ -1189,7 +1210,7 @@ SdrModel* SdView::GetMarkedObjModel() const
 }
 
 /** this method restores all connections between shapes with animations along a path and theire path */
-BOOL SdView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst /* =NULL */, UINT32 nOptions /* =0 */)
+BOOL View::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst /* =NULL */, UINT32 nOptions /* =0 */)
 {
     // this vector holds the index of all shapes with animations along a path and the index
     // of theire corresponding path. The index is a flat index
@@ -1346,3 +1367,4 @@ BOOL SdView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst /* 
     return bRet;
 }
 
+} // end of namespace sd
