@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-27 04:04:45 $
+ *  last change: $Author: sab $ $Date: 2000-11-02 14:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #endif
 #ifndef _SC_XMLTABLEHEADERFOOTERCONTEXT_HXX_
 #include "XMLTableHeaderFooterContext.hxx"
+#endif
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
 #endif
 
 #include "docuno.hxx"
@@ -342,8 +345,10 @@ void XMLTableStyleContext::SetFormula1(com::sun::star::uno::Sequence<com::sun::s
     aProps.realloc(aProps.getLength() + 1);
     beans::PropertyValue aProp;
     aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULA1));
+    rtl::OUString sRealFormula(sFormula);
+    ScXMLConverter::ParseFormula(sRealFormula);
     uno::Any aAnyFormula;
-    aAnyFormula <<= sFormula;
+    aAnyFormula <<= sRealFormula;
     aProp.Value = aAnyFormula;
     aProps[aProps.getLength() - 1] = aProp;
 }
@@ -354,8 +359,10 @@ void XMLTableStyleContext::SetFormula2(com::sun::star::uno::Sequence<com::sun::s
     aProps.realloc(aProps.getLength() + 1);
     beans::PropertyValue aProp;
     aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULA2));
+    rtl::OUString sRealFormula(sFormula);
+    ScXMLConverter::ParseFormula(sRealFormula);
     uno::Any aAnyFormula;
-    aAnyFormula <<= sFormula;
+    aAnyFormula <<= sRealFormula;
     aProp.Value = aAnyFormula;
     aProps[aProps.getLength() - 1] = aProp;
 }

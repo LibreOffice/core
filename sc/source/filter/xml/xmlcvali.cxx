@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-12 08:18:09 $
+ *  last change: $Author: sab $ $Date: 2000-11-02 14:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include "xmlcvali.hxx"
 #include "xmlimprt.hxx"
 #include "xmlconti.hxx"
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
+#endif
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -370,6 +373,10 @@ void ScXMLContentValidationContext::EndElement()
     aValidation.sErrorTitle = sErrorTitle;
     aValidation.sErrorMessage = sErrorMessage;
     GetCondition(sCondition, aValidation.sFormula1, aValidation.sFormula2, aValidation.aValidationType, aValidation.aOperator);
+    if (aValidation.sFormula1.getLength())
+        ScXMLConverter::ParseFormula(aValidation.sFormula1);
+    if (aValidation.sFormula2.getLength())
+        ScXMLConverter::ParseFormula(aValidation.sFormula2);
     GetScImport().GetCellFromString(sBaseCellAddress, aValidation.aBaseCellAddress);
     GetAlertStyle(sErrorMessageType, aValidation.aAlertStyle);
     aValidation.bShowErrorMessage = bDisplayError;
