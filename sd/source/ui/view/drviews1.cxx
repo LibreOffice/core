@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:34:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,10 +216,14 @@ void DrawViewShell::Activate(BOOL bIsMDIActivate)
     {
         BOOL bPreview = FALSE;
 
-        if (eEditMode == EM_PAGE)
-            bPreview = pFrameView->IsShowPreviewInPageMode() != 0;
-        else
-            bPreview = pFrameView->IsShowPreviewInMasterPageMode() != 0;
+        // Only for the Draw application we look whether we have to show a
+        // preview.  For all Impress related view shells no preview is
+        // shown.
+        if (GetShellType() == ST_DRAW)
+            if (eEditMode == EM_PAGE)
+                bPreview = pFrameView->IsShowPreviewInPageMode() != 0;
+            else
+                bPreview = pFrameView->IsShowPreviewInMasterPageMode() != 0;
 
         SfxBoolItem aItem(SID_PREVIEW_WIN, bPreview);
         GetViewFrame()->GetDispatcher()->Execute(
