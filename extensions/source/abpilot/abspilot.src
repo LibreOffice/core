@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-09 10:43:34 $
+ *  last change: $Author: kz $ $Date: 2002-01-14 21:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,7 +397,7 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ polish ] = "Ustawienia";
         Text[ portuguese_brazilian ] = "Settings";
         Text[ japanese ] = "設定";
-        Text[ korean ] = "Settings";
+        Text[ korean ] = "설정";
         Text[ chinese_simplified ] = "设定";
         Text[ chinese_traditional ] = "設定";
         Text[ turkish ] = "Settings";
@@ -1029,6 +1029,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2002/01/09 10:43:34  fs
+ *  #96349# WordBreak for the second fixed text on the field assignment page
+ *
  *  Revision 1.25  2001/12/19 17:53:21  kz
  *  Merge SRC641: 19.12.01 - 18:51:53
  *
@@ -1107,6 +1110,7 @@ Bitmap BMP_HEADERIMAGE
  *
  *  Revision 1.0 26.07.01 09:03:45  fs
  ************************************************************************/
+
 
 
 
