@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
+ *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HXX_
 #include <com/sun/star/io/XInputStreamProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
+#include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #endif
 
 #ifndef _SBXCLASS_HXX //autogen
@@ -190,27 +193,23 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
         BasicManager* pBasMgr = BasicIDE::FindBasicManager( aBasMgrName );
         if ( pBasMgr )
         {
-            // TODO: check password
-            /* old code
-            USHORT nLib = pBasicManager->GetLibId( aLib );
-            if ( !pBasicManager->IsLibLoaded( nLib ) || (
-                    pBasicManager->HasPassword( nLib ) &&
-                    !pBasicManager->IsPasswordVerified( nLib ) ) )
-            {
-                bValid = FALSE;
-            }
-            */
-
             SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
             ::rtl::OUString aOULibName( aLibName );
 
-            // check if module library is loaded
-            Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
-            if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
-                bValid = FALSE;
+            // check if module library is loaded and password protected
+            Reference< script::XLibraryContainer > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+            if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
+            {
+                if ( !xModLibContainer->isLibraryLoaded( aOULibName ) )
+                    bValid = FALSE;
+
+                Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+                if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+                    bValid = FALSE;
+            }
 
             // check if dialog library is loaded
-            Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
+            Reference< script::XLibraryContainer > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
             if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
                 bValid = FALSE;
         }
@@ -592,17 +591,6 @@ void ObjectPage::CheckButtons()
     SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
     USHORT nDepth = pCurEntry ? aBasicBox.GetModel()->GetDepth( pCurEntry ) : 0;
 
-    if ( nDepth == 1 || nDepth == 2 )
-    {
-        aNewModButton.Enable();
-        aNewDlgButton.Enable();
-    }
-    else
-    {
-        aNewModButton.Disable();
-        aNewDlgButton.Disable();
-    }
-
     if ( nDepth == 2 )
         aEditButton.Enable();
     else
@@ -732,57 +720,57 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
 
 StarBASIC* ObjectPage::GetSelectedBasic()
 {
+    StarBASIC* pBasic = 0;
     String aLibName, aModOrDlg, aSub;
     BasicManager* pBasMgr = aBasicBox.GetSelectedSbx( aLibName, aModOrDlg, aSub );
     DBG_ASSERT( pBasMgr, "Kein BasicManager!" );
     SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
 
-    /* old code
-    StarBASIC* pLib = aLibName.Len() ? pBasMgr->GetLib( aLibName ) : pBasMgr->GetLib( 0 );
-    if ( !pLib && aLibName.Len() )
-    {
-        USHORT nLib = pBasMgr->GetLibId( aLibName );
-        BOOL bOK = TRUE;
-        if ( pBasMgr->HasPassword( nLib ) &&
-                !pBasMgr->IsPasswordVerified( nLib ) )
-        {
-            bOK = QueryPassword( pBasMgr, nLib );
-        }
-        if ( bOK )
-        {
-            pBasMgr->LoadLib( nLib );
-            pLib = pBasMgr->GetLib( nLib );
-            if ( !pLib )
-                ErrorBox( this, WB_OK|WB_DEF_OK, String( IDEResId( RID_STR_ERROROPENLIB ) ) ).Execute();
-        }
-    }
-    */
+    if ( !aLibName.Len() )
+        aLibName = String::CreateFromAscii("Standard");
 
-    StarBASIC* pBasic = 0;
-    DBG_ASSERT( aLibName.Len(), "ObjectPage::GetSelectedBasic(): No library name!" );
     if ( aLibName.Len() )
     {
-        // TODO: check password
-
-
+        BOOL bOK = TRUE;
         ::rtl::OUString aOULibName( aLibName );
 
-        // load module library (if not loaded)
-        Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
+        // check, if the module library is not loaded
+        Reference< script::XLibraryContainer > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
-            xModLibContainer->loadLibrary( aOULibName );
+        {
+            // check password
+            Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+            if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+            {
+                bOK = QueryPassword( pShell, aLibName );
+            }
 
-        // load dialog library (if not loaded)
-        Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
+            // load library
+            if ( bOK )
+                xModLibContainer->loadLibrary( aOULibName );
+        }
+
+        // check, if the dialog library is not loaded
+        Reference< script::XLibraryContainer > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
         if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
-            xDlgLibContainer->loadLibrary( aOULibName );
+        {
+            // load library
+            if ( bOK )
+                xDlgLibContainer->loadLibrary( aOULibName );
+        }
 
         // get Basic
-        pBasic = pBasMgr->GetLib( aLibName );
-    }
+        if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
+        {
+            if ( bOK )
+            {
+                pBasic = pBasMgr->GetLib( aLibName );
 
-    if ( !pBasic )
-        ErrorBox( this, WB_OK|WB_DEF_OK, String( IDEResId( RID_STR_ERROROPENLIB ) ) ).Execute();
+                if ( !pBasic )
+                    ErrorBox( this, WB_OK|WB_DEF_OK, String( IDEResId( RID_STR_ERROROPENLIB ) ) ).Execute();
+            }
+        }
+    }
 
     return pBasic;
 }

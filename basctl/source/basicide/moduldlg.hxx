@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-27 12:12:19 $
+ *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,9 @@ public:
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
 };
 
+
+class SvxPasswordDialog;
+
 class LibPage: public TabPage
 {
 protected:
@@ -315,6 +318,7 @@ protected:
     DECL_LINK( BasicSelectHdl, ListBox * );
     //DECL_LINK( CheckBoxHdl, SvTreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
+    DECL_LINK( CheckPasswordHdl, SvxPasswordDialog * );
     void                CheckButtons();
     void                DeleteCurrent();
     void                NewLib();

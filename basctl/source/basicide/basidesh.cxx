@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-17 10:12:29 $
+ *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,10 +110,12 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
+#include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
-
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -724,64 +726,72 @@ void BasicIDEShell::UpdateWindows()
 
             for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
             {
+                // check, if library is password protected and not verified
+                BOOL bProtected = FALSE;
                 String aLibName = pLibNames[ i ];
-
-                // TODO: check password
-                /* old code
-                if ( !pBasicMgr->HasPassword( nLib ) ||
-                        pBasicMgr->IsPasswordVerified( nLib ) )
+                ::rtl::OUString aOULibName( aLibName );
+                Reference< script::XLibraryContainer > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pDocShell ), UNO_QUERY );
+                if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
                 {
-                */
+                    Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+                    if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+                    {
+                        bProtected = TRUE;
+                    }
+                }
 
-                StarBASIC* pLib = pBasicMgr->GetLib( aLibName );
-
-                if ( pLib && ( !pCurBasic || ( pLib == pCurBasic ) ) )
+                if ( !bProtected )
                 {
-                    ImplStartListening( pLib );
+                    StarBASIC* pLib = pBasicMgr->GetLib( aLibName );
 
-                    LibInfo* pLibInf =  IDE_DLL()->GetExtraData()->GetLibInfos().GetInfo( pLib );
-
-                    // modules
-                    try
+                    if ( pLib && ( !pCurBasic || ( pLib == pCurBasic ) ) )
                     {
-                        Sequence< ::rtl::OUString > aModNames = BasicIDE::GetModuleNames( pDocShell, aLibName );
-                        sal_Int32 nModCount = aModNames.getLength();
-                        const ::rtl::OUString* pModNames = aModNames.getConstArray();
+                        ImplStartListening( pLib );
 
-                        for ( sal_Int32 j = 0 ; j < nModCount ; j++ )
+                        LibInfo* pLibInf =  IDE_DLL()->GetExtraData()->GetLibInfos().GetInfo( pLib );
+
+                        // modules
+                        try
                         {
-                            String aModName = pModNames[ j ];
-                            if ( !FindBasWin( pLib, aModName, FALSE ) )
-                                CreateBasWin( pLib, aModName );
+                            Sequence< ::rtl::OUString > aModNames = BasicIDE::GetModuleNames( pDocShell, aLibName );
+                            sal_Int32 nModCount = aModNames.getLength();
+                            const ::rtl::OUString* pModNames = aModNames.getConstArray();
 
-                            if ( pLibInf && !pNextActiveModule && ( aModName == pLibInf->aCurrentModule ) )
-                                pNextActiveModule = pLib->FindModule( aModName );
+                            for ( sal_Int32 j = 0 ; j < nModCount ; j++ )
+                            {
+                                String aModName = pModNames[ j ];
+                                if ( !FindBasWin( pLib, aModName, FALSE ) )
+                                    CreateBasWin( pLib, aModName );
+
+                                if ( pLibInf && !pNextActiveModule && ( aModName == pLibInf->aCurrentModule ) )
+                                    pNextActiveModule = pLib->FindModule( aModName );
+                            }
                         }
-                    }
-                    catch ( container::NoSuchElementException& e )
-                    {
-                        ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                        DBG_ERROR( aBStr.GetBuffer() );
-                    }
-
-                    // dialogs
-                    try
-                    {
-                        Sequence< ::rtl::OUString > aDlgNames = BasicIDE::GetDialogNames( pDocShell, aLibName );
-                        sal_Int32 nDlgCount = aDlgNames.getLength();
-                        const ::rtl::OUString* pDlgNames = aDlgNames.getConstArray();
-
-                        for ( sal_Int32 j = 0 ; j < nDlgCount ; j++ )
+                        catch ( container::NoSuchElementException& e )
                         {
-                            String aDlgName = pDlgNames[ j ];
-                            if ( !FindDlgWin( pLib, aDlgName, FALSE ) ) // this find only looks for non-suspended windows;
-                                CreateDlgWin( pLib, aDlgName );         // suspended windows are handled in CreateDlgWin
+                            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                            DBG_ERROR( aBStr.GetBuffer() );
                         }
-                    }
-                    catch ( container::NoSuchElementException& e )
-                    {
-                        ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                        DBG_ERROR( aBStr.GetBuffer() );
+
+                        // dialogs
+                        try
+                        {
+                            Sequence< ::rtl::OUString > aDlgNames = BasicIDE::GetDialogNames( pDocShell, aLibName );
+                            sal_Int32 nDlgCount = aDlgNames.getLength();
+                            const ::rtl::OUString* pDlgNames = aDlgNames.getConstArray();
+
+                            for ( sal_Int32 j = 0 ; j < nDlgCount ; j++ )
+                            {
+                                String aDlgName = pDlgNames[ j ];
+                                if ( !FindDlgWin( pLib, aDlgName, FALSE ) ) // this find only looks for non-suspended windows;
+                                    CreateDlgWin( pLib, aDlgName );         // suspended windows are handled in CreateDlgWin
+                            }
+                        }
+                        catch ( container::NoSuchElementException& e )
+                        {
+                            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                            DBG_ERROR( aBStr.GetBuffer() );
+                        }
                     }
                 }
             }

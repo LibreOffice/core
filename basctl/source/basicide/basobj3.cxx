@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-26 15:25:17 $
+ *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
+#include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -904,19 +907,29 @@ long BasicIDE::HandleBasicError( StarBASIC* pBasic )
         return 2;
 
     long nRet = 0;
-    BasicIDEShell* pShell = 0;
+    BasicIDEShell* pIDEShell = 0;
     if ( SvtModuleOptions().IsBasicIDE() )
     {
-        BasicManager* pBasicManager = BasicIDE::FindBasicManager( pBasic );
-        if ( pBasicManager )
+        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
+        if ( pBasMgr )
         {
-            USHORT nLib = pBasicManager->GetLibId( pBasic );
-            // TODO: check password
-            //if ( !pBasicManager->HasPassword( nLib ) ||
-            //      pBasicManager->IsPasswordVerified( nLib ) )
-            //{
-                pShell = IDE_DLL()->GetShell();
-                if ( !pShell )
+            BOOL bProtected = FALSE;
+            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+            ::rtl::OUString aOULibName( pBasic->GetName() );
+            Reference< script::XLibraryContainer > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+            if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
+            {
+                Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+                if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+                {
+                    bProtected = TRUE;
+                }
+            }
+
+            if ( !bProtected )
+            {
+                pIDEShell = IDE_DLL()->GetShell();
+                if ( !pIDEShell )
                 {
                     SfxViewFrame* pCurFrame = SfxViewFrame::Current();
                     DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
@@ -925,14 +938,14 @@ long BasicIDE::HandleBasicError( StarBASIC* pBasic )
                     {
                         pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
                     }
-                    pShell = IDE_DLL()->GetShell();
+                    pIDEShell = IDE_DLL()->GetShell();
                 }
-            //}
+            }
         }
     }
 
-    if ( pShell )
-        nRet = pShell->CallBasicErrorHdl( pBasic );
+    if ( pIDEShell )
+        nRet = pIDEShell->CallBasicErrorHdl( pBasic );
     else
         ErrorHandler::HandleError( StarBASIC::GetErrorCode() );
 

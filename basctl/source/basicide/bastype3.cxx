@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-24 17:00:15 $
+ *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
+#include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -110,60 +113,62 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
         BasicManager* pBasMgr = ((BasicManagerEntry*)pUser)->GetBasicManager();
         SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
 
-        /*
         // check password
         BOOL bOK = TRUE;
-        if ( pBasMgr->HasPassword( nLib ) &&
-                !pBasMgr->IsPasswordVerified( nLib ) )
-        {
-            bOK = QueryPassword( pBasMgr, nLib );
-        }
-        if ( bOK )
-        {
-        */
-
-        // load module library
-        BOOL bModLibLoaded = FALSE;
-        Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
+        Reference< script::XLibraryContainer > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
         {
-            if ( !xModLibContainer->isLibraryLoaded( aOULibName ) )
+            Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+            if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
             {
-                EnterWait();
-                xModLibContainer->loadLibrary( aOULibName );
-                LeaveWait();
+                bOK = QueryPassword( pShell, aLibName );
             }
-            bModLibLoaded = TRUE;
         }
 
-        // load dialog library
-        BOOL bDlgLibLoaded = FALSE;
-        Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
-        if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
+        if ( bOK )
         {
-            if ( !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
+            // load module library
+            BOOL bModLibLoaded = FALSE;
+            if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
             {
-                EnterWait();
-                xDlgLibContainer->loadLibrary( aOULibName );
-                LeaveWait();
+                if ( !xModLibContainer->isLibraryLoaded( aOULibName ) )
+                {
+                    EnterWait();
+                    xModLibContainer->loadLibrary( aOULibName );
+                    LeaveWait();
+                }
+                bModLibLoaded = xModLibContainer->isLibraryLoaded( aOULibName );
             }
-            bDlgLibLoaded = TRUE;
-        }
 
-        if ( bModLibLoaded || bDlgLibLoaded )
-        {
-            // create the sub entries
-            ImpCreateLibSubEntries( pEntry, pShell, aLibName );
+            // load dialog library
+            BOOL bDlgLibLoaded = FALSE;
+            Reference< script::XLibraryContainer > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+            if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
+            {
+                if ( !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
+                {
+                    EnterWait();
+                    xDlgLibContainer->loadLibrary( aOULibName );
+                    LeaveWait();
+                }
+                bDlgLibLoaded = xDlgLibContainer->isLibraryLoaded( aOULibName );
+            }
 
-            // exchange image
-            Image aImage( aImages.GetImage( IMGID_LIB ) );
-            SetExpandedEntryBmp( pEntry, aImage );
-            SetCollapsedEntryBmp( pEntry, aImage );
-        }
-        else
-        {
-            // library couldn't be loaded
-            ErrorBox( this, WB_OK|WB_DEF_OK, String( IDEResId( RID_STR_ERROROPENLIB ) ) ).Execute();
+            if ( bModLibLoaded || bDlgLibLoaded )
+            {
+                // create the sub entries
+                ImpCreateLibSubEntries( pEntry, pShell, aLibName );
+
+                // exchange image
+                Image aImage( aImages.GetImage( IMGID_LIB ) );
+                SetExpandedEntryBmp( pEntry, aImage );
+                SetCollapsedEntryBmp( pEntry, aImage );
+            }
+            else
+            {
+                // library couldn't be loaded
+                ErrorBox( this, WB_OK|WB_DEF_OK, String( IDEResId( RID_STR_ERROROPENLIB ) ) ).Execute();
+            }
         }
     }
     else

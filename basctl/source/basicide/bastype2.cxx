@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-24 17:00:15 $
+ *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
+#include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -399,21 +402,24 @@ long BasicTreeListBox::ExpandingHdl()
     BOOL bOK = TRUE;
     if ( GetModel()->GetDepth( GetHdlEntry() ) == 1 )
     {
-        String aLib, aDummy1, aDummy2;
-        BasicManager* pBasicManager = GetSelectedSbx( aLib, aDummy1, aDummy2 );
-        if ( aLib.Len() && !aDummy1.Len() && !aDummy2.Len() )
+        String aLibName, aDummy1, aDummy2;
+        BasicManager* pBasMgr = GetSelectedSbx( aLibName, aDummy1, aDummy2 );
+        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+
+        if ( aLibName.Len() && !aDummy1.Len() && !aDummy2.Len() )
         {
-            // TODO: check password
-            /* old code
-            // Beim expandieren einer Lib pruefen, ob Passwortschutz!
-            USHORT nLib = pBasicManager->GetLibId( aLib );
-            if ( pBasicManager->HasPassword( nLib ) &&
-                    !pBasicManager->IsPasswordVerified( nLib ) )
+            // check password, if library is password protected and not verified
+            ::rtl::OUString aOULibName( aLibName );
+            Reference< script::XLibraryContainer > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+            if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
             {
-                bOK = QueryPassword( pBasicManager, nLib );
+                Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+                if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+                {
+                    bOK = QueryPassword( pShell, aLibName );
+                }
             }
-            */
-        }
+         }
     }
     return bOK;
 }
@@ -423,17 +429,19 @@ BOOL BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
     BOOL bProtected = FALSE;
     if ( pEntry && ( GetModel()->GetDepth( pEntry ) == 1 ) )
     {
-        String aLib, aDummy1, aDummy2, aDummy3;
-        BasicManager* pBasicManager = GetSbx( pEntry, aLib, aDummy1, aDummy2, aDummy3 );
-        USHORT nLib = pBasicManager->GetLibId( aLib );
-        // TODO: check password
-        /* old code
-        if ( pBasicManager->HasPassword( nLib ) &&
-                !pBasicManager->IsPasswordVerified( nLib ) )
+        String aLibName, aDummy1, aDummy2, aDummy3;
+        BasicManager* pBasMgr = GetSbx( pEntry, aLibName, aDummy1, aDummy2, aDummy3 );
+        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+        ::rtl::OUString aOULibName( aLibName );
+        Reference< script::XLibraryContainer > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+        if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
         {
-            bProtected = TRUE;
+            Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+            if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+            {
+                bProtected = TRUE;
+            }
         }
-        */
     }
     return bProtected;
 }

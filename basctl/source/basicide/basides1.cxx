@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-24 10:27:33 $
+ *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,13 @@
 
 #ifndef _SFX_MINFITEM_HXX //autogen
 #include <sfx2/minfitem.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
+#include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -550,33 +557,34 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
 
             StarBASIC* pLib = 0;
             BasicManager* pMgr = 0;
+            SfxObjectShell* pShell = 0;
+            String aLibName;
+            ::rtl::OUString aOULibName;
             if ( aBasMgrAndLib.Len() )
             {
                 String aBasMgr( GetMgrFromMgrAndLib( aBasMgrAndLib ) );
-                String aLib( GetLibFromMgrAndLib( aBasMgrAndLib ) );
+                aLibName = GetLibFromMgrAndLib( aBasMgrAndLib );
+                aOULibName = aLibName;
 
                 pMgr = BasicIDE::FindBasicManager( aBasMgr );
                 if ( !pMgr )    // Doc schon weg...
                     return;
-                pLib = pMgr->GetLib( aLib );
+                pShell = BasicIDE::FindDocShell( pMgr );
+                pLib = pMgr->GetLib( aLibName );
                 if ( !pLib && ( nSlot == SID_BASICIDE_LIBSELECTED ) )
                 {
-                    // LoadOnDemand
-                    SfxObjectShell* pShell = BasicIDE::FindDocShell( pMgr );
-                    ::rtl::OUString aOULibName( aLib );
-
                     // load module library (if not loaded)
-                    Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
+                    Reference< script::XLibraryContainer > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
                     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
                         xModLibContainer->loadLibrary( aOULibName );
 
                     // load dialog library (if not loaded)
-                    Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
+                    Reference< script::XLibraryContainer > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
                     if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
                         xDlgLibContainer->loadLibrary( aOULibName );
 
                     // get Basic
-                    pLib = pMgr->GetLib( aLib );
+                    pLib = pMgr->GetLib( aLibName );
 
                     if ( !pLib )
                     {
@@ -591,21 +599,23 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             {
                 // Keine Abfrage, ob pCurBasic == pLib,
                 // falls welche ausgeblendet waren.
-                BOOL bSet = TRUE;
+                BOOL bOK = TRUE;
 
-                // TODO: check password
-                /* old code
                 if ( pLib )
                 {
-                    USHORT nLib = pMgr->GetLibId( pLib );
-                    if ( pMgr->HasPassword( nLib ) &&
-                            !pMgr->IsPasswordVerified( nLib ) )
+                    // check password, if library is password protected and not verified
+                    Reference< script::XLibraryContainer > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+                    if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
                     {
-                        bSet = QueryPassword( pMgr, nLib );
+                        Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+                        if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+                        {
+                            bOK = QueryPassword( pShell, aLibName );
+                        }
                     }
                 }
-                */
-                if ( bSet )
+
+                if ( bOK )
                     SetCurBasic( pLib );
                 else    // alten Wert einstellen...
                     BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR, TRUE, FALSE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-24 17:00:15 $
+ *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
+#include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#endif
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -152,6 +155,7 @@ LibPage::LibPage( Window * pParent ) :
     aLibBox.SetMode( LIBMODE_MANAGER );
     aLibBox.EnableInplaceEditing( TRUE );
     //aLibBox.SetCheckButtonHdl( LINK( this, LibPage, CheckBoxHdl ) );
+    aLibBox.SetWindowBits( WB_HSCROLL );
     aCloseButton.GrabFocus();
 
     long aTabs[] = { 2, 30, 120 };
@@ -290,26 +294,8 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
     }
     else if ( pButton == &aPasswordButton )
     {
-        String aBasicManager( aBasicsBox.GetSelectEntry() );
-        BasicManager* pBasMgr = BasicIDE::FindBasicManager( aBasicManager );
-        DBG_ASSERT( pBasMgr, "BasicManager?!" );
-
-        SvLBoxEntry* pCurEntry = aLibBox.GetCurEntry();
-        USHORT nLib = (USHORT)aLibBox.GetModel()->GetAbsPos( pCurEntry );
-
-        BOOL bHadPassword = aLibBox.GetBasicManager()->HasPassword( nLib );
-        // Noch nicht geladen, falls gerade erst aktiviert.
-        // Wuerde sonst erst beim Beenden des Dlg's geschehen.
-        /* old code
-        if ( !aLibBox.GetBasicManager()->IsLibLoaded( nLib ) )
-        {
-            Application::EnterWait();
-            aLibBox.GetBasicManager()->LoadLib( nLib );
-            Application::LeaveWait();
-        }
-        */
-
         SfxObjectShell* pShell = BasicIDE::FindDocShell( aLibBox.GetBasicManager() );
+        SvLBoxEntry* pCurEntry = aLibBox.GetCurEntry();
         String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
         ::rtl::OUString aOULibName( aLibName );
 
@@ -331,29 +317,66 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
             Application::LeaveWait();
         }
 
-        SvxPasswordDialog* pDlg = new SvxPasswordDialog( this, TRUE );
-        String aPassword = pBasMgr->GetPassword( nLib );
-#ifdef DEBUG
-        InfoBox( 0, aPassword ).Execute();
-#endif
-        pDlg->SetOldPassword( aPassword );
-
-        if ( pDlg->Execute() == RET_OK )
+        // check, if library is password protected
+        if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
         {
-            pBasMgr->SetPassword( nLib, pDlg->GetNewPassword() );
-            pBasMgr->SetPasswordVerified( nLib );
-            if ( bHadPassword != aLibBox.GetBasicManager()->HasPassword( nLib ) )
+            Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+            if ( xPasswd.is() )
             {
-                aLibBox.GetModel()->Remove( pCurEntry );
-                ImpInsertLibEntry( pBasMgr->GetLibName( nLib ), nLib );
-                aLibBox.GetBasicManager()->SetPasswordVerified( nLib );
+                BOOL bProtected = xPasswd->isLibraryPasswordProtected( aOULibName );
+
+                // change password dialog
+                SvxPasswordDialog* pDlg = new SvxPasswordDialog( this, TRUE, !bProtected );
+                pDlg->SetCheckPasswordHdl( LINK( this, LibPage, CheckPasswordHdl ) );
+
+                if ( pDlg->Execute() == RET_OK )
+                {
+                    BOOL bNewProtected = xPasswd->isLibraryPasswordProtected( aOULibName );
+
+                    if ( bNewProtected != bProtected )
+                    {
+                        ULONG nPos = (ULONG)aLibBox.GetModel()->GetAbsPos( pCurEntry );
+                        aLibBox.GetModel()->Remove( pCurEntry );
+                        ImpInsertLibEntry( aLibName, nPos );
+                        aLibBox.SetCurEntry( aLibBox.GetEntry( nPos ) );
+                    }
+                }
+                delete pDlg;
             }
         }
-        delete pDlg;
     }
     CheckButtons();
     return 0;
 }
+
+
+IMPL_LINK_INLINE_START( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
+{
+    long nRet = 0;
+
+    SfxObjectShell* pShell = BasicIDE::FindDocShell( aLibBox.GetBasicManager() );
+    SvLBoxEntry* pCurEntry = aLibBox.GetCurEntry();
+    ::rtl::OUString aOULibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
+    Reference< script::XLibraryContainerPassword > xPasswd( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+
+    if ( xPasswd.is() )
+    {
+        try
+        {
+            ::rtl::OUString aOUOldPassword( pDlg->GetOldPassword() );
+            ::rtl::OUString aOUNewPassword( pDlg->GetNewPassword() );
+            xPasswd->changeLibraryPassword( aOULibName, aOUOldPassword, aOUNewPassword );
+            nRet = 1;
+        }
+        catch (...)
+        {
+        }
+    }
+
+    return nRet;
+}
+IMPL_LINK_INLINE_END( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
+
 
 void LibPage::NewLib()
 {
@@ -738,6 +761,7 @@ void LibPage::SetCurLib()
         if ( !pEntry )
             pEntry = aLibBox.GetEntry( 0 );
         aLibBox.SetCurEntry( pEntry );
+        //aLibBox.MakeVisible( pEntry );
     }
 }
 
@@ -790,33 +814,38 @@ void LibPage::ActivateCurrentLibSettings()
 
 SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, ULONG nPos )
 {
-    //BasicManager* pBasicManager = aLibBox.GetBasicManager();
-    //DBG_ASSERT( pBasicManager, "ImpInsertLibEntry: Kein BasicManager!" );
+    // check, if library is password protected
+    BOOL bProtected = FALSE;
+    SfxObjectShell* pShell = BasicIDE::FindDocShell( aLibBox.GetBasicManager() );
+    ::rtl::OUString aOULibName( rLibName );
+    Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+    if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
+    {
+        Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+        if ( xPasswd.is() )
+        {
+            bProtected = xPasswd->isLibraryPasswordProtected( aOULibName );
+        }
+    }
 
-    // TODO: check password
-    //BOOL bPassword = pBasicManager->HasPassword( nLib );
-//  if ( !pBasicManager->IsLibLoaded( nLib ) )
-//  {
-//      // Lib muss geladen sein, wenn Passwortabfrage...
-//      pBasicManager->LoadLib( nLib );
-//      bPassword = pBasicManager->HasPassword( nLib );
-//      pBasicManager->UnloadLib( nLib );
-//  }
-
-    /*
-    if ( bPassword )
+    if ( bProtected )
     {
         Image aImg = Image( IDEResId( RID_IMG_LOCKED ) );
         Size aSz = aImg.GetSizePixel();
         aLibBox.SetDefaultExpandedEntryBmp( aImg );
         aLibBox.SetDefaultCollapsedEntryBmp( aImg );
     }
-    */
 
     SvLBoxEntry* pNewEntry = aLibBox.InsertEntry( rLibName, nPos );
 
-    // TODO: check, if library is reference/link
-    /*
+    // check, if library is link
+    if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLink( aOULibName ) )
+    {
+        String aLinkURL = xModLibContainer->getLibraryLinkURL( aOULibName );
+        aLibBox.SetEntryText( aLinkURL, pNewEntry, 1 );
+    }
+
+    /* old code
     if ( pBasicManager->IsReference( nLib ) || pBasicManager->IsExtern( nLib ) )
     {
         String aLibStorage = pBasicManager->GetLibStorageName( nLib );
@@ -839,15 +868,12 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, ULONG nPos )
 
     //aLibBox.CheckEntryPos( nLib, pBasicManager->IsLibLoaded( nLib ) );
 
-
-    /*
-    if ( bPassword )
+    if ( bProtected )
     {
         Image aImg; // Default zuruecksetzen
         aLibBox.SetDefaultExpandedEntryBmp( aImg );
         aLibBox.SetDefaultCollapsedEntryBmp( aImg );
     }
-    */
 
     return pNewEntry;
 }

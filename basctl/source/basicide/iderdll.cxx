@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-11 15:40:15 $
+ *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,15 @@
 
 #define ITEMID_SEARCH   0
 #include <svx/srchitem.hxx>
+
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
+#include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#endif
+
+using namespace ::rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
 
 class BasicIDEModule : public BasicIDEModuleDummy
 {
@@ -237,38 +246,37 @@ void BasicIDEData::SetSearchItem( const SvxSearchItem& rItem )
 
 IMPL_LINK( BasicIDEData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
 {
-    BasicIDEShell* pShell = IDE_DLL()->GetShell();
-    if ( pShell )
+    long nRet = 0;
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    if ( pIDEShell )
     {
-        BasicManager* pBasicManager = BasicIDE::FindBasicManager( pBasic );
-        if ( pBasicManager )
+        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
+        if ( pBasMgr )
         {
-            // TODO: check password
-            /* old code
-            USHORT nLib = pBasicManager->GetLibId( pBasic );
             // Hier lande ich zweimal, wenn Step into protected Basic
             // => schlecht, wenn Passwortabfrage 2x, ausserdem sieht man in
             // dem PasswordDlg nicht, fuer welche Lib...
             // => An dieser Stelle keine Passwort-Abfrage starten
-            if ( !pBasicManager->HasPassword( nLib ) ||
-                    pBasicManager->IsPasswordVerified( nLib )
-                    //|| QueryPassword( pBasicManager, nLib )
-                    )
+            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+            ::rtl::OUString aOULibName( pBasic->GetName() );
+            Reference< script::XLibraryContainer > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+            if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
             {
-                return pShell->CallBasicBreakHdl( pBasic );
+                Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+                if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+                {
+                       // Ein Step-Out muesste mich aus den geschuetzten Bereich befoerdern...
+                    nRet = SbDEBUG_STEPOUT;
+                }
+                else
+                {
+                      nRet = pIDEShell->CallBasicBreakHdl( pBasic );
+                }
             }
-            else
-            {
-                // Ein Step-Out muesste mich aus den geschuetzten Bereich befoerdern...
-                return SbDEBUG_STEPOUT;
-            }
-            */
-            /* new code */
-            return pShell->CallBasicBreakHdl( pBasic );
         }
     }
 
-    return 0;
+    return nRet;
 }
 
 IMPL_LINK( BasicIDEData, ExecuteMacroEvent, void *, pData )
