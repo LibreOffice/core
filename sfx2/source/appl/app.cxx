@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2001-01-23 15:40:55 $
+ *  last change: $Author: as $ $Date: 2001-01-31 14:59:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@
 
 #include <svtools/svdde.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/tempfile.hxx>
+#include <unotools/tempfile.hxx>
 #pragma hdrstop
 
 #define _SVSTDARR_STRINGSDTOR
@@ -1379,14 +1379,14 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
                     if ( pFilter )
                     {
                         aFilterName = pFilter->GetName();
-                        TempFile aTempFile( &aSavePath );
-                        aSaveName = aTempFile.GetName();
+                        ::utl::TempFile aTempFile( &aSavePath );
+                        aSaveName = aTempFile.GetURL();
                     }
                     else
                     {
                         String aExt( DEFINE_CONST_UNICODE( ".sav" ) );
-                        TempFile aTempFile( DEFINE_CONST_UNICODE( "exc" ), &aExt, &aSavePath );
-                        aSaveName = aTempFile.GetName();
+                        ::utl::TempFile aTempFile( DEFINE_CONST_UNICODE( "exc" ), &aExt, &aSavePath );
+                        aSaveName = aTempFile.GetURL();
                     }
 
                     aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aSaveName ) );
