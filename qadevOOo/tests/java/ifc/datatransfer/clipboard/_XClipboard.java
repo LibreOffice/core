@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XClipboard.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:49 $
+ *  last change:$Date: 2003-09-08 10:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,13 @@
 
 package ifc.datatransfer.clipboard;
 
+import lib.MultiMethodTest;
+import lib.StatusException;
+
 import com.sun.star.datatransfer.DataFlavor;
 import com.sun.star.datatransfer.XTransferable;
 import com.sun.star.datatransfer.clipboard.XClipboard;
 import com.sun.star.datatransfer.clipboard.XClipboardOwner;
-import lib.MultiMethodTest;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.datatransfer.clipboard.XClipboard</code>
@@ -135,7 +136,7 @@ public class _XClipboard extends MultiMethodTest {
      */
     public void _getName() {
         String name = oObj.getName();
-        tRes.tested("getName()", oObj.getName() != null);
+        tRes.tested("getName()", name != null);
     }
 
     /**
