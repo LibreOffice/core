@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdffilter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-16 15:57:27 $
+ *  last change: $Author: ka $ $Date: 2002-08-19 14:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,13 +85,18 @@ PDFFilter::~PDFFilter()
 sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 {
     Reference< XOutputStream >  xOStm;
+    Sequence< PropertyValue >   aFilterData;
     sal_Int32                   nLength = rDescriptor.getLength();
     const PropertyValue*        pValue = rDescriptor.getConstArray();
     sal_Bool                    bRet = sal_False;
 
     for ( sal_Int32 i = 0 ; ( i < nLength ) && !xOStm.is(); ++i)
+    {
         if( pValue[ i ].Name.equalsAscii( "OutputStream" ) )
             pValue[ i ].Value >>= xOStm;
+        else if( pValue[ i ].Name.equalsAscii( "FilterData" ) )
+            pValue[ i ].Value >>= aFilterData;
+    }
 
     if( mxSrcDoc.is() && xOStm.is() )
     {
@@ -99,7 +104,7 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         ::utl::TempFile aTempFile;
 
         aTempFile.EnableKillingFile();
-        bRet = aExport.Export( aTempFile.GetURL() );
+        bRet = aExport.Export( aTempFile.GetURL(), aFilterData );
 
         if( bRet )
         {

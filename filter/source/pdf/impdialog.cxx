@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-19 06:41:16 $
+ *  last change: $Author: ka $ $Date: 2002-08-19 14:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,22 @@
 
 ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< PropertyValue >& rFilterData ) :
     ModalDialog( pParent, ResId( DLG_PDFEXPORT, &rResMgr ) ),
-    maBtnOK( this, ResId( BTN_OK ) ),
-    maBtnCancel( this, ResId( BTN_CANCEL ) ),
-    maBtnHelp( this, ResId( BTN_HELP ) ),
-    maGrpExport( this, ResId( GRP_EXPORT ) ),
+    maBtnOK( this, ResId( BT_OK ) ),
+    maBtnCancel( this, ResId( BT_CANCEL ) ),
+    maBtnHelp( this, ResId( BT_HELP ) ),
+    maFlRange( this, ResId( FL_RANGE ) ),
+    maRbAll( this, ResId( RB_ALL ) ),
+    maRbPages( this, ResId( RB_PAGES ) ),
+    maRbSelection( this, ResId( RB_SELECTION ) ),
+    maEdPages( this, ResId( ED_PAGES ) ),
+    maFlCompression( this, ResId( FL_COMPRESSION ) ),
+    maRbScreen( this, ResId( RB_SCREEN ) ),
+    maRbPrint( this, ResId( RB_PRINT ) ),
+    maRbPress( this, ResId( RB_PRESS ) ),
     maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ), &rFilterData )
 {
     FreeResource();
+    maRbPages.SetToggleHdl( LINK( this, ImpPDFDialog, TogglePagesHdl ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -85,7 +94,59 @@ ImpPDFDialog::~ImpPDFDialog()
 
 // -----------------------------------------------------------------------------
 
-Sequence< PropertyValue > ImpPDFDialog::GetFilterData() const
+void ImpPDFDialog::Init( const OUString& rPageSelectionRange )
 {
-    return maConfigItem.GetFilterData();
+    const ULONG nCompressMode = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 0 );
+
+    maRbAll.Check();
+    TogglePagesHdl( NULL );
+    maRbSelection.Enable( ( maPageSelectionRange = rPageSelectionRange ).getLength() > 0 );
+
+    switch( nCompressMode )
+    {
+        case( 1 ): maRbPrint.Check(); break;
+        case( 2 ): maRbPress.Check(); break;
+
+        default:
+            maRbScreen.Check();
+        break;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+Sequence< PropertyValue > ImpPDFDialog::GetFilterData()
+{
+    sal_Int32 nCompressMode;
+
+    if( maRbPrint.IsChecked() )
+        nCompressMode = 1;
+    else if( maRbPress.IsChecked() )
+        nCompressMode = 2;
+    else
+        nCompressMode = 0;
+
+    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), nCompressMode );
+
+    Sequence< PropertyValue > aRet( maConfigItem.GetFilterData() );
+
+    aRet.realloc( aRet.getLength() + 1 );
+    aRet[ aRet.getLength() - 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSelectionRange" ) );
+
+    if( maRbPages.IsChecked() )
+        aRet[ aRet.getLength() - 1 ].Value <<= OUString( maEdPages.GetText() );
+    else if( maRbSelection.IsChecked() )
+        aRet[ aRet.getLength() - 1 ].Value <<= OUString( maPageSelectionRange );
+
+    return aRet;
+}
+
+// -----------------------------------------------------------------------------
+
+IMPL_LINK( ImpPDFDialog, TogglePagesHdl, void*, p )
+{
+    maEdPages.Enable( maRbPages.IsChecked() );
+    maEdPages.SetReadOnly( !maRbPages.IsChecked() );
+
+    return 0;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-19 06:41:16 $
+ *  last change: $Author: ka $ $Date: 2002-08-19 14:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,16 @@
  ************************************************************************/
 
 #define DLG_PDFEXPORT       1024
-#define BTN_OK              1
-#define BTN_CANCEL          1
-#define BTN_HELP            1
-#define GRP_EXPORT          1
+
+#define FL_RANGE            1
+#define RB_ALL              2
+#define RB_PAGES            3
+#define RB_SELECTION        4
+#define ED_PAGES            5
+#define BT_OK               6
+#define BT_CANCEL           7
+#define BT_HELP             8
+#define FL_COMPRESSION      9
+#define RB_SCREEN           10
+#define RB_PRINT            11
+#define RB_PRESS            12

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-16 12:13:29 $
+ *  last change: $Author: ka $ $Date: 2002-08-19 14:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "pdfexport.hxx"
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
+#include <tools/multisel.hxx>
 #include <vcl/pdfwriter.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/virdev.hxx>
@@ -72,6 +73,7 @@
 #include <so3/embobj.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <svtools/filterconfigitem.hxx>
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -114,7 +116,7 @@ PDFExport::~PDFExport()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool PDFExport::Export( const OUString& rFile )
+sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& rFilterData )
 {
     INetURLObject   aURL( rFile );
     OUString        aFile;
@@ -148,7 +150,6 @@ sal_Bool PDFExport::Export( const OUString& rFile )
                     MapUnit                     eMapUnit = MAP_RELATIVE;
                     sal_Int32                   nPageCount, nNextPage = 0;
                     sal_Int16                   nMapUnit = -1;
-                    sal_Bool                    bNextPage = sal_True;
 
                     for( sal_Int32 nProperty = 0, nPropertyCount = aRenderer.getLength(); nProperty < nPropertyCount; ++nProperty )
                     {
@@ -179,9 +180,26 @@ sal_Bool PDFExport::Export( const OUString& rFile )
                         break;
                     }
 
-                    if( ( MAP_RELATIVE != eMapUnit ) &&  ( aPageSize.Width > 0 ) &&( aPageSize.Height > 0 ) )
+                    if( ( MAP_RELATIVE != eMapUnit ) && ( aPageSize.Width > 0 ) &&( aPageSize.Height > 0 ) )
                     {
-                        for( sal_Int32 i = 0; i < nPageCount; ++i )
+                        FilterConfigItem    aFilterOptions( const_cast< Sequence< PropertyValue >* >( &rFilterData ) );
+                        OUString            aPages( aFilterOptions.ReadString( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSelectionRange" ) ), OUString() ) );
+                        sal_Int32           nCompressMode( aFilterOptions.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 0 ) );
+                        const Range         aRange( 1, nPageCount );
+                        MultiSelection      aSel;
+
+                        if( !aPages.getLength() )
+                        {
+                            aSel.SetTotalRange( aRange );
+                            aSel.Select( aRange );
+                        }
+                        else
+                        {
+                            aSel = MultiSelection( aPages );
+                            aSel.SetTotalRange( aRange );
+                        }
+
+                        for( sal_Int32 nSel = aSel.FirstSelected(); nSel != SFX_ENDOFSELECTION; nSel = aSel.NextSelected() )
                         {
                             GDIMetaFile                 aMtf;
                             const MapMode               aMapMode( eMapUnit );
@@ -201,7 +219,7 @@ sal_Bool PDFExport::Export( const OUString& rFile )
                             aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
 
                             aRenderOptions[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageNumber" ) );
-                            aRenderOptions[ 1 ].Value <<= static_cast< sal_Int32 >( i + 1 );
+                            aRenderOptions[ 1 ].Value <<= static_cast< sal_Int32 >( nSel );
 
                             xRenderable->render( aRenderOptions );
 
@@ -209,7 +227,7 @@ sal_Bool PDFExport::Export( const OUString& rFile )
                             aMtf.WindStart();
 
                             if( aMtf.GetActionCount() )
-                                bRet = ImplExportPage( aWriter, aMtf ) || bRet;
+                                bRet = ImplExportPage( aWriter, aMtf, nCompressMode ) || bRet;
                         }
                     }
                 }
@@ -217,7 +235,8 @@ sal_Bool PDFExport::Export( const OUString& rFile )
                 {
                 }
 
-                aWriter.Emit();
+                if( bRet )
+                    aWriter.Emit();
             }
         }
     }
@@ -227,7 +246,7 @@ sal_Bool PDFExport::Export( const OUString& rFile )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, const GDIMetaFile& rMtf )
+sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, const GDIMetaFile& rMtf, sal_Int32 nCompressMode )
 {
     VirtualDevice   aDummyVDev;
     const Size      aSizePDF( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_POINT ) );
@@ -242,14 +261,14 @@ sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, const GDIMetaFile& rMtf 
     rWriter.SetMapMode( rMtf.GetPrefMapMode() );
 
     rWriter.SetClipRegion( aPageRect );
-    bRet = ImplWriteActions( rWriter, rMtf, aDummyVDev );
+    bRet = ImplWriteActions( rWriter, rMtf, aDummyVDev, nCompressMode );
 
     return bRet;
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, const GDIMetaFile& rMtf, VirtualDevice& rDummyVDev )
+sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, const GDIMetaFile& rMtf, VirtualDevice& rDummyVDev, sal_Int32 nCompressMode )
 {
     for( ULONG i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
     {
@@ -347,14 +366,14 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, const GDIMetaFile& rMt
                 const MetaGradientAction* pA = (const MetaGradientAction*) pAction;
                 const PolyPolygon         aPolyPoly( pA->GetRect() );
 
-                ImplWriteGradient( rWriter, aPolyPoly, pA->GetGradient(), rDummyVDev );
+                ImplWriteGradient( rWriter, aPolyPoly, pA->GetGradient(), rDummyVDev, nCompressMode );
             }
             break;
 
             case( META_GRADIENTEX_ACTION ):
             {
                 const MetaGradientExAction* pA = (const MetaGradientExAction*) pAction;
-                ImplWriteGradient( rWriter, pA->GetPolyPolygon(), pA->GetGradient(), rDummyVDev );
+                ImplWriteGradient( rWriter, pA->GetPolyPolygon(), pA->GetGradient(), rDummyVDev, nCompressMode );
             }
             break;
 
@@ -384,7 +403,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, const GDIMetaFile& rMt
                 const MetaEPSAction* pA = (const MetaEPSAction*) pAction;
 
                 rWriter.Push();
-                ImplWriteActions( rWriter, pA->GetSubstitute(), rDummyVDev );
+                ImplWriteActions( rWriter, pA->GetSubstitute(), rDummyVDev, nCompressMode );
                 rWriter.Pop();
             }
             break;
@@ -413,7 +432,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, const GDIMetaFile& rMt
                     }
 
                     if( pGradAction )
-                        ImplWriteGradient( rWriter, pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), rDummyVDev );
+                        ImplWriteGradient( rWriter, pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), rDummyVDev, nCompressMode );
                 }
             }
             break;
@@ -666,7 +685,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, const GDIMetaFile& rMt
 
 // -----------------------------------------------------------------------------
 
-void PDFExport::ImplWriteGradient( PDFWriter& rWriter, const PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rDummyVDev )
+void PDFExport::ImplWriteGradient( PDFWriter& rWriter, const PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rDummyVDev, sal_Int32 nCompressMode )
 {
     GDIMetaFile aTmpMtf;
 
@@ -674,6 +693,6 @@ void PDFExport::ImplWriteGradient( PDFWriter& rWriter, const PolyPolygon& rPolyP
 
     rWriter.Push();
     rWriter.IntersectClipRegion( rPolyPoly );
-    ImplWriteActions( rWriter, aTmpMtf, rDummyVDev );
+    ImplWriteActions( rWriter, aTmpMtf, rDummyVDev, nCompressMode );
     rWriter.Pop();
 }

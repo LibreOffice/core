@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-19 06:41:16 $
+ *  last change: $Author: ka $ $Date: 2002-08-19 14:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/edit.hxx>
 #include <svtools/filterconfigitem.hxx>
 
 // ----------------
@@ -81,16 +82,29 @@ private:
       OKButton                          maBtnOK;
     CancelButton                        maBtnCancel;
     HelpButton                          maBtnHelp;
-    FixedLine                           maGrpExport;
+    FixedLine                           maFlRange;
+    RadioButton                         maRbAll;
+    RadioButton                         maRbPages;
+    RadioButton                         maRbSelection;
+    Edit                                maEdPages;
+    FixedLine                           maFlCompression;
+    RadioButton                         maRbScreen;
+    RadioButton                         maRbPrint;
+    RadioButton                         maRbPress;
 
     FilterConfigItem                    maConfigItem;
+    OUString                            maPageSelectionRange;
+
+                                        DECL_LINK( TogglePagesHdl, void* );
 
 public:
 
                                         ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< PropertyValue >& rFilterData );
                                         ~ImpPDFDialog();
 
-    Sequence< PropertyValue >           GetFilterData() const;
+    void                                Init( const OUString& rPageSelectionRange );
+
+    Sequence< PropertyValue >           GetFilterData();
 };
 
 #endif // IMPDIALOG_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfdialog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-19 06:41:17 $
+ *  last change: $Author: ka $ $Date: 2002-08-19 14:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,18 @@
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
 #include <svtools/solar.hrc>
+
+#ifndef _COM_SUN_STAR_VIEW_XRENDERABLE_HPP_
+#include <com/sun/star/view/XRenderable.hpp>
+#endif
+
+using namespace ::rtl;
+using namespace ::vcl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::view;
 
 // -----------------------
 // - PDFDialog functions -
@@ -139,7 +151,9 @@ Any SAL_CALL PDFDialog::queryInterface( const Type& rType )
     Any aReturn = OGenericUnoDialog::queryInterface( rType );
 
     if( !aReturn.hasValue() )
-        aReturn = ::cppu::queryInterface( rType, static_cast< XPropertyAccess* >( this ) );
+        aReturn = ::cppu::queryInterface( rType,
+                                          static_cast< XPropertyAccess* >( this ),
+                                          static_cast< XExporter* >( this ) );
 
     return aReturn;
 }
@@ -188,7 +202,38 @@ Sequence< OUString > SAL_CALL PDFDialog::getSupportedServiceNames()
 
 Dialog* PDFDialog::createDialog( Window* pParent )
 {
-    return( mpResMgr ? ( new ImpPDFDialog( pParent, *mpResMgr, maFilterData ) ) : NULL );
+    Dialog* pRet = NULL;
+
+    if( mpResMgr )
+    {
+        Reference< XRenderable >    xRenderable( mxSrcDoc, UNO_QUERY );
+        OUString                    aPageSelectionRange;
+
+        if( xRenderable.is() )
+        {
+            Any aAny;
+
+            try
+            {
+                Sequence< PropertyValue >   aRenderer( xRenderable->getRenderer() );
+
+                for( sal_Int32 nProperty = 0, nPropertyCount = aRenderer.getLength(); nProperty < nPropertyCount; ++nProperty )
+                {
+                    if( aRenderer[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSelectionRange" ) ) )
+                        aRenderer[ nProperty].Value >>= aPageSelectionRange;
+                }
+            }
+            catch( RuntimeException )
+            {
+            }
+        }
+
+        ImpPDFDialog* pDlg = new ImpPDFDialog( pParent, *mpResMgr, maFilterData );
+        pDlg->Init( aPageSelectionRange );
+        pRet = pDlg;
+    }
+
+    return pRet;
 }
 
 // -----------------------------------------------------------------------------
@@ -255,10 +300,18 @@ void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
 
     for( sal_Int32 i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if ( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
+        if( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
         {
             maMediaDescriptor[ i ].Value >>= maFilterData;
             break;
         }
     }
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL PDFDialog::setSourceDocument( const Reference< XComponent >& xDoc )
+    throw(IllegalArgumentException, RuntimeException)
+{
+    mxSrcDoc = xDoc;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-19 06:41:17 $
+ *  last change: $Author: ka $ $Date: 2002-08-19 14:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,37 +65,92 @@ ModalDialog DLG_PDFEXPORT
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 186, 100 );
+    Size = MAP_APPFONT ( 179, 101 );
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text = "PDF Export";
-    Text [ ENGLISH ] = "PDF Export";
-    OKButton BTN_OK
+    Text = "PDF Optionen";
+    Text [ ENGLISH ] = "PDF Options";
+    FixedLine FL_RANGE
     {
-        Pos = MAP_APPFONT( 12, 80 );
-        Size = MAP_APPFONT( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 111 , 8 ) ;
+        Text = "Bereich" ;
+        Text [ ENGLISH ] = "Range" ;
+    };
+    RadioButton RB_ALL
+    {
+        Pos = MAP_APPFONT ( 12 , 12 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Text = "~Alle" ;
+        Text [ ENGLISH ] = "~All" ;
+    };
+    RadioButton RB_PAGES
+    {
+        Pos = MAP_APPFONT ( 12 , 24 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "~Seiten" ;
+        Text [ ENGLISH ] = "Pa~ges" ;
+    };
+    RadioButton RB_SELECTION
+    {
+        Pos = MAP_APPFONT ( 12 , 36 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Text = "A~uswahl" ;
+        Text [ ENGLISH ] = "~Selection" ;
+    };
+    Edit ED_PAGES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 65 , 23 ) ;
+        Size = MAP_APPFONT ( 52 , 12 ) ;
+    };
+    FixedLine FL_COMPRESSION
+    {
+        Pos = MAP_APPFONT ( 6 , 52 ) ;
+        Size = MAP_APPFONT ( 111 , 8 ) ;
+        Text = "Komprimierung";
+        Text [ ENGLISH ] = "Compression";
+    };
+    RadioButton RB_SCREEN
+    {
+        Pos = MAP_APPFONT ( 12 , 61 ) ;
+        Size = MAP_APPFONT ( 165 , 10 ) ;
+        Text = "Optimiert für ~Bildschirm (kleinste Dateigröße)" ;
+        Text [ ENGLISH ] = "S~creen optimized (smallest file size)" ;
+    };
+    RadioButton RB_PRINT
+    {
+        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Size = MAP_APPFONT ( 165, 10 ) ;
+        Text = "Optimiert für ~Druck" ;
+        Text [ ENGLISH ] = "~Print optimized" ;
+    };
+    RadioButton RB_PRESS
+    {
+        Pos = MAP_APPFONT ( 12 , 85 ) ;
+        Size = MAP_APPFONT ( 165, 10 ) ;
+        Text = "Optimiert für Druck~vorstufe" ;
+        Text [ ENGLISH ] = "Pr~ess optimized" ;
+    };
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT( 123, 6 );
+        Size = MAP_APPFONT( 50 , 14 );
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
-    CancelButton BTN_CANCEL
+    CancelButton BT_CANCEL
     {
-        Pos = MAP_APPFONT( 68, 80 );
-        Size = MAP_APPFONT( 50 , 14 ) ;
+        Pos = MAP_APPFONT( 123, 23 );
+        Size = MAP_APPFONT( 50 , 14 );
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
-    HelpButton BTN_HELP
+    HelpButton BT_HELP
     {
-        Pos = MAP_APPFONT( 124, 80 );
+        Pos = MAP_APPFONT( 123, 43 );
         Size = MAP_APPFONT( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-    };
-    FixedLine GRP_EXPORT
-    {
-        Pos = MAP_APPFONT( 6, 3 ) ;
-        Size = MAP_APPFONT( 138, 8 ) ;
-        Text = "Einstellungen" ;
-        Text [ ENGLISH ] = "Settings" ;
     };
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfdialog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-19 06:41:18 $
+ *  last change: $Author: ka $ $Date: 2002-08-19 14:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,13 +74,15 @@ class ResMgr;
 
 class PDFDialog : public ::svt::OGenericUnoDialog,
                   public ::comphelper::OPropertyArrayUsageHelper< PDFDialog >,
-                  public XPropertyAccess
+                  public XPropertyAccess,
+                  public XExporter
 {
 private:
 
     ResMgr*                     mpResMgr;
     Sequence< PropertyValue >   maMediaDescriptor;
     Sequence< PropertyValue >   maFilterData;
+    Reference< XComponent >     mxSrcDoc;
 
 protected:
 
@@ -102,6 +104,9 @@ protected:
     // XPropertyAccess
     virtual Sequence< PropertyValue > SAL_CALL getPropertyValues(  ) throw (RuntimeException);
     virtual void SAL_CALL setPropertyValues( const Sequence< PropertyValue >& aProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException);
+
+       // XExporter
+    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException);
 
 public:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-13 11:55:24 $
+ *  last change: $Author: ka $ $Date: 2002-08-19 14:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,7 @@
 #ifndef PDFEXPORT_HXX
 #define PDFEXPORT_HXX
 
-#include <rtl/ustring.hxx>
-
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
-#include <com/sun/star/lang/XComponent.hpp>
-#endif
+#include "pdffilter.hxx"
 
 class SvEmbeddedObject;
 class GDIMetaFile;
@@ -83,18 +79,18 @@ class PDFExport
 {
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  mxSrcDoc;
+    Reference< XComponent > mxSrcDoc;
 
-    sal_Bool                ImplExportPage( ::vcl::PDFWriter& rWriter, const GDIMetaFile& rMtf );
-    sal_Bool                ImplWriteActions( ::vcl::PDFWriter& rWriter, const GDIMetaFile& rMtf, VirtualDevice& rDummyVDev );
-    void                    ImplWriteGradient( ::vcl::PDFWriter& rWriter, const PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rDummyVDev );
+    sal_Bool                ImplExportPage( ::vcl::PDFWriter& rWriter, const GDIMetaFile& rMtf, sal_Int32 nCompressMode );
+    sal_Bool                ImplWriteActions( ::vcl::PDFWriter& rWriter, const GDIMetaFile& rMtf, VirtualDevice& rDummyVDev, sal_Int32 nCompressMode );
+    void                    ImplWriteGradient( ::vcl::PDFWriter& rWriter, const PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rDummyVDev, sal_Int32 nCompressMode );
 
 public:
 
-                            PDFExport( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxSrcDoc );
+                            PDFExport( const Reference< XComponent >& rxSrcDoc );
                             ~PDFExport();
 
-    sal_Bool                Export( const ::rtl::OUString& rFile );
+    sal_Bool                Export( const OUString& rFile, const Sequence< PropertyValue >& rFilterData );
 };
 
 #endif
