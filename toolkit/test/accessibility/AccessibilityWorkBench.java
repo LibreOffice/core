@@ -43,7 +43,7 @@ public class AccessibilityWorkBench
         MessageInterface,
         XTerminateListener
 {
-    public static final String msVersion = "v1.5";
+    public static final String msVersion = "v1.6";
     public String msFileName;
     public String msOptionsFileName = ".AWBrc";
 

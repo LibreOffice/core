@@ -24,7 +24,7 @@ class AccessibleExtendedComponentHandler
     public AccessibleExtendedComponentHandler (XAccessibleExtendedComponent xEComponent)
     {
         if (xEComponent != null)
-            maChildList.setSize (2);
+            maChildList.setSize (0);
     }
 
     private static XAccessibleExtendedComponent getComponent (AccTreeNode aNode)
@@ -49,7 +49,7 @@ class AccessibleExtendedComponentHandler
                 {
                     case 0:
                         nColor = xEComponent.getForeground();
-                        aChild = new StringNode ("Foreground color: R"
+                        aChild = new StringNode ("Depricated Foreground color: R"
                             +       (nColor>>16&0xff)
                             + "G" + (nColor>>8&0xff)
                             + "B" + (nColor>>0&0xff)
@@ -58,7 +58,7 @@ class AccessibleExtendedComponentHandler
                         break;
                     case 1:
                         nColor = xEComponent.getBackground();
-                        aChild = new StringNode ("Background color: R"
+                        aChild = new StringNode ("Depricated Background color: R"
                             +       (nColor>>16&0xff)
                             + "G" + (nColor>>8&0xff)
                             + "B" + (nColor>>0&0xff)

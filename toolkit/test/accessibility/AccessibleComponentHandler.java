@@ -27,7 +27,7 @@ class AccessibleComponentHandler
     public AccessibleComponentHandler (XAccessibleComponent xComponent)
     {
         if (xComponent != null)
-            maChildList.setSize (4);
+            maChildList.setSize (6);
     }
 
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
@@ -40,6 +40,7 @@ class AccessibleComponentHandler
 
             if (xComponent != null)
             {
+                int nColor;
                 switch (nIndex)
                 {
                     case 0:
@@ -65,6 +66,24 @@ class AccessibleComponentHandler
                         aChild = new StringNode (
                             "Bounding Box: "+ aBBox.X + ", " + aBBox.Y + ","
                             + aBBox.Width + ", " + aBBox.Height,
+                            aParent);
+                        break;
+                    case 4:
+                        nColor = xComponent.getForeground();
+                        aChild = new StringNode ("Foreground color: R"
+                            +       (nColor>>16&0xff)
+                            + "G" + (nColor>>8&0xff)
+                            + "B" + (nColor>>0&0xff)
+                            + "A" + (nColor>>24&0xff),
+                            aParent);
+                        break;
+                    case 5:
+                        nColor = xComponent.getBackground();
+                        aChild = new StringNode ("Background color: R"
+                            +       (nColor>>16&0xff)
+                            + "G" + (nColor>>8&0xff)
+                            + "B" + (nColor>>0&0xff)
+                            + "A" + (nColor>>24&0xff),
                             aParent);
                         break;
                 }
