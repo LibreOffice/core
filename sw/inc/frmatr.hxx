@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmatr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: jp $ $Date: 2002-01-25 16:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,12 @@
 #ifndef _FRMATR_HXX
 #define _FRMATR_HXX
 
-#include "hintids.hxx"      //die Ids der Attribute, vor frmitems damit die
-#include "format.hxx"       //fuer Implementierung der inlines
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>      //die Ids der Attribute, vor frmitems damit die
+#endif
+#ifndef _FORMAT_HXX
+#include <format.hxx>       //fuer Implementierung der inlines
+#endif
 
 //------------------------ Inlines ---------------------------------
 
@@ -95,17 +99,14 @@ inline const SvxFmtBreakItem &SwAttrSet::GetBreak(BOOL bInP) const
     { return (const SvxFmtBreakItem&)Get( RES_BREAK,bInP); }
 inline const SvxMacroItem &SwAttrSet::GetMacro(BOOL bInP) const
     { return (const SvxMacroItem&)Get( RES_FRMMACRO,bInP); }
+inline const SvxFrameDirectionItem &SwAttrSet::GetFrmDir(BOOL bInP) const
+    { return (const SvxFrameDirectionItem&)Get( RES_FRAMEDIR,bInP); }
 
 
 /******************************************************************************
  *  Implementierung der FrameAttribut Methoden vom SwFmt
  ******************************************************************************/
 
-// impl. fuer LINUX, SINIX, HPUX auch in gcc_outl.cxx
-#if !( defined GCC && defined C272 && \
-       ( defined LINUX || defined SINIX || defined HPUX ))
-#endif
-#if !( defined GCC && defined C272 && defined HPUX )
 inline const SvxPaperBinItem &SwFmt::GetPaperBin(BOOL bInP) const
     { return aSet.GetPaperBin(bInP); }
 inline const SvxLRSpaceItem &SwFmt::GetLRSpace(BOOL bInP) const
@@ -130,7 +131,7 @@ inline const SvxFmtBreakItem &SwFmt::GetBreak(BOOL bInP) const
     { return aSet.GetBreak(bInP); }
 inline const SvxMacroItem &SwFmt::GetMacro(BOOL bInP) const
     { return aSet.GetMacro(bInP); }
-#endif
-
+inline const SvxFrameDirectionItem  &SwFmt::GetFrmDir(BOOL bInP) const
+    { return aSet.GetFrmDir(bInP); }
 
 #endif //_FRMATR_HXX

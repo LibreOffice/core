@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-10 14:13:28 $
+ *  last change: $Author: jp $ $Date: 2002-01-25 16:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ class SwFmtChain;
 class SwFmtFtnAtTxtEnd;
 class SwFmtEndAtTxtEnd;
 class SwFmtNoBalancedColumns;
+class SvxFrameDirectionItem;
 
 // Grafik-Attribute
 class SwMirrorGrf;
@@ -317,6 +318,7 @@ public:
     inline const SwFmtFtnAtTxtEnd       &GetFtnAtTxtEnd( BOOL = TRUE ) const;
     inline const SwFmtEndAtTxtEnd       &GetEndAtTxtEnd( BOOL = TRUE ) const;
     inline const SwFmtNoBalancedColumns &GetBalancedColumns( BOOL = TRUE ) const;
+    inline const SvxFrameDirectionItem  &GetFrmDir( BOOL = TRUE ) const;
 
     // Grafik-Attribute - impl. steht im grfatr.hxx
     inline const SwMirrorGrf            &GetMirrorGrf( BOOL = TRUE ) const;
@@ -356,71 +358,5 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwAttrSet)
 };
 
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.8  2001/03/05 13:50:48  jp
-      new: SvxCharReliefItem
-
-      Revision 1.7  2001/02/15 20:10:38  jp
-      new character attribute: rotate and scalewidth
-
-      Revision 1.6  2000/11/29 17:18:49  os
-      #80913# forbidden rules
-
-      Revision 1.5  2000/11/20 09:36:59  jp
-      new para attributes - expand para range
-
-      Revision 1.4  2000/11/16 21:29:02  jp
-      SwFmt2Lines moved to SVX and renamed
-
-      Revision 1.3  2000/11/02 17:26:48  jp
-      TwoLines as char and not as text attribute
-
-      Revision 1.2  2000/10/30 12:49:30  jp
-      new: EmphasisItem
-
-      Revision 1.1.1.1  2000/09/18 17:14:28  hr
-      initial import
-
-      Revision 1.48  2000/09/18 16:03:29  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.47  2000/09/08 13:24:27  willem.vandorp
-      Header and footer replaced
-
-      Revision 1.46  2000/07/31 19:23:08  jp
-      new attributes for CJK/CTL and graphic
-
-      Revision 1.45  2000/05/26 07:08:20  os
-      old SW Basic API Slots removed
-
-      Revision 1.44  2000/01/03 18:19:55  jp
-      Bug #71411#: new attribut
-
-      Revision 1.43  1999/09/07 14:33:46  ama
-      New #66878#: EndOfTxt-Items for footnotes and endnotes
-
-      Revision 1.42  1999/03/19 12:33:58  OS
-      #63701# unbenutztes Break-Attribut aus den Sections entfernt
-
-
-      Rev 1.41   19 Mar 1999 13:33:58   OS
-   #63701# unbenutztes Break-Attribut aus den Sections entfernt
-
-      Rev 1.40   05 Feb 1999 17:42:26   JP
-   Task #61467#: Attrset ueber Dokumentgrenzen kopieren, dabei PageDesc/Numrule mit erzeugen
-
-      Rev 1.39   28 Jan 1999 18:11:48   JP
-   Task #57749#: Undo von Bereichs-Attributen (Spalten, Hintergr...)
-
-      Rev 1.38   04 Feb 1998 14:09:20   MA
-   new: SwFmtLineNumber
-
-      Rev 1.37   15 Dec 1997 16:23:40   AMA
-   New: SwSectItem: Soll der uebergeordnete Bereich aufgebrochen werden?
-
-*************************************************************************/
     // #ifndef _SWATRSET_HXX
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-10 14:12:50 $
+ *  last change: $Author: jp $ $Date: 2002-01-25 16:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,38 +248,6 @@ public:
     inline const SvxCharReliefItem   &GetCharRelief( BOOL = TRUE ) const;
 
     // Frame-Attribute  - impl. steht im frmatr.hxx,
-    // fuer LINUX, SINIX, HPUX auch in gcc_outl.cxx
-#if ( defined GCC && defined C272 && \
-      ( defined LINUX || defined SINIX || defined HPUX ))
-    const SwFmtFillOrder        &GetFillOrder( BOOL = TRUE ) const;
-    const SwFmtFrmSize          &GetFrmSize( BOOL = TRUE ) const;
-    const SwFmtHeader           &GetHeader( BOOL = TRUE ) const;
-    const SwFmtFooter           &GetFooter( BOOL = TRUE ) const;
-    const SwFmtSurround         &GetSurround( BOOL = TRUE ) const;
-    const SwFmtHoriOrient       &GetHoriOrient( BOOL = TRUE ) const;
-    const SwFmtAnchor           &GetAnchor( BOOL = TRUE ) const;
-    const SwFmtCol              &GetCol( BOOL = TRUE ) const;
-#endif
-#if ( defined GCC && defined C272 && defined HPUX )
-    const SvxPaperBinItem       &GetPaperBin( BOOL = TRUE ) const;
-    const SvxLRSpaceItem        &GetLRSpace( BOOL = TRUE ) const;
-    const SvxULSpaceItem        &GetULSpace( BOOL = TRUE ) const;
-    const SwFmtCntnt            &GetCntnt( BOOL = TRUE ) const;
-    const SvxPrintItem          &GetPrint( BOOL = TRUE ) const;
-    const SvxOpaqueItem         &GetOpaque( BOOL = TRUE ) const;
-    const SvxProtectItem        &GetProtect( BOOL = TRUE ) const;
-    const SwFmtVertOrient       &GetVertOrient( BOOL = TRUE ) const;
-    const SvxBoxItem            &GetBox( BOOL = TRUE ) const;
-    const SvxFmtKeepItem        &GetKeep( BOOL = TRUE ) const;
-    const SvxBrushItem          &GetBackground( BOOL = TRUE ) const;
-    const SvxShadowItem         &GetShadow( BOOL = TRUE ) const;
-    const SwFmtPageDesc         &GetPageDesc( BOOL = TRUE ) const;
-    const SvxFmtBreakItem       &GetBreak( BOOL = TRUE ) const;
-    const SvxMacroItem          &GetMacro( BOOL = TRUE ) const;
-    const SwFmtURL              &GetURL( BOOL = TRUE ) const;
-#endif
-#if !( defined GCC && defined C272 && \
-       ( defined LINUX || defined SINIX || defined HPUX ))
     inline const SwFmtFillOrder         &GetFillOrder( BOOL = TRUE ) const;
     inline const SwFmtFrmSize           &GetFrmSize( BOOL = TRUE ) const;
     inline const SwFmtHeader            &GetHeader( BOOL = TRUE ) const;
@@ -288,8 +256,6 @@ public:
     inline const SwFmtHoriOrient        &GetHoriOrient( BOOL = TRUE ) const;
     inline const SwFmtAnchor            &GetAnchor( BOOL = TRUE ) const;
     inline const SwFmtCol               &GetCol( BOOL = TRUE ) const;
-#endif
-#if !( defined GCC && defined C272 && defined HPUX )
     inline const SvxPaperBinItem        &GetPaperBin( BOOL = TRUE ) const;
     inline const SvxLRSpaceItem         &GetLRSpace( BOOL = TRUE ) const;
     inline const SvxULSpaceItem         &GetULSpace( BOOL = TRUE ) const;
@@ -313,7 +279,7 @@ public:
     inline const SwFmtFtnAtTxtEnd       &GetFtnAtTxtEnd( BOOL = TRUE ) const;
     inline const SwFmtEndAtTxtEnd       &GetEndAtTxtEnd( BOOL = TRUE ) const;
     inline const SwFmtNoBalancedColumns &GetBalancedColumns( BOOL = TRUE ) const;
-#endif
+    inline const SvxFrameDirectionItem  &GetFrmDir( BOOL = TRUE ) const;
 
     // Grafik-Attribute - impl. steht im grfatr.hxx
     inline const SwMirrorGrf            &GetMirrorGrf( BOOL = TRUE ) const;
