@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:13:59 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Zobrazit text";
         Text[ hebrew ] = "Textdarstellung";
         Text[ hindi ] = "टेक्स्ट् दिखाओ";
+        Text[ slovak ] = "Zobraziť text";
     };
     FixedText FT_CHG_INSERT
     {
@@ -141,6 +142,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Vložené položky";
         Text[ hebrew ] = "Einfügen";
         Text[ hindi ] = "जोड़ना";
+        Text[ slovak ] = "Vložené položky";
     };
     FixedText FT_INS_ATTR
     {
@@ -172,6 +174,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Atributy";
         Text[ hebrew ] = "‮תכונות‬";
         Text[ hindi ] = "ऐट्रिब्यूट्स";
+        Text[ slovak ] = "Atribúty";
     };
     ListBox LB_INS_ATTR
     {
@@ -557,6 +560,20 @@ TabPage TP_REDLINE_OPT
         < "शीर्षक का अक्षर" ; > ;
         < "पृष्ठभाग रंग" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "[Nič]" ; > ;
+        < "Tučné" ; > ;
+        < "Kurzíva" ; > ;
+        < "Podčiarknutie" ; > ;
+        < "Dvojité podčiarknutie" ; > ;
+        < "Preškrtnuté" ; > ;
+        < "Veľké písmená" ; > ;
+        < "Malé písmená" ; > ;
+        < "Malé kapitálky" ; > ;
+        < "Písmo titulu" ; > ;
+        < "Farba pozadia" ; > ;
+    };
     };
     FixedText FT_INS_COL
     {
@@ -589,6 +606,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Barva";
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "रंग";
+        Text[ slovak ] = "Farba";
     };
     ListBox LB_INS_COL
     {
@@ -628,6 +646,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Vložit";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "जोड़ो";
+        Text[ slovak ] = "Vložiť";
     };
     FixedText FT_CHG_DELETE
     {
@@ -659,6 +678,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Smazané položky";
         Text[ hebrew ] = "Löschen";
         Text[ hindi ] = "मिटाना";
+        Text[ slovak ] = "Zmazané položky";
     };
     FixedText FT_DEL_ATTR
     {
@@ -690,6 +710,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Atributy";
         Text[ hebrew ] = "‮תכונות‬";
         Text[ hindi ] = "ऐट्रिब्यूट्स";
+        Text[ slovak ] = "Atribúty";
     };
     ListBox LB_DEL_ATTR
     {
@@ -728,6 +749,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Barva";
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "रंग";
+        Text[ slovak ] = "Farba";
     };
     ListBox LB_DEL_COL
     {
@@ -767,6 +789,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "मिटाओ";
+        Text[ slovak ] = "Zmazať";
     };
     FixedText FT_CHG_CHANGE
     {
@@ -798,6 +821,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Změněné atributy";
         Text[ hebrew ] = "Attributänderung";
         Text[ hindi ] = "बदला की हुयी ऐट्रिब्यूट्स";
+        Text[ slovak ] = "Zmenené atribúty";
     };
     FixedText FT_CHG_ATTR
     {
@@ -829,6 +853,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Atributy";
         Text[ hebrew ] = "‮תכונות‬";
         Text[ hindi ] = "ऐट्रिब्यूट्स";
+        Text[ slovak ] = "Atribúty";
     };
     ListBox LB_CHG_ATTR
     {
@@ -867,6 +892,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Barva";
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "रंग";
+        Text[ slovak ] = "Farba";
     };
     ListBox LB_CHG_COL
     {
@@ -906,6 +932,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Atributy";
         Text[ hebrew ] = "‮תכונות‬";
         Text[ hindi ] = "ऐट्रिब्यूट्स";
+        Text[ slovak ] = "Atribúty";
     };
     FixedLine FL_LC
     {
@@ -938,6 +965,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Změněných řádků";
         Text[ hebrew ] = "Geänderte Zeilen";
         Text[ hindi ] = "रेखाओं को बदला";
+        Text[ slovak ] = "Zmenených riadkov";
     };
     FixedText FT_MARKPOS
     {
@@ -970,6 +998,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Označit";
         Text[ hebrew ] = "Markieru~ng";
         Text[ hindi ] = "~चिह्न";
+        Text[ slovak ] = "O~značiť";
     };
     ListBox LB_MARKPOS
     {
@@ -1193,6 +1222,14 @@ TabPage TP_REDLINE_OPT
         < "बाहरी पृष्ठ-प्रान्त" ; > ;
         < "भीतरी पृष्ठ-प्रान्त" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "[Nič]" ; > ;
+        < "Ľavý okraj" ; > ;
+        < "Pravý okraj" ; > ;
+        < "Vonkajší okraj" ; > ;
+        < "Vnútorný okraj" ; > ;
+    };
     };
     FixedText FT_LC_COL
     {
@@ -1225,6 +1262,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Barva";
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "~रंग";
+        Text[ slovak ] = "~Farba";
     };
     ListBox LB_LC_COL
     {
@@ -1267,6 +1305,7 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "Autor";
         Text[ hebrew ] = "Nach Autor";
         Text[ hindi ] = "लेखक से";
+        Text[ slovak ] = "Autor";
     };
     String STR_NOTHING
     {
@@ -1296,8 +1335,11 @@ TabPage TP_REDLINE_OPT
         Text[ czech ] = "[Nic]";
         Text[ hebrew ] = "‮[ללא]‬";
         Text[ hindi ] = "[कोई नहीं]";
+        Text[ slovak ] = "[Nič]";
     };
 };
+
+
 
 
 
