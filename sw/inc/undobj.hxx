@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:35:05 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,6 +680,7 @@ struct _UndoFmtAttr : public SwClient
 
 class SwUndoFmtColl : public SwUndo, private SwUndRng
 {
+    String aFmtName;
     SwHistory* pHistory;
     SwFmtColl* pFmtColl;
 public:
