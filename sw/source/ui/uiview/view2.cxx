@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 17:00:03 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 08:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,7 +725,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 JumpToSwMark( (( const SfxStringItem*)pItem)->GetValue() );
             break;
         case SID_GALLERY :
-            GetViewFrame()->ToggleChildWindow(SID_GALLERY);
+            GetViewFrame()->ChildWindowExecute(rReq);//ToggleChildWindow(SID_GALLERY);
         break;
         case SID_VIEW_DATA_SOURCE_BROWSER:
         {
