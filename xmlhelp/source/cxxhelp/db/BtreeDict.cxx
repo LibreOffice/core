@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BtreeDict.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-10 15:25:10 $
+ *  last change: $Author: abi $ $Date: 2001-05-22 14:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,10 @@
 #ifndef _XMLSEARCH_DB_DBENVIMPL_HXX_
 #include <util/DBEnvImpl.hxx>
 #endif
+#ifndef _XMLSEARCH_UTIL_RANDOMACCESSSTREAM_HXX_
+#include <util/RandomAccessStream.hxx>
+#endif
 
-
-extern xmlsearch::util::RandomAccessStream* theFile();
 
 
 const sal_Int32 xmlsearch::db::BtreeDict::ENTHEADERLEN = 6;
@@ -262,32 +263,11 @@ namespace xmlsearch {
             }
 
 
-            void setBlockNumbers( sal_Int32* blocks );
-//              {
-//                  for( sal_Int32 e = firstEntry(); e < getFree() ; e = nextEntry(e) )
-//                      blocks[ entryID(e) ] = getNum();
-//              }
-
-
-#ifdef ABIDEBUG
-            void listBlock() const
+            void setBlockNumbers( sal_Int32* blocks )
             {
-                sal_Int8 buffer[ BtreeDict::MaxKeyLength ];
-                sal_Int32 freeSpace = free();
-                sal_Int32 entryPtr = firstEntry();
-
-                if ( isLeaf() )
-                    while( entryPtr < freeSpace )
-                    {
-//                          cout << ( restoreKey( entryPtr,buffer ) + rtl::OUString::createFromAscii(" ") )
-//                               <<   entryID( entryPtr )
-//                               <<   endl;
-                        entryPtr = nextEntry( entryPtr );
-                    }
-                else
-                    cout << "not leaf";
+                for( sal_Int32 e = firstEntry(); e < getFree() ; e = nextEntry(e) )
+                    blocks[ entryID(e) ] = getNum();
             }
-#endif
 
 
         protected:
@@ -325,16 +305,6 @@ namespace xmlsearch {
 
 
         };  // end class DictBlock
-
-
-
-        void DictBlock::setBlockNumbers( sal_Int32* blocks )
-        {
-            for( sal_Int32 e = firstEntry(); e < getFree() ; e = nextEntry(e) )
-                blocks[ entryID(e) ] = getNum();
-        }
-
-
 
 
     }   // end namespace db
@@ -382,20 +352,20 @@ void BlockProcessorImpl::process( Block* block ) const
 
 
 
-BtreeDict::BtreeDict( DBEnv* dbenv )
-  : // parameter_( parameter ),
-  blockManager_( dbenv ? dbenv : new DBEnvImpl() ),
-  root_( 2 ),
-  blocks_( new sal_Int32[5664] )
+BtreeDict::BtreeDict( const util::IndexAccessor& indexAccessor )
+    : // parameter_( parameter ),
+    blockManager_( new DBEnvImpl( indexAccessor ) ),
+    root_( 2 ),    // SCHEMA( rt )
+    blocks_( new sal_Int32[ 12736 ] )  // SCHEMA( id1 )
 {
-  BlockProcessorImpl blProc( this );
-  blockManager_.mapBlocks( blProc );
+    BlockProcessorImpl blProc( this );
+    blockManager_.mapBlocks( blProc );
 }
 
 
 BtreeDict::~BtreeDict()
 {
-  delete[] blocks_;
+    delete[] blocks_;
 }
 
 
@@ -522,49 +492,20 @@ rtl::OUString BtreeDict::findID( sal_Int32 blNum,sal_Int32 id ) const throw( xml
 
 
 
-
-
-
-
-
-
-
-#ifndef _XMLSEARCH_UTIL_RANDOMACCESSSTREAM_HXX_
-#include <util/RandomAccessStream.hxx>
-#endif
-
-void BtreeDict::test()
-{
-//    DictBlock* block = new DictBlock( DATALEN );
-//    for( int i = 0; i < theFile()->length()/BLOCKSIZE; ++i )
-//      {
-//        theFile()->seek( i * BLOCKSIZE );
-//        block->read( theFile() );
-//        block->listBlock();
-//      }
-
-//    const DictBlock* bla = accessBlock(4);
-
-//    if( ! bla )
-//        ; //     cout << rtl::OUString::createFromAscii( "zero" ) << endl;
-//    else
-//        bla->listBlock();
-}
-
-
-
 // Definitions for DBEnvImpl
 
 
 
-DBEnvImpl::DBEnvImpl()
+DBEnvImpl::DBEnvImpl( const util::IndexAccessor& indexAccessor )
 {
-    file_ = theFile();
+    file_ = indexAccessor.getStream( rtl::OUString::createFromAscii( "DICTIONARY" ),
+                                     rtl::OUString::createFromAscii( "r" ) );
 }
 
 
 DBEnvImpl::~DBEnvImpl()
 {
+    delete file_;
 }
 
 
@@ -604,9 +545,6 @@ void DBEnvImpl::read( sal_Int32 blNum,xmlsearch::db::Block*& block ) const
     file_->seek( blNum * getBlockLen() );
 
     block->read( file_ );
-
-//      if( block->getNum() != blNum )
-//         cout << rtl::OUString::createFromAscii( " aua aua " ) << endl;
 }
 
 

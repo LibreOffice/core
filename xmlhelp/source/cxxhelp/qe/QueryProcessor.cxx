@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryProcessor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-11 12:39:12 $
+ *  last change: $Author: abi $ $Date: 2001-05-22 14:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ Query* QueryProcessor::processQuery( Search& search,const QueryStatement& ment )
         else
         {
             ++nContentTerms;
-            rtl::OUString term = terms[i].toLowerCase();
+            rtl::OUString term = terms[i].toAsciiLowerCase();
             sal_Int32 id = 0;
             std::vector< sal_Int32 > ids;
             if( str[0] == sal_Unicode('\"') )

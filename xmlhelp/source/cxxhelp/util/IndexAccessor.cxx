@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IndexAccessor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-10 15:25:58 $
+ *  last change: $Author: abi $ $Date: 2001-05-22 14:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,20 +154,11 @@ RandomAccessStreamImpl::RandomAccessStreamImpl( const rtl::OUString& aPath,const
 }
 
 
-RandomAccessStreamImpl Dic( rtl::OUString::createFromAscii( "//./e:/index/DICTIONARY" ),
-                            rtl::OUString::createFromAscii( "r" ) );
 
 
-RandomAccessStream* theFile()
+RandomAccessStream* IndexAccessor::getStream( const rtl::OUString& fileName,const rtl::OUString& how ) const
 {
-    return &Dic;
-}
-
-
-
-RandomAccessStream* IndexAccessor::getStream( const rtl::OUString& fileName,const rtl::OUString& how )
-{
-    return new RandomAccessStreamImpl( dirName_ + fileName, how );
+    return new RandomAccessStreamImpl( dirName_ + fileName,how );
 }
 
 
@@ -181,8 +172,3 @@ sal_Int32 IndexAccessor::readByteArray( sal_Int8*& out,const rtl::OUString& file
     delete in;
     return n;
 }
-
-
-
-
-

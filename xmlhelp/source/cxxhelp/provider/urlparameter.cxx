@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-22 07:29:14 $
+ *  last change: $Author: abi $ $Date: 2001-05-22 14:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,17 @@
  *
  ************************************************************************/
 
+#ifndef SablotHIncl
+#include <sablot.h>
+#endif
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
+#endif
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
+#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
+#include <cppuhelper/queryinterface.hxx>
 #endif
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
@@ -79,6 +88,9 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
@@ -116,6 +128,7 @@ namespace chelp {
 
 }
 
+using namespace cppu;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -397,11 +410,70 @@ void URLParameter::readBerkeley()
 
 
 
+// Class encapsulating the transformation of the XInputStream to XHTML
+
+
+class InputStreamTransformer
+    : public OWeakObject,
+      public XInputStream,
+      public XSeekable
+{
+public:
+
+    InputStreamTransformer( const Reference< XInputStream >& xUntransformed );
+    ~InputStreamTransformer();
+
+    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException );
+    virtual void SAL_CALL acquire( void ) throw( RuntimeException );
+    virtual void SAL_CALL release( void ) throw( RuntimeException );
+
+
+    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData,sal_Int32 nBytesToRead ) throw( NotConnectedException,
+                                                                                                      BufferSizeExceededException,
+                                                                                                      IOException,
+                                                                                                      RuntimeException);
+
+    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData,sal_Int32 nMaxBytesToRead ) throw( NotConnectedException,
+                                                                                                             BufferSizeExceededException,
+                                                                                                             IOException,
+                                                                                                             RuntimeException);
+
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) throw( NotConnectedException,
+                                                                     BufferSizeExceededException,
+                                                                     IOException,
+                                                                     RuntimeException );
+
+    virtual sal_Int32 SAL_CALL available( void ) throw( NotConnectedException,
+                                                        IOException,
+                                                        RuntimeException );
+
+    virtual void SAL_CALL closeInput( void ) throw( NotConnectedException,
+                                                    IOException,
+                                                    RuntimeException );
+
+    virtual void SAL_CALL seek( sal_Int64 location ) throw( IllegalArgumentException,
+                                                            IOException,
+                                                            RuntimeException );
+
+    virtual sal_Int64 SAL_CALL getPosition( void ) throw( IOException,RuntimeException );
+
+    virtual sal_Int64 SAL_CALL getLength( void ) throw( IOException,RuntimeException );
+
+
+private:
+
+    Reference< XInputStream > m_xInputStream;
+    Reference< XSeekable >    m_xSeekable;
+};
+
+
+
 
 void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
                          const Command& command,
                          sal_Int32 CommandId,
-                         const Reference< XCommandEnvironment >& Environment )
+                         const Reference< XCommandEnvironment >& Environment,
+                         const Reference< XActiveDataSink >& xDataSink )
 {
     rtl::OUString service = rtl::OUString::createFromAscii( "com.sun.star.ucb.UniversalContentBroker" );
 
@@ -430,14 +502,17 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
 
     if( isRoot() )
     {
+        printf( "isRoot" );
 //      getPicture( HelpDatabases.getCssSheet(),m_xOutputStream);
     }
     else if( isPicture() )
     {
+        printf( "isPicture" );
 //      getPicture( m_xParameter.getInputFromJarFile(),m_xOutputStream );
     }
     else if( isActive() )
     {   // This is a Helptext
+        printf( "isActive" );
 //      m_xOutputStream.setBigBuffer( m_xParameter.getByteArrayText() );
     }
     else
@@ -445,6 +520,9 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
         processor->execute( command,
                             CommandId,
                              Environment );
+
+        // Now plug in a new XInputStream
+        xDataSink->setInputStream( new InputStreamTransformer( xDataSink->getInputStream() ) );
     }
 }
 
@@ -600,4 +678,129 @@ bool URLParameter::query()
     }
 
     return ret;
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                           InutStreamTransformerImpl                        //
+////////////////////////////////////////////////////////////////////////////////
+
+
+
+InputStreamTransformer::InputStreamTransformer( const Reference< XInputStream >& xInputStream )
+    : m_xInputStream( xInputStream ),
+      m_xSeekable( xInputStream,UNO_QUERY )
+{
+}
+
+
+InputStreamTransformer::~InputStreamTransformer()
+{
+}
+
+
+Any SAL_CALL InputStreamTransformer::queryInterface( const Type& rType ) throw( RuntimeException )
+{
+    Any aRet;
+    if( m_xSeekable.is() )
+        aRet = ::cppu::queryInterface( rType,
+                                       SAL_STATIC_CAST( XInputStream*,this ),
+                                       SAL_STATIC_CAST( XSeekable*,this ) );
+    else
+        aRet = ::cppu::queryInterface( rType,
+                                       SAL_STATIC_CAST( XInputStream*,this ) );
+
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
+
+
+
+void SAL_CALL InputStreamTransformer::acquire( void ) throw( RuntimeException )
+{
+    OWeakObject::acquire();
+}
+
+
+
+void SAL_CALL InputStreamTransformer::release( void ) throw( RuntimeException )
+{
+    OWeakObject::release();
+}
+
+
+
+sal_Int32 SAL_CALL InputStreamTransformer::readBytes( Sequence< sal_Int8 >& aData,sal_Int32 nBytesToRead ) throw( NotConnectedException,
+                                                                                                                  BufferSizeExceededException,
+                                                                                                                  IOException,
+                                                                                                                  RuntimeException)
+{
+    return m_xInputStream->readBytes( aData,nBytesToRead );
+}
+
+
+
+sal_Int32 SAL_CALL InputStreamTransformer::readSomeBytes( Sequence< sal_Int8 >& aData,sal_Int32 nMaxBytesToRead )
+    throw( NotConnectedException,
+           BufferSizeExceededException,
+           IOException,
+           RuntimeException)
+{
+    return m_xInputStream->readSomeBytes( aData,nMaxBytesToRead );
+}
+
+
+
+void SAL_CALL InputStreamTransformer::skipBytes( sal_Int32 nBytesToSkip ) throw( NotConnectedException,
+                                                                                 BufferSizeExceededException,
+                                                                                 IOException,
+                                                                                 RuntimeException )
+{
+    m_xInputStream->skipBytes( nBytesToSkip );
+}
+
+
+
+sal_Int32 SAL_CALL InputStreamTransformer::available( void ) throw( NotConnectedException,
+                                                                    IOException,
+                                                                    RuntimeException )
+{
+    return m_xInputStream->available();
+}
+
+
+
+void SAL_CALL InputStreamTransformer::closeInput( void ) throw( NotConnectedException,
+                                                                IOException,
+                                                                RuntimeException )
+{
+    m_xInputStream->closeInput();
+}
+
+
+
+void SAL_CALL InputStreamTransformer::seek( sal_Int64 location ) throw( IllegalArgumentException,
+                                                                        IOException,
+                                                                        RuntimeException )
+{
+    if( m_xSeekable.is() )
+        m_xSeekable->seek( location );
+}
+
+
+
+sal_Int64 SAL_CALL InputStreamTransformer::getPosition( void ) throw( IOException,
+                                                                      RuntimeException )
+{
+    if( m_xSeekable.is() )
+        return m_xSeekable->getPosition();
+}
+
+
+
+sal_Int64 SAL_CALL InputStreamTransformer::getLength( void ) throw( IOException,RuntimeException )
+{
+    if( m_xSeekable.is() )
+        return m_xSeekable->getLength();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-17 15:46:30 $
+ *  last change: $Author: abi $ $Date: 2001-05-22 14:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ void Databases::setInstallPath( const rtl::OUString& aInstDir )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
+
     if( osl::FileBase::E_None != osl::FileBase::normalizePath( aInstDir,m_aInstallDirectory ) )
         ;
 
@@ -147,7 +148,6 @@ rtl::OUString Databases::getInstallPathAsURL()
 }
 
 
-
 rtl::OUString Databases::getURLMode()
 {
     return rtl::OUString::createFromAscii( "with-jars" );
@@ -187,7 +187,7 @@ std::vector< rtl::OUString > Databases::getModuleList( const rtl::OUString& Lang
         if( fileName.getLength() == idx + 3                   &&
             ( str[idx + 1] == 'd' || str[idx + 1] == 'D' )    &&
             ( str[idx + 2] == 'b' || str[idx + 2] == 'B' )    &&
-            ( fileName = fileName.copy(0,idx).toLowerCase() ).compareToAscii( "picture" ) != 0 )
+            ( fileName = fileName.copy(0,idx).toAsciiLowerCase() ).compareToAscii( "picture" ) != 0 )
             ret.push_back( fileName );
     }
 

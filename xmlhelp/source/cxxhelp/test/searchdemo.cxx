@@ -2,9 +2,9 @@
  *
  *  $RCSfile: searchdemo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-11 12:39:37 $
+ *  last change: $Author: abi $ $Date: 2001-05-22 14:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,10 +115,10 @@ int main( int argc,char* argv[] )
         std::vector<rtl::OUString> Query(2);
         Query[0] = rtl::OUString::createFromAscii( "text*" );
         Query[1] = rtl::OUString::createFromAscii( "abbildung" );
-        rtl::OUString Scope = rtl::OUString::createFromAscii( "" );
+        rtl::OUString Scope = rtl::OUString::createFromAscii( "headingheading" );
         int HitCount = 40;
 
-        QueryStatement queryStatement( HitCount,Query,Scope );
+         QueryStatement queryStatement( HitCount,Query,Scope );
         queryResults = queryProcessor.processQuery( queryStatement );
 
         rtl::OUString translations[2];

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: abi $ $Date: 2001-05-22 07:29:14 $
+#   last change: $Author: abi $ $Date: 2001-05-22 14:57:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,8 @@ NO_BSYMBOLIC=TRUE
 # --- Settings ---------------------------------------------------------
 
 .INCLUDE: settings.mk
+
+INC+=-Ie:/w3c/Sablot-0.52/include
 
 .IF "$(GUI)"=="WNT"
 CFLAGS+=/GR

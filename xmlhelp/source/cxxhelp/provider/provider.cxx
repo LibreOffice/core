@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-17 15:46:30 $
+ *  last change: $Author: abi $ $Date: 2001-05-22 14:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 Reference< XContent > SAL_CALL ContentProvider::queryContent( const Reference< XContentIdentifier >& xCanonicId )
     throw( IllegalIdentifierException, RuntimeException )
 {
-    if ( ! xCanonicId->getContentProviderScheme().equalsIgnoreCase( m_aScheme ) )
+    if ( ! xCanonicId->getContentProviderScheme().equalsIgnoreAsciiCase( m_aScheme ) )
     {   // Wrong URL-scheme
         throw IllegalIdentifierException();
     }

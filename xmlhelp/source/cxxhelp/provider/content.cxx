@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-22 07:29:14 $
+ *  last change: $Author: abi $ $Date: 2001-05-22 14:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,13 +415,13 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         Reference< XActiveDataSink > xActiveDataSink( aOpenCommand.Sink,UNO_QUERY );
         if( xActiveDataSink.is() )
         {
-            m_aURLParameter.open( m_xSMgr,aCommand,CommandId,Environment );
-            Reference< XInputStream > xUntransformed = xActiveDataSink->getInputStream();
-            Reference< XInputStream > xTransformed( new Transformer( m_xProvider.getBodyPtr(),
-                                                                     xUntransformed,
-                                                                     m_aURLParameter ) );
+            m_aURLParameter.open( m_xSMgr,aCommand,CommandId,Environment,xActiveDataSink );
+//              Reference< XInputStream > xUntransformed = xActiveDataSink->getInputStream();
+//              Reference< XInputStream > xTransformed( new Transformer( m_xProvider.getBodyPtr(),
+//                                                                       xUntransformed,
+//                                                                       m_aURLParameter ) );
 
-            xActiveDataSink->setInputStream( xTransformed );
+//              xActiveDataSink->setInputStream( xTransformed );
         }
 
         if( m_aURLParameter.isRoot() )

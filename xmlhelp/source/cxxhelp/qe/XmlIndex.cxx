@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlIndex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-10 15:25:32 $
+ *  last change: $Author: abi $ $Date: 2001-05-22 14:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ using namespace xmlsearch::qe;
 
 XmlIndex::XmlIndex( const rtl::OUString& indexDir )
     : indexAccessor_( indexDir ),
-      dict_( 0 ),
+      dict_( indexAccessor_ ),
       documents_( 0 ),
       concepts_( 0 ),
       allLists_( 0 ),
@@ -93,7 +93,9 @@ XmlIndex::XmlIndex( const rtl::OUString& indexDir )
       positions_( 0 ),
       contextsDataL_( 0 ),
       contextsData_( 0 ),
-      contextTables_( 0 )
+      contextTables_( 0 ),
+      currentBatchOffset_( 0 ),
+      maxDocNumberInCache_( -1 )
 {
     // reading DOCS
     {
@@ -138,12 +140,6 @@ XmlIndex::XmlIndex( const rtl::OUString& indexDir )
         util::StreamDecompressor sdoffsets( in );
         sdoffsets.ascDecode( k2,offsets_ );
         delete in;
-
-//      int a;
-//      for( a = 0; a < offsets_.size(); ++a )
-//        cout << "concepts_[" << a << "] = " << concepts_[a] << endl;
-//      for( a = 0; a < offsets_.size(); ++a )
-//        cout << "offsets_[" << a << "] = " << offsets_[a] << endl;
     }
 
     // reading OFFSETS
