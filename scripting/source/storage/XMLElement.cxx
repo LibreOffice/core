@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLElement.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: npower $ $Date: 2002-10-24 10:37:53 $
+ *  last change: $Author: dfoster $ $Date: 2003-07-17 08:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,11 @@ void XMLElement::dumpSubElements( Reference< xml::sax::XExtendedDocumentHandler 
 //*************************************************************************
 void XMLElement::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOut )
 {
-    OSL_TRACE( "XMLElement::dump\n" );
+    OSL_TRACE( "XMLElement::dump" );
 
     xOut->ignorableWhitespace( OUString() );
+    OSL_TRACE( "XMLElement::dump starting %s",::rtl::OUStringToOString(
+                _name, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     xOut->startElement( _name, static_cast< xml::sax::XAttributeList * >( this ) );
     // Write out CDATA
     if( _chars.getLength() > 0 )
@@ -125,6 +127,8 @@ void XMLElement::dump( Reference< xml::sax::XExtendedDocumentHandler > const & x
     dumpSubElements( xOut );
     xOut->ignorableWhitespace( OUString() );
     xOut->endElement( _name );
+    OSL_TRACE( "XMLElement::dump ending %s",::rtl::OUStringToOString(
+                _name, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 }
 
 //*************************************************************************

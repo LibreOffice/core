@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.24 $
-*  last change: $Author: npower $ $Date: 2003-07-07 14:27:28 $
+*  $Revision: 1.25 $
+*  last change: $Author: dfoster $ $Date: 2003-07-17 08:36:34 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -576,7 +576,7 @@ ScriptStorage::updateMaps( const Datas_vec & vScriptDatas )
 }
 
 //*************************************************************************
-// Not part of the interface yet, ie. not in the idl, and it should be!!
+// XScriptStorageExport::save
 void
 ScriptStorage::save()
 throw ( RuntimeException )
@@ -630,9 +630,6 @@ throw ( RuntimeException )
 
                     writeMetadataHeader( xHandler );
 
-                    xHandler->startElement( ou_parcel,
-                        Reference< xml::sax::XAttributeList >() );
-
                     mh_parcels[ it_datas->parcelURI ] = xHandler;
                 }
                 else
@@ -653,7 +650,6 @@ throw ( RuntimeException )
                 out_it != out_it_end; ++out_it )
         {
             out_it->second->ignorableWhitespace( ::rtl::OUString() );
-            out_it->second->endElement( ou_parcel );
             out_it->second->endDocument();
             xSource.set( out_it->second, UNO_QUERY );
             Reference< io::XOutputStream > xOS = xSource->getOutputStream();
@@ -710,8 +706,7 @@ ScriptStorage::writeMetadataHeader(
 {
     xHandler->startDocument();
     OUString aDocTypeStr( RTL_CONSTASCII_USTRINGPARAM(
-        "<!DOCTYPE dlg:window PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
-                              " \"parcel.dtd\">" ) );
+        "<!DOCTYPE  parcel SYSTEM \"scripting.dtd\">" ) );
     xHandler->unknown( aDocTypeStr );
     xHandler->ignorableWhitespace( OUString() );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptElement.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-24 12:00:38 $
+ *  last change: $Author: dfoster $ $Date: 2003-07-17 08:36:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,12 +85,12 @@ ScriptElement::ScriptElement( ScriptData & sII ) :
 {
     OSL_TRACE( "ScriptElement ctor called\n" );
 
-    {
-        XMLElement* xel = new XMLElement( OUSTR( "script" ) );
-        xel->addAttribute( OUSTR( "language" ), sII.language );
-        Reference < xml::sax::XAttributeList > xal( xel );
-        addSubElement( xal );
-    }
+    addAttribute( OUSTR( "language" ), sII.language );
+    addAttribute( OUSTR( "xmlns:parcel" ), OUSTR( "scripting.dtd" ) );
+    XMLElement* xScriptElt = new XMLElement( OUSTR( "script" ) );
+    xScriptElt->addAttribute( OUSTR( "language" ), sII.language );
+    Reference < xml::sax::XAttributeList > xal( xScriptElt );
+    addSubElement( xal );
 
     strpair_map::const_iterator mp_it = sII.locales.begin();
     strpair_map::const_iterator mp_itend = sII.locales.end();
@@ -114,21 +114,21 @@ ScriptElement::ScriptElement( ScriptData & sII ) :
         }
 
         Reference < xml::sax::XAttributeList > xal( xel );
-        addSubElement( xal );
+        xScriptElt->addSubElement( xal );
     }
 
     {
         XMLElement* xel = new XMLElement( OUSTR( "functionname" ) );
         xel->addAttribute( OUSTR( "value" ), sII.functionname );
         Reference < xml::sax::XAttributeList > xal( xel );
-        addSubElement( xal );
+        xScriptElt->addSubElement( xal );
     }
 
     {
         XMLElement* xel = new XMLElement( OUSTR( "logicalname" ) );
         xel->addAttribute( OUSTR( "value" ), sII.logicalname );
         Reference < xml::sax::XAttributeList > xal( xel );
-        addSubElement( xal );
+        xScriptElt->addSubElement( xal );
     }
 
     props_vec::const_iterator vp_it = sII.languagedepprops.begin();
@@ -148,7 +148,7 @@ ScriptElement::ScriptElement( ScriptData & sII ) :
         }
 
         Reference < xml::sax::XAttributeList > xal( xel );
-        addSubElement( xal );
+        xScriptElt->addSubElement( xal );
     }
 
     filesets_map::const_iterator fm_it = sII.filesets.begin();
