@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.29 $
- *  last change: $Author: hr $ $Date: 2004-07-23 11:10:14 $
+ *  $Revision: 1.30 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,9 @@
 #include <comphelper/processfactory.hxx>
 #include <svtools/itemdel.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "ipfrm.hxx"
 #include "ipenv.hxx"
@@ -1381,7 +1383,9 @@ sal_uInt16 SfxBindings::GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt )
         DBG_PROFSTOP(SfxBindingsMsgPos);
         return (*pImp->pCaches)[nStartSearchAt]->GetId() >= nId ? 0 : 1;
     }
-    size_t nLow = nStartSearchAt, nMid, nHigh = 0;
+    size_t nLow = nStartSearchAt;
+    size_t nMid = 0;
+    size_t nHigh = 0;
     sal_Bool bFound = sal_False;
     nHigh = pImp->pCaches->Count() - 1;
     while ( !bFound && nLow <= nHigh )
@@ -1598,7 +1602,7 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
 
     SfxDispatcher &rDispatcher = *pDispatcher;
     rDispatcher.Flush();
-    SfxViewFrame *pFrame = rDispatcher.GetFrame();
+    rDispatcher.GetFrame();  // -Wall is this required???
 
     // get SlotServer (Slot+ShellLevel) and Shell from cache
     sal_Bool bDeleteCache = sal_False;
