@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grdocsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:17:02 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,58 +86,64 @@
 #include "strings.hrc"
 #include "glob.hrc"
 
-#include "grdocsh.hxx"
-#include "docshell.hxx"
+#ifndef SD_GRAPHIC_DOC_SHELL_HXX
+#include "GraphicDocShell.hxx"
+#endif
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
 
+using namespace sd;
+#define GraphicDocShell
+#include "sdgslots.hxx"
 
+namespace sd {
 
 /*************************************************************************
 |*
 |* SFX-Slotmaps und -Definitionen
 |*
 \************************************************************************/
-TYPEINIT1(SdGraphicDocShell, SdDrawDocShell);
-
-#define SdGraphicDocShell
-#include "sdgslots.hxx"
+TYPEINIT1(GraphicDocShell, DrawDocShell);
 
 
-SFX_IMPL_INTERFACE(SdGraphicDocShell, SfxObjectShell, SdResId(0))
+
+SFX_IMPL_INTERFACE(GraphicDocShell, SfxObjectShell, SdResId(0))
 {
     SFX_CHILDWINDOW_REGISTRATION(SID_SEARCH_DLG);
 }
 
-//SFX_IMPL_OBJECTFACTORY( SdGraphicDocShell, SFXOBJECTSHELL_STD_NORMAL, sdraw, SvGlobalName(SO3_SDRAW_CLASSID_60) )
-SotFactory* SdGraphicDocShell::pFactory = NULL;
-SotFactory * SdGraphicDocShell::ClassFactory()
+//SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SFXOBJECTSHELL_STD_NORMAL, sdraw, SvGlobalName(SO3_SDRAW_CLASSID_60) )
+SotFactory* GraphicDocShell::pFactory = NULL;
+SotFactory * GraphicDocShell::ClassFactory()
 {
     SotFactory **ppFactory = GetFactoryAdress();
     if( !*ppFactory )
     {
         *ppFactory = new SfxObjectFactory( SvGlobalName(SO3_SDRAW_CLASSID_60),
-            String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "SdGraphicDocShell" ) ),
-                                SdGraphicDocShell::CreateInstance );
+            String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "GraphicDocShell" ) ),
+                                GraphicDocShell::CreateInstance );
         (*ppFactory)->PutSuperClass( SfxInPlaceObject::ClassFactory() );
     }
     return *ppFactory;
 }
 
-void * SdGraphicDocShell::CreateInstance( SotObject ** ppObj )
+void * GraphicDocShell::CreateInstance( SotObject ** ppObj )
 {
-    SdGraphicDocShell * p = new SdGraphicDocShell();
+    GraphicDocShell * p = new GraphicDocShell();
     SfxInPlaceObject* pSfxInPlaceObject = p;
     SotObject* pBasicObj = pSfxInPlaceObject;
     if( ppObj )
         *ppObj = pBasicObj;
     return p;
 }
-const SotFactory * SdGraphicDocShell::GetSvFactory() const
+const SotFactory * GraphicDocShell::GetSvFactory() const
 {
     return ClassFactory();
 }
-void * SdGraphicDocShell::Cast( const SotFactory * pFact )
+void * GraphicDocShell::Cast( const SotFactory * pFact )
 {
     void * pRet = NULL;
     if( !pFact || pFact == ClassFactory() )
@@ -147,48 +153,49 @@ void * SdGraphicDocShell::Cast( const SotFactory * pFact )
     return pRet;
 }
 
-SfxObjectFactory* SdGraphicDocShell::pObjectFactory = 0;
+SfxObjectFactory* GraphicDocShell::pObjectFactory = 0;
 
-SfxObjectShell* SdGraphicDocShell::CreateObject(SfxObjectCreateMode eMode)
+SfxObjectShell* GraphicDocShell::CreateObject(SfxObjectCreateMode eMode)
 {
-    SfxObjectShell* pDoc = new SdGraphicDocShell(eMode);
+    SfxObjectShell* pDoc = new GraphicDocShell(eMode);
     return pDoc;
 }
-SfxObjectFactory& SdGraphicDocShell::GetFactory() const
+SfxObjectFactory& GraphicDocShell::GetFactory() const
 {
     return Factory();
 }
-void SdGraphicDocShell::RegisterFactory( USHORT nPrio )
+void GraphicDocShell::RegisterFactory( USHORT nPrio )
 {
     Factory().Construct(
         nPrio,
-        &SdGraphicDocShell::CreateObject, SFXOBJECTSHELL_STD_NORMAL | SFXOBJECTSHELL_HASMENU,
+        &GraphicDocShell::CreateObject, SFXOBJECTSHELL_STD_NORMAL | SFXOBJECTSHELL_HASMENU,
         "sdraw" );
     Factory().RegisterInitFactory( &InitFactory );
     Factory().Register();
 }
-BOOL SdGraphicDocShell::DoInitNew( SvStorage *pStor )
+BOOL GraphicDocShell::DoInitNew( SvStorage *pStor )
 { return SfxObjectShell::DoInitNew(pStor); }
 
-BOOL SdGraphicDocShell::DoClose()
+BOOL GraphicDocShell::DoClose()
 { return SfxInPlaceObject::DoClose(); }
 
-BOOL SdGraphicDocShell::Close()
+BOOL GraphicDocShell::Close()
 {   SvObjectRef aRef(this);
     SfxInPlaceObject::Close();
     return SfxObjectShell::Close(); }
 
-void SdGraphicDocShell::ModifyChanged()
+void GraphicDocShell::ModifyChanged()
 { SfxObjectShell::ModifyChanged(); }
 
-void SdGraphicDocShell::InitFactory()
+void GraphicDocShell::InitFactory()
 {
-    SdGraphicDocShell::Factory().SetDocumentServiceName( String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) );
-    //SdGraphicDocShell::Factory().GetFilterContainer()->SetDetectFilter( &SdDLL::DetectFilter );
-    SdGraphicDocShell::Factory().RegisterMenuBar( SdResId( RID_GRAPHIC_DEFAULTMENU ) );
-    SdGraphicDocShell::Factory().RegisterPluginMenuBar( SdResId( RID_GRAPHIC_PORTALMENU ) );
-    SdGraphicDocShell::Factory().RegisterAccel( SdResId( RID_GRAPHIC_DEFAULTACCEL ) );
+    GraphicDocShell::Factory().SetDocumentServiceName( String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) );
+    //GraphicDocShell::Factory().GetFilterContainer()->SetDetectFilter( &SdDLL::DetectFilter );
+    GraphicDocShell::Factory().RegisterMenuBar( SdResId( RID_GRAPHIC_DEFAULTMENU ) );
+    GraphicDocShell::Factory().RegisterPluginMenuBar( SdResId( RID_GRAPHIC_PORTALMENU ) );
+    GraphicDocShell::Factory().RegisterAccel( SdResId( RID_GRAPHIC_DEFAULTACCEL ) );
 }
+
 
 /*************************************************************************
 |*
@@ -196,10 +203,10 @@ void SdGraphicDocShell::InitFactory()
 |*
 \************************************************************************/
 
-SdGraphicDocShell::SdGraphicDocShell(SfxObjectCreateMode eMode,
+GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode,
                                      BOOL bDataObject,
                                      DocumentType eDocType) :
-    SdDrawDocShell(eMode, bDataObject, eDocType)
+    DrawDocShell(eMode, bDataObject, eDocType)
 {
     SetStyleFamily( 2 ); //CL: eigentlich SFX_STYLE_FAMILY_PARA, aber der stylist ist sch....
 }
@@ -210,10 +217,10 @@ SdGraphicDocShell::SdGraphicDocShell(SfxObjectCreateMode eMode,
 |*
 \************************************************************************/
 
-SdGraphicDocShell::SdGraphicDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
+GraphicDocShell::GraphicDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
                                      BOOL bDataObject,
                                      DocumentType eDocType) :
-    SdDrawDocShell(pDoc, eMode, bDataObject, eDocType)
+    DrawDocShell(pDoc, eMode, bDataObject, eDocType)
 {
     SetStyleFamily( 2 ); //CL: eigentlich SFX_STYLE_FAMILY_PARA, aber der stylist ist sch....
 }
@@ -224,9 +231,9 @@ SdGraphicDocShell::SdGraphicDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode e
 |*
 \************************************************************************/
 
-SdGraphicDocShell::~SdGraphicDocShell()
+GraphicDocShell::~GraphicDocShell()
 {
 }
 
 
-
+} // end of namespace sd
