@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 18:10:57 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,24 +62,25 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 
 #include <rtl/digest.h>
 #include <osl/file.hxx>
 #include <stg.hxx>
 #include <storinfo.hxx>
 #include <storage.hxx>
+#include <formats.hxx>
 #include <exchange.hxx>
 
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
@@ -1517,4 +1518,84 @@ void SotStorage::SetKey( const ByteString& rKey )
     }
 }
 
+SotStorage* SotStorage::OpenOLEStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
+                                    const String& rEleName, StreamMode nMode )
+{
+    sal_Int32 nEleMode = embed::ElementModes::SEEKABLEREAD;
+    if ( nMode & STREAM_WRITE )
+        nEleMode |= embed::ElementModes::WRITE;
+    if ( nMode & STREAM_TRUNC )
+        nEleMode |= embed::ElementModes::TRUNCATE;
+
+    SvStream* pStream = NULL;
+    try
+    {
+        uno::Reference < io::XStream > xStream = xStorage->openStreamElement( rEleName, nEleMode );
+
+        // TODO/LATER: should it be done this way?
+        if ( nMode & STREAM_WRITE )
+        {
+            uno::Reference < beans::XPropertySet > xStreamProps( xStream, uno::UNO_QUERY_THROW );
+            xStreamProps->setPropertyValue(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
+                        uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.oleobject" ) ) ) );
+        }
+
+           pStream = utl::UcbStreamHelper::CreateStream( xStream );
+    }
+    catch ( uno::Exception& )
+    {
+        //TODO/LATER: ErrorHandling
+        pStream = new SvMemoryStream;
+        pStream->SetError( ERRCODE_IO_GENERAL );
+    }
+
+    return new SotStorage( pStream, TRUE );
+}
+
+sal_Int32 SotStorage::GetFormatID( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage )
+{
+    uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
+    if ( !xProps.is() )
+        return 0;
+
+    ::rtl::OUString aMediaType;
+    xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= aMediaType;
+    if ( aMediaType.getLength() )
+    {
+        ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+        aDataFlavor.MimeType = aMediaType;
+        return SotExchange::GetFormat( aDataFlavor );
+    }
+
+    return 0;
+}
+
+sal_Int32 SotStorage::GetVersion( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage )
+{
+    sal_Int32 nSotFormatID = SotStorage::GetFormatID( xStorage );
+    switch( nSotFormatID )
+    {
+        case SOT_FORMATSTR_ID_STARWRITER_8:
+        case SOT_FORMATSTR_ID_STARWRITERWEB_8:
+        case SOT_FORMATSTR_ID_STARWRITERGLOB_8:
+        case SOT_FORMATSTR_ID_STARDRAW_8:
+        case SOT_FORMATSTR_ID_STARIMPRESS_8:
+        case SOT_FORMATSTR_ID_STARCALC_8:
+        case SOT_FORMATSTR_ID_STARCHART_8:
+        case SOT_FORMATSTR_ID_STARMATH_8:
+            return SOFFICE_FILEFORMAT_8;
+        case SOT_FORMATSTR_ID_STARWRITER_60:
+        case SOT_FORMATSTR_ID_STARWRITERWEB_60:
+        case SOT_FORMATSTR_ID_STARWRITERGLOB_60:
+        case SOT_FORMATSTR_ID_STARDRAW_60:
+        case SOT_FORMATSTR_ID_STARIMPRESS_60:
+        case SOT_FORMATSTR_ID_STARCALC_60:
+        case SOT_FORMATSTR_ID_STARCHART_60:
+        case SOT_FORMATSTR_ID_STARMATH_60:
+            return SOFFICE_FILEFORMAT_60;
+    }
+
+    return 0;
+}
 
