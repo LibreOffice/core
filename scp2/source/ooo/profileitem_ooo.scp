@@ -2,9 +2,9 @@
 *
 *  $RCSfile: profileitem_ooo.scp,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: kz $ $Date: 2004-06-11 11:58:19 $
+*  last change: $Author: hr $ $Date: 2004-06-18 15:52:46 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -271,11 +271,21 @@ ProfileItem gid_Profileitem_Configmgr_Cachewrite
     Value  = "2";
 End
 
+ProfileItem gid_Profileitem_Configmgr_Enableasync
+    ProfileID = gid_Profile_Configmgr_Ini ;
+    ModuleID = gid_Module_Root;
+    Section   = "Bootstrap";
+    Order = 11;
+    Key  = "CFG_EnableAsync";
+    Value  = "True";
+End
+
+
  ProfileItem gid_Profileitem_Configmgr_Localcfg_Userdataurl
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 11;
+    Order = 12;
     Key  = "CFG_UserLayerUrl";
     Value  = "$UserInstallation/user/registry";
 End
@@ -284,7 +294,7 @@ End
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 12;
+    Order = 13;
     Key  = "CFG_CacheUrl";
     Value  = "$UserInstallation/user/registry/cache";
 End
@@ -293,7 +303,7 @@ End
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 13;
+    Order = 14;
     Key  = "CFG_OfflineDataUrl";
     Value  = "$UserInstallation/user/registry/offline";
 End
@@ -302,7 +312,7 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Defaultlayerurl
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 14;
+    Order = 15;
     Key  = "CFG_DefaultLayerUrl";
     Value  = "$BaseInstallation/share/registry";
 End
@@ -311,7 +321,7 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Unosharedpackages
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 15;
+    Order = 16;
     Key  = "CFG_UnoSharedPackages";
     Value = "${$UnoFile:UNO_SHARED_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/registry";
 End
@@ -320,7 +330,7 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Unouserpackages
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 16;
+    Order = 17;
     Key  = "CFG_UnoUserPackages";
     Value = "${$UnoFile:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/registry";
 End
@@ -329,7 +339,7 @@ End
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 17;
+    Order = 18;
     Key  = "CFG_BackendService";
     Value  = "com.sun.star.comp.configuration.backend.MultiStratumBackend";
 End
@@ -338,7 +348,7 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Schemasupplier
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 18;
+    Order = 19;
     Key  = "CFG_SchemaSupplier";
     Value  = "com.sun.star.comp.configuration.backend.LocalSchemaSupplier";
 End
@@ -348,7 +358,7 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Strata
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 19;
+    Order = 20;
     Key  = "CFG_Strata";
     Value  = "com.sun.star.comp.configuration.backend.LocalSingleStratum:$CFG_DefaultLayerUrl;com.sun.star.comp.configuration.backend.LocalSingleStratum:$CFG_UnoSharedPackages;?com.sun.star.comp.configuration.backend.SystemIntegration:;?com.sun.star.comp.configuration.backend.PolicyLayerBackend:;com.sun.star.comp.configuration.backend.LocalSingleStratum:$CFG_UnoUserPackages;com.sun.star.comp.configuration.backend.LocalSingleStratum:$CFG_UserLayerUrl;";
 End
