@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 12:47:26 $
+ *  last change: $Author: sab $ $Date: 2001-03-23 06:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,7 +665,7 @@ sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
 
     {
         char* pRootService;
-        const sal_Int32 nExportMode = mnExportFlags & (EXPORT_META|EXPORT_STYLES|EXPORT_CONTENT|EXPORT_STYLES);
+        const sal_Int32 nExportMode = mnExportFlags & (EXPORT_META|EXPORT_STYLES|EXPORT_CONTENT|EXPORT_SETTINGS);
         if( EXPORT_META == nExportMode )
         {
             // export only meta
