@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:34:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,6 @@
 #ifndef _MySVXACORR_HXX //autogen
 #include <svx/svxacorr.hxx>
 #endif
-#ifndef _SVX_SPLDLG_HXX
-#include <svx/spldlg.hxx>
-#endif
 
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
@@ -106,6 +103,9 @@
 #endif
 #ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
+#endif
+#ifndef _SVX_SPLWRAP_HXX
+#include <svx/splwrap.hxx>
 #endif
 
 
