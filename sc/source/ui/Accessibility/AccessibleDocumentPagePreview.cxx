@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-26 11:13:40 $
+ *  last change: $Author: sab $ $Date: 2002-06-27 08:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,6 +1043,7 @@ accessibility::AccessibleShape* ScShapeChilds::GetAccShape(const ScShapeChildVec
         if (rShapes[nIndex].mpAccShape)
         {
             rShapes[nIndex].mpAccShape->acquire();
+            rShapes[nIndex].mpAccShape->Init();
             rShapes[nIndex].mpAccShape->SetRelationSet(GetRelationSet(rShapes[nIndex]));
         }
     }
