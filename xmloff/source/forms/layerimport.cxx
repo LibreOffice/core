@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:24 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,9 @@
 #endif
 #ifndef _XMLOFF_FORMS_FORMEVENTS_HXX_
 #include "formevents.hxx"
+#endif
+#ifndef XMLOFF_FORMS_FORMCELLBINDING
+#include "formcellbinding.hxx"
 #endif
 
 SV_IMPL_REF( SvXMLStylesContext );
@@ -399,6 +402,22 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::registerCellValueBinding( const Reference< XPropertySet >& _rxControlModel, const ::rtl::OUString& _rCellAddress )
+    {
+        OSL_ENSURE( _rxControlModel.is() && _rCellAddress.getLength(),
+            "OFormLayerXMLImport_Impl::registerCellValueBinding: invalid arguments!" );
+        m_aCellValueBindings.push_back( ModelStringPair( _rxControlModel, _rCellAddress ) );
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::registerCellRangeListSource( const Reference< XPropertySet >& _rxControlModel, const ::rtl::OUString& _rCellRangeAddress )
+    {
+        OSL_ENSURE( _rxControlModel.is() && _rCellRangeAddress.getLength(),
+            "OFormLayerXMLImport_Impl::registerCellRangeListSource: invalid arguments!" );
+        m_aCellRangeListSources.push_back( ModelStringPair( _rxControlModel, _rCellRangeAddress ) );
+    }
+
+    //---------------------------------------------------------------------
     IControlIdMap& OFormLayerXMLImport_Impl::getControlIdMap()
     {
         return *this;
@@ -467,7 +486,7 @@ namespace xmloff
     {
         OSL_ENSURE(_rReferringControls.getLength(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (empty) control id list!");
         OSL_ENSURE(_rxControl.is(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (NULL) control!");
-        m_aControlReferences.push_back(ControlReference(_rxControl, _rReferringControls));
+        m_aControlReferences.push_back( ModelStringPair( _rxControl, _rReferringControls ) );
     }
 
     //---------------------------------------------------------------------
@@ -511,7 +530,7 @@ namespace xmloff
             ::rtl::OUString sSeparator(&s_nSeparator, 1);
             Reference< XPropertySet > xCurrentReferring;
             sal_Int32 nSeparator, nPrevSep;
-            for (   ConstControlReferenceArrayIterator aReferences = m_aControlReferences.begin();
+            for (   ::std::vector< ModelStringPair >::const_iterator aReferences = m_aControlReferences.begin();
                     aReferences != m_aControlReferences.end();
                     ++aReferences
                 )
@@ -520,7 +539,7 @@ namespace xmloff
 
                 // in a list of n ids there are only n-1 separators ... have to catch this last id
                 // -> normalize the list
-                sReferring = aReferences->sReferringControls;
+                sReferring = aReferences->second;
                 sReferring += sSeparator;
 
                 nPrevSep = -1;
@@ -530,7 +549,7 @@ namespace xmloff
                     xCurrentReferring = lookupControlId(sCurrentReferring);
                     if (xCurrentReferring.is())
                         // if this condition fails, this is an error, but lookupControlId should have asserted this ...
-                        xCurrentReferring->setPropertyValue(PROPERTY_CONTROLLABEL, makeAny(aReferences->xReferredControl));
+                        xCurrentReferring->setPropertyValue( PROPERTY_CONTROLLABEL, makeAny( aReferences->first ) );
 
                     nPrevSep = nSeparator;
                 }
@@ -607,6 +626,79 @@ namespace xmloff
         OSL_ENSURE(m_aCurrentPageIds == m_aControlIds.end(), "OFormLayerXMLImport_Impl::seekPage: importing another page currently! This will smash your import!");
         m_aCurrentPageIds = m_aControlIds.find(_rxDrawPage);
         OSL_ENSURE(m_aCurrentPageIds != m_aControlIds.end(), "OFormLayerXMLImport_Impl::seekPage: did not find the given page (perhaps it has not been imported, yet?)!");
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::documentDone( )
+    {
+        if ( ( getGlobalContext().getImportFlags() & IMPORT_CONTENT ) == 0 )
+            return;
+
+        // create (and bind) the spreadsheet cell bindings
+        if  (   !m_aCellValueBindings.empty()
+            &&  FormCellBindingHelper::isCellBindingAllowed( getGlobalContext().GetModel() )
+            )
+        {
+            for (   ::std::vector< ModelStringPair >::const_iterator aCellBindings = m_aCellValueBindings.begin();
+                    aCellBindings != m_aCellValueBindings.end();
+                    ++aCellBindings
+                )
+            {
+                try
+                {
+                    FormCellBindingHelper aHelper( aCellBindings->first, getGlobalContext().GetModel() );
+                    OSL_ENSURE( aHelper.isCellBindingAllowed(), "OFormLayerXMLImport_Impl::documentDone: can't bind this control model!" );
+                    if ( aHelper.isCellBindingAllowed() )
+                    {
+                        // There are special bindings for listboxes. See
+                        // OListAndComboImport::doRegisterCellValueBinding for a comment on this HACK.
+                        ::rtl::OUString sBoundCellAddress( aCellBindings->second );
+                        sal_Int32 nIndicator = sBoundCellAddress.lastIndexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":index" ) ) );
+
+                        bool bUseIndexBinding = false;
+                        if ( nIndicator != -1 )
+                        {
+                            sBoundCellAddress = sBoundCellAddress.copy( 0, nIndicator );
+                            bUseIndexBinding = true;
+                        }
+
+                        aHelper.setBinding( aHelper.createCellBindingFromStringAddress( sBoundCellAddress, bUseIndexBinding ) );
+                    }
+                }
+                catch( const Exception& )
+                {
+                    OSL_ENSURE( sal_False, "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell!" );
+                }
+            }
+            m_aCellValueBindings.clear();
+        }
+
+        // the same for the spreadsheet cell range list sources
+        if  (   !m_aCellRangeListSources.empty()
+            &&  FormCellBindingHelper::isListCellRangeAllowed( getGlobalContext().GetModel() )
+            )
+        {
+            for (   ::std::vector< ModelStringPair >::const_iterator aRangeBindings = m_aCellRangeListSources.begin();
+                    aRangeBindings != m_aCellRangeListSources.end();
+                    ++aRangeBindings
+                )
+            {
+                try
+                {
+                    FormCellBindingHelper aHelper( aRangeBindings->first, getGlobalContext().GetModel() );
+                    OSL_ENSURE( aHelper.isListCellRangeAllowed(), "OFormLayerXMLImport_Impl::documentDone: can't bind this control model!" );
+                    if ( aHelper.isListCellRangeAllowed() )
+                    {
+                        aHelper.setListSource( aHelper.createCellListSourceFromStringAddress( aRangeBindings->second ) );
+                    }
+                }
+                catch( const Exception& )
+                {
+                    OSL_ENSURE( sal_False, "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell range!" );
+                }
+            }
+            m_aCellRangeListSources.clear();
+        }
     }
 
 //.........................................................................
