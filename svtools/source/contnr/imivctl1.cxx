@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:22:21 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2032,7 +2032,6 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
     {
         const StyleSettings& rSettings = pOut->GetSettings().GetStyleSettings();
         Font aNewFont( aTempFont );
-        aNewFont.SetColor( bActiveSelection ? rSettings.GetHighlightTextColor() : rSettings.GetWindowTextColor() );
 
         // bei hart attributierter Font-Fuellcolor muessen wir diese
         // hart auf die Highlight-Color setzen
@@ -2043,6 +2042,13 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
             else
                 aNewFont.SetFillColor( rSettings.GetDeactiveColor() );
         }
+
+        Color aWinCol = rSettings.GetWindowTextColor();
+        if ( !bActiveSelection && rSettings.GetFaceColor().IsBright() == aWinCol.IsBright() )
+            aNewFont.SetColor( rSettings.GetWindowTextColor() );
+        else
+            aNewFont.SetColor( rSettings.GetHighlightTextColor() );
+
         pOut->SetFont( aNewFont );
 
         pOut->SetFillColor( pOut->GetBackground().GetColor() );
@@ -4136,9 +4142,7 @@ void SvxIconChoiceCtrl_Impl::InitSettings()
         Font aFont( rStyleSettings.GetFieldFont() );
         const Font& rFont = pView->GetFont();
         if( pView->HasFontTextColor() )
-        {
-            aFont.SetColor( rFont.GetColor() );
-        }
+            aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         if( pView->HasFontFillColor() )
             aFont.SetFillColor( rFont.GetFillColor() );
         pView->SetPointFont( aFont );
