@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2001-11-08 16:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #define nbyRelPgMargin      0
 #define nbyRelText          2
 
+#if defined WNT || defined WIN || defined OS2
+#define __WW8_NEEDS_PACK
+#pragma pack(2)
+#endif
 
 struct WW8_FSPA
 {
@@ -141,7 +145,9 @@ struct WW8_TXBXS
     SVBT32 txidUndo;
 };
 
-void WW8FSPAShadowToReal( WW8_FSPA_SHADOW* pFSPAS, WW8_FSPA* pPic );
-
+#ifdef __WW8_NEEDS_PACK
+#pragma pack()
 #endif
 
+void WW8FSPAShadowToReal( WW8_FSPA_SHADOW* pFSPAS, WW8_FSPA* pPic );
+#endif
