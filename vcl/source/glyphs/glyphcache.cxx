@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:13 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 13:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ bool operator==( const ImplFontSelectData& rA, const ImplFontSelectData& rB )
 {
     if( (rA.mpFontData != NULL) && (rB.mpFontData != NULL)
     &&  (rA.mpFontData->mpSysData == rB.mpFontData->mpSysData )
-    &&  ((rA.mnWidth==rB.mnWidth) || (!rA.mnWidth && (rA.mnHeight==rB.mnWidth)))
+    &&  ((rA.mnWidth==rB.mnWidth) || (!rA.mnWidth && (rA.mnHeight == rB.mnWidth)))
     &&  (rA.mnHeight        == rB.mnHeight)
     &&  (rA.mnOrientation   == rB.mnOrientation)
     &&  (rA.mbVertical      == rB.mbVertical)
@@ -163,14 +163,16 @@ void GlyphCache::RemoveFont( const ImplFontData* pFontData )
     while( it != maFontList.end() )
     {
         if( pFontData != it->first.mpFontData )
-            ++it;
-        else
         {
-            const ServerFont* pSF = it->second;
-            if( pSF )
-                mnBytesUsed -= pSF->GetByteCount();
-            maFontList.erase( it++ );
+            ++it;
+            continue;
         }
+
+        ServerFont* pSF = it->second;
+        if( pSF && (pSF->GetRefCount() <= 0) )
+            delete pSF;
+        FontList::iterator oldit = it++;
+        maFontList.erase( oldit );
     }
 }
 
@@ -275,13 +277,12 @@ void GlyphCache::UncacheFont( ServerFont& rServerFont )
     // user who wants to release it only got const ServerFonts.
     // The caching algorithm needs a non-const object
     ServerFont* pFont = const_cast<ServerFont*>( &rServerFont );
-    if( pFont->Release() <= 0 )
-        // lazy release
-#if 1 // TODO: decide on method depending on performance impact
-        {}
-#else
-        pFont->GarbageCollect( mnLruIndex - mnGlyphCount/2 );
-#endif
+    if( (pFont->Release() <= 0)
+    &&  (mnMaxSize <= (mnBytesUsed + mpPeer->GetByteCount())) )
+    {
+        mpCurrentGCFont = pFont;
+        GarbageCollect();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -303,12 +304,12 @@ ULONG GlyphCache::CalcByteCount() const
 
 void GlyphCache::GarbageCollect()
 {
+    if( !mpCurrentGCFont )
+        return;
+
     // prepare advance to next font for garbage collection
     ServerFont* const pServerFont = mpCurrentGCFont;
-    mpCurrentGCFont = mpCurrentGCFont->mpNextGCFont;
-
-    if( !pServerFont )
-        return;
+    mpCurrentGCFont = pServerFont->mpNextGCFont;
 
     if( (pServerFont == mpCurrentGCFont)    // no other fonts
     ||  (pServerFont->GetRefCount() > 0) )  // font still used
@@ -317,33 +318,35 @@ void GlyphCache::GarbageCollect()
         pServerFont->GarbageCollect( mnLruIndex - mnGlyphCount/2 );
 
         // when there is a lot of memory pressure also tighten maFontList
-        if( maFontList.size() >= 200 )
+        if( maFontList.size() >= 100 )
         {
+            // remove unreferenced fonts
             FontList::iterator it = maFontList.begin();
             while( it != maFontList.end() )
             {
-                if( !it->second )
+                ServerFont* pSF = it->second;
+                if( (pSF != NULL)
+                &&  (pSF->GetRefCount() <= 0)
+                &&  (pSF != mpCurrentGCFont) )
+                {
                     maFontList.erase( it++ );
+                    delete pSF;
+                }
                 else
                     ++it;
             }
         }
     }
-    else
+    else // current GC font is unreferenced
     {
         DBG_ASSERT( (pServerFont->GetRefCount() == 0),
             "GlyphCache::GC detected RefCount underflow" );
 
-        // now its time to remove the unreferenced font
-        ServerFont* const pPrev = pServerFont->mpPrevGCFont;
-        ServerFont* const pNext = pServerFont->mpNextGCFont;
-        pPrev->mpNextGCFont = pNext;
-        pNext->mpPrevGCFont = pPrev;
-
         pServerFont->GarbageCollect( mnLruIndex+0x10000000 );
+        const ImplFontSelectData& rIFSD = pServerFont->GetFontSelData();
+        maFontList.erase( rIFSD );
         mpPeer->RemovingFont( *pServerFont );
         mnBytesUsed -= pServerFont->GetByteCount();
-        maFontList.erase( pServerFont->GetFontSelData() );
         delete pServerFont;
     }
 }
@@ -391,6 +394,8 @@ ServerFont::ServerFont( const ImplFontSelectData& rFSD )
     mnExtInfo(0),
     mnRefCount(1),
     mnBytesUsed( sizeof(ServerFont) ),
+    mpNextGCFont( NULL ),
+    mpPrevGCFont( NULL ),
     nCos( 0x10000),
     nSin( 0)
 {
@@ -405,7 +410,13 @@ ServerFont::ServerFont( const ImplFontSelectData& rFSD )
 // -----------------------------------------------------------------------
 
 ServerFont::~ServerFont()
-{}
+{
+   // remove from GC list
+    ServerFont* pPrev = mpPrevGCFont;
+    ServerFont* pNext = mpNextGCFont;
+    if( pPrev ) pPrev->mpNextGCFont = pNext;
+    if( pNext ) pNext->mpPrevGCFont = pPrev;
+}
 
 // -----------------------------------------------------------------------
 
