@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-06-17 11:29:44 $
+ *  last change: $Author: os $ $Date: 2002-10-11 14:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,28 +299,25 @@ void  SwFormatTablePage::Init()
     aRightBtn.SetClickHdl( aLk );
     aCenterBtn.SetClickHdl( aLk );
 
-    aLk = LINK( this, SwFormatTablePage, UpHdl );
+    aLk = LINK( this, SwFormatTablePage, UpDownLoseFocusHdl );
     aTopMF.SetUpHdl( aLk );
     aBottomMF.SetUpHdl( aLk );
     aRightMF.SetUpHdl( aLk );
     aLeftMF.SetUpHdl( aLk );
     aWidthMF.SetUpHdl( aLk );
 
-    aLk = LINK( this, SwFormatTablePage, DownHdl );
     aTopMF.SetDownHdl( aLk );
     aBottomMF.SetDownHdl( aLk );
     aRightMF.SetDownHdl( aLk );
     aLeftMF.SetDownHdl( aLk );
     aWidthMF.SetDownHdl( aLk );
 
-    aLk = LINK( this, SwFormatTablePage, LoseFocusHdl );
     aTopMF.SetLoseFocusHdl( aLk );
     aBottomMF.SetLoseFocusHdl( aLk );
     aRightMF.SetLoseFocusHdl( aLk );
     aLeftMF.SetLoseFocusHdl( aLk );
     aWidthMF.SetLoseFocusHdl( aLk );
 
-    aRightMF.SetModifyHdl(LINK(this, SwFormatTablePage, RightModifyHdl));
     aRelWidthCB.SetClickHdl(LINK( this, SwFormatTablePage, RelWidthClickHdl ));
 }
 
@@ -456,30 +453,14 @@ IMPL_LINK( SwFormatTablePage, RightModifyHdl, MetricField *, pFld )
 
 /*------------------------------------------------------------------------
 ------------------------------------------------------------------------*/
-IMPL_LINK_INLINE_START( SwFormatTablePage, UpHdl, MetricField *, pEdit )
+IMPL_LINK_INLINE_START( SwFormatTablePage, UpDownLoseFocusHdl, MetricField *, pEdit )
 {
+    if( &aRightMF == pEdit)
+        RightModifyHdl(pEdit);
     ModifyHdl( pEdit );
     return 0;
 }
-IMPL_LINK_INLINE_END( SwFormatTablePage, UpHdl, MetricField *, pEdit )
-
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
-IMPL_LINK_INLINE_START( SwFormatTablePage, DownHdl, MetricField *, pEdit )
-{
-    ModifyHdl( pEdit );
-    return 0;
-}
-IMPL_LINK_INLINE_END( SwFormatTablePage, DownHdl, MetricField *, pEdit )
-
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
-IMPL_LINK_INLINE_START( SwFormatTablePage, LoseFocusHdl, MetricField *, pEdit )
-{
-    ModifyHdl( pEdit );
-    return 0;
-}
-IMPL_LINK_INLINE_END( SwFormatTablePage, LoseFocusHdl, MetricField *, pEdit )
+IMPL_LINK_INLINE_END( SwFormatTablePage, UpDownLoseFocusHdl, MetricField *, pEdit )
 
 void  SwFormatTablePage::ModifyHdl( Edit* pEdit )
 {

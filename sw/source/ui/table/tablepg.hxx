@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablepg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-06-17 11:16:56 $
+ *  last change: $Author: os $ $Date: 2002-10-11 14:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,9 +135,7 @@ class SwFormatTablePage : public SfxTabPage
     DECL_LINK( AutoClickHdl, CheckBox * );
     DECL_LINK( RelWidthClickHdl, CheckBox * );
     DECL_LINK( RightModifyHdl, MetricField * );
-    DECL_LINK( UpHdl, MetricField * );
-    DECL_LINK( DownHdl, MetricField * );
-    DECL_LINK( LoseFocusHdl, MetricField * );
+    DECL_LINK( UpDownLoseFocusHdl, MetricField * );
 
 public:
     SwFormatTablePage( Window* pParent, const SfxItemSet& rSet );
