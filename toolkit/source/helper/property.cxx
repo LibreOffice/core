@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:49:51 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,15 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "ValueMin" ),           BASEPROPERTY_VALUEMIN_DOUBLE,   ::getCppuType((const double*)0),        ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "ValueStep" ),          BASEPROPERTY_VALUESTEP_DOUBLE,  ::getCppuType((const double*)0),        ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "VisibleSize" ),        BASEPROPERTY_VISIBLESIZE,       ::getCppuType((const sal_Int32*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT|::com::sun::star::beans::PropertyAttribute::MAYBEVOID, sal_True ),
+
+
+            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "Activated" ),          BASEPROPERTY_ACTIVATED, ::getCppuType((const sal_Bool*)0),      ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
+
+            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "Complete" ),           BASEPROPERTY_COMPLETE,  ::getCppuType((const sal_Bool*)0),      ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
+
+            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "CurrentItemID" ),          BASEPROPERTY_CURRENTITEMID, ::getCppuType((const sal_Int16*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
+
+
             };
             pPropertyInfos = aImplPropertyInfos;
             nElements = sizeof( aImplPropertyInfos ) / sizeof( ImplPropertyInfo );
