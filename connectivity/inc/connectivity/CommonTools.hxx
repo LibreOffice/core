@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:17:34 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,15 +100,16 @@
         virtual void    SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException) { baseclass::acquire(); }
 
 #define DECLARE_CTY_PROPERTY(realclass,baseclass) \
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const \
+    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const \
     {                                                               \
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps; \
         describeProperties(aProps);                                 \
+        changePropertyAttributte(aProps);                           \
         return new cppu::OPropertyArrayHelper(aProps);              \
     }                                                               \
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() \
     {                                                               \
-        return *realclass::getArrayHelper();    \
+        return *realclass::getArrayHelper(isNew() ? 1 : 0); \
     }
 
 
