@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgdatasupplier.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 14:41:33 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 09:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _PKGDATASUPPLIER_HXX
 #define _PKGDATASUPPLIER_HXX
 
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
+
 #ifndef _UCBHELPER_RESULTSET_HXX
 #include <ucbhelper/resultset.hxx>
 #endif
@@ -78,7 +82,7 @@ class DataSupplier : public ucb::ResultSetDataSupplier
 public:
     DataSupplier( const com::sun::star::uno::Reference<
                       com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                  const vos::ORef< Content >& rContent,
+                  const rtl::Reference< Content >& rContent,
                   sal_Int32 nOpenMode );
     virtual ~DataSupplier();
 

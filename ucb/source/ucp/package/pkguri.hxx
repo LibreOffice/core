@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-27 13:05:27 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 09:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,16 @@ public:
 
     const ::rtl::OUString & getName() const
     { init(); return m_aName; }
+
+    inline sal_Bool isRootFolder() const;
 };
+
+inline sal_Bool PackageUri::isRootFolder() const
+{
+    init();
+    return ( ( m_aPath.getLength() == 1 ) &&
+             ( m_aPath.getStr()[ 0 ] == sal_Unicode( '/' ) ) );
+}
 
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-17 14:17:57 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 09:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
 #ifndef _PKGURI_HXX
@@ -212,7 +212,7 @@ inline bool isLowSurrogate(sal_uInt32 nUTF16)
 inline sal_uInt32 getUTF32Character(sal_Unicode const *& rBegin,
                                     sal_Unicode const * pEnd)
 {
-    VOS_ASSERT(rBegin && rBegin < pEnd);
+    OSL_ASSERT(rBegin && rBegin < pEnd);
     if (rBegin + 1 < pEnd && rBegin[0] >= 0xD800 && rBegin[0] <= 0xDBFF
         && rBegin[1] >= 0xDC00 && rBegin[1] <= 0xDFFF)
     {
@@ -225,7 +225,7 @@ inline sal_uInt32 getUTF32Character(sal_Unicode const *& rBegin,
 
 sal_uInt32 getHexDigit(int nWeight)
 {
-    VOS_ASSERT(nWeight >= 0 && nWeight < 16);
+    OSL_ASSERT(nWeight >= 0 && nWeight < 16);
     static sal_Char const aDigits[16]
         = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C',
             'D', 'E', 'F' };
@@ -424,7 +424,7 @@ inline bool mustEncode(sal_uInt32 nUTF32, Part ePart)
 void appendUCS4Escape(rtl::OUStringBuffer & rTheText, sal_Char cEscapePrefix,
                       sal_uInt32 nUCS4)
 {
-    VOS_ASSERT(nUCS4 < 0x80000000);
+    OSL_ASSERT(nUCS4 < 0x80000000);
     if (nUCS4 < 0x80)
         appendEscape(rTheText, cEscapePrefix, nUCS4);
     else if (nUCS4 < 0x800)
@@ -508,7 +508,7 @@ void appendUCS4(rtl::OUStringBuffer & rTheText, sal_uInt32 nUCS4,
         switch (eTargetCharset)
         {
             default:
-                VOS_ASSERT(false);
+                OSL_ASSERT(false);
             case RTL_TEXTENCODING_ASCII_US:
             case RTL_TEXTENCODING_ISO_8859_1:
                 appendEscape(rTheText, cEscapePrefix, nUCS4);
@@ -528,7 +528,7 @@ sal_uInt32 getUTF32(sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
                     EncodeMechanism eMechanism, rtl_TextEncoding eCharset,
                     EscapeType & rEscapeType)
 {
-    VOS_ASSERT(rBegin < pEnd);
+    OSL_ASSERT(rBegin < pEnd);
     sal_uInt32 nUTF32 = bOctets ? *rBegin++ : getUTF32Character(rBegin, pEnd);
     switch (eMechanism)
     {
@@ -549,7 +549,7 @@ sal_uInt32 getUTF32(sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
                 switch (eCharset)
                 {
                     default:
-                        VOS_ASSERT(false);
+                        OSL_ASSERT(false);
                     case RTL_TEXTENCODING_ASCII_US:
                         rEscapeType
                             = isUSASCII(nUTF32) ? ESCAPE_UTF32 : ESCAPE_OCTET;

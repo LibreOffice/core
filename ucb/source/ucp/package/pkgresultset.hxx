@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgresultset.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 14:41:33 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 09:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,11 @@
 #ifndef _PKGRESULTSET_HXX
 #define _PKGRESULTSET_HXX
 
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
 #ifndef _UCBHELPER_RESULTSETHELPER_HXX
 #include <ucbhelper/resultsethelper.hxx>
-#endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
 #endif
 
 #ifndef _PKGCONTENT_HXX
@@ -77,7 +77,7 @@ namespace package_ucp {
 
 class DynamicResultSet : public ::ucb::ResultSetImplHelper
 {
-      vos::ORef< Content > m_xContent;
+    rtl::Reference< Content > m_xContent;
     com::sun::star::uno::Reference<
         com::sun::star::ucb::XCommandEnvironment > m_xEnv;
 
@@ -89,7 +89,7 @@ public:
     DynamicResultSet(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-              const vos::ORef< Content >& rxContent,
+            const rtl::Reference< Content >& rxContent,
             const com::sun::star::ucb::OpenCommandArgument2& rCommand,
               const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XCommandEnvironment >& rxEnv );

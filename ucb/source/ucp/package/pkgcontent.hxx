@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-21 13:51:37 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 09:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,10 @@
 
 #include <list>
 
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
+
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFRERURLEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #endif
@@ -197,8 +198,8 @@ private:
                        const ::com::sun::star::uno::Sequence<
                            ::com::sun::star::beans::Property >& rProperties,
                        const ContentProperties& rData,
-                       const ::vos::ORef< ::ucb::ContentProviderImplHelper >&
-                               rProvider,
+                       const rtl::Reference<
+                            ::ucb::ContentProviderImplHelper >& rProvider,
                        const ::rtl::OUString& rContentId );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
@@ -206,7 +207,10 @@ private:
                              ::com::sun::star::beans::Property >& rProperties );
     void setPropertyValues(
             const ::com::sun::star::uno::Sequence<
-                     ::com::sun::star::beans::PropertyValue >& rValues );
+                    ::com::sun::star::beans::PropertyValue >& rValues,
+            const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
+        throw( ::com::sun::star::uno::Exception );
 
     com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameAccess >
@@ -244,7 +248,7 @@ private:
     sal_Bool
     flushData();
 
-    typedef vos::ORef< Content > ContentRef;
+    typedef rtl::Reference< Content > ContentRef;
     typedef std::list< ContentRef > ContentRefList;
     void queryChildren( ContentRefList& rChildren );
 
@@ -256,22 +260,24 @@ private:
     open( const ::com::sun::star::ucb::OpenCommandArgument2& rArg,
           const ::com::sun::star::uno::Reference<
                       ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw( ::com::sun::star::ucb::CommandAbortedException );
+        throw( ::com::sun::star::uno::Exception );
 
     void insert( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::io::XInputStream >& xStream,
-                 sal_Int32 nNameClashResolve )
-        throw( ::com::sun::star::ucb::CommandAbortedException );
+                 sal_Int32 nNameClashResolve,
+                 const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
+        throw( ::com::sun::star::uno::Exception );
 
-    void destroy( sal_Bool bDeletePhysical )
-        throw( ::com::sun::star::ucb::CommandAbortedException );
+    void destroy( sal_Bool bDeletePhysical,
+                  const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
+        throw( ::com::sun::star::uno::Exception );
 
     void transfer( const ::com::sun::star::ucb::TransferInfo& rInfo,
                    const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw( ::com::sun::star::ucb::CommandAbortedException,
-                ::com::sun::star::ucb::InteractiveBadTransferURLException );
-
+        throw( ::com::sun::star::uno::Exception );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
     getInputStream();
