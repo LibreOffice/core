@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-11 15:36:29 $
+ *  last change: $Author: pl $ $Date: 2001-07-17 08:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1819,6 +1819,8 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
                 ImplFontData *pFontData = new ImplFontData;
                 SetImplFontData( aInfo, *pFontData );
                 pFontData->mpSysData = (void*)*it;
+                if( pFontData->maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
+                    pFontData->maName = pFontData->maName.Copy( 4 );
                 pList->Add( pFontData );
             }
         }
@@ -1832,6 +1834,8 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
         {
             ImplFontData *pFontData = new ImplFontData;
             pFonts->Get(nIdx)->ToImplFontData( pFontData );
+            if( pFontData->maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
+                pFontData->maName = pFontData->maName.Copy( 4 );
             pList->Add( pFontData );
         }
 
@@ -1858,6 +1862,8 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
                 SetImplFontData( aInfo, aFontData );
                 aFontData.mnQuality += 4096;    // prefer to X11 fonts
                 int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
+                if( aFontData.maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
+                    aFontData.maName = aFontData.maName.Copy( 4 );
                 if( nFaceNum < 0 )
                     nFaceNum = 0;
                 rGC.AddFontFile( rMgr.getFontFileSysPath( aInfo.m_nID ), nFaceNum,
