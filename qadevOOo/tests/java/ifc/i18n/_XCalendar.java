@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCalendar.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:37 $
+ *  last change:$Date: 2003-05-27 12:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@ import com.sun.star.i18n.CalendarItem;
 import com.sun.star.i18n.XCalendar;
 import com.sun.star.i18n.XLocaleData;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.Locale;
 import lib.MultiMethodTest;
 
@@ -113,8 +114,9 @@ public class _XCalendar extends MultiMethodTest {
         XLocaleData locData = null;
         try {
             locData = (XLocaleData) UnoRuntime.queryInterface(
-                XLocaleData.class,tParam.getMSF().createInstance(
-                                    "com.sun.star.i18n.LocaleData"));
+                XLocaleData.class,
+                    ((XMultiServiceFactory)tParam.getMSF()).createInstance(
+                    "com.sun.star.i18n.LocaleData"));
         } catch (com.sun.star.uno.Exception e) {
 
         }
