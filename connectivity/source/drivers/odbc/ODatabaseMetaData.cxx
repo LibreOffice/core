@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:15:59 $
+ *  last change: $Author: oj $ $Date: 2002-11-13 12:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,7 +812,13 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     Reference< XResultSet > xRef = pResult;
     pResult->setTableTypes();
     SQLUINTEGER nValue = 0;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CREATE_VIEW,nValue,*this);
+    try
+    {
+        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CREATE_VIEW,nValue,*this);
+    }
+    catch(const Exception&)
+    {
+    }
     sal_Bool bViewsSupported = (nValue & SQL_CV_CREATE_VIEW) == SQL_CV_CREATE_VIEW;
 
     ::connectivity::ODatabaseMetaDataResultSet::ORows aRows;
