@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:28:54 $
+ *  last change: $Author: hr $ $Date: 2004-02-05 15:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,7 +722,7 @@ void WinSalInstance::Yield( BOOL bWait )
         if( ImplGetSVData()->maAppData.mnModalMode )
             Sleep(1);
         else
-            ImplSendMessage( maInstData.mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)0 );
+            ImplSendMessage( mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)0 );
 
         n = nCount;
         while ( n )
