@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MailMergeType.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:38:41 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,12 @@ published constants MailMergeType
     /** The output device is a file.
      */
     const short FILE = 2;
+
+    //-------------------------------------------------------------------------
+
+    /** The output is sent as e-Mail.
+     */
+    const short MAIL = 3;
 
 };
 
