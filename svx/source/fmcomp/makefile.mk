@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-02 16:44:16 $
+#   last change: $Author: obo $ $Date: 2004-11-16 11:21:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,7 @@ SRC1FILES= \
 #	$(SLO)$/gridcell.obj	\
 #	$(SLO)$/fmgridcl.obj	\
 #	$(SLO)$/fmgridif.obj	\
-#	$(SLO)$/trace.obj		
+#	$(SLO)$/trace.obj
 
 SLOFILES= \
     $(SLO)$/dbaexchange.obj	\
@@ -96,15 +96,8 @@ SLOFILES= \
     $(SLO)$/gridcell.obj	\
     $(SLO)$/fmgridcl.obj	\
     $(SLO)$/fmgridif.obj	\
-    $(SLO)$/trace.obj		
+    $(SLO)$/trace.obj		\
+    $(SLO)$/xmlexchg.obj
+
 .INCLUDE :  target.mk
-
-
-
-
-
-
-
-
-
 
