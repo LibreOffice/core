@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mav $ $Date: 2004-10-08 12:41:33 $
+ *  last change: $Author: mav $ $Date: 2004-10-08 13:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,10 +266,10 @@ SotStorage* XclRoot::GetRootStorage() const
     if ( !mrData.mrStorage.Is() )
     {
         SvStream* pStream = NULL;
-        if ( GetMedium().IsReadOnly() )
-            pStream = GetMedium().GetInStream();
-        else
+        if ( mrData.mbExport )
             pStream = GetMedium().GetOutStream();
+        else
+            pStream = GetMedium().GetInStream();
 
         if ( pStream )
         {
