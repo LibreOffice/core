@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:46 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 11:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,17 +858,24 @@ const FontList* SvxCharNamePage::GetFontList() const
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         const SfxPoolItem* pItem;
 
+        /* #110771# SvxFontListItem::GetFontList can return NULL */
         if ( pDocSh && ( pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ) ) )
-            m_pImpl->m_pFontList = ( (SvxFontListItem*)pItem )->GetFontList();
-        else
         {
-            m_pImpl->m_pFontList = new FontList( Application::GetDefaultDevice() );
+            m_pImpl->m_pFontList = ( (SvxFontListItem*)pItem )->GetFontList();
+            DBG_ASSERT(NULL != m_pImpl->m_pFontList,
+                       "Where is the font list?")
+        }
+        if(!m_pImpl->m_pFontList)
+        {
+            m_pImpl->m_pFontList =
+                new FontList( Application::GetDefaultDevice() );
             m_pImpl->m_bMustDelete = TRUE;
         }
     }
 
     return m_pImpl->m_pFontList;
 }
+
 // -----------------------------------------------------------------------------
 namespace
 {
