@@ -16,7 +16,6 @@ oa	offapi\com\sun\star\i18n				nmake	-	all	oa_i18n NULL
 oa	offapi\com\sun\star\installation		nmake	-	all	oa_inst NULL
 oa	offapi\com\sun\star\linguistic2			nmake	-	all	oa_ling2 NULL
 oa	offapi\com\sun\star\mozilla				nmake	-	all	oa_mozilla NULL
-oa	offapi\com\sun\star\package				nmake	-	all	oa_package NULL
 oa	offapi\com\sun\star\packages			nmake	-	all	oa_packages NULL
 oa	offapi\com\sun\star\pgp					nmake	-	all	oa_pgp NULL
 oa	offapi\com\sun\star\plugin				nmake	-	all	oa_plug NULL
