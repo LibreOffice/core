@@ -67,6 +67,13 @@ private: //member
     ::drafts::com::sun::star::chart2::CurveStyle    m_eCurveStyle;
     sal_Int32                                       m_nCurveResolution;
     sal_Int32                                       m_nSplineOrder;
+
+    ::com::sun::star::uno::Reference<
+                    ::com::sun::star::drawing::XShapes > m_xSeriesTarget;
+    ::com::sun::star::uno::Reference<
+                    ::com::sun::star::drawing::XShapes > m_xErrorBarTarget;
+    ::com::sun::star::uno::Reference<
+                    ::com::sun::star::drawing::XShapes > m_xTextTarget;
 };
 //.............................................................................
 } //namespace chart
