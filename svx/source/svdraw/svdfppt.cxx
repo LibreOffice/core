@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:48:28 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1026,7 +1026,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         if ( nPageNum > 0 )
             nPageNum--;
         delete pRet;
-        pRet = new SdrPageObj( rObjData.rBoundRect, nPageNum );
+        pRet = new SdrPageObj( rObjData.rBoundRect, pSdrModel->GetPage(nPageNum));
     }
     else
     {
@@ -1320,7 +1320,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             aSet.Put( SdrTextUpperDistItem( nTextTop ) );
             aSet.Put( SdrTextLowerDistItem( nTextBottom ) );
             aSet.Put( SdrTextFixedCellHeightItem( TRUE ) );
-            pTObj->SetItemSet( aSet );
+            pTObj->SetMergedItemSet( aSet );
             pTObj->SetSnapRect( rTextRect );
             pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
             if ( pTObj )
@@ -1344,7 +1344,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                 aTextSize.Width() += nTextLeft + nTextRight;
                                 aTextSize.Height() += nTextTop + nTextBottom;
                                 if ( rTextRect.GetHeight() < aTextSize.Height() )
-                                    pTObj->SetItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
+                                    pTObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
                             }
                         }
                         else
@@ -1355,7 +1355,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                 aTextSize.Width() += nTextLeft + nTextRight;
                                 aTextSize.Height() += nTextTop + nTextBottom;
                                 if ( rTextRect.GetWidth() < aTextSize.Width() )
-                                    pTObj->SetItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_CENTER ) );
+                                    pTObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_CENTER ) );
                             }
                         }
                     }
@@ -3013,15 +3013,18 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                 {
                                     void* pPtr;
                                     const SfxPoolItem* pPoolItem = NULL;
+                                    const SfxItemSet& rObjectItemSet = rSlidePersist.pBObj->GetMergedItemSet();
 
-                                    SfxItemState eState = rSlidePersist.pBObj->GetItemSet()
-                                        .GetItemState( XATTR_FILLCOLOR, FALSE, &pPoolItem );
+                                    SfxItemState eState = rObjectItemSet.GetItemState( XATTR_FILLCOLOR, FALSE, &pPoolItem );
                                     if ( pPoolItem )
                                     {
+                                        SfxItemSet aNewSet(*rObjectItemSet.GetPool());
+                                        aNewSet.Put(*pPoolItem);
+                                        aNewSet.Put(XFillStyleItem( XFILL_SOLID ));
+
                                         for ( pPtr = pList->First(); pPtr; pPtr = pList->Next() )
                                         {
-                                            ((SdrObject*)pPtr)->SetItem( *pPoolItem );
-                                            ((SdrObject*)pPtr)->SetItem( XFillStyleItem( XFILL_SOLID ) );
+                                            ((SdrObject*)pPtr)->SetMergedItemSet(aNewSet);
                                         }
                                     }
                                 }
@@ -3161,7 +3164,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
         pRet = new SdrRectObj( aRect );
         pRet->SetModel( pSdrModel );
 
-        pRet->SetItemSet(*pSet);
+        pRet->SetMergedItemSet(*pSet);
 
         pRet->SetMarkProtect( TRUE );
         pRet->SetMoveProtect( TRUE );
@@ -7103,7 +7106,7 @@ PPTParagraphObj* PPTTextObj::Next()
 const SfxItemSet* PPTTextObj::GetBackground() const
 {
     if ( mpImplTextObj->mrPersistEntry.pBObj )
-        return &mpImplTextObj->mrPersistEntry.pBObj->GetItemSet();
+        return &mpImplTextObj->mrPersistEntry.pBObj->GetMergedItemSet();
     else
         return NULL;
 }
