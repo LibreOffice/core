@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 14:39:52 $
+ *  last change: $Author: kz $ $Date: 2002-09-17 13:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2647,7 +2647,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ portuguese ] = "~Tabulações" ;
         Text [ finnish ] = "Sarkaimet" ;
         Text [ danish ] = "Ta~bulatorer" ;
-        Text [ french ] = "Ta~bulations" ;
+        Text [ french ] = "Tabulations" ;
         Text [ swedish ] = "Ta~bulatorer" ;
         Text [ dutch ] = "Tabsto~ps" ;
         Text [ spanish ] = "Tabulad~ores" ;
