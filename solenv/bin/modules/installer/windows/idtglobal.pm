@@ -2,9 +2,6 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.15 $
-#
-#   last change: $Author: obo $ $Date: 2004-10-18 13:54:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -839,11 +836,14 @@ sub add_licensefile_to_database
 # into the table control.idt . This is only relevant for
 # multilingual installation sets.
 #
+# old:
 # LanguageSelection CheckBox1   CheckBox    22  60  15  24  3   is1033      CheckBox2
 # LanguageSelection Text1   Text    40  60  70  15  65539       OOO_CONTROL_LANG_1033
 # LanguageSelection CheckBox2   CheckBox    22  90  15  24  3   is1031      Next
 # LanguageSelection Text2   Text    40  90  70  15  65539       OOO_CONTROL_LANG_1031
-#
+# new:
+# LanguageSelection CheckBox1   CheckBox    22  60  15  24  3   is1033  Text    CheckBox2
+# LanguageSelection CheckBox2   CheckBox    22  90  15  24  3   is1031  Text    Next
 ################################################################################################
 
 sub add_language_checkboxes_to_database
@@ -876,22 +876,24 @@ sub add_language_checkboxes_to_database
         if ( $last ) { $controlnext = "Next"; }
         else { $controlnext = "CheckBox" . $nextcount; }
 
+        my $stringname = "OOO_CONTROL_LANG_" . $windowslanguage;
+
         my $line1 = "LanguageSelection" . "\t" . $checkboxcount . "\t" . "CheckBox" . "\t" .
-                    "22" . "\t" . $yvalue . "\t" . "15" . "\t" . "15" . "\t" . $checkboxattribute . "\t" .
-                    $property . "\t" . "\t" . $controlnext . "\t" . "\n";
+                    "22" . "\t" . $yvalue . "\t" . "200" . "\t" . "15" . "\t" . $checkboxattribute . "\t" .
+                    $property . "\t" . $stringname . "\t" . $controlnext . "\t" . "\n";
 
         push(@{$controltable}, $line1);
 
-        my $textcount = "Text" . $count;
-        my $stringname = "OOO_CONTROL_LANG_" . $windowslanguage;
-
-        $yvalue = $yvalue + 2;      # text 2 pixel lower than checkbox
-
-        my $line2 = "LanguageSelection" . "\t" . $textcount . "\t" . "Text" . "\t" .
-                    "40" . "\t" . $yvalue . "\t" . "70" . "\t" . "15" . "\t" . "65539" . "\t" .
-                    "\t" . $stringname . "\t" . "\t" . "\n";
-
-        push(@{$controltable}, $line2);
+    #   my $textcount = "Text" . $count;
+    #   my $stringname = "OOO_CONTROL_LANG_" . $windowslanguage;
+    #
+    #   $yvalue = $yvalue + 2;      # text 2 pixel lower than checkbox
+    #
+    #   my $line2 = "LanguageSelection" . "\t" . $textcount . "\t" . "Text" . "\t" .
+    #               "40" . "\t" . $yvalue . "\t" . "70" . "\t" . "15" . "\t" . "65539" . "\t" .
+    #               "\t" . $stringname . "\t" . "\t" . "\n";
+    #
+    #   push(@{$controltable}, $line2);
     }
 }
 
