@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 13:58:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3273,8 +3273,9 @@ throw (::com::sun::star::uno::RuntimeException)
         if ( m_xFrame.is() &&
              m_xContainerWindow.is() )
         {
+            rtl::OUString aModuleIdentifier;
             MenuBar* pMenuBar = new MenuBar;
-            m_pInplaceMenuBar = new MenuBarManager( m_xSMGR, m_xFrame, pMenuBar, sal_True, sal_True );
+            m_pInplaceMenuBar = new MenuBarManager( m_xSMGR, m_xFrame, aModuleIdentifier, pMenuBar, sal_True, sal_True );
             m_pInplaceMenuBar->SetItemContainer( xMergedMenuBar );
 
             Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
