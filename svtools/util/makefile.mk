@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.14 $
+#*  $Revision: 1.15 $
 #*
-#*  last change: $Author: hro $ $Date: 2000-12-13 16:52:36 $
+#*  last change: $Author: mt $ $Date: 2001-03-15 11:45:56 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -227,6 +227,8 @@ DEF1NAME=	$(SHL1TARGET)
 DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
 DEFLIB1NAME =svt
 DEF1DES 	=SvTools
+DEF1EXPORTFILE=	svt.dxp
+
 
 # --- svtools lite --------------------------------------------------
 
