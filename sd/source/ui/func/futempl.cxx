@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 09:51:14 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@
 #include <svx/svditer.hxx>
 #endif
 
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _SVX_XLNDSIT_HXX
 #include <svx/xlndsit.hxx>
