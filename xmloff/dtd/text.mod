@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.36 2001-11-30 18:53:15 dvo Exp $
+	$Id: text.mod,v 1.37 2001-12-06 18:35:56 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -268,15 +268,15 @@
 
 <!ENTITY % formula "CDATA">
 
-<!ENTITY % valueAttr "text:value-type %valueType; #REQUIRED">
+<!ENTITY % valueAttr "text:value-type %valueType; #REQUIRED
+							 text:currency CDATA #IMPLIED" >
 
 <!ENTITY % valueAndTypeAttr "%valueAttr;
 		 					 text:value %float; #IMPLIED
 							 text:date-value %date; #IMPLIED
 							 text:time-value %timeInstance; #IMPLIED
 							 text:boolean-value %boolean; #IMPLIED
-							 text:string-value %string; #IMPLIED
-							 text:currency CDATA #IMPLIED" >
+							 text:string-value %string; #IMPLIED" >
 
 <!ENTITY % numFormat 'style:num-format CDATA #IMPLIED 
 					   style:num-letter-sync %boolean; "false"'>
@@ -375,6 +375,7 @@
 <!ATTLIST text:variable-get text:name %variableName; #REQUIRED>
 <!ATTLIST text:variable-get text:display (value|formula) "value">
 <!ATTLIST text:variable-get style:data-style-name %styleName; #IMPLIED>
+<!ATTLIST text:variable-get %valueAttr;>
 
 <!ELEMENT text:variable-input (#PCDATA)>
 <!ATTLIST text:variable-input text:name %variableName; #REQUIRED>
