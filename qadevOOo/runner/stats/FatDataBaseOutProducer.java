@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FatDataBaseOutProducer.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-11-02 11:46:53 $
+ *  last change:$Date: 2005-02-02 13:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,13 @@ public class FatDataBaseOutProducer extends DataBaseOutProducer {
             }
         }
         return true;
+    }
+
+    public Object getWatcher() {
+        return null;
+    }
+
+    public void setWatcher(Object watcher) {
     }
 
 }
