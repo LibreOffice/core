@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-18 14:58:18 $
+ *  last change: $Author: aw $ $Date: 2002-02-26 14:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,8 @@ class FuPoor
     void SetWindow(SdWindow* pWin) { pWindow = pWin; }
     void WriteStatus(const String& aStr);  // Statuszeile schreiben
 
-    virtual void SelectionHasChanged() {}
+    // #97016# II
+    virtual void SelectionHasChanged();
 
     USHORT  GetSlotID() const { return( nSlotId ); }
     USHORT  GetSlotValue() const { return( nSlotValue ); }
