@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:15:00 $
+ *  last change: $Author: mib $ $Date: 2000-09-28 12:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _HINTS_HXX //autogen wg. SwFmtChg
 #include <hints.hxx>
+#endif
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
 #endif
 
 #ifndef _POOLFMT_HXX //autogen wg. RES_POOL_CHRFMT_TYPE
@@ -525,11 +528,11 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
     if( !pStyle )
         return;
 
-    SwDoc& rDoc = ((SwXMLImport&)GetImport()).GetDoc();
+    const SwDoc *pDoc = pStyle->GetDoc();
 
     const OUString& rName =
                 SwXStyleFamilies::GetUIName( GetName(), SFX_STYLE_FAMILY_PARA );
-    SwTxtFmtColl *pColl = rDoc.FindTxtFmtCollByName( rName );
+    SwTxtFmtColl *pColl = pDoc->FindTxtFmtCollByName( rName );
     ASSERT( pColl, "Text collection not found" );
     if( !pColl || RES_CONDTXTFMTCOLL != pColl->Which() )
         return;
@@ -541,7 +544,7 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
         const OUString& rName =
                 SwXStyleFamilies::GetUIName( pCond->GetApplyStyle(),
                                              SFX_STYLE_FAMILY_PARA  );
-        SwTxtFmtColl* pCondColl = rDoc.FindTxtFmtCollByName( rName );
+        SwTxtFmtColl* pCondColl = pDoc->FindTxtFmtCollByName( rName );
         ASSERT( pCondColl,
             "SwXMLItemSetStyleContext_Impl::ConnectConditions: cond coll missing" );
         if( pCondColl )
@@ -711,9 +714,9 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
             "SwXMLItemSetStyleContext_Impl::CreateItemSetContext: item set exists" );
 
     SvXMLImportContext *pContext = 0;
-    SfxItemPool& rItemPool = GetSwImport().GetDoc().GetAttrPool();
 
 #ifdef XML_CORE_API
+    SfxItemPool& rItemPool = GetSwImport().GetDoc().GetAttrPool();
     switch( GetFamily() )
     {
     case SFX_STYLE_FAMILY_PARA:
@@ -761,6 +764,13 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
         break;
     }
 #else
+    Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
+                                       UNO_QUERY);
+    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    SwXTextCursor *pTxtCrsr = (SwXTextCursor*)xCrsrTunnel->getSomething(
+                                        SwXTextCursor::getUnoTunnelId() );
+    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    SfxItemPool& rItemPool = pTxtCrsr->GetDoc()->GetAttrPool();
     switch( GetFamily() )
     {
     case XML_STYLE_FAMILY_TABLE_TABLE:
@@ -1677,11 +1687,14 @@ sal_Bool SwXMLImport::FindAutomaticStyle(
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlfmt.cxx,v 1.1.1.1 2000-09-18 17:15:00 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlfmt.cxx,v 1.2 2000-09-28 12:45:50 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:15:00  hr
+      initial import
+
       Revision 1.42  2000/09/18 16:05:05  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-27 07:52:50 $
+ *  last change: $Author: mib $ $Date: 2000-09-28 12:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,39 +455,6 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-#ifdef XML_CORE_API
-    const SvXMLTokenMap& rTokenMap = GetSwImport().GetBodyElemTokenMap();
-    sal_Bool bOrdered = sal_False;
-    sal_Bool bHeading = sal_False;
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
-    {
-    case XML_TOK_SW_H:
-        bHeading = sal_True;
-    case XML_TOK_SW_P:
-        InsertContentIfNotThere();
-        pContext = new SwXMLParaContext( GetSwImport(),nPrefix, rLocalName,
-                                         xAttrList, bHeading );
-        break;
-    case XML_TOK_SW_ORDERED_LIST:
-        bOrdered = sal_True;
-    case XML_TOK_SW_UNORDERED_LIST:
-        InsertContentIfNotThere();
-        pContext = new SwXMLListBlockContext( GetSwImport(),nPrefix, rLocalName,
-                                              xAttrList, bOrdered );
-        break;
-
-    case XML_TOK_TABLE_SUBTABLE:
-        if( !HasContent() )
-        {
-            SwXMLTableContext *pTblContext =
-                new SwXMLTableContext( GetSwImport(), nPrefix, rLocalName,
-                                       xAttrList, GetTable() );
-            pContext = pTblContext;
-            InsertContent( pTblContext );
-        }
-        break;
-    }
-#else
     if( XML_NAMESPACE_TABLE == nPrefix &&
         0 == rLocalName.compareToAscii( sXML_sub_table ) )
     {
@@ -507,7 +474,6 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
                         GetImport(), nPrefix, rLocalName, xAttrList,
                         XML_TEXT_TYPE_CELL  );
     }
-#endif
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
@@ -519,19 +485,6 @@ void SwXMLTableCellContext_Impl::EndElement()
 {
     if( bHasContent )
     {
-#ifdef XML_CORE_API
-        SwPaM& rPaM = GetSwImport().GetPaM();
-        SwCntntNode* pCNd = rPaM.GetCntntNode();
-        if( pCNd && pCNd->StartOfSectionIndex() + 2UL <
-            pCNd->EndOfSectionIndex() )
-        {
-            rPaM.GetPoint()->nContent.Assign( 0, 0U );
-            rPaM.SetMark();
-            rPaM.DeleteMark();
-            GetSwImport().GetDoc().GetNodes().Delete( rPaM.GetPoint()->nNode );
-            rPaM.Move( fnMoveBackward, fnGoNode );
-        }
-#else
         if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
         {
             OUString sEmpty;
@@ -539,7 +492,6 @@ void SwXMLTableCellContext_Impl::EndElement()
                 GetImport().GetTextImport()->GetCursorAsRange(), sEmpty,
                 sal_True );
         }
-#endif
     }
     else
     {
@@ -604,11 +556,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
         const SfxPoolItem *pItem;
         const SfxItemSet *pAutoItemSet = 0;
         if( GetSwImport().FindAutomaticStyle(
-#ifdef XML_CORE_API
-                    SFX_STYLE_FAMILY_FRAME, SW_STYLE_SUBFAMILY_TABLE_COL,
-#else
                     XML_STYLE_FAMILY_TABLE_COLUMN,
-#endif
                                               aStyleName, &pAutoItemSet ) &&
             pAutoItemSet &&
             SFX_ITEM_SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, sal_False,
@@ -901,30 +849,26 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     }
 
     SwXMLImport& rSwImport = GetSwImport();
-    SwDoc& rDoc = rSwImport.GetDoc();
+    Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
+                                       UNO_QUERY);
+    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    SwXTextCursor *pTxtCrsr =
+                (SwXTextCursor*)xCrsrTunnel->getSomething(
+                                            SwXTextCursor::getUnoTunnelId() );
+    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    SwDoc *pDoc = pTxtCrsr->GetDoc();
 
     String sTblName;
     if( aName.getLength() )
     {
-        const SwTableFmt *pTblFmt = rDoc.FindTblFmtByName( aName );
+        const SwTableFmt *pTblFmt = pDoc->FindTblFmtByName( aName );
         if( !pTblFmt )
             sTblName = aName;
     }
     if( !sTblName.Len() )
-        sTblName = rDoc.GetUniqueTblName();
+        sTblName = pDoc->GetUniqueTblName();
 
-#ifdef XML_CORE_API
-    const SwTable* pSwTable = rDoc.InsertTable( *rSwImport.GetPaM().GetPoint(),
-                                                1U, 1U, HORI_LEFT );
-    pTableNode = pSwTable->GetTableNode();
-
-    SwFrmFmt *pTblFrmFmt = pSwTable->GetFrmFmt();
-    pTblFrmFmt->SetName( sTblName );
-
-    rSwImport.GetPaM().Move( fnMoveBackward );
-#else
     Reference< XTextTable > xTable;
-
     const SwXTextTable *pXTable = 0;
     Reference<XMultiServiceFactory> xFactory( GetImport().GetModel(),
                                               UNO_QUERY );
@@ -960,7 +904,6 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         Reference < XText> xText( xCell, UNO_QUERY );
         xOldCursor = GetImport().GetTextImport()->GetCursor();
         GetImport().GetTextImport()->SetCursor( xText->createTextCursor() );
-
     }
     if( pXTable )
     {
@@ -977,7 +920,6 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         pBox1 = pLine1->GetTabBoxes()[0U];
         pSttNd1 = pBox1->GetSttNd();
     }
-#endif
 }
 
 SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
@@ -1434,12 +1376,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     const OUString& rStyleName = pCell->GetStyleName();
     if( pCell->GetStartNode() && rStyleName &&
         GetSwImport().FindAutomaticStyle(
-#ifdef XML_CORE_API
-            SFX_STYLE_FAMILY_FRAME, SW_STYLE_SUBFAMILY_TABLE_BOX,
-#else
-            XML_STYLE_FAMILY_TABLE_CELL,
-#endif
-                                          pCell->GetStyleName(),
+            XML_STYLE_FAMILY_TABLE_CELL, pCell->GetStyleName(),
                                           &pAutoItemSet ) )
     {
         if( pAutoItemSet )
@@ -1478,12 +1415,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
     if( 1UL == (nBottomRow - nTopRow) &&
         rStyleName.getLength() &&
         GetSwImport().FindAutomaticStyle(
-#ifdef XML_CORE_API
-            SFX_STYLE_FAMILY_FRAME, SW_STYLE_SUBFAMILY_TABLE_LINE,
-#else
-            XML_STYLE_FAMILY_TABLE_ROW,
-#endif
-                                          rStyleName, &pAutoItemSet ) )
+            XML_STYLE_FAMILY_TABLE_ROW, rStyleName, &pAutoItemSet ) )
     {
         if( pAutoItemSet )
             pFrmFmt->SetAttr( *pAutoItemSet );
@@ -1914,12 +1846,7 @@ void SwXMLTableContext::MakeTable()
     const SfxItemSet *pAutoItemSet = 0;
     if( aStyleName.getLength() &&
         rSwImport.FindAutomaticStyle(
-#ifdef XML_CORE_API
-            SFX_STYLE_FAMILY_FRAME, SW_STYLE_SUBFAMILY_TABLE,
-#else
-            XML_STYLE_FAMILY_TABLE_TABLE,
-#endif
-                                      aStyleName, &pAutoItemSet ) &&
+            XML_STYLE_FAMILY_TABLE_TABLE, aStyleName, &pAutoItemSet ) &&
          pAutoItemSet )
     {
         const SfxPoolItem *pItem;
@@ -2014,13 +1941,9 @@ void SwXMLTableContext::MakeTable()
     }
 
     SwTableLine *pLine1 = pTableNode->GetTable().GetTabLines()[0U];
-#ifdef XML_CORE_API
-    pBox1 = pLine1->GetTabBoxes()[0U];
-#else
     DBG_ASSERT( pBox1 == pLine1->GetTabBoxes()[0U],
                 "Why is box 1 change?" );
     pBox1->pSttNd = pSttNd1;
-#endif
     pLine1->GetTabBoxes().Remove(0U);
 
     pLineFmt = (SwTableLineFmt*)pLine1->GetFrmFmt();
@@ -2043,7 +1966,7 @@ void SwXMLTableContext::MakeTable()
     for( sal_uInt16 i=0; i<pRows->Count(); i++ )
         (*pRows)[i]->Dispose();
 
-    if( rSwImport.GetDoc().GetRootFrm() )
+    if( pTableNode->GetDoc()->GetRootFrm() )
     {
         pTableNode->DelFrms();
         SwNodeIndex aIdx( *pTableNode->EndOfSectionNode(), 1 );
@@ -2065,31 +1988,6 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
                                             const SwStartNode *pPrevSttNd )
 {
     const SwStartNode *pStNd;
-#ifdef XML_CORE_API
-    SwPaM& rPaM = GetSwImport().GetPaM();
-    if( bFirstSection )
-    {
-        // The PaM already is in the first section
-        pStNd = rPaM.GetNode()->FindTableBoxStartNode();
-        bFirstSection = sal_False;
-    }
-    else
-    {
-        SwDoc& rDoc = GetSwImport().GetDoc();
-        const SwEndNode *pEndNd = pPrevSttNd ? pPrevSttNd->EndOfSectionNode()
-                                             : pTableNode->EndOfSectionNode();
-        sal_uInt32 nOffset = pPrevSttNd ? 1UL : 0UL;
-        SwNodeIndex aIdx( *pEndNd, nOffset );
-        SwTxtFmtColl *pColl = rDoc.GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
-        pStNd = rDoc.GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
-                                                 pColl );
-        if( !pPrevSttNd )
-        {
-            rPaM.GetPoint()->nNode.Assign( *pStNd, 1UL );
-            rPaM.GetPoint()->nContent.Assign( rPaM.GetCntntNode(), 0U );
-        }
-    }
-#else
     Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
                                        UNO_QUERY);
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
@@ -2109,32 +2007,30 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
     }
     else
     {
-        SwDoc& rDoc = GetSwImport().GetDoc();
+        SwDoc* pDoc = pTxtCrsr->GetDoc();
         const SwEndNode *pEndNd = pPrevSttNd ? pPrevSttNd->EndOfSectionNode()
                                              : pTableNode->EndOfSectionNode();
         sal_uInt32 nOffset = pPrevSttNd ? 1UL : 0UL;
         SwNodeIndex aIdx( *pEndNd, nOffset );
-        SwTxtFmtColl *pColl = rDoc.GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
-        pStNd = rDoc.GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
+        SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
+        pStNd = pDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
                                                  pColl );
         if( !pPrevSttNd )
         {
             pBox1->pSttNd = pStNd;
-            SwCntntNode *pCNd = rDoc.GetNodes()[ pStNd->GetIndex() + 1 ]
+            SwCntntNode *pCNd = pDoc->GetNodes()[ pStNd->GetIndex() + 1 ]
                                                             ->GetCntntNode();
             SwPosition aPos( *pCNd );
             aPos.nContent.Assign( pCNd, 0U );
 
             Reference < XTextRange > xTextRange =
-                CreateTextRangeFromPosition( &rDoc, aPos, 0 );
+                CreateTextRangeFromPosition( pDoc, aPos, 0 );
             Reference < XText > xText = xTextRange->getText();
             Reference < XTextCursor > xTextCursor =
                 xText->createTextCursorByRange( xTextRange );
             GetImport().GetTextImport()->SetCursor( xTextCursor );
         }
     }
-
-#endif
 
     return pStNd;
 }
@@ -2144,15 +2040,10 @@ void SwXMLTableContext::EndElement()
     if( !xParentTable.Is() )
     {
         MakeTable();
-#ifdef XML_CORE_API
-        GetSwImport().GetPaM().Move( fnMoveForward );
-#else
         GetImport().GetTextImport()->SetCursor( xOldCursor );
-#endif
     }
 }
 
-#ifndef XML_CORE_API
 class SwXMLTextImportHelper : public XMLTextImportHelper
 {
 protected:
@@ -2193,61 +2084,3 @@ XMLTextImportHelper* SwXMLImport::CreateTextImport()
     return new SwXMLTextImportHelper( GetModel(), IsInsertMode(),
                                       IsStylesOnlyMode() );
 }
-
-#endif
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmltbli.cxx,v 1.4 2000-09-27 07:52:50 mib Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.3  2000/09/27 07:28:00  mib
-      align=margins now works without also specifying a width
-
-      Revision 1.2  2000/09/27 06:16:11  mib
-      #78246#: Calculation of relative column widths now works correctly even if
-               the summ of all column widths is smaller than the page width.
-
-      Revision 1.1.1.1  2000/09/18 17:15:00  hr
-      initial import
-
-      Revision 1.11  2000/09/18 16:05:07  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.10  2000/09/18 11:58:02  mib
-      text frames/graphics import and export continued
-
-      Revision 1.9  2000/08/24 11:16:42  mib
-      text import continued
-
-      Revision 1.8  2000/08/10 10:22:16  mib
-      #74404#: Adeptions to new XSL/XLink working draft
-
-      Revision 1.7  2000/07/21 12:55:15  mib
-      text import/export using StarOffice API
-
-      Revision 1.6  2000/06/08 09:45:55  aw
-      changed to use functionality from xmloff project now
-
-      Revision 1.5  2000/05/03 12:08:05  mib
-      unicode
-
-      Revision 1.4  2000/03/13 14:33:44  mib
-      UNO3
-
-      Revision 1.3  2000/03/10 11:15:04  mib
-      #72721#: Made table import much more robust, rowspan
-
-      Revision 1.2  2000/02/17 15:17:57  mib
-      #70271#: headline repeat
-
-      Revision 1.1  2000/02/17 14:40:01  mib
-      #70271#: XML table import
-
-
-*************************************************************************/
-

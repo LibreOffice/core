@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:15:00 $
+ *  last change: $Author: mib $ $Date: 2000-09-28 12:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
 #endif
+#ifndef _UNOCRSR_HXX
+#include "unocrsr.hxx"
+#endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
 #endif
@@ -124,6 +127,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::lang;
 
 sal_Char __READONLY_DATA sXML_np__text[] = "text";
 sal_Char __READONLY_DATA sXML_np__table[] = "table";
@@ -256,86 +260,78 @@ SwXMLImport::SwXMLImport(
     bLoadDoc( bLDoc ),
     bInsert( bInsertMode ),
     nStyleFamilyMask( nStyleFamMask ),
-    pDoc( &rDoc ),
-    pPaM( new SwPaM( *rPaM.GetPoint() )  ),
-#ifdef XML_CORE_API
-    pI18NMap( new SvI18NMap ),
-    pUnusedNumRules( 0 ),
-#endif
     pDocElemTokenMap( 0 ),
-#ifdef XML_CORE_API
-    pBodyElemTokenMap( 0 ),
-    pStyleStylesElemTokenMap( 0 ),
-    pTextPElemTokenMap( 0 ),
-    pTextPAttrTokenMap( 0 ),
-    pTextListBlockAttrTokenMap( 0 ),
-    pTextListBlockElemTokenMap( 0 ),
-#endif
     pTableElemTokenMap( 0 ),
-#ifdef XML_CORE_API
-    pParaItemMapper( 0 ),
-#endif
     pTableItemMapper( 0 ),
     pSttNdIdx( 0 ),
     bAutoStylesValid( sal_False )
 {
-//  GetNamespaceMap().AddAtIndex( XML_NAMESPACE_TEXT, sXML_np__text,
-//                                sXML_n_text, XML_NAMESPACE_TEXT );
-//  GetNamespaceMap().AddAtIndex( XML_NAMESPACE_TABLE, sXML_np__table,
-//                                sXML_n_table, XML_NAMESPACE_TABLE );
-
     _InitItemImport();
 
-    if( !IsStylesOnlyMode() )
-    {
-        pSttNdIdx = new SwNodeIndex( pDoc->GetNodes() );
-        if( IsInsertMode() )
-        {
-            const SwPosition* pPos = pPaM->GetPoint();
-
-            // Split once and remember the node that has been splitted.
-            pDoc->SplitNode( *pPos );
-            *pSttNdIdx = pPos->nNode.GetIndex()-1;
-
-            // Split again.
-            pDoc->SplitNode( *pPos );
-
-            // Insert all content into the new node
-            pPaM->Move( fnMoveBackward );
-            pDoc->SetTxtFmtColl( *pPaM,
-                             pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD) );
-        }
-    }
     Reference < XTextRange > xTextRange =
-        CreateTextRangeFromPosition( pDoc, *rPaM.GetPoint(), 0 );
+        CreateTextRangeFromPosition( &rDoc, *rPaM.GetPoint(), 0 );
     Reference < XText > xText = xTextRange->getText();
     Reference < XTextCursor > xTextCursor =
         xText->createTextCursorByRange( xTextRange );
     GetTextImport()->SetCursor( xTextCursor );
+    if( !IsStylesOnlyMode() )
+    {
+        pSttNdIdx = new SwNodeIndex( rDoc.GetNodes() );
+        if( IsInsertMode() )
+        {
+            Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
+                                               UNO_QUERY);
+            ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+            SwXTextCursor *pTxtCrsr =
+                    (SwXTextCursor*)xCrsrTunnel->getSomething(
+                                            SwXTextCursor::getUnoTunnelId() );
+            ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+            SwPaM *pPaM = pTxtCrsr->GetCrsr();
+            const SwPosition* pPos = pPaM->GetPoint();
+
+            // Split once and remember the node that has been splitted.
+            rDoc.SplitNode( *pPos );
+            *pSttNdIdx = pPos->nNode.GetIndex()-1;
+
+            // Split again.
+            rDoc.SplitNode( *pPos );
+
+            // Insert all content into the new node
+            pPaM->Move( fnMoveBackward );
+            rDoc.SetTxtFmtColl( *pPaM,
+                             rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD) );
+        }
+    }
 }
 
 SwXMLImport::~SwXMLImport()
 {
-    GetTextImport()->ResetCursor();
-
     if( !IsStylesOnlyMode() )
     {
+        Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
+                                              UNO_QUERY);
+        ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+        SwXTextCursor *pTxtCrsr =
+                (SwXTextCursor*)xCrsrTunnel->getSomething(
+                                            SwXTextCursor::getUnoTunnelId() );
+        ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+        SwPaM *pPaM = pTxtCrsr->GetCrsr();
         if( IsInsertMode() && pSttNdIdx->GetIndex() )
         {
             // If we are in insert mode, join the splitted node that is in front
-            // of the new content with the first new node.
+            // of the new content with the first new node. Or in other words:
+            // Revert the first split node.
             SwTxtNode* pTxtNode = pSttNdIdx->GetNode().GetTxtNode();
             SwNodeIndex aNxtIdx( *pSttNdIdx );
             if( pTxtNode && pTxtNode->CanJoinNext( &aNxtIdx ))
             {
-                xub_StrLen nStt = pTxtNode->GetTxt().Len();
-
                 // If the PaM points to the first new node, move the PaM to the
                 // end of the previous node.
                 if( pPaM->GetPoint()->nNode == aNxtIdx )
                 {
                     pPaM->GetPoint()->nNode = *pSttNdIdx;
-                    pPaM->GetPoint()->nContent.Assign( pTxtNode, nStt );
+                    pPaM->GetPoint()->nContent.Assign( pTxtNode,
+                                            pTxtNode->GetTxt().Len() );
                 }
 
 #ifndef PRODUCT
@@ -365,8 +361,8 @@ SwXMLImport::~SwXMLImport()
                 }
 #endif
                 // If the first new node isn't empty, convert  the node's text
-                // attributes into hints. Otherwise, set the new node's paragraph
-                // style at the previous (empty) node.
+                // attributes into hints. Otherwise, set the new node's
+                // paragraph style at the previous (empty) node.
                 SwTxtNode* pDelNd = aNxtIdx.GetNode().GetTxtNode();
                 if( pTxtNode->GetTxt().Len() )
                     pDelNd->FmtToTxtAttr( pTxtNode );
@@ -377,13 +373,18 @@ SwXMLImport::~SwXMLImport()
         }
 
         SwPosition* pPos = pPaM->GetPoint();
+        DBG_ASSERT( !pPos->nContent.GetIndex(), "last paragraph isn't empty" );
         if( !pPos->nContent.GetIndex() )
         {
             SwTxtNode* pCurrNd;
             sal_uInt32 nNodeIdx = pPos->nNode.GetIndex();
+            SwDoc *pDoc = pPaM->GetDoc();
 
+            DBG_ASSERT( pPos->nNode.GetNode().IsCntntNode(),
+                        "insert position is not a content node" );
             if( !IsInsertMode() )
             {
+                // If we're not in insert mode, the last node is deleted.
                 if( pDoc->GetNodes()[nNodeIdx -1]->IsCntntNode() )
                 {
                     SwCntntNode* pCNd = pPaM->GetCntntNode();
@@ -398,12 +399,23 @@ SwXMLImport::~SwXMLImport()
             }
             else if( 0 != (pCurrNd = pDoc->GetNodes()[nNodeIdx]->GetTxtNode()) )
             {
+                // Id we're in insert mode, the empty node is joined with
+                // the next and the previous one.
                 if( pCurrNd->CanJoinNext( &pPos->nNode ))
                 {
                     SwTxtNode* pNextNd = pPos->nNode.GetNode().GetTxtNode();
                     pPos->nContent.Assign( pNextNd, 0 );
                     pPaM->SetMark(); pPaM->DeleteMark();
                     pNextNd->JoinPrev();
+
+                    if( pNextNd->CanJoinPrev(/* &pPos->nNode*/ ) )
+                    {
+//                      SwTxtNode* pPrevNd = pPos->nNode.GetNode().GetTxtNode();
+//                      pPos->nContent.Assign( pPrevNd, 0 );
+//                      pPaM->SetMark(); pPaM->DeleteMark();
+//                      pPrevNd->JoinNext();
+                        pNextNd->JoinPrev();
+                    }
                 }
                 else if( !pCurrNd->GetTxt().Len() )
                 {
@@ -414,8 +426,11 @@ SwXMLImport::~SwXMLImport()
                 }
             }
         }
+#ifdef WE_ARE_SURE_WE_DONT_NEED_THIS_CODE_ANY_LONGER_REMOVE_IT
         else if( IsInsertMode() )
         {
+            // We're always appending a paragarph at the end of the document,
+            // so this code should enver be executed!
             pPaM->Move( fnMoveForward, fnGoNode );
             SwTxtNode* pTxtNode = pPos->nNode.GetNode().GetTxtNode();
             SwNodeIndex aPrvIdx( pPos->nNode );
@@ -444,127 +459,13 @@ SwXMLImport::~SwXMLImport()
                 pTxtNode->JoinPrev();
             }
         }
+#endif
     }
 
-#ifdef XML_CORE_API
-    RemoveUnusedNumRules();
-#endif
+    GetTextImport()->ResetCursor();
 
     delete pSttNdIdx;
-    delete pPaM;
     delete pDocElemTokenMap;
-#ifdef XML_CORE_API
-    delete pI18NMap;
-    delete pBodyElemTokenMap;
-    delete pTextPElemTokenMap;
-    delete pTextPAttrTokenMap;
-    delete pStyleStylesElemTokenMap;
-    delete pTextListBlockAttrTokenMap;
-    delete pTextListBlockElemTokenMap;
-#endif
     delete pTableElemTokenMap;
     _FinitItemImport();
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlimp.cxx,v 1.1.1.1 2000-09-18 17:15:00 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.30  2000/09/18 16:05:06  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.29  2000/08/29 07:33:47  mib
-      text import continued
-
-      Revision 1.28  2000/08/24 11:16:41  mib
-      text import continued
-
-      Revision 1.27  2000/08/10 10:22:16  mib
-      #74404#: Adeptions to new XSL/XLink working draft
-
-      Revision 1.26  2000/07/31 09:42:35  mib
-      text export continued
-
-      Revision 1.25  2000/07/21 12:55:15  mib
-      text import/export using StarOffice API
-
-      Revision 1.24  2000/07/07 13:58:36  mib
-      text styles using StarOffice API
-
-      Revision 1.23  2000/06/08 09:45:54  aw
-      changed to use functionality from xmloff project now
-
-      Revision 1.22  2000/05/15 16:53:17  jp
-      Changes for Unicode
-
-      Revision 1.21  2000/05/03 12:08:05  mib
-      unicode
-
-      Revision 1.20  2000/03/13 14:33:44  mib
-      UNO3
-
-      Revision 1.19  2000/02/17 14:40:30  mib
-      #70271#: XML table import
-
-      Revision 1.17  2000/01/27 08:59:02  mib
-      #70271#: outline numbering
-
-      Revision 1.16  2000/01/20 10:03:16  mib
-      #70271#: Lists reworked
-
-      Revision 1.15  2000/01/06 15:08:27  mib
-      #70271#:separation of text/layout, cond. styles, adaptions to wd-xlink-19991229
-
-      Revision 1.14  1999/11/26 11:12:51  mib
-      loading of styles only and insert mode
-
-      Revision 1.13  1999/11/22 15:53:39  mib
-      split/join nodes correctly
-
-      Revision 1.12  1999/11/12 11:43:03  mib
-      using item mapper, part iii
-
-      Revision 1.11  1999/11/10 15:08:09  mib
-      Import now uses XMLItemMapper
-
-      Revision 1.10  1999/11/01 11:38:50  mib
-      List style import
-
-      Revision 1.9  1999/10/15 12:39:11  mib
-      moved styles element from style to office namespace
-
-      Revision 1.8  1999/10/08 11:47:49  mib
-      moved some file to SVTOOLS/SVX
-
-      Revision 1.7  1999/10/05 14:31:14  hr
-      #65293#: removed redundant const
-
-      Revision 1.6  1999/09/28 10:46:58  mib
-      memory leak
-
-      Revision 1.5  1999/09/23 11:54:16  mib
-      i18n, token maps and hard paragraph attributes
-
-      Revision 1.4  1999/09/22 11:57:14  mib
-      string -> wstring
-
-      Revision 1.3  1999/08/19 12:57:42  MIB
-      attribute import added
-
-
-      Rev 1.2   19 Aug 1999 14:57:42   MIB
-   attribute import added
-
-      Rev 1.1   18 Aug 1999 17:05:20   MIB
-   Style import
-
-      Rev 1.0   17 Aug 1999 16:32:52   MIB
-   Initial revision.
-
-*************************************************************************/
-
