@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:20:46 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,6 +664,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
         //in tables)
         if (nCellLevel == nInTable)
         {
+
             if (!nInTable)
                 bTestAllowed = true;
             else
@@ -675,7 +676,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
                 }
                 else
                 {
-                    bTestAllowed = pTableDesc->GetAktCol() == 0  ||
+                    bTestAllowed = pTableDesc->GetAktCol() == 0  &&
                         pTableDesc->InFirstParaInCell();
                 }
             }
@@ -1732,6 +1733,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
         const BYTE* pParams = aSprmIter.GetAktParams();
         for (int nLoop = 0; nLoop < 2; ++nLoop)
         {
+            bool bRepeatedSprm = false;
             while ( aSprmIter.GetSprms() &&
                 (0 != (pParams = aSprmIter.GetAktParams())) )
             {
@@ -1760,7 +1762,11 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
                     break;
                 case 186:
                 case 0x3404:
-                    nRowsToRepeat++;
+                    if(!bRepeatedSprm)
+                    {
+                        nRowsToRepeat++;
+                        bRepeatedSprm = true;
+                        }
                     break;
                 case 182:
                 case 0x5400:
@@ -1876,8 +1882,12 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
         if( nTabeDxaNew < SHRT_MAX )
         {
             short* pCenter  = pNewBand->nCenter;
+            short firstDxaCenter = *pCenter;
             for( int i = 0; i < pNewBand->nWwCols; i++, ++pCenter )
-                *pCenter += nTabeDxaNew; // Shift left x-position
+            {
+                // #i30298 Use sprmTDxaLeft to adjust the left indent
+                *pCenter += (nTabeDxaNew - firstDxaCenter);
+            }
         }
 
         if (!pActBand)
@@ -2049,11 +2059,10 @@ void WW8TabDesc::CalcDefaults()
             same value, if they are then the cell does not really exist and will
             be blended together into the same cell through the use of the
             nTrans(late) array.
+            #i28333# If the nGapHalf is greater than the cell width best to ignore it
             */
-            if (
-                (pR->nCenter[i+1] - pR->nCenter[i]) &&
-                ((pR->nCenter[i+1] - pR->nCenter[i] - pR->nGapHalf*2) < MINLAY)
-               )
+            int nCellWidth = pR->nCenter[i+1] - pR->nCenter[i];
+            if (nCellWidth && ((nCellWidth - pR->nGapHalf*2) < MINLAY) && pR->nGapHalf < nCellWidth)
             {
                 pR->nCenter[i+1] = pR->nCenter[i]+MINLAY+pR->nGapHalf * 2;
             }
