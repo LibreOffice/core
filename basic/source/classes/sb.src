@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 05:15:43 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 05:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Sub- of functieprocedure niet gedefinieerd";
         Text[ chinese_simplified ] = "Γ»ΣΠ¶¨Òε·ΦΉύ³Μ»ςΊ―ΚύΉύ³Μ";
         Text[ greek ] = "Δεν ορίστηκε η διαδικασία υπό (Sub) ή λειτουργίας (Function)";
-        Text[ korean ] = "Α¤ΐΗµΗΑφΎΚΐΊ Ό­Ίκ ΗΑ·Ξ½Γΐϊ ¶Η΄Β ±β΄Ι  ΗΑ·Ξ½Γΐϊ";
+        Text[ korean ] = "Α¤ΐΗµΗΑφ ΎΚΐΊ Ό­Ίκ ΗΑ·Ξ½Γΐϊ ¶Η΄Β ±β΄Ι  ΗΑ·Ξ½Γΐϊ";
         Text[ turkish ] = "Alt yordam ya da iώlev yordamύ tanύmlanmadύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Procedimiento de funciσn o subordinado no definido";
@@ -591,7 +591,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Fout bei laden van DLL-bestand";
         Text[ chinese_simplified ] = "Χ°Θλ DLL ΞΔΌώΚ±·ΆΙϊ΄νΞσ";
         Text[ greek ] = "Σφάλμα κατά τη φόρτωση ενός αρχείου DLL";
-        Text[ korean ] = "DLLΖΔΐΟ ·Ξµε½ΓΏ΅ Ώΐ·ω";
+        Text[ korean ] = "DLL ΖΔΐΟ ·Ξµε½ΓΏ΅ Ώΐ·ω";
         Text[ turkish ] = "DLL dosyasύnύ yόkleme sύrasύnda hata";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error al cargar un archivo DDL";
@@ -1354,7 +1354,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Geen vrije DDE-kanalen";
         Text[ chinese_simplified ] = "Γ»ΣΠΏΙΣΓµΔ DDE-ΠΕµΐ";
         Text[ greek ] = "Δεν υπάρχουν διαθέσιμα κανάλια DDE";
-        Text[ korean ] = "DDE Γ¤³Ξ ΊÒ°΅΄Ι";
+        Text[ korean ] = "»ηΏλ°΅΄ΙΗΡ DDE Γ¤³Ξ Ύψΐ½";
         Text[ turkish ] = "Boώ DDE kanallarύ yok";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No hay canales DDE libres";
@@ -1618,7 +1618,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Gegevens hebben foutief formaat";
         Text[ chinese_simplified ] = "ΚύΎέΈρΚ½΄νΞσ";
         Text[ greek ] = "Λάθος μορφή δεδομένων";
-        Text[ korean ] = "Ζ²Έ° ΖχΈΛΐΗ µ¥ΐΜΕΝ";
+        Text[ korean ] = "ΖχΈΛ µ¥ΐΜΕΝ Ζ²Έ²";
         Text[ turkish ] = "Verilerin formatύ yanlύώ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Los datos estαn en un formato falso";
@@ -1825,7 +1825,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Ongeldig koppeling-onderwerp; koppelingmodus kan niet worden ingesteld";
         Text[ chinese_simplified ] = "ΣΙΣΪΞήΠ§µΔΑ΄½Σ±κΜβ¶ψΞή·¨Ιθ¶¨Α΄½Σ±κΜβ";
         Text[ greek ] = "Δεν είναι δυνατόν να οριστεί το LinkMode εξαιτίας μη έγκυρων Link-Topics.";
-        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΈµΕ©  ΕδΗΘΐΈ·Ξ ΐΞΗΨ ΈµΕ©Έπµε°΅ Ό³Α¤µΙΌφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΈµΕ©  ΕδΗΘΐΈ·Ξ ΐΞΗΨ ΈµΕ©Έπµε°΅ Ό³Α¤µΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "LinkMode, geηersiz Link-Topics nedeniyle belirlenemez";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se puede establecer el LinkMode debido a un Link Topic incorrecto";
@@ -1885,7 +1885,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "De module kan niet worden geladen, ongeldig formaat";
         Text[ chinese_simplified ] = "ΈρΚ½ΞήΠ§£¬Òς¶ψΞή·¨Χ°ΘλΥβΈφ³ΜΠςΔ£Ώι";
         Text[ greek ] = "Δεν ήταν δυνατόν να φορτωθεί η λειτουργική μονάδα, μη έγκυρη μορφή";
-        Text[ korean ] = "ΈπµβΐΜ ·ΞµεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω. ; ΐ―ΘΏΗΟΑφ΅΅ΎΚΐΊ ΖχΈΛ";
+        Text[ korean ] = "ΈπµβΐΜ ·ΞµεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω; ΐ―ΘΏΗΟΑφ΅΅ΎΚΐΊ ΖχΈΛ";
         Text[ turkish ] = "Modόl yόklenemiyor; geηersiz format";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se puede cargar el mσdulo ya que el formato es incorrecto";
@@ -2241,7 +2241,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Fout bij OLE-automatisering";
         Text[ chinese_simplified ] = "OLE ΧΤ¶―»―΄νΞσ";
         Text[ greek ] = "Σφάλμα κατά την αυτοματοποίηση OLE";
-        Text[ korean ] = "OLE ΐΪµΏΘ­ Ώΐ·ω";
+        Text[ korean ] = "OLE ΐΪµΏΘ­Ώ΅Ό­ Ώΐ·ω";
         Text[ turkish ] = "OLE otomasyonunda hata";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error en la automatizaciσn OLE";
@@ -2271,7 +2271,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Deze handeling wordt niet ondersteund door het aangegeven object";
         Text[ chinese_simplified ] = "Έψ¶¨µΔ¶ΤΟσ²»Φ§³ΦΥβΈφ²ΩΧχ";
         Text[ greek ] = "Η ενέργεια αυτή δεν υποστηρίζεται από το δεδομένο αντικείμενο";
-        Text[ korean ] = "ΐΜ µΏΐΫΐΊ ΑΦΎξΑψ °³ΓΌΏ΅ΐΗΗΨ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΜ µΏΐΫΐΊ Α¦½ΓµΘ °³ΓΌΏ΅ ΐΗΗΨ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Bu iώlem belirtilen nesne tarafύndan desteklenmiyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Esta acciσn no es apoyada por el objeto dado";
@@ -2301,7 +2301,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Genoemde argumenten wordt niet ondersteund door het aangegeven object";
         Text[ chinese_simplified ] = "Έψ¶¨¶ΤΟσ²»Φ§³ΦΦΈ¶¨µΔΧΤ±δΑΏ";
         Text[ greek ] = "Τα ονομαζόμενα ορίσματα δεν υποστηρίζονται από το δεδομένο αντικείμενο";
-        Text[ korean ] = "ΑφΑ¤µΘ µ¶Έ³ Ί―Όφ΄Β ΑΦΎξΑψ °³ΓΌΏ΅ΐΗΗΨ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΑφΑ¤µΘ µ¶Έ³ Ί―Όφ΄Β Α¦½ΓµΘ °³ΓΌΏ΅ ΐΗΗΨ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Adlandύrύlmύώ argόmanlar, belirtilen nesne tarafύndan desteklenmiyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El objeto indicado no apoya los argumentos nombrados";
@@ -2331,7 +2331,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "De huidige lokale instellingen worden niet ondersteund door het aangegeven object";
         Text[ chinese_simplified ] = "µ±Η°µΔΎΦ²ΏΙθ¶¨²»ΚάΈψ¶¨¶ΤΟσµΔΦ§³Φ";
         Text[ greek ] = "Οι τρέχουσες τοπικές ρυθμίσεις δεν υποστηρίζονται από το δεδομένο αντικείμενο";
-        Text[ korean ] = "ΗφΐηΐΗ ·ΞΔΓ Ό³Α¤ΐΊ Α¤ΐΗµΘ °³ΓΌΏ΅ΐΗΗΨ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΗφΐηΐΗ ·ΞΔΓ Ό³Α¤ΐΊ Α¦½ΓµΘ °³ΓΌΏ΅ ΐΗΗΨ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Yόrόlόkteki yerel ayarlar, belirtilen nesne tarafύndan desteklenmiyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La configuraciσn local actual no es apoyada por el objeto dado";
@@ -2771,7 +2771,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Onverwacht symbool: $(ARG1)";
         Text[ chinese_simplified ] = "ÒβΝβµΔΝΌ±κ£Ί$(ARG1)";
         Text[ greek ] = "Μη αναμενόμενο σύμβολο: $(ARG1)";
-        Text[ korean ] = "Ώδ±ΈµΗΑφΎΚΐΊ ±βΘ£ :  $(ARG1)";
+        Text[ korean ] = "Ώδ±ΈµΗΑφ ΎΚΐΊ ±βΘ£ :  $(ARG1)";
         Text[ turkish ] = "Beklenmeyen simge: $(ARG1)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sνmbolo inesperado: $(ARG1)";
@@ -2974,7 +2974,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Sub- of functieprocedure $(ARG1) reeds gedefinieerd";
         Text[ chinese_simplified ] = "ÒΡΎ­¶¨ÒεΑΛ·ΦΉύ³Μ»ςΊ―ΚύΉύ³Μ $(ARG1)";
         Text[ greek ] = "Η διαδικασία υπό (Sub) ή λειτουργίας (Function) $(ARG1) ορίστηκε ήδη";
-        Text[ korean ] = "Ό­Ίκ ΗΑ·Ξ½Γΐϊ΅΅¶Η΄Β ±β΄Ι ΗΑ·Ξ½Γΐϊ $(ARG1) ΐΊ£¨΄Β£©ΐΜΉΜ Α¤ΐΗµΗΎξΐΦ½ΐ΄Ο΄Ω";
+        Text[ korean ] = "Ό­Ίκ ΗΑ·Ξ½Γΐϊ΅΅¶Η΄Β ±β΄Ι ΗΑ·Ξ½Γΐϊ $(ARG1) ΐΊ£¨΄Β£©ΐΜΉΜ Α¤ΐΗµΗΎξ ΐΦ½ΐ΄Ο΄Ω";
         Text[ turkish ] = "Alt yordam ya da iώlev yordamύ $(ARG1) tanύmlanmύώ durumda";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El procedimiento de funciσn o subordinado $(ARG1) ya estα definido";
@@ -3003,7 +3003,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Naam $(ARG1) reeds gedefinieerd";
         Text[ chinese_simplified ] = "ÒΡΎ­¶¨ÒεΑΛ±κΌΗ $(ARG1)";
         Text[ greek ] = "Η επιγραφή $(ARG1) ορίστηκε ήδη";
-        Text[ korean ] = "¶σΊ§ $(ARG1) ΐΊ£¨΄Β£© ΐΜΉΜ Α¤ΐΗµΗΎξΐΦ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "¶σΊ§ $(ARG1) ΐΊ£¨΄Β£© ΐΜΉΜ Α¤ΐΗµΗΎξ ΐΦ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Etiket $(ARG1) tanύmlanmύώ durumda";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La etiqueta $(ARG1) ya estα definida";
@@ -3264,7 +3264,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Symbool $(ARG1) reeds anders gedefinieerd";
         Text[ chinese_simplified ] = "ÒΡΎ­ΑνΠΠ¶¨ÒεΑΛΝΌ±κ $(ARG1)";
         Text[ greek ] = "Το σύμβολο $(ARG1) ορίστηκε ήδη με διαφορετικό τρόπο";
-        Text[ korean ] = "±βΘ£$(ARG1) ΐΜ£¨°΅£© ΐΜΉΜ ΄ΩΈ£°Τ Α¤ΐΗµΗΎξ ΐΦ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "±βΘ£$(ARG1) ΐΜ£¨°΅£© ΐΜΉΜ ΄ΩΈ£°Τ Α¤ΐΗµΗΎξ ΐΦ½ΐ΄Ο΄Ω";
         Text[ turkish ] = "Simge $(ARG1) farklύ bir biηimde tanύmlanmύώ durumda";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El sνmbolo $(ARG1) ya se definiσ de otra manera";
@@ -3293,7 +3293,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Parameters passen niet bij procedure";
         Text[ chinese_simplified ] = "Φϊ±δΑΏΊΝΉύ³Μ²»Ζ¥Εδ";
         Text[ greek ] = "Οι παράμετροι δεν ταιριάζουν στη διαδικασία";
-        Text[ korean ] = "ΖΔ¶σΉΜΕΝ°΅ ΐύΒχΏ΅ ΈΒΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔ¶σΉΜΕΝ°΅ ΗΑ·Ξ½ΓΐϊΏ΅ ΈΒΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Parametreler yordama uymuyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Los parαmetros no coinciden con el procedimiento";
@@ -3619,7 +3619,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Bevindt zich niet in VBScript";
         Text[ chinese_simplified ] = "Γ»ΣΠ°όΊ¬ΤΪ VB script ΔΪ";
         Text[ greek ] = "Δεν περιέχεται στο VB script";
-        Text[ korean ] = "VB ½ΊΕ©Έ³Ζ®Ώ΅΅΅ΖχΗΤµΗΎξΐΦΑφ΅΅ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "VB ½ΊΕ©Έ³Ζ®Ώ΅΅΅ΖχΗΤµΗΎξ ΐΦΑφ΅΅ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "VBScript'te mevcut deπil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No estα contenido en el script VB";
@@ -3776,7 +3776,7 @@ String ERRCODE_BASMGR_MGROPEN & ERRCODE_RES_MASK
     Text[ dutch ] = "BASIC in bestand '$(ARG1)' kon niet worden geοnitialiseerd";
     Text[ chinese_simplified ] = "Ξή·¨΄ΣΞΔΌώ'$(ARG1)' ³υΚΌ»― BASIC";
     Text[ greek ] = "Δεν ήταν δυνατόν να γίνει αναγνώριση του BASIC από το αρχείο '$(ARG1)'.";
-    Text[ korean ] = "ΖΔΐΟ $(ARG1)  ·Ξ ΊΞΕΝΐΗ BASICΐ» ΓΚ±βΘ­ΗΟΑφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΖΔΐΟ $(ARG1)·ΞΊΞΕΝΐΗ BASICΐ» ΓΚ±βΘ­ΗΟΑφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "'$(ARG1)' dosyasύndan BASIC kurulamadύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No se pudo inicializar el Basic del archivo '$(ARG1)'";
