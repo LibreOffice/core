@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:09:30 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,15 +342,11 @@ void SdTbxControl::StateChanged( USHORT nSId,
                                          hasBigImages(),
                                          GetToolBox().GetDisplayBackground().GetColor().IsDark() );
 
-//              Image  aImage = GetBindings().GetImageManager()->GetImage( nImage, rTbx.GetDisplayBackground().GetColor().IsDark(), SD_MOD() );
-                // Es kann u.U. ein Default-Image zurueckgegeben werden,
-                // welches eine Breite von 0 haben soll
-                // if( aImage.GetSizePixel().Width() > 0 )
                 // !-Operator prueft, ob Image nicht vorhanden ist
                 if( !!aImage )
                 {
-                    rTbx.SetItemImage( nSId, aImage );
-                    rTbx.CheckItem( nSId, IsCheckable( nImage ) );
+                    rTbx.SetItemImage( GetId(), aImage );
+                    rTbx.CheckItem( GetId(), IsCheckable( nImage ) );
 
                     if( nSId != SID_ZOOM_TOOLBOX &&
                         nSId != SID_DRAWTBX_INSERT &&
