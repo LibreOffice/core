@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JNI_proxy.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:42:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 14:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 package com.sun.star.bridges.jni_uno;
 
+import com.sun.star.lib.util.NativeLibraryLoader;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.IEnvironment;
@@ -69,7 +70,10 @@ import com.sun.star.uno.IQueryInterface;
 //==================================================================================================
 public final class JNI_proxy implements java.lang.reflect.InvocationHandler
 {
-    static { System.loadLibrary( "java_uno" ); }
+    static {
+        NativeLibraryLoader.loadLibrary(JNI_proxy.class.getClassLoader(),
+                                        "java_uno");
+    }
     protected static ClassLoader s_system_classloader =
         ClassLoader.getSystemClassLoader();
     protected static Class s_InvocationHandler [] =
