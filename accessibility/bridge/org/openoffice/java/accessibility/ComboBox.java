@@ -54,25 +54,26 @@
  *
  *
  ************************************************************************/
-
 package org.openoffice.java.accessibility;
+
+import com.sun.star.accessibility.*;
+import com.sun.star.uno.*;
 
 import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleState;
 import javax.accessibility.AccessibleStateSet;
+
 import javax.swing.SwingConstants;
 
-import com.sun.star.uno.*;
-import com.sun.star.accessibility.*;
 
 /**
  */
 public class ComboBox extends Container {
-
     private XAccessibleAction unoAccessibleAction = null;
 
     public ComboBox(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
-        super(javax.accessibility.AccessibleRole.COMBO_BOX, xAccessible, xAccessibleContext);
+        super(javax.accessibility.AccessibleRole.COMBO_BOX, xAccessible,
+            xAccessibleContext);
     }
 
     /** Appends the specified component to the end of this container */
@@ -85,17 +86,13 @@ public class ComboBox extends Container {
         }
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            accessibleContext = new AccessibleComboBox();
-        }
-        return accessibleContext;
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleComboBox();
     }
 
     protected class AccessibleComboBox extends AccessibleContainer
         implements javax.accessibility.AccessibleAction {
-
         /**
         * Though the class is abstract, this should be called by all sub-classes
         */
@@ -104,13 +101,15 @@ public class ComboBox extends Container {
         }
 
         /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
-        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
+        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(
+            XAccessibleStateSet unoAS) {
             javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
 
             try {
                 if (unoAS != null) {
                     if (unoAS.contains(AccessibleStateType.EXPANDABLE)) {
                         states.add(AccessibleState.EXPANDABLE);
+
                         if (unoAS.contains(AccessibleStateType.EXPANDED)) {
                             states.add(AccessibleState.EXPANDED);
                         } else {
@@ -131,12 +130,14 @@ public class ComboBox extends Container {
         /** Gets the AccessibleAction associated with this object that supports one or more actions */
         public javax.accessibility.AccessibleAction getAccessibleAction() {
             if (unoAccessibleAction == null) {
-                unoAccessibleAction = (XAccessibleAction)
-                    UnoRuntime.queryInterface(XAccessibleAction.class, unoAccessibleContext);
+                unoAccessibleAction = (XAccessibleAction) UnoRuntime.queryInterface(XAccessibleAction.class,
+                        unoAccessibleContext);
+
                 if (unoAccessibleAction == null) {
                     return null;
                 }
             }
+
             return this;
         }
 
@@ -149,7 +150,7 @@ public class ComboBox extends Container {
             if (param == 0) {
                 try {
                     return unoAccessibleAction.doAccessibleAction(0);
-                } catch(com.sun.star.uno.Exception e) {
+                } catch (com.sun.star.uno.Exception e) {
                 }
             }
 
@@ -167,5 +168,3 @@ public class ComboBox extends Container {
         }
     }
 }
-
-
