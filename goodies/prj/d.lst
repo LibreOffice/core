@@ -111,4 +111,5 @@ hedabu: ..\inc\b2dmpnt.hxx %_DEST%\inc%_EXT%\goodies\b2dmpnt.hxx
 hedabu: ..\inc\b2dmtri.hxx %_DEST%\inc%_EXT%\goodies\b2dmtri.hxx
 hedabu: ..\inc\bxdintpo.hxx %_DEST%\inc%_EXT%\goodies\bxdintpo.hxx
 hedabu: ..\inc\agsdkdll.hxx %_DEST%\inc%_EXT%\goodies\agsdkdll.hxx
+hedabu: ..\inc\vdevcache.hxx %_DEST%\inc%_EXT%\goodies\vdevcache.hxx
 
