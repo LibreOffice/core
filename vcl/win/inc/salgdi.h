@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-22 17:01:49 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #include <sallayout.hxx>
 #endif
 
+#include "boost/scoped_ptr.hpp"
+
 struct ImplFontSelectData;
 
 // -----------
@@ -81,6 +83,18 @@ struct ImplFontSelectData;
 // win32 platform specifics, maybe move pmk file
 #define USE_UNISCRIBE
 #define GCP_KERN_HACK
+
+// Instances of classes derived from SalLayout might collectively want to cache
+// font data; see the mxTextLayoutCache member of SalGraphicsData.  Since
+// different derived classes will typically cache different data, this abstract
+// class offers only the minimal interface needed from the outside:
+class ImplTextLayoutCache
+{
+public:
+    virtual inline ~ImplTextLayoutCache() {};
+
+    virtual void flush() = 0;
+};
 
 // -------------------
 // - SalGraphicsData -
@@ -122,6 +136,11 @@ public:
     BOOL                    mbWindow;           // is Window
     BOOL                    mbScreen;           // is Screen compatible
     BOOL                    mbXORMode;          // _every_ output with RasterOp XOR
+
+    // Used collectively by the (derived) SalLayout instances returned by
+    // SalGraphics::GetTextLayout, to cache data derived from mhDC's font;
+    // flushed whenever a new font is selected into mhDC:
+    boost::scoped_ptr< ImplTextLayoutCache > mxTextLayoutCache;
 };
 
 // Init/Deinit Graphics
