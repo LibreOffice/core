@@ -127,7 +127,10 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel, bool bC
     }
     catch( uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        if(!m_bArea)
+        {
+            ASSERT_EXCEPTION( e );
+        }
     }
     PlotterBase::m_pPosHelper = m_pPosHelper;
 }
