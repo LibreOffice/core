@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: os $ $Date: 2001-02-19 08:05:53 $
+ *  last change: $Author: dvo $ $Date: 2001-02-20 13:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,6 +424,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_CHARACTER_FORMAT_NONE                  
 const SwPropNameLen __FAR_DATA  UNO_NAME_TEXT_POSITION                          (MAP_CHAR_LEN("TextPosition"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_DOCUMENT_INDEX_MARK                    (MAP_CHAR_LEN("DocumentIndexMark"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_DOCUMENT_INDEX                         (MAP_CHAR_LEN("DocumentIndex"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_IS_GLOBAL_DOCUMENT_SECTION             (MAP_CHAR_LEN("IsGlobalDocumentSection"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_TEXT_FIELD                             (MAP_CHAR_LEN("TextField"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_BOOKMARK                               (MAP_CHAR_LEN("Bookmark"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_TEXT_TABLE                             (MAP_CHAR_LEN("TextTable"));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: os $ $Date: 2001-02-19 08:06:16 $
+ *  last change: $Author: dvo $ $Date: 2001-02-20 13:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,6 +427,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_CHARACTER_FORMAT_NONE          ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_TEXT_POSITION                ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_DOCUMENT_INDEX_MARK          ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_DOCUMENT_INDEX                 ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_GLOBAL_DOCUMENT_SECTION;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_TEXT_FIELD                     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_BOOKMARK                       ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_TEXT_TABLE                     ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-16 16:47:00 $
+ *  last change: $Author: dvo $ $Date: 2001-02-20 13:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -871,6 +871,13 @@ Sequence< Any > SwXTextSection::getPropertyValues(
                             pRet[nProperty] <<= xIndex;
                         }
                         // else: no enclosing index found -> empty return value
+                    }
+                    break;
+                    case WID_SECT_IS_GLOBAL_DOC_SECTION:
+                    {
+                        sal_Bool bRet = (NULL == pFmt) ? sal_False :
+                                        (NULL != pFmt->GetGlobalDocSection());
+                        pRet[nProperty].setValue( &bRet, ::getCppuBooleanType());
                     }
                     break;
                     case  FN_UNO_ANCHOR_TYPES:
