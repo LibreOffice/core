@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:20:01 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1879,11 +1879,17 @@ void SdrPage::ActionChanged() const
     GetViewContact().ActionChanged();
 }
 
-#ifdef GCC
-// Dummy-Implementationen fuer Deklarationen in svdpage.hxx
-Bitmap      SdrPage::GetBitmap(const SetOfByte& rVisibleLayers, FASTBOOL bTrimBorders) const {}
-GDIMetaFile SdrPage::GetMetaFile(const SetOfByte& rVisibleLayers, FASTBOOL bTrimBorders) {}
-#endif
+// NYI: Dummy implementations for declarations in svdpage.hxx
+Bitmap      SdrPage::GetBitmap(const SetOfByte& rVisibleLayers, FASTBOOL bTrimBorders) const
+{
+    DBG_ASSERT(0, "SdrPage::GetBitmap(): not yet implemented.");
+    return Bitmap();
+}
+GDIMetaFile SdrPage::GetMetaFile(const SetOfByte& rVisibleLayers, FASTBOOL bTrimBorders)
+{
+    DBG_ASSERT(0, "SdrPage::GetMetaFile(): not yet implemented.");
+    return GDIMetaFile();
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // use new redirector instead of pPaintProc
