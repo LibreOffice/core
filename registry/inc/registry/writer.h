@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:43:31 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ extern "C" {
    @return a handle on the type writer; if an out-of-memory condition occurs,
    null is returned, and no type writer is created
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void * SAL_CALL typereg_writer_create(
     typereg_Version version, rtl_uString const * documentation,
@@ -118,7 +118,7 @@ void * SAL_CALL typereg_writer_create(
    @param handle a handle on a type writer obtained from a call to
    <code>typereg_writer_create</code>; must not be null
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_writer_destroy(void * handle) SAL_THROW_EXTERN_C();
 
@@ -135,7 +135,7 @@ void SAL_CALL typereg_writer_destroy(void * handle) SAL_THROW_EXTERN_C();
    @return false iff an out-of-memory condition ocurred, in which case the type
    writer is not modified
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 sal_Bool SAL_CALL typereg_writer_setSuperTypeName(
     void * handle, sal_uInt16 index, rtl_uString const * typeName)
@@ -165,7 +165,7 @@ sal_Bool SAL_CALL typereg_writer_setSuperTypeName(
    @return false iff an out-of-memory condition ocurred, in which case the type
    writer is not modified
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 sal_Bool SAL_CALL typereg_writer_setFieldData(
     void * handle, sal_uInt16 index, rtl_uString const * documentation,
@@ -196,7 +196,7 @@ sal_Bool SAL_CALL typereg_writer_setFieldData(
    @return false iff an out-of-memory condition ocurred, in which case the type
    writer is not modified
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 sal_Bool SAL_CALL typereg_writer_setMethodData(
     void * handle, sal_uInt16 index, rtl_uString const * documentation,
@@ -225,7 +225,7 @@ sal_Bool SAL_CALL typereg_writer_setMethodData(
    @return false iff an out-of-memory condition ocurred, in which case the type
    writer is not modified
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 sal_Bool SAL_CALL typereg_writer_setMethodParameterData(
     void * handle, sal_uInt16 methodIndex, sal_uInt16 parameterIndex,
@@ -248,7 +248,7 @@ sal_Bool SAL_CALL typereg_writer_setMethodParameterData(
    @return false iff an out-of-memory condition ocurred, in which case the type
    writer is not modified
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 sal_Bool SAL_CALL typereg_writer_setMethodExceptionTypeName(
     void * handle, sal_uInt16 methodIndex, sal_uInt16 exceptionIndex,
@@ -274,7 +274,7 @@ sal_Bool SAL_CALL typereg_writer_setMethodExceptionTypeName(
    @return false iff an out-of-memory condition ocurred, in which case the type
    writer is not modified
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 sal_Bool SAL_CALL typereg_writer_setReferenceData(
     void * handle, sal_uInt16 index, rtl_uString const * documentation,

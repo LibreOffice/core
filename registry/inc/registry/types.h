@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:43:02 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ enum RTTypeClass {
 
        @internal
 
-       @since #i21150#
+       @since UDK 3.2.0
      */
     RT_TYPE_PUBLISHED = 0x4000
 };
@@ -214,7 +214,7 @@ typedef sal_uInt16 RTFieldAccess;
    Only valid for fields that represent members of polymorphic struct type
    templates.
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 #define RT_ACCESS_PARAMETERIZED_TYPE 0x4000
 
@@ -224,7 +224,7 @@ typedef sal_uInt16 RTFieldAccess;
    Used in combination with RT_ACCESS_CONST for individual constants (which are
    not members of constant groups).
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 #define RT_ACCESS_PUBLISHED 0x8000
 
@@ -288,7 +288,7 @@ enum RTMethodMode {
        Indicates an extended attribute getter (that has a 'raises' clause) of an
        interface type.
 
-       @since #i21150#
+       @since UDK 3.2.0
      */
     RT_MODE_ATTRIBUTE_GET,
 
@@ -296,7 +296,7 @@ enum RTMethodMode {
        Indicates an extended attribute setter (that has a 'raises' clause) of an
        interface type.
 
-       @since #i21150#
+       @since UDK 3.2.0
      */
     RT_MODE_ATTRIBUTE_SET
 };
@@ -327,7 +327,7 @@ enum RTParamMode {
        RT_PARAM_INOUT (however, service constructors currently only allow
        RT_PARAM_IN, anyway).
 
-       @since #i21150#
+       @since UDK 3.2.0
      */
     RT_PARAM_REST = 4
 };
@@ -362,7 +362,7 @@ enum RTReferenceType {
     /**
        Indicates a type parameter of a polymorphic struct type template.
 
-       @since #i21150#
+       @since UDK 3.2.0
      */
     RT_REF_TYPE_PARAMETER
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:43:44 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ namespace typereg {
 
    <p>Instances of this class are not multi-thread&ndash;safe.</p>
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 class Writer {
 public:
@@ -146,8 +146,6 @@ public:
        @param typeName the super type name
 
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
-
-       @since #i21150#
      */
     void setSuperTypeName(sal_uInt16 index, rtl::OUString const & typeName) {
         if (!typereg_writer_setSuperTypeName(m_handle, index, typeName.pData)) {
@@ -175,8 +173,6 @@ public:
        @param valueValue the value of the value of the field
 
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
-
-       @since #i21150#
      */
     void setFieldData(
         sal_uInt16 index, rtl::OUString const & documentation,
@@ -210,8 +206,6 @@ public:
        @param exceptionCount the number of exceptions of the method
 
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
-
-       @since #i21150#
      */
     void setMethodData(
         sal_uInt16 index, rtl::OUString const & documentation,
@@ -243,8 +237,6 @@ public:
        @param typeName the type name of the parameter
 
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
-
-       @since #i21150#
      */
     void setMethodParameterData(
         sal_uInt16 methodIndex, sal_uInt16 parameterIndex,
@@ -271,8 +263,6 @@ public:
        @param typeName the exception type name
 
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
-
-       @since #i21150#
      */
     void setMethodExceptionTypeName(
         sal_uInt16 methodIndex, sal_uInt16 exceptionIndex,
@@ -302,8 +292,6 @@ public:
        @param typeName the type name of the reference
 
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
-
-       @since #i21150#
      */
     void setReferenceData(
         sal_uInt16 index, rtl::OUString const & documentation,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: version.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:43:18 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ extern "C" {
    @see typereg::Reader
    @see typereg::Writer
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 enum typereg_Version {
     /**
