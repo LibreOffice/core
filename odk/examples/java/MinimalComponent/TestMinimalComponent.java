@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestMinimalComponent.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:56:59 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 17:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,8 +38,7 @@
  *
  *************************************************************************/
 
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
@@ -47,57 +46,30 @@ import com.sun.star.container.XSet;
 import com.sun.star.lang.XServiceInfo;
 
 public class TestMinimalComponent {
-  public static void main(String args[]) {
-    try {
-      /* Bootstraps a component context with the jurt base components
-         registered. Component context to be granted to a component for running.
-         Arbitrary values can be retrieved from the context. */
-      XComponentContext xcomponentcontext =
-      com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
+    public static void main(String args[]) {
+        com.sun.star.uno.XComponentContext xContext = null;
 
-      /* Gets the service manager instance to be used (or null). This method has
-         been added for convenience, because the service manager is a often used
-         object. */
-      XMultiComponentFactory xmulticomponentfactory =
-      xcomponentcontext.getServiceManager();
+        try {
+            // get the remote office component context
+            xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            if( xContext != null )
+                System.out.println("Connected to a running office ...");
 
-      // Querying for the interface XSet on XMultiComponentFactory
-      XSet xsetMultiServiceFactory = ( XSet ) UnoRuntime.queryInterface(
-      XSet.class, xmulticomponentfactory );
+            XServiceInfo xSIMinimalComponent =
+                org.openoffice.MinimalComponent.create(xContext);
 
-      // Getting the XSingleServiceFactory for the minimal component
-      XSingleServiceFactory xsingleservicefactoryMinimalComponent =
-      MinimalComponent.__getServiceFactory(
-      "MinimalComponent$MinimalComponentImplementation",
-      ( XMultiServiceFactory ) UnoRuntime.queryInterface(
-      XMultiServiceFactory.class, xmulticomponentfactory ),
-      null );
+            System.out.println("\nXServiceInfo is used to get the implementation" +
+                               " name: " +
+                               xSIMinimalComponent.getImplementationName() +
+                               "\nOk\n");
+            xContext = null;
 
-      // Inserting the XSingleServiceFactory into the container
-      xsetMultiServiceFactory.insert( xsingleservicefactoryMinimalComponent );
-
-      // Creating an instance of the minimal component
-      Object objectMinimalComponent =
-      xmulticomponentfactory.createInstanceWithContext(
-      "org.OpenOffice.MinimalComponent", xcomponentcontext );
-
-      XServiceInfo xserviceinfoMinimalComponent = ( XServiceInfo )
-      UnoRuntime.queryInterface( XServiceInfo.class,
-      objectMinimalComponent );
-
-      System.out.println( "\nXServiceInfo is used to get the implementation name:\n    -> " +
-                          xserviceinfoMinimalComponent.getImplementationName() +
-                          "\nOk");
-
-      // Removing the XSingleServiceFactory of the minimal Component from the container
-      xsetMultiServiceFactory.remove( xsingleservicefactoryMinimalComponent );
-
-      xcomponentcontext = null;
-
-      System.exit(0);
+            System.exit(0);
+        }
+        catch( Exception e ) {
+            System.err.println( e );
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
-    catch( Exception exception ) {
-      System.err.println( exception );
-    }
-  }
 }
