@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nfuncs.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:17:20 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ NPNetscapeFuncs aNPNFuncs =
 static ::rtl::OString normalizeURL( XPlugin_Impl* plugin, const ::rtl::OString& url )
 {
     ::rtl::OString aLoadURL;
-    if( url.indexOf( ":/" ) == -1 )
+    if( url.indexOf( ":" ) == -1 )
     {
         aLoadURL = ::rtl::OUStringToOString( plugin->getCreationURL(), plugin->getTextEncoding() );
         int nPos;
@@ -154,7 +154,7 @@ static ::rtl::OString normalizeURL( XPlugin_Impl* plugin, const ::rtl::OString& 
         else
             aLoadURL = url;
     }
-    else
+    else if( url.indexOf( ":/" ) != -1 )
         aLoadURL = url;
 
     return aLoadURL;
@@ -245,6 +245,9 @@ extern "C" {
             return NPERR_INVALID_INSTANCE_ERROR;
 
         ::rtl::OString aLoadURL = normalizeURL( pImpl, url );
+        if( !aLoadURL.getLength() )
+            return NPERR_INVALID_URL;
+
         PluginEventListener* pListener =
             new PluginEventListener( pImpl, url, aLoadURL.getStr(), notifyData );
         if( ! target || ! *target )
