@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 20:59:07 $
+ *  last change: $Author: kz $ $Date: 2000-11-24 16:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,47 +666,47 @@ String RID_STR_CURSORSOURCE
 {
     Text = "Inhalt" ;
     Text [ English ] = "Content" ;
-    Text[ english_us ] = "Data source";
-    Text[ portuguese ] = "Fonte de dados";
-    Text[ russian ] = "Èñòî÷íèê äàííûõ";
+    Text[ english_us ] = "Content";
+    Text[ portuguese ] = "Conteúdo";
+    Text[ russian ] = "Ñîäåğæèìîå";
     Text[ greek ] = "Ğåñéå÷üìåíá";
-    Text[ dutch ] = "Gegevensbron";
-    Text[ french ] = "Source de données";
+    Text[ dutch ] = "Inhoud";
+    Text[ french ] = "Contenu";
     Text[ spanish ] = "Fuente de datos";
-    Text[ italian ] = "Sorgente dati";
+    Text[ italian ] = "Contenuto";
     Text[ danish ] = "Datakilde";
     Text[ swedish ] = "Innehåll";
-    Text[ polish ] = "ród³o danych";
+    Text[ polish ] = "Zawartoœæ";
     Text[ portuguese_brazilian ] = "Datenquelle";
     Text[ japanese ] = "“à—e";
     Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º";
-    Text[ chinese_simplified ] = "Êı¾İÔ´";
-    Text[ chinese_traditional ] = "¸ê®Æ·½";
+    Text[ chinese_simplified ] = "ÄÚÈİ";
+    Text[ chinese_traditional ] = "¤º®e";
     Text[ turkish ] = "Veri kaynağı";
-    Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
+    Text[ arabic ] = "ÇáãÍÊæíÇÊ";
 };
 String RID_STR_CURSORSOURCETYPE
 {
     Text = "Art des Inhaltes" ;
     Text [ English ] = "Type of Content" ;
-    Text[ english_us ] = "Type of data source";
-    Text[ portuguese ] = "Tipo da fonte de dados";
-    Text[ russian ] = "Òèï èñòî÷íèêà äàííûõ";
+    Text[ english_us ] = "Content Type";
+    Text[ portuguese ] = "Tipo de conteúdo";
+    Text[ russian ] = "Òèï ñîäåğæèìîãî";
     Text[ greek ] = "Ôığïò ğåñéå÷ïìİíùí";
-    Text[ dutch ] = "Type gegevensbron";
-    Text[ french ] = "Type de la source de données";
+    Text[ dutch ] = "Soort inhoud";
+    Text[ french ] = "Type de contenu";
     Text[ spanish ] = "Tipo de fuente de datos";
-    Text[ italian ] = "Tipo della sorgente dati";
+    Text[ italian ] = "Tipo di contenuto";
     Text[ danish ] = "Datakildetype";
     Text[ swedish ] = "Typ av innehåll";
-    Text[ polish ] = "Typ Ÿród³a danych";
+    Text[ polish ] = "Rodzaj zawartoœci";
     Text[ portuguese_brazilian ] = "Typ der Datenquelle";
     Text[ japanese ] = "“à—e‚Ìí—Ş";
     Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½ºÀÇ À¯Çü";
-    Text[ chinese_simplified ] = "Êı¾İÔ´µÄÀàĞÍ";
-    Text[ chinese_traditional ] = "¸ê®Æ·½Ãş«¬";
+    Text[ chinese_simplified ] = "ÄÚÈİÀàĞÍ";
+    Text[ chinese_traditional ] = "¤º®eÃş«¬";
     Text[ turkish ] = "Veri kaynağı türü";
-    Text[ arabic ] = "äæÚ ãÕÏÑ ÇáÈíÇäÇÊ";
+    Text[ arabic ] = "äæÚ ÇáãÍÊæíÇÊ";
 };
 String RID_STR_ALLOW_ADDITIONS
 {
@@ -808,24 +808,24 @@ String RID_STR_DATASOURCE
 {
     Text = "Datenquelle" ;
     Text [ English ] = "Data Source" ;
-    Text[ english_us ] = "Database";
-    Text[ portuguese ] = "Base de dados";
-    Text[ russian ] = "Áàçà äàííûõ";
+    Text[ english_us ] = "Data source";
+    Text[ portuguese ] = "Fonte de dados";
+    Text[ russian ] = "Èñòî÷íèê äàííûõ";
     Text[ greek ] = "Ğñïİëåõóç äåäïìİíùí";
-    Text[ dutch ] = "Database";
-    Text[ french ] = "Base de données";
+    Text[ dutch ] = "Gegevensbron";
+    Text[ french ] = "Source de données";
     Text[ spanish ] = "Base de datos";
-    Text[ italian ] = "Database";
+    Text[ italian ] = "Sorgente dati";
     Text[ danish ] = "Database";
     Text[ swedish ] = "Datakälla";
-    Text[ polish ] = "Baza danych";
+    Text[ polish ] = "ród³o danych";
     Text[ portuguese_brazilian ] = "Datenbank";
     Text[ japanese ] = "ÃŞ°ÀÍŞ°½";
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º";
-    Text[ chinese_simplified ] = "Êı¾İ¿â";
-    Text[ chinese_traditional ] = "¸ê®Æ®w";
+    Text[ chinese_simplified ] = "Êı¾İÔ´";
+    Text[ chinese_traditional ] = "¸ê®Æ®w·½";
     Text[ turkish ] = "Veritabanı";
-    Text[ arabic ] = "ŞÇÚÏÉ ÇáÈíÇäÇÊ";
+    Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
 };
 String RID_STR_LOCKED
 {
@@ -4705,7 +4705,7 @@ String RID_STR_EVT_FIRING
     Text [ danish ] = "Affyring" ;
     Text [ italian ] = "Lancio" ;
     Text [ spanish ] = "Disparo" ;
-    Text [ french ] = "Firing" ;
+    Text [ french ] = "Feu" ;
     Text [ dutch ] = "Afsluiting" ;
     Text[ chinese_simplified ] = "Çå³ı";
     Text[ russian ] = "Çàïóñê";
