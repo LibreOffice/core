@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-01-11 18:31:08 $
+ *  last change: $Author: er $ $Date: 2001-01-26 17:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2379,9 +2379,7 @@ void ScViewFunc::ChangeNumFmtDecimals( BOOL bIncrement )
     LanguageType eLanguage = pOldEntry->GetLanguage();
     BOOL bThousand, bNegRed;
     USHORT nPrecision, nLeading;
-    //  GetFormatSpecialInfo ist nicht-const
-    ((SvNumberformat*)pOldEntry)->GetFormatSpecialInfo(
-                                    bThousand, bNegRed, nPrecision, nLeading );
+    pOldEntry->GetFormatSpecialInfo( bThousand, bNegRed, nPrecision, nLeading );
 
     short nOldType = pOldEntry->GetType();
     if ( 0 == ( nOldType & (
