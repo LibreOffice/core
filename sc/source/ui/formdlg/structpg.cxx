@@ -2,9 +2,9 @@
  *
  *  $RCSfile: structpg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-22 12:42:26 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,12 @@ ScStructListBox::ScStructListBox(Window* pParent, const ResId& rResId ):
     SvTreeListBox(pParent,rResId )
 {
     bActiveFlag=FALSE;
+
+    Font aFont( GetFont() );
+    Size aSize = aFont.GetSize();
+    aSize.Height() -= 2;
+    aFont.SetSize( aSize );
+    SetFont( aFont );
 }
 
 SvLBoxEntry* ScStructListBox::InsertStaticEntry(
@@ -163,13 +169,7 @@ ScStructPage::ScStructPage(Window* pParent):
 
     FreeResource();
 
-    Font aFont=GetFont();
-    Size aSize=aFont.GetSize();
-    aSize.Height()-=2;
-    aFont.SetSize(aSize);
-    aTlbStruct.SetFont(aFont);
     aTlbStruct.SetSelectHdl(LINK( this, ScStructPage, SelectHdl ) );
-
 }
 
 void ScStructPage::ClearStruct()
