@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:01:09 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,9 +279,6 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
     BOOL bLoadDocView = aOpt.IsSaveDocView();
 
     // In a StarPortal not possible at the moment
-    if ( Application::IsRemoteServer() )
-        bLoadDocWins = FALSE;
-
     if ( !bLoadDocView )
         return 0;
 
