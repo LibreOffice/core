@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:59:41 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,39 @@ namespace xmloff
             OControlElement::ElementType _eType);
     };
 
+    // TODO:
+    // this whole mechanism doesn't scale. Instead of deriving even more classes for every new attribute,
+    // we should have dedicated attribute handlers
+    // The rest of xmloff implements it this way - why don't we do, too?
+
+    //=====================================================================
+    //= OImagePositionImport
+    //=====================================================================
+    class OImagePositionImport : public OControlImport
+    {
+        sal_Int16   m_nImagePosition;
+        sal_Int16   m_nImageAlign;
+        sal_Bool    m_bHaveImagePosition;
+
+    public:
+        OImagePositionImport(
+            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
+            OControlElement::ElementType _eType
+        );
+
+    protected:
+        // SvXMLImportContext overridables
+        virtual void StartElement(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+
+        // OPropertyImport overridables
+        virtual void    handleAttribute( sal_uInt16 _nNamespaceKey,
+            const ::rtl::OUString& _rLocalName,
+            const ::rtl::OUString& _rValue
+       );
+    };
+
     //=====================================================================
     //= OReferredControlImport
     //=====================================================================
@@ -382,7 +415,7 @@ namespace xmloff
     //=====================================================================
     //= ORadioImport
     //=====================================================================
-    class ORadioImport : public OControlImport
+    class ORadioImport : public OImagePositionImport
     {
     public:
         ORadioImport(
@@ -404,7 +437,7 @@ namespace xmloff
     /** a specialized version of the <type>OControlImport</type> class, which is able
         to handle attributes which denote URLs (and stored relative)
     */
-    class OURLReferenceImport : public OControlImport
+    class OURLReferenceImport : public OImagePositionImport
     {
     public:
         OURLReferenceImport(
