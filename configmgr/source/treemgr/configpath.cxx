@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-14 10:27:37 $
+ *  last change: $Author: fs $ $Date: 2000-11-24 10:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,8 +154,10 @@ namespace
     inline
     bool isValidNameCont(sal_Unicode ch)
     {
-        return (sal_Unicode('0') <= ch && ch <= sal_Unicode('9')) ||
-                sal_Unicode('-') == ch;
+        return  (   (sal_Unicode('0') <= ch && ch <= sal_Unicode('9'))
+                ||  (sal_Unicode('-') == ch)
+                ||  (sal_Unicode('.') == ch)
+                );
     }
 
     //-------------------------------------------------------------------------
