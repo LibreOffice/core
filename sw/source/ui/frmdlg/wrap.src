@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:39:45 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ TabPage TP_FRM_WRAP
         Text [ ENGLISH ] = "Wrap ~through" ;
         Text [ norwegian ] = "Wrap ~through" ;
         Text [ italian ] = "~Attraverso" ;
-        Text [ portuguese_brazilian ] = "Circundarmento ~através" ;
+        Text [ portuguese_brazilian ] = "Circundarmento ~atrav?s" ;
         Text [ portuguese ] = "~Através do objecto" ;
         Text [ finnish ] = "~Kautta" ;
         Text [ danish ] = "Gennem" ;
@@ -342,7 +342,7 @@ TabPage TP_FRM_WRAP
         Hide = TRUE ;
         Text [ portuguese ] = "Só ~exterior" ;
         Text [ english_us ] = "Outside only" ;
-        Text [ portuguese_brazilian ] = "Nur außen" ;
+        Text [ portuguese_brazilian ] = "Nur au?en" ;
         Text [ swedish ] = "Bara uta~nför" ;
         Text [ danish ] = "Kun yderside" ;
         Text [ italian ] = "Solo esterno" ;
