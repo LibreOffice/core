@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtmb.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2000-12-13 22:19:48 $
+ *  last change: $Author: jp $ $Date: 2001-09-19 14:02:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
         else
         {
             /* Source buffer to small */
-            if ( pSrcBuf == pEndSrcBuf )
+            if ( pSrcBuf +1 == pEndSrcBuf )
             {
                 *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
                 break;
@@ -426,7 +426,7 @@ sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
             if ( c == 0x8E )
             {
                 /* Source buffer to small */
-                if ( pSrcBuf == pEndSrcBuf )
+                if ( pSrcBuf + 1 == pEndSrcBuf )
                 {
                     *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
                     break;
@@ -450,7 +450,7 @@ sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
                 if ( c == 0x8F )
                 {
                     /* Source buffer to small */
-                    if ( pSrcBuf+1 == pEndSrcBuf )
+                    if ( pSrcBuf+2 == pEndSrcBuf )
                     {
                         *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
                         break;
@@ -467,7 +467,7 @@ sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
                 else
                 {
                     /* Source buffer to small */
-                    if ( pSrcBuf == pEndSrcBuf )
+                    if ( pSrcBuf + 1 == pEndSrcBuf )
                     {
                         *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
                         break;
