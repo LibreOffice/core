@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-31 08:58:24 $
+ *  last change: $Author: sab $ $Date: 2001-07-31 10:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1662,6 +1662,38 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
 
 //----------------------------------------------------------------------
 
+const SvGlobalName SvxShape::GetClassName_Impl(rtl::OUString& rHexCLSID)
+{
+    SvGlobalName aClassName;
+    if( pObj && pObj->ISA(SdrOle2Obj))
+    {
+        rHexCLSID = rtl::OUString();
+        if (((SdrOle2Obj*)pObj)->IsEmpty())
+        {
+            SvPersist* pPersist = pModel->GetPersist();
+            if (pPersist)
+            {
+                SvInfoObject * pEle = pPersist->Find( ((SdrOle2Obj*)pObj)->GetName() );
+                if (pEle)
+                {
+                    aClassName = pEle->GetClassName();
+                    rHexCLSID = aClassName.GetHexName();
+                }
+            }
+        }
+        if (!rHexCLSID.getLength())
+        {
+            const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
+            if (rIPRef.Is() )
+            {
+                aClassName = rIPRef->GetClassName();
+                rHexCLSID = aClassName.GetHexName();
+            }
+        }
+    }
+    return aClassName;
+}
+
 uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -1694,16 +1726,17 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
             case OWN_ATTR_INTERNAL_OLE:
             {
 #ifndef SVX_LIGHT
-                sal_Bool bInternal = sal_False;
+/*              sal_Bool bInternal = sal_False;
                 if( pObj && pObj->ISA(SdrOle2Obj))
                 {
                     const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
                     if (rIPRef.Is() )
                     {
-                        const SvGlobalName &rClassName = rIPRef->GetClassName();
-                        bInternal = SvFactory::IsIntern( rClassName, 0 );
-                    }
-                }
+                        const SvGlobalName &rClassName = rIPRef->GetClassName();*/
+                        rtl::OUString sCLSID;
+                        sal_Bool bInternal = SvFactory::IsIntern( GetClassName_Impl(sCLSID), 0 );
+//                  }
+//              }
                 aAny = uno::Any( &bInternal, ::getBooleanCppuType() );
 #endif
                 break;
@@ -1871,15 +1904,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
             {
                 OUString aCLSID;
 #ifndef SVX_LIGHT
-                if( pObj && pObj->ISA(SdrOle2Obj))
-                {
-                    const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
-                    if (rIPRef.Is() )
-                    {
-                        const SvGlobalName &rClassName = rIPRef->GetClassName();
-                        aCLSID = rClassName.GetHexName();
-                    }
-                }
+                SvGlobalName aClassName = GetClassName_Impl(aCLSID);
 #endif
                 aAny <<= aCLSID;
                 break;
