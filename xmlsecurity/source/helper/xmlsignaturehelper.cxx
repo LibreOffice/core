@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2004-08-18 09:14:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,7 +479,7 @@ void XMLSignatureHelper::freeSecurityContext()
 IMPL_LINK( XMLSignatureHelper, SignatureCreationResultListener, XMLSignatureCreationResult*, pResult )
 {
     maCreationResults.insert( maCreationResults.begin() + maCreationResults.size(), *pResult );
-    if ( pResult->nSignatureCreationResult != com::sun::star::xml::crypto::sax::SignatureCreationResult_CREATIONSUCCEED )
+    if ( pResult->nSignatureCreationResult != com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
         mbError = true;
     return 0;
 }
@@ -487,7 +487,7 @@ IMPL_LINK( XMLSignatureHelper, SignatureCreationResultListener, XMLSignatureCrea
 IMPL_LINK( XMLSignatureHelper, SignatureVerifyResultListener, XMLSignatureVerifyResult*, pResult )
 {
     maVerifyResults.insert( maVerifyResults.begin() + maVerifyResults.size(), *pResult );
-    if ( pResult->nSignatureVerifyResult != com::sun::star::xml::crypto::sax::SignatureVerifyResult_VERIFYSUCCEED )
+    if ( pResult->nSignatureVerifyResult != com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
         mbError = true;
     return 0;
 }
