@@ -25,7 +25,6 @@
 
 <!-- Because of ucbhelper -->
 <ServiceDependency>     com.sun.star.ucb.UniversalContentBroker             </ServiceDependency>
-<ServiceDependency>     com.sun.star.ucb.Configuration                      </ServiceDependency>
 <ServiceDependency>     com.sun.star.script.Converter                       </ServiceDependency>
 <ServiceDependency>     com.sun.star.ucb.Store                              </ServiceDependency>
 <ServiceDependency>     com.sun.star.ucb.ContentProviderProxyFactory        </ServiceDependency>
