@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-19 17:05:45 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3193,9 +3193,12 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             if ( pTop )
             {
                 WorkWindow* pWork = (WorkWindow*) pTop->GetTopFrame_Impl()->GetTopWindow_Impl();
-                BOOL bNewFullScreenMode = pItem ? pItem->GetValue() : !pWork->IsFullScreenMode();
-                pWork->ShowFullScreenMode( bNewFullScreenMode );
-                pWork->SetMenuBarMode( bNewFullScreenMode ? MENUBAR_MODE_HIDE : MENUBAR_MODE_NORMAL );
+                if ( pWork )
+                {
+                    BOOL bNewFullScreenMode = pItem ? pItem->GetValue() : !pWork->IsFullScreenMode();
+                    pWork->ShowFullScreenMode( bNewFullScreenMode );
+                    pWork->SetMenuBarMode( bNewFullScreenMode ? MENUBAR_MODE_HIDE : MENUBAR_MODE_NORMAL );
+                }
             }
 
             GetDispatcher()->Update_Impl( TRUE );
@@ -3236,10 +3239,14 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                     if ( pTop )
                     {
                         WorkWindow* pWork = (WorkWindow*) pTop->GetTopFrame_Impl()->GetTopWindow_Impl();
-                        rSet.Put( SfxBoolItem( nWhich, pWork->IsFullScreenMode() ) );
+                        if ( pWork )
+                        {
+                            rSet.Put( SfxBoolItem( nWhich, pWork->IsFullScreenMode() ) );
+                            break;
+                        }
                     }
-                    else
-                        rSet.DisableItem( nWhich );
+
+                    rSet.DisableItem( nWhich );
                     break;
                 }
 
