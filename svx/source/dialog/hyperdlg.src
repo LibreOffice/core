@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:31:49 $
+ *  last change: $Author: cl $ $Date: 2001-08-15 15:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -887,33 +887,35 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Pos = MAP_APPFONT ( 235, 25 ) ;
         Size = MAP_APPFONT( 13, 13 );
         TabStop = TRUE ;
-        QuickHelpText = "Adressbuch" ;
-        QuickHelpText [ ENGLISH ] = "Adressbook" ;
-        QuickHelpText [ english_us ] = "Address Book" ;
+
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "adrbook.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
-        QuickHelpText[ portuguese ] = "Adressbook";
-        QuickHelpText[ russian ] = "Àäğåñíàÿ êíèãà";
-        QuickHelpText[ greek ] = "Áôæİíôá äéåõèıíóåùí";
-        QuickHelpText[ dutch ] = "Adresboek";
-        QuickHelpText[ french ] = "Carnet d'adresses";
-        QuickHelpText[ spanish ] = "Libreta de direcciones";
-        QuickHelpText[ italian ] = "Rubrica";
-        QuickHelpText[ danish ] = "Adressekartotek";
-        QuickHelpText[ swedish ] = "Adressbok";
-        QuickHelpText[ polish ] = "Ksi¹¿ka adresowa";
-        QuickHelpText[ portuguese_brazilian ] = "Adressbook";
-        QuickHelpText[ japanese ] = "±ÄŞÚ½’£";
-        QuickHelpText[ korean ] = "ÁÖ¼Ò·Ï";
-        QuickHelpText[ chinese_simplified ] = "Í¨Ñ¶²¾";
-        QuickHelpText[ chinese_traditional ] = "³q°T¿ı";
-        QuickHelpText[ arabic ] = "ÏİÊÑ ÇáÚäÇæíä";
-        QuickHelpText[ turkish ] = "Adressbuch";
-        QuickHelpText[ catalan ] = "Libreta de direcciones";
-        QuickHelpText[ finnish ] = "Osoitekirja";
+
+        QuickHelpText = "Datenquellen..." ;
+        QuickHelpText [ english ] = "Data sources..." ;
+        QuickHelpText [ english_us ] = "Data Sources..." ;
+        QuickHelpText[ portuguese ] = "Fontes de dados...";
+        QuickHelpText[ russian ] = "Èñõîäíûå äàííûå...";
+        QuickHelpText[ greek ] = "Ğñïåëåıóåéò äåäïìİíùí...";
+        QuickHelpText[ dutch ] = "Gegevensbronnen...";
+        QuickHelpText[ french ] = "Sources de données...";
+        QuickHelpText[ spanish ] = "Fuentes de datos...";
+        QuickHelpText[ italian ] = "Sorgente dati...";
+        QuickHelpText[ danish ] = "Data sources";
+        QuickHelpText[ swedish ] = "Datakällor...";
+        QuickHelpText[ polish ] = "ród³a danych...";
+        QuickHelpText[ portuguese_brazilian ] = "Data sources";
+        QuickHelpText[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½...";
+        QuickHelpText[ korean ] = "ë°ì´í„° ì†ŒìŠ¤";
+        QuickHelpText[ chinese_simplified ] = "æ•°æ®æº...";
+        QuickHelpText[ chinese_traditional ] = "è³‡æ–™æº...";
+        QuickHelpText[ turkish ] = "Data sources";
+        QuickHelpText[ arabic ] = "ãÕÇÏÑ ÇáÈíÇäÇÊ...";
+        QuickHelpText[ catalan ] = "Fuentes de datos...";
+        QuickHelpText[ finnish ] = "Tietolähteet";
     };
 
     FixedLine GRP_MORE

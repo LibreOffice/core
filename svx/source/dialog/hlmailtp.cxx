@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmailtp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 14:46:43 $
+ *  last change: $Author: cl $ $Date: 2001-08-15 15:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#endif
+
+#ifndef _SFXREQUEST_HXX
+#include <sfx2/request.hxx>
 #endif
 
 #include <comphelper/processfactory.hxx>
@@ -527,10 +531,18 @@ IMPL_LINK ( SvxHyperlinkMailTp, LostFocusReceiverHdl_Impl, void *, EMPTYARG )
 IMPL_LINK ( SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, void *, EMPTYARG )
 {
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-    uno::Reference< frame::XDispatchProvider > xProv( pViewFrame->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
+    if( pViewFrame )
+    {
+        SfxItemPool &rPool = pViewFrame->GetPool();
+        SfxRequest aReq(SID_VIEW_DATA_SOURCE_BROWSER, 0, rPool);
+        pViewFrame->ExecuteSlot( aReq, sal_True );
+    }
+
+
+/*  uno::Reference< frame::XDispatchProvider > xProv( pViewFrame->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
     if ( xProv.is() )
     {
-/*!!! (pb) we need a new config item here
+!!! (pb) we need a new config item here
         SfxAppIniManagerProperty aProp;
         GetpApp()->Property( aProp );
         if( !aProp.GetIniManager() )
@@ -569,8 +581,8 @@ IMPL_LINK ( SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, void *, EMPTYARG )
                 aDisp->dispatch( aURL, aArgs );
             }
         }
-*/
     }
+*/
 
     return( 0L );
 }
