@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:34:02 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,9 +444,27 @@ String SbiImage::GetString( short nId ) const
 {
     if( nId && nId <= nStrings )
     {
-        USHORT nOff = pStringOff[ --nId ];
-        String aStr( pStrings + nOff );
-        return aStr;
+        USHORT nOff = pStringOff[ nId - 1 ];
+        sal_Unicode* pStr = pStrings + nOff;
+
+        // #i42467: Special treatment for vbNullChar
+        if( *pStr == 0 )
+        {
+            USHORT nNextOff = (nId < nStrings) ? pStringOff[ nId ] : nStringOff;
+            USHORT nLen = nNextOff - nOff - 1;
+            if( nLen == 1 )
+            {
+                // Force length 1 and make char 0 afterwards
+                String aNullCharStr( String::CreateFromAscii( " " ) );
+                aNullCharStr.SetChar( 0, 0 );
+                return aNullCharStr;
+            }
+        }
+        else
+        {
+            String aStr( pStr );
+            return aStr;
+        }
     }
     return String();
 }
