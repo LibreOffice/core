@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: bc $ $Date: 2002-07-18 14:55:13 $
+ *  last change: $Author: bc $ $Date: 2002-07-19 10:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -899,8 +899,8 @@ public class ReportWizard {
     insertSaveControls(140, 1, false, 46, 34376);
 
     chkTemplate = UNODialogs.insertControlModel("com.sun.star.awt.UnoControlCheckBoxModel", CurUNODialog, "chkcreateLink",
-                new String[] {"Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-                new Object[] {new Boolean(false), new Integer(8), sCreateLink, new Integer(16), new Integer(170), new Integer(5), new Short((short) 48), new Integer(130)});
+                new String[] {"Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+                new Object[] {new Boolean(false), new Integer(8), "HID:34378", sCreateLink, new Integer(16), new Integer(170), new Integer(5), new Short((short) 48), new Integer(130)});
     }
     catch( Exception exception ){
         exception.printStackTrace(System.out);
@@ -1011,7 +1011,7 @@ public class ReportWizard {
     boolean bDoEnable;
     String HIDString;
     int YPos = 40;
-    int BaseHelpID = 34321;
+    int BaseHelpID = 34345;
     for (int i = 0; i<4; i++){
         bDoEnable = (i < 2);
         UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel",CurUNODialog, "lblSort" + new Integer(i+1),
@@ -1090,9 +1090,9 @@ public class ReportWizard {
     }}
 
 
-    public static void fillFirstStep(XMultiServiceFactory xMSF, ReportDocument.RepWizardDocument CurReportDocument, String[] DatabaseNames,  PropertyValue[] CurPropertyValue)
+    public static void fillFirstStep(XMultiServiceFactory xMSF, ReportDocument.RepWizardDocument CurReportDocument, String[] DatabaseNames,  Object[] CurPropertyValue)
 
-// Scenario 1. No parameters at given
+// Scenario 1. No parameters are given
 //  MainWithDefault()
 
 // Scenario 2: Only Datasourcename is given, but no connection and no Content
@@ -1169,7 +1169,7 @@ public class ReportWizard {
 
         UNODialogs.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", CurUNODialog, "imgTheme",
                             new String[] {"BackgroundColor", "Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "Width"},
-                            new Object[] {new Integer(16777215), new Short("0"), new Integer(30), CurReportPaths.BitmapPath, new Integer(0), new Integer(0), new Boolean(false), new Integer(0), new Integer(50)});
+                            new Object[] {new Integer(16777215), new Short("0"), new Integer(30), CurReportPaths.BitmapPath + "/report.bmp", new Integer(0), new Integer(0), new Boolean(false), new Integer(0), new Integer(50)});
 
         xDBListBox = UNODialogs.insertListBox(CurUNODialog, "lstDatabases", SODBLST, new ActionListenerImpl(), new ItemListenerImpl(),
                             new String[] {"Dropdown", "Height", "HelpURL", "LineCount", "Name", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width"},
@@ -1188,7 +1188,7 @@ public class ReportWizard {
                             new Object[] {new Integer(16), sShowBinaryFields, new Integer(6), new Integer(162), new Integer(1), new Integer(210)});
 
     XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xDBListBox);
-    CurDBMetaData.DataSourceName = (String) tools.getPropertyValue(CurPropertyValue, "DataSourceName");
+    CurDBMetaData.DataSourceName = (String) tools.getPropertyValueFromAny(CurPropertyValue, "DataSourceName");
     if (CurDBMetaData.DataSourceName != null){
         if (CurDBMetaData.DataSourceName.equals("") == false){
         // Note: for some reasons I cannot access the Listbox directly to select the item so I have to go the way over the model.
@@ -1201,7 +1201,7 @@ public class ReportWizard {
         }
         }
     }
-    CurDBMetaData.DBConnection = (com.sun.star.sdbc.XConnection) tools.getPropertyValue(CurPropertyValue, "Connection");
+    CurDBMetaData.DBConnection = (com.sun.star.sdbc.XConnection) tools.getPropertyValueFromAny(CurPropertyValue, "Connection");
     if (CurDBMetaData.DBConnection != null){
         if (CurDBMetaData.DataSourceName == null)
         System.out.println(" Overgiven DataSourcename invalid");
@@ -1213,9 +1213,9 @@ public class ReportWizard {
         iCommandTypes = DBMetaData.createCommandTypeList();
             }
     }
-    CurDBMetaData.Command = (String) tools.getPropertyValue(CurPropertyValue, "Command");
+    CurDBMetaData.Command = (String) tools.getPropertyValueFromAny(CurPropertyValue, "Command");
     if (CurDBMetaData.Command != null){
-        CurDBMetaData.CommandType = ((Integer) tools.getPropertyValue(CurPropertyValue, "CommandType")).intValue();
+        CurDBMetaData.CommandType = ((Integer) tools.getPropertyValueFromAny(CurPropertyValue, "CommandType")).intValue();
         // Todo: find whether it is query or Table in case there is a table and a query with the same name
         // Note: for some reasons I cannot access the Listbox directly to select the item so I have to go the way over the model.
         short iPos = (short) tools.FieldInList(DatabaseNames, CurDBMetaData.DataSourceName);
@@ -1238,33 +1238,8 @@ public class ReportWizard {
     try {
             xGlobalMSF = tools.connect(ConnectStr);
         if(xGlobalMSF != null)  System.out.println("Connected to "+ ConnectStr);
-        com.sun.star.beans.PropertyValue[] CurPropertyValue = new com.sun.star.beans.PropertyValue[4];
 
-//      CurPropertyValue[0] = new PropertyValue();
-//      CurPropertyValue[0].Name = "DataSourceName";
-//      CurPropertyValue[0].Value = "Bibliography";
-
-//      CurPropertyValue[1] = new PropertyValue();
-//      CurPropertyValue[1].Name = "Connection";
-//      Object oDBContext = xGlobalMSF.createInstance("com.sun.star.sdb.DatabaseContext");
-//      XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oDBContext);
-//      Object oDataSource = xNameAccess.getByName("Bibliography");
-//      XDataSource xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, oDataSource);
-//      CurPropertyValue[1].Value = xDataSource.getConnection("","");
-
-//      CurPropertyValue[2] = new PropertyValue();
-//      CurPropertyValue[2].Name = "Command";
-//      CurPropertyValue[2].Value = "biblio";
-
-//      CurPropertyValue[3] = new PropertyValue();
-//      CurPropertyValue[3].Name = "CommandType";
-//      CurPropertyValue[3].Value = new Integer(com.sun.star.sdb.CommandType.TABLE);
-//      Object[] oobject; // = new Object[4];
-//      oobject = (Object[]) CurPropertyValue;
-//      com.sun.star.beans.PropertyValue[] Cur2PropertyValue = new com.sun.star.beans.PropertyValue[4];
-//      Cur2PropertyValue = (com.sun.star.beans.PropertyValue[]) oobject;
-
-        startReportWizard(xGlobalMSF, CurPropertyValue);
+        startReportWizard(xGlobalMSF, null);
     }
         catch(Exception exception) {
             exception.printStackTrace(System.out);
@@ -1272,8 +1247,9 @@ public class ReportWizard {
     }
 
 
-    public static void startReportWizard(XMultiServiceFactory xMSF, PropertyValue[] CurPropertyValue){
+    public static void startReportWizard(XMultiServiceFactory xMSF, Object[] CurPropertyValue){
     try{
+
     xGlobalMSF = xMSF;
     xDesktop = tools.getDesktop( xMSF );
     XFramesSupplier xFrameSuppl = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, xDesktop);
@@ -1449,7 +1425,7 @@ public class ReportWizard {
         TemplatePath = tools.getOfficePath(xMSF, "Template","share");
         ContentFiles = tools.getFolderTitles(xMSF, "cnt", CurReportDocument.ReportFolderName);
         LayoutFiles = tools.getFolderTitles(xMSF,"stl", CurReportDocument.ReportFolderName);
-        BitmapPath = TemplatePath + "/wizard/bitmap/report.bmp";
+        BitmapPath = TemplatePath + "/wizard/bitmap";
     }
     }
 }

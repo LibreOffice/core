@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallReportWizard.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bc $ $Date: 2002-07-18 14:26:07 $
+ *  last change: $Author: bc $ $Date: 2002-07-19 10:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,9 +216,7 @@ public class CallReportWizard {
          */
         public void initialize(Object[] object) throws com.sun.star.uno.Exception
         {
-        com.sun.star.beans.PropertyValue[] CurPropertyValue;
-        CurPropertyValue = (com.sun.star.beans.PropertyValue[]) object;
-        ReportWizard.startReportWizard(xmultiservicefactory,CurPropertyValue);
+            ReportWizard.startReportWizard(xmultiservicefactory,object);
 
     //    xmultiservicefactory = (XMultiservicefactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, object[0]);
         }
