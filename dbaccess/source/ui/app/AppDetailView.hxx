@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailView.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:00:41 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ namespace dbaui
         */
         void createPage(ElementType _eType,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer);
 
-        OAppBorderWindow* getBorderWin() const { return m_pBorderWin;}
+        inline OAppBorderWindow* getBorderWin() const { return m_pBorderWin;}
         sal_Bool isCutAllowed() ;
         sal_Bool isCopyAllowed()    ;
         sal_Bool isPasteAllowed();
