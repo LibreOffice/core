@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 
 #include <svx/adjitem.hxx>
 #include <svx/algitem.hxx>
+#include <svx/brshitem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/editstat.hxx>
 #include <svx/fhgtitem.hxx>
@@ -211,10 +212,11 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
 
     //  Font
 
+    ScAutoFontColorMode eColorMode = pOutput->bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
     if ( bPixelToLogic )
-        pPattern->GetFont( aFont, pFmtDevice, NULL, pCondSet, nScript );
+        pPattern->GetFont( aFont, eColorMode, pFmtDevice, NULL, pCondSet, nScript );
     else
-        pPattern->GetFont( aFont, pFmtDevice, &pOutput->aZoomY, pCondSet, nScript );
+        pPattern->GetFont( aFont, eColorMode, pFmtDevice, &pOutput->aZoomY, pCondSet, nScript );
     aFont.SetAlign(ALIGN_BASELINE);
 
     //  Orientierung
@@ -734,6 +736,8 @@ inline BOOL StringDiffer( const ScPatternAttr*& rpOldPattern, const ScPatternAtt
         return TRUE;
     else if ( &rpNewPattern->GetItem( ATTR_FONT_RELIEF ) != &rpOldPattern->GetItem( ATTR_FONT_RELIEF ) )
         return TRUE;
+    else if ( &rpNewPattern->GetItem( ATTR_BACKGROUND ) != &rpOldPattern->GetItem( ATTR_BACKGROUND ) )
+        return TRUE;    // needed with automatic text color
     else
     {
         rpOldPattern = rpNewPattern;
@@ -1014,9 +1018,11 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                     GetItem(ATTR_FONT_HEIGHT)).GetHeight() <= nMinHeight )
                 {
                     Point aPos(nPosX,nPosY);
-                    pDev->DrawPixel( aPos,
-                                    ((const SvxColorItem&)pInfo->pPatternAttr->
-                                    GetItem( ATTR_FONT_COLOR )).GetValue() );
+                    Color aFontColor = ((const SvxColorItem&)pInfo->pPatternAttr->
+                                            GetItem( ATTR_FONT_COLOR )).GetValue();
+                    if ( aFontColor == COL_AUTO && bUseStyleColor )
+                        aFontColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+                    pDev->DrawPixel( aPos, aFontColor );
                     bEmpty = TRUE;
                 }
 
@@ -1872,6 +1878,9 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     pEngine->SetHyphenator( xXHyphenator );
                                     bHyphenatorSet = TRUE;
                                 }
+
+                                pEngine->SetBackgroundColor( ((const SvxBrushItem&)
+                                    pPattern->GetItem( ATTR_BACKGROUND, pCondSet )).GetColor() );
                             }
 
                             //  horizontal alignment now may depend on cell content
@@ -2606,6 +2615,9 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                     pEngine->SetHyphenator( xXHyphenator );
                                     bHyphenatorSet = TRUE;
                                 }
+
+                                pEngine->SetBackgroundColor( ((const SvxBrushItem&)
+                                    pPattern->GetItem( ATTR_BACKGROUND, pCondSet )).GetColor() );
                             }
 
                             //  Raender

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,6 +354,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         pPrintFunc->SetManualZoom(nZoom);
         pPrintFunc->SetDateTime(aDate,aTime);
         pPrintFunc->SetClearFlag(TRUE);
+        pPrintFunc->SetUseStyleColor(TRUE);         //! configurable
 
         pPrintFunc->SetDrawView( pDrawView );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
     //  use ScPatternAttr::GetFont only for font size
     Font aAttrFont;
     ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
-                                    GetFont(aAttrFont,pDev,&rZoomY);
+                                    GetFont(aAttrFont,SC_AUTOCOL_BLACK,pDev,&rZoomY);
 
     //  everything else from application font
     Font aAppFont = pDev->GetSettings().GetStyleSettings().GetAppFont();
@@ -520,6 +520,8 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
                                         pDoc->GetDocOptions().IsAutoSpell() );
     aOutputData.SetMarkClipped      ( bMarkClipped );
 
+    aOutputData.SetUseStyleColor( TRUE );       // always set in table view
+
     aOutputData.SetEditObject( GetEditObject() );
     aOutputData.SetViewShell( pViewData->GetViewShell() );
 
@@ -857,7 +859,7 @@ void ScGridWindow::DrawPagePreview( USHORT nX1, USHORT nY1, USHORT nX2, USHORT n
         if ( nPageScript == SCRIPTTYPE_LATIN )
         {
             //  use single font and call DrawText directly
-            rDefPattern.GetFont(aFont);
+            rDefPattern.GetFont( aFont, SC_AUTOCOL_BLACK );
             aFont.SetColor( Color( COL_LIGHTGRAY ) );
             //  font size is set as needed
         }

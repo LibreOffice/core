@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-14 10:07:55 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     bMetaFile( FALSE ),
     bPagebreakMode( FALSE ),
     bSolidBackground( FALSE ),
+    bUseStyleColor( FALSE ),
     bSyntaxMode( FALSE ),
     pValueColor( NULL ),
     pTextColor( NULL ),
@@ -347,6 +348,11 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
     {
         aPageColor = COL_GRAY;
         aManualColor = COL_BLUE;
+    }
+    else
+    {
+        aPageColor = aGridColor;
+        aManualColor = aGridColor;
     }
 
     pDev->SetLineColor( aGridColor );
@@ -2581,7 +2587,8 @@ long lcl_FindInList( const List& rPosList, const ScTripel &rPos )
 void ScOutputData::PrintNoteMarks( const List& rPosList )
 {
     Font aFont;
-    ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont(aFont);
+    ScAutoFontColorMode eColorMode = bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
+    ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont(aFont, eColorMode);
     aFont.SetSize( Size( 0, (long) ( 120 * nPPTY ) ) );         // 6 pt
     pDev->SetFont( aFont );
 

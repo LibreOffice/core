@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,7 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
         nZoom = 100;
     nManualZoom = 100;
     bClearWin = FALSE;
+    bUseStyleColor = FALSE;
 
     InitParam(pOptions);
 
@@ -561,6 +562,8 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrint
     aOutputData.SetMetaFileMode(bMetaFile);
     aOutputData.SetShowNullValues(bNullVal);
     aOutputData.SetShowFormulas(bFormula);
+
+    //! SetUseStyleColor ??
 
     if ( bMetaFile && pDev->GetOutDevType() == OUTDEV_VIRDEV )
         aOutputData.SetSnapPixel();
@@ -1541,6 +1544,12 @@ void ScPrintFunc::PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
 
     aOutputData.SetShowFormulas( aTableParam.bFormulas );
     aOutputData.SetShowNullValues( aTableParam.bNullVals );
+    aOutputData.SetUseStyleColor( bUseStyleColor );
+
+    Color aGridColor( COL_BLACK );
+    if ( bUseStyleColor )
+        aGridColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+    aOutputData.SetGridColor( aGridColor );
 
     if (!pPrinter)
     {
@@ -1818,7 +1827,8 @@ long ScPrintFunc::DoNotes( long nNoteStart, BOOL bDoPrint, ScPreviewLocationData
     pEditEngine->SetDefaults( *pEditDefaults );
 
     Font aMarkFont;
-    ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont(aMarkFont);
+    ScAutoFontColorMode eColorMode = bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
+    ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont( aMarkFont, eColorMode );
 //? aMarkFont.SetWeight( WEIGHT_BOLD );
     pDev->SetFont( aMarkFont );
     long nMarkLen = pDev->GetTextWidth(
@@ -2175,17 +2185,22 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
     //  Spalten-/Zeilenkoepfe ausgeben
     //  nach den Daten (ueber evtl. weitergezeichneten Schatten)
 
+    Color aGridColor( COL_BLACK );
+    if ( bUseStyleColor )
+        aGridColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+
     if (aTableParam.bHeaders)
     {
         if ( bDoPrint )
         {
-            pDev->SetLineColor( COL_BLACK );
+            pDev->SetLineColor( aGridColor );
             pDev->SetFillColor();
         }
 
         ScPatternAttr aPattern( pDoc->GetPool() );
         Font aFont;
-        aPattern.GetFont( aFont, pDev );
+        ScAutoFontColorMode eColorMode = bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
+        aPattern.GetFont( aFont, eColorMode, pDev );
         pDev->SetFont( aFont );
 
         if (bDoRepCol)
@@ -2223,7 +2238,7 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
         long nLeftX = nInnerStartX-nOneX;
         long nTopY  = nInnerStartY-nOneY;
         pDev->SetMapMode(aOffsetMode);
-        pDev->SetLineColor( COL_BLACK );
+        pDev->SetLineColor( aGridColor );
         pDev->SetFillColor();
         pDev->DrawRect( Rectangle( nLeftX, nTopY, nEndX-nOneX, nEndY-nOneY ) );
         //  nEndX/Y ohne Rahmen-Anpassung
@@ -2246,6 +2261,11 @@ void ScPrintFunc::SetManualZoom( USHORT nNewZoom )
 void ScPrintFunc::SetClearFlag( BOOL bFlag )
 {
     bClearWin = bFlag;
+}
+
+void ScPrintFunc::SetUseStyleColor( BOOL bFlag )
+{
+    bUseStyleColor = bFlag;
 }
 
 //

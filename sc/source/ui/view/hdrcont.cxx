@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:34:46 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,11 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    SetTextColor( rStyleSettings.GetButtonTextColor() );
+    Color aTextColor = rStyleSettings.GetButtonTextColor();
+    SetTextColor( aTextColor );
+    aNormFont.SetColor( aTextColor );
+    aBoldFont.SetColor( aTextColor );
+
     SetFillColor( rStyleSettings.GetFaceColor() );
     SetLineColor();
     DrawRect( rRect );
