@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:50:43 $
+ *  last change: $Author: dl $ $Date: 2000-11-15 12:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1172,7 +1172,6 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                 pTO  = new SdrRectObj(OBJ_TITLETEXT);
                 pOPO = pOutliner->CreateParaObject( pOutliner->GetAbsPos( pPara ), 1 );
                 pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
-                pTO->SetOutlinerParaObject(pOPO);
                 pTO->SetEmptyPresObj(FALSE);
 
                 // als Praesentationsobjekt anmelden
@@ -1181,6 +1180,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                 pPresObjList->Insert(pTO, LIST_APPEND);
 
                 pPage->InsertObject(pTO);
+                pTO->SetOutlinerParaObject(pOPO);
                             // TRUE: DontRemoveHardAttr
                 pTO->SetStyleSheet(pTitleSheet, TRUE);
                 AddUndo(new SdrUndoNewObj(*pTO));
@@ -1298,7 +1298,6 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                 }
 
                 pTO = new SdrRectObj(OBJ_OUTLINETEXT);
-                pTO->SetOutlinerParaObject(pOPO);
                 pTO->SetEmptyPresObj(FALSE);
 
                 // als Praesentationsobjekt anmelden
@@ -1307,6 +1306,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                 pPresObjList->Insert(pTO, LIST_APPEND);
 
                 pPage->InsertObject(pTO);
+                pTO->SetOutlinerParaObject(pOPO);
 
                 // Linien- und Fuellattribute der Standardvorlage hart
                 // ueberschreiben
