@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-10 17:27:28 $
+ *  last change: $Author: pl $ $Date: 2002-06-12 16:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,7 @@ bool DtIntegrator::StartSystemLookProcess( const char* pCommand )
             dup2( nRedirect, STDERR_FILENO );
         }
         execl( aCommand.GetBuffer(), aCommand.GetBuffer(), "--vcl-system-settings-window", aArgWindow.GetBuffer(), NULL );
+        _exit(1);
     }
     return mnSystemLookCommandProcess != -1;
 }
