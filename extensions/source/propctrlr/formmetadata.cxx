@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:04:03 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,7 @@ namespace pcr
         DEF_INFO_2( LINECOUNT,         LINECOUNT,          LINECOUNT,         FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_2( AUTOCOMPLETE,      AUTOCOMPLETE,       AUTOCOMPLETE,      FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_3( MULTILINE,         MULTILINE,          MULTILINE,         FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
+        DEF_INFO_2( LINEEND_FORMAT,    LINEEND_FORMAT,     LINEEND_FORMAT,    FORM_VISIBLE, ENUM ),
         DEF_INFO_2( WORDBREAK,         WORDBREAK,          WORDBREAK,         FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_4( TEXTTYPE,          TEXTTYPE,           TEXTTYPE,          FORM_VISIBLE, VIRTUAL_PROP, ENUM, ACTUATING ),
         DEF_INFO_2( MULTISELECTION,    MULTISELECTION,     MULTISELECTION,    FORM_VISIBLE, DIALOG_VISIBLE ),
@@ -439,6 +440,9 @@ namespace pcr
             case PROPERTY_ID_TEXTTYPE:
                 nStringItemsResId = RID_RSC_ENUM_TEXTTYPE;
                 break;
+            case PROPERTY_ID_LINEEND_FORMAT:
+                nStringItemsResId = RID_RSC_ENUM_LINEEND_FORMAT;
+                break;
             default:
                 OSL_ENSURE( sal_False, "OFormPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
         }
@@ -522,6 +526,9 @@ namespace pcr
                 static_cast<const EventDisplayDescription*>(pSecond)->sName);
     }
 
+#define EVT_DESC( asciiname, id_postfix ) \
+    EventDisplayDescription( nCount++, asciiname, RID_STR_EVT_##id_postfix, HID_EVT_##id_postfix, UID_BRWEVT_##id_postfix )
+
     //------------------------------------------------------------------------
     EventDisplayDescription* GetEvtTranslation(const ::rtl::OUString& rName)
     {
@@ -531,39 +538,39 @@ namespace pcr
         {
             static EventDisplayDescription __READONLY_DATA aEventDisplayDescriptions[] =
             {
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("approveAction"),             String(ModuleRes(RID_STR_EVT_APPROVEACTIONPERFORMED)),  HID_EVT_APPROVEACTIONPERFORMED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("actionPerformed"),           String(ModuleRes(RID_STR_EVT_ACTIONPERFORMED)),         HID_EVT_ACTIONPERFORMED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("changed"),                   String(ModuleRes(RID_STR_EVT_CHANGED)),                 HID_EVT_CHANGED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("textChanged"),               String(ModuleRes(RID_STR_EVT_TEXTCHANGED)),             HID_EVT_TEXTCHANGED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("itemStateChanged"),          String(ModuleRes(RID_STR_EVT_ITEMSTATECHANGED)),        HID_EVT_ITEMSTATECHANGED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("focusGained"),               String(ModuleRes(RID_STR_EVT_FOCUSGAINED)),             HID_EVT_FOCUSGAINED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("focusLost"),                 String(ModuleRes(RID_STR_EVT_FOCUSLOST)),               HID_EVT_FOCUSLOST),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("keyPressed"),                String(ModuleRes(RID_STR_EVT_KEYTYPED)),                HID_EVT_KEYTYPED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("keyReleased"),               String(ModuleRes(RID_STR_EVT_KEYUP)),                   HID_EVT_KEYUP),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("mouseEntered"),              String(ModuleRes(RID_STR_EVT_MOUSEENTERED)),            HID_EVT_MOUSEENTERED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("mouseDragged"),              String(ModuleRes(RID_STR_EVT_MOUSEDRAGGED)),            HID_EVT_MOUSEDRAGGED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("mouseMoved"),                String(ModuleRes(RID_STR_EVT_MOUSEMOVED)),              HID_EVT_MOUSEMOVED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("mousePressed"),              String(ModuleRes(RID_STR_EVT_MOUSEPRESSED)),            HID_EVT_MOUSEPRESSED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("mouseReleased"),             String(ModuleRes(RID_STR_EVT_MOUSERELEASED)),           HID_EVT_MOUSERELEASED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("mouseExited"),               String(ModuleRes(RID_STR_EVT_MOUSEEXITED)),             HID_EVT_MOUSEEXITED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("approveReset"),              String(ModuleRes(RID_STR_EVT_APPROVERESETTED)),         HID_EVT_APPROVERESETTED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("resetted"),                  String(ModuleRes(RID_STR_EVT_RESETTED)),                HID_EVT_RESETTED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("approveSubmit"),             String(ModuleRes(RID_STR_EVT_SUBMITTED)),               HID_EVT_SUBMITTED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("approveUpdate"),             String(ModuleRes(RID_STR_EVT_BEFOREUPDATE)),            HID_EVT_BEFOREUPDATE),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("updated"),                   String(ModuleRes(RID_STR_EVT_AFTERUPDATE)),             HID_EVT_AFTERUPDATE),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("loaded"),                    String(ModuleRes(RID_STR_EVT_LOADED)),                  HID_EVT_LOADED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("reloading"),                 String(ModuleRes(RID_STR_EVT_RELOADING)),               HID_EVT_RELOADING),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("reloaded"),                  String(ModuleRes(RID_STR_EVT_RELOADED)),                HID_EVT_RELOADED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("unloading"),                 String(ModuleRes(RID_STR_EVT_UNLOADING)),               HID_EVT_UNLOADING),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("unloaded"),                  String(ModuleRes(RID_STR_EVT_UNLOADED)),                HID_EVT_UNLOADED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("confirmDelete"),             String(ModuleRes(RID_STR_EVT_CONFIRMDELETE)),           HID_EVT_CONFIRMDELETE),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("approveRowChange"),          String(ModuleRes(RID_STR_EVT_APPROVEROWCHANGE)),        HID_EVT_APPROVEROWCHANGE),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("rowChanged"),                String(ModuleRes(RID_STR_EVT_ROWCHANGE)),               HID_EVT_ROWCHANGE),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("approveCursorMove"),         String(ModuleRes(RID_STR_EVT_POSITIONING)),             HID_EVT_POSITIONING),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("cursorMoved"),               String(ModuleRes(RID_STR_EVT_POSITIONED)),              HID_EVT_POSITIONED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("approveParameter"),          String(ModuleRes(RID_STR_EVT_APPROVEPARAMETER)),        HID_EVT_APPROVEPARAMETER),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("errorOccured"),              String(ModuleRes(RID_STR_EVT_ERROROCCURED)),            HID_EVT_ERROROCCURED),
-                EventDisplayDescription(nCount++,::rtl::OUString::createFromAscii("adjustmentValueChanged"),    String(ModuleRes(RID_STR_EVT_ADJUSTMENTVALUECHANGED)),  HID_EVT_ADJUSTMENTVALUECHANGED)
+                EVT_DESC( "approveAction",     APPROVEACTIONPERFORMED ),
+                EVT_DESC( "actionPerformed",   ACTIONPERFORMED ),
+                EVT_DESC( "changed",           CHANGED ),
+                EVT_DESC( "textChanged",       TEXTCHANGED ),
+                EVT_DESC( "itemStateChanged",  ITEMSTATECHANGED ),
+                EVT_DESC( "focusGained",       FOCUSGAINED ),
+                EVT_DESC( "focusLost",         FOCUSLOST ),
+                EVT_DESC( "keyPressed",        KEYTYPED ),
+                EVT_DESC( "keyReleased",       KEYUP ),
+                EVT_DESC( "mouseEntered",      MOUSEENTERED ),
+                EVT_DESC( "mouseDragged",      MOUSEDRAGGED ),
+                EVT_DESC( "mouseMoved",        MOUSEMOVED ),
+                EVT_DESC( "mousePressed",      MOUSEPRESSED ),
+                EVT_DESC( "mouseReleased",     MOUSERELEASED ),
+                EVT_DESC( "mouseExited",       MOUSEEXITED ),
+                EVT_DESC( "approveReset",      APPROVERESETTED ),
+                EVT_DESC( "resetted",          RESETTED ),
+                EVT_DESC( "approveSubmit",     SUBMITTED ),
+                EVT_DESC( "approveUpdate",     BEFOREUPDATE ),
+                EVT_DESC( "updated",           AFTERUPDATE ),
+                EVT_DESC( "loaded",            LOADED ),
+                EVT_DESC( "reloading",         RELOADING ),
+                EVT_DESC( "reloaded",          RELOADED ),
+                EVT_DESC( "unloading",         UNLOADING ),
+                EVT_DESC( "unloaded",          UNLOADED ),
+                EVT_DESC( "confirmDelete",     CONFIRMDELETE ),
+                EVT_DESC( "approveRowChange",  APPROVEROWCHANGE ),
+                EVT_DESC( "rowChanged",        ROWCHANGE ),
+                EVT_DESC( "approveCursorMove", POSITIONING ),
+                EVT_DESC( "cursorMoved",       POSITIONED ),
+                EVT_DESC( "approveParameter",  APPROVEPARAMETER ),
+                EVT_DESC( "errorOccured",      ERROROCCURED ),
+                EVT_DESC( "adjustmentValueChanged", ADJUSTMENTVALUECHANGED ),
             };
             s_pEventTranslation = const_cast<EventDisplayDescription*>(aEventDisplayDescriptions);
             nCount = sizeof(aEventDisplayDescriptions) / sizeof(EventDisplayDescription);
@@ -574,7 +581,7 @@ namespace pcr
                  &EventDisplayDescriptionCompareByName);
         }
 
-        EventDisplayDescription aSearch(0, rName, String(), 0);
+        EventDisplayDescription aSearch( rName );
         return static_cast<EventDisplayDescription*>(bsearch(
             &aSearch,
             static_cast<void*>(s_pEventTranslation),
