@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:18:18 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 14:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #ifndef _CPPUHELPER_COMPBASE4_HXX_
 #include <cppuhelper/compbase4.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -163,10 +163,12 @@ class ProviderImpl
                                        XTypeDescriptionEnumerationAccess,
                                        XInitialization >
 {
-    // XHierarchicalNameAccess wrapper first asking the tdmgr instance, then
-    // looking up locally
+    // XHierarchicalNameAccess + XTypeDescriptionEnumerationAccess wrapper
+    // first asking the tdmgr instance, then looking up locally
     class TypeDescriptionManagerWrapper
-        : public ::cppu::WeakImplHelper1<container::XHierarchicalNameAccess>
+        : public ::cppu::WeakImplHelper2<
+            container::XHierarchicalNameAccess,
+            reflection::XTypeDescriptionEnumerationAccess>
     {
         com::sun::star::uno::Reference<container::XHierarchicalNameAccess>
         m_xTDMgr;
@@ -186,6 +188,17 @@ class ProviderImpl
             throw (container::NoSuchElementException, RuntimeException);
         virtual sal_Bool SAL_CALL hasByHierarchicalName( OUString const & name )
             throw (RuntimeException);
+
+        // XTypeDescriptionEnumerationAccess
+        virtual uno::Reference<
+            reflection::XTypeDescriptionEnumeration > SAL_CALL
+        createTypeDescriptionEnumeration(
+            const ::rtl::OUString& moduleName,
+            const uno::Sequence< uno::TypeClass >& types,
+            reflection::TypeDescriptionSearchDepth depth )
+                throw ( reflection::NoSuchTypeNameException,
+                        reflection::InvalidTypeNameException,
+                        uno::RuntimeException );
     };
     friend class TypeDescriptionManagerWrapper;
 
@@ -269,6 +282,34 @@ sal_Bool ProviderImpl::TypeDescriptionManagerWrapper::hasByHierarchicalName(
     catch (container::NoSuchElementException &)
     {
         return false;
+    }
+}
+
+//______________________________________________________________________________
+uno::Reference< reflection::XTypeDescriptionEnumeration > SAL_CALL
+ProviderImpl::TypeDescriptionManagerWrapper::createTypeDescriptionEnumeration(
+        const ::rtl::OUString& moduleName,
+        const uno::Sequence< uno::TypeClass >& types,
+        reflection::TypeDescriptionSearchDepth depth )
+    throw ( reflection::NoSuchTypeNameException,
+            reflection::InvalidTypeNameException,
+            uno::RuntimeException )
+{
+    try
+    {
+        // first try tdmgr:
+        uno::Reference< reflection::XTypeDescriptionEnumerationAccess > xTDEA(
+            m_xTDMgr, uno::UNO_QUERY_THROW );
+        return
+            xTDEA->createTypeDescriptionEnumeration( moduleName, types, depth );
+    }
+    catch (reflection::NoSuchTypeNameException &)
+    {
+        // then lookup locally:
+        uno::Reference< reflection::XTypeDescriptionEnumerationAccess > xTDEA(
+            m_xThisProvider, uno::UNO_QUERY_THROW );
+        return
+            xTDEA->createTypeDescriptionEnumeration( moduleName, types, depth );
     }
 }
 
