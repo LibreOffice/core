@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableSourceContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:11:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,14 +118,14 @@ ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
     nRefresh(0),
     nMode(sheet::SheetLinkMode_NORMAL)
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                            sAttrName, &aLocalName ));
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
         if(nPrefix == XML_NAMESPACE_XLINK)
         {
             if (IsXMLToken(aLocalName, XML_HREF))
@@ -163,8 +163,7 @@ SvXMLImportContext *ScXMLTableSourceContext::CreateChildContext( USHORT nPrefix,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-    return pContext;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLTableSourceContext::EndElement()
@@ -172,7 +171,7 @@ void ScXMLTableSourceContext::EndElement()
     if (sLink.getLength())
     {
         uno::Reference <sheet::XSheetLinkable> xLinkable (GetScImport().GetTables().GetCurrentXSheet(), uno::UNO_QUERY);
-        ScDocument* pDoc = GetScImport().GetDocument();
+        ScDocument* pDoc(GetScImport().GetDocument());
         if (xLinkable.is() && pDoc)
         {
             GetScImport().LockSolarMutex();
