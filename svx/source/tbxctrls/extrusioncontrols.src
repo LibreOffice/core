@@ -1,0 +1,866 @@
+/*************************************************************************
+ *
+ *  $RCSfile: extrusioncontrols.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:14:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dialogs.hrc"
+#include "extrusioncontrols.hrc"
+
+#define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
+
+FloatingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
+{
+    Border = TRUE ;
+    Hide = FALSE ;
+    SVLook = TRUE ;
+    Sizeable = FALSE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+
+    Text = "Extrusionsrichtung" ;
+    Text [ english_us ] = "Extrusion Direction" ;
+
+    Image IMG_DIRECTION + DIRECTION_NW
+    {
+        ImageBitmap = Bitmap { File = "directionnorthwest_22.bmp" ; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION_H + DIRECTION_NW
+    {
+        ImageBitmap = Bitmap { File = "directionnorthwest_22_h.bmp" ; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION + DIRECTION_N
+    {
+        ImageBitmap = Bitmap { File = "directionnorth_22.bmp" ; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION_H + DIRECTION_N
+    {
+        ImageBitmap = Bitmap { File = "directionnorth_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION + DIRECTION_NE
+    {
+        ImageBitmap = Bitmap { File = "directionnortheast_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION_H + DIRECTION_NE
+    {
+        ImageBitmap = Bitmap { File = "directionnortheast_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION + DIRECTION_W
+    {
+        ImageBitmap = Bitmap { File = "directionwest_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION_H + DIRECTION_W
+    {
+        ImageBitmap = Bitmap { File = "directionwest_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION + DIRECTION_NONE
+    {
+        ImageBitmap = Bitmap { File = "directionstraight_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION_H + DIRECTION_NONE
+    {
+        ImageBitmap = Bitmap { File = "directionstraight_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION + DIRECTION_E
+    {
+        ImageBitmap = Bitmap { File = "directioneast_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION_H + DIRECTION_E
+    {
+        ImageBitmap = Bitmap { File = "directioneast_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION + DIRECTION_SW
+    {
+        ImageBitmap = Bitmap { File = "directionsouthwest_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION_H + DIRECTION_SW
+    {
+        ImageBitmap = Bitmap { File = "directionsouthwest_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION + DIRECTION_S
+    {
+        ImageBitmap = Bitmap { File = "directionsouth_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION_H + DIRECTION_S
+    {
+        ImageBitmap = Bitmap { File = "directionsouth_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION + DIRECTION_SE
+    {
+        ImageBitmap = Bitmap { File = "directionsoutheast_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DIRECTION_H + DIRECTION_SE
+    {
+        ImageBitmap = Bitmap { File = "directionsoutheast_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_PERSPECTIVE
+    {
+        ImageBitmap = Bitmap { File = "perspective_16.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_PERSPECTIVE_H
+    {
+        ImageBitmap = Bitmap { File = "perspective_16_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_PARALLEL
+    {
+        ImageBitmap = Bitmap { File = "parallel_16.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_PARALLEL_H
+    {
+        ImageBitmap = Bitmap { File = "parallel_16_h.bmp"; };
+        MASKCOLOR
+    };
+
+    String STR_PERSPECTIVE
+    {
+        Text = "~Perspektive" ;
+        Text [ english_us ] = "~Perspective" ;
+    };
+
+    String STR_PARALLEL
+    {
+        Text = "P~arallel" ;
+        Text [ english_us ] = "P~arallel" ;
+    };
+    String STR_DIRECTION + DIRECTION_NW
+    {
+        Text = "Extrusion nach Nordwesten";
+        Text [english_us] = "Extrusion North-West";
+    };
+    String STR_DIRECTION + DIRECTION_N
+    {
+        Text = "Extrusion nach Norden";
+        Text [english_us] = "Extrusion North";
+    };
+    String STR_DIRECTION + DIRECTION_NE
+    {
+        Text = "Extrusion nach Nordosten";
+        Text [english_us] = "Extrusion North-East";
+    };
+    String STR_DIRECTION + DIRECTION_W
+    {
+        Text = "Extrusion nach Westen";
+        Text [english_us] = "Extrusion West";
+    };
+    String STR_DIRECTION + DIRECTION_NONE
+    {
+        Text = "Extrusion nach hinten";
+        Text [english_us] = "Extrusion Backwards";
+    };
+    String STR_DIRECTION + DIRECTION_E
+    {
+        Text = "Extrusion nach Osten";
+        Text [english_us] = "Extrusion East";
+    };
+    String STR_DIRECTION + DIRECTION_SW
+    {
+        Text = "Extrusion nach Südwesten";
+        Text [english_us] = "Extrusion South-West";
+    };
+    String STR_DIRECTION + DIRECTION_S
+    {
+        Text = "Extrusion nach Süden";
+        Text [english_us] = "Extrusion South";
+    };
+    String STR_DIRECTION + DIRECTION_SE
+    {
+        Text = "Extrusion nach Südosten";
+        Text [english_us] = "Extrusion South-East";
+    };
+};
+
+FloatingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
+{
+    Border = TRUE ;
+    Hide = FALSE ;
+    SVLook = TRUE ;
+    Sizeable = FALSE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+
+    Text = "Extrusionstiefe" ;
+    Text [ english_us ] = "Extrusion Depth" ;
+
+    String STR_CUSTOM
+    {
+        Text = "~Benutzerdefiniert...";
+        Text [ english_us ] = "~Custom...";
+    };
+
+    String STR_INFINITY
+    {
+        Text = "~Unendlich";
+        Text [ english_us ] = "~Infinity";
+    };
+
+    Image IMG_DEPTH_0
+    {
+        ImageBitmap = Bitmap { File = "extrusion0inch_16.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DEPTH_0_H
+    {
+        ImageBitmap = Bitmap { File = "extrusion0inch_16_h.bmp"; };
+        MASKCOLOR
+    };
+
+    Image IMG_DEPTH_1
+    {
+        ImageBitmap = Bitmap { File = "extrusion05inch_16.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DEPTH_1_H
+    {
+        ImageBitmap = Bitmap { File = "extrusion05inch_16_h.bmp"; };
+        MASKCOLOR
+    };
+
+    Image IMG_DEPTH_2
+    {
+        ImageBitmap = Bitmap { File = "extrusion1inch_16.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DEPTH_2_H
+    {
+        ImageBitmap = Bitmap { File = "extrusion1inch_16_h.bmp"; };
+        MASKCOLOR
+    };
+
+    Image IMG_DEPTH_3
+    {
+        ImageBitmap = Bitmap { File = "extrusion2inch_16.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DEPTH_3_H
+    {
+        ImageBitmap = Bitmap { File = "extrusion2inch_16_h.bmp"; };
+        MASKCOLOR
+    };
+
+    Image IMG_DEPTH_4
+    {
+        ImageBitmap = Bitmap { File = "extrusion4inch_16.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DEPTH_4_H
+    {
+        ImageBitmap = Bitmap { File = "extrusion4inch_16_h.bmp"; };
+        MASKCOLOR
+    };
+
+    Image IMG_DEPTH_INFINITY
+    {
+        ImageBitmap = Bitmap { File = "extrusioninfinity_16.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_DEPTH_INFINITY_H
+    {
+        ImageBitmap = Bitmap { File = "extrusioninfinity_16_h.bmp"; };
+        MASKCOLOR
+    };
+};
+
+FloatingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
+{
+    Border = TRUE ;
+    Hide = FALSE ;
+    SVLook = TRUE ;
+    Sizeable = FALSE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+
+    Text = "Extrusionsbeleuchtung" ;
+    Text [ english_us ] = "Extrusion Lighting" ;
+
+    Image IMG_LIGHT_OFF + FROM_TOP_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightofffromtopleft_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_OFF + FROM_TOP
+    {
+        ImageBitmap = Bitmap { File = "lightofffromtop_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_OFF + FROM_TOP_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightofffromtopright_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_OFF + FROM_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightofffromleft_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_OFF + FROM_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightofffromright_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_OFF + FROM_BOTTOM_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightofffrombottomleft_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_OFF + FROM_BOTTOM
+    {
+        ImageBitmap = Bitmap { File = "lightofffrombottom_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_OFF + FROM_BOTTOM_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightofffrombottomright_22.bmp"; };
+        MASKCOLOR
+    };
+
+    Image IMG_LIGHT_OFF_H + FROM_TOP_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightofffromtopleft_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_OFF_H + FROM_TOP
+    {
+        ImageBitmap = Bitmap { File = "lightofffromtop_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_OFF_H + FROM_TOP_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightofffromtopright_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_OFF_H + FROM_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightofffromleft_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_OFF_H + FROM_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightofffromright_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_OFF_H + FROM_BOTTOM_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightofffrombottomleft_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_OFF_H + FROM_BOTTOM
+    {
+        ImageBitmap = Bitmap { File = "lightofffrombottom_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_OFF_H + FROM_BOTTOM_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightofffrombottomright_22_h.bmp"; };
+        MASKCOLOR
+    };
+
+    Image IMG_LIGHT_ON + FROM_TOP_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightonfromtopleft_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_ON + FROM_TOP
+    {
+        ImageBitmap = Bitmap { File = "lightonfromtop_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_ON + FROM_TOP_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightonfromtopright_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_ON + FROM_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightonfromleft_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_ON + FROM_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightonfromright_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_ON + FROM_BOTTOM_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightonfrombottomleft_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_ON + FROM_BOTTOM
+    {
+        ImageBitmap = Bitmap { File = "lightonfrombottom_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_ON + FROM_BOTTOM_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightonfrombottomright_22.bmp"; };
+        MASKCOLOR
+    };
+
+    Image IMG_LIGHT_ON_H + FROM_TOP_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightonfromtopleft_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_ON_H + FROM_TOP
+    {
+        ImageBitmap = Bitmap { File = "lightonfromtop_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_ON_H + FROM_TOP_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightonfromtopright_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_ON_H + FROM_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightonfromleft_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_ON_H + FROM_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightonfromright_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_ON_H + FROM_BOTTOM_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightonfrombottomleft_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_ON_H + FROM_BOTTOM
+    {
+        ImageBitmap = Bitmap { File = "lightonfrombottom_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_ON_H + FROM_BOTTOM_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightonfrombottomright_22_h.bmp"; };
+        MASKCOLOR
+    };
+
+    Image IMG_LIGHT_PREVIEW + FROM_TOP_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightfromtopleft_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW + FROM_TOP
+    {
+        ImageBitmap = Bitmap { File = "lightfromtop_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW + FROM_TOP_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightfromtopright_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW + FROM_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightfromleft_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW + FROM_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightfromright_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW + FROM_FRONT
+    {
+        ImageBitmap = Bitmap { File = "lightfromfront_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW + FROM_BOTTOM_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightfrombottomleft_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW + FROM_BOTTOM
+    {
+        ImageBitmap = Bitmap { File = "lightfrombottom_22.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW + FROM_BOTTOM_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightfrombottomright_22.bmp"; };
+        MASKCOLOR
+    };
+
+    Image IMG_LIGHT_PREVIEW_H + FROM_TOP_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightfromtopleft_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW_H + FROM_TOP
+    {
+        ImageBitmap = Bitmap { File = "lightfromtop_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW_H + FROM_TOP_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightfromtopright_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW_H + FROM_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightfromleft_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW_H + FROM_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightfromright_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW_H + FROM_FRONT
+    {
+        ImageBitmap = Bitmap { File = "lightfromfront_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW_H + FROM_BOTTOM_LEFT
+    {
+        ImageBitmap = Bitmap { File = "lightfrombottomleft_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW_H + FROM_BOTTOM
+    {
+        ImageBitmap = Bitmap { File = "lightfrombottom_22_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHT_PREVIEW_H + FROM_BOTTOM_RIGHT
+    {
+        ImageBitmap = Bitmap { File = "lightfrombottomright_22_h.bmp"; };
+        MASKCOLOR
+    };
+
+    Image IMG_LIGHTING_BRIGHT
+    {
+        ImageBitmap = Bitmap { File = "brightlit_16.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHTING_NORMAL
+    {
+        ImageBitmap = Bitmap { File = "normallit_16.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHTING_DIM
+    {
+        ImageBitmap = Bitmap { File = "dimlit_16.bmp"; };
+        MASKCOLOR
+    };
+
+    Image IMG_LIGHTING_BRIGHT_H
+    {
+        ImageBitmap = Bitmap { File = "brightlit_16_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHTING_NORMAL_H
+    {
+        ImageBitmap = Bitmap { File = "normallit_16_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_LIGHTING_DIM_H
+    {
+        ImageBitmap = Bitmap { File = "dimlit_16_h.bmp"; };
+        MASKCOLOR
+    };
+
+    String STR_BRIGHT
+    {
+        Text = "~Hell";
+        Text [ english_us ] = "~Bright";
+    };
+
+    String STR_NORMAL
+    {
+        Text = "~Normal";
+        Text [ english_us ] = "~Normal";
+    };
+
+    String STR_DIM
+    {
+        Text = "~Abgeblendet";
+        Text [ english_us ] = "~Dim";
+    };
+};
+
+FloatingWindow RID_SVXFLOAT_EXTRUSION_SURFACE
+{
+    Border = TRUE ;
+    Hide = FALSE ;
+    SVLook = TRUE ;
+    Sizeable = FALSE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+
+    Text = "Extrusionsoberfläche" ;
+    Text [ english_us ] = "Extrusion Surface" ;
+
+    String STR_WIREFRAME
+    {
+        Text = "~Drahtrahmen";
+        Text [ english_us ] = "~Wire Frame";
+    };
+
+    String STR_MATTE
+    {
+        Text = "~Matte";
+        Text [ english_us ] = "~Matt";
+    };
+
+    String STR_PLASTIC
+    {
+        Text = "~Plastik";
+        Text [ english_us ] = "~Plastic";
+    };
+
+    String STR_METAL
+    {
+        Text = "Me~tall";
+        Text [ english_us ] = "Me~tal";
+    };
+
+    Image IMG_WIRE_FRAME
+    {
+        ImageBitmap = Bitmap { File = "wireframe_16.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_WIRE_FRAME_H
+    {
+        ImageBitmap = Bitmap { File = "wireframe_16_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_MATTE
+    {
+        ImageBitmap = Bitmap { File = "matte_16.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_MATTE_H
+    {
+        ImageBitmap = Bitmap { File = "matte_16_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_PLASTIC
+    {
+        ImageBitmap = Bitmap { File = "plastic_16.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_PLASTIC_H
+    {
+        ImageBitmap = Bitmap { File = "plastic_16_h.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_METAL
+    {
+        ImageBitmap = Bitmap { File = "metal_16.bmp"; };
+        MASKCOLOR
+    };
+    Image IMG_METAL_H
+    {
+        ImageBitmap = Bitmap { File = "metal_16_h.bmp"; };
+        MASKCOLOR
+    };
+
+};
+
+#define WIDTH                       140
+#define HEIGHT                      (4 * 3 + 3 * 14)
+
+ModalDialog RID_SVX_MDLG_EXTRUSION_DEPTH
+{
+    OutputSize = TRUE;
+    SVLook = TRUE ;
+    Moveable = TRUE;
+    Closeable = TRUE;
+
+    Size = MAP_APPFONT( WIDTH, HEIGHT );
+
+    Text = "Extrusionstiefe" ;
+    Text [ ENGLISH ] = "Extrusion Depth" ;
+    Text [ english_us ] = "Extrusion Depth" ;
+
+    FixedText FL_DEPTH
+    {
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( WIDTH - 50 - 12 , 8 ) ;
+        Text = "~Wert" ;
+        Text [ ENGLISH ] = "~Value" ;
+        Text [ english_us ] = "~Value" ;
+    };
+    MetricField MTR_DEPTH
+    {
+         //HelpId = HID_SD_CTL_FAVORITES ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 14 ) ;
+        Size = MAP_APPFONT ( WIDTH - 50 - 12, 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 338666 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        SpinSize = 10 ;
+    };
+    OkButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( WIDTH - 50 - 3 , 1 * 3 + 0 * 14 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        DefButton = TRUE ;
+        TabStop = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( WIDTH - 50 - 3 , 2 * 3 + 1 * 14 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( WIDTH - 50 - 3 , 3 * 3 + 2 * 14 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+String RID_SVXSTR_EXTRUSION_COLOR
+{
+    Text = "Extrusion Color";
+    Text [ english_us ] = "Extrusion Color";
+};
+
+String RID_SVXSTR_DEPTH_0
+{
+    Text = "~0 mm";
+    Text [english_us] = "~0 mm";
+};
+
+String RID_SVXSTR_DEPTH_1
+{
+    Text = "~1 mm";
+    Text [english_us] = "~1 mm";
+};
+
+String RID_SVXSTR_DEPTH_2
+{
+    Text = "~2.5 mm";
+    Text [english_us] = "~2.5 mm";
+};
+
+String RID_SVXSTR_DEPTH_3
+{
+    Text = "~5 mm";
+    Text [english_us] = "~5 mm";
+};
+
+String RID_SVXSTR_DEPTH_4
+{
+    Text = "10 ~mm";
+    Text [english_us] = "10 ~mm";
+};
+
+String RID_SVXSTR_DEPTH_0_INCH
+{
+    Text = "~0 inch";
+    Text [english_us] = "0 inch";
+};
+
+String RID_SVXSTR_DEPTH_1_INCH
+{
+    Text = "0.~5 inch";
+    Text [english_us] = "0.~5 inch";
+};
+
+String RID_SVXSTR_DEPTH_2_INCH
+{
+    Text = "~1 inch";
+    Text [english_us] = "~1 inch";
+};
+
+String RID_SVXSTR_DEPTH_3_INCH
+{
+    Text = "~2 inch";
+    Text [english_us] = "~2 inch";
+};
+
+String RID_SVXSTR_DEPTH_4_INCH
+{
+    Text = "~4 inch";
+    Text [english_us] = "~4 inch";
+};
