@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 
 #ifndef _WEBDAV_UCP_PROVIDER_HXX
 #define _WEBDAV_UCP_PROVIDER_HXX
-
-#include <hash_set>
 
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
