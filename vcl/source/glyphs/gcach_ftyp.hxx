@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:42:56 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@ public:
     const unsigned char*    GetBuffer() const { return mpFileMap; }
     int                     GetFileSize() const { return mnFileSize; }
     const ::rtl::OString*   GetFileName() const { return &maNativeFileName; }
-
 private:
                             FtFontFile( const ::rtl::OString& rNativeFileName );
 
@@ -102,7 +101,9 @@ class FtFontInfo
 {
 public:
     FtFontInfo( const ImplFontData&, const ::rtl::OString&,
-        int nFaceNum, int nFontId, int nSynthetic );
+                int nFaceNum, int nFontId, int nSynthetic,
+                const unicodeKernMap* pUnicodeKern = NULL
+                );
 
     const unsigned char*  GetTable( const char*, ULONG* pLength=0 ) const;
 
@@ -119,6 +120,11 @@ public:
 
     int                   GetGlyphIndex( sal_Unicode cChar ) const;
     void                  CacheGlyphIndex( sal_Unicode cChar, int nGI ) const;
+    const glyphKernMap*   GetGlyphKernMap() const
+    { return (maUnicodeKernPairs.size() || maGlyphKernPairs.size()) ? &maGlyphKernPairs : NULL; }
+    const unicodeKernMap* GetUnicodeKernMap() const
+    { return maUnicodeKernPairs.size() ? &maUnicodeKernPairs : NULL; }
+
 
 private:
     ImplFontData    maFontData;
@@ -133,6 +139,9 @@ private:
     // cache unicode->glyphid mapping because looking it up is expensive
     typedef ::std::hash_map<sal_Unicode,int> FIGlyphMap;
     mutable FIGlyphMap maGlyphMap;
+
+    mutable glyphKernMap maGlyphKernPairs;
+    unicodeKernMap maUnicodeKernPairs;
 };
 
 // these two inlines are very important for performance
@@ -145,11 +154,6 @@ inline int FtFontInfo::GetGlyphIndex( sal_Unicode cChar ) const
     return -1;
 }
 
-inline void FtFontInfo::CacheGlyphIndex( sal_Unicode cChar, int nGI ) const
-{
-    maGlyphMap[ cChar ] = nGI;
-}
-
 // -----------------------------------------------------------------------
 
 class FreetypeManager
@@ -160,7 +164,9 @@ public:
 
     long                AddFontDir( const String& rUrlName );
     void                AddFontFile( const rtl::OString& rNormalizedName,
-                            int nFaceNum, int nFontId, const ImplFontData* );
+                                     int nFaceNum, int nFontId, const ImplFontData*,
+                                     const unicodeKernMap* pKern = NULL
+                                     );
     long                FetchFontList( ImplDevFontList* ) const;
     void                ClearFontList();
 
@@ -180,7 +186,7 @@ private:
 class FreetypeServerFont : public ServerFont
 {
 public:
-                                FreetypeServerFont( const ImplFontSelectData&, FtFontInfo* );
+                                FreetypeServerFont( const ImplFontSelectData&, FtFontInfo*, const glyphKernMap*, const unicodeKernMap* );
     virtual                     ~FreetypeServerFont();
 
     virtual const ::rtl::OString* GetFontFileName() const { return mpFontInfo->GetFontFileName(); }
