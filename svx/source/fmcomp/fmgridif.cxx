@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-24 14:36:41 $
+ *  last change: $Author: fs $ $Date: 2002-10-08 15:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
 
 #ifndef _SVX_FMTOOLS_HXX
@@ -189,30 +192,34 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::util;
 
 #ifdef MACOSX
-#define XContainerListener ::com::sun::star::container::XContainerListener
-#define ContainerEvent ::com::sun::star::container::ContainerEvent
-#define XIndexContainer ::com::sun::star::container::XIndexContainer
-#define XIndexAccess ::com::sun::star::container::XIndexAccess
-#define XElementAccess ::com::sun::star::container::XElementAccess
-#define XEnumeration ::com::sun::star::container::XEnumeration
-#define XEnumerationAccess ::com::sun::star::container::XEnumerationAccess
-#define XContainer ::com::sun::star::container::XContainer
+    #define XContainerListener ::com::sun::star::container::XContainerListener
+    #define ContainerEvent ::com::sun::star::container::ContainerEvent
+    #define XIndexContainer ::com::sun::star::container::XIndexContainer
+    #define XIndexAccess ::com::sun::star::container::XIndexAccess
+    #define XElementAccess ::com::sun::star::container::XElementAccess
+    #define XEnumeration ::com::sun::star::container::XEnumeration
+    #define XEnumerationAccess ::com::sun::star::container::XEnumerationAccess
+    #define XContainer ::com::sun::star::container::XContainer
 
-#define XRowSet ::com::sun::star::sdbc::XRowSet
-#define XResultSet ::com::sun::star::sdbc::XResultSet
-#define ResultSetType ::com::sun::star::sdbc::ResultSetType
+    #define XRowSet ::com::sun::star::sdbc::XRowSet
+    #define XResultSet ::com::sun::star::sdbc::XResultSet
+    #define ResultSetType ::com::sun::star::sdbc::ResultSetType
 
-#define XUpdateListener ::com::sun::star::form::XUpdateListener
-#define XGridPeer ::com::sun::star::form::XGridPeer
-#define XFormComponent ::com::sun::star::form::XFormComponent
-#define XGridFieldDataSupplier ::com::sun::star::form::XGridFieldDataSupplier
-#define XBoundComponent ::com::sun::star::form::XBoundComponent
-#define XGrid ::com::sun::star::form::XGrid
-#define FormComponentType ::com::sun::star::form::FormComponentType
-#define XReset ::com::sun::star::form::XReset
-#define XResetListener ::com::sun::star::form::XResetListener
-#define XLoadable ::com::sun::star::form::XLoadable
+    #define XUpdateListener ::com::sun::star::form::XUpdateListener
+    #define XGridPeer ::com::sun::star::form::XGridPeer
+    #define XFormComponent ::com::sun::star::form::XFormComponent
+    #define XGridFieldDataSupplier ::com::sun::star::form::XGridFieldDataSupplier
+    #define XBoundComponent ::com::sun::star::form::XBoundComponent
+    #define XGrid ::com::sun::star::form::XGrid
+    #define FormComponentType ::com::sun::star::form::FormComponentType
+    #define XReset ::com::sun::star::form::XReset
+    #define XResetListener ::com::sun::star::form::XResetListener
+    #define XLoadable ::com::sun::star::form::XLoadable
+    #define XColumnsSupplier ::com::sun::star::sdbcx::XColumnsSupplier
+#else
+    using ::com::sun::star::sdbcx::XColumnsSupplier;
 #endif
+
 
 //------------------------------------------------------------------
 ::com::sun::star::awt::FontDescriptor ImplCreateFontDescriptor( const Font& rFont )
@@ -1841,8 +1848,14 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeExcep
     ::cppu::extractInterface(xNewColumn, evt.Element);
     ::cppu::extractInterface(xOldColumn, evt.ReplacedElement);
 
+    sal_Bool bWasEditing = pGrid->IsEditing();
+    if (bWasEditing)
+        pGrid->DeactivateCell();
+
     pGrid->RemoveColumn(pGrid->GetColumnIdFromModelPos((sal_uInt16)::comphelper::getINT32(evt.Accessor)));
+
     removeColumnListeners(xOldColumn);
+    addColumnListeners(xNewColumn);
 
     String aName = ::comphelper::getString(xNewColumn->getPropertyValue(FM_PROP_LABEL));
     Any aWidth = xNewColumn->getPropertyValue(FM_PROP_WIDTH);
@@ -1854,9 +1867,25 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeExcep
 
     // set the model of the new column
     DbGridColumn* pCol = pGrid->GetColumns().GetObject(nNewPos);
-    pCol->setModel(xNewColumn);
 
-    addColumnListeners(xNewColumn);
+    // for initializong this grid column, we need the fields of the grid's data source
+    Reference< XColumnsSupplier > xSuppColumns;
+    CursorWrapper* pGridDataSource = pGrid->getDataSource();
+    if ( pGridDataSource )
+        xSuppColumns = xSuppColumns.query( (Reference< XInterface >)( *pGridDataSource ) );
+    Reference< XNameAccess > xColumnsByName;
+    if ( xSuppColumns.is() )
+        xColumnsByName = xSuppColumns->getColumns();
+    Reference< XIndexAccess > xColumnsByIndex( xColumnsByName, UNO_QUERY );
+
+    if ( xColumnsByIndex.is() )
+        pGrid->InitColumnByField( pCol, xNewColumn, xColumnsByName, xColumnsByIndex );
+    else
+        // the simple version, applies when the grid is not yet connected to a data source
+        pCol->setModel(xNewColumn);
+
+    if (bWasEditing)
+        pGrid->ActivateCell();
 }
 
 //------------------------------------------------------------------------------
