@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:08:38 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 23:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,17 @@ SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode aChar,
     Face.SetAlign(ALIGN_BASELINE);
 
     Character   = aChar;
-    if (RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet())
-        Character |= 0xF000;
+//! according to HDU this should not be used anymore now
+//! since this was necessary in the early days but should
+//! not be done now since this is handled now at a more
+//! bottom layer by HDU.
+//! He can still imagine scenarios where this will be wrong
+//! now though, for example when importing *some* old documents.
+//! But overall it should be a large improvement, and
+//! likely everything will still work... #_- (eyes shut and "go"!)
+//
+//    if (RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet())
+//        Character |= 0xF000;
     aSetName    = rSet;
     bPredefined = bIsPredefined;
     bDocSymbol  = FALSE;
