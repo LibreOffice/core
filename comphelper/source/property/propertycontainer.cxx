@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 13:32:35 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 06:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,17 @@ void OPropertyContainer::registerPropertyNoMember(const ::rtl::OUString& _rName,
 //--------------------------------------------------------------------------
 void OPropertyContainer::implPushBackProperty(const PropertyDescription& _rProp)
 {
+#ifdef DBG_UTIL
+    for (   const PropertyDescription* pCheckConflicts = m_aProperties.begin();
+            pCheckConflicts != m_aProperties.end();
+            ++pCheckConflicts
+        )
+    {
+        OSL_ENSURE(pCheckConflicts->sName != _rProp.sName, "OPropertyContainer::implPushBackProperty: name already exists!");
+        OSL_ENSURE(pCheckConflicts->nHandle != _rProp.nHandle, "OPropertyContainer::implPushBackProperty: name already exists!");
+    }
+#endif
+
     // need one more element
     sal_Int32 nOldLen = m_aProperties.size();
     m_aProperties.resize(nOldLen + 1);
@@ -448,6 +459,9 @@ void OPropertyContainer::describeProperties(Sequence< Property >& _rProps) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/03/22 13:32:35  jl
+ *  OSL_ENSHURE replaced by OSL_ENSHURE
+ *
  *  Revision 1.5  2000/11/29 08:18:43  fs
  *  arghhh ... build the correct attributes in registerMayBeVoidProperty now (hopefully ...)
  *
