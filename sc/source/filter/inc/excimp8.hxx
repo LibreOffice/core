@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:42:47 $
+ *  last change: $Author: dr $ $Date: 2001-04-24 14:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,10 +821,6 @@ enum XclImpWebQueryMode         { xiwqUnknown, xiwqDoc, xiwqAllTables, xiwqSpecT
 
 class XclImpWebQuery
 {
-private:
-    static void                 EraseQuotes( String& rToken );
-    static void                 AppendToken( String& rTokenList, const String& rToken, sal_Unicode cSep );
-
 public:
     String                      aFilename;
     String                      aTables;
