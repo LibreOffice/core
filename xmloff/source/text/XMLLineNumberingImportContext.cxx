@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLLineNumberingImportContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
+ *  last change: $Author: dvo $ $Date: 2001-05-30 10:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,9 +306,13 @@ void XMLLineNumberingImportContext::CreateAndInsert(
         {
             Any aAny;
 
-            // TODO: check if style name exists
-            aAny <<= sStyleName;
-            xLineNumbering->setPropertyValue(sCharStyleName, aAny);
+            // set style name (if it exists)
+            if ( GetImport().GetStyles()->FindStyleChildContext(
+                            XML_STYLE_FAMILY_TEXT_TEXT, sStyleName ) != NULL )
+            {
+                aAny <<= sStyleName;
+                xLineNumbering->setPropertyValue(sCharStyleName, aAny);
+            }
 
             aAny <<= sSeparator;
             xLineNumbering->setPropertyValue(sSeparatorText, aAny);
