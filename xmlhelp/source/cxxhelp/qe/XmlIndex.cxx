@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlIndex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-19 13:41:05 $
+ *  last change: $Author: abi $ $Date: 2001-06-22 10:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,9 @@
 #ifndef _XMLSEARCH_UTIL_DECOMPRESSOR_HXX_
 #include <util/Decompressor.hxx>
 #endif
-
+#ifndef _XMLSEARCH_QE_QUERY_HXX_
+#include <qe/Query.hxx>
+#endif
 
 using namespace xmlsearch;
 using namespace xmlsearch::excep;
@@ -222,18 +224,75 @@ XmlIndex::XmlIndex( const rtl::OUString& indexDir )
         }
     }
 
-    // Hard coding linknames ( object serialization is hard to undo )
+    // reading linknames
     {
+        util::RandomAccessStream* in =
+            indexAccessor_.getStream( rtl::OUString::createFromAscii( "LINKNAMES" ),
+                                      rtl::OUString::createFromAscii( "r" ) );
+        if( ! in )
+        {
+            delete[] allLists_;
+            delete[] contextsData_;
+            delete[] positions_;
+            delete positionsFile_;
+            throw IOException(
+                rtl::OUString::createFromAscii( "BtreeDict::BtreeDict -> no LINKNAMES/linknames" ) );
+        }
+
+        sal_Int32 len = in->length();
+        char* bff = new char[ 1 + len ], *bff1 = new char[ 1 + len ];
+        bff[ len ] = 0;
+        in->readBytes( reinterpret_cast<sal_Int8*>( bff ),len );
+        delete in;
+
+        // Now the buffer must be densified.
+        int i,len1 = 0;
+        for( i = 0; i < len; ++i )
+        {
+            if( bff[i] )
+                bff1[ len1++ ] = bff[i];
+        }
+        bff1[len] = 0;
+        delete[] bff;
+        rtl::OString aStr( bff1 );  // build a string from the densified buffer;
+        delete[] bff1;
+
+        // Now determine the order
+        rtl::OString LN[8];
+        LN[0] = "text:span";
+        LN[1] = "help:help-text";
+        LN[2] = "help:to-be-embedded";
+        LN[3] = "headingheading";
+        LN[4] = "office:body";
+        LN[5] = "text:p";
+        LN[6] = "office:document";
+        LN[7] = "help:link";
+
+        int idx[8];
+        idx[0] = aStr.indexOf( LN[0] );
+        idx[1] = aStr.indexOf( LN[1] );
+        idx[2] = aStr.indexOf( LN[2] );
+        idx[3] = aStr.indexOf( LN[3] );
+        idx[4] = aStr.indexOf( LN[4] );
+        idx[5] = aStr.indexOf( LN[5] );
+        idx[6] = aStr.indexOf( LN[6] );
+        idx[7] = aStr.indexOf( LN[7] );
+
         linkNames_ = new rtl::OUString[ linkNamesL_ = 8 ];
-        linkNames_[0] = rtl::OUString::createFromAscii( "help:link" );
-        linkNames_[1] = rtl::OUString::createFromAscii( "help:help-text" );
-        linkNames_[2] = rtl::OUString::createFromAscii( "text:p" );
-        linkNames_[3] = rtl::OUString::createFromAscii( "text:span" );
-        linkNames_[4] = rtl::OUString::createFromAscii( "headingheading" );
-        linkNames_[5] = rtl::OUString::createFromAscii( "office:body" );
-        linkNames_[6] = rtl::OUString::createFromAscii( "help:to-be-embedded" );
-        linkNames_[7] = rtl::OUString::createFromAscii( "office:document" );
-    }
+
+        for( i = 0; i < 8; ++i )
+        {
+            int first;
+            int Place = 100000;
+            for( int j = 0; j < 8; ++j )
+            {
+                if( idx[j] < Place )
+                    Place = idx[ first = j];
+            }
+            idx[first] = 100000;
+            linkNames_[i] = rtl::OUString( LN[first].getStr(),LN[first].getLength(),RTL_TEXTENCODING_UTF8 );
+        }
+    }  // end linknames
 
 
     {
@@ -359,10 +418,6 @@ void XmlIndex::readMicroindexes( sal_Int32 docNo ) throw( xmlsearch::excep::IOEx
     positionsFile_->readBytes( positions_,upTo - currentBatchOffset_ );
 }
 
-
-#ifndef _XMLSEARCH_QE_QUERY_HXX_
-#include <qe/Query.hxx>
-#endif
 
 QueryHitData* XmlIndex::hitToData( QueryHit* hit )
 {

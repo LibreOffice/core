@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContextTables.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-19 13:41:05 $
+ *  last change: $Author: abi $ $Date: 2001-06-22 10:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,18 +68,6 @@
 using namespace xmlsearch;
 using namespace xmlsearch::qe;
 
-
-
-//  Tables::Tables(int[] initialWords,
-//             int[] dests,
-//             int[] linkTypes,
-//             int[] seqNumbers)
-//  {
-//    _
-//    _destsCached = dests;
-//    _linkTypesCached = linkTypes;
-//    _seqNumbersCached = seqNumbers;
-//  }
 
 
 Tables::Tables( ContextTables* p )
@@ -168,8 +156,8 @@ ContextTables::~ContextTables()
     delete[] dests_;
     delete[] initialWords_;
 
-    for( sal_uInt32 i = 0; i < cache_.size(); ++i );
-    // delete cache_[i];
+    for( sal_uInt32 i = 0; i < cache_.size(); ++i )
+        delete cache_[i];
 }
 
 
