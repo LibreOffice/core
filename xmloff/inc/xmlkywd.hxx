@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.168 $
+ *  $Revision: 1.169 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:25:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,6 @@ XML_CONSTASCII_ACTION( sXML_namespace_form, "form" );
 XML_CONSTASCII_ACTION( sXML_url_form, "http://openoffice.org/2000/form" );
 XML_CONSTASCII_ACTION( sXML_namespace_script, "script" );
 XML_CONSTASCII_ACTION( sXML_url_script, "http://openoffice.org/2000/script" );
-
 
 XML_CONSTASCII_ACTION( sXML_np_block_list, "block-list");
 XML_CONSTASCII_ACTION( sXML_n_block_list, "http://openoffice.org/2001/block-list" );
