@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreparedStatement.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 07:19:56 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,13 +99,15 @@ namespace connectivity
         static jclass theClass;
         // der Destruktor um den Object-Counter zu aktualisieren
         static void saveClassRef( jclass pClass );
+
+        virtual void createStatement();
         virtual ~java_sql_PreparedStatement();
     public:
         DECLARE_SERVICE_INFO();
         static jclass getMyClass();
 
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_PreparedStatement( JNIEnv * pEnv, jobject myObj,java_sql_Connection* _pCon,const ::rtl::OUString& sql );
+        java_sql_PreparedStatement( JNIEnv * pEnv, java_sql_Connection* _pCon,const ::rtl::OUString& sql );
 
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL acquire() throw();
