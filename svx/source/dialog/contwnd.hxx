@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contwnd.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:07 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _CONTWND_HXX
 #define _CONTWND_HXX
 
-#ifndef _SV_POLY_HXX //autogen
-#include <vcl/poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 
 #ifndef _GRAPHCTL_HXX
