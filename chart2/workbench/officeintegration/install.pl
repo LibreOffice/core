@@ -34,7 +34,7 @@ if( $OSNAME eq "MSWin32" ) {
 
     $SVERSION = "$ENV{HOME}/.sversionrc";
     $PATHSEP = "/";
-    $LIBPATTERN = "lib/lib*li.so";
+    $LIBPATTERN = "lib/lib*.so";
     $COPYCMD = "cp";
 }
 
