@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:44:11 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
                                         static_cast<XWeak*>(this),
                                         makeAny(m_aSQLIterator.getWarning()));
 
-        if ( m_aSQLIterator.getSelectColumns()->empty() )
+        if ( (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT || m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT_COUNT) && m_aSQLIterator.getSelectColumns()->empty() )
             throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. It contains no valid column names."),
                                         static_cast<XWeak*>(this),
                                         makeAny(m_aSQLIterator.getWarning()));
