@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_TitleRotation.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: iha $ $Date: 2003-11-08 23:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ private:
     const SfxItemSet&   rOutAttrs;
 
 //  DECL_LINK(CheckButtonHdl, Button*);
-    BOOL bTextCanOverlap;
+//  BOOL bTextCanOverlap;
 public:
     SchAlignmentTabPage(Window* pParent, const SfxItemSet& rInAttrs);
     virtual ~SchAlignmentTabPage();
@@ -134,7 +134,7 @@ public:
     virtual void Reset(const SfxItemSet& rInAttrs);
 
 //  void SetOrderMode(OrderMode eMode);
-    void SetTextCanOverlap(BOOL b){bTextCanOverlap=b;}
+//  void SetTextCanOverlap(BOOL b){bTextCanOverlap=b;}
 };
 
 //.............................................................................
