@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:27:27 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,7 +571,7 @@ USHORT SwFEShell::GetPageOffset() const
 |*
 *************************************************************************/
 
-void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt,
+void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
                              const BOOL bBefore, const USHORT nId,
                              const String& rCharacterStyle,
                              const BOOL bCpyBrd )
@@ -631,7 +631,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt,
                          !pDrawObj->ISA(SwFlyDrawObj) )
                     {
                         SwFlyFrmFmt *pFmt =
-                            GetDoc()->InsertDrawLabel( rTxt, nId, *pDrawObj );
+                            GetDoc()->InsertDrawLabel( rTxt, rSeparator, nId, rCharacterStyle, *pDrawObj );
                         if( !pFlyFmt )
                             pFlyFmt = pFmt;
                     }
@@ -647,7 +647,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt,
         }
 
         if( nIdx )
-            pFlyFmt = GetDoc()->InsertLabel( eType, rTxt, bBefore, nId,
+            pFlyFmt = GetDoc()->InsertLabel( eType, rTxt, rSeparator, bBefore, nId,
                                              nIdx, rCharacterStyle, bCpyBrd );
 
         SwFlyFrm* pFrm;
