@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 07:41:14 $
+ *  last change: $Author: oj $ $Date: 2001-08-10 11:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ void ODbaseTable::construct()
     m_aHeader.db_kopf   = 0;
     m_aHeader.db_slng   = 0;
 
-    String sFileName(getEntry());
+    String sFileName(getEntry(m_pConnection,m_Name));
 
     INetURLObject aURL;
     aURL.SetURL(sFileName);
@@ -456,16 +456,16 @@ BOOL ODbaseTable::ReadMemoHeader()
     return TRUE;
 }
 // -------------------------------------------------------------------------
-String ODbaseTable::getEntry()
+String ODbaseTable::getEntry(OConnection* _pConnection,const ::rtl::OUString& _sName )
 {
     ::rtl::OUString aURL;
     try
     {
-        Reference< XResultSet > xDir = m_pConnection->getDir()->getStaticResultSet();
+        Reference< XResultSet > xDir = _pConnection->getDir()->getStaticResultSet();
         Reference< XRow> xRow(xDir,UNO_QUERY);
         ::rtl::OUString sName;
         ::rtl::OUString sExt;
-        ::rtl::OUString sNeededExt(m_pConnection->getExtension());
+        ::rtl::OUString sNeededExt(_pConnection->getExtension());
         sal_Int32 nExtLen = sNeededExt.getLength();
         sal_Int32 nExtLenWithSep = nExtLen + 1;
         xDir->beforeFirst();
@@ -478,7 +478,7 @@ String ODbaseTable::getEntry()
             sName = sName.copy(0, sName.getLength() - nExtLenWithSep);
 
             // name and extension have to coincide
-            if ((sName == m_Name) && (sExt == sNeededExt))
+            if ((sName == _sName) && (sExt == sNeededExt))
             {
                 Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
                 aURL = xContentAccess->queryContentIdentifierString();
@@ -515,7 +515,7 @@ void ODbaseTable::refreshIndexes()
     if(m_pFileStream && (!m_pIndexes || m_pIndexes->getCount() == 0))
     {
         INetURLObject aURL;
-        aURL.SetURL(getEntry());
+        aURL.SetURL(getEntry(m_pConnection,m_Name));
 
         aURL.setExtension(String::CreateFromAscii("inf"));
         Config aInfFile(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
@@ -806,7 +806,7 @@ BOOL ODbaseTable::CreateImpl()
 
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
-    String aName = getEntry();
+    String aName = getEntry(m_pConnection,m_Name);
     if(!aName.Len())
     {
         ::rtl::OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
@@ -1116,18 +1116,16 @@ BOOL ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
     return TRUE;
 }
 //------------------------------------------------------------------
-BOOL ODbaseTable::DropImpl()
+BOOL ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFields,OCollection* _pIndexes )
 {
-    FileClose();
-
     INetURLObject aURL;
-    aURL.SetURL(getEntry());
+    aURL.SetURL(_sUrl);
 
     BOOL bDropped = FALSE;
 
     if(bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE)))
     {
-        if (HasMemoFields())
+        if (_bHasMemoFields)
         {  // delete the memo fields
             aURL.setExtension(String::CreateFromAscii("dbt"));
             bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
@@ -1135,15 +1133,13 @@ BOOL ODbaseTable::DropImpl()
 
         if(bDropped)
         {
-            // now delete all indices
-            refreshIndexes(); // look for indexes which must be deleted as well
-            if(m_pIndexes)
+            if(_pIndexes)
             {
-                sal_Int32 nCount = m_pIndexes->getCount(),
+                sal_Int32 nCount = _pIndexes->getCount(),
                        i      = 0;
                 while (i < nCount)
                 {
-                    m_pIndexes->dropByIndex(i);
+                    _pIndexes->dropByIndex(i);
                 }
             }
             //  aFile.SetBase(m_Name);
@@ -1162,6 +1158,16 @@ BOOL ODbaseTable::DropImpl()
             }
         }
     }
+    return bDropped;
+}
+// -----------------------------------------------------------------------------
+BOOL ODbaseTable::DropImpl()
+{
+    FileClose();
+
+    refreshIndexes(); // look for indexes which must be deleted as well
+
+    BOOL bDropped = Drop_Static(getEntry(m_pConnection,m_Name),HasMemoFields(),m_pIndexes);
     if(!bDropped)
     {// we couldn't drop the table so we have to reopen it
         construct();
@@ -1706,7 +1712,7 @@ void SAL_CALL ODbaseTable::rename( const ::rtl::OUString& newName ) throw(::com:
 
 
     FileClose();
-    String aName = getEntry();
+    String aName = getEntry(m_pConnection,m_Name);
     if(!aName.Len())
     {
         ::rtl::OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
@@ -1948,9 +1954,10 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
 // -----------------------------------------------------------------------------
 void ODbaseTable::throwInvalidDbaseFormat()
 {
+    FileClose();
     // no dbase file
     ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The file '");
-    sMessage += getEntry();
+    sMessage += getEntry(m_pConnection,m_Name);
     sMessage += ::rtl::OUString::createFromAscii(" is an invalid (or unrecognized) dBase file.");
     throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 07:59:15 $
+ *  last change: $Author: oj $ $Date: 2001-08-10 11:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ namespace connectivity
 
             BOOL    DropImpl();
             BOOL    CreateImpl();
-            String  getEntry();
+
 
             virtual BOOL InsertRow(OValueVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual BOOL DeleteRow(const OSQLColumns& _rCols);
@@ -207,6 +207,9 @@ namespace connectivity
 
             virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor);
             virtual void dropColumn(sal_Int32 _nPos);
+
+            static String   getEntry(file::OConnection* _pConnection,const ::rtl::OUString& _sURL );
+            static BOOL     Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFields,sdbcx::OCollection* _pIndexes );
         };
     }
 }

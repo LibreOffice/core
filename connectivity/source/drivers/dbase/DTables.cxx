@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-30 10:44:15 $
+ *  last change: $Author: oj $ $Date: 2001-08-10 11:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,21 @@ void SAL_CALL ODbaseTables::dropByName( const ::rtl::OUString& elementName ) thr
     if( aIter == m_aNameMap.end())
         throw NoSuchElementException(elementName,*this);
 
-    if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
-        aIter->second = createObject(elementName);
+    if(!aIter->second.is())
+    {// we want to drop a object which isn't loaded yet so we must load it
+        try
+        {
+            aIter->second = createObject(elementName);
+        }
+        catch(const Exception&)
+        {
+            if(ODbaseTable::Drop_Static(ODbaseTable::getEntry(static_cast<OFileCatalog&>(m_rParent).getConnection(),elementName),sal_False,NULL))
+            {
+                ODbaseTables_BASE_BASE::dropByName(elementName);
+                return;
+            }
+        }
+    }
 
     Reference< XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
     if(xTunnel.is())
