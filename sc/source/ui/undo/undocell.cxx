@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undocell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:51:30 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,7 +902,7 @@ void __EXPORT ScUndoNote::Undo()
         DoSdrUndoAction(pDrawUndo);
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScPostIt aNote;
+    ScPostIt aNote(pDoc);
     pDoc->GetNote( aPos.Col(), aPos.Row(), aPos.Tab(), aNote );
     aNote.SetShown( !bIsShow );
     pDoc->SetNote( aPos.Col(), aPos.Row(), aPos.Tab(), aNote );
@@ -918,7 +918,7 @@ void __EXPORT ScUndoNote::Redo()
         RedoSdrUndoAction(pDrawUndo);
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScPostIt aNote;
+    ScPostIt aNote(pDoc);
     pDoc->GetNote( aPos.Col(), aPos.Row(), aPos.Tab(), aNote );
     aNote.SetShown( bIsShow );
     pDoc->SetNote( aPos.Col(), aPos.Row(), aPos.Tab(), aNote );
@@ -966,6 +966,18 @@ void __EXPORT ScUndoEditNote::Undo()
 
     ScDocument* pDoc = pDocShell->GetDocument();
     pDoc->SetNote( aPos.Col(), aPos.Row(), aPos.Tab(), aOldNote );
+
+    // This repaint should not be neccessary but it solves a problem
+    // where following a removal of all the text the undo would only
+    // refresh the note to the source cell position.
+    ScRange aDrawRange;
+    aDrawRange.aStart.SetCol(0);
+    aDrawRange.aStart.SetRow(0);
+    aDrawRange.aStart.SetTab(aPos.Tab());
+    aDrawRange.aEnd.SetCol(MAXCOL);
+    aDrawRange.aEnd.SetRow(MAXROW);
+    aDrawRange.aStart.SetTab(aPos.Tab());
+    pDocShell->PostPaint( aDrawRange, PAINT_GRID| PAINT_EXTRAS);
 
     EndUndo();
 }
