@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeparser.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _MyEDITDATA_HXX //autogen
 #include <svx/editdata.hxx>
 #endif
+#ifndef SC_ADDRESS_HXX
+#include <address.hxx>
+#endif
 
 const sal_Char nHorizontal = 1;
 const sal_Char nVertical = 2;
@@ -111,12 +114,12 @@ struct ScEEParseEntry
     String*             pName;          // HTML evtl. Anchor/RangeName
     String              aAltText;       // HTML IMG ALT Text
     ScHTMLImageList*    pImageList;     // Grafiken in dieser Zelle
-    USHORT              nCol;           // relativ zum Beginn des Parse
-    USHORT              nRow;
+    SCCOL               nCol;           // relativ zum Beginn des Parse
+    SCROW               nRow;
     USHORT              nTab;           // HTML TableInTable
     USHORT              nTwips;         // RTF ColAdjust etc.
-    USHORT              nColOverlap;    // merged cells wenn >1
-    USHORT              nRowOverlap;    // merged cells wenn >1
+    SCCOL               nColOverlap;    // merged cells wenn >1
+    SCROW               nRowOverlap;    // merged cells wenn >1
     USHORT              nOffset;        // HTML PixelOffset
     USHORT              nWidth;         // HTML PixelWidth
     BOOL                bHasGraphic;    // HTML any image loaded
@@ -125,14 +128,14 @@ struct ScEEParseEntry
                         ScEEParseEntry( SfxItemPool* pPool ) :
                             aItemSet( *pPool ), pValStr( NULL ),
                             pNumStr( NULL ), pName( NULL ), pImageList( NULL ),
-                            nCol((USHORT)~0), nRow((USHORT)~0), nTab(0),
+                            nCol(SCCOL_MAX), nRow(SCROW_MAX), nTab(0),
                             nColOverlap(1), nRowOverlap(1),
                             nOffset(0), nWidth(0), bHasGraphic(FALSE), bEntirePara(true)
                             {}
                         ScEEParseEntry( const SfxItemSet& rItemSet ) :
                             aItemSet( rItemSet ), pValStr( NULL ),
                             pNumStr( NULL ), pName( NULL ), pImageList( NULL ),
-                            nCol((USHORT)~0), nRow((USHORT)~0), nTab(0),
+                            nCol(SCCOL_MAX), nRow(SCROW_MAX), nTab(0),
                             nColOverlap(1), nRowOverlap(1),
                             nOffset(0), nWidth(0), bHasGraphic(FALSE), bEntirePara(true)
                             {}
@@ -170,10 +173,10 @@ protected:
     ScEEParseEntry*     pActEntry;
     Table*              pColWidths;
     int                 nLastToken;
-    USHORT              nColCnt;
-    USHORT              nRowCnt;
-    USHORT              nColMax;
-    USHORT              nRowMax;
+    SCCOL               nColCnt;
+    SCROW               nRowCnt;
+    SCCOL               nColMax;
+    SCROW               nRowMax;
 
     void                NewActEntry( ScEEParseEntry* );
 
@@ -183,7 +186,7 @@ public:
 
     virtual ULONG       Read( SvStream& ) = 0;
 
-    void                GetDimensions( USHORT& nCols, USHORT& nRows ) const
+    void                GetDimensions( SCCOL& nCols, SCROW& nRows ) const
                             { nCols = nColMax; nRows = nRowMax; }
     ULONG               Count() const   { return pList->Count(); }
     ScEEParseEntry*     First() const   { return pList->First(); }
