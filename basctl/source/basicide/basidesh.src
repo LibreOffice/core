@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: ab $ $Date: 2002-07-30 13:10:20 $
+ *  last change: $Author: kz $ $Date: 2002-08-02 20:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ String RID_STR_SOURCETOBIG
     Text [ English ] = "The source is to big and cannot be compiled or stored.\nDelete some comments or move some methods to an other module" ;
     Text [ english_us ] = "The source text is too large and can be neither compiled nor saved.\nDelete some of the comments or transfer some methods into another module." ;
     Text [ swedish ] = "Källtexten är för stor och kan varken sparas eller kompileras.\nRadera några kommentarer eller överför några metoder till en annan modul." ;
-    Text [ danish ] = "Kildeteksten er for stor og kan hverken gemmes eller kompileres.\nSlet nogle kommentarer eller overfør nogle metoder til et andet modul." ;
+    Text [ danish ] = "Kildeteksten er for stor og kan hverken gemmes eller kompileres.\nSlet nogle kommentarer, eller overfør nogle metoder til et andet modul." ;
     Text [ italian ] = "Il testo sorgente è troppo grande e non può essere né compilato né salvato\nCancellate alcuni commenti o  trasferite alcuni metodi in un altro modulo." ;
     Text [ spanish ] = "El texto fuente es demasiado grande por lo que no se puede guardar o compilar.\nElimine algunos comentarios o transfiera algunos métodos a otro módulo." ;
     Text [ french ] = "Le texte source est trop long : enregistrement et compilation impossibles.\nSupprimez des commentaires ou transférez des méthodes dans un autre module." ;
@@ -250,7 +250,7 @@ String RID_STR_ERROROPENSTORAGE
     Text [ french ] = "Erreur lors de l'ouverture du fichier" ;
     Text [ dutch ] = "Fout bij het openen van het bestand." ;
     Text [ swedish ] = "Fel när filen öppnades" ;
-    Text [ danish ] = "Fejl ved åbning af fil" ;
+    Text [ danish ] = "Fejl ved åbning af filen" ;
     Text [ portuguese_brazilian ] = "Fehler beim ?ffnen der Datei" ;
     Text [ portuguese ] = "Erro ao abrir o ficheiro." ;
     Text[ chinese_simplified ] = "æ‰“å¼€æ–‡ä»¶æ—¶å‘ç”Ÿé”™è¯¯ã€‚";
@@ -275,7 +275,7 @@ String RID_STR_ERROROPENLIB
     Text [ english_us ] = "Error loading library" ;
     Text [ portuguese_brazilian ] = "Fehler beim Laden der Bibliothek" ;
     Text [ swedish ] = "Fel vid laddning av bibliotek" ;
-    Text [ danish ] = "Fejl under indlæsning af biblioteket" ;
+    Text [ danish ] = "Fejl ved indlæsning af biblioteket" ;
     Text [ italian ] = "Errore nel caricare la library" ;
     Text [ spanish ] = "Error al cargar la biblioteca" ;
     Text [ french ] = "Erreur lors du chargement de la bibliothèque" ;
@@ -307,7 +307,7 @@ String RID_STR_NOLIBINSTORAGE
     Text [ french ] = "Le fichier ne contient aucune bibliothèque BASIC" ;
     Text [ dutch ] = "Het bestand bevat geen BASIC-bibliotheken" ;
     Text [ swedish ] = "Filen innehåller inga BASIC-bibliotek" ;
-    Text [ danish ] = "Filen indeholder ingen BASIC-biblioteker" ;
+    Text [ danish ] = "Filen indeholder ikke nogen BASIC-biblioteker" ;
     Text [ portuguese_brazilian ] = "Die Datei enth?lt keine Basic-Bibliotheken" ;
     Text [ portuguese ] = "O ficheiro não contém bibliotecas BASIC." ;
     Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶æ²¡æœ‰ BASIC ç¨‹åºåº“ã€‚";
@@ -337,7 +337,7 @@ String RID_STR_BADSBXNAME
     Text [ french ] = "Nom incorrect" ;
     Text [ dutch ] = "Ongeldige aanduiding" ;
     Text [ spanish ] = "Nombre no válido" ;
-    Text [ danish ] = "Ugyldigt navn" ;
+    Text [ danish ] = "Ugyldigt id" ;
     Text [ swedish ] = "Ogiltigt namn" ;
     Text [ finnish ] = "Virheellinen nimi" ;
     Text [ english_us ] = "Invalid Name" ;
@@ -367,7 +367,7 @@ String RID_STR_LIBNAMETOLONG
     Text[ french ] = "Le nom d'une bibliothèque peut contenir au maximum 30 caractères.";
     Text[ spanish ] = "El nombre de la biblioteca no debe contener más de 30 caracteres.";
     Text[ italian ] = "Il nome della librery può avere una lunghezza massima di 30 caratteri.";
-    Text[ danish ] = "Et biblioteks navn må højst indeholde 30 tegn.";
+    Text[ danish ] = "Navnet på et bibliotek må højst være på 30 tegn.";
     Text[ swedish ] = "Namnet på ett bibliotek får maximalt innehålla 30 tecken.";
     Text[ polish ] = "Nazwa biblioteki mo¿e siê sk³adaæ z maksymalnie 30 znaków.";
     Text[ portuguese_brazilian ] = "The name of a library can only be 30 characters long.";
@@ -394,7 +394,7 @@ String RID_STR_ERRORCHOOSEMACRO
     Text[ spanish ] = "No se puede acceder a las macros de otros documentos.";
     Text[ finnish ] = "Macros from other documents are not accessible.";
     Text[ italian ] = "Impossibile accedere alle macro di altri documenti.";
-    Text[ danish ] = "Macros from other documents are not accessible.";
+    Text[ danish ] = "Makroer fra andre dokumenter er ikke tilgængelige.";
     Text[ swedish ] = "Makron från andra dokument är inte tillgängliga.";
     Text[ polish ] = "Brak dostêpu do makr innych dokumentów.";
     Text[ portuguese_brazilian ] = "Macros from other documents are not accessible.";
@@ -420,7 +420,7 @@ String RID_STR_LIBISREADONLY
     Text[ spanish ] = "Esta biblioteca es de sólo lectura.";
     Text[ finnish ] = "This library is readonly.";
     Text[ italian ] = "La library è di sola lettura";
-    Text[ danish ] = "This library is readonly.";
+    Text[ danish ] = "Dette bibliotek er skrivebeskyttet.";
     Text[ swedish ] = "Det här biblioteket är skrivskyddat.";
     Text[ polish ] = "This library is readonly.";
     Text[ portuguese_brazilian ] = "This library is readonly.";
@@ -430,7 +430,7 @@ String RID_STR_LIBISREADONLY
     Text[ chinese_traditional ] = "ç¨‹å¼é¡æ˜¯å”¯è®€çš„ã€‚";
     Text[ turkish ] = "This library is readonly.";
     Text[ arabic ] = "This library is readonly.";
-    Text[ catalan ] = "This library is readonly.";
+    Text[ catalan ] = "Aquesta llibreria és de només lectura.";
     Text[ thai ] = "à¹„à¸¥à¸šà¸£à¸²à¸£à¸µà¹ˆà¸™à¸µà¹‰à¹€à¸›à¹‡à¸™à¸Šà¸™à¸´à¸”à¸­à¹ˆà¸²à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";
 };
 String RID_STR_REPLACELIB
@@ -446,7 +446,7 @@ String RID_STR_REPLACELIB
     Text[ spanish ] = "'XX' no se puede sustituir.";
     Text[ finnish ] = "'XX' can't be replaced.";
     Text[ italian ] = "Non è possibile sostituire \"XX\".";
-    Text[ danish ] = "'XX' can't be replaced.";
+    Text[ danish ] = "'XX' kan ikke erstattes.";
     Text[ swedish ] = "Det går inte att ersätta 'XX'.";
     Text[ polish ] = "'XX' can't be replaced.";
     Text[ portuguese_brazilian ] = "'XX' can't be replaced.";
@@ -456,7 +456,7 @@ String RID_STR_REPLACELIB
     Text[ chinese_traditional ] = "ç„¡æ³•ä»£æ›¿ XX ã€‚";
     Text[ turkish ] = "'XX' can't be replaced.";
     Text[ arabic ] = "'XX' can't be replaced.";
-    Text[ catalan ] = "'XX' can't be replaced.";
+    Text[ catalan ] = "No es pot reemplaçar 'XX'.";
     Text[ thai ] = "'XX' cannot be replaced.";
 };
 String RID_STR_IMPORTNOTPOSSIBLE
@@ -472,7 +472,7 @@ String RID_STR_IMPORTNOTPOSSIBLE
     Text[ spanish ] = "No se puede añadir 'XX'.";
     Text[ finnish ] = "Import of 'XX' not possible.";
     Text[ italian ] = "Non è possibile importare 'XX'.";
-    Text[ danish ] = "Import of 'XX' not possible.";
+    Text[ danish ] = "Tilføjelse af 'XX' ikke mulig.";
     Text[ swedish ] = "Det är inte möjligt att lägga till 'XX'.";
     Text[ polish ] = "Import of 'XX' not possible.";
     Text[ portuguese_brazilian ] = "Import of 'XX' not possible.";
@@ -482,7 +482,7 @@ String RID_STR_IMPORTNOTPOSSIBLE
     Text[ chinese_traditional ] = "ç„¡æ³•æ–°å¢ XX ã€‚";
     Text[ turkish ] = "Import of 'XX' not possible.";
     Text[ arabic ] = "Import of 'XX' not possible.";
-    Text[ catalan ] = "Import of 'XX' not possible.";
+    Text[ catalan ] = "No es pot importar 'XX'.";
     Text[ thai ] = "'XX' cannot be added.";
 };
 String RID_STR_NOIMPORT
@@ -498,7 +498,7 @@ String RID_STR_NOIMPORT
     Text[ spanish ] = "'XX' no se añadió.";
     Text[ finnish ] = "'XX' was not imported.";
     Text[ italian ] = "'XX' non è stato importato.";
-    Text[ danish ] = "'XX' was not imported.";
+    Text[ danish ] = "'XX' blev ikke tilføjet.";
     Text[ swedish ] = "'XX' har inte lagts till.";
     Text[ polish ] = "'XX' was not imported.";
     Text[ portuguese_brazilian ] = "'XX' was not imported.";
@@ -508,7 +508,7 @@ String RID_STR_NOIMPORT
     Text[ chinese_traditional ] = "æ²’æœ‰å¢åŠ  'XX' ã€‚";
     Text[ turkish ] = "'XX' was not imported.";
     Text[ arabic ] = "'XX' was not imported.";
-    Text[ catalan ] = "'XX' was not imported.";
+    Text[ catalan ] = "No s'ha importat 'XX'.";
     Text[ thai ] = "'XX' was not added.";
 };
 String RID_STR_ENTERPASSWORD
@@ -524,7 +524,7 @@ String RID_STR_ENTERPASSWORD
     Text[ spanish ] = "Introducir contraseña para 'XX'";
     Text[ finnish ] = "Enter password for 'XX'";
     Text[ italian ] = "Digita password per 'XX'";
-    Text[ danish ] = "Enter password for 'XX'";
+    Text[ danish ] = "Indtast adgangskode for 'XX'";
     Text[ swedish ] = "Ange lösenord för 'XX'";
     Text[ polish ] = "Enter password for 'XX'";
     Text[ portuguese_brazilian ] = "Enter password for 'XX'";
@@ -534,7 +534,7 @@ String RID_STR_ENTERPASSWORD
     Text[ chinese_traditional ] = "ç‚º 'XX' éµå…¥å¯†ç¢¼";
     Text[ turkish ] = "Enter password for 'XX'";
     Text[ arabic ] = "Enter password for 'XX'";
-    Text[ catalan ] = "Enter password for 'XX'";
+    Text[ catalan ] = "Introduïu la contrasenya per 'XX'";
     Text[ thai ] = "Enter password for 'XX'";
 };
 String RID_STR_SBXNAMEALLREADYUSED
@@ -548,7 +548,7 @@ String RID_STR_SBXNAMEALLREADYUSED
     Text [ french ] = "Ce nom existe déjà" ;
     Text [ dutch ] = "Naam bestaat reeds" ;
     Text [ spanish ] = "El nombre ya existe" ;
-    Text [ danish ] = "Dette navn findes allerede" ;
+    Text [ danish ] = "Navnet er allerede valgt" ;
     Text [ swedish ] = "Namnet finns redan" ;
     Text [ finnish ] = "Nimi on jo olemassa" ;
     Text [ english_us ] = "Name already exists" ;
@@ -603,7 +603,7 @@ String RID_STR_FILEEXISTS
     Text [ english_us ] = "The 'XX' file already exists" ;
     Text [ portuguese_brazilian ] = "Die Datei ''XX'' existiert schon" ;
     Text [ swedish ] = "Filen 'XX' existerar redan" ;
-    Text [ danish ] = "Filen ''XX'' eksisterer allerede" ;
+    Text [ danish ] = "Filen 'XX' findes allerede" ;
     Text [ italian ] = "Il file 'XX' esiste già" ;
     Text [ spanish ] = "El archivo 'XX' ya existe" ;
     Text [ french ] = "Le fichier 'XX' existe déjà." ;
@@ -663,7 +663,7 @@ String RID_STR_RUNTIMEERROR
     Text [ portuguese_brazilian ] = "Erro-Execu??o: #" ;
     Text [ portuguese ] = "Erro de execução: #" ;
     Text [ finnish ] = "Suoritusvirhe: #" ;
-    Text [ danish ] = "Runtimefejl: #" ;
+    Text [ danish ] = "Kørselsfejl: #" ;
     Text [ french ] = "Runtime error : #" ;
     Text [ swedish ] = "Runtimefel: #" ;
     Text [ dutch ] = "Runtime error: #" ;
@@ -692,7 +692,7 @@ String RID_STR_SEARCHNOTFOUND
     Text [ portuguese_brazilian ] = "Search pattern not found" ;
     Text [ portuguese ] = "Impossível encontrar expressão procurada." ;
     Text [ finnish ] = "Hakuavainta ei löytynyt" ;
-    Text [ danish ] = "Søgningen gav intet resultat" ;
+    Text [ danish ] = "Søgeordet ikke fundet" ;
     Text [ french ] = "Terme recherché introuvable !" ;
     Text [ swedish ] = "Sökord hittades inte" ;
     Text [ dutch ] = "Zoekbegrip niet gevonden" ;
@@ -723,7 +723,7 @@ String RID_STR_SEARCHFROMSTART
     Text [ french ] = "La recherche a été effectuée jusqu'au dernier module. Voulez-vous poursuivre la recherche à partir du premier module ?" ;
     Text [ dutch ] = "Er werd tot aan de laatste module gezocht. Wilt u het zoeken voortzetten vanaf de eerste module?" ;
     Text [ swedish ] = "Sökning genomförd till sista modulen. Ska sökningen fortsätta i första modulen?" ;
-    Text [ danish ] = "Der blev søgt til sidste modul. Vil du fortsætte søgningen ved første modul?" ;
+    Text [ danish ] = "Søgningen har nået sidste modul. Ønsker du at fortsætte søgningen ved første modul?" ;
     Text [ portuguese_brazilian ] = "Es wurde bis zum letzten Modul gesucht. M?hten Sie die Suche beim ersten Modul fortsetzen?" ;
     Text [ portuguese ] = "Terminada a procura até ao último módulo. Deseja continuar a procura a partir do primeiro?" ;
     Text[ chinese_simplified ] = "å·²ç»æœå¯»è‡³æœ€åä¸€ä¸ªæ¨¡å—ã€‚è¦ä»ç¬¬ä¸€ä¸ªæ¨¡å—å¼€å§‹æœå¯»ï¼Ÿ";
@@ -780,7 +780,7 @@ String RID_STR_COULDNTREAD
     Text [ spanish ] = "No se pudo leer el archivo" ;
     Text [ french ] = "Impossible de lire le fichier !" ;
     Text [ swedish ] = "Det gick inte att läsa filen" ;
-    Text [ danish ] = "Det var ikke muligt at læse filen" ;
+    Text [ danish ] = "Filen kunne ikke læses" ;
     Text [ portuguese_brazilian ] = "Die Datei konnte nicht gelesen werden" ;
     Text [ portuguese ] = "Foi impossível ler o ficheiro." ;
     Text[ chinese_simplified ] = "æ— æ³•è¯»å–æ–‡ä»¶ã€‚";
@@ -808,7 +808,7 @@ String RID_STR_COULDNTWRITE
     Text [ french ] = "Impossible d'enregistrer le fichier !" ;
     Text [ dutch ] = "Het bestand kon niet worden opgeslagen." ;
     Text [ swedish ] = "Det gick inte att spara filen" ;
-    Text [ danish ] = "Det var ikke muligt at gemme filen" ;
+    Text [ danish ] = "Filen kunne ikke gemmes" ;
     Text [ portuguese_brazilian ] = "Die Datei konnte nicht gespeichert werden" ;
     Text [ portuguese ] = "Foi impossível guardar o ficheiro." ;
     Text[ chinese_simplified ] = "æ— æ³•å­˜ç›˜æ–‡ä»¶ã€‚";
@@ -837,7 +837,7 @@ String RID_STR_CANNOTCHANGENAMESTDLIB
     Text [ spanish ] = "No se puede modificar el nombre de la biblioteca predeterminada" ;
     Text [ french ] = "Impossible de modifier le nom de la bibliothèque par défaut !" ;
     Text [ swedish ] = "Det går inte att ändra standardbibliotekets namn" ;
-    Text [ danish ] = "Standardmappens navn kan ikke ændres" ;
+    Text [ danish ] = "Navnet på standardbiblioteket kan ikke ændres" ;
     Text [ portuguese_brazilian ] = "Der Name der Standard-Bibliothek kann nicht ge?ndert werden" ;
     Text [ portuguese ] = "O nome da biblioteca padrão não pode ser alterado." ;
     Text[ chinese_simplified ] = "æ— æ³•æ›´æ”¹æ ‡å‡†ç¨‹åºåº“çš„åç§°ã€‚";
@@ -866,7 +866,7 @@ String RID_STR_CANNOTCHANGENAMEREFLIB
     Text [ spanish ] = "No se puede modificar el nombre de una biblioteca referenciada" ;
     Text [ french ] = "Impossible de modifier le nom d'une bibliothèque référencée !" ;
     Text [ swedish ] = "Det går inte att ändra namnet på ett referensbibliotek" ;
-    Text [ danish ] = "Et referencebiblioteks navn kan ikke ændres" ;
+    Text [ danish ] = "Navnet på et angivet standardbibliotek kan ikke ændres" ;
     Text [ portuguese_brazilian ] = "Der Name einer referenzierten Bibliothek kann nicht ge?ndert werden" ;
     Text [ portuguese ] = "É impossível alterar o nome de uma biblioteca de referência." ;
     Text[ chinese_simplified ] = "æ— æ³•æ›´æ”¹å¼•ç”¨ç¨‹åºåº“çš„åç§°ã€‚";
@@ -894,7 +894,7 @@ String RID_STR_CANNOTUNLOADSTDLIB
     Text [ french ] = "Impossible de désactiver la bibliothèque par défaut !" ;
     Text [ dutch ] = "De standaardbibliotheek kan niet worden gedeactiveerd." ;
     Text [ swedish ] = "Det går inte att deaktivera standardbiblioteket" ;
-    Text [ danish ] = "Standardmappen kan ikke deaktiveres" ;
+    Text [ danish ] = "Standardbiblioteket kan ikke deaktiveres" ;
     Text [ portuguese_brazilian ] = "Die Standard-Bibliothek kann nicht deaktiviert werden" ;
     Text [ portuguese ] = "É impossível desactivar a biblioteca padrão." ;
     Text[ chinese_simplified ] = "æ— æ³•å…³é—­æ ‡å‡†ç¨‹åºåº“";
@@ -922,7 +922,7 @@ String RID_STR_GENERATESOURCE
     Text [ french ] = "Génération du texte source" ;
     Text [ dutch ] = "Brontekst maken" ;
     Text [ swedish ] = "Skapa källtext" ;
-    Text [ danish ] = "Opret kildetekst" ;
+    Text [ danish ] = "Genererer kildetekst" ;
     Text [ portuguese_brazilian ] = "Erzeuge Quelltext" ;
     Text [ portuguese ] = "A criar texto-fonte" ;
     Text[ chinese_simplified ] = "ç”Ÿæˆæºæ–‡æœ¬";
@@ -1008,7 +1008,7 @@ String RID_STR_QUERYDELMACRO
     Text [ french ] = "Voulez-vous supprimer la macro XX ?" ;
     Text [ dutch ] = "Wilt u de macro XX wissen?" ;
     Text [ swedish ] = "Vill du radera makrot XX ?" ;
-    Text [ danish ] = "Vil du slette makroen XX ?" ;
+    Text [ danish ] = "Vil du slette makroen XX?" ;
     Text [ portuguese_brazilian ] = "M?hten Sie das Makro XX l?chen ?" ;
     Text [ portuguese ] = "Deseja eliminar a macro XX ?" ;
     Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤å® XX ï¼Ÿ";
@@ -1037,7 +1037,7 @@ String RID_STR_QUERYDELDIALOG
     Text [ spanish ] = "¿Desea eliminar el diálogo XX?" ;
     Text [ french ] = "Voulez-vous supprimer la boîte de dialogue XX ?" ;
     Text [ swedish ] = "Vill du radera dialogrutan XX?" ;
-    Text [ danish ] = "Vil du slette dialogen XX ?" ;
+    Text [ danish ] = "Vil du slette dialogen XX?" ;
     Text [ portuguese_brazilian ] = "M?hten Sie den Dialog XX l?chen ?" ;
     Text [ portuguese ] = "Deseja eliminar o diálogo XX ?" ;
     Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤å¯¹è¯ XX ï¼Ÿ";
@@ -1066,7 +1066,7 @@ String RID_STR_QUERYDELLIB
     Text [ french ] = "Voulez-vous supprimer la bibliothèque XX ?" ;
     Text [ dutch ] = "Wilt u de bibliotheek XX wissen?" ;
     Text [ swedish ] = "Vill du radera biblioteket XX ?" ;
-    Text [ danish ] = "Vil du slette biblioteket XX ?" ;
+    Text [ danish ] = "Vil du slette biblioteket XX?" ;
     Text [ portuguese_brazilian ] = "M?hten Sie die Bibliothek XX l?chen ?" ;
     Text [ portuguese ] = "Deseja eliminar a biblioteca XX ?" ;
     Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤ç¨‹åºåº“ XX ï¼Ÿ";
@@ -1095,7 +1095,7 @@ String RID_STR_QUERYDELLIBREF
     Text [ french ] = "Voulez-vous supprimer la référence à la bibliothèque XX ?" ;
     Text [ dutch ] = "Wilt u de verwijzing naar de bibliotheek XX wissen?" ;
     Text [ swedish ] = "Vill du radera referensen till biblioteket XX ?" ;
-    Text [ danish ] = "Vil du slette referencen til biblioteket XX ?" ;
+    Text [ danish ] = "Vil du slette referencen til biblioteket XX?" ;
     Text [ portuguese_brazilian ] = "M?hten Sie die Referenz auf die Bibliothek XX l?chen ?" ;
     Text [ portuguese ] = "Deseja eliminar a referência à biblioteca XX ?" ;
     Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤ç¨‹åºåº“ XX çš„å¼•ç”¨ï¼Ÿ";
@@ -1124,7 +1124,7 @@ String RID_STR_QUERYDELMODULE
     Text [ french ] = "Voulez-vous supprimer le module XX ?" ;
     Text [ dutch ] = "Wilt u de module XX wissen?" ;
     Text [ swedish ] = "Vill du radera modulen XX ?" ;
-    Text [ danish ] = "Vil du slette modulet XX ?" ;
+    Text [ danish ] = "Vil du slette modulet XX?" ;
     Text [ portuguese_brazilian ] = "M?hten Sie das Modul XX l?chen ?" ;
     Text [ portuguese ] = "Deseja eliminar o módulo XX ?" ;
     Text[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤æ¨¡å— XX ï¼Ÿ";
@@ -1152,7 +1152,7 @@ String RID_STR_OBJNOTFOUND
     Text [ spanish ] = "No se ha encontrado el objeto o método" ;
     Text [ french ] = "Impossible de détecter l'objet ou méthode !" ;
     Text [ swedish ] = "Objekt eller metod hittades inte" ;
-    Text [ danish ] = "Objekt eller metode blev ikke fundet" ;
+    Text [ danish ] = "Objektet eller metoden blev ikke fundet" ;
     Text [ portuguese_brazilian ] = "Objekt oder Methode nicht gefunden" ;
     Text [ portuguese ] = "Impossível encontrar objecto ou método." ;
     Text[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ°å¯¹è±¡æˆ–æ–¹æ³•ã€‚";
@@ -1209,7 +1209,7 @@ String RID_STR_LINE
     Text [ french ] = "Li" ;
     Text [ dutch ] = "Rg" ;
     Text [ swedish ] = "Ln" ;
-    Text [ danish ] = "Rk" ;
+    Text [ danish ] = "Zl" ;
     Text [ portuguese_brazilian ] = "Zl" ;
     Text [ portuguese ] = "Ln" ;
     Text[ chinese_simplified ] = "è¡Œ";
@@ -1239,7 +1239,7 @@ String RID_STR_COLUMN
     Text [ spanish ] = "Col" ;
     Text [ french ] = "Col" ;
     Text [ swedish ] = "Kol" ;
-    Text [ danish ] = "Kol" ;
+    Text [ danish ] = "Sp" ;
     Text [ portuguese_brazilian ] = "Sp" ;
     Text [ portuguese ] = "Col" ;
     Text[ chinese_simplified ] = "åˆ—";
@@ -1267,7 +1267,7 @@ String RID_STR_DOC
     Text [ french ] = "Document" ;
     Text [ dutch ] = "Document" ;
     Text [ swedish ] = "Dokument" ;
-    Text [ danish ] = "Indlæser dokument " ;
+    Text [ danish ] = "Dokument" ;
     Text [ portuguese_brazilian ] = "Dokument" ;
     Text [ portuguese ] = "Documento" ;
     Text[ chinese_simplified ] = "æ–‡æ¡£";
@@ -1324,7 +1324,7 @@ String RID_STR_CANNOTCLOSE
     Text [ portuguese_brazilian ] = "A janela n?o pode ser fechada enquanto o BASIC estiver rodando" ;
     Text [ portuguese ] = "A janela não pode ser fechada enquanto o \nBASIC estiver a ser executado." ;
     Text [ finnish ] = "Ikkunaa ei voi sulkea, kun BASIC on käynnissä." ;
-    Text [ danish ] = "Vinduet kan ikke lukkes \nmens du kører BASIC." ;
+    Text [ danish ] = "Vinduet kan ikke lukkes,\nmens BASIC-programmet kører." ;
     Text [ french ] = "Impossible de fermer la fenêtre\nlorsque BASIC est en cours d'exécution !" ;
     Text [ swedish ] = "Fönstret kan inte stängas\nnär BASIC-programmet körs." ;
     Text [ dutch ] = "Het venster kan niet worden gesloten \ntijdens het uitvoeren van het BASIC-programma." ;
@@ -1354,7 +1354,7 @@ String RID_STR_REPLACESTDLIB
     Text [ french ] = "Impossible de remplacer la bibliothèque par défaut !" ;
     Text [ dutch ] = "De standaardbibliotheek kan niet worden vervangen." ;
     Text [ swedish ] = "Det går inte att ersätta standardbiblioteket." ;
-    Text [ danish ] = "Standardmappen kan ikke erstattes." ;
+    Text [ danish ] = "Standardbiblioteket kan ikke erstattes." ;
     Text [ portuguese_brazilian ] = "Die Standard-Bibliothek kann nicht ersetzt werden." ;
     Text [ portuguese ] = "É impossível substituir a biblioteca padrão." ;
     Text[ chinese_simplified ] = "æ— æ³•æ›¿æ¢æ ‡å‡†ç¨‹åºåº“ã€‚";
@@ -1384,7 +1384,7 @@ String RID_STR_REFNOTPOSSIBLE
     Text [ spanish ] = "No es posible la referencia a 'XX' ." ;
     Text [ french ] = "Référence à 'XX' impossible." ;
     Text [ swedish ] = "Referens till 'XX' inte möjlig." ;
-    Text [ danish ] = "Reference til 'XX' er ikke mulig." ;
+    Text [ danish ] = "Reference til 'XX' ikke mulig." ;
     Text [ portuguese_brazilian ] = "Referenz auf 'XX' nicht m?lich." ;
     Text [ portuguese ] = "A referência a 'XX' é impossível." ;
     Text[ chinese_simplified ] = "æ— æ³•å¼•ç”¨ 'XX' ã€‚";
@@ -1469,7 +1469,7 @@ String RID_STR_INITIDE
     Text [ portuguese_brazilian ] = "Iniciar BASIC" ;
     Text [ portuguese ] = "Iniciar BASIC" ;
     Text [ finnish ] = "BASIC-alustus" ;
-    Text [ danish ] = "BASIC initialisiering" ;
+    Text [ danish ] = "Initialisering af BASIC" ;
     Text [ french ] = "Initialisation de BASIC" ;
     Text [ swedish ] = "Initiering BASIC" ;
     Text [ dutch ] = "BASIC initialiseren" ;
@@ -1729,7 +1729,7 @@ String RID_STR_MACRONAMEREQ
     Text [ spanish ] = "Se debe introducir un nombre." ;
     Text [ french ] = "Vous devez indiquer un nom." ;
     Text [ swedish ] = "Ett namn måste anges." ;
-    Text [ danish ] = "Der skal angives et navn" ;
+    Text [ danish ] = "Et navn skal angives." ;
     Text [ portuguese_brazilian ] = "Es mu? ein Name angegeben werden." ;
     Text [ portuguese ] = "É necessário especificar um nome." ;
     Text[ chinese_simplified ] = "å¿…é¡»ç»™å®šä¸€ä¸ªåç§°ã€‚";
@@ -1758,7 +1758,7 @@ String RID_STR_WILLSTOPPRG
     Text [ spanish ] = "Tendrá que volver a iniciar el programa después de estas modificaciones.\n¿Continuar?" ;
     Text [ french ] = "Vous devrez redémarrer le programme après cette modification.\nPoursuivre ?" ;
     Text [ swedish ] = "Du måste starta om ditt program efter den här ändringen.\nFortsätta ändå?" ;
-    Text [ danish ] = "Det er nødvendigt at genstarte programmet efter denne ændring .\nVil du fortsætte alligevel?" ;
+    Text [ danish ] = "Programmet skal genstartes efter denne ændring.\nFortsæt?" ;
     Text [ portuguese_brazilian ] = "Sie m?sen nach dieser ?nderung Ihr Programm neu starten.\nForfahren?" ;
     Text [ portuguese ] = "Terá que reiniciar o programa depois desta modificação.\nContinuar?" ;
     Text[ chinese_simplified ] = "æ›´æ”¹ä¹‹åæ‚¨å¿…é¡»é‡æ–°å¯åŠ¨è¿™ä¸ªç¨‹åºã€‚\næ‚¨è¦ç»§ç»­å—ï¼Ÿ";
@@ -2133,7 +2133,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ portuguese_brazilian ] = "Compilar" ;
             Text [ portuguese ] = "Compilar" ;
             Text [ finnish ] = "Kokoa" ;
-            Text [ danish ] = "Kompiler" ;
+            Text [ danish ] = "Oversæt" ;
             Text [ french ] = "Compiler" ;
             Text [ swedish ] = "Översätt" ;
             Text [ dutch ] = "Compileren" ;
@@ -2473,7 +2473,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ portuguese_brazilian ] = "Match Bracket" ;
             Text [ portuguese ] = "Localizar parênteses" ;
             Text [ finnish ] = "Etsi sulkeet" ;
-            Text [ danish ] = "Søg parentes" ;
+            Text [ danish ] = "Søg efter parenteser" ;
             Text [ french ] = "Rechercher les parenthèses" ;
             Text [ swedish ] = "Sök parentes" ;
             Text [ dutch ] = "Haakjes zoeken" ;
@@ -2567,7 +2567,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ portuguese_brazilian ] = "Gravar origem como..." ;
             Text [ portuguese ] = "Guardar texto fonte como..." ;
             Text [ finnish ] = "Tallenna lähde nimellä" ;
-            Text [ danish ] = "Gem kildetekst som..." ;
+            Text [ danish ] = "Gem kildetekst under..." ;
             Text [ french ] = "Enregistrer le texte source sous..." ;
             Text [ swedish ] = "Spara källtext som..." ;
             Text [ dutch ] = "Brontekst opslaan als..." ;
@@ -2631,7 +2631,7 @@ Menu RID_POPUP_BRKPROPS
             Text [ portuguese_brazilian ] = "Ativo" ;
             Text [ portuguese ] = "Activo" ;
             Text [ finnish ] = "Aktiivinen" ;
-            Text [ danish ] = "I/O aktiv" ;
+            Text [ danish ] = "Aktiv" ;
             Text [ french ] = "Actif" ;
             Text [ swedish ] = "Aktiv" ;
             Text [ dutch ] = "Actief" ;
@@ -2781,7 +2781,7 @@ Menu RID_POPUP_TABBAR
             Text [ portuguese_brazilian ] = "Inserir" ;
             Text [ portuguese ] = "Inserir" ;
             Text [ finnish ] = "Lisää" ;
-            Text [ danish ] = "Indsæt" ;
+            Text [ danish ] = "Sæt ind" ;
             Text [ french ] = "Insérer" ;
             Text [ swedish ] = "Infoga" ;
             Text [ dutch ] = "Invoegen" ;
@@ -2800,7 +2800,7 @@ Menu RID_POPUP_TABBAR
                         Text [ english_us ] = "BASIC Module" ;
                         Text [ portuguese_brazilian ] = "M?ulo" ;
                         Text [ swedish ] = "BASIC-modul" ;
-                        Text [ danish ] = "Aktuelt Basic-modul" ;
+                        Text [ danish ] = "BASIC-modul" ;
                         Text [ italian ] = "Modulo BASIC" ;
                         Text [ spanish ] = "Módulo BASIC" ;
                         Text [ french ] = "Module BASIC" ;
@@ -3020,7 +3020,7 @@ Menu RID_POPUP_DLGED
             Text[ spanish ] = "Propiedades...";
             Text[ finnish ] = "Properties...";
             Text[ italian ] = "Proprietà...";
-            Text[ danish ] = "Properties...";
+            Text[ danish ] = "Egenskaber...";
             Text[ swedish ] = "Egenskaper...";
             Text[ polish ] = "W³aœciwoœci...";
             Text[ portuguese_brazilian ] = "Properties...";
@@ -3030,7 +3030,7 @@ Menu RID_POPUP_DLGED
             Text[ chinese_traditional ] = "å±¬æ€§...";
             Text[ turkish ] = "Properties...";
             Text[ arabic ] = "Properties...";
-            Text[ catalan ] = "Properties...";
+            Text[ catalan ] = "Propietats...";
             Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´...";
         };
     };
@@ -3107,7 +3107,7 @@ String RID_STR_QUERYREPLACEMACRO
 {
     Text = "Möchten Sie das Makro XX überschreiben ?" ;
     Text [ ENGLISH ] = "Do you want to overwrite the macro XX ?" ;
-    Text [ english_us ] = "Do you want to overwrite the macro XX ?" ;
+    Text [ english_us ] = "Do you want to overwrite the XX macro?" ;
     Text[ portuguese ] = "Do you want to overwrite the macro XX ?";
     Text[ russian ] = "Do you want to overwrite the macro XX ?";
     Text[ greek ] = "Do you want to overwrite the macro XX ?";
