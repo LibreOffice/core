@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:50:26 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <drafts/com/sun/star/frame/XLayoutManager.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
 
 #ifndef _CACHESTR_HXX //autogen
 #include <tools/cachestr.hxx>
@@ -90,7 +93,11 @@
 #include <svtools/rectitem.hxx>
 #include <svtools/urihelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
 
+#ifndef INCLUDED_SVTOOLS_SECURITYOPTIONS_HXX
+#include <svtools/securityoptions.hxx>
+#endif
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
 #endif
@@ -102,9 +109,6 @@
 #endif
 #include <math.h>
 
-#ifndef INCLUDED_SVTOOLS_SECURITYOPTIONS_HXX
-#include <svtools/securityoptions.hxx>
-#endif
 #include <svtools/saveopt.hxx>
 #include <svtools/useroptions.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -120,7 +124,7 @@
 #include "objshimp.hxx"
 #include "cfgitem.hxx"
 #include "evntconf.hxx"
-#include "interno.hxx"
+//#include "interno.hxx"
 #include "sfxhelp.hxx"
 #include "dispatch.hxx"
 #include "urlframe.hxx"
@@ -164,108 +168,101 @@ GDIMetaFile* SfxObjectShell::GetPreviewMetaFile( sal_Bool bFullContent ) const
     VirtualDevice aDevice;
     aDevice.EnableOutput( FALSE );
 
-    SfxInPlaceObject* pInPlaceObj = GetInPlaceObject();
-    DBG_ASSERT( pInPlaceObj, "Ohne Inplace Objekt keine Grafik" );
-    if (pInPlaceObj)
+    MapMode aMode( ((SfxObjectShell*)this)->GetMapUnit() );
+    aDevice.SetMapMode( aMode );
+    pFile->SetPrefMapMode( aMode );
+
+    Size aTmpSize;
+    sal_Int8 nAspect;
+    if ( bFullContent )
     {
-        MapMode aMode( pInPlaceObj->GetMapUnit() );
-        aDevice.SetMapMode( aMode );
-        pFile->SetPrefMapMode( aMode );
-
-        Size aTmpSize;
-        sal_Int8 nAspect;
-        if ( bFullContent )
-        {
-            nAspect = ASPECT_CONTENT;
-            aTmpSize = pInPlaceObj->GetVisArea( nAspect ).GetSize();
-        }
-        else
-        {
-            nAspect = ASPECT_THUMBNAIL;
-            aTmpSize = ((SfxObjectShell*)this)->GetFirstPageSize();
-        }
-
-        pFile->SetPrefSize( aTmpSize );
-        DBG_ASSERT( aTmpSize.Height()*aTmpSize.Width(),
-                    "size of first page is 0, overload GetFirstPageSize or set vis-area!" );
-
-        pFile->Record( &aDevice );
-        pInPlaceObj->DoDraw(
-                &aDevice, Point(0,0), aTmpSize,
-                JobSetup(), nAspect );
-        pFile->Stop();
+        nAspect = ASPECT_CONTENT;
+        aTmpSize = GetVisArea( nAspect ).GetSize();
     }
+    else
+    {
+        nAspect = ASPECT_THUMBNAIL;
+        aTmpSize = ((SfxObjectShell*)this)->GetFirstPageSize();
+    }
+
+    pFile->SetPrefSize( aTmpSize );
+    DBG_ASSERT( aTmpSize.Height()*aTmpSize.Width(),
+                "size of first page is 0, overload GetFirstPageSize or set vis-area!" );
+
+    pFile->Record( &aDevice );
+    ((SfxObjectShell*)this)->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), nAspect );
+    pFile->Stop();
 
     return pFile;
 }
 
-FASTBOOL SfxObjectShell::SaveWindows_Impl( SvStorage &rStor ) const
-{
-    SvStorageStreamRef xStream = rStor.OpenStream( DEFINE_CONST_UNICODE( SFX_WINDOWS_STREAM ),
-                                    STREAM_TRUNC | STREAM_STD_READWRITE);
-    if ( !xStream )
-        return FALSE;
-
-    xStream->SetBufferSize(1024);
-    xStream->SetVersion( rStor.GetVersion() );
-
-    // "uber alle Fenster iterieren (aber aktives Window zuletzt)
-    SfxViewFrame *pActFrame = SfxViewFrame::Current();
-    if ( !pActFrame || pActFrame->GetObjectShell() != this )
-        pActFrame = SfxViewFrame::GetFirst(this);
-
-    String aActWinData;
-    for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this, TYPE(SfxTopViewFrame) ); pFrame;
-            pFrame = SfxViewFrame::GetNext(*pFrame, this, TYPE(SfxTopViewFrame) ) )
-    {
-        // Bei Dokumenten, die Outplace aktiv sind, kann beim Speichern auch schon die View weg sein!
-        if ( pFrame->GetViewShell() )
-        {
-            SfxTopFrame* pTop = (SfxTopFrame*) pFrame->GetFrame();
-            pTop->GetTopWindow_Impl();
-
-#if SUPD<613//MUSTINI
-            char cToken = SfxIniManager::GetToken();
-#else
-            char cToken = ',';
-#endif
-            const BOOL bActWin = pActFrame == pFrame;
-            String aUserData;
-            pFrame->GetViewShell()->WriteUserData(aUserData);
-
-            // assemble ini-data
-            String aWinData;
-            aWinData += String::CreateFromInt32( pFrame->GetCurViewId() );
-            aWinData += cToken;
-/*
-            if ( !pWin || pWin->IsMaximized() )
-                aWinData += SFX_WINSIZE_MAX;
-            else if ( pWin->IsMinimized() )
-                aWinData += SFX_WINSIZE_MIN;
-            else
-*/
-#if SUPD<613//MUSTINI
-            aWinData += SfxIniManager::GetString( pWin->GetPosPixel(), pWin->GetSizePixel() );
-#endif
-            aWinData += cToken;
-            aWinData += aUserData;
-
-            // aktives kennzeichnen
-            aWinData += cToken;
-            aWinData += bActWin ? '1' : '0';
-
-            // je nachdem merken oder abspeichern
-            if ( bActWin  )
-                aActWinData = aWinData;
-            else
-                xStream->WriteByteString( aWinData );
-        }
-    }
-
-    // aktives Window hinterher
-    xStream->WriteByteString( aActWinData );
-    return !xStream->GetError();
-}
+//REMOVE    FASTBOOL SfxObjectShell::SaveWindows_Impl( SvStorage &rStor ) const
+//REMOVE    {
+//REMOVE        SvStorageStreamRef xStream = rStor.OpenStream( DEFINE_CONST_UNICODE( SFX_WINDOWS_STREAM ),
+//REMOVE                                        STREAM_TRUNC | STREAM_STD_READWRITE);
+//REMOVE        if ( !xStream )
+//REMOVE            return FALSE;
+//REMOVE
+//REMOVE        xStream->SetBufferSize(1024);
+//REMOVE        xStream->SetVersion( rStor.GetVersion() );
+//REMOVE
+//REMOVE        // "uber alle Fenster iterieren (aber aktives Window zuletzt)
+//REMOVE        SfxViewFrame *pActFrame = SfxViewFrame::Current();
+//REMOVE        if ( !pActFrame || pActFrame->GetObjectShell() != this )
+//REMOVE            pActFrame = SfxViewFrame::GetFirst(this);
+//REMOVE
+//REMOVE        String aActWinData;
+//REMOVE        for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this, TYPE(SfxTopViewFrame) ); pFrame;
+//REMOVE                pFrame = SfxViewFrame::GetNext(*pFrame, this, TYPE(SfxTopViewFrame) ) )
+//REMOVE        {
+//REMOVE            // Bei Dokumenten, die Outplace aktiv sind, kann beim Speichern auch schon die View weg sein!
+//REMOVE            if ( pFrame->GetViewShell() )
+//REMOVE            {
+//REMOVE                SfxTopFrame* pTop = (SfxTopFrame*) pFrame->GetFrame();
+//REMOVE                pTop->GetTopWindow_Impl();
+//REMOVE
+//REMOVE    #if SUPD<613//MUSTINI
+//REMOVE                char cToken = SfxIniManager::GetToken();
+//REMOVE    #else
+//REMOVE                char cToken = ',';
+//REMOVE    #endif
+//REMOVE                const BOOL bActWin = pActFrame == pFrame;
+//REMOVE                String aUserData;
+//REMOVE                pFrame->GetViewShell()->WriteUserData(aUserData);
+//REMOVE
+//REMOVE                // assemble ini-data
+//REMOVE                String aWinData;
+//REMOVE                aWinData += String::CreateFromInt32( pFrame->GetCurViewId() );
+//REMOVE                aWinData += cToken;
+//REMOVE    /*
+//REMOVE                if ( !pWin || pWin->IsMaximized() )
+//REMOVE                    aWinData += SFX_WINSIZE_MAX;
+//REMOVE                else if ( pWin->IsMinimized() )
+//REMOVE                    aWinData += SFX_WINSIZE_MIN;
+//REMOVE                else
+//REMOVE    */
+//REMOVE    #if SUPD<613//MUSTINI
+//REMOVE                aWinData += SfxIniManager::GetString( pWin->GetPosPixel(), pWin->GetSizePixel() );
+//REMOVE    #endif
+//REMOVE                aWinData += cToken;
+//REMOVE                aWinData += aUserData;
+//REMOVE
+//REMOVE                // aktives kennzeichnen
+//REMOVE                aWinData += cToken;
+//REMOVE                aWinData += bActWin ? '1' : '0';
+//REMOVE
+//REMOVE                // je nachdem merken oder abspeichern
+//REMOVE                if ( bActWin  )
+//REMOVE                    aActWinData = aWinData;
+//REMOVE                else
+//REMOVE                    xStream->WriteByteString( aWinData );
+//REMOVE            }
+//REMOVE        }
+//REMOVE
+//REMOVE        // aktives Window hinterher
+//REMOVE        xStream->WriteByteString( aActWinData );
+//REMOVE        return !xStream->GetError();
+//REMOVE    }
 
 //====================================================================
 
@@ -293,17 +290,8 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
     // try to get viewdata information for XML format
     REFERENCE < XVIEWDATASUPPLIER > xViewDataSupplier( GetModel(), ::com::sun::star::uno::UNO_QUERY );
     REFERENCE < XINDEXACCESS > xViewData;
-    SvStorageStreamRef xStream;
 
-    // get viewdata information for binary format
-    SvStorage *pStor = HasName() ? GetStorage() : NULL;
-    xStream = pStor ? pStor->OpenStream( DEFINE_CONST_UNICODE( SFX_WINDOWS_STREAM ), STREAM_STD_READ ) : 0;
-    if ( xStream.Is() && xStream->GetError() == ERRCODE_NONE )
-    {
-        xStream->SetVersion( pStor->GetVersion() );
-        xStream->SetBufferSize(1024);
-    }
-    else if ( xViewDataSupplier.is() )
+    if ( xViewDataSupplier.is() )
     {
         xViewData = xViewDataSupplier->getViewData();
         if ( !xViewData.is() )
@@ -326,81 +314,42 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
     while ( TRUE )
     {
         USHORT nViewId = 0;
-        FASTBOOL bActive=FALSE, bMaximized=FALSE;
+        FASTBOOL bMaximized=FALSE;
         String aPosSize;
         String aUserData;                   // used in the binary format
         SEQUENCE < PROPERTYVALUE > aSeq;    // used in the XML format
-        if ( xViewData.is() )
+
+        // XML format
+        // active view is the first view in the container
+        FASTBOOL bActive = ( nView == 0 );
+
+        if ( nView == xViewData->getCount() )
+            // finished
+            break;
+
+        // get viewdata and look for the stored ViewId
+        ::com::sun::star::uno::Any aAny = xViewData->getByIndex( nView++ );
+        if ( aAny >>= aSeq )
         {
-            // XML format
-            // active view is the first view in the container
-            bActive = ( nView == 0 );
-
-            if ( nView == xViewData->getCount() )
-                // finished
-                break;
-
-            // get viewdata and look for the stored ViewId
-            ::com::sun::star::uno::Any aAny = xViewData->getByIndex( nView++ );
-            if ( aAny >>= aSeq )
+            for ( sal_Int32 n=0; n<aSeq.getLength(); n++ )
             {
-                for ( sal_Int32 n=0; n<aSeq.getLength(); n++ )
+                const PROPERTYVALUE& rProp = aSeq[n];
+                if ( rProp.Name.compareToAscii("ViewId") == COMPARE_EQUAL )
                 {
-                    const PROPERTYVALUE& rProp = aSeq[n];
-                    if ( rProp.Name.compareToAscii("ViewId") == COMPARE_EQUAL )
-                    {
-                        ::rtl::OUString aId;
-                        rProp.Value >>= aId;
-                        String aTmp( aId );
-                        aTmp.Erase( 0, 4 );  // format is like in "view3"
-                        nViewId = (USHORT) aTmp.ToInt32();
-                        break;
-                    }
+                    ::rtl::OUString aId;
+                    rProp.Value >>= aId;
+                    String aTmp( aId );
+                    aTmp.Erase( 0, 4 );  // format is like in "view3"
+                    nViewId = (USHORT) aTmp.ToInt32();
+                    break;
                 }
-            }
-        }
-        else
-        {
-            // binary format
-            xStream->ReadByteString( aWinData );
-            if ( !aWinData.Len() )
-                // reading finished
-                break;
-
-            if ( aWinData.GetToken( 0, cToken ).EqualsAscii( "TASK" ) )
-            {
-                // doesn't make any sense with the new task handling using system tasks or browser windows
-                bOldFormat = FALSE;
-                continue;
-            }
-
-            nViewId = (USHORT) aWinData.GetToken( 0, cToken ).ToInt32();
-            if ( bOldFormat )
-            {
-                // Old format
-                aPosSize = aWinData.GetToken( 1, cToken );
-                aPosSize.ToLowerAscii();
-                aUserData = aWinData.GetToken( 2, cToken );
-                bActive = aWinData.GetToken( 3, cToken ).ToInt32();
-            }
-            else
-            {
-                // 5.0-Format, get activity state and UserData
-                USHORT nPos=0;
-                bActive = aWinData.GetToken( 3, cToken, nPos ).ToInt32();
-                aUserData = aWinData.Copy( nPos );
             }
         }
 
         // load only active view, but current item is not the active one ?
+        // in XML format the active view is the first one
         if ( !bLoadDocWins && !bActive )
-        {
-            if ( xViewData.is() )
-                // in XML format the active view is the first one
-                break;
-            else
-                continue;
-        }
+            break;
 
         // check for minimized/maximized/size
         if ( aPosSize.EqualsAscii( "min" ) )
@@ -415,10 +364,6 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
 
         Point aPt;
         Size aSz;
-#if SUPD<613//MUSTINI
-        if ( !bMaximized )
-            SfxIniManager::GetPosSize( aPosSize, aPt, aSz );
-#endif
 
         pSet->ClearItem( SID_USER_DATA );
         SfxViewFrame *pFrame = 0;
@@ -515,229 +460,45 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
 
 void SfxObjectShell::UpdateDocInfoForSave()
 {
-    if( !pImp->bDoNotTouchDocInfo )
+    SfxDocumentInfo &rDocInfo = GetDocInfo();
+    rDocInfo.SetTemplateConfig( sal_False );
+
+    if ( IsModified() )
     {
-        SfxDocumentInfo &rDocInfo = GetDocInfo();
-        rDocInfo.SetTemplateConfig( HasTemplateConfig() );
+        // Keine Unterschiede mehr zwischen Save, SaveAs
+        String aUserName = SvtUserOptions().GetFullName();
+        if ( !rDocInfo.IsUseUserData() )
+           {
+               SfxStamp aCreated = rDocInfo.GetCreated();
+               if ( aUserName == aCreated.GetName() )
+               {
+                   aCreated.SetName( String() );
+                  rDocInfo.SetCreated( aCreated );
+               }
 
-        if ( IsModified() )
-        {
-            // Keine Unterschiede mehr zwischen Save, SaveAs
-            String aUserName = SvtUserOptions().GetFullName();
-            if ( !rDocInfo.IsUseUserData() )
-            {
-                SfxStamp aCreated = rDocInfo.GetCreated();
-                if ( aUserName == aCreated.GetName() )
-                {
-                    aCreated.SetName( String() );
-                    rDocInfo.SetCreated( aCreated );
-                }
+               SfxStamp aPrinted = rDocInfo.GetPrinted();
+               if ( aUserName == aPrinted.GetName() )
+               {
+                   aPrinted.SetName( String() );
+                  rDocInfo.SetPrinted( aPrinted );
+               }
 
-                SfxStamp aPrinted = rDocInfo.GetPrinted();
-                if ( aUserName == aPrinted.GetName() )
-                {
-                    aPrinted.SetName( String() );
-                    rDocInfo.SetPrinted( aPrinted );
-                }
+            aUserName.Erase();
+           }
 
-                aUserName.Erase();
-            }
-
-            rDocInfo.SetChanged( aUserName );
-            if ( !HasName() || pImp->bIsSaving )
-                UpdateTime_Impl( rDocInfo );
-        }
-
-        if ( !pImp->bIsSaving )
-            rDocInfo.SetPasswd( pImp->bPasswd );
-
-        // clear user data if recommend (see 'Tools - Options - Open/StarOffice - Security')
-        if ( SvtSecurityOptions().IsOptionSet( SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO ) )
-            rDocInfo.DeleteUserData( rDocInfo.IsUseUserData() );
-
-        Broadcast( SfxDocumentInfoHint( &rDocInfo ) );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-BOOL SfxObjectShell::SaveInfoAndConfig_Impl( SvStorageRef pNewStg )
-{
-    //Demnaechst mal gemeinsame Teile zusammenfassen
-    UpdateDocInfoForSave();
-
-#if !defined( SFX_KEY_MAXPREVIEWSIZE ) && defined( TFPLUGCOMM )
-#define SFX_KEY_MAXPREVIEWSIZE SFX_KEY_ISFREE
-#endif
-
-#ifdef MI_doch_wieder_die_alte_preview
-    String aMaxSize = SFX_INIMANAGER()->Get( SFX_KEY_MAXPREVIEWSIZE );
-    ULONG nMaxSize = aMaxSize.Len() ? ULONG( aMaxSize ) : 50000;
-#else
-    ULONG nMaxSize = 0L;
-#endif
-    if( nMaxSize && !GetDocInfo().IsPasswd() &&
-        SFX_CREATE_MODE_STANDARD == eCreateMode )
-    {
-        GDIMetaFile* pFile = GetPreviewMetaFile();
-        if ( pFile )
-        {
-            SvCacheStream aStream;
-            long nVer = pNewStg->GetVersion();
-            aStream.SetVersion( nVer );
-            aStream << *pFile;
-            if( aStream.Tell() < nMaxSize )
-            {
-                SvStorageStreamRef xStream = pNewStg->OpenStream(
-                    DEFINE_CONST_UNICODE( SFX_PREVIEW_STREAM ),
-                    STREAM_TRUNC | STREAM_STD_READWRITE);
-                if( xStream.Is() && !xStream->GetError() )
-                {
-                    long nVer = pNewStg->GetVersion();
-                    xStream->SetVersion( nVer );
-                    aStream.Seek( 0L );
-                    *xStream << aStream;
-                }
-            }
-            delete pFile;
-        }
+        rDocInfo.SetChanged( aUserName );
+        if ( !HasName() || pImp->bIsSaving )
+            UpdateTime_Impl( rDocInfo );
     }
 
-    if( pImp->bIsSaving )
-    {
-        //!! kein Aufruf der Basisklasse wegen doppeltem Aufruf in Persist
-        //if(!SfxObjectShell::Save())
-        //  return FALSE;
-        SvStorageRef aRef = GetMedium()->GetStorage();
-        if ( aRef.Is() )
-        {
-            SfxDocumentInfo& rDocInfo = GetDocInfo();
-            rDocInfo.Save(pNewStg);
+    if ( !pImp->bIsSaving )
+        rDocInfo.SetPasswd( pImp->bPasswd );
 
-            // wenn es sich um ein Dokument lokales Basic handelt, dieses
-            // schreiben
-            if ( pImp->pBasicMgr )
-                pImp->pBasicMgr->Store( *pNewStg );
-            else
-            {
-                String aURL;
-                if( HasName() )
-                    aURL = GetMedium()->GetName();
-                else
-                {
-                    aURL = GetDocInfo().GetTemplateFileName();
-                    // Bei Templates keine URL...
-                    aURL = URIHelper::SmartRelToAbs( aURL );
-                }
-#ifndef TFPLUGCOMM
-                BasicManager::CopyBasicData( GetStorage(), aURL, pNewStg );
-#endif
-            }
+    // clear user data if recommend (see 'Tools - Options - Open/StarOffice - Security')
+    if ( SvtSecurityOptions().IsOptionSet( SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO ) )
+        rDocInfo.DeleteUserData( rDocInfo.IsUseUserData() );
 
-            // Windows-merken
-            if ( TRUE ) HACK(aus config)
-                SaveWindows_Impl( *pNewStg );
-
-            // Konfiguration schreiben
-            if ( GetConfigManager() )
-            {
-/* //!MBA
-                if ( rDocInfo.HasTemplateConfig() )
-                {
-                    const String aTemplFileName( rDocInfo.GetTemplateFileName() );
-                    if ( aTemplFileName.Len() )
-                    {
-                        INetURLObject aURL( aTemplFileName );
-                        DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL !" );
-
-                        SvStorageRef aStor = new SvStorage( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-                        if ( SVSTREAM_OK == aStor->GetError() )
-                        {
-                            GetConfigManager()->StoreConfiguration(aStor);
-                            if (aRef->IsStream(SfxConfigManager::GetStreamName()))
-                                aRef->Remove(SfxConfigManager::GetStreamName());
-                        }
-                    }
-                }
-                else
- */
-                {
-//! MBA                    GetConfigManager()->SetModified( TRUE );
-                    GetConfigManager()->StoreConfiguration( pNewStg );
-                }
-            }
-        }
-        return TRUE;
-    }
-    else
-    {
-        //!! kein Aufruf der Basisklasse wegen doppeltem Aufruf in Persist
-        //if(!SfxObjectShell::SaveAs(pNewStg))
-        //  return FALSE;
-        SFX_APP();
-        GetMedium();
-
-        // alte DocInfo laden
-        SfxDocumentInfo &rDocInfo = GetDocInfo();
-
-        // DocInfo speichern
-        rDocInfo.Save( pNewStg );
-
-        // wenn es sich um ein Dokument lokales Basic handelt, dieses schreiben
-        if ( pImp->pBasicMgr )
-            pImp->pBasicMgr->Store( *pNewStg );
-#ifndef MI_NONOS
-        else
-        {
-            String aURL;
-            if( HasName() )
-                aURL = GetMedium()->GetName();
-            else
-            {
-                aURL = GetDocInfo().GetTemplateFileName();
-                // Bei Templates keine URL...
-                aURL = URIHelper::SmartRelToAbs( aURL );
-            }
-#ifndef TFPLUGCOMM
-            BasicManager::CopyBasicData( GetStorage(), aURL, pNewStg );
-#endif
-        }
-#endif
-        // Windows-merken
-        if ( TRUE ) HACK(aus config)
-            SaveWindows_Impl( *pNewStg );
-
-        // Konfiguration schreiben
-        if (GetConfigManager())
-        {
-/* //!MBA
-            if ( rDocInfo.HasTemplateConfig() )
-            {
-                const String aTemplFileName( rDocInfo.GetTemplateFileName() );
-                if ( aTemplFileName.Len() )
-                {
-                    INetURLObject aURL( aTemplFileName );
-                    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL !" );
-
-                    SvStorageRef aStor = new SvStorage( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-                    if ( SVSTREAM_OK == aStor->GetError() )
-                    {
-                        GetConfigManager()->StoreConfiguration(aStor);
-                        if (pNewStg->IsStream(SfxConfigManager::GetStreamName()))
-                            pNewStg->Remove(SfxConfigManager::GetStreamName());
-                    }
-                }
-            }
-            else
- */
-            {
-//!MBA                GetConfigManager()->SetModified( TRUE );
-                GetConfigManager()->StoreConfiguration(pNewStg);
-            }
-        }
-
-        return TRUE;
-    }
+    Broadcast( SfxDocumentInfoHint( &rDocInfo ) );
 }
 
 //--------------------------------------------------------------------
@@ -883,116 +644,6 @@ SfxDocumentInfoDialog* SfxObjectShell::CreateDocumentInfoDialog
 
 //--------------------------------------------------------------------
 
-SvEmbeddedInfoObject* SfxObjectShell::InsertObject
-(
-    SvEmbeddedObject*   pObj,
-    const String&       rName
-)
-
-{
-    // Objekt erzeugen ist fehlgeschlagen?
-    if ( !pObj )
-        HACK(Fehlermeldung fehlt)
-        return 0;
-
-    String aName( rName );
-    if( !aName.Len() )
-    {
-        aName = DEFINE_CONST_UNICODE("Object ");
-        String aStr;
-        USHORT i = 1;
-        HACK(Wegen Storage Bug 46033)
-        // for-Schleife wegen Storage Bug 46033
-        for( USHORT n = 0; n < 100; n++ )
-        {
-            do
-            {
-                aStr = aName;
-                aStr += String::CreateFromInt32( i );
-                i++;
-            } while ( Find( aStr ) );
-
-            SvInfoObjectRef xSub = new SvEmbeddedInfoObject( pObj, aStr );
-            if ( Move( xSub, aStr ) ) // Eigentuemer Uebergang
-                return (SvEmbeddedInfoObject*) &xSub;
-        }
-    }
-    else
-    {
-        SvInfoObjectRef xSub = new SvEmbeddedInfoObject( pObj, aName );
-        if ( Move( xSub, aName ) ) // Eigentuemer Uebergang
-            return (SvEmbeddedInfoObject*) &xSub;
-    }
-    return 0;
-}
-
-//-------------------------------------------------------------------------
-
-SfxConfigManager* SfxObjectShell::GetConfigManager( BOOL bForceCreation )
-{
-    if ( !pImp->pCfgMgr )
-    {
-        if ( bForceCreation || HasStorage() && SfxConfigManager::HasConfiguration( *GetStorage() ) )
-        {
-            pImp->pCfgMgr = new SfxConfigManager( *this );
-            SfxConfigItem* pItem = GetEventConfig_Impl( FALSE );
-            if ( pItem && !pItem->GetConfigManager() )
-                // imported binary format
-                pItem->Connect( pImp->pCfgMgr );
-
-        }
-    }
-
-    return pImp->pCfgMgr;
-}
-
-//-------------------------------------------------------------------------
-
-void SfxObjectShell::SetConfigManager(SfxConfigManager *pMgr)
-{
-//    if ( pImp->pCfgMgr == SFX_CFGMANAGER() && pMgr)
-//        pMgr->Activate(pImp->pCfgMgr);
-
-    if ( pImp->pCfgMgr && pImp->pCfgMgr != pMgr )
-        delete pImp->pCfgMgr;
-
-    pImp->pCfgMgr = pMgr;
-}
-
-//-------------------------------------------------------------------------
-
-void SfxObjectShell::SetTemplateConfig(BOOL bTplConf)
-{
-//    pImp->bTemplateConfig = bTplConf;
-//    DBG_ASSERT(pImp->pCfgMgr || !bTplConf,"Keine Konfiguration in der Vorlage!");
-}
-
-//-------------------------------------------------------------------------
-
-BOOL SfxObjectShell::HasTemplateConfig() const
-{
-//!MBA    return pImp->bTemplateConfig;
-    return FALSE;
-}
-
-//-------------------------------------------------------------------------
-/*
-void SfxObjectShell::TransferConfig(SfxObjectShell& rObjSh)
-{
-    SfxConfigManager *pNewCfgMgr=0, *pOldCfgMgr=0;
-    pOldCfgMgr = pImp->pCfgMgr;
-    pImp->pCfgMgr = 0;
-
-    pNewCfgMgr = rObjSh.pImp->pCfgMgr;
-    rObjSh.pImp->pCfgMgr=0;
-
-    SetConfigManager(pNewCfgMgr);
-    rObjSh.SetConfigManager(pOldCfgMgr);
-}
-*/
-
-//--------------------------------------------------------------------
-
 SfxStyleSheetBasePool* SfxObjectShell::GetStyleSheetPool()
 {
     return 0;
@@ -1026,7 +677,7 @@ USHORT SfxObjectShell::GetContentCount(USHORT nIdx1,
             break;
 /*
         case CONTENT_CONFIG:
-            return (GetConfigManager() && !HasTemplateConfig()) ?
+            return ( GetConfigManager() ) ?
                         GetConfigManager()->GetItemCount() : 0;
             break;
  */
@@ -1108,7 +759,7 @@ void   SfxObjectShell::GetContent(String &rText,
         case INDEX_IGNORE:
         {
             USHORT nTextResId = 0;
-            USHORT nClosedBitmapResId = 0 ; //evtl. sp"ater mal unterschiedliche
+            USHORT nClosedBitmapResId = 0; // evtl. sp"ater mal unterschiedliche
             USHORT nOpenedBitmapResId = 0; // "     "       "   "
             switch(i)
             {
@@ -1172,7 +823,7 @@ void   SfxObjectShell::GetContent(String &rText,
             break;
 /*
         case CONTENT_CONFIG:
-            if ( GetConfigManager() && !HasTemplateConfig())
+            if ( GetConfigManager() )
             {
                 rText = GetConfigManager()->GetItem(i);
                 bCanDel = GetConfigManager()->CanDelete(i);
@@ -1357,7 +1008,7 @@ BOOL SfxObjectShell::Insert(SfxObjectShell &rSource,
         nIdx1 = CONTENT_CONFIG;
 
         SfxConfigManager *pCfgMgr = SFX_CFGMANAGER();
-        if (!GetConfigManager() || HasTemplateConfig())
+        if ( !GetConfigManager() )
         {
             SetConfigManager(new SfxConfigManager(0, pCfgMgr));
             SetTemplateConfig(FALSE);
@@ -1478,7 +1129,6 @@ BOOL SfxObjectShell::Print
                 delete pIter;
                 return FALSE;
             }
-
             Reference< task::XStatusIndicator > xStatusIndicator;
             xStatusIndicator = SFX_APP()->GetStatusIndicator();
             if ( xStatusIndicator.is() )
@@ -1671,14 +1321,16 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     // Storage-medium?
     SfxMedium *pFile = GetMedium();
     DBG_ASSERT( pFile, "cannot UpdateFromTemplate without medium" );
+    if ( !pFile )
+        return;
 
     if ( !::utl::LocalFileHelper::IsLocalFile( pFile->GetName() ) )
         // update only for documents loaded from the local file system
         return;
 
     // only for own storage formats
-    SvStorageRef xDocStor = pFile ? pFile->GetStorage() : 0;
-    if ( !xDocStor.Is() || !pFile->GetFilter() || !pFile->GetFilter()->IsOwnFormat() )
+    uno::Reference< embed::XStorage > xDocStor = pFile->GetStorage();
+    if ( !pFile->GetFilter() || !pFile->GetFilter()->IsOwnFormat() )
         return;
 
     SFX_ITEMSET_ARG( pFile->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
@@ -1689,7 +1341,9 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     String aTemplName( pInfo->GetTemplateName() );
     String aTemplFileName( pInfo->GetTemplateFileName() );
     String aFoundName;
-    SvStorageRef aTemplStor;
+    uno::Reference< embed::XStorage > xTemplStor;
+
+    String aURL;
     if ( aTemplName.Len() || aTemplFileName.Len() && !IsReadOnly() )
     {
         // try to locate template, first using filename
@@ -1703,11 +1357,13 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
             String aURL;
             if( ::utl::LocalFileHelper::ConvertSystemPathToURL( aTemplFileName, GetMedium()->GetName(), aURL ) )
             {
-                aTemplStor = new SvStorage( aURL, STREAM_READ|STREAM_NOCREATE|STREAM_SHARE_DENYWRITE, STORAGE_TRANSACTED );
-                if ( aTemplStor->GetError() )
-                    aTemplStor.Clear();
-                else
+                try {
+                    xTemplStor =
+                        ::comphelper::OStorageHelper::GetStorageFromURL( aURL, embed::ElementModes::READ );
                     aFoundName = aURL;
+                }
+                catch( uno::Exception& )
+                {}
             }
         }
 
@@ -1721,12 +1377,18 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         // check existence of template storage
         aTemplFileName = aFoundName;
         BOOL bLoad = FALSE;
-        if ( !aTemplStor.Is() )
-            aTemplStor = new SvStorage( aTemplFileName,
-                            STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE, STORAGE_TRANSACTED );
+        if ( !xTemplStor.is() )
+        {
+            try {
+                xTemplStor =
+                    ::comphelper::OStorageHelper::GetStorageFromURL( aURL, embed::ElementModes::READ );
+            }
+            catch( uno::Exception& )
+            {}
+        }
 
         // should the document checked against changes in the template ?
-        if ( !aTemplStor->GetError() && pInfo->IsQueryLoadTemplate() )
+        if ( xTemplStor.is() && pInfo->IsQueryLoadTemplate() )
         {
             // load document info of template
             BOOL bOK = FALSE;
@@ -1763,7 +1425,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                 {
                     // ask user
                     if( bCanUpdateFromTemplate == document::UpdateDocMode::QUIET_UPDATE
-                     || bCanUpdateFromTemplate == document::UpdateDocMode::FULL_UPDATE )
+                    || bCanUpdateFromTemplate == document::UpdateDocMode::FULL_UPDATE )
                         bLoad = TRUE;
                     else if ( bCanUpdateFromTemplate == document::UpdateDocMode::ACCORDING_TO_CONFIG )
                     {
@@ -1776,11 +1438,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     {
                         // user refuses, so don't ask again for this document
                         pInfo->SetQueryLoadTemplate(FALSE);
-
-                        if ( xDocStor->IsOLEStorage() )
-                            pInfo->Save(xDocStor);
-                        else
-                            SetModified( TRUE );
+                        SetModified( TRUE );
                     }
                 }
             }
@@ -1788,40 +1446,42 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
             if ( bLoad )
             {
                 // styles should be updated, create document in organizer mode to read in the styles
-                SfxObjectShellLock xTemplDoc = GetFactory().CreateObject( SFX_CREATE_MODE_ORGANIZER );
+                //TODO: testen!
+                SfxObjectShellLock xTemplDoc = CreateObjectByFactoryName( GetFactory().GetFactoryName(), SFX_CREATE_MODE_ORGANIZER );
                 xTemplDoc->DoInitNew(0);
                 String aOldBaseURL = INetURLObject::GetBaseURL();
                 INetURLObject::SetBaseURL( INetURLObject( aTemplFileName ).GetMainURL( INetURLObject::NO_DECODE ) );
-                if ( xTemplDoc->LoadFrom(aTemplStor) )
+                // TODO/LATER: make sure that we don't use binary templates!
+                if ( xTemplDoc->LoadFrom( xTemplStor ) )
                 {
                     // transfer styles from xTemplDoc to this document
                     LoadStyles(*xTemplDoc);
 
                     // remember date/time of check
-                    pInfo->SetTemplateDate(aTemplDate);
-                    pInfo->Save(xDocStor);
+                    // TODO/LATER: new functionality to store document info is required ( didn't work for SO7 XML format )
+//REPLACE                   pInfo->SetTemplateDate(aTemplDate);
+//REPLACE                   pInfo->Save(xDocStor);
                 }
 
                 INetURLObject::SetBaseURL( aOldBaseURL );
             }
 /*
-            SfxConfigManager *pCfgMgr = SFX_CFGMANAGER();
-            BOOL bConfig = pInfo->HasTemplateConfig();
-            {
-                SfxConfigManager *pTemplCfg = new SfxConfigManager(aTemplStor, pCfgMgr);
-                SetConfigManager(pTemplCfg);
-                SetTemplateConfig(TRUE);
+        SfxConfigManager *pCfgMgr = SFX_CFGMANAGER();
+        {
+            SfxConfigManager *pTemplCfg = new SfxConfigManager(aTemplStor, pCfgMgr);
+            SetConfigManager(pTemplCfg);
+            SetTemplateConfig(TRUE);
 
-                // Falls der gerade zerst"orte CfgMgr des Dokuments der
-                // aktive war, pCfgMgr lieber neu holen
-                pCfgMgr = SFX_CFGMANAGER();
+            // Falls der gerade zerst"orte CfgMgr des Dokuments der
+            // aktive war, pCfgMgr lieber neu holen
+            pCfgMgr = SFX_CFGMANAGER();
 
-                // ggf. den neuen ConfigManager aktivieren
-                if ( this == SfxObjectShell::Current() )
-                    pTemplCfg->Activate(pCfgMgr);
-            }
+            // ggf. den neuen ConfigManager aktivieren
+            if ( this == SfxObjectShell::Current() )
+                pTemplCfg->Activate(pCfgMgr);
+        }
 */
-            // Template und Template-DocInfo werden nicht mehr gebraucht
+        // Template und Template-DocInfo werden nicht mehr gebraucht
 //            delete pTemplInfo;
         }
     }
@@ -1841,57 +1501,58 @@ SfxEventConfigItem_Impl* SfxObjectShell::GetEventConfig_Impl( BOOL bForce )
     return pImp->pEventConfig;
 }
 
-SvStorageRef SfxObjectShell::GetConfigurationStorage( SotStorage* pStor )
-{
-    // configuration storage shall be opened in own storage or a new storage, if the
-    // document is getting stored into this storage
-    if ( !pStor )
-        pStor = GetStorage();
+//REMOVE    SvStorageRef SfxObjectShell::GetConfigurationStorage( SotStorage* pStor )
+//REMOVE    {
+//REMOVE        // configuration storage shall be opened in own storage or a new storage, if the
+//REMOVE        // document is getting stored into this storage
+//REMOVE        if ( !pStor )
+//REMOVE            pStor = GetStorage();
+//REMOVE
+//REMOVE        if ( pStor->IsOLEStorage() )
+//REMOVE                    return (SvStorageRef) SotStorageRef();
+//REMOVE
+//REMOVE        // storage is always opened in transacted mode, so changes must be commited
+//REMOVE        SotStorageRef xStorage = pStor->OpenSotStorage( DEFINE_CONST_UNICODE("Configurations"),
+//REMOVE                    IsReadOnly() ? STREAM_STD_READ : STREAM_STD_READWRITE );
+//REMOVE        if ( xStorage.Is() && xStorage->GetError() )
+//REMOVE            xStorage.Clear();
+//REMOVE            return (SvStorageRef) xStorage;
+//REMOVE    }
 
-    if ( pStor->IsOLEStorage() )
-                return (SvStorageRef) SotStorageRef();
-
-    // storage is always opened in transacted mode, so changes must be commited
-    SotStorageRef xStorage = pStor->OpenSotStorage( DEFINE_CONST_UNICODE("Configurations"),
-                IsReadOnly() ? STREAM_STD_READ : STREAM_STD_READWRITE );
-    if ( xStorage.Is() && xStorage->GetError() )
-        xStorage.Clear();
-        return (SvStorageRef) xStorage;
-}
-
-SotStorageStreamRef SfxObjectShell::GetConfigurationStream( const String& rName, BOOL bCreate )
-{
-    SotStorageStreamRef xStream;
-    SvStorageRef xStorage = GetConfigurationStorage();
-    if ( xStorage.Is() )
-    {
-        xStream = xStorage->OpenSotStream( rName,
-            bCreate ? STREAM_STD_READWRITE|STREAM_TRUNC : STREAM_STD_READ );
-        if ( xStream.Is() && xStream->GetError() )
-            xStream.Clear();
-    }
-
-    return xStream;
-}
+//REMOVE    SotStorageStreamRef SfxObjectShell::GetConfigurationStream( const String& rName, BOOL bCreate )
+//REMOVE    {
+//REMOVE        SotStorageStreamRef xStream;
+//REMOVE        SvStorageRef xStorage = GetConfigurationStorage();
+//REMOVE        if ( xStorage.Is() )
+//REMOVE        {
+//REMOVE            xStream = xStorage->OpenSotStream( rName,
+//REMOVE                bCreate ? STREAM_STD_READWRITE|STREAM_TRUNC : STREAM_STD_READ );
+//REMOVE            if ( xStream.Is() && xStream->GetError() )
+//REMOVE                xStream.Clear();
+//REMOVE        }
+//REMOVE
+//REMOVE        return xStream;
+//REMOVE    }
 
 SfxAcceleratorManager* SfxObjectShell::GetAccMgr_Impl()
 {
-    // already constructed ?!
-    if ( pImp->pAccMgr )
-        return pImp->pAccMgr;
-
-    // get the typId ( = ResourceId )
-    const ResId* pResId = GetFactory().GetAccelId();
-    if ( !pResId )
-        return NULL;
-
-    if ( GetConfigManager() && pImp->pCfgMgr->HasConfigItem( pResId->GetId() ) )
-    {
-        // document has configuration
-        pImp->pAccMgr = new SfxAcceleratorManager( *pResId, pImp->pCfgMgr );
-        return pImp->pAccMgr;
-    }
-    else
+    //TODO/LATER: new API after recync to docking1 cws???
+//REMOVE        // already constructed ?!
+//REMOVE        if ( pImp->pAccMgr )
+//REMOVE            return pImp->pAccMgr;
+//REMOVE
+//REMOVE        // get the typId ( = ResourceId )
+//REMOVE        const ResId* pResId = GetFactory().GetAccelId();
+//REMOVE        if ( !pResId )
+//REMOVE            return NULL;
+//REMOVE
+//REMOVE        if ( GetConfigManager() && pImp->pCfgMgr->HasConfigItem( pResId->GetId() ) )
+//REMOVE        {
+//REMOVE            // document has configuration
+//REMOVE            pImp->pAccMgr = new SfxAcceleratorManager( *pResId, pImp->pCfgMgr );
+//REMOVE            return pImp->pAccMgr;
+//REMOVE        }
+//REMOVE        else
         return GetFactory().GetAccMgr_Impl();
 }
 
@@ -1957,26 +1618,33 @@ SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& aTargetURL, BO
     if( SFX_APP()->GetFilterMatcher().GuessFilter( *pMed, &pFilter ) == ERRCODE_NONE && pFilter && pFilter->IsOwnFormat() )
     {
         delete pMed;
-        StreamMode nMode = bForWriting ? STREAM_STD_READWRITE : STREAM_STD_READ;
-        SvStorageRef xStor = new SvStorage( aTargetURL, nMode, STORAGE_TRANSACTED );
-        xStor->SetVersion( pFilter->GetVersion() );
-        if ( SVSTREAM_OK == xStor->GetError() )
+        try
         {
-            // create document
-            xDoc = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
-            if ( xDoc.Is() )
+            sal_Int32 nMode = bForWriting ? embed::ElementModes::READWRITE : embed::ElementModes::READ;
+            uno::Reference< embed::XStorage > xStorage =
+                                            ::comphelper::OStorageHelper::GetStorageFromURL( aTargetURL, nMode );
+            if ( xStorage.is() )
             {
-                // partially load, so don't use DoLoad!
-                xDoc->DoInitNew(0);
-                if( !xDoc->LoadFrom( xStor ) )
-                    xDoc.Clear();
-                else
+                // create document
+                xDoc = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
+                if ( xDoc.Is() )
                 {
-                    // connect to storage, abandon temp. storage
-                    xDoc->DoHandsOff();
-                    xDoc->DoSaveCompleted( xStor );
+                    // partially load, so don't use DoLoad!
+                    xDoc->DoInitNew(0);
+                    // TODO/LATER: make sure that we don't use binary templates!
+                    if( xDoc->LoadFrom( xStorage ) )
+                    {
+                        // connect to storage, abandon temp. storage
+                        xDoc->DoSaveCompleted( xStorage );
+                    }
+                    else
+                        xDoc.Clear();
                 }
             }
+        }
+        catch( uno::Exception& )
+        {
+            // TODO: may need error handling
         }
     }
     else
@@ -1987,10 +1655,12 @@ SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& aTargetURL, BO
 
 SfxToolBoxConfig* SfxObjectShell::GetToolBoxConfig_Impl()
 {
+    //TODO/LATER: new API after recync to docking1 cws???
     if ( !pImp->pTbxConfig )
     {
         pImp->pTbxConfig = new SfxToolBoxConfig(
-            GetConfigManager() ? pImp->pCfgMgr : SFX_APP()->GetConfigManager_Impl() );
+//REMOVE                GetConfigManager() ? pImp->pCfgMgr : SFX_APP()->GetConfigManager_Impl() );
+                                        SFX_APP()->GetConfigManager_Impl() );
     }
 
     return pImp->pTbxConfig;
@@ -2002,3 +1672,4 @@ sal_Bool SfxObjectShell::IsHelpDocument() const
     const SfxFilter* pFilter = GetMedium()->GetFilter();
     return ( pFilter && pFilter->GetFilterName().CompareToAscii("writer_web_HTML_help") == COMPARE_EQUAL );
 }
+
