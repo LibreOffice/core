@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:17:40 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,12 @@ BOOL SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *pCnt,
         SdrObject *pO = rObjs[i];
         if ( !pO->ISA(SwVirtFlyDrawObj) )
             continue;
+
+        // OD 2004-01-15 #110582# - do not consider invisible objects
+        if ( !pPage->GetFmt()->GetDoc()->IsVisibleLayerId( pO->GetLayer() ) )
+        {
+            continue;
+        }
 
         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
 
@@ -2384,7 +2390,18 @@ BOOL SwLayAction::FormatFlyCntnt( const SwPageFrm *pPage, sal_Bool bDontShrink )
         if ( pO->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-            sal_Bool bOldShrink = pFly->IsNoShrink();
+
+            // #110582#-2
+            // During formatting the content of the fly, the fly may be calculated,
+            // which in turn causes the anchor frame to be calculated. If this
+            // anchor frame is invisible, the fly is moved to the invisible layer
+            // and all of its content is deletet. This has to be avoided, because
+            // there are still some references to the content. We lock the deletion
+            // of the fly frame content:
+            const sal_Bool bOldLockDeleteContent = pFly->IsLockDeleteContent();
+            pFly->SetLockDeleteContent( TRUE );
+
+            const sal_Bool bOldShrink = pFly->IsNoShrink();
             if( bDontShrink )
                 pFly->SetNoShrink( sal_True );
             if ( !_FormatFlyCntnt( pFly ) )
@@ -2395,6 +2412,12 @@ BOOL SwLayAction::FormatFlyCntnt( const SwPageFrm *pPage, sal_Bool bDontShrink )
             }
             if( bDontShrink )
                 pFly->SetNoShrink( bOldShrink );
+
+            // #110582#-2 Now the time has come to remove the content of the
+            // fly frame
+            pFly->SetLockDeleteContent( bOldLockDeleteContent );
+            if ( !pFly->GetFmt()->GetDoc()->IsVisibleLayerId( pO->GetLayer() ) )
+                pFly->DeleteCnt();
         }
     }
     return TRUE;
