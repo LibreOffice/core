@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-03 09:53:39 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ TabPage TP_DOCINFODESC
         Text [ portuguese ] = "~Descrição" ;
         Text [ finnish ] = "~Huomautus" ;
         Text [ danish ] = "Beskrivelse" ;
-        Text [ french ] = "~Description" ;
+        Text [ french ] = "Description" ;
         Text [ swedish ] = "~Beskrivning" ;
         Text [ dutch ] = "~Beschrijving" ;
         Text [ spanish ] = "~Descripción" ;
@@ -401,7 +401,7 @@ TabPage TP_DOCINFODOC
         Text[ russian ] = "Ñîçäàíî:";
         Text[ polish ] = "Utworzony:";
         Text[ japanese ] = "ì¬“ú:";
-        Text[ chinese_traditional ] = "»s§@¤é´Á¡G";
+        Text[ chinese_traditional ] = "«Ø¥ß¤é´Á¡G";
         Text[ greek ] = "ÄçìéïõñãŞèçêå ôç:";
         Text[ korean ] = "ÀÛ¼ºÀÏ:";
         Text[ arabic ] = "ÊÇÑíÎ ÇáÅäÔÇÁ:";
@@ -1055,6 +1055,7 @@ TabDialog SID_DOCINFO
         };
     };
 };
+
 
 
 
