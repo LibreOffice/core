@@ -39,8 +39,10 @@ common
 		COPYALL
         COPY_PACKED
 		CPPRTST
+        CVS_HEAD
 		CVSROOT
         CWS_WORK_STAMP
+        CWS_WORK_STAMP_EXT
 		DB2IMP
 		DB2INC
 		DB2LIB
@@ -121,6 +123,9 @@ common
 		RES_SWED
 		RES_THAI
 		RES_TURK
+	   	RES_HINDI
+		RES_PORTBR
+		RES_HEBREW
 		ROOTDIR
 		RSCRES
 		SCPLINKVERSION
@@ -182,6 +187,7 @@ common
             SO_GEN_ERROR
             SO_GEN_ERROR2
 			NO_SRS_PATCH true
+            CVS_HEAD SRX645
 		}
 		bsclient
 		{
