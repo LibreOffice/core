@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:48 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     bShowSpellErrors( FALSE ),
     pEditObj( NULL ),
     pViewShell( NULL ),
+    pDrawView( NULL ), // #114135#
     bAnyRotated( FALSE ),
     bAnyClipped( FALSE )
 {
