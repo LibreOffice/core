@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 20:09:59 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ TabPage TP_COLUMN
         Text[ finnish ] = "~M‰‰r‰";
         Text[ italian ] = "~Num.";
         Text[ danish ] = "Antal";
-        Text[ swedish ] = "~Antal";
+        Text[ swedish ] = "~Kolumner";
         Text[ polish ] = "Liczba";
         Text[ portuguese_brazilian ] = "~N?m.";
         Text[ japanese ] = "íiêî(~A)";
@@ -197,6 +197,26 @@ TabPage TP_COLUMN
         Text = "Spalte" ;
         Text [ English ] = "Column" ;
         Left = TRUE ;
+        Text[ english_us ] = "Column";
+        Text[ portuguese ] = "Column";
+        Text[ russian ] = "Column";
+        Text[ greek ] = "Column";
+        Text[ dutch ] = "Column";
+        Text[ french ] = "Column";
+        Text[ spanish ] = "Column";
+        Text[ finnish ] = "Column";
+        Text[ italian ] = "Column";
+        Text[ danish ] = "Column";
+        Text[ swedish ] = "Kolumn";
+        Text[ polish ] = "Column";
+        Text[ portuguese_brazilian ] = "Column";
+        Text[ japanese ] = "Column";
+        Text[ korean ] = "Column";
+        Text[ chinese_simplified ] = "Column";
+        Text[ chinese_traditional ] = "Column";
+        Text[ turkish ] = "Column";
+        Text[ arabic ] = "Column";
+        Text[ catalan ] = "Column";
     };
     Window WN_BSP
     {
@@ -441,7 +461,7 @@ TabPage TP_COLUMN
         Text[ finnish ] = "Sarakkeen leveys";
         Text[ italian ] = "Larghezza colonna";
         Text[ danish ] = "Kolonnebredde";
-        Text[ swedish ] = "Kolumnbredd";
+        Text[ swedish ] = "Bredd och avstÂnd";
         Text[ polish ] = "Szer. kolumny";
         Text[ portuguese_brazilian ] = "Largura da coluna";
         Text[ japanese ] = "íiÇÃïù";
