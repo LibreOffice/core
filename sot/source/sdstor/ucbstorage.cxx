@@ -957,28 +957,34 @@ void UCBStorage_Impl::Init()
 
     if ( m_pContent )
     {
-        Any aAny = m_pContent->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
-        rtl::OUString aTmp;
-        sal_Bool bIsOfficeDocument = sal_False;
-        if ( ( aAny >>= aTmp ) && aTmp.getLength() )
+        sal_Bool bIsOfficeDocument = m_bIsLinked;
+        if ( m_bIsLinked )
         {
-            m_aContentType = m_aOriginalContentType = aTmp;
+            // read the manifest.xml file
+        }
+        else
+        {
+            // get the manifest information from the package
+            Any aAny = m_pContent->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
+            rtl::OUString aTmp;
+            if ( ( aAny >>= aTmp ) && aTmp.getLength() )
+                m_aContentType = m_aOriginalContentType = aTmp;
+        }
 
-            if ( m_aContentType.Len() )
-            {
-                // get the clipboard format using the content type
-                ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
-                aDataFlavor.MimeType = m_aContentType;
-                m_nFormat = SotExchange::GetFormat( aDataFlavor );
+        if ( m_aContentType.Len() )
+        {
+            // get the clipboard format using the content type
+            ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+            aDataFlavor.MimeType = m_aContentType;
+            m_nFormat = SotExchange::GetFormat( aDataFlavor );
 
-                // get the ClassId using the clipboard format ( internal table )
-                m_aClassId = GetClassId_Impl( m_nFormat );
-                bIsOfficeDocument = ( m_aClassId != SvGlobalName() );
+            // get the ClassId using the clipboard format ( internal table )
+            m_aClassId = GetClassId_Impl( m_nFormat );
+            bIsOfficeDocument = ( m_aClassId != SvGlobalName() );
 
-                // get human presentable name using the clipboard format
-                SotExchange::GetFormatDataFlavor( m_nFormat, aDataFlavor );
-                m_aUserTypeName = aDataFlavor.HumanPresentableName;
-            }
+            // get human presentable name using the clipboard format
+            SotExchange::GetFormatDataFlavor( m_nFormat, aDataFlavor );
+            m_aUserTypeName = aDataFlavor.HumanPresentableName;
         }
 
         // create cursor for access to children
@@ -1053,7 +1059,6 @@ void UCBStorage_Impl::Init()
         }
     }
 }
-
 /*
 sal_Int32 nProps UCBStorage_Impl::GetProps( Sequence < PropertyValue > *pSequence )
 {
@@ -1067,6 +1072,9 @@ sal_Int32 nProps UCBStorage_Impl::GetProps( Sequence < PropertyValue > *pSequenc
         aProps[1].Name = ::rtl::OUString::createFromAscii("MediaType");
         aProps[1].Value = pElement->m_aContentType;
         pSequence[ nProps++ ] = aProps;
+        if ( pElement->m_bIsFolder )
+
+        pElement = m_aChildrenList.Next();
     }
 }
 */
@@ -1310,7 +1318,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                                         ::rtl::OUString::createFromAscii( "com.sun.star.packages.manifest.ManifestWriter" )), UNO_QUERY) ;
                             sal_Int32 nCount = GetObjectCount() + 1;
                             Sequence < Sequence < PropertyValue > > aProps( nCount );
-                            GetProps( aProps.getArray() );
+                            GetProps( &aProps );
                             xWriter->writeManifestSequence( xOutputStream, aProps );
 
                             // move the stream to its desired location
@@ -1318,7 +1326,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             aNewSubFolder.transferContent( aSource, InsertOperation_MOVE, ::rtl::OUString::createFromAscii("manifest.xml"), NameClash::OVERWRITE );
                             delete pHelper;
                         }
-*/
+ */
                     }
                     else
                     {
@@ -1860,13 +1868,28 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
         aName += '/';
         aName += pElement->m_aOriginalName;  //  ???
         pElement->m_bIsStorage = pElement->m_bIsFolder = TRUE;
-        UCBStorage *pStorage = new UCBStorage( aName, nMode, bDirect, FALSE );
-        pStorage->pImp->m_bIsRoot = FALSE;
+        UCBStorage *pStorage = 0;
+        if ( pImp->m_bIsLinked )
+        {
+            Content aNewFolder;
+            BOOL bRet = ::utl::UCBContentHelper::MakeFolder( *pImp->m_pContent, pElement->m_aOriginalName, aNewFolder );
+            if ( bRet )
+                pStorage = new UCBStorage( aNewFolder, aName, nMode, bDirect, FALSE );
+        }
+        else
+        {
+            pStorage = new UCBStorage( aName, nMode, bDirect, FALSE );
+        }
 
-        // if name has been changed before creating the stream: set name!
-        pStorage->pImp->m_aName = rEleName;
-        pElement->m_xStorage = pStorage->pImp;
-        return pStorage;
+        if ( pStorage )
+        {
+            pStorage->pImp->m_bIsRoot = FALSE;
+
+            // if name has been changed before creating the stream: set name!
+            pStorage->pImp->m_aName = rEleName;
+            pElement->m_xStorage = pStorage->pImp;
+            return pStorage;
+        }
     }
 
     return NULL;
