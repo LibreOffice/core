@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: vg $ $Date: 2002-11-19 15:10:08 $
+#   last change: $Author: vg $ $Date: 2002-11-26 12:47:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.67 $ ';
+$id_str = ' $Revision: 1.68 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -273,7 +273,7 @@ sub BuildAll {
 # Start build given project
 #
 sub dmake_dir {
-    my ($folder_nick, $BuildDir);
+    my ($folder_nick, $BuildDir, $error_code);
     $folder_nick = shift;
     $BuildDir = &CorrectPath($StandDir . $PathHash{$folder_nick});
     &print_error("\n$BuildDir not found!!\n") if (!(-d $BuildDir));
@@ -290,9 +290,8 @@ sub dmake_dir {
     if (!$cmd_file && !$show) {
         chdir $BuildDir;
         cwd();
-        $! = 0;
-        system ("$dmake");
-        &print_error("dmake - " . lc($!)) if ($!);
+        $error_code = system ("$dmake");
+        &print_error("dmake - " . lc($!)) if ($error_code);
         if ($? && ($? != -1) && (!$child)) {
             &print_error("Error $? occurred while making $BuildDir");
         };
