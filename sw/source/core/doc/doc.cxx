@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 15:59:33 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,17 +655,20 @@ sal_uInt16 SwDoc::GetPageCount() const
     return GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
 }
 
-const Size SwDoc::GetPageSize( sal_uInt16 nPageNum ) const
+const Size SwDoc::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const
 {
     Size aSize;
     if( GetRootFrm() && nPageNum )
     {
         const SwPageFrm* pPage = static_cast<const SwPageFrm*>
                                  (GetRootFrm()->Lower());
+
         while( --nPageNum && pPage->GetNext() )
             pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
-        if( pPage->IsEmptyPage() && pPage->GetNext() )
+
+        if( !bSkipEmptyPages && pPage->IsEmptyPage() && pPage->GetNext() )
             pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+
         aSize = pPage->Frm().SSize();
     }
     return aSize;
@@ -1156,6 +1159,10 @@ BOOL SwDoc::ConvertFieldsToText()
     for(sal_uInt16 nType = nCount;  nType > 0;  --nType)
     {
         const SwFieldType *pCurType = pFldTypes->GetObject(nType - 1);
+
+        if ( RES_POSTITFLD == pCurType->Which() )
+            continue;
+
         SwClientIter aIter( *(SwFieldType*)pCurType );
         const SwFmtFld* pCurFldFmt = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
         ::std::vector<const SwFmtFld*> aFieldFmts;
