@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:26:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 #include <stdio.h>
 #endif
 #include <vector>
@@ -159,7 +159,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createSimpleRegistry(
     }
     catch (Exception & exc)
     {
-#if defined _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OString cstr_msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_ENSURE( !"### exception occured:", cstr_msg.getStr() );
 #endif
@@ -186,7 +186,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
     }
     catch (Exception & exc)
     {
-#if defined _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OString cstr_msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_ENSURE( !"### exception occured:", cstr_msg.getStr() );
 #endif
@@ -420,7 +420,7 @@ Reference< XComponentContext > bootstrapInitialContext(
                     }
                     catch (Exception & rExc)
                     {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                         OString aStr( OUStringToOString(
                             xKey->getKeyName().copy( 11 ), RTL_TEXTENCODING_ASCII_US ) );
                         OString aStr2( OUStringToOString(
