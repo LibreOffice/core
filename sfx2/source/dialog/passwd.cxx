@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:13:14 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,6 @@
 #include "dialog.hrc"
 #include "passwd.hrc"
 
-#define MAX_PASSWORD_LEN    ((USHORT)16)
-
 // -----------------------------------------------------------------------
 
 #if (SUPD < 555)
@@ -143,9 +141,6 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
     aLink = LINK( this, SfxPasswordDialog, OKHdl );
     maOKBtn.SetClickHdl( aLink );
 
-    maPasswordED.SetMaxTextLen( MAX_PASSWORD_LEN );
-    maConfirmED.SetMaxTextLen( MAX_PASSWORD_LEN );
-
     if ( pGroupText )
           maPasswordBox.SetText( *pGroupText );
 }
@@ -154,7 +149,7 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
 
 void SfxPasswordDialog::SetMinLen( USHORT nLen )
 {
-    mnMinLen = Min( nLen, MAX_PASSWORD_LEN );
+    mnMinLen = nLen;
     EditModifyHdl( NULL );
 }
 
