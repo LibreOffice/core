@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-17 13:28:12 $
+ *  last change: $Author: os $ $Date: 2002-09-20 12:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,10 +282,17 @@ TabPage TP_CONTENT_OPT
         Text[ catalan ] = "Barra de despla�ament ~vertical";
         Text[ thai ] = "แถบเลื่อนแนว~ตั้ง";
     };
-    CheckBox CB_HRULER
+    CheckBox CB_ANY_RULER
     {
         Pos = MAP_APPFONT ( 136 , 40 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text = "Line~al" ;
+        Text [ english_us ] = "R~uler" ;
+    };
+    CheckBox CB_HRULER
+    {
+        Pos = MAP_APPFONT ( 142 , 53 ) ;
+        Size = MAP_APPFONT ( 61 , 10 ) ;
         Text = "Horizontales ~Lineal" ;
         Text [ ENGLISH ] = "~Horic. ruler" ;
         Text [ norwegian ] = "~Horic. ruler" ;
@@ -314,14 +321,14 @@ TabPage TP_CONTENT_OPT
     };
     ListBox LB_HMETRIC
     {
-        Pos = MAP_APPFONT ( 206 , 38 ) ;
+        Pos = MAP_APPFONT ( 206 , 51 ) ;
         Size = MAP_APPFONT ( 45 , 60 ) ;
         DropDown = TRUE;
     };
     CheckBox CB_VRULER
     {
-        Pos = MAP_APPFONT ( 136 , 53 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 142 , 66 ) ;
+        Size = MAP_APPFONT ( 61 , 10 ) ;
         Text = "Vertik~ales Lineal" ;
         Text [ ENGLISH ] = "~Vert. ruler" ;
         Text [ norwegian ] = "~Vert. ruler" ;
@@ -350,8 +357,8 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_VRULER_RIGHT
     {
-        Pos = MAP_APPFONT ( 142 , 66 ) ;
-        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Pos = MAP_APPFONT ( 148 , 79 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Rechts ausgerichtet" ;
         Text [ ENGLISH ] = "Right aligned" ;
         Text[ english_us ] = "Right-aligned";
@@ -378,13 +385,13 @@ TabPage TP_CONTENT_OPT
     };
     ListBox LB_VMETRIC
     {
-        Pos = MAP_APPFONT ( 206 , 51 ) ;
+        Pos = MAP_APPFONT ( 206 , 64 ) ;
         Size = MAP_APPFONT ( 45 , 60 ) ;
         DropDown = TRUE;
     };
     CheckBox CB_SMOOTH_SCROLL
     {
-        Pos = MAP_APPFONT ( 136 , 66 ) ;
+        Pos = MAP_APPFONT ( 136 , 79 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Weiches Scrollen" ;
         Text [ ENGLISH ] = "S~mooth scroll" ;

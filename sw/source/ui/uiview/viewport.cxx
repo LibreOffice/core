@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-08-23 09:39:30 $
+ *  last change: $Author: os $ $Date: 2002-09-20 12:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1087,7 +1087,7 @@ void SwView::ShowAtResize()
 {
     const FASTBOOL bBrowse = pWrtShell->IsBrowseMode();
     bShowAtResize = FALSE;
-    if ( pWrtShell->GetViewOptions()->IsViewTabwin() )
+    if ( pWrtShell->GetViewOptions()->IsViewHRuler() )
         pHRuler->Show();
 //    if ( !bBrowse ||GetDocShell()->GetProtocol().IsInPlaceActive())
 //        pHScrollbar->Show();

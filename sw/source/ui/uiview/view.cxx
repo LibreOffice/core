@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: os $ $Date: 2002-07-04 14:11:58 $
+ *  last change: $Author: os $ $Date: 2002-09-20 12:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -936,8 +936,8 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     SfxViewFrame* pViewFrame = GetViewFrame();
     if( pViewFrame->GetFrame()->GetParentFrame())
     {
-        aUsrPref.SetViewTabwin(sal_False);
-        aUsrPref.SetViewVLin(sal_False);
+        aUsrPref.SetViewHRuler(sal_False);
+        aUsrPref.SetViewVRuler(sal_False);
     }
 
     StartListening( *pViewFrame );
@@ -981,9 +981,9 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     ShowVScrollbar(aUsrPref.IsViewVScrollBar());
     ShowHScrollbar(aUsrPref.IsViewHScrollBar());
     pHScrollbar->SetAuto(bBrowse);
-    if( aUsrPref.IsViewTabwin() )
+    if( aUsrPref.IsViewHRuler() )
         CreateTab();
-    if( aUsrPref.IsViewVLin() )
+    if( aUsrPref.IsViewVRuler() )
         CreateVLineal();
 
     pWrtShell->SetUIOptions( aUsrPref );
@@ -1525,11 +1525,11 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     SwWrtShell &rSh = GetWrtShell();
                     rSh.SetReadonlyOption( GetDocShell()->IsReadOnly() );
 
-                    if ( rSh.GetViewOptions()->IsViewVLin() )
+                    if ( rSh.GetViewOptions()->IsViewVRuler() )
                         CreateVLineal();
                     else
                         KillVLineal();
-                    if ( rSh.GetViewOptions()->IsViewTabwin() )
+                    if ( rSh.GetViewOptions()->IsViewHRuler() )
                         CreateTab();
                     else
                         KillTab();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 10:31:22 $
+ *  last change: $Author: os $ $Date: 2002-09-20 12:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
     aWindowFL     ( this,   SW_RES( FL_WINDOW   ) ),
     aHScrollBox   ( this,   SW_RES( CB_HSCROLL   ) ),
     aVScrollBox   ( this,   SW_RES( CB_VSCROLL   ) ),
+    aAnyRulerCB   ( this,   SW_RES( CB_ANY_RULER ) ),
     aHRulerCBox   ( this,   SW_RES( CB_HRULER   ) ),
     aHMetric      ( this,   SW_RES( LB_HMETRIC    ) ),
     aVRulerCBox   ( this,   SW_RES( CB_VRULER    ) ),
@@ -255,6 +256,7 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
     else
         aVRulerRightCBox.Hide();
     aVRulerCBox.SetClickHdl(LINK(this, SwContentOptPage, VertRulerHdl ));
+    aAnyRulerCB.SetClickHdl(LINK(this, SwContentOptPage, AnyRulerHdl));
 
     SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
     for ( USHORT i = 0; i < aMetricArr.Count(); ++i )
@@ -338,17 +340,17 @@ void SwContentOptPage::Reset(const SfxItemSet& rSet)
         aBigHandleCB.Check(pElemAttr->bBigHandles       );
         aHScrollBox.Check( pElemAttr->bHorzScrollbar     );
         aVScrollBox.Check( pElemAttr->bVertScrollbar     );
+        aAnyRulerCB.Check( pElemAttr->bAnyRuler );
         aHRulerCBox.Check( pElemAttr->bHorzRuler         );
         aVRulerCBox.Check( pElemAttr->bVertRuler         );
         aVRulerRightCBox.Check(pElemAttr->bVertRulerRight);
         aSmoothCBox.Check( pElemAttr->bSmoothScroll      );
-//                                            bHtmlMode
     }
     aMetricLB.SetNoSelection();
     lcl_SelectMetricLB(aMetricLB, SID_ATTR_METRIC, rSet);
     lcl_SelectMetricLB(aHMetric, FN_HSCROLL_METRIC, rSet);
     lcl_SelectMetricLB(aVMetric, FN_VSCROLL_METRIC, rSet);
-    VertRulerHdl(&aVRulerCBox);
+    AnyRulerHdl(&aAnyRulerCB);
 }
 
 /*-----------------31.08.96 13.58-------------------
@@ -372,6 +374,7 @@ BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     aElem.bBigHandles    = aBigHandleCB.IsChecked();
     aElem.bHorzScrollbar = aHScrollBox.IsChecked();
     aElem.bVertScrollbar = aVScrollBox.IsChecked();
+    aElem.bAnyRuler = aAnyRulerCB.IsChecked();
     aElem.bHorzRuler     = aHRulerCBox.IsChecked();
     aElem.bVertRuler     = aVRulerCBox.IsChecked();
     aElem.bVertRulerRight= aVRulerRightCBox.IsChecked();
@@ -413,7 +416,20 @@ BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
  ---------------------------------------------------------------------------*/
 IMPL_LINK(SwContentOptPage, VertRulerHdl, CheckBox*, pBox)
 {
-    aVRulerRightCBox.Enable(pBox->IsChecked());
+    aVRulerRightCBox.Enable(pBox->IsEnabled() && pBox->IsChecked());
+    return 0;
+}
+/* -----------------20.09.2002 11:30-----------------
+ *
+ * --------------------------------------------------*/
+IMPL_LINK( SwContentOptPage, AnyRulerHdl, CheckBox*, pBox)
+{
+    BOOL bChecked = pBox->IsChecked();
+    aHRulerCBox      .Enable(bChecked);
+    aHMetric         .Enable(bChecked);
+    aVRulerCBox      .Enable(bChecked);
+    aVMetric         .Enable(bChecked);
+    VertRulerHdl(&aVRulerCBox);
     return 0;
 }
 /*----------------- OS 27.01.95  -----------------------

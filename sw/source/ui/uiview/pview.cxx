@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-07-05 12:39:21 $
+ *  last change: $Author: os $ $Date: 2002-09-20 12:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1445,8 +1445,8 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
     aOpt.SetFldName( FALSE );
     aOpt.SetPostIts( FALSE );
     aOpt.SetHidden( FALSE );
-    aOpt.SetViewVLin( FALSE );
-    aOpt.SetViewTabwin( FALSE );
+    aOpt.SetViewHRuler( FALSE );
+    aOpt.SetViewVRuler( FALSE );
     aOpt.SetGraphic( TRUE );
     aOpt.SetTable( TRUE );
     aOpt.SetSnap( FALSE );

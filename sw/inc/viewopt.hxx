@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-08-01 11:45:41 $
+ *  last change: $Author: os $ $Date: 2002-09-20 12:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,13 +121,13 @@ namespace svx{ class ColorConfig;}
 #define VIEWOPT_CORE2_BIGMARKHDL        0x00000040L
 
 #define VIEWOPT_2_UNUSED1           0x00000100L
-
-#define VIEWOPT_2_TABWIN            0x00000400L
+#define VIEWOPT_2_UNUSED2           0x00000200L
+#define VIEWOPT_2_H_RULER           0x00000400L
 #define VIEWOPT_2_VSCROLLBAR        0x00000800L
 #define VIEWOPT_2_HSCROLLBAR        0x00001000L
 #define VIEWOPT_2_STATUSLINE        0x00002000L
-#define VIEWOPT_2_VLIN              0x00004000L
-#define VIEWOPT_2_SVLOOK            0x00008000L
+#define VIEWOPT_2_V_RULER           0x00004000L
+#define VIEWOPT_2_ANY_RULER         0x00008000L
 #define VIEWOPT_2_MODIFIED          0x00010000L
 #define VIEWOPT_2_KEEPASPECTRATIO   0x00020000L
 #define VIEWOPT_2_GRFKEEPZOOM       0x00040000L
@@ -137,7 +137,7 @@ namespace svx{ class ColorConfig;}
 #define VIEWOPT_2_RESERVED4         0x00400000L
 #define VIEWOPT_2_PRTFORMAT         0x00800000L
 #define VIEWOPT_2_SHADOWCRSR        0x01000000L
-#define VIEWOPT_2_VLIN_RIGHT        0x02000000L
+#define VIEWOPT_2_V_RULER_RIGHT     0x02000000L
 
 //Tabellenhintergrund
 #define TBL_DEST_CELL   0
@@ -495,8 +495,6 @@ public:
         { return nUIOptions & VIEWOPT_2_VSCROLLBAR ? TRUE : FALSE;    }
     BOOL    IsViewHScrollBar() const
         { return nUIOptions & VIEWOPT_2_HSCROLLBAR ? TRUE : FALSE;    }
-    BOOL    IsViewSVLook()     const
-        { return nUIOptions & VIEWOPT_2_SVLOOK ? TRUE : FALSE;    }
     BOOL    IsKeepRatio()      const
         { return nUIOptions & VIEWOPT_2_KEEPASPECTRATIO ? TRUE : FALSE;   }
     BOOL    IsGrfKeepZoom()    const
@@ -536,10 +534,35 @@ public:
     const Color&    GetRetoucheColor() const        { return aRetoucheColor;}
     void            SetRetoucheColor(const Color&r) { aRetoucheColor = r;   }
 
-    inline BOOL     IsViewTabwin()     const;
-    inline BOOL     IsViewVLin()       const;
-    inline void     SetViewTabwin   (BOOL b);
-    inline void     SetViewVLin     (BOOL b);
+    BOOL            IsViewAnyRuler() const {return 0 != (nUIOptions & VIEWOPT_2_ANY_RULER);}
+    void            SetViewAnyRuler(BOOL bSet)
+                        { bSet ? (nUIOptions |= VIEWOPT_2_ANY_RULER) : (nUIOptions &= ~VIEWOPT_2_ANY_RULER);}
+
+    BOOL            IsViewHRuler(BOOL bDirect = FALSE)     const
+                        {
+                            BOOL bRet = bDirect  ?
+                                    0 != (nUIOptions & VIEWOPT_2_H_RULER) :
+                                    !bReadonly ?
+                                        (nUIOptions & (VIEWOPT_2_ANY_RULER|VIEWOPT_2_H_RULER)) == (VIEWOPT_2_ANY_RULER|VIEWOPT_2_H_RULER)
+                                        : FALSE;
+                            return bRet;
+
+                        }
+    void            SetViewHRuler   (BOOL b)
+                        {    b ? (nUIOptions |= VIEWOPT_2_H_RULER ) : ( nUIOptions &= ~VIEWOPT_2_H_RULER);}
+
+    BOOL            IsViewVRuler(BOOL bDirect = FALSE) const
+                        {
+                            BOOL bRet = bDirect  ?
+                                    0 !=(nUIOptions & VIEWOPT_2_V_RULER) :
+                                    !bReadonly ?
+                                        (nUIOptions &
+                                            (VIEWOPT_2_ANY_RULER|VIEWOPT_2_V_RULER)) == (VIEWOPT_2_ANY_RULER|VIEWOPT_2_V_RULER)
+                                        : FALSE;
+                            return bRet;
+                        }
+    void            SetViewVRuler     (BOOL b)
+                        { b ? (nUIOptions |= VIEWOPT_2_V_RULER ) : ( nUIOptions &= ~VIEWOPT_2_V_RULER);}
 
     // ShadowCursor ein schalten/abfragen/Farbe setzen/Modus setzen
     BOOL    IsShadowCursor()    const
@@ -549,9 +572,9 @@ public:
 
     //move vertical ruler to the right
     BOOL    IsVRulerRight()    const
-        { return nUIOptions & VIEWOPT_2_VLIN_RIGHT ? TRUE : FALSE;   }
+        { return nUIOptions & VIEWOPT_2_V_RULER_RIGHT ? TRUE : FALSE;   }
     void   SetVRulerRight(BOOL b)
-        { b ? (nUIOptions |= VIEWOPT_2_VLIN_RIGHT ) : ( nUIOptions &= ~VIEWOPT_2_VLIN_RIGHT); }
+        { b ? (nUIOptions |= VIEWOPT_2_V_RULER_RIGHT ) : ( nUIOptions &= ~VIEWOPT_2_V_RULER_RIGHT); }
 
     BOOL            IsStarOneSetting() const {return bStarOneSetting; }
     void            SetStarOneSetting(BOOL bSet) {bStarOneSetting = bSet; }
@@ -608,26 +631,6 @@ inline void SwViewOption::SetUIOptions( const SwViewOption& rVOpt )
     nUIOptions = rVOpt.nUIOptions;
     nTblDest = rVOpt.nTblDest;
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
-}
-
-inline BOOL SwViewOption::IsViewTabwin() const
-{
-    return !bReadonly && (nUIOptions & VIEWOPT_2_TABWIN) ? TRUE : FALSE;
-}
-
-inline BOOL SwViewOption::IsViewVLin() const
-{
-    return !bReadonly && (nUIOptions & VIEWOPT_2_VLIN) ? TRUE : FALSE;
-}
-
-inline void SwViewOption::SetViewTabwin(BOOL b)
-{
-    b ? (nUIOptions |= VIEWOPT_2_TABWIN ) : ( nUIOptions &= ~VIEWOPT_2_TABWIN);
-}
-
-inline void SwViewOption::SetViewVLin(BOOL b)
-{
-    b ? (nUIOptions |= VIEWOPT_2_VLIN ) : ( nUIOptions &= ~VIEWOPT_2_VLIN);
 }
 
 

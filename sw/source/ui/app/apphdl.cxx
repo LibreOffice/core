@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 10:23:02 $
+ *  last change: $Author: os $ $Date: 2002-09-20 12:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,16 @@ void SwModule::StateViewOptions(SfxItemSet &rSet)
             switch(nWhich)
             {
                 case FN_RULER:
-                    aBool.SetValue( pActView->StatTab() );  break;
+                {
+                    if(!pOpt->IsViewHRuler(TRUE) && !pOpt->IsViewVRuler(TRUE))
+                    {
+                        rSet.DisableItem(nWhich);
+                        nWhich = 0;
+                    }
+                    else
+                        aBool.SetValue( pOpt->IsViewAnyRuler());
+                }
+                break;
                 case FN_VIEW_BOUNDS:
                     aBool.SetValue( SwViewOption::IsDocBoundaries()); break;
                 case FN_VIEW_GRAPHIC:
@@ -654,9 +663,9 @@ void SwModule::ExecViewOptions(SfxRequest &rReq)
 
         case FN_VLINEAL:
                 if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsViewVLin();
+                    bFlag = !pOpt->IsViewVRuler();
 
-                pOpt->SetViewVLin( bFlag );
+                pOpt->SetViewVRuler( bFlag );
                 break;
 
         case FN_VSCROLLBAR:
@@ -674,9 +683,9 @@ void SwModule::ExecViewOptions(SfxRequest &rReq)
                 break;
         case FN_RULER:
                 if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsViewTabwin();
+                    bFlag = !pOpt->IsViewAnyRuler();
 
-                pOpt->SetViewTabwin( bFlag );
+                pOpt->SetViewAnyRuler( bFlag );
                 break;
 
         case FN_VIEW_TABLEGRID:

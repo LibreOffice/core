@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-07 12:08:21 $
+ *  last change: $Author: os $ $Date: 2002-09-20 12:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ class SwContentOptPage : public SfxTabPage
     FixedLine   aWindowFL;
     CheckBox    aHScrollBox;
     CheckBox    aVScrollBox;
+    CheckBox    aAnyRulerCB;
     CheckBox    aHRulerCBox;
     ListBox     aHMetric;
     CheckBox    aVRulerCBox;
@@ -136,6 +137,7 @@ class SwContentOptPage : public SfxTabPage
     ListBox     aMetricLB;
 
     DECL_LINK(VertRulerHdl, CheckBox*);
+    DECL_LINK(AnyRulerHdl, CheckBox*);
 public:
                         SwContentOptPage( Window* pParent,
                                            const SfxItemSet& rSet );
