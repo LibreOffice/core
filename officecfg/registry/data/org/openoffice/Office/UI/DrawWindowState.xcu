@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DrawWindowState.xcu,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 19:49:33 $
+ *  last change: $Author: rt $ $Date: 2004-12-02 09:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,21 +541,6 @@
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Symbol Shapes</value>
                     <value xml:lang="de">Symbolformen</value>
-                </prop>
-                <prop oor:name="Visible" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
-                </prop>
-            </node>
-            <node oor:name="private:resource/toolbar/arrowshapes" oor:op="replace">
-                <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">Block Arrows</value>
-                    <value xml:lang="de">Blockpfeile</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
