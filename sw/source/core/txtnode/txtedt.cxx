@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:54:55 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
+#endif
+#ifndef SVX_HANGUL_HANJA_CONVERSION_HXX
+#include <svx/hangulhanja.hxx>
 #endif
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
@@ -728,12 +731,12 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
     if ( pArgs->pStartNode != this )
         nBegin = 0;
     else
-        nBegin = pArgs->rStartIdx.GetIndex();
+        nBegin = pArgs->pStartIdx->GetIndex();
 
     if ( pArgs->pEndNode != this )
         nEnd = aText.Len();
     else
-        nEnd = pArgs->rEndIdx.GetIndex();
+        nEnd = pArgs->pEndIdx->GetIndex();
 
     pArgs->xSpellAlt = NULL;
 
@@ -816,8 +819,8 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 
                         pArgs->pStartNode = this;
                         pArgs->pEndNode = this;
-                        pArgs->rStartIdx.Assign(this, aScanner.GetEnd() - nRight );
-                        pArgs->rEndIdx.Assign(this, aScanner.GetBegin() + nLeft );
+                        pArgs->pStartIdx->Assign(this, aScanner.GetEnd() - nRight );
+                        pArgs->pEndIdx->Assign(this, aScanner.GetBegin() + nLeft );
                     }
                 }
             }
@@ -840,20 +843,22 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
     xub_StrLen nTextBegin, nTextEnd;
     //
     if ( rArgs.pStartNode != this )
+    {
         nTextBegin = 0;
+    }
     else
-        nTextBegin = rArgs.rStartIdx.GetIndex();
+        nTextBegin = rArgs.pStartIdx->GetIndex();
     if (nTextBegin > aText.Len())
         nTextBegin = aText.Len();
     //
     if ( rArgs.pEndNode != this )
         nTextEnd = aText.Len();
     else
-        nTextEnd = rArgs.rEndIdx.GetIndex();
+        nTextEnd = rArgs.pEndIdx->GetIndex();
     if (nTextEnd > aText.Len())
         nTextEnd = aText.Len();
 
-    rArgs.bConvTextFound = sal_False;
+    rArgs.aConvText = rtl::OUString();
 
     // modify string according to redline information and hidden text
     const XubString aOldTxt( aText );
@@ -863,15 +868,19 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
     sal_Bool    bFound  = sal_False;
     xub_StrLen  nBegin  = nTextBegin;
     xub_StrLen  nLen;
+    LanguageType nLangFound = LANGUAGE_NONE;
     if (aText.Len())
     {
         SwLanguageIterator aIter( *this, nBegin );
 
         // find non zero length text portion of appropriate language
         do {
-            bFound = (aIter.GetLanguage() == rArgs.nConvLang) &&
-                     (aIter.GetChgPos() - nBegin > 0);
+            nLangFound = aIter.GetLanguage();
+            sal_Bool bLangOk =  (nLangFound == rArgs.nConvSrcLang) ||
+                                (svx::HangulHanjaConversion::IsChinese( nLangFound ) &&
+                                 svx::HangulHanjaConversion::IsChinese( rArgs.nConvSrcLang ));
             nLen = aIter.GetChgPos() - nBegin;
+            bFound = bLangOk && nLen > 0;
             if (!bFound)
                 nBegin = aIter.GetChgPos(); // start of next language portion
         } while (!bFound && aIter.Next());  /* loop while nothing was found and still sth is left to be searched */
@@ -888,22 +897,22 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
     {
         const XubString aTxtPortion = aText.Copy( nBegin, nLen );
         DBG_ASSERT( aText.Len() > 0, "convertible text portion missing!" );
-        rArgs.bConvTextFound = sal_True;
-        rArgs.aConvText = aText.Copy( nBegin, nLen );
+        rArgs.aConvText     = aText.Copy( nBegin, nLen );
+        rArgs.nConvTextLang = nLangFound;
 
-        // position where to start looking in next iterration (after current end)
+        // position where to start looking in next iteration (after current ends)
         rArgs.pStartNode = this;
-        rArgs.rStartIdx.Assign(this, nBegin + nLen );
-        // end position (when we have traversed over the whole document)
+        rArgs.pStartIdx->Assign(this, nBegin + nLen );
+        // end position (when we have travelled over the whole document)
         rArgs.pEndNode = this;
-        rArgs.rEndIdx.Assign(this, nBegin );
+        rArgs.pEndIdx->Assign(this, nBegin );
     }
 
     // restore original text
     if ( bRestoreString )
         aText = aOldTxt;
 
-    return rArgs.bConvTextFound ? 1 : 0;
+    return rArgs.aConvText.getLength() ? 1 : 0;
 }
 
 
