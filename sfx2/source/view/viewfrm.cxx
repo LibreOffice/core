@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:58:51 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3659,9 +3659,14 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                             nIndex = aTmp.SearchBackward( sal_Unicode( '.' ));
                             if ( nIndex != STRING_NOTFOUND )
                                 aTmp.Erase( nIndex );
-
-                            // remove last two digits (language specific number)
-                            aTmp.Erase( aTmp.Len() - 2 );
+                            String aSUPDStr( String::CreateFromInt32( SUPD ));
+                            nIndex = aTmp.SearchCharBackward( aSUPDStr.GetBuffer(), aSUPDStr.Len() );
+                            if (( nIndex != STRING_NOTFOUND ) &&
+                                (( nIndex+aSUPDStr.Len() ) < aTmp.Len() ))
+                            {
+                                nIndex += aSUPDStr.Len();
+                                aTmp.Erase( nIndex );
+                            }
                         }
 
                         aObjMenuResString += aTmp;
