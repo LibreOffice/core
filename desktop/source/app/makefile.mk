@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: lla $ $Date: 2001-03-07 09:20:36 $
+#   last change: $Author: mba $ $Date: 2001-04-09 14:59:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,11 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  $(UPD)minor.mk
 RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
+
+.IF "$(BUILD_SOSL)" == ""
+        CDEFS += "-DTIMEBOMB"
+.ELSE
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
