@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Socket_Const.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:33:19 $
+ *  last change: $Author: obo $ $Date: 2004-01-05 21:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,55 +165,51 @@ extern "C"
 //------------------------------------------------------------------------
 // Ip port definition
 //------------------------------------------------------------------------
-#define IP_PORT_ZERO    0
-#define IP_PORT_FTP    21
-#define IP_PORT_TELNET 23
-#define IP_PORT_SMTP 25
-#define IP_PORT_GOPHER 70
-#define IP_PORT_HTTP1  80
-#define IP_PORT_POP3  110
-#define IP_PORT_NETBIOS_DGM  138
-#define IP_PORT_NETBIOS  139
-#define IP_PORT_IMAP  143
-#define IP_PORT_HTTPS  443
-#define IP_PORT_HTTP2  8080
-/**reference: http://www.iana.org/assignments/port-numbers */
-#define IP_PORT_MYPORT  8881    //8888
-#define IP_PORT_MYPORT1  8882   //8889
-#define IP_PORT_MYPORT2  8883   //8890
-#define IP_PORT_MYPORT3  8884   //8891
-#define IP_PORT_MYPORT4  8885   //8892
-#define IP_PORT_MYPORT5  8886   //8893
-#define IP_PORT_MYPORT6  8887   //8894
-#define IP_PORT_MYPORT7  8895
-#define IP_PORT_MYPORT8  8896
-#define IP_PORT_MYPORT9  8897
-#define IP_PORT_MYPORT10  8898
-
-#define IP_PORT_TMP    9999
-#define IP_PORT_INVAL  99999
+// #define IP_PORT_ZERO    0
+// #define IP_PORT_TELNET 23
+// #define IP_PORT_SMTP 25
+// #define IP_PORT_GOPHER 70
+// #define IP_PORT_POP3  110
+// #define IP_PORT_NETBIOS_DGM  138
+// #define IP_PORT_NETBIOS  139
+// #define IP_PORT_IMAP  143
+// #define IP_PORT_HTTPS  443
+// /**reference: http://www.iana.org/assignments/port-numbers */
+// #define IP_PORT_MYPORT  8881     //8888
+// #define IP_PORT_MYPORT1  8882    //8889
+// #define IP_PORT_MYPORT3  8884    //8891
+// #define IP_PORT_MYPORT4  8885    //8892
+// #define IP_PORT_MYPORT5  8886    //8893
+// #define IP_PORT_MYPORT6  8887    //8894
+// #define IP_PORT_MYPORT7  8895
+// #define IP_PORT_MYPORT8  8896
+// #define IP_PORT_MYPORT9  8897
+// #define IP_PORT_MYPORT10  8898
+//
+// #define IP_PORT_TMP    9999
+// #define IP_PORT_INVAL  99999
 
 //------------------------------------------------------------------------
 // service definitions.
 //------------------------------------------------------------------------
-OSLTEST_DECLARE( ServiceFTP,  "ftp" );
-OSLTEST_DECLARE( ServiceTELNET,  "telnet" );
-OSLTEST_DECLARE( ServiceGOPHER,  "gopher" );
-OSLTEST_DECLARE( ServiceIMAP,  "imap" );
-OSLTEST_DECLARE( ServiceHTTPS,  "https" );
-OSLTEST_DECLARE( ServiceNETBIOS,  "netbios-dgm" );
+// OSLTEST_DECLARE( ServiceFTP,  "ftp" );
+// OSLTEST_DECLARE( ServiceTELNET,  "telnet" );
+// OSLTEST_DECLARE( ServiceGOPHER,  "gopher" );
+// OSLTEST_DECLARE( ServiceIMAP,  "imap" );
+// OSLTEST_DECLARE( ServiceHTTPS,  "https" );
+// OSLTEST_DECLARE( ServiceNETBIOS,  "netbios-dgm" );
 
 //------------------------------------------------------------------------
 // protocol definitions.
 //------------------------------------------------------------------------
-OSLTEST_DECLARE( ProtocolTCP,  "tcp" );
-OSLTEST_DECLARE( ProtocolUDP,  "udp" );
+// OSLTEST_DECLARE( ProtocolTCP,  "tcp" );
+// OSLTEST_DECLARE( ProtocolUDP,  "udp" );
 
 //------------------------------------------------------------------------
 // Hostnames.
 //------------------------------------------------------------------------
-OSLTEST_DECLARE( HostName1,  "localhost" );
-OSLTEST_DECLARE( HostIp1,  "127.0.0.1" );
+// OSLTEST_DECLARE( HostName1,  "localhost" );
+// OSLTEST_DECLARE( HostIp1,  "127.0.0.1" );
 OSLTEST_DECLARE( HostName2,  "longshot.prc.sun.com" );
 OSLTEST_DECLARE( HostIp2,  "129.158.217.202" );
 OSLTEST_DECLARE( HostName3,  "deuce.prc.sun.com" );
@@ -225,9 +221,9 @@ OSLTEST_DECLARE( HostIp5,  "10.5.32.20" );
 OSLTEST_DECLARE( HostName6,  "crumple.SFBay.Sun.COM" );  //sfbay
 OSLTEST_DECLARE( HostIp6,  "10.6.103.83" );
 OSLTEST_DECLARE( HostIpInval,  "123.45.67.89" );    //this is valid ip number,but can not arrive --mindy
-OSLTEST_DECLARE( HostIpInval1,  "123.345.67.89" );  //this is real invalid ip number --mindy
+// OSLTEST_DECLARE( HostIpInval1,  "123.345.67.89" );   //this is real invalid ip number --mindy
 OSLTEST_DECLARE( HostNameInval,  "www.the_hostname_that_can_not_resolvable_to_an_IP_Address.com" );
-
+OSLTEST_DECLARE( HostIpZero,  "0.0.0.0" );
 
 //------------------------------------------------------------------------
 // OS independent file definition
