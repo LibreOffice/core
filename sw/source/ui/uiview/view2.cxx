@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:26:31 $
+ *  last change: $Author: os $ $Date: 2000-11-24 17:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,12 +604,22 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         }
         break;
         case SID_ATTR_LANGUAGE:
+        if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_LANGUAGE, FALSE, &pItem))
         {
-            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_LANGUAGE, FALSE, &pItem))
-            {
-                SvxLanguageItem aLang(((SvxLanguageItem*)pItem)->GetLanguage(), RES_CHRATR_LANGUAGE);
-                pWrtShell->SetDefault( aLang );
-            }
+            SvxLanguageItem aLang(((SvxLanguageItem*)pItem)->GetLanguage(), RES_CHRATR_LANGUAGE);
+            pWrtShell->SetDefault( aLang );
+        }
+        break;
+        case  SID_ATTR_CHAR_CTL_LANGUAGE:
+        if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(RES_CHRATR_CTL_LANGUAGE, FALSE, &pItem))
+        {
+            pWrtShell->SetDefault( *pItem );
+        }
+        break;
+        case  SID_ATTR_CHAR_CJK_LANGUAGE:
+        if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(RES_CHRATR_CJK_LANGUAGE, FALSE, &pItem))
+        {
+            pWrtShell->SetDefault( *pItem );
         }
         break;
         case FN_INSERT_HEADER:
@@ -1157,7 +1167,7 @@ BOOL SwView::JumpToSwMark( const String& rMark )
             {
                 // Normale Textsuche
                 pWrtShell->EnterStdMode();
-                utl::SearchParam aParam( sName, utl::SearchParam::SRCH_NORMAL,
+                SearchParam aParam( sName, SearchParam::SRCH_NORMAL,
                                     TRUE, FALSE, FALSE );
 
                 if( pWrtShell->SearchPattern( aParam, DOCPOS_START, DOCPOS_END ))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-31 16:10:00 $
+ *  last change: $Author: os $ $Date: 2000-11-24 17:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,14 @@ void SwView::GetState(SfxItemSet &rSet)
                 rSet.Put((const SvxLanguageItem&)
                     pWrtShell->GetDefault(RES_CHRATR_LANGUAGE), SID_ATTR_LANGUAGE);
             }
+            break;
+            case RES_CHRATR_CJK_LANGUAGE:
+                rSet.Put((const SvxLanguageItem&)
+                    pWrtShell->GetDefault(RES_CHRATR_CJK_LANGUAGE), RES_CHRATR_CJK_LANGUAGE);
+            break;
+            case RES_CHRATR_CTL_LANGUAGE:
+                rSet.Put((const SvxLanguageItem&)
+                    pWrtShell->GetDefault(RES_CHRATR_CTL_LANGUAGE), RES_CHRATR_CTL_LANGUAGE);
             break;
             case FN_INSERT_FOOTER:
             case FN_INSERT_HEADER:
