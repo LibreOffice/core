@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 07:57:09 $
+ *  last change: $Author: rt $ $Date: 2000-12-04 10:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2205,7 +2205,7 @@ String STR_EVENT_ONERROR
     Text [ portuguese ] = "Erro na execução de JavaScript" ;
     Text[ chinese_simplified ] = "Javascript-ÔËĞĞÊ±¼ä´íÎó";
     Text[ russian ] = "Îøèáêà ïğè âûïîëíåíèè JavaScript";
-    Text[ polish ] = "B³¹d czasu przeb. w Javascript";
+    Text[ polish ] = "JavaScript Runtime Error";
     Text[ japanese ] = "JavaScript runtime ´×°•\\¦‚Ì";
     Text[ chinese_traditional ] = "Javascript ¹B¦æ®É¶¡¿ù»~";
     Text[ arabic ] = "ÎØÃ İí æŞÊ ÊÔÛíáJavaScript ";
@@ -3586,11 +3586,11 @@ String STR_KEY_BACKUP_PATH
     Text [ swedish ] = "Säkerhetskopior" ;
     Text [ dutch ] = "Reservekopieën" ;
     Text [ spanish ] = "Copias de seguridad" ;
-    Text [ english_us ] = "Backup Copies" ;
+    Text [ english_us ] = "Backups" ;
     Text[ chinese_simplified ] = "°²È«±¸¼ş";
     Text[ russian ] = "Ğåçåğâíûå êîïèè";
     Text[ polish ] = "Kopie zapasowe";
-    Text[ japanese ] = "ÊŞ¯¸±¯Ìß ºËß°";
+    Text[ japanese ] = "ÊŞ¯¸±¯ÌßºËß°";
     Text[ chinese_traditional ] = "¦w¥ş³Æ¥ó";
     Text[ arabic ] = "äÓÎ ÇÍÊíÇØíÉ";
     Text[ dutch ] = "Reservekopieën";
@@ -3646,7 +3646,7 @@ String STR_KEY_TEMPLATE_PATH
     Text[ chinese_simplified ] = "ÎÄµµÑùÊ½";
     Text[ russian ] = "Øàáëîíû äîêóìåíòà";
     Text[ polish ] = "Szablony dokumentu";
-    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ÌÃİÌßÚ°Ä";
+    Text[ japanese ] = "ÄŞ·­ÒİÄÃİÌßÚ°Ä";
     Text[ chinese_traditional ] = "¤å¥ó¼Ë¦¡";
     Text[ arabic ] = "ŞæÇáÈ ãÓÊäÏ";
     Text[ dutch ] = "Sjablonen";
@@ -3673,7 +3673,7 @@ String STR_KEY_GLOSSARY_PATH
     Text[ polish ] = "Autotekst";
     Text[ portuguese_brazilian ] = "AutoText";
     Text[ japanese ] = "“ü—Íx‰‡";
-    Text[ korean ] = "AutoText";
+    Text[ korean ] = "ÀÚµ¿ÅØ½ºÆ®";
     Text[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯";
     Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°";
     Text[ turkish ] = "AutoText";
@@ -3816,7 +3816,7 @@ String STR_KEY_STORAGE_DIR
     Text = "Nachrichtenspeicher" ;
     Text [ English ] = "Mail Storages" ;
     Text [ portuguese ] = "Memória de mensagens" ;
-    Text [ english_us ] = "Mail/News Storage" ;
+    Text [ english_us ] = "Message Storage" ;
     Text [ portuguese_brazilian ] = "Nachrichtenspeicher" ;
     Text [ swedish ] = "Meddelandelager" ;
     Text [ danish ] = "Meddelelseslager" ;
@@ -3878,7 +3878,7 @@ String STR_KEY_PLUGINS_PATH
     Text[ swedish ] = "Plugins-katalog";
     Text[ polish ] = "Katalog dodatków Plugin";
     Text[ portuguese_brazilian ] = "Plugins directory";
-    Text[ japanese ] = "Ìß×¸Ş²İ ÃŞ¨Ú¸ÄØ";
+    Text[ japanese ] = "Ìß×¸Ş²İÃŞ¨Ú¸ÄØ";
     Text[ chinese_simplified ] = "Plug-In Ä¿Â¼";
     Text[ chinese_traditional ] = "Plugins ¥Ø¿ı";
     Text[ arabic ] = "Ïáíá Plugins";
@@ -3920,7 +3920,7 @@ String STR_KEY_FILTER_PATH
     Text[ portuguese ] = "Filtros";
     Text[ greek ] = "Ößëôñï";
     Text[ dutch ] = "Filter";
-    Text[ french ] = "Filtre";
+    Text[ french ] = "Filtres";
     Text[ spanish ] = "Filtros";
     Text[ swedish ] = "Filter";
     Text[ russian ] = "Ôèëüòğ";
@@ -4034,7 +4034,7 @@ String STR_KEY_LINGUISTIC_DIR
 {
     Text = "Linguistik" ;
     Text [ English ] = "Linguistic" ;
-    Text[ english_us ] = "Language";
+    Text[ english_us ] = "Writing Aids";
     Text[ portuguese ] = "Linguística";
     Text[ russian ] = "Ëèíãâèñòèêà";
     Text[ greek ] = "Ãëşóóá";
