@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 09:42:36 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1687,11 +1687,13 @@ void FileDialogHelper_Impl::setFileName( const ::rtl::OUString& _rFile )
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::setFilter( const OUString& rFilter )
 {
+    DBG_ASSERT( rFilter.indexOf(':') == -1, "Old filter name used!");
+
     maCurFilter = rFilter;
 
     if ( rFilter.getLength() && mpMatcher )
     {
-        const SfxFilter* pFilter = mpMatcher->GetFilter(
+        const SfxFilter* pFilter = mpMatcher->GetFilter4FilterName(
                                         rFilter, m_nMustFlags, m_nDontFlags );
         if ( pFilter )
             maCurFilter = pFilter->GetUIName();
@@ -1710,15 +1712,15 @@ void FileDialogHelper_Impl::setFilter( const OUString& rFilter )
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::createMatcher( const SfxObjectFactory& rFactory )
+void FileDialogHelper_Impl::createMatcher( const String& rFactory )
 {
-    mpMatcher = new SfxFilterMatcher( rFactory.GetFilterContainer() );
+    mpMatcher = new SfxFilterMatcher( rFactory );
     mbDeleteMatcher = sal_True;
 }
 
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
-                                        const SfxObjectFactory& rFactory,
+                                        const String& rFactory,
                                         SfxFilterFlags nMust,
                                         SfxFilterFlags nDont )
 {
@@ -1729,7 +1731,7 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
 
     // create the list of filters
 
-    if ( !&rFactory )
+    if ( !rFactory.Len() )
     {
         SfxApplication *pSfxApp = SFX_APP();
 
@@ -1738,7 +1740,7 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
     }
     else
     {
-        mpMatcher = new SfxFilterMatcher( rFactory.GetFilterContainer() );
+        mpMatcher = new SfxFilterMatcher( rFactory );
         mbDeleteMatcher = sal_True;
     }
 
@@ -2185,7 +2187,7 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
 // ------------------------------------------------------------------------
 
 FileDialogHelper::FileDialogHelper( sal_uInt32 nFlags,
-                                    const SfxObjectFactory& rFact,
+                                    const String& rFact,
                                     SfxFilterFlags nMust,
                                     SfxFilterFlags nDont )
 {
@@ -2208,7 +2210,7 @@ FileDialogHelper::FileDialogHelper( sal_uInt32 nFlags )
 // ------------------------------------------------------------------------
 FileDialogHelper::FileDialogHelper( const short nDialogType,
                                     sal_uInt32 nFlags,
-                                    const SfxObjectFactory& rFact,
+                                    const String& rFact,
                                     SfxFilterFlags nMust,
                                     SfxFilterFlags nDont )
 {
@@ -2245,7 +2247,7 @@ FileDialogHelper::~FileDialogHelper()
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper::CreateMatcher( const SfxObjectFactory& rFactory )
+void FileDialogHelper::CreateMatcher( const String& rFactory )
 {
     mpImp->createMatcher( rFactory );
 }
@@ -2463,7 +2465,7 @@ void SAL_CALL FileDialogHelper::DialogSizeChanged()
 // ------------------------------------------------------------------------
 
 ErrCode FileOpenDialog_Impl( sal_uInt32 nFlags,
-                             const SfxObjectFactory& rFact,
+                             const String& rFact,
                              SvStringsDtor *& rpURLList,
                              String& rFilter,
                              SfxItemSet *& rpSet,
@@ -2477,6 +2479,7 @@ ErrCode FileOpenDialog_Impl( sal_uInt32 nFlags,
 //      aDialog.SetDialogHelpId( nHelpId );
 
     nRet = aDialog.Execute( aPath, rpURLList, rpSet, rFilter );
+    DBG_ASSERT( rFilter.SearchAscii(": ") == STRING_NOTFOUND, "Old filter name used!");
 
     aPath = aDialog.GetDisplayDirectory();
 
