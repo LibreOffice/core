@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:09:05 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,9 @@
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
-
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
 #endif
@@ -752,8 +754,8 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
             for ( USHORT j = 0; j < aCellArr.Count(); ++j )
             {
                 SwCellFrm *pCell = (SwCellFrm*)aCellArr[j];
-                const sal_Bool bVert = pCell->IsVertical();
-                const sal_Bool bRTL = pCell->IsRightToLeft();
+                const sal_Bool bVert = pTab->IsVertical();
+                const sal_Bool bRTL = pTab->IsRightToLeft();
                 sal_Bool bTopOver, bLeftOver, bRightOver, bBottomOver;
                 if ( bVert )
                 {
@@ -1024,8 +1026,8 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
             for ( USHORT j = 0; j < aCellArr.Count(); ++j )
             {
                 const SwCellFrm *pCell = (const SwCellFrm*)aCellArr[j];
-                const sal_Bool bVert = pCell->IsVertical();
-                const sal_Bool bRTL = pCell->IsRightToLeft();
+                const sal_Bool bVert = pTab->IsVertical();
+                const sal_Bool bRTL = pTab->IsRightToLeft();
                 sal_Bool bTopOver, bLeftOver, bRightOver, bBottomOver;
                 if ( bVert )
                 {
@@ -1244,12 +1246,12 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
 
 /***********************************************************************
 #*  Class      :  SwDoc
-#*  Methoden   :  GetBoxBackground()
+#*  Methoden   :  GetBoxAttr()
 #*  Datum      :  MA 01. Jun. 93
 #*  Update     :  JP 29.04.98
 #***********************************************************************/
 
-BOOL SwDoc::GetBoxBackground( const SwCursor& rCursor, SvxBrushItem &rToFill ) const
+BOOL SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) const
 {
     BOOL bRet = FALSE;
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
@@ -1258,20 +1260,41 @@ BOOL SwDoc::GetBoxBackground( const SwCursor& rCursor, SvxBrushItem &rToFill ) c
     {
         bRet = TRUE;
         BOOL bOneFound = FALSE;
+        const USHORT nWhich = rToFill.Which();
         for( USHORT i = 0; i < aBoxes.Count(); ++i )
         {
-            const SvxBrushItem &rBack =
-                            aBoxes[i]->GetFrmFmt()->GetBackground();
-            if( !bOneFound )
+            switch ( nWhich )
             {
-                rToFill = rBack;
-                bOneFound = TRUE;
-            }
-            else if( rToFill != rBack )
-            {
-                bRet = FALSE;
+                case RES_BACKGROUND:
+                {
+                    const SvxBrushItem &rBack =
+                                    aBoxes[i]->GetFrmFmt()->GetBackground();
+                    if( !bOneFound )
+                    {
+                        (SvxBrushItem&)rToFill = rBack;
+                        bOneFound = TRUE;
+                    }
+                    else if( rToFill != rBack )
+                        bRet = FALSE;
+                }
                 break;
+
+                case RES_FRAMEDIR:
+                {
+                    const SvxFrameDirectionItem& rDir =
+                                    aBoxes[i]->GetFrmFmt()->GetFrmDir();
+                    if( !bOneFound )
+                    {
+                        (SvxFrameDirectionItem&)rToFill = rDir;
+                        bOneFound = TRUE;
+                    }
+                    else if( rToFill != rDir )
+                        bRet = FALSE;
+                }
             }
+
+            if ( FALSE == bRet )
+                break;
         }
     }
     return bRet;
