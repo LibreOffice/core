@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:31:44 $
+ *  last change: $Author: dr $ $Date: 2000-10-18 11:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,26 @@
 #include "xmlmetae.hxx"
 #endif
 
+#ifndef _XMLOFF_FAMILIES_HXX_
+#include "families.hxx"
+#endif
+
+#ifndef _XMLOFF_PAGEMASTERPROPHDLFACTORY_HXX
+#include "PageMasterPropHdlFactory.hxx"
+#endif
+#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
+#include "PageMasterStyleMap.hxx"
+#endif
+#ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
+#include "PageMasterPropMapper.hxx"
+#endif
+#ifndef _XMLOFF_PAGEMASTEREXPORTPROPMAPPER_HXX
+#include "PageMasterExportPropMapper.hxx"
+#endif
+#ifndef _XMLOFF_XMLPAGEEXPORT_HXX
+#include "XMLPageExport.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
@@ -164,6 +184,7 @@ void SvXMLExport::_InitCtor()
                                   sXML_n_number, XML_NAMESPACE_NUMBER );
 
     xAttrList = (xml::sax::XAttributeList*)pAttrList;
+    pPageExport = new XMLPageExport( *this );
 }
 
 SvXMLExport::SvXMLExport(
@@ -177,6 +198,9 @@ SvXMLExport::SvXMLExport(
     pNamespaceMap( new SvXMLNamespaceMap ),
     pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit ) ),
     pAttrList( new SvXMLAttributeList ),
+    pPageMasterPropHdlFactory( NULL ),
+    pPageMasterPropSetMapper( NULL ),
+    pPageExport( NULL ),
     bExtended( sal_False ),
     xHandler( rHandler ),
     xExtHandler( rHandler, uno::UNO_QUERY )
@@ -201,6 +225,9 @@ SvXMLExport::SvXMLExport(
     xExtHandler( rHandler, uno::UNO_QUERY ),
     xModel( rModel ),
     pNumExport(0L),
+    pPageMasterPropHdlFactory( NULL ),
+    pPageMasterPropSetMapper( NULL ),
+    pPageExport( NULL ),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY)
 {
     _InitCtor();
@@ -212,6 +239,17 @@ SvXMLExport::~SvXMLExport()
 {
     delete pNamespaceMap;
     delete pUnitConv;
+    if (pPageMasterPropHdlFactory)
+    {
+        pPageMasterPropHdlFactory->release();
+        pPageMasterPropHdlFactory = NULL;
+    }
+    if (pPageMasterPropSetMapper)
+    {
+        pPageMasterPropSetMapper->release();
+        pPageMasterPropSetMapper = NULL;
+    }
+    delete pPageExport;
 }
 
 void SvXMLExport::AddAttributeASCII( sal_uInt16 nPrefixKey,
@@ -309,7 +347,6 @@ void SvXMLExport::ImplExportStyles( sal_Bool bUsed )
                                       sXML_use_styles, sal_True, sal_True );
         }
 #endif
-
         _ExportAutoStyles();
     }
 
@@ -610,6 +647,23 @@ SvXMLAutoStylePoolP* SvXMLExport::CreateAutoStylePool()
     return new SvXMLAutoStylePoolP();
 }
 
+void SvXMLExport::AddPageMasterFamily()
+{
+    pPageMasterPropHdlFactory = new XMLPageMasterPropHdlFactory;
+    if( pPageMasterPropHdlFactory )
+    {
+        pPageMasterPropHdlFactory->acquire();
+        const UniReference< XMLPropertyHandlerFactory > aFactoryRef = pPageMasterPropHdlFactory;
+
+        pPageMasterPropSetMapper = new XMLPageMasterPropSetMapper( (XMLPropertyMapEntry*) aXMLPageMasterStyleMap, aFactoryRef );
+        if(pPageMasterPropSetMapper)
+            pPageMasterPropSetMapper->acquire();
+    }
+
+    GetAutoStylePool()->AddFamily( XML_STYLE_FAMILY_PAGE_MASTER, OUString( RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_PAGE_MASTER_NAME ) ),
+        pPageMasterPropSetMapper, OUString( RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_PAGE_MASTER_PREFIX ) ), sal_False );
+}
+
 SchXMLExportHelper* SvXMLExport::CreateChartExport()
 {
     return new SchXMLExportHelper(*this,*GetAutoStylePool().get());
@@ -621,6 +675,17 @@ OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat) const
     if(pNumExport)
         sTemp = pNumExport->GetStyleName(nNumberFormat);
     return sTemp;
+}
+
+void SvXMLExport::exportPageMaster()
+{
+    pPageExport->collectAutoStyles( sal_True );
+
+    const UniReference< XMLPropertySetMapper > aPageMasterMapperRef = GetPageMasterPropSetMapper();
+    XMLPageMasterExportPropMapper* pPageMasterExportPropMapper = new XMLPageMasterExportPropMapper(aPageMasterMapperRef);
+    GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_PAGE_MASTER,
+        *pPageMasterExportPropMapper, GetDocHandler(), GetMM100UnitConverter(),
+        GetNamespaceMap());
 }
 
 SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
