@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
+ *  last change: $Author: nn $ $Date: 2001-05-07 13:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,8 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     pStyleSheet = &(pStylePool->Make( aStyleName, eFamily,
                                                       SFXSTYLEBIT_USERDEF ) );
 
-                    if(pStyleSheet!=NULL) pStyleSheet->SetParent(aRefName);
+                    if ( pStyleSheet && pStyleSheet->HasParentSupport() )
+                        pStyleSheet->SetParent(aRefName);
                 }
                 break;
 
@@ -485,7 +486,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                             // wenn ein Style vorhanden ist, so wird dieser
                             // Parent der neuen Vorlage:
-                            if ( pSheetInUse )
+                            if ( pSheetInUse && pStyleSheet->HasParentSupport() )
                                 pStyleSheet->SetParent( pSheetInUse->GetName() );
 
                             if ( bConvertBack )
