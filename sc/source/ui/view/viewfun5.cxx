@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:28:03 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             //  asynchronous, to avoid doing the whole import in drop handler
             SfxDispatcher& rDisp = GetViewData()->GetDispatcher();
             rDisp.Execute(SID_SBA_IMPORT, SFX_CALLMODE_ASYNCHRON,
-                                        &aDataDesc, &aTarget, &aAreaNew, pCursorItem.get() );
+                                        &aDataDesc, &aTarget, &aAreaNew, pCursorItem.get(), (void*)0 );
 
             bRet = TRUE;
         }
