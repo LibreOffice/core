@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.26 $
-# Date:        $Date: 2004-11-15 14:11:32 $
+# Version:     $Revision: 1.27 $
+# Date:        $Date: 2004-12-03 14:20:01 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1075,6 +1075,10 @@ elsif ($platform eq "$Winnt")
 		   # .NET needs wdevenv.exe, VC toolkit doesn't
 		   if ( !"@ENABLE_VCTK@" and $noldPATH !~ /(?:[:]|\A)(?:$WDEVENV_PATH)(?:[:]|\Z)/ ) {
 			   $PATH .= $ps.$WDEVENV_PATH;
+		   }
+		   # Native installer needs some files if the Windows Installer SDK
+		   if ( $noldPATH !~ /(?:[:]|\A)(?:$PSDK_HOME\/bin)(?:[:]|\Z)/i ) {
+			   $PATH .= $ps.$PSDK_HOME.$BIN;
 		   }
 	   }
    }
