@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScViewPaneObj.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-04 17:17:51 $
+ *  last change:$Date: 2003-05-27 13:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
@@ -104,7 +105,7 @@ public class ScViewPaneObj extends TestCase {
     */
     public void initialize( TestParameters Param, PrintWriter log ) {
         // get a soffice factory object
-        SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println("creating a spreadsheetdocument");

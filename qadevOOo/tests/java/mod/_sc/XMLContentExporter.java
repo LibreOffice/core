@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLContentExporter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-05 10:13:34 $
+ *  last change:$Date: 2003-05-27 13:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ public class XMLContentExporter extends TestCase {
      * New spreadsheet document created.
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         try {
             log.println( "creating a textdocument" );
             xSheetDoc = SOF.openDoc("scalc","_blank");
@@ -156,7 +156,7 @@ public class XMLContentExporter extends TestCase {
     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
-        XMultiServiceFactory xMSF = tParam.getMSF() ;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF() ;
         XInterface oObj = null;
         final String CELL_TEXT = "XMLContentExporter";
 
