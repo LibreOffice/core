@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-13 10:54:15 $
+ *  last change: $Author: tl $ $Date: 2001-06-21 09:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ sal_Bool SAL_CALL SpellCheckerDispatcher::hasLanguage( sal_Int16 nLanguage )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return 0 != aSvcList.Seek( nLanguage );
+    return 0 != aSvcList.Get( nLanguage );
 }
 
 
@@ -306,7 +306,7 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
         return bRes;
 
     // search for entry with that language
-    SeqLangSvcEntry_Spell *pEntry = aSvcList.Seek( nLanguage );
+    SeqLangSvcEntry_Spell *pEntry = aSvcList.Get( nLanguage );
 
     if (!pEntry)
     {
@@ -545,7 +545,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
         return xRes;
 
     // search for entry with that language
-    SeqLangSvcEntry_Spell *pEntry = aSvcList.Seek( nLanguage );
+    SeqLangSvcEntry_Spell *pEntry = aSvcList.Get( nLanguage );
 
     if (!pEntry)
     {
@@ -747,23 +747,29 @@ void SpellCheckerDispatcher::SetServiceList( const Locale &rLocale,
     if (pExtCache)
         pExtCache->Flush(); // new services may spell differently...
 
-    // search for entry with that language
     INT16 nLanguage = LocaleToLanguage( rLocale );
-    SeqLangSvcEntry_Spell *pEntry = aSvcList.Seek( nLanguage );
 
-    if (pEntry)
-    {
-        INT32 nLen = rSvcImplNames.getLength();
-        pEntry->aSvcImplNames = rSvcImplNames;
-        pEntry->aSvcRefs  = Sequence< Reference < XSpellChecker > > ( nLen );
-        pEntry->aSvc1Refs = Sequence< Reference < XSpellChecker1 > >( nLen );
-        pEntry->aFlags = SvcFlags();
-    }
+    if (0 == rSvcImplNames.getLength())
+        // remove entry
+        aSvcList.Remove( nLanguage );
     else
     {
-        pEntry = new SeqLangSvcEntry_Spell( rSvcImplNames );
-        aSvcList.Insert( nLanguage, pEntry );
-        DBG_ASSERT( aSvcList.Seek( nLanguage ), "lng : Insert failed" );
+        // modify/add entry
+        SeqLangSvcEntry_Spell *pEntry = aSvcList.Get( nLanguage );
+        if (pEntry)
+        {
+            INT32 nLen = rSvcImplNames.getLength();
+            pEntry->aSvcImplNames = rSvcImplNames;
+            pEntry->aSvcRefs  = Sequence< Reference < XSpellChecker > > ( nLen );
+            pEntry->aSvc1Refs = Sequence< Reference < XSpellChecker1 > >( nLen );
+            pEntry->aFlags = SvcFlags();
+        }
+        else
+        {
+            pEntry = new SeqLangSvcEntry_Spell( rSvcImplNames );
+            aSvcList.Insert( nLanguage, pEntry );
+            DBG_ASSERT( aSvcList.Get( nLanguage ), "lng : Insert failed" );
+        }
     }
 }
 
@@ -778,7 +784,7 @@ Sequence< OUString >
     // search for entry with that language and use data from that
     INT16 nLanguage = LocaleToLanguage( rLocale );
     SpellCheckerDispatcher      *pThis = (SpellCheckerDispatcher *) this;
-    const SeqLangSvcEntry_Spell *pEntry = pThis->aSvcList.Seek( nLanguage );
+    const SeqLangSvcEntry_Spell *pEntry = pThis->aSvcList.Get( nLanguage );
     if (pEntry)
         aRes = pEntry->aSvcImplNames;
 

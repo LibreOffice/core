@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdsp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-13 10:55:07 $
+ *  last change: $Author: tl $ $Date: 2001-06-21 09:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ BOOL SAL_CALL HyphenatorDispatcher::hasLocale(const Locale& rLocale)
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return 0 != aSvcList.Seek( LocaleToLanguage( rLocale ) );
+    return 0 != aSvcList.Get( LocaleToLanguage( rLocale ) );
 }
 
 
@@ -306,7 +306,7 @@ Reference< XHyphenatedWord > SAL_CALL
         return xRes;
 
     // search for entry with that language
-    LangSvcEntry_Hyph *pEntry = aSvcList.Seek( nLanguage );
+    LangSvcEntry_Hyph *pEntry = aSvcList.Get( nLanguage );
 
     BOOL bWordModified = FALSE;
     if (!pEntry)
@@ -416,7 +416,7 @@ Reference< XHyphenatedWord > SAL_CALL
         return xRes;
 
     // search for entry with that language
-    LangSvcEntry_Hyph *pEntry = aSvcList.Seek( nLanguage );
+    LangSvcEntry_Hyph *pEntry = aSvcList.Get( nLanguage );
 
     BOOL bWordModified = FALSE;
     if (!pEntry)
@@ -526,7 +526,7 @@ Reference< XPossibleHyphens > SAL_CALL
         return xRes;
 
     // search for entry with that language
-    LangSvcEntry_Hyph *pEntry = aSvcList.Seek( nLanguage );
+    LangSvcEntry_Hyph *pEntry = aSvcList.Get( nLanguage );
 
     if (!pEntry)
     {
@@ -621,25 +621,31 @@ void HyphenatorDispatcher::SetServiceList( const Locale &rLocale,
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
+    INT16 nLanguage = LocaleToLanguage( rLocale );
+
     INT32 nLen = rSvcImplNames.getLength();
     DBG_ASSERT( nLen <= 1, "unexpected size of sequence" );
-    OUString aSvcImplName( nLen ? rSvcImplNames.getConstArray()[0] : OUString() );
 
-    // search for entry with that language
-    INT16 nLanguage = LocaleToLanguage( rLocale );
-    LangSvcEntry_Hyph *pEntry = aSvcList.Seek( nLanguage );
-
-    if (pEntry)
-    {
-        pEntry->aSvcImplName = aSvcImplName;
-        pEntry->aSvcRef = NULL;
-        pEntry->aFlags  = SvcFlags();
-    }
+    if (0 == nLen)
+        // remove entry
+        aSvcList.Remove( nLanguage );
     else
     {
-        pEntry = new LangSvcEntry_Hyph( aSvcImplName );
-        aSvcList.Insert( nLanguage, pEntry );
-        DBG_ASSERT( aSvcList.Seek( nLanguage ), "lng : Insert failed" );
+        // modify/add entry
+        LangSvcEntry_Hyph *pEntry = aSvcList.Get( nLanguage );
+        const OUString &rSvcImplName = rSvcImplNames.getConstArray()[0];
+        if (pEntry)
+        {
+            pEntry->aSvcImplName = rSvcImplName;
+            pEntry->aSvcRef = NULL;
+            pEntry->aFlags  = SvcFlags();
+        }
+        else
+        {
+            pEntry = new LangSvcEntry_Hyph( rSvcImplName );
+            aSvcList.Insert( nLanguage, pEntry );
+            DBG_ASSERT( aSvcList.Get( nLanguage ), "lng : Insert failed" );
+        }
     }
 }
 
@@ -654,7 +660,7 @@ Sequence< OUString >
     // search for entry with that language and use data from that
     INT16 nLanguage = LocaleToLanguage( rLocale );
     HyphenatorDispatcher    *pThis = (HyphenatorDispatcher *) this;
-    const LangSvcEntry_Hyph *pEntry = pThis->aSvcList.Seek( nLanguage );
+    const LangSvcEntry_Hyph *pEntry = pThis->aSvcList.Get( nLanguage );
     if (pEntry)
         aRes.getArray()[0] = pEntry->aSvcImplName;
     else

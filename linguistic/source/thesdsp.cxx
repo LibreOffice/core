@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdsp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-13 10:55:50 $
+ *  last change: $Author: tl $ $Date: 2001-06-21 09:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ sal_Bool SAL_CALL
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return 0 != aSvcList.Seek( LocaleToLanguage( rLocale ) );
+    return 0 != aSvcList.Get( LocaleToLanguage( rLocale ) );
 }
 
 
@@ -198,7 +198,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
         return aMeanings;
 
     // search for entry with that language
-    SeqLangSvcEntry_Thes *pEntry = aSvcList.Seek( nLanguage );
+    SeqLangSvcEntry_Thes *pEntry = aSvcList.Get( nLanguage );
 
     if (!pEntry)
     {
@@ -283,22 +283,28 @@ void ThesaurusDispatcher::SetServiceList( const Locale &rLocale,
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    // search for entry with that language
     INT16 nLanguage = LocaleToLanguage( rLocale );
-    SeqLangSvcEntry_Thes *pEntry = aSvcList.Seek( nLanguage );
 
-    if (pEntry)
-    {
-        pEntry->aSvcImplNames = rSvcImplNames;
-        pEntry->aSvcRefs = Sequence< Reference < XThesaurus > >(
-                                rSvcImplNames.getLength() );
-        pEntry->aFlags = SvcFlags();
-    }
+    if (0 == rSvcImplNames.getLength())
+        // remove entry
+        aSvcList.Remove( nLanguage );
     else
     {
-        pEntry = new SeqLangSvcEntry_Thes( rSvcImplNames );
-        aSvcList.Insert( nLanguage, pEntry );
-        DBG_ASSERT( aSvcList.Seek( nLanguage ), "lng : Insert failed" );
+        // modify/add entry
+        SeqLangSvcEntry_Thes *pEntry = aSvcList.Get( nLanguage );
+        if (pEntry)
+        {
+            pEntry->aSvcImplNames = rSvcImplNames;
+            pEntry->aSvcRefs = Sequence< Reference < XThesaurus > >(
+                                    rSvcImplNames.getLength() );
+            pEntry->aFlags = SvcFlags();
+        }
+        else
+        {
+            pEntry = new SeqLangSvcEntry_Thes( rSvcImplNames );
+            aSvcList.Insert( nLanguage, pEntry );
+            DBG_ASSERT( aSvcList.Get( nLanguage ), "lng : Insert failed" );
+        }
     }
 }
 
@@ -313,7 +319,7 @@ Sequence< OUString >
     // search for entry with that language and use data from that
     INT16 nLanguage = LocaleToLanguage( rLocale );
     ThesaurusDispatcher         *pThis = (ThesaurusDispatcher *) this;
-    const SeqLangSvcEntry_Thes  *pEntry = pThis->aSvcList.Seek( nLanguage );
+    const SeqLangSvcEntry_Thes  *pEntry = pThis->aSvcList.Get( nLanguage );
     if (pEntry)
         aRes = pEntry->aSvcImplNames;
 
