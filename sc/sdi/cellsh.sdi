@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: nn $ $Date: 2002-04-10 15:38:05 $ $Revision: 1.8 $
+ // $Author: mba $ $Date: 2002-06-04 07:56:02 $ $Revision: 1.9 $
  // $Logfile:   T:/sc/sdi/cellsh.sdv  $ $Workfile:   cellsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -380,6 +380,9 @@ shell ScCellShell : ScFormatShell
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.8  2002/04/10 15:38:05  nn
+    #97777# keyboard shortcut for input line
+
     Revision 1.7  2001/06/25 15:33:14  nn
     #82371# handle database beamer with SID_VIEW_DATA_SOURCE_BROWSER
 
