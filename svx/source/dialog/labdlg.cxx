@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-17 14:25:25 $
+ *  last change: $Author: iha $ $Date: 2002-09-25 16:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,8 +164,8 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
     sal_uInt16 nBitmap;
     for( nBitmap = 0; nBitmap < CAPTYPE_BITMAPS_COUNT; nBitmap++ )
     {
-        mpBmpCapTypes[nBitmap] = new Image(Bitmap(ResId(BMP_CAPTTYPE_1 + nBitmap)),BMP_COLOR_NORMAL);
-        mpBmpCapTypesH[nBitmap] = new Image(Bitmap(ResId(BMP_CAPTTYPE_1_H + nBitmap)),BMP_COLOR_HIGHCONTRAST);
+        mpBmpCapTypes[nBitmap]  = new Image(Bitmap(ResId(BMP_CAPTTYPE_1   + nBitmap)), COL_LIGHTMAGENTA );
+        mpBmpCapTypesH[nBitmap] = new Image(Bitmap(ResId(BMP_CAPTTYPE_1_H + nBitmap)), COL_LIGHTMAGENTA );
     }
 
     //------------ValueSet installieren--------------------------
