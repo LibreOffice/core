@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTabPage.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:31:25 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef __com_sun_star_accessibility_XAccessibleExtendedComponent_idl__
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.idl>
 #endif
+#ifndef __com_sun_star_accessibility_XAccessibleText_idl__
+#include <com/sun/star/accessibility/XAccessibleText.idl>
+#endif
 
 module com { module sun { module star { module awt {
 
@@ -93,7 +96,7 @@ service AccessibleTabPage
         <li>Name: The name of a tab page is the localized tab page text.</li>
         <li>Description: The description of a tab page is its localized
             help text.</li>
-        <li>Children: The children of a tab page are controls.</li>
+        <li>Children: The child of a tab page is a panel.</li>
         <li>Parent: The parent of a tab page is the tab control,
             whose accessible context supports the service
             <type>AccessibleTabControl</type>.</li>
@@ -135,6 +138,11 @@ service AccessibleTabPage
     interface ::com::sun::star::accessibility::XAccessibleComponent;
 
     interface ::com::sun::star::accessibility::XAccessibleExtendedComponent;
+
+    /** This interface gives read-only access to the text representation
+        of a tab page.
+     */
+    interface ::com::sun::star::accessibility::XAccessibleText;
 
 };
 
