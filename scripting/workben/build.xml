@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-05-26 14:41:53 $
+#   last change: $Author: dfoster $ $Date: 2003-05-29 14:18:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@
   <property name="installerclasses" value="${out}/class/sframeworkinstall"/>
   <property name="jardir" value="${out}/class"/>
   <property name="bindir" value="${out}/bin"/>
-  <property name="sfversion" value="0.2"/>
+  <property name="sfversion" value="0.3"/>
   <property name="installerjarname" value="SFrameworkInstall.jar"/>
   <property environment="env"/>
 
@@ -337,6 +337,8 @@
 
     <copy file="${out}/class/ScriptRuntimeForRhino.jar"
         todir="${out}/class/jsruntime/"/>
+    <copy file="installer/Scripting.Rhino.xcu"
+        tofile="${out}/class/jsruntime/Scripting.xcu"/>
 
     <unzip src="${install.dir}/js.jar"
         dest="${out}/class/jsruntimetmp"/>
@@ -359,6 +361,8 @@
     <mkdir dir="${out}/class/bshruntime"/>
     <copy file="${out}/class/ScriptRuntimeForBeanShell.jar"
         todir="${out}/class/bshruntime/"/>
+    <copy file="installer/Scripting.BeanShell.xcu"
+        tofile="${out}/class/bshruntime/Scripting.xcu"/>
     <mkdir dir="${out}/class/bshruntime/skip_registration"/>
     <copy file="${install.dir}/bsh-1.2b7.jar"
         todir="${out}/class/bshruntime/skip_registration"/>
@@ -367,8 +371,11 @@
     </zip>
   </target>
 
-  <!-- ===================== Package scripts, dialogs & examples =========== -->
+  <!-- ========= Package schema, scripts, dialogs & examples =========== -->
   <target name="packagedialogsandexamples" depends="buildexamples">
+    <mkdir dir="${out}/class/sframeworkinstall/schema"/>
+    <copy file="installer/Scripting.xcs"
+        todir="${out}/class/sframeworkinstall/schema/"/>
     <mkdir dir="${out}/class/sframeworkinstall/bindingdialog"/>
     <copy todir="${out}/class/sframeworkinstall/bindingdialog">
         <fileset dir="bindings/">
