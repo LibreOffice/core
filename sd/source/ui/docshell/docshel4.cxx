@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:17:31 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,8 +550,9 @@ BOOL SdDrawDocShell::LoadFrom(SvStorage* pStor)
 
             if(pLocalItemSet && pDestItemSet)
             {
-                const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
-                    pLocalItemSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL));
+                const SfxUnoAnyItem* pItem = static_cast<
+                    const SfxUnoAnyItem*>(
+                        pLocalItemSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL));
 
                 if(pItem)
                 {
@@ -929,7 +930,11 @@ BOOL SdDrawDocShell::GotoBookmark(const String& rBookmark)
             * Zur Seite springen
             **********************************************************/
             bFound = TRUE;
-            SdPage* pPage = (SdPage*) pDoc->GetPage(nPgNum);
+            SdPage* pPage;
+            if (bIsMasterPage)
+                pPage = (SdPage*) pDoc->GetMasterPage(nPgNum);
+            else
+                pPage = (SdPage*) pDoc->GetPage(nPgNum);
 
             PageKind eNewPageKind = pPage->GetPageKind();
 
