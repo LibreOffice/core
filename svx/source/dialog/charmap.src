@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:02:10 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1075,9 +1075,9 @@ String RID_SUBSETSTR_GENERAL_PUNCTUATION
         Text[ swedish ] = "Allmän interpunktion";
         Text[ polish ] = "Ogólna interpunkcja";
         Text[ portuguese_brazilian ] = "General Punctuation";
-        Text[ japanese ] = "ˆê”Ê‹å“Ç“_";
+        Text[ japanese ] = "•’Ê‚Ì‹å“Ç“_";
         Text[ korean ] = "ÀÏ¹İ ±¸µÎÁ¡";
-        Text[ chinese_simplified ] = "ÆÕÍ¨±êµã·ûºÅ";
+        Text[ chinese_simplified ] = "ÆÕÍ¨µÄ±êµã·ûºÅ";
         Text[ chinese_traditional ] = "´¶³q¼ĞÂI";
         Text[ turkish ] = "General Punctuation";
         Text[ arabic ] = "ÚáÇãÇÊ ÊäŞíØ ÚÇãÉ";
@@ -2694,6 +2694,7 @@ String RID_SUBSETSTR_MONGOLIAN
 };
 
 // ********************************************************************** EOF
+
 
 
 
