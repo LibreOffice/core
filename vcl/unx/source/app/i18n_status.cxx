@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cp $ $Date: 2001-12-04 14:57:34 $
+ *  last change: $Author: pl $ $Date: 2001-12-14 12:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,9 +386,9 @@ const String& IIIMPStatusWindow::getText() const
 
 void IIIMPStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
 {
+    // hide IIIMPStatusWindow only in presentations
     if( ! bShow
         && eReason != I18NStatus::presentation
-        && eReason != I18NStatus::contextmap
         )
         return;
 
