@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-25 17:35:04 $
+ *  last change: $Author: nn $ $Date: 2000-10-10 13:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2104,9 +2104,25 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
          rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT ||
          rCEvt.GetCommand() == COMMAND_EXTTEXTINPUTPOS )
     {
-        if (!pViewData->HasEditView( eWhich ))
+        BOOL bEditView = pViewData->HasEditView( eWhich );
+        if (!bEditView)
         {
-            pScMod->SetInputMode( SC_INPUT_TABLE );
+            //  only if no cell editview is active, look at drawview
+            SdrView* pSdrView = pViewData->GetView()->GetSdrView();
+            if ( pSdrView )
+            {
+                OutlinerView* pOlView = pSdrView->GetTextEditOutlinerView();
+                if ( pOlView && pOlView->GetWindow() == this )
+                {
+                    pOlView->Command( rCEvt );
+                    return;                             // done
+                }
+            }
+        }
+
+        if ( !bEditView )
+        {
+            pScMod->SetInputMode( SC_INPUT_TABLE );     // start cell editing
         }
 
         ScInputHandler* pHdl = pScMod->GetInputHdl( pViewData->GetViewShell() );
@@ -2118,6 +2134,9 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
             pHdl->DataChanged();
             return;                                     // erledigt
         }
+
+        Window::Command( rCEvt );
+        return;
     }
 
     if ( rCEvt.GetCommand() == COMMAND_VOICE )
