@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldedt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:27:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,8 +160,14 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
         return;
 
     pSh->SetCareWin(this);
-    pSh->Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
-    pSh->SwapPam();
+
+    /* #108536# Only create selection if there is none
+        already. Normalize PaM instead of swapping. */
+    if ( ! pSh->HasSelection() )
+        pSh->Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
+
+    pSh->NormalizePam();
+
     USHORT nGroup = aMgr.GetGroup(FALSE, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
     CreatePage(nGroup);
@@ -367,8 +373,13 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
 
     rMgr.GoNextPrev( bNext, pOldTyp );
     pCurFld = rMgr.GetCurFld();
-    pSh->Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
-    pSh->SwapPam();
+
+    /* #108536# Only create selection if there is none
+        already. Normalize PaM instead of swapping. */
+    if ( ! pSh->HasSelection() )
+        pSh->Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
+
+    pSh->NormalizePam();
 
     USHORT nGroup = rMgr.GetGroup(FALSE, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
