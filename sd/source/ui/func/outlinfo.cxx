@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlinfo.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:16:25 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,10 +408,10 @@ IMPL_LINK(OutlinerInfo, DrawPortionHdl, DrawPortionInfo*, pInfo)
     if(pInfo->nTextLen && (0xFFFF != pInfo->nIndex))
     {
         pParagraphs[nCurPara].nCharCount += pInfo->nTextLen;
-        sal_uInt16 nInsertIndex(LIST_APPEND);
+        sal_uInt16 nInsertIndex((sal_uInt16)LIST_APPEND);
 
         if(pInfo->IsRTL())
-            nInsertIndex = aCharacterList.Count();
+            nInsertIndex = (sal_uInt16)aCharacterList.Count();
 
         for(sal_uInt16 nCharIndex(0); nCharIndex < pInfo->nTextLen; )
         {
