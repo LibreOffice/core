@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-03-12 16:43:25 $
+ *  last change: $Author: er $ $Date: 2001-03-14 15:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,18 @@ extern "C" {
 #define E_CAP   StopCAP(); DumpCAP();
 
 #endif
+
+#if 0
+// I18N doesn't get this right, can't specify more than one to ignore
+#define SC_COLLATOR_IGNORES ( \
+    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE | \
+    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_KANA | \
+    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_WIDTH )
+#else
+#define SC_COLLATOR_IGNORES ( \
+    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
+#endif
+
 
 //------------------------------------------------------------------------
 struct LabelData;
@@ -501,6 +513,7 @@ class International;
 class CharClass;
 class LocaleDataWrapper;
 class CalendarWrapper;
+class CollatorWrapper;
 
 namespace com { namespace sun { namespace star { namespace lang {
     struct Locale;
@@ -539,6 +552,8 @@ public:
     static CharClass*           pCharClass;
     static LocaleDataWrapper*   pLocaleData;
     static CalendarWrapper*     pCalendar;
+    static CollatorWrapper*     pCollator;
+    static CollatorWrapper*     pCaseCollator;
     static LanguageType         eLnge;
     static sal_Unicode          cListDelimiter;
     static const String&        GetClipDocName();
