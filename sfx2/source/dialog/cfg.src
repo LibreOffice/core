@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:16:18 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,9 @@
     Text[ czech ] = "Uložit...";   \
     Text[ hebrew ] = "‮שמירה...‬"; \
     Text[ hindi ] = "~संचित करो...";    \
-    Text[ slovak ] = "~Uložiť...";
+    Text[ slovak ] = "~Uložiť..."; \
+    Text[ hungarian ] = "~Mentés..."; \
+    Text[ slovenian ] = "~Shrani...";
 
 #define PUSHBUTTON_TEXT_RESET \
     Text = "Zur~�cksetzen" ; \
@@ -103,7 +105,7 @@
     Text [ spanish ] = "Restablecer" ; \
     Text [ french ] = "Re~staurer" ; \
     Text [ swedish ] = "~�terst�ll" ; \
-    Text [ danish ] = "Nulstil" ; \
+    Text [ danish ] = "~Nulstil" ; \
     Text [ portuguese_brazilian ] = "~Restaurar" ; \
     Text [ portuguese ] = "~Restaurar" ; \
     Text[ chinese_simplified ] = "重设(~E)";  \
@@ -122,7 +124,9 @@
     Text[ czech ] = "Obnovit";  \
     Text[ hebrew ] = "‮אתחול‬";    \
     Text[ hindi ] = "रि~सेट्ट करो"; \
-    Text[ slovak ] = "O~bnoviť";
+    Text[ slovak ] = "O~bnoviť"; \
+    Text[ hungarian ] = "A~lapállapot"; \
+    Text[ slovenian ] = "P~onastavi";
 
 #define PUSHBUTTON_TEXT_LOAD \
 /* ### ACHTUNG: Neuer Text in Resource? La~den... : ~Laden... */\
@@ -134,7 +138,7 @@
     Text [ french ] = "~Charger..." ; \
     Text [ dutch ] = "~Laden..." ; \
     Text [ swedish ] = "La~dda..." ; \
-    Text [ danish ] = "Indl�s..." ; \
+    Text [ danish ] = "Ind~l�s..." ; \
     Text [ portuguese_brazilian ] = "~Carregar..." ; \
     Text [ portuguese ] = "~Carregar..." ; \
     Text[ chinese_simplified ] = "装入(~L)...";   \
@@ -153,7 +157,9 @@
     Text[ czech ] = "Načíst...";  \
     Text[ hebrew ] = "‮טעינה...‬"; \
     Text[ hindi ] = "~लोड़ करो...";   \
-    Text[ slovak ] = "~Načítať...";
+    Text[ slovak ] = "~Načítať..."; \
+    Text[ hungarian ] = "~Betöltés..."; \
+    Text[ slovenian ] = "~Naloži...";
 
 #define PUSHBUTTON_TEXT_REMOVE \
 /* ### ACHTUNG: Neuer Text in Resource? ~L�schen : ~L�schen */\
@@ -164,7 +170,7 @@
     Text [ portuguese_brazilian ] = "Exc~luir" ; \
     Text [ portuguese ] = "E~liminar" ; \
     Text [ finnish ] = "~Poista" ; \
-    Text [ danish ] = "Slet" ; \
+    Text [ danish ] = "~Slet" ; \
     Text [ french ] = "~Supprimer" ; \
     Text [ swedish ] = "~Radera" ; \
     Text [ dutch ] = "~Wissen" ; \
@@ -185,7 +191,9 @@
     Text[ czech ] = "Smazat";   \
     Text[ hebrew ] = "‮מחיקה‬";    \
     Text[ hindi ] = "~मिटाओ"; \
-    Text[ slovak ] = "~Zmazať";
+    Text[ slovak ] = "~Zmazať"; \
+    Text[ hungarian ] = "~Törlés"; \
+    Text[ slovenian ] = "~Izbriši";
 
 #define PUSHBUTTON_TEXT_CHANGE \
 /* ### ACHTUNG: Neuer Text in Resource? ~�ndern : ~�ndern */\
@@ -196,7 +204,7 @@
     Text [ portuguese_brazilian ] = "~Modificar" ; \
     Text [ portuguese ] = "~Modificar" ; \
     Text [ finnish ] = "~Muuta" ; \
-    Text [ danish ] = "Modificer" ; \
+    Text [ danish ] = "~Modificer" ; \
     Text [ french ] = "~Modifier" ; \
     Text [ swedish ] = "~�ndra" ; \
     Text [ dutch ] = "Wij~zigen" ; \
@@ -217,7 +225,9 @@
     Text[ czech ] = "Změnit";  \
     Text[ hebrew ] = "‮שינוי‬";    \
     Text[ hindi ] = "~सुधारो";  \
-    Text[ slovak ] = "Z~meniť";
+    Text[ slovak ] = "Z~meniť"; \
+    Text[ hungarian ] = "Mó~dosítás"; \
+    Text[ slovenian ] = "~Spremeni";
 
 #define PUSHBUTTON_TEXT_NEW \
     Text = "~Neu" ; \
@@ -227,7 +237,7 @@
     Text [ portuguese_brazilian ] = "~Novo" ; \
     Text [ portuguese ] = "~Novo" ; \
     Text [ finnish ] = "~Uusi" ; \
-    Text [ danish ] = "~Ny(t)" ; \
+    Text [ danish ] = "~Ny" ; \
     Text [ french ] = "Nou~veau" ; \
     Text [ swedish ] = "~Nytt" ; \
     Text [ dutch ] = "~Nieuw" ; \
@@ -248,7 +258,9 @@
     Text[ czech ] = "Nový";    \
     Text[ hebrew ] = "‮חדש‬";    \
     Text[ hindi ] = "~नया";   \
-    Text[ slovak ] = "~Nový";
+    Text[ slovak ] = "~Nový"; \
+    Text[ hungarian ] = "Ú~j"; \
+    Text[ slovenian ] = "~Nov";
 
 #define FIXEDTEXT_TEXT_GROUP \
     Text = "~Bereich" ; \
@@ -258,7 +270,7 @@
     Text [ portuguese_brazilian ] = "~Categoria" ; \
     Text [ portuguese ] = "~Categoria" ; \
     Text [ finnish ] = "~Luokka" ; \
-    Text [ danish ] = "Omr�de" ; \
+    Text [ danish ] = "~Kategori" ; \
     Text [ french ] = "~Cat�gorie" ; \
     Text [ swedish ] = "~Kategori" ; \
     Text [ dutch ] = "~Bereik" ; \
@@ -279,7 +291,9 @@
     Text[ czech ] = "Kategorie";    \
     Text[ hebrew ] = "‮סיווג‬";    \
     Text[ hindi ] = "~वर्ग";    \
-    Text[ slovak ] = "~Kategória";
+    Text[ slovak ] = "~Kategória"; \
+    Text[ hungarian ] = "~Kategória"; \
+    Text[ slovenian ] = "~Kategorija";
 
 #define FIXEDTEXT_TEXT_FUNCTION \
     Text = "~Funktion" ; \
@@ -310,7 +324,9 @@
     Text[ czech ] = "Funkce";   \
     Text[ hebrew ] = "‮פעולה‬";    \
     Text[ hindi ] = "फंक्शन्";    \
-    Text[ slovak ] = "Funkcia";
+    Text[ slovak ] = "Funkcia"; \
+    Text[ hungarian ] = "Függvény"; \
+    Text[ slovenian ] = "Funkcija";
 
 #define GROUPBOX_TEXT_FUNCTIONS \
     Text = "Funktionen" ; \
@@ -341,7 +357,9 @@
     Text[ czech ] = "Funkce";   \
     Text[ hebrew ] = "‮תפקודים‬";    \
     Text[ hindi ] = "फंक्शन्स"; \
-    Text[ slovak ] = "Funkcie";
+    Text[ slovak ] = "Funkcie"; \
+    Text[ hungarian ] = "Függvények"; \
+    Text[ slovenian ] = "Funkcije";
 
  // TP_CONFIG_MENU --------------------------------------------------------
 TabPage TP_CONFIG_MENU
@@ -380,6 +398,8 @@ TabPage TP_CONFIG_MENU
         Text[ hebrew ] = "‮ערכי תפריט‬";
         Text[ hindi ] = "मेनु प्रविष्टियाँ";
         Text[ slovak ] = "Položky menu";
+        Text[ hungarian ] = "Menüpontok";
+        Text[ slovenian ] = "Vnosi v meni";
     };
     PushButton BTN_MN_NEW
     {
@@ -420,6 +440,8 @@ TabPage TP_CONFIG_MENU
         Text[ hebrew ] = "‮תפריט חדש‬";
         Text[ hindi ] = "नया मे~नु";
         Text[ slovak ] = "Nové men~u";
+        Text[ hungarian ] = "Új m~enü";
+        Text[ slovenian ] = "Nov ~meni";
     };
     PushButton BTN_MN_CHANGE
     {
@@ -515,6 +537,8 @@ TabPage TP_CONFIG_MENU
         Text[ hebrew ] = "‮תפקודים‬";
         Text[ hindi ] = "फंक्शन्स";
         Text[ slovak ] = "Funkcie";
+        Text[ hungarian ] = "Függvények";
+        Text[ slovenian ] = "Funkcije";
     };
     FixedText TXT_MN_GROUP
     {
@@ -527,7 +551,7 @@ TabPage TP_CONFIG_MENU
         Text [ portuguese_brazilian ] = "~Categoria" ;
         Text = "~Bereich" ;
         Text [ swedish ] = "~Kategori" ;
-        Text [ danish ] = "Omr�de" ;
+        Text [ danish ] = "~Kategori" ;
         Text [ italian ] = "Area" ;
         Text [ spanish ] = "~Categor�a" ;
         Text [ french ] = "~Cat�gorie" ;
@@ -550,6 +574,8 @@ TabPage TP_CONFIG_MENU
         Text[ hebrew ] = "‮סיווג‬";
         Text[ hindi ] = "व~र्ग";
         Text[ slovak ] = "K~ategória";
+        Text[ hungarian ] = "~Kategória";
+        Text[ slovenian ] = "K~ategorija";
     };
     Control BOX_MN_GROUP
     {
@@ -640,6 +666,8 @@ TabPage TP_CONFIG_ACCEL
         Text[ hebrew ] = "‮מקשי קיצור‬";
         Text[ hindi ] = "सरलविधि की";
         Text[ slovak ] = "Klávesové skratky";
+        Text[ hungarian ] = "Gyorsbillentyűk";
+        Text[ slovenian ] = "Tipke za bližnjico";
     };
     Control BOX_ACC_ENTRIES
     {
@@ -722,6 +750,8 @@ TabPage TP_CONFIG_ACCEL
         Text[ hebrew ] = "‮מקשים‬";
         Text[ hindi ] = "~की";
         Text[ slovak ] = "~Klávesy";
+        Text[ hungarian ] = "Bill~entyűk";
+        Text[ slovenian ] = "~Tipke";
     };
     ListBox BOX_ACC_KEY
     {
@@ -795,6 +825,8 @@ TabPage TP_CONFIG_STATBAR
         Text[ hebrew ] = "‮סרגל מצב ‬";
         Text[ hindi ] = "वस्तुस्थिति पट्टी ";
         Text[ slovak ] = "Stavový panel";
+        Text[ hungarian ] = "Állapotsor";
+        Text[ slovenian ] = "Vrstica stanja";
     };
     Control BOX_STATBAR_ENTRIES
     {
@@ -847,7 +879,7 @@ TabDialog DLG_CONFIG
     Text [ portuguese_brazilian ] = "Configura��o" ;
     Text [ portuguese ] = "Configura��o" ;
     Text [ finnish ] = "Kokoonpano" ;
-    Text [ danish ] = "Tilpas" ;
+    Text [ danish ] = "Konfiguration" ;
     Text [ french ] = "Adaptation" ;
     Text [ swedish ] = "Anpassa" ;
     Text [ dutch ] = "Aanpassen" ;
@@ -894,6 +926,8 @@ TabDialog DLG_CONFIG
                 Text[ hebrew ] = "‮תפריט‬";
                 Text[ hindi ] = "मेनु";
                 Text[ slovak ] = "Menu";
+                Text[ hungarian ] = "Menü";
+                Text[ slovenian ] = "Meni";
             };
             PageItem
             {
@@ -928,6 +962,8 @@ TabDialog DLG_CONFIG
                 Text[ hebrew ] = "‮מקלדת‬";
                 Text[ hindi ] = "कीबोर्ड";
                 Text[ slovak ] = "Klávesnica";
+                Text[ hungarian ] = "Billentyűzet";
+                Text[ slovenian ] = "Tipkovnica";
             };
             PageItem
             {
@@ -962,6 +998,8 @@ TabDialog DLG_CONFIG
                 Text[ hebrew ] = "‮סרגל מצב‬";
                 Text[ hindi ] = "वस्तुस्थिति पट्टी";
                 Text[ slovak ] = "Stavový riadok";
+                Text[ hungarian ] = "Állapotsor";
+                Text[ slovenian ] = "Vrstica stanja";
             };
             PageItem
             {
@@ -973,7 +1011,7 @@ TabDialog DLG_CONFIG
                 Text [ portuguese_brazilian ] = "Barras de ferramentas" ;
                 Text [ portuguese ] = "Barras de ferramentas" ;
                 Text [ finnish ] = "Ty�kalurivit" ;
-                Text [ danish ] = "Ikonlinjer" ;
+                Text [ danish ] = "V�rkt�jslinjer" ;
                 Text [ french ] = "Barres d'outils" ;
                 Text [ swedish ] = "Symbollister" ;
                 Text [ dutch ] = "Werkbalken" ;
@@ -996,6 +1034,8 @@ TabDialog DLG_CONFIG
                 Text[ hebrew ] = "‮סרגלי כלים‬";
                 Text[ hindi ] = "औज़ार पट्टी";
                 Text[ slovak ] = "Panely nástrojov";
+                Text[ hungarian ] = "Eszköztárak";
+                Text[ slovenian ] = "Orodne vrstice";
             };
             PageItem
             {
@@ -1007,7 +1047,7 @@ TabDialog DLG_CONFIG
                 Text [ portuguese_brazilian ] = "Eventos" ;
                 Text [ portuguese ] = "Eventos" ;
                 Text [ finnish ] = "Tapahtumat" ;
-                Text [ danish ] = "Begivenheder" ;
+                Text [ danish ] = "H�ndelser" ;
                 Text [ french ] = "�v�nements" ;
                 Text [ swedish ] = "H�ndelser" ;
                 Text [ dutch ] = "Gebeurtenissen" ;
@@ -1030,6 +1070,8 @@ TabDialog DLG_CONFIG
                 Text[ hebrew ] = "‮ארועים‬";
                 Text[ hindi ] = "घटना";
                 Text[ slovak ] = "Udalosti";
+                Text[ hungarian ] = "Események";
+                Text[ slovenian ] = "Dogodki";
             };
         };
     };
@@ -1049,6 +1091,8 @@ TabDialog DLG_CONFIG
     Text[ hebrew ] = "‮תצורה‬";
     Text[ hindi ] = "रूपरेखा";
     Text[ slovak ] = "Konfigurácia";
+    Text[ hungarian ] = "Beállítás";
+    Text[ slovenian ] = "Konfiguracija";
 };
  // Strings ---------------------------------------------------------------
 String STR_NEW
@@ -1060,7 +1104,7 @@ String STR_NEW
     Text [ portuguese_brazilian ] = "Novo" ;
     Text [ portuguese ] = "Novo" ;
     Text [ finnish ] = "Uusi" ;
-    Text [ danish ] = "Ny" ;
+    Text [ danish ] = "Ny(t)" ;
     Text [ french ] = "Nouveau" ;
     Text [ swedish ] = "Nytt" ;
     Text [ dutch ] = "Nieuw" ;
@@ -1082,6 +1126,8 @@ String STR_NEW
     Text[ hebrew ] = "‮חדש‬";
     Text[ hindi ] = "नया";
     Text[ slovak ] = "Nový";
+    Text[ hungarian ] = "Új";
+    Text[ slovenian ] = "Nov";
 };
 String STR_OPEN
 {
@@ -1116,6 +1162,8 @@ String STR_OPEN
     Text[ hebrew ] = "‮פתיחה‬";
     Text[ hindi ] = "खोलो";
     Text[ slovak ] = "Otvoriť";
+    Text[ hungarian ] = "Megnyitás";
+    Text[ slovenian ] = "Odpri";
 };
 String STR_SAVE
 {
@@ -1148,6 +1196,8 @@ String STR_SAVE
     Text[ hebrew ] = "‮שמירה‬";
     Text[ hindi ] = "संचित करो";
     Text[ slovak ] = "Uložiť";
+    Text[ hungarian ] = "Mentés";
+    Text[ slovenian ] = "Shrani";
 };
 String STR_SAVEAS
 {
@@ -1180,6 +1230,8 @@ String STR_SAVEAS
     Text[ hebrew ] = "‮שמירה בשם‬";
     Text[ hindi ] = "संचित करो जैसे";
     Text[ slovak ] = "Uložiť ako";
+    Text[ hungarian ] = "Mentés másként";
+    Text[ slovenian ] = "Shrani kot";
 };
 String STR_PRINT
 {
@@ -1212,6 +1264,8 @@ String STR_PRINT
     Text[ hebrew ] = "‮הדפסה‬";
     Text[ hindi ] = "छपाई";
     Text[ slovak ] = "Tlač";
+    Text[ hungarian ] = "Nyomtatás";
+    Text[ slovenian ] = "Natisni";
 };
 String STR_QUIT
 {
@@ -1244,6 +1298,8 @@ String STR_QUIT
     Text[ hebrew ] = "‮יציאה‬";
     Text[ hindi ] = "निर्गम";
     Text[ slovak ] = "Ukončiť";
+    Text[ hungarian ] = "Kilépés";
+    Text[ slovenian ] = "Izhod";
 };
 String STR_CUT
 {
@@ -1276,6 +1332,8 @@ String STR_CUT
     Text[ hebrew ] = "‮גזירה‬";
     Text[ hindi ] = "काटो";
     Text[ slovak ] = "Vybrať";
+    Text[ hungarian ] = "Kivágás";
+    Text[ slovenian ] = "Izreži";
 };
 String STR_COPY
 {
@@ -1308,6 +1366,8 @@ String STR_COPY
     Text[ hebrew ] = "‮העתקה‬";
     Text[ hindi ] = "प्रतिलिपि";
     Text[ slovak ] = "Kopírovať";
+    Text[ hungarian ] = "Másolás";
+    Text[ slovenian ] = "Kopiraj";
 };
 String STR_PASTE
 {
@@ -1320,7 +1380,7 @@ String STR_PASTE
     Text [ portuguese_brazilian ] = "Colar" ;
     Text [ portuguese ] = "Colar" ;
     Text [ finnish ] = "Liit�" ;
-    Text [ danish ] = "Inds�t" ;
+    Text [ danish ] = "S�t ind" ;
     Text [ french ] = "Coller" ;
     Text [ swedish ] = "Klistra in" ;
     Text [ dutch ] = "Invoegen" ;
@@ -1342,6 +1402,8 @@ String STR_PASTE
     Text[ hebrew ] = "‮הדבקה‬";
     Text[ hindi ] = "छिपकाओ";
     Text[ slovak ] = "Vložiť";
+    Text[ hungarian ] = "Beillesztés";
+    Text[ slovenian ] = "Prilepi";
 };
 String STR_DELETE
 {
@@ -1376,6 +1438,8 @@ String STR_DELETE
     Text[ hebrew ] = "‮מחיקה‬";
     Text[ hindi ] = "मिटाओ";
     Text[ slovak ] = "Zmazať";
+    Text[ hungarian ] = "Törlés";
+    Text[ slovenian ] = "Izbriši";
 };
 String STR_FIND
 {
@@ -1408,6 +1472,8 @@ String STR_FIND
     Text[ hebrew ] = "‮חיפוש‬";
     Text[ hindi ] = "खोज";
     Text[ slovak ] = "Hľadať";
+    Text[ hungarian ] = "Keresés";
+    Text[ slovenian ] = "Išči";
 };
 String STR_FINDBACKWARD
 {
@@ -1442,6 +1508,8 @@ String STR_FINDBACKWARD
     Text[ hebrew ] = "‮חיפוש לאחור‬";
     Text[ hindi ] = "पीछे की ओर खोज";
     Text[ slovak ] = "Spätné vyhľadávanie";
+    Text[ hungarian ] = "Keresés visszafelé";
+    Text[ slovenian ] = "Išči nazaj";
 };
 String STR_PROPERTIES
 {
@@ -1474,6 +1542,8 @@ String STR_PROPERTIES
     Text[ hebrew ] = "‮מאפיינים‬";
     Text[ hindi ] = "विशेषतायें";
     Text[ slovak ] = "Vlastnosti";
+    Text[ hungarian ] = "Tulajdonságok";
+    Text[ slovenian ] = "Lastnosti";
 };
 String STR_FRONT
 {
@@ -1484,7 +1554,7 @@ String STR_FRONT
     Text [ portuguese_brazilian ] = "Para a frente" ;
     Text [ portuguese ] = "Para a frente" ;
     Text [ finnish ] = "Eteen" ;
-    Text [ danish ] = "Fremad" ;
+    Text [ danish ] = "Forrest" ;
     Text [ french ] = "Premier plan" ;
     Text [ swedish ] = "Fram�t" ;
     Text [ dutch ] = "Naar voren" ;
@@ -1506,6 +1576,8 @@ String STR_FRONT
     Text[ hebrew ] = "‮קדימה‬";
     Text[ hindi ] = "आगे की ओर";
     Text[ slovak ] = "Na popredie";
+    Text[ hungarian ] = "Előre";
+    Text[ slovenian ] = "V ospredje";
 };
  // MessageBoxes ----------------------------------------------------------
 QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
@@ -1521,7 +1593,7 @@ QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
     Message [ portuguese_brazilian ] = "Algumas fun��es n�o foram definidas (???).\n\nDeseja continuar mesmo assim?" ;
     Message [ portuguese ] = "Ainda existem fun��es indefinidas (???).\n\nDeseja continuar?" ;
     Message [ finnish ] = "Osa toiminnoista on viel� m��ritt�m�tt� (???).\n\nHyv�ksyt��nk� kokoonpano?" ;
-    Message [ danish ] = "Der eksisterer stadig udefinerede funktioner (???).\n\nVil du overtage denne konfiguration alligevel?" ;
+    Message [ danish ] = "Der eksisterer stadig udefinerede funktioner (???).\n\nVil du overtage konfigurationen alligevel?" ;
     Message [ french ] = "Certaines fonctions n'ont pas �t� d�finies (???).\n\nPoursuivre malgr� tout ?" ;
     Message [ swedish ] = "Det finns fortfarande odefinierade funktioner (???). \n\nVill du �nd� anv�nda den h�r konfigurationen?" ;
     Message [ dutch ] = "Er zijn nog ongedefinieerde functies (???).\n\nWilt u deze configuratie toch overnemen?" ;
@@ -1543,6 +1615,8 @@ QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
     Message[ hebrew ] = "‮ישנם עדיין תפקודים לא מוגדרים (???).\n\nהאם אכן לאשר את התצורה בכל זאת?‬";
     Message[ hindi ] = "अभी भी बिना परिभाषा किया हुआ बहुत फंक्शन् है (???)।\n\nआप किसी तरह रूपरेखा को स्वीकार करना चाहते है?";
     Message[ slovak ] = "Niektoré funkcie stále neboli definované (???)-\n\nPrajete si i napriek tomu prijať túto konfiguráciu?";
+    Message[ hungarian ] = "Vannak még nem definiált függvények (???). \n \nEnnek ellenére elfogadja a beállításokat?";
+    Message[ slovenian ] = "Še vedno obstajajo nedefinirane funkcije (???).\n\nAli želite vseeno sprejeti konfiguracijo?";
 };
 QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
 {
@@ -1557,7 +1631,7 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message [ portuguese_brazilian ] = "Ainda existem entradas com fun��es que s� podem ser atribu�das a janelas pop-up.\n\nDeseja continuar mesmo assim?" ;
     Message [ portuguese ] = "Existem ainda entradas com fun��es que s� podem ser atribu�das a janelas instant�neas.\n\nContinuar?" ;
     Message [ finnish ] = "Osa merkint�jen toiminnoista voidaan yh� liitt�� vain ponnahdusobjekteihin.\n\nJatketaanko?" ;
-    Message [ danish ] = "Der findes stadig elementer med funktioner, som kun kan tildeles popups.\n\nVil du overtage denne konfiguration alligevel?" ;
+    Message [ danish ] = "Der findes stadig elementer med funktioner, som kun kan tildeles popups.\n\nVil du overtage konfigurationen alligevel?" ;
     Message [ french ] = "Certaines entr�es sont encore associ�es � des fonctions r�serv�es � des menus d�roulants\n\nPoursuivre malgr� tout ?" ;
     Message [ swedish ] = "Det finns fortfarande poster med funktioner som bara kan tilldelas popups.\n\nVill du �nd� anv�nda den h�r konfigurationen?" ;
     Message [ dutch ] = "Er zijn nog items met functies die alleen aan popup's kunnen worden toegewezen.\n\nWilt u deze configuratie toch overnemen?" ;
@@ -1579,6 +1653,8 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message[ hebrew ] = "‮ישנם עדיין ערכים עם תפקודים שניתנים להשמה רק ל pop-ups.\n\nהאם בכל זאת להמשיך?‬";
     Message[ hindi ] = "अभी भी फंक्शन् में कुछ प्रविष्टियाँ है जिनको सिर्फ़ पॉप्-अप् केलिए निर्दिष्ट कर सकते है ।\n\nकिसी तरह जारी रखना है?";
     Message[ slovak ] = "Stále existujú položky s funkciami, ktoré môžu byť priradené iba ku kontextovému menu.\n\nChcete i napriek tomu pokračovať?";
+    Message[ hungarian ] = "Még mindig vannak olyan bejegyzések, amelyek műveletei csak előugró ablakokhoz rendelhetők.\n\nMindenképpen folytatja?";
+    Message[ slovenian ] = "Še vedno so nekateri vnosi s funkcijami, ki se jih lahko pripiše le pojavnim oknom.\n\nVseeno nadaljujem?";
 };
 InfoBox IBX_MNUCFG_ALREADY_INCLUDED
 {
@@ -1611,6 +1687,8 @@ InfoBox IBX_MNUCFG_ALREADY_INCLUDED
     Message[ hebrew ] = "‮הפופאפ כבר מכיל תפקוד זה‬";
     Message[ hindi ] = "फंक्शन् को इस पॉप्-अप् में पहिले से ही सम्मिलित किया है ।";
     Message[ slovak ] = "Funkcia už bola zahrnutá v tomto kontextovom menu.";
+    Message[ hungarian ] = "Az előugró menü már tartalmazza a függvényt.";
+    Message[ slovenian ] = "Funkcija je že vključena v to pojavno okno.";
 };
 String STR_LOADMENUCONFIG
 {
@@ -1644,6 +1722,8 @@ String STR_LOADMENUCONFIG
     Text[ hebrew ] = "‮טעינת תצורת תפריט‬";
     Text[ hindi ] = "मेनु रूपरेखा लोड़ करो";
     Text[ slovak ] = "Načítať konfiguráciu menu";
+    Text[ hungarian ] = "Menübeállítások betöltése";
+    Text[ slovenian ] = "Naloži konfiguracijo menija";
 };
 String STR_SAVEMENUCONFIG
 {
@@ -1674,6 +1754,8 @@ String STR_SAVEMENUCONFIG
     Text[ hebrew ] = "‮שמירת תצורת תפריט‬";
     Text[ hindi ] = "मेनु रूपरेखा संचित करो";
     Text[ slovak ] = "Uložiť konfiguráciu menu";
+    Text[ hungarian ] = "Menübeállítások mentése";
+    Text[ slovenian ] = "Shrani konfiguracijo menija";
 };
 String STR_LOADACCELCONFIG
 {
@@ -1705,6 +1787,8 @@ String STR_LOADACCELCONFIG
     Text[ hebrew ] = "‮טעינת תצורת מקלדת‬";
     Text[ hindi ] = "किबोर्ड रूपरेखा को लोड़ करो";
     Text[ slovak ] = "Načítať konfiguráciu klávesnice";
+    Text[ hungarian ] = "Billentyűzetbeállítások betöltése";
+    Text[ slovenian ] = "Naloži konfiguracijo tipkovnice";
 };
 String STR_SAVEACCELCONFIG
 {
@@ -1735,6 +1819,8 @@ String STR_SAVEACCELCONFIG
     Text[ hebrew ] = "‮שמירת תצורת מקלדת‬";
     Text[ hindi ] = "किबोर्ड रूपरेखा को संचित करो";
     Text[ slovak ] = "Uložiť konfiguráciu klávesnice";
+    Text[ hungarian ] = "Billentyűzetbeállítások mentése";
+    Text[ slovenian ] = "Shrani konfiguracijo tipkovnice";
 };
 String STR_LOADSTATBARCONFIG
 {
@@ -1766,6 +1852,8 @@ String STR_LOADSTATBARCONFIG
     Text[ hebrew ] = "‮טעינת תצורת סרגל המצב‬";
     Text[ hindi ] = "वस्तुस्थिति पट्टी का रूपरेखा लोड़ करो";
     Text[ slovak ] = "Načítať konfiguráciu stavového panelu";
+    Text[ hungarian ] = " Állapotsor beállításainak betöltése";
+    Text[ slovenian ] = "Naloži konfiguracijo vrstice stanja";
 };
 String STR_SAVESTATBARCONFIG
 {
@@ -1796,6 +1884,8 @@ String STR_SAVESTATBARCONFIG
     Text[ hebrew ] = "‮שמירת תצורת סרגל המצב‬";
     Text[ hindi ] = "Save Status Bar Configuration";
     Text[ slovak ] = "Uložiť konfiguráciu stavového panelu";
+    Text[ hungarian ] = "Állapotsor beállításainak mentése";
+    Text[ slovenian ] = "Shrani konfiguracijo vrstice stanja";
 };
 String STR_MENU
 {
@@ -1827,6 +1917,8 @@ String STR_MENU
     Text[ hebrew ] = "‮תפריט‬";
     Text[ hindi ] = "मेनु";
     Text[ slovak ] = "Menu";
+    Text[ hungarian ] = "Menü";
+    Text[ slovenian ] = "Meni";
 };
 String STR_TOOLBAR_SEPARATOR
 {
@@ -1857,6 +1949,8 @@ String STR_TOOLBAR_SEPARATOR
     Text[ hebrew ] = "‮מפריד‬";
     Text[ hindi ] = "Separator";
     Text[ slovak ] = "Oddeľovač";
+    Text[ hungarian ] = "Elválasztó";
+    Text[ slovenian ] = "Ločilo";
 };
 
 String STR_TOOLBAR_SPACE
@@ -1866,13 +1960,13 @@ String STR_TOOLBAR_SPACE
     Text[ english_us ] = "Invisible separator";
     Text[ portuguese ] = "Invisible separator";
     Text[ russian ] = "Invisible separator";
-    Text[ greek ] = "Invisible separator";
+    Text[ greek ] = "������ ������������";
     Text[ dutch ] = "Invisible separator";
     Text[ french ] = "S�parateur invisible";
     Text[ spanish ] = "Separador invisible";
     Text[ finnish ] = "Invisible separator";
     Text[ italian ] = "Separatore invisibile";
-    Text[ danish ] = "Invisible separator";
+    Text[ danish ] = "Usynligt skilletegn";
     Text[ swedish ] = "Osynlig avgr�nsare";
     Text[ polish ] = "Invisible separator";
     Text[ portuguese_brazilian ] = "Separador invis�vel";
@@ -1888,6 +1982,8 @@ String STR_TOOLBAR_SPACE
     Text[ hebrew ] = "‮מחיצה בלתי נראית‬";
     Text[ hindi ] = "Invisible separator";
     Text[ slovak ] = "Neviditeľný oddeľovač";
+    Text[ hungarian ] = "Láthatatlan elválasztó";
+    Text[ slovenian ] = "Nevidno ločilo";
 };
 
 String STR_FUNCTION_ALREADY_IN_TOOLBOX
@@ -1903,7 +1999,7 @@ String STR_FUNCTION_ALREADY_IN_TOOLBOX
     Text[ spanish ] = "La funci�n seleccionada ya se encuentra disponible en la barra de s�mbolos actual. ";
     Text[ finnish ] = "The selected function is already in the current toolbox.";
     Text[ italian ] = "La funzione selezionata � gi� presente nella barra dei simboli.";
-    Text[ danish ] = "The selected function is already in the current toolbox.";
+    Text[ danish ] = "Den valgte funktion findes allerede p� den nuv�rende v�rkt�jslinje.";
     Text[ swedish ] = "Den �nskade funktionen finns redan p� den aktuella symbollisten.";
     Text[ polish ] = "The selected function is already in the current toolbox.";
     Text[ portuguese_brazilian ] = "A fun��o selecionada j� est� na caixa de ferramentas atual.";
@@ -1919,8 +2015,15 @@ String STR_FUNCTION_ALREADY_IN_TOOLBOX
     Text[ hebrew ] = "‮סרגל הכלים כבר מכיל את התפקוד שנבחר.‬";
     Text[ hindi ] = "The selected function is already on the current toolbar.";
     Text[ slovak ] = "Vybraná funkcia sa už nachádza na paneli nástrojov.";
+    Text[ hungarian ] = "A kijelölt függvény már szerepel az aktuális eszköztáron.";
+    Text[ slovenian ] = "Izbrana funkcija je že v trenutni orodni vrstici.";
 };
  // ********************************************************************** EOF
+
+
+
+
+
 
 
 
