@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:42 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog DLG_START_PRESENTATION
     Text [ ENGLISH ] = "Start Presentation" ;
     Text [ norwegian ] = "Start Presentation" ;
     Text [ italian ] = "Presentazione" ;
-    Text [ portuguese_brazilian ] = "Iniciar Apresenta??o" ;
+    Text [ portuguese_brazilian ] = "Apresentação de Slides" ;
     Text [ portuguese ] = "Apresentação no ecrã" ;
     Text [ finnish ] = "Diaesityksen asetukset" ;
     Text [ danish ] = "Præsentation" ;
@@ -118,7 +118,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ ENGLISH ] = "Range" ;
         Text [ norwegian ] = "Verdimengde" ;
         Text [ italian ] = "Diapositive" ;
-        Text [ portuguese_brazilian ] = "Faixa" ;
+        Text [ portuguese_brazilian ] = "Intervalo" ;
         Text [ portuguese ] = "Volume" ;
         Text [ finnish ] = "Näytettävä osa" ;
         Text [ danish ] = "Omfang" ;
@@ -135,10 +135,13 @@ ModalDialog DLG_START_PRESENTATION
         Text[ arabic ] = "ÇáÍÌã";
         Text[ greek ] = "Åıñïò";
         Text[ korean ] = "ë²”ìœ„";
-        Text[ turkish ] = "Kapsam";
+        Text[ turkish ] = "Aralık";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Volum";
         Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡";
+        Text[ czech ] = "Rozsah";
+        Text[ hebrew ] = "Umfang";
+        Text[ hindi ] = "Range";
     };
     RadioButton RBT_ALL
     {
@@ -160,7 +163,7 @@ ModalDialog DLG_START_PRESENTATION
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å…¨éƒ¨çš„å¹»ç¯ç‰‡(~S)";
         Text[ russian ] = "~Âñå ñëàéäû";
-        Text[ polish ] = "Wszystkie slajdy";
+        Text[ polish ] = "Wszystkie ~slajdy";
         Text[ japanese ] = "ã™ã¹ã¦ã®ã‚¹ãƒ©ã‚¤ãƒ‰(~S)";
         Text[ chinese_traditional ] = "å…¨éƒ¨æŠ•å½±ç‰‡(~S)";
         Text[ arabic ] = "ßá ÇáÔÑÇÆÍ";
@@ -170,6 +173,9 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Totes les ~diapositives";
         Text[ thai ] = "~à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
+        Text[ czech ] = "VÅ¡echny snÃ­mky";
+        Text[ hebrew ] = "~Alle Dias";
+        Text[ hindi ] = "~à¤¸à¤¬ à¤¸à¥à¤²à¤‡à¤¡à¤¸";
     };
     RadioButton RBT_AT_DIA
     {
@@ -179,7 +185,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ ENGLISH ] = "~From" ;
         Text [ norwegian ] = "~Fra" ;
         Text [ italian ] = "A partire ~da" ;
-        Text [ portuguese_brazilian ] = "~De" ;
+        Text [ portuguese_brazilian ] = "A ~partir de:" ;
         Text [ portuguese ] = "A ~partir de:" ;
         Text [ finnish ] = "A~lkaen diasta:" ;
         Text [ danish ] = "Fra dias" ;
@@ -191,7 +197,7 @@ ModalDialog DLG_START_PRESENTATION
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å¹»ç¯ç‰‡ä»(~F)";
         Text[ russian ] = "Íà÷àòü ñî ñëàéäà";
-        Text[ polish ] = "Od slajdu";
+        Text[ polish ] = "~Od:";
         Text[ japanese ] = "ã‚¹ãƒ©ã‚¤ãƒ‰æŒ‡å®š(~F)";
         Text[ chinese_traditional ] = "æŠ•å½±ç‰‡å¾(~F)";
         Text[ arabic ] = "ÈÏÇíÉ ãä ÇáÔÑíÍÉ:";
@@ -201,6 +207,9 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Des de:";
         Text[ thai ] = "~à¸ˆà¸²à¸:";
+        Text[ czech ] = "Od:";
+        Text[ hebrew ] = "Ab ~Dia";
+        Text[ hindi ] = "~à¤¸à¥‡:";
     };
     ListBox LB_DIAS
     {
@@ -220,7 +229,7 @@ ModalDialog DLG_START_PRESENTATION
         TabStop = TRUE ;
         Text [ portuguese ] = "Apres~entação personalizada" ;
         Text [ english_us ] = "~Custom Slide Show" ;
-        Text [ portuguese_brazilian ] = "~Individuelle Pr?sentation" ;
+        Text [ portuguese_brazilian ] = "Apres~entação de Slides Personalizada" ;
         Text [ swedish ] = "~Individuell presentation" ;
         Text [ danish ] = "Individuel præsentation" ;
         Text [ italian ] = "Presentazione su schermo personalizzata" ;
@@ -229,17 +238,20 @@ ModalDialog DLG_START_PRESENTATION
         Text [ dutch ] = "~Individuele schermpresentatie" ;
         Text[ chinese_simplified ] = "è‡ªå®šçš„æ¼”ç¤ºæ–‡ç¨¿(~C)";
         Text[ russian ] = "Îáû÷íàÿ äåìîíñòğàöèÿ";
-        Text[ polish ] = "Indywidualny pokaz slajdów";
+        Text[ polish ] = "~Niestandardowy pokaz slajdów";
         Text[ japanese ] = "ç›®çš„åˆ¥ã‚¹ãƒ©ã‚¤ãƒ‰ã‚·ãƒ§ãƒ¼(~C)";
         Text[ chinese_traditional ] = "ä½¿ç”¨è€…çš„æ”¾æ˜ ç°¡å ±æŠ•å½±ç‰‡(~C)";
         Text[ arabic ] = "ÚÑÖ ÊŞÏíãí ãÎÕÕ";
         Text[ greek ] = "Ğñïóáñìïóìİí~ç ğáñïõóßáóç ïèüíçò";
         Text[ korean ] = "ì‚¬ìš©ì ì •ì˜ ìŠ¬ë¼ì´ë“œ ì‡¼(~C)";
-        Text[ turkish ] = "Özel ekran sunusu";
+        Text[ turkish ] = "Özel slayt gösterimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Presentació personalitzada";
         Text[ finnish ] = "~Mukautettu esitys";
         Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¹à¸šà¸š~à¸à¸³à¸«à¸™à¸”à¹€à¸­à¸‡";
+        Text[ czech ] = "VlastnÃ­ prezentace";
+        Text[ hebrew ] = "~Individuelle BildschirmprÃ¤sentation";
+        Text[ hindi ] = "~à¤¸à¥à¤²à¤‡à¤¡ à¤ªà¥à¤°à¤¸à¥à¤¤à¥à¤¤à¤¿ à¤•à¥‹ à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤•à¤°à¥‹";
     };
     ListBox LB_CUSTOMSHOW
     {
@@ -266,7 +278,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ danish ] = "Type";
         Text[ swedish ] = "Typ";
         Text[ polish ] = "Typ";
-        Text[ portuguese_brazilian ] = "Kind";
+        Text[ portuguese_brazilian ] = "Tipo";
         Text[ japanese ] = "ç¨®é¡";
         Text[ chinese_simplified ] = "ç±»å‹";
         Text[ chinese_traditional ] = "é¡å‹";
@@ -278,6 +290,9 @@ ModalDialog DLG_START_PRESENTATION
         Text[ catalan ] = "Tipus";
         Text[ finnish ] = "Tyyppi";
         Text[ thai ] = "à¸Šà¸™à¸´à¸”";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "â€®×¡×•×’â€¬";
+        Text[ hindi ] = "Type";
     };
     RadioButton RBT_STANDARD
     {
@@ -295,19 +310,22 @@ ModalDialog DLG_START_PRESENTATION
         Text[ italian ] = "Standard";
         Text[ danish ] = "Standard";
         Text[ swedish ] = "S~tandard";
-        Text[ polish ] = "Domyœlnie";
-        Text[ portuguese_brazilian ] = "Stan~dard";
+        Text[ polish ] = "~Domyœlnie";
+        Text[ portuguese_brazilian ] = "~Padrão";
         Text[ japanese ] = "æ¨™æº–(~D)";
         Text[ chinese_simplified ] = "æ ‡å‡†(~D)";
         Text[ chinese_traditional ] = "æ¨™æº–(~D)";
         Text[ arabic ] = "ÇİÊÑÇÖí";
         Text[ greek ] = "ĞñïåğéëïãŞ";
         Text[ korean ] = "ê¸°ë³¸ê°’(~D)";
-        Text[ turkish ] = "Standart";
+        Text[ turkish ] = "Öntanımlı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Per defecte";
         Text[ finnish ] = "Olet~us";
         Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
+        Text[ czech ] = "VÃ½chozÃ­";
+        Text[ hebrew ] = "â€®×‘×¨×™×¨×ª ××’×“×œâ€¬";
+        Text[ hindi ] = "~à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿";
     };
     RadioButton RBT_WINDOW
     {
@@ -325,8 +343,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ italian ] = "Fi~nestra";
         Text[ danish ] = "Vindue";
         Text[ swedish ] = "~Fönster";
-        Text[ polish ] = "Okno";
-        Text[ portuguese_brazilian ] = "~Window";
+        Text[ polish ] = "O~kno";
+        Text[ portuguese_brazilian ] = "~Janela";
         Text[ japanese ] = "ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦(~W)";
         Text[ chinese_simplified ] = "è§†çª—(~W)";
         Text[ chinese_traditional ] = "è¦–çª—(~W)";
@@ -338,6 +356,9 @@ ModalDialog DLG_START_PRESENTATION
         Text[ catalan ] = "~Finestra";
         Text[ finnish ] = "~Ikkuna";
         Text[ thai ] = "~à¸«à¸™à¹‰à¸²à¸•à¹ˆà¸²à¸‡";
+        Text[ czech ] = "Okno";
+        Text[ hebrew ] = "â€®×—×œ×•× ×•×ªâ€¬";
+        Text[ hindi ] = "~à¤µà¤¿à¤¨à¥à¤¡à¥‹";
     };
     RadioButton RBT_AUTO
     {
@@ -355,7 +376,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ italian ] = "Automatico";
         Text[ danish ] = "Auto";
         Text[ swedish ] = "A~uto";
-        Text[ polish ] = "Automatycznie";
+        Text[ polish ] = "A~utomatycznie";
         Text[ portuguese_brazilian ] = "A~uto";
         Text[ japanese ] = "è‡ªå‹•(~U)";
         Text[ chinese_simplified ] = "è‡ªåŠ¨(~U)";
@@ -368,6 +389,9 @@ ModalDialog DLG_START_PRESENTATION
         Text[ catalan ] = "~Auto";
         Text[ finnish ] = "~Automaattinen";
         Text[ thai ] = "à¸­à¸±~à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+        Text[ czech ] = "Automaticky";
+        Text[ hebrew ] = "A~uto";
+        Text[ hindi ] = "~à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤";
     };
 /*
     FixedText FT_PAUSE
@@ -413,7 +437,7 @@ ModalDialog DLG_START_PRESENTATION
         QuickHelpText[ danish ] = "Pausetid";
         QuickHelpText[ swedish ] = "Pausens längd";
         QuickHelpText[ polish ] = "D³ugo?æ przerwy";
-        QuickHelpText[ portuguese_brazilian ] = "Duration of pause";
+        QuickHelpText[ portuguese_brazilian ] = "Duração da pausa";
         QuickHelpText[ japanese ] = "ä¼‘æ­¢æ™‚é–“";
         QuickHelpText[ chinese_simplified ] = "é—´éš”æ—¶é—´";
         QuickHelpText[ chinese_traditional ] = "é–“éš”æ™‚é–“";
@@ -427,6 +451,9 @@ ModalDialog DLG_START_PRESENTATION
         QuickHelpText[ catalan ] = "Duració de pausa";
         QuickHelpText[ finnish ] = "Katkon pituus";
         QuickHelpText[ thai ] = "Duration of pause";
+        QuickHelpText[ czech ] = "DÃ©lka pauzy";
+        QuickHelpText[ hebrew ] = "Pausendauer";
+        QuickHelpText[ hindi ] = "à¤µà¤¿à¤°à¤¾à¤® à¤•à¥€ à¤•à¤¾à¤²à¤¾à¤µà¤§à¤¿";
     };
     CheckBox CBX_AUTOLOGO
     {
@@ -444,8 +471,8 @@ ModalDialog DLG_START_PRESENTATION
         Text[ italian ] = "Mostra logo";
         Text[ danish ] = "Vis logo";
         Text[ swedish ] = "Visa ~logotyp";
-        Text[ polish ] = "Poka¿ logo";
-        Text[ portuguese_brazilian ] = "Show ~logo";
+        Text[ polish ] = "Poka¿ ~logo";
+        Text[ portuguese_brazilian ] = "Mos~trar logotipo";
         Text[ japanese ] = "ãƒ­ã‚´ã®è¡¨ç¤º(~L)";
         Text[ chinese_simplified ] = "æ˜¾ç¤ºå¾½æ ‡(~L)";
         Text[ chinese_traditional ] = "é¡¯ç¤ºåœ–æ¨™(~L)";
@@ -457,6 +484,9 @@ ModalDialog DLG_START_PRESENTATION
         Text[ catalan ] = "Mostra el ~logotip";
         Text[ finnish ] = "Näytä lo~go";
         Text[ thai ] = "à¹à¸ªà¸”à¸‡à¹‚~à¸¥à¹‚à¸à¹‰";
+        Text[ czech ] = "Zobrazit logo";
+        Text[ hebrew ] = "~Logo einblenden";
+        Text[ hindi ] = "~à¤¸à¤‚à¤•à¥‡à¤¤ à¤¦à¤¿à¤–à¤¾à¤“";
     };
 
     FixedLine GRP_OPTIONS
@@ -467,7 +497,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Opzioni" ;
-        Text [ portuguese_brazilian ] = "Op??s" ;
+        Text [ portuguese_brazilian ] = "Opções" ;
         Text [ portuguese ] = "Opções" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
@@ -488,6 +518,9 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions";
         Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
+        Text[ czech ] = "Volby";
+        Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
+        Text[ hindi ] = "Options";
     };
     CheckBox CBX_MANUEL
     {
@@ -497,7 +530,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ ENGLISH ] = "~Manual advance" ;
         Text [ norwegian ] = "~+++Manuell framgangsmåte" ;
         Text [ italian ] = "~Avanzamento manuale" ;
-        Text [ portuguese_brazilian ] = "~Avan?ar Manual" ;
+        Text [ portuguese_brazilian ] = "Mudar os slides ~manualmente" ;
         Text [ portuguese ] = "Transição ~manual de diapositivos" ;
         Text [ finnish ] = "Manuaalinen dianvai~hto" ;
         Text [ danish ] = "Manuel diasovergang" ;
@@ -509,7 +542,7 @@ ModalDialog DLG_START_PRESENTATION
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ‰‹å·¥æ›´æ¢å¹»ç¯ç‰‡(~C)";
         Text[ russian ] = "Ñìåíà ñëàéäà âğó÷íóş";
-        Text[ polish ] = "Zmieniaj slajdy rêcznie";
+        Text[ polish ] = "Zmieniaj slajd~y rêcznie";
         Text[ japanese ] = "æ‰‹å‹•ã§ç”»é¢åˆ‡ã‚Šæ›¿ãˆ(~C)";
         Text[ chinese_traditional ] = "æ‰‹å‹•è®Šæ›æŠ•å½±ç‰‡(~C)";
         Text[ arabic ] = "ÊÛííÑ ÇáÔÑíÍÉ íÏæíÇğ";
@@ -519,6 +552,9 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Canvia les diapositives manualment";
         Text[ thai ] = "à¹€~à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¸”à¹‰à¸§à¸¢à¸•à¸™à¹€à¸­à¸‡";
+        Text[ czech ] = "MÄ›nit snÃ­mky ruÄnÄ›";
+        Text[ hebrew ] = "Diawechsel ~manuell";
+        Text[ hindi ] = "~à¤¸à¥à¤²à¤‡à¤¡à¥‹à¤‚ à¤•à¥‹ à¤¹à¤¾à¤¥ à¤¸à¥‡ à¤¬à¤¦à¤²à¥‹";
     };
     CheckBox CBX_MOUSEPOINTER
     {
@@ -528,7 +564,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ ENGLISH ] = "Mousepointer ~visible" ;
         Text [ norwegian ] = "Musepeker ~synlig" ;
         Text [ italian ] = "Puntatore mouse ~visibile" ;
-        Text [ portuguese_brazilian ] = "Ponteiro do mouse ~vis?vel" ;
+        Text [ portuguese_brazilian ] = "Ponteiro do mouse ~visível" ;
         Text [ portuguese ] = "Ponteiro do rato ~visível" ;
         Text [ finnish ] = "Hiiren osoitin näky~vissä" ;
         Text [ danish ] = "Musemarkør synlig" ;
@@ -540,7 +576,7 @@ ModalDialog DLG_START_PRESENTATION
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ˜¾ç¤ºé¼ æ ‡(~V)";
         Text[ russian ] = "Ïîêàçàòü óêàçàòåëü ìûøè";
-        Text[ polish ] = "WskaŸnik myszy widoczny";
+        Text[ polish ] = "~WskaŸnik myszy widoczny";
         Text[ japanese ] = "ãƒã‚¦ã‚¹ãƒã‚¤ãƒ³ã‚¿ãŒç›®ã«è¦‹ãˆã‚‹(~V)";
         Text[ chinese_traditional ] = "é¡¯ç¤ºé¼ æ¨™(~V)";
         Text[ arabic ] = "ãÄÔÑ ÇáãÇæÓ ãÑÆí";
@@ -550,6 +586,9 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Punter del ratolí vi~sible";
         Text[ thai ] = "~à¸¡à¸­à¸‡à¹€à¸«à¹‡à¸™à¸ˆà¸¸à¸”à¸Šà¸µà¹‰à¹€à¸¡à¹‰à¸²à¸ªà¹Œ";
+        Text[ czech ] = "ViditelnÃ½ kurzor myÅ¡i";
+        Text[ hebrew ] = "Maus~zeiger sichtbar";
+        Text[ hindi ] = "~à¤®à¥Œà¤¸ à¤•à¤¾ à¤¸à¥‚à¤šà¤• à¤¦à¤£à¥à¤¡ à¤¦à¥ƒà¤·à¥à¤Ÿà¤¿à¤—à¥‹à¤šà¤°";
     };
     CheckBox CBX_PEN
     {
@@ -559,7 +598,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ ENGLISH ] = "Mousepointer ~Pen" ;
         Text [ norwegian ] = "Musepeker ~Penn" ;
         Text [ italian ] = "Puntatore mouse come ~penna" ;
-        Text [ portuguese_brazilian ] = "Caneta do ~ponteiro do mouse" ;
+        Text [ portuguese_brazilian ] = "Ponteiro do mouse como ~caneta" ;
         Text [ portuguese ] = "Ponteiro do rato como ~lápis" ;
         Text [ finnish ] = "Hiiren osoitin ~kynänä" ;
         Text [ danish ] = "Musemarkør som pen" ;
@@ -571,7 +610,7 @@ ModalDialog DLG_START_PRESENTATION
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "é¼ æ ‡æ˜¾ç¤ºæˆç¬”å‹(~P)";
         Text[ russian ] = "Óêàçàòåëü ìûøè â âèäå êàğàíäàøà";
-        Text[ polish ] = "WskaŸnik myszy jako pióro";
+        Text[ polish ] = "WskaŸnik myszy jako ~pióro";
         Text[ japanese ] = "ãƒã‚¦ã‚¹ãƒã‚¤ãƒ³ã‚¿ã‚’ãƒšãƒ³ã¨ã—ã¦(~P)";
         Text[ chinese_traditional ] = "é¼ æ¨™é¡¯ç¤ºæˆç•«ç­†(~P)";
         Text[ arabic ] = "ãÄÔÑ ÇáãÇæÓ Úáì åíÆÉ Şáã";
@@ -581,6 +620,9 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Punter del ratolí com a p~luma";
         Text[ thai ] = "à¸ˆà¸¸à¸”à¸Šà¸µà¹‰à¹€à¸¡à¹‰à¸²à¸ªà¹Œà¹€à¸›à¹‡à¸™~à¸›à¸²à¸à¸à¸²";
+        Text[ czech ] = "Kurzor myÅ¡i jako pero";
+        Text[ hebrew ] = "Mauszeiger als ~Stift";
+        Text[ hindi ] = "à¤®à¥Œà¤¸ à¤¸à¥‚à¤šà¤•à¤¦à¤£à¥à¤¡ ~à¤•à¤²à¤® à¤œà¥ˆà¤¸à¥‡";
     };
     CheckBox CBX_NAVIGATOR
     {
@@ -597,20 +639,23 @@ ModalDialog DLG_START_PRESENTATION
         Text [ swedish ] = "~Navigator synlig" ;
         Text [ danish ] = "Navigator synlig" ;
         Text [ portuguese ] = "~Navegador vísivel" ;
-        Text [ portuguese_brazilian ] = "~Navigator sichtbar" ;
+        Text [ portuguese_brazilian ] = "~Navegador visível" ;
         Text[ chinese_simplified ] = "æ˜¾ç¤ºåŠ©æ‰‹(~N)";
         Text[ russian ] = "Ïîêàçàòü Íàâèãàòîğ";
-        Text[ polish ] = "Nawigator widoczny";
+        Text[ polish ] = "N~awigator widoczny";
         Text[ japanese ] = "ãƒŠãƒ“ã‚²ãƒ¼ã‚¿ãŒç›®ã«è¦‹ãˆã‚‹(~N)";
         Text[ chinese_traditional ] = "é¡¯ç¤ºåŠ©æ‰‹(~N)";
         Text[ arabic ] = "ÇáäÇİíÌíÊæÑ ãÑÆí";
         Text[ greek ] = "Navigator ïñáôüò";
         Text[ korean ] = "ë„¤ë¹„ê²Œì´í„° í‘œì‹œ(~N)";
-        Text[ turkish ] = "Navigatörü görüntüle";
+        Text[ turkish ] = "Tarayıcıyı görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Navegador visible";
         Text[ finnish ] = "~Etsin näkyvissä";
         Text[ thai ] = "à¸¡à¸­à¸‡à¹€à¸«à¹‡à¸™~à¸•à¸±à¸§à¸™à¸³à¸—à¸²à¸‡";
+        Text[ czech ] = "NavigÃ¡tor viditelnÃ½";
+        Text[ hebrew ] = "~Navigator sichtbar";
+        Text[ hindi ] = "~à¤¦à¥ƒà¤·à¥à¤Ÿà¤¿à¤—à¥‹à¤šà¤° à¤¨à¤¾à¤µà¤¿à¤—à¥‡à¤Ÿà¤°";
     };
     CheckBox CBX_ANIMATION_ALLOWED
     {
@@ -620,7 +665,7 @@ ModalDialog DLG_START_PRESENTATION
         Text = "Animati~onen zulassen" ;
         Text [ ENGLISH ] = "Animati~ons allowed" ;
         Text [ english_us ] = "~Animations allowed" ;
-        Text [ portuguese_brazilian ] = "Animati~onen zulassen" ;
+        Text [ portuguese_brazilian ] = "A~nimações permitidas" ;
         Text [ swedish ] = "Tillåt animati~oner" ;
         Text [ danish ] = "Tillad animationer" ;
         Text [ italian ] = "Permetti animazioni" ;
@@ -630,7 +675,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ portuguese ] = "Permitir a~nimações" ;
         Text[ chinese_simplified ] = "å…è®¸åŠ¨ç”»(~A)";
         Text[ russian ] = "Ğàçğåøèòü àíèìàöèş";
-        Text[ polish ] = "Dopu~œæ animacje";
+        Text[ polish ] = "~Zezwalaj na animacje";
         Text[ japanese ] = "ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å…¥ã‚Œã‚‹(~A)";
         Text[ chinese_traditional ] = "å…è¨±å‹•ç•«(~A)";
         Text[ arabic ] = "ÇáÓãÇÍ ÈÇáÍÑßÉ";
@@ -641,6 +686,9 @@ ModalDialog DLG_START_PRESENTATION
         Text[ catalan ] = "Es permeten les ~animacions";
         Text[ finnish ] = "~Salli animaatiot";
         Text[ thai ] = "à¹ƒà¸«à¹‰à¸¡à¸µà¸à¸²à¸£à¹€~à¸„à¸¥à¸·à¹ˆà¸­à¸™à¹„à¸«à¸§";
+        Text[ czech ] = "Animace povoleny";
+        Text[ hebrew ] = "Animati~onen zulassen";
+        Text[ hindi ] = "~à¤¹à¥‚à¤²à¤¾à¤¸ à¤¸à¥à¤µà¥€à¤•à¥ƒà¤¤";
     };
     CheckBox CBX_CHANGE_PAGE
     {
@@ -651,16 +699,16 @@ ModalDialog DLG_START_PRESENTATION
         TabStop = TRUE ;
         Text [ english_us ] = "Change slides by clic~king on background" ;
         Text [ italian ] = "Cambio dia dopo clic sullo sfondo" ;
-        Text [ spanish ] = "Transición de dia. pulsando en ~fondo" ;
+        Text [ spanish ] = "Transición pulsando sobre el ~fondo" ;
         Text [ french ] = "Transition : clic sur l'arrière-plan" ;
         Text [ dutch ] = "Dia~wissel per klik op achtergrond" ;
         Text [ swedish ] = "Diaväxling vid ~klick på bakgrunden" ;
         Text [ danish ] = "Diasovergang ved klik på baggrunden" ;
         Text [ portuguese ] = "Transição diapos.: clique plano de ~fundo" ;
-        Text [ portuguese_brazilian ] = "Diawechsel bei ~Klick auf Hintergrund" ;
+        Text [ portuguese_brazilian ] = "Mudar os slides clicando no plano de ~fundo" ;
         Text[ chinese_simplified ] = "å•å‡»èƒŒæ™¯ï¼Œæ›´æ¢æ¼”ç¤ºæ–‡ç¨¿é¡µé¢(~K)";
         Text[ russian ] = "Ïåğåõîä ñëàéäà ïî ùåë÷êó íà ôîíå";
-        Text[ polish ] = "Zmiana ~slajdu przy klikniêciu t³a";
+        Text[ polish ] = "Zmi~eñ slajd po klikniêciu t³a";
         Text[ japanese ] = "èƒŒæ™¯ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¦ç”»é¢åˆ‡ã‚Šæ›¿ãˆ(~K)";
         Text[ chinese_traditional ] = "æŒ‰ä¸€ä¸‹é¼ éµè®Šæ›´ç°¡å ±(~K)";
         Text[ arabic ] = "ÊÛííÑ ÇáÔÑíÍÉ ÚäÏ ÇáäŞÑ İæŞ ÇáÎáİíÉ";
@@ -671,6 +719,9 @@ ModalDialog DLG_START_PRESENTATION
         Text[ catalan ] = "Canvia les diapositives fent ~clic al fons";
         Text[ finnish ] = "Dianvaihto ~taustaa napsauttamalla";
         Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¹‚à¸”à¸¢à¸à¸²à¸£à¸„~à¸¥à¸´à¹Šà¸à¸šà¸™à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
+        Text[ czech ] = "MÄ›nit snÃ­mky kliknutÃ­m na pozadÃ­";
+        Text[ hebrew ] = "Diawechsel bei ~Klick auf Hintergrund";
+        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤— ~à¤®à¥‡à¤‚ à¤•à¥à¤²à¤¿à¤• à¤•à¤°à¤¤à¥‡ à¤¹à¥à¤ à¤¸à¥à¤²à¤‡à¤¡à¤¸ à¤¬à¤¦à¤²à¥‹";
     };
     CheckBox CBX_ALWAYS_ON_TOP
     {
@@ -688,10 +739,10 @@ ModalDialog DLG_START_PRESENTATION
         Text [ swedish ] = "Presentation alltid i förgrunden" ;
         Text [ danish ] = "Præsentation altid i forgrunden" ;
         Text [ portuguese ] = "Apresentação sempre em ~primeiro plano" ;
-        Text [ portuguese_brazilian ] = "Pr?sentation immer im ~Vordergrund" ;
+        Text [ portuguese_brazilian ] = "Apresentação sem~pre visível" ;
         Text[ chinese_simplified ] = "å§‹ç»ˆå‰ç«¯æ˜¾ç¤ºæ¼”ç¤ºæ–‡ç¨¿(~O)";
         Text[ russian ] = "Âñåãäà ïîâåğõ îñòàëüíûõ îêîí";
-        Text[ polish ] = "Pokaz slajdów zawsze na pierwszym planie";
+        Text[ polish ] = "P~rezentacja zawsze na wierzchu";
         Text[ japanese ] = "ã‚¹ãƒ©ã‚¤ãƒ‰ã‚·ãƒ§ãƒ¼ãŒå¸¸ã«å‰æ™¯(~O)";
         Text[ chinese_traditional ] = "è‡ªå‹•å‰ç«¯é¡¯ç¤ºæ”¾æ˜ ç°¡å ±æŠ•å½±ç‰‡(~O)";
         Text[ arabic ] = "ÇáÚÑÖ ÏÇÆãÇğ İí ÇáÃãÇãíÉ";
@@ -702,16 +753,35 @@ ModalDialog DLG_START_PRESENTATION
         Text[ catalan ] = "Prese~ntació sempre en primer pla";
         Text[ finnish ] = "Esitys aina ~päällimmäisenä";
         Text[ thai ] = "à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­à¸­à¸¢à¸¹à¹ˆà¸”à¹‰à¸²à¸™~à¸šà¸™à¹€à¸ªà¸¡à¸­";
+        Text[ czech ] = "Prezentace vÅ¾dy v popÅ™edÃ­";
+        Text[ hebrew ] = "BildschirmprÃ¤sentation immer im ~Vordergrund";
+        Text[ hindi ] = "à¤ªà¥à¤°à¤¸à¥à¤¤à¥à¤¤à¤¿ ~à¤¹à¤®à¥‡à¤¶à¤¾ à¤Šà¤ªà¤° à¤®à¥‡à¤‚";
     };
     Text[ chinese_traditional ] = "æ”¾æ˜ ç°¡å ±æŠ•å½±ç‰‡";
     Text[ arabic ] = "ÇáÚÑÖ Úáì ÇáÔÇÔÉ";
     Text[ greek ] = "Ğáñïõóßáóç ïèüíçò";
     Text[ korean ] = "ìŠ¬ë¼ì´ë“œ ì‡¼";
-    Text[ turkish ] = "Ekran sunusu";
+    Text[ turkish ] = "Slayt gösterimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inicia la presentació";
     Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡";
+    Text[ czech ] = "Prezentace";
+    Text[ hebrew ] = "BildschirmprÃ¤sentation";
+    Text[ hindi ] = "à¤¸à¥à¤²à¤‡à¤¡ à¤¦à¤¿à¤–à¤¾à¤“";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
