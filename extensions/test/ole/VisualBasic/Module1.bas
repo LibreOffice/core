@@ -5,6 +5,10 @@ Private objServiceManager
 Private objCoreReflection
 Private objOleTest
 Private objEventListener
+'General counter
+Dim i As Long
+Dim j As Long
+Dim sError As String
 
 Sub Main()
     Set objServiceManager = CreateObject("com.sun.star.ServiceManager")
@@ -19,341 +23,296 @@ Sub Main()
 '============================================
 Dim tmpVar As Variant
 Dim ret As Variant
-Dim bError As Boolean
-ret = objOleTest.in_methodByte(10)
-Debug.Print TypeName(ret) & " " & CStr(ret)
-If ret <> 10 Then
-    MsgBox "error"
+Dim inByte As Byte, outByte As Byte, retByte As Byte
+Dim inBool As Boolean, outBool As Boolean, retBool As Boolean
+Dim inShort As Integer, outShort As Integer, retShort As Integer
+Dim inUShort As Integer, outUShort As Integer, retUShort As Integer
+Dim inLong As Long, outLong As Long, retLong As Long
+Dim inULong As Long, outULong As Long, retULong As Long
+Dim inHyper As Variant, outHyper As Variant, retHyper As Variant
+Dim inUHyper As Variant, outUHyper As Variant, retUHyper As Variant
+Dim inFloat As Single, outFloat As Single, retFloat As Single
+Dim inDouble As Double, outDouble As Double, retDouble As Double
+Dim inString As String, outString As String, retString As String
+Dim inChar As Integer, outChar As Integer, retChar As Integer, retChar2 As Integer
+Dim inCharAsString As String, outCharAsString As String, retCharAsString As String
+Dim inAny As Variant, outAny As Variant, retAny As Variant
+Dim inXInterface As Object, outXInterface As Object, retXInterface As Object
+Dim inXInterface2 As Object, outXInterface2 As Object, retXInterface2 As Object
+
+Dim outVarByte As Variant
+Dim outVarBool As Variant
+Dim outVarShort As Variant
+Dim outVarUShort As Variant
+Dim outVarLong As Variant
+Dim outVarULong As Variant
+Dim outVarFloat As Variant
+Dim outVarDouble As Variant
+Dim outVarString As Variant
+Dim outVarChar As Variant
+Dim outVarAny As Variant
+
+inByte = 10
+inBool = True
+inShort = -10
+inUShort = -100
+inLong = -1000
+inHyper = CDec("-9223372036854775808") 'lowest int64
+inUHyper = CDec("18446744073709551615") ' highest unsigned int64
+inULong = 10000
+inFloat = 3.14
+inDouble = 3.14
+inString = "Hello World!"
+inChar = 65
+inCharAsString = "A"
+inAny = "Hello World"
+Set inXInterface = objCoreReflection
+Set inXInterface2 = objEventListener
+
+retByte = objOleTest.in_methodByte(inByte)
+retBool = objOleTest.in_methodBool(inBool)
+retShort = objOleTest.in_methodShort(inShort)
+retUShort = objOleTest.in_methodUShort(inUShort)
+retLong = objOleTest.in_methodLong(inLong)
+retULong = objOleTest.in_methodULong(inULong)
+retHyper = objOleTest.in_methodHyper(inHyper)
+retUHyper = objOleTest.in_methodUHyper(inUHyper)
+retFloat = objOleTest.in_methodFloat(inFloat)
+retDouble = objOleTest.in_methodDouble(inDouble)
+retString = objOleTest.in_methodString(inString)
+retChar = objOleTest.in_methodChar(inChar)
+retChar2 = objOleTest.in_methodChar(inCharAsString)
+retAny = objOleTest.in_methodAny(inAny)
+Set retXInterface = objOleTest.in_methodXInterface(inXInterface) ' UNO object
+Set retXInterface2 = objOleTest.in_methodXInterface(inXInterface2)
+
+If retByte <> inByte Or retBool <> inBool _
+    Or retShort <> inShort Or retUShort <> inUShort _
+    Or retLong <> inLong Or retULong <> inULong _
+    Or retHyper <> inHyper Or retUHyper <> inUHyper _
+    Or retFloat <> inFloat Or retDouble <> inDouble _
+    Or retString <> inString Or retChar <> inChar _
+    Or retChar2 <> Asc(inCharAsString) Or retAny <> inAny _
+    Or Not (inXInterface Is retXInterface) _
+    Or Not (inXInterface2 Is retXInterface2) Then
+    sError = "in - parameter and return value test failed"
+    GoTo onerror
 End If
 
-ret = objOleTest.in_methodFloat(3.14)
-Debug.Print TypeName(ret) & " " & CStr(ret)
-If ret <> 3.14 Then
-    MsgBox "error"
-End If
-Dim d As Double 'try conversion
-d = 3.14
-ret = objOleTest.in_methodFloat(3.14)
-Debug.Print TypeName(ret) & " " & CStr(ret)
-If ret <> 3.14 Then
-    MsgBox "error"
-End If
-
-ret = objOleTest.in_methodDouble(4.14)
-Debug.Print TypeName(ret) & " " & CStr(ret)
-If ret <> 4.14 Then
-    MsgBox "error"
-End If
-Dim s As Single
-s = 4.14
-ret = objOleTest.in_methodDouble(s)
-Debug.Print TypeName(ret) & " " & CStr(ret)
-If (ret < 4.13) And (ret > 4.15) Then
-    MsgBox "error"
-End If
-
-ret = objOleTest.in_methodBool(True)
-Debug.Print TypeName(ret) & " " & CStr(ret)
-If ret <> True Then
-    MsgBox "error"
-End If
-
-ret = objOleTest.in_methodBool(False)
-Debug.Print TypeName(ret) & " " & CStr(ret)
-If ret <> False Then
-    MsgBox "error"
-End If
-
-ret = objOleTest.in_methodShort(-10)
-Debug.Print TypeName(ret) & " " & CStr(ret)
-If ret <> -10 Then
-    MsgBox "error"
-End If
-ret = objOleTest.in_methodUShort(10)
-Debug.Print TypeName(ret) & " " & CStr(ret)
-If ret <> 10 Then
-    MsgBox "error"
-End If
-ret = objOleTest.in_methodLong(-1000000)
-Debug.Print TypeName(ret) & " " & CStr(ret)
-If ret <> -1000000 Then
-    MsgBox "error"
-End If
-
-ret = objOleTest.in_methodULong(1000000)
-Debug.Print TypeName(ret) & " " & CStr(ret)
-If ret <> 1000000 Then
-    MsgBox "error"
-End If
-
-ret = objOleTest.in_methodString("This is a String")
-Debug.Print TypeName(ret) & " " & CStr(ret)
-If CStr(ret) <> "This is a String" Then
-    MsgBox "error"
-End If
-
-'different character tests
-ret = objOleTest.in_methodChar("A")
-Debug.Print TypeName(ret) & " " & CStr(ret)
-If ret <> 65 Then
-    MsgBox "error"
-End If
-'!!!Function returns char, i.e sal_Unicode which VB converts to String
-Dim ret1 As String
-ret1 = objOleTest.in_methodChar("A")
-Debug.Print TypeName(ret1) & " " & CStr(ret1)
-If ret <> 65 Then
-    MsgBox "error"
-End If
-
-ret1 = objOleTest.in_methodChar(65)
-Debug.Print TypeName(ret1) & " " & CStr(ret1)
-If ret <> 65 Then
-    MsgBox "error"
-End If
-
-ret = objOleTest.in_methodAny("input string")
-Debug.Print TypeName(ret) & " " & CStr(ret)
-If ret <> "input string" Then
-    MsgBox "error"
-End If
-
-'Call objOleTest.in_methodAll(10, 10.1, 10.111, True, 10, 11, 12, 13, _
-'            "A String", "A", "A String in an Any")
-            
 'Out Parameter simple types
 '================================================
-Dim outByte As Byte
+
 objOleTest.testout_methodByte outByte
-Debug.Print "out byte " & CStr(outByte)
-If outByte <> 111 Then
-    MsgBox "error"
-End If
-
-Dim outFloat As Single
 objOleTest.testout_methodFloat outFloat
-Debug.Print "out float " & CStr(outFloat)
-If outFloat <> 3.14 Then
-    MsgBox "error"
-End If
-
-Dim outDouble As Double
 objOleTest.testout_methodDouble outDouble
-Debug.Print "out double " & CStr(outDouble)
-If outDouble <> 3.14 Then
-    MsgBox "error"
-End If
-
-Dim outBool As Boolean
 objOleTest.testout_methodBool outBool
-Debug.Print "out bool " & CStr(outBool)
-If outBool <> True Then
-    MsgBox "error"
-End If
-
-Dim outInt As Integer
-objOleTest.testout_methodShort outInt
-Debug.Print "out short " & CStr(outInt)
-If outInt <> 222 Then
-    MsgBox "error"
-End If
-
-objOleTest.testout_methodUShort outInt
-Debug.Print "out unsignedshort " & CStr(outInt)
-If outInt <> 333 Then
-    MsgBox "error"
-End If
-
-Dim outLong As Long
+objOleTest.testout_methodShort outShort
+objOleTest.testout_methodUShort outUShort
 objOleTest.testout_methodLong outLong
-Debug.Print "out long " & CStr(outLong)
-If outLong <> 444 Then
-    MsgBox "error"
-End If
-
-objOleTest.testout_methodULong outLong
-Debug.Print "out unsigned long " & CStr(outLong)
-If outLong <> 555 Then
-    MsgBox "error"
-End If
-
-Dim outString As String
+objOleTest.testout_methodULong outULong
+objOleTest.testout_methodHyper outHyper
+objOleTest.testout_methodUHyper outUHyper
 objOleTest.testout_methodString outString
-Debug.Print "out string " & CStr(outString)
-If outString <> "a little string" Then
-    MsgBox "error"
-End If
-
-Dim outChar As Integer
 objOleTest.testout_methodChar outChar
-Debug.Print "out char " & CStr(outChar)
-If outChar <> 65 Then
-    MsgBox "error"
-End If
+objOleTest.testout_methodChar outCharAsString
+objOleTest.testout_methodAny outAny
+'objOleTest.in_methodXInterface (inXInterface) ' UNO object
+Call objOleTest.in_methodXInterface(inXInterface)  ' UNO object
+objOleTest.testout_methodXInterface outXInterface
+Call objOleTest.in_methodXInterface(inXInterface2)  ' COM object
+objOleTest.testout_methodXInterface outXInterface2
 
-Dim outCharS As String
-objOleTest.testout_methodChar outCharS
-Debug.Print "out char (String) " & CStr(outCharS)
-If outCharS <> "A" Then
-    MsgBox "error"
-End If
 
-objOleTest.testout_methodAny outString
-Debug.Print "out Any " & CStr(outString)
+If outByte <> inByte Or outFloat <> inFloat _
+    Or outDouble <> inDouble Or outBool <> inBool _
+    Or outShort <> inShort Or outUShort <> inUShort _
+    Or outLong <> inLong Or outULong <> inULong _
+    Or outHyper <> inHyper Or outUHyper <> inUHyper _
+    Or outString <> inString Or outChar <> inChar _
+    Or outCharAsString <> inCharAsString _
+    Or outAny <> inAny Or Not (inXInterface Is outXInterface) _
+    Or Not (inXInterface2 Is outXInterface2) Then
+
+    sError = "out - parameter test failed!"
+    GoTo onerror
+End If
 
 'Out Parameter simple types (VARIANT var)
-Dim outVar As Variant
-objOleTest.testout_methodByte outVar
-Debug.Print "out Byte (VARIANT) " & CStr(outVar)
-If outVar <> 111 Then
-    MsgBox "error"
-End If
+'====================================================
+objOleTest.testout_methodByte outVarByte
+objOleTest.testout_methodBool outVarBool
+objOleTest.testout_methodChar outVarChar
+objOleTest.testout_methodShort outVarShort
+objOleTest.testout_methodUShort outVarUShort
+objOleTest.testout_methodLong outVarLong
+objOleTest.testout_methodULong outVarULong
+objOleTest.testout_methodString outVarString
+objOleTest.testout_methodFloat outVarFloat
+objOleTest.testout_methodDouble outVarDouble
+objOleTest.testout_methodAny outVarAny
 
-objOleTest.testout_methodFloat outVar
-Debug.Print "out float (VARIANT) " & CStr(outVar)
-If outVar <> 3.14 Then
-    MsgBox "error"
-End If
-
-objOleTest.testout_methodDouble outVar
-Debug.Print "out double (VARIANT) " & CStr(outVar)
-If outVar <> 3.14 Then
-    MsgBox "error"
-End If
-
-objOleTest.testout_methodBool outVar
-Debug.Print "out bool (VARIANT) " & CStr(outVar)
-If outVar <> True Then
-    MsgBox "error"
-End If
-
-objOleTest.testout_methodShort outVar
-Debug.Print "out short (VARIANT) " & CStr(outVar)
-If outVar <> 222 Then
-    MsgBox "error"
-End If
-
-objOleTest.testout_methodUShort outVar
-Debug.Print "out unsigned short (VARIANT) " & CStr(outVar)
-If outVar <> 333 Then
-    MsgBox "error"
-End If
-
-objOleTest.testout_methodLong outVar
-Debug.Print "out long (VARIANT) " & CStr(outVar)
-If outVar <> 444 Then
-    MsgBox "error"
-End If
-
-objOleTest.testout_methodULong outVar
-Debug.Print "out unsigned long (VARIANT) " & CStr(outVar)
-If outVar <> 555 Then
-    MsgBox "error"
-End If
-
-objOleTest.testout_methodString outVar
-Debug.Print "out string (VARIANT) " & CStr(outVar)
-If outVar <> "a little string" Then
-    MsgBox "error"
-End If
-
-objOleTest.testout_methodChar outVar
-Debug.Print "out char (VARIANT) " & CStr(outVar)
-If outVar <> 65 Then
-    MsgBox "error"
-End If
-
-objOleTest.testout_methodAny outVar
-Debug.Print "out any (VARIANT) " & CStr(outVar)
-If outVar <> "I am a string in an any" Then
-    MsgBox "error"
+If outVarByte <> inByte Or outVarBool <> inBool _
+    Or outVarChar <> inChar _
+    Or outVarShort <> inShort Or outVarUShort <> inUShort _
+    Or outVarLong <> inLong Or outVarULong <> inULong _
+    Or outVarString <> inString _
+    Or outVarFloat <> inFloat Or outVarDouble <> inDouble _
+    Or outVarAny <> inAny _
+    Then
+    sError = "out - parameter (VARIANT) test failed!"
+    GoTo onerror
 End If
 
 'In/Out simple types
 '============================================
+objOleTest.in_methodByte (0)
+objOleTest.in_methodBool (False)
+objOleTest.in_methodShort (0)
+objOleTest.in_methodUShort (0)
+objOleTest.in_methodLong (0)
+objOleTest.in_methodULong (0)
+objOleTest.in_methodHyper (0)
+objOleTest.in_methodUHyper (0)
+objOleTest.in_methodFloat (0)
+objOleTest.in_methodDouble (0)
+objOleTest.in_methodString (0)
+objOleTest.in_methodChar (0)
+objOleTest.in_methodAny (0)
+Set outXInterface = Nothing
+Call objOleTest.in_methodXInterface(outXInterface)
+
+
 outByte = 10
-objOleTest.testinout_methodByte outByte
-Debug.Print "inout byte " & CStr(outByte)
-If outByte <> 11 Then
-    MsgBox "error"
-End If
-
-outFloat = 3.14
-objOleTest.testinout_methodFloat outFloat
-Debug.Print "inout float " & CStr(outFloat)
-If (outFloat > 4.15) And (outFloat < 4.13) Then
-    MsgBox "error"
-End If
-
-outDouble = 4.14
-objOleTest.testinout_methodDouble outDouble
-Debug.Print "inout double " & CStr(outDouble)
-If outDouble <> 5.14 Then
-    MsgBox "error"
-End If
-
+retByte = outByte
+objOleTest.testinout_methodByte retByte
+objOleTest.testinout_methodByte retByte
 outBool = True
-objOleTest.testinout_methodBool outBool
-Debug.Print "inout bool " & CStr(outBool)
-If outBool <> False Then
-    MsgBox "error"
-End If
-
-outInt = 10
-objOleTest.testinout_methodShort outInt
-Debug.Print "inout short " & CStr(outInt)
-If outInt <> 11 Then
-    MsgBox "error"
-End If
-
-outInt = 20
-objOleTest.testinout_methodUShort outInt
-Debug.Print "inout unsignedshort " & CStr(outInt)
-If outInt <> 21 Then
-    MsgBox "error"
-End If
-
+retBool = outBool
+objOleTest.testinout_methodBool retBool
+objOleTest.testinout_methodBool retBool
+outShort = 10
+retShort = outShort
+objOleTest.testinout_methodShort retShort
+objOleTest.testinout_methodShort retShort
+outUShort = 20
+retUShort = outUShort
+objOleTest.testinout_methodUShort retUShort
+objOleTest.testinout_methodUShort retUShort
 outLong = 30
-objOleTest.testinout_methodLong outLong
-Debug.Print "inout long " & CStr(outLong)
-If outLong <> 31 Then
+retLong = outLong
+objOleTest.testinout_methodLong retLong
+objOleTest.testinout_methodLong retLong
+outULong = 40
+retULong = outULong
+objOleTest.testinout_methodULong retLong
+objOleTest.testinout_methodULong retLong
+outHyper = CDec("9223372036854775807") 'highest positiv value of int64
+retHyper = outHyper
+objOleTest.testinout_methodHyper retHyper
+objOleTest.testinout_methodHyper retHyper
+outUHyper = CDec("18446744073709551615") 'highest value of unsigned int64
+retUHyper = outUHyper
+objOleTest.testinout_methodUHyper retUHyper
+objOleTest.testinout_methodUHyper retUHyper
+outFloat = 3.14
+retFloat = outFloat
+objOleTest.testinout_methodFloat retFloat
+objOleTest.testinout_methodFloat retFloat
+outDouble = 4.14
+retDouble = outDouble
+objOleTest.testinout_methodDouble retDouble
+objOleTest.testinout_methodDouble retDouble
+outString = "Hello World!"
+retString = outString
+objOleTest.testinout_methodString retString
+objOleTest.testinout_methodString retString
+outChar = 66
+retChar = outChar
+objOleTest.testinout_methodChar retChar
+objOleTest.testinout_methodChar retChar
+outCharAsString = "H"
+retCharAsString = outCharAsString
+objOleTest.testinout_methodChar retCharAsString
+objOleTest.testinout_methodChar retCharAsString
+outAny = "Hello World 2!"
+retAny = outAny
+objOleTest.testinout_methodAny retAny
+objOleTest.testinout_methodAny retAny
+Set outXInterface = objCoreReflection
+Set retXInterface = outXInterface
+objOleTest.testinout_methodXInterface2 retXInterface
+
+If outByte <> retByte Or outBool <> retBool _
+    Or outShort <> retShort Or outUShort <> retUShort _
+    Or outLong <> retLong Or outULong <> retULong _
+    Or outHyper <> retHyper Or outUHyper <> outUHyper _
+    Or outFloat <> retFloat _
+    Or outDouble <> retDouble _
+    Or outString <> retString Or outChar <> retChar _
+    Or outCharAsString <> retCharAsString Or outAny <> retAny _
+    Or Not (outXInterface Is retXInterface) Then
+    sError = "in/out - parameter test failed!"
+    GoTo onerror
+End If
+
+
+'======================================================================
+
+' Other Hyper tests
+Dim emptyVar As Variant
+retAny = emptyVar
+inHyper = CDec("9223372036854775807") 'highest positiv value of int64
+retAny = objOleTest.in_methodAny(inHyper)
+sError = "hyper test failed"
+If inHyper <> retAny Then
+    GoTo onerror
+End If
+inHyper = CDec("-9223372036854775808") 'lowest negativ value of int64
+retAny = objOleTest.in_methodAny(inHyper)
+If inHyper <> retAny Then
+    GoTo onerror
+End If
+inHyper = CDec("18446744073709551615") 'highest positiv value of unsigne int64
+retAny = objOleTest.in_methodAny(inHyper)
+If inHyper <> retAny Then
+    GoTo onerror
+End If
+inHyper = CDec(-1)
+retAny = objOleTest.in_methodAny(inHyper)
+If inHyper <> retAny Then
+    GoTo onerror
+End If
+inHyper = CDec(0)
+retAny = objOleTest.in_methodAny(inHyper)
+If inHyper <> retAny Then
+    GoTo onerror
+End If
+
+'==============================================================================
+
+Dim outVAr
+
+'Any test. We pass in an any as value object. If it is not correct converted
+'then the target component throws a RuntimeException
+Dim lengthInAny As Long
+
+lengthInAny = 10
+Dim seqLongInAny(10) As Long
+For i = 0 To lengthInAny - 1
+    seqLongInAny(i) = i + 10
+Next
+Dim anySeqLong As Object
+Set anySeqLong = objOleTest.Bridge_GetValueObject()
+anySeqLong.Set "[]long", seqLongInAny
+Dim anySeqRet As Variant
+Err.Clear
+On Error Resume Next
+anySeqRet = objOleTest.other_methodAny(anySeqLong, "[]long")
+
+If Err.Number <> 0 Then
     MsgBox "error"
 End If
 
-outLong = 40
-objOleTest.testinout_methodULong outLong
-Debug.Print "inout unsigned long " & CStr(outLong)
-If outLong <> 41 Then
-    MsgBox "error"
-End If
-
-outString = "this is an in string"
-objOleTest.testinout_methodString outString
-Debug.Print "inout string " & CStr(outString)
-If outString <> "this is an in string out string" Then
-    MsgBox "error"
-End If
-
-'different Char conversions
-objOleTest.testout_methodChar outString
-Debug.Print "out char (in: String)" & CStr(outString)
-If outString <> "A" Then
-    MsgBox "error"
-End If
-
-objOleTest.testout_methodChar outInt
-Debug.Print "out char (in: Int)" & CStr(outInt)
-If outInt <> 65 Then
-    MsgBox "error"
-End If
-
-'--
-outString = "this is another in out string"
-objOleTest.testout_methodAny outString
-Debug.Print "out Any " & CStr(outString)
-If outString <> "I am a string in an any" Then
-    MsgBox "error"
-End If
 
 'Objects
 '
@@ -383,10 +342,10 @@ End If
 
 ' out param gives out the OleTestComponent
 objOleTest.testout_methodXInterface retObj
-outVar = Null
-retObj.testout_methodAny outVar
-Debug.Print "test out Interface " & CStr(outVar)
-If outVar <> "I am a string in an any" Then
+outVAr = Null
+retObj.testout_methodAny outVAr
+Debug.Print "test out Interface " & CStr(outVAr)
+If outVAr <> "I am a string in an any" Then
     MsgBox "error"
 End If
 
@@ -425,7 +384,6 @@ If structRet.message <> "Now we are in VBThis string was set in OleTest" Then
     MsgBox "error"
 End If
 
-'inout later
 
 'Arrays
 '========================================
@@ -533,6 +491,20 @@ For Each key2 In seq7
     End If
 Next
 
+'array with starting index != 0
+Dim seqIndex(1 To 2) As Long
+Dim seq8() As Variant
+Dim longVal1 As Long, longVal2 As Long
+longVal1 = 1
+longVal2 = 2
+seqIndex(1) = longVal1
+seqIndex(2) = longVal2
+seq8 = objOleTest.methodLong(seqIndex)
+If longVal1 <> seq8(0) And longVal2 <> seq8(1) Then
+    MsgBox "error"
+End If
+
+
 'in out Array
 ' arrLong is Long Array
 Dim inoutVar(2) As Variant
@@ -557,7 +529,6 @@ Next
 ' Real multidimensional array Array
 ' 9 is Dim 1 (least significant) with C API
 Dim mulAr(9, 1) As Long
-Dim i As Long, j As Long
 For i = 0 To 1
     For j = 0 To 9
         mulAr(j, i) = i * 10 + j
@@ -721,23 +692,32 @@ For Each key In ret
 Next key
 
 
-objVal.InitInOutParam "byte", 10
+outByte = 77
+retByte = outByte
+objVal.InitInOutParam "byte", retByte
+objOleTest.testinout_methodByte objVal
+objVal.InitInOutParam "byte", retByte
 objOleTest.testinout_methodByte objVal
 
 ret = 0
 ret = objVal.Get()
 Debug.Print ret
-If ret <> 11 Then
+If ret <> outByte Then
     MsgBox "error"
 End If
 
 objVal.InitOutParam
+inChar = 65
+objOleTest.in_methodChar (inChar)
 objOleTest.testout_methodChar objVal 'Returns 'A' (65)
 ret = 0
 ret = objVal.Get()
 Debug.Print ret
-If ret <> 65 Then
+If ret <> inChar Then
     MsgBox "error"
 End If
 
+Exit Sub
+onerror:
+MsgBox "Error: " + sError
 End Sub
