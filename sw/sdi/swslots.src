@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-15 20:12:40 $
+ *  last change: $Author: kz $ $Date: 2001-08-17 20:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ SfxSlotInfo FN_AUTOFORMAT_AUTO
 {
     SlotName = "AutoFormat bei Eingabe";
     SlotName [ english ] =  "AutoFormat while Typing";
-    SlotName[ english_us ] = "AutoFormat";
+    SlotName[ english_us ] = "AutoFormat While Typing";
     SlotName[ portuguese ] = "AutoFormatoAoDigitar";
     SlotName[ russian ] = "¿‚ÚÓÙÓÏ‡Ú ‚Ó ‚ÂÏˇ ‚‚Ó‰‡";
     SlotName[ greek ] = "¡ıÙÔÃÔÒˆﬁ";
@@ -214,7 +214,7 @@ SfxSlotInfo FN_AUTOFORMAT_AUTO
     SlotName[ french ] = "AutoFormat pour la saisie";
     SlotName[ spanish ] = "AutoFormato durante la entrada";
     SlotName[ finnish ] = "Automaattinen muotoilu";
-    SlotName[ italian ] = "Foramttazione automatica";
+    SlotName[ italian ] = "Foramttazione automatica durante la digitazione";
     SlotName[ danish ] = "AutoFormat";
     SlotName[ swedish ] = "Autoformat";
     SlotName[ polish ] = "Autoformat";
@@ -3394,13 +3394,13 @@ SfxSlotInfo FN_INSERT_FIELD
 {
     SlotName = "Feldbefehldialog";
     SlotName [ english ] =  "Insert fields dialog";
-    SlotName[ english_us ] = "Insert Fields";
+    SlotName[ english_us ] = "Fields Dialog";
     SlotName[ portuguese ] = "Caixa de di·logo: CÛdigo de campo";
     SlotName[ russian ] = "œÓÎÂ (‰Ë‡ÎÓ„)";
     SlotName[ dutch ] = "Veldopdracht invoegen";
     SlotName[ french ] = "BoÓte de dialogue de champ";
     SlotName[ spanish ] = "Caja de di·logo: CÛdigo de campo";
-    SlotName[ italian ] = "Inserisci comando di campo";
+    SlotName[ italian ] = "Dialogo comando di campo";
     SlotName[ danish ] = "IndsÊt felt";
     SlotName[ swedish ] = "Infoga f‰ltkommando";
     SlotName[ polish ] = "Wstaw pola";
@@ -8420,13 +8420,13 @@ SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
 {
     SlotName = "Als Zeichen verankern";
     SlotName [ english ] =  "Anchor as character";
-    SlotName[ english_us ] = "Anchor to Character";
+    SlotName[ english_us ] = "Anchor as Character";
     SlotName[ portuguese ] = "Ancorar como car·cter";
     SlotName[ russian ] = "œË‚ˇÁ‡Ú¸ Í‡Í ÁÌ‡Í";
     SlotName[ dutch ] = "Aan teken verankeren";
     SlotName[ french ] = "Ancrage comme caractËre";
     SlotName[ spanish ] = "Anclar como car·cter";
-    SlotName[ italian ] = "Ancora al carattere";
+    SlotName[ italian ] = "Ancora come carattere";
     SlotName[ danish ] = "Forankring til tegnet";
     SlotName[ swedish ] = "Fˆrankra vid tecknet";
     SlotName[ polish ] = "Zakotwicz przy znaku";
@@ -9489,6 +9489,7 @@ SfxSlotInfo FN_EDIT_HYPERLINK
     SlotName[ catalan ] = "Editar hiperenlace";
     SlotName[ finnish ] = "Muokkaa hyperlinkki‰";
 };
+
 
 
 
