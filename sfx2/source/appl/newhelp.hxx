@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-09 11:36:59 $
+ *  last change: $Author: pb $ $Date: 2001-07-12 10:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,8 @@ private:
     TabControl          aTabCtrl;
     Timer               aInitTimer;
 
+    Link                aSelectFactoryLink;
+
     ContentTabPage_Impl*    pCPage;
     IndexTabPage_Impl*      pIPage;
     SearchTabPage_Impl*     pSPage;
@@ -273,10 +275,12 @@ public:
     virtual void        Resize();
 
     void                SetDoubleClickHdl( const Link& rLink );
+    void                SetSelectFactoryHdl( const Link& rLink ) { aSelectFactoryLink = rLink; }
     void                SetFactory( const String& rFactory, sal_Bool bActive );
     String              GetFactory() const { return pIPage->GetFactory(); }
     String              GetSelectEntry() const;
     void                AddBookmarks( const String& rTitle, const String& rURL );
+    String              GetActiveFactoryTitle() const { return aActiveLB.GetSelectEntry(); }
 };
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
@@ -291,6 +295,12 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                             xFrame;
     sal_Bool                bIsDebug;
+    sal_Bool                bIsIndexOn;
+
+    String                  aIndexOnText;
+    String                  aIndexOffText;
+    Image                   aIndexOnImage;
+    Image                   aIndexOffImage;
 
 public:
     SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent );
@@ -303,6 +313,7 @@ public:
 
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                             getFrame() const { return xFrame; }
+    void                    ToggleIndex( sal_Bool bOn );
 };
 
 // class SfxHelpWindow_Impl ----------------------------------------------
@@ -327,8 +338,9 @@ private:
     sal_Int32           nHeight;
     long                nIndexSize;
     long                nTextSize;
-
     sal_Bool            bIndex;
+
+    String              aTitle;
 
     virtual void        Resize();
     virtual void        Split();
@@ -337,9 +349,11 @@ private:
     void                InitSizes();
     void                LoadConfig();
     void                SaveConfig();
+    void                ShowStartPage();
 
     DECL_LINK(          SelectHdl, ToolBox* );
     DECL_LINK(          OpenHdl, SfxHelpIndexWindow_Impl* );
+    DECL_LINK(          SelectFactoryHdl, SfxHelpIndexWindow_Impl* );
     DECL_LINK(          ChangeHdl, HelpListener_Impl* );
     DECL_LINK(          OpenDoneHdl, OpenStatusListener_Impl* );
 
