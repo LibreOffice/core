@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labelexp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-14 16:32:50 $
+ *  last change: $Author: os $ $Date: 2001-12-19 11:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,15 +137,21 @@ void SwVisitingCardPage::InitFrameControl()
         uno::Reference< text::XAutoTextGroup >  xGroup;
         aGroup >>= xGroup;
         uno::Reference< container::XIndexAccess >  xIdxAcc(xGroup, uno::UNO_QUERY);
-        if(!xIdxAcc.is() || xIdxAcc->getCount())
+        try
         {
-            uno::Reference< beans::XPropertySet >  xPrSet(xGroup, uno::UNO_QUERY);
-            uno::Any aTitle = xPrSet->getPropertyValue( uTitleName );
-            OUString uTitle;
-            aTitle >>= uTitle;
-            String sGroup(pGroups[i]);
-            sal_uInt16 nEntry = aAutoTextGroupLB.InsertEntry(uTitle);
-            aAutoTextGroupLB.SetEntryData(nEntry, new String(sGroup));
+            if(!xIdxAcc.is() || xIdxAcc->getCount())
+            {
+                uno::Reference< beans::XPropertySet >  xPrSet(xGroup, uno::UNO_QUERY);
+                uno::Any aTitle = xPrSet->getPropertyValue( uTitleName );
+                OUString uTitle;
+                aTitle >>= uTitle;
+                String sGroup(pGroups[i]);
+                sal_uInt16 nEntry = aAutoTextGroupLB.InsertEntry(uTitle);
+                aAutoTextGroupLB.SetEntryData(nEntry, new String(sGroup));
+            }
+        }
+        catch(Exception&)
+        {
         }
     }
     if(aAutoTextGroupLB.GetEntryCount())
