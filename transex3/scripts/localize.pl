@@ -6,9 +6,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: localize.pl,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-27 15:58:33 $
+#   last change: $Author: vg $ $Date: 2005-03-10 11:27:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -287,13 +287,13 @@ sub writesdf{
                 close DESTFILE;
                 if( move( $localizeFile , $localizeFile.".backup" ) ){
                     if( copy( $tmpfile , $localizeFile ) ){
-                        unlink $tmpfile;
                         unlink $localizeFile.".backup";
                     } else { print STDERR "Can't open/create '$localizeFile', original file is renamed to  $localizeFile.backup\n"; }
                 } else { print STDERR "Can't open/create '$localizeFile'\n"; }
             }else{
                 print STDERR "WARNING: Can't open/create '$localizeFile'\n";
             }
+            unlink $tmpfile;
         }
     }
     if( $no_sort eq '' ){
