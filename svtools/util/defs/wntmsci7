@@ -12366,3 +12366,11 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?lcl_MoveControl@?%O:\SRC657\src\svtools\source\filepicker\iodlg.cxx1707630717@@YAXPAVControl@@JJAAJ@Z
 ?lcl_autoUpdateFileExtension@?%O:\SRC657\src\svtools\source\filepicker\iodlg.cxx1707630717@@YAXPAVSvtFileDialog@@@Z
 ?lcl_getHomeDirectory@?%O:\SRC657\src\svtools\source\filepicker\iodlg.cxx1707630717@@YAEABVString@@AAV2@@Z
+?isHiContrast@?%O:\SRC657\src\svtools\source\brwbox\editbrowsebox.cxx3634334@svt@@YAEPAVWindow@@@Z
+??RFilterTitleMatch@?%O:\SRC657\src\svtools\source\filepicker\filepicker.cxx2074710918@@QAE_NABUFilterEntry@@@Z
+?GetFsysExtension_Impl@?%O:\SRC657\src\svtools\source\filepicker\iodlg.cxx2221923252@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRC657\src\svtools\source\filepicker\iodlg.cxx2221923252@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRC657\src\svtools\source\filepicker\iodlg.cxx2221923252@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRC657\src\svtools\source\filepicker\iodlg.cxx2221923252@@YAXPAVControl@@JJAAJ@Z
+?lcl_autoUpdateFileExtension@?%O:\SRC657\src\svtools\source\filepicker\iodlg.cxx2221923252@@YAXPAVSvtFileDialog@@@Z
+?lcl_getHomeDirectory@?%O:\SRC657\src\svtools\source\filepicker\iodlg.cxx2221923252@@YAEABVString@@AAV2@@Z
