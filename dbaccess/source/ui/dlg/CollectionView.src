@@ -1,0 +1,206 @@
+/*************************************************************************
+ *
+ *  $RCSfile: CollectionView.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:39:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
+#endif
+#include "dbaccess_helpid.hrc"
+#include "CollectionView.hrc"
+
+#define WIN_X   200
+#define WIN_Y   192
+
+#define CHECKBOX_HEIGHT     8
+#define FIXEDTEXT_HEIGHT    8
+#define RELATED_CONTROLS    4
+#define UNRELATED_CONTROLS  7
+#define EDIT_HEIGHT         12
+#define BUTTON_HEIGHT       14
+#define FIXEDLINE_HEIGHT    1
+#define IMG_SIZE            15
+
+
+ModalDialog DLG_COLLECTION_VIEW
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    //Sizeable = TRUE;
+    HelpId = HID_EXPLORERDLG_COLLECTION ;
+
+    Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
+    Text [ de ] = "Speichern" ;
+    Text [ en-US ] = "Save" ;
+
+    FixedText FT_EXPLORERFILE_CURRENTPATH
+    {
+        Pos = MAP_APPFONT ( UNRELATED_CONTROLS , UNRELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( 100 , FIXEDTEXT_HEIGHT ) ;
+        NoLabel = TRUE ;
+    };
+    ImageButton BTN_EXPLORERFILE_NEWFOLDER
+    {
+        TabStop = FALSE ;
+        Pos = MAP_APPFONT ( WIN_X - UNRELATED_CONTROLS -  RELATED_CONTROLS - 2*IMG_SIZE, UNRELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( IMG_SIZE , IMG_SIZE ) ;
+        QuickHelpText [ de ] = "Neuen Ordner erstellen" ;
+        QuickHelpText [ en-US ] = "Create New Directory" ;
+    };
+    ImageButton BTN_EXPLORERFILE_UP
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( WIN_X - UNRELATED_CONTROLS - IMG_SIZE, UNRELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( IMG_SIZE , IMG_SIZE ) ;
+        QuickHelpText [ de ] = "Aufwärts" ;
+        QuickHelpText [ en-US ] = "Up One Level" ;
+    };
+
+    Control CTRL_VIEW
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 2*UNRELATED_CONTROLS + IMG_SIZE) ;
+        Size = MAP_APPFONT ( WIN_X - 2*UNRELATED_CONTROLS , WIN_Y - 6*UNRELATED_CONTROLS - BUTTON_HEIGHT - IMG_SIZE - EDIT_HEIGHT - FIXEDTEXT_HEIGHT) ;
+        Border = TRUE ;
+    };
+
+    FixedText FT_EXPLORERFILE_FILENAME
+    {
+        Pos = MAP_APPFONT ( UNRELATED_CONTROLS , WIN_Y - 3*UNRELATED_CONTROLS - BUTTON_HEIGHT - FIXEDLINE_HEIGHT - EDIT_HEIGHT ) ;
+        Size = MAP_APPFONT ( 50 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Datei~name:" ;
+        Text [ en-US ] = "File ~name:" ;
+    };
+    Edit ED_EXPLORERFILE_FILENAME
+    {
+        Pos = MAP_APPFONT ( RELATED_CONTROLS + UNRELATED_CONTROLS + 50 , WIN_Y - 3*UNRELATED_CONTROLS - BUTTON_HEIGHT - FIXEDLINE_HEIGHT - EDIT_HEIGHT) ;
+        Size = MAP_APPFONT ( WIN_X - RELATED_CONTROLS - 2*UNRELATED_CONTROLS - 50 , EDIT_HEIGHT ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+
+    FixedLine FL_1
+    {
+        Pos = MAP_APPFONT ( RELATED_CONTROLS , WIN_Y - 2*UNRELATED_CONTROLS - BUTTON_HEIGHT - FIXEDLINE_HEIGHT) ;
+        Size = MAP_APPFONT ( WIN_X - 2*RELATED_CONTROLS , FIXEDLINE_HEIGHT ) ;
+    };
+
+    HelpButton PB_HELP
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( WIN_X - 2*UNRELATED_CONTROLS - RELATED_CONTROLS - 150, WIN_Y - UNRELATED_CONTROLS - BUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( 50 , BUTTON_HEIGHT ) ;
+    };
+    CancelButton PB_CANCEL
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( WIN_X - UNRELATED_CONTROLS - RELATED_CONTROLS - 100, WIN_Y - UNRELATED_CONTROLS - BUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( 50 , BUTTON_HEIGHT ) ;
+    };
+    PushButton BTN_EXPLORERFILE_SAVE
+    {
+        Pos = MAP_APPFONT ( WIN_X - UNRELATED_CONTROLS - 50, WIN_Y - UNRELATED_CONTROLS - BUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( 50 , BUTTON_HEIGHT ) ;
+        DefButton = TRUE ;
+        TabStop = TRUE ;
+        Text [ de ] = "Speichern" ;
+        Text [ en-US ] = "Save" ;
+    };
+
+    String STR_PATHNAME
+    {
+        Text [ de ] = "~Pfad:" ;
+        Text [ en-US ] = "~Path:" ;
+    };
+};
+
+String STR_NEW_FOLDER
+{
+    Text [ de ] = "Ordner" ;
+    Text [ en-US ] = "Folder" ;
+};
+Image IMG_NAVIGATION_BTN_UP_SC
+{
+    ImageBitmap = Bitmap { File = "fp010"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+Image IMG_NAVIGATION_BTN_UP_SCH
+{
+    ImageBitmap = Bitmap { File = "fph010"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+Image IMG_NAVIGATION_CREATEFOLDER_SC
+{
+    ImageBitmap = Bitmap { File = "fp015"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+Image IMG_NAVIGATION_CREATEFOLDER_SCH
+{
+    ImageBitmap = Bitmap { File = "fph015"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+String STR_ALREADYEXISTOVERWRITE
+{
+    Text [ de ] = "Die Datei existiert bereits. Soll sie überschrieben werden?" ;
+    Text [ en-US ] = "The file already exists. Overwrite?" ;
+};
+
