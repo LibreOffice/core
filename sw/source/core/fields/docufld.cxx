@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:08:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1098,9 +1098,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
         }
         else
         {
-            // Numberformatter anwerfen!
-            double fVal = SwDateTimeField::GetDateTime( GetDoc(), 0,
-                                                        pInf->GetTime());
+            double fVal = Time(pInf->GetTime()).GetTimeInDays();
             aStr = ExpandValue(fVal, nFormat, nLang);
         }
         break;
@@ -1142,8 +1140,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                     {
                         // Numberformatter anwerfen!
                         double fVal = SwDateTimeField::GetDateTime( GetDoc(),
-                                                    aTmp.GetTime().GetDate(),
-                                                    aTmp.GetTime().GetTime());
+                                                    aTmp.GetTime());
                         aStr = ExpandValue(fVal, nFormat, nLang);
                     }
                     break;
@@ -1159,8 +1156,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                     {
                         // Numberformatter anwerfen!
                         double fVal = SwDateTimeField::GetDateTime( GetDoc(),
-                                                    aTmp.GetTime().GetDate(),
-                                                    aTmp.GetTime().GetTime());
+                                                    aTmp.GetTime());
                         aStr = ExpandValue(fVal, nFormat, nLang);
                     }
                     break;
