@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.158 $
+ *  $Revision: 1.159 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:01:54 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,33 +512,7 @@ sal_Bool InitConfiguration()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (jb99855) ::InitConfiguration" );
 
-    // these tree are preloaded to get a faster startup for the office
-    Sequence <rtl::OUString> aPreloadPathList(6);
-    aPreloadPathList[0] =  rtl::OUString::createFromAscii("org.openoffice.Office.Common");
-    aPreloadPathList[1] =  rtl::OUString::createFromAscii("org.openoffice.ucb.Configuration");
-    aPreloadPathList[2] =  rtl::OUString::createFromAscii("org.openoffice.Office.Writer");
-    aPreloadPathList[3] =  rtl::OUString::createFromAscii("org.openoffice.Office.WriterWeb");
-    aPreloadPathList[4] =  rtl::OUString::createFromAscii("org.openoffice.Office.Calc");
-    aPreloadPathList[5] =  rtl::OUString::createFromAscii("org.openoffice.Office.Impress");
-
     Reference< XMultiServiceFactory > xProvider( CreateApplicationConfigurationProvider( ) );
-
-    if ( xProvider.is() )
-    {
-        Reference < com::sun::star::beans::XPropertySet > xPS(xProvider, UNO_QUERY);
-        if (xPS.is())
-        try
-        {
-            Any aValue;
-            aValue <<= aPreloadPathList;
-
-            xPS->setPropertyValue(rtl::OUString::createFromAscii("PrefetchNodes"), aValue );
-        }
-        catch( UnknownPropertyException & )
-        {
-        }
-    }
-
     return xProvider.is();
 }
 
