@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:23:18 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,6 @@ static USHORT nTitleNo = 0;
     aSet.Put(aEnvCfg.GetItem());
 
     SfxPrinter* pTempPrinter = pSh->GetPrt( TRUE );
-    USHORT nPaperBin = pTempPrinter->GetPaperBin();
     if(pOldSh )
     {
         const SwPageDesc& rCurPageDesc = pOldSh->GetPageDesc(pOldSh->GetCurPageDesc());
@@ -340,7 +339,7 @@ static USHORT nTitleNo = 0;
             //#69563# if it isn't the same printer then the pointer has been invalidated!
             pTempPrinter = pSh->GetPrt( TRUE );
         }
-        pTempPrinter->SetPaperBin((nPaperBin = rCurPageDesc.GetMaster().GetPaperBin().GetValue()));
+        pTempPrinter->SetPaperBin(rCurPageDesc.GetMaster().GetPaperBin().GetValue());
 
     }
 
@@ -374,13 +373,13 @@ static USHORT nTitleNo = 0;
         //dem Dialog. Die Informationen muessen hier vor dem evtl. zerstoeren
         //der neuen Shell gesetzt werden, weil deren Drucker an den Dialog
         //gereicht wurde.
+        if ( nMode != ENV_NEWDOC )
+        {
             ASSERT(pOldSh, "Kein Dokument - war 'Einfuegen' nicht disabled???");
             SvxPaperBinItem aItem;
             aItem.SetValue((BYTE)pSh->GetPrt()->GetPaperBin());
-        if ( nMode != ENV_NEWDOC )
             pOldSh->GetPageDescFromPool(RES_POOLPAGE_JAKET)->GetMaster().SetAttr(aItem);
-        else
-            pSh->GetPageDescFromPool(RES_POOLPAGE_JAKET)->GetMaster().SetAttr(aItem);
+        }
 
         SwWrtShell *pTmp = nMode == ENV_INSERT ? pOldSh : pSh;
         const SwPageDesc* pFollow = 0;
@@ -472,9 +471,10 @@ static USHORT nTitleNo = 0;
         SwPageDesc* pDesc = pSh->GetPageDescFromPool(RES_POOLPAGE_JAKET);
         SwFrmFmt&   rFmt  = pDesc->GetMaster();
 
+        Printer *pPrt = pSh->GetPrt( TRUE );
+
         // Raender (setzen sich zusammen aus Shift-Offset und
         // Ausrichtung)
-        Printer *pPrt = pSh->GetPrt( TRUE );
         Size aPaperSize = pPrt->PixelToLogic( pPrt->GetPaperSizePixel(),
                                               MAP_TWIP);
         if ( !aPaperSize.Width() && !aPaperSize.Height() )
@@ -491,19 +491,19 @@ static USHORT nTitleNo = 0;
         USHORT nPageW = (USHORT) Max(rItem.lWidth, rItem.lHeight),
                nPageH = (USHORT) Min(rItem.lWidth, rItem.lHeight);
 
-//      switch (rItem.eAlign)
-//      {
-//          case ENV_HOR_LEFT: break;
-//          case ENV_HOR_CNTR: lLeft  += Max(0L, long(aPaperSize.Width() - nPageW)) / 2;
-//                             break;
-//          case ENV_HOR_RGHT: lLeft  += Max(0L, long(aPaperSize.Width() - nPageW));
-//                             break;
-//          case ENV_VER_LEFT: lUpper += Max(0L, long(aPaperSize.Width() - nPageH));
-//                             break;
-//          case ENV_VER_CNTR: lUpper += Max(0L, long(aPaperSize.Width() - nPageH)) / 2;
-//                             break;
-//          case ENV_VER_RGHT: break;
-//      }
+        switch (rItem.eAlign)
+        {
+            case ENV_HOR_LEFT: break;
+            case ENV_HOR_CNTR: lLeft  += Max(0L, long(aPaperSize.Width() - nPageW)) / 2;
+                               break;
+            case ENV_HOR_RGHT: lLeft  += Max(0L, long(aPaperSize.Width() - nPageW));
+                               break;
+            case ENV_VER_LEFT: lUpper += Max(0L, long(aPaperSize.Width() - nPageH));
+                               break;
+            case ENV_VER_CNTR: lUpper += Max(0L, long(aPaperSize.Width() - nPageH)) / 2;
+                               break;
+            case ENV_VER_RGHT: break;
+        }
         SvxLRSpaceItem aLRMargin;
         SvxULSpaceItem aULMargin;
         aLRMargin.SetLeft ((USHORT) lLeft );
@@ -536,9 +536,8 @@ static USHORT nTitleNo = 0;
             pDesc->SetFollow(pFollow);
 
         // Landscape
-//      pDesc->SetLandscape( rItem.eAlign >= ENV_VER_LEFT &&
-//                           rItem.eAlign <= ENV_VER_RGHT);
-        pDesc->SetLandscape( rItem.lWidth > rItem.lHeight );
+        pDesc->SetLandscape( rItem.eAlign >= ENV_VER_LEFT &&
+                             rItem.eAlign <= ENV_VER_RGHT);
 
         // Page-Desc anwenden
 
