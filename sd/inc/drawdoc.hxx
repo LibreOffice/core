@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:42:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,9 +113,7 @@ class Outliner;
 
 class Timer;
 class SfxObjectShell;
-class FrameView;
 class SdDrawDocShell;
-class SdOutliner;
 class SdPage;
 class SdAnimationInfo;
 class SdIMapInfo;
@@ -377,7 +375,20 @@ public:
 
     SdrObject*          GetObj(const String& rObjName) const;
 
-    USHORT              GetPageByName(const String& rPgName, BOOL& rbIsMasterPage ) const;
+    /** Return the first page that has the given name.  Regular pages and
+        notes pages are searched first.  When not found then the master
+        pages are searched.
+        @param rPgName
+            Name of the page to return.
+        @param rbIsMasterPage
+            Is set by the method to indicate whether the returned index
+            belongs to a master page (<TRUE/>) or a regular or notes page
+            (<FALSE/>). The given value is ignored.
+        @return
+            Returns the index of the page with the given name or
+            SDRPAGE_NOTFOUND (=0xffff) when such a page does not exist.
+    */
+    USHORT GetPageByName(const String& rPgName, BOOL& rbIsMasterPage ) const;
     SdPage*             GetSdPage(USHORT nPgNum, PageKind ePgKind) const;
     USHORT              GetSdPageCount(PageKind ePgKind) const;
     void                SetSelected(SdPage* pPage, BOOL bSelect);
