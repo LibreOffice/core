@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:00:16 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,7 +765,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
             {
                 const SfxItemSet* pOutSet = pDlg ? pDlg->GetOutputItemSet() : rReq.GetArgs();
                 if ( pDlg )
+                {
+                    //to record FN_INSERT_TABLE correctly
+                    rReq.SetSlot(FN_FORMAT_TABLE_DLG);
                     rReq.Done( *pOutSet );
+                }
                 ::lcl_ItemSetToTableParam( *pOutSet, rSh );
             }
 
@@ -777,6 +781,12 @@ void SwTableShell::Execute(SfxRequest &rReq)
             rBindings.Update(SID_RULER_BORDERS_VERTICAL);
             rBindings.Update(SID_ATTR_TABSTOP_VERTICAL);
         }
+        break;
+        case SID_ATTR_BRUSH:
+        case SID_ATTR_BRUSH_ROW :
+        case SID_ATTR_BRUSH_TABLE :
+            if(rReq.GetArgs())
+                ::lcl_ItemSetToTableParam(*rReq.GetArgs(), rSh);
         break;
         case FN_NUM_FORMAT_TABLE_DLG:
         {
