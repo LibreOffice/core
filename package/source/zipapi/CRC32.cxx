@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRC32.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-31 09:47:40 $
+ *  last change: $Author: mtg $ $Date: 2001-06-05 10:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ void SAL_CALL CRC32::update(const Sequence< sal_Int8 > &b)
 }
 
 void SAL_CALL CRC32::updateStream( Reference < XInputStream > & xStream )
+    throw ( RuntimeException )
 {
     Reference < XSeekable > xSeek ( xStream, UNO_QUERY );
     if ( xSeek.is() )
