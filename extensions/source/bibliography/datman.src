@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:20:03 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 //
 //
 //
-// $Author: kz $ $Date: 2001-02-09 20:20:03 $ $Revision: 1.8 $
+// $Author: kz $ $Date: 2001-05-04 20:06:12 $ $Revision: 1.9 $
 // $Logfile:   T:/sc/inc/scresid.hxv  $ $Workfile:   scresid.hxx  $
 //------------------------------------------------------------------
 
@@ -119,6 +119,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÃÓãÇÁ ÇáÃÚãÏÉ";
         Text[ turkish ] = "Sütun adlarý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombres de columna";
     };
     FixedText   FT_IDENTIFIER
     {
@@ -144,6 +145,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ chinese_traditional ] = "ÁY¼g";
         Text[ arabic ] = "ÇáÇÎÊÕÇÑ";
         Text[ turkish ] = "Kýsaltma";
+        Text[ catalan ] = "Abreviatura";
     };
     ListBox     LB_IDENTIFIER
     {
@@ -175,6 +177,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ chinese_traditional ] = "¤åÄmÃþ«¬";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ turkish ] = "Kaynakça türü";
+        Text[ catalan ] = "Tipo de literatura";
     };
     ListBox LB_AUTHORITYTYPE
     {
@@ -206,6 +209,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ chinese_traditional ] = "§@ªÌ";
         Text[ arabic ] = "ÇáãÄáÝ";
         Text[ turkish ] = "Yazan";
+        Text[ catalan ] = "Autor";
     };
     ListBox LB_AUTHOR
     {
@@ -238,6 +242,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÇáÚäæÇä";
         Text[ turkish ] = "Baþlýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Título";
     };
     ListBox LB_TITLE
     {
@@ -270,6 +275,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÇáÔåÑ";
         Text[ turkish ] = "Ay";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mes";
     };
     ListBox LB_MONTH
     {
@@ -302,6 +308,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÇáÓäÉ";
         Text[ turkish ] = "Yýl";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Año";
     };
     ListBox LB_YEAR
     {
@@ -334,6 +341,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ISBN";
         Text[ turkish ] = "ISBN";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "ISBN";
     };
     ListBox LB_ISBN
     {
@@ -366,6 +374,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÚäæÇä ÇáßÊÇÈ";
         Text[ turkish ] = "Kitap baþlýðý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Título del libro";
     };
     ListBox LB_BOOKTITLE
     {
@@ -398,6 +407,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÇáÝÕá";
         Text[ turkish ] = "Bölüm";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Capítulo";
     };
     ListBox LB_CHAPTER
     {
@@ -430,6 +440,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÇáØÈÚÉ";
         Text[ turkish ] = "Yayým";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Edición";
     };
     ListBox LB_EDITION
     {
@@ -462,6 +473,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÇáäÇÔÑ";
         Text[ turkish ] = "Yayýmcý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Editor";
     };
     ListBox LB_EDITOR
     {
@@ -493,6 +505,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ chinese_traditional ] = "¥Xª©Ãþ«¬";
         Text[ arabic ] = "ØÑíÞÉ ÇáäÔÑ";
         Text[ turkish ] = "Yayým türü";
+        Text[ catalan ] = "Tipo de publicación";
     };
     ListBox LB_HOWPUBLISHED
     {
@@ -525,6 +538,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÇáåíÆÉ";
         Text[ turkish ] = "Kurum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Institución";
     };
     ListBox LB_INSTITUTION
     {
@@ -557,6 +571,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÇáãÌáÉ";
         Text[ turkish ] = "Dergi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Revista";
     };
     ListBox LB_JOURNAL
     {
@@ -588,6 +603,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ chinese_traditional ] = "³Æµù";
         Text[ arabic ] = "ãáÇÍÙÉ";
         Text[ turkish ] = "Not";
+        Text[ catalan ] = "Nota";
     };
     ListBox LB_NOTE
     {
@@ -620,6 +636,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÊÚáíÞ ÊæÖíÍí";
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Anotación";
     };
     ListBox LB_ANNOTE
     {
@@ -651,6 +668,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ chinese_traditional ] = "¸¹½X";
         Text[ arabic ] = "ÑÞã";
         Text[ turkish ] = "Sayý";
+        Text[ catalan ] = "Número";
     };
     ListBox LB_NUMBER
     {
@@ -682,6 +700,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ chinese_traditional ] = "¾÷ºc";
         Text[ arabic ] = "ÇáãäÙãÉ";
         Text[ turkish ] = "Organizasyon";
+        Text[ catalan ] = "Organización";
     };
     ListBox LB_ORGANIZATIONS
     {
@@ -714,6 +733,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÕÝÍÉ (ÕÝÍÇÊ)";
         Text[ turkish ] = "Sayfa sayýsý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Página(s)";
     };
     ListBox LB_PAGES
     {
@@ -745,6 +765,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ chinese_traditional ] = "¥Xª©ªÀ";
         Text[ arabic ] = "ÏÇÑ ÇáäÔÑ";
         Text[ turkish ] = "Yayým evi";
+        Text[ catalan ] = "Editorial";
     };
     ListBox LB_PUBLISHER
     {
@@ -777,6 +798,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÇáÚäæÇä";
         Text[ turkish ] = "Adres";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Dirección";
     };
     ListBox LB_ADDRESS
     {
@@ -808,6 +830,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ chinese_traditional ] = "°ªµ¥°|®Õ";
         Text[ arabic ] = "ÇáÌÇãÚÉ";
         Text[ turkish ] = "Üniversite";
+        Text[ catalan ] = "Universidad";
     };
     ListBox LB_SCHOOL
     {
@@ -840,6 +863,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÓáÓáÉ";
         Text[ turkish ] = "Dizi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Serie";
     };
     ListBox LB_SERIES
     {
@@ -872,6 +896,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "äæÚ ÇáÊÞÑíÑ";
         Text[ turkish ] = "Rapor türü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipo de informe";
     };
     ListBox LB_REPORTTYPE
     {
@@ -903,6 +928,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ chinese_traditional ] = "¥U";
         Text[ arabic ] = "ÇáãÌáÏ";
         Text[ turkish ] = "Cilt";
+        Text[ catalan ] = "Tomo";
     };
     ListBox LB_VOLUME
     {
@@ -935,6 +961,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "URL";
         Text[ turkish ] = "URL";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "URL";
     };
     ListBox LB_URL
     {
@@ -967,6 +994,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÍÞá ÇáãÓÊÎÏã 1";
         Text[ turkish ] = "Kullanýcý alaný 1";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Campo de usuario 1";
     };
     ListBox LB_CUSTOM1
     {
@@ -999,6 +1027,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÍÞá ÇáãÓÊÎÏã 2";
         Text[ turkish ] = "Kullanýcý alaný 2";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Campo de usuario 2";
     };
     ListBox LB_CUSTOM2
     {
@@ -1030,6 +1059,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 3";
         Text[ arabic ] = "ÍÞá ÇáãÓÊÎÏã 3";
         Text[ turkish ] = "Kullanýcý alaný 3";
+        Text[ catalan ] = "Campo de usuario 3";
     };
     ListBox LB_CUSTOM3
     {
@@ -1061,6 +1091,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 4";
         Text[ arabic ] = "ÍÞá ÇáãÓÊÎÏã 4";
         Text[ turkish ] = "Kullanýcý alaný 4";
+        Text[ catalan ] = "Campo de usuario 4";
     };
     ListBox LB_CUSTOM4
     {
@@ -1092,6 +1123,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 5";
         Text[ arabic ] = "ÍÞá ÇáãÓÊÎÏã 5";
         Text[ turkish ] = "Kullanýcý alaný 5";
+        Text[ catalan ] = "Campo de usuario 5";
     };
     ListBox LB_CUSTOM5
     {
@@ -1122,6 +1154,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "<ÈÏæä>";
         Text[ turkish ] = "<Yok>";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "<ninguno>";
     };
     Text[ english_us ] = "Column Layout for Table %1";
     Text[ portuguese ] = "Atribuição de colunas para a tabela %1";
@@ -1141,6 +1174,7 @@ ModalDialog RID_DLG_MAPPING
     Text[ chinese_traditional ] = "½s±Æ %1 ªí®æªºÄæ";
     Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ ááÌÏæá %1";
     Text[ turkish ] = "Tablo %1 için sütun düzeni";
+    Text[ catalan ] = "Asignación de columnas para tabla %1";
 };
 ModalDialog RID_DLG_DBCHANGE
 {
@@ -1192,6 +1226,7 @@ ModalDialog RID_DLG_DBCHANGE
         Text[ arabic ] = "ÇáÊÍÏíÏ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Selección";
     };
     String ST_ENTRY
     {
@@ -1215,6 +1250,7 @@ ModalDialog RID_DLG_DBCHANGE
         Text[ chinese_traditional ] = "±ø¥Ø";
         Text[ arabic ] = "ÅÏÎÇá";
         Text[ turkish ] = "Giriþ";
+        Text[ catalan ] = "Entrada";
     };
     String ST_URL
     {
@@ -1239,6 +1275,7 @@ ModalDialog RID_DLG_DBCHANGE
         Text[ arabic ] = "URL";
         Text[ turkish ] = "URL";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "URL";
     };
     Control LB_SELECTION
     {
@@ -1272,5 +1309,6 @@ ModalDialog RID_DLG_DBCHANGE
     Text[ arabic ] = "ÊÍÏíÏ ãÕÏÑ ÇáÈíÇäÇÊ";
     Text[ turkish ] = "Veri kaynaðý seçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Selección de la fuente de datos";
 };
 
