@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-26 12:30:16 $
+ *  last change: $Author: cl $ $Date: 2002-06-04 08:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HDL_
+#include <com/sun/star/lang/DisposedException.hdl>
+#endif
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #endif
@@ -142,6 +145,14 @@
 #include <svx/unoshape.hxx>
 #include <svx/unonrule.hxx>
 #include <svx/eeitem.hxx>
+
+#ifndef _XMLEOHLP_HXX
+#include <svx/xmleohlp.hxx>
+#endif
+
+#ifndef _XMLGRHLP_HXX
+#include <svx/xmlgrhlp.hxx>
+#endif
 
 #include <docshell.hxx>
 
@@ -844,6 +855,36 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         static sal_uInt16 aWhichIds[] = { SDRATTR_XMLATTRIBUTES, EE_CHAR_XMLATTRIBS, EE_PARA_XMLATTRIBS, 0 };
 
         return svx::NamespaceMap_createInstance( aWhichIds, &pDoc->GetItemPool() );
+    }
+
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ExportGraphicObjectResolver") ) )
+    {
+        return (::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE );
+    }
+
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ImportGraphicObjectResolver") ) )
+    {
+        return (::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_READ );
+    }
+
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ExportEmbeddedObjectResolver") ) )
+    {
+        SvPersist *pPersist = pDoc ? pDoc->GetPersist() : NULL;
+
+        if( NULL == pPersist )
+            throw lang::DisposedException();
+
+        return (::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pPersist, EMBEDDEDOBJECTHELPER_MODE_WRITE );
+    }
+
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver") ) )
+    {
+        SvPersist *pPersist = pDoc ? pDoc->GetPersist() : NULL;
+
+        if( NULL == pPersist )
+            throw lang::DisposedException();
+
+        return (::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pPersist, EMBEDDEDOBJECTHELPER_MODE_READ );
     }
 
     uno::Reference< uno::XInterface > xRet;
