@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-13 10:40:46 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,22 @@
  *
  ************************************************************************/
 
+#ifdef PCH
+#include "filt_pch.hxx"
+#endif
+#pragma hdrstop
+
+// ============================================================================
+
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
+#include <com/sun/star/embed/XEmbedPersist.hpp>
+#endif
+
+#include <toolkit/helper/vclunohelper.hxx>
+
 #ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
 #endif
@@ -72,9 +88,6 @@
 #endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _SFX_INTERNO_HXX
-#include <sfx2/interno.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
@@ -181,6 +194,7 @@
 #include <stdio.h>
 
 using ::rtl::OUString;
+using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::XComponent;
@@ -991,11 +1005,10 @@ void XclImpEscherOle::Apply( ScfProgressBar& rProgress )
         SdrOle2Obj* pOleSdrObj = PTR_CAST( SdrOle2Obj, mxSdrObj.get() );
         if( pOleSdrObj && pDocShell )
         {
-            SvInfoObject* pInfoObj = pDocShell->InsertObject( pOleSdrObj->GetObjRef(), EMPTY_STRING );
-            DBG_ASSERT( pInfoObj, "XclImpEscherOle::Apply - no InfoObject" );
-            if( pInfoObj )
+            ::rtl::OUString aName;
+            if ( pDocShell->GetEmbeddedObjectContainer().InsertEmbeddedObject( pOleSdrObj->GetObjRef(), aName ) )
                 // #95381# SetPersistName, not SetName
-                pOleSdrObj->SetPersistName( pInfoObj->GetObjName() );
+                pOleSdrObj->SetPersistName( aName );
         }
         else if( mxSdrObj->ISA( SdrUnoObj ) )
         {
@@ -1073,35 +1086,32 @@ void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
     SfxObjectShell* pDocShell = GetDocShell();
     if( !pDocShell ) return;
 
-    SvInPlaceObjectRef xIPObj;
-
-    // do not access uninstalled Chart module
+    ::rtl::OUString aName;
     if( SvtModuleOptions().IsChart() )
-        xIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
-
-    if( xIPObj.Is() )
     {
-        pDocShell->InsertObject( xIPObj, String() );
+        uno::Reference < embed::XEmbeddedObject > xObj = pDocShell->GetEmbeddedObjectContainer().
+                CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aName );
 
-        String aName;
-        if( SvInfoObject* pInfoObj = pDocShell->Find( xIPObj ) )
-            aName = pInfoObj->GetObjName();
-        else
-            DBG_ERRORFILE( "XclImpEscherChart::Apply - Inplace object not found" );
-
+        //TODO/LATER: hacking?!
+        /*
         BOOL bEnabled = xIPObj->IsEnableSetModified();
         if( bEnabled )
             xIPObj->EnableSetModified( FALSE );
-
-        Size aSize( xIPObj->GetVisArea().GetSize() );
+        */
+        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+        awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+        Size aSize( aSz.Width, aSz.Height );
         if( (aSize.Height() < 1) || (aSize.Width() < 1) )
         {
+            MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
             aSize.Width() = aSize.Height() = 5000;
-            aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( xIPObj->GetMapUnit() ) );
-            xIPObj->SetVisAreaSize( aSize );
+            aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aUnit ) );
+            aSz.Width = aSize.Width();
+            aSz.Height = aSize.Height();
+            xObj->setVisualAreaSize( nAspect, aSz );
         }
 
-        SdrOle2Obj* pSdrObj = new SdrOle2Obj( xIPObj, aName, maAnchorRect );
+        SdrOle2Obj* pSdrObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, maAnchorRect );
         pSdrObj->NbcSetLayer( SC_LAYER_FRONT );
         if( SdrPage* pPage = GetSdrPage( mxChart->nBaseTab ) )
             pPage->InsertObject( pSdrObj );
@@ -1115,27 +1125,23 @@ void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
         aChartObj.SetHeaders( bColHdr, bRowHdr );
 
         SchMemChart* pMemChart = aChartObj.CreateMemChart();
-        SchDLL::Update( xIPObj, pMemChart );
+        SchDLL::Update( xObj, pMemChart );
+        pSdrObj->GetNewReplacement();
         delete pMemChart;
 
-        SfxInPlaceObjectRef aSfxObj( xIPObj );
-        if( aSfxObj.Is() )
-        {
-            if( SfxObjectShell* pObjSh = aSfxObj->GetObjectShell() )
-            {
-                Reference< XComponent > xComp = pObjSh->GetModel().get();
-                if( xComp.is() )
-                    mxChart->Apply( xComp, maAnchorRect, rProgress );
-            }
-        }
+        uno::Reference < embed::XComponentSupplier > xSup( xObj, uno::UNO_QUERY );
+        Reference< XComponent > xComp( xSup->getComponent(), uno::UNO_QUERY );
+        if( xComp.is() )
+            mxChart->Apply( xComp, maAnchorRect, rProgress );
 
-        if( bEnabled )
-            xIPObj->EnableSetModified( TRUE );
+        //TODO/LATER: hacking?!
+        //if( bEnabled )
+        //    xIPObj->EnableSetModified( TRUE );
+        //xIPObj->SetModified();
 
-        xIPObj->SetModified();
-        xIPObj->DoSave();
-        xIPObj->DoSaveCompleted();
-        xIPObj->GetStorage()->Commit();
+        uno::Reference < embed::XEmbedPersist > xPers( xObj, uno::UNO_QUERY );
+        if ( xPers.is() )
+            xPers->storeOwn();
     }
 }
 
@@ -1354,11 +1360,11 @@ bool XclImpDffManager::CreateSdrOleObj( XclImpEscherOle& rOleObj )
         Graphic aGraph;
         if( GetBLIP( rOleObj.GetBlipId(), aGraph ) )
         {
-            SvStorageRef xSrc( GetRootStorage() );
-            SvStorageRef xDst( pDocShell->GetStorage() );
+            SotStorageRef xSrc( GetRootStorage() );
 
+            ErrCode nError = ERRCODE_NONE;
             if( SdrOle2Obj* pOleSdrObj = CreateSdrOLEFromStorage(
-                    rStorageName, xSrc, xDst, aGraph, rAnchor, 0, mnOleImpFlags ) )
+                    rStorageName, xSrc, pDocShell->GetStorage(), aGraph, rAnchor, NULL, nError, mnOleImpFlags ) )
             {
                 rOleObj.SetSdrObj( pOleSdrObj );
                 return true;
