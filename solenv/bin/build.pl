@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.84 $
+#   $Revision: 1.85 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-16 13:53:56 $
+#   last change: $Author: vg $ $Date: 2003-06-20 14:23:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.84 $ ';
+$id_str = ' $Revision: 1.85 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -591,6 +591,7 @@ sub get_stand_dir {
         $ENV{mk_tmp} = '';
         die "No environment set\n";
     };
+    my $StandDir;
     do {
         $StandDir = cwd();
         if (open(BUILD_LST, 'prj/build.lst')) {
@@ -598,8 +599,7 @@ sub get_stand_dir {
             $StandDir = $`;
             $CurrentPrj = $1;
             close(BUILD_LST);
-            return $StandDir if ($^O eq 'MSWin32');
-            return $ENV{SRC_ROOT} . '/';
+            return $StandDir;
         } elsif (&IsRootDir($StandDir)) {
             $ENV{mk_tmp} = '';
             &print_error ('Found no project to build');
@@ -761,22 +761,21 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:   build [--help|-all|-from|-from_opt|since prj_name|-incomp_from prj_name[:startprj_name] [-prepare]|-file file_name|-PP processes|-dlv[_switch] dlvswitch] [--ignore|-i] \n";
-    print STDERR "Example:  build -from sfx2\n";
-    print STDERR "              - build all projects including current one from sfx2\n";
-    print STDERR "Example:  build -from_opt sfx2\n";
-    print STDERR "              - the same as -from, but skip all projects that could have been built (no secure way, use ONLY when -all or -from is already been run and there no external dependencies\' changes occurred)\n";
-    print STDERR "Keys:     -all        - build all projects from very beginning till current one\n";
-    print STDERR "      -from       - build all projects beginning from the specified till current one\n";
-    print STDERR "      -from_opt   - build all projects beginning from the specified till current one (optimized version)\n";
-    print STDERR "      -prepare- clear all projects for incompartible build from prj_name till current one (cws version)\n";
-    print STDERR "      -incomp_from- build all projects incompartible from prj_name beginning from the startprj_name till current one (cws version)\n";
-    print STDERR "      -since      - build all projects beginning from the specified till current one (optimized version, skips specified project)\n";
-    print STDERR "      -show       - show what is going to be built\n";
-    print STDERR "      -file       - generate command file file_name\n";
-    print STDERR "      -deliver    - only deliver, no build (usable for \'-all\' and \'-from\' keys)\n";
-    print STDERR "      -PP         - start multiprocessing build, with number of processes passed (UNIXes only)\n";
-    print STDERR "      -dlv[_switch]   - use deliver with the switch specified\n";
+    print STDERR "Syntax:   build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p]] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [-- dmake_options] \n";
+    print STDERR "Example:  build --from sfx2\n";
+    print STDERR "              - build projects including current one from sfx2\n";
+    print STDERR "Example:  build --all:sfx2\n";
+    print STDERR "              - the same as --all, but skip all projects that have been already built when using \"--all\" switch before sfx2\n";
+    print STDERR "Keys:     --all       - build all projects from very beginning till current one\n";
+    print STDERR "      --from      - build all projects dependent from the specified (including it) till current one\n";
+    print STDERR "      --prepare- clear all projects for incompartible build from prj_name till current one (cws version)\n";
+    print STDERR "      --with_branches- build all projects in neighbour branches and current branch starting from actual project\n";
+    print STDERR "      --since     - build all projects beginning from the specified till current one (the same as \"--all:prj_name\", but skipping prj_name)\n";
+    print STDERR "      --show      - show what is going to be built\n";
+    print STDERR "      --file      - generate command file file_name\n";
+    print STDERR "      --deliver   - only deliver, no build (usable for \'-all\' and \'-from\' keys)\n";
+    print STDERR "      -P          - start multiprocessing build, with number of processes passed (UNIXes only)\n";
+    print STDERR "      --dlv_switch    - use deliver with the switch specified\n";
     print STDERR "      --help      - print help info\n";
     print STDERR "      --ignore    - force tool to ignore errors\n";
     print STDERR "Default:          - build current project\n";
@@ -789,42 +788,60 @@ sub usage {
 sub get_options {
     my $arg;
     while ($arg = shift @ARGV) {
-        $arg =~ /^-PP$/         and $QuantityToBuild = shift @ARGV  and next;
-        $arg =~ /^-PP(\d+)$/            and $QuantityToBuild = $1 and next;
-        $arg =~ /^-all$/        and $BuildAllParents = 1            and next;
-        $arg =~ /^-show$/       and $show = 1                       and next;
-        $arg =~ /^-deliver$/    and $deliver = 1                    and next;
-        $arg =~ /^-dlv_switch$/ and $dlv_switch = &get_switch_options   and next;
-        $arg =~ /^-dlv$/        and $dlv_switch = &get_switch_options   and next;
-        $arg =~ /^-file$/       and $cmd_file = shift @ARGV         and next;
-        $arg =~ /^-from$/       and $BuildAllParents = 1
+        $arg =~ /^-P$/          and $QuantityToBuild = shift @ARGV  and next;
+        $arg =~ /^-P(\d+)$/         and $QuantityToBuild = $1 and next;
+        $arg =~ /^--all$/       and $BuildAllParents = 1            and next;
+        $arg =~ /^-a$/      and $BuildAllParents = 1            and next;
+        $arg =~ /^--show$/      and $show = 1                       and next;
+        $arg =~ /^-s$/      and $show = 1                       and next;
+        $arg =~ /^--deliver$/   and $deliver = 1                    and next;
+        $arg =~ /^-d$/  and $deliver = 1                    and next;
+        $arg =~ /^--dlv_switch$/    and $dlv_switch = &get_switch_options   and next;
+        $arg =~ /^--file$/      and $cmd_file = shift @ARGV         and next;
+        $arg =~ /^-F$/      and $cmd_file = shift @ARGV         and next;
+
+        $arg =~ /^--with_branches$/     and $BuildAllParents = 1
                                 and $build_from = shift @ARGV       and next;
-        $arg =~ /^-from_opt$/   and $BuildAllParents = 1
-                                and $build_from_opt = shift @ARGV   and next;
-        if ($arg =~ /^-incomp_from$/) { $BuildAllParents = 1;
+        $arg =~ /^-b$/      and $BuildAllParents = 1
+                                and $build_from = shift @ARGV       and next;
+
+        $arg =~ /^--all:(\S+)$/ and $BuildAllParents = 1
+                                and $build_from_opt = $1            and next;
+        $arg =~ /^-a:(\S+)$/ and $BuildAllParents = 1
+                                and $build_from_opt = $1            and next;
+        if ($arg =~ /^--from$/ || $arg =~ /^-f$/) {
+                                    $BuildAllParents = 1;
                                     &get_incomp_projects;
                                     next;
         };
-
-        $arg =~ /^-prepare$/    and $prepare = 1 and next;
-        $arg =~ /^-since$/      and $BuildAllParents = 1
+        $arg =~ /^--prepare$/   and $prepare = 1 and next;
+        $arg =~ /^-p$/          and $prepare = 1 and next;
+        $arg =~ /^--since$/     and $BuildAllParents = 1
+                                and $build_since = shift @ARGV      and next;
+        $arg =~ /^-c$/      and $BuildAllParents = 1
+                                and $build_since = shift @ARGV      and next;
+        $arg =~ /^-s$/          and $BuildAllParents = 1
                                 and $build_since = shift @ARGV      and next;
         $arg =~ /^--help$/      and &usage                          and exit(0);
+        $arg =~ /^-h$/      and &usage                          and exit(0);
         $arg =~ /^--ignore$/        and $ignore = 1                         and next;
         $arg =~ /^-i$/      and $ignore = 1                         and next;
+        $arg =~ /^--version$/   and exit(0);
+        $arg =~ /^-V$/          and exit(0);
+        $arg =~ /^--$/ and  &get_dmake_args;
         push (@dmake_args, $arg);
     };
-    &print_error('Switches -from and -from_opt collision') if ($build_from && $build_from_opt);
+    &print_error('Switches --with_branches and --all collision') if ($build_from && $build_from_opt);
 
-    &print_error('Switches -from and -since collision') if ($build_from && $build_since);
+    &print_error('Switches --with_branches and --since collision') if ($build_from && $build_since);
     $cmd_file = '' if ($show);
     if (($ENV{GUI} eq 'WNT') && $QuantityToBuild) {
         $QuantityToBuild = 0;
-        &print_error('-PP switch is disabled for windows!\n');
+        &print_error('-P switch is disabled for windows!\n');
     };
     $incompartible = scalar keys %incompartibles;
     if ($prepare && !$incompartible) {
-        &print_error("-prepare is for use with -incomp_from switch only!\n");
+        &print_error("--prepare is for use with --from switch only!\n");
     };
     if ($QuantityToBuild && $ignore) {
         &print_error("Cannot ignore errors in multiprocessing build");
@@ -837,6 +854,14 @@ sub get_options {
     @ARGV = @dmake_args;
 };
 
+sub get_dmake_args {
+    my $arg;
+    while ($arg = shift @ARGV) {
+        next if ($arg =~ /^--$/);
+        push (@dmake_args, $arg);
+    };
+};
+
 #
 # get all options without '-'
 #
@@ -844,7 +869,7 @@ sub get_switch_options {
     my $string = '';
     my $option = '';
     while ($option = shift @ARGV) {
-        if (!($option =~ /^-/)) {
+        if (!($option =~ /^-+/)) {
             $string .= '-' . $option;
             $string .= ' ';
         } else {
@@ -1121,8 +1146,8 @@ sub module_classify {
 
 #
 # This procedure provides consistency for cws
-# for optimized build (ie in case of from, from_opt
-# and since switches)
+# for optimized build (ie in case of -with_branches, -all:prj_name
+# and -since switches)
 #
 sub provide_consistency {
     &check_dir;
@@ -1377,10 +1402,10 @@ sub prepare_incompartible_build {
             my $message;
             if ($module_type ne 'mod') {
                 $message = "$prj is not a complete module!";
-            } elsif (-d &CorrectPath($StandDir.$prj.'/'. $ENV{INPATH})) {
-                $message = "$prj contains old output tree!";
+#           } elsif (-d &CorrectPath($StandDir.$prj.'/'. $ENV{INPATH})) {
+#               $message = "$prj contains old output tree!";
             };
-                &print_error("$message Prepare workspace with -prepare switch!") if ($message);
+#&print_error("$message Prepare workspace with -prepare switch!") if ($message);
         };
         if ($prj_lnk) {
             $$deps_hash{$prj} = $$deps_hash{$prj_lnk};
@@ -1396,7 +1421,7 @@ sub prepare_incompartible_build {
 
 #
 # Removes projects which it is not necessary to build
-# with -from switch
+# with -with_branches switch
 #
 sub prepare_build_from {
     my ($prj, $deps_hash);
@@ -1411,7 +1436,7 @@ sub prepare_build_from {
 
 #
 # Removes projects which it is not necessary to build
-# with -from_opt or -since switch
+# with --all:prj_name or --since switch
 #
 sub prepare_build_from_opt {
     my ($prj, $deps_hash, $border_prj);
@@ -1439,13 +1464,13 @@ sub prepare_build_from_opt {
 sub get_incomp_projects {
     my $option = '';
     while ($option = shift @ARGV) {
-        if ($option =~ /^-/) {
+        if ($option =~ /^-+/) {
             unshift(@ARGV, $option);
             last;
         } else {
             if ($option =~ /(:)/) {
                 $option = $`;
-                &print_error("-incomp_from switch collision") if ($build_from_opt);
+                &print_error("-from switch collision") if ($build_from_opt);
                 $build_from_opt = $';
             };
             $incompartibles{$option}++;
@@ -1479,7 +1504,7 @@ sub clear_delivered {
     print "Clearing up delivered\n";
     my %backup_vars;
     foreach my $platform (keys %platforms) {
-        print "\nremoving delivered for $platform\n";
+        print "\nRemoving delivered for $platform\n";
         my %solar_vars = ();
         &read_ssolar_vars($platform, \%solar_vars);
         foreach (keys %solar_vars) {
@@ -1567,7 +1592,7 @@ sub get_solar_vars {
 sub checkout_current_module {
     my $module_name = shift;
     my $link_name = $module_name . '.lnk';
-    chdir $ENV{SRC_ROOT};
+    chdir $StandDir;
     cwd();
     print "\nBreaking link to module $module_name";
     &checkout_module($module_name);
@@ -1588,23 +1613,25 @@ sub checkout_current_module {
 
 sub check_dir {
     my $start_dir = cwd();
-    $start_dir =~ /([\\\/])$/;
     my @dir_entries = split(/[\\\/]/, $start_dir);
-    my $current_dir = $dir_entries[$#dir_entries];
+    my $current_module = $dir_entries[$#dir_entries];
+    $current_module = $` if ($current_module =~ /(\.lnk)$/);
+    my $link_name = $ENV{SRC_ROOT}.'/'.$current_module.'.lnk';
     if ( $^O eq 'MSWin32' ) {
-        if ($current_dir =~ /(\.lnk)$/) {
-            &checkout_current_module($`);
+        $start_dir =~ s/\\/\//go;
+        $link_name =~ s/\\/\//go;
+        if (lc($start_dir) eq lc($link_name)) {
+            &checkout_current_module($current_module);
         };
-    } else {
-        my $link_name = $ENV{SRC_ROOT}.'/'.$current_dir.'.lnk';
-        if ((-l $link_name) && (chdir $link_name)) {
-            if ($start_dir eq cwd()) {
-                &checkout_current_module($current_dir);
-                return;
-            } else {
-                chdir $start_dir;
-                cwd();
-            };
+    } elsif ((-l $link_name) && (chdir $link_name)) {
+        if ($start_dir eq cwd()) {
+            # we're dealing with link => fallback to SRC_ROOT under UNIX
+            $StandDir = $ENV{SRC_ROOT}.'/';
+            &checkout_current_module($current_module);
+            return;
+        } else {
+            chdir $start_dir;
+            cwd();
         };
     };
 };
