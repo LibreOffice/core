@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscyacc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:51:41 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@
 /************** V a r i a b l e n ****************************************/
 ObjectStack                     S;
 RscTop *                        pCurClass;
-USHORT                          nCurMask;
+sal_uInt32                      nCurMask;
 char                            szErrBuf[ 100 ];
 
 /************** H i l f s F u n k t i o n e n ****************************/
@@ -105,7 +105,7 @@ RSCINST GetVarInst( const RSCINST & rInst, char * pVarName )
 {
     RSCINST aInst;
 
-    aInst = rInst.pClass->GetVariable( rInst, pHS->Insert( pVarName ),
+    aInst = rInst.pClass->GetVariable( rInst, pHS->getID( pVarName ),
                                        RSCINST() );
 
     if( !aInst.pData )
@@ -130,7 +130,7 @@ void SetNumber( const RSCINST & rInst, char * pVarName, INT32 lValue )
 }
 
 void SetConst( const RSCINST & rInst, char * pVarName,
-               HASHID nValueId, INT32 nVal )
+               Atom nValueId, INT32 nVal )
 {
     RSCINST aInst;
 
@@ -197,7 +197,7 @@ BOOL DoClassHeader( RSCHEADER * pHeader, BOOL bMember )
 
         if( !pCopyObj )
         {
-            ByteString aMsg( pHS->Get( aCopyInst.pClass->GetId() ) );
+            ByteString aMsg( pHS->getString( aCopyInst.pClass->GetId() ) );
             aMsg += ' ';
             aMsg += aName2.GetName();
             pTC->pEH->Error( ERR_NOCOPYOBJ, pHeader->pClass, aName1,
@@ -222,7 +222,7 @@ BOOL DoClassHeader( RSCHEADER * pHeader, BOOL bMember )
         }
         else
             pTC->pEH->Error( ERR_FALSETYPE, S.Top().pClass, aName1,
-                             pHS->Get( pHeader->pClass->GetId() ) );
+                             pHS->getString( pHeader->pClass->GetId() ) );
     }
     else
     {
@@ -259,9 +259,9 @@ BOOL DoClassHeader( RSCHEADER * pHeader, BOOL bMember )
                 pTC->pEH->Error( aError, pHeader->pClass, aName1 );
             else if( aError.IsError() )
             {
-                if( ERR_CONT_INVALIDTYPE == (USHORT)aError )
+                if( ERR_CONT_INVALIDTYPE == aError )
                     pTC->pEH->Error( aError, S.Top().pClass, aName1,
-                                     pHS->Get( pHeader->pClass->GetId() ) );
+                                     pHS->getString( pHeader->pClass->GetId() ) );
                 else
                     pTC->pEH->Error( aError, S.Top().pClass, aName1 );
                 S.Top().pClass->GetElement( S.Top(), RscId(),
@@ -298,7 +298,7 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 /************** Y a c c   C o d e ****************************************/
 //#define YYDEBUG 1
 
-#define TYPE_HASHID               0
+#define TYPE_Atom             0
 #define TYPE_RESID                1
 
 #ifdef UNX
