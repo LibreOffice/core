@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:26:36 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ ModalDialog DLG_CAPTION
         Text [ english_us ] = "~Caption" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "±кЗ©ОД(~C)";
-        Text[ russian ] = "Текст названия";
+        Text[ russian ] = "Текст подписи";
         Text[ polish ] = "Tekst etykiety";
         Text[ japanese ] = "ЧНЮЩ(~C)";
         Text[ chinese_traditional ] = "јРЕТ¤е(~C)";
