@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:48:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,16 @@ void SfxObjectShell::FlushDocInfo()
     String aDocInfoTitle = GetDocInfo().GetTitle();
     if ( aDocInfoTitle.Len() )
         SetTitle( aDocInfoTitle );
+    else
+    {
+        pImp->aTitle.Erase();
+        SetNamedVisibility_Impl();
+        if ( GetMedium() )
+        {
+            SfxShell::SetName( GetTitle(SFX_TITLE_APINAME) );
+            Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
+        }
+    }
 }
 
 //-------------------------------------------------------------------------
