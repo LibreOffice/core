@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:42:49 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 11:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,11 +780,11 @@ enum SwPropNameIds
 /* 0690 */  UNO_NAME_BLIND_COPIES_TO,
 /* 0691 */  UNO_NAME_IN_SERVER_PASSWORD,
 /* 0692 */  UNO_NAME_OUT_SERVER_PASSWORD,
+// <--
 /* 0693 */  UNO_NAME_SAVE_FILTER_OPTIONS,
 /* 0694 */  UNO_NAME_SAVE_FILTER_DATA,
-
-// <--
-/* 0695 */  SW_PROPNAME_END
+/* 0695 */  UNO_NAME_LOCK_UPDATES,
+/* 0696 */  SW_PROPNAME_END
 };
 
 
