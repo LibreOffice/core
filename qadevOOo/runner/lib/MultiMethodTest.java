@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiMethodTest.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sw $ $Date: 2003-01-27 16:27:42 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ public class MultiMethodTest {
         } catch (ClassNotFoundException cnfE) {
 
             cnfE.printStackTrace(log);
-            log.println("couldn´t find a class : " + getTestedClassName());
+            log.println("could not find a class : " + getTestedClassName());
             return null;
 
         }
@@ -254,10 +254,8 @@ public class MultiMethodTest {
 
         // executing methods tests
         for (int i=0;i<entry.SubEntryCount;i++) {
-            log.println("Execute: "+ entry.SubEntries[i].entryName);
             try {
                 executeMethod( entry.SubEntries[i].entryName );
-                log.println(tRes.getStatusFor(entry.SubEntries[i].entryName));
             } catch (Exception e){
                 log.println("Exception while checking: "+
                     entry.SubEntries[i].entryName+" : "+e.getMessage());
@@ -351,21 +349,14 @@ public class MultiMethodTest {
     }
 
     /**
-     * @return the status set to the <code>method</code> test, if it has been
-     * set, <tt>null</tt> otherwise.
-     */
-    protected Status getStatusFor( String method ) {
-        return tRes.getStatusFor( method );
-    }
-
-    /**
      * Calling of the method indicates that the <code>method</code> test should
      * be called. The method checks this and if it is not called, calls it.
      * If the method is failed or skipped, it throws StatusException.
      */
     protected void requiredMethod(String method) {
+        log.println("starting required method: " + method);
         executeMethod( method );
-        Status mtStatus = getStatusFor( method );
+        Status mtStatus = tRes.getStatusFor( method );
 
         if ( mtStatus != null
                 && (!mtStatus.isPassed() || mtStatus.isFailed()) ) {
@@ -380,7 +371,9 @@ public class MultiMethodTest {
      */
     protected void executeMethod( String method ) {
         if ( ! isCalled( method ) ) {
+            log.println("Execute: "+ method);
             callMethod( method );
+            log.println(method + ": " + tRes.getStatusFor(method));
         }
     }
 
