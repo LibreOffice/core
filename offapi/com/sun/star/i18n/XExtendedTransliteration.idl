@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExtendedTransliteration.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 20:43:58 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ module com { module sun { module star { module i18n {
     should be used for performance reason if their full-blown
     counterparts aren't neded.  </p>
 
-     @since #107627#
+     @since OOo 1.1.2
  */
 published interface XExtendedTransliteration : ::com::sun::star::i18n::XTransliteration
 {
