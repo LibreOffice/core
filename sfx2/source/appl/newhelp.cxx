@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-17 06:21:38 $
+ *  last change: $Author: pb $ $Date: 2001-08-20 14:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1658,9 +1658,10 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     if ( EVENT_COMMAND == nType && rNEvt.GetCommandEvent() )
     {
         const CommandEvent* pCmdEvt = rNEvt.GetCommandEvent();
+        Window* pCmdWin = rNEvt.GetWindow();
 
         if ( pCmdEvt->IsMouseEvent() &&
-             pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU && rNEvt.GetWindow() != &aToolBox )
+             pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU && pCmdWin != this && pCmdWin != &aToolBox )
         {
             // link at current mouse position ?
             const Point&  rPos = pCmdEvt->GetMousePosPixel();
