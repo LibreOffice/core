@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2001-08-24 13:18:29 $
+ *  last change: $Author: pb $ $Date: 2001-09-18 12:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ ToolBox TB_SVT_FILEVIEW
         {
             Identifier = TI_DOCTEMPLATE_PRINT;
             HelpId = HID_TEMPLATEDLG_TB_PRINT;
-            ItemBitmap = Bitmap { File = "sc05504.bmp" ; };
+            ItemBitmap = Bitmap { File = "sc05509.bmp" ; };
             Text = "Drucken" ;
             Text [ english_us ] = "Print" ;
             Text[ language_user1 ] = " ";
