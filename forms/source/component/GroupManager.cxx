@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 11:53:06 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef _FRM_GROUPMANAGER_HXX_
 #include "GroupManager.hxx"
 #endif
-#ifndef _FRM_DATABASEFORM_HXX_
-#include "DatabaseForm.hxx"
-#endif
 
 #ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -95,16 +92,12 @@ namespace frm
 //.........................................................................
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form;
 
 namespace
@@ -323,7 +316,7 @@ Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
 DBG_NAME(OGroupManager);
 //------------------------------------------------------------------
 OGroupManager::OGroupManager(const Reference< XContainer >& _rxContainer)
-    :m_pCompGroup(new OGroup(ALL_COMPONENTS_GROUP_NAME))
+    :m_pCompGroup( new OGroup( ::rtl::OUString::createFromAscii( "AllComponentGroup" ) ) )
     ,m_xContainer(_rxContainer)
 {
     DBG_CTOR(OGroupManager,NULL);
