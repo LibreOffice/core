@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:54:57 $
+ *  last change: $Author: kz $ $Date: 2001-06-15 21:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ TabPage TP_HELP_SEARCH
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Nur in Titeln suchen" ;
         Text [ english_us ] = "Find in ~headings only";
-        Text[ portuguese ] = "~Procurar sу tнtulo";
+        Text[ portuguese ] = "~Procurar sу em tнtulos";
         Text[ russian ] = "~»скать только в заголовках";
         Text[ greek ] = "~Search headings only";
         Text[ dutch ] = "~Alleen titels zoeken";
@@ -582,6 +582,7 @@ String STR_HELP_FIRST_HTML
 {
     Text = "<html></head><body><center><br></br><br></br><p><tt>%1</tt></center></body></html>";
 };
+
 
 
 
