@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-14 21:36:54 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 08:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ String STR_DESCRIPTION_HTMLFILE
     Text [ french ] = "Document Internet" ;
     Text [ swedish ] = "Internetdokument" ;
     Text [ danish ] = "Internetdokument" ;
-    Text [ portuguese ] = "Documento da Internet" ;
+    Text [ portuguese ] = "Documento Internet" ;
     Text [ portuguese_brazilian ] = "Internet Dokument" ;
     Text [ chinese_simplified ] = "№ъјК»ҐБЄНшОДµµ";
     Text [ russian ] = "Документ Интернета";
@@ -601,7 +601,7 @@ String STR_DESCRIPTION_SIMPRESS_DOC
 {
     Text = "%PRODUCTNAME Prдsentation" ;
     Text [ English ] = "StarOffice Presentation" ;
-    Text [ portuguese ] = "Apresentaзгo (%PRODUCTNAME)" ;
+    Text [ portuguese ] = "Apresentaзгo %PRODUCTNAME" ;
     Text [ english_us ] = "%PRODUCTNAME presentation" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME Prдsentation" ;
     Text [ swedish ] = "%PRODUCTNAME-presentation" ;
@@ -662,7 +662,7 @@ String STR_DESCRIPTION_GLOBALDOC
     Text [ danish ] = "%PRODUCTNAME tekst hoveddokument" ;
     Text [ italian ] = "Documento master di testo di %PRODUCTNAME" ;
     Text [ spanish ] = "%PRODUCTNAME Documento maestro de texto" ;
-    Text [ french ] = "Document-texte maоtre %PRODUCTNAME" ;
+    Text [ french ] = "Document texte maоtre %PRODUCTNAME" ;
     Text [ dutch ] = "%PRODUCTNAME Tekst master-document" ;
     Text [ chinese_simplified ] = "%PRODUCTNAME ОД±ѕ ЦчїШОДµµ";
     Text [ russian ] = "Главный текстовый документ %PRODUCTNAME";
@@ -822,7 +822,7 @@ String STR_DESCRIPTION_EXCEL_TEMPLATE_DOC
     Text [ portuguese_brazilian ] = "MS Excel Vorlage" ;
     Text [ swedish ] = "MS Excel-dokumentmall" ;
     Text [ danish ] = "MS Excel skabelon" ;
-    Text [ italian ] = "Modello MS Excel" ;
+    Text [ italian ] = "MS Excel Modello" ;
     Text [ spanish ] = "MS Excel - Plantilla" ;
     Text [ french ] = "Modиle MS Excel" ;
     Text [ dutch ] = "MS Excel sjabloon" ;
@@ -851,7 +851,7 @@ String STR_DESCRIPTION_BATCHFILE
     Text [ french ] = "Fichier de traitement par lots" ;
     Text [ swedish ] = "Batch-fil" ;
     Text [ danish ] = "Batch-fil" ;
-    Text [ portuguese ] = "Ficheiro por lotes" ;
+    Text [ portuguese ] = "Ficheiro de comandos" ;
     Text [ portuguese_brazilian ] = "Stapelverarbeitungsdatei" ;
     Text[ chinese_simplified ] = "ЕъОДјю";
     Text[ russian ] = "Пакетный файл";
@@ -1075,7 +1075,7 @@ String STR_DESCRIPTION_FACTORY_MATH
 {
     Text = "Formel";
     Text[ english_us ] = "Formula";
-    Text[ portuguese ] = "Formula";
+    Text[ portuguese ] = "Fуrmula";
     Text[ russian ] = "Формула";
     Text[ greek ] = "Formula";
     Text[ dutch ] = "Formula";
@@ -1095,6 +1095,7 @@ String STR_DESCRIPTION_FACTORY_MATH
     Text[ arabic ] = "Formula";
     Text[ catalan ] = "Formula";
 };
+
 
 
 
