@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-27 15:07:44 $
+ *  last change: $Author: mib $ $Date: 2002-05-29 14:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,7 +846,7 @@ Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAt(
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
     Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to window
-    Point aLogPoint( pWin->PixelToLogic( aPixPoint ) ); // twip rel to doc root
+    Point aLogPoint( GetMap()->PixelToCore( aPixPoint ) ); // twip rel to doc root
 
     const SwFrmOrObj aChild( GetChildAt( aLogPoint ) );
     if( aChild.GetSwFrm() )
@@ -877,13 +877,20 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBounds()
 
     SwRect aLogBounds( GetBounds( GetFrm() ) ); // twip rel to doc root
     Rectangle aPixBounds( 0, 0, 0, 0 );
+    if( GetFrm()->IsPageFrm() &&
+        static_cast < const SwPageFrm * >( GetFrm() )->IsEmptyPage() )
+    {
+        ASSERT( GetShell()->IsPreView(), "empty page accessible?" );
+        if( GetShell()->IsPreView() )
+            aLogBounds.SSize( GetMap()->GetPreViewPageSize() );
+    }
     if( !aLogBounds.IsEmpty() )
     {
-        aPixBounds = pWin->LogicToPixel( aLogBounds.SVRect() );
+        aPixBounds = GetMap()->CoreToPixel( aLogBounds.SVRect() );
         if( !pParent->IsRootFrm() )
         {
             Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
-            Point aParentPixPos( pWin->LogicToPixel( aParentLogPos ) );
+            Point aParentPixPos( GetMap()->CoreToPixel( aParentLogPos ) );
             aPixBounds.Left() -= aParentPixPos.X();
             aPixBounds.Top() -= aParentPixPos.Y();
         }
@@ -911,19 +918,18 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
 
     SwRect aLogBounds( GetBounds( GetFrm() ) ); // twip rel to doc root
     Point aPixPos( 0, 0 );
-    if( !aLogBounds.IsEmpty() )
+
+    //      aPixPos = pWin->LogicToPixel( aLogBounds.Pos() );
+    aPixPos = GetMap()->CoreToPixel( aLogBounds.Pos() );
+    if( pParent->IsRootFrm() )
     {
-        //      aPixPos = pWin->LogicToPixel( aLogBounds.Pos() );
-        aPixPos = GetMap()->LogicToPixel( aLogBounds.Pos() );
-        if( pParent->IsRootFrm() )
-        {
-            Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
-            //          Point aParentPixPos( pWin->LogicToPixel( aParentLogPos ) );
-            Point aParentPixPos( GetMap()->CoreToPixel( aParentLogPos ) );
-            aPixPos.X() -= aParentPixPos.X();
-            aPixPos.Y() -= aParentPixPos.Y();
-        }
+        Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
+        //          Point aParentPixPos( pWin->LogicToPixel( aParentLogPos ) );
+        Point aParentPixPos( GetMap()->CoreToPixel( aParentLogPos ) );
+        aPixPos.X() -= aParentPixPos.X();
+        aPixPos.Y() -= aParentPixPos.Y();
     }
+
     awt::Point aLoc( aPixPos.X(), aPixPos.Y() );
 
     return aLoc;
@@ -942,12 +948,11 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
 
     SwRect aLogBounds( GetBounds( GetFrm() ) ); // twip rel to doc root
     Point aPixPos( 0, 0 );
-    if( !aLogBounds.IsEmpty() )
-    {
-        //      aPixPos = pWin->LogicToPixel( aLogBounds.Pos() );
-        aPixPos = GetMap()->CoreToPixel( aLogBounds.Pos() );
-        aPixPos = pWin->OutputToAbsoluteScreenPixel( aPixPos );
-    }
+
+    //      aPixPos = pWin->LogicToPixel( aLogBounds.Pos() );
+    aPixPos = GetMap()->CoreToPixel( aLogBounds.Pos() );
+    aPixPos = pWin->OutputToAbsoluteScreenPixel( aPixPos );
+
     awt::Point aLoc( aPixPos.X(), aPixPos.Y() );
 
     return aLoc;
@@ -966,6 +971,14 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
 
     SwRect aLogBounds( GetBounds( GetFrm() ) ); // twip rel to doc root
     Size aPixSize( 0, 0 );
+
+    if( GetFrm()->IsPageFrm() &&
+        static_cast < const SwPageFrm * >( GetFrm() )->IsEmptyPage() )
+    {
+        ASSERT( GetShell()->IsPreView(), "empty page accessible?" );
+        if( GetShell()->IsPreView() )
+            aLogBounds.SSize( GetMap()->GetPreViewPageSize() );
+    }
     // The size may differ by one pixel, dependent on the position of
     // the rectangle. For that reason we first have to do the conversion
     // into pixel and then have to get the size.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
+ *  last change: $Author: mib $ $Date: 2002-05-29 14:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef _CELLFRM_HXX
 #include <cellfrm.hxx>
+#endif
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
 #endif
 #ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
@@ -226,7 +229,16 @@ inline sal_Bool SwFrmOrObj::IsVisibleChildrenOnly() const
 inline SwRect SwFrmOrObj::GetBox() const
 {
     if( pFrm )
-        return pFrm->Frm();
+    {
+        if( pFrm->IsPageFrm() &&
+            static_cast< const SwPageFrm * >( pFrm )->IsEmptyPage() )
+        {
+            SwRect aBox( pFrm->Frm().Left(), pFrm->Frm().Top()-1, 1, 1 );
+            return aBox;
+        }
+        else
+            return pFrm->Frm();
+    }
     else if( pObj )
         return SwRect( pObj->GetBoundRect() );
 }
@@ -234,7 +246,16 @@ inline SwRect SwFrmOrObj::GetBox() const
 inline SwRect SwFrmOrObj::GetBounds() const
 {
     if( pFrm )
-        return pFrm->PaintArea();
+    {
+        if( pFrm->IsPageFrm() &&
+            static_cast< const SwPageFrm * >( pFrm )->IsEmptyPage() )
+        {
+            SwRect aBox( pFrm->Frm().Left(), pFrm->Frm().Top()-1, 0, 0 );
+            return aBox;
+        }
+        else
+            return pFrm->PaintArea();
+    }
     else if( pObj )
         return SwRect( pObj->GetBoundRect() );
 }
