@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-15 09:34:53 $
+ *  last change: $Author: fs $ $Date: 2001-01-18 16:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,9 +176,14 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
         Reference<XPropertySet> xColumn;
         for(;pBegin != pEnd;++pBegin)
         {
-            m_xColumns->getByName(*pBegin) >>= xColumn;
-            OSL_ENSHURE(xColumn.is(),"Column is null!");
-            sal_Int32 nDataType;
+            if (m_xColumns->hasByName(*pBegin))
+            {
+                m_xColumns->getByName(*pBegin) >>= xColumn;
+                OSL_ENSHURE(xColumn.is(),"DlgFilterCrit::DlgFilterCrit: Column is null!");
+            }
+            else
+                OSL_ENSHURE(sal_False, "DlgFilterCrit::DlgFilterCrit: invalid column name!");
+            sal_Int32 nDataType(0);
             xColumn->getPropertyValue(PROPERTY_TYPE) >>= nDataType;
             sal_Int32 eColumnSearch = dbtools::getSearchColumnFlag(m_xConnection,nDataType);
             // TODO
@@ -694,7 +699,8 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
     pComp->Clear();
 
     Reference<XPropertySet> xColumn;
-    m_xColumns->getByName(aName) >>= xColumn;
+    if (m_xColumns->hasByName(aName))
+        m_xColumns->getByName(aName) >>= xColumn;
     if(xColumn.is())
     {
         sal_Int32 nDataType;
