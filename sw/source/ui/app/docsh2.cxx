@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-23 18:12:37 $
+ *  last change: $Author: jp $ $Date: 2000-10-26 11:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@
 #include <sfx2/new.hxx>
 #endif
 #ifndef _IODLG_HXX
-#include "sfx2/iodlg.hxx"
+#include <sfx2/iodlg.hxx>
 #endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
@@ -136,6 +136,9 @@
 #endif
 #ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
+#endif
+#ifndef _SFXFRAME_HXX
+#include <sfx2/frame.hxx>
 #endif
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
@@ -1277,15 +1280,29 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                         SfxStringItem aName( SID_FILE_NAME, aFileName );
                         SfxStringItem aReferer( SID_REFERER, aEmptyStr );
+                        SfxFrameItem* pFrameItem = 0;
 
-                        SfxViewFrame::Current()->GetDispatcher()->Execute(
+                        SfxViewShell* pViewShell;
+                        if( GetView() )
+                        {
+                            pViewShell = (SfxViewShell*)GetView();
+                            pFrameItem = new SfxFrameItem( SID_DOCFRAME,
+                                                pViewShell->GetViewFrame() );
+                        }
+                        else
+                            pViewShell = SfxViewShell::Current();
+
+                        pViewShell->GetDispatcher()->Execute(
                                 SID_OPENDOC,
                                 SFX_CALLMODE_ASYNCHRON,
                                 &aName,
                                 &aReferer,
-                                0L );
+                                pFrameItem, 0L );
 
-                        DoClose();
+                        if( pFrameItem )
+                            delete pFrameItem;
+                        else
+                            DoClose();
                     }
                     else if( !rReq.IsAPI() )
                     {
@@ -1675,6 +1692,9 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/10/23 18:12:37  jp
+    ToggleBrowserMode without GPF
+
     Revision 1.4  2000/10/19 13:16:35  jp
     DocSh:Execute: call DoClose after the new load is call
 
