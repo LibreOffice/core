@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-03 17:25:23 $
+ *  last change: $Author: hdu $ $Date: 2002-04-15 12:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #define M_PI 3.1415926536
 #include <malloc.h>
 #define alloca _alloca
+#elif defined(SOLARIS)
+#include <alloca.h>
 #endif
 
 //#define _SV_OUTDEV_CXX
