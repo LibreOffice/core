@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:00:54 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -14367,9 +14367,9 @@ String STR_IMPRESS_DOCUMENT
 };
 String STR_IMPRESS_DOCUMENT_FULLTYPE_60
 {
-    Text = "%PRODUCTNAME 6.0 Präsentation" ;
-    Text [ ENGLISH ] = "StarOffice 6.0 Presentation" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Presentation" ;
+    Text = "%PRODUCTNAME %PRODUCTVERSION Präsentation" ;
+    Text [ ENGLISH ] = "StarOffice %PRODUCTVERSION Presentation" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTVERSION Presentation" ;
     Text [ dutch ] = "%PRODUCTNAME 6.0 Presentatie" ;
     Text [ swedish ] = "%PRODUCTNAME 6.0-presentation" ;
     Text [ danish ] = "%PRODUCTNAME 6.0-præsentation" ;
@@ -14549,9 +14549,9 @@ String STR_GRAPHIC_DOCUMENT_FULLTYPE_50
 };
 String STR_GRAPHIC_DOCUMENT_FULLTYPE_60
 {
-    Text = "%PRODUCTNAME 6.0 Zeichnung" ;
-    Text [ ENGLISH ] = "StarOffice 6.0 Drawing" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Drawing" ;
+    Text = "%PRODUCTNAME %PRODUCTVERSION Zeichnung" ;
+    Text [ ENGLISH ] = "StarOffice %PRODUCTVERSION Drawing" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTVERSION Drawing" ;
     Text [ portuguese ] = "%PRODUCTNAME 6.0 Desenho" ;
     Text [ portuguese_brazilian ] = "Desenho %PRODUCTNAME 6.0" ;
     Text [ swedish ] = "%PRODUCTNAME 6.0-teckning" ;
