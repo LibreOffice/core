@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Frame.idl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 20:11:49 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ published service Frame
         no possibility to check for enabled/disabled recording then.
         </p>
 
-    @since #107627#
+    @since OOo 1.1.2
      */
     [optional, property] XDispatchRecorderSupplier RecorderSupplier;
 
