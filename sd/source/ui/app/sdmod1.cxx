@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-27 09:12:04 $
+ *  last change: $Author: dl $ $Date: 2000-11-27 09:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,23 +790,36 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     }
 
     if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_AUTOSPELL_CHECK ) ||
-        SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_AUTOSPELL_MARKOFF ) ||
-        SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_ATTR_LANGUAGE ) )
+        SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_AUTOSPELL_MARKOFF ) )
     {
-        BOOL bCheck;
-        BOOL bMarkOff;
-
         SdDrawDocShell* pDocSh = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
         if( pDocSh )
         {
             SdDrawDocument* pDoc = pDocSh->GetDoc();
-            bCheck = pDoc->GetOnlineSpell();
-            bMarkOff = pDoc->GetHideSpell();
-
-            rItemSet.Put( SfxBoolItem( SID_AUTOSPELL_CHECK, bCheck ) );
-            rItemSet.Put( SfxBoolItem( SID_AUTOSPELL_MARKOFF, bMarkOff ) );
-            rItemSet.Put( SvxLanguageItem( pDoc->GetLanguage() ) );
+            rItemSet.Put( SfxBoolItem( SID_AUTOSPELL_CHECK, pDoc->GetOnlineSpell() ) );
+            rItemSet.Put( SfxBoolItem( SID_AUTOSPELL_MARKOFF, pDoc->GetHideSpell() ) );
         }
+    }
+
+    if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_ATTR_LANGUAGE ) )
+    {
+        SdDrawDocShell* pDocSh = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
+        if( pDocSh )
+            rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage() ) );
+    }
+
+    if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_ATTR_CHAR_CJK_LANGUAGE ) )
+    {
+        SdDrawDocShell* pDocSh = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
+        if( pDocSh )
+            rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguageCJK() ) );
+    }
+
+    if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_ATTR_CHAR_CTL_LANGUAGE ) )
+    {
+        SdDrawDocShell* pDocSh = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
+        if( pDocSh )
+            rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguageCTL() ) );
     }
 }
 
