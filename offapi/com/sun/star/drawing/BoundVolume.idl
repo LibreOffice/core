@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BoundVolume.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-20 14:20:50 $
+ *  last change: $Author: arellano $ $Date: 2001-04-23 23:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,17 +71,17 @@
 
 //=============================================================================
 
-/** specifies a 3-dimensional boundary volume with two positions.
+/** specifies a three-dimensional boundary volume with two positions.
  */
 struct BoundVolume
 {
-    /** this is the minimum position inside the boundary volume
+    /** this is the minimum position inside the boundary volume.
      */
     Position3D min;
 
     //-------------------------------------------------------------------------
 
-    /** this is the maximum position inside the boundary volume
+    /** this is the maximum position inside the boundary volume.
      */
     Position3D max;
 };
