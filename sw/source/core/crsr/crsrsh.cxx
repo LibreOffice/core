@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:04:06 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2931,6 +2931,11 @@ FASTBOOL SwCrsrShell::IsSelection() const
 {
     return IsTableMode() || pCurCrsr->HasMark() ||
             pCurCrsr->GetNext() != pCurCrsr;
+}
+// returns if multiple cursors are available
+FASTBOOL SwCrsrShell::IsMultiSelection() const
+{
+    return pCurCrsr->GetNext() != pCurCrsr;
 }
 
 // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
