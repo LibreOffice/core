@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-19 13:54:59 $
+ *  last change: $Author: cmc $ $Date: 2002-09-23 11:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1643,8 +1643,18 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
         return rWrt;
     rWW8Wrt.Out_SfxBreakItems(pFmt->GetAttrSet(), rNode);
 
-    SwTwips nPageSize = 0, nTblOffset = 0;
+    /*
+    ALWAYS relative (nPageSize + ( nPageSize / 10 )) < nTblSz, when HORI_FULL,
+    in that case the cell width's and table width's are not real. The table
+    width is maxed and cells relative, so we need the frame (generally page)
+    width that the table is in to work out the true widths.
+    */
+    bool bRelBoxSize = true;
+    SwTwips nTblSz = pFmt->GetFrmSize().GetWidth();
 
+    SwTwips nPageSize = nTblSz;
+    const SwFmtHoriOrient &rOrient = pFmt->GetHoriOrient();
+    if (rOrient.GetHoriOrient() == HORI_FULL)
     {
         Point aPt;
         SwRect aRect(pFmt->FindLayoutRect(false, &aPt));
@@ -1666,10 +1676,8 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             nPageSize = aRect.Width();
     }
 
-    /*ALWAYS relativ (nPageSize + ( nPageSize / 10 )) < nTblSz*/;
-    bool bRelBoxSize = true;
-    SwTwips nTblSz = pFmt->GetFrmSize().GetWidth();
     WW8Bytes aAt( 128, 128 );   // Attribute fuer's Tabellen-Zeilenende
+    SwTwips nTblOffset = 0;
     USHORT nStdAtLen = rWW8Wrt.StartTableFromFrmFmt(aAt, pFmt, nTblOffset);
     static const BYTE aNullBytes[] = { 0, 0, 0, 0 };
 
