@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:02:45 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ void VBA_Impl::Output( int nLen, const sal_uInt8*pData )
 int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
 {
     SvStorageStreamRef xVBAProject;
-    xVBAProject = rxVBAStorage->OpenStream( String(
+    xVBAProject = rxVBAStorage->OpenSotStream( String(
                                 RTL_CONSTASCII_STRINGPARAM( "_VBA_PROJECT" ),
                                 RTL_TEXTENCODING_MS_1252 ),
                     STREAM_STD_READ | STREAM_NOCREATE );
@@ -467,7 +467,7 @@ bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
 {
     /* beginning test for vba stuff */
     bool bRet = false;
-    SvStorageRef xMacros= xStor->OpenStorage( rToplevel,
+    SvStorageRef xMacros= xStor->OpenSotStorage( rToplevel,
                                     STREAM_READWRITE | STREAM_NOCREATE |
                                     STREAM_SHARE_DENYALL );
     if( !xMacros.Is() || SVSTREAM_OK != xMacros->GetError() )
@@ -476,7 +476,7 @@ bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
     }
     else
     {
-        xVBA = xMacros->OpenStorage( rSublevel,
+        xVBA = xMacros->OpenSotStorage( rSublevel,
                                     STREAM_READWRITE | STREAM_NOCREATE |
                                     STREAM_SHARE_DENYALL );
         if( !xVBA.Is() || SVSTREAM_OK != xVBA->GetError() )
@@ -500,7 +500,7 @@ const StringArray &VBA_Impl::Decompress(sal_uInt16 nIndex, int *pOverflow)
     aVBAStrings.SetSize(1);
     aVBAStrings.Put(0,new String);
 
-    xVBAStream = xVBA->OpenStream( pOffsets[nIndex].sName,
+    xVBAStream = xVBA->OpenSotStream( pOffsets[nIndex].sName,
                         STREAM_STD_READ | STREAM_NOCREATE );
     if (pOverflow)
         *pOverflow=0;
