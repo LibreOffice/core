@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdibrow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:57:12 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,13 +542,13 @@ void _SdrItemBrowserControl::SetDirty()
     aSetDirtyHdl.Call(this);
 }
 
-Rectangle _SdrItemBrowserControl::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnId,sal_Int32 nIndex)
+Rectangle _SdrItemBrowserControl::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)
 {
     // no accessibility implementation required
     return Rectangle();
 }
 
-sal_Int32 _SdrItemBrowserControl::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnId,const Point& _rPoint)
+sal_Int32 _SdrItemBrowserControl::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)
 {
     // no accessibility implementation required
     return -1;
