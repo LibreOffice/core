@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSingleSelectQueryComposer.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-19 11:05:40 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <com/sun/star/sdbc/SQLException.idl>
 #endif
 
+#ifndef __com_sun_star_sdb_XSingleSelectQueryAnalyzer_idl__
+#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.idl>
+#endif
+
 //=============================================================================
 
  module com {  module sun {  module star {  module sdb {
@@ -88,7 +92,7 @@
 
     @see com::sun::star::sdb::SingleSelectQueryComposer
  */
-interface XSingleSelectQueryComposer: com::sun::star::uno::XInterface
+interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
 {
     //-------------------------------------------------------------------------
     // FILTER
@@ -141,18 +145,6 @@ interface XSingleSelectQueryComposer: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
 
-    /** appends an additional part to the group criteria of the select
-        statement. The column must be a <type scope="com::sun::star::sdbcx">Column</type>.
-        @param column
-            the column which is used to create a group part
-        @throws com::sun::star::sdbc::SQLException
-            if a database access error occurs.
-     */
-    void appendGroupByColumn([in] com::sun::star::beans::XPropertySet column)
-            raises (com::sun::star::sdbc::SQLException);
-
-    //-------------------------------------------------------------------------
-
     /** makes it possibile to set a group for the query.
         @param group
             the group part to set
@@ -162,6 +154,18 @@ interface XSingleSelectQueryComposer: com::sun::star::uno::XInterface
             or the statement isn't parseable..
      */
     void setGroup([in] string group)
+            raises (com::sun::star::sdbc::SQLException);
+
+    //-------------------------------------------------------------------------
+
+    /** appends an additional part to the group criteria of the select
+        statement. The column must be a <type scope="com::sun::star::sdbcx">Column</type>.
+        @param column
+            the column which is used to create a group part
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+     */
+    void appendGroupByColumn([in] com::sun::star::beans::XPropertySet column)
             raises (com::sun::star::sdbc::SQLException);
 
     //-------------------------------------------------------------------------
@@ -178,6 +182,7 @@ interface XSingleSelectQueryComposer: com::sun::star::uno::XInterface
      */
     void setHavingClause([in] string filter)
             raises (com::sun::star::sdbc::SQLException);
+
     //-------------------------------------------------------------------------
 
     /** appends a new set of HAVING filter criteria which is split into levels.
@@ -190,7 +195,7 @@ interface XSingleSelectQueryComposer: com::sun::star::uno::XInterface
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */
-    void setStructuredHavingFilter([in] sequence< sequence<com::sun::star::beans::PropertyValue> > filter)
+    void setStructuredHavingClause([in] sequence< sequence<com::sun::star::beans::PropertyValue> > filter)
             raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
@@ -206,11 +211,24 @@ interface XSingleSelectQueryComposer: com::sun::star::uno::XInterface
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */
-    void appendHavingFilterByColumn([in] com::sun::star::beans::XPropertySet column,[in] boolean andCriteria)
+    void appendHavingClauseByColumn([in] com::sun::star::beans::XPropertySet column,[in] boolean andCriteria)
             raises (com::sun::star::sdbc::SQLException);
 
     //-------------------------------------------------------------------------
     // ORDER BY
+    //-------------------------------------------------------------------------
+
+    /** makes it possibile to set a sort condition for the query.
+        @param order
+            the order part to set
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs
+            or the order isn't valid
+            or the statement isn't parseable.
+     */
+    void setOrder([in] string order)
+            raises (com::sun::star::sdbc::SQLException);
+
     //-------------------------------------------------------------------------
 
     /** appends an additional part to the sort order criteria of the select
@@ -227,17 +245,51 @@ interface XSingleSelectQueryComposer: com::sun::star::uno::XInterface
             raises (com::sun::star::sdbc::SQLException);
 
     //-------------------------------------------------------------------------
+    // culmulative composing
+    //-------------------------------------------------------------------------
 
-    /** makes it possibile to set a sort condition for the query.
-        @param order
-            the order part to set
-        @throws com::sun::star::sdbc::SQLException
-            if a database access error occurs
-            or the order isn't valid
-            or the statement isn't parseable.
-     */
-    void setOrder([in] string order)
-            raises (com::sun::star::sdbc::SQLException);
+    /** sets a new elementary query for the composer
+
+        <p>An elementary query or statement is a (single select) statement whose parts are
+        not covered by the various set and get methods of the composer. That is, if the
+        elementary statement contains a filter clause, a call to
+        <member>XSingleSelectQueryAnalyzer::getFilter</member> will not return you this
+        filter. Instead, only filters which have been set using for instance <member>setFilter</member>
+        are covered by the get methods.</p>
+
+        <p>The only method which takes all parts of the elementary statement into account is
+        <member>XSingleSelectQueryAnalyzer::getQuery</member>, which always returns the complete
+        composed query.</p>
+
+        <p>As a result, you can use the composer to build culmulative filter expressions. That
+        is, you can set <member>ElementaryQuery</member> to a statement already containing
+        filters, and then use <member>setFilter</member> to append additional filters.</p>
+
+        <p>The very same holds for sort orders, <code>HAVING</code> and <code>GROUP BY</code>
+        clauses.</p>
+
+        <p>There are various use cases for this. For instance, you might want to use the
+        statement represented by a <type>QueryDefinition</type>, and extend it with additional
+        filters or sort orders, while not touching the respective parts already present
+        in <member>QueryDefinition::Command</type>. This can be achieved by setting the
+        <member>QueryDefinition::Command</type> as <member>ElementaryQuery</member> of a
+        <type>SingleSelectQueryComposer</type>.</p>
+
+        <p>If, in such a scenario, you would be interested in the filter part of the
+        <member>QueryDefinition::Command</type>, you would set it via
+        <member>XSingleSelectQueryAnalyzer::setQuery</member>, and retrieve the filter
+        part via <member>XSingleSelectQueryAnalyzer::getFilter</member>.</p>
+
+        <p>If you'd be interested in the composed filter, you would set the
+        <member>QueryDefinition::Command</type> as <member>ElementaryQuery</member>, add your
+        filter, and propagate the resulting query (<member>XSingleSelectQueryAnalyzer::getQuery</member>)
+        to an <type>SingleSelectQueryAnalyzer</type> instance via
+        <member>XSingleSelectQueryAnalyzer::setQuery</member>.</p>
+    */
+    [attribute] string ElementaryQuery
+    {
+        set raises (com::sun::star::sdbc::SQLException);
+    };
 };
 
 //=============================================================================
