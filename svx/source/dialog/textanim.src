@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2001-02-06 15:21:06 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     StringList [ chinese_traditional ] =
     {
             < "µL®ÄªG" ; Default ; > ;
-        < "°{Ã{" ; Default ; > ;
+        < "°{°Ê" ; Default ; > ;
         < "«ùÄò" ; Default ; > ;
         < "¨Ó¦^²¾°Ê" ; Default ; > ;
         < "³æ¦V¶i¤J" ; Default ; > ;
@@ -280,7 +280,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ greek ] = "Ğñïò ôá ğÜíù";
         QuickHelpText[ polish ] = "W górê";
         QuickHelpText[ japanese ] = "ã‚Ö";
-        QuickHelpText[ korean ] = "To Top";
+        QuickHelpText[ korean ] = "À§·Î!";
         QuickHelpText[ chinese_simplified ] = "ÏòÉÏ";
         QuickHelpText[ chinese_traditional ] = "¦V¤W";
         QuickHelpText[ arabic ] = "Åáì ÃÚáì";
@@ -308,7 +308,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ greek ] = "Ğñïò ôá áñéóôåñÜ";
         QuickHelpText[ polish ] = "W lewo";
         QuickHelpText[ japanese ] = "¶‚Ö";
-        QuickHelpText[ korean ] = "To Left";
+        QuickHelpText[ korean ] = "¿ŞÂÊÀ¸·Î!";
         QuickHelpText[ chinese_simplified ] = "Ïò×ó";
         QuickHelpText[ chinese_traditional ] = "¦V¥ª";
         QuickHelpText[ arabic ] = "Åáì ÇáíÓÇÑ";
@@ -336,7 +336,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ greek ] = "Ğñïò ôá äåîéÜ";
         QuickHelpText[ polish ] = "W prawo";
         QuickHelpText[ japanese ] = "‰E‚Ö";
-        QuickHelpText[ korean ] = "To Right";
+        QuickHelpText[ korean ] = "¿À¸¥ÂÊÀ¸·Î!";
         QuickHelpText[ chinese_simplified ] = "ÏòÓÒ";
         QuickHelpText[ chinese_traditional ] = "¦V¥k";
         QuickHelpText[ arabic ] = "Åáì Çáíãíä";
@@ -364,7 +364,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ greek ] = "Ğñïò ôá êÜôù";
         QuickHelpText[ polish ] = "W dó³";
         QuickHelpText[ japanese ] = "‰º‚Ö";
-        QuickHelpText[ korean ] = "To Bottom";
+        QuickHelpText[ korean ] = "¾Æ·¡·Î!";
         QuickHelpText[ chinese_simplified ] = "ÏòÏÂ";
         QuickHelpText[ chinese_traditional ] = "¦V¤U";
         QuickHelpText[ arabic ] = "Åáì ÃÓİá";
@@ -442,7 +442,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ danish ] = "Endeløs" ;
         Text [ portuguese ] = "~Contínuo" ;
         Text [ portuguese_brazilian ] = "~Endlos" ;
-        Text[ chinese_simplified ] = "ÎŞÏŞ(~C)";
+        Text[ chinese_simplified ] = "²»¼ä¶Ï(~C)";
         Text[ russian ] = "Áåñêîíå÷íî";
         Text[ polish ] = "Bez koñca";
         Text[ japanese ] = "´İÄŞÚ½(~C)";
@@ -564,7 +564,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ japanese ] = "½Ã¯Ìß”";
         Text[ chinese_traditional ] = "º¥¶i";
         Text[ greek ] = "ÂŞìá";
-        Text[ korean ] = "Áõ°¡ºĞ";
+        Text[ korean ] = "Áõ°¡Æø";
         Text[ arabic ] = "ÇáÊÒÇíÏ";
         Text[ turkish ] = "Adım";
         Text[ language_user1 ] = " ";
@@ -640,7 +640,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ spanish ] = "Retardo" ;
         Text [ french ] = "Cadence" ;
         Text [ dutch ] = "Vertraging" ;
-        Text [ swedish ] = "Försening" ;
+        Text [ swedish ] = "Fördröjning" ;
         Text [ danish ] = "Forsinkelse" ;
         Text [ portuguese_brazilian ] = "Verzögerung" ;
         Text [ portuguese ] = "Atraso" ;
@@ -661,7 +661,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     Text[ japanese ] = "±ÆÒ°¼®İÃ·½Ä";
     Text[ chinese_traditional ] = "°ÊºA¤å¦r";
     Text[ greek ] = "Åöİ êßíçóçò êåéìİíïõ";
-    Text[ korean ] = "¾Ö´Ï¸ŞÀÌ¼Ç";
+    Text[ korean ] = "ÅØ½ºÆ® ¾Ö´Ï¸ŞÀÌ¼Ç";
     Text[ arabic ] = "ÊÃËíÑÇÊ ãÊÍÑßÉ";
     Text[ turkish ] = "Metin canlandırma";
     Text[ language_user1 ] = " ";
@@ -728,7 +728,7 @@ TabDialog RID_SVXDLG_TEXT
                 Text [ spanish ] = "Animación de texto" ;
                 Text [ french ] = "Défilement de texte" ;
                 Text [ dutch ] = "Tekstanimatie" ;
-                Text [ swedish ] = "Löptext" ;
+                Text [ swedish ] = "Animerad text" ;
                 Text [ danish ] = "Animeret tekst" ;
                 Text [ portuguese_brazilian ] = "Lauftext" ;
                 Text [ portuguese ] = "Texto animado" ;
@@ -738,7 +738,7 @@ TabDialog RID_SVXDLG_TEXT
                 Text[ japanese ] = "Ã·½Ä±ÆÒ°¼®İ";
                 Text[ chinese_traditional ] = "°ÊºA¤å¦r";
                 Text[ greek ] = "Êéíïıìåíï êåßìåíï";
-                Text[ korean ] = "ÅØ½ºÆ® ¾Ö´Ï¸ŞÀÌ¼Ç";
+                Text[ korean ] = "¾Ö´Ï¸ŞÀÌ¼Ç ÅØ½ºÆ®";
                 Text[ arabic ] = "äÕ ãÊÍÑß";
                 Text[ turkish ] = "Metin canlandırma";
                 Text[ language_user1 ] = " ";
