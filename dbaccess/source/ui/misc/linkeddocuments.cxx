@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:10:53 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,31 @@ namespace dbaui
     sal_Bool OLinkedDocumentsAccess::newFormWithPilot(const String& _rDataSourceName, const sal_Int32 _nCommandType,
         const String& _rObjectName, const Reference< XConnection >& _rxConnection)
     {
+        try
+        {
+            ::svx::ODataAccessDescriptor aDesc;
+            aDesc.setDataSource(::rtl::OUString(_rDataSourceName));
+            if ( _nCommandType != -1 )
+                aDesc[::svx::daCommandType] <<= _nCommandType;
+            if ( _rObjectName.Len() )
+                aDesc[::svx::daCommand] <<= ::rtl::OUString(_rObjectName);
+            if ( _rxConnection.is() )
+                aDesc[::svx::daConnection] <<= _rxConnection;
+
+            Reference< XJobExecutor > xFormWizard(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.form.CallFormWizard")),aDesc.createAnySequence()),UNO_QUERY);
+            if ( xFormWizard.is() )
+                xFormWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
+
+        }
+        catch(const Exception&)
+        {
+            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newReport: caught an exception while loading the object!");
+        }
+        return sal_True;
+
+
+
+
         SfxApplication* pApp = SFX_APP();
         SbxArray* pParameter            = new SbxArray();
         SbxVariable* pDataSourceName    = new SbxVariable();
@@ -311,6 +336,7 @@ namespace dbaui
 
         return ERRCODE_NONE != aResult;
     }
+
     //------------------------------------------------------------------
     sal_Bool OLinkedDocumentsAccess::newReportWithPilot(const String& _rDataSourceName, const sal_Int32 _nCommandType,
         const String& _rObjectName, const Reference< XConnection >& _rxConnection)
@@ -337,6 +363,40 @@ namespace dbaui
         }
         return sal_True;
     }
+
+
+    //------------------------------------------------------------------
+    sal_Bool OLinkedDocumentsAccess::newTableWithPilot(const String& _rDataSourceName, const sal_Int32 _nCommandType,
+        const String& _rObjectName, const Reference< XConnection >& _rxConnection)
+    {
+        try
+        {
+            ::svx::ODataAccessDescriptor aDesc;
+            aDesc.setDataSource(::rtl::OUString(_rDataSourceName));
+            if ( _nCommandType != -1 )
+                aDesc[::svx::daCommandType] <<= _nCommandType;
+            if ( _rObjectName.Len() )
+                aDesc[::svx::daCommand] <<= ::rtl::OUString(_rObjectName);
+            if ( _rxConnection.is() )
+                aDesc[::svx::daConnection] <<= _rxConnection;
+
+            Reference< XJobExecutor > xTableWizard(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.table.CallTableWizard")),aDesc.createAnySequence()),UNO_QUERY);
+
+            if ( xTableWizard.is() )
+                xTableWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
+
+        }
+        catch(const Exception&)
+        {
+            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newTable: caught an exception while loading the object!");
+        }
+        return sal_True;
+    }
+
+
+
+
+
 
     //------------------------------------------------------------------
     sal_Bool OLinkedDocumentsAccess::newQueryWithPilot(const String& _rDataSourceName, const sal_Int32 _nCommandType,
