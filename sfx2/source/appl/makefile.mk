@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-25 15:42:35 $
+#   last change: $Author: rt $ $Date: 2004-03-05 08:53:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 IMGLST_SRS=$(SRS)$/appl.srs
-BMP_IN=$(PRJ)$/win/res
+BMP_IN=$(PRJ)$/win$/res
 
 # w.g. compilerbugs
 .IF "$(GUI)"=="WNT"
