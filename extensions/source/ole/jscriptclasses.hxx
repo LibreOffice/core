@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jscriptclasses.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:40 $
+ *  last change: $Author: jl $ $Date: 2000-10-19 10:51:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,18 @@
 #ifndef __JSCRIPTCLASSES_HXX
 #define __JSCRIPTCLASSES_HXX
 #include <tools/presys.h>
-#include "stdafx.h"
+//#include "stdafx.h"
+#define STRICT
+#define _WIN32_WINNT 0x0400
+#define _WIN32_DCOM
+#ifdef _DEBUG
+//#define _ATL_DEBUG_INTERFACES
+#endif
+
+
+#include <atlbase.h>
+extern CComModule _Module;
+#include <atlcom.h>
 #include <tools/postsys.h>
 
 #include "comifaces.hxx"
