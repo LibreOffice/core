@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mtg $ $Date: 2000-11-21 12:09:19 $
+#   last change: $Author: mtg $ $Date: 2001-04-19 14:12:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,8 @@ NO_BSYMBOLIC=TRUE
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=	\
     $(SLB)$/zipapi.lib \
-    $(SLB)$/zippackage.lib
+    $(SLB)$/zippackage.lib \
+    $(SLB)$/manifest.lib
 
 # --- Shared-Library -----------------------------------------------
 
