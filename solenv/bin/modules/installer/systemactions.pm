@@ -2,9 +2,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 08:29:46 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:55:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -144,7 +144,23 @@ sub create_directories
 
     $installer::globals::unpackpath =~ s/\Q$installer::globals::separator\E\s*$//;  # removing ending slashes and backslashes
 
-    my $path = $installer::globals::unpackpath . $installer::globals::separator;     # this path already exists
+    my $path = "";
+
+    if (( $newdirectory eq "zipfiles" ) || ( $newdirectory =~ /rdb\s*$/ ))  # special handling for zip files and services file because of performance reasons
+    {
+        if ( $ENV{'TMP'} ) { $path = $ENV{'TMP'}; }
+        elsif ( $ENV{'TEMP'} ) { $path = $ENV{'TEMP'}; }
+        else { $path = $installer::globals::unpackpath; }
+        $path =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
+        $path = $path . $installer::globals::separator;
+    }
+    else
+    {
+        $path = $installer::globals::unpackpath . $installer::globals::separator;
+    }
+
+    $infoline = "create_directories: Using $path for $newdirectory !\n";
+    push( @installer::globals::logfileinfo, $infoline);
 
     if ($newdirectory eq "unzip" )  # special handling for common directory
     {
@@ -752,8 +768,9 @@ sub rename_directory
     }
     else
     {
-        $infoline = "\nATTENTION: Could not move directory from $olddir to $newdir, \"rename_directory\"\n";
-        push(@installer::globals::logfileinfo, $infoline);
+        installer::exiter::exit_program("ERROR: Could not move directory from $olddir to $newdir", "rename_directory");
+        # $infoline = "\nATTENTION: Could not move directory from $olddir to $newdir, \"rename_directory\"\n";
+        # push(@installer::globals::logfileinfo, $infoline);
     }
 
     return $newdir;
