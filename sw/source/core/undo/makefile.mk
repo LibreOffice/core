@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+#   last change: $Author: vg $ $Date: 2002-11-26 13:35:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ LIBFLAGS=/NOI /NOE /PAGE:128
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
+        SwUndoTempAutoCorr.cxx \
         docundo.cxx \
         rolbck.cxx \
         unattr.cxx \
@@ -108,6 +109,7 @@ CXXFILES = \
 
 
 SLOFILES =	\
+        $(SLO)$/SwUndoTempAutoCorr.obj \
         $(SLO)$/docundo.obj \
         $(SLO)$/rolbck.obj \
         $(SLO)$/unattr.obj \
