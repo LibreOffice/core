@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polygontemplate.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:50 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,8 +299,8 @@ public:
             return sal_True;
 
         // beziercounts are equal and not zero; compare them
-        DBG_ASSERT(0L != mpVectors, "Error: Bezier list needs to exist here(!)");
-        DBG_ASSERT(0L != rPointList.mpVectors, "Error: Bezier list needs to exist here(!)");
+        OSL_ENSURE(0L != mpVectors, "Error: Bezier list needs to exist here(!)");
+        OSL_ENSURE(0L != rPointList.mpVectors, "Error: Bezier list needs to exist here(!)");
 
         return (*mpVectors == *rPointList.mpVectors);
     }
