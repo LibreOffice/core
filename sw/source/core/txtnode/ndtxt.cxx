@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:22:41 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3046,7 +3046,19 @@ const SwNodeNum * SwTxtNode::GetNum(BOOL bUpdate) const
     if (pRule)
     {
         if (! pNdNum)
-            pNdNum = new SwNodeNum(0);
+        {
+            BYTE nOutlineLevel = NO_NUMBERING;
+
+            SwTxtFmtColl * pColl = GetTxtColl();
+
+            if (pColl)
+                nOutlineLevel = pColl->GetOutlineLevel();
+
+            if (nOutlineLevel != NO_NUMBERING)
+                pNdNum = new SwNodeNum(nOutlineLevel);
+            else
+                pNdNum = new SwNodeNum(0);
+        }
 
         if (bUpdate && pRule->IsInvalidRule())
             const_cast<SwDoc *>(GetDoc())->UpdateNumRule(*pRule, 0);
