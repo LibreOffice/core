@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:35:50 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 11:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,8 @@ SwIoDetect aReaderWriter[ MAXFILTER ] = {
 /*last*/ SwIoEntry(FILTER_TEXT,     4,          &::GetASCWriter,    TRUE)
 };
 
+const char* pSw = "swriter";
+const char* pSwWeb = "swriter/web";
 
 // Filter erkennung
 struct W1_FIB
@@ -338,12 +340,11 @@ const String SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
     return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "" ));
 }
 const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
-    const SfxFactoryFilterContainer* pCnt)
+    const SfxFilterContainer* pCnt)
 {
-    const SfxFactoryFilterContainer* pFltCnt = pCnt ? pCnt :
-        ( IsDocShellRegistered()
-            ? SwDocShell::Factory().GetFilterContainer()
-            : SwWebDocShell::Factory().GetFilterContainer() );
+    SfxFilterContainer aCntSw( String::CreateFromAscii( pSw ) );
+    SfxFilterContainer aCntSwWeb( String::CreateFromAscii( pSwWeb ) );
+    const SfxFilterContainer* pFltCnt = IsDocShellRegistered() ? &aCntSw : &aCntSwWeb;
 
     do {
         if( pFltCnt )
@@ -354,14 +355,14 @@ const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
                 if( ( pFilter = pFltCnt->GetFilter( i ))->GetUserData() == rFmtNm )
                     return pFilter;
         }
-        if( pCnt || pFltCnt == SwWebDocShell::Factory().GetFilterContainer())
+        if( pCnt || pFltCnt == &aCntSwWeb )
             break;
-        pFltCnt = SwWebDocShell::Factory().GetFilterContainer();
+        pFltCnt = &aCntSwWeb;
     } while( TRUE );
     return 0;
 }
 
-FASTBOOL SwIoSystem::IsValidStgFilter(SvStorage& rStg, const SfxFilter& rFilter)
+FASTBOOL SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
 {
     ULONG nStgFmtId = rStg.GetFormat();
     /*#i8409# We cannot trust the clipboard id anymore :-(*/
@@ -388,8 +389,8 @@ FASTBOOL SwIoSystem::IsValidStgFilter(SvStorage& rStg, const SfxFilter& rFilter)
                        rFilter.GetUserData().EqualsAscii(FILTER_WW8));
             if (bRet && !rFilter.IsAllowedAsTemplate())
             {
-                SvStorageStreamRef xRef =
-                    rStg.OpenStream(String::CreateFromAscii("WordDocument"),
+                SotStorageStreamRef xRef =
+                    rStg.OpenSotStream(String::CreateFromAscii("WordDocument"),
                     STREAM_STD_READ | STREAM_NOCREATE );
                 xRef->Seek(10);
                 BYTE nByte;
@@ -412,11 +413,13 @@ FASTBOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
 {
     FASTBOOL bRet = FALSE;
     const SfxFilter* pFltr;
-    const SfxFactoryFilterContainer& rFltContainer = IsDocShellRegistered()
-            ? *SwDocShell::Factory().GetFilterContainer()
-            : *SwWebDocShell::Factory().GetFilterContainer();
+
+    SfxFilterContainer aCntSw( String::CreateFromAscii( pSw ) );
+    SfxFilterContainer aCntSwWeb( String::CreateFromAscii( pSwWeb ) );
+    const SfxFilterContainer& rFltContainer = IsDocShellRegistered() ? aCntSw : aCntSwWeb;
+
     USHORT nFltCount = rFltContainer.GetFilterCount();
-    SvStorageRef xStg;
+    SotStorageRef xStg;
     if (rMedium.IsStorage())
          xStg = rMedium.GetStorage();
     for( USHORT n = 0; n < nFltCount; ++n )
@@ -468,9 +471,9 @@ FASTBOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
 const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
     const String& rPrefFltName, SfxMedium* pMedium)
 {
-    SfxFactoryFilterContainer* pFCntnr = IsDocShellRegistered()
-            ? SwDocShell::Factory().GetFilterContainer()
-            : SwWebDocShell::Factory().GetFilterContainer();
+    SfxFilterContainer aCntSw( String::CreateFromAscii( pSw ) );
+    SfxFilterContainer aCntSwWeb( String::CreateFromAscii( pSwWeb ) );
+    const SfxFilterContainer* pFCntnr = IsDocShellRegistered() ? &aCntSw : &aCntSwWeb;
 
     USHORT nFltrCount;
     if( !pFCntnr || 0 == ( nFltrCount = pFCntnr->GetFilterCount() ) )
@@ -478,15 +481,15 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
 
     const SfxFilter* pFilter;
     if( pMedium ? pMedium->IsStorage()
-                : SvStorage::IsStorageFile( rFileName ) )
+                : SotStorage::IsStorageFile( rFileName ) )
     {
         /* Storage: Suchen nach einem Sub-Storage, dessen Name  */
         /* dem in einem Filter stehenden DLL-Namen entspricht   */
-        SvStorageRef xStg;
+        SotStorageRef xStg;
         if( pMedium )
             xStg = pMedium->GetStorage();
         else
-            xStg = new SvStorage( rFileName, STREAM_STD_READ );
+            xStg = new SotStorage( rFileName, STREAM_STD_READ );
 
         if( xStg.Is() && ( xStg->GetError() == SVSTREAM_OK ) )
         {
@@ -497,8 +500,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
                     IsValidStgFilter( *xStg, *pFilter ))
                     return pFilter;
 
-            if( IsDocShellRegistered() && 0 != ( pFCntnr =
-                SwWebDocShell::Factory().GetFilterContainer() ) &&
+            if( IsDocShellRegistered() && 0 != ( pFCntnr = &aCntSwWeb ) &&
                 0 != ( nFltrCount = pFCntnr->GetFilterCount() ) )
                 for( nCnt = 0; nCnt < nFltrCount; ++nCnt )
                     if( 'C' == *( pFilter = pFCntnr->GetFilter( nCnt ))->
