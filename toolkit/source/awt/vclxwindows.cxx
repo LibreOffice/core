@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tbe $ $Date: 2002-03-11 17:19:58 $
+ *  last change: $Author: pb $ $Date: 2002-03-22 08:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,12 @@
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLECHECKBOX_HXX_
 #include <toolkit/awt/vclxaccessiblecheckbox.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEDROPDOWCOMBOBOX_HXX_
+#include <toolkit/awt/vclxaccessibledropdowncombobox.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMBOBOX_HXX_
+#include <toolkit/awt/vclxaccessiblecombobox.hxx>
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLEDROPDOWLISTBOX_HXX_
 #include <toolkit/awt/vclxaccessibledropdownlistbox.hxx>
@@ -2561,7 +2567,17 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXComboBox::CreateAccessibleContext()
 {
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTextComponent( this );
+    ::vos::OGuard aGuard( GetMutex() );
+
+    sal_Bool bIsDropDownBox = sal_False;
+    ComboBox* pBox = static_cast< ComboBox* >( GetWindow() );
+    if ( pBox )
+        bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );
+
+    if ( bIsDropDownBox )
+        return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleDropDownComboBox( this );
+    else
+        return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComboBox( this );
 }
 
 void VCLXComboBox::dispose() throw(::com::sun::star::uno::RuntimeException)
