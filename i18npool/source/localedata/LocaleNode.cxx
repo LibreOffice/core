@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-31 21:58:07 $
+ *  last change: $Author: khong $ $Date: 2002-08-01 19:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,6 +743,25 @@ void LCTransliterationNode::generateCode (const OFileWriter &of) {
     of.writeFunction("getTransliterations_", "nbOfTransliterations", "LCTransliterationsArray");
 }
 
+struct NameValuePair {
+    sal_Char *name;
+    sal_Char *value;
+};
+static NameValuePair ReserveWord[] = {
+    { "trueWord", "trur" },
+    { "falseWord", "false" },
+    { "quarter1Word", "1st quarter" },
+    { "quarter2Word", "2nd quarter" },
+    { "quarter3Word", "3rd quarter" },
+    { "quarter4Word", "4th quarter" },
+    { "aboveWord", "above" },
+    { "belowWord", "below" },
+    { "quarter1Abbreviation", "Q1" },
+    { "quarter2Abbreviation", "Q2" },
+    { "quarter3Abbreviation", "Q3" },
+    { "quarter4Abbreviation", "Q4" }
+};
+
 void LCMiscNode::generateCode (const OFileWriter &of) {
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
@@ -755,9 +774,9 @@ void LCMiscNode::generateCode (const OFileWriter &of) {
 
     sal_Int16 nbOfWords = 0;
     ::rtl::OUString str;
-    for (sal_Int16 i = 0; i < reserveNode->getNumberOfChildren(); i++,nbOfWords++) {
-        LocaleNode * curNode = reserveNode->getChildAt (i);
-          str = curNode -> getValue();
+    for (sal_Int16 i = 0; i < sizeof(ReserveWord)/sizeof(NameValuePair); i++,nbOfWords++) {
+        LocaleNode * curNode = reserveNode->findNode (ReserveWord[i].name);
+          str = curNode ? curNode -> getValue() : OUString::createFromAscii(ReserveWord[i].value);
           of.writeParameter("ReservedWord", str, nbOfWords);
     }
     of.writeAsciiString("static const sal_Int16 nbOfReservedWords = ");
