@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlDateFieldModel.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:10 $
+ *  last change: $Author: mt $ $Date: 2001-03-23 14:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,18 @@ service UnoControlDateFieldModel
      */
     [property] long TextColor;
 
+    //-------------------------------------------------------------------------
+
+    /** specifies the help text of the control.
+     */
+    [property] string HelpText;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the help id of the control.
+     */
+    [property] string HelpURL;
+
 };
 
 //=============================================================================
@@ -221,6 +233,9 @@ service UnoControlDateFieldModel
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:10  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:34:50  hjs
     initial import
 
