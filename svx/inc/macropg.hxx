@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:17:05 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #endif
 #include <rtl/ustring.hxx>
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 #include <hash_map>
 
 typedef ::std::hash_map< ::rtl::OUString, ::std::pair< ::rtl::OUString, ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > EventsHash;
@@ -139,7 +143,7 @@ public:
 };
 
 
-class SvxMacroAssignDlg : public SfxSingleTabDialog
+class SVX_DLLPUBLIC SvxMacroAssignDlg : public SfxSingleTabDialog
 {
 public:
     SvxMacroAssignDlg( Window* pParent, SfxItemSet& rSet, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex=0 );
