@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:05:48 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,7 +578,7 @@ BOOL SwDocShell::Save()
                     ((Sw3Writer*)&xWrt)->SetSw3Io( pIo, FALSE );
                 }
 
-                BOOL bLockedView;
+                BOOL bLockedView(FALSE);
                 if ( pWrtShell )
                 {
                     bLockedView = pWrtShell->IsViewLocked();
@@ -707,7 +707,7 @@ BOOL SwDocShell::SaveAs( SvStorage * pStor )
             ((Sw3Writer*)&xWrt)->SetSw3Io( pIo, TRUE );
         }
 
-        BOOL bLockedView;
+        BOOL bLockedView(FALSE);
         if ( pWrtShell )
         {
             bLockedView = pWrtShell->IsViewLocked();
@@ -1470,15 +1470,6 @@ SwFEShell* SwDocShell::GetFEShell()
 {
     return pWrtShell;
 }
-
-    // embedded alle lokalen Links (Bereiche/Grafiken)
-BOOL SwDocShell::EmbedAllLinks()
-{
-    if( pWrtShell )
-        return pWrtShell->EmbedAllLinks();
-    return pDoc->EmbedAllLinks();
-}
-
 
 void SwDocShell::RemoveOLEObjects()
 {
