@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 09:21:24 $
+ *  last change: $Author: pb $ $Date: 2000-12-07 18:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@
 #include "newhelp.hxx"
 #include "objsh.hxx"
 #include "docfac.hxx"
+#include "sfxresid.hxx"
+#include "app.hrc"
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -153,14 +155,17 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
         return FALSE;
 
     // build up the help URL
+    String aHelpModuleName = GetHelpModuleName( nHelpId );
     String aHelpURL(String::CreateFromAscii("vnd.sun.star.help://") );
-    aHelpURL += GetHelpModuleName( nHelpId );
-    aHelpURL += '/';
-    aHelpURL += String::CreateFromInt32( nHelpId );
+    aHelpURL += aHelpModuleName;
+    aHelpURL += String( DEFINE_CONST_UNICODE("/start") );
+//! aHelpURL += '/';
+//! aHelpURL += String::CreateFromInt32( nHelpId );
 
     // try to find the help frame
-    Reference < XDispatchProvider > xFrame( xActiveTask->findFrame( ::rtl::OUString::createFromAscii( "OFFICE_HELP" ),
-                                                    FrameSearchFlag::GLOBAL ), UNO_QUERY );
+    Reference < XDispatchProvider > xFrame(
+        xActiveTask->findFrame( ::rtl::OUString::createFromAscii( "OFFICE_HELP" ),
+        FrameSearchFlag::GLOBAL ), UNO_QUERY );
     ::com::sun::star::util::URL aURL;
     aURL.Complete = aHelpURL;
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
@@ -184,8 +189,8 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
             Reference < XFrame > xTask = xActiveTask->findFrame( DEFINE_CONST_UNICODE( "_blank" ), 0 );
             xFrame = Reference < XDispatchProvider >( xTask, UNO_QUERY );
             Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
-            pWin->SetText( DEFINE_CONST_UNICODE("StarOffice Help 0.8") );
-            SfxHelpWindow* pHlpWin = new SfxHelpWindow( xTask, pWin, WB_DOCKBORDER );
+            pWin->SetText( String( SfxResId( STR_HELP_WINDOW_TITLE ) ) );
+            SfxHelpWindow_Impl* pHlpWin = new SfxHelpWindow_Impl( xTask, pWin, WB_DOCKBORDER );
             pHlpWin->Show();
             Reference< ::com::sun::star::awt::XWindow > xWindow = VCLUnoHelper::GetInterface( pHlpWin );
             xWindow->setPosSize( 50, 50, 300, 200, ::com::sun::star::awt::PosSize::SIZE );
@@ -194,6 +199,7 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
             else
             {
                 pHlpWin->setContainerWindow( xTask->getContainerWindow() );
+                pHlpWin->SetFactory( aHelpModuleName );
                 xTask->getContainerWindow()->setVisible( sal_True );
             }
         }
