@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:26:52 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 05:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ String STR_APPLY
     Text[ turkish ] = "Apply";
     Text[ arabic ] = "ÊØÈíÞ";
     Text[ catalan ] = "Aplicar";
+    Text[ finnish ] = "Käytä";
 };
 String STR_INTERNET
 {
@@ -164,6 +165,7 @@ String STR_INTERNET
     Text[ turkish ] = "(Internet)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "(Internet)";
+    Text[ finnish ] = "(Internet)";
 };
 String STR_BASEFMT
 {
@@ -273,6 +275,7 @@ PushButton CB_FILE
     Text[ turkish ] = "Dosya sistemi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sistema de ~archivos";
+    Text[ finnish ] = "~Tiedostojärjestelmä";
 };
 PushButton CB_URL
 {
@@ -299,6 +302,7 @@ PushButton CB_URL
     Text[ turkish ] = "Internet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Internet";
+    Text[ finnish ] = "Int~ernet";
 };
 PushButton BTN_MANAGER
 {
@@ -309,7 +313,7 @@ PushButton BTN_MANAGER
     Text [ italian ] = "~Manager..." ;
     Text [ portuguese_brazilian ] = "~Gerenciador..." ;
     Text [ portuguese ] = "~Gestor..." ;
-    Text [ finnish ] = "~Hallinta..." ;
+    Text [ finnish ] = "~Hallinta" ;
     Text [ danish ] = "Manager..." ;
     Text [ french ] = "~Gestionnaire..." ;
     Text [ swedish ] = "Manager..." ;
@@ -337,7 +341,7 @@ PushButton BTN_STANDARD
     Text [ italian ] = "~Standard" ;
     Text [ portuguese_brazilian ] = "~Casa" ;
     Text [ portuguese ] = "~Padrão" ;
-    Text [ finnish ] = "~Vakio" ;
+    Text [ finnish ] = "~Koti" ;
     Text [ danish ] = "Standa~rd" ;
     Text [ french ] = "~Par défaut" ;
     Text [ swedish ] = "Stan~dard" ;
@@ -364,7 +368,7 @@ String STR_PATH_NOT_FOUND1
     Text [ italian ] = "La cartella" ;
     Text [ portuguese_brazilian ] = "O diretório" ;
     Text [ portuguese ] = "O directório '" ;
-    Text [ finnish ] = "Hakemistoa '" ;
+    Text [ finnish ] = "Hakemistoa " ;
     Text [ danish ] = "Biblioteket '" ;
     Text [ french ] = "Le répertoire '" ;
     Text [ swedish ] = "Mappen '" ;
@@ -391,7 +395,7 @@ String STR_PATH_NOT_FOUND2
     Text [ italian ] = "' non esiste." ;
     Text [ portuguese_brazilian ] = "' não existe." ;
     Text [ portuguese ] = "' não existe." ;
-    Text [ finnish ] = "' ei ole." ;
+    Text [ finnish ] = " ei ole" ;
     Text [ danish ] = "' eksisterer ikke." ;
     Text [ french ] = "' n'existe pas." ;
     Text [ swedish ] = "' finns inte." ;
@@ -420,7 +424,7 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE [ italian ] = "La password non corrisponde." ;
     MESSAGE [ portuguese_brazilian ] = "A senha não combina." ;
     MESSAGE [ portuguese ] = "A senha não é válida." ;
-    MESSAGE [ finnish ] = "Salasana ei kelpaa." ;
+    MESSAGE [ finnish ] = "Virheellinen salasana." ;
     MESSAGE [ danish ] = "Ugyldig adgangskode" ;
     MESSAGE [ french ] = "Mot de passe incorrect." ;
     MESSAGE [ swedish ] = "Felaktigt lösenord." ;
@@ -447,7 +451,7 @@ String STR_FILEDLG_INSERT
     Text [ italian ] = "Inserisci file" ;
     Text [ portuguese_brazilian ] = "Inserir" ;
     Text [ portuguese ] = "Inserir ficheiro" ;
-    Text [ finnish ] = "Lisää" ;
+    Text [ finnish ] = "Lisää tiedosto" ;
     Text [ danish ] = "Indsæt fil" ;
     Text [ french ] = "Insérer un fichier" ;
     Text [ swedish ] = "Infoga fil" ;
@@ -474,7 +478,7 @@ String STR_TABPAGE_MANAGESTYLES
     Text [ italian ] = "Gestione" ;
     Text [ portuguese_brazilian ] = "Gerenciar" ;
     Text [ portuguese ] = "Gerir" ;
-    Text [ finnish ] = "Käsittele" ;
+    Text [ finnish ] = "Järjestelytyökalu" ;
     Text [ danish ] = "Administrer" ;
     Text [ french ] = "Gérer" ;
     Text [ swedish ] = "Administrera" ;
@@ -503,7 +507,7 @@ InfoBox MSG_TABPAGE_INVALIDNAME
     Message [ italian ] = "Questo nome è già utilizzato per un modello." ;
     Message [ portuguese_brazilian ] = "Este nome já está sendo usado." ;
     Message [ portuguese ] = "Este nome já está a ser usado para um modelo." ;
-    Message [ finnish ] = "Tämä nimi on jo käytössä." ;
+    Message [ finnish ] = "Nimi on jo käytössä." ;
     Message [ danish ] = "Navnet er allerede i brug som navn på en typografi." ;
     Message [ french ] = "Ce nom a déjà été attribué." ;
     Message [ swedish ] = "Namnet används redan för en mall." ;
@@ -532,7 +536,7 @@ InfoBox MSG_TABPAGE_INVALIDSTYLE
     Message [ italian ] = "Il modello non esiste." ;
     Message [ portuguese_brazilian ] = "O estilo não existe." ;
     Message [ portuguese ] = "Este modelo não existe." ;
-    Message [ finnish ] = "Tyyliä ei ole." ;
+    Message [ finnish ] = "Tätä tyyliä ei ole olemassa." ;
     Message [ danish ] = "Denne typografi eksisterer ikke." ;
     Message [ french ] = "Style inexistant." ;
     Message [ swedish ] = "Den här mallen finns inte." ;
@@ -561,7 +565,7 @@ InfoBox MSG_TABPAGE_INVALIDPARENT
     Message [ italian ] = "Impossibile usare lo stile come principale;\ncauserebbe una connessione circolare." ;
     Message [ portuguese_brazilian ] = "O estilo não pode ser usado como superior;\nisto provocaria uma conex o circular." ;
     Message [ portuguese ] = "Este modelo não pode ser usado como modelo-base,\numa vez que provocaria uma referência recursiva." ;
-    Message [ finnish ] = "Style cannot be used as a parent; it would cause a circular connection." ;
+    Message [ finnish ] = "Mallipohjaa ei voi tallentaa perusmallipohjana.\nTästä seuraisi rekursiivinen viite." ;
     Message [ danish ] = "Denne skabelon kan ikke bruges som basisskabelon, \nda dette ville forårsage en rekursion." ;
     Message [ french ] = "Ce style ne peut pas être utilisé comme style de base\ncar il entraînerait une référence récursive." ;
     Message [ swedish ] = "Denna mall kan inte användas som basmall, då\nen rekursion skulle uppstå." ;
@@ -588,7 +592,7 @@ InfoBox MSG_POOL_STYLE_NAME
     MESSAGE [ italian ] = "Il nome è già usato da uno stile predefinito.\nScegliere un altro nome." ;
     MESSAGE [ portuguese_brazilian ] = "O nome já está sendo usado por um estilo padr o.\nEscolha outro Nome." ;
     MESSAGE [ portuguese ] = "O nome já está a ser usado por um estilo padrão.\nEscolha outro nome por favor." ;
-    MESSAGE [ finnish ] = "Nimeä käytetään jo oletustyylissä.\nKirjoita toinen nimi." ;
+    MESSAGE [ finnish ] = "Nimi on jo määritetty oletustyylille.\nValitse toinen nimi." ;
     MESSAGE [ danish ] = "Navnet er allerede i brug som navn på en standardtypografi.\nVælg venligst et andet navn." ;
     MESSAGE [ french ] = "Ce nom a déjà attribué à un style par défaut.\nVeuillez en choisir un autre." ;
     MESSAGE [ swedish ] = "Namnet används redan för en standardmall.\nVälj ett annat namn." ;
@@ -617,7 +621,7 @@ QueryBox MSG_OVERWRITE_STYLE
     Message [ italian ] = "Il modello esiste già. Sovrascrivere?" ;
     Message [ portuguese_brazilian ] = "O estilo já existe. Sobregravar?" ;
     Message [ portuguese ] = "O modelo já existe. Sobregravar?" ;
-    Message [ finnish ] = "Tyyli on jo määritetty. Korvataanko se?" ;
+    Message [ finnish ] = "Tyyli on jo olemassa. Korvataanko?" ;
     Message [ danish ] = "Typografi eksisterer allerede. Skal den overskrives?" ;
     Message [ french ] = "Ce style existe déjà. Voulez-vous le remplacer ?" ;
     Message [ swedish ] = "Mall finns redan. Skriva över?" ;
@@ -660,6 +664,7 @@ String STR_DELETE_STYLE
     Text[ turkish ] = "$1 þablonlarýný gerçekten silmek istiyor musunuz?";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     Text[ catalan ] = "¿Desea realmente eliminar el estilo $1?";
+    Text[ finnish ] = "Haluatko varmasti poistaa tyylin $1?";
 };
 String STR_DELETE_STYLE_USED
 {
@@ -685,6 +690,7 @@ String STR_DELETE_STYLE_USED
     Text[ turkish ] = "Kullanýlan bir þablonu siliyorsunuz!\n";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     Text[ catalan ] = "¡Usted está borrando un estilo que ha sido aplicado!\n";
+    Text[ finnish ] = "Olet poistamassa käytössä olevaa tyyliä!\n";
 };
 Image BMP_COLLAPSED
 {
@@ -715,7 +721,7 @@ Menu MN_CONTEXT_TEMPLDLG
             Text [ italian ] = "Nuovo..." ;
             Text [ portuguese_brazilian ] = "Novo..." ;
             Text [ portuguese ] = "Novo..." ;
-            Text [ finnish ] = "Uusi..." ;
+            Text [ finnish ] = "Uusi" ;
             Text [ danish ] = "Ny..." ;
             Text [ french ] = "Nouveau..." ;
             Text [ swedish ] = "Nytt..." ;
@@ -744,7 +750,7 @@ Menu MN_CONTEXT_TEMPLDLG
             Text [ italian ] = "Modifica..." ;
             Text [ portuguese_brazilian ] = "Editar..." ;
             Text [ portuguese ] = "Modificar..." ;
-            Text [ finnish ] = "Muokkaa..." ;
+            Text [ finnish ] = "Muokkaa" ;
             Text [ danish ] = "Modificer..." ;
             Text [ french ] = "Modifier..." ;
             Text [ swedish ] = "Ändra..." ;
@@ -773,7 +779,7 @@ Menu MN_CONTEXT_TEMPLDLG
             Text [ italian ] = "Annulla..." ;
             Text [ portuguese_brazilian ] = "Apagar..." ;
             Text [ portuguese ] = "Eliminar..." ;
-            Text [ finnish ] = "Poista..." ;
+            Text [ finnish ] = "Poista" ;
             Text [ danish ] = "Slet..." ;
             Text [ french ] = "Supprimer..." ;
             Text [ swedish ] = "Radera..." ;
@@ -803,7 +809,7 @@ String STR_BASICMACROS
     TEXT [ italian ] = "Macro di BASIC" ;
     TEXT [ portuguese_brazilian ] = "Macros Básico" ;
     TEXT [ portuguese ] = "Macros BASIC" ;
-    TEXT [ finnish ] = "Basic Macros" ;
+    TEXT [ finnish ] = "BASIC-makrot" ;
     TEXT [ danish ] = "BASIC-makroer" ;
     TEXT [ french ] = "Macros BASIC" ;
     TEXT [ swedish ] = "BASIC-makron" ;
@@ -832,7 +838,7 @@ InfoBox MSG_LAYOUT_NOT_LOADING
     MESSAGE [ italian ] = "Il documento viene caricato senza layout" ;
     MESSAGE [ portuguese_brazilian ] = "Carregando Documentos sem Layout." ;
     MESSAGE [ portuguese ] = "A carregar documento sem configuração." ;
-    MESSAGE [ finnish ] = "Luetaan asiakirjat ilman asetttelua." ;
+    MESSAGE [ finnish ] = "Ladataan asettelun sisältävää asiakirjaa." ;
     MESSAGE [ danish ] = "Indlæser dokument uden layout." ;
     MESSAGE [ french ] = "Chargement d'un document sans mise en page." ;
     MESSAGE [ swedish ] = "Dokument laddas utan layout." ;
@@ -891,6 +897,7 @@ ErrorBox MSG_ERR_CANT_EDIT_OLD_FORMAT
     Message[ turkish ] = "Bu dosya formatýndaki belgelerin belge bilgileri iþlenemez";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "La información de documentos no se puede editar en este\nformato de archivo.";
+    Message[ finnish ] = "Tämän tiedostomuodon asiakirjatietoja\n ei voi muokata.";
 };
  //------------------------------------------------------------------------
 ErrorBox MSG_ERR_CANT_EDIT_OPEN_DOCS
@@ -917,6 +924,7 @@ ErrorBox MSG_ERR_CANT_EDIT_OPEN_DOCS
     Message[ turkish ] = "Þu an kullanýlan belgelerin belge bilgileri belge yöneticisi tarafýndan iþlenemez.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "La información acerca de los documentos que se están editando\nno puede ser editada por el administrador de documentos.";
+    Message[ finnish ] = "Nyt muokattavien asiakirjojen\n asiakirjatietoja ei voi muokata asiakirjojen hallinnassa.";
 };
 ModalDialog RID_URLOPEN
 {
@@ -968,6 +976,7 @@ ModalDialog RID_URLOPEN
     Text[ turkish ] = "URL gir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Entrar URL";
+    Text[ finnish ] = "Kirjoita URL-osoite";
 };
 Menu RID_AUTOHIDE
 {
@@ -999,6 +1008,7 @@ Menu RID_AUTOHIDE
             Text[ turkish ] = "Gizle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ocultar";
+            Text[ finnish ] = "Piilota";
         };
     };
 };
@@ -1026,6 +1036,7 @@ String RID_AUTOHIDE
     Text[ turkish ] = "Gizleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No ocultar";
+    Text[ finnish ] = "Älä piilota";
 };
 String SID_NAVIGATOR
 {
@@ -1051,6 +1062,7 @@ String SID_NAVIGATOR
     Text[ turkish ] = "Navigatör";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Navegador";
+    Text[ finnish ] = "Navigaattori";
 };
 
 ErrorBox MSG_ERROR_WRONG_CONFIRM
@@ -1079,6 +1091,7 @@ ErrorBox MSG_ERROR_WRONG_CONFIRM
     MESSAGE[ turkish ] = "Þifre onayý hatalý";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "Confirmación errónea de la contraseña";
+    MESSAGE[ finnish ] = "Salasanan vahvistus ei täsmää";
 };
 
 // ******************************************************************* EOF
