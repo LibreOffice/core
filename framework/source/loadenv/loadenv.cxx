@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 00:14:34 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -945,40 +945,96 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
 void LoadEnv::impl_detectTypeAndFilter()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
+    static ::rtl::OUString TYPEPROP_PREFERREDFILTER = ::rtl::OUString::createFromAscii("PreferredFilter");
+    static ::rtl::OUString FILTERPROP_FLAGS         = ::rtl::OUString::createFromAscii("Flags"          );
+    static sal_Int32       FILTERFLAG_TEMPLATEPATH  = 16;
+
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
-
-    css::uno::Sequence< css::beans::PropertyValue > lDescriptor;
-    m_lMediaDescriptor >> lDescriptor;
-
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
-
-    aReadLock.unlock();
-    // <- SAFE
-
-    // start combined flat/deep detection
-    // It can agree with the current preselection or return any
-    // other type, which match to the specified content!
 
     // Attention: Because our stl media descriptor is a copy of an uno sequence
     // we cant use as an in/out parameter here. Copy it before and dont forget to
     // actualize structure afterwards again!
-    ::rtl::OUString sDetectedType;
+    css::uno::Sequence< css::beans::PropertyValue >        lDescriptor = m_lMediaDescriptor.getAsConstPropertyValueList();
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR       = m_xSMGR;
+
+    aReadLock.unlock();
+    // <- SAFE
+
+    ::rtl::OUString sType;
     css::uno::Reference< css::document::XTypeDetection > xDetect(xSMGR->createInstance(SERVICENAME_TYPEDETECTION), css::uno::UNO_QUERY);
     if (xDetect.is())
-        sDetectedType = xDetect->queryTypeByDescriptor(lDescriptor, sal_True); /*TODO should deep detection be able for enable/disable it from outside? */
+        sType = xDetect->queryTypeByDescriptor(lDescriptor, sal_True); /*TODO should deep detection be able for enable/disable it from outside? */
 
     // no valid content -> loading not possible
-    if (!sDetectedType.getLength())
+    if (!sType.getLength())
         throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT);
 
-    // detection was successfully => update the descriptor
     // SAFE ->
     WriteGuard aWriteLock(m_aLock);
+
+    // detection was successfully => update the descriptor member of this class
     m_lMediaDescriptor << lDescriptor;
-    m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sDetectedType;
+    m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sType;
+    // Is there an already detected (may be preselected) filter?
+    // see below ...
+    ::rtl::OUString sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME(), ::rtl::OUString());
+
     aWriteLock.unlock();
     // <- SAFE
+
+    // But the type isnt enough. For loading sometimes we need more informations.
+    // E.g. for our "_default" feature, where we recylce any frame which contains
+    // and "Untitled" document, we must know if the new document is based on a template!
+    // But this information is available as a filter property only.
+    // => We must try(!) to detect the right filter for this load request.
+    // On the other side ... if no filter is available .. ignore it.
+    // Then the type information must be enough.
+    if (!sFilter.getLength())
+    {
+        // no -> try to find a preferred filter for the detected type.
+        // Dont forget to updatet he media descriptor.
+        css::uno::Reference< css::container::XNameAccess > xTypeCont(xDetect, css::uno::UNO_QUERY_THROW);
+        try
+        {
+            ::comphelper::SequenceAsHashMap lTypeProps(xTypeCont->getByName(sType));
+            sFilter = lTypeProps.getUnpackedValueOrDefault(TYPEPROP_PREFERREDFILTER, ::rtl::OUString());
+            if (sFilter.getLength())
+            {
+                // SAFE ->
+                aWriteLock.lock();
+                m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
+                aWriteLock.unlock();
+                // <- SAFE
+            }
+        }
+        catch(const css::container::NoSuchElementException&)
+            {}
+    }
+    // check if the filter (if one exists) points to a template format filter.
+    // Then we have to add the property AsTemplate implicitly.
+    // Otherwhise the template will be loaded in "Edit" mode instead as "Untitled".
+    sal_Bool bIsOwnTemplate = sal_False;
+    if (sFilter.getLength())
+    {
+        css::uno::Reference< css::container::XNameAccess > xFilterCont(xSMGR->createInstance(SERVICENAME_FILTERFACTORY), css::uno::UNO_QUERY_THROW);
+        try
+        {
+            ::comphelper::SequenceAsHashMap lFilterProps(xFilterCont->getByName(sFilter));
+            sal_Int32 nFlags         = lFilterProps.getUnpackedValueOrDefault(FILTERPROP_FLAGS, (sal_Int32)0);
+                      bIsOwnTemplate = ((nFlags & FILTERFLAG_TEMPLATEPATH) == FILTERFLAG_TEMPLATEPATH);
+        }
+        catch(const css::container::NoSuchElementException&)
+            {}
+    }
+    if (bIsOwnTemplate)
+    {
+        // SAFE ->
+        aWriteLock.lock();
+        m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_ASTEMPLATE()] <<= sal_True;
+        aWriteLock.unlock();
+        // <- SAFE
+    }
 }
 
 /*-----------------------------------------------
@@ -1363,6 +1419,23 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
 /*-----------------------------------------------
     30.03.2004 09:12
 -----------------------------------------------*/
+sal_Bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame) const
+{
+    css::uno::Reference< css::document::XActionLockable > xLock(xFrame, css::uno::UNO_QUERY);
+
+    // ? no lock interface ?
+    // Might its an external written frame implementation :-(
+    // Allowing using of it ... but it can fail if its not synchronized with our processes !
+    if (!xLock.is())
+        return sal_False;
+
+    // Otherwhise we have to look for any other existing lock.
+    return xLock->isActionLocked();
+}
+
+/*-----------------------------------------------
+    30.03.2004 09:12
+-----------------------------------------------*/
 css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
@@ -1379,7 +1452,10 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     css::uno::Reference< css::frame::XFramesSupplier > xSupplier(m_xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
     FrameListAnalyzer aTasksAnalyzer(xSupplier, css::uno::Reference< css::frame::XFrame >(), FrameListAnalyzer::E_BACKINGCOMPONENT);
     if (aTasksAnalyzer.m_xBackingComponent.is())
-        return aTasksAnalyzer.m_xBackingComponent;
+    {
+        if (!impl_isFrameAlreadyUsedForLoading(aTasksAnalyzer.m_xBackingComponent))
+            return aTasksAnalyzer.m_xBackingComponent;
+    }
 
     // These states indicates the wishing for creation of a new view in general.
     if (
@@ -1451,20 +1527,12 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     // by a close() or terminate() request.
     // But if such lock already exist ... it means this task is used for
     // any other operation already. Don't use it then.
-    css::uno::Reference< css::document::XActionLockable > xLock(xTask, css::uno::UNO_QUERY);
-
-    // ? no lock interface ?
-    // Might its an external written frame implementation :-(
-    // Use it ... but it can fail if its not synchronized with our processes.
-    if (!xLock.is())
-        return xTask;
-
-    // Otherwhise we have to look for any other existing lock.
-    if (xLock->isActionLocked())
+    if (impl_isFrameAlreadyUsedForLoading(xTask))
         return css::uno::Reference< css::frame::XFrame >();
 
     // SAFE -> ..................................
     WriteGuard aWriteLock(m_aLock);
+    css::uno::Reference< css::document::XActionLockable > xLock(xTask, css::uno::UNO_QUERY);
     if (!m_aTargetLock.setResource(xLock))
         return css::uno::Reference< css::frame::XFrame >();
     aWriteLock.unlock();
