@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:41:59 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 18:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,7 @@ ModalDialog DLG_MORPH
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 196 , 68 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Überblenden : šberblenden */
-    Text = "Überblenden" ;
-    Text [ ENGLISH ] = "Fading" ;
+    Text [ de ] = "Überblenden" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     OKButton BTN_OK
@@ -100,71 +99,17 @@ ModalDialog DLG_MORPH
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 129 , 8 ) ;
-        Text = "Einstellungen" ;
-        Text [ ENGLISH ] = "Settings" ;
-        Text [ english_us ] = "Settings" ;
-        Text [ italian ] = "Impostazioni" ;
-        Text [ spanish ] = "Configuración" ;
-        Text [ french ] = "Paramètres" ;
-        Text [ dutch ] = "Instellingen" ;
-        Text [ swedish ] = "Inställningar" ;
-        Text [ danish ] = "Indstillinger" ;
-        Text [ portuguese ] = "Definições" ;
-        Text [ portuguese_brazilian ] = "Definições" ;
-        Text[ chinese_simplified ] = "è®¾å®š";
-        Text[ russian ] = "Íàñòğîéêè";
-        Text[ polish ] = "Ustawienia";
-        Text[ japanese ] = "è¨­å®š";
-        Text[ chinese_traditional ] = "è¨­å®š";
-        Text[ arabic ] = "ÅÚÏÇÏÇÊ";
-        Text[ greek ] = "Ñõèìßóåéò";
-        Text[ korean ] = "ì„¤ì •";
-        Text[ turkish ] = "Ayarlar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Configuració";
-        Text[ finnish ] = "Asetukset";
-        Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²";
-        Text[ czech ] = "NastavenÃ­";
-        Text[ hebrew ] = "â€®×”×’×“×¨×•×ªâ€¬";
-        Text[ hindi ] = "Settings";
-        Text[ slovak ] = "Nastavenia";
-        Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡sok";
-        Text[ slovenian ] = "Nastavitve";
+        Text [ de ] = "Einstellungen" ;
+        Text [ en-US ] = "Settings" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_STEPS
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "Schritte" ;
-        Text [ ENGLISH ] = "Steps" ;
-        Text [ english_us ] = "Increments" ;
-        Text [ italian ] = "Passaggi" ;
-        Text [ spanish ] = "Pasos" ;
-        Text [ french ] = "Pas" ;
-        Text [ dutch ] = "Stappen" ;
-        Text [ swedish ] = "Steg" ;
-        Text [ danish ] = "Trin" ;
-        Text [ portuguese ] = "Passos" ;
-        Text [ portuguese_brazilian ] = "Incremento" ;
-        Text[ chinese_simplified ] = "æ¸å¢";
-        Text[ russian ] = "Øàãè";
-        Text[ polish ] = "Przyrosty";
-        Text[ japanese ] = "ã‚¹ãƒ†ãƒƒãƒ—";
-        Text[ chinese_traditional ] = "æ¼¸å¢";
-        Text[ arabic ] = "ÇáÎØæÇÊ";
-        Text[ greek ] = "ÂŞìáôá";
-        Text[ korean ] = "ì¦ë¶„";
-        Text[ turkish ] = "Adımlar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Augments";
-        Text[ finnish ] = "Vaiheiden lkm";
-        Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¹€à¸à¸´à¹ˆà¸¡";
-        Text[ czech ] = "PÅ™Ã­rÅ¯stky";
-        Text[ hebrew ] = "Schritte";
-        Text[ hindi ] = "à¤¬à¤¢à¤¤à¥€";
-        Text[ slovak ] = "PrÃ­rastky";
-        Text[ hungarian ] = "Alakzatok szÃ¡ma";
-        Text[ slovenian ] = "Koraki";
+        Text [ de ] = "Schritte" ;
+        Text [ en-US ] = "Increments" ;
+        Text [ x-comment ] = " ";
     };
     MetricField MTF_STEPS
     {
@@ -184,102 +129,22 @@ ModalDialog DLG_MORPH
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 121 , 12 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Attributierung überblenden : Attributierung ³berblenden */
-        Text = "Attributierung überblenden" ;
-        Text [ ENGLISH ] = "Fade attributes" ;
+        Text [ de ] = "Attributierung überblenden" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Cross-fade attributes" ;
-        Text [ italian ] = "Includi gli attributi" ;
-        Text [ spanish ] = "Cubrir atributos" ;
-        Text [ french ] = "Fondu enchaîné d'attributs" ;
-        Text [ dutch ] = "Opmaak niet weergeven" ;
-        Text [ swedish ] = "Tona över attribut" ;
-        Text [ danish ] = "Ton attributter over" ;
-        Text [ portuguese ] = "Sobreposição de atributos" ;
-        Text [ portuguese_brazilian ] = "Atributos da transição por dissolução" ;
-        Text[ chinese_simplified ] = "äº¤æ›¿æ˜¾ç¤ºç”»é¢ç‰¹æ€§";
-        Text[ russian ] = "Àòğèáóòû ìîğôèíãà";
-        Text[ polish ] = "Przenikanie atrybutów";
-        Text[ japanese ] = "å±æ€§ã‚’ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ";
-        Text[ chinese_traditional ] = "äº¤æ›¿é¡¯ç¤ºç•«é¢ç‰¹æ€§";
-        Text[ arabic ] = "ÊÛØíÉ ÓãÇÊ ÇáßÇÆä";
-        Text[ greek ] = "Éäéüôçôåò óå ğñşôï ğëÜíï";
-        Text[ korean ] = "í˜ì´ë“œ ì†ì„±";
-        Text[ turkish ] = "Öznitelikler: Serme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cobreix atributs";
-        Text[ finnish ] = "Muunna attribuutit";
-        Text[ thai ] = "à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°à¸¥à¸¹à¹ˆà¸‚à¸§à¸²à¸‡";
-        Text[ czech ] = "Vlastnosti postupnÃ©ho pÅ™echodu";
-        Text[ hebrew ] = "Attributierung Ã¼berblenden";
-        Text[ hindi ] = "à¤•à¥à¤°à¥‰à¤¸-à¤«à¤¼à¥‡à¤¡ à¤à¤Ÿà¥à¤°à¤¿à¤¬à¥à¤¯à¥‚à¤Ÿà¥à¤¸";
-        Text[ slovak ] = "AtribÃºty zatmavenia";
-        Text[ hungarian ] = "JellemzÅ‘k Ã¡tÃºsztatÃ¡sa";
-        Text[ slovenian ] = "Atributi pojemanja";
+        Text [ en-US ] = "Cross-fade attributes" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CBX_ORIENTATION
     {
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 121 , 12 ) ;
-        Text = "Gleiche Orientierung" ;
-        Text [ ENGLISH ] = "Same orientation" ;
+        Text [ de ] = "Gleiche Orientierung" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Same orientation" ;
-        Text [ italian ] = "Stesso orientamento" ;
-        Text [ spanish ] = "Misma orientación" ;
-        Text [ french ] = "Même orientation" ;
-        Text [ dutch ] = "Identieke afdrukstand" ;
-        Text [ swedish ] = "Samma orientering" ;
-        Text [ danish ] = "Samme retning" ;
-        Text [ portuguese ] = "Mesma orientação" ;
-        Text [ portuguese_brazilian ] = "Mesma orientação" ;
-        Text[ chinese_simplified ] = "ç›¸åŒæ–¹å‘";
-        Text[ russian ] = "Òàêàÿ æå îğèåíòàöèÿ";
-        Text[ polish ] = "Ta sama orientacja";
-        Text[ japanese ] = "åŒã˜æ–¹å‘";
-        Text[ chinese_traditional ] = "ç›¸åŒæ–¹å‘";
-        Text[ arabic ] = "äİÓ ÇáÇÊÌÇå";
-        Text[ greek ] = "ºäéïò ğñïóáíáôïëéóìüò";
-        Text[ korean ] = "ê°™ì€ ë°©í–¥";
-        Text[ turkish ] = "Aynı yön";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mateixa orientació";
-        Text[ finnish ] = "Samaan suuntaan";
-        Text[ thai ] = "à¸§à¸²à¸‡à¹à¸™à¸§à¹€à¸«à¸¡à¸·à¸­à¸™à¸à¸±à¸™";
-        Text[ czech ] = "StejnÃ½ smÄ›r";
-        Text[ hebrew ] = "Gleiche Orientierung";
-        Text[ hindi ] = "à¤¸à¤®à¤¾à¤¨ à¤…à¤¨à¥à¤¸à¥à¤¥à¤¾à¤ªà¤¨";
-        Text[ slovak ] = "RovnakÃ¡ orientÃ¡cia";
-        Text[ hungarian ] = "Azonos irÃ¡ny";
-        Text[ slovenian ] = "Enaka usmerjenost";
+        Text [ en-US ] = "Same orientation" ;
+        Text [ x-comment ] = " ";
     };
-    Text [ english_us ] = "Cross-fading" ;
-    Text [ italian ] = "Morphing" ;
-    Text [ spanish ] = "Disolvencia" ;
-    Text [ french ] = "Fondu enchaîné" ;
-    Text [ dutch ] = "Overlappen" ;
-    Text [ swedish ] = "Tona över" ;
-    Text [ danish ] = "Ton over" ;
-    Text [ portuguese ] = "Dissolver" ;
-    Text [ portuguese_brazilian ] = "Dissolução" ;
-    Text[ chinese_simplified ] = "æ¸æ¸éšå‡º";
-    Text[ russian ] = "Ìîğôèíã";
-    Text[ polish ] = "Przenikanie";
-    Text[ japanese ] = "ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ";
-    Text[ chinese_traditional ] = "æ¼¸æ¼¸éš±å‡º";
-    Text[ arabic ] = "ÊÛØíÉ";
-    Text[ greek ] = "Âáèìéáßïò áğï÷ñùìáôéóìüò";
-    Text[ korean ] = "êµì°¨í•˜ë©° íë ¤ì§€ê¸°";
-    Text[ turkish ] = "Ser";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Disolvència";
-    Text[ finnish ] = "Luo muodonvaihdos";
-    Text[ thai ] = "à¸¥à¸¹à¹ˆà¸‚à¸§à¸²à¸‡";
-    Text[ czech ] = "PostupnÃ½ pÅ™echod";
-    Text[ hebrew ] = "Ãœberblenden";
-    Text[ hindi ] = "à¤•à¥à¤°à¥‰à¤¸-à¤«à¤¼à¥‡à¤¡ à¤•à¤°à¤¨à¤¾";
-    Text[ slovak ] = "Zatmavenie";
-    Text[ hungarian ] = "ÃtÃºsztatÃ¡s";
-    Text[ slovenian ] = "Pojemanje";
+    Text [ en-US ] = "Cross-fading" ;
+    Text [ x-comment ] = " ";
 };
 
 
