@@ -19,9 +19,6 @@ sw.SwXDrawPage::com::sun::star::drawing::XShapeGrouper
 ### 114164 ###
 sw.SwXShape::com::sun::star::beans::XPropertySet
 
-### 114514 ###
-sw.SwAccessiblePageView::com::sun::star::accessibility::XAccessibleEventBroadcaster
-
 ### 114518 ###
 sw.SwXCellRange::com::sun::star::text::CellRange
 
@@ -48,17 +45,8 @@ sw.SwXAutoTextContainer::com::sun::star::container::XNameAccess
 ### i23294 ###
 sw.SwXChapterNumbering::com::sun::star::container::XIndexReplace
 
-### i23295 ###
-sw.SwXDocumentIndex::com::sun::star::text::BaseIndex
-
-### i23298 ###
-sw.SwXDrawPage::com::sun::star::drawing::GenericDrawPage
-
 ### i23300 ###
 sw.SwXNumberingRules::com::sun::star::container::XIndexReplace
-
-### i23301 ###
-sw.SwXParagraph::com::sun::star::text::TextTable
 
 ### i23386 ###
 sw.SwXTableColumns::com::sun::star::table::XTableColumns
@@ -74,23 +62,11 @@ sw.SwXTextCursor::com::sun::star::text::XSentenceCursor
 ### i23397 ###
 sw.SwXTextCursor::com::sun::star::text::XWordCursor
 
-### i23398 ###
-sw.SwXTextDocument::com::sun::star::text::XBookmarksSupplier
-sw.SwXTextDocument::com::sun::star::text::XDocumentIndexesSupplier
-sw.SwXTextDocument::com::sun::star::text::XTextFramesSupplier
-
 ### i23411 ###
 sw.SwXTextDocument::com::sun::star::text::XPagePrintable
 
-### i23414 ###
-sw.SwXTextEmbeddedObject::com::sun::star::text::TextEmbeddedObject
-
 ### i23415 ###
 sw.SwXTextFrame::com::sun::star::text::BaseFrameProperties
-
-### i23420 ###
-sw.SwXTextGraphicObject::com::sun::star::text::TextGraphicObject
-sw.SwXTextGraphicObject::com::sun::star::text::BaseFrameProperties
 
 ### i23422 ###
 sw.SwXTextViewCursor::com::sun::star::beans::XMultiPropertyStates
@@ -100,3 +76,31 @@ sw.SwXMailMerge::com::sun::star::task::XJob
 
 ### i23623 ###
 sw.SwXStyleFamily::com::sun::star::container::XNameReplace
+
+### i24402 ###
+sw.SwXTextFrame::com::sun::star::text::BaseFrameProperties
+sw.SwXTextFrame::com::sun::star::beans::XPropertySet
+sw.SwXTextGraphicObject::com::sun::star::text::BaseFrameProperties
+sw.SwXTextGraphicObject::com::sun::star::beans::XPropertySet
+sw.SwXTextEmbeddedObject::com::sun::star::text::BaseFrameProperties
+sw.SwXTextEmbeddedObject::com::sun::star::beans::XPropertySet
+
+### i25406 ###
+sw.PageStyle::com::sun::star::style::PageStyle
+sw.PageStyle::com::sun::star::style::PageProperties
+
+### i25408 ###
+sw.PageStyle::com::sun::star::style::XStyle
+
+### i25467 ###
+sw.SwXTextDocument::com::sun::star::frame::XStorable
+
+### i25472 ###
+sw.CharacterStyle::com::sun::star::style::CharacterPropertiesAsian
+
+### i25473 ###
+sw.ParagraphStyle::com::sun::star::beans::XMultiPropertyStates
+sw.ConditionalParagraphStyle::com::sun::star::beans::XMultiPropertyStates
+
+### i26227 ###
+sw.SwXTextGraphicObject::com::sun::star::text::XTextContent
