@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 17:47:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,6 @@
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
 #endif
-#ifndef _SVXLINKMGR_HXX
-#include <svx/linkmgr.hxx>
-#endif
 #ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
 #endif
@@ -118,9 +115,6 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _DOCSH_HXX
-#include <docsh.hxx>
 #endif
 #ifndef _PAM_HXX
 #include <pam.hxx>
@@ -155,17 +149,9 @@
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
 #endif
-#ifndef _LINKENUM_HXX
-#include <linkenum.hxx>
-#endif
 #ifndef _SWSWERROR_H
 #include <swerror.h>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
-#include <com/sun/star/document/UpdateDocMode.hpp>
-#endif
-
-#include <sfx2/frame.hxx>
 
 #include <paratr.hxx>
 
@@ -490,51 +476,10 @@ ULONG SwReader::Read( const Reader& rOptions )
     {
         delete pPam;          // ein neues aufgemacht.
 
-        // alle Links updaten und Fehler melden
-        // (die Graphic-Links nicht, passiert ueber unseren Grafik-Cache!!)
-        // JP 20.03.96: aber nicht wenn die DocShell als INTERNAL
-        //              construiert wurde (FileLinks in FileLinks in ...)
-        // JP 27.06.96: wenn internal, dann nie Updaten! (rekursionen werden
-        //              sonst nicht erkannt! ( Bug )
-
-        SfxObjectCreateMode eMode;
-        USHORT nLinkMode = pDoc->GetLinkUpdMode();
-        USHORT nUpdateDocMode = pDoc->GetDocShell()->GetUpdateDocMode();
-        if( pDoc->GetDocShell() &&
-                (nLinkMode != NEVER ||  document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
-            pDoc->GetLinkManager().GetLinks().Count() &&
-            SFX_CREATE_MODE_INTERNAL !=
-                        ( eMode = pDoc->GetDocShell()->GetCreateMode()) &&
-            SFX_CREATE_MODE_ORGANIZER != eMode &&
-            SFX_CREATE_MODE_PREVIEW != eMode &&
-            !pDoc->GetDocShell()->IsPreview() )
-        {
-            ViewShell* pVSh = 0;
-            BOOL bAskUpdate = nLinkMode == MANUAL;
-            BOOL bUpdate = TRUE;
-            switch(nUpdateDocMode)
-            {
-                case document::UpdateDocMode::NO_UPDATE:   bUpdate = FALSE;break;
-                case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = FALSE; break;
-                case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = TRUE; break;
-//                case document::UpdateDocMode::ACCORDING_TO_CONFIG:break;
-            }
-            if(bUpdate)
-            {
-                SfxMedium* pMedium = pDoc->GetDocShell()->GetMedium();
-                SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
-                Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
-                if( pDoc->GetRootFrm() && !pDoc->GetEditShell( &pVSh ) && !pVSh )
-                {
-                    ViewShell aVSh( *pDoc, 0, 0 );
-
-                    SET_CURR_SHELL( &aVSh );
-                    pDoc->GetLinkManager().UpdateAllLinks( bAskUpdate , TRUE, FALSE, pDlgParent );
-                }
-                else
-                    pDoc->GetLinkManager().UpdateAllLinks( bAskUpdate, TRUE, FALSE, pDlgParent );
-            }
-        }
+        // --> FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
+        // SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
+        pDoc->UpdateLinks();
+        // <--
 
         eOld = (SwRedlineMode)(pDoc->GetRedlineMode() & ~REDLINE_IGNORE);
 
