@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interactionhandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:15:48 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,8 @@
 
 //#include <iostream>
 #include <stdio.h>
+#include <sal/main.h>
 #include <rtl/process.h>
-
-#include <vos/dynload.hxx>
 
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/weak.hxx>
@@ -95,7 +94,6 @@
 using namespace std;
 using namespace rtl;
 using namespace cppu;
-using namespace vos;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 //using namespace com::sun::star::reflection;
@@ -145,7 +143,7 @@ void SAL_CALL InteractionHandler::handle( const Reference< XInteractionRequest >
         if(abort.is())
             break;
     }
-    for ( i= 0; i < seqCont.getLength(); i++)
+    for (sal_Int32 i= 0; i < seqCont.getLength(); i++)
     {
         retry= Reference<XInteractionRetry>::query( seqCont[i]);
         if(retry.is())
@@ -218,12 +216,7 @@ sal_Bool test1(const Reference< XMultiServiceFactory > & xMgr )
     return retVal;
 }
 
-extern
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int __cdecl main( int argc, char * argv[] )
-#endif
+SAL_IMPLEMENT_MAIN()
 {
     Reference<XSimpleRegistry> xreg= createSimpleRegistry();
     xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")),
