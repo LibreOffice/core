@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:00:04 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
 
 #include <rsc/rscsfx.hxx>
@@ -91,9 +90,12 @@
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _SVX_BACKGRND_HXX //autogen
-#include <svx/backgrnd.hxx>
-#endif
+//CHINA001 #ifndef _SVX_BACKGRND_HXX //autogen
+//CHINA001 #include <svx/backgrnd.hxx>
+//CHINA001 #endif
+#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/flagsdef.hxx> //CHINA001
 #ifndef _SVX_SIMPTABL_HXX //autogen wg. SvxSimpleTable
 #include <svx/simptabl.hxx>
 #endif
@@ -145,6 +147,9 @@
 #ifndef _CNTTAB_HXX
 #include <cnttab.hxx>
 #endif
+#ifndef _SWUI_CNTTAB_HXX //CHINA001
+#include <swuicnttab.hxx> //CHINA001
+#endif //CHINA001
 #ifndef _FORMEDT_HXX
 #include <formedt.hxx>
 #endif
@@ -219,6 +224,7 @@
 #ifndef _UTLUI_HRC
 #include "utlui.hrc"
 #endif
+
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -472,11 +478,12 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
             }
         }
     }
-
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create(); //CHINA001
+    DBG_ASSERT(pFact, "Dialogdiet fail!"); //CHINA001
     AddTabPage(TP_TOX_SELECT, SwTOXSelectTabPage::Create, 0);
     AddTabPage(TP_TOX_STYLES, SwTOXStylesTabPage::Create, 0);
     AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
-    AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,  0);
+    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ),  0 ); //CHINA001 AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,   0);
     AddTabPage(TP_TOX_ENTRY, SwTOXEntryTabPage::Create,     0);
     if(!pCurTOX)
         SetCurPageId(TP_TOX_SELECT);
@@ -523,8 +530,12 @@ SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
 void    SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if( TP_BACKGROUND == nId  )
-
-        ((SvxBackgroundTabPage&)rPage).ShowSelector();
+    { //add CHINA001
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_SELECTOR));
+        rPage.PageCreated(aSet);
+    }
+        //CHINA001 ((SvxBackgroundTabPage&)rPage).ShowSelector();
     else if(TP_COLUMN == nId )
     {
         const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)GetInputSetImpl()->Get(RES_FRM_SIZE);
@@ -1784,6 +1795,7 @@ IMPL_LINK(SwTOXSelectTabPage, ChapterHdl,   PushButton*, pButton)
 
     SfxItemSet aTmp(rSh.GetView().GetPool(), FN_PARAM_1, FN_PARAM_1);
     SwOutlineTabDialog* pDlg = new SwOutlineTabDialog(pButton, &aTmp, rSh);
+
     if(RET_OK == pDlg->Execute())
     {
         CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
