@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: bc $ $Date: 2002-11-26 11:12:14 $
+ *  last change: $Author: bc $ $Date: 2002-12-05 15:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
 
 package com.sun.star.wizards.report;
 import com.sun.star.wizards.common.TextDocument;
+import com.sun.star.wizards.common.UNODialogs;
+import com.sun.star.wizards.common.Tools;
 import com.sun.star.wizards.common.TextDocument.UnknownHiddenControlException;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XElementAccess;
@@ -178,7 +180,7 @@ public class Dataimport extends ReportWizard{
         String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
         XMultiServiceFactory xMSF = null;
         try {
-            xMSF = tools.connect(ConnectStr);
+            xMSF = Tools.connect(ConnectStr);
         if( xMSF != null )  System.out.println("Connected to "+ ConnectStr );
         Dataimport CurDataimport = new Dataimport();
         CurDataimport.createReport(xMSF);
@@ -293,7 +295,7 @@ public class Dataimport extends ReportWizard{
     public boolean reconnectToDatabase(XMultiServiceFactory xMSF){
     try{
     XNameContainer xNamedForms = CurReportDocument.getDocumentForms();
-    Object oDBForm = tools.getUNOObjectbyName(xNamedForms, SOREPORTFORMNAME);
+    Object oDBForm = Tools.getUNOObjectbyName(xNamedForms, SOREPORTFORMNAME);
     boolean bgetConnection;
     if (oDBForm != null){
         String sMsg = sMsgHiddenControlMissing + (char) 13 + sMsgEndAutopilot;
@@ -305,11 +307,11 @@ public class Dataimport extends ReportWizard{
         String sGroupFieldNames = CurReportDocument.getValueofHiddenControl(xNamedForm, "GroupFieldNames", sMsg);
         String sFieldNames = CurReportDocument.getValueofHiddenControl(xNamedForm, "FieldNames", sMsg);
         String sRecordFieldNames = CurReportDocument.getValueofHiddenControl(xNamedForm, "RecordFieldNames", sMsg);
-        CurReportDocument.CurDBMetaData.FieldNames = tools.ArrayoutofString(sFieldNames,";");
-        CurReportDocument.CurDBMetaData.RecordFieldNames = tools.ArrayoutofString(sRecordFieldNames,";");
-        CurReportDocument.CurDBMetaData.GroupFieldNames = tools.ArrayoutofString(sGroupFieldNames,";");
+        CurReportDocument.CurDBMetaData.FieldNames = Tools.ArrayoutofString(sFieldNames,";");
+        CurReportDocument.CurDBMetaData.RecordFieldNames = Tools.ArrayoutofString(sRecordFieldNames,";");
+        CurReportDocument.CurDBMetaData.GroupFieldNames = Tools.ArrayoutofString(sGroupFieldNames,";");
         CurReportDocument.CurDBMetaData.CommandType = Integer.valueOf(sCommandType).intValue();
-        sMsgQueryCreationImpossible = tools.replaceSubString(sMsgQueryCreationImpossible, CurReportDocument.CurDBMetaData.Command, "<STATEMENT>");
+        sMsgQueryCreationImpossible = Tools.replaceSubString(sMsgQueryCreationImpossible, CurReportDocument.CurDBMetaData.Command, "<STATEMENT>");
         bgetConnection = CurReportDocument.CurDBMetaData.getConnection(sMsgNoConnection, sMsgConnectionImpossible);
         if (bgetConnection){
         boolean bexecute = CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot);
@@ -319,7 +321,7 @@ public class Dataimport extends ReportWizard{
         return false;
     }
     else{
-        sReportFormNotExisting = tools.replaceSubString(sReportFormNotExisting, SOREPORTFORMNAME, "<REPORTFORM>");
+        sReportFormNotExisting = Tools.replaceSubString(sReportFormNotExisting, SOREPORTFORMNAME, "<REPORTFORM>");
         UNODialogs.showMessageBox(xMSF, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sReportFormNotExisting + (char) 13 + sMsgEndAutopilot);
         return false;
     }
@@ -347,8 +349,8 @@ public class Dataimport extends ReportWizard{
     Object CurGroupValue;
     String CurGroupTableName;
     DBMetaData CurDBMetaData = CurReportDocument.CurDBMetaData;
-    int GroupFieldCount = tools.getArraylength(CurDBMetaData.GroupFieldNames);
-    int FieldCount = tools.getArraylength(CurDBMetaData.FieldNames);
+    int GroupFieldCount = Tools.getArraylength(CurDBMetaData.GroupFieldNames);
+    int FieldCount = Tools.getArraylength(CurDBMetaData.FieldNames);
     Object[] OldGroupFieldValues = new Object[GroupFieldCount];
     XTextTable[] xGroupBaseTables = new XTextTable[GroupFieldCount];
     int RecordFieldCount = FieldCount - GroupFieldCount;
@@ -367,20 +369,20 @@ public class Dataimport extends ReportWizard{
     xTextDocument.lockControllers();
         if (CurDBMetaData.ResultSet.next() == true){
         replaceUserFields();
-        tools.setUNOPropertyValue(xTextCursor, "PageDescName", "First Page");
+        Tools.setUNOPropertyValue(xTextCursor, "PageDescName", "First Page");
         for (ColIndex = 0; ColIndex < GroupFieldCount; ColIndex++){
             CurGroupTableName = "Tbl_GroupField" + Integer.toString(ColIndex+1);
             xGroupBaseTables[ColIndex] = (XTextTable) CurReportDocument.xTextTablesSupplier.getTextTables().getByName(CurGroupTableName);
         if (ColIndex == 0){
-            BreakType BreakValue = (BreakType) tools.getUNOPropertyValue(xGroupBaseTables[ColIndex], "BreakType");
+            BreakType BreakValue = (BreakType) Tools.getUNOPropertyValue(xGroupBaseTables[ColIndex], "BreakType");
             if (BreakValue.equals(BreakType.NONE) == false) {
             CorrBreakValue = BreakValue;
-            tools.setUNOPropertyValue(xGroupBaseTables[ColIndex], "BreakType", BreakType.NONE);
+            Tools.setUNOPropertyValue(xGroupBaseTables[ColIndex], "BreakType", BreakType.NONE);
             }
-            String PageDescName = (String) tools.getUNOPropertyValue(xGroupBaseTables[ColIndex], "PageDescName");
+            String PageDescName = (String) Tools.getUNOPropertyValue(xGroupBaseTables[ColIndex], "PageDescName");
             if (PageDescName.equals("") == false){
             CorrPageDescName = PageDescName;
-            tools.setUNOPropertyValue(xGroupBaseTables[ColIndex], "PageDescName", "");
+            Tools.setUNOPropertyValue(xGroupBaseTables[ColIndex], "PageDescName", "");
             }
         }
             CurGroupValue = CurDBMetaData.getGroupColumnValue(iCommandType, GroupColIndices, ColIndex);
@@ -418,9 +420,9 @@ public class Dataimport extends ReportWizard{
     setLayoutSectionsInvisible(GroupFieldCount);
     CurReportDocument.breakLinkofTextSections();
     if (CorrBreakValue != null)
-        tools.setUNOPropertyValue(xGroupBaseTables[0], "BreakType", CorrBreakValue);
+        Tools.setUNOPropertyValue(xGroupBaseTables[0], "BreakType", CorrBreakValue);
     if (CorrPageDescName != "")
-        tools.setUNOPropertyValue(xGroupBaseTables[0], "PageDescName", CorrPageDescName);
+        Tools.setUNOPropertyValue(xGroupBaseTables[0], "PageDescName", CorrPageDescName);
     }
     catch( com.sun.star.uno.Exception exception ){
         exception.printStackTrace(System.out);
@@ -440,11 +442,11 @@ public class Dataimport extends ReportWizard{
     Object oTextSection;
     for (int i = 0; i< GroupFieldCount; i++){
         oTextSection = xTextSections.getByName("GroupField" + String.valueOf(i+1));
-        tools.setUNOPropertyValue(oTextSection, "IsVisible", new Boolean(false));
+        Tools.setUNOPropertyValue(oTextSection, "IsVisible", new Boolean(false));
     }
     if (xTextSections.hasByName("RecordSection")){
         oTextSection = xTextSections.getByName("RecordSection");
-        tools.setUNOPropertyValue(oTextSection, "IsVisible", new Boolean(false));
+        Tools.setUNOPropertyValue(oTextSection, "IsVisible", new Boolean(false));
     }
     }
     catch( com.sun.star.uno.Exception exception ){
@@ -481,7 +483,7 @@ public class Dataimport extends ReportWizard{
     public void updateProgressDisplay(int iCounter){
     try{
     if (iCounter % 10 == 0){
-        sProgressCurRecord = tools.replaceSubString(sProgressBaseCurRecord, String.valueOf(iCounter), "<COUNT>");
+        sProgressCurRecord = Tools.replaceSubString(sProgressBaseCurRecord, String.valueOf(iCounter), "<COUNT>");
             CurUNOProgressDialog.assignPropertyToDialogControl("lblCurProgress", "Label", sProgressCurRecord);
     }
     }
@@ -496,7 +498,7 @@ public class Dataimport extends ReportWizard{
     XTextContent xTextSectionContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, oTextSection);
     xTextCursor.gotoEnd(false);
     xTextCursor.getText().insertTextContent(xTextCursor, xTextSectionContent, true);
-    tools.setUNOPropertyValue(oTextSection, "LinkRegion", sLinkRegion);
+    Tools.setUNOPropertyValue(oTextSection, "LinkRegion", sLinkRegion);
     if (CurDBColumn != null){
         boolean bIsGroupTable = (sLinkRegion.equals("RecordSection") != true);
         if (bIsGroupTable == true){
