@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base3d.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 14:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifndef INCLUDED_SVTOOLS_OPTIONS3D_HXX
+#include <svtools/options3d.hxx>
+#endif
+
 #ifndef _B3D_BASE3D_HXX
 #include "base3d.hxx"
 #endif
@@ -101,10 +105,6 @@
 
 #ifndef _SFXINIPROP_HXX
 #include <svtools/iniprop.hxx>
-#endif
-
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
 #endif
 
 /*************************************************************************
@@ -238,11 +238,7 @@ Base3D* Base3D::Create(OutputDevice* pOutDev, BOOL bForcePrinter)
             {
                 // Versuchen, einen OpenGL Kontext zu bekommen? Teste das
                 // globale Flag aus der .INI
-                BOOL bUseOpenGL = FALSE;
-                String aTmp = SfxIniManager::Get()->Get( SFX_KEY_3D_OPENGL );
-
-                if(aTmp.Len() && aTmp.GetChar(0) != sal_Unicode('0'))
-                    bUseOpenGL = TRUE;
+                BOOL bUseOpenGL = SvtOptions3D().IsOpenGL();
 
                 if((bUseOpenGL && pRetval->GetBase3DType() != BASE3D_TYPE_OPENGL)
                     || (!bUseOpenGL && pRetval->GetBase3DType() == BASE3D_TYPE_OPENGL))
@@ -306,11 +302,7 @@ Base3D* Base3D::CreateScreenRenderer(OutputDevice* pOutDev)
 
     // Versuchen, einen OpenGL Kontext zu bekommen? Teste das
     // globale Flag aus der .INI
-    BOOL bUseOpenGL = FALSE;
-    String aTmp = SfxIniManager::Get()->Get( SFX_KEY_3D_OPENGL );
-
-    if(aTmp.Len() && aTmp.GetChar(0) != sal_Unicode('0'))
-        bUseOpenGL = TRUE;
+    BOOL bUseOpenGL = SvtOptions3D().IsOpenGL();
 
     // Versuchen, einen OpenGL Kontext zu bekommen
     if(bUseOpenGL)

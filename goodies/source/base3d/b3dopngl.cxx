@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dopngl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 14:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <tools/debug.hxx>
 #endif
 
+#ifndef INCLUDED_SVTOOLS_OPTIONS3D_HXX
+#include <svtools/options3d.hxx>
+#endif
+
 #ifndef _B3D_B3DOPNGL_HXX
 #include "b3dopngl.hxx"
 #endif
@@ -85,10 +89,6 @@
 
 #ifndef _B3D_B3DGEOM_HXX
 #include "b3dgeom.hxx"
-#endif
-
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
 #endif
 
 /*************************************************************************
@@ -136,11 +136,7 @@ Base3DOpenGL::Base3DOpenGL(OutputDevice* pOutDev)
     }
     SetContextIsValid(aOpenGL.IsValid());
     CalcInternPhongDivideSize();
-
-    // read bForceToSinglePrimitiveOutput-flag from .ini
-    String aTmp = SfxIniManager::Get()->Get(SFX_KEY_3D_OPENGL_FASTER);
-    bForceToSinglePrimitiveOutput =
-        (aTmp.Len() && aTmp.GetChar(0) == sal_Unicode('0'));
+    bForceToSinglePrimitiveOutput = SvtOptions3D().IsOpenGL_Faster();
 }
 
 /*************************************************************************
