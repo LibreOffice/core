@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:25:38 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 12:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1601,8 +1601,19 @@ void SwXShape::dispose(void) throw( RuntimeException )
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        SdrObject* pObj = pFmt->FindSdrObject();
-        if(pObj && pObj->IsInserted())
+        // OD 10.07.2003 #110742# - determine correct <SdrObject>
+        //SdrObject* pObj = pFmt->FindSdrObject();
+        SdrObject* pObj = GetSvxShape()->GetSdrObject();
+        // OD 10.07.2003 #110742# - safety assertion:
+        // <pObj> must be the same as <pFmt->FindSdrObject()>, if <pObj> isn't
+        // a 'virtual' drawing object.
+        ASSERT( !pObj->ISA(SwDrawVirtObj) || pObj == pFmt->FindSdrObject(),
+                "<SwXShape::dispose(..) - different 'master' drawing objects!!" );
+        // OD 10.07.2003 #110742# - perform delete of draw frame format *not*
+        // for 'virtual' drawing objects.
+        if ( pObj &&
+             !pObj->ISA(SwDrawVirtObj) &&
+             pObj->IsInserted() )
         {
             if( pFmt->GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
             {
