@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:22:33 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 20:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ ModalDialog DLG_PARAMETERS
         Text = "~nдchster";
         Text [english] = "~next";
         TabStop = TRUE ;
-        Text[ english_us ] = "~next";
+        Text[ english_us ] = "~Next";
         Text[ portuguese ] = "~seguinte";
         Text[ russian ] = "~следующий";
         Text[ greek ] = "ерьме~нп";
@@ -234,6 +234,9 @@ ModalDialog DLG_PARAMETERS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/02/09 20:22:33  kz
+ *  Merge SWT614: 02/09/01 - 21:22:03
+ *
  *  Revision 1.4  2000/11/27 07:48:12  kz
  *  Merge SRC614: 27.11.00 - 08:47:45 (NoBranch)
  *
