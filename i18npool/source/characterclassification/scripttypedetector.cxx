@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scripttypedetector.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-06-13 16:28:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,16 @@
  *
  ************************************************************************/
 
-#include <drafts/com/sun/star/i18n/CTLScriptType.hpp>
-#include <drafts/com/sun/star/i18n/ScriptDirection.hpp>
+#include <com/sun/star/i18n/CTLScriptType.hpp>
+#include <com/sun/star/i18n/ScriptDirection.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <scripttypedetector.hxx>
-#include <unicode.hxx>
+#include <i18nutil/unicode.hxx>
 
 //  ----------------------------------------------------
 //  class ScriptTypeDetector
 //  ----------------------------------------------------;
 
-using namespace drafts::com::sun::star::i18n;
 using namespace com::sun::star::i18n;
 
 ScriptTypeDetector::ScriptTypeDetector()
