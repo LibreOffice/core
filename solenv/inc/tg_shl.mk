@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-19 10:40:11 $
+#   last change: $Author: hjs $ $Date: 2001-06-19 14:41:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -463,7 +463,9 @@ $(SHL$(TNR)TARGETN) : \
     @echo "Making: $@.framework"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL$(TNR)NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL$(TNR)TARGETN).framework
+.ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -477,7 +479,9 @@ $(SHL$(TNR)TARGETN) : \
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL$(TNR)NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL$(TNR)TARGETN)
+.ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL$(TNR)TARGETN:b:b:b)

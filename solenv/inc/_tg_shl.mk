@@ -363,7 +363,9 @@ $(SHL1TARGETN) : \
     @echo "Making: $@.framework"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL1NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL1TARGETN).framework
+.ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -377,7 +379,9 @@ $(SHL1TARGETN) : \
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL1NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL1TARGETN)
+.ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL1TARGETN:b:b:b)
@@ -810,7 +814,9 @@ $(SHL2TARGETN) : \
     @echo "Making: $@.framework"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL2NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL2TARGETN).framework
+.ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -824,7 +830,9 @@ $(SHL2TARGETN) : \
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL2NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL2TARGETN)
+.ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL2TARGETN:b:b:b)
@@ -1257,7 +1265,9 @@ $(SHL3TARGETN) : \
     @echo "Making: $@.framework"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL3NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL3TARGETN).framework
+.ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -1271,7 +1281,9 @@ $(SHL3TARGETN) : \
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL3NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL3TARGETN)
+.ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL3TARGETN:b:b:b)
@@ -1704,7 +1716,9 @@ $(SHL4TARGETN) : \
     @echo "Making: $@.framework"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL4NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL4TARGETN).framework
+.ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -1718,7 +1732,9 @@ $(SHL4TARGETN) : \
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL4NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL4TARGETN)
+.ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL4TARGETN:b:b:b)
@@ -2151,7 +2167,9 @@ $(SHL5TARGETN) : \
     @echo "Making: $@.framework"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL5NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL5TARGETN).framework
+.ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -2165,7 +2183,9 @@ $(SHL5TARGETN) : \
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL5NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL5TARGETN)
+.ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL5TARGETN:b:b:b)
@@ -2598,7 +2618,9 @@ $(SHL6TARGETN) : \
     @echo "Making: $@.framework"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL6NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL6TARGETN).framework
+.ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -2612,7 +2634,9 @@ $(SHL6TARGETN) : \
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL6NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL6TARGETN)
+.ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL6TARGETN:b:b:b)
@@ -3045,7 +3069,9 @@ $(SHL7TARGETN) : \
     @echo "Making: $@.framework"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL7NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL7TARGETN).framework
+.ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -3059,7 +3085,9 @@ $(SHL7TARGETN) : \
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL7NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL7TARGETN)
+.ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL7TARGETN:b:b:b)
@@ -3492,7 +3520,9 @@ $(SHL8TARGETN) : \
     @echo "Making: $@.framework"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL8NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL8TARGETN).framework
+.ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -3506,7 +3536,9 @@ $(SHL8TARGETN) : \
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL8NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL8TARGETN)
+.ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL8TARGETN:b:b:b)
@@ -3939,7 +3971,9 @@ $(SHL9TARGETN) : \
     @echo "Making: $@.framework"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL9NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL9TARGETN).framework
+.ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -3953,7 +3987,9 @@ $(SHL9TARGETN) : \
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL9NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL9TARGETN)
+.ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL9TARGETN:b:b:b)
@@ -4386,7 +4422,9 @@ $(SHL10TARGETN) : \
     @echo "Making: $@.framework"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL10NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL10TARGETN).framework
+.ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -4400,7 +4438,9 @@ $(SHL10TARGETN) : \
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
 .IF "$(UPDATER)"=="YES"
+.IF "$(SHL10NOCHECK)"==""
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL10TARGETN)
+.ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL10TARGETN:b:b:b)
