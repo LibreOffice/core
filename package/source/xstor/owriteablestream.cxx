@@ -2,9 +2,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:15:28 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 09:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
@@ -229,6 +233,24 @@ OWriteStream_Impl::~OWriteStream_Impl()
 }
 
 //-----------------------------------------------
+void OWriteStream_Impl::InsertIntoPackageFolder( const ::rtl::OUString& aName,
+                                                  const uno::Reference< container::XNameContainer >& xParentPackageFolder )
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+
+    if ( m_bCommited )
+    {
+        OSL_ENSURE( m_xPackageStream.is(), "An inserted stream is incomplete!\n" );
+        uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageStream, uno::UNO_QUERY );
+        if ( !xTunnel.is() )
+            throw uno::RuntimeException(); // TODO
+
+        xParentPackageFolder->insertByName( aName, uno::makeAny( xTunnel ) );
+
+        m_bCommited = sal_False;
+    }
+}
+//-----------------------------------------------
 sal_Bool OWriteStream_Impl::IsEncrypted()
 {
     if ( m_bForceEncrypted || m_bHasCachedPassword )
@@ -237,30 +259,27 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
     if ( m_aTempURL.getLength() )
         return sal_False;
 
-    uno::Reference< beans::XPropertySet > xPropertySet( m_xPackageStream, uno::UNO_QUERY );
-    if ( !xPropertySet.is() )
-        throw uno::RuntimeException();
+    GetStreamProperties();
 
-    ::rtl::OUString aString_EncryptionKey = ::rtl::OUString::createFromAscii( "Encrypted" );
-    sal_Bool bEncrypted = sal_False;
-    try {
-        if ( !( xPropertySet->getPropertyValue( aString_EncryptionKey ) >>= bEncrypted ) )
-            throw io::IOException();
-    }
-    catch ( uno::Exception& )
-    {
-        OSL_ENSURE( sal_False, "Can't write encryption related properties!\n" );
-        throw io::IOException(); // TODO
-    }
+    for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
+        if ( m_aProps[nInd].Name.equalsAscii( "Encrypted" ) )
+        {
+            sal_Bool bEncr = sal_False;
+            if ( m_aProps[nInd].Value >>= bEncr )
+                return bEncr;
+        }
 
-    return bEncrypted;
+    OSL_ENSURE( sal_False, "Can't read encryption related properties!\n" );
+    throw io::IOException(); // TODO
+
+    return sal_False; // not reachable
 }
 
 
 //-----------------------------------------------
 void OWriteStream_Impl::DisposeWrappers()
 {
-    ::osl::MutexGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     if ( m_pAntiImpl )
     {
         try {
@@ -298,7 +317,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
 }
 
 //-----------------------------------------------
-::rtl::OUString OWriteStream_Impl::GetNewFilledTempFile()
+::rtl::OUString OWriteStream_Impl::GetFilledTempFile()
 {
     if ( !m_aTempURL.getLength() )
     {
@@ -356,7 +375,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
     uno::Reference< io::XStream > xTempStream;
 
     if ( !m_aTempURL.getLength() )
-        m_aTempURL = GetNewFilledTempFile();
+        m_aTempURL = GetFilledTempFile();
 
     uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
                     GetServiceFactory()->createInstance (
@@ -387,6 +406,9 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
 uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
 {
     uno::Reference< io::XInputStream > xInputStream;
+
+    if ( !m_aTempURL.getLength() )
+        m_aTempURL = GetFilledTempFile();
 
     uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
                     GetServiceFactory()->createInstance (
@@ -449,13 +471,13 @@ void OWriteStream_Impl::Commit()
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
-    // this call can be made only during final commit to root storage
+    // this call can be made only during parent storage commit
     // the  parent storage is responsible for the correct handling
     // of deleted and renamed contents
 
     OSL_ENSURE( m_xPackageStream.is(), "No package stream is set!\n" );
 
-    if ( !m_bIsModified || !m_bCommited )
+    if ( !m_bIsModified )
         return;
 
     // The stream must be free
@@ -475,12 +497,20 @@ void OWriteStream_Impl::Commit()
     CopyTempFileToOutput( xTempOut );
     xTempOut->closeOutput();
 
+    uno::Sequence< uno::Any > aSeq( 1 );
+    aSeq[0] <<= sal_False;
+    uno::Reference< packages::XDataSinkEncrSupport > xNewPackageStream(
+                                                    m_xPackage->createInstanceWithArguments( aSeq ),
+                                                    uno::UNO_QUERY );
+    if ( !xNewPackageStream.is() )
+        throw uno::RuntimeException();
+
     // use new file as current persistent representation
     // the new file will be removed after it's stream is closed
-    m_xPackageStream->setDataStream( xTempIn );
+    xNewPackageStream->setDataStream( xTempIn );
 
     // copy properties to the package stream
-    uno::Reference< beans::XPropertySet > xPropertySet( m_xPackageStream, uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xPropertySet( xNewPackageStream, uno::UNO_QUERY );
     if ( !xPropertySet.is() )
         throw uno::RuntimeException();
 
@@ -488,10 +518,17 @@ void OWriteStream_Impl::Commit()
         xPropertySet->setPropertyValue( ::rtl::OUString::createFromAscii( "EncryptionKey" ), uno::makeAny( m_aKey ) );
 
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
+    {
+        if ( m_aProps[nInd].Name.equalsAscii( "Size" ) && m_pAntiImpl )
+            m_aProps[nInd].Value <<= ((sal_Int32)m_pAntiImpl->m_xSeekable->getLength());
+
         xPropertySet->setPropertyValue( m_aProps[nInd].Name, m_aProps[nInd].Value );
+    }
 
     // the stream should be free soon, after package is stored
-    m_bIsModified = m_bCommited = sal_False;
+    m_xPackageStream = xNewPackageStream;
+    m_bIsModified = sal_False;
+    m_bCommited = sal_True; // will allow to use transaction on stream level if will need it
 }
 
 //-----------------------------------------------
@@ -521,7 +558,7 @@ void OWriteStream_Impl::Revert()
 
     m_aProps.realloc( 0 );
 
-    m_bCommited = m_bIsModified = sal_False;
+    m_bIsModified = sal_False;
 
     m_bHasCachedPassword = sal_False;
     m_aKey.realloc( 0 );
@@ -1025,8 +1062,6 @@ void OWriteStream::CloseOutput_Impl()
         if ( m_pImpl->m_aProps[nInd].Name.equalsAscii( "Size" ) )
             m_pImpl->m_aProps[nInd].Value <<= ((sal_Int32)m_xSeekable->getLength());
     }
-
-    m_pImpl->m_bCommited = sal_True;
 }
 
 //-----------------------------------------------
@@ -1268,6 +1303,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
                     }
                     else
                     {
+                        m_pImpl->GetFilledTempFile(); // the stream is actually changed by removing of encryption
                         m_pImpl->m_bForceEncrypted = sal_False;
                         m_pImpl->m_bHasCachedPassword = sal_False;
                         m_pImpl->m_aKey.realloc( 0 );
