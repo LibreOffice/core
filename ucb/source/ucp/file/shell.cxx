@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:42:49 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1392,6 +1392,29 @@ shell::move( sal_Int32 CommandId,
 //  Copies the content belonging to fileURL srcUnqPath to fileURL dstUnqPath ( files and directories )
 //
 
+namespace {
+
+bool getType(
+    TaskManager & task, sal_Int32 id, rtl::OUString const & fileUrl,
+    osl::DirectoryItem * item, osl::FileStatus::Type * type)
+{
+    OSL_ASSERT(item != 0 && type != 0);
+    osl::FileBase::RC err = osl::DirectoryItem::get(fileUrl, *item);
+    if (err != osl::FileBase::E_None) {
+        task.installError(id, TASKHANDLING_TRANSFER_BY_COPY_SOURCE, err);
+        return false;
+    }
+    osl::FileStatus stat(FileStatusMask_Type);
+    err = item->getFileStatus(stat);
+    if (err != osl::FileBase::E_None) {
+        task.installError(id, TASKHANDLING_TRANSFER_BY_COPY_SOURCESTAT, err);
+        return false;
+    }
+    *type = stat.getFileType();
+    return true;
+}
+
+}
 
 void SAL_CALL
 shell::copy(
@@ -1407,33 +1430,41 @@ shell::copy(
     if( dstUnqPath == srcUnqPath )    // Nothing left to be done
         return;
 
-    // Copying file or folder ?
-    osl::DirectoryItem aItem;
-    nError = osl::DirectoryItem::get( srcUnqPath,aItem );
-    if( nError != osl::FileBase::E_None )
-    {
-        installError( CommandId,
-                      TASKHANDLING_TRANSFER_BY_COPY_SOURCE,
-                      nError );
+    // Resolve symbolic links within the source path.  If srcUnqPath denotes a
+    // symbolic link (targeting either a file or a folder), the contents of the
+    // target is copied (recursively, in the case of a folder).  However, if
+    // recursively copying the contents of a folder causes a symbolic link to be
+    // copied, the symbolic link itself is copied.
+    osl::DirectoryItem item;
+    osl::FileStatus::Type type;
+    if (!getType(*this, CommandId, srcUnqPath, &item, &type)) {
         return;
     }
-    osl::FileStatus aStatus( FileStatusMask_Type );
-    nError = aItem.getFileStatus( aStatus );
-    if( nError != osl::FileBase::E_None || ! aStatus.isValid( FileStatusMask_Type ) )
-    {
-        installError( CommandId,
-                      TASKHANDLING_TRANSFER_BY_COPY_SOURCESTAT,
-                      nError );
-        return;
+    rtl::OUString rslvdSrcUnqPath;
+    if (type == osl::FileStatus::Link) {
+        osl::FileStatus stat(FileStatusMask_LinkTargetURL);
+        nError = item.getFileStatus(stat);
+        if (nError != osl::FileBase::E_None) {
+            installError(
+                CommandId, TASKHANDLING_TRANSFER_BY_COPY_SOURCESTAT, nError);
+            return;
+        }
+        rslvdSrcUnqPath = stat.getLinkTargetURL();
+        if (!getType(*this, CommandId, srcUnqPath, &item, &type)) {
+            return;
+        }
+    } else {
+        rslvdSrcUnqPath = srcUnqPath;
     }
-    sal_Bool isDocument = ( aStatus.getFileType() == osl::FileStatus::Regular );
+    sal_Bool isDocument
+        = type != osl::FileStatus::Directory && type != osl::FileStatus::Volume;
     sal_Int32 IsWhat = isDocument ? -1 : 1;
 
     switch( NameClash )
     {
         case NameClash::KEEP:
         {
-            nError = copy_recursive( srcUnqPath,dstUnqPath,IsWhat,true );
+            nError = copy_recursive( rslvdSrcUnqPath,dstUnqPath,IsWhat,true );
             if( nError != osl::FileBase::E_None && nError != osl::FileBase::E_EXIST )
             {
                 installError( CommandId,
@@ -1449,7 +1480,7 @@ shell::copy(
             remove( CommandId, dstUnqPath, IsWhat, sal_False );
 
             // copy.
-            nError = copy_recursive( srcUnqPath,dstUnqPath,IsWhat,false );
+            nError = copy_recursive( rslvdSrcUnqPath,dstUnqPath,IsWhat,false );
             if( nError != osl::FileBase::E_None )
             {
                 installError( CommandId,
@@ -1462,7 +1493,7 @@ shell::copy(
         case NameClash::RENAME:
         {
             rtl::OUString newDstUnqPath;
-            nError = copy_recursive( srcUnqPath,dstUnqPath,IsWhat,true );
+            nError = copy_recursive( rslvdSrcUnqPath,dstUnqPath,IsWhat,true );
 
             if( nError == osl::FileBase::E_EXIST )
             {
@@ -1488,7 +1519,7 @@ shell::copy(
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
 
-                    nError = copy_recursive( srcUnqPath,newDstUnqPath,IsWhat,true );
+                    nError = copy_recursive( rslvdSrcUnqPath,newDstUnqPath,IsWhat,true );
                 }
                 while( ( nError == osl::FileBase::E_EXIST ) && ( nTry < 10000 ) );
             }
@@ -1513,7 +1544,7 @@ shell::copy(
         }
         case NameClash::ERROR:
         {
-            nError = copy_recursive( srcUnqPath,dstUnqPath,IsWhat,true );
+            nError = copy_recursive( rslvdSrcUnqPath,dstUnqPath,IsWhat,true );
 
             if( nError == osl::FileBase::E_EXIST )
             {
@@ -1533,7 +1564,7 @@ shell::copy(
         case NameClash::ASK:
         default:
         {
-            nError = copy_recursive( srcUnqPath,dstUnqPath,IsWhat,true );
+            nError = copy_recursive( rslvdSrcUnqPath,dstUnqPath,IsWhat,true );
 
             if( nError == osl::FileBase::E_EXIST )
             {
