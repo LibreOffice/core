@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:13:43 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,6 +344,8 @@ ToolBox RID_BRW_QRY_TOOLBOX
             Text[ hebrew ] = "‮סגירה‬";
             Text[ hindi ] = "बन्द करो";
             Text[ slovak ] = "Zavrieť";
+            Text[ hungarian ] = "Bezárás";
+            Text[ slovenian ] = "Zapri";
         };
     };
 };
@@ -378,6 +380,8 @@ String RID_STR_LOADING_DATASOURCE
     Text[ hebrew ] = "Daten laden";
     Text[ hindi ] = "ड़ॉटा लोड करो";
     Text[ slovak ] = "Načítať dáta";
+    Text[ hungarian ] = "Adatok töltése";
+    Text[ slovenian ] = "Naloži podatke";
 };
 
 QueryBox QUERY_BRW_SAVEMODIFIED
@@ -415,6 +419,8 @@ QueryBox QUERY_BRW_SAVEMODIFIED
     Message[ hebrew ] = "Der aktuelle Datensatz wurde geändert.\nSollen die Änderungen gespeichert werden?";
     Message[ hindi ] = "वर्तमान अभिलेख को बदला है ।\nआप परिवर्तनों को संचित करना चाहते है ?";
     Message[ slovak ] = "Aktívny záznam bol zmenený.\nChcete uložiť zmeny?";
+    Message[ hungarian ] = "A jelenlegi rekord megváltozott. \nSzeretné menteni? ";
+    Message[ slovenian ] = "Trenutni zapis je bil spremenjen.\nAli želite shraniti spremembe?";
 };
 
 QueryBox QUERY_BRW_DELETE_ROWS
@@ -449,6 +455,8 @@ QueryBox QUERY_BRW_DELETE_ROWS
     Message[ hebrew ] = "Sollen die selektierten Daten gelöscht werden?";
     Message[ hindi ] = "आप चुने हुए ड़ॉटा को मिटाना चाहते है?";
     Message[ slovak ] = "Chcete zmazať vybrané dáta?";
+    Message[ hungarian ] = "Biztosan törli a kijelölt adatokat?";
+    Message[ slovenian ] = "Ali želite izbrisati izbrane podatke?";
 };
 
 String RID_STR_DATABROWSER_FILTERED
@@ -483,6 +491,8 @@ String RID_STR_DATABROWSER_FILTERED
     Text[ hebrew ] = "(gefiltert)";
     Text[ hindi ] = "(फ़िल्टर की हुयी)";
     Text[ slovak ] = "(filtrované)";
+    Text[ hungarian ] = "(szűrt)";
+    Text[ slovenian ] = "(filtrirano)";
 };
 
 String SBA_BROWSER_SETTING_ORDER
@@ -497,7 +507,7 @@ String SBA_BROWSER_SETTING_ORDER
     Text[ french ] = "Erreur de d�finition des crit�res de tri";
     Text[ spanish ] = "Error al definir los criterios de orden";
     Text[ italian ] = "Errore nell'impostare i criteri";
-    Text[ danish ] = "Fejl under definering af sorteringskriterierne";
+    Text[ danish ] = "Fejl ved bestemmelse af sorteringskriterierne";
     Text[ swedish ] = "Fel vid definition av sorteringskriterier";
     Text[ polish ] = "B��d ustawiania kryteri�w sortowania";
     Text[ portuguese_brazilian ] = "Erro ao definir crit�rios de ordena��o";
@@ -514,6 +524,8 @@ String SBA_BROWSER_SETTING_ORDER
     Text[ hebrew ] = "Fehler beim Setzen der Sortier-Kriterien";
     Text[ hindi ] = "सोर्ट् क्रैटीरिया को सेट्ट करने के समय गलती";
     Text[ slovak ] = "Chybné nastavenie kritérií­ pre zoradenie";
+    Text[ hungarian ] = "Hiba a rendezési feltételek beállításában";
+    Text[ slovenian ] = "Napaka pri nastavljanju pogojev razvrščanja";
 };
 String SBA_BROWSER_SETTING_FILTER
 {
@@ -527,7 +539,7 @@ String SBA_BROWSER_SETTING_FILTER
     Text[ french ] = "Erreur de d�finition des crit�res de filtre";
     Text[ spanish ] = "Error al definir los criterios de filtro";
     Text[ italian ] = "Errore nell'impostare i criteri del filtro";
-    Text[ danish ] = "Fejl under definering af filtreringskriterierne";
+    Text[ danish ] = "Fejl ved bestemmelse af filtreringskriterierne";
     Text[ swedish ] = "Fel vid definition av filterkriterier";
     Text[ polish ] = "B��d ustawiania kryteri�w filtra";
     Text[ portuguese_brazilian ] = "Erro ao definir crit�rios dos filtros";
@@ -544,6 +556,8 @@ String SBA_BROWSER_SETTING_FILTER
     Text[ hebrew ] = "Fehler beim Setzen der Filter-Kriterien";
     Text[ hindi ] = "फिल्टर क्रैटीरिया को सेट्ट करने के समय गलती";
     Text[ slovak ] = "Chybné nastavenie kritérií­ filtra";
+    Text[ hungarian ] = "Hiba a szűrési feltételek beállításában";
+    Text[ slovenian ] = "Napaka pri nastavljanju pogojev filtriranja";
 };
 
 String RID_STR_CONNECTION_LOST
@@ -575,6 +589,8 @@ String RID_STR_CONNECTION_LOST
     Text[ hebrew ] = "Vebindung verloren";
     Text[ hindi ] = "कनेक्शन नष्ट हुआ";
     Text[ slovak ] = "Spojenie stratené";
+    Text[ hungarian ] = "A kapcsolat megszakadt";
+    Text[ slovenian ] = "Povezava prekinjena";
 };
 
 Image QUERYFOLDER_TREE_ICON
@@ -654,6 +670,8 @@ String RID_STR_QUERIES_CONTAINER
     Text[ hebrew ] = "‮שאילתות‬";
     Text[ hindi ] = "जानकारी";
     Text[ slovak ] = "Dotazy";
+    Text[ hungarian ] = "Lekérdezések";
+    Text[ slovenian ] = "Poizvedbe";
 };
 
 String RID_STR_TABLES_CONTAINER
@@ -685,6 +703,8 @@ String RID_STR_TABLES_CONTAINER
     Text[ hebrew ] = "‮טבלאות‬";
     Text[ hindi ] = "सारणियाँ";
     Text[ slovak ] = "Tabuľky";
+    Text[ hungarian ] = "Táblák";
+    Text[ slovenian ] = "Tabele";
 };
 
 String RID_STR_BOOKMARKS_CONTAINER
@@ -700,7 +720,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ spanish ] = "V�nculos";
     Text[ finnish ] = "Linkit";
     Text[ italian ] = "Collegamenti";
-    Text[ danish ] = "Genveje";
+    Text[ danish ] = "Referencer";
     Text[ swedish ] = "L�nkar";
     Text[ polish ] = "��cza";
     Text[ portuguese_brazilian ] = "V�nculos";
@@ -716,6 +736,8 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ hebrew ] = "‮קישורים‬";
     Text[ hindi ] = "लिंक्स";
     Text[ slovak ] = "Odkazy";
+    Text[ hungarian ] = "Hivatkozások";
+    Text[ slovenian ] = "Povezave";
 };
 
 #define MID_ADMINISTRATE    \
@@ -748,7 +770,9 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ czech ] = "Správa zdrojů dat...";   \
     Text[ hebrew ] = "~Datenquellen verwalten ..."; \
     Text[ hindi ] = "~ड़ॉटा मूलों का प्रशासन..."; \
-    Text[ slovak ] = "Administrovať zdroje ~dát...";
+    Text[ slovak ] = "Administrovať zdroje ~dát..."; \
+    Text[ hungarian ] = "Adatforrások ~adminisztrációja..."; \
+    Text[ slovenian ] = "Upravljanje virov pod~atkov...";
 
 #define MID_DIRECT_SQL  \
     Identifier = ID_DIRECT_SQL ;    \
@@ -779,7 +803,9 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ czech ] = "SQL...";   \
     Text[ hebrew ] = "SQL...";  \
     Text[ hindi ] = "SQL...";   \
-    Text[ slovak ] = "SQL...";
+    Text[ slovak ] = "SQL..."; \
+    Text[ hungarian ] = "SQL..."; \
+    Text[ slovenian ] = "SQL...";
 
 #define MID_CLOSECONN   \
     Identifier = ID_TREE_CLOSE_CONN ;   \
@@ -811,7 +837,9 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ czech ] = "Odpojit";  \
     Text[ hebrew ] = "Verbindung s~chließen";  \
     Text[ hindi ] = "डिस~कनेक्ट"; \
-    Text[ slovak ] = "O~dpojiť";
+    Text[ slovak ] = "O~dpojiť"; \
+    Text[ hungarian ] = "Kapcsolat bo~ntása"; \
+    Text[ slovenian ] = "Preki~ni povezavo";
 
 #define MID_REFRESHCONN \
     Identifier = ID_TREE_REBUILD_CONN ; \
@@ -843,7 +871,9 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ czech ] = "Obnovit spojení"; \
     Text[ hebrew ] = "Verbindung e~rneuern";    \
     Text[ hindi ] = "कनेक्शन ~नवीकरण";    \
-    Text[ slovak ] = "Obnoviť ~spojenie";
+    Text[ slovak ] = "Obnoviť ~spojenie"; \
+    Text[ hungarian ] = "Kapcsolat f~rissítése"; \
+    Text[ slovenian ] = "O~sveži povezavo";
 
 #define MITEMS_DEFAULT  \
     MenuItem    \
@@ -1004,6 +1034,8 @@ Menu MENU_BROWSER_TABLECONTEXT
                 Text[ hebrew ] = "Relatio~nenentwurf";
                 Text[ hindi ] = "~संबन्ध डिसैन";
                 Text[ slovak ] = "Návrh r~elácií";
+                Text[ hungarian ] = "~Reláció tervezése";
+                Text[ slovenian ] = "Oblikovanje rel~acij";
             };
         MenuItem
         {
@@ -1072,6 +1104,8 @@ Menu MENU_BROWSER_VIEWCONTEXT
                 Text[ hebrew ] = "Relatio~nenentwurf";
                 Text[ hindi ] = "~संबन्ध डिसैन";
                 Text[ slovak ] = "Návrh r~elácií";
+                Text[ hungarian ] = "~Reláció tervezése";
+                Text[ slovenian ] = "Oblikovanje rel~acij";
             };
         MenuItem
         {
@@ -1128,6 +1162,8 @@ String STR_TITLE_CONFIRM_DELETION
         Text[ hebrew ] = "Löschen bestätigen";
         Text[ hindi ] = "हटाना दृढ़ करो";
         Text[ slovak ] = "Potvrdiť zmazanie";
+        Text[ hungarian ] = "Törlés jóváhagyása";
+        Text[ slovenian ] = "Potrditev brisanja";
     };
 
 String STR_QUERY_DELETE_QUERY
@@ -1159,6 +1195,8 @@ String STR_QUERY_DELETE_QUERY
         Text[ hebrew ] = "Soll die Abfrage '$name$' gelöscht werden?";
         Text[ hindi ] = "आप '$name$' जानकारी को मिटाना चाहते है?";
         Text[ slovak ] = "Chcete zmazať dotaz '$name$'?";
+        Text[ hungarian ] = "Törli a következő lekérdezést: '$name$'?";
+        Text[ slovenian ] = "Ali želite izbrisati poizvedbo '$name$'?";
     };
 
 String STR_QUERY_DELETE_TABLE
@@ -1190,6 +1228,8 @@ String STR_QUERY_DELETE_TABLE
         Text[ hebrew ] = "Soll die Tabelle '%1' gelöscht werden?";
         Text[ hindi ] = "आप सारणी '%1' को मिटाना चाहते है?";
         Text[ slovak ] = "Chcete zmazať tabuľku '%1'?";
+        Text[ hungarian ] = "Biztosan törli a következő táblát: '%1'?  ";
+        Text[ slovenian ] = "Ali želite izbrisati tabelo '%1'?";
     };
 
 QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
@@ -1222,6 +1262,8 @@ QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
         Message[ hebrew ] = "Die Abfrage existiert bereits. Soll sie gelöscht werden?";
         Message[ hindi ] = "जानकारी पहिले से ही अस्तित्व में है । आप इसको को मिटाना चाहते है ?";
         Message[ slovak ] = "Dotaz už existuje. Chcete ho zmazať?";
+        Message[ hungarian ] = "A lekérdezés már létezik. Szeretné törölni?";
+        Message[ slovenian ] = "Poizvedba že obstaja. Ali jo želite izbrisati?";
     };
 
 QueryBox QUERY_CONNECTION_LOST
@@ -1254,6 +1296,8 @@ QueryBox QUERY_CONNECTION_LOST
         Message[ hebrew ] = "Die Verbindung zur Datenbank wurde gelöscht! Soll Sie wieder aufgebaut werden?";
         Message[ hindi ] = "लेखासंचय से कनेक्शन नष्ट हो गया । आप पुनः कनेक्ट करना चाहते है ।";
         Message[ slovak ] = "Spojenie s databázou bolo stratené. Chcete ho obnoviť?";
+        Message[ hungarian ] = "Az adatbázis-kapcsolat megszakadt. Újra szeretne csatlakozni?";
+        Message[ slovenian ] = "Povezava z zbirko podatkov je bila prekinjena. Ali jo želite obnoviti?";
     };
 
 String STR_OPENTABLES_WARNINGS
@@ -1285,6 +1329,8 @@ String STR_OPENTABLES_WARNINGS
         Text[ hebrew ] = "Warnungen aufgetreten.";
         Text[ hindi ] = "चेतावनी मिला";
         Text[ slovak ] = "Objavili sa upozornenia";
+        Text[ hungarian ] = "Kapott figyelmeztetések";
+        Text[ slovenian ] = "Zaznana so opozorila";
     };
 
 String STR_OPENTABLES_WARNINGS_DETAILS
@@ -1299,7 +1345,7 @@ String STR_OPENTABLES_WARNINGS_DETAILS
     Text[ french ] = "Avertissements en provenance de la connexion (BD) durant le processus de r�cup�ration des tables.";
     Text[ spanish ] = "La conexi�n a la base de datos ha enviado advertencias durante la determinaci�n de las tablas.";
     Text[ italian ] = "Il collegamento al database ha inviato avvertenze durante il rilevamento delle tabelle.";
-    Text[ danish ] = "Ved beregning af tabellerne er der modtaget advarsler fra databaseforbindelsen.";
+    Text[ danish ] = "Ved modtagelse af tabellerne blev der modtaget advarsler fra databaseforbindelsen.";
     Text[ swedish ] = "Databasf�rbindelsen rapporterade varningar medan tabellerna best�mdes.";
     Text[ polish ] = "W trakcie pobierania tabel, po��czenie z baz� danych zg�osi�o ostrze�enia.";
     Text[ portuguese_brazilian ] = "Enquanto recuperava as tabelas, a conex�o do banco de dados registrou alguns avisos.";
@@ -1316,6 +1362,8 @@ String STR_OPENTABLES_WARNINGS_DETAILS
         Text[ hebrew ] = "Beim Ermitteln der Tabellen wurden von der Datenbankverbindung Warnungen gemeldet.";
         Text[ hindi ] = "सारणियों को प्राप्त करने के समय, लेखसंचय कनेक्शन से चेतावनी मिला । ";
         Text[ slovak ] = "Počas získavania tabuliek, sa vyskytli varovania pri spojení s databázou.";
+        Text[ hungarian ] = "A táblák letöltése alatt figyelmeztetéseket küldött az adatbázis-kapcsolat.";
+        Text[ slovenian ] = "Pri sprejemanju tabel je povezava z zbirko podatkov izdala opozorila.";
     };
 
 String STR_CONNECTING_DATASOURCE
@@ -1347,6 +1395,8 @@ String STR_CONNECTING_DATASOURCE
         Text[ hebrew ] = "Verbindungsaufbau zu \"$name$\" ...";
         Text[ hindi ] = "$name$ केलिए कनेक्ट कर रहा है ...";
         Text[ slovak ] = "Pripájam k \"$name$\" ...";
+        Text[ hungarian ] = "Kapcsolódás a következőhöz: \"$name$\" ...";
+        Text[ slovenian ] = "Vzpostavljanje povezave z \"$name$\" ...";
     };
 
 String STR_LOADING_QUERY
@@ -1378,6 +1428,8 @@ String STR_LOADING_QUERY
         Text[ hebrew ] = "lade Abfrage $name$ ...";
         Text[ hindi ] = "$name$ जानकारी को लोड़ कर रहा है ...";
         Text[ slovak ] = "Načítavam dotaz $name$ ...";
+        Text[ hungarian ] = "$name$ lekérdezés betöltése...";
+        Text[ slovenian ] = "Nalaganje poizvedbe $name$ ...";
     };
 
 String STR_LOADING_TABLE
@@ -1409,6 +1461,8 @@ String STR_LOADING_TABLE
         Text[ hebrew ] = "lade Tabelle $name$ ...";
         Text[ hindi ] = "$name$ सारणी को लोड़ कर रहा है  ...";
         Text[ slovak ] = "Načítavam tabuľku $name$ ...";
+        Text[ hungarian ] = "$name$ tábla betöltése...";
+        Text[ slovenian ] = "Nalaganje tabele $name& ...";
     };
 
 String STR_DSBROWSER_TITLE
@@ -1440,6 +1494,8 @@ String STR_DSBROWSER_TITLE
         Text[ hebrew ] = "Datenquellen Ansicht";
         Text[ hindi ] = "ड़ॉटा मूल दृश्य";
         Text[ slovak ] = "Pohľad na zdroje dát";
+        Text[ hungarian ] = "Adatforrás nézet";
+        Text[ slovenian ] = "Pogled vira podatkov";
     };
 
 String STR_NO_TABLE_FORMAT_INSIDE
@@ -1471,6 +1527,8 @@ String STR_NO_TABLE_FORMAT_INSIDE
         Text[ hebrew ] = "Es konnte kein Tabellenformat gefunden werden.";
         Text[ hindi ] = "कोई सारणी रचना प्राप्त नहीं कर सकते है ।";
         Text[ slovak ] = "Nebol nájdený formát tabuľky";
+        Text[ hungarian ] = "Semmilyen táblaformátum nem található.";
+        Text[ slovenian ] = "Ni mogoče najti oblike tabele.";
     };
 
 String STR_COULDNOTCONNECT_DATASOURCE
@@ -1486,7 +1544,7 @@ String STR_COULDNOTCONNECT_DATASOURCE
         Text[ spanish ] = "No se pudo realizar la conexi�n a la fuente de datos \"$name$\".";
         Text[ finnish ] = "Yhteytt� tietol�hteeseen $name$ ei voitu muodostaa.";
         Text[ italian ] = "Impossibile stabilire il collegamento alla sorgente dati esterna \"$name$\".";
-        Text[ danish ] = "\"Der kunne ikke oprettes forbindelse til datakilden \"\"$name$\"\".\"";
+        Text[ danish ] = "Der kunne ikke oprettes forbindelse til datakilden \"$name$\"";
         Text[ swedish ] = "Det gick inte att skapa f�rbindelsen till datak�llan \"$name$\".";
         Text[ polish ] = "Nie uda�o si� nawi�za� po��czenia ze �r�d�em danych \"$name$\".";
         Text[ portuguese_brazilian ] = "N�o foi poss�vel estabelecer a conex�o para a fonte de dados \"$name$\".";
@@ -1502,6 +1560,8 @@ String STR_COULDNOTCONNECT_DATASOURCE
         Text[ hebrew ] = "Die Verbindung zur Datenquelle \"$name$\" konnte nicht hergstellt werden.";
         Text[ hindi ] = "$name$ ड़ॉटा मूल को कनेक्शन् स्थापित नहीं कर सकते है ।";
         Text[ slovak ] = "Spojenie so zdrojom dát \"$name$\" nemohlo byť vytvorené.";
+        Text[ hungarian ] = "Nem hozható létre kapcsolat a következő adatforrással: \"$name$\"";
+        Text[ slovenian ] = "Ni mogoče vzpostaviti povezave z virom podatkov \"$name$\".";
     };
 
 Menu RID_MENU_REFRESH_DATA
@@ -1544,9 +1604,13 @@ Menu RID_MENU_REFRESH_DATA
                 Text[ hebrew ] = "Neu aufbauen";
                 Text[ hindi ] = "पुनः निर्माण";
                 Text[ slovak ] = "Obnoviť";
+                Text[ hungarian ] = "Újrafordítás";
+                Text[ slovenian ] = "Ponovno zgradi";
             };
     };
 };
+
+
 
 
 
