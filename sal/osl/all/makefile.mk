@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mfe $ $Date: 2000-10-18 16:13:57 $
+#   last change: $Author: obr $ $Date: 2000-11-06 12:41:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,38 +74,18 @@ MULTITHREAD_OBJ=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)"=="OS2"
-NOOPTFILES=$(SLO)$/daemprot.obj \
-           $(OBJ)$/daemprot.obj 
-
-.ENDIF
-
-SLOFILES=   $(SLO)$/daemprot.obj	\
-            $(SLO)$/daemclie.obj	\
-            $(SLO)$/daemreg.obj		\
-            $(SLO)$/channman.obj	\
-            $(SLO)$/chanpool.obj	\
-            $(SLO)$/isocket.obj		\
+SLOFILES=   $(SLO)$/isocket.obj		\
             $(SLO)$/types.obj		\
-            $(SLO)$/nspr.obj		\
             $(SLO)$/omutex.obj      \
             $(SLO)$/utility.obj
 
 
 #.IF "$(UPDATER)"=="YES"
-OBJFILES=   $(OBJ)$/daemman.obj  	\
-            $(OBJ)$/daemprot.obj	\
-            $(OBJ)$/daemreg.obj		\
-            $(OBJ)$/daemclie.obj	\
-            $(OBJ)$/channman.obj	\
-            $(OBJ)$/chanpool.obj	\
-            $(OBJ)$/isocket.obj		\
+OBJFILES=   $(OBJ)$/isocket.obj		\
             $(OBJ)$/types.obj		\
             $(OBJ)$/omutex.obj      \
             $(OBJ)$/utility.obj
