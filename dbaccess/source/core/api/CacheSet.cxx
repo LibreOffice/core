@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 13:08:22 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 14:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,13 +586,19 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
         }
         if(wasNull())
             aIter->setNull();
-        aIter->setTypeKind(nType);
+        if(nType != aIter->getTypeKind())
+        {
+            aIter->setTypeKind(nType);
+        }
 
     }
 }
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.22  2001/05/22 13:08:22  oj
+    #87199# check column names
+
     Revision 1.21  2001/05/18 11:48:25  oj
     #86528# size changes
 
