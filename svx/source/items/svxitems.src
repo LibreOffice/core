@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:16:34 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ String RID_SVXITEMS_EXTRAS_CHARCOLOR
     Text[ chinese_traditional ] = "¦r«¬ÃC¦â";
     Text[ arabic ] = "áæä ÇáÎØ";
     Text[ greek ] = "×ñşìá ãñáììáôïóåéñÜò";
-    Text[ korean ] = "±Û²Ã »ö";
+    Text[ korean ] = "±Û²Ã »ö»ó";
     Text[ turkish ] = "Yazıtipi rengi";
     Text[ language_user1 ] = " ";
 };
@@ -3315,7 +3315,7 @@ String RID_ATTR_CHAR_WORDLINEMODE
     Text[ polish ] = "Po s³owie";
     Text[ japanese ] = "’PŒê‚²‚Æ‚É‚·‚é";
     Text[ chinese_traditional ] = "³v¦r";
-    Text[ arabic ] = "ßáãÇÊ İÑÏíÉ";
+    Text[ arabic ] = "ÇáßáãÇÊ İŞØ";
     Text[ greek ] = "ÊáôÜ ëİîç";
     Text[ korean ] = "´Ü¾îº°";
     Text[ turkish ] = "Yalnızca sözcükler";
@@ -3607,7 +3607,7 @@ String RID_ATTR_CHAR_BLINK
     Text[ polish ] = "Miganie";
     Text[ japanese ] = "“_–Å‚·‚é";
     Text[ chinese_traditional ] = "°{Ã{";
-    Text[ arabic ] = "æãÇÖ";
+    Text[ arabic ] = "æãíÖ";
     Text[ greek ] = "Íá áíáâïóâŞíåé";
     Text[ korean ] = "±ô¹ÚÀÓ";
     Text[ turkish ] = "Yanıp sönme";
@@ -4154,7 +4154,7 @@ String RID_SINGLE_LINE0
     Text [ danish ] = "Enkelt, hårfin streg" ;
     Text [ italian ] = "Semplice, linea sottile" ;
     Text [ spanish ] = "Sencillo, líneas finas" ;
-    Text [ french ] = "Ligne pointillée" ;
+    Text [ french ] = "Simple, ligne fine" ;
     Text [ dutch ] = "Enkel, haarlijn" ;
     Text[ chinese_simplified ] = "µ¥£¬Ï¸Ïß";
     Text[ russian ] = "Îáû÷íàÿ ëèíèÿ, î÷åíü òîíêàÿ";
@@ -4275,7 +4275,7 @@ String RID_DOUBLE_LINE0
     Text [ danish ] = "Dobbelt, hårfin streg, afstand: lille" ;
     Text [ italian ] = "Doppio, linea sottile, distanza: piccola" ;
     Text [ spanish ] = "Doble, Líneas finas, Espacio: pequeño" ;
-    Text [ french ] = "Double, pointillé, écart : petit" ;
+    Text [ french ] = "Double, ligne fine, écart : petit" ;
     Text [ dutch ] = "Dubbel, haarlijn, afstand: klein" ;
     Text[ chinese_simplified ] = "Ë«£»Ï¸Ïß£»¼ä¸ô£ºĞ¡";
     Text[ russian ] = "Äâîéíàÿ, î÷åíü òîíêàÿ ëèíèÿ, èíòåğâàë: êîğîòêèé";
@@ -4300,7 +4300,7 @@ String RID_DOUBLE_LINE1
     Text [ danish ] = "Dobbelt, hårfin streg, afstand: stor" ;
     Text [ italian ] = "Doppio, linea sottile, distanza: grande" ;
     Text [ spanish ] = "Doble, Línea fina, Espacio: grande" ;
-    Text [ french ] = "Double, pointillé, écart : grand" ;
+    Text [ french ] = "Double, ligne fine, écart : grand" ;
     Text [ dutch ] = "Dubbel, haarlijn, afstand: groot" ;
     Text[ chinese_simplified ] = "Ë«£¬Ï¸Ïß£¬¼ä¸ô£º´ó";
     Text[ russian ] = "Äâîéíàÿ, î÷åíü òîíêàÿ ëèíèÿ, èíòåğâàë: äëèííûé";
@@ -4375,7 +4375,7 @@ String RID_DOUBLE_LINE4
     Text [ danish ] = "Dobbelt, inderside: hårfin streg, yderside: tynd, afstand: stor" ;
     Text [ italian ] = "Doppio, interno: linea sottile, esterno: sottile, distanza: grande" ;
     Text [ spanish ] = "Doble, interior: Línea fina, exterior: delgada, Espacio: grande" ;
-    Text [ french ] = "Double, intérieure : pointillé, extérieure : fine, écart: grand" ;
+    Text [ french ] = "Double, intérieure : ligne fine, extérieure : fine, écart: grand" ;
     Text [ dutch ] = "Dubbel, binnen: haarlijn, buiten: dun, afstand: groot" ;
     Text[ chinese_simplified ] = "Ë«£¬ÄÚ£ºÏ¸Ïß£¬Íâ£ºÏ¸£¬¼ä¸ô£º´ó";
     Text[ russian ] = "Äâîéíàÿ ëèíèÿ, âíóòğè: î÷åíü òîíêàÿ, ñíàğóæè: òîíêàÿ, èíòåğâàë: äëèííûé";
@@ -4400,7 +4400,7 @@ String RID_DOUBLE_LINE5
     Text [ danish ] = "Dobbelt, inderside: hårfin streg, yderside: tyk, afstand: stor" ;
     Text [ italian ] = "Doppio, interno: linea sottile, esterno: spesso, distanza: grande" ;
     Text [ spanish ] = "Doble, interior: Línea fina, exterior: gruesa, Espacio: grande" ;
-    Text [ french ] = "Double, intérieure : pointillé, extérieure : épaisse, écart : grand" ;
+    Text [ french ] = "Double, intérieure : ligne fine, extérieure : épaisse, écart : grand" ;
     Text [ dutch ] = "Dubbel, binnen: haarlijn, buiten: dik, afstand: groot" ;
     Text[ chinese_simplified ] = "Ë«£¬ÄÚ£ºÏ¸Ïß£¬Íâ£º´Ö£¬¼ä¸ô£º´ó";
     Text[ russian ] = "Äâîéíàÿ ëèíèÿ, âíóòğè: î÷åíü òîíêàÿ, ñíàğóæè: òîëñòàÿ, èíòåğâàë: äëèííûé";
@@ -4425,7 +4425,7 @@ String RID_DOUBLE_LINE6
     Text [ danish ] = "Dobbelt, inderside: hårfin streg, yderside: meget tyk, afstand: stor" ;
     Text [ italian ] = "Doppio, interno: linea sottile, esterno: molto spesso, distanza: grande" ;
     Text [ spanish ] = "Doble, interior: Línea fina, exterior: muy gruesa, Espacio: grande" ;
-    Text [ french ] = "Double, intérieure : pointillé, extérieure : très épaisse, écart : grand" ;
+    Text [ french ] = "Double, intérieure : ligne fine, extérieure : très épaisse, écart : grand" ;
     Text [ dutch ] = "Dubbel, binnen: haarlijn, buiten: zeer dik, afstand: groot" ;
     Text[ chinese_simplified ] = "Ë«£¬ÄÚ£ºÏ¸Ïß£¬Íâ£ººÜ´Ö£¬¼ä¸ô£º´ó";
     Text[ russian ] = "Äâîéíàÿ ëèíèÿ, âíóòğè: î÷åíü òîíêàÿ, ñíàğóæè: î÷åíü òîëñòàÿ, èíòåğâàë: äëèííûé";
@@ -4632,7 +4632,7 @@ String RID_SVXITEMS_HORJUST_CENTER
     Text[ chinese_simplified ] = "Ë®Æ½¾ÓÖĞ";
     Text[ russian ] = "Ïî ãîğèçîíòàëè â öåíòğå";
     Text[ polish ] = "Wyœrodkowany poziomo";
-    Text[ japanese ] = "…•½‚É’†‰›‘µ‚¦";
+    Text[ japanese ] = "‰¡ˆÊ’u‚É’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "¤ô¥­¸m¤¤";
     Text[ arabic ] = "ÊæÓíØ ÃİŞí";
     Text[ greek ] = "Êåíôñáñéóìİíá ïñéæüíôéá";
@@ -4998,7 +4998,7 @@ String RID_SVXITEMS_BLINK_TRUE
     Text[ polish ] = "Miganie";
     Text[ japanese ] = "“_–Å‚·‚é";
     Text[ chinese_traditional ] = "°{Ã{";
-    Text[ arabic ] = "æãÇÖ";
+    Text[ arabic ] = "æãíÖ";
     Text[ greek ] = "Íá áíáâïóâŞíåé";
     Text[ korean ] = "±ô¹ÚÀÓ";
     Text[ turkish ] = "Yanıp sönme";
@@ -5022,7 +5022,7 @@ String RID_SVXITEMS_BLINK_FALSE
     Text[ polish ] = "Nie migaj¹cy";
     Text[ japanese ] = "“_–Å‚µ‚È‚¢";
     Text[ chinese_traditional ] = "¤£°{Ã{";
-    Text[ arabic ] = "ÛíÑ æãÇÖ";
+    Text[ arabic ] = "ÈÏæä æãíÖ";
     Text[ greek ] = "Íá ìçí áíáâïóâŞíåé";
     Text[ korean ] = "±ô¹ÚÀÓ ¾øÀ½";
     Text[ turkish ] = "Yanıp sönme yok";
@@ -5039,7 +5039,7 @@ String RID_SVXITEMS_AUTOKERN_TRUE
     Text [ finnish ] = "Automaattinen välistys" ;
     Text [ danish ] = "Parvis knibning" ;
     Text [ french ] = "Crénage pair" ;
-    Text [ swedish ] = "Parvis Kerning" ;
+    Text [ swedish ] = "Parvis kerning" ;
     Text [ dutch ] = "Paarsgewijze Kerning" ;
     Text [ spanish ] = "Ajuste par entre caracteres " ;
     Text [ english_us ] = "Pair Kerning" ;
@@ -5100,7 +5100,7 @@ String RID_SVXITEMS_WORDLINE_TRUE
     Text[ polish ] = "Po s³owie";
     Text[ japanese ] = "’PŒê‚²‚Æ‚É‚·‚é";
     Text[ chinese_traditional ] = "³v¦r";
-    Text[ arabic ] = "ßáãÇÊ İÑÏíÉ";
+    Text[ arabic ] = "ÇáßáãÇÊ İŞØ";
     Text[ greek ] = "ÊáôÜ ëİîç";
     Text[ korean ] = "´Ü¾îº°";
     Text[ turkish ] = "Yalnızca sözcükler";
@@ -5248,7 +5248,7 @@ String RID_SVXITEMS_PRINT_FALSE
     Text[ chinese_traditional ] = "¤£­n¦C¦L";
     Text[ arabic ] = "ÚÏã ÇáØÈÇÚÉ";
     Text[ greek ] = "Íá ìçí åêôõğùèåß";
-    Text[ korean ] = "ÀÎ¼âÇÏÁö ¾ÊÀ½";
+    Text[ korean ] = "ÀÎ¼âÇÏÁö ¸¶½Ê½Ã¿À";
     Text[ turkish ] = "Yazdırma";
     Text[ language_user1 ] = " ";
 };
@@ -7099,7 +7099,7 @@ String RID_SVXITEMS_PATTERN_COLOR
     Text[ chinese_traditional ] = "¹Ï®×¼Ë¦¡¡G ";
     Text[ arabic ] = "áæä ÇáäŞÔ: ";
     Text[ greek ] = "×ñşìá ìïôßâïõ: ";
-    Text[ korean ] = "¹«´Ì »ö: ";
+    Text[ korean ] = "ÆĞÅÏ »ö»ó: ";
     Text[ turkish ] = "Desen rengi: ";
     Text[ language_user1 ] = " ";
 };
@@ -7213,7 +7213,7 @@ String RID_SVXITEMS_EMPHASIS_CIRCLE_STYLE
     Text[ spanish ] = "Ring ";
     Text[ italian ] = "Ring ";
     Text[ danish ] = "Ring ";
-    Text[ swedish ] = "Ring ";
+    Text[ swedish ] = "Cirkel ";
     Text[ polish ] = "Ring ";
     Text[ portuguese_brazilian ] = "Ring ";
     Text[ japanese ] = "Ring ";
@@ -7237,7 +7237,7 @@ String RID_SVXITEMS_EMPHASIS_DISC_STYLE
     Text[ spanish ] = "Filled ring ";
     Text[ italian ] = "Filled ring ";
     Text[ danish ] = "Filled ring ";
-    Text[ swedish ] = "Filled ring ";
+    Text[ swedish ] = "fylld cirkel ";
     Text[ polish ] = "Filled ring ";
     Text[ portuguese_brazilian ] = "Filled ring ";
     Text[ japanese ] = "Filled ring ";
@@ -7378,7 +7378,7 @@ String RID_SVXITEMS_SCRPTSPC_OFF
     Text[ spanish ] = "No automatic character distance";
     Text[ italian ] = "No automatic character distance";
     Text[ danish ] = "No automatic character distance";
-    Text[ swedish ] = "No automatic character distance";
+    Text[ swedish ] = "Inget automatiskt teckenavstånd";
     Text[ polish ] = "No automatic character distance";
     Text[ portuguese_brazilian ] = "No automatic character distance";
     Text[ japanese ] = "No automatic character distance";
