@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-28 16:52:42 $
+#   last change: $Author: hr $ $Date: 2004-08-02 16:54:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ SHL1STDLIBS=\
     $(VOSLIB)					\
     $(OSLLIB)					\
     $(SALLIB)					\
+    $(JVMACCESSLIB)				\
     $(COMPHELPERLIB)
 
 # NETBSD: somewhere we have to instantiate the static data members.
@@ -107,14 +108,16 @@ SHL1DEPN=
 SHL1IMPLIB=	idbtools
 
 SHL1LIBS=	$(LIB1TARGET)
-
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
 DEF1NAME=	$(SHL1TARGET)
+# SHL1VERSIONMAP=$(TARGET).map
 DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt \
             $(LIB1TARGET)
+            
+# DEF1EXPORTFILE=	exports.dxp			
 
 DEFLIB1NAME=$(TARGET)
+
 
 # --- Targets ----------------------------------
 
