@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-12 14:54:00 $
+ *  last change: $Author: hr $ $Date: 2002-08-13 14:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
     unsigned long           imageVMAddressSlide;
     unsigned long           imageLowAddress;
     unsigned long           imageHighAddress;
-    unsigned char           imageName[ 255 ] = "\0";        /* Is this large enough? */
+    unsigned char           *imageName = NULL;
 
     /* Run through all loaded images in the process' address space and
      * test each segment of each image for the address we want.
@@ -438,16 +438,9 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
     numLoadedImages = _dyld_image_count();
     for( imageIndex = 0; ((imageIndex < numLoadedImages) && (result==sal_False)); imageIndex++ )
     {
-    #ifdef DEBUG
-        fprintf( stderr, "  osl_getModuleURLFromAddress(): getting header for image %d.\n", imageIndex );
-    #endif
-
         imageMachHeader = _dyld_get_image_header( imageIndex );
         if ( imageMachHeader != NULL )
         {
-    #ifdef DEBUG
-        fprintf( stderr, "  osl_getModuleURLFromAddress(): iterating commands for image %d.\n", imageIndex );
-    #endif
             /* Get all the load commands from the image, loop through them, and test
              * the segment they load for the address we were passed.
              */
@@ -458,19 +451,13 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
             {
                 if ( loadCmd->cmd == LC_SEGMENT )
                 {
-    #ifdef DEBUG
-        fprintf( stderr, "  osl_getModuleURLFromAddress(): looking at segment %d image %d.\n", mhCmdIndex, imageIndex );
-    #endif
                     segCmd = (struct segment_command *)loadCmd;
                     imageLowAddress = segCmd->vmaddr + imageVMAddressSlide;
                     imageHighAddress = segCmd->vmaddr + segCmd->vmsize + imageVMAddressSlide;
                     if( (((unsigned long)(addr))>=imageLowAddress) && (((unsigned long)(addr))<imageHighAddress) )
                     {
-    #ifdef DEBUG
-        fprintf( stderr, "  osl_getModuleURLFromAddress(): found address in image %d.\n", imageIndex );
-    #endif
                         /* Address passed in is contained in this image. */
-                        strncpy( imageName, _dyld_get_image_name(imageIndex), 254 );
+                        imageName = _dyld_get_image_name( imageIndex );
                         result = sal_True;
                         break;
                     }
@@ -493,10 +480,8 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
     {
         rtl_uString * workDir = NULL;
 
-    #ifdef DEBUG
-        fprintf( stderr, "  osl_getModuleURLFromAddress(): getting URL for module.\n" );
-    #endif
         osl_getProcessWorkingDir( &workDir );
+
     #ifdef DEBUG
         OSL_TRACE( "module.c::osl_getModuleURLFromAddress - %s\n", imageName );
     #endif
