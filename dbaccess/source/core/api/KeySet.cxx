@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:02:07 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,7 +574,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
 #endif
                         OColumnNamePos::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
                         if(aFind != m_pKeyColumnNames->end())
-                            fetchValue(aFind->second.first,(*_rInsertRow)[aFind->second.first].getTypeKind(),xRow,(*_rInsertRow)[aFind->second.first]);
+                            fetchValue(i,(*_rInsertRow)[aFind->second.first].getTypeKind(),xRow,(*_rInsertRow)[aFind->second.first]);
                     }
                     bAutoValuesFetched = sal_True;
                 }
@@ -621,12 +621,12 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
                 if(xRow.is() && xRes->next())
                 {
                     aAutoIter = m_aAutoColumns.begin();
-                    for (;aAutoIter !=  m_aAutoColumns.end(); ++aAutoIter)
+                    for (sal_Int32 i=1;aAutoIter !=  m_aAutoColumns.end(); ++aAutoIter,++i)
                     {
                         // we will only fetch values which are keycolumns
                         OColumnNamePos::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
                         if(aFind != m_pKeyColumnNames->end())
-                            fetchValue(aFind->second.first,(*_rInsertRow)[aFind->second.first].getTypeKind(),xRow,(*_rInsertRow)[aFind->second.first]);
+                            fetchValue(i,(*_rInsertRow)[aFind->second.first].getTypeKind(),xRow,(*_rInsertRow)[aFind->second.first]);
                     }
                 }
                 ::comphelper::disposeComponent(xStatement);
