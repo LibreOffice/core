@@ -8,11 +8,15 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
 #include <cppuhelper/component_context.hxx>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
+#include <uno/current_context.hxx>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef _RTL_BOOTSTRAP_HXX_
 #include <rtl/bootstrap.hxx>
@@ -27,6 +31,7 @@
 #include <osl/diagnose.h>
 #endif
 #include <stdio.h>
+#include <map>
 
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
@@ -83,6 +88,13 @@ static char const WRAPPER_ENTRY[] = CFG_PREFIX "BackendWrapper";
 #define CONTEXT_ITEM_PASSTHRU "/implementations/com.sun.star.com.configuration.bootstrap.ComponentContext/isPassthrough"
 
 // ----------------------------------------------------------------------------
+static char const CONFIGURATION_ERROR_HANDLER[]  = "com.sun.star.configuration.backend.InteractionHandler";
+
+// must be aligned with configmgr/source/misc/configinteractionhandler
+static char const CONFIG_ERROR_HANDLER[] = "configuration.interaction-handler";
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 #define arraysize( arr ) ( sizeof (arr)/sizeof *(arr) )
 
 typedef uno::Reference< lang::XMultiServiceFactory > ConfigurationProvider;
@@ -94,6 +106,7 @@ typedef uno::Reference< lang::XMultiServiceFactory > ConfigurationProvider;
 #define k_PROVIDER OUSTRING( CONFIGURATION_PROVIDER )
 #define k_LOCALBE  OUSTRING( LOCAL_BACKEND )
 #define k_SIMPLEWRAPPER  OUSTRING( SIMPLE_BACKEND_WRAPPER )
+#define k_ERRORHANDLER   OUSTRING( CONFIGURATION_ERROR_HANDLER )
 // ----------------------------------------------------------------------------
 
 
@@ -323,5 +336,121 @@ uno::Reference< lang::XMultiServiceFactory > CreateApplicationConfigurationProvi
 
 
 
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// ConfigurationErrorHandler
+// ----------------------------------------------------------------------------
+
+namespace
+{
+    typedef uno::Reference< uno::XCurrentContext > CurrentContext;
+    class SimpleCurrentContext : public cppu::WeakImplHelper1< uno::XCurrentContext >
+    {
+        CurrentContext m_xChainedContext;
+        typedef std::map< OUString, uno::Any > Settings;
+        Settings m_settings;
+    public:
+        explicit
+        SimpleCurrentContext(const CurrentContext & xChainedContext)
+        : m_xChainedContext(xChainedContext)
+        {}
+
+        void addSetting(const OUString & aName, const uno::Any & aValue)
+        { m_settings[aName] = aValue; }
+
+        void install()      { uno::setCurrentContext(this); }
+        void deinstall()    { uno::setCurrentContext(m_xChainedContext); }
+
+        uno::Any getChainedValueByName( OUString const & aName) const
+        {
+            return m_xChainedContext.is()
+                            ? m_xChainedContext->getValueByName(aName)
+                            : uno::Any();
+        }
+
+        // XCurrentContext
+        uno::Any SAL_CALL
+            getValueByName( OUString const & aName)
+                throw (uno::RuntimeException);
+    };
+
+    uno::Any SAL_CALL
+        SimpleCurrentContext::getValueByName( OUString const & aName)
+            throw (uno::RuntimeException)
+    {
+        Settings::iterator it = m_settings.find(aName);
+        if (it != m_settings.end())
+            return it->second;
+        else
+            return getChainedValueByName(aName);
+    }
+
+}
+
+// ----------------------------------------------------------------------------
+class ConfigurationErrorHandler::Context : public SimpleCurrentContext
+{
+public:
+    explicit
+    Context(InteractionHandler const & xHandler)
+    : SimpleCurrentContext( uno::getCurrentContext() )
+    {
+        addSetting( OUSTRING(CONFIG_ERROR_HANDLER), uno::makeAny(xHandler) );
+    }
+
+    ~Context()
+    {
+    }
+
+};
+
+//------------------------------------------------------------------------------
+ConfigurationErrorHandler::~ConfigurationErrorHandler()
+{
+    deactivate();
+}
+
+//------------------------------------------------------------------------------
+/// installs the handler into the current context
+void ConfigurationErrorHandler::activate()
+{
+    if (!m_pContext)
+    {
+        m_pContext = new Context(m_xHandler);
+        m_pContext->acquire();
+    }
+    m_pContext->install();
+}
+
+//------------------------------------------------------------------------------
+/// deinstalls the handler from the current context, restoring the previous context
+void ConfigurationErrorHandler::deactivate()
+{
+    if (m_pContext)
+    {
+        m_pContext->deinstall();
+        m_pContext->release();
+        m_pContext = 0;
+    }
+}
+//------------------------------------------------------------------------------
+
+ConfigurationErrorHandler::InteractionHandler ConfigurationErrorHandler::getDefaultInteractionHandler()
+{
+    uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+
+    OSL_ENSURE( xServiceManager.is(),"No ServiceManager set for ConfigurationErrorHandler");
+
+    InteractionHandler xHandler;
+
+    if (xServiceManager.is())
+    {
+        xHandler.set( xServiceManager->createInstance(k_ERRORHANDLER), UNO_QUERY );
+    }
+
+    return xHandler;
+}
+//------------------------------------------------------------------------------
 
 
