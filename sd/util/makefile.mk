@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-23 08:30:45 $
+#   last change: $Author: hr $ $Date: 2004-02-03 20:21:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,6 @@ SHL1STDLIBS= $(SCHLIB)
 
 # dynamic libraries
 SHL1STDLIBS+= \
-    $(OFALIB) \
     $(SVXLIB) \
     $(SFXLIB) \
     $(BASICLIB) \
