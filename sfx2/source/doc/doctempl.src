@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-08 21:56:02 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 21:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,5 +410,6 @@ String RID_CNT_STR_WAITING
     Text[ catalan ] = "Los componentes de %PRODUCTNAME van a ser inicializados ahora tras la instalación.";
     Text[ finnish ] = "Alustetaan ohjelman %PRODUCTNAME osat ensimmäistä kertaa asennuksen jälkeen.";
 };
+
 
 
