@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HTMLOutputter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:12:04 $
+ *  last change: $Date: 2004-12-10 16:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@ package convwatch;
 
 import java.io.File;
 import java.io.FileWriter;
+import util.utils;
 
 public class HTMLOutputter
 {
@@ -134,6 +135,7 @@ public class HTMLOutputter
                 m_aOut.write( "<table class=\"infotable\">" + ls);
                 m_aOut.write( "<TR>");
                 m_aOut.write( tableHeaderCell(TEST_TABLETITLE));
+                m_aOut.write( tableHeaderCell(TEST_TABLETITLE));
                 m_aOut.write( tableHeaderCell(VISUAL_STATUS_TABLETITLE));
                 m_aOut.write( tableHeaderCell(VISUAL_STATUS_MESSAGE_TABLETITLE));
                 m_aOut.write( "</TR>" + ls);
@@ -147,11 +149,38 @@ public class HTMLOutputter
     String getHREF(String _sHREF, String _sPathInfo)
         {
             StringBuffer a = new StringBuffer();
+            if (! OSHelper.isWindows())
+            {
             a.append("<A HREF=\"");
             a.append(_sHREF);
             a.append("\">");
             a.append(_sPathInfo);
             a.append("</A>");
+            }
+            else
+            {
+                a.append("<A HREF=\"");
+                a.append(_sHREF);
+                a.append("\">");
+                a.append(_sPathInfo);
+                a.append("</A>");
+                int index = _sHREF.indexOf("X:");
+                if (index >= 0)
+                {
+                    // remove "X:" and insert "/tausch"
+                    StringBuffer sbUNIXPath = new StringBuffer(_sHREF.substring(0, index));
+                    sbUNIXPath.append("/tausch");
+                    sbUNIXPath.append(_sHREF.substring(index + 2));
+                    String sUNIXPath = sbUNIXPath.toString();
+                    sUNIXPath = utils.replaceAll13(sUNIXPath, "\\\\", "/");
+
+                    a.append("<A HREF=\"");
+                    a.append(sUNIXPath);
+                    a.append("\">");
+                    a.append("(UNIX)");
+                    a.append("</A>");
+                }
+            }
             return a.toString();
         }
 
@@ -173,15 +202,25 @@ public class HTMLOutputter
             return a.toString();
         }
 
-    public void indexLine(String _sHTMLFile, String _sStatusRunThrough, String _sStatusMessage)
+    public void indexLine(String _sHTMLFile, String _sHTMLName, String _sHTMLFile2, String _sHTMLName2, String _sStatusRunThrough, String _sStatusMessage)
         {
             try
             {
                 m_aOut.write( "<TR>");
-                m_aOut.write(tableDataCell( getHREF(_sHTMLFile, _sHTMLFile) ) );
+                m_aOut.write(tableDataCell( getHREF(_sHTMLFile, _sHTMLName) ) );
+                if (_sHTMLFile2.length() > 0)
+                {
+                    m_aOut.write(tableDataCell( getHREF(_sHTMLFile2, _sHTMLName2) ) );
+                }
+                else
+                {
+                    m_aOut.write(tableDataCell( "" ) );
+                }
+
                 m_aOut.write( tableDataCell(_sStatusRunThrough) );
                 m_aOut.write( tableDataCell(_sStatusMessage) );
                 m_aOut.write( "</TR>" + ls);
+
                 m_aOut.flush();
             }
             catch (java.io.IOException e)
