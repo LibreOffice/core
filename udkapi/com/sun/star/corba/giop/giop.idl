@@ -2,9 +2,9 @@
  *
  *  $RCSfile: giop.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 08:49:23 $
+ *  last change: $Author: mi $ $Date: 2000-12-15 09:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ module com { module sun { module star { module corba { module giop
 // GIOP 1.0
     struct RequestHeader_1_0
     {
-        com:sun::star::corba::iop::ServiceContextList service_context;
+        com::sun::star::corba::iop::ServiceContextList service_context;
         unsigned long request_id;
         boolean response_expected;
         sequence < byte > object_key;
@@ -119,7 +119,7 @@ module com { module sun { module star { module corba { module giop
 // GIOP 1.1
     struct RequestHeader_1_1
     {
-        com:sun::star::corba::iop::ServiceContextList service_context;
+        com::sun::star::corba::iop::ServiceContextList service_context;
         unsigned long request_id;
         boolean response_expected;
         byte reserved_1;
@@ -135,7 +135,7 @@ module com { module sun { module star { module corba { module giop
     struct IORAddressingInfo
     {
         unsigned long selected_profile_index;
-        com:sun::star::corba::iop::IOR ior;
+        com::sun::star::corba::iop::IOR ior;
     };
 
     constants TargetAddressGroup
@@ -149,7 +149,7 @@ module com { module sun { module star { module corba { module giop
     {
         short nDiscriminator;
         sequence < byte > object_key;  // KeyAddr
-        com:sun::star::corba::iop::TaggedProfile profile;    // ProfileAddr
+        com::sun::star::corba::iop::TaggedProfile profile;    // ProfileAddr
         IORAddressingInfo ior;         // ReferenceAddr
     };
 
@@ -164,7 +164,7 @@ module com { module sun { module star { module corba { module giop
         TargetAddress target;
         CorbaString8 operation;
 // Principal not in GIOP 1.2
-        com:sun::star::corba::iop::ServiceContextList service_context; // 1.2 change
+        com::sun::star::corba::iop::ServiceContextList service_context; // 1.2 change
     };
 
 
@@ -180,7 +180,7 @@ module com { module sun { module star { module corba { module giop
 
     struct ReplyHeader_1_0
     {// Renamed from ReplyHeader
-        com:sun::star::corba::iop::ServiceContextList service_context;
+        com::sun::star::corba::iop::ServiceContextList service_context;
         unsigned long request_id;
         ReplyStatusType reply_status;
     };
@@ -203,7 +203,7 @@ module com { module sun { module star { module corba { module giop
     {
         unsigned long request_id;
         ReplyStatusType_1_2 reply_status;
-        com:sun::star::corba::iop::ServiceContextList service_context; // 1.2 change
+        com::sun::star::corba::iop::ServiceContextList service_context; // 1.2 change
     };
 
     struct SystemExceptionReplyBody
