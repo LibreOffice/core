@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-02-07 14:54:18 $
+ *  last change: $Author: os $ $Date: 2002-02-08 08:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1171,7 +1171,8 @@ BOOL SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
     }
     if(aSnapToGridCB.IsChecked() != aSnapToGridCB.GetSavedValue())
     {
-        rOutSet.Put(SvxParaGridItem(aSnapToGridCB.IsChecked(), SID_ATTR_PARA_SNAPTOGRID));
+        USHORT nWhich = GetWhich( SID_ATTR_PARA_SNAPTOGRID );
+        rOutSet.Put(SvxParaGridItem(aSnapToGridCB.IsChecked(), nWhich));
         bModified = TRUE;
     }
     if(aVertAlignLB.GetSavedValue() != aVertAlignLB.GetSelectEntryPos())
