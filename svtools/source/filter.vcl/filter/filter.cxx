@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-28 15:16:11 $
+ *  last change: $Author: sj $ $Date: 2001-04-25 09:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,11 @@
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
 #endif
+
+#ifndef SVX_LIGHT
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <pathoptions.hxx>
+#endif
 #endif
 
 #if defined WIN || (defined OS2 && !defined ICC)
@@ -1076,8 +1079,12 @@ GraphicFilter::~GraphicFilter()
 
 void GraphicFilter::ImplInit()
 {
+
+#ifndef SVX_LIGHT
     SvtPathOptions aPathOpt;
     aFilterPath = aPathOpt.GetFilterPath();
+#endif
+
     pErrorEx = new FilterErrorEx;
     pConfig = new FilterConfigCache();
     nPercent = 0;
