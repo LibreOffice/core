@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 14:17:21 $
+ *  last change: $Author: mib $ $Date: 2000-12-02 11:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,8 @@ void _InitFilter()
     _SetFltPtr( nCnt, new WW1Reader, sWW1 );
     _SetFltPtr( nCnt, pWW8Rd, sWW5 );
     _SetFltPtr( nCnt, ReadSwg, sSwg1 );
-    _SetFltPtr( nCnt, (ReadXML = new XMLReader), FILTER_XML );
+    _SetFltPtr( nCnt, (ReadXML = new XMLReader), FILTER_CXML );
+    _SetFltPtr( nCnt, ReadXML, FILTER_XML );
 
 #ifdef NEW_WW97_EXPORT
     aReaderWriter[ 9 ].fnGetWriter =  &::GetWW8Writer;
@@ -1545,6 +1546,9 @@ Color ConvertBrushStyle(const Color& rCol, const Color& rFillCol, BYTE nStyle)
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/20 14:17:21  jp
+      ReadFilterFlags removed, use new class SwFilterOptions
+
       Revision 1.3  2000/11/13 10:46:09  jp
       remove IniManager
 
