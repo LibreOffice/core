@@ -2,9 +2,9 @@
  *
  *  $RCSfile: displayinfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:08:20 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ namespace sdr
             mpExtOutputDevice(0L),
             mpPaintInfoRec(0L),
             mpRootVOC(0L),
-            mbTemporaryPaintPage(sal_False),
+            mbControlLayerPainting(sal_False),
             mbPagePainting(sal_True),
             mbGhostedDrawModeActive(sal_False),
             mbBufferingAllowed(sal_True),
@@ -239,17 +239,17 @@ namespace sdr
             return sal_False;
         }
 
-        void DisplayInfo::SetTemporaryPaintPage(sal_Bool bDoPaint)
+        void DisplayInfo::SetControlLayerPainting(sal_Bool bDoPaint)
         {
-            if(mbTemporaryPaintPage != bDoPaint)
+            if(mbControlLayerPainting != bDoPaint)
             {
-                mbTemporaryPaintPage = bDoPaint;
+                mbControlLayerPainting = bDoPaint;
             }
         }
 
-        sal_Bool DisplayInfo::GetTemporaryPaintPage() const
+        sal_Bool DisplayInfo::GetControlLayerPainting() const
         {
-            return mbTemporaryPaintPage;
+            return mbControlLayerPainting;
         }
 
         void DisplayInfo::SetPagePainting(sal_Bool bDoPaint)
