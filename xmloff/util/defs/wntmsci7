@@ -11006,3 +11006,4 @@ _real@8@3ffdaaaaaaaaaaaaa800
 ?applyControlNumberStyle@OFormLayerXMLImport_Impl@xmloff@@UAEXABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@ABVOUString@rtl@@@Z
 ?createControlStyleContext@OFormLayerXMLImport_Impl@xmloff@@IAEPAVXMLPropStyleContext@@GABVOUString@rtl@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@AAVSvXMLStylesContext@@GE@Z
 ?createControlStyleContext@OFormLayerXMLImport@xmloff@@QAEPAVXMLPropStyleContext@@GABVOUString@rtl@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@AAVSvXMLStylesContext@@GE@Z
+?destroy_node@?$_Rb_tree@FFU?$_Identity@F@_STL@@U?$less@F@2@V?$allocator@F@2@@_STL@@IAEXPAU?$_Rb_tree_node@F@2@@Z
