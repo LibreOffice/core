@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: ka $ $Date: 2000-11-30 07:32:41 $
+#   last change: $Author: mib $ $Date: 2001-01-26 11:22:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,10 +71,12 @@ TARGET=xml
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
-        $(SLO)$/xmlgrhlp.obj		
+        $(SLO)$/xmlgrhlp.obj		\
+        $(SLO)$/xmleohlp.obj		
 
 EXCEPTIONSFILES = \
-        $(SLO)$/xmlgrhlp.obj		
+        $(SLO)$/xmlgrhlp.obj		\
+        $(SLO)$/xmleohlp.obj		
 
 # --- Targets --------------------------------------------------------------
 

@@ -561,6 +561,7 @@ hedabu: ..\inc\scriptspaceitem.hxx %_DEST%\inc%_EXT%\svx\scriptspaceitem.hxx
 hedabu: ..\inc\hngpnctitem.hxx %_DEST%\inc%_EXT%\svx\hngpnctitem.hxx
 hedabu: ..\inc\forbiddenruleitem.hxx %_DEST%\inc%_EXT%\svx\forbiddenruleitem.hxx
 hedabu: ..\inc\xmlgrhlp.hxx %_DEST%\inc%_EXT%\svx\xmlgrhlp.hxx
+hedabu: ..\inc\xmleohlp.hxx %_DEST%\inc%_EXT%\svx\xmleohlp.hxx
 
 ..\xml\SvxDrawPage.xml %_DEST%\xml%_EXT%\SvxDrawPage.xml
 ..\xml\SvxGraphicObject.xml %_DEST%\xml%_EXT%\SvxGraphicObject.xml
