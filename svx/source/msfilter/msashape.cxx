@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:24:43 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5757,7 +5757,7 @@ MSO_SPT SvxMSDffAutoShape::GetShapeTypeFromSdrObject(  const SdrObject* pObj )
 {
     MSO_SPT eShapeType = mso_sptNil;
     const SfxPoolItem* pAdjustItem = NULL;
-    const SfxItemSet&  rItemSet = pObj->GetItemSet();
+    const SfxItemSet&  rItemSet = pObj->GetMergedItemSet();
     rItemSet.GetItemState( SDRATTR_AUTOSHAPE_ADJUSTMENT, FALSE, &pAdjustItem );
     if ( pAdjustItem )
     {
@@ -5777,21 +5777,27 @@ MSO_SPT SvxMSDffAutoShape::GetShapeTypeFromSdrObject(  const SdrObject* pObj )
 void SvxMSDffAutoShape::SwapStartAndEndArrow( SdrObject* pObj ) //#108274
 {
     XLineStartItem       aLineStart;
-    aLineStart.SetValue(((XLineStartItem&)pObj->GetItem( XATTR_LINEEND )).GetValue());
-    XLineStartWidthItem  aLineStartWidth(((XLineStartWidthItem&)pObj->GetItem( XATTR_LINEENDWIDTH )).GetValue());
-    XLineStartCenterItem aLineStartCenter(((XLineStartCenterItem&)pObj->GetItem( XATTR_LINEENDCENTER )).GetValue());
+    const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
+
+    aLineStart.SetValue(((XLineStartItem&)rObjItemSet.Get( XATTR_LINEEND )).GetValue());
+    XLineStartWidthItem  aLineStartWidth(((XLineStartWidthItem&)rObjItemSet.Get( XATTR_LINEENDWIDTH )).GetValue());
+    XLineStartCenterItem aLineStartCenter(((XLineStartCenterItem&)rObjItemSet.Get( XATTR_LINEENDCENTER )).GetValue());
 
     XLineEndItem         aLineEnd;
-    aLineEnd.SetValue(((XLineEndItem&)pObj->GetItem( XATTR_LINESTART )).GetValue());
-    XLineEndWidthItem    aLineEndWidth(((XLineEndWidthItem&)pObj->GetItem( XATTR_LINESTARTWIDTH )).GetValue());
-    XLineEndCenterItem   aLineEndCenter(((XLineEndCenterItem&)pObj->GetItem( XATTR_LINESTARTCENTER )).GetValue());
+    aLineEnd.SetValue(((XLineEndItem&)rObjItemSet.Get( XATTR_LINESTART )).GetValue());
+    XLineEndWidthItem    aLineEndWidth(((XLineEndWidthItem&)rObjItemSet.Get( XATTR_LINESTARTWIDTH )).GetValue());
+    XLineEndCenterItem   aLineEndCenter(((XLineEndCenterItem&)rObjItemSet.Get( XATTR_LINESTARTCENTER )).GetValue());
 
-    pObj->SetItem( aLineStart );
-    pObj->SetItem( aLineStartWidth );
-    pObj->SetItem( aLineStartCenter );
-    pObj->SetItem( aLineEnd );
-    pObj->SetItem( aLineEndWidth );
-    pObj->SetItem( aLineEndCenter );
+    SfxItemSet aNew(*rObjItemSet.GetPool());
+
+    aNew.Put( aLineStart );
+    aNew.Put( aLineStartWidth );
+    aNew.Put( aLineStartCenter );
+    aNew.Put( aLineEnd );
+    aNew.Put( aLineEndWidth );
+    aNew.Put( aLineEndCenter );
+
+    pObj->SetMergedItemSet(aNew);
 }
 
 SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, sal_Bool bSetAutoShapeAdjustItem )
@@ -5804,7 +5810,7 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
         {
             pRet = new SdrRectObj( aSnapRect );
             pRet->SetModel( pSdrModel );
-            pRet->SetItemSet(rSet);
+            pRet->SetMergedItemSet(rSet);
         }
         else if ( eSpType == mso_sptRoundRectangle )
         {
@@ -5817,13 +5823,13 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
             rSet.Put( SdrEckenradiusItem( nW ) );
             pRet = new SdrRectObj( aSnapRect );
             pRet->SetModel( pSdrModel );
-            pRet->SetItemSet(rSet);
+            pRet->SetMergedItemSet(rSet);
         }
         else if ( eSpType == mso_sptEllipse )
         {
             pRet = new SdrCircObj( OBJ_CIRC, aSnapRect );
             pRet->SetModel( pSdrModel );
-            pRet->SetItemSet(rSet);
+            pRet->SetMergedItemSet(rSet);
         }
         else if ( eSpType == mso_sptArc )
         {   // the arc is something special, because sometimes the snaprect does not match
@@ -5851,7 +5857,7 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                 pRet = new SdrCircObj( OBJ_SECT, aPolyBoundRect, nStartAngle, nEndAngle );
                 pRet->NbcSetSnapRect( aSnapRect );
                 pRet->SetModel( pSdrModel );
-                pRet->SetItemSet(rSet);
+                pRet->SetMergedItemSet(rSet);
             }
             else
             {
@@ -5911,7 +5917,7 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                 SdrCircObj* pObjCirc = new SdrCircObj( OBJ_CARC, aPolyBoundRect, nStartAngle, nEndAngle );
                 pObjCirc->SetSnapRect( aPolyArcRect );
                 pObjCirc->SetModel( pSdrModel );
-                pObjCirc->SetItemSet( rSet );
+                pObjCirc->SetMergedItemSet( rSet );
 
                 int nSwap = bFlipH ? 1 : 0;
                 nSwap ^= bFlipV ? 1 : 0;
@@ -5921,9 +5927,9 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                 SdrRectObj* pRect = new SdrRectObj( aPolyArcRect );
                 pRect->SetSnapRect( aPolyArcRect );
                 pRect->SetModel( pSdrModel );
-                pRect->SetItemSet( rSet );
-                pRect->SetItem( XLineStyleItem( XLINE_NONE ) );
-                pRect->SetItem( XFillStyleItem( XFILL_NONE ) );
+                pRect->SetMergedItemSet( rSet );
+                pRect->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
+                pRect->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
 
                 pRet = new SdrObjGroup();
                 pRet->SetModel( pSdrModel );
@@ -5950,7 +5956,7 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                                                          aSnapRect.Top() + aUnion.Top() ),
                                                             aUnion.GetSize() ) );
                 pRet->SetModel( pSdrModel );
-                pRet->SetItemSet(rSet);
+                pRet->SetMergedItemSet(rSet);
             }
             else
             {
@@ -6034,7 +6040,7 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                                         rSet.Put( XFillColorItem( String(), aColor ) );
                                     }
                                 }
-                                pSdrPathObj->SetItemSet(rSet);
+                                pSdrPathObj->SetMergedItemSet(rSet);
                                 if ( pGrp )
                                 {
                                     if ( pSdrPathObj )
@@ -6237,8 +6243,8 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                                     }
                                     if ( pLast )
                                     {
-                                        pLast->SetItem( XLineStyleItem( XLINE_NONE ) );
-                                        pLast->SetItem( XFillStyleItem( XFILL_NONE ) );
+                                        pLast->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
+                                        pLast->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
                                     }
                                 }
                                 break;
@@ -6401,7 +6407,7 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                     }
                     SfxItemSet aSet( pSdrModel->GetItemPool() );
                     aSet.Put( aAdjustItem );
-                    pFirstObject->SetItemSet(aSet);
+                    pFirstObject->SetMergedItemSet(aSet);
                 }
             }
         }
