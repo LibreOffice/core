@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraprev.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 14:11:10 $
+ *  last change: $Author: dr $ $Date: 2001-05-15 11:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,12 +114,8 @@ void SvxParaPrevWindow::Paint( const Rectangle& rRect )
 void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
 {
     SetFillColor( Color( COL_WHITE ) );
-
-    if ( bAll )
-    {
-        SetLineColor(Color( COL_BLACK) );
+    if( bAll )
         DrawRect( Rectangle( Point(), aWinSize ) );
-    }
 
     SetLineColor();
 
@@ -229,6 +225,10 @@ void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
         aPnt.X() = DEF_MARGIN / 2;
         aSiz = aLineSiz;
     }
+
+    SetLineColor( Color( COL_BLACK ) );
+    SetFillColor( Color( COL_TRANSPARENT ) );
+    DrawRect( Rectangle( Point(), aWinSize ) );
 }
 
 #undef DEF_MARGIN

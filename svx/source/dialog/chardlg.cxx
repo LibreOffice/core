@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2001-05-08 08:55:18 $
+ *  last change: $Author: dr $ $Date: 2001-05-15 11:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2973,12 +2973,10 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     m_aEastFontLanguageFT   ( this, ResId( FT_EAST_LANG ) ),
     m_aEastFontLanguageLB   ( this, ResId( LB_EAST_LANG )),
 
-    m_aPreviewLine          ( this, ResId( FL_CHAR_PREVIEW ) ),
     m_aPreviewWin           ( this, ResId( WIN_CHAR_PREVIEW ) ),
     m_aFontTypeFT           ( this, ResId( FT_CHAR_FONTTYPE ) ),
 
-    m_aSeparateLine         ( this, ResId( FL_SEPARATE ) ),
-
+    m_aColorFL              ( this, ResId( FL_COLOR2 ) ),
     m_aColorFT              ( this, ResId( FT_COLOR2 ) ),
     m_aColorLB              ( this, ResId( LB_COLOR2 ) ),
 
@@ -3094,7 +3092,6 @@ void SvxCharNamePage::Initialize()
     if ( bKillTable )
         delete pColorTable;
 
-    m_aSeparateLine.SetStyle( m_aSeparateLine.GetStyle() | WB_VERT );
     m_aColorLB.SetSelectHdl( LINK( this, SvxCharNamePage, ColorBoxSelectHdl_Impl ) );
 
     Link aLink = LINK( this, SvxCharNamePage, FontModifyHdl_Impl );
@@ -3947,7 +3944,6 @@ SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSe
     m_aShadowBtn            ( this, ResId( CB_SHADOW ) ),
     m_aBlinkingBtn          ( this, ResId( CB_BLINKING ) ),
 
-    m_aPreviewLine          ( this, ResId( FL_EFFECTS_PREVIEW ) ),
     m_aPreviewWin           ( this, ResId( WIN_EFFECTS_PREVIEW ) ),
     m_aFontTypeFT           ( this, ResId( FT_EFFECTS_FONTTYPE ) )
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
+ *  last change: $Author: dr $ $Date: 2001-05-15 11:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2225,7 +2225,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     TriStateBox CB_AS_FORBIDDEN
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 240 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         Text = "~Liste der verbotenen Zeichen an Zeilenanfang und -ende berücksichtigen" ;
         Text [ ENGLISH ] = "Apply list of forbidden characters at line end and line start" ;
         Text[ english_us ] = "Apply list of forbidden characters to the beginning and end of lines";
@@ -2252,7 +2252,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     TriStateBox CB_AS_ALLOW_WORD_BREAK
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
-        Size = MAP_APPFONT ( 240 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         Text = "~Textumbruch innerhalb von Wötern im lateinischen Text zulassen" ;
         Text [ ENGLISH ] = "Allow break inside of words in latin text" ;
         Text[ english_us ] = "Allow ~breaks in words in Latin text";
@@ -2279,7 +2279,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     TriStateBox CB_AS_HANG_PUNC
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
-        Size = MAP_APPFONT ( 240 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         Text = "Hängende ~Interpunktion zulassen" ;
         Text [ ENGLISH ] = "Hanging punctuation" ;
         Text[ english_us ] = "Allow hanging punctuation";
@@ -2333,7 +2333,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     TriStateBox CB_AS_PUNCTUATION
     {
         Pos = MAP_APPFONT ( 12, 69 ) ;
-        Size = MAP_APPFONT ( 240 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         Text = "I~nterpunktion am Zeilenbeginn zum Komprimieren zulassen" ;
         Text [ ENGLISH ] = "Allow punctuation at line start" ;
         Text[ english_us ] = "Allow punctuation at line start";
@@ -2359,8 +2359,8 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     };
     TriStateBox CB_AS_SCRIPT_SPACE
     {
-        Pos = MAP_APPFONT ( 12 , 84 ) ;
-        Size = MAP_APPFONT ( 240 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 83 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         Text = "~Abstand zwischen asiatischem, lateinischem und komplexem Text anwenden" ;
         Text [ ENGLISH ] = "Apply distance between asian, latin and complex text" ;
         Text[ english_us ] = "Apply spacing between Asian, Latin and Complex text";
@@ -2387,7 +2387,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     TriStateBox CB_AS_ADJUST_NUMBERS
     {
         Pos = MAP_APPFONT ( 12 , 97 ) ;
-        Size = MAP_APPFONT ( 240 , 10 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         Text = "Abstan~d zwischen asiatischem Text und Zahlen automatisch anpassen" ;
         Text [ ENGLISH ] = "Automatically adjust distance between asian text and numbers" ;
         Text[ english_us ] = "Automatically adjust space between Asian text and numbers";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-03-28 10:34:49 $
+ *  last change: $Author: dr $ $Date: 2001-05-15 11:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,9 @@ void SvxNumberPreviewImpl::Paint( const Rectangle& rRect )
     aDrawFont.SetColor( aPrevCol );
     SetFont( aDrawFont );
     DrawText( aPosText, aPrevStr );
+    SetLineColor( Color( COL_BLACK ) );
+    SetFillColor( Color( COL_TRANSPARENT ) );
+    DrawRect( Rectangle( Point(), aSzWnd ) );
 }
 
 // -----------------------------------------------------------------------
@@ -282,7 +285,6 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
 
     :   SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_NUMBERFORMAT ), rCoreAttrs ),
 
-        aFtPreview      ( this, ResId( FT_PREVIEW ) ),
         aWndPreview     ( this, ResId( WND_NUMBER_PREVIEW ) ),
         aFtCategory     ( this, ResId( FT_CATEGORY ) ),
         aLbCategory     ( this, ResId( LB_CATEGORY ) ),
@@ -303,7 +305,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
         aEdDecimals     ( this, ResId( ED_DECIMALS ) ),
         aFtLanguage     ( this, ResId( FT_LANGUAGE ) ),
         aLbLanguage     ( this, ResId( LB_LANGUAGE ), FALSE ),
-        aGbOptions      ( this, ResId( GB_OPTIONS ) ),
+        aFlOptions      ( this, ResId( FL_OPTIONS ) ),
         aFtComment      ( this, ResId( FT_COMMENT ) ),
         aStrEurope      ( ResId( STR_EUROPE) ),
         aIconList       ( ResId( IL_ICON ) ),
@@ -674,7 +676,7 @@ void SvxNumberFormatTabPage::Obstructing()
     aFtDecimals     .Disable();
     aEdLeadZeroes   .Disable();
     aEdDecimals     .Disable();
-    aGbOptions      .Disable();
+    aFlOptions      .Disable();
     aEdDecimals     .SetText( String() );
     aEdLeadZeroes   .SetText( String() );
     aBtnNegRed      .Check( FALSE );
@@ -1100,7 +1102,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( BOOL bCheckCatChange /*= FALSE*
         case CAT_NUMBER:
         case CAT_PERCENT:
         case CAT_CURRENCY:
-            aGbOptions.Enable();
+            aFlOptions.Enable();
             aFtDecimals.Enable();
             aEdDecimals.Enable();
             aFtLeadZeroes.Enable();
@@ -1126,7 +1128,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( BOOL bCheckCatChange /*= FALSE*
         case CAT_SCIENTIFIC:
         case CAT_FRACTION:
         default:
-            aGbOptions      .Disable();
+            aFlOptions      .Disable();
             aFtDecimals     .Disable();
             aEdDecimals     .Disable();
             aFtLeadZeroes   .Disable();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-28 12:01:29 $
+ *  last change: $Author: dr $ $Date: 2001-05-15 11:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,11 +158,10 @@
 #define FT_ARABIAN_LANG         127
 #define LB_ARABIAN_LANG         128
 
-#define FL_CHAR_PREVIEW         130
 #define WIN_CHAR_PREVIEW        131
 #define FT_CHAR_FONTTYPE        132
 
-#define FL_SEPARATE             140
+#define FL_COLOR2               140
 #define FT_COLOR2               141
 #define LB_COLOR2               142
 
@@ -192,7 +191,6 @@
 #define FT_RELIEF               226
 #define LB_RELIEF               227
 
-#define FL_EFFECTS_PREVIEW      230
 #define WIN_EFFECTS_PREVIEW     231
 #define FT_EFFECTS_FONTTYPE     232
 

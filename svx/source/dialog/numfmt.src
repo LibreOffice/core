@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:09:58 $
+ *  last change: $Author: dr $ $Date: 2001-05-15 11:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     ListBox LB_CATEGORY
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 13  ) ;
-        Size = MAP_APPFONT ( 70 , 72 ) ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 70 , 71 ) ;
         AutoHScroll = TRUE ;
         StringList =
         {
@@ -357,109 +357,109 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
             < "˜_—’l" ; Default ; > ;
             < "Ã·½Ä" ; Default ; > ;
         };
-    StringList [ chinese_traditional ] =
-    {
-            < "¥þ³¡" ; Default ; > ;
-        < "¨Ï¥ÎªÌ¦Û­q" ; Default ; > ;
-        < "¼Æ¦r" ; Default ; > ;
-        < "¦Ê¤À¤ñ" ; Default ; > ;
-        < "³f¹ô" ; Default ; > ;
-        < "¤é´Á" ; Default ; > ;
-        < "®É¶¡" ; Default ; > ;
-        < "¬ì¾Ç" ; Default ; > ;
-        < "¤À¼Æ" ; Default ; > ;
-        < "¥¬¤ó­È" ; Default ; > ;
-        < "¤å¦r" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "Çáßá" ; Default ; > ;
-        < "ãÚÑÝ ãä ÞÈá ÇáãÓÊÎÏã" ; Default ; > ;
-        < "ÑÞã" ; Default ; > ;
-        < "Ýí ÇáãÆÉ" ; Default ; > ;
-        < "ÚãáÉ" ; Default ; > ;
-        < "ÇáÊÇÑíÎ" ; Default ; > ;
-        < "ÇáæÞÊ" ; Default ; > ;
-        < "Úáã" ; Default ; > ;
-        < "ßÓÑ" ; Default ; > ;
-        < "ÞíãÉ ÍÞíÞíÉ" ; Default ; > ;
-        < "äÕ" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "¼ëá" ; Default ; > ;
-        < "ÐñïóáñìïóìÝíá" ; Default ; > ;
-        < "Áñéèìüò" ; Default ; > ;
-        < "Ðïóïóôü (%)" ; Default ; > ;
-        < "Íüìéóìá" ; Default ; > ;
-        < "Çìåñïìçíßá" ; Default ; > ;
-        < "¿ñá" ; Default ; > ;
-        < "ÄåêáäéêÜ" ; Default ; > ;
-        < "ÊëÜóìá" ; Default ; > ;
-        < "ËïãéêÞ ôéìÞ" ; Default ; > ;
-        < "Êåßìåíï" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "¸ðµÎ" ; Default ; > ;
-        < "»ç¿ëÀÚ Á¤ÀÇ" ; Default ; > ;
-        < "¼ö" ; Default ; > ;
-        < "ÆÛ¼¾Æ®" ; Default ; > ;
-        < "ÅëÈ­" ; Default ; > ;
-        < "³¯Â¥" ; Default ; > ;
-        < "½Ã°£" ; Default ; > ;
-        < "°úÇÐ" ; Default ; > ;
-        < "ºÐ¼ö" ; Default ; > ;
-        < "ºÒ °ª" ; Default ; > ;
-        < "ÅØ½ºÆ®" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Tümü" ; Default ; > ;
-        < "Kullanýcý tanýmlý" ; Default ; > ;
-        < "Sayý" ; Default ; > ;
-        < "Yüzde" ; Default ; > ;
-        < "Para birimi" ; Default ; > ;
-        < "Tarih" ; Default ; > ;
-        < "Saat" ; Default ; > ;
-        < "Bilimsel" ; Default ; > ;
-        < "Kesir" ; Default ; > ;
-        < "Mantýksal deðer" ; Default ; > ;
-        < "Metin" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
+        StringList [ chinese_traditional ] =
+        {
+                < "¥þ³¡" ; Default ; > ;
+            < "¨Ï¥ÎªÌ¦Û­q" ; Default ; > ;
+            < "¼Æ¦r" ; Default ; > ;
+            < "¦Ê¤À¤ñ" ; Default ; > ;
+            < "³f¹ô" ; Default ; > ;
+            < "¤é´Á" ; Default ; > ;
+            < "®É¶¡" ; Default ; > ;
+            < "¬ì¾Ç" ; Default ; > ;
+            < "¤À¼Æ" ; Default ; > ;
+            < "¥¬¤ó­È" ; Default ; > ;
+            < "¤å¦r" ; Default ; > ;
+        };
+        StringList [ arabic ] =
+        {
+                < "Çáßá" ; Default ; > ;
+            < "ãÚÑÝ ãä ÞÈá ÇáãÓÊÎÏã" ; Default ; > ;
+            < "ÑÞã" ; Default ; > ;
+            < "Ýí ÇáãÆÉ" ; Default ; > ;
+            < "ÚãáÉ" ; Default ; > ;
+            < "ÇáÊÇÑíÎ" ; Default ; > ;
+            < "ÇáæÞÊ" ; Default ; > ;
+            < "Úáã" ; Default ; > ;
+            < "ßÓÑ" ; Default ; > ;
+            < "ÞíãÉ ÍÞíÞíÉ" ; Default ; > ;
+            < "äÕ" ; Default ; > ;
+        };
+        StringList [ greek ] =
+        {
+                < "¼ëá" ; Default ; > ;
+            < "ÐñïóáñìïóìÝíá" ; Default ; > ;
+            < "Áñéèìüò" ; Default ; > ;
+            < "Ðïóïóôü (%)" ; Default ; > ;
+            < "Íüìéóìá" ; Default ; > ;
+            < "Çìåñïìçíßá" ; Default ; > ;
+            < "¿ñá" ; Default ; > ;
+            < "ÄåêáäéêÜ" ; Default ; > ;
+            < "ÊëÜóìá" ; Default ; > ;
+            < "ËïãéêÞ ôéìÞ" ; Default ; > ;
+            < "Êåßìåíï" ; Default ; > ;
+        };
+        StringList [ korean ] =
+        {
+                < "¸ðµÎ" ; Default ; > ;
+            < "»ç¿ëÀÚ Á¤ÀÇ" ; Default ; > ;
+            < "¼ö" ; Default ; > ;
+            < "ÆÛ¼¾Æ®" ; Default ; > ;
+            < "ÅëÈ­" ; Default ; > ;
+            < "³¯Â¥" ; Default ; > ;
+            < "½Ã°£" ; Default ; > ;
+            < "°úÇÐ" ; Default ; > ;
+            < "ºÐ¼ö" ; Default ; > ;
+            < "ºÒ °ª" ; Default ; > ;
+            < "ÅØ½ºÆ®" ; Default ; > ;
+        };
+        StringList [ turkish ] =
+        {
+                < "Tümü" ; Default ; > ;
+            < "Kullanýcý tanýmlý" ; Default ; > ;
+            < "Sayý" ; Default ; > ;
+            < "Yüzde" ; Default ; > ;
+            < "Para birimi" ; Default ; > ;
+            < "Tarih" ; Default ; > ;
+            < "Saat" ; Default ; > ;
+            < "Bilimsel" ; Default ; > ;
+            < "Kesir" ; Default ; > ;
+            < "Mantýksal deðer" ; Default ; > ;
+            < "Metin" ; Default ; > ;
+        };
+        StringList [ language_user1 ] =
+        {
+                < " " ; Default ; > ;
             < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "Todos" ; Default ; > ;
-        < "Definido por el usuario" ; Default ; > ;
-        < "Número" ; Default ; > ;
-        < "Porcentaje" ; Default ; > ;
-        < "Moneda" ; Default ; > ;
-        < "Fecha" ; Default ; > ;
-        < "Hora" ; Default ; > ;
-        < "Ciencia" ; Default ; > ;
-        < "Fracción" ; Default ; > ;
-        < "Valor lógico" ; Default ; > ;
-        < "Texto" ; Default ; > ;
-    };
+            < " " ; Default ; > ;
+            < " " ; Default ; > ;
+            < " " ; Default ; > ;
+            < " " ; Default ; > ;
+            < " " ; Default ; > ;
+            < " " ; Default ; > ;
+            < " " ; Default ; > ;
+            < " " ; Default ; > ;
+            < " " ; Default ; > ;
+        };
+        StringList [ catalan ] =
+        {
+                < "Todos" ; Default ; > ;
+            < "Definido por el usuario" ; Default ; > ;
+            < "Número" ; Default ; > ;
+            < "Porcentaje" ; Default ; > ;
+            < "Moneda" ; Default ; > ;
+            < "Fecha" ; Default ; > ;
+            < "Hora" ; Default ; > ;
+            < "Ciencia" ; Default ; > ;
+            < "Fracción" ; Default ; > ;
+            < "Valor lógico" ; Default ; > ;
+            < "Texto" ; Default ; > ;
+        };
     };
     FixedText FT_EDFORMAT
     {
-        Pos = MAP_APPFONT ( 6 , 141  ) ;
-        Size = MAP_APPFONT ( 167 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 136 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Format-~Code" ;
         Text [ ENGLISH ] = "Format-~Description" ;
         Text [ norwegian ] = "Format-~Beskrivelse" ;
@@ -488,12 +488,12 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     Edit ED_FORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 151  ) ;
-        Size = MAP_APPFONT ( 199 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 147 ) ;
+        Size = MAP_APPFONT ( 200 , 12 ) ;
     };
     FixedText FT_COMMENT
     {
-        Pos = MAP_APPFONT ( 6 , 167  ) ;
+        Pos = MAP_APPFONT ( 6 , 163 ) ;
         Size = MAP_APPFONT ( 248 , 16 ) ;
         WordBreak = TRUE ;
     };
@@ -501,13 +501,13 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     {
         Hide = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 167  ) ;
+        Pos = MAP_APPFONT ( 6 , 163 ) ;
         Size = MAP_APPFONT ( 248 , 12 ) ;
     };
     FixedText FT_FORMAT
     {
         Pos = MAP_APPFONT ( 82 , 3 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "~Format" ;
         Text [ ENGLISH ] = "~Format" ;
         Text [ norwegian ] = "~Format" ;
@@ -537,119 +537,116 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     ListBox LB_CURRENCY
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 82 , 13  ) ;
+        Pos = MAP_APPFONT ( 82 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 71 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
-
         StringList=
         {
             < "Automatisch" ; Default ; > ;
         };
-
         StringList[ENGLISH]=
         {
             < "Automatisch" ; Default ; > ;
         };
-
-    StringList [ language_user1 ] =
-    {
-             < " " ; Default ; > ;
-    };
-    StringList [ english_us ] =
-    {
-             < "Automatically" ; Default ; > ;
-    };
-    StringList [ portuguese ] =
-    {
-             < "Automático" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-             < "Àâòîìàòè÷åñêè" ; Default ; > ;
-    };
-    StringList [ dutch ] =
-    {
-             < "Automatisch" ; Default ; > ;
-    };
-    StringList [ french ] =
-    {
-             < "Automatique" ; Default ; > ;
-    };
-    StringList [ spanish ] =
-    {
-             < "Automático" ; Default ; > ;
-    };
-    StringList [ italian ] =
-    {
-             < "Automatico" ; Default ; > ;
-    };
-    StringList [ danish ] =
-    {
-             < "Automatisk" ; Default ; > ;
-    };
-    StringList [ swedish ] =
-    {
-             < "Automatisk" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-             < "Automatycznie" ; Default ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-             < "Automatisch" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-             < "Ž©“®" ; Default ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-             < "×Ô¶¯" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-             < "¦Û°Ê" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-             < "ÊáÞÇÆí" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-             < "Áõôüìáôá" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-             < "ÀÚµ¿À¸·Î" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-             < "Otomatik" ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-             < "Automático" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
-             < "Automaattisesti" ; Default ; > ;
-    };
+        StringList [ language_user1 ] =
+        {
+                < " " ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+                < "Automatically" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+                < "Automático" ; Default ; > ;
+        };
+        StringList [ russian ] =
+        {
+                < "Àâòîìàòè÷åñêè" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+                < "Automatisch" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+                < "Automatique" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+                < "Automático" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+                < "Automatico" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+                < "Automatisk" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+                < "Automatisk" ; Default ; > ;
+        };
+        StringList [ polish ] =
+        {
+                < "Automatycznie" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+                < "Automatisch" ; Default ; > ;
+        };
+        StringList [ japanese ] =
+        {
+                < "Ž©“®" ; Default ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
+                < "×Ô¶¯" ; Default ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
+                < "¦Û°Ê" ; Default ; > ;
+        };
+        StringList [ arabic ] =
+        {
+                < "ÊáÞÇÆí" ; Default ; > ;
+        };
+        StringList [ greek ] =
+        {
+                < "Áõôüìáôá" ; Default ; > ;
+        };
+        StringList [ korean ] =
+        {
+                < "ÀÚµ¿À¸·Î" ; Default ; > ;
+        };
+        StringList [ turkish ] =
+        {
+                < "Otomatik" ; Default ; > ;
+        };
+        StringList [ catalan ] =
+        {
+                < "Automático" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+                < "Automaattisesti" ; Default ; > ;
+        };
     };
 
     Control LB_FORMAT
     {
         HelpId = HID_NUMBERFORMAT_LB_FORMAT ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 82 , 29  ) ;
-        Size = MAP_APPFONT ( 90 , 56 ) ;
+        Pos = MAP_APPFONT ( 82 , 27 ) ;
+        Size = MAP_APPFONT ( 90 , 58 ) ;
         TabStop = TRUE ;
     };
 
     FixedText FT_DECIMALS
     {
-        Pos = MAP_APPFONT ( 12 , 103  ) ;
+        Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 69 , 8 ) ;
         Text = "N~achkommastellen" ;
         Text [ ENGLISH ] = "~Precision" ;
@@ -679,7 +676,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     NumericField ED_DECIMALS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 84 , 101  ) ;
+        Pos = MAP_APPFONT ( 84 , 102 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Spin = TRUE ;
         Maximum = 20 ;
@@ -691,7 +688,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     FixedText FT_LEADZEROES
     {
-        Pos = MAP_APPFONT ( 12 , 119  ) ;
+        Pos = MAP_APPFONT ( 12 , 120 ) ;
         Size = MAP_APPFONT ( 69 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Führende ~Nullen : F³hrende ~Nullen */
         Text = "Führende ~Nullen" ;
@@ -722,7 +719,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     NumericField ED_LEADZEROES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 84 , 117  ) ;
+        Pos = MAP_APPFONT ( 84 , 118 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Spin = TRUE ;
         Maximum = 20 ;
@@ -734,7 +731,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     CheckBox BTN_NEGRED
     {
-        Pos = MAP_APPFONT ( 133 , 102  ) ;
+        Pos = MAP_APPFONT ( 133 , 104 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Negativ in ~Rot" ;
         Text [ ENGLISH ] = "~Mark negative red" ;
@@ -763,7 +760,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     CheckBox BTN_THOUSAND
     {
-        Pos = MAP_APPFONT ( 133 , 118  ) ;
+        Pos = MAP_APPFONT ( 133 , 120 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Tausenderpunkt" ;
         Text [ ENGLISH ] = "~Thousands point" ;
@@ -790,10 +787,10 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Separador de miles";
     };
-    GroupBox GB_OPTIONS
+    FixedLine FL_OPTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 90  ) ;
-        Size = MAP_APPFONT ( 248 , 45 ) ;
+        Pos = MAP_APPFONT ( 6 , 91 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Optionen" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
@@ -821,8 +818,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     FixedText FT_LANGUAGE
     {
-        Pos = MAP_APPFONT ( 178 , 3  ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Pos = MAP_APPFONT ( 178 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
         Text = "S~prache" ;
         Text [ ENGLISH ] = "~Language" ;
         Text [ norwegian ] = "~Language" ;
@@ -852,50 +849,21 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     {
         Border = TRUE ;
         Sort = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 13  ) ;
-        Size = MAP_APPFONT ( 76 , 80 ) ;
+        Pos = MAP_APPFONT ( 178 , 14 ) ;
+        Size = MAP_APPFONT ( 76 , 71 ) ;
         DropDown = TRUE ;
-    };
-    FixedText FT_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 178 , 32  ) ;
-        Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Preview" ;
-        Text [ norwegian ] = "Preview" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ portuguese_brazilian ] = "Examinar" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text [ finnish ] = "Esikatselu" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ french ] = "Aperçu" ;
-        Text [ swedish ] = "Förhandsvisning" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ spanish ] = "Previsualización" ;
-        Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "ãÚÇíäÉ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "¹Ì¸® º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Previsualización";
     };
     Window WND_NUMBER_PREVIEW
     {
-        Border = TRUE ;
+        Border = FALSE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 42  ) ;
+        Pos = MAP_APPFONT ( 178 , 67 ) ;
         Size = MAP_APPFONT ( 76 , 18 ) ;
     };
     ImageButton IB_ADD
     {
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 209 , 151  ) ;
+        Pos = MAP_APPFONT ( 210 , 147 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         HelpId = HID_NUMBERFORMAT_TBI_ADD ;
         QuickHelpText = "Hinzufügen" ;
@@ -930,7 +898,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     ImageButton IB_REMOVE
     {
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 242 , 151  ) ;
+        Pos = MAP_APPFONT ( 242 , 147 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         HelpId = HID_NUMBERFORMAT_TBI_REMOVE ;
         QuickHelpText = "Entfernen" ;
@@ -964,7 +932,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     ImageButton IB_INFO
     {
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 226 , 151  ) ;
+        Pos = MAP_APPFONT ( 226 , 147 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         HelpId = HID_NUMBERFORMAT_TBI_INFO ;
         QuickHelpText = "Kommentar ändern" ;
