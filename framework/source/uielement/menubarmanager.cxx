@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:54:35 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 09:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_ACCELERATOREXECUTE_HXX
 #include <svtools/acceleratorexecute.hxx>
+#endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -2077,6 +2080,8 @@ void MenuBarManager::FillMenu( USHORT& nId, Menu* pMenu, const Reference< XIndex
 
 void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemContainer )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::MenuBarManager::SetItemContainer" );
+
     ResetableGuard aGuard( m_aLock );
 
     Reference< XFrame > xFrame = m_xFrame;
