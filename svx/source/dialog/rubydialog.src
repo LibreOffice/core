@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 16:22:10 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ polish ] = "Automatyczne rozpoznanie";
         Text[ portuguese_brazilian ] = "Auto detection";
         Text[ japanese ] = "Ž©“®”FŽ¯";
-        Text[ korean ] = "ÀÚµ¿ ÀÎÁö";
+        Text[ korean ] = "ÀÚµ¿ ÀÎ½Ä";
         Text[ chinese_simplified ] = "×Ô¶¯Ê¶±ð";
         Text[ chinese_traditional ] = "¦Û°ÊÃÑ§O";
         Text[ turkish ] = "Auto detection";
@@ -182,7 +182,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ polish ] = "Wyrównanie";
         Text[ portuguese_brazilian ] = "Adjust";
         Text[ japanese ] = "”z’u";
-        Text[ korean ] = "¸ÂÃã";
+        Text[ korean ] = "¹è¿­";
         Text[ chinese_simplified ] = "¶ÔÆë";
         Text[ chinese_traditional ] = "¹ï»ô";
         Text[ turkish ] = "Adjust";
@@ -303,7 +303,7 @@ ModelessDialog RID_SVXDLG_RUBY
     StringList [ polish ] =
     {
             "Do lewej" ;
-            "Wy?rodkuj" ;
+            "Wyœrodkuj" ;
             "Do prawej" ;
             "0 1 0" ;
             "1 2 1" ;
@@ -681,7 +681,7 @@ ModelessDialog RID_SVXDLG_RUBY
     Text[ italian ] = "Testo ruby";
     Text[ danish ] = "Ruby";
     Text[ swedish ] = "Ruby";
-    Text[ polish ] = "Znaki diakrytyczne";
+    Text[ polish ] = "Przewodnik fonetyczny";
     Text[ portuguese_brazilian ] = "Ruby";
     Text[ japanese ] = "ÙËÞ";
     Text[ korean ] = "·çºñ";
