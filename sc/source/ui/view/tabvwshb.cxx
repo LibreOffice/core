@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:39:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,10 +130,11 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
         Rectangle aRect = pObj->GetLogicRect();
         Size aDrawSize = aRect.GetSize();
 
+        svt::EmbeddedObjectRef::TryRunningState( xObj );
         awt::Size aSz = xObj->getVisualAreaSize( pClient->GetAspect() );
         Size aOleSize( aSz.Width, aSz.Height );
 
-                // sichtbarer Ausschnitt wird nur inplace veraendert!
+        // sichtbarer Ausschnitt wird nur inplace veraendert!
         aRect.SetSize( aOleSize );
         pClient->SetObjArea( aRect );
 
@@ -166,8 +167,9 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
         if ( !pClient )
             pClient = new ScClient( this, pWin, GetSdrView()->GetModel(), pObj );
 
-        if ( !(nErr & ERRCODE_ERROR_MASK) )
+        if ( !(nErr & ERRCODE_ERROR_MASK) && xObj.is() )
         {
+            svt::EmbeddedObjectRef::TryRunningState( xObj );
             Rectangle aRect = pObj->GetLogicRect();
             Size aDrawSize = aRect.GetSize();
 
