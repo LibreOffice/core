@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HStorageMap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:56:28 $
+ *  last change: $Author: vg $ $Date: 2005-02-18 13:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ namespace connectivity
 
 #if OSL_DEBUG_LEVEL > 0
 #include <stdio.h>
-#include <process.h>
+//#include <process.h>
 
 DECLARE_STL_USTRINGACCESS_MAP(FILE *,TDebugStreamMap);
 
