@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-03 08:58:39 $
+#   last change: $Author: rt $ $Date: 2005-01-11 12:23:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -210,7 +210,7 @@ STDLIBGUIST=-lm
 STDLIBCUIST=-lX11 -lpthread -lm
 STDLIBGUIMT=-lpthread -lm
 STDLIBCUIMT=-lX11 -lm
-STDSHLGUIMT=-lX11 -lXext -lpthread -m
+STDSHLGUIMT=-lX11 -lXext -lpthread -lm
 STDSHLCUIMT=-lpthread -lm
 
 LIBMGR=ar
