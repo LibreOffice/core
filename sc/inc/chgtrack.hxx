@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-06 15:44:11 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 11:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1111,7 +1111,7 @@ public:
                                     { return aUserCollection; }
             ScDocument*         GetDocument() const { return pDoc; }
                                 // for import filter
-            const DateTime&     GetFixDateTimeUTC() const { return aFixDateTime; }
+            const DateTime&     GetFixDateTime() const { return aFixDateTime; }
 
                                 // set this if the date/time set with
                                 // SetFixDateTime...() shall be applied to
