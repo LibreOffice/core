@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:40:51 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2179,6 +2179,8 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         }
     }
 #endif
+
+    CalcBaseOfstForFly();
 }
 
 /*************************************************************************
