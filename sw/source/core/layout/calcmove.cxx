@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ama $ $Date: 2002-08-19 09:57:30 $
+ *  last change: $Author: ama $ $Date: 2002-08-19 11:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ void SwFrm::PrepareMake()
     StackHack aHack;
     if ( GetUpper() )
     {
-        if( !GetUpper()->IsSctFrm() )
+        if( !GetUpper()->IsSctFrm() && !GetUpper()->IsFooterFrm() )
             GetUpper()->Calc();
         ASSERT( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
         if ( !GetUpper() )
@@ -367,7 +367,7 @@ void SwFrm::PrepareMake()
         if ( !GetUpper() )
             return;
 
-        if( !GetUpper()->IsSctFrm() )
+        if( !GetUpper()->IsSctFrm() && !GetUpper()->IsFooterFrm() )
             GetUpper()->Calc();
 
         ASSERT( GetUpper(), "Layoutgeruest wackelig (Upper wech III)." );
@@ -380,7 +380,7 @@ void SwFrm::PrepareMake()
 
 void SwFrm::OptPrepareMake()
 {
-    if ( GetUpper() )
+    if ( GetUpper() && !GetUpper()->IsFooterFrm() )
     {
         GetUpper()->Calc();
         ASSERT( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
@@ -1197,14 +1197,6 @@ void SwCntntFrm::MakeAll()
     const BOOL bTab = IsInTab();
     const BOOL bFtn = IsInFtn();
     const BOOL bSct = IsInSct();
-    sal_Bool bFooter;
-    {
-        SwFrm* pFooter = FindFooterOrHeader();
-        if( pFooter && pFooter->IsFooterFrm() )
-            bFooter = sal_True;
-        else
-            bFooter = sal_False;
-    }
     Point aOldFrmPos;               //Damit bei Turnarounds jew. mit der
     Point aOldPrtPos;               //letzten Pos verglichen und geprueft
                                     //werden kann, ob ein Prepare sinnvoll ist.
@@ -1287,7 +1279,7 @@ void SwCntntFrm::MakeAll()
                 Prepare( PREP_FIXSIZE_CHG );
         }
 
-        if ( aOldFrmPos != (Frm().*fnRect->fnGetPos)() && !bFooter )
+        if ( aOldFrmPos != (Frm().*fnRect->fnGetPos)() )
             CalcFlys( TRUE );
 #else
         aOldFrmPos = Frm().Pos();
