@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:08:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1027,7 +1027,7 @@ namespace
 
                 // nur wenn eine Sortierung und ein Tabellenname vorhanden ist-> erzeugen
                 // sonst werden die Expressions vom Order By im GenerateCriteria mit erzeugt
-                if (eOrder != ORDER_NONE && pEntryField->GetTable().getLength())
+                if ( eOrder != ORDER_NONE )
                 {
                     aColumnName = pEntryField->GetField();
                     if(aColumnName.toChar() == '*')
@@ -2216,8 +2216,6 @@ namespace
         {
             ::connectivity::OSQLParseNode* pNode = pParseRoot->getChild(3)->getChild(4)->getChild(2);
             ::connectivity::OSQLParseNode* pParamRef = NULL;
-            ::rtl::OUString aField, aAlias;
-            sal_uInt16 nPos = 0;
 
             EOrderDir eOrderDir;
             OTableFieldDescRef aDragLeft = new OTableFieldDesc();
@@ -2232,7 +2230,7 @@ namespace
                 if(SQL_ISRULE(pChild->getChild(0),column_ref))
                 {
                     if( eOk == FillDragInfo(_pView,pChild->getChild(0),aDragLeft))
-                        _pSelectionBrw->AddOrder( aDragLeft, eOrderDir, nPos);
+                        _pSelectionBrw->AddOrder( aDragLeft, eOrderDir, i);
                     else // it could be a alias name for a field
                     {
                         ::rtl::OUString aTableRange,aColumnName;
@@ -2254,7 +2252,7 @@ namespace
                 else if(SQL_ISRULE(pChild->getChild(0),general_set_fct) &&
                         SQL_ISRULE(pParamRef = pChild->getChild(0)->getChild(pChild->getChild(0)->count()-2),column_ref) &&
                         eOk == FillDragInfo(_pView,pParamRef,aDragLeft))
-                    _pSelectionBrw->AddOrder( aDragLeft, eOrderDir, nPos);
+                    _pSelectionBrw->AddOrder( aDragLeft, eOrderDir, i );
                 else
                     eErrorCode = eColumnNotFound;
             }
@@ -2290,7 +2288,7 @@ namespace
                     if ( eOk == (eErrorCode = FillDragInfo(_pView,pColumnRef,aDragInfo)) )
                     {
                         aDragInfo->SetGroupBy(sal_True);
-                        _pSelectionBrw->AddGroupBy(aDragInfo);
+                        _pSelectionBrw->AddGroupBy(aDragInfo,i);
                     }
                 }
             }
@@ -2385,6 +2383,8 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
 // -----------------------------------------------------------------------------
 OQueryDesignView::~OQueryDesignView()
 {
+    if ( m_pTableView )
+        ::dbaui::notifySystemWindow(this,m_pTableView,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     ::std::auto_ptr<Window> aTemp(m_pSelectionBox);
     m_pSelectionBox = NULL;
 }
