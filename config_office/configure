@@ -21,12 +21,12 @@ ac_help="$ac_help
                           Usage: --with-gcc-home=<absolute path to gcc home>
 "
 ac_help="$ac_help
-  --with-jdk-home         if you have installed the JDK 1.1.8, on your system,
+  --with-jdk-home         if you have installed JDK 1.2.2, on your system,
                           please supply the path here.
                           Note that this is not the location of the Java binary but the
                           location of the entire distribution.
  
-                          Usage: --with-jdk-home=<absolute path to JDK 1.1.8 home>
+                          Usage: --with-jdk-home=<absolute path to JDK 1.2.2 home>
 "
 ac_help="$ac_help
   --with-perl-home        if you have installed the Perl 5 Distribution, on your system,
@@ -1832,34 +1832,34 @@ if test "$JAVA"; then
    _correct_jdk_exists="false"
       _jdk=`$JAVA -version 2>&1 | $AWK -F'"' '{ print \$2 }'`
    if test "$_os" = "SunOS"; then
-      _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 1) print "false"; else print "true" }'`
+      _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
    fi
    if test "$_os" = "Linux" -a "$_machine_type" = "i686"; then
-      _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 1) print "false"; else print "true" }'`
+      _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
    fi
    if test "$_os" = "Linux" -a "$_machine_type" = "sparc"; then
       _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
    fi
    if test "$_os" = "WINNT"; then
-      _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 1) print "false"; else print "true" }'`
+      _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
    fi
    if test "$_os" = "Darwin"; then
       _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
    fi
    if test "$_jdk_middle" = "true"; then
       if test "$_os" = "SunOS"; then
-         _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 < 6) print "false"; else print "true" }'`
+         _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
       fi
       if test "$_os" = "Linux"; then
          if test "$_machine_type" = "i686"; then
-            _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 < 8) print "false"; else print "true" }'`
+            _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
          fi
          if test "$_machine_type" = "sparc"; then
             _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
          fi 
       fi
       if test "$_os" = "WINNT"; then
-            _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 < 8) print "false"; else print "true" }'`
+            _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
       fi
       if test "$_os" = "Darwin"; then
             _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
