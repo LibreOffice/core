@@ -83,10 +83,6 @@ hedabu: ..\inc\inetdef.hxx %_DEST%\inc%_EXT%\svtools\inetdef.hxx
 hedabu: ..\inc\inethist.hxx %_DEST%\inc%_EXT%\svtools\inethist.hxx
 hedabu: ..\inc\inetmsg.hxx %_DEST%\inc%_EXT%\svtools\inetmsg.hxx
 hedabu: ..\inc\inetstrm.hxx %_DEST%\inc%_EXT%\svtools\inetstrm.hxx
-hedabu: ..\inc\inidef.hxx %_DEST%\inc%_EXT%\svtools\inidef.hxx
-hedabu: ..\inc\iniman.hxx %_DEST%\inc%_EXT%\svtools\iniman.hxx
-hedabu: ..\inc\iniadrtk.hxx %_DEST%\inc%_EXT%\svtools\iniadrtk.hxx
-hedabu: ..\inc\iniprop.hxx %_DEST%\inc%_EXT%\svtools\iniprop.hxx
 hedabu: ..\inc\intitem.hxx %_DEST%\inc%_EXT%\svtools\intitem.hxx
 hedabu: ..\inc\isethint.hxx %_DEST%\inc%_EXT%\svtools\isethint.hxx
 hedabu: ..\inc\itemiter.hxx %_DEST%\inc%_EXT%\svtools\itemiter.hxx
