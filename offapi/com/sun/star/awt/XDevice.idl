@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDevice.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:47 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@ interface XDisplayBitmap;
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XDevice
 /** provides information about a graphical output device and
     offers a factory for the <em>graphics</em> which provides write
     operations on the device.
@@ -93,63 +92,51 @@ interface XDevice: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XDevice::createGraphics
-    /** creates a new graphics which output operation direct
-        to this device.
+    /** creates a new graphics whose output operation is directed to this
+        device.
      */
     XGraphics createGraphics();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XDevice::createDevice
     /** creates a new device which is compatible with this one.
 
-
-
         <p>If the device does not support the GETBITS device capability,
-        this method returns <NULL/>.
-
-        </p>
+        this method returns <NULL/>.</p>
      */
     XDevice createDevice( [in] long nWidth,
              [in] long nHeight );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XDevice::getInfo
-    /** @returns
-                information about the device.
+    /** returns information about the device.
      */
     com::sun::star::awt::DeviceInfo getInfo();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XDevice::getFontDescriptors
-    /** @returns
-                    the list of available font descriptors.
+    /** returns the list of available font descriptors.
      */
     sequence<FontDescriptor> getFontDescriptors();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XDevice::getFont
-    /** @returns
-                information about a font offered by this device.
+    /** returns information about a font offered by this device.
 
-                @param aDescriptor
-                specifies the description of a font.
+        @returns the font of this device.
 
-                specifies that the unit of measure is pixel for this
-                device.
+        @param aDescriptor
+        specifies the description of a font.
+        The unit of measure is pixel for this device.
      */
     com::sun::star::awt::XFont getFont( [in] FontDescriptor aDescriptor );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XDevice::createBitmap
-    /** creates a bitmap with the current device depth.<br>
-        If the specified area does not lie entirely in the device, the bits
-        outside are not specified.
+    /** creates a bitmap with the current device depth.
+
+        <p>If the specified area does not lie entirely in the device, the bits
+        outside are not specified.</p>
      */
     XBitmap createBitmap( [in] long nX,
              [in] long nY,
@@ -158,15 +145,10 @@ interface XDevice: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XDevice::createDisplayBitmap
-    /** creates a device-compatible bitmap.
-
-
+    /** creates a device compatible bitmap.
 
         <p>The data of the bitmap is in process memory instead of in the device,
-        so the output operation is fast.
-
-        </p>
+        so that the output operation is fast.</p>
      */
     XDisplayBitmap createDisplayBitmap( [in] XBitmap Bitmap );
 
