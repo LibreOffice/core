@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:35:01 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 //#ifndef _SVX_LABDLG_HXX //autogen
 //#include <svx/labdlg.hxx>
 //#endif    delete by CHINA001
+#ifndef _SVXSWFRAMEVALIDATION_HXX
+#include <svx/swframevalidation.hxx>
+#endif
 #ifndef _SVX_ANCHORID_HXX //autogen
 #include <svx/anchorid.hxx>
 #endif
@@ -178,6 +181,19 @@
 #include <svx/dialogs.hrc>
 #include "swabstdlg.hxx" //CHINA001
 #include "dialog.hrc" //CHINA001
+
+#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
+#include <com/sun/star/text/HoriOrientation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
+#include <com/sun/star/text/VertOrientation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_RELORIENTATION_HPP_
+#include <com/sun/star/text/RelOrientation.hpp>
+#endif
+
+using namespace ::com::sun::star::text;
+
 SFX_IMPL_INTERFACE(SwDrawBaseShell, SwBaseShell, SW_RES(0))
 {
 }
@@ -321,9 +337,10 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         BOOL bCaption = FALSE;
 
                         // Erlaubte Verankerungen:
-                        USHORT nAnchor = pSh->GetAnchorId();
+                        short nAnchor = pSh->GetAnchorId();
                         USHORT nAllowedAnchors = SVX_OBJ_AT_CNTNT|SVX_OBJ_IN_CNTNT;
                         USHORT nHtmlMode = ::GetHtmlMode(pSh->GetView().GetDocShell());
+
                         if( !((HTMLMODE_ON & nHtmlMode) && (0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS))) )
                             nAllowedAnchors |= SVX_OBJ_PAGE;
                         if ( pSh->IsFlyInFly() )
@@ -338,7 +355,10 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                             if ( pFact )
                             {
-                                pDlg = pFact->CreateCaptionDialog( NULL, pSdrView, ResId( RID_SVXDLG_CAPTION ), nAllowedAnchors );
+                                AbstractSvxCaptionDialog* pCaptionDlg =
+                                        pFact->CreateCaptionDialog( NULL, pSdrView, ResId( RID_SVXDLG_CAPTION ), nAllowedAnchors );
+                                pCaptionDlg->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
+                                pDlg = pCaptionDlg;
                                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                             }
                         }
@@ -348,7 +368,11 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                             if ( pFact )
                             {
-                                pDlg = pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView,ResId( RID_SVXDLG_TRANSFORM ), nAllowedAnchors );
+
+                                AbstractSvxTransformTabDialog* pTransform =
+                                            pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView,ResId( RID_SVXDLG_TRANSFORM ), nAllowedAnchors );
+                                pTransform->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
+                                pDlg = pTransform;
                                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                             }
                         }
@@ -365,12 +389,27 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         if (bCaption)
                             pSdrView->GetAttributes( aSet );
 
-                        aSet.Put(SfxUInt16Item(SID_ATTR_TRANSFORM_ANCHOR, nAnchor));
+                        aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, nAnchor));
+                        BOOL bRTL;
+                        aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT, pSh->IsFrmVertical(TRUE, bRTL)));
+                        aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_RTL_TEXT, bRTL));
 
                         SwFrmFmt* pFrmFmt = FindFrmFmt( pObj );
-                        SwFmtVertOrient aVOrient((SwFmtVertOrient&)pFrmFmt->GetAttr(RES_VERT_ORIENT));
-                        USHORT nOrient = aVOrient.GetVertOrient();
-                        aSet.Put(SfxUInt16Item(SID_ATTR_TRANSFORM_VERT_ORIENT, nOrient));
+
+                        aSet.Put( pFrmFmt->GetAttr(RES_FOLLOW_TEXT_FLOW) );
+
+                        SwFmtVertOrient aVOrient((const SwFmtVertOrient&)pFrmFmt->GetAttr(RES_VERT_ORIENT));
+                        aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_VERT_ORIENT, aVOrient.GetVertOrient()));
+                        aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_VERT_RELATION, aVOrient.GetRelationOrient() ));
+                        aSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_VERT_POSITION, aVOrient.GetPos()));
+
+                        SwFmtHoriOrient aHOrient((const SwFmtHoriOrient&)pFrmFmt->GetAttr(RES_HORI_ORIENT));
+                        aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_ORIENT, aHOrient.GetHoriOrient()));
+                        aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_RELATION, aHOrient.GetRelationOrient() ));
+                        aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_HORI_MIRROR, aHOrient.IsPosToggle()));
+                        aSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_HORI_POSITION, aHOrient.GetPos()));
+
+                        aSet.Put(SfxUInt16Item(SID_HTML_MODE, nHtmlMode));
 
                         pDlg->SetInputSet( &aSet );
 
@@ -389,19 +428,73 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                 SFX_ITEM_SET != pOutSet->GetItemState(
                                     SID_ATTR_TRANSFORM_POS_Y, FALSE );
 
+                            SfxItemSet aSet(GetPool(), RES_FRMATR_BEGIN, RES_FRMATR_END - 1);
+
+                            bool bSingleSelection = rMarkList.GetMarkCount() == 1;
+
                             const SfxPoolItem* pItem;
                             if(SFX_ITEM_SET == pOutSet->GetItemState(
                                 SID_ATTR_TRANSFORM_ANCHOR, FALSE, &pItem))
-                                pSh->ChgAnchor(((const SfxUInt16Item*)pItem)
-                                    ->GetValue(), FALSE, bPosCorr );
-
-                            if( SFX_ITEM_SET == pOutSet->GetItemState(
-                                SID_ATTR_TRANSFORM_VERT_ORIENT, FALSE, &pItem))
                             {
-                                aVOrient.SetVertOrient( (SwVertOrient)
-                                    ((const SfxUInt16Item*)pItem)->GetValue());
-                                pFrmFmt->SetAttr( aVOrient );
+                                if(!bSingleSelection)
+                                    pSh->ChgAnchor(((const SfxInt16Item*)pItem)
+                                            ->GetValue(), FALSE, bPosCorr );
+                                else
+                                {
+                                    SwFmtAnchor aAnchor(pFrmFmt->GetAnchor());
+                                    aAnchor.SetType((RndStdIds)((const SfxInt16Item*)pItem)->GetValue());
+                                    aSet.Put( aAnchor );
+                                }
                             }
+                            const SfxPoolItem* pHoriOrient = 0;
+                            const SfxPoolItem* pHoriRelation = 0;
+                            const SfxPoolItem* pHoriPosition = 0;
+                            const SfxPoolItem* pHoriMirror = 0;
+                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_ORIENT, FALSE, &pHoriOrient);
+                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_RELATION, FALSE, &pHoriRelation);
+                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_POSITION, FALSE, &pHoriPosition);
+                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_MIRROR, FALSE, &pHoriMirror);
+                            if(pHoriOrient || pHoriRelation || pHoriPosition || pHoriMirror)
+                            {
+                                if(pHoriOrient)
+                                    aHOrient.SetHoriOrient( (SwHoriOrient)
+                                          static_cast<const SfxInt16Item*>(pHoriOrient)->GetValue());
+                                if(pHoriRelation)
+                                    aHOrient.SetRelationOrient( (SwRelationOrient)
+                                              static_cast<const SfxInt16Item*>(pHoriRelation)->GetValue());
+                                if(pHoriPosition)
+                                    aHOrient.SetPos( static_cast<const SfxInt32Item*>(pHoriPosition)->GetValue());
+                                if(pHoriMirror)
+                                    aHOrient.SetPosToggle( static_cast<const SfxBoolItem*>(pHoriMirror)->GetValue());
+                                aSet.Put(aHOrient);
+                            }
+
+                            const SfxPoolItem* pVertOrient = 0;
+                            const SfxPoolItem* pVertRelation = 0;
+                            const SfxPoolItem* pVertPosition = 0;
+                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_VERT_ORIENT, FALSE, &pVertOrient);
+                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_VERT_RELATION, FALSE, &pVertRelation);
+                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_VERT_POSITION, FALSE, &pVertPosition);
+                            if(pVertOrient || pVertRelation || pVertPosition )
+                            {
+                                if(pVertOrient)
+                                    aVOrient.SetVertOrient( (SwVertOrient)
+                                        static_cast<const SfxInt16Item*>(pVertOrient)->GetValue());
+                                if(pVertRelation)
+                                    aVOrient.SetRelationOrient( (SwRelationOrient)
+                                        static_cast<const SfxInt16Item*>(pVertRelation)->GetValue());
+                                if(pVertPosition)
+                                    aVOrient.SetPos( static_cast<const SfxInt32Item*>(pVertPosition)->GetValue());
+                                aSet.Put( aVOrient );
+                            }
+                            const SfxPoolItem* pFollowItem = 0;
+                            pOutSet->GetItemState(RES_FOLLOW_TEXT_FLOW, FALSE, &pFollowItem);
+                            if(pFollowItem)
+                                aSet.Put(*pFollowItem);
+
+                            if(aSet.Count())
+                                pSh->SetDrawingAttr(aSet);
+
 
                             rBind.InvalidateAll(FALSE);
                             pSh->EndAllAction();
@@ -770,6 +863,195 @@ BOOL SwDrawBaseShell::Disable(SfxItemSet& rSet, USHORT nWhich)
     }
 
     return bDisable;
+}
+
+/*-- 09.03.2004 13:15:03---------------------------------------------------
+    Validate of drawing positions
+  -----------------------------------------------------------------------*/
+IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation )
+{
+    SwWrtShell *pSh = &GetShell();
+    pValidation->nMinHeight = MINFLY;
+    pValidation->nMinWidth =  MINFLY;
+
+    SwRect aBoundRect;
+
+    // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
+    //      aligned to page for fly frame anchored to paragraph or to character.
+    const RndStdIds eAnchorType = static_cast<RndStdIds >(pValidation->nAnchorType);
+    const SwPosition* pCntntPos = 0;
+    SdrView*  pSdrView = pSh->GetDrawView();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+        SwFrmFmt* pFrmFmt = FindFrmFmt( pObj );
+        pCntntPos = pFrmFmt->GetAnchor().GetCntntAnchor();
+    }
+
+    pSh->CalcBoundRect( aBoundRect, eAnchorType,
+                           static_cast<SwRelationOrient>(pValidation->nHRelOrient),
+                           static_cast<SwRelationOrient>(pValidation->nVRelOrient),
+                           pCntntPos,
+                           pValidation->bFollowTextFlow,
+                           pValidation->bMirror, NULL, &pValidation->aPercentSize);
+
+    BOOL bRTL;
+    BOOL bIsInVertical = pSh->IsFrmVertical(TRUE, bRTL);
+    if(bIsInVertical)
+    {
+        Point aPos(aBoundRect.Pos());
+        long nTmp = aPos.X();
+        aPos.X() = aPos.Y();
+        aPos.Y() = nTmp;
+        Size aSize(aBoundRect.SSize());
+        nTmp = aSize.Width();
+        aSize.Width() = aSize.Height();
+        aSize.Height() = nTmp;
+        aBoundRect.Chg( aPos, aSize );
+        //exchange width/height to enable correct values
+        nTmp = pValidation->nWidth;
+        pValidation->nWidth = pValidation->nHeight;
+        pValidation->nHeight = nTmp;
+    }
+    if ( eAnchorType == FLY_PAGE || eAnchorType == FLY_AT_FLY )
+    {
+        // MinimalPosition
+        pValidation->nMinHPos = aBoundRect.Left();
+        pValidation->nMinVPos = aBoundRect.Top();
+        SwTwips nH = pValidation->nHPos;
+        SwTwips nV = pValidation->nVPos;
+
+        if (pValidation->nHPos + pValidation->nWidth > aBoundRect.Right())
+        {
+            if (pValidation->nHoriOrient == HoriOrientation::NONE)
+            {
+                pValidation->nHPos -= ((pValidation->nHPos + pValidation->nWidth) - aBoundRect.Right());
+                nH = pValidation->nHPos;
+            }
+            else
+                pValidation->nWidth = aBoundRect.Right() - pValidation->nHPos;
+        }
+
+        if (pValidation->nHPos + pValidation->nWidth > aBoundRect.Right())
+            pValidation->nWidth = aBoundRect.Right() - pValidation->nHPos;
+
+        if (pValidation->nVPos + pValidation->nHeight > aBoundRect.Bottom())
+        {
+            if (pValidation->nVertOrient == VertOrientation::NONE)
+            {
+                pValidation->nVPos -= ((pValidation->nVPos + pValidation->nHeight) - aBoundRect.Bottom());
+                nV = pValidation->nVPos;
+            }
+            else
+                pValidation->nHeight = aBoundRect.Bottom() - pValidation->nVPos;
+        }
+
+        if (pValidation->nVPos + pValidation->nHeight > aBoundRect.Bottom())
+            pValidation->nHeight = aBoundRect.Bottom() - pValidation->nVPos;
+
+        if ( pValidation->nVertOrient != VertOrientation::NONE )
+            nV = aBoundRect.Top();
+
+        if ( pValidation->nHoriOrient != HoriOrientation::NONE )
+            nH = aBoundRect.Left();
+
+        pValidation->nMaxHPos   = aBoundRect.Right()  - pValidation->nWidth;
+        pValidation->nMaxHeight = aBoundRect.Bottom() - nV;
+
+        pValidation->nMaxVPos   = aBoundRect.Bottom() - pValidation->nHeight;
+        pValidation->nMaxWidth  = aBoundRect.Right()  - nH;
+    }
+    else if ( eAnchorType == FLY_AT_CNTNT || eAnchorType == FLY_AUTO_CNTNT )
+    {
+        if (pValidation->nHPos + pValidation->nWidth > aBoundRect.Right())
+        {
+            if (pValidation->nHoriOrient == HoriOrientation::NONE)
+            {
+                pValidation->nHPos -= ((pValidation->nHPos + pValidation->nWidth) - aBoundRect.Right());
+            }
+            else
+                pValidation->nWidth = aBoundRect.Right() - pValidation->nHPos;
+        }
+
+        // OD 29.09.2003 #i17567#, #i18732# - consider following the text flow
+        // and alignment at page areas.
+        const bool bMaxVPosAtBottom = !pValidation->bFollowTextFlow ||
+                                      pValidation->nVRelOrient == RelOrientation::PAGE_FRAME ||
+                                      pValidation->nVRelOrient == RelOrientation::PAGE_PRINT_AREA;
+        {
+            SwTwips nTmpMaxVPos = ( bMaxVPosAtBottom
+                                    ? aBoundRect.Bottom()
+                                    : aBoundRect.Height() ) -
+                                  pValidation->nHeight;
+            if ( pValidation->nVPos > nTmpMaxVPos )
+            {
+                if (pValidation->nVertOrient == VertOrientation::NONE)
+                {
+                    pValidation->nVPos = nTmpMaxVPos;
+                }
+                else
+                {
+                    pValidation->nHeight = ( bMaxVPosAtBottom
+                                     ? aBoundRect.Bottom()
+                                     : aBoundRect.Height() ) - pValidation->nVPos;
+                }
+            }
+        }
+
+        pValidation->nMinHPos  = aBoundRect.Left();
+        pValidation->nMaxHPos  = aBoundRect.Right() - pValidation->nWidth;
+
+        pValidation->nMinVPos  = aBoundRect.Top();
+        // OD 26.09.2003 #i17567#, #i18732# - determine maximum vertical position
+        if ( bMaxVPosAtBottom )
+        {
+            pValidation->nMaxVPos  = aBoundRect.Bottom() - pValidation->nHeight;
+        }
+        else
+        {
+            pValidation->nMaxVPos  = aBoundRect.Height() - pValidation->nHeight;
+        }
+
+        // Maximale Breite Hoehe
+        const SwTwips nH = ( pValidation->nHoriOrient != HoriOrientation::NONE )
+                           ? aBoundRect.Left()
+                           : pValidation->nHPos;
+        const SwTwips nV = ( pValidation->nVertOrient != VertOrientation::NONE )
+                           ? aBoundRect.Top()
+                           : pValidation->nVPos;
+        pValidation->nMaxHeight  = pValidation->nMaxVPos + pValidation->nHeight - nV;
+        pValidation->nMaxWidth   = pValidation->nMaxHPos + pValidation->nWidth - nH;
+    }
+    else if ( eAnchorType == FLY_IN_CNTNT )
+    {
+        pValidation->nMinHPos = 0;
+        pValidation->nMaxHPos = 0;
+
+        pValidation->nMaxHeight = aBoundRect.Height();
+        pValidation->nMaxWidth  = aBoundRect.Width();
+
+        pValidation->nMaxVPos   = aBoundRect.Height();
+        pValidation->nMinVPos   = -aBoundRect.Height() + pValidation->nHeight;
+        if (pValidation->nMaxVPos < pValidation->nMinVPos)
+        {
+            pValidation->nMinVPos = pValidation->nMaxVPos;
+            pValidation->nMaxVPos = -aBoundRect.Height();
+        }
+    }
+    if(bIsInVertical)
+    {
+        //restore width/height exchange
+        long nTmp = pValidation->nWidth;
+        pValidation->nWidth = pValidation->nHeight;
+        pValidation->nHeight = nTmp;
+    }
+
+    if (pValidation->nMaxWidth < pValidation->nWidth)
+        pValidation->nWidth = pValidation->nMaxWidth;
+    if (pValidation->nMaxHeight < pValidation->nHeight)
+        pValidation->nHeight = pValidation->nMaxHeight;
+    return 0;
 }
 
 
