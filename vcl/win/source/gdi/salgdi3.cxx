@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:41:47 $
+ *  last change: $Author: hdu $ $Date: 2004-07-20 09:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,6 +573,7 @@ ImplWinFontData::~ImplWinFontData()
 
 void ImplWinFontData::UpdateFromHDC( HDC hDC )
 {
+    // short circuit if already initialized
     if( mpUnicodeMap != NULL )
         return;
 
@@ -735,8 +736,6 @@ void ImplWinFontData::ReadCmapTable( HDC hDC )
     {
         int nPlatform = GetUShort( p );
         int nEncoding = GetUShort( p+2 );
-        int nTmpOffset = GetUInt( p+4 );
-        int nTmpFormat = GetUShort( pCmap + nTmpOffset );
 
         int nValue;
         if( nPlatform==3 && nEncoding==1 )      // Win Unicode
@@ -750,6 +749,8 @@ void ImplWinFontData::ReadCmapTable( HDC hDC )
         else
             continue;                           // ignore other encodings
 
+        int nTmpOffset = GetUInt( p+4 );
+        int nTmpFormat = GetUShort( pCmap + nTmpOffset );
         if( nTmpFormat == 12 )                  // 32bit code -> glyph map format
             nValue += 3;
         else if( nTmpFormat != 4 )              // 16bit code -> glyph map format
@@ -780,8 +781,10 @@ void ImplWinFontData::ReadCmapTable( HDC hDC )
         {
             sal_uInt32 cMinChar = GetUShort( pBegin + 2*i );
             sal_uInt32 cMaxChar = GetUShort( pLimit + 2*i );
+            if( cMinChar > cMaxChar )   // no sane font should trigger this
+                break;
             if( cMaxChar == 0xFFFF )
-                continue;
+                break;
             *(pCP++) = cMinChar;
             *(pCP++) = cMaxChar + 1;
         }
@@ -796,10 +799,15 @@ void ImplWinFontData::ReadCmapTable( HDC hDC )
         sal_uInt32* pCP = pCodePairs;
         for( int i = 0; i < nRangeCount; ++i )
         {
-            *(pCP++) = GetUShort( pGroup + 0 );
-            *(pCP++) = GetUShort( pGroup + 4 ) + 1;
+            sal_uInt32 cMinChar = GetUShort( pGroup + 0 );
+            sal_uInt32 cMaxChar = GetUShort( pGroup + 4 );
             pGroup += 12;
+            if( cMinChar > cMaxChar )   // no sane font should trigger this
+                break;
+            *(pCP++) = cMinChar;
+            *(pCP++) = cMaxChar + 1;
         }
+        nRangeCount = (pCP - pCodePairs) / 2;
     }
 
     if( nRangeCount > 0 )
@@ -1037,10 +1045,8 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
 {
     DBG_ASSERT( pFont->mpFontEntry, "WinSalGraphics mpFontEntry==NULL");
     DBG_ASSERT( pFont->mpFontData, "WinSalGraphics mpFontData==NULL");
-    if( pFont->mpFontEntry )
-        mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<ImplWinFontEntry*>( pFont->mpFontEntry );
-    if( pFont->mpFontData )
-        mpWinFontData[ nFallbackLevel ] = reinterpret_cast<ImplWinFontData*>( pFont->mpFontData );
+    mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<ImplWinFontEntry*>( pFont->mpFontEntry );
+    mpWinFontData[ nFallbackLevel ] = reinterpret_cast<ImplWinFontData*>( pFont->mpFontData );
 
     HFONT hNewFont = 0;
     HFONT hOldFont;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metric.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:29:57 $
+ *  last change: $Author: hdu $ $Date: 2004-07-20 09:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,9 +290,10 @@ ImplFontCharMap::~ImplFontCharMap()
 
 ImplFontCharMap* ImplFontCharMap::GetDefaultMap()
 {
-    if( !pDefaultImplFontCharMap )
+    if( pDefaultImplFontCharMap )
+        pDefaultImplFontCharMap->AddReference();
+    else
         pDefaultImplFontCharMap = new ImplFontCharMap( 2, pDefaultRangeCodes );
-    pDefaultImplFontCharMap->AddReference();
     return pDefaultImplFontCharMap;
 }
 
@@ -481,6 +482,7 @@ FontCharMap::FontCharMap()
 FontCharMap::~FontCharMap()
 {
     mpImpl->DeReference();
+    mpImpl = NULL;
 }
 
 // -----------------------------------------------------------------------

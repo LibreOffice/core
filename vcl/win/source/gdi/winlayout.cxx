@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:42:04 $
+ *  last change: $Author: hdu $ $Date: 2004-07-20 09:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2360,6 +2360,8 @@ int ImplWinFontEntry::GetKerning( sal_Unicode cLeft, sal_Unicode cRight ) const
 
 ImplFontData* ImplWinFontData::Clone() const
 {
+    if( mpUnicodeMap )
+        mpUnicodeMap->AddReference();
     ImplFontData* pClone = new ImplWinFontData( *this );
     return pClone;
 }
