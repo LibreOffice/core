@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mtg $ $Date: 2001-05-16 11:44:10 $
+#   last change: $Author: vg $ $Date: 2003-04-24 17:44:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,8 @@ PACKAGE=com$/sun$/star$/formula
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    AccessibleFormulaText.idl \
+    AccessibleFormulaView.idl \
     SymbolDescriptor.idl \
     FormulaProperties.idl
 
