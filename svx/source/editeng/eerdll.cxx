@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2001-11-23 19:22:25 $
+ *  last change: $Author: cl $ $Date: 2002-02-25 16:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[14]  = new SvxTabStopItem( 0, 0, SVX_TAB_ADJUST_LEFT, EE_PARA_TABS );
 
         // Zeichenattribute:
-        ppDefItems[15]  = new SvxColorItem( Color( COL_BLACK ), EE_CHAR_COLOR );
+        ppDefItems[15]  = new SvxColorItem( Color( COL_AUTO ), EE_CHAR_COLOR );
         ppDefItems[16]  = new SvxFontItem( EE_CHAR_FONTINFO );
         ppDefItems[17] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT );
         ppDefItems[18] = new SvxCharScaleWidthItem( 100, EE_CHAR_FONTWIDTH );
