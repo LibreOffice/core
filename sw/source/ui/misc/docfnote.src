@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:21:10 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ polish ] = "Numeracja";
         Text[ portuguese_brazilian ] = "Numbering";
         Text[ japanese ] = "”Ô†‚Ìí—Ş(~B)";
-        Text[ korean ] = "¹øÈ£¸Å±â±â";
+        Text[ korean ] = "¹øÈ£¸Å±â±â(~B)";
         Text[ chinese_simplified ] = "±àºÅ(~B)";
         Text[ chinese_traditional ] = "½s¸¹(~B)";
         Text[ turkish ] = "Numbering";
@@ -240,7 +240,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ english_us ] = "~Start at" ;
         Text [ italian ] = "Ini~zia con" ;
         Text [ spanish ] = "Comen~zar en" ;
-        Text [ french ] = "À partir de" ;
+        Text [ french ] = "Commencer avec" ;
         Text [ dutch ] = "~Begin met" ;
         Text [ swedish ] = "Bö~rja med" ;
         Text [ danish ] = "Begynd med" ;
@@ -253,7 +253,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "¶}©l±q(~S)";
         Text[ arabic ] = "ÇáÈÏÁ ÈÜ";
         Text[ greek ] = "Èİóç åêêßíçóçò";
-        Text[ korean ] = "½ÃÀÛÇÒ °÷(~S)";
+        Text[ korean ] = "¿¡¼­ ½ÃÀÛ(~S)";
         Text[ turkish ] = "B~aşlangıç";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comen~zar en";
@@ -287,10 +287,10 @@ TabPage TP_FOOTNOTEOPTION
         Text[ italian ] = "Conteggio";
         Text[ danish ] = "Counting";
         Text[ swedish ] = "Räk~ning";
-        Text[ polish ] = "Obliczenie";
+        Text[ polish ] = "Ustawienia numeracji";
         Text[ portuguese_brazilian ] = "Counting";
         Text[ japanese ] = "”Ô†•t‚¯(~C)";
-        Text[ korean ] = "Ä«¿îÆ®";
+        Text[ korean ] = "Ä«¿îÆ®(~C)";
         Text[ chinese_simplified ] = "¼ÆÊı(~C)";
         Text[ chinese_traditional ] = "­p¼Æ(~C)";
         Text[ turkish ] = "Counting";
@@ -613,7 +613,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "¤å¥ó§Àºİ(~D)";
         Text[ arabic ] = "äåÇíÉ ÇáãÓÊäÏ";
         Text[ greek ] = "Ôİëïò êåéìİíïõ";
-        Text[ korean ] = "¹®¼­ ³¡(~D)";
+        Text[ korean ] = "¹®¼­ ³¡(~)";
         Text[ turkish ] = "~Belge sonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~in del documento";
@@ -712,7 +712,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "­¶(~P)";
         Text[ arabic ] = "ÇáÕİÍÉ";
         Text[ greek ] = "Óåëßäá";
-        Text[ korean ] = "ÂÊ(~P)";
+        Text[ korean ] = "ÆäÀÌÁö(~P)";
         Text[ turkish ] = "~Sayfa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pá~gina";
@@ -848,7 +848,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ spanish ] = "Indicación para notas al pie en varias páginas" ;
         Text [ english_us ] = "Continuation notice" ;
         Text[ chinese_simplified ] = "¶àÒ³×¢½ÅµÄÌáÊ¾ÎÄ";
-        Text[ russian ] = "Óêàçàòåëüíûé òåêñò äëÿ ñíîñîê íà íåñêîëüêèõ ñòğàíèöàõ";
+        Text[ russian ] = "Óêàçàíèå î ïğîäîëæåíèè ñíîñêè";
         Text[ polish ] = "Wskazówka dotycz¹ca kontynuacji przypisów dolnych";
         Text[ japanese ] = "‹r’‚ªŸÍß°¼Ş‚É‘±‚­Û‚Ì’ˆÓ‘‚«";
         Text[ chinese_traditional ] = "¦h­¶µù¸}ªº´£¥Ü¤å";
@@ -916,7 +916,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ spanish ] = "En pág. sig~uiente" ;
         Text [ english_us ] = "Star~t of next page" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ĞøÒ³(~T)";
+        Text[ chinese_simplified ] = "ÄĞøÒ³é_Ê¼(~T)";
         Text[ russian ] = "Ñëåäóşùàÿ ñòğàíèöà";
         Text[ polish ] = "Na nastepnej stronie";
         Text[ japanese ] = "Ÿ‚ÌÍß°¼Ş(~T)";
@@ -994,7 +994,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ polish ] = "Numeracja";
         Text[ portuguese_brazilian ] = "Numbering";
         Text[ japanese ] = "”Ô†‚Ìí—Ş(~N)";
-        Text[ korean ] = "¹øÈ£¸Å±â±â";
+        Text[ korean ] = "¹øÈ£¸Å±â±â(~N)";
         Text[ chinese_simplified ] = "±àºÅ(~N)";
         Text[ chinese_traditional ] = "½s¸¹(~N)";
         Text[ turkish ] = "Numbering";
@@ -1032,7 +1032,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ english_us ] = "~Start at" ;
         Text [ italian ] = "Ini~zia con" ;
         Text [ spanish ] = "Comen~zar en" ;
-        Text [ french ] = "À partir de" ;
+        Text [ french ] = "Commencer avec" ;
         Text [ dutch ] = "~Begin met" ;
         Text [ swedish ] = "~Börja med" ;
         Text [ danish ] = "Begynd med" ;
@@ -1045,7 +1045,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ chinese_traditional ] = "¶}©l±q(~S)";
         Text[ arabic ] = "ÇáÈÏÁ ÈÜ";
         Text[ greek ] = "Èİóç åêêßíçóçò";
-        Text[ korean ] = "½ÃÀÛ¿¡¼­(~S)";
+        Text[ korean ] = "¿¡¼­ ½ÃÀÛ(~S)";
         Text[ turkish ] = "B~aşlangıç";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comen~zar en";
@@ -1315,7 +1315,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ chinese_traditional ] = "­¶(~P)";
         Text[ arabic ] = "ÇáÕİÍÉ";
         Text[ greek ] = "Óåëßäá";
-        Text[ korean ] = "ÂÊ(~P)";
+        Text[ korean ] = "ÆäÀÌÁö(~P)";
         Text[ turkish ] = "~Sayfa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pá~gina";
@@ -1539,5 +1539,6 @@ TabPage TP_ENDNOTEOPTION
         MaxTextLength = 30 ;
     };
 };
+
 
 
