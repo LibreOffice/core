@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_char.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:43:33 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 06:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ TabDialog TAB_CHAR
                 Text [ italian ] = "Carattere" ;
                 Text [ portuguese_brazilian ] = "Caractere" ;
                 Text [ portuguese ] = "Tipo de letra" ;
-                Text [ finnish ] = "Merkki" ;
+                Text [ finnish ] = "Fontti" ;
                 Text [ danish ] = "Skrifttype" ;
                 Text [ french ] = "Police" ;
                 Text [ swedish ] = "Teckensnitt" ;
@@ -126,7 +126,7 @@ TabDialog TAB_CHAR
                 Text [ italian ] = "Effetto carattere" ;
                 Text [ portuguese_brazilian ] = "Extensão de Caracter" ;
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
-                Text [ finnish ] = "Merkin tehosteet" ;
+                Text [ finnish ] = "Fonttitehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
                 Text [ french ] = "Effets de caractères" ;
                 Text [ swedish ] = "Teckensnittseffekt" ;
@@ -160,7 +160,7 @@ TabDialog TAB_CHAR
                 Text[ french ] = "Position";
                 Text[ spanish ] = "Posición";
                 Text[ italian ] = "Position";
-                Text[ danish ] = "Position";
+                Text[ danish ] = "Start_ved";
                 Text[ swedish ] = "Position";
                 Text[ polish ] = "Pozycja";
                 Text[ portuguese_brazilian ] = "Position";
@@ -168,9 +168,10 @@ TabDialog TAB_CHAR
                 Text[ korean ] = "À§Ä¡";
                 Text[ chinese_simplified ] = "Î»ÖÃ";
                 Text[ chinese_traditional ] = "¦ì¸m";
-                Text[ turkish ] = "Position";
+                Text[ turkish ] = "Konum";
                 Text[ arabic ] = "ÇáãæÖÚ";
                 Text[ catalan ] = "Posición";
+                Text[ finnish ] = "Sijainti";
             };
         };
     };
@@ -203,7 +204,7 @@ TabDialog TAB_CHAR
         Text [ italian ] = "Indietro" ;
         Text [ portuguese_brazilian ] = "Devolver" ;
         Text [ portuguese ] = "Anterior" ;
-        Text [ finnish ] = "Palaa" ;
+        Text [ finnish ] = "Takaisin" ;
         Text [ danish ] = "Tilbage" ;
         Text [ french ] = "Quitter" ;
         Text [ swedish ] = "Tillbaka" ;
