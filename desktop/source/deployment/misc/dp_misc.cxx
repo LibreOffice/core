@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_misc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:09:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include "osl/thread.hxx"
 #include "osl/mutex.hxx"
 #include "com/sun/star/ucb/CommandAbortedException.hpp"
+#include "com/sun/star/bridge/UnoUrlResolver.hpp"
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
 
 
@@ -294,9 +295,7 @@ Reference<XInterface> resolveUnoURL(
     AbortChannel * abortChannel )
 {
     Reference<bridge::XUnoUrlResolver> xUnoUrlResolver(
-        xLocalContext->getServiceManager()->createInstanceWithContext(
-            OUSTR("com.sun.star.bridge.UnoUrlResolver"), xLocalContext ),
-        UNO_QUERY_THROW );
+        bridge::UnoUrlResolver::create( xLocalContext ) );
 
     for (;;)
     {
