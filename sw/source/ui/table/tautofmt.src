@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:03:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ english_us ] = "Format" ;
         Text[ portuguese ] = "Formato";
         Text[ russian ] = "Τξπμΰς";
-        Text[ greek ] = "Μορφοποίηση";
+        Text[ greek ] = "Μορφή";
         Text[ dutch ] = "Opmaak";
         Text[ french ] = "Formatage";
         Text[ spanish ] = "Formato";
@@ -521,7 +521,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ japanese ] = "γ‚ªγƒΌγƒγƒ•γ‚©γƒΌγƒγƒƒγƒγ®θΏ½ε ";
         Text[ chinese_traditional ] = "ζ–°εΆθ‡ªε‹•ζ ΌεΌ";
         Text[ arabic ] = "ΕΦΗέΙ ΗαΚδΣνή ΗαΚαήΗΖν";
-        Text[ greek ] = "Προσθήκη ΑυτοΜορφής";
+        Text[ greek ] = "Προσθήκη Αυτόματης Μορφοποίησης";
         Text[ korean ] = "μλ™ μ„μ‹ μ¶”κ°€";
         Text[ turkish ] = "Otomatik formatlamayύ ekle";
         Text[ language_user1 ] = " ";
@@ -585,7 +585,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ japanese ] = "γ‚ªγƒΌγƒγƒ•γ‚©γƒΌγƒγƒƒγƒγ®ε‰ι™¤";
         Text[ chinese_traditional ] = "εªι™¤θ‡ªε‹•ζ ΌεΌ";
         Text[ arabic ] = "ΝΠέ ΗαΚδΣνή ΗαΚαήΗΖν";
-        Text[ greek ] = "Διαγραφή ΑυτοΜορφής";
+        Text[ greek ] = "Διαγραφή Αυτόματης Μορφοποίησης";
         Text[ korean ] = "μλ™ μ„μ‹ μ‚­μ ";
         Text[ turkish ] = "Otomatik formatlamayύ sil";
         Text[ language_user1 ] = " ";
@@ -617,7 +617,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ japanese ] = "δ»¥δΈ‹γ®γ‚ªγƒΌγƒγƒ•γ‚©γƒΌγƒγƒƒγƒγ―ε‰ι™¤γ•γ‚γΎγ™:";
         Text[ chinese_traditional ] = "εªι™¤δ»¥δΈ‹η„θ‡ªε‹•ζ ΌεΌοΌ";
         Text[ arabic ] = "Σζέ νΚγ ΝΠέ ΗαΚδΣνή ΗαΚαήΗΖν ΗαΚΗαν:";
-        Text[ greek ] = "Η εξής ΑυτοΜορφή θα διαγραφεί:";
+        Text[ greek ] = "Η εξής αυτόματη μορφοποίηση θα διαγραφεί:";
         Text[ korean ] = "λ‹¤μκ³Ό κ°™μ€ μλ™ μ„μ‹μ€ μ‚­μ λ©λ‹λ‹¤:";
         Text[ turkish ] = "Aώaπύdaki otomatik formatlama silinecektir:";
         Text[ language_user1 ] = " ";
@@ -647,7 +647,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ japanese ] = "γ‚ªγƒΌγƒγƒ•γ‚©γƒΌγƒγƒƒγƒγ®εε‰γ®ε¤‰ζ›΄";
         Text[ chinese_traditional ] = "ι‡ζ–°ε‘½εθ‡ªε‹•ζ ΌεΌ";
         Text[ arabic ] = "ΕΪΗΟΙ ΚΣγνΙ ΗαΚδΣνή ΗαΚαήΗΖν";
-        Text[ greek ] = "Μετονομασία ΑυτοΜορφής";
+        Text[ greek ] = "Μετονομασία Αυτόματης Μορφοποίησης";
         Text[ korean ] = "μλ™ μ„μ‹ μ΄λ¦„ λ°”κΎΈκΈ°";
         Text[ turkish ] = "Otomatik formatlamayύ yeniden isimlendir";
         Text[ language_user1 ] = " ";
@@ -938,7 +938,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ japanese ] = "ε…¥ε›γ—γεε‰γ―η„΅εΉγ§γ™γ€‚\nγ“γ®γ‚ªγƒΌγƒγƒ•γ‚©γƒΌγƒγƒƒγƒγ§γ―δ½ζγ§γγΎγ›γ‚“γ€‚\nε¥γ®εε‰γ‚’δ½Ώγ£γ¦γγ γ•γ„γ€‚";
         Text[ chinese_traditional ] = "ζ‚¨θΌΈε…¥δΊ†δΈ€ε€‹η„΅ζ•η„εη¨±γ€‚\nη„΅ζ³•ε»Ίη«‹θ‡ªε‹•ζ ΌεΌγ€‚\nθ«‹θΌΈε…¥δΈ€ε€‹ζ‰ζ•εη¨±γ€‚";
         Text[ arabic ] = "αήΟ ήγΚ ΘΕΟΞΗα ΗΣγ ΫνΡ ΥΗαΝ.\nαεΠΗ ΚΪΠΡ ΕδΤΗΑ ΗαΚδΣνή ΗαΚαήΗΖν.\nΗαΡΜΗΑ ΗΞΚνΗΡ ΗΣγ ΓΞΡ.";
-        Text[ greek ] = "Έχετε εισάγει ένα μη έγκυρο όνομα.\nΗ ΑυτοΜορφή δεν ήταν δυνατόν να δημιουργηθεί.\nΕπιλέξτε κάποιο άλλο όνομα.";
+        Text[ greek ] = "Έχετε εισάγει ένα μη έγκυρο όνομα.\nΗ αυτόματη μορφοποίηση δεν ήταν δυνατόν να δημιουργηθεί.\nΕπιλέξτε κάποιο άλλο όνομα.";
         Text[ korean ] = "μλª»λ μ΄λ¦„μ„ μ…λ ¥ν•μ…¨μµλ‹λ‹¤.\nμ”κµ¬λλ” μλ™ μ„μ‹μ„ λ§λ“¤ μ μ—†μµλ‹λ‹¤.\nλ‹¤λ¥Έ μ΄λ¦„μ„ μ„ νƒν•μ‹­μ‹μ¤.";
         Text[ turkish ] = "Geηersiz bir ad girdiniz.\nOtomatik formatlama oluώturulamadύ.\nBaώka bir ad ile deneyiniz.";
         Text[ language_user1 ] = " ";
@@ -955,7 +955,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     Text[ japanese ] = "γ‚ªγƒΌγƒγƒ•γ‚©γƒΌγƒγƒƒγƒ";
     Text[ chinese_traditional ] = "θ‡ªε‹•ζ ΌεΌ";
     Text[ arabic ] = "ΗαΚδΣνή ΗαΚαήΗΖν";
-    Text[ greek ] = "ΑυτοΜορφή";
+    Text[ greek ] = "Αυτόματη μορφοποίηση";
     Text[ korean ] = "μλ™ μ„μ‹";
     Text[ turkish ] = "Otomatik formatlama";
     Text[ language_user1 ] = " ";
@@ -1001,6 +1001,7 @@ ModalDialog DLG_SWDLG_STRINPUT
         TabStop = TRUE ;
     };
 };
+
 
 
 
