@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-03 20:08:22 $
+ *  last change: $Author: mtg $ $Date: 2001-05-04 13:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,12 +605,7 @@ void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::su
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sPrinterName );
 
         pValue[nIndex].Name = sPrinterSetup;
-        Sequence < sal_Int8 > aSequence;
-        xPropSet->getPropertyValue ( sPrinterSetup ) >>= aSequence;
-        OUStringBuffer aBuffer;
-        SvXMLUnitConverter::encodeBase64 ( aBuffer, aSequence );
-        OUString aString = aBuffer.makeStringAndClear();
-        pValue[nIndex++].Value <<= aString;
+        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sPrinterSetup );
 
         pValue[nIndex].Name = sIsKernAsianPunctuation;
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sIsKernAsianPunctuation );
