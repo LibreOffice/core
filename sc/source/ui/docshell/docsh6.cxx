@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh6.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 16:28:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,12 +320,12 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart 
 
     if (aDocument.IsEmbedded())
     {
-        ScTripel aOldStart,aOldEnd;
-        aDocument.GetEmbedded(aOldStart,aOldEnd);
+        ScRange aOld;
+        aDocument.GetEmbedded( aOld);
         aDocument.SetEmbedded( aArea );
-        ScTripel aNewStart,aNewEnd;
-        aDocument.GetEmbedded(aNewStart,aNewEnd);
-        if (aNewStart!=aOldStart || aNewEnd!=aOldEnd)
+        ScRange aNew;
+        aDocument.GetEmbedded( aNew);
+        if (aOld != aNew)
             PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB,PAINT_GRID);
 
         ViewChanged( ASPECT_CONTENT );          // auch im Container anzeigen
@@ -356,7 +356,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
         aNewArea = aDocument.GetEmbeddedRect();
     else
     {
-        USHORT nTab = pViewData->GetTabNo();
+        SCTAB nTab = pViewData->GetTabNo();
         if ( nTab != aDocument.GetVisibleTab() )
         {
             aDocument.SetVisibleTab( nTab );
@@ -364,8 +364,8 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
         }
 
         BOOL bNegativePage = aDocument.IsNegativePage( nTab );
-        USHORT nX = pViewData->GetPosX(SC_SPLIT_LEFT);
-        USHORT nY = pViewData->GetPosY(SC_SPLIT_BOTTOM);
+        SCCOL nX = pViewData->GetPosX(SC_SPLIT_LEFT);
+        SCROW nY = pViewData->GetPosY(SC_SPLIT_BOTTOM);
         Rectangle aMMRect = aDocument.GetMMRect( nX,nY, nX,nY, nTab );
         if (bNegativePage)
             lcl_SetTopRight( aNewArea, aMMRect.TopRight() );
@@ -525,17 +525,15 @@ BOOL __EXPORT ScDocShell::Insert( SfxObjectShell &rSource,
 void ScDocShell::UpdateLinks()
 {
     SvxLinkManager* pLinkManager = aDocument.GetLinkManager();
-    USHORT nCount;
-    USHORT i;
     StrCollection aNames;
 
     // nicht mehr benutzte Links raus
 
-    nCount = pLinkManager->GetLinks().Count();
-    for (i=nCount; i>0; )
+    USHORT nCount = pLinkManager->GetLinks().Count();
+    for (USHORT k=nCount; k>0; )
     {
-        --i;
-        ::so3::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
+        --k;
+        ::so3::SvBaseLink* pBase = *pLinkManager->GetLinks()[k];
         if (pBase->ISA(ScTableLink))
         {
             ScTableLink* pTabLink = (ScTableLink*)pBase;
@@ -548,7 +546,7 @@ void ScDocShell::UpdateLinks()
             else        // nicht mehr benutzt -> loeschen
             {
                 pTabLink->SetAddUndo(TRUE);
-                pLinkManager->Remove(i);
+                pLinkManager->Remove(k);
             }
         }
     }
@@ -556,8 +554,8 @@ void ScDocShell::UpdateLinks()
 
     // neue Links eintragen
 
-    nCount = aDocument.GetTableCount();
-    for (i=0; i<nCount; i++)
+    SCTAB nTabCount = aDocument.GetTableCount();
+    for (SCTAB i=0; i<nTabCount; i++)
         if (aDocument.IsLinked(i))
         {
             String aDocName = aDocument.GetLinkDoc(i);
@@ -565,7 +563,7 @@ void ScDocShell::UpdateLinks()
             String aOptions = aDocument.GetLinkOpt(i);
             ULONG nRefresh  = aDocument.GetLinkRefreshDelay(i);
             BOOL bThere = FALSE;
-            for (USHORT j=0; j<i && !bThere; j++)               // im Dokument mehrfach?
+            for (SCTAB j=0; j<i && !bThere; j++)                // im Dokument mehrfach?
                 if (aDocument.IsLinked(j)
                         && aDocument.GetLinkDoc(j) == aDocName
                         && aDocument.GetLinkFlt(j) == aFltName
