@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:14:16 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,7 +1444,8 @@ void SdXMLTextBoxShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
 void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     // create textbox shape
-    sal_Bool bIsPresShape(FALSE);
+    sal_Bool bIsPresShape = sal_False;
+    bool bClearText = false;
 
     char *pService = NULL;
 
@@ -1467,6 +1468,30 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             {
                 // XmlShapeTypePresNotesShape
                 pService = "com.sun.star.presentation.NotesShape";
+            }
+            else if( IsXMLToken( maPresentationClass, XML_HEADER ) )
+            {
+                // XmlShapeTypePresHeaderShape
+                pService = "com.sun.star.presentation.HeaderShape";
+                bClearText = true;
+            }
+            else if( IsXMLToken( maPresentationClass, XML_FOOTER ) )
+            {
+                // XmlShapeTypePresFooterShape
+                pService = "com.sun.star.presentation.FooterShape";
+                bClearText = true;
+            }
+            else if( IsXMLToken( maPresentationClass, XML_PAGE_NUMBER ) )
+            {
+                // XmlShapeTypePresSlideNumberShape
+                pService = "com.sun.star.presentation.SlideNumberShape";
+                bClearText = true;
+            }
+            else if( IsXMLToken( maPresentationClass, XML_DATE_TIME ) )
+            {
+                // XmlShapeTypePresDateTimeShape
+                pService = "com.sun.star.presentation.DateTimeShape";
+                bClearText = true;
             }
             else //  IsXMLToken( maPresentationClass, XML_PRESENTATION_TITLE ) )
             {
@@ -1506,6 +1531,13 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                         xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") ), ::cppu::bool2any( sal_False ) );
                 }
             }
+        }
+
+        if( bClearText )
+        {
+            uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
+            OUString aEmpty;
+            xText->setString( aEmpty );
         }
 
         // set parameters on shape
