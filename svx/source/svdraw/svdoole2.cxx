@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-18 10:55:23 $
+ *  last change: $Author: ka $ $Date: 2001-09-18 11:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,6 +746,7 @@ void SdrOle2Obj::ImpAssign( const SdrObject& rObj, SdrPage* pNewPage, SdrModel* 
 
 void SdrOle2Obj::ImpCopyObject( SvPersist& rSrcPersist, SvPersist& rDstPersist, String& rPersistName )
 {
+#ifndef SVX_LIGHT
     SvInfoObject* pInfo = rSrcPersist.Find( rPersistName );
 
     if( pInfo != NULL )
@@ -774,6 +775,7 @@ void SdrOle2Obj::ImpCopyObject( SvPersist& rSrcPersist, SvPersist& rDstPersist, 
 
         *ppObjRef = reinterpret_cast< SvInPlaceObject*>( &xNewRef );
     }
+#endif
 }
 
 // -----------------------------------------------------------------------------
