@@ -16,14 +16,14 @@ struct ConstAsciiString
     const sal_Char* ascii;
     sal_Int32       length;
 
-    inline  operator ::rtl::OUString () const;
+    inline  operator const ::rtl::OUString& () const;
     inline  operator const sal_Char* () const { return ascii; }
 
     inline ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength);
     inline ~ConstAsciiString();
 
 private:
-    mutable rtl_uString*    ustring;
+    mutable ::rtl::OUString*    ustring;
 };
 
 //------------------------------------------------------------
@@ -37,19 +37,16 @@ inline ConstAsciiString::ConstAsciiString(const sal_Char* _pAsciiZeroTerminated,
 //------------------------------------------------------------
 inline ConstAsciiString::~ConstAsciiString()
 {
-    if (ustring)
-    {
-        rtl_uString_release(ustring);
-        ustring = NULL;
-    }
+    delete ustring;
+    ustring = NULL;
 }
 
 //------------------------------------------------------------
-inline ConstAsciiString::operator ::rtl::OUString () const
+inline ConstAsciiString::operator const ::rtl::OUString& () const
 {
     if (!ustring)
-        rtl_uString_newFromAscii( &ustring, ascii );
-    return ::rtl::OUString(ustring);
+        ustring = new ::rtl::OUString(ascii, length, RTL_TEXTENCODING_ASCII_US);
+    return *ustring;
 }
 
 //============================================================
