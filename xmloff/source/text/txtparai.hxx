@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-25 06:57:28 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 07:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,12 @@ namespace text {  class XTextRange; }
 namespace xml { namespace sax { class XAttributeList; } }
 } } }
 
+#ifdef CONV_STAR_FONTS
+#define CONV_FROM_STAR_BATS 1
+#define CONV_FROM_STAR_MATH 2
+#define CONV_STAR_FONT_FLAGS_VALID 4
+#endif
+
 class XMLParaContext : public SvXMLImportContext
 {
     ::com::sun::star::uno::Reference <
@@ -85,6 +91,9 @@ class XMLParaContext : public SvXMLImportContext
     XMLHints_Impl           *pHints;
     sal_Bool                bIgnoreLeadingSpace;
     sal_Bool                bHeading;
+#ifdef CONV_STAR_FONTS
+    sal_uInt8               nStarFontsConvFlags;
+#endif
 
 public:
 

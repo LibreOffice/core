@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 07:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -999,6 +999,108 @@ void XMLTextImportHelper::DeleteParagraph()
     }
 }
 
+#ifdef CONV_STAR_FONTS
+sal_Unicode lcl_xmloff_convFromStarBats( sal_Unicode c )
+{
+    sal_Unicode cNew = c;
+    switch( c )
+    {
+    case 0xf095:    cNew = 0x2022;      break;
+    case 0xf05d:    cNew = 0x278a;      break;
+    case 0xf05e:    cNew = 0x278b;      break;
+    case 0xf05f:    cNew = 0x278c;      break;
+    }
+
+    return cNew;
+}
+sal_Unicode lcl_xmloff_convFromStarMath( sal_Unicode c )
+{
+    sal_Unicode cNew = c;
+    switch( c )
+    {
+    case 0xf09c:    cNew = 0x2227;      break;
+    case 0xf09d:    cNew = 0x2228;      break;
+    }
+
+    return cNew;
+}
+
+OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
+                                                const OUString& rStyleName,
+                                                sal_uInt8& rFlags,
+                                                 sal_Bool bPara ) const
+{
+    OUStringBuffer sChars( rChars );
+    sal_Bool bConverted = sal_False;
+    for( sal_Int32 i=0; i<rChars.getLength(); i++ )
+    {
+        sal_Unicode c = rChars[i];
+        if( c >= 0xf000 && c <= 0xf0ff )
+        {
+            if( (rFlags & CONV_STAR_FONT_FLAGS_VALID) == 0 )
+            {
+                XMLTextStyleContext *pStyle = 0;
+                sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
+                                           : XML_STYLE_FAMILY_TEXT_TEXT;
+                if( rStyleName.getLength() && xAutoStyles.Is() )
+                {
+                    pStyle = PTR_CAST( XMLTextStyleContext,
+                          ((SvXMLStylesContext *)&xAutoStyles)->
+                                FindStyleChildContext( nFamily, rStyleName,
+                                                       sal_True ) );
+                }
+
+                if( pStyle )
+                {
+                    sal_Int32 nCount = pStyle->_GetProperties().size();
+                    if( nCount )
+                    {
+                        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+                            ((SvXMLStylesContext *)&xAutoStyles)->GetImportPropertyMapper(nFamily);
+                        if( xImpPrMap.is() )
+                        {
+                            UniReference<XMLPropertySetMapper> rPropMapper =
+                                xImpPrMap->getPropertySetMapper();
+                            for( sal_Int32 i=0; i < nCount; i++ )
+                            {
+                                const XMLPropertyState& rProp = pStyle->_GetProperties()[i];
+                                sal_Int32 nIdx = rProp.mnIndex;
+                                sal_uInt32 nContextId = rPropMapper->GetEntryContextId(nIdx);
+                                if( CTF_FONTFAMILYNAME == nContextId )
+                                {
+                                    rFlags &= ~(CONV_FROM_STAR_BATS|CONV_FROM_STAR_MATH);
+                                    OUString sFontName;
+                                    rProp.maValue >>= sFontName;
+                                    if( sFontName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("StarBats" ) ) )
+                                        rFlags |= CONV_FROM_STAR_BATS;
+                                    else if( sFontName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("StarMath" ) ) )
+                                        rFlags |= CONV_FROM_STAR_MATH;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                rFlags |= CONV_STAR_FONT_FLAGS_VALID;
+            }
+            if( (rFlags & CONV_FROM_STAR_BATS ) != 0 )
+            {
+                sChars.setCharAt( i, lcl_xmloff_convFromStarBats( c ) );
+                bConverted = sal_True;
+            }
+            else if( (rFlags & CONV_FROM_STAR_MATH ) != 0 )
+            {
+                sChars.setCharAt( i, lcl_xmloff_convFromStarMath( c ) );
+                bConverted = sal_True;
+            }
+        }
+    }
+
+    return bConverted ? sChars.makeStringAndClear() : rChars;
+}
+#endif
 
 OUString XMLTextImportHelper::SetStyleAndAttrs(
         const Reference < XTextCursor >& rCursor,
@@ -1009,7 +1111,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     OUString sStyleName( rStyleName );
     if( sStyleName.getLength() && xAutoStyles.Is() )
     {
-        sal_uInt32 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
+        sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
                                    : XML_STYLE_FAMILY_TEXT_TEXT;
         pStyle = PTR_CAST( XMLTextStyleContext,
               ((SvXMLStylesContext *)&xAutoStyles)->

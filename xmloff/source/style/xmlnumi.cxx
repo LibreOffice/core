@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:30 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 07:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,6 +428,11 @@ SvXMLImportContext *SvxXMLListLevelStyleContext_Impl::CreateChildContext(
     return pContext;
 }
 
+#ifdef CONV_STAR_FONTS
+extern sal_Unicode lcl_xmloff_convFromStarBats( sal_Unicode c );
+extern sal_Unicode lcl_xmloff_convFromStarMath( sal_Unicode c );
+#endif
+
 Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         const SvI18NMap *pI18NMap )
 {
@@ -507,12 +512,6 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
 
         if( bBullet )
         {
-            OUStringBuffer sTmp(1);
-            sTmp.append( cBullet );
-            pProps[nPos].Name =
-                    OUString::createFromAscii( XML_UNO_NAME_NRULE_BULLET_CHAR );
-            pProps[nPos++].Value <<= sTmp.makeStringAndClear();
-
             awt::FontDescriptor aFDesc;
             aFDesc.Name = sBulletFontName;
             if( sBulletFontName.getLength() )
@@ -523,7 +522,30 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
                 aFDesc.CharSet = eBulletFontEncoding;
                 aFDesc.Weight = WEIGHT_DONTKNOW;
                 //aFDesc.Transparant = sal_True;
+#ifdef CONV_STAR_FONTS
+                sal_Bool bStarSymbol = sal_False;
+                if( aFDesc.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("StarBats") ) )
+                {
+                    cBullet = lcl_xmloff_convFromStarBats( cBullet );
+                    bStarSymbol = sal_True;
+                }
+                if( aFDesc.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("StarMath") ) )
+                {
+                    cBullet = lcl_xmloff_convFromStarMath( cBullet );
+                    bStarSymbol = sal_True;
+                }
+                if( bStarSymbol )
+                    aFDesc.Name =
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("StarSymbol" ) );
+#endif
             }
+
+            OUStringBuffer sTmp(1);
+            sTmp.append( cBullet );
+            pProps[nPos].Name =
+                    OUString::createFromAscii( XML_UNO_NAME_NRULE_BULLET_CHAR );
+            pProps[nPos++].Value <<= sTmp.makeStringAndClear();
+
 
             pProps[nPos].Name =
                     OUString::createFromAscii( XML_UNO_NAME_NRULE_BULLET_FONT );
