@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 16:01:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,6 @@
 #endif
 #ifndef _SOT_EXCHANGE_HXX //autogen
 #include <sot/exchange.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
 #endif
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
