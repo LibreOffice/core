@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-12 10:47:28 $
+ *  last change: $Author: er $ $Date: 2001-08-06 10:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,11 +501,10 @@ sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
     {
         xub_StrLen nCount = rList.GetTokenCount('\t');
         for ( xub_StrLen i=0; i<nCount; i+=2 )
-            if ( ScGlobal::pTransliteration->compareString(
-                    aStr, rList.GetToken(i,'\t') ) == COMPARE_EQUAL )
-            {
+        {
+            if ( ScGlobal::pTransliteration->isEqual( aStr, rList.GetToken(i,'\t') ) )
                 c = (sal_Unicode)rList.GetToken(i+1,'\t').ToInt32();
-            }
+        }
         if (!c)
             c = (sal_Unicode) aStr.ToInt32();       // Ascii
     }

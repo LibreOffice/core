@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-02 18:16:22 $
+ *  last change: $Author: er $ $Date: 2001-08-06 10:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,8 +221,7 @@ BOOL ScDocument::ValidNewTabName( const String& rName ) const
         {
             String aOldName;
             pTab[i]->GetName(aOldName);
-            bValid = (ScGlobal::pTransliteration->compareString(
-                            rName, aOldName ) != COMPARE_EQUAL );
+            bValid = !ScGlobal::pTransliteration->isEqual( rName, aOldName );
         }
     return bValid;
 }
@@ -436,8 +435,7 @@ BOOL ScDocument::RenameTab( USHORT nTab, const String& rName, BOOL bUpdateRef,
                 {
                     String aOldName;
                     pTab[i]->GetName(aOldName);
-                    bValid = (ScGlobal::pTransliteration->compareString(
-                                    rName, aOldName ) != COMPARE_EQUAL );
+                    bValid = !ScGlobal::pTransliteration->isEqual( rName, aOldName );
                 }
             if (bValid)
             {

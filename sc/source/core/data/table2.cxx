@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-02 18:16:22 $
+ *  last change: $Author: er $ $Date: 2001-08-06 10:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2818,10 +2818,9 @@ BOOL ScTable::Save( SvStream& rStream, long& rSavedDocCells, ScProgress* pProgre
         aLinkDocSaveName = INetURLObject::AbsToRel( aLinkDocSaveName );
         aLinkDocSaveName = INetURLObject::decode( aLinkDocSaveName,
             INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS );
-        if ( ScGlobal::pTransliteration->compareString(
-                aLinkDocSaveName,
+        if ( ScGlobal::pTransliteration->isEqual( aLinkDocSaveName,
                 INetURLObject::decode( aLinkDoc, INET_HEX_ESCAPE,
-                INetURLObject::DECODE_UNAMBIGUOUS ) ) == COMPARE_EQUAL )
+                INetURLObject::DECODE_UNAMBIGUOUS ) ) )
         {
             aSaveName = INetURLObject::decode( aSaveName,
                 INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
+ *  last change: $Author: er $ $Date: 2001-08-06 10:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,6 +481,7 @@ BOOL TypedStrCollection::FindText( const String& rStart, String& rResult,
     //  Die Collection ist nach String-Vergleichen sortiert, darum muss hier
     //  alles durchsucht werden
 
+    sal_Int32 nMatch1, nMatch2;
     xub_StrLen nCmpLen = rStart.Len();
     BOOL bFound = FALSE;
 
@@ -504,14 +505,13 @@ BOOL TypedStrCollection::FindText( const String& rStart, String& rResult,
             TypedStrData* pData = (TypedStrData*) pItems[i];
             if (pData->nStrType)
             {
-                String aCmp = pData->aStrValue.Copy(0,nCmpLen);
-                if ( ScGlobal::pTransliteration->compareString( aCmp, rStart )
-                        == COMPARE_EQUAL )
+                if ( ScGlobal::pTransliteration->isMatch( rStart, pData->aStrValue ) )
                 {
                     //  If the collection is case sensitive, it may contain several entries
                     //  that are equal when compared case-insensitive. They are skipped here.
                     if ( !bCaseSensitive || !aOldResult.Len() ||
-                            ScGlobal::pTransliteration->compareString( pData->aStrValue, aOldResult ) != COMPARE_EQUAL )
+                            !ScGlobal::pTransliteration->isEqual(
+                            pData->aStrValue, aOldResult ) )
                     {
                         rResult = pData->aStrValue;
                         rPos = i;
@@ -533,14 +533,13 @@ BOOL TypedStrCollection::FindText( const String& rStart, String& rResult,
             TypedStrData* pData = (TypedStrData*) pItems[i];
             if (pData->nStrType)
             {
-                String aCmp = pData->aStrValue.Copy(0,nCmpLen);
-                if ( ScGlobal::pTransliteration->compareString( aCmp, rStart )
-                        == COMPARE_EQUAL )
+                if ( ScGlobal::pTransliteration->isMatch( rStart, pData->aStrValue ) )
                 {
                     //  If the collection is case sensitive, it may contain several entries
                     //  that are equal when compared case-insensitive. They are skipped here.
                     if ( !bCaseSensitive || !aOldResult.Len() ||
-                            ScGlobal::pTransliteration->compareString( pData->aStrValue, aOldResult ) != COMPARE_EQUAL )
+                            !ScGlobal::pTransliteration->isEqual(
+                            pData->aStrValue, aOldResult ) )
                     {
                         rResult = pData->aStrValue;
                         rPos = i;
@@ -562,9 +561,8 @@ BOOL TypedStrCollection::GetExactMatch( String& rString ) const
     for (USHORT i=0; i<nCount; i++)
     {
         TypedStrData* pData = (TypedStrData*) pItems[i];
-        if ( pData->nStrType &&
-             ScGlobal::pTransliteration->compareString( pData->aStrValue, rString )
-                 == COMPARE_EQUAL )
+        if ( pData->nStrType && ScGlobal::pTransliteration->isEqual(
+                pData->aStrValue, rString ) )
         {
             rString = pData->aStrValue;                         // String anpassen
             return TRUE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-07-12 11:09:11 $
+ *  last change: $Author: er $ $Date: 2001-08-06 10:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1017,8 +1017,7 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam,
                 {
                     if ( bMatchWholeCell )
                     {
-                        bOk = (pTransliteration->compareString( aCellStr,
-                            *rEntry.pStr ) == COMPARE_EQUAL);
+                        bOk = pTransliteration->isEqual( aCellStr, *rEntry.pStr );
                     }
                     else
                     {

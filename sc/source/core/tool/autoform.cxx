@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-26 19:18:54 $
+ *  last change: $Author: er $ $Date: 2001-08-06 10:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1022,9 +1022,9 @@ short ScAutoFormat::Compare(DataObject* pKey1, DataObject* pKey2) const
     ((ScAutoFormatData*)pKey1)->GetName(aStr1);
     ((ScAutoFormatData*)pKey2)->GetName(aStr2);
     String aStrStandard = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
-    if ( ScGlobal::pTransliteration->compareString( aStr1, aStrStandard ) == COMPARE_EQUAL )
+    if ( ScGlobal::pTransliteration->isEqual( aStr1, aStrStandard ) )
         return -1;
-    if ( ScGlobal::pTransliteration->compareString( aStr2, aStrStandard ) == COMPARE_EQUAL )
+    if ( ScGlobal::pTransliteration->isEqual( aStr2, aStrStandard ) )
         return 1;
     return (short) ScGlobal::pTransliteration->compareString( aStr1, aStr2 );
 }

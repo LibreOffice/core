@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2001-07-12 21:31:46 $
+ *  last change: $Author: er $ $Date: 2001-08-06 10:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3850,7 +3850,6 @@ void ScInterpreter::ScHLookup()
 //!!!!!!!
 //! TODO: enable regex on matrix strings
 //!!!!!!!
-                    sal_Int32 nRes;
                     String aParamStr = *rEntry.pStr;
                     USHORT i;
                     if ( bSorted )
@@ -3859,9 +3858,8 @@ void ScInterpreter::ScHLookup()
                         {
                             if (pMat->IsString(i, 0))
                             {
-                                nRes = ScGlobal::pCollator->compareString(
-                                    pMat->GetString(i,0), aParamStr );
-                                if (nRes == COMPARE_LESS)
+                                if ( ScGlobal::pTransliteration->isEqual(
+                                        pMat->GetString(i,0), aParamStr ) )
                                     i = nMatCount+1;
                                 else
                                     nDelta = i;
@@ -3876,9 +3874,8 @@ void ScInterpreter::ScHLookup()
                         {
                             if (pMat->IsString(i, 0))
                             {
-                                nRes = ScGlobal::pTransliteration->compareString(
-                                    pMat->GetString(i,0), aParamStr );
-                                if (nRes == COMPARE_EQUAL)
+                                if ( ScGlobal::pTransliteration->isEqual(
+                                        pMat->GetString(i,0), aParamStr ) )
                                 {
                                     nDelta = i;
                                     i = nMatCount + 1;
@@ -4123,7 +4120,6 @@ void ScInterpreter::ScVLookup()
 //!!!!!!!
 //! TODO: enable regex on matrix strings
 //!!!!!!!
-                    sal_Int32 nRes;
                     String aParamStr = *rEntry.pStr;
                     USHORT i;
                     if ( bSorted )
@@ -4132,9 +4128,8 @@ void ScInterpreter::ScVLookup()
                         {
                             if (pMat->IsString(0, i))
                             {
-                                nRes = ScGlobal::pCollator->compareString(
-                                    pMat->GetString(0,i), aParamStr );
-                                if (nRes == COMPARE_LESS)
+                                if ( ScGlobal::pTransliteration->isEqual(
+                                        pMat->GetString(0,i), aParamStr ) )
                                     i = nMatCount+1;
                                 else
                                     nDelta = i;
@@ -4149,9 +4144,8 @@ void ScInterpreter::ScVLookup()
                         {
                             if (pMat->IsString(0, i))
                             {
-                                nRes = ScGlobal::pTransliteration->compareString(
-                                    pMat->GetString(0,i), aParamStr );
-                                if (nRes == COMPARE_EQUAL)
+                                if ( ScGlobal::pTransliteration->isEqual(
+                                        pMat->GetString(0,i), aParamStr ) )
                                 {
                                     nDelta = i;
                                     i = nMatCount + 1;
@@ -4366,8 +4360,7 @@ BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam)
                 while (!bFound && (nField <= nDBCol2))
                 {
                     pDok->GetString(nField, nDBRow1, nDBTab1, aCellStr);
-                    bFound = (ScGlobal::pTransliteration->compareString(
-                        aCellStr, aStr ) == COMPARE_EQUAL);
+                    bFound = ScGlobal::pTransliteration->isEqual( aCellStr, aStr );
                     if (!bFound)
                         nField++;
                 }

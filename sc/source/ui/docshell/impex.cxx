@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-07-26 16:08:39 $
+ *  last change: $Author: er $ $Date: 2001-08-06 10:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,8 +877,8 @@ void lcl_PutString( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
                 nLen = xMonths.getLength();
                 for (i=0; i<nLen && !nMonth; i++)
                 {
-                    if ( (rTransliteration.compareString( aMStr, xMonths[i].FullName ) == COMPARE_EQUAL) ||
-                         (rTransliteration.compareString( aMStr, xMonths[i].AbbrevName ) == COMPARE_EQUAL) )
+                    if ( rTransliteration.isEqual( aMStr, xMonths[i].FullName ) ||
+                         rTransliteration.isEqual( aMStr, xMonths[i].AbbrevName ) )
                         nMonth = i+1;
                 }
                 //  if none found, then test english month names
@@ -888,8 +888,8 @@ void lcl_PutString( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
                     nLen = xMonths.getLength();
                     for (i=0; i<nLen && !nMonth; i++)
                     {
-                        if ( (pSecondTransliteration->compareString( aMStr, xMonths[i].FullName ) == COMPARE_EQUAL) ||
-                             (pSecondTransliteration->compareString( aMStr, xMonths[i].AbbrevName ) == COMPARE_EQUAL) )
+                        if ( pSecondTransliteration->isEqual( aMStr, xMonths[i].FullName ) ||
+                             pSecondTransliteration->isEqual( aMStr, xMonths[i].AbbrevName ) )
                         {
                             nMonth = i+1;
                             bSecondCal = TRUE;

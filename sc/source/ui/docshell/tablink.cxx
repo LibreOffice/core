@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:59:09 $
+ *  last change: $Author: er $ $Date: 2001-08-06 10:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,9 +296,8 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
             {
                 String aName;
                 pDoc->GetName( nTab, aName );
-                if ( ScGlobal::pTransliteration->compareString(
-                        ScGlobal::GetDocTabName( aFileName, aTabName ), aName )
-                        == COMPARE_EQUAL )
+                if ( ScGlobal::pTransliteration->isEqual(
+                        ScGlobal::GetDocTabName( aFileName, aTabName ), aName ) )
                 {
                     pDoc->RenameTab( nTab,
                         ScGlobal::GetDocTabName( aNewUrl, aTabName ),

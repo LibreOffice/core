@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: er $ $Date: 2001-07-12 21:31:46 $
+ *  last change: $Author: er $ $Date: 2001-08-06 10:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1191,8 +1191,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                                 ((ScEditCell*)pCell)->GetString( aStr );
                             break;
                         }
-                        if ( ScGlobal::pTransliteration->compareString(
-                                aStr, aName ) == COMPARE_EQUAL )
+                        if ( ScGlobal::pTransliteration->isEqual( aStr, aName ) )
                         {
                             aRef.InitFlags();
                             aRef.nCol = aIter.GetCol();
@@ -1246,8 +1245,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                         ((ScEditCell*)pCell)->GetString( aStr );
                     break;
                 }
-                if ( ScGlobal::pTransliteration->compareString(
-                        aStr, aName ) == COMPARE_EQUAL )
+                if ( ScGlobal::pTransliteration->isEqual( aStr, aName ) )
                 {
                     USHORT nCol = aIter.GetCol();
                     USHORT nRow = aIter.GetRow();

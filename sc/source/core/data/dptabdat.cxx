@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabdat.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:22:13 $
+ *  last change: $Author: er $ $Date: 2001-08-06 10:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,7 @@ BOOL ScDPItemData::IsCaseInsEqual( const ScDPItemData& r ) const
     //! inline?
     return bHasValue ? ( r.bHasValue && fValue == r.fValue ) :
                        ( !r.bHasValue &&
-                        (ScGlobal::pTransliteration->compareString(
-                            aString, r.aString ) == COMPARE_EQUAL) );
+                        ScGlobal::pTransliteration->isEqual( aString, r.aString ) );
 }
 
 // -----------------------------------------------------------------------

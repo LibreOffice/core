@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
+ *  last change: $Author: er $ $Date: 2001-08-06 10:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,8 +779,7 @@ BOOL ScRangeName::SearchName( const String& rName, USHORT& rIndex ) const
     {
         String aName;
         ((*this)[i])->GetName( aName );
-        if ( ScGlobal::pTransliteration->compareString(
-                aName, rName ) == COMPARE_EQUAL )
+        if ( ScGlobal::pTransliteration->isEqual( aName, rName ) )
         {
             rIndex = i;
             return TRUE;
