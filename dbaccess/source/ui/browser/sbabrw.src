@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-08 21:25:12 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 16:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1028,6 +1028,19 @@ Image QUERY_TREE_ICON
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
+String RID_STR_QUERIES_CONTAINER
+{
+    Text = "Abfragen";
+    Text [ english ] = "Queries";
+    Text [ english_us ] = "Queries";
+};
+
+String RID_STR_TABLES_CONTAINER
+{
+    Text = "Tabellen";
+    Text [ english ] = "Tables";
+    Text [ english_us ] = "Tables";
+};
 
 Menu MENU_BROWSERTREE_CONTEXT
 {

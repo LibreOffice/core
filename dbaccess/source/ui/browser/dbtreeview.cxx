@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-08 21:23:39 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 16:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,18 @@ void DBTreeView::SetPreExpandHandler(const Link& _rHdl)
 Link DBTreeView::GetPreExpandHandler() const
 {
     return m_pTreeListBox->GetPreExpandHandler();
+}
+
+// -----------------------------------------------------------------------------
+void DBTreeView::SetContextMenuHandler(const Link& _rHdl)
+{
+    m_pTreeListBox->SetContextMenuHandler(_rHdl);
+}
+
+// -----------------------------------------------------------------------------
+Link DBTreeView::GetContextMenuHandler() const
+{
+    return m_pTreeListBox->GetContextMenuHandler();
 }
 
 // -----------------------------------------------------------------------------

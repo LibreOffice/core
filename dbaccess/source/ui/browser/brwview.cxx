@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-08 21:18:38 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 16:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ UnoDataBrowserView::~UnoDataBrowserView()
 // -----------------------------------------------------------------------------
 IMPL_LINK( UnoDataBrowserView, SplitHdl, void*, p )
 {
+    long nTest = m_pSplitter->GetPosPixel().Y();
     m_pSplitter->SetPosPixel( Point( m_pSplitter->GetSplitPosPixel(), m_pSplitter->GetPosPixel().Y() ) );
     Resize();
 
@@ -240,7 +241,9 @@ void UnoDataBrowserView::Resize()
     {
 
         aSplitPos   = m_pSplitter->GetPosPixel();
+        aSplitPos.Y() = aToolBoxSize.Height();
         aSplitSize  = m_pSplitter->GetOutputSizePixel();
+        aSplitSize.Height() = aNewSize.Height() - aToolBoxSize.Height();
 
         if( ( aSplitPos.X() + aSplitSize.Width() ) > ( aNewSize.Width() ))
             aSplitPos.X() = aNewSize.Width() - aSplitSize.Width();
@@ -253,7 +256,7 @@ void UnoDataBrowserView::Resize()
                                         Size( aSplitPos.X(), aNewSize.Height() - aToolBoxSize.Height() ) );
         //set the size of the splitter
         m_pSplitter->SetPosSizePixel( aSplitPos, Size( aSplitSize.Width(), aNewSize.Height() - aToolBoxSize.Height() ) );
-        m_pSplitter->SetDragRectPixel(  Rectangle( Point( 0, 0 ),
+        m_pSplitter->SetDragRectPixel(  Rectangle( Point( 0, aToolBoxSize.Height() ),
                                         Size( aNewSize.Width(), aNewSize.Height() - aToolBoxSize.Height() ) ) );
     }
 

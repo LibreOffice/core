@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-08 21:13:50 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 16:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
+#include <com/sun/star/container/XContainerListener.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
@@ -91,8 +94,8 @@ namespace dbaui
     class DBTreeView;
     class DBTreeListModel;
     // =========================================================================
-    typedef ::cppu::ImplHelper1< ::com::sun::star::frame::XStatusListener >
-                            SbaTableQueryBrowser_Base;
+    typedef ::cppu::ImplHelper1 <   ::com::sun::star::frame::XStatusListener
+                                >   SbaTableQueryBrowser_Base;
     class SbaTableQueryBrowser
                 :public SbaXDataBrowserController
                 ,public SbaTableQueryBrowser_Base
@@ -101,7 +104,7 @@ namespace dbaui
         DBTreeView*             m_pTreeView;
         Splitter*               m_pSplitter;
         DBTreeListModel*        m_pTreeModel;           // contains the datasources of the registry
-        SvLBoxEntry*            m_pCurrentlyDisplayed;
+        SvLBoxEntry*            m_pCurrentlyLoaded;
 
         DECLARE_STL_STDKEY_MAP( sal_Int32, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >, SpecialSlotDispatchers);
         DECLARE_STL_STDKEY_MAP( sal_Int32, sal_Bool, SpecialSlotStates);
@@ -156,6 +159,11 @@ namespace dbaui
         // lang::XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
+        // XContainerListener
+        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+
     protected:
         // SbaXDataBrowserController overridables
         virtual sal_Bool InitializeForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & xForm);
@@ -177,14 +185,40 @@ namespace dbaui
 
         String getURL() const;
 
+        // methods for showing/hiding the explorer part
         sal_Bool    haveExplorer() const;
         void        hideExplorer();
         void        showExplorer();
         void        toggleExplorer() { if (haveExplorer()) hideExplorer(); else showExplorer(); }
 
+        // methods for handling the 'selection' (paintin them bold) of SvLBoxEntries
+        // returns <TRUE/> if the entry is selected (which means it's part of the selected path)
+        sal_Bool    isSelected(SvLBoxEntry* _pEntry) const;
+        // select the entry (and only the entry, not the whole path)
+        void        select(SvLBoxEntry* _pEntry, sal_Bool _bSelect = sal_True);
+        // select the path of the entry (which must be an entry without children)
+        void        selectPath(SvLBoxEntry* _pEntry, sal_Bool _bSelect = sal_True);
+
     private:
         // check the state of the external slot given, update any UI elements if necessary
         void implCheckExternalSlot(sal_Int32 _nId);
+
+        /** add an entry (including the subentries for queries/tables) to the list model
+
+            <p>The given names and images may be empty, in this case they're filled with the correct
+            values. This way they may be reused for the next call, which saves some resource manager calls.</p>
+        */
+        void implAddDatasource(const String& _rDbName, Image& _rDbImage,
+                String& _rQueryName, Image& _rQueryImage,
+                String& _rTableName, Image& _rTableImage);
+
+        /** unloads the form, empties the grid model
+        */
+        void unloadForm();
+
+        /** close the connection (and collapse the list entries) of the given list entries
+        */
+        void closeConnection(SvLBoxEntry* _pEntry);
 
         sal_Bool    populateTree(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, const Image& _rImage);
         void        initializeTreeModel();
@@ -192,6 +226,7 @@ namespace dbaui
         // is called when a table or a query was selected
         DECL_LINK( OnSelectEntry, SvLBoxEntry* );
         DECL_LINK( OnExpandEntry, SvLBoxEntry* );
+        DECL_LINK( OnListContextMenu, const CommandEvent* );
     };
 }
 #endif // _SBA_UNODATBR_HXX_

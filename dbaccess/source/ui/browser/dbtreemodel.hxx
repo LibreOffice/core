@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 13:53:55 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 16:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,8 @@ namespace dbaui
         virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
         virtual void InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* _pViewData);
 
-        void    Select(sal_Bool _bSelect) { m_bSelected = _bSelect; }
+        sal_Bool    isSelected() const { return m_bSelected; }
+        void        Select(sal_Bool _bSelect) { m_bSelected = _bSelect; }
     };
 
     //========================================================================
