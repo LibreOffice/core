@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxtypes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:30:50 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ String SearchAndReplace( const String &rSource,
                          const String &rToReplace,
                          const String &rReplacement );
 
-#define SFX_PASSWORD_CODE "_:;*š?()/&[&"
+#define SFX_PASSWORD_CODE "_:;*\x9A?()/&[&"
 String SfxStringEncode( const String &rSource,
                         const char *pKey = SFX_PASSWORD_CODE );
 String SfxStringDecode( const String &rSource,
