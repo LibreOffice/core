@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:26:25 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,7 @@ using namespace container           ;
 
 // static counter for OLE-Objects
 static sal_uInt32 nMSOleObjCntr = 0;
+#define MSO_OLE_Obj "MSO_OLE_Obj"
 
 //---------------------------------------------------------------------------
 //  Hilfs Klassen aus MSDFFDEF.HXX
@@ -5028,25 +5029,25 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
                     if( !pFact->GetFilterContainer()->
                         GetFilter4Content( *pMed, &pFilter ) && pFilter )
                     {
-                        String aEmptyStr;
-
                         //then the StarFactory can import this storage
                         pMed->SetFilter( pFilter );
-                        SvStorageRef xStor = new SvStorage( aEmptyStr);
-
                         SfxObjectShellRef xObjShell( pFact->CreateObject( SFX_CREATE_MODE_EMBEDDED ) );
-                        if ( xObjShell.Is() )
+                        if (xObjShell.Is())
                         {
                             xObjShell->OwnerLock( sal_True );
                             xIPObj = xObjShell->GetInPlaceObject();
-                            String aDstStgName( String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "MSO_OLE_Obj" )));
 
-                            aDstStgName += String::CreateFromInt32( ++nMSOleObjCntr );
+                            //Reuse current ole name
+                            String aDstStgName(String::CreateFromAscii(
+                                RTL_CONSTASCII_STRINGPARAM(MSO_OLE_Obj)));
 
-                            SvStorageRef xObjStor( rDestStorage.OpenUCBStorage(
-                                                    aDstStgName,
+                            aDstStgName +=
+                                String::CreateFromInt32(nMSOleObjCntr);
+
+                            SvStorageRef xObjStor(rDestStorage.OpenUCBStorage(
+                                    aDstStgName,
                                     STREAM_READWRITE| STREAM_SHARE_DENYALL));
+
                             xObjShell->DoLoad( pMed );
                             // JP 26.10.2001: Bug 93374 / 91928 the writer
                             // objects need the correct visarea needs the
@@ -5100,7 +5101,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
         // Wenn nicht -> Einbindung als Grafik
         BOOL bValidStorage = FALSE;
         String aDstStgName( String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "MSO_OLE_Obj" )));
+                                RTL_CONSTASCII_STRINGPARAM(MSO_OLE_Obj)));
 
         aDstStgName += String::CreateFromInt32( ++nMSOleObjCntr );
         SvStorageRef xObjStor;
@@ -5113,7 +5114,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 {
                     BYTE aTestA[10];    // exist the \1CompObj-Stream ?
                     SvStorageStreamRef xSrcTst = xObjStg->OpenStream(
-                                String( RTL_CONSTASCII_STRINGPARAM( "\1CompObj" ),
+                                String(RTL_CONSTASCII_STRINGPARAM("\1CompObj"),
                                         RTL_TEXTENCODING_MS_1252 ));
                     bValidStorage = xSrcTst.Is() && sizeof( aTestA ) ==
                                     xSrcTst->Read( aTestA, sizeof( aTestA ) );
@@ -5121,10 +5122,10 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                     {
                         // or the \1Ole-Stream ?
                         xSrcTst = xObjStg->OpenStream(
-                                    String( RTL_CONSTASCII_STRINGPARAM( "\1Ole" ),
+                                    String(RTL_CONSTASCII_STRINGPARAM("\1Ole"),
                                             RTL_TEXTENCODING_MS_1252 ));
-                        bValidStorage = xSrcTst.Is() && sizeof( aTestA ) ==
-                                        xSrcTst->Read( aTestA, sizeof( aTestA ) );
+                        bValidStorage = xSrcTst.Is() && sizeof(aTestA) ==
+                                        xSrcTst->Read(aTestA, sizeof(aTestA));
                     }
                 }
 
@@ -5132,11 +5133,12 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 {
                     SvInPlaceObjectRef xIPObj( CheckForConvertToSOObj(
                                 nConvertFlags, *xObjStg, *rDestStorage, rGrf ));
-                    if( xIPObj.Is() )
+                    if (xIPObj.Is())
                     {
-                        pRet = new SdrOle2Obj( xIPObj, String(), rBoundRect, FALSE );
+                        pRet = new SdrOle2Obj(xIPObj, String(), rBoundRect,
+                            false);
                         // we have the Object, don't create another
-                        bValidStorage = FALSE;
+                        bValidStorage = false;
                     }
                 }
             }
@@ -5189,7 +5191,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
         if( bValidStorage )
         {
             SvInPlaceObjectRef xInplaceObj( ((SvFactory*)SvInPlaceObject::
-                                    ClassFactory())->CreateAndLoad( xObjStor ) );
+                                    ClassFactory())->CreateAndLoad(xObjStor) );
             if( xInplaceObj.Is() )
             {
                 // VisArea am OutplaceObject setzen!!
@@ -5199,7 +5201,8 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 xInplaceObj->EnableSetModified( FALSE );
                 xInplaceObj->SetVisArea( Rectangle( Point(), aSz ));
                 xInplaceObj->EnableSetModified( TRUE );
-                pRet = new SdrOle2Obj( xInplaceObj, aDstStgName, rBoundRect, FALSE );
+                pRet = new SdrOle2Obj(xInplaceObj, aDstStgName, rBoundRect,
+                    false);
             }
         }
     }
