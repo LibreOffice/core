@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:58:43 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,8 +342,6 @@ void InitCpp4();
 void InitCpp5();
 void InitCpp6();
 
-#if defined(ZTC) || defined(MAC) || defined(WNT) || defined(BLC)
-
 #define HELLO()   fprintf( stderr, "[Hello at %s, %d] ", __FILE__, __LINE__ )
 
 #ifndef _STDIO_H
@@ -359,9 +357,9 @@ void InitCpp6();
 #endif
 
 /* cpp1.c */
-int output( int c );
-sharp();
-cppmain();
+void output( int c );
+void sharp();
+void cppmain();
 #if OSL_DEBUG_LEVEL > 1
 #ifdef EVALDEFS
 int outputEval( int c );
@@ -371,44 +369,44 @@ int outputEval( int c );
 
 /* cpp2.c */
 int control( int counter );
-doinclude();
+void doinclude();
 void dodefine();
-doif( int hash );
-openinclude( char *, int );
-hasdirectory(char *, char * );
-openfile( char * );
+void doif( int hash );
+int openinclude( char *, int );
+int hasdirectory(char *, char * );
+int openfile( char * );
 
 /* cpp3.c */
 int openfiles( char *filename );
-int addfile( FILE *fp, char *filename );
-int setincdirs();
+void addfile( FILE *fp, char *filename );
+void setincdirs();
 int AddInclude( char *pIncStr );
 int getredirection( int argc, char **argv );
-zap_uc( char *ap );
+void zap_uc( char *ap );
 
-int initdefines();
-dooptions( int argc, char *argv[] );
+void initdefines();
+int dooptions( int argc, char *argv[] );
 int readoptions(char* filename, char*** pfargv);
 
 /* cpp4.c */
-dodefines();
-checkparm( int c, DEFBUF *dp );
+void dodefines();
+void checkparm( int c, DEFBUF *dp );
 int expcollect();
-int expstuff( DEFBUF *dp );
+void expstuff( DEFBUF *dp );
 
 #if STRING_FORMAL
-stparmscan( int delim, DEFBUF *dp);
+void stparmscan( int delim, DEFBUF *dp);
 #else
-stparmscan( int delim);
+void stparmscan( int delim);
 #endif
 #if OSL_DEBUG_LEVEL > 1
-dumpparm( char *why );
+void dumpparm( char *why );
 #endif
 
-doundef();
-textput( char *text );
-charput( int c );
-expand( DEFBUF *tokenp );
+void doundef();
+void textput( char *text );
+void charput( int c );
+void expand( DEFBUF *tokenp );
 
 /* cpp5.c */
 int eval();
@@ -421,49 +419,31 @@ int bittest( int );
 
 /* cpp6.c */
 
-skipnl();
-skipws();
-scanid( int c );
+void skipnl();
+int skipws();
+void scanid( int c );
 int macroid( int c );
 int catenate();
-int scanstring( int c, int (*outfun)( int c ) );
-scannumber( int c, int (*outfun)( int c ) );
-save( int c );
+int scanstring( int c, void (*outfun)( int c ) );
+void scannumber( int c, void (*outfun)( int c ) );
+void save( int c );
 char *savestring( char *text );
 FILEINFO *getfile( int bufsize, char *name);
 char *getmem( int size );
 DEFBUF *lookid( int c );
 DEFBUF *defendel( char *name, int delete );
-dunpdef( char *why );
-dumpadef( char *why, DEFBUF *dp);
+void dunpdef( char *why );
+void dumpadef( char *why, DEFBUF *dp);
 int get();
 int cget();
-unget();
-ungetstring( char *text );
-domsg( char *severity, char *format, void *arg);
-cerror( char *format, char *sarg);
-cwarn( char *format, char *sarg);
-cfatal( char *format, char *sarg);
-cierror( char *format, int n);
-ciwarn( char *format, int n);
+void unget();
+void ungetstring( char *text );
+void cerror( char *format, char *sarg);
+void cwarn( char *format, char *sarg);
+void cfatal( char *format, char *sarg);
+void cierror( char *format, int n);
+void ciwarn( char *format, int n);
 #if OSL_DEBUG_LEVEL > 1
-dumpdef( char *why );
-dumpadef( char *why, DEFBUF *dp );
+void dumpdef( char *why );
+void dumpadef( char *why, DEFBUF *dp );
 #endif
-
-#else  /* not ZTC || not MAC || || not WNT || not BLC */
-
-extern char     *getmem();              /* Get memory or die.           */
-extern DEFBUF   *lookid();              /* Look for a #define'd thing   */
-extern DEFBUF   *defendel();            /* Symbol table enter/delete    */
-extern char     *savestring();          /* Stuff string in malloc mem.  */
-extern char     *strcpy();
-extern char     *strcat();
-extern char     *strrchr();
-extern char     *strchr();
-#if ! ( defined UNX && defined ALPHA ) && !defined(FREEBSD)
-extern long     time();
-#endif
-/* extern char     *sprintf();  */           /* Lint needs this              */
-
-#endif    /* ZTC */
