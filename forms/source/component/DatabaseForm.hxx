@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 12:04:08 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 06:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,6 +281,7 @@ class ODatabaseForm :public OFormComponents
     ::cppu::OInterfaceContainerHelper   m_aErrorListeners;
     ::osl::Mutex                        m_aResetSafety;
     ::com::sun::star::uno::Any          m_aCycle;
+    ::com::sun::star::uno::Any          m_aIgnoreResult; // set when we are a subform and our master form positioned on a new row
     StringSequence                      m_aMasterFields;
     StringSequence                      m_aDetailFields;
     ::std::vector<bool>                 m_aParameterVisited;

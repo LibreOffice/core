@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-28 06:58:43 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 06:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
+#include <com/sun/star/sdbc/DataType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XOBJECTINPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectInputStream.hpp>
@@ -1663,15 +1666,15 @@ bool ODatabaseForm::fillParameters(ReusableMutexGuard& _rClearForNotifies, const
         return true;
     }
 
-    // is there a valid parent?
-    if (m_bSubForm && !hasValidParent())
-        return true;
-
     // do we have to fill the parameters again?
     if (!m_pParameterInfo)
         m_pParameterInfo = createParameterInfo();
 
     if (!m_pParameterInfo || m_pParameterInfo->nCount == 0)
+        return true;
+
+    // is there a valid parent?
+    if (m_bSubForm && !hasValidParent())
         return true;
 
     // do we have to fill the parent parameters?
@@ -1811,12 +1814,29 @@ sal_Bool ODatabaseForm::executeRowSet(ReusableMutexGuard& _rClearForNotifies, sa
     {
         // don't use any parameters if we don't have a valid parent
         nConcurrency = ResultSetConcurrency::READ_ONLY;
-        clearParameters();
+        //  clearParameters();
+        if(m_pParameterInfo && m_pParameterInfo->nCount > 0)
+        {
+            Reference<XParameters>  xExecutionParams;
+            query_aggregation( m_xAggregate, xExecutionParams); // we don't have to look if this work otherwise previous calls don't work
+            for (sal_Int32 nPos=1;nPos <= m_pParameterInfo->nCount; ++nPos)
+                xExecutionParams->setNull(nPos,DataType::VARCHAR);
+
+            m_aIgnoreResult = m_xAggregateSet->getPropertyValue(PROPERTY_INSERTONLY);
+            m_xAggregateSet->setPropertyValue(PROPERTY_INSERTONLY,makeAny(sal_True));
+        }
     }
     else if (m_bAllowInsert || m_bAllowUpdate || m_bAllowDelete)
         nConcurrency = ResultSetConcurrency::UPDATABLE;
     else
         nConcurrency = ResultSetConcurrency::READ_ONLY;
+
+    if (m_bSubForm && hasValidParent() && m_aIgnoreResult.hasValue() && m_pParameterInfo && m_pParameterInfo->nCount > 0)
+    {
+        m_xAggregateSet->setPropertyValue(PROPERTY_INSERTONLY,m_aIgnoreResult);
+        m_aIgnoreResult = Any();
+    }
+
     m_xAggregateSet->setPropertyValue(PROPERTY_RESULTSET_CONCURRENCY, makeAny(nConcurrency));
 
     sal_Int32 nResultSetType = ResultSetType::SCROLL_SENSITIVE;
