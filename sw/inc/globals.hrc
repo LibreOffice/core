@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:15:01 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 13:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@
 #define STR_DOC_STAT                (RC_GLOBALS_BEGIN + 10)
 
 #define STR_PAGE                    (RC_GLOBALS_BEGIN + 14)
+#define STR_PARAGRAPHS              (RC_GLOBALS_BEGIN + 15)
+#define STR_MULTISEL                (RC_GLOBALS_BEGIN + 16)
 
 //EventStrings
 
@@ -117,6 +119,8 @@
 #define STR_TBL                     (RC_GLOBALS_BEGIN + 39)
 #define STR_TOO                     (RC_GLOBALS_BEGIN + 40)
 #define STR_TOILL                   (RC_GLOBALS_BEGIN + 41)
+
+// more Strings
 
 // BITMAPS -----------------------------------------------------------
 
