@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-18 13:58:13 $
+ *  last change: $Author: cd $ $Date: 2002-12-13 07:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,6 +569,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnHighContrast              = rData.mnHighContrast;
     mnUseSystemUIFonts          = rData.mnUseSystemUIFonts;
     mnAutoMnemonic              = rData.mnAutoMnemonic;
+    mnUseImagesInMenus          = rData.mnUseImagesInMenus;
 }
 
 // -----------------------------------------------------------------------
@@ -648,6 +649,7 @@ void ImplStyleData::SetStandardStyles()
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
     mnUseSystemUIFonts          = 0;
+    mnUseImagesInMenus          = (USHORT)TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -747,6 +749,7 @@ void ImplStyleData::SetStandardOS2Styles()
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
     mnUseSystemUIFonts          = 0;
+    mnUseImagesInMenus          = (USHORT)TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -830,6 +833,7 @@ void ImplStyleData::SetStandardMacStyles()
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
     mnUseSystemUIFonts          = 0;
+    mnUseImagesInMenus          = (USHORT)TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -1079,7 +1083,8 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maRadioCheckFont          == rSet.mpData->maRadioCheckFont)           &&
          (mpData->maPushButtonFont          == rSet.mpData->maPushButtonFont)           &&
          (mpData->maFieldFont               == rSet.mpData->maFieldFont)                &&
-         (mpData->maIconFont                == rSet.mpData->maIconFont) )
+         (mpData->maIconFont                == rSet.mpData->maIconFont)                 &&
+         (mpData->mnUseImagesInMenus        == rSet.mpData->mnUseImagesInMenus) )
         return TRUE;
     else
         return FALSE;
