@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlconti.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: sab $ $Date: 2000-10-11 14:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,8 @@ class ScXMLImport;
 
 class ScXMLContentContext : public SvXMLImportContext
 {
-    ScXMLTableRowCellContext* pScXMLTableRowCellContext;
-
-    ScXMLTableRowCellTokens aTableRowCellToken;
     ::rtl::OUString sOUText;
+    rtl::OUString& sValue;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -90,8 +88,7 @@ public:
                        const NAMESPACE_RTL(OUString)& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                            ScXMLTableRowCellTokens aTempTableRowCellToken,
-                        ScXMLTableRowCellContext* aTempScXMLTableRowCellContext);
+                        rtl::OUString& sValue);
 
     virtual ~ScXMLContentContext();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-10 14:26:31 $
+ *  last change: $Author: sab $ $Date: 2000-10-11 14:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,11 +125,56 @@ enum ScXMLStyleTokens
 
 enum ScXMLBodyTokens
 {
+    XML_TOK_BODY_CONTENT_VALIDATIONS,
     XML_TOK_BODY_TABLE,
     XML_TOK_BODY_NAMED_EXPRESSIONS,
     XML_TOK_BODY_DATABASE_RANGES,
     XML_TOK_BODY_DATABASE_RANGE,
     XML_TOK_BODY_DATA_PILOT_TABLES
+};
+
+enum ScXMLContentValidationsElemTokens
+{
+    XML_TOK_CONTENT_VALIDATION
+};
+
+enum ScXMLContentValidationElemTokens
+{
+    XML_TOK_CONTENT_VALIDATION_ELEM_HELP_MESSAGE,
+    XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MESSAGE,
+    XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MACRO
+};
+
+enum ScXMLContentValidationAttrTokens
+{
+    XML_TOK_CONTENT_VALIDATION_NAME,
+    XML_TOK_CONTENT_VALIDATION_CONDITION,
+    XML_TOK_CONTENT_VALIDATION_BASE_CELL_ADDRESS,
+    XML_TOK_CONTENT_VALIDATION_ALLOW_EMPTY_CELL
+};
+
+enum ScXMLContentValidationMessageElemTokens
+{
+    XML_TOK_P
+};
+
+enum ScXMLContentValidationHelpMessageAttrTokens
+{
+    XML_TOK_HELP_MESSAGE_ATTR_TITLE,
+    XML_TOK_HELP_MESSAGE_ATTR_DISPLAY
+};
+
+enum ScXMLContentValidationErrorMessageAttrTokens
+{
+    XML_TOK_ERROR_MESSAGE_ATTR_TITLE,
+    XML_TOK_ERROR_MESSAGE_ATTR_DISPLAY,
+    XML_TOK_ERROR_MESSAGE_ATTR_MESSAGE_TYPE
+};
+
+enum ScXMLContentValidationErrorMacroAttrTokens
+{
+    XML_TOK_ERROR_MACRO_ATTR_NAME,
+    XML_TOK_ERROR_MACRO_ATTR_EXECUTE
 };
 
 enum ScXMLTableTokens
@@ -501,6 +546,13 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pStylesAttrTokenMap;
     SvXMLTokenMap           *pStyleElemTokenMap;
     SvXMLTokenMap           *pBodyElemTokenMap;
+    SvXMLTokenMap           *pContentValidationsElemTokenMap;
+    SvXMLTokenMap           *pContentValidationElemTokenMap;
+    SvXMLTokenMap           *pContentValidationAttrTokenMap;
+    SvXMLTokenMap           *pContentValidationMessageElemTokenMap;
+    SvXMLTokenMap           *pContentValidationHelpMessageAttrTokenMap;
+    SvXMLTokenMap           *pContentValidationErrorMessageAttrTokenMap;
+    SvXMLTokenMap           *pContentValidationErrorMacroAttrTokenMap;
     SvXMLTokenMap           *pTableElemTokenMap;
     SvXMLTokenMap           *pTableScenarioAttrTokenMap;
     SvXMLTokenMap           *pTableAttrTokenMap;
@@ -615,6 +667,13 @@ public:
     const SvXMLTokenMap& GetStylesAttrTokenMap();
     const SvXMLTokenMap& GetStyleElemTokenMap();
     const SvXMLTokenMap& GetBodyElemTokenMap();
+    const SvXMLTokenMap& GetContentValidationsElemTokenMap();
+    const SvXMLTokenMap& GetContentValidationElemTokenMap();
+    const SvXMLTokenMap& GetContentValidationAttrTokenMap();
+    const SvXMLTokenMap& GetContentValidationMessageElemTokenMap();
+    const SvXMLTokenMap& GetContentValidationHelpMessageAttrTokenMap();
+    const SvXMLTokenMap& GetContentValidationErrorMessageAttrTokenMap();
+    const SvXMLTokenMap& GetContentValidationErrorMacroAttrTokenMap();
     const SvXMLTokenMap& GetTableElemTokenMap();
     const SvXMLTokenMap& GetTableAttrTokenMap();
     const SvXMLTokenMap& GetTableScenarioAttrTokenMap();
@@ -672,6 +731,7 @@ public:
     void        GetRangeListFromString( const rtl::OUString& rRangeListStr, ScRangeList& rRangeList );
     sal_Int32   GetRangeFromString( const rtl::OUString& rRangeListStr, sal_Int32 nOffset,
                                     com::sun::star::table::CellRangeAddress& rCellRange );
+    void        GetCellFromString( const rtl::OUString& rCellStr, com::sun::star::table::CellAddress& rCellAddress);
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-10 14:26:31 $
+ *  last change: $Author: sab $ $Date: 2000-10-11 14:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,11 +157,63 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aBodyTokenMap[] =
 {
-    { XML_NAMESPACE_TABLE, sXML_table,              XML_TOK_BODY_TABLE              },
-    { XML_NAMESPACE_TABLE, sXML_named_expressions,  XML_TOK_BODY_NAMED_EXPRESSIONS  },
-    { XML_NAMESPACE_TABLE, sXML_database_ranges,    XML_TOK_BODY_DATABASE_RANGES    },
-    { XML_NAMESPACE_TABLE, sXML_database_range,     XML_TOK_BODY_DATABASE_RANGE     },
-    { XML_NAMESPACE_TABLE, sXML_data_pilot_tables,  XML_TOK_BODY_DATA_PILOT_TABLES  },
+    { XML_NAMESPACE_TABLE, sXML_content_validations,    XML_TOK_BODY_CONTENT_VALIDATIONS    },
+    { XML_NAMESPACE_TABLE, sXML_table,                  XML_TOK_BODY_TABLE                  },
+    { XML_NAMESPACE_TABLE, sXML_named_expressions,      XML_TOK_BODY_NAMED_EXPRESSIONS      },
+    { XML_NAMESPACE_TABLE, sXML_database_ranges,        XML_TOK_BODY_DATABASE_RANGES        },
+    { XML_NAMESPACE_TABLE, sXML_database_range,         XML_TOK_BODY_DATABASE_RANGE         },
+    { XML_NAMESPACE_TABLE, sXML_data_pilot_tables,      XML_TOK_BODY_DATA_PILOT_TABLES      },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aContentValidationsElemTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE, sXML_content_validation, XML_TOK_CONTENT_VALIDATION  },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aContentValidationElemTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE, sXML_help_message,   XML_TOK_CONTENT_VALIDATION_ELEM_HELP_MESSAGE    },
+    { XML_NAMESPACE_TABLE, sXML_error_message,  XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MESSAGE   },
+    { XML_NAMESPACE_TABLE, sXML_error_macro,    XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MACRO     },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aContentValidationAttrTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE, sXML_name,               XML_TOK_CONTENT_VALIDATION_NAME                 },
+    { XML_NAMESPACE_TABLE, sXML_condition,          XML_TOK_CONTENT_VALIDATION_CONDITION            },
+    { XML_NAMESPACE_TABLE, sXML_base_cell_address,  XML_TOK_CONTENT_VALIDATION_BASE_CELL_ADDRESS    },
+    { XML_NAMESPACE_TABLE, sXML_allow_empty_cell,   XML_TOK_CONTENT_VALIDATION_ALLOW_EMPTY_CELL     },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aContentValidationMessageElemTokenMap[] =
+{
+    { XML_NAMESPACE_TEXT, sXML_p,   XML_TOK_P   },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aContentValidationHelpMessageAttrTokenMap[] =
+{
+    { XML_NAMESPACE_TEXT, sXML_title,   XML_TOK_HELP_MESSAGE_ATTR_TITLE     },
+    { XML_NAMESPACE_TEXT, sXML_display, XML_TOK_HELP_MESSAGE_ATTR_DISPLAY   },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aContentValidationErrorMessageAttrTokenMap[] =
+{
+    { XML_NAMESPACE_TEXT, sXML_title,           XML_TOK_ERROR_MESSAGE_ATTR_TITLE        },
+    { XML_NAMESPACE_TEXT, sXML_display,         XML_TOK_ERROR_MESSAGE_ATTR_DISPLAY      },
+    { XML_NAMESPACE_TEXT, sXML_message_type,    XML_TOK_ERROR_MESSAGE_ATTR_MESSAGE_TYPE },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aContentValidationErrorMacroAttrTokenMap[] =
+{
+    { XML_NAMESPACE_TEXT, sXML_name,    XML_TOK_ERROR_MACRO_ATTR_NAME       },
+    { XML_NAMESPACE_TEXT, sXML_execute, XML_TOK_ERROR_MACRO_ATTR_EXECUTE    },
     XML_TOKEN_MAP_END
 };
 
@@ -638,6 +690,55 @@ const SvXMLTokenMap& ScXMLImport::GetBodyElemTokenMap()
     return *pBodyElemTokenMap;
 }
 
+const SvXMLTokenMap& ScXMLImport::GetContentValidationsElemTokenMap()
+{
+    if( !pContentValidationsElemTokenMap )
+        pContentValidationsElemTokenMap = new SvXMLTokenMap( aContentValidationsElemTokenMap );
+    return *pContentValidationsElemTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetContentValidationElemTokenMap()
+{
+    if( !pContentValidationElemTokenMap )
+        pContentValidationElemTokenMap = new SvXMLTokenMap( aContentValidationElemTokenMap );
+    return *pContentValidationElemTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetContentValidationAttrTokenMap()
+{
+    if( !pContentValidationAttrTokenMap )
+        pContentValidationAttrTokenMap = new SvXMLTokenMap( aContentValidationAttrTokenMap );
+    return *pContentValidationAttrTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetContentValidationMessageElemTokenMap()
+{
+    if( !pContentValidationMessageElemTokenMap )
+        pContentValidationMessageElemTokenMap = new SvXMLTokenMap( aContentValidationMessageElemTokenMap );
+    return *pContentValidationMessageElemTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetContentValidationHelpMessageAttrTokenMap()
+{
+    if( !pContentValidationHelpMessageAttrTokenMap )
+        pContentValidationHelpMessageAttrTokenMap = new SvXMLTokenMap( aContentValidationHelpMessageAttrTokenMap );
+    return *pContentValidationHelpMessageAttrTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetContentValidationErrorMessageAttrTokenMap()
+{
+    if( !pContentValidationErrorMessageAttrTokenMap )
+        pContentValidationErrorMessageAttrTokenMap = new SvXMLTokenMap( aContentValidationErrorMessageAttrTokenMap );
+    return *pContentValidationErrorMessageAttrTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetContentValidationErrorMacroAttrTokenMap()
+{
+    if( !pContentValidationErrorMacroAttrTokenMap )
+        pContentValidationErrorMacroAttrTokenMap = new SvXMLTokenMap( aContentValidationErrorMacroAttrTokenMap );
+    return *pContentValidationErrorMacroAttrTokenMap;
+}
+
 const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
 {
     if( !pTableElemTokenMap )
@@ -973,6 +1074,13 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
     pStylesAttrTokenMap( 0 ),
     pStyleElemTokenMap( 0 ),
     pBodyElemTokenMap( 0 ),
+    pContentValidationsElemTokenMap( 0 ),
+    pContentValidationElemTokenMap( 0 ),
+    pContentValidationAttrTokenMap( 0 ),
+    pContentValidationMessageElemTokenMap( 0 ),
+    pContentValidationHelpMessageAttrTokenMap( 0 ),
+    pContentValidationErrorMessageAttrTokenMap( 0 ),
+    pContentValidationErrorMacroAttrTokenMap( 0 ),
     pTableElemTokenMap( 0 ),
     pTableAttrTokenMap( 0 ),
     pTableScenarioAttrTokenMap( 0 ),
@@ -1097,6 +1205,13 @@ ScXMLImport::~ScXMLImport()
     delete pStylesAttrTokenMap;
     delete pStyleElemTokenMap;
     delete pBodyElemTokenMap;
+    delete pContentValidationsElemTokenMap;
+    delete pContentValidationElemTokenMap;
+    delete pContentValidationAttrTokenMap;
+    delete pContentValidationMessageElemTokenMap;
+    delete pContentValidationHelpMessageAttrTokenMap;
+    delete pContentValidationErrorMessageAttrTokenMap;
+    delete pContentValidationErrorMacroAttrTokenMap;
     delete pTableElemTokenMap;
     delete pTableAttrTokenMap;
     delete pTableScenarioAttrTokenMap;
@@ -1304,5 +1419,23 @@ sal_Int32 ScXMLImport::GetRangeFromString( const rtl::OUString& rRangeListStr, s
     rCellRange.EndRow = aRange.aEnd.Row();
 
     return (nIndex < nLength) ? nIndex : -1;
+}
+
+void ScXMLImport::GetCellFromString( const rtl::OUString& rCellStr, table::CellAddress& rCell)
+{
+    ScModelObj* pDocObj = ScModelObj::getImplementation( GetModel() );
+    if( pDocObj )
+    {
+        ScDocument* pDoc = pDocObj->GetDocument();
+        if( pDoc )
+        {
+            ScAddress aCellAddress;
+            sal_Int16 i( 0 );
+            aCellAddress.Parse(rCellStr, pDoc);
+            rCell.Column = aCellAddress.Col();
+            rCell.Row = aCellAddress.Row();
+            rCell.Sheet = aCellAddress.Tab();
+        }
+    }
 }
 

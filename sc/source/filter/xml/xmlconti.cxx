@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlconti.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: sab $ $Date: 2000-10-11 14:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,11 @@ ScXMLContentContext::ScXMLContentContext( ScXMLImport& rImport,
                                       const NAMESPACE_RTL(OUString)& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      ScXMLTableRowCellTokens aTempTableRowCellToken,
-                                      ScXMLTableRowCellContext* pTempScXMLTableRowCellContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+                                      rtl::OUString& sTempValue) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    sOUText(),
+    sValue(sTempValue)
 {
-    pScXMLTableRowCellContext = pTempScXMLTableRowCellContext;
-    aTableRowCellToken = aTempTableRowCellToken;
 }
 
 ScXMLContentContext::~ScXMLContentContext()
@@ -128,12 +127,5 @@ void ScXMLContentContext::Characters( const ::rtl::OUString& rChars )
 
 void ScXMLContentContext::EndElement()
 {
-      switch (aTableRowCellToken)
-    {
-    case XML_TOK_TABLE_ROW_CELL_P :
-        {
-            pScXMLTableRowCellContext->SetString(sOUText);
-            break;
-        }
-    }
+    sValue += sOUText;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: sab $ $Date: 2000-10-11 14:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include "xmldrani.hxx"
 #include "xmlimprt.hxx"
 #include "xmldpimp.hxx"
+#include "xmlcvali.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 
@@ -119,6 +120,9 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
 //      pContext = new SwXMLListBlockContext( GetSwImport(),nPrefix, rLocalName,
 //                                            xAttrList, bOrdered );
 //      break;
+    case XML_TOK_BODY_CONTENT_VALIDATIONS :
+        pContext = new ScXMLContentValidationsContext( GetScImport(), nPrefix, rLocalName, xAttrList );
+        break;
     case XML_TOK_BODY_TABLE:
 //      if( !GetScImport().GetPaM().GetNode()->FindTableNode() )
             pContext = new ScXMLTableContext( GetScImport(),nPrefix, rLocalName,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-10 06:27:46 $
+ *  last change: $Author: sab $ $Date: 2000-10-11 14:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,10 +347,7 @@ void XMLTableStyleContext::SetFormulas(com::sun::star::uno::Sequence<com::sun::s
         if (sFormulas[i] == ')')
             nBrakes--;
         if (sFormulas[i] == '"')
-            if (bString)
-                bString = sal_False;
-            else
-                bString = sal_True;
+            bString = !bString;
         i++;
     }
     if (sFormulas[i] == ',')

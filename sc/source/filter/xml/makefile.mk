@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dr $ $Date: 2000-10-10 09:42:33 $
+#   last change: $Author: sab $ $Date: 2000-10-11 14:30:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,8 @@ CXXFILES = \
         xmldpimp.cxx \
         xmlannoi.cxx \
         xmlmapch.cxx \
-        xmlsceni.cxx
+        xmlsceni.cxx \
+        xmlcvali.cxx
 
 SLOFILES =  \
         $(SLO)$/xmlwrap.obj \
@@ -124,7 +125,8 @@ SLOFILES =  \
         $(SLO)$/xmldpimp.obj \
         $(SLO)$/xmlannoi.obj \
         $(SLO)$/xmlmapch.obj \
-        $(SLO)$/xmlsceni.obj
+        $(SLO)$/xmlsceni.obj \
+        $(SLO)$/xmlcvali.obj
 
 
 # --- Tagets -------------------------------------------------------
