@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrccfg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 08:59:26 $
+ *  last change: $Author: fs $ $Date: 2001-08-21 13:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,349 +69,335 @@
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 
-// ===================================================================================================
-// = struct FmSearchParams - Parameter einer Suche
-// ===================================================================================================
-
-//------------------------------------------------------------------------
-BOOL FmSearchParams::operator ==(const FmSearchParams& rComp) const
+//........................................................................
+namespace svxform
 {
-    if (!strHistory.Equals(rComp.strHistory))
-        return FALSE;
-    if (nSearchForType != rComp.nSearchForType)
-        return FALSE;
-    if (bAllFields != rComp.bAllFields)
-        return FALSE;
-    if (nPosition != rComp.nPosition)
-        return FALSE;
-    if (bUseFormatter != rComp.bUseFormatter)
-        return FALSE;
-    if (bCaseSensitive != rComp.bCaseSensitive)
-        return FALSE;
-    if (bBackwards != rComp.bBackwards)
-        return FALSE;
-    if (bWildcard != rComp.bWildcard)
-        return FALSE;
-    if (bRegular != rComp.bRegular)
-        return FALSE;
-    if (bApproxSearch != rComp.bApproxSearch)
-        return FALSE;
-    if (bLevRelaxed != rComp.bLevRelaxed)
-        return FALSE;
-    if (nLevOther != rComp.nLevOther)
-        return FALSE;
-    if (nLevShorter != rComp.nLevShorter)
-        return FALSE;
-    if (nLevLonger != rComp.nLevLonger)
-        return FALSE;
-    if (nTransliterationFlags != rComp.nTransliterationFlags)
-        return FALSE;
-    if (bIgnoreWidthCJK != rComp.bIgnoreWidthCJK)
-        return FALSE;
-    if (bSoundsLikeCJK != rComp.bSoundsLikeCJK)
-        return FALSE;
+//........................................................................
 
-    // strSingleSearchField wird nicht mit verglichen : dieser Operator ist nur fuer die persistenten Eigenschaften gedacht,
-    // und strSingleSearchField ist nicht persistent
-    return TRUE;
-}
+    // ====================================================================
+    // = struct FmSearchParams - Parameter einer Suche
+    // ====================================================================
 
-// ===================================================================================================
-// = class FmSearchConfigItem - ein ConfigItem, dass sich Suchparameter merkt
-// ===================================================================================================
+    //---------------------------------------------------------------------
+    //--- 20.08.01 18:17:34 -----------------------------------------------
 
-#define FM_SEARCH_TAG_PARAMS                1
-#define FM_SEARCH_CONFIG_VERSION_SO50       1       // nur in internen Versionen und der 5.1 beta benutzt worden
-#define FM_SEARCH_CONFIG_VERSION_SO51       2       // zur 5.1 eingesetzt
-#define FM_SEARCH_CONFIG_VERSION_SO52       3       // ab der SRC557
-#define FM_SEARCH_CONFIG_VERSION_SO60       4       // ab der SRC629
-
-//------------------------------------------------------------------------
-FmSearchConfigItem::FmSearchConfigItem()
-{
-    UseDefault();
-}
-
-//------------------------------------------------------------------------
-INT32 FmSearchConfigItem::CalcCheckSum(const FmSearchParams& aParams, short nFormatVersion)
-{
-    // ziemlich billig, aber es reicht ...
-    sal_Int32 nReturn = 0;
-    for (xub_StrLen i=0; i<aParams.strHistory.Len(); ++i)
-        nReturn += (sal_Int32)aParams.strHistory.GetChar(i);
-
-    nReturn += aParams.bAllFields;
-    nReturn += aParams.nPosition;
-    nReturn += aParams.bUseFormatter;
-    nReturn += aParams.bCaseSensitive;
-    nReturn += aParams.bBackwards;
-    nReturn += aParams.bWildcard;
-    nReturn += aParams.bRegular;
-    nReturn += aParams.bApproxSearch;
-    nReturn += aParams.bLevRelaxed;
-    nReturn += aParams.nLevOther;
-    nReturn += aParams.nLevShorter;
-    nReturn += aParams.nLevLonger;
-
-    if (nFormatVersion >= FM_SEARCH_CONFIG_VERSION_SO52)
-        nReturn += aParams.nSearchForType;
-
-    if (nFormatVersion >= FM_SEARCH_CONFIG_VERSION_SO60)
+    FmSearchParams::FmSearchParams()
+        :bAllFields         ( sal_False )
+        ,nPosition          ( MATCHING_ANYWHERE )
+        ,bUseFormatter      ( sal_True )
+        ,bBackwards         ( sal_False )
+        ,bWildcard          ( sal_False )
+        ,bRegular           ( sal_False )
+        ,bApproxSearch      ( sal_False )
+        ,bLevRelaxed        ( sal_True )
+        ,nLevOther          ( 2 )
+        ,nLevShorter        ( 2 )
+        ,nLevLonger         ( 2 )
+        ,bSoundsLikeCJK     ( sal_False )
+        ,nTransliterationFlags( 0 )
     {
-        nReturn += aParams.nTransliterationFlags;
-        nReturn += aParams.bIgnoreWidthCJK;
-        nReturn += aParams.bSoundsLikeCJK;
+        nTransliterationFlags =
+                TransliterationModules_ignoreSpace_ja_JP
+            |   TransliterationModules_ignoreMiddleDot_ja_JP
+            |   TransliterationModules_ignoreProlongedSoundMark_ja_JP
+            |   TransliterationModules_ignoreSeparator_ja_JP
+            |   TransliterationModules_IGNORE_CASE;
     }
 
-    return nReturn;
-}
+    //---------------------------------------------------------------------
+    //--- 21.08.01 13:31:48 -----------------------------------------------
 
-/*
-//------------------------------------------------------------------------
-int FmSearchConfigItem::Load(SvStream& rStore)
-{
-    SfxSingleRecordReader aRecord(&rStore);
-
-    if (aRecord.GetTag() == FM_SEARCH_TAG_PARAMS)
+    sal_Bool FmSearchParams::isIgnoreWidthCJK( ) const
     {
-        if (aRecord.HasVersion(FM_SEARCH_CONFIG_VERSION_SO51))  // 5.1 oder groesser
+        return 0 != (nTransliterationFlags & TransliterationModules_IGNORE_WIDTH);
+    }
+
+    //---------------------------------------------------------------------
+    //--- 21.08.01 13:32:03 -----------------------------------------------
+
+    void FmSearchParams::setIgnoreWidthCJK( sal_Bool _bIgnore )
+    {
+        if ( _bIgnore )
+            nTransliterationFlags |= TransliterationModules_IGNORE_WIDTH;
+        else
+            nTransliterationFlags &= ~TransliterationModules_IGNORE_WIDTH;
+    }
+
+    //---------------------------------------------------------------------
+    //--- 21.08.01 13:47:52 -----------------------------------------------
+
+    sal_Bool FmSearchParams::isCaseSensitive( ) const
+    {
+        return 0 == (nTransliterationFlags & TransliterationModules_IGNORE_CASE);
+    }
+
+    //---------------------------------------------------------------------
+    //--- 21.08.01 13:48:00 -----------------------------------------------
+
+    void FmSearchParams::setCaseSensitive( sal_Bool _bCase )
+    {
+        if ( _bCase )
+            nTransliterationFlags &= ~TransliterationModules_IGNORE_CASE;
+        else
+            nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
+    }
+
+    // ====================================================================
+    // = maps from ascii values to int values
+    // ====================================================================
+
+    struct Ascii2Int16
+    {
+        const sal_Char* pAscii;
+        sal_Int16       nValue;
+    };
+
+    //---------------------------------------------------------------------
+    //--- 20.08.01 18:28:38 -----------------------------------------------
+
+    static const Ascii2Int16* lcl_getSearchForTypeValueMap()
+    {
+        static const Ascii2Int16 s_aSearchForTypeMap[] =
         {
-            sal_Bool bVersion52 = aRecord.HasVersion(FM_SEARCH_CONFIG_VERSION_SO52);
-            sal_Bool bVersion60 = aRecord.HasVersion(FM_SEARCH_CONFIG_VERSION_SO60);
-
-            INT32 nCheckSum;
-            *aRecord >> nCheckSum;
-
-            FmSearchParams aParams;
-            aParams.strSingleSearchField.Erase();
-
-            (*aRecord).ReadByteString(aParams.strHistory, gsl_getSystemTextEncoding());
-
-            INT16 nBitField;
-            *aRecord >> nBitField;
-            nBitField >>= 0; aParams.bAllFields     = nBitField & 0x0001;   //  1 bit used up
-            nBitField >>= 1; aParams.nPosition      = nBitField & 0x0003;   //  3 bits used up
-            nBitField >>= 2; aParams.bUseFormatter  = nBitField & 0x0001;   //  4 bits used up
-            nBitField >>= 1; aParams.bCaseSensitive = nBitField & 0x0001;   //  5 bits used up
-            nBitField >>= 1; aParams.bBackwards     = nBitField & 0x0001;   //  6 bits used up
-            nBitField >>= 1; aParams.bWildcard      = nBitField & 0x0001;   //  7 bits used up
-            nBitField >>= 1; aParams.bRegular       = nBitField & 0x0001;   //  8 bits used up
-            nBitField >>= 1; aParams.bApproxSearch  = nBitField & 0x0001;   //  9 bits used up
-            nBitField >>= 1; aParams.bLevRelaxed    = nBitField & 0x0001;   // 10 bits used up
-
-            *aRecord >> aParams.nLevOther;
-            *aRecord >> aParams.nLevShorter;
-            *aRecord >> aParams.nLevLonger;
-
-            if (bVersion52) // 5.2 oder groesser
-            {
-                nBitField >>= 1; aParams.nSearchForType     = nBitField & 0x0003;   // 12 bits used up
-            }
-            else
-                aParams.nSearchForType = 0;
-
-            if (bVersion60) // 6.0 oder größer
-            {
-                nBitField >>= 1; aParams.bIgnoreWidthCJK    = nBitField & 0x0001;   // 13 bits used up
-                nBitField >>= 1; aParams.bSoundsLikeCJK     = nBitField & 0x0001;   // 14 bits used up
-
-                *aRecord >> aParams.nTransliterationFlags;
-            }
-            else
-            {
-                aParams.bIgnoreWidthCJK = sal_False;
-                aParams.bSoundsLikeCJK = sal_False;
-                aParams.nTransliterationFlags =
-                        TransliterationModules_ignoreSpace_ja_JP
-                    |   TransliterationModules_ignoreMiddleDot_ja_JP
-                    |   TransliterationModules_ignoreProlongedSoundMark_ja_JP
-                    |   TransliterationModules_ignoreSeparator_ja_JP
-                    |   TransliterationModules_IGNORE_CASE;
-            }
-
-
-            if (nCheckSum == CalcCheckSum(aParams, aRecord.GetVersion()))
-            {
-                m_aParams = aParams;
-                return ERR_OK;
-            }
-        }
-        else if (aRecord.HasVersion(FM_SEARCH_CONFIG_VERSION_SO50))
-        {
-            INT32 nCheckSum;
-            *aRecord >> nCheckSum;
-
-            FmSearchParams aParams;
-            aParams.strSingleSearchField.Erase();
-
-            (*aRecord).ReadByteString(aParams.strHistory, gsl_getSystemTextEncoding());
-
-            // kleine Verrenkung, da die Bools alle BitFields sind
-            BOOL bTempBool;
-            *aRecord >> bTempBool;  aParams.bAllFields = bTempBool;
-            *aRecord >> bTempBool;  aParams.bUseFormatter = bTempBool;
-            *aRecord >> bTempBool;  aParams.bCaseSensitive = bTempBool;
-            *aRecord >> bTempBool;  aParams.bBackwards = bTempBool;
-            *aRecord >> bTempBool;  aParams.bWildcard = bTempBool;
-            *aRecord >> bTempBool;  aParams.bRegular = bTempBool;
-            *aRecord >> bTempBool;  aParams.bApproxSearch = bTempBool;
-            *aRecord >> bTempBool;  aParams.bLevRelaxed = bTempBool;
-
-            *aRecord >> aParams.nLevOther;
-            *aRecord >> aParams.nLevShorter;
-            *aRecord >> aParams.nLevLonger;
-
-            USHORT nTempShort;
-            *aRecord >> nTempShort; aParams.nPosition = nTempShort;
-
-            if (nCheckSum == CalcCheckSum(aParams, FM_SEARCH_CONFIG_VERSION_SO50))
-            {
-                m_aParams = aParams;
-                return ERR_OK;
-            }
-        }
+            { "text",       0 },
+            { "null",       1 },
+            { "non-null",   2 },
+            { NULL,         -1 }
+        };
+        return s_aSearchForTypeMap;
     }
 
-    UseDefault();
-    return ERR_READ;
-}
+    //---------------------------------------------------------------------
+    //--- 20.08.01 18:28:38 -----------------------------------------------
 
-//------------------------------------------------------------------------
-BOOL FmSearchConfigItem::Store(SvStream& rStore)
-{
-    SfxSingleRecordWriter aRecord(&rStore, FM_SEARCH_TAG_PARAMS, FM_SEARCH_CONFIG_VERSION_SO52);
-
-    // eine Checksumme an den Anfang
-    INT32 nCheckSum = CalcCheckSum(m_aParams, FM_SEARCH_CONFIG_VERSION_SO60);
-    *aRecord << nCheckSum;
-
-    (*aRecord).WriteByteString(m_aParams.strHistory, gsl_getSystemTextEncoding());
-
-    INT16 nBitField = 0;
-    nBitField |= (INT16(m_aParams.bAllFields        & 0x0001)) << 0;
-    nBitField |= (INT16(m_aParams.nPosition         & 0x0003)) << 1;
-    nBitField |= (INT16(m_aParams.bUseFormatter     & 0x0001)) << 3;
-    nBitField |= (INT16(m_aParams.bCaseSensitive    & 0x0001)) << 4;
-    nBitField |= (INT16(m_aParams.bBackwards        & 0x0001)) << 5;
-    nBitField |= (INT16(m_aParams.bWildcard         & 0x0001)) << 6;
-    nBitField |= (INT16(m_aParams.bRegular          & 0x0001)) << 7;
-    nBitField |= (INT16(m_aParams.bApproxSearch     & 0x0001)) << 8;
-    nBitField |= (INT16(m_aParams.bLevRelaxed       & 0x0001)) << 9;
-
-    // version 5.2
-    nBitField |= (INT16(m_aParams.nSearchForType    & 0x0003)) << 10;
-    // version 6.0
-    nBitField |= (INT16(m_aParams.bIgnoreWidthCJK   & 0x0001)) << 12;
-    nBitField |= (INT16(m_aParams.bSoundsLikeCJK    & 0x0001)) << 13;
-
-    *aRecord << nBitField;
-
-    *aRecord << m_aParams.nLevOther;
-    *aRecord << m_aParams.nLevShorter;
-    *aRecord << m_aParams.nLevLonger;
-
-    *aRecord << m_aParams.nTransliterationFlags;
-
-    return TRUE;
-}
-*/
-
-//------------------------------------------------------------------------
-void FmSearchConfigItem::UseDefault()
-{
-    m_aParams.strHistory.Erase();
-    m_aParams.strSingleSearchField = String();
-    m_aParams.bAllFields = FALSE;
-    m_aParams.nPosition = MATCHING_ANYWHERE;
-    m_aParams.bUseFormatter = TRUE;
-    m_aParams.bCaseSensitive = FALSE;
-    m_aParams.bBackwards = FALSE;
-    m_aParams.bWildcard = FALSE;
-    m_aParams.bRegular = FALSE;
-    m_aParams.bApproxSearch = FALSE;
-    m_aParams.bLevRelaxed = TRUE;
-    m_aParams.nLevOther = 2;
-    m_aParams.nLevShorter = 2;
-    m_aParams.nLevLonger = 2;
-
-    m_aParams.bIgnoreWidthCJK = sal_False;
-    m_aParams.bSoundsLikeCJK = sal_False;
-    m_aParams.nTransliterationFlags =
-            TransliterationModules_ignoreSpace_ja_JP
-        |   TransliterationModules_ignoreMiddleDot_ja_JP
-        |   TransliterationModules_ignoreProlongedSoundMark_ja_JP
-        |   TransliterationModules_ignoreSeparator_ja_JP
-        |   TransliterationModules_IGNORE_CASE;
-
-//    SetDefault(TRUE);
-}
-
-// ===================================================================================================
-// = class FmSearchConfigAdmin - verwaltet den Zugriff auf das einzige FmSearchConfigItem, das es gibt
-// ===================================================================================================
-
-// die statics der Klasse
-FmSearchConfigItem* FmSearchConfigAdmin::s_pItem = NULL;
-INT32 FmSearchConfigAdmin::s_nUsageCounter = 0;
-
-// die Instanz, die durch ihre globale Instantiierung dafuer sorgt, dass das ConfigItem erst bei
-// Programmende aufgeraeumt wird
-//FmSearchConfigAdmin g_aEnsureLastPossibleDelete;
-    // da der FmSearchConfigAdmin einen Usage-Counter hat, wird das von ihm verwaltete Item wirklich erst
-    // mit dem Beenden des Office endgueltige aufgeraeumt, dann naemlich wird diese Instanz hier weggeworfen.
-    // Geladen wird es erst bei Benutzung : sobald naemlich jemand von einer FmSearchConfigAdmin-Instanz
-    // die Params erfragt. Also schadet dieses eine zusaetzliche Objekt niemandem.
-
-
-
-DBG_NAME(FmSearchConfigAdmin);
-//------------------------------------------------------------------------
-FmSearchConfigAdmin::FmSearchConfigAdmin()
-{
-    DBG_CTOR(FmSearchConfigAdmin,NULL);
-
-    ++s_nUsageCounter;
-}
-
-//------------------------------------------------------------------------
-FmSearchConfigAdmin::~FmSearchConfigAdmin()
-{
-    if (--s_nUsageCounter == 0)
+    static const Ascii2Int16* lcl_getSearchPositionValueMap()
     {
-        if (s_pItem)
+        static const Ascii2Int16 s_aSearchPositionMap[] =
         {
-//            s_pItem->StoreConfig(TRUE);
-            delete s_pItem;
-            s_pItem = NULL;
-        }
+            { "anywhere-in-field",      MATCHING_ANYWHERE },
+            { "beginning-of-field",     MATCHING_BEGINNING },
+            { "end-of-field",           MATCHING_END },
+            { "complete-field",         MATCHING_WHOLETEXT },
+            { NULL,                     -1 }
+        };
+        return s_aSearchPositionMap;
     }
 
-    DBG_DTOR(FmSearchConfigAdmin,NULL);
-}
+    //---------------------------------------------------------------------
+    //--- 20.08.01 18:30:15 -----------------------------------------------
 
-//------------------------------------------------------------------------
-FmSearchConfigItem* FmSearchConfigAdmin::GetItem() const
-{
-    if (s_pItem)
-        return s_pItem;
-
-    s_pItem = new FmSearchConfigItem;
-//    s_pItem->Initialize();
-    s_pItem->UseDefault();
-    return s_pItem;
-}
-
-//------------------------------------------------------------------------
-void FmSearchConfigAdmin::PutParams(const FmSearchParams& rParams)
-{
-    if (GetParams() != rParams)
+    static sal_Int16 lcl_implMapAsciiValue( const ::rtl::OUString& _rAsciiValue, const Ascii2Int16* _pMap )
     {
-        GetItem()->m_aParams = rParams;
-//        GetItem()->SetDefault(FALSE);   // damit wird das Ding implizit auch modified gesetzt
-    }
-}
+        // search the map for the given ascii value
+        const Ascii2Int16* pSearch = _pMap;
+        while ( pSearch && pSearch->pAscii )
+        {
+            if ( 0 == _rAsciiValue.compareToAscii( pSearch->pAscii ) )
+                // found
+                return pSearch->nValue;
+            ++pSearch;
+        }
 
+        DBG_ERROR(
+            (   ::rtl::OString( "lcl_implMapAsciiValue: could not convert the ascii value " )
+            +=  ::rtl::OString( _rAsciiValue.getStr(), _rAsciiValue.getLength(), RTL_TEXTENCODING_ASCII_US )
+            +=  ::rtl::OString( " !" )
+            ).getStr()
+        );
+        return -1;
+    }
+
+    //---------------------------------------------------------------------
+    //--- 20.08.01 18:33:06 -----------------------------------------------
+
+    static const sal_Char* lcl_implMapIntValue( const sal_Int16 _nValue, const Ascii2Int16* _pMap )
+    {
+        // search the map for the given integer value
+        const Ascii2Int16* pSearch = _pMap;
+        while ( pSearch && pSearch->pAscii )
+        {
+            if ( _nValue == pSearch->nValue )
+                // found
+                return pSearch->pAscii;
+            ++pSearch;
+        }
+
+        DBG_ERROR(
+            (   ::rtl::OString( "lcl_implMapIntValue: could not convert the integer value " )
+            +=  ::rtl::OString::valueOf( (sal_Int32)_nValue )
+            +=  ::rtl::OString( " !" )
+            ).getStr()
+        );
+        static const sal_Char* s_pDummy = "";
+            // just as a fallback ....
+        return s_pDummy;
+    }
+
+    // ====================================================================
+    // = class FmSearchConfigItem - ein ConfigItem, dass sich Suchparameter merkt
+    // ====================================================================
+
+#define TA( c )     &c, getCppuType( &c )
+
+    //---------------------------------------------------------------------
+    //--- 20.08.01 18:19:59 -----------------------------------------------
+
+    FmSearchConfigItem::FmSearchConfigItem()
+        :OConfigurationValueContainer( ::comphelper::getProcessServiceFactory(), m_aMutex, "/org.openoffice.Office.DataAccess/FormSearchOptions", CVC_UPDATE_ACCESS | CVC_LAZY_UPDATE, 2 )
+    {
+        // register our members so the data exchange with the node values is done automatically
+
+        registerExchangeLocation( "SearchHistory",                      TA( aHistory ) );
+        registerExchangeLocation( "LevenshteinOther",                   TA( nLevOther ) );
+        registerExchangeLocation( "LevenshteinShorter",                 TA( nLevShorter ) );
+        registerExchangeLocation( "LevenshteinLonger",                  TA( nLevLonger ) );
+        registerExchangeLocation( "IsLevenshteinRelaxed",               TA( bLevRelaxed ) );
+        registerExchangeLocation( "IsSearchAllFields",                  TA( bAllFields ) );
+        registerExchangeLocation( "IsUseFormatter",                     TA( bUseFormatter ) );
+        registerExchangeLocation( "IsBackwards",                        TA( bBackwards ) );
+        registerExchangeLocation( "IsWildcardSearch",                   TA( bWildcard ) );
+        registerExchangeLocation( "IsUseRegularExpression",             TA( bRegular ) );
+        registerExchangeLocation( "IsSimilaritySearch",                 TA( bApproxSearch ) );
+        registerExchangeLocation( "IsUseAsianOptions",                  TA( bSoundsLikeCJK ) );
+
+        // the properties which need to be translated
+        registerExchangeLocation( "SearchType",                         TA( m_sSearchForType ) );
+        registerExchangeLocation( "SearchPosition",                     TA( m_sSearchPosition ) );
+
+        registerExchangeLocation( "IsMatchCase",                        TA( m_bIsMatchCase ) );
+        registerExchangeLocation( "Japanese/IsMatchFullHalfWidthForms", TA( m_bIsMatchFullHalfWidthForms ) );
+        registerExchangeLocation( "Japanese/IsMatchHiraganaKatakana",   TA( m_bIsMatchHiraganaKatakana ) );
+        registerExchangeLocation( "Japanese/IsMatchContractions",       TA( m_bIsMatchContractions ) );
+        registerExchangeLocation( "Japanese/IsMatchMinusDashCho-on",    TA( m_bIsMatchMinusDashCho_on ) );
+        registerExchangeLocation( "Japanese/IsMatchRepeatCharMarks",    TA( m_bIsMatchRepeatCharMarks ) );
+        registerExchangeLocation( "Japanese/IsMatchVariantFormKanji",   TA( m_bIsMatchVariantFormKanji ) );
+        registerExchangeLocation( "Japanese/IsMatchOldKanaForms",       TA( m_bIsMatchOldKanaForms ) );
+        registerExchangeLocation( "Japanese/IsMatch_DiZi_DuZu",         TA( m_bIsMatch_DiZi_DuZu ) );
+        registerExchangeLocation( "Japanese/IsMatch_BaVa_HaFa",         TA( m_bIsMatch_BaVa_HaFa ) );
+        registerExchangeLocation( "Japanese/IsMatch_TsiThiChi_DhiZi",   TA( m_bIsMatch_TsiThiChi_DhiZi ) );
+        registerExchangeLocation( "Japanese/IsMatch_HyuIyu_ByuVyu",     TA( m_bIsMatch_HyuIyu_ByuVyu ) );
+        registerExchangeLocation( "Japanese/IsMatch_SeShe_ZeJe",        TA( m_bIsMatch_SeShe_ZeJe ) );
+        registerExchangeLocation( "Japanese/IsMatch_IaIya",             TA( m_bIsMatch_IaIya ) );
+        registerExchangeLocation( "Japanese/IsMatch_KiKu",              TA( m_bIsMatch_KiKu ) );
+        registerExchangeLocation( "Japanese/IsIgnorePunctuation",       TA( m_bIsIgnorePunctuation ) );
+        registerExchangeLocation( "Japanese/IsIgnoreWhitespace",        TA( m_bIsIgnoreWhitespace ) );
+        registerExchangeLocation( "Japanese/IsIgnoreProlongedSoundMark",TA( m_bIsIgnoreProlongedSoundMark ) );
+        registerExchangeLocation( "Japanese/IsIgnoreMiddleDot",         TA( m_bIsIgnoreMiddleDot ) );
+
+        read( );
+    }
+
+    //---------------------------------------------------------------------
+    //--- 20.08.01 18:19:57 -----------------------------------------------
+
+    FmSearchConfigItem::~FmSearchConfigItem()
+    {
+        commit( );
+    }
+
+    //---------------------------------------------------------------------
+    //--- 20.08.01 18:20:48 -----------------------------------------------
+
+    void FmSearchConfigItem::implTranslateFromConfig( )
+    {
+        // the search-for string
+        nSearchForType = lcl_implMapAsciiValue( m_sSearchForType, lcl_getSearchForTypeValueMap() );
+
+        // the search position
+        nPosition = lcl_implMapAsciiValue( m_sSearchPosition, lcl_getSearchPositionValueMap() );
+
+        // the transliteration flags
+        nTransliterationFlags = 0;
+
+        if ( !m_bIsMatchCase                )   nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
+        if ( m_bIsMatchFullHalfWidthForms   )   nTransliterationFlags |= TransliterationModules_IGNORE_WIDTH;
+        if ( m_bIsMatchHiraganaKatakana     )   nTransliterationFlags |= TransliterationModules_IGNORE_KANA;
+        if ( m_bIsMatchContractions         )   nTransliterationFlags |= TransliterationModules_ignoreSize_ja_JP;
+        if ( m_bIsMatchMinusDashCho_on      )   nTransliterationFlags |= TransliterationModules_ignoreMinusSign_ja_JP;
+        if ( m_bIsMatchRepeatCharMarks      )   nTransliterationFlags |= TransliterationModules_ignoreIterationMark_ja_JP;
+        if ( m_bIsMatchVariantFormKanji     )   nTransliterationFlags |= TransliterationModules_ignoreTraditionalKanji_ja_JP;
+        if ( m_bIsMatchOldKanaForms         )   nTransliterationFlags |= TransliterationModules_ignoreTraditionalKana_ja_JP;
+        if ( m_bIsMatch_DiZi_DuZu           )   nTransliterationFlags |= TransliterationModules_ignoreZiZu_ja_JP;
+        if ( m_bIsMatch_BaVa_HaFa           )   nTransliterationFlags |= TransliterationModules_ignoreBaFa_ja_JP;
+        if ( m_bIsMatch_TsiThiChi_DhiZi     )   nTransliterationFlags |= TransliterationModules_ignoreTiJi_ja_JP;
+        if ( m_bIsMatch_HyuIyu_ByuVyu       )   nTransliterationFlags |= TransliterationModules_ignoreHyuByu_ja_JP;
+        if ( m_bIsMatch_SeShe_ZeJe          )   nTransliterationFlags |= TransliterationModules_ignoreSeZe_ja_JP;
+        if ( m_bIsMatch_IaIya               )   nTransliterationFlags |= TransliterationModules_ignoreIandEfollowedByYa_ja_JP;
+        if ( m_bIsMatch_KiKu                )   nTransliterationFlags |= TransliterationModules_ignoreKiKuFollowedBySa_ja_JP;
+
+        if ( m_bIsIgnorePunctuation         )   nTransliterationFlags |= TransliterationModules_ignoreSeparator_ja_JP;
+        if ( m_bIsIgnoreWhitespace          )   nTransliterationFlags |= TransliterationModules_ignoreSpace_ja_JP;
+        if ( m_bIsIgnoreProlongedSoundMark  )   nTransliterationFlags |= TransliterationModules_ignoreProlongedSoundMark_ja_JP;
+        if ( m_bIsIgnoreMiddleDot           )   nTransliterationFlags |= TransliterationModules_ignoreMiddleDot_ja_JP;
+    }
+
+    //---------------------------------------------------------------------
+    //--- 20.08.01 18:42:23 -----------------------------------------------
+
+    void FmSearchConfigItem::implTranslateToConfig( )
+    {
+        // the search-for string
+        m_sSearchForType = ::rtl::OUString::createFromAscii( lcl_implMapIntValue( nSearchForType, lcl_getSearchForTypeValueMap() ) );
+
+        // the search position
+        m_sSearchPosition = ::rtl::OUString::createFromAscii( lcl_implMapIntValue( nPosition, lcl_getSearchPositionValueMap() ) );
+
+        // the transliteration flags
+
+        m_bIsMatchCase                  = ( 0 == ( nTransliterationFlags & TransliterationModules_IGNORE_CASE ) );
+        m_bIsMatchFullHalfWidthForms    = ( 0 != ( nTransliterationFlags & TransliterationModules_IGNORE_WIDTH ) );
+        m_bIsMatchHiraganaKatakana      = ( 0 != ( nTransliterationFlags & TransliterationModules_IGNORE_KANA ) );
+        m_bIsMatchContractions          = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreSize_ja_JP ) );
+        m_bIsMatchMinusDashCho_on       = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreMinusSign_ja_JP ) );
+        m_bIsMatchRepeatCharMarks       = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreIterationMark_ja_JP ) );
+        m_bIsMatchVariantFormKanji      = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreTraditionalKanji_ja_JP ) );
+        m_bIsMatchOldKanaForms          = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreTraditionalKana_ja_JP ) );
+        m_bIsMatch_DiZi_DuZu            = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreZiZu_ja_JP ) );
+        m_bIsMatch_BaVa_HaFa            = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreBaFa_ja_JP ) );
+        m_bIsMatch_TsiThiChi_DhiZi      = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreTiJi_ja_JP ) );
+        m_bIsMatch_HyuIyu_ByuVyu        = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreHyuByu_ja_JP ) );
+        m_bIsMatch_SeShe_ZeJe           = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreSeZe_ja_JP ) );
+        m_bIsMatch_IaIya                = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreIandEfollowedByYa_ja_JP ) );
+        m_bIsMatch_KiKu                 = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreKiKuFollowedBySa_ja_JP ) );
+
+        m_bIsIgnorePunctuation          = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreSeparator_ja_JP ) );
+        m_bIsIgnoreWhitespace           = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreSpace_ja_JP ) );
+        m_bIsIgnoreProlongedSoundMark   = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreProlongedSoundMark_ja_JP ) );
+        m_bIsIgnoreMiddleDot            = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreMiddleDot_ja_JP ) );
+    }
+
+    //---------------------------------------------------------------------
+    //--- 20.08.01 18:20:01 -----------------------------------------------
+
+    const FmSearchParams& FmSearchConfigItem::getParams() const
+    {
+        // ensure that the properties which are not stored directly are up-to-date
+        const_cast< FmSearchConfigItem* >( this )->implTranslateFromConfig( );
+
+        // and return our FmSearchParams part
+        return *this;
+    }
+
+    //---------------------------------------------------------------------
+    //--- 20.08.01 18:41:57 -----------------------------------------------
+
+    void FmSearchConfigItem::setParams( const FmSearchParams& _rParams )
+    {
+        // copy the FmSearchParams part
+        *static_cast< FmSearchParams* >( this ) = _rParams;
+
+        // translate the settings not represented by a direct config value
+        implTranslateToConfig();
+    }
+
+//........................................................................
+}   // namespace svxform
+//........................................................................

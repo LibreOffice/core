@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrccfg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 08:59:27 $
+ *  last change: $Author: fs $ $Date: 2001-08-21 13:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,12 @@
 #ifndef _SFXCFGITEM_HXX //autogen
 #include <sfx2/cfgitem.hxx>
 #endif
+#ifndef UNOTOOLS_CONFIGVALUECONTAINER_HXX
+#include <unotools/configvaluecontainer.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
 
 // ===================================================================================================
 
@@ -83,87 +89,111 @@
 // angepasst werden)
 
 
-// ===================================================================================================
-// = struct FmSearchParams - Parameter einer Suche
-// ===================================================================================================
-
-struct FmSearchParams
+//........................................................................
+namespace svxform
 {
-public:
-    String  strHistory;
-        // der Dialog haelt maximal MAX_HISTORY_ENTRIES Eintraege
-    String  strSingleSearchField;
-    INT16   nSearchForType : 2;
-    UINT16  nPosition : 2;
-    INT16   nLevOther;
-    INT16   nLevShorter;
-    INT16   nLevLonger;
-    INT32   nTransliterationFlags;
+//........................................................................
 
-    BOOL    bAllFields : 1;
-    BOOL    bUseFormatter : 1;
-    BOOL    bCaseSensitive : 1;
-    BOOL    bBackwards : 1;
-    BOOL    bWildcard : 1;
-    BOOL    bRegular : 1;
-    BOOL    bApproxSearch : 1;
-        // die letzten 3 schliessen sich gegenseitig aus !
-    // fuer Levenshtein-Suche :
-    BOOL    bLevRelaxed : 1;
+    // ===================================================================================================
+    // = struct FmSearchParams - Parameter einer Suche
+    // ===================================================================================================
 
-    BOOL    bIgnoreWidthCJK : 1;
-    BOOL    bSoundsLikeCJK : 1;
+    struct FmSearchParams
+    {
+    protected:
+        sal_Int32       nTransliterationFlags;
+            // they're way too sensitive for direct access ....
 
-public:
-    // Vergleich nur unter Beachtung der persistenten Eigenschaften !
-    BOOL operator ==(const FmSearchParams& rComp) const;
-    BOOL operator !=(const FmSearchParams& rComp) const { return !(*this == rComp); }
-};
+    public:
+        // no bit fields at all (want to pass the addresses to the OConfigurationValueContainer)
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                        aHistory;
+        ::rtl::OUString sSingleSearchField;
 
-// ===================================================================================================
-// = class FmSearchConfigItem - ein ConfigItem, dass sich Suchparameter merkt
-// ===================================================================================================
+        sal_Int16       nSearchForType;
+        sal_Int16       nPosition;
+        sal_Int16       nLevOther;
+        sal_Int16       nLevShorter;
+        sal_Int16       nLevLonger;
 
-class FmSearchConfigItem
-{
-    friend class FmSearchConfigAdmin;
+        sal_Bool        bAllFields;
+        sal_Bool        bUseFormatter;
+        sal_Bool        bBackwards;
+        sal_Bool        bWildcard;
+        sal_Bool        bRegular;
+        sal_Bool        bApproxSearch;
+            // the last three are mutually exclusive
 
-private:
-    FmSearchParams      m_aParams;
+        // for Levenshtein-search:
+        sal_Bool        bLevRelaxed;
 
-private:
-    FmSearchConfigItem();
+        sal_Bool        bSoundsLikeCJK;
 
-public:
-//    virtual int         Load(SvStream&);
-//    virtual BOOL        Store(SvStream&);
-    virtual void        UseDefault();
+        // ......................................
+        FmSearchParams();
 
-protected:
-    INT32 CalcCheckSum(const FmSearchParams&, short);
-};
+        sal_Bool    isIgnoreWidthCJK( ) const;
+        void        setIgnoreWidthCJK( sal_Bool _bIgnore );
 
-// ===================================================================================================
-// = class FmSearchConfigAdmin - verwaltet den Zugriff auf das einzige FmSearchConfigItem, das es gibt
-// ===================================================================================================
+        sal_Int32   getTransliterationFlags( ) const { return nTransliterationFlags; }
+        void        setTransliterationFlags( sal_Int32 _nFlags ) { nTransliterationFlags = _nFlags; }
 
-class FmSearchConfigAdmin
-{
-private:
-    static  FmSearchConfigItem*     s_pItem;
-    static  INT32                   s_nUsageCounter;
+        sal_Bool    isCaseSensitive( ) const;
+        void        setCaseSensitive( sal_Bool _bCase );
+    };
 
-public:
-    FmSearchConfigAdmin();
-    ~FmSearchConfigAdmin();
+    // ===================================================================================================
+    // = class FmSearchConfigItem - ein ConfigItem, dass sich Suchparameter merkt
+    // ===================================================================================================
 
-public:
-    FmSearchParams      GetParams() const { return GetItem()->m_aParams; }
-    void                PutParams(const FmSearchParams& rParams);
+    class FmSearchConfigItem
+                :protected  FmSearchParams
+                ,public     ::utl::OConfigurationValueContainer
+                // order matters!
+    {
+    private:
+        ::osl::Mutex    m_aMutex;
 
-protected:
-    FmSearchConfigItem* GetItem() const;
-};
+        // wrapper properties:
+        // some of the members of FmSearchParams are must be translated to be stored in the configuration
+        ::rtl::OUString     m_sSearchForType;
+        ::rtl::OUString     m_sSearchPosition;
+
+        sal_Bool            m_bIsMatchCase;
+        sal_Bool            m_bIsMatchFullHalfWidthForms;
+        sal_Bool            m_bIsMatchHiraganaKatakana;
+        sal_Bool            m_bIsMatchContractions;
+        sal_Bool            m_bIsMatchMinusDashCho_on;
+        sal_Bool            m_bIsMatchRepeatCharMarks;
+        sal_Bool            m_bIsMatchVariantFormKanji;
+        sal_Bool            m_bIsMatchOldKanaForms;
+        sal_Bool            m_bIsMatch_DiZi_DuZu;
+        sal_Bool            m_bIsMatch_BaVa_HaFa;
+        sal_Bool            m_bIsMatch_TsiThiChi_DhiZi;
+        sal_Bool            m_bIsMatch_HyuIyu_ByuVyu;
+        sal_Bool            m_bIsMatch_SeShe_ZeJe;
+        sal_Bool            m_bIsMatch_IaIya;
+        sal_Bool            m_bIsMatch_KiKu;
+        sal_Bool            m_bIsIgnorePunctuation;
+        sal_Bool            m_bIsIgnoreWhitespace;
+        sal_Bool            m_bIsIgnoreProlongedSoundMark;
+        sal_Bool            m_bIsIgnoreMiddleDot;
+
+    public:
+        FmSearchConfigItem();
+        ~FmSearchConfigItem();
+
+        const FmSearchParams&   getParams( ) const;
+        void                    setParams( const FmSearchParams& _rParams );
+
+    private:
+        void    implTranslateFromConfig( );
+        void    implTranslateToConfig( );
+    };
+
+//........................................................................
+}   // namespace svxform
+//........................................................................
 
 // ===================================================================================================
 
