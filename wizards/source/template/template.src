@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:26:39 $
+ *  last change: $Author: rt $ $Date: 2001-04-26 20:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ String STYLES + 2
     Text[ portuguese ] = "Cancelar";
     Text[ russian ] = "Ξςμενΰ";
     Text[ greek ] = "~Ακύρωση";
-    Text[ dutch ] = "Stoppen";
+    Text[ dutch ] = "~Annuleren";
     Text[ french ] = "~Annuler";
     Text[ spanish ] = "~Cancelar";
     Text[ italian ] = "Annulla";
@@ -201,7 +201,7 @@ String STYLES + 3
     Text[ portuguese ] = "OK";
     Text[ russian ] = "OK";
     Text[ greek ] = "~OK";
-    Text[ dutch ] = "OK";
+    Text[ dutch ] = "~OK";
     Text[ french ] = "~OK";
     Text[ spanish ] = "~Aceptar";
     Text[ italian ] = "OK";
@@ -484,7 +484,7 @@ String TextField
     Text[ portuguese ] = "Textfield is not defined!";
     Text[ russian ] = "Οξλε οξλόηξβΰςελÿ νε ηΰδΰνξ.";
     Text[ greek ] = "Δεν ορίστηκε το πεδίο των δεδομένων του χρήστη!";
-    Text[ dutch ] = "Textfield is not defined!";
+    Text[ dutch ] = "Geen veld voor gebruikersgegevens gedefinieerd!";
     Text[ french ] = "Ce champ de donnιes d'identitι n'est pas dιfini !";
     Text[ spanish ] = "‘El campo de datos de usuario no estα definido!";
     Text[ italian ] = "Il campo dati utente non θ stato definito!";
