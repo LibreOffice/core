@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dg $ $Date: 2001-07-05 08:04:36 $
+#   last change: $Author: jb $ $Date: 2002-03-28 14:24:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,9 @@ PRJ=..$/..$/..
 PRJNAME=officecfg
 TARGET =cfgimport
 PACKAGE=org$/openoffice$/configuration
+
+# Our jar build rules don't like -P#
+MAXPROCESS=1
 
 # --- Settings -----------------------------------------------------
 

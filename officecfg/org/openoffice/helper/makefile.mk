@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: sus $ $Date: 2001-02-08 18:25:07 $
+#   last change: $Author: jb $ $Date: 2002-03-28 14:24:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,9 @@ PRJ=..$/..$/..
 PRJNAME=officecfg
 TARGET =schema
 PACKAGE=org$/openoffice$/helper
+
+# Our jar build rules don't like -P#
+MAXPROCESS=1
 
 # --- Settings -----------------------------------------------------
 
