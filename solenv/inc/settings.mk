@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.85 $
+#   $Revision: 1.86 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-07 18:43:20 $
+#   last change: $Author: hjs $ $Date: 2001-11-21 17:17:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,7 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
     @+tr -d "\015" < $(SOLARVERSION)$/$(UPD)minor.mk > $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
 .ELSE			# "$(GUI)"=="UNX"
     @+$(COPY) $(SOLARVERSION)$/$(UPD)minor.mk $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk >& $(NULLDEV)
-    @+$(COPY) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.flag >& $(NULLDEV)
+    @+$(TOUCH) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg >& $(NULLDEV)
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(UPDATER)"!=""
 
@@ -1410,18 +1410,20 @@ CDEFS+=-DUPD=\"$(UPD)\" -DMINOR=\"$(LAST_MINOR)\" -DBUILD_ID=\"$(BUILD)\"
 CDEFS+= -DTF_NEWEX
 .ENDIF
 
-.IF "$(UPDATER)"=="YES"
-SVXLIGHT=TRUE
-.ENDIF
+#.IF "$(UPDATER)"=="YES"
+#SVXLIGHT=TRUE
+#.ENDIF
 
 #defaults for UCR HEADER
 UNOUCRBASE*=UCR
 UNOUCROUT*=$(OUT)$/inc
-.IF "$(UDKSTAMP))"==""
+.IF "$(UDKSTAMP)"==""
 UNOUCRRDB*=$(SOLARBINDIR)$/udkapi.rdb
-.ELSE           # "$(UDKSTAMP))"==""
+UNOUCRDEP*=$(SOLARBINDIR)$/udkapi.rdb
+.ELSE           # "$(UDKSTAMP)"==""
 UNOUCRRDB*=$(SOLARBINDIR)$/applicat.rdb
-.ENDIF          # "$(UDKSTAMP))"==""
+UNOUCRDEP*=$(SOLARBINDIR)$/applicat.rdb
+.ENDIF          # "$(UDKSTAMP)"==""
 
 # --- Compiler -----------------------------------------------------
 .INCLUDE : rules.mk
