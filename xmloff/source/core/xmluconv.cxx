@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:33:34 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
     sal_Int32 nLen = rString.getLength();
 
     // skip white space
-    while( nPos < nLen && sal_Unicode(' ') == rString[nPos] )
+    while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
         nPos++;
 
     if( nPos < nLen && sal_Unicode('-') == rString[nPos] )
@@ -304,7 +304,7 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
     }
 
     // skip white space
-    while( nPos < nLen && sal_Unicode(' ') == rString[nPos] )
+    while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
         nPos++;
 
     if( nPos < nLen )
@@ -723,7 +723,7 @@ sal_Bool SvXMLUnitConverter::convertNumber( sal_Int32& rValue,
     sal_Int32 nLen = rString.getLength();
 
     // skip white space
-    while( nPos < nLen && sal_Unicode(' ') == rString[nPos] )
+    while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
         nPos++;
 
     if( nPos < nLen && sal_Unicode('-') == rString[nPos] )
