@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convdic.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:28:40 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,13 +607,15 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversionEntries(
     while (aIt != rConvMap.end())
     {
         OUString aCurEntry( (*aIt).first );
-        // skip duplicate entries
+        // skip duplicate entries ( duplicate = duplicate entries
+        // respective to the evaluated side (FROM_LEFT or FROM_RIGHT).
+        // Thus if FROM_LEFT is evaluated for pairs (A,B) and (A,C)
+        // only one entry for A will be returned in the result)
         if (nIdx == 0 || !lcl_SeqHasEntry( pRes, nIdx, aCurEntry ))
             pRes[ nIdx++ ] = aCurEntry;
         ++aIt;
     }
-    //DBG_ASSERT( nIdx == rConvMap.size(),
-    //      "ConvDic::getConversionEntries: size/index mismatch" );
+    aRes.realloc( nIdx );
 
     return aRes;
 }
