@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:49:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,9 @@
 #ifndef _IFACE_HXX //autogen
 #include <so3/iface.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -1803,7 +1805,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
 // Select-Handler der Toolbox
 void SfxCommonTemplateDialog_Impl::FamilySelect(USHORT nEntry)
 {
-    USHORT nFamily = nActFamily;
     if( nEntry != nActFamily )
     {
         CheckItem( nActFamily, FALSE );
@@ -1984,8 +1985,7 @@ void SfxCommonTemplateDialog_Impl::EditHdl(void *)
         String aTemplName(GetSelectedEntry());
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         const SfxStyleFamily eFam = pItem->GetFamily();
-        SfxStyleSheetBase *pStyle =
-            pStyleSheetPool->Find(aTemplName,eFam,SFXSTYLEBIT_ALL);
+        pStyleSheetPool->Find(aTemplName,eFam,SFXSTYLEBIT_ALL);  // -Wall required??
         Window* pTmp;
         //DefModalDialogParent setzen fuer
         //Modalitaet der nachfolgenden Dialoge
@@ -2658,14 +2658,14 @@ SfxTemplateCatalog_Impl::SfxTemplateCatalog_Impl( Window* pParent, SfxBindings* 
 
     SfxCommonTemplateDialog_Impl( pB, pWindow ),
 
+    aFamList    ( pWindow, SfxResId( BT_TOOL ) ),
     aOkBtn      ( pWindow, SfxResId( BT_OK ) ),
     aCancelBtn  ( pWindow, SfxResId( BT_CANCEL ) ),
     aNewBtn     ( pWindow, SfxResId( BT_NEW ) ),
     aChangeBtn  ( pWindow, SfxResId( BT_EDIT ) ),
     aDelBtn     ( pWindow, SfxResId( BT_DEL ) ),
-    aHelpBtn    ( pWindow, SfxResId( BT_HELP ) ),
     aOrgBtn     ( pWindow, SfxResId( BT_ORG ) ),
-    aFamList    ( pWindow, SfxResId( BT_TOOL ) ),
+    aHelpBtn    ( pWindow, SfxResId( BT_HELP ) ),
     pReal       ( pWindow ),
     aHelper     ( pWindow )
 
