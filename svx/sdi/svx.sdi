@@ -183,7 +183,7 @@ SfxVoidItem AlignDown SID_OBJECT_ALIGN_DOWN
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem AlignLeft SID_OBJECT_ALIGN_LEFT
+SfxVoidItem ObjectAlignLeft SID_OBJECT_ALIGN_LEFT
 ()
 [
     /* flags: */
@@ -260,7 +260,7 @@ SfxVoidItem AlignMiddle SID_OBJECT_ALIGN_MIDDLE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem AlignRight SID_OBJECT_ALIGN_RIGHT
+SfxVoidItem ObjectAlignRight SID_OBJECT_ALIGN_RIGHT
 ()
 [
     /* flags: */
@@ -2619,7 +2619,7 @@ SfxVoidItem Dash SID_DASH
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem DateField SID_INSERT_DATEFIELD
+SfxBoolItem AddDateField SID_INSERT_DATEFIELD
 
 [
     /* flags: */
@@ -2808,7 +2808,7 @@ SfxBoolItem DrawSelect SID_DRAW_SELECT
 ]
 
 //--------------------------------------------------------------------------
-SvxDrawToolItem DrawSelect SID_INSERT_DRAW
+SvxDrawToolItem InsertDraw SID_INSERT_DRAW
 
 [
     /* flags: */
@@ -2891,7 +2891,7 @@ SfxBoolItem Edit SID_FM_EDIT
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem Edit SID_INSERT_EDIT
+SfxBoolItem InsertEdit SID_INSERT_EDIT
 
 [
     /* flags: */
@@ -3136,7 +3136,7 @@ SfxBoolItem FileControl SID_FM_FILECONTROL
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem FileControl SID_INSERT_FILECONTROL
+SfxBoolItem InsertFileControl SID_INSERT_FILECONTROL
 
 [
     /* flags: */
@@ -3937,7 +3937,7 @@ SfxBoolItem FormattedField SID_FM_FORMATTEDFIELD
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem FormattedField SID_INSERT_FORMATTEDFIELD
+SfxBoolItem InsertFormattedField SID_INSERT_FORMATTEDFIELD
 
 [
     /* flags: */
@@ -4198,7 +4198,7 @@ SfxBoolItem Freeline_Unfilled SID_DRAW_FREELINE_NOFILL
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem Gallery SID_ATTR_AUTO_COLOR_INVALID
+SfxBoolItem AutoColorInvalid SID_ATTR_AUTO_COLOR_INVALID
 
 [
     /* flags: */
@@ -5331,7 +5331,7 @@ SfxBoolItem ImageControl SID_FM_IMAGECONTROL
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem ImageControl SID_INSERT_IMAGECONTROL
+SfxBoolItem InsertImageControl SID_INSERT_IMAGECONTROL
 
 [
     /* flags: */
@@ -5464,7 +5464,7 @@ SfxVoidItem InPlaceObjectResize SID_OBJECTRESIZE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Insert SID_ENTER_STRING
+SfxVoidItem EnterString SID_ENTER_STRING
 (SfxStringItem StringName SID_ENTER_STRING)
 [
     /* flags: */
@@ -6025,7 +6025,7 @@ SfxBoolItem JustifyPara SID_ATTR_PARA_ADJUST_BLOCK
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem Label SID_INSERT_FIXEDTEXT
+SfxBoolItem InsertFixedText SID_INSERT_FIXEDTEXT
 
 [
     /* flags: */
@@ -6367,7 +6367,7 @@ SfxBoolItem Line_Diagonal SID_DRAW_XLINE
 ]
 
 //--------------------------------------------------------------------------
-SvxColorItem LineColor SID_FRAME_LINECOLOR
+SvxColorItem FrameLineColor SID_FRAME_LINECOLOR
 
 [
     /* flags: */
@@ -6557,7 +6557,7 @@ SfxBoolItem ListBox SID_FM_LISTBOX
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem Listbox SID_INSERT_LISTBOX
+SfxBoolItem InsertListbox SID_INSERT_LISTBOX
 
 [
     /* flags: */
@@ -6717,7 +6717,7 @@ SfxBoolItem NumericField SID_FM_NUMERICFIELD
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem NumericField SID_INSERT_NUMERICFIELD
+SfxBoolItem InsertNumericField SID_INSERT_NUMERICFIELD
 
 [
     /* flags: */
@@ -7235,7 +7235,7 @@ SvxPaperBinItem PagePaperBin SID_ATTR_PAGE_PAPERBIN
 ]
 
 //--------------------------------------------------------------------------
-SwPageSizeItem PageSize SID_ATTR_PAGE_SIZE
+SwPageSizeItem AttributePageSize SID_ATTR_PAGE_SIZE
 
 [
     /* flags: */
@@ -7262,7 +7262,7 @@ SwPageSizeItem PageSize SID_ATTR_PAGE_SIZE
 ]
 
 //--------------------------------------------------------------------------
-SvxPageModelItem PageStyle SID_ATTR_PARA_MODEL
+SvxPageModelItem AttributeParaModel SID_ATTR_PARA_MODEL
 
 [
     /* flags: */
@@ -7289,7 +7289,7 @@ SvxPageModelItem PageStyle SID_ATTR_PARA_MODEL
 ]
 
 //--------------------------------------------------------------------------
-SvxPageItem PageStyle SID_ATTR_PAGE
+SvxPageItem AttributePage SID_ATTR_PAGE
 
 [
     /* flags: */
@@ -7422,7 +7422,7 @@ SvxFmtSplitItem ParaSplit SID_ATTR_PARA_SPLIT
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem PatternField SID_INSERT_PATTERNFIELD
+SfxBoolItem InsertPatternField SID_INSERT_PATTERNFIELD
 
 [
     /* flags: */
@@ -7801,7 +7801,7 @@ SfxBoolItem Pushbutton SID_FM_PUSHBUTTON
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem Pushbutton SID_INSERT_PUSHBUTTON
+SfxBoolItem InsertPushbutton SID_INSERT_PUSHBUTTON
 
 [
     /* flags: */
@@ -8982,7 +8982,7 @@ SfxVoidItem SetPageMaxSize SID_ATTR_PAGE_MAXSIZE
 ]
 
 //--------------------------------------------------------------------------
-SwShadowItem Shadow SID_ATTR_BORDER_SHADOW
+SwShadowItem BorderShadow SID_ATTR_BORDER_SHADOW
 
 [
     /* flags: */
@@ -9009,7 +9009,7 @@ SwShadowItem Shadow SID_ATTR_BORDER_SHADOW
 ]
 
 //--------------------------------------------------------------------------
-SdrShadowItem Shadow SID_ATTR_FILL_SHADOW
+SdrShadowItem FillShadow SID_ATTR_FILL_SHADOW
 
 [
     /* flags: */
@@ -10322,7 +10322,7 @@ SfxBoolItem ToolEdit SID_TEXTEDIT
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem ToolSelect SID_OBJECT_SELECT
+SfxBoolItem SelectObject SID_OBJECT_SELECT
 
 [
     /* flags: */
