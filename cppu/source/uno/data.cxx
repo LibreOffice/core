@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:29:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
     }
     else
     {
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OUStringBuffer buf( 128 );
         buf.appendAscii(
             RTL_CONSTASCII_STRINGPARAM("### exception occured querying for interface ") );
@@ -384,7 +384,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 //##################################################################################################
 
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 
 #include <stdio.h>
 
@@ -405,7 +405,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 #define BINTEST_VERIFYOFFSET( s, m, n ) \
     if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %d instead of expected %d!!!\n", OFFSET_OF(s, m), n ); abort(); }
 
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #if defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD)) && (defined(INTEL) || defined(POWERPC) || defined(X86_64) || defined(S390))
 #define BINTEST_VERIFYSIZE( s, n ) \
     fprintf( stderr, "> sizeof(" #s ") = %d; __alignof__ (" #s ") = %d\n", sizeof(s), __alignof__ (s) ); \
@@ -415,7 +415,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
     fprintf( stderr, "> sizeof(" #s ") = %d\n", sizeof(s) ); \
     if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
 #endif
-#else // ! DEBUG
+#else // ! OSL_DEBUG_LEVEL
 #define BINTEST_VERIFYSIZE( s, n ) \
     if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
 #endif
