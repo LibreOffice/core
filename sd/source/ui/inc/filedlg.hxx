@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-02 16:11:08 $
+ *  last change: $Author: thb $ $Date: 2001-09-04 16:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,6 @@
 #ifndef _FILEDLG_HXX
 #define _FILEDLG_HXX
 
-#ifndef  _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
-
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -74,46 +70,23 @@
 #include <tools/errcode.hxx>
 #endif
 
-
-#define FILE_OPEN_SERVICE_NAME      "com.sun.star.ui.dialogs.FilePicker"
-
-
-namespace com
-{
-    namespace sun
-    {
-        namespace star
-        {
-            namespace ui
-            {
-                namespace dialogs
-                {
-                    class XFilterManager;
-                    class XFilePicker;
-                    class XFilePickerListener;
-                    class XFilePickerControlAccess;
-                }
-            }
-        }
-    }
-}
+#include <memory>       // auto_ptr
 
 
-
-const short SDFILEDIALOG_EXPORT             = 0;
-const short SDFILEDIALOG_EXPORT_SELECTION   = 1;
-const short SDFILEDIALOG_OPEN_SOUND         = 2;
-
-class SdFileDialogHelper;
+class SdFileDialog_Imp;
 
 
 /******************************************************************************/
 
-
+/**
+   The class SdExportFileDialog wraps the FileDialogHelper, displaying the
+   FILESAVE_AUTOEXTENSION_SELECTION dialog template. The interface is a downstripped
+   version of the aforementioned class, with similar semantics.
+ */
 class SdExportFileDialog
 {
-    ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePickerListener > mxImp;
-    SdFileDialogHelper      *mpImp;
+private:
+    const std::auto_ptr< SdFileDialog_Imp > mpImpl;
 
 public:
                             SdExportFileDialog( BOOL haveCheckbox );
@@ -125,19 +98,23 @@ public:
 
     String                  ReqDisplayDirectory() const;
 
-    String                  ReqCurrFilter() const;
-    BOOL                    IsSelectedBoxChecked() const;
-    BOOL                    IsExtensionBoxChecked() const;
+    String                  ReqCurrentFilter() const;
+    BOOL                    IsExportSelection() const;  // whether the "selection" checkbox is checked.
 };
 
 
 /******************************************************************************/
 
 
+/**
+   The class SdOpenSoundFileDialog wraps the FileDialogHelper, displaying the
+   FILEOPEN_PLAY dialog template and performing the 'preview' functionality
+   (playing the selected sound file). The interface is a downstripped version
+   of the aforementioned class, with similar semantics.
+ */
 class SdOpenSoundFileDialog
 {
-    ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePickerListener > mxImp;
-    SdFileDialogHelper      *mpImp;
+    const std::auto_ptr< SdFileDialog_Imp > mpImpl;
 
 public:
                             SdOpenSoundFileDialog();

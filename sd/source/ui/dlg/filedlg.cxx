@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:39:14 $
+ *  last change: $Author: thb $ $Date: 2001-09-04 16:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,6 @@
  *
  ************************************************************************/
 
-#include <svx/impgrf.hxx>
-
-#include "filedlg.hxx"
-#include "sdresid.hxx"
-#include "strings.hrc"
-
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -72,25 +66,24 @@
 #ifndef  _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #ifndef  _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
-
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_COMMONFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
-#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_FILEPREVIEWIMAGEFORMATS_HPP_
-#include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
-#endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_LISTBOXCONTROLACTIONS_HPP_
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -98,133 +91,99 @@
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERLISTENER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERNOTIFIER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
 #endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPREVIEW_HPP_
-#include <com/sun/star/ui/dialogs/XFilePreview.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#endif
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
 
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
-
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
-
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
 
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
+#ifndef _VOS_THREAD_HXX_
+#include <vos/thread.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
+
+#include <svx/impgrf.hxx>
+
 #include "filedlg.hxx"
+#include "sdresid.hxx"
+#include "strings.hrc"
 
 
-//-----------------------------------------------------------------------------
-
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::uno;
-using namespace ::rtl;
-using namespace ::cppu;
 
 //-----------------------------------------------------------------------------
 
-class SdFileDialogHelper : public WeakImplHelper1< XFilePickerListener >
+namespace css = ::com::sun::star;
+
+
+// --------------------------------------------------------------------
+// -----------      SdFileDialog_Imp        ---------------------------
+// --------------------------------------------------------------------
+class SdFileDialog_Imp : public sfx2::FileDialogHelper
 {
+private:
     friend class SdExportFileDialog;
     friend class SdOpenSoundFileDialog;
 
-    Reference < XFilePicker >               mxFileDlg;
-    Reference< XFilterManager >             mxFilterMgr;
-    Reference< XFilePickerControlAccess >   mxControlAccess;
+    css::uno::Reference< css::ui::dialogs::XFilePickerControlAccess >   mxControlAccess;
 
     Sound                       maSound;
-    OUString                    maPath;
-    OUString                    maCurFilter;
     BOOL                        mbUsableSelection;
     BOOL                        mbSoundPlaying;
-    ErrCode                     mnError;
 
-private:
-    void                        checkSelectionState();
-    void                        dispose();
-
+    void                        CheckSelectionState();
     DECL_LINK( StopMusicHdl, void * );
 
 public:
-    // XFilePickerListener methods
-    virtual void SAL_CALL       fileSelectionChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException );
-    virtual void SAL_CALL       directoryChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException );
-    virtual OUString SAL_CALL   helpRequested( const FilePickerEvent& aEvent ) throw ( RuntimeException );
-    virtual void SAL_CALL       controlStateChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException );
-    virtual void SAL_CALL       dialogSizeChanged() throw ( RuntimeException );
+                                SdFileDialog_Imp( const short nDialogType, sal_Bool bUsableSelection );
+                                   ~SdFileDialog_Imp();
 
-    // XEventListener methods
-    virtual void SAL_CALL       disposing( const EventObject& Source ) throw ( RuntimeException );
+    ErrCode                     Execute();
 
-    // Own methods
-                                SdFileDialogHelper( const short nDialogType );
-                                   ~SdFileDialogHelper();
+    // overwritten from FileDialogHelper, to receive user feedback
+    virtual void SAL_CALL       ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
 
-    ErrCode                     execute();
-
-    void                        setPath( const OUString& rPath ) { maPath = rPath; }
-    OUString                    getPath() const { return maPath; }
-
-    OUString                    reqFile() const;
-
-    void                        addFilter( const String& rFilter,
-                                           const String& rType );
-    sal_Bool                    selectionBoxState() const;
-    sal_Bool                    extensionBoxState() const;
+    sal_Bool                    SelectionBoxState() const;
 };
 
 // ------------------------------------------------------------------------
-// XFilePickerListener Methods
-// ------------------------------------------------------------------------
-void SAL_CALL SdFileDialogHelper::fileSelectionChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
+void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
 {
-}
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-// ------------------------------------------------------------------------
-void SAL_CALL SdFileDialogHelper::directoryChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
-{}
-
-// ------------------------------------------------------------------------
-OUString SAL_CALL SdFileDialogHelper::helpRequested( const FilePickerEvent& aEvent ) throw ( RuntimeException )
-{
-    return OUString();
-}
-
-// ------------------------------------------------------------------------
-void SAL_CALL SdFileDialogHelper::controlStateChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
-{
     switch( aEvent.ElementId )
     {
-        case CommonFilePickerElementIds::LISTBOX_FILTER:
-            checkSelectionState();
+        case css::ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER:
+            CheckSelectionState();
             break;
 
-        case ExtendedFilePickerElementIds::PUSHBUTTON_PLAY:
-            if( mxFilterMgr.is() && mxControlAccess.is() )
+        case css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY:
+            if( mxControlAccess.is() )
             {
                 if( mbSoundPlaying )
                 {
@@ -233,7 +192,8 @@ void SAL_CALL SdFileDialogHelper::controlStateChanged( const FilePickerEvent& aE
                     // reset, so that sound file gets unlocked
                     maSound.SetSoundName( String() );
 
-                    mxControlAccess->setLabel( ExtendedFilePickerElementIds::PUSHBUTTON_PLAY, String( SdResId( STR_PLAY ) ) );
+                    mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
+                                               String( SdResId( STR_PLAY ) ) );
                 }
                 else
                 {
@@ -243,20 +203,21 @@ void SAL_CALL SdFileDialogHelper::controlStateChanged( const FilePickerEvent& aE
                     }
                     else
                     {
-                        INetURLObject   aUrl( reqFile() );
+                        INetURLObject   aUrl( GetPath() );
                         String          aSoundFile( aUrl.GetMainURL( INetURLObject::NO_DECODE ) );
 
                         if( aSoundFile.Len() > 0 )
                         {
                             mbSoundPlaying = TRUE;
 
-                            maSound.SetNotifyHdl( LINK( this, SdFileDialogHelper, StopMusicHdl ) );
+                            maSound.SetNotifyHdl( LINK( this, SdFileDialog_Imp, StopMusicHdl ) );
                             maSound.SetSoundName( aSoundFile );
                             maSound.Play();
 
                             // guard against early stopping
                             if( maSound.IsPlaying() )
-                                mxControlAccess->setLabel( ExtendedFilePickerElementIds::PUSHBUTTON_PLAY, String( SdResId( STR_STOP ) ) );
+                                mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
+                                                           String( SdResId( STR_STOP ) ) );
                         }
                     }
                 }
@@ -266,8 +227,10 @@ void SAL_CALL SdFileDialogHelper::controlStateChanged( const FilePickerEvent& aE
 }
 
 // ------------------------------------------------------------------------
-IMPL_LINK( SdFileDialogHelper, StopMusicHdl, void *, EMPTYARG )
+IMPL_LINK( SdFileDialog_Imp, StopMusicHdl, void *, EMPTYARG )
 {
+     ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     mbSoundPlaying = FALSE;
 
     // reset, so that sound file gets unlocked
@@ -277,9 +240,10 @@ IMPL_LINK( SdFileDialogHelper, StopMusicHdl, void *, EMPTYARG )
     {
         try
         {
-            mxControlAccess->setLabel( ExtendedFilePickerElementIds::PUSHBUTTON_PLAY, String( SdResId( STR_PLAY ) ) );
+            mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
+                                       String( SdResId( STR_PLAY ) ) );
         }
-        catch(IllegalArgumentException)
+        catch( css::lang::IllegalArgumentException )
         {
 #ifdef DBG_UTIL
             DBG_ERROR( "Cannot access play button" );
@@ -290,50 +254,21 @@ IMPL_LINK( SdFileDialogHelper, StopMusicHdl, void *, EMPTYARG )
     return( 0L );
 }
 
-
-// ------------------------------------------------------------------------
-void SAL_CALL SdFileDialogHelper::dialogSizeChanged( ) throw ( RuntimeException )
-{
-}
-
-// ------------------------------------------------------------------------
-// XEventListener Methods
-// ------------------------------------------------------------------------
-void SAL_CALL SdFileDialogHelper::disposing( const EventObject& Source ) throw ( RuntimeException )
-{
-    dispose();
-}
-
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-void SdFileDialogHelper::dispose()
-{
-    if ( mxFileDlg.is() )
-    {
-        // remove the event listener
-        Reference< XFilePickerNotifier > xNotifier( mxFileDlg, UNO_QUERY );
-        if ( xNotifier.is() )
-            xNotifier->removeFilePickerListener( this );
-        mxFileDlg.clear();
-    }
-}
-
 // check whether to disable the "selection" checkbox
-void SdFileDialogHelper::checkSelectionState()
+void SdFileDialog_Imp::CheckSelectionState()
 {
-    if( mbUsableSelection && mxFilterMgr.is() && mxControlAccess.is() )
+    if( mbUsableSelection && mxControlAccess.is() )
     {
-        String  aCurrFilter(mxFilterMgr->getCurrentFilter());
+        String  aCurrFilter( GetCurrentFilter() );
 
         try
         {
             if( !aCurrFilter.Len() || ( aCurrFilter == String( SdResId( STR_EXPORT_HTML_NAME ) ) ) )
-                mxControlAccess->enableControl( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, FALSE );
+                mxControlAccess->enableControl( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, FALSE );
             else
-                mxControlAccess->enableControl( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, TRUE );
+                mxControlAccess->enableControl( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, TRUE );
         }
-        catch(IllegalArgumentException)
+        catch( css::lang::IllegalArgumentException )
         {
 #ifdef DBG_UTIL
             DBG_ERROR( "Cannot access \"selection\" checkbox" );
@@ -342,200 +277,77 @@ void SdFileDialogHelper::checkSelectionState()
     }
 }
 
-// ------------------------------------------------------------------------
-// -----------      FileDialogHelper_Impl       ---------------------------
-// ------------------------------------------------------------------------
-
-SdFileDialogHelper::SdFileDialogHelper( const short  nDialogType ) :
-    mnError(ERRCODE_NONE),
-    mbUsableSelection(FALSE),
+//-----------------------------------------------------------------------------
+SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
+                                    sal_Bool        bUsableSelection    ) :
+    FileDialogHelper( nDialogType, 0 ),
+    mbUsableSelection( bUsableSelection ),
     mbSoundPlaying(FALSE)
 {
-    // create the file open dialog
-    OUString aService( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_SERVICE_NAME ) );
-    Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-
-    mxFileDlg = Reference < XFilePicker > ( xFactory->createInstance( aService ), UNO_QUERY );
-
-    Reference< XFilePickerNotifier > xNotifier( mxFileDlg, UNO_QUERY );
-    Reference< XInitialization > xInit( mxFileDlg, UNO_QUERY );
-
-    if ( ! mxFileDlg.is() || ! xNotifier.is() )
-    {
-        mnError = ERRCODE_ABORT;
-        return;
-    }
-
-    Sequence < Any > aServiceType(1);
-
-    switch ( nDialogType )
-    {
-        case SDFILEDIALOG_EXPORT:
-            aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
-            break;
-        case SDFILEDIALOG_EXPORT_SELECTION:
-            aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
-            mbUsableSelection = TRUE;
-            break;
-        case SDFILEDIALOG_OPEN_SOUND:
-            aServiceType[0] <<= TemplateDescription::FILEOPEN_PLAY;
-            break;
-        default:
-            aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;
-            DBG_ERRORFILE( "SdFileDialogHelper::ctor with unknown type" );
-    }
-
-    if ( xInit.is() )
-        xInit->initialize( aServiceType );
-
-    // add the event listener
-    xNotifier->addFilePickerListener( this );
-
-    // get the filter manager
-    mxFilterMgr = Reference< XFilterManager > ( mxFileDlg, UNO_QUERY );
+    css::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker > xFileDlg = GetFilePicker();
 
     // get the control access
-    mxControlAccess = Reference< XFilePickerControlAccess > ( mxFileDlg, UNO_QUERY );
+    mxControlAccess = css::uno::Reference< css::ui::dialogs::XFilePickerControlAccess > ( xFileDlg, css::uno::UNO_QUERY );
 
     if( mxControlAccess.is() )
     {
-        switch( nDialogType )
+        if( nDialogType == FILEOPEN_PLAY )
         {
-            case SDFILEDIALOG_OPEN_SOUND:
-                try
-                {
-                    mxControlAccess->setLabel( ExtendedFilePickerElementIds::PUSHBUTTON_PLAY, String( SdResId( STR_PLAY ) ) );
-                }
-                catch(IllegalArgumentException)
-                {
+            try
+            {
+                mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
+                                           String( SdResId( STR_PLAY ) ) );
+            }
+            catch( css::lang::IllegalArgumentException )
+            {
 #ifdef DBG_UTIL
-                    DBG_ERROR( "Cannot set play button label" );
+                DBG_ERROR( "Cannot set play button label" );
 #endif
-                }
-                break;
-
-            case SDFILEDIALOG_EXPORT:
-                try
-                {
-                    mxControlAccess->enableControl( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, FALSE );
-                }
-                catch(IllegalArgumentException)
-                {
+            }
+        }
+        else if( mbUsableSelection != sal_True )
+        {
+            try
+            {
+                mxControlAccess->enableControl( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, FALSE );
+            }
+            catch( css::lang::IllegalArgumentException )
+            {
 #ifdef DBG_UTIL
-                    DBG_ERROR( "Cannot disable selection checkbox" );
+                DBG_ERROR( "Cannot disable selection checkbox" );
 #endif
-                }
-                break;
+            }
         }
     }
 }
 
 
 // ------------------------------------------------------------------------
-SdFileDialogHelper::~SdFileDialogHelper()
+SdFileDialog_Imp::~SdFileDialog_Imp()
 {
 }
 
 // ------------------------------------------------------------------------
-OUString SdFileDialogHelper::reqFile() const
+ErrCode SdFileDialog_Imp::Execute()
 {
-    if ( mxFileDlg.is() )
-    {
-        Sequence < OUString > aPathSeq = mxFileDlg->getFiles();
-
-        if ( aPathSeq.getLength() == 1 )
-            return String( aPathSeq[0] );
-    }
-
-    return String();
+    // make sure selection checkbox is disabled if
+    // HTML is current filter!
+    CheckSelectionState();
+    return FileDialogHelper::Execute();
 }
 
 // ------------------------------------------------------------------------
-ErrCode SdFileDialogHelper::execute()
+sal_Bool SdFileDialog_Imp::SelectionBoxState() const
 {
-    if ( ! mxFileDlg.is() || !mxFilterMgr.is() )
-        return ERRCODE_ABORT;
-
-    if ( maPath.getLength() )
-    {
-        INetURLObject aObj( maPath, INET_PROT_FILE );
-        OUString aTitle( aObj.getName( INetURLObject::LAST_SEGMENT, true,
-                         INetURLObject::DECODE_WITH_CHARSET ) );
-        aObj.removeSegment();
-        try
-        {
-            mxFileDlg->setDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
-        }
-        catch(IllegalArgumentException)
-        {
-#ifdef DBG_UTIL
-            DBG_ERROR( "Cannot set display directory" );
-#endif
-        }
-        mxFileDlg->setDefaultName( aTitle );
-    }
-
-    if ( maCurFilter.getLength() )
-    {
-        try
-        {
-            mxFilterMgr->setCurrentFilter( maCurFilter );
-        }
-        catch(IllegalArgumentException)
-        {
-#ifdef DBG_UTIL
-            DBG_ERROR( "Cannot set current filter" );
-#endif
-        }
-    }
-
-    checkSelectionState();
-
-    // show the dialog
-    sal_Int16 nRet = mxFileDlg->execute();
-
-    maPath = mxFileDlg->getDisplayDirectory();
-    maCurFilter = mxFilterMgr->getCurrentFilter();
-
-    if ( nRet == ExecutableDialogResults::CANCEL )
-        return ERRCODE_ABORT;
-    else
-    {
-        return ERRCODE_NONE;
-    }
-}
-
-// ------------------------------------------------------------------------
-void SdFileDialogHelper::addFilter( const String& rFilter,
-                                    const String& rType     )
-{
-    // set the filter
-    if( mxFilterMgr.is() )
-    {
-        try
-        {
-            mxFilterMgr->appendFilter( rFilter, rType );
-        }
-        catch(IllegalArgumentException)
-        {
-#ifdef DBG_UTIL
-            DBG_ERROR( "Cannot append filter" );
-#endif
-        }
-    }
-}
-
-sal_Bool SdFileDialogHelper::selectionBoxState() const
-{
-    if ( !mbUsableSelection || !mxFileDlg.is() || !mxFilterMgr.is() )
+    if ( !mbUsableSelection || !mxControlAccess.is() )
         return sal_False;
 
     sal_Bool bState(0);
     try
     {
-        mxControlAccess->getValue(ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0) >>= bState;
+        mxControlAccess->getValue( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 ) >>= bState;
     }
-    catch(IllegalArgumentException)
+    catch( css::lang::IllegalArgumentException )
     {
 #ifdef DBG_UTIL
         DBG_ERROR( "Cannot access \"selection\" checkbox" );
@@ -545,187 +357,119 @@ sal_Bool SdFileDialogHelper::selectionBoxState() const
     return bState;
 }
 
-sal_Bool SdFileDialogHelper::extensionBoxState() const
+
+// --------------------------------------------------------------------
+// -----------      SdExportFileDialog      ---------------------------
+// --------------------------------------------------------------------
+
+// these are simple forwarders
+SdExportFileDialog::SdExportFileDialog(BOOL bHaveCheckbox) :
+    mpImpl( new SdFileDialog_Imp( FILESAVE_AUTOEXTENSION_SELECTION,
+                                  bHaveCheckbox ) )
 {
-    if ( !mxFileDlg.is() || !mxFilterMgr.is() )
-        return sal_False;
-
-    sal_Bool bState(0);
-    try
-    {
-        mxControlAccess->getValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0) >>= bState;
-    }
-    catch(IllegalArgumentException)
-    {
-#ifdef DBG_UTIL
-        DBG_ERROR( "Cannot access \"auto extension\" checkbox" );
-#endif
-    }
-
-    return bState;
-}
-
-
-// ------------------------------------------------------------------------
-
-
-SdExportFileDialog::SdExportFileDialog(BOOL haveCheckbox)
-{
-    if( haveCheckbox )
-        mpImp = new SdFileDialogHelper( SDFILEDIALOG_EXPORT_SELECTION );
-    else
-        mpImp = new SdFileDialogHelper( SDFILEDIALOG_EXPORT );
-
-    mxImp = mpImp;
-
     // setup filter
     const String    aHTMLFilter( SdResId( STR_EXPORT_HTML_NAME ) );
     GraphicFilter*  pFilter = GetGrfFilter();
     const USHORT    nFilterCount = pFilter->GetExportFormatCount();
 
     // add HTML filter
-    mpImp->addFilter( aHTMLFilter, String( SdResId( STR_EXPORT_HTML_FILTER ) ) );
+    mpImpl->AddFilter( aHTMLFilter, String( SdResId( STR_EXPORT_HTML_FILTER ) ) );
 
     // add other graphic filters
     for ( USHORT i = 0; i < nFilterCount; i++ )
     {
-        mpImp->addFilter( pFilter->GetExportFormatName( i ),
-                          pFilter->GetExportWildcard( i ) );
+        mpImpl->AddFilter( pFilter->GetExportFormatName( i ),
+                           pFilter->GetExportWildcard( i ) );
     }
 
     // set dialog title
-    if ( mpImp->mxFileDlg.is() )
-        mpImp->mxFileDlg->setTitle( String( SdResId( STR_EXPORT_DIALOG_TITLE ) ) );
+    mpImpl->SetTitle( String( SdResId( STR_EXPORT_DIALOG_TITLE ) ) );
 }
 
 // ------------------------------------------------------------------------
 SdExportFileDialog::~SdExportFileDialog()
 {
-    mpImp->dispose();
-    mxImp.clear();
 }
 
 // ------------------------------------------------------------------------
 ErrCode SdExportFileDialog::Execute()
 {
-    return mpImp->execute();
+    return mpImpl->Execute();
 }
 
 String SdExportFileDialog::GetPath() const
 {
-    if ( mpImp->mxFileDlg.is() )
-    {
-        Sequence < OUString > aPathSeq = mpImp->mxFileDlg->getFiles();
-
-        if ( aPathSeq.getLength() == 1 )
-            return String( aPathSeq[0] );
-    }
-
-    return String();
+    return mpImpl->GetPath();
 }
 
 // ------------------------------------------------------------------------
 void SdExportFileDialog::SetPath( const String& rPath )
 {
-    mpImp->setPath( rPath );
+    mpImpl->SetDisplayDirectory( rPath );
 }
 
 // ------------------------------------------------------------------------
-String SdExportFileDialog::ReqDisplayDirectory() const
+String SdExportFileDialog::ReqCurrentFilter() const
 {
-    return mpImp->getPath();
+    return mpImpl->GetCurrentFilter();
 }
 
 // ------------------------------------------------------------------------
-String SdExportFileDialog::ReqCurrFilter() const
+BOOL SdExportFileDialog::IsExportSelection() const
 {
-    return mpImp ? (String)mpImp->maCurFilter : String();
-}
-
-// ------------------------------------------------------------------------
-BOOL SdExportFileDialog::IsSelectedBoxChecked() const
-{
-    if( mpImp )
-        return mpImp->selectionBoxState();
-
-    return FALSE;
-}
-
-// ------------------------------------------------------------------------
-BOOL SdExportFileDialog::IsExtensionBoxChecked() const
-{
-    if( mpImp )
-        return mpImp->extensionBoxState();
-
-    return FALSE;
+    return mpImpl->SelectionBoxState();
 }
 
 
+// --------------------------------------------------------------------
+// -----------      SdOpenSoundFileDialog       -----------------------
+// --------------------------------------------------------------------
 
-// ------------------------------------------------------------------------
-
-
-SdOpenSoundFileDialog::SdOpenSoundFileDialog()
+// these are simple forwarders
+SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
+    mpImpl( new SdFileDialog_Imp( FILEOPEN_PLAY, sal_False ) )
 {
-    mpImp = new SdFileDialogHelper( SDFILEDIALOG_OPEN_SOUND );
-    mxImp = mpImp;
-
     // setup filter
 #if defined UNX
     String aDescr;
     aDescr = String(SdResId(STR_AU_FILE));
-    mpImp->addFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.au;*.snd" ) ) );
+    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.au;*.snd" ) ) );
     aDescr = String(SdResId(STR_VOC_FILE));
-    mpImp->addFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.voc" ) ) );
+    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.voc" ) ) );
     aDescr = String(SdResId(STR_WAV_FILE));
-    mpImp->addFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.wav" ) ) );
+    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.wav" ) ) );
     aDescr = String(SdResId(STR_AIFF_FILE));
-    mpImp->addFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.aiff" ) ) );
+    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.aiff" ) ) );
     aDescr = String(SdResId(STR_SVX_FILE));
-    mpImp->addFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.svx" ) ) );
+    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.svx" ) ) );
 #else
     String aDescr;
     aDescr = String(SdResId(STR_WAV_FILE));
-    mpImp->addFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.wav" ) ) );
+    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.wav" ) ) );
     aDescr = String(SdResId(STR_MIDI_FILE));
-    mpImp->addFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.mid" ) ) );
+    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.mid" ) ) );
 #endif
 }
 
 // ------------------------------------------------------------------------
 SdOpenSoundFileDialog::~SdOpenSoundFileDialog()
 {
-    mpImp->dispose();
-    mxImp.clear();
 }
 
 // ------------------------------------------------------------------------
 ErrCode SdOpenSoundFileDialog::Execute()
 {
-    return mpImp->execute();
+    return mpImpl->Execute();
 }
 
+// ------------------------------------------------------------------------
 String SdOpenSoundFileDialog::GetPath() const
 {
-    if ( mpImp->mxFileDlg.is() )
-    {
-        Sequence < OUString > aPathSeq = mpImp->mxFileDlg->getFiles();
-
-        if ( aPathSeq.getLength() == 1 )
-            return String( aPathSeq[0] );
-    }
-
-    return String();
+    return mpImpl->GetPath();
 }
 
 // ------------------------------------------------------------------------
 void SdOpenSoundFileDialog::SetPath( const String& rPath )
 {
-    mpImp->setPath( rPath );
-}
-
-// ------------------------------------------------------------------------
-String SdOpenSoundFileDialog::ReqDisplayDirectory() const
-{
-    return mpImp->getPath();
+    mpImpl->SetDisplayDirectory( rPath );
 }
