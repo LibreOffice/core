@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-09-28 13:02:59 $
+ *  last change: $Author: cl $ $Date: 2001-10-16 15:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #endif
 #ifndef _SVX_ADJITEM_HXX
 #include <svx/adjitem.hxx>
+#endif
+#ifndef _XTABLE_HXX
+#include <svx/xtable.hxx>
 #endif
 
 // #88751#
@@ -636,6 +639,32 @@ void FuConstRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 |*
 \************************************************************************/
 
+XPolygon getPolygon( sal_uInt16 nResId, SdrModel* pDoc )
+{
+    XPolygon xPolygon;
+
+    XLineEndList* pLineEndList = pDoc->GetLineEndList();
+
+    if( pLineEndList )
+    {
+        String aArrowName( SVX_RESSTR(nResId) );
+        long nCount = pLineEndList->Count();
+        long nIndex;
+        for( nIndex = 0; nIndex < nCount; nIndex++ )
+        {
+            XLineEndEntry* pEntry = pLineEndList->Get(nIndex);
+            if( pEntry->GetName() == aArrowName )
+            {
+                xPolygon = pEntry->GetLineEnd();
+                break;
+            }
+        }
+    }
+
+    return xPolygon;
+
+}
+
 void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
 {
     if ( (pObj->GetObjIdentifier() == OBJ_EDGE &&
@@ -654,22 +683,34 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
         /**************************************************************
         * Linienanfaenge und -enden attributieren
         **************************************************************/
+
         // Pfeilspitze
-        XPolygon aArrow(4);                            //      []
-        aArrow[0]=Point(100,0);                        // 0,4__[]__2,4
-        aArrow[1]=Point(200,400);                      //    \    /
-        aArrow[2]=Point(0,400);                        //     \  /
-        aArrow[3]=Point(100,0);                        //      \/1,0
+        XPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, pDoc ) );
+        if( 0 == aArrow.GetSize() )
+        {
+            aArrow.SetSize(4);                            //      []
+            aArrow[0]=Point(10,0);                        // 0,4__[]__2,4
+            aArrow[1]=Point(0,30);                        //    \    /
+            aArrow[2]=Point(20,30);                       //     \  /
+            aArrow[3]=Point(10,0);                        //      \/1,0
+        }
 
         // Kreis
-        XPolygon aCircle(Point(0,0), 250, 250);
+        XPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, pDoc ) );
+
+        if( 0 == aCircle.GetSize() )
+            aCircle = XPolygon( Point(0,0), 250, 250 );
 
         // Quadrat
-        XPolygon aSquare(4);
-        aSquare[0].X()= 0; aSquare[0].Y()= 0;
-        aSquare[1].X()=10; aSquare[1].Y()= 0;
-        aSquare[2].X()=10; aSquare[2].Y()=10;
-        aSquare[3].X()= 0; aSquare[3].Y()=10;
+        XPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, pDoc ) );
+        if( 0 == aSquare.GetSize() )
+        {
+            aSquare.SetSize(4);
+            aSquare[0].X()= 0; aSquare[0].Y()= 0;
+            aSquare[1].X()=10; aSquare[1].Y()= 0;
+            aSquare[2].X()=10; aSquare[2].Y()=10;
+            aSquare[3].X()= 0; aSquare[3].Y()=10;
+        }
 
         SfxItemSet aSet( pDoc->GetPool() );
         pView->GetAttributes( aSet );
