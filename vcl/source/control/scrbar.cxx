@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-07-25 11:40:26 $
+ *  last change: $Author: mt $ $Date: 2001-10-25 12:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -771,8 +771,11 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
         {
             // Startposition merken fuer Abbruch und EndScroll-Delta
             mnStartPos = mnThumbPos;
-            ImplDoMouseAction( rMousePos );
+            // #92906# Call StartTracking() before ImplDoMouseAction(), otherwise
+            // MouseButtonUp() / EndTracking() may be called if somebody is spending
+            // a lot of time in the scroll handler
             StartTracking( nTrackFlags );
+            ImplDoMouseAction( rMousePos );
         }
     }
 }
