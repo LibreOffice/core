@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+ *  last change: $Author: jbu $ $Date: 2000-12-04 11:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,8 @@ void SAL_CALL remote_createStub (
     remote_Interface **ppRemoteI,
     rtl_uString *pOid ,
     typelib_TypeDescriptionReference *pTypeRef,
-    uno_Environment *pEnvRemote )
+    uno_Environment *pEnvRemote,
+    ReleaseRemoteCallbackFunc releaseRemoteCallback )
 {
     typelib_TypeDescription *pType = 0;
     typelib_typedescriptionreference_getDescription( &pType, pTypeRef );
@@ -94,8 +95,15 @@ void SAL_CALL remote_createStub (
     {
         if( (*ppRemoteI)->acquire == ::bridges_remote::Remote2RemoteStub::thisAcquire ) {
 
-            // send a release to remote
-            ((::bridges_remote::Remote2RemoteStub *)*ppRemoteI)->releaseRemote();
+              if( releaseRemoteCallback )
+              {
+                  // use the callback handler, the bridge wants to send the call immeadiatly
+                  releaseRemoteCallback( *ppRemoteI , pOid, pTypeRef , pEnvRemote );
+              }
+              else
+              {
+                ((::bridges_remote::Remote2RemoteStub *)*ppRemoteI)->releaseRemote();
+              }
         }
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: context.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:48 $
+ *  last change: $Author: jbu $ $Date: 2000-12-04 11:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,14 +82,6 @@ struct remote_Context;
 struct remote_Interface;
 
 
-/*****
- * @deprecated
- ****/
-typedef void ( SAL_CALL * remote_createStubFunc ) (
-    remote_Interface **ppRemoteI,
-    rtl_uString *pOid ,
-    typelib_TypeDescriptionReference *pTypeRef,
-    uno_Environment *pEnvRemote );
 
 /***
  * performs a query-interface for a certain interface via the remote connection !
