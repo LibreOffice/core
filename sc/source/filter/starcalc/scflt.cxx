@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:59:26 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@
 #include "viewopti.hxx"
 #include "fltprgrs.hxx"
 #include "globstr.hrc"
-#include "flttools.hxx"
+#include "FilterTools.hxx"
 
 
 using namespace com::sun::star;
@@ -633,21 +633,21 @@ Sc10DataBaseData::Sc10DataBaseData(SvStream& rStream)
     rStream >> DataBaseRec.QueryOp0;
     rStream >> DataBaseRec.QueryByString0;
     rStream.Read(&DataBaseRec.QueryString0, sizeof(DataBaseRec.QueryString0));
-    DataBaseRec.QueryValue0 = ScFilterTools::ReadLongDouble(rStream);
+    DataBaseRec.QueryValue0 = ScfTools::ReadLongDouble(rStream);
 
     rStream >> DataBaseRec.QueryConnect1;
     rStream >> DataBaseRec.QueryField1;
     rStream >> DataBaseRec.QueryOp1;
     rStream >> DataBaseRec.QueryByString1;
     rStream.Read(&DataBaseRec.QueryString1, sizeof(DataBaseRec.QueryString1));
-    DataBaseRec.QueryValue1 = ScFilterTools::ReadLongDouble(rStream);
+    DataBaseRec.QueryValue1 = ScfTools::ReadLongDouble(rStream);
 
     rStream >> DataBaseRec.QueryConnect2;
     rStream >> DataBaseRec.QueryField2;
     rStream >> DataBaseRec.QueryOp2;
     rStream >> DataBaseRec.QueryByString2;
     rStream.Read(&DataBaseRec.QueryString2, sizeof(DataBaseRec.QueryString2));
-    DataBaseRec.QueryValue2 = ScFilterTools::ReadLongDouble(rStream);
+    DataBaseRec.QueryValue2 = ScfTools::ReadLongDouble(rStream);
 }
 
 
@@ -1726,7 +1726,7 @@ void Sc10Import::LoadCol(USHORT Col, USHORT Tab)
                 {
                     const SfxPoolItem* pValueFormat = pDoc->GetAttr(Col, Row, Tab, ATTR_VALUE_FORMAT);
                     ULONG nFormat = ((SfxUInt32Item*)pValueFormat)->GetValue();
-                    double Value = ScFilterTools::ReadLongDouble(rStream);
+                    double Value = ScfTools::ReadLongDouble(rStream);
                     //rStream.Read(&Value, sizeof(Value));
 
                     // Achtung hier ist eine Anpassung Notwendig wenn Ihr das Basisdatum aendert
@@ -1751,7 +1751,7 @@ void Sc10Import::LoadCol(USHORT Col, USHORT Tab)
                 }
                 case ctFormula :
                 {
-                    double Value = ScFilterTools::ReadLongDouble(rStream);
+                    double Value = ScfTools::ReadLongDouble(rStream);
                     BYTE Len;
                     sal_Char s[256];
                     //rStream.Read(&Value, sizeof(Value));

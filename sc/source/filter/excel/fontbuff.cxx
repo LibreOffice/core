@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontbuff.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:39:16 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,10 +85,13 @@
 #include "docpool.hxx"
 #include "patattr.hxx"
 
-#include "flttools.hxx"
 #include "fontbuff.hxx"
 #include "lotfntbf.hxx"
+#include "flttools.hxx"
 
+#ifndef _SC_FILTERTOOLS_HXX
+#include "FilterTools.hxx"
+#endif
 
 const UINT16 ColorBuffer::nAnzDef = 56;
 
@@ -404,7 +407,7 @@ void FontBuffer::NewFont( UINT16 nHeight, BYTE nAttr0, UINT16 nScript, BYTE nUnd
             eCharSet = RTL_TEXTENCODING_SYMBOL;
             break;
         default:
-            eCharSet = ScFilterTools::GetSystemCharSet();
+            eCharSet = ScfTools::GetSystemCharSet();
     }
 
     FontFamily  eFamily;
@@ -593,7 +596,7 @@ void FontBuffer::Fill( const UINT16 nIndex, SfxItemSet& rItemSet, const BOOL bOw
         SvxFontItem     aFontItem = pFont->GetFontItem();
 
         if( aFontItem.GetCharSet() == *pExcRoot->pCharset )
-            aFontItem.GetCharSet() = ScFilterTools::GetSystemCharSet();
+            aFontItem.GetCharSet() = ScfTools::GetSystemCharSet();
 
         rItemSet.Put( aFontItem, EE_CHAR_FONTINFO );
         rItemSet.Put( aFontItem, EE_CHAR_FONTINFO_CJK );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-18 14:55:34 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,32 +62,6 @@
 #ifndef _EXCRECDS_HXX
 #define _EXCRECDS_HXX
 
-#ifndef SC_OUTLINETAB_HXX
-#include "olinetab.hxx"
-#endif
-#ifndef SC_FILTER_HXX
-#include "filter.hxx"
-#endif
-#ifndef SC_RANGELST_HXX
-#include "rangelst.hxx"
-#endif
-
-#ifndef _ROOT_HXX
-#include "root.hxx"
-#endif
-#ifndef _FLTTOOLS_HXX
-#include "flttools.hxx"
-#endif
-#ifndef _SC_XCLEXPHELPER_HXX
-#include "XclExpHelper.hxx"
-#endif
-#ifndef _EXCDEFS_HXX
-#include "excdefs.hxx"
-#endif
-#ifndef SC_CELL_HXX
-#include "cell.hxx"
-#endif
-
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -102,6 +76,36 @@
 #endif
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
+#endif
+
+#ifndef SC_OUTLINETAB_HXX
+#include "olinetab.hxx"
+#endif
+#ifndef SC_FILTER_HXX
+#include "filter.hxx"
+#endif
+#ifndef SC_RANGELST_HXX
+#include "rangelst.hxx"
+#endif
+
+#ifndef _SC_FILTERTOOLS_HXX
+#include "FilterTools.hxx"
+#endif
+#ifndef _SC_XCLEXPHELPER_HXX
+#include "XclExpHelper.hxx"
+#endif
+
+#ifndef _ROOT_HXX
+#include "root.hxx"
+#endif
+#ifndef _FLTTOOLS_HXX
+#include "flttools.hxx"
+#endif
+#ifndef _EXCDEFS_HXX
+#include "excdefs.hxx"
+#endif
+#ifndef SC_CELL_HXX
+#include "cell.hxx"
 #endif
 
 //------------------------------------------------------------------ Forwards -
@@ -484,11 +488,38 @@ public:
     virtual ULONG           GetLen() const;
 };
 
+//--------------------------------------------------------- class ExcDummy_02 -
+// sheet dummies: CALCMODE to SETUP
+
+class ExcDummy_02a : public ExcDummyRec
+{
+private:
+    static const BYTE       pMyData[];
+    static const ULONG      nMyLen;
+public:
+    virtual ULONG           GetLen( void ) const;
+    virtual const BYTE*     GetData( void ) const;
+};
+
 
 //--------------------------------------------------------- class ExcDummy_02 -
 // sheet dummies: CALCMODE to SETUP
 
-class ExcDummy_02 : public ExcDummyRec
+class ExcDummy_02b : public ExcDummyRec
+{
+private:
+    static const BYTE       pMyData[];
+    static const ULONG      nMyLen;
+public:
+    virtual ULONG           GetLen( void ) const;
+    virtual const BYTE*     GetData( void ) const;
+};
+
+
+//--------------------------------------------------------- class ExcDummy_02 -
+// sheet dummies: CALCMODE to SETUP
+
+class ExcDummy_02c : public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
@@ -678,7 +709,7 @@ public:
 class ExcRichStr
 {
 private:
-    UINT16List              aForms;     // Form und Pos nacheinander
+    ScfUInt16List           aForms;     // Form und Pos nacheinander
     BiffTyp                 eBiff;
 public:
                             ExcRichStr(
@@ -699,7 +730,6 @@ public:
     inline  ULONG           GetByteCount() const;
 
                             // write list of forms
-    void                    Write( SvStream& rStrm );
     void                    Write( XclExpStream& rStrm );
 };
 
@@ -776,7 +806,7 @@ public:
 
 //---------------------------------------------------- class ExcBlankMulblank -
 
-class ExcBlankMulblank : public ExcCell, private UINT32List
+class ExcBlankMulblank : public ExcCell, private ScfUInt32List
 {
 protected:
     ULONG                   nRecLen;
@@ -825,7 +855,7 @@ public:
 
 inline void ExcBlankMulblank::Append( UINT16 nXF, UINT16 nCount )
 {
-    UINT32List::Append( (UINT32) nXF + (((UINT32) nCount) << 16) );
+    ScfUInt32List::Append( (UINT32) nXF + (((UINT32) nCount) << 16) );
 }
 
 
@@ -1755,7 +1785,7 @@ private:
     virtual void            SaveCont( XclExpStream& rStrm );
 protected:
 public:
-                            ExcMargin( long nMargin, IMPEXC_MARGINSIDE eSide );
+                            ExcMargin( long nMargin, XclMarginType eSide );
 
     virtual UINT16          GetNum() const;
     virtual ULONG           GetLen() const;
@@ -1772,7 +1802,7 @@ private:
     virtual void            SaveCont( XclExpStream& rStrm );
 
 protected:
-    UINT16List              aPageBreaks;
+    ScfUInt16List           aPageBreaks;
 
 public:
     enum ExcPBOrientation   { pbHorizontal, pbVertical };

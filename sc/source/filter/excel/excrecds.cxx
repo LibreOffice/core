@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-31 10:50:41 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,21 +295,31 @@ const BYTE      ExcDummy_Style::pMyData[] = {
 };
 const ULONG ExcDummy_Style::nMyLen = sizeof( ExcDummy_Style::pMyData );
 
-//--------------------------------------------------------- class ExcDummy_02 -
-const BYTE      ExcDummy_02::pMyData[] = {
+//-------------------------------------------------------- class ExcDummy_02a -
+const BYTE      ExcDummy_02a::pMyData[] = {
     0x0d, 0x00, 0x02, 0x00, 0x01, 0x00,                     // CALCMODE
     0x0c, 0x00, 0x02, 0x00, 0x64, 0x00,                     // CALCCOUNT
     0x0f, 0x00, 0x02, 0x00, 0x01, 0x00,                     // REFMODE
     0x11, 0x00, 0x02, 0x00, 0x00, 0x00,                     // ITERATION
     0x10, 0x00, 0x08, 0x00, 0xfc, 0xa9, 0xf1, 0xd2, 0x4d,   // DELTA
     0x62, 0x50, 0x3f,
-    0x5f, 0x00, 0x02, 0x00, 0x01, 0x00,                     // SAVERECALC
-    0x82, 0x00, 0x02, 0x00, 0x01, 0x00,                     // GRIDSET
+    0x5f, 0x00, 0x02, 0x00, 0x01, 0x00                      // SAVERECALC
+};
+const ULONG ExcDummy_02a::nMyLen = sizeof( ExcDummy_02a::pMyData );
+
+//-------------------------------------------------------- class ExcDummy_02b -
+const BYTE      ExcDummy_02b::pMyData[] = {
+    0x82, 0x00, 0x02, 0x00, 0x01, 0x00                      // GRIDSET
+};
+const ULONG ExcDummy_02b::nMyLen = sizeof( ExcDummy_02b::pMyData );
+
+//-------------------------------------------------------- class ExcDummy_02c -
+const BYTE      ExcDummy_02c::pMyData[] = {
     0x25, 0x02, 0x04, 0x00, 0x00, 0x00, 0xff, 0x00,         // DEFAULTROWHEIGHT
     0x8c, 0x00, 0x04, 0x00, 0x31, 0x00, 0x31, 0x00,         // COUNTRY
-    0x81, 0x00, 0x02, 0x00, 0xc1, 0x04,                     // WSBOOL
+    0x81, 0x00, 0x02, 0x00, 0xc1, 0x04                      // WSBOOL
 };
-const ULONG ExcDummy_02::nMyLen = sizeof( ExcDummy_02::pMyData );
+const ULONG ExcDummy_02c::nMyLen = sizeof( ExcDummy_02c::pMyData );
 
 
 //---------------------------------------------------------
@@ -916,20 +926,39 @@ ULONG ExcBundlesheet::GetLen() const
 }
 
 
-
 //--------------------------------------------------------- class ExcDummy_02 -
 
-ULONG ExcDummy_02::GetLen( void ) const
+ULONG ExcDummy_02a::GetLen( void ) const
 {
     return nMyLen;
 }
 
-
-const BYTE* ExcDummy_02::GetData( void ) const
+const BYTE* ExcDummy_02a::GetData( void ) const
 {
     return pMyData;
 }
+//--------------------------------------------------------- class ExcDummy_02 -
 
+ULONG ExcDummy_02b::GetLen( void ) const
+{
+    return nMyLen;
+}
+
+const BYTE* ExcDummy_02b::GetData( void ) const
+{
+    return pMyData;
+}
+//--------------------------------------------------------- class ExcDummy_02 -
+
+ULONG ExcDummy_02c::GetLen( void ) const
+{
+    return nMyLen;
+}
+
+const BYTE* ExcDummy_02c::GetData( void ) const
+{
+    return pMyData;
+}
 
 
 //------------------------------------------------------------- class ExcNote -
@@ -1446,19 +1475,6 @@ ExcRichStr::~ExcRichStr()
 }
 
 
-void ExcRichStr::Write( SvStream& rStrm )
-{
-    UINT32 nEnd = (UINT32) GetFormCount() * 2;
-
-    if( eBiff >= Biff8 )
-        for( UINT32 nIndex = 0 ; nIndex < nEnd ; nIndex++ )
-            rStrm << aForms.Get( nIndex );
-    else
-        for( UINT32 nIndex = 0 ; nIndex < nEnd ; nIndex++ )
-            rStrm << (UINT8) aForms.Get( nIndex );
-}
-
-
 void ExcRichStr::Write( XclExpStream& rStrm )
 {
     UINT32 nEnd = (UINT32) GetFormCount() * 2;
@@ -1467,13 +1483,13 @@ void ExcRichStr::Write( XclExpStream& rStrm )
     {
         rStrm.SetSliceLen( 4 );
         for( UINT32 nIndex = 0 ; nIndex < nEnd ; nIndex++ )
-            rStrm << aForms.Get( nIndex );
+            rStrm << aForms.GetValue( nIndex );
     }
     else
     {
         rStrm.SetSliceLen( 2 );
         for( UINT32 nIndex = 0 ; nIndex < nEnd ; nIndex++ )
-            rStrm << (UINT8) aForms.Get( nIndex );
+            rStrm << (UINT8) aForms.GetValue( nIndex );
     }
     rStrm.SetSliceLen( 0 );
 }
@@ -1698,7 +1714,7 @@ ExcBlankMulblank::ExcBlankMulblank(
     bMulBlank = (nCount > 1);
 
     AddEntries( rPos, pAttr, rRootData, nCount, rExcTab );
-    nXF = GetXF( UINT32List::Get( 0 ) );        // store first XF in ExcCell::nXF
+    nXF = GetXF( ScfUInt32List::GetValue( 0 ) );        // store first XF in ExcCell::nXF
 }
 
 
@@ -1773,8 +1789,8 @@ void ExcBlankMulblank::AddEntries(
 
 UINT16 ExcBlankMulblank::GetXF() const
 {
-    DBG_ASSERT( UINT32List::Count(), "ExcBlankMulblank::GetXF - list empty" );
-    return GetXF( UINT32List::Get( UINT32List::Count() - 1 ) );
+    DBG_ASSERT( ScfUInt32List::Count(), "ExcBlankMulblank::GetXF - list empty" );
+    return GetXF( ScfUInt32List::GetValue( ScfUInt32List::Count() - 1 ) );
 }
 
 
@@ -1783,9 +1799,9 @@ void ExcBlankMulblank::SaveDiff( XclExpStream& rStrm )
     if( !bMulBlank ) return;
 
     UINT16 nLastCol = (UINT16) aPos.Col();
-    for( ULONG nIndex = 0; nIndex < UINT32List::Count(); nIndex++ )
+    for( ULONG nIndex = 0; nIndex < ScfUInt32List::Count(); nIndex++ )
     {
-        UINT32 nCurr = UINT32List::Get( nIndex );
+        UINT32 nCurr = ScfUInt32List::GetValue( nIndex );
         UINT16 nXF = GetXF( nCurr );
         UINT16 nTmpCount = GetCount( nCurr );
 
@@ -2027,7 +2043,7 @@ void ExcName::SetUniqueName( const String& rRangeName )
 
 BOOL ExcName::SetBuiltInName( const String& rName, UINT8 nKey )
 {
-    if( ScFilterTools::IsBuiltInName( nTabNum, rName, nKey ) )
+    if( ScfTools::IsBuiltInName( nTabNum, rName, nKey ) )
     {
         nBuiltInKey = nKey;
         bDummy = TRUE;
@@ -4537,14 +4553,14 @@ void ExcAutoFilterRecs::Save( XclExpStream& rStrm )
 
 //----------------------------------------------------------- class ExcMargin -
 
-ExcMargin::ExcMargin( long n, IMPEXC_MARGINSIDE e ) : nVal( ( n < 0 )? 0 : ( UINT16 ) n )
+ExcMargin::ExcMargin( long n, XclMarginType e ) : nVal( ( n < 0 )? 0 : ( UINT16 ) n )
 {
     switch( e )
     {
-        case IMPEXC_MARGINSIDE_LEFT:    nId = 0x26;     break;
-        case IMPEXC_MARGINSIDE_RIGHT:   nId = 0x27;     break;
-        case IMPEXC_MARGINSIDE_TOP:     nId = 0x28;     break;
-        case IMPEXC_MARGINSIDE_BOTTOM:  nId = 0x29;     break;
+        case xlLeftMargin:      nId = 0x26;     break;
+        case xlRightMargin:     nId = 0x27;     break;
+        case xlTopMargin:       nId = 0x28;     break;
+        case xlBottomMargin:    nId = 0x29;     break;
         default:
             nId = 0x26;
             DBG_WARNING( "ExcMargin::ExcMargin(): impossible enum state!" );
@@ -4615,7 +4631,7 @@ void XclExpPageBreaks::SaveCont( XclExpStream& rStrm )
 {
     rStrm << (UINT16) aPageBreaks.Count();
     for( UINT32 nIndex = 0; nIndex < aPageBreaks.Count(); nIndex++ )
-        rStrm << aPageBreaks.Get( nIndex );
+        rStrm << aPageBreaks.GetValue( nIndex );
 }
 
 UINT16 XclExpPageBreaks::GetNum() const

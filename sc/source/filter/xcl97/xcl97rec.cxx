@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-26 16:47:09 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #include "xcl97esc.hxx"
 #include "excupn.hxx"
 
+#ifndef _SC_FILTERTOOLS_HXX
+#include "FilterTools.hxx"
+#endif
 #ifndef _SC_XCLEXPSTREAM_HXX
 #include "XclExpStream.hxx"
 #endif
@@ -2429,7 +2432,7 @@ void XclExpPageBreaks8::SaveCont( XclExpStream& rStrm )
     rStrm << (UINT16) aPageBreaks.Count();
     rStrm.SetSliceLen( 6 );
     for( ULONG nIndex = 0; nIndex < aPageBreaks.Count(); nIndex++ )
-        rStrm << aPageBreaks.Get( nIndex ) << (UINT16) 0x0000 << nRangeMax;
+        rStrm << aPageBreaks.GetValue( nIndex ) << (UINT16) 0x0000 << nRangeMax;
 }
 
 ULONG XclExpPageBreaks8::GetLen() const
@@ -2461,10 +2464,10 @@ XclExpWebQuery::XclExpWebQuery(
     for( xub_StrLen nToken = 0; (nToken < nTokenCnt) && !bExitLoop; nToken++ )
     {
         String aToken( rSource.GetToken( 0, ';', nStringIx ) );
-        bEntireDoc = ScFilterTools::IsHTMLDocName( aToken );
-        bExitLoop = bEntireDoc || ScFilterTools::IsHTMLTablesName( aToken );
-        if( !bExitLoop && ScFilterTools::GetHTMLNameFromName( aToken, aAppendTable ) )
-            ScFilterTools::AddToken( aNewTables, aAppendTable, ',' );
+        bEntireDoc = ScfTools::IsHTMLDocName( aToken );
+        bExitLoop = bEntireDoc || ScfTools::IsHTMLTablesName( aToken );
+        if( !bExitLoop && ScfTools::GetHTMLNameFromName( aToken, aAppendTable ) )
+            ScfTools::AddToken( aNewTables, aAppendTable, ',' );
     }
 
     if( !bExitLoop )    // neither HTML_all nor HTML_tables found

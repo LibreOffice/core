@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-05 14:27:07 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
+#endif
+
+#ifndef _SC_FILTERTOOLS_HXX
+#include "FilterTools.hxx"
 #endif
 
 #ifndef _EXCRECDS_HXX
@@ -144,7 +148,7 @@ public:
 
 //----------------------------------------------------------- class DefRowXFs -
 
-class DefRowXFs : protected UINT32List
+class DefRowXFs : protected ScfUInt32List
 {
 protected:
     UINT32                      nLastList;
@@ -164,7 +168,7 @@ public:
 
 inline void DefRowXFs::Add( UINT16 nR, UINT16 nXF )
 {
-    UINT32List::Append( ( UINT32 ) ( nR | ( ( UINT32 ) nXF << 16 ) ) );
+    ScfUInt32List::Append( ( UINT32 ) ( nR | ( ( UINT32 ) nXF << 16 ) ) );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-26 16:45:21 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,10 +185,10 @@ BOOL DefRowXFs::ChangeXF( UINT16 nRowNum, UINT16& rXF )
     UINT32  nCnt;
     UINT16  nR, nXF;
 
-    nCnt = UINT32List::Count();
+    nCnt = ScfUInt32List::Count();
     for( UINT32 n = ( nRowNum > nLastRow )? nLastList : 0 ; n < nCnt ; n++ )
     {
-        Get( UINT32List::Get( n ), nR, nXF );
+        Get( ScfUInt32List::GetValue( n ), nR, nXF );
         if( nRowNum == nR )
         {
             rXF = nXF;
@@ -365,11 +365,11 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
     UINT16  nCodenames      = rR.nCodenames;
 
     XclExpSst*              pSstRecs            = NULL;
-    XclExpExternsheetList*  pExternsheetRecs    = NULL;     // change: ExternsheetList includes Supbooks
+    XclExpExtsheetBuffer*   pExternsheetRecs    = NULL;     // change: ExternsheetList includes Supbooks
     if ( rR.eDateiTyp >= Biff8 )
     {
         rR.pSstRecs         = pSstRecs          = new XclExpSst;
-        rR.pExternsheetRecs = pExternsheetRecs  = new XclExpExternsheetList( rR );
+        rR.pExternsheetRecs = pExternsheetRecs  = new XclExpExtsheetBuffer( rR );
     }
 
     ExcNameList*    pNameList   = rR.pNameList  = new ExcNameList( rR );
@@ -690,8 +690,15 @@ void ExcTable::FillAsTable( void )
     if( eDateiTyp < Biff8 )
     {
         Add( new ExcBof );
-        // CALCMODE bis VCENTER
-        Add( new ExcDummy_02 );
+        Add( new ExcDummy_02a );
+        Add( new ExcPrintheaders( pStyleSheetItemSet ) );
+        Add( new ExcPrintGridlines( pStyleSheetItemSet ) );
+        Add( new ExcDummy_02b );
+        // GUTS (count & size of outline icons)
+        Add( new ExcEGuts( pOLColArray, pOLRowArray ) );
+        Add( new ExcDummy_02c );
+        Add( new XclExpPageBreaks( rR, nScTab, XclExpPageBreaks::pbHorizontal ) );
+        Add( new XclExpPageBreaks( rR, nScTab, XclExpPageBreaks::pbVertical ) );
     }
     else
     {
@@ -700,39 +707,28 @@ void ExcTable::FillAsTable( void )
         Add( new XclRefmode() );
         Add( new XclIteration( rDoc ) );
         Add( new XclDelta( rDoc ) );
+        Add( new ExcPrintheaders( pStyleSheetItemSet ) );
+        Add( new ExcPrintGridlines( pStyleSheetItemSet ) );
         Add( new ExcDummy8_02 );
-    }
-
-    // GUTS (count & size of outline icons)
-    Add( new ExcEGuts( pOLColArray, pOLRowArray ) );
-
-    // HORIZONTALPAGEBREAKS & VERTICALPAGEBREAKS
-    if( eDateiTyp < Biff8 )
-    {
-        Add( new XclExpPageBreaks( rR, nScTab, XclExpPageBreaks::pbHorizontal ) );
-        Add( new XclExpPageBreaks( rR, nScTab, XclExpPageBreaks::pbVertical ) );
-    }
-    else
-    {
+        // GUTS (count & size of outline icons)
+        Add( new ExcEGuts( pOLColArray, pOLRowArray ) );
         Add( new XclExpPageBreaks8( rR, nScTab, XclExpPageBreaks::pbHorizontal ) );
         Add( new XclExpPageBreaks8( rR, nScTab, XclExpPageBreaks::pbVertical ) );
     }
 
-    const SvxLRSpaceItem&   rLRSpaceItem = ( const SvxLRSpaceItem& ) pStyleSheetItemSet->Get( ATTR_LRSPACE );
-    Add( new ExcMargin( rLRSpaceItem.GetLeft(), IMPEXC_MARGINSIDE_LEFT ) );
-    Add( new ExcMargin( rLRSpaceItem.GetRight(), IMPEXC_MARGINSIDE_RIGHT ) );
-
-    const SvxULSpaceItem&   rULSpaceItem = ( const SvxULSpaceItem& ) pStyleSheetItemSet->Get( ATTR_ULSPACE );
-    Add( new ExcMargin( rULSpaceItem.GetUpper(), IMPEXC_MARGINSIDE_TOP ) );
-    Add( new ExcMargin( rULSpaceItem.GetLower(), IMPEXC_MARGINSIDE_BOTTOM ) );
-
-    Add( new ExcPrintheaders( pStyleSheetItemSet ) );
-    Add( new ExcPrintGridlines( pStyleSheetItemSet ) );
+    Add( new ExcHeader( &rR, eDateiTyp >= Biff8 ) );
+    Add( new ExcFooter( &rR, eDateiTyp >= Biff8 ) );
     Add( new ExcHcenter( pStyleSheetItemSet ) );
     Add( new ExcVcenter( pStyleSheetItemSet ) );
 
-    Add( new ExcHeader( &rR, eDateiTyp >= Biff8 ) );
-    Add( new ExcFooter( &rR, eDateiTyp >= Biff8 ) );
+    // margins
+    const SvxLRSpaceItem&   rLRSpaceItem = ( const SvxLRSpaceItem& ) pStyleSheetItemSet->Get( ATTR_LRSPACE );
+    Add( new ExcMargin( rLRSpaceItem.GetLeft(), xlLeftMargin ) );
+    Add( new ExcMargin( rLRSpaceItem.GetRight(), xlRightMargin ) );
+        const SvxULSpaceItem&   rULSpaceItem = ( const SvxULSpaceItem& ) pStyleSheetItemSet->Get( ATTR_ULSPACE );
+    Add( new ExcMargin( rULSpaceItem.GetUpper(), xlTopMargin ) );
+    Add( new ExcMargin( rULSpaceItem.GetLower(), xlBottomMargin ) );
+
     Add( new ExcSetup( &rR ) );
 
     if( eDateiTyp >= Biff8 )
@@ -1075,7 +1071,7 @@ void ExcTable::FillAsTable( void )
     if( rR.eDateiTyp < Biff8 )
     {
         Add( new ExcWindow2( nExcTab ) );
-        Add( new ExcSelection( 3, 0, 0 ) );
+        Add( new ExcSelection( 0, 0, 3 ) );
     }
     else
     {

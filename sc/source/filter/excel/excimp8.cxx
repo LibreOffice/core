@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-31 10:50:41 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 #include "arealink.hxx"
 #include "docoptio.hxx"
 
+#ifndef _SC_FILTERTOOLS_HXX
+#include "FilterTools.hxx"
+#endif
 #ifndef _SC_XCLIMPSTREAM_HXX
 #include "XclImpStream.hxx"
 #endif
@@ -551,7 +554,7 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
 {
     delete pFormConv;
 
-    pExcRoot->pExtsheetBuffer = new XclImpExternsheetBuffer;
+    pExcRoot->pExtsheetBuffer = new XclImpExtsheetBuffer;
     pExcRoot->pImpTabIdBuffer = new XclImpTabIdBuffer;
 
     pFormConv = new ExcelToSc8( pExcRoot, aIn, nTab );
@@ -755,7 +758,7 @@ void ImportExcel8::Dconref( void )
         aTabName = aFileName;
         aFileName.Erase();
     }
-    ScFilterTools::ConvertName( aTabName );
+    ScfTools::ConvertName( aTabName );
     pCurrPivotCache->SetSource( nC1, nR1, nC2, nR2, aFileName, aTabName, bSelf );
 }
 
@@ -776,7 +779,7 @@ void ImportExcel8::Boundsheet( void )
 
     String aName( aIn.ReadUniString( nLen ) );
 
-    ScFilterTools::ConvertName( aName );
+    ScfTools::ConvertName( aName );
     *pExcRoot->pTabNameBuff << aName;
 
     if( nBdshtTab > 0 )
@@ -1379,9 +1382,9 @@ void ImportExcel8::Name( void )
     BOOL                bSkip = FALSE;
 
     if( bBuiltIn )
-        ScFilterTools::GetBuiltInName( aName, cFirstChar, nSheet );
+        ScfTools::GetBuiltInName( aName, cFirstChar, nSheet );
     else
-        ScFilterTools::ConvertName( aName );
+        ScfTools::ConvertName( aName );
 
     pFormConv->Reset();
     if( nOpt & (EXC_NAME_VB | EXC_NAME_BIG) )
@@ -1567,16 +1570,16 @@ void ImportExcel8::PostDocLoad( void )
         delete pDffMan;
     }
 
-    if( (nChartCnt > 1) && !pExcRoot->pProgress )
-        pExcRoot->pProgress = new FilterProgressBar( nChartCnt );
+//    if( (nChartCnt > 1) && !pExcRoot->pProgress )
+//        pExcRoot->pProgress = new FilterProgressBar( nChartCnt );
 
     aObjManager.Apply();
 
-    if( pExcRoot->pProgress )
-    {
-        delete pExcRoot->pProgress;
-        pExcRoot->pProgress = NULL;
-    }
+//    if( pExcRoot->pProgress )
+//    {
+//        delete pExcRoot->pProgress;
+//        pExcRoot->pProgress = NULL;
+//    }
 
     // controls
 /*
@@ -1716,28 +1719,22 @@ void ImportExcel8::EndAllChartObjects( void )
 
 void ImportExcel8::Supbook( void )
 {
-    pExcRoot->pExtsheetBuffer->AppendSupbook( new XclImpSupbook( aIn ) );
+    pExcRoot->pExtsheetBuffer->ReadSupbook8( aIn );
 }
 
 void ImportExcel8::Xct( void )
 {
-    XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetCurrSupbook();
-    if( pSupbook )
-        pSupbook->ReadXct( aIn );
+    pExcRoot->pExtsheetBuffer->ReadXct8( aIn );
 }
 
 void ImportExcel8::Crn( void )
 {
-    XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetCurrSupbook();
-    if( pSupbook )
-        pSupbook->ReadCrn( aIn, pFormConv );
+    pExcRoot->pExtsheetBuffer->ReadCrn8( aIn, *pFormConv );
 }
 
 void ImportExcel8::Externname( void )
 {
-    XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetCurrSupbook();
-    if( pSupbook )
-        pSupbook->ReadExternname( aIn, *pExcRoot );
+    pExcRoot->pExtsheetBuffer->ReadExternname8( aIn, *pExcRoot );
 }
 
 void ImportExcel8::Externsheet( void )
@@ -1782,12 +1779,12 @@ void ImportExcel8::SXExt_ParamQry()
     if( nFlags & EXC_PQRY_TABLES )
     {
         pQuery->eMode = xiwqAllTables;
-        pQuery->aTables = ScFilterTools::GetHTMLTablesName();
+        pQuery->aTables = ScfTools::GetHTMLTablesName();
     }
     else
     {
         pQuery->eMode = xiwqDoc;
-        pQuery->aTables = ScFilterTools::GetHTMLDocName();
+        pQuery->aTables = ScfTools::GetHTMLDocName();
     }
 }
 
@@ -1849,12 +1846,12 @@ void XclImpWebQuery::ConvertTableNames()
         String aToken( aTables.GetQuotedToken( 0, aQuotedPairs, cSep, nStringIx ) );
         sal_Int32 nTabNum = CharClass::isAsciiNumeric( aToken ) ? aToken.ToInt32() : 0;
         if( nTabNum > 0 )
-            ScFilterTools::AddToken( aNewTables, ScFilterTools::GetNameFromHTMLIndex( (ULONG)nTabNum ), cSep );
+            ScfTools::AddToken( aNewTables, ScfTools::GetNameFromHTMLIndex( (ULONG)nTabNum ), cSep );
         else
         {
-            ScFilterTools::EraseQuotes( aToken );
+            ScfTools::EraseQuotes( aToken );
             if( aToken.Len() )
-                ScFilterTools::AddToken( aNewTables, ScFilterTools::GetNameFromHTMLName( aToken ), cSep );
+                ScfTools::AddToken( aNewTables, ScfTools::GetNameFromHTMLName( aToken ), cSep );
         }
     }
     aTables = aNewTables;

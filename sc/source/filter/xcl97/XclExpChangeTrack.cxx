@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-03 15:07:20 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,8 +687,8 @@ void XclExpChTrData::WriteFormula(
     sal_uInt32 nIndex = 0;
     while( nIndex < pRefList->Count() )
     {
-        sal_uInt16 nExcFirst = pRefList->Get( nIndex++ );
-        sal_uInt16 nExcLast = pRefList->Get( nIndex++ );
+        sal_uInt16 nExcFirst = pRefList->GetValue( nIndex++ );
+        sal_uInt16 nExcLast = pRefList->GetValue( nIndex++ );
         const XclExpUniString* pDocName = rRootData.pExternsheetRecs->GetDocumentName( nExcFirst );
         const XclExpUniString* pTabName = rRootData.pExternsheetRecs->GetTableName( nExcFirst );
         if( pDocName && pTabName )
@@ -838,15 +838,15 @@ void XclExpChTrCellContent::GetCellData(
                 EC_Codetype eDummy;
                 rpData->pUPN = new ExcUPN( pExcRoot, *pTokenArray, eDummy, &pFmlCell->aPos );
                 pExcRoot->pTabBuffer->EndRefLog();
-                rpData->pRefList = new UINT16List( pExcRoot->pTabBuffer->GetRefLog() );
+                rpData->pRefList = new ScfUInt16List( pExcRoot->pTabBuffer->GetRefLog() );
                 rpData->nType = EXC_CHTR_TYPE_FORMULA;
                 sal_uInt32 nSize = rpData->pUPN->GetLen() + 3;
 
                 sal_uInt32 nIndex = 0;
                 while( nIndex < rpData->pRefList->Count() )
                 {
-                    sal_uInt16 nExcFirst = rpData->pRefList->Get( nIndex++ );
-                    sal_uInt16 nExcLast = rpData->pRefList->Get( nIndex++ );
+                    sal_uInt16 nExcFirst = rpData->pRefList->GetValue( nIndex++ );
+                    sal_uInt16 nExcLast = rpData->pRefList->GetValue( nIndex++ );
                     const XclExpUniString* pDocName = pExcRoot->pExternsheetRecs->GetDocumentName( nExcFirst );
                     const XclExpUniString* pTabName = pExcRoot->pExternsheetRecs->GetTableName( nExcFirst );
                     if( pDocName && pTabName )

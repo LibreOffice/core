@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-31 10:50:41 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include "document.hxx"
 #include "root.hxx"
 
+#ifndef _SC_FILTERTOOLS_HXX
+#include "FilterTools.hxx"
+#endif
 #ifndef _SC_XCLIMPSTREAM_HXX
 #include "XclImpStream.hxx"
 #endif
@@ -406,7 +409,7 @@ void ColRowSettings::SetHorizPagebreak( const UINT16 n )
     DBG_ASSERT( n, "+ColRowSettings::SetHorizPagebreak(): 0 ist hier nicht zulaessig!" );
 
     if( !pHorizPb )
-        pHorizPb = new UINT16List;
+        pHorizPb = new ScfUInt16List;
 
     pHorizPb->Append( n );
 }
@@ -417,7 +420,7 @@ void ColRowSettings::SetVertPagebreak( const UINT16 n )
     DBG_ASSERT( n, "+ColRowSettings::SetVertPagebreak(): 0 ist hier nicht zulaessig!" );
 
     if( !pVertPb )
-        pVertPb = new UINT16List;
+        pVertPb = new ScfUInt16List;
 
     pVertPb->Append( n );
 }

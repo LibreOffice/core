@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotform.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:45:10 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include "lotrange.hxx"
 #include "namebuff.hxx"
 #include "root.hxx"
-#include "flttools.hxx"
+#include "FilterTools.hxx"
 #include "tool.h"
 
 extern WKTYP                eTyp;
@@ -567,7 +567,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
                 break;
             case FT_ConstString:
             {
-                String  aTmp( ScFilterTools::ReadCString( aIn, nBytesLeft, eSrcChar ) );
+                String  aTmp( ScfTools::ReadCString( aIn, nBytesLeft, eSrcChar ) );
 
                 aStack << aPool.Store( aTmp );
             }
@@ -587,7 +587,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
                 break;
             case FT_Nrref:
             {
-                String      aTmp( ScFilterTools::ReadCString( aIn, nBytesLeft, eSrcChar ) );
+                String      aTmp( ScfTools::ReadCString( aIn, nBytesLeft, eSrcChar ) );
                 if( rRangeNameBufferWK3.FindRel( aTmp, nRngIndex ) )
                     aStack << aPool.Store( nRngIndex );
                 else
@@ -600,7 +600,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
                 break;
             case FT_Absnref:
             {
-                String      aTmp( ScFilterTools::ReadCString( aIn, nBytesLeft, eSrcChar ) );
+                String      aTmp( ScfTools::ReadCString( aIn, nBytesLeft, eSrcChar ) );
                 if( rRangeNameBufferWK3.FindAbs( aTmp, nRngIndex ) )
                     aStack << aPool.Store( nRngIndex );
                 else
@@ -647,7 +647,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
             }
                 break;
             case FT_Const10Float:
-                aStack << aPool.Store( ScFilterTools::ReadLongDouble( aIn ) );
+                aStack << aPool.Store( ScfTools::ReadLongDouble( aIn ) );
                 break;
             case FT_Snum:
                 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-15 09:03:46 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 
 
 class ScRangeList;
-class UINT16List;
+class ScfUInt16List;
 
 
 #ifdef MWERKS
@@ -140,7 +140,7 @@ inline BOOL ExcelToSc::IsComplRowRange( const UINT16 nRow1, const UINT16 nRow2 )
 class ExcelToSc8 : public ExcelToSc
 {
 private:
-    const XclImpExternsheetBuffer&  rExtsheetBuffer;
+    const XclImpExtsheetBuffer& rExtsheetBuffer;
 
     void                ExcRelToScRel( UINT16 nRow, UINT16 nCol, SingleRefData&,
                             const BOOL bName );

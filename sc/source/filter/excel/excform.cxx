@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-31 10:50:41 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include "imp_op.hxx"
 #include "root.hxx"
 #include "excform.hxx"
+#include "flttools.hxx"
 
 
 const UINT16 ExcelToSc::nRowMask = 0x3FFF;

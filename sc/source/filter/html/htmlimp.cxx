@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-24 14:45:36 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 #include "compiler.hxx"
 #include "rangenam.hxx"
 #include "attrib.hxx"
-#include "flttools.hxx"
+#include "FilterTools.hxx"
 
 
 //------------------------------------------------------------------------
@@ -210,10 +210,10 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
     pParser->GetDimensions( nColDim, nRowDim );
     aNewRange.aEnd.IncCol( nColDim - 1 );
     aNewRange.aEnd.IncRow( nRowDim - 1 );
-    InsertRangeName( pDoc, ScFilterTools::GetHTMLDocName(), aNewRange );
+    InsertRangeName( pDoc, ScfTools::GetHTMLDocName(), aNewRange );
 
     // 2 - all tables
-    InsertRangeName( pDoc, ScFilterTools::GetHTMLTablesName(), ScRange( aRange.aStart ) );
+    InsertRangeName( pDoc, ScfTools::GetHTMLTablesName(), ScRange( aRange.aStart ) );
 
     // 3 - single tables
     short nColDiff = (short)aRange.aStart.Col();
@@ -227,11 +227,11 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
         pTable->GetRange( aNewRange );
         aNewRange.Move( nColDiff, nRowDiff, nTabDiff );
         // insert table number as name
-        InsertRangeName( pDoc, ScFilterTools::GetNameFromHTMLIndex( nTab ), aNewRange );
+        InsertRangeName( pDoc, ScfTools::GetNameFromHTMLIndex( nTab ), aNewRange );
         // insert table id as name
         if( pTable->GetTableName().Len() )
         {
-            String aName( ScFilterTools::GetNameFromHTMLName( pTable->GetTableName() ) );
+            String aName( ScfTools::GetNameFromHTMLName( pTable->GetTableName() ) );
             USHORT nPos;
             if( !pDoc->GetRangeName()->SearchName( aName, nPos ) )
                 InsertRangeName( pDoc, aName, aNewRange );
@@ -248,18 +248,17 @@ String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrig
     ScRangeList aRangeList;
     xub_StrLen nTokenCnt = rOrigName.GetTokenCount( ';' );
     xub_StrLen nStringIx = 0;
-    USHORT nPos;
     for( xub_StrLen nToken = 0; nToken < nTokenCnt; nToken++ )
     {
         String aToken( rOrigName.GetToken( 0, ';', nStringIx ) );
-        if( pRangeNames && ScFilterTools::IsHTMLTablesName( aToken ) )
+        if( pRangeNames && ScfTools::IsHTMLTablesName( aToken ) )
         {   // build list with all HTML tables
             ULONG nIndex = 1;
             USHORT nPos;
             BOOL bLoop = TRUE;
             while( bLoop )
             {
-                aToken = ScFilterTools::GetNameFromHTMLIndex( nIndex++ );
+                aToken = ScfTools::GetNameFromHTMLIndex( nIndex++ );
                 bLoop = pRangeNames->SearchName( aToken, nPos );
                 if( bLoop )
                 {
@@ -267,14 +266,14 @@ String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrig
                     ScRange aRange;
                     if( pRangeData && pRangeData->IsReference( aRange ) && !aRangeList.In( aRange ) )
                     {
-                        ScFilterTools::AddToken( aNewName, aToken );
+                        ScfTools::AddToken( aNewName, aToken );
                         aRangeList.Append( aRange );
                     }
                 }
             }
         }
         else
-            ScFilterTools::AddToken( aNewName, aToken );
+            ScfTools::AddToken( aNewName, aToken );
     }
     return aNewName;
 }

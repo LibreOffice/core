@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-31 10:52:49 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,13 +101,13 @@ class FilterProgressBar;
 class ValueFormBuffer;
 
 class XclImpXFBuffer;
-class XclImpExternsheetBuffer;
+class XclImpExtsheetBuffer;
 class XclImpTabIdBuffer;
 class XclImpPivotCacheList;
 
 class XclExpSst;
 class XclExpTabNumBuffer;
-class XclExpExternsheetList;
+class XclExpExtsheetBuffer;
 class XclExpChTrTabId;
 class XclExpUserBViewList;
 class XclExpCellMerging;
@@ -165,7 +165,7 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     BOOL                bChartTab;              // Tabelle mit einem einzigen Chart
 
     // Biff8
-    XclImpExternsheetBuffer* pExtsheetBuffer;   // supbooks and externsheet list
+    XclImpExtsheetBuffer*   pExtsheetBuffer;        // supbooks and externsheet list
     XclImpTabIdBuffer*      pImpTabIdBuffer;        // table id's for change tracking
 
     SvStorage*              pPivotCacheStorage;
@@ -186,7 +186,7 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     // Erweiterungen fuer Export
     XclExpTabNumBuffer*     pTabBuffer;
     XclExpSst*              pSstRecs;           // pointer to rec list, do not destroy
-    XclExpExternsheetList*  pExternsheetRecs;   // pointer to rec list, do not destroy
+    XclExpExtsheetBuffer*   pExternsheetRecs;   // pointer to rec list, do not destroy
     XclExpChTrTabId*        pTabId;             // pointer to rec list, do not destroy
     XclExpUserBViewList*    pUserBViewList;     // pointer to rec list, do not destroy
     XclExpCellMerging*      pCellMerging;       // pointer to rec list, do not destroy

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-23 15:03:02 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #ifndef _EXCIMP8_HXX
 #define _EXCIMP8_HXX
 
+#ifndef _LIST_HXX
+#include <tools/list.hxx>
+#endif
+#include <string.h>
 
 #ifndef _IMP_OP_HXX
 #include "imp_op.hxx"
@@ -83,17 +87,13 @@
 #ifndef _EXCDEFS_HXX
 #include "excdefs.hxx"
 #endif
+
 #ifndef _SC_XCLIMPPIVOTTABLES_HXX
 #include "XclImpPivotTables.hxx"
 #endif
 #ifndef _SC_XCLIMPOBJECTS_HXX
 #include "XclImpObjects.hxx"
 #endif
-
-#ifndef _LIST_HXX
-#include <tools/list.hxx>
-#endif
-#include <string.h>
 
 class SvStorage;
 

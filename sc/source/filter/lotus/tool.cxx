@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:58:59 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #include "lotrange.hxx"
 #include "namebuff.hxx"
 
-#ifndef _FLTTOOLS_HXX
-#include "flttools.hxx"
+#ifndef _SC_FILTERTTOOLS_HXX
+#include "FilterTools.hxx"
 #endif
 
 #pragma optimize("",off)
@@ -601,7 +601,7 @@ void RangeNameBufferWK3::Add( const String& rOrgName, const ComplRefData& rCRD )
     static UINT16       nDouble = 0;
 
     String              aScName( rOrgName );
-    ScFilterTools::ConvertName( aScName );
+    ScfTools::ConvertName( aScName );
 
     register ENTRY*     pInsert = new ENTRY( rOrgName, aScName, rCRD );
 

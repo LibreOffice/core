@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-31 10:50:41 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #include "filtopt.hxx"
 #include "scerrors.hxx"
 
+#ifndef _SC_FILTERTOOLS_HXX
+#include "FilterTools.hxx"
+#endif
 #ifndef _SC_XCLIMPHELPER_HXX
 #include "XclImpHelper.hxx"
 #endif
@@ -126,7 +129,6 @@
 #include "vfbuff.hxx"
 #include "fontbuff.hxx"
 #include "excform.hxx"
-#include "flttools.hxx"
 
 using namespace ::com::sun::star;
 
@@ -568,7 +570,7 @@ void ImportExcel::Externsheet( void )
     BOOL        bSameWorkBook = FALSE;
 
     XclImpHelper::DecodeExternsheetByte( aIn, aFile, aTabName, bSameWorkBook );
-    ScFilterTools::ConvertName( aTabName );
+    ScfTools::ConvertName( aTabName );
     pExcRoot->pExtSheetBuff->Add( aFile, aTabName, bSameWorkBook );
 }
 
@@ -589,7 +591,7 @@ void ImportExcel::Name25( void )
 
         // Namen einlesen
         String aName( aIn.ReadRawByteString( nLenName ) );
-        ScFilterTools::ConvertName( aName );
+        ScfTools::ConvertName( aName );
 
         pFormConv->Reset();
         if( nAttr0 & 0x02 )
@@ -634,10 +636,10 @@ void ImportExcel::Name25( void )
 
         if( bBuildIn )
         {// Build-in name
-            ScFilterTools::GetBuiltInName( aName, cFirstNameChar, nSheet );
+            ScfTools::GetBuiltInName( aName, cFirstNameChar, nSheet );
         }
         else
-            ScFilterTools::ConvertName( aName );
+            ScfTools::ConvertName( aName );
 
         pFormConv->Reset();
         if( nOpt & (EXC_NAME_VB | EXC_NAME_BIG) )
@@ -841,7 +843,7 @@ void ImportExcel::Externname25( void )
 
     if( ( nOpt & 0x0001 ) || ( ( nOpt & 0xFFFE ) == 0x0000 ) )
     {// external name
-        ScFilterTools::ConvertName( aName );
+        ScfTools::ConvertName( aName );
         pExcRoot->pExtNameBuff->AddName( aName );
     }
     else if( nOpt & 0x0010 )
@@ -884,25 +886,25 @@ void ImportExcel::Defrowheight2( void )
 
 void ImportExcel::Leftmargin( void )
 {
-    GetAndSetMargin( IMPEXC_MARGINSIDE_LEFT );
+    GetAndSetMargin( xlLeftMargin );
 }
 
 
 void ImportExcel::Rightmargin( void )
 {
-    GetAndSetMargin( IMPEXC_MARGINSIDE_RIGHT );
+    GetAndSetMargin( xlRightMargin );
 }
 
 
 void ImportExcel::Topmargin( void )
 {
-    GetAndSetMargin( IMPEXC_MARGINSIDE_TOP );
+    GetAndSetMargin( xlTopMargin );
 }
 
 
 void ImportExcel::Bottommargin( void )
 {
-    GetAndSetMargin( IMPEXC_MARGINSIDE_BOTTOM );
+    GetAndSetMargin( xlBottomMargin );
 }
 
 
@@ -1122,7 +1124,7 @@ void ImportExcel::Boundsheet( void )
         nGrbit = 0x0000;
 
     String aName( aIn.ReadByteString( FALSE ) );
-    ScFilterTools::ConvertName( aName );
+    ScfTools::ConvertName( aName );
 
     *pExcRoot->pTabNameBuff << aName;
 
@@ -1754,11 +1756,11 @@ void ImportExcel::Name34( void )
         bPrintTitles = ( cFirstNameChar == EXC_BUILTIN_PRINTTITLES );
         bBuildIn = TRUE;
 
-        aName.AssignAscii( ScFilterTools::GetBuiltInName( cFirstNameChar ) );
+        aName.AssignAscii( ScfTools::GetBuiltInName( cFirstNameChar ) );
     }
     else
     {
-        ScFilterTools::ConvertName( aName );
+        ScfTools::ConvertName( aName );
 
         bPrintArea = bPrintTitles = bBuildIn = FALSE;
     }
@@ -2369,7 +2371,7 @@ void ImportExcel::GetHFString( String& rStr )
 }
 
 
-void ImportExcel::GetAndSetMargin( IMPEXC_MARGINSIDE eSide )
+void ImportExcel::GetAndSetMargin( XclMarginType eSide )
 {
     double              fMargin;
     aIn >> fMargin;
@@ -2378,11 +2380,11 @@ void ImportExcel::GetAndSetMargin( IMPEXC_MARGINSIDE eSide )
 
     DBG_ASSERT( pStyleSheetItemSet, "-ImportExcel::GetAndSetMargin(): nix StyleSheetItemSet!" );
 
-    if( eSide == IMPEXC_MARGINSIDE_TOP || eSide == IMPEXC_MARGINSIDE_BOTTOM )
+    if( (eSide == xlTopMargin) || (eSide == xlBottomMargin) )
     {
         SvxULSpaceItem  aItem( ATTR_ULSPACE );
         aItem = ( const SvxULSpaceItem& ) pStyleSheetItemSet->Get( ATTR_ULSPACE );
-        if( eSide == IMPEXC_MARGINSIDE_TOP )
+        if( eSide == xlTopMargin )
             aItem.SetUpperValue( ( UINT16 ) fMargin );
         else
             aItem.SetLowerValue( ( UINT16 ) fMargin );
@@ -2392,7 +2394,7 @@ void ImportExcel::GetAndSetMargin( IMPEXC_MARGINSIDE eSide )
     {
         SvxLRSpaceItem  aItem( ATTR_LRSPACE );
         aItem = ( const SvxLRSpaceItem& ) pStyleSheetItemSet->Get( ATTR_LRSPACE );
-        if( eSide == IMPEXC_MARGINSIDE_RIGHT )
+        if( eSide == xlRightMargin )
             aItem.SetRightValue( ( UINT16 ) fMargin );
         else
             aItem.SetLeftValue( ( UINT16 ) fMargin );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-30 13:13:02 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,17 @@ enum XclTextWrap
 
 #define EXC_EXTN_BUILTIN            0x0001
 #define EXC_EXTN_OLE                0x0010
+
+//___________________________________________________________________
+// (0x0026, 0x0027, 0x0028, 0x0029) LEFTMARGIN, RIGHTMARGIN, TOPMARGIN, BOTTOMMARGIN
+
+enum XclMarginType
+{
+    xlLeftMargin,
+    xlRightMargin,
+    xlTopMargin,
+    xlBottomMargin
+};
 
 //___________________________________________________________________
 // (0x0031) FONT

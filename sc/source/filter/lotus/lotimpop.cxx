@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotimpop.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:58:59 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
 #include "global.hxx"
 
 #include "root.hxx"
-#include "flttools.hxx"
 #include "lotimpop.hxx"
 #include "lotfntbf.hxx"
 #include "lotform.hxx"
@@ -89,6 +88,7 @@
 #include "namebuff.hxx"
 #include "lotrange.hxx"
 #include "lotattr.hxx"
+#include "flttools.hxx"
 
 
 static NAMESPACE_VOS( OMutex )      aLotImpSemaphore;
@@ -344,7 +344,7 @@ ScFormulaCell *ImportLotus::Formulacell( UINT16 n )
 
 void ImportLotus::Read( String &r )
 {
-    ScFilterTools::AppendCString( *pIn, r, eQuellChar );
+    ScfTools::AppendCString( *pIn, r, eQuellChar );
 }
 
 

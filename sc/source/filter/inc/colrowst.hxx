@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-31 10:52:49 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,10 @@
 #ifndef _ROOT_HXX
 #include "root.hxx"
 #endif
-#ifndef _FLTTOOLS_HXX
-#include "flttools.hxx"
-#endif
 
+#ifndef _SC_FILTERTOOLS_HXX
+#include "FilterTools.hxx"
+#endif
 
 // ----- forwards --------------------------------------------------------
 
@@ -95,8 +95,8 @@ private:
     // ACHTUNG: Col-/Row-Angaben in TWIPS
     friend ScExtDocOptions;
 
-    UINT16List*         pHorizPb;   // horizontale Seitenumbrueche
-    UINT16List*         pVertPb;    // vertikale ~
+    ScfUInt16List*      pHorizPb;   // horizontale Seitenumbrueche
+    ScfUInt16List*      pVertPb;    // vertikale ~
 
     ScExtTabOptions*    pExtTabOpt;
     INT32*              pWidth;

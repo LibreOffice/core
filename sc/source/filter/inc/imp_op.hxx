@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-31 10:52:49 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,7 @@ protected:
                                 EditTextObject*& rpMid, EditTextObject*& rpRight );
     void                    GetHF( BOOL bHeader );
     virtual void            GetHFString( String& rStr );
-    void                    GetAndSetMargin( IMPEXC_MARGINSIDE eSide );
+    void                    GetAndSetMargin( XclMarginType eSide );
                                 // nSide -> IMPEXC_MARGINSIDE_*
     String                  GetPageStyleName( UINT16 nTab );
     EditTextObject*         CreateFormText( BYTE, const String&, const UINT16 );

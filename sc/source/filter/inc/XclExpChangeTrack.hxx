@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-30 11:33:30 $
+ *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,15 @@
 #include "chgtrack.hxx"
 #endif
 
-#ifndef _EXCRECDS_HXX
-#include "excrecds.hxx"
+#ifndef _SC_FILTERTOOLS_HXX
+#include "FilterTools.hxx"
 #endif
 #ifndef _SC_XCLEXPEXTERNSHEET_HXX
 #include "XclExpExternsheet.hxx"
+#endif
+
+#ifndef _EXCRECDS_HXX
+#include "excrecds.hxx"
 #endif
 
 //___________________________________________________________________
@@ -481,7 +485,7 @@ struct XclExpChTrData
 {
     XclExpUniString*            pString;
     ExcUPN*                     pUPN;
-    UINT16List*                 pRefList;
+    ScfUInt16List*              pRefList;
     double                      fValue;
     sal_Int32                   nRKValue;
     sal_uInt16                  nType;
