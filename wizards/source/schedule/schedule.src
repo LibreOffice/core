@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:35:54 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ Text[ swedish ] = "%PRODUCTNAME-kalender";
     Text[ czech ] = "Kalendář %PRODUCTNAME";
     Text[ hebrew ] = "‮לוח שנה %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME केलन्डर";
+    Text[ slovak ] = "Kalendár %PRODUCTNAME";
 };
 
 String  dlgCalTitleBack
@@ -169,6 +170,7 @@ Text[ swedish ] = "Tillbaka";
     Text[ czech ] = "Zpět";
     Text[ hebrew ] = "‮קודם‬";
     Text[ hindi ] = "पीछे";
+    Text[ slovak ] = "Späť";
 };
 
 String  dlgCalTitleOwnData
@@ -199,6 +201,7 @@ Text[ swedish ] = "Egna data";
     Text[ czech ] = "Osobní data";
     Text[ hebrew ] = "‮פרטים אישיים‬";
     Text[ hindi ] = "वैयक्तिक ड़ॉटा";
+    Text[ slovak ] = "Osobné údaje";
 };
 
 String dlgSchdlTitle
@@ -230,6 +233,7 @@ Text[ swedish ] = "Ber�kna helgdagar";
     Text[ czech ] = "Vložit svátky do kalendáře";
     Text[ hebrew ] = "‮הוספת חגים ללוח שנה‬";
     Text[ hindi ] = "छुट्टियों का दिनों को केलन्डर में जोड़ो";
+    Text[ slovak ] = "Pridať sviatky do kalendára";
 };
 
 String dlgOK
@@ -260,6 +264,7 @@ Text[ swedish ] = "F�rdigst�ll";
     Text[ czech ] = "Vytvořit";
     Text[ hebrew ] = "‮יצירה‬";
     Text[ hindi ] = "उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť";
 };
 
 String dlgCancel
@@ -290,6 +295,7 @@ Text[ swedish ] = "Avbryt";
     Text[ czech ] = "Zrušit";
     Text[ hebrew ] = "‮ביטול‬";
     Text[ hindi ] = "रद्द करो";
+    Text[ slovak ] = "Zrušiť";
 };
 
 String  dlgCalFrameOption
@@ -320,6 +326,7 @@ Text[ swedish ] = "Kalender";
     Text[ czech ] = "Kalendář";
     Text[ hebrew ] = "‮לוח שנה‬";
     Text[ hindi ] = "केलन्डर";
+    Text[ slovak ] = "Kalendár";
 };
 
 String  dlgCalOptionYear
@@ -350,6 +357,7 @@ Text[ swedish ] = "~�rs�versikt";
     Text[ czech ] = "Roční přehled";
     Text[ hebrew ] = "‮מבט שנתי‬";
     Text[ hindi ] = "~वार्षिक दृश्य";
+    Text[ slovak ] = "P~rehľad roku";
 };
 
 String  dlgCalOptionMonth
@@ -380,6 +388,7 @@ Text[ swedish ] = "~M�nad";
     Text[ czech ] = "Měsíc";
     Text[ hebrew ] = "‮חודש‬";
     Text[ hindi ] = "~मास";
+    Text[ slovak ] = "~Mesiac";
 };
 
 String dlgSchdlDescription
@@ -411,6 +420,7 @@ Text[ swedish ] = "Ber�kna helgdagar f�r";
     Text[ czech ] = "Přidat svátky pro";
     Text[ hebrew ] = "‮הוספת החגים של‬";
     Text[ hindi ] = "केलिए छुट्टियों का दिनों को जोड़ो";
+    Text[ slovak ] = "Pridať sviatky pre";
 };
 
 String dlgSchdlCountry
@@ -442,6 +452,7 @@ Text[ swedish ] = "Sverige";
     Text[ czech ] = "USA";
     Text[ hebrew ] = "‮ישראל‬";
     Text[ hindi ] = "USA";
+    Text[ slovak ] = "USA";
 };
 
 String dlgTime
@@ -472,6 +483,7 @@ Text[ swedish ] = "Tidsrymd";
     Text[ czech ] = "Časový rámec";
     Text[ hebrew ] = "‮טווח זמן‬";
     Text[ hindi ] = "समय फ्रेम";
+    Text[ slovak ] = "Časový rámec";
 };
 
 String dlgYear
@@ -503,6 +515,7 @@ Text[ swedish ] = "�r";
     Text[ czech ] = "Rok";
     Text[ hebrew ] = "‮שנה‬";
     Text[ hindi ] = "वर्ष";
+    Text[ slovak ] = "Rok";
 };
 
 String dlgCalMonth
@@ -534,6 +547,7 @@ Text[ swedish ] = "M�nad";
     Text[ czech ] = "Měsíc";
     Text[ hebrew ] = "‮חודש‬";
     Text[ hindi ] = "मास";
+    Text[ slovak ] = "Mesiac";
 };
 
 String  dlgSpecificBankholidays
@@ -586,6 +600,7 @@ Text[ swedish ] = "Egna data";
     Text[ czech ] = "Osobní data";
     Text[ hebrew ] = "‮פרטים אישיים‬";
     Text[ hindi ] = "वैयक्तिक ड़ॉटा";
+    Text[ slovak ] = "Osobné údaje";
 };
 
 String dlgCalInsert
@@ -616,6 +631,7 @@ Text[ swedish ] = "~Infoga";
     Text[ czech ] = "Vložit";
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "~जोड़ो";
+    Text[ slovak ] = "Vlož~iť";
 };
 
 String dlgCalDelete
@@ -646,6 +662,7 @@ Text[ swedish ] = "Ta ~bort";
     Text[ czech ] = "Smazat";
     Text[ hebrew ] = "‮מחיקה‬";
     Text[ hindi ] = "~मिटाओ";
+    Text[ slovak ] = "~Vymazať";
 };
 
 String dlgCalNewEvent
@@ -676,6 +693,7 @@ Text[ swedish ] = "Ny h�ndelse";
     Text[ czech ] = "Nová událost";
     Text[ hebrew ] = "‮אירוע חדש‬";
     Text[ hindi ] = "नया घटना";
+    Text[ slovak ] = "Nová udalosť";
 };
 
 String dlgCalEvent
@@ -706,6 +724,7 @@ Text[ swedish ] = "H�ndelse";
     Text[ czech ] = "Událost";
     Text[ hebrew ] = "‮אירוע‬";
     Text[ hindi ] = "घटना";
+    Text[ slovak ] = "Udalosť";
 };
 
 String dlgCalEventOnce
@@ -736,6 +755,7 @@ Text[ swedish ] = "Eng�ngsf�reteelse";
     Text[ czech ] = "Jednorázová";
     Text[ hebrew ] = "‮חד-פעמי‬";
     Text[ hindi ] = "एक-बार";
+    Text[ slovak ] = "Jednorazové";
 };
 
 String dlgCalEventDay
@@ -767,6 +787,7 @@ Text[ swedish ] = "Dag";
     Text[ czech ] = "Den";
     Text[ hebrew ] = "‮יום‬";
     Text[ hindi ] = "दिन";
+    Text[ slovak ] = "Deň";
 };
 
 String dlgCalEventMonth
@@ -798,6 +819,7 @@ Text[ swedish ] = "M�nad";
     Text[ czech ] = "Měsíc";
     Text[ hebrew ] = "‮חודש‬";
     Text[ hindi ] = "मास";
+    Text[ slovak ] = "Mesiac";
 };
 
 String dlgCalEventYear
@@ -829,6 +851,7 @@ Text[ swedish ] = "�r";
     Text[ czech ] = "Rok";
     Text[ hebrew ] = "‮שנה‬";
     Text[ hindi ] = "वर्ष";
+    Text[ slovak ] = "Rok";
 };
 
 // --------------------------------------------------------------------
@@ -864,6 +887,7 @@ Text[ swedish ] = "sweden.bmp";
     Text[ czech ] = "usa.bmp";
     Text[ hebrew ] = "israel.bmp";
     Text[ hindi ] = "usa.bmp";
+    Text[ slovak ] = "usa.bmp";
 };
 
 // --------------------------------------------------------------------
@@ -896,6 +920,7 @@ Text[ swedish ] = "Allm�nna helgdagar";
     Text[ hebrew ] = "‮חגים‬";
     Text[ portuguese_brazilian ] = "Feriados oficiais";
     Text[ hindi ] = "सार्वजनिक छुट्ठियाँ";
+    Text[ slovak ] = "Štátne sviatky";
 };
 
 
@@ -929,6 +954,7 @@ Text[ swedish ] = "Januari";
     Text[ czech ] = "Leden";
     Text[ hebrew ] = "‮ינואר‬";
     Text[ hindi ] = "जनवरी";
+    Text[ slovak ] = "Január";
 };
 
 String dlgMonth+1
@@ -959,6 +985,7 @@ Text[ swedish ] = "Februari";
     Text[ czech ] = "Únor";
     Text[ hebrew ] = "‮פברואר‬";
     Text[ hindi ] = "फरवरी";
+    Text[ slovak ] = "Február";
 };
 
 String dlgMonth+2
@@ -989,6 +1016,7 @@ Text[ swedish ] = "Mars";
     Text[ czech ] = "Březen";
     Text[ hebrew ] = "‮מרץ‬";
     Text[ hindi ] = "मार्च";
+    Text[ slovak ] = "Marec";
 };
 
 String dlgMonth+3
@@ -1019,6 +1047,7 @@ Text[ swedish ] = "April";
     Text[ czech ] = "Duben";
     Text[ hebrew ] = "‮אפריל‬";
     Text[ hindi ] = "अप्रैल";
+    Text[ slovak ] = "Apríl";
 };
 
 String dlgMonth+4
@@ -1049,6 +1078,7 @@ Text[ swedish ] = "Maj";
     Text[ czech ] = "Květen";
     Text[ hebrew ] = "‮מאי‬";
     Text[ hindi ] = "मेइ";
+    Text[ slovak ] = "Máj";
 };
 
 String dlgMonth+5
@@ -1079,6 +1109,7 @@ Text[ swedish ] = "Juni";
     Text[ czech ] = "Červen";
     Text[ hebrew ] = "‮יוני‬";
     Text[ hindi ] = "जून";
+    Text[ slovak ] = "Jún";
 };
 
 String dlgMonth+6
@@ -1109,6 +1140,7 @@ Text[ swedish ] = "Juli";
     Text[ czech ] = "Červenec";
     Text[ hebrew ] = "‮יולי‬";
     Text[ hindi ] = "जुलाई";
+    Text[ slovak ] = "Júl";
 };
 
 String dlgMonth+7
@@ -1139,6 +1171,7 @@ Text[ swedish ] = "Augusti";
     Text[ czech ] = "Srpen";
     Text[ hebrew ] = "‮אוגוסט‬";
     Text[ hindi ] = "अगस्त";
+    Text[ slovak ] = "August";
 };
 
 String dlgMonth+8
@@ -1169,6 +1202,7 @@ Text[ swedish ] = "September";
     Text[ czech ] = "Září";
     Text[ hebrew ] = "‮ספטמבר‬";
     Text[ hindi ] = "सितंबर";
+    Text[ slovak ] = "September";
 };
 
 String dlgMonth+9
@@ -1199,6 +1233,7 @@ Text[ swedish ] = "Oktober";
     Text[ czech ] = "Říjen";
     Text[ hebrew ] = "‮אוקטובר‬";
     Text[ hindi ] = "अक्तूबर";
+    Text[ slovak ] = "Október";
 };
 
 String dlgMonth+10
@@ -1229,6 +1264,7 @@ Text[ swedish ] = "November";
     Text[ czech ] = "Listopad";
     Text[ hebrew ] = "‮נובמבר‬";
     Text[ hindi ] = "नवंबर";
+    Text[ slovak ] = "November";
 };
 
 String dlgMonth+11
@@ -1259,6 +1295,7 @@ Text[ swedish ] = "December";
     Text[ czech ] = "Prosinec";
     Text[ hebrew ] = "‮דצמבר‬";
     Text[ hindi ] = "दिसंबर";
+    Text[ slovak ] = "December";
 };
 
 // --------------------------------------------------------------------
@@ -1291,6 +1328,7 @@ Text[ swedish ] = "�rs-/m�nadskalender";
     Text[ czech ] = "Roční / měsíční kalendář";
     Text[ hebrew ] = "‮לוח שנתי\\חודשי‬";
     Text[ hindi ] = "वार्षिक / मासिक केलन्डर";
+    Text[ slovak ] = "Ročný / mesačný kalendár";
 };
 
 String msgCalError
@@ -1321,6 +1359,7 @@ Text[ swedish ] = "Ett fel uppstod n�r kalendern skapades.";
     Text[ czech ] = "Při vytváření kalendáře došlo k chybě.";
     Text[ hebrew ] = "‮שגיאה בעת יצירת הלוח‬";
     Text[ hindi ] = "केलन्डर को उत्पन्न करने के समय गलती घटित हुआ ।";
+    Text[ slovak ] = "Pri vytváraní kalendára sa vyskytla chyba.";
 };
 
 String msgCalRemoveTitle
@@ -1351,6 +1390,7 @@ Text[ swedish ] = "Ta bort h�ndelseposter";
     Text[ czech ] = "Odstranit události";
     Text[ hebrew ] = "‮מחיקת ערכי ארועים‬";
     Text[ hindi ] = "घटना प्रविष्टियों को मिटाओ";
+    Text[ slovak ] = "Odstrániť udalosti";
 };
 
 String msgCalRemove
@@ -1382,6 +1422,7 @@ Text[ swedish ] = "Skall de markerade posterna tas bort?";
     Text[ czech ] = "Smazat vybrané položky?";
     Text[ hebrew ] = "‮מחיקת ערכים שנבחרו?‬";
     Text[ hindi ] = "चुने हुए प्रविष्टियों को मिटाना है?";
+    Text[ slovak ] = "Zmazať vybrané položky?";
 };
 
 // --------------------------------------------------------------------
@@ -1421,6 +1462,7 @@ Text[ swedish ] = "";
     Text[ czech ] = "Pracovní týden";
     Text[ hebrew ] = "‮שבוע העבודה‬";
     Text[ hindi ] = "कार्य सप्ताह";
+    Text[ slovak ] = "Pracovný týždeň";
 };
 
 String stlWeekend
@@ -1458,6 +1500,7 @@ Text[ swedish ] = "";
     Text[ czech ] = "Víkend";
     Text[ hebrew ] = "‮סוף שבוע‬";
     Text[ hindi ] = "छुट्ठी के दिन";
+    Text[ slovak ] = "Víkend";
 };
 
 // --------------------------------------------------------------------
@@ -1490,6 +1533,7 @@ Text[ swedish ] = "Kalender";
     Text[ czech ] = "Kalendář";
     Text[ hebrew ] = "‮לוח שנה‬";
     Text[ hindi ] = "केलन्डर";
+    Text[ slovak ] = "Kalendár";
 };
 
 String  nameCalMonth
@@ -1522,6 +1566,7 @@ Text[ swedish ] = "M�nad";
     Text[ czech ] = "Měsíc";
     Text[ hebrew ] = "‮חודש‬";
     Text[ hindi ] = "मास";
+    Text[ slovak ] = "Mesiac";
 };
 
 
@@ -1554,7 +1599,10 @@ Text[ English_us ] = "Progress:";
     Text[ czech ] = "Průběh:";
     Text[ hebrew ] = "‮התקדמות:‬";
     Text[ hindi ] = "प्रस्थान:";
+    Text[ slovak ] = "Priebeh:";
 };
+
+
 
 
 
