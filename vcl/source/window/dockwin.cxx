@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-24 11:19:42 $
+ *  last change: $Author: ssa $ $Date: 2002-05-08 11:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,7 +653,11 @@ long DockingWindow::Notify( NotifyEvent& rNEvt )
         else if( rNEvt.GetType() == EVENT_KEYINPUT )
         {
             const KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
-            if( rKey.GetCode() == KEY_F4 && rKey.GetModifier() )
+            if( rKey.GetCode() == KEY_F4 && rKey.GetModifier()
+#ifdef WNT
+                && !rKey.IsMod2()  // avoid Alt-F4 on Windows
+#endif
+                )
             {
                 SetFloatingMode( !IsFloatingMode() );
                 return TRUE;
