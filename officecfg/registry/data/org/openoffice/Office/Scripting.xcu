@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Scripting.xcu,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:54:03 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 14:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,10 @@
     </node>
     <node oor:name="ScriptDisplaySettings">
         <prop oor:name="ShowBasic">
-            <value xml:lang="en-US">true</value>
+            <value>true</value>
         </prop>
         <prop oor:name="ShowSF">
-            <value xml:lang="en-US">false</value>
+            <value>false</value>
         </prop>
     </node>
 </oor:component-data>
