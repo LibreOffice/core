@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeTypeHandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-03-20 13:38:37 $
+ *  last change: $Author: af $ $Date: 2002-04-11 12:58:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,8 @@ const OUString& ShapeTypeHandler::GetServiceName (ShapeTypeId aTypeId) const
 
 
 /** This factory method determines the type descriptor for the type of the
-    given shape and then calls the descriptor's create function.
+    given shape, then calls the descriptor's create function, and finally
+    initialized the new object.
 */
 AccessibleShape*
     ShapeTypeHandler::CreateAccessibleObject (
@@ -172,11 +173,15 @@ AccessibleShape*
         AccessibleShapeTreeInfo& rShapeTreeInfo) const
 {
     ShapeTypeId nSlotId (GetSlotId (rxShape));
-    return maShapeTypeDescriptorList[nSlotId].maCreateFunction (
-        rxParent,
-        rxShape,
-        rShapeTreeInfo,
-        maShapeTypeDescriptorList[nSlotId].mnShapeTypeId);
+    AccessibleShape* pShape =
+        maShapeTypeDescriptorList[nSlotId].maCreateFunction (
+            rxParent,
+            rxShape,
+            rShapeTreeInfo,
+            maShapeTypeDescriptorList[nSlotId].mnShapeTypeId);
+    if (pShape != NULL)
+        pShape->Init();
+    return pShape;
 }
 
 
