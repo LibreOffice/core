@@ -1,4 +1,4 @@
-br	bridges	:	cppuhelper cli_ure jurt jvmaccess NULL
+br	bridges	:	cppuhelper cli_ure jurt jvmaccess salhelper NULL
 br	bridges									usr1	-	all	br_mkout NULL
 br	bridges\unotypes						nmake	-	all	br_unotypes NULL
 br	bridges\source\remote\static			nmake	-	all	br_rem_static br_unotypes NULL
