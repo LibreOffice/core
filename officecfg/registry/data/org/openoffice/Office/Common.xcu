@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:07:32 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 14:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,33 +87,43 @@
         <value xml:lang="pl">true</value>
         <value xml:lang="ja">true</value>
         <value xml:lang="zh-CN">true</value>
-        <value xml:lang="pt">true</value>
+        <value xml:lang="pt">Verdadeiro</value>
         <value xml:lang="el">true</value>
         <value xml:lang="da">true</value>
         <value xml:lang="ko">true</value>
         <value xml:lang="zh-TW">true</value>
-        <value xml:lang="tr">true</value>
+        <value xml:lang="tr">Doğru</value>
         <value xml:lang="ar">false</value>
+          <value xml:lang="x-comment">true</value>
+          <value xml:lang="fi">Tosi</value>
+          <value xml:lang="pt-BR">true</value>
+          <value xml:lang="ca">Veritable</value>
+          <value xml:lang="th">จริง</value>
       </prop>
       <prop oor:name="DialogScale">
-        <value xml:lang="en-US">10</value>
+        <value xml:lang="en-US">0</value>
         <value xml:lang="de">0</value>
         <value xml:lang="ru">13</value>
         <value xml:lang="nl">10</value>
-        <value xml:lang="fr">10</value>
-        <value xml:lang="es">10</value>
+        <value xml:lang="fr">0</value>
+        <value xml:lang="es">0</value>
         <value xml:lang="it">10</value>
-        <value xml:lang="sv">10</value>
+        <value xml:lang="sv">0</value>
         <value xml:lang="pl">13</value>
-        <value xml:lang="ja">13</value>
-        <value xml:lang="zh-CN">13</value>
+        <value xml:lang="ja">0</value>
+        <value xml:lang="zh-CN">0</value>
         <value xml:lang="pt">10</value>
         <value xml:lang="el">10</value>
         <value xml:lang="da">10</value>
-        <value xml:lang="ko">13</value>
-        <value xml:lang="zh-TW">13</value>
+        <value xml:lang="ko">0</value>
+        <value xml:lang="zh-TW">0</value>
         <value xml:lang="tr">13</value>
         <value xml:lang="ar">13</value>
+          <value xml:lang="x-comment">10</value>
+          <value xml:lang="fi">10</value>
+          <value xml:lang="pt-BR">10</value>
+          <value xml:lang="ca">10</value>
+          <value xml:lang="th">10</value>
       </prop>
     </node>
   </node>
