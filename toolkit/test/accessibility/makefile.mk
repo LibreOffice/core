@@ -1,17 +1,17 @@
 # This is the dmake version.
 
+# copied from settings.mk
+SOLARBINDIR=$(SOLARVERSION)$/$(INPATH)$/bin$(EXT_UPDMINOR)
 
 # Please modify the following lines to match your environment:
 #   If you use the run: target at the end of the file, then adapt port number.
 PORT_NUMBER = 5678
 
-
 # The following variables probably don't need to be changed.
 JAVAC = javac
 JAVA = java
 #   The JAR_PATH points to the jar files of your local office installation.
-JAR_PATH = $(SOLARVERSION)$/$(COMP_ENV)$/bin$(UPDMINOREXT)$/
-
+JAR_PATH = $(SOLARBINDIR)$/
 
 
 # The rest of this makefile should not need to be touched.
@@ -73,16 +73,18 @@ CLASSPATH !:=$(JAVA_CLASSPATHS:t$(PATH_SEPERATOR))
 JFLAGS = -deprecation -classpath $(CLASSPATH)
 
 %.class : %.java
-    $(JAVAC) $(JFLAGS) $<
+    +$(JAVAC) $(JFLAGS) $<
 
 AccessibilityWorkBench : $(JAVA_FILES:b:+".class")
 
 
 # Create a jar file of all files neccessary to build and run the work bench.
-dist:
-    jar -cfm AccessibilityWorkBench.jar jawb.mf *.class
+dist: AccessibilityWorkBench.jar
+
+AccessibilityWorkBench.jar: $(JAVA_FILES:b:+".class")
+    +jar -cfm AccessibilityWorkBench.jar jawb.mf *.class
 
 # Example of how to run the work bench.
 run:
-    $(JAVA) -classpath $(CLASSPATH) AccessibilityWorkBench -p $(PORT_NUMBER)
+    +$(JAVA) -classpath $(CLASSPATH) AccessibilityWorkBench -p $(PORT_NUMBER)
 
