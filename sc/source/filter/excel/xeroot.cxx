@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:29:22 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@
 #include "xecontent.hxx"
 #endif
 
-#include <patattr.hxx>
 
 // Global data ================================================================
 
