@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-01-31 09:15:38 $
+ *  last change: $Author: od $ $Date: 2002-09-03 14:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -910,7 +910,9 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                     const SvxBrushItem *pBrushItem =
                         (const SvxBrushItem *)pItem;
 
-                    if( !pBrushItem->GetColor().GetTransparency() )
+                    /// OD 02.09.2002 #99657#
+                    /// Body has a background color, if it is not "no fill"/"auto fill"
+                    if( pBrushItem->GetColor() != COL_TRANSPARENT )
                         bBodyBGColorSet = TRUE;
                     if( GPOS_NONE != pBrushItem->GetGraphicPos() )
                         bBodyBackgroundSet = TRUE;

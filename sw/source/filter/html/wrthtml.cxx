@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-07-04 07:48:54 $
+ *  last change: $Author: od $ $Date: 2002-09-03 14:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1270,7 +1270,10 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
                                   String& rEmbGrfNm, sal_Bool bGraphic )
 {
     const Color &rBackColor = pBrushItem->GetColor();
-    if( !rBackColor.GetTransparency() )
+    /// OD 02.09.2002 #99657#
+    /// check, if background color is not "no fill"/"auto fill", instead of
+    /// only checking, if transparency is not set.
+    if( rBackColor.GetColor() != COL_TRANSPARENT )
     {
         ByteString sOut( ' ' );
         (sOut += sHTML_O_bgcolor) += '=';

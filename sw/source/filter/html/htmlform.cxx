@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlform.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
+ *  last change: $Author: od $ $Date: 2002-09-03 15:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1190,9 +1190,13 @@ Reference< drawing::XShape > SwHTMLParser::InsertControl(
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             const Color &rColor = ((const SvxBrushItem *)pItem)->GetColor();
-            if( !rColor.GetTransparency() )
+            /// OD 02.09.2002 #99657#
+            /// copy color, if color is not "no fill"/"auto fill"
+            if( rColor.GetColor() != COL_TRANSPARENT )
             {
-                aTmp <<= (sal_Int32)rColor.GetRGBColor();
+                /// OD 02.09.2002 #99657#
+                /// copy complete color with transparency
+                aTmp <<= static_cast<sal_Int32>(rColor.GetColor());
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
 

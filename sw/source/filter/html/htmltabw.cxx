@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltabw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 13:08:58 $
+ *  last change: $Author: od $ $Date: 2002-09-03 14:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,10 @@ sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableBox& rBox,
         const SvxBrushItem& rBrushItem =
             rBox.GetFrmFmt()->GetBackground();
 
-        bRet = !rBrushItem.GetColor().GetTransparency() ||
+        /// OD 02.09.2002 #99657#
+        /// The table box has a background, if its background color is not "no fill"/
+        /// "auto fill" or it has a background graphic.
+        bRet = rBrushItem.GetColor() != COL_TRANSPARENT ||
                rBrushItem.GetGraphicLink() || rBrushItem.GetGraphic();
     }
     else
@@ -314,7 +317,10 @@ sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableLine& rLine,
 
     sal_Bool bRet = sal_False;
     const SvxBrushItem& rBrushItem = rLine.GetFrmFmt()->GetBackground();
-    bRet = !rBrushItem.GetColor().GetTransparency() ||
+    /// OD 02.09.2002 #99657#
+    /// The table line has a background, if its background color is not "no fill"/
+    /// "auto fill" or it has a background graphic.
+    bRet = rBrushItem.GetColor() != COL_TRANSPARENT ||
            rBrushItem.GetGraphicLink() || rBrushItem.GetGraphic();
 
     if( !bRet )

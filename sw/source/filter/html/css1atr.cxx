@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-24 12:38:53 $
+ *  last change: $Author: od $ $Date: 2002-09-03 15:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2517,7 +2517,10 @@ static BOOL OutCSS1_FrmFmtBrush( SwHTMLWriter& rWrt,
                                  const SvxBrushItem& rBrushItem )
 {
     BOOL bWritten = FALSE;
-    if( 0 == rBrushItem.GetColor().GetTransparency() ||
+    /// OD 02.09.2002 #99657#
+    /// output brush of frame format, if its background color is not "no fill"/"auto fill"
+    /// or it has a background graphic.
+    if( rBrushItem.GetColor() != COL_TRANSPARENT ||
         0 != rBrushItem.GetGraphicLink() ||
         0 != rBrushItem.GetGraphicPos() )
     {
@@ -3506,7 +3509,9 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
 
     // Erstmal die Farbe holen
     BOOL bColor = FALSE;
-    BOOL bTransparent = rColor.GetTransparency() > 0;
+    /// OD 02.09.2002 #99657#
+    /// set <bTransparent> to TRUE, if color is "no fill"/"auto fill"
+    BOOL bTransparent = (rColor.GetColor() == COL_TRANSPARENT);
     Color aColor;
     if( !bTransparent )
     {
@@ -3929,6 +3934,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.16  2002/05/24 12:38:53  mib
+      #97826#: Export default style correctly
+
       Revision 1.15  2002/05/16 13:08:57  mib
       #97334#: Process non positive margin correctly in HTML export
 

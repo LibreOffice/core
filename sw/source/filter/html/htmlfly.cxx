@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 13:08:57 $
+ *  last change: $Author: od $ $Date: 2002-09-03 14:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,8 +370,11 @@ USHORT SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
                 if( bEmpty )
                 {
                     const SvxBrushItem& rBrush = rFrmFmt.GetBackground();
+                    /// OD 02.09.2002 #99657#
+                    /// background is not empty, if it has a background graphic
+                    /// or its background color is not "no fill"/"auto fill".
                     if( GPOS_NONE != rBrush.GetGraphicPos() ||
-                        0 == rBrush.GetColor().GetTransparency() )
+                        rBrush.GetColor() != COL_TRANSPARENT )
                         bEmpty = FALSE;
                 }
                 if( bEmpty )
