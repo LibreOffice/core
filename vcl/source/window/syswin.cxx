@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:58:08 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,6 +583,42 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     }
     else
         rData.SetState( 0 );
+
+    // read maximized pos/size
+    aTokenStr = rStr.GetToken( 0, ',', nIndex );
+    if ( aTokenStr.Len() )
+    {
+        rData.SetMaximizedX( aTokenStr.ToInt32() );
+        nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_X;
+    }
+    else
+        rData.SetMaximizedX( 0 );
+    aTokenStr = rStr.GetToken( 0, ',', nIndex );
+    if ( aTokenStr.Len() )
+    {
+        rData.SetMaximizedY( aTokenStr.ToInt32() );
+        nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_Y;
+    }
+    else
+        rData.SetMaximizedY( 0 );
+    aTokenStr = rStr.GetToken( 0, ',', nIndex );
+    if ( aTokenStr.Len() )
+    {
+        rData.SetMaximizedWidth( aTokenStr.ToInt32() );
+        nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_WIDTH;
+    }
+    else
+        rData.SetMaximizedWidth( 0 );
+    aTokenStr = rStr.GetToken( 0, ';', nIndex );
+    if ( aTokenStr.Len() )
+    {
+        rData.SetMaximizedHeight( aTokenStr.ToInt32() );
+        nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_HEIGHT;
+    }
+    else
+        rData.SetMaximizedHeight( 0 );
+
+    // mark valid fields
     rData.SetMask( nValidMask );
 }
 
@@ -615,6 +651,18 @@ static void ImplWindowStateToStr( const WindowStateData& rData, ByteString& rStr
         rStr.Append( ByteString::CreateFromInt32( (long)nState ) );
     }
     rStr.Append( ';' );
+    if ( nValidMask & WINDOWSTATE_MASK_MAXIMIZED_X )
+        rStr.Append( ByteString::CreateFromInt32( rData.GetMaximizedX() ) );
+    rStr.Append( ',' );
+    if ( nValidMask & WINDOWSTATE_MASK_MAXIMIZED_Y )
+        rStr.Append( ByteString::CreateFromInt32( rData.GetMaximizedY() ) );
+    rStr.Append( ',' );
+    if ( nValidMask & WINDOWSTATE_MASK_MAXIMIZED_WIDTH )
+        rStr.Append( ByteString::CreateFromInt32( rData.GetMaximizedWidth() ) );
+    rStr.Append( ',' );
+    if ( nValidMask & WINDOWSTATE_MASK_MAXIMIZED_HEIGHT )
+        rStr.Append( ByteString::CreateFromInt32( rData.GetMaximizedHeight() ) );
+    rStr.Append( ';' );
 }
 
 // -----------------------------------------------------------------------
@@ -634,13 +682,17 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
 
     if ( pWindow->mpWindowImpl->mbFrame )
     {
-        ULONG           nState = rData.GetState();
+        ULONG           nState      = rData.GetState();
         SalFrameState   aState;
-        aState.mnMask   = rData.GetMask();
-        aState.mnX      = rData.GetX();
-        aState.mnY      = rData.GetY();
-        aState.mnWidth  = rData.GetWidth();
-        aState.mnHeight = rData.GetHeight();
+        aState.mnMask               = rData.GetMask();
+        aState.mnX                  = rData.GetX();
+        aState.mnY                  = rData.GetY();
+        aState.mnWidth              = rData.GetWidth();
+        aState.mnHeight             = rData.GetHeight();
+        aState.mnMaximizedX         = rData.GetMaximizedX();
+        aState.mnMaximizedY         = rData.GetMaximizedY();
+        aState.mnMaximizedWidth     = rData.GetMaximizedWidth();
+        aState.mnMaximizedHeight    = rData.GetMaximizedHeight();
         // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - ignore Minimize
         //nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
@@ -782,6 +834,26 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
                 rData.SetWidth( aState.mnWidth );
             if ( nValidMask & WINDOWSTATE_MASK_HEIGHT )
                 rData.SetHeight( aState.mnHeight );
+            if ( aState.mnMask & SAL_FRAMESTATE_MASK_MAXIMIZED_X )
+            {
+                rData.SetMaximizedX( aState.mnMaximizedX );
+                nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_X;
+            }
+            if ( aState.mnMask & SAL_FRAMESTATE_MASK_MAXIMIZED_Y )
+            {
+                rData.SetMaximizedY( aState.mnMaximizedY );
+                nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_Y;
+            }
+            if ( aState.mnMask & SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH )
+            {
+                rData.SetMaximizedWidth( aState.mnMaximizedWidth );
+                nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_WIDTH;
+            }
+            if ( aState.mnMask & SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT )
+            {
+                rData.SetMaximizedHeight( aState.mnMaximizedHeight );
+                nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_HEIGHT;
+            }
             if ( nValidMask & WINDOWSTATE_MASK_STATE )
             {
                 // #94144# allow Minimize again, should be masked out when read from configuration
@@ -790,6 +862,7 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
                     aState.mnState &= ~(WINDOWSTATE_STATE_MINIMIZED);
                 rData.SetState( aState.mnState );
             }
+            rData.SetMask( nValidMask );
         }
         else
             rData.SetMask( 0 );
