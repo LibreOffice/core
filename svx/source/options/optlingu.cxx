@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-29 16:28:17 $
+ *  last change: $Author: tl $ $Date: 2000-12-07 09:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,15 +357,20 @@ class OptionsBreakSet : public ModalDialog
     NumericField    aValNF;
 
 public:
-    OptionsBreakSet(Window* pParent, const String& rGroupBoxTitle) :
+    OptionsBreakSet(Window* pParent, int nRID) :
             ModalDialog(pParent, ResId(RID_SVXDLG_LNG_ED_NUM_PREBREAK, DIALOG_MGR() )),
             aOKPB       (this, ResId(BT_OK_PREBREAK)),
             aCancelPB   (this, ResId(BT_CANCEL_PREBREAK)),
             aValGB      (this, ResId(GB_NUMVAL_PREBREAK)),
             aValNF      (this, ResId(ED_PREBREAK))
     {
+        DBG_ASSERT( STR_NUM_PRE_BREAK_DLG   == nRID ||
+                    STR_NUM_POST_BREAK_DLG  == nRID ||
+                    STR_NUM_MIN_WORDLEN_DLG == nRID, "unexpected RID" );
+
+        if (nRID != -1)
+            aValGB.SetText( String( ResId(nRID) ) );
         FreeResource();
-        aValGB.SetText(rGroupBoxTitle);
     }
 
     NumericField&   GetNumericFld() { return aValNF; }
@@ -386,6 +391,7 @@ enum EID_OPTIONS
     EID_SPELL_AUTO,
     EID_HIDE_MARKINGS,
     EID_OLD_GERMAN,
+    EID_NUM_MIN_WORDLEN,
     EID_NUM_PRE_BREAK,
     EID_NUM_POST_BREAK,
     EID_HYPH_AUTO,
@@ -404,6 +410,7 @@ static const char * aEidToPropName[] =
     "IsSpellAuto",              // EID_SPELL_AUTO
     "IsSpellHide",              // EID_HIDE_MARKINGS
     "IsGermanPreReform",        // EID_OLD_GERMAN
+    "HyphMinWordLength",        // EID_NUM_MIN_WORDLEN,
     "HyphMinLeading",           // EID_NUM_PRE_BREAK
     "HyphMinTrailing",          // EID_NUM_POST_BREAK
     "IsHyphAuto",               // EID_HYPH_AUTO
@@ -930,6 +937,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     sSpellAuto          ( ResId( STR_SPELL_AUTO ) ),
     sHideMarkings       ( ResId( STR_HIDE_MARKINGS ) ),
     sOldGerman          ( ResId( STR_OLD_GERMAN ) ),
+    sNumMinWordlen      ( ResId( STR_NUM_MIN_WORDLEN ) ),
     sNumPreBreak        ( ResId( STR_NUM_PRE_BREAK ) ),
     sNumPostBreak       ( ResId( STR_NUM_POST_BREAK ) ),
     sHyphAuto           ( ResId( STR_HYPH_AUTO ) ),
@@ -1207,14 +1215,26 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
             OptionsUserData aData( (ULONG)pEntry->GetUserData() );
             if(aData.HasNumericValue())
             {
-                OptionsBreakSet aDlg( this, aData.GetEntryId() == EID_NUM_PRE_BREAK ? sNumPreBreak : sNumPostBreak);
-                aDlg.Execute();
-                nVal = aDlg.GetNumericFld().GetValue();
-                if (-1 != nVal && aData.GetNumericValue() != nVal)
+                int nRID = -1;
+                switch (aData.GetEntryId())
                 {
-                    aData.SetNumericValue( (BYTE)nVal ); //! sets IsModified !
-                    pEntry->SetUserData( (void *) aData.GetUserData() );
-                    aLinguOptionsCLB.Invalidate();
+                    case EID_NUM_PRE_BREAK  : nRID = STR_NUM_PRE_BREAK_DLG; break;
+                    case EID_NUM_POST_BREAK : nRID = STR_NUM_POST_BREAK_DLG; break;
+                    case EID_NUM_MIN_WORDLEN: nRID = STR_NUM_MIN_WORDLEN_DLG; break;
+                    default:
+                        DBG_ERROR( "unexpected case" );
+                }
+
+                OptionsBreakSet aDlg( this, nRID );
+                if (RET_OK == aDlg.Execute() )
+                {
+                    nVal = aDlg.GetNumericFld().GetValue();
+                    if (-1 != nVal && aData.GetNumericValue() != nVal)
+                    {
+                        aData.SetNumericValue( (BYTE)nVal ); //! sets IsModified !
+                        pEntry->SetUserData( (void *) aData.GetUserData() );
+                        aLinguOptionsCLB.Invalidate();
+                    }
                 }
             }
         }
@@ -1364,6 +1384,12 @@ void SvxLinguTabPage::UpdateBox_Impl()
         pEntry->SetUserData( (void *)nUserData );
         pModel->Insert( pEntry );
         lcl_SetCheckButton( pEntry, bVal );
+
+        pEntry = CreateEntry( sNumMinWordlen,   CBCOL_SECOND );
+        xProp->getPropertyValue( C2U(UPN_HYPH_MIN_WORD_LENGTH) ) >>= nVal;
+        nUserData = OptionsUserData( EID_NUM_MIN_WORDLEN, TRUE, (USHORT)nVal, FALSE, FALSE).GetUserData();
+        pEntry->SetUserData( (void *)nUserData );
+        pModel->Insert( pEntry );
 
         pEntry = CreateEntry( sNumPreBreak,     CBCOL_SECOND );
         xProp->getPropertyValue( C2U(UPN_HYPH_MIN_LEADING) ) >>= nVal;
@@ -1884,7 +1910,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         sal_Int32 nStart = 0, nLocalIndex = 0;
         Sequence<OUString> aChange;
         sal_Bool bChanged = FALSE;
-        for(ULONG i = 0; i < aModulesCLB.GetEntryCount(); i++)
+        for(USHORT i = 0; i < aModulesCLB.GetEntryCount(); i++)
         {
             SvLBoxEntry *pEntry = aModulesCLB.GetEntry(i);
             ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
