@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml2xcd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-06-05 10:12:11 $
+ *  last change: $Author: as $ $Date: 2001-06-15 12:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,19 +139,39 @@ using namespace ::framework ;
 //  defines
 //_________________________________________________________________________________________________________________
 
-#define PREFIX_TYPES                "t"
-#define PREFIX_FILTERS              "f"
-#define PREFIX_DETECTORS            "d"
-#define PREFIX_LOADERS              "l"
+/*
+    Versions:       1)  first revision
+                        - one entry for every property
+                        - full loclized values
+                    2)  new property "Order" for filters ... but not right set!
+                        all values are 0
+                    3)  decrease size of xml file
+                        - don't write full localized values
+                        - use own formated string for all non localized values
+                        - seperate "Installed" flag for filters
+                    4)  set right values for "Order" property of filters
+ */
 
-#define ARGUMENT_FILENAME           DECLARE_ASCII("-fi=")           // argument for filename                <filename in system notation>
-#define ARGUMENT_WRITEABLE          DECLARE_ASCII("-wr=")           // argument for "writeable"             [true|false]
-#define ARGUMENT_VERSION_INPUT      DECLARE_ASCII("-vi=")           // argument for file version to read    [1|2|3]
-#define ARGUMENT_VERSION_OUTPUT     DECLARE_ASCII("-vo=")           // argument for file version to read    [1|2|3]
-#define ARGUMENTLENGTH              4                               // All arguments should have the same lenght ... it's better to detect it!
-#define ARGUMENTFOUND               0                               // OUString::compareTo returns 0 if searched string match given one
-#define WRITEABLE_ON                DECLARE_ASCII("true" )
-#define WRITEABLE_OFF               DECLARE_ASCII("false")
+#define ARGUMENT_FILENAME_STANDARD      DECLARE_ASCII("-fis=")          // argument for file name of standard filters       <filename in system notation>
+#define ARGUMENT_FILENAME_ADDITIONAL    DECLARE_ASCII("-fia=")          // argument for file name of additional filters     <filename in system notation>
+#define ARGUMENT_PACKAGE_STANDARD       DECLARE_ASCII("-pas=")          // argument for package name of standard filters
+#define ARGUMENT_PACKAGE_ADDITIONAL     DECLARE_ASCII("-paa=")          // argument for package name of additional filters
+#define ARGUMENT_WRITEABLE              DECLARE_ASCII("-wri=")          // argument for "writeable"                         [true|false]
+#define ARGUMENT_VERSION_INPUT          DECLARE_ASCII("-vin=")          // argument for file version to read                [1|2|3]
+#define ARGUMENT_VERSION_OUTPUT         DECLARE_ASCII("-vou=")          // argument for file version to write               [1|2|3]
+
+#define ARGUMENTLENGTH                  5                               // All arguments should have the same lenght ... it's better to detect it!
+#define ARGUMENTFOUND                   0                               // OUString::compareTo returns 0 if searched string match given one
+
+#define WRITEABLE_ON                    DECLARE_ASCII("true" )
+#define WRITEABLE_OFF                   DECLARE_ASCII("false")
+
+#define MINARGUMENTCOUNT                7                               // no optional arguments allowed yet!
+
+#define LISTFILE_STANDARDTYPES          "typelist_standard.txt"
+#define LISTFILE_ADDITIONALTYPES        "typelist_additional.txt"
+#define LISTFILE_STANDARDFILTER         "filterlist_standard.txt"
+#define LISTFILE_ADDITIONALFILTER       "filterlist_additional.txt"
 
 //_________________________________________________________________________________________________________________
 //  declarations
@@ -160,12 +180,22 @@ using namespace ::framework ;
 /*-***************************************************************************************************************/
 struct AppMember
 {
-        FilterCache*                pFilterCache          ;
-        StringHash                  aOldFilterNamesHash   ;
-        ::rtl::OUString             sXCDFileName          ;
-        sal_Bool                    bWriteable            ;
-        sal_Int32                   nVersionInput         ;
-        sal_Int32                   nVersionOutput        ;
+        FilterCache*                pFilterCache          ; // pointer to configuration
+        StringHash                  aOldFilterNamesHash   ; // converter tabel to restaurate old filter names
+        EFilterPackage              ePackage              ; // specify which package should be used => specify using of file name and buffer too!
+        ::rtl::OUString             sFileNameStandard     ; // file name of our standard filter cfg
+        ::rtl::OUString             sFileNameAdditional   ; // file name of our additional filter cfg
+        ::rtl::OUString             sPackageStandard      ; // package name of our standard filter cfg
+        ::rtl::OUString             sPackageAdditional    ; // package name of our additional filter cfg
+        ::rtl::OUStringBuffer       sBufferStandard       ; // buffer of our standard filter cfg
+        ::rtl::OUStringBuffer       sBufferAdditional     ; // buffer of our standard filter cfg
+        ::rtl::OUStringBuffer       sStandardFilterList   ;
+        ::rtl::OUStringBuffer       sAdditionalFilterList ;
+        ::rtl::OUStringBuffer       sStandardTypeList     ;
+        ::rtl::OUStringBuffer       sAdditionalTypeList   ;
+        sal_Bool                    bWriteable            ; // enable/disable writable configuration items
+        sal_Int32                   nVersionInput         ; // format version of input xml file
+        sal_Int32                   nVersionOutput        ; // format version of output xcd file
 
         sal_Int32                   nOriginalTypes        ;
         sal_Int32                   nOriginalFilters      ;
@@ -182,63 +212,57 @@ class XCDGenerator : public Application
 {
     //*************************************************************************************************************
     public:
-
         void Main();
 
     //*************************************************************************************************************
     private:
+        void                    impl_printCopyright             (                                                                                       ); // print copyright to stdout :-)
+        void                    impl_printSyntax                (                                                                                       ); // print help to stout for user
+        void                    impl_parseCommandLine           (           AppMember&                              rMember                             ); // parse command line arguments and fill given struct
 
-        void            impl_printCopyright             (                                                                           );
-        void            impl_printSyntax                (                                                                           );
-        void            impl_parseCommandLine           (           AppMember&                  rMember                             );
-        void            impl_generateXCD                (   const   ::rtl::OUString&            sFileName                           ,
-                                                                    sal_Bool                    bWriteable                          );
-        void            impl_generateCopyright          (           ::rtl::OUStringBuffer&      sXCD                                );
-        void            impl_generateTypeTemplate       (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          );
-        void            impl_generateFilterTemplate     (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          );
-        void            impl_generateDetectorTemplate   (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          );
-        void            impl_generateLoaderTemplate     (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          );
-        void            impl_generateFilterFlagTemplate (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                            const   ::rtl::OUString&            sName                               ,
-                                                                    sal_Int32                   nValue                              ,
-                                                            const   ::rtl::OString&             sDescription = ::rtl::OString()     );
-        void            impl_generateTypeSet            (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          );
-        void            impl_generateFilterSet          (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          );
-        void            impl_generateDetectorSet        (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          );
-        void            impl_generateLoaderSet          (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          );
-        void            impl_generateDefaults           (           ::rtl::OUStringBuffer&      sXCD                                );
-        void            impl_generateIntProperty        (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                            const   ::rtl::OUString&            sName                               ,
-                                                                    sal_Int32                   nValue                              ,
-                                                                    sal_Bool                    bWriteable                          );
-        void            impl_generateBoolProperty       (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                            const   ::rtl::OUString&            sName                               ,
-                                                                    sal_Bool                    bValue                              ,
-                                                                    sal_Bool                    bWriteable                          );
-        void            impl_generateStringProperty     (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                            const   ::rtl::OUString&            sName                               ,
-                                                            const   ::rtl::OUString&            sValue                              ,
-                                                                    sal_Bool                    bWriteable                          );
-        void            impl_generateStringListProperty (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                            const   ::rtl::OUString&            sName                               ,
-                                                            const   ::framework::StringList&    lValue                              ,
-                                                                    sal_Bool                    bWriteable                          );
-        void            impl_generateUINamesProperty    (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                            const   ::rtl::OUString&            sName                               ,
-                                                            const   StringHash&                 lUINames                            ,
-                                                                    sal_Bool                    bWriteable                          );
-        ::rtl::OUString impl_filterSpecialSigns         (   const   ::rtl::OUString&            sValue                              );
-        sal_Unicode     impl_defineSeperator            (   const   ::framework::StringList&    lList                               );
-        void            impl_initFilterHashNew2Old      (           StringHash&                 aHash                               );
-        ::rtl::OUString impl_getOldFilterName           (   const   ::rtl::OUString&            sNewName                            );
+        void                    impl_generateXCD                (                                                                                       ); // generate all xcd files by using current configuration
+        void                    impl_generateCopyright          (                                                                                       ); // generate copyrights
+        void                    impl_generateTypeTemplate       (                                                                                       ); // generate templates ...
+        void                    impl_generateFilterTemplate     (                                                                                       );
+        void                    impl_generateDetectorTemplate   (                                                                                       );
+        void                    impl_generateLoaderTemplate     (                                                                                       );
+        void                    impl_generateTypeSet            (                                                                                       ); // generate sets
+        void                    impl_generateFilterSet          (                                                                                       );
+        void                    impl_generateDetectorSet        (                                                                                       );
+        void                    impl_generateLoaderSet          (                                                                                       );
+        void                    impl_generateDefaults           (                                                                                       ); // generate defaults
+
+        void                    impl_generateFilterFlagTemplate (   const   ::rtl::OUString&                        sName                               ,  // helper to write atomic elements
+                                                                            sal_Int32                               nValue                              ,
+                                                                    const   ::rtl::OString&                         sDescription = ::rtl::OString()     );
+        void                    impl_generateIntProperty        (           ::rtl::OUStringBuffer&                  sXCD                                ,
+                                                                    const   ::rtl::OUString&                        sName                               ,
+                                                                            sal_Int32                               nValue                              );
+        void                    impl_generateBoolProperty       (           ::rtl::OUStringBuffer&                  sXCD                                ,
+                                                                    const   ::rtl::OUString&                        sName                               ,
+                                                                            sal_Bool                                bValue                              );
+        void                    impl_generateStringProperty     (           ::rtl::OUStringBuffer&                  sXCD                                ,
+                                                                    const   ::rtl::OUString&                        sName                               ,
+                                                                    const   ::rtl::OUString&                        sValue                              );
+        void                    impl_generateStringListProperty (           ::rtl::OUStringBuffer&                  sXCD                                ,
+                                                                    const   ::rtl::OUString&                        sName                               ,
+                                                                    const   ::framework::StringList&                lValue                              );
+        void                    impl_generateUINamesProperty    (           ::rtl::OUStringBuffer&                  sXCD                                ,
+                                                                    const   ::rtl::OUString&                        sName                               ,
+                                                                    const   StringHash&                             lUINames                            );
+        ::rtl::OUString         impl_getOldFilterName           (   const   ::rtl::OUString&                        sNewName                            ); // convert filter names to old format
+
+        static void             impl_classifyType               (   const   AppMember&                              rData                               ,
+                                                                    const   ::rtl::OUString&                        sTypeName                           ,
+                                                                            EFilterPackage&                         ePackage                            ); // classify type as STANDARD or ADDITIONAL one
+        static void             impl_classifyFilter             (   const   AppMember&                              rData                               ,
+                                                                    const   ::rtl::OUString&                        sFilterName                         ,
+                                                                            EFilterPackage&                         ePackage                            ,
+                                                                            sal_Int32&                              nOrder                              ); // classify filter as STANDARD or ADDITIONAL filter, set order of standard filter too
+        static ::rtl::OUString  impl_filterSpecialSigns         (   const   ::rtl::OUString&                        sValue                              ); // encode strings for xml
+        static sal_Unicode      impl_defineSeperator            (   const   ::framework::StringList&                lList                               ); // search seperator for lists
+        static void             impl_initFilterHashNew2Old      (           StringHash&                             aHash                               ); // initialize converter table to restaurate old filter names
+        static void             impl_orderAlphabetical          (           css::uno::Sequence< ::rtl::OUString >&  lList                               ); // sort stringlist of internal type-, filter- ... names in alphabetical order to generate xcd files everytime in the same way
 
     //*************************************************************************************************************
     private:
@@ -269,7 +293,7 @@ void XCDGenerator::Main()
     // initialize converter table to match new to old filter names!
     if( m_aData.nVersionOutput >= 3 )
     {
-        impl_initFilterHashNew2Old( m_aData.aOldFilterNamesHash );
+        XCDGenerator::impl_initFilterHashNew2Old( m_aData.aOldFilterNamesHash );
     }
 
     // Create access to current set filter configuration.
@@ -286,8 +310,8 @@ void XCDGenerator::Main()
     m_aData.nOriginalDetectors = m_aData.pFilterCache->getAllDetectorNames().getLength() ;
     m_aData.nOriginalLoaders   = m_aData.pFilterCache->getAllLoaderNames().getLength()   ;
 
-    // Start generation of xcd file.
-    impl_generateXCD( m_aData.sXCDFileName, m_aData.bWriteable );
+    // Start generation of xcd file(s).
+    impl_generateXCD();
 
     // Warn programmer if some items couldn't written to file!
     LOG_ASSERT2( m_aData.nOriginalTypes    != m_aData.nWrittenTypes    , "XCDGenerator::Main()", "Generated xcd file could be invalid ... because I miss some types!"     )
@@ -320,23 +344,31 @@ void XCDGenerator::impl_printCopyright()
 //*****************************************************************************************************************
 void XCDGenerator::impl_printSyntax()
 {
-    fprintf( stderr, "\nusing: xml2xcd -fi=<outputfile> -vi=<version input> -vo=<version output> [-wr=<true|false>]\n\n"    );
-    fprintf( stderr, "\tneccessary parameters:\n"                                                                           );
-    fprintf( stderr, "\t\t-fi=<outputfile>\tname of output file in system notation\n"                                       );
-    fprintf( stderr, "\t\t-vi=<version input>\tformat version of input xml file\n"                                          );
-    fprintf( stderr, "\t\t-vo=<version output>\tformat version of generated xcd file\n\n"                                   );
-    fprintf( stderr, "\toptional parameters:\n"                                                                             );
-    fprintf( stderr, "\t\t-wr=<true|false>\tconfig items should be writeable ... [true|false]\n"                            );
+    // It's not possible to print it out to stdout in a svdem binary :-(
+    // So we show an assert.
+    ::rtl::OStringBuffer sBuffer( 500 );
+    sBuffer.append( "\nusing: xml2xcd -fis=<file standard filter> -fia=<file additional filter> -pas=<package standard filter> -paa=<package additional filter> -vin=<version input> -vou=<version output> [-wri=<true|false>]\n\n" );
+    sBuffer.append( "\tneccessary parameters:\n"                                                                                                                                                                                    );
+    sBuffer.append( "\t\t-fis\tname of output file in system notation\n"                                                                                                                                                            );
+    sBuffer.append( "\t\t-fia\tname of output file in system notation\n"                                                                                                                                                            );
+    sBuffer.append( "\t\t-pas\tpackage of standard filters\n"                                                                                                                                                                       );
+    sBuffer.append( "\t\t-paa\tpackage of additional filters\n"                                                                                                                                                                     );
+    sBuffer.append( "\t\t-vin\tformat version of input xml file\n"                                                                                                                                                                  );
+    sBuffer.append( "\t\t-vou\tformat version of generated xcd file\n\n"                                                                                                                                                            );
+    sBuffer.append( "\toptional parameters:\n"                                                                                                                                                                                      );
+    sBuffer.append( "\t\t-wri\tconfig items should be writeable ... [true|false]\n"                                                                                                                                                 );
+    LOG_ERROR( "", sBuffer.makeStringAndClear() )
 }
 
 /*-************************************************************************************************************//**
     @short      analyze command line arguments
     @descr      Created binary accept different command line arguments. These parameters
                 regulate creation of xcd file. Follow arguments are supported:
-                    "-fi=<filename of xcd>"
-                    "-wr=<writeable>[true|false]"
-                    "-vi=<version of input file>[1|2|3]"
-                    "-vo=<version of output file>[1|2|3]"
+                    "-fis=<filename of standard xcd>"
+                    "-fia=<filename of additional xcd>"
+                    "-wri=<writeable>[true|false]"
+                    "-vin=<version of input file>[1|2|3]"
+                    "-vou=<version of output file>[1|2|3]"
 
     @seealso    -
 
@@ -358,15 +390,39 @@ void XCDGenerator::impl_parseCommandLine( AppMember& rMember )
         aInfo.getCommandArg( nArgument, sArgument );
 
         //_____________________________________________________________________________________________________
-        // look for "-f=<file name of xcd>"
-        if( sArgument.compareTo( ARGUMENT_FILENAME, ARGUMENTLENGTH ) == ARGUMENTFOUND )
+        // look for "-fis=..."
+        if( sArgument.compareTo( ARGUMENT_FILENAME_STANDARD, ARGUMENTLENGTH ) == ARGUMENTFOUND )
         {
-            rMember.sXCDFileName = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
+            rMember.sFileNameStandard = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
             ++nMinCount;
         }
         else
         //_____________________________________________________________________________________________________
-        // look for "-w=<writeable>"
+        // look for "-fia=..."
+        if( sArgument.compareTo( ARGUMENT_FILENAME_ADDITIONAL, ARGUMENTLENGTH ) == ARGUMENTFOUND )
+        {
+            rMember.sFileNameAdditional = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
+            ++nMinCount;
+        }
+        else
+        //_____________________________________________________________________________________________________
+        // look for "-pas=..."
+        if( sArgument.compareTo( ARGUMENT_PACKAGE_STANDARD, ARGUMENTLENGTH ) == ARGUMENTFOUND )
+        {
+            rMember.sPackageStandard = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
+            ++nMinCount;
+        }
+        else
+        //_____________________________________________________________________________________________________
+        // look for "-paa=..."
+        if( sArgument.compareTo( ARGUMENT_PACKAGE_ADDITIONAL, ARGUMENTLENGTH ) == ARGUMENTFOUND )
+        {
+            rMember.sPackageAdditional = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
+            ++nMinCount;
+        }
+        else
+        //_____________________________________________________________________________________________________
+        // look for "-wri=..."
         if( sArgument.compareTo( ARGUMENT_WRITEABLE, ARGUMENTLENGTH ) == ARGUMENTFOUND )
         {
             ::rtl::OUString sWriteable = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
@@ -378,9 +434,10 @@ void XCDGenerator::impl_parseCommandLine( AppMember& rMember )
             {
                 rMember.bWriteable = sal_False;
             }
+            ++nMinCount;
         }
         //_____________________________________________________________________________________________________
-        // look for "-vi=<version of input file>"
+        // look for "-vin=..."
         if( sArgument.compareTo( ARGUMENT_VERSION_INPUT, ARGUMENTLENGTH ) == ARGUMENTFOUND )
         {
             ::rtl::OUString sVersion = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
@@ -388,7 +445,7 @@ void XCDGenerator::impl_parseCommandLine( AppMember& rMember )
             ++nMinCount;
         }
         //_____________________________________________________________________________________________________
-        // look for "-vo=<version of output file>"
+        // look for "-vou=..."
         if( sArgument.compareTo( ARGUMENT_VERSION_OUTPUT, ARGUMENTLENGTH ) == ARGUMENTFOUND )
         {
             ::rtl::OUString sVersion = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
@@ -400,7 +457,7 @@ void XCDGenerator::impl_parseCommandLine( AppMember& rMember )
     }
 
     // Show help if user don't call us right!
-    if( nMinCount != 3 )
+    if( nMinCount != MINARGUMENTCOUNT )
     {
         impl_printSyntax();
         exit(-1);
@@ -408,565 +465,730 @@ void XCDGenerator::impl_parseCommandLine( AppMember& rMember )
 }
 
 /*-************************************************************************************************************//**
-    @short      regulate generation of complete xcd file
-    @descr      This method is the toppest one and implement the global structure of generated xcd file.
+    @short      regulate generation of complete xcd file(s)
+    @descr      This method is the toppest one and implement the global structure of generated xcd file(s).
                 We create a unicode string buffer for complete xcd file in memory ...
                 use different helper methods to fill it ...
                 and write it to disk at the end of this method!
 
-    @seealso    -
+    @seealso    struct AppMember
 
-    @param      "sFileName" , name of generated xcd file
-    @param      "bWriteable", make config properties writeable or not
+    @param      -
     @return     -
 
     @onerror    -
 *//*-*************************************************************************************************************/
-void XCDGenerator::impl_generateXCD( const ::rtl::OUString& sFileName, sal_Bool bWriteable )
+void XCDGenerator::impl_generateXCD()
 {
-    // A complete TypeDetection.xcd needs ~ 1.3 ... 1.5 MB!
-    ::rtl::OUStringBuffer  sXCD( 1500000 );
+    impl_generateCopyright();
 
-    impl_generateCopyright( sXCD );
+    // Write header
+    m_aData.sBufferStandard.appendAscii     ( "\n<!-- PLEASE DON'T CHANGE TEMPLATES OR FILE FORMAT BY HAND! USE \"XML2XCD.EXE\" TO DO THAT. THANKS. -->\n\n"                                                                                                                                                               );
+    m_aData.sBufferStandard.appendAscii     ( "<!DOCTYPE schema:component SYSTEM \"../../../../schema/schema.description.dtd\">\n"                                                                                                                                                                                         );
+    m_aData.sBufferStandard.appendAscii     ( "<schema:component cfg:name=\""                                                                                                                                                                                                                                              );
+    m_aData.sBufferStandard.append          ( m_aData.sPackageStandard                                                                                                                                                                                                                                                     );
+    m_aData.sBufferStandard.appendAscii     ( "\" cfg:package=\"org.openoffice.Office\" xml:lang=\"en-US\" xmlns:schema=\"http://openoffice.org/2000/registry/schema/description\" xmlns:default=\"http://openoffice.org/2000/registry/schema/default\" xmlns:cfg=\"http://openoffice.org/2000/registry/instance\">\n"     );
+    m_aData.sBufferStandard.appendAscii     ( "\t<schema:templates>\n"                                                                                                                                                                                                                                                     );
 
-    sXCD.appendAscii( "<!DOCTYPE schema:component SYSTEM \"../../../../schema/schema.description.dtd\">\n"                                                                                                                                                                                                                                  );
-    sXCD.appendAscii( "<schema:component cfg:name=\"TypeDetection\" cfg:package=\"org.openoffice.Office\" xml:lang=\"en-US\" xmlns:schema=\"http://openoffice.org/2000/registry/schema/description\" xmlns:default=\"http://openoffice.org/2000/registry/schema/default\" xmlns:cfg=\"http://openoffice.org/2000/registry/instance\">\n"    );
-    sXCD.appendAscii( "\t<schema:templates>\n"                                                                                                                                                                                                                                                                                              );
-    sXCD.appendAscii( "\n\n\n<!-- PLEASE DON'T CHANGE TEMPLATES OR FILE FORMAT BY HAND! USE \"XML2XCD.EXE\" TO DO THAT. CONTACT andreas.schluens@germany.sun.com FOR FURTHER INFORMATIONS. THANKS. -->\n\n\n"                                                                                                                               );
-
-    impl_generateTypeTemplate       ( sXCD, bWriteable  );
-    impl_generateFilterTemplate     ( sXCD, bWriteable  );
-    impl_generateDetectorTemplate   ( sXCD, bWriteable  );
-    impl_generateLoaderTemplate     ( sXCD, bWriteable  );
-
-    sXCD.appendAscii( "\t</schema:templates>\n"                     );
-    sXCD.appendAscii( "<schema:schema cfg:localized=\"false\">\n"   );
-
-    impl_generateTypeSet            ( sXCD, bWriteable  );
-    impl_generateFilterSet          ( sXCD, bWriteable  );
-    impl_generateDetectorSet        ( sXCD, bWriteable  );
-    impl_generateLoaderSet          ( sXCD, bWriteable  );
-    impl_generateDefaults           ( sXCD              );
-
-    sXCD.appendAscii( "\t</schema:schema>\n"  );
-    sXCD.appendAscii( "</schema:component>\n" );
-
-    WRITE_LOGFILE( U2B(sFileName), U2B(sXCD.makeStringAndClear()) )
-}
-
-//*****************************************************************************************************************
-void XCDGenerator::impl_generateCopyright( ::rtl::OUStringBuffer& sXCD )
-{
-    sXCD.appendAscii( "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"                                );
-    sXCD.appendAscii( "<!-- The Contents of this file are made available subject to the terms of\n" );
-    sXCD.appendAscii( " either of the following licenses\n"                                         );
-    sXCD.appendAscii( "\n"                                                                          );
-    sXCD.appendAscii( "          - GNU Lesser General Public License Version 2.1\n"                 );
-    sXCD.appendAscii( "          - Sun Industry Standards Source License Version 1.1\n"             );
-    sXCD.appendAscii( "\n"                                                                          );
-    sXCD.appendAscii( "   Sun Microsystems Inc., October, 2000\n"                                   );
-    sXCD.appendAscii( "\n"                                                                          );
-    sXCD.appendAscii( "   GNU Lesser General Public License Version 2.1\n"                          );
-    sXCD.appendAscii( "   =============================================\n"                          );
-    sXCD.appendAscii( "   Copyright 2000 by Sun Microsystems, Inc.\n"                               );
-    sXCD.appendAscii( "   901 San Antonio Road, Palo Alto, CA 94303, USA\n"                         );
-    sXCD.appendAscii( "   This library is free software; you can redistribute it and/or\n"          );
-    sXCD.appendAscii( "   modify it under the terms of the GNU Lesser General Public\n"             );
-    sXCD.appendAscii( "   License version 2.1, as published by the Free Software Foundation.\n"     );
-    sXCD.appendAscii( "\n"                                                                          );
-    sXCD.appendAscii( "   This library is distributed in the hope that it will be useful,\n"        );
-    sXCD.appendAscii( "   but WITHOUT ANY WARRANTY; without even the implied warranty of\n"         );
-    sXCD.appendAscii( "   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"      );
-    sXCD.appendAscii( "   Lesser General Public License for more details.\n"                        );
-    sXCD.appendAscii( "\n"                                                                          );
-    sXCD.appendAscii( "   You should have received a copy of the GNU Lesser General Public\n"       );
-    sXCD.appendAscii( "   License along with this library; if not, write to the Free Software\n"    );
-    sXCD.appendAscii( "   Foundation, Inc., 59 Temple Place, Suite 330, Boston,\n"                  );
-    sXCD.appendAscii( "   MA  02111-1307  USA\n"                                                    );
-    sXCD.appendAscii( "\n"                                                                          );
-    sXCD.appendAscii( "\n"                                                                          );
-    sXCD.appendAscii( "   Sun Industry Standards Source License Version 1.1\n"                      );
-    sXCD.appendAscii( "   =================================================\n"                      );
-    sXCD.appendAscii( "   The contents of this file are subject to the Sun Industry Standards\n"    );
-    sXCD.appendAscii( "   Source License Version 1.1 (the \"License\"); You may not use this file\n");
-    sXCD.appendAscii( "   except in compliance with the License. You may obtain a copy of the\n"    );
-    sXCD.appendAscii( "   License at http://www.openoffice.org/license.html.\n"                     );
-    sXCD.appendAscii( "\n"                                                                          );
-    sXCD.appendAscii( "   Software provided under this License is provided on an \"AS IS\" basis,\n");
-    sXCD.appendAscii( "   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,\n"    );
-    sXCD.appendAscii( "   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,\n"   );
-    sXCD.appendAscii( "   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.\n"         );
-    sXCD.appendAscii( "   See the License for the specific provisions governing your rights and\n"  );
-    sXCD.appendAscii( "   obligations concerning the Software.\n"                                   );
-    sXCD.appendAscii( "\n"                                                                          );
-    sXCD.appendAscii( "   The Initial Developer of the Original Code is: Sun Microsystems, Inc.\n"  );
-    sXCD.appendAscii( "\n"                                                                          );
-    sXCD.appendAscii( "   Copyright: 2000 by Sun Microsystems, Inc.\n"                              );
-    sXCD.appendAscii( "\n"                                                                          );
-    sXCD.appendAscii( "   All Rights Reserved.\n"                                                   );
-    sXCD.appendAscii( "\n"                                                                          );
-    sXCD.appendAscii( "   Contributor(s): _______________________________________\n"                );
-    sXCD.appendAscii( "-->\n"                                                                       );
-}
-
-//*****************************************************************************************************************
-void XCDGenerator::impl_generateTypeTemplate( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
-{
-//_________________________________________________________________________________________________________________
-if( m_aData.nVersionOutput==1 || m_aData.nVersionOutput==2 )
-{
-    sXCD.appendAscii( "\t\t<schema:group cfg:name=\"Type\">\n"                                                                                                                                                                  );
-
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Preferred\" cfg:type=\"boolean\" cfg:writable=\""                                                                                                                         );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
-    sXCD.appendAscii("\t\t\t\t<schema:documentation>\n"                                                                                                                                                                         );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the preferred type for an extension if more then one match given URL</schema:description>\n"                                                                     );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
-    sXCD.appendAscii( "\t\t\t\t<default:data>false</default:data>\n"                                                                                                                                                            );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
-
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"UIName\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""                                                                                                      );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the external name of this type</schema:description>\n"                                                                                                           );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
-
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"MediaType\" cfg:type=\"string\" cfg:writable=\""                                                                                                                          );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the mime type </schema:description>\n"                                                                                                                           );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
-
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"ClipboardFormat\" cfg:type=\"string\" cfg:writable=\""                                                                                                                    );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the clipboard format name</schema:description>\n"                                                                                                                );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
-
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"URLPattern\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""                                                                                                  );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the patterns used for URLs. This type is only relevant for HTTP, FTP etc. and is used for internal URL formats like private:factory etc.</schema:description>\n" );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
-
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Extensions\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""                                                                                                  );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the possible file extensions.</schema:description>\n"                                                                                                            );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
-
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"DocumentIconID\" cfg:type=\"int\" cfg:writable=\""                                                                                                                        );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the document icon ID of this type</schema:description>\n"                                                                                                        );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
-    sXCD.appendAscii( "\t\t\t\t<default:data>0</default:data>\n"                                                                                                                                                                );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
-
-    sXCD.appendAscii( "\t\t</schema:group>\n"                                                                                                                                                                                   );
-}
-//_________________________________________________________________________________________________________________
-else if( m_aData.nVersionOutput==3 )
-{
-    sXCD.appendAscii( "\t\t<schema:group cfg:name=\"Type\">\n"                                                                                                                                                                  );
-
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"UIName\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""                                                                                                      );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the external name of this type</schema:description>\n"                                                                                                           );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
-
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Data\" cfg:type=\"string\" cfg:writable=\""                                                                                                                               );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
-    sXCD.appendAscii("\t\t\t\t<schema:documentation>\n"                                                                                                                                                                         );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Containes all data of a type as an own formated string.{Preferred, MediaType, ClipboardFormat, URLPattern, Extensions, DocumentIconID}</schema:description>\n"             );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
-    sXCD.appendAscii( "\t\t\t\t<default:data>false</default:data>\n"                                                                                                                                                            );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
-
-    sXCD.appendAscii( "\t\t</schema:group>\n"                                                                                                                                                                                   );
-}
-}
-
-//*****************************************************************************************************************
-void XCDGenerator::impl_generateFilterTemplate( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
-{
-//_________________________________________________________________________________________________________________
-if( m_aData.nVersionOutput==1 || m_aData.nVersionOutput==2 )
-{
-    sXCD.appendAscii( "\t\t<schema:group cfg:name=\"Filter\">\n"                                                                                                            );
-
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Installed\" cfg:type=\"boolean\" cfg:writable=\""                                                                     );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Make it possible to enable or disable filter by setup!</schema:description>\n"                                         );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
-    sXCD.appendAscii( "\t\t\t\t<default:data>false</default:data>\n"                                                                                                        );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
-
-    if( m_aData.nVersionOutput==2 )
+    if( m_aData.nVersionOutput >= 4 )
     {
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Order\" cfg:type=\"int\" cfg:writable=\""                                                                             );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies order of filters for relevant module; don't used for default filter!</schema:description>\n"                 );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
-    sXCD.appendAscii( "\t\t\t\t<default:data>0</default:data>\n"                                                                                                            );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+        m_aData.sBufferAdditional.appendAscii   ( "\n<!-- PLEASE DON'T CHANGE TEMPLATES OR FILE FORMAT BY HAND! USE \"XML2XCD.EXE\" TO DO THAT. THANKS. -->\n\n"                                                                                                                                                           );
+        m_aData.sBufferAdditional.appendAscii   ( "<!DOCTYPE schema:component SYSTEM \"../../../../schema/schema.description.dtd\">\n"                                                                                                                                                                                     );
+        m_aData.sBufferAdditional.appendAscii   ( "<schema:component cfg:name=\""                                                                                                                                                                                                                                          );
+        m_aData.sBufferAdditional.append        ( m_aData.sPackageAdditional                                                                                                                                                                                                                                               );
+        m_aData.sBufferAdditional.appendAscii   ( "\" cfg:package=\"org.openoffice.Office\" xml:lang=\"en-US\" xmlns:schema=\"http://openoffice.org/2000/registry/schema/description\" xmlns:default=\"http://openoffice.org/2000/registry/schema/default\" xmlns:cfg=\"http://openoffice.org/2000/registry/instance\">\n" );
+        m_aData.sBufferAdditional.appendAscii   ( "\t<schema:import cfg:name=\""                                                                                                                                                                                                                                             );
+        m_aData.sBufferAdditional.append        ( m_aData.sPackageStandard                                                                                                                                                                                                                                                 );
+        m_aData.sBufferAdditional.appendAscii   ( "\"/>\n"                                                                                                                                                                                                                                                                 );
     }
 
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"UIName\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""                                                  );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the external name of the filter which is displayed at the user interface (dialog).</schema:description>\n"   );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+    // Follow ...generate... methods to nothing for additional filters!
+    impl_generateTypeTemplate    ();
+    impl_generateFilterTemplate  ();
+    impl_generateDetectorTemplate();
+    impl_generateLoaderTemplate  ();
 
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Type\" cfg:type=\"string\" cfg:writable=\""                                                                           );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the relative type key name of the filter, e.g. Type/T1</schema:description>\n"                               );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+    m_aData.sBufferStandard.appendAscii     ( "\t</schema:templates>\n"                     );
+    m_aData.sBufferStandard.appendAscii     ( "<schema:schema cfg:localized=\"false\">\n"   );
+    if( m_aData.nVersionOutput >= 4 )
+    {
+        m_aData.sBufferAdditional.appendAscii( "\t<schema:schema cfg:localized=\"false\">\n"   );
+    }
 
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"DocumentService\" cfg:type=\"string\" cfg:writable=\""                                                                );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the name of the UNO service to implement the document.</schema:description>\n"                               );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+    impl_generateTypeSet         ();
+    impl_generateFilterSet       ();
+    impl_generateDetectorSet     ();
+    impl_generateLoaderSet       ();
+    impl_generateDefaults        ();
 
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"FilterService\" cfg:type=\"string\" cfg:writable=\""                                                                  );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the name of the UNO service for importing the document.</schema:description>\n"                              );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+    m_aData.sBufferStandard.appendAscii     ( "\t</schema:schema>\n"  );
+    m_aData.sBufferStandard.appendAscii     ( "</schema:component>\n" );
+    if( m_aData.nVersionOutput >= 4 )
+    {
+        m_aData.sBufferAdditional.appendAscii ( "\t</schema:schema>\n"  );
+        m_aData.sBufferAdditional.appendAscii ( "</schema:component>\n" );
+    }
 
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Flags\" cfg:type=\"int\" cfg:writable=\""                                                                             );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the properties of the filter</schema:description>\n"                                                         );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
-    sXCD.appendAscii( "\t\t\t\t<schema:type-info>\n"                                                                                                                        );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:value-names>\n"                                                                                                                    );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_IMPORT            , FILTERFLAG_IMPORT                                                                             );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_EXPORT            , FILTERFLAG_EXPORT                                                                             );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_TEMPLATE          , FILTERFLAG_TEMPLATE                                                                           );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_INTERNAL          , FILTERFLAG_INTERNAL                                                                           );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_TEMPLATEPATH      , FILTERFLAG_TEMPLATEPATH                                                                       );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_OWN               , FILTERFLAG_OWN                                                                                );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_ALIEN             , FILTERFLAG_ALIEN                                                                              );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_USESOPTIONS       , FILTERFLAG_USESOPTIONS                                                                        );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_DEFAULT           , FILTERFLAG_DEFAULT                                                                            );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_NOTINFILEDIALOG   , FILTERFLAG_NOTINFILEDIALOG                                                                    );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_NOTINCHOOSER      , FILTERFLAG_NOTINCHOOSER                                                                       );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_ASYNCHRON         , FILTERFLAG_ASYNCHRON                                                                          );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_NOTINSTALLED      , FILTERFLAG_NOTINSTALLED   , "set, if the filter is not installed, but available on CD"        );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_CONSULTSERVICE    , FILTERFLAG_CONSULTSERVICE , "set, if the filter is not installed and not available an CD"     );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_3RDPARTYFILTER    , FILTERFLAG_3RDPARTYFILTER , "must set, if the filter is an external one"                      );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_PACKED            , FILTERFLAG_PACKED                                                                             );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_SILENTEXPORT      , FILTERFLAG_SILENTEXPORT                                                                       );
-    impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_PREFERED          , FILTERFLAG_PREFERED                                                                           );
-    sXCD.appendAscii( "\t\t\t\t\t</schema:value-names>\n"                                                                                                                   );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:constraints xmlns:xsd=\"http://www.w3.org/1999/XMLSchema\"/>\n"                                                                    );
-    sXCD.appendAscii( "\t\t\t\t</schema:type-info>\n"                                                                                                                       );
-    sXCD.appendAscii( "\t\t\t\t<default:data>0</default:data>\n"                                                                                                            );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+    WRITE_LOGFILE( U2B(m_aData.sFileNameStandard  ), U2B(m_aData.sBufferStandard.makeStringAndClear()       ))
+    WRITE_LOGFILE( U2B(m_aData.sFileNameAdditional), U2B(m_aData.sBufferAdditional.makeStringAndClear()     ))
 
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"UserData\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""                                                );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the user-defined data</schema:description>\n"                                                                );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
-    sXCD.appendAscii( "\t\t\t\t<default:data/>\n"                                                                                                                           );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+    WRITE_LOGFILE( LISTFILE_STANDARDFILTER         , U2B(m_aData.sStandardFilterList.makeStringAndClear()   ))
+    WRITE_LOGFILE( LISTFILE_ADDITIONALFILTER       , U2B(m_aData.sAdditionalFilterList.makeStringAndClear() ))
 
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"FileFormatVersion\" cfg:type=\"int\" cfg:writable=\""                                                                 );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
-    sXCD.appendAscii( "\t\t\t\t<!--This should be removed to UserData later-->\n"                                                                                           );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the file format version of the filter</schema:description>\n"                                                );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
-    sXCD.appendAscii( "\t\t\t\t<default:data>0</default:data>\n"                                                                                                            );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
-
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"TemplateName\" cfg:type=\"string\" cfg:writable=\""                                                                   );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
-    sXCD.appendAscii( "\t\t\t\t<!--This should be removed to UserData later-->\n"                                                                                           );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the template used for importing the file with the specified filter.</schema:description>\n"                  );
-    sXCD.appendAscii( "\t\t\t\t\t</schema:documentation>\n"                                                                                                                 );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
-
-    sXCD.appendAscii( "\t\t</schema:group>\n"                                                                                                                               );
-//_________________________________________________________________________________________________________________
-}
-else if( m_aData.nVersionOutput==3 )
-{
-    sXCD.appendAscii( "\t\t<schema:group cfg:name=\"Filter\">\n"                                                                                                                                                                    );
-
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Installed\" cfg:type=\"boolean\" cfg:writable=\""                                                                                                                             );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                             );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                            );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Make it possible to enable or disable filter by setup!</schema:description>\n"                                                                                                 );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                           );
-    sXCD.appendAscii( "\t\t\t\t<default:data>false</default:data>\n"                                                                                                                                                                );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                     );
-
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"UIName\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""                                                                                                          );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                             );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                            );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the external name of the filter which is displayed at the user interface (dialog).</schema:description>\n"                                                           );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                           );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                     );
-
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Data\" cfg:type=\"string\" cfg:writable=\""                                                                                                                                   );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                             );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                            );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>All data of filter written in own format. {Order, OldName, Type, DocumentService, FilterService, Flags, UserData, FilteFormatVersion, TemplateName}</schema:description>\n"    );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                           );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                     );
-
-    sXCD.appendAscii( "\t\t</schema:group>\n"                                                                                                                                                                                       );
-}
+    WRITE_LOGFILE( LISTFILE_STANDARDTYPES          , U2B(m_aData.sStandardTypeList.makeStringAndClear()     ))
+    WRITE_LOGFILE( LISTFILE_ADDITIONALTYPES        , U2B(m_aData.sAdditionalTypeList.makeStringAndClear()   ))
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateFilterFlagTemplate( ::rtl::OUStringBuffer& sXCD, const ::rtl::OUString& sName, sal_Int32 nValue, const ::rtl::OString& sDescription )
+void XCDGenerator::impl_generateCopyright()
 {
-    sXCD.appendAscii( "\t\t\t\t\t\t<schema:named-value name=\"" );
-    sXCD.append     ( sName                                     );
-    sXCD.appendAscii( "\" value=\""                             );
-    sXCD.append     ( nValue                                    );
-    sXCD.appendAscii( "\""                                      );
+    m_aData.sBufferStandard.appendAscii( "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"                                );
+    m_aData.sBufferStandard.appendAscii( "<!-- The Contents of this file are made available subject to the terms of\n" );
+    m_aData.sBufferStandard.appendAscii( " either of the following licenses\n"                                         );
+    m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
+    m_aData.sBufferStandard.appendAscii( "          - GNU Lesser General Public License Version 2.1\n"                 );
+    m_aData.sBufferStandard.appendAscii( "          - Sun Industry Standards Source License Version 1.1\n"             );
+    m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
+    m_aData.sBufferStandard.appendAscii( "   Sun Microsystems Inc., October, 2000\n"                                   );
+    m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
+    m_aData.sBufferStandard.appendAscii( "   GNU Lesser General Public License Version 2.1\n"                          );
+    m_aData.sBufferStandard.appendAscii( "   =============================================\n"                          );
+    m_aData.sBufferStandard.appendAscii( "   Copyright 2000 by Sun Microsystems, Inc.\n"                               );
+    m_aData.sBufferStandard.appendAscii( "   901 San Antonio Road, Palo Alto, CA 94303, USA\n"                         );
+    m_aData.sBufferStandard.appendAscii( "   This library is free software; you can redistribute it and/or\n"          );
+    m_aData.sBufferStandard.appendAscii( "   modify it under the terms of the GNU Lesser General Public\n"             );
+    m_aData.sBufferStandard.appendAscii( "   License version 2.1, as published by the Free Software Foundation.\n"     );
+    m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
+    m_aData.sBufferStandard.appendAscii( "   This library is distributed in the hope that it will be useful,\n"        );
+    m_aData.sBufferStandard.appendAscii( "   but WITHOUT ANY WARRANTY; without even the implied warranty of\n"         );
+    m_aData.sBufferStandard.appendAscii( "   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"      );
+    m_aData.sBufferStandard.appendAscii( "   Lesser General Public License for more details.\n"                        );
+    m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
+    m_aData.sBufferStandard.appendAscii( "   You should have received a copy of the GNU Lesser General Public\n"       );
+    m_aData.sBufferStandard.appendAscii( "   License along with this library; if not, write to the Free Software\n"    );
+    m_aData.sBufferStandard.appendAscii( "   Foundation, Inc., 59 Temple Place, Suite 330, Boston,\n"                  );
+    m_aData.sBufferStandard.appendAscii( "   MA  02111-1307  USA\n"                                                    );
+    m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
+    m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
+    m_aData.sBufferStandard.appendAscii( "   Sun Industry Standards Source License Version 1.1\n"                      );
+    m_aData.sBufferStandard.appendAscii( "   =================================================\n"                      );
+    m_aData.sBufferStandard.appendAscii( "   The contents of this file are subject to the Sun Industry Standards\n"    );
+    m_aData.sBufferStandard.appendAscii( "   Source License Version 1.1 (the \"License\"); You may not use this file\n");
+    m_aData.sBufferStandard.appendAscii( "   except in compliance with the License. You may obtain a copy of the\n"    );
+    m_aData.sBufferStandard.appendAscii( "   License at http://www.openoffice.org/license.html.\n"                     );
+    m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
+    m_aData.sBufferStandard.appendAscii( "   Software provided under this License is provided on an \"AS IS\" basis,\n");
+    m_aData.sBufferStandard.appendAscii( "   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,\n"    );
+    m_aData.sBufferStandard.appendAscii( "   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,\n"   );
+    m_aData.sBufferStandard.appendAscii( "   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.\n"         );
+    m_aData.sBufferStandard.appendAscii( "   See the License for the specific provisions governing your rights and\n"  );
+    m_aData.sBufferStandard.appendAscii( "   obligations concerning the Software.\n"                                   );
+    m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
+    m_aData.sBufferStandard.appendAscii( "   The Initial Developer of the Original Code is: Sun Microsystems, Inc.\n"  );
+    m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
+    m_aData.sBufferStandard.appendAscii( "   Copyright: 2000 by Sun Microsystems, Inc.\n"                              );
+    m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
+    m_aData.sBufferStandard.appendAscii( "   All Rights Reserved.\n"                                                   );
+    m_aData.sBufferStandard.appendAscii( "\n"                                                                          );
+    m_aData.sBufferStandard.appendAscii( "   Contributor(s): _______________________________________\n"                );
+    m_aData.sBufferStandard.appendAscii( "-->\n"                                                                       );
+
+    if( m_aData.nVersionOutput >= 4 )
+    {
+        m_aData.sBufferAdditional.appendAscii( "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"                                );
+        m_aData.sBufferAdditional.appendAscii( "<!-- The Contents of this file are made available subject to the terms of\n" );
+        m_aData.sBufferAdditional.appendAscii( " either of the following licenses\n"                                         );
+        m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
+        m_aData.sBufferAdditional.appendAscii( "          - GNU Lesser General Public License Version 2.1\n"                 );
+        m_aData.sBufferAdditional.appendAscii( "          - Sun Industry Standards Source License Version 1.1\n"             );
+        m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
+        m_aData.sBufferAdditional.appendAscii( "   Sun Microsystems Inc., October, 2000\n"                                   );
+        m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
+        m_aData.sBufferAdditional.appendAscii( "   GNU Lesser General Public License Version 2.1\n"                          );
+        m_aData.sBufferAdditional.appendAscii( "   =============================================\n"                          );
+        m_aData.sBufferAdditional.appendAscii( "   Copyright 2000 by Sun Microsystems, Inc.\n"                               );
+        m_aData.sBufferAdditional.appendAscii( "   901 San Antonio Road, Palo Alto, CA 94303, USA\n"                         );
+        m_aData.sBufferAdditional.appendAscii( "   This library is free software; you can redistribute it and/or\n"          );
+        m_aData.sBufferAdditional.appendAscii( "   modify it under the terms of the GNU Lesser General Public\n"             );
+        m_aData.sBufferAdditional.appendAscii( "   License version 2.1, as published by the Free Software Foundation.\n"     );
+        m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
+        m_aData.sBufferAdditional.appendAscii( "   This library is distributed in the hope that it will be useful,\n"        );
+        m_aData.sBufferAdditional.appendAscii( "   but WITHOUT ANY WARRANTY; without even the implied warranty of\n"         );
+        m_aData.sBufferAdditional.appendAscii( "   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"      );
+        m_aData.sBufferAdditional.appendAscii( "   Lesser General Public License for more details.\n"                        );
+        m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
+        m_aData.sBufferAdditional.appendAscii( "   You should have received a copy of the GNU Lesser General Public\n"       );
+        m_aData.sBufferAdditional.appendAscii( "   License along with this library; if not, write to the Free Software\n"    );
+        m_aData.sBufferAdditional.appendAscii( "   Foundation, Inc., 59 Temple Place, Suite 330, Boston,\n"                  );
+        m_aData.sBufferAdditional.appendAscii( "   MA  02111-1307  USA\n"                                                    );
+        m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
+        m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
+        m_aData.sBufferAdditional.appendAscii( "   Sun Industry Standards Source License Version 1.1\n"                      );
+        m_aData.sBufferAdditional.appendAscii( "   =================================================\n"                      );
+        m_aData.sBufferAdditional.appendAscii( "   The contents of this file are subject to the Sun Industry Standards\n"    );
+        m_aData.sBufferAdditional.appendAscii( "   Source License Version 1.1 (the \"License\"); You may not use this file\n");
+        m_aData.sBufferAdditional.appendAscii( "   except in compliance with the License. You may obtain a copy of the\n"    );
+        m_aData.sBufferAdditional.appendAscii( "   License at http://www.openoffice.org/license.html.\n"                     );
+        m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
+        m_aData.sBufferAdditional.appendAscii( "   Software provided under this License is provided on an \"AS IS\" basis,\n");
+        m_aData.sBufferAdditional.appendAscii( "   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,\n"    );
+        m_aData.sBufferAdditional.appendAscii( "   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,\n"   );
+        m_aData.sBufferAdditional.appendAscii( "   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.\n"         );
+        m_aData.sBufferAdditional.appendAscii( "   See the License for the specific provisions governing your rights and\n"  );
+        m_aData.sBufferAdditional.appendAscii( "   obligations concerning the Software.\n"                                   );
+        m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
+        m_aData.sBufferAdditional.appendAscii( "   The Initial Developer of the Original Code is: Sun Microsystems, Inc.\n"  );
+        m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
+        m_aData.sBufferAdditional.appendAscii( "   Copyright: 2000 by Sun Microsystems, Inc.\n"                              );
+        m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
+        m_aData.sBufferAdditional.appendAscii( "   All Rights Reserved.\n"                                                   );
+        m_aData.sBufferAdditional.appendAscii( "\n"                                                                          );
+        m_aData.sBufferAdditional.appendAscii( "   Contributor(s): _______________________________________\n"                );
+        m_aData.sBufferAdditional.appendAscii( "-->\n"                                                                       );
+    }
+}
+
+//*****************************************************************************************************************
+void XCDGenerator::impl_generateTypeTemplate()
+{
+    //_________________________________________________________________________________________________________________
+    if( m_aData.nVersionOutput==1 || m_aData.nVersionOutput==2 )
+    {
+        m_aData.sBufferStandard.appendAscii( "\t\t<schema:group cfg:name=\"Type\">\n"                                                                                                                                                                  );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Preferred\" cfg:type=\"boolean\" cfg:writable=\""                                                                                                                         );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                 );
+        m_aData.sBufferStandard.appendAscii("\t\t\t\t<schema:documentation>\n"                                                                                                                                                                         );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the preferred type for an extension if more then one match given URL</schema:description>\n"                                                                     );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<default:data>false</default:data>\n"                                                                                                                                                            );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"UIName\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""                                                                                                      );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                 );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the external name of this type</schema:description>\n"                                                                                                           );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"MediaType\" cfg:type=\"string\" cfg:writable=\""                                                                                                                          );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                 );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the mime type </schema:description>\n"                                                                                                                           );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"ClipboardFormat\" cfg:type=\"string\" cfg:writable=\""                                                                                                                    );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                 );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the clipboard format name</schema:description>\n"                                                                                                                );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"URLPattern\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""                                                                                                  );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                 );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the patterns used for URLs. This type is only relevant for HTTP, FTP etc. and is used for internal URL formats like private:factory etc.</schema:description>\n" );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Extensions\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""                                                                                                  );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                 );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the possible file extensions.</schema:description>\n"                                                                                                            );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"DocumentIconID\" cfg:type=\"int\" cfg:writable=\""                                                                                                                        );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                 );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the document icon ID of this type</schema:description>\n"                                                                                                        );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<default:data>0</default:data>\n"                                                                                                                                                                );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t</schema:group>\n"                                                                                                                                                                                   );
+    }
+    //_________________________________________________________________________________________________________________
+    else if( m_aData.nVersionOutput>=3 )
+    {
+        m_aData.sBufferStandard.appendAscii( "\t\t<schema:group cfg:name=\"Type\">\n"                                                                                                                                                                  );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"UIName\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""                                                                                                      );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                 );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the external name of this type</schema:description>\n"                                                                                                           );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Data\" cfg:type=\"string\" cfg:writable=\""                                                                                                                               );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                 );
+        m_aData.sBufferStandard.appendAscii("\t\t\t\t<schema:documentation>\n"                                                                                                                                                                         );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Containes all data of a type as an own formated string.{Preferred, MediaType, ClipboardFormat, URLPattern, Extensions, DocumentIconID}</schema:description>\n"             );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<default:data>false</default:data>\n"                                                                                                                                                            );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t</schema:group>\n"                                                                                                                                                                                   );
+    }
+}
+
+//*****************************************************************************************************************
+void XCDGenerator::impl_generateFilterTemplate()
+{
+    //_________________________________________________________________________________________________________________
+    if( m_aData.nVersionOutput==1 || m_aData.nVersionOutput==2 )
+    {
+        m_aData.sBufferStandard.appendAscii( "\t\t<schema:group cfg:name=\"Filter\">\n"                                                                                                            );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Installed\" cfg:type=\"boolean\" cfg:writable=\""                                                                     );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                             );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Make it possible to enable or disable filter by setup!</schema:description>\n"                                         );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<default:data>false</default:data>\n"                                                                                                        );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
+        if( m_aData.nVersionOutput==2 )
+        {
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Order\" cfg:type=\"int\" cfg:writable=\""                                                                             );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                             );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies order of filters for relevant module; don't used for default filter!</schema:description>\n"                 );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<default:data>0</default:data>\n"                                                                                                            );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+        }
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"UIName\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""                                                  );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                             );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the external name of the filter which is displayed at the user interface (dialog).</schema:description>\n"   );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Type\" cfg:type=\"string\" cfg:writable=\""                                                                           );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                             );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the relative type key name of the filter, e.g. Type/T1</schema:description>\n"                               );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"DocumentService\" cfg:type=\"string\" cfg:writable=\""                                                                );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                             );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the name of the UNO service to implement the document.</schema:description>\n"                               );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"FilterService\" cfg:type=\"string\" cfg:writable=\""                                                                  );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                             );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the name of the UNO service for importing the document.</schema:description>\n"                              );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Flags\" cfg:type=\"int\" cfg:writable=\""                                                                             );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                             );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the properties of the filter</schema:description>\n"                                                         );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:type-info>\n"                                                                                                                        );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:value-names>\n"                                                                                                                    );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_IMPORT            , FILTERFLAG_IMPORT                                                                             );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_EXPORT            , FILTERFLAG_EXPORT                                                                             );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_TEMPLATE          , FILTERFLAG_TEMPLATE                                                                           );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_INTERNAL          , FILTERFLAG_INTERNAL                                                                           );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_TEMPLATEPATH      , FILTERFLAG_TEMPLATEPATH                                                                       );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_OWN               , FILTERFLAG_OWN                                                                                );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_ALIEN             , FILTERFLAG_ALIEN                                                                              );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_USESOPTIONS       , FILTERFLAG_USESOPTIONS                                                                        );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_DEFAULT           , FILTERFLAG_DEFAULT                                                                            );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_NOTINFILEDIALOG   , FILTERFLAG_NOTINFILEDIALOG                                                                    );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_NOTINCHOOSER      , FILTERFLAG_NOTINCHOOSER                                                                       );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_ASYNCHRON         , FILTERFLAG_ASYNCHRON                                                                          );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_NOTINSTALLED      , FILTERFLAG_NOTINSTALLED   , "set, if the filter is not installed, but available on CD"        );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_CONSULTSERVICE    , FILTERFLAG_CONSULTSERVICE , "set, if the filter is not installed and not available an CD"     );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_3RDPARTYFILTER    , FILTERFLAG_3RDPARTYFILTER , "must set, if the filter is an external one"                      );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_PACKED            , FILTERFLAG_PACKED                                                                             );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_SILENTEXPORT      , FILTERFLAG_SILENTEXPORT                                                                       );
+        impl_generateFilterFlagTemplate( FILTERFLAGNAME_PREFERED          , FILTERFLAG_PREFERED                                                                           );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t</schema:value-names>\n"                                                                                                                   );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:constraints xmlns:xsd=\"http://www.w3.org/1999/XMLSchema\"/>\n"                                                                    );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:type-info>\n"                                                                                                                       );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<default:data>0</default:data>\n"                                                                                                            );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"UserData\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""                                                );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                             );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the user-defined data</schema:description>\n"                                                                );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<default:data/>\n"                                                                                                                           );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"FileFormatVersion\" cfg:type=\"int\" cfg:writable=\""                                                                 );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                             );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<!--This should be removed to UserData later-->\n"                                                                                           );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the file format version of the filter</schema:description>\n"                                                );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<default:data>0</default:data>\n"                                                                                                            );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"TemplateName\" cfg:type=\"string\" cfg:writable=\""                                                                   );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                             );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<!--This should be removed to UserData later-->\n"                                                                                           );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the template used for importing the file with the specified filter.</schema:description>\n"                  );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t</schema:documentation>\n"                                                                                                                 );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t</schema:group>\n"                                                                                                                               );
+    //_________________________________________________________________________________________________________________
+    }
+    else if( m_aData.nVersionOutput>=3 )
+    {
+        m_aData.sBufferStandard.appendAscii( "\t\t<schema:group cfg:name=\"Filter\">\n"                                                                                                                                                                    );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Installed\" cfg:type=\"boolean\" cfg:writable=\""                                                                                                                             );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                     );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                            );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Make it possible to enable or disable filter by setup!</schema:description>\n"                                                                                                 );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                           );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<default:data>false</default:data>\n"                                                                                                                                                                );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                     );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"UIName\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""                                                                                                          );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                     );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                            );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the external name of the filter which is displayed at the user interface (dialog).</schema:description>\n"                                                           );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                           );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                     );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Data\" cfg:type=\"string\" cfg:writable=\""                                                                                                                                   );
+        m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                     );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                            );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>All data of filter written in own format. {Order, OldName, Type, DocumentService, FilterService, Flags, UserData, FilteFormatVersion, TemplateName}</schema:description>\n"    );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                           );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                     );
+
+        m_aData.sBufferStandard.appendAscii( "\t\t</schema:group>\n"                                                                                                                                                                                       );
+    }
+}
+
+//*****************************************************************************************************************
+void XCDGenerator::impl_generateFilterFlagTemplate( const ::rtl::OUString& sName, sal_Int32 nValue, const ::rtl::OString& sDescription )
+{
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t\t<schema:named-value name=\"" );
+    m_aData.sBufferStandard.append     ( sName                                     );
+    m_aData.sBufferStandard.appendAscii( "\" value=\""                             );
+    m_aData.sBufferStandard.append     ( nValue                                    );
+    m_aData.sBufferStandard.appendAscii( "\""                                      );
 
     if( sDescription.getLength() > 0 )
     {
-        sXCD.appendAscii( ">\n\t\t\t\t\t\t\t<schema:description>"   );
-        sXCD.appendAscii( sDescription                              );
-        sXCD.appendAscii( "</schema:description>\n"                 );
-        sXCD.appendAscii( "\t\t\t\t\t\t</schema:named-value>\n"     );
+        m_aData.sBufferStandard.appendAscii( ">\n\t\t\t\t\t\t\t<schema:description>"   );
+        m_aData.sBufferStandard.appendAscii( sDescription                              );
+        m_aData.sBufferStandard.appendAscii( "</schema:description>\n"                 );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t\t</schema:named-value>\n"     );
     }
     else
     {
-        sXCD.appendAscii( "/>\n"                                    );
+        m_aData.sBufferStandard.appendAscii( "/>\n"                                    );
     }
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateDetectorTemplate( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
+void XCDGenerator::impl_generateDetectorTemplate()
 {
-    sXCD.appendAscii( "\t\t<schema:group cfg:name=\"DetectService\">\n"                                                             );
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Types\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""           );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                             );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                            );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>List of types which the service has registered for.</schema:description>\n"    );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                           );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                     );
-    sXCD.appendAscii( "\t\t</schema:group>\n"                                                                                       );
+    m_aData.sBufferStandard.appendAscii( "\t\t<schema:group cfg:name=\"DetectService\">\n"                                                             );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Types\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""           );
+    m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                     );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                            );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>List of types which the service has registered for.</schema:description>\n"    );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                           );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                     );
+    m_aData.sBufferStandard.appendAscii( "\t\t</schema:group>\n"                                                                                       );
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateLoaderTemplate( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
+void XCDGenerator::impl_generateLoaderTemplate()
 {
-    sXCD.appendAscii( "\t\t<schema:group cfg:name=\"FrameLoader\">\n"                                                                                                       );
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"UIName\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""                                                  );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the external name of the filter which is displayed at the user interface (dialog).</schema:description>\n"   );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Types\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""                                                   );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>List of types which the service has registered for.</schema:description>\n"                                            );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
-    sXCD.appendAscii( "\t\t</schema:group>\n"                                                                                                                               );
+    m_aData.sBufferStandard.appendAscii( "\t\t<schema:group cfg:name=\"FrameLoader\">\n"                                                                                                       );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"UIName\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""                                                  );
+    m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                             );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Specifies the external name of the filter which is displayed at the user interface (dialog).</schema:description>\n"   );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Types\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""                                                   );
+    m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                             );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>List of types which the service has registered for.</schema:description>\n"                                            );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+    m_aData.sBufferStandard.appendAscii( "\t\t</schema:group>\n"                                                                                                                               );
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateTypeSet( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
+void XCDGenerator::impl_generateTypeSet()
 {
     if( m_aData.pFilterCache->hasTypes() == sal_False )
     {
         // generate empty set!
-        sXCD.appendAscii( "\t<schema:set cfg:name=\"Types\" cfg:element-type=\"Type\"/>\n" );
+        m_aData.sBufferStandard.appendAscii  ( "\t<schema:set cfg:name=\"Types\" cfg:element-type=\"Type\"/>\n"                 );
+
+        if( m_aData.nVersionOutput >= 4 )
+        {
+            m_aData.sBufferAdditional.appendAscii( "\t<schema:set cfg:name=\"Types\" cfg:element-type=\"Type\" cfg:component=\""    );
+            m_aData.sBufferAdditional.append     ( m_aData.sPackageStandard                                                         );
+            m_aData.sBufferAdditional.appendAscii( "\"/>\n"                                                                         );
+        }
     }
     else
     {
         // generate filled set
         // open set
-        sXCD.appendAscii( "\t<schema:set cfg:name=\"Types\" cfg:element-type=\"Type\">\n" );
+        m_aData.sBufferStandard.appendAscii  ( "\t<schema:set cfg:name=\"Types\" cfg:element-type=\"Type\">\n"                  );
 
-        if( m_aData.nVersionOutput==1 || m_aData.nVersionOutput==2 )
+        if( m_aData.nVersionOutput >= 4 )
         {
-            css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllTypeNames();
-            sal_Int32                             nCount = lNames.getLength()                     ;
-            for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
-            {
-                ::rtl::OUString sName = lNames[nItem]                         ;
-                FileType        aItem = m_aData.pFilterCache->getType( sName );
-
-                ++m_aData.nWrittenTypes;
-
-                // open set entry by using name
-                sXCD.appendAscii( "\t\t<default:group cfg:name=\""  );
-                sXCD.append     ( sName                             );
-                sXCD.appendAscii( "\">\n"                           );
-
-                // write properties
-                impl_generateBoolProperty       ( sXCD, SUBKEY_PREFERRED        , aItem.bPreferred          , bWriteable );
-                impl_generateUINamesProperty    ( sXCD, SUBKEY_UINAME           , aItem.lUINames            , bWriteable );
-                impl_generateStringProperty     ( sXCD, SUBKEY_MEDIATYPE        , aItem.sMediaType          , bWriteable );
-                impl_generateStringProperty     ( sXCD, SUBKEY_CLIPBOARDFORMAT  , aItem.sClipboardFormat    , bWriteable );
-                impl_generateStringListProperty ( sXCD, SUBKEY_URLPATTERN       , aItem.lURLPattern         , bWriteable );
-                impl_generateStringListProperty ( sXCD, SUBKEY_EXTENSIONS       , aItem.lExtensions         , bWriteable );
-                impl_generateIntProperty        ( sXCD, SUBKEY_DOCUMENTICONID   , aItem.nDocumentIconID     , bWriteable );
-
-                // close set node
-                sXCD.appendAscii( "\t\t</default:group>\n" );
-            }
+            m_aData.sBufferAdditional.appendAscii( "\t<schema:set cfg:name=\"Types\" cfg:element-type=\"Type\" cfg:component=\""    );
+            m_aData.sBufferAdditional.append     ( m_aData.sPackageStandard                                                         );
+            m_aData.sBufferAdditional.appendAscii( "\">\n"                                                                          );
         }
-        else if( m_aData.nVersionOutput==3 )
+
+        css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllTypeNames();
+        sal_Int32                             nCount = lNames.getLength()                     ;
+
+        XCDGenerator::impl_orderAlphabetical( lNames );
+
+        for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
         {
-            css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllTypeNames();
-            sal_Int32                             nCount = lNames.getLength()                     ;
-            for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+            ::rtl::OUString sName   = lNames[nItem]                         ;
+            FileType        aItem   = m_aData.pFilterCache->getType( sName );
+            EFilterPackage  ePackage                                        ;
+
+            ++m_aData.nWrittenTypes;
+
+            if( m_aData.nVersionOutput==1 || m_aData.nVersionOutput==2 )
             {
-                ::rtl::OUString sName = lNames[nItem]                         ;
-                FileType        aItem = m_aData.pFilterCache->getType( sName );
-
-                ++m_aData.nWrittenTypes;
-
                 // open set entry by using name
-                sXCD.appendAscii( "\t\t<default:group cfg:name=\""  );
-                sXCD.append     ( sName                             );
-                sXCD.appendAscii( "\">\n"                           );
+                m_aData.sBufferStandard.appendAscii( "\t\t<default:group cfg:name=\""  );
+                m_aData.sBufferStandard.append     ( sName                             );
+                m_aData.sBufferStandard.appendAscii( "\">\n"                           );
 
                 // write properties
-                impl_generateUINamesProperty( sXCD, SUBKEY_UINAME, aItem.lUINames                          , bWriteable );
-                impl_generateStringProperty ( sXCD, SUBKEY_DATA  , FilterCFGAccess::encodeTypeData( aItem ), bWriteable );
+                impl_generateBoolProperty       ( m_aData.sBufferStandard, SUBKEY_PREFERRED        , aItem.bPreferred       );
+                impl_generateUINamesProperty    ( m_aData.sBufferStandard, SUBKEY_UINAME           , aItem.lUINames         );
+                impl_generateStringProperty     ( m_aData.sBufferStandard, SUBKEY_MEDIATYPE        , aItem.sMediaType       );
+                impl_generateStringProperty     ( m_aData.sBufferStandard, SUBKEY_CLIPBOARDFORMAT  , aItem.sClipboardFormat );
+                impl_generateStringListProperty ( m_aData.sBufferStandard, SUBKEY_URLPATTERN       , aItem.lURLPattern      );
+                impl_generateStringListProperty ( m_aData.sBufferStandard, SUBKEY_EXTENSIONS       , aItem.lExtensions      );
+                impl_generateIntProperty        ( m_aData.sBufferStandard, SUBKEY_DOCUMENTICONID   , aItem.nDocumentIconID  );
 
                 // close set node
-                sXCD.appendAscii( "\t\t</default:group>\n" );
+                m_aData.sBufferStandard.appendAscii( "\t\t</default:group>\n" );
+            }
+            else if( m_aData.nVersionOutput>=3 )
+            {
+                ::rtl::OUStringBuffer* pBuffer;
+
+                if( m_aData.nVersionOutput == 3 )
+                {
+                    pBuffer = &(m_aData.sBufferStandard);
+                }
+                if( m_aData.nVersionOutput == 4 )
+                {
+                    XCDGenerator::impl_classifyType( m_aData, sName, ePackage );
+                    switch( ePackage )
+                    {
+                        case E_STANDARD   :   {
+                                                pBuffer = &(m_aData.sBufferStandard);
+                                                m_aData.sStandardTypeList.append     ( sName );
+                                                m_aData.sStandardTypeList.appendAscii( "\n"  );
+                                              }
+                                              break;
+                        case E_ADDITIONAL :   {
+                                                pBuffer = &(m_aData.sBufferAdditional);
+                                                m_aData.sAdditionalTypeList.append     ( sName );
+                                                m_aData.sAdditionalTypeList.appendAscii( "\n"  );
+                                              }
+                                              break;
+                    }
+                }
+                // open set entry by using name
+                pBuffer->appendAscii( "\t\t<default:group cfg:name=\""  );
+                pBuffer->append     ( sName                             );
+                pBuffer->appendAscii( "\">\n"                           );
+
+                // write properties
+                impl_generateUINamesProperty( *pBuffer, SUBKEY_UINAME, aItem.lUINames                           );
+                impl_generateStringProperty ( *pBuffer, SUBKEY_DATA  , FilterCFGAccess::encodeTypeData( aItem ) );
+
+                // close set node
+                pBuffer->appendAscii( "\t\t</default:group>\n" );
             }
         }
 
         // close set
-        sXCD.appendAscii( "\t</schema:set>\n" );
+        m_aData.sBufferStandard.appendAscii( "\t</schema:set>\n" );
+        if( m_aData.nVersionOutput >= 4 )
+        {
+            m_aData.sBufferAdditional.appendAscii( "\t</schema:set>\n" );
+        }
     }
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateFilterSet( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
+void XCDGenerator::impl_generateFilterSet()
 {
     if( m_aData.pFilterCache->hasFilters() == sal_False )
     {
         // write empty filter set.
-        sXCD.appendAscii( "\t<schema:set cfg:name=\"Filters\" cfg:element-type=\"Filter\"/>\n" );
+        m_aData.sBufferStandard.appendAscii( "\t<schema:set cfg:name=\"Filters\" cfg:element-type=\"Filter\"/>\n" );
+        if( m_aData.nVersionOutput >= 4 )
+        {
+            m_aData.sBufferAdditional.appendAscii( "\t<schema:set cfg:name=\"Filters\" cfg:element-type=\"Filter\" cfg:component=\""    );
+            m_aData.sBufferAdditional.append     ( m_aData.sPackageStandard                                                             );
+            m_aData.sBufferAdditional.appendAscii( "\"/>\n"                                                                             );
+        }
     }
     else
     {
         // open set
-        sXCD.appendAscii( "\t<schema:set cfg:name=\"Filters\" cfg:element-type=\"Filter\">\n" );
-
-        if( m_aData.nVersionOutput==1 || m_aData.nVersionOutput==2 )
+        m_aData.sBufferStandard.appendAscii( "\t<schema:set cfg:name=\"Filters\" cfg:element-type=\"Filter\">\n" );
+        if( m_aData.nVersionOutput >= 4 )
         {
-            css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllFilterNames();
-            sal_Int32                             nCount = lNames.getLength()                       ;
-            for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+            m_aData.sBufferAdditional.appendAscii( "\t<schema:set cfg:name=\"Filters\" cfg:element-type=\"Filter\" cfg:component=\""    );
+            m_aData.sBufferAdditional.append     ( m_aData.sPackageStandard                                                             );
+            m_aData.sBufferAdditional.appendAscii( "\">\n"                                                                              );
+        }
+
+        css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllFilterNames();
+        sal_Int32                             nCount = lNames.getLength()                       ;
+
+        XCDGenerator::impl_orderAlphabetical( lNames );
+
+        for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+        {
+            ::rtl::OUString sName = lNames[nItem]                                   ;
+            Filter          aItem = m_aData.pFilterCache->getFilter( lNames[nItem] );
+            EFilterPackage  ePackage                                                ;
+
+            ++m_aData.nWrittenFilters;
+
+            if( m_aData.nVersionOutput==1 || m_aData.nVersionOutput==2 )
             {
-                Filter aItem = m_aData.pFilterCache->getFilter( lNames[nItem] );
-
-                ++m_aData.nWrittenFilters;
-
                 // open set node by using name
-                sXCD.appendAscii( "\t\t<default:group cfg:name=\""  );
-                sXCD.append     ( lNames[nItem]                     );
-                sXCD.appendAscii( "\">\n"                           );
+                m_aData.sBufferStandard.appendAscii( "\t\t<default:group cfg:name=\""  );
+                m_aData.sBufferStandard.append     ( sName                             );
+                m_aData.sBufferStandard.appendAscii( "\">\n"                           );
 
                 // write properties
                 // Attention:
                 // We generate "Installed=false" for all entries ... because it's the default for all filters.
                 // You must work with a full office installation and change this to "true" in generated XML file!!!
-                impl_generateBoolProperty       ( sXCD, SUBKEY_INSTALLED        , sal_False               , bWriteable  );
-                impl_generateIntProperty        ( sXCD, SUBKEY_ORDER            , aItem.nOrder            , bWriteable  );
-                impl_generateStringProperty     ( sXCD, SUBKEY_TYPE             , aItem.sType             , bWriteable  );
-                impl_generateUINamesProperty    ( sXCD, SUBKEY_UINAME           , aItem.lUINames          , bWriteable  );
-                impl_generateStringProperty     ( sXCD, SUBKEY_DOCUMENTSERVICE  , aItem.sDocumentService  , bWriteable  );
-                impl_generateStringProperty     ( sXCD, SUBKEY_FILTERSERVICE    , aItem.sFilterService    , bWriteable  );
-                impl_generateIntProperty        ( sXCD, SUBKEY_FLAGS            , aItem.nFlags            , bWriteable  );
-                impl_generateStringListProperty ( sXCD, SUBKEY_USERDATA         , aItem.lUserData         , bWriteable  );
-                impl_generateIntProperty        ( sXCD, SUBKEY_FILEFORMATVERSION, aItem.nFileFormatVersion, bWriteable  );
-                impl_generateStringProperty     ( sXCD, SUBKEY_TEMPLATENAME     , aItem.sTemplateName     , bWriteable  );
+                impl_generateBoolProperty       ( m_aData.sBufferStandard, SUBKEY_INSTALLED        , sal_False                );
+                impl_generateIntProperty        ( m_aData.sBufferStandard, SUBKEY_ORDER            , aItem.nOrder             );
+                impl_generateStringProperty     ( m_aData.sBufferStandard, SUBKEY_TYPE             , aItem.sType              );
+                impl_generateUINamesProperty    ( m_aData.sBufferStandard, SUBKEY_UINAME           , aItem.lUINames           );
+                impl_generateStringProperty     ( m_aData.sBufferStandard, SUBKEY_DOCUMENTSERVICE  , aItem.sDocumentService   );
+                impl_generateStringProperty     ( m_aData.sBufferStandard, SUBKEY_FILTERSERVICE    , aItem.sFilterService     );
+                impl_generateIntProperty        ( m_aData.sBufferStandard, SUBKEY_FLAGS            , aItem.nFlags             );
+                impl_generateStringListProperty ( m_aData.sBufferStandard, SUBKEY_USERDATA         , aItem.lUserData          );
+                impl_generateIntProperty        ( m_aData.sBufferStandard, SUBKEY_FILEFORMATVERSION, aItem.nFileFormatVersion );
+                impl_generateStringProperty     ( m_aData.sBufferStandard, SUBKEY_TEMPLATENAME     , aItem.sTemplateName      );
 
                 // close set node
-                sXCD.appendAscii( "\t\t</default:group>\n" );
+                m_aData.sBufferStandard.appendAscii( "\t\t</default:group>\n" );
             }
-        }
-        else if( m_aData.nVersionOutput==3 )
-        {
-            css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllFilterNames();
-            sal_Int32                             nCount = lNames.getLength()                       ;
-            for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+            else if( m_aData.nVersionOutput>=3 )
             {
+                ::rtl::OUStringBuffer* pBuffer;
+
+                if( m_aData.nVersionOutput == 3 )
+                {
+                    pBuffer = &(m_aData.sBufferStandard);
+                }
+                if( m_aData.nVersionOutput == 4 )
+                {
+                    XCDGenerator::impl_classifyFilter( m_aData, sName, ePackage, aItem.nOrder );
+                    switch( ePackage )
+                    {
+                        case E_STANDARD   :   {
+                                                pBuffer = &(m_aData.sBufferStandard);
+                                                m_aData.sStandardFilterList.append      ( sName );
+                                                m_aData.sStandardFilterList.appendAscii ( "\n"  );
+                                              }
+                                              break;
+                        case E_ADDITIONAL :   {
+                                                pBuffer = &(m_aData.sBufferAdditional);
+                                                m_aData.sAdditionalFilterList.append     ( sName );
+                                                m_aData.sAdditionalFilterList.appendAscii( "\n"  );
+                                              }
+                                              break;
+                    }
+                }
+
+                /*
                 ::rtl::OUString     sNewName;
                 ::rtl::OUString     sOldName;
 
-                sNewName = lNames[nItem];
+                sNewName = sName;
                 sOldName = impl_getOldFilterName  ( sNewName );
                 sOldName = impl_filterSpecialSigns( sOldName );
 
                 Filter aItem = m_aData.pFilterCache->getFilter( sNewName );
-
-                ++m_aData.nWrittenFilters;
+                //m_aData.sBufferStandard.append   ( FilterCFGAccess::encodeFilterName( sOldName )  );
+                */
 
                 // open set node by using name
-                sXCD.appendAscii( "\t\t<default:group cfg:name=\""               );
-                sXCD.append     ( FilterCFGAccess::encodeFilterName( sOldName )  );
-                sXCD.appendAscii( "\">\n"                                        );
+                pBuffer->appendAscii( "\t\t<default:group cfg:name=\"" );
+                pBuffer->append     ( sName                            );
+                pBuffer->appendAscii( "\">\n"                          );
 
                 // write properties
                 // Attention:
                 // We generate "Installed=false" for all entries ... because it's the default for all filters.
                 // You must work with a full office installation and change this to "true" in generated XML file!!!
-                impl_generateBoolProperty   ( sXCD, SUBKEY_INSTALLED, sal_False                                 , bWriteable  );
-                impl_generateUINamesProperty( sXCD, SUBKEY_UINAME   , aItem.lUINames                            , bWriteable  );
-                impl_generateStringProperty ( sXCD, SUBKEY_DATA     , FilterCFGAccess::encodeFilterData( aItem ), bWriteable  );
+                impl_generateBoolProperty   ( *pBuffer, SUBKEY_INSTALLED, sal_False                                  );
+                impl_generateUINamesProperty( *pBuffer, SUBKEY_UINAME   , aItem.lUINames                             );
+                impl_generateStringProperty ( *pBuffer, SUBKEY_DATA     , FilterCFGAccess::encodeFilterData( aItem ) );
 
                 // close set node
-                sXCD.appendAscii( "\t\t</default:group>\n" );
+                pBuffer->appendAscii( "\t\t</default:group>\n" );
             }
         }
 
         // close set
-        sXCD.appendAscii( "\t</schema:set>\n" );
+        m_aData.sBufferStandard.appendAscii( "\t</schema:set>\n" );
+        if( m_aData.nVersionOutput >= 4 )
+        {
+            m_aData.sBufferAdditional.appendAscii( "\t</schema:set>\n" );
+        }
     }
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateDetectorSet( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
+void XCDGenerator::impl_generateDetectorSet()
 {
     if( m_aData.pFilterCache->hasDetectors() == sal_False )
     {
         // write empty detector set!
-        sXCD.appendAscii( "\t<schema:set cfg:name=\"DetectServices\" cfg:element-type=\"DetectService\"/>\n" );
+        m_aData.sBufferStandard.appendAscii( "\t<schema:set cfg:name=\"DetectServices\" cfg:element-type=\"DetectService\"/>\n" );
     }
     else
     {
         // open set
-        sXCD.appendAscii( "\t<schema:set cfg:name=\"DetectServices\" cfg:element-type=\"DetectService\">\n" );
+        m_aData.sBufferStandard.appendAscii( "\t<schema:set cfg:name=\"DetectServices\" cfg:element-type=\"DetectService\">\n" );
 
         css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllDetectorNames();
         sal_Int32                             nCount = lNames.getLength()                         ;
+
+        XCDGenerator::impl_orderAlphabetical( lNames );
+
         for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
         {
             ::rtl::OUString sName = lNames[nItem]                             ;
@@ -975,37 +1197,40 @@ void XCDGenerator::impl_generateDetectorSet( ::rtl::OUStringBuffer& sXCD, sal_Bo
             ++m_aData.nWrittenDetectors;
 
             // open set node by using name
-            sXCD.appendAscii( "\t\t<default:group cfg:name=\""  );
-            sXCD.append     ( sName                             );
-            sXCD.appendAscii( "\">\n"                           );
+            m_aData.sBufferStandard.appendAscii( "\t\t<default:group cfg:name=\""  );
+            m_aData.sBufferStandard.append     ( sName                             );
+            m_aData.sBufferStandard.appendAscii( "\">\n"                           );
 
             // write properties
-            impl_generateStringListProperty ( sXCD, SUBKEY_TYPES, aItem.lTypes, bWriteable );
+            impl_generateStringListProperty ( m_aData.sBufferStandard, SUBKEY_TYPES, aItem.lTypes );
 
             // close set node
-            sXCD.appendAscii( "\t\t</default:group>\n" );
+            m_aData.sBufferStandard.appendAscii( "\t\t</default:group>\n" );
         }
 
         // close set
-        sXCD.appendAscii( "\t</schema:set>\n" );
+        m_aData.sBufferStandard.appendAscii( "\t</schema:set>\n" );
     }
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateLoaderSet( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
+void XCDGenerator::impl_generateLoaderSet()
 {
     if( m_aData.pFilterCache->hasLoaders() == sal_False )
     {
         // write empty loader set!
-        sXCD.appendAscii( "\t<schema:set cfg:name=\"FrameLoaders\" cfg:element-type=\"FrameLoader\"/>\n" );
+        m_aData.sBufferStandard.appendAscii( "\t<schema:set cfg:name=\"FrameLoaders\" cfg:element-type=\"FrameLoader\"/>\n" );
     }
     else
     {
         // open set
-        sXCD.appendAscii( "\t<schema:set cfg:name=\"FrameLoaders\" cfg:element-type=\"FrameLoader\">\n" );
+        m_aData.sBufferStandard.appendAscii( "\t<schema:set cfg:name=\"FrameLoaders\" cfg:element-type=\"FrameLoader\">\n" );
 
         css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllLoaderNames();
         sal_Int32                             nCount = lNames.getLength()                       ;
+
+        XCDGenerator::impl_orderAlphabetical( lNames );
+
         for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
         {
             ::rtl::OUString sName = lNames[nItem]                           ;
@@ -1014,57 +1239,56 @@ void XCDGenerator::impl_generateLoaderSet( ::rtl::OUStringBuffer& sXCD, sal_Bool
             ++m_aData.nWrittenLoaders;
 
             // open set node by using name
-            sXCD.appendAscii( "\t\t<default:group cfg:name=\""  );
-            sXCD.append     ( sName                             );
-            sXCD.appendAscii( "\">\n"                           );
+            m_aData.sBufferStandard.appendAscii( "\t\t<default:group cfg:name=\""  );
+            m_aData.sBufferStandard.append     ( sName                             );
+            m_aData.sBufferStandard.appendAscii( "\">\n"                           );
 
             // write properties
-            impl_generateUINamesProperty    ( sXCD, SUBKEY_UINAME, aItem.lUINames, bWriteable );
-            impl_generateStringListProperty ( sXCD, SUBKEY_TYPES , aItem.lTypes  , bWriteable );
+            impl_generateUINamesProperty    ( m_aData.sBufferStandard, SUBKEY_UINAME, aItem.lUINames );
+            impl_generateStringListProperty ( m_aData.sBufferStandard, SUBKEY_TYPES , aItem.lTypes   );
 
             // close set node
-            sXCD.appendAscii( "\t\t</default:group>\n" );
+            m_aData.sBufferStandard.appendAscii( "\t\t</default:group>\n" );
         }
 
         // close set
-        sXCD.appendAscii( "\t</schema:set>\n" );
+        m_aData.sBufferStandard.appendAscii( "\t</schema:set>\n" );
     }
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateDefaults( ::rtl::OUStringBuffer& sXCD )
+void XCDGenerator::impl_generateDefaults()
 {
     // open group
-    sXCD.appendAscii( "\t<schema:group cfg:name=\"Defaults\">\n" );
+    m_aData.sBufferStandard.appendAscii( "\t<schema:group cfg:name=\"Defaults\">\n" );
 
     // write generic loader
-    sXCD.appendAscii( "\t\t<schema:value cfg:name=\"FrameLoader\" cfg:type=\"string\">\n"   );
-    sXCD.appendAscii( "\t\t\t<default:data>"                                                );
-    sXCD.append     ( m_aData.pFilterCache->getDefaultLoader()                              );
-    sXCD.appendAscii( "</default:data>\n"                                                   );
-    sXCD.appendAscii( "\t\t</schema:value>\n"                                               );
+    m_aData.sBufferStandard.appendAscii( "\t\t<schema:value cfg:name=\"FrameLoader\" cfg:type=\"string\">\n"   );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t<default:data>"                                                );
+    m_aData.sBufferStandard.append     ( m_aData.pFilterCache->getDefaultLoader()                              );
+    m_aData.sBufferStandard.appendAscii( "</default:data>\n"                                                   );
+    m_aData.sBufferStandard.appendAscii( "\t\t</schema:value>\n"                                               );
 
     // write default detector
-    sXCD.appendAscii( "\t\t<schema:value cfg:name=\"DetectService\" cfg:type=\"string\">\n" );
-    sXCD.appendAscii( "\t\t\t<default:data>"                                                );
-    sXCD.append     ( m_aData.pFilterCache->getDefaultDetector()                            );
-    sXCD.appendAscii( "</default:data>\n"                                                   );
-    sXCD.appendAscii( "\t\t</schema:value>\n"                                               );
+    m_aData.sBufferStandard.appendAscii( "\t\t<schema:value cfg:name=\"DetectService\" cfg:type=\"string\">\n" );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t<default:data>"                                                );
+    m_aData.sBufferStandard.append     ( m_aData.pFilterCache->getDefaultDetector()                            );
+    m_aData.sBufferStandard.appendAscii( "</default:data>\n"                                                   );
+    m_aData.sBufferStandard.appendAscii( "\t\t</schema:value>\n"                                               );
 
     // close group
-    sXCD.appendAscii( "\t</schema:group>\n" );
+    m_aData.sBufferStandard.appendAscii( "\t</schema:group>\n" );
 }
 
 //*****************************************************************************************************************
 void XCDGenerator::impl_generateIntProperty(        ::rtl::OUStringBuffer& sXCD        ,
                                             const   ::rtl::OUString&       sName       ,
-                                                    sal_Int32              nValue      ,
-                                                    sal_Bool               bWriteable  )
+                                                    sal_Int32              nValue      )
 {
     sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""                );
     sXCD.append     ( sName                                             );
     sXCD.appendAscii( "\" cfg:type=\"int\" cfg:writable=\""             );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n" );
+    sXCD.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n" );
     sXCD.appendAscii( "\t\t\t\t<default:data>"                          );
     sXCD.append     ( (sal_Int32)(nValue)                               );
     sXCD.appendAscii( "</default:data>\n\t\t\t</default:value>\n"       );
@@ -1073,13 +1297,12 @@ void XCDGenerator::impl_generateIntProperty(        ::rtl::OUStringBuffer& sXCD 
 //*****************************************************************************************************************
 void XCDGenerator::impl_generateBoolProperty(           ::rtl::OUStringBuffer& sXCD        ,
                                                 const   ::rtl::OUString&       sName       ,
-                                                        sal_Bool               bValue      ,
-                                                        sal_Bool               bWriteable  )
+                                                        sal_Bool               bValue      )
 {
     sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""                );
     sXCD.append     ( sName                                             );
     sXCD.appendAscii( "\" cfg:type=\"boolean\" cfg:writable=\""         );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n" );
+    sXCD.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n" );
     sXCD.appendAscii( "\t\t\t\t<default:data>"                          );
     sXCD.appendAscii( bValue==sal_True ? "true" : "false"               );
     sXCD.appendAscii( "</default:data>\n\t\t\t</default:value>\n"       );
@@ -1088,18 +1311,17 @@ void XCDGenerator::impl_generateBoolProperty(           ::rtl::OUStringBuffer& s
 //*****************************************************************************************************************
 void XCDGenerator::impl_generateStringProperty(         ::rtl::OUStringBuffer& sXCD        ,
                                                 const   ::rtl::OUString&       sName       ,
-                                                const   ::rtl::OUString&       sValue      ,
-                                                        sal_Bool               bWriteable  )
+                                                const   ::rtl::OUString&       sValue      )
 {
     sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""            );
     sXCD.append     ( sName                                         );
     sXCD.appendAscii( "\" cfg:type=\"string\" cfg:writable=\""      );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\"" : "false\""   );
+    sXCD.appendAscii( m_aData.bWriteable==sal_True ? "true\"" : "false\""   );
     if( sValue.getLength() > 0 )
     {
-        sXCD.appendAscii( ">\n\t\t\t\t<default:data>"                   );
-        sXCD.append     ( impl_filterSpecialSigns( sValue )             );
-        sXCD.appendAscii( "</default:data>\n\t\t\t</default:value>\n"   );
+        sXCD.appendAscii( ">\n\t\t\t\t<default:data>"                       );
+        sXCD.append     ( XCDGenerator::impl_filterSpecialSigns( sValue )   );
+        sXCD.appendAscii( "</default:data>\n\t\t\t</default:value>\n"       );
     }
     else
     {
@@ -1110,14 +1332,13 @@ void XCDGenerator::impl_generateStringProperty(         ::rtl::OUStringBuffer& s
 //*****************************************************************************************************************
 void XCDGenerator::impl_generateStringListProperty(         ::rtl::OUStringBuffer&      sXCD        ,
                                                     const   ::rtl::OUString&            sName       ,
-                                                    const   ::framework::StringList&    lValue      ,
-                                                            sal_Bool                    bWriteable  )
+                                                    const   ::framework::StringList&    lValue      )
 {
     sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""                );
     sXCD.append     ( sName                                             );
     sXCD.appendAscii( "\" cfg:type=\"string\" cfg:derivedBy=\"list\""   );
 
-    sal_Unicode cSeperator = impl_defineSeperator( lValue );
+    sal_Unicode cSeperator = XCDGenerator::impl_defineSeperator( lValue );
     if( cSeperator != ' ' )
     {
         sXCD.appendAscii( " cfg:separator=\""  );
@@ -1126,7 +1347,7 @@ void XCDGenerator::impl_generateStringListProperty(         ::rtl::OUStringBuffe
     }
 
     sXCD.appendAscii( " cfg:writable=\""                                );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\"" : "false\""       );
+    sXCD.appendAscii( m_aData.bWriteable==sal_True ? "true\"" : "false\""       );
 
     sal_Int32 nCount    = (sal_Int32)(lValue.size());
     sal_Int32 nPosition = 1;
@@ -1156,13 +1377,12 @@ void XCDGenerator::impl_generateStringListProperty(         ::rtl::OUStringBuffe
 //*****************************************************************************************************************
 void XCDGenerator::impl_generateUINamesProperty(        ::rtl::OUStringBuffer&      sXCD        ,
                                                 const   ::rtl::OUString&            sName       ,
-                                                const   StringHash&                 lUINames    ,
-                                                        sal_Bool                    bWriteable  )
+                                                const   StringHash&                 lUINames    )
 {
     sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""                                );
     sXCD.append     ( sName                                                             );
     sXCD.appendAscii( "\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""   );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\"" : "false\""                       );
+    sXCD.appendAscii( m_aData.bWriteable==sal_True ? "true\"" : "false\""                       );
 
     if( lUINames.size() > 0 )
     {
@@ -1188,21 +1408,21 @@ void XCDGenerator::impl_generateUINamesProperty(        ::rtl::OUStringBuffer&  
         {
             for( ConstStringHashIterator pUIName=lUINames.begin(); pUIName!=lUINames.end(); ++pUIName )
             {
-                sXCD.appendAscii( "\t\t\t\t<default:data xml:lang=\""       );
-                sXCD.append     ( pUIName->first                            );
-                sXCD.appendAscii( "\">"                                     );
-                sXCD.append     ( impl_filterSpecialSigns( pUIName->second ));
-                sXCD.appendAscii( "</default:data>\n"                       );
+                sXCD.appendAscii( "\t\t\t\t<default:data xml:lang=\""                       );
+                sXCD.append     ( pUIName->first                                            );
+                sXCD.appendAscii( "\">"                                                     );
+                sXCD.append     ( XCDGenerator::impl_filterSpecialSigns( pUIName->second )  );
+                sXCD.appendAscii( "</default:data>\n"                                       );
             }
         }
         // Generate ONE entry as default for our configuration if all localized values are equal!
         else
         {
-            sXCD.appendAscii( "\t\t\t\t<default:data xml:lang=\""                                       );
-            sXCD.appendAscii( "en-US"                                                                   );
-            sXCD.appendAscii( "\">"                                                                     );
-            sXCD.append     ( impl_filterSpecialSigns( lUINames.find(DECLARE_ASCII("en-US"))->second )  );
-            sXCD.appendAscii( "</default:data>\n"                                                       );
+            sXCD.appendAscii( "\t\t\t\t<default:data xml:lang=\""                                                   );
+            sXCD.appendAscii( "en-US"                                                                               );
+            sXCD.appendAscii( "\">"                                                                                 );
+            sXCD.append     ( XCDGenerator::impl_filterSpecialSigns( lUINames.find(DECLARE_ASCII("en-US"))->second ));
+            sXCD.appendAscii( "</default:data>\n"                                                                   );
         }
         sXCD.appendAscii( "\t\t\t</default:value>\n" );
     }
@@ -1337,266 +1557,266 @@ sal_Unicode XCDGenerator::impl_defineSeperator( const ::framework::StringList& l
 void XCDGenerator::impl_initFilterHashNew2Old( StringHash& aHash )
 {
     // key = new filter name, value = old name
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_StarOffice_XML_Writer"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarOffice XML (Writer)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_StarWriter_50"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 5.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_StarWriter_50_VorlageTemplate"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 5.0 Vorlage/Template"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_StarWriter_40"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 4.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_StarWriter_40_VorlageTemplate"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 4.0 Vorlage/Template"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_StarWriter_30"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 3.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_StarWriter_30_VorlageTemplate"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 3.0 Vorlage/Template"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_StarWriter_20"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 2.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_StarWriter_10"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter 1.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_StarWriter_DOS"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarWriter DOS"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_HTML_StarWriter"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: HTML (StarWriter)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Text"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Text"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Text_Unix"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Text Unix"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Text_Mac"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Text Mac"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Text_DOS"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Text DOS"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Rich_Text_Format"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Rich Text Format"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_Word_97"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 97"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_Word_95"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 95"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_Word_97_Vorlage"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 97 Vorlage"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_Word_95_Vorlage"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 95 Vorlage"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_WinWord_60"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS WinWord 6.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_Word_6x_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 6.x (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_WinWord_5"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS WinWord 5"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_WinWord_2x_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS WinWord 2.x (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_MacWord_5x_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS MacWord 5.x (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordPerfect_Win_61_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect (Win) 6.1 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordPerfect_Win_70_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect (Win) 7.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordStar_Win_1x_20_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar (Win) 1.x-2.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordStar_70_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 7.0  (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Ami_Pro_11_12_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Ami Pro 1.1-1.2 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Ami_Pro_20_31_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Ami Pro 2.0-3.1 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_Excel_40_StarWriter"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Excel 4.0 (StarWriter)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_Excel_50_StarWriter"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Excel 5.0 (StarWriter)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_Excel_95_StarWriter"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Excel 95 (StarWriter)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_Works_20_DOS_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Works 2.0 DOS (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_Works_30_Win_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Works 3.0 Win (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Lotus_1_2_3_10_DOS_StarWriter"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Lotus 1-2-3 1.0 (DOS) (StarWriter)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Lotus_1_2_3_10_WIN_StarWriter"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Lotus 1-2-3 1.0 (WIN) (StarWriter)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Frame_Maker_MIF_50_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Frame Maker MIF 5.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Win_Write_3x_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Win Write 3.x (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Text_encoded"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Text (encoded)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_WinWord_1x_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS WinWord 1.x (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_Word_5x_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 5.x (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_Word_4x_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 4.x (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_Word_3x_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Word 3.x (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_MacWord_40_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS MacWord 4.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_MacWord_30_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS MacWord 3.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordPerfect_Mac_1_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect Mac 1 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordPerfect_Mac_2_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect Mac 2 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordPerfect_Mac_3_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect Mac 3 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordPerfect_Win_51_52_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect (Win) 5.1-5.2 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordPerfect_Win_60_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect (Win) 6.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordPerfect_41_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect 4.1 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordPerfect_42_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect 4.2 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordPerfect_50_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect 5.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordPerfect_51_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect 5.1 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordPerfect_60_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect 6.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordPerfect_61_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordPerfect 6.1 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordStar_2000_Rel_30_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 2000 Rel. 3.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordStar_2000_Rel_35_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 2000 Rel. 3.5 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordStar_33x_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 3.3x (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordStar_345_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 3.45 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordStar_40_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 4.0  (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordStar_50_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 5.0  (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordStar_55_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 5.5  (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WordStar_60_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WordStar 6.0  (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MS_Works_40_Mac_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MS Works 4.0 Mac (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Mac_Write_4x_50_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Mac Write 4.x 5.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Mac_Write_II_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Mac Write II (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Mac_Write_Pro_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Mac Write Pro (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Lotus_Manuscript_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Lotus Manuscript (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MASS_11_Rel_80_83_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MASS 11 Rel. 8.0-8.3 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MASS_11_Rel_85_90_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MASS 11 Rel. 8.5-9.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Claris_Works_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Claris Works (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_CTOS_DEF_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: CTOS DEF (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_OfficeWriter_40_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: OfficeWriter 4.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_OfficeWriter_50_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: OfficeWriter 5.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_OfficeWriter_6x_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: OfficeWriter 6.x (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_XyWrite_III_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XyWrite III ( W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_XyWrite_IIIP_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XyWrite III+ ( W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_XyWrite_Signature_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XyWrite Signature (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_XyWrite_Sig_Win_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XyWrite Sig. (Win) (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_XyWrite_IV_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XyWrite IV (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_XyWrite_Win_10_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XyWrite (Win) 1.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_XEROX_XIF_50_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XEROX XIF 5.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_XEROX_XIF_50_Illustrator_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XEROX XIF 5.0 (Illustrator) (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_XEROX_XIF_60_Color_Bitmap_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XEROX XIF 6.0 (Color Bitmap) (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_XEROX_XIF_60_Res_Graphic_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: XEROX XIF 6.0 (Res Graphic) (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WriteNow_30_Macintosh_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WriteNow 3.0 (Macintosh) (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Writing_Assistant_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Writing Assistant (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_VolksWriter_Deluxe_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: VolksWriter Deluxe (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_VolksWriter_3_and_4_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: VolksWriter 3 and 4 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MultiMate_33_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MultiMate 3.3 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MultiMate_Adv_36_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MultiMate Adv. 3.6 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MultiMate_Adv_II_37_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MultiMate Adv. II 3.7 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MultiMate_4_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: MultiMate 4 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_NAVY_DIF_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: NAVY DIF (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_PFS_Write_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: PFS Write (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_PFS_First_Choice_10_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: PFS First Choice 1.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_PFS_First_Choice_20_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: PFS First Choice 2.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_PFS_First_Choice_30_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: PFS First Choice 3.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Professional_Write_10_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Professional Write 1.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Professional_Write_2x_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Professional Write 2.x (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Professional_Write_Plus_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Professional Write Plus (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Peach_Text_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Peach Text (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_DCA_Revisable_Form_Text_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DCA Revisable Form Text (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_DCA_with_Display_Write_5_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DCA with Display Write 5 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_DCAFFT_Final_Form_Text_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DCA/FFT-Final Form Text (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_DEC_DX_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DEC DX (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_DEC_WPS_PLUS_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DEC WPS-PLUS (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_DisplayWrite_20_4x_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DisplayWrite 2.0-4.x (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_DisplayWrite_5x_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DisplayWrite 5.x (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_DataGeneral_CEO_Write_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: DataGeneral CEO Write (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_EBCDIC_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: EBCDIC (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Enable_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Enable (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Frame_Maker_MIF_30_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Frame Maker MIF 3.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Frame_Maker_MIF_40_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Frame Maker MIF 4.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Frame_Work_III_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Frame Work III (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Frame_Work_IV_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Frame Work IV  (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_HP_AdvanceWrite_Plus_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: HP AdvanceWrite Plus (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_ICL_Office_Power_6_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: ICL Office Power 6 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_ICL_Office_Power_7_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: ICL Office Power 7 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Interleaf_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Interleaf (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Interleaf_5_6_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Interleaf 5 - 6 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Legacy_Winstar_onGO_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Legacy Winstar onGO (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_QA_Write_10_30_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Q&A Write 1.0-3.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_QA_Write_40_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Q&A Write 4.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Rapid_File_10_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Rapid File 1.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Rapid_File_12_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Rapid File 1.2 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Samna_Word_IV_IV_Plus_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Samna Word IV-IV Plus (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Total_Word_W4W"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Total Word (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Uniplex_onGO_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Uniplex onGO (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Uniplex_V7_V8_W4W"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Uniplex V7-V8 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Wang_PC_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Wang PC (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Wang_II_SWP_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Wang II SWP (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Wang_WP_Plus_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: Wang WP Plus (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WITA_W4W"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WITA (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_WiziWord_30_W4W"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: WiziWord 3.0 (W4W)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_HTML"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: HTML"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_StarWriterWeb_50_VorlageTemplate"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: StarWriter/Web 5.0 Vorlage/Template"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_StarWriterWeb_40_VorlageTemplate"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: StarWriter/Web 4.0 Vorlage/Template"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_Text_StarWriterWeb"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: Text (StarWriter/Web)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_Text_DOS_StarWriterWeb"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: Text DOS (StarWriter/Web)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_Text_Mac_StarWriterWeb"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: Text Mac (StarWriter/Web)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_Text_Unix_StarWriterWeb"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: Text Unix (StarWriter/Web)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_StarWriter_50"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: StarWriter 5.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_StarWriter_40"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: StarWriter 4.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_StarWriter_30"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: StarWriter 3.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_Text_encoded"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: Text (encoded)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_globaldocument_StarWriter_60GlobalDocument"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarOffice XML (GlobalDocument)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_globaldocument_StarWriter_50GlobalDocument"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 5.0/GlobalDocument"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_globaldocument_StarWriter_40GlobalDocument"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 4.0/GlobalDocument"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_globaldocument_StarWriter_50"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 5.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_globaldocument_StarWriter_40"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 4.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_globaldocument_StarWriter_30"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 3.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_globaldocument_Text_encoded"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: Text (encoded)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("chart_StarOffice_XML_Chart"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("schart: StarOffice XML (Chart)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("chart_StarChart_50"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("schart: StarChart 5.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("chart_StarChart_40"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("schart: StarChart 4.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("chart_StarChart_30"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("schart: StarChart 3.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_StarOffice_XML_Calc"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarOffice XML (Calc)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_StarCalc_50"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarCalc 5.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_StarCalc_50_VorlageTemplate"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarCalc 5.0 Vorlage/Template"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_StarCalc_40"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarCalc 4.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_StarCalc_40_VorlageTemplate"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarCalc 4.0 Vorlage/Template"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_StarCalc_30"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarCalc 3.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_StarCalc_30_VorlageTemplate"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarCalc 3.0 Vorlage/Template"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_MS_Excel_97"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 97"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_MS_Excel_97_VorlageTemplate"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 97 Vorlage/Template"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_MS_Excel_95"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 95"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_MS_Excel_95_VorlageTemplate"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 95 Vorlage/Template"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_MS_Excel_5095"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 5.0/95"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_MS_Excel_5095_VorlageTemplate"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 5.0/95 Vorlage/Template"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_MS_Excel_40"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 4.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_MS_Excel_40_VorlageTemplate"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: MS Excel 4.0 Vorlage/Template"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_Rich_Text_Format_StarCalc"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: Rich Text Format (StarCalc)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_SYLK"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: SYLK"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_DIF"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: DIF"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_HTML_StarCalc"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: HTML (StarCalc)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_dBase"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: dBase"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_Lotus"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: Lotus"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_StarCalc_10"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: StarCalc 1.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc_Text_txt_csv_StarCalc"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc: Text - txt - csv (StarCalc)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress_StarOffice_XML_Impress"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarOffice XML (Impress)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress_StarImpress_50"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarImpress 5.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress_StarImpress_50_Vorlage"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarImpress 5.0 Vorlage"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress_StarImpress_40"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarImpress 4.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress_StarImpress_40_Vorlage"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarImpress 4.0 Vorlage"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress_StarDraw_50_StarImpress"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarDraw 5.0 (StarImpress)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress_StarDraw_50_Vorlage_StarImpress"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarDraw 5.0 Vorlage (StarImpress)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress_StarDraw_30_StarImpress"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarDraw 3.0 (StarImpress)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress_StarDraw_30_Vorlage_StarImpress"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarDraw 3.0 Vorlage (StarImpress)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress_MS_PowerPoint_97"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: MS PowerPoint 97"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress_MS_PowerPoint_97_Vorlage"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: MS PowerPoint 97 Vorlage"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress_CGM_Computer_Graphics_Metafile"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: CGM - Computer Graphics Metafile"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress_StarImpress_50_packed"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarImpress 5.0 (packed)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarOffice_XML_Draw"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarOffice XML (Draw)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_GIF_Graphics_Interchange"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: GIF - Graphics Interchange"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PCD_Photo_CD"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PCD - Photo CD"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PCX_Zsoft_Paintbrush"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PCX - Zsoft Paintbrush"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PSD_Adobe_Photoshop"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PSD - Adobe Photoshop"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PNG_Portable_Network_Graphic"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PNG - Portable Network Graphic"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarDraw_50"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarDraw 5.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PBM_Portable_Bitmap"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PBM - Portable Bitmap"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PGM_Portable_Graymap"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PGM - Portable Graymap"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PPM_Portable_Pixelmap"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PPM - Portable Pixelmap"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_RAS_Sun_Rasterfile"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: RAS - Sun Rasterfile"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_TGA_Truevision_TARGA"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: TGA - Truevision TARGA"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_SGV_StarDraw_20"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: SGV - StarDraw 2.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_TIF_Tag_Image_File"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: TIF - Tag Image File"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_SGF_StarOffice_Writer_SGF"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: SGF - StarOffice Writer SGF"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_XPM"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: XPM"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gif_Graphics_Interchange"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: GIF - Graphics Interchange"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pcd_Photo_CD"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PCD - Photo CD"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pcx_Zsoft_Paintbrush"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PCX - Zsoft Paintbrush"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("psd_Adobe_Photoshop"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PSD - Adobe Photoshop"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("png_Portable_Network_Graphic"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PNG - Portable Network Graphic"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pbm_Portable_Bitmap"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PBM - Portable Bitmap"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pgm_Portable_Graymap"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PGM - Portable Graymap"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ppm_Portable_Pixelmap"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PPM - Portable Pixelmap"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ras_Sun_Rasterfile"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: RAS - Sun Rasterfile"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tga_Truevision_TARGA"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: TGA - Truevision TARGA"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sgv_StarDraw_20"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: SGV - StarDraw 2.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tif_Tag_Image_File"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: TIF - Tag Image File"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sgf_StarOffice_Writer_SGF"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: SGF - StarOffice Writer SGF"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xpm_XPM"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: XPM"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarDraw_50_Vorlage"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarDraw 5.0 Vorlage"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarImpress_50_StarDraw"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarImpress 5.0 (StarDraw)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarImpress_50_Vorlage_StarDraw"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarImpress 5.0 Vorlage (StarDraw)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarImpress_40_StarDraw"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarImpress 4.0 (StarDraw)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarImpress_40_Vorlage_StarDraw"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarImpress 4.0 Vorlage (StarDraw)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarDraw_30"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarDraw 3.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarDraw_30_Vorlage"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarDraw 3.0 Vorlage"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_EMF_MS_Windows_Metafile"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: EMF - MS Windows Metafile"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_MET_OS2_Metafile"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: MET - OS/2 Metafile"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_DXF_AutoCAD_Interchange"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: DXF - AutoCAD Interchange"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_EPS_Encapsulated_PostScript"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: EPS - Encapsulated PostScript"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_WMF_MS_Windows_Metafile"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: WMF - MS Windows Metafile"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PCT_Mac_Pict"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PCT - Mac Pict"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_SVM_StarView_Metafile"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: SVM - StarView Metafile"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_BMP_MS_Windows"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: BMP - MS Windows"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_JPG_JPEG"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: JPG - JPEG"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw_XBM_X_Consortium"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: XBM - X-Consortium"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("emf_MS_Windows_Metafile"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: EMF - MS Windows Metafile"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("met_OS2_Metafile"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: MET - OS/2 Metafile"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dxf_AutoCAD_Interchange"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: DXF - AutoCAD Interchange"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("eps_Encapsulated_PostScript"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: EPS - Encapsulated PostScript"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("wmf_MS_Windows_Metafile"))] =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: WMF - MS Windows Metafile"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pct_Mac_Pict"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PCT - Mac Pict"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("svm_StarView_Metafile"))]   =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: SVM - StarView Metafile"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bmp_MS_Windows"))]  =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: BMP - MS Windows"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jpg_JPEG"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: JPG - JPEG"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xbm_X_Consortium"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: XBM - X-Consortium"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("math_StarOffice_XML_Math"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarOffice XML (Math)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("math_MathML_XML_Math"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smath: MathML XML (Math)"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("math_StarMath_50"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarMath 5.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("math_StarMath_40"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarMath 4.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("math_StarMath_30"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarMath 3.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("math_StarMath_20"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarMath 2.0"));
-    aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("math_MathType_3x"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smath: MathType 3.x"));
+    aHash[DECLARE_ASCII("writer_StarOffice_XML_Writer"                      )] =   DECLARE_ASCII("swriter: StarOffice XML (Writer)"                            );
+    aHash[DECLARE_ASCII("writer_StarWriter_50"                              )] =   DECLARE_ASCII("swriter: StarWriter 5.0"                                     );
+    aHash[DECLARE_ASCII("writer_StarWriter_50_VorlageTemplate"              )] =   DECLARE_ASCII("swriter: StarWriter 5.0 Vorlage/Template"                    );
+    aHash[DECLARE_ASCII("writer_StarWriter_40"                              )] =   DECLARE_ASCII("swriter: StarWriter 4.0"                                     );
+    aHash[DECLARE_ASCII("writer_StarWriter_40_VorlageTemplate"              )] =   DECLARE_ASCII("swriter: StarWriter 4.0 Vorlage/Template"                    );
+    aHash[DECLARE_ASCII("writer_StarWriter_30"                              )] =   DECLARE_ASCII("swriter: StarWriter 3.0"                                     );
+    aHash[DECLARE_ASCII("writer_StarWriter_30_VorlageTemplate"              )] =   DECLARE_ASCII("swriter: StarWriter 3.0 Vorlage/Template"                    );
+    aHash[DECLARE_ASCII("writer_StarWriter_20"                              )] =   DECLARE_ASCII("swriter: StarWriter 2.0"                                     );
+    aHash[DECLARE_ASCII("writer_StarWriter_10"                              )] =   DECLARE_ASCII("swriter: StarWriter 1.0"                                     );
+    aHash[DECLARE_ASCII("writer_StarWriter_DOS"                             )] =   DECLARE_ASCII("swriter: StarWriter DOS"                                     );
+    aHash[DECLARE_ASCII("writer_HTML_StarWriter"                            )] =   DECLARE_ASCII("swriter: HTML (StarWriter)"                                  );
+    aHash[DECLARE_ASCII("writer_Text"                                       )] =   DECLARE_ASCII("swriter: Text"                                               );
+    aHash[DECLARE_ASCII("writer_Text_Unix"                                  )] =   DECLARE_ASCII("swriter: Text Unix"                                          );
+    aHash[DECLARE_ASCII("writer_Text_Mac"                                   )] =   DECLARE_ASCII("swriter: Text Mac"                                           );
+    aHash[DECLARE_ASCII("writer_Text_DOS"                                   )] =   DECLARE_ASCII("swriter: Text DOS"                                           );
+    aHash[DECLARE_ASCII("writer_Rich_Text_Format"                           )] =   DECLARE_ASCII("swriter: Rich Text Format"                                   );
+    aHash[DECLARE_ASCII("writer_MS_Word_97"                                 )] =   DECLARE_ASCII("swriter: MS Word 97"                                         );
+    aHash[DECLARE_ASCII("writer_MS_Word_95"                                 )] =   DECLARE_ASCII("swriter: MS Word 95"                                         );
+    aHash[DECLARE_ASCII("writer_MS_Word_97_Vorlage"                         )] =   DECLARE_ASCII("swriter: MS Word 97 Vorlage"                                 );
+    aHash[DECLARE_ASCII("writer_MS_Word_95_Vorlage"                         )] =   DECLARE_ASCII("swriter: MS Word 95 Vorlage"                                 );
+    aHash[DECLARE_ASCII("writer_MS_WinWord_60"                              )] =   DECLARE_ASCII("swriter: MS WinWord 6.0"                                     );
+    aHash[DECLARE_ASCII("writer_MS_Word_6x_W4W"                             )] =   DECLARE_ASCII("swriter: MS Word 6.x (W4W)"                                  );
+    aHash[DECLARE_ASCII("writer_MS_WinWord_5"                               )] =   DECLARE_ASCII("swriter: MS WinWord 5"                                       );
+    aHash[DECLARE_ASCII("writer_MS_WinWord_2x_W4W"                          )] =   DECLARE_ASCII("swriter: MS WinWord 2.x (W4W)"                               );
+    aHash[DECLARE_ASCII("writer_MS_MacWord_5x_W4W"                          )] =   DECLARE_ASCII("swriter: MS MacWord 5.x (W4W)"                               );
+    aHash[DECLARE_ASCII("writer_WordPerfect_Win_61_W4W"                     )] =   DECLARE_ASCII("swriter: WordPerfect (Win) 6.1 (W4W)"                        );
+    aHash[DECLARE_ASCII("writer_WordPerfect_Win_70_W4W"                     )] =   DECLARE_ASCII("swriter: WordPerfect (Win) 7.0 (W4W)"                        );
+    aHash[DECLARE_ASCII("writer_WordStar_Win_1x_20_W4W"                     )] =   DECLARE_ASCII("swriter: WordStar (Win) 1.x-2.0 (W4W)"                       );
+    aHash[DECLARE_ASCII("writer_WordStar_70_W4W"                            )] =   DECLARE_ASCII("swriter: WordStar 7.0  (W4W)"                                );
+    aHash[DECLARE_ASCII("writer_Ami_Pro_11_12_W4W"                          )] =   DECLARE_ASCII("swriter: Ami Pro 1.1-1.2 (W4W)"                              );
+    aHash[DECLARE_ASCII("writer_Ami_Pro_20_31_W4W"                          )] =   DECLARE_ASCII("swriter: Ami Pro 2.0-3.1 (W4W)"                              );
+    aHash[DECLARE_ASCII("writer_MS_Excel_40_StarWriter"                     )] =   DECLARE_ASCII("swriter: MS Excel 4.0 (StarWriter)"                          );
+    aHash[DECLARE_ASCII("writer_MS_Excel_50_StarWriter"                     )] =   DECLARE_ASCII("swriter: MS Excel 5.0 (StarWriter)"                          );
+    aHash[DECLARE_ASCII("writer_MS_Excel_95_StarWriter"                     )] =   DECLARE_ASCII("swriter: MS Excel 95 (StarWriter)"                           );
+    aHash[DECLARE_ASCII("writer_MS_Works_20_DOS_W4W"                        )] =   DECLARE_ASCII("swriter: MS Works 2.0 DOS (W4W)"                             );
+    aHash[DECLARE_ASCII("writer_MS_Works_30_Win_W4W"                        )] =   DECLARE_ASCII("swriter: MS Works 3.0 Win (W4W)"                             );
+    aHash[DECLARE_ASCII("writer_Lotus_1_2_3_10_DOS_StarWriter"              )] =   DECLARE_ASCII("swriter: Lotus 1-2-3 1.0 (DOS) (StarWriter)"                 );
+    aHash[DECLARE_ASCII("writer_Lotus_1_2_3_10_WIN_StarWriter"              )] =   DECLARE_ASCII("swriter: Lotus 1-2-3 1.0 (WIN) (StarWriter)"                 );
+    aHash[DECLARE_ASCII("writer_Frame_Maker_MIF_50_W4W"                     )] =   DECLARE_ASCII("swriter: Frame Maker MIF 5.0 (W4W)"                          );
+    aHash[DECLARE_ASCII("writer_Win_Write_3x_W4W"                           )] =   DECLARE_ASCII("swriter: Win Write 3.x (W4W)"                                );
+    aHash[DECLARE_ASCII("writer_Text_encoded"                               )] =   DECLARE_ASCII("swriter: Text (encoded)"                                     );
+    aHash[DECLARE_ASCII("writer_MS_WinWord_1x_W4W"                          )] =   DECLARE_ASCII("swriter: MS WinWord 1.x (W4W)"                               );
+    aHash[DECLARE_ASCII("writer_MS_Word_5x_W4W"                             )] =   DECLARE_ASCII("swriter: MS Word 5.x (W4W)"                                  );
+    aHash[DECLARE_ASCII("writer_MS_Word_4x_W4W"                             )] =   DECLARE_ASCII("swriter: MS Word 4.x (W4W)"                                  );
+    aHash[DECLARE_ASCII("writer_MS_Word_3x_W4W"                             )] =   DECLARE_ASCII("swriter: MS Word 3.x (W4W)"                                  );
+    aHash[DECLARE_ASCII("writer_MS_MacWord_40_W4W"                          )] =   DECLARE_ASCII("swriter: MS MacWord 4.0 (W4W)"                               );
+    aHash[DECLARE_ASCII("writer_MS_MacWord_30_W4W"                          )] =   DECLARE_ASCII("swriter: MS MacWord 3.0 (W4W)"                               );
+    aHash[DECLARE_ASCII("writer_WordPerfect_Mac_1_W4W"                      )] =   DECLARE_ASCII("swriter: WordPerfect Mac 1 (W4W)"                            );
+    aHash[DECLARE_ASCII("writer_WordPerfect_Mac_2_W4W"                      )] =   DECLARE_ASCII("swriter: WordPerfect Mac 2 (W4W)"                            );
+    aHash[DECLARE_ASCII("writer_WordPerfect_Mac_3_W4W"                      )] =   DECLARE_ASCII("swriter: WordPerfect Mac 3 (W4W)"                            );
+    aHash[DECLARE_ASCII("writer_WordPerfect_Win_51_52_W4W"                  )] =   DECLARE_ASCII("swriter: WordPerfect (Win) 5.1-5.2 (W4W)"                    );
+    aHash[DECLARE_ASCII("writer_WordPerfect_Win_60_W4W"                     )] =   DECLARE_ASCII("swriter: WordPerfect (Win) 6.0 (W4W)"                        );
+    aHash[DECLARE_ASCII("writer_WordPerfect_41_W4W"                         )] =   DECLARE_ASCII("swriter: WordPerfect 4.1 (W4W)"                              );
+    aHash[DECLARE_ASCII("writer_WordPerfect_42_W4W"                         )] =   DECLARE_ASCII("swriter: WordPerfect 4.2 (W4W)"                              );
+    aHash[DECLARE_ASCII("writer_WordPerfect_50_W4W"                         )] =   DECLARE_ASCII("swriter: WordPerfect 5.0 (W4W)"                              );
+    aHash[DECLARE_ASCII("writer_WordPerfect_51_W4W"                         )] =   DECLARE_ASCII("swriter: WordPerfect 5.1 (W4W)"                              );
+    aHash[DECLARE_ASCII("writer_WordPerfect_60_W4W"                         )] =   DECLARE_ASCII("swriter: WordPerfect 6.0 (W4W)"                              );
+    aHash[DECLARE_ASCII("writer_WordPerfect_61_W4W"                         )] =   DECLARE_ASCII("swriter: WordPerfect 6.1 (W4W)"                              );
+    aHash[DECLARE_ASCII("writer_WordStar_2000_Rel_30_W4W"                   )] =   DECLARE_ASCII("swriter: WordStar 2000 Rel. 3.0 (W4W)"                       );
+    aHash[DECLARE_ASCII("writer_WordStar_2000_Rel_35_W4W"                   )] =   DECLARE_ASCII("swriter: WordStar 2000 Rel. 3.5 (W4W)"                       );
+    aHash[DECLARE_ASCII("writer_WordStar_33x_W4W"                           )] =   DECLARE_ASCII("swriter: WordStar 3.3x (W4W)"                                );
+    aHash[DECLARE_ASCII("writer_WordStar_345_W4W"                           )] =   DECLARE_ASCII("swriter: WordStar 3.45 (W4W)"                                );
+    aHash[DECLARE_ASCII("writer_WordStar_40_W4W"                            )] =   DECLARE_ASCII("swriter: WordStar 4.0  (W4W)"                                );
+    aHash[DECLARE_ASCII("writer_WordStar_50_W4W"                            )] =   DECLARE_ASCII("swriter: WordStar 5.0  (W4W)"                                );
+    aHash[DECLARE_ASCII("writer_WordStar_55_W4W"                            )] =   DECLARE_ASCII("swriter: WordStar 5.5  (W4W)"                                );
+    aHash[DECLARE_ASCII("writer_WordStar_60_W4W"                            )] =   DECLARE_ASCII("swriter: WordStar 6.0  (W4W)"                                );
+    aHash[DECLARE_ASCII("writer_MS_Works_40_Mac_W4W"                        )] =   DECLARE_ASCII("swriter: MS Works 4.0 Mac (W4W)"                             );
+    aHash[DECLARE_ASCII("writer_Mac_Write_4x_50_W4W"                        )] =   DECLARE_ASCII("swriter: Mac Write 4.x 5.0 (W4W)"                            );
+    aHash[DECLARE_ASCII("writer_Mac_Write_II_W4W"                           )] =   DECLARE_ASCII("swriter: Mac Write II (W4W)"                                 );
+    aHash[DECLARE_ASCII("writer_Mac_Write_Pro_W4W"                          )] =   DECLARE_ASCII("swriter: Mac Write Pro (W4W)"                                );
+    aHash[DECLARE_ASCII("writer_Lotus_Manuscript_W4W"                       )] =   DECLARE_ASCII("swriter: Lotus Manuscript (W4W)"                             );
+    aHash[DECLARE_ASCII("writer_MASS_11_Rel_80_83_W4W"                      )] =   DECLARE_ASCII("swriter: MASS 11 Rel. 8.0-8.3 (W4W)"                         );
+    aHash[DECLARE_ASCII("writer_MASS_11_Rel_85_90_W4W"                      )] =   DECLARE_ASCII("swriter: MASS 11 Rel. 8.5-9.0 (W4W)"                         );
+    aHash[DECLARE_ASCII("writer_Claris_Works_W4W"                           )] =   DECLARE_ASCII("swriter: Claris Works (W4W)"                                 );
+    aHash[DECLARE_ASCII("writer_CTOS_DEF_W4W"                               )] =   DECLARE_ASCII("swriter: CTOS DEF (W4W)"                                     );
+    aHash[DECLARE_ASCII("writer_OfficeWriter_40_W4W"                        )] =   DECLARE_ASCII("swriter: OfficeWriter 4.0 (W4W)"                             );
+    aHash[DECLARE_ASCII("writer_OfficeWriter_50_W4W"                        )] =   DECLARE_ASCII("swriter: OfficeWriter 5.0 (W4W)"                             );
+    aHash[DECLARE_ASCII("writer_OfficeWriter_6x_W4W"                        )] =   DECLARE_ASCII("swriter: OfficeWriter 6.x (W4W)"                             );
+    aHash[DECLARE_ASCII("writer_XyWrite_III_W4W"                            )] =   DECLARE_ASCII("swriter: XyWrite III ( W4W)"                                 );
+    aHash[DECLARE_ASCII("writer_XyWrite_IIIP_W4W"                           )] =   DECLARE_ASCII("swriter: XyWrite III+ ( W4W)"                                );
+    aHash[DECLARE_ASCII("writer_XyWrite_Signature_W4W"                      )] =   DECLARE_ASCII("swriter: XyWrite Signature (W4W)"                            );
+    aHash[DECLARE_ASCII("writer_XyWrite_Sig_Win_W4W"                        )] =   DECLARE_ASCII("swriter: XyWrite Sig. (Win) (W4W)"                           );
+    aHash[DECLARE_ASCII("writer_XyWrite_IV_W4W"                             )] =   DECLARE_ASCII("swriter: XyWrite IV (W4W)"                                   );
+    aHash[DECLARE_ASCII("writer_XyWrite_Win_10_W4W"                         )] =   DECLARE_ASCII("swriter: XyWrite (Win) 1.0 (W4W)"                            );
+    aHash[DECLARE_ASCII("writer_XEROX_XIF_50_W4W"                           )] =   DECLARE_ASCII("swriter: XEROX XIF 5.0 (W4W)"                                );
+    aHash[DECLARE_ASCII("writer_XEROX_XIF_50_Illustrator_W4W"               )] =   DECLARE_ASCII("swriter: XEROX XIF 5.0 (Illustrator) (W4W)"                  );
+    aHash[DECLARE_ASCII("writer_XEROX_XIF_60_Color_Bitmap_W4W"              )] =   DECLARE_ASCII("swriter: XEROX XIF 6.0 (Color Bitmap) (W4W)"                 );
+    aHash[DECLARE_ASCII("writer_XEROX_XIF_60_Res_Graphic_W4W"               )] =   DECLARE_ASCII("swriter: XEROX XIF 6.0 (Res Graphic) (W4W)"                  );
+    aHash[DECLARE_ASCII("writer_WriteNow_30_Macintosh_W4W"                  )] =   DECLARE_ASCII("swriter: WriteNow 3.0 (Macintosh) (W4W)"                     );
+    aHash[DECLARE_ASCII("writer_Writing_Assistant_W4W"                      )] =   DECLARE_ASCII("swriter: Writing Assistant (W4W)"                            );
+    aHash[DECLARE_ASCII("writer_VolksWriter_Deluxe_W4W"                     )] =   DECLARE_ASCII("swriter: VolksWriter Deluxe (W4W)"                           );
+    aHash[DECLARE_ASCII("writer_VolksWriter_3_and_4_W4W"                    )] =   DECLARE_ASCII("swriter: VolksWriter 3 and 4 (W4W)"                          );
+    aHash[DECLARE_ASCII("writer_MultiMate_33_W4W"                           )] =   DECLARE_ASCII("swriter: MultiMate 3.3 (W4W)"                                );
+    aHash[DECLARE_ASCII("writer_MultiMate_Adv_36_W4W"                       )] =   DECLARE_ASCII("swriter: MultiMate Adv. 3.6 (W4W)"                           );
+    aHash[DECLARE_ASCII("writer_MultiMate_Adv_II_37_W4W"                    )] =   DECLARE_ASCII("swriter: MultiMate Adv. II 3.7 (W4W)"                        );
+    aHash[DECLARE_ASCII("writer_MultiMate_4_W4W"                            )] =   DECLARE_ASCII("swriter: MultiMate 4 (W4W)"                                  );
+    aHash[DECLARE_ASCII("writer_NAVY_DIF_W4W"                               )] =   DECLARE_ASCII("swriter: NAVY DIF (W4W)"                                     );
+    aHash[DECLARE_ASCII("writer_PFS_Write_W4W"                              )] =   DECLARE_ASCII("swriter: PFS Write (W4W)"                                    );
+    aHash[DECLARE_ASCII("writer_PFS_First_Choice_10_W4W"                    )] =   DECLARE_ASCII("swriter: PFS First Choice 1.0 (W4W)"                         );
+    aHash[DECLARE_ASCII("writer_PFS_First_Choice_20_W4W"                    )] =   DECLARE_ASCII("swriter: PFS First Choice 2.0 (W4W)"                         );
+    aHash[DECLARE_ASCII("writer_PFS_First_Choice_30_W4W"                    )] =   DECLARE_ASCII("swriter: PFS First Choice 3.0 (W4W)"                         );
+    aHash[DECLARE_ASCII("writer_Professional_Write_10_W4W"                  )] =   DECLARE_ASCII("swriter: Professional Write 1.0 (W4W)"                       );
+    aHash[DECLARE_ASCII("writer_Professional_Write_2x_W4W"                  )] =   DECLARE_ASCII("swriter: Professional Write 2.x (W4W)"                       );
+    aHash[DECLARE_ASCII("writer_Professional_Write_Plus_W4W"                )] =   DECLARE_ASCII("swriter: Professional Write Plus (W4W)"                      );
+    aHash[DECLARE_ASCII("writer_Peach_Text_W4W"                             )] =   DECLARE_ASCII("swriter: Peach Text (W4W)"                                   );
+    aHash[DECLARE_ASCII("writer_DCA_Revisable_Form_Text_W4W"                )] =   DECLARE_ASCII("swriter: DCA Revisable Form Text (W4W)"                      );
+    aHash[DECLARE_ASCII("writer_DCA_with_Display_Write_5_W4W"               )] =   DECLARE_ASCII("swriter: DCA with Display Write 5 (W4W)"                     );
+    aHash[DECLARE_ASCII("writer_DCAFFT_Final_Form_Text_W4W"                 )] =   DECLARE_ASCII("swriter: DCA/FFT-Final Form Text (W4W)"                      );
+    aHash[DECLARE_ASCII("writer_DEC_DX_W4W"                                 )] =   DECLARE_ASCII("swriter: DEC DX (W4W)"                                       );
+    aHash[DECLARE_ASCII("writer_DEC_WPS_PLUS_W4W"                           )] =   DECLARE_ASCII("swriter: DEC WPS-PLUS (W4W)"                                 );
+    aHash[DECLARE_ASCII("writer_DisplayWrite_20_4x_W4W"                     )] =   DECLARE_ASCII("swriter: DisplayWrite 2.0-4.x (W4W)"                         );
+    aHash[DECLARE_ASCII("writer_DisplayWrite_5x_W4W"                        )] =   DECLARE_ASCII("swriter: DisplayWrite 5.x (W4W)"                             );
+    aHash[DECLARE_ASCII("writer_DataGeneral_CEO_Write_W4W"                  )] =   DECLARE_ASCII("swriter: DataGeneral CEO Write (W4W)"                        );
+    aHash[DECLARE_ASCII("writer_EBCDIC_W4W"                                 )] =   DECLARE_ASCII("swriter: EBCDIC (W4W)"                                       );
+    aHash[DECLARE_ASCII("writer_Enable_W4W"                                 )] =   DECLARE_ASCII("swriter: Enable (W4W)"                                       );
+    aHash[DECLARE_ASCII("writer_Frame_Maker_MIF_30_W4W"                     )] =   DECLARE_ASCII("swriter: Frame Maker MIF 3.0 (W4W)"                          );
+    aHash[DECLARE_ASCII("writer_Frame_Maker_MIF_40_W4W"                     )] =   DECLARE_ASCII("swriter: Frame Maker MIF 4.0 (W4W)"                          );
+    aHash[DECLARE_ASCII("writer_Frame_Work_III_W4W"                         )] =   DECLARE_ASCII("swriter: Frame Work III (W4W)"                               );
+    aHash[DECLARE_ASCII("writer_Frame_Work_IV_W4W"                          )] =   DECLARE_ASCII("swriter: Frame Work IV  (W4W)"                               );
+    aHash[DECLARE_ASCII("writer_HP_AdvanceWrite_Plus_W4W"                   )] =   DECLARE_ASCII("swriter: HP AdvanceWrite Plus (W4W)"                         );
+    aHash[DECLARE_ASCII("writer_ICL_Office_Power_6_W4W"                     )] =   DECLARE_ASCII("swriter: ICL Office Power 6 (W4W)"                           );
+    aHash[DECLARE_ASCII("writer_ICL_Office_Power_7_W4W"                     )] =   DECLARE_ASCII("swriter: ICL Office Power 7 (W4W)"                           );
+    aHash[DECLARE_ASCII("writer_Interleaf_W4W"                              )] =   DECLARE_ASCII("swriter: Interleaf (W4W)"                                    );
+    aHash[DECLARE_ASCII("writer_Interleaf_5_6_W4W"                          )] =   DECLARE_ASCII("swriter: Interleaf 5 - 6 (W4W)"                              );
+    aHash[DECLARE_ASCII("writer_Legacy_Winstar_onGO_W4W"                    )] =   DECLARE_ASCII("swriter: Legacy Winstar onGO (W4W)"                          );
+    aHash[DECLARE_ASCII("writer_QA_Write_10_30_W4W"                         )] =   DECLARE_ASCII("swriter: Q&A Write 1.0-3.0 (W4W)"                            );
+    aHash[DECLARE_ASCII("writer_QA_Write_40_W4W"                            )] =   DECLARE_ASCII("swriter: Q&A Write 4.0 (W4W)"                                );
+    aHash[DECLARE_ASCII("writer_Rapid_File_10_W4W"                          )] =   DECLARE_ASCII("swriter: Rapid File 1.0 (W4W)"                               );
+    aHash[DECLARE_ASCII("writer_Rapid_File_12_W4W"                          )] =   DECLARE_ASCII("swriter: Rapid File 1.2 (W4W)"                               );
+    aHash[DECLARE_ASCII("writer_Samna_Word_IV_IV_Plus_W4W"                  )] =   DECLARE_ASCII("swriter: Samna Word IV-IV Plus (W4W)"                        );
+    aHash[DECLARE_ASCII("writer_Total_Word_W4W"                             )] =   DECLARE_ASCII("swriter: Total Word (W4W)"                                   );
+    aHash[DECLARE_ASCII("writer_Uniplex_onGO_W4W"                           )] =   DECLARE_ASCII("swriter: Uniplex onGO (W4W)"                                 );
+    aHash[DECLARE_ASCII("writer_Uniplex_V7_V8_W4W"                          )] =   DECLARE_ASCII("swriter: Uniplex V7-V8 (W4W)"                                );
+    aHash[DECLARE_ASCII("writer_Wang_PC_W4W"                                )] =   DECLARE_ASCII("swriter: Wang PC (W4W)"                                      );
+    aHash[DECLARE_ASCII("writer_Wang_II_SWP_W4W"                            )] =   DECLARE_ASCII("swriter: Wang II SWP (W4W)"                                  );
+    aHash[DECLARE_ASCII("writer_Wang_WP_Plus_W4W"                           )] =   DECLARE_ASCII("swriter: Wang WP Plus (W4W)"                                 );
+    aHash[DECLARE_ASCII("writer_WITA_W4W"                                   )] =   DECLARE_ASCII("swriter: WITA (W4W)"                                         );
+    aHash[DECLARE_ASCII("writer_WiziWord_30_W4W"                            )] =   DECLARE_ASCII("swriter: WiziWord 3.0 (W4W)"                                 );
+    aHash[DECLARE_ASCII("writer_web_HTML"                                   )] =   DECLARE_ASCII("swriter/web: HTML"                                           );
+    aHash[DECLARE_ASCII("writer_web_StarWriterWeb_50_VorlageTemplate"       )] =   DECLARE_ASCII("swriter/web: StarWriter/Web 5.0 Vorlage/Template"            );
+    aHash[DECLARE_ASCII("writer_web_StarWriterWeb_40_VorlageTemplate"       )] =   DECLARE_ASCII("swriter/web: StarWriter/Web 4.0 Vorlage/Template"            );
+    aHash[DECLARE_ASCII("writer_web_Text_StarWriterWeb"                     )] =   DECLARE_ASCII("swriter/web: Text (StarWriter/Web)"                          );
+    aHash[DECLARE_ASCII("writer_web_Text_DOS_StarWriterWeb"                 )] =   DECLARE_ASCII("swriter/web: Text DOS (StarWriter/Web)"                      );
+    aHash[DECLARE_ASCII("writer_web_Text_Mac_StarWriterWeb"                 )] =   DECLARE_ASCII("swriter/web: Text Mac (StarWriter/Web)"                      );
+    aHash[DECLARE_ASCII("writer_web_Text_Unix_StarWriterWeb"                )] =   DECLARE_ASCII("swriter/web: Text Unix (StarWriter/Web)"                     );
+    aHash[DECLARE_ASCII("writer_web_StarWriter_50"                          )] =   DECLARE_ASCII("swriter/web: StarWriter 5.0"                                 );
+    aHash[DECLARE_ASCII("writer_web_StarWriter_40"                          )] =   DECLARE_ASCII("swriter/web: StarWriter 4.0"                                 );
+    aHash[DECLARE_ASCII("writer_web_StarWriter_30"                          )] =   DECLARE_ASCII("swriter/web: StarWriter 3.0"                                 );
+    aHash[DECLARE_ASCII("writer_web_Text_encoded"                           )] =   DECLARE_ASCII("swriter/web: Text (encoded)"                                 );
+    aHash[DECLARE_ASCII("writer_globaldocument_StarWriter_60GlobalDocument" )] =   DECLARE_ASCII("swriter/GlobalDocument: StarOffice XML (GlobalDocument)"     );
+    aHash[DECLARE_ASCII("writer_globaldocument_StarWriter_50GlobalDocument" )] =   DECLARE_ASCII("swriter/GlobalDocument: StarWriter 5.0/GlobalDocument"       );
+    aHash[DECLARE_ASCII("writer_globaldocument_StarWriter_40GlobalDocument" )] =   DECLARE_ASCII("swriter/GlobalDocument: StarWriter 4.0/GlobalDocument"       );
+    aHash[DECLARE_ASCII("writer_globaldocument_StarWriter_50"               )] =   DECLARE_ASCII("swriter/GlobalDocument: StarWriter 5.0"                      );
+    aHash[DECLARE_ASCII("writer_globaldocument_StarWriter_40"               )] =   DECLARE_ASCII("swriter/GlobalDocument: StarWriter 4.0"                      );
+    aHash[DECLARE_ASCII("writer_globaldocument_StarWriter_30"               )] =   DECLARE_ASCII("swriter/GlobalDocument: StarWriter 3.0"                      );
+    aHash[DECLARE_ASCII("writer_globaldocument_Text_encoded"                )] =   DECLARE_ASCII("swriter/GlobalDocument: Text (encoded)"                      );
+    aHash[DECLARE_ASCII("chart_StarOffice_XML_Chart"                        )] =   DECLARE_ASCII("schart: StarOffice XML (Chart)"                              );
+    aHash[DECLARE_ASCII("chart_StarChart_50"                                )] =   DECLARE_ASCII("schart: StarChart 5.0"                                       );
+    aHash[DECLARE_ASCII("chart_StarChart_40"                                )] =   DECLARE_ASCII("schart: StarChart 4.0"                                       );
+    aHash[DECLARE_ASCII("chart_StarChart_30"                                )] =   DECLARE_ASCII("schart: StarChart 3.0"                                       );
+    aHash[DECLARE_ASCII("calc_StarOffice_XML_Calc"                          )] =   DECLARE_ASCII("scalc: StarOffice XML (Calc)"                                );
+    aHash[DECLARE_ASCII("calc_StarCalc_50"                                  )] =   DECLARE_ASCII("scalc: StarCalc 5.0"                                         );
+    aHash[DECLARE_ASCII("calc_StarCalc_50_VorlageTemplate"                  )] =   DECLARE_ASCII("scalc: StarCalc 5.0 Vorlage/Template"                        );
+    aHash[DECLARE_ASCII("calc_StarCalc_40"                                  )] =   DECLARE_ASCII("scalc: StarCalc 4.0"                                         );
+    aHash[DECLARE_ASCII("calc_StarCalc_40_VorlageTemplate"                  )] =   DECLARE_ASCII("scalc: StarCalc 4.0 Vorlage/Template"                        );
+    aHash[DECLARE_ASCII("calc_StarCalc_30"                                  )] =   DECLARE_ASCII("scalc: StarCalc 3.0"                                         );
+    aHash[DECLARE_ASCII("calc_StarCalc_30_VorlageTemplate"                  )] =   DECLARE_ASCII("scalc: StarCalc 3.0 Vorlage/Template"                        );
+    aHash[DECLARE_ASCII("calc_MS_Excel_97"                                  )] =   DECLARE_ASCII("scalc: MS Excel 97"                                          );
+    aHash[DECLARE_ASCII("calc_MS_Excel_97_VorlageTemplate"                  )] =   DECLARE_ASCII("scalc: MS Excel 97 Vorlage/Template"                         );
+    aHash[DECLARE_ASCII("calc_MS_Excel_95"                                  )] =   DECLARE_ASCII("scalc: MS Excel 95"                                          );
+    aHash[DECLARE_ASCII("calc_MS_Excel_95_VorlageTemplate"                  )] =   DECLARE_ASCII("scalc: MS Excel 95 Vorlage/Template"                         );
+    aHash[DECLARE_ASCII("calc_MS_Excel_5095"                                )] =   DECLARE_ASCII("scalc: MS Excel 5.0/95"                                      );
+    aHash[DECLARE_ASCII("calc_MS_Excel_5095_VorlageTemplate"                )] =   DECLARE_ASCII("scalc: MS Excel 5.0/95 Vorlage/Template"                     );
+    aHash[DECLARE_ASCII("calc_MS_Excel_40"                                  )] =   DECLARE_ASCII("scalc: MS Excel 4.0"                                         );
+    aHash[DECLARE_ASCII("calc_MS_Excel_40_VorlageTemplate"                  )] =   DECLARE_ASCII("scalc: MS Excel 4.0 Vorlage/Template"                        );
+    aHash[DECLARE_ASCII("calc_Rich_Text_Format_StarCalc"                    )] =   DECLARE_ASCII("scalc: Rich Text Format (StarCalc)"                          );
+    aHash[DECLARE_ASCII("calc_SYLK"                                         )] =   DECLARE_ASCII("scalc: SYLK"                                                 );
+    aHash[DECLARE_ASCII("calc_DIF"                                          )] =   DECLARE_ASCII("scalc: DIF"                                                  );
+    aHash[DECLARE_ASCII("calc_HTML_StarCalc"                                )] =   DECLARE_ASCII("scalc: HTML (StarCalc)"                                      );
+    aHash[DECLARE_ASCII("calc_dBase"                                        )] =   DECLARE_ASCII("scalc: dBase"                                                );
+    aHash[DECLARE_ASCII("calc_Lotus"                                        )] =   DECLARE_ASCII("scalc: Lotus"                                                );
+    aHash[DECLARE_ASCII("calc_StarCalc_10"                                  )] =   DECLARE_ASCII("scalc: StarCalc 1.0"                                         );
+    aHash[DECLARE_ASCII("calc_Text_txt_csv_StarCalc"                        )] =   DECLARE_ASCII("scalc: Text - txt - csv (StarCalc)"                          );
+    aHash[DECLARE_ASCII("impress_StarOffice_XML_Impress"                    )] =   DECLARE_ASCII("simpress: StarOffice XML (Impress)"                          );
+    aHash[DECLARE_ASCII("impress_StarImpress_50"                            )] =   DECLARE_ASCII("simpress: StarImpress 5.0"                                   );
+    aHash[DECLARE_ASCII("impress_StarImpress_50_Vorlage"                    )] =   DECLARE_ASCII("simpress: StarImpress 5.0 Vorlage"                           );
+    aHash[DECLARE_ASCII("impress_StarImpress_40"                            )] =   DECLARE_ASCII("simpress: StarImpress 4.0"                                   );
+    aHash[DECLARE_ASCII("impress_StarImpress_40_Vorlage"                    )] =   DECLARE_ASCII("simpress: StarImpress 4.0 Vorlage"                           );
+    aHash[DECLARE_ASCII("impress_StarDraw_50_StarImpress"                   )] =   DECLARE_ASCII("simpress: StarDraw 5.0 (StarImpress)"                        );
+    aHash[DECLARE_ASCII("impress_StarDraw_50_Vorlage_StarImpress"           )] =   DECLARE_ASCII("simpress: StarDraw 5.0 Vorlage (StarImpress)"                );
+    aHash[DECLARE_ASCII("impress_StarDraw_30_StarImpress"                   )] =   DECLARE_ASCII("simpress: StarDraw 3.0 (StarImpress)"                        );
+    aHash[DECLARE_ASCII("impress_StarDraw_30_Vorlage_StarImpress"           )] =   DECLARE_ASCII("simpress: StarDraw 3.0 Vorlage (StarImpress)"                );
+    aHash[DECLARE_ASCII("impress_MS_PowerPoint_97"                          )] =   DECLARE_ASCII("simpress: MS PowerPoint 97"                                  );
+    aHash[DECLARE_ASCII("impress_MS_PowerPoint_97_Vorlage"                  )] =   DECLARE_ASCII("simpress: MS PowerPoint 97 Vorlage"                          );
+    aHash[DECLARE_ASCII("impress_CGM_Computer_Graphics_Metafile"            )] =   DECLARE_ASCII("simpress: CGM - Computer Graphics Metafile"                  );
+    aHash[DECLARE_ASCII("impress_StarImpress_50_packed"                     )] =   DECLARE_ASCII("simpress: StarImpress 5.0 (packed)"                          );
+    aHash[DECLARE_ASCII("draw_StarOffice_XML_Draw"                          )] =   DECLARE_ASCII("sdraw: StarOffice XML (Draw)"                                );
+    aHash[DECLARE_ASCII("draw_GIF_Graphics_Interchange"                     )] =   DECLARE_ASCII("sdraw: GIF - Graphics Interchange"                           );
+    aHash[DECLARE_ASCII("draw_PCD_Photo_CD"                                 )] =   DECLARE_ASCII("sdraw: PCD - Photo CD"                                       );
+    aHash[DECLARE_ASCII("draw_PCX_Zsoft_Paintbrush"                         )] =   DECLARE_ASCII("sdraw: PCX - Zsoft Paintbrush"                               );
+    aHash[DECLARE_ASCII("draw_PSD_Adobe_Photoshop"                          )] =   DECLARE_ASCII("sdraw: PSD - Adobe Photoshop"                                );
+    aHash[DECLARE_ASCII("draw_PNG_Portable_Network_Graphic"                 )] =   DECLARE_ASCII("sdraw: PNG - Portable Network Graphic"                       );
+    aHash[DECLARE_ASCII("draw_StarDraw_50"                                  )] =   DECLARE_ASCII("sdraw: StarDraw 5.0"                                         );
+    aHash[DECLARE_ASCII("draw_PBM_Portable_Bitmap"                          )] =   DECLARE_ASCII("sdraw: PBM - Portable Bitmap"                                );
+    aHash[DECLARE_ASCII("draw_PGM_Portable_Graymap"                         )] =   DECLARE_ASCII("sdraw: PGM - Portable Graymap"                               );
+    aHash[DECLARE_ASCII("draw_PPM_Portable_Pixelmap"                        )] =   DECLARE_ASCII("sdraw: PPM - Portable Pixelmap"                              );
+    aHash[DECLARE_ASCII("draw_RAS_Sun_Rasterfile"                           )] =   DECLARE_ASCII("sdraw: RAS - Sun Rasterfile"                                 );
+    aHash[DECLARE_ASCII("draw_TGA_Truevision_TARGA"                         )] =   DECLARE_ASCII("sdraw: TGA - Truevision TARGA"                               );
+    aHash[DECLARE_ASCII("draw_SGV_StarDraw_20"                              )] =   DECLARE_ASCII("sdraw: SGV - StarDraw 2.0"                                   );
+    aHash[DECLARE_ASCII("draw_TIF_Tag_Image_File"                           )] =   DECLARE_ASCII("sdraw: TIF - Tag Image File"                                 );
+    aHash[DECLARE_ASCII("draw_SGF_StarOffice_Writer_SGF"                    )] =   DECLARE_ASCII("sdraw: SGF - StarOffice Writer SGF"                          );
+    aHash[DECLARE_ASCII("draw_XPM"                                          )] =   DECLARE_ASCII("sdraw: XPM"                                                  );
+    aHash[DECLARE_ASCII("gif_Graphics_Interchange"                          )] =   DECLARE_ASCII("sdraw: GIF - Graphics Interchange"                           );
+    aHash[DECLARE_ASCII("pcd_Photo_CD"                                      )] =   DECLARE_ASCII("sdraw: PCD - Photo CD"                                       );
+    aHash[DECLARE_ASCII("pcx_Zsoft_Paintbrush"                              )] =   DECLARE_ASCII("sdraw: PCX - Zsoft Paintbrush"                               );
+    aHash[DECLARE_ASCII("psd_Adobe_Photoshop"                               )] =   DECLARE_ASCII("sdraw: PSD - Adobe Photoshop"                                );
+    aHash[DECLARE_ASCII("png_Portable_Network_Graphic"                      )] =   DECLARE_ASCII("sdraw: PNG - Portable Network Graphic"                       );
+    aHash[DECLARE_ASCII("pbm_Portable_Bitmap"                               )] =   DECLARE_ASCII("sdraw: PBM - Portable Bitmap"                                );
+    aHash[DECLARE_ASCII("pgm_Portable_Graymap"                              )] =   DECLARE_ASCII("sdraw: PGM - Portable Graymap"                               );
+    aHash[DECLARE_ASCII("ppm_Portable_Pixelmap"                             )] =   DECLARE_ASCII("sdraw: PPM - Portable Pixelmap"                              );
+    aHash[DECLARE_ASCII("ras_Sun_Rasterfile"                                )] =   DECLARE_ASCII("sdraw: RAS - Sun Rasterfile"                                 );
+    aHash[DECLARE_ASCII("tga_Truevision_TARGA"                              )] =   DECLARE_ASCII("sdraw: TGA - Truevision TARGA"                               );
+    aHash[DECLARE_ASCII("sgv_StarDraw_20"                                   )] =   DECLARE_ASCII("sdraw: SGV - StarDraw 2.0"                                   );
+    aHash[DECLARE_ASCII("tif_Tag_Image_File"                                )] =   DECLARE_ASCII("sdraw: TIF - Tag Image File"                                 );
+    aHash[DECLARE_ASCII("sgf_StarOffice_Writer_SGF"                         )] =   DECLARE_ASCII("sdraw: SGF - StarOffice Writer SGF"                          );
+    aHash[DECLARE_ASCII("xpm_XPM"                                           )] =   DECLARE_ASCII("sdraw: XPM"                                                  );
+    aHash[DECLARE_ASCII("draw_StarDraw_50_Vorlage"                          )] =   DECLARE_ASCII("sdraw: StarDraw 5.0 Vorlage"                                 );
+    aHash[DECLARE_ASCII("draw_StarImpress_50_StarDraw"                      )] =   DECLARE_ASCII("sdraw: StarImpress 5.0 (StarDraw)"                           );
+    aHash[DECLARE_ASCII("draw_StarImpress_50_Vorlage_StarDraw"              )] =   DECLARE_ASCII("sdraw: StarImpress 5.0 Vorlage (StarDraw)"                   );
+    aHash[DECLARE_ASCII("draw_StarImpress_40_StarDraw"                      )] =   DECLARE_ASCII("sdraw: StarImpress 4.0 (StarDraw)"                           );
+    aHash[DECLARE_ASCII("draw_StarImpress_40_Vorlage_StarDraw"              )] =   DECLARE_ASCII("sdraw: StarImpress 4.0 Vorlage (StarDraw)"                   );
+    aHash[DECLARE_ASCII("draw_StarDraw_30"                                  )] =   DECLARE_ASCII("sdraw: StarDraw 3.0"                                         );
+    aHash[DECLARE_ASCII("draw_StarDraw_30_Vorlage"                          )] =   DECLARE_ASCII("sdraw: StarDraw 3.0 Vorlage"                                 );
+    aHash[DECLARE_ASCII("draw_EMF_MS_Windows_Metafile"                      )] =   DECLARE_ASCII("sdraw: EMF - MS Windows Metafile"                            );
+    aHash[DECLARE_ASCII("draw_MET_OS2_Metafile"                             )] =   DECLARE_ASCII("sdraw: MET - OS/2 Metafile"                                  );
+    aHash[DECLARE_ASCII("draw_DXF_AutoCAD_Interchange"                      )] =   DECLARE_ASCII("sdraw: DXF - AutoCAD Interchange"                            );
+    aHash[DECLARE_ASCII("draw_EPS_Encapsulated_PostScript"                  )] =   DECLARE_ASCII("sdraw: EPS - Encapsulated PostScript"                        );
+    aHash[DECLARE_ASCII("draw_WMF_MS_Windows_Metafile"                      )] =   DECLARE_ASCII("sdraw: WMF - MS Windows Metafile"                            );
+    aHash[DECLARE_ASCII("draw_PCT_Mac_Pict"                                 )] =   DECLARE_ASCII("sdraw: PCT - Mac Pict"                                       );
+    aHash[DECLARE_ASCII("draw_SVM_StarView_Metafile"                        )] =   DECLARE_ASCII("sdraw: SVM - StarView Metafile"                              );
+    aHash[DECLARE_ASCII("draw_BMP_MS_Windows"                               )] =   DECLARE_ASCII("sdraw: BMP - MS Windows"                                     );
+    aHash[DECLARE_ASCII("draw_JPG_JPEG"                                     )] =   DECLARE_ASCII("sdraw: JPG - JPEG"                                           );
+    aHash[DECLARE_ASCII("draw_XBM_X_Consortium"                             )] =   DECLARE_ASCII("sdraw: XBM - X-Consortium"                                   );
+    aHash[DECLARE_ASCII("emf_MS_Windows_Metafile"                           )] =   DECLARE_ASCII("sdraw: EMF - MS Windows Metafile"                            );
+    aHash[DECLARE_ASCII("met_OS2_Metafile"                                  )] =   DECLARE_ASCII("sdraw: MET - OS/2 Metafile"                                  );
+    aHash[DECLARE_ASCII("dxf_AutoCAD_Interchange"                           )] =   DECLARE_ASCII("sdraw: DXF - AutoCAD Interchange"                            );
+    aHash[DECLARE_ASCII("eps_Encapsulated_PostScript"                       )] =   DECLARE_ASCII("sdraw: EPS - Encapsulated PostScript"                        );
+    aHash[DECLARE_ASCII("wmf_MS_Windows_Metafile"                           )] =   DECLARE_ASCII("sdraw: WMF - MS Windows Metafile"                            );
+    aHash[DECLARE_ASCII("pct_Mac_Pict"                                      )] =   DECLARE_ASCII("sdraw: PCT - Mac Pict"                                       );
+    aHash[DECLARE_ASCII("svm_StarView_Metafile"                             )] =   DECLARE_ASCII("sdraw: SVM - StarView Metafile"                              );
+    aHash[DECLARE_ASCII("bmp_MS_Windows"                                    )] =   DECLARE_ASCII("sdraw: BMP - MS Windows"                                     );
+    aHash[DECLARE_ASCII("jpg_JPEG"                                          )] =   DECLARE_ASCII("sdraw: JPG - JPEG"                                           );
+    aHash[DECLARE_ASCII("xbm_X_Consortium"                                  )] =   DECLARE_ASCII("sdraw: XBM - X-Consortium"                                   );
+    aHash[DECLARE_ASCII("math_StarOffice_XML_Math"                          )] =   DECLARE_ASCII("smath: StarOffice XML (Math)"                                );
+    aHash[DECLARE_ASCII("math_MathML_XML_Math"                              )] =   DECLARE_ASCII("smath: MathML XML (Math)"                                    );
+    aHash[DECLARE_ASCII("math_StarMath_50"                                  )] =   DECLARE_ASCII("smath: StarMath 5.0"                                         );
+    aHash[DECLARE_ASCII("math_StarMath_40"                                  )] =   DECLARE_ASCII("smath: StarMath 4.0"                                         );
+    aHash[DECLARE_ASCII("math_StarMath_30"                                  )] =   DECLARE_ASCII("smath: StarMath 3.0"                                         );
+    aHash[DECLARE_ASCII("math_StarMath_20"                                  )] =   DECLARE_ASCII("smath: StarMath 2.0"                                         );
+    aHash[DECLARE_ASCII("math_MathType_3x"                                  )] =   DECLARE_ASCII("smath: MathType 3.x"                                         );
 }
 
 //*****************************************************************************************************************
@@ -1613,4 +1833,265 @@ void XCDGenerator::impl_initFilterHashNew2Old( StringHash& aHash )
         sOldName = m_aData.aOldFilterNamesHash[sNewName];
     }
     return sOldName;
+}
+
+//*****************************************************************************************************************
+void XCDGenerator::impl_classifyType( const AppMember& rData, const ::rtl::OUString& sTypeName, EFilterPackage& ePackage )
+{
+    ePackage = E_STANDARD;
+
+    // Step over all registered filters for this type ...
+    // Classify all of these filters. If one of them a standard filter ...
+    // type must be a standard type too - otherwise not!
+
+    CheckedStringListIterator   pIterator   ;
+    ::rtl::OUString             sFilterName ;
+    sal_Int32                   nOrder      ;
+    while( rData.pFilterCache->searchFilterForType( sTypeName, pIterator, sFilterName ) == sal_True )
+    {
+        EFilterPackage eFilterPackage;
+        XCDGenerator::impl_classifyFilter( rData, sFilterName, eFilterPackage, nOrder );
+        if( eFilterPackage == E_STANDARD )
+        {
+            ePackage = E_STANDARD;
+            break;
+        }
+    }
+}
+
+//*****************************************************************************************************************
+void XCDGenerator::impl_classifyFilter( const AppMember& rData, const ::rtl::OUString& sFilterName, EFilterPackage& ePackage, sal_Int32& nOrder )
+{
+    // a) For versions less then 4 => use hard coded list of filter names to differ between standard or additional filters.
+    //    Why? This version don't support the order flag or hasn't set it right!
+    // b) For version greater then 3 => use order of currently cached types in FilterCache!
+
+    ePackage = E_STANDARD;
+    nOrder   = 0;
+
+    // writer
+    if( sFilterName == DECLARE_ASCII("writer_StarOffice_XML_Writer"                               ) ) { ePackage = E_STANDARD; nOrder =  1; } else
+    if( sFilterName == DECLARE_ASCII("writer_StarOffice_XML_Writer_Template"                      ) ) { ePackage = E_STANDARD; nOrder =  2; } else
+    if( sFilterName == DECLARE_ASCII("writer_StarWriter_50"                                       ) ) { ePackage = E_STANDARD; nOrder =  3; } else
+    if( sFilterName == DECLARE_ASCII("writer_StarWriter_50_VorlageTemplate"                       ) ) { ePackage = E_STANDARD; nOrder =  4; } else
+    if( sFilterName == DECLARE_ASCII("writer_StarWriter_40"                                       ) ) { ePackage = E_STANDARD; nOrder =  5; } else
+    if( sFilterName == DECLARE_ASCII("writer_StarWriter_40_VorlageTemplate"                       ) ) { ePackage = E_STANDARD; nOrder =  6; } else
+    if( sFilterName == DECLARE_ASCII("writer_StarWriter_30"                                       ) ) { ePackage = E_STANDARD; nOrder =  7; } else
+    if( sFilterName == DECLARE_ASCII("writer_StarWriter_30_VorlageTemplate"                       ) ) { ePackage = E_STANDARD; nOrder =  8; } else
+    if( sFilterName == DECLARE_ASCII("writer_StarWriter_20"                                       ) ) { ePackage = E_STANDARD; nOrder =  9; } else
+    if( sFilterName == DECLARE_ASCII("writer_MS_Word_97"                                          ) ) { ePackage = E_STANDARD; nOrder = 10; } else
+    if( sFilterName == DECLARE_ASCII("writer_MS_Word_97_Vorlage"                                  ) ) { ePackage = E_STANDARD; nOrder = 11; } else
+    if( sFilterName == DECLARE_ASCII("writer_MS_Word_95"                                          ) ) { ePackage = E_STANDARD; nOrder = 12; } else
+    if( sFilterName == DECLARE_ASCII("writer_MS_Word_95_Vorlage"                                  ) ) { ePackage = E_STANDARD; nOrder = 13; } else
+    if( sFilterName == DECLARE_ASCII("writer_MS_WinWord_2x_W4W"                                   ) ) { ePackage = E_STANDARD; nOrder = 14; } else
+    if( sFilterName == DECLARE_ASCII("writer_MS_WinWord_1x_W4W"                                   ) ) { ePackage = E_STANDARD; nOrder = 15; } else
+    if( sFilterName == DECLARE_ASCII("writer_MS_Word_6x_W4W"                                      ) ) { ePackage = E_STANDARD; nOrder = 16; } else
+    if( sFilterName == DECLARE_ASCII("writer_MS_Word_5x_W4W"                                      ) ) { ePackage = E_STANDARD; nOrder = 17; } else
+    if( sFilterName == DECLARE_ASCII("writer_MS_Word_4x_W4W"                                      ) ) { ePackage = E_STANDARD; nOrder = 18; } else
+    if( sFilterName == DECLARE_ASCII("writer_MS_Word_3x_W4W"                                      ) ) { ePackage = E_STANDARD; nOrder = 19; } else
+    if( sFilterName == DECLARE_ASCII("writer_WordPerfect_Win_70_W4W"                              ) ) { ePackage = E_STANDARD; nOrder = 20; } else
+    if( sFilterName == DECLARE_ASCII("writer_WordPerfect_Win_61_W4W"                              ) ) { ePackage = E_STANDARD; nOrder = 21; } else
+    if( sFilterName == DECLARE_ASCII("writer_WordPerfect_Win_60_W4W"                              ) ) { ePackage = E_STANDARD; nOrder = 22; } else
+    if( sFilterName == DECLARE_ASCII("writer_WordPerfect_Win_51_52_W4W"                           ) ) { ePackage = E_STANDARD; nOrder = 23; } else
+    if( sFilterName == DECLARE_ASCII("writer_HTML_StarWriter"                                     ) ) { ePackage = E_STANDARD; nOrder = 24; } else
+    if( sFilterName == DECLARE_ASCII("writer_Text"                                                ) ) { ePackage = E_STANDARD; nOrder = 25; } else
+    if( sFilterName == DECLARE_ASCII("writer_Text_encoded"                                        ) ) { ePackage = E_STANDARD; nOrder = 26; } else
+    if( sFilterName == DECLARE_ASCII("writer_Text_DOS"                                            ) ) { ePackage = E_STANDARD; nOrder = 27; } else
+    if( sFilterName == DECLARE_ASCII("writer_Text_Unix"                                           ) ) { ePackage = E_STANDARD; nOrder = 28; } else
+    if( sFilterName == DECLARE_ASCII("writer_Text_Mac"                                            ) ) { ePackage = E_STANDARD; nOrder = 29; } else
+    if( sFilterName == DECLARE_ASCII("writer_Rich_Text_Format"                                    ) ) { ePackage = E_STANDARD; nOrder = 30; }
+
+    // writer web
+    if( sFilterName == DECLARE_ASCII("writer_web_HTML"                                            ) ) { ePackage = E_STANDARD; nOrder =  1; } else
+    if( sFilterName == DECLARE_ASCII("writer_web_StarOffice_XML_Writer"                           ) ) { ePackage = E_STANDARD; nOrder =  2; } else
+    if( sFilterName == DECLARE_ASCII("writer_web_StarOffice_XML_Writer_Web_Template"              ) ) { ePackage = E_STANDARD; nOrder =  3; } else
+    if( sFilterName == DECLARE_ASCII("writer_web_StarWriter_50"                                   ) ) { ePackage = E_STANDARD; nOrder =  4; } else
+    if( sFilterName == DECLARE_ASCII("writer_web_StarWriterWeb_50_VorlageTemplate"                ) ) { ePackage = E_STANDARD; nOrder =  5; } else
+    if( sFilterName == DECLARE_ASCII("writer_web_StarWriter_40"                                   ) ) { ePackage = E_STANDARD; nOrder =  6; } else
+    if( sFilterName == DECLARE_ASCII("writer_web_StarWriterWeb_40_VorlageTemplate"                ) ) { ePackage = E_STANDARD; nOrder =  7; } else
+    if( sFilterName == DECLARE_ASCII("writer_web_StarWriter_30"                                   ) ) { ePackage = E_STANDARD; nOrder =  8; } else
+    if( sFilterName == DECLARE_ASCII("writer_web_Text_StarWriterWeb"                              ) ) { ePackage = E_STANDARD; nOrder =  9; } else
+    if( sFilterName == DECLARE_ASCII("writer_web_Text_encoded"                                    ) ) { ePackage = E_STANDARD; nOrder = 10; } else
+    if( sFilterName == DECLARE_ASCII("writer_web_Text_DOS_StarWriterWeb"                          ) ) { ePackage = E_STANDARD; nOrder = 11; } else
+    if( sFilterName == DECLARE_ASCII("writer_web_Text_Unix_StarWriterWeb"                         ) ) { ePackage = E_STANDARD; nOrder = 12; } else
+    if( sFilterName == DECLARE_ASCII("writer_web_Text_Mac_StarWriterWeb"                          ) ) { ePackage = E_STANDARD; nOrder = 13; }
+
+    // global document
+    if( sFilterName == DECLARE_ASCII("writer_globaldocument_StarOffice_XML_Writer_GlobalDocument" ) ) { ePackage = E_STANDARD; nOrder =  1; } else
+    if( sFilterName == DECLARE_ASCII("writer_globaldocument_StarOffice_XML_Writer"                ) ) { ePackage = E_STANDARD; nOrder =  2; } else
+    if( sFilterName == DECLARE_ASCII("writer_globaldocument_StarWriter_50"                        ) ) { ePackage = E_STANDARD; nOrder =  3; } else
+    if( sFilterName == DECLARE_ASCII("writer_globaldocument_StarWriter_50GlobalDocument"          ) ) { ePackage = E_STANDARD; nOrder =  4; } else
+    if( sFilterName == DECLARE_ASCII("writer_globaldocument_StarWriter_40"                        ) ) { ePackage = E_STANDARD; nOrder =  5; } else
+    if( sFilterName == DECLARE_ASCII("writer_globaldocument_StarWriter_40GlobalDocument"          ) ) { ePackage = E_STANDARD; nOrder =  6; } else
+    if( sFilterName == DECLARE_ASCII("writer_globaldocument_StarWriter_30"                        ) ) { ePackage = E_STANDARD; nOrder =  7; } else
+    if( sFilterName == DECLARE_ASCII("writer_globaldocument_Text_encoded"                         ) ) { ePackage = E_STANDARD; nOrder =  8; }
+
+    // calc
+    if( sFilterName == DECLARE_ASCII("calc_StarOffice_XML_Calc"                                   ) ) { ePackage = E_STANDARD; nOrder =  1; } else
+    if( sFilterName == DECLARE_ASCII("calc_StarOffice_XML_Calc_Template"                          ) ) { ePackage = E_STANDARD; nOrder =  2; } else
+    if( sFilterName == DECLARE_ASCII("calc_StarCalc_50"                                           ) ) { ePackage = E_STANDARD; nOrder =  3; } else
+    if( sFilterName == DECLARE_ASCII("calc_StarCalc_50_VorlageTemplate"                           ) ) { ePackage = E_STANDARD; nOrder =  4; } else
+    if( sFilterName == DECLARE_ASCII("calc_StarCalc_40"                                           ) ) { ePackage = E_STANDARD; nOrder =  5; } else
+    if( sFilterName == DECLARE_ASCII("calc_StarCalc_40_VorlageTemplate"                           ) ) { ePackage = E_STANDARD; nOrder =  6; } else
+    if( sFilterName == DECLARE_ASCII("calc_StarCalc_30"                                           ) ) { ePackage = E_STANDARD; nOrder =  7; } else
+    if( sFilterName == DECLARE_ASCII("calc_StarCalc_30_VorlageTemplate"                           ) ) { ePackage = E_STANDARD; nOrder =  8; } else
+    if( sFilterName == DECLARE_ASCII("calc_StarCalc_10"                                           ) ) { ePackage = E_STANDARD; nOrder =  9; } else
+    if( sFilterName == DECLARE_ASCII("calc_MS_Excel_97"                                           ) ) { ePackage = E_STANDARD; nOrder = 10; } else
+    if( sFilterName == DECLARE_ASCII("calc_MS_Excel_97_VorlageTemplate"                           ) ) { ePackage = E_STANDARD; nOrder = 11; } else
+    if( sFilterName == DECLARE_ASCII("calc_MS_Excel_95"                                           ) ) { ePackage = E_STANDARD; nOrder = 12; } else
+    if( sFilterName == DECLARE_ASCII("calc_MS_Excel_95_VorlageTemplate"                           ) ) { ePackage = E_STANDARD; nOrder = 13; } else
+    if( sFilterName == DECLARE_ASCII("calc_MS_Excel_5095"                                         ) ) { ePackage = E_STANDARD; nOrder = 14; } else
+    if( sFilterName == DECLARE_ASCII("calc_MS_Excel_5095_VorlageTemplate"                         ) ) { ePackage = E_STANDARD; nOrder = 15; } else
+    if( sFilterName == DECLARE_ASCII("calc_MS_Excel_40"                                           ) ) { ePackage = E_STANDARD; nOrder = 16; } else
+    if( sFilterName == DECLARE_ASCII("calc_MS_Excel_40_VorlageTemplate"                           ) ) { ePackage = E_STANDARD; nOrder = 17; } else
+    if( sFilterName == DECLARE_ASCII("calc_HTML_StarCalc"                                         ) ) { ePackage = E_STANDARD; nOrder = 18; } else
+    if( sFilterName == DECLARE_ASCII("calc_HTML_WebQuery"                                         ) ) { ePackage = E_STANDARD; nOrder = 19; } else
+    if( sFilterName == DECLARE_ASCII("calc_Rich_Text_Format_StarCalc"                             ) ) { ePackage = E_STANDARD; nOrder = 20; } else
+    if( sFilterName == DECLARE_ASCII("calc_Text_txt_csv_StarCalc"                                 ) ) { ePackage = E_STANDARD; nOrder = 21; } else
+    if( sFilterName == DECLARE_ASCII("calc_dBase"                                                 ) ) { ePackage = E_STANDARD; nOrder = 22; } else
+    if( sFilterName == DECLARE_ASCII("calc_Lotus"                                                 ) ) { ePackage = E_STANDARD; nOrder = 23; } else
+    if( sFilterName == DECLARE_ASCII("calc_SYLK"                                                  ) ) { ePackage = E_STANDARD; nOrder = 24; } else
+    if( sFilterName == DECLARE_ASCII("calc_DIF"                                                   ) ) { ePackage = E_STANDARD; nOrder = 25; }
+
+    // impress
+    if( sFilterName == DECLARE_ASCII("impress_StarOffice_XML_Impress"                             ) ) { ePackage = E_STANDARD; nOrder =  1; } else
+    if( sFilterName == DECLARE_ASCII("impress_StarOffice_XML_Impress_Template"                    ) ) { ePackage = E_STANDARD; nOrder =  2; } else
+    if( sFilterName == DECLARE_ASCII("impress_StarImpress_50"                                     ) ) { ePackage = E_STANDARD; nOrder =  3; } else
+    if( sFilterName == DECLARE_ASCII("impress_StarImpress_50_Vorlage"                             ) ) { ePackage = E_STANDARD; nOrder =  4; } else
+    if( sFilterName == DECLARE_ASCII("impress_StarImpress_50_packed"                              ) ) { ePackage = E_STANDARD; nOrder =  5; } else
+    if( sFilterName == DECLARE_ASCII("impress_StarImpress_40"                                     ) ) { ePackage = E_STANDARD; nOrder =  6; } else
+    if( sFilterName == DECLARE_ASCII("impress_StarImpress_40_Vorlage"                             ) ) { ePackage = E_STANDARD; nOrder =  7; } else
+    if( sFilterName == DECLARE_ASCII("impress_MS_PowerPoint_97"                                   ) ) { ePackage = E_STANDARD; nOrder =  8; } else
+    if( sFilterName == DECLARE_ASCII("impress_MS_PowerPoint_97_Vorlage"                           ) ) { ePackage = E_STANDARD; nOrder =  9; } else
+    if( sFilterName == DECLARE_ASCII("impress_StarOffice_XML_Draw"                                ) ) { ePackage = E_STANDARD; nOrder = 10; } else
+    if( sFilterName == DECLARE_ASCII("impress_StarDraw_50_StarImpress"                            ) ) { ePackage = E_STANDARD; nOrder = 11; } else
+    if( sFilterName == DECLARE_ASCII("impress_StarDraw_50_Vorlage_StarImpress"                    ) ) { ePackage = E_STANDARD; nOrder = 12; } else
+    if( sFilterName == DECLARE_ASCII("impress_StarDraw_30_StarImpress"                            ) ) { ePackage = E_STANDARD; nOrder = 13; } else
+    if( sFilterName == DECLARE_ASCII("impress_StarDraw_30_Vorlage_StarImpress"                    ) ) { ePackage = E_STANDARD; nOrder = 14; } else
+    if( sFilterName == DECLARE_ASCII("impress_CGM_Computer_Graphics_Metafile"                     ) ) { ePackage = E_STANDARD; nOrder = 15; }
+
+    // draw
+    if( sFilterName == DECLARE_ASCII("draw_StarOffice_XML_Draw"                                   ) ) { ePackage = E_STANDARD; nOrder =  1; } else
+    if( sFilterName == DECLARE_ASCII("draw_StarOffice_XML_Draw_Template"                          ) ) { ePackage = E_STANDARD; nOrder =  2; } else
+    if( sFilterName == DECLARE_ASCII("draw_StarDraw_50"                                           ) ) { ePackage = E_STANDARD; nOrder =  3; } else
+    if( sFilterName == DECLARE_ASCII("draw_StarDraw_50_Vorlage"                                   ) ) { ePackage = E_STANDARD; nOrder =  4; } else
+    if( sFilterName == DECLARE_ASCII("draw_StarDraw_30"                                           ) ) { ePackage = E_STANDARD; nOrder =  5; } else
+    if( sFilterName == DECLARE_ASCII("draw_StarDraw_30_Vorlage"                                   ) ) { ePackage = E_STANDARD; nOrder =  6; } else
+    if( sFilterName == DECLARE_ASCII("draw_StarOffice_XML_Impress"                                ) ) { ePackage = E_STANDARD; nOrder =  7; } else
+    if( sFilterName == DECLARE_ASCII("draw_StarImpress_50_StarDraw"                               ) ) { ePackage = E_STANDARD; nOrder =  8; } else
+    if( sFilterName == DECLARE_ASCII("draw_StarImpress_50_Vorlage_StarDraw"                       ) ) { ePackage = E_STANDARD; nOrder =  9; } else
+    if( sFilterName == DECLARE_ASCII("draw_StarImpress_40_StarDraw"                               ) ) { ePackage = E_STANDARD; nOrder = 10; } else
+    if( sFilterName == DECLARE_ASCII("draw_StarImpress_40_Vorlage_StarDraw"                       ) ) { ePackage = E_STANDARD; nOrder = 11; } else
+    if( sFilterName == DECLARE_ASCII("draw_SGV_StarDraw_20"                                       ) ) { ePackage = E_STANDARD; nOrder = 12; } else
+    if( sFilterName == DECLARE_ASCII("draw_SGF_StarOffice_Writer_SGF"                             ) ) { ePackage = E_STANDARD; nOrder = 13; } else
+    if( sFilterName == DECLARE_ASCII("draw_SVM_StarView_Metafile"                                 ) ) { ePackage = E_STANDARD; nOrder = 14; } else
+    if( sFilterName == DECLARE_ASCII("draw_WMF_MS_Windows_Metafile"                               ) ) { ePackage = E_STANDARD; nOrder = 15; } else
+    if( sFilterName == DECLARE_ASCII("draw_EMF_MS_Windows_Metafile"                               ) ) { ePackage = E_STANDARD; nOrder = 16; } else
+    if( sFilterName == DECLARE_ASCII("draw_EPS_Encapsulated_PostScript"                           ) ) { ePackage = E_STANDARD; nOrder = 17; } else
+    if( sFilterName == DECLARE_ASCII("draw_DXF_AutoCAD_Interchange"                               ) ) { ePackage = E_STANDARD; nOrder = 18; } else
+    if( sFilterName == DECLARE_ASCII("draw_BMP_MS_Windows"                                        ) ) { ePackage = E_STANDARD; nOrder = 19; } else
+    if( sFilterName == DECLARE_ASCII("draw_GIF_Graphics_Interchange"                              ) ) { ePackage = E_STANDARD; nOrder = 20; } else
+    if( sFilterName == DECLARE_ASCII("draw_JPG_JPEG"                                              ) ) { ePackage = E_STANDARD; nOrder = 21; } else
+    if( sFilterName == DECLARE_ASCII("draw_MET_OS2_Metafile"                                      ) ) { ePackage = E_STANDARD; nOrder = 22; } else
+    if( sFilterName == DECLARE_ASCII("draw_PBM_Portable_Bitmap"                                   ) ) { ePackage = E_STANDARD; nOrder = 23; } else
+    if( sFilterName == DECLARE_ASCII("draw_PCD_Photo_CD_Base"                                     ) ) { ePackage = E_STANDARD; nOrder = 24; } else
+    if( sFilterName == DECLARE_ASCII("draw_PCD_Photo_CD_Base4"                                    ) ) { ePackage = E_STANDARD; nOrder = 25; } else
+    if( sFilterName == DECLARE_ASCII("draw_PCD_Photo_CD_Base16"                                   ) ) { ePackage = E_STANDARD; nOrder = 26; } else
+    if( sFilterName == DECLARE_ASCII("draw_PCT_Mac_Pict"                                          ) ) { ePackage = E_STANDARD; nOrder = 27; } else
+    if( sFilterName == DECLARE_ASCII("draw_PCX_Zsoft_Paintbrush"                                  ) ) { ePackage = E_STANDARD; nOrder = 28; } else
+    if( sFilterName == DECLARE_ASCII("draw_PGM_Portable_Graymap"                                  ) ) { ePackage = E_STANDARD; nOrder = 29; } else
+    if( sFilterName == DECLARE_ASCII("draw_PNG_Portable_Network_Graphic"                          ) ) { ePackage = E_STANDARD; nOrder = 30; } else
+    if( sFilterName == DECLARE_ASCII("draw_PPM_Portable_Pixelmap"                                 ) ) { ePackage = E_STANDARD; nOrder = 31; } else
+    if( sFilterName == DECLARE_ASCII("draw_PSD_Adobe_Photoshop"                                   ) ) { ePackage = E_STANDARD; nOrder = 32; } else
+    if( sFilterName == DECLARE_ASCII("draw_RAS_Sun_Rasterfile"                                    ) ) { ePackage = E_STANDARD; nOrder = 33; } else
+    if( sFilterName == DECLARE_ASCII("draw_TGA_Truevision_TARGA"                                  ) ) { ePackage = E_STANDARD; nOrder = 34; } else
+    if( sFilterName == DECLARE_ASCII("draw_TIF_Tag_Image_File"                                    ) ) { ePackage = E_STANDARD; nOrder = 35; } else
+    if( sFilterName == DECLARE_ASCII("draw_XBM_X_Consortium"                                      ) ) { ePackage = E_STANDARD; nOrder = 36; } else
+    if( sFilterName == DECLARE_ASCII("draw_XPM"                                                   ) ) { ePackage = E_STANDARD; nOrder = 37; }
+
+    // chart
+    if( sFilterName == DECLARE_ASCII("chart_StarOffice_XML_Chart"                                 ) ) { ePackage = E_STANDARD; nOrder =  1; } else
+    if( sFilterName == DECLARE_ASCII("chart_StarChart_50"                                         ) ) { ePackage = E_STANDARD; nOrder =  2; } else
+    if( sFilterName == DECLARE_ASCII("chart_StarChart_40"                                         ) ) { ePackage = E_STANDARD; nOrder =  3; } else
+    if( sFilterName == DECLARE_ASCII("chart_StarChart_30"                                         ) ) { ePackage = E_STANDARD; nOrder =  4; }
+
+    // math
+    if( sFilterName == DECLARE_ASCII("math_StarOffice_XML_Math"                                   ) ) { ePackage = E_STANDARD; nOrder =  1; } else
+    if( sFilterName == DECLARE_ASCII("math_StarMath_50"                                           ) ) { ePackage = E_STANDARD; nOrder =  2; } else
+    if( sFilterName == DECLARE_ASCII("math_StarMath_40"                                           ) ) { ePackage = E_STANDARD; nOrder =  3; } else
+    if( sFilterName == DECLARE_ASCII("math_StarMath_30"                                           ) ) { ePackage = E_STANDARD; nOrder =  4; } else
+    if( sFilterName == DECLARE_ASCII("math_StarMath_20"                                           ) ) { ePackage = E_STANDARD; nOrder =  5; } else
+    if( sFilterName == DECLARE_ASCII("math_MathML_XML_Math"                                       ) ) { ePackage = E_STANDARD; nOrder =  6; } else
+    if( sFilterName == DECLARE_ASCII("math_MathType_3x"                                           ) ) { ePackage = E_STANDARD; nOrder =  7; }
+
+    // graphics
+    if( sFilterName == DECLARE_ASCII("bmp_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder =  1; } else
+    if( sFilterName == DECLARE_ASCII("bmp_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder =  2; } else
+    if( sFilterName == DECLARE_ASCII("dxf_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder =  3; } else
+    if( sFilterName == DECLARE_ASCII("emf_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder =  4; } else
+    if( sFilterName == DECLARE_ASCII("emf_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder =  5; } else
+    if( sFilterName == DECLARE_ASCII("eps_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder =  6; } else
+    if( sFilterName == DECLARE_ASCII("eps_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder =  7; } else
+    if( sFilterName == DECLARE_ASCII("gif_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder =  8; } else
+    if( sFilterName == DECLARE_ASCII("gif_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder =  9; } else
+    if( sFilterName == DECLARE_ASCII("jpg_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 10; } else
+    if( sFilterName == DECLARE_ASCII("jpg_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder = 11; } else
+    if( sFilterName == DECLARE_ASCII("met_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 12; } else
+    if( sFilterName == DECLARE_ASCII("met_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder = 13; } else
+    if( sFilterName == DECLARE_ASCII("pbm_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 14; } else
+    if( sFilterName == DECLARE_ASCII("pbm_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder = 15; } else
+    if( sFilterName == DECLARE_ASCII("pcd_Import_Base16"                                          ) ) { ePackage = E_STANDARD; nOrder = 16; } else
+    if( sFilterName == DECLARE_ASCII("pcd_Import_Base4"                                           ) ) { ePackage = E_STANDARD; nOrder = 17; } else
+    if( sFilterName == DECLARE_ASCII("pcd_Import_Base"                                            ) ) { ePackage = E_STANDARD; nOrder = 18; } else
+    if( sFilterName == DECLARE_ASCII("pct_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 19; } else
+    if( sFilterName == DECLARE_ASCII("pct_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder = 20; } else
+    if( sFilterName == DECLARE_ASCII("pcx_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 21; } else
+    if( sFilterName == DECLARE_ASCII("pgm_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 22; } else
+    if( sFilterName == DECLARE_ASCII("pgm_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder = 23; } else
+    if( sFilterName == DECLARE_ASCII("png_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 24; } else
+    if( sFilterName == DECLARE_ASCII("png_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder = 25; } else
+    if( sFilterName == DECLARE_ASCII("ppm_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 26; } else
+    if( sFilterName == DECLARE_ASCII("ppm_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder = 27; } else
+    if( sFilterName == DECLARE_ASCII("psd_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 28; } else
+    if( sFilterName == DECLARE_ASCII("ras_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 29; } else
+    if( sFilterName == DECLARE_ASCII("ras_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder = 30; } else
+    if( sFilterName == DECLARE_ASCII("sgf_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 31; } else
+    if( sFilterName == DECLARE_ASCII("sgv_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 32; } else
+    if( sFilterName == DECLARE_ASCII("svg_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder = 33; } else
+    if( sFilterName == DECLARE_ASCII("svm_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 34; } else
+    if( sFilterName == DECLARE_ASCII("svm_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder = 35; } else
+    if( sFilterName == DECLARE_ASCII("tga_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 36; } else
+    if( sFilterName == DECLARE_ASCII("tif_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 37; } else
+    if( sFilterName == DECLARE_ASCII("tif_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder = 38; } else
+    if( sFilterName == DECLARE_ASCII("wmf_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 39; } else
+    if( sFilterName == DECLARE_ASCII("wmf_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder = 40; } else
+    if( sFilterName == DECLARE_ASCII("xbm_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 41; } else
+    if( sFilterName == DECLARE_ASCII("xpm_Import"                                                 ) ) { ePackage = E_STANDARD; nOrder = 42; } else
+    if( sFilterName == DECLARE_ASCII("xpm_Export"                                                 ) ) { ePackage = E_STANDARD; nOrder = 43; }
+}
+
+//*****************************************************************************************************************
+void XCDGenerator::impl_orderAlphabetical( css::uno::Sequence< ::rtl::OUString >& lList )
+{
+    ::std::vector< ::rtl::OUString > lSortedList;
+    sal_Int32                        nCount     ;
+    sal_Int32                        nItem      ;
+
+    // Copy sequence to vector
+    nCount = lList.getLength();
+    for( nItem=0; nItem<nCount; ++nItem )
+    {
+        lSortedList.push_back( lList[nItem] );
+    }
+
+    // sort in a alphabetical order
+    ::std::sort( lSortedList.begin(), lSortedList.end() );
+
+    // copy sorted list back to sequence
+    nItem = 0;
+    for( ::std::vector< ::rtl::OUString >::iterator pIterator=lSortedList.begin(); pIterator!=lSortedList.end(); ++pIterator )
+    {
+        lList[nItem] = *pIterator;
+        ++nItem;
+    }
 }
