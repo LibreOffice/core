@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:50:03 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,7 @@ ModalDialog DLG_CAPTION
         Text[ japanese ] = "ëÆê´";
         Text[ korean ] = "Settings";
         Text[ chinese_simplified ] = " Ù–‘";
-        Text[ chinese_traditional ] = "Settings";
+        Text[ chinese_traditional ] = "ƒ›© ";
         Text[ turkish ] = "Settings";
         Text[ arabic ] = "Settings";
         Text[ catalan ] = "Settings";
@@ -749,4 +749,5 @@ ModalDialog DLG_SEQUENCE_OPTION
     Text[ finnish ] = "Numeroalueen asetukset";
 };
  // ********************************************************************** EOF
+
 
