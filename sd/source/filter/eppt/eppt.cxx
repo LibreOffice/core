@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-03 18:00:47 $
+ *  last change: $Author: sj $ $Date: 2000-11-06 12:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,12 +498,15 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
 
                     if ( pAry && nAryLen )
                     {
-                        aPropItem.Write( pAry, nAryLen );
-                        sal_uInt32 nSize = aPropItem.Tell() - 8;
-                        aPropItem.Seek( 4 );
-                        aPropItem << nSize;
-                        aPropSet.AddProperty( PID_PREVIEW, aPropItem );
-                        aDInfo.AddSection( aPropSet );
+                        if ( nAryLen < 0x20000 )    // we will not generate preview pics greater than 128kb
+                        {
+                            aPropItem.Write( pAry, nAryLen );
+                            sal_uInt32 nSize = aPropItem.Tell() - 8;
+                            aPropItem.Seek( 4 );
+                            aPropItem << nSize;
+                            aPropSet.AddProperty( PID_PREVIEW, aPropItem );
+                            aDInfo.AddSection( aPropSet );
+                        }
                     }
                 }
                 aDInfo.Write();
