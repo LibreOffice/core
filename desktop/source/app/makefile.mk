@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2004-06-17 11:49:20 $
+#   last change: $Author: hr $ $Date: 2004-08-03 14:33:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,8 +90,6 @@ OBJFILES = \
         $(OBJ)$/appsys.obj					\
         $(OBJ)$/desktopresid.obj			\
         $(OBJ)$/dispatchwatcher.obj			\
-        $(OBJ)$/ssodlg.obj					\
-        $(OBJ)$/ssoinit.obj					\
         $(OBJ)$/configinit.obj				\
         $(OBJ)$/javainteractionhandler.obj	\
         $(OBJ)$/checkinstall.obj			\
@@ -109,8 +107,7 @@ OBJFILES+= $(OBJ)$/icon_resource_ooo.obj \
 .ENDIF
 
 SRS1NAME=	desktop
-SRC1FILES=	desktop.src	\
-            ssodlg.src
+SRC1FILES=	desktop.src	
 
 SRC2FILES=	langselect.src
 SRS2NAME=	langselect
