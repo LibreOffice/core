@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:21:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ namespace framework{
 // definitions
 
 //-----------------------------------------------
-css::uno::Reference< css::frame::XModel > extractFrameModel(const css::uno::Reference< css::frame::XFrame >& xFrame)
+inline css::uno::Reference< css::frame::XModel > extractFrameModel(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     css::uno::Reference< css::frame::XModel >      xModel;
     css::uno::Reference< css::frame::XController > xController;
@@ -144,7 +144,7 @@ css::uno::Reference< css::frame::XModel > extractFrameModel(const css::uno::Refe
     @return [bool]
             TRUE if closing failed.
  */
-sal_Bool closeIt(const css::uno::Reference< css::uno::XInterface >& xResource         ,
+inline sal_Bool closeIt(const css::uno::Reference< css::uno::XInterface >& xResource         ,
                        sal_Bool                                     bDelegateOwnerShip)
 {
     css::uno::Reference< css::util::XCloseable > xClose  (xResource, css::uno::UNO_QUERY);
