@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-02 10:09:38 $
+ *  last change: $Author: cmc $ $Date: 2002-12-02 10:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
         rObj.DoSaveCompleted();
     }
     //We never need this stream: See #99809# and #i2179#
-    rObj.Remove(CREATE_CONST_ASC("\2OlePres000"));
+    rObj.Remove(CREATE_CONST_ASC(SVEXT_PERSIST_STREAM));
 }
 
 
