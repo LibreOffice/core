@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:00:35 $
+ *  last change: $Author: cmc $ $Date: 2002-01-15 17:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,12 +502,6 @@ DateTime WW8ScannerBase::WW8DTTM2DateTime(long lDTTM)
         aDateTime = DateTime(Date(lDay, lMon, lYear), Time(lHour, lMin));
     }
     return aDateTime;
-}
-
-void WW8_BRC::clear()
-{
-    *(USHORT *)aBits1=0;
-    *(USHORT *)aBits2=0;
 }
 
 short WW8_BRC::DetermineBorderProperties( BOOL bVer67, short *pSpace,
@@ -6005,7 +5999,7 @@ static SprmInfo aWwSprmTab[] = {
     0x2A42, 1, L_FIX, // "sprmCIco" chp.ico;ico;byte;
     0x4A43, 2, L_FIX, // "sprmCHps" chp.hps;hps;byte; ACHTUNG: ich nehme mal lieber ein: word;
     0x2A44, 1, L_FIX, // "sprmCHpsInc" chp.hps;(see below);byte;
-    0x4845, 1, L_FIX, // "sprmCHpsPos" chp.hpsPos;hps;byte;
+    0x4845, 2, L_FIX, // "sprmCHpsPos" chp.hpsPos;hps;short; (doc wrong)
     0x2A46, 1, L_FIX, // "sprmCHpsPosAdj" chp.hpsPos;hps (see below);byte;
     0xCA47, 0, L_VAR, // "sprmCMajority" chp.fBold, chp.fItalic, chp.fSmallCaps, chp.fVanish, chp.fStrike, chp.fCaps, chp.rgftc, chp.hps, chp.hpsPos, chp.kul, chp.dxaSpace, chp.ico, chp.rglid;complex (see below);variable length, length byte plus size of following grpprl;
     0x2A48, 1, L_FIX, // "sprmCIss" chp.iss;iss;byte;
