@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.90 $
- *  last change: $Author: rt $ $Date: 2003-04-24 10:29:11 $
+ *  $Revision: 1.91 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,6 +675,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
     rTo.mbDevice            = FALSE;
 
     const TT_OS2* pOS2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
+    const TT_HoriHeader* pHHEA = (const TT_HoriHeader*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_hhea );
     if( pOS2 && (~pOS2->version != 0) )
     {
         // #108862# sanity check, some fonts treat descent as signed !!!
@@ -690,10 +691,20 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
         // Check for CJK capabilities of the current font
         // #107888# workaround for Asian...
         BOOL bCJKCapable = ((( pOS2->ulUnicodeRange2 & 0x2fff0000 ) | ( pOS2->ulUnicodeRange3 & 0x00000001 )) != 0 );
-        if ( bCJKCapable )
+        BOOL bHasKoreanRange = ((( pOS2->ulUnicodeRange1 & 0x10000000 ) | ( pOS2->ulUnicodeRange2 & 0x00100000 ) |
+                                 ( pOS2->ulUnicodeRange2 & 0x01000000 )) != 0 );
+
+        if ( bCJKCapable && pHHEA )
         {
-            rTo.mnAscent    += (long)(+pOS2->sTypoLineGap * fScale + 0.5 );
-            rTo.mnLeading   += (long)(+pOS2->sTypoLineGap * fScale + 0.5 );
+            // formula taken from www.microsoft.com/typography/otspec/recom.htm
+            long externalLeading = std::max(0, +pHHEA->Line_Gap - ((+pOS2->usWinAscent + +pOS2->usWinDescent)
+                - (+pHHEA->Ascender - +pHHEA->Descender)));
+
+            rTo.mnAscent    += (long)(+externalLeading * fScale + 0.5 );
+            rTo.mnLeading   += (long)(+externalLeading * fScale + 0.5 );
+            // #109280# korean only: increase descent for wavelines and improved line space
+            if( bHasKoreanRange )
+                rTo.mnDescent    += (long)(+externalLeading * fScale + 0.5 );
         }
 
         rTo.mnFirstChar     = pOS2->usFirstCharIndex;
