@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-26 18:13:38 $
+ *  last change: $Author: sab $ $Date: 2002-10-17 11:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,12 @@
 #ifndef _COM_SUN_STAR_TABLE_XCOLUMNROWRANGE_HPP_
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
+#include <com/sun/star/table/BorderLine.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TABLE_TABLEBORDER_HPP_
+#include <com/sun/star/table/TableBorder.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SHEET_XDATAPILOTTABLESSUPPLIER_HPP_
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #endif
@@ -237,6 +243,9 @@ class ScCellRangeObj;
 class SvxUnoText;
 class ScLinkListener;
 class ScPatternAttr;
+class SvxBorderLine;
+class SvxBoxItem;
+class SvxBoxInfoItem;
 
 
 typedef ::com::sun::star::uno::Reference<
@@ -252,6 +261,18 @@ SV_DECL_PTRARR_DEL( ScNamedEntryArr_Impl, ScNamedEntryPtr, 4, 4 );
 //                                  und ScCellRangeObj (ohne Index-Access)
 
 //  XServiceInfo ist in den Ableitungen implementiert
+
+class ScHelperFunctions
+{
+public:
+    static const SvxBorderLine* GetBorderLine( SvxBorderLine& rLine, const com::sun::star::table::BorderLine& rStruct );
+    static void FillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const com::sun::star::table::TableBorder& rBorder );
+    static void FillBorderLine( com::sun::star::table::BorderLine& rStruct, const SvxBorderLine* pLine );
+    static void FillTableBorder( com::sun::star::table::TableBorder& rBorder,
+                            const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner );
+    static void ApplyBorder( ScDocShell* pDocShell, const ScRangeList& rRanges,
+                        const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner );
+};
 
 class ScCellRangesBase : public com::sun::star::beans::XPropertySet,
                          public com::sun::star::beans::XMultiPropertySet,

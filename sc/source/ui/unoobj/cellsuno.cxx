@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-27 08:31:53 $
+ *  last change: $Author: sab $ $Date: 2002-10-17 11:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -972,7 +972,7 @@ ScSubTotalFunc lcl_SummaryToSubTotal( sheet::GeneralFunction eSummary )
 
 //------------------------------------------------------------------------
 
-const SvxBorderLine* lcl_GetBorderLine( SvxBorderLine& rLine, const table::BorderLine& rStruct )
+const SvxBorderLine* ScHelperFunctions::GetBorderLine( SvxBorderLine& rLine, const table::BorderLine& rStruct )
 {
     //  Calc braucht Twips, im Uno-Struct sind 1/100mm
 
@@ -987,16 +987,16 @@ const SvxBorderLine* lcl_GetBorderLine( SvxBorderLine& rLine, const table::Borde
         return NULL;
 }
 
-void lcl_FillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const table::TableBorder& rBorder )
+void ScHelperFunctions::FillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const table::TableBorder& rBorder )
 {
     SvxBorderLine aLine;
     rOuter.SetDistance( (USHORT)HMMToTwips( rBorder.Distance ) );
-    rOuter.SetLine( lcl_GetBorderLine( aLine, rBorder.TopLine ),        BOX_LINE_TOP );
-    rOuter.SetLine( lcl_GetBorderLine( aLine, rBorder.BottomLine ),     BOX_LINE_BOTTOM );
-    rOuter.SetLine( lcl_GetBorderLine( aLine, rBorder.LeftLine ),       BOX_LINE_LEFT );
-    rOuter.SetLine( lcl_GetBorderLine( aLine, rBorder.RightLine ),      BOX_LINE_RIGHT );
-    rInner.SetLine( lcl_GetBorderLine( aLine, rBorder.HorizontalLine ), BOXINFO_LINE_HORI );
-    rInner.SetLine( lcl_GetBorderLine( aLine, rBorder.VerticalLine ),   BOXINFO_LINE_VERT );
+    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.TopLine ),     BOX_LINE_TOP );
+    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.BottomLine ),      BOX_LINE_BOTTOM );
+    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.LeftLine ),        BOX_LINE_LEFT );
+    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.RightLine ),       BOX_LINE_RIGHT );
+    rInner.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.HorizontalLine ),  BOXINFO_LINE_HORI );
+    rInner.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.VerticalLine ),    BOXINFO_LINE_VERT );
     rInner.SetValid( VALID_TOP,      rBorder.IsTopLineValid );
     rInner.SetValid( VALID_BOTTOM,   rBorder.IsBottomLineValid );
     rInner.SetValid( VALID_LEFT,     rBorder.IsLeftLineValid );
@@ -1007,7 +1007,7 @@ void lcl_FillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const table::
     rInner.SetTable( TRUE );
 }
 
-void lcl_FillBorderLine( table::BorderLine& rStruct, const SvxBorderLine* pLine )
+void ScHelperFunctions::FillBorderLine( table::BorderLine& rStruct, const SvxBorderLine* pLine )
 {
     if (pLine)
     {
@@ -1021,15 +1021,15 @@ void lcl_FillBorderLine( table::BorderLine& rStruct, const SvxBorderLine* pLine 
             rStruct.OuterLineWidth = rStruct.LineDistance = 0;
 }
 
-void lcl_FillTableBorder( table::TableBorder& rBorder,
+void ScHelperFunctions::FillTableBorder( table::TableBorder& rBorder,
                             const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner )
 {
-    lcl_FillBorderLine( rBorder.TopLine,        rOuter.GetTop() );
-    lcl_FillBorderLine( rBorder.BottomLine,     rOuter.GetBottom() );
-    lcl_FillBorderLine( rBorder.LeftLine,       rOuter.GetLeft() );
-    lcl_FillBorderLine( rBorder.RightLine,      rOuter.GetRight() );
-    lcl_FillBorderLine( rBorder.HorizontalLine, rInner.GetHori() );
-    lcl_FillBorderLine( rBorder.VerticalLine,   rInner.GetVert() );
+    ScHelperFunctions::FillBorderLine( rBorder.TopLine,         rOuter.GetTop() );
+    ScHelperFunctions::FillBorderLine( rBorder.BottomLine,      rOuter.GetBottom() );
+    ScHelperFunctions::FillBorderLine( rBorder.LeftLine,        rOuter.GetLeft() );
+    ScHelperFunctions::FillBorderLine( rBorder.RightLine,       rOuter.GetRight() );
+    ScHelperFunctions::FillBorderLine( rBorder.HorizontalLine,  rInner.GetHori() );
+    ScHelperFunctions::FillBorderLine( rBorder.VerticalLine,    rInner.GetVert() );
 
     rBorder.Distance                = rOuter.GetDistance();
     rBorder.IsTopLineValid          = rInner.IsValid(VALID_TOP);
@@ -1045,7 +1045,7 @@ void lcl_FillTableBorder( table::TableBorder& rBorder,
 
 //! lcl_ApplyBorder nach docfunc verschieben!
 
-void lcl_ApplyBorder( ScDocShell* pDocShell, const ScRangeList& rRanges,
+void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& rRanges,
                         const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
@@ -1805,7 +1805,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const rtl::OUString& aPr
                             if ( pPattern )
                             {
                                 table::TableBorder aBorder;
-                                lcl_FillTableBorder( aBorder,
+                                ScHelperFunctions::FillTableBorder( aBorder,
                                         (const SvxBoxItem&)pPattern->GetItem(ATTR_BORDER),
                                         (const SvxBoxInfoItem&)pPattern->GetItem(ATTR_BORDER_INNER) );
                                 aAny <<= aBorder;
@@ -2036,9 +2036,9 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMap* pMap, cons
                         {
                             SvxBoxItem aOuter(ATTR_BORDER);
                             SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
-                            lcl_FillBoxItems( aOuter, aInner, aBorder );
+                            ScHelperFunctions::FillBoxItems( aOuter, aInner, aBorder );
 
-                            lcl_ApplyBorder( pDocShell, aRanges, aOuter, aInner );  //! docfunc
+                            ScHelperFunctions::ApplyBorder( pDocShell, aRanges, aOuter, aInner );   //! docfunc
                         }
                     }
                     break;
@@ -2214,7 +2214,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertyMap* pMap,
                             pDoc->GetSelectionFrame( aMark, aOuter, aInner );
 
                             table::TableBorder aBorder;
-                            lcl_FillTableBorder( aBorder, aOuter, aInner );
+                            ScHelperFunctions::FillTableBorder( aBorder, aOuter, aInner );
                             rAny <<= aBorder;
                         }
                     }
