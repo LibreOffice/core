@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-17 19:04:16 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 09:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,6 +628,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     bDontCreateCancellable( sal_False ), pSource( NULL ), pSink( NULL ), pTempDir( NULL ),
     bDownloadDone( sal_True ), nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL )
 {
+    aDoneLink.CreateMutex();
 }
 
 //------------------------------------------------------------------
