@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotus.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-26 19:19:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ extern FltError ScImportLotus123old( SvStream&, ScDocument*, CharSet eSrc );
 
 FltError ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, CharSet eSrc )
 {
-    ScFilterOptions aFilterOpt;
+        ScFilterOptions aFilterOpt;
     BOOL bWithWK3 = aFilterOpt.GetWK3Flag();
 
     SvStream*           pStream = rMedium.GetInStream();
