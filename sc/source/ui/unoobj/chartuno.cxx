@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-11 13:31:17 $
+ *  last change: $Author: nn $ $Date: 2001-01-11 15:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,6 +641,20 @@ uno::Reference<lang::XComponent> SAL_CALL ScChartObj::getEmbeddedObject() throw(
         }
     }
     return NULL;
+}
+
+// XNamed
+
+rtl::OUString SAL_CALL ScChartObj::getName() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return aChartName;
+}
+
+void SAL_CALL ScChartObj::setName( const rtl::OUString& aName ) throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    throw uno::RuntimeException();      // name cannot be changed
 }
 
 //------------------------------------------------------------------------
