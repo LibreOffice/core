@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-30 11:43:56 $
+ *  last change: $Author: mav $ $Date: 2002-04-30 13:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
+#include <com/sun/star/document/XExporter.hpp>
 #endif
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
@@ -164,6 +168,7 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::document;
 
 //====================================================================
 
@@ -619,6 +624,10 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                                     if( xFilterDialog.is() && xFilterProperties.is() )
                                     {
                                         bDialogUsed = sal_True;
+
+                                        Reference< XExporter > xExporter( xFilterDialog, UNO_QUERY );
+                                        if( xExporter.is() )
+                                            xExporter->setSourceDocument( Reference< XComponent >( GetModel(), UNO_QUERY ) );
 
                                         Sequence< PropertyValue > aPropsForDialog;
                                         TransformItems( pRequest->GetSlot(), *pParams, aPropsForDialog, NULL );
