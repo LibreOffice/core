@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-17 08:42:32 $
+ *  last change: $Author: dg $ $Date: 2000-11-23 11:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@ namespace configmgr
     IMPLEMENT_CONSTASCII_USTRING(STATE_MODIFIED,     "modified");
     IMPLEMENT_CONSTASCII_USTRING(STATE_REPLACED,     "replaced");
     IMPLEMENT_CONSTASCII_USTRING(STATE_DELETED,      "deleted");
+
+    // the default separator for strings
+    IMPLEMENT_CONSTASCII_USTRING(DEFAULT_SEPARATOR,  " ");
 
 // emacs:
 // create the declare from the implement
