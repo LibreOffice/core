@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:33:45 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,20 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMultiServiceFactory_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
+#include <com/sun/star/task/XJobExecutor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHHELPER_HPP_
+#include <com/sun/star/frame/XDispatchHelper.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -126,8 +138,13 @@
 #ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
 #endif
+#ifndef _VCL_STDTEXT_HXX
+#include <vcl/stdtext.hxx>
+#endif
 
 #include <svtools/pathoptions.hxx>
+#include <svtools/moduleoptions.hxx>
+#include <svtools/regoptions.hxx>
 #include <svtools/helpopt.hxx>
 
 #pragma hdrstop
@@ -893,4 +910,271 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
         ++pRanges;
     }
+}
+
+static const ::rtl::OUString& getProductRegistrationServiceName( )
+{
+    static ::rtl::OUString s_sServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.setup.ProductRegistration" );
+    return s_sServiceName;
+}
+
+typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(BOOL, BOOL, rtl_uString*);
+
+#define DOSTRING( x )                       #x
+#define STRING( x )                         DOSTRING( x )
+
+::rtl::OUString ChooseMacro( BOOL bExecute, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc = ::rtl::OUString() )
+{
+    // get basctl dllname
+    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
+    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
+    ::rtl::OUString aLibName( sLibName );
+
+    // load module
+    oslModule handleMod = osl_loadModule( aLibName.pData, 0 );
+
+    // get symbol
+    ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_choose_macro" ) );
+    basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getSymbol( handleMod, aSymbol.pData );
+
+    // call basicide_choose_macro in basctl
+    rtl_uString* pScriptURL = pSymbol( bExecute, bChooseOnly, rMacroDesc.pData );
+
+    ::rtl::OUString aScriptURL( pScriptURL );
+    rtl_uString_release( pScriptURL );
+    return aScriptURL;
+}
+
+#define RID_ERRBOX_MODULENOTINSTALLED     (RID_OFA_START + 72)
+
+ResMgr* SfxApplication::GetOffResManager_Impl()
+{
+    if ( !pImp->pOfaResMgr )
+        pImp->pOfaResMgr = CreateResManager( "ofa");
+    return pImp->pOfaResMgr;
+}
+
+void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
+{
+    DBG_MEMTEST();
+    FASTBOOL bDone = FALSE;
+    switch ( rReq.GetSlot() )
+    {
+        case SID_ONLINE_REGISTRATION:
+        {
+            try
+            {
+                // create the ProductRegistration component
+                Reference< com::sun::star::lang::XMultiServiceFactory > xORB( ::comphelper::getProcessServiceFactory() );
+                Reference< com::sun::star::task::XJobExecutor > xProductRegistration;
+                if ( xORB.is() )
+                    xProductRegistration = xProductRegistration.query( xORB->createInstance( getProductRegistrationServiceName() ) );
+                DBG_ASSERT( xProductRegistration.is(), "OfficeApplication::ExecuteApp_Impl: could not create the service!" );
+
+                // tell it that the user wants to register
+                if ( xProductRegistration.is() )
+                {
+                    xProductRegistration->trigger( ::rtl::OUString::createFromAscii( "RegistrationRequired" ) );
+                }
+            }
+            catch( const ::com::sun::star::uno::Exception& )
+            {
+                DBG_ERROR( "OfficeApplication::ExecuteApp_Impl(SID_ONLINE_REGISTRATION): caught an exception!" );
+            }
+        }
+        break;
+
+        case SID_BASICIDE_APPEAR:
+        {
+            rReq.Done();
+            SfxViewFrame* pView = SfxViewFrame::GetFirst();
+            ::rtl::OUString aBasicName = ::rtl::OUString::createFromAscii("com.sun.star.comp.basic.BasicIDE");
+            while ( pView )
+            {
+                if ( pView->GetObjectShell()->GetFactory().GetDocumentServiceName() == aBasicName )
+                    break;
+                pView = SfxViewFrame::GetNext( *pView );
+            }
+
+            if ( !pView )
+            {
+                SfxObjectShell* pDocShell = SfxObjectShell::CreateObject( aBasicName );
+                pDocShell->DoInitNew( 0 );
+                pDocShell->SetModified( FALSE );
+                pView = SFX_APP()->CreateViewFrame( *pDocShell, 0 );
+                pView->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC:1" ) ) );
+            }
+            else
+                pView->GetFrame()->Appear();
+        }
+        break;
+
+        case SID_BASICCHOOSER:
+        {
+            const SfxItemSet* pArgs = rReq.GetArgs();
+            const SfxPoolItem* pItem;
+            BOOL bChooseOnly = FALSE, bExecute = TRUE;
+            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_RECORDMACRO, sal_False, &pItem) )
+            {
+                BOOL bRecord = ((SfxBoolItem*)pItem)->GetValue();
+                if ( bRecord )
+                {
+                    // !Hack
+                    bChooseOnly = FALSE;
+                    bExecute = FALSE;
+                }
+            }
+
+            rReq.SetReturnValue( SfxStringItem( rReq.GetSlot(), ChooseMacro( bExecute, bChooseOnly ) ) );
+            rReq.Done();
+        }
+        break;
+
+        case SID_OFFICE_CHECK_PLZ:
+        {
+            sal_Bool bRet = sal_False;
+            SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, rReq.GetSlot(), sal_False);
+
+            if ( pStringItem )
+            {
+                String aPLZ = pStringItem->GetValue();
+                bRet = TRUE /*!!!SfxIniManager::CheckPLZ( aPLZ )*/;
+            }
+            else
+                SbxBase::SetError( SbxERR_WRONG_ARGS );
+            rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bRet ) );
+        }
+        break;
+
+        case SID_SD_AUTOPILOT :
+        case SID_NEWSD :
+        {
+            SvtModuleOptions aModuleOpt;
+            if ( !aModuleOpt.IsImpress() )
+            {
+                ErrorBox( 0, ResId( RID_ERRBOX_MODULENOTINSTALLED, GetOffResManager_Impl() )).Execute();
+                return;
+            }
+
+            Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+            Reference< com::sun::star::frame::XDispatchProvider > xProv(
+                xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
+
+            if ( xProv.is() )
+            {
+                ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
+                Reference< com::sun::star::frame::XDispatchHelper > xHelper(
+                    xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
+                if ( xHelper.is() )
+                {
+                    Sequence < com::sun::star::beans::PropertyValue > aSeq;
+                    if ( rReq.GetArgs() )
+                        TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
+                    xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
+                }
+            }
+        }
+        break;
+
+        case SID_SW_AGENDA_WIZZARD :
+        case SID_SW_FAX_WIZZARD :
+        case SID_SW_LETTER_WIZZARD :
+        case SID_SW_MEMO_WIZZARD :
+        case FN_LABEL :
+        case FN_BUSINESS_CARD :
+        {
+            Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+            Reference< com::sun::star::frame::XDispatchProvider > xProv(
+                xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.text.ModuleDispatcher")), UNO_QUERY );
+
+            if ( xProv.is() )
+            {
+                ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
+                Reference< com::sun::star::frame::XDispatchHelper > xHelper(
+                    xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
+                if ( xHelper.is() )
+                {
+                    Sequence < com::sun::star::beans::PropertyValue > aSeq;
+                    if ( rReq.GetArgs() )
+                        TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
+                    xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
+                }
+            }
+        }
+        break;
+
+        case SID_ADDRESS_DATA_SOURCE:
+        case SID_DATASOURCE_ADMINISTRATION:
+        case SID_SDB52_IMPORT_WIZARD:
+        {
+            ::rtl::OUString sDialogServiceName;
+            if ( rReq.GetSlot() == SID_ADDRESS_DATA_SOURCE )
+                sDialogServiceName = ::rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.AddressBookSourcePilot");
+            else if ( rReq.GetSlot() == SID_DATASOURCE_ADMINISTRATION )
+                sDialogServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.DatasourceAdministrationDialog");
+            else
+                sDialogServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.DatabaseImportWizard");
+            try
+            {
+                Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+                Reference< com::sun::star::ui::dialogs::XExecutableDialog > xDialog;
+                if (xORB.is())
+                    xDialog = Reference< com::sun::star::ui::dialogs::XExecutableDialog >(xORB->createInstance(sDialogServiceName), UNO_QUERY);
+                if (xDialog.is())
+                    xDialog->execute();
+                else
+                    ShowServiceNotAvailableError(NULL, sDialogServiceName, TRUE);
+            }
+            catch(::com::sun::star::uno::Exception&)
+            {
+            }
+        }
+        break;
+
+        case SID_COMP_BIBLIOGRAPHY:
+        {
+            SfxStringItem aURL(SID_FILE_NAME, String::CreateFromAscii(".component:Bibliography/View1"));
+            SfxStringItem aRef(SID_REFERER, String::CreateFromAscii("private:user"));
+            SfxStringItem aTarget(SID_TARGETNAME, String::CreateFromAscii("_blank"));
+            SfxViewFrame::Current()->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aURL, &aRef, &aTarget, 0L);
+        }
+        break;
+    }
+}
+
+void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
+{
+    const USHORT *pRanges = rSet.GetRanges();
+    DBG_ASSERT(pRanges && *pRanges, "Set ohne Bereich");
+    while ( *pRanges )
+    {
+        for(USHORT nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
+        {
+            switch(nWhich)
+            {
+                case SID_ONLINE_REGISTRATION:
+                {
+                    ::svt::RegOptions aOptions;
+                    if ( !aOptions.allowMenu() )
+                        rSet.DisableItem( SID_ONLINE_REGISTRATION );
+                }
+                break;
+            }
+        }
+    }
+
+    SvtModuleOptions aModuleOpt;
+
+    if( !aModuleOpt.IsWriter())
+    {
+        rSet.DisableItem( SID_SW_AGENDA_WIZZARD );
+        rSet.DisableItem( SID_SW_FAX_WIZZARD );
+        rSet.DisableItem( SID_SW_LETTER_WIZZARD );
+        rSet.DisableItem( SID_SW_MEMO_WIZZARD );
+        rSet.DisableItem( FN_LABEL );
+        rSet.DisableItem( FN_BUSINESS_CARD );
+    }
+
+    if ( !aModuleOpt.IsImpress() )
+        rSet.DisableItem( SID_SD_AUTOPILOT );
 }
