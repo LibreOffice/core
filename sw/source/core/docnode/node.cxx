@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:25:39 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1443,7 +1443,7 @@ BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
         {
             SwTxtNode * pTxtNode = (SwTxtNode*)this;
             pItem = (SwNumRuleItem*)GetNoCondAttr(RES_PARATR_NUMRULE, TRUE );
-            const SwNodeNum * pNum = pTxtNode->GetNum(pTxtNode->IsOutlineNum());
+            const SwNodeNum * pNum = pTxtNode->GetNum(); // #115901#
 
             if (0 != pItem  &&
                 pItem->GetValue().Len() &&
