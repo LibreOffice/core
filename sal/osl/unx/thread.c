@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-14 07:39:37 $
+ *  last change: $Author: obr $ $Date: 2001-05-14 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,94 +843,6 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
     /* wait till it is canceled */
     pthread_join(pThreadImpl->m_hThread, NULL);
     return;
-}
-
-/*****************************************************************************/
-/* osl_sleepThread */
-/*****************************************************************************/
-oslThreadSleep SAL_CALL osl_sleepThread(oslThread Thread, const TimeValue* pDelay)
-{
-    osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
-
-    /* invalid arguments?*/
-    if (pThreadImpl == NULL || PTHREAD_VALUE(pThreadImpl->m_hThread)==0 || pDelay==0)
-        return osl_Thread_SleepError;
-
-    if (pThreadImpl->m_Flags & THREADIMPL_FLAGS_SLEEP)
-        return osl_Thread_SleepActive;
-
-    if (pthread_equal(pThreadImpl->m_hThread, pthread_self()))
-    {
-        int ret;
-        struct timeval  now;
-        struct timespec delay;
-
-        pthread_mutex_lock(&pThreadImpl->m_HandleLock);
-        pThreadImpl->m_Timeout = 0;
-        pThreadImpl->m_Flags |=  THREADIMPL_FLAGS_SLEEP;
-        pthread_mutex_unlock(&pThreadImpl->m_HandleLock);
-
-        gettimeofday(&now, NULL);
-
-        SET_TIMESPEC(delay, now.tv_sec + (unsigned long) pDelay->Seconds,
-                      (now.tv_usec * 1000) + (unsigned long) pDelay->Nanosec);
-
-        pthread_mutex_lock(&pThreadImpl->m_AccessLock);
-
-        /* spurious wake up prevention */
-        do
-        {
-            ret = pthread_cond_timedwait(&pThreadImpl->m_Suspend, &pThreadImpl->m_AccessLock, &delay);
-        }
-        while ( ret != 0 && ( ret != ETIME && ret != ETIMEDOUT ) );
-
-        pthread_mutex_unlock(&pThreadImpl->m_AccessLock);
-
-
-        pthread_mutex_lock(&pThreadImpl->m_HandleLock);
-        pThreadImpl->m_Flags &= ~THREADIMPL_FLAGS_SLEEP;
-        pthread_mutex_unlock(&pThreadImpl->m_HandleLock);
-
-        return (ret == ETIME || ret == ETIMEDOUT ) ? osl_Thread_SleepNormal :
-                                osl_Thread_SleepCancel;
-    }
-    else
-    {
-        pthread_mutex_lock(&pThreadImpl->m_HandleLock);
-
-        pThreadImpl->m_Timeout = pDelay->Seconds*1000+pDelay->Nanosec/1000000;
-        pThreadImpl->m_Flags |=  THREADIMPL_FLAGS_SLEEP;
-
-        pthread_mutex_unlock(&pThreadImpl->m_HandleLock);
-
-        return osl_Thread_SleepPending;
-    }
-}
-
-/*****************************************************************************/
-/* osl_awakeThread */
-/*****************************************************************************/
-sal_Bool SAL_CALL osl_awakeThread(oslThread Thread)
-{
-    osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
-
-    /* invalid arguments?*/
-    if (pThreadImpl==NULL || PTHREAD_VALUE(pThreadImpl->m_hThread)==0)
-    {
-        /* assume thread is not running */
-        return sal_False;
-    }
-
-    pthread_mutex_lock(&pThreadImpl->m_HandleLock);
-
-    if (pThreadImpl->m_Flags & THREADIMPL_FLAGS_SLEEP)
-        pthread_cond_signal(&pThreadImpl->m_Suspend);
-
-    pThreadImpl->m_Flags &= ~THREADIMPL_FLAGS_SLEEP;
-
-    pthread_mutex_unlock(&pThreadImpl->m_HandleLock);
-
-    return sal_True;
 }
 
 /*****************************************************************************/

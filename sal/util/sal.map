@@ -9,7 +9,6 @@ UDK_2_0_0 {
         osl_addSignalHandler;
         osl_addToSocketSet;
         osl_assertFailedLine;
-        osl_awakeThread;
         osl_bindAddrToSocket;
         osl_breakDebug;
         osl_checkCondition;
@@ -148,7 +147,6 @@ UDK_2_0_0 {
         osl_setThreadPriority;
         osl_setThreadTextEncoding;
         osl_shutdownSocket;
-        osl_sleepThread;
         osl_suspendThread;
         osl_terminateProcess;
         osl_terminateThread;

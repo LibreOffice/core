@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 13:01:52 $
+ *  last change: $Author: obr $ $Date: 2001-05-14 09:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,17 +101,6 @@ typedef enum
 } oslThreadPriority;
 
 
-typedef enum
-{
-    osl_Thread_SleepNormal,
-    osl_Thread_SleepCancel,
-    osl_Thread_SleepPending,
-    osl_Thread_SleepActive,
-    osl_Thread_SleepError,
-    osl_Thread_SleepUnknown,                /* don't use to set */
-    osl_Thread_Sleep_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
-} oslThreadSleep;
-
 typedef sal_uInt32 oslThreadIdentifier;
 
 typedef sal_uInt32 oslThreadKey;
@@ -184,17 +173,6 @@ sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread);
     Returns immediately if Thread is NULL.
 */
 void SAL_CALL osl_joinWithThread(oslThread Thread);
-
-/** Blocks the calling thread at least for the given number of
-    of time. Returns False if the sleep is aborted by a call
-    to awakeThread.
-*/
-oslThreadSleep SAL_CALL osl_sleepThread(oslThread Thread, const TimeValue* pDelay);
-
-/** Awake a sleeping thread. Returns False if at least one of
-    the handles is invalid or the thread is not sleeping.
-*/
-sal_Bool SAL_CALL osl_awakeThread(oslThread Thread);
 
 /** Blocks the calling thread at least for the given number
     of time.

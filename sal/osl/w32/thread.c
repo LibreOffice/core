@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-09 14:45:39 $
+ *  last change: $Author: obr $ $Date: 2001-05-14 09:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,89 +421,6 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
     }
 
     WaitForSingleObject(pThreadImpl->m_hThread, INFINITE);
-}
-
-/*****************************************************************************/
-/* osl_sleepThread */
-/*****************************************************************************/
-oslThreadSleep SAL_CALL osl_sleepThread(oslThread Thread, const TimeValue* pDelay)
-{
-    DWORD            millisecs;
-    osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
-
-    /* invalid arguments?*/
-    if (pThreadImpl==0 || pThreadImpl->m_hThread==0 || pDelay==0)
-        return osl_Thread_SleepError;
-
-    if (pThreadImpl->m_Flags & THREADIMPL_FLAGS_SLEEP)
-        return osl_Thread_SleepActive;
-
-    EnterCriticalSection(&pThreadImpl->m_Mutex);
-
-    millisecs = pDelay->Seconds * 1000L + pDelay->Nanosec / 1000000L;
-
-    if (pThreadImpl->m_hEvent == 0)
-        pThreadImpl->m_hEvent= CreateEvent(NULL, FALSE, FALSE, NULL);
-    else
-        ResetEvent(pThreadImpl->m_hEvent);
-
-    if (pThreadImpl->m_ThreadId == GetCurrentThreadId())
-    {
-        DWORD ret;
-
-        pThreadImpl->m_Timeout = 0;
-        pThreadImpl->m_Flags |=  THREADIMPL_FLAGS_SLEEP;
-
-        LeaveCriticalSection(&pThreadImpl->m_Mutex);
-
-        ret = WaitForSingleObject(pThreadImpl->m_hEvent, millisecs);
-
-        EnterCriticalSection(&pThreadImpl->m_Mutex);
-
-        pThreadImpl->m_Flags &=  ~THREADIMPL_FLAGS_SLEEP;
-
-        LeaveCriticalSection(&pThreadImpl->m_Mutex);
-
-        return (ret == WAIT_TIMEOUT) ? osl_Thread_SleepNormal :
-                                       osl_Thread_SleepCancel;
-    }
-    else
-    {
-        pThreadImpl->m_Timeout = millisecs;
-        pThreadImpl->m_Flags |=  THREADIMPL_FLAGS_SLEEP;
-
-        LeaveCriticalSection(&pThreadImpl->m_Mutex);
-
-        return osl_Thread_SleepPending;
-    }
-}
-
-/*****************************************************************************/
-/* osl_awakeThread */
-/*****************************************************************************/
-sal_Bool SAL_CALL osl_awakeThread(oslThread Thread)
-{
-    osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
-
-    /* invalid arguments?*/
-    if (pThreadImpl==0 || pThreadImpl->m_hThread==0)
-    {
-        /* assume thread is not running */
-        return sal_False;
-    }
-
-    EnterCriticalSection(&pThreadImpl->m_Mutex);
-
-    if (pThreadImpl->m_Flags & THREADIMPL_FLAGS_SLEEP)
-    {
-        SetEvent(pThreadImpl->m_hEvent);
-    }
-
-    pThreadImpl->m_Flags &= ~THREADIMPL_FLAGS_SLEEP;
-
-    LeaveCriticalSection(&pThreadImpl->m_Mutex);
-
-    return sal_True;
 }
 
 /*****************************************************************************/

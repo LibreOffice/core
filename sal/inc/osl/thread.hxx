@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 09:48:09 $
+ *  last change: $Author: obr $ $Date: 2001-05-14 09:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,16 +176,6 @@ public:
     static oslThreadIdentifier SAL_CALL getCurrentIdentifier()
     {
         return osl_getThreadIdentifier(0);
-    }
-
-    virtual oslThreadSleep SAL_CALL sleep(const TimeValue& Delay)
-    {
-        return osl_sleepThread(m_hThread, &Delay);
-    }
-
-    virtual sal_Bool SAL_CALL awake()
-    {
-        return osl_awakeThread(m_hThread);
     }
 
     static void SAL_CALL wait(const TimeValue& Delay)
