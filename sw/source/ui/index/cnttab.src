@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-23 11:28:59 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,7 +585,7 @@ TabPage TP_TOX_SELECT
         < "Spis tabel" ;    TO_TABLE        ;> ;
         < "Zdefiniowane przez u¿ytkownika" ;    TO_USER         ;> ;
         < "Spis obiektów" ;     TO_OBJECT       ;> ;
-        < "Spis literatury" ;   TO_AUTHORITIES  ;> ;
+        < "Bibliografia" ;  TO_AUTHORITIES  ;> ;
     };
     StringList [ portuguese_brazilian ] =
     {
@@ -1022,7 +1022,7 @@ TabPage TP_TOX_SELECT
         Text [ ENGLISH ] = "Captions" ;
         Text[ english_us ] = "Captions";
         Text[ portuguese ] = "~Legendas";
-        Text[ russian ] = "Íàçâàíèÿ";
+        Text[ russian ] = "Ïîäïèñè";
         Text[ greek ] = "Åğéãñáöİò";
         Text[ dutch ] = "~Bijschriften";
         Text[ french ] = "Légendes";
@@ -1080,7 +1080,7 @@ TabPage TP_TOX_SELECT
         Text = "~Anzeige" ;
         Text [ ENGLISH ] = "Display" ;
         Text[ english_us ] = "Display";
-        Text[ portuguese ] = "~Monitor";
+        Text[ portuguese ] = "~Visualização";
         Text[ russian ] = "Ïîêàçàòü";
         Text[ greek ] = "Ïèüíç";
         Text[ dutch ] = "~Weergave";
@@ -1331,7 +1331,7 @@ TabPage TP_TOX_SELECT
         Text[ korean ] = "µ¿ÀÏ Ç×¸ñ Á¶ÇÕ";
         Text[ chinese_simplified ] = "ºÏ²¢ÏàÍ¬µÄÌõÄ¿";
         Text[ chinese_traditional ] = "¦X¦}¦P¤@±ø¥Ø";
-        Text[ arabic ] = "Öã ÇáÅÏÎÇáÇÊ ÇáãÊãÇËáÉ";
+        Text[ arabic ] = "ÊáÎíÕ ÇáÅÏÎÇáÇÊ ÇáãÊãÇËáÉ";
         Text[ turkish ] = "~Eş girişleri birleştir";
     };
     CheckBox        CB_USEFF
@@ -1341,13 +1341,13 @@ TabPage TP_TOX_SELECT
         Text = "Zusammenfassen mit ~f oder ff" ;
         Text [ english ] = "Combine identical entries with ~pp." ;
         Text[ english_us ] = "Combine identical entries with p or ~pp";
-        Text[ portuguese ] = "Combinar com entradas ~seguinte(s)";
+        Text[ portuguese ] = "Agrupar com ~seg. ou segs.";
         Text[ russian ] = "Îáúåäèíÿòü ıëåìåíòû ñ ñ èëè ññ";
-        Text[ greek ] = "ÁíÜëõóç ìå ~å Ş ìå åğ.";
+        Text[ greek ] = "Óıíïøç ìå p Ş ìå pp";
         Text[ dutch ] = "Samenvatten met ~e.v.";
         Text[ french ] = "~avec \"et suiv.\"";
         Text[ spanish ] = "Combinar entradas con las ~siguiente(s)";
-        Text[ italian ] = "Riunisci con ~p. o pp.";
+        Text[ italian ] = "Riunisci con ~seg. o segg.";
         Text[ danish ] = "Kombiner med f. eller ff.";
         Text[ swedish ] = "Kombinera med ~f eller ff";
         Text[ polish ] = "Streœæ za pomoc¹ s lub ss";
@@ -1356,7 +1356,7 @@ TabPage TP_TOX_SELECT
         Text[ korean ] = "p ¶Ç´Âpp¿Í µ¿ÀÏ Ç×¸ñÀ» ÇÏ³ª·Î ¹­À½(~P)";
         Text[ chinese_simplified ] = "ºÏ²¢´ø f »ò ff µÄÌõÄ¿(~P)";
         Text[ chinese_traditional ] = "¦X¦}¥Î ~f ©Î ff";
-        Text[ arabic ] = "Combine identical entries with ~pp.";
+        Text[ arabic ] = "ÊáÎíÕ ÈÇÓÊÎÏÇã p.  Ãæ  pp";
         Text[ turkish ] = "Sonraki ~sayfa ya da sayfalar ile birleştir";
     };
     CheckBox CB_USE_DASH
@@ -1381,7 +1381,7 @@ TabPage TP_TOX_SELECT
         Text[ korean ] = "-¿Í µ¿ÀÏ Ç×¸ñ Á¶ÇÕ";
         Text[ chinese_simplified ] = "ÓÃ - ºÏ²¢";
         Text[ chinese_traditional ] = "¦X¦}¥Î -";
-        Text[ arabic ] = "Öã ÈÇÓÊÎÏÇã -";
+        Text[ arabic ] = "ÊáÎíÕ ÈÇÓÊÎÏÇã -";
         Text[ turkish ] = "~Birleşme -";
     };
     CheckBox        CB_CASESENSITIVE
@@ -1400,7 +1400,7 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Maiuscole/minu~scole";
         Text[ danish ] = "Forskel på store og små bogstaver";
         Text[ swedish ] = "Observera stor och liten bo~kstav";
-        Text[ polish ] = "Uwzglêd~nij ma³e i du¿e litery";
+        Text[ polish ] = "Uwzglêd~nij wielkie i ma³e litery";
         Text[ portuguese_brazilian ] = "Case sensitive";
         Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê";
         Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ";
@@ -1426,13 +1426,13 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Scrivi le voci maiusc~ole";
         Text[ danish ] = "Skriv elementer automatisk med stort";
         Text[ swedish ] = "Skriv ~automatiskt poster med stor bokstav";
-        Text[ polish ] = "Wpisy autom. zapisywa~æ du¿ymi literami";
+        Text[ polish ] = "Wpisy autom. zapisywa~æ wielkimi literami";
         Text[ portuguese_brazilian ] = "Capitalize entries";
         Text[ japanese ] = "Œê“ª‚ğ©“®“I‚É‘å•¶š‚É‚·‚é";
         Text[ korean ] = "´ë¹®ÀÚ Ç×¸ñ";
         Text[ chinese_simplified ] = "×Ô¶¯×ª»»³É´óĞ´ÌõÄ¿";
         Text[ chinese_traditional ] = "Âà°ÊÂà´«¦¨¤j¼g¦r¥À";
-        Text[ arabic ] = "ßÊÇÈÉ ÇáÅÏÎÇáÇÊ ÈÃÍÑİ ßÈíÑÉ ÊáŞÇÆíÇğ";
+        Text[ arabic ] = "ÈÏÁ ÇáÅÏÎÇáÇÊ ÈÃÍÑİ ßÈíÑÉ ÊáŞÇÆíÇğ";
         Text[ turkish ] = "Girişleri otomatik olarak büyük harfle başla";
         Text[ language_user1 ] = " ";
     };
@@ -1458,7 +1458,7 @@ TabPage TP_TOX_SELECT
         Text[ korean ] = "ºĞ¸® Ç×¸ñÀ¸·Î¼­ÀÇ Å°";
         Text[ chinese_simplified ] = "¼üÂë×÷Îªµ¥¶ÀµÄÌõÄ¿";
         Text[ chinese_traditional ] = "Áä½X·í§@¤@­Ó¦Û¤vªº±ø¥Ø";
-        Text[ arabic ] = "ÇáãİÊÇÍ ßÅÏÎÇá ãäİÕá";
+        Text[ arabic ] = "ÇáãİÊÇÍ ßÅÏÎÇá ãÓÊŞá";
         Text[ turkish ] = "Anahtarları ayrı giriş olarak gir";
     };
     CheckBox    CB_FROMFILE
@@ -1821,7 +1821,7 @@ TabPage TP_TOX_SELECT
             < "StarOffice Chart" ;          2;> ;
             < "StarOffice Calc" ;               8;> ;
             < "StarOffice Draw/StarOffice Impress" ;    16;> ;
-            < "Other OLE objects";  128;> ;
+            < "Other OLE Objects";  128;> ;
         };
         ItemList [ portuguese ] =
         {
@@ -1829,7 +1829,7 @@ TabPage TP_TOX_SELECT
             < "StarOffice Chart" ;          2;> ;
             < "StarOffice Calc" ;               8;> ;
             < "StarOffice Draw/StarOffice Impress" ;    16;> ;
-            < "Outros obejctos OLE";    128;> ;
+            < "Outros objectos OLE";    128;> ;
         };
         ItemList [ russian ] =
         {
@@ -1837,7 +1837,7 @@ TabPage TP_TOX_SELECT
             < "StarOffice Chart" ;          2;> ;
             < "StarOffice Calc" ;               8;> ;
             < "StarOffice Draw/StarOffice Impress" ;    16;> ;
-            < "Äğóãèå îáúêòû OLE";  128;> ;
+            < "Äğóãèå îáúåêòû OLE";     128;> ;
         };
         ItemList [ greek ] =
         {
@@ -1875,16 +1875,16 @@ TabPage TP_TOX_SELECT
         {
             < "StarOffice Math" ;               1;> ;
             < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
-            < "Altri oggetti OLE";  128;> ;
+            < "StarOffice Image" ;              8;> ;
+            < "StarOffice Calc" ;   16;> ;
+            < "StarOffice Draw/StarOffice Impress";     128;> ;
         };
         ItemList [ danish ] =
         {
             < "StarOffice Math" ;               1;> ;
             < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "StarCalc" ;              8;> ;
+            < "StarDraw/StarImpress" ;  16;> ;
             < "Andre OLE-objekter";     128;> ;
         };
         ItemList [ swedish ] =
@@ -1907,9 +1907,9 @@ TabPage TP_TOX_SELECT
         {
             < "StarOffice Math" ;               1;> ;
             < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
-            < "Andere OLE-Objekte";     128;> ;
+            < "StarOffice Image" ;              8;> ;
+            < "StarOffice Calc" ;   16;> ;
+            < "StarOffice Draw/StarOffice Impress";     128;> ;
         };
         ItemList [ japanese ] =
         {
@@ -1917,15 +1917,15 @@ TabPage TP_TOX_SELECT
             < "StarOffice Chart" ;          2;> ;
             < "StarOffice Calc" ;               8;> ;
             < "StarOffice Draw/StarOffice Impress" ;    16;> ;
-            < "‚Ù‚©‚Ì OLE µÌŞ¼Şª¸Ä";    128;> ;
+            < "‚»‚Ì‚Ù‚©‚Ì OLE µÌŞ¼Şª¸Ä";    128;> ;
         };
         ItemList [ korean ] =
         {
             < "StarOffice Math" ;               1;> ;
             < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
-            < "±âÅ¸ OLE °³Ã¼";  128;> ;
+            < "StarOffice Image" ;              8;> ;
+            < "StarOffice Calc" ;   16;> ;
+            < "StarOffice Draw/StarOffice Impress";     128;> ;
         };
         ItemList [ chinese_simplified ] =
         {
@@ -1933,7 +1933,7 @@ TabPage TP_TOX_SELECT
             < "StarOffice Chart" ;          2;> ;
             < "StarOffice Calc" ;               8;> ;
             < "StarOffice Draw/StarOffice Impress" ;    16;> ;
-            < "ÆäËü OLE ¶ÔÏó";  128;> ;
+            < "ÆäËû OLE ¶ÔÏó";  128;> ;
         };
         ItemList [ chinese_traditional ] =
         {
@@ -1941,7 +1941,7 @@ TabPage TP_TOX_SELECT
             < "StarOffice Chart" ;          2;> ;
             < "StarOffice Calc" ;               8;> ;
             < "StarOffice Draw/StarOffice Impress" ;    16;> ;
-            < "¨ä¥L OLE ª«¥ó";  128;> ;
+            < "¨ä¥¦ªº OLE ª«¥ó";    128;> ;
         };
         ItemList [ arabic ] =
         {
@@ -1955,9 +1955,9 @@ TabPage TP_TOX_SELECT
         {
             < "StarOffice Math" ;               1;> ;
             < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Calc" ;               8;> ;
-            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
-            < "Diğer OLE nesneleri";    128;> ;
+            < "StarOffice Image" ;              8;> ;
+            < "StarOffice Calc" ;   16;> ;
+            < "StarOffice Draw/StarOffice Impress";     128;> ;
         };
     };
     };
@@ -2954,7 +2954,7 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Caratteri riempitivi";
         Text[ danish ] = "Fyldtegn";
         Text[ swedish ] = "Ut~fyllnadstecken";
-        Text[ polish ] = "Znak-wype³niacz";
+        Text[ polish ] = "Symbol wieloznaczny";
         Text[ portuguese_brazilian ] = "Fill character";
         Text[ japanese ] = "Ø°ÀŞ°";
         Text[ korean ] = "¹®ÀÚ Ã¤¿ì±â";
@@ -3511,7 +3511,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ greek ] = "Áıîïõóá";
         QuickHelpText[ dutch ] = "Aplopend";
         QuickHelpText[ french ] = "Croissant";
-        QuickHelpText[ spanish ] = "Ascending";
+        QuickHelpText[ spanish ] = "Ascendiente";
         QuickHelpText[ italian ] = "Crescente";
         QuickHelpText[ danish ] = "Stigende";
         QuickHelpText[ swedish ] = "Stigande";
@@ -3543,7 +3543,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ greek ] = "Öèßíïõóá";
         QuickHelpText[ dutch ] = "Aflopend";
         QuickHelpText[ french ] = "Décroissant";
-        QuickHelpText[ spanish ] = "Descending";
+        QuickHelpText[ spanish ] = "Descendiente";
         QuickHelpText[ italian ] = "Decrescente";
         QuickHelpText[ danish ] = "Faldende";
         QuickHelpText[ swedish ] = "Fallande";
@@ -3576,7 +3576,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ greek ] = "Áıîïõóá";
         QuickHelpText[ dutch ] = "Oplopend";
         QuickHelpText[ french ] = "Croissant";
-        QuickHelpText[ spanish ] = "Ascending";
+        QuickHelpText[ spanish ] = "Ascendiente";
         QuickHelpText[ italian ] = "Crescente";
         QuickHelpText[ danish ] = "Stigende";
         QuickHelpText[ swedish ] = "Stigande";
@@ -3608,7 +3608,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ greek ] = "Öèßíïõóá";
         QuickHelpText[ dutch ] = "Aflopend";
         QuickHelpText[ french ] = "Décroissant";
-        QuickHelpText[ spanish ] = "Descending";
+        QuickHelpText[ spanish ] = "Descendiente";
         QuickHelpText[ italian ] = "Decrescente";
         QuickHelpText[ danish ] = "Faldende";
         QuickHelpText[ swedish ] = "Fallande";
@@ -3641,7 +3641,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ greek ] = "Áıîïõóá";
         QuickHelpText[ dutch ] = "Oplopend";
         QuickHelpText[ french ] = "Croissant";
-        QuickHelpText[ spanish ] = "Ascending";
+        QuickHelpText[ spanish ] = "Ascendiente";
         QuickHelpText[ italian ] = "Crescente";
         QuickHelpText[ danish ] = "Stigende";
         QuickHelpText[ swedish ] = "Stigande";
@@ -3673,7 +3673,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ greek ] = "Öèßíïõóá";
         QuickHelpText[ dutch ] = "Aflopend";
         QuickHelpText[ french ] = "Décroissant";
-        QuickHelpText[ spanish ] = "Descending";
+        QuickHelpText[ spanish ] = "Descendiente";
         QuickHelpText[ italian ] = "Decrescente";
         QuickHelpText[ danish ] = "Faldende";
         QuickHelpText[ swedish ] = "Fallande";
@@ -4107,7 +4107,7 @@ ModalDialog DLG_ADD_IDX_STYLES
         Text[ korean ] = "Àû¿ëµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
         Text[ chinese_simplified ] = "²»ÒªÖ¸¶¨";
         Text[ chinese_traditional ] = "¤£«ü©w";
-        Text[ arabic ] = "ÚÏã ÇáÊØÈíŞ";
+        Text[ arabic ] = "áã íÊã ÊÚííäåÇ";
         Text[ turkish ] = "Uygulanmadı";
         Text[ language_user1 ] = " ";
     };
