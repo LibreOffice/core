@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:34:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,6 @@ SfxObjectShell::~SfxObjectShell()
     pImp->xModel = NULL;
 
     DELETEX(pImp->pEventConfig);
-    DELETEX(pImp->pImageManager);
     DELETEX(pImp->pTbxConfig);
     DELETEX(pImp->pAccMgr);
     DELETEX(pImp->pCfgMgr);
