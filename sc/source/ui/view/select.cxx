@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 11:54:59 $
+ *  last change: $Author: nn $ $Date: 2001-07-04 17:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,85 +148,45 @@ void __EXPORT ScViewFunctionSet::BeginDrag()
         if ( rMark.IsMarked() && !rMark.IsMultiMarked() )
         {
             ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
-            pViewData->GetView()->CopyToClip( pClipDoc, FALSE );
-
-            ScDocShell* pDocSh = pViewData->GetDocShell();
-            TransferableObjectDescriptor aObjDesc;
-            pDocSh->FillTransferableObjectDescriptor( aObjDesc );
-            aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
-            // maSize is set in ScTransferObj ctor
-
-            ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
-            uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
-
-            // set position of dragged cell within range
-            ScRange aMarkRange = pTransferObj->GetRange();
-            USHORT nStartX = aMarkRange.aStart.Col();
-            USHORT nStartY = aMarkRange.aStart.Row();
-            USHORT nHandleX = (nPosX >= (short) nStartX) ? nPosX - nStartX : 0;
-            USHORT nHandleY = (nPosY >= (short) nStartY) ? nPosY - nStartY : 0;
-            pTransferObj->SetDragHandlePos( nHandleX, nHandleY );
-
-            pTransferObj->SetDragSource( pDocSh, rMark );
-
-            Window* pWindow = pViewData->GetActiveWin();
-            if ( pWindow->IsTracking() )
-                pWindow->EndTracking( ENDTRACK_CANCEL );    // abort selecting
-
-            SC_MOD()->SetDragObject( pTransferObj, NULL );      // for internal D&D
-            pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
-
-#if 0
-            // old api:
-
-            ScDocument* pDoc = pViewData->GetDocument();
-            ScRange aMarkRange;
-            rMark.GetMarkArea( aMarkRange );
-            USHORT nStartX = aMarkRange.aStart.Col();       // Block
-            USHORT nStartY = aMarkRange.aStart.Row();
-            USHORT nEndX = aMarkRange.aEnd.Col();
-            USHORT nEndY = aMarkRange.aEnd.Row();
-            USHORT nHandleX = (nPosX >= (short) nStartX) ? nPosX - nStartX : 0;
-            USHORT nHandleY = (nPosY >= (short) nStartY) ? nPosY - nStartY : 0;
-
-            pScMod->SetDragObject( rMark,ScRange( nStartX,nStartY,nTab,nEndX,nEndY,nTab ),
-                                    nHandleX, nHandleY, pDoc, 0 );
-
-            Region aRegion = pDoc->GetMMRect( nStartX,nStartY, nEndX,nEndY, nTab );
-
-            SvDataObjectRef pDragServer = new ScDataObject( pDoc, FALSE,
-                                pViewData->GetDocShell(), NULL, &aMarkRange );
-            DropAction eAction = pDragServer->ExecuteDrag(pViewData->GetActiveWin(),
-                                        POINTER_MOVEDATA, POINTER_COPYDATA, POINTER_LINKDATA,
-                                        DRAG_ALL, &aRegion );
-            BOOL bIntern = pScMod->GetDragIntern();
-
-            pScMod->ResetDragObject();
-
-            switch (eAction)
+            // bApi = TRUE -> no error mesages
+            BOOL bCopied = pViewData->GetView()->CopyToClip( pClipDoc, FALSE, TRUE );
+            if ( bCopied )
             {
-                case DROP_MOVE:
-                case DROP_DISCARD:
-                    if (!bIntern)
-                    {
-                        ScViewFunc* pView = pViewData->GetView();
-                        pView->DoneBlockMode();
-                        pView->MoveCursorAbs( nStartX, nStartY, SC_FOLLOW_JUMP, FALSE, FALSE );
-                        pView->InitOwnBlockMode();
-                        rMark.SetMarkArea( ScRange( nStartX,nStartY,nTab, nEndX,nEndY,nTab ) );
-                        pView->DeleteContents( IDF_ALL );
-                    }
-                    break;
-                default:
-                    break;
-            }
-#endif
+                ScDocShell* pDocSh = pViewData->GetDocShell();
+                TransferableObjectDescriptor aObjDesc;
+                pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+                aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+                // maSize is set in ScTransferObj ctor
 
-            return;         // Dragging passiert
+                ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
+                uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+
+                // set position of dragged cell within range
+                ScRange aMarkRange = pTransferObj->GetRange();
+                USHORT nStartX = aMarkRange.aStart.Col();
+                USHORT nStartY = aMarkRange.aStart.Row();
+                USHORT nHandleX = (nPosX >= (short) nStartX) ? nPosX - nStartX : 0;
+                USHORT nHandleY = (nPosY >= (short) nStartY) ? nPosY - nStartY : 0;
+                pTransferObj->SetDragHandlePos( nHandleX, nHandleY );
+                pTransferObj->SetVisibleTab( nTab );
+
+                pTransferObj->SetDragSource( pDocSh, rMark );
+
+                Window* pWindow = pViewData->GetActiveWin();
+                if ( pWindow->IsTracking() )
+                    pWindow->EndTracking( ENDTRACK_CANCEL );    // abort selecting
+
+                SC_MOD()->SetDragObject( pTransferObj, NULL );      // for internal D&D
+                pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
+
+                return;         // dragging started
+            }
+            else
+                delete pClipDoc;
         }
     }
 
-    Sound::Beep();          // kein Dragging
+    Sound::Beep();          // can't drag
 }
 
 //      Selektion

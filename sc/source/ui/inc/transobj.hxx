@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 18:26:59 $
+ *  last change: $Author: nn $ $Date: 2001-07-04 17:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ private:
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRanges> xDragSourceRanges;
     USHORT                          nDragHandleX;
     USHORT                          nDragHandleY;
+    USHORT                          nVisibleTab;
     USHORT                          nDragSourceFlags;
     BOOL                            bDragWasInternal;
 
@@ -122,12 +123,14 @@ public:
     const ScRange&      GetRange() const        { return aBlock; }
     USHORT              GetDragHandleX() const  { return nDragHandleX; }
     USHORT              GetDragHandleY() const  { return nDragHandleY; }
+    USHORT              GetVisibleTab() const   { return nVisibleTab; }
     USHORT              GetDragSourceFlags() const  { return nDragSourceFlags; }
     ScDocShell*         GetSourceDocShell();
     ScDocument*         GetSourceDocument();
     ScMarkData          GetSourceMarkData();
 
     void                SetDragHandlePos( USHORT nX, USHORT nY );
+    void                SetVisibleTab( USHORT nNew );
     void                SetDragSource( ScDocShell* pSourceShell, const ScMarkData& rMark );
     void                SetDragSourceFlags( USHORT nFlags );
     void                SetDragWasInternal();

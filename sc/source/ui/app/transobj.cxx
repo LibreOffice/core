@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 18:28:08 $
+ *  last change: $Author: nn $ $Date: 2001-07-04 17:26:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     }
 
     aBlock = ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+    nVisibleTab = nTab1;    // valid table as default
 }
 
 ScTransferObj::~ScTransferObj()
@@ -473,6 +474,11 @@ void ScTransferObj::SetDragHandlePos( USHORT nX, USHORT nY )
 {
     nDragHandleX = nX;
     nDragHandleY = nY;
+}
+
+void ScTransferObj::SetVisibleTab( USHORT nNew )
+{
+    nVisibleTab = nNew;
 }
 
 void ScTransferObj::SetDragSource( ScDocShell* pSourceShell, const ScMarkData& rMark )

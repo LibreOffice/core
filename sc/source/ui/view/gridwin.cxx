@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-20 08:27:39 $
+ *  last change: $Author: nn $ $Date: 2001-07-04 17:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2809,6 +2809,7 @@ sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
     ScDocument* pSourceDoc = pTransObj->GetSourceDocument();
     ScDocument* pThisDoc   = pViewData->GetDocument();
     ScViewFunc* pView      = pViewData->GetView();
+    USHORT      nThisTab   = pViewData->GetTabNo();
     USHORT nFlags = pTransObj->GetDragSourceFlags();
 
     BOOL bIsNavi = ( nFlags & SC_DROP_NAVIGATOR ) != 0;
@@ -2816,6 +2817,13 @@ sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
     BOOL bIsLink = ( rEvt.mnAction == DND_ACTION_LINK );
 
     ScRange aSource = pTransObj->GetRange();
+
+    //  only use visible tab from source range - when dragging within one table,
+    //  all selected tables at the time of dropping are used (handled in MoveBlockTo)
+    USHORT nSourceTab = pTransObj->GetVisibleTab();
+    aSource.aStart.SetTab( nSourceTab );
+    aSource.aEnd.SetTab( nSourceTab );
+
     BOOL bDone = FALSE;
 
     if (pSourceDoc == pThisDoc)
@@ -2825,9 +2833,8 @@ sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
             if ( pThisDoc->IsDocEditable() )
             {
                 USHORT nSrcTab = aSource.aStart.Tab();
-                USHORT nDestTab = pViewData->GetTabNo();
-                pViewData->GetDocShell()->MoveTable( nSrcTab, nDestTab, !bIsMove, TRUE );   // with Undo
-                pView->SetTabNo( nDestTab, TRUE );
+                pViewData->GetDocShell()->MoveTable( nSrcTab, nThisTab, !bIsMove, TRUE );   // with Undo
+                pView->SetTabNo( nThisTab, TRUE );
                 bDone = TRUE;
             }
         }
@@ -2835,7 +2842,7 @@ sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
         {
             Point aPos = rEvt.maPosPixel;
             String aChartName;
-            if (pThisDoc->HasChartAtPoint( pViewData->GetTabNo(), PixelToLogic(aPos), &aChartName ))
+            if (pThisDoc->HasChartAtPoint( nThisTab, PixelToLogic(aPos), &aChartName ))
             {
                 String aRangeName;
                 aSource.Format( aRangeName, SCR_ABS_3D, pThisDoc );
@@ -2844,17 +2851,22 @@ sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
                 USHORT nId = bIsMove ? SID_CHART_SOURCE : SID_CHART_ADDSOURCE;
                 pViewData->GetDispatcher().Execute( nId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                                             &aRangeItem, &aNameItem, (void*) NULL );
+                bDone = TRUE;
             }
             else if ( nDragStartX != aSource.aStart.Col() || nDragStartY != aSource.aStart.Row() ||
-                        aSource.aStart.Tab() != pViewData->GetTabNo() )
+                        nSourceTab != nThisTab )
             {
-                ScAddress aDest( nDragStartX, nDragStartY, pViewData->GetTabNo() );
+                //  call with bApi = TRUE to avoid error messages in drop handler
+                ScAddress aDest( nDragStartX, nDragStartY, nThisTab );
                 if ( bIsLink )
-                    pView->LinkBlock( aSource, aDest );
+                    bDone = pView->LinkBlock( aSource, aDest, TRUE );
                 else
-                    pView->MoveBlockTo( aSource, aDest, bIsMove );
+                    bDone = pView->MoveBlockTo( aSource, aDest, bIsMove, TRUE, TRUE, TRUE );
+                if (!bDone)
+                    Sound::Beep();  // instead of error message in drop handler
             }
-            bDone = TRUE;
+            else
+                bDone = TRUE;       // nothing to do
         }
 
         if (bDone)
@@ -2892,7 +2904,7 @@ sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
                     }
                 }
 
-                pView->ImportTables( pSrcShell,nTabSelCount, nTabs, bIsLink, pViewData->GetTabNo() );
+                pView->ImportTables( pSrcShell,nTabSelCount, nTabs, bIsLink, nThisTab );
                 bDone = TRUE;
             }
         }
@@ -2922,8 +2934,8 @@ sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
                 aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\")"));
 
                 pView->DoneBlockMode();
-                pView->InitBlockMode( nDragStartX, nDragStartY, pViewData->GetTabNo() );
-                pView->MarkCursor( nDragEndX, nDragEndY, pViewData->GetTabNo() );
+                pView->InitBlockMode( nDragStartX, nDragStartY, nThisTab );
+                pView->MarkCursor( nDragEndX, nDragEndY, nThisTab );
 
                 pView->EnterMatrix( aFormula );
                 pView->CursorPosChanged();
