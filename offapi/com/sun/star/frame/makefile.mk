@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dv $ $Date: 2001-03-09 15:13:01 $
+#   last change: $Author: dv $ $Date: 2001-07-27 12:35:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ IDLFILES=\
     DesktopTask.idl\
     DesktopTasks.idl\
     DispatchDescriptor.idl\
+    DocumentTemplates.idl\
     FeatureStateEvent.idl\
     Frame.idl\
     FrameAction.idl\
