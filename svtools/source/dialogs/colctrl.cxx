@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: ka $ $Date: 2001-08-08 09:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #ifndef _SV_SALBTYPE_HXX //autogen
 #include <vcl/salbtype.hxx>
 #endif
-
 #ifndef _SV_BMPACC_HXX //autogen
 #include <vcl/bmpacc.hxx>
 #endif
@@ -74,7 +73,6 @@
 // - ColorControl -
 // ----------------
 
-// -----------------------------------------------------------------------
 SvColorControl::SvColorControl( Window* pParent, WinBits nStyle ) :
     Control         ( pParent, nStyle ),
     mpBitmap        ( NULL ),
@@ -98,11 +96,7 @@ SvColorControl::SvColorControl( Window* pParent, const ResId& rResId ) :
 // -----------------------------------------------------------------------
 SvColorControl::~SvColorControl()
 {
-    if( mpReadAccess )
-        mpBitmap->ReleaseAccess( mpReadAccess );
-
     delete mpBitmap;
-
 }
 
 // -----------------------------------------------------------------------
@@ -114,122 +108,45 @@ void SvColorControl::Initialize()
 // -----------------------------------------------------------------------
 void SvColorControl::CreateBitmap()
 {
-    Size aSize = GetOutputSizePixel();
-    Size aBmpSize;
+    const Size aSize( GetOutputSizePixel() );
+
     if( mpBitmap && mpBitmap->GetSizePixel() != aSize )
-    {
-        delete mpBitmap;
-        mpBitmap = NULL;
-    }
+        delete mpBitmap, mpBitmap = NULL;
+
     if( !mpBitmap )
         mpBitmap = new Bitmap( aSize, 24 );
 
     BitmapWriteAccess* pWriteAccess = mpBitmap->AcquireWriteAccess();
 
-    USHORT nX = (USHORT) aSize.Width();
-    USHORT nY = (USHORT) aSize.Height();
-
-    UINT16 nHue, nSat;
-    UINT16 nBri = mnLuminance;
-    ColorHSB aColHSB( 0, 0, mnLuminance );
-
-    for( USHORT i = 0; i < nY; i++ )
+    if( pWriteAccess )
     {
-        nSat = 100 - ( 100.0 * i + 0.5 ) / nY;
+        USHORT nX = (USHORT) aSize.Width();
+        USHORT nY = (USHORT) aSize.Height();
 
-        for( USHORT j = 0; j < nX; j++ )
+        UINT16      nHue, nSat;
+        UINT16      nBri = mnLuminance;
+        ColorHSB    aColHSB( 0, 0, mnLuminance );
+
+        for( USHORT i = 0; i < nY; i++ )
         {
-            nHue = ( 360.0 * j + 0.5 ) / nX;
+            nSat = (UINT16) FRound( 100 - ( 100.0 * i + 0.5 ) / nY );
 
-            aColHSB.SetHue( nHue );
-            aColHSB.SetSat( nSat );
-            Color aCol( aColHSB.GetRGB() );
+            for( USHORT j = 0; j < nX; j++ )
+            {
+                nHue = (UINT16) FRound( ( 360.0 * j + 0.5 ) / nX );
 
-            pWriteAccess->SetPixel( i, j, BitmapColor( aCol ) );
+                aColHSB.SetHue( nHue );
+                aColHSB.SetSat( nSat );
 
+                // mpBitmap always has a bit count of 24 => use of SetPixel(...) is safe
+                pWriteAccess->SetPixel( i, j, BitmapColor( aColHSB.GetRGB() ) );
+            }
         }
+
+        mpBitmap->ReleaseAccess( pWriteAccess );
     }
 
-    /*
-     erster Ansatz nur mit RGB
-    USHORT n1_6 = (USHORT) ((nX+3) / 6);
-    USHORT n2_6 = (USHORT) ((nX*2+3) / 6);
-    USHORT n3_6 = (USHORT) ((nX*3+3) / 6);
-    USHORT n4_6 = (USHORT) ((nX*4+3) / 6);
-    USHORT n5_6 = (USHORT) ((nX*5+3) / 6);
-    USHORT n6_6 = nX;
-
-    BitmapColor aBmpColor;
-    BYTE cR, cG, cB;
-    */
-    /*
-    for( USHORT i = 0; i < nY; i++ )
-    {
-        USHORT nK = 100 * i / nY;
-
-        for( USHORT j = 0; j < nX; j++ )
-        {
-            if( j < n1_6 )
-            {
-                cR = 255;
-                cG = 255 * j / n1_6;
-                cB = 0;
-            }
-            else if( j < n2_6 )
-            {
-                cR = 255 - 255 * ( j - n1_6 ) / n1_6;
-                cG = 255;
-                cB = 0;
-            }
-            else if( j < n3_6 )
-            {
-                cR = 0;
-                cG = 255;
-                cB = 255 * (j - n2_6 ) / n1_6;
-            }
-            else if( j < n4_6 )
-            {
-                cR = 0;
-                cG = 255 - 255 * ( j - n3_6 ) / n1_6;
-                cB = 255;
-            }
-            else if( j < n5_6 )
-            {
-                cR = 255 * (j - n4_6 ) / n1_6;
-                cG = 0;
-                cB = 255;
-            }
-            else if( j < nX )
-            {
-                cR = 255;
-                cG = 0;
-                cB = 255 - 255 * ( j - n5_6 ) / n1_6;;
-            }
-
-            //cR -= ( cR - mnLuminance * 256 / 100 ) * nK / 100;
-            //cG -= ( cG - mnLuminance * 256 / 100 ) * nK / 100;
-            //cB -= ( cB - mnLuminance * 256 / 100 ) * nK / 100;
-
-            //aBmpColor.SetRed( cR );
-            //aBmpColor.SetGreen( cG );
-            //aBmpColor.SetBlue( cB );
-
-            //pWriteAccess->SetPixel( i, j, aBmpColor );
-
-            ColorHSB aColHSB( Color( cR, cG, cB ) );
-            aColHSB.SetSat( nK );
-            Color aCol( aColHSB.GetRGB() );
-
-            pWriteAccess->SetPixel( i, j, BitmapColor( aCol ) );
-
-        }
-    }
-    */
-    mpBitmap->ReleaseAccess( pWriteAccess );
-
-    mpReadAccess = mpBitmap->AcquireReadAccess();
-
-    SetColor( maColor ); // Anzeige der Position im Control
+       SetColor( maColor );
 }
 
 // -----------------------------------------------------------------------
@@ -256,7 +173,13 @@ void SvColorControl::ShowPosition( const Point& rPos )
         Invalidate( Rectangle( aPos, Size( 5, 5) ) );
         Invalidate( Rectangle( maPosition, Size( 5, 5) ) );
 
-        maColor = mpReadAccess->GetPixel( nY, nX );
+        if( ( mpReadAccess = mpBitmap->AcquireReadAccess() ) != NULL )
+        {
+            // mpBitmap always has a bit count of 24 => use of GetPixel(...) is safe
+            maColor = mpReadAccess->GetPixel( nY, nX );
+            mpBitmap->ReleaseAccess( mpReadAccess );
+            mpReadAccess = NULL;
+        }
     }
 }
 // -----------------------------------------------------------------------
@@ -295,12 +218,12 @@ void SvColorControl::Paint( const Rectangle& rRect )
     if( !mpBitmap )
         CreateBitmap();
 
-    // dither bitmap if there only 256 colors available !
-    if( GetBitCount() <= 8 )
-        mpBitmap->Dither();
+    Bitmap aOutputBitmap( *mpBitmap );
 
-    DrawBitmap( rRect.TopLeft(), rRect.GetSize(),
-                rRect.TopLeft(), rRect.GetSize(), *mpBitmap );
+    if( GetBitCount() <= 8 )
+        aOutputBitmap.Dither();
+
+    DrawBitmap( rRect.TopLeft(), rRect.GetSize(), rRect.TopLeft(), rRect.GetSize(), aOutputBitmap );
 
     // Positions-Control (Fadenkreuz oder Aehnliches)
     Point aPos1( maPosition );
@@ -322,7 +245,6 @@ void SvColorControl::Paint( const Rectangle& rRect )
 void SvColorControl::Resize()
 {
     CreateBitmap();
-
     Control::Resize();
 }
 
@@ -340,15 +262,13 @@ void SvColorControl::SetColor( const ColorHSB& rCol, BOOL bSetColor )
 
     if( mpBitmap )
     {
-        USHORT nX = (USHORT) mpBitmap->GetSizePixel().Width();
-        USHORT nY = (USHORT) mpBitmap->GetSizePixel().Height();
+        USHORT  nX = (USHORT) mpBitmap->GetSizePixel().Width();
+        USHORT  nY = (USHORT) mpBitmap->GetSizePixel().Height();
+        INT16   nZ = rCol.GetBri();
 
-        INT16 nZ = rCol.GetBri();
         SetLuminance( nZ );
-
         nX = rCol.GetHue() * nX / 360; // Farbe
         nY = nY - rCol.GetSat() * nY / 100; // Saettigung
-
         ShowPosition( Point( nX, nY ) );
     }
 }
@@ -362,36 +282,13 @@ void SvColorControl::SetColor( const Color& rCol )
     {
         ColorHSB aColHsb( rCol );
         SetColor( aColHsb, FALSE );
-        /*
-        BOOL bDone = FALSE;
-        USHORT nX = (USHORT) mpBitmap->GetSizePixel().Width();
-        USHORT nY = (USHORT) mpBitmap->GetSizePixel().Height();
-        USHORT i, j;
-
-        BitmapColor aBmpColor;
-
-        for( i = 0; i < nY && !bDone; i++ )
-        {
-            for( j = 0; j < nX && !bDone; j++ )
-            {
-                aBmpColor = mpReadAccess->GetPixel( i, j );
-
-                if( maColor == (Color)aBmpColor )
-                    bDone = TRUE;
-            }
-        }
-
-        if( bDone )
-            ShowPosition( Point( j, i ) );
-        */
     }
 }
 
 // -----------------------------------------------------------------------
 void SvColorControl::SetLuminance( short nLum )
 {
-    if( nLum != mnLuminance &&
-        nLum >= 0 && nLum <= 100 )
+    if( nLum != mnLuminance && nLum >= 0 && nLum <= 100 )
     {
         mnLuminance = nLum;
 
@@ -404,7 +301,14 @@ void SvColorControl::SetLuminance( short nLum )
 
         USHORT nX = maPosition.X() + 2;
         USHORT nY = maPosition.Y() + 2;
-        maColor = mpReadAccess->GetPixel( nY, nX );
+
+        if( mpBitmap && ( ( mpReadAccess = mpBitmap->AcquireReadAccess() ) != NULL ) )
+        {
+            // mpBitmap always has a bit count of 24 => use of GetPixel(...) is safe
+            maColor = mpReadAccess->GetPixel( nY, nX );
+            mpBitmap->ReleaseAccess( mpReadAccess );
+            mpReadAccess = NULL;
+        }
 
         Invalidate();
     }
