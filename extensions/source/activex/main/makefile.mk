@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-11 13:49:41 $
+#   last change: $Author: obo $ $Date: 2004-11-17 12:43:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,7 @@ use_shl_versions=
 
 .INCLUDE : settings.mk
 
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" && "$(NETTOOLKIT)"==""
 
 VERSIONOBJ=
 LIBTARGET=NO
