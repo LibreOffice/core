@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableValidation.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:08:10 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,17 +88,9 @@ module com {  module sun {  module star {  module sheet {
  */
 service TableValidation
 {
-    //-------------------------------------------------------------------------
 
-//! service PropertySet
-    /** provides access to the properties.
-     */
     interface com::sun::star::beans::XPropertySet;
 
-    //-------------------------------------------------------------------------
-
-    /** provides access to the settings of the condition.
-     */
     interface com::sun::star::sheet::XSheetCondition;
 
     //=========================================================================
@@ -171,6 +163,14 @@ service TableValidation
         is set to <TRUE/>.</p>
      */
     [property] com::sun::star::sheet::ValidationAlertStyle ErrorAlertStyle;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if the list of possible values should be shown on the cell and how.
+
+        See also <type>TableValidationVisibility</type>
+     */
+    [optional,property] short ShowList;
 
 };
 
