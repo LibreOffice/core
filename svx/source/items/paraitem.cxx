@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-04-26 07:20:44 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,7 @@ SfxItemPresentation SvxLineSpacingItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef PRODUCT
@@ -708,7 +708,7 @@ SfxItemPresentation SvxAdjustItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -836,7 +836,7 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -920,7 +920,7 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -1140,7 +1140,7 @@ SfxItemPresentation SvxHyphenZoneItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -1504,7 +1504,7 @@ SfxItemPresentation SvxTabStopItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -1670,7 +1670,7 @@ SfxItemPresentation SvxFmtSplitItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -1737,7 +1737,7 @@ SfxItemPresentation SvxPageModelItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -1796,7 +1796,7 @@ USHORT  SvxScriptSpaceItem::GetVersion( USHORT nFFVer ) const
 SfxItemPresentation SvxScriptSpaceItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-        String &rText, const International* pIntl ) const
+        String &rText, const IntlWrapper* pIntl ) const
 {
     switch( ePres )
     {
@@ -1849,7 +1849,7 @@ USHORT SvxHangingPunctuationItem::GetVersion( USHORT nFFVer ) const
 SfxItemPresentation SvxHangingPunctuationItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-        String &rText, const International* pIntl ) const
+        String &rText, const IntlWrapper* pIntl ) const
 {
     switch( ePres )
     {
@@ -1909,7 +1909,7 @@ USHORT SvxForbiddenRuleItem::GetVersion( USHORT nFFVer ) const
 SfxItemPresentation SvxForbiddenRuleItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-        String &rText, const International* pIntl ) const
+        String &rText, const IntlWrapper* pIntl ) const
 {
     switch( ePres )
     {
@@ -1965,7 +1965,7 @@ USHORT SvxParaVertAlignItem::GetVersion( USHORT nFFVer ) const
 SfxItemPresentation SvxParaVertAlignItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-        String &rText, const International*  ) const
+        String &rText, const IntlWrapper*  ) const
 {
     switch( ePres )
     {

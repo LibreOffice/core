@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 07:15:07 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    String &rText, const International * = 0 ) const;
+                                    String &rText, const IntlWrapper * = 0 ) const;
 
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrtitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-22 13:08:38 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ XubString SvxDoubleItem::GetValueText() const
 
 SfxItemPresentation SvxDoubleItem::GetPresentation
             ( SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric,
-              SfxMapUnit ePresentationMetric, XubString& rText, const International *) const
+              SfxMapUnit ePresentationMetric, XubString& rText, const IntlWrapper *) const
 {
     char cBuff[80];
     sprintf(cBuff, "%e", fVal);

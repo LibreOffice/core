@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-30 10:12:44 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+
+#include <unotools/intlwrapper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -497,14 +500,14 @@ SdrItemPool::~SdrItemPool()
 SfxItemPresentation __EXPORT SdrItemPool::GetPresentation(
               const SfxPoolItem& rItem, SfxItemPresentation ePresentation,
               SfxMapUnit ePresentationMetric, XubString& rText,
-              const International * pInternational) const
+              const IntlWrapper * pIntlWrapper) const
 {
     if (!IsInvalidItem(&rItem)) {
         USHORT nWhich=rItem.Which();
         if (nWhich>=SDRATTR_SHADOW_FIRST && nWhich<=SDRATTR_END) {
             rItem.GetPresentation(SFX_ITEM_PRESENTATION_NAMELESS,
                         GetMetric(nWhich),ePresentationMetric,rText,
-                        pInternational);
+                        pIntlWrapper);
             String aStr;
 
             TakeItemName(nWhich, aStr);
@@ -514,7 +517,7 @@ SfxItemPresentation __EXPORT SdrItemPool::GetPresentation(
             return ePresentation;
         }
     }
-    return XOutdevItemPool::GetPresentation(rItem,ePresentation,ePresentationMetric,rText,pInternational);
+    return XOutdevItemPool::GetPresentation(rItem,ePresentation,ePresentationMetric,rText,pIntlWrapper);
 }
 
 FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
@@ -1114,7 +1117,7 @@ int __EXPORT SdrFractionItem::operator==(const SfxPoolItem& rCmp) const
 
 SfxItemPresentation __EXPORT SdrFractionItem::GetPresentation(
     SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric,
-    SfxMapUnit ePresentationMetric, XubString &rText, const International *) const
+    SfxMapUnit ePresentationMetric, XubString &rText, const IntlWrapper *) const
 {
     if(nValue.IsValid())
     {
@@ -1178,7 +1181,7 @@ TYPEINIT1_AUTOFACTORY(SdrScaleItem,SdrFractionItem);
 
 SfxItemPresentation __EXPORT SdrScaleItem::GetPresentation(
     SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric,
-    SfxMapUnit ePresentationMetric, XubString &rText, const International *) const
+    SfxMapUnit ePresentationMetric, XubString &rText, const IntlWrapper *) const
 {
     if(GetValue().IsValid())
     {
@@ -1239,7 +1242,7 @@ XubString __EXPORT SdrOnOffItem::GetValueTextByVal(BOOL bVal) const
 }
 
 SfxItemPresentation __EXPORT SdrOnOffItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByVal(GetValue());
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
@@ -1279,7 +1282,7 @@ XubString __EXPORT SdrYesNoItem::GetValueTextByVal(BOOL bVal) const
 }
 
 SfxItemPresentation __EXPORT SdrYesNoItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByVal(GetValue());
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
@@ -1318,7 +1321,7 @@ SfxPoolItem* __EXPORT SdrPercentItem::Create(SvStream& rIn, USHORT nVer) const
 
 SfxItemPresentation __EXPORT SdrPercentItem::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreMetric,
-    SfxMapUnit ePresMetric, XubString& rText, const International *) const
+    SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText = UniString::CreateFromInt32(GetValue());
     rText += sal_Unicode('%');
@@ -1361,7 +1364,7 @@ SfxPoolItem* __EXPORT SdrAngleItem::Create(SvStream& rIn, USHORT nVer) const
 
 SfxItemPresentation __EXPORT SdrAngleItem::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-    XubString& rText, const International * pInternational) const
+    XubString& rText, const IntlWrapper * pIntlWrapper) const
 {
     INT32 nValue(GetValue());
     BOOL bNeg(nValue < 0);
@@ -1376,10 +1379,15 @@ SfxItemPresentation __EXPORT SdrAngleItem::GetPresentation(
         sal_Unicode aUnicodeNull('0');
         xub_StrLen nAnz(2);
 
-        if(!pInternational)
-            pInternational = &GetpApp()->GetAppInternational();
+        const IntlWrapper* pMyIntlWrapper = NULL;
+        DBG_ASSERT( pIntlWrapper, "SdrAngleItem::GetPresentation: "
+            "using default App-International-IntlWrapper" );
+        if(!pIntlWrapper)
+            pIntlWrapper = pMyIntlWrapper = new IntlWrapper(
+                ::comphelper::getProcessServiceFactory(),
+                GetpApp()->GetAppInternational().GetLanguage() );
 
-        if(pInternational->IsNumLeadingZero())
+        if(pIntlWrapper->getLocaleData()->isNumLeadingZero())
             nAnz++;
 
         while(rText.Len() < nAnz)
@@ -1396,7 +1404,8 @@ SfxItemPresentation __EXPORT SdrAngleItem::GetPresentation(
         }
         else
         {
-            sal_Unicode cDec = pInternational->GetNumDecimalSep();
+            sal_Unicode cDec =
+                pIntlWrapper->getLocaleData()->getNumDecimalSep().GetChar(0);
             rText.Insert(cDec, nLen-2);
 
             if(bNull1)
@@ -1405,6 +1414,12 @@ SfxItemPresentation __EXPORT SdrAngleItem::GetPresentation(
 
         if(bNeg)
             rText.Insert(sal_Unicode('-'), 0);
+
+        if ( pMyIntlWrapper )
+        {
+            delete pMyIntlWrapper;
+            pIntlWrapper = NULL;
+        }
     }
 
     rText += sal_Unicode(DEGREE_CHAR);
@@ -1463,7 +1478,7 @@ FASTBOOL __EXPORT SdrMetricItem::ScaleMetrics(long nMul, long nDiv)
 }
 
 SfxItemPresentation __EXPORT SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     long nValue=GetValue();
     SdrFormatter aFmt((MapUnit)eCoreMetric,(MapUnit)ePresMetric);
@@ -1536,7 +1551,7 @@ XubString __EXPORT SdrCaptionTypeItem::GetValueTextByPos(USHORT nPos) const
 }
 
 SfxItemPresentation __EXPORT SdrCaptionTypeItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(GetValue());
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
@@ -1563,7 +1578,7 @@ XubString __EXPORT SdrCaptionEscDirItem::GetValueTextByPos(USHORT nPos) const
 }
 
 SfxItemPresentation __EXPORT SdrCaptionEscDirItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(GetValue());
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
@@ -1638,7 +1653,7 @@ XubString __EXPORT SdrTextFitToSizeTypeItem::GetValueTextByPos(USHORT nPos) cons
 }
 
 SfxItemPresentation __EXPORT SdrTextFitToSizeTypeItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(GetValue());
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
@@ -1690,7 +1705,7 @@ XubString __EXPORT SdrTextVertAdjustItem::GetValueTextByPos(USHORT nPos) const
 }
 
 SfxItemPresentation __EXPORT SdrTextVertAdjustItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(GetValue());
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
@@ -1734,7 +1749,7 @@ XubString __EXPORT SdrTextHorzAdjustItem::GetValueTextByPos(USHORT nPos) const
 }
 
 SfxItemPresentation __EXPORT SdrTextHorzAdjustItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(GetValue());
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
@@ -1778,7 +1793,7 @@ XubString __EXPORT SdrTextAniKindItem::GetValueTextByPos(USHORT nPos) const
 }
 
 SfxItemPresentation __EXPORT SdrTextAniKindItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(GetValue());
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
@@ -1822,7 +1837,7 @@ XubString __EXPORT SdrTextAniDirectionItem::GetValueTextByPos(USHORT nPos) const
 }
 
 SfxItemPresentation __EXPORT SdrTextAniDirectionItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(GetValue());
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
@@ -1860,7 +1875,7 @@ SfxPoolItem* __EXPORT SdrTextAniDelayItem::Create(SvStream& rIn, USHORT nVer) co
 
 SfxItemPresentation __EXPORT SdrTextAniDelayItem::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-    XubString& rText, const International *) const
+    XubString& rText, const IntlWrapper *) const
 {
     rText = UniString::CreateFromInt32(GetValue());
     rText += sal_Unicode('m');
@@ -1903,7 +1918,7 @@ FASTBOOL __EXPORT SdrTextAniAmountItem::ScaleMetrics(long nMul, long nDiv)
 
 SfxItemPresentation __EXPORT SdrTextAniAmountItem::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-    XubString& rText, const International *) const
+    XubString& rText, const IntlWrapper *) const
 {
     INT32 nValue(GetValue());
 
@@ -1992,7 +2007,7 @@ int __EXPORT SdrAutoShapeAdjustmentItem::operator==( const SfxPoolItem& rCmp ) c
 
 SfxItemPresentation __EXPORT SdrAutoShapeAdjustmentItem::GetPresentation(
     SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric,
-    SfxMapUnit ePresentationMetric, XubString &rText, const International *) const
+    SfxMapUnit ePresentationMetric, XubString &rText, const IntlWrapper *) const
 {
     sal_uInt32 i, nCount = GetCount();
     rText.Append( UniString::CreateFromInt32( nCount ) );
@@ -2152,7 +2167,7 @@ XubString __EXPORT SdrEdgeKindItem::GetValueTextByPos(USHORT nPos) const
 }
 
 SfxItemPresentation __EXPORT SdrEdgeKindItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(GetValue());
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
@@ -2356,7 +2371,7 @@ XubString __EXPORT SdrMeasureKindItem::GetValueTextByPos(USHORT nPos) const
 }
 
 SfxItemPresentation __EXPORT SdrMeasureKindItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(GetValue());
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
@@ -2399,7 +2414,7 @@ XubString __EXPORT SdrMeasureTextHPosItem::GetValueTextByPos(USHORT nPos) const
 }
 
 SfxItemPresentation __EXPORT SdrMeasureTextHPosItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(GetValue());
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
@@ -2442,7 +2457,7 @@ XubString __EXPORT SdrMeasureTextVPosItem::GetValueTextByPos(USHORT nPos) const
 }
 
 SfxItemPresentation __EXPORT SdrMeasureTextVPosItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(GetValue());
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
@@ -2497,7 +2512,7 @@ XubString __EXPORT SdrMeasureUnitItem::GetValueTextByPos(USHORT nPos) const
 }
 
 SfxItemPresentation __EXPORT SdrMeasureUnitItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(GetValue());
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
@@ -2564,7 +2579,7 @@ XubString __EXPORT SdrCircKindItem::GetValueTextByPos(USHORT nPos) const
 }
 
 SfxItemPresentation __EXPORT SdrCircKindItem::GetPresentation(SfxItemPresentation ePres,
-                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const International *) const
+                      SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, XubString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(GetValue());
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
@@ -2631,7 +2646,7 @@ SfxPoolItem* __EXPORT SdrSignedPercentItem::Create( SvStream& rIn, USHORT nVer )
 
 SfxItemPresentation __EXPORT SdrSignedPercentItem::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-    XubString& rText, const International *) const
+    XubString& rText, const IntlWrapper *) const
 {
     rText = UniString::CreateFromInt32(GetValue());
     rText += sal_Unicode('%');
@@ -2878,7 +2893,7 @@ XubString __EXPORT SdrGrafModeItem::GetValueTextByPos(UINT16 nPos) const
 
 SfxItemPresentation __EXPORT SdrGrafModeItem::GetPresentation( SfxItemPresentation ePres,
                                                                SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-                                                               XubString& rText, const International *) const
+                                                               XubString& rText, const IntlWrapper *) const
 {
     rText = GetValueTextByPos( GetValue() );
 

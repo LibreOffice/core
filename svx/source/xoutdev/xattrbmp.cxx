@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattrbmp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:36:13 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,7 +728,7 @@ SfxItemPresentation XFillBitmapItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&           rText, const International *
+    XubString&           rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rulritem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ SfxItemPresentation SvxLongLRSpaceItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    String&             rText, const International *
+    String&             rText, const IntlWrapper *
 )   const
 {
     return SFX_ITEM_PRESENTATION_NONE;
@@ -152,7 +152,7 @@ SfxItemPresentation SvxLongULSpaceItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    String&             rText, const International *
+    String&             rText, const IntlWrapper *
 )   const
 {
     return SFX_ITEM_PRESENTATION_NONE;
@@ -206,7 +206,7 @@ SfxItemPresentation SvxPagePosSizeItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    String&             rText, const International *
+    String&             rText, const IntlWrapper *
 )   const
 {
     return SFX_ITEM_PRESENTATION_NONE;
@@ -289,7 +289,7 @@ SfxItemPresentation SvxColumnItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    String&             rText, const International *
+    String&             rText, const IntlWrapper *
 )   const
 {
     return SFX_ITEM_PRESENTATION_NONE;
@@ -429,7 +429,7 @@ SfxItemPresentation SvxObjectItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    String&             rText, const International *
+    String&             rText, const IntlWrapper *
 )   const
 {
     return SFX_ITEM_PRESENTATION_NONE;

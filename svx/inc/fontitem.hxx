@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 16:22:52 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    String &rText, const International * = 0 ) const;
+                                    String &rText, const IntlWrapper * = 0 ) const;
 
     // ZugriffsMethoden:
     inline String &GetFamilyName() { return aFamilyName; }

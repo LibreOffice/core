@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 07:15:47 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ SfxItemPresentation  SvxGridItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText, const International *
+    String&             rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )

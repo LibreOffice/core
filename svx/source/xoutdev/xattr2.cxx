@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:28 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ SfxItemPresentation XLineTransparenceItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -223,7 +223,7 @@ SfxPoolItem* XLineJointItem::Clone(SfxItemPool* pPool) const
 // -----------------------------------------------------------------------------
 
 SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit eCoreUnit,
-                                                     SfxMapUnit ePresUnit, XubString& rText, const International*) const
+                                                     SfxMapUnit ePresUnit, XubString& rText, const IntlWrapper*) const
 {
     rText.Erase();
 
@@ -415,7 +415,7 @@ SfxItemPresentation XFillTransparenceItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -573,7 +573,7 @@ SfxItemPresentation XGradientStepCountItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -677,7 +677,7 @@ SfxItemPresentation XFillBmpTileItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -779,7 +779,7 @@ SfxItemPresentation XFillBmpPosItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -892,7 +892,7 @@ SfxItemPresentation XFillBmpSizeXItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -1008,7 +1008,7 @@ SfxItemPresentation XFillBmpSizeYItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -1124,7 +1124,7 @@ SfxItemPresentation XFillBmpSizeLogItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -1226,7 +1226,7 @@ SfxItemPresentation XFillBmpTileOffsetXItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -1328,7 +1328,7 @@ SfxItemPresentation XFillBmpTileOffsetYItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -1430,7 +1430,7 @@ SfxItemPresentation XFillBmpStretchItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -1532,7 +1532,7 @@ SfxItemPresentation XFillBmpPosOffsetXItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -1634,7 +1634,7 @@ SfxItemPresentation XFillBmpPosOffsetYItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -1719,7 +1719,7 @@ SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, USHORT nVer) const
 //------------------------------------------------------------------------
 
 SfxItemPresentation XFillBackgroundItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit eCoreUnit,
-                                                          SfxMapUnit ePresUnit, XubString& rText, const International*) const
+                                                          SfxMapUnit ePresUnit, XubString& rText, const IntlWrapper*) const
 {
     rText.Erase();
 

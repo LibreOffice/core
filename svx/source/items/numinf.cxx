@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numinf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-09 18:09:39 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ SfxItemPresentation SvxNumberInfoItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    String&             rText, const International *
+    String&             rText, const IntlWrapper *
 )   const
 {
     rText.Erase();

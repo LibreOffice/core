@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-25 16:22:24 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,7 +638,7 @@ SfxItemPresentation XLineStyleItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -934,7 +934,7 @@ SfxItemPresentation XLineDashItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -1121,7 +1121,7 @@ SfxItemPresentation XLineWidthItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -1241,7 +1241,7 @@ SfxItemPresentation XLineColorItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -1471,7 +1471,7 @@ SfxItemPresentation XLineStartItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -2165,7 +2165,7 @@ SfxItemPresentation XLineEndItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -2297,7 +2297,7 @@ SfxItemPresentation XLineStartWidthItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -2403,7 +2403,7 @@ SfxItemPresentation XLineEndWidthItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -2509,7 +2509,7 @@ SfxItemPresentation XLineStartCenterItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -2616,7 +2616,7 @@ SfxItemPresentation XLineEndCenterItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -2726,7 +2726,7 @@ SfxItemPresentation XFillStyleItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     rText.Erase();
@@ -2885,7 +2885,7 @@ SfxItemPresentation XFillColorItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -3247,7 +3247,7 @@ SfxItemPresentation XFillGradientItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )
@@ -3472,9 +3472,9 @@ sal_Bool XFillFloatTransparenceItem::PutValue( const ::com::sun::star::uno::Any&
 SfxItemPresentation XFillFloatTransparenceItem::GetPresentation(    SfxItemPresentation ePres,
                                                                     SfxMapUnit eCoreUnit, SfxMapUnit ePresUnit,
                                                                     XubString& rText,
-                                                                    const International * pInternational ) const
+                                                                    const IntlWrapper * pIntlWrapper ) const
 {
-    return XFillGradientItem::GetPresentation( ePres, eCoreUnit, ePresUnit, rText, pInternational );
+    return XFillGradientItem::GetPresentation( ePres, eCoreUnit, ePresUnit, rText, pIntlWrapper );
 }
 
 BOOL XFillFloatTransparenceItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
@@ -3779,7 +3779,7 @@ SfxItemPresentation XFillHatchItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
     switch ( ePres )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-09 16:45:47 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:24:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ SfxItemPresentation SvxSearchItem::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     XubString&          rText,
-    const International *
+    const IntlWrapper *
 )   const
 {
     return SFX_ITEM_PRESENTATION_NONE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optitems.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 10:41:21 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ SfxItemPresentation SfxSpellCheckItem::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*
+    const IntlWrapper*
 )   const
 {
     switch ( ePres )
@@ -200,7 +200,7 @@ SfxItemPresentation SfxHyphenRegionItem::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International*
+    const IntlWrapper*
 )   const
 {
     switch ( ePres )

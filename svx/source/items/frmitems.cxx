@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-29 08:39:26 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ SfxItemPresentation SvxPaperBinItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -435,7 +435,7 @@ SfxItemPresentation SvxSizeItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -811,7 +811,7 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -1208,7 +1208,7 @@ SfxItemPresentation SvxULSpaceItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -1346,7 +1346,7 @@ SfxItemPresentation SvxPrintItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -1426,7 +1426,7 @@ SfxItemPresentation SvxOpaqueItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -1598,7 +1598,7 @@ SfxItemPresentation SvxProtectItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -1906,7 +1906,7 @@ SfxItemPresentation SvxShadowItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -3037,7 +3037,7 @@ SfxItemPresentation SvxBoxItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -3563,7 +3563,7 @@ SfxItemPresentation SvxBoxInfoItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -3712,7 +3712,7 @@ SfxItemPresentation SvxFmtBreakItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -3957,7 +3957,7 @@ SfxItemPresentation SvxFmtKeepItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -4073,7 +4073,7 @@ SfxItemPresentation SvxLineItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT
@@ -4957,7 +4957,7 @@ SfxItemPresentation SvxBrushItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const International *
+    XubString&          rText, const IntlWrapper *
 )   const
 {
 #ifndef SVX_LIGHT

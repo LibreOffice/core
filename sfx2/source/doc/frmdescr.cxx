@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmdescr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1057,7 +1057,7 @@ SfxItemPresentation SfxFrameDescriptorItem::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     XubString&          rText,
-    const International *
+    const IntlWrapper *
 )   const
 {
     rText.Erase();

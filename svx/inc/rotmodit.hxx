@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rotmodit.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:58 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
-                                                 String& rText, const International * = 0 ) const;
+                                                 String& rText, const IntlWrapper * = 0 ) const;
     virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };

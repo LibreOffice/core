@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcnitm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:19:46 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ SfxItemPresentation SvXMLAttrContainerItem::GetPresentation(
                     SfxMapUnit eCoreMetric,
                     SfxMapUnit ePresentationMetric,
                     XubString &rText,
-                    const International *pInternational ) const
+                    const IntlWrapper *pIntlWrapper ) const
 {
     return SFX_ITEM_PRESENTATION_NONE;
 }

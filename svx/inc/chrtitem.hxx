@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrtitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2000-10-12 14:48:51 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,7 @@ public:
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    String &rText, const International * = 0) const;
+                                    String &rText, const IntlWrapper * = 0) const;
 
     virtual int              operator == (const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool *pPool = NULL) const;
