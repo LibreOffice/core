@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:27:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,14 +142,7 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
-#ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
-#endif
 
-#define STATUS_ID_DBTYPE    1
-#define STATUS_ID_USERNAME  2
-#define STATUS_ID_DBNAME    3
-#define STATUS_ID_HOSTNAME  4
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -281,7 +274,6 @@ OApplicationView::OApplicationView( Window* pParent
     ,m_pContainerListener(_pContainerListener)
     ,m_pViewChangeListener(_pViewChangeListener)
     ,m_eChildFocus(NONE)
-    ,m_aStatusBar(this,WinBits( WB_LEFT | WB_3DLOOK ))
     ,m_xController(_xController)
 {
     DBG_CTOR(OApplicationView,NULL);
@@ -298,25 +290,7 @@ OApplicationView::OApplicationView( Window* pParent
     m_pWin->SetUniqueId(UID_APP_VIEW_BORDER_WIN);
     m_pWin->Show();
 
-    m_aStatusBar.SetHelpId(HID_APP_STATUS_BAR);
-
     ImplInitSettings();
-
-    sal_Int32 nXSize = LogicToPixel( Size( 80, 0 ), MAP_APPFONT ).Width();
-    USHORT pItems [] = {
-                        STATUS_ID_DBTYPE,
-                        STATUS_ID_DBNAME,
-                        STATUS_ID_USERNAME,
-                        STATUS_ID_HOSTNAME
-                };
-    for (int i = 0; i < sizeof(pItems)/sizeof(pItems[0]); ++i)
-    {
-        m_aStatusBar.InsertItem(pItems[i],nXSize,SIB_LEFT | SIB_IN | SIB_AUTOSIZE);
-    }
-
-    m_aStatusBar.SetBottomBorder(FALSE);
-    m_aStatusBar.SetBorderStyle(WINDOW_BORDER_MONO);
-    m_aStatusBar.Show();
 }
 
 //------------------------------------------------------------------------------
@@ -361,28 +335,7 @@ void OApplicationView::resizeDocumentView(Rectangle& _rPlayground)
         Size aOldSize = _rPlayground.GetSize();
         _rPlayground.SetSize( Size(aOldSize.A() - 2*aFLSize.A(), aOldSize.B() - 2*aFLSize.B()) );
 
-        Size aStBar = m_aStatusBar.CalcWindowSizePixel();
-        _rPlayground.Bottom()   = _rPlayground.Bottom() - 2 - aStBar.Height();
         m_pWin->SetPosSizePixel(_rPlayground.TopLeft() , _rPlayground.GetSize() );
-
-        _rPlayground.Top() = _rPlayground.Bottom() + 2;
-        _rPlayground.Bottom() = _rPlayground.Top() + aStBar.Height();
-
-        aStBar.setWidth(_rPlayground.getWidth());
-        USHORT nCount = m_aStatusBar.GetItemCount();
-        USHORT nWidth = static_cast<USHORT>(aStBar.getWidth() / (nCount+1));
-        for (USHORT i = 0; i < nCount; ++i)
-        {
-            USHORT nId = m_aStatusBar.GetItemId(i);
-            StatusBarItemBits aBits = m_aStatusBar.GetItemBits(nId);
-
-            String aText = m_aStatusBar.GetItemText(nId);
-            m_aStatusBar.RemoveItem (nId);
-            m_aStatusBar.InsertItem(nId, nWidth , aBits, STATUSBAR_OFFSET, i);
-            m_aStatusBar.SetItemText(nId, aText);
-        }
-
-        m_aStatusBar.SetPosSizePixel(_rPlayground.TopLeft() , aStBar );
     }
     // just for completeness: there is no space left, we occupied it all ...
     _rPlayground.SetPos( _rPlayground.BottomRight() );
@@ -655,72 +608,6 @@ void OApplicationView::showPreview( const ::rtl::OUString& _sDataSourceName,
     }
 }
 // -----------------------------------------------------------------------------
-void OApplicationView::setStatusInformations(const Reference< XPropertySet>& _xDatasource)
-{
-    OSL_ENSURE(_xDatasource.is(),"No valid data source !");
-    if ( _xDatasource.is() )
-    {
-        Sequence< PropertyValue > aAdditionalInfo;
-        String sUser,sDSTypeName, sHostName,sDatabaseName;
-        sal_Int32 nPortNumber = -1;
-        try
-        {
-            ::rtl::OUString sTemp;
-            _xDatasource->getPropertyValue(PROPERTY_INFO) >>= aAdditionalInfo;
-            _xDatasource->getPropertyValue(PROPERTY_USER) >>= sTemp;
-            sUser = sTemp;
-            _xDatasource->getPropertyValue(PROPERTY_URL) >>= sTemp;
-            ::std::auto_ptr<ODsnTypeCollection> pCollection(new ODsnTypeCollection);
-            pCollection->initUserDriverTypes(getORB());
-
-            DATASOURCE_TYPE eType = pCollection->getType(sTemp);
-            sDSTypeName = pCollection->getTypeDisplayName(eType);
-            if ( eType != DST_EMBEDDED )
-            {
-                pCollection->extractHostNamePort(sTemp,getORB(),sDatabaseName,sHostName,nPortNumber);
-                if ( !sDatabaseName.Len() )
-                    sDatabaseName = pCollection->cutPrefix(sTemp);
-
-                if ( pCollection->isFileSystemBased(eType) )
-                {
-                    sDatabaseName = SvtPathOptions().SubstituteVariable( sDatabaseName );
-                    if ( sDatabaseName.Len() )
-                    {
-                        ::svt::OFileNotation aFileNotation(sDatabaseName);
-                        // set this decoded URL as text
-                        sDatabaseName = aFileNotation.get(::svt::OFileNotation::N_SYSTEM);
-                    }
-                }
-            }
-            else
-            {
-                sDatabaseName = pCollection->getEmbeddedDatabaseUIName(getORB());
-            }
-        }
-        catch(Exception&)
-        {
-            OSL_ENSURE(0,"Exception catched!");
-        }
-
-
-        ::std::pair< USHORT, String*> pItems [] = {
-                                                    ::std::pair< USHORT, String*>(STATUS_ID_DBTYPE,&sDSTypeName),
-                                                    ::std::pair< USHORT, String*>(STATUS_ID_DBNAME,&sDatabaseName),
-                                                    ::std::pair< USHORT, String*>(STATUS_ID_USERNAME,&sUser),
-                                                    ::std::pair< USHORT, String*>(STATUS_ID_HOSTNAME,&sHostName)
-        };
-        for (int i = 0; i < sizeof(pItems)/sizeof(pItems[0]); ++i)
-        {
-            if ( pItems[i].second->Len() )
-            {
-                m_aStatusBar.SetItemText(pItems[i].first,*pItems[i].second);
-            }
-        }
-        m_aStatusBar.Invalidate();
-        Resize();
-    }
-}
-// -----------------------------------------------------------------------------
 void OApplicationView::GetFocus()
 {
     if ( m_eChildFocus == NONE && m_pWin )
@@ -746,8 +633,5 @@ void OApplicationView::ImplInitSettings()
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
-    m_aStatusBar.SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
-    m_aStatusBar.SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
-    m_aStatusBar.SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
 }
 //-----------------------------------------------------------------------------
