@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
+ *  last change: $Author: sab $ $Date: 2001-04-11 11:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,7 +666,8 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString,
     }
 }
 
-sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow, sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex)
+sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
+    sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat)
 {
     DBG_ASSERT(static_cast<sal_uInt32>(nTable) < aTables.size(), "wrong table");
     ScMyFormatRangeAddresses* pFormatRanges = aTables[nTable];
@@ -680,6 +681,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int16 nTable, const s
         {
             bIsAutoStyle = aItr->bIsAutoStyle;
             nValidationIndex = aItr->nValidationIndex;
+            nNumberFormat = aItr->nNumberFormat;
             return (*aItr).nStyleNameIndex;
         }
         else
@@ -692,6 +694,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int16 nTable, const s
     }
     return -1;
 }
+
 void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sal_Int32 nEndColumn, const sal_Int32 nRow,
                     const sal_Int16 nTable, ScRowFormatRanges* pRowFormatRanges)
 {
@@ -754,12 +757,15 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
     pRowFormatRanges->Sort();
 }
 
-void ScFormatRangeStyles::AddRangeStyleName(const table::CellRangeAddress aCellRangeAddress, const sal_Int32 nStringIndex, const sal_Bool bIsAutoStyle, const sal_Int32 nValidationIndex)
+void ScFormatRangeStyles::AddRangeStyleName(const table::CellRangeAddress aCellRangeAddress,
+    const sal_Int32 nStringIndex, const sal_Bool bIsAutoStyle, const sal_Int32 nValidationIndex,
+    const sal_Int32 nNumberFormat)
 {
     ScMyFormatRange aFormatRange;
     aFormatRange.aRangeAddress = aCellRangeAddress;
     aFormatRange.nStyleNameIndex = nStringIndex;
     aFormatRange.nValidationIndex = nValidationIndex;
+    aFormatRange.nNumberFormat = nNumberFormat;
     aFormatRange.bIsAutoStyle = bIsAutoStyle;
     DBG_ASSERT(static_cast<sal_uInt32>(aCellRangeAddress.Sheet) < aTables.size(), "wrong table");
     ScMyFormatRangeAddresses* pFormatRanges = aTables[aCellRangeAddress.Sheet];

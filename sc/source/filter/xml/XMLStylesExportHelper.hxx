@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
+ *  last change: $Author: sab $ $Date: 2001-04-11 11:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ struct ScMyFormatRange
     com::sun::star::table::CellRangeAddress aRangeAddress;
     sal_Int32                               nStyleNameIndex;
     sal_Int32                               nValidationIndex;
+    sal_Int32                               nNumberFormat;
     sal_Bool                                bIsAutoStyle : 1;
 
     ScMyFormatRange();
@@ -200,11 +201,12 @@ public:
     void AddNewTable(const sal_Int16 nTable);
     sal_Int32 AddStyleName(rtl::OUString* pString, const sal_Bool bIsAutoStyle = sal_True);
     sal_Int32 GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix, sal_Bool& bIsAutoStyle);
-    sal_Int32 GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow, sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex );
+    sal_Int32 GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
+        sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat );
     void GetFormatRanges(const sal_Int32 nStartColumn, const sal_Int32 nEndColumn, const sal_Int32 nRow,
                     const sal_Int16 nTable, ScRowFormatRanges* pFormatRanges);
     void AddRangeStyleName(const com::sun::star::table::CellRangeAddress aCellRangeAddress, const sal_Int32 nStringIndex,
-                    const sal_Bool bIsAutoStyle, const sal_Int32 nValidationIndex);
+                    const sal_Bool bIsAutoStyle, const sal_Int32 nValidationIndex, const sal_Int32 nNumberFormat);
 //  rtl::OUString* GetStyleName(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow);
     rtl::OUString* GetStyleNameByIndex(const sal_Int32 nIndex, const sal_Bool bIsAutoStyle);
     void Sort();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 14:47:00 $
+ *  last change: $Author: sab $ $Date: 2001-04-11 11:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1583,7 +1583,7 @@ void ScXMLExport::_ExportAutoStyles()
                                                             nIndex = pCellStyles->GetIndexOfStyleName(sName, SC_SCELLPREFIX, bIsAutoStyle);
                                                         pSharedData->SetLastColumn(nTable, aRangeAddress.EndColumn);
                                                         pSharedData->SetLastRow(nTable, aRangeAddress.EndRow);
-                                                        pCellStyles->AddRangeStyleName(aRangeAddress, nIndex, bIsAutoStyle, nValidationIndex);
+                                                        pCellStyles->AddRangeStyleName(aRangeAddress, nIndex, bIsAutoStyle, nValidationIndex, nNumberFormat);
                                                         GetMerged(xCellRange, xTable);
                                                     }
                                                     else
@@ -1591,7 +1591,7 @@ void ScXMLExport::_ExportAutoStyles()
                                                         GetMerged(xCellRange, xTable);
                                                         rtl::OUString* pTemp = new rtl::OUString(sStyleName);
                                                         sal_Int32 nIndex = pCellStyles->AddStyleName(pTemp, sal_False);
-                                                        pCellStyles->AddRangeStyleName(aRangeAddress, nIndex, sal_False, nValidationIndex);
+                                                        pCellStyles->AddRangeStyleName(aRangeAddress, nIndex, sal_False, nValidationIndex, nNumberFormat);
                                                         if (sStyleName.compareToAscii("Default") != 0)
                                                         {
                                                             pSharedData->SetLastColumn(nTable, aRangeAddress.EndColumn);
@@ -1988,9 +1988,11 @@ sal_Int32 ScXMLExport::GetCellNumberFormat(const com::sun::star::uno::Reference 
     return 0;
 }
 
-sal_Bool ScXMLExport::GetCellStyleNameIndex(const ScMyCell& aCell, sal_Int32& nStyleNameIndex, sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex)
+sal_Bool ScXMLExport::GetCellStyleNameIndex(const ScMyCell& aCell, sal_Int32& nStyleNameIndex,
+    sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat)
 {
-    sal_Int32 nIndex = pCellStyles->GetStyleNameIndex(aCell.aCellAddress.Sheet, aCell.aCellAddress.Column, aCell.aCellAddress.Row, bIsAutoStyle, nValidationIndex);
+    sal_Int32 nIndex = pCellStyles->GetStyleNameIndex(aCell.aCellAddress.Sheet, aCell.aCellAddress.Column, aCell.aCellAddress.Row,
+        bIsAutoStyle, nValidationIndex, nNumberFormat);
     if (nIndex > -1)
     {
         nStyleNameIndex = nIndex;
@@ -2016,7 +2018,8 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
     sal_Int32 nIndex;
     sal_Bool bIsAutoStyle;
     sal_Int32 nValidationIndex;
-    if (GetCellStyleNameIndex(aCell, nIndex, bIsAutoStyle, nValidationIndex))
+    sal_Int32 nNumberFormat;
+    if (GetCellStyleNameIndex(aCell, nIndex, bIsAutoStyle, nValidationIndex, nNumberFormat))
         AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
     if (nValidationIndex > -1)
         AddAttribute(XML_NAMESPACE_TABLE, sXML_content_validation_name, pValidationsContainer->GetValidationName(nValidationIndex));
@@ -2045,7 +2048,7 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
     case table::CellContentType_VALUE :
         {
             XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
-                *this, GetCellNumberFormat(aCell.xCell), aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
+                *this, nNumberFormat/*GetCellNumberFormat(aCell.xCell)*/, aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
         }
         break;
     case table::CellContentType_TEXT :
@@ -2081,7 +2084,7 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
                     if (pFormulaCell->IsValue())
                     {
                         sal_Bool bIsStandard = sal_True;
-                        GetCellType(GetCellNumberFormat(aCell.xCell), bIsStandard);
+                        GetCellType(nNumberFormat/*GetCellNumberFormat(aCell.xCell)*/, bIsStandard);
                         if (bIsStandard)
                         {
                             uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
@@ -2098,7 +2101,7 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
                         }
                         else
                             XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(*this,
-                                GetCellNumberFormat(aCell.xCell), aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
+                                nNumberFormat/*GetCellNumberFormat(aCell.xCell)*/, aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
                     }
                     else
                     {
@@ -2512,8 +2515,9 @@ sal_Bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell
                 sal_Int32 nIndex1, nIndex2;
                 sal_Bool bIsAutoStyle1, bIsAutoStyle2;
                 sal_Int32 nValidationIndex1, nValidationIndex2;
-                if (GetCellStyleNameIndex(aCell1, nIndex1, bIsAutoStyle1, nValidationIndex1) &&
-                    GetCellStyleNameIndex(aCell2, nIndex2, bIsAutoStyle2, nValidationIndex2))
+                sal_Int32 nNumberFormat1, nNumberFormat2;
+                if (GetCellStyleNameIndex(aCell1, nIndex1, bIsAutoStyle1, nValidationIndex1, nNumberFormat1) &&
+                    GetCellStyleNameIndex(aCell2, nIndex2, bIsAutoStyle2, nValidationIndex2, nNumberFormat2))
                 {
                     if ((nIndex1 == nIndex2) && (bIsAutoStyle1 == bIsAutoStyle2) &&
                         (nValidationIndex1 == nValidationIndex2) &&
