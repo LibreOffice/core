@@ -32,7 +32,7 @@
 
     <component-description>
         <author> Andreas Schluens </author>
-        <name> com.sun.star.comp.frame.FrameLoaderFactory </name>
+        <name> com.sun.star.comp.framework.FrameLoaderFactory </name>
         <description>
             Supports creation and getting informations about registered frame loader services.
             These services could load a component into a frame.
@@ -41,6 +41,18 @@
         <language> c++ </language>
         <status value="final"/>
         <supported-service> com.sun.star.frame.FrameLoaderFactory </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Andreas Schluens </author>
+        <name> com.sun.star.comp.framework.ContentHandlerFactory </name>
+        <description>
+            Supports creation and getting informations about registered content handler services.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.document.ContentHandlerFactory </supported-service>
     </component-description>
 
     <component-description>

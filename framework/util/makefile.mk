@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: as $ $Date: 2001-08-10 11:55:14 $
+#   last change: $Author: as $ $Date: 2001-08-14 12:18:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,13 +69,10 @@ NO_BSYMBOLIC=		TRUE
 COMP1TYPELIST=		fwk
 COMP2TYPELIST=		fwl
 COMP3TYPELIST=		lgd
+COMP4TYPELIST=		fwe
 
 # --- Settings -----------------------------------------------------
-
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
 .IF "$(COM)"=="ICC"
 LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 .ENDIF
@@ -143,7 +140,9 @@ SHL1OBJS=		$(SLO)$/registerservices.obj		\
                 $(SLO)$/xmldocproperties.obj		\
                 $(SLO)$/fltdlg.obj                  \
                 $(SLO)$/droptargetlistener.obj		\
-                $(SLO)$/soundhandler.obj
+                $(SLO)$/soundhandler.obj			\
+                $(SLO)$/filtercache.obj				\
+                $(SLO)$/filtercachedata.obj
 
 SHL1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
