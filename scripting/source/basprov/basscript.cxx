@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basscript.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:03:16 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,12 @@
 #include "basscript.hxx"
 #endif
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _SBXCLASS_HXX
 #include <svtools/sbx.hxx>
 #endif
@@ -123,7 +129,17 @@ namespace basprov
         // TODO: throw CannotConvertException
         // TODO: check length of aOutParamIndex, aOutParam
 
-        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        if ( StarBASIC::IsRunning() )
+        {
+            throw provider::ScriptFrameworkErrorException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Basic is already running!" ) ),
+                Reference< XInterface >(),
+                m_funcName,
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Basic" ) ),
+                provider::ScriptFrameworkErrorType::UNKNOWN  );
+        }
 
         Any aReturn;
 
