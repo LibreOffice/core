@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.32 2001-04-04 13:32:32 dvo Exp $
+	$Id: style.mod,v 1.33 2001-04-04 14:50:40 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -372,8 +372,8 @@
 <!ATTLIST style:properties style:footnote-max-height %lengthOrNoLimit; #IMPLIED>
 
 <!ELEMENT style:footnote-sep EMPTY>
-<!ATTLIST style:footnote-sep style:width %length; #REQUIRED>
-<!ATTLIST style:footnote-sep style:rel-width %percentage; "100%">
+<!ATTLIST style:footnote-sep style:width %length; #IMPLIED>
+<!ATTLIST style:footnote-sep style:rel-width %percentage; #IMPLIED>
 <!ATTLIST style:footnote-sep style:color %color; #IMPLIED>
 <!ATTLIST style:footnote-sep style:adjustment (left|center|right) "left">
 <!ATTLIST style:footnote-sep style:distance-before-sep %length; #IMPLIED>
