@@ -1,0 +1,4 @@
+mkdir: %_DEST%\res%_EXT%\win32
+
+
+..\win32\office\icons\*.ico	%_DEST%\res%_EXT%\win32\*.ico
