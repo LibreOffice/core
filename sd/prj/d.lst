@@ -73,9 +73,16 @@ hedabu: ..\inc\sdobjfac.hxx %_DEST%\inc%_EXT%\sd\sdobjfac.hxx
 ..\xml\SdXCustomPresentation.xml %_DEST%\xml%_EXT%\SdXCustomPresentation.xml
 ..\xml\SdXCustomPresentationAccess.xml %_DEST%\xml%_EXT%\SdXCustomPresentationAccess.xml
 ..\xml\SdXImpressDocument.xml %_DEST%\xml%_EXT%\SdXImpressDocument.xml
-..\xml\SdXImpressView.xml %_DEST%\xml%_EXT%\SdXImpressView.xml
 ..\xml\SdXPresentation.xml %_DEST%\xml%_EXT%\SdXPresentation.xml
 ..\xml\SdXShape.xml %_DEST%\xml%_EXT%\SdXShape.xml
+
+..\xml\PreviewView.xml %_DEST%\xml%_EXT%\PreviewView.xml
+..\xml\DrawingView.xml %_DEST%\xml%_EXT%\DrawingView.xml
+..\xml\HandoutView.xml %_DEST%\xml%_EXT%\HandoutView.xml
+..\xml\NotesView.xml %_DEST%\xml%_EXT%\NotesView.xml
+..\xml\OutlineView.xml %_DEST%\xml%_EXT%\OutlineView.xml
+..\xml\OutlineView.xml %_DEST%\xml%_EXT%\OutlineView.xml
+..\xml\PresentationView.xml %_DEST%\xml%_EXT%\PresentationView.xml
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
