@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:43:53 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1160,8 +1160,8 @@ BOOL GraphicDescriptor::ImpDetectPSD( SvStream& rStm, BOOL bExtendedInfo )
 
 BOOL GraphicDescriptor::ImpDetectEPS( SvStream& rStm, BOOL bExtendedInfo )
 {
-    // es wird die EPS mit Vorschaubild Variante und die Extensionübereinstimmung
-    // geprüft
+    // es wird die EPS mit Vorschaubild Variante und die Extensionuebereinstimmung
+    // geprueft
 
     sal_uInt32  nFirstLong;
     sal_uInt8   nFirstBytes[20];
