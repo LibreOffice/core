@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: os $ $Date: 2002-10-07 12:59:48 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,26 @@ TabPage TP_CONTENT_OPT
         Size = MAP_APPFONT ( 65 , 10 ) ;
         Text = "Line~al" ;
         Text [ english_us ] = "R~uler" ;
+        Text[ portuguese ] = "R~uler";
+        Text[ russian ] = "R~uler";
+        Text[ greek ] = "R~uler";
+        Text[ dutch ] = "R~uler";
+        Text[ french ] = "R~uler";
+        Text[ spanish ] = "R~uler";
+        Text[ finnish ] = "R~uler";
+        Text[ italian ] = "R~uler";
+        Text[ danish ] = "R~uler";
+        Text[ swedish ] = "R~uler";
+        Text[ polish ] = "R~uler";
+        Text[ portuguese_brazilian ] = "R~uler";
+        Text[ japanese ] = "R~uler";
+        Text[ korean ] = "R~uler";
+        Text[ chinese_simplified ] = "R~uler";
+        Text[ chinese_traditional ] = "標尺";
+        Text[ turkish ] = "R~uler";
+        Text[ arabic ] = "R~uler";
+        Text[ catalan ] = "R~uler";
+        Text[ thai ] = "R~uler";
     };
     CheckBox CB_HRULER
     {
@@ -1698,6 +1718,7 @@ TabPage TP_STD_FONT
         Text[ chinese_traditional ] = "複雜的文字";
         Text[ turkish ] = "CTL";
         Text[ arabic ] = "CTL";
+        Text[ portuguese_brazilian ] = "Complexidade de scripts";
     };
     String ST_SCRIPT_WESTERN
     {
