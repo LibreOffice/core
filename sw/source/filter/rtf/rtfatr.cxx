@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:24:45 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,9 @@
 #include <unotools/charclass.hxx>
 #endif
 
-
+#ifndef _REFFLD_HXX //autogen wg. SwGetRefField
+#include <reffld.hxx>
+#endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
@@ -608,6 +610,7 @@ void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
 bool SwFmtToSet(SwRTFWriter& rWrt, const SwFmt& rFmt, SfxItemSet &rSet)
 {
     bool bOutItemSet = true;
+    rSet.SetParent(rFmt.GetAttrSet().GetParent());
 
     switch( rFmt.Which() )
     {
@@ -653,7 +656,7 @@ bool SwFmtToSet(SwRTFWriter& rWrt, const SwFmt& rFmt, SfxItemSet &rSet)
 
                     aSet.Put(aLR);
                     rSet.Put(aSet);
-                    bOutItemSet = FALSE;
+                    bOutItemSet = false;
                 }
             }
         }
@@ -677,7 +680,7 @@ bool SwFmtToSet(SwRTFWriter& rWrt, const SwFmt& rFmt, SfxItemSet &rSet)
     if (bOutItemSet)
         rSet.Put(rFmt.GetAttrSet());
 
-    return bOutItemSet;
+    return true;
 }
 
 Writer& OutRTF_SwFmt(Writer& rWrt, const SwFmt& rFmt)
@@ -1437,7 +1440,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         POOLATTR_END-1);
     bool bDeep = false;
 
-    if( bNewFmts && rRTFWrt.bWriteAll )
+    if( rRTFWrt.bWriteAll )
     {
         rRTFWrt.Strm() << sRTF_PARD << sRTF_PLAIN << ' ';       // alle Attribute zuruecksetzen
         if( rRTFWrt.bOutTable )
@@ -2637,6 +2640,48 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             RTFOutFuncs::Out_String( rWrt.Strm(), pFld->GetTyp()->GetName(),
                                     DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
             break;
+    case RES_GETREFFLD:
+        {
+            BYTE nFldTyp = 0;
+            rWrt.Strm() << aFldStt.GetBuffer() << " REF ";
+            const SwGetRefField& rRFld = *(SwGetRefField*)pFld;
+            switch( pFld->GetSubType() )
+            {
+                case REF_SETREFATTR:
+                case REF_BOOKMARK:
+                    RTFOutFuncs::Out_String( rWrt.Strm(), rRFld.GetSetRefName(),
+                                    DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
+                    nFldTyp = 3;
+                    break;
+            }
+
+            if( nFldTyp )
+            {
+                switch( pFld->GetFormat() )
+                {
+                    case REF_PAGE_PGDESC:
+                    case REF_PAGE:
+                        rWrt.Strm() << "SEITEN";
+                        nFldTyp = 37;
+                        break;
+                    case REF_UPDOWN:
+                        rWrt.Strm() << " \\p";
+                        nFldTyp = 3;
+                        break;
+                    case REF_CHAPTER:
+                        rWrt.Strm() << " \\n";
+                        break;
+                    case REF_ONLYNUMBER:
+                    case REF_ONLYCAPTION:
+                    case REF_ONLYSEQNO:
+                        break;
+                    // default:
+                    // case REF_CONTENT:
+                }
+                rWrt.Strm() << " \\\\h ";       // insert hyperlink
+            }
+        }
+        break;
 //  case RES_CHAPTERFLD:
 //          rWrt.Strm() << ' ';
 //          break;
@@ -3225,11 +3270,17 @@ Writer& OutRTF_SwFmtHeader( Writer& rWrt, const SfxPoolItem& rHt )
         // wird nicht die PageDesc-Tabelle ausgegeben und gibt es einen
         // Nachfolger, dann handelt es sich um die "1.Seite" nach RTF.
         sal_Char cTyp = 0;
-        if( !rRTFWrt.bOutPageDesc && rRTFWrt.pAktPageDesc->GetFollow() &&
+        if( rRTFWrt.pAktPageDesc->GetFollow() &&
             rRTFWrt.pAktPageDesc->GetFollow() != rRTFWrt.pAktPageDesc )
+        {
+            rWrt.Strm() << sRTF_TITLEPG;        //i13107
             cTyp = 'f';     // dann FirstPage-Header
+        }
         else if( !rRTFWrt.pAktPageDesc->IsHeaderShared() )
+        {
+            rWrt.Strm() << sRTF_FACINGP;        //i13107
             cTyp = rRTFWrt.bOutLeftHeadFoot ? 'l' : 'r';
+        }
 
         rWrt.Strm() << '{'<< pHdNm;
         if( cTyp ) rWrt.Strm() << cTyp;
@@ -3301,9 +3352,15 @@ Writer& OutRTF_SwFmtFooter( Writer& rWrt, const SfxPoolItem& rHt )
         sal_Char cTyp = 0;
         if( !rRTFWrt.bOutPageDesc && rRTFWrt.pAktPageDesc->GetFollow() &&
             rRTFWrt.pAktPageDesc->GetFollow() != rRTFWrt.pAktPageDesc )
+        {
+            rWrt.Strm() << sRTF_TITLEPG;        //i13107
             cTyp = 'f';     // dann FirstPage-Header
+        }
         else if( !rRTFWrt.pAktPageDesc->IsFooterShared() )
+        {
+            rWrt.Strm() << sRTF_FACINGP;        //i13107
             cTyp = rRTFWrt.bOutLeftHeadFoot ? 'l' : 'r';
+        }
 
         rWrt.Strm() << '{'<< pFtNm;
         if( cTyp ) rWrt.Strm() << cTyp;
