@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.142 $
+#   $Revision: 1.143 $
 #
-#   last change: $Author: hjs $ $Date: 2004-03-15 14:50:05 $
+#   last change: $Author: rt $ $Date: 2004-05-21 13:46:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1355,17 +1355,6 @@ HXX39 ?= TNR!:=39
 HXXCOPYTARGET=	copy_hxxcopyfiles
 .ENDIF
 
-# multi-list enabled
-.IF "$(IMGLST_SRS)"!=""
-.IF "$(make_srs_deps)"==""
-.IF "$(common_build_reslib)"!=""
-IMGLSTTARGET=$(foreach,j,$(IMGLST_SRS) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(j:b)_img$i.don))
-.ELSE			# "$(common_build_reslib)"!=""
-IMGLSTTARGET=$(foreach,j,$(IMGLST_SRS) $(foreach,i,$(alllangext) $(MISC)$/$(j:b)_img$i.don))
-.ENDIF			# "$(common_build_reslib)"!=""
-.ENDIF			# "$(make_srs_deps)"==""
-.ENDIF			# "$(IMGLST_SRS)"!=""
-
 .IF "$(LIB1TARGET)" != ""
 LIB1 ?= TNR!:=1
 LIB1TARGETN=$(LIB1TARGET)
@@ -1758,7 +1747,6 @@ ALLTAR:	\
         $(SRC10TARGET)	$(SRC11TARGET)	$(SRC12TARGET)		\
         $(SRC13TARGET)	$(SRC14TARGET)	$(SRC15TARGET)		\
         $(SRC16TARGET) \
-        $(IMGLSTTARGET) \
         $(RSC_MULTI1) \
         $(RSC_MULTI2) \
         $(RSC_MULTI3) \
@@ -1888,7 +1876,6 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(SRC10TARGET)	$(SRC11TARGET)	$(SRC12TARGET)		\
         $(SRC13TARGET)	$(SRC14TARGET)	$(SRC15TARGET)		\
         $(SRC16TARGET) \
-        $(IMGLSTTARGET) \
         $(RSC_MULTI1) \
         $(RSC_MULTI2) \
         $(RSC_MULTI3) \
@@ -2097,28 +2084,6 @@ COMPVTMP:=$(mktmp iii)
     
 .ENDIF			# "$(JAVAVERMK)"!=""
 
-# multi-list enabled
-.IF "$(IMGLSTTARGET)"!=""
-$(IMGLSTTARGET): $(IMGLST_SRS)
-    @+echo -----------------
-    @+echo Making Imagelists:
-    @+echo -----------------
-    @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(common_build_reslib)"!=""
-    @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
-    @-+$(MKDIR) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
-    +$(BMP) $(SRS)$/$(@:b:s/_img/ /:1).srs $(BMP_OUT)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(lang_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) -I $(BMP_IN) -I $(SOLARSRC)$/res -f $@
-    -+$(GNUCOPY) -pu $(subst,\,/ $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}))/* $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
-    +-$(RM) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))})$/*.*~
-.ELSE			# "$(common_build_reslib)"!=""
-    @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
-    +$(BMP) $(SRS)$/$(@:b:s/_img/ /:1).srs $(BMP_OUT)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(lang_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) -I $(BMP_IN) -I $(SOLARSRC)$/res -f $@
-.ENDIF			# "$(common_build_reslib)"!=""
-.IF "$(BMP_WRITES_FLAG)"==""
-    @+echo > $@
-.ENDIF
-.ENDIF
-
 
 .IF "$(XMLPROPERTIES)"!=""
 .IF "$(L10N_framework)"!=""
@@ -2254,10 +2219,6 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 .INCLUDE : tg_rslb.mk
 .ENDIF
 .ENDIF
-
-.IF "$(RSC_MULTI1)$(RSC_MULTI2)$(RSC_MULTI3)$(RSC_MULTI4)$(RSC_MULTI5)$(RSC_MULTI6)$(RSC_MULTI7)$(RSC_MULTI8)$(RSC_MULTI9)"!=""
-$(RSC_MULTI1) $(RSC_MULTI2) $(RSC_MULTI3) $(RSC_MULTI4) $(RSC_MULTI5) $(RSC_MULTI6) $(RSC_MULTI7) $(RSC_MULTI8) $(RSC_MULTI9): $(IMGLSTTARGET)
-.ENDIF          # "$(RSC_MULTI1)$(RSC_MULTI2)$(RSC_MULTI3)$(RSC_MULTI4)$(RSC_MULTI5)$(RSC_MULTI6)$(RSC_MULTI7)$(RSC_MULTI8)$(RSC_MULTI9)"!=""
 
 # -------
 # - SHL -
@@ -2667,8 +2628,7 @@ SRCALLTARGET:	\
         $(SRC7TARGET)	$(SRC8TARGET)	$(SRC9TARGET)		\
         $(SRC10TARGET)	$(SRC11TARGET)	$(SRC12TARGET)		\
         $(SRC13TARGET)	$(SRC14TARGET)	$(SRC15TARGET)		\
-        $(SRC16TARGET) \
-        $(IMGLSTTARGET)
+        $(SRC16TARGET)
 
 .IF "$(ZIP1TARGETN)$(ZIP2TARGETN)$(ZIP3TARGETN)$(ZIP4TARGETN)$(ZIP5TARGETN)$(ZIP6TARGETN)$(ZIP7TARGETN)$(ZIP8TARGETN)$(ZIP9TARGETN)"!=""
 ZIPALLTARGET: \
@@ -2831,14 +2791,6 @@ $(REMOTE_DEPEND):
 .ENDIF			# "$(REMOTE_DEPEND)"!=""
 
 .ENDIF			# "$(depend)" == ""
-
-%officenames.mk : "$(SRC_ROOT)$/officenames$/%officenames.mk"
-    @+$(COPY) $< $(SOLARVERSION)$/$(INPATH)$/inc$(EXT_UPDMINOR)$/$@ 
-.IF "$(depend)"==""	
-.INCLUDE .IGNORE : officenames.mk
-.INCLUDE .IGNORE : _officenames.mk
-.ENDIF			# "$(depend)"==""	
-
 
 .IF "$(SUBDIRS)"!=""
 
