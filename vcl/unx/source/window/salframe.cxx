@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-27 18:07:22 $
+ *  last change: $Author: ssa $ $Date: 2002-07-11 07:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,9 @@
 #ifndef _SV_FLOATWIN_HXX
 #include <floatwin.hxx>
 #endif
-
+#ifndef _SV_SALLAYOUT_HXX
+#include <sallayout.hxx>
+#endif
 #include <svapp.hxx>
 
 #ifndef _SV_SALBMP_HXX
@@ -775,7 +777,7 @@ SalGraphics *SalFrameData::GetGraphics()
     }
     else
     {
-        pGraphics_ = new SalGraphics;
+        pGraphics_ = new SalGraphicsLayout;
         pGraphics_->maGraphicsData.Init( pFrame_ );
     }
 
@@ -1583,6 +1585,10 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
 
      if( mpParent )
      {
+        // --- RTL --- (mirror window pos)
+        if( pGraphics_ && (pGraphics_->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+            values.x = mpParent->maGeometry.nWidth-values.width-1-values.x;
+
          XLIB_Window aChild;
          // coordinates are relative to parent, so translate to root coordinates
          XTranslateCoordinates( GetDisplay()->GetDisplay(),
@@ -2269,6 +2275,9 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
 
             nEvent = SALEVENT_WHEELMOUSE;
 
+            // --- RTL --- (mirror mouse pos)
+            if( pGraphics_ && (pGraphics_->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+                aWheelEvt.mnX = nWidth_-1-aWheelEvt.mnX;
             return Call( nEvent, &aWheelEvt );
         }
     }
@@ -2278,7 +2287,12 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
              aMouseEvt.mnY <  nHeight_ && aMouseEvt.mnY >  -1 )
         || pDisplay_->MouseCaptured( this )
         )
+    {
+        // --- RTL --- (mirror mouse pos)
+        if( pGraphics_ && (pGraphics_->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+            aMouseEvt.mnX = nWidth_-1-aMouseEvt.mnX;
         return Call( nEvent, &aMouseEvt );
+    }
 
 #ifdef DBG_UTIL
     fprintf( stderr, "SalFrameData::HandleMouseEvent %d size=%d*%d event=%d.%d\n",
@@ -2669,7 +2683,11 @@ long SalFrameData::HandleExposeEvent( XEvent *pEvent )
     aPEvt.mnBoundWidth      = maPaintRegion.GetWidth();
     aPEvt.mnBoundHeight     = maPaintRegion.GetHeight();
 
-    Call( SALEVENT_PAINT, &aPEvt );
+    // --- RTL --- (mirror paint rect)
+    if( pGraphics_ && (pGraphics_->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+        aPEvt.mnBoundX = nWidth_-aPEvt.mnBoundWidth-aPEvt.mnBoundX;
+
+     Call( SALEVENT_PAINT, &aPEvt );
     maPaintRegion = Rectangle();
 
     return 1;

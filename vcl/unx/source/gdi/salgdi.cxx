@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-19 11:39:09 $
+ *  last change: $Author: ssa $ $Date: 2002-07-11 07:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,12 @@
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
 #endif
-
+#ifndef _SV_SALFRAME_HXX
+#include <salframe.hxx>
+#endif
+#ifndef _SV_SALVD_HXX
+#include <salvd.hxx>
+#endif
 #include <tools/debug.hxx>
 
 #ifndef _USE_PRINT_EXTENSION_
@@ -559,6 +564,17 @@ USHORT SalGraphics::GetBitCount() // const
 #ifndef _USE_PRINT_EXTENSION_
     }
 #endif
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+long SalGraphics::GetGraphicsWidth()
+{
+    if( maGraphicsData.m_pFrame )
+        return maGraphicsData.m_pFrame->maGeometry.nWidth;
+    else if( maGraphicsData.m_pVDev )
+        return maGraphicsData.m_pVDev->maVirDevData.GetWidth();
+    else
+        return 0;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
