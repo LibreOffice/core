@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servuno.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-18 13:31:17 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,14 @@ class ScDocShell;
 #define SC_SERVICE_EXPORT_EOR   29
 #define SC_SERVICE_IMPORT_EOR   30
 
-#define SC_SERVICE_COUNT        31
+#define SC_SERVICE_VALBIND      31
+#define SC_SERVICE_LISTCELLBIND 32
+#define SC_SERVICE_LISTSOURCE   33
+
+#define SC_SERVICE_CELLADDRESS  34
+#define SC_SERVICE_RANGEADDRESS 35
+
+#define SC_SERVICE_COUNT        36
 #define SC_SERVICE_INVALID      USHRT_MAX
 
 
