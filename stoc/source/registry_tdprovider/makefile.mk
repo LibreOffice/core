@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:29:35 $
+#   last change: $Author: ganaya $ $Date: 2000-10-10 05:44:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,12 @@ SLOFILES=	\
         $(SLO)$/tdcomp.obj	\
         $(SLO)$/tdiface.obj	\
            $(SLO)$/$(COMP1TYPELIST)_description.obj
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+SLOFILES+=$(SLO)$/staticmbregistry_tdprovider.obj
+.ENDIF
 
 SHL1TARGET=	$(TARGET)
 
