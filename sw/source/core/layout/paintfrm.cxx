@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:23:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1870,10 +1870,38 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
                 // calculate paint offset
                 Point aPaintOffset( aAlignedPaintRect.Pos() - aGrf.Pos() );
                 // draw background graphic tiled for aligned paint rectangle
+                // --> OD 2005-02-15 #i42643# - apply fix #104004# for Calc
+                // also for Writer - see /sc/source/view/printfun.cxx
+                // For PDF export, every draw operation for bitmaps takes a
+                // noticeable amount of place (~50 characters). Thus, optimize
+                // between tile bitmap size and number of drawing operations here.
+                //
+                //                  A_out
+                // n_chars = k1 *  ---------- + k2 * A_bitmap
+                //                  A_bitmap
+                //
+                // minimum n_chars is obtained for (derive for  A_bitmap,
+                // set to 0, take positive solution):
+                //                   k1
+                // A_bitmap = Sqrt( ---- A_out )
+                //                   k2
+                //
+                // where k1 is the number of chars per draw operation, and
+                // k2 is the number of chars per bitmap pixel.
+                // This is approximately 50 and 7 for current PDF writer, respectively.
+                //
+                const double    k1( 50 );
+                const double    k2( 7 );
+                const Size      aSize( aAlignedPaintRect.SSize() );
+                const double    Abitmap( k1/k2 * static_cast<double>(aSize.Width())*aSize.Height() );
+
                 pGraphicObj->DrawTiled( pOutDev,
                                         aAlignedPaintRect.SVRect(),
                                         aGrf.SSize(),
-                                        Size( aPaintOffset.X(), aPaintOffset.Y() ) );
+                                        Size( aPaintOffset.X(), aPaintOffset.Y() ),
+                                        NULL, GRFMGR_DRAW_STANDARD,
+                                        ::std::max( 128, static_cast<int>( sqrt(sqrt( Abitmap)) + .5 ) ) );
+                // <--
             }
             // reset clipping at output device
             pOutDev->Pop();
