@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-23 11:40:35 $
+ *  last change: $Author: fs $ $Date: 2001-03-26 15:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1495,7 +1495,7 @@ void DbGridControl::setDataSource(const ::com::sun::star::uno::Reference< ::com:
     {
         xClone = xAccess.is() ? xAccess->createResultSet() : ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > ();
     }
-    catch(...)
+    catch(Exception&)
     {
     }
     if (xClone.is())
@@ -1566,51 +1566,48 @@ void DbGridControl::setDataSource(const ::com::sun::star::uno::Reference< ::com:
         ConnectToFields();
     }
 
-    if (GetModelColCount())
+    sal_uInt32 nRecordCount(0);
+
+    if (m_pSeekCursor)
     {
-        sal_uInt32 nRecordCount(0);
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet((::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >)*m_pDataCursor, ::com::sun::star::uno::UNO_QUERY);
+        xSet->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
+        m_bRecordCountFinal = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ROWCOUNTFINAL));
 
-        if (m_pSeekCursor)
+        // insert the currently known rows
+        // and one row if we are able to insert rows
+        if (m_nOptions & OPT_INSERT)
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet((::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >)*m_pDataCursor, ::com::sun::star::uno::UNO_QUERY);
-            xSet->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
-            m_bRecordCountFinal = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ROWCOUNTFINAL));
-
-            // insert the currently known rows
-            // and one row if we are able to insert rows
-            if (m_nOptions & OPT_INSERT)
-            {
-                // insert the empty row for insertion
-                m_xEmptyRow = new DbGridRow();
-                nRecordCount++;
-            }
-            if (nRecordCount)
-            {
-                m_xPaintRow = m_xSeekRow = new DbGridRow(m_pSeekCursor, sal_True);
-                m_xDataRow  = new DbGridRow(m_pDataCursor, sal_False);
-                RowInserted(0, nRecordCount, sal_False);
-
-                if (m_xSeekRow->IsValid())
-                    m_nSeekPos = m_pSeekCursor->getRow() - 1;
-            }
-            else
-            {
-                // no rows so we don't need a seekcursor
-                DELETEZ(m_pSeekCursor);
-            }
+            // insert the empty row for insertion
+            m_xEmptyRow = new DbGridRow();
+            nRecordCount++;
         }
-
-        // Zur alten Spalte gehen
-        if (!nCurPos || nCurPos >= ColCount())
-            nCurPos = 1;
-
-        // there are rows so go to the selected current column
         if (nRecordCount)
-            GoToRowColumnId(0, GetColumnId(nCurPos));
-        // else stop the editing if neccessary
-        else if (IsEditing())
-            DeactivateCell();
+        {
+            m_xPaintRow = m_xSeekRow = new DbGridRow(m_pSeekCursor, sal_True);
+            m_xDataRow  = new DbGridRow(m_pDataCursor, sal_False);
+            RowInserted(0, nRecordCount, sal_False);
+
+            if (m_xSeekRow->IsValid())
+                m_nSeekPos = m_pSeekCursor->getRow() - 1;
+        }
+        else
+        {
+            // no rows so we don't need a seekcursor
+            DELETEZ(m_pSeekCursor);
+        }
     }
+
+    // Zur alten Spalte gehen
+    if (!nCurPos || nCurPos >= ColCount())
+        nCurPos = 1;
+
+    // there are rows so go to the selected current column
+    if (nRecordCount)
+        GoToRowColumnId(0, GetColumnId(nCurPos));
+    // else stop the editing if neccessary
+    else if (IsEditing())
+        DeactivateCell();
 
     // now reset the mode
     if (m_nMode != nOldMode)
@@ -2105,13 +2102,13 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow, sal_Bool bForceInsertIfNewRow)
     }
     catch(com::sun::star::sdbc::SQLException& )
     {
-        DBG_ERROR("DbGridControl::SetCurrent : catched an exception !");
+        DBG_ERROR("DbGridControl::SetCurrent : caught an exception !");
         EndCursorAction();
         return sal_False;
     }
-    catch(...)
+    catch (Exception)
     {
-        DBG_ERROR("DbGridControl::SetCurrent : catched an exception !");
+        DBG_ERROR("DbGridControl::SetCurrent : caught an exception !");
         EndCursorAction();
         return sal_False;
     }
@@ -2283,7 +2280,7 @@ sal_Int32 DbGridControl::AlignSeekCursor()
                 // Und die Alternative waere eine Schleife so lange bis es stimmt, und das kann auch nicht die Loesung sein
             m_nSeekPos = m_pSeekCursor->getRow() - 1;
         }
-        catch(...)
+        catch(Exception&)
         {
         }
     }
@@ -2419,7 +2416,7 @@ void DbGridControl::MoveToLast()
                 AdjustRows();
             }
         }
-        catch(...)
+        catch(Exception&)
         {
         }
     }
@@ -2472,7 +2469,7 @@ void DbGridControl::MoveToNext()
         }
         catch(::com::sun::star::sdbc::SQLException &)
         {
-            DBG_ERROR("DbGridControl::MoveToNext: SQLException catched");
+            DBG_ERROR("DbGridControl::MoveToNext: SQLException caught");
         }
 
         if(!bOk)
@@ -2508,7 +2505,7 @@ void DbGridControl::MoveToPosition(sal_uInt32 nPos)
                     AdjustRows();
                 }
             }
-            catch(...)
+            catch(Exception&)
             {
                 return;
             }
@@ -2536,7 +2533,7 @@ void DbGridControl::AppendNew()
                 AdjustRows();
             }
         }
-        catch(...)
+        catch(Exception&)
         {
             return;
         }
@@ -2680,7 +2677,7 @@ void DbGridControl::DataSourcePropertyChanged(const ::com::sun::star::beans::Pro
         if (xSource.is())
             bIsNew = ::comphelper::getBOOL(xSource->getPropertyValue(FM_PROP_ISNEW));
 
-        if (bIsNew)
+        if (bIsNew && m_xCurrentRow.Is())
         {
             DBG_ASSERT(::comphelper::getBOOL(xSource->getPropertyValue(FM_PROP_ROWCOUNTFINAL)), "DbGridControl::DataSourcePropertyChanged : somebody moved the form to a new record before the row count was final !");
             sal_Int32 nRecordCount;
@@ -3010,7 +3007,7 @@ void DbGridControl::Undo()
                 xUpdateCursor->cancelRowUpdates();
 
         }
-        catch(...)
+        catch(Exception&)
         {
         }
 
@@ -3196,7 +3193,7 @@ sal_Bool DbGridControl::SaveRow()
         // and repaint the row
         RowModified(m_nCurrentPos);
     }
-    catch(...)
+    catch(Exception&)
     {
     }
 
