@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-17 15:06:07 $
+#   last change: $Author: rt $ $Date: 2004-11-26 15:07:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,6 @@ SLOFILES =	\
         $(SLO)$/objcont.obj \
         $(SLO)$/objserv.obj \
         $(SLO)$/objitem.obj \
-        $(SLO)$/storagehelper.obj \
         $(SLO)$/docfac.obj \
         $(SLO)$/docfilt.obj \
         $(SLO)$/doctempl.obj \
@@ -120,7 +119,6 @@ SLOFILES =	\
 #		$(SLO)$/commitlistener.obj \
 #		$(SLO)$/objxtor.obj \
 #		$(SLO)$/objstor.obj \
-#		$(SLO)$/storagehelper.obj \
 #		$(SLO)$/graphhelp.obj \
 #		$(SLO)$/guisaveas.obj\
 #		$(SLO)$/xmlversion.obj\
