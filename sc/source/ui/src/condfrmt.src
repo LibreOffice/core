@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-30 19:59:49 $
+ *  last change: $Author: obo $ $Date: 2001-06-05 21:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text = "Bedingung ~1" ;
         Text [ ENGLISH ] = "Condition ~1" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Condition 1" ;
-        Text [ italian ] = "Condizione 1" ;
+        Text [ english_us ] = "Condition ~1" ;
+        Text [ italian ] = "Condizione ~1" ;
         Text [ spanish ] = "Condición 1" ;
-        Text [ french ] = "Condition 1" ;
+        Text [ french ] = "Condition ~1" ;
         Text [ dutch ] = "Voorwaarde 1" ;
         Text [ swedish ] = "Villkor ~1" ;
         Text [ danish ] = "Betingelse 1" ;
@@ -585,10 +585,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Right = TRUE ;
         Text = "~Zellvorlage" ;
         Text [ ENGLISH ] = "~Cell style" ;
-        Text [ english_us ] = "Cell Style" ;
+        Text [ english_us ] = "~Cell Style" ;
         Text [ italian ] = "Modello di cella" ;
         Text [ spanish ] = "Estilo de celda" ;
-        Text [ french ] = "Style de cellule" ;
+        Text [ french ] = "Style de ~cellule" ;
         Text [ dutch ] = "Celopmaak" ;
         Text [ swedish ] = "~Cellformatmall" ;
         Text [ danish ] = "Celletypografi" ;
@@ -627,10 +627,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text = "Bedingung ~2" ;
         Text [ ENGLISH ] = "Condition ~2" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Condition 2" ;
-        Text [ italian ] = "Condizione 2" ;
+        Text [ english_us ] = "Condition ~2" ;
+        Text [ italian ] = "Condizione ~2" ;
         Text [ spanish ] = "Condición 2" ;
-        Text [ french ] = "Condition 2" ;
+        Text [ french ] = "Condition ~2" ;
         Text [ dutch ] = "Voorwaarde 2" ;
         Text [ swedish ] = "Villkor ~2" ;
         Text [ danish ] = "Betingelse 2" ;
@@ -1134,10 +1134,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Right = TRUE ;
         Text = "Z~ellvorlage" ;
         Text [ ENGLISH ] = "C~ell style" ;
-        Text [ english_us ] = "Cell Style" ;
+        Text [ english_us ] = "C~ell Style" ;
         Text [ italian ] = "Modello di cella" ;
         Text [ spanish ] = "Estilo de celda" ;
-        Text [ french ] = "Style de cellule" ;
+        Text [ french ] = "Style de c~ellule" ;
         Text [ dutch ] = "Celopmaak" ;
         Text [ swedish ] = "C~ellformatmall" ;
         Text [ danish ] = "Celletypografi" ;
@@ -1176,10 +1176,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text = "Bedingung ~3" ;
         Text [ ENGLISH ] = "Condition ~3" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Condition 3" ;
-        Text [ italian ] = "Condizione 3" ;
+        Text [ english_us ] = "Condition ~3" ;
+        Text [ italian ] = "Condizione ~3" ;
         Text [ spanish ] = "Condición 3" ;
-        Text [ french ] = "Condition 3" ;
+        Text [ french ] = "Condition ~3" ;
         Text [ dutch ] = "Voorwaarde 3" ;
         Text [ swedish ] = "Villkor ~3" ;
         Text [ danish ] = "Betingelse 3" ;
@@ -1683,10 +1683,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Right = TRUE ;
         Text = "Ze~llvorlage" ;
         Text [ ENGLISH ] = "Ce~ll style" ;
-        Text [ english_us ] = "Cell Style" ;
+        Text [ english_us ] = "Ce~ll Style" ;
         Text [ italian ] = "Modello di cella" ;
         Text [ spanish ] = "Estilo de celda" ;
-        Text [ french ] = "Style de cellule" ;
+        Text [ french ] = "Style de ce~llule" ;
         Text [ dutch ] = "Celopmaak" ;
         Text [ swedish ] = "Ce~llformatmall" ;
         Text [ danish ] = "Celletypografi" ;
