@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2002-05-17 16:11:41 $
+ *  last change: $Author: af $ $Date: 2002-06-12 12:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,9 @@ ChildrenManager::ChildrenManager (
     if (mpImpl != NULL)
         mpImpl->Init ();
     else
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(
+            ::rtl::OUString::createFromAscii(
+                "ChildrenManager::ChildrenManager can't create implementation object"), NULL);
 }
 
 
@@ -99,7 +101,7 @@ ChildrenManager::ChildrenManager (
 ChildrenManager::~ChildrenManager (void)
 {
     if (mpImpl != NULL)
-        delete mpImpl;
+        mpImpl->dispose();
 
     // emtpy
     OSL_TRACE ("~ChildrenManager");
