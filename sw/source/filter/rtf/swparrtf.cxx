@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:51:36 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1420,7 +1420,9 @@ void SwRTFParser::NextToken( int nToken )
         if( IsNewDoc() && bSwPageDesc &&
             USHORT(nTokenValue) < pDoc->GetPageDescCnt() )
         {
-            const SwPageDesc* pPgDsc = &pDoc->GetPageDesc( USHORT(nTokenValue) );
+            const SwPageDesc* pPgDsc =
+                &const_cast<const SwDoc *>(pDoc)
+                ->GetPageDesc( USHORT(nTokenValue) );
             CheckInsNewTblLine();
             pDoc->Insert( *pPam, SwFmtPageDesc( pPgDsc ));
         }
@@ -2808,7 +2810,8 @@ void SwRTFParser::ReadPageDescTbl()
             if( nTokenValue )
                 pPg->SetFollow( (const SwPageDesc*)nTokenValue );
             else
-                pPg->SetFollow( &pDoc->GetPageDesc( 0 ) );
+                pPg->SetFollow( & const_cast<const SwDoc *>(pDoc)
+                                ->GetPageDesc( 0 ) );
             break;
 
         case RTF_FORMULA:   /* Zeichen "\|" !!! */
@@ -2988,8 +2991,9 @@ void SwRTFParser::ReadPageDescTbl()
     {
         SwPageDesc* pPgDsc = &pDoc->_GetPageDesc( nPos );
         if( (USHORT)(long)pPgDsc->GetFollow() < pDoc->GetPageDescCnt() )
-            pPgDsc->SetFollow( &pDoc->GetPageDesc(
-                    (USHORT)(long)pPgDsc->GetFollow() ));
+            pPgDsc->SetFollow(& const_cast<const SwDoc *>(pDoc)
+                              ->GetPageDesc((USHORT)(long)
+                                            pPgDsc->GetFollow()));
     }
 
     SetChkStyleAttr( bSaveChkStyleAttr );
@@ -3715,7 +3719,8 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
         if( IsNewDoc() && bSwPageDesc &&
             USHORT(nTokenValue) < pDoc->GetPageDescCnt() )
         {
-            const SwPageDesc* pPgDsc = &pDoc->GetPageDesc( (USHORT)nTokenValue );
+            const SwPageDesc* pPgDsc = &const_cast<const SwDoc *>(pDoc)
+                ->GetPageDesc( (USHORT)nTokenValue );
             pDoc->Insert( *pPam, SwFmtPageDesc( pPgDsc ));
         }
         break;
