@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewWrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-08 17:11:02 $
+ *  last change: $Author: iha $ $Date: 2003-12-10 18:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 #include "DrawViewWrapper.hxx"
 #include "DrawModelWrapper.hxx"
+#include "ConfigurationAccess.hxx"
+#include "ViewSingletons.hxx"
 
 // header for class SdrPage
 #ifndef _SVDPAGE_HXX
@@ -85,6 +87,10 @@
 // header for class SvxForbiddenCharactersTable
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include <svx/forbiddencharacterstable.hxx>
+#endif
+
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
 #endif
 
 //.............................................................................
@@ -137,9 +143,13 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut)
 
 void DrawViewWrapper::ReInit()
 {
+    OutputDevice* pOutDev = this->GetWin(0);
+    Size aOutputSize(100,100);
+    if(pOutDev)
+        aOutputSize = pOutDev->GetOutputSize();
+
     m_pWrappedDLPageView = this->ShowPagePgNum( 0, Point(0,0) );
-    m_pWrappedDLPageView->GetPage()->SetSize(
-        this->GetWin(0)->GetOutputSize() );
+    m_pWrappedDLPageView->GetPage()->SetSize( aOutputSize );
     this->SetPageBorderVisible(false);
     this->SetBordVisible(false);
     this->SetGridVisible(false);
@@ -147,6 +157,11 @@ void DrawViewWrapper::ReInit()
     this->SetHlplVisible(false);
     this->SetNoDragXorPolys(true);//for interactive 3D resize-dragging: paint only a single rectangle (not a simulated 3D object)
     //this->SetResizeAtCenter(true);//for interactive resize-dragging: keep the object center fix
+
+    //a correct work area is at least necessary for correct values in the position and  size dialog
+    //Rectangle aRect = pOutDev->PixelToLogic(Rectangle(Point(0,0), aOutputSize));
+    Rectangle aRect(Point(0,0), aOutputSize);
+    this->SetWorkArea(aRect);
 }
 
 DrawViewWrapper::~DrawViewWrapper()
@@ -235,6 +250,20 @@ SdrOutliner* DrawViewWrapper::getOutliner() const
 {
 //    lcl_initOutliner( m_apOutliner.get(), &GetModel()->GetDrawOutliner() );
     return m_apOutliner.get();
+}
+
+SfxItemSet DrawViewWrapper::getPositionAndSizeItemSetFromMarkedObject() const
+{
+    SfxItemSet aFullSet( GetModel()->GetItemPool(),
+                    SID_ATTR_TRANSFORM_POS_X,SID_ATTR_TRANSFORM_ANGLE,
+                    SID_ATTR_TRANSFORM_PROTECT_POS,SID_ATTR_TRANSFORM_AUTOHEIGHT,
+                    SDRATTR_ECKENRADIUS,SDRATTR_ECKENRADIUS,
+                    SID_ATTR_METRIC,SID_ATTR_METRIC,
+                    0);
+    SfxItemSet aGeoSet( E3dView::GetGeoAttrFromMarked() );
+    aFullSet.Put( aGeoSet );
+    aFullSet.Put( SfxUInt16Item(SID_ATTR_METRIC,ViewSingletons::getConfigurationAccess()->getFieldUnit()) );
+    return aFullSet;
 }
 
 //.............................................................................
