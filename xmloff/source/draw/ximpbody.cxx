@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: cl $ $Date: 2000-11-08 12:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,10 @@
 #include "families.hxx"
 #endif
 
+#ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
+#include "PropertySetMerger.hxx"
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -179,10 +183,49 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                 if(pStyle && pStyle->ISA(XMLPropStyleContext))
                 {
                     XMLPropStyleContext* pPropStyle = (XMLPropStyleContext*)pStyle;
-                    uno::Reference <beans::XPropertySet> xPropSet(rShapes, uno::UNO_QUERY);
-                    if(xPropSet.is())
+
+
+                    uno::Reference <beans::XPropertySet> xPropSet1(rShapes, uno::UNO_QUERY);
+                    if(xPropSet1.is())
                     {
-                        pPropStyle->FillPropertySet(xPropSet);
+                        // since the background items are in a different propertyset
+                        // which itself is a property of the pages property set
+                        // we now merge these two propertysets if possible to simulate
+                        // a single propertyset with all draw page properties
+                        const OUString aBackground(RTL_CONSTASCII_USTRINGPARAM("Background"));
+                        uno::Reference< beans::XPropertySet > xPropSet2;
+                        uno::Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
+                        if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )
+                        {
+                            uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetSdImport().GetModel(), uno::UNO_QUERY);
+                            if(xServiceFact.is())
+                            {
+                                uno::Reference< beans::XPropertySet > xTempSet(
+                                    xServiceFact->createInstance(
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Background"))),
+                                    uno::UNO_QUERY);
+
+                                xPropSet2 = xTempSet;
+                            }
+                        }
+
+                        uno::Reference< beans::XPropertySet > xPropSet;
+                        if( xPropSet2.is() )
+                            xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xPropSet2 );
+                        else
+                            xPropSet = xPropSet1;
+
+                        if(xPropSet.is())
+                        {
+                            pPropStyle->FillPropertySet(xPropSet);
+                        }
+
+                        if( xPropSet2.is() )
+                        {
+                            uno::Any aAny;
+                            aAny <<= xPropSet2;
+                            xPropSet1->setPropertyValue( aBackground, aAny );
+                        }
                     }
                 }
             }

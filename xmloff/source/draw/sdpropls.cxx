@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-26 14:31:15 $
+ *  last change: $Author: cl $ $Date: 2000-11-08 12:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,12 +164,12 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
 
     // graphic attributes
     { "GraphicColorMode", XML_NAMESPACE_DRAW, sXML_color_mode,          XML_SD_TYPE_COLORMODE, 0 },
-    { "AdjustLuminance",  XML_NAMESPACE_DRAW, sXML_luminance,           XML_TYPE_PERCENT, 0 },      // signed?
-    { "AdjustContrast", XML_NAMESPACE_DRAW, sXML_contrast,              XML_TYPE_PERCENT, 0 },      // signed?
+    { "AdjustLuminance",  XML_NAMESPACE_DRAW, sXML_luminance,           XML_TYPE_PERCENT16, 0 },        // signed?
+    { "AdjustContrast", XML_NAMESPACE_DRAW, sXML_contrast,              XML_TYPE_PERCENT16, 0 },        // signed?
     { "Gamma",          XML_NAMESPACE_DRAW, sXML_gamma,                 XML_TYPE_DOUBLE, 0 },       // signed?
-    { "AdjustRed",      XML_NAMESPACE_DRAW, sXML_red,                   XML_TYPE_PERCENT, 0 },      // signed?
-    { "AdjustGreen",    XML_NAMESPACE_DRAW, sXML_green,                 XML_TYPE_PERCENT, 0 },      // signed?
-    { "AdjustBlue",     XML_NAMESPACE_DRAW, sXML_blue,                  XML_TYPE_PERCENT, 0 },      // signed?
+    { "AdjustRed",      XML_NAMESPACE_DRAW, sXML_red,                   XML_TYPE_PERCENT16, 0 },        // signed?
+    { "AdjustGreen",    XML_NAMESPACE_DRAW, sXML_green,                 XML_TYPE_PERCENT16, 0 },        // signed?
+    { "AdjustBlue",     XML_NAMESPACE_DRAW, sXML_blue,                  XML_TYPE_PERCENT16, 0 },        // signed?
 
     // animation text attributes
 
@@ -232,6 +232,15 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
 // still missing:
 //  { "", XML_NAMESPACE_PRESENTATION, "visibility", XML_SD_TYPE_PRESPAGE_VISIBILITY, 0 },
 //  { "", XML_NAMESPACE_PRESENTATION, "sound", XML_SD_TYPE_PRESPAGE_SOUND, 0 },
+
+    { "FillStyle",              XML_NAMESPACE_DRAW, sXML_fill,                  XML_SD_TYPE_FILLSTYLE, 0 },
+    { "FillColor",              XML_NAMESPACE_DRAW, sXML_fill_color,            XML_TYPE_COLOR, 0 },
+    { "FillGradientName",       XML_NAMESPACE_DRAW, sXML_fill_gradient_name,    XML_TYPE_STRING, 0 },
+    { "FillGradientStepCount",  XML_NAMESPACE_DRAW, sXML_gradient_step_count,   XML_TYPE_NUMBER, 0 },
+    { "FillHatchName",          XML_NAMESPACE_DRAW, sXML_fill_hatch_name,       XML_TYPE_STRING, 0 },
+    { "FillBitmapName",         XML_NAMESPACE_DRAW, sXML_fill_image_name,       XML_TYPE_STRING, 0 },
+    { "FillTransparenceName",   XML_NAMESPACE_DRAW, sXML_transparency_name,     XML_TYPE_STRING, 0 },
+
     { 0L }
 };
 
