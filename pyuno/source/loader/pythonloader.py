@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pythonloader.py,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2003-04-06 17:16:47 $
+#   last change: $Author: hr $ $Date: 2004-02-02 19:28:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,11 +99,13 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
                 
           try:
                 if "file" == protocol:
+                      # remove \..\ sequence, which may be useful e.g. in the build env
+                      url = unohelper.absolutize( url, url )
+
+                      # did we load the module already ?
                       mod = g_loadedComponents.get( url )
                       if not mod:
                             mod = imp.new_module("uno_component")
-                            # remove \..\ sequence, which may be useful e.g. in the build env
-                            url = unohelper.absolutize( url, url )
 
                             # read the file
                             fileHandle = file( unohelper.fileUrlToSystemPath( url ) )
