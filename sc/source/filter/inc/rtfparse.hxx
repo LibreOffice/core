@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfparse.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:56:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ private:
 public:
                         ScRTFParser( EditEngine* );
     virtual             ~ScRTFParser();
-    virtual ULONG       Read( SvStream& );
+    virtual ULONG       Read( SvStream&, const String& rBaseURL );
 };
 
 
