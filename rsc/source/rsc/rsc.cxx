@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-27 14:13:06 $
+ *  last change: $Author: hjs $ $Date: 2004-06-08 16:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,6 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
                     const ByteString    aPath( pEqual + 1 );
                     DirEntry            aDir( String( aPath, RTL_TEXTENCODING_ASCII_US ) );
 
-                    aDir.ToAbs();
                     m_aReplacements.push_back( std::pair< OString, OString >( OString( (*ppStr)+4, pEqual - *ppStr - 4 ),
                                                                               ByteString( aDir.GetFull(), RTL_TEXTENCODING_ASCII_US ) ) );
                 }
@@ -295,7 +294,6 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
                 const ByteString    aSysSearchDir( (*ppStr)+4 );
                 DirEntry            aSysDir( String( aSysSearchDir, RTL_TEXTENCODING_ASCII_US ) );
 
-                aSysDir.ToAbs();
                 m_aOutputFiles.back().aSysSearchDirs.push_back( ByteString( aSysDir.GetFull(), RTL_TEXTENCODING_ASCII_US ) );
 
                 if( m_aOutputFiles.back().aLangSearchPath.Len() )
@@ -1287,34 +1285,36 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
         while( ( aDirIter != rOutputFile.aSysSearchDirs.end() ) && !bFound )
         {
             const DirEntry  aPath( String( *aDirIter, RTL_TEXTENCODING_ASCII_US ) );
-            DirEntry        aTestPath( aPath );
-            const String    aFullPath( ( aTestPath += DirEntry( String( *aFileIter, RTL_TEXTENCODING_ASCII_US ) ) ).GetFull() );
-            const FileStat  aFS( aFullPath );
+            DirEntry        aRelPath( aPath );
+            DirEntry        aAbsPath( aRelPath += DirEntry( String( *aFileIter, RTL_TEXTENCODING_ASCII_US ) ) );
+
+            aAbsPath.ToAbs();
+            const FileStat aFS( aAbsPath.GetFull() );
 
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "Searching image: %s\n", ByteString( aFullPath, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+            fprintf( stderr, "Searching image: %s\n", ByteString( aRelPath.GetFull(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
 #endif
 
             if( aFS.IsKind( FSYS_KIND_FILE ) )
             {
                 std::list< std::pair< OString, OString > >::const_iterator  aReplIter( rContext.pCmdLine->m_aReplacements.begin() );
-                OString                                                     aPath( aFullPath.GetBuffer(), aFullPath.Len(), RTL_TEXTENCODING_ASCII_US );
+                String                                                      aStr( aRelPath.GetFull() );
+                OString                                                     aRelPathStr( aStr.GetBuffer(), aStr.Len(), RTL_TEXTENCODING_ASCII_US );
 
                 while( ( aReplIter != rContext.pCmdLine->m_aReplacements.end() ) && !bFound )
                 {
-                    if( ByteString( aPath ).ToLowerAscii().Search( ByteString( aReplIter->second ).ToLowerAscii() ) == 0 )
+                    if( ByteString( aRelPathStr ).ToLowerAscii().Search( ByteString( aReplIter->second ).ToLowerAscii() ) == 0 )
                     {
-                        sal_Int32       nCopyPos = aReplIter->second.getLength(), nLength = aPath.getLength();
-                        const sal_Char* pChars = aPath.getStr();
+                        sal_Int32       nCopyPos = aReplIter->second.getLength(), nLength = aRelPathStr.getLength();
+                        const sal_Char* pChars = aRelPathStr.getStr();
 
-                        while( ( nCopyPos < nLength ) &&
-                               ( pChars[ nCopyPos ] == '/' || pChars[ nCopyPos ] == '\\' || pChars[ nCopyPos ] == ':' ) )
+                        while( ( nCopyPos < nLength ) && ( pChars[ nCopyPos ] == '/' || pChars[ nCopyPos ] == '\\' || pChars[ nCopyPos ] == ':' ) )
                         {
                             ++nCopyPos;
                         }
 
                         if( nCopyPos < nLength )
-                            rImagePath = aPath.copy( nCopyPos ).replace( '\\', '/' );
+                            rImagePath = aRelPathStr.copy( nCopyPos ).replace( '\\', '/' );
 
                         bFound = true;
                     }
@@ -1322,13 +1322,7 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                     ++aReplIter;
                 }
 
-                if( !bFound )
-                {
-                    rImagePath = aPath;
-                    bFound = true;
-                }
-
-                if( pSysListFile )
+                if( bFound && pSysListFile )
                 {
                     DirEntry    aSysPath( String( *aDirIter, RTL_TEXTENCODING_ASCII_US ) );
                     String      aSysPathFull( ( aSysPath += DirEntry( String( *aFileIter, RTL_TEXTENCODING_ASCII_US ) ) ).GetFull() );
