@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:35:02 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,12 @@
 #ifndef _ACCESSIBILITYOPTIONS_HXX
 #include <accessibilityoptions.hxx>
 #endif
+
+// --> FME 2004-06-08 #i12836# enhanced pdf export
+#ifndef _ENHANCEDPDFEXPORTHELPER_HXX
+#include <EnhancedPDFExportHelper.hxx>
+#endif
+// <--
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
@@ -821,52 +827,52 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
 }
 
 /*************************************************************************
- *                          lcl_CalcRect()
+ *                          SwTxtPaintInfo::CalcRect()
  *************************************************************************/
 
-void lcl_CalcRect( const SwTxtPaintInfo* pInf, const SwLinePortion& rPor,
-                   SwRect* pRect, SwRect* pIntersect )
+void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
+                               SwRect* pRect, SwRect* pIntersect ) const
 {
     Size aSize( rPor.Width(), rPor.Height() );
     if( rPor.IsHangingPortion() )
         aSize.Width() = ((SwHangingPortion&)rPor).GetInnerWidth();
-    if( rPor.InSpaceGrp() && pInf->GetSpaceAdd() )
+    if( rPor.InSpaceGrp() && GetSpaceAdd() )
     {
-        SwTwips nAdd = rPor.CalcSpacing( pInf->GetSpaceAdd(), *pInf );
-        if( rPor.InFldGrp() && pInf->GetSpaceAdd() < 0 && nAdd )
-            nAdd += pInf->GetSpaceAdd();
+        SwTwips nAdd = rPor.CalcSpacing( GetSpaceAdd(), *this );
+        if( rPor.InFldGrp() && GetSpaceAdd() < 0 && nAdd )
+            nAdd += GetSpaceAdd();
         aSize.Width() += nAdd;
     }
 
     Point aPoint;
 
-    if( pInf->IsRotated() )
+    if( IsRotated() )
     {
         long nTmp = aSize.Width();
         aSize.Width() = aSize.Height();
         aSize.Height() = nTmp;
-        if ( 1 == pInf->GetDirection() )
+        if ( 1 == GetDirection() )
         {
-            aPoint.A() = pInf->X() - rPor.GetAscent();
-            aPoint.B() = pInf->Y() - aSize.Height();
+            aPoint.A() = X() - rPor.GetAscent();
+            aPoint.B() = Y() - aSize.Height();
         }
         else
         {
-            aPoint.A() = pInf->X() - rPor.Height() + rPor.GetAscent();
-            aPoint.B() = pInf->Y();
+            aPoint.A() = X() - rPor.Height() + rPor.GetAscent();
+            aPoint.B() = Y();
         }
     }
     else
     {
-        aPoint.A() = pInf->X();
-        aPoint.B() = pInf->Y() - rPor.GetAscent();
+        aPoint.A() = X();
+        aPoint.B() = Y() - rPor.GetAscent();
     }
 
 #ifdef BIDI
     // Adjust x coordinate if we are inside a bidi portion
-    const BOOL bFrmDir = pInf->GetTxtFrm()->IsRightToLeft();
-    BOOL bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == pInf->GetDirection() ) ||
-                       (   bFrmDir && DIR_LEFT2RIGHT == pInf->GetDirection() );
+    const BOOL bFrmDir = GetTxtFrm()->IsRightToLeft();
+    BOOL bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == GetDirection() ) ||
+                       (   bFrmDir && DIR_LEFT2RIGHT == GetDirection() );
 
     if ( bCounterDir )
         aPoint.A() -= aSize.Width();
@@ -875,23 +881,23 @@ void lcl_CalcRect( const SwTxtPaintInfo* pInf, const SwLinePortion& rPor,
     SwRect aRect( aPoint, aSize );
 
 #ifdef BIDI
-    if ( pInf->GetTxtFrm()->IsRightToLeft() )
-        pInf->GetTxtFrm()->SwitchLTRtoRTL( aRect );
+    if ( GetTxtFrm()->IsRightToLeft() )
+        GetTxtFrm()->SwitchLTRtoRTL( aRect );
 #endif
 
-    if ( pInf->GetTxtFrm()->IsVertical() )
-        pInf->GetTxtFrm()->SwitchHorizontalToVertical( aRect );
+    if ( GetTxtFrm()->IsVertical() )
+        GetTxtFrm()->SwitchHorizontalToVertical( aRect );
 
     if ( pRect )
         *pRect = aRect;
 
     if( aRect.HasArea() && pIntersect )
     {
-        ::SwAlignRect( aRect, (ViewShell*)pInf->GetVsh() );
+        ::SwAlignRect( aRect, (ViewShell*)GetVsh() );
 
-        if ( pInf->GetOut()->IsClipRegion() )
+        if ( GetOut()->IsClipRegion() )
         {
-            SwRect aClip( pInf->GetOut()->GetClipRegion().GetBoundRect() );
+            SwRect aClip( GetOut()->GetClipRegion().GetBoundRect() );
             aRect.Intersection( aClip );
         }
 
@@ -1062,8 +1068,7 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
     if( OnWin() )
     {
         SwRect aRect;
-
-        lcl_CalcRect( this, rPor, &aRect, 0 );
+        CalcRect( rPor, &aRect );
 
         if ( ! aRect.HasArea() )
             return;
@@ -1093,8 +1098,7 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
         ((SwLinePortion&)rPor).Width( LINE_BREAK_WIDTH );
 
         SwRect aRect;
-
-        lcl_CalcRect( this, rPor, &aRect, 0 );
+        CalcRect( rPor, &aRect );
 
         if( aRect.HasArea() )
         {
@@ -1218,8 +1222,7 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
     ASSERT( OnWin(), "SwTxtPaintInfo::DrawBackground: printer polution ?" );
 
     SwRect aIntersect;
-
-    lcl_CalcRect( this, rPor, 0, &aIntersect );
+    CalcRect( rPor, 0, &aIntersect );
 
     if ( aIntersect.HasArea() )
     {
@@ -1264,12 +1267,16 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
     ASSERT( pFnt->GetBackColor(), "DrawBackBrush: Lost Color" );
 
     SwRect aIntersect;
-
-    lcl_CalcRect( this, rPor, 0, &aIntersect );
+    CalcRect( rPor, 0, &aIntersect );
 
     if ( aIntersect.HasArea() )
     {
         OutputDevice* pOut = (OutputDevice*)GetOut();
+
+        // --> FME 2004-06-24 #i16816# tagged pdf support
+        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pOut );
+        // <--
+
         const Color aOldColor( pOut->GetFillColor() );
         sal_Bool bChgColor;
         if( 0 != ( bChgColor = aOldColor != *pFnt->GetBackColor() ) )
@@ -1330,8 +1337,7 @@ void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
     ASSERT( pNoteURL, "NotifyURL: pNoteURL gone with the wind!" );
 
     SwRect aIntersect;
-
-    lcl_CalcRect( this, rPor, 0, &aIntersect );
+    CalcRect( rPor, 0, &aIntersect );
 
     if( aIntersect.HasArea() )
     {
