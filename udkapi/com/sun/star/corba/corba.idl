@@ -2,9 +2,9 @@
  *
  *  $RCSfile: corba.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:48 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,46 +60,66 @@
  ************************************************************************/
 module com { module sun { module star { module corba
 {
-
-    // CosBridging module
+    /**
+      @deprecated
+     */
      typedef unsigned long ObjectSystemID;
+
+    /**
+      @deprecated
+     */
     typedef sequence< byte > OpaqueData;
 
-    /// @missing
+    /**
+      @deprecated
+     */
     struct OneThreadID
     {
         ObjectSystemID objSysID;
         OpaqueData threadID;
     };
 
+    /**
+      @deprecated
+     */
     typedef sequence<OneThreadID> ThreadIDs;
 
-    /// @missing
+    /**
+      @deprecated
+     */
     struct LogicalThreadID // Service context
     {
         ThreadIDs IDs;
     };
 
-    /// @missing
+    /**
+      @deprecated
+     */
     struct CorbaString8
     {
         string theString;
     };
 
-    /// @missing
+    /**
+      @deprecated
+     */
     struct CorbaUnion
     {
         long dummy;
     };
 
-    /// @missing
+    /**
+      @deprecated
+     */
     struct ObjectKey
     {
         CorbaString8 sOid;
         CorbaString8 sType;
     };
 
-    /// @missing
+    /**
+      @deprecated
+     */
     enum TCKind
     {
         tk_null, tk_void,
