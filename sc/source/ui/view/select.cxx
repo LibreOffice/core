@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-06 10:44:16 $
+ *  last change: $Author: nn $ $Date: 2002-11-28 11:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,10 @@ void __EXPORT ScViewFunctionSet::BeginDrag()
             BOOL bCopied = pViewData->GetView()->CopyToClip( pClipDoc, FALSE, TRUE );
             if ( bCopied )
             {
+                sal_Int8 nDragActions = pViewData->GetView()->SelectionEditable() ?
+                                        ( DND_ACTION_COPYMOVE | DND_ACTION_LINK ) :
+                                        ( DND_ACTION_COPY | DND_ACTION_LINK );
+
                 ScDocShell* pDocSh = pViewData->GetDocShell();
                 TransferableObjectDescriptor aObjDesc;
                 pDocSh->FillTransferableObjectDescriptor( aObjDesc );
@@ -177,7 +181,7 @@ void __EXPORT ScViewFunctionSet::BeginDrag()
                     pWindow->EndTracking( ENDTRACK_CANCEL );    // abort selecting
 
                 SC_MOD()->SetDragObject( pTransferObj, NULL );      // for internal D&D
-                pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
+                pTransferObj->StartDrag( pWindow, nDragActions );
 
                 return;         // dragging started
             }
