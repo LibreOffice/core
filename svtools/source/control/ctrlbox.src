@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-12 07:15:04 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,15 +88,15 @@ String STR_SVT_AUTOMATIC_COLOR
     Text = "Automatisch";
     Text [ ENGLISH ] = "Automatic";
     Text[ english_us ] = "Automatic";
-    Text[ portuguese ] = "Automatic";
+    Text[ portuguese ] = "Autom·tico";
     Text[ russian ] = "¿‚ÚÓÏ‡ÚË˜ÂÒÍË";
     Text[ greek ] = "Automatic";
     Text[ dutch ] = "Automatisch";
     Text[ french ] = "Automatique";
     Text[ spanish ] = "Autom·tico";
-    Text[ italian ] = "Automatic";
+    Text[ italian ] = "Automatico";
     Text[ danish ] = "Automatic";
-    Text[ swedish ] = "Automatic";
+    Text[ swedish ] = "Automatiskt";
     Text[ polish ] = "Automatycznie";
     Text[ portuguese_brazilian ] = "Automatic";
     Text[ japanese ] = "é©ìÆ";
@@ -123,7 +123,7 @@ String STR_SVT_COLLATE_NORMAL
     Text[ dutch ] = "Normaal";
     Text[ french ] = "Normal";
     Text[ spanish ] = "Normal";
-    Text[ italian ] = "Normal";
+    Text[ italian ] = "Normale";
     Text[ danish ] = "Normal";
     Text[ swedish ] = "Normal";
     Text[ polish ] = "Normalny";
@@ -142,13 +142,13 @@ String STR_SVT_COLLATE_CHARSET
     Text = "Charset" ;
      Text [ ENGLISH ] = "Character Set" ;
     Text[ english_us ] = "Character set";
-    Text[ portuguese ] = "Character Set";
+    Text[ portuguese ] = "Conjunto de caracteres";
     Text[ russian ] = "Õ‡·Ó ÁÌ‡ÍÓ‚";
     Text[ greek ] = "”˝ÌÔÎÔ ˜·Ò·ÍÙﬁÒ˘Ì";
     Text[ dutch ] = "Charset";
     Text[ french ] = "Jeu de caractËres";
     Text[ spanish ] = "Juego de caracteres";
-    Text[ italian ] = "Character Set";
+    Text[ italian ] = "Set caratteri";
     Text[ danish ] = "Character Set";
     Text[ swedish ] = "Teckenupps‰ttning";
     Text[ polish ] = "ZbiÛr znakÛw";
@@ -167,15 +167,15 @@ String STR_SVT_COLLATE_DICTIONARY
     Text = "Dictionary" ;
     Text [ ENGLISH ] = "Dictionary" ;
     Text[ english_us ] = "Dictionary";
-    Text[ portuguese ] = "Dictionary";
+    Text[ portuguese ] = "Dicion·rio";
     Text[ russian ] = "—ÎÓ‚‡¸";
     Text[ greek ] = "ÀÂÓÈÍ¸";
     Text[ dutch ] = "Woordenboek";
     Text[ french ] = "Dictionnaire";
     Text[ spanish ] = "Diccionario";
-    Text[ italian ] = "Dictionary";
+    Text[ italian ] = "Dizionario";
     Text[ danish ] = "Dictionary";
-    Text[ swedish ] = "Dictionary";
+    Text[ swedish ] = "Ordbok";
     Text[ polish ] = "S≥ownik";
     Text[ portuguese_brazilian ] = "Dictionary";
     Text[ japanese ] = "é´èë";
@@ -217,7 +217,7 @@ String STR_SVT_COLLATE_STROKE
     Text = "Stroke" ;
     Text [ ENGLISH ] = "Stroke" ;
     Text[ english_us ] = "Stroke";
-    Text[ portuguese ] = "Stroke";
+    Text[ portuguese ] = "TraÁo";
     Text[ russian ] = "ÿÚËıË";
     Text[ greek ] = "Stroke";
     Text[ dutch ] = "Stroke";
@@ -248,7 +248,7 @@ String STR_SVT_COLLATE_RADICAL
     Text[ dutch ] = "Radicaal";
     Text[ french ] = "Radical";
     Text[ spanish ] = "Radical";
-    Text[ italian ] = "Radical";
+    Text[ italian ] = "Radicale";
     Text[ danish ] = "Radical";
     Text[ swedish ] = "Radical";
     Text[ polish ] = "Radical";
