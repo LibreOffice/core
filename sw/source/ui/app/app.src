@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:44:44 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1684,7 +1684,7 @@ String STR_CANTCREATE
     TEXT[ russian ] = "İòîò äîêóìåíò ñîçäàòü íåâîçìîæíî.";
     TEXT[ polish ] = "Dokument nie móg³ zostaæ utworzony.";
     TEXT[ japanese ] = "ÄŞ·­ÒİÄ‚ğì¬‚Å‚«‚Ü‚¹‚ñB";
-    TEXT[ chinese_traditional ] = "µLªk¥Í¦¨¤å¥ó";
+    TEXT[ chinese_traditional ] = "µLªk«Ø¥ß³o­Ó¤å¥ó";
     TEXT[ arabic ] = "ÊÚĞÑ ÅäÔÇÁ ÇáãÓÊäÏ.";
     TEXT[ dutch ] = "Het document kon niet worden gemaakt.";
     TEXT[ chinese_simplified ] = "ÎŞ·¨Éú³ÉÎÄµµ";
@@ -2034,7 +2034,7 @@ String STR_STATSTR_W4WREAD
     Text[ russian ] = "Èìïîğò äîêóìåíòà...";
     Text[ polish ] = "Importowanie dokumentu...";
     Text[ japanese ] = "•¶‘‚Ì²İÎß°Ä...";
-    Text[ chinese_traditional ] = "¿é¤J¤å¥ó...";
+    Text[ chinese_traditional ] = "¶×¤J¤å¥ó...";
     Text[ arabic ] = "ÌÇÑí ÇÓÊíÑÇÏ ÇáãÓÊäÏ...";
     Text[ dutch ] = "Document wordt geïmporteerd...";
     Text[ chinese_simplified ] = "ÊäÈëÎÄµµ...";
@@ -2209,7 +2209,7 @@ String STR_STATSTR_IMPGRF
     Text[ russian ] = "Èìïîğò ãğàôèêè...";
     Text[ polish ] = "Importowanie grafiki...";
     Text[ japanese ] = "}‚Ì²İÎß°Ä’†...";
-    Text[ chinese_traditional ] = "¿é¤J¹Ï¤ù...";
+    Text[ chinese_traditional ] = "¥¿¦b¶×¤J¹Ï¤ù...";
     Text[ arabic ] = "ÌÇÑí ÇÓÊíÑÇÏ ÇáÑÓã...";
     Text[ dutch ] = "Afbeelding wordt geïmporteerd...";
     Text[ chinese_simplified ] = "ÊäÈëÍ¼ĞÎ...";
