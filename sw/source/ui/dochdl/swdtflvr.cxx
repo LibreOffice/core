@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 15:16:10 $
+ *  last change: $Author: fs $ $Date: 2001-09-13 07:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2409,7 +2409,7 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                                     ? 0
                                     : FN_QRY_INSERT_FIELD );
         DataFlavorExVector& rVector = rData.GetDataFlavorExVector();
-        sal_Bool bHaveColumnDescriptor = OColumnTransferable::canExtractColumnDescriptor(rVector, CTF_COLUMN_DESCRIPTOR);
+        sal_Bool bHaveColumnDescriptor = OColumnTransferable::canExtractColumnDescriptor(rVector, CTF_COLUMN_DESCRIPTOR | CTF_CONTROL_EXCHANGE);
         if( nWh )
         {
             SfxUsrAnyItem* pConnectionItem = 0;
