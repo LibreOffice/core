@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:46:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #include <cclass_unicode.hxx>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
-#include <unicode.hxx>
+#include <i18nutil/unicode.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
