@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActiveMSPList.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 15:31:24 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 09:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include <com/sun/star/util/XMacroExpander.hpp>
 
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 
 #include "MasterScriptProvider.hxx"
 #include "ActiveMSPList.hxx"
@@ -142,7 +141,7 @@ ActiveMSPList::createMSP( const Any& aContext )
         Reference< frame::XModel> xModel( aContext, UNO_QUERY );
         if ( xModel.is() )
         {
-            ::rtl::OUString sContext = MiscUtils::xModelToTdocUrl( xModel );
+            ::rtl::OUString sContext = MiscUtils::xModelToTdocUrl( xModel, m_xContext );
             msp = createMSP( sContext );
         }
         else
@@ -200,7 +199,7 @@ ActiveMSPList::createMSP( const ::rtl::OUString& context )
             {
                 msp = createNewMSP( context );
             }
-            catch ( RuntimeException& e )
+            catch ( RuntimeException& )
             {
                 ::rtl::OUStringBuffer buf( 80 );
                 buf.append( OUSTR("Failed to create MasterScriptProvider for " ) );
@@ -238,7 +237,7 @@ ActiveMSPList::addActiveMSP( const Reference< frame::XModel >& xModel,
             xComponent->addEventListener( this );
 
         }
-        catch ( RuntimeException& e )
+        catch ( RuntimeException& )
         {
         }
     }
