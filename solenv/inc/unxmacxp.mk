@@ -46,7 +46,7 @@ LINKFLAGS=-dynamic -framework System -framework Cocoa -lcc_dynamic \
 LINKFLAGSAPPGUI=-Wl,-u,__objcInit
 LINKFLAGSSHLGUI=-dynamiclib -install_name '@executable_path$/$(@:f)' \
   -Wl,-U,___progname -Wl,-U,_environ
-LINKFLAGSAPPCUI=
+LINKFLAGSAPPCUI=-Wl,-u,__objcInit
 LINKFLAGSSHLCUI=-dynamiclib -install_name '@executable_path$/$(@:f)' \
   -Wl,-U,___progname -Wl,-U,_environ
 LINKFLAGSTACK=
