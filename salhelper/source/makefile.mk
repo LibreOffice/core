@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: dbo $ $Date: 2001-10-26 12:49:41 $
+#   last change: $Author: dbo $ $Date: 2001-10-30 15:55:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,7 @@ CFLAGS+= -GR
 .ENDIF
 
 SLOFILES=	\
-        $(SLO)$/dynload.obj \
+    $(SLO)$/dynload.obj \
         $(SLO)$/simplereferenceobject.obj
 
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
@@ -89,10 +89,10 @@ SLOFILES=	\
 SLOFILES+=$(SLO)$/staticmb.obj
 .ENDIF
 
-SHL1TARGET=	$(TARGET)$(UDK_MAJOR)$(COM)
+SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COMID)
 
 SHL1STDLIBS= \
-        $(SALLIB)
+    $(SALLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
