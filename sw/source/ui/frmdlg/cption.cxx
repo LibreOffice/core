@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 16:03:33 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,10 +335,18 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
         }
         if(xNameAccess.is())
         {
-            uno::Any aObj = xNameAccess->getByName(sObjectName);
-            uno::Reference< uno::XInterface >  xTmp;
-            aObj >>= xTmp;
-            xNamed = uno::Reference< container::XNamed >(xTmp, uno::UNO_QUERY);
+            try
+            {
+                uno::Any aObj = xNameAccess->getByName(sObjectName);
+                uno::Reference< uno::XInterface >  xTmp;
+                aObj >>= xTmp;
+                xNamed = uno::Reference< container::XNamed >(xTmp, uno::UNO_QUERY);
+            }
+            catch( const uno::Exception& rEx )
+            {
+                rEx;
+                DBG_ERROR("exception caught SwCaptionDialog::SwCaptionDialog()")
+            }
         }
         aObjectNameED.SetText(sObjectName);
         aObjectNameED.SetForbiddenChars(String::CreateFromAscii(" .<>"));
