@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregistry.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-11 09:30:07 $
+ *  last change: $Author: hr $ $Date: 2002-08-19 14:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ void test_SimpleRegistry(
     OUString dllName( OUString::createFromAscii("simreg.dll") );
 #else
 #ifdef MACOSX
-    OUString dllName( OUString::createFromAscii("libsimreg.dylib.framework") );
+    OUString dllName( OUString::createFromAscii("libsimreg.dylib") );
 #else
     OUString dllName( OUString::createFromAscii("libsimreg.so") );
 #endif
