@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvttcn6.tab,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2002-02-25 14:57:35 $
+ *  last change: $Author: sb $ $Date: 2002-02-27 09:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ static ImplUniToDBCSHighTab const aBIG5DBCSHighTab[256] =
     {    1,    0, NULL },                                       /* 0x1D */
     {    1,    0, NULL },                                       /* 0x1E */
     {    1,    0, NULL },                                       /* 0x1F */
-    { 0x20, 0xAC, aImplUniToDBCSTab_BIG5_20 },                  /* 0x20 */
+    { 0x13, 0xAC, aImplUniToDBCSTab_BIG5_20 },                  /* 0x20 */
     { 0x03, 0x99, aImplUniToDBCSTab_BIG5_21 },                  /* 0x21 */
     { 0x15, 0xEF, aImplUniToDBCSTab_BIG5_22 },                  /* 0x22 */
     {    1,    0, NULL },                                       /* 0x23 */
@@ -382,7 +382,7 @@ static ImplUniToDBCSHighTab const aBIG5DBCSHighTab[256] =
     { 0x00, 0xFE, aImplUniToDBCSTab_BIG5_30 },                  /* 0x30 */
     { 0x05, 0x29, aImplUniToDBCSTab_BIG5_31 },                  /* 0x31 */
     { 0xA3, 0xA3, aImplUniToDBCSTab_BIG5_32 },                  /* 0x32 */
-    {    1,    0, NULL },                                       /* 0x33 */
+    { 0x8E, 0xD5, aImplUniToDBCSTab_BIG5_33 },                  /* 0x33 */
     {    1,    0, NULL },                                       /* 0x34 */
     {    1,    0, NULL },                                       /* 0x35 */
     {    1,    0, NULL },                                       /* 0x36 */
@@ -951,7 +951,7 @@ static ImplUniToDBCSHighTab const aMS950DBCSHighTab[256] =
     {    1,    0, NULL },                                       /* 0x1D */
     {    1,    0, NULL },                                       /* 0x1E */
     {    1,    0, NULL },                                       /* 0x1F */
-    { 0x20, 0xAC, aImplUniToDBCSTab_BIG5_20 },                  /* 0x20 */
+    { 0x13, 0xAC, aImplUniToDBCSTab_BIG5_20 },                  /* 0x20 */
     { 0x03, 0x99, aImplUniToDBCSTab_BIG5_21 },                  /* 0x21 */
     { 0x15, 0xEF, aImplUniToDBCSTab_BIG5_22 },                  /* 0x22 */
     {    1,    0, NULL },                                       /* 0x23 */
@@ -970,7 +970,7 @@ static ImplUniToDBCSHighTab const aMS950DBCSHighTab[256] =
     { 0x00, 0xFE, aImplUniToDBCSTab_BIG5_30 },                  /* 0x30 */
     { 0x05, 0x29, aImplUniToDBCSTab_BIG5_31 },                  /* 0x31 */
     { 0xA3, 0xA3, aImplUniToDBCSTab_BIG5_32 },                  /* 0x32 */
-    {    1,    0, NULL },                                       /* 0x33 */
+    { 0x8E, 0xD5, aImplUniToDBCSTab_BIG5_33 },                  /* 0x33 */
     {    1,    0, NULL },                                       /* 0x34 */
     {    1,    0, NULL },                                       /* 0x35 */
     {    1,    0, NULL },                                       /* 0x36 */
@@ -1509,7 +1509,7 @@ static ImplUniToDBCSHighTab const aAPPLECHINTRADDBCSHighTab[256] =
     {    1,    0, NULL },                                       /* 0x1D */
     {    1,    0, NULL },                                       /* 0x1E */
     {    1,    0, NULL },                                       /* 0x1F */
-    { 0x20, 0xAC, aImplUniToDBCSTab_BIG5_20 },                  /* 0x20 */
+    { 0x13, 0xAC, aImplUniToDBCSTab_BIG5_20 },                  /* 0x20 */
     { 0x03, 0x99, aImplUniToDBCSTab_APPLECHINTRAD_21 },         /* 0x21 */
     { 0x15, 0xEF, aImplUniToDBCSTab_BIG5_22 },                  /* 0x22 */
     {    1,    0, NULL },                                       /* 0x23 */
@@ -1528,7 +1528,7 @@ static ImplUniToDBCSHighTab const aAPPLECHINTRADDBCSHighTab[256] =
     { 0x00, 0xFE, aImplUniToDBCSTab_BIG5_30 },                  /* 0x30 */
     { 0x05, 0x29, aImplUniToDBCSTab_BIG5_31 },                  /* 0x31 */
     { 0xA3, 0xA3, aImplUniToDBCSTab_BIG5_32 },                  /* 0x32 */
-    {    1,    0, NULL },                                       /* 0x33 */
+    { 0x8E, 0xD5, aImplUniToDBCSTab_BIG5_33 },                  /* 0x33 */
     {    1,    0, NULL },                                       /* 0x34 */
     {    1,    0, NULL },                                       /* 0x35 */
     {    1,    0, NULL },                                       /* 0x36 */
