@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:46:40 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1092,7 +1092,7 @@ TabDialog DLG_TEMPLATE_3
     Text[ polish ] = "Styl ramki";
     Text[ japanese ] = "˜g½À²Ù";
     Text[ chinese_traditional ] = "®Ø¼Ë¦¡";
-    Text[ arabic ] = "äãØ ÅØÇÑ";
+    Text[ arabic ] = "äãØ ßÇÏÑ";
     Text[ greek ] = "Óôõë ğëáéóßïõ";
     Text[ korean ] = "ÇÁ·¹ÀÓ À¯Çü";
     Text[ turkish ] = "Çerçeve biçimi";
