@@ -72,7 +72,7 @@ Dim oCharStyles as Object
 				GetWriterStrings()
 			Case &quot;scalc&quot;
 				GetCalcStrings()
-			Case &quot;sdraw&quot;
+			Case &quot;sdraw&quot;, &quot;simpress&quot;
 				GetDrawStrings()
 			Case Else
 				Msgbox(&quot;This macro only works with a Writer, Calc or Draw/Impress document.&quot;, 16, GetProductName())
@@ -518,4 +518,5 @@ Sub MakeLogHeadLine(HeadText as String)
 	oLogText.insertString(oLogCursor,HeadText,False)
 	oLogText.insertControlCharacter(oLogCursor,com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK,False)
 	oLogCursor.CharStyleName = &quot;Log Body&quot;
-End Sub</script:module>
+End Sub
+</script:module>
