@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:24:38 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 07:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ namespace dbaui
 
         DBTreeListBox*      getListBox() const;
 
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual void GetFocus();
     };
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:24:38 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 07:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,15 +221,11 @@ void DBTreeView::setSelectHdl(const Link& _rHdl)
     m_pTreeListBox->SetSelectHdl(_rHdl);
 }
 // -----------------------------------------------------------------------------
-long DBTreeView::PreNotify( NotifyEvent& rNEvt )
+void DBTreeView::GetFocus()
 {
-    long nDone = 0L;
-    if(rNEvt.GetType() == EVENT_GETFOCUS && m_pTreeListBox && !m_pTreeListBox->HasChildPathFocus())
-    {
+    Window::GetFocus();
+    if ( m_pTreeListBox )//&& !m_pTreeListBox->HasChildPathFocus())
         m_pTreeListBox->GrabFocus();
-        nDone = 1L;
-    }
-    return nDone ? nDone : Window::PreNotify(rNEvt);
 }
 
 
