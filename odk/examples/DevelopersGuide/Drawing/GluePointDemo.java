@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GluePointDemo.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:54:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,30 +40,26 @@
 
 // __________ Imports __________
 
-// base classes
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.*;
+import com.sun.star.lang.XComponent;
 
-// property access
-import com.sun.star.beans.*;
+import com.sun.star.awt.Point;
+import com.sun.star.awt.Size;
 
-// name access
-import com.sun.star.container.*;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 
-// text
-import com.sun.star.text.*;
-import com.sun.star.style.*;
+import com.sun.star.container.XIndexContainer;
+import com.sun.star.container.XIdentifierContainer;
 
+import com.sun.star.drawing.Alignment;
+import com.sun.star.drawing.EscapeDirection;
+import com.sun.star.drawing.GluePoint2;
+import com.sun.star.drawing.XShape;
+import com.sun.star.drawing.XShapes;
+import com.sun.star.drawing.XDrawPage;
+import com.sun.star.drawing.XGluePointsSupplier;
 
-// application specific classes
-import com.sun.star.drawing.*;
-
-// presentation specific classes
-import com.sun.star.presentation.*;
-
-// Point, Size, ..
-import com.sun.star.awt.*;
-import java.io.File;
 
 
 // __________ Implementation __________
@@ -79,22 +75,19 @@ public class GluePointDemo
         XComponent xDrawDoc = null;
         try
         {
-            String sConnection;
-            if ( args.length >= 1 )
-                sConnection = args[ 1 ];
-            else
-                sConnection = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
-            XMultiServiceFactory xServiceFactory =
-                Helper.connect( sConnection );
+            // get the remote office context of a running office (a new office
+            // instance is started if necessary)
+            com.sun.star.uno.XComponentContext xOfficeContext = Helper.connect();
 
             // suppress Presentation Autopilot when opening the document
-            // properties are the same as described for com.sun.star.document.MediaDescriptor
+            // properties are the same as described for
+            // com.sun.star.document.MediaDescriptor
             PropertyValue[] pPropValues = new PropertyValue[ 1 ];
             pPropValues[ 0 ] = new PropertyValue();
             pPropValues[ 0 ].Name = "Silent";
             pPropValues[ 0 ].Value = new Boolean( true );
 
-            xDrawDoc = Helper.createDocument( xServiceFactory,
+            xDrawDoc = Helper.createDocument( xOfficeContext,
                 "private:factory/sdraw", "_blank", 0, pPropValues );
 
 
@@ -135,14 +128,12 @@ public class GluePointDemo
             // the "StartPosition" or "EndPosition" property needs not to be set
             // if there is a shape to connect
             xConnectorPropSet.setPropertyValue( "StartShape", xShape1 );
-            xConnectorPropSet.setPropertyValue( "StartGluePointIndex", new Integer( nStartIndex ) );
+            xConnectorPropSet.setPropertyValue( "StartGluePointIndex",
+                                                new Integer( nStartIndex ) );
 
             xConnectorPropSet.setPropertyValue( "EndShape", xShape2 );
-            xConnectorPropSet.setPropertyValue( "EndGluePointIndex", new Integer( nEndIndex ) );
-
-
-
-
+            xConnectorPropSet.setPropertyValue( "EndGluePointIndex",
+                                                new Integer( nEndIndex ) );
 
             XGluePointsSupplier  xGluePointsSupplier;
             XIndexContainer      xIndexContainer;
@@ -161,7 +152,8 @@ public class GluePointDemo
                 UnoRuntime.queryInterface( XGluePointsSupplier.class, xShape1 );
             xIndexContainer = xGluePointsSupplier.getGluePoints();
             xIdentifierContainer = (XIdentifierContainer)
-                UnoRuntime.queryInterface( XIdentifierContainer.class, xIndexContainer );
+                UnoRuntime.queryInterface( XIdentifierContainer.class,
+                                           xIndexContainer );
             int nIndexOfGluePoint1 = xIdentifierContainer.insert( aGluePoint );
 
             // create and insert a glue point at shape2
@@ -169,7 +161,8 @@ public class GluePointDemo
                 UnoRuntime.queryInterface( XGluePointsSupplier.class, xShape2 );
             xIndexContainer = xGluePointsSupplier.getGluePoints();
             xIdentifierContainer = (XIdentifierContainer)
-                UnoRuntime.queryInterface( XIdentifierContainer.class, xIndexContainer );
+                UnoRuntime.queryInterface( XIdentifierContainer.class,
+                                           xIndexContainer );
             int nIndexOfGluePoint2 = xIdentifierContainer.insert( aGluePoint );
 
             // create and add a connector
