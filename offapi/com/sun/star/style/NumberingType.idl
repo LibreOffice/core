@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberingType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:12 $
+ *  last change: $Author: os $ $Date: 2001-03-09 07:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,88 +67,68 @@
  module com {  module sun {  module star {  module style {
 
 //=============================================================================
-
-// DocMerge from idl: constants com::sun::star::style::NumberingType
 /** These constants are used to specify which numbering style is used.
  */
 constants NumberingType
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::style::NumberingType::CHARS_UPPER_LETTER
     /** Numbering is put in upper case letters as "A, B, C, D, ...".
      */
     const short CHARS_UPPER_LETTER = 0;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::style::NumberingType::CHARS_LOWER_LETTER
     /** Numbering is in lower case letters as "a, b, c, e,...".
      */
     const short CHARS_LOWER_LETTER = 1;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::style::NumberingType::ROMAN_UPPER
     /** Numbering is in Roman numbers with upper case letters
                 as "I, II, III, IV, ...".
      */
     const short ROMAN_UPPER = 2;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::style::NumberingType::ROMAN_LOWER
     /** Numbering is in Roman numbers with lower case letters
                 as "i, ii, iii, iv, ...".
      */
     const short ROMAN_LOWER = 3;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::style::NumberingType::ARABIC
     /** Numbering is in Arabic numbers as "1, 2, 3, 4, ...".
      */
     const short ARABIC = 4;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::style::NumberingType::NUMBER_NONE
     /** Numbering is invisible.
      */
     const short NUMBER_NONE = 5;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::style::NumberingType::CHAR_SPECIAL
     /** Use a character from a specified font.
      */
     const short CHAR_SPECIAL = 6;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::style::NumberingType::PAGE_DESCRIPTOR
     /** Numbering is specified in the page style.
      */
     const short PAGE_DESCRIPTOR = 7;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::style::NumberingType::BITMAP
     /** Numbering is displayed as a bitmap graphic.
      */
     const short BITMAP = 8;
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::style::NumberingType::CHARS_UPPER_LETTER_N
     /** Numbering is put in upper case letters as "A, B, ..., Y, Z, AA, BB, CC, ... AAA, ...".
      */
     const short CHARS_UPPER_LETTER_N = 9;
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: value com::sun::star::style::NumberingType::CHARS_LOWER_LETTER_N
     /** Numbering is put in lower case letters as "a, b, ..., y, z, aa, bb, cc, ... aaa, ...".
      */
+    //-------------------------------------------------------------------------
     const short CHARS_LOWER_LETTER_N =10;
+    /** a transliteration module will be used to produce numbers in
+            chinese, japanese, etc.       */
+    const short TRANSLITERATION = 11;
 
 };
 
@@ -156,24 +136,4 @@ constants NumberingType
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:54  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:55  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/06/26 06:35:52  os
-    syntax
-
-    Revision 1.2  2000/06/26 06:34:54  os
-    new types: CHARS_UPPER/LOWER_LETTER_N
-
-    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
-    new
-
-
-=============================================================================*/
 #endif
