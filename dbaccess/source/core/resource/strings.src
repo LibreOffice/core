@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:19:00 $
+ *  last change: $Author: kz $ $Date: 2001-05-03 19:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ String RID_STR_TRIED_OPEN_TABLE
     Text[ russian ] = "Áûëà ñîâåğøåíà ïîïûòêà îòêğûòü òàáëèöó $name$";
     Text[ greek ] = "Åğé÷åéñŞèçêå ôï Üíïéãìá ôïõ ğßíáêá $name$.";
     Text[ dutch ] = "Er werd getracht tabel $name$ te openen.";
-    Text[ french ] = "Tentative d'ouverture de la table $name$ ...";
+    Text[ french ] = "Une tentative d'ouverture de la table $name$ a eu lieu.";
     Text[ spanish ] = "Se intentó abrir la tabla $name$";
     Text[ italian ] = "Tentativo di aprire la tabella $name$";
     Text[ danish ] = "Tried to open the table $name$";
@@ -88,14 +88,48 @@ String RID_STR_CONNECTION_INVALID
 {
     Text = "Es konnte keine Verbindung erstellt werden.";
     Text [ english ] = "The connection could not be established.";
-    Text [ english_us ] = "The connection could not be established.";
+    Text [ english_us ] = "No connection could be established.";
+    Text[ portuguese ] = "Impossível estabelecer ligação.";
+    Text[ russian ] = "Ñîçäàòü ñâÿçü íå óäàëîñü!";
+    Text[ greek ] = "Not possible to create a connection!";
+    Text[ dutch ] = "Not possible to create a connection!";
+    Text[ french ] = "Not possible to create a connection!";
+    Text[ spanish ] = "¡No se pudo crear una conexión!";
+    Text[ italian ] = "Impossibile creare il collegamento!";
+    Text[ danish ] = "Not possible to create a connection!";
+    Text[ swedish ] = "Det gick inte att skapa en förbindelse!";
+    Text[ polish ] = "Brak po³¹czenia!";
+    Text[ portuguese_brazilian ] = "Not possible to create a connection!";
+    Text[ japanese ] = "Ú‘±‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    Text[ korean ] = "Not possible to create a connection!";
+    Text[ chinese_simplified ] = "Not possible to create a connection!";
+    Text[ chinese_traditional ] = "Not possible to create a connection!";
+    Text[ turkish ] = "Not possible to create a connection!";
+    Text[ arabic ] = "Not possible to create a connection!";
 };
 
 String RID_STR_TABLE_IS_FILTERED
 {
     Text = "Die Tabelle $name$ existiert bereits. Sie wurde gefiltert!";
     Text [ english ] = "The table $name$ already exists, but hidden because it's filtered out.";
-    Text [ english_us ] = "The table $name$ already exists, but hidden because it's filtered out.";
+    Text [ english_us ] = "The table $name$ already exists. It has been filtered.";
+    Text[ portuguese ] = "A tabela $name$ já existe. Esta foi filtrada.";
+    Text[ russian ] = "Òàáëèöà $name$ óæå ñóùåñòâóåò. Îíà îòôèëüòğîâàíà!";
+    Text[ greek ] = "the table $name$ already exists. She is only filtered!";
+    Text[ dutch ] = "the table $name$ already exists. She is only filtered!";
+    Text[ french ] = "the table $name$ already exists. She is only filtered!";
+    Text[ spanish ] = "La tabla $name$ ya existe. ¡Ha sido filtrada!";
+    Text[ italian ] = "Il nome della tabella $name$ esiste già in quanto è stato filtrato.";
+    Text[ danish ] = "the table $name$ already exists. She is only filtered!";
+    Text[ swedish ] = "Tabellen $name$ finns redan. Den har filtrerats!";
+    Text[ polish ] = "Tabela $name$ ju¿ istenieje. Zosta³a ona przefiltrowana!";
+    Text[ portuguese_brazilian ] = "the table $name$ already exists. She is only filtered!";
+    Text[ japanese ] = "Ã°ÌŞÙ $name$ ‚Í‚·‚Å‚É‚ ‚è‚Ü‚·BÌ¨ÙÀ‚³‚ê‚Ä‚¢‚Ü‚·B";
+    Text[ korean ] = "the table $name$ already exists. She is only filtered!";
+    Text[ chinese_simplified ] = "the table $name$ already exists. She is only filtered!";
+    Text[ chinese_traditional ] = "the table $name$ already exists. She is only filtered!";
+    Text[ turkish ] = "the table $name$ already exists. She is only filtered!";
+    Text[ arabic ] = "the table $name$ already exists. She is only filtered!";
 };
 
 String RID_STR_NEED_CONFIG_WRITE_ACCESS
