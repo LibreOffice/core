@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:55:21 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,12 @@ SwFrmFmt *FindFrmFmt( SdrObject *pObj )
             pRetval = pContact->GetFmt();
         }
     }
-
+/* SJ: after prior consultation with OD we decided to remove this Assertion
+#if OSL_DEBUG_LEVEL > 1
+    ASSERT( pRetval,
+            "<::FindFrmFmt(..)> - no frame format found for given object. Please inform OD." );
+#endif
+*/
     return pRetval;
 }
 
