@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:29:47 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,9 +574,9 @@ void implSetPropertyValues( NodeGroupAccess& rNode, const Sequence< OUString >& 
             }
         }
 
-        if (!aChanges.test().isEmpty())
+        if (!aChanges.test().compact().isEmpty())
         {
-            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChanges.compact(),true));
+            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChanges,true));
 
             aSender.queryConstraints(aChanges);
 
@@ -754,9 +754,9 @@ void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const Sequence< 
             continue;
         }
 
-        if (!aChanges.test().isEmpty())
+        if (!aChanges.test().compact().isEmpty())
         {
-            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChanges.compact(),false));
+            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChanges,false));
 
             aSender.queryConstraints(aChanges);
 
@@ -1291,9 +1291,9 @@ void implSetPropertiesToDefault( NodeGroupAccess& rNode, const Sequence< OUStrin
 
         const bool bLocal = !aDefaulter.hasDoneSet();
 
-        if (!aChanges.test().isEmpty())
+        if (!aChanges.test().compact().isEmpty())
         {
-            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChanges.compact(),bLocal));
+            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChanges,bLocal));
 
             aSender.queryConstraints(aChanges);
 
@@ -1343,9 +1343,9 @@ void implSetAllPropertiesToDefault( NodeGroupAccess& rNode )
 
         const bool bLocal = !aDefaulter.hasDoneSet();
 
-        if (!aChanges.test().isEmpty())
+        if (!aChanges.test().compact().isEmpty())
         {
-            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChanges.compact(),bLocal));
+            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChanges,bLocal));
 
             aSender.queryConstraints(aChanges);
 
