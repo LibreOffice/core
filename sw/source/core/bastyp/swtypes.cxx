@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:43:15 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 14:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,6 @@
 #ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-#ifndef _OFA_OSPLCFG_HXX //autogen
-#include <offmgr/osplcfg.hxx>
-#endif
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
 #endif
@@ -105,6 +99,8 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+
+#include <vcl/svapp.hxx>
 
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
