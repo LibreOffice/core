@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpcore.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 13:01:46 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 11:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,16 @@
 
 #include <tools/color.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/alpha.hxx>
+#include <vcl/pngread.hxx>
+#include <vcl/pngwrite.hxx>
 #include "bmpcore.hxx"
 
 #include <vector>
 #include <algorithm>
+
+#undef WRITE_ALPHA_PNG
 
 // -------------------------
 // - ImplGetSystemFileName -
@@ -122,34 +128,34 @@ void BmpCreator::ImplCreate( SvStream& rStm,
         ByteString                  aLine;
         String                      aInfo, aPrefix, aName( rName ), aString;
         SvFileStream                aOutStream;
-        Bitmap                      aTotalBmp;
+        BitmapEx                    aTotalBmpEx;
         DirEntry                    aOutFile( rOut );
         ::std::vector< DirEntry >   aInFiles( rInDirs );
         ::std::vector< String >     aNameVector;
         sal_uInt32                  i;
 
         for( i = 0; i < aInFiles.size(); i++ )
-            aInFiles[ i ] += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) );
+            aInFiles[ i ] += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "xxx.xxx" ) ) );
 
         // get prefix for files
-#if SUPD >= 642
         if( ( aName.Len() >= 3 ) && ( aName.GetChar( 2 ) != '_' ) )
             aPrefix = String( aName, 0, 3 );
         else
-#endif
             aPrefix = String( aName, 0, 2 );
 
         if( rLang.mnLangNum != 49 )
         {
             // add country id, if not german
-            String aNumStr( String::CreateFromInt32( rLang.mnLangNum ) );
+            DirEntry    aTmpDirEntry( aName );
+            String      aNumStr( String::CreateFromInt32( rLang.mnLangNum ) );
 
             if( aNumStr.Len() == 1 )
                 aNumStr.Insert( '0', 0 );
 
-            aName = DirEntry( aName ).GetBase();
+            aName = aTmpDirEntry.GetBase();
             aName += aNumStr;
-            aName += String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) );
+            aName += '.';
+            aName += aTmpDirEntry.GetExtension();
         }
 
         // create output file name
@@ -172,11 +178,10 @@ void BmpCreator::ImplCreate( SvStream& rStm,
                 if( atoi( aLine.GetBuffer() ) < 10000 )
                     aString += String::CreateFromInt32( 0 );
 
-                aString += String( aLine.GetBuffer(), RTL_TEXTENCODING_UTF8 );
-                aString += String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) );
-
-                aNameVector.push_back( aString );
-            }
+                // search for pngs by default
+                String aPngString( aString += String( aLine.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
+                aNameVector.push_back( aPngString += String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) ) );
+           }
         }
 
         if( !aNameVector.size() )
@@ -194,29 +199,41 @@ void BmpCreator::ImplCreate( SvStream& rStm,
             aInfo += String( RTL_CONSTASCII_USTRINGPARAM( " ]" ) );
             Message( aInfo );
 
-
             // create bit vector to hold flags for valid bitmaps
             ::std::bit_vector   aValidBmpBitVector( aNameVector.size(), false );
-            sal_Bool            bTrueColor = sal_False;
+            BitmapEx            aBmpEx;
 
             for( sal_uInt32 n = 0; n < aNameVector.size(); n++ )
             {
-                Bitmap aBmp;
+                aBmpEx.SetEmpty();
 
-                for( i = 0; i < aInFiles.size() && aBmp.IsEmpty(); i++ )
+                for( i = 0; i < aInFiles.size() && aBmpEx.IsEmpty(); i++ )
                 {
                     DirEntry aInFile( aInFiles[ i ] );
 
                     aInFile.SetName( aString = aNameVector[ n ] );
+                    bool bPNG = aInFile.Exists();
+
+                    if( !bPNG )
+            {
+                        aInFile.SetExtension( String( RTL_CONSTASCII_USTRINGPARAM( "bmp" ) ) );
+            aString = aInFile.GetName();
+            }
 
                     if( aInFile.Exists() )
                     {
                         const String    aFileName( aInFile.GetFull() );
                         SvFileStream    aIStm( aFileName, STREAM_READ );
-                        aIStm >> aBmp;
-                        aIStm.Close();
 
-                        if( pCollectStm && !aBmp.IsEmpty() )
+                        if( bPNG )
+                        {
+                            ::vcl::PNGReader aPNGReader( aIStm );
+                            aBmpEx = aPNGReader.Read();
+                        }
+                        else
+                            aIStm >> aBmpEx;
+
+                        if( pCollectStm && !aBmpEx.IsEmpty() )
                         {
                             const ByteString aCollectString( aFileName, RTL_TEXTENCODING_ASCII_US );
                             pCollectStm->WriteLine( aCollectString );
@@ -224,25 +241,21 @@ void BmpCreator::ImplCreate( SvStream& rStm,
                     }
                 }
 
-                const Size aSize( aBmp.GetSizePixel() );
+                const Size aSize( aBmpEx.GetSizePixel() );
 
-                if( !aSize.Width() || !aSize.Height() )
+                if( aBmpEx.IsEmpty() )
                 {
-#if SUPD >= 642
-                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Bitmap is missing: " ) ).Append( aString ), EXIT_MISSING_BITMAP );
-#else
-                    //Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Bitmap is missing: " ) ).Append( aString ), EXIT_MISSING_BITMAP );
-                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "WARNING: Bitmap is missing: " ) ).Append( aString ) );
-#endif
+                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: graphic is missing: " ) ).Append( aString ), EXIT_MISSING_BITMAP );
                 }
                 else
                 {
-                    if( aTotalBmp.IsEmpty() )
+                    if( aTotalBmpEx.IsEmpty() )
                     {
                         // first bitmap determines metrics of total bitmap
                         Size aTotalSize( aOneSize = aSize );
+
                         aTotalSize.Width() *= aNameVector.size();
-                        aTotalBmp = Bitmap( aTotalSize, aBmp.GetBitCount() );
+                        aTotalBmpEx = Bitmap( aTotalSize, aBmpEx.GetBitmap().GetBitCount() );
                     }
 
                     if( ( aSize.Width() > aOneSize.Width() ) || ( aSize.Height() > aOneSize.Height() ) )
@@ -253,33 +266,33 @@ void BmpCreator::ImplCreate( SvStream& rStm,
                         const Rectangle aDst( Point( aOneSize.Width() * n, 0L ), aSize );
                         const Rectangle aSrc( aPoint, aSize );
 
-                        if( !aTotalBmp.IsEmpty() && !aBmp.IsEmpty() && !aDst.IsEmpty() && !aSrc.IsEmpty() )
+                        if( !aTotalBmpEx.IsEmpty() && !aBmpEx.IsEmpty() && !aDst.IsEmpty() && !aSrc.IsEmpty() )
                         {
-                            const long nBitCount = aBmp.GetBitCount();
-
-                            if( ( nBitCount != aTotalBmp.GetBitCount() ) && !bTrueColor )
+                            if( !aTotalBmpEx.IsTransparent() && aBmpEx.IsTransparent() )
                             {
-                                aTotalBmp.Convert( BMP_CONVERSION_24BIT );
-                                bTrueColor = sal_True;
+                                const Bitmap aTmpBmp( aTotalBmpEx.GetBitmap() );
+                                aTotalBmpEx = BitmapEx( aTmpBmp, AlphaMask( aTmpBmp.CreateMask( COL_LIGHTMAGENTA ) ) );
+                            }
+                            else if( aTotalBmpEx.IsTransparent() && !aBmpEx.IsTransparent() )
+                            {
+                                const Bitmap aTmpBmp( aBmpEx.GetBitmap() );
+                                aBmpEx = BitmapEx( aTmpBmp, AlphaMask( aTmpBmp.CreateMask( COL_LIGHTMAGENTA ) ) );
                             }
 
-                            if( bTrueColor && ( nBitCount != 24 ) )
-                                aBmp.Convert( BMP_CONVERSION_24BIT );
-
-                            aTotalBmp.CopyPixel( aDst, aSrc, &aBmp );
+                            aTotalBmpEx.CopyPixel( aDst, aSrc, &aBmpEx );
                             aValidBmpBitVector[ n ] = true;
                         }
                     }
                 }
             }
 
-            if( !aTotalBmp.IsEmpty() )
+            if( !aTotalBmpEx.IsEmpty() )
             {
                 // do we have invalid bitmaps?
                 if( ::std::find( aValidBmpBitVector.begin(), aValidBmpBitVector.end(), false ) != aValidBmpBitVector.end() )
                 {
-                    // replace invalid entries with a red cross
-                    BitmapWriteAccess* pAcc = aTotalBmp.AcquireWriteAccess();
+                    Bitmap              aTmpBmp( aTotalBmpEx.GetBitmap() );
+                    BitmapWriteAccess*  pAcc = aTmpBmp.AcquireWriteAccess();
 
                     if( pAcc )
                     {
@@ -297,25 +310,38 @@ void BmpCreator::ImplCreate( SvStream& rStm,
                             }
                         }
 
-                        aTotalBmp.ReleaseAccess( pAcc );
+                        aTmpBmp.ReleaseAccess( pAcc );
+
+                        if( aTotalBmpEx.IsAlpha() )
+                            aTotalBmpEx = BitmapEx( aTmpBmp, aTotalBmpEx.GetAlpha() );
+                        else if( aTotalBmpEx.IsTransparent() )
+                            aTotalBmpEx = BitmapEx( aTmpBmp, aTotalBmpEx.GetMask() );
+                        else
+                            aTotalBmpEx = aTmpBmp;
                     }
                 }
 
                 // write output file
-                const String aFile( aOutFile.GetFull() );
+                const String aOutFileName( aOutFile.GetFull() );
 
-                aOutStream.Open( aFile, STREAM_WRITE | STREAM_TRUNC );
+                aOutStream.Open( aOutFileName, STREAM_WRITE | STREAM_TRUNC );
 
                 if( !aOutStream.IsOpen() )
-                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Could not open output file: " ) ).Append( aFile ), EXIT_IOERROR );
+                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Could not open output file: " ) ).Append( aOutFileName ), EXIT_IOERROR );
                 else
                 {
-                    aOutStream << aTotalBmp;
-
-                    if( aOutStream.GetError() )
-                        Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Could not write to output file: " ) ).Append( aFile ), EXIT_IOERROR );
+                    if( aOutFileName.Search( String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) ) ) != STRING_NOTFOUND )
+                    {
+                        ::vcl::PNGWriter aPNGWriter( aOutStream );
+                        aPNGWriter.Write( aTotalBmpEx );
+                    }
                     else
-                        Message( String( RTL_CONSTASCII_USTRINGPARAM( "Successfully generated ImageList " ) ).Append( aFile ) );
+                        aOutStream << aTotalBmpEx;
+
+                    if( aOutStream.GetError()  )
+                        Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Could not write to output file: " ) ).Append( aOutFileName ), EXIT_IOERROR );
+                    else
+                        Message( String( RTL_CONSTASCII_USTRINGPARAM( "Successfully generated ImageList " ) ).Append( aOutFileName ) );
 
                     aOutStream.Close();
                 }
@@ -340,6 +366,8 @@ void BmpCreator::Create( const String& rSRSName,
                          const String& rOutName,
                          const LangInfo& rLang )
 {
+    const char* pFSysResources = getenv( "BMP_FSYS_RESOURCES" );
+
     DirEntry                    aFileName( ImplGetSystemFileName( rSRSName ) ), aOutDir( ImplGetSystemFileName( rOutName ) );
     ::std::vector< DirEntry >   aInDirs;
     BOOL                        bDone = FALSE;
@@ -406,7 +434,7 @@ void BmpCreator::Create( const String& rSRSName,
                 }
 
                 if (!pSRS->ReadLine(aByteText))
-                     break;
+                    break;
             }
             while (aByteText.Search( "IdList" ) == STRING_NOTFOUND );
             aText = String::CreateFromAscii( aByteText.GetBuffer() );
@@ -415,7 +443,7 @@ void BmpCreator::Create( const String& rSRSName,
             if( aText.Len() )
             {
                 bDone = TRUE;
-                 ImplCreate( *pSRS, aInDirs, aOutDir, aName, rLang );
+                ImplCreate( *pSRS, aInDirs, aOutDir, aName, rLang );
             }
             else if( ( rLang.mnLangNum != 49 ) && !bLangDep )
             {
