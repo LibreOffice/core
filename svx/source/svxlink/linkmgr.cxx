@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-09 15:37:08 $
+ *  last change: $Author: mba $ $Date: 2002-07-09 15:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,24 +406,14 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
             INET_PROT_HTTP != aURL.GetProtocol() )
         {
             SfxStringItem aName( SID_FILE_NAME, sTopic );
-            SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, TRUE);
-//          SfxBoolItem aHidden(SID_HIDDEN, TRUE);
-                // minimiert!
-
-            SfxUInt16Item aViewStat( SID_VIEW_ZOOM_MODE, 0 );
+            SfxBoolItem aHidden(SID_HIDDEN, TRUE);
             SfxStringItem aReferer( SID_REFERER, sReferer );
-
-            SfxBoolItem aSilent(SID_SILENT, TRUE);
             const SfxPoolItem* pRet = SfxViewFrame::Current()->GetDispatcher()->
-                Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
-                        &aName, &aNewView,
-                        &aViewStat,
-                        &aSilent, &aReferer, 0L );
+                Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aName, &aHidden, &aReferer, 0L );
 
             if( pRet && pRet->ISA( SfxViewFrameItem ) &&
                 ((SfxViewFrameItem*)pRet)->GetFrame() )
-                pFndShell = ((SfxViewFrameItem*)pRet)->
-                                                GetFrame()->GetObjectShell();
+                pFndShell = ((SfxViewFrameItem*)pRet)->GetFrame()->GetObjectShell();
         }
     }
 
@@ -444,6 +434,8 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
                                     ? ADVISEMODE_ONLYONCE
                                     : 0 );
         }
+
+        pFndShell->DoClose();
     }
     return bRet;
 }
