@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:01:11 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,11 @@
 // #i13033#
 #ifndef _E3D_SCENE3D_HXX
 #include "scene3d.hxx"
+#endif
+
+// OD 30.06.2003 #108784#
+#ifndef _SVDOVIRT_HXX
+#include <svdovirt.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1630,7 +1635,15 @@ SdrObject* SdrMarkView::ImpCheckObjHit(const Point& rPnt, USHORT nTol, SdrObject
             SdrObjList* pOL=pObj->GetSubList();
             if (pOL!=NULL && pOL->GetObjCount()!=0) {
                 SdrObject* pTmpObj;
-                pRet=ImpCheckObjHit(rPnt,nTol,pOL,pPV,nOptions,pMVisLay,pTmpObj);
+                // OD 30.06.2003 #108784# - adjustment hit point for virtual
+                // objects.
+                Point aPnt( rPnt );
+                if ( pObj->ISA(SdrVirtObj) )
+                {
+                    Point aOffset = static_cast<SdrVirtObj*>(pObj)->GetOffset();
+                    aPnt.Move( -aOffset.X(), -aOffset.Y() );
+                }
+                pRet=ImpCheckObjHit(aPnt,nTol,pOL,pPV,nOptions,pMVisLay,pTmpObj);
             } else {
                 SdrLayerID nLay=pObj->GetLayer();
                 if (pPV->GetVisibleLayers().IsSet(nLay) &&
