@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-08-16 13:03:50 $
+ *  last change: $Author: os $ $Date: 2002-08-22 10:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pFrame,
 {
     FreeResource();
     USHORT nHtmlMode = ::GetHtmlMode(pWrtShell->GetView().GetDocShell());
-    BOOL bHtmlMode = nHtmlMode & HTMLMODE_ON;
+    bHTMLMode = nHtmlMode & HTMLMODE_ON;
 
     // BspFont fuer beide Bsp-TabPages
     //
@@ -183,7 +183,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pFrame,
     AddTabPage( TP_MACRO_ASSIGN, SfxMacroTabPage::Create, 0);
     AddTabPage( TP_BORDER,   SvxBorderTabPage::Create,      0);
 
-    if(bHtmlMode)
+    if(bHTMLMode)
     {
         switch( nDlgType )
         {
@@ -268,7 +268,8 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         if( DLG_FRM_STD == nDlgType )
         {
             ((SvxBackgroundTabPage&)rPage).ShowSelector();
-            ((SvxBackgroundTabPage&)rPage).EnableTransparency(TRUE, TRUE);
+            if(!bHTMLMode)
+                ((SvxBackgroundTabPage&)rPage).EnableTransparency(TRUE, TRUE);
         }
         break;
 
