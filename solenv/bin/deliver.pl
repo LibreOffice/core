@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: rt $ $Date: 2003-05-08 14:48:01 $
+#   last change: $Author: rt $ $Date: 2003-05-14 15:52:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.45 $ ';
+$id_str = ' $Revision: 1.46 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -848,6 +848,8 @@ sub push_default_actions
         foreach $subdir (@common_subdirs) {
             push(@action_data, ['mkdir', "%COMMON_DEST%/$subdir%_EXT%"]);
         }
+        push(@action_data, ['mkdir', "%_DEST%/bin%_EXT%/so"]);
+        push(@action_data, ['mkdir', "%COMMON_DEST%/bin%_EXT%/so"]);
 
         # deliver build.lst to $dest/inc/$module
         push(@action_data, ['mkdir', "%_DEST%/inc%_EXT%/$module"]); # might be necessary
@@ -856,8 +858,6 @@ sub push_default_actions
         push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]); # might be necessary
         push(@action_data, ['copy', "build.lst %COMMON_DEST%/inc%_EXT%/$module/build.lst"]);
     }
-    push(@action_data, ['mkdir', "%_DEST%/bin%_EXT%/so"]);
-    push(@action_data, ['mkdir', "%COMMON_DEST%/bin%_EXT%/so"]);
 
     # need to copy libstaticmxp.dylib for Mac OS X
     if ( $^O eq 'darwin' )
