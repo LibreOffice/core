@@ -10567,3 +10567,4 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ?RedlineAdd@XMLTextImportHelper@@UAEXABVOUString@rtl@@000ABUDateTime@util@star@sun@com@@E@Z
 ?WriteComment@XMLRedlineExport@@AAEXABVOUString@rtl@@@Z
 ?equals@OUString@rtl@@QBEEABV12@@Z
+?end@?$vector@UXMLPropertyState@@V?$allocator@UXMLPropertyState@@@_STL@@@_STL@@QAEPAUXMLPropertyState@@XZ
