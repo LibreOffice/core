@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:30:55 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "±âº»(~D)";
         Text[ turkish ] = "Standar~t";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Predeterm.";
     };
     RadioButton BTN_HORLEFT
     {
@@ -148,6 +149,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "¿ÞÂÊ(~L)";
         Text[ turkish ] = "So~l";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Izq~uierda";
     };
     RadioButton BTN_HORCENTER
     {
@@ -178,6 +180,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "°¡¿îµ¥";
         Text[ turkish ] = "Orta~la";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Centrado";
     };
     RadioButton BTN_HORRIGHT
     {
@@ -208,6 +211,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "¿À¸¥ÂÊ(~I)";
         Text[ turkish ] = "Sa~ð";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Derecha";
     };
     RadioButton BTN_HORBLOCK
     {
@@ -238,6 +242,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "¾ÓÂÊ ¸ÂÃã(~J)";
         Text[ turkish ] = "~Ýki yana yasla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Justificada";
     };
     FixedText FT_INDENT
     {
@@ -266,6 +271,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "µé¿©¾²±â(~N)";
         Text[ turkish ] = "Girinti";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Sangría";
     };
     MetricField ED_INDENT
     {
@@ -308,6 +314,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "°¡·Î";
         Text[ turkish ] = "Yatay";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Horizontal";
     };
     RadioButton BTN_VERSTD
     {
@@ -338,6 +345,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "Ç¥ÁØ(~S)";
         Text[ turkish ] = "Sta~ndart";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Predeterm.";
     };
     RadioButton BTN_VERTOP
     {
@@ -368,6 +376,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "À§(~T)";
         Text[ turkish ] = "Ü~st";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~rriba";
     };
     RadioButton BTN_VERBOT
     {
@@ -398,6 +407,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "¾Æ·¡(~B)";
         Text[ turkish ] = "~Alt";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~bajo";
     };
     RadioButton BTN_VERMID
     {
@@ -428,6 +438,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "°¡¿îµ¥(~E)";
         Text[ turkish ] = "O~rta";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ce~ntro";
     };
     GroupBox GB_VERALIGN
     {
@@ -458,6 +469,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "¼¼·Î";
         Text[ turkish ] = "Dikey";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Vertical";
     };
     Control CTR_DIAL
     {
@@ -504,6 +516,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "µµ(~G)";
         Text[ turkish ] = "De~rece";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Grados";
     };
     NumericField NF_ORIENT
     {
@@ -542,6 +555,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "±âÁØ ¸ð¼­¸®(~F)";
         Text[ turkish ] = "Referans ~kenarý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Aristas de referencia";
     };
     Control CTR_BORDER_LOCK
     {
@@ -580,6 +594,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "ÅØ½ºÆ® ¹æÇâ";
         Text[ turkish ] = "Metin yönü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Dirección de escritura";
     };
     FixedText FT_LEFTSPACE
     {
@@ -610,6 +625,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "¿ÞÂÊ(~E)";
         Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "I~zquierda";
     };
     MetricField ED_LEFTSPACE
     {
@@ -654,6 +670,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "¿À¸¥ÂÊ";
         Text[ turkish ] = "~Sað";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Derec~ha";
     };
     MetricField ED_RIGHTSPACE
     {
@@ -698,6 +715,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "À§(~P)";
         Text[ turkish ] = "Ü~st";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Arr~iba";
     };
     MetricField ED_TOPSPACE
     {
@@ -742,6 +760,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "¾Æ·¡(~M)";
         Text[ turkish ] = "Al~t";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Abaj~o";
     };
     MetricField ED_BOTTOMSPACE
     {
@@ -786,6 +805,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "±¥¼±°úÀÇ °£°Ý";
         Text[ turkish ] = "Kýlavuz çizgilere uzaklýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Distancia a la cuadrícula";
     };
     TriStateBox BTN_WRAP
     {
@@ -816,6 +836,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "°³Çà";
         Text[ turkish ] = "Satýr son~u";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Salto de ~línea";
     };
     GroupBox GB_WRAP
     {
@@ -845,6 +866,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "ÅØ½ºÆ® Èå¸§";
         Text[ turkish ] = "Metin akýþý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Flujo del texto";
     };
     ImageList IL_LOCK_BMPS
     {
@@ -883,6 +905,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ greek ] = "ÅðéìÞêõíóç êåéìÝíïõ áðü êÜôù Üêñç êåëéïý.";
         Text[ korean ] = "¼¿ ¾Æ·¡ Å×µÎ¸®¿¡¼­ ºÎÅÍ ÅØ½ºÆ® È®Àå";
         Text[ turkish ] = "Hücre alt kenarýndan metin geniþlemesi";
+        Text[ catalan ] = "Expansión del texto a partir del borde inferior de la celda.";
     };
     String STR_TOPLOCK
     {
@@ -909,6 +932,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ greek ] = "ÅðéìÞêõíóç êåéìÝíïõ áðü ðÜíù Üêñç êåëéïý.";
         Text[ korean ] = "¼¿ À­Å×µÎ¸®¿¡¼­ ºÎÅÍ ÅØ½ºÆ® È®Àå";
         Text[ turkish ] = "Hücre üst kenarýndan metin geniþlemesi.";
+        Text[ catalan ] = "Expansión del texto a partir del borde superior de la celda.";
     };
     String STR_CELLLOCK
     {
@@ -935,6 +959,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ greek ] = "ÅðéìÞêõíóç êåéìÝíïõ ìüíï óôï åóùôåñéêü ôïõ êåëéïý.";
         Text[ korean ] = "¼¿ ¾È¿¡¼­¸¸ ÅØ½ºÆ® È®Àå";
         Text[ turkish ] = "Yalnýzca hücre içinde metin geniþlemesi";
+        Text[ catalan ] = "Expansión del texto solo dentro de la celda.";
     };
     Text[ chinese_simplified ] = "¶ÔÆë";
     Text[ russian ] = "Âûðàâíèâàíèå";
@@ -948,5 +973,6 @@ TabPage RID_SVXPAGE_ALIGNMENT
     Text[ korean ] = "¸ÂÃã";
     Text[ turkish ] = "Hizalama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Alineación";
 };
  // ********************************************************************** EOF
