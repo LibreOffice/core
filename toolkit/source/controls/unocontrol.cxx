@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-16 11:35:50 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:33:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1057,8 +1057,12 @@ sal_Bool UnoControl::setModel( const Reference< XControlModel >& rxModel ) throw
 
     Reference< XMultiPropertySet > xPropSet( mxModel, UNO_QUERY );
 
+    // query for the XPropertiesChangeListener - our delegator is allowed to overwrite this interface
+    Reference< XPropertiesChangeListener > xListener;
+    queryInterface( ::getCppuType( &xListener ) ) >>= xListener;
+
     if( xPropSet.is() )
-        xPropSet->removePropertiesChangeListener( this );
+        xPropSet->removePropertiesChangeListener( xListener );
 
     mxModel = rxModel;
     if( mxModel.is() )
@@ -1067,7 +1071,7 @@ sal_Bool UnoControl::setModel( const Reference< XControlModel >& rxModel ) throw
         if( xPropSet.is() )
         {
             Sequence< ::rtl::OUString> aNames = lcl_ImplGetPropertyNames( xPropSet );
-            xPropSet->addPropertiesChangeListener( aNames, this );
+            xPropSet->addPropertiesChangeListener( aNames, xListener );
         }
     }
     return mxModel.is();
