@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:05:49 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,9 @@
 #include "textattr.hrc"
 #include "dialmgr.hxx"
 #include "dlgutil.hxx"
-
+#include <sfx2/request.hxx> //add CHINA001
+#include <svx/ofaitem.hxx> //add CHINA001
+#include <svx/svxids.hrc> //add CHINA001
 #ifndef _SVX_WRITINGMODEITEM_HXX
 #include <writingmodeitem.hxx>
 #endif
@@ -133,28 +135,28 @@ static USHORT pRanges[] =
 |*
 \************************************************************************/
 
-SvxTextAttrDialog::SvxTextAttrDialog( Window* pParent, const SfxItemSet& rInAttrs,
-                                const SdrView* pSdrView ) :
-        SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_TEXTATTR )
-{
-    SvxTextAttrPage* pPage = new SvxTextAttrPage( this, rInAttrs );
-
-    pPage->SetView( pSdrView );
-    pPage->Construct();
-
-    SetTabPage( pPage );
-    SetText( pPage->GetText() );
-}
-
+//CHINA001 SvxTextAttrDialog::SvxTextAttrDialog( Window* pParent, const SfxItemSet& rInAttrs,
+//CHINA001                              const SdrView* pSdrView ) :
+//CHINA001      SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_TEXTATTR )
+//CHINA001 {
+//CHINA001 SvxTextAttrPage* pPage = new SvxTextAttrPage( this, rInAttrs );
+//CHINA001
+//CHINA001 pPage->SetView( pSdrView );
+//CHINA001 pPage->Construct();
+//CHINA001
+//CHINA001 SetTabPage( pPage );
+//CHINA001 SetText( pPage->GetText() );
+//CHINA001 }
+//CHINA001
 /*************************************************************************
 |*
 |* Dtor
 |*
 \************************************************************************/
 
-SvxTextAttrDialog::~SvxTextAttrDialog()
-{
-}
+//CHINA001 SvxTextAttrDialog::~SvxTextAttrDialog()
+//CHINA001 {
+//CHINA001 }
 
 /*************************************************************************
 |*
@@ -835,3 +837,16 @@ bool SvxTextAttrPage::IsTextDirectionLeftToRight (void) const
     }
     return bLeftToRightDirection;
 }
+
+//add CHINA001 begin
+void SvxTextAttrPage::PageCreated(SfxAllItemSet aSet)
+{
+    SFX_ITEMSET_ARG (&aSet,pViewItem,OfaPtrItem,SID_SVXTEXTATTRPAGE_VIEW,sal_False);
+
+    if (pViewItem)
+        SetView( static_cast<SdrView *>(pViewItem->GetValue()));
+
+    Construct();
+}
+
+//end of CHINA001
