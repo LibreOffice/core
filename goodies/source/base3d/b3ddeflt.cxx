@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3ddeflt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:28:07 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,12 +502,24 @@ Vector3D Base3DDefault::Get3DCoor(Point& rPnt, double fDepth)
 
 BOOL Base3DDefault::IsVisibleAndScissor(long nX, long nY, UINT32 nDepth)
 {
+    // #112303#
+    // Do not allow pixels smaller then the bitmap
+    if(nX < 0L || nY < 0L)
+        return FALSE;
+
+    // #112303#
+    // Do not allow pixels bigger then the bitmap
+    if(nX > aLocalSizePixel.GetWidth() || nY >aLocalSizePixel.GetHeight())
+        return FALSE;
+
     if(!IsScissorRegionActive() || IsInScissorRegion(nX, nY))
     {
         const BitmapColor& rBmCol = pZBufferWrite->GetPixel(nY, nX);
         Color aColor(rBmCol.GetRed(), rBmCol.GetGreen(), rBmCol.GetBlue());
+
         return (aColor.GetColor() >= nDepth);
     }
+
     return FALSE;
 }
 
@@ -538,6 +550,15 @@ BOOL Base3DDefault::IsInScissorRegion(long nX, long nY)
 
 void Base3DDefault::WritePixel(long nX, long nY, Color aColor, UINT32 nDepth)
 {
+    // #112303#
+    // WritePixel requires the pixel coordinates to be safely on the buffer
+    // bitmaps where the paint will take place. Thus, this asserts will
+    // ensure that.
+    DBG_ASSERT(nX >= 0L, "Base3DDefault::WritePixel: X-Coor negative (!)");
+    DBG_ASSERT(nY >= 0L, "Base3DDefault::WritePixel: Y-Coor negative (!)");
+    DBG_ASSERT(nX <= aPicture.GetSizePixel().Width(), "Base3DDefault::WritePixel: X-Coor too big (!)");
+    DBG_ASSERT(nY <= aPicture.GetSizePixel().Height(), "Base3DDefault::WritePixel: Y-Coor too big (!)");
+
     // In Transparenz-Map eintragen
     if(GetTransparentPartsContainedHint())
     {
