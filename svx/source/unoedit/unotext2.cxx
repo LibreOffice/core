@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-05 15:58:37 $
+ *  last change: $Author: cl $ $Date: 2001-08-14 15:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,14 +146,16 @@ SvxUnoTextContent::SvxUnoTextContent() throw()
 :   SvxUnoTextRangeBase(*getDummyText()),
     rParentText(*getDummyText()),
     aDisposeListeners(aDisposeContainerMutex),
-    nParagraph(0)
+    nParagraph(0),
+    bDisposing( sal_False )
 {
 }
 
 SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_uInt16 nPara ) throw()
 :   SvxUnoTextRangeBase(rText),rParentText(rText),
     aDisposeListeners(aDisposeContainerMutex),
-    nParagraph(nPara)
+    nParagraph(nPara),
+    bDisposing( sal_False )
 {
     xParentText =  (text::XText*)&rText;
     SetSelection( ESelection( nParagraph,0, nParagraph, GetEditSource()->GetTextForwarder()->GetTextLen( nParagraph ) ) );
@@ -162,7 +164,8 @@ SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_uInt16 nP
 SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw()
 :   SvxUnoTextRangeBase(rContent),
     aDisposeListeners(aDisposeContainerMutex),
-    rParentText(rContent.rParentText)
+    rParentText(rContent.rParentText),
+    bDisposing( sal_False )
 {
     xParentText = rContent.xParentText;
     nParagraph  = rContent.nParagraph;
