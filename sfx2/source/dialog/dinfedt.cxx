@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfedt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-28 13:44:05 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "dinfedt.hxx"
 #include "sfxresid.hxx"
