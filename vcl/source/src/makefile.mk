@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ssa $ $Date: 2002-10-25 11:45:39 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:25:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,13 +68,12 @@ RESTARGET=vcl
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 
 # --- Files --------------------------------------------------------
 
-SRCFILES=			images.src			\
+SRS1NAME=$(TARGET)
+SRC1FILES=			images.src			\
                     menu.src			\
                     stdtext.src 		\
                     helptext.src		\
@@ -108,3 +107,4 @@ RESLIB1BMPS=		check.bmp			\
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
