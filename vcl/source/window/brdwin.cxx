@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:10:26 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1631,7 +1631,10 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutD
         // use no gradient anymore, just a static titlecolor
         pDev->SetFillColor( aFrameColor );
         pDev->SetTextColor( rStyleSettings.GetButtonTextColor() );
-        pDev->DrawRect( aInRect );
+        Rectangle aTitleRect( pData->maTitleRect );
+        if( pOffset )
+            aTitleRect.Move( pOffset->X(), pOffset->Y() );
+        pDev->DrawRect( aTitleRect );
 
 
         if ( pData->mnTitleType != BORDERWINDOW_TITLE_TEAROFF )
