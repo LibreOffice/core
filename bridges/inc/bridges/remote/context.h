@@ -2,9 +2,9 @@
  *
  *  $RCSfile: context.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-11-05 11:41:09 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ struct remote_DisposingListener
   @return 0 when such a context does not exist, otherwise
           a pointer to an acquired remote_Context.
  **/
-extern "C" SAL_DLLEXPORT remote_Context * SAL_CALL
+extern "C" remote_Context * SAL_CALL
 remote_getContext( rtl_uString *pIdString );
 
 /**
@@ -174,7 +174,7 @@ remote_getContext( rtl_uString *pIdString );
   @see remote_getContext()
   @see remote_Context
  */
-extern "C" SAL_DLLEXPORT remote_Context * SAL_CALL
+extern "C" remote_Context * SAL_CALL
 remote_createContext( remote_Connection *pConnection,
                       rtl_uString *pIdStr,
                       rtl_uString *pDescription,
@@ -195,13 +195,13 @@ typedef void ( SAL_CALL * remote_contextListenerFunc ) (
     track of existing remote connections.
     @param pObject object which is handed to the listener function, when called.
  */
-extern "C" SAL_DLLEXPORT void SAL_CALL
+extern "C" void SAL_CALL
 remote_addContextListener( remote_contextListenerFunc listener, void *pObject );
 
 
 /** Removes a listener from the context administration.
  */
-extern "C" SAL_DLLEXPORT void SAL_CALL
+extern "C" void SAL_CALL
 remote_removeContextListener( remote_contextListenerFunc listener , void *pObject );
 
 /** Allows to retrieve all existing context strings.
@@ -212,7 +212,7 @@ remote_removeContextListener( remote_contextListenerFunc listener , void *pObjec
    @return array of rtl strings. The caller must call release on all rtl_uString s and must free
            the pointer array.
  */
-extern "C" SAL_DLLEXPORT rtl_uString ** SAL_CALL
+extern "C" rtl_uString ** SAL_CALL
 remote_getContextList(
     sal_Int32 *pnStringCount,
     void * ( SAL_CALL * memAlloc ) ( sal_uInt32 nBytesToAlloc ) );
