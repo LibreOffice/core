@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:12:54 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,10 @@ SwFrmNotify::~SwFrmNotify()
 
     // #i9046# Automatic frame width
     SwFlyFrm* pFly = 0;
-    if ( pFrm->IsInFly() && !pFrm->IsFlyFrm() && ( pFly = pFrm->FindFlyFrm() ) )
+    // --> FME 2004-10-21 #i35879# Do not trust the inf flags. pFrm does not
+    // necessarily have to have an upper!
+    if ( !pFrm->IsFlyFrm() && 0 != ( pFly = pFrm->ImplFindFlyFrm() ) )
+    // <--
     {
         const SwFmtFrmSize &rFrmSz = pFly->GetFmt()->GetFrmSize();
 
@@ -709,6 +712,14 @@ SwFlyNotify::~SwFlyNotify()
             //Wenn in der LayAction das IsAgain gesetzt ist kann es sein,
             //dass die alte Seite inzwischen vernichtet wurde!
             ::Notify( pFly, pOldPage, aFrmAndSpace, &aPrt );
+            // --> OD 2004-10-20 #i35640# - additional notify anchor text frame,
+            // if Writer fly frame has changed its page
+            if ( pFly->GetAnchorFrm()->IsTxtFrm() &&
+                 pFly->GetPageFrm() != pOldPage )
+            {
+                pFly->AnchorFrm()->Prepare( PREP_FLY_LEAVE );
+            }
+            // <--
         }
         pFly->ResetNotifyBack();
     }
@@ -739,6 +750,14 @@ SwFlyNotify::~SwFlyNotify()
                 pNxt->InvalidatePos();
             }
         }
+
+        // --> OD 2004-11-05 #i26945# - notify anchor.
+        // Needed for negative positioned Writer fly frames
+        if ( pFly->GetAnchorFrm()->IsTxtFrm() )
+        {
+            pFly->AnchorFrm()->Prepare( PREP_FLY_LEAVE );
+        }
+        // <--
     }
 
     // OD 2004-05-13 #i28701#
@@ -2868,10 +2887,16 @@ void MA_FASTCALL lcl_NotifyCntnt( const SdrObject *pThis, SwCntntFrm *pCnt,
         aCntPrt.Pos() += pCnt->Frm().Pos();
         if ( eHint == PREP_FLY_ATTR_CHG )
         {
-            if ( aCntPrt.IsOver( pThis->GetCurrentBoundRect() ) )
+            // --> OD 2004-10-20 #i35640# - use given rectangle <rRect> instead
+            // of current bound rectangle
+            if ( aCntPrt.IsOver( rRect ) )
+            // <--
                 pCnt->Prepare( PREP_FLY_ATTR_CHG );
         }
-        else if ( aCntPrt.IsOver( rRect ) || pCnt->IsFollow() || pCnt->HasFollow() )
+        // --> OD 2004-11-01 #i23129# - only invalidate, if the text frame
+        // printing area overlaps with the given rectangle.
+        else if ( aCntPrt.IsOver( rRect ) )
+        // <--
             pCnt->Prepare( eHint, (void*)&aCntPrt._Intersection( rRect ) );
         if ( pCnt->GetDrawObjs() )
         {
