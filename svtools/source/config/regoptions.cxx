@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-20 13:11:37 $
+ *  last change: $Author: fs $ $Date: 2001-12-21 08:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ namespace svt
 
     //--------------------------------------------------------------------
     #define DECLARE_STATIC_LAZY_USTRING( name ) \
-    static const ::rtl::OUString lcl_get##name##Name()  \
+    static const ::rtl::OUString& lcl_get##name##Name() \
     {   \
         static const ::rtl::OUString sName = ::rtl::OUString::createFromAscii( #name ); \
         return sName;   \
@@ -194,7 +194,7 @@ namespace svt
     class RegOptionsImpl
     {
     private:
-        OConfigurationTreeRoot  m_aRegistrationNode;    // the configuration node we need to access our persistent data
+        OConfigurationTreeRoot  m_aRegistrationNode;        // the configuration node we need to access our persistent data
 
         String                  m_sRegistrationURL;         // the URL to use when doing an online registration
         Date                    m_aReminderDate;            // the reminder date as found in the configuration
@@ -492,15 +492,15 @@ namespace svt
     {
         /// we cache this setting, 'cause it is needed very often
         static sal_Bool bKnowMenuPermission = sal_False;
-        static sal_Bool nAllowMenu          = sal_False;
+        static sal_Bool bAllowMenu          = sal_False;
 
         if ( !bKnowMenuPermission )
         {
             const_cast< RegOptions* >( this )->ensureImpl( );
-            nAllowMenu = m_pImpl->allowMenu();
+            bAllowMenu = m_pImpl->allowMenu();
             bKnowMenuPermission = sal_True;
         }
-        return nAllowMenu;
+        return bAllowMenu;
     }
 
 //........................................................................
@@ -510,6 +510,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/12/20 13:11:37  fs
+ *  initial checkin - class encapsulating the product registration configuration settings
+ *
  *
  *  Revision 1.0 19.12.01 13:48:37  fs
  ************************************************************************/
