@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:55:42 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ ModalDialog DLG_PASSWD
         Text[ czech ] = "Uživatel";
         Text[ hebrew ] = "‮משתמש‬";
         Text[ hindi ] = "~उपभोक्ता";
+        Text[ slovak ] = "~Užívateľ";
     };
     Edit ED_PASSWD_USER
     {
@@ -162,6 +163,7 @@ ModalDialog DLG_PASSWD
         Text[ czech ] = "Heslo";
         Text[ hebrew ] = "‮סיסמה‬";
         Text[ hindi ] = "~कूटशब्द";
+        Text[ slovak ] = "~Heslo";
     };
     Edit ED_PASSWD_PASSWORD
     {
@@ -200,6 +202,7 @@ ModalDialog DLG_PASSWD
         Text[ czech ] = "Potvrdit";
         Text[ hebrew ] = "‮אישור‬";
         Text[ hindi ] = "~दृढ़ करो";
+        Text[ slovak ] = "Potvrd~iť";
     };
     Edit ED_PASSWD_CONFIRM
     {
@@ -240,6 +243,7 @@ ModalDialog DLG_PASSWD
         Text[ czech ] = "Heslo";
         Text[ hebrew ] = "‮סיסמה‬";
         Text[ hindi ] = "कूटशब्द";
+        Text[ slovak ] = "Heslo";
     };
     OKButton BTN_PASSWD_OK
     {
@@ -288,6 +292,7 @@ ModalDialog DLG_PASSWD
         Text[ czech ] = "Potvrdit heslo";
         Text[ hebrew ] = "‮אישור סיסמה‬";
         Text[ hindi ] = "कूटशब्द दृढ़ करो";
+        Text[ slovak ] = "Potvrdiť heslo";
     };
     Text[ turkish ] = "Parolay� Girin";
     Text[ language_user1 ] = " ";
@@ -296,9 +301,12 @@ ModalDialog DLG_PASSWD
     Text[ czech ] = "Zadat heslo";
     Text[ hebrew ] = "‮הקלדת סיסמה‬";
     Text[ hindi ] = "कूटशब्द प्रविष्ट करो";
+    Text[ slovak ] = "Zadať heslo";
 };
 
 // ********************************************************************** EOF
+
+
 
 
 
