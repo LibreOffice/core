@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 18:17:43 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,7 +479,7 @@
             Text[ swedish ] = "~Använd på alla liknande texter.";               \
             Text[ polish ] = "Zastosuj w podobnych tekstach.";                  \
             Text[ portuguese_brazilian ] = "~Apply to all similar texts.";      \
-            Text[ japanese ] = "‚·‚×‚Ä‚Ì—‚Ä‚¢‚é•¶š—ñ‚É“K—p(~A)";               \
+            Text[ japanese ] = "—Ş—½ÍßÙ‚É“K—p(~A)";               \
             Text[ chinese_simplified ] = "ÊÊÓÃÓÚÏàÍ¬µÄÕıÎÄ(~A)";           \
             Text[ chinese_traditional ] = "¥Î©ó©Ò¦³¬Û¦Pªº¤º¤å(~A)";            \
             Text[ arabic ] = "ÊØÈíŞ Úáì ßá ÇáäÕæÕ ÇáãÊãÇËáÉ.";                   \
@@ -507,7 +507,7 @@
             Text[ swedish ] = "E~xakt sökning";\
             Text[ polish ] = "Dok³adne wyszukiwanie";\
             Text[ portuguese_brazilian ] = "Match case";\
-            Text[ japanese ] = "Š®‘S‚É“¯ˆê‚È’PŒê‚ÌŒŸõ";\
+            Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~T)";\
             Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ(~T)";\
             Text[ chinese_simplified ] = "¾«È·ËÑÑ°";\
             Text[ chinese_traditional ] = "ºëÚÌ´M§ä";\
@@ -533,7 +533,7 @@
             Text[ swedish ] = "Bara hela ~ord";\
             Text[ polish ] = "Tylko ca³e wyrazy";\
             Text[ portuguese_brazilian ] = "Whole words only";\
-            Text[ japanese ] = "’PŒê’PˆÊ‚Å‚Ì‚İ";\
+            Text[ japanese ] = "’PŒê‚Æ‚µ‚Ä(~W)";\
             Text[ korean ] = "ÀüÃ¼ ´Ü¾î¸¸(~W)";\
             Text[ chinese_simplified ] = "Ö»ÔÊĞíÕû¸ö´Ê";\
             Text[ chinese_traditional ] = "¥u¬O¾ã­Ó¦r";\
@@ -761,7 +761,7 @@ String STR_IDXMRK_INSERT
             Text[ polish ] = "Z bibliograficznej bazy danych";\
             Text[ portuguese_brazilian ] = "Form bibliography database";\
             Text[ japanese ] = "‘ ‘ŠÇ—ÃŞ°ÀÍŞ°½‚©‚ç(~D)";\
-            Text[ korean ] = "Âü°í¹®Çå µ¥ÀÌÅÍº£ÀÌ½º·Î ºÎÅÍ(~D)";\
+            Text[ korean ] = "Âü°í¹®Çå µ¥ÀÌÅÍº£ÀÌ½º·ÎºÎÅÍ";\
             Text[ chinese_simplified ] = "²ÉÓÃÎÄÏ×Êı¾İ¿â";\
             Text[ chinese_traditional ] = "±q¤åÄm¸ê®Æ®w";\
             Text[ arabic ] = "ãä ŞÇÚÏÉ ÈíÇäÇÊ ÇáãÑÇÌÚ";\
