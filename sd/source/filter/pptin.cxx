@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-22 15:43:05 $
+ *  last change: $Author: sj $ $Date: 2001-06-25 13:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,12 +577,9 @@ BOOL SdPPTImport::Import()
                     if ( nMasterNum > 2 )
                     {
                         if ( ePgKind == PK_STANDARD )
-                        {
-                            // Standardseite: Neues Praesentationslayout erzeugen
-                            if ( pSlideLayout && pSlideLayout->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE )
-                                aLayoutName = String( SdResId( STR_LAYOUT_DEFAULT_TITLE_NAME ) );
-                            else
-                                aLayoutName += String::CreateFromInt32( (sal_Int32)( ( nMasterNum + 1 ) / 2 - 1 ) );
+                        {   // Standardseite: Neues Praesentationslayout erzeugen
+                            aLayoutName = String( SdResId( STR_LAYOUT_DEFAULT_TITLE_NAME ) );
+                            aLayoutName += String::CreateFromInt32( (sal_Int32)( ( nMasterNum + 1 ) / 2 - 1 ) );
                             ( (SdStyleSheetPool*)pDoc->GetStyleSheetPool() )->CreateLayoutStyleSheets( aLayoutName );
                         }
                         else    // Notizseite: Praesentationslayout von der Standardseite verwenden
@@ -693,7 +690,16 @@ BOOL SdPPTImport::Import()
 
         if ( pPersist && ( pPersist->bStarDrawFiller == FALSE ) )
         {
-            SdrObject* pObj = ImportPageBackgroundObject( *pMPage, pPersist->nBackgroundOffset, TRUE ); // import background
+            PptSlidePersistEntry* pE = pPersist;
+            while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
+            {
+                sal_uInt16 nNextMaster = pMasterPages->FindPage( pE->aSlideAtom.nMasterId );
+                if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
+                    break;
+                else
+                    pE = (*pList)[ nNextMaster ];
+            }
+            SdrObject* pObj = ImportPageBackgroundObject( *pMPage, pE->nBackgroundOffset, TRUE );   // import background
             if ( pObj )
                 pMPage->NbcInsertObject( pObj );
 
