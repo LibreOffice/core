@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_data.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:30:26 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1964,10 +1964,11 @@ void Bridge::map_to_java(
 
             if (0 < nElements)
             {
-                // static <enum_class>.fromInt( int )
+                // call static <enum_class>.fromInt( int )
                 OStringBuffer sig_buf( 3 + class_name.getLength() );
-                sig_buf.append( RTL_CONSTASCII_STRINGPARAM("(I)") );
+                sig_buf.append( RTL_CONSTASCII_STRINGPARAM("(I)L") );
                 sig_buf.append( class_name );
+                sig_buf.append( ';' );
                 OString sig( sig_buf.makeStringAndClear() );
                 jmethodID method_id = jni->GetStaticMethodID(
                     (jclass) jo_enum_class.get(), "fromInt", sig.getStr() );
