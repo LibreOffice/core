@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:56:12 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,8 @@ using namespace ::com::sun::star::registry;
 //***************************************************************************************
 //
 // registry functions
-extern "C" void SAL_CALL createRegistryInfo_ODatabaseAdministrationDialog();
+extern "C" void SAL_CALL createRegistryInfo_OTableFilterDialog();
+extern "C" void SAL_CALL createRegistryInfo_ODataSourcePropertyDialog();
 extern "C" void SAL_CALL createRegistryInfo_OSQLMessageDialog();
 extern "C" void SAL_CALL createRegistryInfo_OBrowser();
 extern "C" void SAL_CALL createRegistryInfo_OFormGridView();
@@ -93,6 +94,13 @@ extern "C" void SAL_CALL createRegistryInfo_OTableControl();
 extern "C" void SAL_CALL createRegistryInfo_ORelationControl();
 extern "C" void SAL_CALL createRegistryInfo_ORowsetFilterDialog();
 extern "C" void SAL_CALL createRegistryInfo_ORowsetOrderDialog();
+extern "C" void SAL_CALL createRegistryInfo_ODBApplication();
+extern "C" void SAL_CALL createRegistryInfo_ODirectSQLDialog();
+extern "C" void SAL_CALL createRegistryInfo_OAdvancedSettingsDialog();
+extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialog();
+extern "C" void SAL_CALL createRegistryInfo_OUserSettingsDialog();
+extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialog();
+extern "C" void SAL_CALL createRegistryInfo_OAdabasSettingsDialog();
 extern "C" void SAL_CALL createRegistryInfo_OColumnControlModel();
 extern "C" void SAL_CALL createRegistryInfo_OColumnControl();
 
@@ -102,7 +110,8 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
     static sal_Bool bInit = sal_False;
     if (!bInit)
     {
-        createRegistryInfo_ODatabaseAdministrationDialog();
+        createRegistryInfo_OTableFilterDialog();
+        createRegistryInfo_ODataSourcePropertyDialog();
         createRegistryInfo_OSQLMessageDialog();
         createRegistryInfo_OBrowser();
         createRegistryInfo_OFormGridView();
@@ -114,6 +123,12 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
         createRegistryInfo_ORelationControl();
         createRegistryInfo_ORowsetFilterDialog();
         createRegistryInfo_ORowsetOrderDialog();
+        createRegistryInfo_ODBApplication();
+        createRegistryInfo_ODirectSQLDialog();
+        createRegistryInfo_OAdvancedSettingsDialog();
+        createRegistryInfo_ODBTypeWizDialog();
+        createRegistryInfo_OUserSettingsDialog();
+        createRegistryInfo_OAdabasSettingsDialog();
         createRegistryInfo_OColumnControlModel();
         createRegistryInfo_OColumnControl();
         bInit = sal_True;
