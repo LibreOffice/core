@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-22 13:08:08 $
+ *  last change: $Author: ssa $ $Date: 2002-04-15 12:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,17 @@ struct LTRSortBackward : public ::std::binary_function< const Window*, const Win
 
 // --------------------------------------------------
 
+static void ImplTaskPaneListGrabFocus( Window *pWindow )
+{
+    // put focus in child of floating windows which is typically a toolbar
+    // that can deal with the focus
+    if( pWindow->ImplIsFloatingWindow() && pWindow->GetWindow( WINDOW_FIRSTCHILD ) )
+        pWindow = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+    pWindow->GrabFocus();
+}
+
+// --------------------------------------------------
+
 TaskPaneList::TaskPaneList()
 {
 }
@@ -179,7 +190,7 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
     BOOL bFocusInList = FALSE;
     KeyCode aKeyCode = aKeyEvent.GetKeyCode();
     BOOL bForward = !aKeyCode.IsShift();
-    if( ( aKeyCode.IsMod1() && aKeyCode.GetCode() == KEY_TAB )  // Ctrl-TAB
+    if( ( (aKeyCode.IsMod1() || aKeyCode.IsMod2()) && aKeyCode.GetCode() == KEY_TAB )  // Ctrl-TAB or Alt-TAB
         || ( bF6 = ( aKeyCode.GetCode()) == KEY_F6 )    // F6
         )
     {
@@ -202,7 +213,7 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
                 if( pNextWin != pWin )
                 {
                     ImplGetSVData()->maWinData.mbNoSaveFocus = TRUE;
-                    pNextWin->GrabFocus();
+                    ImplTaskPaneListGrabFocus( pNextWin );
                     ImplGetSVData()->maWinData.mbNoSaveFocus = FALSE;
                 }
                 else
@@ -232,7 +243,7 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
             Window *pWin = FindNextFloat( NULL, bForward );
             if( pWin )
             {
-                pWin->GrabFocus();
+                ImplTaskPaneListGrabFocus( pWin );
                 return TRUE;
             }
         }
@@ -262,7 +273,10 @@ Window* TaskPaneList::FindNextPane( Window *pWindow, BOOL bForward )
                 if( ++p == mTaskPanes.end() )
                     p = mTaskPanes.begin();
                 if( (*p)->IsVisible() && !(*p)->IsDialog() )
-                    return *p;
+                {
+                    pWindow = *p;
+                    break;
+                }
             }
             break;
         }
@@ -270,7 +284,7 @@ Window* TaskPaneList::FindNextPane( Window *pWindow, BOOL bForward )
             ++p;
     }
 
-    return pWindow; // nothing found
+    return pWindow;
 }
 
 // --------------------------------------------------
@@ -293,9 +307,12 @@ Window* TaskPaneList::FindNextFloat( Window *pWindow, BOOL bForward )
                 if( pWindow )   // increment before test
                     ++p;
                 if( p == mTaskPanes.end() )
-                    return pWindow; // do not wrap, send focus back to document at end of list
+                    break; // do not wrap, send focus back to document at end of list
                 if( (*p)->IsVisible() /*&& ( (*p)->GetType() == RSC_DOCKINGWINDOW || (*p)->IsDialog() )*/ )
-                    return *p;
+                {
+                    pWindow = *p;
+                    break;
+                }
                 if( !pWindow )  // increment after test, otherwise first element is skipped
                     ++p;
             }
@@ -305,7 +322,7 @@ Window* TaskPaneList::FindNextFloat( Window *pWindow, BOOL bForward )
             ++p;
     }
 
-    return pWindow; // nothing found
+    return pWindow;
 }
 
 // --------------------------------------------------
