@@ -502,15 +502,9 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 
 
 <xsl:template match="para">
-<xsl:choose>
-<xsl:when test="ancestor::varlistentry">
-		<xsl:element name="text:p">
-			<xsl:attribute name="text:style-name">VarList Term</xsl:attribute>
-			<xsl:apply-templates />
-		</xsl:element>
-</xsl:when>
-<xsl:otherwise>
-	<xsl:element name="text:p">
+
+<xsl:element name="text:p">
+
 <xsl:choose>
 	<xsl:when test="ancestor-or-self::footnote">
 	 	<xsl:attribute name= "text:style-name"><xsl:text>Footnote</xsl:text></xsl:attribute>
@@ -538,11 +532,10 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 			<xsl:attribute name="text:style-name">Text body</xsl:attribute>
 	</xsl:otherwise>
 </xsl:choose>
-		<xsl:apply-templates/>	
+
+<xsl:apply-templates/>	
 </xsl:element>
 
-</xsl:otherwise>
-</xsl:choose>
 </xsl:template>
 
 <xsl:template match="section">
@@ -770,13 +763,12 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 
 <!--  lists          Section                                          -->
 
-
-
 <xsl:template match="itemizedlist">
 	<xsl:element name="text:unordered-list">
-	<xsl:attribute name="text:style-name">Itemized List</xsl:attribute>
-			<xsl:attribute name="text:continue-numbering">false</xsl:attribute>
-			<xsl:apply-templates/>
+		<xsl:if test="not(ancestor::itemizedlist)">
+			<xsl:attribute name="text:style-name">L1</xsl:attribute>
+		</xsl:if>
+		<xsl:apply-templates/>
 	</xsl:element>
 </xsl:template>
 
@@ -798,31 +790,20 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 
 <xsl:template match="term">
 	<xsl:if test="parent::varlistentry">
-	<text:list-item>
-	<xsl:element name="text:p">
-		<xsl:attribute name="text:style-name">VarList Term</xsl:attribute>
-		<xsl:apply-templates />
-	</xsl:element>
+    	<text:list-item>    
+	        <xsl:element name="text:p">
+		        <xsl:attribute name="text:style-name">VarList Term</xsl:attribute>
+        		<xsl:apply-templates />
+	        </xsl:element>
 		</text:list-item>
 	</xsl:if>
 </xsl:template>
 
-
 <xsl:template match="listitem">
-	<xsl:choose>
-		<xsl:when test="parent::varlistentry">
-					<text:list-item>
-						<xsl:apply-templates/>
-						</text:list-item>
-		</xsl:when>
-		<xsl:otherwise>
-				<text:list-item>
-						<xsl:apply-templates/>
-				</text:list-item>
-		</xsl:otherwise>	
-	</xsl:choose>
+	<text:list-item>
+        <xsl:apply-templates/>
+	</text:list-item>
 </xsl:template>
-
 
 <!--  end of lists-->
 
