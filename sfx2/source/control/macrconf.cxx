@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:08:38 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,32 +924,6 @@ ErrCode SfxMacroConfig::Call( SbxObject* pVCtrl,
     return nErr;
 }
 
-#if SUPD<582
-void SfxMacroConfig::CallStarScript( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XEngine > & rxEngine, const String & rCode,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rSource, void *pArgs, void *pRet )
-{
-    static String aCallPrefix( "();" );
-
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >   aArgs;
-    if( pArgs )
-        aArgs = *(::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > *)pArgs;
-
-    // HACK!!! TODO: Klaeren, wie das wirklich laufen soll
-    String aCode = rCode;
-    aCode += aCallPrefix;
-
-    ::rtl::OUString aUCode = StringToOUString( aCode, RTL_TEXTENCODING_UTF8 );
-    if ( pRet )
-    {
-        *((::com::sun::star::uno::Any*)pRet) = rxEngine->run( aUCode, rSource, aArgs );
-    }
-    else
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XEngineListener >  xCB;
-        rxEngine->runAsync( aUCode, rSource, aArgs, xCB );
-    }
-}
-#endif
 
 sal_Bool SfxMacroConfig::IsMacroSlot( sal_uInt16 nId )
 {
