@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2001-08-15 09:30:20 $
+#   last change: $Author: kz $ $Date: 2002-01-04 17:50:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -291,13 +291,17 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo _stl_prime >> $@
 .ENDIF
 
+ALLTAR: $(SRS)$/hidother.hid
+
+$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
+
 $(SRS)$/hidother.hid: hidother.src
 .IF "$(GUI)$(CPU)"!="WNTI" || "$(product)"!="full"
     @echo nix
 .ELSE
 .IF "$(BUILD_SOSL)" == ""
     @+echo NO HIDS!!!
-    +-mhids hidother.src ..\$(INPATH)$/srs $(INCLUDE) hidother
+    @+-mhids hidother.src $(SRS) $(PRJNAME)
 .ENDIF
 .ENDIF
 
