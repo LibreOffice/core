@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-08 18:26:22 $
+ *  last change: $Author: obo $ $Date: 2001-01-19 20:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     Text [ finnish ] = "Automaattimuoto" ;
     Text [ danish ] = "AutoFormat" ;
     Text [ french ] = "AutoFormat" ;
-    Text [ swedish ] = "AutoFormat" ;
+    Text [ swedish ] = "Autoformat" ;
     Text [ dutch ] = "AutoOpmaak" ;
     Text [ spanish ] = "AutoFormato" ;
     Text [ english_us ] = "AutoFormat" ;
@@ -474,7 +474,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ finnish ] = "Lisää automaattimuoto" ;
         Text [ danish ] = "Tilføj AutoFormat" ;
         Text [ french ] = "Ajouter AutoFormat" ;
-        Text [ swedish ] = "Lägg till AutoFormat" ;
+        Text [ swedish ] = "Lägg till autoformat" ;
         Text [ dutch ] = "AutoOpmaak toepassen" ;
         Text [ spanish ] = "Añadir AutoFormato" ;
         Text [ english_us ] = "Add AutoFormat" ;
@@ -526,7 +526,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ finnish ] = "Poista automaattimuoto" ;
         Text [ danish ] = "Slet AutoFormat" ;
         Text [ french ] = "Supprimer l'AutoFormat" ;
-        Text [ swedish ] = "Radera AutoFormat" ;
+        Text [ swedish ] = "Radera Autoformat" ;
         Text [ dutch ] = "AutoOpmaak wissen" ;
         Text [ spanish ] = "Eliminar AutoFormato" ;
         Text [ english_us ] = "Delete AutoFormat" ;
@@ -552,7 +552,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ finnish ] = "Poistettava automaattimuoto:" ;
         Text [ danish ] = "Følgende AutoFormat slettes:" ;
         Text [ french ] = "L'AutoFormat suivant va être supprimé :" ;
-        Text [ swedish ] = "Följande AutoFormat raderas:" ;
+        Text [ swedish ] = "Följande autoformat raderas:" ;
         Text [ dutch ] = "Het volgende AutoOpmaak-item wordt gewist." ;
         Text [ spanish ] = "El siguiente AutoFormato se eliminará:" ;
         Text [ english_us ] = "The following AutoFormat entry will be deleted:" ;
@@ -574,7 +574,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ english_us ] = "Rename AutoFormat" ;
         Text [ portuguese ] = "Mudar nome do AutoFormato" ;
         Text [ portuguese_brazilian ] = "Autoformat umbenennen" ;
-        Text [ swedish ] = "Byt namn på AutoFormat" ;
+        Text [ swedish ] = "Byt namn på autoformat" ;
         Text [ danish ] = "Omdøb AutoFormat" ;
         Text [ italian ] = "Rinomina formattazione automatica" ;
         Text [ spanish ] = "Cambiar nombre del AutoFormato" ;
@@ -812,7 +812,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ finnish ] = "You entered an invalid name.\nThe desired AutoFormat could not be createdTry again using a different name." ;
         Text [ danish ] = "Du har indtastet et ugyldigt navn.\nDet var ikke muligt at oprette AutoFormatet.\nVælg venligst et andet navn." ;
         Text [ french ] = "Vous avez saisi un nom non valide.\nL'AutoFormat n'a pas ou être éffectué.\nIndiquez un autre nom." ;
-        Text [ swedish ] = "Du har angett ett ogiltigt namn.\nAutoFormatet kunde inte skapas.\nVälj ett annat namn." ;
+        Text [ swedish ] = "Du har angett ett ogiltigt namn.\nDet gick inte att skapa autoformatet.\nVälj ett annat namn." ;
         Text [ dutch ] = "U heeft een ongeldige naam vermeld.\nDe gewenste AutoOpmaak kon niet worden uitgevoerd.\nKies een andere naam." ;
         Text [ spanish ] = "Ha indicado un nombre no válido, \npor lo que no se pudo crear el AutoFormato.\nSeleccione otro nombre." ;
         Text [ ENGLISH_US ] = "You have entered an invalid name.\nThe desired AutoFormat could not be created. \nTry again using a different name." ;
