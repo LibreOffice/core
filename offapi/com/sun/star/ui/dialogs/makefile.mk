@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: fs $ $Date: 2001-10-26 08:48:11 $
+#   last change: $Author: cl $ $Date: 2002-03-27 12:54:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ PACKAGE=com$/sun$/star$/ui$/dialogs
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    FilterOptionsDialog.idl\
     ControlActions.idl\
     ExecutableDialogException.idl\
     ExecutableDialogResults.idl\
