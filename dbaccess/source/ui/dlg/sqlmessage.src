@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 15:18:12 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ polish ] = "Szczegó³y";
         Text[ portuguese_brazilian ] = "details";
         Text[ japanese ] = "Ú×";
-        Text[ korean ] = "ÀÚ¼¼È÷";
+        Text[ korean ] = "¼¼ºÎ»çÇ×";
         Text[ chinese_simplified ] = "Ï¸½Ú";
         Text[ chinese_traditional ] = "²Ó¸`";
         Text[ arabic ] = "ÇáÊİÇÕíá";
@@ -218,7 +218,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ swedish ] = "~Fellista:";
         Text[ polish ] = "~Lista b³êdów:";
         Text[ portuguese_brazilian ] = "error ~list:";
-        Text[ japanese ] = "´×°‚ÌØ½Ä(~L):";
+        Text[ japanese ] = "´×°Ø½Ä(~L):";
         Text[ korean ] = "¿À·ù ¸ñ·Ï(~L)";
         Text[ chinese_simplified ] = "´íÎóÁĞµ¥(~L)£º";
         Text[ chinese_traditional ] = "¿ù»~²M³æ(~L)¡G";
@@ -291,7 +291,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ polish ] = "B³¹d";
         Text[ portuguese_brazilian ] = "Error";
         Text[ japanese ] = "´×°";
-        Text[ korean ] = "Error";
+        Text[ korean ] = "¿À·ù";
         Text[ chinese_simplified ] = "´íÎó";
         Text[ chinese_traditional ] = "¿ù»~";
         Text[ turkish ] = "Error";
@@ -314,7 +314,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ polish ] = "Ostrze¿enie";
         Text[ portuguese_brazilian ] = "Warning";
         Text[ japanese ] = "Œx";
-        Text[ korean ] = "Warning";
+        Text[ korean ] = "°æ°í";
         Text[ chinese_simplified ] = "¾¯¸æ";
         Text[ chinese_traditional ] = "Äµ§i";
         Text[ turkish ] = "Warning";
@@ -337,7 +337,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ polish ] = "Informacja";
         Text[ portuguese_brazilian ] = "Information";
         Text[ japanese ] = "î•ñ";
-        Text[ korean ] = "Information";
+        Text[ korean ] = "Á¤º¸";
         Text[ chinese_simplified ] = "ĞÅÏ¢";
         Text[ chinese_traditional ] = "¸ê°T";
         Text[ turkish ] = "Information";
@@ -360,7 +360,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ polish ] = "Szczegó³y";
         Text[ portuguese_brazilian ] = "Details";
         Text[ japanese ] = "Ú×";
-        Text[ korean ] = "Details";
+        Text[ korean ] = "ÀÚ¼¼È÷";
         Text[ chinese_simplified ] = "Ï¸½Ú";
         Text[ chinese_traditional ] = "²Ó¸`";
         Text[ turkish ] = "Details";
@@ -406,7 +406,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ polish ] = "Kod b³êdu";
         Text[ portuguese_brazilian ] = "Error code";
         Text[ japanese ] = "´×°º°ÄŞ";
-        Text[ korean ] = "Error code";
+        Text[ korean ] = "¿À·ù ÄÚµå";
         Text[ chinese_simplified ] = "´íÎóÂë";
         Text[ chinese_traditional ] = "¿ù»~½X";
         Text[ turkish ] = "Error code";
@@ -418,6 +418,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/27 15:18:12  kz
+ *  Merge SRC610: 27.10.00 - 17:17:50 (NoBranch)
+ *
  *  Revision 1.2  2000/10/09 12:39:52  fs
  *  some (a lot of) new imlpementations - still under development
  *
