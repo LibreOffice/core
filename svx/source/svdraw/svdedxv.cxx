@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-09 16:12:36 $
+ *  last change: $Author: aw $ $Date: 2001-10-29 12:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,6 +826,12 @@ SdrEndTextEditKind SdrObjEditView::EndTextEdit(BOOL bDontDeleteReally)
 
             if ( pTEObj->GetRotateAngle() != 0 )
                 pTEObj->SendRepaintBroadcast();  // Sonst wird nicht alles restauriert
+
+            // #90468# invalidate here for FontWork object to force complete redraw
+            if(pTEObj && pTEObj->ISA(SdrTextObj) && ((SdrTextObj*)pTEObj)->IsFontwork())
+            {
+                pTEObj->SendRepaintBroadcast();
+            }
 
             if (pTxtUndo!=NULL) {
                 pTxtUndo->AfterSetText();
