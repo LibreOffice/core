@@ -71,7 +71,46 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
     }
 
         tableModel.addTableModelListener(this);
-        JTable tableVersions = new JTable(tableModel);
+        JTable tableVersions = new JTable(tableModel) {
+            public String getToolTipText(MouseEvent event)
+            {
+                int col = columnAtPoint( event.getPoint() );
+                if (col != 2)
+                    return null;
+
+                int row = rowAtPoint( event.getPoint() );
+                Object o = getValueAt(row, col);
+
+                if (o == null)
+                    return null;
+
+                if (o.toString().equals(""))
+                    return null;
+
+                return o.toString();
+            }
+
+            public Point getToolTipLocation(MouseEvent event)
+            {
+                int col = columnAtPoint( event.getPoint() );
+                if (col != 2)
+                    return null;
+
+                int row = rowAtPoint( event.getPoint() );
+                Object o = getValueAt(row,col);
+
+                if (o == null)
+                    return null;
+
+                if (o.toString().equals(""))
+                    return null;
+
+                Point pt = getCellRect(row, col, true).getLocation();
+                pt.translate(-1,-2);
+                return pt;
+            }
+        };
+
         tableVersions.setPreferredSize(new Dimension(InstallWizard.DEFWIDTH,InstallWizard.DEFHEIGHT));
         tableVersions.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         tableVersions.doLayout();
