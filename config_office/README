@@ -10,8 +10,6 @@ correct version of gcc is found. This should be harmless.
 * It is at present time not possible to use --with-local-solenv to point
 to a solvenv residing at a non-standard location.
 
-* Solaris 8
-
 * The configure script also creates a bootstrap script in the top-level 
 directory to support the creation of the build executable tools needed to 
 bootstrap the build process. These tools normally reside in the 
