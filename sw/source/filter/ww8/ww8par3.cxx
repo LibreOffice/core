@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-30 15:17:41 $
+ *  last change: $Author: cmc $ $Date: 2002-11-07 14:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1911,7 +1911,7 @@ sal_Bool WW8FormulaCheckBox::Import(const uno::Reference <
         xPropSet->setPropertyValue(C2U("HelpText"), aTmp );
     }
 
-    return sal_False;
+    return sal_True;
 
 }
 
