@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: od $ $Date: 2002-11-04 13:17:03 $
+ *  last change: $Author: od $ $Date: 2002-11-07 09:03:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,31 +353,40 @@ inline BOOL SwLayAction::_PaintCntnt( const SwCntntFrm *pCntnt,
 
 void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
                               const SwPageFrm *pPage,
-                              const SwRect &rOldRect, long nOldBottom )
+                              const SwRect &rOldRect,
+                              long nOldBottom )
 {
     SWRECTFN( pCnt )
-    long nOldHeight = (rOldRect.*fnRect->fnGetHeight)();
-    long nNewHeight = (pCnt->Frm().*fnRect->fnGetHeight)();
-    const BOOL bHeightDiff = nOldHeight != nNewHeight;
+
     if ( pCnt->IsCompletePaint() || !pCnt->IsTxtFrm() )
     {
         SwRect aPaint( pCnt->PaintArea() );
-        if( rOldRect.HasArea() )
-            aPaint.Union( rOldRect );
+        // OD 06.11.2002 #104171#,#103931# - paint of old area no longer needed.
+        //if( rOldRect.HasArea() )
+        //    aPaint.Union( rOldRect );
         if ( !_PaintCntnt( pCnt, pPage, aPaint ) )
             pCnt->ResetCompletePaint();
     }
     else
     {
+        // paint the area between printing bottom and frame bottom and
+        // the area left and right beside the frame, if its height changed.
+        long nOldHeight = (rOldRect.*fnRect->fnGetHeight)();
+        long nNewHeight = (pCnt->Frm().*fnRect->fnGetHeight)();
+        const bool bHeightDiff = nOldHeight != nNewHeight;
         if( bHeightDiff )
         {
-            SwRect aDrawRect( pCnt->UnionFrm( TRUE ) );
+            // OD 05.11.2002 #94454# - consider whole potential paint area.
+            //SwRect aDrawRect( pCnt->UnionFrm( TRUE ) );
+            SwRect aDrawRect( pCnt->PaintArea() );
             if( nOldHeight > nNewHeight )
                 nOldBottom = (pCnt->*fnRect->fnGetPrtBottom)();
             (aDrawRect.*fnRect->fnSetTop)( nOldBottom );
             _PaintCntnt( pCnt, pPage, aDrawRect );
         }
-        _PaintCntnt( pCnt, pPage, ((SwTxtFrm*)pCnt)->Paint() );
+        // paint content area
+        SwRect aPaintRect = static_cast<SwTxtFrm*>(const_cast<SwCntntFrm*>(pCnt))->Paint();
+        _PaintCntnt( pCnt, pPage, aPaintRect );
     }
 
     if ( pCnt->IsRetouche() && !pCnt->GetNext() )
@@ -500,7 +509,11 @@ void SwLayAction::_AddScrollRect( const SwCntntFrm *pCntnt,
     if ( bScroll && pPage->GetFmt()->GetBackground().GetGraphicPos() != GPOS_NONE )
         bScroll = FALSE;
 
-    aPaintRect.Intersection( pCntnt->UnionFrm( TRUE ) );
+    // OD 04.11.2002 #94454# - Don't intersect potential paint rectangle with
+    // union of frame and printing area, because at scroll destination position
+    // could be a frame that has filled up the potential paint area.
+    //aPaintRect.Intersection( pCntnt->UnionFrm( TRUE ) );
+
     if ( bScroll )
     {
         if( aPaintRect.HasArea() )
@@ -519,7 +532,7 @@ void SwLayAction::_AddScrollRect( const SwCntntFrm *pCntnt,
         if( bVert )
             aPaintRect.Pos().X() += nOfst;
         else
-        aPaintRect.Pos().Y() -= nOfst;
+            aPaintRect.Pos().Y() -= nOfst;
         PaintCntnt( pCntnt, pPage, aPaintRect, nOldBottom );
     }
 }
@@ -2204,13 +2217,14 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
                                 (aOldRect.*fnRect->fnGetBottom)() ) < 0 )
             pCntnt->SetRetouche();
         const SwRect aNewRect( pCntnt->UnionFrm() );
-        if ( bPosOnly && (aNewRect.*fnRect->fnGetTop)() !=
-             (aOldRect.*fnRect->fnGetTop)() &&
+        if ( bPosOnly &&
+             (aNewRect.*fnRect->fnGetTop)() != (aOldRect.*fnRect->fnGetTop)() &&
              !pCntnt->IsInTab() && !pCntnt->IsInSct() &&
              ( !pCntnt->GetPrev() || !pCntnt->GetPrev()->IsTabFrm() ) &&
              pOldUp == pCntnt->GetUpper() &&
-             (aNewRect.*fnRect->fnGetLeft)() == (aOldRect.*fnRect->fnGetLeft)()
-             && aNewRect.SSize() == aOldRect.SSize() )
+             (aNewRect.*fnRect->fnGetLeft)() == (aOldRect.*fnRect->fnGetLeft)() &&
+             aNewRect.SSize() == aOldRect.SSize()
+           )
         {
             _AddScrollRect( pCntnt, pPage, (*fnRect->fnYDiff)(
                             (pCntnt->Frm().*fnRect->fnGetTop)(),
