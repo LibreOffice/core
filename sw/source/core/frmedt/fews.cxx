@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:48:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-14 16:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1303,7 +1303,7 @@ BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
 
     if ( Imp()->HasDrawView() )
     {
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         if( rMrkList.GetMarkCount() != 1 )
             return bVert;
 

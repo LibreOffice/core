@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:47:32 $
+ *  last change: $Author: rt $ $Date: 2004-07-14 16:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1218,7 +1218,7 @@ sal_Bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
             !Imp()->HasDrawView() )
         return bRet;
 
-    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     if ( rMrkList.GetMarkCount() != 1 )
         return bRet;
 
