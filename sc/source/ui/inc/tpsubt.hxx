@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsubt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-21 12:57:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ protected:
 
     const USHORT            nWhichSubTotals;
     const ScSubTotalParam&  rSubTotalData;
-    USHORT                  nFieldArr[SC_MAXFIELDS];
+    SCCOL                   nFieldArr[SC_MAXFIELDS];
     const USHORT            nFieldCount;
 
 private:
@@ -125,7 +125,7 @@ private:
     void            FillListBoxes   ();
     ScSubTotalFunc  LbPosToFunc     ( USHORT nPos );
     USHORT          FuncToLbPos     ( ScSubTotalFunc eFunc );
-    USHORT          GetFieldSelPos  ( USHORT nField );
+    USHORT          GetFieldSelPos  ( SCCOL nField );
 
     // Handler ------------------------
     DECL_LINK( SelectHdl, ListBox * );
