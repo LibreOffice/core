@@ -19997,3 +19997,5 @@ writeInfo
 ?end@?$list@VString@@V?$allocator@VString@@@_STL@@@_STL@@QAE?AU?$_List_iterator@VString@@U?$_Nonconst_traits@VString@@@_STL@@@2@XZ
 ?erase@?$list@VString@@V?$allocator@VString@@@_STL@@@_STL@@QAE?AU?$_List_iterator@VString@@U?$_Nonconst_traits@VString@@@_STL@@@2@U32@@Z
 ?insert@?$list@VString@@V?$allocator@VString@@@_STL@@@_STL@@QAE?AU?$_List_iterator@VString@@U?$_Nonconst_traits@VString@@@_STL@@@2@U32@ABVString@@@Z
+?Read@PPTParaSheet@@QAEXAAVSdrPowerPointImport@@AAVSvStream@@EKEE@Z
+??0Type@uno@star@sun@com@@QAE@XZ
