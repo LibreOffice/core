@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Filter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:13:12 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
 #endif
+#ifndef CONNECTIVITY_PREDICATEINPUT_HXX
+#include <connectivity/predicateinput.hxx>
+#endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
@@ -215,17 +218,16 @@ namespace frm
             return sal_False;
         }
 
-        if ( !m_xMetaData.is() )
+        if ( !m_xConnection.is() )
         {
-            OSL_ENSURE( sal_False, "OFilterControl::ensureInitialized: improperly initialized: no database meta data!" );
+            OSL_ENSURE( sal_False, "OFilterControl::ensureInitialized: improperly initialized: no connection!" );
             return sal_False;
         }
 
         if ( !m_xFormatter.is() )
         {
             // we can create one from the connection, if it's an SDB connection
-            Reference< XConnection > xConn( m_xMetaData->getConnection() );
-            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( xConn, sal_True, m_xORB );
+            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, sal_True, m_xORB );
 
             if ( xFormatSupplier.is() )
             {
@@ -665,62 +667,17 @@ namespace frm
             // check the text with the SQL-Parser
             ::rtl::OUString aNewText(aText);
             aNewText.trim();
-            if (aNewText.getLength())
+            if ( aNewText.getLength() )
             {
-                ::rtl::OUString  aErrorMsg;
-                Locale aAppLocale = Application::GetSettings().GetUILocale();
-                OSQLParseNode* pParseNode = m_aParser.predicateTree(aErrorMsg, aNewText, m_xFormatter, m_xField);
-
-                if ( !pParseNode )
-                {   // is it a text field ?
-
-                    // get the type
-                    sal_Int32 nType = DataType::OTHER;
-                    m_xField->getPropertyValue( PROPERTY_FIELDTYPE ) >>= nType;
-
-                    if  (   ( DataType::CHAR        == nType )
-                        ||  ( DataType::VARCHAR     == nType )
-                        ||  ( DataType::LONGVARCHAR == nType )
-                        )
-                    {   // yes -> force a quoted text and try again
-                        String sQuoted(aNewText);
-                        if  (   sQuoted.Len()
-                            &&  (   ( sQuoted.GetChar( 0 ) != '\'' )
-                                ||  ( sQuoted.GetChar( sQuoted.Len() - 1 ) != '\'' )
-                                )
-                            )
-                        {
-                            sQuoted.SearchAndReplaceAll( '\'', String::CreateFromAscii( "''" ) );
-                            String sTemp( '\'' );
-                            ( sTemp += sQuoted ) += '\'';
-                            sQuoted = sTemp;
-                        }
-                        pParseNode = m_aParser.predicateTree( aErrorMsg, sQuoted, m_xFormatter, m_xField );
-                    }
-                }
-
-                if ( pParseNode )
+                ::dbtools::OPredicateInputController aPredicateInput( m_xORB, m_xConnection, getParseContext() );
+                ::rtl::OUString sErrorMessage;
+                if ( !aPredicateInput.normalizePredicateString( aNewText, m_xField, &sErrorMessage ) )
                 {
-                    ::rtl::OUString aPreparedText;
-                    LocaleDataWrapper aLocaleWrapper(m_xORB,aAppLocale);
-                    pParseNode->parseNodeToPredicateStr(aPreparedText,
-                                               m_xMetaData,
-                                               m_xFormatter,
-                                               m_xField,
-                                               aAppLocale,
-                                               (sal_Char)aLocaleWrapper.getNumDecimalSep().GetChar(0),
-                                               getParseContext());
-                    aNewText = aPreparedText;
-                }
-                else
-                {
-                    // display the error and return sal_False
-
+                    // display the error and outta here
                     SQLContext aError;
                     aError.Message = String( FRM_RES_STRING( RID_STR_SYNTAXERROR ) );
-                    aError.Details = aErrorMsg;
+                    aError.Details = sErrorMessage;
                     displayException( aError );
-
                     return sal_False;
                 }
             }
@@ -999,12 +956,8 @@ namespace frm
                 Reference< XRowSet > xForm;
                 if ( xModel.is() )
                     xForm = xForm.query( xModel->getParent() );
-                Reference< XConnection > xConn = ::dbtools::getConnection( xForm );
-
-                m_xMetaData.clear();
-                if ( xConn.is() )
-                    m_xMetaData = xConn->getMetaData();
-                OSL_ENSURE( m_xMetaData.is(), "OFilterControl::initialize: unable to determine the database meta data for the form's connection!" );
+                m_xConnection = ::dbtools::getConnection( xForm );
+                OSL_ENSURE( m_xConnection.is(), "OFilterControl::initialize: unable to determine the form's connection!" );
             }
         }
     }
