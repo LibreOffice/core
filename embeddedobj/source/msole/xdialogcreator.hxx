@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xdialogcreator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:56:20 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,18 +66,23 @@
 #include <com/sun/star/embed/XInsertObjectDialog.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDOBJECTCLIPBOARDCREATOR_HPP_
+#include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 
 
-class MSOLEDialogObjectCreator : public ::cppu::WeakImplHelper2<
+class MSOLEDialogObjectCreator : public ::cppu::WeakImplHelper3<
                                                 ::com::sun::star::embed::XInsertObjectDialog,
+                                                ::com::sun::star::embed::XEmbedObjectClipboardCreator,
                                                 ::com::sun::star::lang::XServiceInfo >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
@@ -101,6 +106,9 @@ public:
 
     // XInsertObjectDialog
     virtual ::com::sun::star::embed::InsertedObjectInfo SAL_CALL createInstanceByDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::rtl::OUString& sEntName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+    // XEmbedObjectClipboardCreator
+    virtual ::com::sun::star::embed::InsertedObjectInfo SAL_CALL createInstanceInitFromClipboard( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::rtl::OUString& sEntryName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aObjectArgs ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
