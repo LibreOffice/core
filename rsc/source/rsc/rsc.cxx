@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-01 12:16:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
     i = 1;
     while( ppStr && i < (USHORT)(aCmdLine.GetCount() -1) )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "CmdLineArg: \"%s\"\n", *ppStr );
 #endif
         if( '-' == **ppStr )
@@ -916,7 +916,7 @@ ERRTYPE RscCompiler::Link()
                 aSysSearchPath.Append( cSearchDelim );
                 aSysSearchPath.Append( aToken );
             }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "setting search path for language %s: %s\n", it->aLangName.GetBuffer(), aSysSearchPath.GetBuffer() );
 #endif
             pTC->SetSysSearchPath( aSysSearchPath );
