@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_math.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:59:25 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ Module gid_Module_Prg_Math_Bin
     Default = YES;
     Files = (gid_File_Extra_Cdemath,gid_File_Html_W3c_Ipr,gid_File_Dtd_Math,gid_File_Exe_Smath,gid_File_Res_Sm,gid_File_Lib_Sm,gid_File_Lib_Smd,gid_File_Extra_Urlmore_Math,gid_File_Extra_Urlnew_Math,gid_File_Extra_Urltasks_Math,gid_File_Oo_Office_Filter_Math_Pkg,
     gid_File_Oo_Office_Ui_Mathcommands_Xcs,gid_File_Oo_Office_Ui_Mathcommands_Xcu,
-    gid_File_Lib_Bf_Sm, gid_File_Res_Bf_Sm);
+    gid_File_Lib_Bf_Sm, gid_File_Res_Bf_Sm, gid_File_Registry_Spool_Oo_Common_Math_Xcu, gid_File_Registry_Spool_Oo_Setup_Math_Xcu);
 End
 
 Module gid_Module_Prg_Math_Help
