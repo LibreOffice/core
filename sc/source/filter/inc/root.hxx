@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:07:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@ class ShrfmlaBuffer;
 class ExtNameBuff;
 class ExtSheetBuffer;
 class ExcelToSc;
-class ExcExternDup;
 
 class XclImpAutoFilterBuffer;
 class XclImpPivotCacheList;
@@ -102,7 +101,6 @@ class _ScRangeListTabs;
 class XclExpChTrTabId;
 class XclExpUserBViewList;
 
-class ExcNameList;
 class XclObjList;
 class XclEscher;
 class SfxStyleSheet;
@@ -141,11 +139,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     XclExpChTrTabId*        pTabId;             // pointer to rec list, do not destroy
     XclExpUserBViewList*    pUserBViewList;     // pointer to rec list, do not destroy
 
-    ExcNameList*        pNameList;
-    ScRangeName*        pScNameList;        // stores range names and DB ranges
-    ExcExternDup*       pExtSheetCntAndRecs;
-    SCCOL               nColMax;
-    SCROW               nRowMax;
     // Biff8
     XclObjList*         pObjRecs;
     XclEscher*          pEscher;
@@ -159,42 +152,13 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
                         ~RootData();            // -> exctools.cxx
 };
 
-
-
-
 class ExcRoot
 {
-private:
 protected:
     RootData*       pExcRoot;
-//    inline          ExcRoot( void );              //#94039# prevent empty rootdata
     inline          ExcRoot( RootData* pNexExcRoot ) : pExcRoot( pNexExcRoot ) {}
     inline          ExcRoot( const ExcRoot& rCopy ) : pExcRoot( rCopy.pExcRoot ) {}
-public:
-//    inline void     Set( RootData* pExcRoot );    //#94039# prevent empty rootdata
 };
-
-
-
-//#94039# prevent empty rootdata
-
-//inline ExcRoot::ExcRoot( void )
-//{
-//#ifdef DBG_UTIL
-//    pExcRoot = NULL;
-//#endif
-//}
-
-
-//#94039# prevent empty rootdata
-
-//inline void ExcRoot::Set( RootData* pRD )
-//{
-//    pExcRoot = pRD;
-//}
-
-
-
 
 // ---------------------------------------------------------- Lotus Imp~/Exp~ -
 
