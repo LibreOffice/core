@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 19:06:05 $
+#   last change: $Author: hr $ $Date: 2004-08-02 16:44:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,6 @@ SRC1FILES= \
 
 #SLOFILES= \
 #	$(SLO)$/dbaexchange.obj	\
-#	$(SLO)$/showcols.obj	\
 #	$(SLO)$/gridcols.obj	\
 #	$(SLO)$/gridctrl.obj	\
 #	$(SLO)$/gridcell.obj	\
@@ -91,6 +90,7 @@ SRC1FILES= \
 
 SLOFILES= \
     $(SLO)$/dbaexchange.obj	\
+    $(SLO)$/dbaobjectex.obj	\
     $(SLO)$/gridcols.obj	\
     $(SLO)$/gridctrl.obj	\
     $(SLO)$/gridcell.obj	\
