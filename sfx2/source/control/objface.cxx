@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,25 +187,28 @@ friend class SfxInterface;
 
 public:
                     SfxIFConfig_Impl(USHORT nClassId, SfxInterface *pIF);
-    virtual         ~SfxIFConfig_Impl();
-    virtual int     Load(SvStream&);
-    virtual BOOL    Store(SvStream&);
-    virtual String  GetName() const
+                    ~SfxIFConfig_Impl();
+    int             Load(SvStream&);
+    BOOL            Store(SvStream&);
+    int             Load(SotStorage&);
+    BOOL            Store(SotStorage&);
+    String          GetStreamName() const
                     { if (pIFace->HasName()) return pIFace->GetName();
                         else return String(); }
-    virtual void    UseDefault();
+    void            UseDefault();
     void            SaveDefaults(USHORT);
 };
 
 //-------------------------------------------------------------------------
 
 SfxIFConfig_Impl::SfxIFConfig_Impl(USHORT nClassId, SfxInterface *pIF) :
-    SfxConfigItem(SFX_ITEMTYPE_INTERFACE_START + nClassId),
+    SfxConfigItem(SFX_ITEMTYPE_INTERFACE_START + nClassId, NULL ),
     nCount(0),
     pObjectBars(0),
     pIFace(pIF)
 {
-    SetInternal(TRUE);
+//!MBA  ToDo! ConfigManager set to NULL
+//    SetInternal(TRUE);
 }
 
 //-------------------------------------------------------------------------
@@ -287,7 +290,27 @@ BOOL SfxIFConfig_Impl::Store(SvStream& rStream)
 void SfxIFConfig_Impl::UseDefault()
 {
     pIFace->UseDefault();
+    SetDefault( TRUE );
 }
+
+int SfxIFConfig_Impl::Load( SotStorage& rStorage )
+{
+    SotStorageStreamRef xStream = rStorage.OpenSotStream( SfxIFConfig_Impl::GetStreamName(), STREAM_STD_READ );
+    if ( xStream->GetError() )
+        return SfxConfigItem::ERR_READ;
+    else
+        return Load( *xStream );
+}
+
+BOOL SfxIFConfig_Impl::Store( SotStorage& rStorage )
+{
+    SotStorageStreamRef xStream = rStorage.OpenSotStream( SfxIFConfig_Impl::GetStreamName(), STREAM_STD_READWRITE|STREAM_TRUNC );
+    if ( xStream->GetError() )
+        return FALSE;
+    else
+        return Store( *xStream );
+}
+
 
 //====================================================================
 // ctor, registeres a new unit
@@ -347,6 +370,7 @@ void SfxInterface::Init()
     if ( nClassId )
         pConfig = new SfxIFConfig_Impl(nClassId, this);
     pImpData = new SfxInterface_Impl;
+    pConfig->Initialize();
 }
 
 
@@ -1190,7 +1214,7 @@ void SfxInterface::SetObjectBarVisible(BOOL bVis, USHORT nId)
     }
 }
 
-
+/*
 void SfxInterface::ReInitialize(SfxConfigManager *pCfgMgr)
 {
     DBG_ASSERT( pConfig, "ReInitialize ohne Config!" );
@@ -1215,7 +1239,7 @@ void SfxInterface::ReInitialize(SfxConfigManager *pCfgMgr)
         }
     }
 }
-
+*/
 
 void SfxInterface::SaveConfig()
 {
@@ -1304,8 +1328,8 @@ USHORT SfxInterface::RegisterUserDefToolBox(USHORT nId, const String *pName,
     {
         // Am gefundenen Interface mu\s die Konfiguration ver"andert werden
         SfxConfigItem *pCfgItem = pIFace->GetConfig_Impl();
-        SfxConfigManager *pOldCfgMgr = pCfgItem->GetConfigManager_Impl();
-
+        SfxConfigManager *pOldCfgMgr = pCfgItem->GetConfigManager();
+/* //!MBA
         if ( pOldCfgMgr != pCfgMgr )
         {
             // Wenn das Interface bisher von einem anderen ConfigManager
@@ -1320,11 +1344,12 @@ USHORT SfxInterface::RegisterUserDefToolBox(USHORT nId, const String *pName,
             pCfgMgr->AddConfigItem(pCfgItem);
             pCfgItem->Initialize();
         }
-
+*/
         // Jetzt wird das Interface umkonfiguriert
         pIFace->RegisterObjectBar(nPos, nFreeId, pName);
         pIFace->SetObjectBarVisible(TRUE, nFreeId);
 
+/* //!MBA
         // Konfiguration sichern und aktuellen Stand der Config restaurieren
         if ( pCfgMgr != pOldCfgMgr && pCfgMgr != SFX_CFGMANAGER() )
         {
@@ -1333,6 +1358,7 @@ USHORT SfxInterface::RegisterUserDefToolBox(USHORT nId, const String *pName,
             pCfgItem->Connect(pOldCfgMgr);
             pCfgItem->Initialize();
         }
+ */
     }
 
     return nFreeId;
@@ -1353,8 +1379,8 @@ void SfxInterface::ReleaseUserDefToolBox(USHORT nId, SfxConfigManager *pCfgMgr)
         {
             // Die Konfiguration vom "ubergebenen Manager interessiert
             SfxConfigItem *pCfgItem = pIFace->GetConfig_Impl();
-            SfxConfigManager *pOldCfgMgr = pCfgItem->GetConfigManager_Impl();
-
+            SfxConfigManager *pOldCfgMgr = pCfgItem->GetConfigManager();
+/* //!MBA
             if ( pOldCfgMgr != pCfgMgr )
             {
                 // Wenn das Interface bisher von einem anderen ConfigManager
@@ -1365,13 +1391,14 @@ void SfxInterface::ReleaseUserDefToolBox(USHORT nId, SfxConfigManager *pCfgMgr)
                 pCfgMgr->AddConfigItem(pCfgItem);
                 pCfgItem->Initialize();
             }
-
+*/
             if ( pIFace->HasObjectBar(nId) )
             {
                 pIFace->ReleaseObjectBar(nId);
                 BOOL bDone = TRUE;
             }
 
+/* //!MBA
             // Konfiguration sichern und aktuellen Stand der Config restaurieren
             if ( pCfgMgr != pOldCfgMgr )
             {
@@ -1380,6 +1407,7 @@ void SfxInterface::ReleaseUserDefToolBox(USHORT nId, SfxConfigManager *pCfgMgr)
                 pCfgItem->Connect(pOldCfgMgr);
                 pCfgItem->Initialize();
             }
+ */
         }
 
         if ( bDone )
