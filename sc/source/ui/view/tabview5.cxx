@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:02:24 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,7 @@ void ScTabView::TabChanged()
         SfxSimpleHint aAccHint(SC_HINT_ACC_TABLECHANGED);
         aViewData.GetViewShell()->BroadcastAccessibility(aAccHint);
     }
+    aViewData.GetDocument()->BroadcastUno( SfxSimpleHint( SC_HINT_TABLECHANGED ) );
 }
 
 void ScTabView::UpdateLayerLocks()
