@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:21:14 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 09:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,10 @@ namespace dbaccess
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
         // OConfigurationFlushable
         virtual void flush_NoBroadcast_NoCommit();
+
+        // ODescriptor
+        virtual void     setNew(sal_Bool _bNew);
+
     public:
         /** constructs a wrapper supporting the com.sun.star.sdb.Table service.<BR>
             @param          _rxConn         the connection the table belongs to

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:19:18 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 09:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,8 +381,28 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
     }
     return ::comphelper::concatSequences(aRet,OConfigurationFlushable::getTypes());
 }
+
 // -----------------------------------------------------------------------------
-//
+void ODBTable::setNew(sal_Bool _bNew)
+{
+    if (getNew() == _bNew)
+        // nothing to do
+        return;
+
+    OTable_Base::setNew(_bNew);
+
+    // forward the new flag to our "aggregate"
+    ::connectivity::sdbcx::ODescriptor* pAggDescriptor = NULL;
+
+    Reference< XUnoTunnel > xAggTunnel(m_xTable,UNO_QUERY);
+    if (xAggTunnel.is())
+        pAggDescriptor = reinterpret_cast< ::connectivity::sdbcx::ODescriptor* >(xAggTunnel->getSomething(::connectivity::sdbcx::ODescriptor::getUnoTunnelImplementationId()));
+
+    if (pAggDescriptor)
+        pAggDescriptor->setNew(_bNew);
+}
+
+// -----------------------------------------------------------------------------
 void ODBTable::flush_NoBroadcast_NoCommit()
 {
     if(m_aConfigurationNode.isValid())
