@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstrvl1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:45:04 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,14 @@ FASTBOOL SwCrsrShell::IsEndWord() const
 {
     return pCurCrsr->IsEndWord();
 }
+FASTBOOL SwCrsrShell::IsStartSentence() const
+{
+    return pCurCrsr->IsStartEndSentence( false );
+}
+FASTBOOL SwCrsrShell::IsEndSentence() const
+{
+    return pCurCrsr->IsStartEndSentence( true );
+}
 FASTBOOL SwCrsrShell::IsInWord() const
 {
     return pCurCrsr->IsInWord();
@@ -109,6 +117,14 @@ FASTBOOL SwCrsrShell::GoNextSentence()
 FASTBOOL SwCrsrShell::GoPrevSentence()
 {
     return CallCrsrFN( &SwCursor::GoPrevSentence );
+}
+FASTBOOL SwCrsrShell::GoStartSentence()
+{
+    return CallCrsrFN( &SwCursor::GoStartSentence );
+}
+FASTBOOL SwCrsrShell::GoEndSentence()
+{
+    return CallCrsrFN( &SwCursor::GoEndSentence );
 }
 
 FASTBOOL SwCrsrShell::SelectWord( const Point* pPt )
