@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 11:07:33 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,20 +295,21 @@
 using namespace vos;
 using namespace rtl;
 
-namespace css = ::com::sun::star;
+//Gives an ICE with MSVC6
+//namespace css = ::com::sun::star;
 
-using namespace css::uno;
-using namespace css::util;
-using namespace css::lang;
-using namespace css::beans;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
 //using namespace ::com::sun::star::bridge;
-using namespace css::frame;
-using namespace css::document;
-using namespace css::view;
-using namespace css::task;
-using namespace css::system;
-using namespace css::ui::dialogs;
-using namespace css::container;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::system;
+using namespace ::com::sun::star::ui::dialogs;
+using namespace ::com::sun::star::container;
 
 
 ResMgr*                    desktop::Desktop::pResMgr = 0;
@@ -1912,13 +1913,13 @@ void Desktop::OpenClients()
                     // we ignore it and continue with the next item from the list
                     // when recovery and session mangement are seperated, each mechanism
                     // should provide meaningful feedback.
-                    catch (css::lang::IllegalArgumentException)
+                    catch (::com::sun::star::lang::IllegalArgumentException)
                     {
                     }
-                    catch (css::io::IOException)
+                    catch (::com::sun::star::io::IOException)
                     {
                     }
-                    catch (css::uno::RuntimeException)
+                    catch (::com::sun::star::uno::RuntimeException)
                     {
                     }
 
