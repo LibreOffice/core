@@ -2,9 +2,9 @@
  *
  *  $RCSfile: forbiddencharacterstable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-09 18:10:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 namespace com {
 namespace sun {
 namespace star {
@@ -91,7 +95,7 @@ struct ForbiddenCharactersInfo
 
 DECLARE_TABLE( SvxForbiddenCharactersTableImpl, ForbiddenCharactersInfo* )
 
-class SvxForbiddenCharactersTable : public SvxForbiddenCharactersTableImpl, public vos::OReference
+class SVX_DLLPUBLIC SvxForbiddenCharactersTable : public SvxForbiddenCharactersTableImpl, public vos::OReference
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
