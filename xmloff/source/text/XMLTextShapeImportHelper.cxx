@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-08 14:30:12 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 13:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,8 @@ void XMLTextShapeImportHelper::addShape(
                             rImport.GetMM100UnitConverter(), eNew ) &&
                     ( TextContentAnchorType_AT_PAGE == eNew ||
                       TextContentAnchorType_AT_PARAGRAPH == eNew ||
-                      TextContentAnchorType_AS_CHARACTER == eNew ) )
+                      TextContentAnchorType_AS_CHARACTER == eNew ||
+                      TextContentAnchorType_AT_FRAME == eNew) )
                     eAnchorType = eNew;
             }
             break;
