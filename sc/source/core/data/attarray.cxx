@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-08-10 18:02:39 $
+ *  last change: $Author: er $ $Date: 2001-11-05 12:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ ScAttrArray::ScAttrArray( USHORT nNewCol, USHORT nNewTab, ScDocument* pDoc ) :
 {
     ScDocumentPool* pDocPool = pDocument->GetPool();
 
-    nCount = 1;
+    nCount = nLimit = 1;
     pData = new ScAttrEntry[1];
     if (pData)
     {
@@ -155,6 +155,8 @@ void ScAttrArray::TestData() const
             if (pData[nPos].pPattern->Which() != ATTR_PATTERN)
                 ++nErr;
         }
+        if ( nPos && pData[nPos-1].nRow != MAXROW )
+            ++nErr;
     }
     if (nErr)
     {
@@ -206,7 +208,7 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern, BOOL bAlloc )
 
         if (bAlloc)
         {
-            nCount = 1;
+            nCount = nLimit = 1;
             pData = new ScAttrEntry[1];
             if (pData)
             {
@@ -217,7 +219,7 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern, BOOL bAlloc )
         }
         else
         {
-            nCount = 0;
+            nCount = nLimit = 0;
             pData = NULL;               // muss sofort wieder belegt werden !
         }
     }
@@ -345,122 +347,161 @@ void ScAttrArray::SetPatternArea(USHORT nStartRow, USHORT nEndRow, const ScPatte
             Reset(pPattern);
         else
         {
-            USHORT nNewCount = 0;
-            ScAttrEntry* pNewData = new ScAttrEntry[nCount + 2];
-
-            if (pNewData)
+            USHORT nNeeded = nCount + 2;
+            if ( nLimit < nNeeded )
             {
-                ScAddress       aAdrStart( nCol, 0, nTab );
-                ScAddress       aAdrEnd  ( nCol, 0, nTab );
-                ScPatternAttr*  pOldPattern = NULL;
-
-                USHORT ni = 0;
-                USHORT nx = 0;
-                USHORT ns = 0;
-                if (nStartRow > 0)
-                {
-                    // Anfangsbereich kopieren
-                    short nIndex;
-                    Search( nStartRow, nIndex );
-                    ni = nNewCount = nIndex;
-                    memcpy( pNewData, pData, ni*sizeof(ScAttrEntry) );
-
-                    if ( ni )
-                    {
-                        nx = ni;
-                        ns = pData[ni-1].nRow+1;
-                    }
-
-                    // erzeugen des neuen Daten-Array fortsetzen
-
-                    if ((pData[ni].pPattern != pPattern) &&
-                        ((ni==0) ? TRUE : (pData[ni - 1].nRow < nStartRow - 1)))
-                    {
-                        // Eintrag splitten
-                        pNewData[nNewCount].nRow = nStartRow - 1;
-                        pNewData[nNewCount].pPattern = pData[ni].pPattern;
-                        nNewCount++;
-                        ni++;
-                    }
-                    if (ni > 0)
-                        if (pData[ni-1].pPattern == pPattern)       // zusammenfassen
-                        {
-                            ni--;
-                            nNewCount--;
-                        }
-                } // if StartRow > 0
-
-                // ueberpruefen, ob Attributierung die Textbreite der Zelle aendert
-                // oder bedingte Formate neu gesetzt oder geloescht werden
-                while ( ns <= nEndRow )
-                {
-                    const SfxItemSet& rNewSet = pPattern->GetItemSet();
-                    const SfxItemSet& rOldSet = pData[nx].pPattern->GetItemSet();
-
-                    BOOL bNumFormatChanged;
-                    if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
-                            rNewSet, rOldSet ) )
-                    {
-                        aAdrStart.SetRow( Max(nStartRow,ns) );
-                        aAdrEnd  .SetRow( Min(nEndRow,pData[nx].nRow) );
-                        pDocument->InvalidateTextWidth( &aAdrStart, &aAdrEnd, bNumFormatChanged );
-#ifdef DBG_INVALIDATE
-                        DBGOUTPUT("SetPatternArea");
-#endif
-                    }
-                    if ( &rNewSet.Get(ATTR_CONDITIONAL) != &rOldSet.Get(ATTR_CONDITIONAL) )
-                    {
-                        pDocument->ConditionalChanged( ((const SfxUInt32Item&)
-                                        rOldSet.Get(ATTR_CONDITIONAL)).GetValue() );
-                        pDocument->ConditionalChanged( ((const SfxUInt32Item&)
-                                        rNewSet.Get(ATTR_CONDITIONAL)).GetValue() );
-                    }
-                    ns = pData[nx].nRow + 1;
-                    nx++;
-                }
-
-
-                // Bereich setzen
-                pNewData[nNewCount].nRow = nEndRow;
-                pNewData[nNewCount].pPattern = pPattern;
-                nNewCount++;
-
-                USHORT nj = 0;
-                if (nEndRow < MAXROW)
-                {
-                    // mittleren Bereich ueberspringen
-                    while (pData[nj].nRow <= nEndRow) nj++;
-                    if (pData[nj].pPattern == pPattern)
-                    {
-                        // Eintrag zusammenfassen
-                        pNewData[nNewCount - 1].nRow = pData[nj].nRow;
-                        nj++;
-                    }
-                    ScDocumentPool* pDocPool = pDocument->GetPool();
-                    if (nj<ni)
-                    {
-                        //      gesplitteten Eintrag im Pool verdoppeln
-                        pDocPool->Put(*pData[ni-1].pPattern);
-
-                    }
-                    // Eintraege aus Pool loeschen
-                    for (USHORT nk=ni; nk<nj; nk++)
-                    {
-                        pDocPool->Remove(*pData[nk].pPattern);
-                    }
-                    // Den Endbereich kopieren
-                    while (nj < nCount)
-                    {
-                        pNewData[nNewCount].nRow = pData[nj].nRow;
-                        pNewData[nNewCount].pPattern = pData[nj].pPattern;
-                        nNewCount++;
-                        nj++;
-                    }
-                } // if EndRow < MaxRow
-                // Zeiger umsetzen
+                nLimit += SC_ATTRARRAY_DELTA;
+                if ( nLimit < nNeeded )
+                    nLimit = nNeeded;
+                ScAttrEntry* pNewData = new ScAttrEntry[nLimit];
+                memcpy( pNewData, pData, nCount*sizeof(ScAttrEntry) );
                 delete[] pData;
-                nCount = nNewCount;
                 pData = pNewData;
+            }
+
+            ScAddress       aAdrStart( nCol, 0, nTab );
+            ScAddress       aAdrEnd  ( nCol, 0, nTab );
+
+            USHORT ni = 0;      // number of entries in beginning
+            USHORT nx = 0;      // track position
+            USHORT ns = 0;      // start row of track position
+            if ( nStartRow > 0 )
+            {
+                // skip beginning
+                short nIndex;
+                Search( nStartRow, nIndex );
+                ni = nIndex;
+
+                if ( ni )
+                {
+                    nx = ni;
+                    ns = pData[ni-1].nRow+1;
+                }
+            }
+
+            // ueberpruefen, ob Attributierung die Textbreite der Zelle aendert
+            // oder bedingte Formate neu gesetzt oder geloescht werden
+            while ( ns <= nEndRow )
+            {
+                const SfxItemSet& rNewSet = pPattern->GetItemSet();
+                const SfxItemSet& rOldSet = pData[nx].pPattern->GetItemSet();
+
+                BOOL bNumFormatChanged;
+                if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
+                        rNewSet, rOldSet ) )
+                {
+                    aAdrStart.SetRow( Max(nStartRow,ns) );
+                    aAdrEnd  .SetRow( Min(nEndRow,pData[nx].nRow) );
+                    pDocument->InvalidateTextWidth( &aAdrStart, &aAdrEnd, bNumFormatChanged );
+#ifdef DBG_INVALIDATE
+                    DBGOUTPUT("SetPatternArea");
+#endif
+                }
+                if ( &rNewSet.Get(ATTR_CONDITIONAL) != &rOldSet.Get(ATTR_CONDITIONAL) )
+                {
+                    pDocument->ConditionalChanged( ((const SfxUInt32Item&)
+                                    rOldSet.Get(ATTR_CONDITIONAL)).GetValue() );
+                    pDocument->ConditionalChanged( ((const SfxUInt32Item&)
+                                    rNewSet.Get(ATTR_CONDITIONAL)).GetValue() );
+                }
+                ns = pData[nx].nRow + 1;
+                nx++;
+            }
+
+            // continue modifying data array
+
+            USHORT nInsert;     // insert position (MAXROW+1 := no insert)
+            BOOL bCombined = FALSE;
+            BOOL bSplit = FALSE;
+            if ( nStartRow > 0 )
+            {
+                nInsert = MAXROW+1;
+                if ( pData[ni].pPattern != pPattern )
+                {
+                    if ( ni == 0 || (pData[ni-1].nRow < nStartRow - 1) )
+                    {   // may be a split or a simple insert or just a shrink,
+                        // row adjustment is done further down
+                        if ( pData[ni].nRow != nEndRow )
+                            bSplit = TRUE;
+                        ni++;
+                        nInsert = ni;
+                    }
+                    else if ( ni > 0 && pData[ni-1].nRow == nStartRow - 1 )
+                        nInsert = ni;
+                }
+                if ( ni > 0 && pData[ni-1].pPattern == pPattern )
+                {   // combine
+                    pData[ni-1].nRow = nEndRow;
+                    nInsert = MAXROW+1;
+                    bCombined = TRUE;
+                }
+            }
+            else
+                nInsert = 0;
+
+            USHORT nj = ni;     // stop position of range to replace
+            while ( nj < nCount && pData[nj].nRow <= nEndRow )
+                nj++;
+            if ( nj < nCount && pData[nj].pPattern == pPattern )
+            {   // combine
+                if ( ni > 0 )
+                {
+                    if ( pData[ni-1].pPattern == pPattern )
+                    {   // adjacent entries
+                        pData[ni-1].nRow = pData[nj].nRow;
+                        nj++;
+                    }
+                    else if ( nj == nInsert && nj == ni )
+                        pData[ni-1].nRow = nStartRow - 1;   // shrink
+                }
+                nInsert = MAXROW+1;
+                bCombined = TRUE;
+            }
+            ScDocumentPool* pDocPool = pDocument->GetPool();
+            if ( bSplit )
+            {   // duplicate splitted entry in pool
+                pDocPool->Put( *pData[ni-1].pPattern );
+            }
+            if ( ni < nj )
+            {   // remove middle entries
+                for ( USHORT nk=ni; nk<nj; nk++)
+                {   // remove entries from pool
+                    pDocPool->Remove( *pData[nk].pPattern );
+                }
+                if ( !bCombined )
+                {   // replace one entry
+                    pData[ni].nRow = nEndRow;
+                    pData[ni].pPattern = pPattern;
+                    ni++;
+                    nInsert = MAXROW+1;
+                }
+                if ( ni < nj )
+                {   // remove entries
+                    memmove( pData + ni, pData + nj, (nCount - nj) * sizeof(ScAttrEntry) );
+                    nCount -= nj - ni;
+                }
+            }
+
+            if ( nInsert <= MAXROW )
+            {   // insert or append new entry
+                if ( nInsert <= nCount )
+                {
+                    if ( !bSplit )
+                        memmove( pData + nInsert + 1, pData + nInsert,
+                            (nCount - nInsert) * sizeof(ScAttrEntry) );
+                    else
+                    {
+                        memmove( pData + nInsert + 2, pData + nInsert,
+                            (nCount - nInsert) * sizeof(ScAttrEntry) );
+                        pData[nInsert+1] = pData[nInsert-1];
+                        nCount++;
+                    }
+                }
+                if ( nInsert )
+                    pData[nInsert-1].nRow = nStartRow - 1;
+                pData[nInsert].nRow = nEndRow;
+                pData[nInsert].pPattern = pPattern;
+                nCount++;
             }
         }
     }
@@ -2427,7 +2468,7 @@ void ScAttrArray::Load( SvStream& rStream )
 
         // LoadSurrogate erhoeht auch die Ref
     }
-    nCount = nNewCount;
+    nCount = nLimit = nNewCount;
 
     if ( nCount > 1 && pData[nCount-2].nRow >= MAXROW ) // faengt ein Attribut hinter MAXROW an?
     {

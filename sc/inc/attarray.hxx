@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-08-10 18:01:16 $
+ *  last change: $Author: er $ $Date: 2001-11-05 12:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@ class SvxBoxInfoItem;
 #define SC_LINE_SET             1
 #define SC_LINE_DONTCARE        2
 
+#define SC_ATTRARRAY_DELTA      4
+
 struct ScLineFlags
 {
     BYTE    nLeft;
@@ -114,6 +116,7 @@ private:
     ScDocument*     pDocument;
 
     USHORT          nCount;
+    USHORT          nLimit;
     ScAttrEntry*    pData;
 
 friend class ScDocument;                // fuer FillInfo
