@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-04 09:40:31 $
+ *  last change: $Author: vg $ $Date: 2000-12-04 10:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
 #include <com/sun/star/ucb/XContentAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
 
 #include <unotools/localfilehelper.hxx>
