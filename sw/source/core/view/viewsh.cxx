@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,15 +608,6 @@ void ViewShell::MakeVisible( const SwRect &rRect )
             {
                 //MA: 04. Nov. 94, braucht doch keiner oder??
                 ASSERT( !this, "MakeVisible fuer Drucker wird doch gebraucht?" );
-        /*
-                aVisArea = rRect;
-                MapMode aMapMode( GetPrt()->GetMapMode() );
-                Point aPt( rRect.Pos() );
-                aPt.X() = -aPt.X(); aPt.Y() = -aPt.Y();
-                aMapMode.SetOrigin( aPt );
-                GetPrt()->SetMapMode( aMapMode );
-                SetFirstVisPageInvalid();
-        */
             }
 
 #endif
@@ -1856,10 +1847,22 @@ SwRootFrm *ViewShell::GetLayout() const
     return GetDoc()->GetRootFrm();
 }
 
-
-SfxPrinter *ViewShell::GetPrt( BOOL bCreate ) const
+SfxPrinter* ViewShell::GetPrt( BOOL bCreate ) const
 {
     return GetDoc()->GetPrt( bCreate );
+}
+
+VirtualDevice* ViewShell::GetVirDev( BOOL bCreate ) const
+{
+    return GetDoc()->GetVirDev( bCreate );
+}
+
+OutputDevice& ViewShell::GetRefDev() const
+{
+    return ( GetWin() && IsBrowseMode() &&
+             ! GetViewOptions()->IsPrtFormat() ) ?
+            (OutputDevice&)*GetWin() :
+             GetDoc()->GetRefDev();
 }
 
 SwPrintData*    ViewShell::GetPrintData() const
@@ -2004,10 +2007,12 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         // Wenn kein ReferenzDevice (Drucker) zum Formatieren benutzt wird,
         // sondern der Bildschirm, muss bei Zoomfaktoraenderung neu formatiert
         // werden.
-        if( IsBrowseMode() || !GetReferenzDevice() )
+        if( IsBrowseMode() )
             bReformat = TRUE;
     }
 
+    if ( IsBrowseMode() && pOpt->IsPrtFormat() != rOpt.IsPrtFormat() )
+        bReformat = TRUE;
 
     if ( HasDrawView() || rOpt.IsGridVisible() )
     {
@@ -2281,5 +2286,20 @@ void ViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibility
         if(pOpt->IsReadonly())
             pOpt->SetSelectionInReadonly(rAccessibilityOptions.IsSelectionInReadonly());
     }
+}
+/*-----------------07.03.2003 12:38-----------------
+ *
+ * --------------------------------------------------*/
+sal_Bool ViewShell::IsUseVirtualDevice() const
+{
+    return GetDoc()->IsUseVirtualDevice();
+}
+/*-----------------07.03.2003 12:38-----------------
+ *
+ * --------------------------------------------------*/
+void ViewShell::SetUseVirtualDevice( sal_Bool bNew )
+{
+    // this sets the flag at the document and calls PrtDataChanged
+    GetDoc()->SetUseVirtualDevice( bNew );
 }
 
