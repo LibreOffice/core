@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-24 13:09:34 $
+ *  last change: $Author: hro $ $Date: 2001-07-27 07:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1394,11 +1394,7 @@ shell::remove( sal_Int32 CommandId,
                sal_Int32 IsWhat )
     throw()
 {
-#ifdef TF_FILEURL
     sal_Int32 nMask = FileStatusMask_Type | FileStatusMask_FileURL;
-#else
-    sal_Int32 nMask = FileStatusMask_Type | FileStatusMask_FilePath;
-#endif
 
     osl::DirectoryItem aItem;
     osl::FileStatus aStatus( nMask );
@@ -1486,11 +1482,7 @@ shell::remove( sal_Int32 CommandId,
                      aStatus.getFileType() == osl::FileStatus::Volume )
                 recurse = +1;
 
-#ifdef TF_FILEURL
             name = aStatus.getFileURL();
-#else
-            name = aStatus.getFilePath();
-#endif
 
             if( ! ( whileSuccess = remove( CommandId,
                                            name,
@@ -1809,21 +1801,13 @@ sal_Bool SAL_CALL shell::getUnqFromUrl( const rtl::OUString& Url,rtl::OUString& 
         0 == Url.compareToAscii( "file://localhost/" ) ||
         0 == Url.compareToAscii( "file://127.0.0.1/" ) )
     {
-#ifdef TF_FILEURL
         Unq = rtl::OUString::createFromAscii( "file:///" );
-#else
-        Unq = rtl::OUString::createFromAscii( "//./" );
-#endif
         return false;
     }
 
-#ifdef TF_FILEURL
     sal_Bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Url,Unq );
 
     Unq = Url;
-#else
-    sal_Bool err = osl::FileBase::E_None != osl::FileBase::getNormalizedPathFromFileURL( Url,Unq );
-#endif
 
     sal_Int32 l = Unq.getLength()-1;
     if( ! err && Unq.getStr()[ l ] == '/' &&
@@ -1837,27 +1821,11 @@ sal_Bool SAL_CALL shell::getUnqFromUrl( const rtl::OUString& Url,rtl::OUString& 
 
 sal_Bool SAL_CALL shell::getUrlFromUnq( const rtl::OUString& Unq,rtl::OUString& Url )
 {
-#ifdef TF_FILEURL
     sal_Bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Unq,Url );
 
     Url = Unq;
 
     return err;
-#else
-    if( Unq.compareToAscii( "//./" ) == 0 )
-    {
-        Url = rtl::OUString::createFromAscii( "file:///" );
-        return false;
-    }
-
-    rtl::OUString aUnq = Unq;
-    if( aUnq[ aUnq.getLength()-1 ] == sal_Unicode( ':' ) && aUnq.getLength() == 6 )
-    {
-        aUnq += rtl::OUString::createFromAscii( "/" );
-    }
-    sal_Bool err = osl::FileBase::E_None != osl::FileBase::getFileURLFromNormalizedPath( aUnq,Url );
-    return err;
-#endif
 }
 
 
@@ -1886,11 +1854,7 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
         osl::FileBase::RC next = err;
         if( err == osl::FileBase::E_None )
         {
-#ifdef TF_FILEURL
             sal_Int32 n_Mask = FileStatusMask_FileURL | FileStatusMask_FileName | FileStatusMask_Type;
-#else
-            sal_Int32 n_Mask = FileStatusMask_FilePath | FileStatusMask_FileName | FileStatusMask_Type;
-#endif
 
             osl::DirectoryItem aDirItem;
 
@@ -1906,13 +1870,8 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
                 sal_Int32 newTypeToCopy = IsDocument ? -1 : +1;
 
                 rtl::OUString newSrcUnqPath;
-#ifdef TF_FILEURL
                 if( aFileStatus.isValid( FileStatusMask_FileURL ) )
                     newSrcUnqPath = aFileStatus.getFileURL();
-#else
-                if( aFileStatus.isValid( FileStatusMask_FilePath ) )
-                    newSrcUnqPath = aFileStatus.getFilePath();
-#endif
 
                 rtl::OUString newDstUnqPath = dstUnqPath;
                 rtl::OUString tit;
@@ -2018,11 +1977,7 @@ sal_Bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
 
 void SAL_CALL shell::getMaskFromProperties( sal_Int32& n_Mask, const uno::Sequence< beans::Property >& seq )
 {
-#ifdef TF_FILEURL
     n_Mask = FileStatusMask_FileURL | FileStatusMask_LinkTargetURL | FileStatusMask_Type;
-#else
-    n_Mask = FileStatusMask_FilePath  | FileStatusMask_Type;
-#endif
 
     rtl::OUString PropertyName;
     for( sal_Int32 i = 0; i < seq.getLength(); ++i )
@@ -2208,11 +2163,7 @@ shell::commit( const shell::ContentMap::iterator& it,
     }
 
 
-#ifdef TF_FILEURL
     if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
-#else
-    if( m_bFaked && it->first.compareToAscii( "//./" ) == 0 )
-#endif
     {
         sal_Bool dummy = true;
 
@@ -2254,20 +2205,16 @@ shell::commit( const shell::ContentMap::iterator& it,
         }
     }
 
-#ifdef TF_FILEURL
     if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
-#else
-        if( m_bFaked && it->first.compareToAscii( "//./" ) == 0 )
-#endif
+    {
+        sal_Bool readonly = true;
+        aAny <<= readonly;
+        it1 = properties.find( MyProperty( IsReadOnly ) );
+        if( it1 != properties.end() )
         {
-            sal_Bool readonly = true;
-            aAny <<= readonly;
-            it1 = properties.find( MyProperty( IsReadOnly ) );
-            if( it1 != properties.end() )
-            {
-                it1->setValue( aAny );
-            }
+            it1->setValue( aAny );
         }
+    }
 
     if( aFileStatus.isValid( FileStatusMask_ModifyTime ) )
     {
@@ -2348,11 +2295,7 @@ shell::getv(
     osl::FileStatus aFileStatus( n_Mask | FileStatusMask_LinkTargetURL );
     aDirItem.getFileStatus( aFileStatus );
 
-#ifdef TF_FILEURL
     aUnqPath = aFileStatus.getFileURL();
-#else
-    aUnqPath = aFileStatus.getFilePath();
-#endif
 
     // If the directory item type is a link retrieve the type of the target
 

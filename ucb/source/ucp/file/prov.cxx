@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-20 11:17:32 $
+ *  last change: $Author: hro $ $Date: 2001-07-27 07:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,49 +338,29 @@ FileProvider::FileProvider( const Reference< XMultiServiceFactory >& xMultiServi
                         = xCfgMgr->substituteVariables( aDirectory );
                     // old,assuming URL: osl::FileBase::getNormalizedPathFromFileURL( aDir, aUnqDir );
                     // new, assuming system path:
-#ifdef TF_FILEURL
                     osl::FileBase::getFileURLFromSystemPath( aDir,aUnqDir );
-#else
-                    osl::FileBase::normalizePath( aDir,aUnqDir );
-#endif
 
 
                     rtl::OUString aAlias
                         = xCfgMgr->substituteVariables( aAliasName );
                     // old, assuming URL: osl::FileBase::getNormalizedPathFromFileURL( aAlias, aUnqAl );
                     // new, assuming system path:
-#ifdef TF_FILEURL
                     osl::FileBase::getFileURLFromSystemPath( aAlias,aUnqAl );
-#else
-                    osl::FileBase::normalizePath( aAlias,aUnqAl );
-#endif
                 }
 
                 if ( !aUnqDir.getLength() )
-#ifdef TF_FILEURL
                     osl::FileBase::getFileURLFromSystemPath( aDirectory,aUnqDir );
-#else
-                    osl::FileBase::normalizePath( aDirectory,aUnqDir );
-#endif
                 // m_pMyShell->getUnqFromUrl( aDirectory,aUnqDir );
 
                 if ( !aUnqAl.getLength() )
-#ifdef TF_FILEURL
                     osl::FileBase::getFileURLFromSystemPath( aAliasName,aUnqAl );
-#else
-                    osl::FileBase::normalizePath( aAliasName,aUnqAl );
-#endif
                 // m_pMyShell->getUnqFromUrl( aAliasName,aUnqAl );
 
                 rtl::OUString aRealUnqDir;
                 rtl::OUString aRealUnqAlias;
 
                 getResolvedURL( aUnqDir.pData, &aRealUnqDir.pData );
-#if 0
-                getResolvedURL( aUnqAl.pData, &aRealUnqAlias.pData );
-#else
                 aRealUnqAlias = aUnqAl;
-#endif
 
                 if ( !aRealUnqAlias.getLength() )
                     aRealUnqAlias = aUnqAl;
@@ -611,23 +591,14 @@ FileProvider::compareContentIds(
         if ( error != osl::FileBase::E_None )
             return iComp;
 
-#ifdef TF_FILEURL
         osl::FileStatus aStatus1( FileStatusMask_FileURL );
         osl::FileStatus aStatus2( FileStatusMask_FileURL );
-#else
-        osl::FileStatus aStatus1( FileStatusMask_FilePath );
-        osl::FileStatus aStatus2( FileStatusMask_FilePath );
-#endif
         error = aItem1.getFileStatus( aStatus1 );
         if ( error == osl::FileBase::E_None )
             error = aItem2.getFileStatus( aStatus2 );
 
         if ( error == osl::FileBase::E_None )
-#ifdef TF_FILEURL
             iComp = aStatus1.getFileURL().compareTo( aStatus2.getFileURL() );
-#else
-            iComp = aStatus1.getFilePath().compareTo( aStatus2.getFilePath() );
-#endif
     }
 
     return iComp;
@@ -933,11 +904,7 @@ rtl::OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const rtl::OUStri
     throw( RuntimeException )
 {
     rtl::OUString aNormalizedPath;
-#ifdef TF_FILEURL
     if ( osl::FileBase::getFileURLFromSystemPath( SystemPath,aNormalizedPath ) != osl::FileBase::E_None )
-#else
-    if ( osl::FileBase::normalizePath( SystemPath,aNormalizedPath ) != osl::FileBase::E_None )
-#endif
         return rtl::OUString();
 
     rtl::OUString aRed;
@@ -947,13 +914,7 @@ rtl::OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const rtl::OUStri
 
     rtl::OUString aUrl;
 
-#ifdef TF_FILEURL
     aUrl = aRed;
-#else
-    sal_Bool err = m_pMyShell->getUrlFromUnq( aRed,aUrl );
-    if( err )
-        return rtl::OUString();
-#endif
 
     return aUrl;
 }
@@ -963,13 +924,7 @@ rtl::OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const rtl::OUStri
 {
     rtl::OUString aUnq;
 
-#ifdef TF_FILEURL
     aUnq = URL;
-#else
-    sal_Bool err = m_pMyShell->getUnqFromUrl( URL,aUnq );
-    if( err )
-        return rtl::OUString();
-#endif
 
     rtl::OUString aRed;
     sal_Bool success = m_pMyShell->checkMountPoint( aUnq,aRed );
@@ -977,13 +932,8 @@ rtl::OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const rtl::OUStri
         return rtl::OUString();
 
     rtl::OUString aSystemPath;
-#ifdef TF_FILEURL
     if (osl::FileBase::getSystemPathFromFileURL( aRed,aSystemPath ) != osl::FileBase::E_None )
         return rtl::OUString();
-#else
-    if (osl::FileBase::getSystemPathFromNormalizedPath( aRed,aSystemPath ) != osl::FileBase::E_None )
-        return rtl::OUString();
-#endif
 
     return aSystemPath;
 }

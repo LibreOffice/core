@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-23 13:05:55 $
+ *  last change: $Author: hro $ $Date: 2001-07-27 07:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1097,11 +1097,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
         return;
 
     // Never write access to virtual root in case of access restrictions
-#ifdef TF_FILEURL
     if( m_pMyShell->m_bFaked && m_aUncPath.compareToAscii( "file:///" ) == 0 )
-#else
-    if( m_pMyShell->m_bFaked && m_aUncPath.compareToAscii( "//./" ) == 0 )
-#endif
     {
         m_pMyShell->installError( nMyCommandIdentifier,
                                   TASKHANDLING_TRANSFER_ACCESSINGROOT );

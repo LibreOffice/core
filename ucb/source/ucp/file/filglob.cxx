@@ -145,12 +145,8 @@ namespace fileaccess {
 
     oslFileError getResolvedURL(rtl_uString* ustrPath, rtl_uString** pustrResolvedURL)
     {
-#ifdef TF_FILEURL
         /* TODO: If file exist and is a link get link target URL */
         rtl_uString_assign( pustrResolvedURL, ustrPath );
-#else
-        rtl_uString_assign( pustrResolvedURL, ustrPath );
-#endif
 
         return osl_File_E_None;
     }
@@ -161,7 +157,6 @@ namespace fileaccess {
 //  makeAbsolute Path
 //----------------------------------------------------------------------------
 
-#ifdef TF_FILEURL
 
     sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString&    aRelPath, rtl::OUString& aAbsPath )
     {
@@ -199,45 +194,6 @@ namespace fileaccess {
 
         return sal_True;
     }
-
-#else
-
-
-    sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath, rtl::OUString& aAbsPath )
-    {
-        sal_Int32   nIndex = 0;
-
-        std::vector< rtl::OUString >    aTokenStack;
-
-        if ( 0 != aRelPath.compareTo( rtl::OUString::createFromAscii( "//./" ), 4 ) )
-            return sal_False;
-
-        aRelPath.getToken( 0, '/', nIndex );
-
-        while ( nIndex >= 0 )
-        {
-            rtl::OUString   aToken = aRelPath.getToken( 0, '/', nIndex );
-
-            if ( aToken.compareToAscii( ".." ) == 0 )
-                aTokenStack.pop_back();
-            else
-                aTokenStack.push_back( aToken );
-        }
-
-
-        std::vector< rtl::OUString >::iterator it;
-        aAbsPath = rtl::OUString::createFromAscii("file:");
-
-        for ( it = aTokenStack.begin(); it != aTokenStack.end(); it++ )
-        {
-            aAbsPath += rtl::OUString::createFromAscii( "/" );
-            aAbsPath += *it;
-        }
-
-        return sal_True;
-    }
-
-#endif
 
 
 
