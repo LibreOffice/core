@@ -3,9 +3,9 @@
  *
  *  $RCSfile: schema_trim.xsl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-20 11:47:24 $
+ *  last change: $Author: tpf $ $Date: 2002-08-23 08:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 <!-- suppress the location of the schema -->
 	<xsl:template match = "@xsi:schemaLocation"/>
 
-<!-- suppress the constraints of the schema -->
-	<xsl:template match = "constraints"/>
+<!-- suppress the constraints of the schema
+	<xsl:template match = "constraints"/>  -->
 
 <!-- suppress all documentation items -->
 	<xsl:template match = "info"/>
