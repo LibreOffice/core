@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:33:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,6 @@
 
 #ifndef SD_NAVIGATOR_CHILD_WINDOW_HXX
 #include "NavigatorChildWindow.hxx"
-#endif
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
 #endif
 #ifndef SD_ANIMATION_CHILD_WINDOW_HXX
 #include "AnimationChildWindow.hxx"
@@ -1777,7 +1774,6 @@ typedef USHORT (*FncGetChildWindowId)();
 FncGetChildWindowId aShowChilds[] =
 {
     &AnimationChildWindow::GetChildWindowId,
-    &PreviewChildWindow::GetChildWindowId,
     &Svx3DChildWindow::GetChildWindowId,
     &SvxFontWorkChildWindow::GetChildWindowId,
     &SvxColorChildWindow::GetChildWindowId,
