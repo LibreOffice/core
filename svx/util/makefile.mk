@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 17:58:29 $
+#   last change: $Author: rt $ $Date: 2004-11-09 09:40:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,7 @@ SHL4STDLIBS= \
             $(CPPULIB) \
             $(VOSLIB) \
             $(SALLIB) \
+                     $(XMLSCRIPTLIB) \
             $(JVMFWKLIB) \
             $(ICUUCLIB)	\
             $(AVMEDIALIB)	
@@ -141,8 +142,10 @@ SHL1STDLIBS= \
             $(UCBHELPERLIB)	\
             $(CPPUHELPERLIB)	\
             $(CPPULIB) \
+                        $(XMLSCRIPTLIB) \
             $(VOSLIB) \
             $(SALLIB) \
+                     $(XMLSCRIPTLIB) \
             $(ICUUCLIB) \
             $(AVMEDIALIB)	
 
@@ -196,6 +199,7 @@ SHL2STDLIBS= \
             $(CPPUHELPERLIB) \
             $(UNOTOOLSLIB) \
             $(UCBHELPERLIB) \
+                     $(XMLSCRIPTLIB) \
             $(COMPHELPERLIB) \
             $(AVMEDIALIB)	
 
