@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-18 16:48:27 $
+ *  last change: $Author: pl $ $Date: 2000-11-23 08:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1173,8 +1173,7 @@ BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
     {
-        DBG_WARNING ("Warning: PrinterGfx::DrawEPS() not implemented");
-        return FALSE;
+        return maGraphicsData.m_pPrinterGfx->DrawEPS( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ), pPtr, nSize );
     }
     else
     {
