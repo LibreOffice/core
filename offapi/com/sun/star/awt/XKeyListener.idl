@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XKeyListener.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:49 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,22 +76,19 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XKeyListener
 /** makes it possible to receive keyboard events.
  */
 interface XKeyListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XKeyListener::keyPressed
-    /** gets invoked when a key has been pressed.
+    /** is invoked when a key has been pressed.
      */
     [oneway] void keyPressed( [in] com::sun::star::awt::KeyEvent e );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XKeyListener::keyReleased
-    /** gets invoked when a key has been released.
+    /** is invoked when a key has been released.
      */
     [oneway] void keyReleased( [in] com::sun::star::awt::KeyEvent e );
 

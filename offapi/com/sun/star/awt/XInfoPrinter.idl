@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInfoPrinter.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:49 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,16 +76,15 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XInfoPrinter
 /** represents an information printer.
  */
 interface XInfoPrinter: com::sun::star::awt::XPrinterPropertySet
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XInfoPrinter::createDevice
     /** creates a new object which implements an <type>XDevice</type>.
-        The current settings are used as a template.
+
+        <p>The current settings are used as a template.</p>
      */
     com::sun::star::awt::XDevice createDevice();
 

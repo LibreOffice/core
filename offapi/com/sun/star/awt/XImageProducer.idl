@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XImageProducer.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:48 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,52 +76,42 @@
 
 //=============================================================================
 
-// DocMerge from idl: interface com::sun::star::awt::XImageProducer
 /** specifies a source for an image.
  */
 interface XImageProducer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XImageProducer::addConsumer
-    /** registers an image consumer with the
-        image producer for accessing the image data
-        during a later reconstruction of the image.
+    /** registers an image consumer with the image producer for accessing
+        the image data during a later reconstruction of the image.
 
-
-
-        <p>The image producer may, at its
-        discretion, start delivering the image data to the consumer
-        using the <type>XImageConsumer</type> interface immediately, or when the
-        next available image reconstruction is triggered by a call
-        to the startProduction method.</p>
+        <p>The image producer may, at its discretion, start delivering the
+        image data to the consumer using the <type>XImageConsumer</type>
+        interface immediately, or when the next available image reconstruction
+        is triggered by a call to the startProduction method.</p>
      */
     [oneway] void addConsumer( [in] com::sun::star::awt::XImageConsumer xConsumer );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XImageProducer::removeConsumer
-    /** removes the given <type scope="com::sun::star::awt">XImageConsumer</type> callback
-        from the list of consumers currently registered to
-        receive image data.  It is not considered an error
-        to remove a consumer that is not currently registered.
-        The image producer should stop sending data
-        to this consumer as soon as it is feasible.
+    /** removes the given <type scope="com::sun::star::awt">XImageConsumer</type>
+        callback from the list of consumers currently registered to receive
+        image data.
+
+        <p>It is not considered an error to remove a consumer that is not
+        currently registered. The image producer should stop sending data
+        to this consumer as soon as it is feasible.</p>
      */
     [oneway] void removeConsumer( [in] com::sun::star::awt::XImageConsumer xConsumer );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XImageProducer::startProduction
     /** registers the given image consumer as a consumer
         and starts an immediate reconstruction of the image data.
 
-
-
-        <p>The image data will then be delivered to this
-        consumer and any other consumer which may have already
-        been registered with the producer.  This method differs
-        from the addConsumer method in that a reproduction of
+        <p>The image data will then be delivered to this consumer and any other
+        consumer which may have already been registered with the producer.
+        This method differs from the addConsumer method in that a reproduction of
         the image data should be triggered as soon as possible.</p>
      */
     [oneway] void startProduction();
