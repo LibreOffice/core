@@ -48,6 +48,7 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\inc\cppuhelper\weakref.hxx %_DEST%\inc%_EXT%\cppuhelper\weakref.hxx
 ..\inc\cppuhelper\servicefactory.hxx %_DEST%\inc%_EXT%\cppuhelper\servicefactory.hxx
 ..\inc\cppuhelper\smartservices.hxx %_DEST%\inc%_EXT%\cppuhelper\smartservices.hxx
+..\inc\cppuhelper\implementationentry.hxx %_DEST%\inc%_EXT%\cppuhelper\implementationentry.hxx
 
 ..\%__SRC%\bin\cppuhelper*.dll %_DEST%\bin%_EXT%\cppuhelper*.dll
 ..\%__SRC%\lib\*cppuhelper*.lib %_DEST%\lib%_EXT%\*
