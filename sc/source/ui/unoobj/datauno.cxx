@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:32:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                 const util::SortField* pFieldArray = aSeq.getConstArray();
                 for (i=0; i<nCount; i++)
                 {
-                    rParam.nField[i]     = (USHORT)pFieldArray[i].Field;
+                    rParam.nField[i]     = (SCCOLROW)pFieldArray[i].Field;
                     rParam.bAscending[i] = pFieldArray[i].SortAscending;
 
                     // FieldType wird ignoriert
@@ -482,7 +482,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                 const table::TableSortField* pFieldArray = aNewSeq.getConstArray();
                 for (i=0; i<nCount; i++)
                 {
-                    rParam.nField[i]     = (USHORT)pFieldArray[i].Field;
+                    rParam.nField[i]     = (SCCOLROW)pFieldArray[i].Field;
                     rParam.bAscending[i] = pFieldArray[i].IsAscending;
 
                     // only one is possible, sometime we should make it possible to have different for every entry
@@ -512,8 +512,8 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
             if ( rProp.Value >>= aAddress )
             {
                 rParam.nDestTab = aAddress.Sheet;
-                rParam.nDestCol = (USHORT)aAddress.Column;
-                rParam.nDestRow = (USHORT)aAddress.Row;
+                rParam.nDestCol = (SCCOL)aAddress.Column;
+                rParam.nDestRow = (SCROW)aAddress.Row;
             }
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_ISULIST ))
@@ -570,7 +570,7 @@ void SAL_CALL ScSubTotalFieldObj::setGroupColumn( sal_Int32 nGroupColumn ) throw
     ScSubTotalParam aParam;
     rParent.GetData(aParam);
 
-    aParam.nField[nPos] = (USHORT)nGroupColumn;
+    aParam.nField[nPos] = (SCCOL)nGroupColumn;
 
     rParent.PutData(aParam);
 }
@@ -582,10 +582,10 @@ uno::Sequence<sheet::SubTotalColumn> SAL_CALL ScSubTotalFieldObj::getSubTotalCol
     ScSubTotalParam aParam;
     rParent.GetData(aParam);
 
-    USHORT nCount = aParam.nSubTotals[nPos];
+    SCCOL nCount = aParam.nSubTotals[nPos];
     uno::Sequence<sheet::SubTotalColumn> aSeq(nCount);
     sheet::SubTotalColumn* pAry = aSeq.getArray();
-    for (USHORT i=0; i<nCount; i++)
+    for (SCCOL i=0; i<nCount; i++)
     {
         pAry[i].Column = aParam.pSubTotals[nPos][i];
         pAry[i].Function = ScDataUnoConversion::SubTotalToGeneral(
@@ -603,19 +603,19 @@ void SAL_CALL ScSubTotalFieldObj::setSubTotalColumns(
     rParent.GetData(aParam);
 
     UINT32 nColCount = aSubTotalColumns.getLength();
-    if ( nColCount <= USHRT_MAX )
+    if ( nColCount <= SCCOL_MAX )
     {
-        USHORT nCount = (USHORT)nColCount;
+        SCCOL nCount = static_cast<SCCOL>(nColCount);
         aParam.nSubTotals[nPos] = nCount;
-        if (nCount)
+        if (nCount != 0)
         {
-            aParam.pSubTotals[nPos] = new USHORT[nCount];
+            aParam.pSubTotals[nPos] = new SCCOL[nCount];
             aParam.pFunctions[nPos] = new ScSubTotalFunc[nCount];
 
             const sheet::SubTotalColumn* pAry = aSubTotalColumns.getConstArray();
-            for (USHORT i=0; i<nCount; i++)
+            for (SCCOL i=0; i<nCount; i++)
             {
-                aParam.pSubTotals[nPos][i] = (USHORT)pAry[i].Column;
+                aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
                 aParam.pFunctions[nPos][i] =
                             ScDataUnoConversion::GeneralToSubTotal( pAry[i].Function );
             }
@@ -691,25 +691,25 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
 
     UINT32 nColCount = aSubTotalColumns.getLength();
 
-    if ( nPos < MAXSUBTOTAL && nColCount <= USHRT_MAX )
+    if ( nPos < MAXSUBTOTAL && nColCount <= SCCOL_MAX )
     {
         aParam.bGroupActive[nPos] = TRUE;
-        aParam.nField[nPos] = (USHORT)nGroupColumn;
+        aParam.nField[nPos] = static_cast<SCCOL>(nGroupColumn);
 
         delete aParam.pSubTotals[nPos];
         delete aParam.pFunctions[nPos];
 
-        USHORT nCount = (USHORT)nColCount;
+        SCCOL nCount = static_cast<SCCOL>(nColCount);
         aParam.nSubTotals[nPos] = nCount;
-        if (nCount)
+        if (nCount != 0)
         {
-            aParam.pSubTotals[nPos] = new USHORT[nCount];
+            aParam.pSubTotals[nPos] = new SCCOL[nCount];
             aParam.pFunctions[nPos] = new ScSubTotalFunc[nCount];
 
             const sheet::SubTotalColumn* pAry = aSubTotalColumns.getConstArray();
-            for (USHORT i=0; i<nCount; i++)
+            for (SCCOL i=0; i<nCount; i++)
             {
-                aParam.pSubTotals[nPos][i] = (USHORT)pAry[i].Column;
+                aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
                 aParam.pFunctions[nPos][i] =
                             ScDataUnoConversion::GeneralToSubTotal( pAry[i].Function );
             }
@@ -1030,8 +1030,8 @@ void SAL_CALL ScConsolidationDescriptor::setSources(
         USHORT i;
         for (i=0; i<nCount; i++)
             pNew[i] = new ScArea( pAry[i].Sheet,
-                                    (USHORT)pAry[i].StartColumn, (USHORT)pAry[i].StartRow,
-                                    (USHORT)pAry[i].EndColumn,   (USHORT)pAry[i].EndRow );
+                    static_cast<SCCOL>(pAry[i].StartColumn), pAry[i].StartRow,
+                    static_cast<SCCOL>(pAry[i].EndColumn),   pAry[i].EndRow );
 
         aParam.SetAreas( pNew, nCount );    // kopiert alles
 
@@ -1059,8 +1059,8 @@ void SAL_CALL ScConsolidationDescriptor::setStartOutputPosition(
                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    aParam.nCol = (USHORT)aStartOutputPosition.Column;
-    aParam.nRow = (USHORT)aStartOutputPosition.Row;
+    aParam.nCol = (SCCOL)aStartOutputPosition.Column;
+    aParam.nRow = (SCROW)aStartOutputPosition.Row;
     aParam.nTab = aStartOutputPosition.Sheet;
 }
 
@@ -1140,16 +1140,16 @@ uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilte
     ScQueryParam aParam;
     GetData(aParam);
 
-    USHORT nEntries = aParam.GetEntryCount();   // allozierte Eintraege im Param
-    USHORT nCount = 0;                          // aktive
+    SCSIZE nEntries = aParam.GetEntryCount();   // allozierte Eintraege im Param
+    SCSIZE nCount = 0;                          // aktive
     while ( nCount < nEntries &&
             aParam.GetEntry(nCount).bDoQuery )
         ++nCount;
 
     sheet::TableFilterField aField;
-    uno::Sequence<sheet::TableFilterField> aSeq(nCount);
+    uno::Sequence<sheet::TableFilterField> aSeq(static_cast<sal_Int32>(nCount));
     sheet::TableFilterField* pAry = aSeq.getArray();
-    for (USHORT i=0; i<nCount; i++)
+    for (SCSIZE i=0; i<nCount; i++)
     {
         const ScQueryEntry& rEntry = aParam.GetEntry(i);
 
@@ -1210,13 +1210,13 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
     ScQueryParam aParam;
     GetData(aParam);
 
-    USHORT nCount = (USHORT)aFilterFields.getLength();
+    SCSIZE nCount = static_cast<SCSIZE>(aFilterFields.getLength());
     DBG_ASSERT( nCount <= MAXQUERY, "setFilterFields: zu viele" );
 
     aParam.Resize( nCount );
 
     const sheet::TableFilterField* pAry = aFilterFields.getConstArray();
-    USHORT i;
+    SCSIZE i;
     for (i=0; i<nCount; i++)
     {
         ScQueryEntry& rEntry = aParam.GetEntry(i);
@@ -1225,7 +1225,7 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
 
         rEntry.bDoQuery         = TRUE;
         rEntry.eConnect         = (pAry[i].Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
-        rEntry.nField           = (USHORT)pAry[i].Field;
+        rEntry.nField           = pAry[i].Field;
         rEntry.bQueryByString   = !pAry[i].IsNumeric;
         *rEntry.pStr            = String( pAry[i].StringValue );
         rEntry.nVal             = pAry[i].NumericValue;
@@ -1269,7 +1269,7 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
         }
     }
 
-    USHORT nParamCount = aParam.GetEntryCount();    // Param wird nicht unter 8 resized
+    SCSIZE nParamCount = aParam.GetEntryCount();    // Param wird nicht unter 8 resized
     for (i=nCount; i<nParamCount; i++)
         aParam.GetEntry(i).bDoQuery = FALSE;        // ueberzaehlige Felder zuruecksetzen
 
@@ -1327,8 +1327,8 @@ void SAL_CALL ScFilterDescriptorBase::setPropertyValue(
         if ( aValue >>= aAddress )
         {
             aParam.nDestTab = aAddress.Sheet;
-            aParam.nDestCol = (USHORT)aAddress.Column;
-            aParam.nDestRow = (USHORT)aAddress.Row;
+            aParam.nDestCol = (SCCOL)aAddress.Column;
+            aParam.nDestRow = (SCROW)aAddress.Row;
         }
     }
     else if (aString.EqualsAscii( SC_UNONAME_SAVEOUT ))
@@ -1585,8 +1585,8 @@ void SAL_CALL ScDatabaseRangeObj::setDataArea( const table::CellRangeAddress& aD
     {
         ScDBData aNewData( *pData );
         //! MoveTo ???
-        aNewData.SetArea( aDataArea.Sheet, (USHORT)aDataArea.StartColumn, (USHORT)aDataArea.StartRow,
-                                           (USHORT)aDataArea.EndColumn, (USHORT)aDataArea.EndRow );
+        aNewData.SetArea( aDataArea.Sheet, (SCCOL)aDataArea.StartColumn, (SCROW)aDataArea.StartRow,
+                                           (SCCOL)aDataArea.EndColumn, (SCROW)aDataArea.EndRow );
         ScDBDocFunc aFunc(*pDocShell);
         aFunc.ModifyDBData(aNewData, TRUE);
     }
@@ -1602,7 +1602,7 @@ void ScDatabaseRangeObj::GetSortParam(ScSortParam& rSortParam) const
         //  im SortDescriptor sind die Fields innerhalb des Bereichs gezaehlt
         ScRange aDBRange;
         pData->GetArea(aDBRange);
-        USHORT nFieldStart = rSortParam.bByRow ? aDBRange.aStart.Col() : aDBRange.aStart.Row();
+        SCCOLROW nFieldStart = rSortParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
         for (USHORT i=0; i<MAXSORT; i++)
             if (rSortParam.bDoSort[i] && rSortParam.nField[i] >= nFieldStart)
                 rSortParam.nField[i] -= nFieldStart;
@@ -1618,7 +1618,7 @@ void ScDatabaseRangeObj::SetSortParam(const ScSortParam& rSortParam)
         ScSortParam aParam = rSortParam;
         ScRange aDBRange;
         pData->GetArea(aDBRange);
-        USHORT nFieldStart = aParam.bByRow ? aDBRange.aStart.Col() : aDBRange.aStart.Row();
+        SCCOLROW nFieldStart = aParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
         for (USHORT i=0; i<MAXSORT; i++)
             if (aParam.bDoSort[i])
                 aParam.nField[i] += nFieldStart;
@@ -1644,7 +1644,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScDatabaseRangeObj::getSortDescript
         //  im SortDescriptor sind die Fields innerhalb des Bereichs gezaehlt
         ScRange aDBRange;
         pData->GetArea(aDBRange);
-        USHORT nFieldStart = aParam.bByRow ? aDBRange.aStart.Col() : aDBRange.aStart.Row();
+        SCCOLROW nFieldStart = aParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
         for (USHORT i=0; i<MAXSORT; i++)
             if ( aParam.bDoSort[i] && aParam.nField[i] >= nFieldStart )
                 aParam.nField[i] -= nFieldStart;
@@ -1665,9 +1665,9 @@ void ScDatabaseRangeObj::GetQueryParam(ScQueryParam& rQueryParam) const
         //  im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
         ScRange aDBRange;
         pData->GetArea(aDBRange);
-        USHORT nFieldStart = rQueryParam.bByRow ? aDBRange.aStart.Col() : aDBRange.aStart.Row();
-        USHORT nCount = rQueryParam.GetEntryCount();
-        for (USHORT i=0; i<nCount; i++)
+        SCCOLROW nFieldStart = rQueryParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
+        SCSIZE nCount = rQueryParam.GetEntryCount();
+        for (SCSIZE i=0; i<nCount; i++)
         {
             ScQueryEntry& rEntry = rQueryParam.GetEntry(i);
             if (rEntry.bDoQuery && rEntry.nField >= nFieldStart)
@@ -1685,10 +1685,10 @@ void ScDatabaseRangeObj::SetQueryParam(const ScQueryParam& rQueryParam)
         ScQueryParam aParam = rQueryParam;
         ScRange aDBRange;
         pData->GetArea(aDBRange);
-        USHORT nFieldStart = aParam.bByRow ? aDBRange.aStart.Col() : aDBRange.aStart.Row();
+        SCCOLROW nFieldStart = aParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
 
-        USHORT nCount = aParam.GetEntryCount();
-        for (USHORT i=0; i<nCount; i++)
+        SCSIZE nCount = aParam.GetEntryCount();
+        for (SCSIZE i=0; i<nCount; i++)
         {
                ScQueryEntry& rEntry = aParam.GetEntry(i);
                if (rEntry.bDoQuery)
@@ -1720,14 +1720,14 @@ void ScDatabaseRangeObj::GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const
         //  im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
         ScRange aDBRange;
         pData->GetArea(aDBRange);
-        USHORT nFieldStart = aDBRange.aStart.Col();
+        SCCOL nFieldStart = aDBRange.aStart.Col();
         for (USHORT i=0; i<MAXSUBTOTAL; i++)
         {
             if ( rSubTotalParam.bGroupActive[i] )
             {
                 if ( rSubTotalParam.nField[i] >= nFieldStart )
                     rSubTotalParam.nField[i] -= nFieldStart;
-                for (USHORT j=0; j<rSubTotalParam.nSubTotals[i]; j++)
+                for (SCCOL j=0; j<rSubTotalParam.nSubTotals[i]; j++)
                     if ( rSubTotalParam.pSubTotals[i][j] >= nFieldStart )
                         rSubTotalParam.pSubTotals[i][j] -= nFieldStart;
             }
@@ -1744,13 +1744,13 @@ void ScDatabaseRangeObj::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
         ScSubTotalParam aParam = rSubTotalParam;
         ScRange aDBRange;
         pData->GetArea(aDBRange);
-        USHORT nFieldStart = aDBRange.aStart.Col();
+        SCCOL nFieldStart = aDBRange.aStart.Col();
         for (USHORT i=0; i<MAXSUBTOTAL; i++)
         {
             if ( aParam.bGroupActive[i] )
             {
                 aParam.nField[i] += nFieldStart;
-                for (USHORT j=0; j<aParam.nSubTotals[i]; j++)
+                for (SCCOL j=0; j<aParam.nSubTotals[i]; j++)
                     aParam.pSubTotals[i][j] += nFieldStart;
             }
         }
@@ -1823,8 +1823,10 @@ void SAL_CALL ScDatabaseRangeObj::refresh() throw(uno::RuntimeException)
         pData->GetImportParam( aImportParam );
         if (aImportParam.bImport && !pData->HasImportSelection())
         {
-            USHORT nTab, nDummy;
-            pData->GetArea( nTab, nDummy,nDummy,nDummy,nDummy );
+            SCTAB nTab;
+            SCCOL nDummyCol;
+            SCROW nDummyRow;
+            pData->GetArea( nTab, nDummyCol,nDummyRow,nDummyCol,nDummyRow );
             uno::Reference< sdbc::XResultSet > xResultSet;
             bContinue = aFunc.DoImport( nTab, aImportParam, xResultSet, NULL, TRUE, FALSE );    //! Api-Flag als Parameter
         }
@@ -2149,8 +2151,8 @@ void SAL_CALL ScDatabaseRangesObj::addNewByName( const rtl::OUString& aName,
         ScDBDocFunc aFunc(*pDocShell);
 
         String aString = aName;
-        ScRange aNameRange( (USHORT)aRange.StartColumn, (USHORT)aRange.StartRow, aRange.Sheet,
-                            (USHORT)aRange.EndColumn,   (USHORT)aRange.EndRow,   aRange.Sheet );
+        ScRange aNameRange( (SCCOL)aRange.StartColumn, (SCROW)aRange.StartRow, aRange.Sheet,
+                            (SCCOL)aRange.EndColumn,   (SCROW)aRange.EndRow,   aRange.Sheet );
         bDone = aFunc.AddDBRange( aString, aNameRange, TRUE );
     }
     if (!bDone)
