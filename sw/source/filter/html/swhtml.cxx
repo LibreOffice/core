@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:28:44 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,6 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     bInField( FALSE ), bInTitle( FALSE ),
     bInFootEndNoteAnchor( FALSE ), bInFootEndNoteSymbol( FALSE ),
     bNoParSpace( FALSE ), bDocInitalized( FALSE ), bCallNextToken( FALSE ),
-    bDataAvailableLinkSet( FALSE ),
     bIgnoreRawData( FALSE ),
     bUpdateDocStat( FALSE ),
     bFixSelectWidth( FALSE ),
@@ -481,7 +480,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     ,nContinue( 0 )
 #endif
 {
-
+    nEventId = 0;
     bUpperSpace = bViewCreated = bChkJumpMark =
     bSetCrsr = FALSE;
 
@@ -593,22 +592,8 @@ __EXPORT SwHTMLParser::~SwHTMLParser()
     pDoc->SetInLoadAsynchron( FALSE );
     pDoc->SetHTMLMode( bOldIsHTMLMode );
 
-    if( pDoc->GetDocShell() && aLoadEnv.Is() )
-    {
-        // Den Link vor dem DocumentDetected austragen, damit
-        // wir waehrend des DocumentDetected nicht noch irgendwelche
-        // Daten bekommen, die zum nochmaligen Aufruf von
-        // DocumentDetected (in NextToken) fuehren.
-        ((SfxLoadEnvironment*)&aLoadEnv)->SetDataAvailableLink( Link() );
-        bDataAvailableLinkSet = FALSE;
-
-        // wenn noch nichts entschieden ist, dann aber hier
-        if( !bDocInitalized )
-        {
-            ErrCode eError = ((SfxLoadEnvironment*)&aLoadEnv)->
-                                DocumentDetected( pDoc->GetDocShell(), 0 );
-        }
-    }
+    if( pDoc->GetDocShell() && nEventId )
+        Application::RemoveUserEvent( nEventId );
 
     // das DocumentDetected kann ggfs. die DocShells loeschen, darum nochmals
     // abfragen
@@ -660,6 +645,13 @@ __EXPORT SwHTMLParser::~SwHTMLParser()
     }
 }
 
+IMPL_LINK( SwHTMLParser, AsyncCallback, void*, pVoid )
+{
+    nEventId=0;
+    GetAsynchCallLink().Call(0);
+    return 0;
+}
+
 SvParserState __EXPORT SwHTMLParser::CallParser()
 {
     // einen temporaeren Index anlegen, auf Pos 0 so wird er nicht bewegt!
@@ -690,15 +682,15 @@ SvParserState __EXPORT SwHTMLParser::CallParser()
 
     if( GetMedium() )
     {
-        aLoadEnv = GetMedium()->GetLoadEnvironment();
-        if( !bViewCreated && aLoadEnv.Is() )
+        if( !bViewCreated )
         {
-            ((SfxLoadEnvironment*)&aLoadEnv)->
-                SetDataAvailableLink( GetAsynchCallLink() );
-            bDataAvailableLinkSet = TRUE;
+            nEventId = Application::PostUserEvent( LINK( this, SwHTMLParser, AsyncCallback ), 0 );
         }
         else
+        {
             bViewCreated = TRUE;
+            nEventId = 0;
+        }
     }
 
     // Laufbalken anzeigen
@@ -1092,13 +1084,7 @@ void SwHTMLParser::DocumentDetected()
         ASSERT( pTmpVSh==0,
                 "Dok-ViewShell existiert schon vor DocDetected" );
 #endif
-        ErrCode eError = ((SfxLoadEnvironment*)&aLoadEnv)->
-                        DocumentDetected( pDoc->GetDocShell(), 0 );
-        if( eError )
-        {
-            eState = SVPAR_ERROR;
-            return;
-        }
+
         GetSaveAndSetOwnBaseURL();
 
         pDoc->DoUndo( FALSE );
@@ -1205,7 +1191,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
     // versuchen wir das erstmal rauszufinden. Das muss fuer Controls in
     // Fall vor dem Einfuegen des Controls passieren, weil beim Einfuegen
     // bereits eine View benoetigt wird.
-    if( !bDocInitalized && aLoadEnv.Is() )
+    if( !bDocInitalized )
         DocumentDetected();
 
     BOOL bGetIDOption = FALSE, bInsertUnknown = FALSE;
@@ -1607,7 +1593,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
 
         if( aToken.Len() )
         {
-            if( !bDocInitalized && aLoadEnv.Is() )
+            if( !bDocInitalized )
                 DocumentDetected();
             pDoc->Insert( *pPam, aToken );
 
