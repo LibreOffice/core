@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-16 16:34:33 $
+ *  last change: $Author: jbu $ $Date: 2001-03-20 15:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ inline Reference< interface_type >::Reference() SAL_THROW( () )
 template< class interface_type >
 inline Reference< interface_type >::Reference( const Reference< interface_type > & rRef ) SAL_THROW( () )
 {
-    _pInterface = rRef.get();
+    _pInterface = rRef._pInterface;
     if (_pInterface)
         _pInterface->acquire();
 }
