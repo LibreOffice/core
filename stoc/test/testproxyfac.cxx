@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testproxyfac.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:36 $
+ *  last change: $Author: dbo $ $Date: 2000-11-15 17:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
-#include <com/sun/star/util/XProxyFactory.hpp>
+#include <com/sun/star/reflection/XProxyFactory.hpp>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -83,7 +83,7 @@ using namespace rtl;
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::util;
+using namespace com::sun::star::reflection;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
@@ -222,7 +222,7 @@ int __cdecl main( int argc, char * argv[] )
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
 
-        Reference< XProxyFactory > xProxyFac( xMgr->createInstance( OUString::createFromAscii("com.sun.star.util.ProxyFactory") ), UNO_QUERY );
+        Reference< XProxyFactory > xProxyFac( xMgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.ProxyFactory") ), UNO_QUERY );
         OSL_ENSHURE( xProxyFac.is(), "### no proxy factory!" );
 
         bSucc = test_proxyfac( xProxyFac );

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dbo $ $Date: 2000-11-13 10:50:34 $
+#   last change: $Author: dbo $ $Date: 2000-11-15 17:54:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -221,7 +221,7 @@ TESTCOREFL:=ModuleC;ModuleC.XInterfaceA;ModuleC.XInterfaceB;ModuleA.XInterface1;
 TESTIADAPTER:=com.sun.star.beans.XIntrospection;com.sun.star.beans.MethodConcept;com.sun.star.beans.XExactName;com.sun.star.lang.XTypeProvider;com.sun.star.uno.XAggregation;com.sun.star.script.XInvocationAdapterFactory;com.sun.star.script.XInvocation;com.sun.star.lang.XMultiServiceFactory;com.sun.star.registry.XSimpleRegistry;com.sun.star.lang.XInitialization;test.XLanguageBindingTest
 TESTINTROSP:=ModuleA;ModuleA.XIntroTest;com.sun.star.beans.XPropertySet;com.sun.star.container.XIndexAccess;com.sun.star.container.XNameAccess;com.sun.star.beans.PropertyAttribute;com.sun.star.beans.PropertyConcept
 TESTCONV:=com.sun.star.script.XTypeConverter
-TESTPROXYFAC:=com.sun.star.util.XProxyFactory
+TESTPROXYFAC:=com.sun.star.reflection.XProxyFactory
 
 $(BIN)$/stoctest.rdb: $(ALLIDLFILES)
     +unoidl -I$(PRJ) -I$(SOLARIDLDIR) -Burd -OH$(BIN) $?
