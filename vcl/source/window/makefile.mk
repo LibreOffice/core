@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.17 $
+#	$Revision: 1.18 $
 #
-#	last change: $Author: rt $ $Date: 2004-11-26 20:43:48 $
+#	last change: $Author: kz $ $Date: 2005-01-13 18:04:11 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -70,6 +70,7 @@ TARGET=win
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile2.pmk
 
 # --- Files --------------------------------------------------------
 
