@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 21:24:39 $
+ *  last change: $Author: pb $ $Date: 2001-02-12 13:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3015,11 +3015,11 @@ ToolBox RID_ENVTOOLBOX
 /*      ToolBoxItem
         {
             Identifier = SID_TOPDOC ;
-        };
+        };*/
         ToolBoxItem
         {
             Identifier = SID_OPENURL ;
-        };*/
+        };
         ToolBoxItem
         {
             Type = TOOLBOXITEM_SEPARATOR ;
