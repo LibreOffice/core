@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 08:42:23 $
+ *  last change: $Author: nn $ $Date: 2001-05-21 11:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,20 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
                 Invalidate( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
 
                 rReq.Done( aAttr );
+            }
+            break;
+
+        case SID_ENABLE_HYPHENATION:
+            {
+                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION, FALSE);
+                if( pItem )
+                {
+                    SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
+                    BOOL bValue = ( (const SfxBoolItem*) pItem)->GetValue();
+                    aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
+                    pView->SetAttributes( aSet );
+                }
+                rReq.Done();
             }
             break;
     }

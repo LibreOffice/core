@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:31:58 $
+ *  last change: $Author: nn $ $Date: 2001-05-21 11:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,6 +412,10 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             pView->ScEndTextEdit();                 // end text edit before switching direction
             ExecuteGlobal( rReq );
             break;
+
+        case SID_ENABLE_HYPHENATION:
+            ExecuteGlobal( rReq );
+            break;
     }
 }
 
@@ -482,6 +486,18 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
             rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
             rSet.DisableItem( SID_TRANSLITERATE_KATAGANA );
+        }
+    }
+
+    if ( rSet.GetItemState( SID_ENABLE_HYPHENATION ) != SFX_ITEM_UNKNOWN )
+    {
+        SdrView* pView = pViewData->GetScDrawView();
+        SfxItemSet aAttrs( pView->GetModel()->GetItemPool() );
+        pView->GetAttributes( aAttrs );
+        if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_AVAILABLE )
+        {
+            BOOL bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
+            rSet.Put( SfxBoolItem( SID_ENABLE_HYPHENATION, bValue ) );
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 10:02:24 $
+ *  last change: $Author: nn $ $Date: 2001-05-21 11:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #pragma hdrstop
 
 //------------------------------------------------------------------
+
+#include <svx/eeitem.hxx>
 
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
@@ -475,6 +477,20 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
         case SID_ORIGINALSIZE:
             pView->SetMarkedOriginalSize();
+            break;
+
+        case SID_ENABLE_HYPHENATION:
+            {
+                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION, FALSE);
+                if( pItem )
+                {
+                    SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
+                    BOOL bValue = ( (const SfxBoolItem*) pItem)->GetValue();
+                    aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
+                    pView->SetAttributes( aSet );
+                }
+                rReq.Done();
+            }
             break;
 
         default:
