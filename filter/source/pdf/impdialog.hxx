@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 09:40:04 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,15 +93,11 @@ private:
     FixedText                           maFtQuality;
     MetricField                         maNfQuality;
     CheckBox                            maCbReduceImageResolution;
-    FixedText                           maFtReduceImageResolution;
     ComboBox                            maCoReduceImageResolution;
     FixedLine                           maFlGeneral;
     CheckBox                            maCbTaggedPDF;
-    FixedText                           maFtTaggedPDF;
     CheckBox                            maCbExportNotes;
-    FixedText                           maFtExportNotes;
     CheckBox                            maCbTransitionEffects;
-    FixedText                           maFtTransitionEffects;
     FixedText                           maFtFormsFormat;
     ListBox                             maLbFormsFormat;
 
