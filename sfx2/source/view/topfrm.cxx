@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-03 10:58:49 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 07:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@
 #endif
 #include <vcl/dialog.hxx>
 #include <svtools/urihelper.hxx>
+#include <svtools/moduleoptions.hxx>
 
 #include "sfx.hrc"
 #include "objsh.hxx"
@@ -393,6 +394,24 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
     Reference < XFrame > xFrame = xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 );
     SfxTopFrame *pFrame = Create( xFrame );
     pFrame->pImp->bHidden = bHidden;
+
+    Window* pWindow = pFrame->GetTopWindow_Impl();
+    if ( pWindow )
+    {
+        String aTitle = pDoc->GetTitle( SFX_TITLE_DETECT );
+        aTitle += String::CreateFromAscii( " - " );
+        aTitle += Application::GetDisplayName();
+        pWindow->SetText( aTitle );
+        if( pWindow->GetType() == WINDOW_WORKWINDOW )
+        {
+            SvtModuleOptions::EFactory eFactory;
+            if( SvtModuleOptions::ClassifyFactoryByName( pDoc->GetFactory().GetDocumentServiceName(), eFactory ) )
+            {
+                WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
+                pWorkWindow->SetIcon( (sal_uInt16) SvtModuleOptions().GetFactoryIcon( eFactory ) );
+            }
+        }
+    }
 
     pFrame->SetItemSet_Impl( pSet );
     if ( pDoc )
