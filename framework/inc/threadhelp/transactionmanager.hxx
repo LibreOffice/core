@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transactionmanager.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 13:00:41 $
+ *  last change: $Author: as $ $Date: 2001-05-03 11:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ class TransactionManager    :   private INonCopyAble
         virtual void         SAL_CALL setWorkingMode ( EWorkingMode   eMode                           )      ;
         virtual sal_Bool     SAL_CALL isCallRejected ( ERejectReason& eReason                         ) const;
         virtual void         SAL_CALL acquire        ( EExceptionMode eMode  , ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException );
-        virtual void         SAL_CALL release        (                                                ) throw( css::uno::RuntimeException, css::lang::DisposedException );
+        virtual void         SAL_CALL release        (                                                );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
