@@ -10183,3 +10183,9 @@ lpfnDrawStateW
 ?SetDefaultFont@SvtScriptedTextHelper@@QAEXXZ
 ?SetFonts@SvtScriptedTextHelper@@QAEXPAVFont@@00@Z
 ?SetText@SvtScriptedTextHelper@@QAEXABVOUString@rtl@@ABV?$Reference@VXBreakIterator@i18n@star@sun@com@@@uno@star@sun@com@@@Z
+??RFilterTitleMatch@?%O:\SRC641\src\svtools\source\filepicker\filepicker.cxx2026730908@@QAE_NABUFilterEntry@@@Z
+?GetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1003114593@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1003114593@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1003114593@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1003114593@@YAXPAVControl@@JJAAJ@Z
+?lcl_getHomeDirectory@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1003114593@@YAEABVString@@AAV2@@Z
