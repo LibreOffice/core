@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2004-07-27 13:01:40 $
+#   last change: $Author: hr $ $Date: 2004-12-13 18:10:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,7 @@ use strict;
 
 use CwsConfig;
 
-##### ctor ####
+##### constructor ####
 
 sub new
 {
@@ -269,7 +269,7 @@ sub delete_rev
     return 0;
 }
 
-# Update archive with options $options .Returns 'success' and new revision
+# Update archive with options $options. Returns 'success' and new revision
 # on success or reason of failure. If no update happens because file was
 # up-to-date consider operation a success.
 sub update
@@ -288,7 +288,7 @@ sub update
         /\[update aborted\]: connect to/ && ++$connectionfailure;
     }
     if ( $conflict || $notknown || $connectionfailure) {
-        my $failure = 'unkownfailure';
+        my $failure = 'unknownfailure';
         $failure = 'conflict' if $conflict;
         $failure = 'notknown' if $notknown;
         $failure = 'connectionfailure' if $connectionfailure;
@@ -325,7 +325,7 @@ sub commit
         /\[commit aborted\]: connect to/ && ++$connectionfailure;
     }
     if ( !$success ) {
-        my $failure = 'unkownfailure';
+        my $failure = 'unknownfailure';
         $failure = 'conflict'          if $conflict;
         $failure = 'notuptodate'       if $uptodate;
         $failure = 'notknown'          if $notknown;
@@ -386,7 +386,7 @@ sub tag
     return 'connectionfailure' if $connectionfailure;
     return 'invalidfile'       if $invalidfile;
     # should never happen
-    return 'unkownfailure';
+    return 'unknownfailure';
 }
 
 #### misc operations ####
@@ -400,7 +400,7 @@ sub status
     my $self       = shift;
 
     my $file = $self->name();
-    my ($nofile, $unkownfailure, $connectionfailure);
+    my ($nofile, $unknownfailure, $connectionfailure);
     my ($status, $working_rev, $repository_rev);
     my ($sticky_tag, $branch, $sticky_date, $sticky_options);
 
@@ -436,9 +436,9 @@ sub status
         $sticky_options = $1;
     }
 
-    $unkownfailure++ if !$status;
+    $unknownfailure++ if !$status;
 
-    return 'unkownerror' if $unkownfailure;
+    return 'unknownerror' if $unknownfailure;
     return ($status, $working_rev, $repository_rev, $sticky_tag, $branch,
             $sticky_date, $sticky_options);
 }
@@ -452,19 +452,19 @@ sub diff
     my $options    = shift || '';
 
     my $file = $self->name();
-    my ($nofile, $unkowntagfailure, $unkownrevfailure, $connectionfailure);
+    my ($nofile, $unknowntagfailure, $unknownrevfailure, $connectionfailure);
 
     my $response_ref = $self->execute("diff $options -r$rev1 -r$rev2 $file");
 
     foreach ( @{$response_ref} ){
         /\[diff aborted\]: connect to/ && ++$connectionfailure;
-        /cvs \[server aborted\]: no such tag \w+/ && ++$unkowntagfailure;
-        /cvs server: tag [\d\.]+ is not in file $file/ && ++$unkownrevfailure;
+        /cvs \[server aborted\]: no such tag \w+/ && ++$unknowntagfailure;
+        /cvs server: tag [\d\.]+ is not in file $file/ && ++$unknownrevfailure;
     }
 
     return 'connectionfailure' if $connectionfailure;
-    return 'unkowntagfailiure' if $unkowntagfailure;
-    return 'unkownrevfailiure' if $unkownrevfailure;
+    return 'unknowntagfailure' if $unknowntagfailure;
+    return 'unknownrevfailure' if $unknownrevfailure;
     return wantarray ? @{$response_ref} : $response_ref;
 }
 #### private methods ####
