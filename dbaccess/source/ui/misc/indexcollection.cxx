@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexcollection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 06:03:23 $
+ *  last change: $Author: avy $ $Date: 2001-03-30 13:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,8 +408,8 @@ namespace dbaui
     OIndexCollection::iterator OIndexCollection::insert(const String& _rName)
     {
         OSL_ENSURE(end() == find(_rName), "OIndexCollection::insert: invalid new name!");
-
-        OIndex aNewIndex(String()); // the empty string indicates the index is a new one
+        String tmpName;
+        OIndex aNewIndex(tmpName);  // the empty string indicates the index is a new one
         aNewIndex.sName = _rName;
         m_aIndexes.push_back(aNewIndex);
         return m_aIndexes.end() - 1;    // the last element is the new one ...
@@ -461,6 +461,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/19 06:03:23  fs
+ *  ensure that no fields occure twice when committing
+ *
  *  Revision 1.1  2001/03/16 16:22:20  fs
  *  initial checkin - non-UNO index collection
  *
