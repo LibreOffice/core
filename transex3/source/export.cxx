@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-18 08:16:38 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1032,16 +1032,16 @@ int Export::Execute( int nToken, char * pToken )
                 ByteString sText( GetText( sToken, nToken ));
                 if ( !bMergeMode )
                     sText = sText.Convert( aCharSet, RTL_TEXTENCODING_MS_1252 );
-                ByteString sLang( "de" );
+                //ByteString sLang( "de" );
+                ByteString sLang;
                 if ( sToken.GetToken( 0, '=' ).Search( "[" ) != STRING_NOTFOUND ) {
                      sLang = sToken.GetToken( 0, '=' ).GetToken( 1, '[' ).GetToken( 0, ']' );
                     CleanValue( sLang );
                 }
                 ByteString nLangIndex = sLang;
                 ByteString sOrigKey = sKey;
-                if ( sText.Len()) {
-
-
+                //if ( sText.Len()) {
+                if ( sText.Len() && sLang.Len() ) {
                     if (( sKey.ToUpperAscii() == "TEXT" ) ||
                         ( sKey == "MESSAGE" ) ||
                         ( sKey == "CUSTOMUNITTEXT" ) ||
@@ -2388,6 +2388,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                         ULONG nMaxIndex = 0;
                         if ( pList )
                             nMaxIndex = pList->GetGermanEntryCount();
+                        //if( pMergeDataFile ) pMergeDataFile->Dump();
                         while(( pEntrys = pMergeDataFile->GetPFormEntrys( pResData )) && ( nLIndex < nMaxIndex )) {
                             //if( pEntrys ) pEntrys->Dump();
                             ByteString sText;
