@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentresultsetwrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-17 10:44:57 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 10:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,7 +849,7 @@ void SAL_CALL ContentResultSetWrapper
 
 // virtual
 OUString SAL_CALL ContentResultSetWrapper
-    ::queryContentIdentfierString()
+    ::queryContentIdentifierString()
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
@@ -859,7 +859,7 @@ OUString SAL_CALL ContentResultSetWrapper
         OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
-    return m_xContentAccessOrigin->queryContentIdentfierString();
+    return m_xContentAccessOrigin->queryContentIdentifierString();
 }
 
 //--------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:36 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 10:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,7 +661,7 @@ XResultSet_impl::close(
 
 
 rtl::OUString SAL_CALL
-XResultSet_impl::queryContentIdentfierString(
+XResultSet_impl::queryContentIdentifierString(
     void )
     throw( uno::RuntimeException )
 {

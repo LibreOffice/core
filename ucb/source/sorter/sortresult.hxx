@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortresult.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-17 11:50:06 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 10:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ public:
 
     // XContentAccess
     virtual rtl::OUString SAL_CALL
-    queryContentIdentfierString()
+    queryContentIdentifierString()
         throw( RUNTIME_EXCEPTION );
     virtual REFERENCE<
                 com::sun::star::ucb::XContentIdentifier > SAL_CALL

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultsetstub.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-17 10:44:57 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 10:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@ void SAL_CALL CachedContentResultSetStub
         , Reference< XContentAccess > xContentAccess )
         throw ( RuntimeException )
 {
-     rAny <<= xContentAccess->queryContentIdentfierString();
+     rAny <<= xContentAccess->queryContentIdentifierString();
 }
 
 void SAL_CALL CachedContentResultSetStub

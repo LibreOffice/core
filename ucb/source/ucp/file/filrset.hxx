@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:36 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 10:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,7 +605,7 @@ namespace fileaccess {
         // XContentAccess
 
         virtual rtl::OUString SAL_CALL
-        queryContentIdentfierString(
+        queryContentIdentifierString(
             void )
             throw( com::sun::star::uno::RuntimeException );
 

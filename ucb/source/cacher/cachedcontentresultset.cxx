@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-17 10:44:57 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 10:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1321,10 +1321,10 @@ return m_aCache##XXX.get##XXX( nRow );
 //--------------------------------------------------------------------------
 // virtual
 OUString SAL_CALL CachedContentResultSet
-    ::queryContentIdentfierString()
+    ::queryContentIdentifierString()
     throw( RuntimeException )
 {
-    XCONTENTACCESS_queryXXX( queryContentIdentfierString, ContentIdentifierString, OUString )
+    XCONTENTACCESS_queryXXX( queryContentIdentifierString, ContentIdentifierString, OUString )
 }
 
 //--------------------------------------------------------------------------

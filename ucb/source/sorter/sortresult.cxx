@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortresult.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-17 11:50:06 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 10:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,11 +361,11 @@ void SAL_CALL SortedResultSet::removeEventListener(
 //--------------------------------------------------------------------------
 
 OUString SAL_CALL
-SortedResultSet::queryContentIdentfierString()
+SortedResultSet::queryContentIdentifierString()
     throw( RuntimeException )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
-    return Reference< XContentAccess >::query(mxOriginal)->queryContentIdentfierString();
+    return Reference< XContentAccess >::query(mxOriginal)->queryContentIdentifierString();
 }
 
 //--------------------------------------------------------------------------

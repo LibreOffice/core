@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentresultsetwrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-17 10:44:57 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 10:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ public:
     // XContentAccess
     //-----------------------------------------------------------------
     virtual rtl::OUString SAL_CALL
-    queryContentIdentfierString()
+    queryContentIdentifierString()
         throw( com::sun::star::uno::RuntimeException );
 
     virtual com::sun::star::uno::Reference<

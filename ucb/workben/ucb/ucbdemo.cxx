@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbdemo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2000-10-18 10:12:10 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 10:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -948,6 +948,17 @@ sal_Bool Ucb::install( Reference< XMultiServiceFactory >& rxFactory,
             else
             {
                 //////////////////////////////////////////////////////////////
+                //  com.sun.star.ucb.WebDAVContentProvider
+                //////////////////////////////////////////////////////////////
+
+                xConfig->addContentProviderService(
+                    OUString::createFromAscii( "vnd.sun.star.webdav" ),
+                    OUString::createFromAscii(
+                                "com.sun.star.ucb.WebDAVContentProvider" ),
+                    OUString(),
+                    sal_False );
+
+                //////////////////////////////////////////////////////////////
                 //  com.sun.star.ucb.HierarchyContentProvider
                 //////////////////////////////////////////////////////////////
 
@@ -989,8 +1000,8 @@ sal_Bool Ucb::install( Reference< XMultiServiceFactory >& rxFactory,
                     OUString::createFromAscii(
                         "com.sun.star.ucb.ChaosContentProvider" ) );
 
-                // Note: These are the registrations necessary to get working
-                //       all(!) services provided by CHAOS.
+                // Note: These are the registrations necessary to get
+                //       the services provided by CHAOS working.
 
                 // Official schemes.
 
@@ -1715,7 +1726,7 @@ void UcbContent::open( const OUString & rName, const UniString& rInput,
                     if ( bPrint )
                     {
                         OUString aId( xContentAccess->
-                                          queryContentIdentfierString() );
+                                          queryContentIdentifierString() );
                         aText += UniString::CreateFromInt32( ++n );
                         aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
                                                ") " ) );
