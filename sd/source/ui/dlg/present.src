@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:46:47 $
+ *  last change: $Author: rt $ $Date: 2000-11-27 08:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,7 +596,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ japanese ] = "±ΖÒ°Ό®έ‚π‹–‰Β‚·‚ι(~A)";
         Text[ chinese_traditional ] = "¤Ή³\\°Κµe(~A)";
         Text[ arabic ] = "ΗαΣγΗΝ ΘΗαΝΡίΙ";
-        Text[ greek ] = "Επιτρέπ~ονται εφέ κίνησης";
+        Text[ greek ] = "Επιτρέπ~ονται κινούμενες εικόνες";
         Text[ korean ] = "ΎΦ΄ΟΈήΐΜΌΗ ΗγΏλ(~A)";
         Text[ turkish ] = "Canlandύrmaya izin ver";
         Text[ language_user1 ] = " ";
