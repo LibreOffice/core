@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 07:43:53 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,7 +608,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                 }
 
                 // #97016# II
-                if(pView->HasMarkedObj())
+                if(pView->AreObjectsMarked())
                     pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
                 bReturn = TRUE;
@@ -627,7 +627,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                 pView->MarkNextObj(FALSE);
 
                 // #97016# II
-                if(pView->HasMarkedObj())
+                if(pView->AreObjectsMarked())
                     pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
                 bReturn = TRUE;
@@ -646,7 +646,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                 pView->MarkNextObj(TRUE);
 
                 // #97016# II
-                if(pView->HasMarkedObj())
+                if(pView->AreObjectsMarked())
                     pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
                 bReturn = TRUE;
@@ -805,7 +805,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 // Independent of the settings at Extras->Optionen->Grafik "Objekte immer verschieben"
                 // 2D-objects acquit in an other way. Otherwise, the rotation of 3d-objects around any axises
                 // wouldn't be possible per default.
-                const SdrMarkList& rMarkList = pView->GetMarkList();
+                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 SdrObject* pObject = rMarkList.GetMark(0)->GetObj();
                 if ((pObject->ISA(E3dObject)) && (rMarkList.GetMarkCount() == 1))
                 {
@@ -966,9 +966,9 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
     SdrPageView* pPV = NULL;
     USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
-    if ( pView->HasMarkedObj() )
+    if ( pView->AreObjectsMarked() )
     {
-        const SdrMarkList& rMarkList = pView->GetMarkList();
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
         if (rMarkList.GetMarkCount() == 1)
         {
@@ -1251,7 +1251,7 @@ bool FuDraw::cancel()
         rBindings.Invalidate( SID_PARASPACE_INCREASE );
         rBindings.Invalidate( SID_PARASPACE_DECREASE );
     }
-    else if ( pView->HasMarkedObj() )
+    else if ( pView->AreObjectsMarked() )
     {
         // #97016# II
         const SdrHdlList& rHdlList = pView->GetHdlList();
