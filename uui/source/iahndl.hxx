@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-31 13:08:43 $
+ *  last change: $Author: as $ $Date: 2001-11-08 12:04:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include "com/sun/star/uno/RuntimeException.hpp"
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_NOSUCHFILTERREQUEST_HPP_
+#include "com/sun/star/document/NoSuchFilterRequest.hpp"
+#endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include "com/sun/star/uno/Sequence.hxx"
 #endif
@@ -106,6 +109,9 @@
 #endif
 #ifndef _SV_WINTYPES_HXX
 #include "vcl/wintypes.hxx"
+#endif
+#ifndef UUI_FLTDLG_HXX
+#include "fltdlg.hxx"
 #endif
 
 #ifndef INCLUDED_VECTOR
@@ -215,6 +221,11 @@ private:
     void executeCookieDialog(CntHTTPCookieRequest & rRequest)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
+    void executeFilterDialog(rtl::OUString       const & rURL    ,
+                             uui::FilterNameList const & rFilters,
+                             rtl::OUString             & rFilter )
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
     USHORT
     executeErrorDialog(com::sun::star::task::InteractionClassification
                            eClassification,
@@ -244,6 +255,15 @@ private:
     void
     handleCookiesRequest(
         com::sun::star::ucb::HandleCookiesRequest const & rRequest,
+        com::sun::star::uno::Sequence<
+                com::sun::star::uno::Reference<
+                    com::sun::star::task::XInteractionContinuation > > const &
+            rContinuations)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
+    handleFilterRequest(
+        com::sun::star::document::NoSuchFilterRequest const & rRequest,
         com::sun::star::uno::Sequence<
                 com::sun::star::uno::Reference<
                     com::sun::star::task::XInteractionContinuation > > const &

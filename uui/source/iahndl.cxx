@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 11:48:45 $
+ *  last change: $Author: as $ $Date: 2001-11-08 12:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,12 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_XINTERACTIONSUPPLYAUTHENTICATION_HPP_
 #include "com/sun/star/ucb/XInteractionSupplyAuthentication.hpp"
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XINTERACTIONFILTERSELECT_HPP_
+#include "com/sun/star/document/XInteractionFilterSelect.hpp"
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include "com/sun/star/container/XNameContainer.hpp"
 #endif
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include "com/sun/star/uno/Any.hxx"
@@ -518,6 +524,14 @@ UUIInteractionHandler::handle(
         if (aAnyRequest >>= aCookiesRequest)
         {
             handleCookiesRequest(aCookiesRequest,
+                                 rRequest->getContinuations());
+            return;
+        }
+
+        star::document::NoSuchFilterRequest aFilterRequest;
+        if (aAnyRequest >>= aFilterRequest)
+        {
+            handleFilterRequest(aFilterRequest,
                                  rRequest->getContinuations());
             return;
         }
@@ -1128,6 +1142,39 @@ UUIInteractionHandler::executeCookieDialog(CntHTTPCookieRequest & rRequest)
     }
 }
 
+void UUIInteractionHandler::executeFilterDialog(rtl::OUString       const & rURL    ,
+                                                uui::FilterNameList const & rFilters,
+                                                rtl::OUString             & rFilter )
+    SAL_THROW((star::uno::RuntimeException))
+{
+    try
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+
+        std::auto_ptr< ResMgr >
+            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+
+        std::auto_ptr< uui::FilterDialog >
+            xDialog(new uui::FilterDialog(getParentProperty(),
+                                     xManager.get()));
+
+        xDialog->SetURL(rURL);
+        xDialog->ChangeFilters(&rFilters);
+
+        uui::FilterNameListPtr pSelected = rFilters.end();
+        if( xDialog->AskForFilter( pSelected ) )
+        {
+            rFilter = pSelected->sInternal;
+        }
+    }
+    catch (std::bad_alloc const &)
+    {
+        throw star::uno::RuntimeException(
+                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+                  *this);
+    }
+}
+
 USHORT
 UUIInteractionHandler::executeErrorDialog(
     star::task::InteractionClassification eClassification,
@@ -1524,6 +1571,116 @@ UUIInteractionHandler::handleCookiesRequest(
                     }
             xCookieHandling->select();
             break;
+        }
+    }
+}
+
+void
+UUIInteractionHandler::handleFilterRequest( star::document::NoSuchFilterRequest const &                                                 rRequest       ,
+                                            star::uno::Sequence< star::uno::Reference< star::task::XInteractionContinuation > > const & rContinuations ) SAL_THROW((star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionAbort >            xAbort          ;
+    star::uno::Reference< star::document::XInteractionFilterSelect > xFilterTransport;
+
+    sal_Int32 nCount = rContinuations.getLength();
+    for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
+    {
+        if( ! xAbort.is() )
+            xAbort = star::uno::Reference< star::task::XInteractionAbort >( rContinuations[nStep], star::uno::UNO_QUERY );
+
+        if( ! xFilterTransport.is() )
+            xFilterTransport = star::uno::Reference< star::document::XInteractionFilterSelect >( rContinuations[nStep], star::uno::UNO_QUERY );
+    }
+
+    uui::FilterNameList lNames;
+
+    if( m_xServiceFactory.is() == sal_True )
+    {
+        star::uno::Reference< star::container::XNameContainer > xFilterContainer( m_xServiceFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory") ), star::uno::UNO_QUERY );
+        if( xFilterContainer.is() == sal_True )
+        {
+            star::uno::Any                                      aResult   ;
+            star::uno::Sequence< rtl::OUString >                lResult   ;
+            star::uno::Sequence< star::beans::PropertyValue >   lProps    ;
+            sal_Int32                                           nFactory  ;
+            sal_Int32                                           nName     ;
+            sal_Int32                                           nProp     ;
+            sal_Int32                                           nNameCount;
+            sal_Int32                                           nPropCount;
+            uui::FilterNamePair                                 aPair     ;
+
+            rtl::OUString sQueryBase  ;
+            rtl::OUString sQueryParams;
+            rtl::OUString sQuery      ;
+
+            sQueryParams = rtl::OUString::createFromAscii(":sort_prop=uiname:use_order:default_first:case_sensitive:eflags=12288");
+
+            for( nFactory=0; nFactory<8; ++nFactory )
+            {
+                switch( nFactory )
+                {
+                    case 0 : sQueryBase = rtl::OUString::createFromAscii("_query_writer");
+                             break;
+                    case 1 : sQueryBase = rtl::OUString::createFromAscii("_query_web");
+                             break;
+                    case 2 : sQueryBase = rtl::OUString::createFromAscii("_query_global");
+                             break;
+                    case 3 : sQueryBase = rtl::OUString::createFromAscii("_query_calc");
+                             break;
+                    case 4 : sQueryBase = rtl::OUString::createFromAscii("_query_draw");
+                             break;
+                    case 5 : sQueryBase = rtl::OUString::createFromAscii("_query_impress");
+                             break;
+                    case 6 : sQueryBase = rtl::OUString::createFromAscii("_query_math");
+                             break;
+                    case 7 : sQueryBase = rtl::OUString::createFromAscii("_query_chart");
+                             break;
+                }
+
+                sQuery  = sQueryBase  ;
+                sQuery += sQueryParams;
+
+                aResult   = xFilterContainer->getByName( sQuery );
+                aResult >>= lResult;
+
+                nNameCount = lResult.getLength();
+                for( nName=0; nName<nNameCount; ++nName )
+                {
+                    aPair.sInternal   = lResult[nName];
+                    aResult           = xFilterContainer->getByName( aPair.sInternal );
+                    aResult         >>= lProps;
+                    nPropCount        = lProps.getLength();
+                    for( nProp=0; nProp<nPropCount; ++nProp )
+                    {
+                        if( lProps[nProp].Name.compareToAscii("UIName") == 0 )
+                        {
+                            ::rtl::OUString sUIName;
+                            lProps[nProp].Value >>= sUIName;
+                            aPair.sUI = sUIName;
+                            break;
+                        }
+                    }
+                    lNames.push_back( aPair );
+                }
+            }
+        }
+    }
+
+    if( xAbort.is() && xFilterTransport.is() )
+    {
+        if( lNames.size() < 1 )
+        {
+            xAbort->select();
+        }
+        else
+        {
+            rtl::OUString sFilter;
+            executeFilterDialog( rRequest.URL, lNames, sFilter );
+
+            if( sFilter.getLength() > 0 )
+                xFilterTransport->setFilter( sFilter );
+            else
+                xAbort->select();
         }
     }
 }
