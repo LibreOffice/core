@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-26 16:38:44 $
+ *  last change: $Author: ssa $ $Date: 2002-11-28 13:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1220,6 +1220,48 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
     {
         if ( !bPreNotify && pChild->mbKeyUp )
             nRet = 0;
+    }
+
+    // #105591# send keyinput to parent if we are a floating window and the key was not pocessed yet
+    if( !nRet && pWindow->mbFloatWin && pWindow->GetParent() && (pWindow->mpFrame != pWindow->GetParent()->mpFrame) )
+    {
+        pChild = pWindow->GetParent();
+
+        // call handler
+        ImplDelData aDelData;
+        KeyEvent    aKEvt( (xub_Unicode)nCharCode, aKeyCode, nRepeat );
+        NotifyEvent aNEvt( nSVEvent, pChild, &aKEvt );
+        BOOL        bPreNotify;
+
+        pChild->ImplAddDel( &aDelData );
+        if ( !ImplCallPreNotify( aNEvt ) && !aDelData.IsDelete() )
+        {
+            bPreNotify = FALSE;
+
+            if ( nSVEvent == EVENT_KEYINPUT )
+            {
+                pChild->mbKeyInput = FALSE;
+                pChild->KeyInput( aKEvt );
+            }
+            else
+            {
+                pChild->mbKeyUp = FALSE;
+                pChild->KeyUp( aKEvt );
+            }
+            // #82968#
+            if( !aDelData.IsDelete() )
+                aNEvt.GetWindow()->ImplNotifyKeyMouseEventListeners( aNEvt );
+        }
+        else
+            bPreNotify = TRUE;
+
+        if ( aDelData.IsDelete() )
+            return 1;
+
+        pChild->ImplRemoveDel( &aDelData );
+
+        if( bPreNotify || !pChild->mbKeyInput )
+            nRet = 1;
     }
 
     return nRet;
