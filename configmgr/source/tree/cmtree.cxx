@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 16:38:38 $
+ *  last change: $Author: lla $ $Date: 2000-11-13 13:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,18 @@ namespace configmgr
     INode* Subtree::doGetChild(OUString const& aName) const
     {
         SearchNode searchObj(aName);
+
+#ifdef DEBUG
+        for (ChildList::iterator it2 = m_aChildren.GetSet().begin();
+            it2 != m_aChildren.GetSet().end();
+            ++it2)
+        {
+            INode* pINode = *it2;
+            OUString aName2 = pINode->getName();
+            volatile int dummy = 0;
+        }
+#endif
+
         ChildList::iterator it = m_aChildren.GetSet().find(&searchObj);
         if (it == m_aChildren.GetSet().end())
             return NULL;

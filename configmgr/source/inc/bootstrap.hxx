@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-03 08:51:03 $
+ *  last change: $Author: lla $ $Date: 2000-11-13 13:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 #include <rtl/ustring.hxx>
-
-#include <hashhelper.hxx> // I18n
-
+#include "options.hxx"
 
 namespace configmgr
 {
@@ -95,8 +93,6 @@ namespace configmgr
     {
         OUString m_sSettingsFile;
 
-        mutable InternationalHelper m_aI18n;
-
     public:
         ConnectionSettings();
         explicit
@@ -107,9 +103,8 @@ namespace configmgr
             is not empty, the security override will be used (if applicable), else it will be ignored
         */
         IConfigSession* createConnection(uno::Reference<lang::XMultiServiceFactory> const& aServiceMgr,
-            const SettingsOverride& _rSettings) const;
+            const SettingsOverride& _rSettings, vos::ORef<OOptions> &_aOptions) const;
 
-        const InternationalHelper getInternationalHelper() const {return m_aI18n;}
     };
 
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-10 22:42:54 $
+ *  last change: $Author: lla $ $Date: 2000-11-13 13:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ namespace configmgr
     //-----------------------------------------------------------------------------------
     NodeElement* OProviderImpl::buildUpdateAccess(OUString const& _rAccessor, sal_Int32 nMinLevels) throw (uno::Exception, uno::RuntimeException)
     {
-        m_pConfiguration->setInternationalHelper(getInternationalHelper());
+        m_pConfiguration->setOptions(getOptions());
 
         CFG_TRACE_INFO("config provider: requesting the tree from the cache manager");
 
@@ -458,6 +458,7 @@ namespace configmgr
                     bExtractSuccess = (aCurrent.Value >>= nLevelDepth);
                 else if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sLocale))
                     bExtractSuccess = (aCurrent.Value >>= sLocale);
+/*
 #ifdef DBG_UTIL
                 else
                 {
@@ -467,6 +468,7 @@ namespace configmgr
                     OSL_ENSHURE(sal_False, sMessage.getStr());
                 }
 #endif
+*/
 
                 if (!bExtractSuccess)
                     throw   lang::IllegalArgumentException(
@@ -505,6 +507,7 @@ namespace configmgr
         _rLocale = sLocale;
         _rUser = sUser;
     }
+
 } // namespace configmgr
 
 

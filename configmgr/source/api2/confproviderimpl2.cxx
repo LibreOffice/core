@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 11:54:09 $
+ *  last change: $Author: lla $ $Date: 2000-11-13 13:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,14 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+#include "hashhelper.hxx"
+
 namespace configmgr
 {
     namespace css   = ::com::sun::star;
     namespace uno   = css::uno;
     namespace beans = css::beans;
+
     using ::rtl::OUString;
 
     using configapi::NodeElement;
@@ -113,7 +116,9 @@ namespace configmgr
         sal_Int32 nLevels;
         OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels);
         ::rtl::OUString sNodeAccessor = IConfigSession::composeNodeAccessor(sPath, sUser);
-        m_pConfiguration->setLocale(sLocale);
+
+        m_pConfiguration->setOptions(getOptions());
+        getOptions()->add("Locale", sLocale);
 
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sNodeAccessor));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
@@ -150,7 +155,8 @@ namespace configmgr
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sNodeAccessor));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
 
-        m_aI18n.setLocale(sLocale);
+        m_pConfiguration->setOptions(getOptions());
+        getOptions()->add("Locale", sLocale);
 
         // create the access object
         uno::Reference< uno::XInterface > xReturn;
