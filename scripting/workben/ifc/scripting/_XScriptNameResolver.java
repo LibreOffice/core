@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptNameResolver.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2002-12-10 14:12:06 $
+ *  last change:$Date: 2003-02-25 16:22:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ public class _XScriptNameResolver extends MultiMethodTest {
 
         HashMap map = new HashMap();
         map.put("SCRIPTING_DOC_STORAGE_ID", new Integer(storageId));
-        map.put("SCRIPTING_DOC_URI", "hahaha");
+        map.put("SCRIPTING_DOC_URI", util.utils.getFullTestURL(location));
 
         Parameters params = new Parameters(map);
         Object[] args = new Object[] {params};

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2002-12-10 14:12:41 $
+ *  last change:$Date: 2003-02-25 16:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,13 +83,12 @@ public class ScriptInfo extends TestCase {
         // Get path to test documents
         String rootDocPath = ( String )tParam.get( "DOCPTH" );
         System.out.println( "DOCPTH is " + rootDocPath );
-        rootDocPath = util.utils.getFullTestDocName( "ExampleSpreadSheetLatest.sxc" );
+        rootDocPath = util.utils.getFullTestURL( "ExampleSpreadSheetLatest.sxc" );
         if ( rootDocPath != null && rootDocPath.length() > 1 ){
             // convert all "\\" to "/", necessary for UCB
             if ( rootDocPath.indexOf( "\\" ) > 0 ){
                 rootDocPath = rootDocPath.replace( '\\','/' );
         }
-            rootDocPath = "file://" + rootDocPath;
             System.out.println("After processing the path is " + rootDocPath);
         // encode the ulr (for UCB)
             String encodedPath = URLEncoder.encode( rootDocPath );

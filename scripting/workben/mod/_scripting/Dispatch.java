@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dispatch.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2002-11-20 14:32:06 $
+ *  last change:$Date: 2003-02-25 16:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@ public class Dispatch extends TestCase {
             XMultiServiceFactory xMSF = tParam.getMSF();
             SOfficeFactory SOF = null;
             SOF = SOfficeFactory.getFactory( xMSF );
-            String docPath = util.utils.getFullTestDocName( "ExampleSpreadSheetLatest.sxc" );
-            XComponent doc = SOF.loadDocument("file://" + docPath );
+            String docPath = util.utils.getFullTestURL( "ExampleSpreadSheetLatest.sxc" );
+            XComponent doc = SOF.loadDocument( docPath );
             XModel model = ( XModel ) UnoRuntime.queryInterface( XModel.class,
                 doc );
             XFrame frame = model.getCurrentController().getFrame();

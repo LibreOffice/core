@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptInfo.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2002-12-10 14:12:05 $
+ *  last change:$Date: 2003-02-25 16:22:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,8 @@ public class _XScriptInfo extends MultiMethodTest {
                 else if (output.length() == 0)
                     output = "empty";
 
-                log.println("expected: " + expected + ", output: " + output);
+                log.println("expected: [" + expected + "], output: [" +
+                    output + "]");
                 result &= output.equals(expected);
             }
         }

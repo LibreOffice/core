@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Function.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2002-12-10 14:12:41 $
+ *  last change:$Date: 2003-02-25 16:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@ public class Function extends TestCase {
             XMultiServiceFactory xMSF = tParam.getMSF();
             SOfficeFactory SOF = null;
             SOF = SOfficeFactory.getFactory( xMSF );
-            String docPath = util.utils.getFullTestDocName( "ExampleSpreadSheetLatest.sxc" );
-            XComponent doc = SOF.loadDocument("file://" + docPath );
+            String docPath = util.utils.getFullTestURL( "ExampleSpreadSheetLatest.sxc" );
+            XComponent doc = SOF.loadDocument( docPath );
             XModel model = ( XModel ) UnoRuntime.queryInterface( XModel.class,
                 doc );
             oObj  =
