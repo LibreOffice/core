@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:42:21 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef SC_MARKDATA_HXX
 #include "markdata.hxx"
+#endif
+#ifndef SC_VIEWUTIL_HXX
+#include "viewutil.hxx"
 #endif
 
 class ScDocShell;
@@ -583,36 +586,37 @@ private:
 };
 
 
-class ScUndoSpelling: public ScSimpleUndo
+class ScUndoConversion : public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
-                    ScUndoSpelling( ScDocShell* pNewDocShell,
-                                    const ScMarkData& rMark,
-                                    USHORT nCurX, USHORT nCurY, USHORT nCurZ,
-                                    ScDocument* pNewUndoDoc,
-                                    USHORT nNewX, USHORT nNewY, USHORT nNewZ,
-                                    ScDocument* pNewRedoDoc);
-    virtual         ~ScUndoSpelling();
+                            TYPEINFO();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+                            ScUndoConversion(
+                                ScDocShell* pNewDocShell, const ScMarkData& rMark,
+                                USHORT nCurX, USHORT nCurY, USHORT nCurZ, ScDocument* pNewUndoDoc,
+                                USHORT nNewX, USHORT nNewY, USHORT nNewZ, ScDocument* pNewRedoDoc,
+                                ScConversionType eConvType );
+    virtual                 ~ScUndoConversion();
 
-    virtual String  GetComment() const;
+    virtual void            Undo();
+    virtual void            Redo();
+    virtual void            Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL            CanRepeat(SfxRepeatTarget& rTarget) const;
+
+    virtual String          GetComment() const;
 
 private:
-    ScMarkData      aMarkData;
-    ScTripel        aCursorPos;
-    ScDocument*     pUndoDoc;           // Blockmarkierung und geloeschte Daten
-    ScTripel        aNewCursorPos;
-    ScDocument*     pRedoDoc;           // Blockmarkierung und neue Daten
-    ULONG           nStartChangeAction;
-    ULONG           nEndChangeAction;
+    ScMarkData              aMarkData;
+    ScTripel                aCursorPos;
+    ScDocument*             pUndoDoc;           // Blockmarkierung und geloeschte Daten
+    ScTripel                aNewCursorPos;
+    ScDocument*             pRedoDoc;           // Blockmarkierung und neue Daten
+    ULONG                   nStartChangeAction;
+    ULONG                   nEndChangeAction;
+    ScConversionType        meConvType;
 
-    void            DoChange( ScDocument* pRefDoc, const ScTripel& rCursorPos );
-    void            SetChangeTrack();
+    void                    DoChange( ScDocument* pRefDoc, const ScTripel& rCursorPos );
+    void                    SetChangeTrack();
 };
 
 
