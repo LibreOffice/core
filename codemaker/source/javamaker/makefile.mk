@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2001-03-13 12:04:26 $
+#   last change: $Author: hjs $ $Date: 2001-05-14 16:47:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,15 +70,13 @@ LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
-CXXFILES=	javamaker.cxx	\
-            javaoptions.cxx	\
-            javatype.cxx
+OBJFILES=   $(OBJ)$/javamaker.obj	\
+            $(OBJ)$/javaoptions.obj	\
+            $(OBJ)$/javatype.obj			
 
 
 APP1TARGET= $(TARGET)
@@ -102,3 +100,4 @@ APP1LIBS= \
         $(LB)$/codemaker.lib
 
 .INCLUDE :  target.mk
+
