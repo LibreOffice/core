@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClassContext.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:28 $
+ *  last change: $Author: jbu $ $Date: 2002-07-19 09:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,5 +83,7 @@ public interface ClassContext  {
     public void dispose();
 
     public ClassLoader getClassLoader();
+
+    public void addCargo( Object cargo );
 }
 

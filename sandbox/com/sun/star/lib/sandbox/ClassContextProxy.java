@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClassContextProxy.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:28 $
+ *  last change: $Author: jbu $ $Date: 2002-07-19 09:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,10 @@ public final class ClassContextProxy implements ClassContext, Cachable {
 
     public URL getResource(String name) {
         return classContext.getResource(name);
+    }
+
+    public void addCargo( Object cargo ) {
+        classContext.addCargo( cargo );
     }
 
     public void dispose() { // HIER SOLLTE VIELLEICHT NOCH MEHR GETAN WERDEN?

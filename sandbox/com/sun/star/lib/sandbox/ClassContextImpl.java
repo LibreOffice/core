@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClassContextImpl.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-10 15:04:04 $
+ *  last change: $Author: jbu $ $Date: 2002-07-19 09:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
     private URL codeBase;
     private ProtectionDomain protectionDomain;
     private boolean _bSecure;
+    private java.util.Vector _cargoVector = new java.util.Vector();
 
     // HACKHACK!!!: java.lang.Thread fragt bei erzeugen eines Threads den
     // HACKHACK!!!: SECURITYMANAGER nach der THREADGROUP
@@ -115,6 +116,10 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
 
     public URL getBase() {
         return codeBase;
+    }
+
+    public void addCargo( Object cargo ) {
+        _cargoVector.addElement( cargo );
     }
 
     // For OS/2
