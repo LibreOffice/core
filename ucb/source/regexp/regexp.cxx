@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regexp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:21 $
+ *  last change: $Author: sb $ $Date: 2001-11-02 12:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,11 +413,16 @@ bool scanStringLiteral(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
 
 Regexp Regexp::parse(rtl::OUString const & rRegexp)
 {
-    // Detect an input of '<scheme>' as an abbreviation of '"<scheme>".*'
+    // Detect an input of '<scheme>' as an abbreviation of '"<scheme>:".*'
     // where <scheme> is as defined in RFC 2396:
     if (isScheme(rRegexp))
-        return Regexp(Regexp::KIND_PREFIX, rRegexp, false, rtl::OUString(),
-                      false, rtl::OUString());
+        return Regexp(Regexp::KIND_PREFIX,
+                      rRegexp
+                          + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":")),
+                      false,
+                      rtl::OUString(),
+                      false,
+                      rtl::OUString());
 
     sal_Unicode const * p = rRegexp.getStr();
     sal_Unicode const * pEnd = p + rRegexp.getLength();
