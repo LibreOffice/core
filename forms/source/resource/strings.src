@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:42:15 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ String RID_BASELISTBOX_ERROR_FILLLIST
     Text[ czech ] = "Nebylo možné určit obsah rozbalovacího menu nebo položky seznamu.";
     Text[ hebrew ] = "Der Inhalt eines Kombinations- oder Listenfeldes konnte nicht ermittelt werden.";
     Text[ hindi ] = "कॉम्बो बॉक्स अथवा सूची बॉक्स की विषय को निश्चित नहीं कर सकते है ।";
+    Text[ slovak ] = "Nebolo možné určiť obsah rozbaľovacieho menu alebo textového poľa.";
 };
 
 String RID_STR_IMPORT_GRAPHIC
@@ -121,6 +122,7 @@ String RID_STR_IMPORT_GRAPHIC
     Text[ czech ] = "Vložit obrázek";
     Text[ hebrew ] = "Grafik einfügen";
     Text[ hindi ] = "सुचित्र जोड़ो";
+    Text[ slovak ] = "Vložiť obrázok";
 };
 
 String RID_STR_CONTROL_SUBSTITUTED_NAME
@@ -151,6 +153,7 @@ String RID_STR_CONTROL_SUBSTITUTED_NAME
     Text[ czech ] = "nahrazeno";
     Text[ hebrew ] = "ersetzt";
     Text[ hindi ] = "स्थानापन्न की हुयी";
+    Text[ slovak ] = "nahradené";
 };
 
 String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
@@ -181,6 +184,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text[ czech ] = "Nastala chyba při načítání tohoto ovládacího prvku, který byl tudíž nahrazen pouze zástupkou.";
     Text[ hebrew ] = "Beim Laden dieses Controls trat ein Fehler auf. Es wurde daher durch einen Platzhalter ersetzt.";
     Text[ hindi ] = "इस नियंत्रण को लोड करने के समय गलती घटित हुआ । इसलिए इसको स्थानधारक द्वारा प्रतिस्थापित किया है ।";
+    Text[ slovak ] = "Objavila sa chyba pri načítaní tohto ovládacieho prvku, ktorý bol preto nahradený len zástupcom.";
 };
 
 String RID_STR_READERROR
@@ -212,6 +216,7 @@ String RID_STR_READERROR
     Text[ czech ] = "Chyba při čtení dat z databáze";
     Text[ hebrew ] = "Fehler beim Lesen von Daten aus der Datenbank";
     Text[ hindi ] = "लेखासंचय से डॉटा को पढ़ने के समय गलती";
+    Text[ slovak ] = "Chyba pri čítaní­ dát z databázy";
 };
 
 String RID_STR_CONNECTERROR
@@ -243,6 +248,7 @@ String RID_STR_CONNECTERROR
     Text[ czech ] = "Spojení přerušeno";
     Text[ hebrew ] = "Verbindungsaufbau gescheitert";
     Text[ hindi ] = "कनेक्शन असफल हुआ";
+    Text[ slovak ] = "Spojenie prerušené";
 };
 
 String RID_ERR_LOADING_FORM
@@ -273,6 +279,7 @@ String RID_ERR_LOADING_FORM
     Text[ czech ] = "Datový obsah nemohl být nahrán.";
     Text[ hebrew ] = "Die Dateninhalte konnten nicht geladen werden.";
     Text[ hindi ] = "डॉटा विषय को लोड़ नहीं कर सकते है ।";
+    Text[ slovak ] = "Obsah dát nemohol byť načítaný.";
 };
 
 String RID_ERR_REFRESHING_FORM
@@ -304,6 +311,7 @@ String RID_ERR_REFRESHING_FORM
     Text[ czech ] = "Datový obsah nemohl být obnoven.";
     Text[ hebrew ] = "Die Dateninhalte konnten nicht aktualisiert werden.";
     Text[ hindi ] = "डॉटा विषय को अपडेट् नहीं कर सकते है ।";
+    Text[ slovak ] = "Obsah dát nemohol byť aktualizovaný";
 };
 
 String RID_STR_ERR_INSERTRECORD
@@ -334,6 +342,7 @@ String RID_STR_ERR_INSERTRECORD
     Text[ czech ] = "Chyba při vkládání nového záznamu";
     Text[ hebrew ] = "Fehler beim Einfügen des neuen Datensatzs";
     Text[ hindi ] = "नया अभिलेख को जोड़ने के समय गलती";
+    Text[ slovak ] = "Chyba pri vkladaní­ nového záznamu";
 };
 
 String RID_STR_ERR_UPDATERECORD
@@ -347,7 +356,7 @@ String RID_STR_ERR_UPDATERECORD
     Text[ dutch ] = "Fout bij schrijven van huidige record";
     Text[ french ] = "Erreur lors de l'�criture de l'enregistrement actif";
     Text[ spanish ] = "Error al escribir el registro actual de datos.";
-    Text[ italian ] = "Errore nello scrivere il record di dati corrente.";
+    Text[ italian ] = "Errore nello scrivere il record di dati attivo";
     Text[ danish ] = "Fejl ved skrivning af den aktuelle datapost";
     Text[ swedish ] = "Fel vid skrivning av den aktuella dataposten";
     Text[ polish ] = "B��d aktualizacji bie��cego rekordu";
@@ -364,6 +373,7 @@ String RID_STR_ERR_UPDATERECORD
     Text[ czech ] = "Chyba při aktualizaci stávajícího záznamu";
     Text[ hebrew ] = "Fehler beim Schreiben des aktuellen Datensatzes";
     Text[ hindi ] = "वर्तमान अभिलेख को अपडेट् करने के समय गलती";
+    Text[ slovak ] = "Chyba pri aktualizácii aktuálneho záznamu";
 };
 
 String RID_STR_ERR_DELETERECORD
@@ -377,7 +387,7 @@ String RID_STR_ERR_DELETERECORD
     Text[ dutch ] = "Fout bij wissen van huidige record";
     Text[ french ] = "Erreur lors de la suppression de l'enregistrement actif";
     Text[ spanish ] = "Error al borrar el registro actual.";
-    Text[ italian ] = "Errore nel cancellare il record di dati corrente.";
+    Text[ italian ] = "Errore nel cancellare il record di dati attivo";
     Text[ danish ] = "Fejl ved sletning af den aktuelle datapost";
     Text[ swedish ] = "Fel vid radering av den aktuella dataposten";
     Text[ polish ] = "B��d usuwania bie��cego rekordu";
@@ -394,6 +404,7 @@ String RID_STR_ERR_DELETERECORD
     Text[ czech ] = "Chyba při odstraňování stávajícího záznamu";
     Text[ hebrew ] = "Fehler beim Löschen des aktuellen Datensatzes";
     Text[ hindi ] = "वर्तमान अभिलेख को मिटाने के समय गलती";
+    Text[ slovak ] = "Chyba pri odstraňovaní­ aktuálneho záznamu";
 };
 
 String RID_STR_ERR_DELETERECORDS
@@ -424,6 +435,7 @@ String RID_STR_ERR_DELETERECORDS
     Text[ czech ] = "Chyba při odstraňování uvedených záznamů";
     Text[ hebrew ] = "Fehler beim Löschen der angegebenen Datensätze";
     Text[ hindi ] = "निर्दिष्ट की हुयी अभिलेखों को मिटाने के समय गलती";
+    Text[ slovak ] = "Chyba pri odstraňovaní­ uvedených záznamov";
 };
 
 String RID_STR_NEED_NON_NULL_OBJECT
@@ -454,6 +466,7 @@ String RID_STR_NEED_NON_NULL_OBJECT
     Text[ czech ] = "Objekt nemůže být NULL.";
     Text[ hebrew ] = "Das Objekt darf nicht NULL sein.";
     Text[ hindi ] = "वस्तु NULL नहीं हो सकता है ।";
+    Text[ slovak ] = "Objekt nemôže byť NULL.";
 };
 
 String RID_STR_OPEN_GRAPHICS
@@ -484,6 +497,7 @@ String RID_STR_OPEN_GRAPHICS
     Text[ czech ] = "Vložit obrázek z...";
     Text[ hebrew ] = "Grafik einfügen aus...";
     Text[ hindi ] = "से सुचित्रों को जोड़ो...";
+    Text[ slovak ] = "Vložiť obrázok z...";
 };
 
 String RID_STR_CLEAR_GRAPHICS
@@ -514,6 +528,7 @@ String RID_STR_CLEAR_GRAPHICS
     Text[ czech ] = "Odstranit obrázek";
     Text[ hebrew ] = "Grafik entfernen";
     Text[ hindi ] = "सुचित्रों को हटाओ";
+    Text[ slovak ] = "Odstrániť obrázok";
 };
 
 
@@ -550,7 +565,10 @@ String RID_STR_SYNTAXERROR
     Text[ czech ] = "Syntaktická chyba v dotazu";
     Text[ hebrew ] = "‮שגיאת תחביר בביטוי שאילתה‬";
     Text[ hindi ] = "जानकारी की वर्णन में सिन्टाक्स की गलती";
+    Text[ slovak ] = "Chyba syntaxu v dotaze";
 };
+
+
 
 
 
