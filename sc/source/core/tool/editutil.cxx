@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 16:20:22 $
+ *  last change: $Author: nn $ $Date: 2001-06-29 17:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,7 +641,7 @@ String __EXPORT ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         }
         else
         {
-            DBG_ERROR("unbekannter Feldbefehl");
+            //DBG_ERROR("unbekannter Feldbefehl");
             aRet = '?';
         }
     }
