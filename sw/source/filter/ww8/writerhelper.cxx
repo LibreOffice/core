@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:53:26 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,12 +520,15 @@ namespace sw
             std::swap(mnFormLayer, rOther.mnFormLayer);
         }
 
+        // --> OD 2004-12-13 #i38889# - by default put objects into the invisible
+        // layers.
         SetLayer::SetLayer(const SwDoc &rDoc)
-            : mnHeavenLayer(rDoc.GetHeavenId()),
-            mnHellLayer(rDoc.GetHellId()),
-            mnFormLayer(rDoc.GetControlsId())
+            : mnHeavenLayer(rDoc.GetInvisibleHeavenId()),
+              mnHellLayer(rDoc.GetInvisibleHellId()),
+              mnFormLayer(rDoc.GetInvisibleControlsId())
         {
         }
+        // <--
 
         SetLayer::SetLayer(const SetLayer& rOther) throw()
             : mnHeavenLayer(rOther.mnHeavenLayer),
