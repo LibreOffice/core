@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:58:16 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
                 && a3.wChar == L'\0' && a3.td.nInt16 == 0 && a3.td.dDouble == 0
                 && a3.bBool == sal_False );
     OSL_ASSERT( a3.aAny.getValueType() == getCppuVoidType() );
-    delete pa3;
+    delete[] reinterpret_cast< char * >(pa3);
     }
 
     {
@@ -1125,12 +1125,10 @@ int SAL_CALL main(int argc, char **argv)
 {
     {
     typelib_setCacheSize( 200 );
-#ifdef SAL_W32
     Reference< registry::XSimpleRegistry > xRegistry( ::cppu::createSimpleRegistry() );
     xRegistry->open( OUString( RTL_CONSTASCII_USTRINGPARAM("testcppu.rdb") ), sal_True, sal_False );
     Reference< XComponentContext > xContext(
         ::cppu::bootstrap_InitialComponentContext( xRegistry ) );
-#endif
     testEnvironments();
     ::rtl_unloadUnusedModules( 0 );
     testMappingCallback();
@@ -1153,13 +1151,12 @@ int SAL_CALL main(int argc, char **argv)
     testAssignment();
     testCppu();
 //      testArray();
-#ifndef SAL_W32 // cache test not possible if types are loaded dynamically...
+#if 0 // cache test not possible if types are loaded dynamically (cppumaker -L)
     test_cache();
 #endif
     test_interface();
     test_inheritance();
 
-#ifdef SAL_W32
       // shutdown
     Reference< XComponent > xComp( xContext, UNO_QUERY_THROW );
     xComp.set( xContext, UNO_QUERY_THROW );
@@ -1167,7 +1164,6 @@ int SAL_CALL main(int argc, char **argv)
         xContext->getValueByName(
             OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) ), UNO_QUERY_THROW );
     xComp->dispose();
-#endif
     }
 
     typelib_setCacheSize( 0 );
