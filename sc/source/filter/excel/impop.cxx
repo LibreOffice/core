@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-17 15:26:11 $
+ *  last change: $Author: gt $ $Date: 2001-02-02 07:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1894,7 +1894,7 @@ void ImportExcel::Boolerr34( void )
 
 void ImportExcel::Row34( void )
 {
-    UINT16  nRow, nRowHeight, nGrbit;
+    UINT16  nRow, nRowHeight, nGrbit, nXF;
 
     aIn >> nRow;
     aIn.SeekRel( 4 );   // Mic und Mac ueberspringen
@@ -1904,12 +1904,18 @@ void ImportExcel::Row34( void )
         aIn >> nRowHeight;  // direkt in Twips angegeben
         aIn.SeekRel( 4 );
 
-        aIn >> nGrbit;
+        aIn >> nGrbit >> nXF;
 
         aRowOutlineBuff.SetLevel( nRow, EXC_ROW_GETLEVEL( nGrbit ),
             TRUEBOOL( nGrbit & EXC_ROW_COLLAPSED ), TRUEBOOL( nGrbit & EXC_ROW_ZEROHEIGHT ) );
 
         aColRowBuff.SetRowSettings( nRow, nRowHeight, nGrbit );
+
+        if( nGrbit & EXC_ROW_GHOSTDIRTY )
+        {
+            for( UINT16 n = 0 ; n <= MAXCOL ; n++ )
+                pFltTab->SetXF( n, nRow, nXF, TRUE );
+        }
     }
 }
 
