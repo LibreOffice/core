@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-30 14:12:59 $
+ *  last change: $Author: sab $ $Date: 2001-01-30 17:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,6 @@ XML_CONSTASCII_ACTION( sXML_background_repeat, "repeat" );
 XML_CONSTASCII_ACTION( sXML_background_stretch, "stretch" );
 XML_CONSTASCII_ACTION( sXML_bar, "bar" );
 XML_CONSTASCII_ACTION( sXML_base_cell_address, "base-cell-address");
-XML_CONSTASCII_ACTION( sXML_base_change_position, "base-change-position");
 XML_CONSTASCII_ACTION( sXML_baseline, "baseline" );
 XML_CONSTASCII_ACTION( sXML_below , "below" );
 XML_CONSTASCII_ACTION( sXML_bevel , "bevel" );
@@ -1020,6 +1019,7 @@ XML_CONSTASCII_ACTION( sXML_mtable, "mtable");
 XML_CONSTASCII_ACTION( sXML_mtd, "mtd");
 XML_CONSTASCII_ACTION( sXML_mtext, "mtext");
 XML_CONSTASCII_ACTION( sXML_mtr, "mtr");
+XML_CONSTASCII_ACTION( sXML_multi_deletion_spanned, "multi-deletion-spanned");
 XML_CONSTASCII_ACTION( sXML_munder, "munder");
 XML_CONSTASCII_ACTION( sXML_munderover, "munderover");
 XML_CONSTASCII_ACTION( sXML_name, "name" );
@@ -1234,6 +1234,7 @@ XML_CONSTASCII_ACTION( sXML_register_truth_ref_style_name, "register-truth-ref-s
 XML_CONSTASCII_ACTION( sXML_regression_type, "regression-type" );
 XML_CONSTASCII_ACTION( sXML_rejected, "rejected" );
 XML_CONSTASCII_ACTION( sXML_rejecting_change_id, "rejecting-change-id" );
+XML_CONSTASCII_ACTION( sXML_rejection, "rejection" );
 XML_CONSTASCII_ACTION( sXML_rel_column_width, "rel-column-width" );
 XML_CONSTASCII_ACTION( sXML_rel_height, "rel-height" );
 XML_CONSTASCII_ACTION( sXML_rel_width, "rel-width" );
