@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:32:00 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,11 +731,11 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
                         //aVDev.SetOutputSize(pOut->GetOutputSize());
                         Rectangle aDirtyArea(aBound);
                         aDirtyArea.Move(aPvOfs.X(),aPvOfs.Y());
-                        //InitRedraw(&aVDev,aDirtyArea);
+                        //CompleteRedraw(&aVDev,aDirtyArea);
 
                         // #116425#
                         // Do direct paint of dirty area
-                        InitRedraw(pOut, aDirtyArea);
+                        CompleteRedraw(pOut, aDirtyArea);
 
                         // #116425#
                         // paint in-creation object over it using a ObjectContactOfObjListPainter
