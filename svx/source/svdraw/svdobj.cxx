@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-01 12:48:44 $
+ *  last change: $Author: aw $ $Date: 2000-11-09 09:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1929,6 +1929,13 @@ ImpLineGeometry* SdrObject::ImpPrepareLineGeometry(ExtOutputDevice& rXOut, const
         // four lines instead of one is recorded (e.g.)
         if(bForceTwoPixel && rXOut.GetOutDev()->GetConnectMetaFile())
             bForceTwoPixel = FALSE;
+
+        // #78210# switch off bForceTwoPixel when line draft mode
+        if(bForceTwoPixel && bIsLineDraft)
+        {
+            bForceTwoPixel = FALSE;
+            bForceOnePixel = TRUE;
+        }
 
         // create line geometry
         CreateLinePoly(aPolyPoly3D, aLinePoly3D, *rXOut.GetOutDev(),
