@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:15:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,12 @@
 #endif
 #ifndef _UNOTOOLS_DATETIME_HXX_
 #include <unotools/datetime.hxx>
+#endif
+
+#if OSL_DEBUG_LEVEL > 0
+    #ifndef _OSL_THREAD_H_
+    #include <osl/thread.h>
+    #endif
 #endif
 
 //.........................................................................
@@ -205,8 +211,17 @@ namespace xmloff
             aNewValue.Value = convertString(m_rContext.getGlobalContext(), pProperty->aPropertyType, _rValue, pProperty->pEnumMap, pProperty->bInverseSemantics);
             implPushBackPropertyValue( aNewValue );
         }
+#if OSL_DEBUG_LEVEL > 0
         else
-            OSL_ENSURE( sal_False, "OPropertyImport::handleAttribute: can't handle attributes which do not describe properties!" );
+        {
+            ::rtl::OString sMessage( "OPropertyImport::handleAttribute: Can't handle the following:\n" );
+            sMessage += ::rtl::OString( "  Attribute name: " );
+            sMessage += ::rtl::OString( _rLocalName.getStr(), _rLocalName.getLength(), osl_getThreadTextEncoding() );
+            sMessage += ::rtl::OString( "\n  value: " );
+            sMessage += ::rtl::OString( _rValue.getStr(), _rValue.getLength(), osl_getThreadTextEncoding() );
+            OSL_ENSURE( sal_False, sMessage.getStr() );
+        }
+#endif
     }
 
     //---------------------------------------------------------------------
