@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:32:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,8 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define XML_SD_TYPE_TRANSITION_TYPE                 (XML_SD_TYPES_START + 75 )
 #define XML_SD_TYPE_TRANSTIION_SUBTYPE              (XML_SD_TYPES_START + 76 )
 #define XML_SD_TYPE_TRANSTIION_DIRECTION            (XML_SD_TYPES_START + 77 )
+
+#define XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE   (XML_SD_TYPES_START + 78 )
 
 //////////////////////////////////////////////////////////////////////////////
 
