@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: ab $ $Date: 2002-01-09 16:45:02 $
+ *  last change: $Author: mba $ $Date: 2002-01-09 17:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,14 +544,17 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             xPer->DoSaveCompleted( 0 );
         }
 
-        BOOL bHasMacros = FALSE;
-        if ( xStor->IsOLEStorage() )
-            bHasMacros = BasicManager::HasBasicWithModules( *xStor );
-        else
-            bHasMacros = xStor->IsStorage( String::CreateFromAscii("Basic") );
+        if ( xStor.Is() )
+        {
+            BOOL bHasMacros = FALSE;
+            if ( xStor->IsOLEStorage() )
+                bHasMacros = BasicManager::HasBasicWithModules( *xStor );
+            else
+                bHasMacros = xStor->IsStorage( String::CreateFromAscii("Basic") );
 
-        if ( bHasMacros )
-            AdjustMacroMode( String() );
+            if ( bHasMacros )
+                AdjustMacroMode( String() );
+        }
 
         // Load
         const String aOldURL( INetURLObject::GetBaseURL() );
