@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-19 11:40:08 $
+ *  last change: $Author: thb $ $Date: 2002-07-03 17:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,14 @@
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _SV_POLY_HXX
+#include "poly.hxx"
+#endif
+
+// =======================================================================
+
+// comment out to prevent use of beziers on GDI functions
+#define USE_GDI_BEZIERS
 
 // =======================================================================
 
@@ -636,6 +644,106 @@ void ImplClearHDCCache( SalData* pData )
 
             DeleteDC( pC->mhDC );
             DeleteObject( pC->mhSelBmp );
+        }
+    }
+}
+
+// =======================================================================
+
+// #100127# Fill point and flag memory from array of points which
+// might also contain bezier control points for the PolyDraw() GDI method
+// Make sure pWinPointAry and pWinFlagAry are big enough
+void ImplPreparePolyDraw( bool                      bCloseFigures,
+                          ULONG                     nPoly,
+                          const ULONG*              pPoints,
+                          const SalPoint* const*    pPtAry,
+                          const BYTE* const*        pFlgAry,
+                          POINT*                    pWinPointAry,
+                          BYTE*                     pWinFlagAry     )
+{
+    ULONG nCurrPoly;
+    for( nCurrPoly=0; nCurrPoly<nPoly; ++nCurrPoly )
+    {
+        const POINT* pCurrPoint = reinterpret_cast<const POINT*>( *pPtAry++ );
+        const BYTE* pCurrFlag = *pFlgAry++;
+        const ULONG nCurrPoints = *pPoints++;
+        ULONG nCurrPoint;
+
+        if( nCurrPoints )
+        {
+            // start figure
+            *pWinPointAry++ = *pCurrPoint++;
+            *pWinFlagAry++  = PT_MOVETO;
+            ++pCurrFlag;
+
+            for( nCurrPoint=1; nCurrPoint<nCurrPoints; )
+            {
+                if( ( nCurrPoint + 2 ) < nCurrPoints )
+                {
+                    BYTE P4( pCurrFlag[ 2 ] );
+
+                    if( ( POLY_CONTROL == pCurrFlag[ 0 ] ) &&
+                        ( POLY_CONTROL == pCurrFlag[ 1 ] ) &&
+                        ( POLY_NORMAL == P4 || POLY_SMOOTH == P4 || POLY_SYMMTR == P4 ) )
+                    {
+                        // control point one
+                        *pWinPointAry++ = *pCurrPoint++;
+                        *pWinFlagAry++  = PT_BEZIERTO;
+
+                        // control point two
+                        *pWinPointAry++ = *pCurrPoint++;
+                        *pWinFlagAry++  = PT_BEZIERTO;
+
+                        // end point
+                        *pWinPointAry++ = *pCurrPoint++;
+                        *pWinFlagAry++  = PT_BEZIERTO;
+
+                        nCurrPoint += 3;
+                        pCurrFlag += 3;
+                        continue;
+                    }
+                }
+
+                // regular line point
+                *pWinPointAry++ = *pCurrPoint++;
+                *pWinFlagAry++  = PT_LINETO;
+                ++pCurrFlag;
+                ++nCurrPoint;
+            }
+
+            // end figure?
+            if( bCloseFigures )
+                pWinFlagAry[-1] |= PT_CLOSEFIGURE;
+        }
+    }
+}
+
+// =======================================================================
+
+// #100127# draw an array of points which might also contain bezier control points
+void ImplRenderPath( HDC hdc, ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+{
+    if( nPoints )
+    {
+        USHORT i;
+        // TODO: profile whether the following options are faster:
+        // a) look ahead and draw consecutive bezier or line segments by PolyBezierTo/PolyLineTo resp.
+        // b) convert our flag array to window's and use PolyDraw
+
+        MoveToEx( hdc, pPtAry->mnX, pPtAry->mnY, NULL );
+        ++pPtAry; ++pFlgAry;
+
+        for( i=1; i<nPoints; ++i, ++pPtAry, ++pFlgAry )
+        {
+            if( *pFlgAry == POLY_NORMAL )
+            {
+                LineTo( hdc, pPtAry->mnX, pPtAry->mnY );
+            }
+            else if( nPoints - i > 2 )
+            {
+                PolyBezierTo( hdc, reinterpret_cast<const POINT*>(pPtAry), 3 );
+                pPtAry += 2; pFlgAry += 2;
+            }
         }
     }
 }
@@ -1300,16 +1408,74 @@ void SalGraphics::DrawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
 
 // -----------------------------------------------------------------------
 
+#define SAL_POLY_STACKBUF       32
+
+// -----------------------------------------------------------------------
+
 sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
+#ifdef USE_GDI_BEZIERS
+    // Unter NT koennen wir das Array direkt weiterreichen
+    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
+                "SalGraphics::DrawPolyLineBezier(): POINT != SalPoint" );
+
+    ImplRenderPath( maGraphicsData.mhDC, nPoints, pPtAry, pFlgAry );
+
+    return sal_True;
+#else
     return sal_False;
+#endif
 }
 
 // -----------------------------------------------------------------------
 
 sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
+#ifdef USE_GDI_BEZIERS
+    // Unter NT koennen wir das Array direkt weiterreichen
+    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
+                "SalGraphics::DrawPolygonBezier(): POINT != SalPoint" );
+
+    POINT   aStackAry1[SAL_POLY_STACKBUF];
+    BYTE    aStackAry2[SAL_POLY_STACKBUF];
+    POINT*  pWinPointAry;
+    BYTE*   pWinFlagAry;
+    if( nPoints > SAL_POLY_STACKBUF )
+    {
+        pWinPointAry = new POINT[ nPoints ];
+        pWinFlagAry = new BYTE[ nPoints ];
+    }
+    else
+    {
+        pWinPointAry = aStackAry1;
+        pWinFlagAry = aStackAry2;
+    }
+
+    ImplPreparePolyDraw(true, 1, &nPoints, &pPtAry, &pFlgAry, pWinPointAry, pWinFlagAry);
+
+    sal_Bool bRet( sal_False );
+
+    if( BeginPath( maGraphicsData.mhDC ) )
+    {
+        PolyDraw(maGraphicsData.mhDC, pWinPointAry, pWinFlagAry, nPoints);
+
+        if( EndPath( maGraphicsData.mhDC ) )
+        {
+            if( StrokeAndFillPath( maGraphicsData.mhDC ) )
+                bRet = sal_True;
+        }
+    }
+
+    if( pWinPointAry != aStackAry1 )
+    {
+        delete [] pWinPointAry;
+        delete [] pWinFlagAry;
+    }
+
+    return bRet;
+#else
     return sal_False;
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1317,7 +1483,56 @@ sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, 
 sal_Bool SalGraphics::DrawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
                                              const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
 {
+#ifdef USE_GDI_BEZIERS
+    // Unter NT koennen wir das Array direkt weiterreichen
+    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
+                "SalGraphics::DrawPolyPolygonBezier(): POINT != SalPoint" );
+
+    ULONG nCurrPoly, nTotalPoints;
+    const ULONG* pCurrPoints = pPoints;
+    for( nCurrPoly=0, nTotalPoints=0; nCurrPoly<nPoly; ++nCurrPoly )
+        nTotalPoints += *pCurrPoints++;
+
+    POINT   aStackAry1[SAL_POLY_STACKBUF];
+    BYTE    aStackAry2[SAL_POLY_STACKBUF];
+    POINT*  pWinPointAry;
+    BYTE*   pWinFlagAry;
+    if( nTotalPoints > SAL_POLY_STACKBUF )
+    {
+        pWinPointAry = new POINT[ nTotalPoints ];
+        pWinFlagAry = new BYTE[ nTotalPoints ];
+    }
+    else
+    {
+        pWinPointAry = aStackAry1;
+        pWinFlagAry = aStackAry2;
+    }
+
+    ImplPreparePolyDraw(true, nPoly, pPoints, pPtAry, pFlgAry, pWinPointAry, pWinFlagAry);
+
+    sal_Bool bRet( sal_False );
+
+    if( BeginPath( maGraphicsData.mhDC ) )
+    {
+        PolyDraw(maGraphicsData.mhDC, pWinPointAry, pWinFlagAry, nTotalPoints);
+
+        if( EndPath( maGraphicsData.mhDC ) )
+        {
+            if( StrokeAndFillPath( maGraphicsData.mhDC ) )
+                bRet = sal_True;
+        }
+    }
+
+    if( pWinPointAry != aStackAry1 )
+    {
+        delete [] pWinPointAry;
+        delete [] pWinFlagAry;
+    }
+
+    return bRet;
+#else
     return sal_False;
+#endif
 }
 
 // -----------------------------------------------------------------------
