@@ -41,8 +41,9 @@ CFLAGSOUTOBJ=-o
 
 SOLARVERSHLLIBS=$(shell -$(FIND) $(SOLARVERSION)$/$(INPATH)$/lib -name $(DLLPRE)\*$(DLLPOST))
 LINK=cc
-LINKFLAGS=-dynamic -framework System -framework Cocoa -lcc_dynamic \
-  -lstdc++ $(foreach,i,$(SOLARVERSHLLIBS) '-dylib_file @executable_path$/$(i:f):$i')
+LINKFLAGS=-dynamic -framework System -framework Cocoa -framework OpenGL \
+  -lcc_dynamic -lstdc++ \
+  $(foreach,i,$(SOLARVERSHLLIBS) '-dylib_file @executable_path$/$(i:f):$i')
 LINKFLAGSAPPGUI=-Wl,-u,__objcInit
 LINKFLAGSSHLGUI=-dynamiclib -install_name '@executable_path$/$(@:f)' \
   -Wl,-U,___progname -Wl,-U,_environ
