@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:56:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,6 +370,32 @@ const sal_Char cActiveConnection[] = "ActiveConnection";
 // -----------------------------------------------------------------------------
 namespace
 {
+
+bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<XResultSet>& xResultSet )
+{
+    uno::Reference<XPropertySet> xPrSet(xResultSet, UNO_QUERY);
+    if(xPrSet.is())
+    {
+        try
+        {
+            sal_Bool bFinal;
+            Any aFinal = xPrSet->getPropertyValue(C2U("IsRowCountFinal"));
+            aFinal >>= bFinal;
+            if(!bFinal)
+            {
+                xResultSet->last();
+                xResultSet->first();
+            }
+            Any aCount = xPrSet->getPropertyValue(C2U("RowCount"));
+            if( aCount >>= rCount )
+                return true;
+        }
+        catch(Exception&)
+        {
+        }
+    }
+    return false;
+}
 
 }
 /* -----------------09.12.2002 12:35-----------------
@@ -975,28 +1001,9 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
             rOpt.nMergeCnt = pImpl->pMergeData->aSelection.getLength();
         else if(pImpl->pMergeData->xResultSet.is())
         {
-            uno::Reference<XPropertySet> xPrSet(pImpl->pMergeData->xResultSet, UNO_QUERY);
-            if(xPrSet.is())
-            {
-                try
-                {
-                    sal_Bool bFinal;
-                    Any aFinal = xPrSet->getPropertyValue(C2U("IsRowCountFinal"));
-                    aFinal >>= bFinal;
-                    if(!bFinal)
-                    {
-                        pImpl->pMergeData->xResultSet->last();
-                        pImpl->pMergeData->xResultSet->first();
-                    }
-                    long nCount;
-                    Any aCount = xPrSet->getPropertyValue(C2U("RowCount"));
-                    aCount >>= nCount;
-                    rOpt.nMergeCnt = (ULONG)nCount;
-                }
-                catch(Exception&)
-                {
-                }
-            }
+            sal_Int32 nCount;
+            if( lcl_getCountFromResultSet( nCount, pImpl->pMergeData->xResultSet ) )
+                rOpt.nMergeCnt = (ULONG)nCount;
         }
     }
 
@@ -2889,14 +2896,18 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     //bCancel is set from the PrintMonitor
     bCancel = FALSE;
 
-    PrintMonitor aPrtMonDlg(&rSourceView.GetEditWin(), TRUE);
-    aPrtMonDlg.aDocName.SetText(rSourceView.GetDocShell()->GetTitle(22));
-    aPrtMonDlg.aCancel.SetClickHdl(LINK(this, SwNewDBMgr, PrtCancelHdl));
+    CreateMonitor aMonitorDlg(&rSourceView.GetEditWin());
+    aMonitorDlg.SetCancelHdl(LINK(this, SwNewDBMgr, PrtCancelHdl));
     if (!IsMergeSilent())
-        aPrtMonDlg.Show();
-    // the print monitor needs some time to act
-    for( USHORT i = 0; i < 25; i++)
-        Application::Reschedule();
+    {
+        aMonitorDlg.Show();
+        aMonitorDlg.Invalidate();
+        aMonitorDlg.Update();
+        // the print monitor needs some time to act
+        for( USHORT i = 0; i < 25; i++)
+            Application::Reschedule();
+    }
+
     SwWrtShell& rSourceShell = rSourceView.GetWrtShell();
     BOOL bSynchronizedDoc = rSourceShell.IsLabelDoc() && rSourceShell.GetSectionFmtCount() > 1;
     String sSourceDocURL;
@@ -2948,14 +2959,22 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
 
         long nStartRow, nEndRow;
         ULONG nDocNo = 1;
+        sal_Int32 nDocCount = 0;
+        if( !IsMergeSilent() && lcl_getCountFromResultSet( nDocCount, pImpl->pMergeData->xResultSet ) )
+            aMonitorDlg.SetTotalCount( nDocCount );
 
         do
         {
             nStartRow = pImpl->pMergeData->xResultSet->getRow();
-            String sStat(SW_RES(STR_STATSTR_LETTER));
-            sStat += ' ';
-            sStat += String::CreateFromInt32( nDocNo );
-            aPrtMonDlg.aPrintInfo.SetText(sStat);
+            if (!IsMergeSilent())
+            {
+                aMonitorDlg.SetCurrentPosition( nDocNo );
+                aMonitorDlg.Invalidate();
+                aMonitorDlg.Update();
+                // the print monitor needs some time to act
+                for( USHORT i = 0; i < 25; i++)
+                    Application::Reschedule();
+            }
 
             // create a new docshell from the temporary document
             SfxBoolItem aHidden( SID_HIDDEN, TRUE );
@@ -3028,6 +3047,18 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             ++nDocNo;
         } while( !bCancel &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
+
+        //deselect all, go out of the frame and go to the beginning of the document
+        Point aPt(LONG_MIN, LONG_MIN);
+        pTargetShell->SelectObj(aPt, SW_LEAVE_FRAME);
+        if (pTargetShell->IsSelFrmMode())
+        {
+            pTargetShell->UnSelectFrm();
+            pTargetShell->LeaveSelFrmMode();
+        }
+        pTargetShell->EnterStdMode();
+        pTargetShell->SttDoc();
+        //
     }
     catch(Exception& rEx)
     {
