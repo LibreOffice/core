@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-16 13:42:52 $
+ *  last change: $Author: hdu $ $Date: 2000-11-17 09:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,10 +155,37 @@ void VirtDevServerFont::SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphDa
 
 // -----------------------------------------------------------------------
 
-ULONG VirtDevServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
+ULONG VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs ) const
 {
-    ppKernPairs = NULL;
-    return 0;
+    Font aFont;
+    aFont.SetName       ( GetFontSelData().maName );
+    aFont.SetStyleName  ( GetFontSelData().maStyleName );
+    aFont.SetHeight     ( GetFontSelData().mnHeight );
+    aFont.SetWidth      ( GetFontSelData().mnWidth );
+    aFont.SetOrientation( GetFontSelData().mnOrientation );
+
+    VirtualDevice vdev( 1 );
+    vdev.SetFont( aFont );
+
+    ULONG nPairs = vdev.GetKerningPairCount();
+    if( nPairs > 0 )
+    {
+        KerningPair* pKernPairs = new KerningPair[ nPairs ];
+        vdev.GetKerningPairs( nPairs, pKernPairs );
+
+        *ppImplKernPairs = new ImplKernPairData[ nPairs ];
+        ImplKernPairData* pImplKernPair = *ppImplKernPairs;
+        for ( ULONG n = 0; n < nPairs; n++ )
+        {
+            pImplKernPair->mnChar1  = pKernPairs->nChar1;
+            pImplKernPair->mnChar2  = pKernPairs->nChar2;
+            pImplKernPair->mnKern   = pKernPairs->nKern;
+            ++pImplKernPair;
+            ++pKernPairs;
+        }
+    }
+
+    return nPairs;
 }
 
 // -----------------------------------------------------------------------
