@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:27:17 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,11 +400,11 @@ Resource RID_SW_ERRHDL
         TEXT [ dutch ] = "Dit bestand werd met de WinWord- optie \"Snel opslaan\" opgeslagen. Schakel a.u.b in WinWord de optie \"Snel opslaan toestaan\" uit en sla het bestand opnieuw op met WinWord." ;
         TEXT [ spanish ] = "Este archivo ha sido guardado con la opción de WinWord 'guardar rápidamente' . Por favor desactive en WinWord la opción 'permitir guardar rápidamente' y guarde el archivo de nuevo en WinWord." ;
         TEXT [ english_us ] = "This file was saved with WinWord in 'Fast Save' mode. Please uncheck the option 'Allow Fast Saves' and save the file again." ;
-        TEXT[ chinese_simplified ] = "Õâ¸öÎÄ¼ş´æÅÌ²ÉÓÃµÄÊÇ WinWord Ñ¡Ïî '¿ìËÙ±£´æ'·½Ê½¡£ÇëÄúÊ§»îÕâ¸öÑ¡Ïî£¬È»ºóÔÚÖØĞÂ´æÅÌÕâ¸öÎÄ¼ş¡£";
+        TEXT[ chinese_simplified ] = "Õâ¸öÎÄ¼ş´æÅÌ²ÉÓÃµÄÊÇ WinWord Ñ¡Ïî '¿ìËÙ±£´æ'·½Ê½¡£Çë¹Ø±ÕÕâ¸öÑ¡Ïî£¬È»ºóÔÙÖØĞÂ´æÅÌÕâ¸öÎÄ¼ş¡£";
         TEXT[ russian ] = "İòîò ôàéë ñîõğàíåí â WinWord ïğè ïîìîùè ïàğàìåòğà 'Áûñòğîå ñîõğàíåíèå'. Ïîæàëóéñòà, îòêëş÷èòå ïàğàìåòğ 'Ğàçğåøèòü áûñòğîå ñîõğàíåíèå' è çàíîâî ñîõğàíèòå ıòîò ôàéë â WinWord.";
         TEXT[ polish ] = "Ten plik zosta³ zapisany za pomoc¹ opcji WinWord 'Szybkie zapisywanie'. Proszê w³³¹cz w WinWord opcjê 'Dopuœæ szybkie zapisywanie' i zapisz plik ponownie w WinWord";
         TEXT[ japanese ] = "‚±‚ÌÌ§²Ù‚Í WinWord µÌß¼®İ‚Ìu‚‘¬•Û‘¶v‚Å•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚·BWinWord ‚ÌµÌß¼®İu‚‘¬•Û‘¶‚·‚év‚ğµÌ‚É‚µ‚Ä WinWord ‚ÅÌ§²Ù‚ğ•Û‘¶‚µ‚È‚¨‚µ‚Ä‚­‚¾‚³‚¢B";
-        TEXT[ chinese_traditional ] = "Àx¦sÀÉ®×±Ä¥Îªº¬O WinWord ¿ï¶µ¡u§Ö³tÀx¦s¡v¤è¦¡¡C½Ğ±z³]©wÃö³¬³o­Ó¿ï¶µ¡MµM«á¦b­«·sÀx¦s³o­Ó¤å¥ó¡C";
+        TEXT[ chinese_traditional ] = "Àx¦sÀÉ®×±Ä¥Îªº¬O WinWord ¿ï¶µ¡u§Ö³tÀx¦s¡v¤è¦¡¡C½ĞÃö³¬³o­Ó¿ï¶µ¡MµM«á¦A­«·sÀx¦s³o­Ó¤å¥ó¡C";
         TEXT[ arabic ] = "Êã ÍİÙ åĞÇ Çáãáİ Úä ØÑíŞ ÎíÇÑ 'ÇáÍİÙ ÇáÓÑíÚ' İí WinWord. ÇáÑÌÇÁ ÅíŞÇİ ÎÇÕíÉ 'ÇáÓãÇÍ ÈÇáÍİÙ ÇáÓÑíÚ' İí WinWord¡ Ëã Şã ÈÍİÙ Çáãáİ ãä ÌÏíÏ ÈæÇÓØÉ WinWord.";
         TEXT[ greek ] = "Ôï áñ÷åßï áõôü áğïèçêåıôçêå ìå ôçí åğéëïãŞ 'ÃñŞãïñç áğïèŞêåõóç' ôïõ WinWord. Ğáñáêáëş áğåíåñãïğïéŞóåôå ôçí åğéëïãŞ áõôŞ ôïõ WinWord êáé áğïèçêåıó? ";
         TEXT[ korean ] = "ÀÌ ÆÄÀÏÀº  WinWord ÀÇ  'ºü¸¥ ÀúÀå' ¸ğµå·Î ÀúÀåµÇ¾î ÀÖ½À´Ï´Ù.  ¿É¼Ç 'ºü¸¥ ÀúÀå Çã¿ë' ¸¦ ÇØÁ¦ÇÏ°í, ÆÄÀÏÀ» ´Ù½Ã ÀúÀåÇÏ½Ê½Ã¿À .";
@@ -1175,11 +1175,11 @@ Resource RID_SW_ERRHDL
         TEXT [ dutch ] = "Dit bestand werd met de WinWord optie \"Snel opslaan\" opgeslagen. Schakel a.u.b in WinWord de optie \"Snel opslaan toestaan\" uit en sla het bestand opnieuw op met WinWord." ;
         TEXT [ spanish ] = "Este archivo ha sido guardado con la opción de WinWord 'guardar rápidamente' . Por favor desactive en WinWord la opción 'permitir guardar rápidamente' y guarde nuevamente el archivo con WinWord" ;
         TEXT [ english_us ] = "This file was saved with WinWord in 'Fast Save' mode. Please uncheck the option 'Allow Fast Saves' and save the file again." ;
-        TEXT[ chinese_simplified ] = "Õâ¸öÎÄ¼ş´æÅÌ²ÉÓÃµÄÊÇ WinWord Ñ¡Ïî '¿ìËÙ±£´æ'·½Ê½¡£ÇëÄúÊ§»îÕâ¸öÑ¡Ïî£¬È»ºóÔÚÖØĞÂ´æÅÌÕâ¸öÎÄ¼ş¡£";
+        TEXT[ chinese_simplified ] = "Õâ¸öÎÄ¼ş´æÅÌ²ÉÓÃµÄÊÇ WinWord Ñ¡Ïî '¿ìËÙ±£´æ'·½Ê½¡£ÇëÉè¶¨²»Ê¹ÓÃÕâ¸öÑ¡Ïî£¬È»ºóÔÙÖØĞÂ´æÅÌÕâ¸öÎÄ¼ş¡£";
         TEXT[ russian ] = "İòîò ôàéë ñîõğàíåí ïğè ïîìîùè ïàğàìåòğà WinWord 'Áûñòğîå ñîõğàíåíèå'. Ïîæàëóéñòà, îòêëş÷èòå ïàğàìåòğ 'Ğàçğåøèòü áûñòğîå ñîõğàíåíèå' è çàíîâî ñîõğàíèòå ıòîò ôàéë â WinWord.";
         TEXT[ polish ] = "Ten plik zosta³ zapisany za pomoc¹ opcji WinWord 'Szybkie zapisywanie'. Proszê wy³¹cz w WinWord opcjê 'Dopuœæ szybkie zapisywanie' i zapisz plik ponownie w WinWord.";
         TEXT[ japanese ] = "‚±‚ÌÌ§²Ù‚ÍAWinWord µÌß¼®İu‚‘¬•Û‘¶v‚Å•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚·BWinWord µÌß¼®İu‚‘¬•Û‘¶v‚ğµÌ‚É‚µ‚Ä‚©‚çAÌ§²Ù‚ğ WinWord ‚Å•Û‘¶‚µ‚È‚¨‚µ‚Ä‚­‚¾‚³‚¢B";
-        TEXT[ chinese_traditional ] = "Àx¦sÀÉ®×±Ä¥Îªº¬O WinWord ¿ï¶µ¡u§Ö³tÀx¦s¡v¤è¦¡¡C½Ğ±z³]©wÃö³¬³o­Ó¿ï¶µ¡MµM«á¦b­«·sÀx¦s³o­ÓÀÉ®×¡C";
+        TEXT[ chinese_traditional ] = "Àx¦sÀÉ®×±Ä¥Îªº¬O WinWord ¿ï¶µ¡u§Ö³tÀx¦s¡v¤è¦¡¡C½Ğ±zÃö³¬³o­Ó¿ï¶µ¡AµM«á¦A­«·sÀx¦s³o­ÓÀÉ®×¡C";
         TEXT[ arabic ] = "Êã ÍİÙ åĞÇ Çáãáİ Úä ØÑíŞ ÎíÇıÑ 'ÇáÍİÙ ÇáÓÑíÚ' İí WinWord. ÇáÑÌÇÁ ÅíŞÇİ ÎÇÕíÉ 'ÇáÓãÇÍ ÈÇáÍİÙ ÇáÓÑíÚ' İí WinWord¡ Ëã  Şã ÈÍİÙ Çáãáİ ãä ÌÏíÏ ÈæÇÓØÉ WinWord.";
         TEXT[ greek ] = "Ôï áñ÷åßï áõôü áğïèçêåıôçêå ìå ôçí åğéëïãŞ 'ÃñŞãïñç áğïèŞêåõóç' ôïõ WinWord. Ğáñáêáëş áğåíåñãïğïéŞóåôå ôçí åğéëïãŞ áõôŞ ôïõ WinWord êáé áğïèçêåıó? ";
         TEXT[ korean ] = "ÀÌ ÆÄÀÏÀº  WinWordÀÇ  'ºü¸¥ ÀúÀå' ¸ğµå·Î ÀúÀåµÇ¾î ÀÖ½À´Ï´Ù. ¿É¼Ç 'ºü¸¥ ÀúÀå Çã¿ë'À» ÇØÁ¦ÇÏ½Ã°í ÆÄÀÏÀ» ´Ù½Ã ÀúÀåÇÏ½Ê½Ã¿À.";
@@ -1432,23 +1432,24 @@ Resource RID_SW_ERRHDL
         TEXT[ russian ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ greek ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ dutch ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
-        TEXT[ french ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ french ] = "Impossible de représenter les caractères suivants dans le jeu de caractères sélectionné : $(ARG1)";
         TEXT[ spanish ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ finnish ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ italian ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ danish ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
-        TEXT[ swedish ] = "Följande tecken kan inte visas i den valda teckenuppsättningen: $(ARG1)";
+        TEXT[ swedish ] = "Följande tecken gick inte att visa i den valda teckenuppsättningen: $(ARG1)";
         TEXT[ polish ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ portuguese_brazilian ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
-        TEXT[ japanese ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ japanese ] = "ˆÈ‰º‚Ì•¶š‚Í‘I‘ğ‚³‚ê‚½•¶š¾¯Ä‚Å‚Í•\\¦‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½: $(ARG1)";
         TEXT[ korean ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
-        TEXT[ chinese_simplified ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ chinese_simplified ] = "ÒÔÏÂµÄ×Ö·ûÎŞ·¨²ÉÓÃÕâ¸öÑ¡ÔñµÄ×Ö·û¼¯ÏÔÊ¾£º$(ARG1)";
         TEXT[ chinese_traditional ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ turkish ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ arabic ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ catalan ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
     };
 };
+
 
 
 
