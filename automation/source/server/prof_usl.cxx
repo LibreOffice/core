@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prof_usl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:27:59 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,19 +146,19 @@ String TTProfiler::GetSysdepProfileLine( SysdepProfileSnapshot *pStart, SysdepPr
 {
     String aProfile;
 
-    aProfile += Pad( pStop->mpsinfo.pr_size, 9);
-    aProfile += Pad( pStop->mpsinfo.pr_rssize, 11);
+    aProfile += Pad( String::CreateFromInt64(pStop->mpsinfo.pr_size), 9);
+    aProfile += Pad( String::CreateFromInt64(pStop->mpsinfo.pr_rssize), 11);
 
 
-    aProfile += Pad( DIFF_MS( pStart, pStop, mprusage.pr_rtime ) / AVER( pStart, pStop, mprusage.pr_count ), 7 );
+    aProfile += Pad( String::CreateFromInt64(DIFF_MS( pStart, pStop, mprusage.pr_rtime ) / AVER( pStart, pStop, mprusage.pr_count )), 7 );
 
 
     ULONG d_utime = DIFF_MS( pStart, pStop, mpstatus.pr_utime ) + DIFF_MS( pStart, pStop, mpstatus.pr_cutime );
     ULONG d_stime = DIFF_MS( pStart, pStop, mpstatus.pr_stime ) + DIFF_MS( pStart, pStop, mpstatus.pr_cstime );
 
-    aProfile += Pad( d_utime, 7 );
-    aProfile += Pad( d_stime, 7 );
-    aProfile += Pad( d_utime + d_stime, 7 );
+    aProfile += Pad( String::CreateFromInt64(d_utime), 7 );
+    aProfile += Pad( String::CreateFromInt64(d_stime), 7 );
+    aProfile += Pad( String::CreateFromInt64(d_utime + d_stime), 7 );
 
     return aProfile;
 };
