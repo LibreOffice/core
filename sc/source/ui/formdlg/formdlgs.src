@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:40:23 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 21:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ TabPage RID_SCTAB_FUNCTION
         QuickHelpText[ arabic ] = "ΚΨΘνή ΗαΟΗαΙ";
         QuickHelpText[ greek ] = "Εφαρμογή συνάρτησης";
         QuickHelpText[ korean ] = "Apply Function";
+        QuickHelpText[ turkish ] = "Funktion όbernehmen";
     };
     ListBox LB_CATEGORY
     {
