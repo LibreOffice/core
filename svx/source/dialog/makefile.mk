@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hjs $ $Date: 2002-02-07 10:49:27 $
+#   last change: $Author: os $ $Date: 2002-02-13 14:25:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -216,6 +216,7 @@ SRC1FILES =  \
         charmap.src \
         checklbx.src \
         fontwork.src \
+        frmsel.src \
         grfpage.src \
         hdft.src \
         hyperdlg.src \
