@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:24:29 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,8 @@ ValueChange::ValueChange(OUString const& _rName,
      ,m_aValueType( implGetValueType(aNewValue,aOldValue) )
      ,m_aValue(aNewValue)
      ,m_aOldValue(aOldValue)
-     ,m_eMode(_eMode)
      ,m_aAttributes(_rAttributes)
+     ,m_eMode(_eMode)
 {
     m_aAttributes.markAsDefault(Change::isToDefault());
 }
@@ -120,8 +120,8 @@ ValueChange::ValueChange(OUString const& _rName,
      ,m_aValueType( aValueType )
      ,m_aValue()
      ,m_aOldValue()
-     ,m_eMode(_eMode)
      ,m_aAttributes(_rAttributes)
+     ,m_eMode(_eMode)
 {
     m_aAttributes.markAsDefault(Change::isToDefault());
 }
@@ -145,8 +145,8 @@ ValueChange::ValueChange(SetToDefault, ValueNode const& aOldValue)
      ,m_aValueType( aOldValue.getValueType() )
      ,m_aValue(aOldValue.getDefault())
      ,m_aOldValue(aOldValue.getValue())
-     ,m_eMode(setToDefault)
      ,m_aAttributes(aOldValue.getAttributes())
+     ,m_eMode(setToDefault)
 {
     m_aAttributes.markAsDefault(true);
 }
@@ -295,10 +295,10 @@ AddNode::~AddNode()
 // -----------------------------------------------------------------------------
 AddNode::AddNode(const AddNode& _aObj)
 : Change(_aObj)
-, m_bReplacing(_aObj.m_bReplacing)
 , m_aOwnNewNode(_aObj.m_aOwnNewNode.cloneSegment())
 , m_aOwnOldNode(_aObj.m_aOwnOldNode.cloneSegment())
 , m_aInsertedTree(_aObj.m_aInsertedTree)
+, m_bReplacing(_aObj.m_bReplacing)
 {
 }
 
