@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: er $ $Date: 2002-04-15 10:44:25 $
+ *  last change: $Author: bm $ $Date: 2002-10-02 12:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,9 +1063,12 @@ void SvXMLUnitConverter::convertTime( ::rtl::OUStringBuffer& rBuffer,
 sal_Bool SvXMLUnitConverter::convertTime( ::com::sun::star::util::DateTime& rDateTime,
                              const ::rtl::OUString& rString )
 {
-    double fTempTime = 0.0;
-    if( convertTime( fTempTime, rString ) )
+    double fCalculatedTime = 0.0;
+    if( convertTime( fCalculatedTime, rString ) )
     {
+        // #101357# declare as volatile to prevent optimization
+        // (gcc 3.0.1 Linux)
+        volatile double fTempTime = fCalculatedTime;
         fTempTime *= 24;
         double fHoursValue = SolarMath::ApproxFloor (fTempTime);
         fTempTime -= fHoursValue;
