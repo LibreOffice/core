@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-30 16:15:07 $
+ *  last change: $Author: gt $ $Date: 2001-11-12 14:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1801,13 +1801,15 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
                     if( mbReplaceNames )
                     {
                         OUString aNewTitle;
+                        sal_Bool bTranslated;
 
                         if( pData->mbIsFolder )
-                            GetTranslatedName( pData->GetTitle(), aNewTitle );
+                            bTranslated = GetTranslatedName( pData->GetTitle(), aNewTitle );
                         else
-                            GetDocTitle( pData->maTargetURL, aNewTitle );
+                            bTranslated = GetDocTitle( pData->maTargetURL, aNewTitle );
 
-                        pData->ChangeTitle( aNewTitle );
+                        if( bTranslated )
+                            pData->ChangeTitle( aNewTitle );
                     }
 
                     maContent.push_back( pData );
