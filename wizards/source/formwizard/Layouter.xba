@@ -172,7 +172,7 @@ Dim sLocText as String
 	End If
 WIZARDERROR:
 	ShowErrorMessage(True)
-	oDocument.UnlockControllers
+	oDocument.UnlockControllers()
 	ToggleLayoutPage(True)
 End Sub
 
@@ -184,7 +184,6 @@ Dim oModel as Object
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
-
 	oModel = oEvent.Source.Model
 	SwitchAlignMode(Val(Right(oModel.Name,1)))
 	ToggleLayoutPage(False)
@@ -203,7 +202,7 @@ Dim oModel as Object
 	End If
 WIZARDERROR:
 	ShowErrorMessage(True)
-	oDocument.UnlockControllers(False)
+	oDocument.UnlockControllers()
 	ToggleLayoutPage(True)
 End Sub
 
@@ -265,15 +264,16 @@ End Sub
 
 
 Sub ToggleLayoutPage(bDoEnable as Boolean, Optional FocusControlName as String)
-	oDialogModel.Enabled = bDoEnable
-	If Not IsMissing(FocusControlName) Then
-		DlgFormDB.GetControl(FocusControlName).SetFocus()
-	End If
+&apos; Todo: Diese Zeile wieder reinnehmen und schauen, ob alles richtig getogglet wird.
+&apos;	oDialogModel.Enabled = bDoEnable
 	If bDoEnable Then
 		ToggleOptionButtons(oDialogModel,(bWithBackGraphic = True))
 		ToggleAlignGroup(bDoEnable)
 		ToggleBorderGroup(bDoEnable)
 	End If
+	If Not IsMissing(FocusControlName) Then
+		DlgFormDB.GetControl(FocusControlName).SetFocus()
+	End If	
 End Sub
 
 
@@ -283,7 +283,7 @@ Dim oShape as Object
 	For i = oDrawPage.Count-1 To 0 Step -1
 		oShape = oDrawPage.GetByIndex(i)
 		If oShape.ShapeType = &quot;com.sun.star.drawing.ControlShape&quot; Then
-			oShape.Dispose
+			oShape.Dispose()
 		End If
 	Next i
 End Sub

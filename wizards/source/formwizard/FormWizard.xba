@@ -90,6 +90,7 @@ Dim SelCount as Integer
 	TexturePath = GetOfficeSubPath(&quot;Gallery&quot;, &quot;www-back/&quot;)
 	WorkPath = GetPathSettings(&quot;Work&quot;)
 	OpenFormDocument()
+	ToggleWindow(False)
 	GetDatabaseNames()
 	InitializeWidthList()
 	LoadLanguage
@@ -126,7 +127,7 @@ Dim SelCount as Integer
 							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(SelIndex, True)
 						ElseIf CommandType = com.sun.star.sdb.CommandType.TABLE Then
 							SelIndex = IndexInArray(sContent, TableNames()
-							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(Ubound(QueryNames()+1 + SelIndex, True)			
+							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(Ubound(QueryNames()+1 + SelIndex, True)		
 						End If
 					End If
 					CurCommandType = CommandType
@@ -141,26 +142,25 @@ Dim SelCount as Integer
 		&apos; Scenario 1: No parameters are given
 		ToggleListboxControls(oDialogModel, False)
 	End If
-
 	DlgFormDB.Title = WizardTitle(1)
 	NumberofStyles = FillupWebListbox(oUcb, &quot;/stl&quot;, DlgFormDB, &quot;lstStyles&quot;, Styles())
-	ImportStyles()
+	CurIndex = GetCurIndex(oDialogModel.lstStyles, Styles(), NumberofStyles,8)
+	SetImportStyle()
+	ConfigurePageStyle()
 	ToggleWindow(True)
 	oDialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
 	ToggleDatabasePage(True)
 	DlgFormDB.GetControl(&quot;lstDatabases&quot;).SetFocus()
-	oDialogModel.cmdGoOn.DefaultButton = True
 	DlgFormDB.Execute()
 	DlgFormDB.Dispose
 	If Not IsNull(oDBConnection) Then
 		oDBConnection.Dispose()
 	End If
 	If bDisposeDoc Then
-		oDocument.Dispose
+		oDocument.Dispose()
 	End If
 WIZARDERROR:
 	ShowErrorMessage(True)
-	ToggleWindow(True)
 End Sub
 
 
@@ -203,10 +203,6 @@ NOFIELDS:
 End Sub
 
 
-Sub CancelFormWizard()
-	DlgFormDB.EndExecute()
-End Sub
-
 
 Sub PreviousStep()
 	If Not bDebug Then
@@ -227,13 +223,10 @@ End Sub
 
 
 Sub NextStep()
-Dim bOldVisible as Boolean
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
 
-	&apos; Note: Unfortunately it is not possible to query the visibility of the imagecontrol directly
-	bOldVisible = oDialogModel.Height &gt; 40
 	Select Case oDialogModel.Step
 		Case 1
 			bControlsAreCreated = Not (CBool(oDialogModel.lstSelFields.Tag))
@@ -251,7 +244,6 @@ Dim bOldVisible as Boolean
 		Case 2
 			StoreForm()
 	End Select
-	DlgFormDB.GetControl(&quot;imgTheme&quot;).Visible = bOldVisible
 	oDialogModel.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_&quot; &amp; oDialogModel.Step &amp; &quot;.bmp&quot;
 	DlgFormDB.Title = WizardTitle(oDialogModel.Step)
 WIZARDERROR:
@@ -260,11 +252,6 @@ End Sub
 
 
 Sub InitializeLayoutSettings()
-	If oPageStyle.BackGraphicLocation = com.sun.star.style.GraphicLocation.TILED Then
-		oDialogModel.optTiled.State = 1
-	Else
-		oDialogModel.optArea.State = 1
-	End If
 	SwitchArrangementButtons(cTabled)
 	SwitchAlignMode(SBALIGNLEFT)
 	SwitchBorderMode(SB3DBORDER)
@@ -305,7 +292,7 @@ Dim sBaseBookmarkName as String
 	FilterNames(0,0) = oFilters.GetByName(&quot;swriter: StarOffice XML (Writer)&quot;).UIName
 	FilterNames(0,1) = &quot;*.sxw&quot;
 	FilterNames(0,2) = &quot;&quot;
-	sTargetPath = StoreDocument(oDocument, FilterNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;_&quot; &amp; TableName, WorkPath)
+	sTargetPath = StoreDocument(oDocument, FilterNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;_&quot; &amp; TableName &amp; &quot;.sxw&quot;, WorkPath)
 	If sTargetPath &lt;&gt; &quot;&quot; Then
 		sBookmarkName = GetFileNamewithoutExtension(FileNameoutofPath(sTargetPath))
 		sBaseBookmarkName = sBookmarkName

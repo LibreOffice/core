@@ -140,7 +140,6 @@ End Function
 
 Sub	ImportStyles()
 Dim OldIndex as Integer
-Dim sImportPath as String
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
@@ -149,16 +148,21 @@ Dim sImportPath as String
 	If CurIndex &lt;&gt; OldIndex Then	
 		ToggleLayoutPage(False)
 		oDocument.LockControllers
-		sImportPath = Styles(8,CurIndex)
-		bWithBackGraphic = LoadNewStyles(oDocument, oDialogModel, CurIndex, sImportPath, Styles(), TexturePath)
-		ControlCaptionsToStandardLayout()
+		SetImportStyle()
 		ToggleOptionButtons(oDialogModel, bWithBackGraphic)	
-		ConfigurePageStyle()	
 		ToggleLayoutPage(True, &quot;lstStyles&quot;)	
-		oDocument.UnlockControllers
+		oDocument.UnlockControllers()
 	End If
 WIZARDERROR:
 	ShowErrorMessage(True)
+End Sub
+
+
+Sub SetImportStyle()
+Dim sImportPath as String
+	sImportPath = Styles(8,CurIndex)
+	bWithBackGraphic = LoadNewStyles(oDocument, oDialogModel, CurIndex, sImportPath, Styles(), TexturePath)
+	ControlCaptionsToStandardLayout()
 End Sub
 
 
@@ -278,9 +282,9 @@ Sub ShowErrorMessage(bEndExecute as Boolean)
 		ToggleWindow(True)
 		Resume LOCERROR
 		LOCERROR:		
+		On Local Error Goto 0
 		If bEndExecute Then
 			DlgFormDB.EndExecute()	
 		End If
 	End If
-End Sub	
-</script:module>
+End Sub</script:module>

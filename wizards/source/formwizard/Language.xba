@@ -27,9 +27,6 @@ Dim sMsgCreatedForm as String
 Dim sMsgErrCouldNotOpenObject as String
 Dim sMsgErrNameToLong as String
 
-
-Dim Form_ilFormTitleSuggestPrefix as String
-
 Dim sTimeAppendix as String
 Dim sDateAppendix as String
 
@@ -58,7 +55,6 @@ Sub LoadLanguage ()
 	sMsgErrCouldNotOpenObject = GetResText (RID_COMMON + 13)
 
 	&apos;	Internal Logic
-	Form_ilFormTitleSuggestPrefix = GetResText(RID_FORM + 3)
 	sDateAppendix = GetResText(RID_FORM + 4)
 	sTimeAppendix = GetResText(RID_FORM + 5)
 	
@@ -70,6 +66,7 @@ End Sub
 Sub SetDialogLanguage ()
 	DlgFormDB = LoadDialog(&quot;FormWizard&quot;, &quot;DlgFormDB&quot;)
 	oDialogModel = DlgFormDB.Model
+
 	With oDialogModel
 		.cmdCancel.Label = GetResText(RID_COMMON + 1)
 		.cmdBack.Label = GetResText(RID_COMMON + 2)

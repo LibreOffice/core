@@ -10,9 +10,7 @@
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="FormWizard.FormWizard.FormGetFields" script:language="StarBasic"/>
   </dlg:menulist>
   <dlg:img dlg:id="imgTheme" dlg:tab-index="3" dlg:left="6" dlg:top="6" dlg:width="258" dlg:height="26"/>
-  <dlg:button dlg:id="cmdCancel" dlg:tab-index="4" dlg:left="6" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34401" dlg:value="cmdCancel">
-   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="FormWizard.FormWizard.CancelFormWizard" script:language="StarBasic"/>
-  </dlg:button>
+  <dlg:button dlg:id="cmdCancel" dlg:tab-index="4" dlg:left="6" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34401" dlg:value="cmdCancel" dlg:button-type="cancel"/>
   <dlg:button dlg:id="cmdHelp" dlg:tab-index="5" dlg:left="63" dlg:top="190" dlg:width="53" dlg:height="14" dlg:tag="34400" dlg:value="cmdHelp" dlg:button-type="help"/>
   <dlg:button dlg:id="cmdBack" dlg:tab-index="6" dlg:left="155" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34402" dlg:value="cmdBack">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="FormWizard.FormWizard.PreviousStep" script:language="StarBasic"/>
@@ -83,7 +81,7 @@
   </dlg:radiogroup>
   <dlg:fixedline dlg:id="hlnBinaries" dlg:tab-index="29" dlg:left="6" dlg:top="158" dlg:width="258" dlg:height="8" dlg:page="1" dlg:value="hlnBinaries"/>
   <dlg:radiogroup>
-   <dlg:radio dlg:id="optTiled" dlg:tab-index="30" dlg:left="156" dlg:top="154" dlg:width="81" dlg:height="10" dlg:page="2" dlg:tag="11" dlg:help-url="HID:34444" dlg:value="optTiled">
+   <dlg:radio dlg:id="optTiled" dlg:tab-index="30" dlg:left="156" dlg:top="154" dlg:width="81" dlg:height="10" dlg:page="2" dlg:tag="11" dlg:help-url="HID:34444" dlg:value="optTiled" dlg:checked="true">
     <script:event script:event-name="on-mouseup" script:location="application" script:macro-name="WebWizard.Common.SetBackGraphicStyle" script:language="StarBasic"/>
    </dlg:radio>
    <dlg:radio dlg:id="optArea" dlg:tab-index="31" dlg:left="156" dlg:top="168" dlg:width="81" dlg:height="10" dlg:page="2" dlg:tag="10" dlg:help-url="HID:34445" dlg:value="optArea">
@@ -94,15 +92,14 @@
   <dlg:fixedline dlg:id="hlnAlign" dlg:tab-index="33" dlg:left="6" dlg:top="143" dlg:width="137" dlg:height="8" dlg:page="2" dlg:value="hlnAlign"/>
   <dlg:fixedline dlg:id="hlnBorderLayout" dlg:tab-index="34" dlg:left="6" dlg:top="83" dlg:width="137" dlg:height="8" dlg:page="2" dlg:value="hlnBorderLayout"/>
   <dlg:fixedline dlg:id="hlnArrangements" dlg:tab-index="35" dlg:left="6" dlg:top="39" dlg:width="137" dlg:height="8" dlg:page="2" dlg:value="hlnArrangements"/>
-  <dlg:button dlg:id="CommandButton1" dlg:tab-index="36" dlg:left="-15" dlg:top="138" dlg:width="0" dlg:height="2" dlg:page="2" dlg:tag="1" dlg:value="CommandButton1"/>
   <dlg:radiogroup>
-   <dlg:radio dlg:id="optAlign0" dlg:tab-index="37" dlg:left="12" dlg:top="154" dlg:width="131" dlg:height="10" dlg:page="2" dlg:help-url="HID:34441" dlg:value="optAlign0">
+   <dlg:radio dlg:id="optAlign0" dlg:tab-index="36" dlg:left="12" dlg:top="154" dlg:width="131" dlg:height="10" dlg:page="2" dlg:help-url="HID:34441" dlg:value="optAlign0">
     <script:event script:event-name="on-performaction" script:location="application" script:macro-name="FormWizard.Layouter.ChangeLabelAlignments" script:language="StarBasic"/>
    </dlg:radio>
-   <dlg:radio dlg:id="optAlign2" dlg:tab-index="38" dlg:left="12" dlg:top="168" dlg:width="131" dlg:height="10" dlg:page="2" dlg:help-url="HID:34442" dlg:value="optAlign2">
+   <dlg:radio dlg:id="optAlign2" dlg:tab-index="37" dlg:left="12" dlg:top="168" dlg:width="131" dlg:height="10" dlg:page="2" dlg:help-url="HID:34442" dlg:value="optAlign2">
     <script:event script:event-name="on-performaction" script:location="application" script:macro-name="FormWizard.Layouter.ChangeLabelAlignments" script:language="StarBasic"/>
    </dlg:radio>
   </dlg:radiogroup>
-  <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="39" dlg:left="6" dlg:top="180" dlg:width="258" dlg:height="6"/>
+  <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="38" dlg:left="6" dlg:top="180" dlg:width="258" dlg:height="6"/>
  </dlg:bulletinboard>
 </dlg:window>
