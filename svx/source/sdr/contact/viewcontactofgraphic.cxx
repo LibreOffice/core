@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofgraphic.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:30:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ namespace sdr
             if(rGrafObj.HasText())
             {
                 // force only text paint at SdrObject
-                rGrafObj.SdrTextObj::DoPaintObject_Wrapper(
+                rGrafObj.SdrTextObj::DoPaintObject(
                     *rDisplayInfo.GetExtendedOutputDevice(),
                     *rDisplayInfo.GetPaintInfoRec());
                 bRetval = sal_True;
@@ -380,7 +380,7 @@ namespace sdr
             if(rGrafObj.HasText())
             {
                 // force only text paint at SdrObject
-                rGrafObj.SdrTextObj::DoPaintObject_Wrapper(
+                rGrafObj.SdrTextObj::DoPaintObject(
                     *rDisplayInfo.GetExtendedOutputDevice(),
                     *rDisplayInfo.GetPaintInfoRec());
                 bRetval = sal_True;
