@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:24:57 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,6 +828,20 @@ static void lcl_AppendDummyTerm(String &rRet)
         APPEND(rRet," {}");
 }
 
+void MathType::HandleNudge()
+{
+    sal_uInt8 nXNudge;
+    *pS >> nXNudge;
+    sal_uInt8 nYNudge;
+    *pS >> nYNudge;
+    if (nXNudge == 128 && nYNudge == 128)
+    {
+        sal_uInt16 nXLongNudge;
+        sal_uInt16 nYLongNudge;
+        *pS >> nXLongNudge;
+        *pS >> nYLongNudge;
+    }
+}
 /*Fabously complicated as many tokens have to be reordered and generally
  *moved around from mathtypes paradigm to starmaths.*/
 int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
@@ -898,7 +912,8 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
         {
             case LINE:
                 {
-                    //if (xfLMOVE(nTag))
+                    if (xfLMOVE(nTag))
+                        HandleNudge();
                     //if (xfLSPACE(nTag))
                     //if (xfRULER(nTag))
 
@@ -1876,22 +1891,32 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                 }
                 break;
             case CHAR:
+                if (xfLMOVE(nTag))
+                    HandleNudge();
                 nRet = HandleChar(nTextStart,nSetSize,nLevel,nTag,nSelector,
                     nVariation,bSilent);
                  break;
             case TMPL:
+                if (xfLMOVE(nTag))
+                    HandleNudge();
                 nRet = HandleTemplate(nLevel,nSelector,nVariation,
                     nLastTemplateBracket);
                 break;
             case PILE:
+                if (xfLMOVE(nTag))
+                    HandleNudge();
                 nRet = HandlePile(nSetAlign,nLevel,nSelector,nVariation);
                 HandleMatrixSeperator(nMatrixRows,nMatrixCols,nCurCol,nCurRow);
                 break;
             case MATRIX:
+                if (xfLMOVE(nTag))
+                    HandleNudge();
                 nRet = HandleMatrix(nLevel,nSelector,nVariation);
                 HandleMatrixSeperator(nMatrixRows,nMatrixCols,nCurCol,nCurRow);
                 break;
             case EMBEL:
+                if (xfLMOVE(nTag))
+                    HandleNudge();
                 HandleEmblishments();
                 break;
             case RULER:
@@ -2841,7 +2866,6 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
 int MathType::HandlePile(int &rSetAlign,int nLevel,sal_uInt8 nSelector,
     sal_uInt8 nVariation)
 {
-    //if (xfLMOVE(nTag))
     *pS >> nHAlign;
     *pS >> nVAlign;
 
@@ -2864,7 +2888,6 @@ int MathType::HandleMatrix(int nLevel,sal_uInt8 nSelector,
     sal_uInt8 nVariation)
 {
     sal_uInt8 nH_just,nV_just,nRows,nCols;
-    //if (xfLMOVE(nTag))
     *pS >> nVAlign;
     *pS >> nH_just;
     *pS >> nV_just;
@@ -2894,7 +2917,6 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
     sal_uInt8 &rVariation, xub_StrLen &rLastTemplateBracket)
 {
     sal_uInt8 nOption; //This appears utterly unused
-    //if (xfLMOVE(nTag))
     *pS >> rSelector;
     *pS >> rVariation;
     *pS >> nOption;
@@ -2944,7 +2966,6 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
 void MathType::HandleEmblishments()
 {
     sal_uInt8 nEmbel;
-    //if (xfLMOVE(nTag))
     do
     {
         *pS >> nEmbel;
@@ -3056,7 +3077,6 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
     //This is a candidate for function recognition, whatever
     //that is!
     }
-    //if (xfLMODE(nTag))
 
     sal_uInt8 nOldTypeFace = nTypeFace;
     *pS >> nTypeFace;
