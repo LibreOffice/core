@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:39:18 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ czech ] = "Celá stránka";
         Text[ hebrew ] = "‮דף שלם‬";
         Text[ hindi ] = "~सम्पूर्ण पृष्ठ";
+        Text[ slovak ] = "~Celá stránka";
     };
     RadioButton BTN_PAGE_WIDTH
     {
@@ -137,6 +138,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ czech ] = "Šířka stránky";
         Text[ hebrew ] = "‮לפי רוחב הדף‬";
         Text[ hindi ] = "~पृष्ठ चौड़ाई";
+        Text[ slovak ] = "Šírka ~stránky";
     };
     RadioButton BTN_OPTIMAL
     {
@@ -170,6 +172,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ czech ] = "Optimální";
         Text[ hebrew ] = "‮אופטימלי‬";
         Text[ hindi ] = "~योग्य";
+        Text[ slovak ] = "~Optimálny";
     };
     RadioButton BTN_200
     {
@@ -233,6 +236,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ czech ] = "Proměnný";
         Text[ hebrew ] = "‮משתנה‬";
         Text[ hindi ] = "~वेरिऐबल";
+        Text[ slovak ] = "~Premenný";
     };
     MetricField ED_USER
     {
@@ -277,6 +281,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ czech ] = "Faktor zvětšení";
         Text[ hebrew ] = "‮זום פקטור‬";
         Text[ hindi ] = "झूम फॉक्टर";
+        Text[ slovak ] = "Faktor zväčšenia";
     };
     OKButton BTN_ZOOM_OK
     {
@@ -319,8 +324,11 @@ ModalDialog RID_SVXDLG_ZOOM
     Text[ czech ] = "Lupa";
     Text[ hebrew ] = "‮זום‬";
     Text[ hindi ] = "झूम";
+    Text[ slovak ] = "Lupa";
 };
  // ********************************************************************** EOF
+
+
 
 
 
