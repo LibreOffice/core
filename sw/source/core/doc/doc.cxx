@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:07:35 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 15:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,6 @@
 #ifndef _IPOBJ_HXX //autogen
 #include <so3/ipobj.hxx>
 #endif
-#ifndef _WORDSEL_HXX //autogen
-#include <svtools/wordsel.hxx>
-#endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
 #endif
@@ -104,6 +101,9 @@
 #endif
 #ifndef SMDLL0_HXX //autogen
 #include <starmath/smdll0.hxx>
+#endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
 #endif
 
 #ifndef _SWMODULE_HXX //autogen
@@ -447,12 +447,14 @@ BOOL SwDoc::Insert( const SwPaM &rRg, const String &rStr, BOOL bHintExpand )
         USHORT nUndoSize = pUndos->Count();
         xub_StrLen nInsPos = pPos->nContent.GetIndex();
         SwUndoInsert * pUndo;
+        CharClass& rCC = GetAppCharClass();
+
         if( 0 == nUndoSize || UNDO_INSERT !=
                 ( pUndo = (SwUndoInsert*)(*pUndos)[ --nUndoSize ])->GetId() ||
             !pUndo->CanGrouping( *pPos ))
         {
             pUndo = new SwUndoInsert( pPos->nNode, nInsPos, 0,
-                            !WordSelection::IsNormalChar( rStr.GetChar( 0 )) );
+                            !rCC.isLetterNumeric( rStr, 0 ) );
             AppendUndo( pUndo );
         }
 
@@ -463,7 +465,7 @@ BOOL SwDoc::Insert( const SwPaM &rRg, const String &rStr, BOOL bHintExpand )
             if( !pUndo->CanGrouping( rStr.GetChar( i ) ))
             {
                 pUndo = new SwUndoInsert( pPos->nNode, nInsPos,  1,
-                            !WordSelection::IsNormalChar( rStr.GetChar( i )) );
+                            !rCC.isLetterNumeric( rStr, i ) );
                 AppendUndo( pUndo );
             }
         }

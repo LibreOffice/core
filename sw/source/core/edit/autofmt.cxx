@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 11:11:01 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 15:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1964,6 +1964,8 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
     BOOL bFirst = aFlags.bCptlSttSntnc, bFirstSent = bFirst;
     sal_Unicode cChar;
 
+    CharClass& rAppCC = GetAppCharClass();
+
     do {
         while( nPos < pTxt->Len() && IsSpace( cChar = pTxt->GetChar( nPos ) ))
             ++nPos;
@@ -2111,7 +2113,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
 //alle Wortrenner loesen die Autokorrektur aus!
 //          case ' ':
 //          case '\t':
-                if( !WordSelection::IsNormalChar( cChar ))
+                if( !rAppCC.isLetterNumeric( *pTxt, nPos ))
                 {
                     --nPos;     // ++nPos von dem for ungueltig machen !
                     ++bBreak;

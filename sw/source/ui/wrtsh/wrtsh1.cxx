@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 12:06:30 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 15:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@
 #endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
+#endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
 #endif
 
 #ifndef _FMTFTN_HXX //autogen
@@ -296,11 +299,11 @@ void SwWrtShell::InsertByWord( const String & rStr)
 {
     if( rStr.Len() )
     {
-        BOOL bDelim = WordSelection::IsNormalChar( rStr.GetChar(0) );
+        BOOL bDelim = GetAppCharClass().isLetterNumeric( rStr, 0 );
         xub_StrLen nPos = 0, nStt = 0;
         for( ; nPos < rStr.Len(); nPos++ )
            {
-            BOOL bTmpDelim = WordSelection::IsNormalChar( rStr.GetChar( nPos ) );
+            BOOL bTmpDelim = GetAppCharClass().isLetterNumeric( rStr, nPos );
             if( bTmpDelim != bDelim )
             {
                 Insert( rStr.Copy( nStt, nPos - nStt ));
@@ -1569,6 +1572,9 @@ void SwWrtShell::NewCoreSelection()
 /*************************************************************************
 
    $Log: not supported by cvs2svn $
+   Revision 1.3  2000/10/25 12:06:30  jp
+   Spellchecker/Hyphenator are not longer member of the shells
+
    Revision 1.2  2000/10/06 13:41:54  jp
    should changes: don't use IniManager
 

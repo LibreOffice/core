@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acorrect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-18 11:54:58 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 15:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _WORDSEL_HXX
-#include <svtools/wordsel.hxx>
-#endif
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 15:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,11 @@
 #ifndef _SFXMACITEM_HXX //autogen
 #include <svtools/macitem.hxx>
 #endif
-#ifndef _WORDSEL_HXX
-#include <svtools/wordsel.hxx>
-#endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
+#endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
 #endif
 
 
@@ -845,13 +845,15 @@ int SwWrtShell::IntelligentCut(int nSelection, BOOL bCut)
     if( IsAddMode() || !(nSelection & SEL_TXT) )
         return FALSE;
 
-    const sal_Unicode cFirst = GetChar(FALSE);
-    const sal_Unicode cLast = GetChar(TRUE, -1);
+    String sTxt;
+    CharClass& rCC = GetAppCharClass();
+
         // wenn das erste und das letzte Zeichen kein Wortzeichen ist,
         // ist kein Wort selektiert.
-    if( !WordSelection::IsNormalChar( cFirst ) ||
-        !WordSelection::IsNormalChar( cLast ) )
+    if( !rCC.isLetterNumeric( ( sTxt = GetChar(FALSE)), 0 ) ||
+        !rCC.isLetterNumeric( ( sTxt = GetChar(TRUE, -1)), 0 ) )
         return NO_WORD;
+
     const sal_Unicode cPrev = GetChar(FALSE, -1);
     const sal_Unicode cNext = GetChar(TRUE);
 
@@ -860,9 +862,11 @@ int SwWrtShell::IntelligentCut(int nSelection, BOOL bCut)
     if(!cWord && cPrev && cNext &&
         CH_TXTATR_BREAKWORD != cPrev && CH_TXTATR_INWORD != cPrev &&
         CH_TXTATR_BREAKWORD != cNext && CH_TXTATR_INWORD != cNext &&
-       !WordSelection::IsNormalChar(cPrev) && !WordSelection::IsNormalChar(cNext))
+        !rCC.isLetterNumeric( ( sTxt = cPrev), 0 ) &&
+        !rCC.isLetterNumeric( ( sTxt = cNext), 0 ) )
        cWord = WORD_NO_SPACE;
-    if(cWord == WORD_NO_SPACE && cPrev == ' ')
+
+    if(cWord == WORD_NO_SPACE && ' ' == cPrev )
     {
         cWord = WORD_SPACE_BEFORE;
             // Space davor loeschen
@@ -957,11 +961,14 @@ long SwWrtShell::MoveText(const Point *pPt,BOOL)
 
           Source Code Control System - Header
 
-          $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/wrtsh/select.cxx,v 1.1.1.1 2000-09-18 17:14:53 hr Exp $
+          $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/wrtsh/select.cxx,v 1.2 2000-10-25 15:36:07 jp Exp $
 
           Source Code Control System - Update
 
           $Log: not supported by cvs2svn $
+          Revision 1.1.1.1  2000/09/18 17:14:53  hr
+          initial import
+
           Revision 1.173  2000/09/18 16:06:26  willem.vandorp
           OpenOffice header added.
 

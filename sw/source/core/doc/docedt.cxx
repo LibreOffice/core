@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 15:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
-#ifndef _WORDSEL_HXX //autogen
-#include <svtools/wordsel.hxx>
-#endif
 #ifndef _SVX_CSCOITEM_HXX //autogen
 #include <svx/cscoitem.hxx>
 #endif
@@ -88,6 +85,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
 #endif
 
 #ifndef _FMTANCHR_HXX //autogen
@@ -731,7 +731,9 @@ sal_Bool SwDoc::Insert( const SwPaM &rRg, sal_Unicode c )
         else
             AppendUndo( new SwUndoInsert( rPos.nNode,
                                         rPos.nContent.GetIndex(), 1,
-                                        !WordSelection::IsNormalChar( c ) ));
+                                        !GetAppCharClass().isLetterNumeric(
+                                            pNode->GetTxt(),
+                                            rPos.nContent.GetIndex() - 1 )));
     }
 
     if( IsRedlineOn() || (!IsIgnoreRedline() && pRedlineTbl->Count() ))
@@ -2239,8 +2241,8 @@ sal_Bool SwDoc::DelFullPara( SwPaM& rPam )
             }
         }
 
-        rPam.GetPoint()->nContent.Assign( 0, 0 );
-        rPam.GetMark()->nContent.Assign( 0, 0 );
+        rPam.GetBound( TRUE ).nContent.Assign( 0, 0 );
+        rPam.GetBound( FALSE ).nContent.Assign( 0, 0 );
         GetNodes().Delete( aRg.aStart, nNodeDiff+1 );
     }
     rPam.DeleteMark();

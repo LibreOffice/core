@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 15:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 #ifndef _SWCRSR_HXX
 #define _SWCRSR_HXX
 
-#ifndef _WORDSEL_HXX //autogen
-#include <svtools/wordsel.hxx>
-#endif
 #ifndef _PAM_HXX //autogen
 #include <pam.hxx>
 #endif
@@ -160,16 +157,6 @@ public:
                 const SearchParam* pTextPara = 0,
                 const SfxItemSet* rReplSet = 0 );
 
-/*  int IsWordFNC( FNIsWord fnIsWord ) const;
-    int GoWordFNC( FNGoWord fnGoWord );
-    FASTBOOL IsStartWord()const { return IsWordFNC( WordSelection::IsStartWord ); }
-    FASTBOOL IsEndWord() const  { return IsWordFNC( WordSelection::IsEndWord ); }
-    FASTBOOL IsInWord() const   { return IsWordFNC( WordSelection::IsInWord ); }
-    FASTBOOL GoStartWord()  { return GoWordFNC( WordSelection::GoStartWord ); }
-    FASTBOOL GoEndWord()    { return GoWordFNC( WordSelection::GoEndWord ); }
-    FASTBOOL GoNextWord()   { return GoWordFNC( WordSelection::GoNextWord ); }
-    FASTBOOL GoPrevWord()   { return GoWordFNC( WordSelection::GoPrevWord ); }
-*/
     FASTBOOL IsStartWord()const;
     FASTBOOL IsEndWord() const;
     FASTBOOL IsInWord() const;

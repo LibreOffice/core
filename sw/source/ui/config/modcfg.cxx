@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-10-19 13:26:48 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 15:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,6 @@
 #endif
 #ifndef _SVX_SVXENUM_HXX //autogen
 #include <svx/svxenum.hxx>
-#endif
-#ifndef _WORDSEL_HXX
-#include <svtools/wordsel.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-20 14:46:42 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 15:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,20 +85,15 @@
 #ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
 #endif
-#ifndef _WORDSEL_HXX //autogen
-#include <svtools/wordsel.hxx>
-#endif
 #ifndef _LINGU_LNGPROPS_HHX_
 #include <lingu/lngprops.hxx>
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
 #include <com/sun/star/text/WordType.hpp>
 #endif
@@ -118,8 +113,9 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>      // GetDoc()
 #endif
-
-#include "frmsh.hxx"
+#ifndef _FRMSH_HXX
+#include <frmsh.hxx>
+#endif
 #ifndef _TXATBASE_HXX //autogen
 #include <txatbase.hxx>
 #endif
@@ -150,9 +146,15 @@
 #ifndef _SWFONT_HXX
 #include <swfont.hxx>   // GetSystemLang
 #endif
-#include "txttypes.hxx"
-#include "breakit.hxx"
-#include "crstate.hxx"
+#ifndef _TXTTYPES_HXX
+#include <txttypes.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _CRSTATE_HXX
+#include <crstate.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -414,45 +416,18 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 XubString SwTxtNode::GetCurWord( xub_StrLen nPos )
 {
     ASSERT( nPos<=aText.Len() , "SwTxtNode::GetCurWord: Pos hinter String?");
-    xub_StrLen nTxtLen = aText.Len();
-    if( !nTxtLen )
+    if( !aText.Len() )
         return aText;
 
-    xub_StrLen nBegin, nLen;
+    Boundary aBndry;
+    if( pBreakIt->xBreak.is() )
+        aBndry = pBreakIt->xBreak->getWordBoundary(
+                    aText, nPos, pBreakIt->GetLocale( GetLang( nPos ) ),
+                    WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/, TRUE );
 
-    nBegin = WordSelection::GoStartWord( aText, nPos );
-    if( STRING_NOTFOUND == nBegin )
-    {
-        nBegin = 0;
-        nLen = 0;
-    }
-    else
-    {
-        nLen = WordSelection::GoEndWord( aText, nBegin ) - nBegin;
-
-        if( IsSymbol( nBegin ) )
-            nLen = 0;
-        else
-        {
-            // Sonderbehandlung von > ' <, z.B. doesn't
-            xub_StrLen nNewBegin = nBegin + nLen;
-            if ( nNewBegin < nTxtLen && '\'' == aText.GetChar( nNewBegin ) )
-            {
-                // ist das Zeichen hinter dem Wort ein > ' <
-                // dann eventuell das Wort verlaengern
-                xub_StrLen nNewLen;
-                nNewLen = WordSelection::GoEndWord( aText, nNewBegin );
-                nNewBegin = WordSelection::GoStartWord( aText, nNewLen );
-                if( STRING_NOTFOUND != nNewBegin )
-                {
-                    nNewLen -= nNewBegin;
-                    if( nNewBegin == nBegin + nLen + 1 )
-                        nLen += nNewLen + 1;
-                }
-            }
-        }
-    }
-    return aText.Copy( nBegin, nLen );
+    if( aBndry.endPos != aBndry.startPos && IsSymbol( aBndry.startPos ) )
+        aBndry.endPos = aBndry.startPos;
+    return aText.Copy( aBndry.startPos, aBndry.endPos - aBndry.startPos );
 }
 
 

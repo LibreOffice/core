@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:29:22 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 15:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,13 +101,21 @@ SO2_DECL_REF(SvLinkName)
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
 #endif
-#ifndef _WORDSEL_HXX //autogen
-#include <svtools/wordsel.hxx>
-#endif
 #ifndef _ZFORLIST_HXX //autogen
 #define _ZFORLIST_DECLARE_TABLE
 #include <svtools/zforlist.hxx>
 #endif
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HDL
+#include <com/sun/star/text/WordType.hdl>
+#endif
+
 
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
@@ -187,13 +195,12 @@ SO2_DECL_REF(SvLinkName)
 #ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
 #endif
 
+
+using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
@@ -402,17 +409,27 @@ void SwDoc::ResetAttr( const SwPaM &rRg, BOOL bTxtAttr,
             nMkPos = *pURLAttr->GetStart();
             nPtPos = *pURLAttr->GetEnd();
         }
-        else if( WordSelection::IsInWord( rStr, nPtPos ) &&
-            !WordSelection::IsStartWord( rStr, nPtPos ) &&
-            !WordSelection::IsEndWord( rStr, nPtPos ) &&
-            USHRT_MAX != ( nMkPos = WordSelection::GoStartWord( rStr, nPtPos )) &&
-            USHRT_MAX != ( nPtPos = WordSelection::GoEndWord( rStr, nPtPos )) )
-            ;
         else
         {
-            nPtPos = nMkPos = rSt.GetIndex();
-            if( bTxtAttr )
-                pTxtNd->DontExpandFmt( rSt, TRUE );
+            Boundary aBndry;
+            if( pBreakIt->xBreak.is() )
+                aBndry = pBreakIt->xBreak->getWordBoundary(
+                            pTxtNd->GetTxt(), nPtPos,
+                            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
+                            WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
+                            TRUE );
+
+            if( aBndry.startPos < nPtPos && nPtPos < aBndry.endPos )
+            {
+                nMkPos = aBndry.startPos;
+                nPtPos = aBndry.endPos;
+            }
+            else
+            {
+                nPtPos = nMkPos = rSt.GetIndex();
+                if( bTxtAttr )
+                    pTxtNd->DontExpandFmt( rSt, TRUE );
+            }
         }
 
         rSt = nMkPos;
@@ -737,14 +754,24 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                 nMkPos = *pURLAttr->GetStart();
                 nPtPos = *pURLAttr->GetEnd();
             }
-            else if( WordSelection::IsInWord( rStr, nPtPos ) &&
-                    !WordSelection::IsStartWord( rStr, nPtPos ) &&
-                    !WordSelection::IsEndWord( rStr, nPtPos ) &&
-                USHRT_MAX != ( nMkPos = WordSelection::GoStartWord( rStr, nPtPos )) &&
-                USHRT_MAX != ( nPtPos = WordSelection::GoEndWord( rStr, nPtPos )) )
-                ;
             else
-                nPtPos = nMkPos = rSt.GetIndex();
+            {
+                Boundary aBndry;
+                if( pBreakIt->xBreak.is() )
+                    aBndry = pBreakIt->xBreak->getWordBoundary(
+                                pTxtNd->GetTxt(), nPtPos,
+                                pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
+                                WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
+                                TRUE );
+
+                if( aBndry.startPos < nPtPos && nPtPos < aBndry.endPos )
+                {
+                    nMkPos = aBndry.startPos;
+                    nPtPos = aBndry.endPos;
+                }
+                else
+                    nPtPos = nMkPos = rSt.GetIndex();
+            }
 
             // erstmal die zu ueberschreibenden Attribute aus dem
             // SwpHintsArray entfernen, wenn die Selektion den gesamten

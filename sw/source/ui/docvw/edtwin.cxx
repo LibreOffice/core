@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:13:21 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 15:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,6 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
-#ifndef _WORDSEL_HXX
-#include <svtools/wordsel.hxx>
-#endif
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
 #endif
@@ -186,6 +183,9 @@
 #endif
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
+#endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
 #endif
 
 #ifndef _EDTWIN_HXX //autogen
@@ -1474,7 +1474,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
         case KS_InsChar:
         if( !rSh.HasReadonlySel() )
         {
-            if( bChkInsBlank && WordSelection::IsNormalChar( aCh ) &&
+            BOOL bIsNormalChar = GetAppCharClass().isLetterNumeric(
+                                                        String( aCh ), 0 );
+            if( bChkInsBlank && bIsNormalChar &&
                 (aInBuffer.Len() || !rSh.IsSttPara() || !rSh.IsEndPara() ))
             {
                 // vor dem Zeichen noch ein Blank einfuegen. Dieses
@@ -1501,9 +1503,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                         ChgToEnEmDash | SetINetAttr |
                                         Autocorrect ) &&
                 '\"' != aCh && '\'' != aCh && '*' != aCh && '_' != aCh &&
-//              !Application::GetAppInternational().IsAlphaNumeric(
-//                  STR_HACK( aCh ))
-                !WordSelection::IsNormalChar( aCh )
+                !bIsNormalChar
                 )
             {
                 FlushInBuffer( &rSh );
@@ -3958,6 +3958,9 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
 /***********************************************************************
 
         $Log: not supported by cvs2svn $
+        Revision 1.2  2000/10/05 12:13:21  jp
+        should change: remove image
+
         Revision 1.1.1.1  2000/09/18 17:14:35  hr
         initial import
 
