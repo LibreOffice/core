@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:55:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 14:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1010,7 +1010,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, BOOL bLoadLibs )
         ( ManagerStreamName, eStreamReadMode );
 
     String aStorName( rStorage.GetName() );
-    DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
+    // #i13114 removed, DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
 
     if ( !xManagerStream.Is() || xManagerStream->GetError() || ( xManagerStream->Seek( STREAM_SEEK_TO_END ) == 0 ) )
     {
@@ -1019,7 +1019,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, BOOL bLoadLibs )
     }
 
     aStorageName = INetURLObject(aStorName, INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
-    DBG_ASSERT(aStorageName.Len() != 0, "Bad storage name");
+    // #i13114 removed, DBG_ASSERT(aStorageName.Len() != 0, "Bad storage name");
 
     String aRealStorageName = aStorageName;  // fuer relative Pfade, kann durch BaseURL umgebogen werden.
 
@@ -1617,13 +1617,13 @@ BOOL BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorag
     if ( pCurStorage )
     {
         String aStorName( pCurStorage->GetName() );
-        DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
+        // #i13114 removed, DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
 
         INetURLObject aCurStorageEntry(aStorName, INET_PROT_FILE);
-        DBG_ASSERT(aCurStorageEntry.GetMainURL( INetURLObject::NO_DECODE ).Len() != 0, "Bad storage name");
+        // #i13114 removed, DBG_ASSERT(aCurStorageEntry.GetMainURL( INetURLObject::NO_DECODE ).Len() != 0, "Bad storage name");
 
         INetURLObject aStorageEntry(aStorageName, INET_PROT_FILE);
-        DBG_ASSERT(aCurStorageEntry.GetMainURL( INetURLObject::NO_DECODE ).Len() != 0, "Bad storage name");
+        // #i13114 removed, DBG_ASSERT(aCurStorageEntry.GetMainURL( INetURLObject::NO_DECODE ).Len() != 0, "Bad storage name");
 
         if ( aCurStorageEntry == aStorageEntry )
             xStorage = pCurStorage;
