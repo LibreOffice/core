@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-14 13:49:42 $
+ *  last change: $Author: mba $ $Date: 2001-09-19 09:24:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1607,25 +1607,20 @@ void SfxMedium::GetMedium_Impl()
                 pImp->bDontCallDoneLinkOnSharingError = sal_False;
                 Done_Impl( ERRCODE_IO_NOTEXISTS );
             }
-            else if ( pImp->xLockBytes->GetError() == ERRCODE_IO_ACCESSDENIED && bIsWritable && bAllowReadOnlyMode )
+            else if ( pImp->xLockBytes->GetError() == ERRCODE_IO_ACCESSDENIED && bIsWritable && bAllowReadOnlyMode ||
+                    pImp->xLockBytes->GetError() == ERRCODE_IO_NOTSUPPORTED )
             {
-                BOOL bIgnoreReadonly = FALSE;
-                StreamMode aOldMode = GetOpenMode();
-
-                if ( pURLObj && ( pURLObj->GetProtocol() == INET_PROT_HTTP ) )
-                    bIgnoreReadonly = TRUE;
-                if ( ! bIgnoreReadonly )
+                if ( pImp->xLockBytes->GetError() == ERRCODE_IO_ACCESSDENIED )
+                {
                     GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
+                    SetOpenMode(SFX_STREAM_READONLY, sal_False);
+                }
 
-                SetOpenMode(SFX_STREAM_READONLY, sal_False);
                 ResetError();
                 pImp->bDownloadDone = sal_False;
                 pImp->bDontCallDoneLinkOnSharingError = sal_False;
                 pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes(
-                        GetContent(), aProps, nStorOpenMode, xInteractionHandler, pHandler );
-
-                if ( bIgnoreReadonly )
-                    SetOpenMode( aOldMode, sal_False, sal_True );
+                        GetContent(), aProps, SFX_STREAM_READONLY, xInteractionHandler, pHandler );
 
                 if ( !pHandler && !pImp->bDownloadDone )
                     Done_Impl( pImp->xLockBytes->GetError() );
