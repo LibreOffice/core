@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CannotActivateFactoryException.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
     classpath, or a missing java installation. The Message should
     contain some more detailed explanations.
  */
-exception CannotActivateFactoryException: com::sun::star::uno::Exception
+published exception CannotActivateFactoryException: com::sun::star::uno::Exception
 {
 };
 
