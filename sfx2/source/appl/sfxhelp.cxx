@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-08 16:19:17 $
+ *  last change: $Author: pb $ $Date: 2000-12-10 14:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
             else
             {
                 pHlpWin->setContainerWindow( xTask->getContainerWindow() );
-                pHlpWin->SetFactory( aHelpModuleName );
+                pHlpWin->SetFactory( aHelpModuleName, sal_True );
                 xTask->getContainerWindow()->setVisible( sal_True );
             }
         }
