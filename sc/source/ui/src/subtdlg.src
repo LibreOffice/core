@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 12:55:47 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 09:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ chinese_traditional ] = "°Ο°μ¥ύ«φ·ΣΈs²Υ±Ζ§Η(~S)";
         Text[ arabic ] = "έΡÒ ΗαδΨΗή ήΘα Παί ΝΣΘ ΗαγΜγζΪΗΚ";
         Text[ greek ] = "Να γίνει πριν ταξινόμη~ση της περιοχής κατά ομάδες";
-        Text[ korean ] = "±Χ·μΏ΅ µϋ¶σ Ήόΐ§Έ¦ »ηΐόΏ΅ ΊΠ·ω(~S)";
+        Text[ korean ] = "±Χ·μΏ΅ µϋ¶σ Ήόΐ§Έ¦ »ηΐόΏ΅ Α¤·Δ(~S)";
         Text[ turkish ] = "Bφlόmό φnce gruplara gφre ~sύrala";
         Text[ language_user1 ] = " ";
     };
