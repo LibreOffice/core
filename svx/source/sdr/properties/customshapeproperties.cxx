@@ -2,9 +2,9 @@
  *
  *  $RCSfile: customshapeproperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:15:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
 #endif
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -87,12 +90,12 @@ namespace sdr
             return *(new SfxItemSet(rPool,
 
                 // ranges from SdrAttrObj
-                SDRATTR_START, SDRATTRSET_SHADOW,
-                SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+                SDRATTR_START, SDRATTR_SHADOW_LAST,
+                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
                 // Graphic Attributes
-                SDRATTR_GRAF_FIRST, SDRATTRSET_GRAF,
+                SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST,
 
                 // 3d Properties
                 SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
