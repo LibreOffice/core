@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XRowSetApproveBroadcaster.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:31 $
+ *  last change:$Date: 2003-09-08 10:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,14 @@
 
 package ifc.sdb;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.lang.EventObject;
 import com.sun.star.sdb.RowChangeEvent;
 import com.sun.star.sdb.XRowSetApproveBroadcaster;
 import com.sun.star.sdb.XRowSetApproveListener;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * <code>com.sun.star.sdb.XRowSetApproveBroadcaster</code> interface test. <p>
@@ -153,7 +154,6 @@ public class _XRowSetApproveBroadcaster extends MultiMethodTest {
         public void disposing(EventObject ev) {}
     }
     private TestListener listener1 = null ;
-    private TestListener listener2 = null ;
 
     private RowSetApproveChecker checker = null ;
 
