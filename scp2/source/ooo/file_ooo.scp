@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: hr $ $Date: 2004-03-09 10:13:30 $
+*  last change: $Author: svesik $ $Date: 2004-04-20 12:21:50 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -482,7 +482,7 @@ File gid_File_Jar_Accessbridge
     TXT_FILE_BODY;
     Name = "java_uno_accessbridge.jar";
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE,SETUPZIP);
+    Styles = (PACKED,DONT_OVERWRITE,SETUPZIP, UNO_COMPONENT);
 End
 
 #endif
@@ -572,7 +572,7 @@ End
 
 #ifdef SOLAR_JAVA
 
-STD_JAR_FILE( gid_File_Jar_Report, report )
+UNO_JAR_FILE( gid_File_Jar_Report, report )
 
 #endif
 
@@ -600,25 +600,25 @@ End
 
 #ifdef SOLAR_JAVA
 
-STD_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
+UNO_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
 
 #endif
 
 #ifdef SOLAR_JAVA
 
-STD_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
+UNO_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
 
 #endif
 
 #ifdef SOLAR_JAVA
 
-STD_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
+UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
 
 #endif
 
 #ifdef SOLAR_JAVA
 
-STD_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
+UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
 
 #endif
 
