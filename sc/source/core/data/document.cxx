@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:43:52 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2892,6 +2892,14 @@ const ScPatternAttr* ScDocument::GetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab 
 {
     if ( ValidTab(nTab)  && pTab[nTab] )
         return pTab[nTab]->GetPattern( nCol, nRow );
+    return NULL;
+}
+
+
+const ScPatternAttr* ScDocument::GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const
+{
+    if ( ValidTab(nTab)  && pTab[nTab] )
+        return pTab[nTab]->GetMostUsedPattern( nCol, nStartRow, nEndRow );
     return NULL;
 }
 
