@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-12 15:22:59 $
+ *  last change: $Author: sj $ $Date: 2002-05-31 08:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1894,28 +1894,14 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT3
             Point aPos( rPos );
             if ( i > 0 )
                 aPos.X() += pDX[ i - 1 ];
-            Size aSize( aVirDev.GetTextWidth( nChar ), aNormSize.Height() );
-            switch( maFont.GetAlign() )
-            {
-                case( ALIGN_TOP ) :
-                break;
-
-                case( ALIGN_BOTTOM ) :
-                    aPos.Y() -= aMetric.GetLineHeight();
-                break;
-
-                default:
-                case ( ALIGN_BASELINE ) :
-                    aPos.Y() -= aMetric.GetAscent();
-                break;
-            }
             if ( nRotation )
             {
                 aPolyDummy.SetPoint( aPos, 0 );
                 aPolyDummy.Rotate( rPos, nRotation );
                 aPos = aPolyDummy.GetPoint( 0 );
             }
-            if ( aVirDev.GetGlyphOutline( nChar, aPolyPoly, sal_True ) )
+            String aString( nChar );
+            if ( aVirDev.GetTextOutline( aPolyPoly, aString ) )
             {
                 ImplWriteLine( "pum" );
                 // always adjust text position to match baseline alignment
