@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XEnumeration.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:39 $
+ *  last change:$Date: 2003-02-03 16:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@ import com.sun.star.uno.XInterface;
 import lib.MultiMethodTest;
 import lib.Status;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
 * Testing <code>com.sun.star.container.XEnumeration</code>
 * interface methods :
@@ -99,18 +102,7 @@ public class _XEnumeration extends MultiMethodTest {
     */
     public void _hasMoreElements() {
         boolean result = true;
-        // this method runs twice so look if holder.Enum is empty
-        if ( Enum == null ) {
-            Enum  = (XEnumerationAccess) tEnv.getObjRelation("ENUM");
-            if ( Enum == null ) {
-                // SKIPPED.FAILED - the ObjectRelation is not available
-                Status.failed("ObjectRelation('ENUM') XEnumerationAccess n.a.");
-                return;
-            } else {
-                // create an enumeration
-                oObj = Enum.createEnumeration();
-            }
-        }
+
         log.println("get all elements");
         while ( oObj.hasMoreElements() ) {
             try {
@@ -146,7 +138,7 @@ public class _XEnumeration extends MultiMethodTest {
         log.println("additional call must throw NoSuchElementException");
 
         try {
-            XInterface oAny = (XInterface)oObj.nextElement();
+            Object oAny = oObj.nextElement();
             log.println("nextElement: no exception!");
             result = false;
         } catch (WrappedTargetException e) {
