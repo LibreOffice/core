@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProxyFactory_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:10:42 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 11:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,14 +84,14 @@ public final class ProxyFactory_Test extends ComplexTestCase {
     public void testQueryInterface() {
         TestRequestHandler handler = new TestRequestHandler();
         Type type = new Type(XNamingService.class);
-        Object proxy = new ProxyFactory(handler).create("TestOID", type);
+        Object proxy = new ProxyFactory(handler, null).create("TestOID", type);
         assure("", proxy == ((IQueryInterface) proxy).queryInterface(type));
         assure("", proxy == UnoRuntime.queryInterface(type, proxy));
     }
 
     public void testExceptionHandling() throws Exception {
         TestRequestHandler handler = new TestRequestHandler();
-        Object proxy = new ProxyFactory(handler).create(
+        Object proxy = new ProxyFactory(handler, null).create(
             "TestOID", new Type(XNamingService.class));
         testExceptions(
             handler,
