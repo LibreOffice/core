@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DisableCommandsTest.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:42:29 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 12:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -115,11 +115,12 @@ public class DisableCommandsTest extends java.lang.Object {
             xDoc.getText().setString("You can now check the disabled commands. The "
                                      +"following commands are disabled:\n\n"
                                      +"   Open...\n   Exit\n   Select All\n   "
-                                     +"About StarOffice|OpenOffice\n\nPress a key "
-                                     +"in the shell where you have started the "
-                                     +"example to enable the commands!\n\nCheck the"
-                                     +" commands again and press a key to finish "
-                                     +"the example and close the document.");
+                                     +"About StarOffice|OpenOffice\n\nPress "
+                                     + "\"return\" in the shell where you have "
+                                     + "started the example to enable the "
+                                     + "commands!\n\nCheck the commands again and "
+                                     + "press once more \"return\" to finish the "
+                                     + "example and close the document.");
 
             // ensure that the document content is optimal visible
             com.sun.star.frame.XModel xModel =
@@ -155,7 +156,7 @@ public class DisableCommandsTest extends java.lang.Object {
             // disabled
             System.out.println("\nYou can now check the disabled commands.\n"
                                +"Please press 'return' to enable the commands!");
-            while ( System.in.read() != 13 );
+            waitForUserInput();
 
             // Remove disable commands to make Office usable again
             enableCommands();
@@ -165,7 +166,7 @@ public class DisableCommandsTest extends java.lang.Object {
             System.out.println("Check again the now enabled commands.\n"
                                +"Please press 'return' to finish the example and "
                                +"close the document!");
-            while ( System.in.read() != 13 );
+            waitForUserInput();
 
             // close test document
             com.sun.star.util.XCloseable xCloseable = (com.sun.star.util.XCloseable)
@@ -185,6 +186,16 @@ public class DisableCommandsTest extends java.lang.Object {
         finally {
             System.exit(0);
         }
+    }
+
+    /**
+     * Wait for user input -> until the user press 'return'
+     */
+    private static void waitForUserInput() throws java.io.IOException {
+        char c = 'X';
+        do{
+            c = (char) System.in.read();
+        }while ((c != 13) && (c != 10));
     }
 
     /**
