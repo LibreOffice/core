@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SqlNameEdit.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 07:36:48 $
+ *  last change: $Author: oj $ $Date: 2001-03-20 08:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,14 @@ namespace dbaui
                 XubString sText = GetText();
                 if( sText.Len() == 0)
                 {
-                    if(!(pEvt->GetCharCode() >= 'a' && pEvt->GetCharCode() <= 'z'   ||
+                    if(m_bOnlyUpperCase)
+                    {
+                        if(!(pEvt->GetCharCode() >= 'A' && pEvt->GetCharCode() <= 'Z'   ||
+                            pEvt->GetCharCode() == '_'                                  ||
+                            m_sAllowedChars.indexOf(pEvt->GetCharCode()) != -1) )
+                            return 1; // return 1 when the char is not a valid sql starting char
+                    }
+                    else if(!(pEvt->GetCharCode() >= 'a' && pEvt->GetCharCode() <= 'z'  ||
                         pEvt->GetCharCode() >= 'A' && pEvt->GetCharCode() <= 'Z'    ||
                         pEvt->GetCharCode() == '_'                                  ||
                         m_sAllowedChars.indexOf(pEvt->GetCharCode()) != -1) )
@@ -82,7 +89,15 @@ namespace dbaui
                 }
                 else
                 {
-                    if(!(pEvt->GetCharCode() >= 'a' && pEvt->GetCharCode() <= 'z'   ||
+                    if(m_bOnlyUpperCase)
+                    {
+                        if(!(pEvt->GetCharCode() >= 'A' && pEvt->GetCharCode() <= 'Z'   ||
+                            pEvt->GetCharCode() >= '0' && pEvt->GetCharCode() <= '9'    ||
+                            pEvt->GetCharCode() == '_'                                  ||
+                            m_sAllowedChars.indexOf(pEvt->GetCharCode()) != -1) )
+                            return 1; // return 1 when the char is not a valid sql starting char
+                    }
+                    else if(!(pEvt->GetCharCode() >= 'a' && pEvt->GetCharCode() <= 'z'  ||
                         pEvt->GetCharCode() >= 'A' && pEvt->GetCharCode() <= 'Z'    ||
                         pEvt->GetCharCode() >= '0' && pEvt->GetCharCode() <= '9'    ||
                         pEvt->GetCharCode() == '_'                                  ||
