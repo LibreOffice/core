@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:32:59 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,12 +176,17 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     { "met",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_MET },
     { "mml",   FALSE, STR_DESCRIPTION_MATHML_DOC,            IMG_MATH },
     { "mod",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
-    { "ood",   FALSE, STR_DESCRIPTION_SXDRAW_DOC,            IMG_DRAW },
-    { "oof",   FALSE, STR_DESCRIPTION_SXMATH_DOC,            IMG_MATH },
-    { "oom",   FALSE, STR_DESCRIPTION_SXGLOBAL_DOC,          IMG_GLOBAL_DOC },
-    { "oop",   FALSE, STR_DESCRIPTION_SXIMPRESS_DOC,         IMG_IMPRESS },
-    { "oos",   FALSE, STR_DESCRIPTION_SXCALC_DOC,            IMG_CALC },
-    { "oot",   FALSE, STR_DESCRIPTION_SXWRITER_DOC,          IMG_WRITER },
+    { "odb",   FALSE, STR_DESCRIPTION_OO_DATABASE_DOC,       IMG_DATABASE },
+    { "ood",   FALSE, STR_DESCRIPTION_OO_DRAW_DOC,           IMG_DRAW },
+    { "oof",   FALSE, STR_DESCRIPTION_OO_MATH_DOC,           IMG_MATH },
+    { "oom",   FALSE, STR_DESCRIPTION_OO_GLOBAL_DOC,         IMG_GLOBAL_DOC },
+    { "oop",   FALSE, STR_DESCRIPTION_OO_IMPRESS_DOC,        IMG_IMPRESS },
+    { "oos",   FALSE, STR_DESCRIPTION_OO_CALC_DOC,           IMG_CALC },
+    { "oot",   FALSE, STR_DESCRIPTION_OO_WRITER_DOC,         IMG_WRITER },
+    { "otd",   FALSE, STR_DESCRIPTION_OO_DRAW_TEMPLATE,      IMG_DRAWTEMPLATE },
+    { "otp",   FALSE, STR_DESCRIPTION_OO_IMPRESS_TEMPLATE,   IMG_IMPRESSTEMPLATE },
+    { "ots",   FALSE, STR_DESCRIPTION_OO_CALC_TEMPLATE,      IMG_CALCTEMPLATE },
+    { "ott",   FALSE, STR_DESCRIPTION_OO_WRITER_TEMPLATE,    IMG_WRITERTEMPLATE },
     { "pas",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
     { "pcd",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCD },
     { "pct",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCT },
@@ -193,7 +198,6 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     { "sch",   FALSE, STR_DESCRIPTION_SCHART_DOC,            0 },
     { "sda",   FALSE, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW },
     { "sdb",   FALSE, 0,                                     IMG_DATABASE },
-    { "odb",   FALSE, STR_DESCRIPTION_SDATABASE_DOC,         IMG_DATABASE },
     { "sdc",   FALSE, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC },
     { "sdd",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS },
     { "sdp",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESSPACKED },
