@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:28:29 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,270 +317,29 @@ const Graphic& SdrGrafObj::GetGraphic() const
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::ImpTransformBitmap( BitmapEx&          rBmpEx,
-                                     const GraphicAttr& rAttr,
-                                     const Size&        rCropLeftTop,
-                                     const Size&        rCropRightBottom,
-                                     const Rectangle&   rCropRect,
-                                     const Size&        rDstSize,
-                                     BOOL               bRotate,
-                                     BOOL               bEnlarge ) const
-{
-    // #104115# Crop the bitmap
-    if( rAttr.IsCropped() )
-    {
-        rBmpEx.Crop( rCropRect );
-
-        // #104115# Negative crop sizes mean: enlarge bitmap and pad
-        if( bEnlarge &&
-            rCropLeftTop.Width() < 0 ||
-            rCropLeftTop.Height() < 0 ||
-            rCropRightBottom.Width() < 0 ||
-            rCropRightBottom.Height() < 0 )
-        {
-            Size aBmpSize( rBmpEx.GetSizePixel() );
-            sal_Int32 nPadLeft( rCropLeftTop.Width() < 0 ? -rCropLeftTop.Width() : 0 );
-            sal_Int32 nPadTop( rCropLeftTop.Height() < 0 ? -rCropLeftTop.Height() : 0 );
-            sal_Int32 nPadTotalWidth( aBmpSize.Width() + nPadLeft + (rCropRightBottom.Width() < 0 ? -rCropRightBottom.Width() : 0) );
-            sal_Int32 nPadTotalHeight( aBmpSize.Height() + nPadTop + (rCropRightBottom.Height() < 0 ? -rCropRightBottom.Height() : 0) );
-
-            BitmapEx aBmpEx2;
-
-            if( rBmpEx.IsTransparent() )
-            {
-                if( rBmpEx.IsAlpha() )
-                    aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetAlpha() );
-                else
-                    aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetMask() );
-            }
-            else
-            {
-                // #104115# Generate mask bitmap and init to zero
-                Bitmap aMask( aBmpSize, 1 );
-                aMask.Erase( Color(0,0,0) );
-
-                // #104115# Always generate transparent bitmap, we need the border transparent
-                aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), aMask );
-
-                // #104115# Add opaque mask to source bitmap, otherwise the destination remains transparent
-                rBmpEx = aBmpEx2;
-            }
-
-            aBmpEx2.SetSizePixel( Size(nPadTotalWidth, nPadTotalHeight) );
-            aBmpEx2.Erase( Color(0xFF,0,0,0) );
-            aBmpEx2.CopyPixel( Rectangle( Point(nPadLeft, nPadTop), aBmpSize ), Rectangle( Point(0, 0), aBmpSize ), &rBmpEx );
-            rBmpEx = aBmpEx2;
-        }
-    }
-
-    const Size  aSizePixel( rBmpEx.GetSizePixel() );
-
-    if( bRotate )
-    {
-        if( aSizePixel.Width() && aSizePixel.Height() && rDstSize.Width() && rDstSize.Height() )
-        {
-            double fSrcWH = (double) aSizePixel.Width() / aSizePixel.Height();
-            double fDstWH = (double) rDstSize.Width() / rDstSize.Height();
-            double fScaleX = 1.0, fScaleY = 1.0;
-
-            // always choose scaling to shrink bitmap
-            if( fSrcWH < fDstWH )
-                fScaleY = aSizePixel.Width() / ( fDstWH * aSizePixel.Height() );
-            else
-                fScaleX = fDstWH * aSizePixel.Height() / aSizePixel.Width();
-
-            rBmpEx.Scale( fScaleX, fScaleY );
-        }
-    }
-}
-
-// -----------------------------------------------------------------------------
-
 Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
 {
-    Graphic         aTransGraphic( GetGraphic() );
+    // #107947# Refactored most of the code to GraphicObject, where
+    // everybody can use e.g. the cropping functionality
+
     GraphicType     eType = GetGraphicType();
-    MapMode         aDstMap( pModel->GetScaleUnit(), Point(), pModel->GetScaleFraction(), pModel->GetScaleFraction() );
-    const Size      aSrcSize( aTransGraphic.GetPrefSize() );
-    const Size      aDstSize( GetLogicRect().GetSize() );
+    MapMode         aDestMap( pModel->GetScaleUnit(), Point(), pModel->GetScaleFraction(), pModel->GetScaleFraction() );
+    const Size      aDestSize( GetLogicRect().GetSize() );
     const BOOL      bMirror = ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_MIRROR ) != 0;
     const BOOL      bRotate = ( ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_ROTATE ) != 0 ) &&
         ( aGeo.nDrehWink && aGeo.nDrehWink != 18000 ) && ( GRAPHIC_NONE != eType );
 
     // #104115# Need cropping info earlier
     ( (SdrGrafObj*) this )->ImpSetAttrToGrafInfo();
-    GraphicAttr aActAttr( aGrafInfo );
+    GraphicAttr aActAttr;
 
-    // #104115# Convert the crop margins to graphic object mapmode
-    const MapMode aMapGraph( aTransGraphic.GetPrefMapMode() );
-    const MapMode aMap100( MAP_100TH_MM );
-
-    Size aCropLeftTop;
-    Size aCropRightBottom;
-
-    if( GRAPHIC_GDIMETAFILE == eType )
+    if( SDRGRAFOBJ_TRANSFORMATTR_NONE != nTransformFlags &&
+        GRAPHIC_NONE != eType )
     {
-        GDIMetaFile aMtf( aTransGraphic.GetGDIMetaFile() );
+        // actually transform the graphic only in this case. On the
+        // other hand, cropping will always happen
+        aActAttr = aGrafInfo;
 
-        if( aMapGraph == MAP_PIXEL )
-        {
-            aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel( Size( aActAttr.GetLeftCrop(),
-                                                                                aActAttr.GetTopCrop() ),
-                                                                          aMap100 );
-            aCropRightBottom = Application::GetDefaultDevice()->LogicToPixel( Size( aActAttr.GetRightCrop(),
-                                                                                    aActAttr.GetBottomCrop() ),
-                                                                              aMap100 );
-        }
-        else
-        {
-            aCropLeftTop = OutputDevice::LogicToLogic( Size( aActAttr.GetLeftCrop(),
-                                                             aActAttr.GetTopCrop() ),
-                                                       aMap100,
-                                                       aMapGraph );
-            aCropRightBottom = OutputDevice::LogicToLogic( Size( aActAttr.GetRightCrop(),
-                                                                 aActAttr.GetBottomCrop() ),
-                                                           aMap100,
-                                                           aMapGraph );
-        }
-
-        // #104115# If the metafile is cropped, give it a special
-        // treatment: clip against the remaining area, scale up such
-        // that this area later fills the desired size, and move the
-        // origin to the upper left edge of that area.
-        if( aActAttr.IsCropped() )
-        {
-            const MapMode aMtfMapMode( aMtf.GetPrefMapMode() );
-
-            Rectangle aClipRect( aMtfMapMode.GetOrigin().X() + aCropLeftTop.Width(),
-                                 aMtfMapMode.GetOrigin().Y() + aCropLeftTop.Height(),
-                                 aMtfMapMode.GetOrigin().X() + aSrcSize.Width() - aCropRightBottom.Width(),
-                                 aMtfMapMode.GetOrigin().Y() + aSrcSize.Height() - aCropRightBottom.Height() );
-
-            // #104115# To correctly crop rotated metafiles, clip by view rectangle
-            aMtf.AddAction( new MetaISectRectClipRegionAction( aClipRect ), 0 );
-
-            // #104115# To crop the metafile, scale larger than the output rectangle
-            aMtf.Scale( (double)aDstSize.Width() / (aSrcSize.Width() - aCropLeftTop.Width() - aCropRightBottom.Width()),
-                        (double)aDstSize.Height() / (aSrcSize.Height() - aCropLeftTop.Height() - aCropRightBottom.Height()) );
-
-            // #104115# Adapt the pref size by hand (scale changes it
-            // proportionally, but we want it to be smaller than the
-            // former size, to crop the excess out)
-            aMtf.SetPrefSize( Size( (long)((double)aDstSize.Width() *  (1.0 + (aCropLeftTop.Width() + aCropRightBottom.Width()) / aSrcSize.Width())  + .5),
-                                    (long)((double)aDstSize.Height() * (1.0 + (aCropLeftTop.Height() + aCropRightBottom.Height()) / aSrcSize.Height()) + .5) ) );
-
-            // #104115# Adapt the origin of the new mapmode, such that it
-            // is shifted to the place where the cropped output starts
-            Point aNewOrigin( (long)((double)aMtfMapMode.GetOrigin().X() + aDstSize.Width() * aCropLeftTop.Width() / (aSrcSize.Width() - aCropLeftTop.Width() - aCropRightBottom.Width()) + .5),
-                              (long)((double)aMtfMapMode.GetOrigin().Y() + aDstSize.Height() * aCropLeftTop.Height() / (aSrcSize.Height() - aCropLeftTop.Height() - aCropRightBottom.Height()) + .5) );
-            aDstMap.SetOrigin( OutputDevice::LogicToLogic(aNewOrigin, aMtfMapMode, aDstMap) );
-            aMtf.SetPrefMapMode( aDstMap );
-        }
-        else
-        {
-            aMtf.Scale( Fraction( aDstSize.Width(), aSrcSize.Width() ), Fraction( aDstSize.Height(), aSrcSize.Height() ) );
-            aMtf.SetPrefMapMode( aDstMap );
-        }
-
-        aTransGraphic = aMtf;
-    }
-    else if( GRAPHIC_BITMAP == eType )
-    {
-        // convert crops to pixel
-        aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel( Size( aActAttr.GetLeftCrop(),
-                                                                            aActAttr.GetTopCrop() ),
-                                                                      aMap100 );
-        aCropRightBottom = Application::GetDefaultDevice()->LogicToPixel( Size( aActAttr.GetRightCrop(),
-                                                                                aActAttr.GetBottomCrop() ),
-                                                                          aMap100 );
-
-        // convert from prefmapmode to pixel
-        const Size aSrcSizePixel( Application::GetDefaultDevice()->LogicToPixel( aSrcSize,
-                                                                                 aMapGraph ) );
-
-        // setup crop rectangle in pixel
-        Rectangle aCropRect( aCropLeftTop.Width(), aCropLeftTop.Height(),
-                             aSrcSizePixel.Width() - aCropRightBottom.Width(),
-                             aSrcSizePixel.Height() - aCropRightBottom.Height() );
-
-        // #105641# Also crop animations
-        if( aTransGraphic.IsAnimated() )
-        {
-            int nFrame;
-            Animation aAnim( aTransGraphic.GetAnimation() );
-
-            for( nFrame=0; nFrame<aAnim.Count(); ++nFrame )
-            {
-                AnimationBitmap aAnimBmp( aAnim.Get( nFrame ) );
-
-                if( !aCropRect.IsInside( Rectangle(aAnimBmp.aPosPix, aAnimBmp.aSizePix) ) )
-                {
-                    // setup actual cropping (relative to frame position)
-                    Rectangle aCropRectRel( aCropRect );
-                    aCropRectRel.Move( -aAnimBmp.aPosPix.X(),
-                                       -aAnimBmp.aPosPix.Y() );
-
-                    // cropping affects this frame, apply it then
-                    // do _not_ apply enlargement, this is done below
-                    ImpTransformBitmap( aAnimBmp.aBmpEx, aActAttr, Size(), Size(),
-                                        aCropRectRel, aDstSize, bRotate, FALSE );
-
-                    aAnim.Replace( aAnimBmp, nFrame );
-                }
-                // else: bitmap completely within crop area,
-                // i.e. nothing is cropped away
-            }
-
-            // now, apply enlargement (if any) through global animation size
-            if( aCropLeftTop.Width() < 0 ||
-                aCropLeftTop.Height() < 0 ||
-                aCropRightBottom.Width() < 0 ||
-                aCropRightBottom.Height() < 0 )
-            {
-                Size aNewSize( aAnim.GetDisplaySizePixel() );
-                aNewSize.Width() += aCropRightBottom.Width() < 0 ? -aCropRightBottom.Width() : 0;
-                aNewSize.Width() += aCropLeftTop.Width() < 0 ? -aCropLeftTop.Width() : 0;
-                aNewSize.Height() += aCropRightBottom.Height() < 0 ? -aCropRightBottom.Height() : 0;
-                aNewSize.Height() += aCropLeftTop.Height() < 0 ? -aCropLeftTop.Height() : 0;
-                aAnim.SetDisplaySizePixel( aNewSize );
-            }
-
-            // if topleft has changed, we must move all frames to the
-            // right and bottom, resp.
-            if( aCropLeftTop.Width() < 0 ||
-                aCropLeftTop.Height() < 0 )
-            {
-                Point aPosOffset( aCropLeftTop.Width() < 0 ? -aCropLeftTop.Width() : 0,
-                                  aCropLeftTop.Height() < 0 ? -aCropLeftTop.Height() : 0 );
-
-                for( nFrame=0; nFrame<aAnim.Count(); ++nFrame )
-                {
-                    AnimationBitmap aAnimBmp( aAnim.Get( nFrame ) );
-
-                    aAnimBmp.aPosPix += aPosOffset;
-
-                    aAnim.Replace( aAnimBmp, nFrame );
-                }
-            }
-
-            aTransGraphic = aAnim;
-        }
-        else
-        {
-            BitmapEx aBmpEx( aTransGraphic.GetBitmapEx() );
-
-            ImpTransformBitmap( aBmpEx, aActAttr, aCropLeftTop, aCropRightBottom,
-                                aCropRect, aDstSize, bRotate, TRUE );
-
-            aTransGraphic = aBmpEx;
-        }
-
-        aTransGraphic.SetPrefSize( aDstSize );
-        aTransGraphic.SetPrefMapMode( aDstMap );
-    }
-
-    if( ( SDRGRAFOBJ_TRANSFORMATTR_NONE != nTransformFlags ) && ( GRAPHIC_NONE != eType ) )
-    {
         if( bMirror )
         {
             USHORT      nMirrorCase = ( aGeo.nDrehWink == 18000 ) ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 );
@@ -592,12 +351,10 @@ Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
 
         if( bRotate )
             aActAttr.SetRotation( aGeo.nDrehWink / 10 );
-
-        GraphicObject aGrfObj( aTransGraphic );
-        aTransGraphic = aGrfObj.GetTransformedGraphic( &aActAttr );
     }
 
-    return aTransGraphic;
+    // #107947# Delegate to moved code in GraphicObject
+    return GetGraphicObject().GetTransformedGraphic( aDestSize, aDestMap, aActAttr );
 }
 
 // -----------------------------------------------------------------------------
