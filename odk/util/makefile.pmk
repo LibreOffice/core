@@ -35,15 +35,15 @@ MY_TEXTCOPY_SOURCEPRE=<
 MY_TEXTCOPY_TARGETPRE=>
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
-DESTDIRBIN=$(DESTDIR)$/bin$/solsparc
-DESTDIRLIB=$(DESTDIR)$/lib$/solsparc
+DESTDIRBIN=$(DESTDIR)$/solsparc$/bin
+DESTDIRLIB=$(DESTDIR)$/solsparc$/lib
 .ELIF "$(OS)$(CPU)"=="SOLARISI"
-DESTDIRBIN=$(DESTDIR)$/bin$/solia
-DESTDIRLIB=$(DESTDIR)$/lib$/solia
+DESTDIRBIN=$(DESTDIR)$/solia$/bin
+DESTDIRLIB=$(DESTDIR)$/solia$/lib
 .ELIF "$(OS)"=="LINUX"
-DESTDIRBIN=$(DESTDIR)$/bin$/linux
-DESTDIRLIB=$(DESTDIR)$/lib$/linux
+DESTDIRBIN=$(DESTDIR)$/linux$/bin
+DESTDIRLIB=$(DESTDIR)$/linux$/lib
 .ELIF "$(OS)"=="WNT"
-DESTDIRBIN=$(DESTDIR)$/bin$/windows
-DESTDIRLIB=$(DESTDIR)$/lib$/windows
+DESTDIRBIN=$(DESTDIR)$/windows$/bin
+DESTDIRLIB=$(DESTDIR)$/windows$/lib
 .ENDIF
