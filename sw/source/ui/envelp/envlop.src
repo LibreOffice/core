@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-12-04 10:40:08 $
+ *  last change: $Author: rt $ $Date: 2001-12-14 18:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,14 +104,14 @@ TabDialog DLG_ENV
                 Text [ spanish ] = "Sobre" ;
                 Text [ english_us ] = "Envelope" ;
                 PageResID = TP_ENV_ENV ;
-                Text[ chinese_simplified ] = "ĞÅ·â";
+                Text[ chinese_simplified ] = "ä¿¡å°";
                 Text[ russian ] = "Êîíâåğò";
                 Text[ polish ] = "Koperta";
-                Text[ japanese ] = "••“›";
-                Text[ chinese_traditional ] = "«H«Ê";
+                Text[ japanese ] = "å°ç­’";
+                Text[ chinese_traditional ] = "ä¿¡å°";
                 Text[ arabic ] = "ÙÑİ";
                 Text[ greek ] = "ÖÜêåëïò";
-                Text[ korean ] = "ºÀÅõ";
+                Text[ korean ] = "ë´‰íˆ¬";
                 Text[ turkish ] = "Zarf";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sobre";
@@ -134,10 +134,10 @@ TabDialog DLG_ENV
                 Text[ swedish ] = "Format";
                 Text[ polish ] = "Format";
                 Text[ portuguese_brazilian ] = "Format";
-                Text[ japanese ] = "‘®";
-                Text[ korean ] = "¼­½Ä";
-                Text[ chinese_simplified ] = "¸ñÊ½";
-                Text[ chinese_traditional ] = "®æ¦¡";
+                Text[ japanese ] = "æ›¸å¼";
+                Text[ korean ] = "ì„œì‹";
+                Text[ chinese_simplified ] = "æ ¼å¼";
+                Text[ chinese_traditional ] = "æ ¼å¼";
                 Text[ turkish ] = "Renk formatı";
                 Text[ arabic ] = "ÇáÊäÓíŞ";
                 Text[ catalan ] = "Formato";
@@ -160,14 +160,14 @@ TabDialog DLG_ENV
                 Text [ spanish ] = "Impresora" ;
                 Text [ english_us ] = "Printer" ;
                 PageResID = TP_ENV_PRT ;
-                Text[ chinese_simplified ] = "´òÓ¡»ú";
+                Text[ chinese_simplified ] = "æ‰“å°æœº";
                 Text[ russian ] = "Ïğèíòåğ";
                 Text[ polish ] = "Drukarka";
-                Text[ japanese ] = "ÌßØİÀ";
-                Text[ chinese_traditional ] = "¦Lªí¾÷";
+                Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿";
+                Text[ chinese_traditional ] = "å°è¡¨æ©Ÿ";
                 Text[ arabic ] = "ÇáØÇÈÚÉ";
                 Text[ greek ] = "ÅêôõğùôŞò";
-                Text[ korean ] = "ÇÁ¸°ÅÍ";
+                Text[ korean ] = "í”„ë¦°í„°";
                 Text[ turkish ] = "Yazıcı";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Impresora";
@@ -189,16 +189,16 @@ TabDialog DLG_ENV
         Text [ dutch ] = "~Invoegen" ;
         Text [ spanish ] = "I~nsertar" ;
         Text [ english_us ] = "~Insert" ;
-        Text[ chinese_simplified ] = "²åÈë(~I)";
+        Text[ chinese_simplified ] = "æ’å…¥(~I)";
         Text[ russian ] = "Âñòàâêà";
         Text[ polish ] = "Wstaw";
-        Text[ japanese ] = "‘}“ü(~I)";
-        Text[ chinese_traditional ] = "´¡¤J(~I)";
+        Text[ japanese ] = "æŒ¿å…¥(~I)";
+        Text[ chinese_traditional ] = "æ’å…¥(~I)";
         Text[ arabic ] = "ÅÏÑÇÌ";
         Text[ dutch ] = "~Invoegen";
-        Text[ chinese_simplified ] = "²åÈë(~I)";
+        Text[ chinese_simplified ] = "æ’å…¥(~I)";
         Text[ greek ] = "~ÅéóáãùãŞ";
-        Text[ korean ] = "»ğÀÔ(~I)";
+        Text[ korean ] = "ì‚½ì…(~I)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "I~nsertar";
@@ -218,28 +218,28 @@ TabDialog DLG_ENV
         Text [ dutch ] = "~Wijzigen" ;
         Text [ spanish ] = "~Modificar" ;
         Text [ english_us ] = "~Modify" ;
-        Text[ chinese_simplified ] = "¸ü¸Ä(~M)";
+        Text[ chinese_simplified ] = "æ›´æ”¹(~M)";
         Text[ russian ] = "Èçìåíèòü";
         Text[ polish ] = "Modyfikuj";
-        Text[ japanese ] = "•ÏX(~M)";
-        Text[ chinese_traditional ] = "­×§ï(~M)";
+        Text[ japanese ] = "å¤‰æ›´(~M)";
+        Text[ chinese_traditional ] = "ä¿®æ”¹(~M)";
         Text[ arabic ] = "ÊÚÏíá";
         Text[ dutch ] = "~Wijzigen";
-        Text[ chinese_simplified ] = "¸ü¸Ä(~M)";
+        Text[ chinese_simplified ] = "æ›´æ”¹(~M)";
         Text[ greek ] = "Ôñïğïğïßçóç";
-        Text[ korean ] = "¼öÁ¤(~M)";
+        Text[ korean ] = "ìˆ˜ì •(~M)";
         Text[ turkish ] = "D~eğiştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modificar";
     };
-    Text[ chinese_simplified ] = "ĞÅ·â";
+    Text[ chinese_simplified ] = "ä¿¡å°";
     Text[ russian ] = "Êîíâåğò";
     Text[ polish ] = "Koperta listowa";
-    Text[ japanese ] = "••“›";
-    Text[ chinese_traditional ] = "«H«Ê";
+    Text[ japanese ] = "å°ç­’";
+    Text[ chinese_traditional ] = "ä¿¡å°";
     Text[ arabic ] = "ÙÑİ";
     Text[ greek ] = "ÖÜêåëïò";
-    Text[ korean ] = "ºÀÅõ";
+    Text[ korean ] = "ë´‰íˆ¬";
     Text[ turkish ] = "Zarf";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sobre";
@@ -269,14 +269,14 @@ TabPage TP_ENV_ENV
         Text [ english_us ] = "Addr~essee" ;
         Group = TRUE ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÊÕ¼şÈË(~E)";
+        Text[ chinese_simplified ] = "æ”¶ä»¶äºº(~E)";
         Text[ russian ] = "Ïîëó÷àòåëü";
         Text[ polish ] = "Odbiorca";
-        Text[ japanese ] = "ˆ¶æ(~E)";
-        Text[ chinese_traditional ] = "¦¬¥óªÌ(~E)";
+        Text[ japanese ] = "å®›å…ˆ(~E)";
+        Text[ chinese_traditional ] = "æ”¶ä»¶è€…(~E)";
         Text[ arabic ] = "ÇáãÓÊáã";
         Text[ greek ] = "ĞáñáëŞğôçò";
-        Text[ korean ] = "¹Ş´Â »ç¶÷(~E)";
+        Text[ korean ] = "ë°›ëŠ” ì‚¬ëŒ(~E)";
         Text[ turkish ] = "Alıcı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Destinatario";
@@ -309,14 +309,14 @@ TabPage TP_ENV_ENV
         Text [ dutch ] = "~Database" ;
         Text [ spanish ] = "Base de datos" ;
         Text [ english_us ] = "Database" ;
-        Text[ chinese_simplified ] = "Êı¾İ¿â(~D)";
+        Text[ chinese_simplified ] = "æ•°æ®åº“";
         Text[ russian ] = "Áàçà äàííûõ";
         Text[ polish ] = "Baza danych";
-        Text[ japanese ] = "ÃŞ°ÀÍŞ°½";
-        Text[ chinese_traditional ] = "¸ê®Æ®w";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹";
+        Text[ chinese_traditional ] = "è³‡æ–™åº«";
         Text[ arabic ] = "ŞÇÚÏÉ ÇáÈíÇäÇÊ";
         Text[ greek ] = "ÂÜóç ~äåäïìİíùí";
-        Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º";
+        Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤";
         Text[ turkish ] = "Veritabanı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Base de datos";
@@ -344,14 +344,14 @@ TabPage TP_ENV_ENV
         Text [ danish ] = "Tabel" ;
         Text [ portuguese_brazilian ] = "Tabelle" ;
         Text [ portuguese ] = "~Tabela" ;
-        Text[ chinese_simplified ] = "±í¸ñ(~T)";
+        Text[ chinese_simplified ] = "è¡¨æ ¼";
         Text[ russian ] = "Òàáëèöà";
         Text[ polish ] = "Tabela";
-        Text[ japanese ] = "Ã°ÌŞÙ(~T)";
-        Text[ chinese_traditional ] = "ªí®æ";
+        Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«";
+        Text[ chinese_traditional ] = "è¡¨æ ¼";
         Text[ arabic ] = "ÇáÌÏæá";
         Text[ greek ] = "Ğßíáêáò";
-        Text[ korean ] = "Ç¥";
+        Text[ korean ] = "í‘œ";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tabla";
@@ -389,14 +389,14 @@ TabPage TP_ENV_ENV
         Text [ dutch ] = "Database~veld" ;
         Text [ spanish ] = "~Campo base de datos" ;
         Text [ english_us ] = "~Database field" ;
-        Text[ chinese_simplified ] = "Êı¾İ¿â×Ö¶Î(~D)";
+        Text[ chinese_simplified ] = "æ•°æ®åº“å­—æ®µ(~D)";
         Text[ russian ] = "Ïîëå áàçû äàííûõ";
         Text[ polish ] = "Pole bazy danych";
-        Text[ japanese ] = "ÃŞ°ÀÍŞ°½ Ì¨°ÙÄŞ(~D)";
-        Text[ chinese_traditional ] = "¸ê®Æ®wÄæ¦ì(~D)";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰(~D)";
+        Text[ chinese_traditional ] = "è³‡æ–™åº«æ¬„ä½(~D)";
         Text[ arabic ] = "ÍŞá ŞÇÚÏÉ ÇáÈíÇäÇÊ";
         Text[ greek ] = "Ğåäßï âÜóçò äåäïìİíùí";
-        Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå(~D)";
+        Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ í•„ë“œ(~D)";
         Text[ turkish ] = "Veritabanı alanı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Campo base de datos";
@@ -427,14 +427,14 @@ TabPage TP_ENV_ENV
         Text [ spanish ] = "R~emitente" ;
         Text [ english_us ] = "~Sender" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "·¢¼şÈË(~S)";
+        Text[ chinese_simplified ] = "å‘ä»¶äºº(~S)";
         Text[ russian ] = "Îòïğàâèòåëü";
         Text[ polish ] = "Nadawca";
-        Text[ japanese ] = "·ol(~S)";
-        Text[ chinese_traditional ] = "±H¥óªÌ(~S)";
+        Text[ japanese ] = "å·®å‡ºäºº(~S)";
+        Text[ chinese_traditional ] = "å¯„ä»¶è€…(~S)";
         Text[ arabic ] = "ÇáãÑÓá";
         Text[ greek ] = "Áğïóôïëİáò";
-        Text[ korean ] = "º¸³½ »ç¶÷(~S)";
+        Text[ korean ] = "ë³´ë‚¸ ì‚¬ëŒ(~S)";
         Text[ turkish ] = "Gönderen";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "R~emitente";
@@ -473,18 +473,19 @@ String STR_DOC_TITLE
     Text [ dutch ] = "Envelop" ;
     Text [ spanish ] = "Sobre" ;
     Text [ english_us ] = "Envelope" ;
-    Text[ chinese_simplified ] = "ĞÅ·â";
+    Text[ chinese_simplified ] = "ä¿¡å°";
     Text[ russian ] = "Êîíâåğò";
     Text[ polish ] = "Koperta listowa";
-    Text[ japanese ] = "••“›";
-    Text[ chinese_traditional ] = "«H«Ê";
+    Text[ japanese ] = "å°ç­’";
+    Text[ chinese_traditional ] = "ä¿¡å°";
     Text[ arabic ] = "ÙÑİ";
     Text[ greek ] = "ÖÜêåëïò";
-    Text[ korean ] = "ºÀÅõ";
+    Text[ korean ] = "ë´‰íˆ¬";
     Text[ turkish ] = "Zarf";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sobre";
 };
+
 
 
 
