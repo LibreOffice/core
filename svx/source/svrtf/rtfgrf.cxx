@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfgrf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:44:42 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,9 +450,32 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
         case RTF_WBMWIDTHBYTES:     rPicType.nWidthBytes = nVal; break;
         case RTF_PICWGOAL:          rPicType.nGoalWidth = nVal; break;
         case RTF_PICHGOAL:          rPicType.nGoalHeight = nVal; break;
-        case RTF_BIN:               rPicType.nMode = SvxRTFPictureType::BINARY_MODE;
-                                    rPicType.uPicLen = nVal;
-                                    break;
+        case RTF_BIN:
+            rPicType.nMode = SvxRTFPictureType::BINARY_MODE;
+            rPicType.uPicLen = nTokenValue;
+            if (rPicType.uPicLen)
+            {
+                ULONG nPos = rStrm.Tell();
+                nPos = nPos;
+                rStrm.SeekRel(-1);
+                sal_uInt8 aData[4096];
+                ULONG nSize = sizeof(aData);
+
+                while (rPicType.uPicLen > 0)
+                {
+                    if (rPicType.uPicLen < nSize)
+                        nSize = rPicType.uPicLen;
+
+                    rStrm.Read(aData, nSize);
+                    pTmpFile->Write(aData, nSize);
+                    rPicType.uPicLen -= nSize;
+                }
+                nNextCh = GetNextChar();
+                bValidBmp = !pTmpFile->GetError();
+                nPos = rStrm.Tell();
+                nPos = nPos;
+            }
+            break;
         case RTF_PICSCALEX:         rPicType.nScalX = nVal; break;
         case RTF_PICSCALEY:         rPicType.nScalY = nVal; break;
         case RTF_PICSCALED:         break;
@@ -575,7 +598,8 @@ void SvxRTFPictureType::ResetValues()
     eStyle = RTF_BITMAP;
     nMode = HEX_MODE;
     nType = nGoalWidth = nGoalHeight = 0;
-    nWidth = nHeight = uPicLen = nWidthBytes = 0;
+    nWidth = nHeight = nWidthBytes = 0;
+    uPicLen = 0;
     nBitsPerPixel = nPlanes = 1;
     nScalX = nScalY = 100;      // Skalierung in Prozent
     nCropT = nCropB = nCropL = nCropR = 0;
