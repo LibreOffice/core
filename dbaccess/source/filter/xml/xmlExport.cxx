@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 09:29:20 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,26 @@ namespace dbaxml
                 return s_sTypeDouble;
         }
     }
+
+    class OSpecialHanldeXMLExportPropertyMapper : public SvXMLExportPropertyMapper
+    {
+    public:
+        OSpecialHanldeXMLExportPropertyMapper(const UniReference< XMLPropertySetMapper >& rMapper) : SvXMLExportPropertyMapper(rMapper )
+        {
+        }
+        /** this method is called for every item that has the
+        MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
+        virtual void handleSpecialItem(
+                SvXMLAttributeList& rAttrList,
+                const XMLPropertyState& rProperty,
+                const SvXMLUnitConverter& rUnitConverter,
+                const SvXMLNamespaceMap& rNamespaceMap,
+                const ::std::vector< XMLPropertyState > *pProperties = 0,
+                sal_uInt32 nIdx = 0 ) const
+        {
+            // nothing to do here
+        }
+    };
 // -----------------------------------------------------------------------------
 ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nExportFlag)
 : SvXMLExport( _rxMSF,MAP_10TH_MM,XML_DATABASE, EXPORT_OASIS)
@@ -267,7 +287,7 @@ ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_NUMBER), GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
 
     m_xExportHelper = new SvXMLExportPropertyMapper(GetTableStylesPropertySetMapper());
-    m_xColumnExportHelper = new SvXMLExportPropertyMapper(GetColumnStylesPropertySetMapper());
+    m_xColumnExportHelper = new OSpecialHanldeXMLExportPropertyMapper(GetColumnStylesPropertySetMapper());
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_TABLE,
@@ -278,7 +298,7 @@ ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_COLUMN,
         rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ),
-        m_xExportHelper.get(),
+        m_xColumnExportHelper.get(),
         rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX ));
 }
 // -----------------------------------------------------------------------------
@@ -698,7 +718,8 @@ void ODBExport::exportTable(XPropertySet* _xProp)
 // -----------------------------------------------------------------------------
 void ODBExport::exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt)
 {
-    TPropertyStyleMap::iterator aFind = m_aAutoStyleNames.find(_xProp);
+    Reference<XPropertySet> xFind(_xProp);
+    TPropertyStyleMap::iterator aFind = m_aAutoStyleNames.find(xFind);
     if ( aFind != m_aAutoStyleNames.end() )
     {
         _rAtt.AddAttribute( GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DB, GetXMLToken(XML_STYLE_NAME) ),
