@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:34:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,10 @@
 
 #include <sot/formats.hxx>
 
+#include "svxdlg.hxx"
+#include "dialogs.hrc"
+
+
 #ifdef MAC
 #define TRANSCOL Color( COL_LIGHTGRAY )
 #else
@@ -127,7 +131,7 @@
 |*  URLDlg
 |*
 \************************************************************************/
-
+/* move to cui //CHINA001
 URLDlg::URLDlg( Window* pWindow, const String& rURL,
                 const String& rDescription, const String& rTarget,
                 const String& rName, TargetList& rTargetList ) :
@@ -161,7 +165,7 @@ URLDlg::URLDlg( Window* pWindow, const String& rURL,
     else
         aCbbTargets.SetText( rTarget );
 }
-
+*/
 /*************************************************************************
 |*
 |*
@@ -958,27 +962,34 @@ void IMapWindow::DoPropertyDialog()
     if ( pSdrObj )
     {
         IMapObject* pIMapObj = GetIMapObj( pSdrObj );
-        URLDlg      aDlg( this, pIMapObj->GetURL(), pIMapObj->GetDescription(),
-                          pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList );
-
-        if ( aDlg.Execute() == RET_OK )
+        //CHINA001 URLDlg       aDlg( this, pIMapObj->GetURL(), pIMapObj->GetDescription(),
+        //CHINA001                        pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        if(pFact)
         {
-            const String aURLText( aDlg.GetURL() );
-
-            if ( aURLText.Len() )
+            AbstractURLDlg* aDlg = pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetDescription(),
+                                            pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList, ResId(RID_SVXDLG_IMAPURL) );
+            DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
+            if ( aDlg->Execute() == RET_OK ) //CHINA001 if ( aDlg.Execute() == RET_OK )
             {
-                pIMapObj->SetURL( ::URIHelper::SmartRelToAbs( aURLText, FALSE,
-                                                              INetURLObject::WAS_ENCODED,
-                                                              INetURLObject::DECODE_UNAMBIGUOUS ) );
-            }
-            else
-                pIMapObj->SetURL( aURLText );
+                const String aURLText( aDlg->GetURL() ); //CHINA001 const String aURLText( aDlg.GetURL() );
 
-            pIMapObj->SetDescription( aDlg.GetDescription() );
-            pIMapObj->SetTarget( aDlg.GetTarget() );
-            pIMapObj->SetName( aDlg.GetName() );
-            pModel->SetChanged( sal_True );
-            UpdateInfo( TRUE );
+                if ( aURLText.Len() )
+                {
+                    pIMapObj->SetURL( ::URIHelper::SmartRelToAbs( aURLText, FALSE,
+                                                                INetURLObject::WAS_ENCODED,
+                                                                INetURLObject::DECODE_UNAMBIGUOUS ) );
+                }
+                else
+                    pIMapObj->SetURL( aURLText );
+
+                pIMapObj->SetDescription( aDlg->GetDescription() ); //CHINA001 pIMapObj->SetDescription( aDlg.GetDescription() );
+                pIMapObj->SetTarget( aDlg->GetTarget() ); //CHINA001 pIMapObj->SetTarget( aDlg.GetTarget() );
+                pIMapObj->SetName( aDlg->GetName() ); //CHINA001 pIMapObj->SetName( aDlg.GetName() );
+                pModel->SetChanged( sal_True );
+                UpdateInfo( TRUE );
+            }
+            delete aDlg; //add by CHINA001
         }
     }
 }
