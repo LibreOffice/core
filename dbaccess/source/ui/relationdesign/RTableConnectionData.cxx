@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RTableConnectionData.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-07 14:05:04 $
+ *  last change: $Author: oj $ $Date: 2002-11-12 11:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet
     USHORT  nPrimKeysCount      = 0,
             nValidLinesCount    = 0;
     ::std::vector<Reference<XNameAccess> > vKeyColumns  = ::dbaui::getKeyColumns(_xTable,KeyType::PRIMARY);
-    if(vKeyColumns.size())
+    if ( !vKeyColumns.empty() )
     {
         OSL_ENSURE(vKeyColumns.size()==1,"There can be only one primary key in a table!");
         Reference<XNameAccess> xKeyColumns = *vKeyColumns.begin();
@@ -317,18 +317,18 @@ BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet
             for(;aIter != m_vConnLineData.end();++aIter)
             {
                 if( (*aIter)->IsValid() )
-                    nValidLinesCount++;
-                if((*aIter)->GetFieldName(_eEConnectionSide) == *pKeyBegin)
+                    ++nValidLinesCount;
+                if ( (*aIter)->GetFieldName(_eEConnectionSide) == *pKeyBegin )
                 {
-                    nPrimKeysCount++;
+                    ++nPrimKeysCount;
                     break;
                 }
             }
         }
-        if(nPrimKeysCount != aKeyColumns.getLength())
+        if ( nPrimKeysCount != aKeyColumns.getLength() )
             return FALSE;
     }
-    if( !nPrimKeysCount || nPrimKeysCount != nValidLinesCount )
+    if ( !nPrimKeysCount || nPrimKeysCount != nValidLinesCount )
         return FALSE;
 
     return TRUE;
@@ -347,7 +347,7 @@ BOOL ORelationTableConnectionData::IsConnectionPossible()
 
     //////////////////////////////////////////////////////////////////////
     // Wenn die SourceFelder ein PrimKey sind, ist nur die Orientierung falsch
-    if( IsSourcePrimKey() )
+    if ( IsSourcePrimKey() && !IsDestPrimKey() )
         ChangeOrientation();
 
     return TRUE;
