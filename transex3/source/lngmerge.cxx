@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nf $ $Date: 2001-07-04 13:06:41 $
+ *  last change: $Author: nf $ $Date: 2001-07-31 15:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ BOOL LngParser::Merge(
         }
         if ( nLastLangPos ) {
             for ( USHORT i = 0; i < LANGUAGES; i++ ) {
-                if (( i != GERMAN ) && ( !Text[ i ].Len())) {
+                if (( i != GERMAN ) && ( !Text[ i ].Len()) && ( pEntrys )) {
                     ByteString sNewText;
                     pEntrys->GetText( sNewText, STRING_TYP_TEXT, i, TRUE );
                     if (( sNewText.Len()) &&
