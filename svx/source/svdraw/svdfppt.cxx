@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 11:13:57 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,28 @@ PowerPointImportParam::PowerPointImportParam( SvStream& rDocStrm, sal_uInt32 nFl
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+SvStream& operator>>( SvStream& rIn, PptCurrentUserAtom& rAtom )
+{
+    DffRecordHeader aHd;
+    rIn >> aHd;
+    if ( aHd.nRecType == PPT_PST_CurrentUserAtom )
+    {
+        sal_uInt32 nLen;
+        sal_uInt16 nUserNameLen, nPad;
+        rIn >> nLen
+            >> rAtom.nMagic
+            >> rAtom.nCurrentUserEdit
+            >> nUserNameLen
+            >> rAtom.nDocFileVersion
+            >> rAtom.nMajorVersion
+            >> rAtom.nMinorVersion
+            >> nPad;
+        SvxMSDffManager::MSDFFReadZString( rIn, rAtom.aCurrentUser, nUserNameLen, sal_True );
+    }
+    aHd.SeekToEndOfRecord( rIn );
+    return rIn;
+}
+
 void PptSlidePersistAtom::Clear()
 {
     nReserved = nPsrReference = nFlags = nNumberTexts = nSlideId = 0;
@@ -655,8 +677,7 @@ class PptFontCollection: public PptFontEntityAtomList {
 
 SvStream& operator>>( SvStream& rIn, PptUserEditAtom& rAtom )
 {
-    DffRecordHeader aHd;
-    rIn >> aHd
+    rIn >> rAtom.aHd
         >> rAtom.nLastSlideID
         >> rAtom.nVersion
         >> rAtom.nOffsetLastEdit
@@ -664,7 +685,7 @@ SvStream& operator>>( SvStream& rIn, PptUserEditAtom& rAtom )
         >> rAtom.nDocumentRef
         >> rAtom.nMaxPersistWritten
         >> rAtom.eLastViewType;
-    aHd.SeekToEndOfRecord(rIn);
+    rAtom.aHd.SeekToEndOfRecord(rIn);
     return rIn;
 }
 
@@ -1512,31 +1533,97 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
     {
         rStCtrl.Seek( STREAM_SEEK_TO_END );
         nStreamLen = rStCtrl.Tell();
-        rStCtrl.Seek( 0 );
-        aPptRecManager.Consume( rStCtrl, FALSE, nStreamLen );
 
-        // UserEditAtom lesen
-        // Erstmal immer das letzte, falls mehrere vorhanden sind.
-        for ( pHd = aPptRecManager.Last(); pHd; pHd = aPptRecManager.Prev() )
+        // try to allocate the UserEditAtom via CurrentUserAtom
+        sal_uInt32 nCurrentUserEdit = rParam.aCurrentUserAtom.nCurrentUserEdit;
+        if ( nCurrentUserEdit )
         {
-            if ( pHd->nRecType == PPT_PST_UserEditAtom )
-            {
-                pHd->SeekToBegOfRecord( rStCtrl );
-                rStCtrl >> aUserEditAtom;
-                break;
-            }
+            rStCtrl.Seek( nCurrentUserEdit );
+            rStCtrl >> aUserEditAtom;
         }
-        if ( !pHd )
-            bOk = FALSE;
+        if ( !aUserEditAtom.nOffsetPersistDirectory )
+        {   // if there is no UserEditAtom try to search the last one
+
+            rStCtrl.Seek( 0 );
+            DffRecordManager aPptRecManager;                            // contains all first level container and atoms
+            aPptRecManager.Consume( rStCtrl, FALSE, nStreamLen );
+            for ( pHd = aPptRecManager.Last(); pHd; pHd = aPptRecManager.Prev() )
+            {
+                if ( pHd->nRecType == PPT_PST_UserEditAtom )
+                {
+                    pHd->SeekToBegOfRecord( rStCtrl );
+                    rStCtrl >> aUserEditAtom;
+                    break;
+                }
+            }
+            if ( !pHd )
+                bOk = FALSE;
+        }
     }
     if ( rStCtrl.GetError() != 0 )
         bOk = FALSE;
+
     if ( bOk )
-    {   // PersistPtrs lesen (alle)
+    {
+        // PersistPtrs lesen (alle)
         nPersistPtrAnz = aUserEditAtom.nMaxPersistWritten + 1;  // 1 mehr, damit ich immer direkt indizieren kann
         pPersistPtr = new UINT32[ nPersistPtrAnz ];             // (die fangen naemlich eigentlich bei 1 an)
         memset( pPersistPtr, 0x00, nPersistPtrAnz * 4 );
 
+        // SJ: new search mechanism from bottom to top (Issue 21122)
+        PptUserEditAtom aCurrentEditAtom( aUserEditAtom );
+        sal_uInt32 nCurrentEditAtomStrmPos = aCurrentEditAtom.aHd.GetRecEndFilePos();
+        while( nCurrentEditAtomStrmPos )
+        {
+            sal_uInt32 nPersistIncPos = aCurrentEditAtom.nOffsetPersistDirectory;
+            if ( nPersistIncPos )
+            {
+                rStCtrl.Seek( nPersistIncPos );
+                DffRecordHeader aPersistHd;
+                rStCtrl >> aPersistHd;
+                if ( aPersistHd.nRecType == PPT_PST_PersistPtrIncrementalBlock )
+                {
+                    ULONG nPibLen = aPersistHd.GetRecEndFilePos();
+                    while ( bOk && ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nPibLen ) )
+                    {
+                        sal_uInt32 nOfs, nAnz;
+                        rStCtrl >> nOfs;
+                        nAnz = nOfs;
+                        nOfs &= 0x000FFFFF;
+                        nAnz >>= 20;
+                        while ( bOk && ( rStCtrl.GetError() == 0 ) && ( nAnz > 0 ) && ( nOfs < nPersistPtrAnz ) )
+                        {
+                            sal_uInt32 nPt;
+                            rStCtrl >> nPt;
+                            if ( !pPersistPtr[ nOfs ] )
+                            {
+                                pPersistPtr[ nOfs ] = nPt;
+                                if ( pPersistPtr[ nOfs ] > nStreamLen )
+                                {
+                                    bOk = FALSE;
+                                    DBG_ERROR("SdrPowerPointImport::Ctor(): Ungueltiger Eintrag im Persist-Directory!");
+                                }
+                            }
+                            nAnz--;
+                            nOfs++;
+                        }
+                        if ( bOk && nAnz > 0 )
+                        {
+                            DBG_ERROR("SdrPowerPointImport::Ctor(): Nicht alle Persist-Directory Entraege gelesen!");
+                            bOk = FALSE;
+                        }
+                    }
+                }
+            }
+            nCurrentEditAtomStrmPos = aCurrentEditAtom.nOffsetLastEdit < nCurrentEditAtomStrmPos ? aCurrentEditAtom.nOffsetLastEdit : 0;
+            if ( nCurrentEditAtomStrmPos )
+            {
+                rStCtrl.Seek( nCurrentEditAtomStrmPos );
+                rStCtrl >> aCurrentEditAtom;
+            }
+        }
+
+/* SJ: OLD Search mechanism from top to bottom
         for ( pHd = aPptRecManager.GetRecordHeader( PPT_PST_PersistPtrIncrementalBlock, SEEK_FROM_BEGINNING );
                 pHd; pHd = aPptRecManager.GetRecordHeader( PPT_PST_PersistPtrIncrementalBlock, SEEK_FROM_CURRENT ) )
         {
@@ -1567,6 +1654,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
                 }
             }
         }
+*/
     }
     if ( rStCtrl.GetError() != 0 )
         bOk = FALSE;
