@@ -2,9 +2,9 @@
  *
  *  $RCSfile: owriteablestream.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-06 08:46:18 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_EMBED_XENCRYPTIONPROTECTEDSOURCE_HPP_
 #include <com/sun/star/embed/XEncryptionProtectedSource.hpp>
 #endif
@@ -158,8 +162,8 @@ struct OWriteStream_Impl : public PreCreationStruct
 
     InputStreamsList_Impl m_aInputStreamsList;
 
-    sal_Bool                        m_bIsModified;    // only modified elements will be sent to the original content
-    sal_Bool                        m_bCommited;      // sending the streams is coordinated by the root storage of the package
+    sal_Bool                        m_bHasDataToFlush;    // only modified elements will be sent to the original content
+    sal_Bool                        m_bFlushed;      // sending the streams is coordinated by the root storage of the package
 
     ::com::sun::star::uno::Reference< ::com::sun::star::packages::XDataSinkEncrSupport > m_xPackageStream;
 
@@ -202,11 +206,11 @@ public:
             const ::rtl::OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xParentPackageFolder );
 
-    void SetToBeCommited() { m_bCommited = sal_True; }
+    void SetToBeCommited() { m_bFlushed = sal_True; }
 
     sal_Bool HasCachedPassword() { return m_bHasCachedPassword; }
     ::com::sun::star::uno::Sequence< sal_Int8 > GetCachedPassword() { return m_aKey; }
-    sal_Bool IsModified() { return m_bIsModified; }
+    sal_Bool IsModified() { return m_bHasDataToFlush || m_bFlushed; }
 
     sal_Bool IsEncrypted();
 
@@ -238,6 +242,13 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetRawInStream();
 
     void InputStreamDisposed( OInputCompStream* pStream );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > CreateReadonlyCopyBasedOnData(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xDataToCopy );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetCopyOfLastCommit();
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetCopyOfLastCommit(
+                          const ::com::sun::star::uno::Sequence< sal_Int8 >& aKey );
 };
 
 class OWriteStream : public cppu::WeakImplHelper8 < ::com::sun::star::io::XInputStream
