@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:28:08 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,13 +154,13 @@
 #include <svx/sdshitm.hxx>
 
 #include <svtools/aeitem.hxx>
+#include <avmedia/mediaitem.hxx>
 #include "attrib.hxx"
 
 #define SvxDrawToolItem             SfxAllEnumItem
 #define SvxDrawAlignItem            SfxAllEnumItem
 #define SvxChooseControlItem        SfxEnumItem
+#define avmedia_MediaItem           ::avmedia::MediaItem
 
 #define SFX_TYPEMAP
 #include "scslots.hxx"
-
-
