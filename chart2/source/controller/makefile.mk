@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: bm $ $Date: 2003-10-10 12:20:59 $
+#   last change: $Author: bm $ $Date: 2003-12-18 13:54:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,8 @@ LIB1FILES=		\
                 $(SLB)$/chcontroller.lib \
                 $(SLB)$/chcdrawinglayer.lib \
                 $(SLB)$/chcitemsetwrapper.lib \
-                $(SLB)$/chcdialogs.lib
+                $(SLB)$/chcdialogs.lib \
+                $(SLB)$/chchartapiwrapper.lib
 
 #--------
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: bm $ $Date: 2003-10-16 14:27:49 $
+#   last change: $Author: bm $ $Date: 2003-12-18 13:55:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,8 +80,7 @@ LIB1TARGET=		$(SLB)$/_$(TARGET).lib
 LIB1FILES=		\
                 $(SLB)$/chmodelmain.lib \
                 $(SLB)$/chmodeltree.lib \
-                $(SLB)$/chmodeltemplate.lib \
-                $(SLB)$/chmodeloldapi.lib
+                $(SLB)$/chmodeltemplate.lib
 
 #--------
 

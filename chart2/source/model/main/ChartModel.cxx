@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartModel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:22 $
+ *  last change: $Author: bm $ $Date: 2003-12-18 13:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #include "servicenames.hxx"
 #include "MediaDescriptorHelper.hxx"
 #include "macros.hxx"
-#include "ChartDocumentWrapper.hxx"
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
@@ -914,8 +913,10 @@ uno::Any SAL_CALL ChartModel::queryInterface( const uno::Type& aType )
             if( ! m_xOldModelAgg.is())
             {
                 m_xOldModelAgg.set(
-                    static_cast< uno::XWeak* >(
-                        new wrapper::ChartDocumentWrapper( m_xContext )), uno::UNO_QUERY_THROW );
+                    m_xContext->getServiceManager()->createInstanceWithContext(
+                        C2U( "drafts.com.sun.star.chart2.ChartDocumentWrapper" ),
+                        m_xContext ),
+                    uno::UNO_QUERY_THROW );
                 m_xOldModelAgg->setDelegator( static_cast< ::cppu::OWeakObject* >( this ));
             }
 

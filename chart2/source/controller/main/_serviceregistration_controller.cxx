@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _serviceregistration_controller.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: bm $ $Date: 2003-12-18 13:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _CHARTFRAMELOADER_HXX
 #include "ChartFrameloader.hxx"
 #endif
+#ifndef CHART_CHARTDOCUMENTWRAPPER_HXX
+#include "ChartDocumentWrapper.hxx"
+#endif
 
 static struct ::cppu::ImplementationEntry g_entries_chart2_view[] =
 {
@@ -82,6 +85,14 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_view[] =
           ::chart::ChartFrameLoader::create
         , ::chart::ChartFrameLoader::getImplementationName_Static
         , ::chart::ChartFrameLoader::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+    ,{
+          ::chart::wrapper::ChartDocumentWrapper::create
+        , ::chart::wrapper::ChartDocumentWrapper::getImplementationName_Static
+        , ::chart::wrapper::ChartDocumentWrapper::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
         , 0
         , 0
