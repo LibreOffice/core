@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:33:58 $
+ *  last change: $Author: kz $ $Date: 2001-09-06 20:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,7 @@ String RID_STR_TABLE_DOESNT_EXIST
     Text[ portuguese_brazilian ] = "The expression is invalid because table '$name$' doesn't exist !";
     Text[ japanese ] = "'$name$' οΎƒο½°οΎοΎοΎ™γγªγ„γ®γ§γ€θ΅¨ηΎγ―η„΅εΉγ§γ™γ€‚";
     Text[ chinese_simplified ] = "θΏ™δΈªθ΅¨θΎΎεΌζ— ζ•οΌε› δΈΊθ΅¨ζ Ό '$name$' δΈε­ε¨οΌ";
-    Text[ chinese_traditional ] = "ι€™ε€‹θ΅¨ι”εΌη„΅ζ•οΌε› η‚Ίθ΅¨ζ Ό '$name$' δΈε­ε¨οΌ";
+    Text[ chinese_traditional ] = "ι€™ε€‹θ΅¨ι”εΌη„΅ζ•οΌε› η‚Ίθ΅¨ζ Ό<$name$>δΈε­ε¨οΌ";
     Text[ dutch ] = "De uitdrukking is ongeldig daar de tabel '$name$' niet bestaat !";
     Text[ chinese_simplified ] = "θΏ™δΈªθ΅¨θΎΎεΌζ— ζ•οΌε› δΈΊθ΅¨ζ Ό '$name$' δΈε­ε¨οΌ";
     Text[ greek ] = "Η έκφραση δεν είναι έγκυρη επειδή δεν υπάρχει ο πίνακας '$name$'!";
@@ -359,7 +359,7 @@ String RID_STR_FIELD_DOESNT_EXIST
     Text[ portuguese_brazilian ] = "The expression is invalid because the field name '$name$' kann nicht zugeordnet werden !";
     Text[ japanese ] = "οΎο½¨ο½°οΎ™οΎ„οΎε '$name$' γ®ε†ι΅γγ§γγªγ„γ®γ§γ€θ΅¨ηΎγ―η„΅εΉγ§γ™γ€‚";
     Text[ chinese_simplified ] = "θΏ™δΈªθ΅¨θΎΎεΌζ— ζ•οΌε› δΈΊζ— ζ³•η΅®θ®¤ε­—ζ®µεη§° '$name$' οΌ";
-    Text[ chinese_traditional ] = "ε› η„΅ζ³•ηΆΊε®ζ¬„δ½εη¨± '$name$' θ€ι€ ζι€™ε€‹θ΅¨ι”εΌη„΅ζ•οΉ—";
+    Text[ chinese_traditional ] = "ε› η„΅ζ³•ηΆΊε®ζ¬„δ½εη¨±<$name$>θ€ι€ ζι€™ε€‹θ΅¨ι”εΌη„΅ζ•οΉ—";
     Text[ dutch ] = "De uitdrukking is ongeldig daar de veldnaam '$name$' niet kan worden herleid !";
     Text[ chinese_simplified ] = "θΏ™δΈªθ΅¨θΎΎεΌζ— ζ•οΌε› δΈΊζ— ζ³•η΅®θ®¤ε­—ζ®µεη§° '$name$' οΌ";
     Text[ greek ] = "Η έκφραση δεν είναι έγκυρη επειδή δεν μπορεί να προσδιοριστεί το όνομα του πεδίου '$name$'!";
@@ -1814,7 +1814,7 @@ String STR_SVT_SQL_SYNTAX_ERROR_BEFORE
     Text[ polish ] = "przed wyraΏeniem \"#\".";
     Text[ japanese ] = "\"#\" θ΅¨ηΎγ®ε‰γ«γ‚γ‚γΎγ™γ€‚";
     Text[ arabic ] = "ήΘα ΪΘΗΡΙ \"#\".";
-    Text[ chinese_traditional ] = "ε¨'#'θ΅¨ι”δΉ‹ε‰";
+    Text[ chinese_traditional ] = "ε¨<#>θ΅¨ι”δΉ‹ε‰";
     Text[ dutch ] = "voor \"#\" uitdrukking.";
     Text[ chinese_simplified ] = "\"#\" θ΅¨θΎΎεΌδΉ‹ε‰γ€‚";
     Text[ greek ] = "πριν την παράσταση \"#\".";
@@ -1972,7 +1972,7 @@ String STR_SVT_SQL_SYNTAX_TABLE
     Text[ japanese ] = "οΎƒο½°οΎοΎοΎ™ \"#\" γ―γ€οΎƒοΎο½°οΎ€οΎοΎο½°ο½½γ§γ―δΈζγ§γ™γ€‚";
     Text[ korean ] = "\"#\" ν…μ΄λΈ”μ€ λ°μ΄ν„°λ² μ΄μ¤μ— μ•λ ¤μ Έ μμ§€ μ•μµλ‹λ‹¤!";
     Text[ chinese_simplified ] = "θΏ™δΈªθ΅¨ζ Ό \"#\" ε―Ήζ•°ζ®εΊ“θ€θ¨€ζ―δΈζη„οΌ";
-    Text[ chinese_traditional ] = "ι€™ε€‹θ΅¨ζ Ό \"#\" ε°θ³‡ζ–™εΊ«θ€θ¨€ζ―δΈζη„οΌ";
+    Text[ chinese_traditional ] = "ι€™ε€‹θ΅¨ζ Ό<#>ε°θ³‡ζ–™εΊ«θ€θ¨€ζ―δΈζη„οΌ";
     Text[ turkish ] = "The table \"#\" is unknown in the database!";
     Text[ arabic ] = "ΗαΜΟζα \"#\" ΫνΡ γΪΡζέ έν ήΗΪΟΙ ΗαΘνΗδΗΚ!";
     Text[ finnish ] = "Die Tabelle \"#\" ist in der Datenbank unbekannt!";
@@ -1997,7 +1997,7 @@ String STR_SVT_SQL_SYNTAX_COLUMN
     Text[ japanese ] = "ε— \"#\" γ―γ€\"#\" γ®οΎƒο½°οΎοΎοΎ™γ§γ―δΈζγ§γ™γ€‚";
     Text[ korean ] = "\"#\"μ—΄μ€ \"#\" ν…μ΄λΈ”μ— μ•λ ¤μ Έ μμ§€ μ•μµλ‹λ‹¤!";
     Text[ chinese_simplified ] = "θΏ™δΈªε— \"#\" ε―Ήζ•°ζ®εΊ“ \"#\" θ€θ¨€ζ―δΈζη„!";
-    Text[ chinese_traditional ] = "ι€™ζ¬„δ½ \"#\" ε°ι€™ε€‹θ΅¨ζ Ό \"#\" θ€θ¨€ζ―δΈζη„!";
+    Text[ chinese_traditional ] = "ι€™ζ¬„δ½<#>ε°ι€™ε€‹θ΅¨ζ Ό<#>θ€θ¨€ζ―δΈζη„!";
     Text[ turkish ] = "The column \"#\" is unknown in the table \"#\"!";
     Text[ arabic ] = "ΗαΪγζΟ \"#\" ΫνΡ γΪΡζέ έν ΗαΜΟζα \"#\" !";
     Text[ finnish ] = "Die Spalte \"#\" ist in der Tabelle \"#\" unbekannt!";
@@ -2410,8 +2410,8 @@ String STR_DATASOURCE_DELETED
 {
     Text = "Die zugehφrige Datenquelle wurde gelφscht. Es kφnnen keine dies bezόglichen Daten gespeichert werden.";
     Text [ ENGLISH ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
-    Text[ english_us ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
-    Text[ portuguese ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
+    Text[ english_us ] = "The corresponding data source has been deleted. Therefore, data relevant to that data source cannot be saved.";
+    Text[ portuguese ] = "Impossνvel guardar os dados: a fonte de dados correspondente foi eliminada.";
     Text[ russian ] = "Νεξαυξδθμϋι θρςξχνθκ δΰννϋυ σδΰλεν. Οξύςξμσ ρξυπΰνθςό δΰννϋε ξςνξρÿωθερÿ κ νεμσ νεβξημξζνξ.";
     Text[ greek ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ dutch ] = "De bijbehorende gegevensbron werd gewist. De desbetreffende gegevens kunnen niet worden opgeslagen.";
@@ -2420,17 +2420,18 @@ String STR_DATASOURCE_DELETED
     Text[ finnish ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ italian ] = "La sorgente dati θ stata eliminata. Impossibile salvare i dati corrispondenti.";
     Text[ danish ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
-    Text[ swedish ] = "Den tillhφrande datakδllan har raderats. Det gεr inte spara nεgra data som hφr till datakδllan.";
+    Text[ swedish ] = "Den tillhφrande datakδllan har raderats. Det gεr inte spara nεgra data som refererar till datakδllan.";
     Text[ polish ] = "PrzynaleΏne rσd³o danych zosta³o usuniκte. Zapisanie dotyczΉcych go danych nie jest moΏliwe.";
     Text[ portuguese_brazilian ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ japanese ] = "εΎ“ε±γ™γ‚‹οΎƒοΎο½°οΎ€ο½Ώο½°ο½½γε‰ι™¤γ•γ‚γ¦γ„γΎγ™γ€‚γ“γ‚γ«ι–Άι€£γ™γ‚‹οΎƒοΎο½°οΎ€γ―δΏε­γ§γγΎγ›γ‚“γ€‚";
-    Text[ korean ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
+    Text[ korean ] = "ν•΄λ‹Ήν•λ” λ°μ΄ν„° μ†μ¤κ°€ μ‚­μ λμ—μµλ‹λ‹¤. λ°μ΄ν„° μ†μ¤μ κ΄€λ ¨ λ°μ΄ν„°λ¥Ό μ €μ¥ν•  μ μ—†μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "θΏ™δΈªζ•°ζ®εΊ“ε·²η»θΆ«ε ι™¤γ€‚ε› ζ­¤ζ— ζ³•δΏε­δ»»δ½•η›Έε…³ζ•°ζ®γ€‚";
     Text[ chinese_traditional ] = "ι€™ε€‹θ³‡ζ–™ζΊε·²η¶“θΆ«εªι™¤γ€‚ε› ζ­¤η„΅ζ³•ε„²ε­δ»»δ½•θ³‡ζ–™γ€‚";
     Text[ turkish ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ arabic ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ catalan ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
 };
+
 
 
 
