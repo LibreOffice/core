@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartLegend.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:02:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
     <type scope="com::sun::star::drawing">Shape</type> correlate to all text
     objects inside the legend.</p>
  */
-service ChartLegend
+published service ChartLegend
 {
     service com::sun::star::drawing::Shape;
     service com::sun::star::style::CharacterProperties;
