@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-15 13:10:02 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_EMBED_VERBDESCR_HPP_
-#include <com/sun/star/embed/VerbDescr.hpp>
+#ifndef _COM_SUN_STAR_EMBED_VERBDESCRIPTOR_HPP_
+#include <com/sun/star/embed/VerbDescriptor.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
@@ -137,7 +137,7 @@ class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCl
     sal_Int32 m_nOLEMiscFlags;
     sal_Int32 m_nAdvConn;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescr > m_aVerbList;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescriptor > m_aVerbList;
     ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > m_aDataFlavors;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
@@ -184,7 +184,7 @@ public:
 
     void CloseObject(); // switch OLE object to loaded state
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescr > GetVerbList();
+    ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescriptor > GetVerbList();
 
     void ExecuteVerb( sal_Int32 nVerbID );
 
