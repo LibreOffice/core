@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-09 19:39:50 $
+ *  last change: $Author: nn $ $Date: 2001-05-09 20:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ class ScDrawStringsVars
 
     Font                aFont;                  // aus Attributen erzeugt
     FontMetric          aMetric;
+    long                nAscentPixel;           // always pixels
     SvxCellOrientation  eAttrOrient;
     SvxCellHorJustify   eAttrHorJust;
     SvxCellVerJustify   eAttrVerJust;
@@ -122,13 +123,16 @@ class ScDrawStringsVars
 
     String              aString;                // Inhalte
     Size                aTextSize;
+    long                nOriginalWidth;
 
     ScBaseCell*         pLastCell;
     ULONG               nValueFormat;
     BOOL                bLineBreak;
 
+    BOOL                bPixelToLogic;
+
 public:
-                ScDrawStringsVars(ScOutputData* pData);
+                ScDrawStringsVars(ScOutputData* pData, BOOL bPTL);
                 ~ScDrawStringsVars();
 
                 //  SetPattern = ex-SetVars
@@ -151,11 +155,12 @@ public:
 
     const String&           GetString() const       { return aString; }
     const Size&             GetTextSize() const     { return aTextSize; }
+    long                    GetOriginalWidth() const { return nOriginalWidth; }
 
     ULONG   GetValueFormat() const                  { return nValueFormat; }
     BOOL    GetLineBreak() const                    { return bLineBreak; }
 
-    long    GetAscent() const   { return aMetric.GetAscent(); }
+    long    GetAscent() const   { return nAscentPixel; }
     BOOL    IsRotated() const   { return bRotated; }
 
     BOOL    HasCondHeight() const   { return pCondSet && SFX_ITEM_SET ==
@@ -164,11 +169,13 @@ public:
 
 //==================================================================
 
-ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData) :
+ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, BOOL bPTL) :
     pOutput     ( pData ),
+    bPixelToLogic( bPTL ),
     pPattern    ( NULL ),
     pCondSet    ( NULL ),
     pMargin     ( NULL ),
+    nOriginalWidth( 0 ),
     nIndent     ( 0 ),
     bRotated    ( FALSE ),
     eAttrHorJust( SVX_HOR_JUSTIFY_STANDARD ),
@@ -194,6 +201,7 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
     //  pPattern auswerten
 
     OutputDevice* pDev = pOutput->pDev;
+    OutputDevice* pRefDevice = pOutput->pRefDevice;
     OutputDevice* pFmtDevice = pOutput->pFmtDevice;
 
     //  Font
@@ -267,6 +275,10 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
         aMetric = pDefaultDev->GetFontMetric( aFont );
         pDefaultDev->SetMapMode( aOld );
     }
+
+    nAscentPixel = aMetric.GetAscent();
+    if ( bPixelToLogic )
+        nAscentPixel = pRefDevice->LogicToPixel( Size( 0, nAscentPixel ) ).Height();
 
     //  Ausrichtung
 
@@ -422,6 +434,10 @@ BOOL ScDrawStringsVars::SetText( ScBaseCell* pCell )
                 aTextSize.Height() = aTextSize.Width();
                 aTextSize.Width() = nTemp;
             }
+
+            nOriginalWidth = aTextSize.Width();
+            if ( bPixelToLogic )
+                aTextSize = pRefDevice->LogicToPixel( aTextSize );
         }
         //  sonst String/Groesse behalten
     }
@@ -430,6 +446,7 @@ BOOL ScDrawStringsVars::SetText( ScBaseCell* pCell )
         aString.Erase();
         pLastCell = NULL;
         aTextSize = Size(0,0);
+        nOriginalWidth = 0;
     }
 
     return bChanged;
@@ -440,6 +457,7 @@ void ScDrawStringsVars::ResetText()
     aString.Erase();
     pLastCell = NULL;
     aTextSize = Size(0,0);
+    nOriginalWidth = 0;
 }
 
 void ScDrawStringsVars::SetHashText()
@@ -464,6 +482,10 @@ void ScDrawStringsVars::SetHashText()
         aTextSize.Height() = aTextSize.Width();
         aTextSize.Width() = nTemp;
     }
+
+    nOriginalWidth = aTextSize.Width();
+    if ( bPixelToLogic )
+        aTextSize = pRefDevice->LogicToPixel( aTextSize );
 
     pLastCell = NULL;       // derselbe Text kann in der naechsten Zelle wieder passen
 }
@@ -745,7 +767,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
     Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
     UINT32 nMinHeight = aMinSize.Height() / 200;                // 1/2 Pixel
 
-    ScDrawStringsVars aVars( this );
+    ScDrawStringsVars aVars( this, bPixelToLogic );
 
     const ScPatternAttr* pOldPattern = NULL;
     const SfxItemSet* pOldCondSet = NULL;
@@ -857,6 +879,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
 
                 //  nJustPosX ist incl. Ausrichtung, nVirtPosX fuer Clipping ohne Ausrichtung
                 long nJustPosX = nVirtPosX;
+                BOOL bRightAdjusted = FALSE;        // to correct text width calculation later
                 if ( bEmpty && !bMergeEmpty )
                 {
                     if (nX==nX1)                    // links Zellen zum Weiterzeichnen ?
@@ -1307,6 +1330,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                 case SVX_HOR_JUSTIFY_RIGHT:
                                     nJustPosX += nAvailWidth - aVars.GetTextSize().Width() -
                                                 (long) ( aVars.GetMargin()->GetRightMargin() * nPPTX );
+                                    bRightAdjusted = TRUE;
                                     break;
                                 case SVX_HOR_JUSTIFY_CENTER:
                                     nJustPosX += ( nAvailWidth - aVars.GetTextSize().Width() +
@@ -1413,6 +1437,11 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                             //! Test
 */
 
+                            //  aClipRect is not used after SetClipRegion/IntersectClipRegion,
+                            //  so it can be modified here
+                            if (bPixelToLogic)
+                                aClipRect = pRefDevice->PixelToLogic( aClipRect );
+
                             if (bMetaFile)
                             {
                                 pDev->Push();
@@ -1443,6 +1472,20 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                         nJustPosY++;    // Passt sonst nicht zur EditEngine
 #endif
 
+                        Point aDrawTextPos( nJustPosX, nJustPosY );
+                        if ( bPixelToLogic )
+                        {
+                            //  undo text width adjustment in pixels
+                            if (bRightAdjusted)
+                                aDrawTextPos.X() += aVars.GetTextSize().Width();
+
+                            aDrawTextPos = pRefDevice->PixelToLogic( aDrawTextPos );
+
+                            //  redo text width adjustment in logic units
+                            if (bRightAdjusted)
+                                aDrawTextPos.X() -= aVars.GetOriginalWidth();
+                        }
+
                         //  in Metafiles immer DrawTextArray, damit die Positionen mit
                         //  aufgezeichnet werden (fuer nicht-proportionales Resize):
 
@@ -1461,11 +1504,11 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                     pDX[i] = (long)(pDX[i] / fMul + 0.5);
                             }
 
-                            pDev->DrawTextArray( Point( nJustPosX, nJustPosY ), aString, pDX );
+                            pDev->DrawTextArray( aDrawTextPos, aString, pDX );
                             delete[] pDX;
                         }
                         else
-                            pDev->DrawText( Point( nJustPosX, nJustPosY ), aString );
+                            pDev->DrawText( aDrawTextPos, aString );
 
                         if ( bHClip || bVClip )
                         {
