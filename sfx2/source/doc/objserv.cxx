@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:42:03 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,6 +352,8 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             pFilt = SfxFilter::GetDefaultFilterFromFactory(GetFactory().GetFactoryName());
         if ( bIsExport )
             pFilt = GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_EXPORT, SFX_FILTER_INTERNAL | SFX_FILTER_IMPORT);
+        else
+            pFilt = GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_EXPORT, SFX_FILTER_INTERNAL);
     }
 
     DBG_ASSERT( pFilt, "Kein Filter zum Speichern" );
@@ -946,7 +948,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         }
         else
         {
-            // fremdes Format mit m"oglichem Verlust (aber nicht per API) wenn noch nicht gewarnt und anschließend im
+            // fremdes Format mit m"oglichem Verlust (aber nicht per API) wenn noch nicht gewarnt und anschlieï¿½end im
             // alien format gespeichert wurde
             if ( !( pCurFilter->IsOwnFormat() && pCurFilter->GetVersion() == SOFFICE_FILEFORMAT_CURRENT || ( pCurFilter->GetFilterFlags() & SFX_FILTER_SILENTEXPORT ) )
                  && ( !pImp->bDidWarnFormat || !pImp->bDidDangerousSave ) )
