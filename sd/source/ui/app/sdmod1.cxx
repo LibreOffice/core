@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:29:55 $
+ *  last change: $Author: hr $ $Date: 2003-06-26 11:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,7 +620,16 @@ void SdModule::Execute(SfxRequest& rReq)
                     if (pViewShell->GetSlideShow())
                     {
                         const SfxItemSet* pSet = rReq.GetArgs();
-                        if (pSet)
+                        if (pSet == NULL)
+                        {
+                            // e.g. open button during a presentation.
+                            bIntercept = TRUE;
+                        }
+                        /* Since #110295# the following block is not
+                           necessary anymore: Star/OpenOffice
+                           documents can be opened during a show.
+
+                        else
                         {
                             String aBookmark(((SfxStringItem&)pSet->Get(SID_FILE_NAME)).GetValue());
 
@@ -660,11 +669,7 @@ void SdModule::Execute(SfxRequest& rReq)
                                 }
                             }
                         }
-                        // z. B. Oeffnen-Button waehrend der DiaShow
-                        else
-                        {
-                            bIntercept = TRUE;
-                        }
+                        */
                     }
                 }
             }
