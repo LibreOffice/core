@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-20 08:21:11 $
+ *  last change: $Author: thb $ $Date: 2002-08-02 11:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,7 +643,7 @@ IMPL_LINK(ScAccessibleCellTextData, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
     {
-        ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHintTranslator::EENotification2Hint( aNotify );
+        ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify );
 
         if( aHint.get() )
             GetBroadcaster().Broadcast( *aHint.get() );
@@ -748,7 +748,7 @@ IMPL_LINK(ScAccessibleEditObjectTextData, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
     {
-        ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHintTranslator::EENotification2Hint( aNotify );
+        ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify );
 
         if( aHint.get() )
             GetBroadcaster().Broadcast( *aHint.get() );
@@ -972,7 +972,7 @@ IMPL_LINK(ScAccessiblePreviewCellTextData, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
     {
-        ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHintTranslator::EENotification2Hint( aNotify);
+        ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify);
 
         if( aHint.get() )
             GetBroadcaster().Broadcast( *aHint.get() );
@@ -1097,7 +1097,7 @@ IMPL_LINK(ScAccessiblePreviewHeaderCellTextData, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
     {
-        ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHintTranslator::EENotification2Hint( aNotify);
+        ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify);
 
         if( aHint.get() )
             GetBroadcaster().Broadcast( *aHint.get() );
