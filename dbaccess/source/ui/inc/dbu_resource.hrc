@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-06 09:38:12 $
+ *  last change: $Author: fs $ $Date: 2002-05-14 13:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@
 #define ERR_QRY_NOSTATEMENT             RID_ERRORBOX_START +  9
 #define ERR_QRY_NOCRITERIA              RID_ERRORBOX_START + 10
 #define ERR_CANTDOTABLEACTION           RID_ERRORBOX_START + 11
+#define ERROR_INVALID_TABLE_NAME_LENGTH RID_ERRORBOX_START + 12
 
 
 //========================================================================
@@ -162,7 +163,7 @@
 #define QUERY_NEED_TO_SAVE_FILTER       RID_QUERYBOX_START + 10
 #define QUERY_VIEW_DESIGN_SAVEMODIFIED  RID_QUERYBOX_START + 11
 #define QUERY_USERADMIN_DELETE_USER     RID_QUERYBOX_START + 12
-
+#define TABLE_DESIGN_ALL_ROWS_DELETED   RID_QUERYBOX_START + 13
 
 //========================================================================
 // warning boxes
@@ -532,6 +533,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.73  2002/05/06 09:38:12  oj
+ *  #96363# new strings
+ *
  *  Revision 1.72  2002/05/03 07:57:30  oj
  *  #98772#
  *
