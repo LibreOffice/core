@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 10:22:03 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:15:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,8 +722,7 @@ void SwPageFrm::PrepareHeader()
 
     const SwFmtHeader &rH = ((SwFrmFmt*)pRegisteredIn)->GetHeader();
 
-    const FASTBOOL bOn = !((SwFrmFmt*)pRegisteredIn)->GetDoc()->IsBrowseMode() ||
-                          ((SwFrmFmt*)pRegisteredIn)->GetDoc()->IsHeadInBrowse();
+    const FASTBOOL bOn = !((SwFrmFmt*)pRegisteredIn)->GetDoc()->IsBrowseMode();
 
     if ( bOn && rH.IsActive() )
     {   //Header einsetzen, vorher entfernen falls vorhanden.
@@ -773,8 +772,7 @@ void SwPageFrm::PrepareFooter()
     while ( pLay->GetNext() )
         pLay = (SwLayoutFrm*)pLay->GetNext();
 
-    const FASTBOOL bOn = !((SwFrmFmt*)pRegisteredIn)->GetDoc()->IsBrowseMode() ||
-                         ((SwFrmFmt*)pRegisteredIn)->GetDoc()->IsFootInBrowse();
+    const FASTBOOL bOn = !((SwFrmFmt*)pRegisteredIn)->GetDoc()->IsBrowseMode();
 
     if ( bOn && rF.IsActive() )
     {   //Footer einsetzen, vorher entfernen falls vorhanden.
