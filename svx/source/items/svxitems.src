@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:01:14 $
+ *  last change: $Author: os $ $Date: 2000-12-04 15:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7320,7 +7320,7 @@ String RID_SVXITEMS_EMPHASIS_BELOW_POS
 
 String RID_SVXITEMS_TWOLINES_OFF
 {
-    Text = "Zweilig aus";
+    Text = "Zweizeilig aus";
     Text [ English ] = "Two lines off" ;
     Text[ english_us ] = "Two lines off";
     Text[ portuguese ] = "Two lines off";
@@ -7343,7 +7343,7 @@ String RID_SVXITEMS_TWOLINES_OFF
 };
 String RID_SVXITEMS_TWOLINES
 {
-    Text = "Zeilig";
+    Text = "Zweizeilig";
     Text [ English ] = "Two lines" ;
     Text[ english_us ] = "Two lines";
     Text[ portuguese ] = "Two lines";
