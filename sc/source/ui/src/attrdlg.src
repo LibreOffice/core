@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:17:39 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ portuguese ] = "Tipografia asiática";
                 Text[ russian ] = "Àçèàòñêèå øğèôòû";
                 Text[ greek ] = "ÁóéáôéêŞ ôõğïãñáößá";
-                Text[ dutch ] = "Asiatische typografie";
+                Text[ dutch ] = "Aziatische typografie";
                 Text[ french ] = "Typographie asiatique";
                 Text[ spanish ] = "Tipografía asiática";
                 Text[ italian ] = "Tipografia asiatica";
@@ -353,7 +353,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ english_us ] = "~Protected" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "Ëø¶¨µÄ(~P)";
-        Text[ russian ] = "Áëîêèğîâàíî";
+        Text[ russian ] = "Çàáëîêèğîâàíî";
         Text[ polish ] = "Ochrona";
         Text[ japanese ] = "•ÛŒì‚·‚é(~P)";
         Text[ chinese_traditional ] = "Âê©w(~P)";
@@ -435,7 +435,7 @@ TabPage RID_SCPAGE_PROTECTION
         "To activate cell protection, you have to protect the active table.\n\nChoose 'Protect Document' from menu 'Extras' and the command 'Table' afterwards." ;
         Text [ norwegian ] =
         "To activate cell protection, you have to protect the active table.\n\nChoose 'Protect Document' from menu 'Extras' and the command 'Table' afterwards." ;
-        Text [ italian ] = "Per attivare la protezione cella, è necessario proteggere la tabella attiva.\n\nScegliere 'Proteggi documento' dal menu 'Strumenti' e quindi il comando 'Tabella'." ;
+        Text [ italian ] = "Per attivare la protezione cella, è necessario proteggere la tabella attiva.\n\nScegliete 'Proteggi documento' dal menu 'Strumenti' e quindi il comando 'Tabella'." ;
         Text [ portuguese_brazilian ] = "Para ativar a proteção da célula, , preciso proteger a tabelaativa.\n\nEscolha 'Proteger Documento' no menu 'Extras' e,em seguida, o comando 'Tabela'." ;
         Text [ portuguese ] = "Para activar a protecção da célula, é necessário proteger a tabela activa.\n\nSeleccione 'Proteger documento' no menu 'Ferramentas' e em seguida o comando 'Tabela'." ;
         Text [ finnish ] =
