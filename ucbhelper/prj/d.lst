@@ -6,6 +6,7 @@
 ..\%__SRC%\misc\*.sym %_DEST%\bin%_EXT%\*.sym
 
 mkdir: %_DEST%\inc%_EXT%\ucbhelper
+..\inc\ucbhelper\configurationkeys.hxx %_DEST%\inc%_EXT%\ucbhelper\configurationkeys.hxx
 ..\inc\ucbhelper\configureucb.hxx %_DEST%\inc%_EXT%\ucbhelper\configureucb.hxx
 ..\inc\ucbhelper\content.hxx %_DEST%\inc%_EXT%\ucbhelper\content.hxx
 ..\inc\ucbhelper\contentbroker.hxx %_DEST%\inc%_EXT%\ucbhelper\contentbroker.hxx
@@ -18,7 +19,6 @@ mkdir: %_DEST%\inc%_EXT%\ucbhelper
 ..\inc\ucbhelper\macros.hxx %_DEST%\inc%_EXT%\ucbhelper\macros.hxx
 ..\inc\ucbhelper\propertyvalueset.hxx %_DEST%\inc%_EXT%\ucbhelper\propertyvalueset.hxx
 ..\inc\ucbhelper\providerhelper.hxx %_DEST%\inc%_EXT%\ucbhelper\providerhelper.hxx
-..\inc\ucbhelper\registerucb.hxx %_DEST%\inc%_EXT%\ucbhelper\registerucb.hxx
 ..\inc\ucbhelper\resultset.hxx %_DEST%\inc%_EXT%\ucbhelper\resultset.hxx
 ..\inc\ucbhelper\resultsetmetadata.hxx %_DEST%\inc%_EXT%\ucbhelper\resultsetmetadata.hxx
 ..\inc\ucbhelper\resultsethelper.hxx %_DEST%\inc%_EXT%\ucbhelper\resultsethelper.hxx
