@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-10 22:18:16 $
+ *  last change: $Author: nf $ $Date: 2001-12-13 12:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,17 +88,17 @@ TabPage RID_SVXPAGE_INET_PROXY
     Text [ danish ] = "Proxy" ;
     Text [ portuguese ] = "Servidor Proxy" ;
     Text [ portuguese_brazilian ] = "Proxy Server" ;
-    Text[ chinese_simplified ] = "´úÀí·şÎñÆ÷";
+    Text[ chinese_simplified ] = "ä»£ç†æœåŠ¡å™¨";
     Text[ russian ] = "Ïğîêñè";
     Text[ polish ] = "Proxy";
-    Text[ japanese ] = "ÌßÛ·¼";
-    Text[ chinese_traditional ] = "¥N²z¦øªA¾¹";
+    Text[ japanese ] = "ï¾Œï¾Ÿï¾›ï½·ï½¼";
+    Text[ chinese_traditional ] = "ä»£ç†ä¼ºæœå™¨";
     Text[ arabic ] = "Proxy";
     Text[ greek ] = "Proxy";
-    Text[ korean ] = "ÇÁ·Ï½Ã";
+    Text[ korean ] = "í”„ë¡ì‹œ";
     Text[ turkish ] = "Proxy";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Proxy";
+    Text[ catalan ] = "Servidor intermediari";
     Text[ finnish ] = "Välityspalvelin";
                                     #define GB_TYPES_TOP 3
                                     #define GB_TYPES_LEFT 6
@@ -117,14 +117,14 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ danish ] = "Indstillinger" ;
         Text [ portuguese_brazilian ] = "Einstellungen" ;
         Text [ portuguese ] = "Definições" ;
-        Text[ chinese_simplified ] = "Éè¶¨";
+        Text[ chinese_simplified ] = "è®¾å®š";
         Text[ russian ] = "Íàñòğîéêè";
         Text[ polish ] = "Ustawienia";
-        Text[ japanese ] = "İ’è";
-        Text[ chinese_traditional ] = "³]©w";
+        Text[ japanese ] = "è¨­å®š";
+        Text[ chinese_traditional ] = "è¨­å®š";
         Text[ arabic ] = "ÅÚÏÇÏÇÊ";
         Text[ greek ] = "Ñõèìßóåéò";
-        Text[ korean ] = "¼³Á¤";
+        Text[ korean ] = "ì„¤ì •";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Configuración";
@@ -145,14 +145,14 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = "Serveur Pro~xy" ;
         Text [ dutch ] = "Proxy s~erver" ;
         Text [ portuguese ] = "S~ervidor Proxy" ;
-        Text[ chinese_simplified ] = "´úÀí·şÎñÆ÷(~E)";
+        Text[ chinese_simplified ] = "ä»£ç†æœåŠ¡å™¨(~E)";
         Text[ russian ] = "Ïğîêñè-ñåğâåğ";
         Text[ polish ] = "Serwer Proxy";
-        Text[ japanese ] = "ÌßÛ·¼ »°ÊŞ°(~E)";
-        Text[ chinese_traditional ] = "¥N²z¦øªA¾¹(~E)";
+        Text[ japanese ] = "ï¾Œï¾Ÿï¾›ï½·ï½¼ï½»ï½°ï¾Šï¾ï½°(~E)";
+        Text[ chinese_traditional ] = "ä»£ç†ä¼ºæœå™¨(~E)";
         Text[ arabic ] = "ãÒæøÏ Proxy";
         Text[ greek ] = "ÄéáêïìéóôŞò Proxy";
-        Text[ korean ] = "ÇÁ·Ï½Ã ¼­¹ö(~E)";
+        Text[ korean ] = "í”„ë¡ì‹œ ì„œë²„(~E)";
         Text[ turkish ] = "Proxy sunucusu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Servidor Pro~xy";
@@ -202,7 +202,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     StringList [ dutch ] =
     {
              < "Geen" ; > ;
-        < "Automatisch" ; > ;
+        < "Handmatig" ; > ;
     };
     StringList [ french ] =
     {
@@ -217,7 +217,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     StringList [ finnish ] =
     {
              < "Ei mitään" ; > ;
-        < "Automaattinen" ; > ;
+        < "Manuaalinen" ; > ;
     };
     StringList [ italian ] =
     {
@@ -246,23 +246,23 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     StringList [ japanese ] =
     {
-             < "‚È‚µ" ; > ;
-        < "è“®" ; > ;
+             < "ãªã—" ; > ;
+        < "æ‰‹å‹•" ; > ;
     };
     StringList [ korean ] =
     {
-             < "¾øÀ½" ; > ;
-        < "ÀÚµ¿" ; > ;
+             < "ì—†ìŒ" ; > ;
+        < "ìˆ˜ë™" ; > ;
     };
     StringList [ chinese_simplified ] =
     {
-             < "ÎŞ" ; > ;
-        < "ÊÖ¶¯" ; > ;
+             < "æ— " ; > ;
+        < "æ‰‹åŠ¨" ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-             < "µL" ; > ;
-        < "¤â°Ê" ; > ;
+             < "ç„¡" ; > ;
+        < "æ‰‹å‹•" ; > ;
     };
     StringList [ turkish ] =
     {
@@ -289,18 +289,18 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ russian ] = "Use browser settings";
         Text[ greek ] = "Use browser settings";
         Text[ dutch ] = "Use browser settings";
-        Text[ french ] = "Use browser settings";
-        Text[ spanish ] = "Use browser settings";
+        Text[ french ] = "Utiliser les paramètres du Browser";
+        Text[ spanish ] = "Utilizar configuración del navegador";
         Text[ finnish ] = "Use browser settings";
-        Text[ italian ] = "Use browser settings";
+        Text[ italian ] = "Usa le impostazioni browser";
         Text[ danish ] = "Use browser settings";
-        Text[ swedish ] = "Use browser settings";
+        Text[ swedish ] = "Använd webbläsarinställningar";
         Text[ polish ] = "Use browser settings";
         Text[ portuguese_brazilian ] = "Use browser settings";
         Text[ japanese ] = "ï¾Œï¾ï¾—ï½³ï½»ï¾è¨­å®šã‚’ä½¿ç”¨";
         Text[ korean ] = "Use browser settings";
-        Text[ chinese_simplified ] = "Use browser settings";
-        Text[ chinese_traditional ] = "Use browser settings";
+        Text[ chinese_simplified ] = "ä½¿ç”¨æµè§ˆå™¨çš„è®¾å®š";
+        Text[ chinese_traditional ] = "ä½¿ç”¨ç€è¦½å™¨çš„è¨­å®š";
         Text[ turkish ] = "Use browser settings";
         Text[ arabic ] = "Use browser settings";
         Text[ catalan ] = "Use browser settings";
@@ -311,23 +311,23 @@ TabPage RID_SVXPAGE_INET_PROXY
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Http-Proxy" ;
         Text [ English ] = "Http Pro~xy" ;
-        Text [ english_us ] = "Ht~tp proxy" ;
+        Text [ english_us ] = "HT~TP proxy" ;
         Text [ italian ] = "Pro~xy Http" ;
-        Text [ spanish ] = "~Http Proxy" ;
+        Text [ spanish ] = "~Proxy Http" ;
         Text [ french ] = "~Proxy Http" ;
         Text [ dutch ] = "Http Pro~xy" ;
-        Text [ swedish ] = "~Http proxy" ;
+        Text [ swedish ] = "~Http-proxy" ;
         Text [ danish ] = "Http proxy" ;
         Text [ portuguese_brazilian ] = "Http Pro~xy" ;
         Text [ portuguese ] = "Pro~xy Http" ;
-        Text[ chinese_simplified ] = "H~ttp ´úÀí·şÎñÆ÷";
+        Text[ chinese_simplified ] = "H~ttp ä»£ç†";
         Text[ russian ] = "~Http-ïğîêñè";
         Text[ polish ] = "Http Proxy";
-        Text[ japanese ] = "H~ttp ÌßÛ·¼";
-        Text[ chinese_traditional ] = "H~ttp ¥N²z¦øªA¾¹";
+        Text[ japanese ] = "H~ttp ï¾Œï¾Ÿï¾›ï½·ï½¼";
+        Text[ chinese_traditional ] = "H~ttp ä»£ç†";
         Text[ arabic ] = "Http Proxy~";
         Text[ greek ] = "~Http Proxy";
-        Text[ korean ] = "H~ttp ÇÁ·Ï½Ã";
+        Text[ korean ] = "H~ttp í”„ë¡ì‹œ";
         Text[ turkish ] = "~Http Proxy";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Http Proxy";
@@ -354,14 +354,14 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = "~Port" ;
         Text [ dutch ] = "~Poort" ;
         Text [ portuguese ] = "~Porta" ;
-        Text[ chinese_simplified ] = "¶Ë¿Ú(~P)";
+        Text[ chinese_simplified ] = "ç«¯å£(~P)";
         Text[ russian ] = "Ïîğò";
         Text[ polish ] = "Port";
-        Text[ japanese ] = "Îß°Ä(~P)";
-        Text[ chinese_traditional ] = "°ğ(~P)";
+        Text[ japanese ] = "ï¾ï¾Ÿï½°ï¾„(~P)";
+        Text[ chinese_traditional ] = "åŸ (~P)";
         Text[ arabic ] = "ãäİĞ";
         Text[ greek ] = "Èıñá";
-        Text[ korean ] = "Æ÷Æ®(~P)";
+        Text[ korean ] = "í¬íŠ¸(~P)";
         Text[ turkish ] = "~Port";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Puerto";
@@ -379,23 +379,23 @@ TabPage RID_SVXPAGE_INET_PROXY
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Ftp-Proxy" ;
         Text [ English ] = "~Ftp Proxy" ;
-        Text [ english_us ] = "~Ftp proxy" ;
+        Text [ english_us ] = "~FTP proxy" ;
         Text [ italian ] = "Proxy ~Ftp" ;
-        Text [ spanish ] = "~Ftp Proxy" ;
+        Text [ spanish ] = "~Proxy Ftp" ;
         Text [ french ] = "Proxy ~Ftp" ;
         Text [ dutch ] = "~Ftp Proxy" ;
-        Text [ swedish ] = "~Ftp proxy" ;
+        Text [ swedish ] = "~Ftp-proxy" ;
         Text [ danish ] = "Ftp proxy" ;
         Text [ portuguese_brazilian ] = "~Ftp Proxy" ;
         Text [ portuguese ] = "~Ftp Proxy" ;
-        Text[ chinese_simplified ] = "~FTP ´úÀí·şÎñÆ÷";
+        Text[ chinese_simplified ] = "~FTP ä»£ç†";
         Text[ russian ] = "~Ftp-ïğîêñè";
         Text[ polish ] = "Ftp Proxy";
-        Text[ japanese ] = "~Ftp ÌßÛ·¼";
-        Text[ chinese_traditional ] = "~Ftp ¥N²z¦øªA¾¹";
+        Text[ japanese ] = "~Ftp ï¾Œï¾Ÿï¾›ï½·ï½¼";
+        Text[ chinese_traditional ] = "~Ftp ä»£ç†";
         Text[ arabic ] = "Ftp Proxy~";
         Text[ greek ] = "~Ftp Proxy";
-        Text[ korean ] = "~Ftp ÇÁ·Ï½Ã";
+        Text[ korean ] = "~Ftp í”„ë¡ì‹œ";
         Text[ turkish ] = "~Ftp Proxy";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ftp Proxy";
@@ -422,14 +422,14 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = "P~ort" ;
         Text [ dutch ] = "P~oort" ;
         Text [ portuguese ] = "P~ort" ;
-        Text[ chinese_simplified ] = "¶Ë¿Ú(~O)";
+        Text[ chinese_simplified ] = "ç«¯å£(~O)";
         Text[ russian ] = "Ïîğò";
         Text[ polish ] = "Port";
-        Text[ japanese ] = "Îß°Ä(~O)";
-        Text[ chinese_traditional ] = "°ğ(~O)";
+        Text[ japanese ] = "ï¾ï¾Ÿï½°ï¾„(~O)";
+        Text[ chinese_traditional ] = "åŸ (~O)";
         Text[ arabic ] = "ãäİĞ";
         Text[ greek ] = "Èıñá";
-        Text[ korean ] = "Æ÷Æ®(~O)";
+        Text[ korean ] = "í¬íŠ¸(~O)";
         Text[ turkish ] = "Port";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "P~uerto";
@@ -447,23 +447,23 @@ TabPage RID_SVXPAGE_INET_PROXY
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Socks-Proxy" ;
         Text [ English ] = "~Socks Proxy" ;
-        Text [ english_us ] = "~Socks proxy" ;
+        Text [ english_us ] = "~SOCKS proxy" ;
         Text [ italian ] = "Socks Prox~y" ;
         Text [ spanish ] = "Socks Prox~y" ;
         Text [ french ] = "Proxy Soc~ks" ;
         Text [ dutch ] = "Socks Prox~y" ;
-        Text [ swedish ] = "~Socks proxy" ;
+        Text [ swedish ] = "~Socks-proxy" ;
         Text [ danish ] = "Socks proxy" ;
         Text [ portuguese_brazilian ] = "Socks Prox~y" ;
         Text [ portuguese ] = "Socks Prox~y" ;
-        Text[ chinese_simplified ] = "~Socks ´úÀí·şÎñÆ÷";
+        Text[ chinese_simplified ] = "~Socks ä»£ç†";
         Text[ russian ] = "~Socks-ïğîêñè";
         Text[ polish ] = "Socks Proxy";
-        Text[ japanese ] = "~Socks ÌßÛ·¼";
-        Text[ chinese_traditional ] = "~Socks ¥N²z¦øªA¾¹";
+        Text[ japanese ] = "~Socks ï¾Œï¾Ÿï¾›ï½·ï½¼";
+        Text[ chinese_traditional ] = "~Socks ä»£ç†";
         Text[ arabic ] = "Socks proxy~";
         Text[ greek ] = "~Socks Proxy";
-        Text[ korean ] = "~Socks ÇÁ·Ï½Ã";
+        Text[ korean ] = "~Socks í”„ë¡ì‹œ";
         Text[ turkish ] = "Socks Proxy";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Socks Prox~y";
@@ -490,14 +490,14 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = "Po~rt" ;
         Text [ dutch ] = "Poo~rt" ;
         Text [ portuguese ] = "Po~rt" ;
-        Text[ chinese_simplified ] = "¶Ë¿Ú(~R)";
+        Text[ chinese_simplified ] = "ç«¯å£(~R)";
         Text[ russian ] = "Ïîğò";
         Text[ polish ] = "Port";
-        Text[ japanese ] = "Îß°Ä(~R)";
-        Text[ chinese_traditional ] = "°ğ(~R)";
+        Text[ japanese ] = "ï¾ï¾Ÿï½°ï¾„(~R)";
+        Text[ chinese_traditional ] = "åŸ (~R)";
         Text[ arabic ] = "ãäİĞ";
         Text[ greek ] = "Èıñá";
-        Text[ korean ] = "Æ÷Æ®(~R)";
+        Text[ korean ] = "í¬íŠ¸(~R)";
         Text[ turkish ] = "Port";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pu~erto";
@@ -527,11 +527,11 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ chinese_simplified ] = "ä¸ç”¨ä»£ç†æœåŠ¡å™¨(~N)";
         Text[ russian ] = "Áåç ïğîêñè äëÿ ";
         Text[ polish ] = "Brak Proxy dla";
-        Text[ japanese ] = "ÌßÛ·¼‚È‚µ(~N)";
+        Text[ japanese ] = "ï¾Œï¾Ÿï¾›ï½·ï½¼ãªã—(~N)";
         Text[ chinese_traditional ] = "ä¸ç”¨ä»£ç†ä¼ºæœå™¨(~N)";
         Text[ arabic ] = "áÇ íæÌÏ Proxy áÜ:";
         Text[ greek ] = "~Êáíİíá Proxy ãéá";
-        Text[ korean ] = "ÇÁ·Ï½Ã ¾øÀ½(~N):";
+        Text[ korean ] = "í”„ë¡ì‹œ ì—†ìŒ(~N):";
         Text[ turkish ] = "Proxy yok:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Sin Proxy para";
@@ -558,14 +558,14 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ danish ] = "Separatorer ;" ;
         Text [ portuguese ] = "Separador ;" ;
         Text [ portuguese_brazilian ] = "Trennzeichen ;" ;
-        Text[ chinese_simplified ] = "·ÖºÅ;";
+        Text[ chinese_simplified ] = "ç”¨åˆ†å·éš”å¼€";
         Text[ russian ] = "Ğàçäåëèòåëü ;";
         Text[ polish ] = "Separator ;";
-        Text[ japanese ] = "‹æØ‚è‹L†;";
-        Text[ chinese_traditional ] = "¤À¸¹;";
+        Text[ japanese ] = "åŒºåˆ‡ã‚Šè¨˜å·;";
+        Text[ chinese_traditional ] = "ç”¨åˆ†è™Ÿéš”é–‹";
         Text[ arabic ] = "ÇÓÊÎÏã ; áİÕá ÇáÅÏÎÇáÇÊ";
         Text[ greek ] = "Åíùôéêü ;";
-        Text[ korean ] = "±¸ºĞ ±âÈ£ ;";
+        Text[ korean ] = "êµ¬ë¶„ ê¸°í˜¸ ;";
         Text[ turkish ] = "Ayırma işareti ;";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Separador ;";
@@ -586,14 +586,14 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ danish ] = "DNS server" ;
         Text [ portuguese_brazilian ] = "DNS Server" ;
         Text [ portuguese ] = "Servidor DNS" ;
-        Text[ chinese_simplified ] = "DNS ·şÎñÆ÷";
+        Text[ chinese_simplified ] = "DNS æœåŠ¡å™¨";
         Text[ russian ] = "Ñåğâåğ DNS";
         Text[ polish ] = "Serwer DNS";
-        Text[ japanese ] = "DNS »°ÊŞ°";
-        Text[ chinese_traditional ] = "DNS ¦øªA¾¹";
+        Text[ japanese ] = "DNS ï½»ï½°ï¾Šï¾ï½°";
+        Text[ chinese_traditional ] = "DNS ä¼ºæœå™¨";
         Text[ arabic ] = "ãÒæøÏ DNS";
         Text[ greek ] = "ÄéáêïìéóôŞò DNS";
-        Text[ korean ] = "DNS ¼­¹ö";
+        Text[ korean ] = "DNS ì„œë²„";
         Text[ turkish ] = "DNS sunucusu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Servidor DNS";
@@ -614,18 +614,18 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ danish ] = "Automatisk" ;
         Text [ portuguese_brazilian ] = "~Auto" ;
         Text [ portuguese ] = "~Automático" ;
-        Text[ chinese_simplified ] = "×Ô¶¯(~A)";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨(~A)";
         Text[ russian ] = "Àâòîìàòè÷åñêè";
         Text[ polish ] = "Automatycznie";
-        Text[ japanese ] = "©“®(~A)";
-        Text[ chinese_traditional ] = "¦Û°Ê(~A)";
+        Text[ japanese ] = "è‡ªå‹•(~A)";
+        Text[ chinese_traditional ] = "è‡ªå‹•(~A)";
         Text[ arabic ] = "ÊáŞÇÆí";
         Text[ greek ] = "~Áõôüìáôá";
-        Text[ korean ] = "ÀÚµ¿(~A)";
+        Text[ korean ] = "ìë™(~A)";
         Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Automático";
-        Text[ finnish ] = "A~utomaattinen";
+        Text[ finnish ] = "~Automaattinen";
     };
     RadioButton RB_DNS_MANUAL
     {
@@ -642,14 +642,14 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ danish ] = "Manuel" ;
         Text [ portuguese_brazilian ] = "~Manuell" ;
         Text [ portuguese ] = "~Manual" ;
-        Text[ chinese_simplified ] = "ÊÖ¶¯(~M)";
+        Text[ chinese_simplified ] = "æ‰‹åŠ¨(~M)";
         Text[ russian ] = "Âğó÷íóş";
         Text[ polish ] = "Rêcznie";
-        Text[ japanese ] = "è“®(~M)";
-        Text[ chinese_traditional ] = "¤â°Ê(~M)";
+        Text[ japanese ] = "æ‰‹å‹•(~M)";
+        Text[ chinese_traditional ] = "æ‰‹å‹•(~M)";
         Text[ arabic ] = "íÏæí";
         Text[ greek ] = "×åéñïêßíçôá";
-        Text[ korean ] = "¼öµ¿(~M)";
+        Text[ korean ] = "ìˆ˜ë™(~M)";
         Text[ turkish ] = "Manüel";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Manual";
@@ -677,14 +677,14 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = " ne répond pas aux critères fixés pour ce champ. Vous devez saisir une valeur comprise entre 0 et 255." ;
         Text [ dutch ] = "is geen geldig item voor dit veld. Geef een waarde tussen 0 en 255 aan." ;
         Text [ portuguese ] = "não é uma entrada válida para este campo. Indique um valor entre 0 e 255." ;
-        Text[ chinese_simplified ] = " ÊÇÕâ¸ö×Ö¶ÎµÄÎŞĞ§ÌõÄ¿£¬ÇëÊäÈëÒ»¸öÔÚ 0 ºÍ 255 Ö®¼äµÄÊıÖµ¡£";
+        Text[ chinese_simplified ] = " æ˜¯è¿™ä¸ªå­—æ®µçš„æ— æ•ˆæ¡ç›®ï¼Œè¯·è¾“å…¥ä¸€ä¸ªåœ¨ 0 å’Œ 255 ä¹‹é—´çš„æ•°å€¼ã€‚";
         Text[ russian ] = "íåïğàâèëüíàÿ çàïèñü äëÿ ıòîãî ïîëÿ. Ââåäèòå, ïîæàëóéñòà, çíà÷åíèå îò 0 äî 255.";
         Text[ polish ] = "jest wpisem niedozwolonym w danym polu. Nale¿y podaæ wartoœæ miêdzy 0 a 255.";
-        Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚Å‚Í–³Œø‚Å‚·B0 ` 255 ”ÍˆÍ‚Ì”’l‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
-        Text[ chinese_traditional ] = " ¬O³o­ÓÄæ¦ìªºµL®Ä±ø¥Ø¡M½Ğ¿é¤J¤@­Ó¦b0©M255¤§¶¡ªº¼Æ­È¡C";
+        Text[ japanese ] = "ã“ã®ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã§ã¯ç„¡åŠ¹ã§ã™ã€‚0 ï½ 255 ç¯„å›²ã®æ•°å€¤ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
+        Text[ chinese_traditional ] = " æ˜¯é€™å€‹æ¬„ä½çš„ç„¡æ•ˆæ¢ç›®ï¹è«‹è¼¸å…¥ä¸€å€‹åœ¨0å’Œ255ä¹‹é–“çš„æ•¸å€¼ã€‚";
         Text[ arabic ] = "åæ ÅÏÎÇá ÛíÑ ÕÇáÍ áåĞÇ ÇáÍŞá. ÇáÑÌÇÁ ÅÏÎÇá ŞíãÉ ÊÊÑÇæÍ ãÇ Èíä 0 æ 255.";
         Text[ greek ] = "äåí åßíáé İãêõñç êáôá÷şñéóç ãéá áõôü ôï ğåäßï. Ğáñáêáëş åéóÜãåôå ìéá ôéìŞ ìåôáîı ôïõ 0 êáé 255.";
-        Text[ korean ] = " ÀÌ ÇÊµå¿¡ À¯È¿ÇÏÁö ¾ÊÀº Ç×¸ñÀÔ´Ï´Ù. 0°ú 255 »çÀÌÀÇ °ªÀ» ÁöÁ¤ÇÏ½Ê½Ã¿À.";
+        Text[ korean ] = " ì´ í•„ë“œì— ìœ íš¨í•˜ì§€ ì•Šì€ í•­ëª©ì…ë‹ˆë‹¤. 0ê³¼ 255 ì‚¬ì´ì˜ ê°’ì„ ì§€ì •í•˜ì‹­ì‹œì˜¤.";
         Text[ turkish ] = "bu alan için geçerli bir değer değil. 0 ile 255 arasında bir değer girin.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "no es una entrada válida para este campo. Por favor escriba un valor entre 0 y 255.";
@@ -703,14 +703,14 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = " ne répond pas aux critères fixés pour ce champ. Vous devez saisir une valeur comprise entre 1 et 255." ;
         Text [ dutch ] = "is geen geldig item voor dit veld. Geef een waarde tussen 1 en 255 aan." ;
         Text [ portuguese ] = "não é uma entrada válida para este campo. Indique um valor entre 1 e 255." ;
-        Text[ chinese_simplified ] = " ÊÇÕâ¸ö×Ö¶ÎµÄÎŞĞ§ÌõÄ¿£¬ÇëÊäÈëÒ»¸öÔÚ 1 ºÍ 255 Ö®¼äµÄÊıÖµ¡£";
+        Text[ chinese_simplified ] = " æ˜¯è¿™ä¸ªå­—æ®µçš„æ— æ•ˆæ¡ç›®ï¼Œè¯·è¾“å…¥ä¸€ä¸ªåœ¨ 1 å’Œ 255 ä¹‹é—´çš„æ•°å€¼ã€‚";
         Text[ russian ] = "íåïğàâèëüíàÿ çàïèñü äëÿ ıòîãî ïîëÿ. Ââåäèòå, ïîæàëóéñòà, çíà÷åíèå îò 1 äî 255.";
         Text[ polish ] = "jest wpisem niedozwolonym w danym polu. Nale¿y wpisaæ wartoœæ miêdzy 1 a 255 .";
-        Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚Å‚Í–³Œø‚Å‚·B1 ` 255 ”ÍˆÍ‚Ì”’l‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
-        Text[ chinese_traditional ] = " ¬O³o­ÓÄæ¦ìªºµL®Ä±ø¥Ø¡M½Ğ¿é¤J¤@­Ó¦b1©M255¤§¶¡ªº¼Æ­È¡C";
+        Text[ japanese ] = "ã“ã®ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã§ã¯ç„¡åŠ¹ã§ã™ã€‚1 ï½ 255 ç¯„å›²ã®æ•°å€¤ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
+        Text[ chinese_traditional ] = " æ˜¯é€™å€‹æ¬„ä½çš„ç„¡æ•ˆæ¢ç›®ï¹è«‹è¼¸å…¥ä¸€å€‹åœ¨1å’Œ255ä¹‹é–“çš„æ•¸å€¼ã€‚";
         Text[ arabic ] = "åæ ÅÏÎÇá ÛíÑ ÕÇáÍ áåĞÇ ÇáÍŞá. ÇáÑÌÇÁ ÅÏÎÇá ŞíãÉ ÊÊÑÇæÍ ãÇ Èíä 1 æ 255.";
         Text[ greek ] = "äåí åßíáé İãêõñç êáôá÷şñéóç ãéá áõôü ôï ğåäßï. Ğáñáêáëş åéóÜãåôå ìéá ôéìŞ ìåôáîı ôïõ 1 êáé 255.";
-        Text[ korean ] = " ÀÌ ÇÊµå¿¡ À¯È¿ÇÏÁö ¾ÊÀº Ç×¸ñÀÔ´Ï´Ù. 1°ú 255 »çÀÌÀÇ °ªÀ» ÁöÁ¤ÇÏ½Ê½Ã¿À.";
+        Text[ korean ] = " ì´ í•„ë“œì— ìœ íš¨í•˜ì§€ ì•Šì€ í•­ëª©ì…ë‹ˆë‹¤. 1ê³¼ 255 ì‚¬ì´ì˜ ê°’ì„ ì§€ì •í•˜ì‹­ì‹œì˜¤.";
         Text[ turkish ] = "bu alan için geçerli bir değer değil. 1 ile 255 arasında bir değer girin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "no es una entrada válida para este campo. Por favor escriba un valor entre 1 y 255.";
@@ -740,14 +740,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
     Text [ danish ] = "Søgning" ;
     Text [ portuguese ] = "Localizar" ;
     Text [ portuguese_brazilian ] = "Suche" ;
-    Text[ chinese_simplified ] = "ËÑÑ°";
+    Text[ chinese_simplified ] = "æœå¯»";
     Text[ russian ] = "Ïîèñê";
     Text[ polish ] = "Szukaj";
-    Text[ japanese ] = "ŒŸõ";
-    Text[ chinese_traditional ] = "·j´M";
+    Text[ japanese ] = "æ¤œç´¢";
+    Text[ chinese_traditional ] = "æœå°‹";
     Text[ arabic ] = "ÈÍË";
     Text[ greek ] = "AíáæŞôçóç";
-    Text[ korean ] = "Ã£±â";
+    Text[ korean ] = "ì°¾ê¸°";
 
     #define GB_SEARCH_LEFT 6
     #define GB_SEARCH_TOP 3
@@ -766,14 +766,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ danish ] = "Søg i" ;
         Text [ portuguese_brazilian ] = "Suchen in" ;
         Text [ portuguese ] = "Procurar em" ;
-        Text[ chinese_simplified ] = "ËÑÑ°Î»ÖÃ";
+        Text[ chinese_simplified ] = "æœå¯»ä½ç½®";
         Text[ russian ] = "Èñêàòü â";
         Text[ polish ] = "Szukaj w";
-        Text[ japanese ] = "ŒŸõêŠ";
-        Text[ chinese_traditional ] = "·j´M¦ì¸m";
+        Text[ japanese ] = "æ¤œç´¢å ´æ‰€";
+        Text[ chinese_traditional ] = "æœå°‹ä½ç½®";
         Text[ arabic ] = "ÇáÈÍË İí";
         Text[ greek ] = "ÁíáæŞôçóç óôï";
-        Text[ korean ] = "Ã£À» ¹üÀ§";
+        Text[ korean ] = "ì°¾ì„ ë²”ìœ„";
         Text[ turkish ] = "Şurada ara:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Buscar en";
@@ -803,14 +803,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ french ] = "~Nom" ;
         Text [ dutch ] = "~Naam" ;
         Text [ portuguese ] = "~Nome" ;
-        Text[ chinese_simplified ] = "Ãû³Æ(~N)";
+        Text[ chinese_simplified ] = "åç§°(~N)";
         Text[ russian ] = "Èìÿ";
         Text[ polish ] = "Nazwa";
-        Text[ japanese ] = "–¼‘O(~N)";
-        Text[ chinese_traditional ] = "¦WºÙ(~N)";
+        Text[ japanese ] = "åå‰(~N)";
+        Text[ chinese_traditional ] = "åç¨±(~N)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§(~N)";
+        Text[ korean ] = "ì´ë¦„(~N)";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
@@ -837,14 +837,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ french ] = "Type" ;
         Text [ dutch ] = "Type" ;
         Text [ portuguese ] = "Tipo" ;
-        Text[ chinese_simplified ] = "ÀàĞÍ";
+        Text[ chinese_simplified ] = "ç±»å‹";
         Text[ russian ] = "Òèï";
         Text[ polish ] = "Typ";
-        Text[ japanese ] = "À²Ìß";
-        Text[ chinese_traditional ] = "Ãş«¬";
+        Text[ japanese ] = "ï¾€ï½²ï¾Œï¾Ÿ";
+        Text[ chinese_traditional ] = "é¡å‹";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "À¯Çü";
+        Text[ korean ] = "ìœ í˜•";
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo";
@@ -866,18 +866,18 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ danish ] = "Og" ;
         Text [ portuguese_brazilian ] = "~Und" ;
         Text [ portuguese ] = "~E" ;
-        Text[ chinese_simplified ] = "ºÍ(~N)";
+        Text[ chinese_simplified ] = "å’Œ";
         Text[ russian ] = "È";
         Text[ polish ] = "I";
-        Text[ japanese ] = "A~nd";
-        Text[ chinese_traditional ] = "©M(~N)";
+        Text[ japanese ] = "And";
+        Text[ chinese_traditional ] = "å’Œ";
         Text[ arabic ] = "æ";
         Text[ greek ] = "Êáé";
-        Text[ korean ] = "±×¸®°í(~N)";
+        Text[ korean ] = "ê·¸ë¦¬ê³ ";
         Text[ turkish ] = "Ve";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Y";
-        Text[ finnish ] = "~Ja";
+        Text[ finnish ] = "Ja";
     };
     RadioButton RB_OR
     {
@@ -894,14 +894,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ danish ] = "Eller" ;
         Text [ portuguese_brazilian ] = "Ode~r" ;
         Text [ portuguese ] = "~Ou" ;
-        Text[ chinese_simplified ] = "»ò(~O)";
+        Text[ chinese_simplified ] = "æˆ–(~O)";
         Text[ russian ] = "Èëè";
         Text[ polish ] = "Lu~b";
         Text[ japanese ] = "~Or";
-        Text[ chinese_traditional ] = "©Î(~O)";
+        Text[ chinese_traditional ] = "æˆ–(~O)";
         Text[ arabic ] = "Ãæ";
         Text[ greek ] = "Ş";
-        Text[ korean ] = "¶Ç´Â(~O)";
+        Text[ korean ] = "ë˜ëŠ”(~O)";
         Text[ turkish ] = "Veya";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~O";
@@ -922,14 +922,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ danish ] = "Eksakt" ;
         Text [ portuguese_brazilian ] = "E~xakt" ;
         Text [ portuguese ] = "E~xacto" ;
-        Text[ chinese_simplified ] = "¾«È·(~X)";
+        Text[ chinese_simplified ] = "ç²¾ç¡®(~X)";
         Text[ russian ] = "Òî÷íî";
         Text[ polish ] = "Dok³adnie";
-        Text[ japanese ] = "Š®‘S‚É“¯ˆê(~X)";
-        Text[ chinese_traditional ] = "ºë½T(~X)";
+        Text[ japanese ] = "å®Œå…¨ã«åŒä¸€(~X)";
+        Text[ chinese_traditional ] = "ç²¾ç¢º(~X)";
         Text[ arabic ] = "ÈÇáÊãÇã";
         Text[ greek ] = "Á~êñéâşò";
-        Text[ korean ] = "»ó¼¼È÷(~X)";
+        Text[ korean ] = "ì •í™•íˆ(~X)";
         Text[ turkish ] = "Aynısı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~xacto";
@@ -950,14 +950,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ danish ] = "Præfiks" ;
         Text [ portuguese_brazilian ] = "~Pr?fix" ;
         Text [ portuguese ] = "~Prefixo" ;
-        Text[ chinese_simplified ] = "Ç°×º(~P)";
+        Text[ chinese_simplified ] = "å‰ç¼€(~P)";
         Text[ russian ] = "Ïğåôèêñ";
         Text[ polish ] = "Prefiks";
-        Text[ japanese ] = "ÌßÚÌ¨¯¸½(~P)";
-        Text[ chinese_traditional ] = "«eºó(~P)";
+        Text[ japanese ] = "ï¾Œï¾Ÿï¾šï¾Œï½¨ï½¯ï½¸ï½½(~P)";
+        Text[ chinese_traditional ] = "å‰ç¶´(~P)";
         Text[ arabic ] = "ÇáãŞØÚ ÇáÃæá";
         Text[ greek ] = "Ğñüèåìá";
-        Text[ korean ] = "Á¢µÎ¾î(~P)";
+        Text[ korean ] = "ì ‘ë‘ì–´(~P)";
         Text[ turkish ] = "Önek";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Prefijo";
@@ -984,14 +984,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ french ] = "Su~ffixe" ;
         Text [ dutch ] = "Su~ffix" ;
         Text [ portuguese ] = "Su~fixo" ;
-        Text[ chinese_simplified ] = "ºó×º(~F)";
+        Text[ chinese_simplified ] = "åç¼€(~F)";
         Text[ russian ] = "Ñóôôèêñ";
         Text[ polish ] = "Sufiks";
-        Text[ japanese ] = "»Ì¨¯¸½(~F)";
-        Text[ chinese_traditional ] = "«áºó(~F)";
+        Text[ japanese ] = "ï½»ï¾Œï½¨ï½¯ï½¸ï½½(~F)";
+        Text[ chinese_traditional ] = "å¾Œç¶´(~F)";
         Text[ arabic ] = "ÇáãŞØÚ ÇáÃÎíÑ";
         Text[ greek ] = "ÊáôÜëç~îç";
-        Text[ korean ] = "Á¢µÎ¾î(~F)";
+        Text[ korean ] = "ì ‘ë‘ì–´(~F)";
         Text[ turkish ] = "Sonek";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "S~ufijo";
@@ -1018,14 +1018,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ danish ] = "Separator" ;
         Text [ portuguese_brazilian ] = "~Trenner" ;
         Text [ portuguese ] = "~Separador" ;
-        Text[ chinese_simplified ] = "·Ö¸ô·û(~S)";
+        Text[ chinese_simplified ] = "åˆ†éš”ç¬¦(~S)";
         Text[ russian ] = "Ğàçäåëèòåëü";
         Text[ polish ] = "Separator";
-        Text[ japanese ] = "‹æØ‚è‹L†(~S)";
-        Text[ chinese_traditional ] = "³s±µ²Å(~S)";
+        Text[ japanese ] = "åŒºåˆ‡ã‚Šè¨˜å·(~S)";
+        Text[ chinese_traditional ] = "é€£æ¥ç¬¦(~S)";
         Text[ arabic ] = "İÇÕá";
         Text[ greek ] = "Äéá÷ùñéóôéêü";
-        Text[ korean ] = "±¸ºĞ¼±(~S)";
+        Text[ korean ] = "êµ¬ë¶„ ê¸°í˜¸(~S)";
         Text[ turkish ] = "Ayırıcı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Separador";
@@ -1052,14 +1052,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ danish ] = "Skrivestil" ;
         Text [ portuguese ] = "~Estilo de escrita" ;
         Text [ portuguese_brazilian ] = "~Schreibstil" ;
-        Text[ chinese_simplified ] = "ÊéĞ´·½Ê½(~C)";
+        Text[ chinese_simplified ] = "ä¹¦å†™æ–¹å¼(~C)";
         Text[ russian ] = "Ó÷åò ğåãèñòğà";
         Text[ polish ] = "Styl pis~ma";
-        Text[ japanese ] = "•¶š‚Ì‹æ•Ê(~C)";
-        Text[ chinese_traditional ] = "¤j¤p¼g(~C)";
+        Text[ japanese ] = "æ–‡å­—ã®åŒºåˆ¥(~C)";
+        Text[ chinese_traditional ] = "å¤§å°å¯«(~C)";
         Text[ arabic ] = "äãØ ÇáßÊÇÈÉ";
         Text[ greek ] = "~Óôõë ãñáöŞò";
-        Text[ korean ] = "±Û¾¾Ã¼(~C)";
+        Text[ korean ] = "ê¸€ì”¨ì²´(~C)";
         Text[ turkish ] = "~BÜYÜK/küçük harf duyarlı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Es~tilo";
@@ -1139,9 +1139,9 @@ TabPage RID_SVXPAGE_INET_SEARCH
         };
         StringList [ chinese_simplified ] =
         {
-            < "ÎŞ" ; > ;
-            < "´óĞ´" ; > ;
-            < "Ğ¡Ğ´" ; > ;
+            < "æ— " ; > ;
+            < "å¤§å†™" ; > ;
+            < "å°å†™" ; > ;
         };
         StringList [ russian ] =
         {
@@ -1157,15 +1157,15 @@ TabPage RID_SVXPAGE_INET_SEARCH
         };
         StringList [ japanese ] =
         {
-            < "‚È‚µ" ; > ;
-            < "‘å•¶š" ; > ;
-            < "¬•¶š" ; > ;
+            < "ãªã—" ; > ;
+            < "å¤§æ–‡å­—" ; > ;
+            < "å°æ–‡å­—" ; > ;
         };
         StringList [ chinese_traditional ] =
         {
-            < "µL" ; > ;
-            < "¤j¼g" ; > ;
-            < "¤p¼g" ; > ;
+            < "ç„¡" ; > ;
+            < "å¤§å¯«" ; > ;
+            < "å°å¯«" ; > ;
         };
         StringList [ arabic ] =
         {
@@ -1181,9 +1181,9 @@ TabPage RID_SVXPAGE_INET_SEARCH
         };
         StringList [ korean ] =
         {
-            < "¾øÀ½" ; > ;
-            < "´ë¹®ÀÚ" ; > ;
-            < "¼Ò¹®ÀÚ" ; > ;
+            < "ì—†ìŒ" ; > ;
+            < "ëŒ€ë¬¸ì" ; > ;
+            < "ì†Œë¬¸ì" ; > ;
         };
     StringList [ turkish ] =
     {
@@ -1229,10 +1229,10 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ swedish ] = "Nytt";
         Text[ polish ] = "Nowy";
         Text[ portuguese_brazilian ] = "New";
-        Text[ japanese ] = "V‹K(~E)";
-        Text[ korean ] = "»õ·Î(~E)";
-        Text[ chinese_simplified ] = "ĞÂ½¨(~E)";
-        Text[ chinese_traditional ] = "·s¼W(~E)";
+        Text[ japanese ] = "æ–°è¦(~E)";
+        Text[ korean ] = "ìƒˆë¡œ(~E)";
+        Text[ chinese_simplified ] = "æ–°å»º(~E)";
+        Text[ chinese_traditional ] = "æ–°å¢(~E)";
         Text[ arabic ] = "ÌÏíÏ";
         Text[ turkish ] = "Yeni";
         Text[ catalan ] = "Nuevo";
@@ -1253,14 +1253,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ danish ] = "Tilføj" ;
         Text [ portuguese_brazilian ] = "H~inzuf?en" ;
         Text [ portuguese ] = "A~dicionar" ;
-        Text[ chinese_simplified ] = "ĞÂÔö(~A)";
+        Text[ chinese_simplified ] = "æ–°å¢(~A)";
         Text[ russian ] = "Äîáàâèòü";
         Text[ polish ] = "Dodaj";
-        Text[ japanese ] = "’Ç‰Á(~A)";
-        Text[ chinese_traditional ] = "·s¼W(~A)";
+        Text[ japanese ] = "è¿½åŠ (~A)";
+        Text[ chinese_traditional ] = "æ–°å¢(~A)";
         Text[ arabic ] = "ÅÖÇİÉ";
         Text[ greek ] = "ĞñïóèŞêç";
-        Text[ korean ] = "Ãß°¡(~A)";
+        Text[ korean ] = "ì¶”ê°€(~A)";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Añadir";
@@ -1281,14 +1281,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ danish ] = "Modificer" ;
         Text [ portuguese_brazilian ] = "~?ndern" ;
         Text [ portuguese ] = "~Modificar" ;
-        Text[ chinese_simplified ] = "¸ü¸Ä(~M)";
+        Text[ chinese_simplified ] = "æ›´æ”¹(~M)";
         Text[ russian ] = "Èçìåíèòü";
         Text[ polish ] = "Mody~fikuj";
-        Text[ japanese ] = "•ÏX(~M)";
-        Text[ chinese_traditional ] = "ÅÜ§ó(~M)";
+        Text[ japanese ] = "å¤‰æ›´(~M)";
+        Text[ chinese_traditional ] = "è®Šæ›´(~M)";
         Text[ arabic ] = "ÊÚÏíá";
         Text[ greek ] = "Ôñïğïğïßçóç";
-        Text[ korean ] = "º¯°æ(~M)";
+        Text[ korean ] = "ìˆ˜ì •(~M)";
         Text[ turkish ] = "Değiştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modificar";
@@ -1309,14 +1309,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ danish ] = "Slet" ;
         Text [ portuguese_brazilian ] = "~L?chen" ;
         Text [ portuguese ] = "E~liminar" ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëèòü";
         Text[ polish ] = "Usuñ";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ japanese ] = "å‰Šé™¤(~D)";
+        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
@@ -1338,14 +1338,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ swedish ] = "Vill du överta den aktuella ändringen?";
         Text[ polish ] = "Przej¹æ aktualn¹ zmianê?";
         Text[ portuguese_brazilian ] = "Do you want to accept the current modification?";
-        Text[ japanese ] = "Œ»İ‚Ì•ÏX‚ğ“K—p‚µ‚Ü‚·‚©B";
-        Text[ korean ] = "ÇöÀç º¯°æ»çÇ×À» Àû¿ëÇÏ½Ã°Ú½À´Ï±î?";
-        Text[ chinese_simplified ] = "Òª²ÉÓÃµ±Ç°µÄ¸ü¸Ä£¿";
-        Text[ chinese_traditional ] = "±z­n±Ä¥Î·í«eªºÅÜ§ó¡H";
+        Text[ japanese ] = "ç¾åœ¨ã®å¤‰æ›´ã‚’é©ç”¨ã—ã¾ã™ã‹ã€‚";
+        Text[ korean ] = "í˜„ì¬ ë³€ê²½ ì‚¬í•­ì„ ì ìš©í•˜ê² ìŠµë‹ˆê¹Œ?";
+        Text[ chinese_simplified ] = "è¦é‡‡ç”¨å½“å‰çš„æ›´æ”¹ï¼Ÿ";
+        Text[ chinese_traditional ] = "æ‚¨è¦æ¡ç”¨ç›®å‰çš„è®Šæ›´ï¼Ÿ";
         Text[ turkish ] = "Do you want to accept the current modification?";
         Text[ arabic ] = "Do you want to accept the current modification?";
         Text[ catalan ] = "Do you want to accept the current modification?";
-        Text[ finnish ] = "Möchten Sie die aktuelle Änderung übernehmen?";
+        Text[ finnish ] = "Haluatko hyväksyä muokkauksen?";
     };
     Text[ turkish ] = "Ara";
     Text[ language_user1 ] = " ";
@@ -1383,18 +1383,18 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     Text [ spanish ] = "Scripting" ;
     Text [ french ] = "Scripting" ;
     Text [ dutch ] = "Scripting" ;
-    Text[ chinese_simplified ] = "½Å±¾";
+    Text[ chinese_simplified ] = "è„šæœ¬";
     Text[ russian ] = "Ñêğèïò";
     Text[ polish ] = "Scripting";
-    Text[ japanese ] = "½¸ØÌßÄ";
-    Text[ chinese_traditional ] = "©R¥O½Z";
+    Text[ japanese ] = "ï½½ï½¸ï¾˜ï¾Œï¾Ÿï¾„";
+    Text[ chinese_traditional ] = "ç¨‹å¼æª”";
     Text[ arabic ] = "Scripting";
     Text[ greek ] = "Scripting";
-    Text[ korean ] = "½ºÅ©¸³ÆÃ";
+    Text[ korean ] = "ìŠ¤í¬ë¦½íŒ…";
     Text[ turkish ] = "Scripting";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Scripting";
-    Text[ finnish ] = "Käsitellään komentosarjoja";
+    Text[ finnish ] = "Luodaan komentosarja";
     FixedLine GB_STARBASIC
     {
         Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X , GB_SCRIPT_EXEC_Y ) ;
@@ -1410,18 +1410,18 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ french ] = "Script %PRODUCTNAME Basic" ;
         Text [ dutch ] = "%PRODUCTNAME Basic-Script" ;
         Text [ portuguese ] = "Script %PRODUCTNAME Basic" ;
-        Text[ chinese_simplified ] = "%PRODUCTNAME Basic ½Å±¾";
+        Text[ chinese_simplified ] = "%PRODUCTNAME Basic è„šæœ¬";
         Text[ russian ] = "Ñêğèïò %PRODUCTNAME Basic";
         Text[ polish ] = "Skrypt %PRODUCTNAME Basic";
-        Text[ japanese ] = "%PRODUCTNAME Basic ½¸ØÌßÄ";
-        Text[ chinese_traditional ] = "%PRODUCTNAME Basic ©R¥O½Z";
+        Text[ japanese ] = "%PRODUCTNAME Basic ï½½ï½¸ï¾˜ï¾Œï¾Ÿï¾„";
+        Text[ chinese_traditional ] = "%PRODUCTNAME Basic ç¨‹å¼æª”";
         Text[ arabic ] = "%PRODUCTNAME Basic äÕ ÈÑãÌí";
         Text[ greek ] = "%PRODUCTNAME Basic Script";
-        Text[ korean ] = "%PRODUCTNAME Basic-½ºÅ©¸³Æ®";
+        Text[ korean ] = "%PRODUCTNAME Basic-ìŠ¤í¬ë¦½íŠ¸";
         Text[ turkish ] = "%PRODUCTNAME Basic Script";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Script %PRODUCTNAME Basic";
-        Text[ finnish ] = "%PRODUCTNAME Basic-Script";
+        Text[ finnish ] = "%PRODUCTNAME Basic -komentosarja";
     };
     FixedText FT_EXEC_MACRO
     {
@@ -1434,18 +1434,18 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ russian ] = "~Run macro";
         Text[ greek ] = "~Run macro";
         Text[ dutch ] = "~Run macro";
-        Text[ french ] = "~Run macro";
-        Text[ spanish ] = "~Run macro";
+        Text[ french ] = "Exécuter la macro";
+        Text[ spanish ] = "~Ejecutar macro";
         Text[ finnish ] = "~Run macro";
-        Text[ italian ] = "~Run macro";
+        Text[ italian ] = "~Esegui macro";
         Text[ danish ] = "~Run macro";
-        Text[ swedish ] = "~Run macro";
+        Text[ swedish ] = "Kör ~makro";
         Text[ polish ] = "~Run macro";
         Text[ portuguese_brazilian ] = "~Run macro";
-        Text[ japanese ] = "~Run macro";
+        Text[ japanese ] = "ï¾ï½¸ï¾›ã®å®Ÿè¡Œ";
         Text[ korean ] = "~Run macro";
-        Text[ chinese_simplified ] = "~Run macro";
-        Text[ chinese_traditional ] = "~Run macro";
+        Text[ chinese_simplified ] = "æ‰§è¡Œå®";
+        Text[ chinese_traditional ] = "åŸ·è¡Œå·¨é›†";
         Text[ turkish ] = "~Run macro";
         Text[ arabic ] = "~Run macro";
         Text[ catalan ] = "~Run macro";
@@ -1477,7 +1477,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     StringList [ english_us ] =
     {
          < "Never" ; > ;
-        < "Gemäß Pfadliste" ; > ;
+        < "According to path list" ; > ;
         < "Always" ; > ;
     };
     StringList [ portuguese ] =
@@ -1513,7 +1513,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     StringList [ spanish ] =
     {
          < "Nunca" ; > ;
-        < "Gemäß Pfadliste" ; > ;
+        < "Según la lista de rutas" ; > ;
         < "Siempre" ; > ;
     };
     StringList [ finnish ] =
@@ -1525,7 +1525,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     StringList [ italian ] =
     {
          < "Mai" ; > ;
-        < "Gemäß Pfadliste" ; > ;
+        < "Conforme all'elenco percorsi" ; > ;
         < "Sempre" ; > ;
     };
     StringList [ danish ] =
@@ -1606,18 +1606,18 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ russian ] = "C~onfirm in case of other document sources";
         Text[ greek ] = "C~onfirm in case of other document sources";
         Text[ dutch ] = "C~onfirm in case of other document sources";
-        Text[ french ] = "C~onfirm in case of other document sources";
-        Text[ spanish ] = "C~onfirm in case of other document sources";
+        Text[ french ] = "Requête en cas de sources de document différentes";
+        Text[ spanish ] = "C~onfirmar en caso de otros documentos fuente";
         Text[ finnish ] = "C~onfirm in case of other document sources";
-        Text[ italian ] = "C~onfirm in case of other document sources";
+        Text[ italian ] = "~Chiedi conferma nel caso di sorgente dati diversa";
         Text[ danish ] = "C~onfirm in case of other document sources";
-        Text[ swedish ] = "C~onfirm in case of other document sources";
+        Text[ swedish ] = "Frå~ga vid andra dokumentkällor";
         Text[ polish ] = "C~onfirm in case of other document sources";
         Text[ portuguese_brazilian ] = "C~onfirm in case of other document sources";
-        Text[ japanese ] = "C~onfirm in case of other document sources";
+        Text[ japanese ] = "ã»ã‹ã®ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ï½¿ï½°ï½½ã§ã¯ç¢ºèªã™ã‚‹";
         Text[ korean ] = "C~onfirm in case of other document sources";
-        Text[ chinese_simplified ] = "C~onfirm in case of other document sources";
-        Text[ chinese_traditional ] = "C~onfirm in case of other document sources";
+        Text[ chinese_simplified ] = "å¦‚æœæ˜¯å…¶å®ƒæ–‡æ¡£æ¥æºå°±éœ€è¦ç¡®è®¤";
+        Text[ chinese_traditional ] = "å¦‚æœæ˜¯å…¶å®ƒæ–‡ä»¶ä¾†æºå°±éœ€è¦ç¢ºèª";
         Text[ turkish ] = "C~onfirm in case of other document sources";
         Text[ arabic ] = "C~onfirm in case of other document sources";
         Text[ catalan ] = "C~onfirm in case of other document sources";
@@ -1628,23 +1628,23 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 176 , 10 ) ;
         Text = "~Vor Ausführung immer warnen" ;
         Text [ English ] = "Show ~warning before running macro" ;
-        Text[ english_us ] = "Show ~warning before running macro";
+        Text[ english_us ] = "Show ~warning before running";
         Text[ portuguese ] = "Show ~warning before running macro";
         Text[ russian ] = "Show ~warning before running macro";
         Text[ greek ] = "Show ~warning before running macro";
         Text[ dutch ] = "Show ~warning before running macro";
-        Text[ french ] = "Show ~warning before running macro";
-        Text[ spanish ] = "Show ~warning before running macro";
+        Text[ french ] = "Avertissement systématique avant exécution";
+        Text[ spanish ] = "~Advertir siempre antes de la ejecución";
         Text[ finnish ] = "Show ~warning before running macro";
-        Text[ italian ] = "Show ~warning before running macro";
+        Text[ italian ] = "~Avvisa sempre prima dell'esecuzione";
         Text[ danish ] = "Show ~warning before running macro";
-        Text[ swedish ] = "Show ~warning before running macro";
+        Text[ swedish ] = "Visa ~varning innan makro körs";
         Text[ polish ] = "Show ~warning before running macro";
         Text[ portuguese_brazilian ] = "Show ~warning before running macro";
-        Text[ japanese ] = "Show ~warning before running macro";
+        Text[ japanese ] = "å¸¸ã«å®Ÿè¡Œã™ã‚‹å‰ã«è­¦å‘Šã™ã‚‹";
         Text[ korean ] = "Show ~warning before running macro";
-        Text[ chinese_simplified ] = "Show ~warning before running macro";
-        Text[ chinese_traditional ] = "Show ~warning before running macro";
+        Text[ chinese_simplified ] = "åœ¨æ‰§è¡Œä¹‹å‰è‡ªåŠ¨è­¦å‘Š";
+        Text[ chinese_traditional ] = "åœ¨åŸ·è¡Œä¹‹å‰è‡ªå‹•è­¦å‘Š";
         Text[ turkish ] = "Show ~warning before running macro";
         Text[ arabic ] = "Show ~warning before running macro";
         Text[ catalan ] = "Show ~warning before running macro";
@@ -1660,10 +1660,10 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ russian ] = "~Path list";
         Text[ greek ] = "~Path list";
         Text[ dutch ] = "~Path list";
-        Text[ french ] = "~Path list";
-        Text[ spanish ] = "~Path list";
+        Text[ french ] = "Liste des chemins";
+        Text[ spanish ] = "~Lista de rutas";
         Text[ finnish ] = "~Path list";
-        Text[ italian ] = "~Path list";
+        Text[ italian ] = "~Elenco percorsi";
         Text[ danish ] = "~Path list";
         Text[ swedish ] = "Sö~kvägslista";
         Text[ polish ] = "~Path list";
@@ -1698,14 +1698,14 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ french ] = "~Supprimer" ;
         Text [ dutch ] = "~Wissen" ;
         Text [ portuguese ] = "E~liminar" ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëèòü";
         Text[ polish ] = "Usuñ";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ japanese ] = "å‰Šé™¤(~D)";
+        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
@@ -1717,7 +1717,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Standard" ;
         Text [ English ] = "De~fault" ;
-        Text [ english_us ] = "De~fault" ;
+        Text [ english_us ] = "D~efault" ;
         Text [ portuguese_brazilian ] = "S~tandard" ;
         Text [ swedish ] = "~Standard" ;
         Text [ danish ] = "Standard" ;
@@ -1726,14 +1726,14 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ french ] = "Par ~défaut" ;
         Text [ dutch ] = "~Standaard" ;
         Text [ portuguese ] = "~Padrão" ;
-        Text[ chinese_simplified ] = "±ê×¼(~E)";
+        Text[ chinese_simplified ] = "æ ‡å‡†(~E)";
         Text[ russian ] = "Ñòàíäàğò";
         Text[ polish ] = "Domyœlnie";
-        Text[ japanese ] = "•W€(~E)";
-        Text[ chinese_traditional ] = "¼Ğ·Ç(~E)";
+        Text[ japanese ] = "æ¨™æº–(~E)";
+        Text[ chinese_traditional ] = "æ¨™æº–(~E)";
         Text[ arabic ] = "ÇİÊÑÇÖí";
         Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "±âº»(~E)";
+        Text[ korean ] = "ê¸°ë³¸(~E)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
@@ -1750,18 +1750,18 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ russian ] = "New pa~th";
         Text[ greek ] = "New pa~th";
         Text[ dutch ] = "New pa~th";
-        Text[ french ] = "New pa~th";
-        Text[ spanish ] = "New pa~th";
+        Text[ french ] = "Nouveau chemin";
+        Text[ spanish ] = "~Nueva ruta";
         Text[ finnish ] = "New pa~th";
-        Text[ italian ] = "New pa~th";
+        Text[ italian ] = "~Nuovo percorso";
         Text[ danish ] = "New pa~th";
-        Text[ swedish ] = "New pa~th";
+        Text[ swedish ] = "N~y sökväg";
         Text[ polish ] = "New pa~th";
         Text[ portuguese_brazilian ] = "New pa~th";
-        Text[ japanese ] = "New pa~th";
+        Text[ japanese ] = "æ–°ã—ã„ï¾Šï¾Ÿï½½";
         Text[ korean ] = "New pa~th";
-        Text[ chinese_simplified ] = "New pa~th";
-        Text[ chinese_traditional ] = "New pa~th";
+        Text[ chinese_simplified ] = "æ–°çš„è·¯ç»";
+        Text[ chinese_traditional ] = "æ–°çš„è·¯ç¶“";
         Text[ turkish ] = "New pa~th";
         Text[ arabic ] = "New pa~th";
         Text[ catalan ] = "New pa~th";
@@ -1787,14 +1787,14 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ french ] = "~Ajouter" ;
         Text [ dutch ] = "Toe~voegen" ;
         Text [ portuguese ] = "A~dicionar" ;
-        Text[ chinese_simplified ] = "ĞÂÔö(~A)";
+        Text[ chinese_simplified ] = "æ–°å¢(~A)";
         Text[ russian ] = "Äîáàâèòü";
         Text[ polish ] = "Dodaj";
-        Text[ japanese ] = "’Ç‰Á(~A)";
-        Text[ chinese_traditional ] = "·s¼W(~A)";
+        Text[ japanese ] = "è¿½åŠ (~A)";
+        Text[ chinese_traditional ] = "æ–°å¢(~A)";
         Text[ arabic ] = "ÅÖÇİÉ";
         Text[ greek ] = "ĞñïóèŞêç";
-        Text[ korean ] = "Ãß°¡(~A)";
+        Text[ korean ] = "ì¶”ê°€(~A)";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Añadir";
@@ -1837,22 +1837,22 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ italian ] = "A~bilita" ;
         Text [ spanish ] = "Vali~dar" ;
         Text [ french ] = "Valider" ;
-        Text [ dutch ] = "~Vrijgeven" ;
+        Text [ dutch ] = "~vrijgeven" ;
         Text [ swedish ] = "~frige" ;
         Text [ danish ] = "aktiver" ;
         Text [ portuguese_brazilian ] = "~Java freischalten" ;
         Text [ portuguese ] = "~Activar" ;
-        Text[ chinese_simplified ] = "¿ª·Å(~E)";
+        Text[ chinese_simplified ] = "å¼€æ”¾(~E)";
         Text[ russian ] = "~ğàçáëîêèğîâàòü";
         Text[ polish ] = "Aktywacja";
-        Text[ japanese ] = "g—p‚·‚é(~E)";
-        Text[ chinese_traditional ] = "¶}©ñ(~E)";
+        Text[ japanese ] = "ä½¿ç”¨ã™ã‚‹(~E)";
+        Text[ chinese_traditional ] = "é–‹æ”¾(~E)";
         Text[ arabic ] = "ÇáÊÔÛíá";
         Text[ greek ] = "åíåñãïğïßçóç";
-        Text[ korean ] = "»ç¿ë °¡´É(~E)";
+        Text[ korean ] = "ì‚¬ìš© ê°€ëŠ¥(~E)";
         Text[ turkish ] = "Etkinleştir";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Enable";
+        Text[ finnish ] = "~Ota käyttöön";
         Text[ catalan ] = "~Enable";
     };
     CheckBox CB_J_SECURITY
@@ -1861,7 +1861,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 162 , 10 ) ;
         Text = "Sicherhei~tsüberprüfungen";
         Text [ English ] = "Enable ~security checks";
-        Text [ english_us ] = "Enable ~security checks";
+        Text [ english_us ] = "~Security checks";
         Text[ italian ] = "Controlli di s~icurezza";
         Text[ portuguese_brazilian ] = "S~icherheitsüberprüfungen";
         Text[ portuguese ] = "~Controlos de segurança";
@@ -1870,17 +1870,17 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ swedish ] = "S~äkerhetskontroller";
         Text[ dutch ] = "V~eiligheidscontroles";
         Text[ spanish ] = "Co~ntroles de seguridad";
-        Text[ chinese_simplified ] = "°²È«¼ì²é(~S)";
+        Text[ chinese_simplified ] = "å®‰å…¨æ£€æŸ¥(~S)";
         Text[ russian ] = "Ïğîâåğêà áåçîïàñíîñòè";
         Text[ polish ] = "Kontrola zabezpieczeñ";
-        Text[ japanese ] = "¾·­ØÃ¨Áª¯¸(~S)";
-        Text[ chinese_traditional ] = "¦w¥şÀË¬d(~S)";
+        Text[ japanese ] = "ï½¾ï½·ï½­ï¾˜ï¾ƒï½¨ã‚’ï¾ï½ªï½¯ï½¸ã™ã‚‹(~S)";
+        Text[ chinese_traditional ] = "å®‰å…¨æª¢æŸ¥(~S)";
         Text[ arabic ] = "İÍæÕ ÃãäíÉ";
         Text[ greek ] = "¸ëåã÷ï~é áóöáëåßáò";
-        Text[ korean ] = "º¸¾È Á¡°Ë(~S)";
+        Text[ korean ] = "ë³´ì•ˆ ì ê²€(~S)";
         Text[ turkish ] = "Güvenlik kontrolleri";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Enable ~security checks";
+        Text[ finnish ] = "Ota suojaustar~kistukset käyttöön";
         Text[ catalan ] = "Enable ~security checks";
     };
     FixedText FT_NETACCESS
@@ -1889,7 +1889,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "Netzz~ugriff" ;
         Text [ English ] = "~Netaccess" ;
-        Text [ english_us ] = "~Net access" ;
+        Text [ english_us ] = "Net ~access" ;
         Text [ italian ] = "Accesso rete" ;
         Text [ spanish ] = "Acce~so a la red" ;
         Text [ french ] = "Accès réseau" ;
@@ -1898,17 +1898,17 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ danish ] = "Netadgang" ;
         Text [ portuguese_brazilian ] = "~Netzzugriff" ;
         Text [ portuguese ] = "~Acesso à rede" ;
-        Text[ chinese_simplified ] = "¶ÁÈ¡ÍøÂç(~A)";
+        Text[ chinese_simplified ] = "è¯»å–ç½‘ç»œ(~A)";
         Text[ russian ] = "Äîñòóï ê ñåòè";
         Text[ polish ] = "Dostêp do sieci";
-        Text[ japanese ] = "È¯ÄÜ°¸‚Ö‚Ì±¸¾½(~A)";
-        Text[ chinese_traditional ] = "¦s¨úºôµ¸(~A)";
+        Text[ japanese ] = "ï¾ˆï½¯ï¾„ï¾œï½°ï½¸ã¸ã®ï½±ï½¸ï½¾ï½½(~A)";
+        Text[ chinese_traditional ] = "å­˜å–ç¶²çµ¡(~A)";
         Text[ arabic ] = "ÇáæÕæá Åáì ÇáÔÈßÉ";
         Text[ greek ] = "Ğñüóâáóç óôï äßêôõï";
-        Text[ korean ] = "³×Æ®¿¡ Á¢±Ù(~A)";
+        Text[ korean ] = "ë„¤íŠ¸ì›Œí¬ ì•¡ì„¸ìŠ¤(~A)";
         Text[ turkish ] = "Ağ erişimi";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Net ~access";
+        Text[ finnish ] = "Verkko~käyttö";
         Text[ catalan ] = "Net ~access";
     };
     ListBox LB_NETACCESS
@@ -1985,9 +1985,9 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         };
         StringList [ chinese_simplified ] =
         {
-            < "Ã»ÓĞÏŞÖÆµÄ" ; > ;
-            < "ÎŞ" ; > ;
-            < "Ö÷»ú" ; > ;
+            < "æ²¡æœ‰é™åˆ¶çš„" ; > ;
+            < "æ— " ; > ;
+            < "ä¸»æœº" ; > ;
         };
         StringList [ russian ] =
         {
@@ -2003,15 +2003,15 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         };
         StringList [ japanese ] =
         {
-            < "§ŒÀ‚È‚µ" ; > ;
-            < "‚È‚µ" ; > ;
-            < "Î½ÄºİËß­°À" ; > ;
+            < "åˆ¶é™ãªã—" ; > ;
+            < "ãªã—" ; > ;
+            < "ï¾ï½½ï¾„ï½ºï¾ï¾‹ï¾Ÿï½­ï½°ï¾€" ; > ;
         };
         StringList [ chinese_traditional ] =
         {
-            < "µL­­»sªº" ; > ;
-            < "µL" ; > ;
-            < "¹q¸£" ; > ;
+            < "ç„¡é™è£½çš„" ; > ;
+            < "ç„¡" ; > ;
+            < "é›»è…¦" ; > ;
         };
         StringList [ arabic ] =
         {
@@ -2027,9 +2027,9 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         };
         StringList [ korean ] =
         {
-            < "¹«Á¦ÇÑ" ; > ;
-            < "¾øÀ½" ; > ;
-            < "È£½ºÆ®" ; > ;
+            < "ë¬´ì œí•œ" ; > ;
+            < "ì—†ìŒ" ; > ;
+            < "í˜¸ìŠ¤íŠ¸" ; > ;
         };
         StringList [ turkish ] =
         {
@@ -2047,7 +2047,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         {
              < "Rajoittamaton" ; > ;
             < "Ei mitään" ; > ;
-            < "Isäntäkone" ; > ;
+            < "Pääkone" ; > ;
         };
         StringList [ catalan ] =
         {
@@ -2078,10 +2078,10 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ chinese_traditional ] = "~ClassPath";
         Text[ arabic ] = "Class path~";
         Text[ greek ] = "~Class path";
-        Text[ korean ] = "Å¬·¡½º °æ·Î(~C)";
+        Text[ korean ] = "í´ë˜ìŠ¤ ê²½ë¡œ(~C)";
         Text[ turkish ] = "~ClassPath";
         Text[ language_user1 ] = "EM18.7.01 (laut AS) Java Variable: This must left the same as German";
-        Text[ finnish ] = "~Class path";
+        Text[ finnish ] = "~Luokan polku";
         Text[ catalan ] = "~Class path";
     };
     Edit ED_CLASSPATH
@@ -2108,27 +2108,27 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 74 , 8 ) ;
         Text = "Freischalten" ;
         Text [ English ] = "Enable" ;
-        Text [ english_us ] = "Enable" ;
+        Text [ english_us ] = "E~nable" ;
         Text [ portuguese_brazilian ] = "Ausf?ren" ;
         Text [ swedish ] = "Frige" ;
         Text [ danish ] = "PlugIns" ;
         Text [ italian ] = "Abilita" ;
         Text [ spanish ] = "Validar" ;
         Text [ french ] = "Valider" ;
-        Text [ dutch ] = "PlugIns" ;
-        Text [ portuguese ] = "Activar" ;
-        Text[ chinese_simplified ] = "¿ª·Å";
+        Text [ dutch ] = "V~rijgeven" ;
+        Text [ portuguese ] = "~Activar" ;
+        Text[ chinese_simplified ] = "å¼€æ”¾(~N)";
         Text[ russian ] = "Ğàçáëîêèğîâàòü";
         Text[ polish ] = "Aktywacja";
-        Text[ japanese ] = "g—p‚·‚é";
-        Text[ chinese_traditional ] = "±Ò¥Î";
+        Text[ japanese ] = "ä½¿ç”¨ã™ã‚‹(~N)";
+        Text[ chinese_traditional ] = "å•Ÿç”¨(~N)";
         Text[ arabic ] = "Plug-Ins";
         Text[ greek ] = "Óõíäåüìåíåò õğïìïíÜäåò";
-        Text[ korean ] = "»ç¿ë °¡´É";
+        Text[ korean ] = "ì‚¬ìš© ê°€ëŠ¥(~N)";
         Text[ turkish ] = "Plug-In";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Plug-ins";
-        Text[ finnish ] = "Lisäosat";
+        Text[ finnish ] = "O~ta käyttöön";
     };
     CheckBox CB_EXECUTE_PLUGINS
     {
@@ -2136,27 +2136,27 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 62 , 10 ) ;
         Text = "~PlugIns" ;
         Text [ English ] = "Pl~ugIns" ;
-        Text [ english_us ] = "Pl~ug-ins" ;
+        Text [ english_us ] = "Plug-ins" ;
         Text [ portuguese_brazilian ] = "~Plugins" ;
         Text [ swedish ] = "~Plug-ins" ;
         Text [ danish ] = "aktiver" ;
-        Text [ italian ] = "~PlugIn" ;
+        Text [ italian ] = "~Plug in" ;
         Text [ spanish ] = "~Plug-ins" ;
         Text [ french ] = "Plug-ins" ;
-        Text [ dutch ] = "V~rijgeven" ;
+        Text [ dutch ] = "~PlugIns" ;
         Text [ portuguese ] = "~Plug-ins" ;
-        Text[ chinese_simplified ] = "Plug-Ins";
+        Text[ chinese_simplified ] = "Plug-ins";
         Text[ russian ] = "Plug-In";
         Text[ polish ] = "Wtyczki plug-in";
-        Text[ japanese ] = "Ìß×¸Ş²İ";
-        Text[ chinese_traditional ] = "Plug-Ins";
+        Text[ japanese ] = "ï¾Œï¾Ÿï¾—ï½¸ï¾ï½²ï¾";
+        Text[ chinese_traditional ] = "Plug-ins";
         Text[ arabic ] = "ÇáÊÔÛíá";
         Text[ greek ] = "Óõíäåüìåíåò õğïìïíÜäåò";
-        Text[ korean ] = "ÇÃ·¯±×ÀÎ";
+        Text[ korean ] = "í”ŒëŸ¬ê·¸ì¸";
         Text[ turkish ] = "Etkinleştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Va~lidar";
-        Text[ finnish ] = "~Ota käyttöön";
+        Text[ finnish ] = "Lisäosat";
     };
     CheckBox CB_EXECUTE_APPLETS
     {
@@ -2164,21 +2164,21 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 62 , 10 ) ;
         Text = "~Applets" ;
         Text [ English ] = "App~lets" ;
-        Text[ english_us ] = "App~lets";
+        Text[ english_us ] = "Applets";
         Text[ portuguese ] = "~Applets";
         Text[ russian ] = "Àïïëåòû";
         Text[ greek ] = "Ìéêñïåöáñìïãİò";
-        Text[ dutch ] = "Applets";
+        Text[ dutch ] = "~Applets";
         Text[ french ] = "Applets";
         Text[ spanish ] = "~Applets";
         Text[ finnish ] = "Sovelmat";
-        Text[ italian ] = "Applets";
+        Text[ italian ] = "~Applet";
         Text[ danish ] = "Applets";
         Text[ swedish ] = "~Appletprogram";
         Text[ polish ] = "Aplety";
         Text[ portuguese_brazilian ] = "Applets";
-        Text[ japanese ] = "±ÌßÚ¯Ä";
-        Text[ korean ] = "¾ÖÇÃ¸´";
+        Text[ japanese ] = "ï½±ï¾Œï¾Ÿï¾šï½¯ï¾„";
+        Text[ korean ] = "ì• í”Œë¦¿";
         Text[ chinese_simplified ] = "Applets";
         Text[ chinese_traditional ] = "Applets";
         Text[ turkish ] = "Applet'ler";
@@ -2194,7 +2194,7 @@ ErrorBox RID_SVXERR_OPT_PROXYPORTS
     Message [ English ] = "Ungültiger Wert!\n\nDer Höchstwert einer Portnummer ist 65535.";
     Message[ english_us ] = "Invalid value!\n\nThe maximum value for a port number is 65535.";
     Message[ portuguese ] = "Valor incorrecto!\n\nO valor máximo para um número de porta é 65535.";
-    Message[ russian ] = "Íåïğàâèëüíîå çíà÷åíèå!\n\nÌàêñèìàëüíîå çíà÷åíèå íîìåğà ïîğòà - 65535.";
+    Message[ russian ] = "Íåäîïóñòèìîå çíà÷åíèå!\n\nÌàêñèìàëüíîå çíà÷åíèå íîìåğà ïîğòà - 65535.";
     Message[ dutch ] = "Ongeldige waarde!\n\nDe hoogste waarde van een poortnummer is 65535.";
     Message[ french ] = "Valeur incorrecte !\n\nLa valeur maximale d'un numéro de port est 65535.";
     Message[ spanish ] = "¡Valor no válido!\n\nEl valor máximo de un número de puerto es 65535.";
@@ -2203,12 +2203,12 @@ ErrorBox RID_SVXERR_OPT_PROXYPORTS
     Message[ swedish ] = "Ogiltigt värde!\n\nEtt portnummers högsta värde är 65535.";
     Message[ polish ] = "Nieprawid³owa wartoœæ!\n\nMaksymalny numer portu wynosi 65535.";
     Message[ portuguese_brazilian ] = "Ung?tiger Wert!\n\nDer H?hstwert einer Portnummer ist 65535.";
-    Message[ japanese ] = "”’l‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ!\n\nÎß°Ä”Ô†‚ÌÅ‚’l‚Í65535‚Å‚·B";
-    Message[ chinese_simplified ] = "ÎŞĞ§µÄÊıÖµ£¡\n\nÒ»¸ö¶Ë¿ÚºÅÂëµÄ×î´óÖµÊÇ 65535 ¡£";
-    Message[ chinese_traditional ] = "µL®Äªº¼Æ­È¡I\n\n¤@­Ó°ğ¸¹½Xªº³Ì¤j­È¬O65535 ¡C";
+    Message[ japanese ] = "æ•°å€¤ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“!\n\nï¾ï¾Ÿï½°ï¾„ç•ªå·ã®æœ€é«˜å€¤ã¯65535ã§ã™ã€‚";
+    Message[ chinese_simplified ] = "æ— æ•ˆçš„æ•°å€¼ï¼\n\nä¸€ä¸ªç«¯å£å·ç çš„æœ€å¤§å€¼æ˜¯ 65535 ã€‚";
+    Message[ chinese_traditional ] = "ç„¡æ•ˆçš„æ•¸å€¼ï¼\n\nä¸€å€‹åŸ è™Ÿç¢¼çš„æœ€å¤§å€¼æ˜¯65535 ã€‚";
     Message[ arabic ] = "ŞíãÉ ÛíÑ ÕÇáÍÉ!\n\nÇáŞíãÉ ÇáŞÕæì áÑŞã ãäİĞ åí 65535.";
     Message[ greek ] = "Ìç İãêõñç ôéìŞ!\n\nÇ ìİãéóôç ôéìŞ áñéèìïı èıñáò åßíáé 65535.";
-    Message[ korean ] = "°ªÀÌ À¯È¿ÇÏÁö ¾ÊÀ½!\n\nÆ÷Æ® ¹øÈ£ÀÇ ÃÖ´ë°ªÀº 65535ÀÓ.";
+    Message[ korean ] = "ê°’ì´ ìœ íš¨í•˜ì§€ ì•ŠìŒ!\n\ní¬íŠ¸ ë²ˆí˜¸ì˜ ìµœëŒ€ê°’ì€ 65535ì„.";
     Message[ turkish ] = "Geçersiz değer!\n\nPort numarası için en yüksek değer 65535.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "¡Valor no válido!\n\nEl valor máximo de un número de puerto es 65535.";
@@ -2246,12 +2246,12 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text[ swedish ] = "Tänk på att Du även stänger av\nJavascript tillsammans med Java.\n\nVill Du trots det stänga av Java?";
         Text[ polish ] = "Nale¿y uwzglêdniæ, ¿e po wy³¹czeniu Javy \nywy³¹czony zostanie równie¿ JavaScript. \n\nCzy mimo to wy³¹czyæ Javê?";
         Text[ portuguese_brazilian ] = "Please note that with Java\nyou disable Javascript as well.\n\nDo you want to disable Java anyway?";
-        Text[ japanese ] = "Java ‚¾‚¯‚Å‚È‚­\nJavaScript ‚àì“®‚µ‚È‚­‚È‚é‚±‚Æ‚É’ˆÓ‚µ‚Ä‚­‚¾‚³‚¢B\n\nJava ‚ğµÌ‚ÉØ‚è‘Ö‚¦‚Ü‚·‚©B";
-        Text[ chinese_simplified ] = "Çë×¢Òâ£ºÔÚ¹Ø±Õ Java\nÊ±»áÍ¬Ê±¹Ø±Õ Javascript ¡£\n\n»¹ÊÇÒª¹Ø±Õ Java £¿";
-        Text[ chinese_traditional ] = "½Ğµù·N¡GÃö³¬ Java ¤ä´©¡A\n¤]´N¤£¯à¨Ï¥ÎJavascript ¥\\¯à¡C\n\nÁÙ¬O­nÃö³¬ Java ¡H";
+        Text[ japanese ] = "Java ã ã‘ã§ãªã\nJavaScript ã‚‚ä½œå‹•ã—ãªããªã‚‹ã“ã¨ã«æ³¨æ„ã—ã¦ãã ã•ã„ã€‚\n\nJava ã‚’ï½µï¾Œã«åˆ‡ã‚Šæ›¿ãˆã¾ã™ã‹ã€‚";
+        Text[ chinese_simplified ] = "è¯·æ³¨æ„ï¼šåœ¨å…³é—­ Java\næ—¶ä¼šåŒæ—¶å…³é—­ Javascript ã€‚\n\nè¿˜æ˜¯è¦å…³é—­ Java ï¼Ÿ";
+        Text[ chinese_traditional ] = "è«‹è¨»æ„ï¼šé—œé–‰ Java æ”¯æ´ï¼Œ\nä¹Ÿå°±ä¸èƒ½ä½¿ç”¨Javascript åŠŸèƒ½ã€‚\n\né‚„æ˜¯è¦é—œé–‰ Java ï¼Ÿ";
         Text[ arabic ] = "ÇáÑÌÇÁ ãáÇÍÙÉ Ãäå ÈÅÛáÇŞß áÜ Java\nÊŞæã ÈÅÛáÇŞ Javascript ÃíÖÇğ.\n\nåá ÊÑíÏ ÅÛáÇŞ Java ÈÇáÑÛã ãä Ğáß¿";
         Text[ greek ] = "Ğáñáêáëş ğñïóİîôå üôé ìå ôçí áğåíåñãïğïßçóç ôïõ Java\nãßíåôáé êáé áğåíåñãïğïßçóç ôïõ Javascript.\n\nÈİëåôå íá ãßíåé áğåíåñãïğïßçóç ôïõ Java;";
-        Text[ korean ] = "Java¿Í ´õºÒ¾î \nJavaScriptµµ »ç¿ë ºÒ°¡´ÉÇØÁø´Ù´Â »ç½Ç¿¡ À¯ÀÇÇÏ½Ê½Ã¿À. \n\n±×·¡µµ Java¸¦ »ç¿ë ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ korean ] = "Javaì™€ ë”ë¶ˆì–´ \nJavaScriptë„ ì‚¬ìš©í•  ìˆ˜ ì—†ê²Œ ëœë‹¤ëŠ” ì‚¬ì‹¤ì— ìœ ì˜í•˜ì‹­ì‹œì˜¤. \n\nê·¸ë˜ë„ Javaë¥¼ ì‚¬ìš© í•´ì œí•˜ê² ìŠµë‹ˆê¹Œ?";
         Text[ turkish ] = "Java ile birlikte Javascript'in de\nkapatılacağını dikkate alın.\n\nYine de Java'yı kapatmak istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tenga en cuenta que junto con Java\ntambién desactivará Javascript.\n\n¿Desea aún desactivar Java?";
@@ -2275,12 +2275,12 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text[ swedish ] = "~Visa inte den här varningen mer";
         Text[ polish ] = "Nie pokazuj wiêcej tego ostrze¿enia";
         Text[ portuguese_brazilian ] = "~Don't show warning again";
-        Text[ japanese ] = "¡Œã‚±‚ÌŒx‚Í•\\¦‚µ‚È‚¢(~D)";
-        Text[ chinese_simplified ] = "²»ÔÙÏÔÊ¾Õâ¸ö¾¯¸æ(~D)";
-        Text[ chinese_traditional ] = "¤£­n¦AÅã¥Ü³o­ÓÄµ§i(~D)";
+        Text[ japanese ] = "ä»Šå¾Œã“ã®è­¦å‘Šã¯è¡¨ç¤ºã—ãªã„(~D)";
+        Text[ chinese_simplified ] = "ä¸å†æ˜¾ç¤ºè¿™ä¸ªè­¦å‘Š(~D)";
+        Text[ chinese_traditional ] = "ä¸è¦å†é¡¯ç¤ºé€™å€‹è­¦å‘Š(~D)";
         Text[ arabic ] = "ÚÏã ÅÙåÇÑ åĞÇ ÇáÊÍĞíÑ ãÑÉ ÃÎÑì İí ÇáãÓÊŞÈá";
         Text[ greek ] = "Íá ìçí åìöáíéóôåß îáíÜ áõôŞ ç ğñïåé~äïğïßçóç";
-        Text[ korean ] = "ÀÌ °æ°í¸¦ ¾ÕÀ¸·Î ´Ù½Ã Ç¥½Ã ¾Ê±â(~D)";
+        Text[ korean ] = "ì´ ê²½ê³ ë¥¼ ë‹¤ì‹œ í‘œì‹œ ì•ˆí•¨(~D)";
         Text[ turkish ] = "Bu uyarıyı artık görüntüleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~No mostrar más esta advertencia.";
@@ -2300,6 +2300,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
 };
 
  // ******************************************************************* EOF
+
 
 
 
