@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-07 16:09:44 $
+ *  last change: $Author: mtg $ $Date: 2001-03-08 12:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,6 +283,9 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
             {
                 // This ZipPackageFolder is the root folder of a zipfile contained within
                 // this zipfile. Things will get a little strange from here on in...
+                // Note...this functionality was disabled on 08/03/2001 due to problems
+                // with copying streams and is not used currently
+
                 ManifestEntry *pMan = new ManifestEntry;
                 pMan->sShortName = (*aCI).first;
 
