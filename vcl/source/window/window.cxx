@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-06 12:57:42 $
+ *  last change: $Author: ssa $ $Date: 2002-06-10 15:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,6 +546,7 @@ void Window::ImplInitData( WindowType nType )
     mbFloatWin          = FALSE;        // TRUE: FloatingWindow is the base class
     mbPushButton        = FALSE;        // TRUE: PushButton is the base class
     mbToolBox           = FALSE;        // TRUE: ToolBox is the base class
+    mbMenuFloatingWindow= FALSE;        // TRUE: MenuFloatingWindow is the base class
     mbSplitter          = FALSE;        // TRUE: Splitter is the base class
     mbVisible           = FALSE;        // TRUE: Show( TRUE ) called
     mbOverlapVisible    = FALSE;        // TRUE: Hide called for visible window from ImplHideAllOverlapWindow()
@@ -4177,7 +4178,7 @@ Window::~Window()
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
 
     // do not send child events for frames that were registered as native frames
-    if( !( mbFrame && (mnStyle & (WB_MOVEABLE | WB_CLOSEABLE | WB_SIZEABLE))))
+    if( !ImplIsAccessibleNativeFrame() )
         if ( ImplIsAccessibleCandidate() && GetAccessibleParentWindow() )
             GetAccessibleParentWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_CHILDDESTROYED, this );
 
@@ -4187,27 +4188,11 @@ Window::~Window()
     if( xComponent.is() )
         xComponent->dispose();
 
-    if ( mbFrame && mpFrameData )
+    if( mbFrame && mpFrameData )
     {
         try
         {
-#ifndef REMOTE_APPSERVER
-            const SystemEnvData * pEnvData = GetSystemData();
-            ImplSVData* pSVData = ImplGetSVData();
-
-            // revoke native frame from access bridge
-            if(pEnvData && pSVData)
-            {
-                if( pSVData->mxAccessBridge.is() )
-                {
-#ifdef WNT
-                    pSVData->mxAccessBridge->revokeAccessibleNativeFrame(makeAny((sal_uInt32) pEnvData->hWnd));
-#else
-                    pSVData->mxAccessBridge->revokeAccessibleNativeFrame(makeAny((sal_uInt32) pEnvData->aWindow));
-#endif
-                }
-            }
-#endif
+            ImplRevokeAccessibleNativeFrame();
 
             // deregister drop target listener
             if( mpFrameData->mxDropTargetListener.is() )
@@ -5896,30 +5881,8 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
 #ifndef REMOTE_APPSERVER
 
         // filter system windows that are accessible over the Accessibility API anyway
-        if( mbFrame && (mnStyle & (WB_MOVEABLE | WB_CLOSEABLE | WB_SIZEABLE)) )
-        {
-            ImplSVData* pSVData = ImplGetSVData();
-
-            // register proxy accessible for the new native frame window
-            if(pSVData->mxAccessBridge.is())
-            {
-                const SystemEnvData * pEnvData = GetSystemData();
-
-                if(pEnvData)
-                {
-                    Reference< XTopWindow > xTopWindow( ImplGetWindow()->GetComponentInterface(), UNO_QUERY );
-                    if(xTopWindow.is())
-                    {
-#ifdef WNT
-                        pSVData->mxAccessBridge->registerAccessibleNativeFrame( makeAny((sal_uInt32) pEnvData->hWnd), GetAccessible(), xTopWindow);
-#else
-                        pSVData->mxAccessBridge->registerAccessibleNativeFrame( makeAny((sal_uInt32) pEnvData->aWindow), GetAccessible(), xTopWindow);
-#endif
-                        bNativeFrameRegistered = TRUE;
-                    }
-                }
-            }
-        }
+        if( ImplIsAccessibleNativeFrame() )
+            bNativeFrameRegistered = ImplRegisterAccessibleNativeFrame();
 #endif
     }
 
@@ -5929,8 +5892,65 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
 
     // the SHOW/HIDE events also serve as indicators to send child creation/destroy events to the access bridge
     // to avoid creation event to be send twice a NULL handle is passed if this (frame)window was already registered
+    // a NULL handle is also passed if:
+    // the window is hidden
+    // the window is not really visible (ie, all parents must be visible)
     ImplCallEventListeners( mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE,
-        ( bNativeFrameRegistered || !ImplIsAccessibleCandidate() || !bVisible) ? NULL : this );
+        ( bNativeFrameRegistered || !ImplIsAccessibleCandidate() || !bVisible || !mbReallyVisible ) ? NULL : this );
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Window::ImplRegisterAccessibleNativeFrame()
+{
+    BOOL bNativeFrameRegistered = FALSE;
+#ifndef REMOTE_APPSERVER
+    ImplSVData* pSVData = ImplGetSVData();
+
+    // register proxy accessible for the new native frame window
+    if(pSVData->mxAccessBridge.is())
+    {
+        const SystemEnvData * pEnvData = GetSystemData();
+
+        if(pEnvData)
+        {
+            Reference< XTopWindow > xTopWindow( ImplGetWindow()->GetComponentInterface(), UNO_QUERY );
+            if(xTopWindow.is())
+            {
+#ifdef WNT
+                pSVData->mxAccessBridge->registerAccessibleNativeFrame( makeAny((sal_uInt32) pEnvData->hWnd), GetAccessible(), xTopWindow);
+#else
+                pSVData->mxAccessBridge->registerAccessibleNativeFrame( makeAny((sal_uInt32) pEnvData->aWindow), GetAccessible(), xTopWindow);
+#endif
+                bNativeFrameRegistered = TRUE;
+                mbSuppressAccessibilityEvents = FALSE;  // allow accessibility events
+            }
+        }
+    }
+#endif
+    return bNativeFrameRegistered;
+}
+
+void Window::ImplRevokeAccessibleNativeFrame()
+{
+#ifndef REMOTE_APPSERVER
+    const SystemEnvData * pEnvData = GetSystemData();
+    ImplSVData* pSVData = ImplGetSVData();
+
+    // revoke native frame from access bridge
+    if(pEnvData && pSVData)
+    {
+        mbSuppressAccessibilityEvents = TRUE;   // avoid further accessibility events
+        if( pSVData->mxAccessBridge.is() )
+        {
+#ifdef WNT
+            pSVData->mxAccessBridge->revokeAccessibleNativeFrame(makeAny((sal_uInt32) pEnvData->hWnd));
+#else
+            pSVData->mxAccessBridge->revokeAccessibleNativeFrame(makeAny((sal_uInt32) pEnvData->aWindow));
+#endif
+        }
+    }
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -7544,6 +7564,17 @@ BOOL Window::ImplIsAccessibleCandidate() const
             return TRUE;
         else
             return FALSE;
+}
+
+BOOL Window::ImplIsAccessibleNativeFrame() const
+{
+    if( mbFrame )
+        if( (mnStyle & (WB_MOVEABLE | WB_CLOSEABLE | WB_SIZEABLE)) )
+            return TRUE;
+        else
+            return FALSE;
+    else
+        return FALSE;
 }
 
 USHORT Window::ImplGetAccessibleCandidateChildWindowCount( USHORT nFirstWindowType ) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-30 13:16:56 $
+ *  last change: $Author: ssa $ $Date: 2002-06-10 15:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4359,6 +4359,13 @@ void VCLXPatternField::setProperty( const ::rtl::OUString& PropertyName, const :
 //  class VCLXMenuWindow
 //  ----------------------------------------------------
 
+VCLXMenuWindow::VCLXMenuWindow()
+    :m_pMenu( 0 )
+    ,m_nIndexInParent( -1 )
+    ,m_xParent( 0 )
+{
+}
+
 VCLXMenuWindow::VCLXMenuWindow( Menu* pMenu, sal_Int32 nIndexInParent, const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rxParent )
     :m_pMenu( pMenu )
     ,m_nIndexInParent( nIndexInParent )
@@ -4374,6 +4381,10 @@ VCLXMenuWindow::~VCLXMenuWindow()
 {
     return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleMenu( this, m_pMenu, m_nIndexInParent, m_xParent );
 }
+
+// ::com::sun::star::lang::XUnoTunnel
+IMPL_XUNOTUNNEL2( VCLXMenuWindow, VCLXWindow )
+
 
 //  ----------------------------------------------------
 //  class VCLXToolBox

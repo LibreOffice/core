@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-06 14:31:32 $
+ *  last change: $Author: ssa $ $Date: 2002-06-10 15:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,11 @@
 #ifndef _SV_SVIDS_HRC
 #include <svids.hrc>
 #endif
+#define private public
 #ifndef _SV_FLOATWIN_HXX
 #include <floatwin.hxx>
 #endif
+#undef private
 #ifndef _SV_WRKWIN_HXX
 #include <wrkwin.hxx>
 #endif
@@ -370,6 +372,10 @@ uno::Reference< i18n::XCharacterClassification > MenuItemList::GetCharClass() co
 
 
 
+// ----------------------
+// - MenuFloatingWindow -
+// ----------------------
+
 class MenuFloatingWindow : public FloatingWindow
 {
     friend void Menu::ImplFillLayoutData() const;
@@ -442,6 +448,7 @@ public:
     void            ChangeHighlightItem( USHORT n, BOOL bStartPopupTimer );
 
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    BOOL            IsTopmostApplicationMenu();
 };
 
 
@@ -2504,11 +2511,16 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
         aSz.Height() = ImplCalcHeight( nEntries );
     }
 
+    BOOL bNativeFrameRegistered = FALSE;  // accessibility registration
+
     pWin->SetFocusId( nFocusId );
     pWin->SetOutputSizePixel( aSz );
     pWin->GrabFocus();
     if ( GetItemCount() )
     {
+        BOOL bRegisterParent = pWin->IsTopmostApplicationMenu();
+        if( bRegisterParent )
+            bNativeFrameRegistered = pWin->mpBorderWindow->ImplRegisterAccessibleNativeFrame();
         pWin->StartPopupMode( aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS );
     }
     if ( bPreSelectFirst )
@@ -2527,6 +2539,9 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     if ( bRealExecute )
     {
         pWin->Execute();
+
+        if( bNativeFrameRegistered )
+            pWin->mpBorderWindow->ImplRevokeAccessibleNativeFrame();
 
         // Focus wieder herstellen (kann schon im Select wieder
         // hergestellt wurden sein
@@ -2628,6 +2643,7 @@ static void ImplInitMenuWindow( Window* pWin, BOOL bFont, BOOL bMenuBar )
 MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nStyle ) :
     FloatingWindow( pParent, nStyle )
 {
+    mbMenuFloatingWindow= TRUE;
     pMenu               = pMen;
     pActivePopup        = 0;
     nSaveFocusId        = 0;
@@ -3623,6 +3639,13 @@ void MenuFloatingWindow::Command( const CommandEvent& rCEvt )
 
     return xAcc;
 }
+
+
+BOOL MenuFloatingWindow::IsTopmostApplicationMenu()
+{
+    return (!pMenu->pStartedFrom) ? TRUE : FALSE;
+}
+
 
 MenuBarWindow::MenuBarWindow( Window* pParent ) :
     Window( pParent, 0 ),

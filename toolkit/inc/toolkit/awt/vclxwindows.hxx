@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-30 13:12:12 $
+ *  last change: $Author: ssa $ $Date: 2002-06-10 15:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,7 +1104,7 @@ public:
 //  ----------------------------------------------------
 //  class VCLXMenuWindow
 //  ----------------------------------------------------
-class VCLXMenuWindow :  public VCLXWindow
+class VCLXMenuWindow :  public VCLXTopWindow
 {
 private:
     Menu*               m_pMenu;
@@ -1116,13 +1116,20 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
 public:
+                        VCLXMenuWindow();
                         VCLXMenuWindow( Menu* pMenu, sal_Int32 nIndexInParent, const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rxParent );
                         ~VCLXMenuWindow();
 
     Menu*               GetMenu() { return m_pMenu; }
 
-    void                SetAccessibleParent( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rxParent ) { m_xParent = rxParent; }
+    void                SetMenu( Menu* pMenu ) { m_pMenu = pMenu; }
     void                SetIndexInParent( sal_Int32 nIndexInParent ) { m_nIndexInParent = nIndexInParent; }
+    void                SetAccessibleParent( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rxParent ) { m_xParent = rxParent; }
+
+    // ::com::sun::star::lang::XUnoTunnel
+    static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
+    static VCLXMenuWindow*                                      GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
+    sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 //  ----------------------------------------------------
