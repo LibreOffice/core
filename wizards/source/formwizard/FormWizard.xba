@@ -85,7 +85,7 @@ Dim RetValue as Integer
 	WizardPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/&quot;)
 	TexturePath = GetOfficeSubPath(&quot;Gallery&quot;, &quot;www-back/&quot;)
 	WorkPath = GetPathSettings(&quot;Work&quot;)
-	ToggleWindow(False)
+	oDocument.GetCurrentController().Frame.ComponentWindow.Enable = False
 	oProgressBar.Value = 5
 	GetDatabaseNames()
 	oProgressBar.Value = 10
@@ -151,7 +151,7 @@ Dim RetValue as Integer
 	oProgressBar.Value = 70
 	ConfigurePageStyle()
 	oProgressBar.Value = 80
-	ToggleWindow(True)
+	oDocument.GetCurrentController().Frame.ComponentWindow.Enable = True
 	oProgressBar.Value = 90
 	oDialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
 	ToggleDatabasePage(True)
