@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hro $ $Date: 2001-08-22 12:08:23 $
+ *  last change: $Author: ka $ $Date: 2001-09-27 08:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,6 +486,17 @@ ULONG SotExchange::GetFormat( const DataFlavor& rFlavor )
     return 0;
 }
 
+/*************************************************************************
+|*
+|*    SotExchange::GetStaticNameFormat()
+|*
+|*    Beschreibung      CLIP.SDW
+*************************************************************************/
+ULONG SotExchange::GetStaticNameFormat( const String& rName )
+{
+    // has to be changed to return the format for the static name (KA 27.09.2001)
+    return SotExchange::RegisterFormatName( rName );
+}
 
 /*************************************************************************
 |*
@@ -502,6 +513,18 @@ String SotExchange::GetFormatName( ULONG nFormat )
         aRet = aFlavor.HumanPresentableName;
 
     return aRet;
+}
+
+/*************************************************************************
+|*
+|*    SotExchange::GetFormatStaticName()
+|*
+|*    Beschreibung      CLIP.SDW
+*************************************************************************/
+String SotExchange::GetFormatStaticName( ULONG nFormat )
+{
+    // has to be changed to return the static format name (KA 27.09.2001)
+    return SotExchange::GetFormatName( nFormat );
 }
 
 /*************************************************************************
