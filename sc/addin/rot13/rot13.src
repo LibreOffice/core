@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rot13.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:49:36 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ Resource RID_SC_ADDIN_ROT13
         Text[ french ] = "ROT13 Algorythme, remplacement de chaque caract�re alphab�tique du texte par rotation de 13 caract�res dans l'alphabet.";
         Text[ spanish ] = "Algoritmo ROT13, cada car�cter alfab�tico del texto rodar� 13 espacios en el alfabeto.";
         Text[ italian ] = "ROT13 algoritmo, ogni carattere alfabetico del testo viene ruotato di 13 nell'alfabeto.";
-        Text[ danish ] = "ROT13 algoritme, hvert alfabetiske tegn i teksten bliver roteret med 13 i alfabetet.";
+        Text[ danish ] = "ROT13 algoritme: Hvert bogstav forskydes med 13 pladser i alfabetet.";
         Text[ swedish ] = "ROT13 algoritm, varje alfabetiskt tecken i texten roteras med 13 i alfabetet.";
         Text[ polish ] = "Algorytm ROT13, ka�dy alfabetyczny znak tekstu zostanie obr�cony o 13 w alfabecie.";
         Text[ portuguese_brazilian ] = "Algoritmo ROT13, rota��o de 13 caracteres no alfabeto para cada um dos caracteres alfab�ticos do texto ";
@@ -95,6 +95,8 @@ Resource RID_SC_ADDIN_ROT13
         Text[ hebrew ] = "ROT13 Algorithmus, jedes alphabetische Zeichen des Textes wird um 13 im Alphabet rotiert.";
         Text[ hindi ] = "ROT13 अल्गोरितम्, टेक्स्ट् का हरेक वर्णमाला अक्षर को वर्णमाला में 13 बार घुमाता है";
         Text[ slovak ] = "ROT13 algoritmus, každý abecedný znak v texte je posunutý o 13 pozícií v abecede";
+        Text[ hungarian ] = "ROT13 Algoritmus, a szöveg minden betűjét az ábécében 13 egységgel eltolja.";
+        Text[ slovenian ] = "Algoritem ROT13, vsak abecedni znak v besedilu premakne za 13 mest v abecedi";
     };
 
     String ROT13_PAR1_NAME // Name of Parameter 1
@@ -129,6 +131,8 @@ Resource RID_SC_ADDIN_ROT13
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "टेक्स्ट्";
         Text[ slovak ] = "Text";
+        Text[ hungarian ] = "Szöveg";
+        Text[ slovenian ] = "Besedilo";
     };
 
     String ROT13_PAR1_DESC // Description of Parameter 1
@@ -163,8 +167,11 @@ Resource RID_SC_ADDIN_ROT13
         Text[ hebrew ] = "Der Text der rotiert werden soll";
         Text[ hindi ] = "टेक्स्ट् जिसको घुमाना है";
         Text[ slovak ] = "Text ktorý má byť posunutý";
+        Text[ hungarian ] = "Az elforgatandó szöveg";
+        Text[ slovenian ] = "Besedilo, ki ga je potrebno premakniti";
     };
 };
+
 
 
 
