@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Socket.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:11:40 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 13:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,11 +295,12 @@ protected:
         ::osl::StreamSocket ssConnection;
 
         sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
+        CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket bind address failed.", sal_True == bOK1 );
         sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
-        CPPUNIT_ASSERT(  ( sal_True == bOK1 ) && ( sal_True == bOK2 ) );
+        CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
         asAcceptorSocket.enableNonBlockingMode( sal_True );
         sal_Char pReadBuffer[5];
-            oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection);
+        oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection);
 
         /// if the thread should terminate, schedule return false
         while ( schedule( ) == sal_True )
@@ -1242,7 +1243,9 @@ namespace osl_Socket
             ::osl::SocketAddr saBindSocketAddr( aHostIp1, IP_PORT_FTP );
             ::osl::SocketAddr saLocalSocketAddr;
 
-            sSocket.bind( saBindSocketAddr );
+            sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );
+            CPPUNIT_ASSERT_MESSAGE( "Socket bind fail.", sal_True == bOK1 );
+
             sSocket.getLocalAddr( saLocalSocketAddr );
             sal_Bool bOK = compareUString( saLocalSocketAddr.getHostname( 0 ), getHost( ) ) ;
 
@@ -1284,7 +1287,8 @@ namespace osl_Socket
             ::osl::SocketAddr saBindSocketAddr( aHostIp1, IP_PORT_FTP );
             ::osl::SocketAddr saLocalSocketAddr;
 
-            sSocket.bind( saBindSocketAddr );
+            sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );
+            CPPUNIT_ASSERT_MESSAGE( "Socket bind fail.", sal_True == bOK1 );
             sal_Bool bOK = ( IP_PORT_FTP == sSocket.getLocalPort( )  );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getLocalPort function: first create a new socket, then a socket address, bind them, and check the port.",
@@ -1305,7 +1309,8 @@ namespace osl_Socket
             ::osl::SocketAddr saBindSocketAddr( aHostIpInval, IP_PORT_FTP);
             ::osl::SocketAddr saLocalSocketAddr;
 
-            sSocket.bind( saBindSocketAddr );
+            sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );
+            //Invalid IP, so bind should fail
             sal_Bool bOK = ( OSL_INVALID_PORT == sSocket.getLocalPort( ) );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getLocalPort function: first create a new socket, then an invalid socket address, bind them, and check the port assigned.",
@@ -1346,7 +1351,8 @@ namespace osl_Socket
             ::osl::SocketAddr saBindSocketAddr( aHostIp1, IP_PORT_FTP );
             ::osl::SocketAddr saLocalSocketAddr;
 
-            sSocket.bind( saBindSocketAddr );
+            sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );
+            CPPUNIT_ASSERT_MESSAGE( "Socket bind fail.", sal_True == bOK1 );
             sal_Bool bOK = compareUString( sSocket.getLocalHost( ), getHost( ) ) ;
 
             CPPUNIT_ASSERT_MESSAGE( "test for getLocalHost function: create localhost socket and check name.",
@@ -1359,7 +1365,8 @@ namespace osl_Socket
             ::osl::SocketAddr saBindSocketAddr( aHostIpInval, IP_PORT_FTP);
             ::osl::SocketAddr saLocalSocketAddr;
 
-            sSocket.bind( saBindSocketAddr );
+            sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );
+            //Invalid IP, so bind should fail
             sal_Bool bOK = compareUString( sSocket.getLocalHost( ), aNullURL ) ;
 
             CPPUNIT_ASSERT_MESSAGE( "test for getLocalHost function: getLocalHost with invalid SocketAddr.",
@@ -1415,8 +1422,10 @@ namespace osl_Socket
 
             /// launch server socket
             sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket bind address failed.", sal_True == bOK1 );
             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
-            CPPUNIT_ASSERT(  ( sal_True == bOK1 ) && ( sal_True == bOK2 ) );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
+
             asAcceptorSocket.enableNonBlockingMode( sal_True );
             oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
 
@@ -1470,6 +1479,8 @@ namespace osl_Socket
             ::osl::SocketAddr saLocalSocketAddr;
 
             sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );
+            CPPUNIT_ASSERT_MESSAGE( "Socket bind fail.", sal_True == bOK1 );
+
             sal_Bool bOK2 = compareUString( sSocket.getLocalHost( ), getHost( ) ) ;
 
             CPPUNIT_ASSERT_MESSAGE( "test for bind function: bind a valid address.",
@@ -1537,8 +1548,9 @@ namespace osl_Socket
 
             /// launch server socket
             sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket bind address failed.", sal_True == bOK1 );
             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
-            CPPUNIT_ASSERT(  ( sal_True == bOK1 ) && ( sal_True == bOK2 ) );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
             asAcceptorSocket.enableNonBlockingMode( sal_True );
             oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
 
@@ -1599,8 +1611,9 @@ namespace osl_Socket
 
             /// launch server socket
             sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket bind address failed.", sal_True == bOK1 );
             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
-            CPPUNIT_ASSERT(  ( sal_True == bOK1 ) && ( sal_True == bOK2 ) );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
             asAcceptorSocket.enableNonBlockingMode( sal_True );
             oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
 
@@ -1906,8 +1919,9 @@ namespace osl_Socket
 
             /// launch server socket
             sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket bind address failed.", sal_True == bOK1 );
             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
-            CPPUNIT_ASSERT(  ( sal_True == bOK1 ) && ( sal_True == bOK2 ) );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
             asAcceptorSocket.enableNonBlockingMode( sal_True );
             oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
 
@@ -1942,8 +1956,9 @@ namespace osl_Socket
 
             /// launch server socket
             sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket bind address failed.", sal_True == bOK1 );
             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
-            CPPUNIT_ASSERT(  ( sal_True == bOK1 ) && ( sal_True == bOK2 ) );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
 
             sal_Bool bOK3 = asAcceptorSocket.isNonBlockingMode( );
             asAcceptorSocket.enableNonBlockingMode( sal_True );
@@ -2314,8 +2329,10 @@ namespace osl_ConnectorSocket
 
             /// launch server socket
             sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket bind address failed.", sal_True == bOK1 );
             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
-            CPPUNIT_ASSERT(  ( sal_True == bOK1 ) && ( sal_True == bOK2 ) );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
+
             asAcceptorSocket.enableNonBlockingMode( sal_True );
             asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
 
@@ -2427,8 +2444,9 @@ namespace osl_AcceptorSocket
 
             /// launch server socket
             sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket bind address failed.", sal_True == bOK1 );
             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
-            CPPUNIT_ASSERT(  ( sal_True == bOK1 ) && ( sal_True == bOK2 ) );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
             asAcceptorSocket.enableNonBlockingMode( sal_True );
 
             /// launch client socket
@@ -2450,8 +2468,9 @@ namespace osl_AcceptorSocket
 
             /// launch server socket
             sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket bind address failed.", sal_True == bOK1 );
             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
-            CPPUNIT_ASSERT(  ( sal_True == bOK1 ) && ( sal_True == bOK2 ) );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
             asAcceptorSocket.enableNonBlockingMode( sal_True );
 
             /// launch client socket
