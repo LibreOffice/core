@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-21 09:44:20 $
+ *  last change: $Author: ama $ $Date: 2002-08-14 09:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,18 +465,9 @@ void __EXPORT SwVirtFlyDrawObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL ) cons
 void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 {
     MoveRect( aOutRect, rSiz );
-#ifdef VERTICAL_LAYOUT
-    SWRECTFN( GetFlyFrm() )
-    const Point aOldPos( (GetFlyFrm()->Frm().*fnRect->fnGetPos)() );
-    const SwRect aFlyRect( aOutRect );
-    const Point aNewPos( (aFlyRect.*fnRect->fnGetPos)() );
-#else
     const Point aOldPos( GetFlyFrm()->Frm().Pos() );
     const Point aNewPos( aOutRect.TopLeft() );
     const SwRect aFlyRect( aOutRect );
-#endif
-
-    ASSERT( aOldPos != aNewPos, "PosUnchanged." );
 
     //Wenn der Fly eine automatische Ausrichtung hat (rechts oder oben),
     //so soll die Automatik erhalten bleiben
@@ -501,8 +492,6 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             lXDiff = -lXDiff;
         long lYDiff = aNewPos.Y() - aOldPos.Y();
 #ifdef VERTICAL_LAYOUT
-        if( bVert )
-            lXDiff -= GetFlyFrm()->Frm().Width();
         if( GetFlyFrm()->GetAnchor()->IsVertical() )
         {
             lXDiff -= rVert.GetPos();
@@ -610,7 +599,11 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
 
 #ifdef VERTICAL_LAYOUT
     SWRECTFN( GetFlyFrm() )
-    const Point aNewPos( bVert ? aOutRect.Right() + 1 : aOutRect.Left(),
+    SwFrm* pTmpFrm = GetFlyFrm()->GetAnchor();
+    if( !pTmpFrm )
+        pTmpFrm = GetFlyFrm();
+    SWRECTFNX( pTmpFrm )
+    const Point aNewPos( bVertX ? aOutRect.Right() + 1 : aOutRect.Left(),
                          aOutRect.Top() );
     SwTwips nWidth = aOutRect.Right() - aOutRect.Left() + 1;
     SwTwips nHeight = aOutRect.Bottom()- aOutRect.Top() + 1;
@@ -679,7 +672,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
 
     //Position kann auch veraendert sein!
 #ifdef VERTICAL_LAYOUT
-    const Point aOldPos( (GetFlyFrm()->Frm().*fnRect->fnGetPos)() );
+    const Point aOldPos( (GetFlyFrm()->Frm().*fnRectX->fnGetPos)() );
 #else
     const Point aOldPos( GetFlyFrm()->Frm().Pos() );
 #endif
@@ -687,7 +680,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
     {
         //Kann sich durch das ChgSize veraendert haben!
 #ifdef VERTICAL_LAYOUT
-        if( bVert )
+        if( bVertX )
         {
             if( aOutRect.TopRight() != aNewPos )
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-24 08:37:48 $
+ *  last change: $Author: ama $ $Date: 2002-08-14 09:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,19 +557,29 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
         // einspaltige Bereiche muessen zu ihrem Upper durchschalten
         while( pUp->IsSctFrm() )
             pUp = pUp->GetUpper();
+        SWRECTFN( pUp )
         //Dem Textflus folgen.
         if ( pUp->Frm().IsInside( rPt ) )
         {
-            rRet.nMain =  rPt.Y() - pCnt->Frm().Top();
+            if( bVert )
+                rRet.nMain =  pCnt->Frm().Left() + pCnt->Frm().Width() -rPt.X();
+            else
+                rRet.nMain =  rPt.Y() - pCnt->Frm().Top();
             return pCnt;
         }
-        else if ( rPt.X() <  pUp->Frm().Left() &&
-                  rPt.Y() <= pUp->Frm().Bottom() )
+        else if( rPt.X() < pUp->Frm().Left() &&
+                 rPt.Y() <= ( bVert ? pUp->Frm().Top() : pUp->Frm().Bottom() ) )
         {
             const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, FALSE, pCnt );
-            if ( !pLay || (pLay->Frm().Left() + pLay->Prt().Right()) < rPt.X() )
+            if( !pLay ||
+                (bVert && (pLay->Frm().Top() + pLay->Prt().Bottom()) <rPt.Y())||
+                (!bVert && (pLay->Frm().Left() + pLay->Prt().Right())<rPt.X()) )
             {
-                rRet.nMain = rPt.Y() - pCnt->Frm().Top();
+                if( bVert )
+                    rRet.nMain =  pCnt->Frm().Left() + pCnt->Frm().Width()
+                                  - rPt.X();
+                else
+                    rRet.nMain = rPt.Y() - pCnt->Frm().Top();
                 return pCnt;
             }
             else
@@ -577,7 +587,9 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
         }
         else
         {
-            rRet.nMain = (pUp->Frm().Top() + pUp->Prt().Bottom()) - pCnt->Frm().Top();
+            rRet.nMain = bVert ? pCnt->Frm().Left() + pCnt->Frm().Width() -
+                                 (pUp->Frm().Left() + pUp->Prt().Left())
+                : (pUp->Frm().Top() + pUp->Prt().Bottom()) - pCnt->Frm().Top();
 
             const SwFrm *pPre = pCnt;
             const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, TRUE, pCnt );
@@ -595,24 +607,49 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                 const SwSectionFrm* pNxtSect = pLay ? pLay->FindSctFrm() : 0;
                 if( pSect->IsAnFollow( pNxtSect ) )
                 {
-                    nFrmTop = pLay->Frm().Top();
-                    nPrtHeight = pLay->Prt().Height();
+                    if( pLay->IsVertical() )
+                    {
+                        nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                        nPrtHeight = pLay->Prt().Width();
+                    }
+                    else
+                    {
+                        nFrmTop = pLay->Frm().Top();
+                        nPrtHeight = pLay->Prt().Height();
+                    }
                     pSect = pNxtSect;
                 }
                 else
                 {
                     pLay = pSect->GetUpper();
-                    nFrmTop = pSect->Frm().Bottom();
-                    nPrtHeight = pLay->Frm().Top() + pLay->Prt().Top()
-                                 + pLay->Prt().Height() - pSect->Frm().Top()
-                                 - pSect->Frm().Height();
+                    if( pLay->IsVertical() )
+                    {
+                        nFrmTop = pSect->Frm().Left();
+                        nPrtHeight = pSect->Frm().Left() - pLay->Frm().Left()
+                                     - pLay->Prt().Left();
+                    }
+                    else
+                    {
+                        nFrmTop = pSect->Frm().Bottom();
+                        nPrtHeight = pLay->Frm().Top() + pLay->Prt().Top()
+                                     + pLay->Prt().Height() - pSect->Frm().Top()
+                                     - pSect->Frm().Height();
+                    }
                     pSect = 0;
                 }
             }
             else if( pLay )
             {
-                nFrmTop = pLay->Frm().Top();
-                nPrtHeight = pLay->Prt().Height();
+                if( pLay->IsVertical() )
+                {
+                    nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                    nPrtHeight = pLay->Prt().Width();
+                }
+                else
+                {
+                    nFrmTop = pLay->Frm().Top();
+                    nPrtHeight = pLay->Prt().Height();
+                }
                 bSct = 0 != pSect;
             }
             while ( pLay && !pLay->Frm().IsInside( rPt ) &&
@@ -647,24 +684,49 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                         bSct = FALSE;
                         if( pSect->IsAnFollow( pNxtSect ) )
                         {
-                            nFrmTop = pLay->Frm().Top();
-                            nPrtHeight = pLay->Prt().Height();
                             pSect = pNxtSect;
+                            if( pLay->IsVertical() )
+                            {
+                                nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                                nPrtHeight = pLay->Prt().Width();
+                            }
+                            else
+                            {
+                                nFrmTop = pLay->Frm().Top();
+                                nPrtHeight = pLay->Prt().Height();
+                            }
                         }
                         else
                         {
                             pLay = pSect->GetUpper();
-                            nFrmTop = pSect->Frm().Bottom();
-                            nPrtHeight = pLay->Frm().Top() + pLay->Prt().Top()
-                                         + pLay->Prt().Height() - pSect->Frm().Top()
-                                         - pSect->Frm().Height();
+                            if( pLay->IsVertical() )
+                            {
+                                nFrmTop = pSect->Frm().Left();
+                                nPrtHeight = pSect->Frm().Left() -
+                                        pLay->Frm().Left() - pLay->Prt().Left();
+                            }
+                            else
+                            {
+                                nFrmTop = pSect->Frm().Bottom();
+                                nPrtHeight = pLay->Frm().Top()+pLay->Prt().Top()
+                                     + pLay->Prt().Height() - pSect->Frm().Top()
+                                     - pSect->Frm().Height();
+                            }
                             pSect = 0;
                         }
                     }
                     else if( pLay )
                     {
-                        nFrmTop = pLay->Frm().Top();
-                        nPrtHeight = pLay->Prt().Height();
+                        if( pLay->IsVertical() )
+                        {
+                             nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                             nPrtHeight = pLay->Prt().Width();
+                        }
+                        else
+                        {
+                            nFrmTop = pLay->Frm().Top();
+                            nPrtHeight = pLay->Prt().Height();
+                        }
                         bSct = 0 != pSect;
                     }
                 }
@@ -673,10 +735,12 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
             {
                 if ( pLay->Frm().IsInside( rPt ) )
                 {
+                    SwTwips nDiff = pLay->IsVertical() ? ( nFrmTop - rPt.X() )
+                                                       : ( rPt.Y() - nFrmTop );
                     if( bSct || pSect )
-                        rRet.nSub += rPt.Y() - nFrmTop;
+                        rRet.nSub += nDiff;
                     else
-                        rRet.nMain += rPt.Y() - nFrmTop;
+                        rRet.nMain += nDiff;
                 }
                 if ( pLay->IsFtnContFrm() && !((SwLayoutFrm*)pLay)->Lower() )
                 {
@@ -1087,11 +1151,18 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         SwTwips nDiff = 0;
         do
         {   const SwFrm *pUp = pFollow->GetUpper();
-            nDiff += pUp->Prt().Height() - pFollow->GetRelPos().Y();
+            if( pUp->IsVertical() )
+                nDiff += pFollow->Frm().Left() + pFollow->Frm().Width()
+                         - pUp->Frm().Left() - pUp->Prt().Left();
+            else
+                nDiff += pUp->Prt().Height() - pFollow->GetRelPos().Y();
             pFollow = pFollow->GetFollow();
         } while ( pFollow != pOriginal );
         nY += nDiff;
-        nX = pCnt->Frm().Left() - pOriginal->Frm().Left();
+        if( bVert )
+            nX = pCnt->Frm().Top() - pOriginal->Frm().Top();
+        else
+            nX = pCnt->Frm().Left() - pOriginal->Frm().Left();
     }
 
     if ( nY == LONG_MAX )
