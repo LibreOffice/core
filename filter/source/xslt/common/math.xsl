@@ -56,7 +56,12 @@
 Public Functions 
     sin(x,rounding-factor=100)
     cos(x,rounding-factor=100)
-    arctan(x,rounding-factor=100)
+    tan(x,rounding-factor=100)
+    ctan(x,rounding-factor=100)
+    atan2(x, y ,rounding-factor=100)
+    atan(x,rounding-factor=100)
+    acos(x,rounding-factor=100)
+    asin(x,rounding-factor=100)
     abs(x)
     max(x1,x2)
     min(x1,x2)
@@ -76,9 +81,19 @@ Public Functions
             <xsl:with-param name="x" select="34.8"/>
             <xsl:with-param name="rounding-factor" select="100000"/>
         </xsl:call-template>
-        arctan(2.74) 
-        <xsl:call-template name="arctan">
+        atan(2.74) 
+        <xsl:call-template name="atan">
             <xsl:with-param name="x" select="2.74"/>
+            <xsl:with-param name="rounding-factor" select="100000"/>
+        </xsl:call-template>
+        acos(0.5) 
+        <xsl:call-template name="acos">
+            <xsl:with-param name="x" select="0.5"/>
+            <xsl:with-param name="rounding-factor" select="100000"/>
+        </xsl:call-template>
+        asin(0.5) 
+        <xsl:call-template name="asin">
+            <xsl:with-param name="x" select="0.5"/>
             <xsl:with-param name="rounding-factor" select="100000"/>
         </xsl:call-template>
         sqrt(1328.3414)
@@ -112,7 +127,57 @@ Public Functions
         </xsl:variable>
         <xsl:value-of select=" round ( number($cosx) * $rounding-factor ) div $rounding-factor"/>
     </xsl:template>
-    <xsl:template name="arctan">
+    <xsl:template name="tan">
+        <xsl:param name="x" select="0"/>
+        <xsl:param name="rounding-factor" select="100"/>
+        <xsl:variable name="sinx">
+            <xsl:call-template name="sin">
+                <xsl:with-param name="x" select="$x"/>
+                <xsl:with-param name="rounding-factor" select="$rounding-factor * 10"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="cosx">
+            <xsl:call-template name="cos">
+                <xsl:with-param name="x" select="$x"/>
+                <xsl:with-param name="rounding-factor" select="$rounding-factor * 10"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test=" $cosx = 0 ">
+                <xsl:message>tan error : tan(<xsl:value-of select="$x"/>) is infinite!</xsl:message>
+                <xsl:value-of select="63535"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select=" round( $sinx div $cosx * $rounding-factor) div $rounding-factor"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template name="ctan">
+        <xsl:param name="x" select="0"/>
+        <xsl:param name="rounding-factor" select="100"/>
+        <xsl:variable name="sinx">
+            <xsl:call-template name="sin">
+                <xsl:with-param name="x" select="$x"/>
+                <xsl:with-param name="rounding-factor" select="$rounding-factor * 10"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="cosx">
+            <xsl:call-template name="cos">
+                <xsl:with-param name="x" select="$x"/>
+                <xsl:with-param name="rounding-factor" select="$rounding-factor * 10"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test=" $sinx = 0 ">
+                <xsl:message>tan error : tan(<xsl:value-of select="$x"/>) is infinite!</xsl:message>
+                <xsl:value-of select="63535"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select=" round( $cosx div $sinx * $rounding-factor) div $rounding-factor"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template name="atan">
         <xsl:param name="x" select="0"/>
         <xsl:param name="rounding-factor" select="100"/>
         <xsl:choose>
@@ -120,30 +185,96 @@ Public Functions
                 <xsl:value-of select="0"/>
             </xsl:when>
             <xsl:when test="$x &lt; 0">
-                <xsl:variable name="arctan-x">
-                    <xsl:call-template name="arctan">
+                <xsl:variable name="atan-x">
+                    <xsl:call-template name="atan">
                         <xsl:with-param name="x" select=" -1 * $x"/>
                         <xsl:with-param name="rounding-factor" select="$rounding-factor"/>
                     </xsl:call-template>
                 </xsl:variable>
-                <xsl:value-of select="-1 * $arctan-x"/>
+                <xsl:value-of select="-1 * $atan-x"/>
             </xsl:when>
             <xsl:when test="$x &gt; 1">
-                <xsl:variable name="arctan-div-x">
-                    <xsl:call-template name="arctan">
+                <xsl:variable name="atan-div-x">
+                    <xsl:call-template name="atan">
                         <xsl:with-param name="x" select="1 div $x "/>
                         <xsl:with-param name="rounding-factor" select="$rounding-factor"/>
                     </xsl:call-template>
                 </xsl:variable>
-                <xsl:value-of select=" 90 * $pi div 180 - $arctan-div-x"/>
+                <xsl:value-of select=" $pi div 2 - $atan-div-x"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:variable name="arctanx">
-                    <xsl:call-template name="arctan-private">
+                    <xsl:call-template name="atan-private">
                         <xsl:with-param name="x" select="  $x "/>
                     </xsl:call-template>
                 </xsl:variable>
                 <xsl:value-of select=" round ( number($arctanx) * $rounding-factor ) div $rounding-factor"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template name="atan2">
+        <xsl:param name="x"/>
+        <xsl:param name="y"/>
+        <xsl:param name="rounding-factor" select="100"/>
+        <xsl:choose>
+            <xsl:when test="$x = 0">
+                <xsl:value-of select=" $pi div 2"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="atan">
+                    <xsl:with-param name="x" select="$y div $x"/>
+                    <xsl:with-param name="rounding-factor" select="$rounding-factor"/>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template name="acos">
+        <xsl:param name="x"/>
+        <xsl:param name="rounding-factor" select="100"/>
+        <xsl:variable name="abs-x">
+            <xsl:call-template name="abs">
+                <xsl:with-param name="x" select="$x"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="$abs-x  &gt;  1">
+                <xsl:message>acos error : abs(<xsl:value-of select="$x"/>) greate then 1 !</xsl:message>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="atan2">
+                    <xsl:with-param name="x" select="$x"/>
+                    <xsl:with-param name="y">
+                        <xsl:call-template name="sqrt">
+                            <xsl:with-param name="x" select="1 - $x * $x"/>
+                            <xsl:with-param name="rounding-factor" select=" concat($rounding-factor,'0') "/>
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template name="asin">
+        <xsl:param name="x"/>
+        <xsl:param name="rounding-factor" select="100"/>
+        <xsl:variable name="abs-x">
+            <xsl:call-template name="abs">
+                <xsl:with-param name="x" select="$x"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="$abs-x  &gt;  1">
+                <xsl:message>asin error : abs(<xsl:value-of select="$x"/>) greate then 1 !</xsl:message>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="atan2">
+                    <xsl:with-param name="y" select="$x"/>
+                    <xsl:with-param name="x">
+                        <xsl:call-template name="sqrt">
+                            <xsl:with-param name="x" select="1 - $x * $x"/>
+                            <xsl:with-param name="rounding-factor" select=" concat($rounding-factor,'0') "/>
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -223,7 +354,7 @@ Public Functions
 Private functions:
 sin-private
 cos-private
-arctan-private
+atan-private
 sqrt-private
 integer-sqrt
 Sqrt-GetOneDigit
@@ -296,7 +427,7 @@ Sqrt-GetOneDigit
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    <xsl:template name="arctan-private">
+    <xsl:template name="atan-private">
         <xsl:param name="x" select="0"/>
         <xsl:param name="n" select="0"/>
         <xsl:param name="nx" select="1"/>
@@ -308,7 +439,7 @@ Sqrt-GetOneDigit
                 <xsl:value-of select="$arctanx"/>
             </xsl:when>
             <xsl:when test="$n = 0">
-                <xsl:call-template name="arctan-private">
+                <xsl:call-template name="atan-private">
                     <xsl:with-param name="x" select="$x"/>
                     <xsl:with-param name="n" select="$n + 1"/>
                     <xsl:with-param name="sign" select="$sign *  -1"/>
@@ -319,7 +450,7 @@ Sqrt-GetOneDigit
             </xsl:when>
             <xsl:otherwise>
                 <xsl:variable name="new-nx" select=" $nx * $x * $x "/>
-                <xsl:call-template name="arctan-private">
+                <xsl:call-template name="atan-private">
                     <xsl:with-param name="x" select="$x"/>
                     <xsl:with-param name="n" select="$n + 1"/>
                     <xsl:with-param name="sign" select="$sign *  -1"/>
@@ -386,7 +517,8 @@ Sqrt-GetOneDigit
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    <xsl:template name="get-one-sqrt-digit">        <xsl:param name="x"/>
+    <xsl:template name="get-one-sqrt-digit">
+        <xsl:param name="x"/>
         <xsl:param name="last-quotient"/>
         <xsl:param name="n"/>
         <xsl:param name="direct" select="1"/>
