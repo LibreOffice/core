@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:45:27 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1020,11 +1020,12 @@ SfxImageManager::SfxImageManager( SfxObjectShell* pDoc )
     pData->pToolBoxList = new SfxToolBoxArr_Impl;
     pData->pDoc = pDoc;
 
-    if ( pDoc && pDoc->GetConfigManager() && pDoc->GetConfigManager()->HasConfigItem(SFX_ITEMTYPE_IMAGELIST) )
-    {
-        pImp = new SfxImageManager_Impl( pDoc->GetConfigManager() );
-    }
-    else
+    // TODO/LATER: May need a new implementation based on the new API after resync to docking1???
+//REMOVE        if ( pDoc && pDoc->GetConfigManager() && pDoc->GetConfigManager()->HasConfigItem(SFX_ITEMTYPE_IMAGELIST) )
+//REMOVE        {
+//REMOVE            pImp = new SfxImageManager_Impl( pDoc->GetConfigManager() );
+//REMOVE        }
+//REMOVE        else
     {
         if ( !pGlobalConfig )
             pGlobalConfig = new SfxImageManager_Impl( SFX_APP()->GetConfigManager_Impl() );
