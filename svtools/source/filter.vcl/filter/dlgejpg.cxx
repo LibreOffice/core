@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-16 09:32:30 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,9 @@
  ************************************************************************/
 
 
-#pragma hdrstop
+#ifndef GCC
+#   pragma hdrstop
+#endif
 
 #include "dlgejpg.hxx"
 #include "dlgejpg.hrc"
