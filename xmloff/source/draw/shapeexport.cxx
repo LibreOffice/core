@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-07 16:26:36 $
+ *  last change: $Author: cl $ $Date: 2001-02-08 14:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,16 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
+#include <com/sun/star/drawing/XControlShape.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
+#endif
+
+#ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
+#include "PropertySetMerger.hxx"
 #endif
 
 #ifndef _XMLOFF_SHAPEEXPORT_HXX
@@ -138,6 +146,12 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     // chain text attributes
     xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateCharExtPropMapper(rExp));
 
+/*
+    // chain form attributes
+    const UniReference< SvXMLExportPropertyMapper> xFormMapper( rExp.GetFormExport()->getStylePropertyMapper().getBodyPtr() );
+    xPropertySetMapper->ChainExportMapper(xFormMapper);
+*/
+
     rExport.GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_SD_GRAPHICS_ID,
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)),
@@ -204,6 +218,24 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             }
 
             aParentName += xStyle->getName();
+        }
+
+        // if this shape is a control shape we merge the styles
+        // from this shape with the styles from the controls model
+        if( aShapeInfo.meShapeType == XmlShapeTypeDrawControlShape )
+        {
+            do
+            {
+                uno::Reference< drawing::XControlShape > xControl( xShape, uno::UNO_QUERY );
+                if( !xControl.is() )
+                    break;
+
+                uno::Reference< beans::XPropertySet > xControlModel( xControl->getControl(), uno::UNO_QUERY );
+                if( !xControlModel.is() )
+                    break;
+
+                xPropSet = PropertySetMerger_CreateInstance( xPropSet, xControlModel );
+            } while(0);
         }
 
         // filter propset

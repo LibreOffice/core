@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mh $ $Date: 2001-02-01 16:29:47 $
+ *  last change: $Author: cl $ $Date: 2001-02-08 14:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,11 @@ using namespace ::com::sun::star;
 //////////////////////////////////////////////////////////////////////////////
 
 XMLShapeImportHelper::XMLShapeImportHelper(
+        SvXMLImport& rImporter,
         const uno::Reference< frame::XModel>& rModel,
         SvXMLImportPropertyMapper *pExtMapper )
 :   mxModel(rModel),
+    mrImporter( rImporter ),
     mpPropertySetMapper(0L),
     mpPresPagePropsMapper(0L),
     mpStylesContext(0L),
@@ -173,6 +175,12 @@ XMLShapeImportHelper::XMLShapeImportHelper(
 
     // chain text attributes
     mpPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateCharExtPropMapper());
+
+/*
+    // chain form attributes
+    const UniReference< SvXMLImportPropertyMapper> xFormMapper( rImporter.GetFormImport()->getStylePropertyMapper().getBodyPtr() );
+    mpPropertySetMapper->ChainImportMapper(xFormMapper);
+*/
 
     // construct PresPagePropsMapper
     xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, mpSdPropHdlFactory);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-07 16:26:36 $
+ *  last change: $Author: cl $ $Date: 2001-02-08 14:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,10 @@
 
 #ifndef _COM_SUN_STAR_DRAWING_CONNECTORTYPE_HPP_
 #include <com/sun/star/drawing/ConnectorType.hpp>
+#endif
+
+#ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
+#include "PropertySetMerger.hxx"
 #endif
 
 #ifndef _XMLOFF_FAMILIES_HXX_
@@ -312,47 +316,62 @@ void SdXMLShapeContext::SetRotation()
 
 void SdXMLShapeContext::SetStyle()
 {
-    // set style on shape
-    if(maDrawStyleName.getLength() && mxShape.is())
+    do
     {
+        // set style on shape
+        if(maDrawStyleName.getLength() == 0 || !mxShape.is())
+            break;
+
         const SvXMLStyleContext* pStyle = 0L;
         sal_Bool bAutoStyle(FALSE);
 
         if(GetImport().GetShapeImport()->GetAutoStylesContext())
-            pStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(
-            mnStyleFamily, maDrawStyleName);
+            pStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(mnStyleFamily, maDrawStyleName);
 
         if(pStyle)
             bAutoStyle = TRUE;
 
         if(!pStyle && GetImport().GetShapeImport()->GetStylesContext())
-            pStyle = GetImport().GetShapeImport()->GetStylesContext()->
-            FindStyleChildContext(mnStyleFamily, maDrawStyleName);
+            pStyle = GetImport().GetShapeImport()->GetStylesContext()->FindStyleChildContext(mnStyleFamily, maDrawStyleName);
 
-        if(pStyle && pStyle->ISA(XMLShapeStyleContext) )
+        if(NULL == pStyle || !pStyle->ISA(XMLShapeStyleContext) )
+            break;
+
+        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+        if( !xPropSet.is() )
+            break;
+
+        XMLPropStyleContext* pDocStyle =
+            PTR_CAST( XMLShapeStyleContext, pStyle );
+
+        if( pDocStyle->GetStyle().is() )
         {
-            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-            if(xPropSet.is() )
-            {
-                XMLPropStyleContext* pDocStyle =
-                    PTR_CAST( XMLShapeStyleContext, pStyle );
-
-                if( pDocStyle->GetStyle().is() )
-                {
-                    // set style on object
-                    uno::Any aAny;
-                    aAny <<= pDocStyle->GetStyle();
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Style")), aAny);
-                }
-
-                if(bAutoStyle)
-                {
-                    // set PropertySet on object
-                    pDocStyle->FillPropertySet(xPropSet);
-                }
-            }
+            // set style on object
+            uno::Any aAny;
+            aAny <<= pDocStyle->GetStyle();
+            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Style")), aAny);
         }
-    }
+
+        // we are finished if this is not a auto style
+        if(!bAutoStyle)
+            break;
+
+        // check if this is a control shape
+        // if so we must split the style for the shape and its control model
+        uno::Reference< drawing::XControlShape > xControl( mxShape, uno::UNO_QUERY );
+        if( xControl.is() )
+        {
+            uno::Reference< beans::XPropertySet > xControlModel( xControl->getControl(), uno::UNO_QUERY );
+            if( !xControlModel.is() )
+                break;
+
+            xPropSet = PropertySetMerger_CreateInstance( xPropSet, xControlModel );
+        }
+
+        // set PropertySet on object
+        pDocStyle->FillPropertySet(xPropSet);
+
+    } while(0);
 }
 
 void SdXMLShapeContext::SetLayer()
