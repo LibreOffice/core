@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-06 10:41:38 $
+ *  last change: $Author: cd $ $Date: 2001-07-06 12:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,7 @@ namespace rtl
 {
 /**
 @descr  The intended use for class Logfile is to write time stamp information
-        for profiling purposes. The class calls rtl_logfile_trace which uses the traditional
-        C fopen/fprintf family instead of the new C++ ofstream class because of a (hopefully)
-        lower time penalty: Logging should not distort the logged data.
+        for profiling purposes.
 
         Profiling output should only be generated for a special product version of OpenOffice
         which is compiled with a defined preprocessor symbol 'PROFILE'.
@@ -89,8 +87,11 @@ namespace rtl
         this symbol is defined.  If the macros are not sufficient, i.e. you need more
         then three arguments for a printf style message, then you have to insert an
         #ifdef PROFILE/#endif brace yourself.
+
         Additionally the environment variable RTL_LOGFILE has to be defined in order to generate
-        profiling data.  It can be used as a run time switch for enabling or disabling the logging.
+        logging information. If the variable is not empty, it creates a file with the name
+        $(RTL_LOGFILE)_$(PID).log, where $(PID) is the process id of the running process.
+        It can be used as a run time switch for enabling or disabling the logging.
         Note that this variable is evaluated only once at the first attempt to write a message.
 
         The class LogFile collects runtime data within its constructor and destructor. It can be
@@ -100,6 +101,31 @@ namespace rtl
 
         The class LogFile should not be used directly, instead use the RTL_LOGFILE_CONTEXT/
         RTL_LOGFILE_TRACE-macros.
+
+        Macro usage:
+        ------------
+        RTL_LOGFILE_CONTEXT( instance, name );
+        This macro creates an instance of class LogFile with the name "instance" and writes the current time,
+        thread id and "name" to the log file.
+
+        Example: RTL_LOGFILE_CONTEXT( aLog, "Timing for foo-method" );
+
+        RTL_LOGFILE_CONTEXT_TRACE( instance, mesage );
+        RTL_LOGFILE_CONTEXT_TRACEn( instance, frmt, arg1, .., arg3 );
+        These macros can be used to log information in a "instance" context. The "instance" object
+        is used to log message informations. All macros with "frmt" uses printf notation to log timing infos.
+
+        Example: RTL_LOGFILE_CONTEXT_TRACE( aLog, "Now we call an expensive function" );
+                 RTL_LOGFIlE_CONTEXT_TRACE1( aLog, "Config entries read: %u", (unsigned short)i );
+
+        RTL_LOGFILE_TRACE( string );
+        RTL_LOGFILE_TRACEn( frmt, arg1, .., arg3 );
+        These macros can be used to log information outside a context. The macro directly calls
+        rtl_logfile_trace to write the info to the log file. All macros with "frmt" uses printf
+        notation to log timing infos.
+
+        Example: RTL_LOGFILE_TRACE( "Timing for loading a file" );
+                 RTL_LOGFILE_TRACE1( aLog, "Timing for loading file: %s", aFileName );
 
         The lines written to the log file consist of the following space separated elements:
         1.  The time relative to the start of the global timer in milliseconds.  The times is
