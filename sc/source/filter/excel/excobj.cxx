@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-17 12:46:45 $
+ *  last change: $Author: obo $ $Date: 2001-10-16 14:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,13 +474,8 @@ void ImportExcel::EndAllChartObjects( void )
             //! Warnung am Storage setzen?
             if ( SvtModuleOptions().IsChart() )
             {
-#ifndef SO3
-                aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit
-                    ( *SCH_MOD()->pSchChartDocShellFactory, aStor );
-#else
                 aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit
                     ( *SCH_MOD()->pSchChartDocShellFactory, aStor );
-#endif
             }
             if( aIPObj.Is() )
             {
