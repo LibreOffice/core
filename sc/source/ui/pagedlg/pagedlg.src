@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:14:27 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1053,11 +1053,11 @@ TabPage RID_SCPAGE_TABLE
         Text [ spanish ] = "~Primer núm. de página" ;
         Text [ english_us ] = "First ~page number" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "µÚÒ»¸öÒ³Êı(~P)";
+        Text[ chinese_simplified ] = "µÚÒ»¸öÒ³Âë(~P)";
         Text[ russian ] = "Ïåğâàÿ ñòğàíèöà ¹";
         Text[ polish ] = "Pierwszy nu~mer strony";
         Text[ japanese ] = "Å‰‚ÌÍß°¼Ş”Ô†(~P)";
-        Text[ chinese_traditional ] = "²Ä¤@­¶­¶½X(~P)";
+        Text[ chinese_traditional ] = "²Ä¤@­Ó­¶½X(~P)";
         Text[ arabic ] = "ÑŞã ÇáÕİÍÉ ÇáÃæáì";
         Text[ greek ] = "Ğñşôïò áñéèìüò óåëßäáò";
         Text[ korean ] = "Ã¹ ÆäÀÌÁö ¹øÈ£(~P)";
@@ -1215,6 +1215,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ finnish ] = "Skaalaa";
     };
 };
+
 
 
 
