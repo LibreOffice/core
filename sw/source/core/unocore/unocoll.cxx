@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-10-17 13:38:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 14:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 
 #pragma hdrstop
 
@@ -190,7 +187,7 @@ const char* __FAR_DATA aProvNames[] =
         "com.sun.star.text.TextTable",          //SW_SERVICE_TYPE_TEXTTABLE
         "com.sun.star.text.TextFrame",          //SW_SERVICE_TYPE_TEXTFRAME
         "com.sun.star.text.GraphicObject",          //SW_SERVICE_TYPE_GRAPHIC
-        "com.sun.star.text.EmbeddedObject",         //SW_SERVICE_TYPE_OLE
+        "com.sun.star.text.TextEmbeddedObject", //SW_SERVICE_TYPE_OLE
         "com.sun.star.text.Bookmark",           //SW_SERVICE_TYPE_BOOKMARK
         "com.sun.star.text.Footnote",           //SW_SERVICE_TYPE_FOOTNOTE
         "com.sun.star.text.Endnote",            //SW_SERVICE_TYPE_ENDNOTE
