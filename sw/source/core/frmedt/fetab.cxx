@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:08:51 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1638,6 +1638,36 @@ void SwFEShell::SetTblAttr( const SfxItemSet &rNew )
     }
 }
 
+/** move cursor within a table into previous/next row (same column)
+ * @param pShell cursor shell whose cursor is to be moved
+ * @param bUp true: move up, false: move down
+ * @returns true if successful
+ */
+bool lcl_GoTableRow( SwCrsrShell* pShell, bool bUp )
+{
+    ASSERT( pShell != NULL, "need shell" );
+
+    bool bRet = false;
+
+    SwPaM* pPam = pShell->GetCrsr();
+    const SwStartNode* pTableBox = pPam->GetNode()->FindTableBoxStartNode();
+    ASSERT( pTableBox != NULL, "I'm living in a box... NOT!" );
+
+    // move cursor to start node of table box
+    pPam->GetPoint()->nNode = pTableBox->GetIndex();
+    pPam->GetPoint()->nContent.Assign( NULL, 0 );
+    GoInCntnt( *pPam, fnMoveForward );
+
+    // go to beginning end of table box
+    SwPosSection fnPosSect = bUp ? fnSectionStart : fnSectionEnd;
+    pShell->MoveSection( fnSectionCurr, fnPosSect );
+
+    // and go up/down into next content
+    bRet = bUp ? pShell->Up() : pShell->Down();
+
+    return bRet;
+}
+
     // aender eine  Zellenbreite/-Hoehe/Spaltenbreite/Zeilenhoehe
 BOOL SwFEShell::SetColRowWidthHeight( USHORT eType, USHORT nDiff )
 {
@@ -1679,12 +1709,37 @@ BOOL SwFEShell::SetColRowWidthHeight( USHORT eType, USHORT nDiff )
 
     if( (eType & (WH_FLAG_BIGGER | WH_FLAG_INSDEL)) ==
         (WH_FLAG_BIGGER | WH_FLAG_INSDEL) )
+    {
         nDiff = USHORT((pFrm->Frm().*fnRect->fnGetWidth)());
+
+        // we must move the cursor outside the current cell before
+        // deleting the cells.
+        TblChgWidthHeightType eTmp =
+            static_cast<TblChgWidthHeightType>( eType & 0xfff );
+        switch( eTmp )
+        {
+        case WH_ROW_TOP:
+            lcl_GoTableRow( this, true );
+            break;
+        case WH_ROW_BOTTOM:
+            lcl_GoTableRow( this, false );
+            break;
+        case WH_COL_LEFT:
+            GoPrevCell();
+            break;
+        case WH_COL_RIGHT:
+            GoNextCell();
+            break;
+        default:
+            break;
+        }
+    }
 
     SwTwips nLogDiff = nDiff;
     nLogDiff *= pTab->GetFmt()->GetFrmSize().GetWidth();
     nLogDiff /= nPrtWidth;
 
+    /** The cells are destroyed in here */
     BOOL bRet = GetDoc()->SetColRowWidthHeight(
                     *(SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox(),
                     eType, nDiff, nLogDiff );
@@ -1708,14 +1763,12 @@ BOOL SwFEShell::SetColRowWidthHeight( USHORT eType, USHORT nDiff )
 
         case WH_CELL_TOP:
         case WH_ROW_TOP:
-                MoveSection( fnSectionCurr, fnSectionStart );
-                Up();
+                lcl_GoTableRow( this, true );
                 break;
 
         case WH_CELL_BOTTOM:
         case WH_ROW_BOTTOM:
-                MoveSection( fnSectionCurr, fnSectionEnd );
-                Down();
+                lcl_GoTableRow( this, false );
                 break;
         }
     }
