@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 13:58:57 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,23 @@ namespace connectivity
 
     };
 
+    /// ORowSetValueDecorator decorates a ORowSetValue so the value is "refcounted"
+    class ORowSetValueDecorator : public ::vos::OReference
+    {
+        ORowSetValue    m_aValue;   // my own value
+    public:
+        ORowSetValueDecorator(){m_aValue.setBound(sal_True);}
+        ORowSetValueDecorator(const ORowSetValue& _aValue) : m_aValue(_aValue){m_aValue.setBound(sal_True);}
+        ORowSetValueDecorator& operator=(const ORowSetValue& _aValue);
+
+        operator const ORowSetValue&()  const   { return m_aValue; }
+        const ORowSetValue& getValue()  const   { return m_aValue; }
+        void setValue(const ORowSetValue& _aValue) { m_aValue = _aValue; }
+        void setNull() { m_aValue.setNull(); }
+
+    };
+
+    typedef ::vos::ORef<ORowSetValueDecorator> ORowSetValueDecoratorRef;
     // ----------------------------------------------------------------------------
     // Vector for file based rows
     // ----------------------------------------------------------------------------
