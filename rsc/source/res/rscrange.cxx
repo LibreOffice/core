@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscrange.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ RSCCLASS_TYPE RscRange::GetClassType() const
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-ERRTYPE RscRange::SetRange( long nMinimum, long nMaximum )
+ERRTYPE RscRange::SetRange( INT32 nMinimum, INT32 nMaximum )
 {
     if( nMinimum > nMaximum )
     {
@@ -164,7 +164,7 @@ BOOL RscRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-ERRTYPE RscRange::SetNumber( const RSCINST & rInst, long nValue )
+ERRTYPE RscRange::SetNumber( const RSCINST & rInst, INT32 nValue )
 {
     if( nMax < nValue || nMin > nValue )
         return( ERR_RSCRANGE_OUTDEFSET );
@@ -182,7 +182,7 @@ ERRTYPE RscRange::SetNumber( const RSCINST & rInst, long nValue )
 |*    Letzte Aenderung  MM 22.04.91
 |*
 *************************************************************************/
-ERRTYPE RscRange::GetNumber( const RSCINST & rInst, long * pN )
+ERRTYPE RscRange::GetNumber( const RSCINST & rInst, INT32 * pN )
 {
     *pN = ((RscRangeInst *)rInst.pData)->nValue + nMin;
     return( ERR_OK );
@@ -326,7 +326,7 @@ RSCCLASS_TYPE RscLongRange::GetClassType() const
 |*    Letzte Aenderung  MM 18.07.94
 |*
 *************************************************************************/
-ERRTYPE RscLongRange::SetRange( long nMinimum, long nMaximum )
+ERRTYPE RscLongRange::SetRange( INT32 nMinimum, INT32 nMaximum )
 {
     if( nMinimum > nMaximum )
     {
@@ -356,7 +356,7 @@ BOOL RscLongRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
     if( pDef )
         return 0 == memcmp( &((RscLongRangeInst*)rInst.pData)->nValue,
                             &((RscLongRangeInst*)pDef)->nValue,
-                            sizeof( long ) );
+                            sizeof( INT32 ) );
 
     return FALSE;
 }
@@ -370,12 +370,12 @@ BOOL RscLongRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 |*    Letzte Aenderung  MM 18.07.94
 |*
 *************************************************************************/
-ERRTYPE RscLongRange::SetNumber( const RSCINST & rInst, long nValue )
+ERRTYPE RscLongRange::SetNumber( const RSCINST & rInst, INT32 nValue )
 {
     if( nMax < nValue || nMin > nValue )
         return( ERR_RSCRANGE_OUTDEFSET );
     void * pData = &((RscLongRangeInst*)rInst.pData)->nValue;
-    memmove( pData, &nValue, sizeof( long ) );
+    memmove( pData, &nValue, sizeof( INT32 ) );
     ((RscLongRangeInst *)rInst.pData)->bDflt = FALSE;
     return( ERR_OK );
 }
@@ -389,10 +389,10 @@ ERRTYPE RscLongRange::SetNumber( const RSCINST & rInst, long nValue )
 |*    Letzte Aenderung  MM 22.04.91
 |*
 *************************************************************************/
-ERRTYPE RscLongRange::GetNumber( const RSCINST & rInst, long * pN )
+ERRTYPE RscLongRange::GetNumber( const RSCINST & rInst, INT32 * pN )
 {
     memmove( pN, &((RscLongRangeInst*)rInst.pData)->nValue,
-             sizeof( long ) );
+             sizeof( INT32 ) );
     return( ERR_OK );
 }
 
@@ -425,13 +425,13 @@ RSCINST RscLongRange::Create( RSCINST * pInst, const RSCINST & rDflt,
         memmove( aInst.pData, rDflt.pData, sizeof( RscLongRangeInst ) );
     else
     {
-        long    lDflt;
+        INT32   lDflt;
         if( 0L >= nMin && 0L <= nMax )
             lDflt = 0;
         else
             lDflt = nMin;
         void * pData = &((RscLongRangeInst*)aInst.pData)->nValue;
-        memmove( pData, &lDflt, sizeof( long ) );
+        memmove( pData, &lDflt, sizeof( INT32 ) );
         ((RscLongRangeInst *)aInst.pData)->bDflt = TRUE;
     }
 
@@ -450,7 +450,7 @@ RSCINST RscLongRange::Create( RSCINST * pInst, const RSCINST & rDflt,
 void RscLongRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                          RscTypCont *, USHORT, const char * )
 {
-    long lVal;
+    INT32 lVal;
     GetNumber( rInst, &lVal );
     fprintf( fOutput, "%ld", lVal );
 }
@@ -467,7 +467,7 @@ void RscLongRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 ERRTYPE RscLongRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                                RscTypCont *, USHORT, BOOL )
 {
-    long lVal;
+    INT32 lVal;
 
     GetNumber( rInst, &lVal );
     aMem.Put( (INT32)lVal );
@@ -505,7 +505,7 @@ RscLongEnumRange::RscLongEnumRange( HASHID nId, USHORT nTypeId )
 |*    Beschreibung
 *************************************************************************/
 ERRTYPE RscLongEnumRange::SetConst( const RSCINST & rInst, HASHID nConst,
-                                    long nValue )
+                                    INT32 nValue )
 {
     return SetNumber( rInst, nValue );
 }
@@ -573,8 +573,8 @@ RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnCla
         *pClassData = *(RscId *)rDflt.pData;
     else{
             *pClassData = RscId();
-        if( 0L >= nMin && 0L <= nMax )
-            *pClassData = RscId( 0L );
+        if( 0 >= nMin && 0 <= nMax )
+            *pClassData = RscId( (INT32)0 );
         else
             *pClassData = RscId( nMin );
         //cUnused wird fuer Defaultkennung verwendet
@@ -631,7 +631,7 @@ BOOL RscIdRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
 |*    Letzte Aenderung  MM 25.11.91
 |*
 *************************************************************************/
-ERRTYPE RscIdRange::SetNumber( const RSCINST & rInst, long nValue )
+ERRTYPE RscIdRange::SetNumber( const RSCINST & rInst, INT32 nValue )
 {
     if( nMax < nValue || nMin > nValue )
         return( ERR_RSCRANGE_OUTDEFSET );
@@ -650,7 +650,7 @@ ERRTYPE RscIdRange::SetNumber( const RSCINST & rInst, long nValue )
 |*    Letzte Aenderung  MM 25.11.91
 |*
 *************************************************************************/
-ERRTYPE RscIdRange::GetNumber( const RSCINST & rInst, long * plValue ){
+ERRTYPE RscIdRange::GetNumber( const RSCINST & rInst, INT32 * plValue ){
     *plValue = ((RscId *)rInst.pData)->GetNumber();
     return( ERR_OK );
 }
@@ -721,7 +721,7 @@ void RscIdRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 ERRTYPE RscIdRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont *, USHORT, BOOL )
 {
-    long lVal = ((RscId*)rInst.pData)->GetNumber();
+    INT32 lVal = ((RscId*)rInst.pData)->GetNumber();
 
     if( bRcLong )
         //wenn long geschrieben werden soll
@@ -817,7 +817,7 @@ RSCCLASS_TYPE  RscBool::GetClassType() const
 void RscBool::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                         RscTypCont *, USHORT, const char * )
 {
-    long l;
+    INT32 l;
 
     GetNumber( rInst, &l );
     if( l )
@@ -864,7 +864,7 @@ RscBreakRange :: RscBreakRange( HASHID nId, USHORT nTypeId )
 |*    Letzte Aenderung  MM 24.06.91
 |*
 *************************************************************************/
-ERRTYPE RscBreakRange::SetNumber( const RSCINST & rInst, long nValue ){
+ERRTYPE RscBreakRange::SetNumber( const RSCINST & rInst, INT32 nValue ){
     if( nValue == nOutRange )
         return( ERR_RSCRANGE_OUTDEFSET );
     else
@@ -884,7 +884,7 @@ RSCINST RscBreakRange::Create( RSCINST * pInst, const RSCINST & rDflt,
                                BOOL bOwnClass )
 {
     RSCINST aInst;
-    long    l;
+    INT32   l;
 
     aInst = RscRange::Create( pInst, rDflt, bOwnClass );
 
