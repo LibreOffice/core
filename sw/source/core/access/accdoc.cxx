@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-07 12:41:25 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 13:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,6 +491,20 @@ Any SwAccessibleDocument::queryInterface(
     else
         aRet = SwAccessibleContext::queryInterface( rType );
     return aRet;
+}
+
+//====== XTypeProvider ====================================================
+Sequence< Type > SAL_CALL SwAccessibleDocument::getTypes() throw(RuntimeException)
+{
+    Sequence< Type > aTypes( SwAccessibleDocumentBase::getTypes() );
+
+    sal_Int32 nIndex = aTypes.getLength();
+    aTypes.realloc( nIndex + 1 );
+
+    Type* pTypes = aTypes.getArray();
+    pTypes[nIndex] = ::getCppuType( static_cast< Reference< XAccessibleSelection > * >( 0 ) );
+
+    return aTypes;
 }
 
 //=====  XAccessibleSelection  ============================================

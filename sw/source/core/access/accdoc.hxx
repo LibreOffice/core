@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-07 12:41:24 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 13:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,10 @@ public:
 
     virtual void SAL_CALL release(  ) throw ()
         { SwAccessibleContext::release(); };
+
+    //====== XTypeProvider ====================================================
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+
 
     //=====  XAccessibleSelection  ============================================
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-24 13:40:29 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 13:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,9 @@ public:
 
     virtual void SAL_CALL release(  ) throw ()
         { SwAccessibleContext::release(); };
+
+    //====== XTypeProvider ====================================================
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleValue  ================================================
 

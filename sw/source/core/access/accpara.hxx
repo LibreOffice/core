@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-10 16:53:34 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 13:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,9 @@ public:
 
     virtual void SAL_CALL release(  ) throw ()
         { SwAccessibleContext::release(); };
+
+    //====== XTypeProvider ====================================================
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
     //=====  XAccesibleText  ==================================================
     virtual sal_Int32 SAL_CALL getCaretPosition(  ) throw (::com::sun::star::uno::RuntimeException);

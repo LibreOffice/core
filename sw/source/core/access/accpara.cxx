@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dvo $ $Date: 2002-07-24 14:51:49 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 13:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1074,6 +1074,22 @@ Any SwAccessibleParagraph::queryInterface( const Type& rType )
 
     return aRet;
 }
+
+//====== XTypeProvider ====================================================
+Sequence< Type > SAL_CALL SwAccessibleParagraph::getTypes() throw(RuntimeException)
+{
+    Sequence< Type > aTypes( SwAccessibleContext::getTypes() );
+
+    sal_Int32 nIndex = aTypes.getLength();
+    aTypes.realloc( nIndex + 2 );
+
+    Type* pTypes = aTypes.getArray();
+    pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XAccessibleEditableText > * >( 0 ) );
+    pTypes[nIndex] = ::getCppuType( static_cast< Reference< XAccessibleSelection > * >( 0 ) );
+
+    return aTypes;
+}
+
 
 
 //

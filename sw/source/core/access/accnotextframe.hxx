@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accnotextframe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-24 13:14:52 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 13:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@ public:
 
     virtual void SAL_CALL release(  ) throw ()
         { SwAccessibleContext::release(); };
+
+    //====== XTypeProvider ====================================================
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleImage  ================================================
 

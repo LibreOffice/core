@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accnotextframe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-24 13:14:51 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 13:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,21 @@ Any SAL_CALL SwAccessibleNoTextFrame::queryInterface(
     }
     else
         return SwAccessibleContext::queryInterface( aType );
+}
+
+
+//====== XTypeProvider ====================================================
+Sequence< Type > SAL_CALL SwAccessibleNoTextFrame::getTypes() throw(RuntimeException)
+{
+    Sequence< ::com::sun::star::uno::Type > aTypes( SwAccessibleFrameBase::getTypes() );
+
+    sal_Int32 nIndex = aTypes.getLength();
+    aTypes.realloc( nIndex + 1 );
+
+    ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
+    pTypes[nIndex] = ::getCppuType( static_cast< Reference< XAccessibleImage > * >( 0 ) );
+
+    return aTypes;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-10 16:53:32 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 13:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,21 @@ Any SwAccessibleCell::queryInterface( const Type& rType )
         return SwAccessibleContext::queryInterface( rType );
     }
 }
+
+//====== XTypeProvider ====================================================
+Sequence< Type > SAL_CALL SwAccessibleCell::getTypes() throw(RuntimeException)
+{
+    Sequence< Type > aTypes( SwAccessibleContext::getTypes() );
+
+    sal_Int32 nIndex = aTypes.getLength();
+    aTypes.realloc( nIndex + 1 );
+
+    Type* pTypes = aTypes.getArray();
+    pTypes[nIndex] = ::getCppuType( static_cast< Reference< XAccessibleValue > * >( 0 ) );
+
+    return aTypes;
+}
+
 
 
 // =====  XAccessibleValue  ===============================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-24 13:14:53 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 13:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,6 +853,22 @@ Any SwAccessibleTable::queryInterface( const ::com::sun::star::uno::Type& rType 
 
     return aRet;
 }
+
+//====== XTypeProvider ====================================================
+Sequence< ::com::sun::star::uno::Type > SAL_CALL SwAccessibleTable::getTypes() throw(RuntimeException)
+{
+    Sequence< ::com::sun::star::uno::Type > aTypes( SwAccessibleContext::getTypes() );
+
+    sal_Int32 nIndex = aTypes.getLength();
+    aTypes.realloc( nIndex + 2 );
+
+    ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
+    pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XAccessibleTable > * >( 0 ) );
+    pTypes[nIndex] = ::getCppuType( static_cast< Reference< XAccessibleSelection > * >( 0 ) );
+
+    return aTypes;
+}
+
 
 void SwAccessibleTable::UpdateTableData()
 {
