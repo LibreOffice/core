@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-04 12:08:24 $
+ *  last change: $Author: nn $ $Date: 2001-06-29 20:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ TYPEINIT1(ScTableLink, ::so3::SvBaseLink);
 ScTableLink::ScTableLink(ScDocShell* pDocSh, const String& rFile,
                             const String& rFilter, const String& rOpt,
                             ULONG nRefresh ):
-    ::so3::SvBaseLink(LINKUPDATE_ONCALL,FORMAT_FILE),
+    ::so3::SvBaseLink(so3::LINKUPDATE_ONCALL,FORMAT_FILE),
     ScRefreshTimer( nRefresh ),
     pDocShell(pDocSh),
     aFileName(rFile),
@@ -117,7 +117,7 @@ ScTableLink::ScTableLink(ScDocShell* pDocSh, const String& rFile,
 ScTableLink::ScTableLink(SfxObjectShell* pShell, const String& rFile,
                             const String& rFilter, const String& rOpt,
                             ULONG nRefresh ):
-    ::so3::SvBaseLink(LINKUPDATE_ONCALL,FORMAT_FILE),
+    ::so3::SvBaseLink(so3::LINKUPDATE_ONCALL,FORMAT_FILE),
     ScRefreshTimer( nRefresh ),
     pDocShell((ScDocShell*)pShell),
     aFileName(rFile),

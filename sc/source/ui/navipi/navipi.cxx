@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 08:29:22 $
+ *  last change: $Author: nn $ $Date: 2001-06-29 20:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 #include <sfx2/navigat.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/urlbmk.hxx>
-#include <vcl/drag.hxx>
 #include <vcl/sound.hxx>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
@@ -369,7 +368,7 @@ USHORT ColumnEdit::NumStrToAlpha( String& rStr )
     USHORT  nColumn = 0;
 
     if ( CharClass::isAsciiNumeric(rStr) )
-        nColumn = NumToAlpha( rStr.ToInt32(), rStr );
+        nColumn = NumToAlpha( (USHORT)rStr.ToInt32(), rStr );
     else
         rStr.Erase();
 
@@ -722,16 +721,6 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
 void __EXPORT ScNavigatorDialogWrapper::Resizing( Size& rSize )
 {
     ((ScNavigatorDlg*)GetWindow())->Resizing(rSize);
-}
-
-BOOL __EXPORT ScNavigatorDialogWrapper::Drop( const DropEvent& rEvt )
-{
-    return GetWindow()->Drop(rEvt);
-}
-
-BOOL __EXPORT ScNavigatorDialogWrapper::QueryDrop( DropEvent& rEvt )
-{
-    return GetWindow()->QueryDrop(rEvt);
 }
 
 //========================================================================
@@ -1616,6 +1605,7 @@ SfxChildAlignment __EXPORT ScNavigatorDlg::CheckAlignment(
 //
 //------------------------------------------------------------------------
 
+#if 0
 BOOL __EXPORT ScNavigatorDlg::Drop( const DropEvent& rEvt )
 {
     BOOL bReturn = FALSE;
@@ -1663,6 +1653,7 @@ BOOL __EXPORT ScNavigatorDlg::QueryDrop( DropEvent& rEvt )
 
     return bReturn;
 }
+#endif
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:50:39 $
+ *  last change: $Author: nn $ $Date: 2001-06-29 20:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,11 @@
 #include "global.hxx"
 #endif
 
-class SvDataObject;
-class SvDataTypeList;
 class ScDocShell;
 class ScDocument;
 class SvStream;
 class SfxMedium;
 class ScAsciiOptions;
-class SvData;
 
 class ScImportExport
 {
@@ -133,8 +130,6 @@ public:
     BOOL IsUndo() const      { return bUndo; }
     void SetUndo( BOOL b )   { bUndo = b;    }
 
-    static void  AddFormats( SvDataTypeList* );
-    static BOOL  IsFormatSupported( SvDataObject* );
     static BOOL  IsFormatSupported( ULONG nFormat );
     static const sal_Unicode* ScanNextFieldFromString( const sal_Unicode* p,
             String& rField, sal_Unicode cStr, const sal_Unicode* pSeps, BOOL bMergeSeps );
@@ -165,9 +160,6 @@ public:
                      const ::com::sun::star::uno::Any & rValue );
     BOOL ExportData( const String& rMimeType,
                      ::com::sun::star::uno::Any & rValue  );
-
-    BOOL ImportData( SvData& rData );
-    BOOL ExportData( SvData& rData );
 
     BOOL IsOverflow() const { return bOverflow; }       // nach dem Importieren
 };

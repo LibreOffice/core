@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:50:17 $
+ *  last change: $Author: nn $ $Date: 2001-06-29 20:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,9 +616,9 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
             pView->InsertObject(pObj, *pPV);
 
             // Dies veranlaesst Chart zum sofortigen Update
-            SvData aEmpty;
+            //SvData aEmpty;
 
-            aIPObj->SendDataChanged( aEmpty );
+            //aIPObj->SendDataChanged( aEmpty );
             aIPObj->SendViewChanged();
 
             if (!rReq.IsAPI())

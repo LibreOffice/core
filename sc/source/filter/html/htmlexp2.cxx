@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-08 16:31:41 $
+ *  last change: $Author: nn $ $Date: 2001-06-29 20:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <sot/exchange.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
+#include <svtools/transfer.hxx>
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
@@ -225,13 +226,11 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
         case OBJ_OLE2:
         {
             const SvInPlaceObjectRef& rRef = ((SdrOle2Obj*)pObject)->GetObjRef();
-            GDIMetaFile* pPic = NULL;
-            SvData aData( FORMAT_GDIMETAFILE );
-            if( rRef->GetData( &aData ) )
-                aData.GetData( &pPic, TRANSFER_REFERENCE );
-            if( pPic )
+            TransferableDataHelper aOleData( rRef->CreateTransferableSnapshot() );
+            GDIMetaFile aMtf;
+            if( aOleData.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
             {
-                Graphic aGraph( *pPic );
+                Graphic aGraph( aMtf );
                 String aLinkName;
                 WriteImage( aLinkName, aGraph, aOpt );
                 pE->bWritten = TRUE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 08:43:38 $
+ *  last change: $Author: nn $ $Date: 2001-06-29 20:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@
 #include <svtools/ptitem.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/transfer.hxx>
-#include <vcl/drag.hxx>
 #include <vcl/graph.hxx>
 
 #include <sot/formats.hxx>
@@ -477,13 +476,15 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
     }
     else if ( nFormatId == SOT_FORMAT_FILE )
     {
-        USHORT nCount = DragServer::GetItemCount();
-        if (nCount == 0)    // normal handling (not D&D)
+        //! multiple files?
+        //USHORT nCount = DragServer::GetItemCount();
+        //if (nCount == 0)  // normal handling (not D&D)
         {
             String aFile;
             if ( aDataHelper.GetString( nFormatId, aFile ) )
                 bRet = PasteFile( aPos, aFile );
         }
+#if 0
         else        // use multiple items from drag server
         {
             for( USHORT i = 0; i < nCount ; i++ )
@@ -502,6 +503,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             }
             bRet = TRUE;
         }
+#endif
     }
     else if ( nFormatId == SOT_FORMATSTR_ID_SOLK ||
               nFormatId == SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ||

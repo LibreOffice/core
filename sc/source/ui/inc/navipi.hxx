@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 08:29:22 $
+ *  last change: $Author: nn $ $Date: 2001-06-29 20:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,9 +364,6 @@ protected:
     virtual void    Paint( const Rectangle& rRec );
     virtual void    Resizing( Size& rSize );
 
-    virtual BOOL    Drop( const DropEvent& rEvt );
-    virtual BOOL    QueryDrop( DropEvent& rEvt );
-
 public:
                 ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Window* pParent );
                 ~ScNavigatorDlg();
@@ -393,9 +390,6 @@ public:
     SFX_DECL_CHILDWINDOW_CONTEXT(ScNavigatorDialogWrapper)
 
     virtual void    Resizing( Size& rSize );
-
-    virtual BOOL    Drop( const DropEvent& rEvt );
-    virtual BOOL    QueryDrop( DropEvent& rEvt );
 
 private:
     ScNavigatorDlg* pNavigator;

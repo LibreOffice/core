@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 08:42:47 $
+ *  last change: $Author: nn $ $Date: 2001-06-29 20:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #include <svx/linkmgr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/drag.hxx>
 #include <vcl/help.hxx>
 #include <vcl/sound.hxx>
 #include <tools/urlobj.hxx>

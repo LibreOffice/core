@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-05-22 15:15:38 $
+ *  last change: $Author: nn $ $Date: 2001-06-29 20:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,17 +232,6 @@ void ScImportExport::SetExtOptions( const ScAsciiOptions& rOpt )
 }
 
 
-BOOL ScImportExport::IsFormatSupported( SvDataObject* pObj )
-{
-    return BOOL( pObj->HasFormat( FORMAT_STRING )
-              || pObj->HasFormat( SOT_FORMATSTR_ID_SYLK )
-              || pObj->HasFormat( SOT_FORMATSTR_ID_LINK )
-              || pObj->HasFormat( SOT_FORMATSTR_ID_HTML )
-              || pObj->HasFormat( SOT_FORMATSTR_ID_HTML_SIMPLE )
-              || pObj->HasFormat( SOT_FORMATSTR_ID_DIF ) );
-}
-
-
 BOOL ScImportExport::IsFormatSupported( ULONG nFormat )
 {
     return BOOL( nFormat == FORMAT_STRING
@@ -253,15 +242,6 @@ BOOL ScImportExport::IsFormatSupported( ULONG nFormat )
               || nFormat == SOT_FORMATSTR_ID_DIF );
 }
 
-
-void ScImportExport::AddFormats( SvDataTypeList* pList )
-{
-    pList->Insert( SvDataType( SOT_FORMATSTR_ID_HTML, MEDIUM_MEMORY ), LIST_APPEND );
-    pList->Insert( SvDataType( SOT_FORMATSTR_ID_SYLK, MEDIUM_MEMORY ), LIST_APPEND );
-    pList->Insert( SvDataType( SOT_FORMATSTR_ID_LINK, MEDIUM_MEMORY ), LIST_APPEND );
-    pList->Insert( SvDataType( SOT_FORMATSTR_ID_DIF, MEDIUM_MEMORY ), LIST_APPEND );
-    pList->Insert( SvDataType( FORMAT_STRING, MEDIUM_MEMORY ), LIST_APPEND );
-}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -325,6 +305,7 @@ void ScImportExport::EndPaste()
 /////////////////////////////////////////////////////////////////////////////
 
 
+#if 0
 BOOL ScImportExport::ImportData( SvData& rData )
 {
     ULONG nFmt = rData.GetFormat();
@@ -366,17 +347,7 @@ BOOL ScImportExport::ImportData( SvData& rData )
     }
 }
 
-BOOL ScImportExport::ExportData( SvData& rData )
-{
-    SvMemoryStream aStrm;
-    if( ExportStream( aStrm, rData.GetFormat() ) )
-    {
-        aStrm << (BYTE) 0;
-        rData.SetData( (void*)aStrm.GetData(), aStrm.Tell() );
-        return TRUE;
-    }
-    return FALSE;
-}
+#endif
 
 BOOL ScImportExport::ImportData( const String& rMimeType,
                      const ::com::sun::star::uno::Any & rValue )

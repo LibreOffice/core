@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-30 19:14:44 $
+ *  last change: $Author: nn $ $Date: 2001-06-29 20:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,6 @@
 #include <svtools/stritem.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/urlbmk.hxx>
-#include <vcl/drag.hxx>
 #include <vcl/system.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -153,9 +152,10 @@ void ScViewFunc::PasteRTF( USHORT nStartCol, USHORT nStartRow,
 
             if (bPasteIsDrop)
             {
-                DropEvent aDropEvt;
-                if (aEditView.QueryDrop( aDropEvt ))
-                    aEditView.Drop( aDropEvt );
+                //! paste drag server content into EditEngine
+                //DropEvent aDropEvt;
+                //if (aEditView.QueryDrop( aDropEvt ))
+                //  aEditView.Drop( aDropEvt );
             }
             else
                 aEditView.PasteSpecial();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 18:29:47 $
+ *  last change: $Author: nn $ $Date: 2001-06-29 20:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,8 +407,9 @@ void ScViewFunc::PasteFromSystem()
         PasteDraw();
     else
     {
-        SvDataObjectRef pClipObj = SvDataObject::PasteClipboard();
-        if (pClipObj.Is())
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
+
+//      if (pClipObj.Is())
         {
             ULONG nBiff = Exchange::RegisterFormatName(
                     String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Biff5")));
@@ -416,46 +417,52 @@ void ScViewFunc::PasteFromSystem()
                 //  als erstes SvDraw-Model, dann Grafik
                 //  (Grafik darf nur bei einzelner Grafik drinstehen)
 
-            if (pClipObj->HasFormat( SOT_FORMATSTR_ID_DRAWING ))
+            if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ))
                 PasteFromSystem( SOT_FORMATSTR_ID_DRAWING );
-            else if (pClipObj->HasFormat( SOT_FORMATSTR_ID_SVXB ))
+            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ))
                 PasteFromSystem( SOT_FORMATSTR_ID_SVXB );
-            else if (pClipObj->HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE ))
+            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE ))
             {
-                //  Wenn es vom Writer kommt, statt OLE RTF einfuegen
+                //  If it's a Writer object, insert RTF instead of OLE
 
-                SvObjectDescriptor aDesc( pClipObj );
-                //  GlobalName vom Writer wie da in docsh.cxx
-                SvGlobalName aWriterName( SO3_SW_CLASSID );
-                SvGlobalName aSwWebName( SO3_SWWEB_CLASSID );
-                if ((aDesc.GetClassName() == aWriterName || aDesc.GetClassName() == aSwWebName) &&
-                        pClipObj->HasFormat(FORMAT_RTF))
+                BOOL bDoRtf = FALSE;
+                SotStorageStreamRef xStm;
+                TransferableObjectDescriptor aObjDesc;
+                if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
+                    aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) )
+                {
+                    SvStorageRef xStore( new SvStorage( *xStm ) );
+                    bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
+                                 aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
+                               && aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+                }
+                if ( bDoRtf )
                     PasteFromSystem( FORMAT_RTF );
                 else
                     PasteFromSystem( SOT_FORMATSTR_ID_EMBED_SOURCE );
             }
-            else if (pClipObj->HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ))
+            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ))
                 PasteFromSystem( SOT_FORMATSTR_ID_LINK_SOURCE );
             // FORMAT_PRIVATE no longer here (can't work if pOwnClip is NULL)
-            else if (pClipObj->HasFormat(nBiff))        // before xxx_OLE formats
+            else if (aDataHelper.HasFormat(nBiff))      // before xxx_OLE formats
                 PasteFromSystem(nBiff);
-            else if (pClipObj->HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ))
+            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ))
                 PasteFromSystem( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE );
-            else if (pClipObj->HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ))
+            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ))
                 PasteFromSystem( SOT_FORMATSTR_ID_LINK_SOURCE_OLE );
-            else if (pClipObj->HasFormat(FORMAT_RTF))
+            else if (aDataHelper.HasFormat(FORMAT_RTF))
                 PasteFromSystem(FORMAT_RTF);
-            else if (pClipObj->HasFormat(SOT_FORMATSTR_ID_HTML))
+            else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_HTML))
                 PasteFromSystem(SOT_FORMATSTR_ID_HTML);
-            else if (pClipObj->HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE))
+            else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE))
                 PasteFromSystem(SOT_FORMATSTR_ID_HTML_SIMPLE);
-            else if (pClipObj->HasFormat(SOT_FORMATSTR_ID_SYLK))
+            else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_SYLK))
                 PasteFromSystem(SOT_FORMATSTR_ID_SYLK);
-            else if (pClipObj->HasFormat(FORMAT_STRING))
+            else if (aDataHelper.HasFormat(FORMAT_STRING))
                 PasteFromSystem(FORMAT_STRING);
-            else if (pClipObj->HasFormat(FORMAT_GDIMETAFILE))
+            else if (aDataHelper.HasFormat(FORMAT_GDIMETAFILE))
                 PasteFromSystem(FORMAT_GDIMETAFILE);
-            else if (pClipObj->HasFormat(FORMAT_BITMAP))
+            else if (aDataHelper.HasFormat(FORMAT_BITMAP))
                 PasteFromSystem(FORMAT_BITMAP);
 //          else
 //              ErrorMessage(STR_PASTE_ERROR);
