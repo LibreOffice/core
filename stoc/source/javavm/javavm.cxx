@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-06 15:52:48 $
+ *  last change: $Author: kz $ $Date: 2002-12-10 17:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,8 @@ rtl::OUString serviceGetServiceName()
 
 css::uno::Sequence< rtl::OUString > serviceGetSupportedServiceNames()
 {
-    return css::uno::Sequence< rtl::OUString >(&serviceGetServiceName(), 1);
+    rtl::OUString aServiceName = serviceGetServiceName();
+    return css::uno::Sequence< rtl::OUString >(&aServiceName, 1);
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL serviceCreateInstance(
