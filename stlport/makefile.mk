@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hjs $ $Date: 2002-07-09 11:57:02 $
+#   last change: $Author: armin $ $Date: 2002-07-24 12:03:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -147,9 +147,9 @@ OUT2LIB= \
 .IF "$(GUI)"=="WNT"
 $(PACKAGE_DIR)$/so_custom_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
 .IF "$(USE_SHELL)"=="4nt"
-    +win32_custom.bat $(PACKAGE_DIR) "$(BACK_PATH)" && $(TOUCH) $@
+    +win32_custom.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +win32_custom.sh $(PACKAGE_DIR) "$(BACK_PATH)" && $(TOUCH) $@
+    +win32_custom.sh $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
 .ENDIF			# "$(USE_SHELL)"=="4nt"
     
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
