@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 15:29:15 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2071,7 +2071,6 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
             if ( xIPObj.is() )
             {
                 try {
-                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
                     awt::Size aSize = xIPObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
                     aGraphSize = Size( aSize.Width, aSize.Height );
                     bObjSupported = TRUE;
