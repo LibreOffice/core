@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.178 $
+ *  $Revision: 1.179 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:48:27 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,12 @@
 #ifndef SC_SCDOCPOL_HXX
 #include "docpool.hxx"
 #endif
+#ifndef SC_USERDAT_HXX
+#include "userdat.hxx"
+#endif
+#ifndef SC_DOCITER_HXX
+#include "dociter.hxx"
+#endif
 #ifndef SC_CHGTRACK_HXX
 #include "chgtrack.hxx"
 #endif
@@ -211,6 +217,15 @@
 #endif
 #ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
+#endif
+#ifndef _SVDOBJ_HXX
+#include <svx/svdobj.hxx>
+#endif
+#ifndef _SVDCAPT_HXX
+#include <svx/svdocapt.hxx>
+#endif
+#ifndef _OUTLOBJ_HXX
+#include <svx/outlobj.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -582,7 +597,8 @@ ScXMLExport::ScXMLExport(
     bRowHeaderOpen(sal_False),
     sLayerID(RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID )),
     sCaptionShape(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape")),
-    pChartListener(NULL)
+    pChartListener(NULL),
+    pCurrentCell(NULL)
 {
     if (getExportFlags() & EXPORT_CONTENT)
     {
@@ -697,7 +713,7 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                 if (HasDrawPages(xSpreadDoc))
                 {
                     rtl::OUString sCaptionPoint( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ));
-                    for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
+                    for (SCTAB nTable = 0; nTable < nTableCount; nTable++)
                     {
                         nCurrentTable = nTable;
                         uno::Any aTable = xIndex->getByIndex(nTable);
@@ -763,7 +779,6 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                                                                         aMyShape.aAddress = aRange.aStart;
                                                                         aMyShape.aEndAddress = aRange.aEnd;
                                                                         aMyShape.xShape = xShape;
-                                                                        aMyShape.nLayerID = nLayerID;
                                                                         pSharedData->AddNewShape(aMyShape);
                                                                         pSharedData->SetLastColumn(nTable, aRange.aStart.Col());
                                                                         pSharedData->SetLastRow(nTable, aRange.aStart.Row());
@@ -794,6 +809,7 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
 void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
 {
     pSharedData->SortShapesContainer();
+    pSharedData->SortNoteShapes();
     const ScMyShapeList* pShapeList = NULL;
     ScMyShapeList::const_iterator aShapeItr;
     if (pSharedData->GetShapesContainer())
@@ -803,10 +819,45 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
     }
     if (pSharedData->HasDrawPage())
     {
-        for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
+        for (SCTAB nTable = 0; nTable < nTableCount; nTable++)
         {
             uno::Reference<drawing::XDrawPage> xDrawPage(pSharedData->GetDrawPage(nTable));
             uno::Reference<drawing::XShapes> xShapes (xDrawPage, uno::UNO_QUERY);
+
+            uno::Reference<drawing::XShapes> xNoteShapes;
+            ::std::vector < uno::Reference < drawing::XShape > > aNoteShapes;
+            ScCellIterator aCellIter( pDoc, 0,0, nTable, MAXCOL,MAXROW, nTable );
+            ScBaseCell* pCell = aCellIter.GetFirst();
+            while (pCell)
+            {
+                const ScPostIt* pScNote = pCell->GetNotePtr();
+                if (pScNote && !pScNote->IsShown())
+                {
+                    const SfxItemSet& rSet = pScNote->GetItemSet();
+
+                    // In order to transform the SfxItemSet to an EscherPropertyContainer
+                    // and export the properties, we need to recreate the drawing object and
+                    // pass this to XclObjComment() for processing.
+                    SdrCaptionObj* pCaption = new SdrCaptionObj( pScNote->GetRectangle() );
+                    pCaption->SetMergedItemSet(rSet);
+
+                    if(const EditTextObject* pEditText = pScNote->GetEditTextObject())
+                    {
+                        OutlinerParaObject* pOPO = new OutlinerParaObject( *pEditText );
+                        pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+                        pCaption->NbcSetOutlinerParaObject( pOPO );
+                        pOPO->SetVertical( FALSE );  // notes are always horizontal
+                    }
+
+                    pScNote->InsertObject(pCaption, *pDoc, aCellIter.GetTab());
+
+                    uno::Reference<drawing::XShape> xShape(pCaption->getUnoShape(), uno::UNO_QUERY);
+                    if (xShape.is())
+                        pSharedData->AddNoteObj(xShape, ScAddress(aCellIter.GetCol(), aCellIter.GetRow(), aCellIter.GetTab()));
+                }
+                pCell = aCellIter.GetNext();
+            }
+
             if (xShapes.is())
             {
                 GetShapeExport()->seekShapes(xShapes);
@@ -840,9 +891,30 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
                         aShapeItr++;
                     }
                 }
+                const ScMyNoteShapeList* pNoteShapes = NULL;
+                ScMyNoteShapeList::const_iterator aNoteShapeItr;
+                ScMyNoteShapeList::const_iterator aNoteShapeEndItr;
+                if (pSharedData->GetNoteShapes())
+                {
+                    pNoteShapes = pSharedData->GetNoteShapes()->GetNotes();
+                    if (pNoteShapes)
+                    {
+                        aNoteShapeItr = pNoteShapes->begin();
+                        aNoteShapeEndItr = pNoteShapes->end();
+                    }
+                }
+                if (pNoteShapes)
+                {
+                    while (aNoteShapeItr != aNoteShapeEndItr && (static_cast<sal_Int32>(aNoteShapeItr->aPos.Tab()) == nTable))
+                    {
+                        GetShapeExport()->collectShapeAutoStyles(aNoteShapeItr->xShape);
+                        ++aNoteShapeItr;
+                    }
+                }
             }
         }
     }
+    pSharedData->SortNoteShapes(); // sort twice, because some more shapes are added
 }
 
 void ScXMLExport::_ExportMeta()
@@ -1540,6 +1612,7 @@ void ScXMLExport::_ExportContent()
 
                 pCellsItr->Clear();
                 pCellsItr->SetShapes( pSharedData->GetShapesContainer() );
+                pCellsItr->SetNoteShapes( pSharedData->GetNoteShapes() );
                 pCellsItr->SetMergedRanges( pMergedRangesContainer );
                 pCellsItr->SetAreaLinks( &aAreaLinks );
                 pCellsItr->SetEmptyDatabaseRanges( &aEmptyRanges );
@@ -2139,20 +2212,29 @@ void ScXMLExport::_ExportMasterStyles()
 
 void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape )
 {
-    // detective objects
+    // detective objects and notes
     SvxShape* pShapeImp = SvxShape::getImplementation( xShape );
     if( pShapeImp )
     {
         SdrObject *pObject = pShapeImp->GetSdrObject();
         if( pObject )
         {
-            ScDetectiveFunc aDetFunc( pDoc, static_cast<SCTAB>(nCurrentTable) );
-            ScAddress       aPosition;
-            ScRange         aSourceRange;
-            sal_Bool        bRedLine;
-            ScDetectiveObjType eObjType = aDetFunc.GetDetectiveObjectType(
-                pObject, aPosition, aSourceRange, bRedLine );
-            pSharedData->GetDetectiveObjContainer()->AddObject( eObjType, static_cast<SCTAB>(nCurrentTable), aPosition, aSourceRange, bRedLine );
+            if (pObject->ISA( SdrCaptionObj ))
+            {
+                ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
+                if (pData)
+                    pSharedData->AddNoteObj(xShape, pData->aStt);
+            }
+            else
+            {
+                ScDetectiveFunc aDetFunc( pDoc, static_cast<SCTAB>(nCurrentTable) );
+                ScAddress       aPosition;
+                ScRange         aSourceRange;
+                sal_Bool        bRedLine;
+                ScDetectiveObjType eObjType = aDetFunc.GetDetectiveObjectType(
+                    pObject, aPosition, aSourceRange, bRedLine );
+                pSharedData->GetDetectiveObjContainer()->AddObject( eObjType, static_cast<SCTAB>(nCurrentTable), aPosition, aSourceRange, bRedLine );
+            }
         }
     }
 }
@@ -2702,7 +2784,54 @@ void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
     }
 }
 
-void ScXMLExport::WriteAnnotation(const ScMyCell& rMyCell)
+void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >& xShape)
+{
+    if (pCurrentCell && pCurrentCell->xNoteShape.is() && pCurrentCell->xNoteShape.get() == xShape.get() && pCurrentCell->xAnnotation.is())
+    {
+        rtl::OUString sAuthor(pCurrentCell->xAnnotation->getAuthor());
+        if (sAuthor.getLength())
+        {
+            SvXMLElementExport aCreatorElem( *this, XML_NAMESPACE_DC,
+                                                XML_CREATOR, sal_True,
+                                                sal_False );
+            rtl::OUString sAuthor(sAuthor);
+            Characters(sAuthor);
+        }
+
+        String aDate(pCurrentCell->xAnnotation->getDate());
+        if (pDoc)
+        {
+            SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
+            double fDate;
+            sal_uInt32 nfIndex = pNumForm->GetFormatIndex(NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
+            if (pNumForm->IsNumberFormat(aDate, nfIndex, fDate))
+            {
+                rtl::OUStringBuffer sBuf;
+                GetMM100UnitConverter().convertDateTime(sBuf, fDate);
+                SvXMLElementExport aDateElem( *this, XML_NAMESPACE_DC,
+                                                XML_DATE, sal_True,
+                                                sal_False );
+                Characters(sBuf.makeStringAndClear());
+            }
+            else
+            {
+                SvXMLElementExport aDateElem( *this, XML_NAMESPACE_META,
+                                                XML_DATE_STRING, sal_True,
+                                                sal_False );
+                Characters(rtl::OUString(aDate));
+            }
+        }
+        else
+        {
+            SvXMLElementExport aDateElem( *this, XML_NAMESPACE_META,
+                                            XML_DATE_STRING, sal_True,
+                                            sal_False );
+            Characters(rtl::OUString(aDate));
+        }
+    }
+}
+
+void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
 {
     if( rMyCell.bHasAnnotation && rMyCell.xAnnotation.is())
     {
@@ -2749,29 +2878,35 @@ void ScXMLExport::WriteAnnotation(const ScMyCell& rMyCell)
 
         if (rMyCell.xAnnotation->getIsVisible())
             AddAttribute(XML_NAMESPACE_OFFICE, XML_DISPLAY, XML_TRUE);
-        SvXMLElementExport aElemA(*this, XML_NAMESPACE_OFFICE, XML_ANNOTATION, sal_True, sal_True);
-        sal_Int32 i = 0;
-        rtl::OUStringBuffer sTemp;
-        sal_Bool bPrevCharWasSpace(sal_True);
-        String sText(rMyCell.sAnnotationText);
-        rtl::OUString sOUText2 (sText.ConvertLineEnd(LINEEND_LF));
-        while(i < sOUText2.getLength())
+
+        pCurrentCell = &rMyCell;
+
+        GetShapeExport()->exportShape(rMyCell.xNoteShape, SEF_DEFAULT|SEF_EXPORT_ANNOTATION, NULL);
+
+        pCurrentCell = NULL;
+
+        if (!rMyCell.xAnnotation->getIsVisible())
         {
-            if (sOUText2[i] == '\n')
+            rtl::OUString sType(rMyCell.xNoteShape->getShapeType());
+            if ( sType.equals(sCaptionShape) )
             {
-                SvXMLElementExport aElemP(*this, sElemP, sal_True, sal_False);
-                GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
+                SvxShape* pShapeImp = SvxShape::getImplementation(rMyCell.xNoteShape);
+                if (pShapeImp)
+                {
+                    SdrCaptionObj *pSdrObj = static_cast<SdrCaptionObj*>(pShapeImp->GetSdrObject());
+                    if (pSdrObj)
+                    {
+                        ScPostIt aCellNote(pDoc);
+                        if(pDoc->GetNote( rMyCell.aCellAddress.Column, rMyCell.aCellAddress.Row, rMyCell.aCellAddress.Sheet, aCellNote ))
+                        {
+                            rMyCell.xNoteShape.clear();
+                            aCellNote.RemoveObject(pSdrObj, *pDoc, rMyCell.aCellAddress.Sheet);
+                            delete pSdrObj;
+                        }
+                    }
+                }
             }
-            else
-                sTemp.append(sOUText2[i]);
-            i++;
         }
-        if (sTemp.getLength())
-        {
-            SvXMLElementExport aElemP(*this, sElemP, sal_True, sal_False);
-            GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
-        }
-        CheckAttrList();
     }
 }
 
