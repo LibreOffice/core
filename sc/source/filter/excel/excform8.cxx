@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-17 12:46:45 $
+ *  last change: $Author: dr $ $Date: 2001-09-20 14:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,6 +668,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                             aPool   << ocDde << ocOpen << nPar1 << ocSep << nPar2 << ocSep
                                     << nMerk0 << ocClose;
                             aPool >> aStack;
+
+                            pExcRoot->pDoc->CreateDdeLink( aAppl, aExtDoc, pExtName->GetName() );
                         }
                         else
                             aStack << aPool.Store( ocNoName, pExtName->GetName() );

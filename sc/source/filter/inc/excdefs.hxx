@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2001-08-24 12:08:57 $
+ *  last change: $Author: dr $ $Date: 2001-09-20 14:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,11 @@
 //_________________________________________________________
 // cached values list (EXTERNNAME, ptgArray, ...)
 
+#define EXC_CACHEDVAL_EMPTY         0x00
 #define EXC_CACHEDVAL_DOUBLE        0x01
 #define EXC_CACHEDVAL_STRING        0x02
+#define EXC_CACHEDVAL_BOOL          0x04
+#define EXC_CACHEDVAL_ERROR         0x10
 
 //_________________________________________________________
 // Supbooks, ExcETabNumBuffer
@@ -201,16 +204,6 @@
 // (0x003C) CONTINUE
 
 #define EXC_CONT                    0x003C
-
-//_________________________________________________________
-// (0x0059, 0x005A) CRN, XCT
-
-// CRN data types
-#define EXC_CRN_NONE                0x00
-#define EXC_CRN_DOUBLE              0x01
-#define EXC_CRN_STRING              0x02
-#define EXC_CRN_BOOL                0x04
-#define EXC_CRN_ERROR               0x10
 
 //_________________________________________________________
 // (0x005D) OBJ
