@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnum.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:25:03 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,9 @@
 #ifndef _FLDBAS_HXX
 #include <fldbas.hxx>           // UpdateFlds der KapitelNummerierung
 #endif
-
+#ifndef _DOCARY_HXX
+#include <docary.hxx>
+#endif
 
 _SV_IMPL_SORTAR_ALG( SwOutlineNodes, SwNodePtr )
 BOOL SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, USHORT* pFndPos ) const
@@ -222,4 +224,36 @@ void SwNodes::UpdateOutlineNodes()
 {
     if( pOutlineNds->Count() )      // OutlineNodes vorhanden ?
         UpdateOutlineNode( *(*pOutlineNds)[ 0 ], 0, 0 );
+}
+
+void SwNodes::UpdateOutlineNodeList() const
+{
+    if (pOutlineNds->Count() > 0)
+        pOutlineNds->Remove((*pOutlineNds)[0], pOutlineNds->Count());
+
+    const SwNumRuleTbl & rNumRuleTbl = GetDoc()->GetNumRuleTbl();
+
+    for (int i = 0; i < rNumRuleTbl.Count(); i++)
+    {
+        SwNumRule * pRule = rNumRuleTbl[i];
+
+        if (pRule->IsOutlineRule())
+        {
+            SwNumRuleInfo aInfo(pRule->GetName());
+
+            aInfo.MakeList(*const_cast<SwDoc *>(GetDoc()));
+
+            for (int j = 0; j < aInfo.GetList().Count(); j++)
+            {
+                pOutlineNds->Insert(aInfo.GetList().GetObject(j));
+            }
+        }
+    }
+}
+
+const SwOutlineNodes & SwNodes::GetOutLineNds() const
+{
+    UpdateOutlineNodeList();
+
+    return *pOutlineNds;
 }
