@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: af $ $Date: 2001-05-16 12:08:11 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,8 @@ ModalDialog DLG_COPY
         QuickHelpText [ dutch ] = "Waarden uit selectie overnemen" ;
         QuickHelpText [ portuguese ] = "Aplica os valores seleccionados" ;
     QuickHelpText[ russian ] = "Ïğèíÿòü çíà÷åíèÿ èç îòáîğà";
-        QuickHelpText[ polish ] = "Wpisz wartoœci selekcji";
-        QuickHelpText[ japanese ] = "‘I‘ğ‚µ‚½”’l‚ğ‘‚«‚±‚Ş";
+        QuickHelpText[ polish ] = "Wpisz wartoœci selekcji!";
+        QuickHelpText[ japanese ] = "‘I‘ğ‚µ‚½”’l‚ğ‘‚«‚±‚Ş!";
         QuickHelpText[ chinese_simplified ] = "½ÓÊÜÑ¡ÔñµÄÊıÖµ";
         QuickHelpText[ chinese_traditional ] = "¨Ï¥Î¿ï¨úªº¼Æ­È";
         QuickHelpText[ arabic ] = "ÇáŞíã ÍÓÈ ÇáÊÍÏíÏ";
@@ -224,7 +224,7 @@ ModalDialog DLG_COPY
         Text [ ENGLISH ] = "Number of ~Copies" ;
         Text [ norwegian ] = "Antall ~Kopier" ;
         Text [ italian ] = "Numero di ~copie" ;
-        Text [ portuguese_brazilian ] = "Número de ~Cópias" ;
+        Text [ portuguese_brazilian ] = "N?ero de ~C?ias" ;
         Text [ portuguese ] = "Número de ~cópias" ;
         Text [ finnish ] = "~Kopioiden määrä" ;
         Text [ danish ] = "Antal kopier" ;
@@ -253,7 +253,7 @@ ModalDialog DLG_COPY
         Text [ ENGLISH ] = "~Angle" ;
         Text [ norwegian ] = "~Vinkel" ;
         Text [ italian ] = "Angolo di rot." ;
-        Text [ portuguese_brazilian ] = "~Ângulo" ;
+        Text [ portuguese_brazilian ] = "~?ngulo" ;
         Text [ portuguese ] = "~Ângulo" ;
         Text [ finnish ] = "~Kulma" ;
         Text [ danish ] = "Rotationsvinkel" ;
@@ -478,7 +478,7 @@ ModalDialog DLG_COPY
         Text [ english_us ] = "Placement" ;
         Text[ chinese_simplified ] = "ÒÆ¶¯";
         Text[ russian ] = "Ñìåùåíèå";
-        Text[ polish ] = "Przeniesienie";
+        Text[ polish ] = "Przesuniêcie";
         Text[ japanese ] = "ˆÚ“®";
         Text[ chinese_traditional ] = "²¾°Ê";
         Text[ arabic ] = "ÅÒÇÍÉ";
