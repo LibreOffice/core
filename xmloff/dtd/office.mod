@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.10 2000-11-22 18:48:38 cl Exp $
+	$Id: office.mod,v 1.11 2000-11-23 11:01:53 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -98,7 +98,8 @@
 				  meta:hyperlink-behaviour?,
 				  meta:auto-reload?,
 				  meta:template?,
-				  meta:user-defined*)">
+				  meta:user-defined*,
+				  meta:document-statistic?)">
 <!ELEMENT office:meta %meta;>
 
 <!ELEMENT office:font-decls (style:font-decl)*>
