@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcoli.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ SvXMLImportContext *ScXMLTableColContext::CreateChildContext( USHORT nPrefix,
 void ScXMLTableColContext::EndElement()
 {
     ScXMLImport& rXMLImport = GetScImport();
-    //sal_Int16 nSheet = rXMLImport.GetTables().GetCurrentSheet();
+    //sal_Int32 nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentColumn = rXMLImport.GetTables().GetCurrentColumn();
     uno::Reference<sheet::XSpreadsheet> xSheet = rXMLImport.GetTables().GetCurrentXSheet();
     if(xSheet.is())
@@ -363,7 +363,7 @@ void ScXMLTableColsContext::EndElement()
     }
     else if (bGroup)
     {
-        sal_Int16 nSheet = rXMLImport.GetTables().GetCurrentSheet();
+        sal_Int32 nSheet = rXMLImport.GetTables().GetCurrentSheet();
         nGroupEndCol = rXMLImport.GetTables().GetCurrentColumn();
         nGroupEndCol--;
         if (nGroupStartCol <= nGroupEndCol)
@@ -372,12 +372,12 @@ void ScXMLTableColsContext::EndElement()
             if (pDoc)
             {
                 rXMLImport.LockSolarMutex();
-                ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(nSheet, sal_True);
+                ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(static_cast<SCTAB>(nSheet), sal_True);
                 ScOutlineArray* pColArray = pOutlineTable ? pOutlineTable->GetColArray() : NULL;
                 if (pColArray)
                 {
                     sal_Bool bResized;
-                    pColArray->Insert(static_cast<USHORT>(nGroupStartCol), static_cast<USHORT>(nGroupEndCol), bResized, !bGroupDisplay, sal_True);
+                    pColArray->Insert(static_cast<SCCOL>(nGroupStartCol), static_cast<SCCOL>(nGroupEndCol), bResized, !bGroupDisplay, sal_True);
                 }
                 rXMLImport.UnlockSolarMutex();
             }
