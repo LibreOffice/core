@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-16 14:39:29 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 10:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1590,7 +1590,25 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
                         case etView:
                         case etTable:
                         case etTableContainer:
-                            aReturn.bEnabled = ((eType == etTable || eType == etView || eType == etTableContainer) && isTableFormat());
+                            {
+                                // check if connection is readonly
+                                DBTreeListModel::DBTreeListUserData* pDSData = NULL;
+                                DBTreeListModel::DBTreeListUserData* pEntryData = NULL;
+                                SvLBoxEntry* pDSEntry = NULL;
+                                pDSEntry = m_pTreeView->getListBox()->GetRootLevelParent(pEntry);
+                                pDSData =   pDSEntry
+                                        ?   static_cast<DBTreeListModel::DBTreeListUserData*>(pDSEntry->GetUserData())
+                                        :   NULL;
+
+                                sal_Bool bIsConnectionWriteAble = sal_False;
+                                if(pDSData && pDSData->xObject.is())
+                                {
+                                    Reference<XConnection> xCon(pDSData->xObject,UNO_QUERY);
+                                    if(xCon.is())
+                                        bIsConnectionWriteAble = !xCon->getMetaData()->isReadOnly();
+                                }
+                                aReturn.bEnabled = bIsConnectionWriteAble && ((eType == etTable || eType == etView || eType == etTableContainer) && isTableFormat());
+                            }
                             break;
                         default:
                             aReturn.bEnabled = sal_False;
@@ -3405,11 +3423,18 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
     PopupMenu aContextMenu( nMenuRes );
     PopupMenu* pDynamicSubMenu = NULL;
 
+    sal_Bool bIsConnectionWriteAble = sal_False;
     // enable menu entries
     if (!pDSData || !pDSData->xObject.is())
     {   // no -> disable the connection-related menu entries
         aContextMenu.EnableItem(ID_TREE_CLOSE_CONN, sal_False);
         aContextMenu.EnableItem(ID_TREE_REBUILD_CONN, sal_False);
+    }
+    else
+    {
+        Reference<XConnection> xCon(pDSData->xObject,UNO_QUERY);
+        if(xCon.is())
+            bIsConnectionWriteAble = !xCon->getMetaData()->isReadOnly();
     }
 
     if(pEntry)
@@ -3422,12 +3447,19 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             {
                 // 1.2 pasting tables
                 sal_Bool bPasteAble = isTableFormat();
-                aContextMenu.EnableItem(ID_TREE_TABLE_PASTE, bPasteAble);
+                aContextMenu.EnableItem(ID_TREE_TABLE_PASTE, bIsConnectionWriteAble && bPasteAble);
 
                 // 1.3 actions on existing tables
-                aContextMenu.EnableItem(ID_EDIT_TABLE,      etTable == eType);
-                aContextMenu.EnableItem(ID_DROP_TABLE,      etTable == eType);
+                aContextMenu.EnableItem(ID_EDIT_TABLE,      etTable == eType && bIsConnectionWriteAble);
+                aContextMenu.EnableItem(ID_DROP_TABLE,      etTable == eType && bIsConnectionWriteAble);
                 aContextMenu.EnableItem(ID_TREE_TABLE_COPY, etTable == eType);
+                // these have to be disabled if the connection is readonly
+                if(!bIsConnectionWriteAble)
+                {
+                    aContextMenu.EnableItem(ID_NEW_TABLE_DESIGN,sal_False);
+                    aContextMenu.EnableItem(ID_NEW_VIEW_DESIGN,sal_False);
+                    aContextMenu.EnableItem(ID_TREE_RELATION_DESIGN,sal_False);
+                }
             }
             break;
             // 2. for views
@@ -3435,12 +3467,19 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             {
                 // 2.2 pasting tables
                 sal_Bool bPasteAble = isTableFormat();
-                aContextMenu.EnableItem(ID_TREE_VIEW_PASTE, bPasteAble);
+                aContextMenu.EnableItem(ID_TREE_VIEW_PASTE, bIsConnectionWriteAble && bPasteAble);
 
                 // 2.3 actions on existing tables
-                aContextMenu.EnableItem(ID_DROP_VIEW,       sal_True);
+                aContextMenu.EnableItem(ID_DROP_VIEW,       bIsConnectionWriteAble);
                 aContextMenu.EnableItem(ID_TREE_VIEW_COPY,  sal_True);
 
+                // these have to be disabled if the connection is readonly
+                if(!bIsConnectionWriteAble)
+                {
+                    aContextMenu.EnableItem(ID_NEW_TABLE_DESIGN,sal_False);
+                    aContextMenu.EnableItem(ID_NEW_VIEW_DESIGN,sal_False);
+                    aContextMenu.EnableItem(ID_TREE_RELATION_DESIGN,sal_False);
+                }
             }
             break;
 
