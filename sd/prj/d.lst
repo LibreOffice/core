@@ -11,7 +11,13 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\simpress\toolbar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\accelerator
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\accelerator\en-US
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\accelerator\de
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\accelerator\es
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\accelerator\fr
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator\en-US
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator\de
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator\es
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator\fr
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\statusbar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\simpress\statusbar
 
@@ -56,7 +62,13 @@ mkdir: %_DEST%\inc%_EXT%\sd
 ..\uiconfig\sdraw\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\toolbar\*.xml
 ..\uiconfig\simpress\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\toolbar\*.xml
 ..\uiconfig\sdraw\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\accelerator\en-US\*.xml
+..\uiconfig\sdraw\accelerator\de\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\accelerator\de\*.xml
+..\uiconfig\sdraw\accelerator\es\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\accelerator\es\*.xml
+..\uiconfig\sdraw\accelerator\fr\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\accelerator\fr\*.xml
 ..\uiconfig\simpress\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator\en-US\*.xml
+..\uiconfig\simpress\accelerator\de\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator\de\*.xml
+..\uiconfig\simpress\accelerator\es\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator\es\*.xml
+..\uiconfig\simpress\accelerator\fr\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator\fr\*.xml
 ..\uiconfig\sdraw\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\statusbar\*.xml
 ..\uiconfig\simpress\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\statusbar\*.xml
 
