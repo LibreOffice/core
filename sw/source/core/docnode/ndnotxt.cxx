@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnotxt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-04 08:49:08 $
+ *  last change: $Author: mib $ $Date: 2002-07-25 15:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #endif
 #ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>            // fuer SwFmtChg
 #endif
 
 
@@ -301,4 +304,18 @@ Graphic SwNoTxtNode::GetGraphic() const
 }
 
 
+void SwNoTxtNode::SetAlternateText( const String& rTxt, sal_Bool bBroadcast )
+{
+    if( bBroadcast )
+    {
+        SwStringMsgPoolItem aOld( RES_ALT_TEXT_CHANGED, aAlternateText );
+        SwStringMsgPoolItem aNew( RES_ALT_TEXT_CHANGED, rTxt );
+        aAlternateText = rTxt;
+        Modify( &aOld, &aNew );
+    }
+    else
+    {
+        aAlternateText = rTxt;
+    }
+}
 
