@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-12 14:37:48 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 16:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1217,7 +1217,7 @@ static Writer& OutRTF_SwGrfNode( Writer& rWrt, SwCntntNode & rNode )
         // Grafik als File-Referenz speichern (als JPEG-Grafik speichern)
         aGrfNm = *rWrt.GetOrigFileName();
         pNd->SwapIn( TRUE );
-        ULONG nFlags = 0;
+        ULONG nFlags = XOUTBMP_USE_NATIVE_IF_POSSIBLE;
         switch( rMirror.GetValue() )
         {
         case RES_MIRROR_GRF_VERT:   nFlags = XOUTBMP_MIRROR_HORZ; break;
@@ -3400,11 +3400,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.8 2000-12-12 14:37:48 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.9 2000-12-21 16:20:36 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2000/12/12 14:37:48  jp
+      Bug #81815#: export rtl fonts with F instead of AF token
+
       Revision 1.7  2000/11/20 16:40:58  jp
       BreakIterator moved from text to i18n
 

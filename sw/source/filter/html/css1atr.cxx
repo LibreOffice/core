@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-12 09:39:59 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 16:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3094,7 +3094,8 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
             if( pTempFileName )
                 sGrfNm = *pTempFileName;
             USHORT nErr = XOutBitmap::WriteGraphic( *pGrf, sGrfNm,
-                        String::CreateFromAscii("JPG") );
+                        String::CreateFromAscii("JPG"),
+                        XOUTBMP_USE_NATIVE_IF_POSSIBLE );
             if( !nErr )     // fehlerhaft, da ist nichts auszugeben
             {
                 sGrfNm = URIHelper::SmartRelToAbs( sGrfNm );
@@ -3494,6 +3495,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/12/12 09:39:59  mib
+      #70821#: Don't export empty frames as spacer if they have a background
+
       Revision 1.4  2000/11/20 09:39:36  jp
       new para attributes - expand para range
 

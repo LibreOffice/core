@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-14 09:28:31 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 16:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1222,7 +1222,8 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
             if(pTempFileName)
                 rEmbGrfNm = *pTempFileName;
             sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, rEmbGrfNm,
-                    String::CreateFromAscii( "JPG" ) );
+                    String::CreateFromAscii( "JPG" ),
+                    XOUTBMP_USE_NATIVE_IF_POSSIBLE );
             if( !nErr )     // fehlerhaft, da ist nichts auszugeben
             {
                 rEmbGrfNm = URIHelper::SmartRelToAbs( rEmbGrfNm );
@@ -1399,11 +1400,14 @@ void GetHTMLWriter( const String&, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.5 2000-12-14 09:28:31 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.6 2000-12-21 16:21:48 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/12/14 09:28:31  mib
+      #80006#: Export using utf-8 encoding
+
       Revision 1.4  2000/12/12 13:11:13  mib
       #80296#: Export start value if a list is continued
 

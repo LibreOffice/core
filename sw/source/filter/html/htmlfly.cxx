@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-12 09:39:59 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 16:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1284,7 +1284,8 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
                     rGrfName = *rHTMLWrt.GetOrigFileName();
                 USHORT nErr = XOutBitmap::WriteGraphic( *pGrf,  rGrfName,
                         String::CreateFromAscii("JPG"),
-                        XOUTBMP_USE_GIF_IF_SENSIBLE);
+                        (XOUTBMP_USE_GIF_IF_SENSIBLE |
+                         XOUTBMP_USE_NATIVE_IF_POSSIBLE));
                 if( !nErr )
                 {
                     rGrfName = URIHelper::SmartRelToAbs( rGrfName );
@@ -1610,7 +1611,8 @@ static Writer & OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     if( aGrf.GetType() == GRAPHIC_NONE ||
         XOutBitmap::WriteGraphic( aGrf, aGrfNm,
                                   String::CreateFromAscii( "JPG" ),
-                                  XOUTBMP_USE_GIF_IF_POSSIBLE ) != 0 )
+                                  (XOUTBMP_USE_GIF_IF_POSSIBLE|
+                                   XOUTBMP_USE_NATIVE_IF_POSSIBLE) ) != 0 )
     {
         // leer oder fehlerhaft, da ist nichts auszugeben
         rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
@@ -1650,7 +1652,8 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             aGrfNm = *rHTMLWrt.GetOrigFileName();
         pGrfNd->SwapIn( TRUE );
 
-        ULONG nFlags = XOUTBMP_USE_GIF_IF_SENSIBLE;
+        ULONG nFlags = XOUTBMP_USE_GIF_IF_SENSIBLE |
+                       XOUTBMP_USE_NATIVE_IF_POSSIBLE;
         switch( rMirror.GetValue() )
         {
         case RES_MIRROR_GRF_VERT:   nFlags = XOUTBMP_MIRROR_HORZ; break;
@@ -1961,11 +1964,14 @@ BOOL SwHTMLPosFlyFrm::operator<( const SwHTMLPosFlyFrm& rFrm ) const
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfly.cxx,v 1.4 2000-12-12 09:39:59 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfly.cxx,v 1.5 2000-12-21 16:21:48 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/12/12 09:39:59  mib
+      #70821#: Don't export empty frames as spacer if they have a background
+
       Revision 1.3  2000/11/01 19:23:14  jp
       export of mail graphics removed
 

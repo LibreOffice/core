@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-01 19:23:14 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 16:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1294,7 +1294,8 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         USHORT nErr = XOutBitmap::WriteGraphic( aGrf, aGrfNm,
                                     String::CreateFromAscii("JPG"),
-                                    XOUTBMP_USE_GIF_IF_POSSIBLE );
+                                    (XOUTBMP_USE_GIF_IF_POSSIBLE |
+                                     XOUTBMP_USE_NATIVE_IF_POSSIBLE) );
         if( nErr )              // fehlerhaft, da ist nichts auszugeben
         {
             rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
@@ -1315,11 +1316,14 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlplug.cxx,v 1.3 2000-11-01 19:23:14 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlplug.cxx,v 1.4 2000-12-21 16:21:48 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/01 19:23:14  jp
+      export of mail graphics removed
+
       Revision 1.2  2000/10/20 13:43:09  jp
       use correct INetURL-Decode enum
 
