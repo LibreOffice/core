@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-06 09:06:09 $
+ *  last change: $Author: fs $ $Date: 2002-09-11 13:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #endif
 #ifndef _TABBAR_HXX
 #include <tabbar.hxx>
+#endif
+
+#ifndef _STACK_
+#include <stack>
 #endif
 
 #pragma hdrstop
@@ -2930,6 +2934,8 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
     if( bContextMenuHandling && nCommand == COMMAND_CONTEXTMENU )
     {
         Point   aPopupPos;
+        BOOL    bClickedIsFreePlace = FALSE;
+        std::stack<SvLBoxEntry*> aSelRestore;
 
         if( rCEvt.IsMouseEvent() )
         {   // change selection, if mouse pos doesn't fit to selection
@@ -2958,8 +2964,17 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
                 }
             }
             else if( aSelEng.GetSelectionMode() == SINGLE_SELECTION )
-                // does nothing because in singel select mode it's not possible to "select" nothing
-                return;
+            {//modified by BerryJia for fixing Bug102739 2002-9-9 17:00(Beijing Time)
+                bClickedIsFreePlace = TRUE;
+                INT32               nSelectedEntries = pView->GetSelectionCount();
+                SvLBoxEntry*        pSelected = pView->FirstSelected();
+                for(USHORT nSel = 0; nSel < nSelectedEntries; nSel++ )
+                {
+                    aSelRestore.push(pSelected);
+                    pSelected = pView->NextSelected( pSelected );
+                }
+                pView->SelectAll( FALSE );
+            }
             else
             {   // deselect all
                 pView->SelectAll( FALSE );
@@ -3003,6 +3018,13 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
             pView->ExcecuteContextMenuAction( pPopup->Execute( pView, aPopupPos ) );
             delete pPopup;
         }
+        //added by BerryJia for fixing Bug102739 2002-9-9 17:00(Beijing Time)
+        if( bClickedIsFreePlace )
+            while(!aSelRestore.empty())
+            {
+                SetCurEntry( aSelRestore.top());
+                aSelRestore.pop();
+            }
     }
 #ifndef NOCOMMAND
     else
