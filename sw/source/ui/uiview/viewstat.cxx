@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:59:58 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,16 +346,6 @@ void SwView::GetState(SfxItemSet &rSet)
             case RES_CHRATR_CTL_LANGUAGE:
                 rSet.Put((const SvxLanguageItem&)
                     pWrtShell->GetDefault(RES_CHRATR_CTL_LANGUAGE), RES_CHRATR_CTL_LANGUAGE);
-            break;
-            case FN_INSERT_FOOTER:
-            case FN_INSERT_HEADER:
-                if(!pWrtShell->IsBrowseMode())
-                    rSet.DisableItem(nWhich);
-                else
-                    rSet.Put(SfxBoolItem(nWhich,
-                        nWhich == FN_INSERT_HEADER ?
-                            pWrtShell->IsHeadInBrowse() :
-                                pWrtShell->IsFootInBrowse()));
             break;
             case FN_HYPHENATE_OPT_DLG:
             {
