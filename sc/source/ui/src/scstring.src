@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:06 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1543,7 +1543,7 @@ String STR_INSERTGRAPHIC
     Text [ portuguese_brazilian ] = "Insere imagem" ;
     Text [ portuguese ] = "Inserir imagem" ;
     Text [ finnish ] = "Lisää kuva" ;
-    Text [ danish ] = "Indsæt billede" ;
+    Text [ danish ] = "Indsæt grafik" ;
     Text [ french ] = "Insérer une image" ;
     Text [ swedish ] = "Infoga grafik" ;
     Text [ dutch ] = "Afbeelding invoegen" ;
@@ -2833,7 +2833,7 @@ String SCSTR_GRFILTER_TOOBIG
     Text [ portuguese_brazilian ] = "Mem¢ria insuficiente para inserir o gr fico" ;
     Text [ portuguese ] = "Memória insuficiente para inserir a imagem." ;
     Text [ finnish ] = "Muisti ei riitä grafiikan lisäämiseen" ;
-    Text [ danish ] = "Ikke nok hukommelse til at indsætte billedet" ;
+    Text [ danish ] = "Ikke nok hukommelse til at indsætte grafiken" ;
     Text [ french ] = "Impossible d'insérer l'image, mémoire insuffisante !" ;
     Text [ swedish ] = "Inte tillräckligt med minne för att infoga grafiken" ;
     Text [ dutch ] = "Niet genoeg vrij geheugen om de afbeelding in te voegen" ;
