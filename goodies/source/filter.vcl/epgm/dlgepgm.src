@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepgm.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-15 14:05:59 $
+ *  last change: $Author: kz $ $Date: 2001-05-19 05:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ ModalDialog DLG_EXPORT_EPGM
         Text [ ENGLISH ] = "~raw" ;
         TabStop = TRUE ;
         Text[ italian ] = "~Binario";
-        Text[ portuguese_brazilian ] = "~Binär";
+        Text[ portuguese_brazilian ] = "~Bin?r";
         Text[ portuguese ] = "~Binário";
         Text[ danish ] = "~Binær";
         Text[ french ] = "~Binaire";
