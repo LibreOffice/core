@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hro $ $Date: 2001-09-03 10:48:13 $
+ *  last change: $Author: rt $ $Date: 2001-09-04 11:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_Windows( void *pv, rtl_uString
                 // interest. Then copy the information to the buffer pointed
                 // to by lpMe32 so that it can be returned to the caller.
 
-                if ( Module32First(hModuleSnap, &me32) )
+                if ( lpfnModule32First(hModuleSnap, &me32) )
                 {
                     do
                     {
@@ -209,7 +209,7 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_Windows( void *pv, rtl_uString
                             bSuccess = sal_True;
                         }
 
-                    } while ( !bSuccess && Module32Next( hModuleSnap, &me32 ) );
+                    } while ( !bSuccess && lpfnModule32Next( hModuleSnap, &me32 ) );
                 }
 
 
