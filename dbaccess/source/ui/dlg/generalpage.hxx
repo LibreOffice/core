@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:18:14 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,20 +65,20 @@
 #ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
 #endif
-
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
+#endif
+#ifndef _SV_LSTBOX_HXX
+#include <vcl/lstbox.hxx>
+#endif
+#ifndef _SV_EDIT_HXX
+#include <vcl/edit.hxx>
+#endif
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
-    // #106016# --------------
-    enum IS_PATH_EXIST
-    {
-        PATH_NOT_EXIST = 0,
-        PATH_EXIST,
-        PATH_NOT_KNOWN
-    };
-
-    class ODbAdminDialog;
+    class IAdminHelper;
     //=========================================================================
     //= OGeneralPage
     //=========================================================================
@@ -88,20 +88,11 @@ namespace dbaui
 
     private:
         // dialog controls
-        FixedText           m_aNameLabel;
-        Edit                m_aName;
-        FixedLine           m_aTypeBox;
+        FixedText           m_aTypePreLabel;
         FixedText           m_aDatasourceTypeLabel;
         ListBox             m_aDatasourceType;
-        FixedText           m_aConnectionLabel;
-        OConnectionURLEdit  m_aConnection;
-        PushButton          m_aBrowseConnection;
-        PushButton          m_aCreateDatabase;
-
+        FixedText           m_aTypePostLabel;
         FixedText           m_aSpecialMessage;
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                            m_xORB;
 
         ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
         DECLARE_STL_MAP(DATASOURCE_TYPE, String, ::std::less< DATASOURCE_TYPE >, SelectionHistory);
@@ -112,22 +103,11 @@ namespace dbaui
         enum SPECIAL_MESSAGE
         {
             smNone,
-            smInvalidName,
-            smDatasourceDeleted,
-            smUnsupportedType,
-            smMySQL
+            smUnsupportedType
         };
         SPECIAL_MESSAGE     m_eLastMessage;
 
         Link                m_aTypeSelectHandler;   /// to be called if a new type is selected
-        Link                m_aNameModifiedHandler; /// to be called whenever the name of the data source is changed by the user
-        Link                m_aNameValidator;       /// to be called to check the validity of a name
-        ODbAdminDialog*     m_pAdminDialog;         /// we need the servicefactory
-        String              m_sControlUser;         /// set by XExecutableDialog
-        String              m_sControlPassword;     /// set by XExecutableDialog
-        String              m_sUser;                /// set by XExecutableDialog
-        String              m_sUserPassword;        /// set by XExecutableDialog
-        sal_Int32           m_nCacheSize;           /// set by XExecutableDialog
 
         sal_Bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
         sal_Bool            m_bUserGrabFocus : 1;
@@ -137,45 +117,23 @@ namespace dbaui
 
         /// set a handler which gets called every time the user selects a new type
         void            SetTypeSelectHandler(const Link& _rHandler) { m_aTypeSelectHandler = _rHandler; }
+
         /// get the currently selected datasource type
         DATASOURCE_TYPE GetSelectedType() const { return m_eCurrentSelection; }
-
-        /// set a handler which gets called every time the user changes the data source name
-        void            SetNameModifyHandler( const Link& _rHandler ) { m_aNameModifiedHandler = _rHandler; }
-        // set a handler which is to be called whenever the data source name needs to be validated
-        void            SetNameValidationHandler( const Link& _rHandler ) { m_aNameValidator = _rHandler; }
-        /// get the current name the user wants the data source to have
-        String          GetCurrentName() const { return m_aName.GetText(); }
-
-        // set the parent dialog typesafe
-        inline void SetAdminDialog(ODbAdminDialog* _pDialog) { m_pAdminDialog = _pDialog; }
-        void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
-        {
-            m_xORB = _rxORB;
-            m_aConnection.initializeTypeCollection(m_xORB);
-        }
-
-        inline void enableConnectionURL() { m_aConnection.SetReadOnly(sal_False); }
-        inline void disableConnectionURL() { m_aConnection.SetReadOnly(); }
-
-        /** changes the connection URL.
-            <p>The new URL must be of the type which is currently selected, only the parts which do not
-            affect the type may be changed (compared to the previous URL).</p>
-        */
-        void    changeConnectionURL( const String& _rNewDSN );
-        String  getConnectionURL( ) const;
 
     protected:
         // SfxTabPage overridables
         virtual BOOL FillItemSet(SfxItemSet& _rCoreAttrs);
         virtual void Reset(const SfxItemSet& _rCoreAttrs);
-        virtual void ActivatePage(const SfxItemSet& _rSet);
 
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-        virtual sal_Bool checkItems();
 
         virtual void GetFocus();
-        virtual long PreNotify( NotifyEvent& _rNEvt );
+
+        // <method>OGenericAdministrationPage::fillControls</method>
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
+        // <method>OGenericAdministrationPage::fillWindows</method>
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
 
     protected:
 
@@ -187,32 +145,10 @@ namespace dbaui
 
         void switchMessage(sal_Bool _bDeleted,const DATASOURCE_TYPE _eType);
 
-        sal_Int32       checkPathExistence(const String& _rURL);
-        sal_Bool        commitURL();
-        sal_Bool        createDirectoryDeep(const String& _rPathNormalized);
-        // #106016# ----------------
-        IS_PATH_EXIST pathExists(const ::rtl::OUString& _rURL, sal_Bool bIsFile) const;
-
-        void checkCreateDatabase(DATASOURCE_TYPE _eType);
-        sal_Bool isBrowseable(DATASOURCE_TYPE _eType) const;
-        StringBag getInstalledAdabasDBDirs(const String &_rPath,const ::ucb::ResultSetInclude& _reResultSetInclude);
-        StringBag getInstalledAdabasDBs(const String &_rConfigDir,const String &_rWorkDir);
-
-        // setting/retrieving the current connection URL
-        // necessary because for some types, the URL must be decoded for display purposes
-        String      getURL( ) const;
-        void        setURL( const String& _rURL );
-        String      getURLNoPrefix( ) const;
-        void        setURLNoPrefix( const String& _rURL );
+        /// sets the the title of the parent dialog
+        void setParentTitle(DATASOURCE_TYPE _eSelectedType);
 
         DECL_LINK(OnDatasourceTypeSelected, ListBox*);
-        DECL_LINK(OnBrowseConnections, PushButton*);
-        DECL_LINK(OnCreateDatabase, PushButton*);
-        DECL_LINK(OnNameModified, Edit*);
-
-    private:
-        String      implGetURL( sal_Bool _bPrefix ) const;
-        void        implSetURL( const String& _rURL, sal_Bool _bPrefix );
     };
 
 //.........................................................................
