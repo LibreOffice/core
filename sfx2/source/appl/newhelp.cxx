@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-27 10:43:51 $
+ *  last change: $Author: pb $ $Date: 2001-09-28 06:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1808,8 +1808,9 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     else if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
     {
          const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        USHORT nKeyGroup = pKEvt->GetKeyCode().GetGroup();
-        if ( KEYGROUP_ALPHA == nKeyGroup )
+         const KeyCode& rKeyCode = pKEvt->GetKeyCode();
+        USHORT nKeyGroup = rKeyCode.GetGroup();
+        if ( KEYGROUP_ALPHA == nKeyGroup && ( rKeyCode.GetCode() != KEY_C || !rKeyCode.IsMod1() ) )
         {
             // do nothing disables the writer accelerators
             nDone = 1;
