@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:47:14 $
+ *  last change: $Author: oj $ $Date: 2000-11-09 08:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,7 +765,8 @@ void OSQLParseNode::likeNodeToStr(::rtl::OUString& rString, const SQLParseNodePa
         m_aChilds[0]->parseNodeToStr(rString, aNewParam);
 
     m_aChilds[1]->parseNodeToStr(rString, aNewParam);
-    m_aChilds[2]->parseNodeToStr(rString, aNewParam);
+    if(count() == 5)
+        m_aChilds[2]->parseNodeToStr(rString, aNewParam);
 
     sal_Int32 nCurentPos = m_aChilds.size()-2;
     pParaNode = m_aChilds[nCurentPos];

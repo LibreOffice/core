@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.5 2000-10-29 16:58:25 er Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.6 2000-11-09 08:48:25 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: er $ $Date: 2000-10-29 16:58:25 $ $Revision: 1.5 $
+//	$Author: oj $ $Date: 2000-11-09 08:48:25 $ $Revision: 1.6 $
 //
 // Description:
 //
@@ -3080,41 +3080,6 @@ Any getNumberFormatProperty(const Reference< ::com::sun::star::util::XNumberForm
 		}
 	}
 	return Any();
-}
-
-//------------------------------------------------------------------
-::rtl::OUString ToDateString(const Date& rDate)
-{
-	sal_Char s[11];
-	sprintf(s,"%04d-%02d-%02d",
-				(int)rDate.Year,
-				(int)rDate.Month,
-				(int)rDate.Day);
-	s[10] = 0;
-	return ::rtl::OUString::createFromAscii(s);
-}
-
-//------------------------------------------------------------------
-::rtl::OUString ToTimeString(const Time& rTime)
-{
-	sal_Char s[9];
-	sprintf(s,"%02d:%02d:%02d",
-			(int)rTime.Hours,
-			(int)rTime.Minutes,
-			(int)rTime.Seconds);
-	s[8] = 0;
-	return ::rtl::OUString::createFromAscii(s);
-}
-
-//------------------------------------------------------------------
-::rtl::OUString ToDateTimeString(const ::com::sun::star::util::DateTime& _rDateTime)
-{
-	Date aDate(_rDateTime.Day,_rDateTime.Month,_rDateTime.Year);
-	::rtl::OUString aTemp(ToDateString(aDate));
-	aTemp += ::rtl::OUString::createFromAscii(" ");
-	Time aTime(0,_rDateTime.Seconds,_rDateTime.Minutes,_rDateTime.Hours);
-	aTemp += ToTimeString(aTime);
-	return  aTemp;
 }
 
 //------------------------------------------------------------------
