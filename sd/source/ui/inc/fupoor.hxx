@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-01 10:06:29 $
+ *  last change: $Author: af $ $Date: 2002-08-02 12:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,24 @@ protected:
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 protected:
     void ImpForceQuadratic(Rectangle& rRect);
+
+    /** Switch to another layer.  The layer to switch to is specified by an
+        offset relative to the active layer.  With respect to the layer bar
+        control at the lower left of the document window positive values
+        move to the right and negative values move to the left.
+
+        <p>Switching the layer is independant of the view's layer mode.  The
+        layers are switched even when the layer mode is turned off and the
+        layer control is not visible.</p>
+        @param nOffset
+           If the offset is positive skip that many layers in selecting the
+           next layer.  If it is negative then select a previous one.  An
+           offset or zero does not change the current layer.  If the
+           resulting index lies outside the valid range of indices then it
+           is set to either the minimal or maximal valid index, whitchever
+           is nearer.
+    */
+    void SwitchLayer (sal_Int32 nOffset);
 };
 
 
