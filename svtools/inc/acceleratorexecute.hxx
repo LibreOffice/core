@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceleratorexecute.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:27:36 $
+ *  last change: $Author: obo $ $Date: 2005-01-24 09:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ class AcceleratorExecute : private TMutexInit
     private:
 
         /** TODO document me */
-        typedef ::std::vector< ::std::pair< css::util::URL, css::uno::Reference< css::frame::XDispatch > > > TCommandQueue;
+        typedef ::std::vector< ::std::pair< ::com::sun::star::util::URL, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > > TCommandQueue;
 
     //-------------------------------------------
     // member
