@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: svesik $ $Date: 2000-11-08 15:04:36 $
+#   last change: $Author: pluby $ $Date: 2000-11-13 17:30:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,8 +92,8 @@ all_subdirs : $(RC_SUBDIRS)
 RC_SUBDIRS =  \
 	DocumentProperties \
 	UnoControls \
-	automation \
 	api \
+	automation \
 	basctl \
 	basic \
 	bridges \
@@ -129,9 +129,9 @@ RC_SUBDIRS =  \
 	offmgr \
 	offuh \
 	rdbmaker \
-	readlicense \
 	registry \
 	remotebridges \
+	res \
 	rsc \
 	sal \
 	sandbox \
@@ -142,7 +142,6 @@ RC_SUBDIRS =  \
 	scp \
 	scptools \
 	sd \
-	sdb \
 	setup2 \
 	sfx2 \
 	sim2 \
@@ -190,53 +189,48 @@ bootstrap .PHONY :
 configure .PHONY SETDIR=config_office :
 	@configure
 
-install: instsetoo
-	cd $?; dmake subdmake=true  product="full"
-
 # 
 # single directory targets for
 # dependency handling between directories
 # 
 
 DocumentProperties : svtools
-UnoControls : cppuhelper tools offuh
+UnoControls : cppuhelper offuh tools
 api : unoidl
+automation : basic
 basctl : svx
 basic : goodies
 bridges : cppuhelper jurt
 chaos : inet svtools unzip
 codemaker : api
-comphelper : cppuhelper offuh tools
-configmgr : javaunohelper offuh unoil unotools
-connectivity : svtools
+comphelper : cppuhelper offuh
+configmgr : unotools
+connectivity : comphelper svtools
 cppu : codemaker
 cppuhelper : cppu
 cpputools : cppuhelper
-dbaccess : connectivity svx ucb
+dbaccess : connectivity svx
 desktop : sc sd sw
 eventattacher : cppuhelper
-extensions : rdbmaker svx xml2cmp
-external: std2
-extras : xml2cmp
-fileaccess: xml2cmp
+extensions : rdbmaker svx
 forms : svx
 framework : svtools
 goodies : so3
 i18n : bridges stoc svtools unotools
 idl : tools
-inet : tools ldapber
-instsetoo : UnoControls chaos configmgr cpputools dbaccess desktop eventattacher extensions extras forms framework i18n io remotebridges sax scaddins scp wizards readlicense xmlhelp
-io : rdbmaker xml2cmp
-javaunohelper : bridges cppuhelper unoil
+inet : ldapber tools
+io : rdbmaker
+javaunohelper : cppuhelper unoil
 jurt : codemaker sandbox
 jut : javaunohelper
-offmgr : basctl sch sdb sim2 starmath uui
+lingu : sfx2
+offmgr : basctl sch sim2 starmath uui
 offuh : codemaker
 rdbmaker : cppuhelper
 registry : store
-remotebridges : bridges rdbmaker xml2cmp
+remotebridges : bridges rdbmaker
 rsc : tools
-sal : std2
+sal : std2 xml2cmp
 sax : cppuhelper external
 sc : offmgr
 scaddins : cppuhelper
@@ -244,35 +238,33 @@ sch : basctl svx
 scp : scptools
 scptools : setup2
 sd : offmgr sc
-sdb : sfx2
 setup2 : automation basic transex3 unoil unzip
 sfx2 : idl setup2
 sim2 : svx
 sip : sd
-sj2 : jtools sandbox svtools
+sj2 : sandbox svtools
 so3 : inet sj2
 sot : tools
 starmath : svx
-stoc : bridges rdbmaker xml2cmp
+stoc : bridges rdbmaker
 store : vos
 svtools : toolkit ucbhelper unotools
-svx : lingu sfx2 xmloff
+svx : connectivity lingu sfx2 xmloff
 sw : offmgr sd
 toolkit : vcl
 tools : external vos
 transex3 : tools
-ucb : comphelper tools ucbhelper
+ucb : comphelper svtools tools ucbhelper
 ucbhelper : cppuhelper offuh
 unoidl : registry
 unoil : jurt
-unotools : comphelper
+unotools : comphelper cppuhelper offuh tools
 uui : svtools
 vcl : rsc sot ucbhelper unotools xprinter
 vos : sal
 wizards : offmgr
-xml2cmp : tools
-xmloff : tools lingu
-xmlhelp : jut
+xmlhelp : external unoil
+xmloff : lingu
 
 # 
 # central target makefile
