@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:38:18 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,7 @@ ToolBox RID_BRW_QRY_TOOLBOX
             Text[ portuguese ] = "Fechar";
             Text[ russian ] = "Çàêğûòü";
             Text[ greek ] = "Êëåßóéìï";
-            Text[ dutch ] = "Close";
+            Text[ dutch ] = "Sluiten";
             Text[ french ] = "Fermer";
             Text[ spanish ] = "Cerrar";
             Text[ italian ] = "Chiudi";
@@ -582,7 +582,7 @@ String RID_STR_QUERIES_CONTAINER
     Text[ portuguese ] = "Consultas";
     Text[ russian ] = "Çàïğîñû";
     Text[ greek ] = "ÅñùôŞìáôá";
-    Text[ dutch ] = "Queries";
+    Text[ dutch ] = "Query's";
     Text[ french ] = "Requêtes";
     Text[ spanish ] = "Consultas";
     Text[ italian ] = "Ricerche";
@@ -592,7 +592,7 @@ String RID_STR_QUERIES_CONTAINER
     Text[ portuguese_brazilian ] = "Queries";
     Text[ japanese ] = "¸´Ø°";
     Text[ korean ] = "Queries";
-    Text[ chinese_simplified ] = "Queries";
+    Text[ chinese_simplified ] = "²éÑ¯";
     Text[ chinese_traditional ] = "¬d¸ß";
     Text[ turkish ] = "Queries";
     Text[ arabic ] = "ÇÓÊİÓÇÑÇÊ";
@@ -606,7 +606,7 @@ String RID_STR_TABLES_CONTAINER
     Text[ portuguese ] = "Tabelas";
     Text[ russian ] = "Òàáëèöû";
     Text[ greek ] = "Ğßíáêåò";
-    Text[ dutch ] = "Tables";
+    Text[ dutch ] = "Tabellen";
     Text[ french ] = "Tables";
     Text[ spanish ] = "Tablas";
     Text[ italian ] = "Tabelle";
@@ -616,7 +616,7 @@ String RID_STR_TABLES_CONTAINER
     Text[ portuguese_brazilian ] = "Tables";
     Text[ japanese ] = "Ã°ÌŞÙ";
     Text[ korean ] = "Tables";
-    Text[ chinese_simplified ] = "Tables";
+    Text[ chinese_simplified ] = "±í¸ñ";
     Text[ chinese_traditional ] = "ªí®æ";
     Text[ turkish ] = "Tables";
     Text[ arabic ] = "Tables";
@@ -636,7 +636,7 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese ] = "A~dministrar fontes de dados...";
             Text[ russian ] = "~Óïğàâëåíèå èñõîäíûìè äàííûìè...";
             Text[ greek ] = "Äéá÷åßñéóç ğñïåëåıóåùí ôùí ~äåäïìİíùí...";
-            Text[ dutch ] = "administrate ~data sources ...";
+            Text[ dutch ] = "~gegevensbronnen beheren...";
             Text[ french ] = "Gérer les sources de ~données...";
             Text[ spanish ] = "Administrar fuente de datos...";
             Text[ italian ] = "Amministra ~sorgente dati...";
@@ -658,21 +658,21 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text = "Verbindung s~chließen" ;
             Text [ english ] = "~close connection" ;
             Text [ english_us ] = "Disco~nnect" ;
-            Text[ portuguese ] = "~Fechar ligação";
+            Text[ portuguese ] = "~Desligar";
             Text[ russian ] = "~Çàêğûòü ïîäêëş÷åíèå";
             Text[ greek ] = "Êëåßóéìï óıíäåóçò";
-            Text[ dutch ] = "~close connection";
+            Text[ dutch ] = "~Verbinding verbreken";
             Text[ french ] = "Dé~connecter";
             Text[ spanish ] = "Cerrar conexión";
             Text[ italian ] = "C~hiudi collegamento";
             Text[ danish ] = "~close connection";
-            Text[ swedish ] = "Stäng för~bindelse";
+            Text[ swedish ] = "Stän~g förbindelse";
             Text[ polish ] = "Roz³¹cz";
             Text[ portuguese_brazilian ] = "~close connection";
-            Text[ japanese ] = "Ú‘±‚ğ•Â‚¶‚é(~C)";
+            Text[ japanese ] = "Ú‘±‚ğ•Â‚¶‚é";
             Text[ korean ] = "~close connection";
-            Text[ chinese_simplified ] = "¹Ø±ÕÁ¬½Ó";
-            Text[ chinese_traditional ] = "Ãö³¬³s½u";
+            Text[ chinese_simplified ] = "½áÊøÁ¬½Ó";
+            Text[ chinese_traditional ] = "µ²§ô³s½u";
             Text[ turkish ] = "~close connection";
             Text[ arabic ] = "ŞØÚ ÇáÇÊÕÇá";
         };
@@ -686,7 +686,7 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese ] = "~Actualizar ligação";
             Text[ russian ] = "~Âîçîáíîâèòü ïîäêëş÷åíèå";
             Text[ greek ] = "Áíáíİùóç óıíäåóçò";
-            Text[ dutch ] = "~refresh connection";
+            Text[ dutch ] = "~opnieuw verbinden";
             Text[ french ] = "~Rétablir la connexion";
             Text[ spanish ] = "Actualizar conexión";
             Text[ italian ] = "Ag~giorna collegamento";
@@ -715,7 +715,7 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese ] = "~Novo esboço de consulta";
             Text[ russian ] = "Íîâûé ïğîåêò çàïğîñà";
             Text[ greek ] = "Íİïò ó÷åäé~áóìüò åñùôŞìáôïò";
-            Text[ dutch ] = "new ~querydesign";
+            Text[ dutch ] = "nieuw ~query-ontwerp";
             Text[ french ] = "Nouvelle ébauche de ~requête";
             Text[ spanish ] = "nuevo diseño de consulta";
             Text[ italian ] = "Nuova ~struttura di ricerca";
@@ -736,11 +736,11 @@ Menu MENU_BROWSERTREE_CONTEXT
             HelpId = HID_BROWSER_QUERY_CREATE_TEXT ;
             Text = "neuen ~SQL Befehl eingeben" ;
             Text [ english ] = "new ~SQL command" ;
-            Text [ english_us ] = "Enter New ~SQL Command" ;
+            Text [ english_us ] = "New ~SQL Command" ;
             Text[ portuguese ] = "Novo comando ~SQL";
             Text[ russian ] = "Ââåñòè íîâóş êîìàíäó ~SQL";
             Text[ greek ] = "ÅéóáãùãŞ íİáò åíôïëŞò ôïõ ~SQL";
-            Text[ dutch ] = "new ~SQL command";
+            Text[ dutch ] = "nieuwe ~SQL opdracht";
             Text[ french ] = "Saisir une nouvelle instruction ~SQL";
             Text[ spanish ] = "Introducir nuevo comando ~SQL";
             Text[ italian ] = "Nuovo comando S~QL";
@@ -765,7 +765,7 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese ] = "E~ditar consulta";
             Text[ russian ] = "~Ïğàâêà çàïğîñà";
             Text[ greek ] = "~Åğåîåñãáóßá åñùôŞìáôïò";
-            Text[ dutch ] = "~edit query";
+            Text[ dutch ] = "~query bewerken";
             Text[ french ] = "~Éditer la requête";
             Text[ spanish ] = "Editar consulta";
             Text[ italian ] = "Modi~fica ricerca";
@@ -794,12 +794,12 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese ] = "Eli~minar consulta";
             Text[ russian ] = "~Óäàëèòü çàïğîñ";
             Text[ greek ] = "ÄéáãñáöŞ åñùôŞìáôïò";
-            Text[ dutch ] = "de~lete query";
+            Text[ dutch ] = "query ~wissen";
             Text[ french ] = "~Supprimer la requête";
             Text[ spanish ] = "Eliminar consulta";
             Text[ italian ] = "~Elimina ricerca";
             Text[ danish ] = "de~lete query";
-            Text[ swedish ] = "Radera sökn~ing";
+            Text[ swedish ] = "Radera ~sökning";
             Text[ polish ] = "Usuñ kwerendê";
             Text[ portuguese_brazilian ] = "de~lete query";
             Text[ japanese ] = "¸´Ø°‚Ìíœ(~L)";
@@ -819,7 +819,7 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese ] = "~Copiar consulta";
             Text[ russian ] = "~Êîïèğîâàòü çàïğîñ";
             Text[ greek ] = "ÁíôéãñáöŞ åñùôŞìáôïò";
-            Text[ dutch ] = "c~opy query";
+            Text[ dutch ] = "query k~opiëren";
             Text[ french ] = "C~opier la requête";
             Text[ spanish ] = "Copiar consulta";
             Text[ italian ] = "~Copia ricerca";
@@ -848,7 +848,7 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese ] = "Novo e~sboço de tabela";
             Text[ russian ] = "~Íîâûé ïğîåêò òàáëèöû";
             Text[ greek ] = "Íİïò ó÷åäéáóìüò ğßíáêá";
-            Text[ dutch ] = "new ~tabledesign";
+            Text[ dutch ] = "nieuw ~tabel-ontwerp";
             Text[ french ] = "Nouvelle ébauche de ~table";
             Text[ spanish ] = "nuevo diseño de tabla";
             Text[ italian ] = "Nuova struttura ~tabella";
@@ -873,7 +873,7 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese ] = "Editar ta~bela";
             Text[ russian ] = "~Ïğàâêà òàáëèöû";
             Text[ greek ] = "Åğåîåñãáóßá ğßíáêá";
-            Text[ dutch ] = "edit ta~ble";
+            Text[ dutch ] = "tabel ~bewerken";
             Text[ french ] = "~Éditer la table";
             Text[ spanish ] = "Editar tabla";
             Text[ italian ] = "~Modifica tabella";
@@ -902,7 +902,7 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese ] = "Eliminar ~tabela";
             Text[ russian ] = "Ó~äàëèòü òàáëèöó";
             Text[ greek ] = "ÄéáãñáöŞ ğßíáêá";
-            Text[ dutch ] = "de~lete table";
+            Text[ dutch ] = "tabel ~wissen";
             Text[ french ] = "~Supprimer la table";
             Text[ spanish ] = "Eliminar tabla";
             Text[ italian ] = "~Elimina tabella";
@@ -927,7 +927,7 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese ] = "~Copiar tabela";
             Text[ russian ] = "Ê~îïèğîâàòü òàáëèöó";
             Text[ greek ] = "ÁíôéãñáöŞ ğßíá~êá";
-            Text[ dutch ] = "c~opy table";
+            Text[ dutch ] = "tabel ~kopiëren";
             Text[ french ] = "~Copier la table";
             Text[ spanish ] = "Copiar tabla";
             Text[ italian ] = "~Copia tabella";
@@ -952,7 +952,7 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ portuguese ] = "~Inserir tabela";
             Text[ russian ] = "~Âñòàâèòü òàáëèöó";
             Text[ greek ] = "Å~éóáãùãŞ ğßíáêá";
-            Text[ dutch ] = "~insert table";
+            Text[ dutch ] = "tabel ~invoegen";
             Text[ french ] = "~Insérer une table";
             Text[ spanish ] = "Insertar tabla";
             Text[ italian ] = "~Inserisci tabella";
@@ -977,24 +977,24 @@ Menu MENU_BROWSERTREE_CONTEXT
             HelpId = HID_BROWSER_RELATION_DESIGN ;
             Text = "Relatio~nenentwurf" ;
             Text [ english ] = "relatio~n design" ;
-            Text [ english_us ] = "relatio~n design" ;
-            Text[ portuguese ] = "relatio~n design";
-            Text[ russian ] = "relatio~n design";
-            Text[ greek ] = "relatio~n design";
-            Text[ dutch ] = "relatio~n design";
-            Text[ french ] = "relatio~n design";
+            Text [ english_us ] = "Rel~ation Design" ;
+            Text[ portuguese ] = "Es~boçar relação";
+            Text[ russian ] = "Ïğîåêò îòíîøåíèé";
+            Text[ greek ] = "Ó÷åäéáóìüò åîÜñôçóçò";
+            Text[ dutch ] = "~ontwerp voor verbinding";
+            Text[ french ] = "Ébauche de relatio~n";
             Text[ spanish ] = "Diseño de relaciones";
-            Text[ italian ] = "relatio~n design";
+            Text[ italian ] = "Struttura r~elazione";
             Text[ danish ] = "relatio~n design";
             Text[ swedish ] = "Relatio~nsutkast";
             Text[ polish ] = "Projekt relacji";
             Text[ portuguese_brazilian ] = "relatio~n design";
-            Text[ japanese ] = "relatio~n design";
+            Text[ japanese ] = "ØÚ°¼®İ‚ÌÃŞ»Ş²İ(~N)";
             Text[ korean ] = "relatio~n design";
-            Text[ chinese_simplified ] = "relatio~n design";
-            Text[ chinese_traditional ] = "relatio~n design";
+            Text[ chinese_simplified ] = "¹ØÁªÉè¼Æ";
+            Text[ chinese_traditional ] = "ÃöÁp³]­p";
             Text[ turkish ] = "relatio~n design";
-            Text[ arabic ] = "relatio~n design";
+            Text[ arabic ] = "ÊÕãíã ÚáÇŞÇÊ";
         };
     };
 };
@@ -1006,7 +1006,7 @@ String STR_TITLE_CONFIRM_DELETION
     Text[ portuguese ] = "Confirmar eliminação";
     Text[ russian ] = "Ïîäòâåğäèòü óäàëåíèå";
     Text[ greek ] = "Åğéâåâáßùóç äéáãñáöŞò";
-    Text[ dutch ] = "confirm deletion";
+    Text[ dutch ] = "wissen bevestigen";
     Text[ french ] = "Confirmation de suppression";
     Text[ spanish ] = "Confirmar eliminación";
     Text[ italian ] = "Conferma 'Elimina'";
@@ -1016,7 +1016,7 @@ String STR_TITLE_CONFIRM_DELETION
     Text[ portuguese_brazilian ] = "confirm deletion";
     Text[ japanese ] = "íœ‚ÌŠm”F";
     Text[ korean ] = "confirm deletion";
-    Text[ chinese_simplified ] = "confirm deletion";
+    Text[ chinese_simplified ] = "È·¶¨É¾³ı";
     Text[ chinese_traditional ] = "ÚÌ»{§R°£";
     Text[ turkish ] = "confirm deletion";
     Text[ arabic ] = "ÊÃßíÏ ÇáÍĞİ";
@@ -1030,7 +1030,7 @@ String STR_QUERY_DELETE_QUERY
     Text[ portuguese ] = "Eliminar consulta '%1'?";
     Text[ russian ] = "Óäàëèòü çàïğîñ '%1'?";
     Text[ greek ] = "Èİëåôå íá äéáãñáöåß ôï åñşôçìá '%1';";
-    Text[ dutch ] = "Do you want to delete the query '%1'?";
+    Text[ dutch ] = "Wilt u query '%1' wissen?";
     Text[ french ] = "Voulez-vous supprimer la requête '%1' ?";
     Text[ spanish ] = "¿Desea eliminar la consulta '%1'?";
     Text[ italian ] = "Volete eliminare la ricerca '%1'?";
@@ -1040,7 +1040,7 @@ String STR_QUERY_DELETE_QUERY
     Text[ portuguese_brazilian ] = "Do you want to delete the query '%1'?";
     Text[ japanese ] = "¸´Ø° '%1' ‚ğíœ‚µ‚Ü‚·‚©B";
     Text[ korean ] = "Do you want to delete the query '%1'?";
-    Text[ chinese_simplified ] = "Do you want to delete the query '%1'?";
+    Text[ chinese_simplified ] = "ÒªÉ¾³ıÕâ¸ö²éÑ¯ '%1'?";
     Text[ chinese_traditional ] = "­n§R°£¬d¸ß'%1'?";
     Text[ turkish ] = "Do you want to delete the query '%1'?";
     Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÇÓÊİÓÇÑ '%1'¿";
@@ -1054,7 +1054,7 @@ String STR_QUERY_DELETE_TABLE
     Text[ portuguese ] = "Eliminar tabela '%1'?";
     Text[ russian ] = "Óäàëèòü òàáëèöó '%1'?";
     Text[ greek ] = "Èİëåôå íá äéáãñáöåß ï ğßíáêáò '%1';";
-    Text[ dutch ] = "Do you want to delete the table '%1'?";
+    Text[ dutch ] = "Wilt u tabel '%1' wissen?";
     Text[ french ] = "Voulez-vous supprimer la table '%1' ?";
     Text[ spanish ] = "¿Desea eliminar la tabla '%1'?";
     Text[ italian ] = "Volete eliminare la tabella '%1'?";
@@ -1064,7 +1064,7 @@ String STR_QUERY_DELETE_TABLE
     Text[ portuguese_brazilian ] = "Do you want to delete the table '%1'?";
     Text[ japanese ] = "Ã°ÌŞÙ '%1' ‚ğíœ‚µ‚Ü‚·‚©B";
     Text[ korean ] = "Do you want to delete the table '%1'?";
-    Text[ chinese_simplified ] = "Do you want to delete the table '%1'?";
+    Text[ chinese_simplified ] = "ÒªÉ¾³ıÕâ¸ö±í¸ñ '%1'?";
     Text[ chinese_traditional ] = "­n§R°£ªí®æ '%1'?";
     Text[ turkish ] = "Do you want to delete the table '%1'?";
     Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÌÏæá '%1'¿";
@@ -1079,7 +1079,7 @@ QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
     Message[ portuguese ] = "A consulta já existe. Eliminar?";
     Message[ russian ] = "İòîò çàïğîñ óæå ñóùåñòâóåò. Óäàëèòü åãî?";
     Message[ greek ] = "Ôï åñşôçìá õğÜñ÷åé Şäç. Èİëåôå íá äéáãñáöåß;";
-    Message[ dutch ] = "The query already exists. Do you want to delete the query?";
+    Message[ dutch ] = "De query bestaat reeds. Wilt u deze wissen?";
     Message[ french ] = "La requête existe déjà. Voulez-vous la supprimer ?";
     Message[ spanish ] = "Ya existe la consulta. ¿Desea eliminarla?";
     Message[ italian ] = "La ricerca esiste già. Volete eliminarla?";
@@ -1089,7 +1089,7 @@ QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
     Message[ portuguese_brazilian ] = "The query already exists. Do you want to delete the query?";
     Message[ japanese ] = "¸´Ø°‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B¸´Ø°‚ğíœ‚µ‚Ü‚·‚©B";
     Message[ korean ] = "The query already exists. Do you want to delete the query?";
-    Message[ chinese_simplified ] = "The query already exists. Do you want to delete the query?";
+    Message[ chinese_simplified ] = "Õâ¸ö²éÑ¯ÒÑ¾­´æÔÚ¡£ÒªÉ¾³ıËü£¿";
     Message[ chinese_traditional ] = "³o­Ó¬d¸ß¤w¸g¦s¦b¡C­n§R°£¥¦¡H";
     Message[ turkish ] = "The query already exists. Do you want to delete the query?";
     Message[ arabic ] = "åĞÇ ÇáÇÓÊİÓÇÑ ãæÌæÏ ÈÇáİÚá. åá ÊÑíÏ ÍĞİå¿";
@@ -1104,7 +1104,7 @@ QueryBox QUERY_CONNECTION_LOST
     Message[ portuguese ] = "A ligação à base de dados foi cancelada. Restabelecer?";
     Message[ russian ] = "Ñîåäèíåíèå ñ áàçîé äàííûõ óäàëåíî. Ñîçäàòü åãî çàíîâî?";
     Message[ greek ] = "Ç óıíäåóç ìå ôç âÜóç äåäïìİíùí ÷Üèçêå. Èİëåôå íá åğáíáóõíäåèåßôå;";
-    Message[ dutch ] = "The connection to the database was lost! Reconnect";
+    Message[ dutch ] = "De verbinding naar de database werd opgeheven! Wilt u deze weer tot stand brengen?";
     Message[ french ] = "La connexion à la base de données a été annulée ! Rétablir la connexion ?";
     Message[ spanish ] = "¡Se eliminó la conexión a la base de datos! ¿Desea restablecerla?";
     Message[ italian ] = "Il collegamento al database è stato terminato. Volete ristabilirlo?";
@@ -1114,7 +1114,7 @@ QueryBox QUERY_CONNECTION_LOST
     Message[ portuguese_brazilian ] = "The connection to the database was lost! Reconnect";
     Message[ japanese ] = "ÃŞ°ÀÍŞ°½‚Ö‚ÌÚ‘±‚ÍØ’f‚³‚ê‚Ü‚µ‚½BÚ‘±‚µ‚È‚¨‚µ‚Ü‚·‚©B";
     Message[ korean ] = "The connection to the database was lost! Reconnect";
-    Message[ chinese_simplified ] = "The connection to the database was lost! Reconnect";
+    Message[ chinese_simplified ] = "ºÍÊı¾İ¿âµÄÁ¬½ÓÒÑ¾­ÖĞ¶Ï¡£ÒªÖØĞÂºÍÊı¾İ¿âÁ¬½Ó£¿";
     Message[ chinese_traditional ] = "©M¸ê®Æ®wªº³s½u¤w¸gÃö³¬¡C­n­«·s³s½u¡H";
     Message[ turkish ] = "The connection to the database was lost! Reconnect";
     Message[ arabic ] = "İõŞÏ ÇáÇÊÕÇá ÈŞÇÚÏÉ ÇáÈíÇäÇÊ. åá ÊÑíÏ ÅŞÇãÉ ÇáÇÊÕÇá ãÑÉ ÃÎÑì¿";
@@ -1125,45 +1125,45 @@ String STR_OPENTABLES_WARNINGS
     Text = "Warnungen aufgetreten.";
     Text [ english ] = "Warnings encountered.";
     Text [ english_us ] = "Warnings encountered.";
-    Text[ portuguese ] = "Warnings encountered.";
-    Text[ russian ] = "Warnings encountered.";
-    Text[ greek ] = "Warnings encountered.";
-    Text[ dutch ] = "Warnings encountered.";
-    Text[ french ] = "Warnings encountered.";
+    Text[ portuguese ] = "Encontradas advertências.";
+    Text[ russian ] = "Âîçíèêëè ïğåäóïğåæäåíèÿ.";
+    Text[ greek ] = "ĞáñïõóéÜóôçêáí ğñïåéäïğïéŞóåéò.";
+    Text[ dutch ] = "Waarschuwingen opgetreden.";
+    Text[ french ] = "Des avertissements sont survenus !";
     Text[ spanish ] = "Han aparecido advertencias.";
-    Text[ italian ] = "Warnings encountered.";
+    Text[ italian ] = "Avvertimenti";
     Text[ danish ] = "Warnings encountered.";
     Text[ swedish ] = "Varningar har förekommit.";
     Text[ polish ] = "Wyst¹pi³y ostrze¿enia.";
     Text[ portuguese_brazilian ] = "Warnings encountered.";
-    Text[ japanese ] = "Warnings encountered.";
+    Text[ japanese ] = "Œx‚ª‚ ‚è‚Ü‚µ‚½B";
     Text[ korean ] = "Warnings encountered.";
-    Text[ chinese_simplified ] = "Warnings encountered.";
-    Text[ chinese_traditional ] = "Warnings encountered.";
+    Text[ chinese_simplified ] = "³öÏÖÒ»¸ö¾¯¸æ¡£";
+    Text[ chinese_traditional ] = "µo¥X¤@­ÓÄµ§i¡C";
     Text[ turkish ] = "Warnings encountered.";
-    Text[ arabic ] = "Warnings encountered.";
+    Text[ arabic ] = "ÍÏËÊ ÊÍĞíÑÇÊ.";
 };
 
 String STR_OPENTABLES_WARNINGS_DETAILS
 {
     Text = "Beim Ermitteln der Tabellen wurden von der Datenbankverbindung Warnungen gemeldet.";
     Text [ english ] = "While retrieving the tables, warnings were provided by the connection.";
-    Text [ english_us ] = "While retrieving the tables, warnings were provided by the connection.";
-    Text[ portuguese ] = "While retrieving the tables, warnings were provided by the connection.";
-    Text[ russian ] = "While retrieving the tables, warnings were provided by the connection.";
-    Text[ greek ] = "While retrieving the tables, warnings were provided by the connection.";
-    Text[ dutch ] = "While retrieving the tables, warnings were provided by the connection.";
-    Text[ french ] = "While retrieving the tables, warnings were provided by the connection.";
+    Text [ english_us ] = "While retrieving the tables, warnings were reported by the database connection.";
+    Text[ portuguese ] = "Durante a localização das tabelas, a ligação da base de dados registou algumas advertências.";
+    Text[ russian ] = "Âî âğåìÿ îïğåäåëåíèÿ òàáëèö èç ñîåäèíåíèÿ áàçû äàííûõ âîçíèêëè ïğåäóïğåæäåíèÿ.";
+    Text[ greek ] = "ÊáôÜ ôçí äéáäéêáóßá áíåıñåóçò ôùí ğéíÜêùí äå÷ôŞêáìå ğñïåéäïğïéŞóåéò áğü ôçí óıíäåóç ôçò âÜóçò äåäïìİíùí.";
+    Text[ dutch ] = "Bij het openen van de tabellen werden waarschuwingen opgeroepen door de databaseverbinding.";
+    Text[ french ] = "Avertissements en provenance de la connexion (BD) durant le processus de récupération des tables.";
     Text[ spanish ] = "La conexión a la base de datos ha enviado advertencias durante la determinación de las tablas.";
-    Text[ italian ] = "While retrieving the tables, warnings were provided by the connection.";
+    Text[ italian ] = "Il collegamento al database ha inviato avvertenze durante il rilevamento delle tabelle.";
     Text[ danish ] = "While retrieving the tables, warnings were provided by the connection.";
-    Text[ swedish ] = "While retrieving the tables, warnings were provided by the connection.";
+    Text[ swedish ] = "Databasförbindelsen gav varningar medan tabellerna bestämdes.";
     Text[ polish ] = "W trakcie okreœlania tabel po³¹czenie bazy danych wysy³a³o ostrze¿enia.";
     Text[ portuguese_brazilian ] = "While retrieving the tables, warnings were provided by the connection.";
-    Text[ japanese ] = "While retrieving the tables, warnings were provided by the connection.";
+    Text[ japanese ] = "Ã°ÌŞÙ‚Ì“]‘—’†‚ÉAÃŞ°ÀÍŞ°½‚ÌÚ‘±‚©‚çŒx‚ª‚ ‚è‚Ü‚µ‚½B";
     Text[ korean ] = "While retrieving the tables, warnings were provided by the connection.";
-    Text[ chinese_simplified ] = "While retrieving the tables, warnings were provided by the connection.";
-    Text[ chinese_traditional ] = "While retrieving the tables, warnings were provided by the connection.";
+    Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡±í¸ñÊ±·¢³öÒ»¸öÊı¾İ¿âÁ¬½ÓµÄ¾¯¸æ¡£";
+    Text[ chinese_traditional ] = "¦b¦s¨úªí®æ®Éµo¥X¤@­Ó¸ê®Æ®w³s±µªºÄµ§i¡C";
     Text[ turkish ] = "While retrieving the tables, warnings were provided by the connection.";
-    Text[ arabic ] = "While retrieving the tables, warnings were provided by the connection.";
+    Text[ arabic ] = "Êã ÊÈáíÛ ÊÍĞíÑÇÊ ãä ÇÊÕÇá ŞÇÚÏÉ ÇáÈíÇäÇÊ ÃËäÇÁ ãÍÇæáÉ ÇÓÊÑÏÇÏ ÇáÌÏÇæá.";
 };
