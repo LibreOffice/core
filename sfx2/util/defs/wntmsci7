@@ -8519,3 +8519,4 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ?s_pType_com_sun_star_util_XCloseBroadcaster@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXCloseBroadcaster@util@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?s_pType_com_sun_star_util_XCloseable@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXCloseable@util@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx262082188@@YAXABVSbxVariableRef@@PAX@Z
+?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx13347382@@YAXABVSbxVariableRef@@PAX@Z
