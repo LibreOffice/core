@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellObj.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:05:48 $
+ *  last change:$Date: 2003-11-18 16:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,12 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
+import com.sun.star.table.XCell;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import ifc.sheet._XCellRangesQuery;
 
 /**
 * Test for object which is represented by service
@@ -124,6 +126,7 @@ import com.sun.star.uno.XInterface;
 public class ScCellObj extends TestCase {
         XSpreadsheetDocument xSheetDoc = null;
 
+
     /**
     * Creates Spreadsheet document.
     */
@@ -131,7 +134,7 @@ public class ScCellObj extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
-            log.println( "creating a Spreadsheet document" );
+            log.println( "Creating a Spreadsheet document" );
             xSheetDoc = SOF.createCalcDoc(null);
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
@@ -170,16 +173,20 @@ public class ScCellObj extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "Creating a test environment" );
 
+        XSpreadsheet oSheet = null;
+        XCell cell = null;
         try {
             log.println("Getting spreadsheet") ;
             XSpreadsheets oSheets = xSheetDoc.getSheets() ;
             XIndexAccess oIndexSheets = (XIndexAccess)
             UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+            oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
             log.println("Getting a cell from sheet") ;
             oObj = oSheet.getCellByPosition(2, 3) ;
+            cell = (XCell)UnoRuntime.queryInterface(XCell.class, oObj);
+
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException(
@@ -202,6 +209,36 @@ public class ScCellObj extends TestCase {
             "com.sun.star.text.XTextContent", "com.sun.star.text.TextField.URL");
         log.println( "    adding InstCreator object" );
         tEnv.addObjRelation( "XTEXTINFO", new InstCreator( xSheetDoc, tDsc ) );
+        // add the sheet
+        tEnv.addObjRelation("SHEET", oSheet);
+        // add expected results for the XCellRangesQuery interface test
+        String[]expectedResults = new String[7];
+
+        expectedResults[_XCellRangesQuery.QUERYCOLUMNDIFFERENCES] = "Sheet1.C4";
+        expectedResults[_XCellRangesQuery.QUERYCONTENTCELLS] = "";
+        expectedResults[_XCellRangesQuery.QUERYEMPTYCELLS] = "Sheet1.C4";
+        expectedResults[_XCellRangesQuery.QUERYFORMULACELLS] = "";
+        expectedResults[_XCellRangesQuery.QUERYINTERSECTION] = "";
+        expectedResults[_XCellRangesQuery.QUERYROWDIFFERENCES] = "Sheet1.C4";
+        expectedResults[_XCellRangesQuery.QUERYVISIBLECELLS] = "Sheet1.C4";
+        tEnv.addObjRelation("XCellRangesQuery.EXPECTEDRESULTS", expectedResults);
+        tEnv.addObjRelation("XCellRangesQuery.CREATEENTRIES", Boolean.TRUE);
+
+        // make entries in this cell at the interface test
+        tEnv.addObjRelation("XTextFieldsSupplier.MAKEENTRY", Boolean.TRUE);
+        tEnv.addObjRelation("MAKEENTRYINCELL", cell);
+
+        // for XSearchable amd XReplaceable interface test
+        tEnv.addObjRelation("XSearchable.MAKEENTRYINCELL", cell);
+        tEnv.addObjRelation("EXCLUDEFINDNEXT", Boolean.TRUE);
+
+        // for XFormulaQuery interface test
+        tEnv.addObjRelation("EXPECTEDDEPENDENTVALUES", new int[]{2,2,3,3});
+        tEnv.addObjRelation("EXPECTEDPRECEDENTVALUES", new int[]{0,3,0,0});
+        tEnv.addObjRelation("RANGEINDICES", new int[]{0,0});
+
+        // XTextFieldsSupplier
+        tEnv.addObjRelation("SPREADSHEET", xSheetDoc);
 
         XPropertySet PropSet = (XPropertySet)
                     UnoRuntime.queryInterface(XPropertySet.class, oObj);
