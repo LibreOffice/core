@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-08 15:54:06 $
+#   last change: $Author: vg $ $Date: 2003-06-12 09:47:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,12 @@ LIBTARGET=NO
 
 .IF "$(GUI)"=="WNT"
 
-
+.IF "$(COMEX)"=="9"
+.IF "$(PSDK_HOME)"!=""
+# Since the 02/2003 PSDK the "new" linker is needed here.
+LINK=$(WRAPCMD) "$(PSDK_HOME)$/Bin$/Win64$/LINK.EXE"
+.ENDIF
+.ENDIF
 
 SLOFILES=\
         $(SLO)$/CommandLineToArgvW.obj\
