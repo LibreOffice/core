@@ -15,20 +15,21 @@
 ..\%__SRC%\lib\libodbc*.dylib %_DEST%\lib%_EXT%\libodbc*.dylib
 ..\%__SRC%\lib\libdbase*.dylib %_DEST%\lib%_EXT%\libdbase*.dylib
 ..\%__SRC%\lib\libadabas*.dylib %_DEST%\lib%_EXT%\libadabas*.dylib
-..\%__SRC%\lib\libconnectivity*.* %_DEST%\lib%_EXT%\connectivity*.*
-..\%__SRC%\slb\connectivity*.* %_DEST%\lib%_EXT%\connectivity*.*
 
+..\%__SRC%\bin\dbt*.dll %_DEST%\bin%_EXT%\dbt*.dll
+..\%__SRC%\lib\libdbt* %_DEST%\lib%_EXT%\libdbt*
+..\%__SRC%\lib\idbt* %_DEST%\lib%_EXT%\idbt*
 
 mkdir: %_DEST%\inc%_EXT%\connectivity
 mkdir: %_DEST%\inc%_EXT%\connectivity\sdbcx
 
 hedabu: ..\inc\connectivity\CommonTools.hxx %_DEST%\inc%_EXT%\connectivity\CommonTools.hxx
+hedabu: ..\inc\connectivity\DateConversion.hxx %_DEST%\inc%_EXT%\connectivity\DateConversion.hxx
 hedabu: ..\inc\connectivity\PColumn.hxx %_DEST%\inc%_EXT%\connectivity\PColumn.hxx
 hedabu: ..\inc\connectivity\sqliterator.hxx %_DEST%\inc%_EXT%\connectivity\sqliterator.hxx
 hedabu: ..\inc\connectivity\sqlnode.hxx %_DEST%\inc%_EXT%\connectivity\sqlnode.hxx
 hedabu: ..\inc\connectivity\sqlparse.hxx %_DEST%\inc%_EXT%\connectivity\sqlparse.hxx
 hedabu: ..\%__SRC%\inc\connectivity\sqlbison.hxx %_DEST%\inc%_EXT%\connectivity\sqlbison.hxx
-hedabu: ..\inc\connectivity\simplepropertycontainer.hxx %_DEST%\inc%_EXT%\connectivity\simplepropertycontainer.hxx
 hedabu: ..\inc\connectivity\sdbcx\IRefreshable.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\IRefreshable.hxx
 hedabu: ..\inc\connectivity\sdbcx\VCatalog.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VCatalog.hxx
 hedabu: ..\inc\connectivity\sdbcx\VColumn.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VColumn.hxx
@@ -45,3 +46,6 @@ hedabu: ..\inc\connectivity\sdbcx\VTable.hxx %_DEST%\inc%_EXT%\connectivity\sdbc
 hedabu: ..\inc\connectivity\sdbcx\VView.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VView.hxx
 hedabu: ..\inc\connectivity\sdbcx\VTypeDef.hxx %_DEST%\inc%_EXT%\connectivity\sdbcx\VTypeDef.hxx
 
+hedabu: ..\inc\connectivity\dbexception.hxx %_DEST%\inc%_EXT%\connectivity\dbexception.hxx
+hedabu: ..\inc\connectivity\dbconversion.hxx %_DEST%\inc%_EXT%\connectivity\dbconversion.hxx
+hedabu: ..\inc\connectivity\dbtools.hxx %_DEST%\inc%_EXT%\connectivity\dbtools.hxx
