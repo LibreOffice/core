@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtuple.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:36:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ namespace basegfx
             @param rTup
             The 3D Tuple which will be copied.
         */
-        B3DTuple(const B3ITuple& rTup);
+        explicit B3DTuple(const B3ITuple& rTup);
 
         ~B3DTuple()
         {}
@@ -277,9 +277,9 @@ namespace basegfx
         B3DTuple& operator/=(double t)
         {
             const double fVal(1.0 / t);
-            mfX *= t;
-            mfY *= t;
-            mfZ *= t;
+            mfX *= fVal;
+            mfY *= fVal;
+            mfZ *= fVal;
             return *this;
         }
 
