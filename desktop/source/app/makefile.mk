@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-03 14:33:37 $
+#   last change: $Author: rt $ $Date: 2004-08-20 14:13:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,9 +108,6 @@ OBJFILES+= $(OBJ)$/icon_resource_ooo.obj \
 
 SRS1NAME=	desktop
 SRC1FILES=	desktop.src	
-
-SRC2FILES=	langselect.src
-SRS2NAME=	langselect
 
 # --- Targets ------------------------------------------------------
 
