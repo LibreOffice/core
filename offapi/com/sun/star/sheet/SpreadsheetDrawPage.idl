@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetDrawPage.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-27 11:03:14 $
+ *  last change: $Author: sab $ $Date: 2002-10-14 11:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@
     next x%
     </listing>
  */
-service GenericDrawPage
+service SpreadsheetDrawPage
 {
 
 
@@ -132,30 +132,8 @@ service GenericDrawPage
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
-    Revision 1.6  2001/10/26 08:45:35  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.5  2001/10/16 09:47:34  cl
-    #91486# added xml alien attributes
-
-    Revision 1.4  2000/12/21 08:35:06  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:42:41  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:55  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:12  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:20  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
+    Revision 1.1  2002/09/27 11:03:14  sab
+    #86769#; add a more simpler drawpage service for the spreadsheet drawpage
 
 =============================================================================*/
 #endif
