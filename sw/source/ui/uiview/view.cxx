@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:17:24 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,11 @@
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
+#endif
+
+// #107253#
+#ifndef _SWLINGUCONFIG_HXX
+#include <swlinguconfig.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -871,7 +876,9 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
 
     //! get lingu options without loading lingu DLL
     SvtLinguOptions aLinguOpt;
-    SvtLinguConfig().GetOptions( aLinguOpt );
+
+    // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
+    SwLinguConfig().GetOptions( aLinguOpt );
 
     aUsrPref.SetOnlineSpell( aLinguOpt.bIsSpellAuto );
     aUsrPref.SetHideSpell( aLinguOpt.bIsSpellHideMarkings );
