@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:28:08 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,7 +410,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
             Reference<XResultSet> xRes = xMeta->getTableTypes();
             if(xRes.is())
             {
-                ::rtl::OUString sView = ::rtl::OUString::createFromAscii("VIEW");
+                ::rtl::OUString sView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
                 Reference<XRow> xRow(xRes,UNO_QUERY);
                 while(xRes->next())
                 {
