@@ -115,7 +115,6 @@ hedabu: ..\inc\outdev3d.hxx %_DEST%\inc%_EXT%\vcl\outdev3d.hxx
 hedabu: ..\inc\pal.hxx %_DEST%\inc%_EXT%\vcl\pal.hxx
 hedabu: ..\inc\pointr.hxx %_DEST%\inc%_EXT%\vcl\pointr.hxx
 hedabu: ..\inc\poly.hxx %_DEST%\inc%_EXT%\vcl\poly.hxx
-hedabu: ..\inc\ppdparser.hxx %_DEST%\inc%_EXT%\vcl\ppdparser.hxx
 hedabu: ..\inc\print.hxx %_DEST%\inc%_EXT%\vcl\print.hxx
 hedabu: ..\inc\prndlg.hxx %_DEST%\inc%_EXT%\vcl\prndlg.hxx
 hedabu: ..\inc\prntypes.hxx %_DEST%\inc%_EXT%\vcl\prntypes.hxx
@@ -148,7 +147,6 @@ hedabu: ..\inc\split.hxx %_DEST%\inc%_EXT%\vcl\split.hxx
 hedabu: ..\inc\splitwin.hxx %_DEST%\inc%_EXT%\vcl\splitwin.hxx
 hedabu: ..\inc\status.hxx %_DEST%\inc%_EXT%\vcl\status.hxx
 hedabu: ..\inc\stdtext.hxx %_DEST%\inc%_EXT%\vcl\stdtext.hxx
-hedabu: ..\inc\strhelper.hxx %_DEST%\inc%_EXT%\vcl\strhelper.hxx
 hedabu: ..\inc\sv.h %_DEST%\inc%_EXT%\vcl\sv.h
 hedabu: ..\inc\svapp.hxx %_DEST%\inc%_EXT%\vcl\svapp.hxx
 hedabu: ..\inc\svsys.h %_DEST%\inc%_EXT%\vcl\svsys.h

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdeint.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
+ *  last change: $Author: pl $ $Date: 2002-03-01 12:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #include <salbmp.hxx>
 #include <salframe.hxx>
 #include <soicon.hxx>
-#include <strhelper.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 
