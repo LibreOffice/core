@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 14:05:30 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:05:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,23 +101,18 @@ SLOFILES=\
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
-        $(SALLIB)	\
-        $(VOSLIB)	\
-        $(CPPULIB) 	\
         $(CPPUHELPERLIB) \
+        $(CPPULIB) 	\
+        $(SALLIB)	\
         -lX11
 
 SHL1DEPN=
 SHL1IMPLIB=		i$(SHL1TARGET) 
 SHL1OBJS=		$(SLOFILES)
 
-APP1NOSAL=TRUE
-APP1TARGET=testunxcb
-APP1OBJS=$(SLO)$/test_unxcb.obj
-APP1STDLIBS=\
-        $(CPPULIB)			\
-        $(CPPUHELPERLIB)	\
-        $(SALLIB)
+SHL1VERSIONMAP=exports.map
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
 
 .ENDIF		# "$(OS)"=="MACOSX"
 
