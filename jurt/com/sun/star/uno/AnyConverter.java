@@ -514,7 +514,13 @@ public class AnyConverter
                     return object;
                 break;
             case TypeClass.INTERFACE_value:
-                if (tc == TypeClass.INTERFACE_value)
+                // Because object is a class, not an interface, it is
+                // controversial what kind of Type "new Type(object.class)"
+                // above should return (UNKNOWN or INTERFACE), so that we should
+                // not check here for "tc == TypeClass.INTERFACE_value".
+                // Instead, we check whether object (indirectly) derives from
+                // XInterface:
+                if (object instanceof XInterface)
                     return UnoRuntime.queryInterface( destType, object );
                 break;
             case TypeClass.STRUCT_value:
