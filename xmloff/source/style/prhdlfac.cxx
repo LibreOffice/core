@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-04 18:14:25 $
+ *  last change: $Author: dvo $ $Date: 2002-02-06 14:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@
 
 #ifndef _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX
 #include "NamedBoolPropertyHdl.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
+#include "XMLConstantsPropertyHandler.hxx"
 #endif
 
 #ifndef _XMLOFF_PROPERTYHANDLER_CROSSEDOUTTYPES_HXX
@@ -183,18 +187,24 @@ SvXMLEnumMapEntry __READONLY_DATA aXML_HorizontalAdjust_Enum[] =
 };
 
 // aXML_WritingDirection_Enum is used with and without 'page'
-// attribute, so you'll find uses of aXML_WritingDirection_Enum as
-// well as &(aXML_WritingDirection_Enum[1])
+// attribute, so you'll find uses of aXML_WritingDirection_Enum
+// directly, as well as &(aXML_WritingDirection_Enum[1])
 SvXMLEnumMapEntry __READONLY_DATA aXML_WritingDirection_Enum[] =
 {
-    { XML_PAGE,     text::WritingMode2_PAGE },
-    { XML_LR_TB,    text::WritingMode2_LR_TB },
-    { XML_RL_TB,    text::WritingMode2_LR_TB },
-    { XML_TB_RL,    text::WritingMode2_TB_RL },
-    { XML_TB_LR,    text::WritingMode2_TB_LR },
-    { XML_LR,       text::WritingMode2_LR_TB },
-    { XML_RL,       text::WritingMode2_LR_TB },
-    { XML_TB,       text::WritingMode2_TB_RL },
+    // aXML_WritingDirection_Enum
+    { XML_PAGE,     text::WritingMode2::PAGE },
+
+    // &(aXML_WritingDirection_Enum[1])
+    { XML_LR_TB,    text::WritingMode2::LR_TB },
+    { XML_RL_TB,    text::WritingMode2::LR_TB },
+    { XML_TB_RL,    text::WritingMode2::TB_RL },
+    { XML_TB_LR,    text::WritingMode2::TB_LR },
+
+    // alternative names of the above, as accepted by XSL
+    { XML_LR,       text::WritingMode2::LR_TB },
+    { XML_RL,       text::WritingMode2::LR_TB },
+    { XML_TB,       text::WritingMode2::TB_RL },
+
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -450,14 +460,14 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 
                 pPropHdl = new DrawAspectHdl;
                 break;
             case XML_TYPE_TEXT_WRITING_MODE:
-                pPropHdl = new XMLEnumPropertyHdl(
+                pPropHdl = new XMLConstantsPropertyHandler(
                     &(aXML_WritingDirection_Enum[1]),
-                    ::getCppuType((const text::WritingMode2*)0) );
+                    XML_TB_LR);
                 break;
             case XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT:
-                pPropHdl = new XMLEnumPropertyHdl(
+                pPropHdl = new XMLConstantsPropertyHandler(
                     aXML_WritingDirection_Enum,
-                    ::getCppuType((const text::WritingMode2*)0) );
+                    XML_PAGE);
                 break;
         }
 
