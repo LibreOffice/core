@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-29 12:15:56 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include "appdata.hxx"
 #include "workwin.hxx"
 #include "topfrm.hxx"
-#include "clientsh.hxx"
+//#include "clientsh.hxx"
 #include "arrdecl.hxx"
 #include "viewfrm.hxx"
 #include "module.hxx"
@@ -79,7 +79,7 @@
 #include "imgmgr.hxx"
 #include "dockwin.hxx"
 #include "viewsh.hxx"
-#include "ipenv.hxx"
+//#include "ipenv.hxx"
 #include "splitwin.hxx"
 #include "msgpool.hxx"
 #include "stbmgr.hxx"
@@ -413,12 +413,13 @@ void SfxWorkWindow::Sort_Impl()
 //====================================================================
 // ctor f"ur workwin eines Frames
 
-SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( Window *pWin, SfxFrame *pFrm )
+SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( Window *pWin, SfxFrame *pFrm, SfxFrame* pMaster )
     : SfxWorkWindow(
         pWin,
         pFrm->GetCurrentViewFrame()->GetBindings(),
         pFrm->GetParentFrame() ? pFrm->GetParentFrame()->GetWorkWindow_Impl() : NULL )
     , pFrame( pFrm )
+    , pMasterFrame( pMaster )
 {
     pConfigShell = pFrm->GetCurrentViewFrame();
     if ( pConfigShell && pConfigShell->GetObjectShell() )
@@ -450,7 +451,7 @@ SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( Window *pWin, SfxFrame *pFrm )
 
 //====================================================================
 // ctor f"ur workwin eines InPlaceObjects.
-
+#if 0
 SfxIPWorkWin_Impl::SfxIPWorkWin_Impl( WorkWindow *pWin, SfxBindings& rB,
                         SfxInPlaceEnv_Impl *pE) :
     SfxWorkWindow(pWin, rB),
@@ -478,7 +479,7 @@ SfxIPWorkWin_Impl::SfxIPWorkWin_Impl( WorkWindow *pWin, SfxBindings& rB,
     if ( !pParent )
         aStatBar.bOn = sal_True;
 }
-
+#endif
 //====================================================================
 // ctor der Basisklasse
 
@@ -693,7 +694,7 @@ void SfxWorkWindow::ArrangeChilds_Impl()
 // steht daf"ur als Fl"ache das Rectangle zur Verf"ugung, das am
 // InPlaceClient als TopOuterRect abgefragt werden kann. Diese wird
 // durch den von Arrange_Impl() errechneten SvBorder verringert.
-
+#if 0
 void SfxIPWorkWin_Impl::ArrangeChilds_Impl()
 {
     aClientArea = GetTopRect_Impl();
@@ -713,7 +714,7 @@ void SfxIPWorkWin_Impl::ArrangeChilds_Impl()
         pEnv->GetContainerEnv()->SetTopToolSpacePixel(aBorder);
     ArrangeAutoHideWindows( NULL );
 }
-
+#endif
 //====================================================================
 // Virtuelle Methode zum Anordnen der Childfenster. Bei einer Task
 // steht daf"ur als Fl"ache die OutputSize des TaskWindows zur Verf"ugung.
@@ -722,6 +723,14 @@ void SfxIPWorkWin_Impl::ArrangeChilds_Impl()
 void SfxFrameWorkWin_Impl::ArrangeChilds_Impl()
 {
     if ( pFrame->IsClosing_Impl() || bLocked )
+        return;
+
+    SfxInPlaceClient *pClient = 0;
+    SfxViewFrame *pF = pFrame->GetCurrentViewFrame();
+    if ( pF && pF->GetViewShell() )
+        pClient = pF->GetViewShell()->GetIPClient();
+
+    if ( pClient )
         return;
 
     aClientArea = GetTopRect_Impl();
@@ -742,15 +751,8 @@ void SfxFrameWorkWin_Impl::ArrangeChilds_Impl()
     // Das Objekt setzt, wenn es seine UI-Tools wegnimmt, den SetAppBorder nicht,
     // damit kein ObjectBar-Zappeln entsteht.
     // (->SfxInPlaceEnv_Impl::ArrangeChilds_Impl())
-    SfxInPlaceClient *pClient = 0;
-    SfxViewFrame *pF = pFrame->GetCurrentViewFrame();
-    if ( pF && pF->GetViewShell() )
-        pClient = pF->GetViewShell()->GetIPClient();
 
-    if ( pClient )
-        pClient->GetEnv()->SetTopToolFramePixel( aBorder );
-    else
-        pFrame->SetToolSpaceBorderPixel_Impl( aBorder );
+    pMasterFrame->SetToolSpaceBorderPixel_Impl( aBorder );
 
     ArrangeAutoHideWindows( NULL );
 }
@@ -1317,7 +1319,7 @@ void SfxFrameWorkWin_Impl::UpdateObjectBars_Impl()
 
     ShowChilds_Impl();
 }
-
+#if 0
 void SfxIPWorkWin_Impl::UpdateObjectBars_Impl()
 {
     SfxWorkWindow::UpdateObjectBars_Impl();
@@ -1327,7 +1329,7 @@ void SfxIPWorkWin_Impl::UpdateObjectBars_Impl()
         ShowChilds_Impl();
     }
 }
-
+#endif
 SfxStatusBarManager* SfxWorkWindow::GetStatusBarManager_Impl()
 {
     return NULL;
@@ -1678,7 +1680,7 @@ void SfxWorkWindow::ResetStatusBar_Impl()
 //--------------------------------------------------------------------
 void SfxWorkWindow::SetStatusBar_Impl( const ResId& rResId, SfxShell *pSh, SfxBindings& rBindings )
 {
-    if ( rResId.GetId() && bShowStatusBar && nOrigMode != SFX_VISIBILITY_UNVISIBLE )
+    if ( rResId.GetId() && bShowStatusBar && IsVisible_Impl() )
     {
         aStatBar.nId = rResId.GetId();
     }
@@ -1686,7 +1688,7 @@ void SfxWorkWindow::SetStatusBar_Impl( const ResId& rResId, SfxShell *pSh, SfxBi
 
 void SfxWorkWindow::SetTempStatusBar_Impl( BOOL bSet )
 {
-    if ( aStatBar.bTemp != bSet && bShowStatusBar && nOrigMode != SFX_VISIBILITY_UNVISIBLE )
+    if ( aStatBar.bTemp != bSet && bShowStatusBar && IsVisible_Impl() )
     {
         BOOL bOn = FALSE;
         BOOL bReset = FALSE;
@@ -1752,26 +1754,35 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
 }
 
 //------------------------------------------------------------------------
-
+/*
 void SfxWorkWindow::SetObjectBarVisibility_Impl( USHORT nMask )
 {
     switch( nMask )
     {
         case SFX_VISIBILITY_UNVISIBLE:
         case SFX_VISIBILITY_STANDARD:
-        case SFX_VISIBILITY_PLUGSERVER:
-        case SFX_VISIBILITY_PLUGCLIENT:
         case SFX_VISIBILITY_CLIENT:
         case SFX_VISIBILITY_SERVER:
             nOrigMode = nMask;
     }
     if (nMask != nUpdateMode)
         nUpdateMode = nMask;
+}*/
+
+void SfxWorkWindow::MakeVisible_Impl( BOOL bVis )
+{
+    if ( bVis )
+        nOrigMode = SFX_VISIBILITY_STANDARD;
+    else
+        nOrigMode = SFX_VISIBILITY_UNVISIBLE;
+
+    if ( nOrigMode != nUpdateMode)
+        nUpdateMode = nOrigMode;
 }
 
-BOOL SfxWorkWindow::IsContainer_Impl() const
+BOOL SfxWorkWindow::IsVisible_Impl()
 {
-    return nUpdateMode == SFX_VISIBILITY_CLIENT;
+    return nOrigMode != SFX_VISIBILITY_UNVISIBLE;
 }
 
 //------------------------------------------------------------------------
@@ -2605,19 +2616,19 @@ Rectangle SfxWorkWindow::GetTopRect_Impl()
 
 Rectangle SfxFrameWorkWin_Impl::GetTopRect_Impl()
 {
-    return pFrame->GetTopOuterRectPixel_Impl();
+    return pMasterFrame->GetTopOuterRectPixel_Impl();
 }
 
 //------------------------------------------------------------------------
 // Virtuelle Methode, die die Gr"o\se der Fl"ache (client area) des parent
 // windows liefert, in der Child-Fenster angeordnet werden k"onnen.
 // in der ClientArea des parent findet.
-
+#if 0
 Rectangle SfxIPWorkWin_Impl::GetTopRect_Impl()
 {
     return pEnv->GetContainerEnv()->GetTopOuterRectPixel();
 }
-
+#endif
 //------------------------------------------------------------------------
 // Virtuelle Methode, um herauszufinden, ob ein Child-Fenster noch Platz
 // in der ClientArea des parent findet.
@@ -2635,7 +2646,7 @@ BOOL SfxWorkWindow::RequestTopToolSpacePixel_Impl( SvBorder aBorder )
 //------------------------------------------------------------------------
 // Implementation am InPlaceObject: benutzt die SO-Methode, um am InPlaceClient
 // um Platz nachzusuchen.
-
+#if 0
 BOOL SfxIPWorkWin_Impl::RequestTopToolSpacePixel_Impl( SvBorder aBorder )
 {
     if ( !IsDockingAllowed() )
@@ -2644,12 +2655,12 @@ BOOL SfxIPWorkWin_Impl::RequestTopToolSpacePixel_Impl( SvBorder aBorder )
         return pEnv->GetContainerEnv()->RequestTopToolSpacePixel( aBorder );
 }
 
-
 void SfxIPWorkWin_Impl::SaveStatus_Impl(SfxChildWindow *pChild, const SfxChildWinInfo &rInfo)
 {
     if ( pEnv->IsInternalInPlace() )
         SfxWorkWindow::SaveStatus_Impl( pChild, rInfo );
 }
+#endif
 
 void SfxWorkWindow::SaveStatus_Impl(SfxChildWindow *pChild, const SfxChildWinInfo &rInfo)
 {
