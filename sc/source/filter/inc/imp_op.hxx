@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:18:38 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,11 +187,7 @@ protected:
     String                  maPassword;
 
     NameBuffer*             pExtNameBuff;       // ... externe Namen (Ind.-Basis=1)
-    _ScRangeListTabs*       pPrintRanges;
-    _ScRangeListTabs*       pPrintTitles;
     ExcelToSc*              pFormConv;          // Formel-Konverter
-
-    SfxItemSet*             pStyleSheetItemSet; // aktuelle Seitenvorlage
 
     OutlineBuffer*          pColOutlineBuff;
     OutlineBuffer*          pRowOutlineBuff;
@@ -209,14 +205,6 @@ protected:
     BOOL                    bTabTruncated;      // wenn Bereichsueberschreitung zum
                                                 //  Abschneiden von Zellen fuehrt
 
-    sal_Bool                bFitToPage;         /// Stores fit to page setting from WSBOOL record.
-    sal_Bool                bHasHeader;         /// Stores whether header for current sheet exists.
-    sal_Bool                bHasFooter;         /// Stores whether footer for current sheet exists.
-    sal_Bool                bHasTopMargin;      /// Stores whether top margin for current sheet exists.
-    sal_Bool                bHasBottomMargin;   /// Stores whether bottom margin for current sheet exists.
-    sal_Bool                bHasLeftMargin;     /// Stores whether left margin for current sheet exists.
-    sal_Bool                bHasRightMargin;    /// Stores whether right margin for current sheet exists.
-
     // Record-Funktionen
     void                    Dimensions( void );             // 0x00
     void                    Blank25( void );                // 0x01
@@ -232,12 +220,7 @@ protected:
     void                    DocProtect( void );             // 0x12
     void                    Protect( void );                // 0x12 Sheet Protection
     BOOL                    Password( void );               // 0x13
-    void                    Header( void );                 // 0x14
-    void                    Footer( void );                 // 0x15
     void                    Externsheet( void );            // 0x17
-    void                    Name25( void );                 // 0x18
-    void                    Verticalpagebreaks( void );     // 0x1A
-    void                    Horizontalpagebreaks( void );   // 0x1B
     void                    Note( void );                   // 0x1C
     void                    Selection( void );              // 0x1D
     void                    Columndefault( void );          // 0x20
@@ -246,12 +229,6 @@ protected:
     void                    Externname25( void );           // 0x23
     void                    Colwidth( void );               // 0x24
     void                    Defrowheight2( void );          // 0x25
-    void                    Leftmargin( void );             // 0x26
-    void                    Rightmargin( void );            // 0x27
-    void                    Topmargin( void );              // 0x28
-    void                    Bottommargin( void );           // 0x29
-    void                    Printheaders( void );           // 0x2A
-    void                    Prntgrdlns( void );             // 0x2B
     BOOL                    Filepass( void );               // 0x2F
 //      void                Window1( void );                // 0x3D
     void                    Pane( void );                   // 0x41
@@ -263,9 +240,6 @@ protected:
     void                    Colinfo( void );                // 0x7D
     void                    Rk( void );                     // 0x7E
     void                    Wsbool( void );                 // 0x81
-    void                    Gridset( void );                // 0x82
-    void                    Hcenter( void );                // 0x83
-    void                    Vcenter( void );                // 0x84
     void                    Boundsheet( void );             // 0x85
     void                    Country( void );                // 0x8C
     void                    Hideobj( void );                // 0x8D
@@ -273,8 +247,6 @@ protected:
     void                    Palette( void );                // 0x92
     void                    Standardwidth( void );          // 0x99
     void                    Scl( void );                    // 0xA0
-    void                    Setup( void );                  // 0xA1
-    void                    Setup5( void );                 // 0xA1
     void                    Shrfmla( void );                // 0xBC
     void                    Mulrk( void );                  // 0xBD
     void                    Mulblank( void );               // 0xBE
@@ -288,7 +260,6 @@ protected:
                                                             // 0x0207 -> 0x07
     void                    Row34( void );                  // 0x0208
     void                    Bof3( void );                   // 0x0209
-    void                    Name34( void );                 // 0x0218
     void                    Array34( void );                // 0x0221
     void                    Externname34( void );           // 0x0223
     void                    Defrowheight345( void );        // 0x0225
@@ -367,11 +338,7 @@ protected:
     void                    NeueTabelle( void );
     const ScTokenArray*     ErrorToFormula( BYTE bErrOrVal, BYTE nError,
                                 double& rVal );
-    void                    GetHF( BOOL bHeader );
-    virtual void            GetHFString( String& rStr );
 
-                                // nSide -> IMPEXC_MARGINSIDE_*
-    String                  GetPageStyleName( UINT16 nTab );
     EditTextObject*         CreateFormText( BYTE, const String&, const UINT16 );
     virtual void            EndAllChartObjects( void );     // -> excobj.cxx
 
@@ -380,12 +347,6 @@ protected:
     virtual void            SetTextCell( const UINT16 nCol, const UINT16 nRow,
                                         String& rUnconvertedText, const UINT16 nXF );
                                             // Achtung: rUnconvertedText wird moeglicherweise veraendert
-
-    /** Sets a margin item into an item set.
-        @param rItemSet  The destination item set.
-        @param fMargin  The Excel margin value in inches.
-        @param eType  The margin type. */
-    void                    SetMarginItem( SfxItemSet& rItemSet, double fMarginInch, XclMarginType eType );
 
 public:
                             ImportExcel( SvStream&, ScDocument*, const String& rDocUrl );
