@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-21 12:02:52 $
+ *  last change: $Author: fme $ $Date: 2002-03-19 09:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,11 @@ xub_StrLen SwFont::GetCapitalBreak( ViewShell *pSh, const OutputDevice *pOut,
     aInfo.SetDrawSpace( FALSE );
     aInfo.SetKern( CheckKerning() );
     aInfo.SetKanaComp( pScript ? 0 : 100 );
+
+#ifdef VERTICAL_LAYOUT
+    aInfo.SetFont( this );
+#endif
+
     SwDoGetCapitalBreak aDo( aInfo, nTextWidth, pExtra );
     DoOnCapitals( aDo );
     return aDo.GetBreak();
