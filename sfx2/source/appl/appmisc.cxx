@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: as $ $Date: 2000-12-18 14:18:57 $
+ *  last change: $Author: mba $ $Date: 2000-12-20 08:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@
 #include <unotools/configmgr.hxx>
 #endif
 
+#include <unotools/localfilehelper.hxx>
 #include <osl/file.hxx>
 
 #include "sfxresid.hxx"
@@ -1176,6 +1177,7 @@ PopupMenu* SfxAppData_Impl::GetPopupMenu( sal_uInt16 nSID, sal_Bool bBig, sal_Bo
             break;
     }
 
+    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sKey, sKey );
     if( ppMenu && ( !*ppMenu || bNew ) )
     {
         INetURLObject aObj( sKey );
