@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-25 11:12:34 $
+ *  last change: $Author: mt $ $Date: 2002-09-04 08:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1681,13 +1681,13 @@ VCLXMessageBox::~VCLXMessageBox()
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XMessageBox*, this ) );
-    return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
+    return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXMessageBox )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox>* ) NULL ),
-    VCLXWindow::getTypes()
+    VCLXTopWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 void VCLXMessageBox::setCaptionText( const ::rtl::OUString& rText ) throw(::com::sun::star::uno::RuntimeException)

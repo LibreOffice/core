@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-25 11:11:20 $
+ *  last change: $Author: mt $ $Date: 2002-09-04 08:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,7 +509,7 @@ public:
 //  class VCLXMessageBox
 //  ----------------------------------------------------
 class VCLXMessageBox :  public ::com::sun::star::awt::XMessageBox,
-                        public VCLXWindow
+                        public VCLXTopWindow
 {
 public:
                         VCLXMessageBox();
