@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:03:34 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,25 +218,25 @@ TabPage TP_OPTCAPTION_PAGE
     String STR_TABLE
     {
         Text [ de ] = "%PRODUCTNAME Writer Tabelle" ;
-        Text [ en-US ] = "%PRODUCTNAME Writer table";
+        Text [ en-US ] = "%PRODUCTNAME Writer Table";
         Text [ x-comment ] = " ";
     };
     String STR_FRAME
     {
         Text [ de ] = "%PRODUCTNAME Writer Rahmen" ;
-        Text [ en-US ] = "%PRODUCTNAME Writer frame";
+        Text [ en-US ] = "%PRODUCTNAME Writer Frame";
         Text [ x-comment ] = " ";
     };
     String STR_GRAPHIC
     {
-        Text [ de ] = "%PRODUCTNAME Writer Grafik" ;
-        Text [ en-US ] = "%PRODUCTNAME Writer picture";
+        Text [ de ] = "%PRODUCTNAME Writer Bild" ;
+        Text [ en-US ] = "%PRODUCTNAME Writer Picture";
         Text [ x-comment ] = " ";
     };
     String STR_OLE
     {
         Text [ de ] = "Andere OLE-Objekte" ;
-        Text [ en-US ] = "Other OLE objects";
+        Text [ en-US ] = "Other OLE Objects";
         Text [ x-comment ] = " ";
     };
 
