@@ -2,9 +2,9 @@
  *
  *  $RCSfile: text.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:46 $
+ *  last change: $Author: lo $ $Date: 2004-02-19 13:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,127 +138,129 @@ namespace DOM
          // --- overrides for XNode base
         virtual OUString SAL_CALL getNodeName()
             throw (RuntimeException);
-        virtual OUString SAL_CALL getNodeValue()
-            throw (RuntimeException);
 
         // --- resolve uno inheritance problems...
         // --- delegation for XNde base.
         virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
             throw (RuntimeException)
         {
-            return CNode::appendChild(newChild);
+            return CCharacterData::appendChild(newChild);
         }
         virtual Reference< XNode > SAL_CALL cloneNode(sal_Bool deep)
             throw (RuntimeException)
         {
-            return CNode::cloneNode(deep);
+            return CCharacterData::cloneNode(deep);
         }
         virtual Reference< XNamedNodeMap > SAL_CALL getAttributes()
             throw (RuntimeException)
         {
-            return CNode::getAttributes();
+            return CCharacterData::getAttributes();
         }
         virtual Reference< XNodeList > SAL_CALL getChildNodes()
             throw (RuntimeException)
         {
-            return CNode::getChildNodes();
+            return CCharacterData::getChildNodes();
         }
         virtual Reference< XNode > SAL_CALL getFirstChild()
             throw (RuntimeException)
         {
-            return CNode::getFirstChild();
+            return CCharacterData::getFirstChild();
         }
         virtual Reference< XNode > SAL_CALL getLastChild()
             throw (RuntimeException)
         {
-            return CNode::getLastChild();
+            return CCharacterData::getLastChild();
         }
         virtual OUString SAL_CALL getLocalName()
             throw (RuntimeException)
         {
-            return CNode::getLocalName();
+            return CCharacterData::getLocalName();
         }
         virtual OUString SAL_CALL getNamespaceURI()
             throw (RuntimeException)
         {
-            return CNode::getNamespaceURI();
+            return CCharacterData::getNamespaceURI();
         }
         virtual Reference< XNode > SAL_CALL getNextSibling()
             throw (RuntimeException)
         {
-            return CNode::getNextSibling();
+            return CCharacterData::getNextSibling();
         }
         virtual NodeType SAL_CALL getNodeType()
             throw (RuntimeException)
         {
-            return CNode::getNodeType();
+            return CCharacterData::getNodeType();
+        }
+        virtual OUString SAL_CALL getNodeValue() throw (RuntimeException)
+        {
+            return CCharacterData::getNodeValue();
         }
         virtual Reference< XDocument > SAL_CALL getOwnerDocument()
             throw (RuntimeException)
         {
-            return CNode::getOwnerDocument();
+            return CCharacterData::getOwnerDocument();
         }
         virtual Reference< XNode > SAL_CALL getParentNode()
             throw (RuntimeException)
         {
-            return CNode::getParentNode();
+            return CCharacterData::getParentNode();
         }
         virtual OUString SAL_CALL getPrefix()
             throw (RuntimeException)
         {
-            return CNode::getPrefix();
+            return CCharacterData::getPrefix();
         }
         virtual Reference< XNode > SAL_CALL getPreviousSibling()
             throw (RuntimeException)
         {
-            return CNode::getPreviousSibling();
+            return CCharacterData::getPreviousSibling();
         }
         virtual sal_Bool SAL_CALL hasAttributes()
             throw (RuntimeException)
         {
-            return CNode::hasAttributes();
+            return CCharacterData::hasAttributes();
         }
         virtual sal_Bool SAL_CALL hasChildNodes()
             throw (RuntimeException)
         {
-            return CNode::hasChildNodes();
+            return CCharacterData::hasChildNodes();
         }
         virtual Reference< XNode > SAL_CALL insertBefore(
                 const Reference< XNode >& newChild, const Reference< XNode >& refChild)
             throw (RuntimeException)
         {
-            return CNode::insertBefore(newChild, refChild);
+            return CCharacterData::insertBefore(newChild, refChild);
         }
         virtual sal_Bool SAL_CALL isSupported(const OUString& feature, const OUString& ver)
             throw (RuntimeException)
         {
-            return CNode::isSupported(feature, ver);
+            return CCharacterData::isSupported(feature, ver);
         }
         virtual void SAL_CALL normalize()
             throw (RuntimeException)
         {
-            CNode::normalize();
+            CCharacterData::normalize();
         }
         virtual Reference< XNode > SAL_CALL removeChild(const Reference< XNode >& oldChild)
             throw (RuntimeException)
         {
-            return CNode::removeChild(oldChild);
+            return CCharacterData::removeChild(oldChild);
         }
         virtual Reference< XNode > SAL_CALL replaceChild(
                 const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
             throw (RuntimeException)
         {
-            return CNode::replaceChild(newChild, oldChild);
+            return CCharacterData::replaceChild(newChild, oldChild);
         }
         virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
             throw (RuntimeException)
         {
-            return CNode::setNodeValue(nodeValue);
+            return CCharacterData::setNodeValue(nodeValue);
         }
         virtual void SAL_CALL setPrefix(const OUString& prefix)
             throw (RuntimeException)
         {
-            return CNode::setPrefix(prefix);
+            return CCharacterData::setPrefix(prefix);
         }
 
     };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: text.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:45 $
+ *  last change: $Author: lo $ $Date: 2004-02-19 13:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,5 @@ namespace DOM
     {
         return OUString::createFromAscii("#text");
     }
-    OUString SAL_CALL CText::getNodeValue() throw (RuntimeException)
-    {        
-        return getData();
-    }
+
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: characterdata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-16 16:41:46 $
+ *  last change: $Author: lo $ $Date: 2004-02-19 13:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,136 @@ namespace DOM
         */
         virtual OUString SAL_CALL subStringData(sal_Int32 offset, sal_Int32 count)
             throw (RuntimeException);
+
+        // --- delegation for XNode base.
+        virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
+            throw (RuntimeException)
+        {
+            return CNode::appendChild(newChild);
+        }
+        virtual Reference< XNode > SAL_CALL cloneNode(sal_Bool deep)
+            throw (RuntimeException)
+        {
+            return CNode::cloneNode(deep);
+        }
+        virtual Reference< XNamedNodeMap > SAL_CALL getAttributes()
+            throw (RuntimeException)
+        {
+            return CNode::getAttributes();
+        }
+        virtual Reference< XNodeList > SAL_CALL getChildNodes()
+            throw (RuntimeException)
+        {
+            return CNode::getChildNodes();
+        }
+        virtual Reference< XNode > SAL_CALL getFirstChild()
+            throw (RuntimeException)
+        {
+            return CNode::getFirstChild();
+        }
+        virtual Reference< XNode > SAL_CALL getLastChild()
+            throw (RuntimeException)
+        {
+            return CNode::getLastChild();
+        }
+        virtual OUString SAL_CALL getLocalName()
+            throw (RuntimeException)
+        {
+            return CNode::getLocalName();
+        }
+        virtual OUString SAL_CALL getNamespaceURI()
+            throw (RuntimeException)
+        {
+            return CNode::getNamespaceURI();
+        }
+        virtual Reference< XNode > SAL_CALL getNextSibling()
+            throw (RuntimeException)
+        {
+            return CNode::getNextSibling();
+        }
+        virtual OUString SAL_CALL getNodeName()
+            throw (RuntimeException)
+        {
+            return CNode::getNodeName();
+        }
+        virtual NodeType SAL_CALL getNodeType()
+            throw (RuntimeException)
+        {
+            return CNode::getNodeType();
+        }
+        virtual OUString SAL_CALL getNodeValue()
+            throw (RuntimeException)
+        {
+            return getData();
+        }
+        virtual Reference< XDocument > SAL_CALL getOwnerDocument()
+            throw (RuntimeException)
+        {
+            return CNode::getOwnerDocument();
+        }
+        virtual Reference< XNode > SAL_CALL getParentNode()
+            throw (RuntimeException)
+        {
+            return CNode::getParentNode();
+        }
+        virtual OUString SAL_CALL getPrefix()
+            throw (RuntimeException)
+        {
+            return CNode::getPrefix();
+        }
+        virtual Reference< XNode > SAL_CALL getPreviousSibling()
+            throw (RuntimeException)
+        {
+            return CNode::getPreviousSibling();
+        }
+        virtual sal_Bool SAL_CALL hasAttributes()
+            throw (RuntimeException)
+        {
+            return CNode::hasAttributes();
+        }
+        virtual sal_Bool SAL_CALL hasChildNodes()
+            throw (RuntimeException)
+        {
+            return CNode::hasChildNodes();
+        }
+        virtual Reference< XNode > SAL_CALL insertBefore(
+                const Reference< XNode >& newChild, const Reference< XNode >& refChild)
+            throw (RuntimeException)
+        {
+            return CNode::insertBefore(newChild, refChild);
+        }
+        virtual sal_Bool SAL_CALL isSupported(const OUString& feature, const OUString& ver)
+            throw (RuntimeException)
+        {
+            return CNode::isSupported(feature, ver);
+        }
+        virtual void SAL_CALL normalize()
+            throw (RuntimeException)
+        {
+            CNode::normalize();
+        }
+        virtual Reference< XNode > SAL_CALL removeChild(const Reference< XNode >& oldChild)
+            throw (RuntimeException)
+        {
+            return CNode::removeChild(oldChild);
+        }
+        virtual Reference< XNode > SAL_CALL replaceChild(
+                const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
+            throw (RuntimeException)
+        {
+            return CNode::replaceChild(newChild, oldChild);
+        }
+        virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
+            throw (RuntimeException)
+        {
+            return setData(nodeValue);
+        }
+        virtual void SAL_CALL setPrefix(const OUString& prefix)
+            throw (RuntimeException)
+        {
+            return CNode::setPrefix(prefix);
+        }
+
 
     };
 }
