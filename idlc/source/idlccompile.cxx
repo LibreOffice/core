@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+ *  last change: $Author: svesik $ $Date: 2001-05-07 19:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 
 #ifdef  SAL_UNX
 #include <unistd.h>
-#ifdef MACOSX
+#if defined(MACOSX) || defined(FREEBSD)
 #include <sys/wait.h>
 #else
 #include <wait.h>
