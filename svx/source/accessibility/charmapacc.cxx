@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmapacc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:57:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,9 @@ SvxShowCharSetVirtualAcc::SvxShowCharSetVirtualAcc( SvxShowCharSet* pParent ) : 
 ,m_pTable(NULL)
 {
     osl_incrementInterlockedCount(&m_refCount);
-    lateInit(this);
+    { // #b6211265 #
+        lateInit(this);
+    }
     osl_decrementInterlockedCount(&m_refCount);
 }
 
@@ -346,7 +348,9 @@ SvxShowCharSetAcc::SvxShowCharSetAcc( SvxShowCharSetVirtualAcc* _pParent ) : OAc
   ,m_pParent( _pParent )
 {
     osl_incrementInterlockedCount(&m_refCount);
-    lateInit(this);
+    { // #b6211265 #
+        lateInit(this);
+    }
     osl_decrementInterlockedCount(&m_refCount);
 }
 
@@ -681,7 +685,9 @@ SvxShowCharSetItemAcc::SvxShowCharSetItemAcc( SvxShowCharSetItem* pParent ) : OA
 {
     OSL_ENSURE(pParent,"NO parent supplied!");
     osl_incrementInterlockedCount(&m_refCount);
-    lateInit(this);
+    { // #b6211265 #
+        lateInit(this);
+    }
     osl_decrementInterlockedCount(&m_refCount);
 }
 
