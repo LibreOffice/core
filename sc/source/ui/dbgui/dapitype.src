@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-07 16:06:06 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ portuguese_brazilian ] = "Password";
         Text[ japanese ] = "Êß½Ü°ÄÞ(~P)";
         Text[ korean ] = "ÆÐ½º¿öµå(~P)";
-        Text[ chinese_simplified ] = "¿ÚÁî(~P)";
+        Text[ chinese_simplified ] = "ÃÜÂë(~P)";
         Text[ chinese_traditional ] = "±K½X(~P)";
         Text[ arabic ] = "ßáãÉ ÇáÓÑ";
         Text[ turkish ] = "~Þifre";
