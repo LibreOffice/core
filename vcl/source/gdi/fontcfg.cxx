@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #include <tools/isolang.hxx>
 #endif
 
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
@@ -154,7 +154,7 @@ extern "C" {
 int DefaultFontConfigItem::getKeyType( const OUString& rKey )
 {
     const int nItems = sizeof( aKeyMap )/sizeof( aKeyMap[0] );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     static bool bOnce = false;
     if( ! bOnce )
     {
@@ -321,7 +321,7 @@ void DefaultFontConfigItem::getValues()
     END_TIMING();
     for( j = 0; j < aNames.getLength(); j++ )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "found localized default font data for \"%s\"\n",
                  OUStringToOString( aNames.getConstArray()[j], RTL_TEXTENCODING_ASCII_US ).getStr()
                  );
@@ -352,7 +352,7 @@ void DefaultFontConfigItem::getValues()
                 const OUString* pLine = (const OUString*)pValue->getValue();
                 if( pLine->getLength() )
                     m_aDefaults[ nLanguageType ][ getKeyType( aKeys.getConstArray()[i] ) ] = *pLine;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "   \"%s\"=\"%.30s\"\n",
                          OUStringToOString( aKeys.getConstArray()[i], RTL_TEXTENCODING_ASCII_US ).getStr(),
                          OUStringToOString( *pLine, RTL_TEXTENCODING_ASCII_US ).getStr()
@@ -1029,7 +1029,7 @@ void FontSubstConfigItem::getValues()
         START_TIMING();
         Sequence< OUString > aSubstFonts( GetNodeNames( aKeyName ) );
         END_TIMING();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "reading %d font substitutions for locale %s\n",
                  aSubstFonts.getLength(),
                  ByteString( aKeyName, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
@@ -1116,7 +1116,7 @@ void FontSubstConfigItem::getValues()
                         if( pLine->equalsIgnoreAsciiCaseAscii( pWidthNames[width].pName ) )
                             break;
                 }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 if( width < 0 )
                     fprintf( stderr, "Error: invalid width %s for font %s\n",
                              OUStringToOString( *pLine, RTL_TEXTENCODING_ASCII_US ).getStr(),
@@ -1133,7 +1133,7 @@ void FontSubstConfigItem::getValues()
                         if( pLine->equalsIgnoreAsciiCaseAscii( pWeightNames[weight].pName ) )
                             break;
                 }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 if( width < 0 )
                     fprintf( stderr, "Error: invalid weight %s for font %s\n",
                              OUStringToOString( *pLine, RTL_TEXTENCODING_ASCII_US ).getStr(),
@@ -1303,7 +1303,7 @@ void SettingsConfigItem::getValues()
     Sequence< OUString > aNames( GetNodeNames( OUString() ) );
     for( j = 0; j < aNames.getLength(); j++ )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "found settings data for \"%s\"\n",
                  OUStringToOString( aNames.getConstArray()[j], RTL_TEXTENCODING_ASCII_US ).getStr()
                  );
@@ -1329,7 +1329,7 @@ void SettingsConfigItem::getValues()
                 const OUString* pLine = (const OUString*)pValue->getValue();
                 if( pLine->getLength() )
                     m_aSettings[ aKeyName ][ pFrom[i] ] = *pLine;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "   \"%s\"=\"%.30s\"\n",
                          OUStringToOString( aKeys.getConstArray()[i], RTL_TEXTENCODING_ASCII_US ).getStr(),
                          OUStringToOString( *pLine, RTL_TEXTENCODING_ASCII_US ).getStr()
