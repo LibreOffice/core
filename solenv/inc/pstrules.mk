@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-15 11:45:58 $
+#   last change: $Author: hjs $ $Date: 2002-04-16 12:59:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,13 +83,8 @@ $(OBJ)$/sxl_%.obj : %.cxx
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/sxl_$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-.IF "$(COM)"=="BLC"
-    @+if exist $@ $(RM) /q $@ >& nul
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/sxl_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx)
-.ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+    @+-$(RM) $@ >& $(NULLDEV)
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/sxl_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx
-.ENDIF
 .ENDIF
 
 .ENDIF			# "$(SVXLIGHTOBJFILES)"!=""
@@ -111,13 +106,8 @@ $(SLO)$/sxl_%.obj : %.cxx
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/sxl_$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-.IF "$(COM)"=="BLC"
-    @+if exist $@ $(RM) /q $@ >& nul
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/sxl_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx)
-.ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+    @+-$(RM) $@ >& $(NULLDEV)
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/sxl_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx
-.ENDIF
 .ENDIF
 
 .ENDIF			# "$(SVXLIGHTSLOFILES)"!=""
@@ -145,13 +135,8 @@ $(OBJ)$/$(SECOND_BUILD)_%.obj : %.cxx
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$(SECOND_BUILD)_$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-.IF "$(COM)"=="BLC"
-    @+if exist $@ $(RM) /q $@ >& nul
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$(SECOND_BUILD)_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx)
-.ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+    @+-$(RM) $@ >& $(NULLDEV)
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$(SECOND_BUILD)_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx
-.ENDIF
 .ENDIF
 
 $(OBJ)$/$(SECOND_BUILD)_%.obj : %.c
@@ -166,10 +151,7 @@ $(OBJ)$/$(SECOND_BUILD)_%.obj : %.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ENDIF
 .ELSE
-.IF "$(GUI)"=="MAC"
-    @$(RM) $@
-    $(cc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(shell $(UNIX2MACPATH) $@ $*.c)
-.ELSE
+    @+-$(RM) $@ >& $(NULLDEV)
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$(SECOND_BUILD)_$*.obj $*.c )
     @+$(ECHONL)
 .IF "$(COM)"=="GCC"
@@ -178,7 +160,6 @@ $(OBJ)$/$(SECOND_BUILD)_%.obj : %.c
     $(CC) @$(mktmp $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$(SECOND_BUILD)_$*.obj $*.c )
 .ENDIF
     $(SEMADEBUG)
-.ENDIF
 .ENDIF
 
 .ENDIF			# "$($(SECOND_BUILD)_OBJFILES)"!=""
@@ -198,13 +179,8 @@ $(SLO)$/$(SECOND_BUILD)_%.obj : %.cxx
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$(SECOND_BUILD)_$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-.IF "$(COM)"=="BLC"
-    @+if exist $@ $(RM) /q $@ >& nul
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$(SECOND_BUILD)_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx)
-.ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+    @+-$(RM) $@ >& $(NULLDEV)
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$(SECOND_BUILD)_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx
-.ENDIF
 .ENDIF
 
 $(SLO)$/$(SECOND_BUILD)_%.obj :  %.c
@@ -215,17 +191,12 @@ $(SLO)$/$(SECOND_BUILD)_%.obj :  %.c
     $(cc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$(SECOND_BUILD)_$*.o $*.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-.IF "$(GUI)"=="MAC"
-    @$(RM) $@
-    $(cc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(shell $(UNIX2MACPATH) $@ $*.c)
-.ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(COM)"=="GCC"
        $(CC) $(CFLAGS:s/stl//) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$(SECOND_BUILD)_$*.obj $*.c 
 .ELSE
        +$(TYPE) $(mktmp $(CFLAGS:s/stl//) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$(SECOND_BUILD)_$*.obj $*.c )
        $(CC) @$(mktmp $(CFLAGS:s/stl//) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$(SECOND_BUILD)_$*.obj $*.c )
-.ENDIF
 .ENDIF
 .ENDIF
 
