@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 17:34:22 $
+ *  last change: $Author: pb $ $Date: 2000-11-03 05:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,7 +804,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // Grafiken komprimiert speichern
-    SvtSaveOptions::SaveGraphicsMode eMode = aSaveOptions.GetSaveGraphicsMode();
+    SvtSaveOptions::SaveGraphicsMode eMode = SvtSaveOptions::SaveGraphicsNormal;
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_OPT_SAVEGRAPHICSCOMPRESSED), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
