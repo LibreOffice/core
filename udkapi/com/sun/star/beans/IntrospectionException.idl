@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IntrospectionException.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,11 @@
 //=============================================================================
 /** This exception is thrown when an exception happens during
     introspection.
-
     @deprecated
 
     <p>This exception isn't specified and used anywhere</p>
  */
-exception IntrospectionException: com::sun::star::uno::Exception
+published exception IntrospectionException: com::sun::star::uno::Exception
 {
 };
 

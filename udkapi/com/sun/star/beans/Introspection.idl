@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Introspection.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 //=============================================================================
 /** provides functionality to get information about an object's
     properties and methods.
-
     <p><strong>Important note:</strong>An object can only be
     inspected completely if it supports the <type scope=
     "com::sun::star::lang">XTypeProvider</type> interface.</p>
@@ -81,7 +80,7 @@
     <p>For details see method <member>XIntrospection::inspect
     </member>.</p>
  */
-service Introspection
+published service Introspection
 {
     /// The only interface of this service
     interface com::sun::star::beans::XIntrospection;
