@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-01 10:16:41 $
+ *  last change: $Author: mav $ $Date: 2003-12-02 14:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,8 @@ DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory
   m_pEmbedObj( pEmbObj ),
   m_pInterceptor( NULL ),
   m_bReadOnly( sal_False ),
-  m_bWaitForClose( sal_False )
+  m_bWaitForClose( sal_False ),
+  m_bAllowClosing( sal_False )
 {
     const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
     uno::Reference< frame::XDesktop > xDesktop( m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
@@ -223,6 +224,7 @@ void DocumentHolder::CloseDocument( sal_Bool bDeliverOwnership, sal_Bool bWaitFo
         uno::Reference< util::XCloseable > xCloseable( xBroadcaster, uno::UNO_QUERY );
         if ( xCloseable.is() )
         {
+            m_bAllowClosing = sal_True;
             m_bWaitForClose = bWaitForClose;
             xCloseable->close( bDeliverOwnership );
         }
@@ -543,7 +545,7 @@ void SAL_CALL DocumentHolder::disposing( const com::sun::star::lang::EventObject
 void SAL_CALL DocumentHolder::queryClosing( const lang::EventObject& aSource, sal_Bool bGetsOwnership )
         throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException)
 {
-    if ( m_xDocument.is() && m_xDocument == aSource.Source && m_bWaitForClose )
+    if ( m_xDocument.is() && m_xDocument == aSource.Source && !m_bAllowClosing )
         throw util::CloseVetoException();
 }
 
