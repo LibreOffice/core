@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langselect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:38:09 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,8 +334,7 @@ LangList LanguageSelection::getInstalledLanguages()
     try{
         OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
         OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
-        OUString sConfigURL = OUString::createFromAscii("org.openoffice.Setup/Office/");
-        OUString sLocales = OUString::createFromAscii("ooSetupLocales");
+        OUString sConfigURL = OUString::createFromAscii("org.openoffice.Setup/Office/InstalledLocales");
 
         // get configuration provider
         Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
@@ -353,16 +352,12 @@ LangList LanguageSelection::getInstalledLanguages()
         //check access
         if (!theNameAccess.is()) return aList;
 
-        Any aResult = theNameAccess->getByName( sLocales );
-        Sequence< OUString > aLangSeq;
+        Sequence< OUString > aLangSeq = theNameAccess->getElementNames();
 
-        // unpack result from Any type
-        if (aResult >>= aLangSeq)
-        {
-            for (int i=0; i<aLangSeq.getLength(); i++)
-                aList.push_back(ConvertIsoStringToLanguage(aLangSeq[i]));
-        }
-    } catch (com::sun::star::uno::RuntimeException)
+        for (int i=0; i<aLangSeq.getLength(); i++)
+            aList.push_back(ConvertIsoStringToLanguage(aLangSeq[i]));
+
+    } catch (com::sun::star::uno::Exception&)
     {
         // didn't work - return empty list
     }
