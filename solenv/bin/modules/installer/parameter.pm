@@ -102,8 +102,11 @@ The following parameter are needed:
 -ispatchedepm : Usage of a patched (non-standard) epm (opt., non-Windows only)
 -packagelist : file, containing a list of module gids (opt., non-Windows only)
 -addpackagelist : additional packlist, only multilingual unix
+-addsystemintegration : adding system integration packages (opt., Unix only)
 -copyproject : is set for projects that are only used for copying (optional)
 -languagepack : do create a languagepack, no product pack (optional)
+-patch : do create a patch (optional)
+-patchinc: Source for the patch include files (Solaris only)
 -log : Logging all available information (optional)
 -debug : Collecting debug information
 
@@ -179,6 +182,7 @@ sub getparameter
         elsif ($param eq "-dontcallepm") { $installer::globals::call_epm = 0; }
         elsif ($param eq "-msitemplate") { $installer::globals::idttemplatepath = shift(@ARGV); }
         elsif ($param eq "-msilanguage") { $installer::globals::idtlanguagepath = shift(@ARGV); }
+        elsif ($param eq "-patchinc") { $installer::globals::patchincludepath = shift(@ARGV); }
         elsif ($param eq "-addjavainstaller") { $installer::globals::addjavainstaller = 1; }
         elsif ($param eq "-javalanguage") { $installer::globals::javalanguagepath = shift(@ARGV); }
         elsif ($param eq "-buildid") { $installer::globals::buildid = shift(@ARGV); }
@@ -186,7 +190,9 @@ sub getparameter
         elsif ($param eq "-addpackagelist") { $installer::globals::addpackagelist = shift(@ARGV); }
         elsif ($param eq "-copyproject") { $installer::globals::is_copy_only_project = 1; }
         elsif ($param eq "-languagepack") { $installer::globals::languagepack = 1; }
+        elsif ($param eq "-patch") { $installer::globals::patch = 1; }
         elsif ($param eq "-addchildprojects") { $installer::globals::addchildprojects = 1; }
+        elsif ($param eq "-addsystemintegration") { $installer::globals::addsystemintegration = 1; }
         elsif ($param eq "-destdir")    # new parameter for simple installer
         {
             $installer::globals::rootpath ne "" && die "must set destdir before -i or -simple";
@@ -318,7 +324,7 @@ sub setglobalvariables
 
     if (( $installer::globals::compiler =~ /unx/ ) && ( $installer::globals::addpackagelist )) { $installer::globals::is_unix_multi = 1; }
 
-    if ( $installer::globals::compiler =~ /unxlngi/ )
+    if ( $installer::globals::compiler =~ /unxlngi/ || $installer::globals::compiler =~ /unxlngx/ )
     {
         $installer::globals::islinuxbuild = 1;
         if ( $installer::globals::packageformat eq "rpm" )
@@ -359,7 +365,7 @@ sub setglobalvariables
         if ( $installer::globals::iswin ) { $installer::globals::unpackpath =~ s/\//\\/g; }
     }
 
-    if (!($installer::globals::unpackpath eq ""))   # unpackpath set, relative or absolute?
+    if (!($installer::globals::unpackpath eq ""))
     {
         make_path_absolute(\$installer::globals::unpackpath);
     }
@@ -515,8 +521,39 @@ sub control_required_parameter
         {
             $installer::globals::codefilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $installer::globals::codefilename;
             installer::files::check_file($installer::globals::codefilename);
+            $installer::globals::componentfilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $installer::globals::componentfilename;
+            installer::files::check_file($installer::globals::componentfilename);
         }
 
+    }
+
+    #######################################
+    # Patch currently only available
+    # for Solaris packages
+    #######################################
+
+    if (( $installer::globals::patch ) && ( ! $installer::globals::issolarispkgbuild ))
+    {
+        print "\n*******************************************************************\n";
+        print "Sorry, Patch flag currently only available for Solaris pkg builds!";
+        print "\n*******************************************************************\n";
+        usage();
+        exit(-1);
+    }
+
+    if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::patchincludepath ))
+    {
+        print "\n***********************************************************\n";
+        print "ERROR: Solaris patch requires parameter -patchinc !";
+        print "\n***********************************************************\n";
+        usage();
+        exit(-1);
+    }
+
+    if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild ) && ( $installer::globals::patchincludepath ))
+    {
+        make_path_absolute(\$installer::globals::patchincludepath);
+        $installer::globals::patchincludepath = installer::converter::make_path_conform($installer::globals::patchincludepath);
     }
 
     #######################################
@@ -587,8 +624,10 @@ sub outputparameter
     if ( $installer::globals::addjavainstaller ) { push(@output, "Adding Java installer\n"); }
     if (!($installer::globals::javalanguagepath eq "")) { push(@output, "Java language path: $installer::globals::javalanguagepath\n"); }
     if ((!($installer::globals::javalanguagepath eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Java language path will be ignored for Windows builds!\n"); }
+    if ( $installer::globals::patchincludepath ) { push(@output, "Patch include path: $installer::globals::patchincludepath\n"); }
     if (($installer::globals::iswindowsbuild) && ($installer::globals::addchildprojects )) { push(@output, "Adding child projects into installation set\n"); }
     if ( $installer::globals::globallogging ) { push(@output, "Complete logging activated\n"); }
+    if ( $installer::globals::addsystemintegration ) { push(@output, "Adding system integration packages\n"); }
     if ( $installer::globals::debug ) { push(@output, "Debug is activated\n"); }
     if ( $installer::globals::tab ) { push(@output, "TAB version\n"); }
     if ( $installer::globals::dounzip ) { push(@output, "Unzip ARCHIVE files\n"); }
@@ -606,6 +645,7 @@ sub outputparameter
     }
     if ( $installer::globals::is_copy_only_project ) { push(@output, "This is a copy only project!\n"); }
     if ( $installer::globals::languagepack ) { push(@output, "Creating language pack!\n"); }
+    if ( $installer::globals::patch ) { push(@output, "Creating patch!\n"); }
     push(@output, "########################################################\n");
 
     # output into shell and into logfile
