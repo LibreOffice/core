@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 12:51:51 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 13:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,11 @@ GlyphCache::~GlyphCache()
 
 // -----------------------------------------------------------------------
 
+#ifdef IRIX
+size_t std::hash<ImplFontSelectData>::operator()( const ImplFontSelectData& rFontSelData ) const
+#else
 inline size_t std::hash<ImplFontSelectData>::operator()( const ImplFontSelectData& rFontSelData ) const
+#endif
 {
     // TODO: does it pay much to improve this hash function?
     size_t nHash = size_t( rFontSelData.mpFontData->mpSysData );
