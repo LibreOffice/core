@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-23 20:26:24 $
+ *  last change: $Author: er $ $Date: 2001-01-10 18:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1060,7 +1060,11 @@ void ScFormulaCell::CompileTokenArray( BOOL bNoListening )
 void ScFormulaCell::CompileXML()
 {
     if ( cMatrixFlag == MM_REFERENCE )
+    {   // is already token code via ScDocFunc::EnterMatrix, ScDocument::InsertMatrixFormula
+        // just establish listeners
+        StartListeningTo( pDocument );
         return ;
+    }
 
     ScCompiler aComp( pDocument, aPos, *pCode );
     aComp.SetCompileEnglish( TRUE );
