@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:50:26 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,10 @@ INSINGLECHAR:
     case RTF_TC:
     case RTF_NEXTFILE:
     case RTF_TEMPLATE:
+#if 0
+    //disabled for #i19718#
     case RTF_SHPRSLT:   // RTF_SHP fehlt noch !!
+#endif
                             SkipGroup();
                             break;
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
