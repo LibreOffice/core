@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrftn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: ama $ $Date: 2001-11-06 15:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,8 +423,12 @@ void SwTxtFtn::DelFrms()
         for( SwCntntFrm* pFnd = (SwCntntFrm*)aIter.First( TYPE( SwCntntFrm ));
                 pFnd; pFnd = (SwCntntFrm*)aIter.Next() )
         {
-            pFnd->FindPageFrm()->RemoveFtn( pFnd, this );
-            bFrmFnd = TRUE;
+            SwPageFrm* pPage = pFnd->FindPageFrm();
+            if( pPage )
+            {
+                pPage->RemoveFtn( pFnd, this );
+                bFrmFnd = TRUE;
+            }
         }
     }
     //JP 13.05.97: falls das Layout vorm loeschen der Fussnoten entfernt

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-15 13:34:45 $
+ *  last change: $Author: ama $ $Date: 2001-11-06 15:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,18 @@
 #endif
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>       // ClearPara()
+#endif
+#ifndef _FTNIDX_HXX
+#include <ftnidx.hxx>
+#endif
+#ifndef _TXTFTN_HXX
+#include <txtftn.hxx>
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
+#ifndef _NDINDEX_HXX
+#include <ndindex.hxx>
 #endif
 
 #ifndef _FRMTOOL_HXX
@@ -310,6 +322,30 @@ SwCntntFrm::~SwCntntFrm()
         {
             pRoot->DisallowTurbo();
             pRoot->ResetTurbo();
+        }
+        if( IsTxtFrm() && ((SwTxtFrm*)this)->HasFtn() )
+        {
+            SwTxtNode *pTxtNd = ((SwTxtFrm*)this)->GetTxtNode();
+            const SwFtnIdxs &rFtnIdxs = pCNd->GetDoc()->GetFtnIdxs();
+            USHORT nPos;
+            ULONG nIndex = pCNd->GetIndex();
+            rFtnIdxs.SeekEntry( *pTxtNd, &nPos );
+            SwTxtFtn* pTxtFtn;
+            if( nPos < rFtnIdxs.Count() )
+            {
+                while( nPos && pTxtNd == &(rFtnIdxs[ nPos ]->GetTxtNode()) )
+                    --nPos;
+                if( nPos || pTxtNd != &(rFtnIdxs[ nPos ]->GetTxtNode()) )
+                    ++nPos;
+            }
+            while( nPos < rFtnIdxs.Count() )
+            {
+                pTxtFtn = rFtnIdxs[ nPos ];
+                if( pTxtFtn->GetTxtNode().GetIndex() > nIndex )
+                    break;
+                pTxtFtn->DelFrms();
+                ++nPos;
+            }
         }
     }
     if( IsTxtFrm() && ((SwTxtFrm*)this)->HasBlinkPor() )
