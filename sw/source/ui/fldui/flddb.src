@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-17 08:15:45 $
+ *  last change: $Author: fme $ $Date: 2001-05-25 14:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@ TabPage TP_FLD_DB
     ListBox LB_DBTYPE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 16 ) ;
-        Size = MAP_APPFONT ( 76 , 104 ) ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 76 , 106 ) ;
         TabStop = TRUE ;
         Sort = TRUE ;
         AutoHScroll = TRUE ;
@@ -148,15 +148,15 @@ TabPage TP_FLD_DB
     Edit ED_DBCONDITION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 138 ) ;
+        Pos = MAP_APPFONT ( 6 , 137 ) ;
         Size = MAP_APPFONT ( 76 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
     };
     FixedText FT_DBSETNUMBER
     {
-        Pos = MAP_APPFONT ( 6 , 155 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 156 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
         TEXT = "Sat~znummer" ;
         TEXT [ English ] = "Setnumber" ;
         TEXT [ norwegian ] = "Setnumber" ;
@@ -193,7 +193,7 @@ TabPage TP_FLD_DB
     FixedText FT_DBSELECTION
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
-        Size = MAP_APPFONT ( 166 , 10 ) ;
+        Size = MAP_APPFONT ( 166 , 8 ) ;
         Text = "Datenbank~auswahl" ;
         Text [ ENGLISH ] = "Database s~election" ;
         Left = TRUE ;
@@ -221,8 +221,8 @@ TabPage TP_FLD_DB
     Control TLB_DBLIST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 88 , 16 ) ;
-        Size = MAP_APPFONT ( 166 , 122 ) ;
+        Pos = MAP_APPFONT ( 88 , 14 ) ;
+        Size = MAP_APPFONT ( 160 , 124 ) ;
         TabStop = TRUE ;
     };
     RadioButton RB_DBOWNFORMAT
@@ -300,10 +300,10 @@ TabPage TP_FLD_DB
         Sort = FALSE ;
         Hide = TRUE ;
     };
-    GroupBox GB_DBFORMAT
+    FixedLine FL_DBFORMAT
     {
         Pos = MAP_APPFONT ( 88 , 141 ) ;
-        Size = MAP_APPFONT ( 166 , 38 ) ;
+        Size = MAP_APPFONT ( 166 , 8 ) ;
         TEXT = "Format" ;
         TEXT [ English ] = "Format" ;
         Text [ english_us ] = "Format" ;
@@ -326,6 +326,11 @@ TabPage TP_FLD_DB
         Text[ turkish ] = "Format";
         Text[ catalan ] = "Formato";
         Text[ finnish ] = "Muotoile";
+    };
+    FixedLine FL_DBFORMAT_VERT
+    {
+        Pos = MAP_APPFONT ( 87 , 152 ) ;
+        Size = MAP_APPFONT ( 4 , 27 ) ;
     };
     Text [ english_us ] = "Database" ;
     Text [ portuguese_brazilian ] = "Datenbank" ;

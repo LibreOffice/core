@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:18:57 $
+ *  last change: $Author: fme $ $Date: 2001-05-25 14:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -825,9 +825,77 @@ String STR_IDXMRK_INSERT
             Text[ catalan ] = "~Del contenido del documento";\
             Text[ finnish ] = "~Asiakirjan sisällöstä";\
         };                                                          \
+        FixedText FT_AUTHOR                             \
+        {                                               \
+            Pos = MAP_APPFONT ( 12 , 14 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 60 , 8 ) ;             \
+            Text = "Autor" ;                            \
+            Text [ ENGLISH ] = "Author" ;               \
+            Text[ english_us ] = "Author";\
+            Text[ portuguese ] = "Autor";\
+            Text[ russian ] = "Àâòîð";\
+            Text[ greek ] = "ÓõíôÜêôçò";\
+            Text[ dutch ] = "Auteur";\
+            Text[ french ] = "Auteur";\
+            Text[ spanish ] = "Autor";\
+            Text[ italian ] = "Autore";\
+            Text[ danish ] = "Forfatter";\
+            Text[ swedish ] = "Författare";\
+            Text[ polish ] = "Autor";\
+            Text[ portuguese_brazilian ] = "Author";\
+            Text[ japanese ] = "’˜ŽÒ";\
+            Text[ korean ] = "ÀÛ¼ºÀÚ";\
+            Text[ chinese_simplified ] = "×÷Õß";\
+            Text[ chinese_traditional ] = "§@ªÌ";\
+            Text[ arabic ] = "ÇáãÄáÝ";\
+            Text[ turkish ] = "Yazan";\
+            Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "Autor";\
+            Text[ finnish ] = "Laatija";\
+        };                                              \
+        FixedText   FI_AUTHOR                           \
+        {                                               \
+            Pos = MAP_APPFONT ( 12 , 25 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 140, 8 ) ;            \
+            WordBreak = TRUE;                           \
+        };                                              \
+        FixedText FT_TITLE                              \
+        {                                               \
+            Pos = MAP_APPFONT ( 12 , 37 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 60 , 8 ) ;             \
+            Text = "Titel" ;                            \
+            Text [ ENGLISH ] = "Title" ;                \
+            Text[ english_us ] = "Title";\
+            Text[ portuguese ] = "Título";\
+            Text[ russian ] = "Çàãîëîâîê";\
+            Text[ greek ] = "Ôßôëïò";\
+            Text[ dutch ] = "Titel";\
+            Text[ french ] = "Titre";\
+            Text[ spanish ] = "Título";\
+            Text[ italian ] = "Titolo";\
+            Text[ danish ] = "Titel";\
+            Text[ swedish ] = "Titel";\
+            Text[ polish ] = "Tytu³";\
+            Text[ portuguese_brazilian ] = "Title";\
+            Text[ japanese ] = "À²ÄÙ";\
+            Text[ korean ] = "Á¦¸ñ";\
+            Text[ chinese_simplified ] = "±êÌâ";\
+            Text[ chinese_traditional ] = "¼ÐÃD";\
+            Text[ arabic ] = "ÇáÚäæÇä";\
+            Text[ turkish ] = "Baþlýk";\
+            Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "Título";\
+            Text[ finnish ] = "Otsikko";\
+        };                                              \
+        FixedText   FI_TITLE                            \
+        {                                               \
+            Pos = MAP_APPFONT ( 12 , 48  + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 140, 8 ) ;            \
+            WordBreak = TRUE;                           \
+        };                                              \
         FixedText FT_ENTRY                              \
         {                                               \
-            Pos = MAP_APPFONT ( 12 , 15 + RADIO_BUTTON_HEIGHT) ; \
+            Pos = MAP_APPFONT ( 12 , 62 + RADIO_BUTTON_HEIGHT) ; \
             Size = MAP_APPFONT ( 60 , 8 ) ;             \
             Text = "~Kurzbezeichnung" ;                 \
             Text [ ENGLISH ] = "Short name" ;           \
@@ -856,91 +924,23 @@ String STR_IDXMRK_INSERT
         Edit ED_ENTRY                                   \
         {                                               \
             Border = TRUE ;                             \
-            Pos = MAP_APPFONT ( 75 , 14 + RADIO_BUTTON_HEIGHT) ; \
-            Size = MAP_APPFONT ( 74 , 12 ) ;            \
+            Pos = MAP_APPFONT ( 12 , 73 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 140 , 12 ) ;            \
             TabStop = TRUE ;                            \
             Left = TRUE ;                               \
         };                                              \
         ListBox LB_ENTRY                                   \
         {                                               \
             Border = TRUE ;                             \
-            Pos = MAP_APPFONT ( 75 , 14 + RADIO_BUTTON_HEIGHT) ; \
-            Size = MAP_APPFONT ( 74 , 50 ) ;            \
+            Pos = MAP_APPFONT ( 12 , 73 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 140 , 50 ) ;            \
             TabStop = TRUE ;                            \
             DropDown = TRUE ;                           \
         };                                              \
-        FixedText FT_AUTHOR                             \
-        {                                               \
-            Pos = MAP_APPFONT ( 12 , 28 + RADIO_BUTTON_HEIGHT) ; \
-            Size = MAP_APPFONT ( 60 , 8 ) ;             \
-            Text = "Autor" ;                            \
-            Text [ ENGLISH ] = "Author" ;               \
-            Text[ english_us ] = "Author";\
-            Text[ portuguese ] = "Autor";\
-            Text[ russian ] = "Àâòîð";\
-            Text[ greek ] = "ÓõíôÜêôçò";\
-            Text[ dutch ] = "Auteur";\
-            Text[ french ] = "Auteur";\
-            Text[ spanish ] = "Autor";\
-            Text[ italian ] = "Autore";\
-            Text[ danish ] = "Forfatter";\
-            Text[ swedish ] = "Författare";\
-            Text[ polish ] = "Autor";\
-            Text[ portuguese_brazilian ] = "Author";\
-            Text[ japanese ] = "’˜ŽÒ";\
-            Text[ korean ] = "ÀÛ¼ºÀÚ";\
-            Text[ chinese_simplified ] = "×÷Õß";\
-            Text[ chinese_traditional ] = "§@ªÌ";\
-            Text[ arabic ] = "ÇáãÄáÝ";\
-            Text[ turkish ] = "Yazan";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "Autor";\
-            Text[ finnish ] = "Laatija";\
-        };                                              \
-        FixedText   FI_AUTHOR                           \
-        {                                               \
-            Pos = MAP_APPFONT ( 75 , 28 + RADIO_BUTTON_HEIGHT) ; \
-            Size = MAP_APPFONT ( 74 , 20 ) ;            \
-            WordBreak = TRUE;                           \
-        };                                              \
-        FixedText FT_TITLE                              \
-        {                                               \
-            Pos = MAP_APPFONT ( 12 , 54 + RADIO_BUTTON_HEIGHT) ; \
-            Size = MAP_APPFONT ( 60 , 8 ) ;             \
-            Text = "Titel" ;                            \
-            Text [ ENGLISH ] = "Title" ;                \
-            Text[ english_us ] = "Title";\
-            Text[ portuguese ] = "Título";\
-            Text[ russian ] = "Çàãîëîâîê";\
-            Text[ greek ] = "Ôßôëïò";\
-            Text[ dutch ] = "Titel";\
-            Text[ french ] = "Titre";\
-            Text[ spanish ] = "Título";\
-            Text[ italian ] = "Titolo";\
-            Text[ danish ] = "Titel";\
-            Text[ swedish ] = "Titel";\
-            Text[ polish ] = "Tytu³";\
-            Text[ portuguese_brazilian ] = "Title";\
-            Text[ japanese ] = "À²ÄÙ";\
-            Text[ korean ] = "Á¦¸ñ";\
-            Text[ chinese_simplified ] = "±êÌâ";\
-            Text[ chinese_traditional ] = "¼ÐÃD";\
-            Text[ arabic ] = "ÇáÚäæÇä";\
-            Text[ turkish ] = "Baþlýk";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "Título";\
-            Text[ finnish ] = "Otsikko";\
-        };                                              \
-        FixedText   FI_TITLE                            \
-        {                                               \
-            Pos = MAP_APPFONT ( 75 , 54  + RADIO_BUTTON_HEIGHT) ; \
-            Size = MAP_APPFONT ( 74 , 20 ) ;            \
-            WordBreak = TRUE;                           \
-        };                                              \
-        GroupBox GB_ENTRY                               \
+        FixedLine FL_ENTRY                               \
         {                                               \
             Pos = MAP_APPFONT ( 6 , 3 ) ;               \
-            Size = MAP_APPFONT ( 146 , 112  + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 146 , 8 ) ; \
             Text = "Eintrag" ;                          \
             Text [ ENGLISH ] = "Entry" ;                \
             Text[ english_us ] = "Entry";\

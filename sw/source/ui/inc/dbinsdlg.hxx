@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:27:36 $
+ *  last change: $Author: fme $ $Date: 2001-05-25 14:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,31 +150,30 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     RadioButton     aRbAsField;
     RadioButton     aRbAsText;
 
-    GroupBox        aGbSelection;
+    FixedLine       aFlHead;
     FixedText       aFtDbColumn;
 
     ListBox         aLbTblDbColumn;
     ListBox         aLbTxtDbColumn;
 
-    GroupBox        aGbDbFormat;
+    FixedLine       aFlFormat;
     RadioButton     aRbDbFmtFromDb;
     RadioButton     aRbDbFmtFromUsr;
     NumFormatListBox aLbDbFmtFromUsr;
 
     /* ----- Page Text/Field ------- */
-    PushButton      aPbDbcolToEdit;
+    ImageButton     aIbDbcolToEdit;
     MultiLineEdit   aEdDbText;
     FixedText       aFtDbParaColl;
     ListBox         aLbDbParaColl;
 
     /* ----- Page Table ------------ */
-    PushButton      aPbDbcolAllTo;
-    PushButton      aPbDbcolOneTo;
-    PushButton      aPbDbcolOneFrom;
-    PushButton      aPbDbcolAllFrom;
+    ImageButton     aIbDbcolAllTo;
+    ImageButton     aIbDbcolOneTo;
+    ImageButton     aIbDbcolOneFrom;
+    ImageButton     aIbDbcolAllFrom;
     FixedText       aFtTableCol;
     ListBox         aLbTableCol;
-    GroupBox        aGbTableHead;
     CheckBox        aCbTableHeadon;
     RadioButton     aRbHeadlColnms;
     RadioButton     aRbHeadlEmpty;
@@ -184,6 +183,8 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     OKButton        aBtOk;
     CancelButton    aBtCancel;
     HelpButton      aBtHelp;
+
+    FixedLine       aFlBottom;
 
     SwInsDBColumns  aDBColumns;
     const SwDBData  aDBData;

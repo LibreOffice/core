@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *  last change: $Author: fme $ $Date: 2001-05-25 14:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,9 @@
 #define BT_OK                   5
 #define BT_CANCEL               6
 #define BT_HELP                 7
-#define GB_SELECTION            8
+#define FL_HEAD                           8
 #define FT_DB_COLUMN            10
-#define GB_DB_FORMAT            11
+#define FL_FORMAT                       11
 #define RB_DBFMT_FROM_DB        12
 #define RB_DBFMT_FROM_USR       13
 #define LB_DBFMT_FROM_USR       14
@@ -80,21 +80,21 @@
 /* ------------- Page Text/Field ------------------ */
 #define LB_TXT_DB_COLUMN        15
 
-#define PB_DBCOL_TOEDIT         16
-#define ED_DB_TEXT              17
+#define IB_DBCOL_TOEDIT                 16
+#define ED_DB_TEXT                      17
 #define FT_DB_PARA_COLL         18
 #define LB_DB_PARA_COLL         19
 
 /* ------------- Page Table -------------------- */
 #define LB_TBL_DB_COLUMN        20
 
-#define PB_DBCOL_ALL_TO         21
-#define PB_DBCOL_ONE_TO         22
-#define PB_DBCOL_ONE_FROM       23
-#define PB_DBCOL_ALL_FROM       24
+#define IB_DBCOL_ALL_TO                 21
+#define IB_DBCOL_ONE_TO                 22
+#define IB_DBCOL_ONE_FROM               23
+#define IB_DBCOL_ALL_FROM               24
 #define FT_TABLE_COL            25
 #define LB_TABLE_COL            26
-#define GB_TABLE_HEAD           27
+#define FL_BOTTOM                       27
 #define CB_TABLE_HEADON         28
 #define RB_HEADL_COLNMS         29
 #define RB_HEADL_EMPTY          30

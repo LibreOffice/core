@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-17 08:08:30 $
+ *  last change: $Author: fme $ $Date: 2001-05-25 14:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,10 +213,10 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GB_SELECTION
+    FixedLine FL_HEAD
     {
         Pos = MAP_APPFONT ( 6 , 19 ) ;
-        Size = MAP_APPFONT ( 279 , 150 ) ;
+        Size = MAP_APPFONT ( 279 , 8 ) ;
         /* wird dynamisch gesetzt! */
         Text = "" ;
     };
@@ -249,10 +249,10 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ catalan ] = "~Columnas de la base de datos";
         Text[ finnish ] = "~Tietokannan sarakkeet";
     };
-    GroupBox GB_DB_FORMAT
+    FixedLine FL_FORMAT
     {
-        Pos = MAP_APPFONT ( 12 , 121 ) ;
-        Size = MAP_APPFONT ( 99 , 42 ) ;
+        Pos = MAP_APPFONT (   6 , 117 ) ;
+        Size = MAP_APPFONT ( 279 , 8 ) ;
         Text = "For~mat" ;
         Text [ ENGLISH ] = "For~mat" ;
         Text [ english_us ] = "For~mat" ;
@@ -280,7 +280,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     };
     RadioButton RB_DBFMT_FROM_DB
     {
-        Pos = MAP_APPFONT ( 15 , 133 ) ;
+        Pos = MAP_APPFONT ( 15 , 128 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "A~us Datenbank" ;
         Text [ ENGLISH ] = "From database" ;
@@ -311,14 +311,14 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     };
     RadioButton RB_DBFMT_FROM_USR
     {
-        Pos = MAP_APPFONT ( 15 , 148 ) ;
+        Pos = MAP_APPFONT ( 15 , 143 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
     };
     ListBox LB_DBFMT_FROM_USR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 30 , 146 ) ;
+        Pos = MAP_APPFONT ( 30 , 142 ) ;
         Size = MAP_APPFONT ( 75 , 44 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -329,23 +329,35 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 41 ) ;
-        Size = MAP_APPFONT ( 75 , 70 ) ;
+        Size = MAP_APPFONT ( 93 , 70 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
     };
-    PushButton PB_DBCOL_TOEDIT
+    ImageButton IB_DBCOL_TOEDIT
     {
-        Pos = MAP_APPFONT ( 92 , 99 ) ;
+        Pos = MAP_APPFONT ( 111 , 41 ) ;
         Size = MAP_APPFONT ( 20 , 12 ) ;
-        Text = "=>" ;
         TabStop = TRUE ;
         Hide = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "one_right.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+        };
     };
     MultiLineEdit ED_DB_TEXT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 118 , 41 ) ;
-        Size = MAP_APPFONT ( 161 , 70 ) ;
+        Pos = MAP_APPFONT ( 137 , 41 ) ;
+        Size = MAP_APPFONT ( 142 , 70 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         VScroll = TRUE ;
@@ -355,8 +367,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     };
     FixedText FT_DB_PARA_COLL
     {
-        Pos = MAP_APPFONT ( 118 , 133 ) ;
-        Size = MAP_APPFONT ( 58 , 10 ) ;
+        Pos = MAP_APPFONT ( 118 , 129 ) ;
+        Size = MAP_APPFONT ( 58 , 8 ) ;
         TEXT = "Absat~zvorlage:" ;
         TEXT [ English ] = "Paragraph Style:" ;
         TEXT [ norwegian ] = "Avsnittsmal:" ;
@@ -387,8 +399,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     ListBox LB_DB_PARA_COLL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 182 , 131 ) ;
-        Size = MAP_APPFONT ( 90 , 59 ) ;
+        Pos = MAP_APPFONT ( 182 , 127 ) ;
+        Size = MAP_APPFONT ( 97 , 59 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Hide = TRUE ;
@@ -399,40 +411,88 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 41 ) ;
-        Size = MAP_APPFONT ( 75 , 70 ) ;
+        Size = MAP_APPFONT ( 93 , 70 ) ;
         TabStop = TRUE ;
     };
-    PushButton PB_DBCOL_ALL_TO
+    ImageButton IB_DBCOL_ALL_TO
     {
-        Pos = MAP_APPFONT ( 92 , 41 ) ;
+        Pos = MAP_APPFONT ( 111 , 41 ) ;
         Size = MAP_APPFONT ( 20 , 12 ) ;
-        Text = "~=>>" ;
         TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "all_right.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+        };
     };
-    PushButton PB_DBCOL_ONE_TO
+    ImageButton IB_DBCOL_ONE_TO
     {
-        Pos = MAP_APPFONT ( 92 , 56 ) ;
+        Pos = MAP_APPFONT ( 111 , 56 ) ;
         Size = MAP_APPFONT ( 20 , 12 ) ;
-        Text = "-~>" ;
         TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "one_right.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+        };
     };
-    PushButton PB_DBCOL_ONE_FROM
+    ImageButton IB_DBCOL_ONE_FROM
     {
-        Pos = MAP_APPFONT ( 92 , 84 ) ;
+        Pos = MAP_APPFONT ( 111 , 84 ) ;
         Size = MAP_APPFONT ( 20 , 12 ) ;
-        Text = "<~-" ;
         TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "one_left.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+        };
     };
-    PushButton PB_DBCOL_ALL_FROM
+    ImageButton IB_DBCOL_ALL_FROM
     {
-        Pos = MAP_APPFONT ( 92 , 99 ) ;
+        Pos = MAP_APPFONT ( 111 , 99 ) ;
         Size = MAP_APPFONT ( 20 , 12 ) ;
-        Text = "~<<=" ;
         TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "all_left.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+        };
     };
     FixedText FT_TABLE_COL
     {
-        Pos = MAP_APPFONT ( 118 , 31 ) ;
+        Pos = MAP_APPFONT ( 137 , 31 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "Tabe~lle" ;
         Text [ ENGLISH ] = "Tab~le" ;
@@ -462,134 +522,44 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     ListBox LB_TABLE_COL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 118 , 42 ) ;
+        Pos = MAP_APPFONT ( 137 , 41 ) ;
         Size = MAP_APPFONT ( 75 , 70 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GB_TABLE_HEAD
+    FixedLine FL_BOTTOM
     {
-        Pos = MAP_APPFONT ( 199 , 41 ) ;
-        Size = MAP_APPFONT ( 80 , 58 ) ;
-        Text = "Tabellenüberschrift" ;
-        Text [ ENGLISH ] = "Table headline" ;
-        Text [ english_us ] = "Table heading" ;
-        Text [ portuguese_brazilian ] = "Tabellen?erschrift" ;
-        Text [ swedish ] = "Tabellöverskrift" ;
-        Text [ danish ] = "Tabeloverskrift" ;
-        Text [ italian ] = "Titolo tabella" ;
-        Text [ spanish ] = "Encabezado de la tabla" ;
-        Text [ french ] = "Titre de la table" ;
-        Text [ dutch ] = "Tabelopschrift" ;
-        Text [ portuguese ] = "Título da tabela" ;
-        Text[ chinese_simplified ] = "±í¸ñ±êÌâ";
-        Text[ russian ] = "Çàãîëîâîê òàáëèöû";
-        Text[ polish ] = "Nag³ówek tabeli";
-        Text[ japanese ] = "•\\‚ÌŒ©o‚µ";
-        Text[ chinese_traditional ] = "ªí®æ¼ÐÃD";
-        Text[ arabic ] = "ÚäæÇä ÇáÌÏÇæá";
-        Text[ dutch ] = "Tabelopschrift";
-        Text[ chinese_simplified ] = "±í¸ñ±êÌâ";
-        Text[ greek ] = "Åðéêåöáëßäá ðßíáêá";
-        Text[ korean ] = "Ç¥ Á¦¸ñ";
-        Text[ turkish ] = "Tablo baþlýðý";
-        Text[ catalan ] = "Encabezado de la tabla";
-        Text[ finnish ] = "Taulukon otsikko";
+        Pos = MAP_APPFONT ( 0 , 164 ) ;
+        Size = MAP_APPFONT ( 291, 8 ) ;
     };
     CheckBox CB_TABLE_HEADON
     {
-        Pos = MAP_APPFONT ( 205 , 56 ) ;
+        Pos = MAP_APPFONT ( 111 , 128 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "E~inschalten" ;
+        Text = "Tabellenüberschrift einfügen" ;
         Text [ ENGLISH ] = "On" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text [ english_us ] = "~On" ;
-        Text [ portuguese_brazilian ] = "E~inschalten" ;
-        Text [ swedish ] = "~På" ;
-        Text [ danish ] = "Aktiver" ;
-        Text [ italian ] = "Attiva" ;
-        Text [ spanish ] = "~Activar" ;
-        Text [ french ] = "~Activer" ;
-        Text [ dutch ] = "In~schakelen" ;
-        Text [ portuguese ] = "~Activar" ;
-        Text[ chinese_simplified ] = "¼¤»î(~O)";
-        Text[ russian ] = "Âêëþ÷èòü";
-        Text[ polish ] = "W³¹cz";
-        Text[ japanese ] = "µÝ(~O)";
-        Text[ chinese_traditional ] = "±Ò°Ê(~O)";
-        Text[ arabic ] = "ÊÔÛíá";
-        Text[ dutch ] = "In~schakelen";
-        Text[ chinese_simplified ] = "¼¤»î(~O)";
-        Text[ greek ] = "Åíåñãïðïßçóç";
-        Text[ korean ] = "È°¼º(~O)";
-        Text[ turkish ] = "Çalýþtýr";
-        Text[ catalan ] = "~Activar";
-        Text[ finnish ] = "~On";
     };
     RadioButton RB_HEADL_COLNMS
     {
-        Pos = MAP_APPFONT ( 217 , 72 ) ;
+        Pos = MAP_APPFONT ( 117 , 142 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "S~paltenamen" ;
+        Text = "S~paltenamen übernehmen" ;
         Text [ English ] = "Column name" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text [ portuguese ] = "~Nome da coluna" ;
-        Text [ english_us ] = "Column ~name" ;
-        Text [ portuguese_brazilian ] = "S~paltenamen" ;
-        Text [ swedish ] = "Kolumn~namn" ;
-        Text [ danish ] = "Kolonnenavn" ;
-        Text [ italian ] = "Nomi colonne" ;
-        Text [ spanish ] = "~Nombres de columnas" ;
-        Text [ french ] = "Noms ~de colonne" ;
-        Text [ dutch ] = "K~olomnaam" ;
-        Text[ chinese_simplified ] = "À¸Ãû(~N)";
-        Text[ russian ] = "Èìåíà êîëîíîê";
-        Text[ polish ] = "Nazwa kolumny";
-        Text[ japanese ] = "—ñ–¼(~N)";
-        Text[ chinese_traditional ] = "Äæ¦W(~N)";
-        Text[ arabic ] = "ÃÓãÇÁ ÇáÃÚãÏÉ";
-        Text[ dutch ] = "K~olomnaam";
-        Text[ chinese_simplified ] = "À¸Ãû(~N)";
-        Text[ greek ] = "Ïíüìáôá óôÞëçò";
-        Text[ korean ] = "¿­ ÀÌ¸§(~N)";
-        Text[ turkish ] = "~Sütun adý";
-        Text[ catalan ] = "~Nombres de columnas";
-        Text[ finnish ] = "~Sarakkeen nimi";
     };
     RadioButton RB_HEADL_EMPTY
     {
-        Pos = MAP_APPFONT ( 217 , 87 ) ;
+        Pos = MAP_APPFONT ( 117 , 156 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "lee~r" ;
+        Text = "Nur Zeile erstellen" ;
         Text [ English ] = "empty" ;
         TabStop = TRUE ;
-        Text [ portuguese ] = "~vazio" ;
-        Text [ english_us ] = "~empty" ;
-        Text [ portuguese_brazilian ] = "lee~r" ;
-        Text [ swedish ] = "t~om" ;
-        Text [ danish ] = "tom" ;
-        Text [ italian ] = "v~uoto" ;
-        Text [ spanish ] = "~vacío" ;
-        Text [ french ] = "~Vide" ;
-        Text [ dutch ] = "lee~g" ;
-        Text[ chinese_simplified ] = "¿ÕÈ±(~E)";
-        Text[ russian ] = "ïóñòîé";
-        Text[ polish ] = "pusty";
-        Text[ japanese ] = "‹ó”’(~E)";
-        Text[ chinese_traditional ] = "ªÅ¯Ê(~E)";
-        Text[ arabic ] = "ÝÇÑÛ";
-        Text[ dutch ] = "lee~g";
-        Text[ chinese_simplified ] = "¿ÕÈ±(~E)";
-        Text[ greek ] = "êåíü";
-        Text[ korean ] = "ºñ¾îÀÖÀ½(~E)";
-        Text[ turkish ] = "boþ";
-        Text[ catalan ] = "~vacío";
-        Text[ finnish ] = "~tyhjä";
     };
     PushButton PB_TBL_FORMAT
     {
-        Pos = MAP_APPFONT ( 199 , 124 ) ;
+        Pos = MAP_APPFONT ( 219 , 128 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         Text = "Ei~genschaften..." ;
         Text [ English ] = "Properties..." ;
@@ -619,7 +589,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     };
     PushButton PB_TBL_AUTOFMT
     {
-        Pos = MAP_APPFONT ( 199 , 142 ) ;
+        Pos = MAP_APPFONT ( 219 , 144 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         Text = "Aut~oformat..." ;
         Text [ English ] = "Aut~oformat..." ;

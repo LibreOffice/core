@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: fme $ $Date: 2001-05-25 14:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,15 +250,15 @@ class SwAuthMarkDlg : public Window
     friend class SwAuthMarkModalDlg;
     RadioButton     aFromComponentRB;
     RadioButton     aFromDocContentRB;
-    FixedText       aEntryFT;
-    Edit            aEntryED;
-    ListBox         aEntryLB;
     FixedText       aAuthorFT;
     FixedInfo       aAuthorFI;
     FixedText       aTitleFT;
     FixedInfo       aTitleFI;
+    FixedText       aEntryFT;
+    Edit            aEntryED;
+    ListBox         aEntryLB;
 
-    GroupBox        aEntryGB;
+    FixedLine       aEntryFL;
 
     OKButton        aOKBT;
     CancelButton    aCancelBT;

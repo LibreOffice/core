@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-22 13:52:36 $
+ *  last change: $Author: fme $ $Date: 2001-05-25 14:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,9 +123,12 @@ SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aNewFormatRB(this, SW_RES(RB_DBFORMAT)),
     aNumFormatLB(this, SW_RES(LB_DBNUMFORMAT)),
     aFormatLB   (this, SW_RES(LB_DBFORMAT)),
-    aFormatGB   (this, SW_RES(GB_DBFORMAT))
+    aFormatFL   (this, SW_RES(FL_DBFORMAT)),
+    aFormatVertFL   (this, SW_RES(FL_DBFORMAT_VERT))
 {
     FreeResource();
+
+    aFormatVertFL.SetStyle( aFormatVertFL.GetStyle() | WB_VERT );
 
     aOldNumSelectHdl = aNumFormatLB.GetSelectHdl();
 
@@ -444,7 +447,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
             aNumFormatLB.Enable(bDBFormat);
             aFormatLB.Enable(bFormat);
         }
-        aFormatGB.Enable(bDBFormat|bFormat);
+        aFormatFL.Enable(bDBFormat|bFormat);
 
         if (!IsFldEdit())
         {
@@ -547,7 +550,7 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
             aDBFormatRB.Enable(bNumFormat);
             aNewFormatRB.Enable(bNumFormat);
             aNumFormatLB.Enable(bNumFormat);
-            aFormatGB.Enable(bNumFormat);
+            aFormatFL.Enable(bNumFormat);
         }
     }
     return 0;

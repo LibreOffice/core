@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 17:18:14 $
+ *  last change: $Author: fme $ $Date: 2001-05-25 14:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,34 +396,35 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     aBtOk( this, SW_RES( BT_OK )),
     aBtCancel( this, SW_RES( BT_CANCEL )),
     aBtHelp( this, SW_RES( BT_HELP )),
-    aGbSelection( this, SW_RES( GB_SELECTION )),
+    aFlHead( this, SW_RES( FL_HEAD )),
     aFtDbColumn( this, SW_RES( FT_DB_COLUMN )),
-    aGbDbFormat( this, SW_RES( GB_DB_FORMAT )),
+    aFlFormat( this, SW_RES( FL_FORMAT )),
     aRbDbFmtFromDb( this, SW_RES( RB_DBFMT_FROM_DB )),
     aRbDbFmtFromUsr( this, SW_RES( RB_DBFMT_FROM_USR )),
     aLbDbFmtFromUsr( this, &rView, SW_RES( LB_DBFMT_FROM_USR )),
 
     /* ----- Page Text/Field ------- */
     aLbTxtDbColumn( this, SW_RES( LB_TXT_DB_COLUMN )),
-    aPbDbcolToEdit( this, SW_RES( PB_DBCOL_TOEDIT )),
+    aIbDbcolToEdit( this, SW_RES( IB_DBCOL_TOEDIT )),
     aEdDbText( this, SW_RES( ED_DB_TEXT )),
     aFtDbParaColl( this, SW_RES( FT_DB_PARA_COLL )),
     aLbDbParaColl( this, SW_RES( LB_DB_PARA_COLL )),
 
     /* ----- Page Table ------------ */
     aLbTblDbColumn( this, SW_RES( LB_TBL_DB_COLUMN )),
-    aPbDbcolAllTo( this, SW_RES( PB_DBCOL_ALL_TO )),
-    aPbDbcolOneTo( this, SW_RES( PB_DBCOL_ONE_TO )),
-    aPbDbcolOneFrom( this, SW_RES( PB_DBCOL_ONE_FROM )),
-    aPbDbcolAllFrom( this, SW_RES( PB_DBCOL_ALL_FROM )),
+    aIbDbcolAllTo( this, SW_RES( IB_DBCOL_ALL_TO )),
+    aIbDbcolOneTo( this, SW_RES( IB_DBCOL_ONE_TO )),
+    aIbDbcolOneFrom( this, SW_RES( IB_DBCOL_ONE_FROM )),
+    aIbDbcolAllFrom( this, SW_RES( IB_DBCOL_ALL_FROM )),
     aFtTableCol( this, SW_RES( FT_TABLE_COL )),
     aLbTableCol( this, SW_RES( LB_TABLE_COL )),
-    aGbTableHead( this, SW_RES( GB_TABLE_HEAD )),
     aCbTableHeadon( this, SW_RES( CB_TABLE_HEADON )),
     aRbHeadlColnms( this, SW_RES( RB_HEADL_COLNMS )),
     aRbHeadlEmpty( this, SW_RES( RB_HEADL_EMPTY )),
     aPbTblFormat( this, SW_RES( PB_TBL_FORMAT )),
     aPbTblAutofmt( this, SW_RES( PB_TBL_AUTOFMT )),
+
+    aFlBottom( this, SW_RES( FL_BOTTOM )),
 
     sNoTmpl( SW_RES( STR_NOTEMPL )),
     aDBData(rData),
@@ -436,7 +437,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
 {
     FreeResource();
 
-    nGBFmtLen = aGbDbFormat.GetText().Len();
+    nGBFmtLen = aFlFormat.GetText().Len();
 
     if(xColSupp.is())
     {
@@ -562,8 +563,8 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     {
         aRbAsTable.Check( TRUE );
         aRbDbFmtFromDb.Check( TRUE );
-        aPbDbcolOneFrom.Enable( FALSE );
-        aPbDbcolAllFrom.Enable( FALSE );
+        aIbDbcolOneFrom.Enable( FALSE );
+        aIbDbcolAllFrom.Enable( FALSE );
     }
 
     aRbAsTable.SetClickHdl( LINK(this, SwInsertDBColAutoPilot, PageHdl ));
@@ -576,11 +577,11 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     aPbTblFormat.SetClickHdl(LINK(this, SwInsertDBColAutoPilot, TblFmtHdl ));
     aPbTblAutofmt.SetClickHdl(LINK(this, SwInsertDBColAutoPilot, AutoFmtHdl ));
 
-    aPbDbcolAllTo.SetClickHdl( LINK(this, SwInsertDBColAutoPilot, TblToFromHdl ));
-    aPbDbcolOneTo.SetClickHdl( LINK(this, SwInsertDBColAutoPilot, TblToFromHdl ));
-    aPbDbcolOneFrom.SetClickHdl( LINK(this, SwInsertDBColAutoPilot, TblToFromHdl ));
-    aPbDbcolAllFrom.SetClickHdl( LINK(this, SwInsertDBColAutoPilot, TblToFromHdl ));
-    aPbDbcolToEdit.SetClickHdl( LINK(this, SwInsertDBColAutoPilot, TblToFromHdl ));
+    aIbDbcolAllTo.SetClickHdl( LINK(this, SwInsertDBColAutoPilot, TblToFromHdl ));
+    aIbDbcolOneTo.SetClickHdl( LINK(this, SwInsertDBColAutoPilot, TblToFromHdl ));
+    aIbDbcolOneFrom.SetClickHdl( LINK(this, SwInsertDBColAutoPilot, TblToFromHdl ));
+    aIbDbcolAllFrom.SetClickHdl( LINK(this, SwInsertDBColAutoPilot, TblToFromHdl ));
+    aIbDbcolToEdit.SetClickHdl( LINK(this, SwInsertDBColAutoPilot, TblToFromHdl ));
 
     aCbTableHeadon.SetClickHdl( LINK(this, SwInsertDBColAutoPilot, HeaderHdl ));
     aRbHeadlColnms.SetClickHdl( LINK(this, SwInsertDBColAutoPilot, HeaderHdl ));
@@ -629,22 +630,21 @@ IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, Button*, pButton )
     BOOL bShowTbl = pButton == &aRbAsTable;
 
     String sTxt( pButton->GetText() );
-    aGbSelection.SetText( sTxt.EraseAllChars( '~' ) );
+    aFlHead.SetText( sTxt.EraseAllChars( '~' ) );
 
     aLbTxtDbColumn.Show( !bShowTbl );
-    aPbDbcolToEdit.Show( !bShowTbl );
+    aIbDbcolToEdit.Show( !bShowTbl );
     aEdDbText.Show( !bShowTbl );
     aFtDbParaColl.Show( !bShowTbl );
     aLbDbParaColl.Show( !bShowTbl );
 
     aLbTblDbColumn.Show( bShowTbl );
-    aPbDbcolAllTo.Show( bShowTbl );
-    aPbDbcolOneTo.Show( bShowTbl );
-    aPbDbcolOneFrom.Show( bShowTbl );
-    aPbDbcolAllFrom.Show( bShowTbl );
+    aIbDbcolAllTo.Show( bShowTbl );
+    aIbDbcolOneTo.Show( bShowTbl );
+    aIbDbcolOneFrom.Show( bShowTbl );
+    aIbDbcolAllFrom.Show( bShowTbl );
     aFtTableCol.Show( bShowTbl );
     aLbTableCol.Show( bShowTbl );
-    aGbTableHead.Show( bShowTbl );
     aCbTableHeadon.Show( bShowTbl );
     aRbHeadlColnms.Show( bShowTbl );
     aRbHeadlEmpty.Show( bShowTbl );
@@ -688,7 +688,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
     aLbTblDbColumn.SetUpdateMode( FALSE );
     aLbTableCol.SetUpdateMode( FALSE );
 
-    if( pButton == &aPbDbcolAllTo )
+    if( pButton == &aIbDbcolAllTo )
     {
         bEnableTo = FALSE;
 
@@ -705,7 +705,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
         aLbTableCol.SelectEntryPos( nInsPos );
         aLbTblDbColumn.SelectEntryPos( LISTBOX_APPEND );
     }
-    else if( pButton == &aPbDbcolOneTo &&
+    else if( pButton == &aIbDbcolOneTo &&
             LISTBOX_ENTRY_NOTFOUND != aLbTblDbColumn.GetSelectEntryPos() )
     {
         USHORT nInsPos = aLbTableCol.GetSelectEntryPos(),
@@ -722,7 +722,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
 
         bEnableTo = 0 != aLbTblDbColumn.GetEntryCount();
     }
-    else if( pButton == &aPbDbcolOneFrom )
+    else if( pButton == &aIbDbcolOneFrom )
     {
         if( LISTBOX_ENTRY_NOTFOUND != aLbTableCol.GetSelectEntryPos() )
         {
@@ -761,7 +761,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
 
         bEnableFrom = 0 != aLbTableCol.GetEntryCount();
     }
-    else if( pButton == &aPbDbcolAllFrom )
+    else if( pButton == &aIbDbcolAllFrom )
     {
         bEnableFrom = FALSE;
 
@@ -771,7 +771,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
             aLbTblDbColumn.InsertEntry( aDBColumns[ n ]->sColumn, n );
         aLbTblDbColumn.SelectEntryPos( 0 );
     }
-    else if( pButton == &aPbDbcolToEdit )
+    else if( pButton == &aIbDbcolToEdit )
     {
         bChgEnable = FALSE;
         // Daten ins Edit moven:
@@ -812,10 +812,10 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
 
     if( bChgEnable )
     {
-        aPbDbcolOneTo.Enable( bEnableTo );
-        aPbDbcolAllTo.Enable( bEnableTo );
-        aPbDbcolOneFrom.Enable( bEnableFrom );
-        aPbDbcolAllFrom.Enable( bEnableFrom );
+        aIbDbcolOneTo.Enable( bEnableTo );
+        aIbDbcolAllTo.Enable( bEnableTo );
+        aIbDbcolOneFrom.Enable( bEnableFrom );
+        aIbDbcolAllFrom.Enable( bEnableFrom );
 
         aRbDbFmtFromDb.Enable( FALSE );
         aRbDbFmtFromUsr.Enable( FALSE );
@@ -835,11 +835,11 @@ IMPL_LINK( SwInsertDBColAutoPilot, DblClickHdl, ListBox*, pBox )
 {
     Button* pButton = 0;
     if( pBox == &aLbTxtDbColumn )
-        pButton = &aPbDbcolToEdit;
-    else if( pBox == &aLbTblDbColumn && aPbDbcolOneTo.IsEnabled() )
-        pButton = &aPbDbcolOneTo;
-    else if( pBox == &aLbTableCol && aPbDbcolOneFrom.IsEnabled() )
-        pButton = &aPbDbcolOneFrom;
+        pButton = &aIbDbcolToEdit;
+    else if( pBox == &aLbTblDbColumn && aIbDbcolOneTo.IsEnabled() )
+        pButton = &aIbDbcolOneTo;
+    else if( pBox == &aLbTableCol && aIbDbcolOneFrom.IsEnabled() )
+        pButton = &aIbDbcolOneFrom;
 
     if( pButton )
         TblToFromHdl( pButton );
@@ -1004,7 +1004,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
     {
         // an der FormatGroupBox den ausgewaehlten FeldNamen setzen, damit
         // klar ist, welches Feld ueber das Format eingestellt wird!
-        String sTxt( aGbDbFormat.GetText().Copy( 0, nGBFmtLen ));
+        String sTxt( aFlFormat.GetText().Copy( 0, nGBFmtLen ));
         if( !aSrch.sColumn.getLength() )
         {
             aRbDbFmtFromDb.Enable( FALSE );
@@ -1030,7 +1030,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
                 aLbDbFmtFromUsr.SetDefFormat( aDBColumns[ nFndPos ]->nUsrNumFmt );
         }
 
-        aGbDbFormat.SetText( sTxt );
+        aFlFormat.SetText( sTxt );
 
         // um spaeter zu wissen, welche ListBox die "aktive" war, wird sich
         // im 1. Eintrag ein Flag gemerkt,
@@ -2015,11 +2015,11 @@ void SwInsertDBColAutoPilot::Load()
 
                 if( !aLbTblDbColumn.GetEntryCount() )
                 {
-                    aPbDbcolAllTo.Enable( FALSE );
-                    aPbDbcolOneTo.Enable( FALSE );
+                    aIbDbcolAllTo.Enable( FALSE );
+                    aIbDbcolOneTo.Enable( FALSE );
                 }
-                aPbDbcolOneFrom.Enable( TRUE );
-                aPbDbcolAllFrom.Enable( TRUE );
+                aIbDbcolOneFrom.Enable( TRUE );
+                aIbDbcolAllFrom.Enable( TRUE );
             }
             aEdDbText.SetText( pNewData->sEdit );
 

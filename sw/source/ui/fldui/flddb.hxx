@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:24:22 $
+ *  last change: $Author: fme $ $Date: 2001-05-25 14:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,8 @@ class SwFldDBPage : public SwFldPage
     RadioButton         aNewFormatRB;
     NumFormatListBox    aNumFormatLB;
     ListBox             aFormatLB;
-    GroupBox            aFormatGB;
+    FixedLine           aFormatFL;
+    FixedLine           aFormatVertFL;
 
     String              sOldDBName;
     String              sOldTableName;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: fme $ $Date: 2001-05-25 14:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #define RC_TP_DB_START      (RC_FLDTDLG_BEGIN)
 #define FT_DBTYPE           (RC_TP_DB_START + 1)
 #define LB_DBTYPE           (RC_TP_DB_START + 2)
-#define GB_DBFORMAT         (RC_TP_DB_START + 3)
+#define FL_DBFORMAT                     (RC_TP_DB_START + 3)
 #define FT_DBSELECTION      (RC_TP_DB_START + 4)
 #define TLB_DBLIST          (RC_TP_DB_START + 5)
 #define FT_DBCONDITION      (RC_TP_DB_START + 6)
@@ -84,6 +84,7 @@
 #define RB_DBFORMAT         (RC_TP_DB_START + 12)
 #define RB_DBOWNFORMAT      (RC_TP_DB_START + 13)
 #define RC_TP_DB_END        (RC_TP_DB_START + 14)
+#define FL_DBFORMAT_VERT                (RC_TP_DB_START + 15)
 
 // Dokumentinfo-TabPage:
 #define RC_TP_DOCINF_START  (RC_TP_DB_END)

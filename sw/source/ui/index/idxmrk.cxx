@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:47:24 $
+ *  last change: $Author: fme $ $Date: 2001-05-25 14:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1094,7 +1094,7 @@ SwAuthMarkDlg::SwAuthMarkDlg(  Window *pParent,
     aAuthorFI(  this, ResId(FI_AUTHOR   )),
     aTitleFT(   this, ResId(FT_TITLE    )),
     aTitleFI(   this, ResId(FI_TITLE    )),
-    aEntryGB(   this, ResId(GB_ENTRY    )),
+    aEntryFL(   this, ResId(FL_ENTRY    )),
     aOKBT(      this, ResId(PB_OK       )),
     aCancelBT(  this, ResId(PB_CANCEL   )),
     aHelpBT(    this, ResId(PB_HELP )),
@@ -1784,6 +1784,9 @@ void    SwAuthMarkModalDlg::Apply()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/03/27 21:47:24  jp
+    optimize SeachOption initialisation
+
     Revision 1.7  2001/03/19 15:59:00  tl
     use TransliterationModules_IGNORE_CASE now
 
