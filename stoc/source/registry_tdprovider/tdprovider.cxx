@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:16:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 #include "registry/reader.hxx"
 #include "registry/version.h"
@@ -101,6 +102,7 @@
 #ifndef _STOC_RDBTDP_TDENUMERATION_HXX
 #include "rdbtdp_tdenumeration.hxx"
 #endif
+#include "structtypedescription.hxx"
 
 #define SERVICENAME "com.sun.star.reflection.TypeDescriptionProvider"
 #define IMPLNAME    "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"
@@ -435,6 +437,18 @@ static com::sun::star::uno::Reference< XInterface > SAL_CALL ProviderImpl_create
 
 //__________________________________________________________________________________________________
 // global helper function
+
+com::sun::star::uno::Reference< XTypeDescription > resolveTypedefs(
+    com::sun::star::uno::Reference< XTypeDescription > const & type)
+{
+    com::sun::star::uno::Reference< XTypeDescription > resolved(type);
+    while (resolved->getTypeClass() == TypeClass_TYPEDEF) {
+        resolved = com::sun::star::uno::Reference< XIndirectTypeDescription >(
+            resolved, UNO_QUERY_THROW)->getReferencedType();
+    }
+    return resolved;
+}
+
 com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
     const Sequence< sal_Int8 > & rData,
     const com::sun::star::uno::Reference< XHierarchicalNameAccess > & xNameAccess,
@@ -493,9 +507,8 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
                         '/', '.');
                 }
                 return com::sun::star::uno::Reference< XTypeDescription >(
-                    new CompoundTypeDescriptionImpl(
-                        xNameAccess, TypeClass_STRUCT, aName, superTypeName,
-                        rData));
+                    new stoc::registry_tdprovider::StructTypeDescription(
+                        xNameAccess, aName, superTypeName, rData));
             }
 
         case RT_TYPE_ENUM:
