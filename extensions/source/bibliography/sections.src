@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:22:14 $
+ *  last change: $Author: os $ $Date: 2001-02-14 16:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 //#pragma CHARSET_ANSI
 
 #include "sections.hrc"
+#include "extensio.hrc"
 
 #define FT_POS          6
 #define FTSIZE_LEFT     65
@@ -77,6 +78,7 @@ TabPage RID_TP_GENERAL
     Size = MAP_APPFONT( 452, 195 );
     Text = "Allgemein";
     Text[English]= "General";
+    HelpId = HID_BIB_CONTROL_PAGE;
 
     FixedText FT_IDENTIFIER
     {
