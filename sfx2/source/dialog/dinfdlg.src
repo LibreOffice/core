@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:23:03 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,7 +459,7 @@ TabPage TP_DOCINFODOC
         Text[ japanese ] = "•ÏX“ú:";
         Text[ chinese_traditional ] = "ÅÜ§óªº¤é´Á¡G";
         Text[ greek ] = "ÔñïğïğïéŞèçêå ôç:";
-        Text[ korean ] = "º¯°æÀÏ:";
+        Text[ korean ] = "º¯°æÀÏÀÚ:";
         Text[ arabic ] = "ÊÇÑíÎ ÇáÊÚÏíá:";
         Text[ turkish ] = "Değiştirme tarihi:";
         Text[ language_user1 ] = " ";
