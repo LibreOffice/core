@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmaher $ $Date: 2000-10-10 18:15:23 $
+ *  last change: $Author: ab $ $Date: 2000-10-11 12:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,9 +323,17 @@ void OFileAccess::kill( const OUString& FileURL )
 sal_Bool OFileAccess::isFolder( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
-    INetURLObject aURLObj( FileURL, INET_PROT_FILE );
-    Content aCnt( aURLObj.GetMainURL(), mxEnvironment );
-    return aCnt.isFolder();
+    sal_Bool bRet = sal_False;
+    try
+    {
+        INetURLObject aURLObj( FileURL, INET_PROT_FILE );
+        Content aCnt( aURLObj.GetMainURL(), mxEnvironment );
+        bRet = aCnt.isFolder();
+    }
+    catch (CommandAbortedException &) {}
+    catch (RuntimeException &) {}
+    catch (Exception &) {}
+    return bRet;
 }
 
 sal_Bool OFileAccess::isReadOnly( const OUString& FileURL )
