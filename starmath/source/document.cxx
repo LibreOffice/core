@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:23:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,13 +1019,14 @@ BOOL SmDocShell::InitNew( const uno::Reference < embed::XStorage >& xStorage )
 }
 
 
-BOOL SmDocShell::Load( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
+BOOL SmDocShell::Load( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Load" );
 
     BOOL bRet = FALSE;
-    if( SfxObjectShell::Load( xStorage ))
+    if( SfxObjectShell::Load( rMedium ))
     {
+        uno::Reference < embed::XStorage > xStorage = pMedium->GetStorage();
         uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
         if ( xAccess->hasByName( C2S( "content.xml" ) ) && xStorage->isStreamElement( C2S( "content.xml" ) ) ||
              xAccess->hasByName( C2S( "Content.xml" ) ) && xStorage->isStreamElement( C2S( "Content.xml" ) ) )
@@ -1033,8 +1034,7 @@ BOOL SmDocShell::Load( const ::com::sun::star::uno::Reference< ::com::sun::star:
             // is this a fabulous math package ?
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
             SmXMLWrapper aEquation(xModel);
-            SfxMedium aMedium(xStorage);
-            ULONG nError = aEquation.Import(aMedium);
+            ULONG nError = aEquation.Import(rMedium);
             bRet = 0 == nError;
             SetError( nError );
         }
@@ -1049,13 +1049,14 @@ BOOL SmDocShell::Load( const ::com::sun::star::uno::Reference< ::com::sun::star:
 
 
 
-BOOL SmDocShell::Insert( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
+BOOL SmDocShell::Insert( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Insert" );
 
     String aTemp = aText;
     BOOL bRet = FALSE, bChkOldVersion = TRUE;
 
+    uno::Reference < embed::XStorage > xStorage = rMedium.GetStorage();
     uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
     if ( xNameAccess.is() && xNameAccess->getElementNames().getLength() )
     {
@@ -1065,8 +1066,7 @@ BOOL SmDocShell::Insert( const ::com::sun::star::uno::Reference< ::com::sun::sta
             // is this a fabulous math package ?
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
             SmXMLWrapper aEquation(xModel);
-            SfxMedium aMedium(xStorage);
-            bRet = 0 == aEquation.Import(aMedium);
+            bRet = 0 == aEquation.Import(rMedium);
         }
     }
 
@@ -1131,12 +1131,10 @@ BOOL SmDocShell::Save()
         if( pTree && !IsFormulaArranged() )
             ArrangeFormula();
 
-        uno::Reference < embed::XStorage > xStor = GetStorage();
         Reference<com::sun::star::frame::XModel> xModel(GetModel());
         SmXMLWrapper aEquation(xModel);
-        SfxMedium aMedium(xStor);
         aEquation.SetFlat(sal_False);
-        return aEquation.Export(aMedium);
+        return aEquation.Export(*GetMedium());
     }
 
     return FALSE;
@@ -1156,7 +1154,7 @@ void SmDocShell::UpdateText()
 }
 
 
-BOOL SmDocShell::SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
+BOOL SmDocShell::SaveAs( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SaveAs" );
 
@@ -1165,7 +1163,7 @@ BOOL SmDocShell::SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::sta
     //! apply latest changes if necessary
     UpdateText();
 
-    if ( SfxObjectShell::SaveAs( xStorage ) )
+    if ( SfxObjectShell::SaveAs( rMedium ) )
     {
         if( !pTree )
             Parse();
@@ -1174,9 +1172,8 @@ BOOL SmDocShell::SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::sta
 
         Reference<com::sun::star::frame::XModel> xModel(GetModel());
         SmXMLWrapper aEquation(xModel);
-        SfxMedium aMedium(xStorage);
         aEquation.SetFlat(sal_False);
-        bRet = aEquation.Export(aMedium);
+        bRet = aEquation.Export(rMedium);
     }
     return bRet;
 }
@@ -1357,7 +1354,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
             if (pMedium != NULL)
             {
                 if (pMedium->IsStorage())
-                    Insert(pMedium->GetStorage());
+                    Insert(*pMedium);
                 else
                     InsertFrom(*pMedium);
                 delete pMedium;
@@ -1532,7 +1529,8 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 uno::Reference < embed::XStorage > xStorage =
                         ::comphelper::OStorageHelper::GetStorageFromInputStream( xStrm, ::comphelper::getProcessServiceFactory() );
                 uno::Reference < beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
-                Insert( xStorage );
+                SfxMedium aMedium( xStorage, String() );
+                Insert( aMedium );
                 UpdateText();
             }
         }
