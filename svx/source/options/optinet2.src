@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: os $ $Date: 2001-12-03 11:47:07 $
+ *  last change: $Author: pb $ $Date: 2001-12-04 15:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1339,6 +1339,13 @@ TabPage RID_SVXPAGE_INET_SEARCH
 /*  Scripting                                                           */
 /*                                                                      */
 /************************************************************************/
+
+#define GB_SCRIPT_EXEC_X    6
+#define GB_SCRIPT_EXEC_Y    3
+#define GB_SCRIPTING_X      6
+#define GB_SCRIPTING_Y      68
+#define GB_JAVA_Y           113
+
 TabPage RID_SVXPAGE_INET_SCRIPTING
 {
     OutputSize = TRUE ;
@@ -1356,10 +1363,18 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     Text [ spanish ] = "Scripting" ;
     Text [ french ] = "Scripting" ;
     Text [ dutch ] = "Scripting" ;
-                                    #define GB_SCRIPT_EXEC_X 6
-                                    #define GB_SCRIPT_EXEC_Y 3
-                                    #define GB_SCRIPTING_X 6
-                                    #define GB_SCRIPTING_Y 68
+    Text[ chinese_simplified ] = "½Å±¾";
+    Text[ russian ] = "Ñêðèïò";
+    Text[ polish ] = "Scripting";
+    Text[ japanese ] = "½¸ØÌßÄ";
+    Text[ chinese_traditional ] = "©R¥O½Z";
+    Text[ arabic ] = "Scripting";
+    Text[ greek ] = "Scripting";
+    Text[ korean ] = "½ºÅ©¸³ÆÃ";
+    Text[ turkish ] = "Scripting";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Scripting";
+    Text[ finnish ] = "Käsitellään komentosarjoja";
     FixedLine GB_STARBASIC
     {
         Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X , GB_SCRIPT_EXEC_Y ) ;
@@ -1391,14 +1406,14 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     FixedText FT_EXEC_MACRO
     {
         Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 12 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Size = MAP_APPFONT ( 53 , 8 ) ;
         Text = "~Makro ausführen" ;
         Text [ English ] = "~Run macro" ;
     };
     ListBox LB_EXEC_MACRO
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 50 , GB_SCRIPT_EXEC_Y + 11 ) ;
-        Size = MAP_APPFONT ( 100 , 48 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 60 , GB_SCRIPT_EXEC_Y + 11 ) ;
+        Size = MAP_APPFONT ( 90 , 48 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
         StringList =
@@ -1416,42 +1431,35 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     CheckBox CB_CONFIRM
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 56 , GB_SCRIPT_EXEC_Y + 27 ) ;
-        Size = MAP_APPFONT ( 160 , 10 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 66 , GB_SCRIPT_EXEC_Y + 27 ) ;
+        Size = MAP_APPFONT ( 176 , 10 ) ;
         Text = "~Nachfragen bei anderen Dokumentquellen" ;
         Text [ English ] = "C~onfirm in case of other document sources" ;
     };
     CheckBox CB_WARNING
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 56 , GB_SCRIPT_EXEC_Y + 41 ) ;
-        Size = MAP_APPFONT ( 160 , 10 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 66 , GB_SCRIPT_EXEC_Y + 41 ) ;
+        Size = MAP_APPFONT ( 176 , 10 ) ;
         Text = "~Vor Ausführung immer warnen" ;
         Text [ English ] = "Show ~warning before running macro" ;
     };
     FixedText FT_PATH_LIST
     {
         Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 56 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "~Pfadliste" ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
+        Text = "Pfa~dliste" ;
         Text [ English ] = "~Path list" ;
     };
     ListBox LB_SCRIPT_EXEC
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 50 , GB_SCRIPT_EXEC_Y + 55 ) ;
-        Size = MAP_APPFONT ( 139 , 34 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 60 , GB_SCRIPT_EXEC_Y + 55 ) ;
+        Size = MAP_APPFONT ( 129 , 34 ) ;
         Border = TRUE ;
         Sort = TRUE ;
     };
-    FixedText FT_NEW_PATH
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 94 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "N~euer Pfad" ;
-        Text [ English ] = "New pa~th" ;
-    };
     PushButton PB_SCRIPT_DELETE
     {
-        Pos = MAP_APPFONT ( 201 , GB_SCRIPT_EXEC_Y + 55 ) ;
+        Pos = MAP_APPFONT ( 198 , GB_SCRIPT_EXEC_Y + 55 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Löschen" ;
         Text [ English ] = "~Delete" ;
@@ -1479,7 +1487,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     PushButton PB_SCRIPT_DEFAULT
     {
-        Pos = MAP_APPFONT ( 201 , GB_SCRIPT_EXEC_Y + 72 ) ;
+        Pos = MAP_APPFONT ( 198 , GB_SCRIPT_EXEC_Y + 72 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Standard" ;
         Text [ English ] = "De~fault" ;
@@ -1505,15 +1513,22 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ catalan ] = "~Predeterminado";
         Text[ finnish ] = "~Oletusarvo";
     };
+    FixedText FT_NEW_PATH
+    {
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 94 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
+        Text = "N~euer Pfad" ;
+        Text [ English ] = "New pa~th" ;
+    };
     Edit ED_SCRIPT_EXEC
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 50 , GB_SCRIPT_EXEC_Y + 93 ) ;
-        Size = MAP_APPFONT ( 139 , 12 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 60 , GB_SCRIPT_EXEC_Y + 93 ) ;
+        Size = MAP_APPFONT ( 129 , 12 ) ;
         Border = TRUE ;
     };
     PushButton PB_SCRIPT_INSERT
     {
-        Pos = MAP_APPFONT ( 201 , GB_SCRIPT_EXEC_Y + 93 ) ;
+        Pos = MAP_APPFONT ( 198 , GB_SCRIPT_EXEC_Y + 93 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "H~inzufügen" ;
         Text [ English ] = "~Add" ;
@@ -1539,7 +1554,6 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ catalan ] = "~Añadir";
         Text[ finnish ] = "~Lisää";
     };
-#define GB_JAVA_Y 113
     FixedLine FL_JAVA
     {
         Pos = MAP_APPFONT ( 6 , GB_JAVA_Y ) ;
@@ -1570,7 +1584,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     CheckBox CB_J_ENABLE
     {
         Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 11 ) ;
-        Size = MAP_APPFONT ( 159 , 10 ) ;
+        Size = MAP_APPFONT ( 162 , 10 ) ;
         Text = "~freischalten" ;
         Text [ English ] = "~Enable" ;
         Text [ english_us ] = "~Enable" ;
@@ -1598,11 +1612,11 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     CheckBox CB_J_SECURITY
     {
         Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 24 ) ;
-        Size = MAP_APPFONT ( 159 , 10 ) ;
-        Text = "Sicherheits~überprüfungen";
+        Size = MAP_APPFONT ( 162 , 10 ) ;
+        Text = "Sicherhei~tsüberprüfungen";
         Text [ English ] = "Enable ~security checks";
         Text [ english_us ] = "Enable ~security checks";
-            Text[ italian ] = "Controlli di s~icurezza";
+        Text[ italian ] = "Controlli di s~icurezza";
         Text[ portuguese_brazilian ] = "S~icherheitsüberprüfungen";
         Text[ portuguese ] = "~Controlos de segurança";
         Text[ danish ] = "Sikkerhedskontroller";
@@ -1626,7 +1640,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     FixedText FT_NETACCESS
     {
         Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 39 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "Netzz~ugriff" ;
         Text [ English ] = "~Netaccess" ;
         Text [ english_us ] = "~Net access" ;
@@ -1653,7 +1667,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     ListBox LB_NETACCESS
     {
-        Pos = MAP_APPFONT ( 56 , GB_JAVA_Y + 37 ) ;
+        Pos = MAP_APPFONT ( 66 , GB_JAVA_Y + 37 ) ;
         Size = MAP_APPFONT ( 72 , 48 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -1771,35 +1785,35 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
             < "¾øÀ½" ; > ;
             < "È£½ºÆ®" ; > ;
         };
-    StringList [ turkish ] =
-    {
+        StringList [ turkish ] =
+        {
             < "Sýnýrlamasýz" ; > ;
-        < "Hiçbiri" ; > ;
-        < "Ana bilgisayar" ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
+            < "Hiçbiri" ; > ;
+            < "Ana bilgisayar" ; > ;
+        };
+        StringList [ language_user1 ] =
+        {
             < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < " " ; > ;
+            < " " ; > ;
+        };
+        StringList [ finnish ] =
+        {
              < "Rajoittamaton" ; > ;
-        < "Ei mitään" ; > ;
-        < "Isäntäkone" ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < "Ei mitään" ; > ;
+            < "Isäntäkone" ; > ;
+        };
+        StringList [ catalan ] =
+        {
              < "Uneingeschränkt" ; > ;
-        < "Keinen" ; > ;
-        < "Rechner" ; > ;
-    };
+            < "Keinen" ; > ;
+            < "Rechner" ; > ;
+        };
     };
     FixedText FT_CLASSPATH
     {
         Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 54 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "~ClassPath" ;
         Text [ English ] = "~ClassPath" ;
         Text [ english_us ] = "~ClassPath" ;
@@ -1826,13 +1840,13 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     Edit ED_CLASSPATH
     {
-        Pos = MAP_APPFONT ( 56 , GB_JAVA_Y + 52 ) ;
-        Size = MAP_APPFONT ( 97 , 12 ) ;
+        Pos = MAP_APPFONT ( 66 , GB_JAVA_Y + 52 ) ;
+        Size = MAP_APPFONT ( 91 , 12 ) ;
         Border = TRUE ;
     };
     PushButton PB_CLASSPATH
     {
-        Pos = MAP_APPFONT ( 157 , GB_JAVA_Y + 51 ) ;
+        Pos = MAP_APPFONT ( 160 , GB_JAVA_Y + 51 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Text = "~...";
     };
@@ -1873,8 +1887,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     CheckBox CB_EXECUTE_PLUGINS
     {
         Pos = MAP_APPFONT ( 186 , GB_JAVA_Y + 11 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
-        Text = "Pl~ugIns" ;
+        Size = MAP_APPFONT ( 62 , 10 ) ;
+        Text = "~PlugIns" ;
         Text [ English ] = "Pl~ugIns" ;
         Text [ english_us ] = "Pl~ug-ins" ;
         Text [ portuguese_brazilian ] = "~Plugins" ;
@@ -1901,8 +1915,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     CheckBox CB_EXECUTE_APPLETS
     {
         Pos = MAP_APPFONT ( 186 , GB_JAVA_Y + 24 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
-        Text = "App~lets" ;
+        Size = MAP_APPFONT ( 62 , 10 ) ;
+        Text = "~Applets" ;
         Text [ English ] = "App~lets" ;
         Text[ english_us ] = "App~lets";
         Text[ portuguese ] = "~Applets";
@@ -1925,18 +1939,6 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ arabic ] = "ÊØÈíÞÇÊ ÕÛíÑÉ";
         Text[ catalan ] = "Applets";
     };
-    Text[ chinese_simplified ] = "½Å±¾";
-    Text[ russian ] = "Ñêðèïò";
-    Text[ polish ] = "Scripting";
-    Text[ japanese ] = "½¸ØÌßÄ";
-    Text[ chinese_traditional ] = "©R¥O½Z";
-    Text[ arabic ] = "Scripting";
-    Text[ greek ] = "Scripting";
-    Text[ korean ] = "½ºÅ©¸³ÆÃ";
-    Text[ turkish ] = "Scripting";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Scripting";
-    Text[ finnish ] = "Käsitellään komentosarjoja";
 };
 
 ErrorBox RID_SVXERR_OPT_PROXYPORTS
