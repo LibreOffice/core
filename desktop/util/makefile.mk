@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-24 13:43:24 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:37:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -255,7 +255,7 @@ APP5OBJS +=	$(OBJ)$/icon_resource_ooo.obj
 APP5STDLIBS+= -lXext -lSM -lICE
 .ENDIF # LINUX
 
-APP5DEPN= $(APP1RES) ooverinfo.rc
+APP5DEPN= $(APP1TARGETN) $(APP5RES) ooverinfo.rc
 APP5DEF=    $(MISCX)$/$(TARGET).def
 
 .IF "$(GUI)" == "WNT"
@@ -295,4 +295,4 @@ $(MISCX)$/$(APP1TARGET).def : makefile.mk
 
 $(BIN)$/so: makefile.mk
     @echo APP5 : $(APP5TARGET)
-    @+-mkdir $(BIN)$/so
+    @+-mkdir $(BIN)$/so >& $(NULLDEV)
