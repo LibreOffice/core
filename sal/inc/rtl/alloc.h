@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alloc.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mhu $ $Date: 2001-11-29 19:02:40 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ extern "C" {
     @return pointer to allocated memory.
  */
 void * SAL_CALL rtl_allocateMemory (
-    sal_uInt32 Bytes
+    sal_Size Bytes
 ) SAL_THROW_EXTERN_C();
 
 
@@ -98,8 +98,8 @@ void * SAL_CALL rtl_allocateMemory (
     @return pointer to reallocated memory. May differ from Ptr.
  */
 void * SAL_CALL rtl_reallocateMemory (
-    void *     Ptr,
-    sal_uInt32 Bytes
+    void *   Ptr,
+    sal_Size Bytes
 ) SAL_THROW_EXTERN_C();
 
 
@@ -120,7 +120,7 @@ void SAL_CALL rtl_freeMemory (
     @return pointer to allocated and zero'ed memory.
  */
 void * SAL_CALL rtl_allocateZeroMemory (
-    sal_uInt32 Bytes
+    sal_Size Bytes
 ) SAL_THROW_EXTERN_C();
 
 
@@ -130,8 +130,8 @@ void * SAL_CALL rtl_allocateZeroMemory (
     @return none. Memory is zero'ed and released. Ptr is invalid.
  */
 void SAL_CALL rtl_freeZeroMemory (
-    void *     Ptr,
-    sal_uInt32 Bytes
+    void *   Ptr,
+    sal_Size Bytes
 ) SAL_THROW_EXTERN_C();
 
 
