@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrusioncontrols.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:21:03 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 16:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,32 +805,32 @@ String RID_SVXSTR_EXTRUSION_COLOR
 
 String RID_SVXSTR_DEPTH_0
 {
-    Text [ de ] = "~0 mm";
-    Text [ en-US ] = "~0 mm";
+    Text [ de ] = "~0 cm";
+    Text [ en-US ] = "~0 cm";
 };
 
 String RID_SVXSTR_DEPTH_1
 {
-    Text [ de ] = "~1 mm";
-    Text [ en-US ] = "~1 mm";
+    Text [ de ] = "~1 cm";
+    Text [ en-US ] = "~1 cm";
 };
 
 String RID_SVXSTR_DEPTH_2
 {
-    Text [ de ] = "~2.5 mm";
-    Text [ en-US ] = "~2.5 mm";
+    Text [ de ] = "~2.5 cm";
+    Text [ en-US ] = "~2.5 cm";
 };
 
 String RID_SVXSTR_DEPTH_3
 {
-    Text [ de ] = "~5 mm";
-    Text [ en-US ] = "~5 mm";
+    Text [ de ] = "~5 cm";
+    Text [ en-US ] = "~5 cm";
 };
 
 String RID_SVXSTR_DEPTH_4
 {
-    Text [ de ] = "10 ~mm";
-    Text [ en-US ] = "10 ~mm";
+    Text [ de ] = "10 ~cm";
+    Text [ en-US ] = "10 ~cm";
 };
 
 String RID_SVXSTR_DEPTH_0_INCH
