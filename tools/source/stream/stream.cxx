@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:40:56 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,11 +104,6 @@ DBG_NAME( Stream );
 #define SPECIAL_PARAM_WIDTH 1       // Format-Str, Width, Number
 #define SPECIAL_PARAM_PRECISION 2   // Format-Str, Precision, Number
 #define SPECIAL_PARAM_BOTH 3        // Format-Str, Width, Precision, Number
-
-#if SUPD <= 344
-#define _CR '\n'
-#define _LF '\r'
-#endif
 
 // -----------------------------------------------------------------------
 
