@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-17 14:19:06 $
+ *  last change: $Author: jp $ $Date: 2000-11-21 14:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1712,6 +1712,7 @@ SfxItemPresentation SvxUnderlineItem::GetPresentation
     XubString&          rText, const International *
 )   const
 {
+#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -1724,6 +1725,7 @@ SfxItemPresentation SvxUnderlineItem::GetPresentation
                 ( rText += cpDelim ) += ::GetColorString( mColor );
             return ePres;
     }
+#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
