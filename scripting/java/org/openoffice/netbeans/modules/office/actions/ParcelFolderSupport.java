@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelFolderSupport.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-09-10 10:46:29 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ import org.openoffice.netbeans.modules.office.loader.ParcelFolder;
 import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 import org.openoffice.netbeans.modules.office.utils.ManifestParser;
 
-import com.sun.star.script.framework.browse.ParcelDescriptor;
+import com.sun.star.script.framework.container.ParcelDescriptor;
 
 import org.openoffice.idesupport.zip.ParcelZipper;
 import org.openoffice.idesupport.filter.FileFilter;
