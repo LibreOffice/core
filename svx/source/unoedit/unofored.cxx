@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:59:57 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 09:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,13 +378,14 @@ Rectangle SvxEditEngineForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) c
     // #108900# Handle virtual position one-past-the end of the string
     if( nIndex >= rEditEngine.GetTextLen(nPara) )
     {
-        Rectangle aLast(0,0,0,0);
+        // #109151# Don't use paper height, but line height instead
+        Rectangle aLast(0,0,0,rEditEngine.GetLineHeight(nPara,0));
 
         if( nIndex )
             aLast = rEditEngine.GetCharacterBounds( EPosition(nPara, nIndex-1) );
 
         aLast.Move( aLast.Right() - aLast.Left(), 0 );
-        aLast.SetSize( Size(1, rEditEngine.GetTextHeight()) );
+        aLast.SetSize( Size(1, aLast.GetHeight()) );
         return SvxEditSourceHelper::EEToUserSpace( aLast, aSize, rEditEngine.IsVertical() == TRUE );
     }
     else
