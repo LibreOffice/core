@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-01 09:59:45 $
+ *  last change: $Author: lo $ $Date: 2002-11-06 14:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
+#include <com/sun/star/uno/Exception.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -347,7 +351,7 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
     if ( !configureUcb( bServer, aPortalConnect ) )
     {
         DBG_ERROR( "Can't configure UCB" );
-        exit(-1);
+        throw com::sun::star::uno::Exception(rtl::OUString::createFromAscii("RegisterServices, configureUcb"), NULL);
     }
 
 //  UCB_Helper::Initialize(); !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

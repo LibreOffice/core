@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-01 09:49:01 $
+ *  last change: $Author: lo $ $Date: 2002-11-06 14:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ class IntroWindow_Impl;
 class OOfficeAcceptorThread;
 class PluginAcceptThread;
 class CommandLineArgs;
+class Lockfile;
 class Desktop : public Application
 {
     public:
@@ -168,6 +169,8 @@ class Desktop : public Application
         USHORT                          m_nAppEvents;
         IntroWindow_Impl*               m_pIntro;
         BootstrapError                  m_aBootstrapError;
+
+        Lockfile *m_pLockfile;
 
         static ResMgr*                  pResMgr;
         static PluginAcceptThread*      pPluginAcceptThread;
