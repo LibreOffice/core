@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.40 $
- *  last change: $Author: hdu $ $Date: 2001-05-17 12:59:16 $
+ *  $Revision: 1.41 $
+ *  last change: $Author: vg $ $Date: 2001-05-18 14:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,9 +186,9 @@ void FtFontFile::Unmap()
         return;
 
 #if defined(UNX)
-    munmap( mpFileMap, mnFileSize );
+    munmap( (char*)mpFileMap, mnFileSize );
 #elif defined(WIN32)
-    UnmapViewOfFile( mpFileMap );
+    UnmapViewOfFile( (char*)mpFileMap );
 #else
     delete[] mpFileMap;
 #endif
