@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ModelImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:32:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,16 +449,26 @@ Reference<XStorage> ODatabaseModelImpl::getStorage()
         {
             Sequence<Any> aArgs(2);
             const PropertyValue* pEnd = m_aArgs.getConstArray() + m_aArgs.getLength();
-            const PropertyValue* pValue =::std::find_if(m_aArgs.getConstArray(),
-                                                        pEnd,
-                                                        ::std::bind2nd(::comphelper::TPropertyValueEqualFunctor(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Stream"))));
+            const PropertyValue* pValue =::std::find_if(
+                m_aArgs.getConstArray(),
+                pEnd,
+                ::std::bind2nd(
+                    ::comphelper::TPropertyValueEqualFunctor(),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Stream" ) )
+                ));
+
             if ( pValue && pValue != pEnd )
                 aArgs[0] = pValue->Value;
             else
             {
-                pValue =::std::find_if(m_aArgs.getConstArray(),
-                                                            pEnd,
-                                                            ::std::bind2nd(::comphelper::TPropertyValueEqualFunctor(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"))));
+                pValue =::std::find_if(
+                    m_aArgs.getConstArray(),
+                    pEnd,
+                    ::std::bind2nd(
+                        ::comphelper::TPropertyValueEqualFunctor(),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ) )
+                    ));
+
                 if ( pValue && pValue != pEnd )
                     aArgs[0] = pValue->Value;
                 else if ( m_sFileURL.getLength() )
