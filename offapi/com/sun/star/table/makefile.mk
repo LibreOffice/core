@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 15:15:11 $
+#   last change: $Author: vg $ $Date: 2003-04-24 17:46:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,8 @@ PACKAGE=com$/sun$/star$/table
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    AccessibleCellView.idl      \
+    AccessibleTableView.idl	\
     BorderLine.idl\
     Cell.idl\
     CellAddress.idl\
