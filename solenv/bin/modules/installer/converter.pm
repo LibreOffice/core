@@ -2,9 +2,9 @@
 #
 #   $RCSfile: converter.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 18:32:01 $
+#   last change: $Author: hr $ $Date: 2004-11-12 11:26:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,11 +123,11 @@ sub convert_stringlist_into_array
     {
         $first = $1;
         $last = $2;
-        if ( $ENV{'USE_SHELL'} eq "4nt" ) { $first =~ s/\//\\/g; }
+        if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $first =~ s/\//\\/g; }
         push(@newarray, "$first\n");
     }
 
-    if ( $ENV{'USE_SHELL'} eq "4nt" ) { $last =~ s/\//\\/g; }
+    if ( defined($ENV{'USE_SHELL'}) && $ENV{'USE_SHELL'} eq "4nt" ) { $last =~ s/\//\\/g; }
     push(@newarray, "$last\n");
 
     return \@newarray;
