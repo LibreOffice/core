@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-10-18 07:58:49 $
+ *  last change: $Author: cl $ $Date: 2002-12-02 16:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,4 +663,23 @@ void SvxColorDockingWindow::GetFocus (void)
     // Grab the focus to the color value set so that it can be controlled
     // with the keyboard.
     aColorSet.GrabFocus();
+}
+
+long SvxColorDockingWindow::Notify( NotifyEvent& rNEvt )
+{
+    long nRet = 0;
+    if( ( rNEvt.GetType() == EVENT_KEYINPUT ) )
+    {
+        KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
+        USHORT   nKeyCode = aKeyEvt.GetKeyCode().GetCode();
+        switch( nKeyCode )
+        {
+            case KEY_ESCAPE:
+                GrabFocusToDocument();
+                nRet = 1;
+                break;
+        }
+    }
+
+    return nRet ? nRet : SfxDockingWindow::Notify( rNEvt );
 }
