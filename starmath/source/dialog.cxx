@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:26 $
+ *  last change: $Author: tl $ $Date: 2000-10-16 10:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,13 +381,25 @@ void SmShowFont::SetFont(const Font& rFont)
 }
 
 
-IMPL_LINK_INLINE_START( SmFontDialog, FontChangeHdl, ComboBox *, pComboBox )
+IMPL_LINK_INLINE_START( SmFontDialog, FontSelectHdl, ComboBox *, pComboBox )
 {
     Face.SetName(pComboBox->GetText());
     aShowFont.SetFont(Face);
     return 0;
 }
-IMPL_LINK_INLINE_END( SmFontDialog, FontChangeHdl, ComboBox *, pComboBox )
+IMPL_LINK_INLINE_END( SmFontDialog, FontSelectHdl, ComboBox *, pComboBox )
+
+
+IMPL_LINK( SmFontDialog, FontModifyHdl, ComboBox *, pComboBox )
+{
+    // if font is available in list then use it
+    USHORT nPos = pComboBox->GetEntryPos( pComboBox->GetText() );
+    if (COMBOBOX_ENTRY_NOTFOUND != nPos)
+    {
+        FontSelectHdl( pComboBox );
+    }
+    return 0;
+}
 
 
 IMPL_LINK( SmFontDialog, AttrChangeHdl, CheckBox *, pCheckBox )
@@ -463,7 +475,8 @@ SmFontDialog::SmFontDialog(Window * pParent, BOOL bFreeRes)
         //Application::LeaveWait();
     }
 
-    aFontBox.SetSelectHdl(LINK(this, SmFontDialog, FontChangeHdl));
+    aFontBox.SetSelectHdl(LINK(this, SmFontDialog, FontSelectHdl));
+    aFontBox.SetModifyHdl(LINK(this, SmFontDialog, FontModifyHdl));
     aBoldCheckBox.SetClickHdl(LINK(this, SmFontDialog, AttrChangeHdl));
     aItalicCheckBox.SetClickHdl(LINK(this, SmFontDialog, AttrChangeHdl));
 }

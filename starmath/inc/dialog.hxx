@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:24 $
+ *  last change: $Author: tl $ $Date: 2000-10-16 10:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,8 @@ class SmFontDialog : public ModalDialog
 
     Font    Face;
 
-    DECL_LINK(FontChangeHdl, ComboBox *);
+    DECL_LINK(FontSelectHdl, ComboBox *);
+    DECL_LINK(FontModifyHdl, ComboBox *);
     DECL_LINK(AttrChangeHdl, CheckBox *);
 
 public:
