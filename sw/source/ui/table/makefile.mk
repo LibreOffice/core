@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:46:37 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:57:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=table
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -75,21 +73,8 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        colwd.cxx \
-        convert.cxx \
-        chartins.cxx \
-        insrc.cxx \
-        instable.cxx \
-        mergetbl.cxx \
-        rowht.cxx \
-        split.cxx \
-        splittbl.cxx \
-        tabledlg.cxx \
-        tablemgr.cxx \
-        tautofmt.cxx
-
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         colwd.src \
         convert.src \
         chartins.src \
