@@ -59,14 +59,14 @@ $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP)
     +echo  $(JARTARGETN) : \> ..$/misc$/$(JARTARGETDEP)
     +echo $(foreach,i,$(JARCLASSDIRS) $(shell $(FIND) $i -type f -name "*.class" ! -name "*$$*" -print >> ..$/misc$/$(JARTARGETDEP).tmp )) >& $(NULLDEV)
     +type ..$/misc$/$(JARTARGETDEP).tmp | sed "s#\.class#\.class \\#" >> ..$/misc$/$(JARTARGETDEP)
-    +echo. >> ..$/misc$/$(JARTARGETDEP)
+    +$(ECHONL) >> ..$/misc$/$(JARTARGETDEP)
     +-$(RM) ..$/misc$/$(JARTARGETDEP).tmp >& $(NULLDEV)
 .ENDIF
 .IF "$(GUI)"=="WNT"
     +echo  $(JARTARGETN) : \> ..$/misc$/$(JARTARGETDEP)
     +echo $(foreach,i,$(JARCLASSDIRS) $(shell $(FIND) $i -type f -name "*.class" ! -name "*$$*" -print >> ..$/misc$/$(JARTARGETDEP).tmp )) >& $(NULLDEV)
     +type ..$/misc$/$(JARTARGETDEP).tmp | sed "s#\.class#\.class \\#" >> ..$/misc$/$(JARTARGETDEP)
-    +echo. >> ..$/misc$/$(JARTARGETDEP)
+    +$(ECHONL) >> ..$/misc$/$(JARTARGETDEP)
     +-$(RM) ..$/misc$/$(JARTARGETDEP).tmp >& $(NULLDEV)
 .ENDIF
 
