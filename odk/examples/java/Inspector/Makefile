@@ -95,3 +95,6 @@ register: $(REGISTERFLAG)
 	@echo Please use the following command to execute
 	@echo java -classpath $(DK_CLASSPATH) Test
 	@echo --------------------------------------------------------------------------------
+
+run:
+	java -classpath $(DK_CLASSPATH) Test
