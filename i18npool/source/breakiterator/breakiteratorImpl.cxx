@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-26 21:25:10 $
+ *  last change: $Author: khong $ $Date: 2002-09-05 18:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,8 +393,9 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_Unicode currentChar )
 
         //JP 21.9.2001: handle specific characters - always as weak
         //          definition of 1 - this breaks a word
-        //                        2 - this can be inside a word
-        if( 1 == currentChar || 2 == currentChar )
+        //          2 - this can be inside a word
+        //          0x20 - Bug 102975, declare western blank as WEAK char.
+        if( 1 == currentChar || 2 == currentChar || 0x20 == currentChar )
         nRet = ScriptType::WEAK;
         else
         nRet = unicode::getUnicodeScriptType( currentChar, typeList, ScriptType::WEAK );
@@ -444,9 +445,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
             return xBI = listItem->xBI;
         }
 
-        static sal_Unicode under = (sal_Unicode)'_';
-        static OUString tw(OUString::createFromAscii("TW"));
-        static OUString unicode(OUString::createFromAscii("Unicode"));
+        sal_Unicode under = (sal_Unicode)'_';
 
         sal_Int32 l = rLocale.Language.getLength();
         sal_Int32 c = rLocale.Country.getLength();
@@ -465,13 +464,13 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
                     (rLocale.Country.compareToAscii("HK") == 0 ||
                     rLocale.Country.compareToAscii("MO") == 0) &&
             // if the country code is HK or MO, one more step to try TW.
-            createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).append(
-                    tw).makeStringAndClear())) ||
+            createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).appendAscii(
+                    "TW").makeStringAndClear())) ||
         (l > 0 &&
             // load service with name <base>_<lang>
             createLocaleSpecificBreakIterator(rLocale.Language)) ||
             // load default service with name <base>_Unicode
-            createLocaleSpecificBreakIterator(unicode)) {
+            createLocaleSpecificBreakIterator(OUString::createFromAscii("Unicode"))) {
         lookupTable.Insert( new lookupTableItem(aLocale, xBI) );
         return xBI;
         }
