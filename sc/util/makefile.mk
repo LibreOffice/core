@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 12:56:06 $
+#   last change: $Author: vg $ $Date: 2003-07-02 14:34:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,7 @@ IENV!:=$(IENV);..$/res
 LINKFLAGS+=/SEGMENTS:512 /PACKD:32768
 .ENDIF
 .IF "$(OS)"=="IRIX"
-LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=20
+LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=30
 .ENDIF
 
 # --- Resourcen ----------------------------------------------------
