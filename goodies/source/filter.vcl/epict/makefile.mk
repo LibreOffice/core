@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: thb $ $Date: 2001-08-14 14:22:55 $
+#   last change: $Author: thb $ $Date: 2001-12-06 14:18:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,6 +118,7 @@ SHL1BASE=0x1c000000
 
 all:    ALLTAR
 
+# THB: exports list goodies checked for 6.0 Final 6.12.2001
 .IF "$(GUI)" == "OS2"
 
 $(MISC)$/$(SHL1TARGET).def:\

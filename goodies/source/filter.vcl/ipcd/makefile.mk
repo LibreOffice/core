@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: thb $ $Date: 2001-08-14 14:22:56 $
+#   last change: $Author: thb $ $Date: 2001-12-06 14:18:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,7 @@ SHL1BASE=0x1c000000
 .INCLUDE :  target.mk
 
 
+# THB: exports list goodies checked for 6.0 Final 6.12.2001
 .IF "$(GUI)"=="WNT"
 
 $(MISC)$/$(SHL1TARGET).def: makefile.mk 

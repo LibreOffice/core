@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:14:45 $
+#   last change: $Author: thb $ $Date: 2001-12-06 14:18:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -194,6 +194,7 @@ $(MISC)$/$(SHL1TARGET).flt:
 
 # -------------------------------------------------------------------------
 
+# THB: exports list goodies checked for 6.0 Final 6.12.2001
 .IF "$(GUI)"=="MAC"
 
 $(MISC)$/$(SHL1TARGET).def:  $(MISC)$/$(SHL1TARGET).flt makefile.mk

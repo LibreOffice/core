@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ka $ $Date: 2000-11-07 12:38:42 $
+#   last change: $Author: thb $ $Date: 2001-12-06 14:18:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,6 +113,9 @@ DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt \
 DEF1DES		=Goodies
 DEFLIB1NAME	=go
 
+# THB: exports list goodies checked for 6.0 Final 6.12.2001
+# Note: explicit exports only necessary for VCL graphic filters (see there)
+
 # --- Targets -----------------------------------------------------------
 
 .INCLUDE :  target.mk
@@ -129,5 +132,4 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo m_pLoader>$@
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
-
 .ENDIF
