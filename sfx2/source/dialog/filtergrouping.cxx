@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2002-01-03 11:27:02 $
+ *  last change: $Author: aw $ $Date: 2002-06-20 09:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,6 +716,8 @@ namespace sfx2
                 ++aGroupPos;
                 const ::rtl::OUString* pGlobalClassNames = aGlobalClassNames.begin();
                 while   (   ( aGroupPos != _rAllFilters.end() )
+                        // #100545# ++pGlobalClassNames may exceed aGlobalClassNames.end()
+                        &&  ( pGlobalClassNames != aGlobalClassNames.end() )
                         &&  ( *pGlobalClassNames != sDocServName )
                         )
                 {
@@ -1023,6 +1025,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2002/01/03 11:27:02  rt
+ *  #65293# include corrected: don't use sfx2-path here
+ *
  *  Revision 1.9  2001/12/07 09:31:46  fs
  *  #95509# sort the groups in the same order as the global classes
  *
