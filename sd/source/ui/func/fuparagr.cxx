@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuparagr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-13 11:39:37 $
+ *  last change: $Author: cl $ $Date: 2002-09-27 12:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ FuParagraph::FuParagraph( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                             SID_ATTR_PARA_LRSPACE,
                             SID_ATTR_PARA_LEFT_TO_RIGHT,
                             SID_ATTR_PARA_RIGHT_TO_LEFT,
+                            SID_RULER_TEXT_RIGHT_TO_LEFT,
                             SID_PARASPACE_INCREASE,
                             SID_PARASPACE_DECREASE,
                             0 };

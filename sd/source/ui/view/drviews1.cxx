@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-20 14:03:16 $
+ *  last change: $Author: cl $ $Date: 2002-09-27 12:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,6 +738,7 @@ void SdDrawViewShell::UpdateHRuler()
     Invalidate( SID_ATTR_LONG_LRSPACE );
     Invalidate( SID_RULER_PAGE_POS );
     Invalidate( SID_RULER_OBJECT );
+    Invalidate( SID_RULER_TEXT_RIGHT_TO_LEFT );
 
     for (USHORT nIndex=0; nIndex<MAX_HSPLIT_CNT; nIndex++)
     {
