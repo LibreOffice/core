@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tolayoutanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:43:27 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,6 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 
     // calculate 'vertical' position
     SwFmtVertOrient aVert( rFrmFmt.GetVertOrient() );
-    bool bVertChgd = false;
     {
         // to-frame anchored objects are *only* vertical positioned centered or
         // bottom, if its wrap mode is 'throught' and its anchor frame has fixed
@@ -155,13 +154,18 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
                                 rLR, rUL, nVertOffsetToFrmAnchorPos );
 
 
-        // ??? Why saving calculated relative position
-        // keep the calculated relative vertical position
-        if ( aVert.GetVertOrient() != VERT_NONE &&
-             aVert.GetPos() != nRelPosY )
+        // keep the calculated relative vertical position - needed for filters
+        // (including the xml-filter)
         {
-            aVert.SetPos( nRelPosY );
-            bVertChgd = true;
+            SwTwips nAttrRelPosY = nRelPosY - nVertOffsetToFrmAnchorPos;
+            if ( aVert.GetVertOrient() != VERT_NONE &&
+                 aVert.GetPos() != nAttrRelPosY )
+            {
+                aVert.SetPos( nAttrRelPosY );
+                const_cast<SwFrmFmt&>(rFrmFmt).LockModify();
+                const_cast<SwFrmFmt&>(rFrmFmt).SetAttr( aVert );
+                const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
+            }
         }
 
         // determine absolute 'vertical' position, depending on layout-direction
@@ -266,29 +270,23 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
             maOffsetToFrmAnchorPos.X() = nOffset;
         }
 
-        // ??? Why saving calculated relative position
-        // keep the calculated relative horizontal position
-        if ( HORI_NONE != aHori.GetHoriOrient() &&
-             aHori.GetPos() != nRelPosX )
+        // keep the calculated relative horizontal position - needed for filters
+        // (including the xml-filter)
         {
-            aHori.SetPos( nRelPosX );
-            bHoriChgd = true;
+            SwTwips nAttrRelPosX = nRelPosX - nOffset;
+            if ( HORI_NONE != aHori.GetHoriOrient() &&
+                 aHori.GetPos() != nAttrRelPosX )
+            {
+                aHori.SetPos( nAttrRelPosX );
+                const_cast<SwFrmFmt&>(rFrmFmt).LockModify();
+                const_cast<SwFrmFmt&>(rFrmFmt).SetAttr( aHori );
+                const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
+            }
         }
     } // end of determination of horizontal position
 
     // keep calculate relative position
     maRelPos = aRelPos;
-
-    // ??? Why saving calculated relative position
-    // update attributes, if changed
-    {
-        const_cast<SwFrmFmt&>(rFrmFmt).LockModify();
-        if ( bVertChgd )
-            const_cast<SwFrmFmt&>(rFrmFmt).SetAttr( aVert );
-        if ( bHoriChgd )
-            const_cast<SwFrmFmt&>(rFrmFmt).SetAttr( aHori );
-        const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
-    }
 }
 
 /** calculated relative position for object position
