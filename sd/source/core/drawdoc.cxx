@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:53:14 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,11 +232,46 @@ TYPEINIT1( SdDrawDocument, FmFormModel );
 
 SdDrawDocument* SdDrawDocument::pDocLockedInsertingLinks = NULL;
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
+//////////////////////////////////////////////////////////////////////////////
+
+PresentationSettings::PresentationSettings()
+:   mbAll( true ),
+    mbEndless( false ),
+    mbManual( false ),
+    mbMouseVisible( true ),
+    mbMouseAsPen( false ),
+    mbLockedPages( false ),
+    mbAlwaysOnTop( false ),
+    mbFullScreen( true ),
+    mbAnimationAllowed( true ),
+    mnPauseTimeout( 10 ),
+    mbShowPauseLogo( false ),
+    mbCustomShow(false),
+    mbStartWithNavigator(false)
+{
+}
+
+// ---------------------------------------------------------------------------
+
+PresentationSettings::PresentationSettings( const PresentationSettings& r )
+:   maPresPage( r.maPresPage ),
+    mbAll( r.mbAll ),
+    mbEndless( r.mbEndless ),
+    mbManual( r.mbManual ),
+    mbMouseVisible( r.mbMouseVisible ),
+    mbMouseAsPen( r.mbMouseAsPen ),
+    mbLockedPages( r.mbLockedPages ),
+    mbAlwaysOnTop( r.mbAlwaysOnTop ),
+    mbFullScreen( r.mbFullScreen ),
+    mbAnimationAllowed( r.mbAnimationAllowed ),
+    mnPauseTimeout( r.mnPauseTimeout ),
+    mbShowPauseLogo( r.mbShowPauseLogo ),
+    mbCustomShow( r.mbCustomShow ),
+    mbStartWithNavigator( r.mbStartWithNavigator )
+{
+}
+
+// ---------------------------------------------------------------------------
 
 SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     FmFormModel(
@@ -245,20 +280,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     eDocType(eType),
     pDocSh(static_cast< ::sd::DrawDocShell*>(pDrDocSh)),
     pCreatingTransferable( NULL ),
-    bPresAll(TRUE),
-    bPresEndless(FALSE),
-    bPresManual(FALSE),
-    bPresMouseVisible(TRUE),
-    bPresMouseAsPen(FALSE),
-    bPresLockedPages(FALSE),
-    bStartPresWithNavigator(FALSE),
-    bAnimationAllowed(TRUE),
-    bPresAlwaysOnTop(FALSE),
-    bPresFullScreen(TRUE),
-    nPresPause(10),
-    bPresShowLogo(FALSE),
-    bCustomShow(false),
-    nPresFirstPage(1),
     pOutliner(NULL),
     pInternalOutliner(NULL),
     ePageNumType(SVX_ARABIC),
@@ -675,540 +696,6 @@ SdrPage* SdDrawDocument::AllocPage(FASTBOOL bMasterPage)
 
 /*************************************************************************
 |*
-|* Inserter fuer SvStream zum Speichern
-|*
-\************************************************************************/
-
-//BFS02SvStream& operator << (SvStream& rOut, SdDrawDocument& rDoc)
-//BFS02{
-//BFS02 // #90477# CharSet eSysSet = ::GetStoreCharSet( gsl_getSystemTextEncoding());
-//BFS02 CharSet eSysSet = GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion());
-//BFS02
-//BFS02 /**************************************************************************
-//BFS02 * Aktuelle FileFormat-Versionsnummer
-//BFS02 * Bei Aenderugen stets inkrementieren und beim Laden beruecksichtigen!
-//BFS02 **************************************************************************/
-//BFS02 rDoc.nFileFormatVersion = 18;
-//BFS02
-//BFS02 // AutoLayouts muessen ggf. erzeugt werden
-//BFS02 rDoc.StopWorkStartupDelay();
-//BFS02
-//BFS02 // Eindeutige Namen der StandardLayer erzeugen
-//BFS02 rDoc.MakeUniqueLayerNames();
-//BFS02
-//BFS02 rOut << (FmFormModel&) rDoc;
-//BFS02
-//BFS02 // Sprachabhaengige Namen der StandardLayer wieder herstellen
-//BFS02 rDoc.RestoreLayerNames();
-//BFS02
-//BFS02 if ( rDoc.IsStreamingSdrModel() )
-//BFS02 {
-//BFS02     // Es wird nur das SdrModel gestreamt, nicht das SdDrawDocument!
-//BFS02     // Anwendungsfall: svdraw Clipboard-Format
-//BFS02     return(rOut);
-//BFS02 }
-//BFS02
-//BFS02 SdIOCompat aIO(rOut, STREAM_WRITE, rDoc.nFileFormatVersion);
-//BFS02
-//BFS02 BOOL bDummy = TRUE;
-//BFS02 rOut << bDummy;                    // ehem. bPresentation
-//BFS02 rOut << rDoc.bPresAll;
-//BFS02 rOut << rDoc.bPresEndless;
-//BFS02 rOut << rDoc.bPresManual;
-//BFS02 rOut << rDoc.bPresMouseVisible;
-//BFS02 rOut << rDoc.bPresMouseAsPen;
-//BFS02 rOut << rDoc.nPresFirstPage;
-//BFS02
-//BFS02 // Es wird nun eine Liste von FrameViews geschrieben (siehe weiter unten),
-//BFS02 // daher wird an dieser Stelle ein FALSE vermerkt.
-//BFS02 BOOL bSingleFrameView = FALSE;
-//BFS02 rOut << bSingleFrameView;
-//BFS02
-//BFS02 /**************************************************************************
-//BFS02 * Frueher (StarDraw Version 3.0, File-Format Version 3) wurde hier das
-//BFS02 * JobSetup geschrieben, nun der Printer (binaer-kompatibel, daher wurde
-//BFS02 * die Version des File-Formats nicht geaendert)
-//BFS02 **************************************************************************/
-//BFS02 if (rDoc.pDocSh)
-//BFS02 {
-//BFS02     SfxPrinter* pPrinter = rDoc.pDocSh->GetPrinter(TRUE);
-//BFS02     pPrinter->Store(rOut);
-//BFS02 }
-//BFS02 else
-//BFS02 {
-//BFS02     // Keine DocShell, daher wird ein JobSetup geschrieben
-//BFS02     JobSetup aJobSetup;
-//BFS02     rOut << aJobSetup;
-//BFS02 }
-//BFS02
-//BFS02 rOut << (ULONG) rDoc.eLanguage;
-//BFS02
-//BFS02 /**************************************************************************
-//BFS02 * FrameViews schreiben
-//BFS02 **************************************************************************/
-//BFS02 ULONG nFrameViewCount = 0;
-//BFS02 ::sd::ViewShell* pViewSh = NULL;
-//BFS02 SfxViewShell* pSfxViewSh = NULL;
-//BFS02 SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(rDoc.pDocSh,
-//BFS02                                                      TYPE(SfxTopViewFrame));
-//BFS02
-//BFS02 while (pSfxViewFrame)
-//BFS02 {
-//BFS02     // Anzahl FrameViews ermitteln
-//BFS02     pSfxViewSh = pSfxViewFrame->GetViewShell();
-//BFS02     pViewSh = PTR_CAST(::sd::ViewShell, pSfxViewSh );
-//BFS02
-//BFS02     if ( pViewSh && pViewSh->GetFrameView() )
-//BFS02     {
-//BFS02         nFrameViewCount++;
-//BFS02     }
-//BFS02
-//BFS02     pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, rDoc.pDocSh,
-//BFS02                                           TYPE(SfxTopViewFrame));
-//BFS02 }
-//BFS02
-//BFS02 // Anzahl FrameViews schreiben
-//BFS02 rOut << nFrameViewCount;
-//BFS02
-//BFS02 ::sd::FrameView* pFrame = NULL;
-//BFS02 pViewSh = NULL;
-//BFS02 pSfxViewSh = NULL;
-//BFS02 pSfxViewFrame = SfxViewFrame::GetFirst(rDoc.pDocSh, TYPE(SfxTopViewFrame));
-//BFS02
-//BFS02 while (pSfxViewFrame)
-//BFS02 {
-//BFS02     // FrameViews schreiben
-//BFS02     pSfxViewSh = pSfxViewFrame->GetViewShell();
-//BFS02     pViewSh = PTR_CAST(::sd::ViewShell, pSfxViewSh );
-//BFS02
-//BFS02     if ( pViewSh && pViewSh->GetFrameView() )
-//BFS02     {
-//BFS02         pViewSh->WriteFrameViewData();
-//BFS02         rOut << *pViewSh->GetFrameView();
-//BFS02     }
-//BFS02
-//BFS02     pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, rDoc.pDocSh,
-//BFS02                                           TYPE(SfxTopViewFrame));
-//BFS02 }
-//BFS02
-//BFS02 rOut << rDoc.bStartPresWithNavigator;
-//BFS02 rOut << rDoc.bPresLockedPages;
-//BFS02 rOut << rDoc.bPresAlwaysOnTop;
-//BFS02 rOut << rDoc.bOnlineSpell;
-//BFS02 rOut << rDoc.bHideSpell;
-//BFS02 rOut << rDoc.bPresFullScreen;
-//BFS02 rOut.WriteByteString( rDoc.aPresPage, eSysSet );
-//BFS02 rOut << rDoc.bAnimationAllowed;
-//BFS02
-//BFS02 UINT16 nDocType = (UINT16) rDoc.eDocType;
-//BFS02 rOut << nDocType;
-//BFS02
-//BFS02 // CustomShow aktiv
-//BFS02 rOut << rDoc.bCustomShow;
-//BFS02
-//BFS02 // Anzahl CustomShows schreiben
-//BFS02 ULONG nCustomShowCount = 0;
-//BFS02
-//BFS02 if (rDoc.pCustomShowList)
-//BFS02 {
-//BFS02     nCustomShowCount = rDoc.pCustomShowList->Count();
-//BFS02 }
-//BFS02
-//BFS02 rOut << nCustomShowCount;
-//BFS02
-//BFS02 if (rDoc.pCustomShowList)
-//BFS02 {
-//BFS02     for (ULONG i = 0; i < nCustomShowCount; i++)
-//BFS02     {
-//BFS02         // CustomShows schreiben
-//BFS02         SdCustomShow* pCustomShow = (SdCustomShow*) rDoc.pCustomShowList->GetObject(i);
-//BFS02         rOut << *pCustomShow;
-//BFS02     }
-//BFS02
-//BFS02     // Position der aktuellen CustomShow
-//BFS02     ULONG nCurPos = rDoc.pCustomShowList->GetCurPos();
-//BFS02     rOut << nCurPos;
-//BFS02 }
-//BFS02
-//BFS02 // ab Version 15
-//BFS02 rOut << (ULONG) rDoc.GetPageNumType();
-//BFS02
-//BFS02 // ab Version 17
-//BFS02 rOut << rDoc.GetPresPause() << rDoc.IsPresShowLogo();
-//BFS02
-//BFS02 // ab Version 18 (keine Aenderung)
-//BFS02
-//BFS02 return rOut;
-//BFS02}
-
-/*************************************************************************
-|*
-|* Extractor fuer SvStream zum Laden
-|*
-\************************************************************************/
-
-//BFS02SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
-//BFS02{
-//BFS02 // #90477# CharSet eSysSet = ::GetStoreCharSet( gsl_getSystemTextEncoding());
-//BFS02 CharSet eSysSet = GetSOLoadTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rIn.GetVersion());
-//BFS02
-//BFS02 rIn >> (FmFormModel&) rDoc;
-//BFS02 rDoc.GetItemPool().LoadCompleted();
-//BFS02 rDoc.SetTextDefaults();     // overwrites loaded pool defaults
-//BFS02
-//BFS02    // Turn off printer independent layout (make it printer *dependent*) for
-//BFS02    // pre-6.0 documents.
-//BFS02    rDoc.SetPrinterIndependentLayout (
-//BFS02        ::com::sun::star::document::PrinterIndependentLayout::DISABLED);
-//BFS02
-//BFS02 // Fehler ?
-//BFS02 if (rIn.GetError() != 0)
-//BFS02     return (rIn);
-//BFS02
-//BFS02 if ( rDoc.IsStreamingSdrModel() )
-//BFS02 {
-//BFS02     // Es wird nur das SdrModel gestreamt, nicht das SdDrawDocument!
-//BFS02     // Anwendungsfall: svdraw Clipboard-Format
-//BFS02     return(rIn);
-//BFS02 }
-//BFS02
-//BFS02 SdIOCompat aIO(rIn, STREAM_READ);
-//BFS02
-//BFS02 BOOL bDummy;
-//BFS02 rIn >> bDummy;                     // ehem. bPresentation
-//BFS02 rIn >> rDoc.bPresAll;
-//BFS02 rIn >> rDoc.bPresEndless;
-//BFS02 rIn >> rDoc.bPresManual;
-//BFS02 rIn >> rDoc.bPresMouseVisible;
-//BFS02 rIn >> rDoc.bPresMouseAsPen;
-//BFS02 rIn >> rDoc.nPresFirstPage;
-//BFS02
-//BFS02 rDoc.nFileFormatVersion = aIO.GetVersion();
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 1)
-//BFS02 {
-//BFS02     // Daten der Versionen >= 1 einlesen
-//BFS02
-//BFS02     BOOL bSingleFrameView;
-//BFS02     rIn >> bSingleFrameView;
-//BFS02
-//BFS02     if (bSingleFrameView)
-//BFS02     {
-//BFS02         ::sd::FrameView * pFrameView = new ::sd::FrameView( &rDoc );
-//BFS02         rIn >> *pFrameView;
-//BFS02         rDoc.pFrameViewList->Insert(pFrameView, LIST_APPEND);
-//BFS02
-//BFS02         // Fehler ?
-//BFS02         if (rIn.GetError() != 0)
-//BFS02             return (rIn);
-//BFS02     }
-//BFS02 }
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 2)
-//BFS02 {
-//BFS02     // Daten der Versionen >= 2 einlesen
-//BFS02
-//BFS02     /******************************************************************
-//BFS02     * Frueher (StarDraw Version 3.0, File-Format Version 3) wurde hier
-//BFS02     * das JobSetup eingelesen, nun wird der Printer erzeugt
-//BFS02     * (binaer-kompatibel)
-//BFS02     *******************************************************************/
-//BFS02     // ItemSet mit speziellem Poolbereich anlegen
-//BFS02     SfxItemSet* pSet = new SfxItemSet( rDoc.GetPool(),
-//BFS02                     SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
-//BFS02                     SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
-//BFS02                     ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
-//BFS02                     0 );
-//BFS02     // PrintOptionsSet setzen
-//BFS02     SdOptionsPrintItem aPrintItem(ATTR_OPTIONS_PRINT
-//BFS02                                   ,SD_MOD()->GetSdOptions(rDoc.eDocType)
-//BFS02                                   );
-//BFS02
-//BFS02     SfxFlagItem aFlagItem( SID_PRINTER_CHANGESTODOC );
-//BFS02     USHORT      nFlags = 0;
-//BFS02
-//BFS02     nFlags =  (aPrintItem.IsWarningSize() ? SFX_PRINTER_CHG_SIZE : 0) |
-//BFS02             (aPrintItem.IsWarningOrientation() ? SFX_PRINTER_CHG_ORIENTATION : 0);
-//BFS02     aFlagItem.SetValue( nFlags );
-//BFS02
-//BFS02     pSet->Put( aPrintItem );
-//BFS02     pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aPrintItem.IsWarningPrinter() ) );
-//BFS02     pSet->Put( aFlagItem );
-//BFS02
-//BFS02     SfxPrinter* pPrinter = SfxPrinter::Create(rIn, pSet);
-//BFS02
-//BFS02     MapMode aMM (pPrinter->GetMapMode());
-//BFS02     aMM.SetMapUnit(MAP_100TH_MM);
-//BFS02     pPrinter->SetMapMode(aMM);
-//BFS02     if (rDoc.pDocSh)            // z. B. nicht bei "Einfuegen-Datei"
-//BFS02         rDoc.pDocSh->SetPrinter(pPrinter);
-//BFS02     else
-//BFS02         delete pPrinter;
-//BFS02 }
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 3)
-//BFS02 {
-//BFS02     ULONG nTmp;
-//BFS02     rIn >> nTmp;
-//BFS02     rDoc.SetLanguage( (LanguageType) nTmp, EE_CHAR_LANGUAGE );
-//BFS02 }
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 4)
-//BFS02 {
-//BFS02     /**********************************************************************
-//BFS02     * FrameViews lesen
-//BFS02     **********************************************************************/
-//BFS02     ULONG nCount = 0;
-//BFS02     ::sd::FrameView* pFrameView = NULL;
-//BFS02
-//BFS02     for (nCount=0; nCount<rDoc.pFrameViewList->Count(); nCount++)
-//BFS02     {
-//BFS02         // Ggf. FrameViews loeschen
-//BFS02         pFrameView = static_cast< ::sd::FrameView*>(
-//BFS02                rDoc.pFrameViewList->GetObject(nCount));
-//BFS02
-//BFS02         if (pFrameView)
-//BFS02             delete pFrameView;
-//BFS02     }
-//BFS02
-//BFS02     rDoc.pFrameViewList->Clear();
-//BFS02
-//BFS02     // Anzahl FrameViews lesen
-//BFS02     const SvtSaveOptions aOptions;
-//BFS02     BOOL bIsSaveDocView = aOptions.IsSaveDocView();
-//BFS02
-//BFS02     ULONG nFrameViewCount = 0;
-//BFS02     rIn >> nFrameViewCount;
-//BFS02
-//BFS02     for (nCount=0; nCount<nFrameViewCount; nCount++)
-//BFS02     {
-//BFS02         // Einzelne FrameViews lesen
-//BFS02         pFrameView = new ::sd::FrameView( &rDoc );
-//BFS02         rIn >> *pFrameView;
-//BFS02
-//BFS02         if (bIsSaveDocView)
-//BFS02         {
-//BFS02             // FrameViews werden fuer die ViewShell gebraucht
-//BFS02             // Die FrameView gehoert nun der Liste
-//BFS02             rDoc.pFrameViewList->Insert(pFrameView, nCount);
-//BFS02         }
-//BFS02         else
-//BFS02         {
-//BFS02             // FrameView kann wieder geloescht werden
-//BFS02             delete pFrameView;
-//BFS02         }
-//BFS02
-//BFS02         // Fehler ?
-//BFS02         if (rIn.GetError() != 0)
-//BFS02             return (rIn);
-//BFS02     }
-//BFS02 }
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 5)
-//BFS02 {
-//BFS02     rIn >> rDoc.bStartPresWithNavigator;
-//BFS02 }
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 6)
-//BFS02 {
-//BFS02     rIn >> rDoc.bPresLockedPages;
-//BFS02 }
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 7)
-//BFS02 {
-//BFS02     rIn >> rDoc.bPresAlwaysOnTop;
-//BFS02 }
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 8)
-//BFS02 {
-//BFS02     rIn >> rDoc.bOnlineSpell;
-//BFS02     rIn >> rDoc.bHideSpell;
-//BFS02 }
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 9)
-//BFS02 {
-//BFS02     rIn >> rDoc.bPresFullScreen;
-//BFS02 }
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 10)
-//BFS02 {
-//BFS02     rIn.ReadByteString( rDoc.aPresPage, eSysSet );
-//BFS02 }
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 11)
-//BFS02 {
-//BFS02     rIn >> rDoc.bAnimationAllowed;
-//BFS02 }
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 12)
-//BFS02 {
-//BFS02     UINT16 nDocType;
-//BFS02     rIn >> nDocType;
-//BFS02     rDoc.eDocType = (DocumentType) nDocType;
-//BFS02     // existiert eine DocShell bestimmt diese den DocType
-//BFS02     if(rDoc.pDocSh)
-//BFS02     {
-//BFS02         if(NULL != PTR_CAST(::sd::GraphicDocShell,rDoc.pDocSh))
-//BFS02             rDoc.eDocType = DOCUMENT_TYPE_DRAW;
-//BFS02         else
-//BFS02             rDoc.eDocType = DOCUMENT_TYPE_IMPRESS;
-//BFS02     }
-//BFS02 }
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 13)
-//BFS02 {
-//BFS02     // Keine Aenderung
-//BFS02 }
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 14)
-//BFS02 {
-//BFS02     // CustomShow aktiv
-//BFS02     rIn >> rDoc.bCustomShow;
-//BFS02
-//BFS02     ULONG nCustomShowCount = 0;
-//BFS02     rIn >> nCustomShowCount;
-//BFS02
-//BFS02     if (nCustomShowCount > 0)
-//BFS02     {
-//BFS02         // Liste erzeugen
-//BFS02         rDoc.GetCustomShowList(TRUE);
-//BFS02         rDoc.pCustomShowList->Clear();
-//BFS02
-//BFS02         for (ULONG i = 0; i < nCustomShowCount; i++)
-//BFS02         {
-//BFS02             // Einzelne CustomShows lesen
-//BFS02             SdCustomShow* pCustomShow = new SdCustomShow(&rDoc);
-//BFS02             rIn >> *pCustomShow;
-//BFS02
-//BFS02             // Die CustomShows gehoert nun der Liste
-//BFS02             rDoc.pCustomShowList->Insert(pCustomShow, i);
-//BFS02
-//BFS02             // Fehler ?
-//BFS02             if (rIn.GetError() != 0)
-//BFS02                 return (rIn);
-//BFS02         }
-//BFS02
-//BFS02         // Aktuelle CustomShow selektieren
-//BFS02         ULONG nCurPos;
-//BFS02         rIn >> nCurPos;
-//BFS02         rDoc.pCustomShowList->Seek(nCurPos);
-//BFS02     }
-//BFS02 }
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 15)
-//BFS02 {
-//BFS02     ULONG nTmp;
-//BFS02     rIn >> nTmp;
-//BFS02     rDoc.SetPageNumType( (SvxNumType) nTmp );
-//BFS02 }
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 17)
-//BFS02 {
-//BFS02     ULONG   nPauseSec;
-//BFS02     BOOL    bShowLogo;
-//BFS02
-//BFS02     rIn >> nPauseSec >> bShowLogo;
-//BFS02     rDoc.SetPresPause( nPauseSec );
-//BFS02     rDoc.SetPresShowLogo( bShowLogo );
-//BFS02 }
-//BFS02 else
-//BFS02     rDoc.SetPresPause( 0 );
-//BFS02
-//BFS02 if (rDoc.nFileFormatVersion >= 18)
-//BFS02 {
-//BFS02     // Keine Aenderung
-//BFS02 }
-//BFS02
-//BFS02 /**************************************************************************
-//BFS02 * So machts der Writer, und so muessen es alle machen:
-//BFS02 * Bug 9714: Der CharSet an den Fonts muss geaendert werden, wenn
-//BFS02 * es der globale CharSet ist (MT)
-//BFS02 **************************************************************************/
-//BFS02 SfxItemPool& rPool = rDoc.GetItemPool();
-//BFS02 USHORT nMaxItems = rPool.GetItemCount(EE_CHAR_FONTINFO);
-//BFS02 SvxFontItem* pItem;
-//BFS02 CharSet eSrcSet = ((SdPage*) rDoc.GetPage(0))->GetCharSet();
-//BFS02
-//BFS02 for (USHORT n = 0; n < nMaxItems; ++n)
-//BFS02 {
-//BFS02     pItem = (SvxFontItem*) rPool.GetItem(EE_CHAR_FONTINFO, n);
-//BFS02     if (pItem && pItem->GetCharSet() == eSrcSet)
-//BFS02     {
-//BFS02         pItem->GetCharSet() = eSysSet;
-//BFS02     }
-//BFS02 }
-//BFS02
-//BFS02 return rIn;
-//BFS02}
-
-/*************************************************************************
-|*
-|* "Alle Dias"-Parameter der Praesentation aendern
-|*
-\************************************************************************/
-
-void SdDrawDocument::SetPresAll(BOOL bNewPresAll)
-{
-    bPresAll     = bNewPresAll;
-}
-
-/*************************************************************************
-|*
-|* "Endlos"-Parameter der Praesentation aendern
-|*
-\************************************************************************/
-
-void SdDrawDocument::SetPresEndless(BOOL bNewPresEndless)
-{
-    bPresEndless = bNewPresEndless;
-}
-
-/*************************************************************************
-|*
-|* "Manuell"-Parameter der Praesentation aendern
-|*
-\************************************************************************/
-
-void SdDrawDocument::SetPresManual(BOOL bNewPresManual)
-{
-    bPresManual  = bNewPresManual;
-}
-
-/*************************************************************************
-|*
-|* "Maus sichtbar"-Parameter der Praesentation aendern
-|*
-\************************************************************************/
-
-void SdDrawDocument::SetPresMouseVisible(BOOL bNewPresMouseVisible)
-{
-    bPresMouseVisible = bNewPresMouseVisible;
-}
-
-/*************************************************************************
-|*
-|* "Maus als Stift"-Parameter der Praesentation aendern
-|*
-\************************************************************************/
-
-void SdDrawDocument::SetPresMouseAsPen(BOOL bNewPresMouseAsPen)
-{
-    bPresMouseAsPen = bNewPresMouseAsPen;
-}
-
-/*************************************************************************
-|*
-|* "Ab Dia"-Parameter der Praesentation aendern
-|*
-\************************************************************************/
-
-void SdDrawDocument::SetPresFirstPage(ULONG nNewPresFirstPage)
-{
-    nPresFirstPage = nNewPresFirstPage;
-}
-
-/*************************************************************************
-|*
 |* SetChanged(), das Model wurde geaendert
 |*
 \************************************************************************/
@@ -1613,51 +1100,6 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
 /*************************************************************************
 |*
-|* beim Starten der Praesentation den Navigator hochfahren oder nicht
-|*
-\************************************************************************/
-
-void SdDrawDocument::SetStartPresWithNavigator(BOOL bStart)
-{
-    bStartPresWithNavigator = bStart;
-}
-
-/*************************************************************************
-|*
-|* in der Praesentation bei einem Klick in die Flaeche nicht die Seite wechslen
-|*
-\************************************************************************/
-
-void SdDrawDocument::SetPresLockedPages(BOOL bLock)
-{
-    bPresLockedPages = bLock;
-}
-
-/*************************************************************************
-|*
-|* Praesentation immer oberstes Fenster oder nicht
-|*
-\************************************************************************/
-
-void SdDrawDocument::SetPresAlwaysOnTop(BOOL bOnTop)
-{
-    bPresAlwaysOnTop = bOnTop;
-}
-
-/*************************************************************************
-|*
-|* Praesentation im Vollbild-Modus oder im Fenster
-|*
-\************************************************************************/
-
-void SdDrawDocument::SetPresFullScreen(BOOL bNewFullScreen)
-{
-    bPresFullScreen = bNewFullScreen;
-}
-
-
-/*************************************************************************
-|*
 |* OnlineSpelling ein/aus
 |*
 \************************************************************************/
@@ -1840,5 +1282,6 @@ void SdDrawDocument::MasterPageListChanged()
 {
     mpMasterPageListWatcher->Invalidate();
 }
+
 
 // eof
