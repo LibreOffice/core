@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-06 12:19:53 $
+ *  last change: $Author: mtg $ $Date: 2001-09-14 14:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ class ZipPackage :
 {
 protected:
     ::com::sun::star::uno::Sequence < sal_Int8 > aEncryptionKey;
-    NameHash         aRecent;
+    FolderHash       aRecent;
     ::rtl::OUString  sURL;
     sal_Int32        nSegmentSize;
     sal_Bool         bHasEncryptedEntries;
