@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-20 12:57:10 $
+ *  last change: $Author: jl $ $Date: 2001-02-23 15:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,8 +178,8 @@ void SAL_CALL DropTarget::setActive( sal_Bool _b ) throw(RuntimeException)
         }
     }
 
-    if( SUCCEEDED(hrInit) )
-        OleUninitialize();
+//  if( SUCCEEDED(hrInit) )
+//      OleUninitialize();
 }
 
 sal_Int8 SAL_CALL DropTarget::getDefaultActions(  ) throw(RuntimeException)
