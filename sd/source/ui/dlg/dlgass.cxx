@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:42:12 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,10 +858,9 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
     {
         UpdatePreview(TRUE);
     }
-    catch (uno::RuntimeException& e)
+    catch (uno::RuntimeException& )
     {
         // Ignore all exceptions.
-        (void) e;
     }
 }
 
@@ -1391,12 +1390,13 @@ void AssistentDlgImpl::UpdateUserData()
         SdrObjKind eSdrObjKind;
         String aEmptyString;
         USHORT nIndex;
-        List* pPresObjList;
 
-        pPresObjList=pPage->GetPresObjList();
-        for(nIndex=0;nIndex<pPresObjList->Count();nIndex++)
+        sd::PresentationObjectList::iterator aIter( pPage->GetPresObjList().begin() );
+        const sd::PresentationObjectList::iterator aEnd( pPage->GetPresObjList().end() );
+
+        while(aIter != aEnd)
         {
-            pObj=(SdrObject*)pPresObjList->GetObject(nIndex);
+            pObj=(*aIter++).mpObject;
             if (pObj && pObj->GetObjInventor() == SdrInventor)
             {
                 eSdrObjKind=(SdrObjKind)pObj->GetObjIdentifier();
