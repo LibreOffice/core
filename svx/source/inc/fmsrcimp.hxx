@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:16 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,8 @@ class FmSearchEngine
     sal_Bool            m_bCancelAsynchRequest : 1;     // soll abgebrochen werden ?
     ::osl::Mutex        m_aCancelAsynchAccess;          // Zugriff auf m_bCancelAsynchRequest (eigentlich nur bei
                                                         // m_eMode == SM_USETHREAD interesant)
-    FmSearchDialog::SEARCH_MODE m_eMode;                // der aktuelle Modus
+    FMSEARCH_MODE   m_eMode;        //CHINA001  FmSearchDialog::SEARCH_MODE m_eMode;                // der aktuelle Modus
+    // der aktuelle Modus
 
     // Parameter fuer die Suche
     sal_Bool    m_bFormatter : 1;       // Feldformatierung benutzen
@@ -369,13 +370,13 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor,
         const ::rtl::OUString& strVisibleFields,
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xFormat,
-        FmSearchDialog::SEARCH_MODE eMode);
+        FMSEARCH_MODE eMode);//CHINA001 FmSearchDialog::SEARCH_MODE eMode);
     FmSearchEngine(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor,
         const ::rtl::OUString& strVisibleFields,
         const InterfaceArray& arrFields,
-        FmSearchDialog::SEARCH_MODE eMode);
+        FMSEARCH_MODE eMode); //CHINA001 FmSearchDialog::SEARCH_MODE eMode);
 
     virtual ~FmSearchEngine();
 
