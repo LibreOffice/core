@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextGraphicObject.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-01-05 20:20:23 $
+ *  last change:$Date: 2004-12-10 17:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ public class SwXTextGraphicObject extends TestCase {
 
             XInterface oObj = null;
             Object oGObject = null;
+            Object xTextFrame = null;
             SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
             Object instance = null;
@@ -148,6 +149,7 @@ public class SwXTextGraphicObject extends TestCase {
                     (xTextDoc,"com.sun.star.text.GraphicObject");
                 instance = SOF.createInstance
                     (xTextDoc,"com.sun.star.text.GraphicObject");
+                xTextFrame = SOF.createTextFrame(xTextDoc, 500, 500);
             }
             catch (Exception ex) {
                 log.println("Couldn't create instance");
@@ -161,6 +163,18 @@ public class SwXTextGraphicObject extends TestCase {
             XTextCursor the_cursor = the_text.createTextCursor();
             XTextContent the_content = (XTextContent)
                 UnoRuntime.queryInterface(XTextContent.class,oObj);
+
+            log.println("inserting Frame");
+            try{
+                XTextContent Framecontent = (XTextContent) UnoRuntime.queryInterface(
+                                                   XTextContent.class, xTextFrame);
+                the_text.insertTextContent(the_cursor, Framecontent, true);
+            } catch (Exception e) {
+                System.out.println("Couldn't insert text frame");
+                e.printStackTrace();
+                throw new StatusException("Couldn't insert text frame", e );
+            }
+
 
            log.println( "inserting graphic" );
             try {
@@ -215,6 +229,9 @@ public class SwXTextGraphicObject extends TestCase {
             tEnv.addObjRelation("CONTENT", (XTextContent)
                         UnoRuntime.queryInterface(XTextContent.class,instance));
             tEnv.addObjRelation("RANGE", xTextDoc.getText().createTextCursor());
+
+            //object relation for text.BaseFrameProperties
+            tEnv.addObjRelation("TextFrame", xTextFrame);
 
             return tEnv;
 
