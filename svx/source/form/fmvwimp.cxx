@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:45:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 09:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,18 +935,29 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, EMPTYTAG)
 // -----------------------------------------------------------------------------
 namespace
 {
+    /*
+        ATTENTION!
+        Broken for solaris? It seems that the old used template argument TYPE was already
+        defined as a macro ... which expand to ... "TYPE "!?
+        All platforms are OK - excepting Solaris. There the line "template< class TYPE >"
+        was expanded to "template < class TYPE " where the closing ">" was missing.
+    */
+    #ifdef MYTYPE
+        #error "Who defines the macro MYTYPE, which is used as template argument here?"
+    #endif
+
     //....................................................................
-    template< class TYPE >
-    Reference< TYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
+    template< class MYTYPE >
+    Reference< MYTYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
     {
-        Reference< TYPE > xTypedNode( _rxModelNode, UNO_QUERY );
+        Reference< MYTYPE > xTypedNode( _rxModelNode, UNO_QUERY );
         if ( xTypedNode.is() )
             return xTypedNode;
         else
         {
             Reference< XChild > xChild( _rxModelNode, UNO_QUERY );
             if ( xChild.is() )
-                return getTypedModelNode< TYPE >( xChild->getParent() );
+                return getTypedModelNode< MYTYPE >( xChild->getParent() );
             else
                 return NULL;
         }
