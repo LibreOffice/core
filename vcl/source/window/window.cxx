@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-19 17:09:34 $
+ *  last change: $Author: pl $ $Date: 2002-03-19 17:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,6 +826,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
 
 void Window::ImplSetFrameParent( const Window* pParent )
 {
+#ifndef REMOTE_APPSERVER
     if( mpFrame )
     {
         SalFrame* pParentFrame = pParent ? pParent->mpFrame : NULL;
@@ -848,6 +849,7 @@ void Window::ImplSetFrameParent( const Window* pParent )
         pChild->ImplSetFrameParent( pParent );
         pChild = pChild->mpNext;
     }
+#endif
 }
 
 // -----------------------------------------------------------------------
