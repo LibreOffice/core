@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-06 12:40:02 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,6 @@ public:
                               long nNewAlignM);
             SmRect & ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
                       BOOL bKeepVerAlignParams);
-            SmRect & ExtendBy(const Point &rPoint);
 
             long    OrientedDist(const Point &rPoint) const;
             BOOL    IsInsideRect(const Point &rPoint) const;
