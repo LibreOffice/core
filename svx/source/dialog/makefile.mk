@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: obo $ $Date: 2004-04-27 15:47:26 $
+#   last change: $Author: obo $ $Date: 2004-04-29 16:22:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,6 +132,7 @@ SRC1FILES =  \
         hangulhanjadlg.src \
         commonlingui.src \
               fontsubs.src				\
+        readonlyimage.src           \
         opthtml.src					\
         optgdlg.src					\
         optmemory.src				\
@@ -308,7 +309,6 @@ SLOFILES=\
     $(SLO)$/optjsearch.obj  \
     $(SLO)$/optgenrl.obj	\
     $(SLO)$/optinet2.obj	\
-    $(SLO)$/optextbr.obj    \
     $(SLO)$/optctl.obj	\
     $(SLO)$/svxgrahicitem.obj
 
@@ -432,14 +432,14 @@ LIB2OBJFILES= \
     $(SLO)$/cuihyperdlg.obj	\
     $(SLO)$/cuifmsearch.obj \
     $(SLO)$/cuigrfflt.obj \
-    $(SLO)$/optaccessibility.obj	\
+    $(SLO)$/readonlyimage.obj \
+    $(SLO)$/optaccessibility.obj    \
     $(SLO)$/optsave.obj \
     $(SLO)$/optasian.obj		\
     $(SLO)$/optpath.obj	\
     $(SLO)$/optcolor.obj    \
     $(SLO)$/optjsearch.obj  \
     $(SLO)$/optinet2.obj	\
-    $(SLO)$/optextbr.obj  \
     $(SLO)$/optctl.obj	\
     $(SLO)$/optgenrl.obj	\
     $(SLO)$/connect.obj \
