@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:22:47 $
+ *  last change: $Author: oj $ $Date: 2001-08-09 13:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,13 @@ BOOL OTableWindow::Init()
             catch(SQLException& e)
             {
                 ::dbaui::showError(::dbtools::SQLExceptionInfo(e),pParent,pParent->getController()->getORB());
+                bInit = FALSE;
+            }
+            catch(WrappedTargetException& e)
+            {
+                SQLException aSql;
+                if(e.TargetException >>= aSql)
+                    ::dbaui::showError(::dbtools::SQLExceptionInfo(aSql),pParent,pParent->getController()->getORB());
                 bInit = FALSE;
             }
             catch(Exception&)

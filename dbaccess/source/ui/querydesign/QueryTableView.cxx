@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 09:59:51 $
+ *  last change: $Author: oj $ $Date: 2001-08-09 13:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,6 +560,13 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
     OQueryTabWinShowUndoAct* pUndoAction = new OQueryTabWinShowUndoAct(this);
     pUndoAction->SetTabWin(pNewTabWin); // Fenster
     sal_Bool bSuccess = ShowTabWin(pNewTabWin, pUndoAction,bAppend);
+    if(!bSuccess)
+    {
+        delete pUndoAction;
+        if(bAppend)
+            delete pNewTabWinData;
+        return;
+    }
 
     // Relationen zwischen den einzelnen Tabellen anzeigen
     OTableWindowMap* pTabWins = GetTabWinMap();
