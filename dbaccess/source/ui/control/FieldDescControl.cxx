@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 12:59:16 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,9 +472,9 @@ void OFieldDescControl::CheckScrollBars()
     // welches ist das letzte, was ganz drauf passt ?
     sal_uInt16 nLastVisible;
     if (bNeedHScrollBar)
-        nLastVisible = (szOverallSize.Height() - CONTROL_SPACING_Y - nHScrollHeight) / (CONTROL_SPACING_Y + CONTROL_HEIGHT);
+        nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - CONTROL_SPACING_Y - nHScrollHeight) / (CONTROL_SPACING_Y + CONTROL_HEIGHT));
     else
-        nLastVisible = (szOverallSize.Height() - CONTROL_SPACING_Y) / (CONTROL_SPACING_Y + CONTROL_HEIGHT);
+        nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - CONTROL_SPACING_Y) / (CONTROL_SPACING_Y + CONTROL_HEIGHT));
     bNeedVScrollBar = nActive>nLastVisible;
 
     if (bNeedVScrollBar)
@@ -487,7 +487,7 @@ void OFieldDescControl::CheckScrollBars()
             // durch die vertikale brauche ich jetzt ploetzlich doch eine horizontale
             bNeedHScrollBar = sal_True;
             // nLastVisible anpassen
-            nLastVisible = (szOverallSize.Height() - CONTROL_SPACING_Y - nHScrollHeight) / (CONTROL_SPACING_Y + CONTROL_HEIGHT);
+            nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - CONTROL_SPACING_Y - nHScrollHeight) / (CONTROL_SPACING_Y + CONTROL_HEIGHT));
                 // bNeedVScrollBar aendert sich nicht : es ist schon auf sal_True und nLastVisible wird hoechstens kleiner
         }
     }
@@ -865,7 +865,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
     {
         pListBox->SaveValue();
         TOTypeInfoSP pTypeInfo = getTypeInfo(m_pType->GetSelectEntryPos());
-        pActFieldDescr->SetType(pTypeInfo);
+        pActFieldDescr->FillFromTypeInfo(pTypeInfo,sal_True,sal_False); // SetType(pTypeInfo);
 
         DisplayData(pActFieldDescr);
         CellModified(-1, m_pType->GetPos());
@@ -951,7 +951,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if( pDefault )
             return;
         m_nPos++;
-        pDefaultText = new FixedText( this );
+        pDefaultText  =new FixedText( this );
         pDefaultText->SetText( ModuleRes(STR_DEFAULT_VALUE) );
         pDefault = new OPropEditCtrl( this, STR_HELP_DEFAULT_VALUE, FIELD_PROPERTY_DEFAULT, WB_BORDER );
         pDefault->SetHelpId(HID_TAB_ENT_DEFAULT);
@@ -968,7 +968,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if( m_pAutoIncrementValue || !isAutoIncrementValueEnabled() )
             return;
         m_nPos++;
-        m_pAutoIncrementValueText = new FixedText( this );
+        m_pAutoIncrementValueText  =new FixedText( this );
         m_pAutoIncrementValueText->SetText( ModuleRes(STR_AUTOINCREMENT_VALUE) );
         m_pAutoIncrementValue = new OPropEditCtrl( this, STR_HELP_AUTOINCREMENT_VALUE, FIELD_PRPOERTY_AUTOINCREMENT, WB_BORDER );
         m_pAutoIncrementValue->SetHelpId(HID_TAB_AUTOINCREMENTVALUE);
@@ -992,7 +992,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if(xMetaData.is() && xMetaData->supportsNonNullableColumns())
         {
             m_nPos++;
-            pRequiredText = new FixedText( this );
+            pRequiredText  =new FixedText( this );
             pRequiredText->SetText( ModuleRes(STR_FIELD_REQUIRED) );
             pRequired = new OPropListBoxCtrl( this, STR_HELP_FIELD_REQUIRED, FIELD_PROPERTY_REQUIRED, WB_DROPDOWN);
             pRequired->SetHelpId(HID_TAB_ENT_REQUIRED);
@@ -1018,7 +1018,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if( pAutoIncrement )
             return;
         m_nPos++;
-        pAutoIncrementText = new FixedText( this );
+        pAutoIncrementText  =new FixedText( this );
         pAutoIncrementText->SetText( ModuleRes(STR_FIELD_AUTOINCREMENT) );
         pAutoIncrement = new OPropListBoxCtrl( this, STR_HELP_AUTOINCREMENT, FIELD_PROPERTY_AUTOINC, WB_DROPDOWN );
         pAutoIncrement->SetHelpId(HID_TAB_ENT_AUTOINCREMENT);
@@ -1042,7 +1042,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if( pTextLen )
             return;
         m_nPos++;
-        pTextLenText = new FixedText( this );
+        pTextLenText  =new FixedText( this );
         pTextLenText->SetText( ModuleRes(STR_TEXT_LENGTH) );
 
         pTextLen = new OPropNumericEditCtrl( this, STR_HELP_TEXT_LENGTH, FIELD_PROPERTY_TEXTLEN, WB_BORDER );
@@ -1066,7 +1066,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if( m_pType)
             return;
         m_nPos++;
-        m_pTypeText = new FixedText( this );
+        m_pTypeText  =new FixedText( this );
         m_pTypeText->SetText( ModuleRes(STR_TAB_FIELD_DATATYPE) );
         m_pType = new OPropListBoxCtrl( this, STR_HELP_AUTOINCREMENT, FIELD_PRPOERTY_TYPE, WB_DROPDOWN );
         m_pType->SetHelpId(HID_TAB_ENT_TYPE);
@@ -1096,7 +1096,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         {
             Reference< XDatabaseMetaData> xMetaData = getMetaData();
             sal_uInt32 nMax = xMetaData.is() ? xMetaData->getMaxColumnNameLength() : EDIT_NOLIMIT;
-            m_pColumnNameText = new FixedText( this );
+            m_pColumnNameText  =new FixedText( this );
             m_pColumnNameText->SetText( ModuleRes(STR_TAB_FIELD_NAME) );
             ::rtl::OUString aTmpString( xMetaData.is() ? xMetaData->getExtraNameCharacters() : ::rtl::OUString() );
             m_pColumnName = new OPropColumnEditCtrl( this,
@@ -1122,7 +1122,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if( pNumType )
             return;
         m_nPos++;
-        pNumTypeText = new FixedText( this );
+        pNumTypeText  =new FixedText( this );
         pNumTypeText->SetText( ModuleRes(STR_NUMERIC_TYPE) );
 
         pNumType = new OPropListBoxCtrl( this, STR_HELP_NUMERIC_TYPE, FIELD_PROPERTY_NUMTYPE, WB_DROPDOWN );
@@ -1151,7 +1151,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if( pLength )
             return;
         m_nPos++;
-        pLengthText = new FixedText( this );
+        pLengthText  =new FixedText( this );
         pLengthText->SetText( ModuleRes(STR_LENGTH) );
 
         pLength = new OPropNumericEditCtrl( this, STR_HELP_LENGTH, FIELD_PROPERTY_LENGTH, WB_BORDER );
@@ -1175,7 +1175,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if( pScale )
             return;
         m_nPos++;
-        pScaleText = new FixedText( this );
+        pScaleText  =new FixedText( this );
         pScaleText->SetText( ModuleRes(STR_SCALE) );
         pScale = new OPropNumericEditCtrl( this, STR_HELP_SCALE, FIELD_PROPERTY_SCALE, WB_BORDER );
         pScale->SetDecimalDigits(0);
@@ -1199,7 +1199,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if (!pFormat)
         {
             m_nPos++;
-            pFormatText = new FixedText( this );
+            pFormatText  =new FixedText( this );
             pFormatText->SetText( ModuleRes(STR_FORMAT) );
 
             pFormatSample = new OPropEditCtrl( this, STR_HELP_FORMAT_CODE, -1, WB_BORDER );
@@ -1229,7 +1229,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
 
         m_nPos++;
-        pBoolDefaultText = new FixedText(this);
+        pBoolDefaultText  =new FixedText(this);
         pBoolDefaultText->SetText(ModuleRes(STR_DEFAULT_VALUE));
         pBoolDefault = new OPropListBoxCtrl( this, STR_HELP_BOOL_DEFAULT, FIELD_PROPERTY_BOOL_DEFAULT, WB_DROPDOWN );
         pBoolDefault->SetDropDownLineCount(3);
@@ -1267,7 +1267,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         delete pDefault;
         delete pDefaultText;
         pDefault = NULL;
-        pDefaultText = NULL;
+        pDefaultText  =NULL;
         break;
 
     case tpAutoIncrementValue:
@@ -1279,7 +1279,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         delete m_pAutoIncrementValue;
         delete m_pAutoIncrementValueText;
         m_pAutoIncrementValue = NULL;
-        m_pAutoIncrementValueText = NULL;
+        m_pAutoIncrementValueText  =NULL;
         break;
 
     case tpColumnName:
@@ -1291,7 +1291,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         delete m_pColumnName;
         delete m_pColumnNameText;
         m_pColumnName = NULL;
-        m_pColumnNameText = NULL;
+        m_pColumnNameText  =NULL;
         break;
 
     case tpType:
@@ -1303,7 +1303,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         delete m_pType;
         delete m_pTypeText;
         m_pType = NULL;
-        m_pTypeText = NULL;
+        m_pTypeText  =NULL;
         break;
 
     case tpAutoIncrement:
@@ -1315,7 +1315,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         delete pAutoIncrement;
         delete pAutoIncrementText;
         pAutoIncrement = NULL;
-        pAutoIncrementText = NULL;
+        pAutoIncrementText  =NULL;
         break;
 
     case tpRequired:
@@ -1327,7 +1327,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         delete pRequired;
         delete pRequiredText;
         pRequired = NULL;
-        pRequiredText = NULL;
+        pRequiredText  =NULL;
         break;
 
     case tpTextLen:
@@ -1339,7 +1339,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         delete pTextLen;
         delete pTextLenText;
         pTextLen = NULL;
-        pTextLenText = NULL;
+        pTextLenText  =NULL;
         break;
 
     case tpNumType:
@@ -1351,7 +1351,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         delete pNumType;
         delete pNumTypeText;
         pNumType = NULL;
-        pNumTypeText = NULL;
+        pNumTypeText  =NULL;
         break;
 
     case tpLength:
@@ -1363,7 +1363,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         delete pLength;
         delete pLengthText;
         pLength = NULL;
-        pLengthText = NULL;
+        pLengthText  =NULL;
         break;
 
     case tpScale:
@@ -1375,7 +1375,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         delete pScale;
         delete pScaleText;
         pScale = NULL;
-        pScaleText = NULL;
+        pScaleText  =NULL;
         break;
 
     case tpFormat:
@@ -1387,7 +1387,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         delete pFormatText;
         delete pFormatSample;
         delete pFormat;
-        pFormatText = NULL;
+        pFormatText  =NULL;
         pFormatSample = NULL;
         pFormat = NULL;
         break;
@@ -1400,7 +1400,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         delete pBoolDefault;
         delete pBoolDefaultText;
         pBoolDefault = NULL;
-        pBoolDefaultText = NULL;
+        pBoolDefaultText  =NULL;
         break;
 
     }
@@ -1801,25 +1801,25 @@ IMPL_LINK(OFieldDescControl, OnControlFocusGot, Control*, pControl )
     if ((pControl == pLength) || (pControl == pScale) || (pControl == pTextLen))
     {
         ((OPropNumericEditCtrl*)pControl)->SaveValue();
-        strHelpText = ((OPropNumericEditCtrl*)pControl)->GetHelp();
+        strHelpText  =((OPropNumericEditCtrl*)pControl)->GetHelp();
     }
     if(pControl == m_pColumnName)
     {
         ((OPropColumnEditCtrl*)pControl)->SaveValue();
-        strHelpText = ((OPropColumnEditCtrl*)pControl)->GetHelp();
+        strHelpText  =((OPropColumnEditCtrl*)pControl)->GetHelp();
     }
     else if ((pControl == pDefault) || (pControl == pFormatSample) || (pControl == m_pAutoIncrementValue) )
     {
         ((OPropEditCtrl*)pControl)->SaveValue();
-        strHelpText = ((OPropEditCtrl*)pControl)->GetHelp();
+        strHelpText  =((OPropEditCtrl*)pControl)->GetHelp();
     }
     else if ((pControl == pRequired) || (pControl == pNumType) || (pControl == pAutoIncrement) || (pControl == pBoolDefault) || (pControl == m_pType))
     {
         ((OPropListBoxCtrl*)pControl)->SaveValue();
-        strHelpText = ((OPropListBoxCtrl*)pControl)->GetHelp();
+        strHelpText  =((OPropListBoxCtrl*)pControl)->GetHelp();
     }
     else if (pControl == pFormat)
-        strHelpText = String(ModuleRes(STR_HELP_FORMAT_BUTTON));
+        strHelpText  =String(ModuleRes(STR_HELP_FORMAT_BUTTON));
 
     if (strHelpText.Len() && (pHelp != NULL))
         pHelp->SetHelpText(strHelpText);
@@ -1901,36 +1901,44 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
     // Controls auslesen
     ::rtl::OUString sDefault;
     if (pDefault)
-        sDefault = pDefault->GetText();
-    else if (pBoolDefault)
-        sDefault = BoolStringPersistent(pBoolDefault->GetSelectEntry());
-
-    sal_uInt32 nFormatKey;
-    try
     {
-        if ( isTextFormat(pFieldDescr,nFormatKey) )
-        {
-            pFieldDescr->SetControlDefault(makeAny(sDefault));
-        }
-        else
-        {
-            try
-            {
-                double nValue = GetFormatter()->convertStringToNumber(nFormatKey,sDefault);
-                nValue = checkDoubleForDateFormat(nValue,nFormatKey,GetFormatter());
-                pFieldDescr->SetControlDefault(makeAny(nValue));
-            }
-            catch(const Exception&)
-            {
-                if ( sDefault.getLength() )
-                    pFieldDescr->SetControlDefault(makeAny(sDefault));
-                else
-                    pFieldDescr->SetControlDefault(Any());
-            }
-        }
+        if ( pDefault->GetSavedValue() != pDefault->GetText() )
+            sDefault = pDefault->GetText();
     }
-    catch(const Exception&)
+    else if (pBoolDefault)
     {
+        sDefault = BoolStringPersistent(pBoolDefault->GetSelectEntry());
+    }
+
+    if ( sDefault.getLength() )
+    {
+        sal_uInt32 nFormatKey;
+        try
+        {
+            if ( isTextFormat(pFieldDescr,nFormatKey) )
+            {
+                pFieldDescr->SetControlDefault(makeAny(sDefault));
+            }
+            else
+            {
+                try
+                {
+                    double nValue = GetFormatter()->convertStringToNumber(nFormatKey,sDefault);
+                    nValue = checkDoubleForDateFormat(nValue,nFormatKey,GetFormatter());
+                    pFieldDescr->SetControlDefault(makeAny(nValue));
+                }
+                catch(const Exception&)
+                {
+                    if ( sDefault.getLength() )
+                        pFieldDescr->SetControlDefault(makeAny(sDefault));
+                    else
+                        pFieldDescr->SetControlDefault(Any());
+                }
+            }
+        }
+        catch(const Exception&)
+        {
+        }
     }
 
     if((pRequired && pRequired->GetSelectEntryPos() == 0) || pFieldDescr->IsPrimaryKey() || (pBoolDefault && pBoolDefault->GetEntryCount() == 2))  // yes
@@ -1951,7 +1959,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
     if(m_pColumnName)
         pFieldDescr->SetName(m_pColumnName->GetText());
 
-    if ( m_pAutoIncrementValue )
+    if ( m_pAutoIncrementValue && isAutoIncrementValueEnabled() )
         pFieldDescr->SetAutoIncrementValue(m_pAutoIncrementValue->GetText());
 }
 
