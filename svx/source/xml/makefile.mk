@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: cl $ $Date: 2001-07-20 12:05:22 $
+#   last change: $Author: cl $ $Date: 2001-07-20 13:48:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 SLOFILES = \
+        $(SLO)$/xmltxtimp.obj		\
         $(SLO)$/xmltxtexp.obj		\
         $(SLO)$/xmlxtimp.obj		\
         $(SLO)$/xmlxtexp.obj		\

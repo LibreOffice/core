@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editxml.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-20 12:02:13 $
+ *  last change: $Author: cl $ $Date: 2001-07-20 13:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,15 @@
 #ifndef _SVX_EDITXML_HXX
 #define _SVX_EDITXML_HXX
 
-/** these function exports the selected content of an edit engine into a
-    xml stream*/
 class EditEngine;
 class SvStream;
 struct ESelection;
 
+/** this function exports the selected content of an edit engine into a xml stream*/
 extern void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& rSel );
+
+/** this function imports xml from the stream into the selected of an edit engine */
+extern void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& rSel );
 
 #endif
 
