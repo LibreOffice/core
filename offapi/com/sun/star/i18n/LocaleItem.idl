@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleItem.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-05-21 21:40:33 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 10:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,17 +73,17 @@ module com {  module sun {  module star {  module i18n {
  */
 constants LocaleItem
 {
-    /// date separator, for example, <bold> / </bold>
+    /// date separator,  <b> / </b>
     const short DATE_SEPARATOR          = 0;
-    /// group and thousand separator, for example,  <bold>","</bold>.
+    /// group and thousand separator,  <b>","</b>.
     const short THOUSAND_SEPARATOR      = 1;
-    /// decimal separator, for example, <bold>"."</bold> .
+    /// decimal separator,  <b>"."</b> .
     const short DECIMAL_SEPARATOR       = 2;
-    /// time separator, for example, <bold>":"</bold> .
+    /// time separator,  <b>":"</b> .
     const short TIME_SEPARATOR          = 3;
-    /// time 100th seconds separator,  for example, <bold>","</bold> .
+    /// time 100th seconds separator,  <b>","</b> .
     const short TIME_100SEC_SEPARATOR   = 4;
-    /// list separator, for example, <bold>";"</bold> .
+    /// list separator,  <b>";"</b> .
     const short LIST_SEPARATOR          = 5;
     /// single quotation mark start.
     const short SINGLE_QUOTATION_START  = 6;
@@ -93,19 +93,19 @@ constants LocaleItem
     const short DOUBLE_QUOTATION_START  = 8;
     /// double quotation mark end.
     const short DOUBLE_QUOTATION_END    = 9;
-    /// measurement system, for example, <bold>"metric"</bold> or <bold>"us"</bold>.
+    /// measurement system, for example, <b>"metric"</b> or <b>"us"</b>.
     const short MEASUREMENT_SYSTEM      = 10;
-    /// time AM symbol, for example, <bold>"AM"</bold> or <bold>"am"</bold>.
+    /// time AM symbol, for example, <b>"AM"</b> or <b>"am"</b>.
     const short TIME_AM                 = 11;
-    /// time PM symbol, for example, <bold>"PM"</bold> or <bold>"pm"</bold>.
+    /// time PM symbol, for example, <b>"PM"</b> or <b>"pm"</b>.
     const short TIME_PM                 = 12;
-    /// long date day of week separator, e.g. ", "
+    /// long date day of week separator,  <b>", "</b>
     const short LONG_DATE_DAY_OF_WEEK_SEPARATOR = 13;
-    /// long date day separator, for example, ", ".
+    /// long date day separator, <b>", "</b>
     const short LONG_DATE_DAY_SEPARATOR = 14;
-    /// long date month separator, for example, " "
+    /// long date month separator, <b>" "</b>
     const short LONG_DATE_MONTH_SEPARATOR   = 15;
-    /// long date year separator, e.g. " "
+    /// long date year separator,  <b>" "</b>
     const short LONG_DATE_YEAR_SEPARATOR    = 16;
 
     //! New values may be inserted here if locale data provides them.

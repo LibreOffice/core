@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBreakIterator.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-05-10 21:49:59 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 10:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,18 +133,17 @@ constants ScriptType
 constants WordType
 {
     /** any "words" - words in the meaning of same character types,
-         collection auf alphanumeric characters or collection of non
-         alphanumeric characters.
+         collection of alphanumeric characters, or collection of non-alphanumeric characters.
     */
     const short ANY_WORD                 = 0;
 
     /** any "words" - words in the meaning of same character types,
-         collection auf alphanumeric characters or collection of non
-         alphanumeric characters except blanks.
+         collection of alphanumeric characters, or collection of
+non-alphanumeric characters except blanks.
     */
     const short ANYWORD_IGNOREWHITESPACES= 1;
 
-    /** "words" - in the meaning of a collection auf alphanumeric characters.
+    /** "words" - in the meaning of a collection of alphanumeric characters.
     */
     const short DICTIONARY_WORD          = 2;
 };
@@ -235,10 +234,10 @@ struct LineBreakHyphenationOptions
 */
 struct LineBreakResults
 {
-    /// type of line break, see <type>BreakType</type>
+    /// type of linebreak, see <type>BreakType</type>
     short breakType;
 
-    /// position of the calculated line break
+    /// position of the calculated linebreak
     long  breakIndex;
 
     /// return value of the hyphenator
@@ -250,18 +249,18 @@ struct LineBreakResults
 */
 struct Boundary
 {
-    /// start position of a word (dont forget - inclusive)
+    /// start position of a word (don't forget - inclusive)
     long startPos ;
 
-    /// end position of a word (dont forget - exclusive)
+    /// end position of a word (don't forget - exclusive)
     long endPos;
 };
 
 
 //--------------------------------------------------------------------------
-/** contains the base routines for iterate in Unicode string. Iterates over
+/** contains the base routines for iteration in Unicode string. Iterates over
     Characters, Words, Sentences and Linebreaks.
-    <P>It exist also specific breakiterator for asian languages
+    <P>There also exists a specific BreakIterator for asian languages
     <P>
     <P>Assumption - StartPos is inclusive and EndPos is exclusive.
 */
@@ -291,7 +290,7 @@ interface XBreakIterator: com::sun::star::uno::XInterface
        /** Traverses one word in Text from the StartPos to the right.
         The <type>WordType</type> specify the type of travelling.
         @returns the <type>Boundary</type> of the found word.
-        Normaly used for the CTRL-Right.
+        Normally used for the CTRL-Right.
     */
     Boundary nextWord( [in] string Text, [in] long nStartPos,
                    [in] ::com::sun::star::lang::Locale nLocale,
@@ -301,7 +300,7 @@ interface XBreakIterator: com::sun::star::uno::XInterface
        /** Traverses one word in Text from the StartPos to the left.
         The <type>WordType</type> specify the type of travelling.
         @returns the <type>Boundary</type> of the found word.
-        Normaly used for the CTRL-Right.
+        Normally used for the CTRL-Right.
     */
     Boundary previousWord( [in] string Text, [in] long nStartPos,
                        [in] ::com::sun::star::lang::Locale nLocale,
@@ -358,9 +357,9 @@ interface XBreakIterator: com::sun::star::uno::XInterface
 
     //--------------------------------------------------------------------------
        /** calculate the linebreak position in the Text from the specified StartPos.
-        <type>LineBreakHyphenationOptions</type> defines if the hyphenator is to use.
+        <type>LineBreakHyphenationOptions</type> defines if the hyphenator is to be used.
         The <type>LineBreakUserOptions</type> defines, how to handle hanging
-        punctuations, the forbidden chraracter at the start/end of a line.
+        punctuations, the forbidden character at the start/end of a line.
 
         @returns <type>LineBreakResults</type>, which contains the break position
         of the word and which kind of break it is.
@@ -403,7 +402,7 @@ interface XBreakIterator: com::sun::star::uno::XInterface
 
 
     //--------------------------------------------------------------------------
-       /** Traverses in Text from the StartPos to the begin of the specified character type.
+       /** Traverses in Text from the StartPos to the beginning of the specified character type.
         @returns the position where the character type starts
     */
     long beginOfCharBlock( [in] string Text, [in] long nStartPos,
@@ -443,6 +442,9 @@ interface XBreakIterator: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/05/10 21:49:59  bustamam
+    modify charType - Joe Xu
+
     Revision 1.5  2001/03/28 09:17:44  tl
     #84966 aHyphenationOptions added LineBreakHyphenationOptions
 

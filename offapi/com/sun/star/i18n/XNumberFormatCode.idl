@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNumberFormatCode.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 10:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,13 @@ module com { module sun { module star { module i18n {
 
 
 /**
-    Attribute of number format. LeastSignificantBit is used to distinguish between
+    Attribute of number format.
+
+    LeastSignificantBit is used to distinguish between
     positive or negative and second LSB is used for Long or Short format.
 
-    //! ER 02.11.00   ? description does not seem to match reality ?
-*/
+    <!-- ER 02.11.00   ? description does not seem to match reality -->
+    <!-- JRH:   Meaning unclear still. -->*/
 constants KNumberFormatType
 {
         const short SHORT                =1;
@@ -141,7 +143,7 @@ interface XNumberFormatCode : com::sun::star::uno::XInterface
     NumberFormatCode getDefault( [in] short nFormatType, [in] short nFormatUsage, [in] com::sun::star::lang::Locale rLocale );
 
     /**
-        returns the number format pointed to by <code>nFormatIndex</code> for
+        returns the number format pointed to by <em>nFormatIndex</em> for
         a given locale.
 
         @param nFormatIndex
@@ -150,7 +152,7 @@ interface XNumberFormatCode : com::sun::star::uno::XInterface
     NumberFormatCode getFormatCode( [in] short nFormatIndex, [in] com::sun::star::lang::Locale rLocale );
 
     /**
-        returns all format codes for a given <code>nFormatUsage</code> and locale.
+        returns all format codes for a given <em>nFormatUsage</em> and locale.
 
         @param nFormatUsage
             one of <type>KNumberFormatUsage</type> values

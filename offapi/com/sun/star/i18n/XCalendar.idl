@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCalendar.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-07-01 16:53:38 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 10:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,18 +90,18 @@ interface XCalendar : com::sun::star::uno::XInterface
     /// returns all available calendars for the given locale
     sequence< string >  getAllCalendars( [in] ::com::sun::star::lang::Locale rLocale );
 
-    /// returns the ID string of the loaded calendar, e.g. <bold>gregorian</bold>
+    /// returns the ID string of the loaded calendar, e.g. <b>gregorian</b>
     string  getUniqueID();
 
     /**
-        Set the date/time as an offset to the start of the calendar at 1Jan1970 00:00
+        Set the date/time as an offset to the start of the calendar at 1-Jan-1970 00:00
         The integer part represents the number of days passed since start date.
         The fractional part represents fractions of a day, thus 0.5 means 12 hours.
      */
     void    setDateTime( [in] double nTimeInDays );
 
     /**
-         Get the date/time as an offset to the start of the calendar at 1Jan1970 00:00
+         Get the date/time as an offset to the start of the calendar at 1-Jan-1970 00:00
         The integer part represents the number of days passed since start date.
         The fractional part represents fractions of a day, thus 0.5 means 12 hours.
      */
@@ -128,7 +128,7 @@ interface XCalendar : com::sun::star::uno::XInterface
 
     /**
         Verify if the date fields set by "setValue()" is valid.
-        Is has a side-effect because it will internally calculates
+        It has a side-effect because it will internally calculate
         the final value for the date fields
      */
     boolean isValid();
@@ -156,10 +156,10 @@ interface XCalendar : com::sun::star::uno::XInterface
     /// returns how many days of a week must reside in the first week of a year
     short   getMinimumNumberOfDaysForFirstWeek();
 
-    /// returns the number of months in a year, e.g. <bold>12</bold>
+    /// returns the number of months in a year, e.g., <b>12</b>
     short   getNumberOfMonthsInYear();
 
-    /// returns the number of days in a week, e.g. <bold>7</bold>
+    /// returns the number of days in a week, e.g., <b>7</b>
     short   getNumberOfDaysInWeek();
 
     /// returns a sequence of <type>CalendarItem</type> describing the month names
@@ -176,21 +176,21 @@ interface XCalendar : com::sun::star::uno::XInterface
 
         @param nIdx
             A value matching the <type>CalendarDisplayIndex</type> type:
-            <emp>AM_PM</emp> =&gt; one of <type>AmPmValue</type>
-            <emp>DAY</emp>   =&gt; one of <type>Weekdays</type>
-            <emp>MONTH</emp> =&gt; one of <type>Months</type>
-            <emp>YEAR</emp>  =&gt; <bold>not used, empty string returned</bold>
-            <emp>ERA</emp>   =&gt; one of ???
+            <em>AM_PM</em> =&gt; one of <type>AmPmValue</type>
+            <em>DAY</em>   =&gt; one of <type>Weekdays</type>
+            <em>MONTH</em> =&gt; one of <type>Months</type>
+            <em>YEAR</em>  =&gt; <b>not used, empty string returned</b>
+            <em>ERA</em>   =&gt; one of ???
 
             The value should be obtained by a previous call to
              <member>XCalendar::getValue()</member> with an appropriate
             <type>CalendarFieldIndex</type> argument.
 
         @param nNameType
-            0 =&gt; abbreviated name, e.g. <bold>Jan</bold>
-            1 =&gt; full name, e.g. <bold>January</bold>
+            0 =&gt; abbreviated name, e.g., <b>Jan</b>
+            1 =&gt; full name, e.g., <b>January</b>
 
-            This parameter is not used if the <emp>nCalendarDisplayIndex<emp>
+            This parameter is not used if the <em>nCalendarDisplayIndex</em>
             argument equals <type>CalendarDisplayIndex::AM_PM</type>
      */
     string  getDisplayName( [in] short nCalendarDisplayIndex, [in] short nIdx, [in] short nNameType );

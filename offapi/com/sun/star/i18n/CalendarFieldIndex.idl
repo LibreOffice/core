@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CalendarFieldIndex.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: arellano $ $Date: 2001-05-21 20:55:04 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 10:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com { module sun { module star { module i18n {
 /**
     Field indexes to be passed to various <type>XCalendar</type> methods.
 
-    <p>Field is writable only if marked both Get/Set.
+    <p>Field is writable only if marked both Get/Set.</p>
  */
 constants CalendarFieldIndex
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BreakIterator.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-10-12 21:22:34 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 10:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,9 @@
 //=============================================================================
 
 //--------------------------------------------------------------------------
-/** contains the base routines for iterate in Unicode string. Iterates over
+/** contains the base routines for iteration in Unicode string. Iterates over
     Characters, Words, Sentences and Linebreaks.
-    <P>It exist also specific breakiterator for asian languages
+    <P>It also contains a BreakIterator service for asian languages
 */
 service BreakIterator
 {

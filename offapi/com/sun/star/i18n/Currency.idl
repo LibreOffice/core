@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Currency.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-05-31 16:49:21 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 10:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,13 +74,13 @@ module com { module sun { module star { module i18n {
     <p> Returned by <member>XLocaleData::getAllCurrencies()</member>.
  */
 struct Currency {
-    /// identifier, for example, <bold>dollar</bold>.
+    /// identifier, for example, <b>dollar</b>.
     string ID;
-    /// currency symbol, for example, <bold>$</bold>.
+    /// currency symbol, for example, <b>$</b>.
     string Symbol;
-    /// currency abbreviation used by banks and in money exchange, for example, <bold>USD</bold>.
+    /// currency abbreviation used by banks and in money exchange, for example, <b>USD</b>.
     string BankSymbol;
-    /// name of the currency, for example, <bold>US Dollar</bold>.
+    /// name of the currency, for example, <b>US Dollar</b>.
     string Name;
     /// if this currency is the default currency for a given locale.
     boolean Default;

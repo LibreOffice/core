@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XForbiddenCharacters.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 10:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 //=============================================================================
 
 /** provides access to forbidden character settings in a document.
-<p>In some languages particular characaters are not allowed to be placed at the beginning or
+<p>In some languages, particular characaters are not allowed to be placed at the beginning or
 at the end of a text line.</p>
  */
 interface XForbiddenCharacters : com::sun::star::uno::XInterface
