@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:55:22 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:22:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2016,6 +2016,7 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
 
     rSet.Put( aAllSet, FALSE );
 }
+
 
 
 /*************************************************************************
