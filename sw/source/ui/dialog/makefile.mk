@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:21:42 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:55:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=dialog
 
-AUTOSEG=true
-
 IMGLST_SRS=$(SRS)$/dialog.srs
 BMP_IN=$(PRJ)$/win/imglst
 
@@ -80,15 +78,8 @@ BMP_IN=$(PRJ)$/win/imglst
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        addrdlg.cxx \
-        abstract.cxx \
-        ascfldlg.cxx \
-        docstdlg.cxx \
-        macassgn.cxx \
-        regionsw.cxx
-
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         abstract.src \
         ascfldlg.src \
         dialog.src \
