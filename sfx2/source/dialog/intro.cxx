@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intro.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-10 07:51:45 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "intro.hxx"
 
