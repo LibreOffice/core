@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:24:04 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,31 +282,41 @@ void ORelationController::Execute(sal_uInt16 _nId)
         case ID_BROWSER_SAVEDOC:
             {
                 OSL_ENSURE(m_bEditable,"Slot ID_BROWSER_SAVEDOC should not be enabled!");
-                // now we save the layout information
-                //  create the output stream
-                try
+                if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_NAME)),getORB()))
                 {
-                    Sequence< sal_Int8 > aOutputSeq;
-                    if(m_xDataSource.is() && m_xDataSource->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION))
-                    {
-                        Reference< XOutputStream>       xOutStreamHelper = new OSequenceOutputStream(aOutputSeq);
-                        Reference< XObjectOutputStream> xOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")),UNO_QUERY);
-                        Reference< XOutputStream>   xMarkOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")),UNO_QUERY);
-                        Reference< XActiveDataSource >(xMarkOutStream,UNO_QUERY)->setOutputStream(xOutStreamHelper);
-                        Reference< XActiveDataSource > xOutDataSource(xOutStream, UNO_QUERY);
-                        OSL_ENSURE(xOutDataSource.is(),"Couldn't create com.sun.star.io.ObjectOutputStream!");
-                        xOutDataSource->setOutputStream(xMarkOutStream);
-                        Save(xOutStream);
-
-                        m_xDataSource->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aOutputSeq));
-                        Reference<XFlushable> xFlush(m_xDataSource,UNO_QUERY);
-                        if(xFlush.is())
-                            xFlush->flush();
-                        setModified(sal_False);
-                    }
+                    String aMessage(ModuleRes(STR_DATASOURCE_DELETED));
+                    String sTitle(ModuleRes(STR_STAT_WARNING));
+                    OSQLMessageBox aMsg(getView(),sTitle,aMessage);
+                    aMsg.Execute();
                 }
-                catch(Exception&)
+                else
                 {
+                    // now we save the layout information
+                    //  create the output stream
+                    try
+                    {
+                        Sequence< sal_Int8 > aOutputSeq;
+                        if(m_xDataSource.is() && m_xDataSource->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION))
+                        {
+                            Reference< XOutputStream>       xOutStreamHelper = new OSequenceOutputStream(aOutputSeq);
+                            Reference< XObjectOutputStream> xOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")),UNO_QUERY);
+                            Reference< XOutputStream>   xMarkOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")),UNO_QUERY);
+                            Reference< XActiveDataSource >(xMarkOutStream,UNO_QUERY)->setOutputStream(xOutStreamHelper);
+                            Reference< XActiveDataSource > xOutDataSource(xOutStream, UNO_QUERY);
+                            OSL_ENSURE(xOutDataSource.is(),"Couldn't create com.sun.star.io.ObjectOutputStream!");
+                            xOutDataSource->setOutputStream(xMarkOutStream);
+                            Save(xOutStream);
+
+                            m_xDataSource->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aOutputSeq));
+                            Reference<XFlushable> xFlush(m_xDataSource,UNO_QUERY);
+                            if(xFlush.is())
+                                xFlush->flush();
+                            setModified(sal_False);
+                        }
+                    }
+                    catch(Exception&)
+                    {
+                    }
                 }
             }
             break;

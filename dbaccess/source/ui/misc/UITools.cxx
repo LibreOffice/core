@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:53:20 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,15 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
     {
     }
     return sDefaultName;
+}
+// -----------------------------------------------------------------------------
+sal_Bool checkDataSourceAvailable(const ::rtl::OUString& _sDataSourceName,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB)
+{
+    sal_Bool bRet = sal_False;
+    Reference< XNameAccess > xDataBaseContext(_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+    if(xDataBaseContext.is())
+        bRet = xDataBaseContext->hasByName(_sDataSourceName);
+    return bRet;
 }
 
 // .........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 13:42:36 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:51:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,6 +444,8 @@
 #define STR_QUERY_REL_DELETE_WINDOW         RID_STRING_START + 182
 #define STR_NO_TABLE_FORMAT_INSIDE          RID_STRING_START + 183
 #define STR_ERROR_PASSWORDS_NOT_IDENTICAL   RID_STRING_START + 184
+#define STR_TABLEDESIGN_DATASOURCE_DELETED  RID_STRING_START + 185
+#define STR_DATASOURCE_DELETED              RID_STRING_START + 186
 
 //========================================================================
 // untyped resources
@@ -458,6 +460,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.56  2001/07/16 13:42:36  oj
+ *  #89650# check if table was created for html/rtf format
+ *
  *  Revision 1.55  2001/07/09 06:56:48  oj
  *  #88144# d&d for creating relations corrected
  *

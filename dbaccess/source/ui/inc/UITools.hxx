@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:50:32 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:51:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,11 @@ namespace dbaui
     ::rtl::OUString createDefaultName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTables,
                                         const ::rtl::OUString& _sName);
+
+    /** checks if the given name exists in the database context
+    */
+    sal_Bool checkDataSourceAvailable(  const ::rtl::OUString& _sDataSourceName,
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory_xORB);
 // .........................................................................
 }
 // .........................................................................

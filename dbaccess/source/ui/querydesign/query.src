@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:26:15 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2401,6 +2401,9 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
     };
 };
 
-
-
+String STR_DATASOURCE_DELETED
+{
+    Text = "Die zugehörige Datenquelle wurde gelöscht. Es können keine dies bezüglichen Daten gespeichert werden.";
+    Text [ ENGLISH ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
+};
 

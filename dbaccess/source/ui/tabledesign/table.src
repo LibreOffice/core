@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:26:29 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1810,6 +1810,13 @@ String STR_TABLEDESIGN_CONNECTION_MISSING
     Text[ catalan ] = "The table couldn't be saved due to connection problems.";
     Text[ finnish ] = "Die Tabelle konnte nicht gespeichert werden, da keine Verbindung zur Datenbank hergestellt werden konnte.";
 };
+String STR_TABLEDESIGN_DATASOURCE_DELETED
+{
+    Text = "Der Tabellenfilter konnte nicht angepasst werden, da die Datenquelle gelöscht wurde.";
+    Text [ english_us ] = "The table filter could not be saved because the datasource was deleted before.";
+    Text [ english ] = "The table filter could not be saved because the datasource was deleted before.";
+};
+
 FixedText FIXED_NO_CONNECTION
 {
     Pos                 = MAP_APPFONT ( 0,0 ) ;

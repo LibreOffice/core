@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:54:08 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,109 +517,107 @@ void OQueryController::Execute(sal_uInt16 _nId)
 void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
 
-        OJoinController::initialize(aArguments);
+    OJoinController::initialize(aArguments);
 
-        //  m_pWindow->initialize(m_xCurrentFrame);
+    PropertyValue aValue;
+    const Any* pBegin   = aArguments.getConstArray();
+    const Any* pEnd     = pBegin + aArguments.getLength();
 
-        PropertyValue aValue;
-        const Any* pBegin   = aArguments.getConstArray();
-        const Any* pEnd     = pBegin + aArguments.getLength();
+    for(;pBegin != pEnd;++pBegin)
+    {
+        if (!(*pBegin >>= aValue))
+            continue;
 
-        for(;pBegin != pEnd;++pBegin)
+        if (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION))
         {
-            if (!(*pBegin >>= aValue))
-                continue;
-
-            if (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION))
+            ::cppu::extractInterface(m_xConnection,aValue.Value);
+            // be notified when connection is in disposing
+            Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
+            if (xComponent.is())
             {
-                ::cppu::extractInterface(m_xConnection,aValue.Value);
-                // be notified when connection is in disposing
-                Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
-                if (xComponent.is())
+                Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
+                xComponent->addEventListener(xEvtL);
+            }
+        }
+        else if(0 == aValue.Name.compareToAscii(PROPERTY_DATASOURCENAME))
+        {
+            aValue.Value >>= m_sDataSourceName;
+        }
+        else if(0 == aValue.Name.compareToAscii(PROPERTY_CURRENTQUERY))
+        {
+            aValue.Value >>= m_sName;
+        }
+        else if(0 == aValue.Name.compareToAscii(PROPERTY_QUERYDESIGNVIEW))
+        {
+            m_bDesign = ::cppu::any2bool(aValue.Value);
+        }
+        else if(0 == aValue.Name.compareToAscii(PROPERTY_CREATEVIEW))
+        {
+            m_bCreateView = ::cppu::any2bool(aValue.Value);
+        }
+    }
+
+    if (!m_xConnection.is())
+    {   // whoever instantiated us did not give us a connection to share. Okay, create an own one
+        createNewConnection(sal_False);
+    }
+    if (!m_xConnection.is())
+    {   // we have no connection so what else should we do
+        m_bDesign = sal_False;
+        if(m_bCreateView)
+        {
+            String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
+            ODataView* pWindow = getView();
+            InfoBox(pWindow, aMessage).Execute();
+            throw SQLException();
+        }
+    }
+
+    // we need a datasource
+    if(m_xConnection.is())
+    {
+        Reference<XChild> xChild(m_xConnection,UNO_QUERY);
+        if(xChild.is())
+            m_xDataSource = Reference< XPropertySet >(xChild->getParent(),UNO_QUERY);
+        // now we have to check if our database supports views
+        if(m_bCreateView)
+        {
+            static ::rtl::OUString sView = ::rtl::OUString::createFromAscii("VIEW");
+            Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
+            Reference<XResultSet> xRes = xMeta->getTableTypes();
+            sal_Bool bFound = sal_False;
+            if(xRes.is())
+            {
+                Reference<XRow> xRow(xRes,UNO_QUERY);
+                while(xRes->next())
                 {
-                    Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-                    xComponent->addEventListener(xEvtL);
+                    ::rtl::OUString sValue = xRow->getString(1);
+                    if(!xRow->wasNull() && sValue == sView)
+                        bFound = sal_True;
                 }
             }
-            else if(0 == aValue.Name.compareToAscii(PROPERTY_DATASOURCENAME))
-            {
-                aValue.Value >>= m_sDataSourceName;
-            }
-            else if(0 == aValue.Name.compareToAscii(PROPERTY_CURRENTQUERY))
-            {
-                aValue.Value >>= m_sName;
-            }
-            else if(0 == aValue.Name.compareToAscii(PROPERTY_QUERYDESIGNVIEW))
-            {
-                m_bDesign = ::cppu::any2bool(aValue.Value);
-            }
-            else if(0 == aValue.Name.compareToAscii(PROPERTY_CREATEVIEW))
-            {
-                m_bCreateView = ::cppu::any2bool(aValue.Value);
-            }
-        }
-
-        if (!m_xConnection.is())
-        {   // whoever instantiated us did not give us a connection to share. Okay, create an own one
-            createNewConnection(sal_False);
-        }
-        if (!m_xConnection.is())
-        {   // we have no connection so what else should we do
-            m_bDesign = sal_False;
-            if(m_bCreateView)
-            {
-                String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
-                ODataView* pWindow = getView();
-                InfoBox(pWindow, aMessage).Execute();
-                throw SQLException();
-            }
-        }
-
-        // we need a datasource
-        if(m_xConnection.is())
-        {
-            Reference<XChild> xChild(m_xConnection,UNO_QUERY);
-            if(xChild.is())
-                m_xDataSource = Reference< XPropertySet >(xChild->getParent(),UNO_QUERY);
-            // now we have to check if our database supports views
-            if(m_bCreateView)
-            {
-                static ::rtl::OUString sView = ::rtl::OUString::createFromAscii("VIEW");
-                Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-                Reference<XResultSet> xRes = xMeta->getTableTypes();
-                sal_Bool bFound = sal_False;
-                if(xRes.is())
+            if(!bFound)
+            {   // we can't create views so we ask if the user wants to create a query instead
+                m_bCreateView = sal_False;
+                sal_Bool bClose = sal_False;
                 {
-                    Reference<XRow> xRow(xRes,UNO_QUERY);
-                    while(xRes->next())
-                    {
-                        ::rtl::OUString sValue = xRow->getString(1);
-                        if(!xRow->wasNull() && sValue == sView)
-                            bFound = sal_True;
-                    }
+                    String aTitle(ModuleRes(STR_QUERYDESIGN_NO_VIEW_SUPPORT));
+                    String aMessage(ModuleRes(STR_QUERYDESIGN_NO_VIEW_ASK));
+                    ODataView* pWindow = getView();
+                    OSQLMessageBox aDlg(pWindow,aTitle, aMessage,WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Query);
+                    bClose = aDlg.Execute() == RET_NO;
                 }
-                if(!bFound)
-                {   // we can't create views so we ask if the user wants to create a query instead
-                    m_bCreateView = sal_False;
-                    sal_Bool bClose = sal_False;
-                    {
-                        String aTitle(ModuleRes(STR_QUERYDESIGN_NO_VIEW_SUPPORT));
-                        String aMessage(ModuleRes(STR_QUERYDESIGN_NO_VIEW_ASK));
-                        ODataView* pWindow = getView();
-                        OSQLMessageBox aDlg(pWindow,aTitle, aMessage,WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Query);
-                        bClose = aDlg.Execute() == RET_NO;
-                    }
-                    if(bClose)
-                        throw Exception();
-                }
+                if(bClose)
+                    throw Exception();
             }
         }
-        else
-        {
-            Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-            xDatabaseContext->getByName(m_sDataSourceName) >>= m_xDataSource;
-            OSL_ENSURE(m_xDataSource.is(),"We need a datasource!");
-        }
+    }
+    else
+    {
+        Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+        xDatabaseContext->getByName(m_sDataSourceName) >>= m_xDataSource;
+        OSL_ENSURE(m_xDataSource.is(),"We need a datasource!");
+    }
     try
     {
         // get command from the query if a query name was supplied
@@ -1114,171 +1112,180 @@ void OQueryController::askForNewName(const Reference<XNameAccess>& _xElements,sa
 void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 {
     OSL_ENSURE(m_bEditable,"Slot ID_BROWSER_SAVEDOC should not be enabled!");
-
-    Reference<XNameAccess> xElements = getElements();
-    if(xElements.is())
+    if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_NAME)),getORB()))
     {
-        ::rtl::OUString sTranslatedStmt = translateStatement();
-
-        if(sTranslatedStmt.getLength())
+        String aMessage(ModuleRes(STR_DATASOURCE_DELETED));
+        String sTitle(ModuleRes(STR_STAT_WARNING));
+        OSQLMessageBox aMsg(getView(),sTitle,aMessage);
+        aMsg.Execute();
+    }
+    else
+    {
+        Reference<XNameAccess> xElements = getElements();
+        if(xElements.is())
         {
-            sal_Bool bNew = 0 == m_sName.getLength();
-            bNew = bNew || _bSaveAs;
-            // first we need a name for our query so ask the user
-            askForNewName(xElements,_bSaveAs);
+            ::rtl::OUString sTranslatedStmt = translateStatement();
 
-            // did we get a name
-            if(m_sName.getLength())
+            if(sTranslatedStmt.getLength())
             {
-                SQLExceptionInfo aInfo;
-                try
+                sal_Bool bNew = 0 == m_sName.getLength();
+                bNew = bNew || _bSaveAs;
+                // first we need a name for our query so ask the user
+                askForNewName(xElements,_bSaveAs);
+
+                // did we get a name
+                if(m_sName.getLength())
                 {
-                    Reference<XPropertySet> xProp;
-                    if(bNew || !xElements->hasByName(m_sName)) // just to make sure the query already exists
+                    SQLExceptionInfo aInfo;
+                    try
                     {
-                        if(xElements->hasByName(m_sName))
+                        Reference<XPropertySet> xProp;
+                        if(bNew || !xElements->hasByName(m_sName)) // just to make sure the query already exists
                         {
-                            Reference<XDrop> xNameCont(xElements,UNO_QUERY);
-                            OSL_ENSURE(xNameCont.is(),"Can not drop query!");
-                            if(xNameCont.is())
-                                xNameCont->dropByName(m_sName);
+                            if(xElements->hasByName(m_sName))
+                            {
+                                Reference<XDrop> xNameCont(xElements,UNO_QUERY);
+                                OSL_ENSURE(xNameCont.is(),"Can not drop query!");
+                                if(xNameCont.is())
+                                    xNameCont->dropByName(m_sName);
+                            }
+
+                            Reference<XDataDescriptorFactory> xFact(xElements,UNO_QUERY);
+                            OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
+                            xProp = xFact->createDataDescriptor();
+                            OSL_ENSURE(xProp.is(),"OQueryController::Execute ID_BROWSER_SAVEDOC: Create query failed!");
+                            // to set the name is only allowed when the wuery is new
+                            xProp->setPropertyValue(PROPERTY_NAME,makeAny(m_sName));
+                        }
+                        else
+                        {
+                            xElements->getByName(m_sName) >>= xProp;
                         }
 
-                        Reference<XDataDescriptorFactory> xFact(xElements,UNO_QUERY);
-                        OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
-                        xProp = xFact->createDataDescriptor();
-                        OSL_ENSURE(xProp.is(),"OQueryController::Execute ID_BROWSER_SAVEDOC: Create query failed!");
-                        // to set the name is only allowed when the wuery is new
-                        xProp->setPropertyValue(PROPERTY_NAME,makeAny(m_sName));
-                    }
-                    else
-                    {
-                        xElements->getByName(m_sName) >>= xProp;
-                    }
 
 
+                        xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(sTranslatedStmt));
 
-                    xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(sTranslatedStmt));
-
-                    // some properties are only valid for a query object
-                    if(m_bCreateView)
-                    {
-                        xProp->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(m_sUpdateCatalogName));
-                        xProp->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(m_sUpdateSchemaName));
-                    }
-                    else
-                    {
-                        xProp->setPropertyValue(PROPERTY_UPDATE_TABLENAME,makeAny(m_sUpdateTableName));
-                        xProp->setPropertyValue(PROPERTY_UPDATE_CATALOGNAME,makeAny(m_sUpdateCatalogName));
-                        xProp->setPropertyValue(PROPERTY_UPDATE_SCHEMANAME,makeAny(m_sUpdateSchemaName));
-                        xProp->setPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING,::cppu::bool2any(m_bEsacpeProcessing));
-
-                        // now we save the layout information
-                        //  create the output stream
-                        m_pWindow->getView()->SaveUIConfig();
-                        Sequence< sal_Int8 > aOutputSeq;
-                        {
-                            Reference< XOutputStream>       xOutStreamHelper = new OSequenceOutputStream(aOutputSeq);
-                            Reference< XObjectOutputStream> xOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")),UNO_QUERY);
-                            Reference< XOutputStream>   xMarkOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")),UNO_QUERY);
-                            Reference< XActiveDataSource >(xMarkOutStream,UNO_QUERY)->setOutputStream(xOutStreamHelper);
-                            Reference< XActiveDataSource > xOutDataSource(xOutStream, UNO_QUERY);
-                            OSL_ENSURE(xOutDataSource.is(),"Couldn't create com.sun.star.io.ObjectOutputStream!");
-                            xOutDataSource->setOutputStream(xMarkOutStream);
-                            Save(xOutStream);
-                        }
-                        xProp->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aOutputSeq));
-                    }
-
-                    if(bNew)
-                    {
-                        Reference<XAppend> xAppend(xElements,UNO_QUERY);
-                        OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
-                        xAppend->appendByDescriptor(xProp);
-
+                        // some properties are only valid for a query object
                         if(m_bCreateView)
                         {
-                            Reference<XPropertySet> xProp2;
-                            if(xElements->hasByName(m_sName))
-                                xElements->getByName(m_sName) >>= xProp2;
-                            if(!xProp2.is()) // correct name and try again
-                            {
-                                // it can be that someone inserted new data for us
-                                ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
-                                xProp->getPropertyValue(PROPERTY_CATALOGNAME)   >>= sCatalog;
-                                xProp->getPropertyValue(PROPERTY_SCHEMANAME)    >>= sSchema;
-                                xProp->getPropertyValue(PROPERTY_NAME)          >>= sTable;
+                            xProp->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(m_sUpdateCatalogName));
+                            xProp->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(m_sUpdateSchemaName));
+                        }
+                        else
+                        {
+                            xProp->setPropertyValue(PROPERTY_UPDATE_TABLENAME,makeAny(m_sUpdateTableName));
+                            xProp->setPropertyValue(PROPERTY_UPDATE_CATALOGNAME,makeAny(m_sUpdateCatalogName));
+                            xProp->setPropertyValue(PROPERTY_UPDATE_SCHEMANAME,makeAny(m_sUpdateSchemaName));
+                            xProp->setPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING,::cppu::bool2any(m_bEsacpeProcessing));
 
-                                ::dbtools::composeTableName(m_xConnection->getMetaData(),sCatalog,sSchema,sTable,sComposedName,sal_False);
-                                m_sName = sComposedName;
-                            }
-                            // now check if our datasource has set a tablefilter and if append the new table name to it
-                            Reference< XChild> xChild(m_xConnection,UNO_QUERY);
-                            if(xChild.is())
+                            // now we save the layout information
+                            //  create the output stream
+                            m_pWindow->getView()->SaveUIConfig();
+                            Sequence< sal_Int8 > aOutputSeq;
                             {
-                                Reference< XPropertySet> xDSProp(xChild->getParent(),UNO_QUERY);
-                                if(xDSProp.is())
+                                Reference< XOutputStream>       xOutStreamHelper = new OSequenceOutputStream(aOutputSeq);
+                                Reference< XObjectOutputStream> xOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")),UNO_QUERY);
+                                Reference< XOutputStream>   xMarkOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")),UNO_QUERY);
+                                Reference< XActiveDataSource >(xMarkOutStream,UNO_QUERY)->setOutputStream(xOutStreamHelper);
+                                Reference< XActiveDataSource > xOutDataSource(xOutStream, UNO_QUERY);
+                                OSL_ENSURE(xOutDataSource.is(),"Couldn't create com.sun.star.io.ObjectOutputStream!");
+                                xOutDataSource->setOutputStream(xMarkOutStream);
+                                Save(xOutStream);
+                            }
+                            xProp->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aOutputSeq));
+                        }
+
+                        if(bNew)
+                        {
+                            Reference<XAppend> xAppend(xElements,UNO_QUERY);
+                            OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
+                            xAppend->appendByDescriptor(xProp);
+
+                            if(m_bCreateView)
+                            {
+                                Reference<XPropertySet> xProp2;
+                                if(xElements->hasByName(m_sName))
+                                    xElements->getByName(m_sName) >>= xProp2;
+                                if(!xProp2.is()) // correct name and try again
                                 {
-                                    Sequence< ::rtl::OUString > aFilter;
-                                    xDSProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
-                                    // first check if we have something like SCHEMA.%
-                                    sal_Bool bHasToInsert = sal_True;
-                                    static ::rtl::OUString sPattern = ::rtl::OUString::createFromAscii("%");
-                                    const ::rtl::OUString* pBegin = aFilter.getConstArray();
-                                    const ::rtl::OUString* pEnd = pBegin + aFilter.getLength();
-                                    for (;pBegin != pEnd; ++pBegin)
+                                    // it can be that someone inserted new data for us
+                                    ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
+                                    xProp->getPropertyValue(PROPERTY_CATALOGNAME)   >>= sCatalog;
+                                    xProp->getPropertyValue(PROPERTY_SCHEMANAME)    >>= sSchema;
+                                    xProp->getPropertyValue(PROPERTY_NAME)          >>= sTable;
+
+                                    ::dbtools::composeTableName(m_xConnection->getMetaData(),sCatalog,sSchema,sTable,sComposedName,sal_False);
+                                    m_sName = sComposedName;
+                                }
+                                // now check if our datasource has set a tablefilter and if append the new table name to it
+                                Reference< XChild> xChild(m_xConnection,UNO_QUERY);
+                                if(xChild.is())
+                                {
+                                    Reference< XPropertySet> xDSProp(xChild->getParent(),UNO_QUERY);
+                                    if(xDSProp.is())
                                     {
-                                        if(pBegin->indexOf('%') != -1)
+                                        Sequence< ::rtl::OUString > aFilter;
+                                        xDSProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
+                                        // first check if we have something like SCHEMA.%
+                                        sal_Bool bHasToInsert = sal_True;
+                                        static ::rtl::OUString sPattern = ::rtl::OUString::createFromAscii("%");
+                                        const ::rtl::OUString* pBegin = aFilter.getConstArray();
+                                        const ::rtl::OUString* pEnd = pBegin + aFilter.getLength();
+                                        for (;pBegin != pEnd; ++pBegin)
                                         {
-                                            sal_Int32 nLen;
-                                            if((nLen = pBegin->lastIndexOf('.')) != -1 && !pBegin->compareTo(m_sName,nLen))
-                                                bHasToInsert = sal_False;
-                                            else if(pBegin->getLength() == 1)
-                                                bHasToInsert = sal_False;
+                                            if(pBegin->indexOf('%') != -1)
+                                            {
+                                                sal_Int32 nLen;
+                                                if((nLen = pBegin->lastIndexOf('.')) != -1 && !pBegin->compareTo(m_sName,nLen))
+                                                    bHasToInsert = sal_False;
+                                                else if(pBegin->getLength() == 1)
+                                                    bHasToInsert = sal_False;
+                                            }
                                         }
-                                    }
-                                    if(bHasToInsert)
-                                    {
-                                        aFilter.realloc(aFilter.getLength()+1);
-                                        aFilter.getArray()[aFilter.getLength()-1] = m_sName;
-                                        xDSProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aFilter));
-                                        Reference<XFlushable> xFlush(xDSProp,UNO_QUERY);
-                                        if(xFlush.is())
-                                            xFlush->flush();
+                                        if(bHasToInsert)
+                                        {
+                                            aFilter.realloc(aFilter.getLength()+1);
+                                            aFilter.getArray()[aFilter.getLength()-1] = m_sName;
+                                            xDSProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aFilter));
+                                            Reference<XFlushable> xFlush(xDSProp,UNO_QUERY);
+                                            if(xFlush.is())
+                                                xFlush->flush();
+                                        }
                                     }
                                 }
                             }
                         }
+                        else
+                        {
+                            Reference<XFlushable> xFlush(xProp,UNO_QUERY);
+                            if(xFlush.is())
+                                xFlush->flush();
+                        }
+                        setModified(sal_False);
                     }
-                    else
+                    catch(SQLContext& e)
                     {
-                        Reference<XFlushable> xFlush(xProp,UNO_QUERY);
-                        if(xFlush.is())
-                            xFlush->flush();
+                        m_sName = ::rtl::OUString();
+                        aInfo = SQLExceptionInfo(e);
                     }
-                    setModified(sal_False);
+                    catch(SQLWarning& e)
+                    {
+                        m_sName = ::rtl::OUString();
+                        aInfo = SQLExceptionInfo(e);
+                    }
+                    catch(SQLException& e)
+                    {
+                        m_sName = ::rtl::OUString();
+                        aInfo = SQLExceptionInfo(e);
+                    }
+                    catch(Exception&)
+                    {
+                        m_sName = ::rtl::OUString();
+                        OSL_ENSURE(0,"OQueryController::doSaveAsDoc: Query could not be inserted!");
+                    }
+                    showError(aInfo);
                 }
-                catch(SQLContext& e)
-                {
-                    m_sName = ::rtl::OUString();
-                    aInfo = SQLExceptionInfo(e);
-                }
-                catch(SQLWarning& e)
-                {
-                    m_sName = ::rtl::OUString();
-                    aInfo = SQLExceptionInfo(e);
-                }
-                catch(SQLException& e)
-                {
-                    m_sName = ::rtl::OUString();
-                    aInfo = SQLExceptionInfo(e);
-                }
-                catch(Exception&)
-                {
-                    m_sName = ::rtl::OUString();
-                    OSL_ENSURE(0,"OQueryController::doSaveAsDoc: Query could not be inserted!");
-                }
-                showError(aInfo);
             }
         }
     }

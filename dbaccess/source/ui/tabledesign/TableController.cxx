@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:55:35 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,6 +517,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
                 Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
                 if(xProp.is())
                 {
+
                     Sequence< ::rtl::OUString > aFilter;
                     xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
                     // first check if we have something like SCHEMA.%
@@ -537,12 +538,23 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
                     }
                     if(bHasToInsert)
                     {
-                        aFilter.realloc(aFilter.getLength()+1);
-                        aFilter.getArray()[aFilter.getLength()-1] = m_sName;
-                        xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aFilter));
-                        Reference<XFlushable> xFlush(xProp,UNO_QUERY);
-                        if(xFlush.is())
-                            xFlush->flush();
+                        if(! ::dbaui::checkDataSourceAvailable(::comphelper::getString(xProp->getPropertyValue(PROPERTY_NAME)),getORB()))
+                        {
+                            String aMessage(ModuleRes(STR_TABLEDESIGN_DATASOURCE_DELETED));
+                            String sTitle(ModuleRes(STR_STAT_WARNING));
+                            OSQLMessageBox aMsg(getView(),sTitle,aMessage);
+                            aMsg.Execute();
+                            return sal_False;
+                        }
+                        else
+                        {
+                            aFilter.realloc(aFilter.getLength()+1);
+                            aFilter.getArray()[aFilter.getLength()-1] = m_sName;
+                            xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aFilter));
+                            Reference<XFlushable> xFlush(xProp,UNO_QUERY);
+                            if(xFlush.is())
+                                xFlush->flush();
+                        }
                     }
                 }
             }
