@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:17:06 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -878,6 +878,27 @@ void ViewShell::SetUseVirtualDevice( short nNew )
     GetDoc()->SetUseVirtualDevice( nNew );
 }
 
+// OD 2004-02-16 #106629# - access value of compatibility flag for adding
+// paragraph and table spacing at bottom of table cells
+sal_Bool ViewShell::IsAddParaSpacingToTableCells() const
+{
+    return GetDoc()->IsAddParaSpacingToTableCells();
+}
+
+// OD 2004-02-16 #106629# - control, if paragraph and table spacing is added
+// at bottom of table cells
+void ViewShell::SetAddParaSpacingToTableCells(
+                                const sal_Bool _bAddParaSpacingToTableCells )
+{
+    if ( GetDoc()->IsAddParaSpacingToTableCells() != _bAddParaSpacingToTableCells )
+    {
+        SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
+        GetDoc()->SetAddParaSpacingToTableCells( _bAddParaSpacingToTableCells );
+        const BYTE nInv = INV_PRTAREA;
+        lcl_InvalidateAllCntnt( *this, nInv );
+    }
+}
+
 // OD 06.01.2004 #i11859# - former formatting of text lines with proportional
 // line spacing or not.
 sal_Bool ViewShell::IsFormerLineSpacing() const
@@ -898,7 +919,6 @@ void ViewShell::SetUseFormerLineSpacing( const sal_Bool _bUseFormerLineSpacing )
         lcl_InvalidateAllCntnt( *this, nInv );
     }
 }
-
 
 /******************************************************************************
 |*
