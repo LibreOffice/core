@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-16 08:14:11 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1994,8 +1994,10 @@ public:
 
     // -------------------- FeShell - Schnittstellen -----------------------
     // !!!!! diese gehen immer davon aus, das ein Layout existiert  !!!!
-    sal_Bool ChgAnchor( const SdrMarkList &rMrkList, int eAnchorId,
-                        sal_Bool bSameOnly, sal_Bool bPosCorr );
+    sal_Bool ChgAnchor( const SdrMarkList& _rMrkList,
+                        RndStdIds _eAnchorType,
+                        const sal_Bool _bSameOnly,
+                        const sal_Bool _bPosCorr );
 
     void SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew );
     void GetRowHeight( const SwCursor& rCursor, SwFmtFrmSize *& rpSz ) const;
@@ -2188,6 +2190,10 @@ public:
     */
     bool ContainsHiddenChars() const;
 
+    // -> #111955#
+    sal_Bool IsOldNumbering() const { return bOldNumbering; }
+    void SetOldNumbering(sal_Bool _bOldNumbering);
+    // <- #111955#
     // call back for API wrapper
     SwModify*   GetUnoCallBack() const;
 
