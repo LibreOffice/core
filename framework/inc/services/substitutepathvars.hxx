@@ -2,9 +2,9 @@
  *
  *  $RCSfile: substitutepathvars.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:13:07 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,6 @@
 
 #ifndef __FRAMEWORK_STDTYPES_H_
 #include <stdtypes.h>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_WILDCARD_HXX_
-#include <classes/wildcard.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
