@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-24 11:45:01 $
+ *  last change: $Author: cl $ $Date: 2002-09-04 14:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@
 #include "unopsfm.hxx"
 #include "unogsfm.hxx"
 #include "unopstyl.hxx"
+#include "unopage.hxx"
 #include "viewshel.hxx"
 #ifndef SVX_LIGHT
 #include "docshell.hxx"
@@ -519,7 +520,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     if(!(aValue >>= aString))
                         throw lang::IllegalArgumentException();
 
-                    pInfo->aBookmark = aString;
+                    pInfo->aBookmark = SdDrawPage::getUiNameFromPageApiName( aString );
                     break;
                 }
                 case WID_CLICKACTION:
@@ -723,7 +724,20 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
         {
             OUString aString;
             if( pInfo )
-                aString = pInfo->aBookmark ;
+            {
+                SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
+                // is the bookmark a page?
+                BOOL bIsMasterPage;
+                if(pDoc->GetPageByName( pInfo->aBookmark, bIsMasterPage ) != SDRPAGE_NOTFOUND)
+                {
+                    aString = SdDrawPage::getPageApiNameFromUiName( pInfo->aBookmark );
+                }
+                else
+                {
+                    aString = pInfo->aBookmark ;
+                }
+            }
+
             aRet <<= aString;
             break;
         }
