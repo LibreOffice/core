@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-08 13:49:54 $
+ *  last change: $Author: mtg $ $Date: 2001-05-31 09:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,14 +101,13 @@ protected:
     sal_Int16           nLevel;
     sal_Bool            bFinished;
     sal_Bool            bEncryptCurrentEntry;
-    sal_Int32           nCurrentDataBegin;
 
 public:
     ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream, sal_Int32 nNewBufferSize);
     ~ZipOutputStream(void);
 
     // rawWrite to support a direct write to the output stream
-    void SAL_CALL rawWrite( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer)
+    void SAL_CALL rawWrite( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     void SAL_CALL rawCloseEntry(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
