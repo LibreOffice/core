@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:29:58 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,8 @@ namespace basegfx
         // Check and evtl. correct orientations of all contained Polygons so that
         // the orientations of contained polygons will variate to express areas and
         // holes
-        void correctOrientations(::basegfx::B2DPolyPolygon& rCandidate);
+//BFS08     void correctOrientations(::basegfx::B2DPolyPolygon& rCandidate);
+        ::basegfx::B2DPolyPolygon correctOrientations(const ::basegfx::B2DPolyPolygon& rCandidate);
 
         // Remove all intersections, the self intersections and the in-between
         // polygon intersections. After this operation there are no more intersections
@@ -100,10 +101,15 @@ namespace basegfx
         // computed.
         // bForceOrientation: If true, the orientations of all contained polygons
         // is changed to ORIENTATION_POSITIVE before computing.
-        // bInvertRemove: if true, created polygons which are inside others and
-        // have the same orientation are removed (cleanup).
-        void removeIntersections(::basegfx::B2DPolyPolygon& rCandidate,
-            bool bForceOrientation = true, bool bInvertRemove = false);
+//BFS08     // bInvertRemove: if true, created polygons which are inside others and
+//BFS08     // have the same orientation are removed (cleanup).
+//BFS08     void removeIntersections(::basegfx::B2DPolyPolygon& rCandidate,
+//BFS08         bool bForceOrientation = true, bool bInvertRemove = false);
+//BFS08     void removeIntersections(::basegfx::B2DPolyPolygon& rCandidate, bool bForceOrientation = true);
+//BFS08     void removeIntersections(::basegfx::B2DPolyPolygon& rCandidate);
+        ::basegfx::B2DPolyPolygon removeIntersections(const ::basegfx::B2DPolyPolygon& rCandidate);
+        ::basegfx::B2DPolyPolygon removeAllIntersections(const ::basegfx::B2DPolyPolygon& rCandidate);
+        ::basegfx::B2DPolyPolygon removeNeutralPolygons(const ::basegfx::B2DPolyPolygon& rCandidate, bool bUseOr);
 
         // Subdivide all contained curves. Use distanceBound value if given.
         ::basegfx::B2DPolyPolygon adaptiveSubdivideByDistance(const ::basegfx::B2DPolyPolygon& rCandidate, double fDistanceBound = 0.0);
@@ -119,6 +125,14 @@ namespace basegfx
         // If fFullDashDotLen is not given it will be calculated from the given
         // raDashDotArray.
         ::basegfx::B2DPolyPolygon applyLineDashing(const ::basegfx::B2DPolyPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen = 0.0);
+
+        // Merge contained Polygons to longer ones if the end point of one Polygon equals
+        // the start point of the next one. Only direct successors are checked.
+        // This method is mainly for joining line snippets which reach over an original
+        // polygon edge after using applyLineDashing. This is necessary if the dashed line
+        // parts shall be used for creating thick line geometry to be able to do correct
+        // line joints.
+        ::basegfx::B2DPolyPolygon mergeDashedLines(const ::basegfx::B2DPolyPolygon& rCandidate);
 
         // test if point is inside epsilon-range around the given PolyPolygon. Can be used
         // for HitTesting. The epsilon-range is defined to be the tube around the PolyPolygon
