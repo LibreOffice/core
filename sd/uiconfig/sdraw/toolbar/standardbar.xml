@@ -19,6 +19,8 @@
  <toolbar:toolbaritem xlink:href=".uno:Copy" toolbar:helpid="helpid:5711" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:Paste" toolbar:helpid="helpid:5712" toolbar:text="" />
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatPaintbrush" toolbar:helpid="helpid:5715" toolbar:text="" />
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Undo" toolbar:helpid="helpid:5701" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:helpid="helpid:5700" toolbar:text="" />
  <toolbar:toolbarseparator/>
