@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOOo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:17:53 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,12 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_TEXT, XML_ANIMATION_DELAY, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_DRAW, XML_AUTO_GROW_WIDTH, XML_ATACTION_COPY,
-          NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_DRAW, XML_AUTO_GROW_HEIGHT, XML_ATACTION_COPY,
-          NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_DRAW, XML_AUTO_GROW_WIDTH, XML_ATACTION_RENAME,
+        XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
+                                                 XML_AUTO_GROW_HEIGHT   ), 0 },
+    { XML_NAMESPACE_DRAW, XML_AUTO_GROW_HEIGHT, XML_ATACTION_RENAME,
+        XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
+                                                 XML_AUTO_GROW_WIDTH    ), 0 },
     { XML_NAMESPACE_DRAW, XML_FIT_TO_SIZE, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_TEXTAREA_VERTICAL_ALIGN, XML_ATACTION_COPY,
