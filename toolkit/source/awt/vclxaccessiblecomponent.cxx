@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:05:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,7 +728,7 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (uno::RuntimeExce
     if ( GetWindow() )
     {
         aName = GetWindow()->GetAccessibleName();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         aName += String( RTL_CONSTASCII_USTRINGPARAM( " (Type = " ) );
         aName += String::CreateFromInt32( GetWindow()->GetType() );
         aName += String( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
