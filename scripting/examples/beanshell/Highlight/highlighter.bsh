@@ -107,12 +107,25 @@ myListener = new ActionListener() {
     }
 };
 
+
+exitListener = new ActionListener() {
+    actionPerformed(ActionEvent e) {
+        frame.dispose();
+    }
+};
+
+
 searchButton = new JButton("Highlight");
 searchButton.addActionListener(myListener);
+
+exitButton = new JButton("Exit");
+exitButton.addActionListener(exitListener);
 
 buttonPanel = new JPanel();
 buttonPanel.setLayout(new FlowLayout());
 buttonPanel.add(searchButton);
+buttonPanel.add(exitButton);
+
 
 // Create a JPanel containing one JTextField for the search text. 
 searchPanel = new JPanel();
@@ -134,5 +147,3 @@ frame.getContentPane().add(buttonPanel);
 
 frame.setVisible(true);
 frame.pack();
-
-return 0;
