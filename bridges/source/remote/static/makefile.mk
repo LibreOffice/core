@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2000-11-13 15:20:19 $
+#   last change: $Author: dbo $ $Date: 2001-04-18 12:02:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,19 +77,6 @@ NO_BSYMBOLIC=TRUE
 # ------------------------------------------------------------------
 
 BRIDGES_MARSHALLIB = bridges_marshal.lib
-#CPPUMAKERFLAGS += -C
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb 
-
-# output directory (one dir for each project)
-UNOUCROUT=$(OUT)$/inc
-
-# adding to inludepath
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES=  com.sun.star.uno.XInterface \
-       com.sun.star.uno.TypeClass
-
 
 SLOFILES= 	\
         $(SLO)$/proxy.obj \

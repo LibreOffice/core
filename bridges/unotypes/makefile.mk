@@ -2,7 +2,7 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.1 $
 #
 #   last change: $Author: dbo $ $Date: 2001-04-18 12:02:47 $
 #
@@ -59,14 +59,10 @@
 #
 #
 #*************************************************************************
-
-PRJ=..$/..$/..
+PRJ=..
 
 PRJNAME=bridges
-TARGET=urp_uno
-ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
+TARGET=unotypes
 
 # --- Settings -----------------------------------------------------
 
@@ -74,53 +70,30 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 
-# ------------------------------------------------------------------
+#-------------------------------------------------------------------
 
-.IF "$(COM)$(OS)" == "GCCMACOSX"
-CFLAGS += -Duno_initEnvironment=$(TARGET)uno_initEnvironment \
-      -Duno_ext_getMapping=$(TARGET)uno_ext_getMapping
-.ENDIF
+#CPPUMAKERFLAGS += -C
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb 
+UNOUCROUT=$(OUT)$/inc
 
-
-SLOFILES= 	\
-        $(SLO)$/urp_environment.obj \
-        $(SLO)$/urp_marshal.obj \
-        $(SLO)$/urp_unmarshal.obj \
-        $(SLO)$/urp_dispatch.obj \
-        $(SLO)$/urp_job.obj \
-        $(SLO)$/urp_reader.obj \
-        $(SLO)$/urp_writer.obj \
-        $(SLO)$/urp_log.obj \
-        $(SLO)$/urp_bridgeimpl.obj \
-        $(SLO)$/urp_propertyobject.obj
-
-.IF "$(COM)"=="GCC"
-NOOPTFILES= \
-        $(SLO)$/urp_reader.obj
-.ENDIF			# "$(COM)"=="GCC"
-
-SHL1TARGET= $(TARGET)
-
-SHL1STDLIBS=\
-        $(SALLIB)\
-        $(CPPULIB)
-
-SHL1LIBS=\
-            $(SLB)$/$(TARGET).lib \
-            $(SLB)$/bridges_remote_static.lib
-
+UNOTYPES = \
+    com.sun.star.bridge.XProtocolProperties		\
+    com.sun.star.corba.giop.MessageHeader_1_2	\
+    com.sun.star.corba.giop.MsgType_1_1		\
+    com.sun.star.corba.iop.ServiceContextList	\
+    com.sun.star.corba.iop.ProfileIdGroup		\
+    com.sun.star.corba.iiop.ProfileBody_1_1		\
+    com.sun.star.corba.LogicalThreadID		\
+    com.sun.star.corba.iop.ServiceIdGroup		\
+    com.sun.star.corba.giop.ReplyHeader_1_2		\
+    com.sun.star.corba.giop.RequestHeader_1_2	\
+    com.sun.star.corba.TCKind			\
+    com.sun.star.corba.ObjectKey			\
+    com.sun.star.uno.XInterface			\
+    com.sun.star.uno.TypeClass
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :	target.mk
-
-$(MISC)$/$(SHL1TARGET).def: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY     $(SHL1TARGET)                                  >$@
-    @echo DESCRIPTION 'URP to UNO binding' 		            >>$@
-    @echo DATA        READ WRITE NONSHARED                          >>$@
-    @echo EXPORTS                                                   >>$@
-    @echo uno_initEnvironment @3                                    >>$@
-    @echo uno_ext_getMapping @4					    >>$@
+.INCLUDE :  target.mk
 

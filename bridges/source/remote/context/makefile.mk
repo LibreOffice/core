@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:28:49 $
+#   last change: $Author: dbo $ $Date: 2001-04-18 12:02:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,14 +76,6 @@ USE_DEFFILE=TRUE
 
 UNOUCRDEP=$(SOLARUCRDIR)$/uce.rdb 
 UNOUCRRDB=$(SOLARUCRDIR)$/uce.rdb 
-
-# output directory (one dir for each project)
-UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)
-
-# adding to inludepath
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES=
 
 SLOFILES= $(SLO)$/context.obj
 
