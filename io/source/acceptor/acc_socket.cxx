@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acc_socket.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-20 16:55:46 $
+ *  last change: $Author: jbu $ $Date: 2000-10-20 17:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,7 @@ namespace stoc_acceptor {
         if( ! m_bIgnoreClose && 1 == osl_incrementInterlockedCount( (&m_nStatus) ) )
         {
             m_socket.shutdown();
+            notifyListeners(this, callClosed);
         }
     }
 
