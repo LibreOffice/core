@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:37:02 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 07:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3655,7 +3655,7 @@ String RID_SVXSTR_HATCH10
     Text [ italian ] = "Tratteggio" ;
     Text [ portuguese_brazilian ] = "Sombreado" ;
     Text [ portuguese ] = "Tracejado" ;
-    Text [ finnish ] = "Schraffur" ;
+    Text [ finnish ] = "Viivoitus" ;
     Text [ danish ] = "Skravering" ;
     Text [ french ] = "Hachure" ;
     Text [ swedish ] = "Skraffering" ;
@@ -4335,13 +4335,13 @@ String RID_SVXSTR_BMP21
     Text[ polish ] = "Mapa bitowa";
     Text[ portuguese_brazilian ] = "Bitmap";
     Text[ japanese ] = "ËŞ¯ÄÏ¯Ìß";
-    Text[ korean ] = "Bitmap";
+    Text[ korean ] = "ºñÆ®¸Ê";
     Text[ chinese_simplified ] = "Î»Í¼";
     Text[ chinese_traditional ] = "ÂI°}¹Ï";
     Text[ turkish ] = "Bit eşlem";
     Text[ arabic ] = "ÕæÑÉ äŞØíÉ";
     Text[ catalan ] = "Bitmap";
-    Text[ finnish ] = "Bitmap";
+    Text[ finnish ] = "Bittikartta";
 };
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -4701,7 +4701,7 @@ String RID_SVXSTR_DASH11
     Text[ polish ] = "Kreski";
     Text[ portuguese_brazilian ] = "Dashed";
     Text[ japanese ] = "”jüó";
-    Text[ korean ] = "Dashed";
+    Text[ korean ] = "´ë½Ã";
     Text[ chinese_simplified ] = "ÆÆÕÛºÅ";
     Text[ chinese_traditional ] = "¯}§é¸¹";
     Text[ turkish ] = "Dashed";
@@ -5110,10 +5110,10 @@ String RID_SVXSTR_TRASNGR0
     Text[ dutch ] = "Transparantie";
     Text[ chinese_simplified ] = "Í¸Ã÷";
     Text[ greek ] = "ÄéáöÜíåéá åğéöÜíåéáò";
-    Text[ korean ] = "Åõ¸í Ã¤¿ì±â";
+    Text[ korean ] = "Æò¸é Åõ¸í";
     Text[ turkish ] = "Yüzey saydamlığı";
     Text[ catalan ] = "Transparencia";
-    Text[ finnish ] = "Flächentransparenz";
+    Text[ finnish ] = "Läpinäkyvyys";
 };
 
  // ********************************************************************** EOF
