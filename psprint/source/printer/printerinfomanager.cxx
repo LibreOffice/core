@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:52:39 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 14:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,11 @@ bool PrinterInfoManager::checkPrintersChanged()
 
         applePrintSystem = macxp_GetSystemPrintMethod();
         if ( applePrintSystem == kApplePrintingCUPS )
+        {
             m_aSystemPrintQueues.clear();
+            delete m_pQueueInfo;
+            m_pQueueInfo = new SystemQueueInfo();
+        }
 #endif
         initialize();
     }
