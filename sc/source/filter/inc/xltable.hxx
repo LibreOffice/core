@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:51:02 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ const sal_uInt16 EXC_ID_FORMULA             = 0x0006;
 const sal_uInt16 EXC_FORMULA_RECALC_ALWAYS  = 0x0001;
 const sal_uInt16 EXC_FORMULA_RECALC_ONLOAD  = 0x0002;
 const sal_uInt16 EXC_FORMULA_SHARED         = 0x0008;
-const sal_uInt16 EXC_FORMULA_DEFAULTFLAGS   = EXC_FORMULA_RECALC_ALWAYS | EXC_FORMULA_RECALC_ONLOAD;
+const sal_uInt16 EXC_FORMULA_DEFAULTFLAGS   = EXC_FORMULA_RECALC_ONLOAD;
 
 const sal_uInt8 EXC_FORMULA_RES_STRING      = 0x00;     /// Result is a string.
 const sal_uInt8 EXC_FORMULA_RES_BOOL        = 0x01;     /// Result is Boolean value.
@@ -150,7 +150,7 @@ const sal_uInt16 EXC_ID_ARRAY               = 0x0221;
 
 const sal_uInt16 EXC_ARRAY_RECALC_ALWAYS    = 0x0001;
 const sal_uInt16 EXC_ARRAY_RECALC_ONLOAD    = 0x0002;
-const sal_uInt16 EXC_ARRAY_DEFAULTFLAGS     = EXC_ARRAY_RECALC_ALWAYS | EXC_ARRAY_RECALC_ONLOAD;
+const sal_uInt16 EXC_ARRAY_DEFAULTFLAGS     = EXC_ARRAY_RECALC_ONLOAD;
 
 // (0x0025, 0x0225) DEFAULTROWHEIGHT ------------------------------------------
 
@@ -174,7 +174,7 @@ const sal_uInt16 EXC_TABLEOP_RECALC_ALWAYS  = 0x0001;
 const sal_uInt16 EXC_TABLEOP_RECALC_ONLOAD  = 0x0002;
 const sal_uInt16 EXC_TABLEOP_ROW            = 0x0004;
 const sal_uInt16 EXC_TABLEOP_BOTH           = 0x0008;
-const sal_uInt16 EXC_TABLEOP_DEFAULTFLAGS   = EXC_TABLEOP_RECALC_ALWAYS | EXC_TABLEOP_RECALC_ONLOAD;
+const sal_uInt16 EXC_TABLEOP_DEFAULTFLAGS   = EXC_TABLEOP_RECALC_ONLOAD;
 
 // (0x0037) TABLEOP2 ----------------------------------------------------------
 
