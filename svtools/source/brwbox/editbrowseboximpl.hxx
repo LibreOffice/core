@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowseboximpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-17 12:04:31 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 14:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ namespace svt
     {
     public:
         ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > m_xActiveCell;
+        sal_Bool m_bHiContrast;
         void disposeCell();
     };
 }

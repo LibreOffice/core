@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-17 11:56:23 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 14:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,24 @@
 namespace svt
 {
 // .......................................................................
+    namespace
+    {
+        sal_Bool isHiContrast(Window* _pWindow)
+        {
+            OSL_ENSURE(_pWindow,"Window must be not null!");
+            Window* pIter = _pWindow;
+            //  while( pIter &&  pIter->GetBackground().GetColor().GetColor() == COL_TRANSPARENT )
+            while( pIter )
+            {
+                const Color& aColor = pIter->GetBackground().GetColor();
+                if ( aColor.GetColor() == COL_TRANSPARENT )
+                    pIter = pIter->GetParent();
+                else
+                    break;
+            }
+            return pIter && pIter->GetBackground().GetColor().IsDark();
+        }
+    }
 
     using namespace drafts::com::sun::star::accessibility::AccessibleEventId;
     //==================================================================
@@ -175,6 +193,8 @@ namespace svt
     void EditBrowseBox::Construct()
     {
         m_aImpl = ::std::auto_ptr<EditBrowseBoxImpl>(new EditBrowseBoxImpl());
+        m_aImpl->m_bHiContrast = isHiContrast(&GetDataWindow());
+
         SetCompoundControl(sal_True);
         SetLineColor(Color(COL_LIGHTGRAY));
 
@@ -356,8 +376,12 @@ namespace svt
     //------------------------------------------------------------------------------
     Image EditBrowseBox::GetImage(RowStatus eStatus) const
     {
-        if (!m_aStatusImages.GetImageCount())
-            const_cast<EditBrowseBox*>(this)->m_aStatusImages = ImageList(SvtResId(RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX));
+        sal_Bool bHiContrast = isHiContrast(&GetDataWindow());
+        if ( !m_aStatusImages.GetImageCount() || (bHiContrast != m_aImpl->m_bHiContrast) )
+        {
+            m_aImpl->m_bHiContrast = bHiContrast;
+            const_cast<EditBrowseBox*>(this)->m_aStatusImages = ImageList(SvtResId(bHiContrast ? RID_SVTOOLS_IMAGELIST_EDITBWSEBOX_H : RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX));
+        }
 
         Image aImage;
         switch (eStatus)
@@ -783,8 +807,9 @@ namespace svt
     {
         BrowseBox::DataChanged( rDCEvt );
 
-        if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS ) &&
-             (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
+            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
+            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
         {
             ImplInitSettings( sal_True, sal_True, sal_True );
             Invalidate();
@@ -1456,6 +1481,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2002/04/17 11:56:23  oj
+ *  #98286# improve accessibility
+ *
  *  Revision 1.5  2002/04/11 15:57:05  fs
  *  #98483# allow for row/column selection (event when currently editing)
  *
