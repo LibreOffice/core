@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ ModalDialog DLG_ASS
         Text [ spanish ] = "Elija un ~estilo de página" ;
         Text [ french ] = "Sélectionnez un style de page" ;
         Text [ dutch ] = "Kies een pagina-~opmaakprofiel" ;
-        Text [ swedish ] = "Välj ut en ~sidmall" ;
+        Text [ swedish ] = "Välj ut en ~sidformatmall" ;
         Text [ danish ] = "Vælg en sidetypografi" ;
         Text [ portuguese ] = "Seleccione um estilo de ~página" ;
         Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÒ»¸öÒ³ÃæÑùÊ½(~S)";
@@ -570,7 +570,7 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "~Effekt:";
         Text[ polish ] = "Efekt:";
         Text[ portuguese_brazilian ] = "~Effect:";
-        Text[ japanese ] = "Œø‰Ê:(~E)";
+        Text[ japanese ] = "Œø‰Ê(~E):";
         Text[ chinese_simplified ] = "Ð§¹û(~E)";
         Text[ chinese_traditional ] = "®ÄªG(~E)";
         Text[ arabic ] = "ÇáÊÃËíÑ:";
@@ -608,7 +608,7 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "~Hastighet:";
         Text[ polish ] = "Szy~bkoœæ:";
         Text[ portuguese_brazilian ] = "~Speed:";
-        Text[ japanese ] = "½Ëß°ÄÞ:(~S)";
+        Text[ japanese ] = "½Ëß°ÄÞ(~S):";
         Text[ chinese_simplified ] = "ËÙ¶È(~S)";
         Text[ chinese_traditional ] = "³t«×(~S)";
         Text[ arabic ] = "ÇáÓÑÚÉ:";
