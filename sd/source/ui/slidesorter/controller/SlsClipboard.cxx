@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:33:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,8 +261,8 @@ void Clipboard::DoPaste (::Window* pWindow)
         }
         else
         {
-            SvEmbeddedObject* pObj = pClipTransferable->GetDocShell();
-            DrawDocShell* pDataDocSh = (DrawDocShell*) pObj;
+            SfxObjectShell* pShell = pClipTransferable->GetDocShell();
+            DrawDocShell* pDataDocSh = (DrawDocShell*)pShell;
             SdDrawDocument* pDataDoc = pDataDocSh->GetDoc();
 
             if (pDataDoc!=NULL
