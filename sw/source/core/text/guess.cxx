@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-19 13:43:38 $
+ *  last change: $Author: fme $ $Date: 2002-02-20 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #endif
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
+#endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
 #endif
 #ifndef _PORFLD_HXX
 #include <porfld.hxx>
@@ -274,16 +277,22 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
     sal_Bool bChgLocale = sal_False;
 
-    // if the current character does not fit to the current line,
-    // we check for possible hanging punctuation:
-    const sal_Bool bAllowHanging = rInf.IsHanging() && ! rInf.IsMulti() &&
-                                   ! rPor.InFldGrp();
-    if ( nCutPos && nCutPos == rInf.GetIdx() && bAllowHanging )
+    // if we have to apply the forbidden character rules, we have to check
+    // if we temporarily have to change the language in order to get the
+    // correct forbidden rules
+    const CharClass& rCC = GetAppCharClass();
+    xub_StrLen nLangIndex = nCutPos;
+
+    if ( nCutPos )
     {
-        ASSERT( rSI.ScriptType( nCutPos - 1 ), "Script is not between 1 and 4" );
+        // step back until a non-punctuation character is reached
+        while ( nLangIndex && ! rCC.isLetterNumeric( rInf.GetTxt(), nLangIndex ) )
+            --nLangIndex;
+
+        ASSERT( rSI.ScriptType( nLangIndex ), "Script is not between 1 and 4" );
 
         // compare current script with last script
-        bChgLocale = ( rSI.ScriptType( nCutPos - 1 ) - 1 !=
+        bChgLocale = ( rSI.ScriptType( nLangIndex ) - 1 !=
                        rInf.GetFont()->GetActual() );
     }
 
@@ -365,11 +374,15 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         // be allowed to be hanging punctuation.
         LanguageType aLang = bChgLocale ?
                              rInf.GetTxtFrm()->GetTxtNode()->GetLang(
-                                    nCutPos - nFieldDiff - 1 ) :
+                                    nLangIndex - nFieldDiff ) :
                              rInf.GetFont()->GetLanguage();
         const ForbiddenCharacters aForbidden(
                 *rInf.GetTxtFrm()->GetNode()->GetDoc()->
-                    GetForbiddenCharacters( aLang, TRUE ));
+                            GetForbiddenCharacters( aLang, TRUE ));
+
+        const sal_Bool bAllowHanging = rInf.IsHanging() && ! rInf.IsMulti() &&
+                                      ! rPor.InFldGrp();
+
         LineBreakUserOptions aUserOpt(
                 aForbidden.beginLine, aForbidden.endLine,
                 rInf.HasForbiddenChars(), bAllowHanging, sal_False );
@@ -472,10 +485,12 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         if( nBreakPos > nCutPos && nBreakPos != STRING_LEN )
         {
+            const xub_StrLen nHangingLen = nBreakPos - nCutPos;
             SwPosSize aTmpSize = rInf.GetTxtSize( &rSI, nCutPos,
-                                                  nBreakPos - nCutPos, 0 );
+                                                  nHangingLen, 0 );
             ASSERT( !pHanging, "A hanging portion is hanging around" );
             pHanging = new SwHangingPortion( aTmpSize );
+            pHanging->SetLen( nHangingLen );
             nPorLen = nCutPos - rInf.GetIdx();
         }
 
