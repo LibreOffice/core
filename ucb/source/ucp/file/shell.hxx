@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:39:08 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,7 +484,6 @@ namespace fileaccess {
          *  The content of aInputStream becomes the content of the file
          *  Return:: success of operation
          */
-
         sal_Bool SAL_CALL
         write( sal_Int32 CommandId,
                const rtl::OUString& aUnqPath,
@@ -690,52 +689,7 @@ namespace fileaccess {
         PropertySet                                                         m_aDefaultProperties;
         com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >   m_sCommandInfo;
 
-
     public:
-
-        /*******************************************************************************/
-        /*                                                                             */
-        /*                 the functions remapping the path to a physical file,        */
-        /*                 if access is allowed by the mount points                    */
-        /*                                                                             */
-        /*******************************************************************************/
-
-        sal_Bool m_bFaked;
-
-        struct MountPoint
-        {
-            MountPoint( const rtl::OUString& aMountPoint,
-                        const rtl::OUString& aDirectory );
-
-            rtl::OUString m_aTitle;
-            rtl::OUString m_aMountPoint;
-            rtl::OUString m_aDirectory;
-        };
-
-        std::vector< MountPoint > m_vecMountPoint;
-
-        /**
-         *  Replaces the alias name part of aUnqPath by the physical directory.
-         *  Returns true if mapping is successful;
-         */
-
-        sal_Bool SAL_CALL checkMountPoint( const rtl::OUString&  aUnqPath,
-                                           rtl::OUString&        aRedirectedPath );
-
-
-        /**
-         *  Replaces the physical directory name part corresponding to a given accessible
-         *  directory in the mount points by the alias name, defined for that part in
-         *  the mount points;
-         *  Returns true if mapping is successful;
-         */
-
-        sal_Bool SAL_CALL uncheckMountPoint( const rtl::OUString&  aUnqPath,
-                                             rtl::OUString&        aRedirectedPath );
-
-
-    public:
-
         // Misceancellous:
         // Methods for "writeComponentInfo" and "createComponentFactory"
 
