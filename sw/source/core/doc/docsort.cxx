@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsort.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:35:13 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -889,10 +889,10 @@ FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox) :
 FlatFndBox::~FlatFndBox()
 {
     _FndBox** ppTmp = (_FndBox**)pArr;
-    __DELETE(nRows * nCols * sizeof(_FndBoxPtr)) ppTmp;
+    delete [] ppTmp;
 
     if( ppItemSets )
-        __DELETE(nRows * nCols * sizeof(SfxItemSet*)) ppItemSets;
+        delete [] ppItemSets;
 }
 
 /*--------------------------------------------------------------------
