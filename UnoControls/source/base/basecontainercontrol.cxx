@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basecontainercontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-12 10:33:18 $
+ *  last change: $Author: mba $ $Date: 2001-09-12 11:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,13 +306,10 @@ void SAL_CALL BaseContainerControl::disposing( const EventObject& rEvent ) throw
 //  XControlContainer
 //____________________________________________________________________________________________________________
 
-void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Reference< XControl > & rControl ) throw( IllegalArgumentException, RuntimeException )
+void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Reference< XControl > & rControl ) throw( RuntimeException )
 {
-    // only correct references can add to list!!!
     if ( !rControl.is () )
-    {
-        throw IllegalArgumentException ();
-    }
+        return;
 
     // take memory for new item
     IMPL_ControlInfo* pNewControl = new IMPL_ControlInfo ;
