@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-05 16:27:13 $
+ *  last change: $Author: sb $ $Date: 2002-11-06 15:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,12 @@
 #include "rtl/math.h"
 
 #include "osl/diagnose.h"
-#include "osl/mathconf.h"
 #include "rtl/math.hxx"
 #include "rtl/strbuf.h"
 #include "rtl/string.h"
 #include "rtl/ustrbuf.h"
 #include "rtl/ustring.h"
+#include "sal/mathconf.h"
 #include "sal/types.h"
 
 #include <algorithm>
@@ -744,7 +744,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             rtl::math::setNan( &fVal );
             if (bSign)
             {
-                reinterpret_cast< osl_math_Double * >(&fVal)->w32_parts.msw
+                reinterpret_cast< sal_math_Double * >(&fVal)->w32_parts.msw
                     |= 0x80000000; // create negative NaN
                 bSign = false; // don't negate again
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-04 15:21:39 $
+ *  last change: $Author: sb $ $Date: 2002-11-06 15:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,10 @@
 #if !defined INCLUDED_RTL_MATH_HXX
 #define INCLUDED_RTL_MATH_HXX
 
-#include "osl/mathconf.h"
 #include "rtl/math.h"
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
+#include "sal/mathconf.h"
 #include "sal/types.h"
 
 #include <math.h>
@@ -266,7 +266,7 @@ inline double approxCeil(double a)
  */
 inline bool isFinite(double d)
 {
-    return OSL_MATH_FINITE(d) != 0;
+    return SAL_MATH_FINITE(d) != 0;
 }
 
 /** If a value represents +INF or -INF.
@@ -278,9 +278,9 @@ inline bool isFinite(double d)
 inline bool isInf(double d)
 {
     // exponent==0x7ff fraction==0
-    return (OSL_MATH_FINITE(d) == 0) &&
-        (reinterpret_cast< osl_math_Double * >(&d)->inf_parts.fraction_hi == 0)
-        && (reinterpret_cast< osl_math_Double * >(&d)->inf_parts.fraction_lo
+    return (SAL_MATH_FINITE(d) == 0) &&
+        (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_hi == 0)
+        && (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_lo
             == 0);
 }
 
@@ -289,9 +289,9 @@ inline bool isInf(double d)
 inline bool isNan(double d)
 {
     // exponent==0x7ff fraction!=0
-    return (OSL_MATH_FINITE(d) == 0) && (
-        (reinterpret_cast< osl_math_Double * >(&d)->inf_parts.fraction_hi != 0)
-        || (reinterpret_cast< osl_math_Double * >(&d)->inf_parts.fraction_lo
+    return (SAL_MATH_FINITE(d) == 0) && (
+        (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_hi != 0)
+        || (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_lo
             != 0) );
 }
 
@@ -299,24 +299,24 @@ inline bool isNan(double d)
  */
 inline bool isSignBitSet(double d)
 {
-    return reinterpret_cast< osl_math_Double * >(&d)->inf_parts.sign != 0;
+    return reinterpret_cast< sal_math_Double * >(&d)->inf_parts.sign != 0;
 }
 
 /** Set to +INF if bNegative==false or -INF if bNegative==true.
  */
 inline void setInf(double * pd, bool bNegative)
 {
-    reinterpret_cast< osl_math_Double * >(pd)->w32_parts.msw
+    reinterpret_cast< sal_math_Double * >(pd)->w32_parts.msw
         = bNegative ? 0xFFF00000 : 0x7FF00000;
-    reinterpret_cast< osl_math_Double * >(pd)->w32_parts.lsw = 0;
+    reinterpret_cast< sal_math_Double * >(pd)->w32_parts.lsw = 0;
 }
 
 /** Set a QNAN.
  */
 inline void setNan(double * pd)
 {
-    reinterpret_cast< osl_math_Double * >(pd)->w32_parts.msw = 0x7FFFFFFF;
-    reinterpret_cast< osl_math_Double * >(pd)->w32_parts.lsw = 0xFFFFFFFF;
+    reinterpret_cast< sal_math_Double * >(pd)->w32_parts.msw = 0x7FFFFFFF;
+    reinterpret_cast< sal_math_Double * >(pd)->w32_parts.lsw = 0xFFFFFFFF;
 }
 
 /** If a value is a valid argument for sin(), cos(), tan().
