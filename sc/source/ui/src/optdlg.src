@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-11 07:51:57 $
+ *  last change: $Author: nn $ $Date: 2001-05-14 19:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2727,6 +2727,13 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Se~lektion in Spalten-/Zeilenköpfen hervorheben";
         Text[ catalan ] = "Destacar selección en los encabezamientos de columna y líneas";
+    };
+    CheckBox CB_TEXTFMT
+    {
+        Pos = MAP_APPFONT ( 12 , 151 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text = "~Druckermaße für Textformatierung verwenden" ;
+        Text [ ENGLISH ] = "Use printer metrics for text formatting" ;
     };
 };
 

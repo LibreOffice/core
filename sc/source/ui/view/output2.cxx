@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 12:40:47 $
+ *  last change: $Author: nn $ $Date: 2001-05-14 19:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2248,7 +2248,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     if (eVerJust==SVX_VER_JUSTIFY_BOTTOM ||
                                         eVerJust==SVX_VER_JUSTIFY_STANDARD)
                                     {
-                                        if (bPixelToLogic)
+                                        // if pRefDevice != pFmtDevice, stick with logic units
+                                        if (bPixelToLogic && pRefDevice == pFmtDevice)
                                             aLogicStart.Y() += pRefDevice->PixelToLogic( Size(0,
                                                             pRefDevice->LogicToPixel(aCellSize).Height() -
                                                             pRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height()

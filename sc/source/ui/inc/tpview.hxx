@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 10:06:50 $
+ *  last change: $Author: nn $ $Date: 2001-05-14 19:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,7 @@ class ScTpLayoutOptions : public SfxTabPage
     CheckBox        aFormatCB;
     CheckBox        aExpRefCB;
     CheckBox        aMarkHdrCB;
+    CheckBox        aTextFmtCB;
 
     SvxStringArray  aUnitArr;
 

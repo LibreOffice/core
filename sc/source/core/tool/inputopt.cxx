@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputopt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 16:20:22 $
+ *  last change: $Author: nn $ $Date: 2001-05-14 19:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,7 @@ void ScInputOptions::SetDefaults()
     bExpandRefs     = FALSE;
     bMarkHeader     = TRUE;
     bUseTabCol      = FALSE;        //! ja wie denn nun?
-//  bTextWysiwyg    = TRUE;
-    bTextWysiwyg    = FALSE;    //! TRUE when options dialog is finished
+    bTextWysiwyg    = TRUE;
 }
 
 //------------------------------------------------------------------------
@@ -209,7 +208,8 @@ SvStream& operator<<( SvStream& rStream, const ScInputOptions& rOpt )
 #define SCINPUTOPT_EXPANDREFS       5
 #define SCINPUTOPT_MARKHEADER       6
 #define SCINPUTOPT_USETABCOL        7
-#define SCINPUTOPT_COUNT            8
+#define SCINPUTOPT_TEXTWYSIWYG      8
+#define SCINPUTOPT_COUNT            9
 
 Sequence<OUString> ScInputCfg::GetPropertyNames()
 {
@@ -222,7 +222,8 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
         "ShowReference",            // SCINPUTOPT_RANGEFIND
         "ExpandReference",          // SCINPUTOPT_EXPANDREFS
         "HighlightSelection",       // SCINPUTOPT_MARKHEADER
-        "UseTabCol"                 // SCINPUTOPT_USETABCOL
+        "UseTabCol",                // SCINPUTOPT_USETABCOL
+        "UsePrinterMetrics"         // SCINPUTOPT_TEXTWYSIWYG
     };
     Sequence<OUString> aNames(SCINPUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -276,6 +277,9 @@ ScInputCfg::ScInputCfg() :
                     case SCINPUTOPT_USETABCOL:
                         SetUseTabCol( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
+                    case SCINPUTOPT_TEXTWYSIWYG:
+                        SetTextWysiwyg( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
                 }
             }
         }
@@ -318,6 +322,9 @@ void ScInputCfg::Commit()
                 break;
             case SCINPUTOPT_USETABCOL:
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetUseTabCol() );
+                break;
+            case SCINPUTOPT_TEXTWYSIWYG:
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetTextWysiwyg() );
                 break;
         }
     }

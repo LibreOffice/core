@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-10 17:30:43 $
+ *  last change: $Author: nn $ $Date: 2001-05-14 19:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,6 +471,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
     aFormatCB( this,        ResId( CB_FORMAT    )),
     aExpRefCB( this,        ResId( CB_EXPREF    )),
     aMarkHdrCB( this,       ResId( CB_MARKHDR   )),
+    aTextFmtCB( this,       ResId( CB_TEXTFMT   )),
     aUnitArr(               ResId(ST_UNIT           )),
     pDoc(NULL)
 {
@@ -605,6 +606,13 @@ BOOL    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_MARK_HEADER, aMarkHdrCB.IsChecked()));
         bRet = TRUE;
     }
+
+    if(aTextFmtCB.GetSavedValue() != aTextFmtCB.IsChecked())
+    {
+        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_TEXTWYSIWYG, aTextFmtCB.IsChecked()));
+        bRet = TRUE;
+    }
+
     return bRet;
 }
 /*-----------------11.01.97 10.53-------------------
@@ -677,6 +685,9 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_INPUT_MARK_HEADER, FALSE, &pItem))
         aMarkHdrCB.Check(((const SfxBoolItem*)pItem)->GetValue());
 
+    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_INPUT_TEXTWYSIWYG, FALSE, &pItem))
+        aTextFmtCB.Check(((const SfxBoolItem*)pItem)->GetValue());
+
     aAlignCB    .SaveValue();
     aAlignLB    .SaveValue();
     aEditModeCB .SaveValue();
@@ -684,6 +695,7 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
 
     aExpRefCB   .SaveValue();
     aMarkHdrCB  .SaveValue();
+    aTextFmtCB  .SaveValue();
     AlignHdl(&aAlignCB);
 
     aAlwaysRB.SaveValue();

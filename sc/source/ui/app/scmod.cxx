@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 18:28:08 $
+ *  last change: $Author: nn $ $Date: 2001-05-14 19:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,6 +832,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     const SfxPoolItem*      pItem   = NULL;
     BOOL                    bRepaint            = FALSE;
     BOOL                    bUpdateMarks        = FALSE;
+    BOOL                    bUpdateRefDev       = FALSE;
     BOOL                    bCalcAll            = FALSE;
     BOOL                    bSaveSpellCheck     = FALSE;
     BOOL                    bSaveAppOptions     = FALSE;
@@ -1094,6 +1095,16 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         bSaveInputOptions = TRUE;
         bUpdateMarks = TRUE;
     }
+    if ( IS_AVAILABLE(SID_SC_INPUT_TEXTWYSIWYG,pItem) )
+    {
+        BOOL bNew = ((const SfxBoolItem*)pItem)->GetValue();
+        if ( bNew != pInputCfg->GetTextWysiwyg() )
+        {
+            pInputCfg->SetTextWysiwyg( bNew );
+            bSaveInputOptions = TRUE;
+            bUpdateRefDev = TRUE;
+        }
+    }
 
     //----------------------------------------------------------
 
@@ -1137,6 +1148,50 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         {
             pBindings->Invalidate( FID_TOGGLEHEADERS ); // -> Checks im Menue
             pBindings->Invalidate( FID_TOGGLESYNTAX );
+        }
+    }
+
+    // update ref device (for all documents)
+
+    if ( bUpdateRefDev )
+    {
+        //  for all documents: recalc output factor, update row heights
+        SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
+        while ( pObjSh )
+        {
+            if ( pObjSh->Type() == TYPE(ScDocShell) )
+            {
+                ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
+                pDocSh->CalcOutputFactor();
+                USHORT nTabCount = pDocSh->GetDocument()->GetTableCount();
+                for (USHORT nTab=0; nTab<nTabCount; nTab++)
+                    pDocSh->AdjustRowHeight( 0, MAXROW, nTab );
+            }
+            pObjSh = SfxObjectShell::GetNext( *pObjSh );
+        }
+
+        //  for all (tab-) views:
+        TypeId aScType = TYPE(ScTabViewShell);
+        SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );
+        while ( pSh )
+        {
+            ScTabViewShell* pViewSh = (ScTabViewShell*)pSh;
+
+            //  set ref-device for EditEngine
+            ScInputHandler* pHdl = GetInputHdl(pViewSh);
+            if (pHdl)
+                pHdl->UpdateRefDevice();
+
+            //  update view scale
+            ScViewData* pViewData = pViewSh->GetViewData();
+            pViewSh->SetZoom( pViewData->GetZoomX(), pViewData->GetZoomY() );
+
+            //  repaint
+            pViewSh->PaintGrid();
+            pViewSh->PaintTop();
+            pViewSh->PaintLeft();
+
+            pSh = SfxViewShell::GetNext( *pSh, &aScType );
         }
     }
 }
@@ -1711,6 +1766,7 @@ SfxItemSet*  ScModule::CreateItemSet( USHORT nId )
                             SID_SCVIEWOPTIONS,      SID_SCVIEWOPTIONS,
                             // TP_INPUT:
                             SID_SC_INPUT_SELECTION,SID_SC_INPUT_MARK_HEADER,
+                            SID_SC_INPUT_TEXTWYSIWYG,SID_SC_INPUT_TEXTWYSIWYG,
                             // TP_USERLISTS:
                             SCITEM_USERLIST,        SCITEM_USERLIST,
                             // TP_PRINT:
@@ -1766,6 +1822,8 @@ SfxItemSet*  ScModule::CreateItemSet( USHORT nId )
                     rInpOpt.GetExpandRefs() ) );
         pRet->Put( SfxBoolItem( SID_SC_INPUT_MARK_HEADER,
                     rInpOpt.GetMarkHeader() ) );
+        pRet->Put( SfxBoolItem( SID_SC_INPUT_TEXTWYSIWYG,
+                    rInpOpt.GetTextWysiwyg() ) );
 
         // TP_GRID
         SvxGridItem* pSvxGridItem = aViewOpt.CreateGridItem();
