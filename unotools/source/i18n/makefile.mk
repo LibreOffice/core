@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: mh $ $Date: 2001-11-06 20:55:25 $
+#   last change: $Author: er $ $Date: 2002-06-26 16:58:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,24 +86,25 @@ UNOUCROUT=$(OUT)$/inc
 INCPRE+=$(UNOUCROUT)
 
 UNOTYPES+= \
+    com.sun.star.i18n.CalendarDisplayIndex  \
+    com.sun.star.i18n.CalendarFieldIndex    \
+    com.sun.star.i18n.CollatorOptions       \
+    com.sun.star.i18n.KCharacterType        \
+    com.sun.star.i18n.KNumberFormatType     \
+    com.sun.star.i18n.KNumberFormatUsage    \
+    com.sun.star.i18n.KParseTokens          \
+    com.sun.star.i18n.KParseType            \
+    com.sun.star.i18n.LocaleItem            \
+    com.sun.star.i18n.reservedWords         \
     com.sun.star.i18n.XCalendar             \
     com.sun.star.i18n.XCharacterClassification \
     com.sun.star.i18n.XCollator             \
     com.sun.star.i18n.XLocaleData           \
     com.sun.star.i18n.XNumberFormatCode     \
     com.sun.star.i18n.XTransliteration      \
-    com.sun.star.i18n.KCharacterType        \
-    com.sun.star.i18n.KParseTokens          \
-    com.sun.star.i18n.KParseType            \
-    com.sun.star.i18n.LocaleItem            \
-    com.sun.star.i18n.reservedWords         \
-    com.sun.star.i18n.CollatorOptions       \
-    com.sun.star.i18n.KNumberFormatUsage    \
-    com.sun.star.i18n.KNumberFormatType     \
-    com.sun.star.i18n.CalendarFieldIndex    \
-    com.sun.star.i18n.CalendarDisplayIndex  \
     com.sun.star.util.SearchFlags           \
-    com.sun.star.util.XTextSearch
+    com.sun.star.util.XTextSearch			\
+    drafts.com.sun.star.i18n.XNativeNumberSupplier	
 
 
 # --- Files -------------------------------------
@@ -114,6 +115,7 @@ SLOFILES=	\
     $(SLO)$/collatorwrapper.obj	\
     $(SLO)$/intlwrapper.obj \
     $(SLO)$/localedatawrapper.obj	\
+    $(SLO)$/nativenumberwrapper.obj	\
     $(SLO)$/numberformatcodewrapper.obj \
     $(SLO)$/readwritemutexguard.obj \
     $(SLO)$/transliterationwrapper.obj \
