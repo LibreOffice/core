@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-08 11:31:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,14 +82,14 @@
 
 #include <cppcanvas/canvas.hxx>
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP_
-#include <drafts/com/sun/star/rendering/XGraphicDevice.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP_
+#include <com/sun/star/rendering/XGraphicDevice.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_TEXTURINGMODE_HPP_
-#include <drafts/com/sun/star/rendering/TexturingMode.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_TEXTURINGMODE_HPP_
+#include <com/sun/star/rendering/TexturingMode.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XPARAMETRICPOLYPOLYGON2DFACTORY_HPP_
-#include <drafts/com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XPARAMETRICPOLYPOLYGON2DFACTORY_HPP_
+#include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
 #endif
 
 #ifndef _VCL_CANVASTOOLS_HXX
@@ -135,29 +135,29 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_REALPOINT2D_HPP__
-#include <drafts/com/sun/star/geometry/RealPoint2D.hpp>
+#ifndef _COM_SUN_STAR_GEOMETRY_REALPOINT2D_HPP__
+#include <com/sun/star/geometry/RealPoint2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_VIEWSTATE_HPP__
-#include <drafts/com/sun/star/rendering/ViewState.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_VIEWSTATE_HPP__
+#include <com/sun/star/rendering/ViewState.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <drafts/com/sun/star/rendering/RenderState.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
+#include <com/sun/star/rendering/RenderState.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVASFONT_HPP__
-#include <drafts/com/sun/star/rendering/XCanvasFont.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XCANVASFONT_HPP__
+#include <com/sun/star/rendering/XCanvasFont.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
-#include <drafts/com/sun/star/rendering/XPolyPolygon2D.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP__
-#include <drafts/com/sun/star/rendering/XCanvas.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP__
+#include <com/sun/star/rendering/XCanvas.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_PATHCAPTYPE_HPP__
-#include <drafts/com/sun/star/rendering/PathCapType.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_PATHCAPTYPE_HPP__
+#include <com/sun/star/rendering/PathCapType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_PATHJOINTYPE_HPP__
-#include <drafts/com/sun/star/rendering/PathJoinType.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_PATHJOINTYPE_HPP__
+#include <com/sun/star/rendering/PathJoinType.hpp>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
@@ -190,7 +190,6 @@
 #include <outdevstate.hxx>
 
 
-using namespace ::drafts::com::sun::star;
 using namespace ::com::sun::star;
 
 
@@ -876,12 +875,10 @@ namespace cppcanvas
             ENSURE_AND_THROW( nIndex >= 0 && nLength <= rString.Len() + nIndex,
                               "ImplRenderer::createTextWithEffectsAction(): Invalid text index" );
 
-            ::cppcanvas::internal::OutDevState& rState = getState( rStates );
-
             // TODO(F2): implement all text effects
-            if( rState.textAlignment );             // TODO(F2): NYI
+            if( getState( rStates ).textAlignment );             // TODO(F2): NYI
 
-            if( rState.isTextEffectShadowSet )
+            if( getState( rStates ).isTextEffectShadowSet )
             {
                 // calculate relief offset (similar to outdev3.cxx)
                 // TODO(F3): better match with outdev3.cxx
@@ -893,7 +890,7 @@ namespace cppcanvas
 
                 // determine shadow color (from outdev3.cxx)
                 ::Color aTextColor = ::vcl::unotools::sequenceToColor(
-                    rCanvas->getUNOCanvas()->getDevice(), rState.textColor );
+                    rCanvas->getUNOCanvas()->getDevice(), getState( rStates ).textColor );
                 bool bIsDark = (aTextColor.GetColor() == COL_BLACK)
                     || (aTextColor.GetLuminance() < 8);
                 ::Color aShadowColor( bIsDark ? COL_LIGHTGRAY : COL_BLACK );
@@ -902,14 +899,14 @@ namespace cppcanvas
                 // draw shadow text and restore original rState
                 // TODO(P2): just restore textColor instead of push/pop
                 pushState( rStates, PUSH_ALL );
-                // ::com::sun::star::uno::Sequence< double > origTextColor = rState.textColor;
+                // ::com::sun::star::uno::Sequence< double > origTextColor = getState( rStates ).textColor;
                 getState( rStates ).textColor = ::vcl::unotools::colorToDoubleSequence(
                     rCanvas->getUNOCanvas()->getDevice(), aShadowColor );
                 createTextWithLinesAction(
                     aShadowPoint, rString, nIndex, nLength,
                     pCharWidths, rVDev, rCanvas, rStates, rParms, nCurrActionIndex );
                 popState( rStates );
-                // rState.textColor = origTextColor;
+                // getState( rStates ).textColor = origTextColor;
             }
 
             // draw the normal text
@@ -917,7 +914,7 @@ namespace cppcanvas
                 rStartPoint, rString, nIndex, nLength,
                 pCharWidths, rVDev, rCanvas, rStates, rParms, nCurrActionIndex );
 
-            if( rState.textReliefStyle )
+            if( getState( rStates ).textReliefStyle )
             {
                 // calculate relief offset (similar to outdev3.cxx)
                 long nReliefOffset = rVDev.PixelToLogic( Size( 1, 1 ) ).Height();
@@ -925,14 +922,14 @@ namespace cppcanvas
                 if( nReliefOffset < 1 )
                     nReliefOffset = 1;
 
-                if( rState.textReliefStyle == RELIEF_ENGRAVED )
+                if( getState( rStates ).textReliefStyle == RELIEF_ENGRAVED )
                     nReliefOffset = -nReliefOffset;
                 Point aReliefPoint( nReliefOffset, nReliefOffset );
                 aReliefPoint += rStartPoint;
 
                 // determine relief color (from outdev3.cxx)
                 ::Color aTextColor = ::vcl::unotools::sequenceToColor(
-                    rCanvas->getUNOCanvas()->getDevice(), rState.textColor );
+                    rCanvas->getUNOCanvas()->getDevice(), getState( rStates ).textColor );
                 ::Color aReliefColor( COL_LIGHTGRAY );
                 if( aTextColor.GetColor() == COL_BLACK )
                     aReliefColor = ::Color( COL_WHITE );
@@ -943,14 +940,14 @@ namespace cppcanvas
                 // draw relief text and restore original rState
                 // TODO(P2): just restore textColor instead of push/pop
                 pushState( rStates, PUSH_ALL );
-                // ::com::sun::star::uno::Sequence< double > origTextColor = rState.textColor;
+                // ::com::sun::star::uno::Sequence< double > origTextColor = getState( rStates ).textColor;
                 getState( rStates ).textColor = ::vcl::unotools::colorToDoubleSequence(
                     rCanvas->getUNOCanvas()->getDevice(), aReliefColor );
                 createTextWithLinesAction(
                     aReliefPoint, rString, nIndex, nLength,
                     pCharWidths, rVDev, rCanvas, rStates, rParms, nCurrActionIndex );
                 popState( rStates );
-                // rState.textColor = origTextColor;
+                // getState( rStates ).textColor = origTextColor;
             }
         }
 
@@ -1058,6 +1055,9 @@ namespace cppcanvas
                 int                     nCurrActionIndex )
         {
             pushState( rStates, PUSH_ALL );
+
+            // #i42812# Don't hold references into vector, when
+            // modifying it at the same time.
             ::cppcanvas::internal::OutDevState& rState = getState( rStates );
 
             // initialize the color of the text lines
