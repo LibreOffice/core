@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-27 15:58:09 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 14:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1162,40 +1162,36 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
     if( INET_PROT_FILE == aTmpObj.GetProtocol() )
         pMed->DownLoad();     // nur mal das Medium anfassen (DownLoaden)
 
-    if( pMed->GetError() || !pMed->Exists() )
-    {
-        delete pMed;
-        return 0;
-    }
-
-    // kein Filter, dann suche ihn. Ansonsten teste, ob der angegebene ein
-    // gueltiger ist
     const SfxFilter* pSfxFlt = 0;
-    if( rFilter.Len() )
+    if( !pMed->GetError() )
     {
-        pSfxFlt =  SwIoSystem::GetFilterOfFilterTxt( rFilter );
-        if( pSfxFlt && !SwIoSystem::IsFileFilter( *pMed, pSfxFlt->GetUserData() ))
-            pSfxFlt = 0;        // dann neu detecten lassen
-    }
+        // kein Filter, dann suche ihn. Ansonsten teste, ob der angegebene
+        // ein gueltiger ist
+        if( rFilter.Len() )
+        {
+            pSfxFlt =  SwIoSystem::GetFilterOfFilterTxt( rFilter );
+            if( pSfxFlt && !SwIoSystem::IsFileFilter( *pMed, pSfxFlt->GetUserData() ))
+                pSfxFlt = 0;        // dann neu detecten lassen
+        }
 
-    if( !pSfxFlt )
-        pSfxFlt = SwIoSystem::GetFileFilter( pMed->GetPhysicalName(), aEmptyStr );
+        if( !pSfxFlt )
+            pSfxFlt = SwIoSystem::GetFileFilter( pMed->GetPhysicalName(), aEmptyStr );
 
-    if( pSfxFlt )
-    {
-        // ohne Filter geht gar nichts
-        pMed->SetFilter( pSfxFlt );
+        if( pSfxFlt )
+        {
+            // ohne Filter geht gar nichts
+            pMed->SetFilter( pSfxFlt );
 
-        if( nVersion )
-            pMed->GetItemSet()->Put( SfxInt16Item( SID_VERSION, nVersion ));
+            if( nVersion )
+                pMed->GetItemSet()->Put( SfxInt16Item( SID_VERSION, nVersion ));
 
-        if( rPasswd.Len() )
-            pMed->GetItemSet()->Put( SfxStringItem( SID_PASSWORD, rPasswd ));
+            if( rPasswd.Len() )
+                pMed->GetItemSet()->Put( SfxStringItem( SID_PASSWORD, rPasswd ));
 
-        xDocSh = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
-        if( xDocSh->DoLoad( pMed ) )
-            return 2;
-//      InfoBox( 0, ResId(ERR_CLPBRD_READ) ).Execute();
+            xDocSh = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
+            if( xDocSh->DoLoad( pMed ) )
+                return 2;
+        }
     }
 
     if( !xDocSh.Is() )      // Medium muss noch geloescht werden
