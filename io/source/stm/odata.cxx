@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-08 08:24:40 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 15:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1085,7 +1085,7 @@ public:
                 { ODataOutputStream::writeShort( Value ); }
     virtual void SAL_CALL writeLong(sal_Int32 Value) throw (IOException, RuntimeException)
                 { ODataOutputStream::writeLong( Value ); }
-    virtual void SAL_CALL writeHyper(Hyper Value) throw (IOException, RuntimeException)
+    virtual void SAL_CALL writeHyper(sal_Int64 Value) throw (IOException, RuntimeException)
                 { ODataOutputStream::writeHyper( Value ); }
     virtual void SAL_CALL writeFloat(float Value) throw (IOException, RuntimeException)
                 { ODataOutputStream::writeFloat( Value ); }
@@ -1429,7 +1429,7 @@ public: // XDataInputStream
                 { return ODataInputStream::readShort(); }
     virtual sal_Int32 SAL_CALL readLong(void) throw (IOException, RuntimeException)
                 { return ODataInputStream::readLong(); }
-    virtual Hyper SAL_CALL readHyper(void) throw (IOException, RuntimeException)
+    virtual sal_Int64 SAL_CALL readHyper(void) throw (IOException, RuntimeException)
                 { return ODataInputStream::readHyper(); }
     virtual float SAL_CALL readFloat(void) throw (IOException, RuntimeException)
                 { return ODataInputStream::readFloat(); }
