@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_base.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-15 16:12:19 $
+ *  last change: $Author: dbo $ $Date: 2002-11-20 09:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 #ifndef _JNI_BASE_H_
 #define _JNI_BASE_H_
 
+#if defined (__SUNPRO_CC) || defined (__SUNPRO_C)
+#include <stdarg.h>
+namespace std
+{
+typedef __va_list va_list;
+}
+#endif
 #include <jni.h>
 #include <memory>
 
