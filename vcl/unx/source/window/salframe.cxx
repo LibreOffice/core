@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.160 $
+ *  $Revision: 1.161 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 14:31:23 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 10:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,10 +628,10 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
                                        eType,
                                        nDecoFlags,
                                        hPresentationWindow ? NULL : mpParent );
-    }
 
-    if( nStyle_ & SAL_FRAME_STYLE_DEFAULT )
+        if( nStyle_ & SAL_FRAME_STYLE_DEFAULT )
         pDisplay_->getWMAdaptor()->maximizeFrame( pFrame_, true, true );
+    }
 
     // Pointer
     pFrame_->SetPointer( POINTER_ARROW );
