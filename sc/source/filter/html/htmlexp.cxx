@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-07-17 17:53:24 $
+ *  last change: $Author: er $ $Date: 2001-07-17 18:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,8 +684,14 @@ void ScHTMLExport::WriteBody()
             OUT_STR( INetURLObject::AbsToRel( *pLink ) ) << '\"';
         }
     }
-    OUT_SP_CSTR_ASS( sHTML_O_bgcolor );
-    HTMLOutFuncs::Out_Color( rStrm, aHTMLStyle.aBackgroundColor );
+    if ( !aHTMLStyle.aBackgroundColor.GetTransparency() )
+    {   // A transparent background color should always result in default
+        // background of the browser. Also, HTMLOutFuncs::Out_Color() writes
+        // black #000000 for COL_AUTO which is the same as white #ffffff with
+        // transparency set to 0xff, our default background.
+        OUT_SP_CSTR_ASS( sHTML_O_bgcolor );
+        HTMLOutFuncs::Out_Color( rStrm, aHTMLStyle.aBackgroundColor );
+    }
 
     rStrm << '>'; OUT_LF();
 
