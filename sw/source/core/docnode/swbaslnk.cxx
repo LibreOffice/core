@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbaslnk.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:18:24 $
+ *  last change: $Author: jp $ $Date: 2001-07-04 18:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,9 @@
 #ifndef _TABFRM_HXX
 #include <tabfrm.hxx>
 #endif
+#ifndef _CNTFRM_HXX
+#include <cntfrm.hxx>
+#endif
 #ifndef _HTMLTBL_HXX
 #include <htmltbl.hxx>
 #endif
@@ -152,6 +155,30 @@ SV_IMPL_REF( SwServerObject )
 SwBaseLink::~SwBaseLink()
 {
 }
+
+void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
+{
+    //JP 4.7.2001: call fist all not SwNoTxtFrames, then the SwNoTxtFrames.
+    //              The reason is, that in the SwNoTxtFrames the Graphic
+    //              after a Paint will be swapped out! So all other "behind"
+    //              them havent't a loaded Graphic. - #86501#
+    rGrfNd.LockModify();
+
+    SwClientIter aIter( rGrfNd );
+    for( int n = 0; n < 2; ++n )
+    {
+        SwClient * pLast = aIter.GoStart();
+        if( pLast )     // konnte zum Anfang gesprungen werden ??
+        {
+            do {
+                if( (0 == n) ^ ( 0 != pLast->ISA( SwCntntFrm )) )
+                    pLast->Modify( &rItem, &rItem );
+            } while( 0 != ( pLast = aIter++ ));
+        }
+    }
+    rGrfNd.UnlockModify();
+}
+
 
 void SwBaseLink::DataChanged( const String& rMimeType,
                             const ::com::sun::star::uno::Any & rValue )
@@ -315,12 +342,12 @@ void SwBaseLink::DataChanged( const String& rMimeType,
 
                         // Fly der Grafik anpassen !
                         if( !::SetGrfFlySize( aGrfSz, pGrfNd ) )
-                            pGrfNd->Modify( &aMsgHint, &aMsgHint );
+                            ::lcl_CallModify( *pGrfNd, aMsgHint );
                     }
                     else if( pBLink == this &&
                             !::SetGrfFlySize( aGrfSz, pGrfNd ) )
                         // Fly der Grafik anpassen !
-                        pGrfNd->Modify( &aMsgHint, &aMsgHint );
+                        ::lcl_CallModify( *pGrfNd, aMsgHint );
                 }
             }
 
