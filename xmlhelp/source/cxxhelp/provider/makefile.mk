@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 16:14:24 $
+#   last change: $Author: rt $ $Date: 2005-03-30 08:38:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,6 +102,7 @@ SLOFILES=\
     $(SLO)$/inputstream.obj        \
     $(SLO)$/debughelper.obj  	   \
     $(SLO)$/databases.obj          \
+    $(SLO)$/db.obj		           \
     $(SLO)$/bufferedinputstream.obj
 
 # --- Targets ----------------------------------------------------------
