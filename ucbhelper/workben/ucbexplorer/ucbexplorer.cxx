@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbexplorer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2001-05-03 08:44:32 $
+ *  last change: $Author: kso $ $Date: 2001-06-06 11:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,26 +568,22 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
                 aSourceContent.openStream( xSourceData.getBodyPtr() );
                 xData = xSourceData->getInputStream();
             }
-            catch ( ContentCreationException& )
+            catch ( ContentCreationException const & )
             {
                 DBG_ERROR( "UcbExplorerListBoxEntry::createNewContent - "
                               "No content for document data!" );
                 return FALSE;
             }
-            catch ( CommandAbortedException& )
+            catch ( CommandAbortedException const & )
             {
-                DBG_ERROR( "UcbExplorerListBoxEntry::createNewContent - "
-                              "CommandAbortedException!" );
                 return FALSE;
             }
-            catch ( RuntimeException& )
+            catch ( RuntimeException const & )
             {
                 throw;
             }
-            catch ( Exception& )
+            catch ( Exception const & )
             {
-                DBG_ERROR( "UcbExplorerListBoxEntry::createNewContent - "
-                              "Exception!" );
                 return FALSE;
             }
         }
@@ -608,19 +604,15 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
         bRet = m_aContent.insertNewContent(
                     rInfo.Type, aPropNames, aPropValues, xData, rNewContent );
     }
-    catch ( CommandAbortedException& )
+    catch ( CommandAbortedException const & )
     {
-        DBG_ERROR( "UcbExplorerListBoxEntry::createNewContent - "
-                   "CommandAbortedException!" );
     }
-    catch ( RuntimeException& )
+    catch ( RuntimeException const & )
     {
         throw;
     }
-    catch ( Exception& )
+    catch ( Exception const & )
     {
-        DBG_ERROR( "UcbExplorerListBoxEntry::createNewContent - "
-                   "Exception!" );
     }
 
     Application::AcquireSolarMutex( n );
@@ -697,22 +689,17 @@ void UcbExplorerTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
                         }
                     }
                 }
-                catch ( CommandAbortedException& )
+                catch ( CommandAbortedException const & )
                 {
-                    DBG_ERROR(
-                        "UcbExplorerTreeListBox::RequestingChilds - "
-                        "CommandAbortedException!" );
                 }
-                catch ( RuntimeException& )
+                catch ( RuntimeException const & )
                 {
                     throw;
                 }
-                catch ( Exception& )
+                catch ( Exception const & )
                 {
-                    DBG_ERROR(
-                        "UcbExplorerTreeListBox::RequestingChilds - "
-                        "Exception!" );
                 }
+
                 Application::AcquireSolarMutex( n );
                 break;
             }
@@ -788,24 +775,20 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                                         OUString::createFromAscii( "Title" ) );
                 bEnable = !( aProp.Attributes & PropertyAttribute::READONLY );
             }
-            catch( UnknownPropertyException& )
+            catch( UnknownPropertyException const & )
             {
                 // getPropertyByName
                 bEnable = sal_False;
             }
-            catch ( CommandAbortedException& )
+            catch ( CommandAbortedException const & )
             {
-                DBG_ERROR( "UcbExplorerTreeListBox::Command - "
-                           "CommandAbortedException!" );
             }
-            catch ( RuntimeException& )
+            catch ( RuntimeException const & )
             {
                 throw;
             }
-            catch ( Exception& )
+            catch ( Exception const & )
             {
-                DBG_ERROR( "UcbExplorerTreeListBox::Command - "
-                           "Exception!" );
             }
 
             pMenu->EnableItem( MENU_RENAME, bEnable );
@@ -822,19 +805,15 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                                         OUString::createFromAscii(
                                             "delete" ) ) );
             }
-            catch ( CommandAbortedException& )
+            catch ( CommandAbortedException const & )
             {
-                DBG_ERROR( "UcbExplorerTreeListBox::Command - "
-                           "CommandAbortedException!" );
             }
-            catch ( RuntimeException& )
+            catch ( RuntimeException const & )
             {
                 throw;
             }
-            catch ( Exception& )
+            catch ( Exception const & )
             {
-                DBG_ERROR( "UcbExplorerTreeListBox::Command - "
-                           "Exception!" );
             }
 
             //////////////////////////////////////////////////////////////
@@ -857,19 +836,15 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                                     OUString::createFromAscii( "Title" ) )
                                     >>= aNewTitle;
                     }
-                    catch ( CommandAbortedException& )
+                    catch ( CommandAbortedException const & )
                     {
-                        DBG_ERROR( "UcbExplorerTreeListBox::Command - "
-                                      "CommandAbortedException!" );
                     }
-                    catch ( RuntimeException& )
+                    catch ( RuntimeException const & )
                     {
                         throw;
                     }
-                    catch ( Exception& )
+                    catch ( Exception const & )
                     {
-                        DBG_ERROR( "UcbExplorerTreeListBox::Command - "
-                                      "Exception!" );
                     }
 
                     StringInputDialog* pDlg
@@ -903,19 +878,15 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                                     aValue );
                         bOK = sal_True;
                     }
-                    catch ( CommandAbortedException& )
+                    catch ( CommandAbortedException const & )
                     {
-                        DBG_ERROR( "UcbExplorerTreeListBox::Command - "
-                                      "CommandAbortedException!" );
                     }
-                    catch ( RuntimeException& )
+                    catch ( RuntimeException const & )
                     {
                         throw;
                     }
-                    catch ( Exception& )
+                    catch ( Exception const & )
                     {
-                        DBG_ERROR( "UcbExplorerTreeListBox::Command - "
-                                      "Exception!" );
                     }
 
                     Application::AcquireSolarMutex( n );
@@ -930,7 +901,14 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                                 OUString::createFromAscii( "TargetURL" ) )
                                     >>= aTargetURL;
                         }
-                        catch ( CommandAbortedException& )
+                        catch ( CommandAbortedException const & )
+                        {
+                        }
+                        catch ( RuntimeException const & )
+                        {
+                            throw;
+                        }
+                        catch ( Exception const & )
                         {
                             // The property is optional!
                         }
@@ -958,22 +936,16 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                                     OUString::createFromAscii( "delete" ),
                                     makeAny( sal_True ) );
                     }
-                    catch ( CommandAbortedException& )
+                    catch ( CommandAbortedException const & )
                     {
-                        DBG_ERROR(
-                            "UcbExplorerTreeListBox::Command - "
-                            "CommandAbortedException!" );
                         bOK = sal_False;
                     }
-                    catch ( RuntimeException& )
+                    catch ( RuntimeException const & )
                     {
                         throw;
                     }
-                    catch ( Exception& )
+                    catch ( Exception const & )
                     {
-                        DBG_ERROR(
-                            "UcbExplorerTreeListBox::Command - "
-                            "Exception!" );
                         bOK = sal_False;
                     }
 
@@ -1050,7 +1022,14 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
                 rContent.getPropertyValue(
                     OUString::createFromAscii( "TargetURL" ) ) >>= aTargetURL;
             }
-            catch ( CommandAbortedException& )
+            catch ( CommandAbortedException const & )
+            {
+            }
+            catch ( RuntimeException const & )
+            {
+                throw;
+            }
+            catch ( Exception const & )
             {
                 // The property is optional!
             }
@@ -1084,13 +1063,11 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
         pEntry->m_aContent = rContent;
         return pEntry;
     }
-    catch ( ::com::sun::star::ucb::CommandAbortedException& )
+    catch ( CommandAbortedException const & )
     {
     }
-    catch ( Exception& )
+    catch ( Exception const & )
     {
-        DBG_ERROR(
-            "UcbExplorerTreeListBox::InsertEntry - Exception!" );
     }
 
     return 0;
@@ -1124,10 +1101,8 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
         ::ucb::Content aContent( rURL, xEnv );
         return InsertEntry( aContent, pParent );
     }
-    catch ( ContentCreationException& )
+    catch ( ContentCreationException const & )
     {
-        DBG_ERROR(
-            "UcbExplorerTreeListBox::InsertEntry - ContentCreationException!" );
     }
 
     return 0;
@@ -1204,7 +1179,7 @@ void MyApp::Main()
         xFac = cppu::createRegistryServiceFactory(
                                     aWritableRegFile, aReadOnlyRegFile );
     }
-    catch ( com::sun::star::uno::Exception )
+    catch ( com::sun::star::uno::Exception const & )
     {
         DBG_ERROR( "Error creating RegistryServiceFactory!" );
         return;
