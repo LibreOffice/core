@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 15:15:04 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 07:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,11 +367,13 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
 {
     if(_pRight == &m_lbNewColumnNames)
     {
+        // we copy the column into the new format for the dest
         OFieldDescription* pSrcField = static_cast<OFieldDescription*>(_pLeft->GetEntryData(_pLeft->GetEntryPos(String(_sColumnName))));
         createNewColumn(_pRight,pSrcField,_rRightColumns,_sColumnName,_sExtraChars,_nMaxNameLen,_aCase);
     }
     else
     {
+        // find the new column in the dest name mapping to obtain the old column
         OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
                                                                 ::std::compose1(
                                                                     ::std::bind2nd(_aCase, _sColumnName),
@@ -381,9 +383,15 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
         DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must to be defined");
         const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
         ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
-        if(aSrcIter != pSrcColumns->end())
+        if ( aSrcIter != pSrcColumns->end() )
         {
-            _pRight->SetEntryData(_pRight->InsertEntry((*aIter).first),aSrcIter->second);
+            // we need also the old position of this column to insert it back on that position again
+            const ODatabaseExport::TColumnVector* pSrcVector = m_pParent->getSrcVector();
+            ODatabaseExport::TColumnVector::const_iterator aPos = ::std::find(pSrcVector->begin(),pSrcVector->end(),aSrcIter);
+            OSL_ENSURE( aPos != pSrcVector->end(),"Invalid position for the iterator here!");
+            USHORT nPos = aPos - pSrcVector->begin();
+
+            _pRight->SetEntryData( _pRight->InsertEntry( (*aIter).first, nPos),aSrcIter->second );
             _rRightColumns.push_back((*aIter).first);
         }
     }
