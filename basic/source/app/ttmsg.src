@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-01 19:28:48 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 21:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ String S_LONGNAME_UNKNOWN
     Text[ dutch ] = "Naam onbekend: ($Arg1)";
     Text[ french ] = "Nom inconnu : ($Arg1)";
     Text[ spanish ] = "Nombre largo desconocido: ($Arg1)";
-    Text[ italian ] = "Short name unknown during copying: ($Arg1)";
+    Text[ italian ] = "Long name unknown: ($Arg1)";
     Text[ danish ] = "Short name unknown during copying: ($Arg1)";
     Text[ swedish ] = "Long name unknown: ($Arg1)";
     Text[ polish ] = "Pe³na nazwa nieznana: ($Arg1)";
@@ -703,3 +703,4 @@ String
     Text = ;
 };
 */
+
