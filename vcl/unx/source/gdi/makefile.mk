@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+#   last change: $Author: pl $ $Date: 2000-09-27 08:35:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,6 @@ SLOFILES=	\
         $(SLO)$/salpimpl.obj	\
         $(SLO)$/charnames.obj	\
         $(SLO)$/dtint.obj		\
-        $(SLO)$/cdeint.obj		\
         $(SLO)$/kdeint.obj		\
         $(SLO)$/salconfig.obj	\
         $(SLO)$/salcvt.obj		\
@@ -103,9 +102,14 @@ SLOFILES=	\
         $(SLO)$/xlfd_smpl.obj	\
         $(SLO)$/salgdi3.obj
 
+.IF "$(OS)"=="SOLARIS"
+SLOFILES+=$(SLO)$/cdeint.obj
+ENVCFLAGS+=-DUSE_CDE
 .ENDIF
 
-.ENDIF		# "$(OS)"=="MACOSX"
+.ENDIF
+
+.ENDIF	# "$(OS)"=="MACOSX"
 
 # --- Targets ------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: pl $ $Date: 2000-09-27 08:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 #include <X11/keysym.h>
 #include <postx.h>
 
+#ifdef USE_CDE
 #include <cdeint.hxx>
+#endif
 #include <kdeint.hxx>
 #include <soicon.hxx>
 #include <saldisp.hxx>
@@ -820,6 +822,7 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator( SalFrame* pFrame )
     Atom nDtAtom;
     void* pLibrary = NULL;
 
+#ifdef USE_CDE
     // check dt type
     // CDE
     nDtAtom = XInternAtom( pDisplay, "_DT_WM_READY", True );
@@ -829,6 +832,7 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator( SalFrame* pFrame )
         CDEIntegrator::pDtSvcLib = pLibrary;
         return new CDEIntegrator( pFrame );
     }
+#endif
 
     nDtAtom = XInternAtom( pDisplay, "KWM_RUNNING", True );
     if( nDtAtom ) // perhaps should check getenv( "KDEDIR" )
