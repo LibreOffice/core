@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 11:09:45 $
+ *  last change: $Author: tl $ $Date: 2001-03-12 11:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1170,19 +1170,19 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
             }
         }
 
+        BOOL bRegExpSrch = FALSE;
+        BOOL bLevSrch = FALSE;
+        if (GetCheckBoxValue( aRegExpBtn ))
+            bRegExpSrch = TRUE;
+        else if (GetCheckBoxValue( aSimilarityBox ))
+            bLevSrch = TRUE;
+        pSearchItem->SetRegExp( bRegExpSrch );
+        pSearchItem->SetLevenshtein( bLevSrch );
+
         pSearchItem->SetWordOnly( GetCheckBoxValue( aWordBtn ) );
         pSearchItem->SetBackward( GetCheckBoxValue( aBackwardsBtn ) );
         pSearchItem->SetPattern( GetCheckBoxValue( aLayoutBtn ) );
         pSearchItem->SetSelection( GetCheckBoxValue( aSelectionBtn ) );
-        if (GetCheckBoxValue( aRegExpBtn ))
-            pSearchItem->SetRegExp( TRUE );
-        else if (GetCheckBoxValue( aSimilarityBox ))
-            pSearchItem->SetLevenshtein( TRUE );
-        else
-        {
-            DBG_ASSERT( FALSE == pSearchItem->GetRegExp(), "incorrect value" );
-            DBG_ASSERT( FALSE == pSearchItem->IsLevenshtein(), "incorrect value" );
-        }
         pSearchItem->SetUseAsianOptions( GetCheckBoxValue( aJapOptionsCB ) );
         //! and even if checkboxes are disabled...
         pSearchItem->SetExact( aMatchCaseCB.IsChecked() );
@@ -2094,19 +2094,19 @@ void SvxSearchDialog::SaveToModule_Impl()
         Remember_Impl( aSearchLB.GetText(), TRUE );
     }
 
+    BOOL bRegExpSrch = FALSE;
+    BOOL bLevSrch = FALSE;
+    if (GetCheckBoxValue( aRegExpBtn ))
+        bRegExpSrch = TRUE;
+    else if (GetCheckBoxValue( aSimilarityBox ))
+        bLevSrch = TRUE;
+    pSearchItem->SetRegExp( bRegExpSrch );
+    pSearchItem->SetLevenshtein( bLevSrch );
+
     pSearchItem->SetWordOnly( GetCheckBoxValue( aWordBtn ) );
     pSearchItem->SetBackward( GetCheckBoxValue( aBackwardsBtn ) );
     pSearchItem->SetPattern( GetCheckBoxValue( aLayoutBtn ) );
     pSearchItem->SetSelection( GetCheckBoxValue( aSelectionBtn ) );
-    if (GetCheckBoxValue( aRegExpBtn ))
-        pSearchItem->SetRegExp( TRUE );
-    else if (GetCheckBoxValue( aSimilarityBox ))
-        pSearchItem->SetLevenshtein( TRUE );
-    else
-    {
-        DBG_ASSERT( FALSE == pSearchItem->GetRegExp(), "incorrect value" );
-        DBG_ASSERT( FALSE == pSearchItem->IsLevenshtein(), "incorrect value" );
-    }
     pSearchItem->SetUseAsianOptions( GetCheckBoxValue( aJapOptionsCB ) );
     //! and even if checkboxes are disabled...
     pSearchItem->SetExact( aMatchCaseCB.IsChecked() );
