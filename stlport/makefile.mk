@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2002-01-14 15:45:23 $
+#   last change: $Author: hr $ $Date: 2002-02-18 12:15:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,8 +71,17 @@ TARGET=so_stlport
 
 # --- Files --------------------------------------------------------
 
+.IF "$(GUI)"=="WNT"
+TARFILE_NAME=STLport-4.0
+PATCH_FILE_NAME=STLport-4.0.patch
+.ELSE
 TARFILE_NAME=STLport-4.5
 PATCH_FILE_NAME=STLport-4.5.patch
+.ENDIF
+
+.IF "$(GUI)"=="WNT"
+TAR_EXCLUDES=*/SC5/*
+.ENDIF          # "$(GUI)"=="WNT"
 
 ADDITIONAL_FILES=src$/gcc-3.0.mak
 
@@ -125,4 +134,11 @@ OUT2LIB= \
 .INCLUDE : set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
+
+.IF "$(GUI)"=="WNT"
+$(PACKAGE_DIR)$/so_custom_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
+    +win32_custom.bat $(PACKAGE_DIR) "$(BACK_PATH)" && $(TOUCH) $@
+    
+$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
+.ENDIF          # "$(GUI)"=="WNT"
 
