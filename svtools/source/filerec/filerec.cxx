@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filerec.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: ka $ $Date: 2002-05-17 07:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1017,8 +1017,14 @@ FASTBOOL SfxMultiRecordReader::GetContent()
                     : SFX_REC_CONTENT_OFS(_pContentOfs[_nContentNo]);
         UINT32 nNewPos = _nStartPos + nOffset;
         DBG_ASSERT( nNewPos >= _pStream->Tell(), "SfxMultiRecordReader::GetContent() - New position before current, to much data red!" );
-        if ( nNewPos > _pStream->Tell() )
-            _pStream->Seek( nNewPos );
+
+        // #99366#: correct stream pos in every case;
+        // the if clause was added by MT  a long time ago,
+        // maybe to 'repair' other corrupt documents; but this
+        // gives errors when writing with 5.1 and reading with current
+        // versions, so we decided to remove the if clause (KA-05/17/2002)
+        // if ( nNewPos > _pStream->Tell() )
+        _pStream->Seek( nNewPos );
 
         // ggf. Content-Header lesen
         if ( _nRecordType == SFX_REC_TYPE_MIXTAGS ||
