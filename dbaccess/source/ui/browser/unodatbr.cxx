@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:30:34 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 09:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1723,6 +1723,9 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
 
         case ID_BROWSER_REFRESH_REBUILD:
         {
+            if ( !SaveModified( ) )
+                // nothing to do
+                break;
             SvLBoxEntry* pSelected = m_pCurrentlyDisplayed;
             // unload
             unloadAndCleanup( sal_False, sal_True );
