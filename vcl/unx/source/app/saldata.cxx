@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:47:56 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,12 @@
 #endif
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
+#endif
+#ifndef _RTL_STRBUF_HXX_
+#include <rtl/strbuf.hxx>
+#endif
+#ifndef _RTL_BOOTSTRAP_HXX
+#include <rtl/bootstrap.hxx>
 #endif
 
 #include <tools/debug.hxx>
@@ -863,3 +869,59 @@ void SalXLib::PostUserEvent()
 {
     Wakeup();
 }
+
+const char* SalData::getFrameResName()
+{
+    /*  according to ICCCM:
+     *  first search command line for -name parameter
+     *  then try RESOURCE_NAME environment variable
+     *  then use argv[0] stripped by directories
+     */
+    static rtl::OStringBuffer aResName;
+    if( !aResName.getLength() )
+    {
+        int nArgs = osl_getCommandArgCount();
+        for( int n = 0; n < nArgs-1; n++ )
+        {
+            rtl::OUString aArg;
+            if( ! osl_getCommandArg( n, &aArg.pData ) &&
+                aArg.equalsIgnoreAsciiCaseAscii( "-name" ) &&
+                ! osl_getCommandArg( n+1, &aArg.pData ) )
+            {
+                aResName.append( rtl::OUStringToOString( aArg, osl_getThreadTextEncoding() ) );
+                break;
+            }
+        }
+        if( !aResName.getLength() )
+        {
+            const char* pEnv = getenv( "RESOURCE_NAME" );
+            if( pEnv && *pEnv )
+                aResName.append( pEnv );
+        }
+        if( !aResName.getLength() )
+            aResName.append( "VCLSalFrame" );
+    }
+    return aResName.getStr();
+}
+
+const char* SalData::getFrameClassName()
+{
+    static rtl::OStringBuffer aClassName;
+    if( !aClassName.getLength() )
+    {
+        rtl::OUString aIni, aProduct;
+        osl_getExecutableFile( &aIni.pData );
+        aIni = aIni.copy( 0, aIni.lastIndexOf( SAL_PATHDELIMITER )+1 );
+        aIni += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "bootstrap" ) ) );
+        rtl::Bootstrap aBootstrap( aIni );
+        aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ProductKey" ) ), aProduct );
+
+        if( aProduct.getLength() )
+            aClassName.append( rtl::OUStringToOString( aProduct, osl_getThreadTextEncoding() ) );
+        else
+            aClassName.append( "VCLSalFrame" );
+    }
+    return aClassName.getStr();
+}
+
+
