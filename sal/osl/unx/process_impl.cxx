@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process_impl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:05 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 13:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,36 +165,40 @@
 
 oslProcessError SAL_CALL osl_getExecutableFile(rtl_uString** ppustrFile)
 {
-    sal_Char*     p_cmdline = getCmdLine();
-    rtl::OUString cmdline(p_cmdline, strlen(p_cmdline), osl_getThreadTextEncoding());
-
-    free(p_cmdline);
-
-    rtl::OUString abs_path;
-
-    if (osl::systemPathIsRelativePath(cmdline))
-    {
-        if (is_relative_to_cwd(cmdline))
-            make_absolute_to_cwd(cmdline, abs_path);
-        else
-            find_in_PATH(cmdline, abs_path);
-    }
-    else
-    {
-        abs_path = cmdline;
-    }
-
-    rtl::OUString path_resolved;
+    sal_Char*       p_cmdline = getCmdLine();
     oslProcessError osl_error = osl_Process_E_Unknown;
 
-    if ((abs_path.getLength() > 0) && osl::realpath(abs_path, path_resolved))
+    if (p_cmdline != 0)
     {
-        rtl::OUString furl;
-        osl::FileBase::RC rc = osl::FileBase::getFileURLFromSystemPath(path_resolved.pData, furl);
-        OSL_ASSERT(osl::FileBase::E_None == rc);
+        rtl::OUString cmdline(p_cmdline, strlen(p_cmdline), osl_getThreadTextEncoding());
 
-        rtl_uString_assign(ppustrFile, furl.pData);
-        osl_error = osl_Process_E_None;
+        free(p_cmdline);
+
+        rtl::OUString abs_path;
+
+        if (osl::systemPathIsRelativePath(cmdline))
+        {
+            if (is_relative_to_cwd(cmdline))
+                make_absolute_to_cwd(cmdline, abs_path);
+            else
+                find_in_PATH(cmdline, abs_path);
+        }
+        else
+        {
+            abs_path = cmdline;
+        }
+
+        rtl::OUString path_resolved;
+
+        if ((abs_path.getLength() > 0) && osl::realpath(abs_path, path_resolved))
+        {
+            rtl::OUString furl;
+            osl::FileBase::RC rc = osl::FileBase::getFileURLFromSystemPath(path_resolved.pData, furl);
+            OSL_ASSERT(osl::FileBase::E_None == rc);
+
+            rtl_uString_assign(ppustrFile, furl.pData);
+            osl_error = osl_Process_E_None;
+        }
     }
     return osl_error;
 }
@@ -206,20 +210,24 @@ oslProcessError SAL_CALL osl_getExecutableFile(rtl_uString** ppustrFile)
 char* osl_impl_getExecutableName(char * buffer, size_t n)
 {
     sal_Char*     p_cmdline = getCmdLine();
-    rtl::OUString cmdline(p_cmdline, strlen(p_cmdline), osl_getThreadTextEncoding());
+    char*         pChrRet   = NULL;
 
-    free(p_cmdline);
-
-    rtl::OUString exename_u;
-    osl::systemPathGetFileNameOrLastDirectoryPart(cmdline, exename_u);
-
-    rtl::OString exename_a = rtl::OUStringToOString(exename_u, osl_getThreadTextEncoding());
-    char*        pChrRet   = NULL;
-
-    if (exename_a.getLength() < n)
+    if (p_cmdline != 0)
     {
-        strcpy(buffer, exename_a.getStr());
-        pChrRet = buffer;
+        rtl::OUString cmdline(p_cmdline, strlen(p_cmdline), osl_getThreadTextEncoding());
+
+        free(p_cmdline);
+
+        rtl::OUString exename_u;
+        osl::systemPathGetFileNameOrLastDirectoryPart(cmdline, exename_u);
+
+        rtl::OString exename_a = rtl::OUStringToOString(exename_u, osl_getThreadTextEncoding());
+
+        if (exename_a.getLength() < n)
+        {
+            strcpy(buffer, exename_a.getStr());
+            pChrRet = buffer;
+        }
     }
     return pChrRet;
 }
