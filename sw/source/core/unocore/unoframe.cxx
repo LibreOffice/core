@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-29 15:57:15 $
+ *  last change: $Author: mib $ $Date: 2000-12-06 11:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,9 @@
 #endif
 #ifndef _FMTCLDS_HXX
 #include <fmtclds.hxx>
+#endif
+#ifndef _FRMATR_HXX
+#include <frmatr.hxx>
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
@@ -1049,6 +1052,30 @@ uno::Reference< XPropertySetInfo >  SwXFrame::getPropertySetInfo(void) throw( Ru
 /*-- 11.12.98 15:05:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+
+SdrObject *lcl_GetOrCreateSdrObject( SwFlyFrmFmt *pFmt )
+{
+    SdrObject* pObject = pFmt->FindSdrObject();
+    if( !pObject )
+    {
+        SwDoc *pDoc = pFmt->GetDoc();
+        SdrModel *pDrawModel = pDoc->MakeDrawModel();
+        SwFlyDrawContact* pContactObject
+                    = new SwFlyDrawContact( pFmt, pDrawModel );
+        pObject = pContactObject->GetMaster();
+
+        const SwFmtSurround& rSurround = pFmt->GetSurround();
+        pObject->SetLayer(
+            ( SURROUND_THROUGHT == rSurround.GetSurround() &&
+              !pFmt->GetOpaque().GetValue() ) ? pDoc->GetHellId()
+                                             : pDoc->GetHeavenId() );
+
+        pDrawModel->GetPage(0)->InsertObject( pObject );
+    }
+
+    return pObject;
+}
+
 void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
     throw( UnknownPropertyException, PropertyVetoException, lang::IllegalArgumentException, WrappedTargetException, RuntimeException )
 {
@@ -1230,11 +1257,13 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             sal_Int32 nZOrder = - 1;
             aValue >>= nZOrder;
             const SwContact* pContact = pFmt->FindContactObj();
-            if(pContact && nZOrder >= 0)
+            if( nZOrder >= 0)
             {
-                const SdrObject* pObj = pContact->GetMaster();
-                pFmt->GetDoc()->GetDrawModel()->GetPage(0)->
-                            SetObjectOrdNum(pObj->GetOrdNum(), nZOrder);
+                SdrObject* pObject =
+                    lcl_GetOrCreateSdrObject( (SwFlyFrmFmt*)pFmt );
+                SdrModel *pDrawModel = pDoc->GetDrawModel();
+                pDrawModel->GetPage(0)->
+                            SetObjectOrdNum(pObject->GetOrdNum(), nZOrder);
             }
         }
         else
@@ -1707,6 +1736,8 @@ void SwXFrame::ResetDescriptor()
 /* -----------------18.02.99 13:34-------------------
  *
  * --------------------------------------------------*/
+
+
 void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             throw( IllegalArgumentException, RuntimeException )
 {
@@ -1785,8 +1816,6 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
         else if( eType == FLYCNTTYPE_GRF)
         {
             UnoActionContext aCont(pDoc);
-            SwFlyFrmFmt* pFmt = 0;
-
             uno::Any* pGraphicURL;
             String sGraphicURL;
             GraphicObject *pGrfObj = 0;
@@ -1820,16 +1849,16 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                 sFltName = String(uTemp);
             }
 
-            SwFlyFrmFmt* pGFmt =
+            pFmt =
                 pGrfObj ? pDoc->Insert( aPam, *pGrfObj, &aFrmSet, &aGrSet)
                          : pDoc->Insert( aPam, sGraphicURL, sFltName, 0,
                                         &aFrmSet, &aGrSet );
             delete pGrfObj;
-            if(pGFmt)
+            if(pFmt)
             {
-                pGFmt->Add(this);
+                pFmt->Add(this);
                 if(sName.Len())
-                    pDoc->SetFlyName((SwFlyFrmFmt&)*pGFmt, sName);
+                    pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt, sName);
 
             }
             uno::Any* pSurroundContour;
@@ -1850,8 +1879,11 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             DBG_ERROR("EmbeddedObject: not implemented")
             throw RuntimeException();
         }
+
+        if( pFmt && pDoc->GetDrawModel() )
+            lcl_GetOrCreateSdrObject( pFmt );
         uno::Any* pOrder;
-        if(pProps->GetProperty(C2S(UNO_NAME_Z_ORDER), pOrder))
+        if( pProps->GetProperty(C2S(UNO_NAME_Z_ORDER), pOrder) )
         {
             setPropertyValue(C2U(UNO_NAME_Z_ORDER), *pOrder);
         }
