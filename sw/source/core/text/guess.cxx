@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-29 13:20:26 $
+ *  last change: $Author: ama $ $Date: 2000-12-18 13:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,9 +458,6 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
     if ( nLeftPos < rInf.GetIdx() )
         nLeftPos = rInf.GetIdx();
 
-    if( !SwTxtGuess::IsWordEnd( rInf, nRightPos ) )
-        nRightPos = GetNextEnd( rInf, nRightPos );
-
     nLeftWidth =
         rInf.GetTxtSize( rInf.GetIdx(), nLeftPos - rInf.GetIdx() ).Width();
 
@@ -474,7 +471,6 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
         nLeftPos = GetPrevEnd( rInf, nLeftPos );
         if ( nLeftPos < rInf.GetIdx() )
             nLeftPos = rInf.GetIdx();
-        nRightPos = GetNextEnd( rInf, nLeftPos );
         nLeftWidth =
             rInf.GetTxtSize( rInf.GetIdx(), nLeftPos - rInf.GetIdx() + 1 ).Width();
     }
