@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:41:07 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 05:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ String RID_GALLERYSTR_THEME_3D
     Text[ turkish ] = "3B";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Efectos 3D";
+    Text[ finnish ] = "3D";
 };
 
 // -----------------------------------------------------------------------------
@@ -115,6 +116,7 @@ String RID_GALLERYSTR_THEME_ANIMATIONS
     Text[ turkish ] = "Canland˝rmalar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Animaciones";
+    Text[ finnish ] = "Animaatiot";
 };
 
 // -----------------------------------------------------------------------------
@@ -143,6 +145,7 @@ String RID_GALLERYSTR_THEME_BULLETS
     Text[ turkish ] = "Madde i˛aretleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "ViÒetas";
+    Text[ finnish ] = "Luettelomerkit";
 };
 
 // -----------------------------------------------------------------------------
@@ -171,6 +174,7 @@ String RID_GALLERYSTR_THEME_OFFICE
     Text[ turkish ] = "Clipart";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Oficina";
+    Text[ finnish ] = "B¸ro";
 };
 
 // -----------------------------------------------------------------------------
@@ -199,6 +203,7 @@ String RID_GALLERYSTR_THEME_FLAGS
     Text[ turkish ] = "Bayraklar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Banderas";
+    Text[ finnish ] = "Tunnisteet";
 };
 
 // -----------------------------------------------------------------------------
@@ -227,6 +232,7 @@ String RID_GALLERYSTR_THEME_FLOWCHARTS
     Text[ turkish ] = "Ak˝˛ ˛emalar˝";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Diagramas de flujo";
+    Text[ finnish ] = "Flow Charts";
 };
 
 // -----------------------------------------------------------------------------
@@ -244,7 +250,7 @@ String RID_GALLERYSTR_THEME_EMOTICONS
     Text[ italian ] = "Emoticons";
     Text[ danish ] = "Former";
     Text[ swedish ] = "Emoticons";
-    Text[ polish ] = "Buüka";
+    Text[ polish ] = "Buüki";
     Text[ portuguese_brazilian ] = "Forms";
     Text[ japanese ] = "¥”∞√®∫›";
     Text[ chinese_simplified ] = "«ÈæwÕº∞∏";
@@ -255,6 +261,7 @@ String RID_GALLERYSTR_THEME_EMOTICONS
     Text[ turkish ] = "ﬁekiller";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Emoticon";
+    Text[ finnish ] = "Emoticons";
 };
 
 // -----------------------------------------------------------------------------
@@ -283,6 +290,7 @@ String RID_GALLERYSTR_THEME_PHOTOS
     Text[ turkish ] = "Fotoraflar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fotos";
+    Text[ finnish ] = "Kuvat";
 };
 
 // -----------------------------------------------------------------------------
@@ -311,6 +319,7 @@ String RID_GALLERYSTR_THEME_BACKGROUNDS
     Text[ turkish ] = "Artalanlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fondos";
+    Text[ finnish ] = "Taustat";
 };
 
 // -----------------------------------------------------------------------------
@@ -339,6 +348,7 @@ String RID_GALLERYSTR_THEME_HOMEPAGE
     Text[ turkish ] = "Web sayfas˝";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "P·gina principal";
+    Text[ finnish ] = "Kotisivu";
 };
 
 // -----------------------------------------------------------------------------
@@ -367,6 +377,7 @@ String RID_GALLERYSTR_THEME_INTERACTION
     Text[ turkish ] = "Etkile˛im";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "InteracciÛn";
+    Text[ finnish ] = "Vuorovaikutus";
 };
 
 // -----------------------------------------------------------------------------
@@ -395,6 +406,7 @@ String RID_GALLERYSTR_THEME_MAPS
     Text[ turkish ] = "Haritalar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mapas";
+    Text[ finnish ] = "Kartat";
 };
 
 // -----------------------------------------------------------------------------
@@ -412,7 +424,7 @@ String RID_GALLERYSTR_THEME_PEOPLE
     Text[ italian ] = "Persone";
     Text[ danish ] = "M¯bler";
     Text[ swedish ] = "Personer";
-    Text[ polish ] = "Ludzie";
+    Text[ polish ] = "Ludziki";
     Text[ portuguese_brazilian ] = "Furniture";
     Text[ japanese ] = "êlï®";
     Text[ chinese_simplified ] = "»ÀŒÔ";
@@ -423,6 +435,7 @@ String RID_GALLERYSTR_THEME_PEOPLE
     Text[ turkish ] = "E˛yalar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Personas";
+    Text[ finnish ] = "Personen";
 };
 
 // -----------------------------------------------------------------------------
@@ -451,6 +464,7 @@ String RID_GALLERYSTR_THEME_SURFACES
     Text[ turkish ] = "Y¸zeyler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Superficies";
+    Text[ finnish ] = "Pinnat";
 };
 
 // -----------------------------------------------------------------------------
@@ -495,6 +509,7 @@ String RID_GALLERYSTR_THEME_RULERS
     Text[ turkish ] = "«izgiler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "LÌmites";
+    Text[ finnish ] = "Viivaimet";
 };
 
 // -----------------------------------------------------------------------------
@@ -523,6 +538,7 @@ String RID_GALLERYSTR_THEME_SOUNDS
     Text[ turkish ] = "Sesler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sonidos";
+    Text[ finnish ] = "ƒ‰net";
 };
 
 // -----------------------------------------------------------------------------
@@ -551,6 +567,7 @@ String RID_GALLERYSTR_THEME_SYMBOLS
     Text[ turkish ] = "Simgeler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "SÌmbolos";
+    Text[ finnish ] = "Symbolit";
 };
 
 // -----------------------------------------------------------------------------
@@ -578,6 +595,7 @@ String RID_GALLERYSTR_THEME_MYTHEME
     Text[ turkish ] = "Kullan˝c˝ konusu";
     Text[ arabic ] = "„Ê÷Ê⁄ „Œ’’";
     Text[ catalan ] = "Mis temas";
+    Text[ finnish ] = "Oma teema";
 };
 
 // -----------------------------------------------------------------------------
@@ -613,6 +631,7 @@ String RID_GALLERYSTR_THEME_ARROWS
     Text[ turkish ] = "Kullan˝c˝ konusu";
     Text[ arabic ] = "√”Â„";
     Text[ catalan ] = "Flechas";
+    Text[ finnish ] = "Pfeile";
 };
 
 // -----------------------------------------------------------------------------
@@ -640,6 +659,7 @@ String RID_GALLERYSTR_THEME_BALLOONS
     Text[ turkish ] = "Kullan˝c˝ konusu";
     Text[ arabic ] = " ⁄·Ìﬁ  ›”Ì—Ì";
     Text[ catalan ] = "Llamadas";
+    Text[ finnish ] = "Sprechblasen";
 };
 
 // -----------------------------------------------------------------------------
@@ -667,6 +687,7 @@ String RID_GALLERYSTR_THEME_KEYBOARD
     Text[ turkish ] = "Kullan˝c˝ konusu";
     Text[ arabic ] = "·ÊÕ… «·„›« ÌÕ";
     Text[ catalan ] = "Teclado";
+    Text[ finnish ] = "Tastatur";
 };
 
 // -----------------------------------------------------------------------------
@@ -694,6 +715,7 @@ String RID_GALLERYSTR_THEME_TIME
     Text[ turkish ] = "Kullan˝c˝ konusu";
     Text[ arabic ] = "«·Êﬁ ";
     Text[ catalan ] = "Hora";
+    Text[ finnish ] = "Zeit";
 };
 
 // -----------------------------------------------------------------------------
@@ -721,6 +743,7 @@ String RID_GALLERYSTR_THEME_PRESENTATION
     Text[ turkish ] = "Kullan˝c˝ konusu";
     Text[ arabic ] = "⁄—÷  ﬁœÌ„Ì";
     Text[ catalan ] = "PresentaciÛn";
+    Text[ finnish ] = "Pr‰sentation";
 };
 
 // -----------------------------------------------------------------------------
@@ -748,6 +771,7 @@ String RID_GALLERYSTR_THEME_CALENDAR
     Text[ turkish ] = "Kullan˝c˝ konusu";
     Text[ arabic ] = " ﬁÊÌ„";
     Text[ catalan ] = "Calendario";
+    Text[ finnish ] = "Kalender";
 };
 
 // -----------------------------------------------------------------------------
@@ -775,6 +799,7 @@ String RID_GALLERYSTR_THEME_NAVIGATION
     Text[ turkish ] = "Kullan˝c˝ konusu";
     Text[ arabic ] = "„·«Õ…";
     Text[ catalan ] = "NavegaciÛn";
+    Text[ finnish ] = "Navigation";
 };
 
 // -----------------------------------------------------------------------------
@@ -802,6 +827,7 @@ String RID_GALLERYSTR_THEME_COMMUNICATION
     Text[ turkish ] = "Kullan˝c˝ konusu";
     Text[ arabic ] = "« ’«·";
     Text[ catalan ] = "ComunicaciÛn";
+    Text[ finnish ] = "Kommunikation";
 };
 
 // -----------------------------------------------------------------------------
@@ -829,6 +855,7 @@ String RID_GALLERYSTR_THEME_FINANCES
     Text[ turkish ] = "Kullan˝c˝ konusu";
     Text[ arabic ] = "„«·Ì…";
     Text[ catalan ] = "Finanzas";
+    Text[ finnish ] = "Finanzen";
 };
 
 // -----------------------------------------------------------------------------
@@ -856,6 +883,7 @@ String RID_GALLERYSTR_THEME_COMPUTER
     Text[ turkish ] = "Kullan˝c˝ konusu";
     Text[ arabic ] = "ﬂ„»ÌÊ —";
     Text[ catalan ] = "Ordenador";
+    Text[ finnish ] = "Computer";
 };
 
 // -----------------------------------------------------------------------------
