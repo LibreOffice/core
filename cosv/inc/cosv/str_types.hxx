@@ -2,9 +2,9 @@
  *
  *  $RCSfile: str_types.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,13 @@
 namespace csv
 {
 
+/** Provides some generally used constants.
+*/
 struct str
 {
   public:
-    typedef uintt       position;
-    typedef position    size;
+    typedef ::size_t    position;
+    typedef ::size_t    size;
 
     enum constants
     {
@@ -86,6 +88,11 @@ struct str
 };
 
 
+/** Is used for string comparisons.
+
+    @collab String
+    @collab various csv::compare(...) functions
+*/
 class CharOrder_Table
 {
   public:
@@ -119,5 +126,3 @@ CharOrder_Table::operator()( char i_c ) const
 }   // namespace csv
 
 #endif
-
-
