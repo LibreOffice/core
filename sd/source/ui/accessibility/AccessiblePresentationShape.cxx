@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationShape.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:04:05 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,18 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
         case PRESENTATION_HANDOUT:
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressHandout"));
             break;
+        case PRESENTATION_HEADER:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressHeader"));
+            break;
+        case PRESENTATION_FOOTER:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressFooter"));
+            break;
+        case PRESENTATION_DATETIME:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressDateAndTime"));
+            break;
+        case PRESENTATION_PAGENUMBER:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressPageNumber"));
+            break;
         default:
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("UnknownAccessibleImpressShape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
@@ -175,6 +187,18 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
             break;
         case PRESENTATION_HANDOUT:
             aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationHandoutShape"));
+            break;
+        case PRESENTATION_HEADER:
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationHeaderShape"));
+            break;
+        case PRESENTATION_FOOTER:
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationFooterShape"));
+            break;
+        case PRESENTATION_DATETIME:
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationDateAndTimeShape"));
+            break;
+        case PRESENTATION_PAGENUMBER:
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationPageNumberShape"));
             break;
         default:
             aDG.Initialize (::rtl::OUString::createFromAscii ("Unknown accessible presentation shape"));
