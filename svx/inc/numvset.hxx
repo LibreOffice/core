@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numvset.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-04-05 14:17:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 namespace com{namespace sun{ namespace star{
     namespace container{
         class XIndexAccess;
@@ -102,7 +106,7 @@ struct SvxBmpItemInfo
 /*-----------------09/09/97 01:05pm-----------------
 
 --------------------------------------------------*/
-class SvxNumValueSet : public ValueSet
+class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 {
     Color           aLineColor;
     USHORT          nPageType;
@@ -146,7 +150,7 @@ class SvxNumValueSet : public ValueSet
 
 --------------------------------------------------*/
 
-class SvxBmpNumValueSet : public SvxNumValueSet
+class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
 {
     String      sBullets;
     Timer       aFormatTimer;
