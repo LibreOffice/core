@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:33:11 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ TabPage TP_DROPCAPS
         Text [ danish ] = "Eksempel" ;
         Text [ portuguese_brazilian ] = "Beispiel" ;
         Text [ portuguese ] = "Exemplo" ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ê¾Àı";
         Text[ russian ] = "Ïğèìåğ";
         Text[ polish ] = "Przyk³ad";
         Text[ japanese ] = "—á";
@@ -445,7 +445,7 @@ TabPage TP_DROPCAPS
         Text [ spanish ] = "E~stilo de carácter" ;
         Text [ english_us ] = "Character St~yle" ;
         Text[ chinese_simplified ] = "×Ö·ûÑùÊ½(~Y)";
-        Text[ russian ] = "Ñòèëü òåêñòà";
+        Text[ russian ] = "~Ñòèëü çíàêîâ";
         Text[ polish ] = "Styl znaku";
         Text[ japanese ] = "•¶š½À²Ù(~Y)";
         Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡(~Y)";
