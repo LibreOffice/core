@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:07:19 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
+#endif
+#ifndef _SFX_DOCFILT_HACK_HXX
+#include <sfx2/docfilt.hxx>
 #endif
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
@@ -1111,6 +1114,17 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
 
     return bRet;
 }
+
+//------------------------------------------------------------------------------
+const SfxFilter* getStandardDatabaseFilter()
+{
+    static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
+    const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
+    OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
+    return pFilter;
+}
+
+
 // -----------------------------------------------------------------------------
 sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
                         const ::rtl::OUString& _sName,
