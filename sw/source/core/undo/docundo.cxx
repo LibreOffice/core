@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-29 09:08:52 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 13:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,11 +139,8 @@ void UndoArrStatus::Paint( const Rectangle& )
 #endif
 
 
-void SwDoc::AppendUndo(SwUndo* pUndo)
+void SwDoc::AppendUndo( SwUndo* pUndo )
 {
-    ASSERT( pUndos->Count() == nUndoPos,
-            "das Undo-Array wurde nach einem Redo nicht geloescht!" );
-
 #ifdef COMPACT
     DelUndoGroups( FALSE );     // nur die History loeschen !!
 #endif
@@ -151,8 +148,8 @@ void SwDoc::AppendUndo(SwUndo* pUndo)
     if( REDLINE_NONE == pUndo->GetRedlineMode() )
         pUndo->SetRedlineMode( GetRedlineMode() );
 
-    pUndos->Insert( pUndo, pUndos->Count() );
-    nUndoPos = pUndos->Count();
+    pUndos->Insert( pUndo, nUndoPos );
+    ++nUndoPos;
     switch( pUndo->GetId() )
     {
     case UNDO_START:        ++nUndoSttEnd;
@@ -160,11 +157,16 @@ void SwDoc::AppendUndo(SwUndo* pUndo)
 
     case UNDO_END:          ASSERT( nUndoSttEnd, "Undo-Ende ohne Start" );
                             --nUndoSttEnd;
-
                             // kein break !!!
-    default:                if( !nUndoSttEnd )
-                                ++nUndoCnt;
-                            break;
+    default:
+        if( pUndos->Count() != nUndoPos && UNDO_END != pUndo->GetId() )
+            ClearRedo();
+        else
+            ASSERT( pUndos->Count() == nUndoPos || UNDO_END == pUndo->GetId(),
+                    "Redo history not deleted!" );
+        if( !nUndoSttEnd )
+            ++nUndoCnt;
+        break;
     }
 
 #ifdef _SHOW_UNDORANGE
@@ -223,7 +225,7 @@ void SwDoc::ClearRedo()
 {
     if( DoesUndo() && nUndoPos != pUndos->Count() )
     {
-        if( !nUndoSttEnd )
+//?? why ??     if( !nUndoSttEnd )
         {
             // setze UndoCnt auf den neuen Wert
             SwUndo* pUndo;
@@ -419,7 +421,6 @@ USHORT SwDoc::StartUndo( USHORT nUndoId )
     if( !nUndoId )
         nUndoId = UNDO_START;
 
-    ClearRedo();
     AppendUndo( new SwUndoStart( nUndoId ));
     return nUndoId;
 }
@@ -428,7 +429,7 @@ USHORT SwDoc::StartUndo( USHORT nUndoId )
 
 USHORT SwDoc::EndUndo(USHORT nUndoId)
 {
-    USHORT nSize = pUndos->Count();
+    USHORT nSize = nUndoPos;
     if( !bUndo || !nSize-- )
         return 0;
 
@@ -440,9 +441,21 @@ USHORT SwDoc::EndUndo(USHORT nUndoId)
     {
         // leere Start/End-Klammerung ??
         pUndos->DeleteAndDestroy( nSize );
-        nUndoPos = pUndos->Count();
+        --nUndoPos;
         --nUndoSttEnd;
         return 0;
+    }
+
+    // exist above any redo objects? If yes, delete them
+    if( nUndoPos != pUndos->Count() )
+    {
+        // setze UndoCnt auf den neuen Wert
+        for( USHORT nCnt = pUndos->Count(); nUndoPos < nCnt; --nUndoCnt )
+            // Klammerung ueberspringen
+            if( UNDO_END == (pUndo = (*pUndos)[ --nCnt ])->GetId() )
+                nCnt -= ((SwUndoEnd*)pUndo)->GetSttOffset();
+
+        pUndos->DeleteAndDestroy( nUndoPos, pUndos->Count() - nUndoPos );
     }
 
     // suche den Anfang dieser Klammerung
@@ -846,7 +859,7 @@ USHORT SwDoc::GetRepeatIds(String* pStr, SwUndoIds *pRepeatIds) const
 
 SwUndo* SwDoc::RemoveLastUndo( USHORT nUndoId )
 {
-    SwUndo* pUndo = (*pUndos)[ pUndos->Count() - 1 ];
+    SwUndo* pUndo = (*pUndos)[ nUndoPos - 1 ];
     if( nUndoId == pUndo->GetId() && nUndoPos == pUndos->Count() )
     {
         if( !nUndoSttEnd )
