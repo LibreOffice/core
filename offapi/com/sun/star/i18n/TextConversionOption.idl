@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextConversionOption.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 20:39:18 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module i18n {
     The options can be combined and may be related to
     <type>TextConversionType</type>. </p>
 
-     @since #107627#
+     @since OOo 1.1.2
 */
 
 published constants TextConversionOption
