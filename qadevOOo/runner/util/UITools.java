@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-10-06 12:42:25 $
+ *  last change:$Date: 2004-12-10 17:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,8 +422,8 @@ public class UITools {
             currencyVal = currencyVal.substring(0, currencyVal.length()-3) +
                           "#" + currencyVal.substring(currencyVal.length()-2);
 
-            currencyVal = currencyVal.replaceAll(",", "");
-            currencyVal = currencyVal.replaceAll("\\.", "");
+            currencyVal = utils.replaceAll13(currencyVal, ",", "");
+            currencyVal = utils.replaceAll13(currencyVal, "\\.", "");
             currencyVal = currencyVal.replace('#', '.');
 
             return currencyVal;
