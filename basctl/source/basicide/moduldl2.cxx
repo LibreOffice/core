@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-14 14:25:01 $
+ *  last change: $Author: tbe $ $Date: 2000-11-20 08:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include <svx/passwd.hxx>
 #include <sbxitem.hxx>
 
-#ifndef _FSYS_HXX //autogen
-#include <tools/fsys.hxx>
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 
 #ifndef _SVSTOR_HXX //autogen
@@ -98,6 +98,18 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+
+using namespace comphelper;
+using namespace rtl;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::ucb;
+
 
 LibPage::LibPage( Window * pParent ) :
         TabPage(        pParent,IDEResId( RID_TP_LIBS ) ),
@@ -331,17 +343,32 @@ void LibPage::NewLib()
             String aLibStorageName;
             if ( pNewDlg->IsSeparateFile() )
             {
-                DirEntry aDirEntry( pBasMgr->GetStorageName() );
-                String aExt = aDirEntry.GetExtension();
-                aDirEntry.SetName( aLibName );
-                aDirEntry.SetExtension( aExt );
-                aLibStorageName = aDirEntry.GetFull();
-                if ( aDirEntry.Exists() )
+                INetURLObject aFileURL( pBasMgr->GetStorageName() , INetURLObject::FSYS_DETECT );
+                String aExt = aFileURL.getExtension();
+                aFileURL.setName( aLibName );
+                aFileURL.setExtension( aExt );
+                aLibStorageName = aFileURL.getFSysPath( INetURLObject::FSYS_DETECT );
+                String aFileURLStr = aFileURL.GetMainURL();
+
+                Reference< XSimpleFileAccess > xSFI;
+                Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+                if( xSMgr.is() )
                 {
-                    String aText( IDEResId( RID_STR_FILEEXISTS ) );
-                    aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), aLibStorageName );
-                    ErrorBox( this, WB_OK | WB_DEF_OK, aText ).Execute();
-                    bCreateLib = FALSE;
+                    xSFI = Reference< XSimpleFileAccess >( xSMgr->createInstance
+                        ( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+                }
+                if( xSFI.is() )
+                {
+                    sal_Bool bExists = sal_False;
+                    try { bExists = xSFI->exists( aFileURLStr ); }
+                    catch( Exception & ) {}
+                    if( bExists )
+                    {
+                        String aText( IDEResId( RID_STR_FILEEXISTS ) );
+                        aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), aLibStorageName );
+                        ErrorBox( this, WB_OK | WB_DEF_OK, aText ).Execute();
+                        bCreateLib = FALSE;
+                    }
                 }
             }
 
@@ -356,6 +383,14 @@ void LibPage::NewLib()
 
                 if ( aLibStorageName.Len() )
                 {
+                    INetURLObject aFileURL( aLibStorageName , INetURLObject::FSYS_DETECT );
+                    String aShortName = aFileURL.getName();
+
+                    // conversion to 8.3 filename for FAT filesystem not implemented, because
+                    // INetURLObject doesn't have a method corresponding to old DirEntry::MakeShortName
+                    //
+                    // old code for comparison:
+                    /*
                     DirEntry aDirEntry( aLibStorageName );
                     String aShortName = aDirEntry.GetName();
 
@@ -366,6 +401,8 @@ void LibPage::NewLib()
                         aLibStorageName = aTempEntry.GetFull();
                         aShortName = aTempEntry.GetName();
                     }
+                    */
+
                     pBasMgr->SetLibStorageName( nLib, aLibStorageName );
                     aLibBox.SetEntryText( aShortName, pEntry, 1 );
 
@@ -414,7 +451,9 @@ void LibPage::InsertLib()
     {
         // macro path from configuration management
         aPath = SvtPathOptions().GetWorkPath();
-        aPath += DirEntry::GetAccessDelimiter();
+        INetURLObject aFileURL( aPath , INetURLObject::FSYS_DETECT );
+        aFileURL.setFinalSlash();
+        aPath = aFileURL.getFSysPath( INetURLObject::FSYS_DETECT );
         aFileDialogBox.SetPath( aPath );
         aFileDialogBox.SetCurFilter( String( IDEResId( RID_STR_DOC ) ) );
     }
@@ -424,8 +463,10 @@ void LibPage::InsertLib()
         aPath = aFileDialogBox.GetPath();
         IDE_DLL()->GetExtraData()->SetAddLibPath( aPath );
         IDE_DLL()->GetExtraData()->SetAddLibFilter( aFileDialogBox.GetCurFilter() );
-        DirEntry aDirEntry( aPath );
-        String aFullName( aDirEntry.GetFull() );
+
+        INetURLObject aFileURL( aPath );
+        String aFullName( aFileURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
+
         if ( SvStorage::IsStorageFile( aFullName ) )
         {
             SvStorageRef xStorage = new SvStorage( aFullName, STREAM_READ | STREAM_SHARE_DENYWRITE );
@@ -450,7 +491,7 @@ void LibPage::InsertLib()
                             if ( !pLibDlg )
                             {
                                 pLibDlg = new LibDialog( this );
-                                pLibDlg->SetStorageName( aDirEntry.GetName() );
+                                pLibDlg->SetStorageName( aFileURL.getName() );
                                 pLibDlg->GetLibBox().SetMode( LIBMODE_CHOOSER );
                                 if ( pBasMgr == SFX_APP()->GetBasicManager() )
                                     pLibDlg->SetSeparateFileEnabled( TRUE );
@@ -519,11 +560,11 @@ void LibPage::InsertLib()
                                     USHORT nLib = pBasMgr->GetLibId( pNew->GetName() );
                                     if ( pLibDlg->IsSeparateFile() )
                                     {
-                                        DirEntry aDirEntry( pBasMgr->GetStorageName() );
-                                        String aExt = aDirEntry.GetExtension();
-                                        aDirEntry.SetName( pBasMgr->GetLibName( nLib ) );
-                                        aDirEntry.SetExtension( aExt );
-                                        pBasMgr->SetLibStorageName( nLib, aDirEntry.GetFull() );
+                                        INetURLObject aFileURL( pBasMgr->GetStorageName() , INetURLObject::FSYS_DETECT );
+                                        String aExt = aFileURL.getExtension();
+                                        aFileURL.setName( pBasMgr->GetLibName( nLib ) );
+                                        aFileURL.setExtension( aExt );
+                                        pBasMgr->SetLibStorageName( nLib, aFileURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
                                     }
                                     DBG_ASSERT( nLib != LIB_NOTFOUND, "Lib nicht eingefuegt?!" );
                                     ImpInsertLibEntry( nLib );
@@ -711,8 +752,11 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( USHORT nLib )
         String aLibStorage = pBasicManager->GetLibStorageName( nLib );
         if ( pBasicManager->GetStorageName().Len() )
         {
-            DirEntry aEntry( pBasicManager->GetStorageName() );
-            String aPath = aEntry.GetPath().GetFull();
+            INetURLObject aFileURL( pBasicManager->GetStorageName() , INetURLObject::FSYS_DETECT );
+            aFileURL.removeSegment();
+            aFileURL.removeFinalSlash();
+            String aPath = aFileURL.getFSysPath( INetURLObject::FSYS_DETECT );
+
             if ( aLibStorage.CompareIgnoreCaseToAscii( aPath, aPath.Len() ) == COMPARE_EQUAL )
                 aLibStorage.Erase( 0, aPath.Len()+1 );  // Dann ohne Pfadangabe...
             else if ( pBasicManager->GetRelLibStorageName( nLib ).Len() )

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+#   last change: $Author: tbe $ $Date: 2000-11-20 08:32:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,8 @@ SLOFILES =  \
             $(SLO)$/moduldl2.obj	\
             $(SLO)$/objdlg.obj	\
             $(SLO)$/tbxctl.obj
+
+EXCEPTIONSFILES=$(SLO)$/moduldl2.obj
 
 SRCFILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src tbxctl.src
 
