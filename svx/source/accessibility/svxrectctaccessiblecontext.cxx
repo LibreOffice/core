@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2002-03-08 13:11:41 $
+ *  last change: $Author: obo $ $Date: 2002-03-11 12:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,9 +367,10 @@ uno::Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibl
         if( !pChild )
         {
             const ChildIndexToPointData*    p = IndexToPoint( nIndex, mbAngleMode );
-
-            OUString        aName( SVX_RESSTR( p->nResIdName ) );
-            OUString        aDescr( SVX_RESSTR( p->nResIdDescr ) );
+            UniString       tmp = SVX_RESSTR( p->nResIdName );
+            OUString        aName( tmp );
+                        tmp = SVX_RESSTR( p->nResIdDescr );
+            OUString        aDescr( tmp );
 
             Rectangle       aFocusRect( mpRepr->CalculateFocusRectangle( p->ePoint ) );
 
