@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-01 09:30:56 $
+ *  last change: $Author: cmc $ $Date: 2002-03-04 13:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,6 +863,7 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     bAnl            = pRdr->bAnl;
     bInHyperlink    = pRdr->bInHyperlink;
     bPgSecBreak     = pRdr->bPgSecBreak;
+    bVerticalEnviron = pRdr->bVerticalEnviron;
     nAktColl        = pRdr->nAktColl;
     nNoAttrScan     = pRdr->pSBase->GetNoAttrScan();
 
@@ -912,6 +913,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->bTableInApo   = bTableInApo;
     pRdr->bAnl          = bAnl;
     pRdr->bInHyperlink  = bInHyperlink;
+    pRdr->bVerticalEnviron = bVerticalEnviron;
     pRdr->bPgSecBreak   = bPgSecBreak;
     pRdr->nAktColl      = nAktColl;
     pRdr->pSBase->SetNoAttrScan( nNoAttrScan );
@@ -2261,6 +2263,7 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     bNoLnNumYet = TRUE;
     bRestartLnNumPerSection = FALSE;
     bInHyperlink = FALSE;
+    bVerticalEnviron = FALSE;
     nProgress = 0;
     nHdTextHeight = nFtTextHeight = 0;
     nPgWidth = lA4Width;

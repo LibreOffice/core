@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
+ *  last change: $Author: cmc $ $Date: 2002-03-04 13:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,36 +65,27 @@
 
 #pragma hdrstop
 
-#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
-#include <hintids.hxx>
-
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
-#endif
 #ifndef _TOOLS_SOLMATH_H
 #include <tools/solmath.hxx>
 #endif
-#ifndef _VIRDEV_HXX //autogen
-#include <vcl/virdev.hxx>
-#endif
-#ifndef _APP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
-#include <vcl/wrkwin.hxx>
-#endif
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
-#endif
-#ifndef _SVSTOR_HXX //autogen wg. SvStorage
-#include <so3/svstor.hxx>
-#endif
+
 #ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
 #endif
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
 #endif
+
+#ifndef _VIRDEV_HXX //autogen
+#include <vcl/virdev.hxx>
+#endif
+#ifndef _APP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
+
+#define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
+#include <hintids.hxx>
+
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
 #endif
@@ -119,6 +110,7 @@
 #ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
 #endif
+
 #ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
 #endif
@@ -134,20 +126,24 @@
 #ifndef _NDOLE_HXX
 #include <ndole.hxx>
 #endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
 #ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
 #endif
 #ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
 #endif
+
 #ifndef _WW8STRUC_HXX
-#include <ww8struc.hxx>
+#include "ww8struc.hxx"
 #endif
 #ifndef _WRTWW8_HXX
-#include <wrtww8.hxx>
+#include "wrtww8.hxx"
 #endif
 #ifndef _WW8PAR_HXX
-#include <ww8par.hxx>
+#include "ww8par.hxx"
 #endif
 
 // Damit KA debuggen kann, ohne sich den ganzen Writer zu holen, ist
@@ -411,15 +407,27 @@ void SwWW8Writer::OutGrf( const SwNoTxtNode* pNd )
         SwVertOrient eVert = pFlyFmt->GetVertOrient().GetVertOrient();
         if ((eVert == VERT_CHAR_CENTER) || (eVert == VERT_LINE_CENTER))
         {
-            SwTwips nHeight = pFlyFmt->GetFrmSize().GetHeight();
-            nHeight/=20;    //nHeight was in twips, want it in half points, but
-                            //then half of total height.
-            long nFontHeight = ((SvxFontHeightItem&)GetItem(RES_CHRATR_FONTSIZE)).GetHeight();
-            nHeight-=nFontHeight/20;
-            nHeight*=2;
+            BOOL bVert=FALSE;
+            //The default for word in vertical text mode is to center,
+            //otherwise a sub/super script hack is employed
+            if (pOutFmtNode && pOutFmtNode->ISA(SwCntntNode) )
+            {
+                const SwTxtNode* pTxtNd = (const SwTxtNode*)pOutFmtNode;
+                SwPosition aPos(*pTxtNd);
+                bVert = pDoc->IsInVerticalText(aPos);
+            }
+            if (!bVert)
+            {
+                SwTwips nHeight = pFlyFmt->GetFrmSize().GetHeight();
+                nHeight/=20; //nHeight was in twips, want it in half points, but
+                             //then half of total height.
+                long nFontHeight = ((const SvxFontHeightItem&)
+                    GetItem(RES_CHRATR_FONTSIZE)).GetHeight();
+                nHeight-=nFontHeight/20;
 
-            Set_UInt16( pArr, 0x4845 );
-            Set_UInt16( pArr, -((INT16)nHeight));
+                Set_UInt16( pArr, 0x4845 );
+                Set_UInt16( pArr, -((INT16)nHeight));
+            }
         }
     }
 
@@ -863,5 +871,3 @@ void SwWW8WrGrf::Write()
         }
     }
 }
-
-

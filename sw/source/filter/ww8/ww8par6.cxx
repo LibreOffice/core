@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-01 09:30:56 $
+ *  last change: $Author: cmc $ $Date: 2002-03-04 13:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,6 +541,11 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
         eDir = FRMDIR_HORI_RIGHT_TOP;
     if (eDir != FRMDIR_HORI_LEFT_TOP)
         rFmt.SetAttr(SvxFrameDirectionItem(eDir));
+
+    if (eDir == FRMDIR_VERT_TOP_RIGHT || eDir == FRMDIR_VERT_TOP_LEFT)
+        bVerticalEnviron=TRUE;
+    else
+        bVerticalEnviron=FALSE;
 }
 
 BOOL SwWW8ImplReader::SetCols( SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
@@ -697,7 +702,7 @@ void SwWW8ImplReader::SetPage1( SwPageDesc* pInPageDesc, SwFrmFmt &rFmt,
 
     short nWWLe = MSRoundTweak(ReadULSprm( pSep, pIds[3], nLef[nLIdx]));
     short nWWRi = MSRoundTweak(ReadULSprm( pSep, pIds[4], nRig[nLIdx]));
-    short nWWGu = MSRoundTweak(ReadULSprm( pSep, pIds[5], 0));
+    short nWWGu = ReadULSprm( pSep, pIds[5], 0);
 
     /*
     0x322A is set if the gutter is on the right, the gutter is otherwise
@@ -1386,15 +1391,23 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                     since only the very 1st line numbering settings are taken
                     into account anyway, see: bNoLnNum
                 */
-                static USHORT __READONLY_DATA aVer67Ids[ 13 ] =
-                    {136, 137, 138, 139, 142, 144, 145, 147, 152, 154, 155, 158, 160};//sortiert!
-                static USHORT __READONLY_DATA aVer8Ids[  14] =
-                    {0x3005, 0x3006, 0x3009, 0x300E, 0x3013, 0x3019, 0x3229, 0x500B, 0x5015, 0x501B,
-                     0x900C, 0x9016, 0xF203, 0xF204};//sortiert!
+                static USHORT __READONLY_DATA aVer67Ids[13] =
+                {
+                    //sortiert!
+                    136, 137, 138, 139, 142, 144, 145, 147, 152, 154, 155,
+                    158, 160
+                };
+                static USHORT __READONLY_DATA aVer8Ids[16] =
+                {
+                    //sortiert!
+                    0x3005, 0x3006, 0x3009, 0x300E, 0x3013, 0x3019, 0x3229,
+                    0x500B, 0x5015, 0x501B, 0x5026, 0x703A, 0x900C, 0x9016,
+                    0xF203, 0xF204
+                };
                 if( bVer67 )
-                    aIgnore.Insert( aVer67Ids, 13);
+                    aIgnore.Insert(aVer67Ids, 13);
                 else
-                    aIgnore.Insert( aVer8Ids,  14);
+                    aIgnore.Insert(aVer8Ids, 16);
             }
 
             // nachschauen, ob die nicht zu ignor. Attr. gleich sind
@@ -2701,10 +2714,16 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
 
     Put( SvxLRSpaceItem() ); //inline writer ole2 objects start with 0.2cm l/r
     SwFmtAnchor aAnchor( FLY_IN_CNTNT );
+
     aAnchor.SetAnchor( pPaM->GetPoint() );
     Put( aAnchor );
 
-    Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ));
+    //The horizontal default is on the baseline, the vertical is centered
+    //around the character center it appears
+    if (rReader.bVerticalEnviron)
+        Put(SwFmtVertOrient(0, VERT_CHAR_CENTER,REL_CHAR));
+    else
+        Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ));
 
     short aSizeArray[5]={0};
     /*

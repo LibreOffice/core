@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-01 09:50:36 $
+ *  last change: $Author: cmc $ $Date: 2002-03-04 13:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,6 +418,7 @@ class WW8ReaderSave
     BOOL bAnl           : 1;
     BOOL bInHyperlink : 1;
     BOOL bPgSecBreak : 1;
+    BOOL bVerticalEnviron :1;
 public:
     WW8ReaderSave( SwWW8ImplReader* pRdr, WW8_CP nStart=-1 );
     void Restore( SwWW8ImplReader* pRdr );
@@ -762,6 +763,7 @@ friend class WW8FormulaControl;
     BOOL bNoAttrImport;     // Attribute ignorieren zum Ignorieren v. Styles
     BOOL bInHyperlink;      // Sonderfall zum einlesen eines 0x01
                                    // siehe: SwWW8ImplReader::Read_F_Hyperlink()
+    BOOL bVerticalEnviron;
 
     // praktische Hilfsvariablen:
     BOOL bVer67;            // ( (6 == nVersion) || (7 == nVersion) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-04 09:50:19 $
+ *  last change: $Author: cmc $ $Date: 2002-03-04 13:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6188,7 +6188,8 @@ static SprmInfo aWwSprmTab[] = {
     0x845E, 2, L_FIX, // undoc, must be asian version of "sprmPDxaLeft"
     0x8460, 2, L_FIX, // undoc, must be asian version of "sprmPDxaLeft1"
     0x3615, 1, L_FIX, // undocumented
-    0x360D, 0, L_VAR  // undocumented
+    0x360D, 0, L_VAR, // undocumented
+    0x703A, 4, L_FIX  // undocumented, sep, perhaps related to textgrids ?
 };
 
 extern "C"
@@ -6329,13 +6330,32 @@ BOOL WW8PLCFx_SEPX::CompareSprms(const BYTE*  pOtherSprms, long nOtherSprmSiz,
                 const BYTE* pOtherSp =
                     HasSprm( nSpId, pOtherSprms, nOtherSprmSiz );
 
-                if( ( !pOtherSp ) ||
-                    (0 != memcmp( pSp + 1 + nDelta + WW8SprmDataOfs( nSpId ),
-                    pOtherSp, WW8GetSprmSize0( nSpId, pSp, nDelta ) ) ) )
-                {
+                if (!pOtherSp)
                     bRes = FALSE;
-                    break;
+                else
+                {
+                    const BYTE *pTst = pSp + 1 + nDelta + WW8SprmDataOfs(nSpId);
+                    //Allow a one twip fuzziness for the margins, word is
+                    //doing something very small but intriguing with its
+                    //rounding of these margins
+                    if (nSpId == 0xB021 || nSpId == 0xB022 ||
+                        nSpId == 0x9023 || nSpId == 0x9024 ||
+                        nSpId == 0xB017 || nSpId == 0xB018 )
+                    {
+                        short nOne = SVBT16ToShort(pTst);
+                        short nTwo = SVBT16ToShort(pOtherSp);
+                        if (abs(nOne-nTwo) > 1) //(perhaps ww8par2#nToleranz)
+                            bRes = FALSE;
+                    }
+                    else if (memcmp(pTst,pOtherSp,WW8GetSprmSize0(nSpId,pSp,
+                        nDelta)))
+                    {
+                        bRes = FALSE;
+                    }
                 }
+
+                if (!bRes)
+                    break;
             }
             // increase pointers, so it points to next sprm
             i += nSpLen;
