@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:57:07 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 07:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ TabPage RID_SVXPAGE_PICK_BULLET
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selección";
+        Text[ finnish ] = "Valinta";
     };
     Control VS_VALUES
     {
@@ -145,6 +146,7 @@ TabPage RID_SVXPAGE_PICK_SINGLE_NUM
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selección";
+        Text[ finnish ] = "Valinta";
     };
     Control VS_VALUES
     {
@@ -190,6 +192,7 @@ TabPage RID_SVXPAGE_PICK_NUM
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selección";
+        Text[ finnish ] = "Valinta";
     };
     Control VS_VALUES
     {
@@ -235,6 +238,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selección";
+        Text[ finnish ] = "Valinta";
     };
     Control VS_VALUES
     {
@@ -270,6 +274,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ turkish ] = "Grafiðe baðlantý oluþtur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Vincular imágenes";
+        Text[ finnish ] = "~Linkitä kuvat";
     };
     FixedText FT_ERROR
     {
@@ -299,6 +304,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ turkish ] = "'Madde iþaretleri' galeri konusu altýnda grafik mevcut deðil.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No hay imágenes en el tema 'Bullets' de la Galería.";
+        Text[ finnish ] = "Galleriateema \"Luettelomerkit\" on tyhjä (ei kuvia).";
     };
 };
 /**************************************************************************/
@@ -322,7 +328,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ italian ] = "Livello" ;
         Text [ portuguese_brazilian ] = "Nível" ;
         Text [ portuguese ] = "Nível" ;
-        Text [ finnish ] = "Taso" ;
+        Text [ finnish ] = "Taso " ;
         Text [ danish ] = "Niveau" ;
         Text [ french ] = "Niveau" ;
         Text [ swedish ] = "Nivå" ;
@@ -376,6 +382,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Format";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Formato";
+        Text[ finnish ] = "Muotoile";
     };
     FixedText FT_FMT
     {
@@ -403,6 +410,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Numaralama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nu~meración";
+        Text[ finnish ] = "~Numerointi";
     };
     ListBox LB_FMT
     {
@@ -707,17 +715,31 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     StringList [ catalan ] =
     {
-            < "1, 2, 3, ..." ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "A, B, C, ..." ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "a, b, c, ..." ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "I, II, III, ..." ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "i, ii, iii, ..." ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "A, .., AA, .., AAA, ..." ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "a, .., aa, .., aaa, ..." ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "Viñeta" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "Imagen" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "Imagen vinculada" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+            < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
+        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+        < "Viñeta" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "Imagen" ;                    8/*SVX_NUM_BITMAP              */; > ;
+        < "Imagen vinculada" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
         < "Ninguna" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "1, 2, 3, ... " ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "A, B, C, ... " ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "a, b, c, ..." ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "I, II, III, ... " ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "i, ii, iii, ... " ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "A, .., AA, .., AAA, ... " ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "a, .., aa, .., aaa, ..." ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "Luettelomerkki" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "Kuvat" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "Linkitetyt kuvat" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "Ei mitään" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
     };
     };
     FixedText FT_PREFIX
@@ -730,7 +752,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ italian ] = "~Davanti" ;
         Text [ portuguese_brazilian ] = "Antes" ;
         Text [ portuguese ] = "À fr~ente" ;
-        Text [ finnish ] = "Edellä" ;
+        Text [ finnish ] = "Ennen" ;
         Text [ danish ] = "Før" ;
         Text [ french ] = "De~vant" ;
         Text [ swedish ] = "Fra~mför" ;
@@ -769,7 +791,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ italian ] = "~Dietro" ;
         Text [ portuguese_brazilian ] = "Atrás" ;
         Text [ portuguese ] = "A~trás" ;
-        Text [ finnish ] = "Jäljessä" ;
+        Text [ finnish ] = "Jälkeen" ;
         Text [ danish ] = "Efter" ;
         Text [ french ] = "D~errière" ;
         Text [ swedish ] = "Ba~kom" ;
@@ -824,6 +846,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Karakter þablonu:";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
         Text[ catalan ] = "Es~tilo de carácter:";
+        Text[ finnish ] = "~Merkistön tyyli:";
     };
     ListBox LB_CHARFMT
     {
@@ -859,6 +882,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Renk:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Color:";
+        Text[ finnish ] = "Väri:";
     };
     ListBox LB_BUL_COLOR
     {
@@ -895,6 +919,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Orantýlý boyut:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tamaño relativo:";
+        Text[ finnish ] = "~Suhteellinen koko:";
     };
     MetricField MF_BUL_REL_SIZE
     {
@@ -922,7 +947,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ italian ] = "~Completa" ;
         Text [ portuguese_brazilian ] = "~Completar" ;
         Text [ portuguese ] = "Co~mpleto" ;
-        Text [ finnish ] = "~Täydellinen" ;
+        Text [ finnish ] = "Näytä alatasot" ;
         Text [ danish ] = "Fuldstændig" ;
         Text [ french ] = "~Complet" ;
         Text [ swedish ] = "F~ullständig" ;
@@ -966,7 +991,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ italian ] = "~Comincia con" ;
         Text [ portuguese_brazilian ] = "~Começar em" ;
         Text [ portuguese ] = "~Começar em" ;
-        Text [ finnish ] = "~Start at" ;
+        Text [ finnish ] = "Aloita kohdasta" ;
         Text [ danish ] = "Begynd med" ;
         Text [ french ] = "~Commencer à" ;
         Text [ swedish ] = "~Börja med" ;
@@ -1029,6 +1054,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Simgeyi görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar símbolo";
+        Text[ finnish ] = "Näytä symboli";
     };
     FixedText FT_ALIGN
     {
@@ -1058,6 +1084,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Hizalama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Alineación";
+        Text[ finnish ] = "~Tasaus";
     };
     ListBox LB_ALIGN
     {
@@ -1198,6 +1225,12 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         < "Centrado" ; > ;
         < "Derecha" ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Vasen" ; > ;
+        < "Keskitetty" ; > ;
+        < "Oikea" ; > ;
+    };
     };
     String STR_BULLET
     {
@@ -1261,6 +1294,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Grafik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imagen";
+        Text[ finnish ] = "Kuvat";
     };
     MenuButton MB_BITMAP
     {
@@ -1300,6 +1334,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
                     Text[ turkish ] = "Dosyadan...";
                     Text[ language_user1 ] = " ";
                     Text[ catalan ] = "De archivo...";
+                    Text[ finnish ] = "Tiedostosta";
                 };
                 MenuItem
                 {
@@ -1329,6 +1364,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Seçim...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selec~ción...";
+        Text[ finnish ] = "Valitse";
     };
     FixedText FT_SIZE
     {
@@ -1357,6 +1393,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Geniþlik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~ncho";
+        Text[ finnish ] = "Leveys";
     };
     MetricField MF_WIDTH
     {
@@ -1404,6 +1441,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Yükseklik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~ltura";
+        Text[ finnish ] = "Korkeus";
     };
     MetricField MF_HEIGHT
     {
@@ -1451,6 +1489,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Orantýlý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Sincronización";
+        Text[ finnish ] = "Säilytä suhde";
     };
     FixedText FT_ORIENT
     {
@@ -1479,6 +1518,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Hizalama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Orientación";
+        Text[ finnish ] = "Tasaus";
     };
     ListBox LB_ORIENT
     {
@@ -1752,6 +1792,18 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         < "Línea centro" ; > ;
         < "Línea inferior" ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Perusviivan yläosa" ; > ;
+        < "Perusviivan keskipiste" ; > ;
+        < "Perusviivan alaosa" ; > ;
+        < "Merkin yläosa" ; > ;
+        < "Merkin keskipiste" ; > ;
+        < "Merkin alaosa" ; > ;
+        < "Rivin yläosa" ; > ;
+        < "Rivin keskipiste" ; > ;
+        < "Viivan alaosa" ; > ;
+    };
     };
     GroupBox GB_SAME_LEVEL
     {
@@ -1779,6 +1831,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Tüm düzeyler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Todos los niveles";
+        Text[ finnish ] = "Kaikki tasot";
     };
     CheckBox CB_SAME_LEVEL
     {
@@ -1806,6 +1859,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Sürekli numaralama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Numeración c~onsecutiva";
+        Text[ finnish ] = "~Jatkuva numerointi";
     };
     GroupBox GB_PREVIEW
     {
@@ -1833,6 +1887,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Previsualización";
+        Text[ finnish ] = "Esikatselu";
     };
     Window WIN_PREVIEW
     {
@@ -1862,6 +1917,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
         Text[ arabic ] = "áÇ ÊæÌÏ ÃíÉ ÕæÑ Ýí ãæÖæÚ ÇáÌÇáíÑí 'Bullets'.";
         Text[ catalan ] = "No existen imágenes en el tema 'Viñetas' de la Gallery.";
+        Text[ finnish ] = "Galleriateemassa Luettelomerkit ei ole kuvia.";
     };
 
 };
@@ -1886,7 +1942,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ italian ] = "Livello" ;
         Text [ portuguese_brazilian ] = "Nível" ;
         Text [ portuguese ] = "Nível" ;
-        Text [ finnish ] = "Taso" ;
+        Text [ finnish ] = "Taso " ;
         Text [ danish ] = "Niveau" ;
         Text [ french ] = "Niveau" ;
         Text [ swedish ] = "Nivå" ;
@@ -1941,6 +1997,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Konum ve aralýk";
         Text[ catalan ] = "Posición y espacio";
+        Text[ finnish ] = "Sijainti ja välit";
     };
     FixedText FT_BORDERDIST
     {
@@ -1969,6 +2026,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ turkish ] = "Girinti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Sangría";
+        Text[ finnish ] = "Sisennä";
     };
     CheckBox CB_RELATIVE
     {
@@ -1996,6 +2054,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ turkish ] = "Göreceli";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Relati~vo";
+        Text[ finnish ] = "~Suhteellinen";
     };
     MetricField MF_BORDERDIST
     {
@@ -2042,6 +2101,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ turkish ] = "Metin uzaklýðý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Distancia al texto";
+        Text[ finnish ] = "Välit tekstiin";
     };
     MetricField MF_INDENT
     {
@@ -2087,6 +2147,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ turkish ] = "Asgari aralýk: Numara <-> Metin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Distancia mínima número <-> texto";
+        Text[ finnish ] = "Vähimmäistila numerointi <-> teksti";
     };
     MetricField MF_NUMDIST
     {
@@ -2133,6 +2194,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ turkish ] = "Numara hizalama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Alineación de numeración";
+        Text[ finnish ] = "~Numeroiden tasaus";
     };
     ListBox LB_ALIGN
     {
@@ -2272,6 +2334,12 @@ TabPage RID_SVXPAGE_NUM_POSITION
         < "Centrado" ; > ;
         < "Derecha" ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Vasen" ; > ;
+        < "Keskitetty" ; > ;
+        < "Oikea" ; > ;
+    };
     };
     PushButton PB_STANDARD
     {
@@ -2299,6 +2367,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
+        Text[ finnish ] = "Oletusarvo";
     };
     GroupBox GB_PREVIEW
     {
@@ -2326,6 +2395,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Previsualización";
+        Text[ finnish ] = "Esikatselu";
     };
     Window WIN_PREVIEW
     {
@@ -2342,7 +2412,7 @@ String RID_STR_EDIT_GRAPHIC
     Text [ italian ] = "Collega" ;
     Text [ portuguese_brazilian ] = "Ligação com" ;
     Text [ portuguese ] = "Ligar" ;
-    Text [ finnish ] = "Linkitä:" ;
+    Text [ finnish ] = "Linkki" ;
     Text [ danish ] = "Kæd" ;
     Text [ french ] = "Lien" ;
     Text [ swedish ] = "Länka" ;
