@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:06:13 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2844,7 +2844,10 @@ BOOL ScDocument::GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& n
         aItr++;
         while (aItr != aSet.end())
         {
-            if (aItr->nCount > aDefaultItr->nCount)
+            // for entries with equal count, use the one with the lowest start row,
+            // don't use the random order of pointer comparisons
+            if ( aItr->nCount > aDefaultItr->nCount ||
+                 ( aItr->nCount == aDefaultItr->nCount && aItr->nFirst < aDefaultItr->nFirst ) )
                 aDefaultItr = aItr;
             aItr++;
         }
@@ -3201,13 +3204,13 @@ void ScDocument::SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr,
 
 ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, BOOL bDeep )
 {
-    SfxItemSet* pSet = NULL;
+    ScMergePatternState aState;
 
     if ( rMark.IsMultiMarked() )                                // multi selection
     {
         for (SCTAB i=0; i<=MAXTAB; i++)
             if (pTab[i] && rMark.GetTableSelect(i))
-                pTab[i]->MergeSelectionPattern( &pSet, rMark, bDeep );
+                pTab[i]->MergeSelectionPattern( aState, rMark, bDeep );
     }
     if ( rMark.IsMarked() )                                     // simle selection
     {
@@ -3215,14 +3218,14 @@ ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, BOOL
         rMark.GetMarkArea(aRange);
         for (SCTAB i=0; i<=MAXTAB; i++)
             if (pTab[i] && rMark.GetTableSelect(i))
-                pTab[i]->MergePatternArea( &pSet,
+                pTab[i]->MergePatternArea( aState,
                                 aRange.aStart.Col(), aRange.aStart.Row(),
                                 aRange.aEnd.Col(), aRange.aEnd.Row(), bDeep );
     }
 
-    DBG_ASSERT( pSet, "SelectionPattern Null" );
-    if (pSet)
-        return new ScPatternAttr( pSet );
+    DBG_ASSERT( aState.pItemSet, "SelectionPattern Null" );
+    if (aState.pItemSet)
+        return new ScPatternAttr( aState.pItemSet );
     else
         return new ScPatternAttr( GetPool() );      // empty
 }
