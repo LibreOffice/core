@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logoimagestatusbarcontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 12:57:18 $
+ *  last change: $Author: obo $ $Date: 2005-03-16 14:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
@@ -173,28 +172,28 @@ throw ( RuntimeException )
 
 // XStatusbarController
 ::sal_Bool SAL_CALL LogoImageStatusbarController::mouseButtonDown(
-    const ::com::sun::star::awt::MouseEvent& aMouseEvent )
+    const awt::MouseEvent& aMouseEvent )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
 }
 
 ::sal_Bool SAL_CALL LogoImageStatusbarController::mouseMove(
-    const ::com::sun::star::awt::MouseEvent& aMouseEvent )
+    const awt::MouseEvent& aMouseEvent )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
 }
 
 ::sal_Bool SAL_CALL LogoImageStatusbarController::mouseButtonUp(
-    const ::com::sun::star::awt::MouseEvent& aMouseEvent )
+    const awt::MouseEvent& aMouseEvent )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
 }
 
 void SAL_CALL LogoImageStatusbarController::command(
-    const ::com::sun::star::awt::Point& aPos,
+    const awt::Point& aPos,
     ::sal_Int32 nCommand,
     ::sal_Bool bMouseEvent,
     const ::com::sun::star::uno::Any& aData )
@@ -204,8 +203,8 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 void SAL_CALL LogoImageStatusbarController::paint(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics,
-    const ::com::sun::star::awt::Rectangle& rOutputRectangle,
+    const ::com::sun::star::uno::Reference< awt::XGraphics >& xGraphics,
+    const awt::Rectangle& rOutputRectangle,
     ::sal_Int32 nItemId,
     ::sal_Int32 nStyle )
 throw (::com::sun::star::uno::RuntimeException)
