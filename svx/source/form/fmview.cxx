@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:58:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,9 +682,9 @@ SdrObject* FmFormView::CreateFieldControl( const ODataAccessDescriptor& _rColumn
 }
 
 //------------------------------------------------------------------------
-SdrObject* FmFormView::CreateXFormsControl()
+SdrObject* FmFormView::CreateXFormsControl( const OXFormsDescriptor &_rDesc )
 {
-    return pImpl->implCreateXFormsControl();
+    return pImpl->implCreateXFormsControl(_rDesc);
 }
 
 //------------------------------------------------------------------------
