@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prcntfld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: os $ $Date: 2001-03-15 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ void PercentField::SetRefValue(long nValue)
     nRefValue = nValue;
 
     if (GetUnit() == FUNIT_CUSTOM)
-        SetValue(nRealValue, eOldUnit);
+        SetPrcntValue(nRealValue, eOldUnit);
 }
 
 /*--------------------------------------------------------------------
@@ -148,12 +148,12 @@ void PercentField::ShowPercent(BOOL bPercent)
         {
             nAktWidth = ConvertValue(nOldValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
             nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
-            MetricField::SetValue(nPercent);
+            MetricFormatter::SetValue(nPercent);
             nLastPercent = nPercent;
             nLastValue = nOldValue;
         }
         else
-            MetricField::SetValue(nLastPercent);
+            MetricFormatter::SetValue(nLastPercent);
 //      SetValue(100, FUNIT_CUSTOM);
     }
     else
@@ -175,23 +175,29 @@ void PercentField::ShowPercent(BOOL bPercent)
 
         if (nOldPercent != nLastPercent)
         {
-            SetValue(nOldValue, eOldUnit);
+            SetPrcntValue(nOldValue, eOldUnit);
             nLastPercent = nOldPercent;
             nLastValue = nOldValue;
         }
         else
-            SetValue(nLastValue, eOldUnit);
+            SetPrcntValue(nLastValue, eOldUnit);
     }
 }
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
 void PercentField::SetValue(long nNewValue, FieldUnit eInUnit)
 {
+   MetricFormatter::SetValue(nNewValue, eInUnit);
+}
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+void PercentField::SetPrcntValue(long nNewValue, FieldUnit eInUnit)
+{
     if (GetUnit() != FUNIT_CUSTOM || eInUnit == FUNIT_CUSTOM)
-        MetricField::SetValue(Convert(nNewValue, eInUnit, GetUnit()));
+        MetricFormatter::SetValue(Convert(nNewValue, eInUnit, GetUnit()));
 
     else
     {
@@ -207,7 +213,7 @@ void PercentField::SetValue(long nNewValue, FieldUnit eInUnit)
             nAktWidth = ConvertValue(nValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
         }
         nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
-        MetricField::SetValue(nPercent);
+        MetricFormatter::SetValue(nPercent);
     }
 }
 
@@ -409,6 +415,9 @@ long PercentField::Convert(long nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:50  hr
+      initial import
+
       Revision 1.21  2000/09/18 16:06:19  willem.vandorp
       OpenOffice header added.
 

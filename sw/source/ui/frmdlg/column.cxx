@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-25 15:00:36 $
+ *  last change: $Author: os $ $Date: 2001-03-15 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -952,7 +952,7 @@ IMPL_LINK( SwColumnPage, GapModify, PercentField *, pFld )
         if(nActValue > nMaxGap)
         {
             nActValue = nMaxGap;
-            aDistEd1.SetValue(aDistEd1.Normalize(nMaxGap), FUNIT_TWIP);
+            aDistEd1.SetPrcntValue(aDistEd1.Normalize(nMaxGap), FUNIT_TWIP);
         }
         pColMgr->SetGutterWidth((USHORT)nActValue);
         for(USHORT i = 0; i < nCols; i++)
@@ -1137,13 +1137,13 @@ void SwColumnPage::Update()
     aBalanceColsCB.Enable(nCols > 1);
     if(nCols >= 2)
     {
-        aEd1.SetValue(aEd1.Normalize(nColWidth[nFirstVis]), FUNIT_TWIP);
-        aDistEd1.SetValue(aDistEd1.Normalize(nColDist[nFirstVis]), FUNIT_TWIP);
-        aEd2.SetValue(aEd2.Normalize(nColWidth[nFirstVis + 1]), FUNIT_TWIP);
+        aEd1.SetPrcntValue(aEd1.Normalize(nColWidth[nFirstVis]), FUNIT_TWIP);
+        aDistEd1.SetPrcntValue(aDistEd1.Normalize(nColDist[nFirstVis]), FUNIT_TWIP);
+        aEd2.SetPrcntValue(aEd2.Normalize(nColWidth[nFirstVis + 1]), FUNIT_TWIP);
         if(nCols >= 3)
         {
-            aDistEd2.SetValue(aDistEd2.Normalize(nColDist[nFirstVis + 1]), FUNIT_TWIP);
-            aEd3.SetValue(aEd3.Normalize(nColWidth[nFirstVis + 2]), FUNIT_TWIP);
+            aDistEd2.SetPrcntValue(aDistEd2.Normalize(nColDist[nFirstVis + 1]), FUNIT_TWIP);
+            aEd3.SetPrcntValue(aEd3.Normalize(nColWidth[nFirstVis + 2]), FUNIT_TWIP);
         }
         else
         {
@@ -1282,7 +1282,7 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
     {
         aCLNrEdt.SetValue( nItem );
         aAutoWidthBox.Check();
-        aDistEd1.SetValue(0);
+        aDistEd1.SetPrcntValue(0);
         ColModify(0);
     }
     else
@@ -1290,18 +1290,18 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
         bLockUpdate = TRUE;
         aCLNrEdt.SetValue( 2 );
         aAutoWidthBox.Check(FALSE);
-        aDistEd1.SetValue(0);
+        aDistEd1.SetPrcntValue(0);
         ColModify(0);
         // jetzt noch das Breitenverhaeltnisse auf 2 : 1 bzw. 1 : 2 stellen
         USHORT nSmall = pColMgr->GetActualSize()  / 3;
         if(nItem == 4)
         {
-            aEd2.SetValue(aEd2.Normalize(long(nSmall)), FUNIT_TWIP);
+            aEd2.SetPrcntValue(aEd2.Normalize(long(nSmall)), FUNIT_TWIP);
             pModifiedField = &aEd2;
         }
         else
         {
-            aEd1.SetValue(aEd1.Normalize(long(nSmall)), FUNIT_TWIP);
+            aEd1.SetPrcntValue(aEd1.Normalize(long(nSmall)), FUNIT_TWIP);
             pModifiedField = &aEd1;
         }
         bLockUpdate = FALSE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:49:14 $
+ *  last change: $Author: os $ $Date: 2001-03-15 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1833,7 +1833,7 @@ IMPL_LINK( SwFrmPage, ModifyHdl, Edit *, pEdit )
                 aHeightED.GetRefValue() * ( aHeightED.GetOldDigits() == 1 ? 10 : 100):
                             aHeightED.GetMax(FUNIT_TWIP);
             if(nMaxHeight >= nTmp)
-                aHeightED.SetValue(nTmp, FUNIT_TWIP);
+                aHeightED.SetPrcntValue(nTmp, FUNIT_TWIP);
             else
             {
                 //cut selected width
@@ -1855,7 +1855,7 @@ IMPL_LINK( SwFrmPage, ModifyHdl, Edit *, pEdit )
                             aWidthED.GetRefValue() * (aWidthED.GetOldDigits()== 1 ? 10 : 100):
                             aWidthED.GetMax(FUNIT_TWIP);
             if(nMaxWidth >= nTmp)
-                aWidthED.SetValue(nTmp, FUNIT_TWIP);
+                aWidthED.SetPrcntValue(nTmp, FUNIT_TWIP);
             else
             {
                 //cut selected height
@@ -1938,7 +1938,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
             aWidthED.SetUserValue(nWidth, FUNIT_TWIP);
         }
         else
-            aWidthED.SetValue(nWidth, FUNIT_TWIP);
+            aWidthED.SetPrcntValue(nWidth, FUNIT_TWIP);
     }
 
     if (nHeight != aHeightED.GetValue(FUNIT_TWIP))
@@ -1950,7 +1950,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
             aHeightED.SetUserValue(nHeight, FUNIT_TWIP);
         }
         else
-            aHeightED.SetValue(nHeight, FUNIT_TWIP);
+            aHeightED.SetPrcntValue(nHeight, FUNIT_TWIP);
     }
 
     if (nDlgType != DLG_FRM_GRF && nDlgType != DLG_FRM_OLE)
@@ -2040,14 +2040,14 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
     {
         aRelWidthCB.Check(TRUE);
         RelSizeClickHdl(&aRelWidthCB);
-        aWidthED.SetValue(rSize.GetWidthPercent(), FUNIT_CUSTOM);
+        aWidthED.SetPrcntValue(rSize.GetWidthPercent(), FUNIT_CUSTOM);
     }
     if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != 0xff &&
         !aRelHeightCB.IsChecked())
     {
         aRelHeightCB.Check(TRUE);
         RelSizeClickHdl(&aRelHeightCB);
-        aHeightED.SetValue(rSize.GetHeightPercent(), FUNIT_CUSTOM);
+        aHeightED.SetPrcntValue(rSize.GetHeightPercent(), FUNIT_CUSTOM);
     }
     aRelWidthCB.SaveValue();
     aRelHeightCB.SaveValue();
