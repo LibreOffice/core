@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-19 12:08:10 $
+ *  last change: $Author: aw $ $Date: 2001-04-25 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,8 @@ SfxItemPropertyMap* ImplGetSvxShapePropertyMap()
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
+        // #FontWork#
+        FONTWORK_PROPERTIES
         AUTOSHAPE_PROPERTIES
         {0,0,0,0,0}
     };
@@ -133,6 +135,8 @@ SfxItemPropertyMap* ImplGetSvxConnectorPropertyMap()
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
+        // #FontWork#
+        FONTWORK_PROPERTIES
         {0,0,0,0,0}
     };
 
@@ -153,6 +157,8 @@ SfxItemPropertyMap* ImplGetSvxDimensioningPropertyMap()
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
+        // #FontWork#
+        FONTWORK_PROPERTIES
         {0,0,0,0,0}
     };
 
@@ -173,6 +179,8 @@ SfxItemPropertyMap* ImplGetSvxCirclePropertyMap()
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
+        // #FontWork#
+        FONTWORK_PROPERTIES
         AUTOSHAPE_PROPERTIES
         {0,0,0,0,0}
     };
@@ -195,6 +203,8 @@ SfxItemPropertyMap* ImplGetSvxPolyPolygonPropertyMap()
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
+        // #FontWork#
+        FONTWORK_PROPERTIES
         AUTOSHAPE_PROPERTIES
         {0,0,0,0,0}
     };
@@ -217,6 +227,8 @@ SfxItemPropertyMap* ImplGetSvxPolyPolygonBezierPropertyMap()
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
+        // #FontWork#
+        FONTWORK_PROPERTIES
         AUTOSHAPE_PROPERTIES
         {0,0,0,0,0}
     };
@@ -236,6 +248,8 @@ SfxItemPropertyMap* ImplGetSvxGraphicObjectPropertyMap()
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
+        // #FontWork#
+        FONTWORK_PROPERTIES
         { MAP_CHAR_LEN("IsMirrored"),               OWN_ATTR_MIRRORED           , &::getCppuBooleanType(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         {0,0,0,0,0}
     };
@@ -367,6 +381,8 @@ SfxItemPropertyMap* ImplGetSvxAllPropertyMap()
         FILL_PROPERTIES
         EDGERADIUS_PROPERTIES
         TEXT_PROPERTIES
+        // #FontWork#
+        FONTWORK_PROPERTIES
         SHAPE_DESCRIPTOR_PROPERTIES
         MISC_OBJ_PROPERTIES
         LINKTARGET_PROPERTIES
