@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestReader.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:24:12 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,7 @@ public:
     // Component constructor
     static ::rtl::OUString static_getImplementationName();
     static ::com::sun::star::uno::Sequence < ::rtl::OUString > static_getSupportedServiceNames();
+    sal_Bool SAL_CALL static_supportsService(rtl::OUString const & rServiceName);
     static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > createServiceFactory( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory );
-    virtual sal_Bool SAL_CALL static_supportsService(rtl::OUString const & rServiceName)
-        throw (com::sun::star::uno::RuntimeException);
 };
 #endif
