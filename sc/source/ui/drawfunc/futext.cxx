@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 18:00:14 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "ui_pch.hxx"
 #endif
@@ -256,6 +255,7 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
             else
             {
                 // disable tail & circular move for caption objects.
+                bool bDrag = false;
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( rMarkList.GetMarkCount() == 1 )
                 {
@@ -263,17 +263,18 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     if( pObj && pObj->ISA( SdrCaptionObj) && pObj->GetLayer() == SC_LAYER_INTERN)
                     {
                         if(pHdl->GetKind() != HDL_POLY && pHdl->GetKind() != HDL_CIRC)
-                        {
-                              aDragTimer.Start();
-                            pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
-                        }
+                            bDrag = true;
                     }
                     else
-                    {
+                        bDrag = true;   // different object
+                }
+                else
+                    bDrag = true;       // several objects
 
-                        aDragTimer.Start();
-                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
-                        }
+                if ( bDrag )
+                {
+                    aDragTimer.Start();
+                    pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
                 }
             }
         }
