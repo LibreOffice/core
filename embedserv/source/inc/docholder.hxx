@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:10:33 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ private:
     ::com::sun::star::uno::Reference<
     ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
+    RECT                          m_aBorder;
 
     // contains top level system window data
     bool                          m_bOnDeactivate;
@@ -214,6 +215,7 @@ public:
 
     IDispatch* GetIDispatch();
 
+    HRESULT GetDocumentBorder( RECT *pRect );
     HRESULT SetVisArea( const RECTL *pRect );
     HRESULT GetVisArea( RECTL *pRect );
     HRESULT SetExtent( const SIZEL *pSize );
