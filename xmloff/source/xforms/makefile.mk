@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 10:15:47 $
+#   last change: $Author: rt $ $Date: 2005-01-11 14:30:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+.INCLUDE: $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
