@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:06:29 $
+ *  last change: $Author: os $ $Date: 2001-11-01 07:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,8 +539,6 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 135 , 106 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
-        DeltaLang = < Default ; Default ; Default ; Default ; > ;
-        DeltaLang [ ENGLISH ] = < Default ; Default ; 19 ; Default ; > ;
         Text = "E~xemplare" ;
         Text [ ENGLISH ] = "Number of ~copies" ;
         Text [ english_us ] = "Number of copies" ;
@@ -570,8 +568,6 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Border = TRUE ;
         Pos = MAP_APPFONT ( 201 , 105 ) ;
         Size = MAP_APPFONT ( 39 , 12 ) ;
-        DeltaLang = < Default ; Default ; Default ; Default ; > ;
-        DeltaLang [ ENGLISH ] = < 1 ; Default ; -1 ; Default ; > ;
         Repeat = TRUE ;
         Spin = TRUE ;
         Minimum = 1 ;
@@ -584,8 +580,6 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 201 , 123 ) ;
         Size = MAP_APPFONT ( 47 , 10 ) ;
-        DeltaLang = < Default ; Default ; Default ; Default ; > ;
-        DeltaLang [ ENGLISH ] = < 2 ; Default ; Default ; Default ; > ;
         Text = "S~ortieren" ;
         Text [ ENGLISH ] = "C~ollate" ;
         Text [ english_us ] = "Co~llate" ;
