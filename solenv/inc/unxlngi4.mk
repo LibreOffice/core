@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2001-12-21 12:24:32 $
+#   last change: $Author: hjs $ $Date: 2002-01-11 17:50:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -193,6 +193,8 @@ STDLIBGUIST=-lX11 -ldl -lm
 # libraries for linking shared libraries
 STDSHLGUIMT=-lX11 -lXext -ldl -lpthread -lm
 STDSHLCUIMT=-ldl -lpthread -lm
+STDSHLGUIST=-lX11 -lXext -ldl -lm
+STDSHLCUIST=-ldl -lm
 
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc -lstdc++
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)

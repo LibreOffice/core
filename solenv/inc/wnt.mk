@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2001-12-11 10:03:26 $
+#   last change: $Author: hjs $ $Date: 2002-01-11 17:50:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -476,6 +476,8 @@ STDLIBGUIST=$(LIBCMT) kernel32.lib user32.lib oldnames.lib
 STDLIBCUIST=$(LIBCMT) kernel32.lib user32.lib oldnames.lib
 STDLIBGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 STDLIBCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
+STDSHLGUIST=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
+STDSHLCUIST=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 STDSHLGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 STDSHLCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 .ELSE
@@ -483,6 +485,8 @@ STDLIBGUIST=libc.lib kernel32.lib user32.lib oldnames.lib
 STDLIBCUIST=libc.lib kernel32.lib user32.lib oldnames.lib
 STDLIBGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 STDLIBCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
+STDSHLGUIST=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
+STDSHLCUIST=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 STDSHLGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 STDSHLCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 .ENDIF
