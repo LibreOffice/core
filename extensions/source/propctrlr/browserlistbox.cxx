@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserlistbox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:03:53 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,7 +494,7 @@ namespace pcr
     // #95343# ---------------------------------------------------------
     sal_Int32 OBrowserListBox::GetMinimumWidth()
     {
-        return m_nTheNameSize + 2 * FRAME_OFFSET + (m_nRowHeight - 4) * 10;
+        return m_nTheNameSize + 2 * FRAME_OFFSET + (m_nRowHeight - 4) * 8;
     }
 
     //------------------------------------------------------------------
