@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-22 11:33:49 $
+ *  last change: $Author: hr $ $Date: 2001-10-31 14:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,10 @@ using namespace ::__cxxabiv1;
 
 namespace CPPU_CURRENT_NAMESPACE
 {
+
+void dummy_can_throw_anything( char const * )
+{
+}
 
 //==================================================================================================
 static OUString toUNOname( char const * p ) SAL_THROW( () )
