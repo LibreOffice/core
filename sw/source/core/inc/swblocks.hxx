@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-08 15:55:07 $
+ *  last change: $Author: mib $ $Date: 2001-04-27 15:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@ public:
     virtual ULONG Rename( USHORT, const String&, const String& ) = 0;
     virtual ULONG CopyBlock( SwImpBlocks& rImp, String& rShort, const String& rLong) = 0;
     virtual ULONG GetDoc( USHORT ) = 0;
+    virtual ULONG GetDocForConversion( USHORT );
     virtual ULONG BeginPutDoc( const String&, const String& ) = 0;
     virtual ULONG PutDoc() = 0;
     virtual ULONG GetText( USHORT, String& ) = 0;
@@ -241,6 +242,7 @@ public:
     virtual ULONG Rename( USHORT, const String&, const String& );
     virtual ULONG CopyBlock( SwImpBlocks& rImp, String& rShort, const String& rLong);
     virtual ULONG GetDoc( USHORT );
+    virtual ULONG GetDocForConversion( USHORT );
     virtual ULONG BeginPutDoc( const String&, const String& );
     virtual ULONG PutDoc();
     virtual void SetDoc( SwDoc * pNewDoc);

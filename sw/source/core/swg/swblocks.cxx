@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-18 18:31:14 $
+ *  last change: $Author: mib $ $Date: 2001-04-27 15:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,11 @@ SwImpBlocks::~SwImpBlocks()
 void SwImpBlocks::ClearDoc()
 {
     pDoc->ClearDoc();
+}
+
+ULONG SwImpBlocks::GetDocForConversion( USHORT n )
+{
+    return GetDoc( n );
 }
 
 // Erzeugen eines PaMs, der das ganze Dokument umfasst
@@ -517,7 +522,7 @@ ULONG SwTextBlocks::ConvertToNew()
                             // I think this is how it should work (!!!!!!) mtg
                             pNew->pDoc->SetPersist( pPersist2 );
                         }
-                        nErr = pOld->GetDoc( i );
+                        nErr = pOld->GetDocForConversion( i );
                         if( nErr )
                             break;
                         nErr = pNew->BeginPutDoc( aShort, aLong );
