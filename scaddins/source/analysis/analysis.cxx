@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:17:27 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,18 +875,17 @@ double SAL_CALL AnalysisAddIn::getSqrtpi( double fNum ) THROWDEF_RTE_IAE
 
 double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) THROWDEF_RTE_IAE
 {
-    const rtl_math_RoundingMode eRM = rtl_math_RoundingMode_Up;
-    fMin = ::rtl::math::round( fMin, 0, eRM );
-    fMax = ::rtl::math::round( fMax, 0, eRM );
-
+    fMin = ::rtl::math::round( fMin, 0, rtl_math_RoundingMode_Up );
+    fMax = ::rtl::math::round( fMax, 0, rtl_math_RoundingMode_Up );
     if( fMin > fMax )
         THROW_IAE;
 
     // fMax -> range
-    fMax -= fMin;
-    fMax /= double( RAND_MAX );
-
-    double fRet = ::rtl::math::round( fMin + fMax * double( rand() ) );
+    double fRet = fMax - fMin + 1.0;
+    fRet *= rand();
+    fRet /= (RAND_MAX + 1.0);
+    fRet += fMin;
+    fRet = floor( fRet );   // simple floor is sufficient here
     RETURN_FINITE( fRet );
 }
 
@@ -982,110 +981,112 @@ double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROW
     RETURN_FINITE( fRet );
 }
 
-//TODO none of the numeric suffixes to the definitions below make sense.
-//TODO:  Should not use _ as an application prefix, reserved for compiler.
-#define _P      10                  // max. number of places
 
-//              -0x200
-#define _MIN2   -512                // min. val for binary numbers
-
-//              0x1FF
-#define _MAX2   511                 // min. val for binary numbers
-
-//              -0x20000000
-#define _MIN8   -536870912          // min. val for octal numbers
-
-//              0x1FFFFFFF
-#define _MAX8   536870911           // max. val for octal numbers
-
-//              -0x10000000000
-#define _MIN16  SAL_CONST_INT64(-1099511627776) // min. val for hexadecimal numbers
-
-//              0xFFFFFFFFFF
-#define _MAX16  SAL_CONST_INT64(1099511627775)  // max. val for hexadecimal numbers
-
-
-#define GETPLACES()                 aAnyConv.getInt32(xOpt,rPlaces,sal_Int32(0x80000000))
-
-//   within the following macro takes _MIN and adds the second parameter to
-//   create a second macro call eg:
-//       DOUBLECONV( 2, 8 )  resolves to _MIN8, which resolves to 536870911
-
-#define DOUBLECONV(from,to)         ConvertFromDec(sal_Int64(ConvertToDec(aNum,from,_P)),_MIN##to,_MAX##to,to,GETPLACES(),_P)
+const double    SCA_MAX2        = 511.0;            // min. val for binary numbers (9 bits + sign)
+const double    SCA_MIN2        = -SCA_MAX2-1.0;    // min. val for binary numbers (9 bits + sign)
+const double    SCA_MAX8        = 536870911.0;      // max. val for octal numbers (29 bits + sign)
+const double    SCA_MIN8        = -SCA_MAX8-1.0;    // min. val for octal numbers (29 bits + sign)
+const double    SCA_MAX16       = 549755813888.0;   // max. val for hexadecimal numbers (39 bits + sign)
+const double    SCA_MIN16       = -SCA_MAX16-1.0;   // min. val for hexadecimal numbers (39 bits + sign)
+const sal_Int32 SCA_MAXPLACES   = 10;               // max. number of places
 
 
 STRING SAL_CALL AnalysisAddIn::getBin2Oct( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
-    return DOUBLECONV( 2, 8 );
+    double fVal = ConvertToDec( aNum, 2, SCA_MAXPLACES );
+    sal_Int32 nPlaces = 0;
+    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    return ConvertFromDec( fVal, SCA_MIN8, SCA_MAX8, 8, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
 
 double SAL_CALL AnalysisAddIn::getBin2Dec( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    double fRet = ConvertToDec( aNum, 2, _P );
+    double fRet = ConvertToDec( aNum, 2, SCA_MAXPLACES );
     RETURN_FINITE( fRet );
 }
 
 
 STRING SAL_CALL AnalysisAddIn::getBin2Hex( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
-    return DOUBLECONV( 2, 16 );
+    double fVal = ConvertToDec( aNum, 2, SCA_MAXPLACES );
+    sal_Int32 nPlaces = 0;
+    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    return ConvertFromDec( fVal, SCA_MIN16, SCA_MAX16, 16, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
 
 STRING SAL_CALL AnalysisAddIn::getOct2Bin( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
-    return DOUBLECONV( 8, 2 );
+    double fVal = ConvertToDec( aNum, 8, SCA_MAXPLACES );
+    sal_Int32 nPlaces = 0;
+    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    return ConvertFromDec( fVal, SCA_MIN2, SCA_MAX2, 2, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
 
 double SAL_CALL AnalysisAddIn::getOct2Dec( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    double fRet = ConvertToDec( aNum, 8, _P );
+    double fRet = ConvertToDec( aNum, 8, SCA_MAXPLACES );
     RETURN_FINITE( fRet );
 }
 
 
 STRING SAL_CALL AnalysisAddIn::getOct2Hex( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
-    return DOUBLECONV( 8, 16 );
+    double fVal = ConvertToDec( aNum, 8, SCA_MAXPLACES );
+    sal_Int32 nPlaces = 0;
+    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    return ConvertFromDec( fVal, SCA_MIN16, SCA_MAX16, 16, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
 
 STRING SAL_CALL AnalysisAddIn::getDec2Bin( constREFXPS& xOpt, sal_Int32 nNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
-    return ConvertFromDec( nNum, _MIN2, _MAX2, 2, GETPLACES(), _P );
+    sal_Int32 nPlaces = 0;
+    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    return ConvertFromDec( nNum, SCA_MIN2, SCA_MAX2, 2, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
 
 STRING SAL_CALL AnalysisAddIn::getDec2Oct( constREFXPS& xOpt, sal_Int32 nNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
-    return ConvertFromDec( nNum, _MIN8, _MAX8, 8, GETPLACES(), _P );
+    sal_Int32 nPlaces = 0;
+    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    return ConvertFromDec( nNum, SCA_MIN8, SCA_MAX8, 8, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
 
 STRING SAL_CALL AnalysisAddIn::getDec2Hex( constREFXPS& xOpt, double fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
-    return ConvertFromDec( sal_Int64( fNum ), _MIN16, _MAX16, 16, GETPLACES(), _P );
+    sal_Int32 nPlaces = 0;
+    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    return ConvertFromDec( fNum, SCA_MIN16, SCA_MAX16, 16, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
 
 STRING SAL_CALL AnalysisAddIn::getHex2Bin( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
-    return DOUBLECONV( 16, 2 );
+    double fVal = ConvertToDec( aNum, 16, SCA_MAXPLACES );
+    sal_Int32 nPlaces = 0;
+    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    return ConvertFromDec( fVal, SCA_MIN2, SCA_MAX2, 2, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
 
 double SAL_CALL AnalysisAddIn::getHex2Dec( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    double fRet = ConvertToDec( aNum, 16, _P );
+    double fRet = ConvertToDec( aNum, 16, SCA_MAXPLACES );
     RETURN_FINITE( fRet );
 }
 
 
 STRING SAL_CALL AnalysisAddIn::getHex2Oct( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
 {
-    return DOUBLECONV( 16, 8 );
+    double fVal = ConvertToDec( aNum, 16, SCA_MAXPLACES );
+    sal_Int32 nPlaces = 0;
+    sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
+    return ConvertFromDec( fVal, SCA_MIN8, SCA_MAX8, 8, nPlaces, SCA_MAXPLACES, bUsePlaces );
 }
 
 
