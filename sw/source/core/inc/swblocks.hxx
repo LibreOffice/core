@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:28:45 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,7 @@
 #define _SWBLOCKS_HXX
 
 #ifndef _DATE_HXX //autogen
-#include <tools/date.hxx>
-#endif
-#ifndef _PERSIST_HXX //autogen
-#include <so3/persist.hxx>
+#include <tools/datetime.hxx>
 #endif
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
@@ -177,6 +174,7 @@ public:
     virtual BOOL PutMuchEntries( BOOL bOn );
 };
 
+/*
 class Sw3Persist : public SvPersist
 {
     virtual void FillClass( SvGlobalName * pClassName,
@@ -184,7 +182,7 @@ class Sw3Persist : public SvPersist
                             String * pAppName,
                             String * pLongUserName,
                             String * pUserName,
-                            long nFileFormat=SOFFICE_FILEFORMAT_CURRENT ) const;
+                            sal_Int32 nFileFormat=SOFFICE_FILEFORMAT_CURRENT ) const;
     virtual BOOL Save();
     virtual BOOL SaveCompleted( SvStorage * );
 public:
@@ -270,5 +268,5 @@ public:
 
     void ReadInfo();
 };
-
+*/
 #endif
