@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.40 2001-02-28 11:03:05 mtg Exp $
+	$Id: drawing.mod,v 1.41 2001-03-09 12:27:27 mtg Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -720,7 +720,7 @@
 <!ATTLIST draw:applet draw:object CDATA #IMPLIED>
 <!ATTLIST draw:applet draw:archive CDATA #IMPLIED>
 <!ATTLIST draw:applet draw:mayscript %boolean; "false">
-<!ATTLIST draw:applet office:name CDATA #IMPLIED>
+<!ATTLIST draw:applet draw:name CDATA #IMPLIED>
 <!ATTLIST draw:applet %draw-style-name;>
 <!ATTLIST draw:applet svg:width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:applet svg:height %lengthOrPercentage; #IMPLIED>
@@ -736,7 +736,7 @@
 <!ATTLIST draw:plugin xlink:show (new|replace) #IMPLIED>
 <!ATTLIST draw:plugin xlink:actuate (onRequest) #IMPLIED>
 <!ATTLIST draw:plugin draw:mimetype CDATA #REQUIRED>
-<!ATTLIST draw:plugin office:name CDATA #IMPLIED>
+<!ATTLIST draw:plugin draw:name CDATA #IMPLIED>
 <!ATTLIST draw:plugin %draw-style-name;>
 <!ATTLIST draw:plugin svg:width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:plugin svg:height %lengthOrPercentage; #IMPLIED>
@@ -747,7 +747,7 @@
 
 <!-- Paramaters -->
 <!ELEMENT draw:param EMPTY>
-<!ATTLIST draw:param office:name CDATA #IMPLIED>
+<!ATTLIST draw:param draw:name CDATA #IMPLIED>
 <!ATTLIST draw:param draw:name CDATA #IMPLIED>
 
 <!-- Floating Frames -->
@@ -756,7 +756,7 @@
 <!ATTLIST draw:floating-frame xlink:type (simple) #IMPLIED>
 <!ATTLIST draw:floating-frame xlink:show (new|replace) #IMPLIED>
 <!ATTLIST draw:floating-frame xlink:actuate (onRequest) #IMPLIED>
-<!ATTLIST draw:floating-frame office:name CDATA #IMPLIED>
+<!ATTLIST draw:floating-frame draw:name CDATA #IMPLIED>
 <!ATTLIST draw:floating-frame %draw-style-name;>
 <!ATTLIST draw:floating-frame svg:width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:floating-frame svg:height %lengthOrPercentage; #IMPLIED>
