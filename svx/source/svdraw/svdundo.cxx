@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:01:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ FASTBOOL SdrUndoGroup::CanSdrRepeat(SdrView& rView) const
 {
     switch (eFunction) {
         case SDRREPFUNC_OBJ_NONE            :  return FALSE;
-        case SDRREPFUNC_OBJ_DELETE          :  return rView.HasMarkedObj();
+        case SDRREPFUNC_OBJ_DELETE          :  return rView.AreObjectsMarked();
         case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  return rView.IsCombinePossible(FALSE);
         case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  return rView.IsCombinePossible(TRUE);
         case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  return rView.IsDismantlePossible(FALSE);
@@ -603,7 +603,7 @@ void SdrUndoAttrObj::SdrRepeat(SdrView& rView)
 
 FASTBOOL SdrUndoAttrObj::CanSdrRepeat(SdrView& rView) const
 {
-    return (pRepeatSet!=0L && rView.HasMarkedObj());
+    return (pRepeatSet!=0L && rView.AreObjectsMarked());
 }
 
 XubString SdrUndoAttrObj::GetSdrRepeatComment(SdrView& rView) const
@@ -654,7 +654,7 @@ void SdrUndoMoveObj::SdrRepeat(SdrView& rView)
 
 FASTBOOL SdrUndoMoveObj::CanSdrRepeat(SdrView& rView) const
 {
-    return rView.HasMarkedObj();
+    return rView.AreObjectsMarked();
 }
 
 XubString SdrUndoMoveObj::GetSdrRepeatComment(SdrView& rView) const
@@ -927,7 +927,7 @@ void SdrUndoDelObj::SdrRepeat(SdrView& rView)
 
 FASTBOOL SdrUndoDelObj::CanSdrRepeat(SdrView& rView) const
 {
-    return rView.HasMarkedObj();
+    return rView.AreObjectsMarked();
 }
 
 XubString SdrUndoDelObj::GetSdrRepeatComment(SdrView& rView) const
@@ -1219,8 +1219,8 @@ XubString SdrUndoObjSetText::GetSdrRepeatComment(SdrView& rView) const
 
 void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
 {
-    if (bNewTextAvailable && rView.HasMarkedObj()) {
-        const SdrMarkList& rML=rView.GetMarkList();
+    if (bNewTextAvailable && rView.AreObjectsMarked()) {
+        const SdrMarkList& rML=rView.GetMarkedObjectList();
         XubString aStr;
         ImpTakeDescriptionStr(STR_UndoObjSetText,aStr);
         rView.BegUndo(aStr);
@@ -1242,7 +1242,7 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
 FASTBOOL SdrUndoObjSetText::CanSdrRepeat(SdrView& rView) const
 {
     FASTBOOL bOk=FALSE;
-    if (bNewTextAvailable && rView.HasMarkedObj()) {
+    if (bNewTextAvailable && rView.AreObjectsMarked()) {
         bOk=TRUE;
     }
     return bOk;
@@ -1357,41 +1357,43 @@ XubString SdrUndoMoveLayer::GetComment() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrUndoPage::SdrUndoPage(SdrPage& rNewPg):
-    SdrUndoAction(*rNewPg.GetModel()), pPage(&rNewPg)
-{ }
+SdrUndoPage::SdrUndoPage(SdrPage& rNewPg)
+:   SdrUndoAction(*rNewPg.GetModel()),
+    mrPage(rNewPg)
+{
+}
 
 void SdrUndoPage::ImpInsertPage(USHORT nNum)
 {
-    DBG_ASSERT(!pPage->IsInserted(),"SdrUndoPage::ImpInsertPage(): pPage ist bereits Inserted");
-    if (!pPage->IsInserted()) {
-        if (pPage->IsMasterPage()) {
-            rMod.InsertMasterPage(pPage,nNum);
+    DBG_ASSERT(!mrPage.IsInserted(),"SdrUndoPage::ImpInsertPage(): mrPage ist bereits Inserted");
+    if (!mrPage.IsInserted()) {
+        if (mrPage.IsMasterPage()) {
+            rMod.InsertMasterPage(&mrPage,nNum);
         } else {
-            rMod.InsertPage(pPage,nNum);
+            rMod.InsertPage(&mrPage,nNum);
         }
     }
 }
 
 void SdrUndoPage::ImpRemovePage(USHORT nNum)
 {
-    DBG_ASSERT(pPage->IsInserted(),"SdrUndoPage::ImpRemovePage(): pPage ist nicht Inserted");
-    if (pPage->IsInserted()) {
+    DBG_ASSERT(mrPage.IsInserted(),"SdrUndoPage::ImpRemovePage(): mrPage ist nicht Inserted");
+    if (mrPage.IsInserted()) {
         SdrPage* pChkPg=NULL;
-        if (pPage->IsMasterPage()) {
+        if (mrPage.IsMasterPage()) {
             pChkPg=rMod.RemoveMasterPage(nNum);
         } else {
             pChkPg=rMod.RemovePage(nNum);
         }
-        DBG_ASSERT(pChkPg==pPage,"SdrUndoPage::ImpRemovePage(): RemovePage!=pPage");
+        DBG_ASSERT(pChkPg==&mrPage,"SdrUndoPage::ImpRemovePage(): RemovePage!=&mrPage");
     }
 }
 
 void SdrUndoPage::ImpMovePage(USHORT nOldNum, USHORT nNewNum)
 {
-    DBG_ASSERT(pPage->IsInserted(),"SdrUndoPage::ImpMovePage(): pPage ist nicht Inserted");
-    if (pPage->IsInserted()) {
-        if (pPage->IsMasterPage()) {
+    DBG_ASSERT(mrPage.IsInserted(),"SdrUndoPage::ImpMovePage(): mrPage ist nicht Inserted");
+    if (mrPage.IsInserted()) {
+        if (mrPage.IsMasterPage()) {
             rMod.MoveMasterPage(nOldNum,nNewNum);
         } else {
             rMod.MovePage(nOldNum,nNewNum);
@@ -1415,10 +1417,9 @@ SdrUndoPageList::SdrUndoPageList(SdrPage& rNewPg):
 
 SdrUndoPageList::~SdrUndoPageList()
 {
-    if(bItsMine && pPage)
+    if(bItsMine)
     {
-        delete pPage;
-        pPage = 0L;
+        delete (&mrPage);
     }
 }
 
@@ -1428,22 +1429,29 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg):
     SdrUndoPageList(rNewPg),
     pUndoGroup(NULL)
 {
-    bItsMine=TRUE;
+    bItsMine = TRUE;
+
     // Und nun ggf. die MasterPage-Beziehungen merken
-    if (pPage->IsMasterPage()) {
-        USHORT nMasterPageNum=pPage->GetPageNum();
-        USHORT nPageAnz=rMod.GetPageCount();
-        for (USHORT nPageNum=0; nPageNum<nPageAnz; nPageNum++) {
-            SdrPage* pDrawPage=rMod.GetPage(nPageNum);
-            USHORT nMasterAnz=pDrawPage->GetMasterPageCount();
-            for (USHORT nMasterNum=nMasterAnz; nMasterNum>0;) { // Rueckwaerts, da die Beziehungen auch rueckwaerts entfernt werden
-                nMasterNum--;
-                USHORT nReferencedMaster=pDrawPage->GetMasterPageNum(nMasterNum);
-                if (nReferencedMaster==nMasterPageNum) { // Aha, betroffen
-                    if (pUndoGroup==NULL) {
-                        pUndoGroup=new SdrUndoGroup(rMod);
+    if(mrPage.IsMasterPage())
+    {
+        sal_uInt16 nPageAnz(rMod.GetPageCount());
+
+        for(sal_uInt16 nPageNum(0); nPageNum < nPageAnz; nPageNum++)
+        {
+            SdrPage* pDrawPage = rMod.GetPage(nPageNum);
+
+            if(pDrawPage->TRG_HasMasterPage())
+            {
+                SdrPage& rMasterPage = pDrawPage->TRG_GetMasterPage();
+
+                if(&mrPage == &rMasterPage)
+                {
+                    if(!pUndoGroup)
+                    {
+                        pUndoGroup = new SdrUndoGroup(rMod);
                     }
-                    pUndoGroup->AddAction(new SdrUndoPageRemoveMasterPage(*pDrawPage,nMasterNum));
+
+                    pUndoGroup->AddAction(new SdrUndoPageRemoveMasterPage(*pDrawPage));
                 }
             }
         }
@@ -1463,7 +1471,7 @@ void SdrUndoDelPage::Undo()
     if (pUndoGroup!=NULL) { // MasterPage-Beziehungen wiederherstellen
         pUndoGroup->Undo();
     }
-    DBG_ASSERT(bItsMine,"UndoDeletePage: pPage gehoert nicht der UndoAction");
+    DBG_ASSERT(bItsMine,"UndoDeletePage: mrPage gehoert nicht der UndoAction");
     bItsMine=FALSE;
 }
 
@@ -1471,7 +1479,7 @@ void SdrUndoDelPage::Redo()
 {
     ImpRemovePage(nPageNum);
     // Die MasterPage-Beziehungen werden ggf. von selbst geloesst
-    DBG_ASSERT(!bItsMine,"RedoDeletePage: pPage gehoert bereits der UndoAction");
+    DBG_ASSERT(!bItsMine,"RedoDeletePage: mrPage gehoert bereits der UndoAction");
     bItsMine=TRUE;
 }
 
@@ -1503,14 +1511,14 @@ FASTBOOL SdrUndoDelPage::CanSdrRepeat(SdrView& rView) const
 void SdrUndoNewPage::Undo()
 {
     ImpRemovePage(nPageNum);
-    DBG_ASSERT(!bItsMine,"UndoNewPage: pPage gehoert bereits der UndoAction");
+    DBG_ASSERT(!bItsMine,"UndoNewPage: mrPage gehoert bereits der UndoAction");
     bItsMine=TRUE;
 }
 
 void SdrUndoNewPage::Redo()
 {
     ImpInsertPage(nPageNum);
-    DBG_ASSERT(bItsMine,"RedoNewPage: pPage gehoert nicht der UndoAction");
+    DBG_ASSERT(bItsMine,"RedoNewPage: mrPage gehoert nicht der UndoAction");
     bItsMine=FALSE;
 }
 
@@ -1578,114 +1586,41 @@ XubString SdrUndoSetPageNum::GetComment() const
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrUndoPageMasterPage::SdrUndoPageMasterPage(SdrPage& rNewPg, USHORT nMasterDescriptorNum):
-        SdrUndoPage(rNewPg), pMasterDescriptor(NULL),
-        pNewMasterDescriptor(NULL), nMasterNum(0), nNewMasterNum(0)
+SdrUndoPageMasterPage::SdrUndoPageMasterPage(SdrPage& rChangedPage)
+:   SdrUndoPage(rChangedPage),
+    mbOldHadMasterPage(mrPage.TRG_HasMasterPage())
 {
-    nMasterNum=nMasterDescriptorNum;
-    SdrMasterPageDescriptor* pDscr=&rNewPg.GetMasterPageDescriptor(nMasterDescriptorNum);
-    if (pDscr!=NULL) { // den betroffenen MasterPageDescriptor kopieren
-        pMasterDescriptor=new SdrMasterPageDescriptor(*pDscr);
-    } else {
-#ifdef DBGUTIL
-        String aMsg("SdrUndoPageMasterPage::Ctor(): Descriptornummer "); aMsg+=nMasterNum;
-        aMsg+="\nKein MasterPageDescriptor an dieser Position gefunden.";
-        DBG_ERROR(aMsg.GetStr());
-#endif
+    // get current state from page
+    if(mbOldHadMasterPage)
+    {
+        maOldSet = mrPage.TRG_GetMasterPageVisibleLayers();
+        maOldMasterPageNumber = mrPage.TRG_GetMasterPage().GetPageNum();
     }
 }
 
 SdrUndoPageMasterPage::~SdrUndoPageMasterPage()
 {
-    if (pMasterDescriptor!=NULL) delete pMasterDescriptor;
-    if (pNewMasterDescriptor!=NULL) delete pNewMasterDescriptor;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrUndoPageInsertMasterPage::Undo()
+SdrUndoPageRemoveMasterPage::SdrUndoPageRemoveMasterPage(SdrPage& rChangedPage)
+:   SdrUndoPageMasterPage(rChangedPage)
 {
-#ifdef DBGUTIL
-    String aMsg("SdrUndoPageInsertMasterPage::Undo(): Descriptornummer "); aMsg+=nMasterNum;
-    if (pMasterDescriptor!=NULL) {
-        aMsg+=" (MasterPage-Nummer im gemerkten Descriptor ist ";
-        aMsg+=pMasterDescriptor->GetPageNum();
-        aMsg+=')';
-    } else {
-        aMsg+=" (kein Descriptor gemerkt)";
-    }
-    aMsg+="\n";
-    if (nMasterNum>=pPage->GetMasterPageCount()) {
-        aMsg+="An der Seite sind nur ";
-        aMsg+=pPage->GetMasterPageCount();
-        aMsg+=" Descriptoren vorhanden.";
-        DBG_ERROR(aMsg.GetStr());
-    } else if (pMasterDescriptor!=NULL && *pMasterDescriptor!=*pPage->GetMasterPageDescriptor(nMasterNum)) {
-        aMsg+="Aktueller und gemerkter Descriptor enthalten unterschiedliche MasterPage-Nummern";
-        DBG_ERROR(aMsg.GetStr());
-    }
-#endif
-    pPage->RemoveMasterPage(nMasterNum);
 }
-
-void SdrUndoPageInsertMasterPage::Redo()
-{
-    if (pMasterDescriptor!=NULL) {
-        pPage->InsertMasterPage(*pMasterDescriptor,nMasterNum);
-    } else {
-#ifdef DBGUTIL
-        String aMsg("SdrUndoPageInsertMasterPage::Redo(): Descriptornummer "); aMsg+=nMasterNum;
-        aMsg+="Kein MasterPageDescriptor gemerkt.";
-        DBG_ERROR(aMsg.GetStr());
-#endif
-    }
-}
-
-XubString SdrUndoPageInsertMasterPage::GetComment() const
-{
-    XubString aStr;
-    ImpTakeDescriptionStr(STR_UndoNewPageMasterDscr,aStr,0,FALSE);
-    return aStr;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrUndoPageRemoveMasterPage::Undo()
 {
-    if (pMasterDescriptor!=NULL) {
-        pPage->InsertMasterPage(*pMasterDescriptor,nMasterNum);
-    } else {
-#ifdef DBGUTIL
-        String aMsg("SdrUndoPageRemoveMasterPage::Undo(): Descriptornummer "); aMsg+=nMasterNum;
-        aMsg+="Kein MasterPageDescriptor gemerkt.";
-        DBG_ERROR(aMsg.GetStr());
-#endif
+    if(mbOldHadMasterPage)
+    {
+        mrPage.TRG_SetMasterPage(*mrPage.GetModel()->GetMasterPage(maOldMasterPageNumber));
+        mrPage.TRG_SetMasterPageVisibleLayers(maOldSet);
     }
 }
 
 void SdrUndoPageRemoveMasterPage::Redo()
 {
-#ifdef DBGUTIL
-    String aMsg("SdrUndoPageRemoveMasterPage::Redo(): Descriptornummer "); aMsg+=nMasterNum;
-    if (pMasterDescriptor!=NULL) {
-        aMsg+=" (MasterPage-Nummer im gemerkten Descriptor ist ";
-        aMsg+=pMasterDescriptor->GetPageNum();
-        aMsg+=')';
-    } else {
-        aMsg+=" (kein Descriptor gemerkt)";
-    }
-    aMsg+="\n";
-    if (nMasterNum>=pPage->GetMasterPageCount()) {
-        aMsg+="An der Seite sind nur ";
-        aMsg+=pPage->GetMasterPageCount();
-        aMsg+=" Descriptoren vorhanden.";
-        DBG_ERROR(aMsg.GetStr());
-    } else if (pMasterDescriptor!=NULL && *pMasterDescriptor!=*pPage->GetMasterPageDescriptor(nMasterNum)) {
-        aMsg+="Aktueller und gemerkter Descriptor enthalten unterschiedliche MasterPage-Nummern";
-        DBG_ERROR(aMsg.GetStr());
-    }
-#endif
-    pPage->RemoveMasterPage(nMasterNum);
+    mrPage.TRG_ClearMasterPage();
 }
 
 XubString SdrUndoPageRemoveMasterPage::GetComment() const
@@ -1697,48 +1632,39 @@ XubString SdrUndoPageRemoveMasterPage::GetComment() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrUndoPageMoveMasterPage::Undo()
+SdrUndoPageChangeMasterPage::SdrUndoPageChangeMasterPage(SdrPage& rChangedPage)
+:   SdrUndoPageMasterPage(rChangedPage),
+    mbNewHadMasterPage(sal_False)
 {
-    pPage->MoveMasterPage(nNewMasterNum,nMasterNum);
 }
-
-void SdrUndoPageMoveMasterPage::Redo()
-{
-    pPage->MoveMasterPage(nMasterNum,nNewMasterNum);
-}
-
-XubString SdrUndoPageMoveMasterPage::GetComment() const
-{
-    XubString aStr;
-    ImpTakeDescriptionStr(STR_UndoMovPageMasterDscr,aStr,0,FALSE);
-    return aStr;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrUndoPageChangeMasterPage::Undo()
 {
-    if (pNewMasterDescriptor==NULL) {
-        SdrMasterPageDescriptor* pDscr=&pPage->GetMasterPageDescriptor(nMasterNum);
-        if (pDscr!=NULL) { // den neuen MasterPageDescriptor merken fuer Redo
-            pNewMasterDescriptor=new SdrMasterPageDescriptor(*pDscr);
-        } else {
-#ifdef DBGUTIL
-            String aMsg("SdrUndoPageChangeMasterPage::Undo(): Descriptornummer "); aMsg+=nMasterNum;
-            aMsg+="\nKein MasterPageDescriptor an dieser Position gefunden.";
-            DBG_ERROR(aMsg.GetStr());
-#endif
-        }
+    // remember values from new page
+    if(mrPage.TRG_HasMasterPage())
+    {
+        mbNewHadMasterPage = sal_True;
+        maNewSet = mrPage.TRG_GetMasterPageVisibleLayers();
+        maNewMasterPageNumber = mrPage.TRG_GetMasterPage().GetPageNum();
     }
-    if (pMasterDescriptor!=NULL) {
-        pPage->SetMasterPageDescriptor(*pMasterDescriptor,nMasterNum);
+
+    // restore old values
+    if(mbOldHadMasterPage)
+    {
+        mrPage.TRG_ClearMasterPage();
+        mrPage.TRG_SetMasterPage(*mrPage.GetModel()->GetMasterPage(maOldMasterPageNumber));
+        mrPage.TRG_SetMasterPageVisibleLayers(maOldSet);
     }
 }
 
 void SdrUndoPageChangeMasterPage::Redo()
 {
-    if (pNewMasterDescriptor!=NULL) {
-        pPage->SetMasterPageDescriptor(*pNewMasterDescriptor,nMasterNum);
+    // restore new values
+    if(mbNewHadMasterPage)
+    {
+        mrPage.TRG_ClearMasterPage();
+        mrPage.TRG_SetMasterPage(*mrPage.GetModel()->GetMasterPage(maNewMasterPageNumber));
+        mrPage.TRG_SetMasterPageVisibleLayers(maNewSet);
     }
 }
 
@@ -1749,3 +1675,4 @@ XubString SdrUndoPageChangeMasterPage::GetComment() const
     return aStr;
 }
 
+// eof
