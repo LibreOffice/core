@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:43:51 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,146 +82,8 @@
 
 #include <prex.h>
 #include <X11/cursorfont.h>
-#include "nodrop_curs.h"
-#include "nodrop_mask.h"
-#include "wait_curs.h"
-#include "wait_mask.h"
-#include "hsplit_curs.h"
-#include "hsplit_mask.h"
-#include "vsplit_curs.h"
-#include "vsplit_mask.h"
-#include "neswsize_curs.h"
-#include "neswsize_mask.h"
-#include "nwsesize_curs.h"
-#include "nwsesize_mask.h"
-#include "magnify_curs.h"
-#include "magnify_mask.h"
-#include "rotate_curs.h"
-#include "rotate_mask.h"
-#include "hshear_curs.h"
-#include "hshear_mask.h"
-#include "vshear_curs.h"
-#include "vshear_mask.h"
-#include "drawline_curs.h"
-#include "drawline_mask.h"
-#include "drawrect_curs.h"
-#include "drawrect_mask.h"
-#include "drawpolygon_curs.h"
-#include "drawpolygon_mask.h"
-#include "drawbezier_curs.h"
-#include "drawbezier_mask.h"
-#include "drawarc_curs.h"
-#include "drawarc_mask.h"
-#include "drawpie_curs.h"
-#include "drawpie_mask.h"
-#include "drawcirclecut_curs.h"
-#include "drawcirclecut_mask.h"
-#include "drawellipse_curs.h"
-#include "drawellipse_mask.h"
-#include "drawconnect_curs.h"
-#include "drawconnect_mask.h"
-#include "drawtext_curs.h"
-#include "drawtext_mask.h"
-#include "mirror_curs.h"
-#include "mirror_mask.h"
-#include "crook_curs.h"
-#include "crook_mask.h"
-#include "crop_curs.h"
-#include "crop_mask.h"
-#include "move_curs.h"
-#include "move_mask.h"
-#include "movepoint_curs.h"
-#include "movepoint_mask.h"
-#include "movebezierweight_curs.h"
-#include "movebezierweight_mask.h"
-#include "drawfreehand_curs.h"
-#include "drawfreehand_mask.h"
-#include "drawcaption_curs.h"
-#include "drawcaption_mask.h"
-#include "movedata_curs.h"
-#include "movedata_mask.h"
-#include "copydata_curs.h"
-#include "copydata_mask.h"
-#include "linkdata_curs.h"
-#include "linkdata_mask.h"
-#include "movedlnk_curs.h"
-#include "movedlnk_mask.h"
-#include "copydlnk_curs.h"
-#include "copydlnk_mask.h"
-#include "movefile_curs.h"
-#include "movefile_mask.h"
-#include "copyfile_curs.h"
-#include "copyfile_mask.h"
-#include "linkfile_curs.h"
-#include "linkfile_mask.h"
-#include "moveflnk_curs.h"
-#include "moveflnk_mask.h"
-#include "copyflnk_curs.h"
-#include "copyflnk_mask.h"
-#include "movefiles_curs.h"
-#include "movefiles_mask.h"
-#include "copyfiles_curs.h"
-#include "copyfiles_mask.h"
-
-#include "chart_curs.h"
-#include "chart_mask.h"
-#include "detective_curs.h"
-#include "detective_mask.h"
-#include "pivotcol_curs.h"
-#include "pivotcol_mask.h"
-#include "pivotfld_curs.h"
-#include "pivotfld_mask.h"
-#include "pivotrow_curs.h"
-#include "pivotrow_mask.h"
-#include "pivotdel_curs.h"
-#include "pivotdel_mask.h"
-
-#include "chain_curs.h"
-#include "chain_mask.h"
-#include "chainnot_curs.h"
-#include "chainnot_mask.h"
-
-#include "timemove_curs.h"
-#include "timemove_mask.h"
-#include "timesize_curs.h"
-#include "timesize_mask.h"
-
-#include "ase_curs.h"
-#include "ase_mask.h"
-#include "asn_curs.h"
-#include "asn_mask.h"
-#include "asne_curs.h"
-#include "asne_mask.h"
-#include "asns_curs.h"
-#include "asns_mask.h"
-#include "asnswe_curs.h"
-#include "asnswe_mask.h"
-#include "asnw_curs.h"
-#include "asnw_mask.h"
-#include "ass_curs.h"
-#include "ass_mask.h"
-#include "asse_curs.h"
-#include "asse_mask.h"
-#include "assw_curs.h"
-#include "assw_mask.h"
-#include "asw_curs.h"
-#include "asw_mask.h"
-#include "aswe_curs.h"
-#include "aswe_mask.h"
-#include "null_curs.h"
-#include "null_mask.h"
-
-#include "airbrush_curs.h"
-#include "airbrush_mask.h"
-#include "fill_curs.h"
-#include "fill_mask.h"
-#include "vertcurs_curs.h"
-#include "vertcurs_mask.h"
-
+#include "salcursors.h"
 #include "invert50.h"
-#if !(defined AIX)
-#include <X11/extensions/XShm.h>
-#endif
 #ifdef SOLARIS
 #define XK_KOREAN
 #endif
@@ -317,8 +179,6 @@ using namespace vcl_sal;
 
 // -=-= Prototyps =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-EXTERN_C int XShmGetEventBase( Display* );
-
 // -=-= static variables -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const char* const VisualClassName[] = {
@@ -737,14 +597,17 @@ extern "C" {
 }
 #endif /* HAVE_LIBSN */
 
-SalDisplay::SalDisplay( Display *display, Visual *pVisual, Colormap aColMap ) :
-        mpFallbackFactory ( NULL ),
+SalDisplay::SalDisplay( Display *display, Colormap aColMap ) :
         pDisp_( display ),
+        mpFallbackFactory ( NULL ),
+        m_pWMAdaptor( NULL ),
         hRefWindow_( None ),
-        m_pWMAdaptor( NULL )
+        mpInputMethod( NULL )
 {
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "SalDisplay::SalDisplay()\n" );
+#endif
     SalData *pSalData  = GetSalData();
-    XVisualInfo aXVI;
 
     if( !pSalData->GetDefDisp() )
         pSalData->SetDefDisp( this );
@@ -762,25 +625,25 @@ SalDisplay::SalDisplay( Display *display, Visual *pVisual, Colormap aColMap ) :
         aColMap = DefaultColormap( display, nScreen_ );
     if( !IsDisplay() && !aColMap)
         aColMap = 1;   // trick for XPrinter
-    if (!pVisual)
-        pVisual = DefaultVisual( pDisp_, nScreen_ );
-
-    sal_GetVisualInfo( pDisp_, XVisualIDFromVisual( pVisual ), aXVI );
-    Init( aColMap, &aXVI );
-
-#ifdef HAVE_LIBSN
-    m_pSnDisplay = sn_display_new( display, SnErrorTrapPush, SnErrorTrapPop );
-    m_pSnLauncheeContext = sn_launchee_context_new_from_environment( m_pSnDisplay, nScreen_ );
-#  ifdef DBG_UTIL
-    if( !m_pSnLauncheeContext )
-         fprintf( stderr, "Failed to get launch feedback info from "
-          "DESKTOP_LAUNCH_ID/DESKTOP_LAUNCH_WINDOW\n" );
-#  endif /* DBG_UTIL */
-#endif /* HAVE_LIBSN */
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalDisplay::~SalDisplay( )
+{
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "SalDisplay::~SalDisplay()\n" );
+#endif
+    if( pDisp_ )
+    {
+        doDestruct();
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "display %p closed\n", pDisp_ );
+#endif
+        pDisp_ = NULL;
+    }
+}
+
+void SalDisplay::doDestruct()
 {
     SalData *pSalData = GetSalData();
 
@@ -821,7 +684,7 @@ SalDisplay::~SalDisplay( )
         pXLib_->Remove( ConnectionNumber( pDisp_ ) );
 
         // free colormap before modifying pVisual_
-        xColor_.Clear();
+        delete m_pColormap;
 
         delete pVisual_;
 
@@ -830,10 +693,6 @@ SalDisplay::~SalDisplay( )
 
         delete mpInputMethod;
         delete mpKbdExtension;
-        XCloseDisplay( pDisp_ );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "display %p closed\n", pDisp_ );
-#endif
     }
 
 #ifdef HAVE_LIBSN
@@ -841,8 +700,6 @@ SalDisplay::~SalDisplay( )
         sn_launchee_context_unref( m_pSnLauncheeContext );
     sn_display_unref( m_pSnDisplay );
 #endif /* HAVE_LIBSN */
-
-    pDisp_  = (Display*)ILLEGAL_POINTER;
 
     pSalData->Remove( this );
 
@@ -855,7 +712,7 @@ SalDisplay::~SalDisplay( )
         pSalData->SetCurDisp( NULL );
 }
 
-static int DisplayHasEvent( int fd, SalDisplay *pDisplay  )
+static int DisplayHasEvent( int fd, SalX11Display *pDisplay  )
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" );
@@ -867,7 +724,7 @@ static int DisplayHasEvent( int fd, SalDisplay *pDisplay  )
   ::vos::OGuard aGuard( *pSalInstYieldMutex );
   return pDisplay->IsEvent();
 }
-static int DisplayQueue( int fd, SalDisplay *pDisplay )
+static int DisplayQueue( int fd, SalX11Display *pDisplay )
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" )
@@ -877,7 +734,7 @@ static int DisplayQueue( int fd, SalDisplay *pDisplay )
   return XEventsQueued( pDisplay->GetDisplay(),
                         QueuedAfterReading );
 }
-static int DisplayYield( int fd, SalDisplay *pDisplay )
+static int DisplayYield( int fd, SalX11Display *pDisplay )
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" );
@@ -888,9 +745,40 @@ static int DisplayYield( int fd, SalDisplay *pDisplay )
   return TRUE;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
+SalX11Display::SalX11Display( Display *display, Visual *pVisual, Colormap aColMap )
+        : SalDisplay( display, aColMap )
 {
+    Init( aColMap, pVisual );
+
+    pXLib_->Insert( ConnectionNumber( pDisp_ ),
+                    this,
+                    (YieldFunc) DisplayHasEvent,
+                    (YieldFunc) DisplayQueue,
+                    (YieldFunc) DisplayYield );
+}
+
+SalX11Display::~SalX11Display()
+{
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "SalX11Display::~SalX11Display()\n" );
+#endif
+    if( pDisp_ )
+    {
+        doDestruct();
+        XCloseDisplay( pDisp_ );
+        pDisp_ = NULL;
+    }
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void SalDisplay::Init( Colormap hXColmap, Visual *pVisual )
+{
+    XVisualInfo aXVI;
+
+    if (!pVisual)
+        pVisual = DefaultVisual( pDisp_, nScreen_ );
+    sal_GetVisualInfo( pDisp_, XVisualIDFromVisual( pVisual ), aXVI );
+
     GetSalData()->Insert( this );
 
     for( size_t i = 0; i < POINTER_COUNT; i++ )
@@ -898,16 +786,12 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
 
     eWindowManager_     = otherwm;
     nProperties_        = PROPERTY_DEFAULT;
-    nStateOfYield_      = 0;
-    nStateOfSendEvent_  = 0;
     hEventGuard_        = NULL;
-    pEventQueue_        = NULL;
-    pDispatchStack_     = NULL;
     pFontCache_         = NULL;
     mpFontList          = (XlfdStorage*)NULL;
     mpFactory           = (AttributeProvider*)NULL;
-    pCapture_           = NULL;
-    pVisual_            = new SalVisual( pXVI );
+    m_pCapture          = NULL;
+    pVisual_            = new SalVisual( &aXVI );
     m_bXinerama         = false;
     aSize_              = Size( DisplayWidth ( pDisp_, nScreen_ ),
                                 DisplayHeight( pDisp_, nScreen_ ) );
@@ -943,12 +827,6 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
     {
         hEventGuard_    = osl_createMutex();
 
-        pXLib_->Insert( ConnectionNumber( pDisp_ ),
-                        this,
-                        (YieldFunc) DisplayHasEvent,
-                        (YieldFunc) DisplayQueue,
-                        (YieldFunc) DisplayYield );
-
         pScreen_        = ScreenOfDisplay( pDisp_, nScreen_ );
         hRootWindow_    = RootWindowOfScreen( pScreen_ );
 
@@ -958,7 +836,6 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
 
         // - - - - - - - - - - Visuals - - - - - - - - - - - - - - -
         Visual *pRootVisual = DefaultVisual( pDisp_, nScreen_ );
-        // if( pRootVisual != pXVI->visual )
         if( pRootVisual->visualid != pVisual_->GetVisualId() )
         {
             XVisualInfo aXVI;
@@ -1010,40 +887,6 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
         // - - - - - - - - - - Synchronize - - - - - - - - - - - - -
         if( getenv( "SAL_SYNCHRONIZE" ) )
             XSynchronize( pDisp_, True );
-
-        // - - - - - - - - - - Shared Images - - - - - - - - - - - -
-#if defined _XSHM_H_ // && defined DBG_UTIL
-        // SharedMem wird nur noch ueber SalProperties enabled
-        // wegen Bugs #47289 und #46512
-
-        if(    ( nProperties_ & PROPERTY_FEATURE_SharedMemory )
-            && (    *DisplayString( pDisp_ ) == ':'
-                || !strncmp( DisplayString( pDisp_ ), "localhost:", 10 ))
-          )
-        {
-            int  nMinor, nMajor;
-            Bool bPixmaps;
-
-            nSharedImages_      = XShmQueryVersion( pDisp_,
-                                                    &nMajor,
-                                                    &nMinor,
-                                                    &bPixmaps )
-                ? 0x80000000 : 0;
-        }
-        else
-            nSharedImages_      = 0;
-#else
-        nSharedImages_      = 0;
-#endif
-        // - - - - - - - - - - Images  - - - - - - - - - - - - - - -
-        nImageDepths_       = 0x00000000;
-        int nCount, *pDepths = XListDepths( pDisp_, nScreen_, &nCount );
-        if( pDepths )
-        {
-            for( int i = 0; i < nCount; i++ )
-                nImageDepths_ |= 1 << (pDepths[i]-1);
-            XFree( pDepths );
-        }
     }
     else
     {
@@ -1078,22 +921,10 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
         bLocal_             = TRUE; /* always true for xprinter */
         mbLocalIsValid      = TRUE; /* yes bLocal_ is initialized */
         nProperties_       &= ~PROPERTY_SUPPORT_XSetClipMask; //XPrinter doesnt
-        nSharedImages_      = 0;
-        nImageDepths_       = 0xFFFFFFFF;
     }
 
     // - - - - - - - - - - Images  - - - - - - - - - - - - - - -
-    // 0x8080C889
-    nImageDepths_ &= (1<<(32-1))
-                     |(1<<(24-1))
-                     |(1<<(16-1))
-                     |(1<<(15-1))
-                     |(1<<(12-1))
-                     |(1<<(8-1))
-                     |(1<<(4-1))
-                     |(1<<(1-1));
-
-    xColor_             = new SalColormap( this, hXColmap );
+    m_pColormap             = new SalColormap( this, hXColmap );
 
     // - - - - - - - - - - GCs - - - - - - - - - - - - - - - - -
     XGCValues values;
@@ -1162,10 +993,6 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
                                             invert50_bits,
                                             invert50_width,
                                             invert50_height );
-
-        // - - - - - - - - - - Sound - - - - - - - - - - - - - - - -
-
-        nBeepVolume_    = 0;
 
         // - - - - - - - - - - Fonts - - - - - - - - - - - - - - - -
 
@@ -1337,6 +1164,16 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
     DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator();
     pIntegrator->Acquire();
 
+#ifdef HAVE_LIBSN
+    m_pSnDisplay = sn_display_new( display, SnErrorTrapPush, SnErrorTrapPop );
+    m_pSnLauncheeContext = sn_launchee_context_new_from_environment( m_pSnDisplay, nScreen_ );
+#  ifdef DBG_UTIL
+    if( !m_pSnLauncheeContext )
+         fprintf( stderr, "Failed to get launch feedback info from "
+          "DESKTOP_LAUNCH_ID/DESKTOP_LAUNCH_WINDOW\n" );
+#  endif /* DBG_UTIL */
+#endif /* HAVE_LIBSN */
+
 #ifdef DBG_UTIL
     PrintInfo();
 #endif
@@ -1346,7 +1183,7 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalDisplay::Beep() const
 {
-    XBell( pDisp_, nBeepVolume_ );
+    XBell( pDisp_, 0 );
 }
 
 // Keyboard
@@ -2345,7 +2182,7 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
     if( None == aCur )
     {
         XColor      aBlack, aWhite, aDummy;
-        Colormap    hColormap = xColor_->GetXColormap();
+        Colormap    hColormap = m_pColormap->GetXColormap();
 
         XAllocNamedColor( pDisp_, hColormap, "black", &aBlack, &aDummy );
         XAllocNamedColor( pDisp_, hColormap, "white", &aWhite, &aDummy );
@@ -2366,19 +2203,18 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
 {
     if( !pCapture )
     {
-        pCapture_ = NULL;
+        m_pCapture = NULL;
         XUngrabPointer( GetDisplay(), CurrentTime );
         XFlush( GetDisplay() );
         return 0;
     }
 
-    if( pCapture_ )
-        //pCapture_->CaptureMouse( FALSE );
-        pCapture_ = NULL;
+    m_pCapture = NULL;
 
     // FIXME: get rid of X11SalFrame
+    const SystemEnvData* pEnvData = pCapture->GetSystemData();
     int ret = XGrabPointer( GetDisplay(),
-                            static_cast<X11SalFrame*>(pCapture)->GetWindow(),
+                            (XLIB_Window)pEnvData->aWindow,
                             False,
                             PointerMotionMask| ButtonPressMask|ButtonReleaseMask,
                             GrabModeAsync,
@@ -2393,7 +2229,7 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
         return -1;
     }
 
-    pCapture_ = pCapture;
+    m_pCapture = pCapture;
     return 1;
 }
 
@@ -2475,68 +2311,12 @@ void SalDisplay::AddFontPath( const ByteString &rPath ) const
 
 // Events
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalDisplay::Remove( XEvent *pEvent )
+
+void SalDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, USHORT nEvent )
 {
-}
-
-void SalDisplay::SendEvent( Atom          aEvent,
-                                  void         *pData,
-                                  XLIB_Window   hReceiver ) const
-{
-    UINT32 aData[5];
-
-#if __SIZEOFLONG > 4
-    aData[0] = (UINT32)((long)pData & 0xffffffff);
-    aData[1] = (UINT32)((long)pData >> 32);
-#else
-    aData[0] = (UINT32)(long)pData;
-    aData[1] = 0;
-#endif
-    aData[2] = 0;
-    aData[3] = 0;
-    aData[4] = 0;
-
-    SendEvent( aEvent, aData, hReceiver );
-}
-
-void SalDisplay::SendEvent( Atom          aEvent,
-                                  UINT32       *Data,
-                                  XLIB_Window   hReceiver ) const
-{
-#define pClient (&(aClient.xclient))
-    XEvent aClient;
-
-    if( !hReceiver )
-        hReceiver = hReceiver;
-
-    pClient->type           = ClientMessage;
-    pClient->display        = pDisp_;
-    pClient->window         = hReceiver;
-    pClient->message_type   = aEvent;
-    pClient->format         = 32;
-
-    if( Data ) for( int i = 0; i < 5; i++ )
-        pClient->data.l[i] = Data[i];
-
     if( osl_acquireMutex( hEventGuard_ ) )
     {
-        pClient->send_event     = 2;
-        if( pEventQueue_ )
-        {
-            SalXEvent *pEvent = pEventQueue_;
-            while( pEvent->pNext_ )
-                pEvent = pEvent->pNext_;
-
-            pEvent->pNext_                      = new SalXEvent;
-            pEvent->pNext_->event_              = aClient;
-            pEvent->pNext_->pNext_              = NULL;
-        }
-        else
-        {
-            ((SalDisplay*)this)->pEventQueue_   = new SalXEvent;
-            pEventQueue_->event_                = aClient;
-            pEventQueue_->pNext_                = NULL;
-        }
+        m_aUserEvents.push_back( SalUserEvent( pFrame, pData, nEvent ) );
 
         // Notify SalXLib::Yield() of a pending event.
         pXLib_->Wakeup();
@@ -2545,89 +2325,88 @@ void SalDisplay::SendEvent( Atom          aEvent,
     }
     else
         DBG_ASSERT( 1, "SalDisplay::SendEvent !acquireMutex\n" );
-#undef pClient
 }
 
-BOOL SalDisplay::IsEvent()
+BOOL SalX11Display::IsEvent()
 {
-    if( pEventQueue_ )
-        return TRUE;
+    BOOL bRet = FALSE;
 
-    if( XEventsQueued( pDisp_, QueuedAlready ) )
+    if( osl_acquireMutex( hEventGuard_ ) )
+    {
+        if( m_aUserEvents.begin() != m_aUserEvents.end() )
+            bRet = TRUE;
+        osl_releaseMutex( hEventGuard_ );
+    }
+
+    if( bRet || XEventsQueued( pDisp_, QueuedAlready ) )
         return TRUE;
 
     XFlush( pDisp_ );
     return FALSE;
 }
 
+bool SalDisplay::DispatchInternalEvent()
+{
+    SalFrame* pFrame = NULL;
+    void* pData = NULL;
+    USHORT nEvent = 0;
+
+    if( osl_acquireMutex( hEventGuard_ ) )
+    {
+        if( m_aUserEvents.begin() != m_aUserEvents.end() )
+        {
+            pFrame  = m_aUserEvents.front().m_pFrame;
+            pData   = m_aUserEvents.front().m_pData;
+            nEvent  = m_aUserEvents.front().m_nEvent;
+
+            m_aUserEvents.pop_front();
+        }
+        osl_releaseMutex( hEventGuard_ );
+    }
+    else
+        DBG_ASSERT( 1, "SalDisplay::Yield !acquireMutex\n" );
+
+    if( pFrame )
+        pFrame->CallCallback( nEvent, pData );
+
+    return pFrame != NULL;
+}
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void SalDisplay::Yield( BOOL bWait )
+void SalX11Display::Yield( BOOL bWait )
 {
-    SalXEvent aEvent;
-    while( !nStateOfYield_ )
-    {
-        if( pEventQueue_ )
-        {
-            nStateOfYield_ = 5;
-            if( osl_acquireMutex( hEventGuard_ ) )
-            {
-                nStateOfYield_ = 6;
+    if( DispatchInternalEvent() )
+        return;
 
-                SalXEvent *pEvent = pEventQueue_;
+    XEvent aEvent;
+    DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->pInstance_->GetYieldMutex())->GetThreadId() ==
+                NAMESPACE_VOS(OThread)::getCurrentIdentifier(),
+                "will crash soon since solar mutex not locked in SalDisplay::Yield" );
 
-                pEventQueue_    = pEventQueue_->pNext_;
-
-                osl_releaseMutex( hEventGuard_ );
-
-                aEvent.event_   = pEvent->event_;
-
-                delete pEvent;
-
-                break;
-            }
-            else
-                DBG_ASSERT( 1, "SalDisplay::Yield !acquireMutex\n" );
-        }
-
-        nStateOfYield_ = 1;
-
-        DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->pInstance_->GetYieldMutex())->GetThreadId() ==
-                   NAMESPACE_VOS(OThread)::getCurrentIdentifier(),
-                    "will crash soon since solar mutex not locked in SalDisplay::Yield" );
-
-        // note: alternate input is dispatched by XtAppNextEvent
-        XNextEvent( pDisp_, &aEvent.event_ );
+    XNextEvent( pDisp_, &aEvent );
 
 #ifdef HAVE_LIBSN
-        if( m_pSnLauncheeContext )
-            {
-            sn_launchee_context_complete( m_pSnLauncheeContext );
-            sn_launchee_context_unref( m_pSnLauncheeContext );
-            m_pSnLauncheeContext = NULL;
-        }
-
-        if( sn_display_process_event( m_pSnDisplay, &aEvent.event_ ) )
-            return;
-#endif /* HAVE_LIBSN */
+    if( m_pSnLauncheeContext )
+    {
+        sn_launchee_context_complete( m_pSnLauncheeContext );
+        sn_launchee_context_unref( m_pSnLauncheeContext );
+        m_pSnLauncheeContext = NULL;
     }
 
-    nStateOfYield_ = 0;
+    if( sn_display_process_event( m_pSnDisplay, &aEvent ) )
+        return;
+#endif /* HAVE_LIBSN */
 
     BOOL bIgnoreXErrors = pXLib_->GetIgnoreXErrors();
 
-    aEvent.pNext_   = pDispatchStack_;
-    pDispatchStack_ = &aEvent;
-
-    Dispatch( &aEvent.event_ );
-
-    pDispatchStack_ = aEvent.pNext_;
+    Dispatch( &aEvent );
 
 #ifdef DBG_UTIL
     if( pXLib_->WasXError() )
     {
         XFlush( pDisp_ );
-        PrintEvent( "SalDisplay::Yield (WasXError)", &aEvent.event_ );
+        PrintEvent( "SalDisplay::Yield (WasXError)", &aEvent );
     }
 #endif
 
@@ -2698,19 +2477,6 @@ long SalDisplay::Dispatch( XEvent *pEvent )
                 GetKbdExtension()->Dispatch( pEvent );
                 return 1;
             }
-
-#ifdef _XSHM_H_
-        {
-            BOOL bPrevious = pXLib_->GetIgnoreXErrors();
-            pXLib_->SetIgnoreXErrors( TRUE );
-            if( pEvent->type == XShmGetEventBase( pDisp_ ) + ShmCompletion )
-            {
-                Remove( pEvent );
-                return 1;
-            }
-            pXLib_->SetIgnoreXErrors( bPrevious );
-        }
-#endif
             break;
     }
 
@@ -2869,24 +2635,6 @@ void SalDisplay::PrintEvent( const ByteString &rComment,
                 break;
         }
     }
-#ifdef _XSHM_H_
-    else if( pEvent->type == XShmGetEventBase( pDisp_ ) + ShmCompletion )
-    {
-#define pCompletionEvent ((XShmCompletionEvent*)pEvent)
-        fprintf( stderr, "[%s] %s s=%d d=%ld\n",
-                 rComment.GetBuffer(),
-                 "ShmCompletion",
-                 pCompletionEvent->send_event,
-                 pCompletionEvent->drawable );
-
-        fprintf( stderr, "\t\tc=%d.%d s=%ld o=%ld\n",
-                 pCompletionEvent->major_code,
-                 pCompletionEvent->minor_code,
-                 pCompletionEvent->shmseg,
-                 pCompletionEvent->offset );
-#undef pCompletionEvent
-    }
-#endif
     else
         fprintf( stderr, "[%s] %d s=%d w=%ld\n",
                  rComment.GetBuffer(),
@@ -2955,7 +2703,7 @@ void SalDisplay::PrintInfo() const
              Hypothenuse( DisplayWidthMM ( pDisp_, nScreen_ ),
                           DisplayHeightMM( pDisp_, nScreen_ ) ) / 25.4 );
     fprintf( stderr, "\tBlack&White       \t%lu %lu\n",
-             xColor_->GetBlackPixel(), xColor_->GetWhitePixel() );
+             m_pColormap->GetBlackPixel(), m_pColormap->GetWhitePixel() );
     fprintf( stderr, "\tRGB               \t0x%lx 0x%lx 0x%lx\n",
              pVisual_->red_mask, pVisual_->green_mask, pVisual_->blue_mask );
     fprintf( stderr, "\tVisual            \t%d-bit %s ID=0x%x\n",
@@ -2967,25 +2715,6 @@ void SalDisplay::PrintInfo() const
                  pRootVisual_->GetDepth(),
                  VisualClassName[ pRootVisual_->GetClass() ],
                  pRootVisual_->GetVisualId() );
-    fprintf( stderr, "\tImages (Shared)   \t0x%lx (%lx)\n",
-             nImageDepths_, nSharedImages_ );
-
-    if( nStateOfYield_ || nStateOfSendEvent_ )
-    {
-        fprintf( stderr, "Thread/Signal\n" );
-        fprintf( stderr, "\tNextEvent         \t%d\n", nStateOfYield_ );
-        fprintf( stderr, "\tSendEvent         \t%d\n", nStateOfSendEvent_ );
-    }
-    if( pDispatchStack_ )
-    {
-        fprintf( stderr, "Event\n" );
-        SalXEvent *pEvent = pDispatchStack_;
-        while( pEvent )
-        {
-            PrintEvent( "\t\x08\x08", &pEvent->event_ );
-            pEvent = pEvent->pNext_;
-        }
-    }
 }
 
 void SalDisplay::GetScreenFontResolution( long& rDPIX, long& rDPIY ) const
