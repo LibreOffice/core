@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-11 09:19:40 $
+ *  last change: $Author: er $ $Date: 2001-05-16 09:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2739,6 +2739,7 @@ void ImportExcel::PostDocLoad( void )
 {
     ScDocOptions        aDocOpt( pD->GetDocOptions() );
     aDocOpt.SetIgnoreCase( TRUE );      // immer in Excel
+    aDocOpt.SetFormulaRegexEnabled( FALSE );    // regular expressions? what's that?
     pD->SetDocOptions( aDocOpt );
 
     pExcRoot->pExtDocOpt->fColScale = pExcRoot->fColScale;
