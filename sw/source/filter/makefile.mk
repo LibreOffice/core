@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2000-10-13 09:34:08 $
+#   last change: $Author: hjs $ $Date: 2001-08-24 14:29:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,6 +136,7 @@ SUBLIBS+= \
 
 # -----------------------------------------------------------
 
+.IF "$(L10N-framework)" == ""
 .IF "$(RC_SUBDIRS)" == ""
 .IF "$(depend)" == ""
 filter: 					\
@@ -147,6 +148,7 @@ filter:
     @+echo Doing nothing in source\filter
 .ENDIF
 .ENDIF
+.ENDIF          # "$(L10N-framework)" == ""
 
 ################################################################
 
