@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataaccessdescriptor.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:31:01 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,14 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
+#include <com/sun/star/ucb/XContent.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 
 //........................................................................
@@ -89,6 +95,7 @@ namespace svx
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::ucb;
     using namespace ::comphelper;
 
     //====================================================================
@@ -265,17 +272,20 @@ namespace svx
         // the properties we know
         static PropertyMapEntry s_aDesriptorProperties[] =
         {
-            { CONST_CHAR("ActiveConnection"),   daConnection,       &::getCppuType( static_cast< Reference< XConnection >* >(NULL) ),   PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("BookmarkSelection"),  daBookmarkSelection,&::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Column"),             daColumnObject,     &::getCppuType( static_cast< Reference< XPropertySet >* >(NULL) ),  PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("ColumnName"),         daColumnName,       &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Command"),            daCommand,          &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("CommandType"),        daCommandType,      &::getCppuType( static_cast< sal_Int32* >(NULL) ),                  PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Cursor"),             daCursor,           &::getCppuType( static_cast< Reference< XResultSet>* >(NULL) ),     PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("DataSourceName"),     daDataSource,       &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("EscapeProcessing"),   daEscapeProcessing, &::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Filter"),             daFilter,           &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Selection"),          daSelection,        &::getCppuType( static_cast< Sequence< Any >* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("ActiveConnection"),   daConnection,           &::getCppuType( static_cast< Reference< XConnection >* >(NULL) ),   PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("BookmarkSelection"),  daBookmarkSelection,    &::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("Column"),             daColumnObject,         &::getCppuType( static_cast< Reference< XPropertySet >* >(NULL) ),  PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("ColumnName"),         daColumnName,           &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("Command"),            daCommand,              &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("CommandType"),        daCommandType,          &::getCppuType( static_cast< sal_Int32* >(NULL) ),                  PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("Component"),          daComponent,            &::getCppuType( static_cast< Reference< XContent >* >(NULL) ),      PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("ConnectionResource"), daConnectionResource,   &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("Cursor"),             daCursor,               &::getCppuType( static_cast< Reference< XResultSet>* >(NULL) ),     PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("DataSourceName"),     daDataSource,           &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("DatabaseLocation"),   daDatabaseLocation,     &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("EscapeProcessing"),   daEscapeProcessing,     &::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("Filter"),             daFilter,               &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("Selection"),          daSelection,            &::getCppuType( static_cast< Sequence< Any >* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
         // MUST be sorted !!
@@ -615,6 +625,33 @@ namespace svx
         return m_pImpl->m_xAsSet;
 #else
         return Reference< XPropertySet >();
+#endif
+    }
+    //--------------------------------------------------------------------
+    ::rtl::OUString ODataAccessDescriptor::getDataSource() const
+    {
+#ifndef SVX_LIGHT
+        ::rtl::OUString sDataSourceName;
+        if ( has(daDataSource) )
+            (*this)[daDataSource] >>= sDataSourceName;
+        else if ( has(daDatabaseLocation) )
+            (*this)[daDatabaseLocation] >>= sDataSourceName;
+        return sDataSourceName;
+#else
+        return ::rtl::OUString();
+#endif
+    }
+    //--------------------------------------------------------------------
+    void ODataAccessDescriptor::setDataSource(const ::rtl::OUString& _sDataSourceNameOrLocation)
+    {
+#ifndef SVX_LIGHT
+        if ( _sDataSourceNameOrLocation.getLength() )
+        {
+            INetURLObject aURL(_sDataSourceNameOrLocation);
+            (*this)[ (( aURL.GetProtocol() == INET_PROT_FILE ) ? daDatabaseLocation : daDataSource)] <<= _sDataSourceNameOrLocation;
+        }
+        else
+            (*this)[ daDataSource ] <<= ::rtl::OUString();
 #endif
     }
 
