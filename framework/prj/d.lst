@@ -4,7 +4,7 @@ mkdir: %_DEST%\inc%_EXT%\framework
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*
 ..\%__SRC%\bin\login %_DEST%\bin%_EXT%\login.bin
-..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
 
 ..\dtd\menubar.dtd %_DEST%\bin%_EXT%\menubar.dtd
 ..\dtd\toolbar.dtd %_DEST%\bin%_EXT%\toolbar.dtd
@@ -34,5 +34,3 @@ hedabu: ..\inc\classes\addonmenu.hxx %_DEST%\inc%_EXT%\framework\addonmenu.hxx
 
 ..\source\unotypes\fw?.xml %_DEST%\xml%_EXT%\*.xml
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
-dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
