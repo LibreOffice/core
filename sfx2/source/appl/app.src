@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-19 11:17:27 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3271,7 +3271,7 @@ String STR_EDITOBJECT
     Text[ dutch ] = "~Bewerken";
     Text[ chinese_simplified ] = "±ΰΌ­(~E)";
     Text[ greek ] = "~Επεξεργασία";
-    Text[ korean ] = "ΖνΑύ";
+    Text[ korean ] = "ΖνΑύ(~E)";
     Text[ turkish ] = "~Dόzenle";
     Text[ language_user1 ] = " ";
 };
@@ -3298,7 +3298,7 @@ String STR_OPENOBJECT
     Text[ dutch ] = "~Openen";
     Text[ chinese_simplified ] = "΄ςΏͺ(~O)";
     Text[ greek ] = "’νοιγμα";
-    Text[ korean ] = "Ώ­±β";
+    Text[ korean ] = "Ώ­±β(~O)";
     Text[ turkish ] = "~Aη";
     Text[ language_user1 ] = " ";
 };
