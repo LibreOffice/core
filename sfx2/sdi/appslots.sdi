@@ -5,8 +5,8 @@
 #*    Description       shell SfxApplication
 #*
 #*    Creation date     MI  01/31/1995
-#*    last change       $Author: rt $ $Date: 2003-09-19 07:55:01 $
-#*    $Revision: 1.11 $
+#*    last change       $Author: hr $ $Date: 2004-02-03 19:51:16 $
+#*    $Revision: 1.12 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -502,6 +502,16 @@ shell SfxApplication
     SID_ADDRESS_DATA_SOURCE
     [
         ExecMethod = OfaExec_Impl;
+    ]
+
+    SID_AUTO_CORRECT_DLG
+    [
+        ExecMethod = OfaExec_Impl ;
+    ]
+
+    SID_OPTIONS_TREEDIALOG
+    [
+        ExecMethod = OfaExec_Impl ;
     ]
 }
 
