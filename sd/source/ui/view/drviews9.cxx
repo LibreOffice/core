@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews9.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-13 16:44:45 $
+ *  last change: $Author: ka $ $Date: 2002-03-14 12:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,42 +295,10 @@ void SdDrawViewShell::ExecGallery(SfxRequest& rReq)
                     pGrafObj->SetGraphicLink( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ), pGal->GetFilterName() );
             }
             // Sound als OLE-Objekt einfuegen
-            else if (nFormats & SGA_FORMAT_SOUND)
+            else if( nFormats & SGA_FORMAT_SOUND )
             {
                 String aURL( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
-
-                if( pGal->IsLinkage() )
-                    InsertURLButton( aURL, aURL, String(), NULL );
-                else
-                {
-                    SvInPlaceObjectRef  aIPObj;
-                    SvStorageRef        aStor = new SvStorage( String(), STREAM_STD_READWRITE );
-                    String              aName;
-
-                    aIPObj = &( static_cast< SvFactory* >( SvInPlaceObject::ClassFactory() ) )->CreateAndInit( aURL, aStor );
-
-                    if( aIPObj.Is() )
-                    {
-                        Size aSize( aIPObj->GetVisArea( ASPECT_CONTENT ).GetSize() );
-
-                        if( !aSize.Width() || !aSize.Height() )
-                        {
-                            aSize.Width()   = 1410;
-                            aSize.Height()  = 1000;
-                        }
-
-                        SdrPageView*    pPV = pDrView->GetPageViewPvNum(0);
-                        Size            aPageSize( pPV->GetPage()->GetSize() );
-                        Point           aPnt( (aPageSize.Width() - aSize.Width() ) >> 1, ( aPageSize.Height() - aSize.Height() ) >> 1 );
-                        Rectangle       aRect(aPnt, aSize);
-
-                        aName = pDocSh->InsertObject( aIPObj, String() )->GetObjName();
-                        SdrOle2Obj* pOleObj = new SdrOle2Obj( aIPObj, aName, aRect );
-                        pDrView->InsertObject( pOleObj, *pPV, SDRINSERT_SETDEFLAYER );
-                        pOleObj->SetLogicRect( aRect );
-                        aIPObj->SetVisAreaSize( aRect.GetSize() );
-                    }
-                }
+                InsertURLButton( aURL, aURL, String(), NULL );
             }
 
             pDocSh->SetWaitCursor( FALSE );

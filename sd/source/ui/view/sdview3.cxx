@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-06 18:20:39 $
+ *  last change: $Author: ka $ $Date: 2002-03-14 12:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #pragma hdrstop
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
+#endif
+#ifndef _FILELIST_HXX
+#include <sot/filelist.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -1129,10 +1132,32 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
             }
         }
     }
+    else if( CHECK_FORMAT_TRANS( FORMAT_FILE_LIST ) )
+    {
+        FileList aDropFileList;
+
+        if( aDataHelper.GetFileList( FORMAT_FILE_LIST, aDropFileList ) )
+        {
+            aDropFileVector.clear();
+
+            for( ULONG i = 0, nCount = aDropFileList.Count(); i < nCount; i++ )
+                aDropFileVector.push_back( aDropFileList.GetFile( i ) );
+
+            aDropInsertFileTimer.Start();
+        }
+
+        bReturn = TRUE;
+    }
     else if( CHECK_FORMAT_TRANS( FORMAT_FILE ) )
     {
+        String aDropFile;
+
         if( aDataHelper.GetString( FORMAT_FILE, aDropFile ) )
+        {
+            aDropFileVector.clear();
+            aDropFileVector.push_back( aDropFile );
             aDropInsertFileTimer.Start();
+        }
 
         bReturn = TRUE;
     }

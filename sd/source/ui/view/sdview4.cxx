@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-13 16:44:45 $
+ *  last change: $Author: ka $ $Date: 2002-03-14 12:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,6 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
-
-#if defined (WIN) || defined (WNT)
-#include <tools/svwin.h>
-#endif
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
 #endif
@@ -81,6 +76,12 @@
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _SV_SOUND_HXX //autogen
+#include <vcl/sound.hxx>
+#endif
+#ifndef _URLBMK_HXX //autogen
+#include <svtools/urlbmk.hxx>
 #endif
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
@@ -106,10 +107,6 @@
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
 #endif
-#ifndef _URLBMK_HXX //autogen
-#include <svtools/urlbmk.hxx>
-#endif
-
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
@@ -127,12 +124,6 @@
 #include "sdpage.hxx"
 #include "sdview.hxx"
 #include "slidview.hxx"
-
-/*************************************************************************
-|*
-|* Paste
-|*
-\************************************************************************/
 
 #ifdef WNT
 #pragma optimize ( "", off )
@@ -294,144 +285,130 @@ SdrGrafObj* SdView::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     return pNewGrafObj;
 }
 
-
 /*************************************************************************
 |*
 |* Timer-Handler fuer InsertFile beim Drop()
 |*
 \************************************************************************/
 
-IMPL_LINK_INLINE_START( SdView, DropInsertFileHdl, Timer*, pTimer )
+IMPL_LINK( SdView, DropInsertFileHdl, Timer*, pTimer )
 {
-    INetURLObject   aURL( aDropFile );
-    BOOL            bOK = FALSE;
+    ::std::vector< String >::const_iterator aIter( aDropFileVector.begin() );
 
-    if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
+    while( aIter != aDropFileVector.end() )
     {
-        String aURLStr;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aDropFile, aURLStr );
-        aURL = INetURLObject( aURLStr );
-    }
+        String          aCurrentDropFile( *aIter );
+        INetURLObject   aURL( aCurrentDropFile );
+        BOOL            bOK = FALSE;
 
-    aDropFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
-
-    GraphicFilter*  pGraphicFilter = GetGrfFilter();
-    FilterProgress* pFilterProgress = new FilterProgress( pGraphicFilter, pViewSh->GetDocSh() );
-    Graphic         aGraphic;
-
-    if( !pGraphicFilter->ImportGraphic( aGraphic, aURL ) )
-    {
-        SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nAction, aDropPos, NULL, NULL );
-
-        if( pGrafObj )
-            pGrafObj->SetGraphicLink( aDropFile, String() );
-
-        bOK = TRUE;
-    }
-
-    delete pFilterProgress;
-
-    if( !bOK )
-    {
-        const SfxFilter*    pFilter = NULL;
-        SfxMedium           aSfxMedium( aDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
-        ErrCode             nErr = SFX_APP()->GetFilterMatcher().GuessFilter(  aSfxMedium, &pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
-
-        if( pFilter && !nErr )
+        if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
         {
-            const String    aFilterName( pFilter->GetFilterName() );
-            const String    aLowerAsciiFileName( aDropFile.ToLowerAscii() );
-
-            if( aFilterName.EqualsAscii( "Text" )               ||
-                aFilterName.EqualsAscii( "Rich Text Format" )   ||
-                aFilterName.EqualsAscii( "HTML" )               ||
-                aLowerAsciiFileName.SearchAscii(".sdd") != STRING_NOTFOUND ||
-                aLowerAsciiFileName.SearchAscii(".sda") != STRING_NOTFOUND ||
-                aLowerAsciiFileName.SearchAscii(".sxd") != STRING_NOTFOUND ||
-                aLowerAsciiFileName.SearchAscii(".sxi") != STRING_NOTFOUND ||
-                aLowerAsciiFileName.SearchAscii(".std") != STRING_NOTFOUND ||
-                aLowerAsciiFileName.SearchAscii(".sti") != STRING_NOTFOUND )
-            {
-                /******************************************************************
-                * Eigenes Format, Text oder RTF
-                ******************************************************************/
-                bOK = TRUE;
-                SdWindow* pWin = pViewSh->GetActiveWindow();
-                SfxRequest aReq(SID_INSERTFILE, 0, pDoc->GetItemPool());
-                SfxStringItem aItem1(ID_VAL_DUMMY0, aDropFile);
-                SfxStringItem aItem2(ID_VAL_DUMMY1, pFilter->GetFilterName());
-                aReq.AppendItem (aItem1);
-                aReq.AppendItem (aItem2);
-                FuInsertFile* pFunc = new FuInsertFile(pViewSh, pWin, this, pDoc, aReq);
-                delete pFunc;
-            }
+            String aURLStr;
+            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aCurrentDropFile, aURLStr );
+            aURL = INetURLObject( aURLStr );
         }
-    }
 
-    if( !bOK )
-    {
-        String          aTmpStr;
-        INetBookmark    aINetBookmark(aTmpStr, aTmpStr);
+        GraphicFilter*  pGraphicFilter = GetGrfFilter();
+        FilterProgress* pFilterProgress = new FilterProgress( pGraphicFilter, pViewSh->GetDocSh() );
+        Graphic         aGraphic;
 
-        // FIXME: was (( nAction && DND_ACTION_LINK ) || !INetBookmark::DragServerHasFormat(0) || !aINetBookmark.PasteDragServer(0)) before
-        if( ( nAction & DND_ACTION_LINK ) )
+        aCurrentDropFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
+
+        if( !pGraphicFilter->ImportGraphic( aGraphic, aURL ) )
         {
-            ((SdDrawViewShell*) pViewSh)->InsertURLButton(aDropFile, aDropFile, String(), &aDropPos);
+            SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nAction, aDropPos, NULL, NULL );
+
+            if( pGrafObj )
+                pGrafObj->SetGraphicLink( aCurrentDropFile, String() );
+
+            bOK = TRUE;
         }
-        else
-        {
-            /**********************************************************************
-            * Datei als OLE-Objekt einfuegen
-            **********************************************************************/
-            SvInPlaceObjectRef  aIPObj;
-            SvStorageRef        aStor = new SvStorage( String(), STREAM_STD_READWRITE );
-            String              aName;
 
-            if (pViewSh)
+        delete pFilterProgress;
+
+        if( !bOK )
+        {
+            const SfxFilter*        pFoundFilter = NULL;
+            SfxMedium               aSfxMedium( aCurrentDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
+            ErrCode                 nErr = SFX_APP()->GetFilterMatcher().GuessFilter(  aSfxMedium, &pFoundFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
+
+            if( pFoundFilter && !nErr )
             {
-                aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(aDropFile, aStor);
-                if ( aIPObj.Is() )
+                ::std::vector< String > aFilterVector;
+                const String            aFilterName( pFoundFilter->GetFilterName() );
+                const String            aLowerAsciiFileName( aCurrentDropFile.ToLowerAscii() );
+
+                FuInsertFile::GetSupportedFilterVector( aFilterVector );
+
+                if( ( ::std::find( aFilterVector.begin(), aFilterVector.end(), pFoundFilter->GetMimeType() ) != aFilterVector.end() ) ||
+                    aFilterName.SearchAscii( "Text" ) != STRING_NOTFOUND ||
+                    aFilterName.SearchAscii( "Rich" ) != STRING_NOTFOUND ||
+                    aFilterName.SearchAscii( "RTF" ) != STRING_NOTFOUND ||
+                    aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND ||
+                    aLowerAsciiFileName.SearchAscii(".sdd") != STRING_NOTFOUND ||
+                    aLowerAsciiFileName.SearchAscii(".sda") != STRING_NOTFOUND ||
+                    aLowerAsciiFileName.SearchAscii(".sxd") != STRING_NOTFOUND ||
+                    aLowerAsciiFileName.SearchAscii(".sxi") != STRING_NOTFOUND ||
+                    aLowerAsciiFileName.SearchAscii(".std") != STRING_NOTFOUND ||
+                    aLowerAsciiFileName.SearchAscii(".sti") != STRING_NOTFOUND )
                 {
-                    Size        aSize(aIPObj->GetVisArea(ASPECT_CONTENT).GetSize());
-                    Rectangle   aRect;
+                    SdWindow*       pWin = pViewSh->GetActiveWindow();
+                    SfxRequest      aReq(SID_INSERTFILE, 0, pDoc->GetItemPool());
+                    SfxStringItem   aItem1( ID_VAL_DUMMY0, aCurrentDropFile ), aItem2( ID_VAL_DUMMY1, pFoundFilter->GetFilterName() );
 
-                    if (!aSize.Width() || !aSize.Height())
-                    {
-                        aSize.Width()   = 1410;
-                        aSize.Height()  = 1000;
-
-                        aRect = Rectangle(aDropPos, aSize);
-                    }
-                    else
-                    {
-                        aRect = Rectangle(aDropPos, aSize);
-                    }
-
-                    aName = pDocSh->InsertObject(aIPObj, String())->GetObjName();
-
-                    SdrOle2Obj* pOleObj = new SdrOle2Obj(aIPObj, aName, aRect);
-
-                    ULONG nOptions = SDRINSERT_SETDEFLAYER;
-
-                    if (pViewSh && pViewSh->GetIPClient() &&
-                        pViewSh->GetIPClient()->IsInPlaceActive())
-                    {
-                        nOptions |= SDRINSERT_DONTMARK;
-                    }
-
-                    InsertObject(pOleObj, *GetPageViewPvNum(0), nOptions);
-
-                    pOleObj->SetLogicRect(aRect);
-                    aIPObj->SetVisAreaSize(aRect.GetSize());
+                    aReq.AppendItem( aItem1 );
+                    aReq.AppendItem( aItem2 );
+                    delete( new FuInsertFile( pViewSh, pWin, this, pDoc, aReq ) );
+                    bOK = TRUE;
                 }
             }
         }
+
+        if( !bOK )
+        {
+            if( Sound::IsSoundFile( aCurrentDropFile ) || ( nAction & DND_ACTION_LINK ) )
+                static_cast< SdDrawViewShell* >( pViewSh )->InsertURLButton( aCurrentDropFile, aCurrentDropFile, String(), &aDropPos );
+            else
+            {
+                if( pViewSh )
+                {
+                    String              aName;
+                    SvStorageRef        aStor( new SvStorage( String(), STREAM_STD_READWRITE ) );
+                    SvInPlaceObjectRef  aIPObj( &static_cast< SvFactory* >( SvInPlaceObject::ClassFactory() )->CreateAndInit( aCurrentDropFile, aStor ) );
+
+                    if( aIPObj.Is() )
+                    {
+                        Size        aSize( aIPObj->GetVisArea( ASPECT_CONTENT ).GetSize() );
+                        Rectangle   aRect;
+
+                        if (!aSize.Width() || !aSize.Height())
+                        {
+                            aSize.Width()   = 1410;
+                            aSize.Height()  = 1000;
+                        }
+
+                        aRect = Rectangle( aDropPos, aSize );
+                        aName = pDocSh->InsertObject( aIPObj, String() )->GetObjName();
+
+                        SdrOle2Obj* pOleObj = new SdrOle2Obj( aIPObj, aName, aRect );
+                        ULONG       nOptions = SDRINSERT_SETDEFLAYER;
+
+                        if (pViewSh && pViewSh->GetIPClient() && pViewSh->GetIPClient()->IsInPlaceActive())
+                            nOptions |= SDRINSERT_DONTMARK;
+
+                        InsertObject( pOleObj, *GetPageViewPvNum(0), nOptions );
+                        pOleObj->SetLogicRect( aRect );
+                        aIPObj->SetVisAreaSize( aRect.GetSize() );
+                    }
+                }
+            }
+        }
+
+        ++aIter;
     }
 
     return 0;
 }
-IMPL_LINK_INLINE_END( SdView, DropInsertFileHdl, Timer*, pTimer )
-
 
 /*************************************************************************
 |*
@@ -439,14 +416,11 @@ IMPL_LINK_INLINE_END( SdView, DropInsertFileHdl, Timer*, pTimer )
 |*
 \************************************************************************/
 
-IMPL_LINK_INLINE_START( SdView, DropErrorHdl, Timer*, pTimer )
+IMPL_LINK( SdView, DropErrorHdl, Timer*, pTimer )
 {
-    InfoBox( pViewSh->GetActiveWindow(),
-             String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+    InfoBox( pViewSh->GetActiveWindow(), String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
     return 0;
 }
-IMPL_LINK_INLINE_END( SdView, DropErrorHdl, Timer*, pTimer )
-
 
 #ifdef WNT
 #pragma optimize ( "", on )
