@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-04 14:10:31 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:25:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,8 +82,8 @@ PARFILES=\
         starregistryitem_python.par    \
         file_python.par
 
-LNGFILES= \
-        module_python.lng 
+ULFFILES= \
+        module_python.ulf 
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
