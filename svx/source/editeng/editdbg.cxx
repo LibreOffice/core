@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-02 14:07:17 $
+ *  last change: $Author: mt $ $Date: 2001-10-11 11:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,9 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         case EE_CHAR_WLM:
             aDebStr += "WordLineMode=";
             aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxWordLineModeItem&)rItem).GetValue() );
+        break;
+        case EE_CHAR_XMLATTRIBS:
+            aDebStr += "XMLAttribs=...";
         break;
     }
     return aDebStr;

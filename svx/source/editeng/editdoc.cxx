@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-21 12:47:30 $
+ *  last change: $Author: mt $ $Date: 2001-10-11 11:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include <emphitem.hxx>
 #include <charscaleitem.hxx>
 #include <charreliefitem.hxx>
+#include <xmlcnitm.hxx>
 
 #include <editdoc.hxx>
 #include <editdbg.hxx>
@@ -205,6 +206,7 @@ DBG_NAME( EE_ContentNode );
 DBG_NAME( EE_CharAttribList );
 
 SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
+        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_XMLATTRIBS
         { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },   // EE_PARA_HANGINGPUNCTUATION
         { SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEM_POOLABLE },
         { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },   // EE_PARA_ASIANCJKSPACING
@@ -247,7 +249,7 @@ SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },
         { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_RUBI_DUMMY
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_ROTATION_DUMMY
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_XMLATTRIBS
         { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_TAB
         { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_LINEBR
         { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEM_POOLABLE },  // EE_FEATURE_NOTCONV
@@ -274,7 +276,7 @@ USHORT aV4Map[] = {
     3994, 3995, 3996, 3997, 3998, 3999, 4000, 4001, 4002, 4003,
     4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013,
     4014, 4015, 4016, 4017, 4018,
-    /* CJK Items inserted here: EE_CHAR_LANGUAGE - EE_CHAR_ROTATION_DUMMY */
+    /* CJK Items inserted here: EE_CHAR_LANGUAGE - EE_CHAR_XMLATTRIBS */
     4034, 4035, 4036, 4037
 };
 
@@ -393,6 +395,11 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, US
         case EE_CHAR_WLM:
         {
             pNew = new EditCharAttribWordLineMode( (const SvxWordLineModeItem&)rNew, nS, nE );
+        }
+        break;
+        case EE_CHAR_XMLATTRIBS:
+        {
+            pNew = new EditCharAttrib( rNew, nS, nE );  // Attrib is only for holding XML information...
         }
         break;
         case EE_FEATURE_TAB:
