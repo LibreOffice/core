@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:46:53 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #ifndef _COM_SUN_STAR_EMBED_XWINDOWSUPPLIER_HPP_
 #include <com/sun/star/embed/XWindowSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_STATECHANGEINPROGRESSEXCEPTION_HPP_
+#include <com/sun/star/embed/StateChangeInProgressException.hpp>
+#endif
+
 
 #ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
 #include <com/sun/star/awt/XWindowPeer.hpp>
@@ -106,6 +110,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
+#include <targetstatecontrol.hxx>
 
 #include "commonembobj.hxx"
 #include "convert.hxx"
@@ -462,37 +467,49 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
             throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
                                             uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-        // in case the object is already in requested state
-        if ( m_nObjectState == nNewState )
-        {
-            // if active object is activated again, bring it's window to top
-            if ( m_nObjectState == embed::EmbedStates::ACTIVE )
-                m_pDocHolder->Show();
-
-            return;
-        }
-
         sal_Int32 nOldState = m_nObjectState;
 
-        // retrieve sequence of states that should be passed to reach desired state
-        uno::Sequence< sal_Int32 > aIntermediateStates = GetIntermediateStatesSequence_Impl( nNewState );
-
-        // notify listeners that the object is going to change the state
-        StateChangeNotification_Impl( sal_True, nOldState, nNewState,aGuard );
-
-        try {
-            for ( sal_Int32 nInd = 0; nInd < aIntermediateStates.getLength(); nInd++ )
-                SwitchStateTo_Impl( aIntermediateStates[nInd] );
-
-            SwitchStateTo_Impl( nNewState );
-        }
-        catch( uno::Exception& )
+        if ( m_nTargetState != -1 )
         {
-            if ( nOldState != m_nObjectState )
-                // notify listeners that the object has changed the state
-                StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState ,aGuard);
+            // means that the object is currently trying to reach the target state
+            throw embed::StateChangeInProgressException( ::rtl::OUString(),
+                                                        uno::Reference< uno::XInterface >(),
+                                                        m_nTargetState );
+        }
+        else
+        {
+            TargetStateControl_Impl aControl( m_nTargetState, nNewState );
 
-            throw;
+            // in case the object is already in requested state
+            if ( m_nObjectState == nNewState )
+            {
+                // if active object is activated again, bring it's window to top
+                if ( m_nObjectState == embed::EmbedStates::ACTIVE )
+                    m_pDocHolder->Show();
+
+                return;
+            }
+
+            // retrieve sequence of states that should be passed to reach desired state
+            uno::Sequence< sal_Int32 > aIntermediateStates = GetIntermediateStatesSequence_Impl( nNewState );
+
+            // notify listeners that the object is going to change the state
+            StateChangeNotification_Impl( sal_True, nOldState, nNewState,aGuard );
+
+            try {
+                for ( sal_Int32 nInd = 0; nInd < aIntermediateStates.getLength(); nInd++ )
+                    SwitchStateTo_Impl( aIntermediateStates[nInd] );
+
+                SwitchStateTo_Impl( nNewState );
+            }
+            catch( uno::Exception& )
+            {
+                if ( nOldState != m_nObjectState )
+                    // notify listeners that the object has changed the state
+                    StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState ,aGuard);
+
+                throw;
+            }
         }
 
         // notify listeners that the object has changed the state
