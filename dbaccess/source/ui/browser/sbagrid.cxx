@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:43:47 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1341,6 +1341,18 @@ void SbaGridControl::ColChanged()
     if (m_pMasterListener)
         m_pMasterListener->ColumnChanged();
 }
+//---------------------------------------------------------------------------------------
+void SbaGridControl::BeforeDrop()
+{
+    if (m_pMasterListener)
+        m_pMasterListener->BeforeDrop();
+}
+//---------------------------------------------------------------------------------------
+void SbaGridControl::AfterDrop()
+{
+    if (m_pMasterListener)
+        m_pMasterListener->AfterDrop();
+}
 
 
 //------------------------------------------------------------------------------
@@ -1887,20 +1899,24 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, EMPTY_ARG)
         Hide();
         try
         {
+            BeforeDrop();
             if(!pImExport->Read())
             {
                 String sError = String(ModuleRes(STR_NO_COLUMNNAME_MATCHING));
                 throwGenericSQLException(sError,NULL);
             }
+            AfterDrop();
             Show();
         }
         catch(const SQLException& e)
         {
+            AfterDrop();
             Show();
             ::dbaui::showError(::dbtools::SQLExceptionInfo(e),this,getServiceManager());
         }
         catch(const Exception& )
         {
+            AfterDrop();
             Show();
             OSL_ENSURE(0,"Exception catched!");
         }
