@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eertfpar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-18 11:27:11 $
+ *  last change: $Author: mt $ $Date: 2002-01-16 10:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,9 +402,16 @@ void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     else
     {
         if ( ( aStartPaM.GetIndex() == 0 ) && ( aEndPaM.GetIndex() == aEndPaM.GetNode()->Len() ) )
-            pImpEditEngine->SetParaAttribs( nStartNode, rSet.GetAttrSet() );
+        {
+            // #96298# When settings char attribs as para attribs, we must merge with existing attribs, not overwrite the ItemSet!
+            SfxItemSet aAttrs = pImpEditEngine->GetParaAttribs( nStartNode );
+            aAttrs.Put( rSet.GetAttrSet() );
+            pImpEditEngine->SetParaAttribs( nStartNode, aAttrs );
+        }
         else
+        {
             pImpEditEngine->SetAttribs( EditSelection( aStartPaM, aEndPaM ), rSet.GetAttrSet() );
+        }
     }
 
     // OutlLevel...
