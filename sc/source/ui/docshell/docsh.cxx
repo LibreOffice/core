@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: er $ $Date: 2001-04-23 09:44:00 $
+ *  last change: $Author: vg $ $Date: 2001-05-03 12:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ static const sal_Char __FAR_DATA pFilterDBase[]     = "dBase";
 static const sal_Char __FAR_DATA pFilterDif[]       = "DIF";
 static const sal_Char __FAR_DATA pFilterSylk[]      = "SYLK";
 static const sal_Char __FAR_DATA pFilterHtml[]      = "HTML (StarCalc)";
-static const sal_Char __FAR_DATA pFilterHtmlWebQ[]  = "calc_HTML_WebQuery";
+const sal_Char __FAR_DATA pFilterHtmlWebQ[] = "calc_HTML_WebQuery";
 static const sal_Char __FAR_DATA pFilterRtf[]       = "Rich Text Format (StarCalc)";
 
 //----------------------------------------------------------------------
