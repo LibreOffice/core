@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:16:43 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,8 @@
 #include "GraphicViewShell.hxx"
 #endif
 #include "sdpage.hxx"
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #include "anminfo.hxx"
 #include "sdpopup.hxx"
@@ -576,9 +576,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 {
     if ( !IsInputLocked() )
     {
-        const BOOL bNativeShow = pFuSlideShow &&
-                                 ( pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW ) &&
-                                 !pFuSlideShow->IsLivePresentation();
+        const BOOL bNativeShow = mpSlideShow &&( mpSlideShow->getAnimationMode() == ANIMATIONMODE_SHOW );
 
         if( rCEvt.GetCommand() == COMMAND_PASTESELECTION && !bNativeShow )
         {
