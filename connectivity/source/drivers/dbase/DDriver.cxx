@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDriver.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-30 10:44:15 $
+ *  last change: $Author: fs $ $Date: 2001-06-14 09:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,41 +82,14 @@ using namespace ::com::sun::star::lang;
 //------------------------------------------------------------------------------
 rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdbc.driver.dbase.Driver");
+    return rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.dbase.ODriver");
 }
-//------------------------------------------------------------------------------
-//Sequence< ::rtl::OUString > ODriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
-//{
-//      Sequence< ::rtl::OUString > aSNS( 2 );
-//  aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
-//  aSNS[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Driver");
-//  return aSNS;
-//}
 
 //------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
-
-//------------------------------------------------------------------
-//sal_Bool SAL_CALL ODriver::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
-//{
-//      Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-//  const ::rtl::OUString* pSupported = aSupported.getConstArray();
-//  for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
-//      if (pSupported->equals(_rServiceName))
-//          return sal_True;
-//
-//  return sal_False;
-//}
-
-//------------------------------------------------------------------
-//Sequence< ::rtl::OUString > SAL_CALL ODriver::getSupportedServiceNames(  ) throw(RuntimeException)
-//{
-//  return getSupportedServiceNames_Static();
-//}
-
 
 //------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL connectivity::dbase::ODriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )

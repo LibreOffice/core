@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADriver.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
+ *  last change: $Author: fs $ $Date: 2001-06-14 09:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ void ODriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdbc.ADriver");
+    return rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.ado.ODriver");
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > ODriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)

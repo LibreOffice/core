@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-30 14:16:09 $
+ *  last change: $Author: fs $ $Date: 2001-06-14 09:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ void ODriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdbc.BDriver");
+    return rtl::OUString::createFromAscii("com.sun.star.comp.sdbcx.adabas.ODriver");
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > ODriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CDriver.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-26 19:05:48 $
+ *  last change: $Author: fs $ $Date: 2001-06-14 09:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ using namespace ::com::sun::star::lang;
 
 rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdbc.driver.calc.Driver");
+    return rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.calc.ODriver");
 }
 
 ::rtl::OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
