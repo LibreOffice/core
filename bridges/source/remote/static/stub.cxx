@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stub.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:30:01 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 #include <sal/alloca.h>
-
 #include <osl/diagnose.h>
 
 #include <uno/data.h>
@@ -86,12 +85,12 @@ Uno2RemoteStub::Uno2RemoteStub( uno_Interface *pUnoI,
                                 typelib_InterfaceTypeDescription *pType,
                                 uno_Environment *pEnvUno,
                                 uno_Environment *pEnvRemote ) :
+    m_sOid( pOid ),
     m_pType(  pType ),
     m_pUnoI( pUnoI ),
+    m_nRef( 1 ),
     m_pEnvUno( pEnvUno ),
     m_pEnvRemote( pEnvRemote ),
-    m_sOid( pOid ),
-    m_nRef( 1 ),
     m_mapRemote2Uno( pEnvRemote, pEnvUno ),
     m_mapUno2Remote( pEnvUno, pEnvRemote )
 {
