@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:27:44 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,25 +657,7 @@ void SfxInterface::RegisterObjectBar( USHORT nPos, const ResId& rResId, ULONG nF
 SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResId, ULONG nFeature, const String *pStr, USHORT nClassId )
 {
     if ((nPos & SFX_VISIBILITY_MASK) == 0)
-    {
-        if ((nPos & SFX_POSITION_MASK) == 0 )
-            nPos |= SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_STANDARD;
-        else
-            nPos |= (SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_SERVER);
-    }
-
-    // App-Leiste?
-    if ( SFX_OBJECTBAR_APPLICATION == ( nPos & SFX_POSITION_MASK ) )
-        // je nach Desktop oder Einzelapp nur die richtige registrieren
-        if ( !( SFX_VISIBILITY_DESKTOP == ( nPos & SFX_VISIBILITY_DESKTOP ) ) )
-            return NULL;
-
-    nPos &= ~(USHORT)SFX_VISIBILITY_DESKTOP;
-
-    if( nPos & SFX_VISIBILITY_SERVER )
-        nPos |= SFX_VISIBILITY_PLUGSERVER;
-    if( nPos & SFX_VISIBILITY_CLIENT )
-        nPos |= SFX_VISIBILITY_PLUGCLIENT;
+        nPos |= SFX_VISIBILITY_STANDARD;
 
     SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(nPos, rResId, TRUE, nFeature, nClassId);
 
