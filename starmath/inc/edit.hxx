@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-31 14:11:58 $
+ *  last change: $Author: tl $ $Date: 2002-06-13 14:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <svx/editdata.hxx>
 #endif
 
+#ifndef _ACCESSIBILITY_HXX_
+#include "accessibility.hxx"
+#endif
+
 class SmDocShell;
 class SmViewShell;
 class EditView;
@@ -94,6 +98,10 @@ class SmCmdBoxWindow;
 
 class SmEditWindow : public Window, public DropTargetHelper
 {
+    ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible >  xAccessible;
+    SmEditAccessible *                                          pAccessible;
+
     SmCmdBoxWindow &rCmdBox;
     EditView       *pEditView;
     ScrollBar      *pHScrollBar,
@@ -130,13 +138,15 @@ class SmEditWindow : public Window, public DropTargetHelper
     void        SetScrollBarRanges();
     void        InitScrollBars();
 
-    SmDocShell *    GetDoc();
-    EditEngine *    GetEditEngine();
-    SfxItemPool *   GetEditEngineItemPool();
-
 public:
     SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin );
     ~SmEditWindow();
+
+    SmDocShell *    GetDoc();
+    SmViewShell *   GetView();
+    EditView *      GetEditView()   { return pEditView; }
+    EditEngine *    GetEditEngine();
+    SfxItemPool *   GetEditEngineItemPool();
 
     // Window
     virtual void        SetText(const XubString &rText);
@@ -164,6 +174,11 @@ public:
 
     void                Flush();
     void                DeleteEditView( SmViewShell &rView );
+
+    // for Accessibility
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+
+    SmEditAccessible *   GetAccessible()  { return pAccessible; }
 };
 
 

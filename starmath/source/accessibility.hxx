@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-31 14:23:22 $
+ *  last change: $Author: tl $ $Date: 2002-06-13 14:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,10 +96,25 @@
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
+#endif
+#ifndef _SFXBRDCST_HXX
+#include <svtools/brdcst.hxx>
+#endif
 
+#include <svx/editeng.hxx>
+
+#ifndef _SVX_UNOEDSRC_HXX
+#include <svx/unoedsrc.hxx> // SvxEditSource, SvxTextForwarder, SvxViewForwarder, SvxEditViewForwarder
+#endif
+#ifndef _SVX_ACCESSILE_TEXT_HELPER_HXX_
+#include <svx/AccessibleTextHelper.hxx>
+#endif
 
 class Window;
 class SmGraphicWindow;
+class SmEditWindow;
 class SmDocShell;
 
 namespace drafts { namespace com { namespace sun { namespace star { namespace accessibility {
@@ -107,6 +122,9 @@ struct AccessibleEventObject;
 }}}}};
 
 //////////////////////////////////////////////////////////////////////
+//
+// classes and helper-classes used for accessibility in the graphic-window
+//
 
 typedef
 cppu::WeakImplHelper5
@@ -117,10 +135,10 @@ cppu::WeakImplHelper5
         drafts::com::sun::star::accessibility::XAccessibleText,
         drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
     >
-SmAccessibilityBaseClass;
+SmGraphicAccessibleBaseClass;
 
-class SmAccessibility :
-    public SmAccessibilityBaseClass
+class SmGraphicAccessible :
+    public SmGraphicAccessibleBaseClass
 {
     //vos::ORefCount    aRefCount;  // number of references to object
     cppu::OInterfaceContainerHelper     aAccEventListeners;
@@ -129,16 +147,16 @@ class SmAccessibility :
     SmGraphicWindow     *pWin;
 
     // disallow copy-ctor and assignment-operator for now
-    SmAccessibility( const SmAccessibility & );
-    SmAccessibility & operator = ( const SmAccessibility & );
+    SmGraphicAccessible( const SmGraphicAccessible & );
+    SmGraphicAccessible & operator = ( const SmGraphicAccessible & );
 
 protected:
     SmDocShell *    GetDoc_Impl();
     String          GetAccessibleText_Impl();
 
 public:
-    SmAccessibility( SmGraphicWindow *pGraphicWin );
-    virtual ~SmAccessibility();
+    SmGraphicAccessible( SmGraphicWindow *pGraphicWin );
+    virtual ~SmGraphicAccessible();
 
     SmGraphicWindow *   GetWin()    { return pWin; }
     void                ClearWin();     // to be called when view is destroyed
@@ -160,11 +178,6 @@ public:
     virtual sal_Bool SAL_CALL isShowing(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isFocusTraversable(  ) throw (::com::sun::star::uno::RuntimeException);
-    //
-    // already removed from interface in latest version
-    virtual void SAL_CALL addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    //
     virtual void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -202,6 +215,220 @@ public:
     virtual ::rtl::OUString SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 };
+
+//////////////////////////////////////////////////////////////////////
+//
+// classes and helper-classes used for accessibility in the command-window
+//
+
+class SmEditSource;
+class EditEngine;
+class EditView;
+class SvxFieldItem;
+struct ESelection;
+
+
+class SmViewForwarder :
+    public SvxViewForwarder
+{
+    EditView &          rEditView;
+
+    // disallow copy-ctor and assignment-operator for now
+    SmViewForwarder( const SmViewForwarder & );
+    SmViewForwarder & operator = ( const SmViewForwarder & );
+
+public:
+                        SmViewForwarder( EditView &rView );
+    virtual             ~SmViewForwarder();
+
+    virtual BOOL        IsValid() const;
+    virtual Rectangle   GetVisArea() const;
+    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+};
+
+
+class SmTextForwarder :     /* analog to SvxEditEngineForwarder */
+    public SvxTextForwarder
+{
+    EditEngine &        rEditEngine;
+    SmEditSource &      rEditSource;
+
+    DECL_LINK( NotifyHdl, EENotify * );
+
+    // disallow copy-ctor and assignment-operator for now
+    SmTextForwarder( const SmTextForwarder & );
+    SmTextForwarder & operator = ( const SmTextForwarder & );
+
+public:
+    SmTextForwarder( EditEngine& rEngine, SmEditSource & rSource );
+    virtual ~SmTextForwarder();
+
+    virtual USHORT      GetParagraphCount() const;
+    virtual USHORT      GetTextLen( USHORT nParagraph ) const;
+    virtual String      GetText( const ESelection& rSel ) const;
+    virtual SfxItemSet  GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib = EditEngineAttribs_All ) const;
+    virtual SfxItemSet  GetParaAttribs( USHORT nPara ) const;
+    virtual void        SetParaAttribs( USHORT nPara, const SfxItemSet& rSet );
+    virtual void        GetPortions( USHORT nPara, SvUShorts& rList ) const;
+
+    virtual USHORT      GetItemState( const ESelection& rSel, USHORT nWhich ) const;
+    virtual USHORT      GetItemState( USHORT nPara, USHORT nWhich ) const;
+
+    virtual void        QuickInsertText( const String& rText, const ESelection& rSel );
+    virtual void        QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );
+    virtual void        QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
+    virtual void        QuickInsertLineBreak( const ESelection& rSel );
+
+    virtual SfxItemPool* GetPool() const;
+
+    virtual XubString    CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor );
+    virtual BOOL         IsValid() const;
+
+    virtual LanguageType    GetLanguage( USHORT, USHORT ) const;
+    virtual USHORT          GetFieldCount( USHORT nPara ) const;
+    virtual EFieldInfo      GetFieldInfo( USHORT nPara, USHORT nField ) const;
+    virtual EBulletInfo     GetBulletInfo( USHORT nPara ) const;
+    virtual Rectangle       GetCharBounds( USHORT nPara, USHORT nIndex ) const;
+    virtual Rectangle       GetParaBounds( USHORT nPara ) const;
+    virtual MapMode         GetMapMode() const;
+    virtual OutputDevice*   GetRefDevice() const;
+    virtual sal_Bool        GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const;
+    virtual sal_Bool        GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const;
+    virtual USHORT          GetLineCount( USHORT nPara ) const;
+    virtual USHORT          GetLineLen( USHORT nPara, USHORT nLine ) const;
+    virtual sal_Bool        Delete( const ESelection& );
+    virtual sal_Bool        InsertText( const String&, const ESelection& );
+    virtual sal_Bool        QuickFormatDoc( BOOL bFull=FALSE );
+};
+
+
+class SmEditViewForwarder :     /* analog to SvxEditEngineViewForwarder */
+    public SvxEditViewForwarder
+{
+    EditView &          rEditView;
+
+    // disallow copy-ctor and assignment-operator for now
+    SmEditViewForwarder( const SmEditViewForwarder & );
+    SmEditViewForwarder & operator = ( const SmEditViewForwarder & );
+
+public:
+                        SmEditViewForwarder( EditView& rView );
+    virtual             ~SmEditViewForwarder();
+
+    virtual BOOL        IsValid() const;
+
+    virtual Rectangle   GetVisArea() const;
+    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+
+    virtual sal_Bool    GetSelection( ESelection& rSelection ) const;
+    virtual sal_Bool    SetSelection( const ESelection& rSelection );
+    virtual sal_Bool    Copy();
+    virtual sal_Bool    Cut();
+    virtual sal_Bool    Paste();
+};
+
+
+class SmEditSource :
+    public SvxEditSource
+{
+    SfxBroadcaster          aBroadCaster;
+    SmViewForwarder         aViewFwd;
+    SmTextForwarder         aTextFwd;
+    SmEditViewForwarder     aEditViewFwd;
+
+    EditEngine &            rEditEngine;
+    EditView &              rEditView;
+
+    // disallow copy-ctor and assignment-operator for now
+    SmEditSource( const SmEditSource &rSrc );
+    SmEditSource & operator = ( const SmEditSource & );
+
+public:
+            SmEditSource( SmEditWindow *pWin, EditEngine &rEditEngine, EditView &rEditView );
+    virtual ~SmEditSource();
+
+    virtual SvxEditSource*      Clone() const;
+    virtual SvxTextForwarder*   GetTextForwarder();
+     virtual SvxViewForwarder*  GetViewForwarder();
+     virtual SvxEditViewForwarder*  GetEditViewForwarder( sal_Bool bCreate = sal_False );
+    virtual void                UpdateData();
+    virtual SfxBroadcaster&     GetBroadcaster() const;
+};
+
+
+
+
+typedef
+cppu::WeakImplHelper4
+    <
+        drafts::com::sun::star::accessibility::XAccessible,
+        drafts::com::sun::star::accessibility::XAccessibleComponent,
+        drafts::com::sun::star::accessibility::XAccessibleContext,
+        drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
+    >
+SmEditAccessibleBaseClass;
+
+class SmEditAccessible :
+    public SmEditAccessibleBaseClass
+{
+    cppu::OInterfaceContainerHelper         aAccEventListeners;
+    osl::Mutex                              aListenerMutex;
+    accessibility::AccessibleTextHelper    *pTextHelper;
+    SmEditWindow                           *pWin;
+
+    // disallow copy-ctor and assignment-operator for now
+    SmEditAccessible( const SmEditAccessible & );
+    SmEditAccessible & operator = ( const SmEditAccessible & );
+
+protected:
+    SmDocShell *    GetDoc_Impl();
+
+public:
+    SmEditAccessible( SmEditWindow *pEditWin );
+    virtual ~SmEditAccessible();
+
+    accessibility::AccessibleTextHelper *   GetTextHelper() { return pTextHelper; }
+
+    void                Init();
+    SmEditWindow *      GetWin()    { return pWin; }
+    void                ClearWin();     // to be called when view is destroyed
+
+    // XAccessible
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XAccessibleComponent
+    virtual sal_Bool SAL_CALL contains( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isShowing(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isFocusTraversable(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XAccessibleContext
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
+
+    // XAccessibleEventBroadcaster
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+};
+
+//////////////////////////////////////////////////////////////////////
 
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-31 14:23:21 $
+ *  last change: $Author: tl $ $Date: 2002-06-13 14:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ class SmGraphicWindow : public ScrollableWindow
 
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible >  xAccessible;
-    SmAccessibility *                                           pAccessible;
+    SmGraphicAccessible *                                       pAccessible;
 
     SmViewShell    *pViewShell;
     USHORT          nZoom;
@@ -153,7 +153,7 @@ public:
     // for Accessibility
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
-    SmAccessibility *   GetAccessibility()  { return pAccessible; }
+    SmGraphicAccessible *   GetAccessible()  { return pAccessible; }
 };
 
 /**************************************************************************/

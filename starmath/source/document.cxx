@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-31 14:23:22 $
+ *  last change: $Author: tl $ $Date: 2002-06-13 14:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,7 @@ void SmDocShell::SetText(const String& rBuffer)
         SetModified(TRUE);
 
         // launch accessible event if necessary
-        SmAccessibility *pAcc = pViewSh ? pViewSh->GetGraphicWindow().GetAccessibility() : 0;
+        SmGraphicAccessible *pAcc = pViewSh ? pViewSh->GetGraphicWindow().GetAccessible() : 0;
         if (pAcc)
         {
             uno::Any aOldValue, aNewValue;

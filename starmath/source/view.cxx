@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-31 14:23:22 $
+ *  last change: $Author: tl $ $Date: 2002-06-13 14:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,7 +504,7 @@ uno::Reference< XAccessible > SmGraphicWindow::CreateAccessible()
 {
     if (!pAccessible)
     {
-        pAccessible = new SmAccessibility( this );
+        pAccessible = new SmGraphicAccessible( this );
         xAccessible = pAccessible;
     }
     return xAccessible;
