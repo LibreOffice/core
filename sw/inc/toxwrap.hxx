@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxwrap.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-23 08:10:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 10:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,14 @@
 #include <swunodef.hxx>
 #endif
 
-namespace drafts { namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star {
 namespace i18n {
     class XExtendedIndexEntrySupplier;
 }
 namespace lang {
     class XMultiServiceFactory;
 }
-}}}};
+}}};
 
 
 class String;
@@ -91,7 +91,7 @@ class String;
 class IndexEntrySupplierWrapper
 {
     STAR_NMSPC::lang::Locale aLcl;
-    STAR_NMSPC::uno::Reference < drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier > xIES;
+    STAR_NMSPC::uno::Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > xIES;
 
 public:
     IndexEntrySupplierWrapper();
