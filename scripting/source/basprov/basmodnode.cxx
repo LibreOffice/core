@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmodnode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2003-11-07 13:49:39 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,9 @@ namespace basprov
     // =============================================================================
 
     BasicModuleNodeImpl::BasicModuleNodeImpl( const Reference< XComponentContext >& rxContext,
-        const Reference< beans::XPropertySet >& rxScriptingContext, SbModule* pModule, bool isAppScript )
+        const ::rtl::OUString& sScriptingContext, SbModule* pModule, bool isAppScript )
         :m_xContext( rxContext )
-        ,m_xScriptingContext( rxScriptingContext )
+        ,m_sScriptingContext( sScriptingContext )
         ,m_pModule( pModule )
         ,m_bIsAppScript( isAppScript )
     {
@@ -151,7 +151,7 @@ namespace basprov
                 {
                     SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Get( static_cast< USHORT >( i ) ) );
                     if ( pMethod )
-                        pChildNodes[i] = static_cast< browse::XBrowseNode* >( new BasicMethodNodeImpl( m_xContext, m_xScriptingContext, pMethod, m_bIsAppScript ) );
+                        pChildNodes[i] = static_cast< browse::XBrowseNode* >( new BasicMethodNodeImpl( m_xContext, m_sScriptingContext, pMethod, m_bIsAppScript ) );
                 }
             }
         }

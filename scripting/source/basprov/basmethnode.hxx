@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmethnode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2003-11-07 13:51:16 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ namespace basprov
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xScriptingContext;
+    ::rtl::OUString m_sScriptingContext;
         SbMethod* m_pMethod;
         bool m_bIsAppScript;
 
@@ -133,7 +133,7 @@ namespace basprov
 
     public:
         BasicMethodNodeImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rxScriptingContext,
+            const ::rtl::OUString& sScriptingContext,
             SbMethod* pMethod, bool isAppScript = true );
         virtual ~BasicMethodNodeImpl();
 

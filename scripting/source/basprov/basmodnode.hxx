@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmodnode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2003-11-07 13:49:38 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,13 +96,13 @@ namespace basprov
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xScriptingContext;
+    ::rtl::OUString m_sScriptingContext;
         SbModule* m_pModule;
         bool m_bIsAppScript;
 
     public:
         BasicModuleNodeImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rxScriptingContext,
+            const ::rtl::OUString& sScriptingContext,
             SbModule* pModule, bool isAppScript = true );
         virtual ~BasicModuleNodeImpl();
 
