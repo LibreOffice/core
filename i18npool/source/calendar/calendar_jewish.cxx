@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_jewish.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2002-12-06 18:51:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
-using namespace drafts::com::sun::star::i18n;
 using namespace ::rtl;
 
 #define ERROR RuntimeException()
