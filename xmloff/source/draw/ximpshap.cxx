@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:09:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,10 @@
 
 #ifndef _XMLOFF_XMLEMBEDDEDOBJECTIMPORTCONTEXT_HXX
 #include "XMLEmbeddedObjectImportContext.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLERROR_HXX
+#include "xmlerror.hxx"
 #endif
 
 using namespace ::rtl;
@@ -548,9 +552,19 @@ void SdXMLShapeContext::AddShape(const char* pServiceName )
     uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
     if(xServiceFact.is())
     {
-        uno::Reference< drawing::XShape > xShape(xServiceFact->createInstance(OUString::createFromAscii(pServiceName)), uno::UNO_QUERY);
-        if( xShape.is() )
-            AddShape( xShape );
+        try
+        {
+            uno::Reference< drawing::XShape > xShape(xServiceFact->createInstance(OUString::createFromAscii(pServiceName)), uno::UNO_QUERY);
+            if( xShape.is() )
+                AddShape( xShape );
+        }
+        catch( const uno::Exception& e )
+        {
+            uno::Sequence<rtl::OUString> aSeq( 1 );
+            aSeq[0] = OUString::createFromAscii(pServiceName);
+            GetImport().SetError( XMLERROR_FLAG_ERROR | XMLERROR_API,
+                                  aSeq, e.Message, NULL );
+        }
     }
 }
 
