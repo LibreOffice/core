@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:57:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1002,6 +1002,9 @@ SwFormTokensHelper::SwFormTokensHelper(const String & rPattern)
         SwFormToken aToken = BuildToken(rPattern, nCurPatternPos);
         aTokens.push_back(aToken);
     }
+
+    SwFormToken aToken(TOKEN_END);
+    aTokens.push_back(aToken);
 }
 
 SwFormToken SwFormTokensHelper::BuildToken( const String & sPattern,
