@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-28 11:48:38 $
+ *  last change: $Author: sj $ $Date: 2002-07-08 12:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1909,7 +1909,23 @@ void PPTWriter::ImplWriteOLE( sal_uInt32 nCnvrtFlags )
                     {
                         SvStorageRef xTempStorage( new SvStorage( new SvMemoryStream(), TRUE ) );
                         aOleExport.ExportOLEObject( *xInplaceObj, *xTempStorage );
-                        pStrm = xTempStorage->CreateMemoryStream();
+                        String aPersistStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( SVEXT_PERSIST_STREAM ) ) );
+                        xTempStorage->Remove( aPersistStream );
+                        SvStorageRef xCleanStorage( new SvStorage( new SvMemoryStream(), TRUE ) );
+                        xTempStorage->CopyTo( xCleanStorage );
+                        // SJ: #99809# create a dummy content stream, the dummy content is necessary for ppt, but not for
+                        // doc files, so we can't share code.
+                        SotStorageStreamRef xStm = xCleanStorage->OpenSotStream( aPersistStream, STREAM_STD_READWRITE );
+                        *xStm   << (sal_uInt32)0        // no ClipboardId
+                                << (sal_uInt32)4        // no target device
+                                << (sal_uInt32)1        // aspect ratio
+                                << (sal_Int32)-1        // L-Index
+                                << (sal_uInt32)0        // Advanced Flags
+                                << (sal_uInt32)0        // compression
+                                << (sal_uInt32)0        // Size
+                                << (sal_uInt32)0        //  "
+                                << (sal_uInt32)0;
+                        pStrm = xCleanStorage->CreateMemoryStream();
                         xInplaceObj.Clear();
                     }
                 }
