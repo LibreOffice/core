@@ -114,3 +114,28 @@ mkdir: %_DEST%\xml%_EXT%\office\ldap
 ..\%__SRC%\misc\template\org\openoffice\Setup.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Setup.xml
 ..\%__SRC%\misc\template\org\openoffice\UserProfile.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\UserProfile.xml
 ..\%__SRC%\misc\template\org\openoffice\VCL.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\VCL.xml
+
+mkdir: %_DEST%\xml%_EXT%\registry
+
+mkdir: %_DEST%\xml%_EXT%\registry\schema
+mkdir: %_DEST%\xml%_EXT%\registry\schema\org
+mkdir: %_DEST%\xml%_EXT%\registry\schema\org\openoffice
+mkdir: %_DEST%\xml%_EXT%\registry\schema\org\openoffice\Office
+mkdir: %_DEST%\xml%_EXT%\registry\schema\org\openoffice\ucb
+
+..\%__SRC%\misc\registry\schema\org\openoffice\*.xcs %_DEST%\xml%_EXT%\registry\schema\org\openoffice
+..\%__SRC%\misc\registry\schema\org\openoffice\Office\*.xcs %_DEST%\xml%_EXT%\registry\schema\org\openoffice\Office
+..\%__SRC%\misc\registry\schema\org\openoffice\ucb\*.xcs %_DEST%\xml%_EXT%\registry\schema\org\openoffice\ucb
+
+mkdir: %_DEST%\xml%_EXT%\registry\data
+mkdir: %_DEST%\xml%_EXT%\registry\data\org
+mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice
+mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office
+mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\ucb
+
+..\%__SRC%\misc\registry\data\org\openoffice\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice
+..\%__SRC%\misc\registry\data\org\openoffice\Office\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office
+..\%__SRC%\misc\registry\data\org\openoffice\ucb\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\ucb
+
+
+..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%
