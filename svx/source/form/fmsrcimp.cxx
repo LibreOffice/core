@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 12:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,8 @@
 #else
 #define INLINE_METHOD inline
 #endif // DEBUG || DBG_UTIL
+#define IFACECAST(c)          ((const com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&)c)
+ // SUN C52 has some ambiguities without this cast ....
 
 // ***************************************************************************************************
 
@@ -403,8 +405,8 @@ INLINE_METHOD sal_Bool FmSearchEngine::MoveField(sal_Int32& nPos, FieldCollectio
 void FmSearchEngine::BuildAndInsertFieldInfo(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xAllFields, sal_Int32 nField)
 {
     // das Feld selber
-    ::com::sun::star::uno::Any anyCurrentField = xAllFields->getByIndex(nField);
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xCurrentField = *(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)anyCurrentField.getValue();
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xCurrentField;
+    xAllFields->getByIndex(nField) >>= xCurrentField;
 
     // von dem weiss ich jetzt, dass es den DatabaseRecord-Service unterstuetzt (hoffe ich)
     // fuer den FormatKey und den Typ brauche ich das PropertySet
@@ -849,7 +851,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
     m_arrFieldMapping.Remove(0, m_arrFieldMapping.Count());
 
     // der Cursor kann mir einen Record (als PropertySet) liefern, dieser unterstuetzt den DatabaseRecord-Service
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >   xSupplyCols((::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >)m_xSearchCursor, ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >   xSupplyCols(IFACECAST(m_xSearchCursor), ::com::sun::star::uno::UNO_QUERY);
     DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::Init : invalid cursor (no columns supplier) !");
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        xAllFieldNames = xSupplyCols->getColumns();
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  seqFieldNames = xAllFieldNames->getElementNames();
@@ -1213,7 +1215,7 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xFields;
         for (sal_uInt16 i=0; i<m_arrFieldMapping.Count(); ++i)
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols((::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >)m_xSearchCursor, ::com::sun::star::uno::UNO_QUERY);
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), ::com::sun::star::uno::UNO_QUERY);
             DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::RebuildUsedFields : invalid cursor (no columns supplier) !");
             xFields = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > (xSupplyCols->getColumns(), ::com::sun::star::uno::UNO_QUERY);
             BuildAndInsertFieldInfo(xFields, m_arrFieldMapping.GetObject(i));
@@ -1222,7 +1224,7 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
     else
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xFields;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols((::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >)m_xSearchCursor, ::com::sun::star::uno::UNO_QUERY);
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), ::com::sun::star::uno::UNO_QUERY);
         DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::RebuildUsedFields : invalid cursor (no columns supplier) !");
         xFields = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > (xSupplyCols->getColumns(), ::com::sun::star::uno::UNO_QUERY);
         BuildAndInsertFieldInfo(xFields, m_arrFieldMapping.GetObject(nFieldIndex));
