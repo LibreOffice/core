@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-26 19:05:48 $
+ *  last change: $Author: nn $ $Date: 2001-01-29 19:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _COM_SUN_STAR_SHEET_XCELLRANGEADDRESSABLE_HPP_
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_XCELLRANGESQUERY_HPP_
+#include <com/sun/star/sheet/XCellRangesQuery.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
 #endif
@@ -103,6 +106,9 @@
 #endif
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/sdbcx/VColumn.hxx"
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
@@ -195,6 +201,65 @@ sal_Int32 lcl_RowCount( const Reference<XSpreadsheet>& xSheet )
     return aRangeAddr.EndRow;       // first row (headers) is not counted
 }
 
+CellContentType lcl_GetContentOrResultType( const Reference<XCell>& xCell )
+{
+    CellContentType eCellType = xCell->getType();
+    if ( eCellType == CellContentType_FORMULA )
+    {
+        Reference<XPropertySet> xProp( xCell, UNO_QUERY );
+        try
+        {
+            Any aTypeAny = xProp->getPropertyValue( ::rtl::OUString::createFromAscii("FormulaResultType") );
+            aTypeAny >>= eCellType;     // type of formula result
+        }
+        catch (UnknownPropertyException&)
+        {
+            eCellType = CellContentType_VALUE;  // if FormulaResultType property not available
+        }
+    }
+    return eCellType;
+}
+
+Reference<XCell> lcl_GetUsedCell( const Reference<XSpreadsheet>& xSheet, sal_Int32 nDocColumn, sal_Int32 nDocRow )
+{
+    Reference<XCell> xCell = xSheet->getCellByPosition( nDocColumn, nDocRow );
+    if ( xCell.is() && xCell->getType() == CellContentType_EMPTY )
+    {
+        //  get first non-empty cell
+
+        Reference<XCellRangeAddressable> xAddr( xSheet, UNO_QUERY );
+        if (xAddr.is())
+        {
+            CellRangeAddress aTotalRange = xAddr->getRangeAddress();
+            sal_Int32 nLastRow = aTotalRange.EndRow;
+            Reference<XCellRange> xRange =
+                    xSheet->getCellRangeByPosition( nDocColumn, nDocRow, nDocColumn, nLastRow );
+            Reference<XCellRangesQuery> xQuery( xRange, UNO_QUERY );
+            if (xQuery.is())
+            {
+                // queryIntersection to get a ranges object
+                Reference<XSheetCellRanges> xRanges = xQuery->queryIntersection( aTotalRange );
+                if (xRanges.is())
+                {
+                    Reference<XEnumerationAccess> xCells = xRanges->getCells();
+                    if (xCells.is())
+                    {
+                        Reference<XEnumeration> xEnum = xCells->createEnumeration();
+                        if ( xEnum.is() && xEnum->hasMoreElements() )
+                        {
+                            // get first non-empty cell from enumeration
+                            Any aCellAny = xEnum->nextElement();
+                            aCellAny >>= xCell;
+                        }
+                        // otherwise, keep empty cell
+                    }
+                }
+            }
+        }
+    }
+    return xCell;
+}
+
 void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<XNumberFormats>& xFormats,
                         sal_Int32 nDocColumn,
                         ::rtl::OUString& rName, sal_Int32& rDataType, sal_Bool& rCurrency )
@@ -214,18 +279,14 @@ void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<X
     // get column type from first data row
 
     sal_Int32 nDataRow = 1;         //! detect missing header row
-    xCell = xSheet->getCellByPosition( nDocColumn, nDataRow );
+    xCell = lcl_GetUsedCell( xSheet, nDocColumn, nDataRow );
+
     Reference<XPropertySet> xProp( xCell, UNO_QUERY );
     if ( xProp.is() )
     {
         rCurrency = sal_False;          // set to true for currency below
 
-        CellContentType eCellType = xCell->getType();
-        if ( eCellType == CellContentType_FORMULA )
-        {
-            //! use FormulaResultType property
-        }
-
+        CellContentType eCellType = lcl_GetContentOrResultType( xCell );
         if ( eCellType == CellContentType_TEXT )
             rDataType = DataType::VARCHAR;
         else if ( eCellType == CellContentType_VALUE )
@@ -274,7 +335,7 @@ void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<X
         }
         else
         {
-            //! find first non-empty row
+            //  whole column empty
             rDataType = DataType::VARCHAR;
         }
     }
@@ -292,10 +353,12 @@ void lcl_SetValue( file::ORowSetValue& rValue, const Reference<XSpreadsheet>& xS
     Reference<XCell> xCell = xSheet->getCellByPosition( nDocColumn, nDocRow );
     if ( xCell.is() )
     {
+        CellContentType eCellType = lcl_GetContentOrResultType( xCell );
         switch (nType)
         {
             case DataType::VARCHAR:
                 {
+                    // no difference between empty cell and empty string in spreadsheet
                     Reference<XText> xText( xCell, UNO_QUERY );
                     if ( xText.is() )
                     {
@@ -305,20 +368,30 @@ void lcl_SetValue( file::ORowSetValue& rValue, const Reference<XSpreadsheet>& xS
                 }
                 break;
             case DataType::DECIMAL:
-                rValue = xCell->getValue();         // double
+                if ( eCellType == CellContentType_VALUE )
+                    rValue = xCell->getValue();         // double
+                else
+                    rValue.setNull();
                 break;
             case DataType::BIT:
-                rValue = (sal_Bool)( xCell->getValue() != 0.0 );
+                if ( eCellType == CellContentType_VALUE )
+                    rValue = (sal_Bool)( xCell->getValue() != 0.0 );
+                else
+                    rValue.setNull();
                 break;
             case DataType::DATE:
+                if ( eCellType == CellContentType_VALUE )
                 {
                     ::Date aDate( rNullDate );
                     aDate += (long)SolarMath::ApproxFloor( xCell->getValue() );
                     ::com::sun::star::util::Date aDateStruct( aDate.GetDay(), aDate.GetMonth(), aDate.GetYear() );
                     rValue = aDateStruct;
                 }
+                else
+                    rValue.setNull();
                 break;
             case DataType::TIME:
+                if ( eCellType == CellContentType_VALUE )
                 {
                     double fCellVal = xCell->getValue();
                     double fTime = fCellVal - SolarMath::ApproxFloor( fCellVal );
@@ -336,8 +409,11 @@ void lcl_SetValue( file::ORowSetValue& rValue, const Reference<XSpreadsheet>& xS
                     aTime.Hours = (sal_uInt16) nIntTime;
                     rValue = aTime;
                 }
+                else
+                    rValue.setNull();
                 break;
             case DataType::TIMESTAMP:
+                if ( eCellType == CellContentType_VALUE )
                 {
                     double fCellVal = xCell->getValue();
                     double fDays = SolarMath::ApproxFloor( fCellVal );
@@ -369,6 +445,8 @@ void lcl_SetValue( file::ORowSetValue& rValue, const Reference<XSpreadsheet>& xS
 
                     rValue = aDateTime;
                 }
+                else
+                    rValue.setNull();
                 break;
         }
     }
@@ -378,16 +456,32 @@ void lcl_SetValue( file::ORowSetValue& rValue, const Reference<XSpreadsheet>& xS
 
 // -------------------------------------------------------------------------
 
+::rtl::OUString lcl_GetColumnStr( sal_Int32 nColumn )
+{
+    if ( nColumn < 26 )
+        return ::rtl::OUString::valueOf( (sal_Unicode) ( 'A' + nColumn ) );
+    else
+    {
+        ::rtl::OUStringBuffer aBuffer(2);
+        aBuffer.setCharAt( 0, (sal_Unicode) ( 'A' + ( nColumn / 26 ) - 1 ) );
+        aBuffer.setCharAt( 1, (sal_Unicode) ( 'A' + ( nColumn % 26 ) ) );
+        return aBuffer.makeStringAndClear();
+    }
+}
+
 void OCalcTable::fillColumns()
 {
     if ( !m_xSheet.is() )
         throw SQLException();
+
+    m_nDataRows = lcl_RowCount( m_xSheet );
 
     sal_Int32 nFieldCount = lcl_ColumnCount( m_xSheet );
 
     String aStrFieldName;
     aStrFieldName.AssignAscii("Column");
     ::rtl::OUString aTypeName;
+    ::comphelper::UStringMixEqual aCase(m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 
     for (sal_Int32 i = 0; i < nFieldCount; i++)
     {
@@ -396,6 +490,9 @@ void OCalcTable::fillColumns()
         sal_Bool bCurrency = sal_False;
 
         lcl_GetColumnInfo( m_xSheet, m_xFormats, i, aColumnName, eType, bCurrency );
+
+        if ( !aColumnName.getLength() )
+            aColumnName = lcl_GetColumnStr( i );
 
         sal_Int32 nPrecision = 0;   //! ...
         sal_Int32 nDecimals = 0;    //! ...
@@ -425,7 +522,17 @@ void OCalcTable::fillColumns()
                 aTypeName = ::rtl::OUString();
         }
 
-        sdbcx::OColumn* pColumn = new sdbcx::OColumn( aColumnName, aTypeName, ::rtl::OUString(),
+        // check if the column name already exists
+        ::rtl::OUString aAlias = aColumnName;
+        OSQLColumns::const_iterator aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
+        sal_Int32 nExprCnt = 0;
+        while(aFind != m_aColumns->end())
+        {
+            (aAlias = aColumnName) += ::rtl::OUString::valueOf((sal_Int32)++nExprCnt);
+            aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
+        }
+
+        sdbcx::OColumn* pColumn = new sdbcx::OColumn( aAlias, aTypeName, ::rtl::OUString(),
                                                 ColumnValue::NULLABLE, nPrecision, nDecimals,
                                                 eType, sal_False, sal_False, bCurrency,
                                                 getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers() );
@@ -440,6 +547,7 @@ void OCalcTable::fillColumns()
 // -------------------------------------------------------------------------
 OCalcTable::OCalcTable(OCalcConnection* _pConnection)
         :OCalcTable_BASE(_pConnection)
+        ,m_nDataRows(0)
 {
 }
 // -------------------------------------------------------------------------
@@ -454,6 +562,7 @@ OCalcTable::OCalcTable(OCalcConnection* _pConnection,
                                   _Description,
                                   _SchemaName,
                                   _CatalogName)
+                ,m_nDataRows(0)
 {
     //  get sheet object
 
@@ -598,8 +707,7 @@ sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
 //------------------------------------------------------------------
 sal_Int32 OCalcTable::getCurrentLastPos() const
 {
-    //! cache
-    return lcl_RowCount( m_xSheet );
+    return m_nDataRows;
 }
 //------------------------------------------------------------------
 sal_Bool OCalcTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
@@ -607,7 +715,7 @@ sal_Bool OCalcTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
     // ----------------------------------------------------------
     // Positionierung vorbereiten:
 
-    sal_uInt32  nNumberOfRecords = lcl_RowCount( m_xSheet );
+    sal_uInt32 nNumberOfRecords = m_nDataRows;
     sal_uInt32 nTempPos = m_nFilePos;
     m_nFilePos = nCurPos;
 
