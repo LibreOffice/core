@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:57:46 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,9 +139,9 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
-#ifndef _INPDLG_HXX
-#include <inpdlg.hxx>       // Eingabefelder
-#endif
+//CHINA001 #ifndef _INPDLG_HXX
+//CHINA001 #include <inpdlg.hxx>       // Eingabefelder
+//CHINA001 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>      // SwViewOptions
 #endif
@@ -188,9 +188,11 @@
 #ifndef _WRTSH_HRC
 #include <wrtsh.hrc>
 #endif
-#ifndef _SW_DROPDOWNFIELDDIALOG_HXX
-#include <DropDownFieldDialog.hxx>
-#endif
+//CHINA001 #ifndef _SW_DROPDOWNFIELDDIALOG_HXX
+//CHINA001 #include <DropDownFieldDialog.hxx>
+//CHINA001 #endif
+#include "swabstdlg.hxx" //CHINA001
+#include "fldui.hrc" //CHINA001
 /*------------------------------------------------------------------------
         Beschreibung:
 ------------------------------------------------------------------------*/
@@ -270,7 +272,12 @@ BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton, ByteString* 
 //              das TopWindow der Application benutzt werden.
 //  SwFldInputDlg* pDlg = new SwFldInputDlg( GetWin(), *this, pFld );
 
-    SwFldInputDlg* pDlg = new SwFldInputDlg( NULL, *this, pFld, bNextButton );
+    //CHINA001 SwFldInputDlg* pDlg = new SwFldInputDlg( NULL, *this, pFld, bNextButton );
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    AbstractFldInputDlg* pDlg = pFact->CreateFldInputDlg( ResId(DLG_FLD_INPUT),
+                                                        NULL, *this, pFld, bNextButton);
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     if(pWindowState && pWindowState->Len())
         pDlg->SetWindowState(*pWindowState);
     BOOL bRet = RET_CANCEL == pDlg->Execute();
@@ -286,7 +293,12 @@ BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton, ByteString* 
  --------------------------------------------------*/
 BOOL SwWrtShell::StartDropDownFldDlg(SwField* pFld, BOOL bNextButton, ByteString* pWindowState)
 {
-    sw::DropDownFieldDialog* pDlg = new sw::DropDownFieldDialog( NULL, *this, pFld, bNextButton );
+    //CHINA001 sw::DropDownFieldDialog* pDlg = new sw::DropDownFieldDialog( NULL, *this, pFld, bNextButton );
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+    AbstractDropDownFieldDialog* pDlg = pFact->CreateDropDownFieldDialog( NULL, *this, pFld,ResId( DLG_FLD_DROPDOWN ),bNextButton );
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     if(pWindowState && pWindowState->Len())
         pDlg->SetWindowState(*pWindowState);
     USHORT nRet = pDlg->Execute();
