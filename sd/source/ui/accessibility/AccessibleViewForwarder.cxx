@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleViewForwarder.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: af $ $Date: 2002-06-03 15:06:58 $
+ *  last change: $Author: af $ $Date: 2002-06-28 08:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,10 @@ Rectangle AccessibleViewForwarder::GetVisibleArea (void) const
 
 
 
+/** Tansform the given point into pixel coordiantes.  After the the pixel
+    coordiantes of the window origin are added to make the point coordinates
+    absolute.
+*/
 Point AccessibleViewForwarder::LogicToPixel (const Point& rPoint) const
 {
     OSL_ASSERT (mpView != NULL);
@@ -162,11 +166,15 @@ Size AccessibleViewForwarder::LogicToPixel (const Size& rSize) const
 
 
 
+/** First subtract the window origin to make the point coordinates relative
+    to the window and then transform them into internal coordinates.
+*/
 Point AccessibleViewForwarder::PixelToLogic (const Point& rPoint) const
 {
     OSL_ASSERT (mpView != NULL);
     OutputDevice* pDevice = mpView->GetWin(mnWindowId);
-    return pDevice->PixelToLogic (rPoint);
+    Rectangle aBBox (static_cast<Window*>(pDevice)->GetWindowExtentsRelative(NULL));
+    return pDevice->PixelToLogic (rPoint - aBBox.TopLeft());
 }
 
 
