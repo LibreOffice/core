@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_uno2java.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:01:37 $
+ *  last change: $Author: rt $ $Date: 2004-08-02 09:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,25 @@ void Bridge::call_java(
     JNI_guarded_context jni(
         m_jni_info, reinterpret_cast< ::jvmaccess::VirtualMachine * >(
             m_java_env->pContext ) );
+
+    // assure fully initialized iface_td:
+    ::com::sun::star::uno::TypeDescription iface_holder;
+    if (! iface_td->aBase.bComplete) {
+        iface_holder = ::com::sun::star::uno::TypeDescription(
+            reinterpret_cast<typelib_TypeDescription *>(iface_td) );
+        iface_holder.makeComplete();
+        if (! iface_holder.get()->bComplete) {
+            OUStringBuffer buf;
+            buf.appendAscii(
+                RTL_CONSTASCII_STRINGPARAM("cannot make type complete: ") );
+            buf.append( OUString::unacquired(&iface_holder.get()->pTypeName) );
+            buf.append( jni.get_stack_trace() );
+            throw BridgeRuntimeError( buf.makeStringAndClear() );
+        }
+        iface_td = reinterpret_cast<typelib_InterfaceTypeDescription *>(
+            iface_holder.get() );
+        OSL_ASSERT( iface_td->aBase.eTypeClass == typelib_TypeClass_INTERFACE );
+    }
 
     // prepare java args, save param td
     jvalue * java_args = (jvalue *) alloca( sizeof (jvalue) * nParams );
