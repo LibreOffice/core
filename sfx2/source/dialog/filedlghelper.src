@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:14:57 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ String STR_SFX_EXPLORERFILE_EXPORT
     Text[ thai ] = "ΰΈªΰΉΰΈ‡ΰΈ­ΰΈ­ΰΈ";
     Text[ czech ] = "Exportovat";
     Text[ hebrew ] = "β€®Χ™Χ¦Χ•Χβ€¬";
-    Text[ portuguese_brazilian ] = "Export";
+    Text[ portuguese_brazilian ] = "Exportar";
     Text[ hindi ] = "Export";
     Text[ slovak ] = "ExportovaΕ¥";
 };
@@ -244,7 +244,7 @@ String STR_CB_AUTO_EXTENSION
     Text[ japanese ] = "γƒ•γ‚΅γ‚¤γƒ«εγ«ζ‹΅εΌµε­γ‚’δ»γ‘γ‚‹(~A)";
     Text[ chinese_traditional ] = "θ‡ªε‹•ε δΈε‰―ζª”ε(~A)";
     Text[ arabic ] = "ΗγΚΟΗΟ ΚαήΗΖν αΗΣγ Ηαγαέ";
-    Text[ greek ] = "Αυτόματη επέκταση ονομάτων αρχείων";
+    Text[ greek ] = "~Αυτόματη επέκταση ονόματος αρχείων";
     Text[ korean ] = "μλ™ νμΌ μ΄λ¦„ ν™•μ¥μ(~A)";
     Text[ turkish ] = "~Otomatik dosya adύ uzantύsύ";
     Text[ finnish ] = "Automaattinen tiedoston ~tunniste";
@@ -275,7 +275,7 @@ String STR_CB_SELECTION
     Text[ japanese ] = "ιΈζη―„ε›²(~S)";
     Text[ chinese_traditional ] = "ιΈε–(~S)";
     Text[ arabic ] = "ΗαΚΝΟνΟ";
-    Text[ greek ] = "Επιλογή";
+    Text[ greek ] = "~Επιλογή";
     Text[ korean ] = "μ„ νƒ(~S)";
     Text[ turkish ] = "~Seηim";
     Text[ language_user1 ] = " ";
@@ -309,7 +309,7 @@ String STR_CB_INSERT_AS_LINK
     Text[ japanese ] = "γƒªγƒ³γ‚―(~L)";
     Text[ chinese_traditional ] = "ζ·εΎ‘(~L)";
     Text[ arabic ] = "ΡΘΨ";
-    Text[ greek ] = "Σύνδεση";
+    Text[ greek ] = "~Σύνδεση";
     Text[ korean ] = "μ—°κ²°(~L)";
     Text[ turkish ] = "~Baπlantύ";
     Text[ language_user1 ] = " ";
@@ -342,7 +342,7 @@ String STR_CB_SHOW_PREVIEW
     Text[ japanese ] = "γƒ—γƒ¬γƒ“γƒ¥γƒΌ(~E)";
     Text[ chinese_traditional ] = "ι θ¦½(~E)";
     Text[ arabic ] = "γΪΗνδΙ";
-    Text[ greek ] = "Προεπισκόπηση";
+    Text[ greek ] = "Πρ~οεπισκόπηση";
     Text[ korean ] = "λ―Έλ¦¬ λ³΄κΈ°(~E)";
     Text[ turkish ] = "Φ~nizleme";
     Text[ language_user1 ] = " ";
@@ -373,7 +373,7 @@ String STR_CB_READONLY
     Text[ japanese ] = "θª­γΏε–γ‚ε°‚η”¨(~R)";
     Text[ chinese_traditional ] = "ε”―θ®€(~R)";
     Text[ arabic ] = "ααήΡΗΑΙ έήΨ";
-    Text[ greek ] = "Μόνο για ανάγνωση";
+    Text[ greek ] = "~Μόνο για ανάγνωση";
     Text[ korean ] = "μ½κΈ° μ „μ©(~R)";
     Text[ turkish ] = "~Salt okunur";
     Text[ finnish ] = "Vain ~luku";
@@ -404,7 +404,7 @@ String STR_CB_PASSWORD
     Text[ japanese ] = "γƒ‘γ‚Ήγƒ―γƒΌγƒ‰δ»γγ§δΏε­γ™γ‚‹(~P)";
     Text[ chinese_traditional ] = "δ½Ώη”¨ε―†ηΆΌε„²ε­(~P)";
     Text[ arabic ] = "ΝέΩ ΘίαγΙ ΣΡ";
-    Text[ greek ] = "Αποθήκευση με τον κωδικό πρόσβασης";
+    Text[ greek ] = "Αποθήκευση με ~κωδικό πρόσβασης";
     Text[ korean ] = "μ•”νΈλ¥Ό μ‚¬μ©ν•μ—¬ μ €μ¥(~P)";
     Text[ turkish ] = "~ήifreyle kaydet";
     Text[ finnish ] = "Tallenna ~myφs salasana";
@@ -435,7 +435,7 @@ String STR_CB_FILTER_OPTIONS
     Text[ chinese_simplified ] = "ηΌ–θΎ‘η­›ι€‰θ®Ύε®(~F)";
     Text[ chinese_traditional ] = "η·¨θΌ―η―©ιΈθ¨­ε®(~F)";
     Text[ arabic ] = "ΚΝΡνΡ ΕΪΟΗΟΗΚ ΗαέαΚΡ";
-    Text[ greek ] = "Επεξεργασία ρυθμίσεων φίλτρου";
+    Text[ greek ] = "Επεξεργασία ρυθμίσεων ~φίλτρου";
     Text[ korean ] = "ν•„ν„° μ„¤μ • νΈμ§‘(~F)";
     Text[ turkish ] = "~Filtre ayarlarύnύ dόzenle";
     Text[ finnish ] = "Muokkaa ~suodatusasetuksia";
@@ -464,7 +464,7 @@ String STR_PB_PLAY
     Text[ russian ] = "Ηβσκ";
     Text[ polish ] = "O~dtwσrz";
     Text[ japanese ] = "ε†η”(~P)";
-    Text[ greek ] = "Εκτέλε~ση";
+    Text[ greek ] = "~Αναπαραγωγή";
     Text[ korean ] = "μ¬μƒ(~P)";
     Text[ chinese_traditional ] = "ζ”Ύζ (~P)";
     Text[ arabic ] = "ΚΤΫνα";
@@ -495,7 +495,7 @@ String STR_PB_STOP
     Text[ russian ] = "Ρςξο";
     Text[ polish ] = "~Zatrzymaj";
     Text[ japanese ] = "δΈ€ζ™‚εζ­Ά(~P)";
-    Text[ greek ] = "Διακοπή";
+    Text[ greek ] = "Διακο~πή";
     Text[ korean ] = "μ¤‘μ§€(~P)";
     Text[ chinese_traditional ] = "ζ«ε(~P)";
     Text[ arabic ] = "ΕνήΗέ";
@@ -528,7 +528,7 @@ String STR_PB_OPEN
     Text[ japanese ] = "ι–‹γ(~O)";
     Text[ chinese_traditional ] = "ι–‹ε•θζª”(~O)";
     Text[ arabic ] = "έΚΝ";
-    Text[ greek ] = "Άν~οιγμα";
+    Text[ greek ] = "Άνοι~γμα";
     Text[ korean ] = "μ—΄κΈ°(~O)";
     Text[ turkish ] = "~Aη";
     Text[ finnish ] = "~Avaa";
@@ -559,7 +559,7 @@ String STR_PB_SAVE
     Text[ japanese ] = "δΏε­(~S)";
     Text[ chinese_traditional ] = "ε„²ε­ζª”ζ΅(~S)";
     Text[ arabic ] = "ΝέΩ";
-    Text[ greek ] = "Αποθήκευση";
+    Text[ greek ] = "Απο~θήκευση";
     Text[ korean ] = "μ €μ¥(~S)";
     Text[ turkish ] = "~Kaydet";
     Text[ finnish ] = "~Tallenna";
@@ -578,7 +578,7 @@ String STR_LB_IMAGE_TEMPLATE
     Text[ english_us ] = "Style:" ;
     Text[ portuguese ] = "Estilo:";
     Text[ russian ] = "Ρςθλό:";
-    Text[ greek ] = "Style:";
+    Text[ greek ] = "Στυλ:";
     Text[ dutch ] = "Stijl:";
     Text[ french ] = "Style :";
     Text[ spanish ] = "Estilo:";
@@ -623,7 +623,7 @@ String STR_LB_TEMPLATES
     Text[ japanese ] = "γƒ†γƒ³γƒ—γƒ¬γƒΌγƒ(~T)";
     Text[ chinese_traditional ] = "ζ¨£εΌ(~T)οΌ";
     Text[ arabic ] = "ήζΗαΘ";
-    Text[ greek ] = "Πρότυπα";
+    Text[ greek ] = "~Πρότυπα:";
     Text[ korean ] = "μ„μ‹ νμΌ(~T)";
     Text[ turkish ] = "ή~ablonlar:";
     Text[ catalan ] = "P~lantilles:";
@@ -653,7 +653,7 @@ String STR_LB_VERSION
     Text[ chinese_simplified ] = "η‰ζ¬(~V)οΌ";
     Text[ chinese_traditional ] = "η‰ζ¬(~V)οΌ";
     Text[ arabic ] = "ΗαΕΥΟΗΡ:";
-    Text[ greek ] = "Έκδοση:";
+    Text[ greek ] = "~Έκδοση:";
     Text[ korean ] = "λ²„μ „(~V):";
     Text[ turkish ] = "~Sόrόm:";
     Text[ finnish ] = "~Versio:";
@@ -666,6 +666,7 @@ String STR_LB_VERSION
 };
 
 //******************************************************************** EOF
+
 
 
 
