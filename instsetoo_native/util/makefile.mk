@@ -63,9 +63,11 @@ GEN_HID2=TRUE
 
 .INCLUDE:  settings.mk
 .IF "$(USE_SHELL)"=="4nt"
-PYTHONPATH:=.;$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
-.EXPORT: PYTHONPATH
+PYTHONPATH:=$(BIN);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
+.ELSE			# "$(USE_SHELL)"=="4nt"
+PYTHONPATH:=$(BIN):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload
 .ENDIF			# "$(USE_SHELL)"=="4nt"
+.EXPORT: PYTHONPATH
 
 .EXPORT: LAST_MINOR
 .EXPORT: PRJ
@@ -90,6 +92,12 @@ FORMAT*=-format pkg
 .IF "$(OS)"=="MACOSX"
 FORMAT*=-format osx
 .ENDIF
+
+LOCALPYFILES= \
+    $(BIN)$/uno.py \
+    $(BIN)$/unohelper.py \
+    $(BIN)$/pythonloader.py \
+    $(BIN)$/pythonscript.py
 
 # epm supports the following formats:
 # aix - AIX software distribution
@@ -138,3 +146,10 @@ openoffice:
     @+echo cannot pack nothing...
 
 .ENDIF			# "$(alllangiso)"!=""
+
+.IF "$(LOCALPYFILES)"!=""
+$(foreach,i,$(alllangiso) openoffice_$i) updatepack $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(LOCALPYFILES) 
+.ENDIF			# "$(LOCALPYFILES)"!=""
+
+$(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
+    @+$(COPY) $< $@
