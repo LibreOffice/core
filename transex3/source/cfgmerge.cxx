@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-11-20 14:45:29 $
+ *  last change: $Author: nf $ $Date: 2000-11-22 10:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@ ByteString sInputFileName;
 ByteString sActFileName;
 ByteString sOutputFile;
 ByteString sMergeSrc;
+
+CfgParser *pParser;
 
 extern "C" {
 // the whole interface to lexer is in this extern "C" section
@@ -181,6 +183,9 @@ int InitCfgExport( char *pOutput )
     // instanciate Export
     ByteString sOutput( pOutput );
 
+    pParser = new CfgParser();
+
+
     return 1;
 }
 
@@ -188,6 +193,8 @@ int InitCfgExport( char *pOutput )
 int EndCfgExport()
 /*****************************************************************************/
 {
+    delete pParser;
+
     return 1;
 }
 
@@ -230,7 +237,7 @@ extern FILE *GetCfgFile()
 int WorkOnTokenSet( int nTyp, char *pTokenText )
 /*****************************************************************************/
 {
-    fprintf( stdout, pTokenText );
+    pParser->Execute( nTyp, pTokenText );
 
     return 1;
 }
@@ -278,4 +285,250 @@ ByteString CfgStack::GetAccessPath( ULONG nPos )
     }
 
     return sReturn;
+}
+
+/*****************************************************************************/
+CfgStackData *CfgStack::GetStackData( ULONG nPos )
+/*****************************************************************************/
+{
+    if ( nPos == LIST_APPEND )
+        nPos = Count() - 1;
+
+    return GetObject( nPos );
+}
+
+//
+// class CfgParser
+//
+
+/*****************************************************************************/
+CfgParser::CfgParser()
+/*****************************************************************************/
+                : pStackData( NULL )
+{
+}
+
+/*****************************************************************************/
+CfgParser::~CfgParser()
+/*****************************************************************************/
+{
+}
+
+
+/*****************************************************************************/
+BOOL CfgParser::IsTokenClosed( const ByteString &rToken )
+/*****************************************************************************/
+{
+    return rToken.GetChar( rToken.Len() - 2 ) == '/';
+}
+
+/*****************************************************************************/
+void CfgParser::WorkOnText(
+    const ByteString &rText,
+    const ByteString &rIsoLang
+)
+/*****************************************************************************/
+{
+//  fprintf( stdout, "%s %s %s %s\n", rCurrentGid.GetBuffer(), rCurrentLid.GetBuffer(), rIsoLang.GetBuffer(), rText.GetBuffer());
+
+    USHORT nLang = GetLang( rIsoLang );
+    if ( nLang ) {
+         pStackData->sText[ Export::GetLangIndex( nLang )] = rText;
+    }
+}
+
+/*****************************************************************************/
+void CfgParser::WorkOnRessourceEnd( const ByteString &rResTyp )
+/*****************************************************************************/
+{
+    if ( pStackData->sText[ ENGLISH_US_INDEX ].Len()) {
+        pStackData->sResTyp = rResTyp;
+
+        fprintf( stdout, "%s\n", aStack.GetAccessPath().GetBuffer());
+        fprintf( stdout, "%s\n", pStackData->sResTyp.GetBuffer());
+        for ( ULONG i = 0; i < LANGUAGES; i++ ) {
+            if ( pStackData->sText[ i ].Len())
+                fprintf( stdout, "\t%s%s%s\n", pStackData->sTextTag.GetBuffer(), pStackData->sText[ i ].GetBuffer(), pStackData->sEndTextTag.GetBuffer());
+        }
+    }
+}
+
+/*****************************************************************************/
+int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
+/*****************************************************************************/
+{
+    ByteString sToken( pToken );
+
+    ByteString sTokenName;
+    ByteString sTokenId;
+
+    switch ( nToken ) {
+        case CFG_TOKEN_PACKAGE:
+        case CFG_TOKEN_COMPONENT:
+        case CFG_TOKEN_TEMPLATE:
+        case CFG_TOKEN_CONFIGNAME:
+        case CFG_TAG:
+        case ANYTOKEN:
+        case CFG_TEXT_START:
+        {
+              if ( !IsTokenClosed( sToken )) {
+                sTokenName = sToken.GetToken( 1, '<' ).GetToken( 0, '>' ).GetToken( 0, ' ' );
+
+                ByteString sSearch;
+                switch ( nToken ) {
+                    case CFG_TOKEN_PACKAGE:
+                        sSearch = "package-id=";
+                    break;
+                    case CFG_TOKEN_COMPONENT:
+                        sSearch = "component-id=";
+                    break;
+                    case CFG_TOKEN_TEMPLATE:
+                        sSearch = "template-id=";
+                    break;
+                    case CFG_TOKEN_CONFIGNAME:
+                        sSearch = "cfg:name=";
+                    break;
+                    case CFG_TEXT_START: {
+                        sCurrentResTyp = sTokenName;
+
+                        ByteString sTemp = sToken.Copy( sToken.Search( "xml:lang=" ));
+                        sCurrentIsoLang = sTemp.GetToken( 1, '\"' ).GetToken( 0, '\"' );
+
+                        pStackData->sTextTag = sToken;
+
+                        sCurrentText = "";
+                    }
+                    break;
+                }
+                if ( sSearch.Len()) {
+                    ByteString sTemp = sToken.Copy( sToken.Search( sSearch ));
+                    sTokenId = sTemp.GetToken( 1, '\"' ).GetToken( 0, '\"' );
+                }
+                pStackData = aStack.Push( sTokenName, sTokenId );
+            }
+        }
+        break;
+        case CFG_CLOSETAG:
+            sTokenName = sToken.GetToken( 1, '/' ).GetToken( 0, '>' ).GetToken( 0, ' ' );
+               if ( aStack.GetStackData() && ( aStack.GetStackData()->GetTagType() == sTokenName )) {
+                WorkOnRessourceEnd( sCurrentResTyp );
+                aStack.Pop();
+                pStackData = aStack.GetStackData();
+            }
+            else {
+                ByteString sError( "Missplaced close tag: " );
+                sError += sToken;
+                Error( sError );
+            }
+        break;
+
+        case CFG_TEXTCHAR:
+            sCurrentText += sToken;
+        break;
+    }
+
+    if ( sCurrentText.Len() && nToken != CFG_TEXTCHAR ) {
+        WorkOnText( sCurrentText, sCurrentIsoLang );
+        sCurrentText = "";
+        pStackData->sEndTextTag = sToken;
+    }
+
+    return 1;
+}
+
+/*****************************************************************************/
+int CfgParser::Execute( int nToken, char * pToken )
+/*****************************************************************************/
+{
+    ByteString sToken( pToken );
+
+    switch ( nToken ) {
+        case CFG_TAG:
+            if ( sToken.Search( "package-id=" ) != STRING_NOTFOUND )
+                return ExecuteAnalyzedToken( CFG_TOKEN_PACKAGE, pToken );
+            else if ( sToken.Search( "component-id=" ) != STRING_NOTFOUND )
+                return ExecuteAnalyzedToken( CFG_TOKEN_COMPONENT, pToken );
+            else if ( sToken.Search( "template-id=" ) != STRING_NOTFOUND )
+                return ExecuteAnalyzedToken( CFG_TOKEN_TEMPLATE, pToken );
+            else if ( sToken.Search( "cfg:name=" ) != STRING_NOTFOUND )
+                return ExecuteAnalyzedToken( CFG_TOKEN_CONFIGNAME, pToken );
+        break;
+    }
+    return ExecuteAnalyzedToken( nToken, pToken );
+}
+
+/*****************************************************************************/
+USHORT CfgParser::GetLang( const ByteString &rIsoLang )
+/*****************************************************************************/
+{
+    ByteString sLang( rIsoLang );
+
+    sLang.ToUpperAscii();
+
+    if ( sLang == ByteString( COMMENT_ISO ).ToUpperAscii())
+        return COMMENT;
+    else if ( sLang == ByteString( ENGLISH_US_ISO ).ToUpperAscii())
+        return ENGLISH_US;
+    else if ( sLang == ByteString( PORTUGUESE_ISO ).ToUpperAscii())
+        return PORTUGUESE;
+    else if ( sLang == ByteString( RUSSIAN_ISO ).ToUpperAscii())
+        return RUSSIAN;
+    else if ( sLang == ByteString( GREEK_ISO ).ToUpperAscii())
+        return GREEK;
+    else if ( sLang == ByteString( DUTCH_ISO ).ToUpperAscii())
+        return DUTCH;
+    else if ( sLang == ByteString( FRENCH_ISO ).ToUpperAscii())
+        return FRENCH;
+    else if ( sLang == ByteString( SPANISH_ISO ).ToUpperAscii())
+        return SPANISH;
+    else if ( sLang == ByteString( FINNISH_ISO ).ToUpperAscii())
+        return FINNISH;
+    else if ( sLang == ByteString( HUNGARIAN_ISO ).ToUpperAscii())
+        return HUNGARIAN;
+    else if ( sLang == ByteString( ITALIAN_ISO ).ToUpperAscii())
+        return ITALIAN;
+    else if ( sLang == ByteString( CZECH_ISO ).ToUpperAscii())
+        return CZECH;
+    else if ( sLang == ByteString( SLOVAK_ISO ).ToUpperAscii())
+        return SLOVAK;
+    else if ( sLang == ByteString( ENGLISH_ISO ).ToUpperAscii())
+        return ENGLISH;
+    else if ( sLang == ByteString( DANISH_ISO ).ToUpperAscii())
+        return DANISH;
+    else if ( sLang == ByteString( SWEDISH_ISO ).ToUpperAscii())
+        return SWEDISH;
+    else if ( sLang == ByteString( NORWEGIAN_ISO ).ToUpperAscii())
+        return NORWEGIAN;
+    else if ( sLang == ByteString( POLISH_ISO ).ToUpperAscii())
+        return POLISH;
+    else if ( sLang == ByteString( GERMAN_ISO ).ToUpperAscii())
+        return GERMAN;
+    else if ( sLang == ByteString( PORTUGUESE_BRAZILIAN_ISO ).ToUpperAscii())
+        return PORTUGUESE_BRAZILIAN;
+    else if ( sLang == ByteString( JAPANESE_ISO ).ToUpperAscii())
+        return JAPANESE;
+    else if ( sLang == ByteString( KOREAN_ISO ).ToUpperAscii())
+        return KOREAN;
+    else if ( sLang == ByteString( CHINESE_SIMPLIFIED_ISO ).ToUpperAscii())
+        return CHINESE_SIMPLIFIED;
+    else if ( sLang == ByteString( CHINESE_TRADITIONAL_ISO ).ToUpperAscii())
+        return CHINESE_TRADITIONAL;
+    else if ( sLang == ByteString( TURKISH_ISO ).ToUpperAscii())
+        return TURKISH;
+    else if ( sLang == ByteString( ARABIC_ISO ).ToUpperAscii())
+        return ARABIC;
+    else if ( sLang == ByteString( HEBREW_ISO ).ToUpperAscii())
+        return HEBREW;
+
+    ByteString sError( "Unknown language code: " );
+    sError += rIsoLang;
+    Error( sError );
+    return 0;
+}
+
+/*****************************************************************************/
+void CfgParser::Error( const ByteString &rError )
+/*****************************************************************************/
+{
+    yyerror(( char * ) rError.GetBuffer());
 }

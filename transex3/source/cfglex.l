@@ -48,24 +48,19 @@ int bText=0;
 	WorkOnTokenSet( ANYTOKEN, yytext );
 }
 
-\<[^\>]*"package-id="\".*\"[^\<]*\>	{
-	bText = 0;
-	WorkOnTokenSet( CFG_TAG, yytext );
-}
-
 \<[^\>]*"xml:lang="\".*\"[^\<]*\>	{
 	bText = 1;
 	WorkOnTokenSet( CFG_TEXT_START, yytext );
 }
 
-\<[^\>]*"="\".*\"[^\<]*\>	{
-	bText = 0;
-	WorkOnTokenSet( CFG_TAG, yytext );
-}
-
 "<!--"[^\>]*\> {
 	bText = 0;
 	WorkOnTokenSet( COMMEND, yytext );
+}
+
+\<[^\/][^\>]*\>	{
+	bText = 0;
+	WorkOnTokenSet( CFG_TAG, yytext );
 }
 
 "<!--"	{
