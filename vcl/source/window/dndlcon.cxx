@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndlcon.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-20 11:17:45 $
+ *  last change: $Author: obr $ $Date: 2001-02-23 08:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,7 @@ sal_uInt32 DNDListenerContainer::fireDropActionChangedEvent( const Reference< XD
 // DNDListenerContainer::fireDragGestureEvent
 //==================================================================================================
 
-sal_uInt32 DNDListenerContainer::fireDragGestureEvent( const sal_Int8 dragAction, sal_Int32 dragOriginX,
+sal_uInt32 DNDListenerContainer::fireDragGestureEvent( sal_Int8 dragAction, sal_Int32 dragOriginX,
     sal_Int32 dragOriginY, const Reference< XDragSource >& dragSource, const Any& triggerEvent )
 {
     sal_uInt32 nRet = 0;
