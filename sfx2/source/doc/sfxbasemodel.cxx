@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-17 11:10:21 $
+ *  last change: $Author: mba $ $Date: 2001-12-19 18:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #include <svtools/eitem.hxx>
 #endif
 
+#include <svtools/sbx.hxx>
+#include <basic/sbuno.hxx>
+
 //________________________________________________________________________________________________________
 //  includes of my own project
 //________________________________________________________________________________________________________
@@ -193,7 +196,8 @@
 #include "sfx.hrc"
 #endif
 
-#include <topfrm.hxx>
+#include "topfrm.hxx"
+#include "appdata.hxx"
 
 //________________________________________________________________________________________________________
 //  defines
@@ -593,6 +597,28 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
         SfxObjectShell *pShell;
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
         {
+            // am I "ThisComponent" in AppBasic?
+            StarBASIC* pBas = SFX_APP()->GetBasic_Impl();
+            if ( pBas && SFX_APP()->Get_Impl()->pThisDocument == m_pData->m_pObjectShell )
+            {
+                // remove "ThisComponent" reference from AppBasic
+                SFX_APP()->Get_Impl()->pThisDocument = NULL;
+                SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
+                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInterface;
+                ::com::sun::star::uno::Any aComponent;
+                if ( pCompVar )
+                {
+                    aComponent <<= xInterface;
+                    pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent ) );
+                }
+                else
+                {
+                    SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent );
+                    xUnoObj->SetFlag( SBX_DONTSTORE );
+                    pBas->Insert( xUnoObj );
+                }
+            }
+
             ::osl::MutexGuard aGuard( m_aMutex );
             pShell = m_pData->m_pObjectShell;
             EndListening( *pShell );
