@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-19 16:18:24 $
+ *  last change: $Author: cl $ $Date: 2001-03-08 12:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 
 #define UNO_PREFIX "com.sun.star."
 
+// SdXImpressDocument
+SD_CONSTASCII_ACTION( sUNO_Service_DrawingDocument, UNO_PREFIX "drawing.DrawingDocument" );
+SD_CONSTASCII_ACTION( sUNO_Service_PresentationDocument, UNO_PREFIX "drawing.PresentationDocument" );
+
 // SdUnoStyleFamilies
 SD_CONSTASCII_ACTION( sUNO_SdUnoStyleFamilies, "SdUnoStyleFamilies" );
 SD_CONSTASCII_ACTION( sUNO_Graphic_Style_Family_Name, "graphics" );
@@ -145,11 +149,15 @@ SD_CONSTASCII_ACTION( sUNO_shape_layername, "LayerName" );
 SD_CONSTASCII_ACTION( sUNO_Service_StyleFamily, UNO_PREFIX "style.StyleFamily" );
 SD_CONSTASCII_ACTION( sUNO_Service_StyleFamilies, UNO_PREFIX "style.StyleFamilies" );
 SD_CONSTASCII_ACTION( sUNO_Service_Style, UNO_PREFIX "style.Style" );
-SD_CONSTASCII_ACTION( sUNO_Service_AreaShapeDescriptor, UNO_PREFIX "drawing.AreaShapeDescriptor" );
-SD_CONSTASCII_ACTION( sUNO_Service_LineShapeDescriptor, UNO_PREFIX "drawing.LineShapeDescriptor" );
+SD_CONSTASCII_ACTION( sUNO_Service_FillProperties, UNO_PREFIX "drawing.FillProperties" );
+SD_CONSTASCII_ACTION( sUNO_Service_LineProperties, UNO_PREFIX "drawing.LineProperties" );
 SD_CONSTASCII_ACTION( sUNO_Service_ParagraphProperties, UNO_PREFIX "style.ParagraphProperties" );
 SD_CONSTASCII_ACTION( sUNO_Service_CharacterProperties, UNO_PREFIX "style.CharacterProperties" );
 SD_CONSTASCII_ACTION( sUNO_Service_Text, UNO_PREFIX "drawing.Text" );
+SD_CONSTASCII_ACTION( sUNO_Service_TextProperties, UNO_PREFIX "drawing.TextProperties" );
+SD_CONSTASCII_ACTION( sUNO_Service_ShadowProperties, UNO_PREFIX "drawing.ShadowProperties" );
+SD_CONSTASCII_ACTION( sUNO_Service_ConnectorProperties, UNO_PREFIX "drawing.ConnectorProperties" );
+SD_CONSTASCII_ACTION( sUNO_Service_MeasureProperties, UNO_PREFIX "drawing.MeasureProperties" );
 SD_CONSTASCII_ACTION( sUNO_Service_PageBackground, UNO_PREFIX "drawing.PageBackground" );
 SD_CONSTASCII_ACTION( sUNO_Service_DrawingLayer, UNO_PREFIX "drawing.Layer" );
 SD_CONSTASCII_ACTION( sUNO_Service_DrawingLayerManager, UNO_PREFIX "drawing.LayerManager" );
