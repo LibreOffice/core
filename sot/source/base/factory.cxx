@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-22 12:28:38 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <tools/string.hxx>
 #include <object.hxx>
 #include <sotdata.hxx>
+#include <clsids.hxx>
 #pragma hdrstop
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
@@ -244,7 +245,7 @@ const SotFactoryList * SotFactory::GetFactoryList()
 |*
 |*    Beschreibung
 *************************************************************************/
-const SotFactory * SotFactory::Find( const SvGlobalName & rFactName )
+const SotFactory* SotFactory::Find( const SvGlobalName & rFactName )
 {
     SvGlobalName aEmpty;
     SotData_Impl * pSotData = SOTDATA();
@@ -258,7 +259,8 @@ const SotFactory * SotFactory::Find( const SvGlobalName & rFactName )
             pFact = pSotData->pFactoryList->Next();
         }
     }
-    return NULL;
+
+    return 0;
 }
 
 /*************************************************************************
