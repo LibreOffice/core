@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:21:46 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 09:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,21 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const Rectangle
     if (!pModel)
         return;
 
+    //  #i46362# high contrast mode (and default text direction) must be handled
+    //  by the application, so it's still needed when using DrawLayer().
+
+    SdrOutliner& rOutl = pModel->GetDrawOutliner();
+    rOutl.EnableAutoColor( bUseStyleColor );
+    rOutl.SetDefaultHorizontalTextDirection(
+                (EEHorizontalTextDirection)pDoc->GetEditTextDirection( nTab ) );
+
+    ULONG nOldDrawMode = pDev->GetDrawMode();
+    if ( bUseStyleColor && Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        pDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
+                            DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+    }
+
     // #109985#
     if(pViewShell || pDrawView)
     {
@@ -197,6 +212,8 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const Rectangle
             }
         }
     }
+
+    pDev->SetDrawMode(nOldDrawMode);
 
     // #109985#
     return;
