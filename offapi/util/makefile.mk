@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-25 17:07:47 $
+#   last change: $Author: hr $ $Date: 2004-03-08 14:11:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,6 +112,10 @@ UNOIDLDBFILES= \
     $(UCR)$/csspresentation.db \
     $(UCR)$/cssresource.db \
     $(UCR)$/csssax.db \
+    $(UCR)$/cssdom.db \
+    $(UCR)$/cssxpath.db \
+    $(UCR)$/cssdomviews.db \
+    $(UCR)$/cssdomevents.db \
     $(UCR)$/cssscanner.db \
     $(UCR)$/csssdb.db \
     $(UCR)$/csssdbc.db \
