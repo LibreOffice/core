@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:25:10 $
+ *  last change: $Author: kz $ $Date: 2002-01-23 21:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2652,7 +2652,7 @@ QueryBox MSG_COMCORE_ASKSEARCH
     Message [ finnish ] = "Tämän toiminnon peruuttamiseen tarvitaan suuri määrä muistia.\nHaluatko peruuttaa peruutuksen?" ;
     Message [ danish ] = "Denne handling kræver megen hukommelse til fortryd-funktionen\nVil du slå fortryd-funktionen fra?" ;
     Message [ french ] = "Cette action nécessite beaucoup de mémoire pour l'annulation (Undo).\nVoulez-vous désactiver l'annulation ?" ;
-    Message [ swedish ] = "Denna åtgärd kräver alltför mycket minne för Ångra-funktionen.\nVill Du stänga av Ångra-funktionen?" ;
+    Message [ swedish ] = "Den här åtgärden kräver mycket minne för Ångra-funktionen.\nVill du stänga av Ångra-funktionen?" ;
     Message [ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U \"Ongedaan maken\" opheffen ?" ;
     Message [ spanish ] = "Esta acción necesita mucha memoria para la operación de Deshacer.\n¿Desea desactivar la opción de deshacer?" ;
     Message [ english_us ] = "A large amount of memory is required to undo this action.\nDo you want to cancel the undo?" ;
