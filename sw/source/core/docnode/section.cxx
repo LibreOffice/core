@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 10:16:48 $
+ *  last change: $Author: jp $ $Date: 2001-08-31 11:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1153,7 +1153,8 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
     }
 
     // 2. selbst die Date oeffnen
-    SfxMedium* pMed = new SfxMedium( aTmpObj.GetMainURL(), STREAM_READ, TRUE );
+    SfxMedium* pMed = new SfxMedium( aTmpObj.GetMainURL(
+                             INetURLObject::NO_DECODE ), STREAM_READ, TRUE );
     if( INET_PROT_FILE == aTmpObj.GetProtocol() )
         pMed->DownLoad();     // nur mal das Medium anfassen (DownLoaden)
 

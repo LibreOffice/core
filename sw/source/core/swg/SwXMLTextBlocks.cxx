@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-11 14:05:05 $
+ *  last change: $Author: jp $ $Date: 2001-08-31 11:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -851,7 +851,7 @@ BOOL SwXMLTextBlocks::IsFileUCBStorage( const String & rFileName)
         String aURL;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
         aObj.SetURL( aURL );
-        aName = aObj.GetMainURL();
+        aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
     }
 
     SvStream * pStm = ::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READ );

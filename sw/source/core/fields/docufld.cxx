@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-20 10:21:48 $
+ *  last change: $Author: jp $ $Date: 2001-08-31 11:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,8 @@ String SwFileNameFieldType::Expand(sal_uInt32 nFmt) const
                     }
                     else
                     {
-                        aRet = URIHelper::removePassword( rURLObj.GetMainURL(),
+                        aRet = URIHelper::removePassword(
+                                    rURLObj.GetMainURL( INetURLObject::NO_DECODE ),
                                     INetURLObject::WAS_ENCODED, URL_DECODE );
                         aRet.Erase( aRet.Search( rURLObj.GetLastName(
                                                     URL_DECODE ) ) );
@@ -617,7 +618,8 @@ String SwFileNameFieldType::Expand(sal_uInt32 nFmt) const
                 if( INET_PROT_FILE == rURLObj.GetProtocol() )
                     aRet = rURLObj.GetFull();
                 else
-                    aRet = URIHelper::removePassword( rURLObj.GetMainURL(),
+                    aRet = URIHelper::removePassword(
+                                    rURLObj.GetMainURL( INetURLObject::NO_DECODE ),
                                     INetURLObject::WAS_ENCODED, URL_DECODE );
         }
     }

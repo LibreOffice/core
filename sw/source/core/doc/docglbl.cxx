@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-23 16:02:12 $
+ *  last change: $Author: jp $ $Date: 2001-08-31 11:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
     INetURLObject aEntry(rPath);
     String sLeading(aEntry.GetBase());
     aEntry.removeSegment();
-    String sPath = aEntry.GetMainURL();
+    String sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
     utl::TempFile aTemp(sLeading,&sExt,&sPath );
     aTemp.EnableKillingFile();
 

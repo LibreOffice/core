@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-09 17:47:03 $
+ *  last change: $Author: jp $ $Date: 2001-08-31 11:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     {
         INetURLObject aUrl( rGrfName );
         if( INET_PROT_FILE == aUrl.GetProtocol() &&
-            FStatHelper::IsDocument( aUrl.GetMainURL() ))
+            FStatHelper::IsDocument( aUrl.GetMainURL( INetURLObject::NO_DECODE ) ))
         {
             // File vorhanden, Verbindung herstellen ohne ein Update
             ((SwBaseLink*)&refLink)->Connect();

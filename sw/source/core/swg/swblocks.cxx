@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 13:09:45 $
+ *  last change: $Author: jp $ $Date: 2001-08-31 11:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,10 +203,6 @@ SwImpBlocks::SwImpBlocks( const String& rFile, BOOL bMake )
     INetURLObject aObj(rFile);
     aObj.setExtension( aEmptyStr );
     aName = aObj.GetBase();
-
-    aName.Erase(aName.Len() - 4, 4); //remove extension
-//  aDEntry.SetExtension( aEmptyStr );
-//  aName = aDEntry.GetName();
 }
 
 
@@ -360,18 +356,13 @@ SwTextBlocks::SwTextBlocks( const String& rFile )
     : pImp( 0 ), nErr( 0 )
 {
     INetURLObject aObj(rFile);
-    String sFileName = aObj.GetMainURL();
+    String sFileName = aObj.GetMainURL( INetURLObject::NO_DECODE );
     switch( SwImpBlocks::GetFileType( rFile ) )
     {
-        case SWBLK_SW2:
-            pImp = new Sw2TextBlocks( sFileName ); break;
-        case SWBLK_SW3:
-            pImp = new Sw3TextBlocks( sFileName );
-            break;
-        case SWBLK_XML:
-            pImp = new SwXMLTextBlocks( sFileName ); break;
-        case SWBLK_NO_FILE:
-            pImp = new SwXMLTextBlocks( sFileName ); break;
+    case SWBLK_SW2:     pImp = new Sw2TextBlocks( sFileName );  break;
+    case SWBLK_SW3:     pImp = new Sw3TextBlocks( sFileName );  break;
+    case SWBLK_XML:     pImp = new SwXMLTextBlocks( sFileName ); break;
+    case SWBLK_NO_FILE: pImp = new SwXMLTextBlocks( sFileName ); break;
     }
     if( !pImp )
         nErr = ERR_SWG_FILE_FORMAT_ERROR;
@@ -436,11 +427,12 @@ ULONG SwTextBlocks::ConvertToNew()
         INetURLObject aNewFull( aName );
 
         aOldFull.SetExtension( String::CreateFromAscii("bak") );
-        String aOld( aOldFull.GetMainURL() );
+        String aOld( aOldFull.GetMainURL( INetURLObject::NO_DECODE ) );
+        String aNew( aNewFull.GetMainURL( INetURLObject::NO_DECODE ) );
         BOOL bError = FALSE;
         try
         {
-            String sMain(aOldFull.GetMainURL());
+            String sMain( aOld );
             sal_Unicode cSlash = '/';
             xub_StrLen nSlashPos = sMain.SearchBackward(cSlash);
             sMain.Erase(nSlashPos);
@@ -451,7 +443,7 @@ ULONG SwTextBlocks::ConvertToNew()
             TransferInfo aInfo;
             aInfo.NameClash = NameClash::OVERWRITE;
             aInfo.NewTitle = aOldFull.GetName();
-            aInfo.SourceURL = aNewFull.GetMainURL();
+            aInfo.SourceURL = aNew;
             aInfo.MoveData  = TRUE;
             aAny <<= aInfo;
             aNewContent.executeCommand( C2U( "transfer" ), aAny);
@@ -567,9 +559,8 @@ ULONG SwTextBlocks::ConvertToNew()
             pImp = pNew;
             try
             {
-                ::ucb::Content aOldContent(
-                        aOldFull.GetMainURL(),
-                        Reference< XCommandEnvironment > ());
+                ::ucb::Content aOldContent( aOld,
+                                        Reference< XCommandEnvironment > ());
                 aOldContent.executeCommand( C2U( "delete" ),
                                     makeAny( sal_Bool( sal_True ) ) );
             }
@@ -581,7 +572,7 @@ ULONG SwTextBlocks::ConvertToNew()
             delete pOld; delete pNew;
             try
             {
-                String sMain(aNewFull.GetMainURL());
+                String sMain( aNew );
                 sal_Unicode cSlash = '/';
                 xub_StrLen nSlashPos = sMain.SearchBackward(cSlash);
                 sMain.Erase(nSlashPos);
@@ -590,7 +581,7 @@ ULONG SwTextBlocks::ConvertToNew()
                 TransferInfo aInfo;
                 aInfo.NameClash = NameClash::OVERWRITE;
                 aInfo.NewTitle = aNewFull.GetName();
-                aInfo.SourceURL = aOldFull.GetMainURL();
+                aInfo.SourceURL = aOld;
                 aInfo.MoveData  = TRUE;
                 aAny <<= aInfo;
                 aNewContent.executeCommand( C2U( "transfer" ), aAny);
@@ -611,8 +602,8 @@ ULONG SwTextBlocks::ConvertToNew()
         }
         catch(...){}
 
-        FStatHelper::GetModifiedDateTimeOfFile( aNewFull.GetMainURL(),
-                                &pImp->aDateModified, &pImp->aTimeModified );
+        FStatHelper::GetModifiedDateTimeOfFile( aNew,
+                            &pImp->aDateModified, &pImp->aTimeModified );
     }
     return nErr;
 }
