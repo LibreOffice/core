@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:18:03 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ chinese_simplified ] = "ÎÄµµÊ¹ÓÃµÄÊı¾İ¿â£º";
         Text[ russian ] = "Áàçà äàííûõ, óñòàíîâëåííàÿ â äîêóìåíòå:";
         Text[ polish ] = "Baza danych ustawiona przy dok.:";
-        Text[ japanese ] = "ÄŞ·¨ÒİÄ‚É“K—p‚³‚ê‚½ÃŞ°ÀÍŞ°½:";
+        Text[ japanese ] = "ÄŞ·­ÒİÄ‚É“K—p‚³‚ê‚½ÃŞ°ÀÍŞ°½:";
         Text[ chinese_traditional ] = "¤å¥ó¨Ï¥Îªº¸ê®Æ®w¡G";
         Text[ arabic ] = "ŞÇÚÏÉ ÇáÈíÇäÇÊ ÇáãÑÊÈØÉ ÈÇáãÓÊäÏ:";
         Text[ dutch ] = "Gekoppeld gegevensbestand";
