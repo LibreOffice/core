@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-16 11:52:50 $
+ *  last change: $Author: pl $ $Date: 2002-05-16 13:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,16 @@
 #endif
 
 #include <unohelp.hxx>
+
+namespace vcl
+{
+
+struct MenuLayoutData : public ControlLayoutData
+{
+    std::vector< USHORT >       m_aLineItemIds;
+};
+
+}
 
 using namespace ::com::sun::star;
 using namespace vcl;
@@ -1767,7 +1777,10 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                     MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
                     String* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
                     if( bLayout )
+                    {
                         mpLayoutData->m_aLineIndices.push_back( mpLayoutData->m_aDisplayText.Len() );
+                        mpLayoutData->m_aLineItemIds.push_back( pData->nId );
+                    }
                     pWin->DrawCtrlText( aTmpPos, pData->aText, 0, pData->aText.Len(), nStyle, pVector, pDisplayText );
                 }
 
@@ -2002,7 +2015,7 @@ void Menu::ImplFillLayoutData() const
 {
     if( pWindow && pWindow->IsReallyVisible() )
     {
-        mpLayoutData = new ControlLayoutData();
+        mpLayoutData = new MenuLayoutData();
         if( bIsMenuBar )
         {
             ImplPaint( pWindow, 0, 0, 0, FALSE, true );
@@ -2021,6 +2034,14 @@ String Menu::GetDisplayText() const
         ImplFillLayoutData();
     return mpLayoutData ? mpLayoutData->m_aDisplayText : String();
 }
+
+Rectangle Menu::GetCharacterBounds( long nIndex ) const
+{
+    if( ! mpLayoutData )
+        ImplFillLayoutData();
+    return mpLayoutData ? mpLayoutData->GetCharacterBounds( nIndex ) : Rectangle();
+}
+
 
 long Menu::GetIndexForPoint( const Point& rPoint ) const
 {
@@ -2041,6 +2062,28 @@ Pair Menu::GetLineStartEnd( long nLine ) const
     if( ! mpLayoutData )
         ImplFillLayoutData();
     return mpLayoutData ? mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
+}
+
+USHORT Menu::GetDisplayItemId( long nLine ) const
+{
+    USHORT nItemId = 0;
+    if( ! mpLayoutData )
+        ImplFillLayoutData();
+    if( mpLayoutData && nLine >= 0 && nLine < mpLayoutData->m_aLineItemIds.size() )
+        nItemId = mpLayoutData->m_aLineItemIds[nLine];
+    return nItemId;
+}
+
+BOOL Menu::ConvertPoint( Point& rPoint, Window* pReferenceWindow ) const
+{
+    BOOL bRet = FALSE;
+    if( pWindow && pReferenceWindow )
+    {
+        rPoint = pReferenceWindow->OutputToAbsoluteScreenPixel( rPoint );
+        rPoint = pWindow->AbsoluteScreenToOutputPixel( rPoint );
+        bRet = TRUE;
+    }
+    return bRet;
 }
 
 // -----------
