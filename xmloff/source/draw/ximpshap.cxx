@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-22 12:27:36 $
+ *  last change: $Author: aw $ $Date: 2001-02-22 17:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,12 @@ void SdXMLShapeContext::SetTransformation()
 
             if(maSize.Width != 1 || maSize.Height != 1)
             {
+                // take care there are no zeros used by error
+                if(0 == maSize.Width)
+                    maSize.Width = 1;
+                if(0 == maSize.Height)
+                    maSize.Height = 1;
+
                 // set global size. This should always be used.
                 aTransformation.Scale(maSize.Width, maSize.Height);
             }
