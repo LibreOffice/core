@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:08:47 $
+ *  last change: $Author: thb $ $Date: 2002-08-22 09:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,11 @@
 #include "xlinjoit.hxx"
 #include "unopage.hxx"
 #include "eeitem.hxx"
+#include "xenum.hxx"
+#include "xgrad.hxx"
+#include "xhatch.hxx"
+#include "xflhtit.hxx"
+#include "xbtmpit.hxx"
 
 #ifndef _SVDPOOL_HXX
 #include "svdpool.hxx"
@@ -145,6 +150,14 @@
 #include <sfx2/objface.hxx>
 #endif
 
+#ifndef _SVX_SVDOIMP_HXX
+#include "svdoimp.hxx"
+#endif
+
+#ifndef _SVTOOLS_GRAPHICTOOLS_HXX_
+#include <svtools/graphictools.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 /***********************************************************************
@@ -152,6 +165,10 @@ using namespace ::com::sun::star;
 ***********************************************************************/
 #define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
 #define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -333,6 +350,138 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
 
 ///////////////////////////////////////////////////////////////////////////////
 
+// #100127# Bracket filled output with a comment, if recording a Mtf
+ImpGraphicFill::ImpGraphicFill( const SdrObject& rObj, const ExtOutputDevice& rXOut ) :
+    mrObj( rObj ),
+    mrXOut( rXOut ),
+    mbCommentWritten( false )
+{
+    const SfxItemSet& rSet = rObj.GetItemSet();
+    XFillStyle eFillStyle( ITEMVALUE( rSet, XATTR_FILLSTYLE, XFillStyleItem ) );
+    XGradient aGradient( ITEMVALUE( rSet, XATTR_FILLGRADIENT, XFillGradientItem ) );
+    XHatch aHatch( ITEMVALUE( rSet, XATTR_FILLHATCH, XFillHatchItem ) );
+
+    GDIMetaFile* pMtf=NULL;
+    if( eFillStyle != XFILL_NONE &&
+        (pMtf=mrXOut.GetOutDev()->GetConnectMetaFile()) )
+    {
+        XPolyPolygon aPolyPoly;
+        mrObj.TakeXorPoly(aPolyPoly, TRUE);
+
+        SvtGraphicFill::FillType eType;
+        switch( eFillStyle )
+        {
+            case XFILL_NONE:
+            case XFILL_SOLID:
+                eType = SvtGraphicFill::fillSolid;
+                break;
+
+            case XFILL_GRADIENT:
+                eType = SvtGraphicFill::fillGradient;
+                break;
+
+            case XFILL_HATCH:
+                eType = SvtGraphicFill::fillHatch;
+                break;
+
+            case XFILL_BITMAP:
+                eType = SvtGraphicFill::fillTexture;
+                break;
+
+            default:
+                DBG_ERROR( "ImpGraphicFill::ImpGraphicFill invalid fill type");
+                break;
+        }
+
+        SvtGraphicFill::HatchType eHatch;
+        switch( aHatch.GetHatchStyle() )
+        {
+            case XHATCH_SINGLE:
+                eHatch = SvtGraphicFill::hatchSingle;
+                break;
+
+            case XHATCH_DOUBLE:
+                eHatch = SvtGraphicFill::hatchDouble;
+                break;
+
+            case XHATCH_TRIPLE:
+                eHatch = SvtGraphicFill::hatchTriple;
+                break;
+
+            default:
+                DBG_ERROR( "ImpGraphicFill::ImpGraphicFill invalid hatch type");
+                break;
+        }
+
+        SvtGraphicFill::GradientType eGrad;
+        switch( aGradient.GetGradientStyle() )
+        {
+            case XGRAD_LINEAR:
+            case XGRAD_AXIAL:
+                // TODO: setup transformation
+                eGrad = SvtGraphicFill::gradientLinear;
+                break;
+
+            case XGRAD_RADIAL:
+            case XGRAD_ELLIPTICAL:
+                // TODO: setup transformation
+                eGrad = SvtGraphicFill::gradientRadial;
+                break;
+
+            case XGRAD_SQUARE:
+            case XGRAD_RECT:
+                // TODO: setup transformation
+                eGrad = SvtGraphicFill::gradientRectangular;
+                break;
+
+            default:
+                DBG_ERROR( "ImpGraphicFill::ImpGraphicFill invalid gradient type");
+                break;
+        }
+
+        SvtGraphicFill aFill( XOutCreatePolyPolygonBezier( aPolyPoly, rXOut.GetOutDev() ),
+                              ITEMVALUE( rSet, XATTR_FILLCOLOR, XFillColorItem ),
+                              ITEMVALUE( rSet, XATTR_FILLTRANSPARENCE, XFillTransparenceItem ) / 100.0,
+                              SvtGraphicFill::fillEvenOdd,
+                              eType,
+                              SvtGraphicFill::Transform(), // TODO
+                              eType == SvtGraphicFill::fillTexture ? ITEMVALUE( rSet, XATTR_FILLBMP_TILE, SfxBoolItem ) : false,
+                              eHatch,
+                              aHatch.GetColor(),
+                              eGrad,
+                              aGradient.GetStartColor(),
+                              aGradient.GetEndColor(),
+                              ITEMVALUE( rSet, XATTR_FILLBITMAP, XFillBitmapItem ).GetBitmap() );
+
+#ifdef DBG_UTIL
+        ::rtl::OString aStr( aFill.toString() );
+#endif
+
+        SvMemoryStream  aMemStm;
+
+        aMemStm << aFill;
+
+        pMtf->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN", 0,
+                                                static_cast<const BYTE*>(aMemStm.GetData()),
+
+                                                aMemStm.Seek( STREAM_SEEK_TO_END ) ) );
+        mbCommentWritten = true;
+    }
+}
+
+// #100127# Bracket filled output with a comment, if recording a Mtf
+ImpGraphicFill::~ImpGraphicFill()
+{
+    GDIMetaFile* pMtf=NULL;
+    if( mbCommentWritten &&
+        (pMtf=mrXOut.GetOutDev()->GetConnectMetaFile()) )
+    {
+        pMtf->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_END" ) );
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 static double SMALLEST_DASH_WIDTH(26.95);
 
 ImpLineStyleParameterPack::ImpLineStyleParameterPack(const SfxItemSet& rSet,
@@ -365,8 +514,8 @@ ImpLineStyleParameterPack::ImpLineStyleParameterPack(const SfxItemSet& rSet,
     aDash = ((const XLineDashItem&)(rSet.Get(XATTR_LINEDASH))).GetValue();
 
     // fill local dash info
-    nNumDotDashArray = (GetDots() + GetDashes()) * 2;
-    pDotDashArray = new double[nNumDotDashArray];
+    UINT16 nNumDotDashArray = (GetDots() + GetDashes()) * 2;
+    aDotDashArray.resize( nNumDotDashArray, 0.0 );
     UINT16 a;
     UINT16 nIns = 0;
     double fDashDotDistance = (double)GetDashDistance();
@@ -520,25 +669,23 @@ ImpLineStyleParameterPack::ImpLineStyleParameterPack(const SfxItemSet& rSet,
 
     for(a=0;a<GetDots();a++)
     {
-        pDotDashArray[nIns++] = fSingleDotLen;
+        aDotDashArray[nIns++] = fSingleDotLen;
         fFullDashDotLen += fSingleDotLen;
-        pDotDashArray[nIns++] = fDashDotDistance;
+        aDotDashArray[nIns++] = fDashDotDistance;
         fFullDashDotLen += fDashDotDistance;
     }
 
     for(a=0;a<GetDashes();a++)
     {
-        pDotDashArray[nIns++] = fSingleDashLen;
+        aDotDashArray[nIns++] = fSingleDashLen;
         fFullDashDotLen += fSingleDashLen;
-        pDotDashArray[nIns++] = fDashDotDistance;
+        aDotDashArray[nIns++] = fDashDotDistance;
         fFullDashDotLen += fDashDotDistance;
     }
 }
 
 ImpLineStyleParameterPack::~ImpLineStyleParameterPack()
 {
-    if(pDotDashArray)
-        /*#90353#*/ delete [] pDotDashArray;
 }
 
 UINT16 ImpLineStyleParameterPack::GetFirstDashDotIndex(double fPos, double& rfDist) const
@@ -546,22 +693,22 @@ UINT16 ImpLineStyleParameterPack::GetFirstDashDotIndex(double fPos, double& rfDi
     double fIndPos = fPos - (fFullDashDotLen * (double)((UINT32)(fPos / fFullDashDotLen)));
     UINT16 nPos = 0;
 
-    while(fIndPos && fIndPos - pDotDashArray[nPos] > -SMALL_DVALUE)
+    while(fIndPos && fIndPos - aDotDashArray[nPos] > -SMALL_DVALUE)
     {
-        fIndPos -= pDotDashArray[nPos];
-        nPos = (nPos + 1 == nNumDotDashArray) ? 0 : nPos + 1;
+        fIndPos -= aDotDashArray[nPos];
+        nPos = (static_cast< size_t >(nPos + 1) == aDotDashArray.size()) ? 0 : nPos + 1;
     }
 
-    rfDist = pDotDashArray[nPos] - fIndPos;
-    nPos = (nPos + 1 == nNumDotDashArray) ? 0 : nPos + 1;
+    rfDist = aDotDashArray[nPos] - fIndPos;
+    nPos = (static_cast< size_t >(nPos + 1) == aDotDashArray.size()) ? 0 : nPos + 1;
 
     return nPos;
 }
 
 UINT16 ImpLineStyleParameterPack::GetNextDashDotIndex(UINT16 nPos, double& rfDist) const
 {
-    rfDist = pDotDashArray[nPos];
-    nPos = (nPos + 1 == nNumDotDashArray) ? 0 : nPos + 1;
+    rfDist = aDotDashArray[nPos];
+    nPos = (static_cast< size_t >(nPos + 1) == aDotDashArray.size()) ? 0 : nPos + 1;
     return nPos;
 }
 
@@ -1620,16 +1767,21 @@ FASTBOOL SdrObject::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& /*rInfo
     return TRUE;
 }
 
-void SdrObject::CreateLinePoly(PolyPolygon3D& rPolyPolygon, PolyPolygon3D& rPolyLine, OutputDevice& rOut,
-    BOOL bForceHair, BOOL bIsLineDraft) const
+::std::auto_ptr< ImpLineGeometry >  SdrObject::CreateLinePoly( OutputDevice&        rOut,
+                                                               BOOL                 bForceOnePixel,
+                                                               BOOL                 bForceTwoPixel,
+                                                               BOOL                 bIsLineDraft    ) const
 {
+    PolyPolygon3D aPolyPoly3D;
+    PolyPolygon3D aLinePoly3D;
+
     // get XOR Poly as base
     XPolyPolygon aTmpPolyPolygon;
     TakeXorPoly(aTmpPolyPolygon, TRUE);
 
     // get ImpLineStyleParameterPack
-    ImpLineStyleParameterPack aLineAttr(GetItemSet(), bForceHair || bIsLineDraft, &rOut);
-    ImpLineGeometryCreator aLineCreator(aLineAttr, rPolyPolygon, rPolyLine, bIsLineDraft);
+    ImpLineStyleParameterPack aLineAttr(GetItemSet(), bForceOnePixel || bForceTwoPixel || bIsLineDraft, &rOut);
+    ImpLineGeometryCreator aLineCreator(aLineAttr, aPolyPoly3D, aLinePoly3D, bIsLineDraft);
 
     // compute single lines
     for(UINT16 a=0;a<aTmpPolyPolygon.Count();a++)
@@ -1642,6 +1794,12 @@ void SdrObject::CreateLinePoly(PolyPolygon3D& rPolyPolygon, PolyPolygon3D& rPoly
         // polygons are all clockwise oriented
         aLineCreator.AddPolygon3D(aPoly3D);
     }
+
+    if(aPolyPoly3D.Count() || aLinePoly3D.Count())
+        return ::std::auto_ptr< ImpLineGeometry > (new ImpLineGeometry(aPolyPoly3D, aLinePoly3D,
+                                                                       aLineAttr, bForceOnePixel, bForceTwoPixel));
+    else
+        return NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1999,15 +2157,12 @@ void PolyPolygon3D_BuildSkeletonsAndGrow(const PolyPolygon3D& rPolyPoly)
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-ImpLineGeometry* SdrObject::ImpPrepareLineGeometry(ExtOutputDevice& rXOut, const SfxItemSet& rSet,
-    BOOL bIsLineDraft) const
+::std::auto_ptr< ImpLineGeometry > SdrObject::ImpPrepareLineGeometry( ExtOutputDevice& rXOut, const SfxItemSet& rSet,
+                                                                      BOOL bIsLineDraft) const
 {
     XLineStyle eXLS = (XLineStyle)((const XLineStyleItem&)rSet.Get(XATTR_LINESTYLE)).GetValue();
     if(eXLS != XLINE_NONE)
     {
-        PolyPolygon3D aPolyPoly3D;
-        PolyPolygon3D aLinePoly3D;
-
         // need to force single point line?
         INT32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
         Size aSize(nLineWidth, nLineWidth);
@@ -2028,11 +2183,8 @@ ImpLineGeometry* SdrObject::ImpPrepareLineGeometry(ExtOutputDevice& rXOut, const
         }
 
         // create line geometry
-        CreateLinePoly(aPolyPoly3D, aLinePoly3D, *rXOut.GetOutDev(),
-            bForceOnePixel || bForceTwoPixel, bIsLineDraft);
-
-        if(aPolyPoly3D.Count() || aLinePoly3D.Count())
-            return new ImpLineGeometry(aPolyPoly3D, aLinePoly3D, bForceOnePixel, bForceTwoPixel);
+        return CreateLinePoly(*rXOut.GetOutDev(),
+                              bForceOnePixel, bForceTwoPixel, bIsLineDraft);
     }
 
     return 0L;
@@ -2103,6 +2255,90 @@ void SdrObject::ImpDrawLineGeometry(
     {
         aLineColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
         rXOut.GetOutDev()->SetDrawMode( nOldDrawMode & (~DRAWMODE_SETTINGSFILL) );
+    }
+
+    // #100127# Bracket output with a comment, if recording a Mtf
+    GDIMetaFile* pMtf=NULL;
+    bool bMtfCommentWritten( false );
+    if( (pMtf=rXOut.GetOutDev()->GetConnectMetaFile()) )
+    {
+        XPolyPolygon aPolyPoly;
+        TakeXorPoly(aPolyPoly, TRUE);
+
+        // for geometries with more than one polygon, dashing, arrows
+        // etc. become ambiguous (e.g. measure objects have no arrows
+        // on the end line), thus refrain from writing the comment
+        // here.
+        if( aPolyPoly.Count() == 1 )
+        {
+            // add completely superfluous color action (gets overwritten
+            // below), to store our line color reliably
+            rXOut.GetOutDev()->SetLineColor(aLineColor);
+
+            const ImpLineStyleParameterPack& rLineParameters = rLineGeometry.GetLineAttr();
+
+            XPolygon aStartPoly( rLineParameters.GetStartPolygon() );
+            XPolygon aEndPoly( rLineParameters.GetEndPolygon() );
+
+            // scale arrows to specified stroke width
+            if( aStartPoly.GetPointCount() )
+            {
+                Rectangle aBounds( aStartPoly.GetBoundRect() );
+
+                // mirror and translate to origin
+                aStartPoly.Scale(-1,-1);
+                aStartPoly.Translate( Point(aBounds.GetWidth() / 2, aBounds.GetHeight()) );
+
+                if( aBounds.GetWidth() )
+                {
+                    double fScale( (double)rLineParameters.GetStartWidth() / (double)aBounds.GetWidth() );
+                    aStartPoly.Scale( fScale, fScale );
+                }
+
+                if( rLineParameters.IsStartCentered() )
+                    aStartPoly.Translate( Point(0, -aStartPoly.GetBoundRect().GetHeight() / 2) );
+            }
+            if( aEndPoly.GetPointCount() )
+            {
+                Rectangle aBounds( aEndPoly.GetBoundRect() );
+
+                // mirror and translate to origin
+                aEndPoly.Scale(-1,-1);
+                aEndPoly.Translate( Point(aBounds.GetWidth() / 2, aBounds.GetHeight()) );
+
+                if( aBounds.GetWidth() )
+                {
+                    double fScale( static_cast<double>(rLineParameters.GetEndWidth()) / static_cast<double>(aBounds.GetWidth()) );
+                    aEndPoly.Scale( fScale, fScale );
+                }
+
+                if( rLineParameters.IsEndCentered() )
+                    aEndPoly.Translate( Point(0, -aEndPoly.GetBoundRect().GetHeight() / 2) );
+            }
+
+            SvtGraphicStroke aStroke( XOutCreatePolygonBezier( aPolyPoly[0], rXOut.GetOutDev() ),
+                                      XOutCreatePolygonBezier( aStartPoly, rXOut.GetOutDev() ),
+                                      XOutCreatePolygonBezier( aEndPoly, rXOut.GetOutDev() ),
+                                      nTransparence / 100.0,
+                                      rLineParameters.GetLineWidth(),
+                                      SvtGraphicStroke::capButt,
+                                      SvtGraphicStroke::joinRound,
+                                      rLineParameters.GetLinejointMiterUpperBound(),
+                                      rLineParameters.GetDotDash() );
+
+#ifdef DBG_UTIL
+            ::rtl::OString aStr( aStroke.toString() );
+#endif
+
+            SvMemoryStream  aMemStm;
+
+            aMemStm << aStroke;
+
+            pMtf->AddAction( new MetaCommentAction( "XPATHSTROKE_SEQ_BEGIN", 0,
+                                                    static_cast<const BYTE*>(aMemStm.GetData()),
+                                                    aMemStm.Seek( STREAM_SEEK_TO_END ) ) );
+            bMtfCommentWritten = true;
+        }
     }
 
     if(nTransparence)
@@ -2298,6 +2534,10 @@ void SdrObject::ImpDrawLineGeometry(
             }
         }
     }
+
+    // #100127# Bracket output with a comment, if recording a Mtf
+    if( bMtfCommentWritten && pMtf )
+        pMtf->AddAction( new MetaCommentAction( "XPATHSTROKE_SEQ_END" ) );
 
     rXOut.GetOutDev()->SetDrawMode( nOldDrawMode );
 }
@@ -3924,99 +4164,102 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
         aMap.SetScaleY(pModel->GetScaleFraction());
         aVDev.SetMapMode(aMap);
 
-        PolyPolygon3D aPolyPoly3D;
-        PolyPolygon3D aLinePoly3D;
-        pRet->CreateLinePoly(aPolyPoly3D, aLinePoly3D, aVDev, FALSE, FALSE);
-
-        //  || aLinePoly3D.Count() removed; the conversion is ONLY
-        // useful when new closed filled polygons are created
-        if(aPolyPoly3D.Count() || (bForceLineDash && aLinePoly3D.Count()))
+        ::std::auto_ptr< ImpLineGeometry > aLineGeom( pRet->CreateLinePoly(aVDev, FALSE, FALSE, FALSE) );
+        if( aLineGeom.get() )
         {
-            SfxItemSet aSet(pRet->GetItemSet());
-            XFillStyle eOldFillStyle = ((const XFillStyleItem&)(aSet.Get(XATTR_FILLSTYLE))).GetValue();
-            SdrPathObj* aLinePolygonPart = NULL;
-            SdrPathObj* aLineLinePart = NULL;
-            BOOL bBuildGroup(FALSE);
+            PolyPolygon3D& rPolyPoly3D = aLineGeom->GetPolyPoly3D();
+            PolyPolygon3D& rLinePoly3D = aLineGeom->GetLinePoly3D();
 
-            aPolyPoly3D.Merge(TRUE);
-
-            if(aPolyPoly3D.Count())
+            //  || rLinePoly3D.Count() removed; the conversion is ONLY
+            // useful when new closed filled polygons are created
+            if(rPolyPoly3D.Count() || (bForceLineDash && rLinePoly3D.Count()))
             {
-                aLinePolygonPart = new SdrPathObj(OBJ_PATHFILL, aPolyPoly3D.GetXPolyPolygon());
-                aLinePolygonPart->SetModel(pRet->GetModel());
+                SfxItemSet aSet(pRet->GetItemSet());
+                XFillStyle eOldFillStyle = ((const XFillStyleItem&)(aSet.Get(XATTR_FILLSTYLE))).GetValue();
+                SdrPathObj* aLinePolygonPart = NULL;
+                SdrPathObj* aLineLinePart = NULL;
+                BOOL bBuildGroup(FALSE);
 
-                aSet.Put(XLineWidthItem(0L));
-                Color aColorLine = ((const XLineColorItem&)(aSet.Get(XATTR_LINECOLOR))).GetValue();
-                UINT16 nTransLine = ((const XLineTransparenceItem&)(aSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
-                aSet.Put(XFillColorItem(XubString(), aColorLine));
-                aSet.Put(XFillStyleItem(XFILL_SOLID));
-                aSet.Put(XLineStyleItem(XLINE_NONE));
-                aSet.Put(XFillTransparenceItem(nTransLine));
+                rPolyPoly3D.Merge(TRUE);
 
-                aLinePolygonPart->SetItemSet(aSet);
-            }
-
-            if(aLinePoly3D.Count())
-            {
-                aLineLinePart = new SdrPathObj(OBJ_PATHFILL, aLinePoly3D.GetXPolyPolygon());
-                aLineLinePart->SetModel(pRet->GetModel());
-
-                aSet.Put(XLineWidthItem(0L));
-                aSet.Put(XFillStyleItem(XFILL_NONE));
-                aSet.Put(XLineStyleItem(XLINE_SOLID));
-
-                aLineLinePart->SetItemSet(aSet);
-
-                if(aLinePolygonPart)
-                    bBuildGroup = TRUE;
-            }
-
-            if(!bBuildGroup)
-            {
-                SdrPathObj* pPath = PTR_CAST(SdrPathObj, pRet);
-                if(pPath && pPath->IsClosed())
+                if(rPolyPoly3D.Count())
                 {
-                    if(eOldFillStyle != XFILL_NONE)
+                    aLinePolygonPart = new SdrPathObj(OBJ_PATHFILL, rPolyPoly3D.GetXPolyPolygon());
+                    aLinePolygonPart->SetModel(pRet->GetModel());
+
+                    aSet.Put(XLineWidthItem(0L));
+                    Color aColorLine = ((const XLineColorItem&)(aSet.Get(XATTR_LINECOLOR))).GetValue();
+                    UINT16 nTransLine = ((const XLineTransparenceItem&)(aSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
+                    aSet.Put(XFillColorItem(XubString(), aColorLine));
+                    aSet.Put(XFillStyleItem(XFILL_SOLID));
+                    aSet.Put(XLineStyleItem(XLINE_NONE));
+                    aSet.Put(XFillTransparenceItem(nTransLine));
+
+                    aLinePolygonPart->SetItemSet(aSet);
+                }
+
+                if(rLinePoly3D.Count())
+                {
+                    aLineLinePart = new SdrPathObj(OBJ_PATHFILL, rLinePoly3D.GetXPolyPolygon());
+                    aLineLinePart->SetModel(pRet->GetModel());
+
+                    aSet.Put(XLineWidthItem(0L));
+                    aSet.Put(XFillStyleItem(XFILL_NONE));
+                    aSet.Put(XLineStyleItem(XLINE_SOLID));
+
+                    aLineLinePart->SetItemSet(aSet);
+
+                    if(aLinePolygonPart)
                         bBuildGroup = TRUE;
                 }
+
+                if(!bBuildGroup)
+                {
+                    SdrPathObj* pPath = PTR_CAST(SdrPathObj, pRet);
+                    if(pPath && pPath->IsClosed())
+                    {
+                        if(eOldFillStyle != XFILL_NONE)
+                            bBuildGroup = TRUE;
+                    }
+                }
+
+                if(bBuildGroup)
+                {
+                    SdrObject* pGroup = new SdrObjGroup;
+                    pGroup->SetModel(pRet->GetModel());
+
+                    aSet.ClearItem();
+
+                    aSet.Put(pRet->GetItemSet());
+
+                    aSet.Put(XLineStyleItem(XLINE_NONE));
+                    aSet.Put(XLineWidthItem(0L));
+
+                    SdrObject* pClone = pRet->Clone();
+                    pClone->SetModel(pRet->GetModel());
+
+                    pClone->SetItemSet(aSet);
+
+                    pGroup->GetSubList()->NbcInsertObject( pClone );
+
+                    if(aLinePolygonPart)
+                        pGroup->GetSubList()->NbcInsertObject(aLinePolygonPart);
+
+                    if(aLineLinePart)
+                        pGroup->GetSubList()->NbcInsertObject(aLineLinePart);
+
+                    pRet = pGroup;
+                }
+                else
+                {
+                    if(aLinePolygonPart)
+                        pRet = aLinePolygonPart;
+                    else if(aLineLinePart)
+                        pRet = aLineLinePart;
+                }
+
+                bNoChange = FALSE;
             }
-
-            if(bBuildGroup)
-            {
-                SdrObject* pGroup = new SdrObjGroup;
-                pGroup->SetModel(pRet->GetModel());
-
-                aSet.ClearItem();
-
-                aSet.Put(pRet->GetItemSet());
-
-                aSet.Put(XLineStyleItem(XLINE_NONE));
-                aSet.Put(XLineWidthItem(0L));
-
-                SdrObject* pClone = pRet->Clone();
-                pClone->SetModel(pRet->GetModel());
-
-                pClone->SetItemSet(aSet);
-
-                pGroup->GetSubList()->NbcInsertObject( pClone );
-
-                if(aLinePolygonPart)
-                    pGroup->GetSubList()->NbcInsertObject(aLinePolygonPart);
-
-                if(aLineLinePart)
-                    pGroup->GetSubList()->NbcInsertObject(aLineLinePart);
-
-                pRet = pGroup;
-            }
-            else
-            {
-                if(aLinePolygonPart)
-                    pRet = aLinePolygonPart;
-                else if(aLineLinePart)
-                    pRet = aLineLinePart;
-            }
-
-            bNoChange = FALSE;
         }
     }
 
