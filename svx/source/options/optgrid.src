@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:23:46 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ chinese_simplified ] = "Ê¹ÓÃÍø¸ñ×ø±ê(~S)";
         Text[ russian ] = "Ïğèâÿçàòü ê ñåòêå";
         Text[ polish ] = "U¿yj siatki zaczepu";
-        Text[ japanese ] = "½Å¯Ìß–Ô–Ú½¸Ø°İ‚Ìg—p(~S)";
+        Text[ japanese ] = "½Å¯Ìß–Ô–Ú½¸Ø°İ‚ğg—p‚·‚é(~S)";
         Text[ chinese_traditional ] = "¨Ï¥Îºô®æ®y¼Ğ(~S)";
         Text[ arabic ] = "ÇÓÊÎÏÇã ÔÈßÉ ÇáÍÈÓ";
         Text[ greek ] = "×ñŞóç ğëİãìáôïò ğñïóêüëëçóçò";
@@ -149,7 +149,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ chinese_simplified ] = "ÏÔÊ¾Íø¸ñÏß(~V)";
         Text[ russian ] = "Ïîêàçàòü ñåòêó";
         Text[ polish ] = "Raster widoczny";
-        Text[ japanese ] = "¸ŞØ¯ÄŞ‚ğ•\\¦‚·‚é(~V)";
+        Text[ japanese ] = "¸ŞØ¯ÄŞü‚ğ•\\¦‚·‚é(~V)";
         Text[ chinese_traditional ] = "Åã¥Üºô®æ½u(~V)";
         Text[ arabic ] = "ÔÈßÉ ãÑÆíÉ";
         Text[ greek ] = "Ğëİãìá ïñá~ôÜ";
