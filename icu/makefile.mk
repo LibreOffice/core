@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: er $ $Date: 2002-04-22 17:51:40 $
+#   last change: $Author: hjs $ $Date: 2002-05-13 17:21:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,7 +114,11 @@ OUT2LIB+= \
 
 .IF "$(GUI)"=="WNT"
 CONFIGURE_DIR=source
+.IF "$(USE_SHELL)"=="4nt"
 CONFIGURE_ACTION=$(BACK_PATH)..$/..$/convert.bat
+.ELSE			# "$(USE_SHELL)"=="4nt"
+CONFIGURE_ACTION=$(BACK_PATH)..$/..$/convert.sh
+.ENDIF			# "$(USE_SHELL)"=="4nt"
 BUILD_DIR=source
 BUILD_ACTION=msdev allinone$/allinone.dsw /useenv /MAKE "all"
 
@@ -137,7 +141,7 @@ OUT2BIN= \
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
-TG_DELIVER : build$/$(INPATH)$/so_predeliver
+TG_DELIVER : $/$(MISC)$/build$/so_predeliver
         $(DELIVER)
 
 .IF "$(BUILD_SOSL)"!=""
