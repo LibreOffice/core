@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:58:56 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1611,7 +1611,10 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
         const OUString sInputStream ( RTL_CONSTASCII_USTRINGPARAM ( "InputStream" ) );
 
         sal_Bool bHasInputStream = sal_False;
-        for ( sal_Int32 i = 0, nEnd = lDescriptor.getLength(); i < nEnd; i++ )
+        sal_Int32 i;
+        sal_Int32 nEnd = lDescriptor.getLength();
+
+        for ( i = 0; i < nEnd; i++ )
         {
             pNewValue[i] = pOldValue[i];
             if ( pOldValue [i].Name == sInputStream )
@@ -1683,7 +1686,10 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         // put in the REAL file name, and copy all PropertyValues
         const OUString sOutputStream ( RTL_CONSTASCII_USTRINGPARAM ( "OutputStream" ) );
         BOOL bHasStream = FALSE;
-        for ( sal_Int32 i = 0, nEnd = aOldArgs.getLength(); i < nEnd; i++ )
+        sal_Int32 i;
+        sal_Int32 nEnd = aOldArgs.getLength();
+
+        for ( i = 0; i < nEnd; i++ )
         {
             pNewValue[i] = pOldValue[i];
             if ( pOldValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "FileName" ) ) )
