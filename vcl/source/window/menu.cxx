@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-23 12:14:54 $
+ *  last change: $Author: tbe $ $Date: 2002-07-24 16:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -988,12 +988,19 @@ void Menu::InsertSeparator( USHORT nPos )
     // Separator in die Item-Liste einfuegen
     pItemList->InsertSeparator( nPos );
     delete mpLayoutData, mpLayoutData = NULL;
+
+    ImplCallEventListeners( VCLEVENT_MENU_INSERTITEM, nPos );
 }
 
 void Menu::RemoveItem( USHORT nPos )
 {
+    BOOL bRemove = FALSE;
+
     if ( nPos < GetItemCount() )
+    {
         pItemList->Remove( nPos );
+        bRemove = TRUE;
+    }
 
     Window* pWin = ImplGetWindow();
     if ( pWin )
@@ -1003,7 +1010,9 @@ void Menu::RemoveItem( USHORT nPos )
             pWin->Invalidate();
     }
     delete mpLayoutData, mpLayoutData = NULL;
-    ImplCallEventListeners( VCLEVENT_MENU_REMOVEITEM, nPos );
+
+    if ( bRemove )
+        ImplCallEventListeners( VCLEVENT_MENU_REMOVEITEM, nPos );
 }
 
 void ImplCopyItem( Menu* pThis, const Menu& rMenu, USHORT nPos, USHORT nNewPos,
@@ -1375,8 +1384,12 @@ void Menu::SetItemText( USHORT nItemId, const XubString& rStr )
     if ( !pData )
         return;
 
-    pData->aText = rStr;
-    ImplSetMenuItemData( pData, nPos );
+    if ( !rStr.Equals( pData->aText ) )
+    {
+        pData->aText = rStr;
+        ImplSetMenuItemData( pData, nPos );
+        ImplCallEventListeners( VCLEVENT_MENU_ITEMTEXTCHANGED, nPos );
+    }
 }
 
 XubString Menu::GetItemText( USHORT nItemId ) const
