@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-09 16:30:40 $
+ *  last change: $Author: mba $ $Date: 2001-04-09 16:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1464,7 +1464,10 @@ void SfxMedium::GetMedium_Impl()
         else
         {
             if ( !SfxContentHelper::Exists( GetName() ) )
+            {
+                Done_Impl( ERRCODE_IO_NOTEXISTS );
                 return;
+            }
 
             SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
             BOOL bAllowReadOnlyMode = pItem ? pItem->GetValue() : TRUE;
