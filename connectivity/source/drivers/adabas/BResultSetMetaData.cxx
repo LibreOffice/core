@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:20 $
+ *  last change: $Author: oj $ $Date: 2001-04-25 06:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,8 +174,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(starsdbc::SQLException, staruno::RuntimeException)
 {
-    return getCharColAttrib(column,SQL_DESC_TYPE_NAME
-);
+    return getCharColAttrib(column,SQL_DESC_TYPE_NAME);
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column ) throw(starsdbc::SQLException, staruno::RuntimeException)
