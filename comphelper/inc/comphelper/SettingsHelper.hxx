@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-27 18:41:47 $
+ *  last change: $Author: obo $ $Date: 2001-12-06 10:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ namespace comphelper
         SettingsHelperNoState ( ComphelperBaseInfo *pInfo, ::vos::IMutex *pMutex = NULL)
         : ComphelperBase ( pInfo, pMutex )
         {}
-        virtual ~SettingsHelperNoState () {}
+        virtual ~SettingsHelperNoState () throw( ) {}
         com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& aType ) throw (com::sun::star::uno::RuntimeException)
         { return HelperBaseNoState::queryInterface( aType ); }
         void SAL_CALL acquire(  ) throw ()
