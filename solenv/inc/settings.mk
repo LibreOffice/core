@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.160 $
+#   $Revision: 1.161 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-14 11:34:33 $
+#   last change: $Author: obo $ $Date: 2005-01-25 15:15:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -157,37 +157,83 @@ ASM=
 AFLAGS=
 
 
-#JAVA
+#START JAVA
+
+#interpreter location
+.IF "$(JAVAINTERPRETER)" == ""
 .IF "$(JDK)" == "J++"
-JAVAC=jvc.exe
-JAVAI=jview.exe
-JAVACPS=/cp
+JAVAINTERPRETER=jview.exe
 .ELSE
 .IF "$(JDK)" == "SCAFE"
 .IF "$(JDK_VERSION)" != ""
-JAVAC=$(DEVROOT)$/vcafe11$/bin$/sj.exe
-JAVAI=$(DEVROOT)$/vcafe11$/java$/bin$/java.exe
+JAVAINTERPRETER=$(DEVROOT)$/vcafe11$/java$/bin$/java.exe
 .ELSE
-JAVAC=$(DEVROOT)$/cafepro$/bin$/sj.exe
-JAVAI=$(DEVROOT)$/cafepro$/java$/bin$/java.exe
+JAVAINTERPRETER=$(DEVROOT)$/cafepro$/java$/bin$/java.exe
 .ENDIF
+.ELSE
+.IF "$(JDK)" == "gcj"
+JAVAINTERPRETER=gij
+.ELSE
+JAVAINTERPRETER=java
+.ENDIF
+.ENDIF
+.ENDIF
+.ENDIF
+
+#compiler location
+.IF "$(JAVACOMPILER)" == ""
+.IF "$(JDK)" == "J++"
+JAVACOMPILER=jvc.exe
+.ELSE
+.IF "$(JDK)" == "SCAFE"
+.IF "$(JDK_VERSION)" != ""
+JAVACOMPILER=$(DEVROOT)$/vcafe11$/bin$/sj.exe
+.ELSE
+JAVACOMPILER=$(DEVROOT)$/cafepro$/bin$/sj.exe
+.ENDIF
+.ELSE
+.IF "$(JDK)" == "gcj"
+JAVACOMPILER=gcj
+.ELSE
+JAVACOMPILER=javac
+.ENDIF
+.ENDIF
+.ENDIF
+.ENDIF
+
+#if javadoc is not already set
+.IF $(JAVADOC)==""
+JAVADOC=javadoc -J-Xmx120m
+.ENDIF
+
+#required arguments
+.IF "$(JDK)" == "gcj"
+#JAVAC=$(JAVACOMPILER) -g -fno-assert -Wno-deprecated -C
+JAVAC=$(JAVACOMPILER) --encoding=ISO-8859-15 -g -fno-assert -Wno-deprecated -C
+JAVAI=$(JAVAINTERPRETER) -Dgnu.gcj.runtime.VMClassLoader.library_control=never
+.ELSE
+JAVAC=$(JAVACOMPILER)
+JAVAI=$(JAVAINTERPRETER)
+.ENDIF
+
+#classpath and response
+.IF "$(JDK)" == "J++"
+JAVACPS=/cp
+.ELSE
+.IF "$(JDK)" == "SCAFE"
 JAVACPS=-classpath
 JAVARESPONSE=TRUE
 .ELSE
-#JAVAC=javac.exe
-#JAVAI=java.exe
 .IF "$(JDK)" == "gcj"
-JAVAC=gcj -C
-JAVAI=gij
 JAVACPS=--classpath
 .ELSE
-JAVAC=javac
-JAVAI=java
 JAVACPS=-classpath
 .ENDIF
 JAVARESPONSE=
 .ENDIF
 .ENDIF
+
+#END JAVA
 
 CDEFS=
 CXXDEFS=
