@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 14:29:24 $
+#   last change: $Author: kz $ $Date: 2004-11-27 13:20:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -119,7 +119,9 @@ EXCEPTIONSFILES= \
         $(SLO)$/lngreg.obj\
         $(SLO)$/lngsvcmgr.obj\
         $(SLO)$/misc.obj\
+        $(SLO)$/prophelp.obj\
         $(SLO)$/spelldsp.obj\
+        $(SLO)$/thesdta.obj\
         $(SLO)$/thesdsp.obj
 
 SLOFILES = \
@@ -135,8 +137,11 @@ SLOFILES = \
         $(SLO)$/lngopt.obj\
         $(SLO)$/lngsvcmgr.obj\
         $(SLO)$/misc.obj\
+        $(SLO)$/prophelp.obj\
         $(SLO)$/spelldsp.obj\
         $(SLO)$/spelldta.obj\
+        $(SLO)$/supplang.obj\
+        $(SLO)$/thesdta.obj\
         $(SLO)$/thesdsp.obj\
         $(SLO)$/lngreg.obj
 
