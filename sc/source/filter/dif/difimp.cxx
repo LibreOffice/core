@@ -2,9 +2,9 @@
  *
  *  $RCSfile: difimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:40:40 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -74,7 +73,6 @@
 #include "dif.hxx"
 #include "filter.hxx"
 #include "fprogressbar.hxx"
-#include "flttools.hxx"
 #include "scerrors.hxx"
 #include "document.hxx"
 #include "cell.hxx"
