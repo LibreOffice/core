@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:37:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ DBG_NAME(OTableEditorCtrl);
 
 //==================================================================
 //------------------------------------------------------------------
-OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(sal_uInt32 nTimeout,OTableEditorCtrl* _pOwner)
+OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(ULONG nTimeout,OTableEditorCtrl* _pOwner)
 : m_pOwner(_pOwner)
 {
     m_aInvalidateTimer.SetTimeout(nTimeout);
@@ -1309,7 +1309,7 @@ String OTableEditorCtrl::GetCellText( long nRow, sal_uInt16 nColId ) const
 }
 
 //------------------------------------------------------------------------------
-sal_uInt32 OTableEditorCtrl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
+ULONG OTableEditorCtrl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     return GetTextWidth(GetCellText(nRow, nColId)) + 2 * GetTextWidth('0');
