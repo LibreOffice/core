@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-19 12:58:51 $
+ *  last change: $Author: fs $ $Date: 2001-10-30 15:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1041,7 +1041,27 @@ namespace pcr
         catch (Exception&) { }
 
         if (aErrorInfo.isValid() && haveView())
-            showError(aErrorInfo, VCLUnoHelper::GetInterface(m_pView), m_xORB);
+        {
+            ::rtl::OUString sDataSourceName;
+            try
+            {
+                Reference< XPropertySet > xRSP( getRowSet(), UNO_QUERY );
+                if ( xRSP.is() )
+                    xRSP->getPropertyValue( PROPERTY_DATASOURCE ) >>= sDataSourceName;
+            }
+            catch( const Exception& )
+            {
+                DBG_ERROR( "OPropertyBrowserController::connectRowset: caught an exception during error handling!" );
+            }
+            // additional info about what happended
+            String sInfo( ModuleRes( RID_STR_UNABLETOCONNECT ) );
+            sInfo.SearchAndReplaceAllAscii( "$name$", sDataSourceName );
+
+            SQLContext aContext;
+            aContext.Message = sInfo;
+            aContext.NextException = aErrorInfo.get();
+            showError( aContext, VCLUnoHelper::GetInterface( m_pView ), m_xORB);
+        }
     }
 
     //------------------------------------------------------------------------
@@ -1081,17 +1101,22 @@ namespace pcr
             else
                 aProperty.sValue = String();
 
-            if (bInit)
+            if ( bInit )
                 connectRowset();
 
             ////////////////////////////////////////////////////////////
             // Enums setzen
-            Sequence< ::rtl::OUString > aCommandTypes = m_pPropertyInfo->getPropertyEnumRepresentations(PROPERTY_ID_COMMANDTYPE);
-            sal_Int32 nPos = GetStringPos(sCommandType, aCommandTypes);
-            if (0 == nPos)
-                SetTables(aProperty);
-            else if (1 == nPos)
-                SetQueries(aProperty);
+
+            sal_Bool bFailedToConnect = bInit && !haveRowsetConnection();
+            if ( !bFailedToConnect )
+            {
+                Sequence< ::rtl::OUString > aCommandTypes = m_pPropertyInfo->getPropertyEnumRepresentations(PROPERTY_ID_COMMANDTYPE);
+                sal_Int32 nPos = GetStringPos(sCommandType, aCommandTypes);
+                if (0 == nPos)
+                    SetTables(aProperty);
+                else if (1 == nPos)
+                    SetQueries(aProperty);
+            }
 
             getPropertyBox()->ChangeEntry(aProperty, getPropertyBox()->GetPropertyPos(aProperty.sName));
             Commit(aProperty.sName, aProperty.sValue, NULL);
@@ -2608,6 +2633,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.44  2001/10/19 12:58:51  tbe
+ *  #92755# Assign Standard Values for Basic Controls in Designmode
+ *
  *  Revision 1.43  2001/08/27 16:57:39  fs
  *  #91537# changed the runtime representation for form (control) StarBasic script events (now with 'application' resp. 'document')
  *
