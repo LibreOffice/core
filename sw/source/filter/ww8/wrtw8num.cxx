@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2001-11-02 09:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,14 @@
 #ifndef _NDTXT_HXX //autogen wg. SwTxtNode
 #include <ndtxt.hxx>
 #endif
-
 #ifndef _WRTWW8_HXX
 #include <wrtww8.hxx>
 #endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+
+using namespace ::com::sun::star::i18n;
 
 
 USHORT SwWW8Writer::GetId( const SwNumRule& rNumRule ) const
@@ -261,7 +265,7 @@ void SwWW8Writer::OutListTab()
                 else
                     pOutSet = &rFmt.GetCharFmt()->GetAttrSet();
 
-                Out_SfxItemSet( *pOutSet, FALSE, TRUE );
+                Out_SfxItemSet( *pOutSet, FALSE, TRUE, ScriptType::LATIN );
                 pO = pOldpO;
             }
             nFlags = (BYTE)aCharAtrs.Count();

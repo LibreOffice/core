@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-19 08:47:13 $
+ *  last change: $Author: cmc $ $Date: 2001-11-02 09:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,7 @@ static Writer& OutWW8_SwNumRuleItem( Writer& rWrt, const SfxPoolItem& rHt );
  */
 
 void SwWW8Writer::Out_SfxItemSet( const SfxItemSet& rSet,
-                                  BOOL bPapFmt, BOOL bChpFmt )
+                                  BOOL bPapFmt, BOOL bChpFmt, USHORT nScript )
 {
     if( rSet.Count() )
     {
@@ -423,6 +423,19 @@ void SwWW8Writer::Out_SfxItemSet( const SfxItemSet& rSet,
             {
                 BOOL bChp = nWhich >= RES_CHRATR_BEGIN
                             && nWhich < RES_TXTATR_END;
+                if (bChp)
+                {
+                    if ( (nWhich == RES_CHRATR_CJK_FONTSIZE) &&
+                          (nScript != com::sun::star::i18n::ScriptType::ASIAN) )
+                    {
+                        bChp = FALSE;
+                    }
+                    else if ( (nWhich == RES_CHRATR_FONTSIZE) &&
+                          (nScript == com::sun::star::i18n::ScriptType::ASIAN) )
+                    {
+                        bChp = FALSE;
+                    }
+                }
                 BOOL bPap = nWhich >= RES_PARATR_BEGIN
                             && nWhich < RES_FRMATR_END;
                 if( ( bChpFmt && bChp  ) || ( bPapFmt && bPap ) )
@@ -522,7 +535,7 @@ BYTE SwWW8Writer::GetNumId( USHORT eNumType )
 }
 
 void SwWW8Writer::Out_SwFmt( const SwFmt& rFmt, BOOL bPapFmt, BOOL bChpFmt,
-                                BOOL bFlyFmt )
+    BOOL bFlyFmt )
 {
     BOOL bCallOutSet = TRUE;
     const SwModify* pOldMod = pOutFmtNode;
@@ -575,14 +588,15 @@ void SwWW8Writer::Out_SwFmt( const SwFmt& rFmt, BOOL bPapFmt, BOOL bChpFmt,
                 if( rNFmt.GetAbsLSpace() )
                 {
                     SfxItemSet aSet( rFmt.GetAttrSet() );
-                    SvxLRSpaceItem aLR( (SvxLRSpaceItem&)aSet.Get( RES_LR_SPACE ) );
+                    SvxLRSpaceItem aLR((SvxLRSpaceItem&)aSet.Get(RES_LR_SPACE));
 
                     aLR.SetTxtLeft( aLR.GetTxtLeft() + rNFmt.GetAbsLSpace() );
                     aLR.SetTxtFirstLineOfst( rNFmt.GetFirstLineOffset() );
 
                     aSet.Put( aLR );
                     SwWW8Writer::CorrTabStopInSet( aSet, rNFmt.GetAbsLSpace() );
-                    Out_SfxItemSet( aSet, bPapFmt, bChpFmt );
+                    Out_SfxItemSet( aSet, bPapFmt, bChpFmt,
+                        com::sun::star::i18n::ScriptType::LATIN);
                     bCallOutSet = FALSE;
                 }
             }
@@ -612,7 +626,9 @@ void SwWW8Writer::Out_SwFmt( const SwFmt& rFmt, BOOL bPapFmt, BOOL bChpFmt,
                 aSet.Put( SwFmtSurround( SURROUND_NONE ) );
 
             bOutFlyFrmAttrs  = TRUE;
-            Out_SfxItemSet( aSet, TRUE, FALSE );
+            //script doesn't matter if not exporting chp
+            Out_SfxItemSet( aSet, TRUE, FALSE,
+                com::sun::star::i18n::ScriptType::LATIN );
             bOutFlyFrmAttrs = FALSE;
 
             bCallOutSet = FALSE;
@@ -623,7 +639,8 @@ void SwWW8Writer::Out_SwFmt( const SwFmt& rFmt, BOOL bPapFmt, BOOL bChpFmt,
     }
 
     if( bCallOutSet )
-        Out_SfxItemSet( rFmt.GetAttrSet(), bPapFmt, bChpFmt );
+        Out_SfxItemSet( rFmt.GetAttrSet(), bPapFmt, bChpFmt,
+            com::sun::star::i18n::ScriptType::LATIN);
     pOutFmtNode = pOldMod;
 }
 

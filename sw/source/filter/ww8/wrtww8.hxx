@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
+ *  last change: $Author: cmc $ $Date: 2001-11-02 09:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@
 #ifndef _WW8SCAN_HXX
 #include <ww8scan.hxx>
 #endif
-
 
 // einige Forward Deklarationen
 class BitmapPalette;
@@ -489,7 +488,8 @@ public:
     const SfxItemSet* GetCurItemSet() const         { return pISet; }
     void SetCurItemSet( const SfxItemSet* pS )      { pISet = pS; }
 
-    void Out_SfxItemSet( const SfxItemSet& rSet, BOOL bPapFmt, BOOL bChpFmt );
+    void Out_SfxItemSet( const SfxItemSet& rSet, BOOL bPapFmt, BOOL bChpFmt,
+        USHORT nScript);
     void Out_SfxBreakItems( const SfxItemSet& rSet, const SwNode& rNd );
 
     void Out_SwFmtBox( const SvxBoxItem& rBox, BOOL bShadow );

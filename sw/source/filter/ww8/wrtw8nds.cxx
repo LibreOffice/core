@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-26 12:41:58 $
+ *  last change: $Author: cmc $ $Date: 2001-11-02 09:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,6 @@
 #endif
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
-#endif
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
-#include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
@@ -195,6 +192,9 @@
 #ifndef _TXTATR_HXX
 #include <txtatr.hxx>
 #endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
 
 using namespace ::com::sun::star::i18n;
 
@@ -237,6 +237,7 @@ class WW8_SwAttrIter : public WW8_AttrIter
     xub_StrLen nTmpSwPos;                   // fuer HasItem()
     USHORT nCurRedlinePos;
     rtl_TextEncoding eNdChrSet;
+    USHORT nScript;
 
     xub_StrLen SearchNext( xub_StrLen nStartPos );
     void SetCharSet( const SwTxtAttr& rTxtAttr, BOOL bStart );
@@ -278,6 +279,12 @@ WW8_SwAttrIter::WW8_SwAttrIter( SwWW8Writer& rWr, const SwTxtNode& rTxtNd )
     // werden.
     eNdChrSet = ((SvxFontItem&)rNd.SwCntntNode::GetAttr(
                                         RES_CHRATR_FONT )).GetCharSet();
+
+    if( pBreakIt->xBreak.is() )
+        nScript = pBreakIt->xBreak->getScriptType( rTxtNd.GetTxt(), 0);
+    else
+        nScript = ScriptType::LATIN;
+
     if( rWrt.pDoc->GetRedlineTbl().Count() )
     {
         SwPosition aPos( rNd, SwIndex( (SwTxtNode*)&rNd ) );
@@ -429,7 +436,7 @@ void WW8_SwAttrIter::SetCharSet( const SwTxtAttr& rAttr, BOOL bStart )
 void WW8_SwAttrIter::OutAttr( xub_StrLen nSwPos )
 {
     if( rNd.GetpSwAttrSet() )
-        rWrt.Out_SfxItemSet( *rNd.GetpSwAttrSet(), FALSE, TRUE );
+        rWrt.Out_SfxItemSet( *rNd.GetpSwAttrSet(), FALSE, TRUE, nScript );
 
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
@@ -517,7 +524,7 @@ void WW8_SwAttrIter::GetItems( WW8Bytes& rItems ) const
     rWrt.pO = &rItems;
 
     if( rNd.GetpSwAttrSet() )
-        rWrt.Out_SfxItemSet( *rNd.GetpSwAttrSet(), FALSE, TRUE );
+        rWrt.Out_SfxItemSet( *rNd.GetpSwAttrSet(), FALSE, TRUE, nScript );
 
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
@@ -1053,8 +1060,10 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
     // akt. Style
     if( !bFlyInTable )
+    {
         rWW8Wrt.nStyleBeforeFly
             = rWW8Wrt.GetId( (SwTxtFmtColl&)pNd->GetAnyFmtColl() );
+    }
 
     SVBT16 nSty;
     ShortToSVBT16( rWW8Wrt.nStyleBeforeFly, nSty );
@@ -1104,30 +1113,8 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     xub_StrLen nAktPos = 0;
     xub_StrLen nEnd = aStr.Len();
     BOOL bUnicode = rWW8Wrt.bWrtWW8, bRedlineAtEnd = FALSE;
+
     do {
-/*
-        if( !bUseAlwaysUnicode )
-        {
-            switch( eChrSet )
-            {
-//          case CHARSET_DONTKNOW:       ????
-            case CHARSET_SYMBOL:
-//          case CHARSET_WIN_SYMBOL:
-//          case CHARSET_WIN_WINGDINGS:
-//          case CHARSET_MAC_DINGBATS:
-//          case CHARSET_MAC_SYMBOL:
-//          case CHARSET_ADOBE_SYMBOL:
-//          case CHARSET_ADOBE_DINGBATS:
-//          case CHARSET_STAR_STARBATS:
-//          case CHARSET_STAR_STARMATH:
-                bUnicode = rWW8Wrt.bWrtWW8 ? TRUE : FALSE;
-                break;
-            default:
-                bUnicode = FALSE;
-                break;
-            }
-        }
-*/
         xub_StrLen nNextAttr = aAttrIter.WhereNext();
         rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
 
@@ -1142,8 +1129,8 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             rWW8Wrt.OutSwString( aStr, nAktPos, nNextAttr - nAktPos,
                                     bUnicode, eChrSet );
 
-                    // Am Zeilenende werden die Attribute bis ueber das CR
-                    // aufgezogen. Ausnahme: Fussnoten am Zeilenende
+        // Am Zeilenende werden die Attribute bis ueber das CR aufgezogen.
+        // Ausnahme: Fussnoten am Zeilenende
         if( nNextAttr == nEnd )
         {
             if( !bTxtAtr && !bAttrWithRange )
@@ -1188,8 +1175,8 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                     if( pO->Count() )
                     {
                         rWW8Wrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
-                                                    pO->Count(), pO->GetData() );
-                        pO->Remove( 0, pO->Count() );                   // leeren
+                            pO->Count(), pO->GetData() );
+                        pO->Remove( 0, pO->Count() );   // delete
                     }
                 }
             }
@@ -1293,7 +1280,9 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 const SwModify* pOldMod = rWW8Wrt.pOutFmtNode;
                 rWW8Wrt.pOutFmtNode = pNd;
 
-                rWW8Wrt.Out_SfxItemSet( *pTmpSet, TRUE, FALSE );        // Pap-Attrs
+                // Pap-Attrs, so script is not necessary
+                rWW8Wrt.Out_SfxItemSet( *pTmpSet, TRUE, FALSE,
+                    com::sun::star::i18n::ScriptType::LATIN);
 
                 rWW8Wrt.pStyAttr = 0;
                 rWW8Wrt.pOutFmtNode = pOldMod;
