@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:37:28 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,16 +662,20 @@ void SwHstryBookmark::SetInDoc( SwDoc* pDoc, BOOL )
         SwCntntNode * pCntntNd = rNds[ nNode1 ]->GetCntntNode();
         ASSERT( pCntntNd, "Falscher Node fuer den Bookmark" );
 
-        SwPaM aPam( *pCntntNd, nCntnt1 );
-        if( ULONG_MAX != nNode2 )
+        // #111660# don't crash when nNode1 doesn't point to content node.
+        if( pCntntNd != NULL )
         {
-            aPam.SetMark();
-            aPam.GetMark()->nNode = nNode2;
-            pCntntNd = rNds[ aPam.GetMark()->nNode ]->GetCntntNode();
-            ASSERT( pCntntNd, "Falscher Node fuer den Bookmark" );
-            aPam.GetMark()->nContent.Assign( pCntntNd, nCntnt2 );
+            SwPaM aPam( *pCntntNd, nCntnt1 );
+            if( ULONG_MAX != nNode2 )
+            {
+                aPam.SetMark();
+                aPam.GetMark()->nNode = nNode2;
+                pCntntNd = rNds[ aPam.GetMark()->nNode ]->GetCntntNode();
+                ASSERT( pCntntNd, "Falscher Node fuer den Bookmark" );
+                aPam.GetMark()->nContent.Assign( pCntntNd, nCntnt2 );
+            }
+            pDoc->MakeBookmark( aPam, KeyCode( nKeyCode ), aName, aShortName );
         }
-        pDoc->MakeBookmark( aPam, KeyCode( nKeyCode ), aName, aShortName );
     }
     else
     {
