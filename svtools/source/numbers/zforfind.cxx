@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2001-08-22 15:25:10 $
+ *  last change: $Author: er $ $Date: 2001-08-27 11:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2005,78 +2005,77 @@ void ImpSvNumberInputScan::ChangeNullDate(
 //---------------------------------------------------------------------------
 //      IsNumberFormat
 //
-// => String als Zahl darstellbar
+// => does rString represent a number (also date, time et al)
 
 BOOL ImpSvNumberInputScan::IsNumberFormat(
-        const String& rString,              // zu analysierender String
-        short& F_Type,                          // IN: alter Typ, OUT: neuer Typ
-        double& fOutNumber,                     // OUT: Zahl, wenn Umwandlung moeglich
-        const SvNumberformat* pFormat )         // evtl. gesetztes Zahlenformat
+        const String& rString,                  // string to be analyzed
+        short& F_Type,                          // IN: old type, OUT: new type
+        double& fOutNumber,                     // OUT: number if convertable
+        const SvNumberformat* pFormat )         // maybe a number format to match against
 {
-    // in den zerlegten Strings gibt es keine Null-Laengen Strings mehr!
-
-    String sResString;                      // die Eingabe fuer atof
-    BOOL res;                                   // Rueckgabewert
-    eSetType = F_Type;                          // Typ der Zelle
+    String sResString;
+    BOOL res;                                   // return value
+    eSetType = F_Type;                          // old type set
 
     if ( !rString.Len() )
         res = FALSE;
-    else if (rString.Len() > 308)                   // frueher 100
+    else if (rString.Len() > 308)               // arbitrary
         res = FALSE;
     else
         res = IsNumberFormatMain(rString, fOutNumber, pFormat);
 
     if (res)
     {
-        if (   nNegCheck                            // ')' nicht gefunden
-            || (eScannedType == NUMBERFORMAT_TIME   // Zeit mit Vorzeichen
-                && nSign) )
+        if ( nNegCheck                              // ')' not found for '('
+                || (nSign && (eScannedType == NUMBERFORMAT_DATE
+                    || eScannedType == NUMBERFORMAT_DATETIME))
+            )                                       // signed date/datetime
             res = FALSE;
-        else                                        // Check der Zahlanzahlen
-        {
-            switch (eScannedType)                   // Analyseergebnis pruefen
+        else
+        {                                           // check count of partial number strings
+            switch (eScannedType)
             {
-                case NUMBERFORMAT_PERCENT:          // alle Zahlen
+                case NUMBERFORMAT_PERCENT:
                 case NUMBERFORMAT_CURRENCY:
                 case NUMBERFORMAT_NUMBER:
-                    if (nDecPos == 1)               // ,05
+                    if (nDecPos == 1)               // .05
                     {
                         if (nAnzNums != 1)
                             res = FALSE;
                     }
-                    else if (nDecPos == 2)          // 1,05
+                    else if (nDecPos == 2)          // 1.05
                     {
                         if (nAnzNums != nThousand+2)
                             res = FALSE;
                     }
-                    else                            // 1.100 oder 1.100,
+                    else                            // 1,100 or 1,100.
                     {
                         if (nAnzNums != nThousand+1)
                             res = FALSE;
                     }
                     break;
 
-                case NUMBERFORMAT_SCIENTIFIC:       // wissenschaftl. Format 1,0e-2
-                    if (nDecPos == 1)               // ,05
+                case NUMBERFORMAT_SCIENTIFIC:       // 1.0e-2
+                    if (nDecPos == 1)               // .05
                     {
                         if (nAnzNums != 2)
                             res = FALSE;
                     }
-                    else if (nDecPos == 2)          // 1,05
+                    else if (nDecPos == 2)          // 1.05
                     {
                         if (nAnzNums != nThousand+3)
                             res = FALSE;
                     }
-                    else                            // 1.100 oder 1.100,
+                    else                            // 1,100 oder 1,100.
                     {
                         if (nAnzNums != nThousand+2)
                             res = FALSE;
                     }
                     break;
 
-                case NUMBERFORMAT_DATE:             // Datum
+                case NUMBERFORMAT_DATE:
                     if (nMonth)
-                    {
+                    {                               // month name and numbers
                         if (nAnzNums > 2)
                             res = FALSE;
                     }
@@ -2087,9 +2086,9 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                     }
                     break;
 
-                case NUMBERFORMAT_TIME:             // Uhrzeit
+                case NUMBERFORMAT_TIME:
                     if (nDecPos)
-                    {
+                    {                               // seconds included
                         if (nAnzNums > 4)
                             res = FALSE;
                     }
@@ -2100,9 +2099,9 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                     }
                     break;
 
-                case NUMBERFORMAT_DATETIME:         // Datum + Uhrzeit
+                case NUMBERFORMAT_DATETIME:
                     if (nMonth)
-                    {
+                    {                               // month name and numbers
                         if (nAnzNums > 5)
                             res = FALSE;
                     }
@@ -2119,11 +2118,11 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
         }   // else
     }   // if (res)
 
-    if (res)                                    // Bestimmung der Zahl:
-    {
+    if (res)
+    {                                           // we finally have a number
         switch (eScannedType)
         {
-            case NUMBERFORMAT_LOGICAL:          // Logisch
+            case NUMBERFORMAT_LOGICAL:
                 if      (nLogical ==  1)
                     fOutNumber = 1.0;           // True
                 else if (nLogical == -1)
@@ -2132,11 +2131,11 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                     res = FALSE;                // Oops
                 break;
 
-            case NUMBERFORMAT_PERCENT:          // Zahlen
+            case NUMBERFORMAT_PERCENT:
             case NUMBERFORMAT_CURRENCY:
             case NUMBERFORMAT_NUMBER:
-            case NUMBERFORMAT_SCIENTIFIC:       // erstmal Zahlanteil
-                if (nDecPos == 1)                           // , am Anfang
+            case NUMBERFORMAT_SCIENTIFIC:
+                if (nDecPos == 1)                           // . at start
                 {
                     sResString.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "0." ) );
                     sResString += sStrArray[nNums[0]];
@@ -2145,8 +2144,8 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                 {   USHORT k;
                     sResString = sStrArray[nNums[0]];
                     for ( k = 1; k <= nThousand; k++)
-                        sResString += sStrArray[nNums[k]];  // Vorkommateil
-                    if (nDecPos == 2)                       // in der Mitte
+                        sResString += sStrArray[nNums[k]];  // integer part
+                    if (nDecPos == 2)                       // . somewhere
                     {
                         sResString += '.';
                         sResString += sStrArray[nNums[k]];
@@ -2155,8 +2154,8 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
 
                 if (eScannedType != NUMBERFORMAT_SCIENTIFIC)
                     fOutNumber = StringToDouble(sResString);
-                else                                        // Nachbehandlung Exponent
-                {
+                else
+                {                                           // append exponent
                     sResString += 'E';
                     if ( nESign == -1 )
                         sResString += '-';
@@ -2185,14 +2184,14 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                     else
                         nSign = nStringScanSign;
                 }
-                if ( nSign < 0 )                            // Vorzeichen dazu
+                if ( nSign < 0 )
                     fOutNumber = -fOutNumber;
 
-                if (eScannedType == NUMBERFORMAT_PERCENT)   // durch 100 dividieren
+                if (eScannedType == NUMBERFORMAT_PERCENT)
                     fOutNumber/= 100.0;
                 break;
 
-            case NUMBERFORMAT_FRACTION:         // Bruch
+            case NUMBERFORMAT_FRACTION:
                 if (nAnzNums == 1)
                     fOutNumber = StringToDouble(sStrArray[nNums[0]]);
                 else if (nAnzNums == 2)
@@ -2200,7 +2199,7 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                     if (nThousand == 1)
                     {
                         sResString = sStrArray[nNums[0]];
-                        sResString += sStrArray[nNums[1]];  // Vorkommateil
+                        sResString += sStrArray[nNums[1]];  // integer part
                         fOutNumber = StringToDouble(sResString);
                     }
                     else
@@ -2240,32 +2239,34 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                     else
                         nSign = nStringScanSign;
                 }
-                if ( nSign < 0 )                            // Vorzeichen dazu
+                if ( nSign < 0 )
                     fOutNumber = -fOutNumber;
                 break;
 
-            case NUMBERFORMAT_TIME:             // Uhrzeit
+            case NUMBERFORMAT_TIME:
                 GetTimeRef(fOutNumber, 0, nAnzNums);
+                if ( nSign < 0 )
+                    fOutNumber = -fOutNumber;
                 break;
 
-            case NUMBERFORMAT_DATE:             // Datum
+            case NUMBERFORMAT_DATE:
             {
-                Date aDt;                                   // heute
-                USHORT nCounter = 0;                        // hier dummy
-                res = GetDateRef(aDt, nCounter, pFormat);   // Datum->aDt
+                Date aDt;                                   // today
+                USHORT nCounter = 0;                        // dummy here
+                res = GetDateRef(aDt, nCounter, pFormat);   // date->aDt
                 if ( res )
                 {
-                    long nDate = (long) (aDt - *pNullDate); // erst nach long!!
-                    fOutNumber = (double) nDate;            // vorsichtshalber
+                    long nDate = (long) (aDt - *pNullDate);
+                    fOutNumber = (double) nDate;
                 }
             }
             break;
 
-            case NUMBERFORMAT_DATETIME:         // Datum mit Uhrzeit
+            case NUMBERFORMAT_DATETIME:
             {
-                Date aDt;                                   // heute
-                USHORT nCounter;                            // hier wichtig
-                res = GetDateRef(aDt, nCounter, pFormat);   // Datum->aDt
+                Date aDt;                                   // today
+                USHORT nCounter;                            // needed here
+                res = GetDateRef(aDt, nCounter, pFormat);   // date->aDt
                 double fTime;
                 GetTimeRef(fTime, nCounter, nAnzNums-nCounter);
                 if ( res )
@@ -2281,7 +2282,7 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
         }
     }
 
-    if (res)        // Ueberlauf -> Text
+    if (res)        // overflow/underflow -> Text
     {
         if      (fOutNumber < -DBL_MAX) // -1.7E308
         {
