@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 11:52:27 $
+ *  last change: $Author: fs $ $Date: 2001-06-25 11:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1794,7 +1794,8 @@ sal_Bool ODatabaseForm::executeRowSet(ReusableMutexGuard& _rClearForNotifies, sa
     if (!m_xAggregateAsRowSet.is())
         return sal_False;
 
-    fillParameters(_rClearForNotifies, _rxCompletionHandler);
+    if (!fillParameters(_rClearForNotifies, _rxCompletionHandler))
+        return sal_False;
     sal_Bool bInsertOnly = sal_False;
 
     // ensure the aggregated row set has the correct properties
