@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kso $ $Date: 2002-02-07 11:58:56 $
+#   last change: $Author: kso $ $Date: 2002-08-15 09:53:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,7 @@ TARGET=so_neon
 
 # --- Files --------------------------------------------------------
 
-NEON_NAME=neon-0.14.0
+NEON_NAME=neon-0.22.0
 
 TARFILE_NAME=$(NEON_NAME)
 PATCH_FILE_NAME=neon.patch
@@ -82,23 +82,22 @@ BUILD_DIR=src
 BUILD_ACTION=dmake $(PROFULLSWITCH)
 
 OUT2INC= \
-    $(BUILD_DIR)$/dates.h			\
-    $(BUILD_DIR)$/dav_207.h         \
-    $(BUILD_DIR)$/dav_basic.h       \
-    $(BUILD_DIR)$/dav_locks.h       \
-    $(BUILD_DIR)$/dav_props.h       \
-    $(BUILD_DIR)$/hip_xml.h         \
-    $(BUILD_DIR)$/http_auth.h       \
-    $(BUILD_DIR)$/http_basic.h      \
-    $(BUILD_DIR)$/http_cookies.h    \
-    $(BUILD_DIR)$/http_redirect.h   \
-    $(BUILD_DIR)$/http_request.h    \
-    $(BUILD_DIR)$/http_utils.h      \
-    $(BUILD_DIR)$/neon_defs.h       \
-    $(BUILD_DIR)$/ne_alloc.h        \
-    $(BUILD_DIR)$/nsocket.h         \
-    $(BUILD_DIR)$/string_utils.h    \
-    $(BUILD_DIR)$/uri.h
+    $(BUILD_DIR)$/config.h \
+    $(BUILD_DIR)$/ne_207.h \
+    $(BUILD_DIR)$/ne_alloc.h \
+    $(BUILD_DIR)$/ne_auth.h \
+    $(BUILD_DIR)$/ne_basic.h \
+    $(BUILD_DIR)$/ne_defs.h \
+    $(BUILD_DIR)$/ne_locks.h \
+    $(BUILD_DIR)$/ne_props.h \
+    $(BUILD_DIR)$/ne_redirect.h \
+    $(BUILD_DIR)$/ne_request.h \
+    $(BUILD_DIR)$/ne_session.h \
+    $(BUILD_DIR)$/ne_socket.h \
+    $(BUILD_DIR)$/ne_string.h \
+    $(BUILD_DIR)$/ne_uri.h \
+    $(BUILD_DIR)$/ne_utils.h \
+    $(BUILD_DIR)$/ne_xml.h
 
 # --- Targets ------------------------------------------------------
 
