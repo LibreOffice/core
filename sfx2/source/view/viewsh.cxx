@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 10:11:57 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1235,7 +1235,21 @@ FASTBOOL SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
     if ( bRet )
         return bRet;
     else
-        return SFX_APP()->GetAppAccel_Impl()->Call( rKeyEvent, GetViewFrame()->GetBindings(), FALSE );
+        bRet = SFX_APP()->GetAppAccel_Impl()->Call( rKeyEvent, GetViewFrame()->GetBindings(), FALSE );
+    if ( !bRet && rKeyEvent.GetKeyCode().GetCode() == KEY_ESCAPE )
+    {
+        SfxTopViewFrame *pTop = PTR_CAST( SfxTopViewFrame, GetViewFrame()->GetTopViewFrame() );
+        if ( pTop )
+        {
+            WorkWindow* pWork = (WorkWindow*) pTop->GetTopFrame_Impl()->GetTopWindow_Impl();
+            if ( pWork && pWork->IsFullScreenMode() )
+            {
+                GetViewFrame()->GetDispatcher()->Execute( SID_WIN_FULLSCREEN, SFX_CALLMODE_SLOT );
+            }
+        }
+    }
+
+    return bRet;
 }
 
 FASTBOOL SfxViewShell::GlobalKeyInput_Impl( const KeyEvent &rKeyEvent )
