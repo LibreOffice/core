@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setup.cpp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 22:29:21 $
+ *  last change: $Author: rt $ $Date: 2004-12-09 15:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,11 +858,11 @@ boolean SetupAppX::Install( long nLanguage )
     if ( pTransform )
     {
         nParLen += lstrlen( PARAM_TRANSFORM );
-        nParLen += lstrlen( pTransform );
+        nParLen += lstrlen( pTransform ) + 2;       // two quotes
     }
 
     if ( m_pCmdLine )
-        nParLen += lstrlen( m_pCmdLine ) + 1;         // one for the space;
+        nParLen += lstrlen( m_pCmdLine ) + 1;       // one for the space;
 
     TCHAR *pParams = new TCHAR[ nParLen ];
 
@@ -883,7 +883,9 @@ boolean SetupAppX::Install( long nLanguage )
     if ( pTransform )
     {
         StringCchCat( pParams, nParLen, PARAM_TRANSFORM );
+        StringCchCat( pParams, nParLen, TEXT( "\"" ) );
         StringCchCat( pParams, nParLen, pTransform );
+        StringCchCat( pParams, nParLen, TEXT( "\"" ) );
     }
 
     if ( m_pCmdLine )
