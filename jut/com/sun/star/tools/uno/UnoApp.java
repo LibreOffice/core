@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoApp.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2000-10-27 08:04:39 $
+ *  last change: $Author: kr $ $Date: 2000-11-09 17:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ import com.sun.star.connection.XConnection;
 import com.sun.star.container.XSet;
 
 import com.sun.star.lang.XInitialization;
+import com.sun.star.lang.XMain;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleServiceFactory;
@@ -165,6 +166,36 @@ public class UnoApp {
     }
 
 
+    static class DelegatorSingleServiceFactory implements XSingleServiceFactory, XServiceInfo {
+        XMultiServiceFactory _xMultiServiceFactory;
+        String _serviceName;
+
+        DelegatorSingleServiceFactory(XMultiServiceFactory xMultiServiceFactory, String serviceName) {
+            _xMultiServiceFactory = xMultiServiceFactory;
+            _serviceName = serviceName;
+        }
+
+        public Object createInstance( ) throws com.sun.star.uno.Exception, com.sun.star.uno.RuntimeException {
+            return _xMultiServiceFactory.createInstance(_serviceName);
+        }
+        public Object createInstanceWithArguments( /*IN*/java.lang.Object[] aArguments ) throws com.sun.star.uno.Exception, com.sun.star.uno.RuntimeException {
+            return _xMultiServiceFactory.createInstanceWithArguments(_serviceName, aArguments);
+        }
+
+        // Methods
+        public String getImplementationName(  ) throws com.sun.star.uno.RuntimeException {
+            return getClass().getName() + _serviceName;
+        }
+
+        public boolean supportsService( /*IN*/String ServiceName ) throws com.sun.star.uno.RuntimeException {
+            return _serviceName.equals(ServiceName);
+        }
+
+        public String[] getSupportedServiceNames(  ) throws com.sun.star.uno.RuntimeException {
+            return new String[]{_serviceName};
+        }
+    }
+
     /**
      * An XInstanceProvider implementation, which allows simple object export.
      * <p>
@@ -173,18 +204,32 @@ public class UnoApp {
      */
     static class InstanceProvider implements XInstanceProvider {
         private String _name;
-        private Object _component;
+        private Object _object;
 
-        InstanceProvider(String name, Object component) {
-            _name = name;
-            _component = component;
+        InstanceProvider(String name, Object object) {
+            _name   = name;
+            _object = object;
         }
 
         public Object getInstance(String sInstanceName) throws com.sun.star.container.NoSuchElementException, com.sun.star.uno.RuntimeException {
             Object object = null;
 
-            if(sInstanceName.equals(_name))
-                object = _component;
+            if(_name.equals("__delegate")) { // ?is this a hack?
+                XMultiServiceFactory xMultiServiceFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(XMultiServiceFactory.class, _object);
+
+                String services[] = xMultiServiceFactory.getAvailableServiceNames();
+                boolean hasService = false;
+
+                for(int i = 0; i < services.length && !hasService; ++ i)
+                    hasService = services[i].equals(sInstanceName);
+
+                if(hasService) {
+                    object = new DelegatorSingleServiceFactory(xMultiServiceFactory, sInstanceName);
+                }
+            }
+            else
+                if(sInstanceName.equals(_name))
+                    object = _object;
 
             return object;
         }
@@ -518,36 +563,6 @@ public class UnoApp {
         static final String __key  = "-smgr";
         static final String __help = "\"object[,object]*\" merges the given factorys into the result object factory";
 
-        class MySingleServiceFactory implements XSingleServiceFactory, XServiceInfo {
-            XMultiServiceFactory _xMultiServiceFactory;
-            String _serviceName;
-
-            MySingleServiceFactory(XMultiServiceFactory xMultiServiceFactory, String serviceName) {
-                _xMultiServiceFactory = xMultiServiceFactory;
-                _serviceName = serviceName;
-            }
-
-            public Object createInstance( ) throws com.sun.star.uno.Exception, com.sun.star.uno.RuntimeException {
-                return _xMultiServiceFactory.createInstance(_serviceName);
-            }
-            public Object createInstanceWithArguments( /*IN*/java.lang.Object[] aArguments ) throws com.sun.star.uno.Exception, com.sun.star.uno.RuntimeException {
-                return _xMultiServiceFactory.createInstanceWithArguments(_serviceName, aArguments);
-            }
-
-            // Methods
-            public String getImplementationName(  ) throws com.sun.star.uno.RuntimeException {
-                return getClass().getName() + _serviceName;
-            }
-
-            public boolean supportsService( /*IN*/String ServiceName ) throws com.sun.star.uno.RuntimeException {
-                return _serviceName.equals(ServiceName);
-            }
-
-            public String[] getSupportedServiceNames(  ) throws com.sun.star.uno.RuntimeException {
-                return new String[]{_serviceName};
-            }
-        }
-
         ServiceManager_Option() {
             super(__key, __help);
         }
@@ -584,7 +599,7 @@ public class UnoApp {
                         String services[] = xMultiServiceFactory.getAvailableServiceNames();
 
                         for(int j = 0; j < services.length; ++ j)
-                            xSet.insert(new MySingleServiceFactory(xMultiServiceFactory, services[j]));
+                            xSet.insert(new DelegatorSingleServiceFactory(xMultiServiceFactory, services[j]));
                     }
                     else
                         System.err.println("warning! -- " + object + " is neither XSingleServiceFactory nor XMultiServiceFactory");
@@ -671,8 +686,14 @@ public class UnoApp {
 
         if(unoApp._uno_url != null) // see, if we have to export the object
             export(unoApp._xMultiServiceFactory, unoApp._uno_url, object);
-        else
+        else {
+            XMain xMain = (XMain)UnoRuntime.queryInterface(XMain.class, object);
+
+            if(xMain != null)
+                xMain.run(new String[0]);
+
             System.out.println("result: " + object);
+        }
     }
 
 
