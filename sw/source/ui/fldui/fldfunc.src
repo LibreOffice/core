@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:17:49 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ TabPage TP_FLD_FUNC
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "~Typ";
     };
     ListBox LB_FUNCTYPE
     {
@@ -147,6 +148,7 @@ TabPage TP_FLD_FUNC
         Text[ czech ] = "Vybrat";
         Text[ hebrew ] = "~Auswahl";
         Text[ hindi ] = "चु~नो";
+        Text[ slovak ] = "Vy~brať";
     };
     ListBox LB_FUNCSELECTION
     {
@@ -190,6 +192,7 @@ TabPage TP_FLD_FUNC
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "F~ormat";
         Text[ hindi ] = "र~चना";
+        Text[ slovak ] = "F~ormát";
     };
     ListBox LB_FUNCFORMAT
     {
@@ -230,6 +233,7 @@ TabPage TP_FLD_FUNC
         Text[ czech ] = "Název";
         Text[ hebrew ] = "Na~me";
         Text[ hindi ] = "~नाम";
+        Text[ slovak ] = "Ná~zov";
     };
     Edit ED_FUNCNAME
     {
@@ -272,6 +276,7 @@ TabPage TP_FLD_FUNC
         Text[ czech ] = "Hodnota";
         Text[ hebrew ] = "~Wert";
         Text[ hindi ] = "~मूल्य";
+        Text[ slovak ] = "~Hodnota";
     };
     Edit ED_FUNCVALUE
     {
@@ -314,6 +319,7 @@ TabPage TP_FLD_FUNC
         Text[ czech ] = "Potom";
         Text[ hebrew ] = "~Dann";
         Text[ hindi ] = "Then";
+        Text[ slovak ] = "Potom";
     };
     Edit ED_FUNCCOND1
     {
@@ -357,6 +363,7 @@ TabPage TP_FLD_FUNC
         Text[ czech ] = "Jinak";
         Text[ hebrew ] = "So~nst";
         Text[ hindi ] = "Else";
+        Text[ slovak ] = "Inak";
     };
     Edit ED_FUNCCOND2
     {
@@ -401,6 +408,7 @@ TabPage TP_FLD_FUNC
         Text[ czech ] = "Makro...";
         Text[ hebrew ] = "‮הפעלת מאקרו...‬";
         Text[ hindi ] = "~मॉक्रो...";
+        Text[ slovak ] = "~Makro...";
     };
     Text [ english_us ] = "Functions" ;
     Text [ portuguese_brazilian ] = "Fun��es" ;
@@ -427,7 +435,10 @@ TabPage TP_FLD_FUNC
     Text[ czech ] = "Funkce";
     Text[ hebrew ] = "Funktionen";
     Text[ hindi ] = "फंक्शन्स";
+    Text[ slovak ] = "Funkcie";
 };
+
+
 
 
 
