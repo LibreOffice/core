@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
         {
             bMadness = true;
             aOldDefLanguage = pTC->ChangeDefLanguage( LANGUAGE_ENGLISH_US );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "entering madness, changing def language from %d to %d\n", aOldDefLanguage, LANGUAGE_ENGLISH_US );
 #endif
         }
@@ -400,7 +400,7 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
 
     if( bMadness && pTC )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "leaving madness\n" );
 #endif
         pTC->ChangeDefLanguage( aOldDefLanguage );
