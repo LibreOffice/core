@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:13:16 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 07:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,7 +601,7 @@ MessBox MSG_CANT_CLOSE
     Message[ japanese ] = "σό’†‚Μ‚½‚ί\n΅Δή·­ÒέΔ‚π•Β‚¶‚ι‚±‚Ζ‚Ν‚Ε‚«‚ά‚Ή‚ρB";
     Message[ chinese_traditional ] = "¥Ώ¦b°υ¦ζ¤@­Σ¦C¦L¤u§@΅A\nµLªkΓφ³¬³o­Σ¤ε¥σ΅C";
     Message[ greek ] = "Δεν είναι δυνατόν να κλείσετε αυτό το έγγραφο\n επειδή εκτελείται μια εργασία εκτύπωσης.";
-    Message[ korean ] = "ΐΞΌβΐΫΎχΐΜ ΎΖΑχ ΑψΗΰΑίΐΜ±β ¶§Ή®Ώ΅ \n Αφ±έΐΊ Ή®Ό­Έ¦ ΄έΐ» Όφ Ύψ½ΐ΄Ο΄Ω.";
+    Message[ korean ] = "ΐΞΌβΐΫΎχΐΜ ΎΖΑχ ΑψΗΰΑίΐΜ±β ¶§Ή®Ώ΅ \n Ηφΐη Ή®Ό­Έ¦ ΄έΐ» Όφ Ύψ½ΐ΄Ο΄Ω.";
     Message[ arabic ] = "αΗ νγίδ ΕΫαΗή ΗαγΣΚδΟ ΝΗανΗπ΅\nαΓδ εδΗαί ΪγανΙ ΨΘΗΪΙ ήνΟ ΗαΚδένΠ.";
     Message[ turkish ] = "Belge, devam eden bir yazdύrma iώi nedeniyle\nώu an kapatύlamύyor.";
     Message[ language_user1 ] = " ";
