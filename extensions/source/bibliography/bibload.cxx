@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:15:03 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,8 @@
 #ifndef _COM_SUN_STAR_FORM_XLOADLISTENER_HPP_
 #include <com/sun/star/form/XLoadListener.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
@@ -505,7 +505,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
 
     // attach menu bar
     Reference< XPropertySet > xPropSet( rFrame, UNO_QUERY );
-    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
     if ( xPropSet.is() )
     {
         try
