@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:13:08 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 11:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #include "nspr.h"
 #include "prtypes.h"
 #include "pk11func.h"
+#ifdef SYSTEM_MOZILLA
+#include "nssrenam.h"
+#endif
 #include "cert.h"
 #include "cryptohi.h"
 #include "certdb.h"
