@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:52 $
+#   last change: $Author: rt $ $Date: 2003-04-23 17:04:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,10 +71,7 @@ TARGET  = com_sun_star_lib_uno_environments_java
 
 # --- Files --------------------------------------------------------
 
-JAVACLASSFILES= 									\
-    $(CLASSDIR)$/$(PACKAGE)$/IRequester.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/java_environment.class	\
-    $(CLASSDIR)$/$(PACKAGE)$/Proxy.class			
+JAVACLASSFILES = $(CLASSDIR)$/$(PACKAGE)$/java_environment.class
 
 # --- Targets ------------------------------------------------------
 
