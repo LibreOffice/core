@@ -2,9 +2,9 @@
  *
  *  $RCSfile: windowstateconfiguration.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:55:11 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@
 #include <com/sun/star/awt/Size.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_DOCKINGAREA_HPP_
-#include <drafts/com/sun/star/ui/DockingArea.hpp>
+#ifndef _COM_SUN_STAR_UI_DOCKINGAREA_HPP_
+#include <com/sun/star/ui/DockingArea.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
@@ -142,8 +142,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::container;
-using namespace drafts::com::sun::star::frame;
-using namespace drafts::com::sun::star::ui;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::ui;
 
 //_________________________________________________________________________________________________________________
 //  Namespace
@@ -289,14 +289,14 @@ class ConfigurationAccess_WindowState : // interfaces
                                 nInternalState( 0 ),
                                 nStyle( 0 ),
                                 aDockPos( 0, 0 ),
-                                aDockingArea( drafts::com::sun::star::ui::DockingArea_DOCKINGAREA_TOP ) {}
+                                aDockingArea( ::com::sun::star::ui::DockingArea_DOCKINGAREA_TOP ) {}
 
             sal_Bool                                bLocked : 1,
                                                     bDocked : 1,
                                                     bVisible : 1,
                                                     bContext : 1,
                                                     bHideFromMenu : 1;
-            drafts::com::sun::star::ui::DockingArea aDockingArea;
+            ::com::sun::star::ui::DockingArea aDockingArea;
             com::sun::star::awt::Point              aDockPos;
             com::sun::star::awt::Size               aDockSize;
             com::sun::star::awt::Point              aPos;
@@ -1139,7 +1139,7 @@ void ConfigurationAccess_WindowState::impl_fillStructFromSequence( WindowStateIn
 
                     case PROPERTY_DOCKINGAREA:
                     {
-                        drafts::com::sun::star::ui::DockingArea eDockingArea;
+                        ::com::sun::star::ui::DockingArea eDockingArea;
                         if ( rSeq[i].Value >>= eDockingArea )
                         {
                             rWinStateInfo.aDockingArea = eDockingArea;
