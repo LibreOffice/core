@@ -2,9 +2,9 @@
  *
  *  $RCSfile: submission.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 14:41:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,14 @@
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/task/XInteractionContinuation.hpp>
+#include <com/sun/star/xforms/InvalidDataOnSubmitException.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/interaction.hxx>
 #include <unotools/processfactory.hxx>
 #include <memory>
 
@@ -102,10 +108,14 @@ using com::sun::star::form::submission::XSubmissionVetoListener;
 using com::sun::star::lang::WrappedTargetException;
 using com::sun::star::lang::NoSupportException;
 using com::sun::star::task::XInteractionHandler;
+using com::sun::star::task::XInteractionRequest;
+using com::sun::star::task::XInteractionContinuation;
 using com::sun::star::xforms::XModel;
+using com::sun::star::xforms::InvalidDataOnSubmitException;
 using com::sun::star::container::XNameAccess;
 using com::sun::star::xml::xpath::XXPathObject;
 using com::sun::star::xml::xpath::XPathObjectType;
+using com::sun::star::frame::XFrame;
 using xforms::Submission;
 using xforms::Model;
 using xforms::MIP;
@@ -133,7 +143,7 @@ Submission::Submission() :
     msIncludeNamespacePrefixes(),
     m_aFactory(utl::getProcessServiceFactory())
 {
-    setInfo( _getPropertySetInfo() );
+    initializePropertySet();
 }
 
 Submission::~Submission() throw()
@@ -295,18 +305,12 @@ Sequence< OUString > Submission::getIncludeNamespacePrefixes() const
     return msIncludeNamespacePrefixes;
 }
 
-void Submission::setIncludeNamespacePrefixes( const OUString& sIncludeNamespacePrefixes )
+void Submission::setIncludeNamespacePrefixes( const Sequence< OUString >& rIncludeNamespacePrefixes )
 {
-    std::vector< OUString > vPrefixes;
-    sal_Int32 p = 0;
-    while ( p >= 0 );
-    {
-        vPrefixes.push_back(sIncludeNamespacePrefixes.getToken(0, ',', p));
-    }
-    msIncludeNamespacePrefixes = Sequence< OUString >(&(vPrefixes[0]), vPrefixes.size());
+    msIncludeNamespacePrefixes = rIncludeNamespacePrefixes;
 }
 
-bool Submission::doSubmit( const Reference< XInteractionHandler >& aHandler )
+bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
 {
     liveCheck();
 
@@ -319,7 +323,6 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& aHandler )
         if( pBinding != NULL )
         {
             aExpression.setExpression( pBinding->getBindingExpression() );
-            aExpression.setNamespaces( pBinding->getBindingNamespaces() );
             aEvalContext = pBinding->getEvaluationContext();
         }
         // TODO: else: illegal binding name -> raise error
@@ -327,14 +330,11 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& aHandler )
     else if( maRef.getExpression().getLength() != 0 )
     {
         aExpression.setExpression( maRef.getExpression() );
-        // TODO: store namespaces for ref expression!!!!
-        aExpression.setNamespaces( maRef.getNamespaces() );
         aEvalContext = Model::getModel( mxModel )->getEvaluationContext();
     }
     else
     {
         aExpression.setExpression( OUSTRING( "/" ) );
-        // we don't need namespaces for "/".
         aEvalContext = Model::getModel( mxModel )->getEvaluationContext();
     }
     aExpression.evaluate( aEvalContext );
@@ -371,7 +371,13 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& aHandler )
     }
 
     xSubmission->setEncoding(getEncoding());
-    CSubmission::SubmissionResult aResult = xSubmission->submit();
+    CSubmission::SubmissionResult aResult = xSubmission->submit( xHandler );
+
+    if (aResult == CSubmission::SUCCESS)
+    {
+        Reference< XDocument > aInstanceDoc = getInstanceDocument(xResult);
+        aResult = xSubmission->replace(getReplace(), aInstanceDoc, Reference< XFrame >());
+    }
 
     return ( aResult == CSubmission::SUCCESS );
 }
@@ -443,182 +449,61 @@ Model* Submission::getModelImpl() const
 #define HANDLE_IncludeNamespacePrefixes 14
 #define HANDLE_Model 15
 
-#define ENTRY_FLAGS(NAME,TYPE,FLAG) { #NAME, sizeof(#NAME)-1, HANDLE_##NAME, &getCppuType(static_cast<TYPE*>(NULL)), FLAG, 0 }
-#define ENTRY(NAME,TYPE) ENTRY_FLAGS(NAME,TYPE,0)
-#define ENTRY_RO(NAME,TYPE) ENTRY_FLAGS(NAME,TYPE,com::sun::star::beans::PropertyAttribute::READONLY)
-#define ENTRY_END { NULL, 0, NULL, 0, 0}
+#define REGISTER_PROPERTY( property, type )   \
+    registerProperty( PROPERTY( property, type ), \
+    new DirectPropertyAccessor< Submission, type >( this, &Submission::set##property, &Submission::get##property ) );
 
-comphelper::PropertySetInfo* Submission::_getPropertySetInfo()
+#define REGISTER_PROPERTY_BOOL( property )   \
+    registerProperty( PROPERTY( property, bool ), \
+    new BooleanPropertyAccessor< Submission, bool >( this, &Submission::set##property, &Submission::get##property ) );
+
+void Submission::initializePropertySet()
 {
-    static comphelper::PropertySetInfo* pInfo = NULL;
+    REGISTER_PROPERTY     ( ID,                         OUString );
+    REGISTER_PROPERTY     ( Bind,                       OUString );
+    REGISTER_PROPERTY     ( Ref,                        OUString );
+    REGISTER_PROPERTY     ( Action,                     OUString );
+    REGISTER_PROPERTY     ( Method,                     OUString );
+    REGISTER_PROPERTY     ( Version,                    OUString );
+    REGISTER_PROPERTY_BOOL( Indent );
+    REGISTER_PROPERTY     ( MediaType,                  OUString );
+    REGISTER_PROPERTY     ( Encoding,                   OUString );
+    REGISTER_PROPERTY_BOOL( OmitXmlDeclaration );
+    REGISTER_PROPERTY_BOOL( Standalone );
+    REGISTER_PROPERTY     ( CDataSectionElement,        OUString );
+    REGISTER_PROPERTY     ( Replace,                    OUString );
+    REGISTER_PROPERTY     ( Separator,                  OUString );
+    REGISTER_PROPERTY     ( IncludeNamespacePrefixes,   Sequence< OUString > );
+    REGISTER_PROPERTY     ( Model,                      Reference<XModel> );
 
-    static comphelper::PropertyMapEntry pEntries[] =
-    {
-        ENTRY( ID, OUString ),
-        ENTRY( Bind, OUString ),
-        ENTRY( Ref, OUString ),
-        ENTRY( Action, OUString ),
-        ENTRY( Method, OUString ),
-        ENTRY( Version, OUString ),
-        ENTRY( Indent, bool ),
-        ENTRY( MediaType, OUString ),
-        ENTRY( Encoding, OUString ),
-        ENTRY( OmitXmlDeclaration, bool ),
-        ENTRY( Standalone, bool ),
-        ENTRY( CDataSectionElement, OUString ),
-        ENTRY( Replace, OUString ),
-        ENTRY( Separator, OUString ),
-        ENTRY( IncludeNamespacePrefixes, OUString ),
-        ENTRY( Model, Reference<XModel> ),
-        ENTRY_END
-    };
-
-    if( pInfo == NULL )
-    {
-        pInfo = new comphelper::PropertySetInfo( pEntries );
-        pInfo->acquire();
-    }
-
-    return pInfo;
+    initializePropertyValueCache( HANDLE_Indent );
+    initializePropertyValueCache( HANDLE_OmitXmlDeclaration );
+    initializePropertyValueCache( HANDLE_Standalone );
 }
 
-void Submission::_setPropertyValues(
-    const comphelper::PropertyMapEntry** ppEntries,
-    const Any* pValues )
-    throw( UnknownPropertyException,
-           PropertyVetoException,
-           IllegalArgumentException,
-           WrappedTargetException )
+sal_Bool SAL_CALL Submission::convertFastPropertyValue(
+    Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue )
+    throw ( IllegalArgumentException )
 {
-    // iterate over all PropertyMapEntry/Any pairs
-    for( ; *ppEntries != NULL; ppEntries++, pValues++ )
+    if ( nHandle == HANDLE_IncludeNamespacePrefixes )
     {
-        // delegate each property to the suitable handler method
-        switch( (*ppEntries)->mnHandle )
+        // for convinience reasons (????), we accept a string which contains
+        // a comma-separated list of namespace prefixes
+        ::rtl::OUString sTokenList;
+        if ( rValue >>= sTokenList )
         {
-            case HANDLE_ID:
-                setAny( this, &Submission::setID, *pValues );
-                break;
-            case HANDLE_Bind:
-                setAny( this, &Submission::setBind, *pValues );
-                break;
-            case HANDLE_Ref:
-                setAny( this, &Submission::setRef, *pValues );
-                break;
-            case HANDLE_Action:
-                setAny( this, &Submission::setAction, *pValues );
-                break;
-            case HANDLE_Method:
-                setAny( this, &Submission::setMethod, *pValues );
-                break;
-            case HANDLE_Version:
-                setAny( this, &Submission::setVersion, *pValues );
-                break;
-            case HANDLE_Indent:
-                setAny( this, &Submission::setIndent, *pValues );
-                break;
-            case HANDLE_MediaType:
-                setAny( this, &Submission::setMediaType, *pValues );
-                break;
-            case HANDLE_Encoding:
-                setAny( this, &Submission::setEncoding, *pValues );
-                break;
-            case HANDLE_OmitXmlDeclaration:
-                setAny( this, &Submission::setOmitXmlDeclaration, *pValues );
-                break;
-            case HANDLE_Standalone:
-                setAny( this, &Submission::setStandalone, *pValues );
-                break;
-            case HANDLE_CDataSectionElement:
-                setAny( this, &Submission::setCDataSectionElement, *pValues );
-                break;
-            case HANDLE_Replace:
-                setAny( this, &Submission::setReplace, *pValues );
-                break;
-            case HANDLE_Separator:
-                setAny( this, &Submission::setSeparator, *pValues );
-                break;
-            case HANDLE_IncludeNamespacePrefixes:
-                setAny( this, &Submission::setIncludeNamespacePrefixes, *pValues );
-                break;
-            case HANDLE_Model:
-                setAny( this, &Submission::setModel, *pValues );
-                break;
-            default:
-                OSL_ENSURE( false, "Unknown HANDLE" );
-                break;
+            std::vector< OUString > aPrefixes;
+            sal_Int32 p = 0;
+            while ( p >= 0 )
+                aPrefixes.push_back( sTokenList.getToken( 0, ',', p ) );
+
+            Sequence< ::rtl::OUString > aConvertedPrefixes( aPrefixes.begin(), aPrefixes.size() );
+            return PropertySetBase::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, makeAny( aConvertedPrefixes ) );
         }
     }
+
+    return PropertySetBase::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
 }
-
-void Submission::_getPropertyValues(
-    const comphelper::PropertyMapEntry** ppEntries,
-    Any* pValues )
-    throw( UnknownPropertyException,
-           WrappedTargetException )
-{
-    // iterate over all PropertyMapEntry/Any pairs
-    for( ; *ppEntries != NULL; ppEntries++, pValues++ )
-    {
-        // delegate each property to the suitable handler method
-        switch( (*ppEntries)->mnHandle )
-        {
-            case HANDLE_ID:
-                getAny( this, &Submission::getID, *pValues );
-                break;
-            case HANDLE_Bind:
-                getAny( this, &Submission::getBind, *pValues );
-                break;
-            case HANDLE_Ref:
-                getAny( this, &Submission::getRef, *pValues );
-                break;
-            case HANDLE_Action:
-                getAny( this, &Submission::getAction, *pValues );
-                break;
-            case HANDLE_Method:
-                getAny( this, &Submission::getMethod, *pValues );
-                break;
-            case HANDLE_Version:
-                getAny( this, &Submission::getVersion, *pValues );
-                break;
-            case HANDLE_Indent:
-                getAny( this, &Submission::getIndent, *pValues );
-                break;
-            case HANDLE_MediaType:
-                getAny( this, &Submission::getMediaType, *pValues );
-                break;
-            case HANDLE_Encoding:
-                getAny( this, &Submission::getEncoding, *pValues );
-                break;
-            case HANDLE_OmitXmlDeclaration:
-                getAny( this, &Submission::getOmitXmlDeclaration, *pValues );
-                break;
-            case HANDLE_Standalone:
-                getAny( this, &Submission::getStandalone, *pValues );
-                break;
-            case HANDLE_CDataSectionElement:
-                getAny( this, &Submission::getCDataSectionElement, *pValues );
-                break;
-            case HANDLE_Replace:
-                getAny( this, &Submission::getReplace, *pValues );
-                break;
-            case HANDLE_Separator:
-                getAny( this, &Submission::getSeparator, *pValues );
-                break;
-            case HANDLE_IncludeNamespacePrefixes:
-                getAny( this, &Submission::getIncludeNamespacePrefixes, *pValues );
-                break;
-            case HANDLE_Model:
-                getAny( this, &Submission::getModel, *pValues );
-                break;
-            default:
-                OSL_ENSURE( false, "Unknown HANDLE" );
-                break;
-        }
-    }
-}
-
-
 
 OUString SAL_CALL Submission::getName()
     throw( RuntimeException )
@@ -642,11 +527,25 @@ sal_Int64 SAL_CALL Submission::getSomething(
 }
 
 
-
-void SAL_CALL Submission::submitWithInteraction( const Reference< XInteractionHandler >& _rxHandler ) throw ( VetoException, WrappedTargetException, RuntimeException )
+OUString lcl_message( const OUString& rID, const OUString& rText )
 {
-    // as long as this class is not really threadsafe, we need to copy the members we're interested
-    // in
+    OUStringBuffer aMessage;
+    aMessage.append( OUSTRING("XForms submission '") );
+    aMessage.append( rID );
+    aMessage.append( OUSTRING("' failed") );
+    aMessage.append( rText );
+    aMessage.append( OUSTRING(".") );
+    return aMessage.makeStringAndClear();
+}
+
+void SAL_CALL Submission::submitWithInteraction(
+    const Reference<XInteractionHandler>& _rxHandler )
+    throw ( VetoException,
+            WrappedTargetException,
+            RuntimeException )
+{
+    // as long as this class is not really threadsafe, we need to copy
+    // the members we're interested in
     Reference< XModel > xModel( mxModel );
     ::rtl::OUString sID( msID );
 
@@ -656,18 +555,83 @@ void SAL_CALL Submission::submitWithInteraction( const Reference< XInteractionHa
                 *this
               );
 
+    Model* pModel = Model::getModel( xModel );
+    OSL_ENSURE( pModel != NULL, "illegal model?" );
+
+    // check for validity (and query user if invalid)
+    bool bValid = pModel->isValid();
+    if( ! bValid )
+    {
+        InvalidDataOnSubmitException aInvalidDataException(
+            lcl_message(sID, OUSTRING(" due to invalid data") ), *this );
+
+// #i36765# warning on submission of illegal data.  Removed for
+// upcoming 2.0 release because string change could not go through
+// translation anymore. Please re-enable in the next version.
+/*
+        if( _rxHandler.is() )
+        {
+            // labouriously create interaction request
+            comphelper::OInteractionRequest* pRequest
+                = new comphelper::OInteractionRequest(
+                    makeAny( aInvalidDataException ) );
+            Reference<XInteractionRequest> xRequest = pRequest;
+
+            comphelper::OInteractionApprove* pContinue
+                = new comphelper::OInteractionApprove();
+            Reference<XInteractionContinuation> xContinue = pContinue;
+            pRequest->addContinuation( xContinue );
+
+            comphelper::OInteractionDisapprove* pCancel
+                = new comphelper::OInteractionDisapprove();
+            Reference<XInteractionContinuation> xCancel = pCancel;
+            pRequest->addContinuation( xCancel );
+
+            // ask the handler...
+            _rxHandler->handle( xRequest );
+            OSL_ENSURE( pContinue->wasSelected() || pCancel->wasSelected(),
+                        "handler didn't select" );
+
+            // and continue, if user chose 'continue'
+            if( pContinue->wasSelected() )
+                bValid = true;
+        }
+*/
+
+        // abort if invalid (and user didn't tell us to continue)
+        if( ! bValid )
+            throw aInvalidDataException;
+    }
+
+    // attempt submission
+    bool bResult = false;
     try
     {
-        xModel->submitWithInteraction( sID, _rxHandler );
+        bResult = doSubmit( _rxHandler );
     }
-    catch( const RuntimeException& e )
+    catch( const VetoException& )
+    {
+        OSL_ENSURE( sal_False, "Model::submit: Hmm. How can a single submission have a veto right?" );
+        // allowed to leave
+        throw;
+    }
+    catch( const Exception& e )
     {
         // exception caught: re-throw as wrapped target exception
-        OUStringBuffer aMessage;
-        aMessage.append( OUSTRING("XForms submission '") );
-        aMessage.append( sID );
-        aMessage.append( OUSTRING("' failed due to exception being thrown.") );
-        throw WrappedTargetException( aMessage.makeStringAndClear(), *this, makeAny( e ) );
+        throw WrappedTargetException(
+            lcl_message( sID, OUSTRING(" due to exception being thrown") ),
+            *this, makeAny( e ) );
+    }
+
+    if( bResult )
+    {
+        mxModel->rebuild();
+    }
+    else
+    {
+        // other failure: throw wrapped target exception, too.
+        throw WrappedTargetException(
+            lcl_message( sID, OUString() ), *this, Any() );
     }
 }
 
@@ -709,7 +673,7 @@ static void _cloneNodes(Model& aModel, const Reference< XNode >& dstParent, cons
     Reference< XDocument > dstDoc = dstParent->getOwnerDocument();
     Reference< XNode > imported;
 
-    while (cur.is())
+    if (cur.is())
     {
         //  is this node relevant?
         MIP mip = aModel.queryMIP(cur);
@@ -718,10 +682,24 @@ static void _cloneNodes(Model& aModel, const Reference< XNode >& dstParent, cons
             imported = dstDoc->importNode(cur, sal_False);
             imported = dstParent->appendChild(imported);
             // append source children to new imported parent
-            _cloneNodes(aModel, imported, cur->getFirstChild(), bRemoveWSNodes);
+            for( cur = cur->getFirstChild(); cur.is(); cur = cur->getNextSibling() )
+                _cloneNodes(aModel, imported, cur, bRemoveWSNodes);
         }
-        cur = cur->getNextSibling();
     }
+}
+Reference< XDocument > Submission::getInstanceDocument(const Reference< XXPathObject >& aObj)
+{
+    using namespace com::sun::star::xml::xpath;
+    // result
+    Reference< XDocument > aDocument;
+
+    if (aObj->getObjectType() == XPathObjectType_XPATH_NODESET)
+    {
+        Reference< XNodeList > aList = aObj->getNodeList();
+        if (aList->getLength() > 0)
+            aDocument = aList->item(0)->getOwnerDocument();
+    }
+    return aDocument;
 }
 
 Reference< XDocumentFragment > Submission::createSubmissionDocument(const Reference< XXPathObject >& aObj, sal_Bool bRemoveWSNodes)
