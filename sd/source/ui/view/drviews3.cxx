@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:35:42 $
+ *  last change: $Author: aw $ $Date: 2001-02-16 10:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,13 @@
 #endif
 #ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
+#endif
+
+#ifndef _SVX_F3DCHILD_HXX
+#include <svx/f3dchild.hxx>
+#endif
+#ifndef _SVX_FLOAT3D_HXX
+#include <svx/float3d.hxx>
 #endif
 
 #ifndef _SD_OPTSITEM_HXX
@@ -364,6 +371,16 @@ void __EXPORT SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
 
         case SID_RELOAD:
         {
+            // #83951#
+            USHORT nId = Svx3DChildWindow::GetChildWindowId();
+            SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow(nId);
+            if(pWindow)
+            {
+                Svx3DWin* p3DWin = (Svx3DWin*)(pWindow->GetWindow());
+                if(p3DWin)
+                    p3DWin->DocumentReload();
+            }
+
             // DER SLOT KANN IN DEN SFX VERSCHOBEN WERDEN
             SFX_REQUEST_ARG(rReq, pForceReloadItem, SfxBoolItem, SID_NOCACHE, FALSE);
             // Normale Weiterleitung an ViewFrame zur Ausfuehrung
