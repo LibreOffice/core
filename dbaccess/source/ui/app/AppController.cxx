@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-22 14:59:53 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,9 +459,9 @@ void SAL_CALL OApplicationController::disposing()
 //--------------------------------------------------------------------
 sal_Bool OApplicationController::Construct(Window* _pParent)
 {
-    //  _pParent->SetSizePixel(_pParent->LogicToPixel( Size(APP_SIZE_WIDTH,APP_SIZE_HEIGHT), MAP_APPFONT ));
     m_pView = new OApplicationView(_pParent,getORB(),this,this,this,this,this,this);
     m_pView->SetUniqueId(UID_APP_VIEW);
+
     // late construction
     sal_Bool bSuccess = sal_False;
     try
@@ -503,7 +503,7 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
     m_pClipbordNotifier->AddRemoveListener( getView(), sal_True );
 
     OApplicationController_CBASE::Construct( _pParent );
-    getContainer()->Show();
+    getView()->Show();
 
     return sal_True;
 }
@@ -576,7 +576,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
     FeatureState aReturn;
     aReturn.bEnabled = sal_False;
     // check this first
-    if ( !getContainer() )
+    if ( !getContainer() || m_bReadOnly )
         return aReturn;
 
     try
@@ -657,11 +657,18 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
             case SID_DB_FORM_NEW_PILOT:
                 aReturn.bEnabled = !isDataSourceReadOnly();
                 break;
-            case ID_NEW_TABLE_DESIGN:
             case ID_NEW_VIEW_DESIGN:
             case SID_DB_NEW_VIEW_SQL:
-            case ID_NEW_TABLE_DESIGN_AUTO_PILOT:
             case ID_NEW_VIEW_DESIGN_AUTO_PILOT:
+                aReturn.bEnabled = !isDataSourceReadOnly() && !isConnectionReadOnly();
+                if ( aReturn.bEnabled )
+                {
+                    Reference<XViewsSupplier> xViewsSup(getActiveConnection(),UNO_QUERY);
+                    aReturn.bEnabled = xViewsSup.is();
+                }
+                break;
+            case ID_NEW_TABLE_DESIGN:
+            case ID_NEW_TABLE_DESIGN_AUTO_PILOT:
                 aReturn.bEnabled = !isDataSourceReadOnly() && !isConnectionReadOnly();
                 break;
             case ID_DIRECT_SQL:
@@ -891,7 +898,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
-    if ( !getContainer() )
+    if ( !getContainer() || m_bReadOnly )
         return; // return without execution
 
     try
@@ -1506,7 +1513,7 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
                 Reference<XConnection> xConnection;
                 ensureConnection(xConnection);
 
-                if ( xConnection.is() )
+                if ( xConnection.is() && getContainer()->getDetailView() )
                 {
                     getContainer()->getDetailView()->createTablesPage(xConnection);
                     Reference<XTablesSupplier> xTabSup(xConnection,UNO_QUERY);
@@ -1535,7 +1542,7 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
         }
         xLayoutManager->unlock();
         xLayoutManager->doLayout();
-        if ( bAdd )
+        if ( bAdd && getContainer()->getDetailView() )
         {
             Reference< XNameAccess > xContainer = getElements(_eType);
             addContainerListener(xContainer);
@@ -2110,7 +2117,7 @@ sal_Bool OApplicationController::requestDrag( sal_Int8 _nAction, const Point& _r
             pTransfer = copyObject( );
             Reference< XTransferable> xEnsureDelete = pTransfer;
 
-            if ( pTransfer )
+            if ( pTransfer && getContainer()->getDetailView() )
             {
                 ElementType eType = getContainer()->getElementType();
                 pTransfer->StartDrag( getContainer()->getDetailView(), ((eType == E_FORM || eType == E_REPORT) ? DND_ACTION_COPYMOVE : DND_ACTION_COPY) );
