@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multmrk.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: fme $ $Date: 2001-05-21 12:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,6 @@
 #define OK_BT       3
 #define LB_TOX      4
 #define FT_TEXT     5
-#define GB_TOX      6
+#define FL_TOX      6
 #define CANCEL_BT   7
 

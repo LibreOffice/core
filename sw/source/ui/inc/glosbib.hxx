@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: fme $ $Date: 2001-05-21 12:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #include <vcl/button.hxx>
 #endif
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
 
 class SwGlossaryHdl;
@@ -129,7 +129,9 @@ class SwGlossaryGroupDlg : public SvxStandardDialog
     PushButton      aNewPB;
     PushButton      aDelPB;
     PushButton      aRenamePB;
-    GroupBox        aBibGB;
+    FixedText       aBibFT;
+    FixedText       aPathFT;
+    FixedText       aSelectFT;
 
     SvStrings*      pRemovedArr;
     SvStrings*      pInsertedArr;

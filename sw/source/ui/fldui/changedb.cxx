@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-14 10:02:46 $
+ *  last change: $Author: fme $ $Date: 2001-05-21 12:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,12 +141,12 @@ using namespace com::sun::star::lang;
 SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     SvxStandardDialog(&rVw.GetViewFrame()->GetWindow(), SW_RES(DLG_CHANGE_DB)),
 
-    aDescFT     (this, SW_RES(FT_DESC       )),
+    aDBListFL   (this, SW_RES(FL_DBLIST     )),
     aUsedDBFT   (this, SW_RES(FT_USEDDB     )),
     aAvailDBFT  (this, SW_RES(FT_AVAILDB    )),
-    aDBListGB   (this, SW_RES(GB_DBLIST     )),
     aUsedDBTLB  (this, SW_RES(TLB_USEDDB    )),
     aAvailDBTLB (this, SW_RES(TLB_AVAILDB   )),
+    aDescFT     (this, SW_RES(FT_DESC       )),
     aDocDBTextFT(this, SW_RES(FT_DOCDBTEXT  )),
     aDocDBNameFT(this, SW_RES(FT_DOCDBNAME  )),
     aOKBT       (this, SW_RES(BT_OK         )),

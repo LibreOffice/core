@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 08:53:08 $
+ *  last change: $Author: fme $ $Date: 2001-05-21 12:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #include <vcl/button.hxx>
 #endif
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
 
 #ifndef _BUTTON_HXX //autogen
@@ -166,24 +166,17 @@ class SwGlossaryDlg : public SvxStandardDialog
     friend SwNewGlosNameDlg;
     friend SwGlTreeListBox;
 
-    GroupBox        aExampleGB;
-    Window          aExampleWIN;
-    CheckBox        aShowExampleCB;
-
     CheckBox        aInsertTipCB;
-
     FixedText       aNameLbl;
     Edit            aNameED;
     FixedText       aShortNameLbl;
     NoSpaceEdit     aShortNameEdit;
-
     SwGlTreeListBox aCategoryBox;
-    GroupBox        aGlossaryFrm;
-
+    FixedLine       aRelativeFL;
     CheckBox        aFileRelCB;
     CheckBox        aNetRelCB;
-    GroupBox        aRelativeGB;
-
+    Window          aExampleWIN;
+    CheckBox        aShowExampleCB;
     OKButton        aInsertBtn;
     CancelButton    aCloseBtn;
     HelpButton      aHelpBtn;

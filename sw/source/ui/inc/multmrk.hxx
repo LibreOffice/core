@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multmrk.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: fme $ $Date: 2001-05-21 12:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #include <vcl/lstbox.hxx>
 #endif
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
 
 #ifndef _BUTTON_HXX //autogen
@@ -97,11 +97,11 @@ class SwMultiTOXMarkDlg : public SvxStandardDialog
 {
     DECL_LINK( SelectHdl, ListBox * );
 
+    FixedLine           aTOXFL;
     FixedText           aEntryFT;
     FixedInfo           aTextFT;
     FixedText           aTOXFT;
     ListBox             aTOXLB;
-    GroupBox            aTOXGB;
     OKButton            aOkBT;
     CancelButton        aCancelBT;
 

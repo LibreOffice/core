@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:46:30 $
+ *  last change: $Author: fme $ $Date: 2001-05-21 12:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,11 +173,11 @@ ModalDialog DLG_BIB_BASE
         Text[ catalan ] = "~Cambiar nombre";
         Text[ finnish ] = "~Nimeä uudelleen";
     };
-    GroupBox GB_BIB
+    FixedText FT_BIB
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 281 , 111 ) ;
-        Text = "Bereich" ;
+        Pos = MAP_APPFONT ( 12 , 3 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text = "Bereichstitel" ;
         Text [ ENGLISH ] = "Group" ;
         Text [ norwegian ] = "Gruppe" ;
         Text [ italian ] = "Sezione" ;
@@ -229,6 +229,13 @@ ModalDialog DLG_BIB_BASE
         Border = TRUE ;
         MaxTextLength = 256 ;
     };
+    FixedText FT_PATH
+    {
+        Pos = MAP_APPFONT ( 174 , 3 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text = "Pfad" ;
+        Text [ ENGLISH ] = "Path" ;
+    };
     ListBox LB_PATH
     {
         Pos = MAP_APPFONT ( 174 , 14 ) ;
@@ -238,10 +245,17 @@ ModalDialog DLG_BIB_BASE
         TabStop = TRUE ;
         DDExtraWidth = TRUE ;
     };
+    FixedText FT_SELECT
+    {
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text = "Auswahlliste" ;
+        Text [ ENGLISH ] = "Group" ;
+    };
     Control TLB_GROUPS
     {
-        Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 269 , 61 ) ;
+        Pos = MAP_APPFONT ( 12 , 41 ) ;
+        Size = MAP_APPFONT ( 269 , 73 ) ;
         TabStop = TRUE ;
         Border = TRUE ;
     };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:27:36 $
+ *  last change: $Author: fme $ $Date: 2001-05-21 12:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,8 @@
 #ifndef _DBTREE_HXX
 #include "dbtree.hxx"
 #endif
-
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _SV_FIXED_HXX //autogen
+#include <vcl/fixed.hxx>
 #endif
 
 class SwFldMgr;
@@ -99,12 +98,12 @@ struct SwDBData;
 
 class SwChangeDBDlg: public SvxStandardDialog
 {
-    FixedInfo       aDescFT;
+    FixedLine       aDBListFL;
     FixedText       aUsedDBFT;
     FixedText       aAvailDBFT;
     SvTreeListBox   aUsedDBTLB;
     SwDBTreeList    aAvailDBTLB;
-    GroupBox        aDBListGB;
+    FixedInfo       aDescFT;
     FixedText       aDocDBTextFT;
     FixedText       aDocDBNameFT;
     OKButton        aOKBT;

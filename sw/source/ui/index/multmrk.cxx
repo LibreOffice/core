@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multmrk.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: fme $ $Date: 2001-05-21 12:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ SwMultiTOXMarkDlg::SwMultiTOXMarkDlg( Window* pParent, SwTOXMgr& rTOXMgr ) :
     aOkBT(this,     SW_RES(OK_BT)),
     aCancelBT(this, SW_RES(CANCEL_BT)),
     aTOXLB(this,    SW_RES(LB_TOX)),
-    aTOXGB(this,    SW_RES(GB_TOX)),
+    aTOXFL(this,    SW_RES(FL_TOX)),
     rMgr( rTOXMgr ),
     nPos(0)
 {
@@ -128,6 +128,9 @@ SwMultiTOXMarkDlg::~SwMultiTOXMarkDlg() {}
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:44  hr
+    initial import
+
     Revision 1.28  2000/09/18 16:05:53  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: fme $ $Date: 2001-05-21 12:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
-#define GB_BIB              1
+#define FT_BIB                          1
+#define FT_PATH                         2
+#define FT_SELECT                       3
 #define CO_NAME             2
 #define PB_NEW              3
 #define PB_DELETE           4

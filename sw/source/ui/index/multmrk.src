@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multmrk.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:21:07 $
+ *  last change: $Author: fme $ $Date: 2001-05-21 12:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,37 @@ ModalDialog DLG_MULTMRK
     Text [ spanish ] = "Marcas del índice" ;
     Text [ english_us ] = "Index Markings" ;
     Moveable = TRUE ;
+    FixedLine FL_TOX
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 153 , 8 ) ;
+        Text = "Auswahl" ;
+        Text [ English ] = "Choice" ;
+        Text [ norwegian ] = "Choice" ;
+        Text [ italian ] = "Scelta" ;
+        Text [ portuguese_brazilian ] = "Escolha" ;
+        Text [ portuguese ] = "Opções" ;
+        Text [ finnish ] = "Määritykset" ;
+        Text [ danish ] = "Udvalg" ;
+        Text [ french ] = "Sélection" ;
+        Text [ swedish ] = "Urval" ;
+        Text [ dutch ] = "Selectie" ;
+        Text [ spanish ] = "Opción" ;
+        Text [ english_us ] = "Selection" ;
+        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ russian ] = "Îòáîð";
+        Text[ polish ] = "Wybór";
+        Text[ japanese ] = "‘I‘ð";
+        Text[ chinese_traditional ] = "¿ï¾Ü";
+        Text[ arabic ] = "ÊÍÏíÏ";
+        Text[ dutch ] = "Selectie";
+        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ greek ] = "ÅðéëïãÞ";
+        Text[ korean ] = "¼±ÅÃ";
+        Text[ turkish ] = "Seçim";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opción";
+    };
     FixedText FT_ENTRY
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
@@ -123,7 +154,7 @@ ModalDialog DLG_MULTMRK
     };
     FixedText FT_TOX
     {
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 41 , 8 ) ;
         Text = "Eintrag" ;
         Text [ English ] = "Entry" ;
@@ -153,6 +184,14 @@ ModalDialog DLG_MULTMRK
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Entrada";
     };
+    ListBox LB_TOX
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 37 ) ;
+        Size = MAP_APPFONT ( 100 , 49 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+    };
     OKButton OK_BT
     {
         Pos = MAP_APPFONT ( 165 , 6 ) ;
@@ -165,45 +204,6 @@ ModalDialog DLG_MULTMRK
         Pos = MAP_APPFONT ( 165 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-    };
-    ListBox LB_TOX
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 53 , 28 ) ;
-        Size = MAP_APPFONT ( 100 , 52 ) ;
-        TabStop = TRUE ;
-        AutoHScroll = TRUE ;
-    };
-    GroupBox GB_TOX
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 153 , 85 ) ;
-        Text = "Auswahl" ;
-        Text [ English ] = "Choice" ;
-        Text [ norwegian ] = "Choice" ;
-        Text [ italian ] = "Scelta" ;
-        Text [ portuguese_brazilian ] = "Escolha" ;
-        Text [ portuguese ] = "Opções" ;
-        Text [ finnish ] = "Valinta" ;
-        Text [ danish ] = "Udvalg" ;
-        Text [ french ] = "Sélection" ;
-        Text [ swedish ] = "Urval" ;
-        Text [ dutch ] = "Selectie" ;
-        Text [ spanish ] = "Opción" ;
-        Text [ english_us ] = "Selection" ;
-        Text[ chinese_simplified ] = "Ñ¡Ôñ";
-        Text[ russian ] = "Îòáîð";
-        Text[ polish ] = "Wybór";
-        Text[ japanese ] = "‘I‘ð";
-        Text[ chinese_traditional ] = "¿ï¾Ü";
-        Text[ arabic ] = "ÊÍÏíÏ";
-        Text[ dutch ] = "Selectie";
-        Text[ chinese_simplified ] = "Ñ¡Ôñ";
-        Text[ greek ] = "ÅðéëïãÞ";
-        Text[ korean ] = "¼±ÅÃ";
-        Text[ turkish ] = "Seçim";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opción";
     };
     Text[ chinese_simplified ] = "Ä¿Â¼±ê¼Ç";
     Text[ russian ] = "Âûäåëåíèÿ óêàçàòåëÿ";

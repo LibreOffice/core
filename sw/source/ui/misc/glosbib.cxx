@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 17:46:40 $
+ *  last change: $Author: fme $ $Date: 2001-05-21 12:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,9 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     aGroupTLB(  this, SW_RES(TLB_GROUPS)),
     aNameED(    this, SW_RES(ED_NAME)),
     aPathLB(    this, SW_RES(LB_PATH)),
-    aBibGB(     this, SW_RES(GB_BIB)),
+    aBibFT(     this, SW_RES(FT_BIB)),
+    aPathFT(     this, SW_RES(FT_PATH)),
+    aSelectFT(   this, SW_RES(FT_SELECT)),
     aRenamePB(  this, SW_RES(PB_RENAME)),
     aNewPB(     this, SW_RES(PB_NEW)),
     aDelPB(     this, SW_RES(PB_DELETE)),
@@ -680,6 +682,9 @@ void    SwGlossaryGroupTLB::Clear()
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/04/27 17:46:40  jp
+      use Collator for international string compare
+
       Revision 1.6  2001/03/08 15:39:00  os
       #84732# skip invalid auto text groups
 

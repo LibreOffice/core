@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-17 08:13:17 $
+ *  last change: $Author: fme $ $Date: 2001-05-21 12:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,43 +83,40 @@ ModalDialog DLG_CHANGE_DB
     Text [ portuguese_brazilian ] = "Datenbank austauschen" ;
     Text [ portuguese ] = "Substituir base de dados" ;
     Moveable = TRUE ;
-    FixedText FT_DESC
+    FixedLine FL_DBLIST
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 190 , 45 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? In diesem Dialog können Sie Datenbanken, auf die Sie in Ihrem Dokument über Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie können nur eine Änderung pro Arbeitsgang durchführen. In der linken Liste ist Mehrfachselektion möglich. : In diesem Dialog k÷nnen Sie Datenbanken, auf die Sie in Ihrem Dokument ³ber Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie k÷nnen nur eine nderung pro Arbeitsgang durchf³hren. In der linken Liste ist Mehrfachselektion m÷glich. */
-        Text = "In diesem Dialog können Sie Datenbanken, auf die Sie in Ihrem Dokument über Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie können nur eine Änderung pro Arbeitsgang durchführen. In der linken Liste ist Mehrfachselektion möglich." ;
-        Text [ ENGLISH ] = "???" ;
-        WordBreak = TRUE ;
-        Left = TRUE ;
-        Text [ english_us ] = "Use this dialog to exchange the database accessed in your document via database fields with another one. You can only make one change at a time. Multiple selection is possible in the list on the left." ;
-        Text [ italian ] = "In questo dialogo si possono scambiare database ai quali si accede tramite campi di database. Si può effettuare una modifica per volta. Nell'elenco di sinistra è possibile una selezione multipla." ;
-        Text [ spanish ] = "En este diálogo puede intercambiar por otras las bases de datos a las que acceda a través de los campos. Se puede realizar solo un cambio por fase de trabajo. En la lista izquierda es posible hacer una selección múltiple." ;
-        Text [ french ] = "Cette boîte de dialogue vous permet d'échanger les bases de données auxquelles vous accédez dans vos documents par des champs de formulaire. Vous pouvez exécuter une seule modification par saisie. La liste de gauche permet une sélection multiple." ;
-        Text [ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. In de linker lijst is ook een meervoudige keuze mogelijk." ;
-        Text [ swedish ] = "I denna dialog kan du byta ut databaser, som du kan nå via databasfältet i ditt dokument, mot andra databaser. Du kan bara göra en ändring åt gången. I den vänstra listan går det att göra multimarkering." ;
-        Text [ danish ] = "I denne dialog kan du udskifte databaser, som du har adgang til via databasefelter. Du kan kun udføre en ændring ad gangen. I listen til venstre er der mulighed for multimarkering." ;
-        Text [ portuguese_brazilian ] = "In diesem Dialog k?nen Sie Datenbanken, auf die Sie in Ihrem Dokument ?er Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie k?nen nur eine ?nderung pro Arbeitsgang durchf?ren. In der linken Liste ist Mehrfachselektion m?lich." ;
-        Text [ portuguese ] = "Nesta caixa de diálogo poderá substituir bases de dados por outras, tendo acesso a elas no seu documento através dos campos da base de dados. É apenas possível uma alteração por cada operação. Na lista da esquerda poderá seleccionar várias opç" ;
-        Text[ chinese_simplified ] = "ÔÚÕâ¸ö¶Ô»°¿òÄÚÄúÄÜ¹»Ê¹ÓÃÒ»¸öÆäËûÊı¾İ¿âÀ´´úÌæÄúµ±Ç°±à¼­µÄÎÄµµËùÊ¹ÓÃµÄÊı¾İ¿â¡£Ã¿´ÎÄúÖ»ÄÜ×öÒ»Ïî¸ü¸Ä¡£ÔÚ×ó·½µÄÁĞµ¥ÄÚÄú¿ÉÒÔ½øĞĞ¶àÖØÑ¡Ôñ¡£";
-        Text[ russian ] = "Â ıòîì äèàëîãå Âû ìîæåòå çàìåíèòü áàçû äàííûõ, äîñòóï ê êîòîğûì âîçìîæåí ïğè ïîìîùè ïîëåé áàçû äàííûõ, äğóãèìè áàçàìè äàííûõ. Çà îäíó îïåğàö";
-        Text[ polish ] = "W tym dialogu mo¿esz wymieniæ dostêpne w twoim dokumencie poprzez pola bazy danych na inne. Mo¿esz dokonaæ tylko jednej zmiany podczas sesji roboczej. Na li?cie z lewej strony mo¿liwa jest wielokrotna selekcja.";
-        Text[ japanese ] = "‚±‚ÌÀŞ²±Û¸Ş‚Å‚ÍÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚ğ’Ê‚µ‚ÄAÄŞ·­ÒİÄ‚É±¸¾½‚·‚éÃŞ°ÀÍŞ°½‚ğ‘¼‚ÌÃŞ°ÀÍŞ°½‚ÆŒğŠ·‚Å‚«‚Ü‚·Bˆê“x‚É1‚Â‚Ì•ÏX‚µ‚©‚Å‚«‚Ü‚¹‚ñB¶‚ÌØ½Ä‚Å‚Í•¡”‘I‘ğ‚ª‰Â”\\‚Å‚·B";
-        Text[ chinese_traditional ] = "¦b³o­Ó¹ï¸Ü¤è¶ô¤º±z¯à°÷¨Ï¥Î¤@­Ó¨ä¥L¸ê®Æ®w¨Ó¥N´À±z·í«e½s¿èªº¤å¥ó©Ò¨Ï¥Îªº¸ê®Æ®w¡C±z¨C¦¸¥u¯à§@¤@¦¸ÅÜ§ó¡C±z¯à°÷¦b¥ªÄæ¤º§@¦h­«¿ï¨ú¡C";
-        Text[ arabic ] = "İí ãÑÈÚ ÇáÍæÇÑ åĞÇ¡ íãßäß ÇÓÊÈÏÇá ŞæÇÚÏ ÇáÈíÇäÇÊ¡ ÇáÊí ÊÕá ÅáíåÇ İí ãÓÊäÏß ÈæÇÓØÉ ÍŞæá ŞæÇÚÏ ÇáÈíÇäÇÊ¡ ÈÃÎÑì. áÇÍÙ Ãäå íãßäß Úãá ÊÛííÑ æÇÍÏ";
-        Text[ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. In de linker lijst is ook een meervoudige keuze mogelijk.";
-        Text[ chinese_simplified ] = "ÔÚÕâ¸ö¶Ô»°¿òÄÚÄúÄÜ¹»Ê¹ÓÃÒ»¸öÆäËûÊı¾İ¿âÀ´´úÌæÄúµ±Ç°±à¼­µÄÎÄµµËùÊ¹ÓÃµÄÊı¾İ¿â¡£Ã¿´ÎÄúÖ»ÄÜ×öÒ»Ïî¸ü¸Ä¡£ÔÚ×ó·½µÄÁĞµ¥ÄÚÄú¿ÉÒÔ½øĞĞ¶àÖØÑ¡Ôñ¡£";
-        Text[ greek ] = "Óå áõôüí ôïí äéÜëïãï ìğïñåßôå íá áíôáëëÜîåôå ôéò âÜóåéò äåäïìİíùí, ôéò ïğïßåò ÷ñçóéìïğïéåßôå ãéá ôï İããñáöï óáò ìİóù ôùí ğåäßùí âÜóåùí äåäïìİíùí, ìå Üëëåò âÜóåéò äåäïìİíùí. Åğéôñİğåôáé ìüíï ìéá áëëáãŞ áíÜ åñãÜóéìç çìİñá. Óôï áñéóôåñü ôìŞìá ìğïñïıí íá ãßíïõí ğïëëáëİò åğéëïãİò.";
-        Text[ korean ] = "ÀÌ ´ëÈ­»óÀÚ¿¡¼­, ±ÍÇÏ´Â ¹®¼­¿¡¼­ µ¥ÀÌÅÍº£ÀÌ½º¿¡ Á¢±ÙÇÏ°Å³ª ±³È¯ÇÏ´Â µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¸¦ »ç¿ëÇÏ½Ç¼ö ÀÖ½À´Ï´Ù.ÇÑ¹ø¿¡ ÇÑ¹ø º¯°æÀÌ ¸¸µé¾î  Áı´Ï´Ù. ¿ŞÂÊÀÇ ¸®½ºÆ® »ó¿¡¼­, ´ÙÁß ¼±ÅÃÀÌ ?";
-        Text[ turkish ] = "Bu pencerede, belgenizdeki veritabanı alanları yoluyla eriştiğiniz veritabanlarını başkaları ile değiştirebilirsiniz. Her işlemde yalnızca tek bir değişiklik yapılabilir. Soldaki listede birden fazla seçim yapılabilir.";
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 198 , 8 ) ;
+        Text = "Datenbank austauschen" ;
+        Text [ ENGLISH ] = "Change Database Names" ;
+        Text [ dutch ] = "Database wisselen" ;
+        Text [ english_us ] = "Exchange databases" ;
+        Text [ italian ] = "Scambia database" ;
+        Text [ spanish ] = "Cambiar Bases de Datos" ;
+        Text [ french ] = "Changer de base de données" ;
+        Text [ swedish ] = "Byt databas" ;
+        Text [ danish ] = "Udskift database" ;
+        Text [ portuguese_brazilian ] = "Datenbank austauschen" ;
+        Text [ portuguese ] = "Substituir base de dados" ;
+        Text[ chinese_simplified ] = "¸ü»»Êı¾İ¿â";
+        Text[ russian ] = "Çàìåíèòü áàçó äàííûõ";
+        Text[ polish ] = "Wymieñ bazê danych";
+        Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚ÌŒğŠ·";
+        Text[ chinese_traditional ] = "´À´«¸ê®Æ®w";
+        Text[ arabic ] = "ÇÓÊÈÏÇá ŞæÇÚÏ ÇáÈíÇäÇÊ";
+        Text[ dutch ] = "Database wisselen";
+        Text[ chinese_simplified ] = "¸ü»»Êı¾İ¿â";
+        Text[ greek ] = "ÁëëáãŞ âÜóçò äåäïìİíùí";
+        Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ±³È¯";
+        Text[ turkish ] = "Veritabanının değiştirilmesi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "En este diálogo puede intercambiar por otras las bases de datos a las que acceda a través de los campos. Se puede realizar solo un cambio por fase de trabajo. En la lista izquierda es posible hacer una selección múltiple.";
-        Text[ finnish ] = "Tämän valintaikkunan avulla voit vaihtaa asiakirjassa tietokantakenttien kautta käsiteltävän tietokannan toiseen tietokantaan. Voit tehdä kerralla vain yhden muutoksen. Monivalinta on mahdollista vasemmanpuoleisessa luettelossa.";
+        Text[ catalan ] = "Cambiar Bases de Datos";
+        Text[ finnish ] = "Vaihda tietokannat";
     };
     FixedText FT_USEDDB
     {
-        Pos = MAP_APPFONT ( 12 , 60 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text = "Verwendete Datenbanken" ;
         Text [ ENGLISH ] = "Used Databases" ;
         Left = TRUE ;
@@ -149,8 +146,8 @@ ModalDialog DLG_CHANGE_DB
     };
     FixedText FT_AVAILDB
     {
-        Pos = MAP_APPFONT ( 108 , 60 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 108 , 14 ) ;
+        Size = MAP_APPFONT ( 80 ,  8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Verfügbare Datenbanken : Verf³gbare Datenbanken */
         Text = "Verfügbare Datenbanken" ;
         Text [ ENGLISH ] = "Available Databases" ;
@@ -182,16 +179,49 @@ ModalDialog DLG_CHANGE_DB
     Control TLB_USEDDB
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
         Size = MAP_APPFONT ( 90 , 52 ) ;
         TabStop = TRUE ;
     };
     Control TLB_AVAILDB
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 108 , 73 ) ;
+        Pos = MAP_APPFONT ( 108 , 25 ) ;
         Size = MAP_APPFONT ( 90 , 52 ) ;
         TabStop = TRUE ;
+    };
+    FixedText FT_DESC
+    {
+        Pos = MAP_APPFONT ( 12 , 83 ) ;
+        Size = MAP_APPFONT ( 190 , 45 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? In diesem Dialog können Sie Datenbanken, auf die Sie in Ihrem Dokument über Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie können nur eine Änderung pro Arbeitsgang durchführen. In der linken Liste ist Mehrfachselektion möglich. : In diesem Dialog k÷nnen Sie Datenbanken, auf die Sie in Ihrem Dokument ³ber Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie k÷nnen nur eine nderung pro Arbeitsgang durchf³hren. In der linken Liste ist Mehrfachselektion m÷glich. */
+        Text = "In diesem Dialog können Sie Datenbanken, auf die Sie in Ihrem Dokument über Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie können nur eine Änderung pro Arbeitsgang durchführen. In der linken Liste ist Mehrfachselektion möglich." ;
+        Text [ ENGLISH ] = "???" ;
+        WordBreak = TRUE ;
+        Left = TRUE ;
+        Text [ english_us ] = "Use this dialog to exchange the database accessed in your document via database fields with another one. You can only make one change at a time. Multiple selection is possible in the list on the left." ;
+        Text [ italian ] = "In questo dialogo si possono scambiare database ai quali si accede tramite campi di database. Si può effettuare una modifica per volta. Nell'elenco di sinistra è possibile una selezione multipla." ;
+        Text [ spanish ] = "En este diálogo puede intercambiar por otras las bases de datos a las que acceda a través de los campos. Se puede realizar solo un cambio por fase de trabajo. En la lista izquierda es posible hacer una selección múltiple." ;
+        Text [ french ] = "Cette boîte de dialogue vous permet d'échanger les bases de données auxquelles vous accédez dans vos documents par des champs de formulaire. Vous pouvez exécuter une seule modification par saisie. La liste de gauche permet une sélection multiple." ;
+        Text [ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. In de linker lijst is ook een meervoudige keuze mogelijk." ;
+        Text [ swedish ] = "I denna dialog kan du byta ut databaser, som du kan nå via databasfältet i ditt dokument, mot andra databaser. Du kan bara göra en ändring åt gången. I den vänstra listan går det att göra multimarkering." ;
+        Text [ danish ] = "I denne dialog kan du udskifte databaser, som du har adgang til via databasefelter. Du kan kun udføre en ændring ad gangen. I listen til venstre er der mulighed for multimarkering." ;
+        Text [ portuguese_brazilian ] = "In diesem Dialog k?nen Sie Datenbanken, auf die Sie in Ihrem Dokument ?er Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie k?nen nur eine ?nderung pro Arbeitsgang durchf?ren. In der linken Liste ist Mehrfachselektion m?lich." ;
+        Text [ portuguese ] = "Nesta caixa de diálogo poderá substituir bases de dados por outras, tendo acesso a elas no seu documento através dos campos da base de dados. É apenas possível uma alteração por cada operação. Na lista da esquerda poderá seleccionar várias opç" ;
+        Text[ chinese_simplified ] = "ÔÚÕâ¸ö¶Ô»°¿òÄÚÄúÄÜ¹»Ê¹ÓÃÒ»¸öÆäËûÊı¾İ¿âÀ´´úÌæÄúµ±Ç°±à¼­µÄÎÄµµËùÊ¹ÓÃµÄÊı¾İ¿â¡£Ã¿´ÎÄúÖ»ÄÜ×öÒ»Ïî¸ü¸Ä¡£ÔÚ×ó·½µÄÁĞµ¥ÄÚÄú¿ÉÒÔ½øĞĞ¶àÖØÑ¡Ôñ¡£";
+        Text[ russian ] = "Â ıòîì äèàëîãå Âû ìîæåòå çàìåíèòü áàçû äàííûõ, äîñòóï ê êîòîğûì âîçìîæåí ïğè ïîìîùè ïîëåé áàçû äàííûõ, äğóãèìè áàçàìè äàííûõ. Çà îäíó îïåğàö";
+        Text[ polish ] = "W tym dialogu mo¿esz wymieniæ dostêpne w twoim dokumencie poprzez pola bazy danych na inne. Mo¿esz dokonaæ tylko jednej zmiany podczas sesji roboczej. Na li?cie z lewej strony mo¿liwa jest wielokrotna selekcja.";
+        Text[ japanese ] = "‚±‚ÌÀŞ²±Û¸Ş‚Å‚ÍÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚ğ’Ê‚µ‚ÄAÄŞ·­ÒİÄ‚É±¸¾½‚·‚éÃŞ°ÀÍŞ°½‚ğ‘¼‚ÌÃŞ°ÀÍŞ°½‚ÆŒğŠ·‚Å‚«‚Ü‚·Bˆê“x‚É1‚Â‚Ì•ÏX‚µ‚©‚Å‚«‚Ü‚¹‚ñB¶‚ÌØ½Ä‚Å‚Í•¡”‘I‘ğ‚ª‰Â”\\‚Å‚·B";
+        Text[ chinese_traditional ] = "¦b³o­Ó¹ï¸Ü¤è¶ô¤º±z¯à°÷¨Ï¥Î¤@­Ó¨ä¥L¸ê®Æ®w¨Ó¥N´À±z·í«e½s¿èªº¤å¥ó©Ò¨Ï¥Îªº¸ê®Æ®w¡C±z¨C¦¸¥u¯à§@¤@¦¸ÅÜ§ó¡C±z¯à°÷¦b¥ªÄæ¤º§@¦h­«¿ï¨ú¡C";
+        Text[ arabic ] = "İí ãÑÈÚ ÇáÍæÇÑ åĞÇ¡ íãßäß ÇÓÊÈÏÇá ŞæÇÚÏ ÇáÈíÇäÇÊ¡ ÇáÊí ÊÕá ÅáíåÇ İí ãÓÊäÏß ÈæÇÓØÉ ÍŞæá ŞæÇÚÏ ÇáÈíÇäÇÊ¡ ÈÃÎÑì. áÇÍÙ Ãäå íãßäß Úãá ÊÛííÑ æÇÍÏ";
+        Text[ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. In de linker lijst is ook een meervoudige keuze mogelijk.";
+        Text[ chinese_simplified ] = "ÔÚÕâ¸ö¶Ô»°¿òÄÚÄúÄÜ¹»Ê¹ÓÃÒ»¸öÆäËûÊı¾İ¿âÀ´´úÌæÄúµ±Ç°±à¼­µÄÎÄµµËùÊ¹ÓÃµÄÊı¾İ¿â¡£Ã¿´ÎÄúÖ»ÄÜ×öÒ»Ïî¸ü¸Ä¡£ÔÚ×ó·½µÄÁĞµ¥ÄÚÄú¿ÉÒÔ½øĞĞ¶àÖØÑ¡Ôñ¡£";
+        Text[ greek ] = "Óå áõôüí ôïí äéÜëïãï ìğïñåßôå íá áíôáëëÜîåôå ôéò âÜóåéò äåäïìİíùí, ôéò ïğïßåò ÷ñçóéìïğïéåßôå ãéá ôï İããñáöï óáò ìİóù ôùí ğåäßùí âÜóåùí äåäïìİíùí, ìå Üëëåò âÜóåéò äåäïìİíùí. Åğéôñİğåôáé ìüíï ìéá áëëáãŞ áíÜ åñãÜóéìç çìİñá. Óôï áñéóôåñü ôìŞìá ìğïñïıí íá ãßíïõí ğïëëáëİò åğéëïãİò.";
+        Text[ korean ] = "ÀÌ ´ëÈ­»óÀÚ¿¡¼­, ±ÍÇÏ´Â ¹®¼­¿¡¼­ µ¥ÀÌÅÍº£ÀÌ½º¿¡ Á¢±ÙÇÏ°Å³ª ±³È¯ÇÏ´Â µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¸¦ »ç¿ëÇÏ½Ç¼ö ÀÖ½À´Ï´Ù.ÇÑ¹ø¿¡ ÇÑ¹ø º¯°æÀÌ ¸¸µé¾î  Áı´Ï´Ù. ¿ŞÂÊÀÇ ¸®½ºÆ® »ó¿¡¼­, ´ÙÁß ¼±ÅÃÀÌ ?";
+        Text[ turkish ] = "Bu pencerede, belgenizdeki veritabanı alanları yoluyla eriştiğiniz veritabanlarını başkaları ile değiştirebilirsiniz. Her işlemde yalnızca tek bir değişiklik yapılabilir. Soldaki listede birden fazla seçim yapılabilir.";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "En este diálogo puede intercambiar por otras las bases de datos a las que acceda a través de los campos. Se puede realizar solo un cambio por fase de trabajo. En la lista izquierda es posible hacer una selección múltiple.";
+        Text[ finnish ] = "Tämän valintaikkunan avulla voit vaihtaa asiakirjassa tietokantakenttien kautta käsiteltävän tietokannan toiseen tietokantaan. Voit tehdä kerralla vain yhden muutoksen. Monivalinta on mahdollista vasemmanpuoleisessa luettelossa.";
     };
     /*  MultiListBox LB_USEDDB {
             Sort = TRUE;
@@ -211,7 +241,7 @@ ModalDialog DLG_CHANGE_DB
     FixedText FT_DOCDBTEXT
     {
         Pos = MAP_APPFONT ( 6 , 136 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
         Text = "Am Dokument gesetzte Datenbank:" ;
         Text [ ENGLISH ] = "???" ;
         Left = TRUE ;
@@ -242,7 +272,7 @@ ModalDialog DLG_CHANGE_DB
     FixedText FT_DOCDBNAME
     {
         Pos = MAP_APPFONT ( 109 , 136 ) ;
-        Size = MAP_APPFONT ( 94 , 10 ) ;
+        Size = MAP_APPFONT ( 94 , 8 ) ;
         Text = "Adressen.Adressen" ;
         Text [ ENGLISH ] = "???" ;
         Left = TRUE ;
@@ -297,36 +327,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ greek ] = "Êáèïñéóìüò";
         Text[ korean ] = "Define";
     };
-  */    GroupBox GB_DBLIST
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 198 , 128 ) ;
-        Text = "Datenbank austauschen" ;
-        Text [ ENGLISH ] = "Change Database Names" ;
-        Text [ dutch ] = "Database wisselen" ;
-        Text [ english_us ] = "Exchange databases" ;
-        Text [ italian ] = "Scambia database" ;
-        Text [ spanish ] = "Cambiar Bases de Datos" ;
-        Text [ french ] = "Changer de base de données" ;
-        Text [ swedish ] = "Byt databas" ;
-        Text [ danish ] = "Udskift database" ;
-        Text [ portuguese_brazilian ] = "Datenbank austauschen" ;
-        Text [ portuguese ] = "Substituir base de dados" ;
-        Text[ chinese_simplified ] = "¸ü»»Êı¾İ¿â";
-        Text[ russian ] = "Çàìåíèòü áàçó äàííûõ";
-        Text[ polish ] = "Wymieñ bazê danych";
-        Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚ÌŒğŠ·";
-        Text[ chinese_traditional ] = "´À´«¸ê®Æ®w";
-        Text[ arabic ] = "ÇÓÊÈÏÇá ŞæÇÚÏ ÇáÈíÇäÇÊ";
-        Text[ dutch ] = "Database wisselen";
-        Text[ chinese_simplified ] = "¸ü»»Êı¾İ¿â";
-        Text[ greek ] = "ÁëëáãŞ âÜóçò äåäïìİíùí";
-        Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ±³È¯";
-        Text[ turkish ] = "Veritabanının değiştirilmesi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cambiar Bases de Datos";
-        Text[ finnish ] = "Vaihda tietokannat";
-    };
+  */
     OKButton BT_OK
     {
         Pos = MAP_APPFONT ( 210 , 6 ) ;
@@ -427,4 +428,3 @@ ModalDialog DLG_CHANGE_DB
     Text[ catalan ] = "Cambiar Bases de Datos";
     Text[ finnish ] = "Vaihda tietokannat";
 };
-
