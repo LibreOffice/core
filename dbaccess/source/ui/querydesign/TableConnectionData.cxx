@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnectionData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:32:34 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,24 @@ OConnectionLineDataRef OTableConnectionData::CreateLineDataObj( const OConnectio
 OTableConnectionData* OTableConnectionData::NewInstance() const
 {
     return new OTableConnectionData();
+}
+// -----------------------------------------------------------------------------
+void OTableConnectionData::normalizeLines()
+{
+    // noch ein wenig Normalisierung auf den LineDatas : leere Lines vom Anfang an das Ende verschieben
+    sal_Int32 nCount = m_vConnLineData.size();
+    for(sal_Int32 i=0;i<nCount;)
+    {
+        if(!m_vConnLineData[i]->GetSourceFieldName().getLength() && !m_vConnLineData[i]->GetDestFieldName().getLength())
+        {
+            OConnectionLineDataRef pData = m_vConnLineData[i];
+            m_vConnLineData.erase(m_vConnLineData.begin()+i);
+            m_vConnLineData.push_back(pData);
+            --nCount;
+        }
+        else
+            ++i;
+    }
 }
 // -----------------------------------------------------------------------------
 

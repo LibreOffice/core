@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableConnectionData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:32:33 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,11 @@ void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft
 OTableConnectionData* OQueryTableConnectionData::NewInstance() const
 {
     return new OQueryTableConnectionData();
+}
+// -----------------------------------------------------------------------------
+BOOL OQueryTableConnectionData::Update()
+{
+    return TRUE;
 }
 // -----------------------------------------------------------------------------
 

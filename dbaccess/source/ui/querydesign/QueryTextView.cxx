@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:19:01 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,11 +165,10 @@ void OQueryTextView::setReadOnly(sal_Bool _bReadOnly)
 // -----------------------------------------------------------------------------
 void OQueryTextView::clear()
 {
-    SfxUndoManager* pUndoMgr = getContainerWindow()->getDesignView()->getController()->getUndoMgr();
     OSqlEditUndoAct* pUndoAct = new OSqlEditUndoAct( m_pEdit );
 
     pUndoAct->SetOriginalText( m_pEdit->GetText() );
-    pUndoMgr->AddUndoAction( pUndoAct );
+    getContainerWindow()->getDesignView()->getController()->addUndoActionAndInvalidate( pUndoAct );
 
     m_pEdit->SetText(String());
 }

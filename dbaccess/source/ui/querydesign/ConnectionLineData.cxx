@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:26:32 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ void OConnectionLineData::CopyFrom(const OConnectionLineData& rSource)
 }
 
 //------------------------------------------------------------------------
-BOOL OConnectionLineData::IsValid()
+bool OConnectionLineData::IsValid() const
 {
     return (GetSourceFieldName().getLength() && GetDestFieldName().getLength());
 }
@@ -124,9 +124,10 @@ OConnectionLineData& OConnectionLineData::operator=( const OConnectionLineData& 
 }
 
 //------------------------------------------------------------------------
-void OConnectionLineData::Reset()
+bool OConnectionLineData::Reset()
 {
     m_aDestFieldName = m_aSourceFieldName = ::rtl::OUString();
+    return true;
 }
 // -----------------------------------------------------------------------------
 

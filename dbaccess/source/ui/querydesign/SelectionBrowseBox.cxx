@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: svesik $ $Date: 2002-01-02 11:07:17 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -914,7 +914,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                                             static_cast<OQueryController*>(getDesignView()->getController())->getNumberFormatter(),
                                                             xColumn,
                                                             getDesignView()->getLocale(),
-                                                            getDesignView()->getDecimalSeparator().toChar(),
+                                                            static_cast<sal_Char>(getDesignView()->getDecimalSeparator().toChar()),
                                                             &(static_cast<OQueryController*>(getDesignView()->getController())->getParser()->getContext()));
                         delete pParseNode;
                     }
@@ -952,7 +952,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                                                     static_cast<OQueryController*>(getDesignView()->getController())->getNumberFormatter(),
                                                                     xColumn,
                                                                     getDesignView()->getLocale(),
-                                                                    getDesignView()->getDecimalSeparator().toChar(),
+                                                                    static_cast<sal_Char>(getDesignView()->getDecimalSeparator().toChar()),
                                                                     &(static_cast<OQueryController*>(getDesignView()->getController())->getParser()->getContext()));
                                 delete pParseNode;
                             }
@@ -1122,7 +1122,7 @@ void OSelectionBrowseBox::RemoveField(sal_uInt16 nId, sal_Bool bActivate)
     pUndoAction->SetTabFieldDescr(pDesc);
     pUndoAction->SetOwnership(sal_True);
     pUndoAction->SetColId( nId );
-    pController->getUndoMgr()->AddUndoAction( pUndoAction );
+    pController->addUndoActionAndInvalidate( pUndoAction );
 
     RemoveColumn(nId);
 
@@ -1433,7 +1433,7 @@ OTableFieldDescRef OSelectionBrowseBox::InsertField(const OTableFieldDescRef& _r
     pUndoAction->SetTabFieldDescr( pEntry );
     pUndoAction->SetOwnership(sal_False);
     pUndoAction->SetColId( nColId );
-    static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->AddUndoAction( pUndoAction );
+    getDesignView()->getController()->addUndoActionAndInvalidate( pUndoAction );
 
     return pEntry;
 }
@@ -1718,6 +1718,8 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
                 if (!static_cast<OQueryController*>(getDesignView()->getController())->isReadOnly())
                 {
                     PopupMenu aContextMenu(ModuleRes(RID_QUERYCOLPOPUPMENU));
+                    aContextMenu.EnableItem(ID_QUERY_EDIT_JOINCONNECTION,FALSE);
+                    aContextMenu.RemoveDisabledEntries();
                     switch (aContextMenu.Execute(this, aPoint))
                     {
                         case SID_DELETE:                // Aussch
@@ -2071,7 +2073,7 @@ void OSelectionBrowseBox::ColumnResized(sal_uInt16 nColId)
         OTabFieldSizedUndoAct* pUndo = new OTabFieldSizedUndoAct(this);
         pUndo->SetColId(nColId);
         pUndo->SetOriginalWidth(pEntry->GetColWidth());
-        static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->AddUndoAction(pUndo);
+        getDesignView()->getController()->addUndoActionAndInvalidate(pUndo);
         pEntry->SetColWidth(sal_uInt16(GetColumnWidth(nColId)));
     }
 }
@@ -2178,7 +2180,7 @@ void OSelectionBrowseBox::appendUndoAction(const String& _rOldValue,const String
         pUndoAct->SetCellIndex(_nRow);
         pUndoAct->SetColId(GetCurColumnId());
         pUndoAct->SetCellContents(_rOldValue);
-        static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->AddUndoAction(pUndoAct);
+        getDesignView()->getController()->addUndoActionAndInvalidate(pUndoAct);
     }
 }
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableConnectionData.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:32:33 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ namespace dbaui
         virtual OConnectionLineDataRef CreateLineDataObj();
         virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData );
 
+        OQueryTableConnectionData& operator=( const OQueryTableConnectionData& rConnData );
     public:
         TYPEINFO();
         OQueryTableConnectionData();
@@ -111,7 +112,12 @@ namespace dbaui
         virtual void CopyFrom(const OTableConnectionData& rSource);
         virtual OTableConnectionData* NewInstance() const;
 
-        OQueryTableConnectionData& operator=( const OQueryTableConnectionData& rConnData );
+
+        /** Update create a new connection
+
+            @return true if successful
+        */
+        virtual BOOL Update();
 
         ::rtl::OUString GetTableName(EConnectionSide nWhich) const;
         ::rtl::OUString GetAliasName(EConnectionSide nWhich) const;

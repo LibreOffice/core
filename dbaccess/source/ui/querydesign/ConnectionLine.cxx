@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLine.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:26:32 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,81 @@
 using namespace dbaui;
 const long DESCRIPT_LINE_WIDTH = 15;
 const long HIT_SENSITIVE_RADIUS = 5;
+
+namespace
+{
+    /** calcRect creates a new rectangle with the given points
+            @param  _rBase      the base point
+            @param  _aVector    the vector which will be added
+    */
+    inline Rectangle calcRect(const Point& _rBase,const Point& _aVector)
+    {
+        return Rectangle( _rBase - _aVector, _rBase + _aVector );
+    }
+    // -----------------------------------------------------------------------------
+    /** GetTextPos calculate the rectangle for the connection to be drawn
+            @param  _pWin           the table window where to draw it
+            @param  _aConnPos       the connection point
+            @param  _aDescrLinePos  the description line pos
+    */
+    Rectangle GetTextPos(const OTableWindow* _pWin, const Point& _aConnPos,const Point& _aDescrLinePos)
+    {
+        OTableWindowListBox* pListBox = _pWin ? _pWin->GetListBox() : NULL;
+        DBG_ASSERT(_pWin && pListBox, "OConnectionLine::GetSourceTextPos : invalid call !");
+
+        long nRowHeight = pListBox->GetEntryHeight();
+
+        Rectangle aReturn;
+        aReturn.Top() = _aConnPos.Y() - nRowHeight;
+        aReturn.Bottom() = aReturn.Top() + nRowHeight;
+        if (_aDescrLinePos.X() < _aConnPos.X())
+        {
+            aReturn.Left() = _aDescrLinePos.X();
+            aReturn.Right() = aReturn.Left() + _aConnPos.X() - _aDescrLinePos.X();
+        }
+        else
+        {
+            aReturn.Left() = _aConnPos.X();
+            aReturn.Right() = aReturn.Left() + _aDescrLinePos.X() - _aConnPos.X();
+        }
+
+        return aReturn;
+    }
+    // -----------------------------------------------------------------------------
+    /** calcPointsYValue calculate the points Y value in relation to the listbox entry
+            @param  _pWin           the corresponding window
+            @param  _pEntry         the source or dest entry
+            @param  _rNewConPos     (in/out) the connection pos
+            @param  _rNewDescrPos   (in/out) the description pos
+    */
+    void calcPointsYValue(const OTableWindow* _pWin,SvLBoxEntry* _pEntry,Point& _rNewConPos,Point& _rNewDescrPos)
+    {
+        const OTableWindowListBox* pListBox = _pWin->GetListBox();
+        long nRowHeight = pListBox->GetEntryHeight();
+
+        _rNewConPos.Y() = _pWin->GetPosPixel().Y();
+        _rNewConPos.Y() += pListBox->GetPosPixel().Y();
+        long nEntryPos = pListBox->GetEntryPos( _pEntry ).Y();
+
+        if( nEntryPos >= 0 )
+        {
+            _rNewConPos.Y() += nEntryPos;
+            _rNewConPos.Y() += (long)( 0.5 * nRowHeight );
+        }
+        else
+            _rNewConPos.Y() -= (long)( 0.5 * nRowHeight );
+
+        long nListBoxBottom = _pWin->GetPosPixel().Y()
+                                + pListBox->GetPosPixel().Y()
+                                + pListBox->GetSizePixel().Height();
+        if( _rNewConPos.Y() > nListBoxBottom )
+            _rNewConPos.Y() = nListBoxBottom + 2;
+
+        _rNewDescrPos.Y() = _rNewConPos.Y();
+    }
+    // -----------------------------------------------------------------------------
+}
+
 //========================================================================
 // class OConnectionLine
 //========================================================================
@@ -111,8 +186,6 @@ OConnectionLine::OConnectionLine( OTableConnection* _pConn, const String& _rSour
 {
     DBG_CTOR(OConnectionLine,NULL);
     m_pData = new OConnectionLineData( _rSourceFieldName,_rDestFieldName);
-//  m_pData->SetSourceFieldName( _rSourceFieldName );
-//  m_pData->SetDestFieldName( _rDestFieldName );
 }
 
 //------------------------------------------------------------------------
@@ -133,33 +206,31 @@ OConnectionLine::~OConnectionLine()
 void OConnectionLine::SetSourceFieldName( const String& rSourceFieldName )
 {
     m_pData->SetSourceFieldName( rSourceFieldName );
-//  m_pSourceEntry = m_pTabConn->GetSourceWin()->GetListBox()->GetEntryFromText( rSourceFieldName );
 }
 
 //------------------------------------------------------------------------
 void OConnectionLine::SetDestFieldName( const String& rDestFieldName )
 {
     m_pData->SetDestFieldName( rDestFieldName );
-//  m_pDestEntry = m_pTabConn->GetDestWin()->GetListBox()->GetEntryFromText( rDestFieldName );
 }
 
 //------------------------------------------------------------------------
 OConnectionLine& OConnectionLine::operator=( const OConnectionLine& rLine )
 {
-    if( &rLine == this )
-        return *this;
+    if( &rLine != this )
+    {
+        // da mir die Daten nicht gehoeren, loesche ich die alten nicht
+        m_pData->CopyFrom(*rLine.GetData());
+            // CopyFrom ist virtuell, damit ist es kein Problem, wenn m_pData von einem von OTableConnectionData abgeleiteten Typ ist
 
-    // da mir die Daten nicht gehoeren, loesche ich die alten nicht
-    m_pData->CopyFrom(*rLine.GetData());
-        // CopyFrom ist virtuell, damit ist es kein Problem, wenn m_pData von einem von OTableConnectionData abgeleiteten Typ ist
-
-    m_pTabConn = rLine.m_pTabConn;
-    m_pSourceEntry = rLine.m_pSourceEntry;
-    m_pDestEntry = rLine.m_pDestEntry;
-    m_aSourceConnPos = rLine.m_aSourceConnPos;
-    m_aDestConnPos = rLine.m_aDestConnPos;
-    m_aSourceDescrLinePos = rLine.m_aSourceDescrLinePos;
-    m_aDestDescrLinePos = rLine.m_aDestDescrLinePos;
+        m_pTabConn = rLine.m_pTabConn;
+        m_pSourceEntry = rLine.m_pSourceEntry;
+        m_pDestEntry = rLine.m_pDestEntry;
+        m_aSourceConnPos = rLine.m_aSourceConnPos;
+        m_aDestConnPos = rLine.m_aDestConnPos;
+        m_aSourceDescrLinePos = rLine.m_aSourceDescrLinePos;
+        m_aDestDescrLinePos = rLine.m_aDestDescrLinePos;
+    }
 
     return *this;
 }
@@ -176,16 +247,6 @@ BOOL OConnectionLine::Connect( const String& rSourceFieldName, const String& rDe
     // Feldnamen setzen
     m_pData->SetSourceFieldName( rSourceFieldName );
     m_pData->SetDestFieldName( rDestFieldName );
-
-    //////////////////////////////////////////////////////////////////////
-    // Entries setzen
-/*  m_pSourceEntry = m_pTabConn->GetSourceWin()->GetListBox()->GetEntryFromText( rSourceFieldName );
-    if( !m_pSourceEntry )
-        return FALSE;
-    m_pDestEntry = m_pTabConn->GetDestWin()->GetListBox()->GetEntryFromText( rDestFieldName );
-    if( !m_pDestEntry )
-        return FALSE;
-*/
 
     return TRUE;
 }
@@ -237,7 +298,20 @@ Rectangle OConnectionLine::GetBoundingRect()
 
     return aBoundingRect;
 }
-
+// -----------------------------------------------------------------------------
+void calcPointX1(const OTableWindow* _pWin,Point& _rNewConPos,Point& _rNewDescrPos)
+{
+    _rNewConPos.X() = _pWin->GetPosPixel().X() + _pWin->GetSizePixel().Width();
+    _rNewDescrPos.X() = _rNewConPos.X();
+    _rNewConPos.X() += DESCRIPT_LINE_WIDTH;
+}
+// -----------------------------------------------------------------------------
+void calcPointX2(const OTableWindow* _pWin,Point& _rNewConPos,Point& _rNewDescrPos)
+{
+    _rNewConPos.X() = _pWin->GetPosPixel().X();
+    _rNewDescrPos.X() = _rNewConPos.X();
+    _rNewConPos.X() -= DESCRIPT_LINE_WIDTH;
+}
 //------------------------------------------------------------------------
 BOOL OConnectionLine::RecalcLine()
 {
@@ -262,133 +336,37 @@ BOOL OConnectionLine::RecalcLine()
 
     aSourceCenter.X() = pSourceWin->GetPosPixel().X() + (long)( 0.5*pSourceWin->GetSizePixel().Width() );
     aDestCenter.X() = pDestWin->GetPosPixel().X() + (long)( 0.5*pDestWin->GetSizePixel().Width() );
-    if( aDestCenter.X()>aSourceCenter.X() )
-    {
-        //////////////////////////////////////////////////////////////////////
-        // DestWin liegt rechts vom SourceWin
-        m_aSourceConnPos.X() = pSourceWin->GetPosPixel().X()+pSourceWin->GetSizePixel().Width();
-        m_aSourceDescrLinePos.X() = m_aSourceConnPos.X();
-        m_aSourceConnPos.X() += DESCRIPT_LINE_WIDTH;
 
-        m_aDestConnPos.X() = pDestWin->GetPosPixel().X();
-        m_aDestDescrLinePos.X() = m_aDestConnPos.X();
-        m_aDestConnPos.X() -= DESCRIPT_LINE_WIDTH;
-    }
-    else
+    const OTableWindow* pFirstWin   = pDestWin;
+    const OTableWindow* pSecondWin  = pSourceWin;
+    Point* pFirstConPos             = &m_aDestConnPos;
+    Point* pFirstDescrPos           = &m_aDestDescrLinePos;
+    Point* pSecondConPos            = &m_aSourceConnPos;
+    Point* pSecondDescrPos          = &m_aSourceDescrLinePos;
+    if( aDestCenter.X() > aSourceCenter.X() )
     {
-        //////////////////////////////////////////////////////////////////////
-        // DestWin liegt links vom SourceWin
-        m_aSourceConnPos.X() = pSourceWin->GetPosPixel().X();
-        m_aSourceDescrLinePos.X() = m_aSourceConnPos.X();
-        m_aSourceConnPos.X() -= DESCRIPT_LINE_WIDTH;
-
-        m_aDestConnPos.X() = pDestWin->GetPosPixel().X()+pDestWin->GetSizePixel().Width();
-        m_aDestDescrLinePos.X() = m_aDestConnPos.X();
-        m_aDestConnPos.X() += DESCRIPT_LINE_WIDTH;
+        pFirstWin       = pSourceWin;
+        pSecondWin      = pDestWin;
+        pFirstConPos    = &m_aSourceConnPos;
+        pFirstDescrPos  = &m_aSourceDescrLinePos;
+        pSecondConPos   = &m_aDestConnPos;
+        pSecondDescrPos = &m_aDestDescrLinePos;
     }
+
+    calcPointX1(pFirstWin,*pFirstConPos,*pFirstDescrPos);
+    calcPointX2(pSecondWin,*pSecondConPos,*pSecondDescrPos);
 
     //////////////////////////////////////////////////////////////////////
     // aSourceConnPosY bestimmen
-    OTableWindowListBox* pListBox = pSourceWin->GetListBox();
-    long nRowHeight = pListBox->GetEntryHeight();
-
-    m_aSourceConnPos.Y() = pSourceWin->GetPosPixel().Y();
-    m_aSourceConnPos.Y() += pListBox->GetPosPixel().Y();
-    long nEntryPos = pListBox->GetEntryPos( m_pSourceEntry ).Y();
-
-    if( nEntryPos >= 0 )
-    {
-        m_aSourceConnPos.Y() += nEntryPos;
-        m_aSourceConnPos.Y() += (long)( 0.5 * nRowHeight );
-    }
-    else
-        m_aSourceConnPos.Y() -= (long)( 0.5 * nRowHeight );
-
-    long nListBoxBottom = pSourceWin->GetPosPixel().Y()
-                            +pListBox->GetPosPixel().Y()
-                            +pListBox->GetSizePixel().Height();
-    if( m_aSourceConnPos.Y() > nListBoxBottom )
-        m_aSourceConnPos.Y() = nListBoxBottom + 2;
-
-    m_aSourceDescrLinePos.Y() = m_aSourceConnPos.Y();
+    calcPointsYValue(pSourceWin,m_pSourceEntry,m_aSourceConnPos,m_aSourceDescrLinePos);
 
     //////////////////////////////////////////////////////////////////////
     // aDestConnPosY bestimmen
-    pListBox = pDestWin->GetListBox();
-
-    m_aDestConnPos.Y() = pDestWin->GetPosPixel().Y();
-    m_aDestConnPos.Y() += pListBox->GetPosPixel().Y();
-    nEntryPos = pListBox->GetEntryPos( m_pDestEntry ).Y();
-    if( nEntryPos >= 0 )
-    {
-        m_aDestConnPos.Y() += nEntryPos;
-        m_aDestConnPos.Y() += (long)( 0.5 * nRowHeight );
-    }
-    else
-        m_aDestConnPos.Y() -= (long)( 0.5 * nRowHeight );
-
-    nListBoxBottom = pDestWin->GetPosPixel().Y()
-                        +pListBox->GetPosPixel().Y()
-                        +pListBox->GetSizePixel().Height();
-    if( m_aDestConnPos.Y() > nListBoxBottom )
-        m_aDestConnPos.Y() = nListBoxBottom + 2;
-
-    m_aDestDescrLinePos.Y() = m_aDestConnPos.Y();
+    calcPointsYValue(pDestWin,m_pDestEntry,m_aDestConnPos,m_aDestDescrLinePos);
 
     return TRUE;
 }
-
-//------------------------------------------------------------------------
-Rectangle OConnectionLine::GetSourceTextPos() const
-{
-    const OTableWindow* pDestWin = m_pTabConn->GetDestWin();
-    OTableWindowListBox* pListBox = pDestWin ? pDestWin->GetListBox() : NULL;
-    DBG_ASSERT(pDestWin && pListBox, "OConnectionLine::GetSourceTextPos : invalid call !");
-
-    long nRowHeight = pListBox->GetEntryHeight();
-
-    Rectangle aReturn;
-    aReturn.Top() = m_aSourceConnPos.Y() - nRowHeight;
-    aReturn.Bottom() = aReturn.Top() + nRowHeight;
-    if (m_aSourceDescrLinePos.X() < m_aSourceConnPos.X())
-    {
-        aReturn.Left() = m_aSourceDescrLinePos.X();
-        aReturn.Right() = aReturn.Left() + m_aSourceConnPos.X() - m_aSourceDescrLinePos.X();
-    }
-    else
-    {
-        aReturn.Left()  = m_aSourceConnPos.X();
-        aReturn.Right() = aReturn.Left() + m_aSourceDescrLinePos.X() - m_aSourceConnPos.X();
-    }
-
-    return aReturn;
-}
-
-//------------------------------------------------------------------------
-Rectangle OConnectionLine::GetDestTextPos() const
-{
-    const OTableWindow* pSourceWin = m_pTabConn->GetSourceWin();
-    OTableWindowListBox* pListBox = pSourceWin ? pSourceWin->GetListBox() : NULL;
-    DBG_ASSERT(pSourceWin && pListBox, "OConnectionLine::GetSourceTextPos : invalid call !");
-
-    long nRowHeight = pListBox->GetEntryHeight();
-
-    Rectangle aReturn;
-    aReturn.Top() = m_aDestConnPos.Y() - nRowHeight;
-    aReturn.Bottom() = aReturn.Top() + nRowHeight;
-    if (m_aDestDescrLinePos.X() < m_aDestConnPos.X())
-    {
-        aReturn.Left() = m_aDestDescrLinePos.X();
-        aReturn.Right() = aReturn.Left() + m_aDestConnPos.X() - m_aDestDescrLinePos.X();
-    }
-    else
-    {
-        aReturn.Left() = m_aDestConnPos.X();
-        aReturn.Right() = aReturn.Left() + m_aDestDescrLinePos.X() - m_aDestConnPos.X();
-    }
-
-    return aReturn;
-}
+// -----------------------------------------------------------------------------
 
 //------------------------------------------------------------------------
 void OConnectionLine::Draw( OutputDevice* pOutDev )
@@ -425,26 +403,24 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
             xOffset = 0;
             yOffset = 1;
         }
-        pOutDev->DrawLine(m_aSourceConnPos + Point(-xOffset, -yOffset), m_aDestConnPos + Point(-xOffset, -yOffset));
-        pOutDev->DrawLine(m_aSourceConnPos + Point(xOffset, yOffset), m_aDestConnPos + Point(xOffset, yOffset));
+
+        Point aPos1(-xOffset, -yOffset);
+        Point aPos2(xOffset, yOffset);
+        pOutDev->DrawLine(m_aSourceConnPos + aPos1, m_aDestConnPos + aPos1);
+        pOutDev->DrawLine(m_aSourceConnPos + aPos2, m_aDestConnPos + aPos2);
     }
 
 
     //////////////////////////////////////////////////////////////////////
-    // Zeichnen der Verbindungs-Rechtecke
-//  pOutDev->SetLineColor(Application::GetSettings().GetStyleSettings().GetWindowTextColor());
-    Rectangle aSourceRect( m_aSourceDescrLinePos-Point(nRectSize,nRectSize),
-                           m_aSourceDescrLinePos+Point(nRectSize,nRectSize) );
-
-    Rectangle aDestRect( m_aDestDescrLinePos-Point(nRectSize,nRectSize),
-                         m_aDestDescrLinePos+Point(nRectSize,nRectSize) );
+    // draw the connection rectangles
     pOutDev->SetFillColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
-    pOutDev->DrawRect( aSourceRect );
-    pOutDev->DrawRect( aDestRect );
-}
 
-//------------------------------------------------------------------------
-BOOL OConnectionLine::IsValid()
+    Point aVector(nRectSize,nRectSize);
+    pOutDev->DrawRect( calcRect(m_aSourceDescrLinePos,aVector) );
+    pOutDev->DrawRect( calcRect( m_aDestDescrLinePos,aVector) );
+}
+// -----------------------------------------------------------------------------
+BOOL OConnectionLine::IsValid() const
 {
     return m_pData.isValid() && m_pData->IsValid();
 }
@@ -481,6 +457,25 @@ bool OConnectionLine::CheckHit( const Point& rMousePos ) const
     }
 
     return false;
+}
+// -----------------------------------------------------------------------------
+Rectangle OConnectionLine::GetSourceTextPos() const
+{
+    return GetTextPos(m_pTabConn->GetSourceWin(),m_aSourceConnPos,m_aSourceDescrLinePos);
+}
+// -----------------------------------------------------------------------------
+Rectangle OConnectionLine::GetDestTextPos() const
+{
+    return GetTextPos(m_pTabConn->GetDestWin(),m_aDestConnPos,m_aDestDescrLinePos);
+}
+// -----------------------------------------------------------------------------
+Point OConnectionLine::getMidPoint() const
+{
+    Point aDest = m_aDestConnPos - m_aSourceConnPos;
+    aDest.X() *= 0.5;
+    aDest.Y() *= 0.5;
+
+    return m_aSourceConnPos + aDest;
 }
 // -----------------------------------------------------------------------------
 

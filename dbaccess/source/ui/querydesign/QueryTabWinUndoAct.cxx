@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTabWinUndoAct.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 14:24:23 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
         ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
         for(;aIter != m_vTableConnection.end();++aIter)
         {
+            m_pOwner->DeselectConn(*aIter);
             delete (*aIter)->GetData();
             delete (*aIter);
         }
@@ -131,6 +132,8 @@ void OTabFieldSizedUndoAct::Undo()
     pOwner->SetColWidth(m_nColId, m_nNextWidth);
     m_nNextWidth = nNextWidth;
 }
+// -----------------------------------------------------------------------------
+
 
 
 

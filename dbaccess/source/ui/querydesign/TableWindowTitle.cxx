@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowTitle.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 17:32:48 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,22 +181,10 @@ void OTableWindowTitle::Command( const CommandEvent& rEvt )
         case COMMAND_CONTEXTMENU:
         {
             GrabFocus();
-            OQueryTableView* pView = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
-            OSL_ENSURE(pView,"No OQueryTableView!");
-            if(!pView->getDesignView()->getController()->isReadOnly() && pView->getDesignView()->getController()->isConnected())
-            {
-                Point aPoint = rEvt.GetMousePosPixel();
-                PopupMenu aContextMenu( ModuleRes(RID_QUERYCOLPOPUPMENU) );
-                switch (aContextMenu.Execute(this, aPoint))
-                {
-                case SID_DELETE:
-                    m_pTabWin->Remove();
-
-                    break;
-                default:
-                    Control::Command(rEvt);
-                }
-            }
+            if ( m_pTabWin )
+                m_pTabWin->Command( rEvt );
+            else
+                Control::Command(rEvt);
         }
     }
 }

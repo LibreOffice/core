@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-10 11:04:08 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,8 +205,7 @@ long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             const KeyCode& rCode = pKeyEvent->GetKeyCode();
-            if (rCode.IsMod1() || rCode.IsMod2() || rCode.IsShift())
-                break;
+
             if (rCode.GetCode() != KEY_RETURN)
             {
                 if(m_pTabWin)
@@ -214,6 +213,8 @@ long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
                 break;
             }
 
+            if (rCode.IsMod1() || rCode.IsMod2() || rCode.IsShift())
+                break;
             if (FirstSelected())
                 static_cast<OTableWindow*>(Window::GetParent())->OnEntryDoubleClicked(FirstSelected());
         }
@@ -429,6 +430,20 @@ IMPL_LINK( OTableWindowListBox, DoubleClickHdl, SvTreeListBox *, pBox )
     static_cast<OTableWindow*>(pParent)->OnEntryDoubleClicked(GetHdlEntry());
 
     return 0;
+}
+// -----------------------------------------------------------------------------
+void OTableWindowListBox::Command(const CommandEvent& rEvt)
+{
+    switch (rEvt.GetCommand())
+    {
+        case COMMAND_CONTEXTMENU:
+        {
+            static_cast<OTableWindow*>(Window::GetParent())->Command(rEvt);
+            break;
+        }
+        default:
+            SvTreeListBox::Command(rEvt);
+    }
 }
 // -----------------------------------------------------------------------------
 

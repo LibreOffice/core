@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:49:36 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,9 @@ namespace dbaui
         virtual void                GetFocus();
         virtual void                DeactivateCell(sal_Bool bUpdate = sal_True);
 
+        void                        Fill();
+        void                        PreFill();
+
     protected:
         virtual sal_Bool            SeekRow( long nRow );
 
@@ -211,7 +214,7 @@ namespace dbaui
 
         virtual sal_uInt16          GetDefaultColumnWidth(const String& rName) const;
 
-        void                        Fill();
+
 
         void                        stopTimer();
         void                        startTimer();
@@ -230,7 +233,6 @@ namespace dbaui
         long            GetBrowseRow(long nRowId) const;
         sal_Bool        GetFunktionName(String& rFkt);
         void            appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow);
-        void            PreFill();
         OTableFields&   getFields() const;
         void            enableControl(const OTableFieldDescRef& _rEntry,Window* _pControl);
         void            setTextCellContext(const OTableFieldDescRef& _rEntry,const String& _sText,ULONG _nHelpId);

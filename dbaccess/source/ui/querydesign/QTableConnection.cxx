@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef DBAUI_QUERYTABLEVIEW_HXX
 #include "QueryTableView.hxx"
+#endif
+#ifndef DBAUI_CONNECTIONLINE_HXX
+#include "ConnectionLine.hxx"
 #endif
 using namespace dbaui;
 

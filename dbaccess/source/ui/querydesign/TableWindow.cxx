@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 12:20:16 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,12 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
-
+#ifndef DBACCESS_TABLEWINDOWACCESS_HXX
+#include "TableWindowAccess.hxx"
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
 
 using namespace dbaui;
 using namespace ::utl;
@@ -128,10 +133,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+using namespace ::drafts::com::sun::star::accessibility;
 
-const long TABWIN_SIZING_AREA = 4;
-const long LISTBOX_SCROLLING_AREA = 6;
-const ULONG SCROLLING_TIMESPAN = 500;
+const long TABWIN_SIZING_AREA       = 4;
+const long LISTBOX_SCROLLING_AREA   = 6;
+const ULONG SCROLLING_TIMESPAN      = 500;
 
 
 TYPEINIT0(OTableWindow);
@@ -146,6 +152,8 @@ OTableWindow::OTableWindow( Window* pParent, OTableWindowData* pTabWinData )
           ,m_nSizingFlags( SIZING_NONE )
           ,m_bActive( FALSE )
           ,m_pListBox(NULL)
+          ,m_nMoveCount(0)
+          ,m_nMoveIncrement(1)
 {
     DBG_CTOR(OTableWindow,NULL);
     // ich uebernehme nicht die Verantwortung fuer die Daten, ich merke mir nur den Zeiger darauf
@@ -159,8 +167,8 @@ OTableWindow::OTableWindow( Window* pParent, OTableWindowData* pTabWinData )
         SetSizePixel( GetData()->GetSize() );
 
     // Hintergrund setzen
-    StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
-    SetBackground(Wallpaper(Color(aSystemStyle.GetFaceColor())));
+    const StyleSettings&  aSystemStyle = Application::GetSettings().GetStyleSettings();
+    SetBackground(Wallpaper(aSystemStyle.GetFaceColor()));
     // und Textfarbe (obwohl ich eigentlich keinen Text habe, aber wer weiss, was
     // abgeleitete Klassen machen)
     SetTextColor(aSystemStyle.GetButtonTextColor());
@@ -289,13 +297,16 @@ BOOL OTableWindow::FillListBox()
 void OTableWindow::EmptyListBox()
 {
     // da ich defaultmaessig keine USerData an die Items haenge, kann ich hier einfach loeschen
-    SvLBoxEntry* pEntry = m_pListBox->First();
-
-    while(pEntry)
+    if ( m_pListBox )
     {
-        SvLBoxEntry* pNextEntry = m_pListBox->Next(pEntry);
-        m_pListBox->GetModel()->Remove(pEntry);
-        pEntry = pNextEntry;
+        SvLBoxEntry* pEntry = m_pListBox->First();
+
+        while(pEntry)
+        {
+            SvLBoxEntry* pNextEntry = m_pListBox->Next(pEntry);
+            m_pListBox->GetModel()->Remove(pEntry);
+            pEntry = pNextEntry;
+        }
     }
 }
 
@@ -384,7 +395,7 @@ void OTableWindow::DataChanged(const DataChangedEvent& rDCEvt)
     {
         // nehmen wir den worst-case an : die Farben haben sich geaendert, also
         // mich anpassen
-        StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
+        const StyleSettings&  aSystemStyle = Application::GetSettings().GetStyleSettings();
         SetBackground(Wallpaper(Color(aSystemStyle.GetFaceColor())));
         SetTextColor(aSystemStyle.GetButtonTextColor());
     }
@@ -407,7 +418,7 @@ void OTableWindow::SetTitle( const ::rtl::OUString& rTit )
 void OTableWindow::Draw3DBorder(const Rectangle& rRect)
 {
     // die Style-Settings des Systems fuer meine Farben
-    StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
+    const StyleSettings& aSystemStyle = Application::GetSettings().GetStyleSettings();
 
     // Schwarze Linie unten und rechts
     SetLineColor(aSystemStyle.GetDarkShadowColor());
@@ -416,13 +427,14 @@ void OTableWindow::Draw3DBorder(const Rectangle& rRect)
 
     // Dunkelgraue Linie ueber der schwarzen
     SetLineColor(aSystemStyle.GetShadowColor());
-    DrawLine( rRect.BottomLeft()+Point(1,-1), rRect.BottomRight()-Point(1,1) );
-    DrawLine( rRect.BottomRight()-Point(1,1), rRect.TopRight()+Point(-1,1) );
+    Point aEHvector(1,1);
+    DrawLine( rRect.BottomLeft()+Point(1,-1), rRect.BottomRight() - aEHvector );
+    DrawLine( rRect.BottomRight() - aEHvector, rRect.TopRight()+Point(-1,1) );
 
     // Hellgraue Linie links und oben
     SetLineColor(aSystemStyle.GetLightColor());
-    DrawLine( rRect.BottomLeft()+Point(1,-2), rRect.TopLeft()+Point(1,1) );
-    DrawLine( rRect.TopLeft()+Point(1,1), rRect.TopRight()+Point(-2,1) );
+    DrawLine( rRect.BottomLeft()+Point(1,-2), rRect.TopLeft() + aEHvector );
+    DrawLine( rRect.TopLeft() + aEHvector, rRect.TopRight()+Point(-2,1) );
 }
 
 //------------------------------------------------------------------------------
@@ -581,10 +593,16 @@ void OTableWindow::Remove()
 //------------------------------------------------------------------------------
 void OTableWindow::KeyInput( const KeyEvent& rEvt )
 {
-    USHORT nCode = rEvt.GetKeyCode().GetCode();
-    BOOL   bShift = rEvt.GetKeyCode().IsShift();
-    BOOL   bCtrl = rEvt.GetKeyCode().IsMod1();
+    const KeyCode& rCode = rEvt.GetKeyCode();
+    USHORT nCode = rCode.GetCode();
+    BOOL   bShift = rCode.IsShift();
+    BOOL   bCtrl = rCode.IsMod1();
 
+    if ( rCode.IsMod2() )
+    {
+        m_nMoveCount        = 0; // reset our move ment count
+        m_nMoveIncrement    = 1;
+    }
     if( !bCtrl && !bShift && (nCode==KEY_DELETE) )
     {
         Remove();
@@ -609,14 +627,15 @@ void OTableWindow::EnumValidFields(::std::vector< ::rtl::OUString>& arrstrFields
 {
     arrstrFields.clear();
     // diese Default-Implementierung zaehlt einfach alles auf, was es in der ListBox gibt ... fuer anderes Verhalten ueberschreiben
-    if (!m_pListBox)
-        return;
-
-    SvLBoxEntry* pEntryLoop = m_pListBox->First();
-    while (pEntryLoop)
+    if ( m_pListBox )
     {
-        arrstrFields.push_back(m_pListBox->GetEntryText(pEntryLoop));
-        pEntryLoop = m_pListBox->Next(pEntryLoop);
+        arrstrFields.reserve(m_pListBox->GetEntryCount());
+        SvLBoxEntry* pEntryLoop = m_pListBox->First();
+        while (pEntryLoop)
+        {
+            arrstrFields.push_back(m_pListBox->GetEntryText(pEntryLoop));
+            pEntryLoop = m_pListBox->Next(pEntryLoop);
+        }
     }
 }
 // -----------------------------------------------------------------------------
@@ -647,7 +666,101 @@ void OTableWindow::_disposing( const ::com::sun::star::lang::EventObject& _rSour
     m_xColumns  = NULL;
 }
 // -----------------------------------------------------------------------------
+Reference< XAccessible > OTableWindow::CreateAccessible()
+{
+    return new OTableWindowAccess(getTableView()->GetAccessible(),this);
+}
+// -----------------------------------------------------------------------------
+void OTableWindow::Command(const CommandEvent& rEvt)
+{
+    switch (rEvt.GetCommand())
+    {
+        case COMMAND_CONTEXTMENU:
+        {
+            OJoinController* pController = getDesignView()->getController();
+            if(!pController->isReadOnly() && pController->isConnected())
+            {
+                Point ptWhere;
+                if ( rEvt.IsMouseEvent() )
+                    ptWhere = rEvt.GetMousePosPixel();
+                else
+                {
+                    SvLBoxEntry* pCurrent = m_pListBox->GetCurEntry();
+                    if ( pCurrent )
+                        ptWhere = m_pListBox->GetEntryPos(pCurrent);
+                    else
+                        ptWhere = m_aTitle.GetPosPixel();
+                }
+
+                PopupMenu aContextMenu(ModuleRes(RID_QUERYCOLPOPUPMENU));
+                aContextMenu.EnableItem(ID_QUERY_EDIT_JOINCONNECTION,FALSE);
+                aContextMenu.RemoveDisabledEntries();
+                switch (aContextMenu.Execute(this, ptWhere))
+                {
+                    case SID_DELETE:
+                        Remove();
+                        break;
+                }
+            }
+            break;
+        }
+        default:
+            Window::Command(rEvt);
+    }
+}
+// -----------------------------------------------------------------------------
+long OTableWindow::PreNotify(NotifyEvent& rNEvt)
+{
+    BOOL bHandled = FALSE;
+    switch (rNEvt.GetType())
+    {
+        case EVENT_KEYINPUT:
+        {
+            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+            const KeyCode& rCode = pKeyEvent->GetKeyCode();
+            if ( rCode.IsMod2() )
+            {
+                Point aStartPoint = GetPosPixel();
+                switch( rCode.GetCode() )
+                {
+                    case KEY_DOWN:
+                        bHandled = TRUE;
+                        aStartPoint.Y() += m_nMoveIncrement;
+                        break;
+                    case KEY_UP:
+                        bHandled = TRUE;
+                        aStartPoint.Y() += -m_nMoveIncrement;
+                        break;
+                    case KEY_LEFT:
+                        bHandled = TRUE;
+                        aStartPoint.X() += -m_nMoveIncrement;
+                        break;
+                    case KEY_RIGHT:
+                        bHandled = TRUE;
+                        aStartPoint.X()  += m_nMoveIncrement;
+                        break;
+                }
+                if( bHandled )
+                {
+                    // remember how often the user moved our window
+                    ++m_nMoveCount;
+                    if( m_nMoveCount == 5 )
+                        m_nMoveIncrement = 10;
+                    else if( m_nMoveCount > 15 )
+                        m_nMoveCount = m_nMoveIncrement = 20;
 
 
-
-
+                    SetPosPixel(aStartPoint);
+                    getTableView()->TabWinMoved(this,aStartPoint);
+                    Invalidate(INVALIDATE_NOCHILDREN);
+                    getDesignView()->getController()->setModified( sal_True );
+                }
+            }
+        }
+        break;
+    }
+    if (!bHandled)
+        return Window::PreNotify(rNEvt);
+    return 1L;
+}
+// -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-26 14:29:00 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,217 +67,208 @@
 #ifndef DBAUI_TABLECONNECTIONDATA_HXX
 #include "TableConnectionData.hxx"
 #endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
 #ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
-
+#ifndef DBACCESS_CONNECTIONLINEACCESS_HXX
+#include "ConnectionLineAccess.hxx"
+#endif
 #include <algorithm>
 
 
 using namespace dbaui;
 using namespace comphelper;
+using namespace ::com::sun::star::uno;
+using namespace ::drafts::com::sun::star::accessibility;
 
 TYPEINIT0(OTableConnection);
 //========================================================================
 // class OTableConnection
 //========================================================================
-DBG_NAME(OTableConnection);
-//------------------------------------------------------------------------
-OTableConnection::OTableConnection( OJoinTableView* _pContainer, OTableConnectionData* _pTabConnData )
-    :m_bSelected( FALSE )
-    ,m_pParent( _pContainer )
-    ,m_pData( _pTabConnData )
+namespace dbaui
 {
-    DBG_CTOR(OTableConnection,NULL);
-    Init();
-}
-
-//------------------------------------------------------------------------
-OTableConnection::OTableConnection( const OTableConnection& _rConn )
-{
-    DBG_CTOR(OTableConnection,NULL);
-    m_pData = _rConn.GetData()->NewInstance();
-    *this = _rConn;
-}
-//------------------------------------------------------------------------
-OTableConnection::~OTableConnection()
-{
-    //////////////////////////////////////////////////////////////////////
-    // clear vector
-    for(::std::vector<OConnectionLine*>::iterator aIter = m_vConnLine.begin();aIter != m_vConnLine.end();++aIter)
-        delete *aIter;
-    m_vConnLine.clear();
-    DBG_DTOR(OTableConnection,NULL);
-}
-
-//------------------------------------------------------------------------
-void OTableConnection::Init()
-{
-    //////////////////////////////////////////////////////////////////////
-    // Linienliste mit Defaults initialisieren
-    OConnectionLineDataVec* pLineData = GetData()->GetConnLineDataList();
-    OConnectionLineDataVec::const_iterator aIter = pLineData->begin();
-    for(;aIter != pLineData->end();++aIter)
+    DBG_NAME(OTableConnection)
+    //------------------------------------------------------------------------
+    OTableConnection::OTableConnection( OJoinTableView* _pContainer, OTableConnectionData* _pTabConnData )
+        :m_bSelected( FALSE )
+        ,m_pParent( _pContainer )
+        ,m_pData( _pTabConnData )
     {
-        OConnectionLine* pConnLine = new OConnectionLine(this, *aIter);
-        m_vConnLine.push_back( pConnLine);
-    }
-}
-
-//------------------------------------------------------------------------
-OConnectionLine* OTableConnection::CreateConnLine( const OConnectionLine& rConnLine )
-{
-    return new OConnectionLine( rConnLine );
-}
-//------------------------------------------------------------------------
-void OTableConnection::UpdateLineList()
-{
-    //////////////////////////////////////////////////////////////////////
-    // Linienliste loeschen
-    for(::std::vector<OConnectionLine*>::iterator aLineIter = m_vConnLine.begin();aLineIter != m_vConnLine.end();++aLineIter)
-        delete *aLineIter;
-    m_vConnLine.clear();
-
-    Init();
-}
-
-//------------------------------------------------------------------------
-OTableConnection& OTableConnection::operator=( const OTableConnection& rConn )
-{
-    if( &rConn == this )
-        return *this;
-
-    // Linienliste loeschen
-    for(::std::vector<OConnectionLine*>::iterator aIter = m_vConnLine.begin();aIter != m_vConnLine.end();++aIter)
-        delete *aIter;
-    m_vConnLine.clear();
-
-    // Linienliste kopieren
-    if(! rConn.GetConnLineList()->empty() )
-    {
-        const ::std::vector<OConnectionLine*>* pLine = rConn.GetConnLineList();
-        ::std::vector<OConnectionLine*>::const_iterator aIter = pLine->begin();
-        for(;aIter != pLine->end();++aIter)
-        {
-            OConnectionLine* pDestLine = CreateConnLine( **aIter );
-            m_vConnLine.push_back( pDestLine);
-        }
+        DBG_CTOR(OTableConnection,NULL);
+        Init();
     }
 
-    // da mir die Daten nicht gehoeren, loesche ich die alten nicht
-    m_pData->CopyFrom(*rConn.GetData());
-        // CopyFrom ist virtuell, damit ist es kein Problem, wenn m_pData von einem von OTableConnectionData abgeleiteten Typ ist
-
-    m_bSelected = rConn.m_bSelected;
-    m_pParent = rConn.m_pParent;
-
-    return *this;
-}
-
-
-//------------------------------------------------------------------------
-bool OTableConnection::RecalcLines()
-{
-    ::std::for_each(m_vConnLine.begin(),m_vConnLine.end(),::std::mem_fun(&OConnectionLine::RecalcLine));
-    return true;
-}
-//------------------------------------------------------------------------
-OTableWindow* OTableConnection::GetSourceWin() const
-{
-    return m_pParent->GetWindow( GetData()->GetSourceWinName() );
-}
-//------------------------------------------------------------------------
-OTableWindow* OTableConnection::GetDestWin() const
-{
-    return m_pParent->GetWindow( GetData()->GetDestWinName() );
-}
-
-//------------------------------------------------------------------------
-void OTableConnection::Select()
-{
-    m_bSelected = TRUE;
-    m_pParent->Invalidate( GetBoundingRect(), INVALIDATE_NOCHILDREN);
-}
-
-//------------------------------------------------------------------------
-void OTableConnection::Deselect()
-{
-    m_bSelected = FALSE;
-    Rectangle rcBounding = GetBoundingRect();
-    rcBounding.Bottom() += 1;
-    rcBounding.Right() += 1;
-    m_pParent->Invalidate( rcBounding, INVALIDATE_NOCHILDREN );
-        // Kommentar siehe ::Invalidate ...
-}
-
-//------------------------------------------------------------------------
-BOOL OTableConnection::CheckHit( const Point& rMousePos )
-{
-    //////////////////////////////////////////////////////////////////////
-    // Pruefen, ob auf eine der Linien geclickt worden ist
-    ::std::vector<OConnectionLine*>::iterator aIter = ::std::find_if(m_vConnLine.begin(),
-                                                                     m_vConnLine.end(),
-                                                                     ::std::compose2(::std::logical_and<bool>(),
-                                                                                ::std::mem_fun(&OConnectionLine::IsValid),
-                                                                                ::std::bind2nd(TConnectionLineCheckHitFunctor(),rMousePos)));
-    return aIter != m_vConnLine.end();
-}
-
-//------------------------------------------------------------------------
-bool OTableConnection::Invalidate()
-{
-    Rectangle rcBounding = GetBoundingRect();
-    rcBounding.Bottom() += 1;
-    rcBounding.Right() += 1;
-        // ich glaube, dass sich Invalidate und Draw(Rectangle) nicht konsistent verhalten : jedenfalls waere dadurch zu
-        // erklaeren, warum ohne diesen Fake hier beim Loeschen einer Connection ein Strich an ihrem unteren Ende stehen bleibt :
-        // Invalidate erfasst dabei offensichtlich eine Pixelzeile weniger als Draw.
-        // Oder alles haengt ganz anders zusammen ... jedenfalls klappt es so ...
-    m_pParent->Invalidate( rcBounding, INVALIDATE_NOCHILDREN );
-
-    return true;
-}
-
-//------------------------------------------------------------------------
-Rectangle OTableConnection::GetBoundingRect()
-{
-    //////////////////////////////////////////////////////////////////////
-    // Aus allen Linien das umgebende Rechteck bestimmen
-    Rectangle aBoundingRect( Point(0,0), Point(0,0) );
-    Rectangle aTempRect;
-    for(::std::vector<OConnectionLine*>::iterator aIter = m_vConnLine.begin();aIter != m_vConnLine.end();++aIter)
+    //------------------------------------------------------------------------
+    OTableConnection::OTableConnection( const OTableConnection& _rConn )
     {
-        aTempRect = (*aIter)->GetBoundingRect();
+        DBG_CTOR(OTableConnection,NULL);
+        m_pData = _rConn.GetData()->NewInstance();
+        *this = _rConn;
+    }
 
+    //------------------------------------------------------------------------
+    void OTableConnection::Init()
+    {
         //////////////////////////////////////////////////////////////////////
-        // Ist das BoundingRect dieser Linie gueltig?
-        if( (aTempRect.GetWidth()!=1) && (aTempRect.GetHeight()!=1) )
-        {
-            if( (aBoundingRect.GetWidth()==1) && (aBoundingRect.GetHeight()==1) )
-                aBoundingRect = aTempRect;
-            else
-                aBoundingRect.Union( aTempRect );
-        }
+        // Linienliste mit Defaults initialisieren
+        OConnectionLineDataVec* pLineData = GetData()->GetConnLineDataList();
+        OConnectionLineDataVec::const_iterator aIter = pLineData->begin();
+        m_vConnLine.reserve(pLineData->size());
+        for(;aIter != pLineData->end();++aIter)
+            m_vConnLine.push_back( new OConnectionLine(this, *aIter) );
     }
 
-    return aBoundingRect;
-}
+    //------------------------------------------------------------------------
+    OConnectionLine* OTableConnection::CreateConnLine( const OConnectionLine& rConnLine )
+    {
+        return new OConnectionLine( rConnLine );
+    }
+    // -----------------------------------------------------------------------------
+    void OTableConnection::clearLineData()
+    {
+        for(::std::vector<OConnectionLine*>::iterator aLineIter = m_vConnLine.begin();aLineIter != m_vConnLine.end();++aLineIter)
+            delete *aLineIter;
+        m_vConnLine.clear();
+    }
+    //------------------------------------------------------------------------
+    void OTableConnection::UpdateLineList()
+    {
+        //////////////////////////////////////////////////////////////////////
+        // Linienliste loeschen
+        clearLineData();
 
-//------------------------------------------------------------------------
-void OTableConnection::Draw( const Rectangle& rRect )
-{
-    //////////////////////////////////////////////////////////////////////
-    // Linien zeichnen
-    ::std::for_each(m_vConnLine.begin(),m_vConnLine.end(),TConnectionLineDrawFunctor(m_pParent));
-}
-// -----------------------------------------------------------------------------
+        Init();
+    }
 
+    //------------------------------------------------------------------------
+    OTableConnection& OTableConnection::operator=( const OTableConnection& rConn )
+    {
+        if( &rConn == this )
+            return *this;
+
+        // Linienliste loeschen
+        clearLineData();
+
+        // Linienliste kopieren
+        if(! rConn.GetConnLineList()->empty() )
+        {
+            const ::std::vector<OConnectionLine*>* pLine = rConn.GetConnLineList();
+            ::std::vector<OConnectionLine*>::const_iterator aIter = pLine->begin();
+            m_vConnLine.reserve(pLine->size());
+            for(;aIter != pLine->end();++aIter)
+                m_vConnLine.push_back( CreateConnLine( **aIter ));
+        }
+
+        // da mir die Daten nicht gehoeren, loesche ich die alten nicht
+        m_pData->CopyFrom(*rConn.GetData());
+            // CopyFrom ist virtuell, damit ist es kein Problem, wenn m_pData von einem von OTableConnectionData abgeleiteten Typ ist
+
+        m_bSelected = rConn.m_bSelected;
+        m_pParent = rConn.m_pParent;
+
+        return *this;
+    }
+
+
+    //------------------------------------------------------------------------
+    bool OTableConnection::RecalcLines()
+    {
+        // call RecalcLines on each line
+        ::std::for_each(m_vConnLine.begin(),m_vConnLine.end(),::std::mem_fun(&OConnectionLine::RecalcLine));
+        return true;
+    }
+    //------------------------------------------------------------------------
+    OTableWindow* OTableConnection::GetSourceWin() const
+    {
+        return m_pParent->GetWindow( GetData()->GetSourceWinName() );
+    }
+    //------------------------------------------------------------------------
+    OTableWindow* OTableConnection::GetDestWin() const
+    {
+        return m_pParent->GetWindow( GetData()->GetDestWinName() );
+    }
+
+    //------------------------------------------------------------------------
+    void OTableConnection::Select()
+    {
+        m_bSelected = TRUE;
+        m_pParent->Invalidate( GetBoundingRect(), INVALIDATE_NOCHILDREN);
+    }
+
+    //------------------------------------------------------------------------
+    void OTableConnection::Deselect()
+    {
+        m_bSelected = FALSE;
+        Rectangle rcBounding = GetBoundingRect();
+        rcBounding.Bottom() += 1;
+        rcBounding.Right() += 1;
+        m_pParent->Invalidate( rcBounding, INVALIDATE_NOCHILDREN );
+            // Kommentar siehe ::Invalidate ...
+    }
+
+    //------------------------------------------------------------------------
+    BOOL OTableConnection::CheckHit( const Point& rMousePos ) const
+    {
+        //////////////////////////////////////////////////////////////////////
+        // check if the point hit our line
+        ::std::vector<OConnectionLine*>::const_iterator aIter = ::std::find_if(m_vConnLine.begin(),
+                                                                         m_vConnLine.end(),
+                                                                         ::std::bind2nd(TConnectionLineCheckHitFunctor(),rMousePos));
+        return aIter != m_vConnLine.end();
+    }
+
+    //------------------------------------------------------------------------
+    bool OTableConnection::Invalidate()
+    {
+        Rectangle rcBounding = GetBoundingRect();
+        rcBounding.Bottom() += 1;
+        rcBounding.Right() += 1;
+            // ich glaube, dass sich Invalidate und Draw(Rectangle) nicht konsistent verhalten : jedenfalls waere dadurch zu
+            // erklaeren, warum ohne diesen Fake hier beim Loeschen einer Connection ein Strich an ihrem unteren Ende stehen bleibt :
+            // Invalidate erfasst dabei offensichtlich eine Pixelzeile weniger als Draw.
+            // Oder alles haengt ganz anders zusammen ... jedenfalls klappt es so ...
+        m_pParent->Invalidate( rcBounding, INVALIDATE_NOCHILDREN );
+
+        return true;
+    }
+
+    //------------------------------------------------------------------------
+    Rectangle OTableConnection::GetBoundingRect() const
+    {
+        //////////////////////////////////////////////////////////////////////
+        // Aus allen Linien das umgebende Rechteck bestimmen
+        Rectangle aBoundingRect( Point(0,0), Point(0,0) );
+        Rectangle aTempRect;
+        for(::std::vector<OConnectionLine*>::const_iterator aIter = m_vConnLine.begin();aIter != m_vConnLine.end();++aIter)
+        {
+            aTempRect = (*aIter)->GetBoundingRect();
+
+            //////////////////////////////////////////////////////////////////////
+            // Ist das BoundingRect dieser Linie gueltig?
+            if( (aTempRect.GetWidth()!=1) && (aTempRect.GetHeight()!=1) )
+            {
+                if( (aBoundingRect.GetWidth()==1) && (aBoundingRect.GetHeight()==1) )
+                    aBoundingRect = aTempRect;
+                else
+                    aBoundingRect.Union( aTempRect );
+            }
+        }
+
+        return aBoundingRect;
+    }
+
+    //------------------------------------------------------------------------
+    void OTableConnection::Draw( const Rectangle& rRect )
+    {
+        //////////////////////////////////////////////////////////////////////
+        // Linien zeichnen
+        ::std::for_each(m_vConnLine.begin(),m_vConnLine.end(),TConnectionLineDrawFunctor(m_pParent));
+    }
+    // -----------------------------------------------------------------------------
+}
 
 
 
