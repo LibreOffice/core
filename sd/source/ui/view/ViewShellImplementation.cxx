@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 14:39:09 $
+ *  last change: $Author: rt $ $Date: 2004-11-29 16:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 #include "DrawDocShell.hxx"
 #include "PreviewChildWindow.hxx"
 #include "PreviewWindow.hxx"
-#include "fuslshow.hxx"
 #include "FactoryIds.hxx"
 #include "slideshow.hxx"
 
