@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-22 19:11:01 $
+ *  last change: $Author: dvo $ $Date: 2002-02-28 16:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1446,6 +1446,12 @@ void XMLTextParagraphExport::exportText(
     Reference < XPropertySet > xPropertySet( rText, UNO_QUERY );
     Reference < XTextSection > xBaseSection;
 
+    // #97718# footnotes don't supply paragraph enumerations in some cases
+    // This is always a bug, but at least we don't want to crash.
+    DBG_ASSERT( xParaEnum.is(), "We need a paragraph enumeration" );
+    if( ! xParaEnum.is() )
+        return;
+
     sal_Bool bExportLevels = sal_True;
 
     if (xPropertySet.is())
@@ -1502,6 +1508,7 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
         const Reference < XPropertySet > *pRangePropSet,
         sal_Bool bExportLevels)
 {
+    DBG_ASSERT( rContEnum.is(), "No enumeration to export!" );
     sal_Bool bHasMoreElements = rContEnum->hasMoreElements();
     if( !bHasMoreElements )
         return sal_False;
