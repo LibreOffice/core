@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:36:16 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Formát papíru";
         Text[ hebrew ] = "‮גודל נייר‬";
         Text[ hindi ] = "कागज रचना";
+        Text[ slovak ] = "Formát papiera";
     };
     FixedText FT_PAPER_FORMAT
     {
@@ -136,6 +137,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "~रचना";
+        Text[ slovak ] = "~Formát";
     };
     ListBox LB_PAPER_SIZE
     {
@@ -177,6 +179,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "~चौड़ाई";
+        Text[ slovak ] = "Ší~rka";
     };
     MetricField ED_PAPER_WIDTH
     {
@@ -225,6 +228,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
+        Text[ slovak ] = "~Výška";
     };
     MetricField ED_PAPER_HEIGHT
     {
@@ -270,6 +274,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Orientace";
         Text[ hebrew ] = "‮כיוון‬";
         Text[ hindi ] = "अनुस्थापन";
+        Text[ slovak ] = "Orientácia";
     };
     RadioButton RB_PORTRAIT
     {
@@ -304,6 +309,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Na výšku";
         Text[ hebrew ] = "‮לאורך הדף‬";
         Text[ hindi ] = "~पोर्टरैट्";
+        Text[ slovak ] = "Na ~výšku";
     };
     RadioButton RB_LANDSCAPE
     {
@@ -335,6 +341,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Na šířku";
         Text[ hebrew ] = "‮לרוחב הדף‬";
         Text[ hindi ] = "~लान्डस्केप्";
+        Text[ slovak ] = "Na ší~rku";
     };
     Window WN_BSP
     {
@@ -374,6 +381,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Směr textu";
         Text[ hebrew ] = "‮כיוון הטקסט‬";
         Text[ hindi ] = "~Text direction";
+        Text[ slovak ] = "Smer ~textu";
     };
     ListBox LB_TEXT_FLOW
     {
@@ -415,6 +423,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Zásobník papíru";
         Text[ hebrew ] = "‮מגש נייר‬";
         Text[ hindi ] = "कागज ~ट्रेए";
+        Text[ slovak ] = "~Zásobník papiera";
     };
     ListBox LB_PAPER_TRAY
     {
@@ -453,6 +462,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Okraje";
         Text[ hebrew ] = "‮שוליים‬";
         Text[ hindi ] = "पृष्ठ-प्रान्त";
+        Text[ slovak ] = "Okraje";
     };
     FixedText FT_LEFT_MARGIN
     {
@@ -487,6 +497,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Vlevo";
         Text[ hebrew ] = "‮שמאל‬";
         Text[ hindi ] = "~बायाँ";
+        Text[ slovak ] = "Vľ~avo";
     };
     MetricField ED_LEFT_MARGIN
     {
@@ -535,6 +546,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Vpravo";
         Text[ hebrew ] = "‮ימין‬";
         Text[ hindi ] = "~दाहिना";
+        Text[ slovak ] = "Vp~ravo";
     };
     MetricField ED_RIGHT_MARGIN
     {
@@ -583,6 +595,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Nahoře";
         Text[ hebrew ] = "‮עליון‬";
         Text[ hindi ] = "~ऊपर";
+        Text[ slovak ] = "~Hore";
     };
     MetricField ED_TOP_MARGIN
     {
@@ -631,6 +644,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Dole";
         Text[ hebrew ] = "‮תחתון‬";
         Text[ hindi ] = "~तल";
+        Text[ slovak ] = "~Dole";
     };
     MetricField ED_BOTTOM_MARGIN
     {
@@ -682,6 +696,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Nastavení rozvržení";
         Text[ hebrew ] = "‮קביעות פריסה‬";
         Text[ hindi ] = "अभिन्यास निर्धारण";
+        Text[ slovak ] = "Nastavenie rozvrhnutia";
     };
     FixedText FT_PAGELAYOUT
     {
@@ -715,6 +730,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Vzhled stránky";
         Text[ hebrew ] = "‮פריסת הדף‬";
         Text[ hindi ] = "पृष्ठ अभिन्यास";
+        Text[ slovak ] = "Vzhľad stránky";
     };
     ListBox LB_LAYOUT
     {
@@ -918,6 +934,13 @@ TabPage RID_SVXPAGE_PAGE
             < "केवल दाहिना" ; Default ; > ;
             < "केवल बायाँ" ; Default ; > ;
         };
+    StringList [ slovak ] =
+    {
+         < "Vpravo a vľavo" ; Default ; > ;
+        < "Zrkadliť" ; Default ; > ;
+        < "Iba vpravo" ; Default ; > ;
+        < "Iba vľavo" ; Default ; > ;
+    };
     };
     FixedText FT_NUMBER_FORMAT
     {
@@ -949,6 +972,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮צורה‬";
         Text[ hindi ] = "रच~ना";
+        Text[ slovak ] = "For~mát";
     };
     ListBox LB_NUMBER_FORMAT
     {
@@ -1208,6 +1232,15 @@ TabPage RID_SVXPAGE_PAGE
             < "1, 2, 3, ..." ; Default ; > ;
             < "कोई नहीं" ; Default ; > ;
         };
+    StringList [ slovak ] =
+    {
+         < "A, B, C, ..." ; Default ; > ;
+        < "a, b, c, ..." ; Default ; > ;
+        < "I, II, III, ..." ; Default ; > ;
+        < "i, ii, iii, ..." ; Default ; > ;
+        < "1, 2, 3, ..." ; Default ; > ;
+        < "Žiadne" ; Default ; > ;
+    };
     };
     FixedText FT_TBL_ALIGN
     {
@@ -1240,6 +1273,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Zarovnání tabulky";
         Text[ hebrew ] = "‮יישור טבלאות‬";
         Text[ hindi ] = "सारणी पंक्तिकरण";
+        Text[ slovak ] = "Zarovnanie tabuľky";
     };
     CheckBox CB_HORZ
     {
@@ -1274,6 +1308,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Vodorovné";
         Text[ hebrew ] = "‮אופקי‬";
         Text[ hindi ] = "सम~तल";
+        Text[ slovak ] = "~Vodorovné";
     };
     CheckBox CB_VERT
     {
@@ -1308,6 +1343,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Svislé";
         Text[ hebrew ] = "‮אנכי‬";
         Text[ hindi ] = "~लम्ब";
+        Text[ slovak ] = "~Zvislé";
     };
     CheckBox CB_ADAPT
     {
@@ -1341,6 +1377,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Přizpůsobit objekt formátu papíru";
         Text[ hebrew ] = "‮התאמת העצם למידות הדף‬";
         Text[ hindi ] = "वस्तु को कागज रचना केलिए ~योग्य बनाओ";
+        Text[ slovak ] = "~Prispôsobiť objekt formátu papiera";
     };
     /* Registerhaltigkeit (fuer SW) */
     CheckBox CB_REGISTER
@@ -1375,6 +1412,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Registr";
         Text[ hebrew ] = "‮יישור שורות טבלה‬";
         Text[ hindi ] = "रजिस्टर-सही";
+        Text[ slovak ] = "Register";
     };
     FixedText FT_REGISTER
     {
@@ -1408,6 +1446,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Styl odkazu";
         Text[ hebrew ] = "‮סגנון יחוס‬";
         Text[ hindi ] = "रेफ़रेन्स ~शैली";
+        Text[ slovak ] = "Štýl ~odkazu";
     };
     ListBox LB_REGISTER
     {
@@ -1448,6 +1487,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Vnitřní";
         Text[ hebrew ] = "‮פנימי‬";
         Text[ hindi ] = "भी~तरी";
+        Text[ slovak ] = "V~nútorné";
     };
     String STR_OUTSIDE
     {
@@ -1478,6 +1518,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Vnější";
         Text[ hebrew ] = "‮חיצוני‬";
         Text[ hindi ] = "बा~हरी";
+        Text[ slovak ] = "V~onkajšie";
     };
     String STR_QUERY_PRINTRANGE
     {
@@ -1508,6 +1549,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ czech ] = "Nastavené okraje jsou mimo tiskovou oblast.\n\nOpravdu chcete použít tato nastavení?";
         Text[ hebrew ] = "‮השוליים מחוץ לגודל המדפסת.\n\nהאם אכן ליישם קביעות אלו?‬";
         Text[ hindi ] = "पृष्ठ-प्रान्त का निर्धारण मुद्रण की फैलाव से बाहर है ।\n\nआप फ़िर भी इन निर्धारण को लागू करना चाहते है?";
+        Text[ slovak ] = "Nastavené okraje sú mimo rozsahu tlače.\n\nNaozaj chcete použiť tieto nastavenia?";
     };
 };
  // App-spezifische Res
@@ -1541,6 +1583,7 @@ String RID_SVXSTR_WRITER_PAGE
     Text[ czech ] = "Následující stránka";
     Text[ hebrew ] = "‮דף המשך‬";
     Text[ hindi ] = "गत पृष्ठ से आगे की पृष्ठ";
+    Text[ slovak ] = "Nasledujúca stránka";
 };
  // Papierformate
 String RID_SVXSTR_PAPER_A0
@@ -1617,6 +1660,7 @@ String RID_SVXSTR_PAPER_USER
     Text[ czech ] = "Uživatelsky definované";
     Text[ hebrew ] = "‮שדות בהגדרה אישית‬";
     Text[ hindi ] = "उपभोक्ता से परिभाषित";
+    Text[ slovak ] = "Užívateľsky definované";
 };
 String RID_SVXSTR_PAPER_B6
 {
@@ -1676,6 +1720,7 @@ String RID_SVXSTR_PAPER_SCREEN
     Text[ czech ] = "Obrazovka";
     Text[ hebrew ] = "‮מסך‬";
     Text[ hindi ] = "परदा";
+    Text[ slovak ] = "Obrazovka";
 };
 String RID_SVXSTR_PAPER_A
 {
@@ -2565,6 +2610,36 @@ ItemList [ thai ] =
         < "32 kai" ; PAPERSIZE_KAI32; > ;
         < "32 kai large" ; PAPERSIZE_KAI32BIG; > ;
     };
+    ItemList [ slovak ] =
+    {
+         < "A3" ; PAPERSIZE_A3 ; > ;
+        < "A4" ; PAPERSIZE_A4 ; > ;
+        < "A5" ; PAPERSIZE_A5 ; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "List" ; PAPERSIZE_LETTER ; > ;
+        < "Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Užívateľ" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
+        < "C6" ; PAPERSIZE_C6 ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "Obálka #63" ; PAPERSIZE_COM675; > ;
+        < "Obálka Monarch" ; PAPERSIZE_MONARCH; > ;
+        < "Obálka #9" ; PAPERSIZE_COM9; > ;
+        < "Obálka #10" ; PAPERSIZE_COM10; > ;
+        < "Obálka #11" ; PAPERSIZE_COM11; > ;
+        < "Obálka #12" ; PAPERSIZE_COM12; > ;
+        < "16 kai" ; PAPERSIZE_KAI16; > ;
+        < "32 kai" ; PAPERSIZE_KAI32; > ;
+        < "32 kai veľké" ; PAPERSIZE_KAI32BIG; > ;
+    };
     };
 StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
 {
@@ -3277,6 +3352,21 @@ ItemList [ thai ] =
         < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
         < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
         < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "Letter" ; PAPERSIZE_LETTER ; > ;
+        < "Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Uživatelský" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
+        < "C6" ; PAPERSIZE_C6 ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "Snímek" ; PAPERSIZE_DIA ; > ;
+        < "Obrazovka" ; PAPERSIZE_SCREEN ; > ;
+        < "16 kai" ; PAPERSIZE_KAI16; > ;
+        < "32 kai" ; PAPERSIZE_KAI32; > ;
+        < "32 kai velké" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ hebrew ] =
     {
@@ -3291,6 +3381,21 @@ ItemList [ thai ] =
         < "‮B6 (ISO)‬" ; PAPERSIZE_B6 ; > ;
         < "‮B4 (JIS)‬" ; PAPERSIZE_B4_JIS ; > ;
         < "‮B5 (JIS)‬" ; PAPERSIZE_B5_JIS ; > ;
+        < "‮B6 (JIS)‬" ; PAPERSIZE_B6_JIS ; > ;
+        < "‮מכתב‬" ; PAPERSIZE_LETTER ; > ;
+        < "‮דף ארוך (Legal)‬" ; PAPERSIZE_LEGAL ; > ;
+        < "‮דף פוליו (Tabloid)‬" ; PAPERSIZE_TABLOID ; > ;
+        < "‮משתמש‬" ; PAPERSIZE_USER ; > ;
+        < "‮C4‬" ; PAPERSIZE_C4 ; > ;
+        < "‮C5‬" ; PAPERSIZE_C5 ; > ;
+        < "‮C6‬" ; PAPERSIZE_C6 ; > ;
+        < "‮C65‬" ; PAPERSIZE_C65 ; > ;
+        < "‮DL‬" ; PAPERSIZE_DL ; > ;
+        < "‮שקף‬" ; PAPERSIZE_DIA ; > ;
+        < "‮מסך‬" ; PAPERSIZE_SCREEN ; > ;
+        < "‮16 kai‬" ; PAPERSIZE_KAI16; > ;
+        < "‮32 kai‬" ; PAPERSIZE_KAI32; > ;
+        < "‮32 kai - גדול‬" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ hindi ] =
     {
@@ -3305,6 +3410,35 @@ ItemList [ thai ] =
         < "Letter" ; PAPERSIZE_B6 ; > ;
         < "Legal" ; PAPERSIZE_B4_JIS ; > ;
         < "Tabloid" ; PAPERSIZE_B5_JIS ; > ;
+    };
+    ItemList [ slovak ] =
+    {
+         < "A0" ; PAPERSIZE_A0 ; > ;
+        < "A1" ; PAPERSIZE_A1 ; > ;
+        < "A2" ; PAPERSIZE_A2 ; > ;
+        < "A3" ; PAPERSIZE_A3 ; > ;
+        < "A4" ; PAPERSIZE_A4 ; > ;
+        < "A5" ; PAPERSIZE_A5 ; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "List" ; PAPERSIZE_LETTER ; > ;
+        < "Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Užívateľ" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
+        < "C6" ; PAPERSIZE_C6 ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "Snímok" ; PAPERSIZE_DIA ; > ;
+        < "Obrazovka" ; PAPERSIZE_SCREEN ; > ;
+        < "16 kai" ; PAPERSIZE_KAI16; > ;
+        < "32 kai" ; PAPERSIZE_KAI32; > ;
+        < "32 kai veľké" ; PAPERSIZE_KAI32BIG; > ;
     };
     };
 String RID_SVXSTR_PAPERBIN
@@ -3337,6 +3471,7 @@ String RID_SVXSTR_PAPERBIN
     Text[ czech ] = "Zásobník papíru";
     Text[ hebrew ] = "‮מגש נייר‬";
     Text[ hindi ] = "कागज ट्रेए";
+    Text[ slovak ] = "Zásobník papiera";
 };
 String RID_SVXSTR_PAPERBIN_SETTINGS
 {
@@ -3366,8 +3501,11 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
     Text[ czech ] = "[Z nastavení tiskárny]";
     Text[ hebrew ] = "‮[מהגדרות מדפסת]‬";
     Text[ hindi ] = "[मुद्रक निर्धारण से]";
+    Text[ slovak ] = "[Z nastavenia tlačiarne]";
 };
  // ********************************************************************** EOF
+
+
 
 
 
