@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelckb.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-10 14:53:27 $
+ *  last change: $Author: mhu $ $Date: 2001-08-09 16:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_FILELCKB_CXX_ "$Revision: 1.7 $"
+#define _STORE_FILELCKB_CXX_ "$Revision: 1.8 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -72,8 +72,8 @@
 #include <rtl/ustring.hxx>
 #endif
 
-#ifndef _OSL_FILE_H_
-#include <osl/file.h>
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
 #endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -509,55 +509,47 @@ inline storeError OFileLockBytes_Impl::create (
     // Path conversion result.
     oslFileError result;
 
-#if 0
-    // Convert into normalized path.
-    rtl::OUString aNormPath;
-    result = osl_getNormalizedPathFromFileURL (
-        pFilename, &(aNormPath.pData));
-    if (!(result == osl_File_E_None))
-    {
-        // Not FileUrl. Maybe System or already Normalized.
-        result = osl_normalizePath (pFilename, &(aNormPath.pData));
-        if (!(result == osl_File_E_None))
-        {
-            // Invalid path.
-            return store_E_InvalidParameter;
-        }
-    }
-
     // Convert into system path.
     rtl::OUString aSystemPath;
-    result = osl_getSystemPathFromNormalizedPath (
-        aNormPath.pData, &(aSystemPath.pData));
+    result = osl_getSystemPathFromFileURL (pFilename, &(aSystemPath.pData));
     if (!(result == osl_File_E_None))
     {
-        // Invalid path.
-        return store_E_InvalidParameter;
-    }
-#else
-    rtl::OUString aSystemPath;
-
-    result = osl_getSystemPathFromFileURL( pFilename, &(aSystemPath.pData) );
-
-    // Maybe it's alreadey a system path
-
-    if ( osl_File_E_None != result )
-    {
-        rtl::OUString aTempURL;
-
-        result = osl_getFileURLFromSystemPath( pFilename, &(aTempURL.pData) );
-
+        // Not FileUrl. Maybe a system path, already.
+        result = osl_getFileURLFromSystemPath (
+            pFilename, &(aSystemPath.pData));
         if (!(result == osl_File_E_None))
         {
             // Invalid path.
             return store_E_InvalidParameter;
         }
-        else
-            aSystemPath = pFilename;
+
+        rtl_uString_assign (&(aSystemPath.pData), pFilename);
     }
 
-#endif
+    // Check access mode for memory mapped I/O.
+    if (m_bMemmap && (!(eAccessMode == store_AccessReadOnly)))
+    {
+        // Memory mapped write access. Obtain FileUrl.
+        rtl::OUString aFileUrl;
+        osl_getFileURLFromSystemPath (aSystemPath.pData, &(aFileUrl.pData));
 
+        // Obtain directory.
+        sal_Int32 k = aFileUrl.lastIndexOf (sal_Unicode('/'));
+        if (k > 0)
+        {
+            // Cut off last segment.
+            aFileUrl = aFileUrl.copy (0, k);
+        }
+
+        // Obtain volume attributes.
+        osl::VolumeInfo aInfo (VolumeInfoMask_Attributes);
+        osl::Directory::getVolumeInfo (aFileUrl, aInfo);
+        if (aInfo.isValid (VolumeInfoMask_Attributes) && aInfo.getRemoteFlag())
+        {
+            // Remote volume. Turn off memory mapped write access.
+            m_bMemmap = sal_False;
+        }
+    }
 
     // Convert into system text encoding.
     rtl::OString aFilename (
