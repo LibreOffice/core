@@ -258,8 +258,8 @@ hedabu: ..\inc\shaditem.hxx %_DEST%\inc%_EXT%\svx\shaditem.hxx
 hedabu: ..\inc\shdditem.hxx %_DEST%\inc%_EXT%\svx\shdditem.hxx
 hedabu: ..\inc\sizeitem.hxx %_DEST%\inc%_EXT%\svx\sizeitem.hxx
 hedabu: ..\inc\sphere3d.hxx %_DEST%\inc%_EXT%\svx\sphere3d.hxx
-hedabu: ..\inc\spldlg.hxx %_DEST%\inc%_EXT%\svx\spldlg.hxx
 hedabu: ..\inc\spltitem.hxx %_DEST%\inc%_EXT%\svx\spltitem.hxx
+hedabu: ..\inc\hangulhanja.hxx %_DEST%\inc%_EXT%\svx\hangulhanja.hxx
 hedabu: ..\inc\splwrap.hxx %_DEST%\inc%_EXT%\svx\splwrap.hxx
 hedabu: ..\inc\srchdlg.hxx %_DEST%\inc%_EXT%\svx\srchdlg.hxx
 hedabu: ..\inc\srchitem.hxx %_DEST%\inc%_EXT%\svx\srchitem.hxx
