@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-26 13:47:46 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 15:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,13 +276,6 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
         else
         {
             ::rtl::OUStringBuffer aCurrentDsn; aCurrentDsn.appendAscii(reinterpret_cast<const char*>(szDSN));
-            // append the description (as comment)
-            if (*szDescription)
-            {
-                aCurrentDsn.appendAscii(" (");
-                aCurrentDsn.appendAscii(reinterpret_cast<const char*>(szDescription));
-                aCurrentDsn.appendAscii(")");
-            }
             _rNames.insert(aCurrentDsn.makeStringAndClear());
         }
     }
@@ -329,6 +322,9 @@ void OOdbcManagement::manageDataSources(void* _pParentSysWindowHandle)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/26 13:47:46  kz
+ *  chg. cast & ifdef WIN
+ *
  *  Revision 1.2  2000/10/26 13:11:36  obo
  *  #65293# cant compile for linux
  *
