@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-03-12 15:05:40 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,11 +233,11 @@ TabPage TP_NUMPARA
         Text [ spanish ] = "~Volver a empezar en este párrafo" ;
         Text [ french ] = "~Commencer avec ce paragraphe" ;
         Text [ dutch ] = "~Bij deze alinea opnieuw beginnen" ;
-        Text[ chinese_simplified ] = "´ÓÕâ¸ö¶ÎÂäÖØĞÂ¿ªÊ¼(~R)";
+        Text[ chinese_simplified ] = "´ÓÕâ¸ö¶ÎÂäÖØĞÂ¿ªÊ¼(~E)";
         Text[ russian ] = "Íà÷àòü ñ ıòîãî àáçàöà";
         Text[ polish ] = "Zacznij ponownie przy tym akapicie";
-        Text[ japanese ] = "‚±‚Ì’i—‚ÅV‚µ‚­n‚ß‚é(~R)";
-        Text[ chinese_traditional ] = "±q³o­Ó¬q¸¨­«·s¶}©l(~R)";
+        Text[ japanese ] = "‚±‚Ì’i—‚ÅV‚µ‚­n‚ß‚é(~E)";
+        Text[ chinese_traditional ] = "±q³o­Ó¬q¸¨­«·s¶}©l(~E)";
         Text[ arabic ] = "ÇáÈÏÁ ãä ÌÏíÏ ÚäÏ åĞå ÇáİŞÑÉ";
         Text[ greek ] = "Åğ~áíåêêßíçóç áğü áõôŞ ôçí ğáñÜãñáöï";
         Text[ korean ] = "ÀÌ ´Ü¶ô¿¡¼­ ´Ù½Ã ½ÃÀÛ(~E)";
@@ -268,7 +268,7 @@ TabPage TP_NUMPARA
         Text[ chinese_traditional ] = "¶}©l±q(~S)";
         Text[ arabic ] = "ÇáÈÏÁ ÈÜ:";
         Text[ greek ] = "¸íáñîç áğü:";
-        Text[ korean ] = "¿Í ÇÔ²² ½ÃÀÛ:(~S)";
+        Text[ korean ] = "¿Í ÇÔ²² ½ÃÀÛ(~S):";
         Text[ turkish ] = "~Başlangıç değeri:";
         Text[ language_user1 ] = " ";
     };
@@ -362,8 +362,8 @@ TabPage TP_NUMPARA
         Text[ chinese_simplified ] = "ÔÚÕâ¸ö¶ÎÂä´¦ÖØĞÂ¿ªÊ¼(~A)";
         Text[ russian ] = "Íà÷àòü ñ ıòîãî àáçàöà";
         Text[ polish ] = "Zacznij p~onownie od tego akapitu";
-        Text[ japanese ] = "‚±‚Ì’i—‚ÅV‚µ‚­n‚ß‚é(~R)";
-        Text[ chinese_traditional ] = "±q³o­Ó¬q¸¨­«·s¶}©l(~R)";
+        Text[ japanese ] = "‚±‚Ì’i—‚ÅV‚µ‚­n‚ß‚é(~A)";
+        Text[ chinese_traditional ] = "±q³o­Ó¬q¸¨­«·s¶}©l(~A)";
         Text[ arabic ] = "ÇáÈÏÁ ãä ÌÏíÏ ÚäÏ åĞå ÇáİŞÑÉ";
         Text[ greek ] = "Åğáíåêêßíçóç áğü áõôŞ ôçí ğáñÜãñáöï";
         Text[ korean ] = "ÀÌ ´Ü¶ô¿¡¼­ ´Ù½Ã ½ÃÀÛ(~A)";
@@ -393,7 +393,7 @@ TabPage TP_NUMPARA
         Text[ chinese_traditional ] = "¶}©l±q(~S)¡G";
         Text[ arabic ] = "ÇáÈÏÁ ÈÜ:";
         Text[ greek ] = "¸íáñîç ì~å:";
-        Text[ korean ] = "¿Í ÇÔ²² ½ÃÀÛ:";
+        Text[ korean ] = "¿Í ÇÔ²² ½ÃÀÛ(~S):";
         Text[ turkish ] = "~Başlangıç değeri:";
         Text[ language_user1 ] = " ";
     };
