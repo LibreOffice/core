@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storbase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mhu $ $Date: 2001-11-26 21:14:19 $
+ *  last change: $Author: mhu $ $Date: 2002-08-17 17:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORBASE_CXX_ "$Revision: 1.4 $"
+#define _STORE_STORBASE_CXX_ "$Revision: 1.5 $"
 
 #ifndef __ALGORITHM__
 #include <algorithm>
@@ -77,9 +77,6 @@
 
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
-#endif
-#ifndef _RTL_MEMORY_H_
-#include <rtl/memory.h>
 #endif
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
@@ -481,18 +478,18 @@ struct OStoreStateBlock
 
     /** Operation.
      */
-    sal_Bool closePending (void) const
+    bool closePending (void) const
     {
-        return ((m_nState & STATE_CLOSE_WAIT) ? 1 : 0);
+        return ((m_nState & STATE_CLOSE_WAIT) == STATE_CLOSE_WAIT);
     }
     void closed (void)
     {
         m_nState &= ~STATE_CLOSE_WAIT;
     }
 
-    sal_Bool flushPending (void) const
+    bool flushPending (void) const
     {
-        return ((m_nState & STATE_FLUSH_WAIT) ? 1 : 0);
+        return ((m_nState & STATE_FLUSH_WAIT) == STATE_FLUSH_WAIT);
     }
     void flushed (void)
     {
@@ -533,6 +530,18 @@ struct OStoreSuperBlockPage
     static sal_uInt16 size (void)
     {
         return (2 * SuperBlock::size() + StateBlock::size());
+    }
+
+    /** Allocation.
+     */
+    static void * operator new (std::size_t n) SAL_THROW(())
+    {
+        return rtl_allocateMemory (sal_uInt32(n));
+    }
+
+    static void operator delete (void * p, std::size_t) SAL_THROW(())
+    {
+        rtl_freeMemory (p);
     }
 
     /** Construction.
@@ -633,30 +642,34 @@ storeError OStoreSuperBlockPage::create (
     OStorePageBIOS             &rBIOS,
     const OStorePageDescriptor &rDescr)
 {
-    // Setup initial Page.
-    void *p = rtl_allocateMemory (rDescr.m_nSize);
-    rtl_zeroMemory (p, rDescr.m_nSize);
-
-    // Mark as modified.
-    m_aState.modified();
-
-    // Write initial Page.
-    storeError eErrCode = rBIOS.write (0, p, rDescr.m_nSize);
-    if (eErrCode == store_E_None)
+    storeError eErrCode = store_E_OutOfMemory;
+    void * p = rtl_allocateMemory (rDescr.m_nSize);
+    if (p != 0)
     {
-        // Setup 1st and 2nd SuperBlock copy.
-        m_aSuperOne.create (rDescr);
-        m_aSuperTwo = m_aSuperOne;
+        // Setup initial Page.
+        __store_memset (p, 0, rDescr.m_nSize);
 
         // Mark as modified.
         m_aState.modified();
 
-        // Save.
-        eErrCode = save (rBIOS);
-    }
+        // Write initial Page.
+        eErrCode = rBIOS.write (0, p, rDescr.m_nSize);
+        if (eErrCode == store_E_None)
+        {
+            // Setup 1st and 2nd SuperBlock copy.
+            m_aSuperOne.create (rDescr);
+            m_aSuperTwo = m_aSuperOne;
 
-    // Cleanup and finish.
-    rtl_freeMemory (p);
+            // Mark as modified.
+            m_aState.modified();
+
+            // Save.
+            eErrCode = save (rBIOS);
+        }
+
+        // Cleanup and finish.
+        rtl_freeMemory (p);
+    }
     return eErrCode;
 }
 
@@ -835,6 +848,109 @@ storeError OStoreSuperBlockPage::verify (OStorePageBIOS &rBIOS)
 
 /*========================================================================
  *
+ * MyAllocator.
+ *
+ *======================================================================*/
+
+template<typename T>
+struct MyAllocator
+{
+    typedef std::size_t    size_type;
+    typedef std::ptrdiff_t difference_type;
+
+    typedef T * pointer;
+    typedef const T * const_pointer;
+
+    typedef T & reference;
+    typedef const T & const_reference;
+
+    typedef T value_type;
+
+    template<typename U>
+    struct rebind
+    {
+        typedef MyAllocator<U> other;
+    };
+
+    pointer address (reference value) const
+    {
+        return &value;
+    }
+    const_pointer address (const_reference value) const
+    {
+        return &value;
+    }
+
+    MyAllocator (void)
+    {}
+
+    template<typename U>
+    MyAllocator (const MyAllocator<U> &)
+    {}
+
+    MyAllocator (const MyAllocator &)
+    {}
+
+    ~MyAllocator (void)
+    {}
+
+    size_type max_size() const
+    {
+        return size_type(-1)/sizeof(T);
+    }
+
+    pointer allocate (size_type n, void const * = 0)
+    {
+        n *= sizeof(T);
+        return (pointer)rtl_allocateMemory(sal_uInt32(n));
+    }
+    void deallocate (pointer p, size_type n)
+    {
+        n *= sizeof(T);
+        rtl_freeMemory(p);
+    }
+
+    void construct (pointer p, const_reference value)
+    {
+        new ((void*)p) T(value);
+    }
+    void destroy (pointer p)
+    {
+        p->~T();
+    }
+};
+
+//----------------------------------------------------------------------------
+
+template<typename T, typename U>
+inline bool operator== (const MyAllocator<T> &, const MyAllocator<U> &)
+{
+    return true;
+}
+
+template<typename T, typename U>
+inline bool operator!= (const MyAllocator<T> &, const MyAllocator<U> &)
+{
+    return false;
+}
+
+//----------------------------------------------------------------------------
+// see stlport '_alloc.h' comments why old compilers require the hack below.
+//----------------------------------------------------------------------------
+
+#ifndef __STL_MEMBER_TEMPLATE_CLASSES
+namespace _STL
+{
+    template<typename T, typename U>
+    inline MyAllocator<U> & __stl_alloc_rebind (MyAllocator<T> & a, U const *)
+    {
+        return (MyAllocator<U>&)(a);
+    }
+}
+#endif /* __STL_MEMBER_TEMPLATE_CLASSES */
+
+/*========================================================================
+ *
  * OStorePageACL.
  *
  *======================================================================*/
@@ -844,7 +960,13 @@ typedef sal_uInt32              val_type;
 typedef std::hash<key_type>     key_hash;
 typedef std::equal_to<key_type> key_cmp;
 
-typedef std::hash_map<key_type, val_type, key_hash, key_cmp> map_type;
+typedef std::hash_map<
+    key_type,
+    val_type,
+    std::hash<key_type>,
+    std::equal_to<key_type>,
+    MyAllocator<key_type>
+> map_type;
 
 namespace store
 {
@@ -854,6 +976,18 @@ struct OStorePageACL : public map_type
     /** Representation.
      */
     sal_uInt32 m_nRefCount;
+
+    /** Allocation.
+     */
+    static void * operator new (std::size_t n) SAL_THROW(())
+    {
+        return rtl_allocateMemory (sal_uInt32(n));
+    }
+
+    static void operator delete (void * p, std::size_t) SAL_THROW(())
+    {
+        rtl_freeMemory (p);
+    }
 
     /** Construction.
      */
@@ -896,10 +1030,11 @@ OStorePageBIOS::~OStorePageBIOS (void)
 storeError OStorePageBIOS::verify (SuperPage *&rpSuper)
 {
     // Check SuperBlock page allocation.
-    if (rpSuper == NULL)
+    if (rpSuper == 0)
     {
         // Allocate.
-        rpSuper = new SuperPage();
+        if ((rpSuper = new SuperPage()) == 0)
+            return store_E_OutOfMemory;
 
         // Load (w/o verification).
         storeError eErrCode = rpSuper->load (*this);
@@ -1035,8 +1170,12 @@ storeError OStorePageBIOS::create (sal_uInt16 nPageSize)
         return eErrCode;
 
     // Check SuperBlock page allocation.
-    if (m_pSuper == NULL)
-        m_pSuper = new SuperPage();
+    if ((m_pSuper == 0) && ((m_pSuper = new SuperPage()) == 0))
+    {
+        // Cleanup and fail.
+        releaseLock (0, SuperPage::size());
+        return store_E_OutOfMemory;
+    }
 
     // Create SuperBlock page.
     eErrCode = m_pSuper->create (
@@ -1257,8 +1396,8 @@ storeError OStorePageBIOS::acquirePage (
         return store_E_AccessViolation;
 
     // Check access control list.
-    if (!m_pAcl)
-        m_pAcl = new OStorePageACL();
+    if ((m_pAcl == 0) && ((m_pAcl = new OStorePageACL()) == 0))
+        return store_E_OutOfMemory;
 
     // Find access control list entry.
     map_type::iterator it = m_pAcl->find (rDescr.m_nAddr);
