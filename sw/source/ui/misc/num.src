@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:53:14 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ TabPage TP_NUM_POSITION
         Text[ chinese_traditional ] = "½s¸¹©M¤º¤å¤§¶¡ªº³Ì¤Ö¶¡¹j(~M)";
         Text[ arabic ] = "ÃŞá ãÓÇİÉ Èíä ÇáÑŞã <-> ÇáäÕ";
         Text[ greek ] = "ÅëÜ÷éóôç áğüóôáóç Áñéè~ìüò <-> Êåßìåíï";
-        Text[ korean ] = "ÃÖ¼Ò°£°İ  ¹øÈ£ <-> ÅØ½ºÆ®(~M)";
+        Text[ korean ] = "ÃÖ¼Ò°£°İ ¹øÈ£ <-> ÅØ½ºÆ®(~M)";
         Text[ turkish ] = "Asgari numara <-> metin aralığı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Distancia mínima Número <-> Texto";
@@ -427,7 +427,7 @@ TabPage TP_NUM_POSITION
     StringList [ polish ] =
     {
             < "Z lewej" ; > ;
-        < "Wyœrodkowany" ; > ;
+        < "Do œrodka" ; > ;
         < "Z prawej" ; > ;
     };
     StringList [ japanese ] =
@@ -764,6 +764,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
     Text[ catalan ] = "Numeración/Viñetas";
     Text[ finnish ] = "Numerointi/luettelomerkit";
 };
+
 
 
 
