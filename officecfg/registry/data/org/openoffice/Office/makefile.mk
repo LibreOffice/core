@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 12:41:52 $
+#   last change: $Author: vg $ $Date: 2005-03-23 10:54:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,6 +100,7 @@ MODULEFILES= \
     Common-unx.xcu   \
     Common-wnt.xcu   \
     Common-dicooo.xcu   \
+    Common-UseOOoFileDialogs.xcu \
     Scripting-python.xcu   \
     Common-cjk.xcu   \
     Common-ctl.xcu   \
