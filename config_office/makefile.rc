@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: svesik $ $Date: 2001-06-25 22:21:50 $
+#   last change: $Author: armin $ $Date: 2001-06-28 11:03:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -241,7 +241,7 @@ desktop : sc sd sw
 drafts : offapi
 dtrans : offapi sal rdbmaker
 eventattacher : cppuhelper offapi drafts
-extensions : rdbmaker svx
+extensions : offmgr rdbmaker svx
 fileaccess : tools
 forms : svx
 framework : svtools
