@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:07:50 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -860,6 +860,10 @@ SwSectionNode* SwNodes::InsertSection( const SwNodeIndex& rNdIdx,
     SwNodeIndex aInsPos( rNdIdx );
     if( !pEnde )        // kein Bereich also neue Section davor/hinter anlegen
     {
+        // #i26762#
+        ASSERT(!pEnde || rNdIdx <= *pEnde,
+               "Section start and end in wrong order!");
+
         if( bInsAtStart )
         {
             if( !lcl_IsTOXSection( rSection ))
