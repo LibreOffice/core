@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:34:56 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
 #include <vcl/image.hxx>
-#include <vcl/rcid.h>
 #include <vcl/virdev.hxx>
+#include <tools/rcid.h>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
 #include <time.h>
