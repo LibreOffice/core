@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:43:08 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 22:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ String S_NAME_NOT_THERE
     Text[ arabic ] = "Name doesn't exist: #($Arg1)";
     Text[ turkish ] = "Name doesn't exist: #($Arg1)";
     Text[ catalan ] = "El nom no existeix: #($Arg1)";
-    Text[ finnish ] = "Nime‰ ei ole: ($Arg1)";
+    Text[ finnish ] = "Nime‰ ei ole: #($Arg1)";
 };
 String S_DOUBLE_NAME
 {
@@ -239,7 +239,7 @@ String S_LONGNAME_UNKNOWN
     Text[ arabic ] = "«”„ ÿÊÌ· €Ì— „⁄—Ê›: ($Arg1)";
     Text[ turkish ] = "Short name unknown during copying: ($Arg1)";
     Text[ catalan ] = "El nom llarg Ès desconegut: ($Arg1)";
-    Text[ finnish ] = "Kopioitaessa havaittu tuntematon lyhyt nimi: ($Arg1)";
+    Text[ finnish ] = "Tuntematon pitk‰ nimi: ($Arg1)";
 };
 String S_FIRST_SHORTNAME_REQ_ASTRX
 {
@@ -703,6 +703,7 @@ String
     Text = ;
 };
 */
+
 
 
 
