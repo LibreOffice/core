@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: gh $ $Date: 2002-05-29 07:27:13 $
+ *  last change: $Author: gh $ $Date: 2002-07-29 12:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,7 +726,10 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     {
         Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
         aConf.SetGroup("WinGeom");
-        SetWindowState( aConf.ReadKey("WinParams", "") );
+        // workaround for #100819#
+        ByteString a( aConf.ReadKey("WinParams", "").GetToken(1) );
+        if ( !a.Equals( "5" ) )
+            SetWindowState( aConf.ReadKey("WinParams", "") );
     }
 
 //  pWork = new AppEdit( this, NULL );
@@ -881,7 +884,10 @@ void BasicFrame::Resize()
 {
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("WinGeom");
-    aConf.WriteKey("WinParams",GetWindowState());
+    // workaround for #100819#
+    ByteString a( GetWindowState( WINDOWSTATE_MASK_STATE ).GetToken(1) );
+    if ( !a.Equals( "5" ) )
+        aConf.WriteKey("WinParams",GetWindowState());
 
     // Statusbar
     Size aOutSize = GetOutputSizePixel();
@@ -906,7 +912,10 @@ void BasicFrame::Move()
 {
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("WinGeom");
-    aConf.WriteKey("WinParams",GetWindowState());
+    // workaround for #100819#
+    ByteString a( GetWindowState( WINDOWSTATE_MASK_STATE ).GetToken(1) );
+    if ( !a.Equals( "5" ) )
+        aConf.WriteKey("WinParams",GetWindowState());
 }
 
 IMPL_LINK( BasicFrame, CloseButtonClick, void*, EMPTYARG )
