@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:36:03 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1292,7 +1292,7 @@ MAKENUMSTR:
         else
             aScriptedText.SetDefaultFont();
 
-        aScriptedText.SetText( cellString, pBreakIt->xBreak );
+        aScriptedText.SetText( cellString, ::GetBreakIt()->xBreak ); //CHINA001 aScriptedText.SetText( cellString, pBreakIt->xBreak );
         aStrSize = aScriptedText.GetTextSize();
 
         if( aCurData.IsFont() &&
@@ -1312,7 +1312,7 @@ MAKENUMSTR:
 //                          cellString.Erase( 0, 1 );
 //                  else
             cellString.Erase( cellString.Len() - 1 );
-            aScriptedText.SetText( cellString, pBreakIt->xBreak );
+            aScriptedText.SetText( cellString, ::GetBreakIt()->xBreak ); //CHINA001 aScriptedText.SetText( cellString, pBreakIt->xBreak );
             aStrSize = aScriptedText.GetTextSize();
         }
 
