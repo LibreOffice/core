@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 09:27:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,12 +663,41 @@ Reference< XStorage> ODocumentContainer::getStorage() const
 {
     static const ::rtl::OUString s_sForms = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("forms"));
     static const ::rtl::OUString s_sReports = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reports"));
-    return m_pImpl->m_pDataSource ? m_pImpl->m_pDataSource->getStorage(m_bFormsContainer ? s_sForms : s_sReports) : Reference< XStorage>();
+    Reference<XTransactionListener> xEvt(m_pImpl->m_pDataSource->m_xModel,UNO_QUERY);
+    return m_pImpl->m_pDataSource ? m_pImpl->m_pDataSource->getStorage(m_bFormsContainer ? s_sForms : s_sReports,xEvt) : Reference< XStorage>();
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODocumentContainer::approveNewObject(const ::rtl::OUString& _sName,const Reference< XContent >& _rxObject) const
 {
     return (_sName.indexOf('/',0) == -1) && ODefinitionContainer::approveNewObject(_sName,_rxObject);
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL ODocumentContainer::removeByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+{
+    Reference< XContent > xOldElement;
+    ClearableMutexGuard aGuard(m_aMutex);
+    {
+        // check the arguments
+        if (!_rName.getLength())
+            throw IllegalArgumentException();
+
+        if (!checkExistence(_rName))
+            throw NoSuchElementException(_rName,*this);
+
+        Reference< XCommandProcessor > xContent(implGetByName(_rName),UNO_QUERY);
+        if ( xContent.is() )
+        {
+            Command aCommand;
+
+            aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete"));
+            xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >());
+        }
+        // do the removal
+        implRemove(_rName);
+
+        //  disposeComponent(xOldElement); // no dispose here, the object amy be inserted again unde a different name
+    }
+    notifyByName(aGuard,_rName,NULL,NULL,E_REMOVED);
 }
 //........................................................................
 }   // namespace dbaccess
