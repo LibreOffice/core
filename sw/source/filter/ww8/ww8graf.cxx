@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:05:06 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2467,9 +2467,9 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             HORI_NONE,     // From left position
             HORI_LEFT,     // left
             HORI_CENTER,   // centered
-            HORI_RIGHT,        // right
-            HORI_LEFT,     // inside
-            HORI_RIGHT     // outside
+            HORI_RIGHT,    // right
+            HORI_INSIDE,   // inside
+            HORI_OUTSIDE   // outside
         };
 
 
@@ -3200,6 +3200,22 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
     return pRetFrmFmt;
 }
 
+void MatchEscherMirrorIntoFlySet(const SvxMSDffImportRec &rRecord,
+    SfxItemSet &rFlySet)
+{
+    if (rRecord.bVFlip || rRecord.bHFlip)
+    {
+        GRFMIRROR eType(RES_DONT_MIRROR_GRF);
+        if (rRecord.bVFlip && rRecord.bHFlip)
+            eType = RES_MIRROR_GRF_BOTH;
+        else if (rRecord.bVFlip)
+            eType = RES_MIRROR_GRF_HOR;
+        else
+            eType = RES_MIRROR_GRF_VERT;
+        rFlySet.Put(SwMirrorGrf(eType));
+    }
+}
+
 SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
     SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord, WW8_FSPA *pF,
     SfxItemSet &rFlySet )
@@ -3214,21 +3230,25 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
 
     ProcessEscherAlign(pRecord, pF, rFlySet, true);
 
-    rFlySet.Put(SwFmtFrmSize( ATT_FIX_SIZE, nWidthTw, nHeightTw));
+    rFlySet.Put(SwFmtFrmSize(ATT_FIX_SIZE, nWidthTw, nHeightTw));
 
-    if( pRecord )
+    SfxItemSet aGrSet(rDoc.GetAttrPool(), RES_GRFATR_BEGIN, RES_GRFATR_END-1);
+
+    if (pRecord)
     {
         //Note that the escher inner distance only seems to be honoured in
         //word for textboxes, not for graphics and ole objects.
-        Rectangle aInnerDist(0,0,0,0);
+        Rectangle aInnerDist(0, 0, 0, 0);
 
-        MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
-            pRecord->eShapeType, aInnerDist );
+        MatchSdrItemsIntoFlySet(rpObject, rFlySet, pRecord->eLineStyle,
+            pRecord->eShapeType, aInnerDist);
+
+        MatchEscherMirrorIntoFlySet(*pRecord, aGrSet);
     }
 
     String aObjectName(rpObject->GetName());
     if (OBJ_OLE2 == SdrObjKind(rpObject->GetObjIdentifier()))
-        pRetFrmFmt = InsertOle(*((SdrOle2Obj*)rpObject), rFlySet);
+        pRetFrmFmt = InsertOle(*((SdrOle2Obj*)rpObject), rFlySet, aGrSet);
     else
     {
         const SdrGrafObj *pGrf= (const SdrGrafObj*)rpObject;
@@ -3240,7 +3260,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
             if (GRAPHIC_NONE == eType && CanUseRemoteLink(aGrfName))
             {
                 pRetFrmFmt = rDoc.Insert(*pPaM, aGrfName, aEmptyStr, 0,
-                    &rFlySet, 0);
+                    &rFlySet, &aGrSet);
                 bDone = true;
             }
         }
@@ -3248,7 +3268,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
         {
             const Graphic& rGraph = pGrf->GetGraphic();
             pRetFrmFmt = rDoc.Insert(*pPaM, aEmptyStr, aEmptyStr, &rGraph,
-                &rFlySet, 0);
+                &rFlySet, &aGrSet);
         }
     }
 
