@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ocompinstream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:27:55 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ void SAL_CALL OInputCompStream::setPropertyValue( const ::rtl::OUString& aProper
 
 
 //-----------------------------------------------
-uno::Any SAL_CALL OInputCompStream::getPropertyValue( const ::rtl::OUString& aPropertyName )
+uno::Any SAL_CALL OInputCompStream::getPropertyValue( const ::rtl::OUString& aProp )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -357,6 +357,12 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const ::rtl::OUString& aPr
 
     if ( m_bDisposed )
         throw lang::DisposedException();
+
+    ::rtl::OUString aPropertyName;
+    if ( aProp.equalsAscii( "IsEncrypted" ) )
+        aPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Encrypted" ) );
+    else
+        aPropertyName = aProp;
 
     if ( aPropertyName.equalsAscii( "MediaType" )
       || aPropertyName.equalsAscii( "Size" )
