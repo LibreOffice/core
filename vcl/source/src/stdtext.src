@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:43:10 $
+ *  last change: $Author: kz $ $Date: 2001-06-15 21:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ String SV_STDTEXT_DONTWARNAGAIN
     Text[ dutch ] = "Do not warn me again.";
     Text[ french ] = "Ne plus afficher cet avertissement.";
     Text[ spanish ] = "No mostrar más esta advertencia.";
-    Text[ italian ] = "Do not warn me again.";
+    Text[ italian ] = "Non mostrare più questo avviso.";
     Text[ danish ] = "Do not warn me again.";
     Text[ swedish ] = "Visa inte den här informationen mer.";
     Text[ polish ] = "Nie wyœwietlaj wiêcej ostrze¿enia.";
@@ -117,5 +117,6 @@ String SV_STDTEXT_DONTWARNAGAIN
     Text[ catalan ] = "Do not warn me again.";
     Text[ finnish ] = "Diesen Hinweis nicht mehr anzeigen.";
 };
+
 
 
