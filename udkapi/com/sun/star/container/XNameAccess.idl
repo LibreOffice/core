@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNameAccess.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,9 @@ module com {  module sun {  module star {  module container {
     <p>To implement inaccurate name access, support the
     <type scope="com::sun::star::beans">XExactName</type>
     interface.  </p>
-
     @see com::sun::star::beans::XExactName
  */
-interface XNameAccess: com::sun::star::container::XElementAccess
+published interface XNameAccess: com::sun::star::container::XElementAccess
 {
     //-------------------------------------------------------------------------
 
