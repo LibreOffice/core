@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mav $ $Date: 2003-11-14 15:24:28 $
+#   last change: $Author: mav $ $Date: 2003-11-28 18:04:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,12 +102,6 @@ SHL1STDLIBS=\
     $(SALLIB)\
     $(CPPULIB)\
     $(CPPUHELPERLIB)
-
-SHL1STDLIBS +=\
-    ole32.lib\
-    gdi32.lib\
-    uuid.lib\
-    oleaut32.lib
 
 SHL1DEF= $(MISC)$/$(SHL1TARGET).def
 

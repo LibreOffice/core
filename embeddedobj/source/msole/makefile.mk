@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mav $ $Date: 2003-11-28 17:54:18 $
+#   last change: $Author: mav $ $Date: 2003-11-28 18:04:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ=..$/..
 
 PRJNAME=embeddedobj
-TARGET=embedobj
+TARGET=emboleobj
 
 
 # --- Settings -----------------------------------------------------
@@ -76,7 +76,12 @@ INCPRE+=$(ATL_INCLUDE)
 
 # --- Files --------------------------------------------------------
 
+SHL1TARGET= $(TARGET)
+
+SHL1IMPLIB= i$(TARGET)
+
 SLOFILES =  \
+        $(SLO)$/closepreventer.obj\
         $(SLO)$/oleregister.obj\
         $(SLO)$/xolefactory.obj\
         $(SLO)$/olecomponent.obj\
@@ -89,6 +94,7 @@ SLOFILES =  \
 
 
 EXCEPTIONSFILES= \
+        $(SLO)$/closepreventer.obj\
         $(SLO)$/oleregister.obj\
         $(SLO)$/xolefactory.obj\
         $(SLO)$/olecomponent.obj\
@@ -98,6 +104,22 @@ EXCEPTIONSFILES= \
         $(SLO)$/olemisc.obj\
         $(SLO)$/olewrapclient.obj\
         $(SLO)$/advisesink.obj
+
+SHL1OBJS= $(SLOFILES)
+
+SHL1STDLIBS=\
+    $(SALLIB)\
+    $(CPPULIB)\
+    $(CPPUHELPERLIB)\
+    ole32.lib\
+    gdi32.lib\
+    uuid.lib\
+    oleaut32.lib
+
+SHL1DEF= $(MISC)$/$(SHL1TARGET).def
+
+DEF1NAME= $(SHL1TARGET)
+DEF1EXPORTFILE=	exports.dxp
 
 
 # --- Targets -------------------------------------------------------
