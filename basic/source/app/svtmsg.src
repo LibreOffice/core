@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: gh $ $Date: 2001-03-16 11:53:51 $
+ *  last change: $Author: vg $ $Date: 2001-03-20 16:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1354,4 +1354,4 @@ String S_NO_LIST_BOX_BUTTON
 {
     Text = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ english_us ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
-}
+};
