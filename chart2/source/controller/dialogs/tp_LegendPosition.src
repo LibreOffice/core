@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_LegendPosition.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:26 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,37 +72,9 @@ TabPage TP_LEGEND_POS
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Anordnung" ;
-        Text [ ENGLISH ] = "Arrangement" ;
-        Text [ norwegian ] = "Arrangement" ;
-        Text [ italian ] = "Disponi" ;
-        Text [ portuguese_brazilian ] = "Posição" ;
-        Text [ portuguese ] = "Disposição" ;
-        Text [ finnish ] = "Sijainti" ;
-        Text [ danish ] = "Placering" ;
-        Text [ french ] = "Disposition" ;
-        Text [ swedish ] = "Placering" ;
-        Text [ dutch ] = "Positie" ;
-        Text [ spanish ] = "Posición" ;
-        Text [ english_us ] = "Position" ;
-        Text[ chinese_simplified ] = "æ’åº";
-        Text[ russian ] = "Ïîëîæåíèå";
-        Text[ polish ] = "Pozycja";
-        Text[ japanese ] = "é…ç½®";
-        Text[ chinese_traditional ] = "æ’åº";
-        Text[ arabic ] = "ÇáÊÑÊíÈ";
-        Text[ dutch ] = "Positie";
-        Text[ chinese_simplified ] = "æ’åº";
-        Text[ greek ] = "Èİóç";
-        Text[ korean ] = "ë°°ì—´";
-        Text[ turkish ] = "Konum";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Posició";
-        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-        Text[ czech ] = "UmÃ­stÄ›nÃ­";
-        Text[ hebrew ] = "â€®××™×§×•×â€¬";
-        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
-        Text[ slovak ] = "Umiestnenie";
+        Text [ de ] = "Anordnung" ;
+        Text [ en-US ] = "Position" ;
+        Text [ x-comment ] = " ";
     };
     RESOURCE_LEGENDPOSITION( 14 )
 };
