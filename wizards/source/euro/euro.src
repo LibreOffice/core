@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-11 21:07:54 $
+ *  last change: $Author: vg $ $Date: 2001-10-17 21:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ Text = "Heben Sie vorab Den Schutz aller Tabellen auf!";
 Text[English] = "Unprotect all sheets beforehand!";
 Text[ english_us ] = "First, unprotect all sheets.";
     Text[ portuguese ] = "Desproteger primeiro todas as tabelas!";
-    Text[ russian ] = "—начала снимите защиту со всех таблиц!";
+    Text[ russian ] = "—начала снимите защиту со всех таблиц.";
     Text[ greek ] = " бфбсгёуефе рсйн фзн рспуфбуяб ьлщн фщн рйн№кщн!";
     Text[ dutch ] = "Hef eerst de beveiliging van alle werkbladen op!";
     Text[ french ] = "Dйsactivez la protection des feuilles au prйalable !";
@@ -1564,7 +1564,7 @@ String MESSAGES + 22
     Text[English] = "The File '<1>' already exists. Do you want to overwrite it?";
     Text[ English_us ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
     Text[ portuguese ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
-    Text[ russian ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
+    Text[ russian ] = "‘айл '<1>' уже существует.<CR>«аменить его?";
     Text[ greek ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
     Text[ dutch ] = "Bestand '<1>' bestaat reeds.<CR>Overschrijven?";
     Text[ french ] = "Le fichier '<1>' existe dйjа.<CR>Voulez-vous l'йcraser ?";
@@ -1591,7 +1591,7 @@ String MESSAGES + 23
     Text[English] = "Do you really want to cancel the conversion at this point?";
     Text[ English_us ] = "Do you really want to terminate conversion at this point?";
     Text[ portuguese ] = "Do you really want to terminate conversion at this point?";
-    Text[ russian ] = "Do you really want to terminate conversion at this point?";
+    Text[ russian ] = "¬ы действительно хотите прервать в этом месте процесс преобразовани€?";
     Text[ greek ] = "Do you really want to terminate conversion at this point?";
     Text[ dutch ] = "Wilt u het converteren werkelijk stoppen?";
     Text[ french ] = "Interrompre la conversion а ce stade ?";
@@ -1617,7 +1617,7 @@ String MESSAGES + 24
     Text[English] = "Cancel Autopilot";
     Text[ English_us ] = "Cancel AutoPilot";
     Text[ portuguese ] = "Cancel AutoPilot";
-    Text[ russian ] = "Cancel AutoPilot";
+    Text[ russian ] = "ќтменить јвтопилота";
     Text[ greek ] = "Cancel AutoPilot";
     Text[ dutch ] = "AutoPiloot stoppen";
     Text[ french ] = "Annuler l'AutoPilote";
@@ -2132,6 +2132,7 @@ Text[ english_us ] = "Sheet is always unprotected";
     Text[ finnish ] = "Lomake on aina suojaamaton";
     Text[ catalan ] = "Anular siempre la protecciуn de hoja";
 };
+
 
 
 
