@@ -122,6 +122,11 @@ case $sd_platform in
     export LIBPATH
     ;;
 
+  Darwin)
+    DYLD_LIBRARY_PATH="$sd_progsub":"$sd_prog":$DYLD_LIBRARY_PATH
+    export DYLD_LIBRARY_PATH
+    ;;
+
   HP-UX)
     SHLIB_PATH="$sd_progsub":"$sd_prog":/usr/openwin/lib:$SHLIB_PATH
     export SHLIB_PATH
@@ -144,6 +149,9 @@ if [ "$java_ld_library_path" != "" ] ; then
     case $sd_platform in
         AIX)
             LIBPATH=${java_ld_library_path}:${LIBPATH}
+            ;;
+        Darwin)
+            DYLD_LIBRARY_PATH=${java_ld_library_path}:${DYLD_LIBRARY_PATH}
             ;;
         HP-UX)
             SHLIB_PATH=${java_ld_library_path}:${SHLIB_PATH}
