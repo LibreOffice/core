@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-16 11:40:41 $
+ *  last change: $Author: cl $ $Date: 2001-01-25 10:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2083,6 +2083,7 @@ void SdrTextObj::ForceOutlinerParaObject()
             Outliner& aDrawOutliner = pModel->GetDrawOutliner();
             pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
 
+            pOutliner->SetStyleSheet( 0, GetStyleSheet());
             OutlinerParaObject* pOutlinerParaObject = pOutliner->CreateParaObject();
             SetOutlinerParaObject( pOutlinerParaObject );
 
