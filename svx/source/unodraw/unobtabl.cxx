@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unobtabl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:13:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,11 +176,14 @@ GraphicObject CreateGraphicObjectFromURL( const ::rtl::OUString &rURL ) throw()
         Graphic     aGraphic;
 
 #ifndef SVX_LIGHT
-        SfxMedium   aMedium( aURL, STREAM_READ, TRUE );
-        SvStream*   pStream = aMedium.GetInStream();
+        if ( aURL.Len() )
+        {
+            SfxMedium   aMedium( aURL, STREAM_READ, TRUE );
+            SvStream*   pStream = aMedium.GetInStream();
 
-        if( pStream )
-            GraphicConverter::Import( *pStream, aGraphic );
+            if( pStream )
+                GraphicConverter::Import( *pStream, aGraphic );
+        }
 #else
         String aSystemPath( rURL );
         utl::LocalFileHelper::ConvertURLToSystemPath( aSystemPath, aSystemPath );
