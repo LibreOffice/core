@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:04:53 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,13 +144,13 @@ SbaExternalSourceBrowser::~SbaExternalSourceBrowser()
 // -------------------------------------------------------------------------
 ::rtl::OUString SbaExternalSourceBrowser::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OFormGridView");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OFormGridView"));
 }
 //-------------------------------------------------------------------------
 ::comphelper::StringSequence SbaExternalSourceBrowser::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.FormGridView");
+    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.FormGridView"));
     return aSupported;
 }
 //-------------------------------------------------------------------------
