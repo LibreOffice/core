@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 15:20:49 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ String RID_BASELISTBOX_ERROR_FILLLIST
     Text[ polish ] = "Nie mo¿na by³o ustaliæ zawartoœci pola kombi lub pola listy.";
     Text[ portuguese_brazilian ] = "ComboBox/ListBox : determine the list contents";
     Text[ japanese ] = "ºİÎŞÎŞ¯¸½‚Ü‚½‚ÍØ½ÄÎŞ¯¸½‚Ì“à—e‚ªŠm”F‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "ComboBox/ListBox : determine the list contents";
+    Text[ korean ] = "ÄŞº¸ ¹Ú½º/¸ñ·Ï ÇÊµåÀÇ ³»¿ëÀ» Á¶»çÇÒ ¼ö ¾ø¾ú½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÎŞ·¨È·¶¨×éºÏ¿ò»òÕßÁĞ±í¿òÄÚµÄÄÚÈİ¡£";
     Text[ chinese_traditional ] = "µLªk±q¸ê®Æ®w¤º´ú©w²Õ¦X¤è¶ô©Î²M³æ¤è¶ôªº¤º®e";
     Text[ arabic ] = "ÊÚĞÑ ÇáÊÚÑİ Úáì ãÍÊæíÇÊ ãÑÈÚ ÊÍÑíÑ æÓÑÏ Ãæ ãÑÈÚ ŞÇÆãÉ.";
@@ -128,7 +128,7 @@ String RID_STR_CONTROL_SUBSTITUTED_NAME
     Text[ polish ] = "zamieniono";
     Text[ portuguese_brazilian ] = "substituted";
     Text[ japanese ] = "’uŠ·";
-    Text[ korean ] = "´ëÃ¼";
+    Text[ korean ] = "´ëÃ¼µÊ";
     Text[ chinese_simplified ] = "Ìæ»»";
     Text[ chinese_traditional ] = "´À¥N";
     Text[ arabic ] = "ãÓÊÈÏá";
@@ -152,7 +152,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text[ polish ] = "Wyst¹pi³ b³¹d podczas ³adowania pola kontrolnego (control). Zamieniono je dlatego na symbol wieloznaczny.";
     Text[ portuguese_brazilian ] = "While loading this control an error occured. Thus it was replaced with a placeholder.";
     Text[ japanese ] = "‚±‚ÌºİÄÛ°Ù‚Ì“Ç‚İ‚İ’†‚É´×°‚ª”­¶‚µ‚Ü‚µ‚½B‚»‚ê‚ªŒ´ˆö‚ÅÜ²ÙÄŞ¶°ÄŞ‚É’uŠ·‚³‚ê‚Ü‚µ‚½B";
-    Text[ korean ] = "ÀÌ ÄÁÆ®·ÑÀ» ·ÎµåÇÒ ¶§ ¿À·ù°¡ ¹ß»ıÇØ¼­ °³Ã¼ Æ²·Î ´ëÃ¼µÇ¾ú½À´Ï´Ù.";
+    Text[ korean ] = "ÀÌ ÄÁÆ®·Ñ ·Îµå½Ã¿¡ ¿À·ù°¡ ¹ß»ıÇÏ¿´½À´Ï´Ù. ±×·¯¹Ç·Î ÇÃ·¹ÀÌ½ºÈ¦´õ·Î ´ëÃ¼µÇ¾ú½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÔÚ×°ÔØÕâ¸ö×Ö¶ÎÊ±³öÏÖÁËÒ»¸ö´íÎó£¬Òò´ËÓÃÍ¨Åä·û´úÌæ×Ö¶Î¡£";
     Text[ chinese_traditional ] = "¦b¸Ë¸ü³o­Ó±±¨î¶µ®Éµo¥Í¤@­Ó¿ù»~¡C¦ı¤w¸g¥Î¤@­Ó³q°t²Å´À¥N¥¦¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍãíá ÚäÕÑ ÇáÊÍßã åĞÇ. áåĞÇ Êã ÇÓÊÈÏÇáå ÈÚäÕÑ äÇÆÈ.";
@@ -180,7 +180,7 @@ String RID_STR_READERROR
     Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚©‚çÃŞ°À“Ç‚İæ‚è‚Ì´×°";
     Text[ chinese_traditional ] = "¦bÅª¨ú¸ê®Æ®w®Éµo¥Í¿ù»~";
     Text[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç äåäïìİíùí áğü ôç âÜóç äåäïìİíùí";
-    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º¿¡¼­ µ¥ÀÌÅÍ¸¦ ÀĞÀ» ¶§ ¿À·ù ¹ß»ı";
+    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º¿¡ ÀÖ´Â µ¥ÀÌÅÍ¸¦ ÀĞÀ» ¶§ ¿À·ù";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ ÈíÇäÇÊ ãä ŞÇÚÏÉ ÇáÈíÇäÇÊ";
     Text[ turkish ] = "Error reading data from database";
 };
@@ -206,7 +206,7 @@ String RID_STR_CONNECTERROR
     Text[ japanese ] = "Ú‘±‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ chinese_traditional ] = "³s½u¥¢±Ñ";
     Text[ greek ] = "Ç óıíäåóç áğİôõ÷å";
-    Text[ korean ] = "¿¬°á¿¡ ½ÇÆĞÇßÀ½";
+    Text[ korean ] = "¿¬°á ½ÇÆĞ";
     Text[ arabic ] = "ÚãáíÉ ÇáÇÊÕÇá İÔáÊ";
     Text[ turkish ] = "Connection failed";
 };
@@ -228,7 +228,7 @@ String RID_ERR_LOADING_FORM
     Text[ polish ] = "Nie mo¿na by³o za³adowaæ zawartoœci danych.";
     Text[ portuguese_brazilian ] = "The data content could not be loaded.";
     Text[ japanese ] = "ÃŞ°À“à—e‚ª“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "µ¥ÀÌÅÍ ³»¿ëÀ» ·ÎµåÇÏÁö ¸øÇß½À´Ï´Ù.";
+    Text[ korean ] = "µ¥ÀÌÅÍ ³»¿ëÀ» ·ÎµåÇÒ ¼ö ¾ø¾ú½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÎŞ·¨×°ÔØÊı¾İÄÚÈİ¡£";
     Text[ chinese_traditional ] = "µLªk¸Ë¸ü¸ê®Æ¤º®e¡C";
     Text[ arabic ] = "ÊÚĞÑ ÊÍãíá ÇáãÍÊæíÇÊ ÇáÈíÇäíÉ.";
@@ -252,7 +252,7 @@ String RID_ERR_REFRESHING_FORM
     Text[ polish ] = "Nie mo¿na by³o zaktualizowaæ zawartoœci danych.";
     Text[ portuguese_brazilian ] = "The data content could not be refreshed.";
     Text[ japanese ] = "ÃŞ°À“à—e‚ªXV‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "µ¥ÀÌÅÍ ³»¿ëÀ» »õ·Î °íÄ¡Áö ¸øÇß½À´Ï´Ù.";
+    Text[ korean ] = "µ¥ÀÌÅÍ ³»¿ëÀ» °»½ÅÇÒ ¼ö ¾ø¾ú½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÎŞ·¨¸üĞÂÊı¾İÄÚÈİ¡£";
     Text[ chinese_traditional ] = "µLªk§ó·s¸ê®Æ¤º®e¡C";
     Text[ arabic ] = "ÊÚĞÑ ÊÍÏíË ÇáãÍÊæíÇÊ ÇáÈíÇäíÉ.";
@@ -300,7 +300,7 @@ String RID_STR_ERR_UPDATERECORD
     Text[ polish ] = "B³¹d przy pisaniu aktualnego rekordu";
     Text[ portuguese_brazilian ] = "error updating the current record";
     Text[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚ğ‘‚«‚Ş‚Ì´×°";
-    Text[ korean ] = "ÇöÀç ·¹ÄÚµå ¾÷µ¥ÀÌÆ®½Ã ¿À·ù";
+    Text[ korean ] = "ÇöÀçÀÇ ·¹ÄÚµå °»½Å½Ã¿¡ ¿À·ù";
     Text[ chinese_simplified ] = "ÔÚ¸üĞÂµ±Ç°Êı¾İÌõÄ¿Ê±·¢Éú´íÎó";
     Text[ chinese_traditional ] = "¦b¼g¤J¸ê®Æ±ø¥Ø®Éµo¥Í¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ÇáÓÌá ÇáÍÇáí";
@@ -324,7 +324,7 @@ String RID_STR_ERR_DELETERECORD
     Text[ polish ] = "B³¹d przy usuwaniu aktualnego rekordu";
     Text[ portuguese_brazilian ] = "error deleting the current record";
     Text[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚ğíœ‚·‚é‚Ì´×°";
-    Text[ korean ] = "ÇöÀç ·¹ÄÚµå »èÁ¦½Ã ¿À·ù";
+    Text[ korean ] = "ÇöÀç ·¹ÄÚµå »èÁ¦½Ã¿¡  ¿À·ù";
     Text[ chinese_simplified ] = "ÔÚÉ¾³ıµ±Ç°Êı¾İÌõÄ¿Ê±·¢Éú´íÎó";
     Text[ chinese_traditional ] = "¦b§R°£¸ê®Æ±ø¥Ø®Éµo¥Í¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÍĞİ ÇáÓÌá ÇáÍÇáí";
@@ -348,7 +348,7 @@ String RID_STR_ERR_DELETERECORDS
     Text[ polish ] = "B³¹d przy usuwaniu podanych rekordów";
     Text[ portuguese_brazilian ] = "error deleting the specified records";
     Text[ japanese ] = "w’è‚µ‚½Úº°ÄŞ‚ğíœ‚·‚é‚Ì´×°";
-    Text[ korean ] = "ÁöÁ¤µÈ ·¹ÄÚµå »èÁ¦½Ã ¿À·ù";
+    Text[ korean ] = "ÁöÁ¤µÈ ·¹ÄÚµå »èÁ¦½Ã¿¡ ¿À·ù";
     Text[ chinese_simplified ] = "ÔÚÉ¾³ıÖ¸¶¨µÄÊı¾İÌõÄ¿Ê±·¢Éú´íÎó";
     Text[ chinese_traditional ] = "¦b§R°£«ü©w¸ê®Æ±ø¥Ø®Éµo¥Í¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÍĞİ ÇáÓÌáÇÊ ÇáãÏÑÌÉ";
