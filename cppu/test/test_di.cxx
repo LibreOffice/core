@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:54 $
+ *  last change: $Author: dbo $ $Date: 2001-02-28 15:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,7 +577,10 @@ sal_Bool raiseException( const Reference< XLanguageBindingTest > & xLBT )
 //==================================================================================================
 void test_di(void)
 {
-    Reference<XLanguageBindingTest > xOriginal( (XLanguageBindingTest *)new Test_Impl() );
+    Test_Impl * p = new Test_Impl();
+    Reference< XInterface > x( *p );
+    {
+    Reference<XLanguageBindingTest > xOriginal( x, UNO_QUERY );
     Reference<XLanguageBindingTest > xLBT;
 
     uno_Environment * pCppEnv1 = 0;
@@ -601,8 +604,15 @@ void test_di(void)
         if (raiseException( xLBT ))
         {
             printf( "> dynamic invocation test succeeded!\n" );
-            return;
+        }
+        else
+        {
+            printf( "> exception test failed!\n" );
         }
     }
-    printf( "> dynamic invocation test failed!\n" );
+    else
+    {
+        printf( "> dynamic invocation test failed!\n" );
+    }
+    }
 }
