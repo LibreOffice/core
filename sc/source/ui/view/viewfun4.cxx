@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
+ *  last change: $Author: nn $ $Date: 2001-02-15 10:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,6 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
     ScDocument* pDoc = pDocSh->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ScSplitPos eWhich = GetViewData()->GetActivePart();
-    LanguageType eLnge;
     CellType eCellType;
     EESpellState eState;
     String sOldText, sNewString;
@@ -275,8 +274,6 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
     //!     return;
     //! }
 
-    eLnge = ScViewUtil::GetEffLanguage( pDoc, ScAddress( nCol, nRow, nTab ) );
-
     pThesaurusEngine = new ScEditEngineDefaulter( pDoc->GetEnginePool() );
     pThesaurusEngine->SetEditTextObjectPool( pDoc->GetEditPool() );
     pThesaurusEngine->SetRefDevice(GetViewData()->GetActiveWin());
@@ -319,11 +316,14 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
 
     pThesaurusEngine->ClearModifyFlag();
 
-    eState = pEditView->StartThesaurus( eLnge );
+    //  language is now in EditEngine attributes -> no longer passed to StartThesaurus
+
+    eState = pEditView->StartThesaurus();
     DBG_ASSERT(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
 
     if (eState == EE_SPELL_ERRORFOUND)              // sollte spaeter durch Wrapper geschehen!
     {
+        LanguageType eLnge = ScViewUtil::GetEffLanguage( pDoc, ScAddress( nCol, nRow, nTab ) );
         SvxLanguageTable aLangTab;
         String aErr = aLangTab.GetString(eLnge);
         aErr += ScGlobal::GetRscString( STR_SPELLING_NO_LANG );
