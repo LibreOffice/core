@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:58:30 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,6 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
                 aListNameED.SetText(pDrop->GetPar2());
                 aListNameED.SaveValue();
                 bDropDownLBChanged = false;
-                ListEnableHdl(0);
             }
             else
             {
@@ -419,6 +418,8 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
             aNameED.SetText(aEmptyStr);
             aValueED.SetText(aEmptyStr);
         }
+        if(bDropDown)
+            ListEnableHdl(0);
 
         if( aNameFT.GetText() != sOldNameFT )
             aNameFT.SetText(sOldNameFT);
