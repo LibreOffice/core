@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:01:56 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,8 @@ namespace framework{
 #define PRODUCTNAME_VARIABLE                        DECLARE_ASCII("%productname%")
 #define PRODUCTNAME_VARLENGTH                       13
 #define PRODUCTNAME_FALLBACK                        DECLARE_ASCII("StarOffice"                                      )   /// fallback, if configuration can't give us current set product name ...
-#define PRODUCTPATCH_ORGVERSION                     DECLARE_ASCII("6.0"                                             )
+//#define PRODUCTPATCH_ORGVERSION                     DECLARE_ASCII("6.0"                                             )
+#define PRODUCTPATCH_ORGVERSION                     DECLARE_ASCII("6/7"                                             )
 #define PRODUCTPATCH_NEWVERSION                     DECLARE_ASCII("1.0"                                             )
 #define PRODUCTPATCH_VARLENGTH                      3
 
