@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-16 13:44:43 $
+ *  last change: $Author: hdu $ $Date: 2000-11-22 15:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,14 +164,14 @@ void GlyphCache::AddFontPath( const String& rFontPath )
         return;
 
 #ifndef NO_FREETYPE_FONTS
-    for( xub_StrLen nComma1 = 0, nComma2 = 0; nComma2 != STRING_LEN; nComma1 = nComma2 + 1 )
+    for( xub_StrLen nBreaker1 = 0, nBreaker2 = 0; nBreaker2 != STRING_LEN; nBreaker1 = nBreaker2 + 1 )
     {
-        nComma2 = rFontPath.Search( ',', nComma1 );
-        if( nComma2 == STRING_NOTFOUND )
-            nComma2 = STRING_LEN;
+        nBreaker2 = rFontPath.Search( ';', nBreaker1 );
+        if( nBreaker2 == STRING_NOTFOUND )
+            nBreaker2 = STRING_LEN;
 
         ::rtl::OUString aNormalizedName;
-        osl::FileBase::normalizePath( rFontPath.Copy( nComma1, nComma2 ), aNormalizedName );
+        osl::FileBase::normalizePath( rFontPath.Copy( nBreaker1, nBreaker2 ), aNormalizedName );
         pFtManager->AddFontDir( aNormalizedName );
     }
 #endif // NO_FREETYPE_FONTS
@@ -248,6 +248,7 @@ ULONG GlyphCache::CalcByteCount() const
     ULONG nCacheSize = sizeof(*this);
     for( FontList::const_iterator it = aFontList.begin(); it != aFontList.end(); ++it )
         nCacheSize += it->second->GetByteCount();
+    // TODO: also account something for hashtable management
     return nCacheSize;
 }
 
@@ -262,7 +263,13 @@ ULONG GlyphCache::GarbageCollect()
         pCurrentGCFont = NULL;
 
     ULONG nBytesCollected;
-    if( pServerFont->GetRefCount() == 0 )
+    DBG_ASSERT( (pServerFont->GetRefCount() >= 0), "GlyphCache::GC detected RefCount underflow" );
+    if( pServerFont->GetRefCount() > 0 )
+    {
+        // try to save at least a few bytes
+        nBytesCollected = pServerFont->GarbageCollect( mnLruIndex );
+    }
+    else
     {
         // now its time to remove the unreferenced font
         ServerFont* pPrev = pServerFont->pPrevGCFont;
@@ -273,11 +280,6 @@ ULONG GlyphCache::GarbageCollect()
         nBytesCollected = pServerFont->GetByteCount();
         aFontList.erase( pServerFont->GetFontSelData() );
         delete pServerFont;
-    }
-    else
-    {
-        // try to save at least a few bytes
-        nBytesCollected = pServerFont->GarbageCollect( mnLruIndex );
     }
 
     return nBytesCollected;
@@ -341,6 +343,7 @@ ServerFont::ServerFont( const ImplFontSelectData& rFSD )
 :   maFontSelData(rFSD),
     mnRefCount(1),
     mnBytesUsed( sizeof(ServerFont) ),
+    nLastGC(0),
     nCos( 0x10000),
     nSin( 0)
 {
@@ -381,6 +384,7 @@ const GlyphData* ServerFont::CacheGlyphData( int nGlyphIndex, bool bWithBitmap )
 {
     GlyphData& pGD = const_cast<GlyphList&>(aGlyphList)[ nGlyphIndex ];
     SetGlyphData( nGlyphIndex, bWithBitmap, pGD );
+    // TODO: also account something for hashtable management
     mnBytesUsed += pGD.GetByteCount();
     return &pGD;
 }
@@ -389,6 +393,10 @@ const GlyphData* ServerFont::CacheGlyphData( int nGlyphIndex, bool bWithBitmap )
 
 ULONG ServerFont::GarbageCollect( long nLruIndex )
 {
+    if( nLastGC < nLruIndex + 150 )                 // TODO: change constant
+        return 0;
+    nLastGC = nLruIndex;
+
     ULONG nOldByteCount = mnBytesUsed;
 
     for( GlyphList::iterator it = aGlyphList.begin(); it != aGlyphList.end(); )
@@ -414,8 +422,8 @@ Point ServerFont::TransformPoint( const Point& rPoint ) const
     if( !nSin)
         return rPoint;
     // TODO: use 32x32=>64bit intermediate
-    const double dCos = nCos * 1.0 / 0x10000;
-    const double dSin = nSin * 1.0 / 0x10000;
+    const double dCos = nCos * (1.0 / 0x10000);
+    const double dSin = nSin * (1.0 / 0x10000);
     long nX = (long)(rPoint.X() * dCos + rPoint.Y() * dSin);
     long nY = (long)(rPoint.Y() * dCos - rPoint.X() * dSin);
     return Point( nX, nY );
