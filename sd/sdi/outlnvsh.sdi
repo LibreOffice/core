@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.sdi,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:45:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,11 +334,6 @@ interface OutlineView : Object
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
-    SID_PREVIEW_WIN // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_PREVIEW_STATE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -417,26 +412,6 @@ interface OutlineView : Object
     ]
 */
 
-    SID_PREVIEW_QUALITY_COLOR // ole : no, status : play rec
-    [
-        ExecMethod = ExecCtrl ;
-        StateMethod = GetCtrlState ;
-    ]
-    SID_PREVIEW_QUALITY_GRAYSCALE // ole : no, status : play rec
-    [
-        ExecMethod = ExecCtrl ;
-        StateMethod = GetCtrlState ;
-    ]
-    SID_PREVIEW_QUALITY_BLACKWHITE // ole : no, status : play rec
-    [
-        ExecMethod = ExecCtrl ;
-        StateMethod = GetCtrlState ;
-    ]
-    SID_PREVIEW_QUALITY_CONTRAST // ole : no, status : play rec
-    [
-        ExecMethod = ExecCtrl ;
-        StateMethod = GetCtrlState ;
-    ]
     SID_MAIL_SCROLLBODY_PAGEDOWN // ole : no, status : ?
     [
         ExecMethod = ExecCtrl ;
