@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-20 09:00:39 $
+ *  last change: $Author: ab $ $Date: 2001-12-03 15:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         ErrCode nErr = pMeth->Call( xValue );
         if( pRet )
             *pRet = sbxToUnoValue( xValue );
+        pMeth->SetParameters( NULL );
     }
 }
 
@@ -414,7 +415,6 @@ public:
     virtual void SAL_CALL disposing(const EventObject& Source)
         throw( RuntimeException );
 };
-
 
 //========================================================================
 
