@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:44:59 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,16 +694,21 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
                 }
             }
 
+            INT32 nThick = aIter->mnThick;
+
             //If we are being exported as an inline hack, set
-            //corner to 0
+            //corner to 0 and forget about border thickness for positioning
             if (rFrmFmt.IsInline())
+            {
                 aRect.SetPos(Point(0,0));
+                nThick = 0;
+            }
 
             // spid
             SwWW8Writer::WriteLong(*rWrt.pTableStrm, aIter->mnShapeId);
 
-            sal_Int32 nLeft = aRect.Left() + aIter->mnThick;
-            sal_Int32 nRight = aRect.Right() - aIter->mnThick;
+            sal_Int32 nLeft = aRect.Left() + nThick;
+            sal_Int32 nRight = aRect.Right() - nThick;
 
             //Nasty swap for bidi if neccessary
             rWrt.MiserableRTLFrmFmtHack(nLeft, nRight, rFrmFmt);
@@ -712,11 +717,9 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
             //(most of) the border is outside the graphic is word, so
             //change dimensions to fit
             SwWW8Writer::WriteLong(*rWrt.pTableStrm, nLeft);
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm, aRect.Top() +
-                aIter->mnThick);
+            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Top() + nThick);
             SwWW8Writer::WriteLong(*rWrt.pTableStrm, nRight);
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm, aRect.Bottom() -
-                aIter->mnThick);
+            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Bottom() - nThick);
 
             //fHdr/bx/by/wr/wrk/fRcaSimple/fBelowText/fAnchorLock
             USHORT nFlags=0;
@@ -1486,22 +1489,46 @@ void SwBasicEscherEx::WriteEmptyFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
     CloseContainer();   // ESCHER_SpContainer
 }
 
+UINT32 AddMirrorFlags(UINT32 nFlags, const SwMirrorGrf &rMirror)
+{
+    switch (rMirror.GetValue())
+    {
+        default:
+        case RES_DONT_MIRROR_GRF:
+            break;
+        case RES_MIRROR_GRF_VERT:
+            nFlags |= SHAPEFLAG_FLIPH;
+            break;
+        case RES_MIRROR_GRF_HOR:
+            nFlags |= SHAPEFLAG_FLIPV;
+            break;
+        case RES_MIRROR_GRF_BOTH:
+            nFlags |= SHAPEFLAG_FLIPH;
+            nFlags |= SHAPEFLAG_FLIPV;
+            break;
+
+    }
+    return nFlags;
+}
+
 INT32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
 {
     INT32 nBorderThick=0;
-    OpenContainer( ESCHER_SpContainer );
-
-    AddShape( ESCHER_ShpInst_PictureFrame, 0xa00, nShapeId );
-
-    EscherPropertyContainer aPropOpt;
-
-    UINT32 nFlags = ESCHER_BlipFlagDefault;
-
     SwNoTxtNode *pNd = GetNoTxtNodeFromSwFrmFmt(rFmt);
     SwGrfNode *pGrfNd = pNd ? pNd->GetGrfNode() : 0;
     ASSERT(pGrfNd, "No SwGrfNode ?, suspicious");
     if (!pGrfNd)
         return nBorderThick;
+
+    OpenContainer( ESCHER_SpContainer );
+
+    const SwMirrorGrf &rMirror = pGrfNd->GetSwAttrSet().GetMirrorGrf();
+    AddShape(ESCHER_ShpInst_PictureFrame, AddMirrorFlags(0xa00, rMirror),
+        nShapeId);
+
+    EscherPropertyContainer aPropOpt;
+
+    UINT32 nFlags = ESCHER_BlipFlagDefault;
 
     if (pGrfNd->IsLinkedFile())
     {
@@ -1653,7 +1680,6 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTxtNode& rNd,
         if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetBottom() ) )
             rPropOpt.AddOpt( ESCHER_Prop_cropFromBottom, ToFract16( nVal, aSz.Height()));
     }
-    // mirror ??
 }
 
 void SwBasicEscherEx::SetPicId(const SdrObject &, UINT32,
@@ -1690,7 +1716,9 @@ INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
         OpenContainer(ESCHER_SpContainer);
 
         EscherPropertyContainer aPropOpt;
-        WritePicture(aPropOpt, aGraphic, *pSdrObj, nShapeId);
+        const SwMirrorGrf &rMirror = rOLENd.GetSwAttrSet().GetMirrorGrf();
+        WriteOLEPicture(aPropOpt, AddMirrorFlags(0xa00 | SHAPEFLAG_OLESHAPE,
+            rMirror), aGraphic, *pSdrObj, nShapeId);
 
         nBorderThick = WriteFlyFrameAttr(rFmt, mso_sptPictureFrame, aPropOpt);
         WriteGrfAttr(rOLENd, aPropOpt);
@@ -2068,7 +2096,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
                     WriteOCXControl(rFmt, nShapeId=GetShapeID());
                     break;
                 case sw::Frame::eDrawing:
-                    aWinwordAnchoring.SetAnchoring(rFmt, true);
+                    aWinwordAnchoring.SetAnchoring(rFmt);
                     if (const SdrObject* pObj = rFmt.FindRealSdrObject())
                     {
                         bool bSwapInPage = false;
@@ -2156,541 +2184,132 @@ void SwEscherEx::FinishEscher()
     delete pEscherStrm, pEscherStrm = 0;
 }
 
-extern "C"
-{
-    static int CompUINT32( const void *pFirst, const void *pSecond)
-    {
-        return(
-            (*((UINT32*)pFirst ) & 0xFFFFFF00) -
-            (*((UINT32*)pSecond) & 0xFFFFFF00) );
-    }
-}
-
-void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt, bool bBROKEN)
+void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt)
 {
     const RndStdIds eAnchor = rFmt.GetAnchor().GetAnchorId();
     mbInline = (eAnchor == FLY_IN_CNTNT);
 
-    const SwFmtHoriOrient&  rHoriOri = rFmt.GetHoriOrient();
-    const SwFmtVertOrient&  rVertOri = rFmt.GetVertOrient();
+    const SwFmtHoriOrient& rHoriOri = rFmt.GetHoriOrient();
+    const SwFmtVertOrient& rVertOri = rFmt.GetVertOrient();
 
     const SwHoriOrient eHOri = rHoriOri.GetHoriOrient();
     // CMC, OD 24.11.2003 #i22673#
-    SwVertOrient eVOri = rVertOri.GetVertOrient();
+    const SwVertOrient eVOri = rVertOri.GetVertOrient();
 
-    SwRelationOrient eHRel = rHoriOri.GetRelationOrient();
-    SwRelationOrient eVRel = rVertOri.GetRelationOrient();
+    const SwRelationOrient eHRel = rHoriOri.GetRelationOrient();
+    const SwRelationOrient eVRel = rVertOri.GetRelationOrient();
 
-    //There must be a problem with page anchoring and draw objects in writer
-    //must be a problem somewhere.
-    if (bBROKEN)
+    // horizontal Adjustment
+    switch (eHOri)
     {
-        if (eHRel == PRTAREA)
-            eHRel = FRAME;
-        if (eVRel == PRTAREA)
-            eVRel = FRAME;
-    }
-
-    UINT32 nHIndex = 0;
-    UINT32 nVIndex = 0;
-
-    switch( eAnchor )
-    {
-        case FLY_PAGE:
-            nHIndex = 0x00000000;
-            nVIndex = 0x10000000;
-            // match eHRel ?
-            if(      PRTAREA == eHRel ) eHRel = REL_PG_PRTAREA;
-            else if( FRAME   == eHRel ) eHRel = REL_PG_FRAME;
-            // match eVRel ?
-            if(      REL_PG_PRTAREA == eVRel ) eVRel = PRTAREA;
-            else
-            if(      REL_PG_FRAME   == eVRel ) eVRel = FRAME;
-            break;
-        case FLY_AT_CNTNT:
-            nHIndex = 0x01000000;
-            nVIndex = 0x11000000;
-            break;
-        case FLY_AUTO_CNTNT:
-            nHIndex = 0x01000000;
-            nVIndex = 0x12000000;
-            break;
-        case FLY_IN_CNTNT:
-            nHIndex = 0x02000000;
-            nVIndex = 0x13000000;
-            break;
         default:
-            nHIndex = 0x01000000; // FLY_AT_CNTNT
-            nVIndex = 0x11000000;
+        case HORI_NONE:
+            mnXAlign = 0;
             break;
-    }
-
-    switch( eHRel )
-    {
-        case FRAME:
-        //  nHIndex |= 0x00000000;
-            break;
-        case PRTAREA:
-            nHIndex |= 0x00010000;
-            break;
-        case REL_PG_LEFT:
-            nHIndex |= 0x00020000;
-            break;
-        case REL_PG_RIGHT:
-            nHIndex |= 0x00030000;
-            break;
-        case REL_FRM_LEFT:
-            nHIndex |= 0x00040000;
-            break;
-        case REL_FRM_RIGHT:
-            nHIndex |= 0x00050000;
-            break;
-        case REL_PG_FRAME:
-            nHIndex |= 0x00060000;
-            break;
-        case REL_PG_PRTAREA:
-            nHIndex |= 0x00070000;
-            break;
-        case REL_CHAR:
-            nHIndex |= 0x00080000;
-            break;
-        default:
-            nHIndex |= 0x00090000; // PRTAREA
-            break;
-    }
-
-    switch( eHOri )
-    {
         case HORI_LEFT:
-        //  nHIndex |= 0x00000000;
-            break;
-        case HORI_INSIDE:
-            nHIndex |= 0x00000100;
-            break;
-        case HORI_RIGHT:
-            nHIndex |= 0x00000200;
-            break;
-        case HORI_OUTSIDE:
-            nHIndex |= 0x00000300;
+            mnXAlign = 1;
             break;
         case HORI_CENTER:
-            nHIndex |= 0x00000400;
+            mnXAlign = 2;
             break;
-        case HORI_NONE:
-            nHIndex |= 0x00000500;
+        case HORI_RIGHT:
+            mnXAlign = 3;
             break;
-        default:
-        //  nHIndex |= 0x00000000; // HORI_LEFT
+        case HORI_INSIDE:
+            mnXAlign = 4;
             break;
-    }
-
-    // CMC, OD 24.11.2003 #i22673#
-    bool bVertSwap = false;
-    switch( eVRel )
-    {
-        case FRAME:
-        //  nVIndex |= 0x00000000;
-            break;
-        case PRTAREA:
-            nVIndex |= 0x00010000;
-            break;
-        case REL_CHAR:
-            bVertSwap = true;
-            nVIndex |= 0x00020000;
-            break;
-        case REL_VERT_LINE:
-            bVertSwap = true;
-            nVIndex |= 0x00040000;
-            break;
-        default:
-            nVIndex |= 0x00030000; // PRTAREA
+        case HORI_OUTSIDE:
+            mnXAlign = 5;
             break;
     }
 
+    // vertical Adjustment
     // CMC, OD 24.11.2003 #i22673#
-    // When anchored vertically relative to line, (or to char) bottom becomes top
-    // and vice versa
-    if (bVertSwap)
+    // When adjustment is vertically relative to line or to char
+    // bottom becomes top and vice versa
+    const bool bVertSwap = (eVRel == REL_CHAR) || (eVRel == REL_VERT_LINE);
+    switch (eVOri)
     {
-        switch (eVOri)
-        {
-            case VERT_TOP:
-                eVOri = VERT_BOTTOM;
-                break;
-            case VERT_BOTTOM:
-                eVOri = VERT_TOP;
-                break;
-            case VERT_CHAR_TOP:
-                eVOri = VERT_CHAR_BOTTOM;
-                break;
-            case VERT_CHAR_BOTTOM:
-                eVOri = VERT_CHAR_TOP;
-                break;
-            case VERT_LINE_TOP:
-                eVOri = VERT_LINE_BOTTOM;
-                break;
-            case VERT_LINE_BOTTOM:
-                eVOri = VERT_LINE_TOP;
-                break;
-            default:
-                break;
-        }
-    }
-    switch( eVOri )
-    {
+        default:
+        case VERT_NONE:
+            mnYAlign = 0;
+            break;
         case VERT_TOP:
-        //  nVIndex |= 0x00000000;
-            break;
-        case VERT_BOTTOM:
-            nVIndex |= 0x00000100;
+        case VERT_LINE_TOP:
+        case VERT_CHAR_TOP:
+            mnYAlign = bVertSwap ? 3 : 1;
             break;
         case VERT_CENTER:
-            nVIndex |= 0x00000200;
-            break;
-        case VERT_NONE:
-            nVIndex |= 0x00000300;
-            break;
-        case VERT_CHAR_TOP:
-            nVIndex |= 0x00000400;
-            break;
-        case VERT_CHAR_CENTER:
-            nVIndex |= 0x00000500;
-            break;
-        case VERT_CHAR_BOTTOM:
-            nVIndex |= 0x00000600;
-            break;
-        case VERT_LINE_TOP:
-            nVIndex |= 0x00000700;
-            break;
         case VERT_LINE_CENTER:
-            nVIndex |= 0x00000800;
+            mnYAlign = 2;
             break;
+        case VERT_BOTTOM:
         case VERT_LINE_BOTTOM:
-            nVIndex |= 0x00000900;
-            break;
-        default:
-        //  nVIndex |= 0x00000000; // VERT_TOP
+        case VERT_CHAR_BOTTOM:
+            mnYAlign = bVertSwap ? 1 : 3;
             break;
     }
 
-/*
-    Note: the following table MUST be sorted in ascendent order!
+    // Adjustment is horizontally relative to...
+    switch (eHRel)
+    {
+        case REL_PG_PRTAREA:
+            mnXRelTo = 0;
+            break;
+        case REL_PG_FRAME:
+        case REL_PG_LEFT:  //:-(
+        case REL_PG_RIGHT: //:-(
+            mnXRelTo = 1;
+            break;
+        case FRAME:
+        case REL_FRM_LEFT: //:-(
+        case REL_FRM_RIGHT: //:-(
+            if (eAnchor == FLY_PAGE)
+                mnXRelTo = 1;
+            else
+                mnXRelTo = 2;
+            break;
+        case PRTAREA:
+            if (eAnchor == FLY_PAGE)
+                mnXRelTo = 0;
+            else
+                mnXRelTo = 2;
+            break;
+        case REL_CHAR:
+            mnXRelTo = 3;
+            break;
+    }
 
-        nXAlign - abs. Position, Left,  Centered,  Right,  Inside, Outside
-        nYAlign - abs. Position, Top,   Centered,  Bottom, Inside, Outside
-
-        nXRelTo - Page printable area, Page,  Column,    Character
-        nYRelTo - Page printable area, Page,  Paragraph, Line
-
-        Match:  0x99 99 99 9 9
-                   |  |  | | |
-                   |  |  | | +-- ord of nXRelTo
-                   |  |  | +---- ord of nXAlign
-                   |  |  |
-                   |  |  +------ SwHoriOrient
-                   |  +--------- SwRelationOrient (horizontal)
-                   +------------ RndStdIds
-*/
-    static const UINT32 aHVMatcher [] = {
-
-//     H O R I Z O N T A L    SwHoriOrient:   HORI_LEFT, HORI_INSIDE, HORI_RIGHT, HORI_OUTSIDE, HORI_CENTER, HORI_NONE
-//                                                0          1            2           3             4            5
-
-    // RndStdIds: FLY_PAGE: 0
-
-    // SwRelationOrient: REL_PG_LEFT: 2
-    //               |
-                0x00020011,  // SwHoriOrient: HORI_LEFT
-                0x00020111,  //               HORI_INSIDE
-                0x00020211,  //               HORI_RIGHT
-                0x00020311,  //               HORI_OUTSIDE
-                0x00020411,  //               HORI_CENTER
-                0x00020511,  //               HORI_NONE
-    // SwRelationOrient: REL_PG_RIGHT: 3
-    //               |
-                0x00030031,
-                0x00030131,
-                0x00030231,
-                0x00030331,
-                0x00030431,
-                0x00030531,
-    // SwRelationOrient: REL_PG_FRAME: 6
-    //               |
-                0x00060011,
-                0x00060141,
-                0x00060231,
-                0x00060351,
-                0x00060421,
-                0x00060501,
-    // SwRelationOrient: REL_PG_PRTAREA: 7
-    //               |
-                0x00070010,
-                0x00070140,
-                0x00070230,
-                0x00070350,
-                0x00070420,
-                0x00070500,
-
-    // RndStdIds: FLY_AT_CNTNT: 1
-    //
-    // SwRelationOrient: FRAME: 0
-    //               |
-                0x01000012,
-                0x01000112,
-                0x01000232,
-                0x01000332,
-                0x01000422,
-                0x01000502,
-    // SwRelationOrient: PRTAREA: 1
-    //               |
-                0x01010012,
-                0x01010112,
-                0x01010232,
-                0x01010332,
-                0x01010422,
-                0x01010502,
-    // SwRelationOrient: REL_PG_LEFT: 2
-    //               |
-                0x01020011,
-                0x01020111,
-                0x01020211,
-                0x01020311,
-                0x01020411,
-                0x01020511,
-    // SwRelationOrient: REL_PG_RIGHT: 3
-    //               |
-                0x01030031,
-                0x01030131,
-                0x01030231,
-                0x01030331,
-                0x01030431,
-                0x01030531,
-    // SwRelationOrient: REL_FRM_LEFT: 4
-    //               |
-                0x01040012,
-                0x01040112,
-                0x01040212,
-                0x01040312,
-                0x01040412,
-                0x01040512,
-    // SwRelationOrient: REL_FRM_RIGHT: 5
-    //               |
-                0x01050032,
-                0x01050132,
-                0x01050232,
-                0x01050332,
-                0x01050432,
-                0x01050532,
-    // SwRelationOrient: REL_PG_FRAME: 6
-    //               |
-                0x01060011,
-                0x01060141,
-                0x01060231,
-                0x01060351,
-                0x01060421,
-                0x01060501,
-    // SwRelationOrient: REL_PG_PRTAREA: 7
-    //               |
-                0x01070010,
-                0x01070140,
-                0x01070230,
-
-
-                0x01070350,
-                0x01070420,
-                0x01070500,
-
-    // i2916
-    // RndStdIds: FLY_AUTO_CNTNT: 1
-    //
-    // As for FLY_AT_CNTNT with the addition
-    // of following.
-    //
-    // SwRelationOrient: REL_CHAR: 8
-    //               |
-                0x01080013,
-                0x01080113,
-                0x01080233,
-                0x01080333,
-                0x01080423,
-                0x01080503,
-
-
-    // RndStdIds: FLY_IN_CNTNT: 2
-    //
-    // SwRelationOrient: FRAME: 0
-    //               |
-                0x02000012,
-                0x02000112,
-                0x02000232,
-                0x02000332,
-                0x02000422,
-                0x02000502,
-    // SwRelationOrient: PRTAREA: 1
-    //               |
-                0x02010012,
-                0x02010112,
-                0x02010232,
-                0x02010332,
-                0x02010422,
-                0x02010502,
-    // SwRelationOrient: REL_PG_LEFT: 2
-    //               |
-                0x02020011,
-                0x02020111,
-                0x02020211,
-                0x02020311,
-                0x02020411,
-                0x02020511,
-    // SwRelationOrient: REL_PG_RIGHT: 3
-    //               |
-                0x02030031,
-                0x02030131,
-                0x02030231,
-                0x02030331,
-                0x02030431,
-                0x02030531,
-    // SwRelationOrient: REL_FRM_LEFT: 4
-    //               |
-                0x02040012,
-                0x02040112,
-                0x02040212,
-                0x02040312,
-                0x02040412,
-                0x02040512,
-    // SwRelationOrient: REL_FRM_RIGHT: 5
-    //               |
-                0x02050032,
-                0x02050132,
-                0x02050232,
-                0x02050332,
-                0x02050432,
-                0x02050532,
-    // SwRelationOrient: REL_PG_FRAME: 6
-    //               |
-                0x02060011,
-                0x02060141,
-                0x02060231,
-                0x02060351,
-                0x02060421,
-                0x02060501,
-    // SwRelationOrient: REL_PG_PRTAREA: 7
-    //               |
-                0x02070010,
-                0x02070140,
-                0x02070230,
-                0x02070350,
-                0x02070420,
-                0x02070500,
-    // SwRelationOrient: REL_CHAR: 8
-    //               |
-                0x02080013,
-                0x02080113,
-                0x02080233,
-                0x02080333,
-                0x02080423,
-                0x02080503,
-
-//     V E R T I C A L   SwVertOrient:   VERT_TOP, VERT_BOTTOM, VERT_CENTER, VERT_NONE, VERT_CHAR_TOP, VERT_CHAR_CENTER, VERT_CHAR_BOTTOM, VERT_LINE_TOP, VERT_LINE_CENTER, VERT_LINE_BOTTOM
-//                                           0         1            2            3          4              5                 6 == "below"      7              8                 9
-
-    // RndStdIds: FLY_PAGE: 0x10
-    //
-    // SwRelationOrient: REL_PG_FRAME (or FRAME resp.): 0
-    //               |
-                0x10000011,  // SwVertOrient: VERT_TOP
-                0x10000131,  //               VERT_BOTTOM
-                0x10000221,  //               VERT_CENTER
-                0x10000301,  //               VERT_NONE
-    // SwRelationOrient: REL_PG_PRTAREA (or PRTAREA resp.): 1
-    //               |
-                0x10010010,  // SwVertOrient: VERT_TOP
-                0x10010130,  //               VERT_BOTTOM
-                0x10010220,  //               VERT_CENTER
-                0x10010300,  //               VERT_NONE
-
-    // RndStdIds: FLY_AT_CNTNT: 0x11
-    //
-    // SwRelationOrient: FRAME: 0
-    //               |
-                0x11000013,  // SwVertOrient: VERT_TOP
-                0x11000133,  //               VERT_BOTTOM
-                0x11000223,  //               VERT_CENTER
-                0x11000302,  //               VERT_NONE
-    // SwRelationOrient: PRTAREA: 1
-    //               |
-                0x11010013,  // SwVertOrient: VERT_TOP
-                0x11010133,  //               VERT_BOTTOM
-                0x11010223,  //               VERT_CENTER
-                0x11010302,  //               VERT_NONE
-
-    // RndStdIds: "to character" == FLY_AUTO_CNTNT: 0x12
-    //
-    // SwRelationOrient: "Margin" == FRAME: 0
-    //               |
-                0x12000013,  // SwVertOrient: VERT_TOP
-                0x12000133,  //               VERT_BOTTOM
-                0x12000223,  //               VERT_CENTER
-                0x12000302,  //               VERT_NONE
-    // SwRelationOrient: "Textarea" == PRTAREA: 1
-    //               |
-                0x12010013,  // SwVertOrient: VERT_TOP
-                0x12010133,  //               VERT_BOTTOM
-                0x12010223,  //               VERT_CENTER
-                0x12010302,  //               VERT_NONE
-    // SwRelationOrient: "Character" == REL_CHAR: 2
-    //               |
-                0x12020013,  // SwVertOrient: VERT_TOP
-                0x12020133,  //               VERT_BOTTOM
-                0x12020223,  //               VERT_CENTER
-                0x12020302,  //               VERT_NONE
-                0x12020633,  //               VERT_CHAR_BOTTOM (value: 6)
-    // CMC, OD 24.11.2003 #i22673# - extending for vertical alignment at top of line
-    // SwRelationOrient: "Character" == REL_VERT_LINE: 4
-    //               |
-                0x12040013,  //               VERT_TOP
-                0x12040123,  //               VERT_BOTTOM
-                0x12040233,  //               VERT_CENTER
-                0x12040303,  //               VERT_NONE
-                0x12040713,  //               VERT_LINE_TOP
-                0x12040823,  //               VERT_LINE_BOTTOM
-                0x12040933,  //               VERT_LINE_CENTER
-
-    // RndStdIds: "as character" == FLY_IN_CNTNT: 0x13
-    //
-    // SwRelationOrient: FRAME: 0
-    //               |
-                0x13000013,  // SwVertOrient: VERT_TOP        (baseline)
-                0x13000133,  //               VERT_BOTTOM
-                0x13000223,  //               VERT_CENTER
-                0x13000302,  //               VERT_NONE        == "from bottom"
-
-                0x13000413,  //               VERT_CHAR_TOP   (character)
-                0x13000533,  //               VERT_CHAR_CENTER
-                0x13000623,  //               VERT_CHAR_BOTTOM == "below"
-
-                0x13000713,  //               VERT_LINE_TOP   (row)
-                0x13000813,  //               VERT_LINE_CENTER
-                0x13000923,  //               VERT_LINE_BOTTOM
-        };
-
-    // find horizontal values
-    UINT32* pFound = (UINT32*)bsearch( (const void*) &nHIndex,
-        (const void*) aHVMatcher, sizeof(aHVMatcher) / sizeof(aHVMatcher[0]),
-        sizeof(aHVMatcher[0]), CompUINT32 );
-    if( !pFound )
-        pFound = (UINT32*)aHVMatcher; // take Element #0 if none found
-    mnXAlign = (*pFound & 0x000000F0) >> 4;
-    mnXRelTo = (*pFound & 0x0000000F);
-
-    // find vertical values
-    pFound= (UINT32*)bsearch( (const void*) &nVIndex, (void*) aHVMatcher,
-        sizeof(aHVMatcher) / sizeof(aHVMatcher[0]), sizeof(aHVMatcher[0]),
-        CompUINT32 );
-    if( !pFound )
-        pFound = (UINT32*)aHVMatcher; // take Element #0 if none found
-    mnYAlign = (*pFound & 0x000000F0) >> 4;
-    mnYRelTo = (*pFound & 0x0000000F);
+        // Adjustment is vertically relative to...
+    switch (eVRel)
+    {
+        case REL_PG_PRTAREA:
+            mnYRelTo = 0;
+            break;
+        case REL_PG_FRAME:
+            mnYRelTo = 1;
+            break;
+        case PRTAREA:
+            if (eAnchor == FLY_PAGE)
+                mnYRelTo = 0;
+            else
+                mnYRelTo = 2;
+            break;
+        case FRAME:
+            if (eAnchor == FLY_PAGE)
+                mnYRelTo = 1;
+            else
+                mnYRelTo = 2;
+            break;
+        case REL_CHAR:
+        case REL_VERT_LINE: // CMC, OD 24.11.2003 #i22673# - vertical alignment at top of line
+        case REL_PG_LEFT:   //nonsense
+        case REL_PG_RIGHT:  //nonsense
+        case REL_FRM_LEFT:  //nonsense
+        case REL_FRM_RIGHT: //nonsense
+            mnYRelTo = 3;
+            break;
+    }
 }
 
 void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
@@ -2848,10 +2467,12 @@ INT32 SwEscherEx::WriteTxtFlyFrame(const DrawObj &rObj, UINT32 nShapeId,
     return nBorderThick;
 }
 
-void SwBasicEscherEx::WritePicture(EscherPropertyContainer &rPropOpt,
-    const Graphic &rGraphic, const SdrObject &rObj, sal_uInt32 nShapeId)
+void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
+    sal_uInt32 nShapeFlags, const Graphic &rGraphic, const SdrObject &rObj,
+    sal_uInt32 nShapeId)
 {
-    AddShape( ESCHER_ShpInst_PictureFrame, 0xa10, nShapeId );
+    //nShapeFlags == 0xA00 + flips and ole active
+    AddShape(ESCHER_ShpInst_PictureFrame, nShapeFlags, nShapeId);
 
     GraphicObject aGraphicObject(rGraphic);
     ByteString aId = aGraphicObject.GetUniqueID();
@@ -2884,7 +2505,8 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
             const_cast<SdrObject*>(pSdrObj)));
 
         EscherPropertyContainer aPropOpt;
-        WritePicture(aPropOpt, aGraphic, *pSdrObj, nShapeId);
+        WriteOLEPicture(aPropOpt, 0xa00 | SHAPEFLAG_OLESHAPE, aGraphic,
+            *pSdrObj, nShapeId);
 
         WriteFlyFrameAttr( rFmt, mso_sptPictureFrame , aPropOpt );
         aPropOpt.Commit( GetStream() );
