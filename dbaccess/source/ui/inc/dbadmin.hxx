@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-18 14:55:45 $
+ *  last change: $Author: fs $ $Date: 2001-10-24 10:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,6 +342,10 @@ protected:
     */
     sal_Bool            implInsertNew_noCheck(const ::rtl::OUString& _rName);
 
+#ifdef DBG_UTIL
+    ::rtl::OString translatePropertyId( sal_Int32 _nId );
+#endif
+
 private:
     DECL_LINK(OnDatasourceSelected, ListBox*);
     DECL_LINK(OnTypeSelected, OGeneralPage*);
@@ -367,6 +371,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2001/09/18 14:55:45  vg
+ *  #65293# changed to void type of function
+ *
  *  Revision 1.25  2001/09/11 15:08:49  fs
  *  #91304# +isUIEnabled / disableUI
  *
