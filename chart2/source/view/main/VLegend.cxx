@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-17 18:48:19 $
+ *  last change: $Author: bm $ $Date: 2003-11-21 17:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,8 @@ uno::Reference< drawing::XShape >
         {
             eSymbolStyle = chart2::LegendSymbolStyle_BOX;
         }
-        else if( aChartType.equals( C2U( "com.sun.star.chart2.LineChart" )))
+        else if( aChartType.equals( C2U( "com.sun.star.chart2.LineChart" )) ||
+                 aChartType.equals( C2U( "com.sun.star.chart2.ScatterChart" )))
         {
             eSymbolStyle = chart2::LegendSymbolStyle_LINE;
             try
