@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-07-01 07:25:51 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 14:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #include <interface.hxx>
 #include <cstdio>
 #include <sys/utsname.h>
-#include <_version.h>
+#include <vcl/_version.h>
 #include <errno.h>
 #include <string>
 #include <string.h>
@@ -1032,9 +1032,9 @@ static bool setup_version()
     g_buildid = get_profile_string( "bootstraprc", "Bootstrap", "BuildId" );
     g_strDefaultLanguage = get_script_string( "instdb.ins", "DefaultLanguage"  );
 
-    g_strReportServer = get_profile_string( "bootstraprc", "ErrorReport", "Server" );
+    g_strReportServer = get_profile_string( "bootstraprc", "ErrorReport", "ErrorReportServer" );
 
-    string strReportPort = get_profile_string( "bootstraprc", "ErrorReport", "Port", "80" );
+    string strReportPort = get_profile_string( "bootstraprc", "ErrorReport", "ErrorReportPort", "80" );
     char *endptr = NULL;
     unsigned short uReportPort = (unsigned short)strtoul( strReportPort.c_str(), &endptr, 10 );
     g_uReportPort = uReportPort ? uReportPort : 80;
