@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-08 21:54:49 $
+ *  last change: $Author: cl $ $Date: 2002-03-27 09:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,25 +67,16 @@
 
 #define MA_TABPAGE_HEIGHT       82 + 22 + 48 + RSC_SP_TBPG_INNERBORDER_BOTTOM
 
- // RID_SVXPAGE_POSITION -----------------------------------------------------
-TabPage RID_SVXPAGE_POSITION
+ // RID_SVXPAGE_POSITION_SIZE ------------------------------------------------
+TabPage RID_SVXPAGE_POSITION_SIZE
 {
-    HelpId = HID_TRANS_POSITION ;
+    HelpId = HID_TRANS_POSITION_SIZE ;
     Hide = TRUE ;
-    Text = "Position" ;
-    Text [ English ] = "Position" ;
-    Text [ norwegian ] = "Posisjon" ;
-    Text [ italian ] = "Posizione" ;
-    Text [ portuguese_brazilian ] = "Posi??o" ;
-    Text [ portuguese ] = "Posição" ;
-    Text [ finnish ] = "Sijainti" ;
-    Text [ danish ] = "Placering" ;
-    Text [ french ] = "Position" ;
-    Text [ swedish ] = "Placering" ;
-    Text [ dutch ] = "Positie" ;
-    Text [ spanish ] = "Posición" ;
-    Text [ english_us ] = "Position" ;
+    Text = "Position und Größe" ;
+    Text[ English ] = "Position and Size" ;
+    Text[ english_us ] = "Position and Size" ;
     Size = MAP_APPFONT ( 260 , MA_TABPAGE_HEIGHT ) ;
+
     FixedLine FL_POSITION
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
@@ -117,7 +108,7 @@ TabPage RID_SVXPAGE_POSITION
     };
     FixedText FT_POS_X
     {
-        Pos = MAP_APPFONT ( 12 , 16 + 11  ) ;
+        Pos = MAP_APPFONT ( 12 , 16 + 8  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "Position ~X" ;
         Text [ English ] = "Position ~X" ;
@@ -146,7 +137,7 @@ TabPage RID_SVXPAGE_POSITION
     };
     FixedText FT_POS_Y
     {
-        Pos = MAP_APPFONT ( 12 , 32 + 11  ) ;
+        Pos = MAP_APPFONT ( 12 , 32 + 8  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "Position ~Y" ;
         Text [ English ] = "Position ~Y" ;
@@ -176,7 +167,7 @@ TabPage RID_SVXPAGE_POSITION
     MetricField MTR_FLD_POS_X
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 14 + 11  ) ;
+        Pos = MAP_APPFONT ( 56 , 14 + 8  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -191,7 +182,7 @@ TabPage RID_SVXPAGE_POSITION
     MetricField MTR_FLD_POS_Y
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 30 + 11  ) ;
+        Pos = MAP_APPFONT ( 56 , 30 + 8  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -203,9 +194,9 @@ TabPage RID_SVXPAGE_POSITION
         Unit = FUNIT_MM ;
         SpinSize = 10 ;
     };
-    FixedText FT_REFERENCE
+    FixedText FT_POSREFERENCE
     {
-        Pos = MAP_APPFONT ( 178 , 14  ) ;
+        Pos = MAP_APPFONT ( 178 , 2 + 8  ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Basispunkt" ;
         Text [ ENGLISH ] = "Base point" ;
@@ -230,12 +221,12 @@ TabPage RID_SVXPAGE_POSITION
         Text[ arabic ] = "Base point";
         Text[ catalan ] = "Base point";
     };
-    Control CTL_RECT
+    Control CTL_POSRECT
     {
         HelpId = HID_TPPOSITION_CTRL ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 14 + 11  ) ;
-        Size = MAP_APPFONT ( 70 , 48 ) ;
+        Pos = MAP_APPFONT ( 178 , 12 + 8  ) ;
+        Size = MAP_APPFONT ( 48 , 34 ) ;
         TabStop = TRUE ;
         QuickHelpText = "Basispunkt" ;
         QuickHelpText [ English ] = "Base point" ;
@@ -262,41 +253,348 @@ TabPage RID_SVXPAGE_POSITION
         QuickHelpText[ catalan ] = "Punto base";
         QuickHelpText[ finnish ] = "Peruspiste";
     };
-    TriStateBox TSB_PROTECT
+
+    // size
+
+    FixedLine FL_SIZE
     {
-        Pos = MAP_APPFONT ( 12 , 46 + 11  ) ;
-        Size = MAP_APPFONT ( 160 , 10 ) ;
-        Text = "Sch~ützen" ;
-        Text [ ENGLISH ] = "~Protect" ;
-        Text [ norwegian ] = "~Beskytte" ;
-        Text [ italian ] = "Proteggi" ;
-        Text [ portuguese_brazilian ] = "~Proteger" ;
-        Text [ portuguese ] = "~Proteger" ;
-        Text [ finnish ] = "~Suojaa" ;
-        Text [ danish ] = "Beskyt" ;
-        Text [ french ] = "Protéger" ;
-        Text [ swedish ] = "S~kydda" ;
-        Text [ dutch ] = "~Beveiligen" ;
-        Text [ spanish ] = "Proteger" ;
-        Text [ english_us ] = "Pr~otect" ;
-        TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ä¿æŠ¤(~O)";
-        Text[ russian ] = "Çàùèòà";
-        Text[ polish ] = "Chroñ";
-        Text[ japanese ] = "ä¿è­·(~O)";
-        Text[ chinese_traditional ] = "ä¿è­·(~O)";
-        Text[ arabic ] = "ÍãÇíÉ";
-        Text[ greek ] = "Ğñïóôáóßá";
-        Text[ korean ] = "ë³´í˜¸(~O)";
-        Text[ turkish ] = "~Koru";
+        Pos = MAP_APPFONT ( 6 , 56  ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text = "Größe" ;
+        Text [ ENGLISH ] = "Size" ;
+        Text [ norwegian ] = "Størrelse" ;
+        Text [ italian ] = "Dimensione" ;
+        Text [ portuguese_brazilian ] = "Tamanho" ;
+        Text [ portuguese ] = "Tamanho" ;
+        Text [ finnish ] = "Koko" ;
+        Text [ danish ] = "Størrelse" ;
+        Text [ french ] = "Taille" ;
+        Text [ swedish ] = "Storlek" ;
+        Text [ dutch ] = "Grootte" ;
+        Text [ spanish ] = "Tamaño" ;
+        Text [ english_us ] = "Size" ;
+        Text[ chinese_simplified ] = "å¤§å°";
+        Text[ russian ] = "Ğàçìåğ";
+        Text[ polish ] = "Rozmiar";
+        Text[ japanese ] = "ã‚µã‚¤ã‚º";
+        Text[ chinese_traditional ] = "å¤§å°";
+        Text[ arabic ] = "ÇáÍÌã";
+        Text[ greek ] = "Ìİãåèïò";
+        Text[ korean ] = "í¬ê¸°";
+        Text[ turkish ] = "Boyut";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Proteger";
+        Text[ catalan ] = "Tamaño";
     };
+    FixedText FT_WIDTH
+    {
+        Pos = MAP_APPFONT ( 12 , 16 + 61 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "~Breite" ;
+        Text [ ENGLISH ] = "~Width" ;
+        Text [ norwegian ] = "~Bredde" ;
+        Text [ italian ] = "Larghezza" ;
+        Text [ portuguese_brazilian ] = "~Largura" ;
+        Text [ portuguese ] = "~Largura" ;
+        Text [ finnish ] = "Le~veys" ;
+        Text [ danish ] = "Bredde" ;
+        Text [ french ] = "Largeur" ;
+        Text [ swedish ] = "~Bredd" ;
+        Text [ dutch ] = "~Breedte" ;
+        Text [ spanish ] = "Ancho" ;
+        Text [ english_us ] = "Wi~dth" ;
+        Text[ chinese_simplified ] = "å®½åº¦(~D)";
+        Text[ russian ] = "Øèğèíà";
+        Text[ polish ] = "Szer.";
+        Text[ japanese ] = "å¹…(~D)";
+        Text[ chinese_traditional ] = "å¯¬åº¦(~D)";
+        Text[ arabic ] = "ÇáÚÑÖ";
+        Text[ greek ] = "ĞëÜôïò";
+        Text[ korean ] = "ë„ˆë¹„(~D)";
+        Text[ turkish ] = "~Genişlik";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ncho";
+    };
+    FixedText FT_HEIGHT
+    {
+        Pos = MAP_APPFONT ( 12 , 32 + 61  ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "~Höhe" ;
+        Text [ ENGLISH ] = "H~eight" ;
+        Text [ norwegian ] = "H~eight" ;
+        Text [ italian ] = "Al~tezza" ;
+        Text [ portuguese_brazilian ] = "A~ltura" ;
+        Text [ portuguese ] = "A~ltura" ;
+        Text [ finnish ] = "K~orkeus" ;
+        Text [ danish ] = "Højde" ;
+        Text [ french ] = "Hauteur" ;
+        Text [ swedish ] = "H~öjd" ;
+        Text [ dutch ] = "H~oogte" ;
+        Text [ spanish ] = "A~ltura" ;
+        Text [ english_us ] = "H~eight" ;
+        Text[ chinese_simplified ] = "é«˜åº¦(~E)";
+        Text[ russian ] = "Âûñîòà";
+        Text[ polish ] = "Wys.";
+        Text[ japanese ] = "é«˜ã•(~E)";
+        Text[ chinese_traditional ] = "é«˜åº¦(~E)";
+        Text[ arabic ] = "ÇáÇÑÊİÇÚ";
+        Text[ greek ] = "¾øïò";
+        Text[ korean ] = "ë†’ì´(~E)";
+        Text[ turkish ] = "Y~ükseklik";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ltura";
+    };
+    MetricField MTR_FLD_WIDTH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 56 , 14 + 61  ) ;
+        Size = MAP_APPFONT ( 54 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 120000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        SpinSize = 10 ;
+    };
+    MetricField MTR_FLD_HEIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 56 , 30 + 61  ) ;
+        Size = MAP_APPFONT ( 54 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 120000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_SIZEREFERENCE
+    {
+        Pos = MAP_APPFONT ( 178 , 2 + 61  ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "Basispunkt" ;
+        Text [ ENGLISH ] = "Base point" ;
+        Text[ english_us ] = "Base point";
+        Text[ portuguese ] = "Ponto de base";
+        Text[ russian ] = "Áàçèñíàÿ òî÷êà";
+        Text[ greek ] = "Base point";
+        Text[ dutch ] = "Basispunt";
+        Text[ french ] = "Point de base";
+        Text[ spanish ] = "Punto base";
+        Text[ finnish ] = "Peruspiste";
+        Text[ italian ] = "Punto base";
+        Text[ danish ] = "Base point";
+        Text[ swedish ] = "Baspunkt";
+        Text[ polish ] = "Punkt podstawy";
+        Text[ portuguese_brazilian ] = "Base point";
+        Text[ japanese ] = "åŸºç‚¹";
+        Text[ korean ] = "ê¸°ì¤€ì ";
+        Text[ chinese_simplified ] = "åŸºç‚¹";
+        Text[ chinese_traditional ] = "åŸºé»";
+        Text[ turkish ] = "Base point";
+        Text[ arabic ] = "Base point";
+        Text[ catalan ] = "Base point";
+    };
+    Control CTL_SIZERECT
+    {
+        HelpId = HID_TPSIZE_CTRL ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 178 , 12 + 61 ) ;
+        Size = MAP_APPFONT ( 48 , 34 ) ;
+        TabStop = TRUE ;
+        QuickHelpText = "Basispunkt" ;
+        QuickHelpText [ English ] = "Base point" ;
+        QuickHelpText [ english_us ] = "Base point" ;
+        QuickHelpText [ portuguese_brazilian ] = "Basispunkt" ;
+        QuickHelpText [ swedish ] = "Baspunkt" ;
+        QuickHelpText [ danish ] = "Basispunkt" ;
+        QuickHelpText [ italian ] = "Punto di base" ;
+        QuickHelpText [ spanish ] = "Punto base" ;
+        QuickHelpText [ french ] = "Point de base" ;
+        QuickHelpText [ dutch ] = "Basispunt" ;
+        QuickHelpText [ portuguese ] = "Ponto de base" ;
+        QuickHelpText[ russian ] = "Òî÷êà îñíîâû";
+        QuickHelpText[ polish ] = "Punkt podstawy";
+        QuickHelpText[ japanese ] = "åŸºæº–ãƒã‚¤ãƒ³ãƒˆ";
+        QuickHelpText[ chinese_simplified ] = "åŸºç‚¹";
+        QuickHelpText[ chinese_traditional ] = "åŸºé»";
+        QuickHelpText[ arabic ] = "äŞØÉ ÇáÇäØáÇŞ";
+        QuickHelpText[ greek ] = "Óçìåßï âÜóçò";
+        QuickHelpText[ korean ] = "ê¸°ì¤€ì ";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Basispunkt";
+        QuickHelpText[ catalan ] = "Punto base";
+        QuickHelpText[ finnish ] = "Peruspiste";
+    };
+    CheckBox CBX_SCALE
+    {
+        Pos = MAP_APPFONT ( 12 , 47 + 61 ) ;
+        Size = MAP_APPFONT ( 162 , 10 ) ;
+        Text = "~Abgleich" ;
+        Text [ ENGLISH ] = "~Match" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Keep ratio" ;
+        Text [ italian ] = "Adatta" ;
+        Text [ spanish ] = "~Igualar" ;
+        Text [ french ] = "Proportionnel" ;
+        Text [ dutch ] = "~Synchroniseren" ;
+        Text [ swedish ] = "Anpassa proportionellt" ;
+        Text [ danish ] = "Proportional" ;
+        Text [ portuguese_brazilian ] = "~Abgleich" ;
+        Text [ portuguese ] = "Pr~oporcional" ;
+        Text[ chinese_simplified ] = "è°ƒæ•´(~K)";
+        Text[ russian ] = "Ïğîïîğöèîíàëüíî";
+        Text[ polish ] = "Dopasuj";
+        Text[ japanese ] = "èª¿æ•´(~K)";
+        Text[ chinese_traditional ] = "èª¿æ•´(~K)";
+        Text[ arabic ] = "ÊÒÇãä";
+        Text[ greek ] = "~ÁíáëïãéêÜ";
+        Text[ korean ] = "ë¹„ìœ¨ ìœ ì§€(~K)";
+        Text[ turkish ] = "~Eşitle";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Igualar";
+        Text[ finnish ] = "~Säilytä suhde";
+    };
+
+    // Protect
+
+    FixedLine FL_PROTECT
+    {
+        Pos = MAP_APPFONT ( 6 , 120  ) ;
+        Size = MAP_APPFONT ( 119 , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text = "Schützen" ;
+        Text [ ENGLISH ] = "Protect" ;
+        Text [ english_us ] = "Protect" ;
+    };
+
+    TriStateBox TSB_POSPROTECT
+    {
+        Pos = MAP_APPFONT ( 12 , 10 + 120 ) ;
+        Size = MAP_APPFONT ( 113 , 10 ) ;
+        Text = "~Position" ;
+        Text [ ENGLISH ] = "~Position" ;
+        Text [ english_us ] = "~Position" ;
+        TabStop = TRUE ;
+    };
+
+    TriStateBox TSB_SIZEPROTECT
+    {
+        Pos = MAP_APPFONT ( 12 , 24 + 120 ) ;
+        Size = MAP_APPFONT ( 113 , 10 ) ;
+        Text = "~Größe" ;
+        Text [ ENGLISH ] = "~Size" ;
+        Text [ english_us ] = "~Size" ;
+        TabStop = TRUE ;
+    };
+
+    // Adjust
+
+    FixedLine FL_ADJUST
+    {
+        Pos = MAP_APPFONT ( 6 + 123 + 6 , 120 ) ;
+        Size = MAP_APPFONT ( 119 , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text = "Anpassen" ;
+        Text [ ENGLISH ] = "Adjust" ;
+        Text [ english_us ] = "Adapt" ;
+        Text[ portuguese ] = "Ajustar";
+        Text[ russian ] = "Ñîãëàñîâàòü";
+        Text[ greek ] = "ĞñïóáñìïãŞ";
+        Text[ dutch ] = "Aanpassen";
+        Text[ french ] = "Adapter";
+        Text[ spanish ] = "Ajustar";
+        Text[ italian ] = "Adatta";
+        Text[ danish ] = "Tilpas";
+        Text[ swedish ] = "Anpassa";
+        Text[ polish ] = "Konfiguracja";
+        Text[ portuguese_brazilian ] = "Adjust";
+        Text[ japanese ] = "é©åˆ";
+        Text[ korean ] = "ì¡°ì •";
+        Text[ chinese_simplified ] = "è°ƒæ•´";
+        Text[ chinese_traditional ] = "èª¿æ•´";
+        Text[ arabic ] = "ÖÈØ";
+        Text[ turkish ] = "Ayarla";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ajustar";
+        Text[ finnish ] = "Sovita";
+    };
+    TriStateBox TSB_AUTOGROW_WIDTH
+    {
+        Pos = MAP_APPFONT ( 12 + 121 + 8, 10 + 120 ) ;
+        Size = MAP_APPFONT ( 113 , 10 ) ;
+        Text = "Br~eite an Text anpassen" ;
+        Text [ ENGLISH ] = "Fit ~width to text" ;
+        Text [ english_us ] = "~Fit width to text" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "Br~eedte aan tekst aanpassen" ;
+        Text [ italian ] = "~Adatta la larghezza al testo" ;
+        Text [ spanish ] = "Ajustar ancho al texto" ;
+        Text [ french ] = "Adapter la lar~geur au texte" ;
+        Text [ swedish ] = "Anpassa br~edd till text" ;
+        Text [ danish ] = "Tilpas bredde til tekst" ;
+        Text [ portuguese ] = "Ajustar ~largura ao texto" ;
+        Text [ portuguese_brazilian ] = "Br~eite an Text anpassen" ;
+        Text[ chinese_simplified ] = "å’Œæ–‡å­—å®½åº¦å¯¹åº”(~F)";
+        Text[ russian ] = "Âûğîâíÿòü øèğèíó ïî òåêñòó";
+        Text[ polish ] = "Dopasuj szerokoœæ do tekstu";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã«å¹…ã‚’åˆã‚ã›ã‚‹(~F)";
+        Text[ chinese_traditional ] = "å’Œå…§æ–‡å¯¬åº¦å°é½Š(~F)";
+        Text[ arabic ] = "ãáÇÁãÉ ÇáÚÑÖ ááäÕ";
+        Text[ greek ] = "ĞñïóáñìïãŞ ğëÜôïõò ùò ğñïò êåßìåíï";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ì— ë„ˆë¹„ ë§ì¶¤(~F)";
+        Text[ turkish ] = "Genişliği, metne göre a~yarla";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ajustar ~ancho al texto";
+        Text[ finnish ] = "~Sovita leveys tekstiin";
+    };
+    TriStateBox TSB_AUTOGROW_HEIGHT
+    {
+        Pos = MAP_APPFONT ( 12 + 121 + 8, 24 + 120 ) ;
+        Size = MAP_APPFONT ( 113 , 10 ) ;
+        Text = "Höhe a~n Text anpassen" ;
+        Text [ ENGLISH ] = "Fit ~height to text" ;
+        Text [ english_us ] = "Fit ~height to text" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "Hoo~gte aan tekst aanpassen" ;
+        Text [ italian ] = "Adatta l'alt~ezza al testo" ;
+        Text [ spanish ] = "~Ajustar altura al texto" ;
+        Text [ french ] = "Adapter la hauteur au texte" ;
+        Text [ swedish ] = "A~npassa höjd till text" ;
+        Text [ danish ] = "Tilpas højde til tekst" ;
+        Text [ portuguese ] = "Ajustar ~altura ao texto" ;
+        Text [ portuguese_brazilian ] = "H?~e an Text anpassen" ;
+        Text[ chinese_simplified ] = "å’Œæ–‡å­—é«˜åº¦å¯¹åº”(~H)";
+        Text[ russian ] = "Âûğîâíÿòü âûñîòó ïî òåêñòó";
+        Text[ polish ] = "Dopasuj wysokoœæ do tekstu";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã«é«˜ã•ã‚’åˆã‚ã›ã‚‹(~H)";
+        Text[ chinese_traditional ] = "å’Œå…§æ–‡é«˜åº¦å°é½Š(~H)";
+        Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ááäÕ";
+        Text[ greek ] = "ĞñïóáñìïãŞ ıøïõò ùò ğñïò êåßìåíï";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ì— ë†’ì´ ë§ì¶¤(~H)";
+        Text[ turkish ] = "Yüksekliği, metne göre a~yarla";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ajustar altura al texto";
+        Text[ finnish ] = "~Sovita korkeus tekstiin";
+    };
+
+    FixedLine FL_DIVIDER
+    {
+        Pos = MAP_APPFONT( 6 + 119 + 5, 128 );
+        Size = MAP_APPFONT( RSC_CD_FIXEDLINE_WIDTH, 26 );
+        Vert = True;
+    };
+
+    // Anchor
 
     FixedLine FL_ANCHOR
     {
-        Pos = MAP_APPFONT ( 6 , 71 + 11  ) ;
-        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Pos = MAP_APPFONT ( 6 + 123 + 6 , 120 ) ;
+        Size = MAP_APPFONT ( 119 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Verankerung" ;
         Text [ ENGLISH ] = "Anchor" ;
         Hide = TRUE ;
@@ -324,7 +622,7 @@ TabPage RID_SVXPAGE_POSITION
     };
     FixedText FT_ANCHOR
     {
-        Pos = MAP_APPFONT ( 12 , 84 + 11  ) ;
+        Pos = MAP_APPFONT ( 12 + 121 + 8, 10 + 120 ) ;
         Size = MAP_APPFONT ( 37 , 10 ) ;
         Text = "~Anker" ;
         Text [ ENGLISH ] = "~Anchor" ;
@@ -353,7 +651,7 @@ TabPage RID_SVXPAGE_POSITION
     };
     ListBox LB_ANCHOR
     {
-        Pos = MAP_APPFONT ( 53 , 82 + 11  ) ;
+        Pos = MAP_APPFONT ( 46 + 121 + 16 , 8 + 120 ) ;
         Size = MAP_APPFONT ( 54 , 60 ) ;
         Hide = TRUE ;
         DropDown = TRUE ;
@@ -521,7 +819,7 @@ TabPage RID_SVXPAGE_POSITION
     };
     FixedText FT_ORIENT
     {
-        Pos = MAP_APPFONT ( 12 , 100 + 11  ) ;
+        Pos = MAP_APPFONT ( 12 + 121 + 8, 24 + 120 ) ;
         Size = MAP_APPFONT ( 37 , 10 ) ;
         Text = "~Position" ;
         Text[English] = "~Position" ;
@@ -549,7 +847,7 @@ TabPage RID_SVXPAGE_POSITION
     };
     ListBox LB_ORIENT
     {
-        Pos = MAP_APPFONT ( 53 , 98 + 11  );
+        Pos = MAP_APPFONT ( 46 + 121 + 16 , 22 + 120 );
         Size = MAP_APPFONT ( 54 , 60 ) ;
         Hide = TRUE ;
         DropDown = TRUE ;
@@ -853,371 +1151,8 @@ TabPage RID_SVXPAGE_POSITION
         < "Viivan alaosa" ; > ;
     };
     };
-    Text[ chinese_simplified ] = "ä½ç½®";
-    Text[ russian ] = "Ïîçèöèÿ";
-    Text[ polish ] = "Pozycja";
-    Text[ japanese ] = "ä½ç½®";
-    Text[ chinese_traditional ] = "ä½ç½®";
-    Text[ arabic ] = "ÇáãæÖÚ";
-    Text[ greek ] = "Èİóç";
-    Text[ korean ] = "ìœ„ì¹˜";
-    Text[ turkish ] = "Konum";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Posición";
 };
- // RID_SVXPAGE_SIZE ---------------------------------------------------------
-TabPage RID_SVXPAGE_SIZE
-{
-    HelpId = HID_TRANS_SIZE ;
-    Hide = TRUE ;
-    Text = "Größe" ;
-    Text [ English ] = "Size" ;
-    Text [ norwegian ] = "Størrelse" ;
-    Text [ italian ] = "Dimensione" ;
-    Text [ portuguese_brazilian ] = "Tamanho" ;
-    Text [ portuguese ] = "Tamanho" ;
-    Text [ finnish ] = "Koko" ;
-    Text [ danish ] = "Størrelse" ;
-    Text [ french ] = "Taille" ;
-    Text [ swedish ] = "Storlek" ;
-    Text [ dutch ] = "Grootte" ;
-    Text [ spanish ] = "Tamaño" ;
-    Text [ english_us ] = "Size" ;
-    Size = MAP_APPFONT ( 260 , MA_TABPAGE_HEIGHT ) ;
-    FixedLine FL_SIZE
-    {
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text = "Größe" ;
-        Text [ ENGLISH ] = "Size" ;
-        Text [ norwegian ] = "Størrelse" ;
-        Text [ italian ] = "Dimensione" ;
-        Text [ portuguese_brazilian ] = "Tamanho" ;
-        Text [ portuguese ] = "Tamanho" ;
-        Text [ finnish ] = "Koko" ;
-        Text [ danish ] = "Størrelse" ;
-        Text [ french ] = "Taille" ;
-        Text [ swedish ] = "Storlek" ;
-        Text [ dutch ] = "Grootte" ;
-        Text [ spanish ] = "Tamaño" ;
-        Text [ english_us ] = "Size" ;
-        Text[ chinese_simplified ] = "å¤§å°";
-        Text[ russian ] = "Ğàçìåğ";
-        Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "ã‚µã‚¤ã‚º";
-        Text[ chinese_traditional ] = "å¤§å°";
-        Text[ arabic ] = "ÇáÍÌã";
-        Text[ greek ] = "Ìİãåèïò";
-        Text[ korean ] = "í¬ê¸°";
-        Text[ turkish ] = "Boyut";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tamaño";
-    };
-    FixedText FT_WIDTH
-    {
-        Pos = MAP_APPFONT ( 12 , 16 + 11  ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "~Breite" ;
-        Text [ ENGLISH ] = "~Width" ;
-        Text [ norwegian ] = "~Bredde" ;
-        Text [ italian ] = "Larghezza" ;
-        Text [ portuguese_brazilian ] = "~Largura" ;
-        Text [ portuguese ] = "~Largura" ;
-        Text [ finnish ] = "Le~veys" ;
-        Text [ danish ] = "Bredde" ;
-        Text [ french ] = "Largeur" ;
-        Text [ swedish ] = "~Bredd" ;
-        Text [ dutch ] = "~Breedte" ;
-        Text [ spanish ] = "Ancho" ;
-        Text [ english_us ] = "Wi~dth" ;
-        Text[ chinese_simplified ] = "å®½åº¦(~D)";
-        Text[ russian ] = "Øèğèíà";
-        Text[ polish ] = "Szer.";
-        Text[ japanese ] = "å¹…(~D)";
-        Text[ chinese_traditional ] = "å¯¬åº¦(~D)";
-        Text[ arabic ] = "ÇáÚÑÖ";
-        Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "ë„ˆë¹„(~D)";
-        Text[ turkish ] = "~Genişlik";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~ncho";
-    };
-    FixedText FT_HEIGHT
-    {
-        Pos = MAP_APPFONT ( 12 , 32 + 11  ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "~Höhe" ;
-        Text [ ENGLISH ] = "H~eight" ;
-        Text [ norwegian ] = "H~eight" ;
-        Text [ italian ] = "Al~tezza" ;
-        Text [ portuguese_brazilian ] = "A~ltura" ;
-        Text [ portuguese ] = "A~ltura" ;
-        Text [ finnish ] = "K~orkeus" ;
-        Text [ danish ] = "Højde" ;
-        Text [ french ] = "Hauteur" ;
-        Text [ swedish ] = "H~öjd" ;
-        Text [ dutch ] = "H~oogte" ;
-        Text [ spanish ] = "A~ltura" ;
-        Text [ english_us ] = "H~eight" ;
-        Text[ chinese_simplified ] = "é«˜åº¦(~E)";
-        Text[ russian ] = "Âûñîòà";
-        Text[ polish ] = "Wys.";
-        Text[ japanese ] = "é«˜ã•(~E)";
-        Text[ chinese_traditional ] = "é«˜åº¦(~E)";
-        Text[ arabic ] = "ÇáÇÑÊİÇÚ";
-        Text[ greek ] = "¾øïò";
-        Text[ korean ] = "ë†’ì´(~E)";
-        Text[ turkish ] = "Y~ükseklik";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~ltura";
-    };
-    MetricField MTR_FLD_WIDTH
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 14 + 11  ) ;
-        Size = MAP_APPFONT ( 54 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 1 ;
-        Maximum = 120000 ;
-        StrictFormat = TRUE ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_MM ;
-        SpinSize = 10 ;
-    };
-    MetricField MTR_FLD_HEIGHT
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 30 + 11  ) ;
-        Size = MAP_APPFONT ( 54 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 1 ;
-        Maximum = 120000 ;
-        StrictFormat = TRUE ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_MM ;
-        SpinSize = 10 ;
-    };
-    FixedText FT_REFERENCE
-    {
-        Pos = MAP_APPFONT ( 178 , 14  ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "Basispunkt" ;
-        Text [ ENGLISH ] = "Base point" ;
-        Text[ english_us ] = "Base point";
-        Text[ portuguese ] = "Ponto de base";
-        Text[ russian ] = "Áàçèñíàÿ òî÷êà";
-        Text[ greek ] = "Base point";
-        Text[ dutch ] = "Basispunt";
-        Text[ french ] = "Point de base";
-        Text[ spanish ] = "Punto base";
-        Text[ finnish ] = "Peruspiste";
-        Text[ italian ] = "Punto base";
-        Text[ danish ] = "Base point";
-        Text[ swedish ] = "Baspunkt";
-        Text[ polish ] = "Punkt podstawy";
-        Text[ portuguese_brazilian ] = "Base point";
-        Text[ japanese ] = "åŸºç‚¹";
-        Text[ korean ] = "ê¸°ì¤€ì ";
-        Text[ chinese_simplified ] = "åŸºç‚¹";
-        Text[ chinese_traditional ] = "åŸºé»";
-        Text[ turkish ] = "Base point";
-        Text[ arabic ] = "Base point";
-        Text[ catalan ] = "Base point";
-    };
-    Control CTL_RECT
-    {
-        HelpId = HID_TPSIZE_CTRL ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 14 + 11 ) ;
-        Size = MAP_APPFONT ( 70 , 48 ) ;
-        TabStop = TRUE ;
-        QuickHelpText = "Basispunkt" ;
-        QuickHelpText [ English ] = "Base point" ;
-        QuickHelpText [ english_us ] = "Base point" ;
-        QuickHelpText [ portuguese_brazilian ] = "Basispunkt" ;
-        QuickHelpText [ swedish ] = "Baspunkt" ;
-        QuickHelpText [ danish ] = "Basispunkt" ;
-        QuickHelpText [ italian ] = "Punto di base" ;
-        QuickHelpText [ spanish ] = "Punto base" ;
-        QuickHelpText [ french ] = "Point de base" ;
-        QuickHelpText [ dutch ] = "Basispunt" ;
-        QuickHelpText [ portuguese ] = "Ponto de base" ;
-        QuickHelpText[ russian ] = "Òî÷êà îñíîâû";
-        QuickHelpText[ polish ] = "Punkt podstawy";
-        QuickHelpText[ japanese ] = "åŸºæº–ãƒã‚¤ãƒ³ãƒˆ";
-        QuickHelpText[ chinese_simplified ] = "åŸºç‚¹";
-        QuickHelpText[ chinese_traditional ] = "åŸºé»";
-        QuickHelpText[ arabic ] = "äŞØÉ ÇáÇäØáÇŞ";
-        QuickHelpText[ greek ] = "Óçìåßï âÜóçò";
-        QuickHelpText[ korean ] = "ê¸°ì¤€ì ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Basispunkt";
-        QuickHelpText[ catalan ] = "Punto base";
-        QuickHelpText[ finnish ] = "Peruspiste";
-    };
-    CheckBox CBX_SCALE
-    {
-        Pos = MAP_APPFONT ( 12 , 46 + 11  ) ;
-        Size = MAP_APPFONT ( 162 , 10 ) ;
-        Text = "~Abgleich" ;
-        Text [ ENGLISH ] = "~Match" ;
-        TabStop = TRUE ;
-        Text [ english_us ] = "~Keep ratio" ;
-        Text [ italian ] = "Adatta" ;
-        Text [ spanish ] = "~Igualar" ;
-        Text [ french ] = "Proportionnel" ;
-        Text [ dutch ] = "~Synchroniseren" ;
-        Text [ swedish ] = "Anpassa proportionellt" ;
-        Text [ danish ] = "Proportional" ;
-        Text [ portuguese_brazilian ] = "~Abgleich" ;
-        Text [ portuguese ] = "Pr~oporcional" ;
-        Text[ chinese_simplified ] = "è°ƒæ•´(~K)";
-        Text[ russian ] = "Ïğîïîğöèîíàëüíî";
-        Text[ polish ] = "Dopasuj";
-        Text[ japanese ] = "èª¿æ•´(~K)";
-        Text[ chinese_traditional ] = "èª¿æ•´(~K)";
-        Text[ arabic ] = "ÊÒÇãä";
-        Text[ greek ] = "~ÁíáëïãéêÜ";
-        Text[ korean ] = "ë¹„ìœ¨ ìœ ì§€(~K)";
-        Text[ turkish ] = "~Eşitle";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Igualar";
-        Text[ finnish ] = "~Säilytä suhde";
-    };
-    TriStateBox TSB_PROTECT
-    {
-        Pos = MAP_APPFONT ( 12 , 60 + 11  ) ;
-        Size = MAP_APPFONT ( 162 , 10 ) ;
-        Text = "Sch~ützen" ;
-        Text [ ENGLISH ] = "~Protect" ;
-        Text [ norwegian ] = "~Beskytte" ;
-        Text [ italian ] = "Proteggi" ;
-        Text [ portuguese_brazilian ] = "~Proteger" ;
-        Text [ portuguese ] = "~Proteger" ;
-        Text [ finnish ] = "~Suojaa" ;
-        Text [ danish ] = "Beskyt" ;
-        Text [ french ] = "Protéger" ;
-        Text [ swedish ] = "S~kydda" ;
-        Text [ dutch ] = "~Beveiligen" ;
-        Text [ spanish ] = "Proteger" ;
-        Text [ english_us ] = "Pr~otect" ;
-        TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ä¿æŠ¤(~O)";
-        Text[ russian ] = "Çàùèòà";
-        Text[ polish ] = "Chroñ";
-        Text[ japanese ] = "ä¿è­·(~O)";
-        Text[ chinese_traditional ] = "ä¿è­·(~O)";
-        Text[ arabic ] = "ÍãÇíÉ";
-        Text[ greek ] = "Ğñïóôáóßá";
-        Text[ korean ] = "ë³´í˜¸(~O)";
-        Text[ turkish ] = "~Koru";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Proteger";
-    };
 
-    FixedLine FL_ADJUST
-    {
-        Pos = MAP_APPFONT ( 6 , 79 + 11  ) ;
-        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text = "Anpassen" ;
-        Text [ ENGLISH ] = "Adjust" ;
-        Text [ english_us ] = "Adapt" ;
-        Text[ portuguese ] = "Ajustar";
-        Text[ russian ] = "Ñîãëàñîâàòü";
-        Text[ greek ] = "ĞñïóáñìïãŞ";
-        Text[ dutch ] = "Aanpassen";
-        Text[ french ] = "Adapter";
-        Text[ spanish ] = "Ajustar";
-        Text[ italian ] = "Adatta";
-        Text[ danish ] = "Tilpas";
-        Text[ swedish ] = "Anpassa";
-        Text[ polish ] = "Konfiguracja";
-        Text[ portuguese_brazilian ] = "Adjust";
-        Text[ japanese ] = "é©åˆ";
-        Text[ korean ] = "ì¡°ì •";
-        Text[ chinese_simplified ] = "è°ƒæ•´";
-        Text[ chinese_traditional ] = "èª¿æ•´";
-        Text[ arabic ] = "ÖÈØ";
-        Text[ turkish ] = "Ayarla";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ajustar";
-        Text[ finnish ] = "Sovita";
-    };
-    TriStateBox TSB_AUTOGROW_WIDTH
-    {
-        Pos = MAP_APPFONT ( 12 , 90 + 11  ) ;
-        Size = MAP_APPFONT ( 220 , 10 ) ;
-        Text = "Br~eite an Text anpassen" ;
-        Text [ ENGLISH ] = "Fit ~width to text" ;
-        Text [ english_us ] = "~Fit width to text" ;
-        TabStop = TRUE ;
-        Text [ dutch ] = "Br~eedte aan tekst aanpassen" ;
-        Text [ italian ] = "~Adatta la larghezza al testo" ;
-        Text [ spanish ] = "Ajustar ancho al texto" ;
-        Text [ french ] = "Adapter la lar~geur au texte" ;
-        Text [ swedish ] = "Anpassa br~edd till text" ;
-        Text [ danish ] = "Tilpas bredde til tekst" ;
-        Text [ portuguese ] = "Ajustar ~largura ao texto" ;
-        Text [ portuguese_brazilian ] = "Br~eite an Text anpassen" ;
-        Text[ chinese_simplified ] = "å’Œæ–‡å­—å®½åº¦å¯¹åº”(~F)";
-        Text[ russian ] = "Âûğîâíÿòü øèğèíó ïî òåêñòó";
-        Text[ polish ] = "Dopasuj szerokoœæ do tekstu";
-        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã«å¹…ã‚’åˆã‚ã›ã‚‹(~F)";
-        Text[ chinese_traditional ] = "å’Œå…§æ–‡å¯¬åº¦å°é½Š(~F)";
-        Text[ arabic ] = "ãáÇÁãÉ ÇáÚÑÖ ááäÕ";
-        Text[ greek ] = "ĞñïóáñìïãŞ ğëÜôïõò ùò ğñïò êåßìåíï";
-        Text[ korean ] = "í…ìŠ¤íŠ¸ì— ë„ˆë¹„ ë§ì¶¤(~F)";
-        Text[ turkish ] = "Genişliği, metne göre a~yarla";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ajustar ~ancho al texto";
-        Text[ finnish ] = "~Sovita leveys tekstiin";
-    };
-    TriStateBox TSB_AUTOGROW_HEIGHT
-    {
-        Pos = MAP_APPFONT ( 12 , 114 ) ;
-        Size = MAP_APPFONT ( 220 , 10 ) ;
-        Text = "Höhe a~n Text anpassen" ;
-        Text [ ENGLISH ] = "Fit ~height to text" ;
-        Text [ english_us ] = "Fit ~height to text" ;
-        TabStop = TRUE ;
-        Text [ dutch ] = "Hoo~gte aan tekst aanpassen" ;
-        Text [ italian ] = "Adatta l'alt~ezza al testo" ;
-        Text [ spanish ] = "~Ajustar altura al texto" ;
-        Text [ french ] = "Adapter la hauteur au texte" ;
-        Text [ swedish ] = "A~npassa höjd till text" ;
-        Text [ danish ] = "Tilpas højde til tekst" ;
-        Text [ portuguese ] = "Ajustar ~altura ao texto" ;
-        Text [ portuguese_brazilian ] = "H?~e an Text anpassen" ;
-        Text[ chinese_simplified ] = "å’Œæ–‡å­—é«˜åº¦å¯¹åº”(~H)";
-        Text[ russian ] = "Âûğîâíÿòü âûñîòó ïî òåêñòó";
-        Text[ polish ] = "Dopasuj wysokoœæ do tekstu";
-        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã«é«˜ã•ã‚’åˆã‚ã›ã‚‹(~H)";
-        Text[ chinese_traditional ] = "å’Œå…§æ–‡é«˜åº¦å°é½Š(~H)";
-        Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ááäÕ";
-        Text[ greek ] = "ĞñïóáñìïãŞ ıøïõò ùò ğñïò êåßìåíï";
-        Text[ korean ] = "í…ìŠ¤íŠ¸ì— ë†’ì´ ë§ì¶¤(~H)";
-        Text[ turkish ] = "Yüksekliği, metne göre a~yarla";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Ajustar altura al texto";
-        Text[ finnish ] = "~Sovita korkeus tekstiin";
-    };
-    Text[ chinese_simplified ] = "å¤§å°";
-    Text[ russian ] = "Ğàçìåğ";
-    Text[ polish ] = "Rozmiar";
-    Text[ japanese ] = "ã‚µã‚¤ã‚º";
-    Text[ chinese_traditional ] = "å¤§å°";
-    Text[ arabic ] = "ÇáÍÌã";
-    Text[ greek ] = "Ìİãåèïò";
-    Text[ korean ] = "í¬ê¸°";
-    Text[ turkish ] = "Boyut";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tamaño";
-};
  // RID_SVXPAGE_ANGLE --------------------------------------------------------
 TabPage RID_SVXPAGE_ANGLE
 {
@@ -1804,61 +1739,32 @@ TabDialog RID_SVXDLG_TRANSFORM
         {
             PageItem
             {
-                Identifier = RID_SVXPAGE_POSITION ;
-                Text = "Position" ;
-                Text [ ENGLISH ] = "Position" ;
-                Text [ norwegian ] = "Posisjon" ;
-                Text [ italian ] = "Posizione" ;
-                Text [ portuguese_brazilian ] = "Posi??o" ;
-                Text [ portuguese ] = "Posição" ;
-                Text [ finnish ] = "Sijainti" ;
-                Text [ danish ] = "Placering" ;
-                Text [ french ] = "Position" ;
-                Text [ swedish ] = "Position" ;
-                Text [ dutch ] = "Positie" ;
-                Text [ spanish ] = "Posición" ;
-                Text [ english_us ] = "Position" ;
-                PageResID = RID_SVXPAGE_POSITION ;
-                Text[ chinese_simplified ] = "ä½ç½®";
-                Text[ russian ] = "Ïîçèöèÿ";
-                Text[ polish ] = "Pozycja";
-                Text[ japanese ] = "ä½ç½®";
-                Text[ chinese_traditional ] = "ä½ç½®";
-                Text[ arabic ] = "ÇáãæÖÚ";
-                Text[ greek ] = "Èİóç";
-                Text[ korean ] = "ìœ„ì¹˜";
-                Text[ turkish ] = "Konum";
+                Identifier = RID_SVXPAGE_POSITION_SIZE ;
+                PageResID = RID_SVXPAGE_POSITION_SIZE ;
+                Text = "Position und Größe" ;
+                Text [ ENGLISH ] = "Position and Size" ;
+                Text [ norwegian ] = "Posisjon og størrelse" ;
+                Text [ italian ] = "Posizione e dimensione" ;
+                Text [ portuguese_brazilian ] = "Posi??o e Tamanho" ;
+                Text [ portuguese ] = "Posição e tamanho" ;
+                Text [ finnish ] = "Sijainti ja koko" ;
+                Text [ danish ] = "Placering og størrelse" ;
+                Text [ french ] = "Position et taille" ;
+                Text [ swedish ] = "Position och storlek" ;
+                Text [ dutch ] = "Positie en grootte" ;
+                Text [ spanish ] = "Posición y tamaño" ;
+                Text [ english_us ] = "Position and Size" ;
+                Text[ chinese_simplified ] = "ä½ç½®å’Œå¤§å°";
+                Text[ russian ] = "Ïîçèöèÿ è ğàçìåğ";
+                Text[ polish ] = "Pozycja i rozmiar";
+                Text[ japanese ] = "ä½ç½®ã¨ã‚µã‚¤ã‚º";
+                Text[ chinese_traditional ] = "ä½ç½®å’Œå¤§å°";
+                Text[ arabic ] = "ÇáãæÖÚ æÇáÍÌã";
+                Text[ greek ] = "Èİóç êáé ìİãåèïò";
+                Text[ korean ] = "ìœ„ì¹˜ì™€ í¬ê¸°";
+                Text[ turkish ] = "Konum ve boyut";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Posición";
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_SIZE ;
-                Text = "Größe" ;
-                Text [ ENGLISH ] = "Size" ;
-                Text [ norwegian ] = "Størrelse" ;
-                Text [ italian ] = "Dimensione" ;
-                Text [ portuguese_brazilian ] = "Tamanho" ;
-                Text [ portuguese ] = "Tamanho" ;
-                Text [ finnish ] = "Koko" ;
-                Text [ danish ] = "Størrelse" ;
-                Text [ french ] = "Taille" ;
-                Text [ swedish ] = "Storlek" ;
-                Text [ dutch ] = "Grootte" ;
-                Text [ spanish ] = "Tamaño" ;
-                Text [ english_us ] = "Size" ;
-                PageResID = RID_SVXPAGE_SIZE ;
-                Text[ chinese_simplified ] = "å¤§å°";
-                Text[ russian ] = "Ğàçìåğ";
-                Text[ polish ] = "Rozmiar";
-                Text[ japanese ] = "ã‚µã‚¤ã‚º";
-                Text[ chinese_traditional ] = "å¤§å°";
-                Text[ arabic ] = "ÇáÍÌã";
-                Text[ greek ] = "Ìİãåèïò";
-                Text[ korean ] = "í¬ê¸°";
-                Text[ turkish ] = "Boyut";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Tamaño";
+                Text[ catalan ] = "Posición y tamaño";
             };
             PageItem
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-06 11:09:04 $
+ *  last change: $Author: cl $ $Date: 2002-03-27 09:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3638,6 +3638,11 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         FASTBOOL b=((const SdrObjSizeProtectItem*)pPoolItem)->GetValue();
         SetResizeProtect(b);
     }
+
+    /* #67368# move protect always sets size protect */
+    if( IsMoveProtect() )
+        SetResizeProtect( true );
+
     if (rAttr.GetItemState(SDRATTR_OBJPRINTABLE,TRUE,&pPoolItem)==SFX_ITEM_SET) {
         FASTBOOL b=((const SdrObjPrintableItem*)pPoolItem)->GetValue();
         SetPrintable(b);
