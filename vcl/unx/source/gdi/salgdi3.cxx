@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:09:56 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2097,7 +2097,6 @@ BOOL SalGraphics::CreateFontSubset(
 
 //--------------------------------------------------------------------------
 
-
 const void* SalGraphics::GetEmbedFontData( ImplFontData* pFont, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
 {
 #ifndef _USE_PRINT_EXTENSION_
@@ -2167,8 +2166,38 @@ const void* SalGraphics::GetEmbedFontData( ImplFontData* pFont, sal_Int32* pWidt
 #endif
 }
 
+//--------------------------------------------------------------------------
+
 void SalGraphics::FreeEmbedFontData( const void* pData, long nLen )
 {
     munmap( (char*)pData, nLen );
 }
+
+//--------------------------------------------------------------------------
+
+const std::map< sal_Unicode, sal_Int32 >* SalGraphics::GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** pNonEncoded )
+{
+#ifndef _USE_PRINT_EXTENSION_
+    // in this context the sysdata member of pFont should
+    // contain a fontID as the X fonts should be filtered
+    // out of the font list available to PDF export (for
+    // which this method was created). The correct way would
+    // be to have the GlyphCache search for the ImplFontData pFont
+    psp::fontID aFont = (psp::fontID)pFont->mpSysData;
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+
+    psp::PrintFontInfo aFontInfo;
+    if( ! rMgr.getFontInfo( aFont, aFontInfo ) )
+    {
+        if( pNonEncoded )
+            *pNonEncoded = NULL;
+        return NULL;
+    }
+
+    return rMgr.getEncodingMap( aFont, pNonEncoded );
+#else
+    return NULL;
+#endif
+}
+
 // ===========================================================================
