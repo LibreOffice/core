@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gluepts.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:03:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,12 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
                 const SdrGluePoint& rTempPoint = (*pList)[i];
                 if( rTempPoint.GetId() == nId )
                 {
-                    aGluePoint.IsUserDefined = sal_True;
+                    // #i38892#
+                    if(rTempPoint.IsUserDefined())
+                    {
+                        aGluePoint.IsUserDefined = sal_True;
+                    }
+
                     convert( rTempPoint, aGluePoint );
                     return uno::makeAny( aGluePoint );
                 }
