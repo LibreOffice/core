@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 14:48:04 $
+#   last change: $Author: rt $ $Date: 2004-09-20 13:36:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,6 @@ SLOFILES =      							\
     $(SLO)$/MasterPagesSelector.obj			\
     $(SLO)$/MasterPagesSelectorListener.obj	\
     $(SLO)$/MasterPageContainer.obj			\
-    $(SLO)$/PreviewRenderer.obj				\
     $(SLO)$/PreviewValueSet.obj				\
     $(SLO)$/RecentlyUsedMasterPages.obj		\
     $(SLO)$/RecentMasterPagesSelector.obj
