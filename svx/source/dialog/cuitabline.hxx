@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cuitabline.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:17:50 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,11 +169,12 @@ private:
     LineEndLB           maLBEdgeStyle;
 
     //#58425# Symbole auf einer Linie (z.B. StarChart) ->
+    SdrObjList*         pSymbolList; //a list of symbols to be shown in menu. Symbol at position SID_ATTR_SYMBOLTYPE is to be shown in preview. The list position is to be used cyclic.
     BOOL                bNewSize;
-    Graphic             aAutoSymbolGraphic;
+    Graphic             aAutoSymbolGraphic; //a graphic to be displayed in the preview in case that an automatic symbol is choosen
     long                nNumMenuGalleryItems;
     long                nSymbolType;
-    const SfxItemSet    *pSymbolAttr;
+    SfxItemSet*         pSymbolAttr; //attributes for the shown symbols; only necessary if not equal to line properties
     FixedLine           aFlSymbol;
 #if SUPD>642
     MenuButton          aSymbolMB;
@@ -218,7 +219,6 @@ private:
     XColorTable*        pColorTab;
     XDashList*          pDashList;
     XLineEndList*       pLineEndList;
-    SdrObjList          *pSymbolList;
 
     ChangeType*         pnLineEndListState;
     ChangeType*         pnDashListState;
@@ -250,23 +250,7 @@ private:
     void FillListboxes();
 public:
 
-    //#58425# Symbole auf einer Linie (z.B. StarChart) Controls an/aus
-
-    // Symbolcontrols aktivieren:
     void ShowSymbolControls(BOOL bOn);
-    //Liste von SdrObject(s), aus der Anhand eines positiven Wertes (Wert >= 0) im Attribut
-    //SID_ATTR_SYMBOLTYPE  ein Symbol erzeugt wird. Die Liste ist cyclisch, d.h. gilt
-    //SID_ATTR_SYMBOLTYPE.GetValue() >= pList->Count(), so wird das Listenelement
-    //SID_ATTR_SYMBOLTYPE->GetValue() modulo pList->Count() benutzt
-    void SetSymbolList(SdrObjList *pList){pSymbolList=pList;};
-    //Attribute für Symbol, nur nötig, wenn ungleich den Linienattributen
-    void SetSymbolAttr(const SfxItemSet* pSet){pSymbolAttr=pSet;};
-    //Bei automatischen Symbolen ist hier eine Graphic mit dem Symbol zu setzten, das von
-    //der Automatik des aufrufenden Moduls benutzt wird, dies dient nur der korrekten
-    //Darstellung, Size-Controls sind bei Automatik disabled.
-    void SetAutoSymbolGraphic(Graphic *p){aAutoSymbolGraphic=*p;}
-
-
 
     SvxLineTabPage( Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxLineTabPage();
