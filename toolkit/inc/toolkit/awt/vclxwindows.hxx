@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-04 08:39:52 $
+ *  last change: $Author: tbe $ $Date: 2002-11-12 17:51:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,6 +853,7 @@ private:
 
 protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
 public:
                     VCLXSpinField();
