@@ -1,0 +1,582 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AccessibleImageBullet.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: thb $ $Date: 2002-05-16 16:10:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _SV_GEN_HXX
+#include <tools/gen.hxx>
+#endif
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_POINT_HPP_
+#include <com/sun/star/awt/Point.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
+#include <com/sun/star/awt/Rectangle.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleTextType.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
+
+#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
+#include <unotools/accessiblestatesethelper.hxx>
+#endif
+
+#ifndef _UNO_LINGU_HXX
+#include "unolingu.hxx"
+#endif
+
+#ifndef _SVX_ACCESSIBLE_EDITABLE_TEXT_PARA_HXX
+#include "AccessibleEditableTextPara.hxx"
+#endif
+
+#ifndef _SVX_ACCESSIBLE_IMAGE_BULLET_HXX
+#include "AccessibleImageBullet.hxx"
+#endif
+
+#include "editdata.hxx"
+#include "editeng.hxx"
+#include "outliner.hxx"
+
+
+using namespace ::com::sun::star;
+using namespace ::drafts::com::sun::star::accessibility;
+
+namespace accessibility
+{
+
+    AccessibleImageBullet::AccessibleImageBullet ( const uno::Reference< XAccessible >& rParent ) :
+        mnParagraphIndex( 0 ),
+        mnIndexInParent( 0 ),
+        mpEditSource( NULL ),
+        maEEOffset( 0, 0 ),
+        mxParent( rParent ),
+        maStateListeners( maMutex )
+    {
+    }
+
+    AccessibleImageBullet::~AccessibleImageBullet()
+    {
+    }
+
+    uno::Any SAL_CALL AccessibleImageBullet::queryInterface (const uno::Type & rType) throw (uno::RuntimeException)
+    {
+        return AccessibleImageBulletInterfaceBase::queryInterface(rType);
+    }
+
+    uno::Reference< XAccessibleContext > SAL_CALL AccessibleImageBullet::getAccessibleContext(  ) throw (uno::RuntimeException)
+    {
+        // We implement the XAccessibleContext interface in the same object
+        return uno::Reference< XAccessibleContext > ( this );
+    }
+
+    sal_Int32 SAL_CALL  AccessibleImageBullet::getAccessibleChildCount() throw (uno::RuntimeException)
+    {
+        return 0;
+    }
+
+    uno::Reference< XAccessible > SAL_CALL  AccessibleImageBullet::getAccessibleChild( sal_Int32 i ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    {
+        throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No childs available")),
+                                              uno::Reference< uno::XInterface >
+                                              ( static_cast< ::cppu::OWeakObject* > (this) ) ); // static_cast: disambiguate hierarchy
+    }
+
+    uno::Reference< XAccessible > SAL_CALL  AccessibleImageBullet::getAccessibleParent() throw (uno::RuntimeException)
+    {
+        return mxParent;
+    }
+
+    sal_Int32 SAL_CALL  AccessibleImageBullet::getAccessibleIndexInParent() throw (uno::RuntimeException)
+    {
+        return mnIndexInParent;
+    }
+
+    sal_Int16 SAL_CALL  AccessibleImageBullet::getAccessibleRole() throw (uno::RuntimeException)
+    {
+        // TODO
+        return AccessibleRole::GRAPHIC;
+    }
+
+    ::rtl::OUString SAL_CALL  AccessibleImageBullet::getAccessibleDescription() throw (uno::RuntimeException)
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        ::rtl::OUString aStr( RTL_CONSTASCII_USTRINGPARAM("Image bullet in paragraph ") );
+
+        aStr += ::rtl::OUString::valueOf( GetParagraphIndex() );
+
+        return aStr;
+    }
+
+    ::rtl::OUString SAL_CALL  AccessibleImageBullet::getAccessibleName() throw (uno::RuntimeException)
+    {
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Image bullet") );
+    }
+
+    uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleImageBullet::getAccessibleRelationSet() throw (uno::RuntimeException)
+    {
+        // no relations, therefore empty
+        return uno::Reference< XAccessibleRelationSet >();
+    }
+
+    uno::Reference< XAccessibleStateSet > SAL_CALL AccessibleImageBullet::getAccessibleStateSet() throw (uno::RuntimeException)
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        utl::AccessibleStateSetHelper* aStateSet = new utl::AccessibleStateSetHelper();
+        uno::Reference< XAccessibleStateSet > xStateSet( static_cast< cppu::OWeakObject* > (aStateSet), uno::UNO_QUERY );
+
+        // are we defunc?
+        if( !mpEditSource )
+        {
+            aStateSet->AddState( AccessibleStateType::DEFUNC );
+            aStateSet->AddState( AccessibleStateType::INVALID );
+        }
+
+        // are we visible?
+        if( IsVisible() )
+        {
+            aStateSet->AddState( AccessibleStateType::SHOWING );
+            aStateSet->AddState( AccessibleStateType::VISIBLE );
+        }
+
+        return xStateSet;
+    }
+
+    lang::Locale SAL_CALL AccessibleImageBullet::getLocale() throw (IllegalAccessibleComponentStateException, uno::RuntimeException)
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        lang::Locale        aLocale;
+
+        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                   "AccessibleImageBullet::getLocale: paragraph index value overflow");
+
+        // return locale of first character in the paragraph
+        return SvxLanguageToLocale(aLocale, GetTextForwarder().GetLanguage( static_cast< USHORT >( GetParagraphIndex() ), 0 ));
+    }
+
+    void SAL_CALL AccessibleImageBullet::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
+    {
+        maStateListeners.addInterface( xListener );
+    }
+
+    void SAL_CALL AccessibleImageBullet::removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
+    {
+        maStateListeners.removeInterface( xListener );
+    }
+
+    sal_Bool SAL_CALL AccessibleImageBullet::contains( const awt::Point& rPoint ) throw (uno::RuntimeException)
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                   "AccessibleEditableTextPara::contains: index value overflow");
+
+        awt::Rectangle aTmpRect = getBounds();
+        Rectangle aRect( Point(aTmpRect.X, aTmpRect.Y), Size(aTmpRect.Width, aTmpRect.Height) );
+        Point aPoint( rPoint.X, rPoint.Y );
+
+        return aRect.IsInside( aPoint );
+    }
+
+    uno::Reference< XAccessible > SAL_CALL AccessibleImageBullet::getAccessibleAt( const awt::Point& aPoint ) throw (uno::RuntimeException)
+    {
+        // as we have no children, empty reference
+        return uno::Reference< XAccessible >();
+    }
+
+    awt::Rectangle SAL_CALL AccessibleImageBullet::getBounds(  ) throw (uno::RuntimeException)
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                   "AccessibleEditableTextPara::getBounds: index value overflow");
+
+        SvxTextForwarder& rCacheTF = GetTextForwarder();
+        EBulletInfo aBulletInfo = rCacheTF.GetBulletInfo( static_cast< USHORT > (GetParagraphIndex()) );
+
+        if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
+            aBulletInfo.bVisible &&
+            aBulletInfo.nType == SVX_NUM_BITMAP )
+        {
+            Rectangle aRect = aBulletInfo.aBounds;
+
+            // convert to screen coordinates
+            Rectangle aScreenRect = AccessibleEditableTextPara::LogicToPixel( aRect,
+                                                                              rCacheTF.GetMapMode(),
+                                                                              GetViewForwarder() );
+
+            // offset from shape/cell
+            Point aOffset = GetEEOffset();
+
+            return awt::Rectangle( aScreenRect.Left() + aOffset.X(),
+                                   aScreenRect.Top() + aOffset.Y(),
+                                   aScreenRect.GetSize().Width(),
+                                   aScreenRect.GetSize().Height() );
+        }
+
+        return awt::Rectangle();
+    }
+
+    awt::Point SAL_CALL AccessibleImageBullet::getLocation(  ) throw (uno::RuntimeException)
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        awt::Rectangle aRect = getBounds();
+
+        return awt::Point( aRect.X, aRect.Y );
+    }
+
+    awt::Point SAL_CALL AccessibleImageBullet::getLocationOnScreen(  ) throw (uno::RuntimeException)
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        // relate us to parent
+        uno::Reference< XAccessible > xParent = getAccessibleParent();
+        if( xParent.is() )
+        {
+            uno::Reference< XAccessibleComponent > xParentComponent( xParent, uno::UNO_QUERY );
+            if( xParentComponent.is() )
+            {
+                awt::Point aRefPoint = xParentComponent->getLocationOnScreen();
+                awt::Point aPoint = getLocation();
+                aPoint.X += aRefPoint.X;
+                aPoint.Y += aRefPoint.Y;
+
+                return aPoint;
+            }
+        }
+
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot access parent")),
+                                    uno::Reference< uno::XInterface >
+                                    ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
+    }
+
+    awt::Size SAL_CALL AccessibleImageBullet::getSize(  ) throw (uno::RuntimeException)
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        awt::Rectangle aRect = getBounds();
+
+        return awt::Size( aRect.Width, aRect.Height );
+    }
+
+    sal_Bool SAL_CALL AccessibleImageBullet::isShowing(  ) throw (uno::RuntimeException)
+    {
+        return IsVisible();
+    }
+
+    sal_Bool SAL_CALL AccessibleImageBullet::isVisible(  ) throw (uno::RuntimeException)
+    {
+        return IsVisible();
+    }
+
+    sal_Bool SAL_CALL AccessibleImageBullet::isFocusTraversable(  ) throw (uno::RuntimeException)
+    {
+        return sal_False;
+    }
+
+    void SAL_CALL AccessibleImageBullet::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
+    {
+        // TODO: remove
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Not focusable")),
+                                    uno::Reference< uno::XInterface >
+                                    ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
+    }
+
+    void SAL_CALL AccessibleImageBullet::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
+    {
+        // TODO: remove
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Not focusable")),
+                                    uno::Reference< uno::XInterface >
+                                    ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
+    }
+
+    void SAL_CALL AccessibleImageBullet::grabFocus(  ) throw (uno::RuntimeException)
+    {
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Not focusable")),
+                                    uno::Reference< uno::XInterface >
+                                    ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
+    }
+
+    uno::Any SAL_CALL AccessibleImageBullet::getAccessibleKeyBinding(  ) throw (uno::RuntimeException)
+    {
+        // AFAIK, none.
+        return uno::Any();
+    }
+
+    ::rtl::OUString SAL_CALL AccessibleImageBullet::getImplementationName (void) throw (uno::RuntimeException)
+    {
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("AccessibleImageBullet"));
+    }
+
+    sal_Bool SAL_CALL AccessibleImageBullet::supportsService (const ::rtl::OUString& sServiceName) throw (uno::RuntimeException)
+    {
+        //  Iterate over all supported service names and return true if on of them
+        //  matches the given name.
+        uno::Sequence< ::rtl::OUString> aSupportedServices (
+            getSupportedServiceNames ());
+        for (int i=0; i<aSupportedServices.getLength(); i++)
+            if (sServiceName == aSupportedServices[i])
+                return sal_True;
+        return sal_False;
+    }
+
+    uno::Sequence< ::rtl::OUString> SAL_CALL AccessibleImageBullet::getSupportedServiceNames (void) throw (uno::RuntimeException)
+    {
+        const ::rtl::OUString sServiceName (RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
+        return uno::Sequence< ::rtl::OUString > (&sServiceName, 1);
+    }
+
+    ::rtl::OUString SAL_CALL AccessibleImageBullet::getServiceName (void) throw (uno::RuntimeException)
+    {
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.accessibility.AccessibleContext"));
+    }
+
+    void AccessibleImageBullet::SetIndexInParent( sal_Int32 nIndex )
+    {
+        mnIndexInParent = nIndex;
+    }
+
+    sal_Int32 AccessibleImageBullet::GetIndexInParent() const
+    {
+        return mnIndexInParent;
+    }
+
+    void AccessibleImageBullet::SetEEOffset( const Point& rOffset )
+    {
+        maEEOffset = rOffset;
+    }
+
+    void AccessibleImageBullet::SetEditSource( SvxEditSource* pEditSource )
+    {
+        mpEditSource = pEditSource;
+
+        if( !mpEditSource )
+        {
+            // going defunc
+            FireEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+
+            try
+            {
+                uno::Reference < XAccessibleContext > xThis = getAccessibleContext();
+
+                lang::EventObject aEvent (xThis);
+                maStateListeners.disposeAndClear( aEvent );
+            }
+            catch( const uno::RuntimeException& ) {}
+        }
+    }
+
+    void AccessibleImageBullet::FireEvent(const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue ) const
+    {
+        uno::Reference < XAccessibleContext > xThis( const_cast< AccessibleImageBullet* > (this)->getAccessibleContext() );
+
+        AccessibleEventObject aEvent(xThis, nEventId, rNewValue, rOldValue);
+
+        // no locking necessary, OInterfaceIteratorHelper copies listeners if someone removes/adds in between
+        ::cppu::OInterfaceIteratorHelper aIter( const_cast< AccessibleImageBullet* >(this)->maStateListeners );
+        while( aIter.hasMoreElements() )
+        {
+            uno::Reference < XAccessibleEventListener > xListener( aIter.next(), uno::UNO_QUERY );
+
+            if( xListener.is() )
+            {
+                try
+                {
+                    xListener->notifyEvent( aEvent );
+                }
+                catch( const uno::RuntimeException& )
+                {
+#ifdef DBG_UTIL
+                    DBG_ERROR("AccessibleImageBullet::FireEvent: Caught runtime exception from listener, removing object (bridge/listener dead?)");
+#endif
+                }
+            }
+        }
+    }
+
+    void AccessibleImageBullet::GotPropertyEvent( const uno::Any& rNewValue, const sal_Int16 nEventId ) const
+    {
+        FireEvent( nEventId, rNewValue );
+    }
+
+    void AccessibleImageBullet::LostPropertyEvent( const uno::Any& rOldValue, const sal_Int16 nEventId ) const
+    {
+        FireEvent( nEventId, uno::Any(), rOldValue );
+    }
+
+    sal_Bool AccessibleImageBullet::IsVisible() const
+    {
+        return mpEditSource ? sal_True : sal_False ;
+    }
+
+    void AccessibleImageBullet::SetParagraphIndex( sal_Int32 nIndex )
+    {
+        sal_Int32 nOldIndex = mnParagraphIndex;
+
+        if( nOldIndex != nIndex )
+        {
+            // index and therefore description changed
+            LostPropertyEvent( uno::makeAny( getAccessibleDescription() ), AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT );
+            LostPropertyEvent( uno::makeAny( getAccessibleName() ), AccessibleEventId::ACCESSIBLE_NAME_EVENT );
+        }
+
+        mnParagraphIndex = nIndex;
+
+        if( nOldIndex != nIndex )
+        {
+            // index and therefore description changed
+            GotPropertyEvent( uno::makeAny( getAccessibleDescription() ), AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT );
+            GotPropertyEvent( uno::makeAny( getAccessibleName() ), AccessibleEventId::ACCESSIBLE_NAME_EVENT );
+        }
+    }
+
+    sal_Int32 AccessibleImageBullet::GetParagraphIndex() const throw (uno::RuntimeException)
+    {
+        return mnParagraphIndex;
+    }
+
+    SvxEditSource& AccessibleImageBullet::GetEditSource() const throw (uno::RuntimeException)
+    {
+        if( mpEditSource )
+            return *mpEditSource;
+        else
+            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No edit source, object is defunct")),
+                                        uno::Reference< uno::XInterface >
+                                        ( static_cast< ::cppu::OWeakObject* >
+                                          ( const_cast< AccessibleImageBullet* > (this) ) ) );  // disambiguate hierarchy
+    }
+
+    SvxTextForwarder& AccessibleImageBullet::GetTextForwarder() const throw (uno::RuntimeException)
+    {
+        SvxEditSource& rEditSource = GetEditSource();
+        SvxTextForwarder* pTextForwarder = rEditSource.GetTextForwarder();
+
+        if( !pTextForwarder )
+            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to fetch text forwarder, object is defunct")),
+                                        uno::Reference< uno::XInterface >
+                                        ( static_cast< ::cppu::OWeakObject* >
+                                          ( const_cast< AccessibleImageBullet* > (this) ) ) );  // disambiguate hierarchy
+
+        if( pTextForwarder->IsValid() )
+            return *pTextForwarder;
+        else
+            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text forwarder is invalid, object is defunct")),
+                                        uno::Reference< uno::XInterface >
+                                        ( static_cast< ::cppu::OWeakObject* >
+                                          ( const_cast< AccessibleImageBullet* > (this) ) ) );  // disambiguate hierarchy
+    }
+
+    SvxViewForwarder& AccessibleImageBullet::GetViewForwarder() const throw (uno::RuntimeException)
+    {
+        SvxEditSource& rEditSource = GetEditSource();
+        SvxViewForwarder* pViewForwarder = rEditSource.GetViewForwarder();
+
+        if( !pViewForwarder )
+        {
+            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to fetch view forwarder, object is defunct")),
+                                        uno::Reference< uno::XInterface >
+                                        ( static_cast< ::cppu::OWeakObject* >
+                                          ( const_cast< AccessibleImageBullet* > (this) ) ) );  // disambiguate hierarchy
+        }
+
+        if( pViewForwarder->IsValid() )
+            return *pViewForwarder;
+        else
+            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("View forwarder is invalid, object is defunct")),
+                                        uno::Reference< uno::XInterface >
+                                        ( static_cast< ::cppu::OWeakObject* >
+                                          ( const_cast< AccessibleImageBullet* > (this) )  ) ); // disambiguate hierarchy
+    }
+
+    const Point& AccessibleImageBullet::GetEEOffset() const
+    {
+        return maEEOffset;
+    }
+
+} // end of namespace accessibility
+
