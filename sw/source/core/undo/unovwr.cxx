@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unovwr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:08:58 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,8 @@ inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
-    : SwUndo(UNDO_OVERWRITE), bGroup( FALSE ), pRedlSaveData( 0 )
+    : SwUndo(UNDO_OVERWRITE), bGroup( FALSE ),
+      pRedlSaveData( 0 )
 {
 #ifdef COMPACT
     pDoc->DelUndoGroups();
@@ -169,6 +170,8 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
         pTxtNd->Erase( aTmpIndex, 1 );
     }
     pTxtNd->SetIgnoreDontExpand( bOldExpFlg );
+
+    bCacheComment = false;
 }
 
 SwUndoOverwrite::~SwUndoOverwrite()
