@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-23 11:03:34 $
+ *  last change: $Author: er $ $Date: 2002-10-29 18:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,8 +338,9 @@ ExcPalette2*    ExcXf::pPalette2 = NULL;
 UINT16          ExcXf::nObjCnt = 0;
 #endif
 
-SvNumberFormatter*  ExcFormat::pFormatter = NULL;
-UINT32          ExcFormat::nObjCnt = 0;
+SvNumberFormatter*  ExcFormat::pFormatter    = NULL;
+UINT32              ExcFormat::nObjCnt       = 0;
+NfKeywordTable*     ExcFormat::pKeywordTable = 0;
 
 
 
@@ -2948,7 +2949,19 @@ ExcFormat::ExcFormat( RootData* pExcRoot, UINT32 nNewScIndex ) : ExcRoot( pExcRo
 {
     // ACHTUNG: nIndex wird hier NICHT gesetzt -> bei Freunden machen!
     if( !nObjCnt )
-        pFormatter = new SvNumberFormatter( pExcRoot->pDoc->GetServiceManager(), LANGUAGE_ENGLISH_US );
+    {
+        pFormatter = new SvNumberFormatter(
+                pExcRoot->pDoc->GetServiceManager(), LANGUAGE_ENGLISH_US );
+        // Compiler needs a hint, this doesn't work: pKeywordTable = new NfKeywordTable;
+        // cannot convert from 'class String *' to 'class String (*)[54]'
+        // The effective result here is class String (*)[54*1]
+        pKeywordTable = new NfKeywordTable[1];
+        pFormatter->FillKeywordTable( *pKeywordTable, LANGUAGE_ENGLISH_US );
+        // remap codes unknown to Excel
+        (*pKeywordTable)[NF_KEY_NN] = String( RTL_CONSTASCII_USTRINGPARAM( "DDD" ) );
+        // NNNN gets a separator appended in SvNumberformat::GetMappedFormatString()
+        (*pKeywordTable)[NF_KEY_NNNN] = String( RTL_CONSTASCII_USTRINGPARAM( "DDDD" ) );
+    }
 
     nObjCnt++;  // Objektzaehler einen hoch
 
@@ -2968,47 +2981,53 @@ ExcFormat::ExcFormat( RootData* pExcRoot, UINT32 nNewScIndex ) : ExcRoot( pExcRo
             Color   aDummyCol;
             Color*  pDummyCol = &aDummyCol;
 
-            pForm = new String( '\"' );
+            aFormStr = sal_Unicode( '\"' );
             ( ( SvNumberformat * ) pEntry )->GetOutputString( 1.0, aTmpStr, &pDummyCol );
-            *pForm += aTmpStr;
-            pForm->AppendAscii( "\";\"" );
-            *pForm += aTmpStr;
-            pForm->AppendAscii( "\";\"" );
+            aFormStr += aTmpStr;
+            aFormStr.AppendAscii( "\";\"" );
+            aFormStr += aTmpStr;
+            aFormStr.AppendAscii( "\";\"" );
             ( ( SvNumberformat * ) pEntry )->GetOutputString( 0.0, aTmpStr, &pDummyCol );
-            *pForm += aTmpStr;
-            pForm->AppendAscii( "\"" );
+            aFormStr += aTmpStr;
+            aFormStr += sal_Unicode( '\"' );
         }
         else
         {
             LanguageType    eLang = pEntry->GetLanguage();
             if ( eLang == LANGUAGE_ENGLISH_US )
-                pForm = new String( pEntry->GetFormatstring() );
+                aFormStr = pEntry->GetMappedFormatstring( *pKeywordTable,
+                        *pFormatter->GetLocaleData() );
             else
-        {
-                xub_StrLen  nDummy;
+            {
+                xub_StrLen  nCheckPos;
                 UINT32      nConvertIndex;
                 INT16       nTyp = NUMBERFORMAT_DEFINED;
                 String      aTmpString( pEntry->GetFormatstring() );
-                pFormatter->PutandConvertEntry( aTmpString, nDummy, nTyp,
-                                nConvertIndex, eLang, LANGUAGE_ENGLISH_US );
-
-                pForm = new String( pFormatter->GetEntry( nConvertIndex )->GetFormatstring() );
-        }
-            if( pForm->EqualsAscii( "Standard" ) )
-                pForm->AssignAscii( "General" );
+                pFormatter->PutandConvertEntry( aTmpString, nCheckPos, nTyp,
+                        nConvertIndex, eLang, LANGUAGE_ENGLISH_US );
+#ifndef PRODUCT
+                if ( nCheckPos )
+                {
+                    ByteString aMsg( "Format code string not convertible to English code:\n" );
+                    aMsg += ByteString( aTmpString, RTL_TEXTENCODING_UTF8 );
+                    DBG_ERRORFILE( aMsg.GetBuffer() );
+                }
+#endif
+                aFormStr = pFormatter->GetEntry( nConvertIndex
+                        )->GetMappedFormatstring( *pKeywordTable,
+                            *pFormatter->GetLocaleData() );
+            }
+            if( aFormStr.EqualsAscii( "Standard" ) )
+                aFormStr.AssignAscii( "General" );
         }
     }
     else
-        pForm = new String( RTL_CONSTASCII_USTRINGPARAM( "\"Internal Error: Unknown Numberformat!\"" ) );
-
-    nFormLen = ( BYTE ) pForm->Len();
+        aFormStr.AssignAscii( "\"Internal Error: Unknown Numberformat!\"" );
 }
 
 
 ExcFormat::~ExcFormat()
 {
-    delete pForm;
-
     DBG_ASSERT( nObjCnt, "*ExcFormat::~ExcFormat(): zuviel des Guten" );
     nObjCnt--;
     if( !nObjCnt )
@@ -3026,12 +3045,12 @@ void ExcFormat::SaveCont( XclExpStream& rStrm )
     {
         rStrm << nIndex;
         rStrm.WriteByteString(
-            ByteString( *pForm, *pExcRoot->pCharset ), nFormLen );  // 8 bit length
+            ByteString( aFormStr, *pExcRoot->pCharset ), (BYTE)aFormStr.Len() );    // 8 bit length
     }
     else
     {
         rStrm << nIndex;
-        XclExpUniString( *pForm, nFormLen ).Write( rStrm );     // normal unicode string
+        XclExpUniString( aFormStr, aFormStr.Len() ).Write( rStrm );     // normal unicode string
     }
 }
 
@@ -3044,7 +3063,7 @@ UINT16 ExcFormat::GetNum( void ) const
 
 ULONG ExcFormat::GetLen( void ) const
 {   //! for Biff8 only a prediction, assumes 8-bit string
-    return ( eBiff < Biff8 ? 2 + 1 + nFormLen : 2 + 3 + nFormLen );
+    return ( eBiff < Biff8 ? 2 + 1 + (BYTE)aFormStr.Len() : 2 + 3 + aFormStr.Len() );
 }
 
 
