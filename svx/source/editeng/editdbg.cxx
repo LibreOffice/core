@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-12 11:39:47 $
+ *  last change: $Author: mt $ $Date: 2002-11-20 11:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include <langitem.hxx>
 #include <emphitem.hxx>
 #include <numitem.hxx>
+#include <tstpitem.hxx>
 #include <charscaleitem.hxx>
 #include <charreliefitem.hxx>
 #include <frmdiritem.hxx>
@@ -190,7 +191,22 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
             aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxAdjustItem&)rItem).GetAdjust() );
         break;
         case EE_PARA_TABS:
-            aDebStr += "Tabs = ?";
+        {
+            aDebStr += "Tabs: ";
+            const SvxTabStopItem& rTabs = (const SvxTabStopItem&) rItem;
+            aDebStr += ByteString::CreateFromInt32( rTabs.Count() );
+            if ( rTabs.Count() )
+            {
+                aDebStr += "( ";
+                for ( USHORT i = 0; i < rTabs.Count(); i++ )
+                {
+                    const SvxTabStop& rTab = rTabs[i];
+                    aDebStr += ByteString::CreateFromInt32( rTab.GetTabPos() );
+                    aDebStr += " ";
+                }
+                aDebStr += ")";
+            }
+        }
         break;
         case EE_CHAR_LANGUAGE:
         case EE_CHAR_LANGUAGE_CJK:
