@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $
+ *  last change: $Author: kz $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,6 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
-#ifndef _SOT_STORAGE_HXX
-#include <sot/storage.hxx>
-#endif
 #ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
 #endif
@@ -86,6 +80,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XBINARYSTREAMRESOLVER_HPP_
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
 #endif
 
 // ----------------------
@@ -102,8 +99,6 @@ enum SvXMLGraphicHelperMode
 // - SvXMLGraphicHelper -
 // ----------------------
 
-class SotStorage;
-
 class SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper2< ::com::sun::star::document::XGraphicObjectResolver,
                                                                     ::com::sun::star::document::XBinaryStreamResolver >
 {
@@ -116,8 +111,8 @@ private:
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > >    GraphicOutputStreamVector;
 
     ::osl::Mutex                maMutex;
-    SotStorage*                 mpRootStorage;
-    SotStorageRef               mxGraphicStorage;
+    ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage > mxRootStorage;
+    ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage > mxGraphicStorage;
     ::rtl::OUString             maCurStorageName;
     URLPairVector               maGrfURLs;
     GraphicObjectVector         maGrfObjs;
@@ -129,8 +124,8 @@ private:
     sal_Bool                    ImplGetStreamNames( const ::rtl::OUString& rURLStr,
                                                     ::rtl::OUString& rPictureStorageName,
                                                     ::rtl::OUString& rPictureStreamName );
-    SotStorageRef               ImplGetGraphicStorage( const ::rtl::OUString& rPictureStorageName );
-    SotStorageStreamRef         ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
+    ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage > ImplGetGraphicStorage( const ::rtl::OUString& rPictureStorageName );
+    ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
                                                       const ::rtl::OUString& rPictureStreamName,
                                                       BOOL bTruncate );
     String                      ImplGetGraphicMimeType( const String& rFileName ) const;
@@ -144,7 +139,7 @@ private:
 protected:
                                 SvXMLGraphicHelper();
                                 ~SvXMLGraphicHelper();
-    void                        Init( SotStorage* pXMLStorage,
+    void                        Init( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage >& xXMLStorage,
                                       SvXMLGraphicHelperMode eCreateMode,
                                       BOOL bDirect );
 
@@ -153,7 +148,7 @@ protected:
 public:
                                 SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode );
 
-    static SvXMLGraphicHelper*  Create( SotStorage& rXMLStorage,
+    static SvXMLGraphicHelper*  Create( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage >& rXMLStorage,
                                         SvXMLGraphicHelperMode eCreateMode,
                                         BOOL bDirect = TRUE );
     static SvXMLGraphicHelper*  Create( SvXMLGraphicHelperMode eCreateMode );
