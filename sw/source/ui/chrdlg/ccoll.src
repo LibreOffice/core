@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:27:49 $
+ *  last change: $Author: rt $ $Date: 2001-08-10 20:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ TabPage TP_CONDCOLL
         Text[ chinese_simplified ] = "δ½Ώη”¨η„ζ ·εΌ";
         Text[ russian ] = "Οπθμενεννϋε ρςθλθ";
         Text[ polish ] = "UΏyte style";
-        Text[ japanese ] = "δ½Ώη”¨γ•γ‚γο½½οΎ€ο½²οΎ™";
+        Text[ japanese ] = "δ½Ώη”¨γ™γ‚‹ο½½οΎ€ο½²οΎ™";
         Text[ chinese_traditional ] = "δ½Ώη”¨η„ζ¨£εΌ";
         Text[ arabic ] = "ΓδγΗΨ ήνΟ ΗαΗΣΚΞΟΗγ";
         Text[ greek ] = "Εφαρμοσμένα πρότυπα";
@@ -1050,6 +1050,7 @@ TabPage TP_CONDCOLL
     };
 };
  // ********************************************************************** EOF
+
 
 
 
