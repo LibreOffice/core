@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-22 16:15:54 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 23:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ TabPage RID_SVXPAGE_HEADER
         Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "Höh~e" ;
         Text [ ENGLISH ] = "H~eight" ;
-        Text [ english_us ] = "H~eight" ;
+        Text [ english_us ] = "~Height" ;
         Text [ portuguese_brazilian ] = "~H?e" ;
         Text [ swedish ] = "~Höjd" ;
         Text [ danish ] = "Højde" ;
@@ -640,13 +640,13 @@ TabPage RID_SVXPAGE_FOOTER
         Text = "Höh~e" ;
         Text [ ENGLISH ] = "H~eight" ;
         Disable = TRUE ;
-        Text [ english_us ] = "H~eight" ;
+        Text [ english_us ] = "~Height" ;
         Text [ portuguese_brazilian ] = "~H?e" ;
         Text [ swedish ] = "~Höjd" ;
         Text [ danish ] = "Højde" ;
         Text [ italian ] = "~Altezza" ;
         Text [ spanish ] = "A~ltura" ;
-        Text [ french ] = "~Hauteur" ;
+        Text [ french ] = "Hauteur" ;
         Text [ dutch ] = "~Hoogte" ;
         Text [ portuguese ] = "~Altura" ;
         Text[ chinese_simplified ] = "¸ß¶È(~H)";
@@ -815,5 +815,6 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
 };
 
  // ********************************************************************** EOF
+
 
 
