@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSynchronousDispatch.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 13:31:40 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com {  module sun {  module star {  module frame {
 
 //=============================================================================
 /** additional interfaces for dispatch objects: allow to execute with return value
-
+    @since #110224#
     @see XDispatch
  */
 interface XSynchronousDispatch: com::sun::star::uno::XInterface
@@ -88,8 +88,8 @@ interface XSynchronousDispatch: com::sun::star::uno::XInterface
     /** dispatches a URL synchronously and offers a return values
 
         <p>
-    After getting a dispatch object as a result of a queryDispatch call, this interface can
-    be used to dispatch the URL synchronously and with a return value.
+        After getting a dispatch object as a result of a queryDispatch call, this interface can
+        be used to dispatch the URL synchronously and with a return value.
         </p>
 
         @param URL
