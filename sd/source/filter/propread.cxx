@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propread.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:43:08 $
+ *  last change: $Author: sj $ $Date: 2002-11-18 12:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,29 +70,32 @@
 
 struct PropEntry
 {
-    UINT32  mnId;
-    UINT32  mnSize;
-    BYTE*   mpBuf;
+    sal_uInt32  mnId;
+    sal_uInt32  mnSize;
+    sal_uInt16  mnTextEnc;
+    sal_uInt8*  mpBuf;
 
-                        PropEntry( UINT32 nId, const BYTE* pBuf, UINT32 nBufSize );
+                        PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize, sal_uInt16 nTextEnc );
                         PropEntry( const PropEntry& rProp );
                         ~PropEntry() { delete[] mpBuf; } ;
 
     const PropEntry&    operator=(const PropEntry& rPropEntry);
 };
 
-PropEntry::PropEntry( UINT32 nId, const BYTE* pBuf, UINT32 nBufSize ) :
-    mnId    ( nId ),
-    mnSize  ( nBufSize ),
-    mpBuf   ( new BYTE[ nBufSize ] )
+PropEntry::PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize, sal_uInt16 nTextEnc ) :
+    mnId        ( nId ),
+    mnSize      ( nBufSize ),
+    mnTextEnc   ( nTextEnc ),
+    mpBuf       ( new sal_uInt8[ nBufSize ] )
 {
     memcpy( (void*)mpBuf, (void*)pBuf, nBufSize );
 };
 
 PropEntry::PropEntry( const PropEntry& rProp ) :
-    mnId    ( rProp.mnId ),
-    mnSize  ( rProp.mnSize ),
-    mpBuf   ( new BYTE[ mnSize ] )
+    mnId        ( rProp.mnId ),
+    mnSize      ( rProp.mnSize ),
+    mpBuf       ( new sal_uInt8[ mnSize ] ),
+    mnTextEnc   ( rProp.mnTextEnc )
 {
     memcpy( (void*)mpBuf, (void*)rProp.mpBuf, mnSize );
 };
@@ -104,7 +107,8 @@ const PropEntry& PropEntry::operator=(const PropEntry& rPropEntry)
         delete[] mpBuf;
         mnId = rPropEntry.mnId;
         mnSize = rPropEntry.mnSize;
-        mpBuf = new BYTE[ mnSize ];
+        mnTextEnc = rPropEntry.mnTextEnc;
+        mpBuf = new sal_uInt8[ mnSize ];
         memcpy( (void*)mpBuf, (void*)rPropEntry.mpBuf, mnSize );
     }
     return *this;
@@ -120,33 +124,10 @@ void PropItem::Clear()
 
 //  -----------------------------------------------------------------------
 
-BOOL PropItem::Read( String& rString, UINT32 nStringType, BOOL bAlign, sal_uInt16 nCodePage )
+BOOL PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
 {
-    sal_uInt16 nEncoding;
-    switch ( nCodePage )
-    {
-        default :
-        case 1252: nEncoding = RTL_TEXTENCODING_MS_1252; break;
-        case 1250: nEncoding = RTL_TEXTENCODING_MS_1250; break;
-        case 1251: nEncoding = RTL_TEXTENCODING_MS_1251; break;
-        case 1253: nEncoding = RTL_TEXTENCODING_MS_1253; break;
-        case 1254: nEncoding = RTL_TEXTENCODING_MS_1254; break;
-        case 1255: nEncoding = RTL_TEXTENCODING_MS_1255; break;
-        case 1256: nEncoding = RTL_TEXTENCODING_MS_1256; break;
-        case 1257: nEncoding = RTL_TEXTENCODING_MS_1257; break;
-        case 1258: nEncoding = RTL_TEXTENCODING_MS_1258; break;
-        case 874: nEncoding = RTL_TEXTENCODING_MS_874; break;
-        case 932: nEncoding = RTL_TEXTENCODING_MS_932; break;
-        case 936: nEncoding = RTL_TEXTENCODING_MS_936; break;
-        case 949: nEncoding = RTL_TEXTENCODING_MS_949; break;
-        case 950: nEncoding = RTL_TEXTENCODING_MS_950; break;
-        case 1361: nEncoding = RTL_TEXTENCODING_MS_1361; break;
-        case 65000 : nEncoding = RTL_TEXTENCODING_UTF7; break;
-        case 65001 : nEncoding = RTL_TEXTENCODING_UTF8; break;
-    }
-
-    UINT32  nSize, nType, nPos;
-    BOOL    bRetValue = FALSE;
+    sal_uInt32  i, nSize, nType, nPos;
+    sal_Bool    bRetValue = sal_False;
 
     nPos = Tell();
 
@@ -161,18 +142,34 @@ BOOL PropItem::Read( String& rString, UINT32 nStringType, BOOL bAlign, sal_uInt1
     {
         case VT_LPSTR :
         {
-            if ( nSize )
+            if ( (sal_uInt16)nSize )
             {
-                // ignore codepage, we will read just UNICODE or ANSI
-                char* pString = new char[ nSize ];
-                SvMemoryStream::Read( pString, nSize );
-                if ( pString[ nSize - 1 ] == 0 )
+                sal_Char* pString = new sal_Char[ (sal_uInt16)nSize ];
+                if ( mnTextEnc == RTL_TEXTENCODING_UCS2 )
                 {
-                    if ( nSize > 1 )
-                        rString = String( ByteString( pString ), nEncoding );
+                    nSize >>= 1;
+                    if ( (sal_uInt16)nSize > 1 )
+                    {
+                        sal_Unicode* pWString = (sal_Unicode*)pString;
+                        for ( i = 0; i < (sal_uInt16)nSize; i++ )
+                            *this >> pWString[ i ];
+                        rString = String( pWString, (sal_uInt16)nSize - 1 );
+                    }
                     else
                         rString = String();
-                    bRetValue = TRUE;
+                    bRetValue = sal_True;
+                }
+                else
+                {
+                    SvMemoryStream::Read( pString, (sal_uInt16)nSize );
+                    if ( pString[ (sal_uInt16)nSize - 1 ] == 0 )
+                    {
+                        if ( (sal_uInt16)nSize > 1 )
+                            rString = String( ByteString( pString ), mnTextEnc );
+                        else
+                            rString = String();
+                        bRetValue = sal_True;
+                    }
                 }
                 delete[] pString;
             }
@@ -185,16 +182,16 @@ BOOL PropItem::Read( String& rString, UINT32 nStringType, BOOL bAlign, sal_uInt1
         {
             if ( nSize )
             {
-                sal_Unicode* pString = new sal_Unicode[ nSize ];
-                for ( UINT32 i = 0; i < nSize; i++ )
+                sal_Unicode* pString = new sal_Unicode[ (sal_uInt16)nSize ];
+                for ( i = 0; i < (sal_uInt16)nSize; i++ )
                     *this >> pString[ i ];
                 if ( pString[ i - 1 ] == 0 )
                 {
-                    if ( nSize > 1 )
-                        rString = String( pString, nSize - 1 );
+                    if ( (sal_uInt16)nSize > 1 )
+                        rString = String( pString, (sal_uInt16)nSize - 1 );
                     else
                         rString = String();
-                    bRetValue = TRUE;
+                    bRetValue = sal_True;
                 }
                 delete[] pString;
             }
@@ -217,7 +214,8 @@ PropItem& PropItem::operator=( PropItem& rPropItem )
         Seek( STREAM_SEEK_TO_BEGIN );
         delete[] SwitchBuffer();
 
-        UINT32 nPos = rPropItem.Tell();
+        mnTextEnc = rPropItem.mnTextEnc;
+        sal_uInt32 nPos = rPropItem.Tell();
         rPropItem.Seek( STREAM_SEEK_TO_END );
         SvMemoryStream::Write( rPropItem.GetData(), rPropItem.Tell() );
         rPropItem.Seek( nPos );
@@ -229,10 +227,10 @@ PropItem& PropItem::operator=( PropItem& rPropItem )
 
 struct Dict
 {
-    UINT32  mnId;
-    String  aString;
+    sal_uInt32  mnId;
+    String      aString;
 
-            Dict( UINT32 nId, String rString ) { mnId = nId; aString = rString; };
+            Dict( sal_uInt32 nId, String rString ) { mnId = nId; aString = rString; };
 };
 
 //  -----------------------------------------------------------------------
@@ -245,7 +243,7 @@ Dictionary::~Dictionary()
 
 //  -----------------------------------------------------------------------
 
-void Dictionary::AddProperty( UINT32 nId, const String& rString )
+void Dictionary::AddProperty( sal_uInt32 nId, const String& rString )
 {
     if ( rString.Len() )        // eindeutige namen bei properties
     {
@@ -293,6 +291,7 @@ Dictionary& Dictionary::operator=( Dictionary& rDictionary )
 
 Section::Section( Section& rSection )
 {
+    mnTextEnc = rSection.mnTextEnc;
     for ( int i = 0; i < 16; i++ )
         aFMTID[ i ] = rSection.aFMTID[ i ];
     for ( PropEntry* pProp = (PropEntry*)rSection.First(); pProp; pProp = (PropEntry*)rSection.Next() )
@@ -301,15 +300,16 @@ Section::Section( Section& rSection )
 
 //  -----------------------------------------------------------------------
 
-Section::Section( const BYTE* pFMTID )
+Section::Section( const sal_uInt8* pFMTID )
 {
+    mnTextEnc = RTL_TEXTENCODING_MS_1252;
     for ( int i = 0; i < 16; i++ )
         aFMTID[ i ] = pFMTID[ i ];
 }
 
 //  -----------------------------------------------------------------------
 
-BOOL Section::GetProperty( UINT32 nId, PropItem& rPropItem )
+sal_Bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
 {
     if ( nId )
     {
@@ -321,17 +321,18 @@ BOOL Section::GetProperty( UINT32 nId, PropItem& rPropItem )
         if ( pProp )
         {
             rPropItem.Clear();
+            rPropItem.SetTextEncoding( mnTextEnc );
             rPropItem.Write( pProp->mpBuf, pProp->mnSize );
             rPropItem.Seek( STREAM_SEEK_TO_BEGIN );
-            return TRUE;
+            return sal_True;
         }
     }
-    return FALSE;
+    return sal_False;
 }
 
 //  -----------------------------------------------------------------------
 
-void Section::AddProperty( UINT32 nId, const BYTE* pBuf, UINT32 nBufSize )
+void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize )
 {
     // kleiner id check
 
@@ -341,25 +342,25 @@ void Section::AddProperty( UINT32 nId, const BYTE* pBuf, UINT32 nBufSize )
         nId = 0;
 
     // keine doppelten PropId's zulassen, sortieren
-    for ( UINT32 i = 0; i < Count(); i++ )
+    for ( sal_uInt32 i = 0; i < Count(); i++ )
     {
         PropEntry* pPropEntry = (PropEntry*)GetObject( i );
         if ( pPropEntry->mnId == nId )
-            delete (PropEntry*)Replace( new PropEntry( nId, pBuf, nBufSize ), i );
+            delete (PropEntry*)Replace( new PropEntry( nId, pBuf, nBufSize, mnTextEnc ), i );
         else if ( pPropEntry->mnId > nId )
-            Insert( new PropEntry( nId, pBuf, nBufSize ), i );
+            Insert( new PropEntry( nId, pBuf, nBufSize, mnTextEnc ), i );
         else
             continue;
         return;
     }
-    Insert( new PropEntry( nId, pBuf, nBufSize ), LIST_APPEND );
+    Insert( new PropEntry( nId, pBuf, nBufSize, mnTextEnc ), LIST_APPEND );
 }
 
 //  -----------------------------------------------------------------------
 
-BOOL Section::GetDictionary( Dictionary& rDict )
+sal_Bool Section::GetDictionary( Dictionary& rDict )
 {
-    BOOL bRetValue = FALSE;
+    sal_Bool bRetValue = sal_False;
 
     Dictionary aDict;
 
@@ -370,36 +371,36 @@ BOOL Section::GetDictionary( Dictionary& rDict )
     }
     if ( pProp )
     {
-        UINT32 nCount, nId, nSize, nPos;
-        SvMemoryStream aStream( (char*)pProp->mpBuf, pProp->mnSize, STREAM_READ );
+        sal_uInt32 nCount, nId, nSize, nPos;
+        SvMemoryStream aStream( (sal_Int8*)pProp->mpBuf, pProp->mnSize, STREAM_READ );
         aStream.Seek( STREAM_SEEK_TO_BEGIN );
         aStream >> nCount;
-        for ( UINT32 i = 0; i < nCount; i++ )
+        for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
             aStream >> nId >> nSize;
-            if ( nSize )
+            if ( (sal_uInt16)nSize )
             {
                 String aString;
                 nPos = aStream.Tell();
-                char* pString = new char[ nSize ];
-                aStream.Read( pString, nSize );
-                if ( pString[ nSize - 2 ] )
-                    aString = String( ByteString( pString, nSize - 1 ), RTL_TEXTENCODING_MS_1252 );
-                else if ( nSize ^ 1 )
+                sal_Char* pString = new sal_Char[ (sal_uInt16)nSize ];
+                aStream.Read( pString, (sal_uInt16)nSize );
+                if ( mnTextEnc == RTL_TEXTENCODING_UCS2 )
                 {
                     nSize >>= 1;
                     aStream.Seek( nPos );
                     sal_Unicode* pWString = (sal_Unicode*)pString;
-                    for ( i = 0; i < nSize; i++ )
+                    for ( i = 0; i < (sal_uInt16)nSize; i++ )
                         aStream >> pWString[ i ];
-                    aString = String( pWString, nSize - 1 );
+                    aString = String( pWString, (sal_uInt16)nSize - 1 );
                 }
+                else
+                    aString = String( ByteString( pString, (sal_uInt16)nSize - 1 ), mnTextEnc );
                 delete[] pString;
                 if ( !aString.Len() )
                     break;
                 aDict.AddProperty( nId, aString );
             }
-            bRetValue = TRUE;
+            bRetValue = sal_True;
         }
     }
     rDict = aDict;
@@ -418,8 +419,9 @@ Section::~Section()
 
 void Section::Read( SvStorageStream *pStrm )
 {
-    UINT32 nSecOfs, nSecSize, nPropCount, nPropId, nPropOfs, nPropType, nPropSize, nCurrent, nVectorCount, nTemp;
+    sal_uInt32 i, nSecOfs, nSecSize, nPropCount, nPropId, nPropOfs, nPropType, nPropSize, nCurrent, nVectorCount, nTemp;
     nSecOfs = pStrm->Tell();
+    mnTextEnc = RTL_TEXTENCODING_MS_1252;
     *pStrm >> nSecSize >> nPropCount;
     while( nPropCount-- && ( pStrm->GetError() == ERRCODE_NONE ) )
     {
@@ -443,9 +445,9 @@ void Section::Read( SvStorageStream *pStrm )
                 nVectorCount = 1;
 
 
-            BOOL bVariant = ( nPropType == VT_VARIANT );
+            sal_Bool bVariant = ( nPropType == VT_VARIANT );
 
-            for ( UINT32 i = 0; nPropSize && ( i < nVectorCount ); i++ )
+            for ( i = 0; nPropSize && ( i < nVectorCount ); i++ )
             {
                 if ( bVariant )
                 {
@@ -523,17 +525,50 @@ void Section::Read( SvStorageStream *pStrm )
             if ( nPropSize )
             {
                 pStrm->Seek( nPropOfs + nSecOfs );
-                BYTE* pBuf = new BYTE[ nPropSize ];
+                sal_uInt8* pBuf = new sal_uInt8[ nPropSize ];
                 pStrm->Read( pBuf, nPropSize );
                 AddProperty( nPropId, pBuf, nPropSize );
                 delete[] pBuf;
             }
+            if ( nPropId == 1 )
+            {
+                PropItem aPropItem;
+                if ( GetProperty( 1, aPropItem ) )
+                {
+                    sal_uInt16 nCodePage;
+                    aPropItem >> nPropType;
+                    if ( nPropType == VT_I2 )
+                        aPropItem >> nCodePage;
+                    switch ( nCodePage )
+                    {
+                        default :
+                        case 1252: mnTextEnc = RTL_TEXTENCODING_MS_1252; break;
+                        case 1200: mnTextEnc = RTL_TEXTENCODING_UCS2; break;
+                        case 1250: mnTextEnc = RTL_TEXTENCODING_MS_1250; break;
+                        case 1251: mnTextEnc = RTL_TEXTENCODING_MS_1251; break;
+                        case 1253: mnTextEnc = RTL_TEXTENCODING_MS_1253; break;
+                        case 1254: mnTextEnc = RTL_TEXTENCODING_MS_1254; break;
+                        case 1255: mnTextEnc = RTL_TEXTENCODING_MS_1255; break;
+                        case 1256: mnTextEnc = RTL_TEXTENCODING_MS_1256; break;
+                        case 1257: mnTextEnc = RTL_TEXTENCODING_MS_1257; break;
+                        case 1258: mnTextEnc = RTL_TEXTENCODING_MS_1258; break;
+                        case 874: mnTextEnc = RTL_TEXTENCODING_MS_874; break;
+                        case 932: mnTextEnc = RTL_TEXTENCODING_MS_932; break;
+                        case 936: mnTextEnc = RTL_TEXTENCODING_MS_936; break;
+                        case 949: mnTextEnc = RTL_TEXTENCODING_MS_949; break;
+                        case 950: mnTextEnc = RTL_TEXTENCODING_MS_950; break;
+                        case 1361: mnTextEnc = RTL_TEXTENCODING_MS_1361; break;
+                        case 65000 : mnTextEnc = RTL_TEXTENCODING_UTF7; break;
+                        case 65001 : mnTextEnc = RTL_TEXTENCODING_UTF8; break;
+                    }
+                }
+            }
         }
         else
         {
-            UINT32 nDictCount, nSize;
+            sal_uInt32 nDictCount, nSize;
             *pStrm >> nDictCount;
-            for ( UINT32 i = 0; i < nDictCount; i++ )
+            for ( i = 0; i < nDictCount; i++ )
             {
                 *pStrm >> nSize >> nSize;
                 pStrm->SeekRel( nSize );
@@ -541,7 +576,7 @@ void Section::Read( SvStorageStream *pStrm )
             nSize = pStrm->Tell();
             pStrm->Seek( nPropOfs + nSecOfs );
             nSize -= pStrm->Tell();
-            BYTE* pBuf = new BYTE[ nSize ];
+            sal_uInt8* pBuf = new sal_uInt8[ nSize ];
             pStrm->Read( pBuf, nSize );
             AddProperty( 0xffffffff, pBuf, nSize );
             delete[] pBuf;
@@ -570,7 +605,7 @@ Section& Section::operator=( Section& rSection )
 //  -----------------------------------------------------------------------
 
 PropRead::PropRead( SvStorage& rStorage, const String& rName ) :
-        mbStatus            ( FALSE ),
+        mbStatus            ( sal_False ),
         mnByteOrder         ( 0xfffe ),
         mnFormat            ( 0 ),
         mnVersionLo         ( 4 ),
@@ -583,7 +618,7 @@ PropRead::PropRead( SvStorage& rStorage, const String& rName ) :
         {
             mpSvStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
             memset( mApplicationCLSID, 0, 16 );
-            mbStatus = TRUE;
+            mbStatus = sal_True;
         }
     }
 }
@@ -597,7 +632,7 @@ void PropRead::AddSection( Section& rSection )
 
 //  -----------------------------------------------------------------------
 
-const Section* PropRead::GetSection( const BYTE* pFMTID )
+const Section* PropRead::GetSection( const sal_uInt8* pFMTID )
 {
     for ( Section* pSection = (Section*)First(); pSection; pSection = (Section*)Next() )
     {
@@ -624,14 +659,14 @@ void PropRead::Read()
     Clear();
     if ( mbStatus )
     {
-        UINT32  nSections;
-        UINT32  nSectionOfs;
-        UINT32  nCurrent;
-        BYTE*   pSectCLSID = new BYTE[ 16 ];
+        sal_uInt32  nSections;
+        sal_uInt32  nSectionOfs;
+        sal_uInt32  nCurrent;
+        sal_uInt8*  pSectCLSID = new sal_uInt8[ 16 ];
         *mpSvStream >> mnByteOrder >> mnFormat >> mnVersionLo >> mnVersionHi;
         mpSvStream->Read( mApplicationCLSID, 16 );
         *mpSvStream >> nSections;
-        for ( UINT32 i = 0; i < nSections; i++ )
+        for ( sal_uInt32 i = 0; i < nSections; i++ )
         {
             mpSvStream->Read( pSectCLSID, 16 );
             *mpSvStream >> nSectionOfs;

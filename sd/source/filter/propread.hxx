@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propread.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2002-01-11 11:48:06 $
+ *  last change: $Author: sj $ $Date: 2002-11-18 12:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,11 +155,14 @@
 
 class PropItem : public SvMemoryStream
 {
+        sal_uInt16      mnTextEnc;
+
     public :
                         PropItem(){};
         void            Clear();
 
-        BOOL            Read( String& rString, UINT32 nType = VT_EMPTY, BOOL bDwordAlign = TRUE, sal_uInt16 nCodePage = 0 );
+        void            SetTextEncoding( sal_uInt16 nTextEnc ){ mnTextEnc = nTextEnc; };
+        sal_Bool        Read( String& rString, sal_uInt32 nType = VT_EMPTY, sal_Bool bDwordAlign = sal_True );
         PropItem&       operator=( PropItem& rPropItem );
 };
 
@@ -182,22 +185,23 @@ class Dictionary : protected List
 
 class Section : private List
 {
+        sal_uInt16              mnTextEnc;
 
     protected:
 
         BYTE                    aFMTID[ 16 ];
 
-        void                    AddProperty( UINT32 nId, const BYTE* pBuf, UINT32 nBufSize );
+        void                    AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize );
 
     public:
-                                Section( const BYTE* pFMTID );
+                                Section( const sal_uInt8* pFMTID );
                                 Section( Section& rSection );
                                 ~Section();
 
         Section&                operator=( Section& rSection );
-        BOOL                    GetProperty( UINT32 nId, PropItem& rPropItem );
-        BOOL                    GetDictionary( Dictionary& rDict );
-        const BYTE*             GetFMTID() const { return aFMTID; };
+        sal_Bool                GetProperty( sal_uInt32 nId, PropItem& rPropItem );
+        sal_Bool                GetDictionary( Dictionary& rDict );
+        const sal_uInt8*        GetFMTID() const { return aFMTID; };
         void                    Read( SvStorageStream* pStrm );
 };
 
@@ -205,14 +209,14 @@ class Section : private List
 
 class PropRead : private List
 {
-        BOOL                    mbStatus;
+        sal_Bool                mbStatus;
         SvStorageStream*        mpSvStream;
 
-        UINT16                  mnByteOrder;
-        UINT16                  mnFormat;
-        UINT16                  mnVersionLo;
-        UINT16                  mnVersionHi;
-        BYTE                    mApplicationCLSID[ 16 ];
+        sal_uInt16              mnByteOrder;
+        sal_uInt16              mnFormat;
+        sal_uInt16              mnVersionLo;
+        sal_uInt16              mnVersionHi;
+        sal_uInt8               mApplicationCLSID[ 16 ];
 
         void                    AddSection( Section& rSection );
 
@@ -222,7 +226,7 @@ class PropRead : private List
 
         PropRead&               operator=( PropRead& rPropRead );
         const Section*          GetSection( const BYTE* pFMTID );
-        BOOL                    IsValid() const { return mbStatus; };
+        sal_Bool                IsValid() const { return mbStatus; };
         void                    Read();
 };
 
