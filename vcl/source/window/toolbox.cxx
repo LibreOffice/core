@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-06 19:15:22 $
+ *  last change: $Author: pl $ $Date: 2001-11-07 10:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -871,7 +871,7 @@ ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
             if ( !pBox->IsFloatingMode() )
             {
                 Point aPos = pBox->GetPosPixel();
-                aPos = pBox->GetParent()->OutputToScreenPixel( aPos );
+                aPos = pBox->GetParent()->OutputToAbsoluteScreenPixel( aPos );
                 Rectangle aTempRect( aPos, pBox->GetSizePixel() );
                 if ( aTempRect.IsOver( rRect ) )
                     return pBox;
@@ -938,8 +938,8 @@ void ImplTBDragMgr::Dragging( const Point& rPos )
     if ( mnLineMode )
     {
         ImplLineSizing( mpDragBox, rPos, maRect, mnLineMode );
-        Point aPos = mpDragBox->OutputToScreenPixel( rPos );
-        Point aOff = mpDragBox->OutputToScreenPixel( Point() );
+        Point aPos = mpDragBox->OutputToAbsoluteScreenPixel( rPos );
+        Point aOff = mpDragBox->OutputToAbsoluteScreenPixel( Point() );
         maRect.Move( aOff.X(), aOff.Y() );
         mpDragBox->Docking( rPos, maRect );
         maRect.Move( -aOff.X(), -aOff.Y() );
@@ -1015,7 +1015,7 @@ void ImplTBDragMgr::EndDragging( BOOL bOK )
             }
             else
             {
-                Point aOff = mpDragBox->OutputToScreenPixel( Point() );
+                Point aOff = mpDragBox->OutputToAbsoluteScreenPixel( Point() );
                 Rectangle aScreenRect( maRect );
                 aScreenRect.Move( aOff.X(), aOff.Y() );
                 ToolBox* pDropBox = FindToolBox( aScreenRect );
@@ -1034,7 +1034,7 @@ void ImplTBDragMgr::EndDragging( BOOL bOK )
                         aPos.Y() = aScreenRect.Top()-TB_CUSTOMIZE_OFFSET;
                     }
 
-                    aPos = pDropBox->ScreenToOutputPixel( aPos );
+                    aPos = pDropBox->AbsoluteScreenToOutputPixel( aPos );
                     USHORT nPos = ImplFindItemPos( pDropBox, aPos );
                     mpDragBox->Customize( ToolBoxCustomizeEvent( pDropBox, nTempItem,
                                                                  nPos, mpCustomizeData ) );
@@ -3528,9 +3528,9 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                 // koenen
                 StartDocking();
 
-                Point aPos  = GetParent()->OutputToScreenPixel( GetPosPixel() );
+                Point aPos  = GetParent()->OutputToAbsoluteScreenPixel( GetPosPixel() );
                 Size  aSize = GetSizePixel();
-                aPos = ScreenToOutputPixel( aPos );
+                aPos = AbsoluteScreenToOutputPixel( aPos );
 
                 // Dragging starten
                 pMgr->StartDragging( this, aMousePos, Rectangle( aPos, aSize ),
@@ -3686,7 +3686,7 @@ void ToolBox::Resize()
 
 void ToolBox::RequestHelp( const HelpEvent& rHEvt )
 {
-    USHORT nItemId = GetItemId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
+    USHORT nItemId = GetItemId( AbsoluteScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
 
     if ( nItemId )
     {
@@ -3694,10 +3694,10 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
         {
             // Rechteck ermitteln
             Rectangle aTempRect = GetItemRect( nItemId );
-            Point aPt = OutputToScreenPixel( aTempRect.TopLeft() );
+            Point aPt = OutputToAbsoluteScreenPixel( aTempRect.TopLeft() );
             aTempRect.Left()   = aPt.X();
             aTempRect.Top()    = aPt.Y();
-            aPt = OutputToScreenPixel( aTempRect.BottomRight() );
+            aPt = OutputToAbsoluteScreenPixel( aTempRect.BottomRight() );
             aTempRect.Right()  = aPt.X();
             aTempRect.Bottom() = aPt.Y();
 
@@ -3731,16 +3731,16 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
             }
         }
     }
-    else if ( maNextToolRect.IsInside( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) ) )
+    else if ( maNextToolRect.IsInside( AbsoluteScreenToOutputPixel( rHEvt.GetMousePosPixel() ) ) )
     {
         if ( rHEvt.GetMode() & (HELPMODE_BALLOON | HELPMODE_QUICK) )
         {
             // Rechteck ermitteln
             Rectangle aTempRect = maNextToolRect;
-            Point aPt = OutputToScreenPixel( aTempRect.TopLeft() );
+            Point aPt = OutputToAbsoluteScreenPixel( aTempRect.TopLeft() );
             aTempRect.Left()   = aPt.X();
             aTempRect.Top()    = aPt.Y();
-            aPt = OutputToScreenPixel( aTempRect.BottomRight() );
+            aPt = OutputToAbsoluteScreenPixel( aTempRect.BottomRight() );
             aTempRect.Right()  = aPt.X();
             aTempRect.Bottom() = aPt.Y();
 
@@ -4165,11 +4165,11 @@ void ToolBox::StartCustomize( const Rectangle& rRect, void* pData )
 
     ImplTBDragMgr* pMgr = ImplGetTBDragMgr();
     Point aMousePos = GetPointerPosPixel();
-    Point aPos = ScreenToOutputPixel( rRect.TopLeft() );
+    Point aPos = AbsoluteScreenToOutputPixel( rRect.TopLeft() );
     Rectangle aRect( aPos.X(), aPos.Y(),
                      aPos.X()+rRect.GetWidth()+SMALLBUTTON_HSIZE,
                      aPos.Y()+rRect.GetHeight()+SMALLBUTTON_VSIZE );
-    aMousePos = ScreenToOutputPixel( aPos );
+    aMousePos = AbsoluteScreenToOutputPixel( aPos );
     Pointer aPtr;
     SetPointer( aPtr );
     pMgr->StartDragging( this, aMousePos, aRect, 0, FALSE, pData );
