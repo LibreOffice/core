@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-18 12:17:03 $
+ *  last change: $Author: fme $ $Date: 2002-11-19 09:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ void SwTxtFrm::SwitchLTRtoRTL( SwRect& rRect ) const
 
     long nWidth = rRect.Width();
     rRect.Left( 2 * ( Frm().Left() + Prt().Left() ) +
-                Prt().Width() - rRect.Right() );
+                Prt().Width() - rRect.Right() - 1 );
 
     rRect.Width( nWidth );
 
