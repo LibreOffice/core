@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-08 09:18:51 $
+ *  last change: $Author: dr $ $Date: 2001-05-11 12:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, USHORT n
         //
         aBtnBefore      ( this, ScResId( RB_BEFORE ) ),
         aBtnBehind      ( this, ScResId( RB_BEHIND ) ),
-        aGbPos          ( this, ScResId( GB_POSITION ) ),
+        aFlPos          ( this, ScResId( FL_POSITION ) ),
         aFtCount        ( this, ScResId( FT_COUNT ) ),
         aNfCount        ( this, ScResId( NF_COUNT ) ),
         aFtName         ( this, ScResId( FT_NAME ) ),
@@ -102,10 +102,10 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, USHORT n
         aLbTables       ( this, ScResId( LB_TABLES ) ),
         aFtPath         ( this, ScResId( FT_PATH ) ),
         aBtnBrowse      ( this, ScResId( BTN_BROWSE ) ),
-        aBtnLink        ( this, ScResId( BTN_LINK ) ),
-        aGbTable        ( this, ScResId( GB_TABLE ) ),
-        aBtnNew         ( this, ScResId( BTN_NEW ) ),
-        aBtnFromFile    ( this, ScResId( BTN_FROMFILE ) ),
+        aBtnLink        ( this, ScResId( CB_LINK ) ),
+        aFlTable        ( this, ScResId( FL_TABLE ) ),
+        aBtnNew         ( this, ScResId( RB_NEW ) ),
+        aBtnFromFile    ( this, ScResId( RB_FROMFILE ) ),
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
@@ -155,7 +155,7 @@ void ScInsertTableDlg::Init_Impl()
     }
     else
     {
-        String aName=aGbTable.GetText();
+        String aName=aFlTable.GetText();
         aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
         aEdName.SetText( aName );
         aFtName.Disable();
@@ -301,7 +301,7 @@ IMPL_LINK( ScInsertTableDlg, CountHdl_Impl, NumericField*, EMPTYARG )
     }
     else
     {
-        String aName=aGbTable.GetText();
+        String aName=aFlTable.GetText();
         aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
         aEdName.SetText( aName );
         aFtName.Disable();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: dr $ $Date: 2001-05-11 12:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ public:
 private:
     RadioButton             aBtnBefore;
     RadioButton             aBtnBehind;
-    GroupBox                aGbPos;
+    FixedLine               aFlPos;
     RadioButton             aBtnNew;
     RadioButton             aBtnFromFile;
     FixedText               aFtCount;
@@ -135,7 +135,7 @@ private:
     ScExpandedFixedText     aFtPath;
     PushButton              aBtnBrowse;
     CheckBox                aBtnLink;
-    GroupBox                aGbTable;
+    FixedLine               aFlTable;
     OKButton                aBtnOk;
     CancelButton            aBtnCancel;
     HelpButton              aBtnHelp;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: dr $ $Date: 2001-05-11 12:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 // StarCalc Dialog: Tabelle einfuegen (Resource-IDs)
 //
 // (C) 1994 StarDivision GmbH, Hamburg, Germany
-// $Author: hr $ $Date: 2000-09-18 16:44:59 $ $Revision: 1.1.1.1 $
+// $Author: dr $ $Date: 2001-05-11 12:40:43 $ $Revision: 1.2 $
 // $Logfile:   T:/sc/source/ui/inc/instbdlg.hrv  $ $Workfile:   instbdlg.hrc  $
 //------------------------------------------------------------------
 
@@ -71,22 +71,23 @@
 //#define RID_SCDLG_INSERT_TABLE 300
 
 #define BTN_OK                  1
-#define BTN_CANCEL              1
-#define BTN_HELP                1
-#define BTN_NEW                 1
-#define BTN_FROMFILE            2
-#define GB_CHOSE                1
-#define FT_PATH                 2
-#define ED_TABNAME              1
-#define BTN_BROWSE              1
-#define BTN_LINK                1
-#define LB_TABLES               1
-#define GB_POSITION             20
-#define RB_BEHIND               21
-#define RB_BEFORE               22
-#define GB_TABLE                30
-#define NF_COUNT                30
-#define FT_COUNT                31
-#define FT_NAME                 32
+#define BTN_CANCEL              2
+#define BTN_HELP                3
+
+#define FL_POSITION             10
+#define RB_BEFORE               11
+#define RB_BEHIND               12
+
+#define FL_TABLE                20
+#define RB_NEW                  21
+#define FT_COUNT                22
+#define NF_COUNT                23
+#define FT_NAME                 24
+#define ED_TABNAME              25
+#define RB_FROMFILE             26
+#define LB_TABLES               27
+#define BTN_BROWSE              28
+#define CB_LINK                 29
+#define FT_PATH                 30
 
 
