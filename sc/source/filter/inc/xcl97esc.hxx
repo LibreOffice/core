@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:55:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include <tools/stack.hxx>
 #endif
 
+#ifndef SC_XLESCHER_HXX
+#include "xlescher.hxx"
+#endif
 #ifndef SC_XLOCX_HXX
 #include "xlocx.hxx"
 #endif
@@ -182,91 +185,61 @@ public:
 };
 
 
-// --- class XclEscherClientAnchor -----------------------------------
+// Escher client anchor =======================================================
 
-struct RootData;
-class ScDocument;
-class ScAddress;
 class Rectangle;
 class SdrObject;
+class ScAddress;
 
-class XclEscherClientAnchor : public EscherExClientAnchor_Base
+/** Represents the position (anchor) of an Escher object in a Calc document. */
+class XclExpEscherAnchor : public EscherExClientAnchor_Base, protected XclExpRoot
 {
-private:
-        RootData*           pRootData;
-                                        // all undocumented
-        UINT16              nFlag;      // 0: move and size with cell
-                                        // 2: move with cell, don't size
-                                        // 3: don't move, don't size
-        UINT16              nCol1;      // UL column
-        UINT16              nX1;        // UL offset (in fractions of a column, 1024)
-        UINT16              nRow1;      // UL row
-        UINT16              nY1;        // UL offset (in fractions of a row, 256)
-        UINT16              nCol2;      // LR column
-        UINT16              nX2;        // LR offset (in fractions of a column, 1024)
-        UINT16              nRow2;      // LR row
-        UINT16              nY2;        // LR offset (in fractions of a row, 256)
-
-    static  BOOL                FindNextCol(
-                                    USHORT& nCol,
-                                    const ScDocument* pDoc,
-                                    USHORT nTab,
-                                    short nDir
-                                    );
-    static  BOOL                FindNextRow(
-                                    USHORT& nRow,
-                                    const ScDocument* pDoc,
-                                    USHORT nTab,
-                                    short nDir
-                                    );
-    static  void                ColX(
-                                    UINT16& nCol,
-                                    UINT16& nX,
-                                    UINT16 nStart,
-                                    long& nWidth,
-                                    long nPosX,
-                                    const ScDocument* pDoc,
-                                    USHORT nTab
-                                    );
-    static  void                RowY(
-                                    UINT16& nRow,
-                                    UINT16& nY,
-                                    UINT16 nStart,
-                                    long& nWidth,
-                                    long nPosY,
-                                    const ScDocument* pDoc,
-                                    USHORT nTab
-                                    );
-            void                Init( const Rectangle& rRect );
-
 public:
+    /** Constructs a dummy Escher client anchor. */
+    explicit                    XclExpEscherAnchor( const XclExpRoot& rRoot, sal_uInt16 nFlags = 0 );
+    /** Constructs an Escher client anchor directly from an SdrObject. */
+    explicit                    XclExpEscherAnchor( const XclExpRoot& rRoot, const SdrObject& rSdrObj );
 
-    static  UINT16              GetMoveSizeFlag( const SdrObject& rObj );
+    /** Sets the flags according to the passed SdrObject. */
+    void                        SetFlags( const SdrObject& rSdrObj );
 
-                                XclEscherClientAnchor(
-                                    RootData& rRoot,
-                                    UINT16 nMoveSizeFlag
-                                    );
-
-                                /// used for Charts
-                                XclEscherClientAnchor(
-                                    RootData& rRoot,
-                                    const SdrObject& rObj
-                                    );
-
-                                /// only used for notes without sizes
-                                XclEscherClientAnchor(
-                                    const ScDocument* pDoc,
-                                    const ScAddress& rPos
-                                    );
-
-                                /// used by class XclObjDropDown
-            void                SetDropDownPosition( const ScAddress& rAddr );
-
+    /** Called from SVX Escher exporter.
+        @param rRect  The object anchor rectangle to be exported (in twips). */
     virtual void                WriteData( EscherEx& rEx, const Rectangle& rRect );
-            void                WriteData( EscherEx& rEx ) const;
+
+    /** Writes the Escher anchor structure with the current anchor position. */
+    void                        WriteData( EscherEx& rEx ) const;
+
+protected:
+    BOOL                        FindNextCol( USHORT& nCol, short nDir );
+    BOOL                        FindNextRow( USHORT& nRow, short nDir );
+
+protected:  // for access in derived classes
+    XclEscherAnchor             maAnchor;       /// The client anchor data.
+    sal_uInt16                  mnFlags;        /// Flags for Escher stream export.
 };
 
+// ----------------------------------------------------------------------------
+
+/** Represents the position (anchor) of an Escher note object. */
+class XclExpEscherNoteAnchor : public XclExpEscherAnchor
+{
+public:
+    explicit                    XclExpEscherNoteAnchor( const XclExpRoot& rRoot, const ScAddress& rPos );
+};
+
+
+// ----------------------------------------------------------------------------
+
+/** Represents the position (anchor) of an Escher cell dropdown object. */
+class XclExpEscherDropDownAnchor : public XclExpEscherAnchor
+{
+public:
+    explicit                    XclExpEscherDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rPos );
+};
+
+
+// ============================================================================
 
 // --- class XclEscherClientData -------------------------------------
 
@@ -281,6 +254,7 @@ public:
 // --- class XclEscherClientTextbox ----------------------------------
 
 class SdrTextObj;
+struct RootData;
 
 class XclEscherClientTextbox : public EscherExClientRecord_Base
 {
