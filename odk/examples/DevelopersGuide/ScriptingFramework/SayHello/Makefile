@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:51:13 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:13:56 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -115,7 +115,7 @@ $(SAMPLE_NAME) : $(SCRIPT_REGISTERFLAG)
 	@echo You can also load the document "$(QM)$(SCRIPT_NAME).odt$(QM)" and press the button to run the
 	@echo script.
 	@echo -
-	@echo make $(SCRIPT_NAME).odt.load
+	@echo $(MAKE) $(SCRIPT_NAME).odt.load
 	@echo --------------------------------------------------------------------------------
 
 $(SCRIPT_NAME).odt.load : $(SCRIPT_REGISTERFLAG)
