@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-13 01:09:14 $
+ *  last change: $Author: khong $ $Date: 2002-11-07 02:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ class LocaleNode{
     //inline LocaleNode() { ; }
 public:
     LocaleNode (const OUString& name, const Reference< XAttributeList > & attr);
-    inline void setValue(const OUString &oValue) { aValue = oValue; };
+    inline void setValue(const OUString &oValue) { aValue += oValue; };
     inline const OUString getName() { return aName; };
     inline const OUString getValue() { return aValue; };
     inline const Attr* getAttr() { return xAttribs; };

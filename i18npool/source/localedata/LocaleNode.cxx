@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-16 04:24:52 $
+ *  last change: $Author: khong $ $Date: 2002-11-07 02:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@ LocaleNode :: LocaleNode (const OUString& name, const Reference< XAttributeList 
     xAttribs = new Attr(attr);
     nChildren = 0;
     childArrSize = 0;
+    aValue=OUString();
 }
 
 void LocaleNode::print () {
