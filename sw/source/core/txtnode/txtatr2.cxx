@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 15:49:57 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 14:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
-#ifndef _XMLOFF_XMLCNITM_HXX
-#include <xmloff/xmlcnitm.hxx>
+#ifndef _SVX_XMLCNITM_HXX
+#include <svx/xmlcnitm.hxx>
 #endif
 #ifndef _SVX_TWOLINESITEM_HXX
 #include <svx/twolinesitem.hxx>

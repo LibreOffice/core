@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 15:50:08 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 14:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #ifndef _SOT_FACTORY_HXX
 #include <sot/factory.hxx>
 #endif
-#ifndef _XMLOFF_XMLCNITM_HXX
-#include <xmloff/xmlcnitm.hxx>
+#ifndef _SVX_XMLCNITM_HXX
+#include <svx/xmlcnitm.hxx>
 #endif
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>

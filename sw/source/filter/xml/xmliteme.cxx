@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmliteme.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 17:27:51 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 14:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
 #endif
-#ifndef _XMLOFF_XMLITMPR_HXX
-#include <xmloff/xmlexpit.hxx>
+#ifndef _XMLITMPR_HXX
+#include "xmlexpit.hxx"
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>

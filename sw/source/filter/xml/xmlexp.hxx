@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 17:27:51 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 14:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <xmloff/xmlexp.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLITMAP_HXX
-#include <xmloff/xmlitmap.hxx>
+#ifndef _XMLITMAP_HXX
+#include "xmlitmap.hxx"
 #endif
 #ifndef _UNIVERSALL_REFERENCE_HXX
 #include <xmloff/uniref.hxx>

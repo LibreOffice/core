@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-02 09:53:00 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 14:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,8 @@
 #ifndef _XMLOFF_XMLTKMAP_HXX
 #include <xmloff/xmltkmap.hxx>
 #endif
-#ifndef _XMLOFF_XMLITEM_HXX
-#include <xmloff/xmlitem.hxx>
+#ifndef _XMLITEM_HXX
+#include "xmlitem.hxx"
 #endif
 #ifndef _XMLOFF_XMLSTYLE_HXX
 #include <xmloff/xmlstyle.hxx>

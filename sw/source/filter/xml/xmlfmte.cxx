@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:12:53 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 14:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #ifndef _XMLOFF_ATTRLIST_HXX
 #include <xmloff/attrlist.hxx>
 #endif
-#ifndef _XMLOFF_XMLITMPR_HXX
-#include <xmloff/xmlexpit.hxx>
+#ifndef _XMLITMPR_HXX
+#include "xmlexpit.hxx"
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>

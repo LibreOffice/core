@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitemi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 14:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,14 @@
 #include <rsc/rscsfx.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLITMAP_HXX
-#include <xmloff/xmlitmap.hxx>
+#ifndef _XMLITMAP_HXX
+#include "xmlitmap.hxx"
 #endif
-#ifndef _XMLOFF_XMLIMPIT_HXX
-#include <xmloff/xmlimpit.hxx>
+#ifndef _XMLIMPIT_HXX
+#include "xmlimpit.hxx"
 #endif
-#ifndef _XMLOFF_XMLITEM_HXX
-#include <xmloff/xmlitem.hxx>
+#ifndef _XMLITEM_HXX
+#include "xmlitem.hxx"
 #endif
 #ifndef _XMLOFF_I18NMAP_HXX
 #include <xmloff/i18nmap.hxx>

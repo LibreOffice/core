@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-28 16:33:10 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 14:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@
 #include <vcl/mapmod.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLCNITM_HXX
-#include <xmloff/xmlcnitm.hxx>
+#ifndef _SVX_XMLCNITM_HXX
+#include <svx/xmlcnitm.hxx>
 #endif
 
 #ifndef _SFXMACITEM_HXX

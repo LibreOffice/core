@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-25 18:29:13 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 14:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
-#ifndef _XMLOFF_XMLCNITM_HXX
-#include <xmloff/xmlcnitm.hxx>
+#ifndef _SVX_XMLCNITM_HXX
+#include <svx/xmlcnitm.hxx>
 #endif
 #ifndef _XMLOFF_PROGRESSBARHELPER_HXX
 #include <xmloff/ProgressBarHelper.hxx>
