@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:02:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,8 +421,6 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
             if ( bRet )
             {
-                GetModel()->attachResource(sFileName,Sequence< PropertyValue >());
-
                 Reference< XModifiable > xModi(GetModel(),UNO_QUERY);
                 if ( xModi.is() )
                     xModi->setModified(sal_False);
