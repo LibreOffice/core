@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 21:28:37 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ TabPage TP_HELP_INDEX
         Text[ polish ] = "Szukane has³o";
         Text[ portuguese_brazilian ] = "~Suchbegriff";
         Text[ japanese ] = "ŒŸõ·°(~S)";
-        Text[ korean ] = "°Ë»ö ¿ë¾î";
+        Text[ korean ] = "°Ë»ö ¿ë¾î(~S)";
         Text[ chinese_simplified ] = "ËÑÑ°×Ö´Ê(~S)";
         Text[ chinese_traditional ] = "·j´M¶µ¥Ø(~S)";
         Text[ turkish ] = "~Suchbegriff";
@@ -216,7 +216,7 @@ TabPage TP_HELP_INDEX
         Text[ polish ] = "Poka¿";
         Text[ portuguese_brazilian ] = "~Display";
         Text[ japanese ] = "•\\¦(~D)";
-        Text[ korean ] = "³ªÅ¸³»±â";
+        Text[ korean ] = "³ªÅ¸³»±â(~D)";
         Text[ chinese_simplified ] = "ÏÔÊ¾(~D)";
         Text[ chinese_traditional ] = "Åã¥Ü(~D)";
         Text[ turkish ] = "~Display";
@@ -247,7 +247,7 @@ TabPage TP_HELP_SEARCH
         Text[ portuguese_brazilian ] = "~Suchbegriff";
         Text[ japanese ] = "ŒŸõ·°(~E)";
         Text[ korean ] = "~°Ë»ö ¿ë¾î";
-        Text[ chinese_simplified ] = "ËÑÑ°×Ö´Ê(~S)";
+        Text[ chinese_simplified ] = "ËÑÑ°×Ö´Ê(~E)";
         Text[ chinese_traditional ] = "·j´M¶µ¥Ø(~E)";
         Text[ turkish ] = "~Suchbegriff";
         Text[ arabic ] = "ãÕØáÍ ÇáÈÍË";
@@ -277,7 +277,7 @@ TabPage TP_HELP_SEARCH
         Text[ polish ] = "Szukaj";
         Text[ portuguese_brazilian ] = "Search";
         Text[ japanese ] = "ŒŸõ(~F)";
-        Text[ korean ] = "Ã£±â";
+        Text[ korean ] = "Ã£±â(~F)";
         Text[ chinese_simplified ] = "ËÑÑ°(~F)";
         Text[ chinese_traditional ] = "·j´M(~F)";
         Text[ turkish ] = "Search";
@@ -307,7 +307,7 @@ TabPage TP_HELP_SEARCH
         Text[ polish ] = "Poka¿";
         Text[ portuguese_brazilian ] = "~Display";
         Text[ japanese ] = "•\\¦(~D)";
-        Text[ korean ] = "³ªÅ¸³»±â";
+        Text[ korean ] = "³ªÅ¸³»±â(~D)";
         Text[ chinese_simplified ] = "ÏÔÊ¾(~D)";
         Text[ chinese_traditional ] = "Åã¥Ü(~D)";
         Text[ turkish ] = "~Display";
