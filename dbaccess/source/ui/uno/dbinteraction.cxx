@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:53:07 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _COM_SUN_STAR_SDB_XINTERACTIONSUPPLYPARAMETERS_HPP_
 #include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XINTERACTIONDOCUMENTSAVE_HPP_
+#include <com/sun/star/sdb/XInteractionDocumentSave.hpp>
+#endif
 #ifndef _SVTOOLS_LOGINDLG_HXX_
 #include <svtools/logindlg.hxx>
 #endif
@@ -109,6 +112,9 @@
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
+#endif
+#ifndef DBAUI_COLLECTIONVIEW_HXX
+#include "CollectionView.hxx"
 #endif
 
 //==========================================================================
@@ -179,6 +185,13 @@ namespace dbaui
         if (aRequest >>= aParamRequest)
         {   // it's an authentification request
             implHandle(aParamRequest, aContinuations);
+            return;
+        }
+
+        DocumentSaveRequest aDocuRequest;
+        if (aRequest >>= aDocuRequest)
+        {   // it's an document request
+            implHandle(aDocuRequest, aContinuations);
             return;
         }
 
@@ -393,6 +406,81 @@ namespace dbaui
             DBG_ERROR("OInteractionHandler::implHandle(SQLExceptionInfo): caught a RuntimeException while calling the continuation callback!");
         }
     }
+    //-------------------------------------------------------------------------
+    void OInteractionHandler::implHandle(const DocumentSaveRequest& _rDocuRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
+    {
+        ::vos::OGuard aGuard(Application::GetSolarMutex());
+            // want to open a dialog ....
+
+        sal_Int32 nApprovePos = getContinuation(APPROVE, _rContinuations);
+        sal_Int32 nDisApprovePos = getContinuation(DISAPPROVE, _rContinuations);
+        sal_Int32 nAbortPos = getContinuation(ABORT, _rContinuations);
+
+        short nRet = RET_YES;
+        if ( -1 != nApprovePos )
+        {
+            // fragen, ob gespeichert werden soll
+            String aText( ModuleRes( STR_QUERY_SAVE_DOCUMENT ) );
+            aText.SearchAndReplace( String::CreateFromAscii("$(DOC)"),
+                                    _rDocuRequest.Name );
+
+            QueryBox aQBox( NULL, WB_YES_NO_CANCEL | WB_DEF_YES, aText );
+            aQBox.SetButtonText( BUTTONID_NO, ModuleRes( STR_NOSAVEANDCLOSE ) );
+            aQBox.SetButtonText( BUTTONID_YES, ModuleRes( STR_SAVEDOC ) );
+
+            nRet = aQBox.Execute();
+        }
+
+        if ( RET_CANCEL == nRet )
+        {
+            if (-1 != nAbortPos)
+                _rContinuations[nAbortPos]->select();
+            return;
+        }
+        else if ( RET_YES == nRet )
+        {
+            sal_Int32 nDocuPos = getContinuation(SUPPLY_DOCUMENTSAVE, _rContinuations);
+
+            if (-1 != nDocuPos)
+            {
+                Reference< XInteractionDocumentSave > xCallback(_rContinuations[nDocuPos], UNO_QUERY);
+                DBG_ASSERT(xCallback.is(), "OInteractionHandler::implHandle(DocumentSaveRequest): can't save document without an appropriate interaction handler!s");
+
+                // determine the style of the dialog, dependent on the present continuation types
+                WinBits nDialogStyle = WB_OK | WB_DEF_OK;
+                if (-1 != nAbortPos)
+                    nDialogStyle = WB_OK_CANCEL;
+
+                OCollectionView aDlg(NULL,_rDocuRequest.Content,_rDocuRequest.Name,m_xORB);
+                sal_Int16 nResult = aDlg.Execute();
+                try
+                {
+                    switch (nResult)
+                    {
+                        case RET_OK:
+                            if (xCallback.is())
+                            {
+                                xCallback->setName(aDlg.getName(),aDlg.getSelectedFolder());
+                                xCallback->select();
+                            }
+                            break;
+                        default:
+                            if (-1 != nAbortPos)
+                                _rContinuations[nAbortPos]->select();
+                            break;
+                    }
+                }
+                catch(RuntimeException&)
+                {
+                    DBG_ERROR("OInteractionHandler::implHandle(DocumentSaveRequest): caught a RuntimeException while calling the continuation callback!");
+                }
+            }
+            else if ( -1 != nApprovePos )
+                _rContinuations[nApprovePos]->select();
+        }
+        else if ( -1 != nDisApprovePos )
+                _rContinuations[nDisApprovePos]->select();
+    }
 
     //-------------------------------------------------------------------------
     sal_Int32 OInteractionHandler::getContinuation(Continuation _eCont, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
@@ -424,6 +512,10 @@ namespace dbaui
                     break;
                 case SUPPLY_PARAMETERS:
                     if (Reference< XInteractionSupplyParameters >(*pContinuations, UNO_QUERY).is())
+                        return i;
+                    break;
+                case SUPPLY_DOCUMENTSAVE:
+                    if (Reference< XInteractionDocumentSave >(*pContinuations, UNO_QUERY).is())
                         return i;
                     break;
             }
