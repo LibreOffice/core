@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltxtimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 13:04:53 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,11 @@ SvXMLImportContext *SvxXMLTextImportContext::CreateChildContext( USHORT nPrefix,
 class SvxXMLXTextImportComponent : public SvXMLImport
 {
 public:
-    SvxXMLXTextImportComponent( const Reference< XText > & xText );
+    // #110680#
+    SvxXMLXTextImportComponent(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const Reference< XText > & xText );
+
     virtual ~SvxXMLXTextImportComponent() throw ();
 
     static sal_Bool load( const rtl::OUString& rUrl, const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xTable ) throw();
@@ -214,8 +218,12 @@ private:
 
 // --------------------------------------------------------------------
 
-SvxXMLXTextImportComponent::SvxXMLXTextImportComponent( const Reference< XText > & xText )
-: mxText( xText )
+// #110680#
+SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const Reference< XText > & xText )
+:   SvXMLImport(xServiceFactory),
+    mxText( xText )
 {
     GetTextImport()->SetCursor( mxText->createTextCursor() );
 }
@@ -300,7 +308,9 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
 
 */
 
-            Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xText ) );
+            // #110680#
+            // Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xText ) );
+            Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xServiceFactory, xText ) );
 
             xParser->setDocumentHandler( xHandler );
 
