@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-06 14:01:22 $
+ *  last change: $Author: dbo $ $Date: 2002-03-25 12:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,17 +66,31 @@
 namespace xmlscript
 {
 
+static inline bool readFontProps( ElementDescriptor * element, Style & style )
+{
+    bool ret = false;
+    ret |= (sal_False != (element->readProp(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= style._descr));
+    ret |= (sal_False != (element->readProp(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("FontEmphasisMark") ) ) >>= style._fontEmphasisMark));
+    ret |= (sal_False != (element->readProp(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("FontRelief") ) ) >>= style._fontRelief));
+    return ret;
+}
+
 //__________________________________________________________________________________________________
 void ElementDescriptor::readButtonModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x1 | 0x2 | 0x8 );
+    Style aStyle( 0x1 | 0x2 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -98,6 +112,27 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-src") ) );
     readAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageAlign") ),
                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-align") ) );
+
+    // State
+    sal_Int16 nState;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ) ) >>= nState)
+    {
+        switch (nState)
+        {
+        case 0:
+            addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":checked") ),
+                          OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) );
+            break;
+        case 1:
+            addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":checked") ),
+                          OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
+            break;
+        default:
+            OSL_ENSURE( 0, "### unexpected radio state!" );
+            break;
+        }
+    }
+
     readEvents();
 }
 //__________________________________________________________________________________________________
@@ -105,10 +140,12 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x2 | 0x8 );
+    Style aStyle( 0x2 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x2;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -145,6 +182,9 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
         case 2: // tristate=true exported, checked omitted => dont know!
             OSL_ENSURE( bTriState, "### detected tristate value, but TriState is not set!" );
             break;
+        default:
+            OSL_ENSURE( 0, "### unexpected checkbox state!" );
+            break;
         }
     }
     readEvents();
@@ -154,14 +194,16 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
+    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
         aStyle._set |= 0x4;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -215,14 +257,16 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
+    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
         aStyle._set |= 0x4;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -286,10 +330,12 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x2 | 0x8 );
+    Style aStyle( 0x2 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -317,9 +363,8 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles )
             addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":checked") ),
                           OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
             break;
-        case 2: // tristate=true exported, checked omitted => dont know!
-            addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tristate") ),
-                          OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
+        default:
+            OSL_ENSURE( 0, "### unexpected radio state!" );
             break;
         }
     }
@@ -330,10 +375,12 @@ void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x2 | 0x8 );
+    Style aStyle( 0x2 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -361,14 +408,16 @@ void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
+    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
         aStyle._set |= 0x4;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -382,6 +431,8 @@ void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":multiline") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
     readAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );
     readEvents();
@@ -391,14 +442,16 @@ void ElementDescriptor::readEditModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
+    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
         aStyle._set |= 0x4;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -464,14 +517,16 @@ void ElementDescriptor::readFileControlModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
+    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
         aStyle._set |= 0x4;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -492,14 +547,16 @@ void ElementDescriptor::readCurrencyFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
+    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
         aStyle._set |= 0x4;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -541,14 +598,16 @@ void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
+    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
         aStyle._set |= 0x4;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -566,6 +625,8 @@ void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":strict-format") ) );
     readDateFormatAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("DateFormat") ),
                         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":date-format") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("DateShowCentury") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":show-century") ) );
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Date") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("DateMin") ),
@@ -583,14 +644,16 @@ void ElementDescriptor::readNumericFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
+    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
         aStyle._set |= 0x4;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -627,14 +690,16 @@ void ElementDescriptor::readTimeFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
+    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
         aStyle._set |= 0x4;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -667,14 +732,16 @@ void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
+    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
         aStyle._set |= 0x4;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -692,6 +759,8 @@ void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":strict-format") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
+    readShortAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
+                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":maxlength") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("EditMask") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":edit-mask") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("LiteralMask") ),
@@ -703,14 +772,16 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
+    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
         aStyle._set |= 0x4;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -768,6 +839,9 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
                 OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-min") ) );
         }
     }
+    readBoolAttr(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("TreatAsNumber") ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":treat-as-number") ) );
 
     readEvents();
 }
@@ -776,10 +850,12 @@ void ElementDescriptor::readFixedLineModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
     // collect styles
-    Style aStyle( 0x2 | 0x8 );
+    Style aStyle( 0x2 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -862,16 +938,16 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_URI) ) );
     addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("xmlns:" XMLNS_SCRIPT_PREFIX) ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_URI) ) );
-    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ) );
 
     // collect styles
-    Style aStyle( 0x1 | 0x4 | 0x8 );
+    Style aStyle( 0x1 | 0x2 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
-//      if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
-//          aStyle._set |= 0x4;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
+        aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
+    if (readFontProps( this, aStyle ))
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
@@ -879,24 +955,20 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
                       all_styles->getStyleId( aStyle ) );
     }
 
-    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":title") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":left") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":top") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":width") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":height") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Step") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":page") ) );
-    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tag") ) );
-    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpText") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":help-text") ) );
-    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpURL") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":help-url") ) );
+    // collect elements
+    readDefaults( false );
+    readBoolAttr(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("Closeable") ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":closeable") ) );
+    readBoolAttr(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("Moveable") ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":moveable") ) );
+    readBoolAttr(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("Sizeable") ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":resizeable") ) );
+    readStringAttr(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":title") ) );
     readEvents();
 }
 

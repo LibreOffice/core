@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-06 14:01:22 $
+ *  last change: $Author: dbo $ $Date: 2002-03-25 12:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/awt/FontEmphasisMark.hpp>
+#include <com/sun/star/awt/FontRelief.hpp>
 
 #include <com/sun/star/xml/sax2/XExtendedAttributes.hpp>
 #include <com/sun/star/xml/XImportContext.hpp>
@@ -279,11 +281,16 @@ class StyleElement
 {
     sal_Int32 _backgroundColor;
     sal_Int32 _textColor;
+    sal_Int32 _textLineColor;
     sal_Int16 _border;
     awt::FontDescriptor _descr;
+    sal_Int16 _fontRelief;
+    sal_Int16 _fontEmphasisMark;
     sal_Int32 _fillColor;
 
     short _inited, _hasValue;
+
+    void setFontProperties( Reference< beans::XPropertySet > const & xProps );
 
 public:
     virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
@@ -294,6 +301,8 @@ public:
         throw (xml::sax::SAXException, RuntimeException);
 
     bool importTextColorStyle(
+        Reference< beans::XPropertySet > const & xProps );
+    bool importTextLineColorStyle(
         Reference< beans::XPropertySet > const & xProps );
     bool importFillColorStyle(
         Reference< beans::XPropertySet > const & xProps );
@@ -310,6 +319,8 @@ public:
         ElementBase * pParent, DialogImport * pImport )
         SAL_THROW( () )
         : ElementBase( XMLNS_DIALOGS_UID, rLocalName, xAttributes, pParent, pImport )
+        , _fontRelief( awt::FontRelief::NONE )
+        , _fontEmphasisMark( awt::FontEmphasisMark::NONE )
         , _inited( 0 )
         , _hasValue( 0 )
         {}
@@ -368,17 +379,25 @@ class ImportContext
 {
 protected:
     Reference< beans::XPropertySet > _xControlModel;
+    OUString _aId;
 
 public:
-    inline ImportContext( Reference< beans::XPropertySet > const & xControlModel_ )
+    inline ImportContext(
+        Reference< beans::XPropertySet > const & xControlModel_, OUString const & id )
         : _xControlModel( xControlModel_ )
+        , _aId( id )
         { OSL_ASSERT( _xControlModel.is() ); }
 
     inline Reference< beans::XPropertySet > getControlModel()
         { return _xControlModel; }
 
+    void importDefaults(
+        sal_Int32 nBaseX, sal_Int32 nBaseY,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        bool supportPrintable = true );
     void importEvents(
         vector< Reference< xml::XImportContext > > const & rEvents );
+
     bool importStringProperty(
         OUString const & rPropName, OUString const & rAttrName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
@@ -421,21 +440,15 @@ public:
 class ControlImportContext : public ImportContext
 {
     DialogImport * _pImport;
-    OUString _aId;
 public:
-    inline ControlImportContext( DialogImport * pImport,
-                                 OUString const & rId, OUString const & rControlName )
+    inline ControlImportContext(
+        DialogImport * pImport, OUString const & rId, OUString const & rControlName )
         : ImportContext( Reference< beans::XPropertySet >(
-            pImport->_xDialogModelFactory->createInstance( rControlName ), UNO_QUERY ) )
+            pImport->_xDialogModelFactory->createInstance( rControlName ), UNO_QUERY ), rId )
         , _pImport( pImport )
-        , _aId( rId )
         {}
     inline ~ControlImportContext()
         { _pImport->_xDialogModel->insertByName( _aId, makeAny( Reference< awt::XControlModel >::query( _xControlModel ) ) ); }
-
-    void importDefaults(
-        sal_Int32 nBaseX, sal_Int32 nBaseY,
-        Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
 };
 
 //==================================================================================================

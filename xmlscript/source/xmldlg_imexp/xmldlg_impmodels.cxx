@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-06 14:01:22 $
+ *  last change: $Author: dbo $ $Date: 2002-03-25 12:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,7 @@ void FixedLineElement::endElement()
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
         pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
     }
 
@@ -283,6 +284,7 @@ void PatternFieldElement::endElement()
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
     }
@@ -300,6 +302,9 @@ void PatternFieldElement::endElement()
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
                               _xAttributes );
+    ctx.importShortProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("maxlength") ),
+                             _xAttributes );
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("EditMask") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("edit-mask") ),
                               _xAttributes );
@@ -348,6 +353,7 @@ void FormattedFieldElement::endElement()
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
     }
@@ -462,6 +468,10 @@ void FormattedFieldElement::endElement()
             throw xml::sax::SAXException( exc.Message, Reference< XInterface >(), Any() );
         }
     }
+    ctx.importBooleanProperty(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("TreatAsNumber") ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("treat-as-number") ),
+        _xAttributes );
 
     ctx.importEvents( _events );
     // avoid ring-reference:
@@ -505,6 +515,7 @@ void TimeFieldElement::endElement()
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
     }
@@ -576,6 +587,7 @@ void NumericFieldElement::endElement()
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
     }
@@ -653,6 +665,7 @@ void DateFieldElement::endElement()
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
     }
@@ -670,6 +683,9 @@ void DateFieldElement::endElement()
     ctx.importDateFormatProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("DateFormat") ),
                                   OUString( RTL_CONSTASCII_USTRINGPARAM("date-format") ),
                                   _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("DateShowCentury") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("show-century") ),
+                               _xAttributes );
     ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Date") ),
                             OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
                             _xAttributes );
@@ -727,6 +743,7 @@ void CurrencyFieldElement::endElement()
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
     }
@@ -810,6 +827,7 @@ void FileControlElement::endElement()
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
     }
@@ -914,6 +932,7 @@ void TextElement::endElement()
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
     }
@@ -924,6 +943,9 @@ void TextElement::endElement()
                               _xAttributes );
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("multiline") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
                                _xAttributes );
     ctx.importAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
@@ -970,6 +992,7 @@ void TextFieldElement::endElement()
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
     }
@@ -1080,6 +1103,7 @@ void TitledBoxElement::endElement()
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
         pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
     }
 
@@ -1112,6 +1136,7 @@ void TitledBoxElement::endElement()
         {
             StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
             pStyle->importTextColorStyle( xControlModel );
+            pStyle->importTextLineColorStyle( xControlModel );
             pStyle->importFontStyle( xControlModel );
         }
 
@@ -1218,6 +1243,7 @@ void RadioGroupElement::endElement()
         {
             StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
             pStyle->importTextColorStyle( xControlModel );
+            pStyle->importTextLineColorStyle( xControlModel );
             pStyle->importFontStyle( xControlModel );
         }
 
@@ -1363,6 +1389,7 @@ void MenuListElement::endElement()
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
     }
@@ -1373,6 +1400,9 @@ void MenuListElement::endElement()
                                _xAttributes );
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiSelection") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("multiselection") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ),
                                _xAttributes );
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Dropdown") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
@@ -1443,6 +1473,7 @@ void ComboBoxElement::endElement()
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importBorderStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
     }
@@ -1466,17 +1497,17 @@ void ComboBoxElement::endElement()
     ctx.importShortProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("LineCount") ),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("linecount") ),
                              _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                              _xAttributes );
 
     if (_popup.is())
     {
         MenuPopupElement * p = static_cast< MenuPopupElement * >( _popup.get() );
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("StringItemList") ),
                                          makeAny( p->getItemValues() ) );
-
-        ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
-                                  OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
-                                  _xAttributes );
     }
+
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -1518,6 +1549,7 @@ void CheckBoxElement::endElement()
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
         pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
     }
 
@@ -1592,6 +1624,7 @@ void ButtonElement::endElement()
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
         pStyle->importBackgroundColorStyle( xControlModel );
         pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
     }
 
@@ -1614,6 +1647,15 @@ void ButtonElement::endElement()
     ctx.importImageAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageAlign") ),
                                   OUString( RTL_CONSTASCII_USTRINGPARAM("image-align") ),
                                   _xAttributes );
+    // State
+    sal_Bool bChecked;
+    if (getBoolAttr(
+        &bChecked, OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ), _xAttributes ) && bChecked)
+    {
+        sal_Int16 nVal = 1;
+        ctx.getControlModel()->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("State") ), makeAny( nVal ) );
+    }
 
     ctx.importEvents( _events );
     // avoid ring-reference:
@@ -1867,57 +1909,35 @@ void WindowElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
     Reference< beans::XPropertySet > xProps( _pImport->_xDialogModel, UNO_QUERY );
-    ImportContext ctx( xProps );
+    ImportContext ctx( xProps, getControlId( _xAttributes ) );
 
     Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
         pStyle->importBackgroundColorStyle( xProps );
-//          pStyle->importBorderStyle( xProps );
+        pStyle->importTextColorStyle( xProps );
+        pStyle->importTextLineColorStyle( xProps );
         pStyle->importFontStyle( xProps );
     }
 
-    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ),
-                              OUString( RTL_CONSTASCII_USTRINGPARAM("id") ),
-                              _xAttributes );
-    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
-                              OUString( RTL_CONSTASCII_USTRINGPARAM("title") ),
-                              _xAttributes );
-    ctx.importLongProperty( 0,
-                            OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
-                            OUString( RTL_CONSTASCII_USTRINGPARAM("left") ),
-                            _xAttributes );
-    ctx.importLongProperty( 0,
-                            OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
-                            OUString( RTL_CONSTASCII_USTRINGPARAM("top") ),
-                            _xAttributes );
-    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),
-                            OUString( RTL_CONSTASCII_USTRINGPARAM("width") ),
-                            _xAttributes );
-    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
-                            OUString( RTL_CONSTASCII_USTRINGPARAM("height") ),
-                            _xAttributes );
-
-    sal_Int32 nLong;
-    if (! getLongAttr( &nLong, OUString( RTL_CONSTASCII_USTRINGPARAM("page") ), _xAttributes ))
-    {
-        nLong = 0;
-    }
-    xProps->setPropertyValue(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("Step") ),
-        makeAny( nLong ) );
-
-    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
-                              OUString( RTL_CONSTASCII_USTRINGPARAM("tag") ),
-                              _xAttributes );
-    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpText") ),
-                              OUString( RTL_CONSTASCII_USTRINGPARAM("help-text") ),
-                              _xAttributes );
-    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpURL") ),
-                              OUString( RTL_CONSTASCII_USTRINGPARAM("help-url") ),
-                              _xAttributes );
-
+    ctx.importDefaults( 0, 0, _xAttributes, false );
+    ctx.importBooleanProperty(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("Closeable") ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("closeable") ),
+        _xAttributes );
+    ctx.importBooleanProperty(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("Moveable") ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("moveable") ),
+        _xAttributes );
+    ctx.importBooleanProperty(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("Sizeable") ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("resizeable") ),
+        _xAttributes );
+    ctx.importStringProperty(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("title") ),
+        _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-06 14:01:22 $
+ *  last change: $Author: dbo $ $Date: 2002-03-25 12:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/awt/FontEmphasisMark.hpp>
+#include <com/sun/star/awt/FontRelief.hpp>
 
 
 using namespace ::rtl;
@@ -83,8 +85,11 @@ struct Style
 {
     sal_uInt32 _backgroundColor;
     sal_uInt32 _textColor;
+    sal_uInt32 _textLineColor;
     sal_Int16 _border;
     awt::FontDescriptor _descr;
+    sal_uInt16 _fontRelief;
+    sal_uInt16 _fontEmphasisMark;
     sal_uInt32 _fillColor;
 
     short _all;
@@ -93,7 +98,9 @@ struct Style
     OUString _id;
 
     inline Style( short all_ ) SAL_THROW( () )
-        : _all( all_ )
+        : _fontRelief( awt::FontRelief::NONE )
+        , _fontEmphasisMark( awt::FontEmphasisMark::NONE )
+        , _all( all_ )
         , _set( 0 )
         {}
 
@@ -136,7 +143,7 @@ public:
     //
     Any readProp( OUString const & rPropName );
     //
-    void readDefaults();
+    void readDefaults( bool supportPrintable = true );
     //
     void readStringAttr( OUString const & rPropName, OUString const & rAttrName );
     void readDoubleAttr( OUString const & rPropName, OUString const & rAttrName );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-06 14:01:22 $
+ *  last change: $Author: dbo $ $Date: 2002-03-25 12:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,17 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                               buf.makeStringAndClear() );
     }
 
+    // textline-color
+    if (_set & 0x20)
+    {
+        OUStringBuffer buf( 16 );
+        buf.append( (sal_Unicode)'0' );
+        buf.append( (sal_Unicode)'x' );
+        buf.append( OUString::valueOf( (sal_Int64)(sal_uInt64)_textLineColor, 16 ) );
+        pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":textline-color") ),
+                              buf.makeStringAndClear() );
+    }
+
     // fill-color
     if (_set & 0x10)
     {
@@ -145,6 +156,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             break;
         default:
             OSL_ENSURE( 0, "### unexpected border value!" );
+            break;
         }
     }
 
@@ -206,6 +218,9 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-family") ),
                                       OUString( RTL_CONSTASCII_USTRINGPARAM("system") ) );
                 break;
+            default:
+                OSL_ENSURE( 0, "### unexpected font-family!" );
+                break;
             }
         }
         // dialog:font-charset "(ansi|mac|ibmpc_437|ibmpc_850|ibmpc_860|ibmpc_861|ibmpc_863|ibmpc_865|system|symbol)" #IMPLIED
@@ -253,6 +268,9 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
                                       OUString( RTL_CONSTASCII_USTRINGPARAM("symbol") ) );
                 break;
+            default:
+                OSL_ENSURE( 0, "### unexpected font-charset!" );
+                break;
             }
         }
         // dialog:font-pitch "(fixed|variable)" #IMPLIED
@@ -267,6 +285,9 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             case awt::FontPitch::VARIABLE:
                 pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-pitch") ),
                                       OUString( RTL_CONSTASCII_USTRINGPARAM("variable") ) );
+                break;
+            default:
+                OSL_ENSURE( 0, "### unexpected font-pitch!" );
                 break;
             }
         }
@@ -302,6 +323,9 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             case awt::FontSlant_REVERSE_ITALIC:
                 pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-slant") ),
                                       OUString( RTL_CONSTASCII_USTRINGPARAM("reverse_italic") ) );
+                break;
+            default:
+                OSL_ENSURE( 0, "### unexpected font-slant!" );
                 break;
             }
         }
@@ -378,6 +402,9 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
                                       OUString( RTL_CONSTASCII_USTRINGPARAM("boldwave") ) );
                 break;
+            default:
+                OSL_ENSURE( 0, "### unexpected font-underline!" );
+                break;
             }
         }
         // dialog:font-strikeout "(single|double|bold|slash|x)" #IMPLIED
@@ -404,6 +431,9 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             case awt::FontStrikeout::X:
                 pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-strikeout") ),
                                       OUString( RTL_CONSTASCII_USTRINGPARAM("x") ) );
+                break;
+            default:
+                OSL_ENSURE( 0, "### unexpected font-strikeout!" );
                 break;
             }
         }
@@ -442,7 +472,70 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-type") ),
                                       OUString( RTL_CONSTASCII_USTRINGPARAM("scalable") ) );
                 break;
+            default:
+                OSL_ENSURE( 0, "### unexpected font-type!" );
+                break;
             }
+        }
+
+        // additional attributes not in FontDescriptor struct
+        // dialog:font-relief (none|embossed|engraved) #IMPLIED
+        switch (_fontRelief)
+        {
+        case awt::FontRelief::NONE: // dont export default
+            break;
+        case awt::FontRelief::EMBOSSED:
+            pStyle->addAttribute(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-relief") ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM("embossed") ) );
+            break;
+        case awt::FontRelief::ENGRAVED:
+            pStyle->addAttribute(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-relief") ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM("engraved") ) );
+            break;
+        default:
+            OSL_ENSURE( 0, "### unexpected font-relief!" );
+            break;
+        }
+        // dialog:font-emphasismark (none|dot|circle|disc|accent|above|below) #IMPLIED
+        switch (_fontEmphasisMark)
+        {
+        case awt::FontEmphasisMark::NONE: // dont export default
+            break;
+        case awt::FontEmphasisMark::DOT:
+            pStyle->addAttribute(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-emphasismark") ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM("dot") ) );
+            break;
+        case awt::FontEmphasisMark::CIRCLE:
+            pStyle->addAttribute(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-emphasismark") ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM("circle") ) );
+            break;
+        case awt::FontEmphasisMark::DISC:
+            pStyle->addAttribute(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-emphasismark") ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM("disc") ) );
+            break;
+        case awt::FontEmphasisMark::ACCENT:
+            pStyle->addAttribute(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-emphasismark") ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM("accent") ) );
+            break;
+        case awt::FontEmphasisMark::ABOVE:
+            pStyle->addAttribute(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-emphasismark") ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM("above") ) );
+            break;
+        case awt::FontEmphasisMark::BELOW:
+            pStyle->addAttribute(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-emphasismark") ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM("below") ) );
+            break;
+        default:
+            OSL_ENSURE( 0, "### unexpected font-emphasismark!" );
+            break;
         }
     }
 
@@ -614,6 +707,9 @@ void ElementDescriptor::readDateFormatAttr( OUString const & rPropName, OUString
             case 11:
                 addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_YYYYMMDD_DIN5008") ) );
                 break;
+            default:
+                OSL_ENSURE( 0, "### unexpected date format!" );
+                break;
             }
         }
     }
@@ -646,6 +742,9 @@ void ElementDescriptor::readTimeFormatAttr( OUString const & rPropName, OUString
             case 5:
                 addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("Duration_long") ) );
                 break;
+            default:
+                OSL_ENSURE( 0, "### unexpected time format!" );
+                break;
             }
         }
     }
@@ -671,6 +770,7 @@ void ElementDescriptor::readAlignAttr( OUString const & rPropName, OUString cons
                 break;
             default:
                 OSL_ENSURE( 0, "### illegal alignment value!" );
+                break;
             }
         }
     }
@@ -699,6 +799,7 @@ void ElementDescriptor::readImageAlignAttr( OUString const & rPropName, OUString
                 break;
             default:
                 OSL_ENSURE( 0, "### illegal image alignment value!" );
+                break;
             }
         }
     }
@@ -727,6 +828,7 @@ void ElementDescriptor::readButtonTypeAttr( OUString const & rPropName, OUString
                 break;
             default:
                 OSL_ENSURE( 0, "### illegal button-type value!" );
+                break;
             }
         }
     }
@@ -749,12 +851,13 @@ void ElementDescriptor::readOrientationAttr( OUString const & rPropName, OUStrin
                 break;
             default:
                 OSL_ENSURE( 0, "### illegal orientation value!" );
+                break;
             }
         }
     }
 }
 //__________________________________________________________________________________________________
-void ElementDescriptor::readDefaults()
+void ElementDescriptor::readDefaults( bool supportPrintable )
 {
     Any a( _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) ) );
     addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ),
@@ -802,8 +905,12 @@ void ElementDescriptor::readDefaults()
                       OUString::valueOf( *(sal_Int32 const *)a.getValue() ) );
     }
 
-    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":printable") ) );
+    if (supportPrintable)
+    {
+        readBoolAttr(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":printable") ) );
+    }
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Step") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":page") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
@@ -935,24 +1042,30 @@ void ElementDescriptor::readEvents()
 
 //##################################################################################################
 
-inline bool equals( awt::FontDescriptor const & f1, awt::FontDescriptor const & f2 )
+inline bool equalFont( Style const & style1, Style const & style2 )
 {
-    return (f1.Name == f2.Name &&
-            f1.Height == f2.Height &&
-            f1.Width == f2.Width &&
-            f1.StyleName == f2.StyleName &&
-            f1.Family == f2.Family &&
-            f1.CharSet == f2.CharSet &&
-            f1.Pitch == f2.CharSet &&
-            f1.CharacterWidth == f2.CharacterWidth &&
-            f1.Weight == f2.Weight &&
-            f1.Slant == f2.Slant &&
-            f1.Underline == f2.Underline &&
-            f1.Strikeout == f2.Strikeout &&
-            f1.Orientation == f2.Orientation &&
-            (f1.Kerning != sal_False) == (f2.Kerning != sal_False) &&
-            (f1.WordLineMode != sal_False) == (f2.WordLineMode != sal_False) &&
-            f1.Type == f2.Type);
+    awt::FontDescriptor const & f1 = style1._descr;
+    awt::FontDescriptor const & f2 = style2._descr;
+    return (
+        f1.Name == f2.Name &&
+        f1.Height == f2.Height &&
+        f1.Width == f2.Width &&
+        f1.StyleName == f2.StyleName &&
+        f1.Family == f2.Family &&
+        f1.CharSet == f2.CharSet &&
+        f1.Pitch == f2.CharSet &&
+        f1.CharacterWidth == f2.CharacterWidth &&
+        f1.Weight == f2.Weight &&
+        f1.Slant == f2.Slant &&
+        f1.Underline == f2.Underline &&
+        f1.Strikeout == f2.Strikeout &&
+        f1.Orientation == f2.Orientation &&
+        (f1.Kerning != sal_False) == (f2.Kerning != sal_False) &&
+        (f1.WordLineMode != sal_False) == (f2.WordLineMode != sal_False) &&
+        f1.Type == f2.Type &&
+        style1._fontRelief == style2._fontRelief &&
+        style1._fontEmphasisMark == style2._fontEmphasisMark
+        );
 }
 //__________________________________________________________________________________________________
 OUString StyleBag::getStyleId( Style const & rStyle )
@@ -968,8 +1081,6 @@ OUString StyleBag::getStyleId( Style const & rStyle )
     {
         Style * pStyle = _styles[ nStylesPos ];
 
-        // xxx todo: have a look at this...
-
         short demanded_defaults = ~rStyle._set & rStyle._all;
         // test, if defaults are not set
         if ((~pStyle->_set & demanded_defaults) == demanded_defaults &&
@@ -984,6 +1095,10 @@ OUString StyleBag::getStyleId( Style const & rStyle )
             {
                 continue;
             }
+            if ((bset & 0x20) && rStyle._textLineColor != pStyle->_textLineColor)
+            {
+                continue;
+            }
             if ((bset & 0x10) && rStyle._fillColor != pStyle->_fillColor)
             {
                 continue;
@@ -992,7 +1107,7 @@ OUString StyleBag::getStyleId( Style const & rStyle )
             {
                 continue;
             }
-            if ((bset & 0x8) && !equals( rStyle._descr, pStyle->_descr))
+            if ((bset & 0x8) && !equalFont( rStyle, *pStyle ))
             {
                 continue;
             }
@@ -1007,6 +1122,10 @@ OUString StyleBag::getStyleId( Style const & rStyle )
             {
                 pStyle->_textColor = rStyle._textColor;
             }
+            if (bnset & 0x20)
+            {
+                pStyle->_textLineColor = rStyle._textLineColor;
+            }
             if (bnset & 0x10)
             {
                 pStyle->_fillColor = rStyle._fillColor;
@@ -1018,6 +1137,8 @@ OUString StyleBag::getStyleId( Style const & rStyle )
             if (bnset & 0x8)
             {
                 pStyle->_descr = rStyle._descr;
+                pStyle->_fontRelief = rStyle._fontRelief;
+                pStyle->_fontEmphasisMark = rStyle._fontEmphasisMark;
             }
 
             pStyle->_all |= rStyle._all;

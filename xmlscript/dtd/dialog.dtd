@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-        $Id: dialog.dtd,v 1.22 2002-03-06 15:23:47 dbo Exp $
+        $Id: dialog.dtd,v 1.23 2002-03-25 12:03:20 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -100,17 +100,11 @@
                     )">
 
 <!ELEMENT dlg:window (dlg:styles*, (%event;)*, dlg:bulletinboard*)>
-<!ATTLIST dlg:window dlg:id CDATA #REQUIRED
-                     dlg:left %numeric; #IMPLIED
-                     dlg:top %numeric; #IMPLIED
-                     dlg:width %numeric; #IMPLIED
-                     dlg:height %numeric; #IMPLIED
-                     dlg:style-id CDATA #IMPLIED
+<!ATTLIST dlg:window %default-attributes;
+		     dlg:closeable %boolean; #IMPLIED
+		     dlg:moveable %boolean; #IMPLIED
+		     dlg:resizeable %boolean; #IMPLIED
                      dlg:title CDATA #IMPLIED
-                     dlg:page %numeric; #IMPLIED
-                     dlg:tag CDATA #IMPLIED
-                     dlg:help-text CDATA #IMPLIED
-                     dlg:help-url CDATA #IMPLIED
                      xmlns:dlg CDATA #FIXED "http://openoffice.org/2000/dialog"
                      xmlns:script CDATA #FIXED "http://openoffice.org/2000/script"
                      >
@@ -121,6 +115,7 @@
 <!ATTLIST dlg:style dlg:style-id CDATA #REQUIRED
                     dlg:background-color %numeric; #IMPLIED
                     dlg:text-color %numeric; #IMPLIED
+                    dlg:textline-color %numeric; #IMPLIED
                     dlg:fill-color %numeric; #IMPLIED
                     dlg:border (none|3d|simple) #IMPLIED
                     dlg:font-name CDATA #IMPLIED
@@ -139,6 +134,8 @@
                     dlg:font-kerning %boolean; #IMPLIED
                     dlg:font-wordlinemode %boolean; #IMPLIED
                     dlg:font-type (raster|device|scalable) #IMPLIED
+		    dialog:font-relief (none|embossed|engraved) #IMPLIED
+		    dialog:font-emphasismark (none|dot|circle|disc|accent|above|below) #IMPLIED
                     >
 
 <!ELEMENT script:event EMPTY>
@@ -204,6 +201,7 @@
                        dlg:tabstop %boolean; #IMPLIED
                        dlg:spin %boolean; #IMPLIED
                        dlg:multiselection %boolean; #IMPLIED
+                       dlg:readonly %boolean; #IMPLIED
                        dlg:linecount %numeric; #IMPLIED
                        >
 
@@ -218,7 +216,6 @@
 <!ATTLIST dlg:radio %default-attributes;
                     dlg:value CDATA #IMPLIED
                     dlg:checked %boolean; #IMPLIED
-                    dlg:tristate %boolean; #IMPLIED
                     dlg:tabstop %boolean; #IMPLIED
                     >
 
@@ -233,6 +230,7 @@
 <!ATTLIST dlg:text %default-attributes;
                    dlg:align (left|center|right) #IMPLIED
                    dlg:multiline %boolean; #IMPLIED
+                   dlg:tabstop %boolean; #IMPLIED
                    dlg:value CDATA #IMPLIED
                    >
 
@@ -284,6 +282,7 @@
                         dlg:readonly %boolean; #IMPLIED
                         dlg:strict-format %boolean; #IMPLIED
                         dlg:date-format (system_short|system_short_YY|system_short_YYYY|system_long|short_DDMMYY|short_MMDDYY|short_YYMMDD|short_DDMMYYYY|short_MMDDYYYY|short_YYYYMMDD|short_YYMMDD_DIN5008|short_YYYYMMDD_DIN5008) #IMPLIED
+                        dlg:show-century %boolean; #IMPLIED
                         dlg:value CDATA #IMPLIED
                         dlg:value-min CDATA #IMPLIED
                         dlg:value-max CDATA #IMPLIED
@@ -323,6 +322,7 @@
                            dlg:readonly %boolean; #IMPLIED
                            dlg:strict-format %boolean; #IMPLIED
                            dlg:value CDATA #IMPLIED
+                           dlg:maxlength %numeric; #IMPLIED
                            dlg:edit-mask CDATA #IMPLIED
                            dlg:literal-mask CDATA #IMPLIED
                            >
@@ -334,6 +334,7 @@
 			     dlg:align (left|center|right) #IMPLIED
 			     dlg:format-code CDATA #IMPLIED
 			     dlg:format-locale CDATA #IMPLIED
+			     dlg:treat-as-number %boolean; #IMPLIED
 			     dlg:strict-format %boolean; #IMPLIED
 			     dlg:value-default CDATA #IMPLIED
 			     dlg:value-max %numeric; #IMPLIED

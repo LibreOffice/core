@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-06 14:01:22 $
+ *  last change: $Author: dbo $ $Date: 2002-03-25 12:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,32 @@ bool StyleElement::importTextColorStyle(
     return false;
 }
 //__________________________________________________________________________________________________
+bool StyleElement::importTextLineColorStyle(
+    Reference< beans::XPropertySet > const & xProps )
+{
+    if ((_inited & 0x20) != 0)
+    {
+        if ((_hasValue & 0x20) != 0)
+        {
+            xProps->setPropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ), makeAny( _textLineColor ) );
+            return true;
+        }
+        return false;
+    }
+    _inited |= 0x20;
+
+    if (getLongAttr( &_textLineColor,
+                     OUString( RTL_CONSTASCII_USTRINGPARAM("textline-color") ), _xAttributes ))
+    {
+        _hasValue |= 0x20;
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ), makeAny( _textLineColor ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
 bool StyleElement::importFillColorStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
@@ -265,6 +291,17 @@ bool StyleElement::importBorderStyle(
     return false;
 }
 //__________________________________________________________________________________________________
+void StyleElement::setFontProperties(
+    Reference< beans::XPropertySet > const & xProps )
+{
+    xProps->setPropertyValue(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ), makeAny( _descr ) );
+    xProps->setPropertyValue(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("FontEmphasisMark") ), makeAny( _fontEmphasisMark ) );
+    xProps->setPropertyValue(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("FontRelief") ), makeAny( _fontRelief ) );
+}
+//__________________________________________________________________________________________________
 bool StyleElement::importFontStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
@@ -272,8 +309,7 @@ bool StyleElement::importFontStyle(
     {
         if ((_hasValue & 0x8) != 0)
         {
-            xProps->setPropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ), makeAny( _descr ) );
+            setFontProperties( xProps );
             return true;
         }
         return false;
@@ -597,11 +633,75 @@ bool StyleElement::importFontStyle(
         bFontImport = true;
     }
 
+    // additional properties which are not part of the FontDescriptor struct
+    // dialog:font-relief (none|embossed|engraved) #IMPLIED
+    if (getStringAttr( &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-relief") ), _xAttributes ))
+    {
+        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("none") ))
+        {
+            _fontRelief = awt::FontRelief::NONE;
+        }
+        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("embossed") ))
+        {
+            _fontRelief = awt::FontRelief::EMBOSSED;
+        }
+        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("engraved") ))
+        {
+            _fontRelief = awt::FontRelief::ENGRAVED;
+        }
+        else
+        {
+            throw xml::sax::SAXException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid font-relief style!") ),
+                Reference< XInterface >(), Any() );
+        }
+        bFontImport = true;
+    }
+    // dialog:font-emphasismark (none|dot|circle|disc|accent|above|below) #IMPLIED
+    if (getStringAttr( &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-emphasismark") ), _xAttributes ))
+    {
+        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("none") ))
+        {
+            _fontEmphasisMark = awt::FontEmphasisMark::NONE;
+        }
+        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dot") ))
+        {
+            _fontEmphasisMark = awt::FontEmphasisMark::DOT;
+        }
+        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("circle") ))
+        {
+            _fontEmphasisMark = awt::FontEmphasisMark::CIRCLE;
+        }
+        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("disc") ))
+        {
+            _fontEmphasisMark = awt::FontEmphasisMark::DISC;
+        }
+        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("accent") ))
+        {
+            _fontEmphasisMark = awt::FontEmphasisMark::ACCENT;
+        }
+        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("above") ))
+        {
+            _fontEmphasisMark = awt::FontEmphasisMark::ABOVE;
+        }
+        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("below") ))
+        {
+            _fontEmphasisMark = awt::FontEmphasisMark::BELOW;
+        }
+        else
+        {
+            throw xml::sax::SAXException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid font-emphasismark style!") ),
+                Reference< XInterface >(), Any() );
+        }
+        bFontImport = true;
+    }
+
+    // ==================================================
     if (bFontImport)
     {
         _hasValue |= 0x8;
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ), makeAny( _descr ) );
+        setFontProperties( xProps );
     }
 
     return bFontImport;
@@ -1134,9 +1234,10 @@ void ImportContext::importEvents(
     }
 }
 //__________________________________________________________________________________________________
-void ControlImportContext::importDefaults(
+void ImportContext::importDefaults(
     sal_Int32 nBaseX, sal_Int32 nBaseY,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+    bool supportPrintable )
 {
     _xControlModel->setPropertyValue(
         OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ),
@@ -1174,9 +1275,13 @@ void ControlImportContext::importDefaults(
             Reference< XInterface >(), Any() );
     }
 
-    importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
-                           OUString( RTL_CONSTASCII_USTRINGPARAM("printable") ),
-                           xAttributes );
+    if (supportPrintable)
+    {
+        importBooleanProperty(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("printable") ),
+            xAttributes );
+    }
 
     sal_Int32 nLong;
     if (! getLongAttr( &nLong, OUString( RTL_CONSTASCII_USTRINGPARAM("page") ), xAttributes ))
