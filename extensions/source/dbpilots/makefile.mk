@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:51:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@ PRJINC=..$/inc
 PRJNAME=dbp
 TARGET=dbp
 ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -74,19 +73,6 @@ USE_DEFFILE=TRUE
 # --- defines ------------------------------------------------------
 
 CDEFS+=-DCOMPMOD_NAMESPACE=dbp
-
-# --- UNO header ---------------------------------------------------
-
-#Create UNO Header files
-#UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)
-#INCPRE+=$(UNOUCROUT)
-
-#UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
-#UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
-
-#UNOTYPES=\
-    com.sun.star.lang.XMultiServiceFactory
-
 
 # --- Files --------------------------------------------------------
 
@@ -122,26 +108,18 @@ SRCFILES=			gridpages.src	\
 RESLIB1NAME=dbp
 RESLIB1SRSFILES= $(SRS)/dbp.srs
 
-#IMGLST_SRS=$(SRS)$/dbp.srs
-
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1VERSIONMAP= $(TARGET).map
 
 SHL1STDLIBS= \
-        $(CPPULIB) 	 \
-        $(CPPUHELPERLIB) 	 \
-        $(COMPHELPERLIB) 	 \
-        $(VOSLIB) 	 \
-        $(TOOLSLIB)  \
-        $(SO2LIB)	\
-        $(VCLLIB)    \
-        $(SVTOOLLIB)\
-        $(SVLLIB)	\
-        $(OSLLIB)	 \
-        $(SALLIB)	\
-        $(SFXLIB)	\
-        $(DBTOOLSLIB)
-
+        $(SVTOOLLIB) \
+        $(VCLLIB) \
+        $(TOOLSLIB) \
+        $(DBTOOLSLIB) \
+        $(COMPHELPERLIB) \
+        $(CPPUHELPERLIB) \
+        $(CPPULIB) \
+        $(SALLIB)
 
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1IMPLIB=		i$(TARGET)
@@ -149,11 +127,7 @@ SHL1DEPN=		$(SHL1LIBS)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
-
-
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
-
