@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:31:32 $
+ *  last change: $Author: obr $ $Date: 2000-10-30 12:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2386,7 +2386,6 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
     sal_Char *pChr, *pStr;
     sal_Char Buffer[1024] = "";
     sal_Char Product[132] = "";
-    sal_Char szSUPD[20] = "";
 
     WCHAR wcsPath[MAX_PATH] = L"";
     DWORD dwPathLen = 0;
@@ -2683,52 +2682,20 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                 if ((osl_getProfileName(strSVLocation, strSVName, &strSVProfile)) &&
                     (hProfile = osl_openProfile(strSVProfile, osl_Profile_READLOCK)))
                 {
-                    pChr = &Product[strlen(Product)];
-
-                    /* append build number */
-                    strcat(Product, "/");
-                    _itoa( osl_getSUPD(), szSUPD, 10 );
-                    strcat(Product, szSUPD);
-
                     osl_readProfileString(hProfile, SVERSION_SECTION, Product, Buffer, sizeof(Buffer), "");
+                    osl_closeProfile(hProfile);
 
-                    /* if not found, try it without build number */
-                    if (strlen(Buffer) <= 0)
+                    /* if not found, try the fallback */
+                    if ((strlen(Buffer) <= 0) && (strcmp(SVERSION_LOCATION, SVERSION_FALLBACK) != 0))
                     {
-                        *pChr = '\0';
-
-                        osl_readProfileString(hProfile, SVERSION_SECTION, Product,
-                                              Buffer, sizeof(Buffer), "");
-
-                        osl_closeProfile(hProfile);
-
-                        /* if not found, try the fallback */
-                        if ((strlen(Buffer) <= 0) && (strcmp(SVERSION_LOCATION, SVERSION_FALLBACK) != 0))
+                        if ((osl_getProfileName(strSVFallback, strSVName, &strSVProfile)) &&
+                            (hProfile = osl_openProfile(strSVProfile, osl_Profile_READLOCK)))
                         {
-                            if ((osl_getProfileName(strSVFallback, strSVName, &strSVProfile)) &&
-                                (hProfile = osl_openProfile(strSVProfile, osl_Profile_READLOCK)))
-                            {
-                                /* prepare build number */
-                                *pChr = '/';
-
-                                osl_readProfileString(hProfile, SVERSION_SECTION, Product,
-                                                      Buffer, sizeof(Buffer), "");
-
-                                /* if not found, try it without build number */
-                                if (strlen(Buffer) <= 0)
-                                {
-                                    *pChr = '\0';
-
-                                    osl_readProfileString(hProfile, SVERSION_SECTION, Product,
-                                                          Buffer, sizeof(Buffer), "");
-                                }
-
-                                osl_closeProfile(hProfile);
-                            }
+                            osl_readProfileString(hProfile, SVERSION_SECTION, Product, Buffer, sizeof(Buffer), "");
                         }
-                    }
-                    else
+
                         osl_closeProfile(hProfile);
+                    }
 
                     if (strlen(Buffer) > 0)
                     {
