@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-01 13:44:45 $
+ *  last change: $Author: fs $ $Date: 2002-11-14 14:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,6 @@ protected:
     void Remove(FmFilterData* pItem);
 
     DECL_LINK(OnRemove, SvLBoxEntry*);
-    DECL_LINK(OnEdited, SvLBoxEntry*);
     DECL_LINK(OnSelect, void*);
     DECL_LINK(OnDropActionTimer, void*);
 
