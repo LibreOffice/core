@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-26 10:59:20 $
+ *  last change: $Author: ka $ $Date: 2002-03-20 12:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1517,7 +1517,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
 Font SdStyleSheetPool::GetBulletFont() const
 {
     Font aBulletFont( String( RTL_CONSTASCII_USTRINGPARAM( "StarSymbol" )), Size(0, 1000) );
-    aBulletFont.SetCharSet(RTL_TEXTENCODING_MS_1252);
+    aBulletFont.SetCharSet(RTL_TEXTENCODING_UNICODE);
     aBulletFont.SetWeight(WEIGHT_NORMAL);
     aBulletFont.SetUnderline(UNDERLINE_NONE);
     aBulletFont.SetStrikeout(STRIKEOUT_NONE);
