@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:19:37 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ public:
     SwFrm *PlaceFly( SwFlyFrm *, SwFrmFmt *, const SwFmtAnchor * );
 
     virtual BOOL GetCrsrOfst( SwPosition *, Point&,
-                              const SwCrsrMoveState* = 0 ) const;
+                              SwCrsrMoveState* = 0 ) const;
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
         // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
