@@ -4238,12 +4238,6 @@ __CTA2?AVIndexOutOfBoundsException@lang@star@sun@com@@
 ?set@?$Reference@VXMacroExpander@util@star@sun@com@@@uno@star@sun@com@@QAAEPAVXMacroExpander@util@345@@Z
 ?ReadImageFromURL@AddonsOptions_Impl@framework@@AAE?AVImage@@W4ImageSize@12@ABVOUString@rtl@@@Z
 ?SubstituteVariables@AddonsOptions_Impl@framework@@AAEXAAVOUString@rtl@@@Z
-??_C@_0DF@OACFFDKI@o?3?2SRC680?2wntmsci8?2inc?2com?1sun?1s@
-??_C@_0CH@OANPDINN@o?3?2SRC680?2wntmsci8?2inc?2rtl?1ustri@
-??0WildCard@@QAE@ABVString@@D@Z
-??1WildCard@@QAE@XZ
-??_C@_0DC@DKKKBHKE@f?3?2o_fwkq1?2SRC680?2wntmsci8?2inc?4m@
-??_C@_0EA@GBALMHLG@f?3?2o_fwkq1?2SRC680?2wntmsci8?2inc?4m@
 ??0bad_alloc@std@@QAE@ABV01@@Z
 ??0bad_alloc@std@@QAE@PBD@Z
 ??1bad_alloc@std@@UAE@XZ
@@ -4259,9 +4253,9 @@ __CTA2?AVbad_alloc@std@@
 ?getArray@?$Sequence@VAny@uno@star@sun@com@@@uno@star@sun@com@@QAAPAVAny@2345@XZ
 ?getArray@?$Sequence@VOUString@rtl@@@uno@star@sun@com@@QAAPAVOUString@rtl@@XZ
 ?getArray@?$Sequence@UNamedValue@beans@star@sun@com@@@uno@star@sun@com@@QAAPAUNamedValue@beans@345@XZ
+??0WildCard@@QAE@ABVString@@D@Z
+??1WildCard@@QAE@XZ
 ?getArray@?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAPAV?$Sequence@UPropertyValue@beans@star@sun@com@@@2345@XZ
 ?getArray@?$Sequence@V?$Reference@VXInteractionContinuation@task@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAPAV?$Reference@VXInteractionContinuation@task@star@sun@com@@@2345@XZ
-??_C@_0EO@BDBBFLOP@f?3?2solar?2o_vclcleanup02?2SRC680?2w@
-??_C@_0EA@MAHFGMED@f?3?2solar?2o_vclcleanup02?2SRC680?2w@
-??_C@_0EO@OCMLFOEF@f?3?2solar?2o_vclcleanup02?2SRC680?2w@
-??_C@_0EA@CPCHNKKC@f?3?2solar?2o_vclcleanup02?2SRC680?2w@
+??_C@_0DF@OACFFDKI@o?3?2SRC680?2wntmsci8?2inc?2com?1sun?1s@
+??_C@_0CH@OANPDINN@o?3?2SRC680?2wntmsci8?2inc?2rtl?1ustri@
