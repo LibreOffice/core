@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-12 10:33:43 $
+ *  last change: $Author: cl $ $Date: 2002-03-27 14:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2033,16 +2033,27 @@ Color SdrPage::GetBackgroundColor() const
     Color aColor( COL_WHITE );
 
     // first, see if we have a background object
-    SdrObject* pBackgroundObj = GetBackgroundObj();
-    if( NULL == pBackgroundObj )
-    {
-        // if not, see if we have a masterpage and get that background object
-        if( GetMasterPageCount() )
-        {
-            SdrPage* pMaster = GetMasterPage(0);
+    SdrObject* pBackgroundObj = NULL;
 
-            if( pMaster && pMaster->GetObjCount() )
-                pBackgroundObj = pMaster->GetObj( 0 );
+
+    if( IsMasterPage() )
+    {
+        if( GetObjCount() )
+            pBackgroundObj = GetObj( 0 );
+    }
+    else
+    {
+        pBackgroundObj = GetBackgroundObj();
+        if( NULL == pBackgroundObj )
+        {
+            // if not, see if we have a masterpage and get that background object
+            if( GetMasterPageCount() )
+            {
+                SdrPage* pMaster = GetMasterPage(0);
+
+                if( pMaster && pMaster->GetObjCount() )
+                    pBackgroundObj = pMaster->GetObj( 0 );
+            }
         }
     }
 
