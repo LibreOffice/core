@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:26:08 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 
 #include <math.h>
 
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
 #ifndef _SV_FONTCVT_HXX
 #include <vcl/fontcvt.hxx>
 #endif
@@ -93,9 +90,6 @@
 #endif
 #ifndef SC_EDITUTIL_HXX
 #include "editutil.hxx"
-#endif
-#ifndef SC_ADDINCOL_HXX
-#include "addincol.hxx"
 #endif
 #ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
@@ -527,67 +521,6 @@ bool XclTools::IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNe
 }
 
 
-// languages ------------------------------------------------------------------
-
-/** Table entry for Excel country -> Calc language conversion. */
-struct XclLanguageEntry
-{
-    sal_uInt16                  mnXclCountry;   /// Excel country ID.
-    LanguageType                meLanguage;     /// Corresponding language.
-};
-
-/** Streact weak ordering function object for ::std::lower_bound(). */
-struct XclLanguageEntrySWO
-{
-    inline bool                 operator()( const XclLanguageEntry& rEntry, sal_uInt16 nXclCountry )
-                                    { return rEntry.mnXclCountry < nXclCountry; }
-};
-
-/** Table with Excel<->Calc languages. Must be sorted by Excel country ID! */
-static const XclLanguageEntry pLanguages[] =
-{
-    {   1,  LANGUAGE_ENGLISH_US             },
-    {   2,  LANGUAGE_ENGLISH_CAN            },
-    {   3,  LANGUAGE_SPANISH                },
-    {  31,  LANGUAGE_DUTCH                  },
-    {  32,  LANGUAGE_DUTCH_BELGIAN          },
-    {  33,  LANGUAGE_FRENCH                 },
-    {  34,  LANGUAGE_SPANISH                },
-    {  39,  LANGUAGE_ITALIAN                },
-    {  41,  LANGUAGE_GERMAN_SWISS           },
-    {  43,  LANGUAGE_GERMAN_AUSTRIAN        },
-    {  44,  LANGUAGE_ENGLISH_UK             },
-    {  45,  LANGUAGE_DANISH                 },
-    {  46,  LANGUAGE_SWEDISH                },
-    {  47,  LANGUAGE_NORWEGIAN              },
-    {  49,  LANGUAGE_GERMAN                 },
-    {  52,  LANGUAGE_SPANISH_MEXICAN        },
-    {  55,  LANGUAGE_PORTUGUESE_BRAZILIAN   },
-    {  61,  LANGUAGE_ENGLISH_AUS            },
-    {  64,  LANGUAGE_ENGLISH_NZ             },
-    {  81,  LANGUAGE_JAPANESE               },
-    {  82,  LANGUAGE_KOREAN                 },
-    { 351,  LANGUAGE_PORTUGUESE             },
-    { 354,  LANGUAGE_ICELANDIC              },
-    { 358,  LANGUAGE_SWEDISH_FINLAND        },
-    { 785,  LANGUAGE_ARABIC_SAUDI_ARABIA    },
-    { 886,  LANGUAGE_CHINESE                },
-    { 972,  LANGUAGE_HEBREW                 }
-};
-
-bool XclTools::GetScLanguage( LanguageType& reScLang, sal_uInt16 nXclCountry )
-{
-    const XclLanguageEntry* pLast = pLanguages + STATIC_TABLE_SIZE( pLanguages );
-    const XclLanguageEntry* pResult = ::std::lower_bound( pLanguages, pLast, nXclCountry, XclLanguageEntrySWO() );
-    if( (pResult != pLast) && (pResult->mnXclCountry == nXclCountry) )
-    {
-        reScLang = pResult->meLanguage;
-        return true;
-    }
-    return false;
-}
-
-
 // read/write range lists -----------------------------------------------------
 
 XclImpStream& operator>>( XclImpStream& rStrm, ScRangeList& rRanges )
@@ -623,32 +556,6 @@ XclExpStream& operator<<( XclExpStream& rStrm, const ScRangeList& rRanges )
             rStrm.WriteZeroBytes( 8 );
     }
     return rStrm;
-}
-
-
-// Add-in function names ======================================================
-
-XclAddInNameTranslator::XclAddInNameTranslator() :
-        mrAddInColl( *ScGlobal::GetAddInCollection() ),
-        meLanguage( Application::GetSettings().GetUILanguage() )
-{
-}
-
-String XclAddInNameTranslator::GetScName( const String& rXclName )
-{
-    String aScName;
-    if( mrAddInColl.GetCalcName( rXclName, aScName ) )
-        return aScName;
-    return rXclName;
-}
-
-
-String XclAddInNameTranslator::GetXclName( const String& rScName )
-{
-    String aXclName;
-    if( mrAddInColl.GetExcelName( rScName, meLanguage, aXclName ) )
-        return aXclName;
-    return rScName;
 }
 
 
