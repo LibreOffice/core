@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
+ *  last change: $Author: cl $ $Date: 2001-07-04 13:21:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,8 +465,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
     if( bBullet )
     {
         eType = NumberingType::CHAR_SPECIAL;
-        nCount = 10L;
-
+        nCount = cBullet ? 10 : 9;
     }
     if( bImage && (sImageURL.getLength() > 0L || xBase64Stream.is()) &&
         nImageWidth > 0L && nImageHeight > 0L )
