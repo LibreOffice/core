@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-13 12:13:18 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 13:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,43 +298,6 @@ Size __EXPORT SdDrawDocShell::GetFirstPageSize()
     return SfxObjectShell::GetFirstPageSize();
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-long __EXPORT SdDrawDocShell::DdeGetData( const String& rItem, SvData& rData )
-{
-//        return pDoc->GetData( rItem, rData );
-    return 1;
-}
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-long __EXPORT SdDrawDocShell::DdeSetData( const String& rItem, const SvData& rData )
-{
-//        return pDoc->SetData( rItem, rData );
-    return 1;
-}
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-SvPseudoObject* __EXPORT SdDrawDocShell::DdeCreateHotLink( const String& rItem )
-{
-//        return pDoc->CreateHotLink( rItem );
-    return NULL;
-}
-
 /*************************************************************************
 |*
 |*
@@ -375,17 +338,9 @@ void __EXPORT SdDrawDocShell::UIActivate( BOOL bActive )
     SfxInPlaceObject::UIActivate( bActive );
 }
 
-/*************************************************************************
-|*
-|* CreateSnapshot
-|*
-\************************************************************************/
-
+/*
 SvDataMemberObjectRef __EXPORT SdDrawDocShell::CreateSnapshot()
 {
-    /**********************************************************************
-    * Dokument vorhanden, View muss erzeugt werden
-    **********************************************************************/
     VirtualDevice* pVDev = new VirtualDevice( *Application::GetDefaultDevice() );
     MapMode aMap = pVDev->GetMapMode();
     aMap.SetMapUnit( pDoc->GetScaleUnit() );
@@ -432,6 +387,7 @@ SvDataMemberObjectRef __EXPORT SdDrawDocShell::CreateSnapshot()
     SvDataObjectRef xDataObject;
     return SvDataMemberObjectRef( (SvObject*) &xDataObject );
 }
+*/
 
 /*************************************************************************
 |*

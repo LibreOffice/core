@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-14 12:55:54 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 13:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,7 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
             if( pSdDrawDocumentIntern )
                 pSdDrawDocumentIntern->SetSwapGraphicsMode( nOldSwapMode );
         }
-        else
+        else if( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
         {
             ULONG nOldSwapMode;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-14 12:35:08 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 13:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,10 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
         TransferableObjectDescriptor    aObjDesc;
 
         if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
-            aDataHelper.GetSotStorageStream( nFormat, xStm ) )
+            ( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) ||
+              aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ, xStm ) ||
+              aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStm ) ||
+              aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm ) ) )
         {
             DocumentType eDocType = pDoc->GetDocumentType();
             SvStorageRef xStore( new SvStorage( *xStm ) );

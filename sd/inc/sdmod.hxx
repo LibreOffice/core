@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:03:15 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 13:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@ class BasicIDE;
 class SvxSearchItem;
 class SdAppLinkHdl; ;
 class SvxErrorHandler;
-class SvDataObject;
 class EditFieldInfo;
 class SvFactory;
 class SdTransferable;

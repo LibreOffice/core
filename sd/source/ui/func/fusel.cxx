@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-13 12:43:44 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 13:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,6 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 
-#include <svx/svdtrans.hxx>
 #include "grdocsh.hxx"
 #include "app.hxx"
 #include "docshell.hxx"
