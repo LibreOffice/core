@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-21 20:10:08 $
+ *  last change: $Author: obo $ $Date: 2001-08-24 05:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ String STR_SVT_FILEVIEW_COLUMN_TYPE
     Text[ polish ] = "Typ";
     Text[ portuguese_brazilian ] = "Type";
     Text[ japanese ] = "η¨®ι΅";
-    Text[ korean ] = "ν•μ‹";
+    Text[ korean ] = "νƒ€μ…";
     Text[ chinese_simplified ] = "η±»ε‹";
     Text[ chinese_traditional ] = "ι΅ε‹";
     Text[ turkish ] = "Type";
@@ -465,7 +465,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ dutch ] = "Wilt u de geselecteerde gegevens werkelijk wissen?";
         Text[ chinese_simplified ] = "ηθ¦ε ι™¤ι€‰δΈ­η„ζ•°ζ®οΌ";
         Text[ greek ] = "Θέλετε πραγματικά να διαγραφούν τα επιλεγμένα δεδομένα;";
-        Text[ korean ] = "μ„ νƒλ λ°μ΄ν„°λ¥Ό μ •λ§λ΅ μ‚­μ ν•μ‹κ² μµλ‹κΉ?";
+        Text[ korean ] = "μ„ νƒν• λ°μ΄ν„°λ¥Ό μ •λ§λ΅ μ‚­μ ν•μ‹κ² μµλ‹κΉ?";
         Text[ turkish ] = "Seηilen verileri gerηekten silmek istiyor musunuz?";
         Text[ finnish ] = "Haluatko varmasti poistaa valitut tiedot?";
         Text[ catalan ] = "ΏDesea realmente eliminar los datos seleccionados?";
@@ -567,6 +567,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         TabStop = TRUE ;
     };
 };
+
 
 
 
