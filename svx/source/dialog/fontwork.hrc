@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-16 11:56:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 14:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #define MTR_FLD_SHADOW_Y 4
 #define CLB_SHADOW_COLOR 1
 
-#define IL_FONTWORK     1
-#define ILH_FONTWORK    2
+#define IL_FONTWORK     1200
+#define ILH_FONTWORK    1201
 
 // the following ids are also used to identify the
 // bitmaps for the image list

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-31 14:00:23 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 14:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,8 @@
 
 #define STB_STATUS              1
 
-#define CD_IMAPDLG              1
-#define CDH_IMAPDLG             2
+#define CD_IMAPDLG              1300
+#define CDH_IMAPDLG             1301
 
 
 /******************************************************************************/
