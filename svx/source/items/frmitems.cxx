@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:11:57 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@
 #include "keepitem.hxx"
 #include "bolnitem.hxx"
 #include "brshitem.hxx"
-#include "backgrnd.hxx"
+//CHINA001 #include "backgrnd.hxx"
 #include "frmdiritem.hxx"
 
 #include "itemtype.hxx"
