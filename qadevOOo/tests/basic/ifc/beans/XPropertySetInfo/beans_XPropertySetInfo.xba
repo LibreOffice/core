@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: beans_XPropertySetInfo.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:45:01 $ 
+'*  last change:$Date: 2003-10-06 12:49:39 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -84,7 +84,7 @@ On Error Goto ErrHndl
     Test.StartMethod("getProperties()")
     bOK = true
     aProperties = oObj.getProperties()
-    bOK = bOk AND uBound(aProperties)
+    bOK = bOk AND not isNull(aProperties)
     Test.MethodTested("getProperties()", bOK)
 
     Test.StartMethod("getPropertyByName()")
