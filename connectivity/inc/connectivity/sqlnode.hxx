@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:44:32 $
+ *  last change: $Author: svesik $ $Date: 2000-11-22 16:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
 #ifndef __SGI_STL_VECTOR
-#include <stl/vector>
+#include <vector>
 #endif
 
 // forward declarations

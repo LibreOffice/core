@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-13 07:14:23 $
+ *  last change: $Author: svesik $ $Date: 2000-11-22 16:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
 #ifndef __SGI_STL_ROPE
-#include <stl/rope>
+#include <rope>
 #endif
 
 #ifndef _DBHELPER_DBCONVERSION_HXX_
