@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-05-23 05:52:32 $
+ *  last change: $Author: as $ $Date: 2001-05-30 08:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ namespace framework{
 #define PROPERTY_TYPES                              DECLARE_ASCII("Types"                                           )
 
 #define PROPCOUNT_TYPE                              8
-#define PROPCOUNT_FILTER                            9
+#define PROPCOUNT_FILTER                            10
 #define PROPCOUNT_DETECTOR                          1
 #define PROPCOUNT_LOADER                            3
 
