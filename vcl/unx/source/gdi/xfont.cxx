@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:13:48 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,19 @@ ExtendedFontStruct::Match( const ExtendedXlfd *pXlfd,
     if( mpXlfd != pXlfd )
         return false;
 
-    return (maPixelSize == rPixelSize) && (mbVertical == bVertical);
+    if( bVertical != mbVertical )
+        return FALSE;
+
+    if( rPixelSize.Height() != maPixelSize.Height() )
+        return FALSE;
+
+    long nReqWidth = rPixelSize.Width();
+    if( !nReqWidth )
+        nReqWidth = rPixelSize.Height();
+    if( nReqWidth != maPixelSize.Width() )
+        return FALSE;
+
+    return true;
 }
 
 // Get an appropriate x-font that contains a glyph for the given unicode
