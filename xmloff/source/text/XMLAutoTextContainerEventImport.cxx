@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextContainerEventImport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 16:34:29 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,6 @@
 #include "XMLAutoTextContainerEventImport.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLAUTOTEXTGROUPEVENTIMPORT_HXX
-#include "XMLAutoTextGroupEventImport.hxx"
-#endif
-
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
@@ -75,8 +71,8 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_XAUTOTEXTCONTAINER_HPP_
-#include <com/sun/star/text/XAutoTextContainer.hpp>
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
+#include <com/sun/star/container/XNameReplace.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
@@ -95,6 +91,10 @@
 #include "xmlkywd.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
+#include "XMLEventsImportContext.hxx"
+#endif
+
 
 using namespace ::com::sun::star;
 
@@ -102,7 +102,7 @@ using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
-using ::com::sun::star::text::XAutoTextContainer;
+using ::com::sun::star::container::XNameReplace;
 
 
 
@@ -113,9 +113,9 @@ XMLAutoTextContainerEventImport::XMLAutoTextContainerEventImport(
     SvXMLImport& rImport,
     USHORT nPrfx,
     const OUString& rLName,
-    const Reference<XAutoTextContainer > & rContnr ) :
+    const Reference<XNameReplace> & rEvnts ) :
         SvXMLImportContext(rImport, nPrfx, rLName),
-        rContainer(rContnr)
+        rEvents(rEvnts)
 {
 }
 
@@ -128,12 +128,12 @@ SvXMLImportContext* XMLAutoTextContainerEventImport::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    if ((XML_NAMESPACE_TEXT == nPrefix) &&
-        rLocalName.equalsAsciiL(sXML_auto_text_group,
-                                sizeof(sXML_auto_text_group)-1))
+    if ((XML_NAMESPACE_OFFICE == nPrefix) &&
+        rLocalName.equalsAsciiL(sXML_events,
+                                sizeof(sXML_events)-1))
     {
-        return new XMLAutoTextGroupEventImport(GetImport(), nPrefix,
-                                               rLocalName, rContainer);
+        return new XMLEventsImportContext(GetImport(), nPrefix, rLocalName,
+                                          rEvents);
     }
     else
         return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextContainerEventImport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 16:34:29 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,7 @@
 
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
-    namespace text { class XAutoTextContainer; }
-    namespace text { class XAutoTextGroup; }
+    namespace container { class XNameReplace; }
     namespace xml { namespace sax { class XAttributeList; } }
 } } }
 
@@ -87,7 +86,7 @@ class XMLAutoTextContainerEventImport : public SvXMLImportContext
 {
     /// the parent auto text container
     const ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XAutoTextContainer> & rContainer;
+        ::com::sun::star::container::XNameReplace> & rEvents;
 
 public:
 
@@ -98,7 +97,7 @@ public:
         USHORT nPrfx,
         const ::rtl::OUString& rLName,
         const ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XAutoTextContainer > & rContainer );
+                ::com::sun::star::container::XNameReplace > & rEvents );
 
     ~XMLAutoTextContainerEventImport();
 

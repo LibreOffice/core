@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-13 16:55:00 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,18 +63,6 @@
 #include "XMLAutoTextEventExport.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_XAUTOTEXTCONTAINER_HPP_
-#include <com/sun/star/text/XAutoTextContainer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XAUTOTEXTGROUP_HPP_
-#include <com/sun/star/text/XAutoTextGroup.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XAUTOTEXTENTRY_HPP_
-#include <com/sun/star/text/XAutoTextEntry.hpp>
-#endif
-
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
@@ -93,6 +81,10 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
 #include <com/sun/star/container/XNameReplace.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
@@ -142,284 +134,139 @@ using ::comphelper::getProcessServiceFactory;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::std::set;
+using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::text::XAutoTextContainer;
-using ::com::sun::star::text::XAutoTextEntry;
-using ::com::sun::star::text::XAutoTextGroup;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;
+using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::xml::sax::XDocumentHandler;
 
 
 const sal_Char sAPI_AutoText[] = "com.sun.star.text.AutoTextContainer";
 
+
 XMLAutoTextEventExport::XMLAutoTextEventExport() :
-    SvXMLExport( MAP_INCH, sXML_auto_text ),
-    eventCount( NULL ),
-    rGroupNames( * new Sequence<OUString> )
+        SvXMLExport( MAP_INCH, sXML_auto_text ),
+        sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
+        sNone(RTL_CONSTASCII_USTRINGPARAM("None"))
 {
 }
 
 XMLAutoTextEventExport::XMLAutoTextEventExport(
     const OUString& rFileName,
     const Reference<XDocumentHandler> & rHandler,
-    const Reference<XModel> & rModel) :
+    const Reference<XModel> & rModel,
+    const Reference<XNameAccess> & rEvents) :
         SvXMLExport(rFileName, rHandler, rModel, MAP_INCH),
-        eventCount( NULL ),
-        rGroupNames( * new Sequence<OUString> )
+        xEvents(rEvents),
+        sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
+        sNone(RTL_CONSTASCII_USTRINGPARAM("None"))
 {
 }
 
 XMLAutoTextEventExport::~XMLAutoTextEventExport()
 {
-    delete eventCount;
 }
 
-// export the events off all autotexts
-sal_uInt32 XMLAutoTextEventExport::exportDoc( const sal_Char *pClass )
+
+void XMLAutoTextEventExport::initialize(
+    const Sequence<Any> & rArguments )
+        throw(uno::Exception, uno::RuntimeException)
 {
-    // instantiate AutoTextContainer via factory
-    Reference<XMultiServiceFactory> xFactory = getProcessServiceFactory();
-    if (xFactory.is())
+    if (rArguments.getLength() > 1)
     {
-        OUString sService(RTL_CONSTASCII_USTRINGPARAM(sAPI_AutoText));
-        Reference<XAutoTextContainer> xAutoTextContainer(
-            xFactory->createInstance(sService), uno::UNO_QUERY);
-
-        if (xAutoTextContainer.is())
+        Reference<XEventsSupplier> xSupplier;
+        rArguments[1] >>= xSupplier;
+        if (xSupplier.is())
         {
-            // export all, or only the name groups?
-            Sequence<OUString> & rNames =
-                (rGroupNames.getLength() > 0) ? rGroupNames :
-                xAutoTextContainer->getElementNames();
-
-            countEvents(xAutoTextContainer, rNames);
-            exportAutoTextContainer(pClass, xAutoTextContainer, rNames);
+            Reference<XNameAccess> xAccess(xSupplier->getEvents(), UNO_QUERY);
+            xEvents = xAccess;
+        }
+        else
+        {
+            Reference<XNameReplace> xReplace;
+            rArguments[1] >>= xReplace;
+            if (xReplace.is())
+            {
+                Reference<XNameAccess> xAccess(xReplace, UNO_QUERY);
+                xEvents = xAccess;
+            }
+            else
+            {
+                rArguments[1] >>= xEvents;
+            }
         }
     }
-    return 0;
+
+    // call super class (for XHandler)
+    SvXMLExport::initialize(rArguments);
 }
 
-void XMLAutoTextEventExport::exportAutoTextContainer(
-    const sal_Char *pClass,
-    Reference<XAutoTextContainer> & rAutoTextContainer,
-    Sequence<OUString> & rNames)
+
+sal_uInt32 XMLAutoTextEventExport::exportDoc(
+    const sal_Char* pClass)
 {
-    if (hasDocumentEvents())
+    if (hasEvents())
     {
         GetDocHandler()->startDocument();
 
-    // do we really want all namespaces ?
-//  sal_uInt16 nPos = pNamespaceMap->GetFirstIndex();
-//  while( USHRT_MAX != nPos )
-//  {
-//      pAttrList->AddAttribute( pNamespaceMap->GetAttrNameByIndex( nPos ),
-//                               sCDATA,
-//                               pNamespaceMap->GetNameByIndex( nPos ) );
-//      nPos = pNamespaceMap->GetNextIndex( nPos );
-//  }
-
-        // namespaces for office:, text: and script:
-        GetAttrList().AddAttribute(
-            GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_TEXT ),
-            sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_TEXT ) );
-        GetAttrList().AddAttribute(
-            GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_SCRIPT ),
-            sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_SCRIPT ) );
-        GetAttrList().AddAttribute(
-            GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_OFFICE ),
-            sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_OFFICE ) );
+        addNamespaces();
 
         {
             // container element
             SvXMLElementExport aContainerElement(
-                *this, XML_NAMESPACE_TEXT, sXML_auto_text_events,
+                *this, XML_NAMESPACE_OFFICE, sXML_auto_text_events,
                 sal_True, sal_True);
 
-            // iterate over group list
-            sal_Int32 nCount = rNames.getLength();
-            for(sal_Int32 i = 0; i < nCount; i++)
-            {
-                OUString& rName = rNames[i];
-                Any aAny = rAutoTextContainer->getByName(rName);
-                Reference<XAutoTextGroup> xGroup;
-                aAny >>= xGroup;
-
-                exportAutoTextGroup(rName, xGroup);
-            }
+            exportEvents();
         }
 
         // and close document again
         GetDocHandler()->endDocument();
     }
+
+    return 0;
 }
 
-void XMLAutoTextEventExport::exportAutoTextGroup(
-    OUString& rGroupName,
-    Reference<XAutoTextGroup> & rGroup)
+sal_Bool XMLAutoTextEventExport::hasEvents()
 {
-    DBG_ASSERT(rGroup.is(), "Where is the group?");
-
-    if (hasGroupEvents(rGroupName))
-    {
-        AddAttribute(XML_NAMESPACE_TEXT, sXML_group_name, rGroupName);
-        SvXMLElementExport aGroupElement(
-            *this, XML_NAMESPACE_TEXT, sXML_auto_text_group,
-            sal_True, sal_True);
-
-        // iterate over all autotexts in this group
-        Sequence<OUString> aNames = rGroup->getElementNames();
-        sal_Int32 nCount = aNames.getLength();
-        for(sal_Int32 i = 0; i < nCount; i++)
-        {
-            OUString& rTextName = aNames[i];
-
-            Any aAny = rGroup->getByName(rTextName);
-            Reference<XAutoTextEntry> xEntry;
-            aAny >>= xEntry;
-
-            exportAutoTextEntry(rGroupName, rTextName, xEntry);
-        }
-    }
+    // TODO: provide full implementation that check for presence of events
+    return xEvents.is();
 }
 
-void XMLAutoTextEventExport::exportAutoTextEntry(
-    OUString& rGroupName,
-    OUString& rName,
-    Reference<XAutoTextEntry> & rEntry)
+void XMLAutoTextEventExport::addNamespaces()
 {
-    if (hasEntryEvents(rGroupName, rName))
-    {
-        Reference<XEventsSupplier> xEventsSupp(rEntry, uno::UNO_QUERY);
-        DBG_ASSERT(xEventsSupp.is(),
-                   "XEventsSupplier is required by service descr.");
-
-        AddAttribute(XML_NAMESPACE_TEXT, sXML_name, rName);
-        SvXMLElementExport aElem(*this, XML_NAMESPACE_TEXT, sXML_auto_text,
-                                 sal_True, sal_True);
-
-        GetEventExport().Export(xEventsSupp, sal_True);
-    }
+    // namespaces for office:, text: and script:
+    GetAttrList().AddAttribute(
+        GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_TEXT ),
+        sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_TEXT ) );
+    GetAttrList().AddAttribute(
+        GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_SCRIPT ),
+        sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_SCRIPT ) );
+    GetAttrList().AddAttribute(
+        GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_OFFICE ),
+        sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_OFFICE ) );
 }
 
-
-
-
-void XMLAutoTextEventExport::countEvents(
-    Reference<XAutoTextContainer> & rAutoTextContainer,
-    Sequence<OUString> & rNames)
+void XMLAutoTextEventExport::exportEvents()
 {
-    OUString sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType"));
-    OUString sNone(RTL_CONSTASCII_USTRINGPARAM("None"));
+    DBG_ASSERT(hasEvents(), "no events to export!");
 
-    set<OUString> * pEventCount = new set<OUString> ;
-
-    // iterate over all groups
-    sal_Int32 nGroupsCount = rNames.getLength();
-    for(sal_Int32 i = 0; i < nGroupsCount; i++)
-    {
-        OUString& rGroupName = rNames[i];
-        Any aAny = rAutoTextContainer->getByName(rGroupName);
-        Reference<XAutoTextGroup> xGroup;
-        aAny >>= xGroup;
-
-        // iterate over all autotexts in this group
-        Sequence<OUString> aEntryNames = xGroup->getElementNames();
-        sal_Int32 nEntryCount = aEntryNames.getLength();
-        for(sal_Int32 i = 0; i < nEntryCount; i++)
-        {
-            OUString& rEntryName = aEntryNames[i];
-
-            Any aAny = xGroup->getByName(rEntryName);
-            Reference<XAutoTextEntry> xEntry;
-            aAny >>= xEntry;
-
-            // iterate over all events of the autotext
-            Reference<XEventsSupplier> xSupplier(xEntry, uno::UNO_QUERY);
-            Reference<XNameReplace> xEvents = xSupplier->getEvents();
-            Sequence<OUString> aEventNames = xEvents->getElementNames();
-            sal_Int32 nEventsCount = aEventNames.getLength();
-            for(sal_Int32 i = 0; i < nEventsCount; i++)
-            {
-                OUString& rEventName = aEventNames[i];
-
-                Any aAny = xEvents->getByName(rEventName);
-                Sequence<PropertyValue> aValues;
-                aAny >>= aValues;
-
-                // now, finally, iterate over values and find a non-empty macro
-                sal_Int32 nValuesCount = aValues.getLength();
-                for(sal_Int32 i = 0; i < nValuesCount; i++)
-                {
-                    if (aValues[i].Name == sEventType)
-                    {
-                        OUString sType;
-                        aValues[i].Value >>= sType;
-
-                        // non-empty macro?
-                        if (sType != sNone)
-                        {
-                            // Wow! We found a event. Let's celebrate!
-
-                            // insert the group + the event
-                            pEventCount->insert(rGroupName);
-                            pEventCount->insert(
-                                combinedName(rGroupName, rEntryName));
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    eventCount = pEventCount;
-}
-
-sal_Bool XMLAutoTextEventExport::hasDocumentEvents()
-{
-    return (NULL == eventCount) ? sal_True : (eventCount->size() != 0);
-}
-
-
-sal_Bool XMLAutoTextEventExport::hasGroupEvents(
-    const OUString& rGroupName  )
-{
-    return (NULL == eventCount) ? sal_True :
-        (eventCount->find(rGroupName) != eventCount->end());
-}
-
-sal_Bool XMLAutoTextEventExport::hasEntryEvents(
-    const OUString& rGroupName,
-    const OUString& rEntryName )
-{
-    return (NULL == eventCount) ? sal_True :
-        (eventCount->find(combinedName(rGroupName, rEntryName))
-                != eventCount->end());
-}
-
-
-
-OUString XMLAutoTextEventExport::combinedName(
-    const OUString& rGroupName,
-    const OUString& rEntryName)
-{
-    OUStringBuffer sBuf;
-    sBuf.append(rGroupName);
-    sBuf.append(sal_Unicode('#'));
-    sBuf.append(rEntryName);
-    return sBuf.makeStringAndClear();
+    GetEventExport().Export(xEvents, sal_True);
 }
 
 
 
 // methods without content:
+
 void XMLAutoTextEventExport::_ExportMeta() {}
 void XMLAutoTextEventExport::_ExportScripts() {}
 void XMLAutoTextEventExport::_ExportFontDecls() {}
@@ -430,18 +277,21 @@ void XMLAutoTextEventExport::_ExportChangeTracking() {}
 void XMLAutoTextEventExport::_ExportContent() {}
 
 
+
+// methods to support the component registration
+
 Sequence< OUString > SAL_CALL XMLAutoTextEventExport_getSupportedServiceNames()
     throw()
 {
-    const OUString aServiceName(
-        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.AutoTextEventWriter" ) );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    Sequence< OUString > aSeq( 1 );
+    aSeq[0] = XMLAutoTextEventExport_getImplementationName();
     return aSeq;
 }
 
 OUString SAL_CALL XMLAutoTextEventExport_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "XMLAutoTextEventExport" ) );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.Writer.XMLAutotextEventsExporter" ) );
 }
 
 Reference< XInterface > SAL_CALL XMLAutoTextEventExport_createInstance(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventImport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 11:51:27 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,13 +89,20 @@ namespace com { namespace sun { namespace star {
 class XMLAutoTextEventImport : public SvXMLImport
 {
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XAutoTextContainer> xAutoTextContainer;
+        ::com::sun::star::container::XNameReplace> xEvents;
 
 public:
     XMLAutoTextEventImport() throw();
 
     ~XMLAutoTextEventImport();
 
+    // XInitialization
+    virtual void SAL_CALL initialize(
+        const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Any> & rArguments )
+        throw(
+            ::com::sun::star::uno::Exception,
+            ::com::sun::star::uno::RuntimeException);
 
 protected:
 

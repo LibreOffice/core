@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventExport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-13 16:55:00 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,9 @@
 
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
+    namespace container { class XNameAccess; }
     namespace frame { class XModel; }
     namespace lang { class XMultiServiceFactory; }
-    namespace text { class XAutoTextContainer; }
-    namespace text { class XAutoTextGroup; }
-    namespace text { class XAutoTextEntry; }
     namespace uno { template<class X> class Reference; }
     namespace uno { template<class X> class Sequence; }
     namespace uno { class XInterface; }
@@ -84,20 +82,24 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
+/**
+ * Component for the export of events attached to autotext blocks.
+ * Via the XInitialization interface it expects up to two strings, the
+ * first giving the file name (URL) of the autotext group, and the second
+ * identifying the autotext. If one of the strings is not given, it
+ * will export the whole group / all groups.
+ */
 class XMLAutoTextEventExport : public SvXMLExport
 {
-    ::std::set< ::rtl::OUString > * eventCount;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::container::XNameAccess> xEvents;
 
-    /// names of groups to be exported; export all group if empty.
-    ::com::sun::star::uno::Sequence< ::rtl::OUString> & rGroupNames;
+    const ::rtl::OUString sEventType;
+    const ::rtl::OUString sNone;
 
-
-    // generate a combined name for sake of counting names
-    ::rtl::OUString combinedName(
-        const ::rtl::OUString& rGroupName,
-        const ::rtl::OUString& rEntryName);
 
 public:
+
     XMLAutoTextEventExport();
 
     XMLAutoTextEventExport(
@@ -105,51 +107,36 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & rModel);
+            ::com::sun::star::frame::XModel > & rModel,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::container::XNameAccess > & rEvents);
 
     ~XMLAutoTextEventExport();
 
+    // XInitialization
+    virtual void SAL_CALL initialize(
+        const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Any> & rArguments )
+        throw(
+            ::com::sun::star::uno::Exception,
+            ::com::sun::star::uno::RuntimeException);
+
 protected:
-    // export the events off all autotexts
+
+    /// export the events off all autotexts
     virtual sal_uInt32 exportDoc(
         const sal_Char *pClass = NULL );
 
-    void exportAutoTextContainer(
-        const sal_Char* pClass,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XAutoTextContainer> & rAutoTextContainer,
-        ::com::sun::star::uno::Sequence< ::rtl::OUString> & rGroupNames);
-
-    void exportAutoTextGroup(
-        ::rtl::OUString& rName,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XAutoTextGroup> & rGroup);
-
-    void exportAutoTextEntry(
-        ::rtl::OUString& rGroupName,
-        ::rtl::OUString& rName,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XAutoTextEntry> & rEntry);
-
-
-    /// count the number of events (to be used before hasXXX() methods)
-    void countEvents(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XAutoTextContainer> & rAutoTextContainer,
-        ::com::sun::star::uno::Sequence< ::rtl::OUString> & rGroupNames);
-
     /// does the document have any events ?
-    sal_Bool hasDocumentEvents();
+    sal_Bool hasEvents();
 
-    /// does the group have any events ?
-    sal_Bool hasGroupEvents(
-        const ::rtl::OUString& rGroupName   );
+    /// export the events element
+    void exportEvents();
 
-    /// does this entry have any events ?
-    sal_Bool hasEntryEvents(
-        const ::rtl::OUString& rGroupName,
-        const ::rtl::OUString& rEntryName );
 
+    /// add the namespaces used by events
+    /// (to be called for the document element)
+    void addNamespaces();
 
 
     // methods without content:
@@ -162,6 +149,8 @@ protected:
     virtual void _ExportChangeTracking();
     virtual void _ExportContent();
 };
+
+
 
 // global functions to support the component
 
