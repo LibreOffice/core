@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFileIdentifierConverter.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-15 08:23:40 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ interface XFileIdentifierConverter : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** Get information about the 'locality' of a file content provider.
 
-        The returned information can be used to chose the 'best' among a
+        <p>The returned information can be used to chose the 'best' among a
         number of file content providers implementing this interface.
 
         @param BaseURL

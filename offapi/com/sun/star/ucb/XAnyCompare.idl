@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAnyCompare.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,16 +85,16 @@ interface XAnyCompare: com::sun::star::uno::XInterface
         @param Any2
         is the second compare value
 
-        @returns the following values:
+        @returns
         <ul>
         <li>
-        -1, if the first any is smaller than the second ( Any1 &lt; Any2 )
+        <code>-1</code>, if the first any is less than the second ( Any1 &lt; Any2 )
         </li>
         <li>
-        0, if the first any is equal to the second ( Any1==Any2 )
+        <code>0</code>, if the first any is equal to the second ( Any1 == Any2 )
         </li>
         <li>
-        +1, if the first any is greater than the second ( Any1 &gt; Any2 )
+        <code>+1</code>, if the first any is greater than the second ( Any1 &gt; Any2 )
         </li>
         </ul>
     */

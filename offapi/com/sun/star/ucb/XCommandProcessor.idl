@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCommandProcessor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,45 +90,52 @@ module com { module sun { module star { module ucb {
     @author   Kai Sommerfeld
     @see      Command
     @see      XCommandEnvironment
+    @see      XContent
 */
 [ uik(F4CAAD40-00A5-11d4-9F980050-04526AC8), ident( "XCommandProcessor", 1.0 ) ]
 interface XCommandProcessor : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** creates a unique identifier for a command, which can be used to
-        abort the execution of the command accociated with that identifier.
-        Note that it is generally not necessary to obtain a new id for each
-        command, because commands are executed synchronously. So the id
-        for a command is valid again after a command previously associated
-        with this id has finished. In fact you only should get one identifier
-        per thread and assign it to every command executed by that thread.
+    /** creates a unique identifier for a command.
+
+        <p>This identifier can be used to abort the execution of the command
+        accociated with that identifier. Note that it is generally not
+        necessary to obtain a new id for each command, because commands are
+        executed synchronously. So the id for a command is valid again after a
+        command previously associated with this id has finished. In fact you
+        only should get one identifier per thread and assign it to every
+        command executed by that thread.
+
+        @returns
+        a command identifier.
     */
     long createCommandIdentifier();
 
     //-------------------------------------------------------------------------
     /** executes a command.
 
+        <p>Common command definitions can be found in the soecification of the
+        service <type>Content</type>.
+
         @param aCommand
-        The command to execute.
+        is the command to execute.
 
         @param CommandId
-        A unique id for the command. This identifier was obtained by calling
-        <type>XCommandProcessor::createCommandIdentifier</type>. A value of
-        Zero can be used, if the command never shall be aborted.
+        is a unique id for the command. This identifier was obtained by calling
+        <member>XCommandProcessor::createCommandIdentifier</member>. A value of
+        zero can be used, if the command never shall be aborted.
 
         @param Environment
-        The execution environment.
+        is the execution environment.
 
-        @return
-        The result according to the specification of the command.
+        @returns
+        the result according to the specification of the command.
 
         @throws CommandAbortedException
-        thrown to indicate that the command was aborted.
+        to indicate that the command was aborted.
 
         @throws Exception
-        Different exceptions are thrown to indicate errors during
-        execution of the command.
-
+        if an error occured during the execution of the command.
     */
     any execute( [in] Command aCommand,
                  [in] long CommandId,
@@ -139,8 +146,8 @@ interface XCommandProcessor : com::sun::star::uno::XInterface
     /** ends the command associated with the given id.
 
         @param CommandId
-        A unique id for the command to abort. This must be the identifier
-        passed to <type>XCommandProcessor::execute</type> for the command
+        is a unique id for the command to abort. This must be the identifier
+        passed to <member>XCommandProcessor::execute</member> for the command
         to abort.
     */
     [oneway] void abort( [in] long CommandId );

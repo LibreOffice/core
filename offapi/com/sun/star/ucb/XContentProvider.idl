@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentProvider.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** a content provider which creates objects of a special kind.
+/** a content provider which creates and manages <type>XContent</type>s.
 
      @version  1.0
      @author   Kai Sommerfeld
@@ -93,8 +93,9 @@ module com { module sun { module star { module ucb {
 interface XContentProvider: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** creates a new UCB content, if the given identifier matches the
-        content provided by the implementation of this interface.
+    /** creates a new <type>XContent</type> instance, if the given
+        <typeXContentIdentifier</type> matches a content provided by the
+        implementation of this interface.
 
         @param Identifier
         an identifier for the content to query.
@@ -102,17 +103,16 @@ interface XContentProvider: com::sun::star::uno::XInterface
         @returns
         the content.
 
-        @throws
-        <TYPE>IllegalIdentifierException</TYPE> is thrown, if the given
-        identifier does not match a content provided by the implementation
-        of this interface
+        @throws IllegalIdentifierException
+        if the given identifier does not match a content provided by the
+        implementation of this interface
     */
     com::sun::star::ucb::XContent queryContent(
                 [in] com::sun::star::ucb::XContentIdentifier Identifier )
         raises ( com::sun::star::ucb::IllegalIdentifierException );
 
     //-------------------------------------------------------------------------
-    /** compares two XContentIdentifier's.
+    /** compares two <type>XContentIdentifier</type>s.
 
         @param Id1
         first content identifier.

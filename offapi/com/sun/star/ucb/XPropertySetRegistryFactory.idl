@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertySetRegistryFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,8 @@ interface XPropertySetRegistryFactory : com::sun::star::uno::XInterface
     /** creates a propertyset registry.
 
         @param URL
-        The identifier of the registry to create ( e.g. file-URL ).
+        The identifier of the registry to create ( e.g. file-URL ). The
+        value can be an empty string.
 
         @returns
         The registry.

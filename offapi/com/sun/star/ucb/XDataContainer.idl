@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataContainer.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com { module sun { module star { module ucb {
 
     <p>A data container may contain data and/or other data containers.
     A typical container with children is a MIME message with
-    attachments.</P>
+    attachments.
 
     @version    1.0
     @author     Kai Sommerfeld
@@ -84,34 +84,50 @@ module com { module sun { module star { module ucb {
 interface XDataContainer: com::sun::star::container::XIndexContainer
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR XDataContainer::getContentType
+    /** returns the content type (MIME Type) of the data container.
+
+        @returns
+        the content type
+    */
     [const] string getContentType();
 
     //-------------------------------------------------------------------------
     /** sets the content type (MIME Type) of the data container.
+
+        @param aType
+        the content type
     */
     void setContentType( [in] string aType );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR XDataContainer::getData
+    /** returns the data of the data container.
+
+        @returns
+        the data
+    */
     [const] sequence<byte> getData();
 
     //-------------------------------------------------------------------------
-    /** sets the data of the data container.  It can be used
-        <B>alternatively</B> to the "DataURL" methods.
+    /** sets the data of the data container.
+
+        @param aData
+        the data
     */
     void setData( [in] sequence<byte> aData );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR XDataContainer::getDataURL
+    /** Deprecated. Do not use!
+
+        @deprecated
+    */
     [const] string getDataURL();
 
     //-------------------------------------------------------------------------
-    /** sets a file-URL for the data.  It can be used
-        <B>alternatively</B> to the data methods.
+    /** Deprecated. Do not use!
+
+        @deprecated
     */
     void setDataURL( [in] string aURL );
-
 };
 
 //=============================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentProviderFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** a factory for a content provider.
+/** a factory for a <type>XContentProvider</type>.
 
      @version  1.0
      @author   Kai Sommerfeld
@@ -84,11 +84,11 @@ module com { module sun { module star { module ucb {
 interface XContentProviderFactory : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** creates a content provider implementation object.
+    /** creates a <type>XContentProvider</type> implementation object.
 
         @param Service
         the name of the UNO service to be used to create the implementation of
-        the <type>XContentProvider</type>.
+        the content provider.
 
         @returns
         a content provider.

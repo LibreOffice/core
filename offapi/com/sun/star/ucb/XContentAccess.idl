@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentAccess.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-15 10:19:07 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,12 @@ interface XContentIdentifier;
 //=============================================================================
 /** specifies methods for obtaining information on a content in different
     levels.
-    <p>In example, if there is a cursor which points to <type>XContent</type>s,
+
+    <p>For example, if there is a cursor which points to <type>XContent</type>s,
     this interface could be used to give the user access to the content under
     the cursor. If the client only needs the identifier string of the content,
     there is no need to first create the content object, then to obtain the
-    string from it and after that to release the content.</p>
+    string from it and after that to release the content.
 
     @version    1.0
     @author     Kai Sommerfeld
@@ -92,12 +93,13 @@ interface XContentAccess : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** returns the identifier string of the content ( "cheap method" ).
-        Note that this string can be used later to recreate the content.
+
+        <p>Note that this string can be used later to recreate the content.
 
         @returns
         the identifier string.
     */
-    string             queryContentIdentifierString();
+    string queryContentIdentifierString();
 
     //-------------------------------------------------------------------------
     /** returns the identifier object of the content.
@@ -113,7 +115,7 @@ interface XContentAccess : com::sun::star::uno::XInterface
         @returns
         the content.
     */
-    XContent           queryContent();
+    XContent queryContent();
 };
 
 //=============================================================================

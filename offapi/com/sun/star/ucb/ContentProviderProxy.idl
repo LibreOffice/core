@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProviderProxy.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,15 +79,34 @@ module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** is a proxy for a content provider.
+
+    <p>Implementing a content provider proxy can be useful if the creation of
+    the real content provider object shall be deferred for some reason
+    (i.e. performance) until the first method gets called on it. Instaead of
+    instanciating and registering the real provider at the UCB, a proxy for
+    the real provider can be created and registered at the UCB.
+
+    @see XContentProviderProxyFactory
 */
 service ContentProviderProxy
 {
     //-------------------------------------------------------------------------
+    /** The implementation of
+        <member scope="com::sun::star::uno">XInterface::queryInterface</member>
+        must instanciate the real provider and return the return value
+        of a queryInterface call at the real provider, except for queries
+        for the interfaces implemented by the proxy itself. So the caller of
+        the queryInterface method at the proxy will get access to the real
+        provider in a completely transparent way.
+     */
+    interface com::sun::star::uno::XInterface;
+
+    //-------------------------------------------------------------------------
     /** gives access to the original content provider behind the proxy.
 
-        <p>The implementation will instantiate the real content provider only on
-        demand using its UNO service name. This will load the content providers
-        implementation code (dynamic library), if not already done.
+        <p>The implementation will instantiate the real content provider only
+        on demand using its UNO service name. This will load the content
+        providers implementation code (dynamic library), if not already done.
      */
     interface com::sun::star::ucb::XContentProviderSupplier;
 

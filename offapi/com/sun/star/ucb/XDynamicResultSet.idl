@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDynamicResultSet.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,14 +156,15 @@ interface XDynamicResultSet: com::sun::star::lang::XComponent
     //-------------------------------------------------------------------------
     /** Call this, if you don't care about any changes.
 
-        <p>The returned <type>XResultSet</type> is implemented as
+        @returns
+        an <type>XResultSet</type> that is implemented as
         <type>ContentResultSet</type>. Its content will never change.
 
-        <p>This method is not allowed to be called, if someone already has
-        registered as listener via <member>XDynamicResultSet::setListener</member>
-        or if someone has established a connection to a <type>CashedDynamicresultSet</type>
+        @trows ListenerAlreadySetException
+        if someone already has registered as listener via
+        <member>XDynamicResultSet::setListener</member> or if someone has
+        established a connection to a <type>CashedDynamicresultSet</type>
         via <member>XDynamicResultSet::connectToCache</member>.
-        Otherwise you get the Exception <type>ListenerAlreadySetException</type>.
     */
     com::sun::star::sdbc::XResultSet getStaticResultSet()
         raises( com::sun::star::ucb::ListenerAlreadySetException );
@@ -171,18 +172,21 @@ interface XDynamicResultSet: com::sun::star::lang::XComponent
     //-------------------------------------------------------------------------
     /** Call this, if you want to get notifications about changes.
 
-        <p>This method is only allowed to be called once, otherwise you get
-            the Exception <type>ListenerAlreadySetException</type>
-
-        <p>This method is not allowed to be called, if someone already has
-            fetched the <type>ContentResultSet</type> via
-            <member>XDynamicResultSet::getStaticResultSet</member>.
-            Otherwise you get the Exception
-            <type>ListenerAlreadySetException</type>.
-
-        <p>The implementor has to call <member>XComponent::addEventListener</member>
+        <p>The implementor has to call
+        <member scope="com::sun::star::lang">XComponent::addEventListener</member>
         in this method, so that we can call
-        <member>XEventListener::disposing</member> to the listener
+        <member scope="com::sun::star::lang">XEventListener::disposing</member>
+        at the listener
+
+        @param Listener
+        a listener for resultset notifications
+
+        @throws ListenerAlreadySetException
+        if this method is called more than once during the life of the
+        implementation object or if this method is called if someone already
+        has fetched the <type>ContentResultSet</type> via
+        <member>XDynamicResultSet::getStaticResultSet</member>.
+
     */
     void setListener( [in] XDynamicResultSetListener Listener )
         raises( com::sun::star::ucb::ListenerAlreadySetException );
@@ -191,41 +195,39 @@ interface XDynamicResultSet: com::sun::star::lang::XComponent
     /** Connects this to a <type>CachedDynamicResultSet</type> for optimized
         remote data transport.
 
-        <p><parameter>Cache<parameter> has to be an implementation of the
-        service <type>CachedDynamicResultSet</type>. In particular
-        <parameter>Cache<parameter> has to have an interface
-        <type>XSourceInitialization</type>.
-
         <p>This method creates a <type>CachedDynamicResultSetStub</type>
-        and sets it as Source to the given <parameter>Cache</parameter>.
+        and sets it as Source to the given cache.
 
         <p>After this method has returned you can and have to use the given
-        result set <parameter>Cache</parameter> for further access.
+        result set cache for further access.
 
-        <p>This method is not allowed to be called, if someone already has
-            fetched the <type>ContentResultSet</type> via
-            <member>XDynamicResultSet::getStaticResultSet</member>.
-            Otherwise you get the Exception
-            <type>ListenerAlreadySetException</type>.
+        @param Cache
+        has to be an implementation of the service
+        <type>CachedDynamicResultSet</type>. In particular it has to support
+        the interface <type>XSourceInitialization</type>.
 
-        <p>You will get an <exception>AlreadyInitializedException</exception>,
-        if <parameter> Cache</parameter> was initialized with another source
-        already.
+        @throws ListenerAlreadySetException
+        if if someone already has fetched the <type>ContentResultSet</type> via
+        <member>XDynamicResultSet::getStaticResultSet</member>.
+
+        @throws AlreadyInitializedException
+        if <var>Cache</var> was already initialized with another source.
+
+        @throws ServiceNotFoundException
     */
     void connectToCache( [in] XDynamicResultSet Cache )
         raises( com::sun::star::ucb::ListenerAlreadySetException
                 , com::sun::star::ucb::AlreadyInitializedException
                 , com::sun::star::ucb::ServiceNotFoundException );
 
-
     //-------------------------------------------------------------------------
-    /**
-        With this method you can get information, wether the offered
+    /** Using this method you can get information, whether the offered
         <type>ContentResultSet</type>s are sorted or filtered etc correctly as
         demanded during the creation of the <type>XDynamicResultSet</type>.
 
-        The return-value may contain zero or more constants of the
-        <type>ContentResultSetCapability</type> constants group.
+        @returns
+        zero or more constants of the <type>ContentResultSetCapability</type>
+        constants group.
     */
     short getCapabilities();
 };

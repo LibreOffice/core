@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSortedDynamicResultSetFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,21 +80,33 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** Provides a methods to create a sorted <type>XDynamicResultSet</type> which
-will be sorted by the given sorting options.
+/** Provides a method to create an <type>XDynamicResultSet</type> which
+    will be sorted according to the given sorting options.
 */
 
 [ uik(D4E3B8F0-3D1E-11d4-9F6A0050-04D81245), ident( "XSortedDynamicResultSetFactory", 1.0 ) ]
 interface XSortedDynamicResultSetFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** provides the creation of a sorted <type>XDynamicResultSet</type>
-    depending on internal data, an XDynamicResultSet and the sorting info.
+    /** creates a sorted <type>XDynamicResultSet</type> depending on internal
+        data, an (unsorted) XDynamicResultSet and the sorting info.
+
+        @returns
+        a sorted resultset.
+
+        @param Source
+        the (unsorted) source resultset
+
+        @param Info
+        the sort criteria
+
+        @param CompareFactory
+        a factory for compare objects.
     */
     com::sun::star::ucb::XDynamicResultSet  createSortedDynamicResultSet(
-                        [in] com::sun::star::ucb::XDynamicResultSet Source,
-                        [in] sequence<com::sun::star::ucb::NumberedSortingInfo> Info,
-                        [in] com::sun::star::ucb::XAnyCompareFactory CompareFactory );
+                [in] com::sun::star::ucb::XDynamicResultSet Source,
+                [in] sequence<com::sun::star::ucb::NumberedSortingInfo> Info,
+                [in] com::sun::star::ucb::XAnyCompareFactory CompareFactory );
 };
 
 //=============================================================================

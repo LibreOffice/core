@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertyMatcherFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** Creates an XPropertyMatcher, given a set of search criteria.
-
-    @seealso  com::sun::star::ucb::XPropertyMatcher.
+/** Creates an <type>XPropertyMatcher</type>, given a set of search criteria.
 */
 [ uik(6556F751-1B44-11d4-9FB10050-04526AC8), ident( "XPropertyMatcherFactory", 1.0 ) ]
 interface XPropertyMatcherFactory : com::sun::star::uno::XInterface
@@ -88,10 +86,11 @@ interface XPropertyMatcherFactory : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** Creates an XPropertyMatcher.
 
-        @param Criteria  The set of search criteria the returned
-        XPropertyMatcher will use.
+        @param Criteria
+        The set of search criteria the returned XPropertyMatcher will use.
 
-        @returns  An XPropertyMatcher with the given search criteria.
+        @returns
+        An XPropertyMatcher with the given search criteria.
     */
     com::sun::star::ucb::XPropertyMatcher createPropertyMatcher(
             [in] sequence<com::sun::star::ucb::SearchCriterium> Criteria);

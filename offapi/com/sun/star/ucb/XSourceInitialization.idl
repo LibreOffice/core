@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSourceInitialization.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,24 @@ interface XSourceInitialization: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** provides the initialization of a component with any source object.
-        The service description has to specify which type of interface is to be
-        set as parameter.
 
-        <p>Hopefully you will only use this, when <parameter>Source</parameter>
-        is an <type>XComponent</type> and this is an <type>XEventListener</type>.
-        Than you should call <member>XComponent::addEventListener()</member>
-        within this method.
+        <p>The service description has to specify which type of interface must
+        be set as parameter.
+
+        <p>Hopefully you will only use this, when <var>Source</var>
+        is an <type scope="com::sun::star::lang">XComponent</type> and this
+        is an <type scope="com::sun::star::lang">XEventListener</type>.
+        Than you should call
+        <member scope="com::sun::star::lang">XComponent::addEventListener()</member>
+        from inside the implementation of this method.
+
+        @param Source
+        the source.
+
+        @throws AlreadyInitializedException
+        if this method is called more than once during the lifetime of the
+        object implementing this interface.
+
     */
     void setSource( [in] com::sun::star::uno::XInterface Source )
          raises (AlreadyInitializedException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContent.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:19:06 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** specifies a content with a type and an identifier,
-    which is able to manage listeners for special content events.
+/** specifies a content with a type and an identifier, which is able to manage
+    listeners for events that are related to contents.
 
      @version  1.0
      @author   Kai Sommerfeld
@@ -99,7 +99,8 @@ interface XContent: com::sun::star::uno::XInterface
     com::sun::star::ucb::XContentIdentifier getIdentifier();
 
     //-------------------------------------------------------------------------
-    /** returns a content type string ( i.e. a MIME type ).
+    /** returns a type string, which is unique for that type of content (e.g.
+        "application/vnd.sun.star.hierarchy-folder").
 
         @returns
         the content type string.
@@ -111,16 +112,22 @@ interface XContent: com::sun::star::uno::XInterface
 
         @param Listener
         the listener to add.
+
+        @see ContentEvent
     */
-    [oneway] void addContentEventListener( [in] com::sun::star::ucb::XContentEventListener Listener );
+    [oneway] void addContentEventListener(
+                    [in] com::sun::star::ucb::XContentEventListener Listener );
 
     //-------------------------------------------------------------------------
     /** removes a listener for content events.
 
         @param Listener
         the listener to remove.
+
+        @see ContentEvent
     */
-    [oneway] void removeContentEventListener( [in] com::sun::star::ucb::XContentEventListener Listener );
+    [oneway] void removeContentEventListener(
+                    [in] com::sun::star::ucb::XContentEventListener Listener );
 
 };
 

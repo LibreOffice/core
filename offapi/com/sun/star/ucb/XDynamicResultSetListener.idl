@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDynamicResultSetListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-15 13:22:25 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,42 +74,36 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** The interface <type>XDynamicResultSetListener</type> provides possibility to
-    get notifications of type <type>ListEvent</type> from a
-    <type>XDynamicResultSet</type>.
+/** used to receive notifications from an <type>XDynamicResultSet</type>.
 */
 
 [ uik(55E5B801-3245-11d4-8B130010-4BCAF449), ident( "XDynamicResultSetListener", 1.0 ) ]
 interface XDynamicResultSetListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
-    /** A method used to propagate changes of the resultset.
+    /** A method used to propagate changes of a resultset.
 
-    </p>
-    In the first notify-call the listener gets the two <type>XResultSet</type>s
-    and has to hold them. The <type>XResultSet</type>s are implementations of
-    the service <type>ContentResultSet</type>.
-    </p>
+        <p>In the first notify-call the listener gets two(!)
+        <type>XResultSet</type>s and has to hold them. The
+        <type>XResultSet</type>s are implementations of the service
+        <type>ContentResultSet</type>.
 
-    <p>
-    The notified new <type>XResultSet</type> will stay valid after returning
-    notification. The old one will become invalid after returning notification.
-    </p>
+        <p>The notified new <type>XResultSet</type> will stay valid after
+        returning from this method. The old one will become invalid after
+        returning.
 
-    <p>
-    While in notify-call the listener is allowed to read old and new
-    version, except in the first call, where only the new Resultset is valid.
-    </p>
+        <p>While in notify-call the listener is allowed to read from old and
+        new resultset, except in the first call, where only the new resultset
+        is valid.
 
-    <p>
-    The Listener is allowed to blockade this call, until he really want to go
-    to the new version. The only situation, where the listener has to return the
-    update call at once is, while he disposes his broadcaster or while he is
-    removing himsef as listener (otherwise you deadlock)!!!
-    </p>
+        <p>The Listener is allowed to stay (block) this call, until he really
+        wants to use the new resultset. The only situation, where the listener
+        has to return immediately is while he disposes his broadcaster or while
+        he is removing himself as listener (otherwise you deadlock)!!!
 
+        @param  Changes
+        the changes to notify.
     */
-
     void notify( [in] ListEvent Changes );
 };
 

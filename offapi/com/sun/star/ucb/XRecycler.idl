@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRecycler.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-15 11:29:29 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,25 +78,28 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** Allows an XContent to delete itself into the trash can.
+/** Allows an <type>XContent</type> to delete itself into the trash can.
 
-    <p> This is an additional interface the XContent representing the trash
-    can (URL <vnd.sun.staroffice.trashcan:///>) should support. </p>
+    <p>This is an additional interface the XContent representing the trash
+    can (URL: "vnd.sun.staroffice.trashcan:///") should support.
 */
 [ uik(DF1E66B0-24C9-11d4-9FBC0050-04526AC8), ident( "XRecycler", 1.0 ) ]
 interface XRecycler : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** Notify the trash can that an XContent is deleting itself into it.
+    /** Notify the trash can that an <type>XContent</type> is deleting itself
+        into it.
 
-        @param Properties  The trash can uses this interface to access the
-        properties of the content being deleted, to copy them for later
-        display etc.  The trash can will not use the interface after it has
-        returned from this method.
+        @param Properties
+        The trash can uses this interface to access the properties of the
+        content being deleted, to copy them for later display etc.  The
+        trash can will not use the interface after it has returned from this
+        method.
 
-        @param Identifier  When the deleted content is later restored or
-        ultimately deleted, the trash can will use this identifier to query an
-        XContent that it will send the undelete or delete command to.
+        @param Identifier
+        When the deleted content is later restored or ultimately deleted, the
+        trash can will use this identifier to query an XContent that it will
+        send the undelete or delete command to.
     */
     void trashContent([in] com::sun::star::ucb::XCommandProcessor Properties,
                         [in] com::sun::star::ucb::XContentIdentifier Identifier);

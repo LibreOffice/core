@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProvider.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,20 +113,6 @@ service ContentProvider
      */
     [optional] interface com::sun::star::ucb::XParameterizedContentProvider;
 
-    //-------------------------------------------------------------------------
-    /** allows the implementation of a proxy object for a content provider.
-
-        <p>The content provider returned by the implementation of this interface
-        will be the original provider. Implementing a content provider proxy
-        can be useful if the creation of the real content provider object
-        shall be deferred for some reason until the first method gets called
-        on it (i.e. performance).
-
-        <p><b>It is highly recommended to support this interface.</b>
-
-        @see ContentProviderProxy
-     */
-    [optional] interface com::sun::star::ucb::XContentProviderSupplier;
 };
 
 //=============================================================================

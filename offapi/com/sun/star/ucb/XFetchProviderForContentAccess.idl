@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFetchProviderForContentAccess.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-09 13:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,56 +74,83 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** Provides the possibility load information offered by a
-<type>XContentAccess</type> for several rows of one result set at once.
+/** provides the possibility to load information offered by a
+    <type>XContentAccess</type> for several rows of a
+    <type>ContentResultSet</type> with a single function call.
 */
 [ uik(E5C8C4E1-5E26-11d4-8B1D0010-4BCAF449), ident( "XFetchProviderForContentAccess", 1.0 ) ]
 interface XFetchProviderForContentAccess: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** returns the ContentIdentfierStrings of the columns of the indicated rows
+    /** returns the content identifier strings of the columns of the indicated
+        rows
 
-        <p>set <parameter>bDirection</parameter> to TRUE, if you want the rows
-        to be read in the same order, as they are contained in the result set
-        ( TRUE <-> forward step; FALSE <-> backward step )
+        @returns
+        <member>FetchResult::Rows</member> contains a sequence of anys. Each
+        of these anys contains a string.
 
-        <p>the <member>Rows</member> of the returned <type>FetchResult</type>
-        contains a <atom>sequence</atom> of <atom>any</atom>s. Each of these anys
-        contains a <atom>string</atom>.
+        @param nRowStartPosition
+        the starting row of the resultset
+
+        @param nRowCount
+        the count of rows
+
+        @param bDirection
+        <TRUE/>, if you want the rows to be read in the same order, as they
+        are contained in the result set ( <TRUE/> &lt;-&gt; forward step;
+        <FALSE/> &lt;-&gt; backward step )
     */
     com::sun::star::ucb::FetchResult
          fetchContentIdentifierStrings( [in] long nRowStartPosition
-                , [in] long nRowCount, [in] boolean bDirection );
+                                      , [in] long nRowCount
+                                      , [in] boolean bDirection );
 
     //-------------------------------------------------------------------------
-    /** returns the <type>XContentIdentfier</type>s of the columns of the indicated rows
+    /** returns the <type>XContentIdentfier</type>s of the columns of the
+        indicated rows
 
-        <p>set <parameter>bDirection</parameter> to TRUE, if you want the rows
-        to be read in the same order, as they are contained in the result set
-        ( TRUE <-> forward step; FALSE <-> backward step )
+        @returns
+        <member>FetchResult::Rows</member> contains a sequence of anys. Each
+        of these anys contains an <type>XContentIdentifier</type>.
 
-        <p>the <member>Rows</member> of the returned <type>FetchResult</type>
-        contains a <atom>sequence</atom> of <atom>any</atom>s. Each of these anys
-        contains a <type>XContentIdentifier</type>.
+        @param nRowStartPosition
+        the starting row of the resultset
+
+        @param nRowCount
+        the count of rows
+
+        @param bDirection
+        <TRUE/>, if you want the rows to be read in the same order, as they
+        are contained in the result set ( <TRUE/> &lt;-&gt; forward step;
+        <FALSE/> &lt;-&gt; backward step )
     */
     com::sun::star::ucb::FetchResult
          fetchContentIdentifiers( [in] long nRowStartPosition
-                , [in] long nRowCount, [in] boolean bDirection );
+                                , [in] long nRowCount
+                                , [in] boolean bDirection );
 
     //-------------------------------------------------------------------------
     /** returns the <type>XContent</types>s of the columns of the indicated rows
 
-        <p>set <parameter>bDirection</parameter> to TRUE, if you want the rows
-        to be read in the same order, as they are contained in the result set
-        ( TRUE <-> forward step; FALSE <-> backward step )
+        @returns
+        <member>FetchResult::Rows</member> contains a sequence of anys. Each
+        of these anys contains an <type>XContent</type>.
 
-        <p>the <member>Rows</member> of the returned <type>FetchResult</type>
-        contains a <atom>sequence</atom> of <atom>any</atom>s. Each of these anys
-        contains a <type>XContent</type>.
+        @param nRowStartPosition
+        the starting row of the resultset
+
+        @param nRowCount
+        the count of rows
+
+        @param bDirection
+        <TRUE/>, if you want the rows to be read in the same order, as they
+        are contained in the result set ( <TRUE/> &lt;-&gt; forward step;
+        <FALSE/> &lt;-&gt; backward step )
     */
     com::sun::star::ucb::FetchResult
          fetchContents( [in] long nRowStartPosition
-                , [in] long nRowCount, [in] boolean bDirection );
+                      , [in] long nRowCount
+                      , [in] boolean bDirection );
 };
 
 //=============================================================================
