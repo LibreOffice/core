@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smdll.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:26 $
+ *  last change: $Author: tl $ $Date: 2001-02-13 08:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,9 @@
 #ifndef _SVX_ZOOMCTRL_HXX //autogen
 #include <svx/zoomctrl.hxx>
 #endif
-
+#ifndef _SFX_OBJFAC_HXX
+#include <sfx2/docfac.hxx>
+#endif
 
 #ifndef _SMDLL_HXX
 #include "smdll.hxx"
@@ -133,6 +135,7 @@ void SmDLL::Init()
     SmModule::RegisterInterface(pp);
 
     SmDocShell::Factory().RegisterMenuBar( SmResId(RID_SMMENU) );
+    SmDocShell::Factory().RegisterPluginMenuBar( SmResId(RID_SMMENU) );
     SmDocShell::Factory().RegisterAccel ( SmResId(RID_SMACCEL) );
     SmDocShell::RegisterInterface(pp);
 
