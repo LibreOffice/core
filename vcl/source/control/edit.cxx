@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 07:26:03 $
+ *  last change: $Author: mt $ $Date: 2001-06-05 14:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,10 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XFLUSHABLECLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -177,9 +181,11 @@ class TextDataObject :  public ::com::sun::star::datatransfer::XTransferable,
 
 {
 private:
+//    uno::Reference< datatransfer::clipboard::XClipboard >& mxClipboard;
     String          maText;
 
 public:
+//                  TextDataObject( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard, const String& rText );
                     TextDataObject( const String& rText );
                     ~TextDataObject();
 
@@ -196,8 +202,10 @@ public:
     sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::uno::RuntimeException);
 };
 
+// TextDataObject::TextDataObject( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard, const String& rText ) : maText( rText )
 TextDataObject::TextDataObject( const String& rText ) : maText( rText )
 {
+//    mxClipboard = rxClipboard;
 }
 
 TextDataObject::~TextDataObject()
@@ -220,6 +228,10 @@ uno::Any TextDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
     if ( nT == SOT_FORMAT_STRING )
     {
         aAny <<= (::rtl::OUString)GetString();
+    }
+    else
+    {
+        throw datatransfer::UnsupportedFlavorException();
     }
     return aAny;
 }
@@ -2017,6 +2029,11 @@ void Edit::Copy()
             TextDataObject* pDataObj = new TextDataObject( GetSelected() );
             const sal_uInt32 nRef = Application::ReleaseSolarMutex();
             xClipboard->setContents( pDataObj, NULL );
+
+            Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
+            if( xFlushableClipboard.is() )
+                 xFlushableClipboard->flushClipboard();
+
             Application::AcquireSolarMutex( nRef );
         }
     }
