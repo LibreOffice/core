@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 16:04:47 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 21:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,7 @@ Resource RID_ERRHDLSC
         Text [ danish ] = "Filen er beskyttet med en adgangskode." ;
         Text [ portuguese ] = "O ficheiro está protegido por senha." ;
         Text [ portuguese_brazilian ] = "Die Datei ist durch ein Kennwort geschützt." ;
-        Text[ chinese_simplified ] = "Õâ¸öÎÄ¼şÊÜµ½¿ÚÁî±£»¤¡£";
+        Text[ chinese_simplified ] = "Õâ¸öÎÄ¼şÊÜµ½ÃÜÂë±£»¤¡£";
         Text[ russian ] = "Ôàéë çàùèùåí ïàğîëåì.";
         Text[ polish ] = "Plik jest zabezpieczony has³em.";
         Text[ japanese ] = "Ì§²Ù‚ÍÊß½Ü°ÄŞ‚É‚æ‚Á‚Ä•ÛŒì‚³‚ê‚Ä‚¢‚Ü‚·B";
