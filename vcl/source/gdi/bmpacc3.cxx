@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpacc3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 14:38:19 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 16:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
