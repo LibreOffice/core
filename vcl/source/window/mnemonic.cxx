@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-06-15 13:28:19 $
+ *  last change: $Author: pl $ $Date: 2002-03-25 15:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ BOOL ImplMnemonicGenerator::CreateMnemonic( XubString& rKey )
     BOOL bChanged = FALSE;
     xub_StrLen nLen = aKey.Len();
 
-    // 1) Anfangsbuchstaben werden bevorzugt
+    // 1) first try the first character of a word
     int             nCJK = 0;
     USHORT          nMnemonicIndex;
     sal_Unicode     c;
@@ -224,7 +224,7 @@ BOOL ImplMnemonicGenerator::CreateMnemonic( XubString& rKey )
     }
     while ( nIndex < nLen );
 
-    // 2) Eindeutiger/seltender Buchstabe enthalten?
+    // 2) search for a unique/uncommon character
     if ( !bChanged )
     {
         USHORT      nBestCount = 0xFFFF;
@@ -262,7 +262,7 @@ BOOL ImplMnemonicGenerator::CreateMnemonic( XubString& rKey )
         }
     }
 
-    // 3) Add Englisch Mnemonic for CJK Text
+    // 3) Add English Mnemonic for CJK Text
     if ( !bChanged && (nCJK == 1) && rKey.Len() )
     {
         // Append Ascii Mnemonic
@@ -300,6 +300,37 @@ BOOL ImplMnemonicGenerator::CreateMnemonic( XubString& rKey )
             }
         }
     }
+
+    /*
+     *  #97809# if all else fails use the first character of a word
+     *  anyway and live with duplicate mnemonics
+     */
+    nIndex = 0;
+    do
+    {
+        c = aKey.GetChar( nIndex );
+
+        nMnemonicIndex = ImplGetMnemonicIndex( c );
+        if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
+        {
+            maMnemonics[nMnemonicIndex] = 0;
+            rKey.Insert( MNEMONIC_CHAR, nIndex );
+            bChanged = TRUE;
+            break;
+        }
+
+        // Search for next word
+        do
+        {
+            nIndex++;
+            c = aKey.GetChar( nIndex );
+            if ( c == ' ' )
+                break;
+        }
+        while ( nIndex < nLen );
+        nIndex++;
+    }
+    while ( nIndex < nLen );
 
     return bChanged;
 }
