@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.26 2004-06-25 18:34:47 hjs Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.27 2004-08-02 17:16:32 hr Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: hjs $ $Date: 2004-06-25 18:34:47 $ $Revision: 1.26 $
+//	$Author: hr $ $Date: 2004-08-02 17:16:32 $ $Revision: 1.27 $
 //
 // Description:
 //
@@ -156,6 +156,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 
 [Dd]											{SQL_NEW_KEYWORD(SQL_TOKEN_D); return SQL_TOKEN_D; }
 [Dd][Aa][Tt][Ee]								{SQL_NEW_KEYWORD(SQL_TOKEN_DATE); return SQL_TOKEN_DATE; }
+[Dd][Aa][Tt][Ee][Vv][Aa][Ll][Uu][Ee]			{SQL_NEW_KEYWORD(SQL_TOKEN_DATEVALUE); return SQL_TOKEN_DATEVALUE; }
 [Dd][Aa][Yy]									{SQL_NEW_KEYWORD(SQL_TOKEN_DAY); return SQL_TOKEN_DAY; }
 [Dd][Aa][Yy][Nn][Aa][Mm][Ee]					{SQL_NEW_KEYWORD(SQL_TOKEN_DAYNAME); return SQL_TOKEN_DAYNAME; }
 [Dd][Aa][Yy][Oo][Ff][Mm][Oo][Nn][Tt][Hh]		{SQL_NEW_KEYWORD(SQL_TOKEN_DAYOFMONTH); return SQL_TOKEN_DAYOFMONTH; }
@@ -214,6 +215,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Ll][Ee][Ff][Tt]								{SQL_NEW_KEYWORD(SQL_TOKEN_LEFT); return SQL_TOKEN_LEFT; }
 [Ll][Ee][Nn][Gg][Tt][Hh]						{SQL_NEW_KEYWORD(SQL_TOKEN_LENGTH); return SQL_TOKEN_LENGTH; }
 [Ll][Ii][Kk][Ee]								{SQL_NEW_KEYWORD(SQL_TOKEN_LIKE); return SQL_TOKEN_LIKE; }
+[Ll][Nn]								{SQL_NEW_KEYWORD(SQL_TOKEN_LN); return SQL_TOKEN_LN; }
 [Ll][Oo][Cc][Aa][Ll]							{SQL_NEW_KEYWORD(SQL_TOKEN_LOCAL); return SQL_TOKEN_LOCAL; }
 [Ll][Oo][Cc][Aa][Tt][Ee]						{SQL_NEW_KEYWORD(SQL_TOKEN_LOCATE); return SQL_TOKEN_LOCATE; }
 [Ll][Oo][Gg]									{SQL_NEW_KEYWORD(SQL_TOKEN_LOGF); return SQL_TOKEN_LOGF; }
@@ -289,6 +291,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Tt][Ii][Mm][Ee][Ss][Tt][Aa][Mm][Pp]			{SQL_NEW_KEYWORD(SQL_TOKEN_TIMESTAMP); return SQL_TOKEN_TIMESTAMP; }
 [Tt][Ii][Mm][Ee][Ss][Tt][Aa][Mm][Pp][Aa][Dd][Dd]			{SQL_NEW_KEYWORD(SQL_TOKEN_TIMESTAMPADD); return SQL_TOKEN_TIMESTAMPADD; }
 [Tt][Ii][Mm][Ee][Ss][Tt][Aa][Mm][Pp][Dd][Ii][Ff][Ff]		{SQL_NEW_KEYWORD(SQL_TOKEN_TIMESTAMPDIFF); return SQL_TOKEN_TIMESTAMPDIFF; }
+[Tt][Ii][Mm][Ee][Vv][Aa][Ll][Uu][Ee]		{SQL_NEW_KEYWORD(SQL_TOKEN_TIMEVALUE); return SQL_TOKEN_TIMEVALUE; }
 [Tt][Ii][Mm][Ee][Zz][Oo][Nn][Ee]_[Hh][Oo][Uu][Rr]			{SQL_NEW_KEYWORD(SQL_TOKEN_TIMEZONE_HOUR); return SQL_TOKEN_TIMEZONE_HOUR; }
 [Tt][Ii][Mm][Ee][Zz][Oo][Nn][Ee]_[Mm][Ii][Nn][Uu][Tt][Ee]	{SQL_NEW_KEYWORD(SQL_TOKEN_TIMEZONE_MINUTE); return SQL_TOKEN_TIMEZONE_MINUTE; }
 [Tt][Oo]										{SQL_NEW_KEYWORD(SQL_TOKEN_TO); return SQL_TOKEN_TO; }
@@ -440,17 +443,17 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 				{
 					case 0:
 						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_NAME);
-						delete Buffer;
+						delete[] Buffer;
 						Buffer = NULL;
 						return SQL_TOKEN_NAME;											
 					case 1:
 						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
-						delete Buffer;
+						delete[] Buffer;
 						Buffer = NULL;
 						return SQL_TOKEN_STRING;
 					case 2:
 						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE);
-						delete Buffer;
+						delete[] Buffer;
 						Buffer = NULL;
 						return SQL_TOKEN_ACCESS_DATE;
 				}				
@@ -461,7 +464,7 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 				if (++nPos == BUFFERSIZE)
 				{
 					::rtl::OString aBuf(Buffer);
-					delete Buffer;
+					delete[] Buffer;
 					BUFFERSIZE *=2;
 					Buffer = new sal_Char[BUFFERSIZE];
 					for(sal_Int32 i=0;i<aBuf.getLength();++i,++Buffer)
@@ -479,7 +482,7 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 			if (++nPos == BUFFERSIZE)
 			{
 				::rtl::OString aBuf(Buffer);
-				delete Buffer;
+				delete[] Buffer;
 				BUFFERSIZE *=2;
 				Buffer = new sal_Char[BUFFERSIZE];
 				for(sal_Int32 i=0;i<aBuf.getLength();++i,++Buffer)
@@ -490,7 +493,7 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 	}
 	*s = '\0';		 		
 	YY_FATAL_ERROR("Unterminated name string"); 
-	delete Buffer;
+	delete[] Buffer;
 	Buffer = NULL;
 	return SQL_TOKEN_INVALIDSYMBOL;		
 }
@@ -668,7 +671,7 @@ void OSQLScanner::SQLyyerror(sal_Char *fmt)
 				if (++nPos == BUFFERSIZE)
 				{
 					::rtl::OString aBuf(Buffer);
-					delete Buffer;
+					delete[] Buffer;
 					BUFFERSIZE *=2;
 					Buffer = new sal_Char[BUFFERSIZE];
 					for(sal_Int32 i=0;i<aBuf.getLength();++i,++Buffer)
@@ -678,7 +681,7 @@ void OSQLScanner::SQLyyerror(sal_Char *fmt)
 			}
 		}
 		m_sErrorMessage += aError;
-		delete Buffer;
+		delete[] Buffer;
 		Buffer = NULL;
 	}
 	IN_SQLyyerror = false;
