@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-05 12:26:22 $
+ *  last change: $Author: dl $ $Date: 2001-03-06 07:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@
 #include "fhgtitem.hxx"
 #endif
 
-#include <charscaleitem.hxx>
+//#include <charscaleitem.hxx>
 
 #ifndef _SVX_XLNSTCIT_HXX //autogen
 #include <xlnstcit.hxx>
@@ -773,6 +773,7 @@ SfxItemSet* SdrAttrObj::CreateNewItemSet(SfxItemPool& rPool)
         // ranges from SdrAttrObj
         SDRATTR_START, SDRATTRSET_SHADOW,
         SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+        SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, SDRATTR_TEXTDIRECTION_TOP_TO_BOTTOM,
 
         // outliner and end
         EE_ITEMS_START, EE_ITEMS_END,
