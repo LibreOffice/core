@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:06:31 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ japanese ] = "γ‚¤γƒ΅γƒΌγ‚Έζ γ®θ΅¨η¤Ί(~I)";
         Text[ chinese_traditional ] = "ι΅―η¤Ίε…¶δ»–ζ ΌεΌη„ε–ε½Άι‚ζ΅†(~I)";
         Text[ arabic ] = "ΚαγνΝ αΥζΡ ΞΗΡΜνΙ";
-        Text[ greek ] = "Υποδήλωση εξωτερικών γρα~φικών";
+        Text[ greek ] = "Πλαίσια δείκτες τοποθέτησης γρα~φικών";
         Text[ korean ] = "κ·Έλ¦Ό κ°μ²΄ ν‹€(~I)";
         Text[ turkish ] = "Harici grafik iηin yer tutucu";
         Text[ language_user1 ] = " ";
@@ -234,7 +234,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒγ®γƒ—γƒ¬γƒΌγ‚Ήγƒ›γƒ«γƒ€(~T)";
         Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε΅(~T)";
         Text[ arabic ] = "ΚαγνΝ Εαμ ΗαδΥ";
-        Text[ greek ] = "Υποδήλωση κειμένου";
+        Text[ greek ] = "Πλαίσια ~δείκτες τοποθέτησης κειμένου";
         Text[ korean ] = "ν…μ¤νΈ κ°μ²΄ ν‹€(~T)";
         Text[ turkish ] = "Metin iηin yer tutucu";
         Text[ language_user1 ] = " ";
@@ -338,7 +338,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ japanese ] = "γƒ«γƒΌγƒ©γ®θ΅¨η¤Ί(~R)";
         Text[ chinese_traditional ] = "ι΅―η¤Ίζ¨™ε°Ί(~R)";
         Text[ arabic ] = "ΗαγΣΗΨΡ γΡΖνΙ";
-        Text[ greek ] = "Χάρακες ορατά";
+        Text[ greek ] = "Χάρακες ορατοί";
         Text[ korean ] = "λκΈμ ν‘μ‹(~R)";
         Text[ turkish ] = "~Cetvel gφrόnebilir";
         Text[ language_user1 ] = " ";
@@ -364,14 +364,14 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ swedish ] = "Hjδlplinjer vid fφrfl~yttning" ;
         Text [ danish ] = "Hjζlpelinjer ved ~flytning" ;
         Text [ portuguese ] = "Guias ao ~mover" ;
-        Text [ portuguese_brazilian ] = "Guias ao ~mover" ;
+        Text [ portuguese_brazilian ] = "Guias ao ~mover objetos" ;
         Text[ chinese_simplified ] = "ε¨η§»ε¨ζ—¶ζΎη¤ΊθΎ…ε©ηΊΏ(~G)";
         Text[ russian ] = "Νΰοπΰβ. ~λθνθθ οπθ οεπεμεωενθθ ξαϊεκςΰ";
         Text[ polish ] = "Prowadn~ice przy przesuwaniu";
         Text[ japanese ] = "η§»ε‹•ζ™‚γ®θ£ε©η·γ‚’θ΅¨η¤Ί(~G)";
         Text[ chinese_traditional ] = "ε¨η§»ε‹•ζ™‚ι΅―η¤ΊθΌ”ε©η·(~G)";
         Text[ arabic ] = "ΗαΞΨζΨ ΗαγΣΗΪΟΙ ΓΛδΗΑ ΗαΕÒΗΝΙ";
-        Text[ greek ] = "Βοηθητικές γραμμές κατά τη μετακίνηση";
+        Text[ greek ] = "Βοηθητ. γραμμές κατά τη μετακίνηση";
         Text[ korean ] = "μ΄λ™ μ‹ μ•λ‚΄μ„ (~G)";
         Text[ turkish ] = "~Taώύrken yardύm eder";
         Text[ language_user1 ] = " ";
@@ -405,7 +405,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ japanese ] = "γƒ™γ‚Έγ‚§ζ›²η·η·¨ι›†γ§ε¶εΎ΅η‚Ήγ‚’γ™γΉγ¦θ΅¨η¤Ί(~A)";
         Text[ chinese_traditional ] = "ζ›²η·η·¨θΌ―η¨‹εΌε…§η„ε…¨ιƒ¨ζ§ι»(~A)";
         Text[ arabic ] = "ία δήΗΨ ΗαΚΝίγ έν γΝΡΡ Bιzier";
-        Text[ greek ] = "Όλες τα σημε~ία ελέγχου σε επεξεργασία Bιzier";
+        Text[ greek ] = "Όλα τα σημεία ελέγχ~ου του προγρ. BA(c)zier";
         Text[ korean ] = "λ² μ§€μ— νΈμ§‘κΈ°μ λª¨λ“  μ μ–΄μ μ„ ν‘μ‹(~A)";
         Text[ turkish ] = "Bιzier dόzenleyicisindeki tόm denetim noktalarύ.";
         Text[ language_user1 ] = " ";
@@ -637,12 +637,12 @@ TabPage TP_OPTIONS_MISC
         Text[ danish ] = "Start med AutoPiloter";
         Text[ swedish ] = "Starta med ~AutoPiloten";
         Text[ polish ] = "~Generuj, korzystajΉc z AutoPilota";
-        Text[ portuguese_brazilian ] = "Iniciar com Assistente";
+        Text[ portuguese_brazilian ] = "Iniciar com o assistente de apresentaηυes";
         Text[ japanese ] = "γ‚ªγƒΌγƒγƒ‘γ‚¤γƒ­γƒƒγƒγ§ι–‹ε§‹";
         Text[ chinese_simplified ] = "ε’θ‡ªε¨ζ–‡δ»¶ε©η†δΈ€θµ·ε―ε¨";
         Text[ chinese_traditional ] = "ε’θ‡ªε‹•ζª”ζ΅ε©η†δΈ€θµ·ε•ε‹•";
         Text[ arabic ] = "ΗαΘΟΑ γΪ ΗαγΡΤΟνδ ΗαΒαννδ";
-        Text[ greek ] = "Εκκίνηση με ~AutoPilot";
+        Text[ greek ] = "Εκκίνηση με ~αυτόματο πιλότο";
         Text[ korean ] = "μλ™ νμΌλΏμΌλ΅ μ‹μ‘";
         Text[ turkish ] = "OtoPilot ile baώla";
         Text[ language_user1 ] = " ";
@@ -734,7 +734,7 @@ TabPage TP_OPTIONS_MISC
         Text [ french ] = "Copie lors du dιplacement" ;
         Text [ swedish ] = "~Kopia vid fφrflyttning" ;
         Text [ danish ] = "Kopi ved flytning" ;
-        Text [ portuguese_brazilian ] = "Copiar enquanto move" ;
+        Text [ portuguese_brazilian ] = "Copiar objeto ao move-lo" ;
         Text [ portuguese ] = "Cσpia ao deslocar" ;
         Text[ chinese_simplified ] = "ε¨η§»ε¨ζ—¶η”ζε¤ε¶δ»¶";
         Text[ russian ] = "~Κξοθπξβΰςό οπθ οεπεμεωενθθ";
@@ -778,7 +778,7 @@ TabPage TP_OPTIONS_MISC
         Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ―εΈΈγ«η§»ε‹•ε―θƒ½";
         Text[ chinese_traditional ] = "η‰©δ»¶ε―θ‡ªε‹•η§»ε‹•";
         Text[ arabic ] = "ΗαίΗΖδΗΚ ήΗΘαΙ ααΕÒΗΝΙ ΟΗΖγΗπ";
-        Text[ greek ] = "~Πάντα δυνατότητα μετακίνησης αντικειμένων";
+        Text[ greek ] = "Πάντα ~δυνατότητα μετακίνησης αντικειμένων";
         Text[ korean ] = "κ°μ²΄λ” ν•­μƒ μ΄λ™μ΄ κ°€λ¥";
         Text[ turkish ] = "Nesneler hep taώύnabilir";
         Text[ language_user1 ] = " ";
@@ -1029,8 +1029,8 @@ TabPage TP_OPTIONS_MISC
         Text[ spanish ] = "U~tilizar los parαmetros de la impresora para formatear el documento";
         Text[ italian ] = "Us~a i parametri della stampante per la formattazione dei documenti.";
         Text[ swedish ] = "An~vδnd skrivarmεtt fφr dokumentformatering";
-        Text[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®ζ›ΈεΌθ¨­ε®γ«γƒ—γƒªγƒ³γ‚Ώγ®γƒ΅γƒγƒªγƒƒγ‚―γ‚Ήζƒ…ε ±γ‚’δ½Ώη”¨";
-        Text[ korean ] = "ν”„λ¦°ν„° λ©”νΈλ¦­μ¤λ΅ λ¬Έμ„μ μ„μ‹ μ„¤μ •";
+        Text[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®ζ›ΈεΌθ¨­ε®γ«γƒ—γƒªγƒ³γ‚Ώγ®γƒ΅γƒγƒªγƒƒγ‚―γ‚Ήζƒ…ε ±γ‚’δ½Ώη”¨(~E)";
+        Text[ korean ] = "ν”„λ¦°ν„° λ©”νΈλ¦­μ¤λ΅ λ¬Έμ„μ μ„μ‹ μ„¤μ •(~E)";
         Text[ chinese_simplified ] = "ζ–‡ζ΅£ζ ΌεΌι‡‡η”¨ζ‰“ε°ζΊη„ε­—δ½“ε°ΊεΊ¦(~E)";
         Text[ chinese_traditional ] = "ζ–‡δ»¶δ½Ώη”¨ε°θ΅¨ζ©η„ε­—ε‹ε°ΊεΊ¦(~E)";
         Text[ portuguese ] = "Us~e printer metrics for document formatting";
@@ -1041,7 +1041,7 @@ TabPage TP_OPTIONS_MISC
         Text[ czech ] = "Us~e printer metrics for document formatting";
         Text[ danish ] = "Us~e printer metrics for document formatting";
         Text[ polish ] = "Us~e printer metrics for document formatting";
-        Text[ portuguese_brazilian ] = "Us~e printer metrics for document formatting";
+        Text[ portuguese_brazilian ] = "Usar mιtricas da impressora para a formataηγo do documento";
         Text[ turkish ] = "Us~e printer metrics for document formatting";
         Text[ arabic ] = "Us~e printer metrics for document formatting";
         Text[ hebrew ] = "Us~e printer metrics for document formatting";
@@ -1131,7 +1131,7 @@ TabPage TP_OPTIONS_MISC
         Text[ english_us ] = "Equivalent to";
         Text[ portuguese ] = "Corresponde a";
         Text[ russian ] = "Ρξξςβεςρςβσες";
-        Text[ greek ] = "Αντιστοιχεί";
+        Text[ greek ] = "Ισοδύναμο με";
         Text[ dutch ] = "Komt overeen met";
         Text[ french ] = "Correspond ΰ";
         Text[ spanish ] = "Corresponde a";
@@ -1164,7 +1164,7 @@ TabPage TP_OPTIONS_MISC
         Text[ english_us ] = "~Drawing scale";
         Text[ portuguese ] = "Es~cala de desenho";
         Text[ russian ] = "Μΰρψςΰα πθρσνκΰ";
-        Text[ greek ] = "Κλίμακα σχεδιασ~μού";
+        Text[ greek ] = "Κλίμακα σχεδ~ιασμού";
         Text[ dutch ] = "Teken~maatstaf";
         Text[ french ] = "Ιchelle de dessin";
         Text[ spanish ] = "Escala de dibujo";
@@ -1330,6 +1330,7 @@ TabPage TP_OPTIONS_MISC
     Text[ hindi ] = "ΰ¤…ΰ¤¨ΰ¥ΰ¤―";
     Text[ slovak ] = "OstatnΓ©";
 };
+
 
 
 
