@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-08-13 13:13:43 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-08-30 09:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,13 @@ sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet )
         return sal_False;
 
     SwDoc* pDoc = (SwDoc*)rFmt.GetDoc();
+
+#ifndef PRODUCT
+    ASSERT( !(nNew == FLY_PAGE &&
+        (FLY_AT_CNTNT==nOld || FLY_AUTO_CNTNT==nOld || FLY_IN_CNTNT==nOld ) &&
+        pDoc->IsInHeaderFooter( rOldAnch.GetCntntAnchor()->nNode )),
+            "Unerlaubter Ankerwechsel in Head/Foot." );
+#endif
 
     return ::lcl_FindAnchorPos( *pDoc, rFly.Frm().Pos(), rFly, rSet );
 }
@@ -1327,6 +1334,16 @@ const SwFrmFmt* SwFEShell::GetFlyFrmFmt() const
     return 0;
 }
 
+SwFrmFmt* SwFEShell::GetFlyFrmFmt()
+{
+    SwFlyFrm* pFly = FindFlyFrm();
+    if ( !pFly )
+        pFly = GetCurrFrm()->FindFlyFrm();
+    if( pFly )
+        return pFly->GetFmt();
+    return 0;
+}
+
 /*************************************************************************
 |*
 |*  SwFEShell::GetFlyRect()
@@ -1931,25 +1948,120 @@ static USHORT SwFmtGetPageNum(const SwFlyFrmFmt * pFmt)
     return aResult;
 }
 
-void SwFEShell::GetConnectableFrmFmts
-(const SwFrmFmt & rFmt, const String & rReference, BOOL bSuccessors,
- ::std::vector< String > & aPrevPageVec,
- ::std::vector< String > & aThisPageVec,
- ::std::vector< String > & aNextPageVec,
- ::std::vector< String > & aRestVec)
-{
-    ::std::vector< String > aResult;
+#include <fmtcnct.hxx>
+#if 0
+#include <algorithm>
+#include <iostream>
+#include <iterator>
 
-    SwPosFlyFrms aAllFlys;
-    pDoc->GetAllFlyFmts(aAllFlys);
-    sal_uInt16 nCnt = aAllFlys.Count();
+
+static ::std::ostream & operator << (::std::ostream & aStream,
+                                     const String & aString)
+{
+    ByteString aByteString(aString, RTL_TEXTENCODING_ASCII_US);
+    aStream << aByteString.GetBuffer();
+
+    return aStream;
+}
+
+void lcl_PrintFrameChainPrev(const SwFrmFmt * pFmt)
+{
+    if (pFmt != NULL)
+    {
+        lcl_PrintFrameChainPrev(pFmt->GetChain().GetPrev());
+
+        ::std::clog << pFmt->GetName() << "->";
+    }
+}
+
+void lcl_PrintFrameChainNext(const SwFrmFmt * pFmt)
+{
+    if (pFmt != NULL)
+    {
+        ::std::clog << "->" << pFmt->GetName();
+
+        lcl_PrintFrameChainPrev(pFmt->GetChain().GetNext());
+    }
+}
+
+void lcl_PrintFrameChain(const SwFrmFmt & rFmt)
+{
+    lcl_PrintFrameChainPrev(rFmt.GetChain().GetPrev());
+    ::std::clog << "(" <<  rFmt.GetName() << ")";
+    lcl_PrintFrameChainNext(rFmt.GetChain().GetNext());
+    ::std::clog << ::std::endl;
+}
+
+String lcl_GetChainableString(int nVal)
+{
+    switch(nVal)
+    {
+    case SW_CHAIN_OK:
+        return String::CreateFromAscii("OK");
+
+    case SW_CHAIN_SOURCE_CHAINED:
+        return String::CreateFromAscii("source chained");
+
+    case SW_CHAIN_SELF:
+        return String::CreateFromAscii("self");
+
+    case SW_CHAIN_IS_IN_CHAIN:
+        return String::CreateFromAscii("in chain");
+
+    case SW_CHAIN_NOT_FOUND:
+        return String::CreateFromAscii("not found");
+
+    case SW_CHAIN_NOT_EMPTY:
+        return String::CreateFromAscii("not empty");
+
+    case SW_CHAIN_WRONG_AREA:
+        return String::CreateFromAscii("wrong area");
+
+    default:
+        return String::CreateFromAscii("??");
+
+    }
+}
+#endif
+
+void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
+                                      const String & rReference,
+                                      BOOL bSuccessors,
+                                      ::std::vector< String > & aPrevPageVec,
+                                      ::std::vector< String > & aThisPageVec,
+                                      ::std::vector< String > & aNextPageVec,
+                                      ::std::vector< String > & aRestVec)
+{
+#if 0
+    ::std::clog << "Connectables:" << rFmt.GetName() << ","
+                << (bSuccessors ? "succ" : "pred") << "," << rReference
+                << ::std::endl;
+    lcl_PrintFrameChain(rFmt);
+    ::std::vector< String > aResult;
+#endif
+
+    StartAction();
+
+    SwFmtChain & rChain = rFmt.GetChain();
+    SwFrmFmt * pOldChainNext = (SwFrmFmt *) rChain.GetNext();
+    SwFrmFmt * pOldChainPrev = (SwFrmFmt *) rChain.GetPrev();
+
+    if (pOldChainNext)
+        pDoc->Unchain(rFmt);
+
+    if (pOldChainPrev)
+        pDoc->Unchain(*pOldChainPrev);
+
+    sal_uInt16 nCnt = pDoc->GetFlyCount(FLYCNTTYPE_FRM);
 
     /* potential successors resp. predecessors */
     ::std::vector< const SwFrmFmt * > aTmpSpzArray;
 
+    SwFrmFmt * pNext = (SwFrmFmt *) pDoc->FindFlyByName(rReference);
+
     for (sal_uInt16 n = 0; n < nCnt; n++)
     {
-        const SwFrmFmt & rFmt1 = aAllFlys[n]->GetFmt();
+        const SwFrmFmt & rFmt1 = *(pDoc->GetFlyNum(n, FLYCNTTYPE_FRM));
 
         /*
            pFmt is a potential successor of rFmt if it is chainable after
@@ -1959,9 +2071,30 @@ void SwFEShell::GetConnectableFrmFmts
            after pFmt.
         */
 
-        if ((bSuccessors && pDoc->Chainable(rFmt, rFmt1) == SW_CHAIN_OK) ||
-            (! bSuccessors && pDoc->Chainable(rFmt1, rFmt) == SW_CHAIN_OK))
+#if 0
+        if (bSuccessors)
+            ::std::clog << rFmt.GetName() << "->" << rFmt1.GetName() << "?:";
+        else
+            ::std::clog << rFmt1.GetName() << "->" << rFmt.GetName() << "?:";
+#endif
+
+        int nChainState;
+
+        if (bSuccessors)
+            nChainState = pDoc->Chainable(rFmt, rFmt1);
+        else
+            nChainState = pDoc->Chainable(rFmt1, rFmt);
+
+#if 0
+            ::std::clog << lcl_GetChainableString(nChainState) << ::std::endl;
+#endif
+
+        if (nChainState == SW_CHAIN_OK)
+        {
             aTmpSpzArray.push_back(&rFmt1);
+
+        }
+
     }
 
     if  (aTmpSpzArray.size() > 0)
@@ -1999,4 +2132,27 @@ void SwFEShell::GetConnectableFrmFmts
         }
 
     }
+
+    if (pOldChainNext)
+        pDoc->Chain(rFmt, *pOldChainNext);
+
+    if (pOldChainPrev)
+        pDoc->Chain(*pOldChainPrev, rFmt);
+
+    EndAction();
+
+#if 0
+    ::std::copy(aPrevPageVec.begin(), aPrevPageVec.end(),
+                ::std::ostream_iterator<String>(::std::clog, "\n"));
+    ::std::clog << "-------------------------" << ::std::endl;
+    ::std::copy(aThisPageVec.begin(), aThisPageVec.end(),
+                ::std::ostream_iterator<String>(::std::clog, "\n"));
+    ::std::clog << "-------------------------" << ::std::endl;
+    ::std::copy(aNextPageVec.begin(), aNextPageVec.end(),
+                ::std::ostream_iterator<String>(::std::clog, "\n"));
+    ::std::clog << "-------------------------" << ::std::endl;
+    ::std::copy(aRestVec.begin(), aRestVec.end(),
+                ::std::ostream_iterator<String>(::std::clog, "\n"));
+    ::std::clog << "-------------------------" << ::std::endl;
+#endif
 }
