@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:19:14 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,8 @@
 #endif
 
 #pragma hdrstop
+
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _SVX_FMSHELL_HXX            // XXX nur temp (dg)
 #include <svx/fmshell.hxx>
