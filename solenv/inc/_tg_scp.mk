@@ -14,7 +14,6 @@ $(SCP1TARGETN): $(LOCALSCP1FILES)
     @echo Making: $@
     @+-$(MKDIRHIER) $(BIN)$/$(SCP1LINK_PRODUCT_TYPE) >& $(NULLDEV)
     +$(SCPLINK) $(SCPLINKFLAGS) @@$(mktmp $(foreach,i,$(SCP1FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
-    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -34,7 +33,6 @@ $(SCP2TARGETN): $(LOCALSCP2FILES)
     @echo Making: $@
     @+-$(MKDIRHIER) $(BIN)$/$(SCP2LINK_PRODUCT_TYPE) >& $(NULLDEV)
     +$(SCPLINK) $(SCPLINKFLAGS) @@$(mktmp $(foreach,i,$(SCP2FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
-    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -54,7 +52,6 @@ $(SCP3TARGETN): $(LOCALSCP3FILES)
     @echo Making: $@
     @+-$(MKDIRHIER) $(BIN)$/$(SCP3LINK_PRODUCT_TYPE) >& $(NULLDEV)
     +$(SCPLINK) $(SCPLINKFLAGS) @@$(mktmp $(foreach,i,$(SCP3FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
-    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -74,7 +71,6 @@ $(SCP4TARGETN): $(LOCALSCP4FILES)
     @echo Making: $@
     @+-$(MKDIRHIER) $(BIN)$/$(SCP4LINK_PRODUCT_TYPE) >& $(NULLDEV)
     +$(SCPLINK) $(SCPLINKFLAGS) @@$(mktmp $(foreach,i,$(SCP4FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
-    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -94,7 +90,6 @@ $(SCP5TARGETN): $(LOCALSCP5FILES)
     @echo Making: $@
     @+-$(MKDIRHIER) $(BIN)$/$(SCP5LINK_PRODUCT_TYPE) >& $(NULLDEV)
     +$(SCPLINK) $(SCPLINKFLAGS) @@$(mktmp $(foreach,i,$(SCP5FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
-    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -114,7 +109,6 @@ $(SCP6TARGETN): $(LOCALSCP6FILES)
     @echo Making: $@
     @+-$(MKDIRHIER) $(BIN)$/$(SCP6LINK_PRODUCT_TYPE) >& $(NULLDEV)
     +$(SCPLINK) $(SCPLINKFLAGS) @@$(mktmp $(foreach,i,$(SCP6FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
-    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -134,7 +128,6 @@ $(SCP7TARGETN): $(LOCALSCP7FILES)
     @echo Making: $@
     @+-$(MKDIRHIER) $(BIN)$/$(SCP7LINK_PRODUCT_TYPE) >& $(NULLDEV)
     +$(SCPLINK) $(SCPLINKFLAGS) @@$(mktmp $(foreach,i,$(SCP7FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
-    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -154,7 +147,6 @@ $(SCP8TARGETN): $(LOCALSCP8FILES)
     @echo Making: $@
     @+-$(MKDIRHIER) $(BIN)$/$(SCP8LINK_PRODUCT_TYPE) >& $(NULLDEV)
     +$(SCPLINK) $(SCPLINKFLAGS) @@$(mktmp $(foreach,i,$(SCP8FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
-    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -174,7 +166,6 @@ $(SCP9TARGETN): $(LOCALSCP9FILES)
     @echo Making: $@
     @+-$(MKDIRHIER) $(BIN)$/$(SCP9LINK_PRODUCT_TYPE) >& $(NULLDEV)
     +$(SCPLINK) $(SCPLINKFLAGS) @@$(mktmp $(foreach,i,$(SCP9FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
-    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -194,7 +185,6 @@ $(SCP10TARGETN): $(LOCALSCP10FILES)
     @echo Making: $@
     @+-$(MKDIRHIER) $(BIN)$/$(SCP10LINK_PRODUCT_TYPE) >& $(NULLDEV)
     +$(SCPLINK) $(SCPLINKFLAGS) @@$(mktmp $(foreach,i,$(SCP10FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
-    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
