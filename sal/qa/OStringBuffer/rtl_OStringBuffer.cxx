@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_OStringBuffer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lwang $ $Date: 2003-01-14 03:35:48 $
+ *  last change: $Author: lla $ $Date: 2003-03-10 11:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,22 +135,31 @@ namespace rtl_OStringBuffer
     #endif
             ::rtl::OStringBuffer aStrBuf3(kNonSInt32Max);
 
+#ifdef WITH_CORE
             CPPUNIT_ASSERT_MESSAGE
             (
                 "New OStringBuffer containing no characters and contain assigned capacity",
                 aStrBuf1.getLength() == 0 &&
                 ! *(aStrBuf1.getStr()) && aStrBuf1.getCapacity() == kTestStr2Len &&
-    #ifdef WITH_CORE
                 aStrBuf2.getLength() == 0 &&
                 ! *(aStrBuf2.getStr()) && aStrBuf2.getCapacity() == kSInt32Max &&
-    #else
-                aStrBuf2.getLength() == 0 &&
-                ! *(aStrBuf2.getStr()) && aStrBuf2.getCapacity() == 16 &&
-    #endif
                 aStrBuf3.getLength() == 0 &&
                 ! *(aStrBuf3.getStr()) && aStrBuf3.getCapacity() == kNonSInt32Max
 
             );
+#else
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "New OStringBuffer containing no characters and contain assigned capacity",
+                aStrBuf1.getLength() == 0 &&
+                ! *(aStrBuf1.getStr()) && aStrBuf1.getCapacity() == kTestStr2Len &&
+                aStrBuf2.getLength() == 0 &&
+                ! *(aStrBuf2.getStr()) && aStrBuf2.getCapacity() == 16 &&
+                aStrBuf3.getLength() == 0 &&
+                ! *(aStrBuf3.getStr()) && aStrBuf3.getCapacity() == kNonSInt32Max
+
+            );
+#endif
 
         }
 

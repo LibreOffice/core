@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_String_Const.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lwang $ $Date: 2003-01-13 01:49:50 $
+ *  last change: $Author: lla $ $Date: 2003-03-10 11:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1410,7 +1410,7 @@ static const sal_Int32  expValStrLastNormal[nStrLastNormalCount] =
             0,-1,0,4,-1,-1,-1,-1,-1,3,15,11
         };
 //------------------------------------------------------------------------
-static const sal_Int32 kNonSInt64Max = LLONG_MIN;
+static const sal_Int32 kNonSInt64Max = LONG_MIN;
 static const sal_Int32 kNonSInt32Max = INT_MIN;
 static const sal_Int32 kNonSInt16Max = SHRT_MIN;
 //------------------------------------------------------------------------
