@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-27 14:11:37 $
+ *  last change: $Author: aw $ $Date: 2001-09-28 13:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,10 @@ BOOL FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             String aStr(SdResId(STR_LAYER_MEASURELINES));
             pObj->SetLayer(rAdmin.GetLayerID(aStr, FALSE));
         }
+
+        // #92557# re-get the object pointer, the object may be deleted
+        // in the meantime
+        pObj = pView->GetCreateObj();
 
         // #88751# init text position when vertica caption object is created
         if(pObj && pObj->ISA(SdrCaptionObj) && nSlotId == SID_DRAW_CAPTION_VERTICAL)
