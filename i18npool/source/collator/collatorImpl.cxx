@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collatorImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2002-07-05 18:49:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#include <assert.h>
 #include <collatorImpl.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <rtl/ustrbuf.hxx>
