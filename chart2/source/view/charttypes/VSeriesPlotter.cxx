@@ -444,6 +444,28 @@ void VSeriesPlotter::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximu
         ::rtl::math::setNan(&rfMaximum);
 }
 
+void VSeriesPlotter::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX ) const
+{
+    ::rtl::math::setInf(&rfMinY, false);
+    ::rtl::math::setInf(&rfMaxY, true);
+
+    ::std::vector< VDataSeriesGroup >::const_iterator aXSlotIter = m_aXSlots.begin();
+    const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = m_aXSlots.end();
+    for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
+    {
+        double fLocalMinimum, fLocalMaximum;
+        aXSlotIter->getMinimumAndMaximiumYInContinuousXRange( fLocalMinimum, fLocalMaximum, fMinX, fMaxX );
+        if( !::rtl::math::isNan(fLocalMinimum) && fLocalMinimum< rfMinY )
+            rfMinY = fLocalMinimum;
+        if( !::rtl::math::isNan(fLocalMaximum) && fLocalMaximum> rfMaxY )
+            rfMaxY = fLocalMaximum;
+    }
+    if(::rtl::math::isInf(rfMinY))
+        ::rtl::math::setNan(&rfMinY);
+    if(::rtl::math::isInf(rfMaxY))
+        ::rtl::math::setNan(&rfMaxY);
+}
+
 //static
 sal_Int32 VSeriesPlotter::getPointCount( const ::std::vector< VDataSeriesGroup >& rSlots )
 {
@@ -508,6 +530,40 @@ void VDataSeriesGroup::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaxi
         ::rtl::math::setNan(&rfMinimum);
     if(::rtl::math::isInf(rfMaximum))
         ::rtl::math::setNan(&rfMaximum);
+}
+void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX ) const
+{
+    const ::std::vector< VDataSeries* >* pSeriesList = &this->m_aSeriesVector;
+
+    ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
+    const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
+
+    ::rtl::math::setInf(&rfMinY, false);
+    ::rtl::math::setInf(&rfMaxY, true);
+
+    for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+    {
+        sal_Int32 nPointCount = (*aSeriesIter)->getTotalPointCount();
+        for(sal_Int32 nN=0;nN<nPointCount;nN++)
+        {
+            double fX = (*aSeriesIter)->getX( nN );
+            if( ::rtl::math::isNan(fX) )
+                continue;
+            if( fX < fMinX || fX > fMaxX )
+                continue;
+            double fY = (*aSeriesIter)->getY( nN );
+            if( ::rtl::math::isNan(fY) )
+                continue;
+            if(rfMaxY<fY)
+                rfMaxY=fY;
+            if(rfMinY>fY)
+                rfMinY=fY;
+        }
+    }
+    if(::rtl::math::isInf(rfMinY))
+        ::rtl::math::setNan(&rfMinY);
+    if(::rtl::math::isInf(rfMaxY))
+        ::rtl::math::setNan(&rfMaxY);
 }
 
 void VDataSeriesGroup::calculateYSumsForCategory( sal_Int32 nCategoryIndex

@@ -202,6 +202,23 @@ double AreaChart::getMaximumX()
     return fMaximum;
 }
 
+double AreaChart::getMinimumYInRange( double fMinX, double fMaxX )
+{
+    if( m_bCategoryXAxis )
+        return VSeriesPlotter::getMinimumYInRange( fMinX, fMaxX );
+
+    double fMinY, fMaxY;
+    this->getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinX, fMaxX );
+    return fMinY;
+}
+double AreaChart::getMaximumYInRange( double fMinX, double fMaxX )
+{
+    if( m_bCategoryXAxis )
+        return VSeriesPlotter::getMaximumYInRange( fMinX, fMaxX );
+    double fMinY, fMaxY;
+    this->getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinX, fMaxX );
+    return fMaxY;
+}
 double AreaChart::getMaximumZ()
 {
     if( 3!=m_nDimension )

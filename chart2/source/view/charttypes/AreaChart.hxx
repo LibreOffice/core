@@ -42,6 +42,8 @@ public:
     //-------------------------------------------------------------------------
     virtual double getMinimumX();
     virtual double getMaximumX();
+    virtual double getMinimumYInRange( double fMinimumX, double fMaximumX );
+    virtual double getMaximumYInRange( double fMinimumX, double fMaximumX );
     virtual double getMaximumZ();
 
     //-------------------------------------------------------------------------
