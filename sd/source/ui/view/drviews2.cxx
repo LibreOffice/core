@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:34:04 $
+ *  last change: $Author: cl $ $Date: 2001-01-19 14:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                     SdNewFoilDlg* pDlg = NULL;
 
                     if (nSId == SID_INSERTPAGE && !this->ISA( SdGraphicViewShell ))
-                        pDlg = new SdNewFoilDlg(NULL, aAttrSet, ePageKind, pDocSh, FALSE);
+                        pDlg = new SdNewFoilDlg(pWindow, aAttrSet, ePageKind, pDocSh, FALSE);
 
                     if (pDlg && pDlg->Execute () != RET_OK)
                     {
