@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-16 09:21:25 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 17:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3162,13 +3162,13 @@ uno::Any SAL_CALL SvxShapeText::queryAggregation( const uno::Type & rType )
 }
 
 //----------------------------------------------------------------------
-void SAL_CALL SvxShapeText::acquire() throw( uno::RuntimeException )
+void SAL_CALL SvxShapeText::acquire() throw()
 {
     SvxShape::acquire();
 }
 
 //----------------------------------------------------------------------
-void SAL_CALL SvxShapeText::release() throw( uno::RuntimeException )
+void SAL_CALL SvxShapeText::release() throw()
 {
     SvxShape::release();
 }
@@ -3307,12 +3307,12 @@ uno::Any SAL_CALL SvxShapeRect::queryAggregation( const uno::Type & rType ) thro
     return SvxShapeText::queryAggregation( rType );
 }
 
-void SAL_CALL SvxShapeRect::acquire() throw(uno::RuntimeException)
+void SAL_CALL SvxShapeRect::acquire() throw()
 {
     OWeakAggObject::acquire();
 }
 
-void SAL_CALL SvxShapeRect::release() throw(uno::RuntimeException)
+void SAL_CALL SvxShapeRect::release() throw()
 {
     OWeakAggObject::release();
 }
