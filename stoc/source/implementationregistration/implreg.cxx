@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-08 11:27:38 $
+ *  last change: $Author: dbo $ $Date: 2002-11-11 16:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@
 #include <uno/mapping.hxx>
 #include <osl/thread.h>
 
-
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
@@ -98,11 +97,16 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/reflection/XServiceTypeDescription.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #if defined(SAL_W32) || defined(SAL_OS2)
 #include <io.h>
 #endif
+
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -132,6 +136,7 @@ struct StringPool
     OUString slash_IMPLEMENTATIONS;
     OUString slash_UNO;
     OUString slash_UNO_slash_SERVICES;
+    OUString slash_UNO_slash_SINGLETONS;
     OUString slash_SERVICES;
     OUString slash_UNO_slash_LOCATION;
     OUString slash_UNO_slash_ACTIVATOR;
@@ -147,6 +152,7 @@ struct StringPool
         , slash_IMPLEMENTATIONS( RTL_CONSTASCII_USTRINGPARAM( "/IMPLEMENTATIONS" ) )
         , slash_UNO( RTL_CONSTASCII_USTRINGPARAM("/UNO"))
         , slash_UNO_slash_SERVICES( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"))
+        , slash_UNO_slash_SINGLETONS( RTL_CONSTASCII_USTRINGPARAM("/UNO/SINGLETONS"))
         , slash_SERVICES( RTL_CONSTASCII_USTRINGPARAM("/SERVICES/") )
         , slash_UNO_slash_LOCATION( RTL_CONSTASCII_USTRINGPARAM("/UNO/LOCATION") )
         , slash_UNO_slash_ACTIVATOR( RTL_CONSTASCII_USTRINGPARAM("/UNO/ACTIVATOR") )
@@ -830,6 +836,7 @@ static void deleteAllImplementations(   const Reference < XSimpleRegistry >& xRe
                                 if (pSubKeys[i]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_SERVICES ) &&
                                     pSubKeys[i]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_REGISTRY_LINKS ) &&
                                     pSubKeys[i]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_ACTIVATOR ) &&
+                                    pSubKeys[i]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_SINGLETONS ) &&
                                     pSubKeys[i]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_LOCATION) )
                                 {
                                     prepareUserKeys(xReg, xKey, pSubKeys[i], implName, sal_False);
@@ -858,6 +865,69 @@ static void deleteAllImplementations(   const Reference < XSimpleRegistry >& xRe
     {
         xSource->closeKey();
         xReg->getRootKey()->deleteKey(xSource->getKeyName());
+    }
+}
+
+//==================================================================================================
+static void delete_all_singleton_entries(
+    Reference < registry::XRegistryKey > const & xSingletons_section,
+    ::std::list< OUString > const & impl_names )
+    throw (InvalidRegistryException)
+{
+    Sequence< Reference< registry::XRegistryKey > > singletons( xSingletons_section->openKeys() );
+    Reference< registry::XRegistryKey > const * subkeys = singletons.getConstArray();
+    for ( sal_Int32 nPos = singletons.getLength(); nPos--; )
+    {
+        Reference< registry::XRegistryKey > const & xSingleton = subkeys[ nPos ];
+        Reference< registry::XRegistryKey > xRegisteredImplNames(
+            xSingleton->openKey( OUSTR("REGISTERED_BY") ) );
+        if (xRegisteredImplNames.is() && xRegisteredImplNames->isValid())
+        {
+            Sequence< OUString > registered_implnames;
+            try
+            {
+                registered_implnames = xRegisteredImplNames->getAsciiListValue();
+            }
+            catch (registry::InvalidValueException &)
+            {
+            }
+            OUString const * p = registered_implnames.getConstArray();
+            sal_Int32 nOrigRegLength = registered_implnames.getLength();
+            sal_Int32 nNewLength = nOrigRegLength;
+            for ( sal_Int32 n = nOrigRegLength; n--; )
+            {
+                OUString const & registered_implname = p[ n ];
+
+                ::std::list< OUString >::const_iterator iPos( impl_names.begin() );
+                ::std::list< OUString >::const_iterator const iEnd( impl_names.end() );
+                for ( ; iPos != iEnd; ++iPos )
+                {
+                    if (iPos->equals( registered_implname ))
+                    {
+                        registered_implnames[ n ] = p[ nNewLength -1 ];
+                        --nNewLength;
+                    }
+                }
+            }
+
+            if (nNewLength != nOrigRegLength)
+            {
+                if (0 == nNewLength)
+                {
+                    // remove whole entry
+                    xRegisteredImplNames->closeKey();
+                    xSingleton->deleteKey( OUSTR("REGISTERED_BY") );
+                    // registry key cannot provide its relative name, only absolute :(
+                    OUString abs( xSingleton->getKeyName() );
+                    xSingletons_section->deleteKey( abs.copy( abs.lastIndexOf( '/' ) +1 ) );
+                }
+                else
+                {
+                    registered_implnames.realloc( nNewLength );
+                    xRegisteredImplNames->setAsciiListValue( registered_implnames );
+                }
+            }
+        }
     }
 }
 
@@ -936,6 +1006,151 @@ static void deleteAllServiceEntries(    const Reference < XSimpleRegistry >& xRe
     }
 }
 
+//--------------------------------------------------------------------------------------------------
+static bool is_supported_service(
+    OUString const & service_name,
+    Reference< reflection::XServiceTypeDescription > const & xService_td )
+{
+    if (xService_td->getName().equals( service_name ))
+        return true;
+    Sequence< Reference< reflection::XServiceTypeDescription > > seq(
+        xService_td->getMandatoryServices() );
+    Reference< reflection::XServiceTypeDescription > const * p = seq.getConstArray();
+    for ( sal_Int32 nPos = seq.getLength(); nPos--; )
+    {
+        if (is_supported_service( service_name, p[ nPos ] ))
+            return true;
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+static void insert_singletons(
+    Reference< registry::XSimpleRegistry > const & xDest,
+    Reference< registry::XRegistryKey > const & xImplKey,
+    Reference< XComponentContext > const & xContext )
+    SAL_THROW( (registry::InvalidRegistryException,
+                registry::CannotRegisterImplementationException) )
+{
+    // singletons
+    Reference< registry::XRegistryKey > xKey( xImplKey->openKey( OUSTR("UNO/SINGLETONS") ) );
+    if (xKey.is() && xKey->isValid())
+    {
+        OUString implname( xImplKey->getKeyName().copy( sizeof ("/IMPLEMENTATIONS/") -1 ) );
+        // singleton entries
+        Sequence< Reference< registry::XRegistryKey > > xSingletons_section( xKey->openKeys() );
+        Reference< registry::XRegistryKey > const * p = xSingletons_section.getConstArray();
+        for ( sal_Int32 nPos = xSingletons_section.getLength(); nPos--; )
+        {
+            Reference< registry::XRegistryKey > const & xSingleton = p[ nPos ];
+            OUString singleton_name(
+                xSingleton->getKeyName().copy(
+                    implname.getLength() + sizeof ("/IMPLEMENTATIONS//UNO/SINGLETONS/") -1 ) );
+            OUString service_name( xSingleton->getStringValue() );
+
+            OUString keyname( OUSTR("/SINGLETONS/") + singleton_name );
+            Reference< registry::XRegistryKey > xKey( xDest->getRootKey()->openKey( keyname ) );
+            if (xKey.is() && xKey->isValid())
+            {
+                try
+                {
+                    OUString existing_name( xKey->getStringValue() );
+                    if (! existing_name.equals( service_name ))
+                    {
+                        Reference< container::XHierarchicalNameAccess > xTDMgr;
+                        OUString the_tdmgr =
+                            OUSTR("/singletons/com.sun.star.reflection.theTypeDescriptionManager");
+                        xContext->getValueByName( the_tdmgr ) >>= xTDMgr;
+                        if (! xTDMgr.is())
+                        {
+                            throw RuntimeException(
+                                OUSTR("cannot get singleton ") + the_tdmgr,
+                                Reference< XInterface >() );
+                        }
+                        try
+                        {
+                            Reference< reflection::XServiceTypeDescription > xExistingService_td;
+                            xTDMgr->getByHierarchicalName( existing_name ) >>= xExistingService_td;
+                            if (! xExistingService_td.is())
+                            {
+                                throw RuntimeException(
+                                    OUSTR("cannot get service type description: ") + existing_name,
+                                    Reference< XInterface >() );
+                            }
+
+                            // everything's fine if existing service entry supports the one
+                            // to be registered
+                            if (! is_supported_service( service_name, xExistingService_td ))
+                            {
+                                OUStringBuffer buf( 64 );
+                                buf.appendAscii(
+                                    RTL_CONSTASCII_STRINGPARAM("existing singleton service (") );
+                                buf.append( singleton_name );
+                                buf.append( (sal_Unicode)'=' );
+                                buf.append( existing_name );
+                                buf.appendAscii(
+                                    RTL_CONSTASCII_STRINGPARAM(") does not support given one: ") );
+                                buf.append( service_name );
+                                throw registry::CannotRegisterImplementationException(
+                                    buf.makeStringAndClear(), Reference< XInterface >() );
+                            }
+                        }
+                        catch (container::NoSuchElementException & exc)
+                        {
+                            throw RuntimeException(
+                                OUSTR("cannot get service type description: ") + exc.Message,
+                                Reference< XInterface >() );
+                        }
+                    }
+                }
+                catch (registry::InvalidValueException &)
+                {
+                    // repair
+                    xKey->setStringValue( service_name );
+                }
+            }
+            else
+            {
+                // insert singleton entry
+                xKey = xDest->getRootKey()->createKey( keyname );
+                xKey->setStringValue( service_name );
+            }
+
+            Reference< registry::XRegistryKey > xRegisteredImplNames(
+                xKey->openKey( OUSTR("REGISTERED_BY") ) );
+            if (!xRegisteredImplNames.is() || !xRegisteredImplNames->isValid())
+            {
+                // create
+                xRegisteredImplNames = xKey->createKey( OUSTR("REGISTERED_BY") );
+            }
+
+            Sequence< OUString > implnames;
+            try
+            {
+                implnames = xRegisteredImplNames->getAsciiListValue();
+            }
+            catch (registry::InvalidValueException &)
+            {
+            }
+            OUString const * p = implnames.getConstArray();
+            // check implname is already in
+            sal_Int32 nPos = implnames.getLength();
+            while (nPos--)
+            {
+                if (implname.equals( p[ nPos ] ))
+                    break;
+            }
+            if (0 > nPos)
+            {
+                // append and write back
+                implnames.realloc( implnames.getLength() +1 );
+                implnames[ implnames.getLength() -1 ] = implname;
+                xRegisteredImplNames->setAsciiListValue( implnames );
+            }
+        }
+    }
+}
+
 
 //*************************************************************************
 //  static prepareRegistry
@@ -944,7 +1159,9 @@ static void prepareRegistry(
     const Reference < XSimpleRegistry >& xDest,
     const Reference < XRegistryKey >& xSource,
     const OUString& implementationLoaderUrl,
-    const OUString& locationUrl) throw ( InvalidRegistryException )
+    const OUString& locationUrl,
+    Reference< XComponentContext > const & xContext )
+    throw ( InvalidRegistryException, CannotRegisterImplementationException )
 {
     Sequence< Reference < XRegistryKey > > subKeys = xSource->openKeys();
 
@@ -1015,7 +1232,8 @@ static void prepareRegistry(
                     for (sal_Int32 i = 0; i < subKeys.getLength(); i++)
                     {
                         if (pSubKeys[i]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_SERVICES) &&
-                            pSubKeys[i]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_REGISTRY_LINKS ))
+                            pSubKeys[i]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_REGISTRY_LINKS ) &&
+                            pSubKeys[i]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_SINGLETONS ))
                         {
                             prepareUserKeys(xDest, xKey, pSubKeys[i], implName, sal_True);
                         }
@@ -1057,6 +1275,8 @@ static void prepareRegistry(
                 }
             }
         }
+
+        insert_singletons( xDest, xImplKey, xContext );
     }
 }
 
@@ -1235,7 +1455,7 @@ Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceM
                 aAny >>= xRegistry;
             }
          }
-         catch( UnknownPropertyException e ) {
+         catch( UnknownPropertyException & ) {
              // empty reference is error signal !
         }
     }
@@ -1459,7 +1679,7 @@ sal_Bool ImplementationRegistration::revokeImplementation(const OUString& locati
                     aAny >>= xRegistry;
                 }
             }
-            catch ( UnknownPropertyException e )  {
+            catch ( UnknownPropertyException & ) {
             }
         }
     }
@@ -1471,7 +1691,7 @@ sal_Bool ImplementationRegistration::revokeImplementation(const OUString& locati
             doRevoke(m_xSMgr, m_xCtx, Reference< XImplementationLoader > (), xRegistry, OUString(), location);
             ret = sal_True;
         }
-        catch( InvalidRegistryException &e )
+        catch( InvalidRegistryException & )
         {
             // no way to transport the error, as no exception is specified and a runtime
             // exception is not appropriate.
@@ -1597,11 +1817,10 @@ void ImplementationRegistration::doRevoke(
 
         Reference < XRegistryKey > xKey =
             xRootKey->openKey( pool.slash_IMPLEMENTATIONS );
-        if (xKey.is())
+        if (xKey.is() && xKey->isValid())
         {
             deleteAllImplementations(xDest, xKey, locationUrl, aNames);
         }
-
 
         xKey = xRootKey->openKey( pool.slash_SERVICES );
         if (xKey.is())
@@ -1613,6 +1832,12 @@ void ImplementationRegistration::doRevoke(
                 deleteAllServiceEntries(xDest, xKey, *iter);
                 ++iter;
             }
+        }
+
+        xKey = xRootKey->openKey( OUSTR("/SINGLETONS") );
+        if (xKey.is() && xKey->isValid())
+        {
+            delete_all_singleton_entries( xKey, aNames );
         }
 
         if (xRootKey.is())
@@ -1651,7 +1876,7 @@ void ImplementationRegistration::doRegister(
                 xAct->writeRegistryInfo(xSourceKey, implementationLoaderUrl, locationUrl);
             if ( bSuccess )
             {
-                prepareRegistry(xDest, xSourceKey, implementationLoaderUrl, locationUrl);
+                prepareRegistry(xDest, xSourceKey, implementationLoaderUrl, locationUrl, xCtx);
 
                 xSourceKey->closeKey();
 
