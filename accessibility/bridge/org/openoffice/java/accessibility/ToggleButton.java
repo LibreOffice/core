@@ -54,28 +54,23 @@
  *
  *
  ************************************************************************/
-
 package org.openoffice.java.accessibility;
 
-import com.sun.star.uno.*;
 import com.sun.star.accessibility.*;
+import com.sun.star.uno.*;
+
 
 class ToggleButton extends AbstractButton implements javax.accessibility.Accessible {
-
     public ToggleButton(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
         super(xAccessible, xAccessibleContext);
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            accessibleContext = new AccessibleToggleButton();
-        }
-        return accessibleContext;
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleToggleButton();
     }
 
     protected class AccessibleToggleButton extends AccessibleAbstractButton {
-
         /** Gets the role of this object */
         public javax.accessibility.AccessibleRole getAccessibleRole() {
             return javax.accessibility.AccessibleRole.TOGGLE_BUTTON;
@@ -84,14 +79,14 @@ class ToggleButton extends AbstractButton implements javax.accessibility.Accessi
         /** Gets the AccessibleValue associated with this object that has a graphical representation */
         public javax.accessibility.AccessibleValue getAccessibleValue() {
             try {
-                XAccessibleValue unoAccessibleValue = (XAccessibleValue)
-                    UnoRuntime.queryInterface(XAccessibleValue.class, unoAccessibleContext);
-                return (unoAccessibleValue != null) ?
-                    new AccessibleValueImpl(unoAccessibleValue) : null;
+                XAccessibleValue unoAccessibleValue = (XAccessibleValue) UnoRuntime.queryInterface(XAccessibleValue.class,
+                        unoAccessibleContext);
+
+                return (unoAccessibleValue != null)
+                ? new AccessibleValueImpl(unoAccessibleValue) : null;
             } catch (com.sun.star.uno.RuntimeException e) {
                 return null;
             }
         }
     }
 }
-
