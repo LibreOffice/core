@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellexec.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-20 13:55:05 $
+ *  last change: $Author: obr $ $Date: 2001-06-26 15:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,14 +320,16 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     {
         OString aTmp = OUStringToOString( aParameter, osl_getThreadTextEncoding() );
 
-        OStringBuffer aBuffer( aCommandLine.getLength() + aTmp.getLength() + 1 );
+        OStringBuffer aBuffer( aCommandLine.getLength() + aTmp.getLength() + 3 );
 
         aBuffer.append( aCommandLine );
         aBuffer.append( ' ' );
-        aBuffer.append( aTmp );
 
         aCommandLine = aBuffer.makeStringAndClear();
     }
+
+    // do not wait for completion
+    aCommandLine += " &";
 
     if( 0 != system( aCommandLine.getStr() ) )
     {
