@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-12 17:51:49 $
+ *  last change: $Author: tbe $ $Date: 2002-11-15 14:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,7 +650,12 @@ void VCLXCheckBox::setState( short n ) throw(::com::sun::star::uno::RuntimeExcep
 
     CheckBox* pCheckBox = (CheckBox*)GetWindow();
     if ( pCheckBox)
+    {
         pCheckBox->SetState( (TriState)n );
+
+        // #105198# call C++ click listeners (needed for accessibility)
+        pCheckBox->GetClickHdl().Call( pCheckBox );
+    }
 }
 
 short VCLXCheckBox::getState() throw(::com::sun::star::uno::RuntimeException)
