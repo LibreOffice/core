@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storbase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mhu $ $Date: 2002-08-17 17:06:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORBASE_HXX_
-#define _STORE_STORBASE_HXX_ "$Revision: 1.4 $"
+#define _STORE_STORBASE_HXX_ "$Revision: 1.5 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -109,7 +109,7 @@
  *
  *======================================================================*/
 /* MSVC 6.0 still has std functions in global namespace */
-#if defined(_MSC_VER) && (_MSC_VER <= 1200)
+#if defined(_MSC_VER) && (_MSC_VER <= 1300)
 #define __STORE_CSTD
 #else
 #define __STORE_CSTD std

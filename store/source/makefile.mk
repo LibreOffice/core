@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:18:31 $
+#   last change: $Author: hr $ $Date: 2003-03-27 14:06:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,9 +67,7 @@ TARGET=store
 
 # --- Settings ---
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 
 # --- Files ---
 
@@ -80,7 +78,6 @@ SLOFILES=	\
     $(SLO)$/storbase.obj	\
     $(SLO)$/storcach.obj	\
     $(SLO)$/stordata.obj	\
-    $(SLO)$/stordmon.obj	\
     $(SLO)$/storlckb.obj	\
     $(SLO)$/stortree.obj	\
     $(SLO)$/storpage.obj	\
@@ -94,7 +91,6 @@ OBJFILES=	\
     $(OBJ)$/storbase.obj	\
     $(OBJ)$/storcach.obj	\
     $(OBJ)$/stordata.obj	\
-    $(OBJ)$/stordmon.obj	\
     $(OBJ)$/storlckb.obj	\
     $(OBJ)$/stortree.obj	\
     $(OBJ)$/storpage.obj	\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storcach.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2002-08-17 17:29:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORCACH_HXX
-#define _STORE_STORCACH_HXX "$Revision: 1.3 $"
+#define _STORE_STORCACH_HXX "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -92,8 +92,8 @@ class  OStorePageBIOS;
  * (OStorePageData in external representation)
  *
  *======================================================================*/
-#define STORE_DEFAULT_CACHEPAGES 128
 #define STORE_LIMIT_CACHEPAGES   256
+#define STORE_DEFAULT_CACHEPAGES STORE_LIMIT_CACHEPAGES
 
 struct OStorePageCacheEntry;
 

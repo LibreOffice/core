@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelckb.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2002-09-03 13:59:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,18 @@
  *
  *
  ************************************************************************/
-#include <string.h>
 
-#define _STORE_FILELCKB_CXX_ "$Revision: 1.10 $"
+#include <store/filelckb.hxx>
+
+#ifndef INCLUDED_STDDEF_H
+#include <stddef.h>
+#define INCLUDED_STDDEF_H
+#endif
+
+#ifndef INCLUDED_STRING_H
+#include <string.h>
+#define INCLUDED_STRING_H
+#endif
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -76,38 +85,24 @@
 #include <rtl/ustring.hxx>
 #endif
 
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
+#ifndef _OSL_FILE_H_
+#include <osl/file.h>
 #endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
-
-#ifndef _STORE_OBJECT_HXX_
-#include <store/object.hxx>
-#endif
-#ifndef _STORE_LOCKBYTE_HXX_
-#include <store/lockbyte.hxx>
-#endif
-#ifndef _STORE_FILELCKB_HXX_
-#include <store/filelckb.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 #ifndef _STORE_TYPES_H_
 #include <store/types.h>
 #endif
-
-#ifndef INCLUDED_CSTDDEF
-#include <cstddef>
-#define INCLUDED_CSTDDEF
+#ifndef _STORE_OBJECT_HXX_
+#include <store/object.hxx>
 #endif
-
-#ifndef INCLUDED_CSTRING
-#include <cstring>
-#define INCLUDED_CSTRING
+#ifndef _STORE_LOCKBYTE_HXX_
+#include <store/lockbyte.hxx>
 #endif
 
 using namespace store;
@@ -117,13 +112,6 @@ using namespace store;
  * OFileLockBytes internals.
  *
  *======================================================================*/
-/* MSVC 6.0 still has std functions in global namespace */
-#if defined(_MSC_VER) && (_MSC_VER <= 1200)
-#define __STORE_CSTD
-#else
-#define __STORE_CSTD std
-#endif /* _MSC_VER */
-
 #ifdef DEBUG
 #define inline static
 #endif /* DEBUG */
@@ -133,7 +121,7 @@ using namespace store;
  */
 inline void __store_memcpy (void * dst, const void * src, sal_uInt32 n)
 {
-    __STORE_CSTD::memcpy (dst, src, n);
+    ::memcpy (dst, src, n);
 }
 
 /*
@@ -153,29 +141,18 @@ static storeError __store_errnoToErrCode (sal_uInt32 nErrno);
  */
 #define store_File_OpenRead     0x01L
 #define store_File_OpenWrite    0x02L
-#define store_File_OpenNoBuffer 0x04L
-#define store_File_OpenNoCreate 0x08L
-#define store_File_OpenTruncate 0x10L
+#define store_File_OpenNoCreate 0x04L
+#define store_File_OpenTruncate 0x08L
 
-#ifdef __STORE_IO_NATIVE
-#undef __STORE_IO_NATIVE
-#endif
-
-#ifdef SAL_OS2
-#include <fileos2.cxx>
-#endif /* SAL_OS2 */
-
-#ifdef SAL_UNX
-#include <fileunx.cxx>
-#endif /* SAL_UNX */
-
-#ifdef SAL_W32
-#include <filew32.cxx>
-#endif /* SAL_W32 */
-
-#ifndef __STORE_IO_NATIVE
-#include <filestd.cxx>
-#endif  /* !_STORE_IO_NATIVE */
+#if defined(SAL_OS2)
+#include <fileos2.hxx>
+#elif defined(SAL_UNX)
+#include <fileunx.hxx>
+#elif defined(SAL_W32)
+#include <filew32.hxx>
+#else  /* !(OS2 | UNX | W32) */
+#include <filestd.hxx>
+#endif /* !(OS2 | UNX | W32) */
 
 /*
  * __store_errnoToErrCode.
@@ -200,13 +177,73 @@ static storeError __store_errnoToErrCode (sal_uInt32 nErrno)
 
 /*========================================================================
  *
- * OMappingDescriptor_Impl.
+ * FileMapping_Impl.
  *
  *======================================================================*/
-struct OMappingDescriptor_Impl
+namespace // unnamed
 {
-    typedef OMappingDescriptor_Impl self;
 
+struct FileMapping_Impl
+{
+    /** Representation.
+     */
+    sal_uInt32 m_nAlignment;
+    sal_uInt32 m_nSize;
+    HSTORE     m_hMap;
+
+    /** Construction.
+     */
+    FileMapping_Impl (void);
+    ~FileMapping_Impl (void);
+
+    /** Create readonly file mapping.
+     */
+    storeError create (HSTORE hFile);
+};
+
+/*
+ * FileMapping_Impl.
+ */
+inline FileMapping_Impl::FileMapping_Impl (void)
+    : m_nAlignment (__store_malign()), m_nSize (0), m_hMap (0)
+{
+}
+
+/*
+ * ~FileMapping_Impl.
+ */
+inline FileMapping_Impl::~FileMapping_Impl (void)
+{
+    if (m_hMap != 0)
+        __store_funmap (m_hMap);
+}
+
+/*
+ * create.
+ */
+inline storeError FileMapping_Impl::create (HSTORE hFile)
+{
+    if (m_nAlignment == (sal_uInt32)(-1))
+        return store_E_Unknown; // E_Unsupported
+
+    if ((m_hMap = __store_fmap (hFile)) == 0)
+        return ERROR_FROM_NATIVE(__store_errno());
+
+    return __store_fsize (hFile, m_nSize);
+}
+
+} // unnamed namespace
+
+/*========================================================================
+ *
+ * MemoryMapping_Impl.
+ *
+ *======================================================================*/
+namespace // unnamed
+{
+
+struct MemoryMapping_Impl
+{
     /** Representation.
      */
     sal_uInt32  m_nOffset;
@@ -215,103 +252,39 @@ struct OMappingDescriptor_Impl
 
     /** Construction.
      */
-    inline OMappingDescriptor_Impl (
-        sal_uInt32 nOffset = 0xffffffff,
-        sal_uInt32 nSize   = 0);
+    MemoryMapping_Impl (void);
+    ~MemoryMapping_Impl (void);
 
-    /** Assignment.
+    /** Check for a valid memory mapping.
      */
-    inline self& operator= (const self& rDescr);
+    bool isValid (void) const { return (m_pData != 0); }
 
-    /** Comparison.
+    /** Create a readonly memory mapping.
      */
-    inline bool operator== (const self& rDescr) const;
-    inline bool operator<= (const self& rDescr) const;
+    storeError create (
+        const FileMapping_Impl & fmap,
+        sal_uInt32               nOffset,
+        sal_uInt32               nSize);
 
-    /** normalize.
+    /** Cleanup (unmap) memory mapping.
      */
-    inline void normalize (
-        sal_uInt32 nAlignment,
-        sal_uInt32 nSizeLimit);
-
-    /** cleanup.
-     */
-    inline void cleanup (void);
-
-    /** unmap.
-     */
-    inline void unmap (void);
-
-    /** sync.
-     */
-    inline void sync (void);
+    void cleanup (void);
 };
 
 /*
- * OMappingDescriptor_Impl.
+ * MemoryMapping_Impl.
  */
-inline OMappingDescriptor_Impl::OMappingDescriptor_Impl (
-    sal_uInt32 nOffset, sal_uInt32 nSize)
-    : m_nOffset (nOffset),
-      m_nSize   (nSize),
-      m_pData   (NULL)
+inline MemoryMapping_Impl::MemoryMapping_Impl (void)
+    : m_nOffset (0), m_nSize (0), m_pData (0)
 {
 }
 
 /*
- * operator=().
+ * ~MemoryMapping_Impl.
  */
-inline OMappingDescriptor_Impl&
-OMappingDescriptor_Impl::operator= (const self& rDescr)
+inline MemoryMapping_Impl::~MemoryMapping_Impl (void)
 {
-    m_nOffset = rDescr.m_nOffset;
-    m_nSize   = rDescr.m_nSize;
-    m_pData   = rDescr.m_pData;
-
-    return *this;
-}
-
-/*
- * operator==().
- */
-inline bool
-OMappingDescriptor_Impl::operator== (const self& rDescr) const
-{
-    return ((m_nOffset == rDescr.m_nOffset) &&
-            (m_nSize   == rDescr.m_nSize  )    );
-}
-
-/*
- * operator<=().
- */
-inline bool
-OMappingDescriptor_Impl::operator<= (const self& rDescr) const
-{
-    return ((m_nOffset == rDescr.m_nOffset) &&
-            (m_nSize   <= rDescr.m_nSize  )    );
-}
-
-/*
- * normalize.
- */
-inline void OMappingDescriptor_Impl::normalize (
-    sal_uInt32 nAlignment, sal_uInt32 nSizeLimit)
-{
-    sal_uInt32 nRemain = (m_nSize % nAlignment);
-    if (nRemain)
-        m_nSize += (nAlignment - nRemain);
-
-    m_nOffset -= (m_nOffset % nAlignment);
-    if ((m_nOffset + m_nSize) > nSizeLimit)
-        m_nSize = nSizeLimit - m_nOffset;
-}
-
-/*
- * unmap.
- */
-inline void OMappingDescriptor_Impl::unmap (void)
-{
-    if (m_pData)
+    if (m_pData != 0)
     {
         __store_munmap (m_pData, m_nSize);
         m_pData = 0, m_nSize = 0;
@@ -319,26 +292,41 @@ inline void OMappingDescriptor_Impl::unmap (void)
 }
 
 /*
- * sync.
+ * create.
  */
-inline void OMappingDescriptor_Impl::sync (void)
+inline storeError MemoryMapping_Impl::create (
+    const FileMapping_Impl & fmap, sal_uInt32 nOffset, sal_uInt32 nSize)
 {
-    if (m_pData)
-        __store_msync (m_pData, m_nSize);
+    storeError result = store_E_None;
+    sal_uInt32 nAlign = (nOffset % fmap.m_nAlignment);
+
+    nOffset -= nAlign;
+    nSize   += nAlign;
+
+    if ((nOffset + nSize) > fmap.m_nSize)
+        nSize = fmap.m_nSize - nOffset;
+
+    m_pData = __store_mmap (fmap.m_hMap, nOffset, nSize);
+    if (m_pData == 0)
+        result = ERROR_FROM_NATIVE(__store_errno());
+    else
+        m_nOffset = nOffset, m_nSize = nSize;
+    return (result);
 }
 
 /*
  * cleanup.
  */
-inline void OMappingDescriptor_Impl::cleanup (void)
+inline void MemoryMapping_Impl::cleanup (void)
 {
-    if (m_pData)
+    if (m_pData != 0)
     {
-        __store_msync  (m_pData, m_nSize);
         __store_munmap (m_pData, m_nSize);
         m_pData = 0, m_nSize = 0;
     }
 }
+
+} // unnamed namespace
 
 /*========================================================================
  *
@@ -350,45 +338,43 @@ namespace store
 
 class OFileLockBytes_Impl
 {
-    HSTORE     m_hFile;
-#ifdef DEBUG
-    sal_Char  *m_pszFilename;
-#endif /* DEBUG */
-    bool       m_bMemmap    : 1;
-    bool       m_bWriteable : 1;
-
-    HSTORE     m_hMap;              // OMappingDescriptor (?)
-    sal_uInt32 m_nAlignment;        // mapping alignment
-    sal_uInt32 m_nSize;             // mapping size
-
-    OMappingDescriptor_Impl m_aDescrOne; // OMemoryDescriptor (?)
-    OMappingDescriptor_Impl m_aDescrAny;
+    /** Representation.
+     */
+    HSTORE              m_hFile;
+    MemoryMapping_Impl  m_aMemmap;
+    bool                m_bWriteable;
 
 public:
-    static void * operator new (std::size_t n) SAL_THROW(())
+    /** Allocation.
+     */
+    static void * operator new (size_t n) SAL_THROW(())
     {
         return rtl_allocateMemory (sal_uInt32(n));
     }
-    static void operator delete (void * p, std::size_t) SAL_THROW(())
+    static void operator delete (void * p, size_t) SAL_THROW(())
     {
         rtl_freeMemory (p);
     }
 
+    /** Construction.
+     */
     OFileLockBytes_Impl (void);
     ~OFileLockBytes_Impl (void);
 
+    /** Check for a valid file handle.
+     */
     bool isValid (void) const { return (m_hFile != 0); }
 
+    /** Operation.
+     */
     storeError close (void);
+
     storeError create (
         const sal_Char *pszFilename,
         storeAccessMode eAccessMode);
     storeError create (
         rtl_uString    *pFilename,
         storeAccessMode eAccessMode);
-
-    storeError memmap (OMappingDescriptor_Impl &rDescr);
-    storeError size (void);
 
     storeError resize (sal_uInt32 nSize);
 
@@ -419,15 +405,8 @@ public:
  */
 inline OFileLockBytes_Impl::OFileLockBytes_Impl (void)
     : m_hFile       (0),
-#ifdef DEBUG
-      m_pszFilename (0),
-#endif /* DEBUG */
-      m_bWriteable  (sal_False),
-      m_hMap        (0),
-      m_nSize       (0)
+      m_bWriteable  (false)
 {
-    m_nAlignment = __store_malign();
-    m_bMemmap = (!(m_nAlignment == (sal_uInt32)(-1)));
 }
 
 /*
@@ -435,27 +414,12 @@ inline OFileLockBytes_Impl::OFileLockBytes_Impl (void)
  */
 inline OFileLockBytes_Impl::~OFileLockBytes_Impl (void)
 {
+    m_aMemmap.cleanup();
     if (m_hFile)
     {
-        if (m_hMap)
-        {
-            m_aDescrOne.cleanup();
-            m_aDescrAny.cleanup();
-
-            __store_funmap (m_hMap);
-            m_hMap = 0;
-        }
-
         __store_fclose (m_hFile);
         m_hFile = 0;
     }
-#ifdef DEBUG
-    if (m_pszFilename)
-    {
-        ::free (m_pszFilename);
-        m_pszFilename = 0;
-    }
-#endif /* DEBUG */
 }
 
 /*
@@ -463,17 +427,9 @@ inline OFileLockBytes_Impl::~OFileLockBytes_Impl (void)
  */
 inline storeError OFileLockBytes_Impl::close (void)
 {
+    m_aMemmap.cleanup();
     if (m_hFile)
     {
-        if (m_hMap)
-        {
-            m_aDescrOne.cleanup();
-            m_aDescrAny.cleanup();
-
-            __store_funmap (m_hMap);
-            m_hMap = 0;
-        }
-
         __store_fclose (m_hFile);
         m_hFile = 0;
     }
@@ -486,17 +442,9 @@ inline storeError OFileLockBytes_Impl::close (void)
 inline storeError OFileLockBytes_Impl::create (
     const sal_Char *pszFilename, storeAccessMode eAccessMode)
 {
+    m_aMemmap.cleanup();
     if (m_hFile)
     {
-        if (m_hMap)
-        {
-            m_aDescrOne.cleanup();
-            m_aDescrAny.cleanup();
-
-            __store_funmap (m_hMap);
-            m_hMap = 0;
-        }
-
         __store_fclose (m_hFile);
         m_hFile = 0;
     }
@@ -514,18 +462,20 @@ inline storeError OFileLockBytes_Impl::create (
     if (eAccessMode == store_AccessReadWrite)
         nMode |= store_File_OpenNoCreate;
 
-    if (m_bMemmap)
-        nMode |= store_File_OpenNoBuffer;
-
     storeError eErrCode = __store_fopen (pszFilename, nMode, m_hFile);
-#ifdef DEBUG
     if (eErrCode == store_E_None)
     {
-        sal_uInt32 nLen = ::strlen (pszFilename);
-        m_pszFilename = (sal_Char*)(::realloc (m_pszFilename, nLen + 1));
-        ::memcpy (m_pszFilename, pszFilename, nLen + 1);
+        if (!m_bWriteable)
+        {
+            // Readonly, try Memory mapped I/O, ignore errors.
+            FileMapping_Impl fmap;
+            if (fmap.create (m_hFile) == store_E_None)
+            {
+                // Try to map the entire file into memory.
+                m_aMemmap.create (fmap, 0, fmap.m_nSize);
+            }
+        }
     }
-#endif /* DEBUG */
     return eErrCode;
 }
 
@@ -555,31 +505,6 @@ inline storeError OFileLockBytes_Impl::create (
         rtl_uString_assign (&(aSystemPath.pData), pFilename);
     }
 
-    // Check access mode for memory mapped I/O.
-    if (m_bMemmap && (!(eAccessMode == store_AccessReadOnly)))
-    {
-        // Memory mapped write access. Obtain FileUrl.
-        rtl::OUString aFileUrl;
-        osl_getFileURLFromSystemPath (aSystemPath.pData, &(aFileUrl.pData));
-
-        // Obtain directory.
-        sal_Int32 k = aFileUrl.lastIndexOf (sal_Unicode('/'));
-        if (k > 0)
-        {
-            // Cut off last segment.
-            aFileUrl = aFileUrl.copy (0, k);
-        }
-
-        // Obtain volume attributes.
-        osl::VolumeInfo aInfo (VolumeInfoMask_Attributes);
-        osl::Directory::getVolumeInfo (aFileUrl, aInfo);
-        if (aInfo.isValid (VolumeInfoMask_Attributes) && aInfo.getRemoteFlag())
-        {
-            // Remote volume. Turn off memory mapped write access.
-            m_bMemmap = sal_False;
-        }
-    }
-
     // Convert into system text encoding.
     rtl::OString aFilename (
         aSystemPath.pData->buffer,
@@ -591,96 +516,6 @@ inline storeError OFileLockBytes_Impl::create (
 }
 
 /*
- * memmap.
- */
-inline storeError OFileLockBytes_Impl::memmap (OMappingDescriptor_Impl &rDescr)
-{
-    if (rDescr <= m_aDescrOne)
-        rDescr = m_aDescrOne;
-    if (rDescr <= m_aDescrAny)
-        rDescr = m_aDescrAny;
-
-    if (!rDescr.m_pData)
-    {
-        if (rDescr.m_nOffset == 0)
-            m_aDescrOne.unmap();
-        else
-            m_aDescrAny.unmap();
-
-        if (!m_hMap)
-        {
-            if (m_bWriteable)
-                m_hMap = __store_fmap_rw (m_hFile);
-            else
-                m_hMap = __store_fmap_ro (m_hFile);
-            if (!m_hMap)
-                return ERROR_FROM_NATIVE(__store_errno());
-        }
-
-        if (m_bWriteable)
-            rDescr.m_pData = __store_mmap_rw (
-                m_hMap, rDescr.m_nOffset, rDescr.m_nSize);
-        else
-            rDescr.m_pData = __store_mmap_ro (
-                m_hMap, rDescr.m_nOffset, rDescr.m_nSize);
-        if (!rDescr.m_pData)
-            return ERROR_FROM_NATIVE(__store_errno());
-
-        if (rDescr.m_nOffset == 0)
-            m_aDescrOne = rDescr;
-        else
-            m_aDescrAny = rDescr;
-    }
-    return store_E_None;
-}
-
-/*
- * size.
- */
-inline storeError OFileLockBytes_Impl::size (void)
-{
-    if (!m_hMap)
-        return __store_fsize (m_hFile, m_nSize);
-    else
-        return store_E_None;
-}
-
-/*
- * resize.
- */
-inline storeError OFileLockBytes_Impl::resize (sal_uInt32 nSize)
-{
-    storeError eErrCode = size();
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
-    if (nSize != m_nSize)
-    {
-        if (m_hMap)
-        {
-#ifdef __STORE_FEATURE_WRITETHROUGH
-            // Note: file creation slowed down by about 60 percent.
-            m_aDescrOne.cleanup();
-            m_aDescrAny.cleanup();
-#else
-            m_aDescrOne.unmap();
-            m_aDescrAny.unmap();
-#endif /* __STORE_FEATURE_WRITETHROUGH */
-
-            __store_funmap (m_hMap);
-            m_hMap = 0;
-        }
-
-        eErrCode = __store_ftrunc (m_hFile, nSize);
-        if (eErrCode != store_E_None)
-            return eErrCode;
-
-        m_nSize = nSize;
-    }
-    return store_E_None;
-}
-
-/*
  * readAt.
  */
 inline storeError OFileLockBytes_Impl::readAt (
@@ -689,47 +524,26 @@ inline storeError OFileLockBytes_Impl::readAt (
     sal_uInt32  nBytes,
     sal_uInt32 &rnDone)
 {
-    storeError eErrCode = store_E_None;
-    if (m_bMemmap)
+    if (m_aMemmap.isValid())
     {
         // Memory mapped I/O.
-        eErrCode = size();
-        if (eErrCode != store_E_None)
-            return eErrCode;
-
-        if (!(nOffset < m_nSize))
+        if (!(nOffset < m_aMemmap.m_nSize))
             return store_E_None;
 
-        nBytes = SAL_MIN(nOffset + nBytes, m_nSize) - nOffset;
+        nBytes = SAL_MIN(nOffset + nBytes, m_aMemmap.m_nSize) - nOffset;
         if (!(nBytes > 0))
             return store_E_None;
 
-        OMappingDescriptor_Impl aDescr;
-        if (m_bWriteable)
-            aDescr = OMappingDescriptor_Impl (nOffset, nBytes);
-        else
-            aDescr = OMappingDescriptor_Impl (0, m_nSize);
-        aDescr.normalize (m_nAlignment, m_nSize);
-
-        eErrCode = memmap (aDescr);
-        if (eErrCode != store_E_None)
-            return eErrCode;
-
-        aDescr.m_pData += (nOffset - aDescr.m_nOffset);
-        __store_memcpy (pBuffer, aDescr.m_pData, nBytes);
-
+        __store_memcpy (pBuffer, m_aMemmap.m_pData + nOffset, nBytes);
         rnDone = nBytes;
+
+        return store_E_None;
     }
     else
     {
         // File I/O.
-        eErrCode = __store_fseek (m_hFile, nOffset);
-        if (eErrCode != store_E_None)
-            return eErrCode;
-
-        eErrCode = __store_fread (m_hFile, pBuffer, nBytes, rnDone);
+        return __store_fread (m_hFile, nOffset, pBuffer, nBytes, rnDone);
     }
-    return eErrCode;
 }
 
 /*
@@ -741,45 +555,21 @@ inline storeError OFileLockBytes_Impl::writeAt (
     sal_uInt32  nBytes,
     sal_uInt32 &rnDone)
 {
-    storeError eErrCode = store_E_None;
-    if (m_bMemmap)
-    {
-        // Memory mapped I/O. Determine current size.
-        eErrCode = size();
-        if (eErrCode != store_E_None)
-            return eErrCode;
-
-        // Check current size.
-        if (m_nSize < (nOffset + nBytes))
-        {
-            // Extend.
-            eErrCode = resize (nOffset + nBytes);
-            if (eErrCode != store_E_None)
-                return eErrCode;
-        }
-
-        OMappingDescriptor_Impl aDescr (nOffset, nBytes);
-        aDescr.normalize (m_nAlignment, m_nSize);
-
-        eErrCode = memmap (aDescr);
-        if (eErrCode != store_E_None)
-            return eErrCode;
-
-        aDescr.m_pData += (nOffset - aDescr.m_nOffset);
-        __store_memcpy (aDescr.m_pData, pBuffer, nBytes);
-
-        rnDone = nBytes;
-    }
+    if (m_bWriteable)
+        return __store_fwrite (m_hFile, nOffset, pBuffer, nBytes, rnDone);
     else
-    {
-        // File I/O.
-        eErrCode = __store_fseek (m_hFile, nOffset);
-        if (eErrCode != store_E_None)
-            return eErrCode;
+        return store_E_AccessViolation;
+}
 
-        eErrCode = __store_fwrite (m_hFile, pBuffer, nBytes, rnDone);
-    }
-    return eErrCode;
+/*
+ * resize.
+ */
+inline storeError OFileLockBytes_Impl::resize (sal_uInt32 nSize)
+{
+    if (m_bWriteable)
+        return __store_ftrunc (m_hFile, nSize);
+    else
+        return store_E_AccessViolation;
 }
 
 /*
@@ -787,13 +577,7 @@ inline storeError OFileLockBytes_Impl::writeAt (
  */
 inline storeError OFileLockBytes_Impl::sync (void)
 {
-    if (m_bMemmap)
-    {
-        // Memory mapped I/O.
-        m_aDescrOne.sync();
-        m_aDescrAny.sync();
-    }
-    else
+    if (m_bWriteable)
     {
         // File I/O.
         __store_fsync (m_hFile);
@@ -806,10 +590,13 @@ inline storeError OFileLockBytes_Impl::sync (void)
  */
 inline storeError OFileLockBytes_Impl::stat (sal_uInt32 &rnSize)
 {
-    storeError eErrCode = size();
-    if (eErrCode == store_E_None)
-        rnSize = m_nSize;
-    return eErrCode;
+    if (m_aMemmap.isValid())
+    {
+        // Memory mapped I/O.
+        rnSize = m_aMemmap.m_nSize;
+        return store_E_None;
+    }
+    return __store_fsize (m_hFile, rnSize);
 }
 
 /*========================================================================
@@ -821,10 +608,8 @@ inline storeError OFileLockBytes_Impl::stat (sal_uInt32 &rnSize)
  * OFileLockBytes.
  */
 OFileLockBytes::OFileLockBytes (void)
+    : m_pImpl (new OFileLockBytes_Impl())
 {
-    // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
-    m_pImpl = new OFileLockBytes_Impl();
 }
 
 /*
@@ -832,8 +617,6 @@ OFileLockBytes::OFileLockBytes (void)
  */
 OFileLockBytes::~OFileLockBytes (void)
 {
-    // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
     delete m_pImpl;
 }
 
@@ -978,4 +761,3 @@ storeError OFileLockBytes::unlockRange (
     else
         return store_E_InvalidHandle;
 }
-

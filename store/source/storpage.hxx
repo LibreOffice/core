@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storpage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 20:45:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,14 +60,10 @@
  ************************************************************************/
 
 #ifndef _STORE_STORPAGE_HXX_
-#define _STORE_STORPAGE_HXX_ "$Revision: 1.2 $"
+#define _STORE_STORPAGE_HXX_ "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
-
-#ifndef _RTL_REF_HXX_
-#include <rtl/ref.hxx>
 #endif
 
 #ifndef _STORE_OBJECT_HXX_
@@ -79,9 +75,6 @@
 
 #ifndef _STORE_STORBASE_HXX_
 #include <storbase.hxx>
-#endif
-#ifndef _STORE_STORDMON_HXX_
-#include <stordmon.hxx>
 #endif
 
 namespace store
@@ -228,9 +221,7 @@ private:
 
     /** Representation.
     */
-    rtl::Reference<OStorePageDaemon>  m_xDaemon;
-    OStorePageCache                  *m_pCache;
-
+    OStorePageCache    *m_pCache;
     page               *m_pNode[3];
     inode              *m_pDirect;
     indirect           *m_pLink[3];

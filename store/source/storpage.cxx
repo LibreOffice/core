@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 20:45:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORPAGE_CXX_ "$Revision: 1.2 $"
+#include <storpage.hxx>
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -98,18 +98,11 @@
 #ifndef _STORE_STORCACH_HXX_
 #include <storcach.hxx>
 #endif
-#ifndef _STORE_STORDMON_HXX_
-#include <stordmon.hxx>
-#endif
 #ifndef _STORE_STORDATA_HXX_
 #include <stordata.hxx>
 #endif
 #ifndef _STORE_STORTREE_HXX_
 #include <stortree.hxx>
-#endif
-
-#ifndef _STORE_STORPAGE_HXX_
-#include <storpage.hxx>
 #endif
 
 using namespace store;
@@ -125,8 +118,7 @@ const sal_uInt32 OStorePageManager::m_nTypeId = sal_uInt32(0x62190120);
  * OStorePageManager.
  */
 OStorePageManager::OStorePageManager (void)
-    : m_xDaemon   (NULL),
-      m_pCache    (NULL),
+    : m_pCache    (NULL),
       m_pDirect   (NULL),
       m_pData     (NULL),
       m_nPageSize (0)
@@ -140,9 +132,6 @@ OStorePageManager::OStorePageManager (void)
     m_pLink[0] = NULL;
     m_pLink[1] = NULL;
     m_pLink[2] = NULL;
-
-    // Daemon (kflushd :-).
-    OStorePageDaemon::getOrCreate (m_xDaemon);
 }
 
 /*
@@ -150,13 +139,6 @@ OStorePageManager::OStorePageManager (void)
  */
 OStorePageManager::~OStorePageManager (void)
 {
-    osl::MutexGuard aGuard (*this);
-    if (m_xDaemon.is())
-    {
-        m_xDaemon->remove (this);
-        m_xDaemon.clear();
-    }
-
     delete m_pCache;
     delete m_pDirect;
     delete m_pData;
@@ -240,12 +222,6 @@ storeError OStorePageManager::initialize (
     {
         m_pNode[1] = new(m_nPageSize) page(m_nPageSize);
         m_pNode[2] = new(m_nPageSize) page(m_nPageSize);
-
-        if (m_xDaemon.is())
-        {
-            // Request to be flushed.
-            m_xDaemon->insert (this);
-        }
     }
 
     // Initialize page cache.
@@ -1436,9 +1412,6 @@ storeError OStorePageManager::rebuild (
     eErrCode = aCtx.getPageSize (nPageSize);
     if (eErrCode != store_E_None)
         return eErrCode;
-
-    // Prevent flush() attempt from daemon during exclusive access.
-    m_xDaemon.clear();
 
     // Initialize as 'Destination' with 'Source' page size.
     eErrCode = self::initialize (pDstLB, store_AccessCreate, nPageSize);

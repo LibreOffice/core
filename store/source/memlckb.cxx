@@ -2,9 +2,9 @@
  *
  *  $RCSfile: memlckb.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2002-08-17 17:00:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,17 @@
  *
  ************************************************************************/
 
-#define _STORE_MEMLCKB_CXX_ "$Revision: 1.3 $"
+#include <store/memlckb.hxx>
+
+#ifndef INCLUDED_STDDEF_H
+#include <stddef.h>
+#define INCLUDED_STDDEF_H
+#endif
+
+#ifndef INCLUDED_STRING_H
+#include <string.h>
+#define INCLUDED_STRING_H
+#endif
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -76,28 +86,14 @@
 #include <osl/mutex.hxx>
 #endif
 
+#ifndef _STORE_TYPES_H_
+#include <store/types.h>
+#endif
 #ifndef _STORE_OBJECT_HXX_
 #include <store/object.hxx>
 #endif
 #ifndef _STORE_LOCKBYTE_HXX_
 #include <store/lockbyte.hxx>
-#endif
-#ifndef _STORE_MEMLCKB_HXX_
-#include <store/memlckb.hxx>
-#endif
-
-#ifndef _STORE_TYPES_H_
-#include <store/types.h>
-#endif
-
-#ifndef INCLUDED_CSTDDEF
-#include <cstddef>
-#define INCLUDED_CSTDDEF
-#endif
-
-#ifndef INCLUDED_CSTRING
-#include <cstring>
-#define INCLUDED_CSTRING
 #endif
 
 using namespace store;
@@ -107,13 +103,6 @@ using namespace store;
  * OMemoryLockBytes internals.
  *
  *======================================================================*/
-/* MSVC 6.0 still has std functions in global namespace */
-#if defined(_MSC_VER) && (_MSC_VER <= 1200)
-#define __STORE_CSTD
-#else
-#define __STORE_CSTD std
-#endif /* _MSC_VER */
-
 #ifdef DEBUG
 #define inline static
 #endif /* DEBUG */
@@ -123,7 +112,7 @@ using namespace store;
  */
 inline void __store_memcpy (void * dst, const void * src, sal_uInt32 n)
 {
-    __STORE_CSTD::memcpy (dst, src, n);
+    ::memcpy (dst, src, n);
 }
 
 /*
@@ -131,7 +120,7 @@ inline void __store_memcpy (void * dst, const void * src, sal_uInt32 n)
  */
 inline void __store_memset (void * dst, int val, sal_uInt32 n)
 {
-    __STORE_CSTD::memset (dst, val, n);
+    ::memset (dst, val, n);
 }
 
 #ifdef DEBUG
@@ -155,11 +144,11 @@ class OMemoryLockBytes_Impl
     sal_uInt32  m_nSize;
 
 public:
-    static void * operator new (std::size_t n) SAL_THROW(())
+    static void * operator new (size_t n) SAL_THROW(())
     {
         return rtl_allocateMemory (sal_uInt32(n));
     }
-    static void operator delete (void * p, std::size_t) SAL_THROW(())
+    static void operator delete (void * p, size_t) SAL_THROW(())
     {
         rtl_freeMemory (p);
     }
@@ -294,10 +283,8 @@ inline storeError OMemoryLockBytes_Impl::stat (sal_uInt32 &rnSize)
  * OMemoryLockBytes.
  */
 OMemoryLockBytes::OMemoryLockBytes (void)
+    : m_pImpl (new OMemoryLockBytes_Impl())
 {
-    // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
-    m_pImpl = new OMemoryLockBytes_Impl();
 }
 
 /*
@@ -305,8 +292,6 @@ OMemoryLockBytes::OMemoryLockBytes (void)
  */
 OMemoryLockBytes::~OMemoryLockBytes (void)
 {
-    // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
     delete m_pImpl;
 }
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mhu $ $Date: 2002-08-22 15:31:09 $
+#   last change: $Author: hr $ $Date: 2003-03-27 14:06:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,9 +99,12 @@ SHL1VERSIONMAP=	$(TARGET).map
 .ENDIF
 
 SHL1STDLIBS=	$(SALLIB)
-.IF "$(COM)"=="GCC"
-SHL1STDLIBS+= 	-lsupc++
-.ENDIF # GCC
+
+# On gcc3 __Unwind_SetIP is not in supc++ but in libgcc_s.so
+.IF "$(COMID)"=="gcc3"
+SHL1STDLIBS+= 	-lsupc++ -lgcc_s
+.ENDIF
+
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 SHL1DEPN=	$(L)$/isal.lib
