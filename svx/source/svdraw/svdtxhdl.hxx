@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: aw $ $Date: 2002-08-01 14:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,11 +108,20 @@ class ImpTextPortionHandler
     Fraction                    aYFact;
 
     // Variablen fuer DrawTextToPath
-    Polygon                     aPoly;
-    long                        nTextWidth;
+    // #101498#
+    //Polygon                       aPoly;
+    //long                      nTextWidth;
     ULONG                       nParagraph;
     BOOL                        bToLastPoint;
     BOOL                        bDraw;
+    void*                       mpRecordPortions;
+
+private:
+    // #101498#
+    void SortedAddFormTextRecordPortion(DrawPortionInfo* pInfo);
+    void DrawFormTextRecordPortions(Polygon aPoly);
+    void ClearFormTextRecordPortions();
+    sal_uInt32 GetFormTextPortionsLength(OutputDevice* pOut);
 
 public:
     ImpTextPortionHandler(SdrOutliner& rOutln, const SdrTextObj& rTxtObj);
@@ -126,8 +135,11 @@ public:
 
     DECL_LINK(ConvertHdl,DrawPortionInfo*);
     DECL_LINK(FitTextDrawHdl,DrawPortionInfo*);
-    DECL_LINK(FormTextWidthHdl,DrawPortionInfo*);
-    DECL_LINK(FormTextDrawHdl,DrawPortionInfo*);
+
+    // #101498#
+    DECL_LINK(FormTextRecordPortionHdl, DrawPortionInfo*);
+    //DECL_LINK(FormTextWidthHdl,DrawPortionInfo*);
+    //DECL_LINK(FormTextDrawHdl,DrawPortionInfo*);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
