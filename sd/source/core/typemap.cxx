@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:24:29 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,10 @@
 #ifndef _SVX_TEXTIT0_HXX //autogen
 #include <svx/xtextit0.hxx>
 #endif
+#ifndef _AVMEDIA_MEDIAITEM_HXX
+#include <avmedia/mediaitem.hxx>
+#endif
+
 
 #define ITEMID_DASH_LIST        SID_DASH_LIST
 #define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
@@ -276,6 +280,7 @@
 #define SvxLanguage                 SfxUInt16Item
 //#define SfxLockBytesItem            SfxPoolItem
 #define OfaStringListItem           SfxStringListItem
+#define avmedia_MediaItem           ::avmedia::MediaItem
 
 #ifndef _SFX_TPLPITEM_HXX //autogen
 #include <sfx2/tplpitem.hxx>
