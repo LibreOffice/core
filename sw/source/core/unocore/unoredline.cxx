@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
+ *  last change: $Author: vg $ $Date: 2001-01-18 16:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,7 +668,7 @@ Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
             }
             break;
             default:
-                DBG_ERROR("illegal node type")
+                DBG_ERROR("illegal node type");
         }
         aRet <<= xRet;
     }
