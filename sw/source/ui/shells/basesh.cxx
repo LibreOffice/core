@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:43:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,11 +578,16 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     rReq.Ignore();
                     bIgnore = sal_True;
                     int nRet = SwTransferable::PasteSpecial( rSh, aDataHelper, nFormatId );
-                    if ( nRet && rReq.IsRecording() )
+                    if(nRet)// && rReq.IsRecording() )
                     {
-                        SfxRequest aReq( pView->GetViewFrame(), SID_CLIPBOARD_FORMAT_ITEMS );
-                        aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, nFormatId ) );
-                        aReq.Done();
+                        SfxViewFrame* pViewFrame = GetView().GetViewFrame();
+                        com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+                                pViewFrame->GetBindings().GetRecorder();
+                        if(xRecorder.is()) {
+                            SfxRequest aReq( pView->GetViewFrame(), SID_CLIPBOARD_FORMAT_ITEMS );
+                            aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, nFormatId ) );
+                            aReq.Done();
+                        }
                     }
 
                     if (rSh.IsFrmSelected() || rSh.IsObjSelected())
