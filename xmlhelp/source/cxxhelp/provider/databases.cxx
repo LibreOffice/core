@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-28 14:14:36 $
+ *  last change: $Author: abi $ $Date: 2001-07-17 08:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,6 +613,10 @@ void Databases::setFromURL( const rtl::OUString& url,const Reference< XInputStre
 Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& jar,
                                                          const rtl::OUString& Language )
 {
+    if( ! jar.getLength() ||
+        ! Language.getLength() )
+        return Reference< XHierarchicalNameAccess >( 0 );
+
     rtl::OUString key = lang(Language) + rtl::OUString::createFromAscii( "/" ) + jar;
 
     osl::MutexGuard aGuard( m_aMutex );
