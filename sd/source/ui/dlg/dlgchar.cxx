@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgchar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,16 +65,20 @@
 
 #include <svx/dialogs.hrc>
 #include <svx/flstitem.hxx>
-#ifndef _SVX_CHARDLG_HXX //autogen
-#include <svx/chardlg.hxx>
-#endif
+//CHINA001 #ifndef _SVX_CHARDLG_HXX //autogen
+//CHINA001 #include <svx/chardlg.hxx>
+//CHINA001 #endif
+#include <svx/flagsdef.hxx> //CHINA001
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
 
 #include "sdresid.hxx"
 #include "dlg_char.hxx"
-
+#include <svx/svxids.hrc> //CHINA001
+#ifndef _SFXINTITEM_HXX //CHINA001
+#include <svtools/intitem.hxx> //CHINA001
+#endif //CHINA001
 
 /*************************************************************************
 |*
@@ -90,15 +94,16 @@ SdCharDlg::SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
 {
     FreeResource();
 
-    AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_CHAR_POSITION, SvxCharPositionPage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_CHAR_NAME ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_CHAR_EFFECTS ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_CHAR_POSITION ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_POSITION, SvxCharPositionPage::Create, 0 );
 }
 
 // -----------------------------------------------------------------------
 
 void SdCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
+    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool())); //CHINA001
     switch( nId )
     {
         case RID_SVXPAGE_CHAR_NAME:
@@ -106,12 +111,16 @@ void SdCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             SvxFontListItem aItem(*( (const SvxFontListItem*)
                 ( rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
 
-            ( (SvxCharNamePage&) rPage ).SetFontList( aItem );
+            //CHINA001 ( (SvxCharNamePage&) rPage ).SetFontList( aItem );
+            aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
+            rPage.PageCreated(aSet);
         }
         break;
 
         case RID_SVXPAGE_CHAR_EFFECTS:
-            ( (SvxCharEffectsPage&) rPage ).DisableControls( DISABLE_CASEMAP );
+            //CHINA001 ( (SvxCharEffectsPage&) rPage ).DisableControls( DISABLE_CASEMAP );
+            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP)); //CHINA001
+            rPage.PageCreated(aSet);
             break;
 
         default:
