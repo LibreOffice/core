@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:37:00 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #include "globstr.hrc"
 #endif
 
+#ifndef SC_XLSTYLE_HXX
+#include "xlstyle.hxx"
+#endif
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
 #endif
@@ -480,7 +483,9 @@ static const sal_Char* const ppcStyleNames[] =
     "Currency",
     "Percent",
     "Comma_0",
-    "Currency_0"
+    "Currency_0",
+    "Hyperlink",
+    "Followed_Hyperlink"
 };
 
 String XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, sal_uInt8 nLevel )
@@ -582,11 +587,13 @@ sal_uInt16 XclTools::GetBuiltInXFIndex( sal_uInt8 nStyleId, sal_uInt8 nLevel )
         case EXC_STYLE_COLLEVEL:
             DBG_ASSERT( nLevel < EXC_STYLE_LEVELCOUNT, "XclTools::GetBuiltInXFIndex - invalid level" );
             return 2 + 2 * nLevel;
-        case EXC_STYLE_COMMA:       return 16;
-        case EXC_STYLE_COMMA_0:     return 17;
-        case EXC_STYLE_CURRENCY:    return 18;
-        case EXC_STYLE_CURRENCY_0:  return 19;
-        case EXC_STYLE_PERCENT:     return 20;
+        case EXC_STYLE_COMMA:               return 16;
+        case EXC_STYLE_COMMA_0:             return 17;
+        case EXC_STYLE_CURRENCY:            return 18;
+        case EXC_STYLE_CURRENCY_0:          return 19;
+        case EXC_STYLE_PERCENT:             return 20;
+        case EXC_STYLE_HYPERLINK:           return 21;
+        case EXC_STYLE_FOLLOWED_HYPERLINK:  return 22;
         default:
             DBG_ERRORFILE( "XclTools::GetBuiltInXFIndex - unknown style id" );
     }
@@ -598,9 +605,10 @@ sal_uInt16 XclTools::GetBuiltInXFIndex( sal_uInt8 nStyleId, sal_uInt8 nLevel )
 
 const String XclTools::maCFStyleNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_CondFormat_" ) );
 
-String XclTools::GetCondFormatStyleName( sal_Int32 nFormat, sal_uInt16 nCondition )
+String XclTools::GetCondFormatStyleName( sal_uInt16 nScTab, sal_Int32 nFormat, sal_uInt16 nCondition )
 {
-    return String( maCFStyleNamePrefix ).Append( String::CreateFromInt32( nFormat + 1 ) ).
+    return String( maCFStyleNamePrefix ).Append( String::CreateFromInt32( nScTab + 1 ) ).
+                Append( '_' ).Append( String::CreateFromInt32( nFormat + 1 ) ).
                 Append( '_' ).Append( String::CreateFromInt32( nCondition + 1 ) );
 }
 
