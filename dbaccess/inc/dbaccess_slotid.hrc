@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_slotid.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 17:25:39 $
+ *  last change: $Author: fs $ $Date: 2001-06-22 10:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,17 @@
 #include <sfx2/sfxsids.hrc>
 #endif
 
-#define SID_INDEXDESIGN         ( SID_DBACCESS_START +   0 )
+#define SID_INDEXDESIGN             ( SID_DBACCESS_START +   0 )
+#define SID_DOCUMENT_DATA_SOURCE    ( SID_DBACCESS_START +   1 )
 
 #endif // _DBACCESS_SLOTID_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/16 17:25:39  fs
+ *  initial checkin - slot ids for dbaccess
+ *
  *
  *  Revision 1.0 07.03.01 09:42:29  fs
  ************************************************************************/
