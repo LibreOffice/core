@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:48:54 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #endif
 #ifndef _SWVIEW_HXX
 #include <view.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
 #endif
 #ifndef _UNOMOD_HXX
 #include <unomod.hxx>
@@ -187,6 +190,10 @@
 #include <crsskip.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -270,6 +277,7 @@ sal_Bool lcl_FindObjInGroup(
 SwXTextView::SwXTextView(SwView* pSwView) :
     SfxBaseController(pSwView),
     pView(pSwView),
+    pMap( aSwMapProvider.GetPropertyMap( PROPERTY_MAP_TEXT_VIEW ) ),
     pxViewSettings(0),
     pxTextViewCursor(0)
 {
@@ -325,7 +333,7 @@ Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(::com::sun::star:
 
     long nIndex = aBaseTypes.getLength();
     aBaseTypes.realloc(
-        aBaseTypes.getLength() + 6 );
+        aBaseTypes.getLength() + 7 );
 
     uno::Type* pBaseTypes = aBaseTypes.getArray();
     pBaseTypes[nIndex++] = ::getCppuType((Reference<XSelectionSupplier  >*)0);
@@ -334,6 +342,7 @@ Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(::com::sun::star:
     pBaseTypes[nIndex++] = ::getCppuType((Reference<XTextViewCursorSupplier>*)0);
     pBaseTypes[nIndex++] = ::getCppuType((Reference<XViewSettingsSupplier   >*)0);
     pBaseTypes[nIndex++] = ::getCppuType((Reference<XRubySelection  >*)0);
+    pBaseTypes[nIndex++] = ::getCppuType((Reference<XPropertySet  >*)0);
     return aBaseTypes;
 }
 /* -----------------------------18.05.00 10:18--------------------------------
@@ -400,6 +409,11 @@ uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
     else if(aType == ::getCppuType((Reference<XRubySelection>*)0))
     {
         Reference<XRubySelection> xRet = this;
+        aRet.setValue(&xRet, aType);
+    }
+    else if(aType == ::getCppuType((Reference<XPropertySet>*)0))
+    {
+        Reference<XPropertySet> xRet = this;
         aRet.setValue(&xRet, aType);
     }
     else
@@ -699,29 +713,32 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
             {
                 //Get FlyFrameFormat; fuer UI Macro Anbindung an Flys
                 const SwFrmFmt* pFmt = rSh.GetFlyFrmFmt();
-                SwXFrame* pxFrame = (SwXFrame*)SwClientIter((SwFrmFmt&)*pFmt).
-                                                First(TYPE(SwXFrame));
+                if (pFmt)
+                {
+                    SwXFrame* pxFrame = (SwXFrame*)SwClientIter((SwFrmFmt&)*pFmt).
+                                                    First(TYPE(SwXFrame));
 
-                if(pxFrame)                //das einzige gemeinsame interface fuer alle Frames
-                {
-                    aRef = Reference< uno::XInterface >((cppu::OWeakObject*)pxFrame, uno::UNO_QUERY);
-                }
-                else
-                {
-                    if(SEL_FRAME == eSelMode)
+                    if(pxFrame)                //das einzige gemeinsame interface fuer alle Frames
                     {
-                        Reference< text::XTextFrame >  xFrm =  new SwXTextFrame((SwFrmFmt&)*pFmt);
-                        aRef = Reference< uno::XInterface >(xFrm, uno::UNO_QUERY);
-                    }
-                    else if(SEL_GRAPHIC == eSelMode)
-                    {
-                        Reference< text::XTextContent >  xFrm = new SwXTextGraphicObject((SwFrmFmt&)*pFmt);
-                        aRef = xFrm;
+                        aRef = Reference< uno::XInterface >((cppu::OWeakObject*)pxFrame, uno::UNO_QUERY);
                     }
                     else
                     {
-                        Reference< text::XTextContent >  xFrm =  new SwXTextEmbeddedObject((SwFrmFmt&)*pFmt);
-                        aRef = xFrm;
+                        if(SEL_FRAME == eSelMode)
+                        {
+                            Reference< text::XTextFrame >  xFrm =  new SwXTextFrame((SwFrmFmt&)*pFmt);
+                            aRef = Reference< uno::XInterface >(xFrm, uno::UNO_QUERY);
+                        }
+                        else if(SEL_GRAPHIC == eSelMode)
+                        {
+                            Reference< text::XTextContent >  xFrm = new SwXTextGraphicObject((SwFrmFmt&)*pFmt);
+                            aRef = xFrm;
+                        }
+                        else
+                        {
+                            Reference< text::XTextContent >  xFrm =  new SwXTextEmbeddedObject((SwFrmFmt&)*pFmt);
+                            aRef = xFrm;
+                        }
                     }
                 }
             }
@@ -1082,6 +1099,143 @@ void SwXTextView::NotifyDBChanged()
         if(xDispatch.is())
             xDispatch->dispatch(aURL, Sequence<PropertyValue>(0));
     }
+}
+
+/* -----------------------------10.12.04 11:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+
+uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXTextView::getPropertySetInfo(  )
+    throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+    static Reference< XPropertySetInfo > aRef = new SfxItemPropertySetInfo( pMap );
+    return aRef;
+}
+
+
+void SAL_CALL SwXTextView::setPropertyValue(
+        const OUString& rPropertyName, const uno::Any& rValue )
+    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName( pMap, rPropertyName );
+    if (!pCur)
+        throw UnknownPropertyException();
+    else if (pCur->nFlags & PropertyAttribute::READONLY)
+        throw PropertyVetoException();
+    else
+    {
+        switch (pCur->nWID)
+        {
+            case WID_IS_CONSTANT_SPELLCHECK :
+            case WID_IS_HIDE_SPELL_MARKS :
+            {
+                sal_Bool bVal;
+                const SwViewOption *pOpt = pView->GetWrtShell().GetViewOptions();
+                if (!pOpt || !(rValue >>= bVal))
+                    throw RuntimeException();
+                SwViewOption aNewOpt( *pOpt );
+                if (pCur->nWID == WID_IS_CONSTANT_SPELLCHECK)
+                    aNewOpt.SetOnlineSpell(bVal);
+                else
+                    aNewOpt.SetHideSpell(bVal);
+                pView->GetWrtShell().ApplyViewOptions( aNewOpt );
+            }
+            break;
+            default :
+                DBG_ERROR("unknown WID");
+        }
+    }
+}
+
+
+uno::Any SAL_CALL SwXTextView::getPropertyValue(
+        const OUString& rPropertyName )
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    Any aRet;
+
+    const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName( pMap, rPropertyName );
+    if (!pCur)
+        throw UnknownPropertyException();
+    else
+    {
+        sal_Int16 nWID = pCur->nWID;
+        switch (nWID)
+        {
+            case WID_PAGE_COUNT :
+            case WID_LINE_COUNT :
+            {
+                // format document completely in order to get meaningful
+                // values for page count and line count
+                pView->GetWrtShell().CalcLayout();
+
+                sal_Int32 nCount = -1;
+                if (nWID == WID_PAGE_COUNT)
+                    nCount = pView->GetDocShell()->GetDoc()->GetPageCount();
+                else // WID_LINE_COUNT
+                    nCount = pView->GetWrtShell().GetLineCount( FALSE /*of whole document*/ );
+                aRet <<= nCount;
+            }
+            break;
+            case WID_IS_CONSTANT_SPELLCHECK :
+            case WID_IS_HIDE_SPELL_MARKS :
+            {
+                const SwViewOption *pOpt = pView->GetWrtShell().GetViewOptions();
+                if (!pOpt)
+                    throw RuntimeException();
+                UINT32 nFlag = nWID == WID_IS_CONSTANT_SPELLCHECK ?
+                                    VIEWOPT_1_ONLINESPELL : VIEWOPT_1_HIDESPELL;
+                sal_Bool bVal = 0 != (pOpt->GetCoreOptions() & nFlag);
+                aRet <<= bVal;
+            }
+            break;
+            default :
+                DBG_ERROR("unknown WID");
+        }
+    }
+
+    return aRet;
+}
+
+
+void SAL_CALL SwXTextView::addPropertyChangeListener(
+        const OUString& rPropertyName,
+        const uno::Reference< beans::XPropertyChangeListener >& rxListener )
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    DBG_WARNING("not implemented")
+}
+
+
+void SAL_CALL SwXTextView::removePropertyChangeListener(
+        const OUString& rPropertyName,
+        const uno::Reference< beans::XPropertyChangeListener >& rxListener )
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    DBG_WARNING("not implemented")
+}
+
+
+void SAL_CALL SwXTextView::addVetoableChangeListener(
+        const OUString& rPropertyName,
+        const uno::Reference< beans::XVetoableChangeListener >& rxListener )
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    DBG_WARNING("not implemented")
+}
+
+
+void SAL_CALL SwXTextView::removeVetoableChangeListener(
+        const OUString& rPropertyName,
+        const uno::Reference< beans::XVetoableChangeListener >& rxListener )
+    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    DBG_WARNING("not implemented")
 }
 
 /* -----------------------------06.04.00 11:07--------------------------------
