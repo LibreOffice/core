@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odbcconfig.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:26 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,13 +103,13 @@ protected:
 #ifndef HAVE_ODBC_SUPPORT
     OOdbcLibWrapper() : m_pOdbcLib(NULL) { }
 #endif
-    OOdbcLibWrapper(const sal_Char* _pLibPath);
+    OOdbcLibWrapper();
     ~OOdbcLibWrapper();
 
     void*   loadSymbol(const sal_Char* _pFunctionName);
 
     /// load the lib
-    sal_Bool    load();
+    sal_Bool    load(const sal_Char* _pLibPath);
     /// unload the lib
     void        unload();
 };
