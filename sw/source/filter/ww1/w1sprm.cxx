@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1sprm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:00:43 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:22:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,7 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC* pBrc)
     pLine->SetDistance(nDistTab[nIdx]);
     if(pBrc->icoGet())
     {
-        ColorName nIdx;
+        ColorData nIdx;
         switch(pBrc->icoGet())
         {
         default: ASSERT(FALSE, "unknown color code");
