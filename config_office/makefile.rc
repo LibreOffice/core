@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: svesik $ $Date: 2000-10-23 13:02:11 $
+#   last change: $Author: svesik $ $Date: 2000-10-24 22:48:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -172,7 +172,8 @@ RC_SUBDIRS =  \
 	wizards \
 	xml2cmp \
 	xmlhelp \
-	xmloff
+	xmloff \
+	xprinter
 
 # 
 # bootstrap target
@@ -260,7 +261,7 @@ unoidl : registry
 unoil : jurt
 unotools : comphelper
 uui : svtools
-vcl : rsc sot ucbhelper unotools
+vcl : rsc sot ucbhelper unotools xprinter
 vos : sal
 wizards : offmgr
 
