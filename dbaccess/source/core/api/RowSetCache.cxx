@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:18:56 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,12 +235,15 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
 
                             Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
                             Reference<XColumnsSupplier> xColSup(_xComposer,UNO_QUERY);
-                            Reference<XNameAccess> xSelColumns = xColSup->getColumns();
+                            if ( xColSup.is() )
+                            {
+                                Reference<XNameAccess> xSelColumns = xColSup->getColumns();
 
-                            Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
-                            OColumnNamePos aColumnNames(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers() ? true : false);
-                            ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
-                            bAllKeysFound = sal_Int32(aColumnNames.size()) == xColumns->getElementNames().getLength();
+                                Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
+                                OColumnNamePos aColumnNames(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers() ? true : false);
+                                ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
+                                bAllKeysFound = sal_Int32(aColumnNames.size()) == xColumns->getElementNames().getLength();
+                            }
                         }
                     }
                 }
@@ -263,6 +266,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         try
         {
             m_pCacheSet = new OBookmarkSet();
+            m_xCacheSet = m_pCacheSet;
             m_pCacheSet->construct(_xRs);
 
             // check privileges
@@ -296,6 +300,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         if(!bAllKeysFound )
         {
             m_pCacheSet = new OStaticSet();
+            m_xCacheSet = m_pCacheSet;
             m_pCacheSet->construct(_xRs);
             m_nPrivileges = Privilege::SELECT;
         }
@@ -335,11 +340,13 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             OKeySet* pKeySet = new OKeySet(m_aUpdateTable,aUpdateTableName ,_xComposer);
             try
             {
+                m_pCacheSet = pKeySet;
+                m_xCacheSet = m_pCacheSet;
                 pKeySet->construct(_xRs);
 
                 // now we need to set the extern parameters because the select stmt could contain a :var1
                 pKeySet->setExternParameters(_rParameterRow);
-                m_pCacheSet = pKeySet;
+
 
                 if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())  // this interface is optional so we have to check it
                 {
@@ -359,8 +366,10 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             {
                 // we couldn't create a keyset here so we have to create a static cache
                 if ( m_pCacheSet )
-                    delete m_pCacheSet;
+                    m_pCacheSet = NULL;
+                m_xCacheSet = NULL;
                 m_pCacheSet = new OStaticSet();
+                m_xCacheSet = m_pCacheSet;
                 m_pCacheSet->construct(_xRs);
                 m_nPrivileges = Privilege::SELECT;
             }
@@ -376,8 +385,8 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
 // -------------------------------------------------------------------------
 ORowSetCache::~ORowSetCache()
 {
-    delete m_pCacheSet;
     m_pCacheSet = NULL;
+    m_xCacheSet = NULL;
     if(m_pMatrix)
     {
         m_pMatrix->clear();
