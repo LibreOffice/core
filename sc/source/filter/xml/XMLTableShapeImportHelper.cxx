@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-23 09:30:10 $
+ *  last change: $Author: sab $ $Date: 2002-05-28 06:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,18 @@ XMLTableShapeImportHelper::~XMLTableShapeImportHelper()
 {
 }
 
+void XMLTableShapeImportHelper::SetLayer(uno::Reference<drawing::XShape>& rShape, sal_Int16 nLayerID, const rtl::OUString& sType) const
+{
+    if (sType.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape"))))
+        nLayerID = SC_LAYER_CONTROLS;
+    if (nLayerID != -1)
+    {
+        uno::Reference< beans::XPropertySet > xShapeProp( rShape, uno::UNO_QUERY );
+        if( xShapeProp.is() )
+            xShapeProp->setPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ), uno::makeAny(nLayerID) );
+    }
+}
+
 void XMLTableShapeImportHelper::finishShape(
     uno::Reference< drawing::XShape >& rShape,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
@@ -158,14 +170,7 @@ void XMLTableShapeImportHelper::finishShape(
                     pRangeList = new rtl::OUString(rValue);
             }
         }
-        if ((nLayerID == -1) && rShape->getShapeType().equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape")))) //controls are never in background
-            nLayerID = SC_LAYER_CONTROLS;
-        if (nLayerID != -1)
-        {
-            uno::Reference< beans::XPropertySet > xShapeProp( rShape, uno::UNO_QUERY );
-            if( xShapeProp.is() )
-                xShapeProp->setPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ), uno::makeAny(nLayerID) );
-        }
+        SetLayer(rShape, nLayerID, rShape->getShapeType());
 
         if (!bOnTable)
         {
@@ -189,6 +194,28 @@ void XMLTableShapeImportHelper::finishShape(
                     ScDrawLayer::SetAnchor(pSdrObj, SCA_PAGE);
             }
         }
+    }
+    else //#99532# this are grouped shapes which should also get the layerid
+    {
+        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        sal_Int16 nLayerID(-1);
+        for( sal_Int16 i=0; i < nAttrCount; i++ )
+        {
+            const rtl::OUString& rAttrName = xAttrList->getNameByIndex( i );
+            const rtl::OUString& rValue = xAttrList->getValueByIndex( i );
+
+            rtl::OUString aLocalName;
+            sal_uInt16 nPrefix =
+                static_cast<ScXMLImport&>(mrImporter).GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                                &aLocalName );
+            if(nPrefix == XML_NAMESPACE_TABLE)
+            {
+                if (IsXMLToken(aLocalName, XML_TABLE_BACKGROUND))
+                    if (IsXMLToken(rValue, XML_TRUE))
+                        nLayerID = SC_LAYER_BACK;
+            }
+        }
+        SetLayer(rShape, -1, rShape->getShapeType());
     }
     static_cast<ScXMLImport&>(mrImporter).UnlockSolarMutex();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-23 15:24:06 $
+ *  last change: $Author: sab $ $Date: 2002-05-28 06:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ public:
     XMLTableShapeImportHelper( ScXMLImport& rImp, SvXMLImportPropertyMapper *pImpMapper=0 );
     ~XMLTableShapeImportHelper();
 
+    void SetLayer(com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& rShape, sal_Int16 nLayerID, const rtl::OUString& sType) const;
     virtual void finishShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape,
             const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
             com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
@@ -89,5 +90,6 @@ public:
     void SetCell (const ::com::sun::star::table::CellAddress& rAddress) { aStartCell = rAddress; }
     void SetOnTable (const sal_Bool bTempOnTable) { bOnTable = bTempOnTable; }
 };
+
 
 #endif
