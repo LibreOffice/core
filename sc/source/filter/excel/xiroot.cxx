@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:38:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
+#endif
+#ifndef SC_XIPIVOT_HXX
+#include "xipivot.hxx"
 #endif
 
 #include "root.hxx"
@@ -211,6 +214,13 @@ XclImpWebQueryBuffer& XclImpRoot::GetWebQueryBuffer() const
     if( !mrImpData.mpWebQBuffer.get() )
         mrImpData.mpWebQBuffer.reset( new XclImpWebQueryBuffer( GetRoot() ) );
     return *mrImpData.mpWebQBuffer;
+}
+
+XclImpPivotTableManager& XclImpRoot::GetPivotTableManager() const
+{
+    if( !mrImpData.mpPTManager.get() )
+        mrImpData.mpPTManager.reset( new XclImpPivotTableManager( GetRoot() ) );
+    return *mrImpData.mpPTManager;
 }
 
 ExcelToSc& XclImpRoot::GetFmlaConverter() const
