@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 21:57:28 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2998,7 +2998,7 @@ String STR_ObjNameSingulUno
     Text = "Kontrollfeld" ;
     Text [ ENGLISH ] = "Control field" ;
     Text[ english_us ] = "Control";
-    Text[ portuguese ] = "Campo de controlo";
+    Text[ portuguese ] = "Controlo";
     Text[ russian ] = "İëåìåíò óïğàâëåíèÿ";
     Text[ dutch ] = "Controleveld";
     Text[ french ] = "Contrôle";
@@ -5677,7 +5677,7 @@ String STR_ExchangeClpPaste
     Text [ norwegian ] = "Lim inn Utklippstavle" ;
     Text [ italian ] = "Incolla Appunti" ;
     Text [ portuguese_brazilian ] = "Colar clipboard" ;
-    Text [ portuguese ] = "Colar conteúdo da Área de Transferência" ;
+    Text [ portuguese ] = "Colar conteúdo da área de transferência" ;
     Text [ finnish ] = "Liitä leikepöytä" ;
     Text [ danish ] = "Indsæt udklipsholder" ;
     Text [ french ] = "Coller le contenu du presse-papiers" ;
@@ -6101,7 +6101,7 @@ String STR_DragMethGradient
     Text[ danish ] = "Interaktiv farvegraduering for %O";
     Text[ polish ] = "Interaktywny gradient dla %O";
     Text[ portuguese_brazilian ] = "Interactive gradient for %O";
-    Text[ japanese ] = "%O—p²İÀ×¸Ã¨ÌŞ¸Ş×ÃŞ°¼®İ";
+    Text[ japanese ] = "%O ‚Ì‘Î˜bŒ^‘€ì¸Ş×ÃŞ°¼®İ";
     Text[ korean ] = "%O¸¦ À§ÇÑ ´ëÈ­½Ä ±×¶óµ¥ÀÌ¼Ç";
     Text[ chinese_simplified ] = "ÓÃÓÚ %O µÄ½»»¥Ê½²ÊÉ«Í¼°¸";
     Text[ chinese_traditional ] = "%O ¥æ°Ê¦¡±m¦â¹Ï®×";
@@ -6126,7 +6126,7 @@ String STR_DragMethTransparence
     Text[ danish ] = "Interaktiv transparens for %O";
     Text[ polish ] = "Interaktywna przezroczystoœæ dla %O";
     Text[ portuguese_brazilian ] = "Interactive transparence for %O";
-    Text[ japanese ] = "%O‚Ì‚½‚ß‚Ì²İÀ×¸Ã¨ÌŞ“§‰ß«";
+    Text[ japanese ] = "%O ‚Ì‘Î˜bŒ^‘€ì“§‰ß«";
     Text[ korean ] = "%O¸¦ À§ÇÑ ´ëÈ­½Ä Åõ¸íµµ";
     Text[ chinese_simplified ] = "ÓÃÓÚ %O µÄ½»»¥Ê½Í¸Ã÷";
     Text[ chinese_traditional ] = "%O ªº¥æ°Ê¦¡³z©ú";
@@ -7777,14 +7777,14 @@ String STR_ItemValTEXTVADJTOP
     Text [ spanish ] = "Arriba" ;
     Text [ french ] = "En haut" ;
     Text [ dutch ] = "Boven" ;
-    Text[ chinese_simplified ] = "ÉÏ";
+    Text[ chinese_simplified ] = "ÏòÉÏ";
     Text[ russian ] = "Ââåğõó";
     Text[ polish ] = "W górze";
     Text[ japanese ] = "ã";
     Text[ chinese_traditional ] = "¦V¤W";
     Text[ arabic ] = "ÃÚáì";
     Text[ dutch ] = "Boven";
-    Text[ chinese_simplified ] = "ÉÏ";
+    Text[ chinese_simplified ] = "ÏòÉÏ";
     Text[ greek ] = "ĞÜíù";
     Text[ korean ] = "À§";
     Text[ turkish ] = "Üst";
@@ -7805,14 +7805,14 @@ String STR_ItemValTEXTVADJCENTER
     Text [ spanish ] = "Centro" ;
     Text [ french ] = "Milieu" ;
     Text [ dutch ] = "Midden" ;
-    Text[ chinese_simplified ] = "ÖĞ";
+    Text[ chinese_simplified ] = "¾ÓÖĞ";
     Text[ russian ] = "Ïî ñåğåäèíå";
     Text[ polish ] = "Poœrodku";
     Text[ japanese ] = "’†‰›";
     Text[ chinese_traditional ] = "©~¤¤";
     Text[ arabic ] = "ÇáæÓØ";
     Text[ dutch ] = "Midden";
-    Text[ chinese_simplified ] = "ÖĞ";
+    Text[ chinese_simplified ] = "¾ÓÖĞ";
     Text[ greek ] = "Êİíôñï";
     Text[ korean ] = "°¡¿îµ¥";
     Text[ turkish ] = "Orta";
@@ -7833,14 +7833,14 @@ String STR_ItemValTEXTVADJBOTTOM
     Text [ spanish ] = "Abajo" ;
     Text [ french ] = "Inférieur" ;
     Text [ dutch ] = "Beneden" ;
-    Text[ chinese_simplified ] = "ÏÂ";
+    Text[ chinese_simplified ] = "ÏòÏÂ";
     Text[ russian ] = "Âíèçó";
     Text[ polish ] = "W dole";
     Text[ japanese ] = "‰º";
     Text[ chinese_traditional ] = "¦V¤U";
     Text[ arabic ] = "ÃÓİá";
     Text[ dutch ] = "Beneden";
-    Text[ chinese_simplified ] = "ÏÂ";
+    Text[ chinese_simplified ] = "ÏòÏÂ";
     Text[ greek ] = "ÊÜôù";
     Text[ korean ] = "¾Æ·¡";
     Text[ turkish ] = "Alt";
@@ -11395,7 +11395,7 @@ String SIP_XA_FILLBMP_SIZELOG
     Text[ swedish ] = "Kakelstorlek ej i %";
     Text[ polish ] = "Wielkoœæ p³ytek nie w %";
     Text[ portuguese_brazilian ] = "Tile size not in %";
-    Text[ japanese ] = "%‚É•s“K‡‚ÌÀ²Ù »²½Ş";
+    Text[ japanese ] = "% ‚É•s“K‡‚ÈÀ²Ù»²½Ş";
     Text[ chinese_simplified ] = "Æ½ÆÌ´óĞ¡²»ÊÇ %";
     Text[ chinese_traditional ] = "¥­çE¤j¤p¤£¬O %";
     Text[ arabic ] = "ÍÌã ÇáÈáÇØÉ ÈÏæä %";
@@ -17632,5 +17632,6 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
