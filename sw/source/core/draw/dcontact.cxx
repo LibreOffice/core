@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:01:52 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,9 @@ bool CheckControlLayer( const SdrObject *pObj )
 SwDrawContact::SwDrawContact( SwFrmFmt *pToRegisterIn, SdrObject *pObj ) :
     SwContact( pToRegisterIn, pObj ),
     pAnchor( 0 ),
-    pPage( 0 )
+    pPage( 0 ),
+    // OD 10.10.2003 #112299#
+    mbDisconnectInProgress( false )
 {
     // clear vector containing 'virtual' drawing objects.
    maDrawVirtObjs.clear();
@@ -690,9 +692,18 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
             }
         case SDRUSERCALL_INSERTED:
             {
-                ConnectToLayout();
-                if( bNotify )
-                    lcl_Notify( this, pOldBoundRect );
+                // OD 10.10.2003 #112299#
+                if ( mbDisconnectInProgress )
+                {
+                    ASSERT( false,
+                            "<SwDrawContact::_Changed(..)> - Insert event during disconnection from layout is invalid." );
+                }
+                else
+                {
+                    ConnectToLayout();
+                    if( bNotify )
+                        lcl_Notify( this, pOldBoundRect );
+                }
                 break;
             }
         case SDRUSERCALL_REMOVED:
@@ -714,7 +725,13 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
             if( bInCntnt )
             {
                 SwFrm *pAnch = GetAnchor();
-                if( !pAnch )
+                // OD 10.10.2003 #112299# - do not try to connect to layout,
+                // if disconnection from layout is in progress.
+                // Note: Such a usercall can be initiated during disconnection
+                //       of the group object, if a member 'connector' object is
+                //       formatted, because the object, its 'connected' to is
+                //       disconnected from layout.
+                if ( !pAnch && !mbDisconnectInProgress )
                 {
                     ConnectToLayout();
                     pAnch = GetAnchor();
@@ -767,6 +784,10 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
 
 void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
+    // OD 10.10.2003 #112299#
+    ASSERT( !mbDisconnectInProgress,
+            "<SwDrawContact::Modify(..)> called during disconnection.");
+
     //Es kommen immer Sets herein.
     //MA 03. Dec. 95: Falsch es kommen nicht immer Sets herein
     //(siehe SwRootFrm::AssertPageFlys()
@@ -780,8 +801,10 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         else if( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
                                  GetItemState( RES_VERT_ORIENT, FALSE ))
         {
-            SwFrm *pFrm = GetAnchor();
-            if( !pFrm )
+            SwFrm* pFrm = GetAnchor();
+            // OD 10.10.2003 #112299# - do not try to connect to layout during
+            // disconnection from layout.
+            if ( !pFrm && !mbDisconnectInProgress )
             {
                 ConnectToLayout();
                 pFrm = GetAnchor();
@@ -796,30 +819,34 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     if ( pAnch )
     {
         // JP 10.04.95: nicht auf ein Reset Anchor reagieren !!!!!
-        if( SFX_ITEM_SET == ((SwFrmFmt*)pRegisteredIn)->GetAttrSet().
+        if ( SFX_ITEM_SET == ((SwFrmFmt*)pRegisteredIn)->GetAttrSet().
             GetItemState( RES_ANCHOR, FALSE ) )
         {
-            if( !FLY_IN_CNTNT == pAnch->GetAnchorId() )
-                ((SwFrmFmt*)pRegisteredIn)->ResetAttr( RES_VERT_ORIENT );
-
-            SwFrm *pOldAnch = GetAnchor();
-            SwPageFrm *pPg = NULL;
-            SwRect aOldRect;
-            if( pOldAnch )
+            // OD 10.10.2003 #112299# - no connect to layout during disconnection
+            if ( !mbDisconnectInProgress )
             {
-                pPg = pOldAnch->FindPageFrm();
-                aOldRect = SwRect( GetMaster()->GetCurrentBoundRect() );
-            }
-            ConnectToLayout( pAnch );
-            if( pPg && aOldRect.HasArea() )
-                Notify_Background(GetMaster(),pPg,aOldRect,PREP_FLY_LEAVE,TRUE);
-            lcl_Notify( this, NULL );
+                if( !FLY_IN_CNTNT == pAnch->GetAnchorId() )
+                    ((SwFrmFmt*)pRegisteredIn)->ResetAttr( RES_VERT_ORIENT );
 
-            // #86973#
-            if(GetMaster())
-            {
-                GetMaster()->SetChanged();
-                GetMaster()->BroadcastObjectChange();
+                SwFrm *pOldAnch = GetAnchor();
+                SwPageFrm *pPg = NULL;
+                SwRect aOldRect;
+                if( pOldAnch )
+                {
+                    pPg = pOldAnch->FindPageFrm();
+                    aOldRect = SwRect( GetMaster()->GetBoundRect() );
+                }
+                ConnectToLayout( pAnch );
+                if( pPg && aOldRect.HasArea() )
+                    Notify_Background(GetMaster(),pPg,aOldRect,PREP_FLY_LEAVE,TRUE);
+                lcl_Notify( this, NULL );
+
+                // #86973#
+                if(GetMaster())
+                {
+                    GetMaster()->SetChanged();
+                    GetMaster()->BroadcastObjectChange();
+                }
             }
         }
         else
@@ -849,6 +876,9 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 
 void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
 {
+    // OD 10.10.2003 #112299#
+    mbDisconnectInProgress = true;
+
     // OD 16.05.2003 #108784# - remove 'virtual' drawing objects from writer
     // layout and from drawing page
     for ( std::list<SwDrawVirtObj*>::iterator aDisconnectIter = maDrawVirtObjs.begin();
@@ -885,6 +915,9 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
             MoveObjToInvisibleLayer( GetMaster() );
         }
     }
+
+    // OD 10.10.2003 #112299#
+    mbDisconnectInProgress = false;
 }
 
 // OD 26.06.2003 #108784# - method to remove 'master' drawing object
@@ -906,53 +939,48 @@ void SwDrawContact::RemoveMasterFromDrawPage()
 // could be 'master' or 'virtual'.
 // a 'master' drawing object will disconnect a 'virtual' drawing object
 // in order to take its place.
+// OD 13.10.2003 #i19919# - no special case, if drawing object isn't in
+// page header/footer, in order to get drawing objects in repeating table headers
+// also working.
 void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
 {
-    if ( !GetAnchor()->FindFooterOrHeader() )
+    if ( _pDrawObj->ISA(SwDrawVirtObj) )
     {
-        // disconnect completely from layout
-        DisconnectFromLayout();
+        SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(_pDrawObj);
+        pDrawVirtObj->RemoveFromWriterLayout();
+        pDrawVirtObj->RemoveFromDrawingPage();
     }
     else
     {
-        if ( _pDrawObj->ISA(SwDrawVirtObj) )
+        std::list<SwDrawVirtObj*>::const_iterator aFoundVirtObjIter =
+                std::find_if( maDrawVirtObjs.begin(), maDrawVirtObjs.end(),
+                              UsedOrUnusedVirtObjPred( true ) );
+        if ( aFoundVirtObjIter != maDrawVirtObjs.end() )
         {
-            SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(_pDrawObj);
+            // replace found 'virtual' drawing object by 'master' drawing
+            // object and disconnect the 'virtual' one
+            SwDrawVirtObj* pDrawVirtObj = (*aFoundVirtObjIter);
+            SwFrm* pNewAnchorFrmOfMaster = pDrawVirtObj->GetAnchorFrm();
+            Point aNewAnchorPos = pDrawVirtObj->GetAnchorPos();
+            // disconnect 'virtual' drawing object
             pDrawVirtObj->RemoveFromWriterLayout();
             pDrawVirtObj->RemoveFromDrawingPage();
+            // disconnect 'master' drawing object from current frame
+            pAnchor->RemoveDrawObj( this );
+            // re-connect 'master' drawing object to frame of found 'virtual'
+            // drawing object.
+            pNewAnchorFrmOfMaster->AppendDrawObj( this );
+            // set anchor position at 'master' virtual drawing object to the
+            // one of the found 'virtual' drawing object.
+            GetMaster()->SetAnchorPos( aNewAnchorPos );
+            // restore positions of remaining 'virtual' drawing objects
+            CorrectRelativePosOfVirtObjs();
         }
         else
         {
-            std::list<SwDrawVirtObj*>::const_iterator aFoundVirtObjIter =
-                    std::find_if( maDrawVirtObjs.begin(), maDrawVirtObjs.end(),
-                                  UsedOrUnusedVirtObjPred( true ) );
-            if ( aFoundVirtObjIter != maDrawVirtObjs.end() )
-            {
-                // replace found 'virtual' drawing object by 'master' drawing
-                // object and disconnect the 'virtual' one
-                SwDrawVirtObj* pDrawVirtObj = (*aFoundVirtObjIter);
-                SwFrm* pNewAnchorFrmOfMaster = pDrawVirtObj->GetAnchorFrm();
-                Point aNewAnchorPos = pDrawVirtObj->GetAnchorPos();
-                // disconnect 'virtual' drawing object
-                pDrawVirtObj->RemoveFromWriterLayout();
-                pDrawVirtObj->RemoveFromDrawingPage();
-                // disconnect 'master' drawing object from current frame
-                pAnchor->RemoveDrawObj( this );
-                // re-connect 'master' drawing object to frame of found 'virtual'
-                // drawing object.
-                pNewAnchorFrmOfMaster->AppendDrawObj( this );
-                // set anchor position at 'master' virtual drawing object to the
-                // one of the found 'virtual' drawing object.
-                GetMaster()->SetAnchorPos( aNewAnchorPos );
-                // restore positions of remaining 'virtual' drawing objects
-                CorrectRelativePosOfVirtObjs();
-            }
-            else
-            {
-                // no connected 'virtual' drawing object found. Thus, disconnect
-                // completely from layout.
-                DisconnectFromLayout();
-            }
+            // no connected 'virtual' drawing object found. Thus, disconnect
+            // completely from layout.
+            DisconnectFromLayout();
         }
     }
 }
@@ -968,6 +996,15 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
 
 void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
 {
+    // OD 10.10.2003 #112299# - *no* connect to layout during disconnection from
+    // layout.
+    if ( mbDisconnectInProgress )
+    {
+        ASSERT( false,
+                "<SwDrawContact::ConnectToLayout(..)> called during disconnection.");
+        return;
+    }
+
     SwFrmFmt* pDrawFrmFmt = (SwFrmFmt*)pRegisteredIn;
 
     SwRootFrm* pRoot = pDrawFrmFmt->GetDoc()->GetRootFrm();
@@ -1269,6 +1306,14 @@ SwPageFrm* SwDrawContact::FindPage( const SwRect &rRect )
 
 void SwDrawContact::ChkPage()
 {
+    // OD 10.10.2003 #112299#
+    if ( mbDisconnectInProgress )
+    {
+        ASSERT( false,
+                "<SwDrawContact::ChkPage()> called during disconnection." );
+        return;
+    }
+
     SwPageFrm* pPg = pAnchor && pAnchor->IsPageFrm() ?
         pPage : FindPage( GetMaster()->GetCurrentBoundRect() );
     if ( pPage != pPg )
