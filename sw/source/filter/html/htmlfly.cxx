@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:55:07 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,7 +481,9 @@ BOOL SwHTMLWriter::OutFlyFrm( ULONG nNdIdx, xub_StrLen nCntntIdx, BYTE nPos )
         bFlysLeft = bRestart = FALSE;
 
         // suche nach dem Anfang der FlyFrames
-        for( USHORT i=0; i<pHTMLPosFlyFrms->Count() &&
+        USHORT i;
+
+        for( i = 0; i < pHTMLPosFlyFrms->Count() &&
             (*pHTMLPosFlyFrms)[i]->GetNdIndex().GetIndex() < nNdIdx; i++ )
             ;
         for( ; !bRestart && i < pHTMLPosFlyFrms->Count() &&
