@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:02:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ private:
     String          aFile;          // gewaehlter Dateiname
 
     void            InsTextOrRTFinOlMode(SfxMedium* pMedium);
-    void            InsSDDinOlMode(SfxMedium* pMedium);
+    BOOL            InsSDDinOlMode(SfxMedium* pMedium);
     void            InsTextOrRTFinDrMode(SfxMedium* pMedium);
     BOOL            InsSDDinDrMode(SfxMedium* pMedium);
 };
