@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:27:29 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1837,7 +1837,7 @@ ScFunctionMgr::~ScFunctionMgr()
 {
     for (USHORT i = 0; i < MAX_FUNCCAT; i++)
         delete aCatLists[i];
-//  delete pFuncList;       // Macht später die App
+//  delete pFuncList;       // Macht spaeter die App
 }
 
 //------------------------------------------------------------------------
