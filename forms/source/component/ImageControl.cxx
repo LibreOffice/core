@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:29:28 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 11:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,7 @@ void OImageControlModel::disposing()
     OBoundControlModel::disposing();
 
     {
-        ::osl::MutexGuard aRelease( m_aMutex ); // setControlValue expects this
+        ::osl::MutexGuard aGuard( m_aMutex ); // setControlValue expects this
         setControlValue( Any() );
     }
 }
@@ -636,18 +636,18 @@ Sequence<Type> OImageControlControl::_getTypes()
 
 //------------------------------------------------------------------------------
 OImageControlControl::OImageControlControl(const Reference<XMultiServiceFactory>& _rxFactory)
-                       :OBoundControl(_rxFactory, VCL_CONTROL_IMAGECONTROL)
+    :OBoundControl(_rxFactory, VCL_CONTROL_IMAGECONTROL)
+    ,m_pImageIndicator( m_pImageIndicator.createUnambiguous( new OImageIndicator ) )
 {
     increment(m_refCount);
     {
         // als Focus- und MouseListener anmelden
-        Reference<XWindow>  xComp;
-        query_aggregation( m_xAggregate, xComp);
-        if (xComp.is())
-            xComp->addMouseListener(this);
+        Reference< XWindow > xComp;
+        query_aggregation( m_xAggregate, xComp );
+        if ( xComp.is() )
+            xComp->addMouseListener( this );
     }
-    // Refcount bei 1 fuer den Listener
-    sal_Int32 n = decrement(m_refCount);
+    decrement(m_refCount);
 }
 
 // UNO Anbindung
@@ -674,44 +674,46 @@ StringSequence  OImageControlControl::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-// XControl
-//------------------------------------------------------------------------------
-void SAL_CALL OImageControlControl::createPeer(const Reference<XToolkit>& _rxToolkit, const Reference<XWindowPeer>& Parent) throw( RuntimeException )
+//--------------------------------------------------------------------
+sal_Bool SAL_CALL OImageControlControl::setModel(const Reference<starawt::XControlModel>& _rxModel ) throw (RuntimeException)
 {
-    OBoundControl::createPeer(_rxToolkit, Parent);
-    // the following is not necessary anymore. The aggregated control (from the toolkit project)
-    // itself will register as image consumer at the image producer, so there's no need to do this ourself.
-    // This holds since our model is an XImageProducer itself, and thus hiding the XImageProducer of the aggregated
-    // model. Before, we had two ImageProducers working in parallel.
-    // 2003-05-15 - 109591 - fs@openoffice.org
+    Reference< XImageProducer > xProducer( getModel(), UNO_QUERY );
+    if ( xProducer.is() )
+        xProducer->removeConsumer( m_pImageIndicator.getRef() );
 
-/**
-    if (!m_xControl.is())
-        return;
+    sal_Bool bReturn = OBoundControl::setModel( _rxModel );
 
-    // ImageConsumer vom Control holen
-    Reference<XWindowPeer>  xPeer = m_xControl->getPeer();
-    Reference<XImageConsumer>  xImageConsumer(xPeer, UNO_QUERY);
-    if (!xImageConsumer.is())
-        return;
+    xProducer = xProducer.query( getModel() );
+    if ( xProducer.is() )
+    {
+        m_pImageIndicator->reset();
+        xProducer->addConsumer( m_pImageIndicator.getRef() );
+    }
 
-    // ImageConsumer am Imageproducer setzen
-    Reference<XImageProducerSupplier>  xImageSource(m_xControl->getModel(), UNO_QUERY);
-    if (!xImageSource.is())
-        return;
-    Reference<XImageProducer>  xImageProducer = xImageSource->getImageProducer();
-
-    xImageProducer->addConsumer(xImageConsumer);
-    xImageProducer->startProduction();
-*/
+    return bReturn;
 }
 
 //------------------------------------------------------------------------------
-void OImageControlControl::implClearGraphics()
+void OImageControlControl::implClearGraphics( sal_Bool _bForce )
 {
     Reference< XPropertySet > xSet( getModel(), UNO_QUERY );
     if ( xSet.is() )
+    {
+        if ( _bForce )
+        {
+            ::rtl::OUString sOldImageURL;
+            xSet->getPropertyValue( PROPERTY_IMAGE_URL ) >>= sOldImageURL;
+
+            if ( !sOldImageURL.getLength() )
+                // the ImageURL is already empty, so simply setting a new empty one would not suffice
+                // (since it would be ignored)
+                xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:emptyImage" ) ) ) );
+                    // (the concrete URL we're passing here doens't matter. It's important that
+                    // the model cannot resolve it to a a valid resource describing an image stream
+        }
+
         xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString() ) );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -740,7 +742,7 @@ void OImageControlControl::implInsertGraphics()
         {
             // reset the url property in case it already has the value we're about to set - in this case
             // our propertyChanged would not get called without this.
-            implClearGraphics();
+            implClearGraphics( sal_False );
 
             xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString( aDialog.GetPath() ) ) );
         }
@@ -776,10 +778,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
 
             // check if the ImageURL is empty
             ::rtl::OUString sCurrentURL;
-            Reference< XPropertySet > xSet( getModel(), UNO_QUERY );
-            if ( xSet.is() )
-                xSet->getPropertyValue( PROPERTY_IMAGE_URL ) >>= sCurrentURL;
-            if ( 0 == sCurrentURL.getLength() )
+            if ( m_pImageIndicator->isEmptyImage() )
                 xMenu->enableItem( ID_CLEAR_GRAPHICS, sal_False );
 
             awt::Rectangle aRect( e.X, e.Y, 0, 0 );
@@ -806,7 +805,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
                 break;
 
             case ID_CLEAR_GRAPHICS:
-                implClearGraphics();
+                implClearGraphics( sal_True );
                 break;
             }
         }
@@ -844,6 +843,61 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
             implInsertGraphics();
         }
     }
+}
+
+//==============================================================================
+//= OImageIndicator
+//==============================================================================
+DBG_NAME( OImageIndicator )
+//------------------------------------------------------------------------------
+OImageIndicator::OImageIndicator( )
+    :m_bIsProducing( sal_False )
+    ,m_bIsEmptyImage( sal_True )
+{
+    DBG_CTOR( OImageIndicator, NULL );
+}
+
+//------------------------------------------------------------------------------
+OImageIndicator::~OImageIndicator( )
+{
+    DBG_DTOR( OImageIndicator, NULL );
+}
+
+//--------------------------------------------------------------------
+void OImageIndicator::reset()
+{
+    OSL_ENSURE( !m_bIsProducing, "OImageIndicator::reset: sure you know what you're doing? The producer is currently producing!" );
+    m_bIsProducing = sal_True;
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OImageIndicator::init( sal_Int32 Width, sal_Int32 Height ) throw (RuntimeException)
+{
+    m_bIsProducing = sal_True;
+    m_bIsEmptyImage = sal_True;
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OImageIndicator::setColorModel( sal_Int16 BitCount, const Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw (RuntimeException)
+{
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OImageIndicator::setPixelsByBytes( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const Sequence< sal_Int8 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw (RuntimeException)
+{
+    m_bIsEmptyImage = sal_False;
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OImageIndicator::setPixelsByLongs( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const Sequence< sal_Int32 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw (RuntimeException)
+{
+    m_bIsEmptyImage = sal_False;
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OImageIndicator::complete( sal_Int32 Status, const Reference< XImageProducer >& xProducer ) throw (RuntimeException)
+{
+    m_bIsProducing = sal_False;
 }
 
 //.........................................................................
