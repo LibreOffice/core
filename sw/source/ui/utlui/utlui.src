@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 12:02:33 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "¦Û°Ê *²ÊÅé*";
         Text[ arabic ] = "*ÚÑíÖ* ÊáŞÇÆíÇğ";
         Text[ greek ] = "ÁõôïìÜôùò *İíôïíá*";
-        Text[ korean ] = "ÀÚµ¿À¸·Î *ÁøÇÏ°Ô*";
+        Text[ korean ] = "ÀÚµ¿À¸·Î *±½°Ô*";
         Text[ turkish ] = "Otomatik *kalın*";
         Text[ language_user1 ] = " ";
     };
@@ -1547,8 +1547,8 @@ String STR_MULT_INTERACT_SPELL_WARN
     Text[ portuguese_brazilian ] = "The interactive spelling already active\\in a different document";
     Text[ japanese ] = "²İÀ×¸Ã¨ÌŞ½ÍßÙÁª¯¸‚Í‚·‚Å‚É\n‚Ù‚©‚ÌÄŞ·­ÒİÄ‚Å±¸Ã¨ÌŞ‚É‚È‚Á‚Ä‚¢‚Ü‚·";
     Text[ korean ] = "´ëÈ­Çü ¸ÂÃã¹ı °Ë»ç´Â \nÀÌ¹Ì ´Ù¸¥ ¹®¼­¿¡¼­ È°¼ºÈ­µÇ¾î ÀÖ½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "½»»¥Ê½Õı×Ö·¨¼ì²é\nÒÑ¾­Ê¹ÓÃÔÚÒ»¸öÆäËüÎÄµµÖĞ";
-    Text[ chinese_traditional ] = "¥t¤@­Ó¤å¥ó¤w¸g¨Ï¥Î¤¬°Ê¦¡¥¿¦rªk¥\\¯à";
+    Text[ chinese_simplified ] = "½»»¥Ê½Æ´Ğ´¼ì²é¹¦ÄÜÒÑ¾­×÷ÔÚÁíÒ»¸öÎÄµµÖĞ";
+    Text[ chinese_traditional ] = "¥t¤@­Ó¤å¥ó¤w¸g¨Ï¥Î¤¬°Ê¦¡«÷¼g¥\\¯à";
     Text[ arabic ] = "ÇáÊÏŞíŞ ÇáÅãáÇÆí ÇáÊÈÇÏáí\näÔØ ÈÇáİÚá İí ãÓÊäÏ ÂÎÑ";
     Text[ turkish ] = "Etkileşimli yazım denetimi\nşu an başka bir belgede etkin";
 };
@@ -1593,8 +1593,8 @@ String STR_SPELL_TITLE
     Text[ portuguese_brazilian ] = "Spelling";
     Text[ japanese ] = "½ÍßÙÁª¯¸";
     Text[ korean ] = "¸ÂÃã¹ı °Ë»ç";
-    Text[ chinese_simplified ] = "Õı×Ö·¨¼ì²é";
-    Text[ chinese_traditional ] = "¥¿¦rªk";
+    Text[ chinese_simplified ] = "Æ´Ğ´¼ì²é";
+    Text[ chinese_traditional ] = "«÷¼gÀË¬d";
     Text[ arabic ] = "ÇáÊÏŞíŞ ÇáÅãáÇÆí";
     Text[ turkish ] = "Yazım denetimi";
 };
