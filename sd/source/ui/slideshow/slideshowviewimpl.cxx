@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowviewimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:12:05 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #endif
 #ifndef _SD_SLIDESHOWIMPL_HXX_
 #include <slideshowimpl.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
 #endif
 
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -212,6 +215,8 @@ void SAL_CALL SlideShowView::dispose() throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
+    mpSlideShow = 0;
+
     // deregister listeners
     if( mxWindow.is() )
     {
@@ -246,12 +251,15 @@ void SAL_CALL SlideShowView::disposing( const lang::EventObject& ) throw(Runtime
 
 void SAL_CALL SlideShowView::paint( const awt::PaintEvent& e ) throw (RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
     if( mbFirstPaint )
     {
         mbFirstPaint = false;
-        mpSlideShow->onFirstPaint();
+        SlideshowImpl* pSlideShow = mpSlideShow;
+        aGuard.clear();
+        if( pSlideShow )
+            pSlideShow->onFirstPaint();
     }
     else
     {
@@ -259,7 +267,6 @@ void SAL_CALL SlideShowView::paint( const awt::PaintEvent& e ) throw (RuntimeExc
         // with view
         awt::PaintEvent aEvent( e );
         aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
-
         mpPaintListeners->notify( aEvent );
     }
 }
@@ -276,6 +283,7 @@ void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeExcept
 {
     // paint background in black
     ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
 
     // fill the bounds rectangle in black
     // ----------------------------------
@@ -299,6 +307,7 @@ void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeExcept
 geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
 
     const Size& rWindowSize = mrOutputWindow.GetSizePixel();
     Size aOutputSize( rWindowSize );
@@ -448,12 +457,22 @@ void SAL_CALL SlideShowView::windowHidden( const lang::EventObject& e ) throw (R
     // ignored
 }
 
+static void updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImpl* pSlideShow )
+{
+    if( pSlideShow )
+    {
+        SlideShowImplGuard aSLGuard( pSlideShow );
+        rGuard.clear();
+        pSlideShow->startUpdateTimer();
+    }
+}
+
 // XMouseListener implementation
 void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e ) throw (uno::RuntimeException)
 {
-    if( !mpSlideShow->isInputFreezed() )
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    if( mpSlideShow && !mpSlideShow->isInputFreezed() )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
 
         // Change event source, to enable listeners to match event
         // with view
@@ -463,14 +482,15 @@ void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e ) throw (uno
         aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
         mpMouseListeners->notify( aEvent );
+        updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
     }
 }
 
 void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e ) throw (uno::RuntimeException)
 {
-    if( !mpSlideShow->isInputFreezed() )
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    if( mpSlideShow && !mpSlideShow->isInputFreezed() )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
 
         // Change event source, to enable listeners to match event
         // with view
@@ -480,12 +500,13 @@ void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e ) throw (un
         aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
         mpMouseListeners->notify( aEvent );
+        updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
     }
 }
 
 void SAL_CALL SlideShowView::mouseEntered( const awt::MouseEvent& e ) throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
     // Change event source, to enable listeners to match event
     // with view
@@ -495,11 +516,12 @@ void SAL_CALL SlideShowView::mouseEntered( const awt::MouseEvent& e ) throw (uno
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
     mpMouseListeners->notify( aEvent );
+    updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
 }
 
 void SAL_CALL SlideShowView::mouseExited( const awt::MouseEvent& e ) throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
     // Change event source, to enable listeners to match event
     // with view
@@ -509,12 +531,13 @@ void SAL_CALL SlideShowView::mouseExited( const awt::MouseEvent& e ) throw (uno:
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
     mpMouseListeners->notify( aEvent );
+    updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
 }
 
 // XMouseMotionListener implementation
 void SAL_CALL SlideShowView::mouseDragged( const awt::MouseEvent& e ) throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
     // Change event source, to enable listeners to match event
     // with view
@@ -524,11 +547,12 @@ void SAL_CALL SlideShowView::mouseDragged( const awt::MouseEvent& e ) throw (uno
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
     mpMouseMotionListeners->notify( aEvent );
+    updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
 }
 
 void SAL_CALL SlideShowView::mouseMoved( const awt::MouseEvent& e ) throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
     // Change event source, to enable listeners to match event
     // with view
@@ -538,6 +562,7 @@ void SAL_CALL SlideShowView::mouseMoved( const awt::MouseEvent& e ) throw (uno::
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
     mpMouseMotionListeners->notify( aEvent );
+    updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
 }
 
 void SlideShowView::init()
