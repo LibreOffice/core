@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sysplug.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:39:06 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 
 #include <sys/types.h>
 #include <signal.h>
+#include <sys/wait.h>
 #include <osl/thread.h>
 
 #include <plugin/impl.hxx>
@@ -127,5 +128,11 @@ UnxPluginComm::~UnxPluginComm()
 {
     NPP_Shutdown();
     if( m_nCommPID != -1 && m_nCommPID != 0 )
-        kill( m_nCommPID, 9 );
+    {
+        int status = 16777216;
+        pid_t nExit = waitpid( m_nCommPID, &status, WUNTRACED );
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "child %d (plugin app child %d) exited with status %d\n", nExit, m_nCommPID, WEXITSTATUS(status) );
+#endif
+    }
 }
