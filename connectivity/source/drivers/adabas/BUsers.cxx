@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUsers.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:42:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 #endif
 
 using namespace ::comphelper;
-
+using namespace connectivity;
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -98,7 +98,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
-Reference< XNamed > OUsers::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OUsers::createObject(const ::rtl::OUString& _rName)
 {
     return new OAdabasUser(m_pConnection,_rName);
 }
@@ -112,13 +112,6 @@ Reference< XPropertySet > OUsers::createEmptyObject()
 {
     OUserExtend* pNew = new OUserExtend(m_pConnection);
     return pNew;
-}
-// -------------------------------------------------------------------------
-Reference< XNamed > OUsers::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
 // -------------------------------------------------------------------------
 // XAppend
