@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-13 22:54:10 $
+ *  last change: $Author: rt $ $Date: 2001-11-22 23:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "Size optimization for XML files (no pretty printing)";
         Text[ dutch ] = "Grootte van XML-bestanden optimaliseren (zonder Pretty Printing)";
         Text[ french ] = "Optimisation de la taille pour le format XML (sans pretty printing)";
-        Text[ spanish ] = "Optimación del tamaño para los archivos ~XML (sin pretty printing)";
+        Text[ spanish ] = "Optimar tamaño para el formato XML (sin pretty printing)";
         Text[ finnish ] = "Size optimization for XML files (no pretty printing)";
         Text[ italian ] = "Size optimization for XML files (no pretty printing)";
         Text[ danish ] = "Size optimization for XML files (no pretty printing)";
@@ -784,7 +784,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Text[ greek ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ dutch ] = "Het gebruik van \"%1\" als standaard-bestandsformaat kan leiden tot verlies van gegevens.\n";
         Text[ french ] = "L'application de \"%1\" comme format de fichier par défaut peut entraîner une perte d'information.\n";
-        Text[ spanish ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ spanish ] = "El uso de \"%1\" como formato de archivo predeterminado puede causar una pérdida de información.\n";
         Text[ finnish ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ italian ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ danish ] = "Saving with \"%1\" may cause information loss.\n";
@@ -819,6 +819,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Size = MAP_APPFONT( 50, 14 );
     };
 };
+
 
 
 
