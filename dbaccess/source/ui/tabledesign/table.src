@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 16:26:00 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 06:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1619,6 +1619,16 @@ FixedText FIXED_NO_CONNECTION
     Text [ English ]    = "no connection" ;
     Text [ english_us ] = "no connection" ;
 };
+QueryBox QUERY_SAVE_TABLE_EDIT_INDEXES
+{
+    Message = "Bevor Sie die Indizies einer Tabelle ändern können, muß diese gespeichert werden.\n"
+        "Wollen Sie Ihre Änderungen an der Tabellenstruktur jetzt speichern?";
+    Message [ english ] = "Before you can edit the indexes of a table, it must be saved.\n"
+        "Do you want to save your changes now?";
+    Message [ english_us ] = "Before you can edit the indexes of a table, it must be saved.\n"
+        "Do you want to save your changes now?";
 
+    Buttons = WB_YES_NO ;
+};
 
 
