@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-11 16:03:15 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -908,11 +908,8 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     const PropertyValue *pValue = aViewProps.getConstArray();
 
     long nTmp;
-    sal_Bool bShowRedlineChanges = sal_False, bBrowseMode = sal_False,
-        bShowFooter = sal_False, bShowHeader = sal_False;
-
-    sal_Bool bChangeShowRedline = sal_False, bChangeBrowseMode = sal_False,
-             bChangeFooter = sal_False, bChangeHeader = sal_False;
+    sal_Bool bShowRedlineChanges = sal_False, bBrowseMode = sal_False;
+    sal_Bool bChangeShowRedline = sal_False, bChangeBrowseMode = sal_False;
 
     sal_Bool bTwip = pDoc->GetDocShell()->SfxInPlaceObject::GetMapUnit ( ) == MAP_TWIP;
 
@@ -947,16 +944,9 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
             bShowRedlineChanges = *(sal_Bool *)(pValue->Value.getValue());
             bChangeShowRedline = sal_True;
         }
-        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowHeaderWhileBrowsing" ) ) )
-        {
-            bShowHeader = *(sal_Bool *)(pValue->Value.getValue());
-            bChangeFooter = sal_True;
-        }
-        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowFooterWhileBrowsing" ) ) )
-        {
-            bShowFooter = *(sal_Bool *)(pValue->Value.getValue());
-            bChangeHeader = sal_True;
-        }
+// #105372#: Headers and footers are not displayed in BrowseView anymore
+//        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowHeaderWhileBrowsing" ) ) )
+//        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowFooterWhileBrowsing" ) ) )
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "InBrowseMode" ) ) )
         {
             bBrowseMode = *(sal_Bool *)(pValue->Value.getValue());
@@ -967,10 +957,6 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     if( pDoc->GetDocShell() )
         pDoc->GetDocShell()->SetVisArea ( aRect );
 
-    if (bChangeHeader)
-        pDoc->SetHeadInBrowse ( bShowHeader );
-    if (bChangeFooter)
-        pDoc->SetFootInBrowse ( bShowFooter );
     if (bChangeBrowseMode)
         pDoc->SetBrowseMode ( bBrowseMode );
 
