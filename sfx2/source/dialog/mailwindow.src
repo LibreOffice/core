@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:47:30 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,43 +721,15 @@ Window RID_MAIL_WINDOW
     };
 };
 
-// MSG_ERROR_SEND_MAIL ---------------------------------------------------
+// RID_ERRBOX_MAIL_CONFIG ---------------------------------------------------
 
-InfoBox MSG_ERROR_SEND_MAIL
+ErrorBox RID_ERRBOX_MAIL_CONFIG
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    MESSAGE = "Fehler beim Versenden der Nachricht. Mögliche Fehler sind ein fehlendes Benutzerkonto oder ein fehlerhaftes Setup.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME oder die ihres e-mail Programms." ;
-    MESSAGE [ English ] = "Error while sending mail. Possible errors are a missing account or an incorrect setup.\nPlease check your settings within %PRODUCTNAME or within your e-mail client." ;
-    MESSAGE [ norwegian ] = "Feil ved sending av mail." ;
-    MESSAGE [ italian ] = "Errore durante l'invio del messaggio. I possibili errori sono: conto dell'utente errato oppure setup errato.\nVerificate le impostazioni di %PRODUCTNAME oppure il programma di eMail." ;
-    MESSAGE [ portuguese_brazilian ] = "Ocorreu um erro ao enviar correio." ;
-    MESSAGE [ portuguese ] = "Erro ao enviar correio." ;
-    MESSAGE [ finnish ] = "Virhe viestiä lähetettäessä. Syitä voivat olla puuttuva käyttäjätili tai virheelliset asetukset.\nTarkista %PRODUCTNAMEn tai sähköpostiohjelmasi asetukset." ;
-    MESSAGE [ danish ] = "Fejl ved afsendelse af meddelelsen. Mulige fejlkilder er en manglende brugerkonto eller en forkert opsætning.\nKontroller venligst indstillingerne i %PRODUCTNAME eller i dit e-mailprogram." ;
-    MESSAGE [ french ] = "Erreur lors de l'envoi du message. Erreurs possibles : compte d'utilisateur manquant ou Setup erroné.\nVérifiez les paramètres de %PRODUCTNAME ou ceux du logiciel de messagerie." ;
-    MESSAGE [ swedish ] = "Fel vid sändning av meddelande. Möjliga fel är att ett användarkonto saknas eller en felaktig installation.\nKontrollera inställningarna i %PRODUCTNAME eller i ditt e-postprogram." ;
-    MESSAGE [ dutch ] = "Fout bij verzenden van bericht. Het is mogelijk dat de gebruikersaccount ontbreekt of dat de installatie fouten bevat.\nControleer de instellingen van %PRODUCTNAME of van het e-mailprogramma." ;
-    MESSAGE [ spanish ] = "Error al enviar el mensaje. La razón puede ser una cuenta de usuario o una instalación defectuosa.\nCompruebe la configuración de %PRODUCTNAME o la de su programa mensajería." ;
-    MESSAGE [ english_us ] = "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings." ;
-    MESSAGE[ chinese_simplified ] = "åœ¨å¯„å‘ç”µå­é‚®ä»¶æ—¶å‘ç”Ÿä¸€ä¸ªé”™è¯¯ã€‚å¯èƒ½ç¼ºå°‘ä¸€ä¸ªç”¨æˆ·å¸å·æˆ–è€…å®‰è£…ç¨‹åºæœ‰è¯¯ã€‚\nè¯·æ£€æŸ¥ %PRODUCTNAME çš„è®¾å®šæˆ–è€…ç”µå­é‚®ä»¶ç¨‹åºçš„è®¾å®šã€‚";
-    MESSAGE[ russian ] = "Îøèáêà îòïğàâêè ñîîáùåíèÿ. Âîçìîæíî, îøèáêà âîçíèêëà èç-çà íåâåğíîé ó÷åòíîé çàïèñè ïîëüçîâàòåëÿ èëè íåêîğğåêòíûõ íàñòğîåê ïî÷òîâîé ïğîãğàììû.\nÏğîâåğüòå íàñòğîéêè %PRODUCTNAME è ïğîãğàììû ıëåêòğîííîé ïî÷òû.";
-    MESSAGE[ polish ] = "Wyst¹pi³ b³¹d podczas przesy³ania wiadomoœci: brak konta u¿ytkownika lub nieprawid³owa instalacja.\nSprawdŸ ustawienia programu %PRODUCTNAME lub programu do poczty elektronicznej.";
-    MESSAGE[ japanese ] = "ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡æ™‚ã®ã‚¨ãƒ©ãƒ¼ã€‚ã‚¨ãƒ©ãƒ¼ã®åŸå› ã¨ã—ã¦ã¯ã€ãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚¢ã‚«ã‚¦ãƒ³ãƒˆãŒãªã„ã‹ã€ã‚ã‚‹ã„ã¯ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ãŒæ­£ã—ããªã„ã‹ãŒè€ƒãˆã‚‰ã‚Œã¾ã™ã€‚\n%PRODUCTNAMEã€ã¾ãŸã¯ãŠä½¿ã„ã® E-mail ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®è¨­å®šã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚";
-    MESSAGE[ chinese_traditional ] = "åœ¨å‚³é€é€™å€‹æ–‡ä»¶æ™‚ç™¼ç”Ÿä¸€å€‹éŒ¯èª¤ã€‚å¯èƒ½ç¼ºå°‘ä¸€å€‹ä½¿ç”¨è€…è³¬è™Ÿæˆ–ç¨‹å¼å®‰è£æœ‰å•é¡Œã€‚\nè«‹æª¢æŸ¥ %PRODUCTNAME çš„è¨­å®šå’Œé›»å­éƒµä»¶ç¨‹å¼çš„è¨­å®šã€‚";
-    MESSAGE[ greek ] = "ĞáñïõóéÜóôçêå óöÜëìá êáôÜ ôçí áğïóôïëŞ ôïõ ìçíıìáôïò. Áõôü ìğïñåß íá óõìâáßíåé åğåéäŞ äåí õğÜñ÷åé ëïãáñéáóìüò ÷ñŞóôç Ş åğåéäŞ ç åãêáôÜóôáóç åßíáé åëáôôùìáôéêŞ.\nÅëİãîôå ôéò ñõèìßóåéò ôïõ %PRODUCTNAME Ş ôïõ ğñïãñÜììáôïò çëåêôñïíéêïı ôá÷õäñïìåßïõ.";
-    MESSAGE[ korean ] = "ë©”ì‹œì§€ë¥¼ ë³´ë‚´ëŠ” ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤. ì•„ë§ˆë„ ì‚¬ìš©ì ê³„ì •ì´ ì—†ê±°ë‚˜ ì˜ëª» ì„¤ì¹˜ë˜ì–´ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆì„ ê²ƒì…ë‹ˆë‹¤.\n%PRODUCTNAME ì„¤ì •ì´ë‚˜ ì „ì ë©”ì¼ í”„ë¡œê·¸ë¨ ì„¤ì •ì„ í™•ì¸í•˜ì‹­ì‹œì˜¤.";
-    MESSAGE[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÅÑÓÇá ÇáÑÓÇáÉ ";
-    MESSAGE[ turkish ] = "Posta gönderirken hata oluştu. Muhtemel hatalar, hatalı kullanıcı hesabından veya hatalı kurlumdan , geçekleşmiş olabilir.\nLütfen, %PRODUCTNAME içerisinde yer alan e-posta ayarlarınızı kontrol edin.";
-    MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ catalan ] = "Error a l'enviar el mensaje.";
-    MESSAGE[ thai ] = "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings.";
-    MESSAGE[ czech ] = "BÄ›hem posÃ­lÃ¡nÃ­ zprÃ¡vy nastala chyba. MoÅ¾nou pÅ™Ã­Äinou tÃ©to chyby by mohlo bÃ½t chybÄ›jÃ­cÃ­ uÅ¾ivatelskÃ© konto nebo chyba v nastavenÃ­.\nProsÃ­m zkontrolujte nastavenÃ­ %PRODUCTNAME nebo nastavenÃ­ svÃ©ho programu pro posÃ­lÃ¡nÃ­ e-mailÅ¯.";
-    MESSAGE[ hebrew ] = "â€®××¨×¢×” ×©×’×™××” ×‘×©×™×œ×•×— ×”×”×•×“×¢×”. ×™×ª×›×Ÿ ×©×—×¡×¨ ×”×’×“×¨×ª ×—×©×‘×•×Ÿ ×”××©×ª××© ××• ×©×”×”×ª×§× ×” ×¤×’×•××”.\n× × ×œ×‘×“×•×§ ××ª ×”×§×‘×™×¢×•×ª ×©×œ %PRODUCTNAME ×•×©×œ ×ª×•×›× ×™×ª ×”×“×•××¨.â€¬";
-    MESSAGE[ hindi ] = "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings.";
-    MESSAGE[ slovak ] = "Behom posielania sprÃ¡vy sa vyskytla chyba. MoÅ¾nou prÃ­Äinou tejto chyby by mohlo byÅ¥ chÃ½bajÃºce uÅ¾Ã­vateÄ¾skÃ© konto alebo chyba v nastavenÃ­.\nProsÃ­m skontrolujte nastavenia %PRODUCTNAME alebo nastavenia svojho programu na posielanie e-mailov.";
-    MESSAGE[ hungarian ] = "ÃœzenetkÃ¼ldÃ©skor hiba tÃ¶rtÃ©nt, ennek oka a hiÃ¡nyzÃ³ felhasznÃ¡lÃ³nÃ©v vagy egyÃ©b hibÃ¡s beÃ¡llÃ­tÃ¡s lehet.\nEllenÅ‘rizze az %PRODUCTNAME Ã©s a levelezÅ‘programja beÃ¡llÃ­tÃ¡sait. ";
-    MESSAGE[ slovenian ] = "Med poÅ¡iljanjem sporoÄila je priÅ¡lo do napake. MoÅ¾ne napake so nepravilne nastavitve raÄuna ali pa raÄun sploh ne obstaja.\nPreverite nastavitve poÅ¡tnega programa v %PRODUCTNAME.";
+    MESSAGE = "%PRODUCTNAME konnte keine funktionierende E-Mail Konfiguration finden. Bitte speichern sie dieses Dokument lokal und senden es dann mit ihrem E-Mail Programm." ;
+    MESSAGE [ English ] = "%PRODUCTNAME was unable to find a working e-mail configuration. Please save this document locally instead and attach it from within your e-mail client." ;
+    MESSAGE [ english_us ] = "%PRODUCTNAME was unable to find a working e-mail configuration. Please save this document locally instead and attach it from within your e-mail client." ;
 };
 
 // ------------------------------------------------------------------- EOF
