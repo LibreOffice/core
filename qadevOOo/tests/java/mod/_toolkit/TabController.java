@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TabController.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:26 $
+ *  last change:$Date: 2003-05-27 14:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._toolkit;
 
 import com.sun.star.awt.XControl;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XTabControllerModel;
@@ -88,7 +89,7 @@ public class TabController extends TestCase{
     protected void initialize(TestParameters param, PrintWriter log) {
         try {
             log.println( "creating a textdocument" );
-            xTextDoc = WriterTools.createTextDoc(param.getMSF());
+            xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)param.getMSF());
         } catch ( Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -143,7 +144,7 @@ public class TabController extends TestCase{
                         xCtrl1.getContext());
         // create object
         try {
-            oObj = (XInterface)param.getMSF().
+            oObj = (XInterface)((XMultiServiceFactory)param.getMSF()).
                             createInstance ("com.sun.star.awt.TabController");
         } catch (Exception e) {}
 

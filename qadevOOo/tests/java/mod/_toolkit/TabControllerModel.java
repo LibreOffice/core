@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TabControllerModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:25 $
+ *  last change:$Date: 2003-05-27 14:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._toolkit;
 
 import com.sun.star.drawing.XControlShape;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
@@ -80,7 +81,7 @@ public class TabControllerModel extends TestCase {
     protected void initialize(TestParameters param, PrintWriter log) {
         try {
             log.println( "creating a textdocument" );
-            xTextDoc = WriterTools.createTextDoc(param.getMSF());
+            xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)param.getMSF());
         } catch ( Exception e ) {
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
@@ -104,7 +105,7 @@ public class TabControllerModel extends TestCase {
                                 xTextDoc,5000,3500,7500,5000,"TextField");
 
         try {
-            oObj = (XInterface) param.getMSF().createInstance(
+            oObj = (XInterface) ((XMultiServiceFactory)param.getMSF()).createInstance(
                                     "com.sun.star.awt.TabControllerModel");
         } catch (Exception e) {
             e.printStackTrace(log);
