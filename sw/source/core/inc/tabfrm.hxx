@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:13:20 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,9 @@ public:
 
     BOOL CalcFlyOffsets( SwTwips& rUpper, long& rLeftOffset,
                          long& rRightOffset ) const;
+
+    bool IsLayoutSplitAllowed() const;
+
     DECL_FIXEDMEMPOOL_NEWDEL(SwTabFrm)
 };
 
