@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2000-10-23 11:23:38 $
+ *  last change: $Author: os $ $Date: 2000-10-25 11:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1963,6 +1963,10 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
     while(pTmp && pTmp->IsSectionNode())
     {
         pTmp = pTmp->FindStartNode();
+    }
+    while(pOwnStartNode && pOwnStartNode->IsSectionNode())
+    {
+        pOwnStartNode = pOwnStartNode->FindStartNode();
     }
     if(pOwnStartNode != pTmp)
     {
