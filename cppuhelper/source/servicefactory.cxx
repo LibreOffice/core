@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-29 15:24:39 $
+ *  last change: $Author: kr $ $Date: 2001-06-15 14:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+
+#include <osl/security.hxx>
 
 #include <cppuhelper/shlib.hxx>
 #include <cppuhelper/factory.hxx>
@@ -419,14 +421,20 @@ Reference< XComponentContext > SAL_CALL bootstrap_InitialComponentContext(
 //==================================================================================================
 
 
-static OUString findBoostrapArgument(const OUString & arg_name) SAL_THROW(()) {
+static OUString findBoostrapArgument(const OUString & arg_name, sal_Bool * pFallenBack) SAL_THROW(()) {
     OUString result;
 
     OUString prefixed_arg_name = OUString(RTL_CONSTASCII_USTRINGPARAM("UNO_"));
     prefixed_arg_name += arg_name.toAsciiUpperCase();
 
+    if(pFallenBack)
+        *pFallenBack = sal_False;
+
     if(!rtl_bootstrap_get(prefixed_arg_name.pData, &result.pData, NULL)) // environment not set -> try relative to executable
     {
+        if(pFallenBack)
+            *pFallenBack = sal_True;
+
         OUString fileName_url;
         osl_getExecutableFile(&fileName_url.pData);
 
@@ -449,9 +457,26 @@ static OUString findBoostrapArgument(const OUString & arg_name) SAL_THROW(()) {
         OSL_TRACE("cppuhelper::createServiceFactoy - setting %s relative to executable: %s\n",
                   arg_name_dbg.getStr(),
                   result_dbg.getStr());
+#endif
     }
     else
     {
+        if(*result == (sal_Unicode)'/') // the path is already absolut, so do nothing
+            ;
+
+        else // it is real-relative, so extend it
+        {
+            OUString fileName;
+            osl_getExecutableFile(&fileName.pData);
+            osl::FileBase::getSystemPathFromFileURL(fileName, fileName);
+
+            fileName = fileName.copy(0, fileName.lastIndexOf('/') + 1);
+            fileName += result;
+
+            result = fileName;
+        }
+
+#ifdef DEBUG
         OString prefixed_arg_name_dbg = OUStringToOString(prefixed_arg_name, RTL_TEXTENCODING_ASCII_US);
         OString result_dbg = OUStringToOString(result, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("cppuhelper::createServiceFactoy - found %s in env: %s",
@@ -466,11 +491,34 @@ static OUString findBoostrapArgument(const OUString & arg_name) SAL_THROW(()) {
 
 static Reference<XSimpleRegistry> nestRegistries(const Reference<XSingleServiceFactory> & xSimRegFac,
                                                  const Reference<XSingleServiceFactory> & xNesRegFac,
-                                                 OUString csl_rdbs)
+                                                 OUString csl_rdbs,
+                                                 const OUString & write_rdb,
+                                                 sal_Bool forceWrite_rdb)
     SAL_THROW((Exception))
 {
     sal_Int32 index;
     Reference<XSimpleRegistry> lastRegistry;
+
+    if(write_rdb.getLength()) // is there a write registry given?
+    {
+        lastRegistry = Reference<XSimpleRegistry>::query(xSimRegFac->createInstance());
+
+        try
+        {
+            lastRegistry->open(write_rdb, sal_False, forceWrite_rdb);
+        }
+        catch (InvalidRegistryException & invalidRegistryException)
+        {
+#ifdef DEBUG
+            OString rdb_name_tmp = OUStringToOString(write_rdb, RTL_TEXTENCODING_ASCII_US);
+            OString message_dbg = OUStringToOString(invalidRegistryException.Message, RTL_TEXTENCODING_ASCII_US);
+            OSL_TRACE("warning: couldn't open %s cause of %s", rdb_name_tmp.getStr(), message_dbg.getStr());
+#endif
+        }
+
+        if(!lastRegistry->isValid())
+            lastRegistry = Reference<XSimpleRegistry>();
+    }
 
     do
     {
@@ -524,8 +572,11 @@ static Reference<XSimpleRegistry> nestRegistries(const Reference<XSingleServiceF
  */
 Reference<XComponentContext> SAL_CALL defaultBootstrap_InitialComponentContext() SAL_THROW((Exception))
 {
-      OUString cls_uno_types = findBoostrapArgument(OUString(RTL_CONSTASCII_USTRINGPARAM("TYPES")));
-      OUString cls_uno_services = findBoostrapArgument(OUString(RTL_CONSTASCII_USTRINGPARAM("SERVICES")));
+      OUString cls_uno_types = findBoostrapArgument(OUString(RTL_CONSTASCII_USTRINGPARAM("TYPES")), NULL);
+      OUString cls_uno_services = findBoostrapArgument(OUString(RTL_CONSTASCII_USTRINGPARAM("SERVICES")), NULL);
+
+    sal_Bool fallenBack;
+      OUString write_rdb = findBoostrapArgument(OUString(RTL_CONSTASCII_USTRINGPARAM("WRITERDB")), &fallenBack);
 
     OUString bootstrapPath;
 
@@ -552,8 +603,8 @@ Reference<XComponentContext> SAL_CALL defaultBootstrap_InitialComponentContext()
             xEmptyKey),
         UNO_QUERY);
 
-    Reference<XSimpleRegistry> types_xRegistry = nestRegistries(xSimRegFac, xNesRegFac, cls_uno_types);
-    Reference<XSimpleRegistry> services_xRegistry = nestRegistries(xSimRegFac, xNesRegFac, cls_uno_services);
+    Reference<XSimpleRegistry> types_xRegistry = nestRegistries(xSimRegFac, xNesRegFac, cls_uno_types, OUString(), sal_False);
+    Reference<XSimpleRegistry> services_xRegistry = nestRegistries(xSimRegFac, xNesRegFac, cls_uno_services, write_rdb, !fallenBack);
 
     return initializeSF(smgr_XMultiComponentFactory, types_xRegistry, services_xRegistry, bootstrapPath);
 }
