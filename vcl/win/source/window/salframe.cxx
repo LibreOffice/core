@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-30 17:31:47 $
+ *  last change: $Author: ssa $ $Date: 2001-12-07 11:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4185,6 +4185,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 {
     LRESULT     nRet = 0;
     static int  bInWheelMsg = FALSE;
+    static int  bInQueryEnd = FALSE;
 
     // By WM_CRETAE we connect the frame with the window handle
     if ( nMsg == WM_CREATE )
@@ -4344,7 +4345,25 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             break;
 
         case WM_QUERYENDSESSION:
-            nRet = !ImplHandleShutDownMsg( hWnd );
+            if( !bInQueryEnd )
+            {
+                // handle queryendsession only once
+                bInQueryEnd = TRUE;
+                nRet = !ImplHandleShutDownMsg( hWnd );
+                rDef = FALSE;
+            }
+            else
+            {
+                ImplSalYieldMutexAcquireWithWait();
+                ImplSalYieldMutexRelease();
+                rDef = TRUE;
+            }
+            break;
+
+        case WM_ENDSESSION:
+            if( !wParam )
+                bInQueryEnd = FALSE; // no shutdown: allow query again
+            nRet = FALSE;
             rDef = FALSE;
             break;
 
