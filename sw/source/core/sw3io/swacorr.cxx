@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swacorr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:11:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:21:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include <swblocks.hxx>
 #endif
 #ifndef _SW_XMLTEXTBLOCKS_HXX
-#include <SwXMLTextBlocks.hxx>
+#include "SwXMLTextBlocks.hxx"
 #endif
 #ifndef _SWSERROR_H
 #include <swerror.h>
@@ -92,13 +92,13 @@ TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
     //      koennen aus der Wortliste herausgeholt werden!)
     //      rShort ist der Stream-Name - gecryptet!
 
-BOOL SwAutoCorrect::GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rShort, String& rLong )
+BOOL SwAutoCorrect::GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rFileName, const String& rShort, String& rLong )
 {
     ULONG nRet;
     if (rStg.is())
     {
-        //TODO/MBA: can't pass filename of storage; the only place where it seems to be used is in SwImpBlocks::IsFileChanged()
-        SwXMLTextBlocks aBlk( rStg, String() );
+        // mba: relative URLs don't make sense here
+        SwXMLTextBlocks aBlk( rStg, rFileName );
         nRet = aBlk.GetText( rShort, rLong );
     }
     else
@@ -108,20 +108,17 @@ BOOL SwAutoCorrect::GetLongText( const com::sun::star::uno::Reference < com::sun
 
     //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
     //      rShort ist der Stream-Name - gecryptet!
-BOOL SwAutoCorrect::PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&  rStg, const String& rShort,
+BOOL SwAutoCorrect::PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&  rStg, const String& rFileName, const String& rShort,
                             SfxObjectShell& rObjSh, String& rLong )
 {
     if( !rObjSh.IsA( TYPE(SwDocShell) ) )
         return FALSE;
 
     SwDocShell& rDShell = (SwDocShell&)rObjSh;
-    // Bis es eine Option dafuer gibt, base URL loeschen
-    const String aOldURL( INetURLObject::GetBaseURL() );
-    INetURLObject::SetBaseURL( aEmptyStr );
     ULONG nRet = 0;
 
-    //TODO/MBA: can't pass filename of storage; the only place where it seems to be used is in SwImpBlocks::IsFileChanged()
-    SwXMLTextBlocks aBlk( rStg, String() );
+    // mba: relative URLs don't make sense here
+    SwXMLTextBlocks aBlk( rStg, rFileName );
     SwDoc* pDoc = aBlk.GetDoc();
 
     nRet = aBlk.BeginPutDoc( rShort, rShort );
@@ -133,8 +130,6 @@ BOOL SwAutoCorrect::PutText( const com::sun::star::uno::Reference < com::sun::st
         if( !IsError( nRet ) )
             nRet = aBlk.GetText( rShort, rLong );
     }
-
-    INetURLObject::SetBaseURL( aOldURL );
     return !IsError( nRet );
 }
 
