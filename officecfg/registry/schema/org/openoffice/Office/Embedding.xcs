@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Embedding.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:25:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,18 +159,18 @@
 				<desc>Contains possible verbs for embedded objects.</desc>
 			</info>
 		</set>
-		<set oor:name="MimeTypeClassIDRelations" oor:node-type="xs:string">
+		<group oor:name="MimeTypeClassIDRelations" oor:extensible="true">
 			<info>
 				<author>MAV</author>
 				<desc>Contains convertion table from MimeType to ClassID. MimeType is used as a name for entry.</desc>
 			</info>
-		</set>
-		<set oor:name="UserFactories" oor:node-type="xs:string">
+		</group>
+		<group oor:name="UserFactories" oor:extensible="true">
 			<info>
 				<author>MAV</author>
 				<desc>List of additional factories that can be used to create embedded object.</desc>
 			</info>
-		</set>
+		</group>
 		<set oor:name="ObjectNames" oor:node-type="ObjectName">
 			<info>
 				<author>MAV</author>
