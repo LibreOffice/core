@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPagePrintable.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:29:05 $
+ *  last change:$Date: 2003-09-08 11:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.text;
 
+import lib.MultiMethodTest;
+import util.utils;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XPagePrintable;
-import lib.MultiMethodTest;
-import util.utils;
 
 /**
  * Testing <code>com.sun.star.text.XPagePrintable</code>
