@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:37:46 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,6 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
-
 #ifdef CONV_STAR_FONTS
 #ifndef _VCL_FONTCVT_HXX
 #include <vcl/fontcvt.hxx>
@@ -353,7 +352,7 @@ void SvXMLImport::_InitCtor()
     sPackageProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
 
     if (xNumberFormatsSupplier.is())
-        pNumImport = new SvXMLNumFmtHelper(xNumberFormatsSupplier);
+        pNumImport = new SvXMLNumFmtHelper(xNumberFormatsSupplier, getServiceFactory());
 
     if (xModel.is() && !pEventListener)
     {
@@ -362,10 +361,19 @@ void SvXMLImport::_InitCtor()
     }
 }
 
-SvXMLImport::SvXMLImport( sal_uInt16 nImportFlags ) throw () :
-    pImpl( new SvXMLImport_Impl() ),
+// #110680#
+SvXMLImport::SvXMLImport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    sal_uInt16 nImportFlags ) throw ()
+:   pImpl( new SvXMLImport_Impl() ),
+    // #110680#
+    mxServiceFactory(xServiceFactory),
     pNamespaceMap( new SvXMLNamespaceMap ),
-    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
+
+    // #110680#
+    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
+    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, getServiceFactory() ) ),
+
     pContexts( new SvXMLImportContexts_Impl ),
     pNumImport( NULL ),
     pProgressBarHelper( NULL ),
@@ -375,13 +383,23 @@ SvXMLImport::SvXMLImport( sal_uInt16 nImportFlags ) throw () :
     mnImportFlags( nImportFlags ),
     mbIsFormsSupported( sal_True )
 {
+    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
 }
 
-SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
-    pImpl( new SvXMLImport_Impl() ),
+// #110680#
+SvXMLImport::SvXMLImport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const Reference< XModel > & rModel ) throw ()
+:   pImpl( new SvXMLImport_Impl() ),
+    // #110680#
+    mxServiceFactory(xServiceFactory),
     pNamespaceMap( new SvXMLNamespaceMap ),
-    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
+
+    // #110680#
+    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
+    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, getServiceFactory() ) ),
+
     pContexts( new SvXMLImportContexts_Impl ),
     pNumImport( NULL ),
     xModel( rModel ),
@@ -393,14 +411,24 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
     mnImportFlags( IMPORT_ALL ),
     mbIsFormsSupported( sal_True )
 {
+    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
 }
 
-SvXMLImport::SvXMLImport( const Reference< XModel > & rModel,
-                          const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > & rGraphicObjects ) throw () :
-    pImpl( new SvXMLImport_Impl() ),
+// #110680#
+SvXMLImport::SvXMLImport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const Reference< XModel > & rModel,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > & rGraphicObjects ) throw ()
+:   pImpl( new SvXMLImport_Impl() ),
+    // #110680#
+    mxServiceFactory(xServiceFactory),
     pNamespaceMap( new SvXMLNamespaceMap ),
-    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
+
+    // #110680#
+    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
+    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, getServiceFactory() ) ),
+
     pContexts( new SvXMLImportContexts_Impl ),
     pNumImport( NULL ),
     xModel( rModel ),
@@ -413,6 +441,7 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel,
     mnImportFlags( IMPORT_ALL ),
     mbIsFormsSupported( sal_True )
 {
+    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
 }
 
@@ -1366,7 +1395,7 @@ void SvXMLImport::_CreateDataStylesImport()
     uno::Reference<util::XNumberFormatsSupplier> xNum =
         GetNumberFormatsSupplier();
     if ( xNum.is() )
-        pNumImport = new SvXMLNumFmtHelper(xNum);
+        pNumImport = new SvXMLNumFmtHelper(xNum, getServiceFactory());
 }
 
 
@@ -1461,3 +1490,11 @@ void SvXMLImport::DisposingModel()
     xModel = 0;
     pEventListener = NULL;
 }
+
+::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SvXMLImport::getServiceFactory()
+{
+    // #110680#
+    return mxServiceFactory;
+}
+
+// eof
