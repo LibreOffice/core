@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: pb $ $Date: 2002-01-10 13:56:29 $
+ *  last change: $Author: kz $ $Date: 2002-01-17 21:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ TabPage TP_HELP_SEARCH
         Text[ swedish ] = "S�k bara i r~ubriker";
         Text[ polish ] = "Przeszukaj tylko tytu�y";
         Text[ portuguese_brazilian ] = "~Search headings only";
-        Text[ japanese ] = "タイトルだけで検索(~H)";
+        Text[ japanese ] = "タイトルのみを検索(~H)";
         Text[ korean ] = "제목에서만 찾기(~H)";
         Text[ chinese_simplified ] = "仅在大标题范围内搜寻(~H)";
         Text[ chinese_traditional ] = "僅在大標題範圍內搜尋(~H)";
