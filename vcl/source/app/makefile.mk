@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2004-01-06 13:11:24 $
+#   last change: $Author: kz $ $Date: 2004-05-18 10:50:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,8 @@ SLOFILES=	$(SLO)$/dbggui.obj		\
             $(SLO)$/unohelp2.obj    \
             $(SLO)$/vclevent.obj	\
             $(SLO)$/i18nhelp.obj	\
-            $(SLO)$/salvtables.obj
+            $(SLO)$/salvtables.obj	\
+            $(SLO)$/session.obj
 
 EXCEPTIONSFILES=					\
             $(SLO)$/svapp.obj		\
@@ -102,7 +103,8 @@ EXCEPTIONSFILES=					\
             $(SLO)$/unohelp.obj 	\
             $(SLO)$/unohelp2.obj    \
             $(SLO)$/i18nhelp.obj 	\
-            $(SLO)$/svmain.obj
+            $(SLO)$/svmain.obj		\
+            $(SLO)$/session.obj
 
 # --- Targets ------------------------------------------------------
 
