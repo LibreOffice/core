@@ -8397,3 +8397,14 @@ _real@8@bffdf1a9fbe76c8b4000
 ?GetTextContent@XMLTextFrameHint_Impl@@QBE?AV?$Reference@VXTextContent@text@star@sun@com@@@uno@star@sun@com@@XZ
 ?GetTextContent@XMLTextFrameContext@@QBE?AV?$Reference@VXTextContent@text@star@sun@com@@@uno@star@sun@com@@XZ
 ??0XMLTextFrameHyperlinkContext@@QAE@AAVSvXMLImport@@GABVOUString@rtl@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@W4TextContentAnchorType@text@678@PAV?$Reference@VXTextContent@text@star@sun@com@@@5678@PAW49text@678@@Z
+??0SvXMLElementExport@@QAE@AAVSvXMLExport@@EGABVOUString@rtl@@EE@Z
+??0SvXMLElementExport@@QAE@AAVSvXMLExport@@EGPBDEE@Z
+?StartElement@SvXMLElementExport@@AAEXAAVSvXMLExport@@GABVOUString@rtl@@E@Z
+?exportRectangle@XMLSettingsExportHelper@@ABEXABURectangle@awt@star@sun@com@@VOUString@rtl@@@Z
+?addTextStyleAttribute@XMLTextParagraphExport@@IAEEABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@@Z
+?exportShape@XMLTextParagraphExport@@IAEXABV?$Reference@VXTextContent@text@star@sun@com@@@uno@star@sun@com@@EPBV?$Reference@VXPropertySet@beans@star@sun@com@@@3456@@Z
+?exportTextContentEnumeration@XMLTextParagraphExport@@IAEXABV?$Reference@VXEnumeration@container@star@sun@com@@@uno@star@sun@com@@EABV?$Reference@VXTextSection@text@star@sun@com@@@3456@EEPBV?$Reference@VXPropertySet@beans@star@sun@com@@@3456@@Z
+?exportTextEmbedded@XMLTextParagraphExport@@IAEXABV?$Reference@VXTextContent@text@star@sun@com@@@uno@star@sun@com@@EPBV?$Reference@VXPropertySet@beans@star@sun@com@@@3456@@Z
+?exportTextFrame@XMLTextParagraphExport@@IAEXABV?$Reference@VXTextContent@text@star@sun@com@@@uno@star@sun@com@@EEPBV?$Reference@VXPropertySet@beans@star@sun@com@@@3456@@Z
+?exportTextGraphic@XMLTextParagraphExport@@IAEXABV?$Reference@VXTextContent@text@star@sun@com@@@uno@star@sun@com@@EPBV?$Reference@VXPropertySet@beans@star@sun@com@@@3456@@Z
+?lcl_txtpara_isBoundAsChar@@YAEABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXPropertySetInfo@beans@star@sun@com@@@2345@@Z
