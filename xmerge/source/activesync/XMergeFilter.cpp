@@ -152,6 +152,7 @@ STDMETHODIMP CXMergeFilter::NextConvertFile(int nConversion, CFF_CONVERTINFO *pc
 
     si.cb = sizeof(si);
 
+
     // Locate Java Home
     TCHAR* szJavaDir = GetJavaBaseDir();
     if (szJavaDir == NULL)
@@ -249,6 +250,9 @@ STDMETHODIMP CXMergeFilter::NextConvertFile(int nConversion, CFF_CONVERTINFO *pc
 }
 
 
+typedef HRESULT (WINAPI *SHGETFOLDERPATH)( HWND, int, HANDLE, DWORD, LPTSTR );
+
+
 TCHAR* CXMergeFilter::GetJavaBaseDir()
 {
     HRESULT lRet;
@@ -274,13 +278,12 @@ TCHAR* CXMergeFilter::GetJavaBaseDir()
      * Need to enumerate the subkeys.  The current version may not be 1.4 if
      * multiple versions are installed on the system.
      */
-    while ((lRet = ::RegEnumKeyEx(hKey, 0, szKeyName, &dwKeyName, 0, szClassName, &dwClassName, NULL))
-                != ERROR_NO_MORE_ITEMS)
+    for (DWORD i = 0; lRet != ERROR_NO_MORE_ITEMS; i++)
     {
-        if(!lstrcmp(szKeyName, "1.4"))
+        lRet = ::RegEnumKeyEx(hKey, i, szKeyName, &dwKeyName, 0, szClassName, &dwClassName, NULL);
+        if(!strncmp(szKeyName, "1.4", 3))
             break;
     }
-
 
     // Found a Java 1.4 installation.  Can now read its home directory.
     lRet = ::RegOpenKeyEx(hKey, _T(szKeyName), 0, KEY_READ, &hDataKey);
@@ -334,8 +337,43 @@ TCHAR* CXMergeFilter::GetXMergeClassPath()
 
     TCHAR szIniPath[MAX_PATH];
 
-    if (SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, szIniPath) != S_OK)
+
+    /*
+     * On Windows ME and Windows 2000, the SHGetFolderPath function is incorporated
+     * into SHELL32.dll.  Unfortunately, this is not the case in Windows 95/98 so
+     * the SHFOLDER library needs to be dynamically loaded to get an address for the
+     * procedure.
+     */
+    SHGETFOLDERPATH SHGetFolderPath;
+    HMODULE hModSHFolder = LoadLibrary("shfolder.dll");
+    if ( hModSHFolder != NULL )
+    {
+        SHGetFolderPath = (SHGETFOLDERPATH)GetProcAddress(hModSHFolder, "SHGetFolderPathA");
+    }
+    else
+    {
+        FreeLibrary(hModSHFolder);
+        SHGetFolderPath = NULL;
+    }
+
+
+    if (SHGetFolderPath != NULL )
+    {
+        if(SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, NULL, szIniPath) != S_OK)
+        {
+            FreeLibrary(hModSHFolder);
+            return NULL;
+        }
+    }
+    else
+    {
+        FreeLibrary(hModSHFolder);
         return NULL;
+    }
+
+    FreeLibrary(hModSHFolder);
+
+
     lstrcat(szIniPath, "\\sversion.ini");
 
 
