@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.84 $
+*  $Revision: 1.85 $
 *
-*  last change: $Author: obo $ $Date: 2004-11-29 12:05:06 $
+*  last change: $Author: kz $ $Date: 2005-01-14 11:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2645,7 +2645,7 @@ namespace xmloff { namespace token {
         TOKEN( "attributeName",             XML_ATTRIBUTENAME ),
 
         TOKEN( "smil",                      XML_NP_SMIL ),
-        TOKEN( "http://www.w3.org/2001/SMIL20", XML_N_SMIL ),
+        TOKEN( "http://www.w3.org/2001/SMIL20/", XML_N_SMIL ),
 
         TOKEN( "anim",                      XML_NP_ANIMATION ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:animation:1.0",  XML_N_ANIMATION ),
