@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2004-07-27 14:08:15 $
+#   last change: $Author: rt $ $Date: 2004-08-09 13:34:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -393,6 +393,14 @@ sub get_creation_master
     my $self = shift;
 
     return $self->get_creation_master_from_eis();
+}
+
+# Get the 'public' flag indicating whether a CWS is visible on OOo
+sub get_public_flag
+{
+    my $self = shift;
+
+    return $self->get_public_flag_from_eis();
 }
 
 #### public class methods ####
@@ -1085,6 +1093,26 @@ sub get_creation_master_from_eis
     }
     return $result;
 
+}
+
+sub get_public_flag_from_eis
+{
+    my $self      = shift;
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->isPublic($id) };
+    if ( $@ ) {
+        carp("ERROR: get_public_flag(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
 }
 
 #logging
