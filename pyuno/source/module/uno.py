@@ -2,9 +2,9 @@
 #
 #   $RCSfile: uno.py,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jbu $ $Date: 2003-05-24 23:24:27 $
+#   last change: $Author: hr $ $Date: 2004-02-02 19:31:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,7 +132,7 @@ class Enum:
         pyuno.checkEnum( self )
 
     def __repr__(self):
-        return "<uno.Eunm %s (%r)>" % (self.typeName, self.value)
+        return "<uno.Enum %s (%r)>" % (self.typeName, self.value)
 
     def __eq__(self, that):
         if not isinstance(that, Enum):
