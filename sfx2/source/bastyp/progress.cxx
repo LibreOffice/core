@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2002-07-22 07:05:53 $
+ *  last change: $Author: obo $ $Date: 2002-11-26 16:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ struct SfxProgress_Impl : public SfxCancellable
 
 //========================================================================
 
-inline ULONG Get10ThSec()
+static inline ULONG Get10ThSec()
 {
 #if defined (MSC) && defined (WIN)
     ULONG n10Ticks = 10 * (ULONG)GetTickCount();
