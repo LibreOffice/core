@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:44:44 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,10 @@
 
 #include "strings.hrc"
 #include "sdresid.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "sdmod.hxx"
 #include "sdiocmpt.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "vectdlg.hxx"
 #include "vectdlg.hrc"
 
@@ -101,7 +101,8 @@
 // - SdVectorizeDlg -
 // ------------------
 
-SdVectorizeDlg::SdVectorizeDlg( Window* pParent, const Bitmap& rBmp, SdDrawDocShell* pDocShell ) :
+SdVectorizeDlg::SdVectorizeDlg(
+    Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell ) :
         ModalDialog     ( pParent, SdResId( DLG_VECTORIZE ) ),
         pDocSh          ( pDocShell ),
         aGrpSettings    ( this, SdResId( GRP_SETTINGS ) ),
@@ -438,4 +439,3 @@ void SdVectorizeDlg::SaveSettings() const
         *xOStm << (UINT16) aMtFillHoles.GetValue() << aCbFillHoles.IsChecked();
     }
 }
-
