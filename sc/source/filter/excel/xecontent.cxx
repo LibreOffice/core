@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:02:23 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,6 @@ void XclExpSst::Save( XclExpStream& rStrm )
 // Merged cells ===============================================================
 
 XclExpMergedcells::XclExpMergedcells( const XclExpRoot& rRoot ) :
-    XclExpRecord( EXC_ID_MERGEDCELLS ),
     XclExpRoot( rRoot )
 {
 }
@@ -387,15 +386,19 @@ void XclExpMergedcells::Save( XclExpStream& rStrm )
         CheckCellRangeList( maMergedRanges );
         if( maMergedRanges.Count() )
         {
-            SetRecSize( 2 + 8 * maMergedRanges.Count() );
-            XclExpRecord::Save( rStrm );
+            ULONG nFirstRange = 0;
+            ULONG nRemainingRanges = maMergedRanges.Count();
+            while( nRemainingRanges > 0)
+            {
+                ULONG nRangeCount = ::std::min<ULONG>(nRemainingRanges, EXC_MERGEDCELLS_MAXCOUNT);
+                rStrm.StartRecord(EXC_ID_MERGEDCELLS, 2 + 8 * nRangeCount );
+                XclTools::WriteRangeList( rStrm, maMergedRanges, nFirstRange, nRangeCount);
+                rStrm.EndRecord();
+                nFirstRange += nRangeCount;
+                nRemainingRanges -= nRangeCount;
+            }
         }
     }
-}
-
-void XclExpMergedcells::WriteBody( XclExpStream& rStrm )
-{
-    rStrm << maMergedRanges;
 }
 
 // Hyperlinks =================================================================
