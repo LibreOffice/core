@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SQLExecution.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-11-18 16:16:58 $
+ *  last change:$Date: 2003-12-11 11:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,13 @@ import java.util.Vector;
  */
 public class SQLExecution {
 
+    protected Connection mConnection = null;
     protected Statement mStatement = null;
     protected String mJdbcClass = null;
     protected String mDbURL = null;
     protected String mUser = null;
     protected String mPassword = null;
+    protected boolean m_bConnectionOpen = false;
     protected boolean m_bDebug = false;
 
 
@@ -116,6 +118,7 @@ public class SQLExecution {
      * @return True, if no error occured.
      */
     public boolean openConnection() {
+        if(m_bConnectionOpen) return true;
         try {
             Class.forName(mJdbcClass);
         } catch (ClassNotFoundException e) {
@@ -125,18 +128,36 @@ public class SQLExecution {
 
         try {
             // establish database connection
-            Connection connection = DriverManager.getConnection(
+            mConnection = DriverManager.getConnection(
                                                 mDbURL, mUser, mPassword);
-            mStatement = connection.createStatement();
+            mStatement = mConnection.createStatement();
         }
         catch(java.sql.SQLException e) {
             System.err.println("Couldn't establish a connection: " + e.getMessage());
             return false;
         }
-
+        m_bConnectionOpen = true;
         return true;
     }
 
+    /**
+     * Close the connection to the DataBase
+     * @return True, if no error occured.
+     */
+    public boolean closeConnection() {
+        if (!m_bConnectionOpen) return true;
+        try {
+            // close database connection
+            mStatement.close();
+            mConnection.close();
+        }
+        catch(java.sql.SQLException e) {
+            System.err.println("Couldn't close the connection: " + e.getMessage());
+            return false;
+        }
+        m_bConnectionOpen = false;
+        return true;
+    }
 
     /**
      * Execute an sql command.

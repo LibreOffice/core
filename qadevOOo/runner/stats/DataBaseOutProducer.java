@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataBaseOutProducer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-11-18 16:16:26 $
+ *  last change:$Date: 2003-12-11 11:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,12 @@ public abstract class DataBaseOutProducer implements LogWriter {
         mSqlInput = new Hashtable();
         mSqlInput.putAll(param);
 
-        String debug = (String)param.get("DebugIsActive");
+        Object o = param.get("DebugIsActive");
+        String debug = null;
+        if (o instanceof String)
+            debug = (String)o;
+        else
+            debug = o.toString();
         if (debug != null && (debug.equalsIgnoreCase("true") || debug.equalsIgnoreCase("yes"))) {
             m_bDebug = true;
         }
@@ -129,8 +134,10 @@ public abstract class DataBaseOutProducer implements LogWriter {
      *
      */
     public boolean summary(DescEntry entry) {
+        mSqlExec.openConnection();
         findTypeInEntryTree(entry, entry.Logger);
 //        checkDataBase(entry.Logger);
+        mSqlExec.closeConnection();
         return true;
     }
 
