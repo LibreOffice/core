@@ -22,15 +22,6 @@ using namespace ::com::sun::star;
 namespace
 {
 
-template< typename T, typename U >
-    struct lcl_LessFirstOfPair : ::std::binary_function< ::std::pair< T, U >, ::std::pair< T, U >, bool >
-{
-    inline bool operator() ( const ::std::pair< T, U > & rOne, const ::std::pair< T, U > & rOther )
-    {
-        return ( rOne.first < rOther.first );
-    }
-};
-
 template< typename T >
 struct lcl_EqualsFirstDoubleOfPair : ::std::binary_function< ::std::pair< double, T >, ::std::pair< double, T >, bool >
 {
@@ -39,6 +30,95 @@ struct lcl_EqualsFirstDoubleOfPair : ::std::binary_function< ::std::pair< double
         return ( ::rtl::math::approxEqual( rOne.first, rOther.first ) );
     }
 };
+
+//-----------------------------------------------------------------------------
+
+struct Point3D
+{
+    Point3D( double X, double Y, double Z );
+    Point3D();
+
+    double X;
+    double Y;
+    double Z;
+};
+Point3D::Point3D( double _X, double _Y, double _Z )
+: X(_X), Y(_Y), Z(_Z)
+{
+}
+Point3D::Point3D()
+: X(0.0), Y(0.0), Z(0.0)
+{
+}
+
+typedef ::std::vector< Point3D >  t3DPointVecType;
+
+
+struct lcl_LessXOfPoint3D : ::std::binary_function< Point3D, Point3D, bool >
+{
+    inline bool operator() ( const Point3D& rOne, const Point3D& rOther )
+    {
+        return ( rOne.X < rOther.X );
+    }
+};
+
+t3DPointVecType lcl_makeVector3D( const drawing::PolyPolygonShape3D& rPoly, sal_Int32 nPolyIndex=0 )
+{
+    t3DPointVecType aRet;
+    if(nPolyIndex>=0&&nPolyIndex<rPoly.SequenceX.getLength())
+    {
+        sal_Int32 nPointCount = rPoly.SequenceX[nPolyIndex].getLength();
+        if(nPointCount)
+        {
+            const double* pXSequence = rPoly.SequenceX[nPolyIndex].getConstArray();
+            const double* pYSequence = rPoly.SequenceY[nPolyIndex].getConstArray();
+            const double* pZSequence = rPoly.SequenceZ[nPolyIndex].getConstArray();
+            aRet.resize(nPointCount);
+            for(sal_Int32 nN=0;nN<nPointCount;nN++)
+            {
+                aRet[ nN ].X  = pXSequence[nN];
+                aRet[ nN ].Y  = pYSequence[nN];
+                aRet[ nN ].Z  = pZSequence[nN];
+            }
+        }
+    }
+    return aRet;
+}
+
+void lcl_makePolygonFromVector3D( const t3DPointVecType& rVector, drawing::PolyPolygonShape3D& rPoly )
+{
+    sal_Int32 nPointCount = static_cast<sal_Int32>(rVector.size());
+
+    rPoly.SequenceX.realloc(1);
+    rPoly.SequenceY.realloc(1);
+    rPoly.SequenceZ.realloc(1);
+    rPoly.SequenceX[0].realloc( nPointCount );
+    rPoly.SequenceY[0].realloc( nPointCount );
+    rPoly.SequenceZ[0].realloc( nPointCount );
+
+    if(!nPointCount)
+        return;
+
+    double* pXSequence = rPoly.SequenceX[0].getArray();
+    double* pYSequence = rPoly.SequenceY[0].getArray();
+    double* pZSequence = rPoly.SequenceZ[0].getArray();
+
+    for(sal_Int32 nN=0;nN<nPointCount;nN++)
+    {
+        Point3D aP = rVector[nN];
+        pXSequence[nN] = aP.X;
+        pYSequence[nN] = aP.Y;
+        pZSequence[nN] = aP.Z;
+    }
+}
+
+void lcl_getSortedPolyPolygonShape3D( const drawing::PolyPolygonShape3D& rUnsortedInput, drawing::PolyPolygonShape3D& rSortedOutput )
+{
+
+    t3DPointVecType aVector = lcl_makeVector3D( rUnsortedInput);
+    ::std::sort( aVector.begin(), aVector.end(), lcl_LessXOfPoint3D() );
+    lcl_makePolygonFromVector3D( aVector, rSortedOutput );
+}
 
 //-----------------------------------------------------------------------------
 
@@ -51,16 +131,16 @@ class lcl_SplineCalculation
 public:
     /** @descr creates an object that calculates cublic splines on construction
 
-        @param rPoints  the points for which splines shall be calculated
+        @param rSortedPoints  the points for which splines shall be calculated, they need to be sorted in x values
         @param fY1FirstDerivation the resulting spline should have the first
                derivation equal to this value at the x-value of the first point
-               of rPoints.  If fY1FirstDerivation is set to infinity, a natural
+               of rSortedPoints.  If fY1FirstDerivation is set to infinity, a natural
                spline is calculated.
         @param fYnFirstDerivation the resulting spline should have the first
                derivation equal to this value at the x-value of the last point
-               of rPoints
+               of rSortedPoints
      */
-    lcl_SplineCalculation( const tPointVecType & rPoints,
+    lcl_SplineCalculation( const tPointVecType & rSortedPoints,
                            double fY1FirstDerivation,
                            double fYnFirstDerivation );
 
@@ -99,25 +179,21 @@ private:
 //-----------------------------------------------------------------------------
 
 lcl_SplineCalculation::lcl_SplineCalculation(
-    const tPointVecType & rPoints,
+    const tPointVecType & rSortedPoints,
     double fY1FirstDerivation,
     double fYnFirstDerivation )
-        : m_aPoints( rPoints ),
+        : m_aPoints( rSortedPoints ),
           m_fYp1( fY1FirstDerivation ),
           m_fYpN( fYnFirstDerivation ),
           m_nKLow( 0 ),
-          m_nKHigh( rPoints.size() - 1 )
+          m_nKHigh( rSortedPoints.size() - 1 )
 {
     ::rtl::math::setInf( &m_fLastInterpolatedValue, sal_False );
-
-    ::std::sort( m_aPoints.begin(), m_aPoints.end(),
-          lcl_LessFirstOfPair< double, double >() );
 
     // #108301# remove points that have equal x-values
     m_aPoints.erase( ::std::unique( m_aPoints.begin(), m_aPoints.end(),
                              lcl_EqualsFirstDoubleOfPair< double >() ),
                      m_aPoints.end() );
-
     Calculate();
 }
 
@@ -125,9 +201,6 @@ void lcl_SplineCalculation::Calculate()
 {
     // n is the last valid index to m_aPoints
     const tPointVecType::size_type n = m_aPoints.size() - 1;
-    if( n < 1 )
-        return;
-
     ::std::vector< double > u( n );
     m_aSecDerivY.resize( n + 1, 0.0 );
 
@@ -193,19 +266,11 @@ void lcl_SplineCalculation::Calculate()
 
 double lcl_SplineCalculation::GetInterpolatedValue( double x )
 {
-    DBG_ASSERT( m_aPoints.size() < 1 ||
-                ( ( m_aPoints[ 0 ].first <= x ) &&
-                  ( x <= m_aPoints[ m_aPoints.size() - 1 ].first ) ),
+    DBG_ASSERT( ( m_aPoints[ 0 ].first <= x ) &&
+                ( x <= m_aPoints[ m_aPoints.size() - 1 ].first ),
                 "Trying to extrapolate" );
 
     const tPointVecType::size_type n = m_aPoints.size() - 1;
-    if( n < 1 )
-    {
-        double fNan;
-        ::rtl::math::setNan( & fNan );
-        return fNan;
-    }
-
     if( x < m_fLastInterpolatedValue )
     {
         m_nKLow = 0;
@@ -356,13 +421,16 @@ void SplineCalculater::CalculateCubicSplines(
     if(!rInput.SequenceX[0].getLength())
         return;
 
+    drawing::PolyPolygonShape3D aSortedInput;
+    lcl_getSortedPolyPolygonShape3D( rInput, aSortedInput );
+
     // calculate second derivates
     double fInfty;
     ::rtl::math::setInf( &fInfty, sal_False );
-    lcl_SplineCalculation aSpline( makeVector(rInput), fInfty, fInfty );
+    lcl_SplineCalculation aSpline( makeVector(aSortedInput), fInfty, fInfty );
 
     // fill result polygon with calculated values
-    lcl_tSizeType nOldPointCount = rInput.SequenceX[0].getLength();
+    lcl_tSizeType nOldPointCount = aSortedInput.SequenceX[0].getLength();
 
     rResult.SequenceX.realloc(1);
     rResult.SequenceY.realloc(1);
@@ -375,9 +443,9 @@ void SplineCalculater::CalculateCubicSplines(
     double* pNewY = rResult.SequenceY[0].getArray();
     double* pNewZ = rResult.SequenceZ[0].getArray();
 
-    const double* pOldX = rInput.SequenceX[0].getConstArray();
-    const double* pOldY = rInput.SequenceY[0].getConstArray();
-    const double* pOldZ = rInput.SequenceZ[0].getConstArray();
+    const double* pOldX = aSortedInput.SequenceX[0].getConstArray();
+    const double* pOldY = aSortedInput.SequenceY[0].getConstArray();
+    const double* pOldZ = aSortedInput.SequenceZ[0].getConstArray();
 
     //we know that their is at least one point here
     pNewX[0]=pOldX[0];
@@ -419,10 +487,13 @@ void SplineCalculater::CalculateBSplines(
     if(!rInput.SequenceX[0].getLength())
         return;
 
-    const double* pOldX = rInput.SequenceX[0].getConstArray();
-    const double* pOldY = rInput.SequenceY[0].getConstArray();
+    drawing::PolyPolygonShape3D aSortedInput;
+    lcl_getSortedPolyPolygonShape3D( rInput, aSortedInput );
 
-    sal_Int32 n = rInput.SequenceX[0].getLength()-1;//maximim index of control points
+    const double* pOldX = aSortedInput.SequenceX[0].getConstArray();
+    const double* pOldY = aSortedInput.SequenceY[0].getConstArray();
+
+    sal_Int32 n = aSortedInput.SequenceX[0].getLength()-1;//maximim index of control points
     sal_Int32 nNewSectorCount = nGranularity * n;
 
     double *b       = new double [n + nDegree + 1];
