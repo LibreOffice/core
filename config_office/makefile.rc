@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: svesik $ $Date: 2000-10-20 20:41:43 $
+#   last change: $Author: svesik $ $Date: 2000-10-22 20:10:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,7 @@ all_subdirs : $(RC_SUBDIRS)
 RC_SUBDIRS =  \
 	DocumentProperties \
 	UnoControls \
+	automation \
 	api \
 	basctl \
 	basic \
@@ -236,7 +237,7 @@ scp : scptools
 scptools : setup2
 sd : offmgr sc
 sdb : sfx2
-setup2 : basic transex3 unoil unzip
+setup2 : automation basic transex3 unoil unzip
 sfx2 : idl setup2
 sim2 : svx
 sip : sd
