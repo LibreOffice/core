@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-12-11 08:15:31 $
+ *  last change: $Author: cd $ $Date: 2002-02-22 08:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,6 @@
 
 #define BMP_COLLAPSED                   ( RC_DIALOG_BEGIN + 18)
 #define BMP_EXPANDED                    ( RC_DIALOG_BEGIN + 19)
-
 #define TP_CONFIG_ACCEL                 ( RC_DIALOG_BEGIN + 20)
 #define TP_CONFIG_MENU                  ( RC_DIALOG_BEGIN + 21)
 #define TP_CONFIG_STATBAR               ( RC_DIALOG_BEGIN + 22)
@@ -184,6 +183,12 @@
 #define RID_WARN_PRINTTRANSPARENCY      ( RC_DIALOG_BEGIN + 91 )
 
 #define MSG_ERROR_SEND_MAIL             ( RC_DIALOG_BEGIN + 92 )
+
+#define STR_TOOLBAR_SEPARATOR           ( RC_DIALOG_BEGIN + 93 )
+#define STR_TOOLBAR_SPACE               ( RC_DIALOG_BEGIN + 94 )
+
+#define STR_FUNCTION_ALREADY_IN_TOOLBOX ( RC_DIALOG_BEGIN + 95 )
+
 
 #endif // #ifndef _SFX_DIALOG_HRC
 

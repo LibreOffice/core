@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: fs $ $Date: 2001-10-01 16:34:57 $
+#   last change: $Author: cd $ $Date: 2002-02-22 08:07:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,7 +113,8 @@ SLOFILES =\
         $(SLO)$/tplpitem.obj		\
         $(SLO)$/partwnd.obj			\
         $(SLO)$/versdlg.obj			\
-        $(SLO)$/printopt.obj
+        $(SLO)$/printopt.obj		\
+        $(SLO)$/cfgtreelstbox.obj
 
 SRCFILES =\
         about.src			\

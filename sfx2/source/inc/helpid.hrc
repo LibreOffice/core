@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-29 07:08:39 $
+ *  last change: $Author: cd $ $Date: 2002-02-22 08:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,6 +366,11 @@
 #define HID_CLOSE_WARNING                           (HID_SFX_START + 299)
 #define HID_DID_SAVE_PACKED_XML                     (HID_SFX_START + 300)
 #define HID_HELP_TREELISTBOX_CONTENTS               (HID_SFX_START + 301)
+#define HID_CUSTOMIZETOOLBOX                        (HID_SFX_START + 302)
+#define HID_CUSTOMIZETOOLBOX_FUNCTIONS              (HID_SFX_START + 303)
+#define HID_CUSTOMIZETOOLBOX_TOOLBOX                (HID_SFX_START + 304)
+
+
 
 #define ACT_SFX_HID_END HID_HELP_TREELISTBOX_CONTENTS
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2002-02-19 21:12:25 $
+ *  last change: $Author: cd $ $Date: 2002-02-22 08:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1598,6 +1598,25 @@ String STR_MENU
     Text[ catalan ] = "Menú";
     Text[ finnish ] = "Valikko";
 };
+
+String STR_TOOLBAR_SEPARATOR
+{
+    Text = "Trenner" ;
+    Text [ ENGLISH ] = "Separator" ;
+};
+
+String STR_TOOLBAR_SPACE
+{
+    Text = "Unsichtbarer Trenner" ;
+    Text [ ENGLISH ] = "Invisible separator" ;
+};
+
+String STR_FUNCTION_ALREADY_IN_TOOLBOX
+{
+    Text = "Die gewünschte Funktion ist bereits in der aktuellen Toolbar vorhanden." ;
+    Text [ ENGLISH ] = "The selected function is already in the current toolbox." ;
+};
+
  // ********************************************************************** EOF
 
 

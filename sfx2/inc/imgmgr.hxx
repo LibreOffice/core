@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:14:10 $
+ *  last change: $Author: cd $ $Date: 2002-02-22 08:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ public:
     Image           GetImage(USHORT nId, SfxModule* pMod = 0) const;
     void            SetImages( ToolBox& rToolBox, SfxModule* );
     void            LockImage(USHORT nNewId, ToolBox *pBox);
+    Image           MakeUserImage(USHORT nNewId, Image& aSourceImage );
     Image           GetImage(USHORT nId, SfxModule* pMod, BOOL bBig ) const;
 
                     // add images to configurable user list

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-28 11:47:00 $
+ *  last change: $Author: cd $ $Date: 2002-02-22 08:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,6 +924,37 @@ void SfxImageManager::LockImage( USHORT nId, ToolBox *pBox )
         // auf die Quellliste wieder entfernt wird.
         pBox->SetItemImage( nId, pUserImageList->GetImage( nId ) );
     }
+}
+
+//-------------------------------------------------------------------------
+
+Image SfxImageManager::MakeUserImage( USHORT nId, Image& aImage )
+{
+    // Neue Images kommen aus der Office-Liste
+    if ( !pOffImageList || pOffImageList->GetImagePos( nId ) == IMAGELIST_IMAGE_NOTFOUND )
+        return Image();
+
+    // Das Image mu\s die richtige Gr"o\e haben
+    if ( aImage.GetSizePixel() == pImageList->GetImageSize() )
+    {
+        // Ist das Image schon vorhanden ?
+        ImageList *pUserImageList = pImp->pUserImageList;
+        if ( pUserImageList->GetImagePos( nId ) == IMAGELIST_IMAGE_NOTFOUND )
+        {
+            // Eine physikalische Kopie des Images in der User-Liste machen
+            pUserImageList->AddImage( nId, aImage );
+            if ( SfxMacroConfig::IsMacroSlot(nId) )
+                SfxMacroConfig::GetOrCreate()->RegisterSlotId( nId );
+
+            pImp->SetDefault( FALSE );
+        }
+
+        // In der Toolbox dieses neue Image benutzen, so da\s die Referenz
+        // auf die Quellliste wieder entfernt wird.
+        return pUserImageList->GetImage( nId );
+    }
+
+    return Image();
 }
 
 //-------------------------------------------------------------------------
