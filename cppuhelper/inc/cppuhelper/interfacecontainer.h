@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-05 09:26:46 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,6 @@ public:
         from the underlying container. Calling this method before
         next() has been called or calling it twice with no next()
         inbetween is an error.
-        @since udk211 (has been added in udk210)
     */
     void SAL_CALL remove() SAL_THROW( () );
 
