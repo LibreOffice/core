@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:25:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 class ScDocShell;
 class ScMarkData;
 
@@ -89,27 +93,27 @@ class ScTransferObj : public TransferableHelper
 private:
     ScDocument*                     pDoc;
     ScRange                         aBlock;
-    USHORT                          nNonFiltered;       // non-filtered rows
+    SCROW                           nNonFiltered;       // non-filtered rows
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
     SvEmbeddedObjectRef             aDocShellRef;
     SvEmbeddedObjectRef             aDrawPersistRef;
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRanges> xDragSourceRanges;
-    USHORT                          nDragHandleX;
-    USHORT                          nDragHandleY;
-    USHORT                          nVisibleTab;
+    SCCOL                           nDragHandleX;
+    SCROW                           nDragHandleY;
+    SCTAB                           nVisibleTab;
     USHORT                          nDragSourceFlags;
     BOOL                            bDragWasInternal;
     BOOL                            bUsedForLink;
 
     void        InitDocShell();
-    static void StripRefs( ScDocument* pDoc, USHORT nStartX, USHORT nStartY,
-                            USHORT nEndX, USHORT nEndY,
+    static void StripRefs( ScDocument* pDoc, SCCOL nStartX, SCROW nStartY,
+                            SCCOL nEndX, SCROW nEndY,
                             ScDocument* pDestDoc=0,
-                            USHORT nSubX=0, USHORT nSubY=0 );
+                            SCCOL nSubX=0, SCROW nSubY=0 );
     static void PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPrintFactor,
                             const ScRange& rBlock, BOOL bMetaFile );
-    static void GetAreaSize( ScDocument* pDoc, USHORT nTab1, USHORT nTab2, USHORT& nRow, USHORT& nCol );
+    static void GetAreaSize( ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol );
 
 public:
             ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDescriptor& rDesc );
@@ -124,18 +128,18 @@ public:
 
     ScDocument*         GetDocument()           { return pDoc; }        // owned by ScTransferObj
     const ScRange&      GetRange() const        { return aBlock; }
-    USHORT              GetNonFilteredRows() const { return nNonFiltered; }
-    USHORT              GetDragHandleX() const  { return nDragHandleX; }
-    USHORT              GetDragHandleY() const  { return nDragHandleY; }
-    USHORT              GetVisibleTab() const   { return nVisibleTab; }
+    SCROW               GetNonFilteredRows() const { return nNonFiltered; }
+    SCCOL               GetDragHandleX() const  { return nDragHandleX; }
+    SCROW               GetDragHandleY() const  { return nDragHandleY; }
+    SCTAB               GetVisibleTab() const   { return nVisibleTab; }
     USHORT              GetDragSourceFlags() const  { return nDragSourceFlags; }
     ScDocShell*         GetSourceDocShell();
     ScDocument*         GetSourceDocument();
     ScMarkData          GetSourceMarkData();
 
     void                SetDrawPersist( const SvEmbeddedObjectRef& rRef );
-    void                SetDragHandlePos( USHORT nX, USHORT nY );
-    void                SetVisibleTab( USHORT nNew );
+    void                SetDragHandlePos( SCCOL nX, SCROW nY );
+    void                SetVisibleTab( SCTAB nNew );
     void                SetDragSource( ScDocShell* pSourceShell, const ScMarkData& rMark );
     void                SetDragSourceFlags( USHORT nFlags );
     void                SetDragWasInternal();
