@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:58:29 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -901,14 +901,15 @@ void Outliner::SetParaAttribs( ULONG nPara, const SfxItemSet& rSet, bool bApiCal
 
         pEditEngine->SetParaAttribs( (USHORT)nPara, rSet );
 
-        if ( !bApiCall && bLRSpaceChanged )
+        if( bLRSpaceChanged )
         {
             const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&)pEditEngine->GetParaAttrib( (USHORT)nPara, EE_PARA_NUMBULLET );
             Paragraph* pPara = pParaList->GetParagraph( nPara );
-            if ( rNumBullet.GetNumRule()->GetLevelCount() > pPara->GetDepth() )
+            const USHORT nDepth = pPara->GetDepth();
+            if ( rNumBullet.GetNumRule()->GetLevelCount() > nDepth )
             {
                 SvxNumBulletItem* pNewNumBullet = (SvxNumBulletItem*) rNumBullet.Clone();
-                EditEngine::ImportBulletItem( *pNewNumBullet, pPara->GetDepth(), NULL, (SvxLRSpaceItem*)&rSet.Get( EE_PARA_LRSPACE ) );
+                EditEngine::ImportBulletItem( *pNewNumBullet, nDepth, NULL, (SvxLRSpaceItem*)&rSet.Get( EE_PARA_LRSPACE ) );
                 SfxItemSet aAttribs( rSet );
                 aAttribs.Put( *pNewNumBullet );
                 pEditEngine->SetParaAttribs( (USHORT)nPara, aAttribs );
