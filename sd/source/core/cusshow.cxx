@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cusshow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-06 08:34:08 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,69 +126,69 @@ SdCustomShow::~SdCustomShow()
 |* Inserter fuer SvStream zum Speichern
 |*
 \************************************************************************/
-SvStream& operator << (SvStream& rOut, const SdCustomShow& rCustomShow)
-{
-    // Letzter Parameter ist die aktuelle Versionsnummer des Codes
-    SdIOCompat aIO(rOut, STREAM_WRITE, 0);
-
-    // Name
-    // #90477# rOut.WriteByteString( rCustomShow.aName, ::GetStoreCharSet( gsl_getSystemTextEncoding() ) );
-    rOut.WriteByteString(rCustomShow.aName,
-        GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion()));
-
-    // Anzahl Seiten
-    UINT32 nCount = rCustomShow.Count();
-    rOut << nCount;
-
-    for (UINT32 i = 0; i < nCount; i++)
-    {
-        // Seite aus Liste holen
-        SdPage* pPage = (SdPage*) rCustomShow.GetObject(i);
-
-        if (pPage)
-        {
-            // SdPage-Seitennummer
-            UINT16 nPageNum = (pPage->GetPageNum() - 1) / 2;
-            rOut << nPageNum;
-        }
-    }
-
-    return rOut;
-}
+//BFS02SvStream& operator << (SvStream& rOut, const SdCustomShow& rCustomShow)
+//BFS02{
+//BFS02 // Letzter Parameter ist die aktuelle Versionsnummer des Codes
+//BFS02 SdIOCompat aIO(rOut, STREAM_WRITE, 0);
+//BFS02
+//BFS02 // Name
+//BFS02 // #90477# rOut.WriteByteString( rCustomShow.aName, ::GetStoreCharSet( gsl_getSystemTextEncoding() ) );
+//BFS02 rOut.WriteByteString(rCustomShow.aName,
+//BFS02     GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion()));
+//BFS02
+//BFS02 // Anzahl Seiten
+//BFS02 UINT32 nCount = rCustomShow.Count();
+//BFS02 rOut << nCount;
+//BFS02
+//BFS02 for (UINT32 i = 0; i < nCount; i++)
+//BFS02 {
+//BFS02     // Seite aus Liste holen
+//BFS02     SdPage* pPage = (SdPage*) rCustomShow.GetObject(i);
+//BFS02
+//BFS02     if (pPage)
+//BFS02     {
+//BFS02         // SdPage-Seitennummer
+//BFS02         UINT16 nPageNum = (pPage->GetPageNum() - 1) / 2;
+//BFS02         rOut << nPageNum;
+//BFS02     }
+//BFS02 }
+//BFS02
+//BFS02 return rOut;
+//BFS02}
 
 /*************************************************************************
 |*
 |* Extractor fuer SvStream zum Laden
 |*
 \************************************************************************/
-SvStream& operator >> (SvStream& rIn, SdCustomShow& rCustomShow)
-{
-    SdIOCompat aIO(rIn, STREAM_READ);
-
-    // Name
-    // #90477# rIn.ReadByteString( rCustomShow.aName, ::GetStoreCharSet( gsl_getSystemTextEncoding() ) );
-    rIn.ReadByteString(rCustomShow.aName,
-        GetSOLoadTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rIn.GetVersion()));
-
-    // Anzahl Seiten
-    UINT32 nCount = 0;
-    rIn >> nCount;
-
-    rCustomShow.Clear();
-
-    for (UINT32 i = 0; i < nCount; i++)
-    {
-        // Seitennummer
-        UINT16 nPageNum;
-        rIn >> nPageNum;
-
-        // Seite in Liste einfuegen
-        SdPage* pPage = (SdPage*) rCustomShow.pDoc->GetSdPage(nPageNum, PK_STANDARD);
-        rCustomShow.Insert(pPage, LIST_APPEND);
-    }
-
-    return rIn;
-}
+//BFS02SvStream& operator >> (SvStream& rIn, SdCustomShow& rCustomShow)
+//BFS02{
+//BFS02 SdIOCompat aIO(rIn, STREAM_READ);
+//BFS02
+//BFS02 // Name
+//BFS02 // #90477# rIn.ReadByteString( rCustomShow.aName, ::GetStoreCharSet( gsl_getSystemTextEncoding() ) );
+//BFS02 rIn.ReadByteString(rCustomShow.aName,
+//BFS02     GetSOLoadTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rIn.GetVersion()));
+//BFS02
+//BFS02 // Anzahl Seiten
+//BFS02 UINT32 nCount = 0;
+//BFS02 rIn >> nCount;
+//BFS02
+//BFS02 rCustomShow.Clear();
+//BFS02
+//BFS02 for (UINT32 i = 0; i < nCount; i++)
+//BFS02 {
+//BFS02     // Seitennummer
+//BFS02     UINT16 nPageNum;
+//BFS02     rIn >> nPageNum;
+//BFS02
+//BFS02     // Seite in Liste einfuegen
+//BFS02     SdPage* pPage = (SdPage*) rCustomShow.pDoc->GetSdPage(nPageNum, PK_STANDARD);
+//BFS02     rCustomShow.Insert(pPage, LIST_APPEND);
+//BFS02 }
+//BFS02
+//BFS02 return rIn;
+//BFS02}
 
 extern uno::Reference< uno::XInterface > createUnoCustomShow( SdCustomShow* pShow );
 
