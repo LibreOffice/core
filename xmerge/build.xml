@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ #  The Contents of this file are made available subject to the terms of
+ #  either of the following licenses
+ #
+ #         - GNU Lesser General Public License Version 2.1
+ #         - Sun Industry Standards Source License Version 1.1
+ #
+ #  Sun Microsystems Inc., October, 2000
+ #
+ #  GNU Lesser General Public License Version 2.1
+ #  =============================================
+ #  Copyright 2000 by Sun Microsystems, Inc.
+ #  901 San Antonio Road, Palo Alto, CA 94303, USA
+ #
+ #  This library is free software; you can redistribute it and/or
+ #  modify it under the terms of the GNU Lesser General Public
+ #  License version 2.1, as published by the Free Software Foundation.
+ #
+ #  This library is distributed in the hope that it will be useful,
+ #  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ #  Lesser General Public License for more details.
+ #
+ #  You should have received a copy of the GNU Lesser General Public
+ #  License along with this library; if not, write to the Free Software
+ #  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ #  MA  02111-1307  USA
+ #
+ #
+ #  Sun Industry Standards Source License Version 1.1
+ #  =================================================
+ #  The contents of this file are subject to the Sun Industry Standards
+ #  Source License Version 1.1 (the "License"); You may not use this file
+ #  except in compliance with the License. You may obtain a copy of the
+ #  License at http://www.openoffice.org/license.html.
+ #
+ #  Software provided under this License is provided on an "AS IS" basis,
+ #  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ #  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ #  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ #  See the License for the specific provisions governing your rights and
+ #  obligations concerning the Software.
+ #
+ #  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ #
+ #  Copyright: 2000 by Sun Microsystems, Inc.
+ #
+ #  All Rights Reserved.
+ #
+ #  Contributor(s): _______________________________________
+ #
+ #
+ -->
+<project name="xmerge" default="main" basedir=".">
+
+    <!-- ================================================================= -->
+    <!-- settings                                                          -->
+    <!-- ================================================================= -->
+
+    <!-- project prefix, used to generate build.lst -->
+    <property name="prj.prefix" value="xmrg"/>
+
+    <!-- name of this sub target used in recursive builds -->
+    <property name="target" value="xmerge"/>
+
+
+    <!-- ================================================================= -->
+    <!--  solar build environment targets                                  -->
+    <!-- ================================================================= -->
+
+    <!-- used by init to set build directory -->
+    <target name="build_dir" unless="build.dir">
+        <property name="build.dir" value="${basedir}/${inpath}"/>
+    </target>
+
+    <target name="build_class" depends="build_dir">
+    <property name="build.class" value="${build.dir}/class"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.class}"/>
+    <copy file="util/solar.properties" todir="${build.class}"/>
+    </target>
+
+    <!-- used by init to set up  'solar' build environment -->
+    <target name="solar" depends="build_dir,build_class" if="solar.update">
+        <property name="solar.properties"
+                  value="${solar.bin}/solar.properties"/>
+        <property name="build.dir" value="${basedir}/${out}"/>
+    </target>
+
+
+    <!-- initialize build environment -->
+    <target name="init" depends="solar">
+        <property name="build.compiler" value="classic"/>
+        <property file="${build.dir}/class/solar.properties"/>
+        <property file="${solar.properties}"/>
+    </target>
+
+    <!-- show information about current sub target in recursive builds -->
+    <target name="info">
+       <echo message="----------------------------------------"/>
+       <echo message="${target}"/>
+       <echo message="----------------------------------------"/>
+    </target>
+
+
+    <!-- ================================================================= -->
+    <!--- custom targets                                                   -->
+    <!-- ================================================================= -->
+
+    <!-- names for targets build by release engineering   -->
+    <!-- must start with project prefix and an underscore -->
+
+    <!-- the main target, called in recursive builds -->
+    <target name="main" depends="info,prepare,xmrg_util,xmrg_javadoc"/>
+
+    <!-- prepare output directories -->
+    <target name="prepare" depends="init"/>
+
+
+
+    <!-- java package -->
+    <target name="xmrg_joo_xmerge" depends="prepare">
+        <ant dir="java/org/openoffice/xmerge" target="main">
+            <property name="target" value="xmrg_joo_xmerge"/>
+            <property name="prj" value="../../../.."/>
+        </ant>
+    </target>
+
+
+    <!-- java package -->
+    <target name="xmrg_jooxc_xml" depends="prepare">
+        <ant dir="java/org/openoffice/xmerge/converter/xml" target="main">
+            <property name="target" value="xmrg_jooxc_xml"/>
+            <property name="prj" value="../../../../../.."/>
+        </ant>
+    </target>
+
+
+    <!-- java package -->
+    <target name="xmrg_jooxcx_sxc" depends="prepare">
+        <ant dir="java/org/openoffice/xmerge/converter/xml/sxc" target="main">
+            <property name="target" value="xmrg_jooxcx_sxc"/>
+            <property name="prj" value="../../../../../../.."/>
+        </ant>
+    </target>
+
+
+    <!-- java package -->
+    <target name="xmrg_jooxcx_sxw" depends="prepare">
+        <ant dir="java/org/openoffice/xmerge/converter/xml/sxw" target="main">
+            <property name="target" value="xmrg_jooxcx_sxw"/>
+            <property name="prj" value="../../../../../../.."/>
+        </ant>
+    </target>
+
+
+    <!-- java package -->
+    <target name="xmrg_jooxcx_xslt" depends="prepare">
+        <ant dir="java/org/openoffice/xmerge/converter/xml/xslt" target="main">
+            <property name="target" value="xmrg_jooxcx_xslt"/>
+            <property name="prj" value="../../../../../../.."/>
+        </ant>
+    </target>
+
+
+    <!-- java package -->
+    <target name="xmrg_joox_merger" depends="prepare">
+        <ant dir="java/org/openoffice/xmerge/merger" target="main">
+            <property name="target" value="xmrg_joox_merger"/>
+            <property name="prj" value="../../../../.."/>
+        </ant>
+    </target>
+
+
+    <!-- java package -->
+    <target name="xmrg_jooxm_diff" depends="prepare">
+        <ant dir="java/org/openoffice/xmerge/merger/diff" target="main">
+            <property name="target" value="xmrg_jooxm_diff"/>
+            <property name="prj" value="../../../../../.."/>
+        </ant>
+    </target>
+
+
+    <!-- java package -->
+    <target name="xmrg_jooxm_merge" depends="prepare">
+        <ant dir="java/org/openoffice/xmerge/merger/merge" target="main">
+            <property name="target" value="xmrg_jooxm_merge"/>
+            <property name="prj" value="../../../../../.."/>
+        </ant>
+    </target>
+
+
+    <!-- java package -->
+    <target name="xmrg_joox_test" depends="prepare,xmrg_joox_util,xmrg_joo_xmerge">
+        <ant dir="java/org/openoffice/xmerge/test" target="main">
+            <property name="target" value="xmrg_joox_test"/>
+            <property name="prj" value="../../../../.."/>
+        </ant>
+    </target>
+
+
+    <!-- java package -->
+    <target name="xmrg_joox_util" depends="prepare">
+        <ant dir="java/org/openoffice/xmerge/util" target="main">
+            <property name="target" value="xmrg_joox_util"/>
+            <property name="prj" value="../../../../.."/>
+        </ant>
+    </target>
+
+
+    <!-- java package -->
+    <target name="xmrg_jooxu_registry" depends="prepare">
+        <ant dir="java/org/openoffice/xmerge/util/registry" target="main">
+            <property name="target" value="xmrg_jooxu_registry"/>
+            <property name="prj" value="../../../../../.."/>
+        </ant>
+    </target>
+
+
+    <!-- java package -->
+    <target name="xmrg_jooxc_dom" depends="prepare">
+        <ant dir="java/org/openoffice/xmerge/converter/dom" target="main">
+            <property name="target" value="xmrg_jooxc_dom"/>
+            <property name="prj" value="../../../../../.."/>
+        </ant>
+    </target>
+
+
+    <!-- java package -->
+    <target name="xmrg_javadoc" depends="prepare">
+        <ant dir="java" target="main">
+            <property name="target" value="javadoc"/>
+            <property name="prj" value=".."/>
+        </ant>
+    </target>
+
+
+    <!-- util -->
+    <target name="xmrg_util" depends="prepare,xmrg_joo_xmerge,xmrg_jooxc_xml,xmrg_jooxcx_sxc,xmrg_jooxcx_sxw,xmrg_jooxcx_xslt,xmrg_joox_merger,xmrg_jooxm_diff,xmrg_jooxm_merge,xmrg_joox_test,xmrg_joox_util,xmrg_jooxu_registry,xmrg_jooxc_dom,xmrg_javadoc">
+        <ant dir="util" target="main">
+            <property name="target" value="xmrg_util"/>
+                <property name="prj" value="."/>
+        </ant>
+     </target>
+
+
+    <!-- clean up -->
+    <target name="clean" depends="prepare">
+        <delete includeEmptyDirs="true">
+            <fileset dir="${build.dir}">
+                <patternset>
+                    <include name="**"/>
+                </patternset>
+            </fileset>
+        </delete>
+    </target>
+
+    <!-- handle dependencies -->
+    <target name="depend"/>
+
+</project>
+

@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<!--
+ #  The Contents of this file are made available subject to the terms of
+ #  either of the following licenses
+ #
+ #         - GNU Lesser General Public License Version 2.1
+ #         - Sun Industry Standards Source License Version 1.1
+ #
+ #  Sun Microsystems Inc., October, 2000
+ #
+ #  GNU Lesser General Public License Version 2.1
+ #  =============================================
+ #  Copyright 2000 by Sun Microsystems, Inc.
+ #  901 San Antonio Road, Palo Alto, CA 94303, USA
+ #
+ #  This library is free software; you can redistribute it and/or
+ #  modify it under the terms of the GNU Lesser General Public
+ #  License version 2.1, as published by the Free Software Foundation.
+ #
+ #  This library is distributed in the hope that it will be useful,
+ #  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ #  Lesser General Public License for more details.
+ #
+ #  You should have received a copy of the GNU Lesser General Public
+ #  License along with this library; if not, write to the Free Software
+ #  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ #  MA  02111-1307  USA
+ #
+ #
+ #  Sun Industry Standards Source License Version 1.1
+ #  =================================================
+ #  The contents of this file are subject to the Sun Industry Standards
+ #  Source License Version 1.1 (the "License"); You may not use this file
+ #  except in compliance with the License. You may obtain a copy of the
+ #  License at http://www.openoffice.org/license.html.
+ #
+ #  Software provided under this License is provided on an "AS IS" basis,
+ #  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ #  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ #  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ #  See the License for the specific provisions governing your rights and
+ #  obligations concerning the Software.
+ #
+ #  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ #
+ #  Copyright: 2000 by Sun Microsystems, Inc.
+ #
+ #  All Rights Reserved.
+ #
+ #  Contributor(s): _______________________________________
+ #
+ #
+ -->
+<HTML>
+<HEAD>
+	<TITLE>org.openoffice.xmerge.converter.xml.xslt package</TITLE>
+</HEAD>
+<BODY>
+<P>Provides the tools for doing the conversion of StarWriter XML to
+and from supported formats, through the use of an XSLT
+transformation.</P>
+<P>It follows the {@link org.openoffice.xmerge}
+framework for the conversion process.</P>
+<P>This converter does not currently support merge.</P>
+<P><FONT FACE="Times New Roman, serif"><FONT SIZE=5><B>XSLT
+Transformation</B></FONT></FONT></P>
+<p>The converter makes use
+of one or more XSLT style sheets, which are used in the
+DocumentSerializer and DocumentDeserializer, to perform the actual
+translations. The location of these stylesheets is extracted from the {@link org.openoffice.xmerge.util.registry.ConverterInfo ConverterInfo} data structure, and are specified using the optional converter-xslt-serialize and converter-xsltdeserialize tags in a plugins converter.xml file. Please refer to the SDK document for more information about how to implement a Plugin Configuration XML File for a specific plugin.
+A sample OpenOffice to Html stylesheet and Html to
+Openffice stylesheet, has been provided as a sample implementation.
+The converter also makes use of an XsltPlugin.properties file, which may be edited by the user to provide MIME-TYPE to file extension mappings. This file is used by the {@link org.openoffice.xmerge.converter.xml.xslt.PluginFactoryImpl getDeviceFileExtension} method.
+</p>
+
+<H2>TODO list</H2>
+
+<p><ol>
+<li>Expand XSLT style sheets to support more office/html
+    capabilities</li>
+<li>Add support for certain character codes, such as &amp;nbsp
+    which currently causes the transformer to break.</li>
+<li>Change the DocumentDeserializer transformer, so that the DOMResult is serialized using the xalan serializer and create an SxwDocument from the result</li>
+</ol></p>
+
+@see org.openoffice.xmerge.util.registry
+
+</BODY>
+</HTML>
+
+

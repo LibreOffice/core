@@ -1,0 +1,121 @@
+<!--
+ #  The Contents of this file are made available subject to the terms of
+ #  either of the following licenses
+ #
+ #         - GNU Lesser General Public License Version 2.1
+ #         - Sun Industry Standards Source License Version 1.1
+ #
+ #  Sun Microsystems Inc., October, 2000
+ #
+ #  GNU Lesser General Public License Version 2.1
+ #  =============================================
+ #  Copyright 2000 by Sun Microsystems, Inc.
+ #  901 San Antonio Road, Palo Alto, CA 94303, USA
+ #
+ #  This library is free software; you can redistribute it and/or
+ #  modify it under the terms of the GNU Lesser General Public
+ #  License version 2.1, as published by the Free Software Foundation.
+ #
+ #  This library is distributed in the hope that it will be useful,
+ #  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ #  Lesser General Public License for more details.
+ #
+ #  You should have received a copy of the GNU Lesser General Public
+ #  License along with this library; if not, write to the Free Software
+ #  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ #  MA  02111-1307  USA
+ #
+ #
+ #  Sun Industry Standards Source License Version 1.1
+ #  =================================================
+ #  The contents of this file are subject to the Sun Industry Standards
+ #  Source License Version 1.1 (the "License"); You may not use this file
+ #  except in compliance with the License. You may obtain a copy of the
+ #  License at http://www.openoffice.org/license.html.
+ #
+ #  Software provided under this License is provided on an "AS IS" basis,
+ #  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ #  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ #  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ #  See the License for the specific provisions governing your rights and
+ #  obligations concerning the Software.
+ #
+ #  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ #
+ #  Copyright: 2000 by Sun Microsystems, Inc.
+ #
+ #  All Rights Reserved.
+ #
+ #  Contributor(s): _______________________________________
+ #
+ #
+ -->
+
+<!-- converter.dtd
+
+     Author: Brian Cameron
+
+     This DTD file is provided for documentation and development
+     purposes, the converter does not actually validate the
+     converter.xml files that it processes.  Plug-ins will not
+     work properly, though, if the converter.xml does not
+     conform to this DTD specification.  -->
+
+<!-- The root node, converters, must contain one or more
+     converter nodes, each corresponds to a converter plug-in. -->
+
+<!ELEMENT converters (converter)+>
+
+<!-- The converter node must contain two elements:
+     type    - The convert-from mime-type.
+     version - The version of the plug-in.
+
+     Each converter node must contain these child nodes:
+     converter-display-name     - Name of the converter
+     converter-class-impl       - The PluginFactory implementation for
+                                  the plugin
+     converter-targets          - Can be one or more of these nodes.  Each
+                                  contains only a "type" element.  This
+                                  "type" element specifies the convert-to
+                                  mime-type.
+			      
+     Each converter node may contain these child nodes:
+     converter-description      - Descriptive description of the plug-in.
+     converter-vendor           - Plug-in vendor name
+     converter-xslt-serialize   - The URL of the xsl stylesheet for
+                                  serialization.  This stylesheet must
+                                  exist if the xslt plugin implementation
+                                  is to be used.  It is assumed that the
+                                  plug-in specified via converter-class-impl
+                                  will make use of this value.
+     converter-xslt-deserialize - The URL of the xsl stylesheet for
+                                  deserialization.  This stylesheet must
+                                  exist if the xslt plugin implementation
+                                  is to be used.  It is assumed that the
+                                  plug-in specified via converter-class-impl
+                                  will make use of this value. 
+				  -->
+     
+<!ELEMENT converter  (converter-display-name,
+                     converter-description?,
+                     converter-vendor?,
+                     converter-class-impl,
+		     converter-xslt-serialize?,
+		     converter-xslt-deserialize?,
+                     converter-target+)>
+
+<!ATTLIST converter  type        CDATA      #REQUIRED>
+<!ATTLIST converter  version     CDATA      #REQUIRED>
+
+<!ELEMENT converter-display-name (#PCDATA)>
+<!ELEMENT converter-description  (#PCDATA)>
+<!ELEMENT converter-vendor       (#PCDATA)>
+<!ELEMENT converter-class-impl   (#PCDATA)>
+<!ELEMENT converter-xslt-serialize  (#PCDATA)>
+<!ELEMENT converter-xslt-deserialize  (#PCDATA)>
+
+<!ELEMENT converter-target       EMPTY>
+
+<!ATTLIST converter-target type  CDATA      #REQUIRED>
+
