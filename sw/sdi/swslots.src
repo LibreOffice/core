@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:58:04 $
+ *  last change: $Author: kz $ $Date: 2001-06-15 21:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6476,7 +6476,7 @@ SfxSlotInfo FN_REDLINE_PROTECT
     SlotName[ dutch ] = "Registratie van wijzigingen beveiligen";
     SlotName[ french ] = "Protéger l'historique des modifications";
     SlotName[ spanish ] = "Proteger grabación de las modificaciones";
-    SlotName[ italian ] = "Protect changes trace mode";
+    SlotName[ italian ] = "Proteggi modulo registrazione modifiche";
     SlotName[ danish ] = "Protect changes trace mode";
     SlotName[ swedish ] = "Skydda registrering av ändringar";
     SlotName[ polish ] = "Chroñ historiê zmian";
@@ -9603,6 +9603,7 @@ SfxSlotInfo FN_EDIT_HYPERLINK
     SlotName[ catalan ] = "Editar hiperenlace";
     SlotName[ finnish ] = "Muokkaa hyperlinkkiä";
 };
+
 
 
 
