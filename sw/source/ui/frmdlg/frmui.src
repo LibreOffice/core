@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: gt $ $Date: 2002-12-04 09:02:07 $
+ *  last change: $Author: gt $ $Date: 2002-12-06 15:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,7 @@ String STR_REL_BORDER
 };
 String STR_REL_PRTAREA
 {
-    TEXT = "Absatz-Textbereich" ;
+    TEXT = "Absatztextbereich" ;
     TEXT [ English ] = "Paragraph text area" ;
     Text [ portuguese ] = "Área de texto" ;
     Text [ english_us ] = "Paragraph text area" ;
