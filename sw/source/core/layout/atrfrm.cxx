@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-16 12:30:43 $
+ *  last change: $Author: jp $ $Date: 2001-10-08 13:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,8 +276,6 @@
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
-#include <string>
-#include <algorithm>
 #ifndef _SVTOOLS_UNOIMAP_HXX
 #include <svtools/unoimap.hxx>
 #endif
@@ -1231,7 +1229,8 @@ BOOL SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
             const text::TextColumn* pArray = aSetColumns.getConstArray();
             aColumns.DeleteAndDestroy(0, aColumns.Count());
             //max. Count ist hier 64K - das kann das Array aber nicht
-            sal_uInt16 nCount = std::min((sal_uInt16)aSetColumns.getLength(), (sal_uInt16) 0x3fff);
+            sal_uInt16 nCount = Min( (sal_uInt16)aSetColumns.getLength(),
+                                     (sal_uInt16) 0x3fff );
             sal_uInt16 nWidthSum = 0;
             for(sal_uInt16 i = 0; i < nCount; i++)
             {

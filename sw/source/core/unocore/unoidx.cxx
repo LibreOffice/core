@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-23 09:38:30 $
+ *  last change: $Author: jp $ $Date: 2001-10-08 13:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,6 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
-#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -1653,7 +1652,8 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
                     aMark.SetAlternativeText(lcl_AnyToString(aValue));
                 break;
                 case WID_LEVEL:
-                    aMark.SetLevel(std::min((sal_Int8) MAXLEVEL, (sal_Int8)lcl_AnyToInt16(aValue)));
+                    aMark.SetLevel(Min( (sal_Int8) MAXLEVEL,
+                                        (sal_Int8)lcl_AnyToInt16(aValue)));
                 break;
                 case WID_PRIMARY_KEY  :
                     aMark.SetPrimaryKey(lcl_AnyToString(aValue));

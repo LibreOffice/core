@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:22:03 $
+ *  last change: $Author: jp $ $Date: 2001-10-08 13:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,12 @@
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 #ifndef _NUM_HXX //autogen
 #define USE_NUMTABPAGES
@@ -146,13 +152,6 @@
 #endif
 #ifndef _OUTLINE_HRC
 #include <outline.hrc>
-#endif
-#include <algorithm>
-#ifndef _UTL_CONFIGMGR_HXX_
-#include <unotools/configmgr.hxx>
-#endif
-#ifndef _SWSTYLENAMEMAPPER_HXX
-#include <SwStyleNameMapper.hxx>
 #endif
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
@@ -507,7 +506,7 @@ short SwOutlineTabDialog::Ok()
                 SwTxtFmtColl* pTxtColl = rWrtSh.GetParaStyle(
                                 aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
                 if(pTxtColl)
-                    pTxtColl->SetOutlineLevel(i);
+                    pTxtColl->SetOutlineLevel( (BYTE)i );
             }
         }
     }
@@ -599,10 +598,7 @@ void    SwOutlineSettingsTabPage::Update()
             }
         }
         if(bSameType)
-        {
-            long nData = aNumFmtArr[0]->GetNumberingType();
-            aNumberBox.SelectNumberingType(nData);
-        }
+            aNumberBox.SelectNumberingType( aNumFmtArr[0]->GetNumberingType() );
         else
             aNumberBox.SetNoSelection();
         if(bSameStart)
@@ -650,8 +646,7 @@ void    SwOutlineSettingsTabPage::Update()
             aCollBox.SelectEntry(aNoFmtName);
         const SwNumFmt &rFmt = pNumRule->Get(nTmpLevel);
 
-        ULONG nData = rFmt.GetNumberingType();
-        aNumberBox.SelectNumberingType(nData);
+        aNumberBox.SelectNumberingType( rFmt.GetNumberingType() );
         aPrefixED.SetText(rFmt.GetPrefix());
         aSuffixED.SetText(rFmt.GetSuffix());
         const SwCharFmt* pFmt = rFmt.GetCharFmt();
@@ -715,7 +710,8 @@ IMPL_LINK( SwOutlineSettingsTabPage, ToggleComplete, NumericField *, pFld )
         if(nActLevel & nMask)
         {
             SwNumFmt aNumFmt(pNumRule->Get(i));
-            aNumFmt.SetIncludeUpperLevels((BYTE) std::min(pFld->GetValue(), (long)(i + 1)) );
+            aNumFmt.SetIncludeUpperLevels( Min( (BYTE)pFld->GetValue(),
+                                                (BYTE)(i + 1)) );
             pNumRule->Set(i, aNumFmt);
         }
         nMask <<= 1;
@@ -942,8 +938,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
         }
     }
 
-    long nData = rNumFmt.GetNumberingType();
-    aNumberBox.SelectNumberingType(nData);
+    aNumberBox.SelectNumberingType(rNumFmt.GetNumberingType());
     USHORT nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
     USHORT nTmp = 0;
     if(nOutlinePos != USHRT_MAX)
@@ -1107,7 +1102,7 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
             }
             if(nStart) // damit moeglichs Vorgaenger und Nachfolger gezeigt werden
                 nStart--;
-            BYTE nEnd = std::min((long)(nStart + 3), (long) MAXLEVEL);
+            BYTE nEnd = Min( (BYTE)(nStart + 3), MAXLEVEL );
             for( BYTE nLevel = nStart; nLevel < nEnd; ++nLevel )
             {
                 const SwNumFmt &rFmt = pActNum->Get(nLevel);

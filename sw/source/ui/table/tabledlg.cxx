@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:03:33 $
+ *  last change: $Author: jp $ $Date: 2001-10-08 13:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,9 @@
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
 #endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -165,10 +168,6 @@
 #endif
 #ifndef _TABLE_HRC
 #include <table.hrc>
-#endif
-#include <algorithm>
-#ifndef _SWSTYLENAMEMAPPER_HXX
-#include <SwStyleNameMapper.hxx>
 #endif
 
 #ifdef DEBUG_TBLDLG
@@ -659,7 +658,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
                             pTblData->GetWidth()), FUNIT_TWIP);
             aWidthMF.SaveValue();
             nSaveWidth = pTblData->GetWidth();
-            nMinTableWidth = std::min(nSaveWidth, nMinTableWidth);
+            nMinTableWidth = Min( nSaveWidth, nMinTableWidth );
         }
 
         aWidthMF.SetRefValue(pTblData->GetSpace());
@@ -840,7 +839,9 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* pSet )
             }
             if(nColSum != pTblData->GetWidth())
             {
-                SwTwips nMinWidth = std::min((long)MINLAY, (long) (pTblData->GetWidth() / pTblData->GetColCount() - 1));
+                SwTwips nMinWidth = Min( (long)MINLAY,
+                                    (long) (pTblData->GetWidth() /
+                                            pTblData->GetColCount() - 1));
                 SwTwips nDiff = nColSum - pTblData->GetWidth();
                 while ( Abs(nDiff) > pTblData->GetColCount() + 1 )
                 {
@@ -1535,8 +1536,8 @@ SwTableRep::~SwTableRep()
 --------------------------------------------------*/
 BOOL SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
 {
-    USHORT nOldLeft = rTabCols.GetLeft();
-    USHORT nOldRight = rTabCols.GetRight();
+    long nOldLeft = rTabCols.GetLeft(),
+         nOldRight = rTabCols.GetRight();
 
     BOOL bSingleLine = FALSE;
     for ( USHORT i = 0; i < rTabCols.Count(); ++i )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:23:56 $
+ *  last change: $Author: jp $ $Date: 2001-10-08 13:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,35 @@
 #ifndef _SV_TIMER_HXX //autogen
 #include <vcl/timer.hxx>
 #endif
-
-
-#ifndef _SVX_SVXIDS_HRC //autogen
-#include <svx/svxids.hrc>
+#ifndef _SV_FIELD_HXX //autogen
+#include <vcl/field.hxx>
+#endif
+#ifndef _SV_FIXED_HXX //autogen
+#include <vcl/fixed.hxx>
+#endif
+#ifndef _SV_HELP_HXX //autogen
+#include <vcl/help.hxx>
+#endif
+#ifndef _VCL_CMDEVT_HXX //autogen
+#include <vcl/cmdevt.hxx>
+#endif
+#ifndef _SV_BUTTON_HXX //autogen
+#include <vcl/button.hxx>
+#endif
+#ifndef _SV_PRINTDLG_HXX_ //autogen
+#include <svtools/printdlg.hxx>
+#endif
+#ifndef _SFX_WHITER_HXX //autogen
+#include <svtools/whiter.hxx>
+#endif
+#ifndef _SFXSTRITEM_HXX //autogen
+#include <svtools/stritem.hxx>
+#endif
+#ifndef _SFXENUMITEM_HXX //autogen
+#include <svtools/eitem.hxx>
+#endif
+#ifndef _SFX_PRINTER_HXX //autogen
+#include <sfx2/printer.hxx>
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
@@ -84,44 +109,17 @@
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
-#ifndef _SVX_STDDLG_HXX //autogen
-#include <svx/stddlg.hxx>
-#endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _SFX_WHITER_HXX //autogen
-#include <svtools/whiter.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
-#include <svtools/stritem.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX //autogen
-#include <vcl/button.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
-#include <svtools/eitem.hxx>
+#ifndef _SVX_STDDLG_HXX //autogen
+#include <svx/stddlg.hxx>
 #endif
 #ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX //autogen
-#include <sfx2/printer.hxx>
-#endif
-#ifndef _SV_FIELD_HXX //autogen
-#include <vcl/field.hxx>
-#endif
-#ifndef _SV_FIXED_HXX //autogen
-#include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_HELP_HXX //autogen
-#include <vcl/help.hxx>
-#endif
-#ifndef _SV_PRINTDLG_HXX_ //autogen
-#include <svtools/printdlg.hxx>
 #endif
 #ifndef _SVX_SRCHITEM_HXX //autogen
 #include <svx/srchitem.hxx>
@@ -129,8 +127,11 @@
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
 #endif
-#ifndef _VCL_CMDEVT_HXX //autogen
-#include <vcl/cmdevt.hxx>
+#ifndef _SVX_DLGUTIL_HXX //autogen
+#include <svx/dlgutil.hxx>
+#endif
+#ifndef _SVX_SVXIDS_HRC //autogen
+#include <svx/svxids.hrc>
 #endif
 
 
@@ -146,38 +147,74 @@
 #ifndef _PVPRTDAT_HXX
 #include <pvprtdat.hxx>
 #endif
-#include "helpid.h"
-#include "swmodule.hxx"
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
 #ifndef _MODOPT_HXX //autogen
 #include <modcfg.hxx>
 #endif
-#include "wrtsh.hxx"
-#include "docsh.hxx"
-#include "doc.hxx"
-#include "cmdid.h"
-#include "viewopt.hxx"
-#include "globals.hrc"
-#include "doc.hxx"
-#include "pview.hxx"
-#include "view.hxx"
-#include "textsh.hxx"
-#include "scroll.hxx"
-#include "swprtopt.hxx"
-#include "docstat.hxx"
-#include "usrpref.hxx"
-#include "popup.hrc"
-#include "pview.hrc"
-#include "viewfunc.hxx"
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _PVIEW_HXX
+#include <pview.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _TEXTSH_HXX
+#include <textsh.hxx>
+#endif
+#ifndef _SCROLL_HXX
+#include <scroll.hxx>
+#endif
+#ifndef _SWPRTOPT_HXX
+#include <swprtopt.hxx>
+#endif
+#ifndef _DOCSTAT_HXX
+#include <docstat.hxx>
+#endif
+#ifndef _USRPREF_HXX
+#include <usrpref.hxx>
+#endif
+#ifndef _VIEWFUNC_HXX
+#include <viewfunc.hxx>
+#endif
 
-#ifndef _SVX_DLGUTIL_HXX //autogen
-#include <svx/dlgutil.hxx>
+
+#ifndef _HELPID_H
+#include <helpid.h>
+#endif
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _GLOBALS_HRC
+#include <globals.hrc>
+#endif
+#ifndef _POPUP_HRC
+#include <popup.hrc>
+#endif
+#ifndef _PVIEW_HRC
+#include <pview.hrc>
 #endif
 
 #define SwPagePreView
-#include "itemdef.hxx"
-#include "swslots.hxx"
+#ifndef _ITEMDEF_HXX
+#include <itemdef.hxx>
+#endif
+#ifndef _SWSLOTS_HXX
+#include <swslots.hxx>
+#endif
 
-#include <algorithm>
 
 SFX_IMPL_VIEWFACTORY(SwPagePreView, SW_RES(STR_NONAME))
 {
@@ -692,9 +729,8 @@ void    PrtPrvWindow::Paint(const Rectangle&)
         long nHeight = rSettings.aPrtSize.Height();
         BOOL bHoriValid = (aWinSize.Width() * 100 / aWinSize.Height()) <
                     (rSettings.aPrtSize.Width() * 100/ rSettings.aPrtSize.Height());
-        Fraction aXScale( aWinSize.Width(),
-                            std::max( nWidth , 1L ) );
-        Fraction aYScale( aWinSize.Height(), std::max( nHeight, 1L ) );
+        Fraction aXScale( aWinSize.Width(), Max( nWidth , 1L ) );
+        Fraction aYScale( aWinSize.Height(), Max( nHeight, 1L ) );
         MapMode aMapMode( GetMapMode() );
         aMapMode.SetScaleX( bHoriValid ? aXScale : aYScale);
         aMapMode.SetScaleY( bHoriValid ? aXScale : aYScale);
@@ -2220,6 +2256,9 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/06/01 11:23:56  fme
+      Fix #86988#: Redesign of dialogs
+
       Revision 1.7  2001/05/17 09:32:40  jp
       Bug #80651#: call InitJob at the printer
 
