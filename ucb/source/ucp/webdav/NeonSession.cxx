@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kso $ $Date: 2002-01-23 14:41:17 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 15:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <string.h>
 #ifndef HTTPAUTH_H
 #include <http_auth.h>
 #endif
