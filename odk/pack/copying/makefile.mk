@@ -29,7 +29,8 @@ all : 	\
     $(EXAMPLESLIST) \
     $(DESTIDLLIST)  \
     $(DESTDIRBIN)$/applicat.rdb  \
-    $(DESTDIR)$/settings$/dk.mk
+    $(DESTDIR)$/settings$/dk.mk \
+    $(DESTDIR)$/classes$/unoil.jar
 
 $(DIRLIST) :
      -$(MKDIRHIER) 	$@
@@ -37,6 +38,9 @@ $(DIRLIST) :
 $(DESTDIREXAMPLES)$/% : $(PRJ)$/examples$/cpp$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIR)$/classes$/unoil.jar : $(BINOUT)$/unoil.jar 
+    $(GNUCOPY) $? $@
 
 $(DESTDIRBIN)$/applicat.rdb : $(BINOUT)$/applicat.rdb 
     $(GNUCOPY) $(BINOUT)$/applicat.rdb $@
