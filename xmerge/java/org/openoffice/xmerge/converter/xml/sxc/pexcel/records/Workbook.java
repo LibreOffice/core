@@ -233,7 +233,7 @@ OfficeConstants {
     /**
       * Adds a font recrod to the workbook
      *
-      * @param  f the font recrod to add
+      * @param  f the font record to add
       */
     public int addFont(FontDescription f) {
 
@@ -242,10 +242,12 @@ OfficeConstants {
 
         for(Enumeration e = fonts.elements();e.hasMoreElements();) {
             FontDescription fd = (FontDescription) e.nextElement();
-            if(fd.compareTo(f))
+            if(fd.compareTo(f)) {
                 alreadyExists = true;
-            else
+                break;
+            } else {
                 i++;
+            }
         }
 
         if(!alreadyExists)
@@ -268,6 +270,7 @@ OfficeConstants {
             ExtendedFormat currentXF = (ExtendedFormat) e.nextElement();
             if(xf.compareTo(currentXF)) {
                 alreadyExists = true;
+                break;
             } else if(!alreadyExists) {
                 i++;
             }
@@ -290,14 +293,39 @@ OfficeConstants {
     }
 
     /**
-      * Gets a worksheet at a particular index from mthe current workbook.
+     * Returns a FontDescription indictated by the
+     * index parameter passed in to the method
      *
-      * @param  index the index of the worksheet to retrieve
+     * @param ixfnt index to the FontDescriptions, this is a 0 based index
+     * @return FontDescription indexed by ixfe
+     */
+    public FontDescription getFontDescription(int ixfnt) {
+
+        return (FontDescription) fonts.elementAt(ixfnt);
+    }
+
+    /**
+     * Returns a ExtendedFormat indictated by the
+     * index parameter passed in to the method
+     *
+     * @param ixfe index to the FontDescriptions, this is a 0 based index
+     * @return FontDescription indexed by ixfe
+     */
+    public ExtendedFormat getExtendedFormat(int ixfe) {
+
+        return (ExtendedFormat) extendedFormats.elementAt(ixfe);
+    }
+
+    /**
+      * Returns an enumeration of DefinedNames for this workbook
+     *
+      * @return Enumeration enumeration for the DefinedNames
       */
     public Enumeration getDefinedNames() {
 
         return definedNames.elements();
     }
+
     /**
      * Returns a <code>Vector</code> containing all the worksheet Names
      *
@@ -357,6 +385,8 @@ OfficeConstants {
 
         // Now the formatting is out of the way add the cell
         Debug.log(Debug.TRACE,"Cell Format: " + fmt);
+        Debug.log(Debug.TRACE,"Row : " + row);
+        Debug.log(Debug.TRACE,"Col : " + col);
         if(cellContents.startsWith("=")) {
             try {
                 Formula f = new Formula(row, col, cellContents, ixfe, fmt, this);
@@ -380,6 +410,7 @@ OfficeConstants {
                 currentWS.addCell(lc);
             }
         } else {
+            Debug.log(Debug.TRACE, "Label Cell : " + cellContents);
             LabelCell lc = new LabelCell(row, col, cellContents, ixfe);
             currentWS.addCell(lc);  // three because we assume the last three
                                     // Records in any worksheet is the selection,

@@ -69,7 +69,6 @@ import org.openoffice.xmerge.util.EndianConverter;
  */
 public class BoolErrCell extends CellValue {
 
-    private byte[] ixfe     = new byte[2];
     private byte   bBoolErr;
     private byte   fError;
 
@@ -84,7 +83,7 @@ public class BoolErrCell extends CellValue {
       */
     public BoolErrCell(int row, int column, int ixfe, int bBoolErr, int fError) throws IOException {
 
-        this.ixfe = EndianConverter.writeShort((short)ixfe);
+        setIxfe(ixfe);
         this.bBoolErr = (byte)bBoolErr;
         this.fError = (byte)fError;
         setRow(row);

@@ -68,7 +68,6 @@ import org.openoffice.xmerge.util.EndianConverter;
  */
 public class LabelCell extends CellValue {
 
-    private byte[] ixfe = new byte[2];
     private byte[] cch  = new byte[2];
     private byte[] rgch;
 
@@ -82,10 +81,11 @@ public class LabelCell extends CellValue {
       */
     public LabelCell(int row, int column, String cellContents, int ixfe)
     throws IOException {
-        this.ixfe   = EndianConverter.writeShort((short)ixfe);
+
            setLabel(cellContents);
            setRow(row);
            setCol(column);
+        setIxfe(ixfe);
     }
 
     /**

@@ -68,7 +68,6 @@ import org.openoffice.xmerge.util.EndianConverter;
  */
 public class FloatNumber extends CellValue {
 
-    protected byte[] ixfe   = new byte[2];
     protected byte[] num  = new byte[8];
 
     /**
@@ -91,9 +90,9 @@ public class FloatNumber extends CellValue {
       */
     public FloatNumber(int row, int column, String cellContents, int ixfe) throws IOException {
 
+        setIxfe(ixfe);
         setRow(row);
            setCol(column);
-        this.ixfe   = EndianConverter.writeShort((short) (ixfe));
         double cellLong = (double) Double.parseDouble(cellContents);
         num     = EndianConverter.writeDouble(cellLong);
     }

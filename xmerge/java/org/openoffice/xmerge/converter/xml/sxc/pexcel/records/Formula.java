@@ -77,7 +77,6 @@ import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
  */
 public class Formula extends CellValue implements OfficeConstants {
 
-    private byte[] ixfe     = new byte[2];
     private byte[] num      = new byte[8];
     private byte grbit;
     private byte[] cce      = new byte[2];
@@ -95,16 +94,20 @@ public class Formula extends CellValue implements OfficeConstants {
       */
     public Formula(int row, int column, String cellContents, int ixfe, Format fmt, Workbook wb)
     throws Exception {
+
         fh.setWorkbook(wb);
-        this.ixfe   = EndianConverter.writeShort((short)ixfe);
+
         setRow(row);
         setCol(column);
+        setIxfe(ixfe);
         setFormula(cellContents);
+
         String category = fmt.getCategory();
+        String value = fmt.getValue();
+
         if(category.equalsIgnoreCase(CELLTYPE_BOOLEAN)) {
             num[0]=(byte)0x01;
             num[1]=(byte)0x00;
-            String value = fmt.getValue();
             if(value.equalsIgnoreCase("true")) {
                 num[2]=(byte)0x01;
             } else {

@@ -66,6 +66,7 @@ import org.openoffice.xmerge.util.EndianConverter;
 
     protected byte[] rw = new byte[2];
     protected byte   col;
+    protected byte[] ixfe = new byte[2];
 
        /**
      * Get the row number of this cell
@@ -83,6 +84,23 @@ import org.openoffice.xmerge.util.EndianConverter;
      */
     public void setRow(int row) {
         this.rw = EndianConverter.writeShort((short) (row - 1));
+    }
+       /**
+     * Get the Index to the <code>ExtendedFormat</code>
+     *
+     * @return the index number of this cell's <code>ExtendedFormat</code>
+     */
+    public int getIxfe() {
+        return EndianConverter.readShort(ixfe);
+    }
+
+    /**
+     * Sets the Index to the <code>ExtendedFormat</code>
+     *
+     * @param ixfe sets the index number for this cell's <code>ExtendedFormat</code>
+     */
+    public void setIxfe(int ixfe) {
+        this.ixfe = EndianConverter.writeShort((short) (ixfe));
     }
 
     /**

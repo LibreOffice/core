@@ -121,7 +121,7 @@ public class Worksheet {
             ci.write(os);
         }
         for(Enumeration e = cells.elements();e.hasMoreElements();) {
-            CellValue cv = (CellValue) e.nextElement();
+            BIFFRecord cv = (BIFFRecord) e.nextElement();
             cv.write(os);
         }
         win2.write(os);
@@ -261,8 +261,8 @@ public class Worksheet {
      *
       * @param  f the font recrod to add
       */
-    public void addCell(CellValue cv) {
-        cells.add(cv);
+    public void addCell(BIFFRecord br) {
+        cells.add(br);
     }
 
     /**

@@ -68,7 +68,7 @@ import org.openoffice.xmerge.util.EndianConverter;
  * Represents a BIFF Record that describes the value of a formula that
  * evaluates to a string
  */
-public class StringValue extends CellValue implements BIFFRecord {
+public class StringValue implements BIFFRecord {
 
     private byte[]  cch     = new byte[2];
     private byte[]  rgch;
