@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:03:28 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,6 +757,7 @@ void BasicIDE::MarkDocShellModified( SfxObjectShell* pShell )
     SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
     if ( pBindings )
     {
+        pBindings->Invalidate( SID_SIGNATURE );
         pBindings->Invalidate( SID_SAVEDOC );
         pBindings->Update( SID_SAVEDOC );
     }
