@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:10:59 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,11 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId,
 
 SdPageObjsTLB::~SdPageObjsTLB()
 {
-    CloseBookmarkDoc();
+    if ( pBookmarkDoc )
+        CloseBookmarkDoc();
+    else
+        // no document was created from pMedium, so this object is still the owner of it
+        delete pMedium;
 }
 
 /*************************************************************************
@@ -534,6 +538,8 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
                           const String& rDocName )
 {
     pDoc = pInDoc;
+
+    // this object now owns the Medium
     pMedium = pInMedium;
     aDocName = rDocName;
 
@@ -839,65 +845,41 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
     if (!pBookmarkDoc ||
         pMed && (!pOwnMedium || pOwnMedium->GetName() != pMed->GetName()))
     {
+        // create a new BookmarkDoc if now one exists or if a new Medium is provided
         if (pOwnMedium != pMed)
         {
             CloseBookmarkDoc();
         }
 
-        SfxMedium* pWorkMedium = NULL;
-
         if (pMed)
         {
-            // Dieses Medium gehoert nun SdPageObjsTLB
+            // it looks that it is undefined if a Medium was set by Fill() allready
+            DBG_ASSERT( !pMedium, "SfxMedium confusion!" );
+            delete pMedium;
+            pMedium = NULL;
+
+            // take over this Medium (currently used only be Navigator)
             pOwnMedium = pMed;
-            pWorkMedium = pOwnMedium;
-        }
-        else
-        {
-            delete pOwnMedium;
-            pOwnMedium = NULL;
-            pWorkMedium = pMedium;
-
-            // Das Medium muss mit READ/WRITE geoeffnet werden, da es ev.
-            // OLE-Objekte enthaelt, welche geclont werden
-            // (innerhalb dieses Mediums)
-
-            // #70116#: OpenMode is set only to STREAM_READ
-            pWorkMedium->SetOpenMode(STREAM_READ /*WRITE | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE */,
-                                        FALSE);
-            pWorkMedium->ReOpen();
         }
 
-        uno::Reference < embed::XStorage > xStorage;
-        if( !pWorkMedium->IsStorage() )
-        {
-            // create writable copy; //TODO/LATER: what's this?!
-            pWorkMedium = new SfxMedium(*pWorkMedium, TRUE);
-            if ( pWorkMedium->IsStorage() )
-                xStorage = pWorkMedium->GetStorage();
-        }
-        else
-            xStorage = pWorkMedium->GetStorage();
+        DBG_ASSERT( pMedium || pMed, "No SfxMedium provided!" );
 
-        uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
-        if ( xAccess->hasByName( pStarDrawXMLContent ) && xStorage->isStreamElement( pStarDrawXMLContent ) ||
-             xAccess->hasByName( pStarDrawOldXMLContent ) && xStorage->isStreamElement( pStarDrawOldXMLContent ) )
+        if( pMed )
         {
-            if( pMed )
-            {
-                // Da das Medium der SdTreeLb gehoert, gehoert auch die
-                // nun zu erzeugende DocShell der SdTreeLb
-                xBookmarkDocShRef = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
-
-                if (xBookmarkDocShRef->DoLoad(pMed))
-                    pBookmarkDoc = xBookmarkDocShRef->GetDoc();
-                else
-                    pBookmarkDoc = NULL;
-            }
+            // in this mode the document is also owned and controlled by this instance
+            xBookmarkDocShRef = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
+            if (xBookmarkDocShRef->DoLoad(pMed))
+                pBookmarkDoc = xBookmarkDocShRef->GetDoc();
             else
-                pBookmarkDoc = ((SdDrawDocument*) pDoc)->OpenBookmarkDoc(*pWorkMedium);
+                pBookmarkDoc = NULL;
         }
-        else             // unbekanntes Storage-Format
+        else if ( pMedium )
+            // in this mode the document is owned and controlled by the SdDrawDocument
+            // it can be released by calling the corresponding CloseBookmarkDoc method
+            // successfull creation of a document makes this the owner of the medium
+            pBookmarkDoc = ((SdDrawDocument*) pDoc)->OpenBookmarkDoc(*pMedium);
+
+        if ( !pBookmarkDoc )
         {
             ErrorBox aErrorBox( this, WB_OK, String( SdResId( STR_READ_DATA_ERROR ) ) );
             aErrorBox.Execute();
@@ -918,19 +900,29 @@ void SdPageObjsTLB::CloseBookmarkDoc()
     if (xBookmarkDocShRef.Is())
     {
         xBookmarkDocShRef->DoClose();
+        xBookmarkDocShRef.Clear();
+
+        // Medium is owned by document, so it's destroyed already
+        pOwnMedium = 0;
+    }
+    else if ( pBookmarkDoc )
+    {
+        DBG_ASSERT( !pOwnMedium, "SfxMedium confusion!" );
+        if ( pDoc )
+        {
+            // The document owns the Medium, so the Medium will be invalid after closing the document
+            ((SdDrawDocument*) pDoc)->CloseBookmarkDoc();
+            pMedium = 0;
+        }
     }
     else
     {
-        if (pBookmarkDoc && pDoc)
-            ((SdDrawDocument*) pDoc)->CloseBookmarkDoc();
+        // perhaps pOwnMedium provided, but no successfull creation of BookmarkDoc
+        delete pOwnMedium;
+        pOwnMedium = NULL;
     }
 
-    xBookmarkDocShRef.Clear();
-
     pBookmarkDoc = NULL;
-
-//    delete pOwnMedium;
-    pOwnMedium = NULL;
 }
 
 /*************************************************************************
