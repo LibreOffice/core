@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 13:55:30 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,8 +667,6 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
     // Die Aehnlichkeiten zu SwTxtFrm::_AutoSpell sind beabsichtigt ...
     // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
 
-    //!! please check SwTxtNode::Convert when modifying this one !!
-
     Reference<beans::XPropertySet> xProp( GetLinguPropertySet() );
 
     xub_StrLen nBegin, nEnd;
@@ -796,91 +794,74 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
     return pArgs->xSpellAlt.is() ? 1 : 0;
 }
 
+
 USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
 {
-    //!! mofified version of SwTxtNode::Spell.          !!
-    //!! please check the above when modifying this one !!
+    // get range of text within node to be converted
+    // (either all the text or the the text within the selection
+    // when the conversion was started)
+    xub_StrLen nTextBegin, nTextEnd;
+    //
+    if ( rArgs.pStartNode != this )
+        nTextBegin = 0;
+    else
+        nTextBegin = rArgs.rStartIdx.GetIndex();
+    if (nTextBegin > aText.Len())
+        nTextBegin = aText.Len();
+    //
+    if ( rArgs.pEndNode != this )
+        nTextEnd = aText.Len();
+    else
+        nTextEnd = rArgs.rEndIdx.GetIndex();
+    if (nTextEnd > aText.Len())
+        nTextEnd = aText.Len();
 
-    xub_StrLen nBegin, nEnd;
+    rArgs.bConvTextFound = sal_False;
 
     // modify string according to redline information and hidden text
     const XubString aOldTxt( aText );
     const bool bRestoreString = lcl_MaskRedlinesAndHiddenText( *this, aText );
 
-    if ( rArgs.pStartNode != this )
-        nBegin = 0;
-    else
-        nBegin = rArgs.rStartIdx.GetIndex();
-
-    if ( rArgs.pEndNode != this )
-        nEnd = aText.Len();
-    else
-        nEnd = rArgs.rEndIdx.GetIndex();
-
-    rArgs.bConvTextFound = sal_False;
-
-    if(aText.Len() )
+    sal_Bool    bFound  = sal_False;
+    xub_StrLen  nBegin  = nTextBegin;
+    xub_StrLen  nLen;
+    if (aText.Len())
     {
-        if( nBegin > aText.Len() )
-            nBegin = aText.Len();
-        if( nEnd > aText.Len() )
-            nEnd = aText.Len();
+        SwLanguageIterator aIter( *this, nBegin );
 
-        // In case 2. we pass the wrong list to the scanned, because only
-        // the words in the wrong list have to be checked
-        SwScanner aScanner( *this,
-                            WordType::DICTIONARY_WORD,
-                            nBegin, nEnd, TRUE /*clip == true*/ );
-        while( !rArgs.bConvTextFound && aScanner.NextWord() )
-        {
-            const XubString& rWord = aScanner.GetWord();
-
-            // get next language for next word, consider language attributes
-            // within the word
-            LanguageType eActLang = aScanner.GetCurrentLanguage();
-
-            if( rWord.Len() > 0 && rArgs.nConvLang == eActLang )
-            {
-                // clip result to provided begin and end (that may be
-                // obtained from a selection) in order to restrict the
-                // results to that selection
-                xub_StrLen nRealBegin = aScanner.GetBegin();
-                xub_StrLen nRealEnd   = aScanner.GetEnd();
-                if (nRealBegin < nBegin)
-                    nRealBegin = nBegin;
-                if (nRealEnd > nEnd)
-                    nRealEnd = nEnd;
-
-                rArgs.bConvTextFound = sal_True;
-                xub_StrLen nCpStart, nCpLen;
-                nCpStart = nRealBegin - aScanner.GetBegin();
-                nCpLen = nRealEnd - nRealBegin;
-                rArgs.aConvText = rWord.Copy( nCpStart, nCpLen );
-                rArgs.pStartNode = this;
-                rArgs.pEndNode = this;
-                rArgs.rStartIdx.Assign(this, nRealEnd );
-                rArgs.rEndIdx.Assign(this, nRealBegin );
-            }
-
-            // get next language in order to find next or previous word
-            xub_StrLen nNextBegin = aScanner.GetBegin() + rWord.Len();
-
-            // first we have to skip some whitespace characters
-            short nInc = 1;
-            while ( nNextBegin < aText.Len() &&
-                    lcl_IsSkippableWhiteSpace( aText.GetChar( nNextBegin ) ) )
-            {
-                nNextBegin += nInc;
-            }
-
-            if ( nNextBegin < aText.Len() )
-                eActLang = GetLang( nNextBegin );
-            else
-                break;
-        }
+        // find non zero length text portion of appropriate language
+        do {
+            bFound = (aIter.GetLanguage() == rArgs.nConvLang) &&
+                     (aIter.GetChgPos() - nBegin > 0);
+            nLen = aIter.GetChgPos() - nBegin;
+            if (!bFound)
+                nBegin = aIter.GetChgPos(); // start of next language portion
+        } while (!bFound && aIter.Next());  /* loop while nothing was found and still sth is left to be searched */
     }
 
-    // reset original text
+    // keep resulting text within selection / range of text to be converted
+    if (nBegin < nTextBegin)
+        nBegin = nTextBegin;
+    if (nBegin + nLen > nTextEnd)
+        nLen = nTextEnd - nBegin;
+    sal_Bool bInSelection = nBegin < nTextEnd;
+
+    if (bFound && bInSelection)     // convertible text found within selection/range?
+    {
+        const XubString aTxtPortion = aText.Copy( nBegin, nLen );
+        DBG_ASSERT( aText.Len() > 0, "convertible text portion missing!" );
+        rArgs.bConvTextFound = sal_True;
+        rArgs.aConvText = aText.Copy( nBegin, nLen );
+
+        // position where to start looking in next iterration (after current end)
+        rArgs.pStartNode = this;
+        rArgs.rStartIdx.Assign(this, nBegin + nLen );
+        // end position (when we have traversed over the whole document)
+        rArgs.pEndNode = this;
+        rArgs.rEndIdx.Assign(this, nBegin );
+    }
+
+    // restore original text
     if ( bRestoreString )
         aText = aOldTxt;
 
@@ -1398,6 +1379,7 @@ void SwTxtNode::TransliterateText( utl::TransliterationWrapper& rTrans,
         delete pIter;
     }
 }
+
 
 void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
                                 const XubString& rText,
