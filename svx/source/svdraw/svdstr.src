@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 18:42:20 $
+ *  last change: $Author: kz $ $Date: 2001-12-19 18:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5817,7 +5817,7 @@ String STR_ExchangeDD
     Text[ chinese_simplified ] = "æ‹–æ”¾ %O";
     Text[ russian ] = "Ïåğåòàùèòü %O";
     Text[ polish ] = "Przeci¹gnij i upuœæ %O";
-    Text[ japanese ] = "%Oã®ãƒ‰ãƒ©ãƒƒã‚°&ãƒ‰ãƒ­ãƒƒãƒ—";
+    Text[ japanese ] = "%O ã‚’ãƒ‰ãƒ©ãƒƒã‚°ï¼†ãƒ‰ãƒ­ãƒƒãƒ—";
     Text[ chinese_traditional ] = "æ‹–æ›³ %O";
     Text[ arabic ] = "ÓÍÈ æ ÅÓŞÇØ %O";
     Text[ dutch ] = "Slepen&neerzetten %O";
@@ -5848,7 +5848,7 @@ String STR_ExchangeDDPaste
     Text[ chinese_simplified ] = "æ’å…¥æ‹–æ”¾å†…å®¹";
     Text[ russian ] = "Âñòàâèòü ğåæèì ïåğåòàñêèâàíèÿ";
     Text[ polish ] = "Wstaw Przeci¹gnij i upuœæ";
-    Text[ japanese ] = "ãƒ‰ãƒ©ãƒƒã‚°&ãƒ…ãƒ­ãƒƒãƒ—ã‚’æŒ¿å…¥";
+    Text[ japanese ] = "ãƒ‰ãƒ©ãƒƒã‚°ï¼†ãƒ‰ãƒ­ãƒƒãƒ—ã§æŒ¿å…¥";
     Text[ chinese_traditional ] = "æ’å…¥æ‹–æ›³å…§å®¹";
     Text[ arabic ] = "ÅÏÑÇÌ ÓÍÈ æ ÅÓŞÇØ";
     Text[ dutch ] = "Plakken via slepen&neerzetten";
@@ -13806,7 +13806,7 @@ String SIP_SA_TEXT_ANISTARTINSIDE
     Text[ swedish ] = "Den rullande texten startar inom";
     Text[ polish ] = "Pocz¹tek przesuwaj¹cego siê pisma wewn¹trz";
     Text[ portuguese_brazilian ] = "Ticker start inside";
-    Text[ japanese ] = "æ å†…ã§ãƒ†ã‚­ã‚¹ãƒˆ ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å§‹ã¾ã‚Š";
+    Text[ japanese ] = "æ å†…ã§ãƒ†ã‚­ã‚¹ãƒˆã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ã‚¹ã‚¿ãƒ¼ãƒˆ";
     Text[ chinese_simplified ] = "æ´»åŠ¨æ–‡å­—å¼€å§‹åœ¨æ–‡å­—æ¡†å†…";
     Text[ chinese_traditional ] = "ç§»å‹•æ–‡å­—é–‹å§‹åœ¨æ–‡å­—æ–¹å¡Šå…§";
     Text[ arabic ] = "ÈÏÁ ÇáßÊÇÈÉ ÇáãÊÍÑßÉ ÈÇáÏÇÎá";
@@ -13834,7 +13834,7 @@ String SIP_SA_TEXT_ANISTOPINSIDE
     Text[ swedish ] = "Den rullande texten stannar inom";
     Text[ polish ] = "Koniec przesuwaj¹cego siê pisma";
     Text[ portuguese_brazilian ] = "Ticker stop inside";
-    Text[ japanese ] = "æ å†…ã§ãƒ†ã‚­ã‚¹ãƒˆ ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®çµ‚ã‚ã‚Š";
+    Text[ japanese ] = "æ å†…ã§ãƒ†ã‚­ã‚¹ãƒˆã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ã‚¹ãƒˆãƒƒãƒ—";
     Text[ chinese_simplified ] = "æ´»åŠ¨æ–‡å­—åœç•™åœ¨æ–‡å­—æ¡†å†…";
     Text[ chinese_traditional ] = "ç§»å‹•æ–‡å­—åœç•™åœ¨æ–‡å­—æ–¹å¡Šå…§";
     Text[ arabic ] = "ÅíŞÇİ ÇáßÊÇÈÉ ÇáãÊÍÑß ÈÇáÏÇÎá";
@@ -17730,6 +17730,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
