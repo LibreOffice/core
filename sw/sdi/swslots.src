@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:48:28 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:50:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ SfxSlotInfo FN_ABSTRACT_NEWDOC
     SlotName[ arabic ] = "����� �� �������";
     SlotName[ dutch ] = "Document van samenvatting";
     SlotName[ chinese_simplified ] = "文档来自摘要";
-    SlotName[ greek ] = "������� ��� Abstract";
+    SlotName[ greek ] = "������� ��� ��������";
     SlotName[ korean ] = "문서를 요약으로부터";
     SlotName[ turkish ] = "Belge �zeti ��kar";
     SlotName[ language_user1 ] = " ";
@@ -94,6 +94,8 @@ SfxSlotInfo FN_ABSTRACT_NEWDOC
     SlotName[ hebrew ] = "‮מסמך מתקציר מסמך נוכחי‬";
     SlotName[ hindi ] = "सारांश से लेखपत्र";
     SlotName[ slovak ] = "Dokument z konceptu";
+    SlotName[ hungarian ] = "Összefoglalóból dokumentum";
+    SlotName[ slovenian ] = "Dokument iz povzetka";
 };
 SfxSlotInfo FN_ABSTRACT_STARIMPRESS
 {
@@ -116,7 +118,7 @@ SfxSlotInfo FN_ABSTRACT_STARIMPRESS
     SlotName[ arabic ] = "��� ������ �� �������";
     SlotName[ dutch ] = "Presentatie uit samenvatting";
     SlotName[ chinese_simplified ] = "演示文稿来自摘要";
-    SlotName[ greek ] = "���������� ��� Abstract";
+    SlotName[ greek ] = "���������� ��� ��������";
     SlotName[ korean ] = "프레젠테이션을 요약으로부터";
     SlotName[ turkish ] = "Sunu �zeti ��kar";
     SlotName[ language_user1 ] = " ";
@@ -127,6 +129,8 @@ SfxSlotInfo FN_ABSTRACT_STARIMPRESS
     SlotName[ hebrew ] = "‮מצגת מתקציר מסמך‬";
     SlotName[ hindi ] = "सारांश से प्रस्तुति ";
     SlotName[ slovak ] = "Prezentácia z konceptu";
+    SlotName[ hungarian ] = "Összefoglalóból bemutató";
+    SlotName[ slovenian ] = "Predstavitev iz povzetka";
 };
 SfxSlotInfo FN_ADD_UNKNOWN
 {
@@ -139,7 +143,7 @@ SfxSlotInfo FN_ADD_UNKNOWN
     SlotName[ french ] = "Ajouter mots inconnus";
     SlotName[ spanish ] = "Aceptar palabras desconocidas";
     SlotName[ italian ] = "Preleva le parole sconosciute";
-    SlotName[ danish ] = "Tilf�j alle ukendte ord";
+    SlotName[ danish ] = "Tilf�j ukendte ord";
     SlotName[ swedish ] = "L�gg till ok�nda ord";
     SlotName[ polish ] = "Dodaj nieznane wyrazy";
     SlotName[ portuguese_brazilian ] = "Adicionar Palavras Desconhecidas";
@@ -160,6 +164,8 @@ SfxSlotInfo FN_ADD_UNKNOWN
     SlotName[ hebrew ] = "‮הוספת מלים לא ידועות‬";
     SlotName[ hindi ] = "अज्ञात शब्दों को जोड़ो";
     SlotName[ slovak ] = "Pridať neznáme slová";
+    SlotName[ hungarian ] = "Ismeretlen szavak hozzáadása";
+    SlotName[ slovenian ] = "Dodaj neznane besede";
 };
 SfxSlotInfo FN_AUTO_CORRECT
 {
@@ -193,6 +199,8 @@ SfxSlotInfo FN_AUTO_CORRECT
     SlotName[ hebrew ] = "‮תיקון אוטומטי‬";
     SlotName[ hindi ] = "स्वयं ठीक करना";
     SlotName[ slovak ] = "Automatické opravy";
+    SlotName[ hungarian ] = "Automatikus javítás";
+    SlotName[ slovenian ] = "Samopopravki";
 };
 SfxSlotInfo FN_AUTOFORMAT_APPLY
 {
@@ -226,6 +234,8 @@ SfxSlotInfo FN_AUTOFORMAT_APPLY
     SlotName[ hebrew ] = "‮החלת אפשרויות עיצוב‬";
     SlotName[ hindi ] = "स्वचालित ढंग से रचना विकल्प को लागू करो";
     SlotName[ slovak ] = "Použiť automatický formát";
+    SlotName[ hungarian ] = "Automatikus formázás alkalmazása";
+    SlotName[ slovenian ] = "Uporabi možnosti samooblikovanja";
 };
 SfxSlotInfo FN_AUTOFORMAT_AUTO
 {
@@ -240,7 +250,7 @@ SfxSlotInfo FN_AUTOFORMAT_AUTO
     SlotName[ spanish ] = "Formateado autom�tico mientras se escribe";
     SlotName[ finnish ] = "Automaattinen muotoilu kirjoitettaessa";
     SlotName[ italian ] = "Foramttazione automatica durante la digitazione";
-    SlotName[ danish ] = "AutoFormat ved indtastning";
+    SlotName[ danish ] = "Anvend AutoFormat mens der indtastes";
     SlotName[ swedish ] = "AutoFormat vid inmatning";
     SlotName[ polish ] = "Autoformatowanie podczas pisania";
     SlotName[ japanese ] = "入力時オートフォーマット";
@@ -256,6 +266,8 @@ SfxSlotInfo FN_AUTOFORMAT_AUTO
     SlotName[ portuguese_brazilian ] = "AutoFormata��o Durante a Digita��o";
     SlotName[ hindi ] = "टइपिंग के समय स्वचालित ढंग से रचना";
     SlotName[ slovak ] = "Automatický formát počas písania";
+    SlotName[ hungarian ] = "Szerkesztés közbeni automatikus formázás";
+    SlotName[ slovenian ] = "Samooblikuj med vnašanjem";
 };
 SfxSlotInfo FN_AUTOFORMAT_REDLINE_APPLY
 {
@@ -289,6 +301,8 @@ SfxSlotInfo FN_AUTOFORMAT_REDLINE_APPLY
     SlotName[ hebrew ] = "‮החלת אפשרויות עיצוב אוטומטי ואישור‬";
     SlotName[ hindi ] = "स्वचालित ढंग से रचना विकल्पों को लागू करो और परिवर्तनों को दृढ़ करो";
     SlotName[ slovak ] = "Použiť automatický formát a potvrdiť zmeny";
+    SlotName[ hungarian ] = "Automatikus formázás alkalmazása megerősítéssel";
+    SlotName[ slovenian ] = "Uporabi možnosti samooblikovanja in potrdi spremembe";
 };
 SfxSlotInfo FN_BACKSPACE
 {
@@ -322,6 +336,8 @@ SfxSlotInfo FN_BACKSPACE
     SlotName[ hebrew ] = "Rückschritt";
     SlotName[ hindi ] = "बॉकस्पेस";
     SlotName[ slovak ] = "Späť";
+    SlotName[ hungarian ] = "Backspace";
+    SlotName[ slovenian ] = "Vračalka";
 };
 SfxSlotInfo FN_CALC_TABLE
 {
@@ -355,6 +371,8 @@ SfxSlotInfo FN_CALC_TABLE
     SlotName[ hebrew ] = "‮חישוב טבלה‬";
     SlotName[ hindi ] = "सारणी गणना करो";
     SlotName[ slovak ] = "Spočítaj tabuľku";
+    SlotName[ hungarian ] = "Tábla számolása";
+    SlotName[ slovenian ] = "Preračunaj tabelo";
 };
 SfxSlotInfo FN_CALCULATE
 {
@@ -388,6 +406,8 @@ SfxSlotInfo FN_CALCULATE
     SlotName[ hebrew ] = "‮חישוב נוסחה נבחרת‬";
     SlotName[ hindi ] = "चुनाव की गणना करो";
     SlotName[ slovak ] = "Spočítať vybrané hodnoty";
+    SlotName[ hungarian ] = "Kijelölés számolása";
+    SlotName[ slovenian ] = "Preračunaj izbrano";
 };
 SfxSlotInfo FN_CHANGE_DBFIELD
 {
@@ -421,6 +441,8 @@ SfxSlotInfo FN_CHANGE_DBFIELD
     SlotName[ hebrew ] = "Datenbank ändern";
     SlotName[ hindi ] = "लेखासंचय बदलो";
     SlotName[ slovak ] = "Zmeniť databázu";
+    SlotName[ hungarian ] = "Adatbázis váltása";
+    SlotName[ slovenian ] = "Zamenjaj zbirko podatkov";
 };
 SfxSlotInfo FN_CHANGE_PAGENUM
 {
@@ -454,6 +476,8 @@ SfxSlotInfo FN_CHANGE_PAGENUM
     SlotName[ hebrew ] = "Seitennummer";
     SlotName[ hindi ] = "पृष्ठ संख्या ";
     SlotName[ slovak ] = "Číslo stránky";
+    SlotName[ hungarian ] = "Oldalszám";
+    SlotName[ slovenian ] = "Številka strani";
 };
 SfxSlotInfo FN_CHAR_LEFT
 {
@@ -487,6 +511,8 @@ SfxSlotInfo FN_CHAR_LEFT
     SlotName[ hebrew ] = "Zeichen links";
     SlotName[ hindi ] = "अक्षर के बायाँ ओर";
     SlotName[ slovak ] = "Na znak vľavo";
+    SlotName[ hungarian ] = "Bal oldali karakterig";
+    SlotName[ slovenian ] = "Na levi znak";
 };
 SfxSlotInfo FN_CHAR_LEFT_SEL
 {
@@ -520,6 +546,8 @@ SfxSlotInfo FN_CHAR_LEFT_SEL
     SlotName[ hebrew ] = "Zeichen links selektieren";
     SlotName[ hindi ] = "अक्षर के बायाँ ओर चुनो";
     SlotName[ slovak ] = "Vybrať znak vľavo";
+    SlotName[ hungarian ] = "Bal oldali karakter kiválasztása";
+    SlotName[ slovenian ] = "Izberi levi znak";
 };
 SfxSlotInfo FN_CHAR_RIGHT
 {
@@ -553,6 +581,8 @@ SfxSlotInfo FN_CHAR_RIGHT
     SlotName[ hebrew ] = "Zeichen rechts";
     SlotName[ hindi ] = "दाहिनी ओर जाओ";
     SlotName[ slovak ] = "Prechod vpravo";
+    SlotName[ hungarian ] = "Jobbra lép";
+    SlotName[ slovenian ] = "Pojdi desno";
 };
 SfxSlotInfo FN_CHAR_RIGHT_SEL
 {
@@ -586,6 +616,8 @@ SfxSlotInfo FN_CHAR_RIGHT_SEL
     SlotName[ hebrew ] = "Zeichen rechts selektieren";
     SlotName[ hindi ] = "अक्षर के दाहिनी ओर चुनो";
     SlotName[ slovak ] = "Vybrať znak vpravo";
+    SlotName[ hungarian ] = "Jobb oldali karakter kiválasztása";
+    SlotName[ slovenian ] = "Izberi desni znak";
 };
 SfxSlotInfo FN_CNTNT_TO_NEXT_FRAME
 {
@@ -619,6 +651,8 @@ SfxSlotInfo FN_CNTNT_TO_NEXT_FRAME
     SlotName[ hebrew ] = "‮אל המסגרת הבאה‬";
     SlotName[ hindi ] = "अगला फ्रेम को";
     SlotName[ slovak ] = "Na nasledujúce ohraničenie";
+    SlotName[ hungarian ] = "A következő kerethez";
+    SlotName[ slovenian ] = "Na naslednji okvir";
 };
 SfxSlotInfo FN_CONVERT_TEXT_TABLE
 {
@@ -652,6 +686,8 @@ SfxSlotInfo FN_CONVERT_TEXT_TABLE
     SlotName[ hebrew ] = "‮המרה טקסט-טבלה‬";
     SlotName[ hindi ] = "सारणी/टेक्स्ट् बदलो   ";
     SlotName[ slovak ] = "Prevod tabuľky na text";
+    SlotName[ hungarian ] = "Táblázat és szöveg közti átalakítás";
+    SlotName[ slovenian ] = "Pretvori tabelo/besedilo";
 };
 SfxSlotInfo FN_DEC_INDENT_OFFSET
 {
@@ -685,6 +721,8 @@ SfxSlotInfo FN_DEC_INDENT_OFFSET
     SlotName[ hebrew ] = "‮הקטנת הזחה‬";
     SlotName[ hindi ] = "इन्डेन्ट मूल्य को घटाओ";
     SlotName[ slovak ] = "Zmenšiť odsadenie";
+    SlotName[ hungarian ] = "Behúzás értékének csökkentése";
+    SlotName[ slovenian ] = "Zmanjšaj vrednost zamika";
 };
 SfxSlotInfo FN_DELETE_BACK_LINE
 {
@@ -697,7 +735,7 @@ SfxSlotInfo FN_DELETE_BACK_LINE
     SlotName[ french ] = "Supprimer jusqu'au d�but de la ligne";
     SlotName[ spanish ] = "Borrar hasta el comienzo de la l�nea";
     SlotName[ italian ] = "Cancella fino all'inzio della riga";
-    SlotName[ danish ] = "Slet til begyndelsen af r�kken";
+    SlotName[ danish ] = "Slet til begyndelsen af linjen";
     SlotName[ swedish ] = "Radera till b�rjan av rad";
     SlotName[ polish ] = "Usu� do pocz�tku wiersza";
     SlotName[ portuguese_brazilian ] = "Excluir at� o In�cio da Linha";
@@ -718,6 +756,8 @@ SfxSlotInfo FN_DELETE_BACK_LINE
     SlotName[ hebrew ] = "Bis Zeilenanfang löschen";
     SlotName[ hindi ] = "रेखा के प्रारंभ तक मिटाओ";
     SlotName[ slovak ] = "Odstrániť do začiatku riadku";
+    SlotName[ hungarian ] = "Törlés a sor elejéig";
+    SlotName[ slovenian ] = "Izbriši do začetka vrstice";
 };
 SfxSlotInfo FN_DELETE_BACK_PARA
 {
@@ -751,6 +791,8 @@ SfxSlotInfo FN_DELETE_BACK_PARA
     SlotName[ hebrew ] = "Bis Absatzanfang löschen";
     SlotName[ hindi ] = "परिच्छेद के प्रारंभ तक मिटाओ";
     SlotName[ slovak ] = "Odstrániť do začiatku odstavca";
+    SlotName[ hungarian ] = "Törlés a bekezdés elejéig";
+    SlotName[ slovenian ] = "Izbriši do začetka odstavka";
 };
 SfxSlotInfo FN_DELETE_BACK_SENT
 {
@@ -784,6 +826,8 @@ SfxSlotInfo FN_DELETE_BACK_SENT
     SlotName[ hebrew ] = "Bis Satzanfang löschen";
     SlotName[ hindi ] = "वाक्य के प्रारंभ तक मिटाओ";
     SlotName[ slovak ] = "Odstrániť do začiatku vety";
+    SlotName[ hungarian ] = "Törlés a mondat elejéig";
+    SlotName[ slovenian ] = "Izbriši do začetka povedi";
 };
 SfxSlotInfo FN_DELETE_BACK_WORD
 {
@@ -817,6 +861,8 @@ SfxSlotInfo FN_DELETE_BACK_WORD
     SlotName[ hebrew ] = "Bis Wortanfang löschen";
     SlotName[ hindi ] = "शब्द के प्रारंभ तक मिटाओ";
     SlotName[ slovak ] = "Odstrániť do začiatku slova";
+    SlotName[ hungarian ] = "Törlés a szó elejéig";
+    SlotName[ slovenian ] = "Izbriši do začetka besede";
 };
 SfxSlotInfo FN_DELETE_LINE
 {
@@ -829,7 +875,7 @@ SfxSlotInfo FN_DELETE_LINE
     SlotName[ french ] = "Supprimer jusqu'� la fin de la ligne";
     SlotName[ spanish ] = "Borrar hasta el final de la l�nea";
     SlotName[ italian ] = "Cancella fino a fine riga";
-    SlotName[ danish ] = "Slet til slutningen af r�kken";
+    SlotName[ danish ] = "Slet til slutningen af linjen";
     SlotName[ swedish ] = "Radera till radslut";
     SlotName[ polish ] = "Usu� do ko�ca wiersza";
     SlotName[ portuguese_brazilian ] = "Excluir at� o Fim da Linha";
@@ -850,6 +896,8 @@ SfxSlotInfo FN_DELETE_LINE
     SlotName[ hebrew ] = "Bis Zeilenende löschen";
     SlotName[ hindi ] = "रेखा के अंत तक मिटाओ";
     SlotName[ slovak ] = "Odstrániť do konca riadkov";
+    SlotName[ hungarian ] = "Törlés a sor végéig";
+    SlotName[ slovenian ] = "Izbriši do konca vrstice";
 };
 SfxSlotInfo FN_DELETE_PARA
 {
@@ -883,6 +931,8 @@ SfxSlotInfo FN_DELETE_PARA
     SlotName[ hebrew ] = "Bis Absatzende löschen";
     SlotName[ hindi ] = "परिच्छेद के अंत तक मिटाओ";
     SlotName[ slovak ] = "Odstrániť do konca odstavca";
+    SlotName[ hungarian ] = "Törlés a bekezdés végéig";
+    SlotName[ slovenian ] = "Izbriši do konca odstavka";
 };
 SfxSlotInfo FN_DELETE_SENT
 {
@@ -916,6 +966,8 @@ SfxSlotInfo FN_DELETE_SENT
     SlotName[ hebrew ] = "Bis Satzende löschen";
     SlotName[ hindi ] = "वाक्य के अंत तक मिटाओ";
     SlotName[ slovak ] = "Odstrániť do konca vety";
+    SlotName[ hungarian ] = "Törlés a mondat végéig";
+    SlotName[ slovenian ] = "Izbriši do konca povedi";
 };
 SfxSlotInfo FN_DELETE_WHOLE_LINE
 {
@@ -928,7 +980,7 @@ SfxSlotInfo FN_DELETE_WHOLE_LINE
     SlotName[ french ] = "Supprimer la ligne";
     SlotName[ spanish ] = "Borrar fila";
     SlotName[ italian ] = "Elimina riga";
-    SlotName[ danish ] = "Slet r�kken";
+    SlotName[ danish ] = "Slet r�kke";
     SlotName[ swedish ] = "Radera rad";
     SlotName[ polish ] = "Usu� wiersz";
     SlotName[ portuguese_brazilian ] = "Excluir Linha";
@@ -949,6 +1001,8 @@ SfxSlotInfo FN_DELETE_WHOLE_LINE
     SlotName[ hebrew ] = "‮מחיקת שורה‬";
     SlotName[ hindi ] = "पंक्ति मिटाओ";
     SlotName[ slovak ] = "Zmazať riadok";
+    SlotName[ hungarian ] = "Sor törlése";
+    SlotName[ slovenian ] = "Izbriši vrstico";
 };
 SfxSlotInfo FN_DELETE_WORD
 {
@@ -982,6 +1036,8 @@ SfxSlotInfo FN_DELETE_WORD
     SlotName[ hebrew ] = "Bis Wortende löschen";
     SlotName[ hindi ] = "शब्द के अंत तक मिटाओ";
     SlotName[ slovak ] = "Odstrániť do konca slova";
+    SlotName[ hungarian ] = "Törlés a szó végéig";
+    SlotName[ slovenian ] = "Izbriši do konca besede";
 };
 SfxSlotInfo FN_DRAW_WRAP_DLG
 {
@@ -1015,6 +1071,8 @@ SfxSlotInfo FN_DRAW_WRAP_DLG
     SlotName[ hebrew ] = "Textumlauf";
     SlotName[ hindi ] = "टेक्स्ट् लपेटो";
     SlotName[ slovak ] = "Obtekanie textu";
+    SlotName[ hungarian ] = "Szöveg törése";
+    SlotName[ slovenian ] = "Oblivanje z besedilom";
 };
 SfxSlotInfo FN_DRAWTEXT_ATTR_DLG
 {
@@ -1048,6 +1106,8 @@ SfxSlotInfo FN_DRAWTEXT_ATTR_DLG
     SlotName[ hebrew ] = "Textattribute";
     SlotName[ hindi ] = "टेक्स्ट् ऐट्रिब्यूट्स";
     SlotName[ slovak ] = "Atribúty textu";
+    SlotName[ hungarian ] = "Szövegjellemzők";
+    SlotName[ slovenian ] = "Atributi besedila";
 };
 SfxSlotInfo FN_EDIT_FIELD
 {
@@ -1060,7 +1120,7 @@ SfxSlotInfo FN_EDIT_FIELD
     SlotName[ french ] = "Champ";
     SlotName[ spanish ] = "Campos";
     SlotName[ italian ] = "Comando di campo";
-    SlotName[ danish ] = "Felt";
+    SlotName[ danish ] = "Felter";
     SlotName[ swedish ] = "F�ltkommando";
     SlotName[ polish ] = "Pola";
     SlotName[ portuguese_brazilian ] = "Campos";
@@ -1081,6 +1141,8 @@ SfxSlotInfo FN_EDIT_FIELD
     SlotName[ hebrew ] = "‮שדות‬";
     SlotName[ hindi ] = "क्षेत्रें";
     SlotName[ slovak ] = "Polia";
+    SlotName[ hungarian ] = "Mezők";
+    SlotName[ slovenian ] = "Polja";
 };
 SfxSlotInfo FN_EDIT_FOOTNOTE
 {
@@ -1114,6 +1176,8 @@ SfxSlotInfo FN_EDIT_FOOTNOTE
     SlotName[ hebrew ] = "‮הערת שוליים‬";
     SlotName[ hindi ] = "पृष्ठ के नीचे की टीका";
     SlotName[ slovak ] = "Poznámka pod čiarou";
+    SlotName[ hungarian ] = "Lábjegyzet";
+    SlotName[ slovenian ] = "Sprotna opomba";
 };
 SfxSlotInfo FN_EDIT_FORMULA
 {
@@ -1127,7 +1191,7 @@ SfxSlotInfo FN_EDIT_FORMULA
     SlotName[ spanish ] = "Barra de f�rmulas";
     SlotName[ finnish ] = "Lis�� kaava";
     SlotName[ italian ] = "Barra di calcolo";
-    SlotName[ danish ] = "Inds�t formel";
+    SlotName[ danish ] = "Formellinje";
     SlotName[ swedish ] = "Formellist";
     SlotName[ polish ] = "Wstaw formu��";
     SlotName[ portuguese_brazilian ] = "Inserir F�rmula";
@@ -1143,6 +1207,8 @@ SfxSlotInfo FN_EDIT_FORMULA
     SlotName[ hebrew ] = "‮הוספת נוסחה‬";
     SlotName[ hindi ] = "सूत्र जोड़ो";
     SlotName[ slovak ] = "Panel vzorcov";
+    SlotName[ hungarian ] = "Képlet eszköztár";
+    SlotName[ slovenian ] = "Orodna vrstica za formule";
 };
 SfxSlotInfo FN_EDIT_IDX_ENTRY_DLG
 {
@@ -1176,6 +1242,8 @@ SfxSlotInfo FN_EDIT_IDX_ENTRY_DLG
     SlotName[ hebrew ] = "‮ערך מפתח‬";
     SlotName[ hindi ] = "अनुक्रमणिका प्रविष्टि";
     SlotName[ slovak ] = "Položka obsahu";
+    SlotName[ hungarian ] = "Tárgymutató-bejegyzés";
+    SlotName[ slovenian ] = "Vnos v kazalo";
 };
 SfxSlotInfo FN_EDIT_LINK_DLG
 {
@@ -1209,6 +1277,8 @@ SfxSlotInfo FN_EDIT_LINK_DLG
     SlotName[ hebrew ] = "‮קישורים‬";
     SlotName[ hindi ] = "लिंक्स";
     SlotName[ slovak ] = "Odkazy";
+    SlotName[ hungarian ] = "Hivatkozások";
+    SlotName[ slovenian ] = "Povezave";
 };
 SfxSlotInfo FN_EDIT_REGION
 {
@@ -1221,7 +1291,7 @@ SfxSlotInfo FN_EDIT_REGION
     SlotName[ french ] = "Sections";
     SlotName[ spanish ] = "Secciones";
     SlotName[ italian ] = "Sezioni";
-    SlotName[ danish ] = "Omr�der";
+    SlotName[ danish ] = "Sektioner";
     SlotName[ swedish ] = "Omr�den";
     SlotName[ polish ] = "Sekcje";
     SlotName[ portuguese_brazilian ] = "Se��es";
@@ -1242,6 +1312,8 @@ SfxSlotInfo FN_EDIT_REGION
     SlotName[ hebrew ] = "‮חלקי מסמך‬";
     SlotName[ hindi ] = "विभाग";
     SlotName[ slovak ] = "Sekcie";
+    SlotName[ hungarian ] = "Szakaszok";
+    SlotName[ slovenian ] = "Odseki";
 };
 SfxSlotInfo FN_END_DOC_DIRECT
 {
@@ -1275,6 +1347,8 @@ SfxSlotInfo FN_END_DOC_DIRECT
     SlotName[ hebrew ] = "Direkt zum Dokumentende";
     SlotName[ hindi ] = "सीधा लेखपत्र के अंत तक";
     SlotName[ slovak ] = "Priamo na koniec súboru";
+    SlotName[ hungarian ] = "Közvetlenül a dokumentum végéhez";
+    SlotName[ slovenian ] = "Neposredno na konec dokumenta";
 };
 SfxSlotInfo FN_END_OF_COLUMN
 {
@@ -1308,6 +1382,8 @@ SfxSlotInfo FN_END_OF_COLUMN
     SlotName[ hebrew ] = "‮אל סןף הטור‬";
     SlotName[ hindi ] = "स्तंभ के अंत तक";
     SlotName[ slovak ] = "Na koniec stĺpca";
+    SlotName[ hungarian ] = "A hasáb végére";
+    SlotName[ slovenian ] = "Na konec stolpca";
 };
 SfxSlotInfo FN_END_OF_DOCUMENT
 {
@@ -1341,6 +1417,8 @@ SfxSlotInfo FN_END_OF_DOCUMENT
     SlotName[ hebrew ] = "‮אל סוף המיסמך‬";
     SlotName[ hindi ] = "लेखपत्र के अंत तक";
     SlotName[ slovak ] = "Na koniec dokumentu";
+    SlotName[ hungarian ] = "A dokumentum végére";
+    SlotName[ slovenian ] = "Na konec dokumenta";
 };
 SfxSlotInfo FN_END_OF_DOCUMENT_SEL
 {
@@ -1374,6 +1452,8 @@ SfxSlotInfo FN_END_OF_DOCUMENT_SEL
     SlotName[ hebrew ] = "Bis Dokumentende selektieren";
     SlotName[ hindi ] = "लेखपत्र के अंत तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko do konca dokumentu";
+    SlotName[ hungarian ] = "Kijelölés a dokumentum végéig";
+    SlotName[ slovenian ] = "Izberi do konca dokumenta";
 };
 SfxSlotInfo FN_END_OF_LINE
 {
@@ -1386,7 +1466,7 @@ SfxSlotInfo FN_END_OF_LINE
     SlotName[ french ] = "� la fin de la ligne";
     SlotName[ spanish ] = "Ir al final de la l�nea";
     SlotName[ italian ] = "Alla fine della riga";
-    SlotName[ danish ] = "Til r�kkens slutning";
+    SlotName[ danish ] = "Til slutningen af linjen";
     SlotName[ swedish ] = "Till slutet av raden";
     SlotName[ polish ] = "Do ko�ca wiersza";
     SlotName[ portuguese_brazilian ] = "Para o Fim da Linha";
@@ -1407,6 +1487,8 @@ SfxSlotInfo FN_END_OF_LINE
     SlotName[ hebrew ] = "‮אל סוף השורה‬";
     SlotName[ hindi ] = "रेखा के अंत तक";
     SlotName[ slovak ] = "Na koniec riadku";
+    SlotName[ hungarian ] = "Sor végéig";
+    SlotName[ slovenian ] = "Na konec vrstice";
 };
 SfxSlotInfo FN_END_OF_LINE_SEL
 {
@@ -1419,7 +1501,7 @@ SfxSlotInfo FN_END_OF_LINE_SEL
     SlotName[ french ] = "S�lectionner jusqu'� la fin de la ligne";
     SlotName[ spanish ] = "Seleccionar hasta el final de la l�nea";
     SlotName[ italian ] = "Seleziona fino alla fine della linea";
-    SlotName[ danish ] = "Marker til r�kkens slutning";
+    SlotName[ danish ] = "Marker til til slutningen af linjen";
     SlotName[ swedish ] = "Markera till slutet av raden";
     SlotName[ polish ] = "Zaznacz do ko�ca wiersza";
     SlotName[ portuguese_brazilian ] = "Selecionar at� o Fim da Linha";
@@ -1440,6 +1522,8 @@ SfxSlotInfo FN_END_OF_LINE_SEL
     SlotName[ hebrew ] = "Bis Zeilenende selektieren";
     SlotName[ hindi ] = "रेखा के अंत तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko do konca riadku";
+    SlotName[ hungarian ] = "Kijelölés sor végéig";
+    SlotName[ slovenian ] = "Izberi do konca vrstice";
 };
 SfxSlotInfo FN_END_OF_NEXT_COLUMN
 {
@@ -1473,6 +1557,8 @@ SfxSlotInfo FN_END_OF_NEXT_COLUMN
     SlotName[ hebrew ] = "‮אל סוף הטור הבא‬";
     SlotName[ hindi ] = "अगला स्तंभ के अंत तक";
     SlotName[ slovak ] = "Na koniec nasledujúcej tabuľky";
+    SlotName[ hungarian ] = "A következő hasáb végére";
+    SlotName[ slovenian ] = "Na konec naslednjega stolpca";
 };
 SfxSlotInfo FN_END_OF_NEXT_PAGE
 {
@@ -1506,6 +1592,8 @@ SfxSlotInfo FN_END_OF_NEXT_PAGE
     SlotName[ hebrew ] = "‮אל סף, הדף הבא‬";
     SlotName[ hindi ] = "अगला पृष्ठ के अंत तक";
     SlotName[ slovak ] = "Na koniec nasledujúcej stránky";
+    SlotName[ hungarian ] = "Következő oldal végéig";
+    SlotName[ slovenian ] = "Na konec naslednje strani";
 };
 SfxSlotInfo FN_END_OF_NEXT_PAGE_SEL
 {
@@ -1539,6 +1627,8 @@ SfxSlotInfo FN_END_OF_NEXT_PAGE_SEL
     SlotName[ hebrew ] = "‮בתירה לסוף הדף הבא‬";
     SlotName[ hindi ] = "अगला पृष्ठ के अंत तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko do konca nasledujúcej stránky";
+    SlotName[ hungarian ] = "Kijelölés a következő oldal végéig";
+    SlotName[ slovenian ] = "Izberi do konca naslednje strani";
 };
 SfxSlotInfo FN_END_OF_PAGE
 {
@@ -1572,6 +1662,8 @@ SfxSlotInfo FN_END_OF_PAGE
     SlotName[ hebrew ] = "‮אל סוף הדף‬";
     SlotName[ hindi ] = "पृष्ठ के अंत तक";
     SlotName[ slovak ] = "Na koniec stránky";
+    SlotName[ hungarian ] = "Oldal végéig";
+    SlotName[ slovenian ] = "Na konec strani";
 };
 SfxSlotInfo FN_END_OF_PAGE_SEL
 {
@@ -1605,6 +1697,8 @@ SfxSlotInfo FN_END_OF_PAGE_SEL
     SlotName[ hebrew ] = "‮בחירה לסוף הדף‬";
     SlotName[ hindi ] = "पृष्ठ के अंत तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko do konca stránky";
+    SlotName[ hungarian ] = "Kijelölés az oldal végéig";
+    SlotName[ slovenian ] = "Izberi do konca strani";
 };
 SfxSlotInfo FN_END_OF_PARA
 {
@@ -1638,6 +1732,8 @@ SfxSlotInfo FN_END_OF_PARA
     SlotName[ hebrew ] = "Zum Absatzende";
     SlotName[ hindi ] = "परिच्छेद के अंत तक";
     SlotName[ slovak ] = "Na koniec odstavca";
+    SlotName[ hungarian ] = "Bekezdés végéig";
+    SlotName[ slovenian ] = "Na konec odstavka";
 };
 SfxSlotInfo FN_END_OF_PARA_SEL
 {
@@ -1671,6 +1767,8 @@ SfxSlotInfo FN_END_OF_PARA_SEL
     SlotName[ hebrew ] = "Bis Absatzende selektieren";
     SlotName[ hindi ] = "परिच्छेद के अंत तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko do konca odstavca";
+    SlotName[ hungarian ] = "Kijelölés bekezdés végéig";
+    SlotName[ slovenian ] = "Izberi do konca odstavka";
 };
 SfxSlotInfo FN_END_OF_PREV_COLUMN
 {
@@ -1704,6 +1802,8 @@ SfxSlotInfo FN_END_OF_PREV_COLUMN
     SlotName[ hebrew ] = "‮אל הטור הקודם‬";
     SlotName[ hindi ] = "पिछला स्तंभ में";
     SlotName[ slovak ] = "Na predchádzajúci stĺpec";
+    SlotName[ hungarian ] = "Az előző hasábra";
+    SlotName[ slovenian ] = "Na prejšnji stolpec";
 };
 SfxSlotInfo FN_END_OF_PREV_PAGE
 {
@@ -1737,6 +1837,8 @@ SfxSlotInfo FN_END_OF_PREV_PAGE
     SlotName[ hebrew ] = "‮אל סוף הדף הקודם‬";
     SlotName[ hindi ] = "पिछला पृष्ठ के अंत में";
     SlotName[ slovak ] = "Na koniec predchádzajúcej stránky";
+    SlotName[ hungarian ] = "Előző oldal végéig";
+    SlotName[ slovenian ] = "Na konec prejšnje strani";
 };
 SfxSlotInfo FN_END_OF_PREV_PAGE_SEL
 {
@@ -1770,6 +1872,8 @@ SfxSlotInfo FN_END_OF_PREV_PAGE_SEL
     SlotName[ hebrew ] = "‮בחירה לסוף הדך הקודם‬";
     SlotName[ hindi ] = "पिछला पृष्ठ के अंत तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko do konca predchádzajúcej stránky";
+    SlotName[ hungarian ] = "Kijelölés az előző oldal végéig";
+    SlotName[ slovenian ] = "Izberi do konca prejšnje strani";
 };
 SfxSlotInfo FN_END_TABLE
 {
@@ -1803,6 +1907,8 @@ SfxSlotInfo FN_END_TABLE
     SlotName[ hebrew ] = "Zum Tabellenende";
     SlotName[ hindi ] = "सारणी के अंत तक";
     SlotName[ slovak ] = "Na koniec tabuľky";
+    SlotName[ hungarian ] = "Táblázat végéig";
+    SlotName[ slovenian ] = "Na konec tabele";
 };
 SfxSlotInfo FN_ENVELOP
 {
@@ -1836,6 +1942,8 @@ SfxSlotInfo FN_ENVELOP
     SlotName[ hebrew ] = "‮הוספת מעטפה‬";
     SlotName[ hindi ] = "लिफाफा जोड़ो";
     SlotName[ slovak ] = "Vložiť obálku";
+    SlotName[ hungarian ] = "Boríték beszúrása";
+    SlotName[ slovenian ] = "Vstavi ovojnico";
 };
 SfxSlotInfo FN_ESCAPE
 {
@@ -1869,6 +1977,8 @@ SfxSlotInfo FN_ESCAPE
     SlotName[ hebrew ] = "‮ביטול‬";
     SlotName[ hindi ] = "रद्द करो";
     SlotName[ slovak ] = "Zrušiť";
+    SlotName[ hungarian ] = "Mégsem";
+    SlotName[ slovenian ] = "Prekliči";
 };
 SfxSlotInfo FN_EXECUTE_MACROFIELD
 {
@@ -1902,6 +2012,8 @@ SfxSlotInfo FN_EXECUTE_MACROFIELD
     SlotName[ hebrew ] = "Makrofeld ausführen";
     SlotName[ hindi ] = "मॉक्रो क्षेत्र चलाओ";
     SlotName[ slovak ] = "Spustiť pole makra";
+    SlotName[ hungarian ] = "Makrófuttató mező";
+    SlotName[ slovenian ] = "Zaženi polje makra";
 };
 SfxSlotInfo FN_EXPAND_GLOSSARY
 {
@@ -1914,7 +2026,7 @@ SfxSlotInfo FN_EXPAND_GLOSSARY
     SlotName[ french ] = "Ex�cuter entr�e AutoTexte";
     SlotName[ spanish ] = "Ejecutar entrada Texto autom�tico";
     SlotName[ italian ] = "Esegui digitazione testo automatico";
-    SlotName[ danish ] = "Udf�r Autoekst-element";
+    SlotName[ danish ] = "Udf�r AutoTekst-element";
     SlotName[ swedish ] = "Utf�r AutoText-post";
     SlotName[ polish ] = "Uruchom wpis Autotekstu";
     SlotName[ portuguese_brazilian ] = "Executar Entrada de AutoTexto";
@@ -1935,6 +2047,8 @@ SfxSlotInfo FN_EXPAND_GLOSSARY
     SlotName[ hebrew ] = "AutoText-Eintrag ausführen";
     SlotName[ hindi ] = "स्वचालित टेक्स्ट् प्रविष्टि चलाओ";
     SlotName[ slovak ] = "Spustiť položku automatického textu";
+    SlotName[ hungarian ] = "Szöveg-o-mata elem futtatása";
+    SlotName[ slovenian ] = "Zaženi vnos samobesedila";
 };
 SfxSlotInfo FN_FLIP_HORZ_GRAFIC
 {
@@ -1968,6 +2082,8 @@ SfxSlotInfo FN_FLIP_HORZ_GRAFIC
     SlotName[ hebrew ] = "Vertikal spiegeln";
     SlotName[ hindi ] = "लंबरूप प्रकार से प्लिप करो";
     SlotName[ slovak ] = "Prevrátiť zvisle";
+    SlotName[ hungarian ] = "Függőleges tükrözés";
+    SlotName[ slovenian ] = "Obrni navpično";
 };
 SfxSlotInfo FN_FLIP_VERT_GRAFIC
 {
@@ -2001,6 +2117,8 @@ SfxSlotInfo FN_FLIP_VERT_GRAFIC
     SlotName[ hebrew ] = "Horizontal spiegeln";
     SlotName[ hindi ] = "समतल प्रकार से प्लिप करो";
     SlotName[ slovak ] = "Prevrátiť vodorovne";
+    SlotName[ hungarian ] = "Vízszintes tükrözés";
+    SlotName[ slovenian ] = "Obrni vodoravno";
 };
 SfxSlotInfo FN_FOOTNOTE_TO_ANCHOR
 {
@@ -2013,7 +2131,7 @@ SfxSlotInfo FN_FOOTNOTE_TO_ANCHOR
     SlotName[ french ] = "� la note d.b.d. page/l'appel de note";
     SlotName[ spanish ] = "Ir a la nota al pie/Ancla";
     SlotName[ italian ] = "Alla nota a pi� pagina/richiamo";
-    SlotName[ danish ] = "Til fodnote/anker";
+    SlotName[ danish ] = "Til fodnoteanker";
     SlotName[ swedish ] = "Till fotnot/ankare";
     SlotName[ polish ] = "Do punktu zakotwiczenia przypisu";
     SlotName[ portuguese_brazilian ] = "Para �ncora da nota de rodap�";
@@ -2034,6 +2152,8 @@ SfxSlotInfo FN_FOOTNOTE_TO_ANCHOR
     SlotName[ hebrew ] = "‮אל עוגן הערת השוליים‬";
     SlotName[ hindi ] = "पृष्ठ के नीचे की टीका ऐन्कर में ";
     SlotName[ slovak ] = "Na ukotvenie poznámky pod čiarou";
+    SlotName[ hungarian ] = "Lábjegyzethorgonyig";
+    SlotName[ slovenian ] = "Na sidro sprotne opombe";
 };
 SfxSlotInfo FN_FORMAT_BACKGROUND_DLG
 {
@@ -2067,6 +2187,8 @@ SfxSlotInfo FN_FORMAT_BACKGROUND_DLG
     SlotName[ hebrew ] = "‮רקע‬";
     SlotName[ hindi ] = "पृष्ठभाग";
     SlotName[ slovak ] = "Pozadie";
+    SlotName[ hungarian ] = "Háttér";
+    SlotName[ slovenian ] = "Ozadje";
 };
 SfxSlotInfo FN_FORMAT_BORDER_DLG
 {
@@ -2079,7 +2201,7 @@ SfxSlotInfo FN_FORMAT_BORDER_DLG
     SlotName[ french ] = "Bordure";
     SlotName[ spanish ] = "Bordes";
     SlotName[ italian ] = "Bordo";
-    SlotName[ danish ] = "Ramme";
+    SlotName[ danish ] = "Kanter";
     SlotName[ swedish ] = "Inramning";
     SlotName[ polish ] = "Kraw�dzie";
     SlotName[ portuguese_brazilian ] = "Bordas";
@@ -2100,6 +2222,8 @@ SfxSlotInfo FN_FORMAT_BORDER_DLG
     SlotName[ hebrew ] = "‮מסגרות‬";
     SlotName[ hindi ] = "किनारें";
     SlotName[ slovak ] = "Okraje";
+    SlotName[ hungarian ] = "Szegélyek";
+    SlotName[ slovenian ] = "Obrobe";
 };
 SfxSlotInfo FN_FORMAT_DROPCAPS
 {
@@ -2112,7 +2236,7 @@ SfxSlotInfo FN_FORMAT_DROPCAPS
     SlotName[ french ] = "Lettrines";
     SlotName[ spanish ] = "Iniciales";
     SlotName[ italian ] = "Capolettera";
-    SlotName[ danish ] = "Initialer";
+    SlotName[ danish ] = "Uncialer";
     SlotName[ swedish ] = "Anfanger";
     SlotName[ polish ] = "Inicja�y";
     SlotName[ portuguese_brazilian ] = "Capitular";
@@ -2133,6 +2257,8 @@ SfxSlotInfo FN_FORMAT_DROPCAPS
     SlotName[ hebrew ] = "‮השמטת אותיות גדולות‬";
     SlotName[ hindi ] = "बड़े अक्षरों को हटाओ";
     SlotName[ slovak ] = "Stránkovanie veľkými písmenami";
+    SlotName[ hungarian ] = "Iniciálék";
+    SlotName[ slovenian ] = "Ozaljšana začetnica";
 };
 SfxSlotInfo FN_FORMAT_FOOTNOTE_DLG
 {
@@ -2166,6 +2292,8 @@ SfxSlotInfo FN_FORMAT_FOOTNOTE_DLG
     SlotName[ hebrew ] = "‮הערות שוליים‬";
     SlotName[ hindi ] = "पृष्ठ के नीचे की टीका";
     SlotName[ slovak ] = "Poznámky pod čiarou";
+    SlotName[ hungarian ] = "Lábjegyzetek";
+    SlotName[ slovenian ] = "Sprotne opombe";
 };
 SfxSlotInfo FN_FORMAT_FRAME_DLG
 {
@@ -2199,6 +2327,8 @@ SfxSlotInfo FN_FORMAT_FRAME_DLG
     SlotName[ hebrew ] = "‮איפיוני מסגרת‬";
     SlotName[ hindi ] = "फ्रेम विशेषतायें";
     SlotName[ slovak ] = "Vlastnosti rámca";
+    SlotName[ hungarian ] = "A keret tulajdonságai";
+    SlotName[ slovenian ] = "Lastnosti okvira";
 };
 SfxSlotInfo FN_FORMAT_GRAFIC_DLG
 {
@@ -2232,6 +2362,8 @@ SfxSlotInfo FN_FORMAT_GRAFIC_DLG
     SlotName[ hebrew ] = "‮עריכת גרפיקה‬";
     SlotName[ hindi ] = "सुचित्र संपादन";
     SlotName[ slovak ] = "Upraviť obrázok";
+    SlotName[ hungarian ] = "Kép szerkesztése";
+    SlotName[ slovenian ] = "Uredi grafiko";
 };
 SfxSlotInfo FN_FORMAT_PAGE_COLUMN_DLG
 {
@@ -2265,6 +2397,8 @@ SfxSlotInfo FN_FORMAT_PAGE_COLUMN_DLG
     SlotName[ hebrew ] = "‮טורים בדף‬";
     SlotName[ hindi ] = "पृष्ठ स्तंभें ";
     SlotName[ slovak ] = "Stĺpce stránky";
+    SlotName[ hungarian ] = "Oldalhasábok";
+    SlotName[ slovenian ] = "Stolpci strani";
 };
 SfxSlotInfo FN_FORMAT_PAGE_DLG
 {
@@ -2298,6 +2432,8 @@ SfxSlotInfo FN_FORMAT_PAGE_DLG
     SlotName[ hebrew ] = "‮הגדרות דף‬";
     SlotName[ hindi ] = "पृष्ठ निर्धारण";
     SlotName[ slovak ] = "Nastavenie stránky";
+    SlotName[ hungarian ] = "Oldalbeállítások";
+    SlotName[ slovenian ] = "Nastavitve strani";
 };
 SfxSlotInfo FN_FORMAT_RESET
 {
@@ -2310,7 +2446,7 @@ SfxSlotInfo FN_FORMAT_RESET
     SlotName[ french ] = "Restaurer les attributs de caract�res";
     SlotName[ spanish ] = "Restablecer atributos de caracteres";
     SlotName[ italian ] = "Ripristina attributi carattere";
-    SlotName[ danish ] = "Nulstil tegnattributter";
+    SlotName[ danish ] = "Nulstil skrifttypeattributter";
     SlotName[ swedish ] = "�terst�ll teckenattribut";
     SlotName[ polish ] = "Resetuj atrybuty znak�w";
     SlotName[ portuguese_brazilian ] = "Redefinir Atributos da Fonte";
@@ -2331,6 +2467,8 @@ SfxSlotInfo FN_FORMAT_RESET
     SlotName[ hebrew ] = "‮איתחול איפיוני גופנים‬";
     SlotName[ hindi ] = "अक्षर ऐट्रिब्यूट्स को रिसेट्ट करो ";
     SlotName[ slovak ] = "Obnoviť atribúty písma";
+    SlotName[ hungarian ] = "Betűkészlet-jellemzők alaphelyzetbe állítása";
+    SlotName[ slovenian ] = "Ponastavi atribute pisave";
 };
 SfxSlotInfo FN_FORMAT_TABLE_DLG
 {
@@ -2364,6 +2502,8 @@ SfxSlotInfo FN_FORMAT_TABLE_DLG
     SlotName[ hebrew ] = "‮עכיכת טבלה‬";
     SlotName[ hindi ] = "सारणी संपादन";
     SlotName[ slovak ] = "Upraviť tabuľku";
+    SlotName[ hungarian ] = "Táblázat szerkesztése";
+    SlotName[ slovenian ] = "Uredi tabelo";
 };
 SfxSlotInfo FN_FRAME_ALIGN_HORZ_CENTER
 {
@@ -2397,6 +2537,8 @@ SfxSlotInfo FN_FRAME_ALIGN_HORZ_CENTER
     SlotName[ hebrew ] = "‮מירקז אופקי‬";
     SlotName[ hindi ] = "समतल मध्यभाग में";
     SlotName[ slovak ] = "Vodorovne na stred";
+    SlotName[ hungarian ] = "Vízszintesen középre";
+    SlotName[ slovenian ] = "Vodoravno na sredino";
 };
 SfxSlotInfo FN_FRAME_ALIGN_HORZ_LEFT
 {
@@ -2409,7 +2551,7 @@ SfxSlotInfo FN_FRAME_ALIGN_HORZ_LEFT
     SlotName[ french ] = "Aligner � gauche";
     SlotName[ spanish ] = "Alinear a la izquierda";
     SlotName[ italian ] = "Allinea a sinistra";
-    SlotName[ danish ] = "Placer til venstre";
+    SlotName[ danish ] = "Venstrejusteret";
     SlotName[ swedish ] = "Placera till v�nster";
     SlotName[ polish ] = "Wyr�wnaj do lewej";
     SlotName[ portuguese_brazilian ] = "Alinhar � Esquerda";
@@ -2430,6 +2572,8 @@ SfxSlotInfo FN_FRAME_ALIGN_HORZ_LEFT
     SlotName[ hebrew ] = "‮ישור לשמאל‬";
     SlotName[ hindi ] = "बायाँ ओर पंक्तिकरण";
     SlotName[ slovak ] = "Zarovnať vľavo";
+    SlotName[ hungarian ] = "Balra igazítás";
+    SlotName[ slovenian ] = "Poravnaj levo";
 };
 SfxSlotInfo FN_FRAME_ALIGN_HORZ_RIGHT
 {
@@ -2442,7 +2586,7 @@ SfxSlotInfo FN_FRAME_ALIGN_HORZ_RIGHT
     SlotName[ french ] = "Aligner � droite";
     SlotName[ spanish ] = "Alinear a la derecha";
     SlotName[ italian ] = "Disponi a destra";
-    SlotName[ danish ] = "Placer til h�jre";
+    SlotName[ danish ] = "H�jrejusteret";
     SlotName[ swedish ] = "Placera till h�ger";
     SlotName[ polish ] = "Wyr�wnaj do prawej";
     SlotName[ portuguese_brazilian ] = "Alinhar � Direita";
@@ -2463,6 +2607,8 @@ SfxSlotInfo FN_FRAME_ALIGN_HORZ_RIGHT
     SlotName[ hebrew ] = "‮ישור לימין‬";
     SlotName[ hindi ] = "दाहिनी ओर पंक्तिकरण";
     SlotName[ slovak ] = "Zarovnať vpravo";
+    SlotName[ hungarian ] = "Jobbra igazítás";
+    SlotName[ slovenian ] = "Poravnaj desno";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_BOTTOM
 {
@@ -2475,7 +2621,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_BOTTOM
     SlotName[ french ] = "Aligner en bas";
     SlotName[ spanish ] = "Alinear hacia abajo";
     SlotName[ italian ] = "Disponi in basso";
-    SlotName[ danish ] = "Placer nederst";
+    SlotName[ danish ] = "Juster til bunden";
     SlotName[ swedish ] = "Placera vid underkant";
     SlotName[ polish ] = "Wyr�wnaj do do�u";
     SlotName[ portuguese_brazilian ] = "Alinhar em baixo";
@@ -2496,6 +2642,8 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_BOTTOM
     SlotName[ hebrew ] = "‮ישור למטה‬";
     SlotName[ hindi ] = "नीचे केलिए पंक्तिकरण";
     SlotName[ slovak ] = "Zarovnať dole";
+    SlotName[ hungarian ] = "Alulra igazítás";
+    SlotName[ slovenian ] = "Poravnaj spodaj";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CENTER
 {
@@ -2508,7 +2656,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CENTER
     SlotName[ french ] = "Alignement vertical centr�";
     SlotName[ spanish ] = "Alinear al centro vertical";
     SlotName[ italian ] = "Disponi al centro in verticale";
-    SlotName[ danish ] = "Juster vandret centreret";
+    SlotName[ danish ] = "Juster lodret centreret";
     SlotName[ swedish ] = "Placera vertikalt centrerat";
     SlotName[ polish ] = "Wyr�wnaj do �rodka w pionie";
     SlotName[ portuguese_brazilian ] = "Centralizar Verticalmente";
@@ -2529,6 +2677,8 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CENTER
     SlotName[ hebrew ] = "‮מירכוז אנכי‬";
     SlotName[ hindi ] = "लंबरूप मध्य केलिए पंक्तिकरण";
     SlotName[ slovak ] = "Zarovnať zvisle na stred";
+    SlotName[ hungarian ] = "Függőlegesen középre igazítás";
+    SlotName[ slovenian ] = "Poravnaj navpično na sredino";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_BOTTOM
 {
@@ -2541,7 +2691,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_BOTTOM
     SlotName[ french ] = "Aligner au caract�re en bas";
     SlotName[ spanish ] = "Alinear debajo del car�cter";
     SlotName[ italian ] = "Allinea al carattere in basso";
-    SlotName[ danish ] = "Juster til tegn forneden";
+    SlotName[ danish ] = "Juster til bunden af tegnet";
     SlotName[ swedish ] = "Placera vid tecknets underkant";
     SlotName[ polish ] = "Wyr�wnaj do do�u znaku";
     SlotName[ portuguese_brazilian ] = "Alinhar pela Base do Caracter";
@@ -2562,6 +2712,8 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_BOTTOM
     SlotName[ hebrew ] = "Am Zeichen unten anordnen";
     SlotName[ hindi ] = "अक्षर की नीचे केलिए पंक्तिकरण";
     SlotName[ slovak ] = "Zarovnať k päte znaku";
+    SlotName[ hungarian ] = "Betű aljához igazítás";
+    SlotName[ slovenian ] = "Poravnaj na spodnji rob znakov";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_CENTER
 {
@@ -2574,7 +2726,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_CENTER
     SlotName[ french ] = "Aligner au milieu vertical du caract�re";
     SlotName[ spanish ] = "Alinear al centro vertical del car�cter";
     SlotName[ italian ] = "Allinea al carattere verticalmente al centro";
-    SlotName[ danish ] = "Juster til tegn lodret centreret";
+    SlotName[ danish ] = "Juster til lodret midte af tegnet";
     SlotName[ swedish ] = "Placera vertikalt centrerat till tecknet";
     SlotName[ polish ] = "Wyr�wnaj do �rodka znaku w pionie";
     SlotName[ portuguese_brazilian ] = "Alinhar no Centro Vertical do Caracter";
@@ -2595,6 +2747,8 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_CENTER
     SlotName[ hebrew ] = "‮ישור למרקז אנכי של תו‬";
     SlotName[ hindi ] = "अक्षर की लंबरूप मध्य केलिए पंक्तिकरण";
     SlotName[ slovak ] = "Zarovnať zvisle na stred znaku";
+    SlotName[ hungarian ] = "Betű vízszintes tengelyéhez igazítás";
+    SlotName[ slovenian ] = "Poravnaj navpično na sredino znaka";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_TOP
 {
@@ -2607,7 +2761,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_TOP
     SlotName[ french ] = "Aligner au caract�re en haut";
     SlotName[ spanish ] = "Alinear encima del car�cter";
     SlotName[ italian ] = "Allinea al carattere in alto";
-    SlotName[ danish ] = "Juster til tegn foroven";
+    SlotName[ danish ] = "Juster til toppen af tegnet";
     SlotName[ swedish ] = "Placera vid tecknets �verkant";
     SlotName[ polish ] = "Wyr�wnaj do g�ry znaku";
     SlotName[ portuguese_brazilian ] = "Alinhar pelo Topo do Caracter";
@@ -2628,6 +2782,8 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_TOP
     SlotName[ hebrew ] = "‮ישור לחלק עליון של תו‬";
     SlotName[ hindi ] = "अक्षर की ऊपर की पंक्तिकरण";
     SlotName[ slovak ] = "Zarovnať na vrchol znaku";
+    SlotName[ hungarian ] = "Betű tetejéhez igazítás";
+    SlotName[ slovenian ] = "Poravnaj na zgornji rob znaka";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_BOTTOM
 {
@@ -2640,7 +2796,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_BOTTOM
     SlotName[ french ] = "Aligner en bas de la ligne";
     SlotName[ spanish ] = "Alinear debajo de la l�nea";
     SlotName[ italian ] = "Allinea alla riga in basso";
-    SlotName[ danish ] = "Juster til r�kke forneden";
+    SlotName[ danish ] = "Juster til bunden af linjen";
     SlotName[ swedish ] = "Placera vid radens underkant";
     SlotName[ polish ] = "Wyr�wnaj do do�u wiersza";
     SlotName[ portuguese_brazilian ] = "Alinhar pela Base da Linha";
@@ -2661,6 +2817,8 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_BOTTOM
     SlotName[ hebrew ] = "‮ישור לתחתית שורה‬";
     SlotName[ hindi ] = "रेखा की नीचे केलिए पंक्तिकरण";
     SlotName[ slovak ] = "Zarovnať na pätu riadka";
+    SlotName[ hungarian ] = "Sor aljához igazítás";
+    SlotName[ slovenian ] = "Poravnaj na dno vrstice";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_CENTER
 {
@@ -2673,7 +2831,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_CENTER
     SlotName[ french ] = "Aligner au milieu vertical de la ligne";
     SlotName[ spanish ] = "Alinear centro vertical l�nea";
     SlotName[ italian ] = "Allinea alla riga verticale al centro";
-    SlotName[ danish ] = "Juster til r�kke lodret centreret";
+    SlotName[ danish ] = "Juster til lodret midte af linjen";
     SlotName[ swedish ] = "Placera vertikalt centrerat p� raden";
     SlotName[ polish ] = "Wyr�wnaj do �rodka wiersza w pionie";
     SlotName[ portuguese_brazilian ] = "Alinhar pelo Centro Vertical da Linha";
@@ -2694,6 +2852,8 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_CENTER
     SlotName[ hebrew ] = "‮ישור למרקז אנכי של שורה‬";
     SlotName[ hindi ] = "रेखा की लंबरूप मध्य केलिए पंक्तिकरण";
     SlotName[ slovak ] = "Zarovnaj zvisle na stred riadku";
+    SlotName[ hungarian ] = "Sor vízszintes tengelyéhez igazítás";
+    SlotName[ slovenian ] = "Poravnaj navpično na sredino vrstice";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_TOP
 {
@@ -2706,7 +2866,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_TOP
     SlotName[ french ] = "Aligner en haut de la ligne";
     SlotName[ spanish ] = "Alinear encima de la l�nea";
     SlotName[ italian ] = "Allinea alla riga in alto";
-    SlotName[ danish ] = "Juster til r�kke foroven";
+    SlotName[ danish ] = "Juster til toppen af linjen";
     SlotName[ swedish ] = "Placera vid radens �verkant";
     SlotName[ polish ] = "Wyr�wnaj do g�ry wiersza";
     SlotName[ portuguese_brazilian ] = "Alinhar no Topo da Linha";
@@ -2727,6 +2887,8 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_TOP
     SlotName[ hebrew ] = "‮ישור לחלק עליון של שורה‬";
     SlotName[ hindi ] = "रेखा की ऊपर केलिए पंक्तिकरण";
     SlotName[ slovak ] = "Zarovnať na vrchol riadku";
+    SlotName[ hungarian ] = "Sor tetejéhez igazítás";
+    SlotName[ slovenian ] = "Poravnaj na vrh vrstice";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_TOP
 {
@@ -2739,7 +2901,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_TOP
     SlotName[ french ] = "Aligner en haut";
     SlotName[ spanish ] = "Alinear hacia arriba";
     SlotName[ italian ] = "Disponi in alto";
-    SlotName[ danish ] = "Placer �verst";
+    SlotName[ danish ] = "Juster til toppen";
     SlotName[ swedish ] = "Placera vid �verkant";
     SlotName[ polish ] = "Wyr�wnaj do g�ry";
     SlotName[ portuguese_brazilian ] = "Alinhar em cima";
@@ -2760,6 +2922,8 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_TOP
     SlotName[ hebrew ] = "‮ישור למעלה‬";
     SlotName[ hindi ] = "ऊपर केलिए पंक्तिकरण";
     SlotName[ slovak ] = "Zarovnať nahor";
+    SlotName[ hungarian ] = "Felülre igazítás";
+    SlotName[ slovenian ] = "Poravnaj zgoraj";
 };
 SfxSlotInfo FN_FRAME_CHAIN
 {
@@ -2772,7 +2936,7 @@ SfxSlotInfo FN_FRAME_CHAIN
     SlotName[ french ] = "Encha�ner";
     SlotName[ spanish ] = "Vincular marcos";
     SlotName[ italian ] = "Concatena";
-    SlotName[ danish ] = "K�d";
+    SlotName[ danish ] = "Sammenk�d rammer";
     SlotName[ swedish ] = "L�nka";
     SlotName[ polish ] = "Po��cz ramki";
     SlotName[ portuguese_brazilian ] = "Vincular Molduras";
@@ -2793,6 +2957,8 @@ SfxSlotInfo FN_FRAME_CHAIN
     SlotName[ hebrew ] = "‮שרשור מסגרות‬";
     SlotName[ hindi ] = "फ्रेमों को लिंक करो";
     SlotName[ slovak ] = "Prepojiť rámce";
+    SlotName[ hungarian ] = "Keretek összekapcsolása";
+    SlotName[ slovenian ] = "Poveži okvire";
 };
 SfxSlotInfo FN_FRAME_DOWN
 {
@@ -2826,6 +2992,8 @@ SfxSlotInfo FN_FRAME_DOWN
     SlotName[ hebrew ] = "Nach hinten";
     SlotName[ hindi ] = "पिछली ओर भेजो";
     SlotName[ slovak ] = "Odoslať späť";
+    SlotName[ hungarian ] = "Hátrébb küldés";
+    SlotName[ slovenian ] = "Pošlji nazaj";
 };
 SfxSlotInfo FN_FRAME_MIRROR_ON_EVEN_PAGES
 {
@@ -2859,6 +3027,8 @@ SfxSlotInfo FN_FRAME_MIRROR_ON_EVEN_PAGES
     SlotName[ hebrew ] = "Auf geraden Seiten spiegeln";
     SlotName[ hindi ] = "सम संख्या पृष्ठों में दर्पण वस्तु";
     SlotName[ slovak ] = "Zrkadliť na párnych stránkach";
+    SlotName[ hungarian ] = "Objektum tükrözése a páros oldalakon";
+    SlotName[ slovenian ] = "Zrcali predmet na sodih straneh";
 };
 SfxSlotInfo FN_FRAME_NOWRAP
 {
@@ -2892,6 +3062,8 @@ SfxSlotInfo FN_FRAME_NOWRAP
     SlotName[ hebrew ] = "‮ללא עיטוף‬";
     SlotName[ hindi ] = "लपेटना बंद";
     SlotName[ slovak ] = "Vypnúť obtekanie";
+    SlotName[ hungarian ] = "Körbefuttatás ki";
+    SlotName[ slovenian ] = "Izključi oblivanje";
 };
 SfxSlotInfo FN_FRAME_TO_ANCHOR
 {
@@ -2904,7 +3076,7 @@ SfxSlotInfo FN_FRAME_TO_ANCHOR
     SlotName[ french ] = "Curseur sur l'ancre";
     SlotName[ spanish ] = "Colocar cursor sobre ancla";
     SlotName[ italian ] = "Porta cursore all'ancoraggio";
-    SlotName[ danish ] = "S�t mark�r p� anker";
+    SlotName[ danish ] = "S�t mark�r p� forankring";
     SlotName[ swedish ] = "S�tt mark�ren p� ankaret";
     SlotName[ polish ] = "Ustaw kursor na zakotwiczeniu";
     SlotName[ portuguese_brazilian ] = "Definir cursor na �ncora";
@@ -2925,6 +3097,8 @@ SfxSlotInfo FN_FRAME_TO_ANCHOR
     SlotName[ hebrew ] = "‮השמת סמן לעוגן‬";
     SlotName[ hindi ] = "कर्सर को ऐन्कर केलिए सेट्ट करो";
     SlotName[ slovak ] = "Umiestniť kurzor na ukotvenie";
+    SlotName[ hungarian ] = "Kurzort a horgonyponthoz";
+    SlotName[ slovenian ] = "Nastavi kazalko na sidro";
 };
 SfxSlotInfo FN_FRAME_UNCHAIN
 {
@@ -2937,7 +3111,7 @@ SfxSlotInfo FN_FRAME_UNCHAIN
     SlotName[ french ] = "Annuler l'encha�nement";
     SlotName[ spanish ] = "Desvincular marcos";
     SlotName[ italian ] = "Annulla concatenazione";
-    SlotName[ danish ] = "Oph�v k�der";
+    SlotName[ danish ] = "Oph�v k�de mellem rammer";
     SlotName[ swedish ] = "L�s upp l�nkning";
     SlotName[ polish ] = "Roz��cz ramki";
     SlotName[ portuguese_brazilian ] = "Desvincular Molduras";
@@ -2958,6 +3132,8 @@ SfxSlotInfo FN_FRAME_UNCHAIN
     SlotName[ hebrew ] = "‮פירוק שרשור מסגרת‬";
     SlotName[ hindi ] = "फ्रेमों का लिंक हटाओ";
     SlotName[ slovak ] = "Zrušiť prepojenie";
+    SlotName[ hungarian ] = "Keretek szétkapcsolása";
+    SlotName[ slovenian ] = "Razveži okvire";
 };
 SfxSlotInfo FN_FRAME_UP
 {
@@ -2991,6 +3167,8 @@ SfxSlotInfo FN_FRAME_UP
     SlotName[ hebrew ] = "Nach vorn";
     SlotName[ hindi ] = "आगे की ओर लाओ";
     SlotName[ slovak ] = "Preniesť bližšie";
+    SlotName[ hungarian ] = "Előrébb hozás";
+    SlotName[ slovenian ] = "Postavi naprej";
 };
 SfxSlotInfo FN_FRAME_WRAP
 {
@@ -3024,6 +3202,8 @@ SfxSlotInfo FN_FRAME_WRAP
     SlotName[ hebrew ] = "‮עיטוף‬";
     SlotName[ hindi ] = "लपेटना शुरु";
     SlotName[ slovak ] = "Zapnúť obtekanie";
+    SlotName[ hungarian ] = "Körbefuttatás be";
+    SlotName[ slovenian ] = "Vključi oblivanje";
 };
 SfxSlotInfo FN_FRAME_WRAP_CONTOUR
 {
@@ -3057,6 +3237,8 @@ SfxSlotInfo FN_FRAME_WRAP_CONTOUR
     SlotName[ hebrew ] = "‮עיטוף סביב קוי מיתאר‬";
     SlotName[ hindi ] = "लपेटने का परिवेश शुरु";
     SlotName[ slovak ] = "Zapnúť obrysy";
+    SlotName[ hungarian ] = "Körvonal megjelenítése";
+    SlotName[ slovenian ] = "Vključi oblivanje obrisov";
 };
 SfxSlotInfo FN_FRAME_WRAP_IDEAL
 {
@@ -3090,6 +3272,8 @@ SfxSlotInfo FN_FRAME_WRAP_IDEAL
     SlotName[ hebrew ] = "‮עיטוף מיטבי‬";
     SlotName[ hindi ] = "योग्य लपेटना ";
     SlotName[ slovak ] = "Optimálne obtekanie";
+    SlotName[ hungarian ] = "Optimális körbefuttatás";
+    SlotName[ slovenian ] = "Optimalno oblivanje";
 };
 SfxSlotInfo FN_FRAME_WRAP_LEFT
 {
@@ -3123,6 +3307,8 @@ SfxSlotInfo FN_FRAME_WRAP_LEFT
     SlotName[ hebrew ] = "‮עיטוף משמאל‬";
     SlotName[ hindi ] = "बायाँ ओर लपेटो";
     SlotName[ slovak ] = "Obtekať zľava";
+    SlotName[ hungarian ] = "Körbefuttatás balra";
+    SlotName[ slovenian ] = "Oblij levo";
 };
 SfxSlotInfo FN_FRAME_WRAP_RIGHT
 {
@@ -3156,6 +3342,8 @@ SfxSlotInfo FN_FRAME_WRAP_RIGHT
     SlotName[ hebrew ] = "‮עיטוף מימין‬";
     SlotName[ hindi ] = "दाहिना ओर लपेटो";
     SlotName[ slovak ] = "Obtekať sprava";
+    SlotName[ hungarian ] = "Körbefuttatás jobbra";
+    SlotName[ slovenian ] = "Oblij desno";
 };
 SfxSlotInfo FN_FRAME_WRAPTHRU
 {
@@ -3189,6 +3377,8 @@ SfxSlotInfo FN_FRAME_WRAPTHRU
     SlotName[ hebrew ] = "‮עיטוף דרך‬";
     SlotName[ hindi ] = "से लपेटो";
     SlotName[ slovak ] = "Obtekať cez";
+    SlotName[ hungarian ] = "Keresztülfuttatás";
+    SlotName[ slovenian ] = "Oblivanje skozi";
 };
 SfxSlotInfo FN_FRAME_WRAPTHRU_TRANSP
 {
@@ -3222,6 +3412,8 @@ SfxSlotInfo FN_FRAME_WRAPTHRU_TRANSP
     SlotName[ hebrew ] = "‮עיטוף כרקע‬";
     SlotName[ hindi ] = "पारदर्शक लपेटना";
     SlotName[ slovak ] = "Priehľadné obtekanie";
+    SlotName[ hungarian ] = "Átlátszó körbefuttatás";
+    SlotName[ slovenian ] = "Prosojno oblivanje";
 };
 SfxSlotInfo FN_GLOSSARY_DLG
 {
@@ -3255,6 +3447,8 @@ SfxSlotInfo FN_GLOSSARY_DLG
     SlotName[ hebrew ] = "‮עריכת טקסט מקובץ‬";
     SlotName[ hindi ] = "स्वचालित ढंग का टेक्स्ट् का संपादन";
     SlotName[ slovak ] = "Upraviť automatický text";
+    SlotName[ hungarian ] = "Szöveg-o-mata szerkesztése";
+    SlotName[ slovenian ] = "Uredi samobesedilo";
 };
 SfxSlotInfo FN_GOTO_NEXT_INPUTFLD
 {
@@ -3288,6 +3482,8 @@ SfxSlotInfo FN_GOTO_NEXT_INPUTFLD
     SlotName[ hebrew ] = "‮אל שדה הקלט הבא‬";
     SlotName[ hindi ] = "अगला इनपुट् क्षेत्र तक";
     SlotName[ slovak ] = "Na nasledujúce vstupné pole";
+    SlotName[ hungarian ] = "A következő mezőhöz";
+    SlotName[ slovenian ] = "Na naslednje vnosno polje";
 };
 SfxSlotInfo FN_GOTO_NEXT_MARK
 {
@@ -3321,6 +3517,8 @@ SfxSlotInfo FN_GOTO_NEXT_MARK
     SlotName[ hebrew ] = "‮אל שומר המקום הבא‬";
     SlotName[ hindi ] = "अगला स्थानधारक तक";
     SlotName[ slovak ] = "Na nasledujúci zástupný znak";
+    SlotName[ hungarian ] = "A következő helykitöltőig";
+    SlotName[ slovenian ] = "Na naslednjo ogrado";
 };
 SfxSlotInfo FN_GOTO_NEXT_OBJ
 {
@@ -3354,6 +3552,8 @@ SfxSlotInfo FN_GOTO_NEXT_OBJ
     SlotName[ hebrew ] = "‮אל האוביקט הבא‬";
     SlotName[ hindi ] = "अगला वस्तु तक";
     SlotName[ slovak ] = "Na nasledujúci objekt";
+    SlotName[ hungarian ] = "A következő objektumhoz";
+    SlotName[ slovenian ] = "Na naslednji predmet";
 };
 SfxSlotInfo FN_GOTO_NEXT_REGION
 {
@@ -3366,7 +3566,7 @@ SfxSlotInfo FN_GOTO_NEXT_REGION
     SlotName[ french ] = "� la section suivante";
     SlotName[ spanish ] = "Ir a la secci�n siguiente";
     SlotName[ italian ] = "All'area successiva";
-    SlotName[ danish ] = "Til n�ste omr�de";
+    SlotName[ danish ] = "Til n�ste sektion";
     SlotName[ swedish ] = "Till n�sta omr�de";
     SlotName[ polish ] = "Do nast�pnej sekcji";
     SlotName[ portuguese_brazilian ] = "Para a Pr�xima Se��o";
@@ -3387,6 +3587,8 @@ SfxSlotInfo FN_GOTO_NEXT_REGION
     SlotName[ hebrew ] = "‮אל הקטע הבא‬";
     SlotName[ hindi ] = "अगला विभाग तक";
     SlotName[ slovak ] = "Na nasledujúcu oblasť";
+    SlotName[ hungarian ] = "A következő szakaszra";
+    SlotName[ slovenian ] = "Na naslednji odsek";
 };
 SfxSlotInfo FN_GOTO_PREV_INPUTFLD
 {
@@ -3420,6 +3622,8 @@ SfxSlotInfo FN_GOTO_PREV_INPUTFLD
     SlotName[ hebrew ] = "‮אל שדה הקלט הקודם‬";
     SlotName[ hindi ] = "पिछला इनपुट् क्षेत्र तक";
     SlotName[ slovak ] = "Na predchádzajúce vstupné pole";
+    SlotName[ hungarian ] = "Az előző mezőhöz";
+    SlotName[ slovenian ] = "Na prejšnje vnosno polje";
 };
 SfxSlotInfo FN_GOTO_PREV_MARK
 {
@@ -3453,6 +3657,8 @@ SfxSlotInfo FN_GOTO_PREV_MARK
     SlotName[ hebrew ] = "‮אל שומר המקום הקודם‬";
     SlotName[ hindi ] = "पिछला स्थानधारक तक";
     SlotName[ slovak ] = "Na predchádzajúci zástupný znak";
+    SlotName[ hungarian ] = "Az előző helykitöltőig";
+    SlotName[ slovenian ] = "Na prejšnjo ogrado";
 };
 SfxSlotInfo FN_GOTO_PREV_OBJ
 {
@@ -3486,6 +3692,8 @@ SfxSlotInfo FN_GOTO_PREV_OBJ
     SlotName[ hebrew ] = "‮אל האוביקט הקודם‬";
     SlotName[ hindi ] = "पिछला वस्तु तक";
     SlotName[ slovak ] = "Na predchádzajúci objekt";
+    SlotName[ hungarian ] = "Az előző objektumhoz";
+    SlotName[ slovenian ] = "Na prejšnji predmet";
 };
 SfxSlotInfo FN_GOTO_PREV_REGION
 {
@@ -3498,7 +3706,7 @@ SfxSlotInfo FN_GOTO_PREV_REGION
     SlotName[ french ] = "� la section pr�c�dente";
     SlotName[ spanish ] = "Ir a la secci�n anterior";
     SlotName[ italian ] = "All'area precedente";
-    SlotName[ danish ] = "Til forrige omr�de";
+    SlotName[ danish ] = "Til forrige sektion";
     SlotName[ swedish ] = "Till f�reg�ende omr�de";
     SlotName[ polish ] = "Do poprzedniej sekcji";
     SlotName[ portuguese_brazilian ] = "Para a Se��o Anterior";
@@ -3519,6 +3727,8 @@ SfxSlotInfo FN_GOTO_PREV_REGION
     SlotName[ hebrew ] = "‮אל הקטע הקודם‬";
     SlotName[ hindi ] = "पिछला विभाग तक";
     SlotName[ slovak ] = "Na predchádzajúcu oblasť";
+    SlotName[ hungarian ] = "Az előző szakaszra";
+    SlotName[ slovenian ] = "Na prejšnji odsek";
 };
 SfxSlotInfo FN_GOTO_REFERENCE
 {
@@ -3531,7 +3741,7 @@ SfxSlotInfo FN_GOTO_REFERENCE
     SlotName[ french ] = "A la r�f�rence";
     SlotName[ spanish ] = "Ir a la referencia";
     SlotName[ italian ] = "Al riferimento";
-    SlotName[ danish ] = "Til reference";
+    SlotName[ danish ] = "Til henvisning";
     SlotName[ swedish ] = "Till referens";
     SlotName[ polish ] = "Do odwo�ania";
     SlotName[ portuguese_brazilian ] = "Para a Refer�ncia";
@@ -3552,6 +3762,8 @@ SfxSlotInfo FN_GOTO_REFERENCE
     SlotName[ hebrew ] = "‮אל מראה מקום‬";
     SlotName[ hindi ] = "रेफरेन्स में ";
     SlotName[ slovak ] = "Na odkaz";
+    SlotName[ hungarian ] = "A hivatkozáshoz";
+    SlotName[ slovenian ] = "Na sklic";
 };
 SfxSlotInfo FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
 {
@@ -3585,6 +3797,8 @@ SfxSlotInfo FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
     SlotName[ hebrew ] = "‮היפוך גרפיקה בדפים זוגיים‬";
     SlotName[ hindi ] = "सम संख्या पृष्ठों में सुचित्र को फ्लिप करो";
     SlotName[ slovak ] = "Prevrátiť obrázky na párnych stránkach";
+    SlotName[ hungarian ] = "Képek tükrözése a páros oldalakon";
+    SlotName[ slovenian ] = "Zrcali grafiko na sodih straneh";
 };
 SfxSlotInfo FN_GROW_FONT_SIZE
 {
@@ -3597,7 +3811,7 @@ SfxSlotInfo FN_GROW_FONT_SIZE
     SlotName[ french ] = "Agrandir la taille des caract�res";
     SlotName[ spanish ] = "Aumentar fuente";
     SlotName[ italian ] = "Ingrandisci carattere";
-    SlotName[ danish ] = "Forst�r tegn";
+    SlotName[ danish ] = "For�g skriftst�rrelse";
     SlotName[ swedish ] = "F�rstora tecken";
     SlotName[ polish ] = "Zwi�ksz czcionk�";
     SlotName[ portuguese_brazilian ] = "Aumentar Fonte";
@@ -3618,6 +3832,8 @@ SfxSlotInfo FN_GROW_FONT_SIZE
     SlotName[ hebrew ] = "‮הגדלת גופן‬";
     SlotName[ hindi ] = "अक्षर को बढाओ";
     SlotName[ slovak ] = "Zväčšiť písmo";
+    SlotName[ hungarian ] = "Betűméret növelése";
+    SlotName[ slovenian ] = "Povečaj pisavo";
 };
 SfxSlotInfo FN_HSCROLLBAR
 {
@@ -3630,7 +3846,7 @@ SfxSlotInfo FN_HSCROLLBAR
     SlotName[ french ] = "D�filement horizontal";
     SlotName[ spanish ] = "Desplazamiento Horizontal";
     SlotName[ italian ] = "Scorrimento orizzontale";
-    SlotName[ danish ] = "Rull vandret";
+    SlotName[ danish ] = "Rul vandret";
     SlotName[ swedish ] = "Rulla horisontellt";
     SlotName[ polish ] = "Przewijaj poziomo";
     SlotName[ portuguese_brazilian ] = "Rolar na Horizontal";
@@ -3651,6 +3867,8 @@ SfxSlotInfo FN_HSCROLLBAR
     SlotName[ hebrew ] = "‮גלילה אופקית‬";
     SlotName[ hindi ] = "समतल प्रकार से स्क्रॉल ";
     SlotName[ slovak ] = "Posúvať vodorovne";
+    SlotName[ hungarian ] = "Vízszintes görgetés";
+    SlotName[ slovenian ] = "Vodoravno drsenje";
 };
 SfxSlotInfo FN_HYPHENATE_OPT_DLG
 {
@@ -3684,6 +3902,8 @@ SfxSlotInfo FN_HYPHENATE_OPT_DLG
     SlotName[ hebrew ] = "‮שבירת מלים‬";
     SlotName[ hindi ] = "हाइफनेशन";
     SlotName[ slovak ] = "Delenie slov";
+    SlotName[ hungarian ] = "Elválasztás";
+    SlotName[ slovenian ] = "Deljenje besed";
 };
 SfxSlotInfo FN_IDX_MARK_TO_IDX
 {
@@ -3717,6 +3937,8 @@ SfxSlotInfo FN_IDX_MARK_TO_IDX
     SlotName[ hebrew ] = "‮מסימון מפתח למפתח‬";
     SlotName[ hindi ] = "अनुक्रमणिका चिह्न अनुक्रमणिका तक";
     SlotName[ slovak ] = "Značky obsahu do obsahu";
+    SlotName[ hungarian ] = "Jegyzékjel a jegyzékhez";
+    SlotName[ slovenian ] = "Vstavi oznako kazala v kazalo";
 };
 SfxSlotInfo FN_INC_INDENT_OFFSET
 {
@@ -3729,7 +3951,7 @@ SfxSlotInfo FN_INC_INDENT_OFFSET
     SlotName[ french ] = "Augmenter le retrait de";
     SlotName[ spanish ] = "Incrementar sangr�a en";
     SlotName[ italian ] = "Aumenta rientro valore";
-    SlotName[ danish ] = "For�g indrykning om v�rdi";
+    SlotName[ danish ] = "For�g indrykningsv�rdi";
     SlotName[ swedish ] = "�ka indrag med enhet";
     SlotName[ polish ] = "Zwi�ksz wci�cie";
     SlotName[ portuguese_brazilian ] = "Aumentar Valor do Recuo";
@@ -3750,6 +3972,8 @@ SfxSlotInfo FN_INC_INDENT_OFFSET
     SlotName[ hebrew ] = "‮הגדלת הזחה‬";
     SlotName[ hindi ] = "इन्डेन्ट मूल्य बढाओ";
     SlotName[ slovak ] = "Zväčšiť odsadenie";
+    SlotName[ hungarian ] = "Behúzás növelése";
+    SlotName[ slovenian ] = "Povečaj vrednost zamika";
 };
 SfxSlotInfo FN_INSERT_BOOKMARK
 {
@@ -3762,7 +3986,7 @@ SfxSlotInfo FN_INSERT_BOOKMARK
     SlotName[ french ] = "Ins�rer un rep�re de texte";
     SlotName[ spanish ] = "Insertar marca";
     SlotName[ italian ] = "Inserisci segnalibro";
-    SlotName[ danish ] = "Inds�t tekstmarkering";
+    SlotName[ danish ] = "Inds�t bogm�rke";
     SlotName[ swedish ] = "Infoga bokm�rke";
     SlotName[ polish ] = "Wstaw zak�adk�";
     SlotName[ portuguese_brazilian ] = "Inserir Marcador";
@@ -3783,6 +4007,8 @@ SfxSlotInfo FN_INSERT_BOOKMARK
     SlotName[ hebrew ] = "‮הוספת סימניה‬";
     SlotName[ hindi ] = "पृष्ठसंकेत जोड़ो";
     SlotName[ slovak ] = "Vložiť záložku";
+    SlotName[ hungarian ] = "Könyvjelző beszúrása";
+    SlotName[ slovenian ] = "Vstavi zaznamek";
 };
 SfxSlotInfo FN_INSERT_BREAK
 {
@@ -3816,6 +4042,8 @@ SfxSlotInfo FN_INSERT_BREAK
     SlotName[ hebrew ] = "‮הוספת פיסקה‬";
     SlotName[ hindi ] = "परिच्छेद जोड़ो";
     SlotName[ slovak ] = "Vložiť odstavec";
+    SlotName[ hungarian ] = "Bekezdés beszúrása";
+    SlotName[ slovenian ] = "Vstavi odstavek";
 };
 SfxSlotInfo FN_INSERT_BREAK_DLG
 {
@@ -3849,6 +4077,8 @@ SfxSlotInfo FN_INSERT_BREAK_DLG
     SlotName[ hebrew ] = "‮הוספת הפסקה יזומה‬";
     SlotName[ hindi ] = "मान्युवल खण्डन जोड़ो";
     SlotName[ slovak ] = "Vložiť zalomenie stránky";
+    SlotName[ hungarian ] = "Töréspont beszúrása";
+    SlotName[ slovenian ] = "Vstavi ročni prelom";
 };
 SfxSlotInfo FN_INSERT_CAPTION
 {
@@ -3882,6 +4112,8 @@ SfxSlotInfo FN_INSERT_CAPTION
     SlotName[ hebrew ] = "‮הוספת כיתוב‬";
     SlotName[ hindi ] = "कॉप्शन् जोड़ो";
     SlotName[ slovak ] = "Vložiť popisok";
+    SlotName[ hungarian ] = "Felirat beszúrása";
+    SlotName[ slovenian ] = "Vstavi napis";
 };
 SfxSlotInfo FN_INSERT_COLUMN_BREAK
 {
@@ -3894,7 +4126,7 @@ SfxSlotInfo FN_INSERT_COLUMN_BREAK
     SlotName[ french ] = "Ins�rer un changement de colonne";
     SlotName[ spanish ] = "Insertar cambio de columnas";
     SlotName[ italian ] = "Inserisci cambio colonna";
-    SlotName[ danish ] = "Inds�t spalteskift";
+    SlotName[ danish ] = "Inds�t kolonneskift";
     SlotName[ swedish ] = "Infoga kolumnbrytning";
     SlotName[ polish ] = "Wstaw podzia� kolumny";
     SlotName[ portuguese_brazilian ] = "Inserir Quebra de Coluna";
@@ -3915,6 +4147,8 @@ SfxSlotInfo FN_INSERT_COLUMN_BREAK
     SlotName[ hebrew ] = "‮הוספת הפסקת טור יזומה‬";
     SlotName[ hindi ] = "स्तंभ खण्डन जोड़ो";
     SlotName[ slovak ] = "Vložiť zalomenie stĺpca";
+    SlotName[ hungarian ] = "Hasábtörés beszúrása";
+    SlotName[ slovenian ] = "Vstavi prelom stolpca";
 };
 SfxSlotInfo FN_INSERT_CTRL
 {
@@ -3948,6 +4182,8 @@ SfxSlotInfo FN_INSERT_CTRL
     SlotName[ hebrew ] = "‮הוספה‬";
     SlotName[ hindi ] = "जोड़ो";
     SlotName[ slovak ] = "Vložiť";
+    SlotName[ hungarian ] = "Beszúrás";
+    SlotName[ slovenian ] = "Vstavi";
 };
 SfxSlotInfo FN_INSERT_ENDNOTE
 {
@@ -3981,6 +4217,8 @@ SfxSlotInfo FN_INSERT_ENDNOTE
     SlotName[ hebrew ] = "Endnote direkt einfügen";
     SlotName[ hindi ] = "अंतिम टीका को सीधा जोड़ो";
     SlotName[ slovak ] = "Vložiť vysvetlivku priamo";
+    SlotName[ hungarian ] = "Végjegyzet közvetlen beszúrása";
+    SlotName[ slovenian ] = "Neposredno vstavi končno opombo";
 };
 SfxSlotInfo FN_INSERT_FIELD
 {
@@ -4014,6 +4252,8 @@ SfxSlotInfo FN_INSERT_FIELD
     SlotName[ hebrew ] = "‮תיבת שיח הוספת שדות‬";
     SlotName[ hindi ] = "क्षेत्र डयलॉग";
     SlotName[ slovak ] = "Pole";
+    SlotName[ hungarian ] = "Mezők párbeszédablak";
+    SlotName[ slovenian ] = "Pogovorno okno Polja";
 };
 SfxSlotInfo FN_INSERT_FIELD_CTRL
 {
@@ -4047,6 +4287,8 @@ SfxSlotInfo FN_INSERT_FIELD_CTRL
     SlotName[ hebrew ] = "Feldbefehle einfügen";
     SlotName[ hindi ] = "क्षेत्रों को जोड़ो";
     SlotName[ slovak ] = "Vložiť pole";
+    SlotName[ hungarian ] = "Mezők beszúrása";
+    SlotName[ slovenian ] = "Vstavi polja";
 };
 SfxSlotInfo FN_INSERT_FLD_AUTHOR
 {
@@ -4080,6 +4322,8 @@ SfxSlotInfo FN_INSERT_FLD_AUTHOR
     SlotName[ hebrew ] = "‮הוספת שדה מחבר‬";
     SlotName[ hindi ] = "लेखक क्षेत्र को जोड़ो";
     SlotName[ slovak ] = "Vložiť pole autora";
+    SlotName[ hungarian ] = "Szerző mező beszúrása";
+    SlotName[ slovenian ] = "Vstavi avtorsko polje";
 };
 SfxSlotInfo FN_INSERT_FLD_DATE
 {
@@ -4113,6 +4357,8 @@ SfxSlotInfo FN_INSERT_FLD_DATE
     SlotName[ hebrew ] = "‮הוספת שדה תאריך‬";
     SlotName[ hindi ] = "दिनांक जोड़ो";
     SlotName[ slovak ] = "Vložiť dátum";
+    SlotName[ hungarian ] = "Dátum beszúrása";
+    SlotName[ slovenian ] = "Vstavi datum";
 };
 SfxSlotInfo FN_INSERT_FLD_PGCOUNT
 {
@@ -4146,6 +4392,8 @@ SfxSlotInfo FN_INSERT_FLD_PGCOUNT
     SlotName[ hebrew ] = "‮הוספת שדה מספר דפים כולל‬";
     SlotName[ hindi ] = "पृष्ठ गिनती जोड़ो";
     SlotName[ slovak ] = "Vložiť počet strán";
+    SlotName[ hungarian ] = "Oldalak számának beszúrása";
+    SlotName[ slovenian ] = "Vstavi število strani";
 };
 SfxSlotInfo FN_INSERT_FLD_PGNUMBER
 {
@@ -4179,6 +4427,8 @@ SfxSlotInfo FN_INSERT_FLD_PGNUMBER
     SlotName[ hebrew ] = "‮הוספת שדה מספר דף‬";
     SlotName[ hindi ] = "पृष्ठ संख्या जोड़ो";
     SlotName[ slovak ] = "Vložiť číslo stránky";
+    SlotName[ hungarian ] = "Oldalszám beszúrása";
+    SlotName[ slovenian ] = "Vstavi številko strani";
 };
 SfxSlotInfo FN_INSERT_FLD_TIME
 {
@@ -4212,6 +4462,8 @@ SfxSlotInfo FN_INSERT_FLD_TIME
     SlotName[ hebrew ] = "‮הוספת שדה שעה‬";
     SlotName[ hindi ] = "समय जोड़ो";
     SlotName[ slovak ] = "Vložiť čas";
+    SlotName[ hungarian ] = "Idő beszúrása";
+    SlotName[ slovenian ] = "Vstavi čas";
 };
 SfxSlotInfo FN_INSERT_FLD_TITLE
 {
@@ -4245,6 +4497,8 @@ SfxSlotInfo FN_INSERT_FLD_TITLE
     SlotName[ hebrew ] = "‮הוספת שדה כותרת מסמך‬";
     SlotName[ hindi ] = "लेखपत्र शीर्षक को जोड़ो";
     SlotName[ slovak ] = "Vložiť titulok súboru";
+    SlotName[ hungarian ] = "Dokumentumcím beszúrása";
+    SlotName[ slovenian ] = "Vstavi naslov dokumenta";
 };
 SfxSlotInfo FN_INSERT_FLD_TOPIC
 {
@@ -4278,6 +4532,8 @@ SfxSlotInfo FN_INSERT_FLD_TOPIC
     SlotName[ hebrew ] = "‮הוספת שדה נושא‬";
     SlotName[ hindi ] = "विषय जोड़ो";
     SlotName[ slovak ] = "Vložiť predmet";
+    SlotName[ hungarian ] = "Tárgy beszúrása";
+    SlotName[ slovenian ] = "Vstavi zadevo";
 };
 SfxSlotInfo FN_INSERT_FOOTER
 {
@@ -4311,6 +4567,8 @@ SfxSlotInfo FN_INSERT_FOOTER
     SlotName[ hebrew ] = "‮הוספת כותרת תחתונה‬";
     SlotName[ hindi ] = "पृष्ठ के अधोभाग की टीका को जोड़ो";
     SlotName[ slovak ] = "Vložiť zápätie";
+    SlotName[ hungarian ] = "Élőláb beszúrása";
+    SlotName[ slovenian ] = "Vstavi nogo";
 };
 SfxSlotInfo FN_INSERT_FOOTNOTE
 {
@@ -4323,7 +4581,7 @@ SfxSlotInfo FN_INSERT_FOOTNOTE
     SlotName[ french ] = "Ins�rer directement une note de bas de page";
     SlotName[ spanish ] = "Insertar nota al pie, directo";
     SlotName[ italian ] = "Inserisci nota a pi� pagina direttamente";
-    SlotName[ danish ] = "Inds�t sidefod direkte";
+    SlotName[ danish ] = "Inds�t fodnote direkte";
     SlotName[ swedish ] = "Infoga fotnot direkt";
     SlotName[ polish ] = "Wstaw przypis dolny bezpo�rednio";
     SlotName[ portuguese_brazilian ] = "Inserir Nota de Rodap� Diretamente";
@@ -4344,6 +4602,8 @@ SfxSlotInfo FN_INSERT_FOOTNOTE
     SlotName[ hebrew ] = "‮הוספת הערת שוליים‬";
     SlotName[ hindi ] = "पृष्ठ के नीचे की टीका को सीधा जोड़ो";
     SlotName[ slovak ] = "Vložiť poznámku pod čiarou priamo";
+    SlotName[ hungarian ] = "Lábjegyzet közvetlen beszúrása";
+    SlotName[ slovenian ] = "Neposredno vstavi sprotno opombo";
 };
 SfxSlotInfo FN_INSERT_FOOTNOTE_DLG
 {
@@ -4377,6 +4637,8 @@ SfxSlotInfo FN_INSERT_FOOTNOTE_DLG
     SlotName[ hebrew ] = "‮הוספת הערת שוליים‬";
     SlotName[ hindi ] = "पृष्ठ के नीचे की टीका को जोड़ो";
     SlotName[ slovak ] = "Vložiť poznámku pod čiarou";
+    SlotName[ hungarian ] = "Lábjegyzet beszúrása";
+    SlotName[ slovenian ] = "Vstavi sprotno opombo";
 };
 SfxSlotInfo FN_INSERT_FRAME
 {
@@ -4410,6 +4672,8 @@ SfxSlotInfo FN_INSERT_FRAME
     SlotName[ hebrew ] = "‮הוספת מסגרת‬";
     SlotName[ hindi ] = "फ्रेम जोड़ो";
     SlotName[ slovak ] = "Vložiť ohraničenie";
+    SlotName[ hungarian ] = "Keret beszúrása";
+    SlotName[ slovenian ] = "Vstavi okvir";
 };
 SfxSlotInfo FN_INSERT_FRAME_INTERACT_NOCOL
 {
@@ -4423,7 +4687,7 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT_NOCOL
     SlotName[ french ] = "Insertion manuelle d'un cadre � une colonne";
     SlotName[ spanish ] = "Insertar manualmente marco de una columna";
     SlotName[ italian ] = "Inserisci manualmente frame a colonna singola";
-    SlotName[ danish ] = "Inds�t enkelt-kolonne ramme manuelt";
+    SlotName[ danish ] = "Inds�t enkeltkolonne ramme manuelt";
     SlotName[ swedish ] = "Infoga ram med en kolumn manuellt";
     SlotName[ polish ] = "Wstaw r�cznie ramk� jednokolumnow�";
     SlotName[ portuguese_brazilian ] = "Inserir moldura de coluna simples manualmente";
@@ -4440,6 +4704,8 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT_NOCOL
     SlotName[ hebrew ] = "Einspaltigen Rahmen manuell einfügen";
     SlotName[ hindi ] = "अकेला-स्तंभ का फ्रेम को मान्युवली जोड़ो";
     SlotName[ slovak ] = "Ručne vložiť jednostĺpcový rámec";
+    SlotName[ hungarian ] = "Egyhasábos keret kézi beszúrása";
+    SlotName[ slovenian ] = "Ročno vstavi okvir z enim stolpcem";
 };
 SfxSlotInfo FN_INSERT_FRAME_INTERACT
 {
@@ -4473,6 +4739,8 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT
     SlotName[ hebrew ] = "‮הוספת מסגרת ידנית‬";
     SlotName[ hindi ] = "फ्रेम को मान्युवली जोड़ो";
     SlotName[ slovak ] = "Vložiť rámec ručne";
+    SlotName[ hungarian ] = "Keret kézi beszúrása";
+    SlotName[ slovenian ] = "Ročno vstavi okvir";
 };
 SfxSlotInfo FN_INSERT_HARD_SPACE
 {
@@ -4506,6 +4774,8 @@ SfxSlotInfo FN_INSERT_HARD_SPACE
     SlotName[ hebrew ] = "!";
     SlotName[ hindi ] = "बिना-खण्डन का अंतर जोड़ो";
     SlotName[ slovak ] = "Vložiť nezalomiteľnú medzeru";
+    SlotName[ hungarian ] = "Nemtörő szóköz beszúrása";
+    SlotName[ slovenian ] = "Vstavi nedeljivi presledek";
 };
 SfxSlotInfo FN_INSERT_HARDHYPHEN
 {
@@ -4539,6 +4809,8 @@ SfxSlotInfo FN_INSERT_HARDHYPHEN
     SlotName[ hebrew ] = "Geschützen Trenner einfügen";
     SlotName[ hindi ] = "बिना-खण्डन का हाइफन जोड़ो";
     SlotName[ slovak ] = "Vložiť nezalomiteľné rozdelenie";
+    SlotName[ hungarian ] = "Nemtörő kötőjel beszúrása";
+    SlotName[ slovenian ] = "Vstavi nedeljivi vezaj";
 };
 SfxSlotInfo FN_INSERT_HEADER
 {
@@ -4572,6 +4844,8 @@ SfxSlotInfo FN_INSERT_HEADER
     SlotName[ hebrew ] = "‮הוספת כותרת עלינה‬";
     SlotName[ hindi ] = "पृष्ठ के ऊपर की टीका को जोड़ो";
     SlotName[ slovak ] = "Vložiť záhlavie";
+    SlotName[ hungarian ] = "Élőfej beszúrása";
+    SlotName[ slovenian ] = "Vstavi glavo";
 };
 SfxSlotInfo FN_INSERT_HRULER
 {
@@ -4584,7 +4858,7 @@ SfxSlotInfo FN_INSERT_HRULER
     SlotName[ french ] = "Ins�rer une ligne horizontale";
     SlotName[ spanish ] = "Insertar l�nea horizontal";
     SlotName[ italian ] = "Inserisci linea orizzontale";
-    SlotName[ danish ] = "Inds�t vandret linje";
+    SlotName[ danish ] = "Inds�t vandret lineal";
     SlotName[ swedish ] = "Infoga horisontell linje";
     SlotName[ polish ] = "Wstaw linijk� poziom�";
     SlotName[ portuguese_brazilian ] = "Inserir R�gua Horizontal";
@@ -4605,6 +4879,8 @@ SfxSlotInfo FN_INSERT_HRULER
     SlotName[ hebrew ] = "‮הוספת סרגל אופקי‬";
     SlotName[ hindi ] = "समतल रूलर जोड़ो";
     SlotName[ slovak ] = "Vložiť vodorovné pravítko";
+    SlotName[ hungarian ] = "Vízszintes vonal beszúrása";
+    SlotName[ slovenian ] = "Vstavi vodoravno ravnilo";
 };
 SfxSlotInfo FN_INSERT_HYPERLINK
 {
@@ -4637,6 +4913,8 @@ SfxSlotInfo FN_INSERT_HYPERLINK
     SlotName[ hebrew ] = "Hyperlink ‮הוספת‬";
     SlotName[ hindi ] = "हाइपरलिंक जोड़ो";
     SlotName[ slovak ] = "Vložiť hypertextový odkaz";
+    SlotName[ hungarian ] = "Hiperhivatkozás beszúrása";
+    SlotName[ slovenian ] = "Vstavi hiperpovezavo";
 };
 SfxSlotInfo FN_INSERT_IDX_ENTRY_DLG
 {
@@ -4670,6 +4948,8 @@ SfxSlotInfo FN_INSERT_IDX_ENTRY_DLG
     SlotName[ hebrew ] = "‮הוספת סמן מפתח‬";
     SlotName[ hindi ] = "अनुक्रमणिका सूचित करनेवाले को जोड़ो";
     SlotName[ slovak ] = "Vložiť značku obsahu";
+    SlotName[ hungarian ] = "Jegyzékbejegyzés beszúrása";
+    SlotName[ slovenian ] = "Vstavi označevalec kazala";
 };
 SfxSlotInfo FN_INSERT_LINEBREAK
 {
@@ -4682,7 +4962,7 @@ SfxSlotInfo FN_INSERT_LINEBREAK
     SlotName[ french ] = "Ins�rer un retour � la ligne manuel";
     SlotName[ spanish ] = "Insertar salto de l�nea manual";
     SlotName[ italian ] = "Inserisci interruzione manuale riga";
-    SlotName[ danish ] = "Inds�t manuelt linjeskift";
+    SlotName[ danish ] = "Inds�t manuelt r�kkeskift";
     SlotName[ swedish ] = "Infoga manuell radbrytning";
     SlotName[ polish ] = "Wstaw r�czny podzia� wiersza";
     SlotName[ portuguese_brazilian ] = "Inserir Quebra de Linha Manual";
@@ -4703,6 +4983,8 @@ SfxSlotInfo FN_INSERT_LINEBREAK
     SlotName[ hebrew ] = "‮הוספת הפסקת שורה יזומה‬";
     SlotName[ hindi ] = "मान्युवल पंक्ति खण्डन जोड़ो";
     SlotName[ slovak ] = "Vložiť zalomenie riadkov";
+    SlotName[ hungarian ] = "Kézi sortörés beszúrása";
+    SlotName[ slovenian ] = "Vstavi ročni prelom vrstice";
 };
 SfxSlotInfo FN_INSERT_OBJ_CTRL
 {
@@ -4733,6 +5015,8 @@ SfxSlotInfo FN_INSERT_OBJ_CTRL
     SlotName[ hebrew ] = "‮הוספת אוביקט‬";
     SlotName[ hindi ] = "वस्तुओं को जोड़ो";
     SlotName[ slovak ] = "Vložiť objekty";
+    SlotName[ hungarian ] = "Objektum beszúrása";
+    SlotName[ slovenian ] = "Vstavi predmet";
 };
 SfxSlotInfo FN_INSERT_OBJECT_DLG
 {
@@ -4766,6 +5050,8 @@ SfxSlotInfo FN_INSERT_OBJECT_DLG
     SlotName[ hebrew ] = "Weitere Objekte einfügen";
     SlotName[ hindi ] = "अन्य वस्तुओं को जोड़ो";
     SlotName[ slovak ] = "Vložiť ostatné objekty";
+    SlotName[ hungarian ] = "Egyéb objektum beszúrása";
+    SlotName[ slovenian ] = "Vstavi ostale predmete";
 };
 SfxSlotInfo FN_INSERT_PAGEBREAK
 {
@@ -4799,6 +5085,8 @@ SfxSlotInfo FN_INSERT_PAGEBREAK
     SlotName[ hebrew ] = "‮הוספת הפסקת דף יזומה‬";
     SlotName[ hindi ] = "मान्युवल पृष्ठ खण्डन जोड़ो";
     SlotName[ slovak ] = "Vložiť ručné zalomenie stránky";
+    SlotName[ hungarian ] = "Oldaltörés beszúrása";
+    SlotName[ slovenian ] = "Vstavi ročni prelom strani";
 };
 SfxSlotInfo FN_INSERT_PAGEFOOTER
 {
@@ -4832,6 +5120,8 @@ SfxSlotInfo FN_INSERT_PAGEFOOTER
     SlotName[ hebrew ] = "‮הוספת כותרת תחתונה‬";
     SlotName[ hindi ] = "पृष्ठ के अधोभाग की टीका को जोड़ो";
     SlotName[ slovak ] = "Vložiť zápätie";
+    SlotName[ hungarian ] = "Élőláb beszúrása";
+    SlotName[ slovenian ] = "Vstavi nogo";
 };
 SfxSlotInfo FN_INSERT_PAGEHEADER
 {
@@ -4865,6 +5155,8 @@ SfxSlotInfo FN_INSERT_PAGEHEADER
     SlotName[ hebrew ] = "‮הוספת כותרת עליונה‬";
     SlotName[ hindi ] = "पृष्ठ के अधोभाग की टीका को जोड़ो";
     SlotName[ slovak ] = "Vložiť záhlavie";
+    SlotName[ hungarian ] = "Élőfej beszúrása";
+    SlotName[ slovenian ] = "Vstavi glavo";
 };
 SfxSlotInfo FN_INSERT_REF_FIELD
 {
@@ -4877,7 +5169,7 @@ SfxSlotInfo FN_INSERT_REF_FIELD
     SlotName[ french ] = "Ins�rer un renvoi";
     SlotName[ spanish ] = "Insertar referencia";
     SlotName[ italian ] = "Inserisci riferimento incrociato";
-    SlotName[ danish ] = "Inds�t krydshenvisning";
+    SlotName[ danish ] = "Inds�t felthenvisning";
     SlotName[ swedish ] = "Infoga korsh�nvisning";
     SlotName[ polish ] = "Wstaw odwo�anie do pola";
     SlotName[ portuguese_brazilian ] = "Inserir Refer�ncia de Campo";
@@ -4898,6 +5190,8 @@ SfxSlotInfo FN_INSERT_REF_FIELD
     SlotName[ hebrew ] = "‮הוספת הפניה לשדה‬";
     SlotName[ hindi ] = "क्षेत्र रेफरेन्स को जोड़ो";
     SlotName[ slovak ] = "Vložiť krížový odkaz";
+    SlotName[ hungarian ] = "Mezőhivatkozás beszúrása";
+    SlotName[ slovenian ] = "Vstavi sklic na polje";
 };
 SfxSlotInfo FN_INSERT_REGION
 {
@@ -4912,7 +5206,7 @@ SfxSlotInfo FN_INSERT_REGION
     SlotName[ swedish ] = "Infoga omr�de";
     SlotName[ russian ] = "�������� ������";
     SlotName[ italian ] = "Inserisci area";
-    SlotName[ danish ] = "Inds�t omr�de";
+    SlotName[ danish ] = "Inds�t sektion";
     SlotName[ polish ] = "Wstaw sekcj�";
     SlotName[ portuguese_brazilian ] = "Inserir Se��o";
     SlotName[ japanese ] = "範囲の挿入";
@@ -4929,6 +5223,8 @@ SfxSlotInfo FN_INSERT_REGION
     SlotName[ hebrew ] = "‮הוספת קטע‬";
     SlotName[ hindi ] = "विभाग को जोड़ो";
     SlotName[ slovak ] = "Vložiť oblasť";
+    SlotName[ hungarian ] = "Szakasz beszúrása";
+    SlotName[ slovenian ] = "Vstavi odsek";
 };
 SfxSlotInfo FN_INSERT_SMA
 {
@@ -4962,6 +5258,8 @@ SfxSlotInfo FN_INSERT_SMA
     SlotName[ hebrew ] = "%PRODUCTNAME Math Objekt einfügen";
     SlotName[ hindi ] = "%PRODUCTNAME गणित वस्तु को जोड़ो";
     SlotName[ slovak ] = "Vložiť matematický objekt %PRODUCTNAME";
+    SlotName[ hungarian ] = "%PRODUCTNAME matematikai objektum beszúrása";
+    SlotName[ slovenian ] = "Vstavi predmet programa %PRODUCTNAME Math";
 };
 SfxSlotInfo FN_INSERT_SOFT_HYPHEN
 {
@@ -4995,6 +5293,8 @@ SfxSlotInfo FN_INSERT_SOFT_HYPHEN
     SlotName[ hebrew ] = "‮הוספת מקף ברירה הביטוי‬";
     SlotName[ hindi ] = "वैकल्पिक हाइफन को जोड़ो";
     SlotName[ slovak ] = "Vložiť voliteľnú pomlčku";
+    SlotName[ hungarian ] = "Feltételes kötőjel beszúrása";
+    SlotName[ slovenian ] = "Vstavi izbirni vezaj";
 };
 SfxSlotInfo FN_INSERT_SYMBOL
 {
@@ -5028,6 +5328,8 @@ SfxSlotInfo FN_INSERT_SYMBOL
     SlotName[ hebrew ] = "‮הוספת תו מיוחד‬";
     SlotName[ hindi ] = "विशेष अक्षर को जोड़ो ";
     SlotName[ slovak ] = "Vložiť špeciálny znak";
+    SlotName[ hungarian ] = "Különleges karakter beszúrása";
+    SlotName[ slovenian ] = "Vstavi posebni znak";
 };
 SfxSlotInfo FN_INSERT_TABLE
 {
@@ -5061,6 +5363,8 @@ SfxSlotInfo FN_INSERT_TABLE
     SlotName[ hebrew ] = "‮הוספת טבלה‬";
     SlotName[ hindi ] = "सारणी जोड़ो";
     SlotName[ slovak ] = "Vložiť tabuľku";
+    SlotName[ hungarian ] = "Táblázat beszúrása";
+    SlotName[ slovenian ] = "Vstavi tabelo";
 };
 SfxSlotInfo FN_JAVAEDIT
 {
@@ -5094,6 +5398,8 @@ SfxSlotInfo FN_JAVAEDIT
     SlotName[ hebrew ] = "‮הוספת קוד לביצוע‬";
     SlotName[ hindi ] = "स्क्रिप्ट् जोड़ो";
     SlotName[ slovak ] = "Vložiť skript";
+    SlotName[ hungarian ] = "Parancsfájl beszúrása";
+    SlotName[ slovenian ] = "Vstavi skript";
 };
 SfxSlotInfo FN_LABEL
 {
@@ -5127,6 +5433,8 @@ SfxSlotInfo FN_LABEL
     SlotName[ hebrew ] = "‮הוספת תוית‬";
     SlotName[ hindi ] = "लेबिलों को जोड़ो";
     SlotName[ slovak ] = "Vložiť popisy";
+    SlotName[ hungarian ] = "Címke beszúrása";
+    SlotName[ slovenian ] = "Vstavi nalepke";
 };
 SfxSlotInfo FN_BUSINESS_CARD
 {
@@ -5158,6 +5466,8 @@ SfxSlotInfo FN_BUSINESS_CARD
     SlotName[ hebrew ] = "‮הוספת כרטיס ביקור‬";
     SlotName[ hindi ] = "व्यवहार कार्ड जोड़ो";
     SlotName[ slovak ] = "Vložiť vizitky";
+    SlotName[ hungarian ] = "Névjegykártya beszúrása";
+    SlotName[ slovenian ] = "Vstavi vizitke";
 };
 SfxSlotInfo FN_LINE_DOWN
 {
@@ -5170,7 +5480,7 @@ SfxSlotInfo FN_LINE_DOWN
     SlotName[ french ] = "A la ligne inf�rieure";
     SlotName[ spanish ] = "Ir a la l�nea de abajo";
     SlotName[ italian ] = "Alla riga in basso";
-    SlotName[ danish ] = "Til r�kke forneden";
+    SlotName[ danish ] = "Til linje nedenunder";
     SlotName[ swedish ] = "Till raden under";
     SlotName[ polish ] = "Do wiersza poni�ej";
     SlotName[ portuguese_brazilian ] = "Para a Linha Abaixo";
@@ -5191,6 +5501,8 @@ SfxSlotInfo FN_LINE_DOWN
     SlotName[ hebrew ] = "Zur Zeile unten";
     SlotName[ hindi ] = "रेखा के नीचे तक";
     SlotName[ slovak ] = "Na riadok nižšie";
+    SlotName[ hungarian ] = "Egy sorral lejjebb";
+    SlotName[ slovenian ] = "Na spodnjo vrstico";
 };
 SfxSlotInfo FN_LINE_DOWN_SEL
 {
@@ -5203,7 +5515,7 @@ SfxSlotInfo FN_LINE_DOWN_SEL
     SlotName[ french ] = "S�lectionner jusqu'� la ligne inf�rieure";
     SlotName[ spanish ] = "Seleccionar hasta la l�nea de abajo";
     SlotName[ italian ] = "Seleziona fino alla riga in basso";
-    SlotName[ danish ] = "Marker til r�kke forneden";
+    SlotName[ danish ] = "Marker nedad";
     SlotName[ swedish ] = "Markera till raden under";
     SlotName[ polish ] = "Zaznacz w d�";
     SlotName[ portuguese_brazilian ] = "Selecionar para Baixo";
@@ -5224,6 +5536,8 @@ SfxSlotInfo FN_LINE_DOWN_SEL
     SlotName[ hebrew ] = "Bis Zeile unten selektieren";
     SlotName[ hindi ] = "निचे चुनो";
     SlotName[ slovak ] = "Vybrať smerom dolu";
+    SlotName[ hungarian ] = "Kijelölés lefelé";
+    SlotName[ slovenian ] = "Izberi navzdol";
 };
 SfxSlotInfo FN_LINE_NUMBERING_DLG
 {
@@ -5257,6 +5571,8 @@ SfxSlotInfo FN_LINE_NUMBERING_DLG
     SlotName[ hebrew ] = "‮מיספור שורות‬";
     SlotName[ hindi ] = "रेखा गिनती को सेट्ट करो";
     SlotName[ slovak ] = "Nastaviť číslovanie  riadkov";
+    SlotName[ hungarian ] = "Sorszámozás beállítása";
+    SlotName[ slovenian ] = "Nastavi oštevilčevanje vrstic";
 };
 SfxSlotInfo FN_LINE_UP
 {
@@ -5269,7 +5585,7 @@ SfxSlotInfo FN_LINE_UP
     SlotName[ french ] = "Aller � la ligne sup�rieure";
     SlotName[ spanish ] = "Ir a la l�nea de arriba";
     SlotName[ italian ] = "Alla riga superiore";
-    SlotName[ danish ] = "Til r�kke foroven";
+    SlotName[ danish ] = "Til toplinje";
     SlotName[ swedish ] = "Till raden �ver";
     SlotName[ polish ] = "Do g�rnego wiersza";
     SlotName[ portuguese_brazilian ] = "Para a Linha do Topo";
@@ -5290,6 +5606,8 @@ SfxSlotInfo FN_LINE_UP
     SlotName[ hebrew ] = "Zur Zeile oben";
     SlotName[ hindi ] = "ऊपरी रेखा तक";
     SlotName[ slovak ] = "Na riadok vyššie";
+    SlotName[ hungarian ] = "Legfelső sorra";
+    SlotName[ slovenian ] = "Na zgornjo vrstico";
 };
 SfxSlotInfo FN_LINE_UP_SEL
 {
@@ -5302,7 +5620,7 @@ SfxSlotInfo FN_LINE_UP_SEL
     SlotName[ french ] = "S�lectionner jusqu'� la ligne sup�rieure";
     SlotName[ spanish ] = "Seleccionar hasta l�nea de arriba";
     SlotName[ italian ] = "Seleziona fino alla riga superiore";
-    SlotName[ danish ] = "Marker til r�kke foroven";
+    SlotName[ danish ] = "Marker til toplinje";
     SlotName[ swedish ] = "Markera till raden �ver";
     SlotName[ polish ] = "Zaznacz do pierwszego wiersza";
     SlotName[ portuguese_brazilian ] = "Selecionar at� a Linha do Topo";
@@ -5323,6 +5641,8 @@ SfxSlotInfo FN_LINE_UP_SEL
     SlotName[ hebrew ] = "Bis Zeile oben selektieren";
     SlotName[ hindi ] = "ऊपरी रेखा तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko do predchádzajúceho riadku";
+    SlotName[ hungarian ] = "Kijelölés a legfelső sorig";
+    SlotName[ slovenian ] = "Izberi do zgornje vrstice";
 };
 SfxSlotInfo FN_NAVIGATION_PI_GOTO_PAGE
 {
@@ -5356,6 +5676,8 @@ SfxSlotInfo FN_NAVIGATION_PI_GOTO_PAGE
     SlotName[ hebrew ] = "Zur Seite";
     SlotName[ hindi ] = "पृष्ठ में";
     SlotName[ slovak ] = "Na stránku";
+    SlotName[ hungarian ] = "Adott oldalra";
+    SlotName[ slovenian ] = "Na stran";
 };
 SfxSlotInfo FN_NEW_GLOBAL_DOC
 {
@@ -5389,6 +5711,8 @@ SfxSlotInfo FN_NEW_GLOBAL_DOC
     SlotName[ hebrew ] = "‮יצירת מסמך אב‬";
     SlotName[ hindi ] = "मास्टर लेखपत्र उत्पन्न करो";
     SlotName[ slovak ] = "Vytvoriť hlavný dokument";
+    SlotName[ hungarian ] = "Fődokumentum létrehozása";
+    SlotName[ slovenian ] = "Ustvari glavni dokument";
 };
 SfxSlotInfo FN_NEW_HTML_DOC
 {
@@ -5422,6 +5746,8 @@ SfxSlotInfo FN_NEW_HTML_DOC
     SlotName[ hebrew ] = "‮יצירת דף LMTH‬";
     SlotName[ hindi ] = "HTML लेखपत्र उत्पन्न करो";
     SlotName[ slovak ] = "Vytvoriť HTML dokument";
+    SlotName[ hungarian ] = "HTML-dokumentum készítése";
+    SlotName[ slovenian ] = "Ustvari HTML dokument";
 };
 SfxSlotInfo FN_NEXT_BOOKMARK
 {
@@ -5434,7 +5760,7 @@ SfxSlotInfo FN_NEXT_BOOKMARK
     SlotName[ french ] = "Aller au rep�re de texte suivant";
     SlotName[ spanish ] = "Ir a la marca siguiente";
     SlotName[ italian ] = "Al segnalibro successivo";
-    SlotName[ danish ] = "Til n�ste tekstmarkering";
+    SlotName[ danish ] = "Til n�ste bogm�rke";
     SlotName[ swedish ] = "Till n�sta bokm�rke";
     SlotName[ polish ] = "Do nast�pnej zak�adki";
     SlotName[ portuguese_brazilian ] = "Para o Pr�ximo Marcador";
@@ -5455,6 +5781,8 @@ SfxSlotInfo FN_NEXT_BOOKMARK
     SlotName[ hebrew ] = "‮אל הסימניה הבאה‬";
     SlotName[ hindi ] = "अगला पृष्टसंकेत तक ";
     SlotName[ slovak ] = "Na nasledujúcu záložku";
+    SlotName[ hungarian ] = "A következő könyvjelzőhöz";
+    SlotName[ slovenian ] = "Na naslednji zaznamek";
 };
 SfxSlotInfo FN_NEXT_FOOTNOTE
 {
@@ -5488,6 +5816,8 @@ SfxSlotInfo FN_NEXT_FOOTNOTE
     SlotName[ hebrew ] = "‮אל הערת השוליים הבאה‬";
     SlotName[ hindi ] = "अगला पृष्ठ के नीचे की टीका तक";
     SlotName[ slovak ] = "Na nasledujúcu poznámku pod čiarou";
+    SlotName[ hungarian ] = "A következő lábjegyzethez";
+    SlotName[ slovenian ] = "Na naslednjo sprotno opombo";
 };
 SfxSlotInfo FN_NEXT_PARA
 {
@@ -5521,6 +5851,8 @@ SfxSlotInfo FN_NEXT_PARA
     SlotName[ hebrew ] = "Zum nächsten Absatz";
     SlotName[ hindi ] = "अगला परिच्छेद तक";
     SlotName[ slovak ] = "Na nasledujúci odstavec";
+    SlotName[ hungarian ] = "A következő bekezdéshez";
+    SlotName[ slovenian ] = "Na naslednji odstavek";
 };
 SfxSlotInfo FN_NEXT_SENT
 {
@@ -5554,6 +5886,8 @@ SfxSlotInfo FN_NEXT_SENT
     SlotName[ hebrew ] = "Zum nächsten Satz";
     SlotName[ hindi ] = "अगला वाक्य तक";
     SlotName[ slovak ] = "Na nasledujúcu vetu";
+    SlotName[ hungarian ] = "A következő mondatra";
+    SlotName[ slovenian ] = "Na naslednjo poved";
 };
 SfxSlotInfo FN_NEXT_SENT_SEL
 {
@@ -5587,6 +5921,8 @@ SfxSlotInfo FN_NEXT_SENT_SEL
     SlotName[ hebrew ] = "Bis nächsten Satz selektieren";
     SlotName[ hindi ] = "अगला वाक्य तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko do nasledujúcej vety";
+    SlotName[ hungarian ] = "Kijelölés a következő mondatig";
+    SlotName[ slovenian ] = "Izberi do naslednje povedi";
 };
 SfxSlotInfo FN_NEXT_TABLE
 {
@@ -5620,6 +5956,8 @@ SfxSlotInfo FN_NEXT_TABLE
     SlotName[ hebrew ] = "‮אל הטבלה הבאה‬";
     SlotName[ hindi ] = "अगला सारणी तक";
     SlotName[ slovak ] = "Na nasledujúcu tabuľku";
+    SlotName[ hungarian ] = "A következő táblázatra";
+    SlotName[ slovenian ] = "Na naslednjo tabelo";
 };
 SfxSlotInfo FN_NEXT_TBLFML
 {
@@ -5653,6 +5991,8 @@ SfxSlotInfo FN_NEXT_TBLFML
     SlotName[ hebrew ] = "‮מעבר אל נוסחת טבלה‬";
     SlotName[ hindi ] = "अगला सारणी सूत्र में जाओ";
     SlotName[ slovak ] = "Prechod na nasledujúci tabuľkový vzorec";
+    SlotName[ hungarian ] = "Következő képletre";
+    SlotName[ slovenian ] = "Pojdi na naslednjo formulo v tabeli";
 };
 SfxSlotInfo FN_NEXT_TBLFML_ERR
 {
@@ -5686,6 +6026,8 @@ SfxSlotInfo FN_NEXT_TBLFML_ERR
     SlotName[ hebrew ] = "‮מעבר אל נוסחת טבלה הלקויה הבאה‬";
     SlotName[ hindi ] = "अगला दोषयुक्त सारणी सूत्र में जाओ";
     SlotName[ slovak ] = "Prechod na nasledujúci chybný tabuľkový vzorec";
+    SlotName[ hungarian ] = "Következő hibás képletre";
+    SlotName[ slovenian ] = "Pojdi na naslednjo napačno formulo v tabeli";
 };
 SfxSlotInfo FN_NEXT_TOXMARK
 {
@@ -5719,6 +6061,8 @@ SfxSlotInfo FN_NEXT_TOXMARK
     SlotName[ hebrew ] = "‮מעבר אל סימן המפתח הבא‬";
     SlotName[ hindi ] = "अगला अनुक्रमणिका चिह्न में जाओ";
     SlotName[ slovak ] = "Prechod na nasledujúcu značku registra";
+    SlotName[ hungarian ] = "Következő jegyzékjelre";
+    SlotName[ slovenian ] = "Pojdi na naslednjo oznako kazala";
 };
 SfxSlotInfo FN_NEXT_WORD
 {
@@ -5752,6 +6096,8 @@ SfxSlotInfo FN_NEXT_WORD
     SlotName[ hebrew ] = "Zum Wort rechts";
     SlotName[ hindi ] = "शब्द का दाहिनी ओर";
     SlotName[ slovak ] = "Na slovo vpravo";
+    SlotName[ hungarian ] = "Egy szóval jobbra";
+    SlotName[ slovenian ] = "Na desno besedo";
 };
 SfxSlotInfo FN_NEXT_WORD_SEL
 {
@@ -5785,6 +6131,8 @@ SfxSlotInfo FN_NEXT_WORD_SEL
     SlotName[ hebrew ] = "Bis Wort rechts selektieren";
     SlotName[ hindi ] = "शब्द का दाहिनी ओर चुनो";
     SlotName[ slovak ] = "Vybrať všetko do slova vpravo";
+    SlotName[ hungarian ] = "Jobb oldali szó kijelölése";
+    SlotName[ slovenian ] = "Izberi do desne besede";
 };
 SfxSlotInfo FN_NUM_BULLET_DOWN
 {
@@ -5818,6 +6166,8 @@ SfxSlotInfo FN_NUM_BULLET_DOWN
     SlotName[ hebrew ] = "‮דרגה אחת למטה‬";
     SlotName[ hindi ] = "एक स्तर नीचे";
     SlotName[ slovak ] = "O úroveň nižšie";
+    SlotName[ hungarian ] = "Egy szinttel beljebb";
+    SlotName[ slovenian ] = "Eno raven niže";
 };
 SfxSlotInfo FN_NUM_BULLET_MOVEDOWN
 {
@@ -5851,6 +6201,8 @@ SfxSlotInfo FN_NUM_BULLET_MOVEDOWN
     SlotName[ hebrew ] = "‮הזז לצטה‬";
     SlotName[ hindi ] = "नीचे की ओर स्थान परिवर्तन करो";
     SlotName[ slovak ] = "Presunúť dole";
+    SlotName[ hungarian ] = "Lejjebb";
+    SlotName[ slovenian ] = "Premakni navzdol";
 };
 SfxSlotInfo FN_NUM_BULLET_MOVEUP
 {
@@ -5884,6 +6236,8 @@ SfxSlotInfo FN_NUM_BULLET_MOVEUP
     SlotName[ hebrew ] = "‮הזז למעלה‬";
     SlotName[ hindi ] = "ऊपर की ओर स्थान परिवर्तन करो";
     SlotName[ slovak ] = "Presunúť nahor";
+    SlotName[ hungarian ] = "Feljebb";
+    SlotName[ slovenian ] = "Premakni navzgor";
 };
 SfxSlotInfo FN_NUM_BULLET_NEXT
 {
@@ -5917,6 +6271,8 @@ SfxSlotInfo FN_NUM_BULLET_NEXT
     SlotName[ hebrew ] = "‮לפסקה הבאה באותה דרגה‬";
     SlotName[ hindi ] = "स्तर में अगला परिच्छेद तक";
     SlotName[ slovak ] = "Na nasledujúci odstavec v úrovni";
+    SlotName[ hungarian ] = "A szint következő bekezdésére";
+    SlotName[ slovenian ] = "Do naslednjega odstavka na isti ravni";
 };
 SfxSlotInfo FN_NUM_BULLET_NONUM
 {
@@ -5950,6 +6306,8 @@ SfxSlotInfo FN_NUM_BULLET_NONUM
     SlotName[ hebrew ] = "Eintrag ohne Nummer einfügen";
     SlotName[ hindi ] = "बिना संख्या की प्रविष्टि जोड़ो";
     SlotName[ slovak ] = "Vložiť neočíslovanú položku";
+    SlotName[ hungarian ] = "Számozatlan elem beszúrása";
+    SlotName[ slovenian ] = "Vstavi neoštevilčen vnos";
 };
 SfxSlotInfo FN_NUM_BULLET_OFF
 {
@@ -5983,6 +6341,8 @@ SfxSlotInfo FN_NUM_BULLET_OFF
     SlotName[ hebrew ] = "‮הפסקת מיספור‬";
     SlotName[ hindi ] = "संख्या देना बंद";
     SlotName[ slovak ] = "Vypnúť číslovanie";
+    SlotName[ hungarian ] = "Számozás kikapcsolása";
+    SlotName[ slovenian ] = "Izključi oštevilčevanje";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_DOWN
 {
@@ -5995,7 +6355,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_DOWN
     SlotName[ french ] = "Abaisser d'un niveau (sous-points inclus)";
     SlotName[ spanish ] = "Bajar un nivel con subniveles";
     SlotName[ italian ] = "Riduci livello con sottopunti";
-    SlotName[ danish ] = "Nedad med underpunkter";
+    SlotName[ danish ] = "Flyt nedad med underpunkter";
     SlotName[ swedish ] = "Ned�t med underniv�er";
     SlotName[ polish ] = "Poziom w d� z podpunktami";
     SlotName[ portuguese_brazilian ] = "Mover para baixo com sub par�grafos";
@@ -6016,6 +6376,8 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_DOWN
     SlotName[ hebrew ] = "‮הורדת דרגה עם נקודות משנה‬";
     SlotName[ hindi ] = "अधीनबिन्दुओं सहित नीचे की ओर स्थान परिवर्तन करो";
     SlotName[ slovak ] = "Presunúť dole vrátane podčastí";
+    SlotName[ hungarian ] = "Egy szinttel beljebb, alpontokkal együtt";
+    SlotName[ slovenian ] = "Premakni navzdol s podtočkami";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEDOWN
 {
@@ -6049,6 +6411,8 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEDOWN
     SlotName[ hebrew ] = "‮הורדת דרגה עם נקודות משנה‬";
     SlotName[ hindi ] = "अधीनबिन्दुओं सहित नीचे की ओर स्थान परिवर्तन करो";
     SlotName[ slovak ] = "Presunúť dole vrátane podčastí";
+    SlotName[ hungarian ] = "Lejjebb, alpontokkal együtt";
+    SlotName[ slovenian ] = "Premakni navzdol s podtočkami";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEUP
 {
@@ -6082,6 +6446,8 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEUP
     SlotName[ hebrew ] = "‮העלאת דרגה עם נקודות משנה‬";
     SlotName[ hindi ] = "अधीनबिन्दुओं सहित ऊपर की ओर स्थान परिवर्तन करो";
     SlotName[ slovak ] = "Presunúť nahor vrátane podčastí";
+    SlotName[ hungarian ] = "Feljebb, alpontokkal együtt";
+    SlotName[ slovenian ] = "Premakni navzgor s podtočkami";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_UP
 {
@@ -6094,7 +6460,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_UP
     SlotName[ french ] = "Hausser d'un niveau (sous-points inclus)";
     SlotName[ spanish ] = "Subir un nivel con subniveles";
     SlotName[ italian ] = "In alto con sottopunti";
-    SlotName[ danish ] = "Opad med underpunkter";
+    SlotName[ danish ] = "Flyt opad med underpunkter";
     SlotName[ swedish ] = "Upp�t med underniv�er";
     SlotName[ polish ] = "Poziom w g�r� z podpunktami";
     SlotName[ portuguese_brazilian ] = "Mover para cima com sub par�grafos";
@@ -6115,6 +6481,8 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_UP
     SlotName[ hebrew ] = "‮העלאת דרגה עם נקודות משנה‬";
     SlotName[ hindi ] = "अधीनबिन्दुओं सहित ऊपर की ओर स्थान परिवर्तन करो";
     SlotName[ slovak ] = "Presunúť nahor vrátane podčastí";
+    SlotName[ hungarian ] = "Egy szinttel kijjebb, alpontokkal együtt";
+    SlotName[ slovenian ] = "Premakni navzgor s podtočkami";
 };
 SfxSlotInfo FN_NUM_BULLET_PREV
 {
@@ -6148,6 +6516,8 @@ SfxSlotInfo FN_NUM_BULLET_PREV
     SlotName[ hebrew ] = "‮לפסקה הקודמת באותה דרגה‬";
     SlotName[ hindi ] = "स्तर में पिछला परिच्छेद में";
     SlotName[ slovak ] = "Na predchádzajúci odstavec v úrovni";
+    SlotName[ hungarian ] = "A szint előző bekezdésére";
+    SlotName[ slovenian ] = "Na prejšnji odstavek na isti ravni";
 };
 SfxSlotInfo FN_NUM_BULLET_UP
 {
@@ -6181,6 +6551,8 @@ SfxSlotInfo FN_NUM_BULLET_UP
     SlotName[ hebrew ] = "‮דרגה אחת למעלה‬";
     SlotName[ hindi ] = "एक स्तर ऊपर ";
     SlotName[ slovak ] = "O úroveň vyššie";
+    SlotName[ hungarian ] = "Egy szinttel kijjebb";
+    SlotName[ slovenian ] = "Eno raven višje";
 };
 SfxSlotInfo FN_NUM_FORMAT_TABLE_DLG
 {
@@ -6214,6 +6586,8 @@ SfxSlotInfo FN_NUM_FORMAT_TABLE_DLG
     SlotName[ hebrew ] = "‮עריכת תבנית מספר‬";
     SlotName[ hindi ] = "संख्या रचना का संपादन";
     SlotName[ slovak ] = "Upraviť formát čísla";
+    SlotName[ hungarian ] = "Számformátum beállítása";
+    SlotName[ slovenian ] = "Uredi obliko številk";
 };
 SfxSlotInfo FN_NUM_OR_NONUM
 {
@@ -6247,6 +6621,8 @@ SfxSlotInfo FN_NUM_OR_NONUM
     SlotName[ hebrew ] = "‮מיספור מופעל/מופסק‬";
     SlotName[ hindi ] = "संख्या देना शुरू/बंद";
     SlotName[ slovak ] = "Číslovanie zap/vyp";
+    SlotName[ hungarian ] = "Számozás";
+    SlotName[ slovenian ] = "Oštevilčevanje vključeno/izključeno";
 };
 SfxSlotInfo FN_NUMBER_BULLETS
 {
@@ -6280,6 +6656,8 @@ SfxSlotInfo FN_NUMBER_BULLETS
     SlotName[ hebrew ] = "‮עריכת מיספור‬";
     SlotName[ hindi ] = "संख्या देने का संपादन";
     SlotName[ slovak ] = "Upraviť číslovanie";
+    SlotName[ hungarian ] = "Számozás beállítása";
+    SlotName[ slovenian ] = "Uredi oštevilčevanje";
 };
 SfxSlotInfo FN_NUMBER_CURRENCY
 {
@@ -6313,6 +6691,8 @@ SfxSlotInfo FN_NUMBER_CURRENCY
     SlotName[ hebrew ] = "‮תבנית מספר: מטבע‬";
     SlotName[ hindi ] = "संख्या की रचना: मुद्रा";
     SlotName[ slovak ] = "Formát čísla: Mena";
+    SlotName[ hungarian ] = "Számformátum: pénz";
+    SlotName[ slovenian ] = "Oblika številk: valuta";
 };
 SfxSlotInfo FN_NUMBER_DATE
 {
@@ -6346,6 +6726,8 @@ SfxSlotInfo FN_NUMBER_DATE
     SlotName[ hebrew ] = "‮תבנית מספר: תאריך‬";
     SlotName[ hindi ] = "संख्या रचना : दिनांक";
     SlotName[ slovak ] = "Formát čísla: Dátum";
+    SlotName[ hungarian ] = "Számformátum: dátum";
+    SlotName[ slovenian ] = "Oblika številk: datum";
 };
 SfxSlotInfo FN_NUMBER_NEWSTART
 {
@@ -6379,6 +6761,8 @@ SfxSlotInfo FN_NUMBER_NEWSTART
     SlotName[ hebrew ] = "‮מיספור-ספירה חדש‬";
     SlotName[ hindi ] = "संख्या देना पुनः प्रारंभ करो";
     SlotName[ slovak ] = "Reštartovať číslovanie";
+    SlotName[ hungarian ] = "Számozás újraindítása";
+    SlotName[ slovenian ] = "Ponovno začni oštev.";
 };
 SfxSlotInfo FN_NUMBER_PERCENT
 {
@@ -6412,6 +6796,8 @@ SfxSlotInfo FN_NUMBER_PERCENT
     SlotName[ hebrew ] = "‮תבנית מספר: אחוזים‬";
     SlotName[ hindi ] = "संख्या रचना: प्रतिशत";
     SlotName[ slovak ] = "Formát čísla: Percentá";
+    SlotName[ hungarian ] = "Számformátum: százalék";
+    SlotName[ slovenian ] = "Oblika številk: odstotek";
 };
 SfxSlotInfo FN_NUMBER_SCIENTIFIC
 {
@@ -6445,6 +6831,8 @@ SfxSlotInfo FN_NUMBER_SCIENTIFIC
     SlotName[ hebrew ] = "‮תבנית מספר: מעריכי‬";
     SlotName[ hindi ] = "संख्या रचना: ऐक्पोनेश्यल";
     SlotName[ slovak ] = "Formát čísla: Exponenciálny";
+    SlotName[ hungarian ] = "Számformátum: exponenciális";
+    SlotName[ slovenian ] = "Oblika številk: eksponent";
 };
 SfxSlotInfo FN_NUMBER_STANDARD
 {
@@ -6478,6 +6866,8 @@ SfxSlotInfo FN_NUMBER_STANDARD
     SlotName[ hebrew ] = "‮תבנית מספר: רגיל‬";
     SlotName[ hindi ] = "संख्या रचना: स्टान्डर्ड";
     SlotName[ slovak ] = "Formát čísla: Štandardný";
+    SlotName[ hungarian ] = "Számformátum: standard";
+    SlotName[ slovenian ] = "Oblika številk: standardno";
 };
 SfxSlotInfo FN_NUMBER_TIME
 {
@@ -6511,6 +6901,8 @@ SfxSlotInfo FN_NUMBER_TIME
     SlotName[ hebrew ] = "‮תבנית מספר: זמן‬";
     SlotName[ hindi ] = "संख्या रचना: समय";
     SlotName[ slovak ] = "Formát čísla: Čas";
+    SlotName[ hungarian ] = "Számformátum: idő";
+    SlotName[ slovenian ] = "Oblika številk: čas";
 };
 SfxSlotInfo FN_NUMBER_TWODEC
 {
@@ -6544,6 +6936,8 @@ SfxSlotInfo FN_NUMBER_TWODEC
     SlotName[ hebrew ] = "‮תבנית מספר: עשרוני‬";
     SlotName[ hindi ] = "संख्या रचना: दशांश";
     SlotName[ slovak ] = "Formát čísla: Desiatkový";
+    SlotName[ hungarian ] = "Számformátum: decimális";
+    SlotName[ slovenian ] = "Oblika številk: decimalno";
 };
 SfxSlotInfo FN_NUMBERING_OUTLINE_DLG
 {
@@ -6577,6 +6971,8 @@ SfxSlotInfo FN_NUMBERING_OUTLINE_DLG
     SlotName[ hebrew ] = "‮מיספור פסקאות‬";
     SlotName[ hindi ] = "बाहरी रूपरेखा को संख्या देना";
     SlotName[ slovak ] = "Číslovanie osnovy";
+    SlotName[ hungarian ] = "Többszintű számozás";
+    SlotName[ slovenian ] = "Orisno oštevilčevanje";
 };
 SfxSlotInfo FN_OPTIMIZE_TABLE
 {
@@ -6610,6 +7006,8 @@ SfxSlotInfo FN_OPTIMIZE_TABLE
     SlotName[ hebrew ] = "‮סידור מיטבי‬";
     SlotName[ hindi ] = "योग्य करो";
     SlotName[ slovak ] = "Optimalizovať";
+    SlotName[ hungarian ] = "Optimalizálás";
+    SlotName[ slovenian ] = "Optimiraj";
 };
 SfxSlotInfo FN_OUTLINE_TO_CLIPBOARD
 {
@@ -6643,6 +7041,8 @@ SfxSlotInfo FN_OUTLINE_TO_CLIPBOARD
     SlotName[ hebrew ] = "‮מסמך נוכחי ללוח העריכה‬";
     SlotName[ hindi ] = "क्लिपबोर्ड केलिए बाहरी रूपरेखा";
     SlotName[ slovak ] = "Osnova do schránky";
+    SlotName[ hungarian ] = "Vázlat a vágólapra";
+    SlotName[ slovenian ] = "Oris v odložišče";
 };
 SfxSlotInfo FN_OUTLINE_TO_IMPRESS
 {
@@ -6676,6 +7076,8 @@ SfxSlotInfo FN_OUTLINE_TO_IMPRESS
     SlotName[ hebrew ] = "‮מסמך נוכחי למצגת‬";
     SlotName[ hindi ] = "प्रस्तुति केलिए बाहरी रूपरेखा";
     SlotName[ slovak ] = "Osnova do prezentácie";
+    SlotName[ hungarian ] = "Vázlatból bemutató";
+    SlotName[ slovenian ] = "Oris v predstavitev";
 };
 SfxSlotInfo FN_PAGE_STYLE_SET_COLS
 {
@@ -6709,6 +7111,8 @@ SfxSlotInfo FN_PAGE_STYLE_SET_COLS
     SlotName[ hebrew ] = "Seitenvorlage: Spalten";
     SlotName[ hindi ] = "पृष्ठ शैली: स्तंभें";
     SlotName[ slovak ] = "Štýl stránky: stĺpce";
+    SlotName[ hungarian ] = "Oldalstílus: hasábok";
+    SlotName[ slovenian ] = "Slog strani: stolpci";
 };
 SfxSlotInfo FN_PAGEDOWN
 {
@@ -6742,6 +7146,8 @@ SfxSlotInfo FN_PAGEDOWN
     SlotName[ hebrew ] = "‮הדף הבא‬";
     SlotName[ hindi ] = "अगला पृष्ठ ";
     SlotName[ slovak ] = "Ďalšia stránka";
+    SlotName[ hungarian ] = "Következő oldal";
+    SlotName[ slovenian ] = "Naslednja stran";
 };
 SfxSlotInfo FN_PAGEDOWN_SEL
 {
@@ -6775,6 +7181,8 @@ SfxSlotInfo FN_PAGEDOWN_SEL
     SlotName[ hebrew ] = "Bis nächste Seite selektieren";
     SlotName[ hindi ] = "अगला पृष्ठ तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko do nasledujúcej stránky";
+    SlotName[ hungarian ] = "Kijelölés a következő oldalig";
+    SlotName[ slovenian ] = "Izberi do naslednje strani";
 };
 SfxSlotInfo FN_PAGEUP
 {
@@ -6808,6 +7216,8 @@ SfxSlotInfo FN_PAGEUP
     SlotName[ hebrew ] = "‮הדף הקודם‬";
     SlotName[ hindi ] = "पिछला पृष्ठ";
     SlotName[ slovak ] = "Predchádzajúca strana";
+    SlotName[ hungarian ] = "Előző oldal";
+    SlotName[ slovenian ] = "Prejšnja stran";
 };
 SfxSlotInfo FN_PAGEUP_SEL
 {
@@ -6841,6 +7251,8 @@ SfxSlotInfo FN_PAGEUP_SEL
     SlotName[ hebrew ] = "Bis vorherige Seite selektieren";
     SlotName[ hindi ] = "पिछला पृष्ठ तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko do predchádzajúcej stránky";
+    SlotName[ hungarian ] = "Kijelölés az előző oldalig";
+    SlotName[ slovenian ] = "Izberi do prejšnje strani";
 };
 SfxSlotInfo FN_PASTESPECIAL
 {
@@ -6853,7 +7265,7 @@ SfxSlotInfo FN_PASTESPECIAL
     SlotName[ french ] = "Collage sp�cial";
     SlotName[ spanish ] = "Pegado especial";
     SlotName[ italian ] = "Incolla speciale";
-    SlotName[ danish ] = "Inds�t indhold";
+    SlotName[ danish ] = "Inds�t speciel";
     SlotName[ swedish ] = "Klistra in inneh�ll";
     SlotName[ polish ] = "Wklej specjalnie";
     SlotName[ portuguese_brazilian ] = "Colar Especial";
@@ -6874,6 +7286,8 @@ SfxSlotInfo FN_PASTESPECIAL
     SlotName[ hebrew ] = "‮הדבקה מיוחדת‬";
     SlotName[ hindi ] = "विशेष छिपकाओ";
     SlotName[ slovak ] = "Vložiť ináč";
+    SlotName[ hungarian ] = "Irányított beillesztés";
+    SlotName[ slovenian ] = "Posebno lepljenje";
 };
 SfxSlotInfo FN_POSTIT
 {
@@ -6907,6 +7321,8 @@ SfxSlotInfo FN_POSTIT
     SlotName[ hebrew ] = "‮הוספת הערה‬";
     SlotName[ hindi ] = "सूचना जोड़ो";
     SlotName[ slovak ] = "Vložiť poznámku";
+    SlotName[ hungarian ] = "Jegyzet beszúrása";
+    SlotName[ slovenian ] = "Vstavi opombo";
 };
 SfxSlotInfo FN_PREV_BOOKMARK
 {
@@ -6919,7 +7335,7 @@ SfxSlotInfo FN_PREV_BOOKMARK
     SlotName[ french ] = "Aller au rep�re de texte pr�c�dent";
     SlotName[ spanish ] = "Ir a la marca anterior";
     SlotName[ italian ] = "Al segnalibro precedente";
-    SlotName[ danish ] = "Til forrige tekstmarkering";
+    SlotName[ danish ] = "Til forrige Bogm�rke";
     SlotName[ swedish ] = "Till f�reg�ende bokm�rke";
     SlotName[ polish ] = "Do poprzedniej zak�adki";
     SlotName[ portuguese_brazilian ] = "Para o Marcador Anterior";
@@ -6940,6 +7356,8 @@ SfxSlotInfo FN_PREV_BOOKMARK
     SlotName[ hebrew ] = "‮אל הסימניה הקודמת‬";
     SlotName[ hindi ] = "पिछला पृष्टसंकेत तक";
     SlotName[ slovak ] = "Na predchádzajúcu záložku";
+    SlotName[ hungarian ] = "Előző könyvjelzőre";
+    SlotName[ slovenian ] = "Na prejšnji zaznamek";
 };
 SfxSlotInfo FN_PREV_FOOTNOTE
 {
@@ -6973,6 +7391,8 @@ SfxSlotInfo FN_PREV_FOOTNOTE
     SlotName[ hebrew ] = "‮אל הערת השוליים הקודם‬";
     SlotName[ hindi ] = "पिछला पृष्ठ के नीचे की टीका तक";
     SlotName[ slovak ] = "Na predchádzajúcu poznámku pod čiarou";
+    SlotName[ hungarian ] = "Előző lábjegyzetre";
+    SlotName[ slovenian ] = "Na prejšnjo sprotno opombo";
 };
 SfxSlotInfo FN_PREV_PARA
 {
@@ -7006,6 +7426,8 @@ SfxSlotInfo FN_PREV_PARA
     SlotName[ hebrew ] = "Zum vorherigen Absatz";
     SlotName[ hindi ] = "पिछला परिच्छेद तक";
     SlotName[ slovak ] = "Na predchádzajúci odstavec";
+    SlotName[ hungarian ] = "Előző bekezdésre";
+    SlotName[ slovenian ] = "Na prejšnji odstavek";
 };
 SfxSlotInfo FN_PREV_SENT
 {
@@ -7039,6 +7461,8 @@ SfxSlotInfo FN_PREV_SENT
     SlotName[ hebrew ] = "Zum vorherigen Satz";
     SlotName[ hindi ] = "पिछला वाक्य तक";
     SlotName[ slovak ] = "Na predchádzajúcu vetu";
+    SlotName[ hungarian ] = "Az előző mondatra";
+    SlotName[ slovenian ] = "Na prejšnjo poved";
 };
 SfxSlotInfo FN_PREV_SENT_SEL
 {
@@ -7072,6 +7496,8 @@ SfxSlotInfo FN_PREV_SENT_SEL
     SlotName[ hebrew ] = "Bis zum vorherigen Satz selektieren";
     SlotName[ hindi ] = "पिछला वाक्य तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko do predchádzajúcej vety";
+    SlotName[ hungarian ] = "Az előző mondat kijelölése";
+    SlotName[ slovenian ] = "Izberi do prejšnje povedi";
 };
 SfxSlotInfo FN_PREV_TABLE
 {
@@ -7105,6 +7531,8 @@ SfxSlotInfo FN_PREV_TABLE
     SlotName[ hebrew ] = "Zur vorherigen Tabelle";
     SlotName[ hindi ] = "पिछला सारणी तक";
     SlotName[ slovak ] = "Na predchádzajúcu tabuľku";
+    SlotName[ hungarian ] = "Az előző táblázatra";
+    SlotName[ slovenian ] = "Na prejšnjo tabelo";
 };
 SfxSlotInfo FN_PREV_TBLFML
 {
@@ -7138,6 +7566,8 @@ SfxSlotInfo FN_PREV_TBLFML
     SlotName[ hebrew ] = "‮מעבר אל נוסחת טבלה הקודמת‬";
     SlotName[ hindi ] = "पिछला सारणी सूत्र में जाओ";
     SlotName[ slovak ] = "Prechod na predchádzajúci tabuľkový vzorec";
+    SlotName[ hungarian ] = "Előző képletre";
+    SlotName[ slovenian ] = "Pojdi na prejšnjo formulo v tabeli";
 };
 SfxSlotInfo FN_PREV_TBLFML_ERR
 {
@@ -7171,6 +7601,8 @@ SfxSlotInfo FN_PREV_TBLFML_ERR
     SlotName[ hebrew ] = "‮מעבר אל נוסחת טבלה הלקויה הקודמת‬";
     SlotName[ hindi ] = "पिछला दोषयुक्त सारणी सूत्र में जाओ";
     SlotName[ slovak ] = "Prechod na predchádzajúci chybný tabuľkový vzorec";
+    SlotName[ hungarian ] = "Előző hibás képletre";
+    SlotName[ slovenian ] = "Pojdi na prejšnjo napačno formulo v tabeli";
 };
 SfxSlotInfo FN_PREV_TOXMARK
 {
@@ -7204,6 +7636,8 @@ SfxSlotInfo FN_PREV_TOXMARK
     SlotName[ hebrew ] = "‮מעבר אל סימן המפתח הקודם‬";
     SlotName[ hindi ] = "पिछला अनुक्रमणिका चिह्न में जाओ";
     SlotName[ slovak ] = "Prechod na predchádzajúcu značku registra";
+    SlotName[ hungarian ] = "Előző jegyzékjelre";
+    SlotName[ slovenian ] = "Pojdi na prejšnjo oznako kazala";
 };
 SfxSlotInfo FN_PREV_WORD
 {
@@ -7237,6 +7671,8 @@ SfxSlotInfo FN_PREV_WORD
     SlotName[ hebrew ] = "Zum Wort links";
     SlotName[ hindi ] = "शब्द के बायाँ ओर तक";
     SlotName[ slovak ] = "Na slovo vľavo";
+    SlotName[ hungarian ] = "Egy szóval balra";
+    SlotName[ slovenian ] = "Na levo besedo";
 };
 SfxSlotInfo FN_PREV_WORD_SEL
 {
@@ -7249,7 +7685,7 @@ SfxSlotInfo FN_PREV_WORD_SEL
     SlotName[ french ] = "S�lectionner jusqu'au mot � gauche";
     SlotName[ spanish ] = "Seleccionar hasta el comienzo de la palabra";
     SlotName[ italian ] = "Seleziona fino alla parola di sinistra";
-    SlotName[ danish ] = "Marker til ord til venstre";
+    SlotName[ danish ] = "Marker til begyndelse af ord";
     SlotName[ swedish ] = "Markera till ord till v�nster";
     SlotName[ polish ] = "Zaznacz do pocz�tku wyrazu";
     SlotName[ portuguese_brazilian ] = "Selecionar at� o In�cio da Palavra";
@@ -7270,6 +7706,8 @@ SfxSlotInfo FN_PREV_WORD_SEL
     SlotName[ hebrew ] = "Bis Wort links selektieren";
     SlotName[ hindi ] = "शब्द के प्रारंभ से चुनो";
     SlotName[ slovak ] = "Vybrať začiatok slova";
+    SlotName[ hungarian ] = "Kijelölés a szó elejéig";
+    SlotName[ slovenian ] = "Izberi do začetka besede";
 };
 SfxSlotInfo FN_PREVIEW_PRINT_OPTIONS
 {
@@ -7303,6 +7741,8 @@ SfxSlotInfo FN_PREVIEW_PRINT_OPTIONS
     SlotName[ hebrew ] = "‮תיבת שיח אפשרויות הדפסה‬";
     SlotName[ hindi ] = "छपाई विकल्प पृष्ठ दृश्य";
     SlotName[ slovak ] = "Vlastnosti tlače zobrazenej strany";
+    SlotName[ hungarian ] = "Nyomtatási beállítások megtekintése";
+    SlotName[ slovenian ] = "Pogled strani z možnostmi tiskanja";
 };
 SfxSlotInfo FN_PREVIEW_ZOOM
 {
@@ -7333,6 +7773,8 @@ SfxSlotInfo FN_PREVIEW_ZOOM
     SlotName[ hebrew ] = "‮זום תצוגה מקדימה‬";
     SlotName[ hindi ] = "पूर्वदृश्य झूम";
     SlotName[ slovak ] = "Merítko Náhľadu";
+    SlotName[ hungarian ] = "Nagyítás";
+    SlotName[ slovenian ] = "Predogled zooma";
 };
 SfxSlotInfo FN_PRINT_LAYOUT
 {
@@ -7366,6 +7808,8 @@ SfxSlotInfo FN_PRINT_LAYOUT
     SlotName[ hebrew ] = "‮מראה להדפסה מופעל/מופסק‬";
     SlotName[ hindi ] = "छपाई अभिन्यास शुरू/बंद";
     SlotName[ slovak ] = "Náhľad tlače zap/vyp";
+    SlotName[ hungarian ] = "Nyomtatás - elrendezés";
+    SlotName[ slovenian ] = "Postavitev tiskanja vključena/izključena";
 };
 SfxSlotInfo FN_PRINT_PAGEPREVIEW
 {
@@ -7374,7 +7818,7 @@ SfxSlotInfo FN_PRINT_PAGEPREVIEW
     SlotName[ english_us ] = "Print page view";
     SlotName[ portuguese ] = "Imprimir previsualiza��o";
     SlotName[ russian ] = "������";
-    SlotName[ dutch ] = "Afdrukvoorbeeld drukken";
+    SlotName[ dutch ] = "Afdrukvoorbeeld afdrukken";
     SlotName[ french ] = "Imprimer l'aper�u";
     SlotName[ spanish ] = "Imprimir vista preliminar";
     SlotName[ italian ] = "Stampa anteprima pagina";
@@ -7386,7 +7830,7 @@ SfxSlotInfo FN_PRINT_PAGEPREVIEW
     SlotName[ chinese_simplified ] = "打印页面视图";
     SlotName[ chinese_traditional ] = "列印頁面檢視";
     SlotName[ arabic ] = "������� ��� ��������";
-    SlotName[ dutch ] = "Afdrukvoorbeeld drukken";
+    SlotName[ dutch ] = "Afdrukvoorbeeld afdrukken";
     SlotName[ chinese_simplified ] = "打印页面视图";
     SlotName[ greek ] = "�������� �������������� �������";
     SlotName[ korean ] = "미리 보기 인쇄";
@@ -7399,6 +7843,8 @@ SfxSlotInfo FN_PRINT_PAGEPREVIEW
     SlotName[ hebrew ] = "‮תצוגה מקדימה‬";
     SlotName[ hindi ] = "छपाई पृष्ठ दृश्य";
     SlotName[ slovak ] = "Tlač zobrazenej strany";
+    SlotName[ hungarian ] = "Nyomtatás";
+    SlotName[ slovenian ] = "Pogled strani za tiskanje";
 };
 SfxSlotInfo FN_QRY_MERGE
 {
@@ -7407,7 +7853,7 @@ SfxSlotInfo FN_QRY_MERGE
     SlotName[ english_us ] = "Prepare Mail Merge";
     SlotName[ portuguese ] = "Preparar impress�o em s�rie";
     SlotName[ russian ] = "���������� �������� �����";
-    SlotName[ dutch ] = "Afdrukken standaardbrief voorbereiden";
+    SlotName[ dutch ] = "Afdrukken van standaardbrief voorbereiden";
     SlotName[ french ] = "Pr�parer un mailing";
     SlotName[ spanish ] = "Preparar impresi�n en serie";
     SlotName[ italian ] = "Prepara stampa in serie";
@@ -7419,7 +7865,7 @@ SfxSlotInfo FN_QRY_MERGE
     SlotName[ chinese_simplified ] = "准备邮件合并";
     SlotName[ chinese_traditional ] = "準備合併列印";
     SlotName[ arabic ] = "����� ������� ��������";
-    SlotName[ dutch ] = "Afdrukken standaardbrief voorbereiden";
+    SlotName[ dutch ] = "Afdrukken van standaardbrief voorbereiden";
     SlotName[ chinese_simplified ] = "准备邮件合并";
     SlotName[ greek ] = "������������ ��� ���������� �������������";
     SlotName[ korean ] = "편지 병합 준비";
@@ -7432,6 +7878,8 @@ SfxSlotInfo FN_QRY_MERGE
     SlotName[ hebrew ] = "‮הכנת מיזוג דואר‬";
     SlotName[ hindi ] = "मेइल मिलाने को तैयार करो";
     SlotName[ slovak ] = "Príprava pre zlúčenie pošty";
+    SlotName[ hungarian ] = "Körlevél előkészítése";
+    SlotName[ slovenian ] = "Pripravi spajanje dokumentov";
 };
 SfxSlotInfo FN_REDLINE_ACCEPT
 {
@@ -7444,7 +7892,7 @@ SfxSlotInfo FN_REDLINE_ACCEPT
     SlotName[ french ] = "Accepter ou rejeter les modifications";
     SlotName[ spanish ] = "Aceptar modificaciones o rechazarlas";
     SlotName[ italian ] = "Accetta o rifiuta modifiche";
-    SlotName[ danish ] = "Accepter eller forkast �ndringer";
+    SlotName[ danish ] = "Accepter eller afvis �ndringer";
     SlotName[ swedish ] = "Acceptera eller ignorera �ndringar";
     SlotName[ polish ] = "Akceptuj albo odrzu� zmiany";
     SlotName[ portuguese_brazilian ] = "Aceitar ou Rejeitar Modifica��es";
@@ -7465,6 +7913,8 @@ SfxSlotInfo FN_REDLINE_ACCEPT
     SlotName[ hebrew ] = "Änderungen akzeptieren oder ablehnen";
     SlotName[ hindi ] = "परिवर्तनों को स्वीकार करो अथवा अस्वीकार करो";
     SlotName[ slovak ] = "Prijať alebo odmietnuť zmeny";
+    SlotName[ hungarian ] = "Változtatások elfogadása vagy elvetése";
+    SlotName[ slovenian ] = "Sprejmi ali zavrni spremembe";
 };
 SfxSlotInfo FN_REDLINE_COMMENT
 {
@@ -7498,6 +7948,8 @@ SfxSlotInfo FN_REDLINE_COMMENT
     SlotName[ hebrew ] = "‮הוספת הערה‬";
     SlotName[ hindi ] = "अपवाद जोड़ो";
     SlotName[ slovak ] = "Vložiť komentár";
+    SlotName[ hungarian ] = "Megjegyzés beszúrása";
+    SlotName[ slovenian ] = "Vstavi komentar";
 };
 SfxSlotInfo FN_REDLINE_ON
 {
@@ -7531,6 +7983,8 @@ SfxSlotInfo FN_REDLINE_ON
     SlotName[ hebrew ] = "‮החלפת מצב שמירת שינויים‬";
     SlotName[ hindi ] = "पुनः परिशीलन करने में स्विच करो";
     SlotName[ slovak ] = "Znovu prehliadnuť";
+    SlotName[ hungarian ] = "Korrektúra bekapcsolása";
+    SlotName[ slovenian ] = "Vključi pregled";
 };
 SfxSlotInfo FN_REDLINE_PROTECT
 {
@@ -7545,7 +7999,7 @@ SfxSlotInfo FN_REDLINE_PROTECT
     SlotName[ french ] = "Prot�ger l'historique des modifications";
     SlotName[ spanish ] = "Proteger grabaci�n de las modificaciones";
     SlotName[ italian ] = "Proteggi modulo registrazione modifiche";
-    SlotName[ danish ] = "Beskyt �ndring";
+    SlotName[ danish ] = "Beskyt registrerede �ndringer";
     SlotName[ swedish ] = "Skydda registrering av �ndringar";
     SlotName[ polish ] = "Chro� rejestr zmian";
     SlotName[ portuguese_brazilian ] = "Proteger Registro de Mudan�as";
@@ -7562,6 +8016,8 @@ SfxSlotInfo FN_REDLINE_PROTECT
     SlotName[ hebrew ] = "Änderungsaufzeichnung schützen";
     SlotName[ hindi ] = "परिवर्तन लेखा को रक्षा करो";
     SlotName[ slovak ] = "Zamknúť záznam o zmenách";
+    SlotName[ hungarian ] = "Változások naplójának védelme";
+    SlotName[ slovenian ] = "Zaščiti zapis sprememb";
 };
 SfxSlotInfo FN_REDLINE_SHOW
 {
@@ -7574,7 +8030,7 @@ SfxSlotInfo FN_REDLINE_SHOW
     SlotName[ french ] = "Afficher les retouches";
     SlotName[ spanish ] = "Mostrar modificaciones";
     SlotName[ italian ] = "Mostra revisione";
-    SlotName[ danish ] = "Vis �ndringer";
+    SlotName[ danish ] = "Fremh�v �ndringer";
     SlotName[ swedish ] = "Visa revidering";
     SlotName[ polish ] = "Wyr�nij zmiany";
     SlotName[ portuguese_brazilian ] = "Destacar Modifica��es";
@@ -7595,6 +8051,8 @@ SfxSlotInfo FN_REDLINE_SHOW
     SlotName[ hebrew ] = "‮הדגשת שינויים‬";
     SlotName[ hindi ] = "परिवर्तन को विशेष प्रकार से दिखाओ";
     SlotName[ slovak ] = "Zvýrazniť zmeny";
+    SlotName[ hungarian ] = "Változások mutatása";
+    SlotName[ slovenian ] = "Označi spremembe";
 };
 SfxSlotInfo FN_REFRESH_VIEW
 {
@@ -7628,6 +8086,8 @@ SfxSlotInfo FN_REFRESH_VIEW
     SlotName[ hebrew ] = "‮שחזור תצוגה‬";
     SlotName[ hindi ] = "दृश्य पूर्व अवस्था में पहुँचाना";
     SlotName[ slovak ] = "Obnoviť pohľad";
+    SlotName[ hungarian ] = "Nézet visszaállítása";
+    SlotName[ slovenian ] = "Obnovi pogled";
 };
 SfxSlotInfo FN_REPAGINATE
 {
@@ -7636,11 +8096,11 @@ SfxSlotInfo FN_REPAGINATE
     SlotName[ english_us ] = "Repaginate";
     SlotName[ portuguese ] = "Repaginar";
     SlotName[ russian ] = "������� �� ��������";
-    SlotName[ dutch ] = "Nieuwe opmaak";
+    SlotName[ dutch ] = "Opnieuw pagineren";
     SlotName[ french ] = "Nouveau formatage";
     SlotName[ spanish ] = "Reformatear";
     SlotName[ italian ] = "Reimpagina";
-    SlotName[ danish ] = "Genformatering";
+    SlotName[ danish ] = "Opdater sidenummerering";
     SlotName[ swedish ] = "Omformatering";
     SlotName[ polish ] = "Podziel ponownie na strony";
     SlotName[ portuguese_brazilian ] = "Repaginar";
@@ -7648,7 +8108,7 @@ SfxSlotInfo FN_REPAGINATE
     SlotName[ chinese_simplified ] = "重新制作格式";
     SlotName[ chinese_traditional ] = "重新製作格式";
     SlotName[ arabic ] = "����� �������";
-    SlotName[ dutch ] = "Nieuwe opmaak";
+    SlotName[ dutch ] = "Opnieuw pagineren";
     SlotName[ chinese_simplified ] = "重新制作格式";
     SlotName[ greek ] = "��������� ������������";
     SlotName[ korean ] = "다시 서식 설정";
@@ -7661,6 +8121,8 @@ SfxSlotInfo FN_REPAGINATE
     SlotName[ hebrew ] = "‮חלוקת דפים מחודשת‬";
     SlotName[ hindi ] = "रिपेजिनेट";
     SlotName[ slovak ] = "Prestránkovať";
+    SlotName[ hungarian ] = "Újratördelés";
+    SlotName[ slovenian ] = "Preštevilči";
 };
 SfxSlotInfo FN_REPEAT_SEARCH
 {
@@ -7694,6 +8156,8 @@ SfxSlotInfo FN_REPEAT_SEARCH
     SlotName[ hebrew ] = "‮חזרה על חיפוש‬";
     SlotName[ hindi ] = "खोज को दुहाराना";
     SlotName[ slovak ] = "Opakovať hľadanie";
+    SlotName[ hungarian ] = "Keresés ismétlése";
+    SlotName[ slovenian ] = "Ponovi iskanje";
 };
 SfxSlotInfo FN_RULER
 {
@@ -7727,6 +8191,8 @@ SfxSlotInfo FN_RULER
     SlotName[ hebrew ] = "‮סרגל מופעל/מופסק‬";
     SlotName[ hindi ] = "रूलर शुरू/बंद";
     SlotName[ slovak ] = "Pravítko zap/vyp";
+    SlotName[ hungarian ] = "Vonalzó";
+    SlotName[ slovenian ] = "Ravnilo vključeno/izključeno";
 };
 SfxSlotInfo FN_SELECT_PARA
 {
@@ -7760,6 +8226,8 @@ SfxSlotInfo FN_SELECT_PARA
     SlotName[ hebrew ] = "‮בחירת פסקה‬";
     SlotName[ hindi ] = "परिच्छेद चुनो";
     SlotName[ slovak ] = "Vybrať odstavec";
+    SlotName[ hungarian ] = "Bekezdés kijelölése";
+    SlotName[ slovenian ] = "Izberi odstavek";
 };
 SfxSlotInfo FN_SELECT_WORD
 {
@@ -7793,6 +8261,8 @@ SfxSlotInfo FN_SELECT_WORD
     SlotName[ hebrew ] = "Wort selektieren";
     SlotName[ hindi ] = "शब्द चुनो";
     SlotName[ slovak ] = "Vybrať slovo";
+    SlotName[ hungarian ] = "Szó kijelölése";
+    SlotName[ slovenian ] = "Izberi besedo";
 };
 SfxSlotInfo FN_SET_ADD_MODE
 {
@@ -7826,6 +8296,8 @@ SfxSlotInfo FN_SET_ADD_MODE
     SlotName[ hebrew ] = "‮בחירה מרובה מופעלת‬";
     SlotName[ hindi ] = "बहुमुखी चुनाव";
     SlotName[ slovak ] = "Zapnúť viacnásobný výber";
+    SlotName[ hungarian ] = "Többszörös kijelölés be";
+    SlotName[ slovenian ] = "Vključi večkratni izbor";
 };
 SfxSlotInfo FN_SET_EXT_MODE
 {
@@ -7838,7 +8310,7 @@ SfxSlotInfo FN_SET_EXT_MODE
     SlotName[ french ] = "S�lection �tendue";
     SlotName[ spanish ] = "Selecci�n ampliada";
     SlotName[ italian ] = "Attiva selezione ampliata";
-    SlotName[ danish ] = "Aktiver udvidet markering";
+    SlotName[ danish ] = "Aktiver tilf�jet markering";
     SlotName[ swedish ] = "Ut�kad markering p�";
     SlotName[ polish ] = "W��cz wyb�r rozszerzony";
     SlotName[ portuguese_brazilian ] = "Ativar Sele��o Estendida";
@@ -7859,6 +8331,8 @@ SfxSlotInfo FN_SET_EXT_MODE
     SlotName[ hebrew ] = "Erweiterte Selektion ein";
     SlotName[ hindi ] = "विस्तृत चुनाव शुरू";
     SlotName[ slovak ] = "Zapnúť rozšírený výber";
+    SlotName[ hungarian ] = "Kiterjeszthető kijelölés be";
+    SlotName[ slovenian ] = "Vključi razširjeni izbor";
 };
 SfxSlotInfo FN_SET_PAGE_STYLE
 {
@@ -7871,7 +8345,7 @@ SfxSlotInfo FN_SET_PAGE_STYLE
     SlotName[ french ] = "Appliquer le style de page";
     SlotName[ spanish ] = "Aplicar estilo de p�gina";
     SlotName[ italian ] = "Assegna modello di pagina";
-    SlotName[ danish ] = "Tildel sidetypografi";
+    SlotName[ danish ] = "Anvend sidetypografi";
     SlotName[ swedish ] = "Tilldela sidformatmall";
     SlotName[ polish ] = "Zastosuj styl strony";
     SlotName[ portuguese_brazilian ] = "Aplicar Estilo de P�gina";
@@ -7892,6 +8366,8 @@ SfxSlotInfo FN_SET_PAGE_STYLE
     SlotName[ hebrew ] = "‮החלת סגנון דף‬";
     SlotName[ hindi ] = "पृष्ठ शैली लागू करो";
     SlotName[ slovak ] = "Použiť štýl stránky";
+    SlotName[ hungarian ] = "Oldalstílus alkalmazása";
+    SlotName[ slovenian ] = "Uporabi slog strani";
 };
 SfxSlotInfo FN_SET_SUB_SCRIPT
 {
@@ -7904,7 +8380,7 @@ SfxSlotInfo FN_SET_SUB_SCRIPT
     SlotName[ french ] = "Indice";
     SlotName[ spanish ] = "Sub�ndice";
     SlotName[ italian ] = "Pedice";
-    SlotName[ danish ] = "S�nket";
+    SlotName[ danish ] = "S�nket skrift";
     SlotName[ swedish ] = "Neds�nkt";
     SlotName[ polish ] = "Indeks dolny";
     SlotName[ portuguese_brazilian ] = "Subscrito";
@@ -7925,6 +8401,8 @@ SfxSlotInfo FN_SET_SUB_SCRIPT
     SlotName[ hebrew ] = "Tiefgestellt";
     SlotName[ hindi ] = "सबस्क्रिप्ट्";
     SlotName[ slovak ] = "Dolný index";
+    SlotName[ hungarian ] = "Alsó index";
+    SlotName[ slovenian ] = "Podpisano";
 };
 SfxSlotInfo FN_SET_SUPER_SCRIPT
 {
@@ -7937,7 +8415,7 @@ SfxSlotInfo FN_SET_SUPER_SCRIPT
     SlotName[ french ] = "Exposant";
     SlotName[ spanish ] = "Super�ndice";
     SlotName[ italian ] = "Apice";
-    SlotName[ danish ] = "H�vet";
+    SlotName[ danish ] = "H�vet skrift";
     SlotName[ swedish ] = "Upph�jt";
     SlotName[ polish ] = "Indeks g�rny";
     SlotName[ portuguese_brazilian ] = "Sobrescrito";
@@ -7958,6 +8436,8 @@ SfxSlotInfo FN_SET_SUPER_SCRIPT
     SlotName[ hebrew ] = "Hochgestellt";
     SlotName[ hindi ] = "सूपरस्क्रिप्ट्";
     SlotName[ slovak ] = "Horný index";
+    SlotName[ hungarian ] = "Felső index";
+    SlotName[ slovenian ] = "Nadpisano";
 };
 SfxSlotInfo FN_SHADOWCURSOR
 {
@@ -7970,7 +8450,7 @@ SfxSlotInfo FN_SHADOWCURSOR
     SlotName[ french ] = "(D�s)activer le curseur direct";
     SlotName[ spanish ] = "Activar/desactivar el cursor directo";
     SlotName[ italian ] = "Cursore diretto";
-    SlotName[ danish ] = "Direkt-mark�r til/fra";
+    SlotName[ danish ] = "Direkte-mark�r til/fra";
     SlotName[ swedish ] = "Direktmark�r p�/av";
     SlotName[ polish ] = "W��cz/Wy��cz kursor bezpo�redni";
     SlotName[ portuguese_brazilian ] = "Ativar/Desativar Cursor Direto";
@@ -7991,6 +8471,8 @@ SfxSlotInfo FN_SHADOWCURSOR
     SlotName[ hebrew ] = "Direkt-Cursor ein/aus";
     SlotName[ hindi ] = "सीधा कर्सर शुरू/बंद";
     SlotName[ slovak ] = "Priamy kurzor zap/vyp";
+    SlotName[ hungarian ] = "Közvetlen kurzor";
+    SlotName[ slovenian ] = "Neposredna kazalka vključena/izključena";
 };
 SfxSlotInfo FN_SHIFT_BACKSPACE
 {
@@ -8024,6 +8506,8 @@ SfxSlotInfo FN_SHIFT_BACKSPACE
     SlotName[ hebrew ] = "Rückschritt";
     SlotName[ hindi ] = "बॉकस्पेस";
     SlotName[ slovak ] = "Späť";
+    SlotName[ hungarian ] = "Backspace";
+    SlotName[ slovenian ] = "Vračalka";
 };
 SfxSlotInfo FN_SHOW_MULTIPLE_PAGES
 {
@@ -8032,12 +8516,12 @@ SfxSlotInfo FN_SHOW_MULTIPLE_PAGES
     SlotName[ portuguese ] = "Page Preview: Multiple Pages";
     SlotName[ russian ] = "Page Preview: Multiple Pages";
     SlotName[ greek ] = "Page Preview: Multiple Pages";
-    SlotName[ dutch ] = "Page Preview: Multiple Pages";
+    SlotName[ dutch ] = "Afdrukvoorbeeld: meerdere pagina's";
     SlotName[ french ] = "Aper�u : plusieurs pages";
     SlotName[ spanish ] = "Vista preliminar de varias p�ginas";
     SlotName[ finnish ] = "Page Preview: Multiple Pages";
     SlotName[ italian ] = "Anteprima di stampa: pi� pagine";
-    SlotName[ danish ] = "Page Preview: Multiple Pages";
+    SlotName[ danish ] = "Sidevisning: flere sider";
     SlotName[ swedish ] = "F�rhandsgranskning: flera sidor";
     SlotName[ polish ] = "Page Preview: Multiple Pages";
     SlotName[ japanese ] = "ページプレビュー: 複数のページ";
@@ -8053,6 +8537,8 @@ SfxSlotInfo FN_SHOW_MULTIPLE_PAGES
     SlotName[ portuguese_brazilian ] = "Visualizar p�ginas: M�ltiplas p�ginas";
     SlotName[ hindi ] = "Page Preview: Multiple Pages";
     SlotName[ slovak ] = "Náhľad: viac stránok";
+    SlotName[ hungarian ] = "Nyomtatási kép: több oldalas";
+    SlotName[ slovenian ] = "Predogled strani: Več strani";
 };
 SfxSlotInfo FN_SHOW_TWO_PAGES
 {
@@ -8086,6 +8572,8 @@ SfxSlotInfo FN_SHOW_TWO_PAGES
     SlotName[ hebrew ] = "‮תצוגה מקדימה: שני עמודים ‬";
     SlotName[ hindi ] = "पृष्ठ का पूर्वदृश्य: दो पृष्ठ";
     SlotName[ slovak ] = "Náhľad: dve stránky";
+    SlotName[ hungarian ] = "Nyomtatási kép: kétoldalas";
+    SlotName[ slovenian ] = "Predogled strani: dve strani";
 };
 SfxSlotInfo FN_SHRINK_FONT_SIZE
 {
@@ -8119,6 +8607,8 @@ SfxSlotInfo FN_SHRINK_FONT_SIZE
     SlotName[ hebrew ] = "‮הקטנת גופן‬";
     SlotName[ hindi ] = "अक्षर घटाओ";
     SlotName[ slovak ] = "Zmenšiť písmo";
+    SlotName[ hungarian ] = "Betűméret csökkentése";
+    SlotName[ slovenian ] = "Zmanjšaj pisavo";
 };
 SfxSlotInfo FN_SORTING_DLG
 {
@@ -8152,6 +8642,8 @@ SfxSlotInfo FN_SORTING_DLG
     SlotName[ hebrew ] = "‮מיון‬";
     SlotName[ hindi ] = "सोर्ट";
     SlotName[ slovak ] = "Zoradiť";
+    SlotName[ hungarian ] = "Rendezés";
+    SlotName[ slovenian ] = "Razvrsti";
 };
 SfxSlotInfo FN_SPELLING_DLG
 {
@@ -8184,6 +8676,8 @@ SfxSlotInfo FN_SPELLING_DLG
     SlotName[ hebrew ] = "‮בדיקת איות‬";
     SlotName[ hindi ] = "अक्षर की जाँच";
     SlotName[ slovak ] = "Kontrola pravopisu";
+    SlotName[ hungarian ] = "Helyesírás-ellenőrzés";
+    SlotName[ slovenian ] = "Preverjanje črkovanja";
 };
 SfxSlotInfo FN_START_DOC_DIRECT
 {
@@ -8217,6 +8711,8 @@ SfxSlotInfo FN_START_DOC_DIRECT
     SlotName[ hebrew ] = "Direkt zum Dokumentanfang";
     SlotName[ hindi ] = "सीधा लेखपत्र के प्रारंभ में";
     SlotName[ slovak ] = "Priamo na začiatok dokumentu";
+    SlotName[ hungarian ] = "Közvetlenül a dokumentum elejére";
+    SlotName[ slovenian ] = "Neposredno na začetek dokumenta";
 };
 SfxSlotInfo FN_START_OF_COLUMN
 {
@@ -8250,6 +8746,8 @@ SfxSlotInfo FN_START_OF_COLUMN
     SlotName[ hebrew ] = "‮אל תחילת הטור‬";
     SlotName[ hindi ] = "स्तंभ के प्रारंभ में";
     SlotName[ slovak ] = "Na začiatok stĺpca";
+    SlotName[ hungarian ] = "A hasáb elejére";
+    SlotName[ slovenian ] = "Na začetek stolpca";
 };
 SfxSlotInfo FN_START_OF_DOCUMENT
 {
@@ -8283,6 +8781,8 @@ SfxSlotInfo FN_START_OF_DOCUMENT
     SlotName[ hebrew ] = "‮לתחילת מסמך‬";
     SlotName[ hindi ] = "लेखपत्र के प्रारंभ में";
     SlotName[ slovak ] = "Na začiatok dokumentu";
+    SlotName[ hungarian ] = "A dokumentum elejére";
+    SlotName[ slovenian ] = "Na začetek dokumenta";
 };
 SfxSlotInfo FN_START_OF_DOCUMENT_SEL
 {
@@ -8316,6 +8816,8 @@ SfxSlotInfo FN_START_OF_DOCUMENT_SEL
     SlotName[ hebrew ] = "Bis Dokumentanfang selektieren";
     SlotName[ hindi ] = "लेखपत्र के प्रारंभ तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko od začiatku dokumentu";
+    SlotName[ hungarian ] = "Kijelölés a dokumentum elejéig";
+    SlotName[ slovenian ] = "Izberi do začetka dokumenta";
 };
 SfxSlotInfo FN_START_OF_LINE
 {
@@ -8328,7 +8830,7 @@ SfxSlotInfo FN_START_OF_LINE
     SlotName[ french ] = "Aller au d�but de ligne";
     SlotName[ spanish ] = "Ir al comienzo de la l�nea";
     SlotName[ italian ] = "All'inizio riga";
-    SlotName[ danish ] = "Til r�kkens begyndelse";
+    SlotName[ danish ] = "Til linjens begyndelse";
     SlotName[ swedish ] = "Till b�rjan av rad";
     SlotName[ polish ] = "Do pocz�tku wiersza";
     SlotName[ portuguese_brazilian ] = "Para o In�cio da Linha";
@@ -8349,6 +8851,8 @@ SfxSlotInfo FN_START_OF_LINE
     SlotName[ hebrew ] = "‮אל תחילת השורה‬";
     SlotName[ hindi ] = "रेखा के प्रारंभ में";
     SlotName[ slovak ] = "Na začiatok riadku";
+    SlotName[ hungarian ] = "Sorkezdetig";
+    SlotName[ slovenian ] = "Na začetek vrstice";
 };
 SfxSlotInfo FN_START_OF_LINE_SEL
 {
@@ -8361,7 +8865,7 @@ SfxSlotInfo FN_START_OF_LINE_SEL
     SlotName[ french ] = "S�lectionner jusqu'au d�but de la ligne";
     SlotName[ spanish ] = "Seleccionar hasta el comienzo de la l�nea";
     SlotName[ italian ] = "Seleziona fino all'inizio della riga";
-    SlotName[ danish ] = "Marker til r�kkens begyndelse";
+    SlotName[ danish ] = "Marker til linjens begyndelse";
     SlotName[ swedish ] = "Markera till b�rjan av rad";
     SlotName[ polish ] = "Zaznacz do pocz�tku wiersza";
     SlotName[ portuguese_brazilian ] = "Selecionar at� o In�cio da Linha";
@@ -8382,6 +8886,8 @@ SfxSlotInfo FN_START_OF_LINE_SEL
     SlotName[ hebrew ] = "Bis Zeilenanfang selektieren";
     SlotName[ hindi ] = "रेखा के प्रारंभ तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko od začiatku riadku";
+    SlotName[ hungarian ] = "Kijelölés sor elejéig";
+    SlotName[ slovenian ] = "Izberi do začetka vrstice";
 };
 SfxSlotInfo FN_START_OF_NEXT_COLUMN
 {
@@ -8415,6 +8921,8 @@ SfxSlotInfo FN_START_OF_NEXT_COLUMN
     SlotName[ hebrew ] = "‮אל תחילת הטור הבא‬";
     SlotName[ hindi ] = "अगला स्तंभ के प्रारंभ में";
     SlotName[ slovak ] = "Na začiatok nasledujúceho stĺpca";
+    SlotName[ hungarian ] = "A következő hasáb kezdetére";
+    SlotName[ slovenian ] = "Na začetek naslednjega stolpca";
 };
 SfxSlotInfo FN_START_OF_NEXT_PAGE
 {
@@ -8448,6 +8956,8 @@ SfxSlotInfo FN_START_OF_NEXT_PAGE
     SlotName[ hebrew ] = "‮אל תחילת הדף הבא‬";
     SlotName[ hindi ] = "अगला पृष्ठ के प्रारंभ में";
     SlotName[ slovak ] = "Na začiatok nasledujúcej stránky";
+    SlotName[ hungarian ] = "A következő oldal kezdetéig";
+    SlotName[ slovenian ] = "Na začetek naslednje strani";
 };
 SfxSlotInfo FN_START_OF_NEXT_PAGE_SEL
 {
@@ -8481,6 +8991,8 @@ SfxSlotInfo FN_START_OF_NEXT_PAGE_SEL
     SlotName[ hebrew ] = "‮בחירה לתח ילת הדף הבא‬";
     SlotName[ hindi ] = "अगला पृष्ठ के प्रारंभ तक चुनो";
     SlotName[ slovak ] = "Vybrať do začiatku nasledujúcej stránky";
+    SlotName[ hungarian ] = "Kijelölés a következő oldal elejéig";
+    SlotName[ slovenian ] = "Izberi do začetka naslednje strani";
 };
 SfxSlotInfo FN_START_OF_PAGE
 {
@@ -8514,6 +9026,8 @@ SfxSlotInfo FN_START_OF_PAGE
     SlotName[ hebrew ] = "‮אל תחילת הדף‬";
     SlotName[ hindi ] = "पृष्ठ के प्रारंभ तक";
     SlotName[ slovak ] = "Na začiatok stránky";
+    SlotName[ hungarian ] = "A lap elejére";
+    SlotName[ slovenian ] = "Na začetek strani";
 };
 SfxSlotInfo FN_START_OF_PAGE_SEL
 {
@@ -8547,6 +9061,8 @@ SfxSlotInfo FN_START_OF_PAGE_SEL
     SlotName[ hebrew ] = "‮בחירת לתחילת הדף‬";
     SlotName[ hindi ] = "पृष्ठ के प्रारंभ तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko od začiatku stránky";
+    SlotName[ hungarian ] = "Kijelölés az oldal kezdetéig";
+    SlotName[ slovenian ] = "Izberi do začetka strani";
 };
 SfxSlotInfo FN_START_OF_PARA
 {
@@ -8580,6 +9096,8 @@ SfxSlotInfo FN_START_OF_PARA
     SlotName[ hebrew ] = "Zum Absatzanfang";
     SlotName[ hindi ] = "परिच्छेद के प्रारंभ तक";
     SlotName[ slovak ] = "Na začiatok odstavca";
+    SlotName[ hungarian ] = "A bekezdés elejére";
+    SlotName[ slovenian ] = "Na začetek odstavka";
 };
 SfxSlotInfo FN_START_OF_PARA_SEL
 {
@@ -8613,6 +9131,8 @@ SfxSlotInfo FN_START_OF_PARA_SEL
     SlotName[ hebrew ] = "Bis Absatzanfang selektieren";
     SlotName[ hindi ] = "परिच्छेद के प्रारंभ तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko od začiatku odstavca";
+    SlotName[ hungarian ] = "Kijelölés bekezdés elejéig";
+    SlotName[ slovenian ] = "Izberi do začetka odstavka";
 };
 SfxSlotInfo FN_START_OF_PREV_COLUMN
 {
@@ -8646,6 +9166,8 @@ SfxSlotInfo FN_START_OF_PREV_COLUMN
     SlotName[ hebrew ] = "‮אל תחילת הטור הקודם‬";
     SlotName[ hindi ] = "पिछला स्तंभ के प्रारंभ तक";
     SlotName[ slovak ] = "Na začiatok predchádzajúceho stĺpca";
+    SlotName[ hungarian ] = "Az előző hasáb kezdetére";
+    SlotName[ slovenian ] = "Na začetek prejšnjega stolpca";
 };
 SfxSlotInfo FN_START_OF_PREV_PAGE
 {
@@ -8679,6 +9201,8 @@ SfxSlotInfo FN_START_OF_PREV_PAGE
     SlotName[ hebrew ] = "‮אל תחילת הדף הקודם‬";
     SlotName[ hindi ] = "पिछला पृष्ठ के प्रारंभ तक";
     SlotName[ slovak ] = "Na začiatok predchádzajúcej stránky";
+    SlotName[ hungarian ] = "Az előző lap elejére";
+    SlotName[ slovenian ] = "Na začetek prejšnje strani";
 };
 SfxSlotInfo FN_START_OF_PREV_PAGE_SEL
 {
@@ -8712,6 +9236,8 @@ SfxSlotInfo FN_START_OF_PREV_PAGE_SEL
     SlotName[ hebrew ] = "‮בחירה לתחילת הדף הקודם‬";
     SlotName[ hindi ] = "पिछला पृष्ठ के प्रारंभ तक चुनो";
     SlotName[ slovak ] = "Vybrať všetko od začiatku predchádzajúcej stránky";
+    SlotName[ hungarian ] = "Kijelölés az előző oldal elejéig";
+    SlotName[ slovenian ] = "Izberi do začetka prejšnje strani";
 };
 SfxSlotInfo FN_START_TABLE
 {
@@ -8745,6 +9271,8 @@ SfxSlotInfo FN_START_TABLE
     SlotName[ hebrew ] = "Zum Tabellenanfang";
     SlotName[ hindi ] = "सारणी के प्रारंभ तक";
     SlotName[ slovak ] = "Na začiatok tabuľky";
+    SlotName[ hungarian ] = "A táblázat kezdetéig";
+    SlotName[ slovenian ] = "Na začetek tabele";
 };
 SfxSlotInfo FN_STAT_HYPERLINKS
 {
@@ -8778,6 +9306,8 @@ SfxSlotInfo FN_STAT_HYPERLINKS
     SlotName[ hebrew ] = "Hyperlinks aktiv";
     SlotName[ hindi ] = "क्रियाशील हाइपरलिंक";
     SlotName[ slovak ] = "Aktívne hypertextové odkazy";
+    SlotName[ hungarian ] = "Hiperhivatkozás aktív";
+    SlotName[ slovenian ] = "Hiperpovezave aktivne";
 };
 SfxSlotInfo FN_STAT_PAGE
 {
@@ -8811,6 +9341,8 @@ SfxSlotInfo FN_STAT_PAGE
     SlotName[ hebrew ] = "Seitennummer";
     SlotName[ hindi ] = "पृष्ठ संख्या";
     SlotName[ slovak ] = "Číslo stránky";
+    SlotName[ hungarian ] = "Oldalszám";
+    SlotName[ slovenian ] = "Številka strani";
 };
 SfxSlotInfo FN_STAT_SELMODE
 {
@@ -8823,7 +9355,7 @@ SfxSlotInfo FN_STAT_SELMODE
     SlotName[ french ] = "Mode S�lection";
     SlotName[ spanish ] = "Modo Selecci�n";
     SlotName[ italian ] = "Modo selezione";
-    SlotName[ danish ] = "Markeringsmodus";
+    SlotName[ danish ] = "Markeringstilstand";
     SlotName[ swedish ] = "Markeringsl�ge";
     SlotName[ polish ] = "Tryb wyboru";
     SlotName[ portuguese_brazilian ] = "Modo de Sele��o";
@@ -8844,6 +9376,8 @@ SfxSlotInfo FN_STAT_SELMODE
     SlotName[ hebrew ] = "Selektionsmodus";
     SlotName[ hindi ] = "चुनाव प्रकार";
     SlotName[ slovak ] = "Režim výberu";
+    SlotName[ hungarian ] = "Kijelölési mód";
+    SlotName[ slovenian ] = "Izbirni način";
 };
 SfxSlotInfo FN_STAT_TEMPLATE
 {
@@ -8877,6 +9411,8 @@ SfxSlotInfo FN_STAT_TEMPLATE
     SlotName[ hebrew ] = "‮סגנון‬";
     SlotName[ hindi ] = "पृष्ठ शैली";
     SlotName[ slovak ] = "Štýl stránky";
+    SlotName[ hungarian ] = "Oldalstílus";
+    SlotName[ slovenian ] = "Slog strani";
 };
 SfxSlotInfo FN_TABLE_ADJUST_CELLS
 {
@@ -8910,6 +9446,8 @@ SfxSlotInfo FN_TABLE_ADJUST_CELLS
     SlotName[ hebrew ] = "‮רוחב טור מיטבי‬";
     SlotName[ hindi ] = "योग्य स्तंभ विस्तार";
     SlotName[ slovak ] = "Optimálna šírka stĺpca";
+    SlotName[ hungarian ] = "Optimális oszlopszélesség";
+    SlotName[ slovenian ] = "Optimalna širina stolpca";
 };
 SfxSlotInfo FN_TABLE_AUTOSUM
 {
@@ -8940,6 +9478,8 @@ SfxSlotInfo FN_TABLE_AUTOSUM
     SlotName[ hebrew ] = "‮סכום‬";
     SlotName[ hindi ] = "जोड़";
     SlotName[ slovak ] = "Celkom";
+    SlotName[ hungarian ] = "Összeg";
+    SlotName[ slovenian ] = "Vsota";
 };
 SfxSlotInfo FN_TABLE_BALANCE_CELLS
 {
@@ -8973,6 +9513,8 @@ SfxSlotInfo FN_TABLE_BALANCE_CELLS
     SlotName[ hebrew ] = "‮פיזטר טורים באופן אחיד‬";
     SlotName[ hindi ] = "स्तंभों को समान अंतर दो";
     SlotName[ slovak ] = "Rovnomerne rozložiť stĺpce";
+    SlotName[ hungarian ] = "Azonos oszlopköz";
+    SlotName[ slovenian ] = "Enakomerno razmakni stolpce";
 };
 SfxSlotInfo FN_TABLE_BALANCE_ROWS
 {
@@ -9006,6 +9548,8 @@ SfxSlotInfo FN_TABLE_BALANCE_ROWS
     SlotName[ hebrew ] = "‮פיזור שורות באופן אחיד‬";
     SlotName[ hindi ] = "पंक्तियों को समान अंतर दो ";
     SlotName[ slovak ] = "Rovnomerne rozložiť riadky";
+    SlotName[ hungarian ] = "Azonos sortávolság";
+    SlotName[ slovenian ] = "Enakomerno razmakni vrstice";
 };
 SfxSlotInfo FN_TABLE_DELETE_COL
 {
@@ -9039,6 +9583,8 @@ SfxSlotInfo FN_TABLE_DELETE_COL
     SlotName[ hebrew ] = "‮מחיקת טור‬";
     SlotName[ hindi ] = "स्तंभ मिटाओ";
     SlotName[ slovak ] = "Odstrániť stĺpec";
+    SlotName[ hungarian ] = "Oszlop törlése";
+    SlotName[ slovenian ] = "Izbriši stolpec";
 };
 SfxSlotInfo FN_TABLE_DELETE_ROW
 {
@@ -9072,6 +9618,8 @@ SfxSlotInfo FN_TABLE_DELETE_ROW
     SlotName[ hebrew ] = "‮מחיקת שורה‬";
     SlotName[ hindi ] = "पंक्ति मिटाओ";
     SlotName[ slovak ] = "Odstrániť riadok";
+    SlotName[ hungarian ] = "Sor törlése";
+    SlotName[ slovenian ] = "Izbriši vrstico";
 };
 SfxSlotInfo FN_TABLE_INSERT_COL
 {
@@ -9105,6 +9653,8 @@ SfxSlotInfo FN_TABLE_INSERT_COL
     SlotName[ hebrew ] = "‮הכנסת טור‬";
     SlotName[ hindi ] = "स्तंभ जोड़ो";
     SlotName[ slovak ] = "Vložiť stĺpec";
+    SlotName[ hungarian ] = "Oszlop beszúrása";
+    SlotName[ slovenian ] = "Vstavi stolpec";
 };
 SfxSlotInfo FN_TABLE_INSERT_ROW
 {
@@ -9138,6 +9688,8 @@ SfxSlotInfo FN_TABLE_INSERT_ROW
     SlotName[ hebrew ] = "‮החנסת שורה‬";
     SlotName[ hindi ] = "पंक्ति जोड़ो";
     SlotName[ slovak ] = "Vložiť riadok";
+    SlotName[ hungarian ] = "Sor beszúrása";
+    SlotName[ slovenian ] = "Vstavi vrstico";
 };
 SfxSlotInfo FN_TABLE_MERGE_CELLS
 {
@@ -9171,6 +9723,8 @@ SfxSlotInfo FN_TABLE_MERGE_CELLS
     SlotName[ hebrew ] = "‮מיזוג תאים‬";
     SlotName[ hindi ] = "कोष्ठों को मिलाओ";
     SlotName[ slovak ] = "Zlúčiť bunky";
+    SlotName[ hungarian ] = "Cellák egyesítése";
+    SlotName[ slovenian ] = "Spoji celice";
 };
 SfxSlotInfo FN_TABLE_MERGE_TABLE
 {
@@ -9204,6 +9758,8 @@ SfxSlotInfo FN_TABLE_MERGE_TABLE
     SlotName[ hebrew ] = "‮מיזוג טבלה‬";
     SlotName[ hindi ] = "सारणी को मिलाओ";
     SlotName[ slovak ] = "Zlúčiť tabuľku";
+    SlotName[ hungarian ] = "Táblázat egyesítése";
+    SlotName[ slovenian ] = "Spoji tabelo";
 };
 SfxSlotInfo FN_TABLE_MODE_FIX
 {
@@ -9237,6 +9793,8 @@ SfxSlotInfo FN_TABLE_MODE_FIX
     SlotName[ hebrew ] = "‮טבלה: מבנה קבוע‬";
     SlotName[ hindi ] = "सारणी: स्थिर";
     SlotName[ slovak ] = "Tabuľka: stála";
+    SlotName[ hungarian ] = "Táblázat: Rögzített";
+    SlotName[ slovenian ] = "Tabela: fiksna";
 };
 SfxSlotInfo FN_TABLE_MODE_FIX_PROP
 {
@@ -9270,6 +9828,8 @@ SfxSlotInfo FN_TABLE_MODE_FIX_PROP
     SlotName[ hebrew ] = "‮טבלה: מבנה קבוע, יחסי‬";
     SlotName[ hindi ] = "सारणी: स्थिर, अनुरूप";
     SlotName[ slovak ] = "Tabuľka : stála a proporcionálna";
+    SlotName[ hungarian ] = "Táblázat: Rögzített, arányos";
+    SlotName[ slovenian ] = "Tabela: fiksna, sorazmerna";
 };
 SfxSlotInfo FN_TABLE_MODE_VARIABLE
 {
@@ -9303,6 +9863,8 @@ SfxSlotInfo FN_TABLE_MODE_VARIABLE
     SlotName[ hebrew ] = "‮טבלה: משתנה ‬";
     SlotName[ hindi ] = "सारणी: अस्थिर";
     SlotName[ slovak ] = "Tabuľka: premenná";
+    SlotName[ hungarian ] = "Táblázat: Változtatható";
+    SlotName[ slovenian ] = "Tabela: spremenljiva";
 };
 SfxSlotInfo FN_TABLE_OPTIMAL_HEIGHT
 {
@@ -9336,6 +9898,8 @@ SfxSlotInfo FN_TABLE_OPTIMAL_HEIGHT
     SlotName[ hebrew ] = "‮גובה שורה מיטבי‬";
     SlotName[ hindi ] = "पंक्ति की योग्य ऊँचाई";
     SlotName[ slovak ] = "Optimálna výška riadku";
+    SlotName[ hungarian ] = "Optimális sormagasság";
+    SlotName[ slovenian ] = "Optimalna višina vrstice";
 };
 SfxSlotInfo FN_TABLE_SELECT_ALL
 {
@@ -9348,7 +9912,7 @@ SfxSlotInfo FN_TABLE_SELECT_ALL
     SlotName[ french ] = "S�lectionner le tableau";
     SlotName[ spanish ] = "Seleccionar tabla";
     SlotName[ italian ] = "Seleziona tabella";
-    SlotName[ danish ] = "Marker tabel";
+    SlotName[ danish ] = "V�lg tabel";
     SlotName[ swedish ] = "Markera tabell";
     SlotName[ polish ] = "Zaznacz tabel�";
     SlotName[ portuguese_brazilian ] = "Selecionar Tabela";
@@ -9369,6 +9933,8 @@ SfxSlotInfo FN_TABLE_SELECT_ALL
     SlotName[ hebrew ] = "‮בחירת טבלה‬";
     SlotName[ hindi ] = "सारणी चुनो";
     SlotName[ slovak ] = "Vybrať tabuľku";
+    SlotName[ hungarian ] = "Táblázat kijelölése";
+    SlotName[ slovenian ] = "Izberi tabelo";
 };
 SfxSlotInfo FN_TABLE_SELECT_COL
 {
@@ -9402,6 +9968,8 @@ SfxSlotInfo FN_TABLE_SELECT_COL
     SlotName[ hebrew ] = "Spalte selektieren";
     SlotName[ hindi ] = "स्तंभ चुनो";
     SlotName[ slovak ] = "Vybrať stĺpec";
+    SlotName[ hungarian ] = "Oszlop kijelölése";
+    SlotName[ slovenian ] = "Izberi stolpec";
 };
 SfxSlotInfo FN_TABLE_SELECT_ROW
 {
@@ -9414,7 +9982,7 @@ SfxSlotInfo FN_TABLE_SELECT_ROW
     SlotName[ french ] = "S�lectionner la ligne";
     SlotName[ spanish ] = "Selecionar fila";
     SlotName[ italian ] = "Seleziona riga";
-    SlotName[ danish ] = "Marker r�kke";
+    SlotName[ danish ] = "Marker r�kker";
     SlotName[ swedish ] = "Markera rad";
     SlotName[ polish ] = "Zaznacz wiersze";
     SlotName[ portuguese_brazilian ] = "Selecionar Linhas";
@@ -9435,6 +10003,8 @@ SfxSlotInfo FN_TABLE_SELECT_ROW
     SlotName[ hebrew ] = "Zeile selektieren";
     SlotName[ hindi ] = "पंक्तियों को चुनो";
     SlotName[ slovak ] = "Vybrať riadky";
+    SlotName[ hungarian ] = "Sorok kijelölése";
+    SlotName[ slovenian ] = "Izberi vrstice";
 };
 SfxSlotInfo FN_TABLE_SET_READ_ONLY_CELLS
 {
@@ -9447,7 +10017,7 @@ SfxSlotInfo FN_TABLE_SET_READ_ONLY_CELLS
     SlotName[ french ] = "Protection";
     SlotName[ spanish ] = "Proteger celda";
     SlotName[ italian ] = "Proteggi cella";
-    SlotName[ danish ] = "Beskyt celle";
+    SlotName[ danish ] = "Beskyt celler";
     SlotName[ swedish ] = "Skydda cell";
     SlotName[ polish ] = "Chro� kom�rki";
     SlotName[ portuguese_brazilian ] = "Proteger C�lulas";
@@ -9468,6 +10038,8 @@ SfxSlotInfo FN_TABLE_SET_READ_ONLY_CELLS
     SlotName[ hebrew ] = "‮הגנה על תאים‬";
     SlotName[ hindi ] = "कोष्ठों को रक्षा करो";
     SlotName[ slovak ] = "Zamknúť bunky";
+    SlotName[ hungarian ] = "Cellák védelme";
+    SlotName[ slovenian ] = "Zaščiti celice";
 };
 SfxSlotInfo FN_TABLE_SET_ROW_HEIGHT
 {
@@ -9501,6 +10073,8 @@ SfxSlotInfo FN_TABLE_SET_ROW_HEIGHT
     SlotName[ hebrew ] = "‮גובה שורה‬";
     SlotName[ hindi ] = "पंक्ति ऊँचाई";
     SlotName[ slovak ] = "Výška riadku";
+    SlotName[ hungarian ] = "Sormagasság";
+    SlotName[ slovenian ] = "Višina vrstice";
 };
 SfxSlotInfo FN_TABLE_SPLIT_CELLS
 {
@@ -9513,7 +10087,7 @@ SfxSlotInfo FN_TABLE_SPLIT_CELLS
     SlotName[ french ] = "Scinder la celulle";
     SlotName[ spanish ] = "Dividir celdas";
     SlotName[ italian ] = "Dividi celle";
-    SlotName[ danish ] = "Opdel celle";
+    SlotName[ danish ] = "Opdel celler";
     SlotName[ swedish ] = "Dela cell";
     SlotName[ polish ] = "Podziel kom�rki";
     SlotName[ portuguese_brazilian ] = "Dividir C�lulas";
@@ -9534,6 +10108,8 @@ SfxSlotInfo FN_TABLE_SPLIT_CELLS
     SlotName[ hebrew ] = "‮פיצול תאים‬";
     SlotName[ hindi ] = "कोष्ठों को अलगाना";
     SlotName[ slovak ] = "Rozdeliť bunky";
+    SlotName[ hungarian ] = "Cellák felosztása";
+    SlotName[ slovenian ] = "Razdeli celice";
 };
 SfxSlotInfo FN_TABLE_SPLIT_TABLE
 {
@@ -9567,6 +10143,8 @@ SfxSlotInfo FN_TABLE_SPLIT_TABLE
     SlotName[ hebrew ] = "‮פיצול טבלה‬";
     SlotName[ hindi ] = "सारणी को अलगाना";
     SlotName[ slovak ] = "Rozdeliť tabuľku";
+    SlotName[ hungarian ] = "Táblázat felosztása";
+    SlotName[ slovenian ] = "Razdeli tabelo";
 };
 SfxSlotInfo FN_TABLE_UNSET_READ_ONLY
 {
@@ -9600,6 +10178,8 @@ SfxSlotInfo FN_TABLE_UNSET_READ_ONLY
     SlotName[ hebrew ] = "‮הסרת הגנה מגליון‬";
     SlotName[ hindi ] = "शीट् अरक्षित करो";
     SlotName[ slovak ] = "Odomknúť list";
+    SlotName[ hungarian ] = "Munkalap védelmének megszüntetése";
+    SlotName[ slovenian ] = "Odstrani zaščito lista";
 };
 SfxSlotInfo FN_TABLE_UNSET_READ_ONLY_CELLS
 {
@@ -9633,6 +10213,8 @@ SfxSlotInfo FN_TABLE_UNSET_READ_ONLY_CELLS
     SlotName[ hebrew ] = "‮הסרת הגנה על תאים‬";
     SlotName[ hindi ] = "कोष्ठों को अरक्षित करो";
     SlotName[ slovak ] = "Odomknúť bunky";
+    SlotName[ hungarian ] = "Cellavédelem megszüntetése";
+    SlotName[ slovenian ] = "Odstrani zaščito celic";
 };
 SfxSlotInfo FN_TABLE_VERT_BOTTOM
 {
@@ -9645,7 +10227,7 @@ SfxSlotInfo FN_TABLE_VERT_BOTTOM
     SlotName[ french ] = "En bas";
     SlotName[ spanish ] = "Abajo";
     SlotName[ italian ] = "In basso";
-    SlotName[ danish ] = "Nederst";
+    SlotName[ danish ] = "Bund";
     SlotName[ swedish ] = "Nere";
     SlotName[ polish ] = "U do�u";
     SlotName[ portuguese_brazilian ] = "Em baixo";
@@ -9666,6 +10248,8 @@ SfxSlotInfo FN_TABLE_VERT_BOTTOM
     SlotName[ hebrew ] = "Unten";
     SlotName[ hindi ] = "नीचे";
     SlotName[ slovak ] = "Dole";
+    SlotName[ hungarian ] = "Alulra";
+    SlotName[ slovenian ] = "Spodaj";
 };
 SfxSlotInfo FN_TABLE_VERT_CENTER
 {
@@ -9699,6 +10283,8 @@ SfxSlotInfo FN_TABLE_VERT_CENTER
     SlotName[ hebrew ] = "‮מרקז(אנכי)‬";
     SlotName[ hindi ] = "केन्द्रित ( लम्ब )";
     SlotName[ slovak ] = "Na stred (zvisle)";
+    SlotName[ hungarian ] = "Középre (függőlegesen)";
+    SlotName[ slovenian ] = "Sredina ( navpično )";
 };
 SfxSlotInfo FN_TABLE_VERT_NONE
 {
@@ -9711,7 +10297,7 @@ SfxSlotInfo FN_TABLE_VERT_NONE
     SlotName[ french ] = "En haut";
     SlotName[ spanish ] = "Arriba";
     SlotName[ italian ] = "Sopra";
-    SlotName[ danish ] = "�verst";
+    SlotName[ danish ] = "Top";
     SlotName[ swedish ] = "Uppe";
     SlotName[ polish ] = "W g�rze";
     SlotName[ portuguese_brazilian ] = "Em cima";
@@ -9732,6 +10318,8 @@ SfxSlotInfo FN_TABLE_VERT_NONE
     SlotName[ hebrew ] = "Oben";
     SlotName[ hindi ] = "ऊपर";
     SlotName[ slovak ] = "Navrchu";
+    SlotName[ hungarian ] = "Felülre";
+    SlotName[ slovenian ] = "Zgoraj";
 };
 SfxSlotInfo FN_THESAURUS_DLG
 {
@@ -9765,6 +10353,8 @@ SfxSlotInfo FN_THESAURUS_DLG
     SlotName[ hebrew ] = "‮מלים נרדפות‬";
     SlotName[ hindi ] = "शब्दकोश";
     SlotName[ slovak ] = "Slovník synoným";
+    SlotName[ hungarian ] = "Szókincstár";
+    SlotName[ slovenian ] = "Slovar sopomenk";
 };
 SfxSlotInfo FN_TO_FOOTER
 {
@@ -9798,6 +10388,8 @@ SfxSlotInfo FN_TO_FOOTER
     SlotName[ hebrew ] = "‮אל הכותרת התחתונה‬";
     SlotName[ hindi ] = "पृष्ठ के नीचे की टीका";
     SlotName[ slovak ] = "Na zápätie";
+    SlotName[ hungarian ] = "Élőlábhoz";
+    SlotName[ slovenian ] = "Na nogo";
 };
 SfxSlotInfo FN_TO_HEADER
 {
@@ -9831,6 +10423,8 @@ SfxSlotInfo FN_TO_HEADER
     SlotName[ hebrew ] = "‮אל הכותרת העליונה‬";
     SlotName[ hindi ] = "पृष्ठ के ऊपर की टीका";
     SlotName[ slovak ] = "Na záhlavie";
+    SlotName[ hungarian ] = "Fejléchez";
+    SlotName[ slovenian ] = "Na glavo";
 };
 SfxSlotInfo FN_TOOL_ANKER
 {
@@ -9843,7 +10437,7 @@ SfxSlotInfo FN_TOOL_ANKER
     SlotName[ french ] = "Changer d'ancrage";
     SlotName[ spanish ] = "Cambiar ancla";
     SlotName[ italian ] = "Commuta l'ancoraggio";
-    SlotName[ danish ] = "Skift ankerpunkt";
+    SlotName[ danish ] = "Skift forankring";
     SlotName[ swedish ] = "Byt f�rankring";
     SlotName[ polish ] = "Zmie� zakotwiczenie";
     SlotName[ portuguese_brazilian ] = "Alterar a �ncora";
@@ -9864,6 +10458,8 @@ SfxSlotInfo FN_TOOL_ANKER
     SlotName[ hebrew ] = "‮שינוי עוגן‬";
     SlotName[ hindi ] = "ऐन्कर बदलो";
     SlotName[ slovak ] = "Zmeniť ukotvenie";
+    SlotName[ hungarian ] = "Horgonypont változtatása";
+    SlotName[ slovenian ] = "Spremeni sidro";
 };
 SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
 {
@@ -9876,7 +10472,7 @@ SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
     SlotName[ french ] = "Ancrage au caract�re";
     SlotName[ spanish ] = "Anclar al car�cter";
     SlotName[ italian ] = "Ancora al carattere";
-    SlotName[ danish ] = "L�s ved tegn";
+    SlotName[ danish ] = "Forankring til tegn";
     SlotName[ swedish ] = "F�rankra vid tecknet";
     SlotName[ polish ] = "Zakotwicz przy znaku";
     SlotName[ portuguese_brazilian ] = "Ancorar no Caracter";
@@ -9897,6 +10493,8 @@ SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
     SlotName[ hebrew ] = "‮עוגן לתו‬";
     SlotName[ hindi ] = "अक्षर केलिए ऐन्कर";
     SlotName[ slovak ] = "Ukotviť k znaku";
+    SlotName[ hungarian ] = "Horgonypont karakterhez igazítása";
+    SlotName[ slovenian ] = "Zasidraj na znak";
 };
 SfxSlotInfo FN_TOOL_ANKER_CHAR
 {
@@ -9909,7 +10507,7 @@ SfxSlotInfo FN_TOOL_ANKER_CHAR
     SlotName[ french ] = "Ancrage comme caract�re";
     SlotName[ spanish ] = "Anclar como car�cter";
     SlotName[ italian ] = "Ancora come carattere";
-    SlotName[ danish ] = "L�s som tegn";
+    SlotName[ danish ] = "Forankring som tegn";
     SlotName[ swedish ] = "F�rankra som tecken";
     SlotName[ polish ] = "Zakotwicz jako znak";
     SlotName[ portuguese_brazilian ] = "Ancorar como Caracter";
@@ -9930,6 +10528,8 @@ SfxSlotInfo FN_TOOL_ANKER_CHAR
     SlotName[ hebrew ] = "‮עוגן כתו בטקסט‬";
     SlotName[ hindi ] = "अक्षर जैसे ऐन्कर";
     SlotName[ slovak ] = "Ukotviť ako znak";
+    SlotName[ hungarian ] = "Horgonypont karakterként";
+    SlotName[ slovenian ] = "Zasidraj kot znak";
 };
 SfxSlotInfo FN_TOOL_ANKER_FRAME
 {
@@ -9942,7 +10542,7 @@ SfxSlotInfo FN_TOOL_ANKER_FRAME
     SlotName[ french ] = "Ancrage au cadre";
     SlotName[ spanish ] = "Anclar al marco";
     SlotName[ italian ] = "Ancora alla cornice";
-    SlotName[ danish ] = "Forankring til rammen";
+    SlotName[ danish ] = "Forankring til ramme";
     SlotName[ swedish ] = "F�rankra vid ramen";
     SlotName[ polish ] = "Zakotwicz przy ramce";
     SlotName[ portuguese_brazilian ] = "Ancorar na Moldura";
@@ -9963,6 +10563,8 @@ SfxSlotInfo FN_TOOL_ANKER_FRAME
     SlotName[ hebrew ] = "‮עוגן למסגרת‬";
     SlotName[ hindi ] = "फ़्रेम केलिए ऐन्कर";
     SlotName[ slovak ] = "Ukotviť k rámcu";
+    SlotName[ hungarian ] = "Horgonypont kerethez igazítása";
+    SlotName[ slovenian ] = "Zasidraj na okvir";
 };
 SfxSlotInfo FN_TOOL_ANKER_PAGE
 {
@@ -9975,7 +10577,7 @@ SfxSlotInfo FN_TOOL_ANKER_PAGE
     SlotName[ french ] = "Ancrage � la page";
     SlotName[ spanish ] = "Anclar a la p�gina";
     SlotName[ italian ] = "Ancora alla pagina";
-    SlotName[ danish ] = "Forankring til siden";
+    SlotName[ danish ] = "Forankring til side";
     SlotName[ swedish ] = "F�rankra vid sidan";
     SlotName[ polish ] = "Zakotwicz przy stronie";
     SlotName[ portuguese_brazilian ] = "Ancorar na P�gina";
@@ -9996,6 +10598,8 @@ SfxSlotInfo FN_TOOL_ANKER_PAGE
     SlotName[ hebrew ] = "‮עוגן לדף‬";
     SlotName[ hindi ] = "पृष्ठ केलिए ऐन्कर";
     SlotName[ slovak ] = "Ukotviť k stránke";
+    SlotName[ hungarian ] = "Horgonypont oldalhoz igazítása";
+    SlotName[ slovenian ] = "Zasidraj na stran";
 };
 SfxSlotInfo FN_TOOL_ANKER_PARAGRAPH
 {
@@ -10008,7 +10612,7 @@ SfxSlotInfo FN_TOOL_ANKER_PARAGRAPH
     SlotName[ french ] = "Ancrage au paragraphe";
     SlotName[ spanish ] = "Anclar en el p�rrafo";
     SlotName[ italian ] = "Ancora al paragrafo";
-    SlotName[ danish ] = "Forankring til afsnittet";
+    SlotName[ danish ] = "Forankring til afsnit";
     SlotName[ swedish ] = "F�rankra vid stycket";
     SlotName[ polish ] = "Zakotwicz przy akapicie";
     SlotName[ portuguese_brazilian ] = "Ancorar no Par�grafo";
@@ -10029,6 +10633,8 @@ SfxSlotInfo FN_TOOL_ANKER_PARAGRAPH
     SlotName[ hebrew ] = "‮עוגן לפסקה‬";
     SlotName[ hindi ] = "परिच्छेद केलिए ऐन्कर";
     SlotName[ slovak ] = "Ukotviť k odstavcu";
+    SlotName[ hungarian ] = "Horgonypont bekezdéshez igazítása";
+    SlotName[ slovenian ] = "Zasidraj na odstavek";
 };
 SfxSlotInfo FN_TOOL_GROUP
 {
@@ -10062,6 +10668,8 @@ SfxSlotInfo FN_TOOL_GROUP
     SlotName[ hebrew ] = "Gruppierung";
     SlotName[ hindi ] = "समूह";
     SlotName[ slovak ] = "Zoskupiť";
+    SlotName[ hungarian ] = "Csoport";
+    SlotName[ slovenian ] = "Združi";
 };
 SfxSlotInfo FN_TOOL_HIERARCHIE
 {
@@ -10095,6 +10703,8 @@ SfxSlotInfo FN_TOOL_HIERARCHIE
     SlotName[ hebrew ] = "Lage wechseln";
     SlotName[ hindi ] = "स्थान बदलो";
     SlotName[ slovak ] = "Zmeniť umiestnenie";
+    SlotName[ hungarian ] = "Pozíció változtatása";
+    SlotName[ slovenian ] = "Spremeni položaj";
 };
 SfxSlotInfo FN_TOOL_UNGROUP
 {
@@ -10128,6 +10738,8 @@ SfxSlotInfo FN_TOOL_UNGROUP
     SlotName[ hebrew ] = "Gruppierung aufheben";
     SlotName[ hindi ] = "समूह को अलगाना";
     SlotName[ slovak ] = "Zrušiť zoskupenie";
+    SlotName[ hungarian ] = "Csoport szétbontása";
+    SlotName[ slovenian ] = "Razdruži";
 };
 SfxSlotInfo FN_UNDERLINE_DOUBLE
 {
@@ -10140,7 +10752,7 @@ SfxSlotInfo FN_UNDERLINE_DOUBLE
     SlotName[ french ] = "Double soulignage";
     SlotName[ spanish ] = "Subrayado doble";
     SlotName[ italian ] = "Sottolinea doppio";
-    SlotName[ danish ] = "Dobbelt understreget";
+    SlotName[ danish ] = "Dobbelt understreget ";
     SlotName[ swedish ] = "Dubbelt understruket";
     SlotName[ polish ] = "Podw�jne podkre�lenie";
     SlotName[ portuguese_brazilian ] = "Sublinhado Duplo";
@@ -10161,6 +10773,8 @@ SfxSlotInfo FN_UNDERLINE_DOUBLE
     SlotName[ hebrew ] = "Doppelt unterstrichen";
     SlotName[ hindi ] = "द्विगुणित रेखांकित ";
     SlotName[ slovak ] = "Dvojité podčiarknutie";
+    SlotName[ hungarian ] = "Kettős aláhúzás";
+    SlotName[ slovenian ] = "Dvojno podčrtano";
 };
 SfxSlotInfo FN_UPDATE_ALL
 {
@@ -10194,6 +10808,8 @@ SfxSlotInfo FN_UPDATE_ALL
     SlotName[ hebrew ] = "‮עידכון כולל‬";
     SlotName[ hindi ] = "सब अपडेट् करो";
     SlotName[ slovak ] = "Aktualizovať všetko";
+    SlotName[ hungarian ] = "Összes frissítése";
+    SlotName[ slovenian ] = "Posodobi vse";
 };
 SfxSlotInfo FN_UPDATE_ALL_LINKS
 {
@@ -10206,7 +10822,7 @@ SfxSlotInfo FN_UPDATE_ALL_LINKS
     SlotName[ french ] = "Actualiser les liens";
     SlotName[ spanish ] = "Actualizar v�nculos";
     SlotName[ italian ] = "Aggiorna collegamenti";
-    SlotName[ danish ] = "Opdater k�der";
+    SlotName[ danish ] = "Opdater alle k�der";
     SlotName[ swedish ] = "Uppdatera l�nkar";
     SlotName[ polish ] = "Aktualizuj ��cza";
     SlotName[ portuguese_brazilian ] = "Atualizar Todos os V�nculos";
@@ -10227,6 +10843,8 @@ SfxSlotInfo FN_UPDATE_ALL_LINKS
     SlotName[ hebrew ] = "‮עדכון כל הקישורים‬";
     SlotName[ hindi ] = "सब लिंक्स को अपडेट् करो";
     SlotName[ slovak ] = "Aktualizovať všetky odkazy";
+    SlotName[ hungarian ] = "Az összes hivatkozás frissítése";
+    SlotName[ slovenian ] = "Posodobi vse povezave";
 };
 SfxSlotInfo FN_UPDATE_CUR_TOX
 {
@@ -10260,6 +10878,8 @@ SfxSlotInfo FN_UPDATE_CUR_TOX
     SlotName[ hebrew ] = "‮עידכון מפתח נוכחי‬";
     SlotName[ hindi ] = "अनुक्रमणिका अपडेट् करो";
     SlotName[ slovak ] = "Aktualizovať register";
+    SlotName[ hungarian ] = "Tárgymutató frissítése";
+    SlotName[ slovenian ] = "Posodobi kazalo";
 };
 SfxSlotInfo FN_EDIT_CURRENT_TOX
 {
@@ -10291,6 +10911,8 @@ SfxSlotInfo FN_EDIT_CURRENT_TOX
     SlotName[ hebrew ] = "‮עריכת מפתח‬";
     SlotName[ hindi ] = "अनुक्रमणिका संपादन";
     SlotName[ slovak ] = "Upraviť register";
+    SlotName[ hungarian ] = "Tárgymutató szerkesztése";
+    SlotName[ slovenian ] = "Uredi kazalo";
 };
 SfxSlotInfo FN_UPDATE_FIELDS
 {
@@ -10324,6 +10946,8 @@ SfxSlotInfo FN_UPDATE_FIELDS
     SlotName[ hebrew ] = "‮עדכון שדות‬";
     SlotName[ hindi ] = "क्षेत्रों को अपडेट् करो";
     SlotName[ slovak ] = "Aktualizovať polia";
+    SlotName[ hungarian ] = "Mezők frissítése";
+    SlotName[ slovenian ] = "Posodobi polja";
 };
 SfxSlotInfo FN_UPDATE_INPUTFIELDS
 {
@@ -10357,6 +10981,8 @@ SfxSlotInfo FN_UPDATE_INPUTFIELDS
     SlotName[ hebrew ] = "Eingabefelder aktualisieren";
     SlotName[ hindi ] = "इनपुट् क्षेत्रों को अपडेट् करो";
     SlotName[ slovak ] = "Aktualizovať vstupné pole";
+    SlotName[ hungarian ] = "Beviteli mezők frissítése";
+    SlotName[ slovenian ] = "Posodobi vnosna polja";
 };
 SfxSlotInfo FN_UPDATE_TOX
 {
@@ -10390,6 +11016,8 @@ SfxSlotInfo FN_UPDATE_TOX
     SlotName[ hebrew ] = "‮עידכון מפתחות‬";
     SlotName[ hindi ] = "अनुक्रमणिका अपडेट् करो";
     SlotName[ slovak ] = "Aktualizovať registre";
+    SlotName[ hungarian ] = "Jegyzékek frissítése";
+    SlotName[ slovenian ] = "Posodobi kazala";
 };
 SfxSlotInfo FN_VIEW_BOUNDS
 {
@@ -10402,7 +11030,7 @@ SfxSlotInfo FN_VIEW_BOUNDS
     SlotName[ french ] = "D�limitations du texte";
     SlotName[ spanish ] = "L�mites del texto";
     SlotName[ italian ] = "Margini del testo";
-    SlotName[ danish ] = "Tekstmargener";
+    SlotName[ danish ] = "Tekstgr�nser";
     SlotName[ swedish ] = "Textbegr�nsningar";
     SlotName[ polish ] = "Granice tekstu";
     SlotName[ portuguese_brazilian ] = "Limites do Texto";
@@ -10419,10 +11047,12 @@ SfxSlotInfo FN_VIEW_BOUNDS
     SlotName[ catalan ] = "L�mits del text";
     SlotName[ finnish ] = "Tekstin rajat";
     SlotName[ thai ] = "ขีดจำกัดข้อความ";
-    SlotName[ czech ] = "Limity textu";
+    SlotName[ czech ] = "Hranice textu";
     SlotName[ hebrew ] = "‮גבולות הטקסט‬";
     SlotName[ hindi ] = "टेक्स्ट् सीमा";
     SlotName[ slovak ] = "Limity textu";
+    SlotName[ hungarian ] = "Szöveghatárok";
+    SlotName[ slovenian ] = "Meje besedila";
 };
 SfxSlotInfo FN_VIEW_FIELDNAME
 {
@@ -10456,6 +11086,8 @@ SfxSlotInfo FN_VIEW_FIELDNAME
     SlotName[ hebrew ] = "‮שמות שדות‬";
     SlotName[ hindi ] = "क्षेत्र नामें शुरू/बंद";
     SlotName[ slovak ] = "Názvy polí­";
+    SlotName[ hungarian ] = "Mezők tartalma vagy csak neve";
+    SlotName[ slovenian ] = "Imena polj vključena/izključena";
 };
 SfxSlotInfo FN_VIEW_FIELDS
 {
@@ -10489,6 +11121,8 @@ SfxSlotInfo FN_VIEW_FIELDS
     SlotName[ hebrew ] = "‮שדות‬";
     SlotName[ hindi ] = "क्षेत्रें";
     SlotName[ slovak ] = "Polia";
+    SlotName[ hungarian ] = "Mezők";
+    SlotName[ slovenian ] = "Polja";
 };
 SfxSlotInfo FN_VIEW_GRAPHIC
 {
@@ -10520,6 +11154,8 @@ SfxSlotInfo FN_VIEW_GRAPHIC
     SlotName[ hebrew ] = "‮גרפיקה מופעל/מופסק‬";
     SlotName[ hindi ] = "सुचित्र शुरू/बंद";
     SlotName[ slovak ] = "Obrázky zap/vyp";
+    SlotName[ hungarian ] = "Képek";
+    SlotName[ slovenian ] = "Grafika vključena/izključena";
 };
 SfxSlotInfo FN_VIEW_HIDDEN_PARA
 {
@@ -10553,6 +11189,8 @@ SfxSlotInfo FN_VIEW_HIDDEN_PARA
     SlotName[ hebrew ] = "‮פסקאות נסתרות‬";
     SlotName[ hindi ] = "छिपा हुआ परिच्छेद";
     SlotName[ slovak ] = "Skryté odstavce";
+    SlotName[ hungarian ] = "Rejtett bekezdések";
+    SlotName[ slovenian ] = "Skriti odstavki";
 };
 SfxSlotInfo FN_VIEW_MARKS
 {
@@ -10565,7 +11203,7 @@ SfxSlotInfo FN_VIEW_MARKS
     SlotName[ french ] = "Marques";
     SlotName[ spanish ] = "Fondo del campo";
     SlotName[ italian ] = "Selezioni";
-    SlotName[ danish ] = "Markeringer";
+    SlotName[ danish ] = "Feltskygger";
     SlotName[ swedish ] = "Markeringar";
     SlotName[ polish ] = "Cieniowanie p�l";
     SlotName[ portuguese_brazilian ] = "Sombreamento de campo";
@@ -10586,6 +11224,8 @@ SfxSlotInfo FN_VIEW_MARKS
     SlotName[ hebrew ] = "Marken";
     SlotName[ hindi ] = "क्षेत्र छायें";
     SlotName[ slovak ] = "Tieňovanie poľa";
+    SlotName[ hungarian ] = "Mezők árnyékolása";
+    SlotName[ slovenian ] = "Senčenja polja";
 };
 SfxSlotInfo FN_VIEW_META_CHARS
 {
@@ -10616,6 +11256,8 @@ SfxSlotInfo FN_VIEW_META_CHARS
     SlotName[ hebrew ] = "Steuerzeichen  ein/aus";
     SlotName[ hindi ] = "छपाई करने अयोग्य अक्षरें शुरू/बंद";
     SlotName[ slovak ] = "Riadiace znaky zap/vyp";
+    SlotName[ hungarian ] = "Nem nyomtatható karakterek";
+    SlotName[ slovenian ] = "Nenatisljivi znaki vključeni/izključeni";
 };
 SfxSlotInfo FN_VIEW_TABLEGRID
 {
@@ -10645,10 +11287,12 @@ SfxSlotInfo FN_VIEW_TABLEGRID
     SlotName[ catalan ] = "L�mits de la taula";
     SlotName[ finnish ] = "Taulukon rajat";
     SlotName[ thai ] = "ขีดจำกัดตาราง";
-    SlotName[ czech ] = "Limity tabulky";
+    SlotName[ czech ] = "Hranice polí";
     SlotName[ hebrew ] = "‮גבולות טבלה‬";
     SlotName[ hindi ] = "सारणी सीमा";
     SlotName[ slovak ] = "Limity tabuľky";
+    SlotName[ hungarian ] = "Táblázat határai";
+    SlotName[ slovenian ] = "Meje tabele";
 };
 SfxSlotInfo FN_VLINEAL
 {
@@ -10682,6 +11326,8 @@ SfxSlotInfo FN_VLINEAL
     SlotName[ hebrew ] = "‮סרגל אנכי‬l";
     SlotName[ hindi ] = "लंबरूप रूलर";
     SlotName[ slovak ] = "Zvislé pravítko";
+    SlotName[ hungarian ] = "Függőleges vonalzó";
+    SlotName[ slovenian ] = "Navpično ravnilo";
 };
 SfxSlotInfo FN_VSCROLLBAR
 {
@@ -10694,7 +11340,7 @@ SfxSlotInfo FN_VSCROLLBAR
     SlotName[ french ] = "Barre de d�filement verticale";
     SlotName[ spanish ] = "Barra de desplazamiento vertical";
     SlotName[ italian ] = "Barra di scorrimento verticale";
-    SlotName[ danish ] = "Lodret rullepanel";
+    SlotName[ danish ] = "Lodret rullebj�lke";
     SlotName[ swedish ] = "Vertikal rullningslist";
     SlotName[ polish ] = "Pionowy pasek przewijania";
     SlotName[ portuguese_brazilian ] = "Barra de Rolagem Vertical";
@@ -10715,6 +11361,8 @@ SfxSlotInfo FN_VSCROLLBAR
     SlotName[ hebrew ] = "‮פס גלילה אנכי‬";
     SlotName[ hindi ] = "लंबरूप स्क्रोल पट्टी";
     SlotName[ slovak ] = "Zvislá posuvná lišta";
+    SlotName[ hungarian ] = "Függőleges görgetősáv";
+    SlotName[ slovenian ] = "Navpični drsni trak";
 };
 SfxSlotInfo FN_WRAP_ANCHOR_ONLY
 {
@@ -10748,6 +11396,8 @@ SfxSlotInfo FN_WRAP_ANCHOR_ONLY
     SlotName[ hebrew ] = "‮עיטוף פסקה ראשונה‬";
     SlotName[ hindi ] = "पहला परिच्छेद को लपेटो";
     SlotName[ slovak ] = "Obtekať prvý odstavec";
+    SlotName[ hungarian ] = "Sortörés az első bekezdésben";
+    SlotName[ slovenian ] = "Oblij prvi odstavek";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND
 {
@@ -10760,7 +11410,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND
     SlotName[ french ] = "Trame de fond";
     SlotName[ spanish ] = "Fondo del car�cter";
     SlotName[ italian ] = "Sfondo caratteri";
-    SlotName[ danish ] = "Tegnbaggrund";
+    SlotName[ danish ] = "Fremh�velse";
     SlotName[ swedish ] = "Teckenbakgrund";
     SlotName[ polish ] = "Wyr�nienie";
     SlotName[ portuguese_brazilian ] = "Destaque";
@@ -10781,6 +11431,8 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND
     SlotName[ hebrew ] = "‮הדגשה‬";
     SlotName[ hindi ] = "विशेष प्रकार से दिखाओ";
     SlotName[ slovak ] = "Zvýraznenie";
+    SlotName[ hungarian ] = "Kiemelés";
+    SlotName[ slovenian ] = "Poudarjanje";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
 {
@@ -10793,7 +11445,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
     SlotName[ french ] = "Trame de fond - Verseuse";
     SlotName[ spanish ] = "Color de fondo del car�cter";
     SlotName[ italian ] = "Colore sfondo caratteri";
-    SlotName[ danish ] = "Tegnbaggrund-fyld";
+    SlotName[ danish ] = "Fremh�v-fyld";
     SlotName[ swedish ] = "F�rg�verstrykning teckenbakgrund";
     SlotName[ polish ] = "Wype�nienie wyr�niaj�ce";
     SlotName[ portuguese_brazilian ] = "Destacar Preenchimento";
@@ -10814,6 +11466,8 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
     SlotName[ hebrew ] = "‮הדגשת מילוי‬";
     SlotName[ hindi ] = "भरना विशेष प्रकार से दिखाओ";
     SlotName[ slovak ] = "Zvýrazniť výplň";
+    SlotName[ hungarian ] = "Kiemelés színe";
+    SlotName[ slovenian ] = "Polnilo za označevanje";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR_EXT
 {
@@ -10826,7 +11480,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_EXT
     SlotName[ french ] = "Couleur de caract�re - Verseuse";
     SlotName[ spanish ] = "Color de relleno del car�cter";
     SlotName[ italian ] = "Colore riempimento carattere";
-    SlotName[ danish ] = "Tegnefarve-fyld";
+    SlotName[ danish ] = "Skriftfarve-fyld";
     SlotName[ swedish ] = "F�rg�verstrykning teckenf�rg";
     SlotName[ polish ] = "Wype�nienie czcionki kolorem";
     SlotName[ portuguese_brazilian ] = "Cor de Preenchimento da Fonte";
@@ -10847,6 +11501,8 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_EXT
     SlotName[ hebrew ] = "‮צבע מילוי גופן‬";
     SlotName[ hindi ] = "अक्षर रंग भरो";
     SlotName[ slovak ] = "Farba výplne písma";
+    SlotName[ hungarian ] = "Betűkitöltőszín";
+    SlotName[ slovenian ] = "Polnilo barve pisave";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR2
 {
@@ -10859,7 +11515,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR2
     SlotName[ french ] = "Couleur de caract�res";
     SlotName[ spanish ] = "Color del car�cter";
     SlotName[ italian ] = "Colore carattere";
-    SlotName[ danish ] = "Tegnfarve";
+    SlotName[ danish ] = "Skriftfarve";
     SlotName[ swedish ] = "Teckenf�rg";
     SlotName[ polish ] = "Kolor czcionki";
     SlotName[ portuguese_brazilian ] = "Cor da Fonte";
@@ -10880,6 +11536,8 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR2
     SlotName[ hebrew ] = "‮צבע גופן‬";
     SlotName[ hindi ] = "अक्षर रंग";
     SlotName[ slovak ] = "Farba písma";
+    SlotName[ hungarian ] = "Betűszín";
+    SlotName[ slovenian ] = "Barva pisave";
 };
 SfxSlotInfo SID_TEMPLATE_LOAD
 {
@@ -10913,6 +11571,8 @@ SfxSlotInfo SID_TEMPLATE_LOAD
     SlotName[ hebrew ] = "‮טעינת סגנונות‬";
     SlotName[ hindi ] = "शैलियों को लोड़ करो";
     SlotName[ slovak ] = "Načítať štýly";
+    SlotName[ hungarian ] = "Stílusok betöltése";
+    SlotName[ slovenian ] = "Naloži sloge";
 };
 SfxSlotInfo FN_FORMAT_COLUMN
 {
@@ -10944,6 +11604,8 @@ SfxSlotInfo FN_FORMAT_COLUMN
     SlotName[ hebrew ] = "‮טורים‬";
     SlotName[ hindi ] = "स्तंभ";
     SlotName[ slovak ] = "Stĺpce";
+    SlotName[ hungarian ] = "Hasábok";
+    SlotName[ slovenian ] = "Stolpci";
 };
 SfxSlotInfo FN_INSERT_MULTI_TOX
 {
@@ -10976,6 +11638,8 @@ SfxSlotInfo FN_INSERT_MULTI_TOX
     SlotName[ hebrew ] = "‮הוספת מפתח‬";
     SlotName[ hindi ] = "अनुक्रमणिका जोड़ो";
     SlotName[ slovak ] = "Vložiť obsah";
+    SlotName[ hungarian ] = "Tárgymutató beszúrása";
+    SlotName[ slovenian ] = "Vstavi kazalo";
 };
 SfxSlotInfo FN_INSERT_AUTH_ENTRY_DLG
 {
@@ -11007,6 +11671,8 @@ SfxSlotInfo FN_INSERT_AUTH_ENTRY_DLG
     SlotName[ hebrew ] = "Literaturverzeichniseintrag einfügen";
     SlotName[ hindi ] = "ग्रन्थ-सूची प्रविष्टि जोड़ो";
     SlotName[ slovak ] = "Vložiť položku zoznamu použitej literatúry";
+    SlotName[ hungarian ] = "Irodalomjegyzék-bejegyzés beszúrása";
+    SlotName[ slovenian ] = "Vstavi bibliografski vnos";
 };
 
 SfxSlotInfo FN_EDIT_AUTH_ENTRY_DLG
@@ -11039,6 +11705,8 @@ SfxSlotInfo FN_EDIT_AUTH_ENTRY_DLG
     SlotName[ hebrew ] = "Literaturverzeichniseintrag bearbeiten";
     SlotName[ hindi ] = "ग्रन्थ-सूची प्रविष्टि संपादन";
     SlotName[ slovak ] = "Upraviť položku zoznamu použitej literatúry";
+    SlotName[ hungarian ] = "Irodalomjegyzék-bejegyzés szerkesztése";
+    SlotName[ slovenian ] = "Uredi bibliografski vnos";
 };
 
 SfxSlotInfo FN_REMOVE_CUR_TOX
@@ -11071,6 +11739,8 @@ SfxSlotInfo FN_REMOVE_CUR_TOX
     SlotName[ hebrew ] = "‮מחיקת מפתח‬";
     SlotName[ hindi ] = "अनुक्रमणिका मिटाओ";
     SlotName[ slovak ] = "Zmazať index";
+    SlotName[ hungarian ] = "Tárgymutató törlése";
+    SlotName[ slovenian ] = "Izbriši kazalo";
 };
 SfxSlotInfo FN_EDIT_HYPERLINK
 {
@@ -11101,6 +11771,8 @@ SfxSlotInfo FN_EDIT_HYPERLINK
     SlotName[ hebrew ] = "Hyperlink ‮עריכה‬";
     SlotName[ hindi ] = "हाइपरलिंक का संपादन";
     SlotName[ slovak ] = "Upraviť hypertextový odkaz";
+    SlotName[ hungarian ] = "Hiperhivatkozás szerkesztése";
+    SlotName[ slovenian ] = "Uredi hiperpovezavo";
 };
 SfxSlotInfo FN_SET_MODOPT_TBLNUMFMT
 {
@@ -11131,6 +11803,8 @@ SfxSlotInfo FN_SET_MODOPT_TBLNUMFMT
     SlotName[ hebrew ] = "‮זיהוי מספרים‬";
     SlotName[ hindi ] = "संख्या पहचान";
     SlotName[ slovak ] = "Rozpoznávanie čísel";
+    SlotName[ hungarian ] = "Számfelismerés";
+    SlotName[ slovenian ] = "Prepoznavanje števil";
 };
 SfxSlotInfo FN_UPDATE_CHARTS
 {
@@ -11161,6 +11835,8 @@ SfxSlotInfo FN_UPDATE_CHARTS
     SlotName[ hebrew ] = "‮עדכון גרפים‬";
     SlotName[ hindi ] = "चार्टों को अपडेट् करो";
     SlotName[ slovak ] = "Aktualizovať grafy";
+    SlotName[ hungarian ] = "Diagramok frissítése";
+    SlotName[ slovenian ] = "Posodobi grafikone";
 };
 SfxSlotInfo FN_NAME_GROUP
 {
@@ -11194,6 +11870,8 @@ SfxSlotInfo FN_NAME_GROUP
     SlotName[ hebrew ] = "Objekt benennen";
     SlotName[ hindi ] = "Name Object";
     SlotName[ slovak ] = "Názov objektu";
+    SlotName[ hungarian ] = "Objektum neve";
+    SlotName[ slovenian ] = "Poimenuj predmet";
 };
 SfxSlotInfo FN_CLOSE_PAGEPREVIEW
 {
@@ -11202,13 +11880,13 @@ SfxSlotInfo FN_CLOSE_PAGEPREVIEW
     SlotName[ english_us ] = "Close Preview";
     SlotName[ portuguese ] = "Close Preview";
     SlotName[ russian ] = "Close Preview";
-    SlotName[ greek ] = "Close Preview";
-    SlotName[ dutch ] = "Close Preview";
+    SlotName[ greek ] = "�������� ��������������";
+    SlotName[ dutch ] = "Afdrukvoorbeeld sluiten";
     SlotName[ french ] = "Fermer l'aper�u";
     SlotName[ spanish ] = "Cerrar la vista preliminar";
     SlotName[ finnish ] = "Close Preview";
     SlotName[ italian ] = "Chiudi anteprima";
-    SlotName[ danish ] = "Close Preview";
+    SlotName[ danish ] = "Luk eksempel";
     SlotName[ swedish ] = "St�ng f�rhandsgranskning";
     SlotName[ polish ] = "Close Preview";
     SlotName[ portuguese_brazilian ] = "Fechar visualiza��o";
@@ -11224,6 +11902,8 @@ SfxSlotInfo FN_CLOSE_PAGEPREVIEW
     SlotName[ hebrew ] = "‮סגירת תצוגה מקדימה‬";
     SlotName[ hindi ] = "Close Preview";
     SlotName[ slovak ] = "Zatvoriť náhľad";
+    SlotName[ hungarian ] = "Nyomtatási kép bezárása";
+    SlotName[ slovenian ] = "Zapri predogled";
 };
 
 SfxSlotInfo FN_TO_FOOTNOTE_AREA
@@ -11232,13 +11912,13 @@ SfxSlotInfo FN_TO_FOOTNOTE_AREA
     SlotName[ english_us ] = "Edit Footnote/Endnote";
     SlotName[ portuguese ] = "Edit Footnote/Endnote";
     SlotName[ russian ] = "Edit Footnote/Endnote";
-    SlotName[ greek ] = "Edit Footnote/Endnote";
-    SlotName[ dutch ] = "Edit Footnote/Endnote";
+    SlotName[ greek ] = "����������� ������������/��������� ������";
+    SlotName[ dutch ] = "Voetnoot/Eindnoot bewerken";
     SlotName[ french ] = "�diter les notes de bas de page / notes de fin";
     SlotName[ spanish ] = "Editar nota al pie / nota final";
     SlotName[ finnish ] = "Edit Footnote/Endnote";
     SlotName[ italian ] = "Modifica note a pi� pagina/di chiusura";
-    SlotName[ danish ] = "Edit Footnote/Endnote";
+    SlotName[ danish ] = "Rediger fodnote/slutnote";
     SlotName[ swedish ] = "Redigera fotnot/slutnot";
     SlotName[ polish ] = "Edit Footnote/Endnote";
     SlotName[ portuguese_brazilian ] = "Editar notas de rodap� / notas de fim";
@@ -11254,6 +11934,8 @@ SfxSlotInfo FN_TO_FOOTNOTE_AREA
     SlotName[ hebrew ] = "‮עריכת הערת שוליים/הערה סופית‬";
     SlotName[ hindi ] = "Edit Footnote/Endnote";
     SlotName[ slovak ] = "Upraviť poznámky/vysvetlivky";
+    SlotName[ hungarian ] = "Lábjegyzet/végjegyzet szerkesztése";
+    SlotName[ slovenian ] = "Uredi sprotno/končno opombo";
 };
 
 SfxSlotInfo FN_READONLY_SELECTION_MODE
@@ -11262,13 +11944,13 @@ SfxSlotInfo FN_READONLY_SELECTION_MODE
     SlotName[ english_us ] = "Select Text";
     SlotName[ portuguese ] = "Select Text";
     SlotName[ russian ] = "Select Text";
-    SlotName[ greek ] = "Select Text";
-    SlotName[ dutch ] = "Select Text";
+    SlotName[ greek ] = "������� ��������";
+    SlotName[ dutch ] = "Tekst selecteren";
     SlotName[ french ] = "S�lectionner le texte";
     SlotName[ spanish ] = "Seleccionar texto";
     SlotName[ finnish ] = "Select Text";
     SlotName[ italian ] = "Seleziona testo";
-    SlotName[ danish ] = "Select Text";
+    SlotName[ danish ] = "Marker tekst";
     SlotName[ swedish ] = "Markera text";
     SlotName[ polish ] = "Select Text";
     SlotName[ portuguese_brazilian ] = "Selecionar texto";
@@ -11284,63 +11966,6 @@ SfxSlotInfo FN_READONLY_SELECTION_MODE
     SlotName[ hebrew ] = "‮בחירת טקסט‬";
     SlotName[ hindi ] = "Select Text";
     SlotName[ slovak ] = "Vybrať text";
+    SlotName[ hungarian ] = "Szöveg kijelölése";
+    SlotName[ slovenian ] = "Izberi besedilo";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
