@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:04:27 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#undef SC_DLLIMPLEMENTATION
 
 #ifdef PCH
 #include "ui_pch.hxx"
