@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detdata.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: nn $ $Date: 2002-11-04 15:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,10 @@ SV_DECL_PTRARR_DEL(ScDetOpArr_Impl, ScDetOpDataPtr, SC_DETOP_GROW, SC_DETOP_GROW
 
 class ScDetOpList : public ScDetOpArr_Impl
 {
+    BOOL    bHasAddError;       // updated in Append
+
 public:
-        ScDetOpList() {}
+        ScDetOpList() : bHasAddError(FALSE) {}
         ScDetOpList(const ScDetOpList& rList);
         ~ScDetOpList() {}
 
@@ -131,10 +133,12 @@ public:
 
     BOOL    operator==( const ScDetOpList& r ) const;       // fuer Ref-Undo
 
-    void    Append( ScDetOpData* pData )    { Insert( pData, Count() ); }
+    void    Append( ScDetOpData* pData );
 
     void    Load( SvStream& rStream );
     void    Store( SvStream& rStream ) const;
+
+    BOOL    HasAddError() const     { return bHasAddError; }
 };
 
 
