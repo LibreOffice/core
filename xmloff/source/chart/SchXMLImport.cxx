@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-09 15:54:21 $
+ *  last change: $Author: bm $ $Date: 2000-12-22 11:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ static __FAR_DATA SvXMLTokenMapEntry aPlotAreaAttrTokenMap[] =
     { XML_NAMESPACE_SVG,    sXML_width,                 XML_TOK_PA_WIDTH        },
     { XML_NAMESPACE_SVG,    sXML_height,                XML_TOK_PA_HEIGHT       },
     { XML_NAMESPACE_CHART,  sXML_style_name,            XML_TOK_PA_STYLE_NAME   },
+    { XML_NAMESPACE_DR3D,   sXML_transform,             XML_TOK_PA_TRANSFORM    },
     XML_TOKEN_MAP_END
 };
 

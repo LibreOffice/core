@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-09 16:00:12 $
+ *  last change: $Author: bm $ $Date: 2000-12-22 11:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,9 @@
 #ifndef _XMLOFF_XMLMETAE_HXX
 #include "xmlmetae.hxx"
 #endif
-
+#ifndef _XEXPTRANSFORM_HXX
+#include "xexptran.hxx"
+#endif
 #ifndef _TOOLS_SOLMATH_HXX
 #include <tools/solmath.hxx>
 #endif
@@ -759,11 +761,19 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
         // 3d attributes
         if( xPropSet.is())
         {
+            uno::Any aAny;
             try
             {
-                uno::Any aAny( xPropSet->getPropertyValue(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryYAxis" ))));
+                aAny = xPropSet->getPropertyValue(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryYAxis" )));
                 aAny >>= bHasTwoYAxes;
+            }
+            catch( beans::UnknownPropertyException )
+            {
+                DBG_ERROR( "Property HasSecondaryYAxis not found in Diagram" );
+            }
+            try
+            {
                 aAny = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Dim3D" )));
                 aAny >>= bIs3DChart;
 
@@ -773,17 +783,17 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                     aAny = xPropSet->getPropertyValue(
                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "D3DTransformMatrix" )));
                     aAny >>= aTransMatrix;
+
+                    SdXMLImExTransform3D aTransform;
+                    aTransform.AddHomogenMatrix( aTransMatrix );
+                    if( aTransform.NeedsAction())
+                        mrExport.AddAttribute( XML_NAMESPACE_DR3D, sXML_transform,
+                                               aTransform.GetExportString( mrExport.GetMM100UnitConverter()));
                 }
             }
             catch( beans::UnknownPropertyException )
             {
-                DBG_WARNING( "Required property not found in Diagram" );
-            }
-
-            // write rotation of 3d chart
-            if( bIs3DChart )
-            {
-                //ToDo: use aTransMatrix to extract vectors as attributes
+                DBG_ERROR( "Property D3DTransformMatrix not found in Diagram" );
             }
         }
 

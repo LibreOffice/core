@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-15 17:53:30 $
+ *  last change: $Author: bm $ $Date: 2000-12-22 11:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef _XMLOFF_XMLSTYLE_HXX
 #include "xmlstyle.hxx"
+#endif
+#ifndef _XEXPTRANSFORM_HXX
+#include "xexptran.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
@@ -259,6 +262,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
 {
     awt::Size aSize;
     awt::Point aPosition;
+    uno::Any aTransMatrixAny;
 
     // initialize size and position
     uno::Reference< drawing::XShape > xDiaShape( mxDiagram, uno::UNO_QUERY );
@@ -298,6 +302,43 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
             case XML_TOK_PA_STYLE_NAME:
                 sAutoStyleName = aValue;
                 break;
+            case XML_TOK_PA_TRANSFORM:
+                {
+                    SdXMLImExTransform3D aTransform( aValue, GetImport().GetMM100UnitConverter());
+                    if( aTransform.NeedsAction())
+                    {
+                        drawing::HomogenMatrix xHomMat;
+                        if( aTransform.GetFullHomogenTransform( xHomMat ))
+                            aTransMatrixAny <<= xHomMat;
+                    }
+                    break;
+                }
+        }
+    }
+
+    // set rotation - before size!
+    uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
+    if( xProp.is() &&
+        aTransMatrixAny.hasValue())
+    {
+        // set 3d flag before, so that property is available
+        // if chart is 2d with transform matrix the flag will be
+        // reset in the FillPropertySet method
+        try
+        {
+            uno::Any aTrueAny;
+            aTrueAny <<= (sal_Bool)(sal_True);
+
+            xProp->setPropertyValue(
+                ::rtl::OUString::createFromAscii( "Dim3D" ),
+                aTrueAny );
+            xProp->setPropertyValue(
+                ::rtl::OUString::createFromAscii( "D3DTransformMatrix" ),
+                aTransMatrixAny );
+        }
+        catch( beans::UnknownPropertyException )
+        {
+            DBG_ERROR( "Transform-Matrix cannot be set" );
         }
     }
 
@@ -311,7 +352,6 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     // set properties
     if( sAutoStyleName.getLength())
     {
-        uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
         if( xProp.is())
         {
             const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
