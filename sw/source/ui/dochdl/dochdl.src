@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:25:36 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ String STR_NOGLOS1
     TEXT [ English ] = "AutoText for Short Name '" ;
     TEXT [ norwegian ] = "AutoText for Short Name '" ;
     TEXT [ italian ] = "Testo automatico per la sigla" ;
-    TEXT [ portuguese_brazilian ] = "Texto Automático para Abreviação" ;
+    TEXT [ portuguese_brazilian ] = "Texto Autom?tico para Abrevia??o" ;
     TEXT [ portuguese ] = "AutoTexto para abreviatura '" ;
     TEXT [ finnish ] = "Automaattinen teksti pikavalinnalle '" ;
     TEXT [ danish ] = "AutoTekst til genvej '" ;
@@ -106,7 +106,7 @@ String STR_NOGLOS2
     TEXT [ English ] = "' not found." ;
     TEXT [ norwegian ] = "' not found." ;
     TEXT [ italian ] = "' non trovato." ;
-    TEXT [ portuguese_brazilian ] = "' não encontrado." ;
+    TEXT [ portuguese_brazilian ] = "' n?o encontrado." ;
     TEXT [ portuguese ] = "' não localizado." ;
     TEXT [ finnish ] = "Kohdetta ' ei löydy." ;
     TEXT [ danish ] = "' blev ikke fundet." ;
@@ -137,7 +137,7 @@ String STR_NO_TABLE
     Text [ English ] = "Inserting a table is impossible now." ;
     Text [ norwegian ] = "Inserting a table is impossible now." ;
     Text [ italian ] = "Adesso è impossibile inserire una tabella." ;
-    Text [ portuguese_brazilian ] = "Inserir a tabela é agora impossível." ;
+    Text [ portuguese_brazilian ] = "Inserir a tabela ? agora imposs?vel." ;
     Text [ portuguese ] = "De momento não é possível inserir a tabela." ;
     Text [ finnish ] = "Tällä hetkellä taulukkoa ei voi lisätä" ;
     Text [ danish ] = "Det er for tiden ikke muligt at indsætte en tabel" ;
@@ -168,7 +168,7 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE [ English ] = "Could not insert AutoText." ;
     MESSAGE [ norwegian ] = "Could not insert AutoText." ;
     MESSAGE [ italian ] = "Impossibile creare voce di glossario." ;
-    MESSAGE [ portuguese_brazilian ] = "Não pude inserir Texto Automático." ;
+    MESSAGE [ portuguese_brazilian ] = "N?o pude inserir Texto Autom?tico." ;
     MESSAGE [ portuguese ] = "Impossível inserir o AutoTexto." ;
     MESSAGE [ finnish ] = "Automaattista tekstiä ei voitu luoda." ;
     MESSAGE [ danish ] = "Det var ikke muligt at oprette AutoTeksten." ;
@@ -199,7 +199,7 @@ InfoBox MSG_CLPBRD_FORMAT_ERROR
     MESSAGE [ English ] = "Requested clipboard format is not available." ;
     MESSAGE [ norwegian ] = "Requested clipboard format is not available." ;
     MESSAGE [ italian ] = "Il formato appunti richiesto non è disponibile." ;
-    MESSAGE [ portuguese_brazilian ] = "Formato solicitado de clipboard não está disponível." ;
+    MESSAGE [ portuguese_brazilian ] = "Formato solicitado de clipboard n?o est? dispon?vel." ;
     MESSAGE [ portuguese ] = "Formato da área de transferência solicitado não se encontra disponível." ;
     MESSAGE [ finnish ] = "Pyydetty leikepöydän muoto ei ole käytettävissä." ;
     MESSAGE [ danish ] = "Det anmodede udskriftsholderformat er ikke tilgængeligt." ;
@@ -231,7 +231,7 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     MESSAGE [ English ] = "The file format of the region is out-of-date.\nIt must be converted in order to save modifications.\nDo you want to convert it?" ;
     MESSAGE [ norwegian ] = "The file format of the region is out-of-date.\nIt must be converted in order to save modifications.\nDo you want to convert it?" ;
     MESSAGE [ italian ] = "Il formato dell'area è vecchio.\nÈ necessario convertirlo per poter\nsalvare le modifiche apportate\nVolete convertirlo?" ;
-    MESSAGE [ portuguese_brazilian ] = "O formato de arquivo da regiao está desatualizado.\nDeve ser convertido para que se possa gravar modificações.\nDeseja convertê-lo?" ;
+    MESSAGE [ portuguese_brazilian ] = "O formato de arquivo da regiao est? desatualizado.\nDeve ser convertido para que se possa gravar modifica??s.\nDeseja convert?-lo?" ;
     MESSAGE [ portuguese ] = "O formato do ficheiro está desactualizado.\nDeve ser convertido para que se possam\n guardar as respectivas alterações.\nDeseja convertê-lo?" ;
     MESSAGE [ finnish ] = "Osion muoto on vanhentunut.\nSe on muunnettava, jotta\nsitä voisi muuttaa.\nMuunnetaanko osio nyt?" ;
     MESSAGE [ danish ] = "Områdets filformat er forældet.\nDet skal konverteres, for at ændringerne kan gemmes.\nVil du konvertere det?" ;
@@ -250,7 +250,7 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     Message[ arabic ] = "ÊäÓíŞ ÇáäØÇŞ ŞÏíã.\níÌÈ ÊÍæíáå¡ ÍÊì íãßä \nÍİÙ ÇáÊÛííÑÇÊ.\nåá ÊÑíÏ ÊÍæíáå¿";
     Message[ dutch ] = "Het bereik heeft een verouderd formaat.\nHet moet worden geconverteerd om de wijzigingen\nte kunnen opslaan.\nWilt u de conversie nu uitvoeren?";
     Message[ chinese_simplified ] = "Õâ¸öÇøÓò¾ßÓĞµÄ¸ñÊ½ÊÇ¾ÉµÄ¡£\nÒª´æÅÌ¸ü¸Ä¾Í±ØĞë½øĞĞ¸ñÊ½×ª»»¡£\nÒª×ª»»¸ñÊ½Âğ£¿";
-    Message[ greek ] = "Ç ğåñéï÷Ş õğÜñ÷åé óå êÜğïéá ğñïãåíİóôåñç ìïñöŞ.\nĞñİğåé íá ìåôáôñáğåß ãéá íá åßíáé äõíáôŞ\nç áğïèŞêåõóç ôùí áëëáãşí.\nÈİëåôå íá ãßíåé ç ìåôáôñïğŞ;";
+    Message[ greek ] = "Ç ğåñéï÷Ş õğÜñ÷åé óå êÜğïéá ğñïãåíİóôåñç ìïñöŞ.\nĞñİğåé íá ìåôáôñáğåß ãéá íá åßíáé äõíáôŞ\nç áğïèŞêåõóç ôùí áëëáãşí.\nÈİëåôå íá ãßíåé ç ìåôáô";
     Message[ korean ] = "±¸¿ª ¼­½ÄÀº ¿À·¡µÈ °ÍÀÔ´Ï´Ù.\n ÀÌ°ÍÀ» º¯È¯ÇÏ¿©¾ß º¯°æ»çÇ×À»\nÀúÀåÇÒ ¼ö ÀÖ½À´Ï´Ù.\n Áö±İ º¯È¯ ÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Bölümün formatı eski.\nDeğişikliklerin kaydedilebilmesi n\niçin değiştirilmesi gerekiyor.\nFormat değiştirilsin mi?";
     Message[ language_user1 ] = " ";
@@ -289,7 +289,7 @@ String STR_PRIVATEGRAPHIC
     Text [ ENGLISH ] = "Graphic [%PRODUCTNAME Writer]" ;
     Text [ norwegian ] = "Graphic [%PRODUCTNAME Writer]" ;
     Text [ italian ] = "Immagine [%PRODUCTNAME Writer]" ;
-    Text [ portuguese_brazilian ] = "Gráfico [%PRODUCTNAME Writer]" ;
+    Text [ portuguese_brazilian ] = "Gr?fico [%PRODUCTNAME Writer]" ;
     Text [ portuguese ] = "Imagem [%PRODUCTNAME Writer]" ;
     Text [ finnish ] = "Grafiikka [%PRODUCTNAME Writer]" ;
     Text [ danish ] = "Grafik [%PRODUCTNAME Writer]" ;
@@ -341,7 +341,7 @@ String STR_DDEFORMAT
     Text [ ENGLISH ] = "DDE link" ;
     Text [ norwegian ] = "DDE link" ;
     Text [ italian ] = "Collegamento DDE" ;
-    Text [ portuguese_brazilian ] = "Ligação do DDE" ;
+    Text [ portuguese_brazilian ] = "Liga??o do DDE" ;
     Text [ portuguese ] = "Ligação DDE" ;
     Text [ finnish ] = "DDE-linkki" ;
     Text [ danish ] = "DDE-kæde" ;
@@ -396,7 +396,7 @@ String STR_TEXTFORMAT
     Text [ ENGLISH ] = "Unformatted Text" ;
     Text [ norwegian ] = "Uformatert Tekst" ;
     Text [ italian ] = "Testo non formattato" ;
-    Text [ portuguese_brazilian ] = "Texto Não Formatado" ;
+    Text [ portuguese_brazilian ] = "Texto N?o Formatado" ;
     Text [ portuguese ] = "Texto não formatado" ;
     Text [ finnish ] = "Muotoilematon teksti" ;
     Text [ danish ] = "Uformateret tekst" ;
