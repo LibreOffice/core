@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-23 09:26:18 $
+ *  last change: $Author: fs $ $Date: 2002-09-23 13:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include "SvxShapeTypes.hxx"
 #endif
 #include "svdstr.hrc"
+#include <algorithm>
 
 using namespace accessibility;
 using namespace ::rtl;
