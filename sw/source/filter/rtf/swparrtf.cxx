@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:19:09 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): cmc@openoffice.org, tono@openoffice.org
  *
  *
  ************************************************************************/
@@ -68,6 +68,7 @@
 #include <hintids.hxx>
 #endif
 
+#include <stack>
 
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
@@ -114,7 +115,6 @@
 #ifndef _SVX_HYZNITEM_HXX
 #include <svx/hyznitem.hxx>
 #endif
-
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
 #endif
@@ -229,6 +229,9 @@
 #ifndef _SW_HF_EAT_SPACINGITEM_HXX
 #include <hfspacingitem.hxx>
 #endif
+#ifndef _TOX_HXX
+#include <tox.hxx>
+#endif
 
 #ifndef _FLTSHELL_HXX
 #include <fltshell.hxx>
@@ -245,6 +248,10 @@
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
+#endif
+
+#ifndef SW_MS_MSFILTER_HXX
+#include "../inc/msfilter.hxx"
 #endif
 
 // einige Hilfs-Funktionen
@@ -305,7 +312,8 @@ SwRTFParser::SwRTFParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     pSttNdIdx( 0 ),
     pRegionEndIdx( 0 ),
     pRelNumRule( new SwRelNumRuleSpaces( *pD, bReadNewDoc )),
-    aTblFmts( 0, 10 )
+    aTblFmts( 0, 10 ),
+    mpBookmarkStart(0)
 {
     mbIsFootnote = mbReadNoTbl = bReadSwFly = bSwPageDesc = bStyleTabValid =
     bInPgDscTbl = bNewNumList = false;
@@ -650,6 +658,8 @@ void rtfSections::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
         SetCols(rFmt, rSection, rSection.GetPageWidth() -
             rSection.GetPageLeft() - rSection.GetPageRight());
     }
+
+    rFmt.SetAttr(rSection.maPageInfo.maBox);
 }
 
 bool HasHeader(const SwFrmFmt &rFmt)
@@ -1148,9 +1158,14 @@ void SwRTFParser::NextToken( int nToken )
 
     switch( nToken )
     {
-    case RTF_FOOTNOTE:      ReadHeaderFooter( nToken );
-                            SkipToken( -1 );        // Klammer wieder zurueck
-                            break;
+    case RTF_FOOTNOTE:
+        //We can only insert a footnote if we're not inside a footnote. e.g. #i7713#
+        if (!mbIsFootnote)
+        {
+            ReadHeaderFooter( nToken );
+            SkipToken( -1 );        // Klammer wieder zurueck
+        }
+        break;
     case RTF_SWG_PRTDATA:           ReadPrtData();              break;
     case RTF_FIELD:                 ReadField();                break;
     case RTF_SHPPICT:
@@ -1183,6 +1198,39 @@ void SwRTFParser::NextToken( int nToken )
             }
         }
         break;
+
+
+    case RTF_BKMKSTART:
+        if(RTF_TEXTTOKEN == GetNextToken())
+            mpBookmarkStart = new BookmarkPosition(*pPam);
+        else
+            SkipToken(-1);
+
+        SkipGroup();
+        break;
+
+    case RTF_BKMKEND:
+        if(RTF_TEXTTOKEN == GetNextToken())
+        {
+            const String& sBookmark = aToken;
+            KeyCode aEmptyKeyCode;
+            if (mpBookmarkStart)
+            {
+                BookmarkPosition aBookmarkEnd(*pPam);
+                SwPaM aBookmarkRegion(  mpBookmarkStart->maMkNode, mpBookmarkStart->mnMkCntnt,
+                                        aBookmarkEnd.maMkNode, aBookmarkEnd.mnMkCntnt);
+                if (*mpBookmarkStart == aBookmarkEnd)
+                    aBookmarkRegion.DeleteMark();
+                pDoc->MakeBookmark(aBookmarkRegion, aEmptyKeyCode, sBookmark, aEmptyStr);
+            }
+            delete mpBookmarkStart, mpBookmarkStart = 0;
+        }
+        else
+            SkipToken(-1);
+
+        SkipGroup();
+        break;
+
 
     case RTF_PNSECLVL:
         if( bNewNumList )
@@ -1633,7 +1681,7 @@ DocPageInformation::DocPageInformation()
 
 SectPageInformation::SectPageInformation(const DocPageInformation &rDoc)
     :
-    mpTitlePageHdFt(0), mpPageHdFt(0),
+    mpTitlePageHdFt(0), mpPageHdFt(0), maBox(rDoc.maBox),
     mnPgwsxn(rDoc.mnPaperw), mnPghsxn(rDoc.mnPaperh),
     mnMarglsxn(rDoc.mnMargl), mnMargrsxn(rDoc.mnMargr),
     mnMargtsxn(rDoc.mnMargt), mnMargbsxn(rDoc.mnMargb),
@@ -1646,7 +1694,7 @@ SectPageInformation::SectPageInformation(const DocPageInformation &rDoc)
 };
 
 SectPageInformation::SectPageInformation(const SectPageInformation &rSect)
-    : maColumns(rSect.maColumns), maNumType(rSect.maNumType),
+    : maColumns(rSect.maColumns), maBox(rSect.maBox), maNumType(rSect.maNumType),
     mpTitlePageHdFt(rSect.mpTitlePageHdFt), mpPageHdFt(rSect.mpPageHdFt),
     mnPgwsxn(rSect.mnPgwsxn), mnPghsxn(rSect.mnPghsxn),
     mnMarglsxn(rSect.mnMarglsxn), mnMargrsxn(rSect.mnMargrsxn),
@@ -1723,6 +1771,110 @@ void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
             pDoc->Insert( *pPam, aPgDsc );
         }
     }
+}
+
+void SwRTFParser::SetBorderLine(SvxBoxItem& rBox, sal_uInt16 nLine)
+{
+    int bWeiter = true;
+    int nDistance = 0;
+    int nPageDistance = 0;
+    int nCol = 0;
+    int nIdx = 0;
+    int nLineThickness = 1;
+
+    int nToken = GetNextToken();
+    do {
+        switch( nToken )
+        {
+        case RTF_BRDRS:
+            nIdx = 1;
+            break;
+
+        case RTF_BRDRDB:
+            nIdx = 3;
+            break;
+
+        case RTF_BRDRTRIPLE:
+            nIdx = 10;
+            break;
+
+        case RTF_BRDRTNTHSG:
+            nIdx = 11;
+            break;
+
+        case RTF_BRDRTHTNSG:
+            nIdx = 12;
+            break;
+
+        case RTF_BRDRTNTHTNSG:
+            nIdx = 13;
+            break;
+
+        case RTF_BRDRTNTHMG:
+            nIdx = 14;
+            break;
+
+        case RTF_BRDRTHTNMG:
+            nIdx = 15;
+            break;
+
+        case RTF_BRDRTNTHTNMG:
+            nIdx = 16;
+            break;
+
+        case RTF_BRDRTNTHLG:
+            nIdx = 17;
+            break;
+
+        case RTF_BRDRTHTNLG:
+            nIdx = 18;
+            break;
+
+        case RTF_BRDRTNTHTNLG:
+            nIdx = 19;
+            break;
+
+        case RTF_BRDRWAVY:
+            nIdx = 20;
+            break;
+
+        case RTF_BRDRWAVYDB:
+            nIdx = 21;
+            break;
+
+        case RTF_BRDREMBOSS:
+            nIdx = 24;
+            break;
+
+        case RTF_BRDRENGRAVE:
+            nIdx = 25;
+            break;
+
+        case RTF_BRSP:
+             nPageDistance = nTokenValue;
+            break;
+
+        case RTF_BRDRDOT:           // SO does not have dashed or dotted lines
+        case RTF_BRDRDASH:
+        case RTF_BRDRDASHSM:
+        case RTF_BRDRDASHD:
+        case RTF_BRDRDASHDD:
+        case RTF_BRDRDASHDOTSTR:
+            break;
+
+        case RTF_BRDRW:
+            nLineThickness = nTokenValue;
+            break;
+        default:
+            bWeiter = false;
+            SkipToken(-1);
+            break;
+        }
+        if (bWeiter)
+            nToken = GetNextToken();
+    } while (bWeiter && IsParserWorking());
+
+    GetLineIndex(rBox, nLineThickness, nPageDistance, nCol, nIdx, nLine, nLine, 0);
 }
 
 // lese alle Dokument-Controls ein
@@ -1860,6 +2012,22 @@ void SwRTFParser::ReadDocControls( int nToken )
                 bSetHyph = true;
             //FOO//
             break;
+        case RTF_PGBRDRT:
+            SetBorderLine(maPageDefaults.maBox, BOX_LINE_TOP);
+            break;
+
+        case RTF_PGBRDRB:
+            SetBorderLine(maPageDefaults.maBox, BOX_LINE_BOTTOM);
+            break;
+
+        case RTF_PGBRDRL:
+            SetBorderLine(maPageDefaults.maBox, BOX_LINE_LEFT);
+            break;
+
+        case RTF_PGBRDRR:
+            SetBorderLine(maPageDefaults.maBox, BOX_LINE_RIGHT);
+            break;
+
         case '{':
             {
                 short nSkip = 0;
@@ -2236,6 +2404,23 @@ void SwRTFParser::ReadSectControls( int nToken )
             case RTF_SBKCOL:
                 aNewSection.mnBkc = 1;
                 break;
+            case RTF_PGBRDRT:
+                SetBorderLine(aNewSection.maBox, BOX_LINE_TOP);
+                break;
+
+            case RTF_PGBRDRB:
+                SetBorderLine(aNewSection.maBox, BOX_LINE_BOTTOM);
+                break;
+
+            case RTF_PGBRDRL:
+                SetBorderLine(aNewSection.maBox, BOX_LINE_LEFT);
+                break;
+
+            case RTF_PGBRDRR:
+                SetBorderLine(aNewSection.maBox, BOX_LINE_RIGHT);
+                break;
+
+            case RTF_PGBRDROPT:
             case RTF_ENDNHERE:
             case RTF_BINFSXN:
             case RTF_BINSXN:
@@ -2811,15 +2996,15 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
     {
     case RTF_FOOTNOTE:
         {
-            BOOL bIsEndNote = RTF_FTNALT == GetNextToken();
-            if( !bIsEndNote )
-                SkipToken( -1 );
+            bool bIsEndNote = RTF_FTNALT == GetNextToken();
+            if (!bIsEndNote)
+                SkipToken(-1);
 
             SwTxtNode* pTxtNd = pPam->GetNode()->GetTxtNode();
-            SwFmtFtn aFtnNote( bIsEndNote );
+            SwFmtFtn aFtnNote(bIsEndNote);
             xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
 
-            if( nPos && !bFootnoteAutoNum )
+            if (nPos && !bFootnoteAutoNum)
             {
                 pPam->GetPoint()->nContent--;
                 nPos--;
@@ -3231,10 +3416,160 @@ void SwRTFParser::SetStyleAttr( SfxItemSet& rCollSet,
     SetSwgValues( rCollSet );
 }
 
+//Takashi Ono for CJK
+String SwRTFParser::XlateFmtColName(const String &rName) const
+{
+#define RES_NONE RES_POOLCOLL_DOC_END
+
+    static const RES_POOL_COLLFMT_TYPE aArr[]={
+        RES_POOLCOLL_STANDARD, RES_POOLCOLL_HEADLINE1, RES_POOLCOLL_HEADLINE2,
+        RES_POOLCOLL_HEADLINE3, RES_POOLCOLL_HEADLINE4, RES_POOLCOLL_HEADLINE5,
+        RES_POOLCOLL_HEADLINE6, RES_POOLCOLL_HEADLINE7, RES_POOLCOLL_HEADLINE8,
+        RES_POOLCOLL_HEADLINE9,
+
+        RES_POOLCOLL_TOX_IDX1, RES_POOLCOLL_TOX_IDX2, RES_POOLCOLL_TOX_IDX3,
+        RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
+        RES_POOLCOLL_TOX_CNTNT1,
+
+        RES_POOLCOLL_TOX_CNTNT2, RES_POOLCOLL_TOX_CNTNT3, RES_POOLCOLL_TOX_CNTNT4,
+        RES_POOLCOLL_TOX_CNTNT5, RES_POOLCOLL_TOX_CNTNT6, RES_POOLCOLL_TOX_CNTNT7,
+        RES_POOLCOLL_TOX_CNTNT8, RES_POOLCOLL_TOX_CNTNT9,
+        RES_NONE, RES_POOLCOLL_FOOTNOTE,
+
+        RES_NONE, RES_POOLCOLL_HEADER, RES_POOLCOLL_FOOTER, RES_POOLCOLL_TOX_IDXH,
+        RES_NONE, RES_NONE, RES_POOLCOLL_JAKETADRESS, RES_POOLCOLL_SENDADRESS,
+        RES_NONE, RES_NONE,
+
+        RES_NONE, RES_NONE, RES_NONE, RES_POOLCOLL_ENDNOTE, RES_NONE, RES_NONE, RES_NONE,
+        RES_POOLCOLL_LISTS_BEGIN, RES_NONE, RES_NONE,
+
+        RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
+        RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
+
+        RES_NONE,RES_NONE, RES_POOLCOLL_DOC_TITEL, RES_NONE, RES_POOLCOLL_SIGNATURE, RES_NONE,
+        RES_POOLCOLL_TEXT, RES_POOLCOLL_TEXT_MOVE, RES_NONE, RES_NONE,
+
+        RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_POOLCOLL_DOC_SUBTITEL };
+    static const sal_Char *stiName[] = {
+        "Normal",
+        "heading 1",
+        "heading 2",
+        "heading 3",
+        "heading 4",
+        "heading 5",
+        "heading 6",
+        "heading 7",
+        "heading 8",
+        "heading 9",
+        "index 1",
+        "index 2",
+        "index 3",
+        "index 4",
+        "index 5",
+        "index 6",
+        "index 7",
+        "index 8",
+        "index 9",
+        "toc 1",
+        "toc 2",
+        "toc 3",
+        "toc 4",
+        "toc 5",
+        "toc 6",
+        "toc 7",
+        "toc 8",
+        "toc 9",
+        "Normal Indent",
+        "footnote text",
+        "annotation text",
+        "header",
+        "footer",
+        "index heading",
+        "caption",
+        "table of figures",
+        "envelope address",
+        "envelope return",
+        "footnote reference",
+        "annotation reference",
+        "line number",
+        "page number",
+        "endnote reference",
+        "endnote text",
+        "table of authorities",
+        "macro",
+        "toa heading",
+        "List",
+        "List Bullet",
+        "List Number",
+        "List 2",
+        "List 3",
+        "List 4",
+        "List 5",
+        "List Bullet 2",
+        "List Bullet 3",
+        "List Bullet 4",
+        "List Bullet 5",
+        "List Number 2",
+        "List Number 3",
+        "List Number 4",
+        "List Number 5",
+        "Title",
+        "Closing",
+        "Signature",
+        "Default Paragraph Font",
+        "Body Text",
+        "Body Text Indent",
+        "List Continue",
+        "List Continue 2",
+        "List Continue 3",
+        "List Continue 4",
+        "List Continue 5",
+        "Message Header",
+        "Subtitle",
+    };
+
+
+    ASSERT( ( sizeof( aArr ) / sizeof( RES_POOL_COLLFMT_TYPE ) == 75 ),
+            "Style-UEbersetzungstabelle hat falsche Groesse" );
+    ASSERT( ( sizeof( stiName ) / sizeof( *stiName ) == 75 ),
+            "Style-UEbersetzungstabelle hat falsche Groesse" );
+
+    RES_POOL_COLLFMT_TYPE nId = RES_NONE;
+    size_t nSize = sizeof(stiName) / sizeof(*stiName);
+
+    for (size_t i = 0; i < nSize; ++i)
+    {
+        if ( rName == String( stiName[i], RTL_TEXTENCODING_MS_1252 ) )
+        {
+            nId = aArr[i];
+            break;
+        }
+    }
+
+    if (i >= nSize)
+        return rName;
+
+    USHORT nResId;
+    if( RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END )
+        nResId = RC_POOLCOLL_TEXT_BEGIN - RES_POOLCOLL_TEXT_BEGIN;
+    else if (RES_POOLCOLL_LISTS_BEGIN <= nId && nId < RES_POOLCOLL_LISTS_END)
+        nResId = RC_POOLCOLL_LISTS_BEGIN - RES_POOLCOLL_LISTS_BEGIN;
+    else if (RES_POOLCOLL_EXTRA_BEGIN <= nId && nId < RES_POOLCOLL_EXTRA_END)
+        nResId = RC_POOLCOLL_EXTRA_BEGIN - RES_POOLCOLL_EXTRA_BEGIN;
+    else if (RES_POOLCOLL_REGISTER_BEGIN <= nId && nId < RES_POOLCOLL_REGISTER_END)
+        nResId = RC_POOLCOLL_REGISTER_BEGIN - RES_POOLCOLL_REGISTER_BEGIN;
+    else if (RES_POOLCOLL_DOC_BEGIN <= nId && nId < RES_POOLCOLL_DOC_END)
+        nResId = RC_POOLCOLL_DOC_BEGIN - RES_POOLCOLL_DOC_BEGIN;
+    else if (RES_POOLCOLL_HTML_BEGIN <= nId && nId < RES_POOLCOLL_HTML_END)
+        nResId = RC_POOLCOLL_HTML_BEGIN - RES_POOLCOLL_HTML_BEGIN;
+    return String( ResId( nResId + nId, pSwResMgr ) );
+}
+
 SwTxtFmtColl* SwRTFParser::MakeStyle( USHORT nNo, const SvxRTFStyleType& rStyle )
 {
-    int bCollExist;
-    SwTxtFmtColl* pColl = MakeColl( rStyle.sName, USHORT(nNo),
+     int bCollExist;
+    SwTxtFmtColl* pColl = MakeColl( XlateFmtColName( rStyle.sName ),
+                                    USHORT(nNo),
                                     rStyle.nOutlineNo, bCollExist );
     aTxtCollTbl.Insert( nNo, pColl );
 
@@ -3445,57 +3780,79 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
             // alles ueberlesen bis dieses wieder abgeschaltet wird. Durch
             // plain in der Gruppe oder durch V0
             String sHiddenTxt;
-            int nOpenBrakets = 0;
+            String sXE;
+            std::stack<bool> minicontexts;
+            minicontexts.push(false);
             int nOpenHiddens = 1;
             do {
                 switch( nToken = GetNextToken() )
                 {
                 case '}':
-                    if( !--nOpenBrakets /*&& IsNewGroup()*/ )
+                    minicontexts.pop();
+                    if (minicontexts.empty())
+                    {
                         // die Klammer wird noch gebraucht!
                         SkipToken( -1 );
+                    }
                     break;
                 case '{':
-                    ++nOpenBrakets;
+                    minicontexts.push(minicontexts.top());
                     break;
-
                 case RTF_V:
                     if( nTokenValue )
                         ++nOpenHiddens;
-                    else if( !--nOpenHiddens && 1 == nOpenBrakets )
-                        // das wars
-                        nOpenBrakets = 0;
-                    break;
-
-                case RTF_U:
+                    else if (!--nOpenHiddens && minicontexts.size() == 2)
                     {
-                        if( nTokenValue )
-                            sHiddenTxt += (sal_Unicode)nTokenValue;
-                        else
-                            sHiddenTxt += aToken;
+                        // das wars
+                        minicontexts.pop();
                     }
                     break;
-
-                case RTF_TEXTTOKEN:
-                    sHiddenTxt += aToken;
-                    break;
-
-                case RTF_PLAIN:
-                    if( !nOpenHiddens && 1 == nOpenBrakets )
+                case RTF_U:
                     {
-                        nOpenBrakets = 0;
+                        String &rWhich = minicontexts.top() ? sXE : sHiddenTxt;
+                        if (nTokenValue)
+                            rWhich += (sal_Unicode)nTokenValue;
+                        else
+                            rWhich += aToken;
+                    }
+                    break;
+                case RTF_TEXTTOKEN:
+                    {
+                        String &rWhich = minicontexts.top() ? sXE : sHiddenTxt;
+                        rWhich += aToken;
+                    }
+                    break;
+                case RTF_PLAIN:
+                    if (!nOpenHiddens && minicontexts.size() == 2)
+                    {
+                        minicontexts.pop();
                         SkipToken( -1 );
                     }
                     break;
+                case RTF_SUBENTRYINDEX:
+                    if (minicontexts.top() == true)
+                        sXE += ':';
+                    break;
+                case RTF_XE:
+                    minicontexts.top() = true;
+                    break;
                 }
-            } while( nOpenBrakets && IsParserWorking() );
-            if( sHiddenTxt.Len() )
+            } while (!minicontexts.empty() && IsParserWorking());
+
+            if (sHiddenTxt.Len())
             {
                 SwHiddenTxtField aFld( (SwHiddenTxtFieldType*)
                             pDoc->GetSysFldType( RES_HIDDENTXTFLD ),
                             TRUE, aEmptyStr, sHiddenTxt, TRUE );
 
                 pDoc->Insert( *pPam, SwFmtFld( aFld ) );
+            }
+
+            if (sXE.Len())
+            {
+                sXE.Insert('\"', 0);
+                sXE.Append('\"');
+                sw::ms::ImportXE(*pDoc, *pPam, sXE);
             }
         }
         break;
@@ -3598,6 +3955,22 @@ void SwRTFParser::RestoreState()
 #endif
 
 /**/
+
+BookmarkPosition::BookmarkPosition(const SwPaM &rPaM)
+    : maMkNode(rPaM.GetMark()->nNode),
+    mnMkCntnt(rPaM.GetMark()->nContent.GetIndex())
+{
+}
+
+BookmarkPosition::BookmarkPosition(const BookmarkPosition &rEntry)
+    : maMkNode(rEntry.maMkNode), mnMkCntnt(rEntry.mnMkCntnt)
+{
+}
+
+bool BookmarkPosition::operator==(const BookmarkPosition rhs)
+{
+    return(maMkNode.GetIndex() == rhs.maMkNode.GetIndex() && mnMkCntnt == rhs.mnMkCntnt);
+}
 
 ULONG SwNodeIdx::GetIdx() const
 {
