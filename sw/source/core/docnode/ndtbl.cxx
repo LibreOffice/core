@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:57:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3358,7 +3358,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, BOOL bCallUpdate )
         {
             if( DoesUndo() )
             {
-                StartUndo( UNDO_START );
+                StartUndo( UNDO_TABLE_AUTOFMT );
                 pUndo = new SwUndoTblNumFmt( rBox );
                 pUndo->SetNumFmt( nFmtIdx, fNumber );
             }
@@ -3433,7 +3433,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, BOOL bCallUpdate )
         {
             if( DoesUndo() )
             {
-                StartUndo( UNDO_START );
+                StartUndo( UNDO_TABLE_AUTOFMT );
                 pUndo = new SwUndoTblNumFmt( rBox );
             }
 
