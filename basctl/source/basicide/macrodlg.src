@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 16:48:03 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ portuguese ] = "De~scrição" ;
         Text [ finnish ] = "Ku~vaus" ;
         Text [ danish ] = "Beskrivelse" ;
-        Text [ french ] = "~Description" ;
+        Text [ french ] = "Description" ;
         Text [ swedish ] = "Be~skrivning" ;
         Text [ dutch ] = "Be~schrijving" ;
         Text [ spanish ] = "De~scripción" ;
