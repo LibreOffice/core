@@ -1,4 +1,4 @@
-    <node oor:name="WMF - MS Windows Metafile" oor:op="replace">
+    <node oor:name="WMF - MS Windows Metafile" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>wmf_MS_Windows_Metafile</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
