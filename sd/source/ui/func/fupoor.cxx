@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: af $ $Date: 2002-10-28 09:15:25 $
+ *  last change: $Author: cl $ $Date: 2002-11-29 14:40:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,12 +451,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_ESCAPE:
         {
-            if ( !this->ISA(FuSelection) )
-            {
-                // In Selektion verzweigen
-                bReturn = TRUE;
-                pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
-            }
+            bReturn = cancel();
         }
         break;
 
@@ -1217,4 +1212,21 @@ void FuPoor::SwitchLayer (sal_Int32 nOffset)
             pLayerTabControl->SendActivatePageEvent ();
         }
     }
+}
+
+/** is called when the currenct function should be aborted. <p>
+    This is used when a function gets a KEY_ESCAPE but can also
+    be called directly.
+
+    @returns true if a active function was aborted
+*/
+bool FuPoor::cancel()
+{
+    if ( !this->ISA(FuSelection) )
+    {
+        pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+        return true;
+    }
+
+    return false;
 }
