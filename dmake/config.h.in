@@ -95,3 +95,6 @@
 
 /* Define if you have the <utime.h> header file.  */
 #undef HAVE_UTIME_H
+
+/* Define if you have the <wait.h> header file.  */
+#undef HAVE_WAIT_H
