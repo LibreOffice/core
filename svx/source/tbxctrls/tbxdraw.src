@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:39:07 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ polish ] = "Pionowy tekst";
                 Text[ portuguese_brazilian ] = "Vertical Text";
                 Text[ japanese ] = "廲彂偒梅侥";
-                Text[ korean ] = "Vertical Text";
+                Text[ korean ] = "荐流 咆胶飘";
                 Text[ chinese_simplified ] = "直式文字";
                 Text[ chinese_traditional ] = "Αゅ";
                 Text[ turkish ] = "Vertical Text";
@@ -516,7 +516,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ polish ] = "Pionowa legenda";
                 Text[ portuguese_brazilian ] = "Vertical Caption";
                 Text[ japanese ] = "廲彂偒梡杴椺";
-                Text[ korean ] = "Vertical Caption";
+                Text[ korean ] = "荐流 裹肥";
                 Text[ chinese_simplified ] = "直式图例";
                 Text[ chinese_traditional ] = "Α瓜ㄒ";
                 Text[ turkish ] = "Vertical Caption";
