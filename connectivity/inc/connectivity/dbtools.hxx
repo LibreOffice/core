@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 14:46:37 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 14:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ namespace dbtools
     /** create a new ::com::sun::star::sdbc::SQLContext, fill it with the given descriptions and the given source,
         and <i>append</i> _rException (i.e. put it into the NextException member of the SQLContext).
     */
-    ::com::sun::star::sdb::SQLContext prependContextInfo(::com::sun::star::sdbc::SQLException& _rException, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext, const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails = ::rtl::OUString());
+    ::com::sun::star::sdb::SQLContext prependContextInfo(const ::com::sun::star::sdbc::SQLException& _rException, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext, const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails = ::rtl::OUString());
 
     /** quote the given name with the given quote string.
     */

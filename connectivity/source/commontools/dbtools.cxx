@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:02:18 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 14:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,7 +613,7 @@ Reference< XNameAccess> getTableFields(const Reference< XConnection>& _rxConn,co
 }
 
 //------------------------------------------------------------------------------
-SQLContext prependContextInfo(SQLException& _rException, const Reference< XInterface >& _rxContext, const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails)
+SQLContext prependContextInfo(const SQLException& _rException, const Reference< XInterface >& _rxContext, const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails)
 {
     // determine the type of the exception
     SQLExceptionInfo aInfo(_rException);
@@ -1695,6 +1695,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.39  2001/08/24 06:02:18  oj
+ *  #90015# code corrcetions for some speedup's
+ *
  *  Revision 1.38  2001/08/06 15:56:13  fs
  *  #90664# TransferFormComponentProperties: properly check for formatted fields
  *
