@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-18 17:33:38 $
+ *  last change: $Author: thb $ $Date: 2001-10-30 13:23:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -993,6 +993,10 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         case XATTR_FILLBITMAP:
         {
             XBitmapList* pBitmapList = pModel->GetBitmapList();
+
+            if( !pBitmapList )
+                return sal_False;
+
             long nPos = ((XPropertyList*)pBitmapList)->Get(aStrName);
             if( nPos == -1 )
                 return sal_False;
@@ -1008,6 +1012,10 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         case XATTR_FILLGRADIENT:
         {
             XGradientList* pGradientList = pModel->GetGradientList();
+
+            if( !pGradientList )
+                return sal_False;
+
             long nPos = ((XPropertyList*)pGradientList)->Get(aStrName);
             if( nPos == -1 )
                 return sal_False;
@@ -1023,6 +1031,10 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         case XATTR_FILLHATCH:
         {
             XHatchList* pHatchList = pModel->GetHatchList();
+
+            if( !pHatchList )
+                return sal_False;
+
             long nPos = ((XPropertyList*)pHatchList)->Get(aStrName);
             if( nPos == -1 )
                 return sal_False;
@@ -1039,6 +1051,10 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         case XATTR_LINESTART:
         {
             XLineEndList* pLineEndList = pModel->GetLineEndList();
+
+            if( !pLineEndList )
+                return sal_False;
+
             long nPos = ((XPropertyList*)pLineEndList)->Get(aStrName);
             if( nPos == -1 )
                 return sal_False;
@@ -1066,6 +1082,10 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         case XATTR_LINEDASH:
         {
             XDashList* pDashList = pModel->GetDashList();
+
+            if( !pDashList )
+                return sal_False;
+
             long nPos = ((XPropertyList*)pDashList)->Get(aStrName);
             if( nPos == -1 )
                 return sal_False;
