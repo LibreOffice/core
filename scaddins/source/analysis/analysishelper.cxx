@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: gt $ $Date: 2001-08-24 07:16:52 $
+ *  last change: $Author: gt $ $Date: 2001-08-31 08:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1760,8 +1760,8 @@ double GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
     double      fAi = GetYearFrac( nNullDate, nLastCoup, nSettle, nBase ) * fFreq;
 
     double      p = fRedemp + fDCi * 100.0 * fRate / fFreq;
-    p /= 100.0 + fDSCi * 100.0 * fYield / fFreq - ( fAi * 100.0 * fRate / fFreq );
-    p *= 100.0;
+    p /= fDSCi * fYield / fFreq + 1.0;
+    p -= fAi * 100.0 * fRate / fFreq;
 
     return p;
 }
