@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:53:13 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 23:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -814,7 +814,7 @@ String STR_PRESOBJ_GRAPHIC
     Text[ korean ] = "ÎçîÎ∏î ÌÅ¥Î¶≠ÏúºÎ°ú Í∑∏ÎûòÌîΩ Ï∂îÍ∞Ä";
     Text[ turkish ] = "Grafik eklemek iÁin Áift t˝klay˝n";
     Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Lis?? kuva kaksoisnapsauttamalla";
+    Text[ finnish ] = "Lis‰‰ kuva kaksoisnapsauttamalla";
     Text[ catalan ] = "Pulse dos veces para aÒadir una imagen";
 };
 String STR_PRESOBJ_OBJECT
@@ -1251,7 +1251,7 @@ String STR_LAYOUT_DEFAULT_NAME
     Text [ italian ] = "Standard" ;
     Text [ portuguese_brazilian ] = "Padr?o" ;
     Text [ portuguese ] = "Padr„o" ;
-    Text [ finnish ] = "Koti" ;
+    Text [ finnish ] = "Oletusarvo" ;
     Text [ danish ] = "Standard" ;
     Text [ french ] = "Standard" ;
     Text [ swedish ] = "Standard" ;
@@ -1308,7 +1308,7 @@ String STR_STANDARD_STYLESHEET_NAME
     Text [ italian ] = "Standard" ;
     Text [ portuguese_brazilian ] = "padr?o" ;
     Text [ portuguese ] = "Padr„o" ;
-    Text [ finnish ] = "Vakio" ;
+    Text [ finnish ] = "Oletusarvo" ;
     Text [ danish ] = "Standard" ;
     Text [ french ] = "Standard" ;
     Text [ swedish ] = "Standard" ;
@@ -2272,7 +2272,7 @@ Resource RID_SD_ERRHDL
         Text[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         Text[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         Text[ catalan ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        Text[ finnish ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
+        Text[ finnish ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , WARN_FORMAT_FILE_ROWCOL )
     {
@@ -2297,9 +2297,10 @@ Resource RID_SD_ERRHDL
         Text[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         Text[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         Text[ catalan ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        Text[ finnish ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
+        Text[ finnish ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe";
     };
 };
+
 
 
 
