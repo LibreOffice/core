@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_writer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:07 $
+ *  last change: $Author: jbu $ $Date: 2000-12-04 11:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,26 @@
  *
  *
  ************************************************************************/
+#include <list>
+
 #include <osl/conditn.h>
+#include <osl/mutex.hxx>
+
+#include <rtl/ustring.hxx>
+
 #include <vos/thread.hxx>
+
+#include <com/sun/star/uno/Type.hxx>
 
 struct remote_Connection;
 
 namespace bridges_urp
 {
+    struct RemoteReleaseCall
+    {
+        ::rtl::OUString sOid;
+        ::com::sun::star::uno::Type typeInterface;
+    };
 
     struct urp_BridgeImpl;
     class OWriterThread :
@@ -72,7 +85,8 @@ namespace bridges_urp
     {
     public:
         OWriterThread( remote_Connection *pConnection,
-                       urp_BridgeImpl *m_pBridgeImpl);
+                       urp_BridgeImpl *m_pBridgeImpl,
+                       uno_Environment *pEnvRemote);
         ~OWriterThread(  );
 
         virtual void SAL_CALL run();
@@ -82,6 +96,10 @@ namespace bridges_urp
 
         void abort();
 
+        void SAL_CALL insertReleaseRemoteCall (
+            rtl_uString *pOid,typelib_TypeDescriptionReference *pTypeRef);
+        void SAL_CALL executeReleaseRemoteCalls();
+
     private:
         void write();
         oslCondition m_oslCondition;
@@ -89,6 +107,10 @@ namespace bridges_urp
         sal_Bool m_bWaitForTimeout;
         remote_Connection *m_pConnection;
         urp_BridgeImpl *m_pBridgeImpl;
+        uno_Environment *m_pEnvRemote; // this is held weak only
+
+        ::osl::Mutex m_releaseCallMutex;
+        ::std::list< struct RemoteReleaseCall > m_lstReleaseCalls;
     };
 }
 

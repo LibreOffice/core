@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_reader.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
+ *  last change: $Author: jbu $ $Date: 2000-12-04 11:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <uno/environment.h>
 
 #include "urp_reader.hxx"
+#include "urp_writer.hxx"
 #include "urp_dispatch.hxx"
 #include "urp_job.hxx"
 #include "urp_bridgeimpl.hxx"
@@ -86,6 +87,23 @@ static MyCounter thisCounter( "DEBUG : ReaderThread" );
 
 namespace bridges_urp
 {
+
+    /**
+     * This callback is used to ensure, that the release call is sent for the correct type.
+     *
+     ***/
+    void SAL_CALL urp_releaseRemoteCallback (
+        remote_Interface *pRemoteI,rtl_uString *pOid,
+        typelib_TypeDescriptionReference *pTypeRef,
+        uno_Environment *pEnvRemote )
+    {
+        remote_Context *pContext = (remote_Context *) pEnvRemote->pContext;
+        urp_BridgeImpl *pImpl = (urp_BridgeImpl*) ( pContext->m_pBridgeImpl );
+
+        pImpl->m_pWriter->insertReleaseRemoteCall( pOid , pTypeRef );
+    }
+
+
     struct MessageFlags
     {
         sal_uInt16 nMethodId;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
+ *  last change: $Author: jbu $ $Date: 2000-12-04 11:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,8 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pE
     }
 
     // start reader and writer threads
-    pImpl->m_pWriter = new ::bridges_urp::OWriterThread( pContext->m_pConnection , pImpl );
+    pImpl->m_pWriter = new ::bridges_urp::OWriterThread( pContext->m_pConnection , pImpl,
+                                                         pEnvRemote);
     pImpl->m_pWriter->create();
 
     pImpl->m_pReader = new ::bridges_urp::OReaderThread( pContext->m_pConnection ,

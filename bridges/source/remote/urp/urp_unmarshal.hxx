@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_unmarshal.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:07 $
+ *  last change: $Author: jbu $ $Date: 2000-12-04 11:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include <rtl/byteseq.hxx>
 
 #include <bridges/remote/context.h>
+#include <bridges/remote/helper.hxx>
 
 #include <com/sun/star/uno/Type.hxx>
 
@@ -76,6 +77,10 @@ namespace bridges_urp
 extern char g_bSystemIsLittleEndian;
 class ThreadId;
 struct urp_BridgeImpl;
+void SAL_CALL urp_releaseRemoteCallback(
+    remote_Interface *pRemoteI,rtl_uString *pOid,
+    typelib_TypeDescriptionReference *pTypeRef,
+    uno_Environment *pEnvRemote );
 
 class Unmarshal
 {
@@ -354,7 +359,8 @@ inline sal_Bool Unmarshal::unpack( void *pDest , typelib_TypeDescription *pType 
             m_callback( (remote_Interface**) pDest ,
                         pString,
                         pType->pWeakRef ,
-                        m_pEnvRemote );
+                        m_pEnvRemote,
+                        urp_releaseRemoteCallback );
         }
         if( pString )
         {

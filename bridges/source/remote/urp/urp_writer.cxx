@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_writer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
+ *  last change: $Author: jbu $ $Date: 2000-12-04 11:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #include <osl/mutex.hxx>
 #include <osl/conditn.h>
 
+#include <typelib/typedescription.h>
+
 #include <bridges/remote/connection.h>
 #include <bridges/remote/remote.hxx>
 
@@ -76,6 +78,7 @@
 #include "urp_writer.hxx"
 #include "urp_bridgeimpl.hxx"
 #include "urp_marshal.hxx"
+#include "urp_dispatch.hxx"
 
 #ifdef DEBUG
 static MyCounter thisCounter( "DEBUG : WriterThread" );
@@ -85,10 +88,12 @@ using namespace ::osl;
 
 namespace bridges_urp {
 
-OWriterThread::OWriterThread( remote_Connection *pConnection, urp_BridgeImpl *pBridgeImpl) :
+OWriterThread::OWriterThread( remote_Connection *pConnection, urp_BridgeImpl *pBridgeImpl,
+                              uno_Environment *pEnvRemote) :
     m_pConnection( pConnection ),
     m_bAbort( sal_False ),
-    m_pBridgeImpl( pBridgeImpl )
+    m_pBridgeImpl( pBridgeImpl ),
+    m_pEnvRemote( pEnvRemote )
 {
     m_oslCondition = osl_createCondition();
     osl_resetCondition( m_oslCondition );
@@ -157,6 +162,70 @@ void OWriterThread::sendEmptyMessage()
     }
 }
 
+void OWriterThread::insertReleaseRemoteCall(
+    rtl_uString *pOid,typelib_TypeDescriptionReference *pTypeRef)
+{
+    ::osl::MutexGuard guard( m_releaseCallMutex );
+
+    struct RemoteReleaseCall call;
+    call.sOid = pOid;
+    call.typeInterface = pTypeRef;
+    m_lstReleaseCalls.push_back( call );
+}
+
+/* The release calls for doubled interfaces
+ *
+ *
+ ***/
+void OWriterThread::executeReleaseRemoteCalls()
+{
+    sal_Bool bFound = sal_True;
+    while( bFound )
+    {
+        struct RemoteReleaseCall call;
+        {
+            ::osl::MutexGuard guard( m_releaseCallMutex );
+            if( m_lstReleaseCalls.size() )
+            {
+                call = m_lstReleaseCalls.front();
+                m_lstReleaseCalls.pop_front();
+            }
+            else
+            {
+                bFound = sal_False;
+            }
+        }
+        if( bFound )
+        {
+            sal_Bool bNeedsRelease = sal_False;
+
+            typelib_TypeDescription *pInterfaceTypeDesc = 0;
+            typelib_TypeDescription *pReleaseMethod = 0;
+
+            call.typeInterface.getDescription( &pInterfaceTypeDesc );
+            if( ! pInterfaceTypeDesc->bComplete )
+            {
+                typelib_typedescription_complete( &pInterfaceTypeDesc );
+            }
+
+            uno_Any any;
+            uno_Any *pAny = &any;
+
+            typelib_typedescriptionreference_getDescription(
+                &pReleaseMethod ,
+                ((typelib_InterfaceTypeDescription*)pInterfaceTypeDesc)->ppAllMembers[REMOTE_RELEASE_METHOD_INDEX] );
+
+            urp_sendRequest( m_pEnvRemote , pReleaseMethod, call.sOid.pData,
+                             (typelib_InterfaceTypeDescription*) pInterfaceTypeDesc,
+                             0, 0 , &pAny );
+
+            typelib_typedescription_release( pReleaseMethod );
+            typelib_typedescription_release( pInterfaceTypeDesc );
+        }
+    }
+}
+
+
 void OWriterThread::run()
 {
     while( sal_True )
@@ -167,6 +236,9 @@ void OWriterThread::run()
         osl_waitCondition( m_oslCondition , &value );
 
         {
+            // check if there are some release calls to be sent ....
+              executeReleaseRemoteCalls();
+
             // write to the socket
             MutexGuard guard( m_pBridgeImpl->m_marshalingMutex );
             m_bWaitForTimeout = sal_False;
