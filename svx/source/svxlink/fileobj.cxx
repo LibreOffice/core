@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:12:15 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,10 +85,10 @@
 #include <svtools/filter.hxx>
 #endif
 #ifndef _SOERR_HXX
-#include <so3/soerr.hxx>
+//#include <so3/soerr.hxx>
 #endif
 #ifndef _LNKBASE_HXX
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
@@ -97,7 +97,7 @@
 #include <sfx2/progress.hxx>
 #endif
 #ifndef _SFX_INTERNO_HXX
-#include <sfx2/interno.hxx>
+//#include <sfx2/interno.hxx>
 #endif
 #ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
@@ -328,7 +328,7 @@ JP 28.02.96: noch eine Baustelle:
 
 
 
-BOOL SvFileObject::Connect( so3::SvBaseLink* pLink )
+BOOL SvFileObject::Connect( sfx2::SvBaseLink* pLink )
 {
     if( !pLink || !pLink->GetLinkManager() )
         return FALSE;
@@ -339,11 +339,9 @@ BOOL SvFileObject::Connect( so3::SvBaseLink* pLink )
 
     if( OBJECT_CLIENT_GRF == pLink->GetObjType() )
     {
-        // Reload-Erkennung ???
-        SvInPlaceObjectRef aRef( pLink->GetLinkManager()->GetPersist() );
-        if( aRef.Is() )
+        SfxObjectShellRef pShell = pLink->GetLinkManager()->GetPersist();
+        if( pShell.Is() )
         {
-            SfxObjectShell* pShell = ((SfxInPlaceObject*)&aRef)->GetObjectShell();
             if( pShell->IsAbortingImport() )
                 return FALSE;
 
@@ -518,7 +516,7 @@ BOOL SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
 }
 
 
-String SvFileObject::Edit( Window* pParent, so3::SvBaseLink* pLink )
+String SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink )
 {
     String sFile, sRange, sTmpFilter;
     if( !pLink || !pLink->GetLinkManager() )
@@ -541,8 +539,8 @@ String SvFileObject::Edit( Window* pParent, so3::SvBaseLink* pLink )
             if( !aDlg.Execute() )
             {
                 sFile = aDlg.GetPath();
-                sFile += ::so3::cTokenSeperator;
-                sFile += ::so3::cTokenSeperator;
+                sFile += ::sfx2::cTokenSeperator;
+                sFile += ::sfx2::cTokenSeperator;
                 sFile += aDlg.GetCurrentFilter();
             }
             else
@@ -556,20 +554,17 @@ String SvFileObject::Edit( Window* pParent, so3::SvBaseLink* pLink )
             Application::SetDefDialogParent( pParent );
 
             const SfxObjectFactory* pFactory=0;
-            SvInPlaceObjectRef aRef( pLink->GetLinkManager()->GetPersist() );
-            if( aRef.Is() )
-            {
-                SfxObjectShell* pShell = ((SfxInPlaceObject*)&aRef)->GetObjectShell();
+            SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
+            if ( pShell )
                 pFactory = &pShell->GetFactory();
-            }
 
             SfxMediumRef xMed = SFX_APP()->InsertDocumentDialog( 0, pFactory ? pFactory->GetFactoryName() : String() );
             if( xMed.Is() )
             {
                 sFile = xMed->GetName();
-                sFile += ::so3::cTokenSeperator;
+                sFile += ::sfx2::cTokenSeperator;
 // Bereich!         sFile += xMed->GetFilter()->GetName();
-                sFile += ::so3::cTokenSeperator;
+                sFile += ::sfx2::cTokenSeperator;
                 sFile += xMed->GetFilter()->GetFilterName();
             }
             else
