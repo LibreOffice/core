@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2001-03-19 13:45:22 $
+ *  last change: $Author: sj $ $Date: 2001-05-22 10:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1338,6 +1338,7 @@ void SvxLineWindow::MakeLineBitmap( USHORT nNo,
     aVirDev.DrawRect( Rectangle( Point(0,0), rSize ) );
     aVirDev.SetFillColor( Color( COL_BLACK ) );
 
+    sal_uInt16 nLineWidth = 0;
     switch ( nNo )
     {
         case 1: // DEF_LINE_WIDTH_0
@@ -1350,16 +1351,14 @@ void SvxLineWindow::MakeLineBitmap( USHORT nNo,
             aRect.Top()     = 5;
             aRect.Bottom()  = 6;
             aVirDev.DrawRect( aRect );
-            rStr  = (USHORT) DEF_LINE_WIDTH_1/20;
-            rStr.AppendAscii(" pt") ;
+            nLineWidth = (USHORT) DEF_LINE_WIDTH_1/20;
             break;
 
         case 3: // DEF_LINE_WIDTH_2
             aRect.Top()     = 5;
             aRect.Bottom()  = 7;
             aVirDev.DrawRect( aRect );
-            rStr  = (USHORT) DEF_LINE_WIDTH_2/20;
-            rStr.AppendAscii(" pt") ;
+            nLineWidth = (USHORT) DEF_LINE_WIDTH_2/20;
             break;
 
         case 4: // DEF_LINE_WIDTH_3
@@ -1367,16 +1366,14 @@ void SvxLineWindow::MakeLineBitmap( USHORT nNo,
             aRect.Bottom()  = 7;
             aVirDev.DrawRect( aRect );
             aVirDev.DrawRect( Rectangle( Point(2,4), Point(37,7) ) );
-            rStr  = (USHORT) DEF_LINE_WIDTH_3/20;
-            rStr.AppendAscii(" pt" );
+            nLineWidth = (USHORT) DEF_LINE_WIDTH_3/20;
             break;
 
         case 5: // DEF_LINE_WIDTH_4
             aRect.Top()     = 4;
             aRect.Bottom()  = 8;
             aVirDev.DrawRect( aRect );
-            rStr  = (USHORT) DEF_LINE_WIDTH_4/20;
-            rStr.AppendAscii(" pt");
+            nLineWidth = (USHORT) DEF_LINE_WIDTH_4/20;
             break;
 
         case 6: // DEF_DOUBLE_LINE0
@@ -1386,8 +1383,7 @@ void SvxLineWindow::MakeLineBitmap( USHORT nNo,
             aRect.Top()     = 7;
             aRect.Bottom()  = 7;
             aVirDev.DrawRect( aRect );
-            rStr  = (USHORT) (DEF_DOUBLE_LINE0_OUT+DEF_DOUBLE_LINE0_IN+DEF_DOUBLE_LINE0_DIST)/20;
-            rStr.AppendAscii(" pt");
+            nLineWidth = (USHORT) (DEF_DOUBLE_LINE0_OUT+DEF_DOUBLE_LINE0_IN+DEF_DOUBLE_LINE0_DIST)/20;
             break;
 
         case 7: // DEF_DOUBLE_LINE7
@@ -1397,8 +1393,7 @@ void SvxLineWindow::MakeLineBitmap( USHORT nNo,
             aRect.Top()     = 7;
             aRect.Bottom()  = 7;
             aVirDev.DrawRect( aRect );
-            rStr  = (USHORT) (DEF_DOUBLE_LINE7_OUT+DEF_DOUBLE_LINE7_IN+DEF_DOUBLE_LINE7_DIST)/20;
-            rStr.AppendAscii(" pt") ;
+            nLineWidth = (USHORT) (DEF_DOUBLE_LINE7_OUT+DEF_DOUBLE_LINE7_IN+DEF_DOUBLE_LINE7_DIST)/20;
             break;
 
         case 8: // DEF_DOUBLE_LINE1
@@ -1408,8 +1403,7 @@ void SvxLineWindow::MakeLineBitmap( USHORT nNo,
             aRect.Top()     = 7;
             aRect.Bottom()  = 8;
             aVirDev.DrawRect( aRect );
-            rStr  = (USHORT) (DEF_DOUBLE_LINE1_OUT+DEF_DOUBLE_LINE1_IN+DEF_DOUBLE_LINE1_DIST)/20;
-            rStr.AppendAscii(" pt");
+            nLineWidth = (USHORT) (DEF_DOUBLE_LINE1_OUT+DEF_DOUBLE_LINE1_IN+DEF_DOUBLE_LINE1_DIST)/20;
             break;
 
         case 9: // DEF_DOUBLE_LINE2
@@ -1419,8 +1413,7 @@ void SvxLineWindow::MakeLineBitmap( USHORT nNo,
             aRect.Top()     = 8;
             aRect.Bottom()  = 10;
             aVirDev.DrawRect( aRect );
-            rStr  = (USHORT) (DEF_DOUBLE_LINE2_OUT+DEF_DOUBLE_LINE2_IN+DEF_DOUBLE_LINE2_DIST)/20;
-            rStr.AppendAscii(" pt") ;
+            nLineWidth = (USHORT) (DEF_DOUBLE_LINE2_OUT+DEF_DOUBLE_LINE2_IN+DEF_DOUBLE_LINE2_DIST)/20;
             break;
 
         case 10: // DEF_DOUBLE_LINE8
@@ -1430,8 +1423,7 @@ void SvxLineWindow::MakeLineBitmap( USHORT nNo,
             aRect.Top()     = 7;
             aRect.Bottom()  = 7;
             aVirDev.DrawRect( aRect );
-            rStr  = (USHORT) (DEF_DOUBLE_LINE8_OUT+DEF_DOUBLE_LINE8_IN+DEF_DOUBLE_LINE8_DIST)/20;
-            rStr.AppendAscii(" pt" );
+            nLineWidth = (USHORT) (DEF_DOUBLE_LINE8_OUT+DEF_DOUBLE_LINE8_IN+DEF_DOUBLE_LINE8_DIST)/20;
             break;
 
         case 11: // DEF_DOUBLE_LINE9
@@ -1441,8 +1433,7 @@ void SvxLineWindow::MakeLineBitmap( USHORT nNo,
             aRect.Top()     = 8;
             aRect.Bottom()  = 8;
             aVirDev.DrawRect( aRect );
-            rStr  = (USHORT) (DEF_DOUBLE_LINE9_OUT+DEF_DOUBLE_LINE9_IN+DEF_DOUBLE_LINE9_DIST)/20;
-            rStr.AppendAscii(" pt" );
+            nLineWidth = (USHORT) (DEF_DOUBLE_LINE9_OUT+DEF_DOUBLE_LINE9_IN+DEF_DOUBLE_LINE9_DIST)/20;
             break;
 
         case 12: // DEF_DOUBLE_LINE10
@@ -1452,8 +1443,7 @@ void SvxLineWindow::MakeLineBitmap( USHORT nNo,
             aRect.Top()     = 8;
             aRect.Bottom()  = 8;
             aVirDev.DrawRect( aRect );
-            rStr  = (USHORT) (DEF_DOUBLE_LINE10_OUT+DEF_DOUBLE_LINE10_IN+DEF_DOUBLE_LINE10_DIST)/20;
-            rStr.AppendAscii(" pt");
+            nLineWidth = (USHORT) (DEF_DOUBLE_LINE10_OUT+DEF_DOUBLE_LINE10_IN+DEF_DOUBLE_LINE10_DIST)/20;
             break;
 
         case 13: // DEF_DOUBLE_LINE3
@@ -1463,8 +1453,7 @@ void SvxLineWindow::MakeLineBitmap( USHORT nNo,
             aRect.Top()     = 7;
             aRect.Bottom()  = 7;
             aVirDev.DrawRect( aRect );
-            rStr  = (USHORT) (DEF_DOUBLE_LINE3_OUT+DEF_DOUBLE_LINE3_IN+DEF_DOUBLE_LINE3_DIST)/20;
-            rStr.AppendAscii(" pt");
+            nLineWidth = (USHORT) (DEF_DOUBLE_LINE3_OUT+DEF_DOUBLE_LINE3_IN+DEF_DOUBLE_LINE3_DIST)/20;
             break;
 
         case 14: // DEF_DOUBLE_LINE4
@@ -1474,8 +1463,7 @@ void SvxLineWindow::MakeLineBitmap( USHORT nNo,
             aRect.Top()     = 6;
             aRect.Bottom()  = 7;
             aVirDev.DrawRect( aRect );
-            rStr  = (USHORT) (DEF_DOUBLE_LINE4_OUT+DEF_DOUBLE_LINE4_IN+DEF_DOUBLE_LINE4_DIST)/20;
-            rStr.AppendAscii(" pt") ;
+            nLineWidth = (USHORT) (DEF_DOUBLE_LINE4_OUT+DEF_DOUBLE_LINE4_IN+DEF_DOUBLE_LINE4_DIST)/20;
             break;
 
         case 15: // DEF_DOUBLE_LINE5
@@ -1485,8 +1473,7 @@ void SvxLineWindow::MakeLineBitmap( USHORT nNo,
             aRect.Top()     = 8;
             aRect.Bottom()  = 9;
             aVirDev.DrawRect( aRect );
-            rStr  = (USHORT) (DEF_DOUBLE_LINE5_OUT+DEF_DOUBLE_LINE5_IN+DEF_DOUBLE_LINE5_DIST)/20;
-            rStr.AppendAscii(" pt");
+            nLineWidth = (USHORT) (DEF_DOUBLE_LINE5_OUT+DEF_DOUBLE_LINE5_IN+DEF_DOUBLE_LINE5_DIST)/20;
             break;
 
         case 16: // DEF_DOUBLE_LINE6
@@ -1496,12 +1483,16 @@ void SvxLineWindow::MakeLineBitmap( USHORT nNo,
             aRect.Top()     = 7;
             aRect.Bottom()  = 9;
             aVirDev.DrawRect( aRect );
-            rStr  = (USHORT) (DEF_DOUBLE_LINE6_OUT+DEF_DOUBLE_LINE6_IN+DEF_DOUBLE_LINE6_DIST)/20;
-            rStr.AppendAscii(" pt");
+            nLineWidth = (USHORT) (DEF_DOUBLE_LINE6_OUT+DEF_DOUBLE_LINE6_IN+DEF_DOUBLE_LINE6_DIST)/20;
             break;
 
         default:
             break;
+    }
+    if ( nLineWidth )
+    {
+        rStr = String::CreateFromInt32( nLineWidth );
+        rStr.AppendAscii(" pt");
     }
     rBmp = aVirDev.GetBitmap( Point(0,0), rSize );
 }
