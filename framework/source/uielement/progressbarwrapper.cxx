@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progressbarwrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:43:01 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ void ProgressBarWrapper::start( const ::rtl::OUString& Text, ::sal_Int32 Range )
 throw (uno::RuntimeException)
 {
     uno::Reference< awt::XWindow > xWindow;
+    sal_Int32                      nValue( 0 );
 
     {
         ResetableGuard aGuard( m_aLock );
@@ -179,6 +180,7 @@ throw (uno::RuntimeException)
         xWindow  = m_xStatusBar;
         m_nValue = 0;
         m_nRange = Range;
+        nValue   = m_nValue;
     }
 
     if ( xWindow.is() )
@@ -191,7 +193,14 @@ throw (uno::RuntimeException)
             if ( !pStatusBar->IsProgressMode() )
                 pStatusBar->StartProgressMode( Text );
             else
-                pStatusBar->SetText( Text );
+            {
+                pStatusBar->SetUpdateMode( FALSE );
+                pStatusBar->EndProgressMode();
+                pStatusBar->StartProgressMode( Text );
+                pStatusBar->SetProgressValue( USHORT( nValue ));
+                pStatusBar->SetUpdateMode( TRUE );
+            }
+            pStatusBar->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
         }
     }
 }
