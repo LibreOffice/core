@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:25:17 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text [ portuguese_brazilian ] = "~P�gina Inteira" ;
         Text [ portuguese ] = "~P�gina inteira" ;
         Text [ finnish ] = "~Koko sivu" ;
-        Text [ danish ] = "Hele siden" ;
+        Text [ danish ] = "H~ele siden" ;
         Text [ french ] = "Page enti�re" ;
         Text [ swedish ] = "Hela sidan" ;
         Text [ dutch ] = "H~ele pagina" ;
@@ -105,6 +105,8 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ hebrew ] = "‮דף שלם‬";
         Text[ hindi ] = "~सम्पूर्ण पृष्ठ";
         Text[ slovak ] = "~Celá stránka";
+        Text[ hungarian ] = "~Teljes oldal";
+        Text[ slovenian ] = "~Cela stran";
     };
     RadioButton BTN_PAGE_WIDTH
     {
@@ -117,7 +119,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text [ portuguese_brazilian ] = "~Largura da P�gina" ;
         Text [ portuguese ] = "~Larg. de p�gina" ;
         Text [ finnish ] = "~Sivun leveys" ;
-        Text [ danish ] = "Sidebredde" ;
+        Text [ danish ] = "Side~bredde" ;
         Text [ french ] = "~Largeur de page" ;
         Text [ swedish ] = "Sidbredd" ;
         Text [ dutch ] = "~Paginabreedte" ;
@@ -139,6 +141,8 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ hebrew ] = "‮לפי רוחב הדף‬";
         Text[ hindi ] = "~पृष्ठ चौड़ाई";
         Text[ slovak ] = "Šírka ~stránky";
+        Text[ hungarian ] = "~Oldalszélesség";
+        Text[ slovenian ] = "Širina s~trani";
     };
     RadioButton BTN_OPTIMAL
     {
@@ -151,7 +155,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text [ portuguese_brazilian ] = "~Otimizado" ;
         Text [ portuguese ] = "~Optimizar" ;
         Text [ finnish ] = "O~ptimaalinen" ;
-        Text [ danish ] = "Optimal" ;
+        Text [ danish ] = "~Optimal" ;
         Text [ french ] = "~Optimal" ;
         Text [ swedish ] = "Optimal" ;
         Text [ dutch ] = "~Optimaal" ;
@@ -173,6 +177,8 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ hebrew ] = "‮אופטימלי‬";
         Text[ hindi ] = "~योग्य";
         Text[ slovak ] = "~Optimálny";
+        Text[ hungarian ] = "S~zöveghatár";
+        Text[ slovenian ] = "~Optimalno";
     };
     RadioButton BTN_200
     {
@@ -215,7 +221,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text [ portuguese_brazilian ] = "~Vari�vel" ;
         Text [ portuguese ] = "~Vari�vel" ;
         Text [ finnish ] = "~Vaihtuva" ;
-        Text [ danish ] = "Variabel" ;
+        Text [ danish ] = "~Variabel" ;
         Text [ french ] = "~Autre" ;
         Text [ swedish ] = "~Stegl�s" ;
         Text [ dutch ] = "~Traploos" ;
@@ -237,6 +243,8 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ hebrew ] = "‮משתנה‬";
         Text[ hindi ] = "~वेरिऐबल";
         Text[ slovak ] = "~Premenný";
+        Text[ hungarian ] = "~Egyedi";
+        Text[ slovenian ] = "~Po meri";
     };
     MetricField ED_USER
     {
@@ -282,6 +290,8 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ hebrew ] = "‮זום פקטור‬";
         Text[ hindi ] = "झूम फॉक्टर";
         Text[ slovak ] = "Faktor zväčšenia";
+        Text[ hungarian ] = "Nagyítás mértéke";
+        Text[ slovenian ] = "Faktor povečave";
     };
     OKButton BTN_ZOOM_OK
     {
@@ -312,7 +322,7 @@ ModalDialog RID_SVXDLG_ZOOM
     Text[ spanish ] = "Escala";
     Text[ finnish ] = "Zoomaus";
     Text[ italian ] = "Zoom";
-    Text[ danish ] = "M�lestok";
+    Text[ danish ] = "Zoom";
     Text[ swedish ] = "Skala";
     Text[ polish ] = "Skala";
     Text[ portuguese_brazilian ] = "Zoom";
@@ -325,8 +335,11 @@ ModalDialog RID_SVXDLG_ZOOM
     Text[ hebrew ] = "‮זום‬";
     Text[ hindi ] = "झूम";
     Text[ slovak ] = "Lupa";
+    Text[ hungarian ] = "Nagyítás";
+    Text[ slovenian ] = "Zoom";
 };
  // ********************************************************************** EOF
+
 
 
 
