@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: mba $ $Date: 2000-09-25 11:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2861,7 +2861,7 @@ sal_Bool SfxMedium::SaveVersionList_Impl()
             return sal_True;
 
         SvStorageStreamRef aStream =
-            GetStorage()->OpenStream( DEFINE_CONST_UNICODE( "Version.Ist" ), SFX_STREAM_READWRITE );
+            GetStorage()->OpenStream( DEFINE_CONST_UNICODE( "VersionList" ), SFX_STREAM_READWRITE );
         if ( aStream.Is() && aStream->GetError() == SVSTREAM_OK )
         {
             pImp->pVersions->Write( *aStream );
