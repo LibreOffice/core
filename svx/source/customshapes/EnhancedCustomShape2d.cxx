@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:17:11 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,11 +130,11 @@
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERTYPE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERTYPE_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #endif
-#ifndef __drafts_com_sun_star_drawing_EnhancedCustomShapeSegmentCommand_hpp__
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#ifndef __com_sun_star_drawing_EnhancedCustomShapeSegmentCommand_hpp__
+#include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #endif
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
@@ -167,8 +167,8 @@
 //#endif
 
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::drawing;
-using namespace ::drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand;
 
 void EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( EnhancedCustomShapeParameter& rParameter, const sal_Int32 nValue )
 {
@@ -607,7 +607,7 @@ sal_Bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
 /* seems not to be used.
             else if ( rPropVal.Name.equals( sMap ) )
             {
-                drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aMap;
+                com::sun::star::drawing::EnhancedCustomShapeParameterPair aMap;
                 if ( rPropVal.Value >>= aMap )
                 {
                     if ( GetValueForEnhancedCustomShapeHandleParameter( nXMap, aMap.First ) )
@@ -981,7 +981,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
             // POSITION
             {
                 const rtl::OUString sPosition( RTL_CONSTASCII_USTRINGPARAM ( "Position" ) );
-                ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aPosition;
+                ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aPosition;
                 SetEnhancedCustomShapeHandleParameter( aPosition.First, pData->nPositionX, sal_True, sal_True );
                 SetEnhancedCustomShapeHandleParameter( aPosition.Second, pData->nPositionY, sal_True, sal_False );
                 rPropValues[ n ].Name = sPosition;
@@ -1011,7 +1011,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
             if ( nFlags & MSDFF_HANDLE_FLAGS_POLAR )
             {
                 const rtl::OUString sPolar( RTL_CONSTASCII_USTRINGPARAM ( "Polar" ) );
-                ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aCenter;
+                ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aCenter;
                 SetEnhancedCustomShapeHandleParameter( aCenter.First,  pData->nCenterX,
                     ( nFlags & MSDFF_HANDLE_FLAGS_CENTER_X_IS_SPECIAL ) != 0, sal_True  );
                 SetEnhancedCustomShapeHandleParameter( aCenter.Second, pData->nCenterY,
@@ -1023,7 +1023,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
                     if ( pData->nRangeXMin != 0x80000000 )
                     {
                         const rtl::OUString sRadiusRangeMinimum( RTL_CONSTASCII_USTRINGPARAM ( "RadiusRangeMinimum" ) );
-                        ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
+                        ::com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
                         SetEnhancedCustomShapeHandleParameter( aRadiusRangeMinimum, pData->nRangeXMin,
                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, sal_True  );
                         rPropValues[ n ].Name = sRadiusRangeMinimum;
@@ -1032,7 +1032,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
                     if ( pData->nRangeXMax != 0x7fffffff )
                     {
                         const rtl::OUString sRadiusRangeMaximum( RTL_CONSTASCII_USTRINGPARAM ( "RadiusRangeMaximum" ) );
-                        ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
+                        ::com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
                         SetEnhancedCustomShapeHandleParameter( aRadiusRangeMaximum, pData->nRangeXMax,
                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, sal_False );
                         rPropValues[ n ].Name = sRadiusRangeMaximum;
@@ -1045,7 +1045,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
                 if ( pData->nRangeXMin != 0x80000000 )
                 {
                     const rtl::OUString sRangeXMinimum( RTL_CONSTASCII_USTRINGPARAM ( "RangeXMinimum" ) );
-                    ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMinimum;
+                    ::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMinimum;
                     SetEnhancedCustomShapeHandleParameter( aRangeXMinimum, pData->nRangeXMin,
                         ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, sal_True  );
                     rPropValues[ n ].Name = sRangeXMinimum;
@@ -1054,7 +1054,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
                 if ( pData->nRangeXMax != 0x7fffffff )
                 {
                     const rtl::OUString sRangeXMaximum( RTL_CONSTASCII_USTRINGPARAM ( "RangeXMaximum" ) );
-                    ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMaximum;
+                    ::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMaximum;
                     SetEnhancedCustomShapeHandleParameter( aRangeXMaximum, pData->nRangeXMax,
                         ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, sal_False );
                     rPropValues[ n ].Name = sRangeXMaximum;
@@ -1063,7 +1063,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
                 if ( pData->nRangeYMin != 0x80000000 )
                 {
                     const rtl::OUString sRangeYMinimum( RTL_CONSTASCII_USTRINGPARAM ( "RangeYMinimum" ) );
-                    ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeYMinimum;
+                    ::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeYMinimum;
                     SetEnhancedCustomShapeHandleParameter( aRangeYMinimum, pData->nRangeYMin,
                         ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL ) != 0, sal_True );
                     rPropValues[ n ].Name = sRangeYMinimum;
@@ -1072,7 +1072,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
                 if ( pData->nRangeYMax != 0x7fffffff )
                 {
                     const rtl::OUString sRangeYMaximum( RTL_CONSTASCII_USTRINGPARAM ( "RangeYMaximum" ) );
-                    ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeYMaximum;
+                    ::com::sun::star::drawing::EnhancedCustomShapeParameter aRangeYMaximum;
                     SetEnhancedCustomShapeHandleParameter( aRangeYMaximum, pData->nRangeYMax,
                         ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL ) != 0, sal_False );
                     rPropValues[ n ].Name = sRangeYMaximum;
@@ -1345,7 +1345,7 @@ sal_Bool EnhancedCustomShape2d::SetAdjustValueAsDouble( const double& rValue, co
     return bRetValue;
 }
 
-Point EnhancedCustomShape2d::GetPoint( const drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair& rPair,
+Point EnhancedCustomShape2d::GetPoint( const com::sun::star::drawing::EnhancedCustomShapeParameterPair& rPair,
                                         const sal_Bool bScale, const sal_Bool bReplaceGeoSize ) const
 {
     Point       aRetValue;
@@ -1571,8 +1571,8 @@ sal_Bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Poin
                 {
                     if ( aLogicRect.GetHeight() > aLogicRect.GetWidth() )
                     {
-                        drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aFirst = aHandle.aPosition.First;
-                        drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aSecond = aHandle.aPosition.Second;
+                        com::sun::star::drawing::EnhancedCustomShapeParameter aFirst = aHandle.aPosition.First;
+                        com::sun::star::drawing::EnhancedCustomShapeParameter aSecond = aHandle.aPosition.Second;
                         aHandle.aPosition.First = aSecond;
                         aHandle.aPosition.Second = aFirst;
                     }
