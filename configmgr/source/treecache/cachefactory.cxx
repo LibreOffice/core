@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachefactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:41 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,8 @@ namespace configmgr
 // -------------------------------------------------------------------------
 
     static
-    rtl::Reference<TreeManager> buildCacheManager(MergedBackendRef const & _xBackend)
+    rtl::Reference<TreeManager> buildCacheManager(MergedBackendRef const & _xBackend,
+                                                  CacheFactory::CreationContext const & _xContext)
     {
         rtl::Reference< TreeManager > xCache;
 
@@ -91,7 +92,7 @@ namespace configmgr
             memory::HeapManager & rHeap = memory::cacheHeap();
 
             rtl::Reference< backend::ICachedDataProvider > xLoader
-                = new backend::CacheController(_xBackend.get(),rHeap);
+                = new backend::CacheController(_xBackend.get(),rHeap, _xContext);
 
             xCache.set( new TreeManager(xLoader.get(),rHeap) );
         }
@@ -105,7 +106,7 @@ namespace configmgr
     {
         MergedBackendRef xBackend = backend::BackendFactory::instance(_xContext).createBackend();
 
-        return buildCacheManager(xBackend);
+        return buildCacheManager(xBackend, _xContext);
     }
 
 // -------------------------------------------------------------------------
