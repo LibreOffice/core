@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-08 08:25:30 $
+ *  last change: $Author: oj $ $Date: 2002-10-15 09:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,6 +632,8 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
                 }   break;
                 case DataType::DOUBLE:
                 case DataType::INTEGER:
+                case DataType::DECIMAL:             // #99178# OJ
+                case DataType::NUMERIC:
                 {
                     char cDecimalDelimiter = pConnection->getDecimalDelimiter();
                     char cThousandDelimiter = pConnection->getThousandDelimiter();
@@ -654,10 +656,14 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
                             aStrConverted += aStr.GetChar(j) ;
                     }
                     double nVal = toDouble(aStrConverted,pConnection->getTextEncoding());
-                    (*_rRow)[i+1] = nVal;
+
+                    // #99178# OJ
+                    if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )
+                        (*_rRow)[i+1] = String::CreateFromDouble(nVal);
+                    else
+                        (*_rRow)[i+1] = nVal;
                 } break;
-                case DataType::DECIMAL:
-                case DataType::NUMERIC:
+
                 default:
                 {
                     // Wert als String in Variable der Row uebernehmen
