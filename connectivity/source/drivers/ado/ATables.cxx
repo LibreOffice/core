@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
     ADOTable* pTable = NULL;
     m_pCollection->get_Item(OLEVariant(_rName),&pTable);
 
-    Reference< XNamed > xRet = new OAdoTable(isCaseSensitive(),m_pCatalog,pTable);
+    Reference< XNamed > xRet = new OAdoTable(this,isCaseSensitive(),m_pCatalog,pTable);
 
     return xRet;
 }
@@ -121,7 +121,7 @@ void OTables::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OTables::createEmptyObject()
 {
-    OAdoTable* pNew = new OAdoTable(isCaseSensitive(),m_pCatalog);
+    OAdoTable* pNew = new OAdoTable(this,isCaseSensitive(),m_pCatalog);
     return pNew;
 }
 // -------------------------------------------------------------------------

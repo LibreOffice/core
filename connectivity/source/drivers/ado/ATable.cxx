@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _CONNECTIVITY_ADO_KEYS_HXX_
 #include "ado/AKeys.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADO_ACONNECTION_HXX_
+#include "ado/AConnection.hxx"
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -120,8 +123,8 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 
 // -------------------------------------------------------------------------
-OAdoTable::OAdoTable(sal_Bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable)
-    : OTable_TYPEDEF(_bCase,::rtl::OUString(),::rtl::OUString())
+OAdoTable::OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable)
+    : OTable_TYPEDEF(_pTables,_bCase,::rtl::OUString(),::rtl::OUString())
     ,m_pCatalog(_pCatalog)
 {
     construct();
@@ -130,8 +133,8 @@ OAdoTable::OAdoTable(sal_Bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable)
 
 }
 // -----------------------------------------------------------------------------
-OAdoTable::OAdoTable(sal_Bool _bCase,OCatalog* _pCatalog)
-    : OTable_TYPEDEF(_bCase)
+OAdoTable::OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCatalog)
+    : OTable_TYPEDEF(_pTables,_bCase)
     ,m_pCatalog(_pCatalog)
 {
     construct();
@@ -257,8 +260,10 @@ void SAL_CALL OAdoTable::rename( const ::rtl::OUString& newName ) throw(SQLExcep
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
-
     m_aTable.put_Name(newName);
+    ADOS::ThrowException(*(m_pCatalog->getConnection()->getConnection()),*this);
+
+    OTable_TYPEDEF::rename(newName);
 }
 // -------------------------------------------------------------------------
 // XAlterTable

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
         Reference< XRow > xRow(xResult,UNO_QUERY);
         if(xResult->next()) // there can be only one table with this name
         {
-            OAdabasTable* pRet = new OAdabasTable(  static_cast<OAdabasCatalog&>(m_rParent).getConnection(),
+            OAdabasTable* pRet = new OAdabasTable(this, static_cast<OAdabasCatalog&>(m_rParent).getConnection(),
                                         aName,xRow->getString(4),xRow->getString(5),aSchema);
             xRet = pRet;
         }
@@ -160,7 +160,7 @@ void OTables::disposing(void)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OTables::createEmptyObject()
 {
-    OAdabasTable* pNew = new OAdabasTable(static_cast<OAdabasCatalog&>(m_rParent).getConnection());
+    OAdabasTable* pNew = new OAdabasTable(this,static_cast<OAdabasCatalog&>(m_rParent).getConnection());
     return pNew;
 }
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-17 11:15:40 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@
 
 using namespace ::comphelper;
 using namespace connectivity::adabas;
+using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -121,18 +122,24 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OAdabasTable::OAdabasTable( OAdabasConnection* _pConnection) : OTable_TYPEDEF(sal_True),m_pConnection(_pConnection)
+OAdabasTable::OAdabasTable( sdbcx::OCollection* _pTables,
+                           OAdabasConnection* _pConnection)
+    :OTable_TYPEDEF(_pTables,sal_True)
+    ,m_pConnection(_pConnection)
 {
     construct();
 }
 // -------------------------------------------------------------------------
-OAdabasTable::OAdabasTable( OAdabasConnection* _pConnection,
+OAdabasTable::OAdabasTable( sdbcx::OCollection* _pTables,
+                           OAdabasConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description ,
                     const ::rtl::OUString& _SchemaName,
                     const ::rtl::OUString& _CatalogName
-                ) : OTable_TYPEDEF(sal_True,_Name,
+                ) : OTable_TYPEDEF(_pTables,
+                                    sal_True,
+                                    _Name,
                                   _Type,
                                   _Description,
                                   _SchemaName,
@@ -274,29 +281,32 @@ sal_Int64 OAdabasTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (
 void SAL_CALL OAdabasTable::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (
+    checkDisposed(
 #ifdef GCC
         ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed
 #else
         rBHelper.bDisposed
 #endif
-        )
-                throw DisposedException();
+        );
 
+    Reference<XDatabaseMetaData> xMeta = m_pConnection->getMetaData();
+    OSL_ENSURE(xMeta.is(),"No Metadata!");
     if(!isNew())
     {
-        ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("RENAME TABLE ");
-        ::rtl::OUString sQuote = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString sSql   = ::rtl::OUString::createFromAscii("RENAME TABLE ");
+        ::rtl::OUString sQuote = xMeta->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
-        ::rtl::OUString aName,aSchema;
-        sal_Int32 nLen = newName.indexOf('.');
-        aSchema = newName.copy(0,nLen);
-        aName   = newName.copy(nLen+1);
+        ::rtl::OUString sNewName;
+        sal_Int32 nPos = 0;
+        if(nPos = newName.indexOf(sDot) != -1)
+            sNewName = newName.copy(nPos+1);
+        else
+            sNewName = newName;
 
         sSql += ::dbtools::quoteName(sQuote,m_SchemaName) + sDot + ::dbtools::quoteName(sQuote,m_Name)
                     + ::rtl::OUString::createFromAscii(" TO ")
-                    + ::dbtools::quoteName(sQuote,aSchema) + sDot + ::dbtools::quoteName(sQuote,aName);
+                    + ::dbtools::quoteName(sQuote,sNewName);
 
         Reference< XStatement > xStmt = m_pConnection->createStatement(  );
         if(xStmt.is())
@@ -304,23 +314,23 @@ void SAL_CALL OAdabasTable::rename( const ::rtl::OUString& newName ) throw(SQLEx
             xStmt->execute(sSql);
             ::comphelper::disposeComponent(xStmt);
         }
+        OTable_TYPEDEF::rename(newName);
     }
     else
-        m_Name = newName;
+        ::dbtools::qualifiedNameComponents(xMeta,newName,m_CatalogName,m_SchemaName,m_Name);
 }
 // -------------------------------------------------------------------------
 // XAlterTable
 void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (
+    checkDisposed(
 #ifdef GCC
         ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed
 #else
         rBHelper.bDisposed
 #endif
-        )
-        throw DisposedException();
+        );
 
     if(m_pColumns && !m_pColumns->hasByName(colName))
         throw NoSuchElementException(colName,*this);
@@ -418,14 +428,13 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
 void SAL_CALL OAdabasTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (
+    checkDisposed(
 #ifdef GCC
         ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed
 #else
         rBHelper.bDisposed
 #endif
-        )
-        throw DisposedException();
+        );
 
     Reference< XPropertySet > xOld;
     if(::cppu::extractInterface(xOld,m_pColumns->getByIndex(index)) && xOld.is())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-19 11:03:03 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,8 +168,8 @@ namespace connectivity
             virtual void refreshIndexes();
 
         public:
-            ODbaseTable( ODbaseConnection* _pConnection);
-            ODbaseTable( ODbaseConnection* _pConnection,
+            ODbaseTable( sdbcx::OCollection* _pTables,ODbaseConnection* _pConnection);
+            ODbaseTable( sdbcx::OCollection* _pTables,ODbaseConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description = ::rtl::OUString(),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-19 11:03:04 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,8 +326,8 @@ void ODbaseTable::fillColumns()
     }
 }
 // -------------------------------------------------------------------------
-ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection)
-        :ODbaseTable_BASE(_pConnection)
+ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables,ODbaseConnection* _pConnection)
+        :ODbaseTable_BASE(_pTables,_pConnection)
         ,m_pMemoStream(NULL)
         ,m_bWriteableMemo(sal_False)
 {
@@ -338,13 +338,13 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection)
     m_aHeader.db_slng   = 0;
 }
 // -------------------------------------------------------------------------
-ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
+ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables,ODbaseConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description ,
                     const ::rtl::OUString& _SchemaName,
                     const ::rtl::OUString& _CatalogName
-                ) : ODbaseTable_BASE(_pConnection,_Name,
+                ) : ODbaseTable_BASE(_pTables,_pConnection,_Name,
                                   _Type,
                                   _Description,
                                   _SchemaName,
@@ -1664,7 +1664,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
 
         String sTempName = createTempFile();
 
-        pNewTable = new ODbaseTable(static_cast<ODbaseConnection*>(m_pConnection));
+        pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
         Reference<XPropertySet> xHoldTable = pNewTable;
         pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
@@ -1751,6 +1751,8 @@ void SAL_CALL ODbaseTable::rename( const ::rtl::OUString& newName ) throw(::com:
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
+    if(m_pTables && m_pTables->hasByName(newName))
+        throw ElementExistException(newName,*this);
 
 
     FileClose();
@@ -1776,23 +1778,36 @@ void SAL_CALL ODbaseTable::rename( const ::rtl::OUString& newName ) throw(::com:
         String sOldName = aURL.GetMainURL(INetURLObject::NO_DECODE);
         //  ::utl::UCBContentHelper::MoveTo(sOldName,sNewName);
         Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
-        aContent.setPropertyValue( rtl::OUString::createFromAscii( "Title" ),makeAny( ::rtl::OUString(sNewName) ) );
+        Sequence< PropertyValue > aProps( 1 );
+        aProps[0].Name      = ::rtl::OUString::createFromAscii("Title");
+        aProps[0].Handle    = -1; // n/a
+        aProps[0].Value     = makeAny( ::rtl::OUString(sNewName) );
+        Sequence< Any > aValues;
+        aContent.executeCommand( rtl::OUString::createFromAscii( "setPropertyValues" ),makeAny(aProps) ) >>= aValues;
+        if(aValues.getLength() && aValues[0].hasValue())
+            throw Exception();
+
+        //  aContent.setPropertyValue( rtl::OUString::createFromAscii( "Title" ),makeAny( ::rtl::OUString(sNewName) ) );
     }
     catch(Exception&)
     {
-        throw ElementExistException();
+        throw ElementExistException(newName,*this);
     }
-    m_Name = newName;
+
+    ODbaseTable_BASE::rename(newName);
+
     construct();
     if(m_pColumns)
         m_pColumns->refresh();
+
+
 }
 // -----------------------------------------------------------------------------
 void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
 {
     String sTempName = createTempFile();
 
-    ODbaseTable* pNewTable = new ODbaseTable(static_cast<ODbaseConnection*>(m_pConnection));
+    ODbaseTable* pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
     pNewTable->acquire();
     pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
     {
@@ -1862,7 +1877,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
 {
     String sTempName = createTempFile();
 
-    ODbaseTable* pNewTable = new ODbaseTable(static_cast<ODbaseConnection*>(m_pConnection));
+    ODbaseTable* pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
     pNewTable->acquire();
     pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
     {

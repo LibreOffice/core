@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABTable.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-08-08 08:04:35 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,8 @@ namespace connectivity
 
         public:
             //  DECLARE_CTY_DEFAULTS( OMozabTable_BASE);
-            OMozabTable( OMozabConnection* _pConnection);
-            OMozabTable( OMozabConnection* _pConnection,
+            OMozabTable( sdbcx::OCollection* _pTables,OMozabConnection* _pConnection);
+            OMozabTable( sdbcx::OCollection* _pTables,OMozabConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description = ::rtl::OUString(),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTables.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ namespace starutil      = ::com::sun::star::util;
 Reference< XNamed > OCalcTables::createObject(const ::rtl::OUString& _rName)
 {
     ::rtl::OUString aName,aSchema;
-    OCalcTable* pRet = new OCalcTable((OCalcConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
+    OCalcTable* pRet = new OCalcTable(this,(OCalcConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
                                         _rName,::rtl::OUString::createFromAscii("TABLE"));
 
     Reference< XNamed > xRet = pRet;
@@ -131,7 +131,7 @@ void OCalcTables::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OCalcTables::createEmptyObject()
 {
-    OCalcTable* pRet = new OCalcTable((OCalcConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection());
+    OCalcTable* pRet = new OCalcTable(this,(OCalcConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection());
     Reference< XPropertySet > xRet = pRet;
     return xRet;
 }

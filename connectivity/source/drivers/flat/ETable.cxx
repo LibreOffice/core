@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:01:55 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,18 +377,18 @@ void OFlatTable::fillColumns()
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 }
 // -------------------------------------------------------------------------
-OFlatTable::OFlatTable(OFlatConnection* _pConnection) : OFlatTable_BASE(_pConnection)
+OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnection) : OFlatTable_BASE(_pTables,_pConnection)
 {
 
 }
 // -------------------------------------------------------------------------
-OFlatTable::OFlatTable(OFlatConnection* _pConnection,
+OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description ,
                     const ::rtl::OUString& _SchemaName,
                     const ::rtl::OUString& _CatalogName
-                ) : OFlatTable_BASE(_pConnection,_Name,
+                ) : OFlatTable_BASE(_pTables,_pConnection,_Name,
                                   _Type,
                                   _Description,
                                   _SchemaName,

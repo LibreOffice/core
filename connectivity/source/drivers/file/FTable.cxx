@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-19 11:03:04 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,8 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-OFileTable::OFileTable(OConnection* _pConnection) : OTable_TYPEDEF(_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
+OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
+: OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
                 ,m_pConnection(_pConnection)
                 ,m_nFilePos(0)
                 ,m_nBufferSize(0)
@@ -108,13 +109,13 @@ OFileTable::OFileTable(OConnection* _pConnection) : OTable_TYPEDEF(_pConnection-
     m_aColumns = new OSQLColumns();
 }
 // -------------------------------------------------------------------------
-OFileTable::OFileTable( OConnection* _pConnection,
+OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description ,
                     const ::rtl::OUString& _SchemaName,
                     const ::rtl::OUString& _CatalogName
-                ) : OTable_TYPEDEF(_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),
+                ) : OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),
                                   _Name,
                                   _Type,
                                   _Description,

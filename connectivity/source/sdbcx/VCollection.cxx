@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:06:12 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ void SAL_CALL OCollection::dropByIndex( sal_Int32 index ) throw(SQLException, In
 
     // notify our container listeners
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(elementName), Any(), Any());
-        // note that xExistent may be empty, in case somebody removed the data source while it is not alive at this moment
+    // note that xExistent may be empty, in case somebody removed the data source while it is not alive at this moment
     OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
     while (aListenerLoop.hasMoreElements())
         static_cast<XContainerListener*>(aListenerLoop.next())->elementRemoved(aEvent);
@@ -389,5 +389,31 @@ void OCollection::insertElement(const ::rtl::OUString& _sElementName,const Objec
     OSL_ENSURE(m_aNameMap.find(_sElementName) == m_aNameMap.end(),"Element already exists");
     if(m_aNameMap.find(_sElementName) == m_aNameMap.end())
         m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(_sElementName,_xElement)));
+}
+// -----------------------------------------------------------------------------
+void OCollection::renameObject(const ::rtl::OUString _sOldName,const ::rtl::OUString _sNewName)
+{
+
+    OSL_ENSURE(m_aNameMap.find(_sOldName) != m_aNameMap.end(),"Element doesn't exist");
+    OSL_ENSURE(m_aNameMap.find(_sNewName) == m_aNameMap.end(),"Element already exists");
+    OSL_ENSURE(_sNewName.getLength(),"New name must not be empty!");
+    OSL_ENSURE(_sOldName.getLength(),"New name must not be empty!");
+
+    ObjectMap::iterator aIter = m_aNameMap.find(_sOldName);
+    if(aIter != m_aNameMap.end())
+    {
+        ::std::vector< ObjectIter >::iterator aFind = ::std::find(m_aElements.begin(),m_aElements.end(),aIter);
+        if(m_aElements.end() != aFind)
+        {
+            (*aFind) = m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(_sNewName,(*aFind)->second));
+            m_aNameMap.erase(aIter);
+
+            ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_sNewName), makeAny((*aFind)->second),makeAny(_sOldName));
+            // note that xExistent may be empty, in case somebody removed the data source while it is not alive at this moment
+            OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
+            while (aListenerLoop.hasMoreElements())
+                static_cast<XContainerListener*>(aListenerLoop.next())->elementReplaced(aEvent);
+        }
+    }
 }
 // -----------------------------------------------------------------------------

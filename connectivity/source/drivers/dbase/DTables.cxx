@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-18 13:14:31 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ namespace starutil      = ::com::sun::star::util;
 Reference< XNamed > ODbaseTables::createObject(const ::rtl::OUString& _rName)
 {
     ::rtl::OUString aName,aSchema;
-    ODbaseTable* pRet = new ODbaseTable((ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
+    ODbaseTable* pRet = new ODbaseTable(this,(ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
                                         _rName,::rtl::OUString::createFromAscii("TABLE"));
 
     Reference< XNamed > xRet = pRet;
@@ -125,7 +125,7 @@ void ODbaseTables::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > ODbaseTables::createEmptyObject()
 {
-    ODbaseTable* pRet = new ODbaseTable((ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection());
+    ODbaseTable* pRet = new ODbaseTable(this,(ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection());
     Reference< XPropertySet > xRet = pRet;
     return xRet;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:18:05 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,8 +550,8 @@ void OCalcTable::fillColumns()
 }
 
 // -------------------------------------------------------------------------
-OCalcTable::OCalcTable(OCalcConnection* _pConnection)
-        :OCalcTable_BASE(_pConnection)
+OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnection)
+        :OCalcTable_BASE(_pTables,_pConnection)
         ,m_nStartCol(0)
         ,m_nStartRow(0)
         ,m_nDataCols(0)
@@ -560,13 +560,13 @@ OCalcTable::OCalcTable(OCalcConnection* _pConnection)
 {
 }
 // -------------------------------------------------------------------------
-OCalcTable::OCalcTable(OCalcConnection* _pConnection,
+OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description ,
                     const ::rtl::OUString& _SchemaName,
                     const ::rtl::OUString& _CatalogName
-                ) : OCalcTable_BASE(_pConnection,_Name,
+                ) : OCalcTable_BASE(_pTables,_pConnection,_Name,
                                   _Type,
                                   _Description,
                                   _SchemaName,

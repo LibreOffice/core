@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:09:04 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@ namespace connectivity
             virtual void refreshIndexes();
 
         public:
-            OAdoTable(sal_Bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable);
-            OAdoTable(sal_Bool _bCase,OCatalog* _pCatalog);
+            OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable);
+            OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCatalog);
 
 
             ::rtl::OUString SAL_CALL getName() { return m_Name; }

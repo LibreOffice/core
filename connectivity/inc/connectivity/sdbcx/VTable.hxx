@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:13:37 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ namespace connectivity
             OCollection*    m_pKeys;
             OCollection*    m_pColumns;
             OCollection*    m_pIndexes;
+            OCollection*    m_pTables;  // must hold his own container to notify him when renaming
 
             using OTableDescriptor_BASE::rBHelper;
 
@@ -150,8 +151,10 @@ namespace connectivity
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
         public:
-            OTable(sal_Bool _bCase);
-            OTable( sal_Bool _bCase,
+            OTable( OCollection*    _pTables,
+                    sal_Bool _bCase);
+            OTable( OCollection*    _pTables,
+                    sal_Bool _bCase,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description = ::rtl::OUString(),

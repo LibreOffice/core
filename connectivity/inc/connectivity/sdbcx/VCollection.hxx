@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 13:58:57 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,7 @@ namespace connectivity
 
             void reFill(const TStringVector &_rVector);
             sal_Bool isCaseSensitive() const { return m_aNameMap.key_comp().isCaseSensitive(); }
+            void renameObject(const ::rtl::OUString _sOldName,const ::rtl::OUString _sNewName);
 
             // only the name is identical to ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);

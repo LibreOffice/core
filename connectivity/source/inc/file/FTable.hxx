@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-19 11:03:01 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,8 @@ namespace connectivity
             };
 
         public:
-            OFileTable( OConnection* _pConnection);
-            OFileTable( OConnection* _pConnection,
+            OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection);
+            OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description = ::rtl::OUString(),

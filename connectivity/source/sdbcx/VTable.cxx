@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 07:45:30 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,15 +126,19 @@ sal_Bool SAL_CALL OTable::supportsService( const ::rtl::OUString& _rServiceName 
     return pSupported != pEnd;
 }
 // -------------------------------------------------------------------------
-OTable::OTable(sal_Bool _bCase) :   OTableDescriptor_BASE(m_aMutex)
+OTable::OTable(OCollection* _pTables,
+               sal_Bool _bCase)
+               : OTableDescriptor_BASE(m_aMutex)
                 ,ODescriptor(OTableDescriptor_BASE::rBHelper,_bCase,sal_True)
                 ,m_pKeys(NULL)
                 ,m_pColumns(NULL)
                 ,m_pIndexes(NULL)
+                ,m_pTables(_pTables)
 {
 }
 // -----------------------------------------------------------------------------
-OTable::OTable( sal_Bool _bCase,
+OTable::OTable( OCollection*    _pTables,
+                sal_Bool _bCase,
                 const ::rtl::OUString& _Name,       const ::rtl::OUString& _Type,
                 const ::rtl::OUString& _Description,const ::rtl::OUString& _SchemaName,
                 const ::rtl::OUString& _CatalogName) :  OTableDescriptor_BASE(m_aMutex)
@@ -146,6 +150,7 @@ OTable::OTable( sal_Bool _bCase,
                 ,m_SchemaName(_SchemaName)
                 ,m_Description(_Description)
                 ,m_Type(_Type)
+                ,m_pTables(_pTables)
 {
     m_Name = _Name;
 }
@@ -166,7 +171,7 @@ void OTable::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOGNAME),     PROPERTY_ID_CATALOGNAME,nAttrib,&m_CatalogName, ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),      PROPERTY_ID_SCHEMANAME, nAttrib,&m_SchemaName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION),     PROPERTY_ID_DESCRIPTION,nAttrib,&m_Description, ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),                PROPERTY_ID_TYPE,       nAttrib,&m_Type,        ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),            PROPERTY_ID_TYPE,       nAttrib,&m_Type,        ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OTable::acquire() throw(::com::sun::star::uno::RuntimeException)
@@ -215,6 +220,7 @@ void SAL_CALL OTable::disposing(void)
     if(m_pIndexes)
         m_pIndexes->disposing();
 
+    m_pTables = NULL;
 }
 // -----------------------------------------------------------------------------
 // XColumnsSupplier
@@ -285,24 +291,29 @@ void SAL_CALL OTable::rename( const ::rtl::OUString& newName ) throw(SQLExceptio
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
+    ::rtl::OUString sOldComposedName = getName();
+    ::rtl::OUString sNewComposedName;
+    sal_Int32 nPos = sOldComposedName.lastIndexOf('.');
+    if(nPos != -1)
+    {
+        sNewComposedName = sOldComposedName.copy(0,nPos);
+        sNewComposedName += ::rtl::OUString::createFromAscii(".") ;
+        sNewComposedName += newName;
+    }
+    else
+        sNewComposedName = newName;
 
+    m_pTables->renameObject(sOldComposedName,sNewComposedName);
+    m_Name = newName;
 }
 // -------------------------------------------------------------------------
 // XAlterTable
 void SAL_CALL OTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
-
-
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
-
-
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OTable::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)

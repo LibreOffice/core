@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:09:03 $
+ *  last change: $Author: oj $ $Date: 2001-09-25 13:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,8 @@ namespace connectivity
             virtual void refreshIndexes();
 
         public:
-            OCalcTable( OCalcConnection* _pConnection);
-            OCalcTable( OCalcConnection* _pConnection,
+            OCalcTable( sdbcx::OCollection* _pTables,OCalcConnection* _pConnection);
+            OCalcTable( sdbcx::OCollection* _pTables,OCalcConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description = ::rtl::OUString(),
