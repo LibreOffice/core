@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerparser.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:34:42 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@ namespace configmgr
         namespace sax       = ::com::sun::star::xml::sax;
 // -----------------------------------------------------------------------------
 
-LayerParser::LayerParser(ServiceFactory const & _xSvcFactory, uno::Reference< backenduno::XLayerHandler > const & _xHandler)
-: BasicParser(_xSvcFactory)
+LayerParser::LayerParser(Context const & _xContext, uno::Reference< backenduno::XLayerHandler > const & _xHandler)
+: BasicParser(_xContext)
 , m_xHandler(_xHandler)
 , m_bRemoved(false)
 , m_bNewProp(false)
@@ -353,7 +353,9 @@ void LayerParser::endValueData()
 
     if (m_bNewProp)
     {
-        OSL_ENSURE(!isValueDataLocalized(),"Layer parser: Invalid Data: 'lang' ignored for newly added property.");
+        if (this->isValueDataLocalized())
+            getLogger().warning("Language attribute ignored for value of added property.",
+                                "endValueData()","configuration::xml::SchemaParser");
 
         addOrReplaceCurrentProperty(aValue) ;
     }
