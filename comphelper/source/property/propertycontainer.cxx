@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-13 12:10:21 $
+ *  last change: $Author: fs $ $Date: 2000-11-19 10:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ void OPropertyContainer::registerMayBeVoidProperty(const ::rtl::OUString& _rName
     OSL_ENSHURE(_pPointerToMember,
         "OPropertyContainer::registerMayBeVoidProperty : you gave me nonsense : the pointer must be non-NULL");
 
-    _nAttributes &= PropertyAttribute::MAYBEVOID;
+    _nAttributes &= ~PropertyAttribute::MAYBEVOID;
 
     PropertyDescription aNewProp;
     aNewProp.sName = _rName;
@@ -448,6 +448,9 @@ void OPropertyContainer::describeProperties(Sequence< Property >& _rProps) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/13 12:10:21  oj
+ *  impl dtor to avoid wrong delete call
+ *
  *  Revision 1.2  2000/10/06 14:43:54  fs
  *  uno_typ_equalData instead of uno_typ_equal
  *
