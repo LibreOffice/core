@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:16:37 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1036,7 +1036,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
         // replacing the object which we will return with a SdrPageObj
         delete pRet;
-        pRet = new SdrPageObj( rObjData.rBoundRect, pSdrModel->GetPage( nPageNum ));
+        pRet = new SdrPageObj( rObjData.rBoundRect, pSdrModel->GetPage( nPageNum - 1 ) );
     }
     else
     {
