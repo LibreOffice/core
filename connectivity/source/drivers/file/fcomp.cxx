@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:11 $
+ *  last change: $Author: oj $ $Date: 2001-08-09 12:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,20 @@
 #ifndef _COM_SUN_STAR_SDBC_XCOLUMNLOCATE_HPP_
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
+#include <com/sun/star/util/Date.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
+#include <com/sun/star/util/Time.hpp>
+#endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
+#endif
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include "connectivity/dbconversion.hxx"
 #endif
 
 using namespace connectivity;
@@ -87,6 +99,7 @@ using namespace connectivity::file;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::util;
 
 DBG_NAME(OPredicateCompiler);
 //------------------------------------------------------------------
@@ -502,7 +515,50 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
             SQL_ISTOKEN(pODBCNodeChild,T) ||
             SQL_ISTOKEN(pODBCNodeChild,TS) ))
         {
-            pOperand = new OOperandConst(*pODBCNode->getChild(1), pODBCNode->getChild(1)->getTokenValue());
+            ::rtl::OUString sDateTime = pODBCNode->getChild(1)->getTokenValue();
+            pOperand = new OOperandConst(*pODBCNode->getChild(1), sDateTime);
+            if(SQL_ISTOKEN(pODBCNodeChild,D))
+            {
+                ::rtl::OUString sDate = sDateTime.copy(0,4);
+                sal_uInt16 nYear    = sDate.toInt32();
+                sDate = sDateTime.copy(5,2);
+                sal_uInt16 nMonth   = sDate.toInt32();
+                sDate = sDateTime.copy(8,2);
+                sal_uInt16 nDay     = sDate.toInt32();
+
+                pOperand->setValue(::dbtools::DBTypeConversion::toDouble(Date(nDay,nMonth,nYear)));
+            }
+            else if(SQL_ISTOKEN(pODBCNodeChild,T))
+            {
+                ::rtl::OUString sDate = sDateTime.copy(0,2);
+                sal_uInt16 nHour    = sDate.toInt32();
+                sDate = sDateTime.copy(3,2);
+                sal_uInt16 nMin = sDate.toInt32();
+                sDate = sDateTime.copy(6,2);
+                sal_uInt16 nSec     = sDate.toInt32();
+
+                pOperand->setValue(::dbtools::DBTypeConversion::toDouble(Time(0,nSec,nMin,nHour)));
+            }
+            else if(SQL_ISTOKEN(pODBCNodeChild,TS))
+            {
+                ::rtl::OUString sDate = sDateTime.copy(0,4);
+                sal_uInt16 nYear    = sDate.toInt32();
+                sDate = sDateTime.copy(5,2);
+                sal_uInt16 nMonth   = sDate.toInt32();
+                sDate = sDateTime.copy(8,2);
+                sal_uInt16 nDay     = sDate.toInt32();
+
+                sDate = sDateTime.copy(11,2);
+                sal_uInt16 nHour    = sDate.toInt32();
+                sDate = sDateTime.copy(14,2);
+                sal_uInt16 nMin = sDate.toInt32();
+                sDate = sDateTime.copy(17,2);
+                sal_uInt16 nSec     = sDate.toInt32();
+
+                pOperand->setValue(::dbtools::DBTypeConversion::toDouble(DateTime(0,nSec,nMin,nHour,nDay,nMonth,nYear)));
+            }
+
+
 
 //          // setting the Date
 //          try
@@ -516,7 +572,6 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
 //          }
         }
         else
-            ;
             ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Statement to complex"),NULL);
     }
     else

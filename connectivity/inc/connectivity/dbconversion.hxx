@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 13:11:19 $
+ *  last change: $Author: oj $ $Date: 2001-08-09 12:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ namespace dbtools
         // return the DateTime in the format %04d-%02d-%02d %02d:%02d:%02d
         static ::rtl::OUString toDateTimeString(const ::com::sun::star::util::DateTime& _rDateTime);
         // return the any in an sql standard format
-        ::rtl::OUString toSQLString(sal_Int32 eType, const ::com::sun::star::uno::Any& _rVal, sal_Bool bQuote,
+        static ::rtl::OUString toSQLString(sal_Int32 eType, const ::com::sun::star::uno::Any& _rVal, sal_Bool bQuote,
             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >&  _rxTypeConverter);
     };
 
