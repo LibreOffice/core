@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:26 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,22 +648,20 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
                 if (!bMaster &&
                     aPresObjList.GetPos((void*) &rObj) != LIST_ENTRY_NOTFOUND)
                 {
-                    if (!rObj.IsEmptyPresObj())
-                    {
-                        // In die Liste fuers Undo eintragen, da dieses Objekt
-                        // durch das Default-Praesentationsobjekt ersetzt werden
-                        // soll.
-                        // Im UndoActionHdl des DrawDocs wird der UserCall
-                        // auf NULL gesetzt und das Obj aus der Liste ausgetragen
-                        ((SdrObject&) rObj).SetUserCall(this);
-                        List* pList = ((SdDrawDocument*) pModel)->GetDeletedPresObjList();
-                        pList->Insert((void*) &rObj, LIST_APPEND);
-                    }
-                    else
-                    {
-                        aPresObjList.Remove((void*) &rObj);
-                        ((SdrObject*) &rObj)->SetUserCall(NULL);  // const as const can...
-                    }
+                    // #107844#
+                    // Handling of non-empty and empty PresObjs was moved to UndoActionHdl
+                    // to allow adding the correct SdrUndoUserCallObj. This may be done here, too,
+                    // but it makes more sense to handle all changes to PresObjs in a central
+                    // place where the Undo is needed to be fetched anyways.
+
+                    // In die Liste fuers Undo eintragen, da dieses Objekt
+                    // durch das Default-Praesentationsobjekt ersetzt werden
+                    // soll.
+                    // Im UndoActionHdl des DrawDocs wird der UserCall
+                    // auf NULL gesetzt und das Obj aus der Liste ausgetragen
+                    ((SdrObject&) rObj).SetUserCall(this);
+                    List* pList = ((SdDrawDocument*) pModel)->GetDeletedPresObjList();
+                    pList->Insert((void*) &rObj, LIST_APPEND);
                 }
             }
             break;
