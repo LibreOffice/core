@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:27:07 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -872,6 +872,7 @@ void SwWW8ImplReader::ImportDop()
         SvxLanguageItem( (const LanguageType)pWwFib->lid )  );
 
     rDoc._SetUseVirtualDevice(!pWDop->fUsePrinterMetrics);
+    rDoc.SetAddFlyOffsets( true );
 
     //import magic doptypography information, if its there
     if (pWwFib->nFib > 105)
