@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-30 19:54:42 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ english_us ] = "Font Effects";
                 Text[ portuguese ] = "Efeitos do tipo de letra";
                 Text[ russian ] = "İôôåêò øğèôòà";
-                Text[ greek ] = "Åöİ ãñáììáôïóåéñÜò";
+                Text[ greek ] = "Åöİ ÷áñáêôŞñùí";
                 Text[ dutch ] = "Schrifteffect";
                 Text[ french ] = "Effets de caractères";
                 Text[ spanish ] = "Efectos de fuente";
@@ -517,7 +517,7 @@ TabPage RID_SCPAGE_PROTECTION
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "´òÓ¡Ê±ÒşÈë(~W)";
         Text[ russian ] = "Ñêğûòü äëÿ ïå÷àòè";
-        Text[ polish ] = "U~kryj przy wydruku";
+        Text[ polish ] = "U~kryj na wydruku";
         Text[ japanese ] = "ˆóü‚µ‚È‚¢(~W)";
         Text[ chinese_traditional ] = "¥´¦L®ÉÁô¤J(~W)";
         Text[ arabic ] = "ÅÎİÇÁ ÚäÏ ÇáØÈÇÚÉ";
@@ -587,3 +587,4 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ catalan ] = "Impresión";
     };
 };
+
