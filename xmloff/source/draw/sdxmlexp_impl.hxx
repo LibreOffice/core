@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-18 14:49:52 $
+ *  last change: $Author: cl $ $Date: 2001-02-02 11:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@ class ImpPresPageDrawStylePropMapper;
 class ImpXMLEXPPageMasterList;
 class ImpXMLEXPPageMasterInfo;
 class ImpXMLDrawPageInfoList;
-class ImpXMLShapeStyleInfoList;
 class ImpXMLAutoLayoutInfoList;
 class SvXMLAutoStylePoolP;
 class XMLSdPropHdlFactory;
@@ -128,52 +127,6 @@ enum XmlPlaceholder
 
 //////////////////////////////////////////////////////////////////////////////
 
-enum XmlShapeType
-{
-    XmlShapeTypeUnknown,                            // not known
-
-    XmlShapeTypeDrawRectangleShape,                 // "com.sun.star.drawing.RectangleShape"
-    XmlShapeTypeDrawEllipseShape,                   // "com.sun.star.drawing.EllipseShape"
-    XmlShapeTypeDrawControlShape,                   // "com.sun.star.drawing.ControlShape"
-    XmlShapeTypeDrawConnectorShape,                 // "com.sun.star.drawing.ConnectorShape"
-    XmlShapeTypeDrawMeasureShape,                   // "com.sun.star.drawing.MeasureShape"
-    XmlShapeTypeDrawLineShape,                      // "com.sun.star.drawing.LineShape"
-    XmlShapeTypeDrawPolyPolygonShape,               // "com.sun.star.drawing.PolyPolygonShape"
-    XmlShapeTypeDrawPolyLineShape,                  // "com.sun.star.drawing.PolyLineShape"
-    XmlShapeTypeDrawOpenBezierShape,                // "com.sun.star.drawing.OpenBezierShape"
-    XmlShapeTypeDrawClosedBezierShape,              // "com.sun.star.drawing.ClosedBezierShape"
-    XmlShapeTypeDrawGraphicObjectShape,             // "com.sun.star.drawing.GraphicObjectShape"
-    XmlShapeTypeDrawGroupShape,                     // "com.sun.star.drawing.GroupShape"
-    XmlShapeTypeDrawTextShape,                      // "com.sun.star.drawing.TextShape"
-    XmlShapeTypeDrawOLE2Shape,                      // "com.sun.star.drawing.OLE2Shape"
-    XmlShapeTypeDrawChartShape,                     // embedded com.sun.star.chart
-    XmlShapeTypeDrawTableShape,                     // embedded com.sun.star.sheet
-    XmlShapeTypeDrawPageShape,                      // "com.sun.star.drawing.PageShape"
-    XmlShapeTypeDrawFrameShape,                     // "com.sun.star.drawing.FrameShape"
-    XmlShapeTypeDrawCaptionShape,                   // "com.sun.star.drawing.CaptionShape"
-
-    XmlShapeTypeDraw3DSceneObject,                  // "com.sun.star.drawing.Shape3DSceneObject"
-    XmlShapeTypeDraw3DCubeObject,                   // "com.sun.star.drawing.Shape3DCubeObject"
-    XmlShapeTypeDraw3DSphereObject,                 // "com.sun.star.drawing.Shape3DSphereObject"
-    XmlShapeTypeDraw3DLatheObject,                  // "com.sun.star.drawing.Shape3DLatheObject"
-    XmlShapeTypeDraw3DExtrudeObject,                // "com.sun.star.drawing.Shape3DExtrudeObject"
-
-    XmlShapeTypePresTitleTextShape,                 // "com.sun.star.presentation.TitleTextShape"
-    XmlShapeTypePresOutlinerShape,                  // "com.sun.star.presentation.OutlinerShape"
-    XmlShapeTypePresSubtitleShape,                  // "com.sun.star.presentation.SubtitleShape"
-    XmlShapeTypePresGraphicObjectShape,             // "com.sun.star.presentation.GraphicObjectShape"
-    XmlShapeTypePresPageShape,                      // "com.sun.star.presentation.PageShape"
-    XmlShapeTypePresOLE2Shape,                      // "com.sun.star.presentation.OLE2Shape"
-    XmlShapeTypePresChartShape,                     // "com.sun.star.presentation.ChartShape"
-    XmlShapeTypePresTableShape,                     // "com.sun.star.presentation.TableShape"
-    XmlShapeTypePresOrgChartShape,                  // "com.sun.star.presentation.OrgChartShape"
-    XmlShapeTypePresNotesShape,                     // "com.sun.star.presentation.NotesShape"
-
-    XmlShapeTypeNotYetSet
-};
-
-//////////////////////////////////////////////////////////////////////////////
-
 class SdXMLExport : public SvXMLExport
 {
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > mxDocStyleFamilies;
@@ -186,7 +139,6 @@ class SdXMLExport : public SvXMLExport
     // temporary infos
     ImpXMLEXPPageMasterList*    mpPageMasterInfoList;
     ImpXMLEXPPageMasterList*    mpPageMaterUsageList;
-    ImpXMLShapeStyleInfoList*   mpShapeStyleInfoList;
     ImpXMLAutoLayoutInfoList*   mpAutoLayoutInfoList;
 
     ::std::vector< ::rtl::OUString >        maDrawPagesAutoLayoutNames;
@@ -231,63 +183,7 @@ class SdXMLExport : public SvXMLExport
 
     void ImpWriteDefaultStyleInfos();
 
-    void ImpPrepSingleShapeStyleInfo(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape,
-        const rtl::OUString& rPrefix);
-    void ImpPrepSingleShapeStyleInfos(com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xShapes,
-        const rtl::OUString& rPrefix);
-    void ImpWriteSingleShapeStyleInfos(com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xShapes,
-        sal_Int32 nFeatures = SEF_DEFAULT,
-        com::sun::star::awt::Point* pRefPoint = NULL
-    );
-
-    void ImpWriteSingleShapeStyleInfo(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape,
-        sal_Int32 nFeatures = SEF_DEFAULT,
-        com::sun::star::awt::Point* pRefPoint = NULL
-    );
-
     void exportFormsElement( com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xDrawPage );
-
-public:
-    static void ImpWriteSingleShapeStyleInfo(SvXMLExport& rExp,
-        const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape,
-        sal_uInt16 nFamily, const rtl::OUString& rStyleName, XmlShapeType eShapeType,
-        sal_Int32 nFeatures = SEF_DEFAULT,
-        com::sun::star::awt::Point* pRefPoint = NULL
-    );
-    static void ImpWriteSingleShapeStyleInfos(SvXMLExport& rExp,
-        com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xShapes,
-        sal_Int32 nFeatures = SEF_DEFAULT,
-        com::sun::star::awt::Point* pRefPoint = NULL
-    );
-    static void ImpStartWriteGroupShape(SvXMLExport& rExp,
-        const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape,
-        sal_Int32 nFeatures = SEF_DEFAULT,
-        com::sun::star::awt::Point* pRefPoint = NULL
-    );
-
-    static void ImpCalcShapeType(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape,
-        XmlShapeType& eShapeType);
-
-private:
-    // single shape exporters
-    static void ImpExportRectangleShape(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
-    static void ImpExportLineShape(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,  com::sun::star::awt::Point* pRefPoint = NULL );
-    static void ImpExportEllipseShape(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,   com::sun::star::awt::Point* pRefPoint = NULL );
-    static void ImpExportPolygonShape(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,   com::sun::star::awt::Point* pRefPoint = NULL );
-    static void ImpExportTextBoxShape(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,   com::sun::star::awt::Point* pRefPoint = NULL );
-    static void ImpExportGraphicObjectShape(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
-    static void ImpExportChartShape(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
-    static void ImpExportSpreadsheetShape(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,   com::sun::star::awt::Point* pRefPoint = NULL );
-    static void ImpExportControlShape(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,   com::sun::star::awt::Point* pRefPoint = NULL );
-    static void ImpExportConnectorShape(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
-    static void ImpExportMeasureShape(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,   com::sun::star::awt::Point* pRefPoint = NULL );
-    static void ImpExportOLE2Shape(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,  com::sun::star::awt::Point* pRefPoint = NULL );
-    static void ImpExportPageShape(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,  com::sun::star::awt::Point* pRefPoint = NULL );
-    static void ImpExportCaptionShape(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,   com::sun::star::awt::Point* pRefPoint = NULL );
-    static void ImpExport3DShape(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,    com::sun::star::awt::Point* pRefPoint = NULL );
-
-    static void ImpPrepareExport3DScene(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
-    static void ImpExport3DLamps(SvXMLExport& rExp, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,    com::sun::star::awt::Point* pRefPoint = NULL );
 
 public:
     SdXMLExport( sal_Bool bIsDraw );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-19 16:25:18 $
+ *  last change: $Author: cl $ $Date: 2001-02-02 11:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
+#include <com/sun/star/style/XStyle.hpp>
+#endif
+
 #ifndef _XMLOFF_SHAPEEXPORT_HXX
 #include "shapeexport.hxx"
 #endif
@@ -107,11 +111,11 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") )
 {
     // construct PropertyHandlerFactory
-    xSdPropHdlFactory = new XMLSdPropHdlFactory( rExp.GetModel() );
+    xSdPropHdlFactory = new XMLSdPropHdlFactory( rExport.GetModel() );
 
     // construct PropertySetMapper
     UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xSdPropHdlFactory);
-    xPropertySetMapper = new XMLShapeExportPropertyMapper( xMapper, (XMLTextListAutoStylePool*)&rExp.GetTextParagraphExport()->GetListAutoStylePool(), rExp );
+    xPropertySetMapper = new XMLShapeExportPropertyMapper( xMapper, (XMLTextListAutoStylePool*)&rExport.GetTextParagraphExport()->GetListAutoStylePool(), rExp );
     if( pExtMapper )
     {
         UniReference < SvXMLExportPropertyMapper > xExtMapper( pExtMapper );
@@ -121,50 +125,109 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     // chain text attributes
     xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateCharExtPropMapper(rExp));
 
-    rExp.GetAutoStylePool()->AddFamily(
+    rExport.GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_SD_GRAPHICS_ID,
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)),
         GetPropertySetMapper(),
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX)));
-    rExp.GetAutoStylePool()->AddFamily(
+    rExport.GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_SD_PRESENTATION_ID,
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_NAME)),
         GetPropertySetMapper(),
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX)));
+
+    maCurrentInfo = maShapeInfos.end();
 }
+
+///////////////////////////////////////////////////////////////////////
 
 XMLShapeExport::~XMLShapeExport()
 {
 }
 
+///////////////////////////////////////////////////////////////////////
+
 // This method collects all automatic styles for the given XShape
 void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShape >& xShape)
 {
+    ImplXMLShapeExportInfo aShapeInfo;
+
+    // -----------------------------
+    // first compute the shapes type
+    // -----------------------------
+    ImpCalcShapeType(xShape, aShapeInfo.meShapeType);
+
+    // ------------------------------
+    // compute the shape parent style
+    // ------------------------------
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
+        uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
+
+        OUString aParentName;
+        uno::Reference< style::XStyle > xStyle;
+
+        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( OUString(RTL_CONSTASCII_USTRINGPARAM("Style"))) )
+            xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Style"))) >>= xStyle;
+
+        if(xStyle.is())
+        {
+            // get family ID
+            uno::Reference< beans::XPropertySet > xStylePropSet(xStyle, uno::UNO_QUERY);
+            DBG_ASSERT( xStylePropSet.is(), "style without a XPropertySet?" );
+            if(xStylePropSet.is())
+            {
+                OUString aFamilyName;
+                xStylePropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Family"))) >>= aFamilyName;
+                if(aFamilyName.getLength() && aFamilyName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("presentation"))))
+                    aShapeInfo.mnFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
+            }
+
+            // get parent-style name
+            if(XML_STYLE_FAMILY_SD_PRESENTATION_ID == aShapeInfo.mnFamily)
+            {
+                aParentName = msPresentationStylePrefix;
+            }
+
+            aParentName += xStyle->getName();
+        }
+
         // filter propset
-        OUString aParentName; // parent maybe the pool in later versions
-        OUString aNewName;
         std::vector< XMLPropertyState > xPropStates = GetPropertySetMapper()->Filter( xPropSet );
 
-        if(xPropStates.size())
+        sal_Int32 nCount = 0;
+        std::vector< XMLPropertyState >::iterator aIter = xPropStates.begin();
+        const std::vector< XMLPropertyState >::iterator aEnd = xPropStates.end();
+        while( aIter != aEnd )
+        {
+            if( aIter->mnIndex != -1 )
+                nCount++;
+            aIter++;
+        }
+
+        if(nCount == 0)
+        {
+            // no hard attributes, use parent style name for export
+            aShapeInfo.msStyleName = aParentName;
+        }
+        else
         {
             // there are filtered properties -> hard attributes
             // try to find this style in AutoStylePool
-            aNewName = GetExport().GetAutoStylePool()->Find(
-                XML_STYLE_FAMILY_SD_GRAPHICS_ID, aParentName, xPropStates);
+            aShapeInfo.msStyleName = rExport.GetAutoStylePool()->Find(aShapeInfo.mnFamily, aParentName, xPropStates);
 
-            if(!aNewName.getLength())
+            if(!aShapeInfo.msStyleName.getLength())
             {
                 // Style did not exist, add it to AutoStalePool
-                GetExport().GetAutoStylePool()->Add(
-                    XML_STYLE_FAMILY_SD_GRAPHICS_ID, aParentName, xPropStates);
+                aShapeInfo.msStyleName = rExport.GetAutoStylePool()->Add(aShapeInfo.mnFamily, aParentName, xPropStates);
             }
         }
     }
 
+    // ----------------
     // prep text styles
+    // ----------------
     uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY);
     if(xText.is())
     {
@@ -184,22 +247,23 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         }
     }
 
-    // check for calc ole
-    const OUString aShapeType( xShape->getShapeType() );
-    if( aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.OLE2Shape" )) ||
-        aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.CalcShape" )) )
+    // -------------------
+    // check for chart ole
+    // -------------------
+    if( aShapeInfo.meShapeType == XmlShapeTypeDrawChartShape || aShapeInfo.meShapeType == XmlShapeTypePresChartShape )
     {
         uno::Reference< chart::XChartDocument > xChartDoc;
-        uno::Any aAny( xPropSet->getPropertyValue(msModel) );
-        aAny >>= xChartDoc;
+        xPropSet->getPropertyValue(msModel) >>= xChartDoc;
         if( xChartDoc.is() )
         {
             GetExport().GetChartExport()->collectAutoStyles( xChartDoc );
         }
     }
 
+    // -------------------
     // check for connector
-    if( aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.ConnectorShape" ) ) )
+    // -------------------
+    if( aShapeInfo.meShapeType == XmlShapeTypeDrawConnectorShape )
     {
         uno::Reference< drawing::XShape > xConnection;
 
@@ -213,42 +277,282 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             createShapeId( xConnection );
         }
     }
+
+    maShapeInfos.push_back( aShapeInfo );
+    maCurrentInfo = maShapeInfos.begin();
+
+    // -----------------------------------------------------
+    // check for shape collections (group shape or 3d scene)
+    // and collect contained shapes style infos
+    // -----------------------------------------------------
+    {
+        uno::Reference< drawing::XShapes > xShapes( xShape, uno::UNO_QUERY );
+        if( xShapes.is() )
+        {
+            collectShapesAutoStyles( xShapes );
+        }
+    }
 }
+
+///////////////////////////////////////////////////////////////////////
 
 // This method exports the given XShape
 void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape,
                                  sal_Int32 nFeatures /* = SEF_DEFAULT */,
                                  com::sun::star::awt::Point* pRefPoint /* = NULL */ )
 {
-    uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    if( maCurrentInfo == maShapeInfos.end() )
     {
-        OUString aParentName; // parent maybe the pool in later versions
-        OUString aNewName;
-        std::vector< XMLPropertyState > xPropStates( GetPropertySetMapper()->Filter( xPropSet ) );
+        DBG_ERROR( "exportShape callings do not correspond to collectShapeAutoStyles calls!" );
+        return;
+    }
 
-        if(xPropStates.size())
-            aNewName = GetExport().GetAutoStylePool()->Find(
-                XML_STYLE_FAMILY_SD_GRAPHICS_ID, aParentName, xPropStates);
+    const ImplXMLShapeExportInfo aShapeInfo( *maCurrentInfo );
+    maCurrentInfo++;
 
-        // compute the shape type
+#ifdef DBG_UTIL
+    // -----------------------------
+    // first compute the shapes type
+    // -----------------------------
+    {
         XmlShapeType eShapeType(XmlShapeTypeNotYetSet);
-        SdXMLExport::ImpCalcShapeType(xShape, eShapeType);
+        ImpCalcShapeType(xShape, eShapeType);
 
-        uno::Reference< container::XIndexAccess > xShapes(xShape, uno::UNO_QUERY);
-        if(xShapes.is() && xShapes->getCount())
+        DBG_ASSERT( eShapeType == aShapeInfo.meShapeType, "exportShape callings do not correspond to collectShapeAutoStyles calls!" );
+    }
+#endif
+
+    // -------------------------------
+    // export shapes name if he has one
+    // -------------------------------
+    {
+        uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY );
+        if( xNamed.is() )
         {
-            // group shape
-            SdXMLExport::ImpStartWriteGroupShape(GetExport(), xShape, nFeatures, pRefPoint);
+            const OUString aName( xNamed->getName() );
+            if( aName.getLength() )
+                rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_name, aName );
         }
+    }
+
+    // ------------------
+    // export style name
+    // ------------------
+    if( aShapeInfo.msStyleName.getLength() != 0 )
+    {
+        if(XML_STYLE_FAMILY_SD_GRAPHICS_ID == aShapeInfo.mnFamily)
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, aShapeInfo.msStyleName);
         else
+            rExport.AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_style_name, aShapeInfo.msStyleName);
+    }
+
+    // --------------------------
+    // export shapes id if needed
+    // --------------------------
+    {
+        const sal_Int32 nShapeId = getShapeId( xShape );
+        if( nShapeId != -1 )
         {
-            // single shape
-            SdXMLExport::ImpWriteSingleShapeStyleInfo(GetExport(), xShape,
-                XML_STYLE_FAMILY_SD_GRAPHICS_ID, aNewName, eShapeType, nFeatures, pRefPoint);
+            const OUString sId( OUString::valueOf( nShapeId ) );
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_id, sId );
+        }
+    }
+
+    // --------------------------
+    // export layer information
+    // --------------------------
+    if( IsLayerExportEnabled() )
+    {
+        try
+        {
+            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
+            OUString aLayerName;
+            xProps->getPropertyValue( OUString::createFromAscii( "LayerName" ) ) >>= aLayerName;
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_layer, aLayerName );
+
+        }
+        catch( uno::Exception e )
+        {
+            DBG_ERROR( "could not export layer name for shape!" );
+        }
+    }
+
+    // ----------------------------------------
+    // collect animation informations if needed
+    // ----------------------------------------
+    if( mxAnimationsExporter.is() )
+        mxAnimationsExporter->collect( xShape );
+
+    // --------------------
+    // export shape element
+    // --------------------
+    switch(aShapeInfo.meShapeType)
+    {
+        case XmlShapeTypeDrawRectangleShape:
+        {
+            ImpExportRectangleShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+        case XmlShapeTypeDrawEllipseShape:
+        {
+            ImpExportEllipseShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+        case XmlShapeTypeDrawLineShape:
+        {
+            ImpExportLineShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+        case XmlShapeTypeDrawPolyPolygonShape:  // closed PolyPolygon
+        case XmlShapeTypeDrawPolyLineShape:     // open PolyPolygon
+        case XmlShapeTypeDrawClosedBezierShape: // closed PolyPolygon containing curves
+        case XmlShapeTypeDrawOpenBezierShape:   // open PolyPolygon containing curves
+        {
+            ImpExportPolygonShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypeDrawTextShape:
+        case XmlShapeTypePresTitleTextShape:
+        case XmlShapeTypePresOutlinerShape:
+        case XmlShapeTypePresSubtitleShape:
+        case XmlShapeTypePresNotesShape:
+        {
+            ImpExportTextBoxShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypeDrawGraphicObjectShape:
+        case XmlShapeTypePresGraphicObjectShape:
+        {
+            ImpExportGraphicObjectShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypeDrawChartShape:
+        case XmlShapeTypePresChartShape:
+        {
+            ImpExportChartShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypeDrawTableShape:
+        case XmlShapeTypePresTableShape:
+        {
+            ImpExportSpreadsheetShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypeDrawControlShape:
+        {
+            ImpExportControlShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypeDrawConnectorShape:
+        {
+            ImpExportConnectorShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypeDrawMeasureShape:
+        {
+            ImpExportMeasureShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypeDrawOLE2Shape:
+        case XmlShapeTypePresOLE2Shape:
+        {
+            ImpExportOLE2Shape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypeDrawPageShape:
+        case XmlShapeTypePresPageShape:
+        {
+            ImpExportPageShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypeDrawCaptionShape:
+        {
+            ImpExportCaptionShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypeDraw3DCubeObject:
+        case XmlShapeTypeDraw3DSphereObject:
+        case XmlShapeTypeDraw3DLatheObject:
+        case XmlShapeTypeDraw3DExtrudeObject:
+        {
+            ImpExport3DShape(xShape, aShapeInfo.meShapeType);
+            break;
+        }
+
+        case XmlShapeTypeDraw3DSceneObject:
+        {
+            ImpExport3DSceneShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypeDrawGroupShape:
+        {
+            // empty group
+            ImpExportGroupShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            break;
+        }
+
+        case XmlShapeTypePresOrgChartShape:
+        case XmlShapeTypeDrawFrameShape:
+        case XmlShapeTypeUnknown:
+        case XmlShapeTypeNotYetSet:
+        default:
+        {
+            // this should never happen and is an error
+            DBG_ERROR("XMLEXP: WriteShape: unknown or unexpected type of shape in export!");
+            break;
         }
     }
 }
+
+///////////////////////////////////////////////////////////////////////
+
+// This method collects all automatic styles for the shapes inside the given XShapes collection
+void XMLShapeExport::collectShapesAutoStyles( const uno::Reference < drawing::XShapes >& xShapes )
+{
+    uno::Reference< drawing::XShape > xShape;
+    const sal_Int32 nShapeCount(xShapes->getCount());
+    for(sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++)
+    {
+        xShapes->getByIndex(nShapeId) >>= xShape;
+        DBG_ASSERT( xShape.is(), "Shape without a XShape?" );
+        if(!xShape.is())
+            continue;
+
+        collectShapeAutoStyles( xShape );
+    }
+}
+
+///////////////////////////////////////////////////////////////////////
+
+// This method exports all XShape inside the given XShapes collection
+void XMLShapeExport::exportShapes( const uno::Reference < drawing::XShapes >& xShapes, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */ )
+{
+    uno::Reference< drawing::XShape > xShape;
+    const sal_Int32 nShapeCount(xShapes->getCount());
+    for(sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++)
+    {
+        xShapes->getByIndex(nShapeId) >>= xShape;
+        DBG_ASSERT( xShape.is(), "Shape without a XShape?" );
+        if(!xShape.is())
+            continue;
+
+        exportShape( xShape, nFeatures, pRefPoint );
+    }
+}
+
+///////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::exportAutoStyles()
 {
@@ -275,6 +579,8 @@ void XMLShapeExport::exportAutoStyles()
     }
 }
 
+///////////////////////////////////////////////////////////////////////
+
 /** creates a unique id for this shape, this id is saved and exported with this shape later
     with the exportShape method. Its ok to call this twice with the same shape */
 void XMLShapeExport::createShapeId( const uno::Reference < drawing::XShape >& xShape )
@@ -284,6 +590,8 @@ void XMLShapeExport::createShapeId( const uno::Reference < drawing::XShape >& xS
     if( aId == maShapeIds.end() )
         maShapeIds[xShape] = mnNextUniqueShapeId++;
 }
+
+///////////////////////////////////////////////////////////////////////
 
 /** returns the unique id for this shape. It returns -1 if the was no createShapeId call
     for this shape yet. */
@@ -296,6 +604,8 @@ sal_Int32 XMLShapeExport::getShapeId( const uno::Reference < drawing::XShape >& 
 
     return -1;
 }
+
+///////////////////////////////////////////////////////////////////////
 
 /// returns the export property mapper for external chaining
 SvXMLExportPropertyMapper* XMLShapeExport::CreateShapePropMapper(
@@ -311,3 +621,97 @@ SvXMLExportPropertyMapper* XMLShapeExport::CreateShapePropMapper(
     pResult->ChainExportMapper( XMLTextParagraphExport::CreateCharExtPropMapper( rExport ));
     return pResult;
 }
+
+///////////////////////////////////////////////////////////////////////
+
+void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& xShape,
+    XmlShapeType& eShapeType)
+{
+    // set in every case, so init here
+    eShapeType = XmlShapeTypeUnknown;
+
+    uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor(xShape, uno::UNO_QUERY);
+    if(xShapeDescriptor.is())
+    {
+        String aType((OUString)xShapeDescriptor->getShapeType());
+
+        if(aType.EqualsAscii((const sal_Char*)"com.sun.star.", 0, 13))
+        {
+            if(aType.EqualsAscii("drawing.", 13, 8))
+            {
+                // drawing shapes
+                if     (aType.EqualsAscii("Rectangle", 21, 9)) { eShapeType = XmlShapeTypeDrawRectangleShape; }
+                else if(aType.EqualsAscii("Ellipse", 21, 7)) { eShapeType = XmlShapeTypeDrawEllipseShape; }
+                else if(aType.EqualsAscii("Control", 21, 7)) { eShapeType = XmlShapeTypeDrawControlShape; }
+                else if(aType.EqualsAscii("Connector", 21, 9)) { eShapeType = XmlShapeTypeDrawConnectorShape; }
+                else if(aType.EqualsAscii("Measure", 21, 7)) { eShapeType = XmlShapeTypeDrawMeasureShape; }
+                else if(aType.EqualsAscii("Line", 21, 4)) { eShapeType = XmlShapeTypeDrawLineShape; }
+                else if(aType.EqualsAscii("PolyPolygon", 21, 11)) { eShapeType = XmlShapeTypeDrawPolyPolygonShape; }
+                else if(aType.EqualsAscii("PolyLine", 21, 8)) { eShapeType = XmlShapeTypeDrawPolyLineShape; }
+                else if(aType.EqualsAscii("OpenBezier", 21, 10)) { eShapeType = XmlShapeTypeDrawOpenBezierShape; }
+                else if(aType.EqualsAscii("ClosedBezier", 21, 12)) { eShapeType = XmlShapeTypeDrawClosedBezierShape; }
+                else if(aType.EqualsAscii("GraphicObject", 21, 13)) { eShapeType = XmlShapeTypeDrawGraphicObjectShape; }
+                else if(aType.EqualsAscii("Group", 21, 5)) { eShapeType = XmlShapeTypeDrawGroupShape; }
+                else if(aType.EqualsAscii("Text", 21, 4)) { eShapeType = XmlShapeTypeDrawTextShape; }
+                else if(aType.EqualsAscii("OLE2", 21, 4))
+                {
+                    eShapeType = XmlShapeTypeDrawOLE2Shape;
+
+                    // get info about presentation shape
+                    uno::Reference <beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
+
+                    if(xPropSet.is())
+                    {
+                        uno::Any aAny;
+                        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Model")));
+                        uno::Reference <lang::XServiceInfo> xObjectInfo;
+
+                        if(aAny >>= xObjectInfo)
+                        {
+                            if(xObjectInfo->supportsService(OUString(RTL_CONSTASCII_USTRINGPARAM
+                                ("com.sun.star.chart.ChartDocument"))))
+                            {
+                                eShapeType = XmlShapeTypeDrawChartShape;
+                            }
+                            else if(xObjectInfo->supportsService(OUString(RTL_CONSTASCII_USTRINGPARAM
+                                ("com.sun.star.sheet.SpreadsheetDocument"))))
+                            {
+                                eShapeType = XmlShapeTypeDrawTableShape;
+                            }
+                            else
+                            {
+                                // general OLE2 Object
+                            }
+                        }
+                    }
+                }
+                else if(aType.EqualsAscii("Page", 21, 4)) { eShapeType = XmlShapeTypeDrawPageShape; }
+                else if(aType.EqualsAscii("Frame", 21, 5)) { eShapeType = XmlShapeTypeDrawFrameShape; }
+                else if(aType.EqualsAscii("Caption", 21, 6)) { eShapeType = XmlShapeTypeDrawCaptionShape; }
+
+                // 3D shapes
+                else if(aType.EqualsAscii("Scene", 21 + 7, 5)) { eShapeType = XmlShapeTypeDraw3DSceneObject; }
+                else if(aType.EqualsAscii("Cube", 21 + 7, 4)) { eShapeType = XmlShapeTypeDraw3DCubeObject; }
+                else if(aType.EqualsAscii("Sphere", 21 + 7, 6)) { eShapeType = XmlShapeTypeDraw3DSphereObject; }
+                else if(aType.EqualsAscii("Lathe", 21 + 7, 5)) { eShapeType = XmlShapeTypeDraw3DLatheObject; }
+                else if(aType.EqualsAscii("Extrude", 21 + 7, 7)) { eShapeType = XmlShapeTypeDraw3DExtrudeObject; }
+            }
+            else if(aType.EqualsAscii("presentation.", 13, 13))
+            {
+                // presentation shapes
+                if     (aType.EqualsAscii("TitleText", 26, 9)) { eShapeType = XmlShapeTypePresTitleTextShape; }
+                else if(aType.EqualsAscii("Outliner", 26, 8)) { eShapeType = XmlShapeTypePresOutlinerShape;  }
+                else if(aType.EqualsAscii("Subtitle", 26, 8)) { eShapeType = XmlShapeTypePresSubtitleShape;  }
+                else if(aType.EqualsAscii("GraphicObject", 26, 13)) { eShapeType = XmlShapeTypePresGraphicObjectShape;  }
+                else if(aType.EqualsAscii("Page", 26, 4)) { eShapeType = XmlShapeTypePresPageShape;  }
+                else if(aType.EqualsAscii("OLE2", 26, 4)) { eShapeType = XmlShapeTypePresOLE2Shape; }
+                else if(aType.EqualsAscii("Chart", 26, 5)) { eShapeType = XmlShapeTypePresChartShape;  }
+                else if(aType.EqualsAscii("Table", 26, 5)) { eShapeType = XmlShapeTypePresTableShape;  }
+                else if(aType.EqualsAscii("OrgChart", 26, 8)) { eShapeType = XmlShapeTypePresOrgChartShape;  }
+                else if(aType.EqualsAscii("Notes", 26, 5)) { eShapeType = XmlShapeTypePresNotesShape;  }
+            }
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////
