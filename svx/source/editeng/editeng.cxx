@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-17 12:25:13 $
+ *  last change: $Author: thb $ $Date: 2002-05-17 17:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2620,4 +2620,21 @@ EFieldInfo::EFieldInfo( const SvxFieldItem& rFieldItem, USHORT nPara, USHORT nPo
 EFieldInfo::~EFieldInfo()
 {
     delete pFieldItem;
+}
+
+EFieldInfo::EFieldInfo( const EFieldInfo& rFldInfo )
+{
+    *this = rFldInfo;
+}
+
+EFieldInfo& EFieldInfo::operator= ( const EFieldInfo& rFldInfo )
+{
+    if( this == &rFldInfo )
+        return *this;
+
+    pFieldItem = rFldInfo.pFieldItem ? new SvxFieldItem( *rFldInfo.pFieldItem ) : 0;
+    aCurrentText = rFldInfo.aCurrentText;
+    aPosition = rFldInfo.aPosition;
+
+    return *this;
 }
