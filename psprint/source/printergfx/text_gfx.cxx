@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.17 $
+  *  $Revision: 1.18 $
   *
-  *  last change: $Author: pl $ $Date: 2002-08-01 18:54:33 $
+  *  last change: $Author: pl $ $Date: 2002-08-29 15:19:59 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -131,12 +131,18 @@ static int getVerticalDeltaAngle( sal_Unicode nChar )
 {
     int nAngle = 0;
     if( ( nChar >= 0x1100 && nChar < 0x11fa ) ||
-        ( nChar >= 0x3000 && nChar < 0xfb00 ) )
+        ( nChar >= 0x3000 && nChar < 0xfb00 ) ||
+        ( nChar >= 0xfe20 && nChar < 0xfe70 ) ||
+        ( nChar >= 0xff00 && nChar < 0xff64 )
+        )
     {
         if( nChar == 0x2010 || nChar == 0x2015 ||
             nChar == 0x2016 || nChar == 0x2026 ||
-            ( nChar >= 0x3008 && nChar < 0x3018 ) ||
-            nChar >= 0xFF00 )
+            ( nChar >= 0x3008 && nChar < 0x3019 && nChar != 0x3012 ) ||
+            nChar == 0xff3b || nChar == 0xff3d ||
+            (nChar >= 0xff6b && nChar < 0xff64 ) ||
+            nChar == 0xffe3
+            )
             nAngle = 0;
         else if( nChar == 0x30fc )
             nAngle = -900;
@@ -298,7 +304,6 @@ void PrinterGfx::DrawGlyphs(
         sal_Int32* pTempDelta = (sal_Int32*)alloca(sizeof(sal_Int32)*nLen);
         sal_Unicode* pTempUnicodes = (sal_Unicode*)alloca(sizeof(sal_Unicode)*nLen);
         sal_Int16 nTempLen = 0;
-        sal_Int16 nTempDeltaOffset = -1;
         sal_Int32 nTempFirstDelta = 0;
         sal_Int32 nRot = 0;
         Point aRotPoint;
@@ -318,7 +323,7 @@ void PrinterGfx::DrawGlyphs(
                 pTempUnicodes[nTempLen] = pUnicodes[i];
                 pTempGlyphIds[nTempLen] = pGlyphIds[i];
                 if( nTempLen > 0 )
-                    pTempDelta[nTempLen+nTempDeltaOffset]   = pDeltaArray[i-1];
+                    pTempDelta[nTempLen-1]  = pDeltaArray[i-1]-nTempFirstDelta;
                 else
                 {
                     // the first element in pDeltaArray shows
@@ -327,9 +332,7 @@ void PrinterGfx::DrawGlyphs(
                     // then we do not need to move the delta indices
                     // else we have to move them down by one and
                     // recalculate aPoint and all deltas
-                    if( i == 0 )
-                        nTempDeltaOffset = 0;
-                    else
+                    if( i != 0 )
                         nTempFirstDelta = pDeltaArray[ i-1 ];
                 }
                 nTempLen++;
@@ -382,12 +385,7 @@ void PrinterGfx::DrawGlyphs(
         pDeltaArray = pTempDelta;
         nLen = nTempLen;
 
-        if( nTempFirstDelta )
-        {
-            aPoint.X() += nTempFirstDelta;
-            for( sal_Int16 i = 0; i < nLen; i++ )
-                pDeltaArray[i] -= nTempFirstDelta;
-        }
+        aPoint.X() += nTempFirstDelta;
     }
 
     if( nLen > 0 )

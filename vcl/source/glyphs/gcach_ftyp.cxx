@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.74 $
- *  last change: $Author: hdu $ $Date: 2002-08-13 08:10:15 $
+ *  $Revision: 1.75 $
+ *  last change: $Author: pl $ $Date: 2002-08-29 15:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,7 +647,10 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 int SetVerticalFlags( sal_Unicode nChar )
 {
     if( (nChar >= 0x1100 && nChar <= 0x11f9)   // Hangul Jamo
-    ||  (nChar >= 0x3000 && nChar <= 0xfaff) ) // other CJK
+        || (nChar >= 0x3000 && nChar <= 0xfaff)
+        || (nChar >= 0xfe20 && nChar <= 0xfe6f)
+        || (nChar >= 0xff00 && nChar <= 0xfffd)
+        ) // other CJK
     {
         if( nChar == 0x2010 || nChar == 0x2015
         ||  nChar == 0x2016 || nChar == 0x2026
