@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 18:53:58 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ module com {  module sun {  module star {  module drawing {
     parent.  That is either the containing draw page or a group shape or a
     3D scene object.</p>
 
-     @since #107627#
+     @since OOo 1.1.2
 */
 published service AccessibleShape
 {
