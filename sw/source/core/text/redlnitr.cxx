@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
+ *  last change: $Author: ama $ $Date: 2001-09-24 09:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
 
     const SwExtTextInput* pExtInp = pDoc->GetExtTextInput( rTxtNode );
     sal_Bool bShow = ::IsShowChanges( pDoc->GetRedlineMode() );
-    if( pExtInp || bShow || (SwHoriOrient)SW_MOD()->GetRedlineMarkPos() != HORI_NONE )
+    if( pExtInp || bShow )
     {
         MSHORT nRedlPos = pDoc->GetRedlinePos( rTxtNode );
         if( pExtInp || MSHRT_MAX != nRedlPos )
