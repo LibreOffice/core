@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:59:51 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,17 +236,15 @@ namespace x11 {
         // property used to transfer the data
         struct IncrementalTransfer
         {
-            Sequence< sal_Int8 >
-                                            m_aData;
+            Sequence< sal_Int8 >            m_aData;
             int                             m_nBufferPos;
             Window                          m_aRequestor;
             Atom                            m_aProperty;
             Atom                            m_aTarget;
             int                             m_nFormat;
             int                             m_nTransferStartTime;
-
-            IncrementalTransfer( const Sequence< sal_Int8 >& rData, Window aRequestor, Atom aProperty, Atom aTarget, int nFormat );
         };
+        int m_nIncrementalThreshold;
 
         // a struct to hold the data associated with a selection
         struct Selection
@@ -431,7 +429,7 @@ namespace x11 {
         ::std::hash_map< Atom, Selection* >
                                     m_aSelections;
         // IncrementalTransfers in progress
-        ::std::hash_map< Window, ::std::list< IncrementalTransfer > >
+        std::hash_map< Window, std::hash_map< Atom, IncrementalTransfer > >
                                     m_aIncrementals;
 
         // do not use X11 multithreading capabilities
