@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-30 08:52:57 $
+ *  last change: $Author: dl $ $Date: 2001-04-02 10:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,9 +272,9 @@ void SdrTextObj::ItemSetChanged(const SfxItemSet& rSet)
         sal_uInt16 nParaCount((sal_uInt16)pOutliner->GetParagraphCount());
         for(sal_uInt16 nPara(0); nPara < nParaCount; nPara++)
         {
-            SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
-            aSet.Put(*mpObjectItemSet);
-            pOutliner->SetParaAttribs(nPara, aSet);
+            SfxItemSet aSet( pOutliner->GetParaAttribs(nPara) );
+            aSet.Put( rSet );
+            pOutliner->SetParaAttribs(nPara, aSet);
         }
 
         if(!pEdtOutl)
