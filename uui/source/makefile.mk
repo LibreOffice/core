@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mav $ $Date: 2002-10-31 11:08:28 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:01:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,9 +65,7 @@ PRJNAME = uui
 TARGET = source
 ENABLE_EXCEPTIONS = true
 
-.INCLUDE: svpre.mk
 .INCLUDE: settings.mk
-.INCLUDE: sv.mk
 
 SLOFILES = \
     $(SLO)$/cookiedg.obj \
@@ -79,8 +77,8 @@ SLOFILES = \
     $(SLO)$/passworddlg.obj \
     $(SLO)$/passcrtdlg.obj \
     $(SLO)$/fltdlg.obj
-
-SRCFILES = \
+SRS1NAME=$(TARGET)
+SRC1FILES = \
     cookiedg.src \
     ids.src \
     logindlg.src \
