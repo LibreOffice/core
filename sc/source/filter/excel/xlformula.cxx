@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:46:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
             FillXclFuncMap( saFuncTable_5, STATIC_TABLE_END( saFuncTable_5 ) );
         if( eBiff >= xlBiff8 )
             FillXclFuncMap( saFuncTable_8, STATIC_TABLE_END( saFuncTable_8 ) );
-        // external functions (i.e. addin functions)
+        // external functions (i.e. add-in functions)
         FillXclFuncMap( saFuncTable_E, STATIC_TABLE_END( saFuncTable_E ) );
     }
     else
@@ -393,11 +393,10 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
         if( eBiff >= xlBiff5 )
             FillScFuncMap( saFuncTable_5, STATIC_TABLE_END( saFuncTable_5 ) );
         if( eBiff >= xlBiff8 )
-        {
             FillScFuncMap( saFuncTable_8, STATIC_TABLE_END( saFuncTable_8 ) );
-            // external functions (i.e. addin functions), currently BIFF8 only
+        // external functions (i.e. add-in functions)
+        if( eBiff >= xlBiff5 )
             FillScFuncMap( saFuncTable_E, STATIC_TABLE_END( saFuncTable_E ) );
-        }
     }
 }
 
