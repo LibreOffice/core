@@ -21,7 +21,7 @@ class valueOf : public CppUnit::TestFixture
             suValue = rtl::OUString::valueOf( _nValue );
             rtl::OString sValue;
             sValue <<= suValue;
-            printf("# nFloat := %.9f  sValue := %s\n", _nValue, sValue.getStr());
+            t_print("nFloat := %.9f  sValue := %s\n", _nValue, sValue.getStr());
 
             float nValueATOF = atof( sValue.getStr() );
 
@@ -101,7 +101,7 @@ private:
             suValue = rtl::OUString::valueOf( _nValue );
             rtl::OString sValue;
             sValue <<= suValue;
-            printf("# nDouble := %.20f  sValue := %s\n", _nValue, sValue.getStr());
+            t_print("nDouble := %.20f  sValue := %s\n", _nValue, sValue.getStr());
 
             double nValueATOF = atof( sValue.getStr() );
 
@@ -192,7 +192,7 @@ public:
 template<class T>
 sal_Int16 SAL_CALL checkPrecisionSize()
 {
-    sal_Int16 nSize = sizeof(T);
+    // sal_Int16 nSize = sizeof(T);
     volatile T nCalcValue = 1.0;
 
 
@@ -235,7 +235,7 @@ sal_Int16 SAL_CALL checkPrecisionSize()
         volatile T nValue = nCalcValue + 1.0;
         volatile T dSub = nValue - 1.0;
         // ---- 0.02 ----- 0.01 ---- 0 --- -0.99 ---- -0.98 ----
-        volatile T dSubAbsolut = fabs(dSub);
+        // volatile T dSubAbsolut = fabs(dSub);
         // ---- 0.02 ----- 0.01 ---- 0 (cut)
         if ( dSub == 0)
             break;
@@ -252,7 +252,7 @@ sal_Int16 SAL_CALL checkPrecisionSize()
             }
             else
             {
-                printf("# warning: presision differs more than 1!\n");
+                t_print("warning: presision differs more than 1!\n");
             }
         }
 
@@ -268,13 +268,13 @@ sal_Int16 SAL_CALL checkPrecisionSize()
             {
                 sal_Int16 nPrecision;
                 nPrecision = checkPrecisionSize<float>();
-                printf("# precision of float: %d sizeof()=%d \n", nPrecision, sizeof(float));
+                t_print("precision of float: %d sizeof()=%d \n", nPrecision, sizeof(float));
 
                 nPrecision = checkPrecisionSize<double>();
-                printf("# precision of double: %d sizeof()=%d \n", nPrecision, sizeof(double));
+                t_print("precision of double: %d sizeof()=%d \n", nPrecision, sizeof(double));
 
                 nPrecision = checkPrecisionSize<long double>();
-                printf("# precision of long double: %d sizeof()=%d \n", nPrecision, sizeof(long double));
+                t_print("precision of long double: %d sizeof()=%d \n", nPrecision, sizeof(long double));
 
             }
 
@@ -329,7 +329,7 @@ sal_Int16 SAL_CALL checkPrecisionSize()
         // insert your test code here.
         void toDouble_selftest()
             {
-                printf("# Start selftest:\n");
+                t_print("Start selftest:\n");
                 CPPUNIT_ASSERT (is_double_equal(1.0, 1.01) == false);
                 CPPUNIT_ASSERT (is_double_equal(1.0, 1.001) == false);
                 CPPUNIT_ASSERT (is_double_equal(1.0, 1.0001) == false);
@@ -346,7 +346,7 @@ sal_Int16 SAL_CALL checkPrecisionSize()
                 CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000000000001) == true);
                 CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000000000001) == true);
                 CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000000000000001) == true);
-                printf("# Selftest done.\n");
+                t_print("Selftest done.\n");
             }
 
         void toDouble_test_3()
@@ -699,8 +699,8 @@ public:
 // LLA: old code:                 // double nOUStringValue = suOUStringValue.toDouble();
 // LLA: old code:
 // LLA: old code:                 // double nOUStringDelta = fabs(nATOFValue - nOUStringDelta);
-// LLA: old code:                 // printf("# Value: %.20f   DeltaATOF: %e   DeltaOUStr: %e   String: %s   \n", nValue, nATOFDelta, nOUStringDelta, sValue.getStr());
-// LLA: old code:                 printf("# Value: %.20lf   DeltaATOF: %e   String: %s   \n", nValue, nATOFDelta, sValue.getStr());
+// LLA: old code:                 // t_print("Value: %.20f   DeltaATOF: %e   DeltaOUStr: %e   String: %s   \n", nValue, nATOFDelta, nOUStringDelta, sValue.getStr());
+// LLA: old code:                 t_print("Value: %.20lf   DeltaATOF: %e   String: %s   \n", nValue, nATOFDelta, sValue.getStr());
 // LLA: old code:
 // LLA: old code:                 // we wan'na use digits between 1 and 9
 // LLA: old code:                 nAdd ++;
@@ -730,9 +730,9 @@ public:
 // LLA: old code:         sStr <<= suStr;
 // LLA: old code:         double nValue2 = sStr.toDouble();
 // LLA: old code:
-// LLA: old code:         printf("# OUString::valueOf(3.0) = %s\n", sStr.getStr());
+// LLA: old code:         t_print("OUString::valueOf(3.0) = %s\n", sStr.getStr());
 // LLA: old code:         double nDelta = fabs(nValue - nValue2);
-// LLA: old code:         printf("# nDelta = %f\n", nDelta);
+// LLA: old code:         t_print("nDelta = %f\n", nDelta);
 // LLA: old code:         bool bCondition = true;
 // LLA: old code:         CPPUNIT_ASSERT_MESSAGE("valueOf(double(3.0)) failed.", bCondition);
 // LLA: old code:     }
@@ -750,19 +750,19 @@ public:
 // LLA: old code:             // LLA: 4 stellen hinter dem komma
 // LLA: old code:             sal_Int32 nPrecOfN = -4 + sal_Int32( log10(x) );
 // LLA: old code:
-// LLA: old code:             printf("# prec: %d\n", nPrecOfN);
+// LLA: old code:             t_print("prec: %d\n", nPrecOfN);
 // LLA: old code:             double nPrec = pow(10, nPrecOfN) * 1;
 // LLA: old code:
-// LLA: old code:             printf("# prec: %.25f\n", nPrec);
+// LLA: old code:             t_print("prec: %.25f\n", nPrec);
 // LLA: old code:
 // LLA: old code:             double nDelta = fabs( x - y);
 // LLA: old code:             if (nDelta > nPrec)
 // LLA: old code:             {
-// LLA: old code:                 printf("# values are not equal! ndelta:%.20f\n", nDelta);
+// LLA: old code:                 t_print("values are not equal! ndelta:%.20f\n", nDelta);
 // LLA: old code:             }
 // LLA: old code:             else
 // LLA: old code:             {
-// LLA: old code:                 printf("# values are equal.     ndelta:%.20f\n", nDelta);
+// LLA: old code:                 t_print("values are equal.     ndelta:%.20f\n", nDelta);
 // LLA: old code:             }
 // LLA: old code:         }
 // LLA: old code:
@@ -771,18 +771,18 @@ public:
 // LLA: old code:         // CPPUNIT_ASSERT_STUB();
 // LLA: old code:         // double n;
 // LLA: old code:         // n = log10(100);
-// LLA: old code:         // printf("# log10(100) %f\n", n);
+// LLA: old code:         // t_print("log10(100) %f\n", n);
 // LLA: old code:         // n = log10(10);
-// LLA: old code:         // printf("# log10(10) %f\n", n);
+// LLA: old code:         // t_print("log10(10) %f\n", n);
 // LLA: old code:         // n = log10(1);
-// LLA: old code:         // printf("# log10(1) %f\n", n);
+// LLA: old code:         // t_print("log10(1) %f\n", n);
 // LLA: old code:         //
 // LLA: old code:         // n = log10(0.1);
-// LLA: old code:         // printf("# log10(0.1) %f\n", n);
+// LLA: old code:         // t_print("log10(0.1) %f\n", n);
 // LLA: old code:         // n = log10(0.01);
-// LLA: old code:         // printf("# log10(0.01) %f\n", n);
+// LLA: old code:         // t_print("log10(0.01) %f\n", n);
 // LLA: old code:         // n = log10(0.001);
-// LLA: old code:         // printf("# log10(0.001) %f\n", n);
+// LLA: old code:         // t_print("log10(0.001) %f\n", n);
 // LLA: old code:
 // LLA: old code:         double_equal(1,1);
 // LLA: old code:         double_equal(3.1415926, 3.1415);
@@ -801,11 +801,11 @@ public:
 // LLA: old code:             double nDelta = fabs(_x - _y);
 // LLA: old code:             if (nDelta > _prec)
 // LLA: old code:             {
-// LLA: old code:                 printf("# x and y are not equal, delta:%.19f prec:%.19f\n", nDelta, _prec);
+// LLA: old code:                 t_print("x and y are not equal, delta:%.19f prec:%.19f\n", nDelta, _prec);
 // LLA: old code:             }
 // LLA: old code:             else
 // LLA: old code:             {
-// LLA: old code:                 printf("# x and y are equal.     delta:%.19f prec:%.19f\n", nDelta, _prec);
+// LLA: old code:                 t_print("x and y are equal.     delta:%.19f prec:%.19f\n", nDelta, _prec);
 // LLA: old code:             }
 // LLA: old code:         }
 // LLA: old code:
@@ -876,7 +876,7 @@ public:
 // LLA: old code:         y = _nFactor *  1.000000000000000002;
 // LLA: old code:         doubleequal_prec(x, y, 0.000000000000000001);
 // LLA: old code:
-// LLA: old code:         printf("# ---------- \n");
+// LLA: old code:         t_print("---------- \n");
 // LLA: old code:         // CPPUNIT_ASSERT_STUB();
 // LLA: old code:     }
 // LLA: old code:
@@ -893,15 +893,15 @@ public:
 // LLA: old code:             // valueOf_double(10000000);
 // LLA: old code:             // valueOf_double(100000000);
 // LLA: old code:             double n = log10(1);
-// LLA: old code:             printf("# log10 (1) = %f \n", n);
+// LLA: old code:             t_print("log10 (1) = %f \n", n);
 // LLA: old code:             n = log10(10);
-// LLA: old code:             printf("# log10 (10) = %f \n", n);
+// LLA: old code:             t_print("log10 (10) = %f \n", n);
 // LLA: old code:             n = log10(100);
-// LLA: old code:             printf("# log10 (100) = %f \n", n);
+// LLA: old code:             t_print("log10 (100) = %f \n", n);
 // LLA: old code:             n = log10(1000);
-// LLA: old code:             printf("# log10 (1000) = %f \n", n);
+// LLA: old code:             t_print("log10 (1000) = %f \n", n);
 // LLA: old code:             n = log10(30000);
-// LLA: old code:             printf("# log10 (30000) = %f \n", n);
+// LLA: old code:             t_print("log10 (30000) = %f \n", n);
 // LLA: old code:
 // LLA: old code:         }
 // LLA: old code:
@@ -964,7 +964,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::lastIndexOf, "rtl_OUString")
 // LLA: old code:
 // LLA: old code:         rtl::OString sStr;
 // LLA: old code:         sStr <<= suStr;
-// LLA: old code:         printf("# valueOf(3.0) = %s\n", sStr.getStr());
+// LLA: old code:         t_print("valueOf(3.0) = %s\n", sStr.getStr());
 // LLA: old code:         bool bCondition = false;
 // LLA: old code:         CPPUNIT_ASSERT_MESSAGE("valueOf(double(3.0)) failed.", bCondition);
 // LLA: old code:     }
