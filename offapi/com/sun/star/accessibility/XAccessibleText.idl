@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleText.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 10:58:59 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,15 +200,24 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
             caller is interested in.  When there are attributes defined that
             are not listed in the sequence then they are not returned.  When
             there are requested attributes that are not defined for the
-            character then they are also ignored.
+            character then they are ignored, too.
+
+            <p>An empty sequence signals the callers interest in all the
+            attributes.  This is usefull in two cases: a) Simply as a way to
+            avoid passing a potentially large array to the called object or
+            b) when the caller does not know what attributes the called
+            objects supports but is interested in all of them
+            nevertheless.</p>
 
         @return
-            Returns the requested attributes of the specified character.
-            Each attribute is represented by a <type
-            scope="::com::sun::star::beans::">PropertyValue</type> object.
-            The returned list of attribute descriptions contains all
-            attributes that are both members of the sequence of requested
-            attributes and defined for the character.
+            Returns the explicitly or implicitly (empty
+            <arg>aRequestedAttributes</arg> argument) requested attributes
+            of the specified character.  Each attribute is represented by a
+            <type scope="::com::sun::star::beans">PropertyValue</type>
+            object.  The returned list of attribute descriptions contains
+            all attributes that are both members of the sequence of
+            requested attributes and are defined for the character at the
+            specified index.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the index is invalid
