@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ebbcontrols.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 16:57:26 $
+ *  last change: $Author: fs $ $Date: 2002-10-15 07:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
 #endif
+#include "fmtfield.hxx"
 
 #include <algorithm>
 
@@ -80,6 +81,8 @@ namespace svt
     TYPEINIT1(CheckBoxCellController, CellController);
     TYPEINIT1(ComboBoxCellController, CellController);
     TYPEINIT1(ListBoxCellController, CellController);
+
+    TYPEINIT1( FormattedFieldCellController, EditCellController );
 
     //==================================================================
     ComboBoxControl::ComboBoxControl(Window* pParent, WinBits nWinStyle)
@@ -376,6 +379,126 @@ namespace svt
         ((CheckBoxControl &)GetWindow()).SetModifyHdl(rLink);
     }
 
+    //------------------------------------------------------------------------------
+    EditCellController::EditCellController(Edit* pWin)
+                         :CellController(pWin)
+    {
+    }
+
+    //-----------------------------------------------------------------------------
+    void EditCellController::SetModified()
+    {
+        GetEditWindow().SetModifyFlag();
+    }
+
+    //-----------------------------------------------------------------------------
+    void EditCellController::ClearModified()
+    {
+        GetEditWindow().ClearModifyFlag();
+    }
+
+    //------------------------------------------------------------------------------
+    sal_Bool EditCellController::MoveAllowed(const KeyEvent& rEvt) const
+    {
+        sal_Bool bResult;
+        switch (rEvt.GetKeyCode().GetCode())
+        {
+            case KEY_END:
+            case KEY_RIGHT:
+            {
+                Selection aSel = GetEditWindow().GetSelection();
+                bResult = !aSel && aSel.Max() == GetEditWindow().GetText().Len();
+            }   break;
+            case KEY_HOME:
+            case KEY_LEFT:
+            {
+                Selection aSel = GetEditWindow().GetSelection();
+                bResult = !aSel && aSel.Min() == 0;
+            }   break;
+            default:
+                bResult = sal_True;
+        }
+        return bResult;
+    }
+
+    //------------------------------------------------------------------------------
+    sal_Bool EditCellController::IsModified() const
+    {
+        return GetEditWindow().IsModified();
+    }
+
+    //------------------------------------------------------------------------------
+    void EditCellController::SetModifyHdl(const Link& rLink)
+    {
+        GetEditWindow().SetModifyHdl(rLink);
+    }
+
+    //------------------------------------------------------------------------------
+    SpinCellController::SpinCellController(SpinField* pWin)
+                         :CellController(pWin)
+    {
+    }
+
+    //-----------------------------------------------------------------------------
+    void SpinCellController::SetModified()
+    {
+        GetSpinWindow().SetModifyFlag();
+    }
+
+    //-----------------------------------------------------------------------------
+    void SpinCellController::ClearModified()
+    {
+        GetSpinWindow().ClearModifyFlag();
+    }
+
+    //------------------------------------------------------------------------------
+    sal_Bool SpinCellController::MoveAllowed(const KeyEvent& rEvt) const
+    {
+        sal_Bool bResult;
+        switch (rEvt.GetKeyCode().GetCode())
+        {
+            case KEY_END:
+            case KEY_RIGHT:
+            {
+                Selection aSel = GetSpinWindow().GetSelection();
+                bResult = !aSel && aSel.Max() == GetSpinWindow().GetText().Len();
+            }   break;
+            case KEY_HOME:
+            case KEY_LEFT:
+            {
+                Selection aSel = GetSpinWindow().GetSelection();
+                bResult = !aSel && aSel.Min() == 0;
+            }   break;
+            default:
+                bResult = sal_True;
+        }
+        return bResult;
+    }
+
+    //------------------------------------------------------------------------------
+    sal_Bool SpinCellController::IsModified() const
+    {
+        return GetSpinWindow().IsModified();
+    }
+
+    //------------------------------------------------------------------------------
+    void SpinCellController::SetModifyHdl(const Link& rLink)
+    {
+        GetSpinWindow().SetModifyHdl(rLink);
+    }
+
+    //------------------------------------------------------------------------------
+    FormattedFieldCellController::FormattedFieldCellController( FormattedField* _pFormatted )
+        :EditCellController( _pFormatted )
+    {
+    }
+
+    //------------------------------------------------------------------------------
+    void FormattedFieldCellController::CommitModifications()
+    {
+        static_cast< FormattedField& >( GetWindow() ).Commit();
+    }
+
 // .......................................................................
 }   // namespace svt
 // .......................................................................
@@ -383,6 +506,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/10/12 16:57:26  hr
+ *  #92830#: required change: std::min()/std::max()
+ *
  *  Revision 1.2  2001/09/28 12:57:51  hr
  *  #65293#: std::min/std::max
  *
