@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Oasis2OOo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:28:46 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,11 @@ enum XMLUserDefinedTransformerAction
 
 #define ENTRY0( n, l, a ) \
     ENTRY3( n, l, a, 0, 0, 0 )
+
+// BM: a macro to put two tokens into one sal_Int32 for the action
+// XML_ATACTION_RENAME_ATTRIBUTE
+#define RENAME_ENTRY( f, s ) \
+    (static_cast< sal_Int32 >(f) | (static_cast< sal_Int32 >(s) << 16))
 
 static XMLTransformerActionInit aActionTable[] =
 {
@@ -397,7 +402,6 @@ static XMLTransformerActionInit aActionTable[] =
 
     ENTRY0( CHART, CHART, XML_ETACTION_CHART ),
     ENTRY0( CHART, PLOT_AREA, XML_ETACTION_CHART_PLOT_AREA ),
-
 
     ENTRY0( CONFIG, CONFIG_ITEM, XML_ETACTION_CONFIG_ITEM ),
     ENTRY1Q( TEXT, TRACKED_CHANGES, XML_ETACTION_TRACKED_CHANGES,
@@ -778,6 +782,11 @@ static XMLTransformerActionInit aShapeActionTable[] =
     ENTRY1Q( DRAW, CONTROL, XML_ATACTION_RENAME,
                     XML_NAMESPACE_FORM, XML_ID ),
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OASIS, sal_True ),
+    // BM: needed by chart:legend.  The legend needs also the draw actions.  As
+    // there is no merge mechanism, all actions have to be in the same table
+    ENTRY2( CHART, LEGEND_POSITION, XML_ATACTION_RENAME_ATTRIBUTE,
+            RENAME_ENTRY( XML_START, XML_LEFT ),
+            RENAME_ENTRY( XML_END, XML_RIGHT )),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -1807,7 +1816,8 @@ Oasis2OOoTransformer* Oasis2OOoTransformer::getImplementation( Reference< XInter
 {
     Reference< XUnoTunnel > xUT( xInt, UNO_QUERY );
     if( xUT.is() )
-        return (Oasis2OOoTransformer*)xUT->getSomething( Oasis2OOoTransformer::getUnoTunnelId() );
+        return reinterpret_cast< Oasis2OOoTransformer* >(
+            xUT->getSomething( Oasis2OOoTransformer::getUnoTunnelId() ));
     else
         return NULL;
 }
@@ -1826,7 +1836,7 @@ sal_Int64 SAL_CALL Oasis2OOoTransformer::getSomething( const Sequence< sal_Int8 
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return reinterpret_cast< sal_Int64 >( this );
     }
     else
     {
