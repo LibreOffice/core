@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplHelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-11 07:03:29 $
+ *  last change: $Author: tra $ $Date: 2001-05-10 09:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,6 @@
 // namespace directives
 //------------------------------------------------------------------------
 
-using ::com::sun::star::datatransfer::DataFlavor;
-using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
 using ::rtl::OString;
 

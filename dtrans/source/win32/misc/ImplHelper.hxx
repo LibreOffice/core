@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-09 08:48:25 $
+ *  last change: $Author: tra $ $Date: 2001-05-10 09:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #include <sal/types.h>
 #endif
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
-#include <com/sun/star/datatransfer/XTransferable.hpp>
+#ifndef _RTL_USTRING_
+#include <rtl/ustring>
 #endif
 
 #include <windows.h>
