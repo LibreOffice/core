@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:05:48 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #endif
 #ifndef _SVX_ESCHEREX_HXX
 #include <escherex.hxx>
+#endif
+#ifndef _BGFX_RANGE_B2IRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XIDENTIFIERCONTAINER_HPP_
 #include <com/sun/star/container/XIdentifierContainer.hpp>
@@ -363,6 +366,9 @@ using namespace vos;
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENT_HPP_
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEGLUEPOINTTYPE_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_HPP_
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
@@ -972,67 +978,67 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
 
                     if( nInventor == SdrInventor )
                     {
-                        if ( pList && ( pList->GetCount() > nC ) )
+                        sal_uInt32 nObjId = pO->GetObjIdentifier();
+                        switch( nObjId )
                         {
-                            bValidGluePoint = sal_True;
-                            nId = (sal_Int32)((*pList)[ (sal_uInt16)nC].GetId() + 4 );
-                        }
-                        else
-                        {
-                            sal_uInt32 nObjId = pO->GetObjIdentifier();
-                            switch( nObjId )
+                            case OBJ_GRUP :
+                            case OBJ_GRAF :
+                            case OBJ_RECT :
+                            case OBJ_TEXT :
+                            case OBJ_PAGE :
+                            case OBJ_TEXTEXT :
+                            case OBJ_wegFITTEXT :
+                            case OBJ_wegFITALLTEXT :
+                            case OBJ_TITLETEXT :
+                            case OBJ_OUTLINETEXT :
                             {
-                                case OBJ_GRUP :
-                                case OBJ_GRAF :
-                                case OBJ_RECT :
-                                case OBJ_TEXT :
-                                case OBJ_PAGE :
-                                case OBJ_TEXTEXT :
-                                case OBJ_wegFITTEXT :
-                                case OBJ_wegFITALLTEXT :
-                                case OBJ_TITLETEXT :
-                                case OBJ_OUTLINETEXT :
+                                if ( nC & 1 )
                                 {
-                                    if ( nC & 1 )
-                                    {
-                                        if ( nSpFlags & SP_FFLIPH )
-                                            nC ^= 2;    // 1 <-> 3
-                                    }
-                                    else
-                                    {
-                                        if ( nSpFlags & SP_FFLIPV )
-                                            nC ^= 1;    // 0 <-> 2
-                                    }
-                                    switch( nC )
-                                    {
-                                        case 0 :
-                                            nId = 0;    // SDRVERTALIGN_TOP;
-                                        break;
-                                        case 1 :
-                                            nId = 3;    // SDRHORZALIGN_RIGHT;
-                                        break;
-                                        case 2 :
-                                            nId = 2;    // SDRVERTALIGN_BOTTOM;
-                                        break;
-                                        case 3 :
-                                            nId = 1; // SDRHORZALIGN_LEFT;
-                                        break;
-                                    }
-                                    if ( nId <= 3 )
-                                        bValidGluePoint = sal_True;
+                                    if ( nSpFlags & SP_FFLIPH )
+                                        nC ^= 2;    // 1 <-> 3
                                 }
-                                break;
-                                case OBJ_POLY :
-                                case OBJ_PLIN :
-                                case OBJ_LINE :
-                                case OBJ_PATHLINE :
-                                case OBJ_PATHFILL :
-                                case OBJ_FREELINE :
-                                case OBJ_FREEFILL :
-                                case OBJ_SPLNLINE :
-                                case OBJ_SPLNFILL :
-                                case OBJ_PATHPOLY :
-                                case OBJ_PATHPLIN :
+                                else
+                                {
+                                    if ( nSpFlags & SP_FFLIPV )
+                                        nC ^= 1;    // 0 <-> 2
+                                }
+                                switch( nC )
+                                {
+                                    case 0 :
+                                        nId = 0;    // SDRVERTALIGN_TOP;
+                                    break;
+                                    case 1 :
+                                        nId = 3;    // SDRHORZALIGN_RIGHT;
+                                    break;
+                                    case 2 :
+                                        nId = 2;    // SDRVERTALIGN_BOTTOM;
+                                    break;
+                                    case 3 :
+                                        nId = 1; // SDRHORZALIGN_LEFT;
+                                    break;
+                                }
+                                if ( nId <= 3 )
+                                    bValidGluePoint = sal_True;
+                            }
+                            break;
+                            case OBJ_POLY :
+                            case OBJ_PLIN :
+                            case OBJ_LINE :
+                            case OBJ_PATHLINE :
+                            case OBJ_PATHFILL :
+                            case OBJ_FREELINE :
+                            case OBJ_FREEFILL :
+                            case OBJ_SPLNLINE :
+                            case OBJ_SPLNFILL :
+                            case OBJ_PATHPOLY :
+                            case OBJ_PATHPLIN :
+                            {
+                                if ( pList && ( pList->GetCount() > nC ) )
+                                {
+                                    bValidGluePoint = sal_True;
+                                    nId = (sal_Int32)((*pList)[ (sal_uInt16)nC].GetId() + 4 );
+                                }
+                                else
                                 {
                                     sal_Bool bNotFound = sal_True;
 
@@ -1085,8 +1091,164 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                         bValidGluePoint = sal_True;
                                     }
                                 }
-                                break;
                             }
+                            break;
+
+                            case OBJ_CUSTOMSHAPE :
+                            {
+                                SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)((SdrObjCustomShape*)pO)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+                                const rtl::OUString sPath( RTL_CONSTASCII_USTRINGPARAM ( "Path" ) );
+                                const rtl::OUString sGluePointType( RTL_CONSTASCII_USTRINGPARAM ( "GluePointType" ) );
+                                sal_Int16 nGluePointType = EnhancedCustomShapeGluePointType::SEGMENTS;
+                                com::sun::star::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sPath, sGluePointType );
+                                if ( pAny )
+                                    *pAny >>= nGluePointType;
+                                else
+                                {
+                                    const rtl::OUString sPredefinedType( RTL_CONSTASCII_USTRINGPARAM ( "PredefinedType" ) );
+                                    rtl::OUString sShapeType;
+                                    pAny = aGeometryItem.GetPropertyValueByName( sPredefinedType );
+                                    if ( pAny )
+                                        *pAny >>= sShapeType;
+                                    MSO_SPT eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
+                                    nGluePointType = GetCustomShapeConnectionTypeDefault( eSpType );
+                                }
+                                if ( nGluePointType == EnhancedCustomShapeGluePointType::CUSTOM )
+                                {
+                                    if ( pList && ( pList->GetCount() > nC ) )
+                                    {
+                                        bValidGluePoint = sal_True;
+                                        nId = (sal_Int32)((*pList)[ (sal_uInt16)nC].GetId() + 4 );
+                                    }
+                                }
+                                else if ( nGluePointType == EnhancedCustomShapeGluePointType::RECT )
+                                {
+                                    if ( nC & 1 )
+                                    {
+                                        if ( nSpFlags & SP_FFLIPH )
+                                            nC ^= 2;    // 1 <-> 3
+                                    }
+                                    else
+                                    {
+                                        if ( nSpFlags & SP_FFLIPV )
+                                            nC ^= 1;    // 0 <-> 2
+                                    }
+                                    switch( nC )
+                                    {
+                                        case 0 :
+                                            nId = 0;    // SDRVERTALIGN_TOP;
+                                        break;
+                                        case 1 :
+                                            nId = 3;    // SDRHORZALIGN_RIGHT;
+                                        break;
+                                        case 2 :
+                                            nId = 2;    // SDRVERTALIGN_BOTTOM;
+                                        break;
+                                        case 3 :
+                                            nId = 1; // SDRHORZALIGN_LEFT;
+                                        break;
+                                    }
+                                    if ( nId <= 3 )
+                                        bValidGluePoint = sal_True;
+                                }
+                                else if ( nGluePointType == EnhancedCustomShapeGluePointType::SEGMENTS )
+                                {
+                                    const rtl::OUString sSegments( RTL_CONSTASCII_USTRINGPARAM ( "Segments" ) );
+                                    const rtl::OUString sCoordinates( RTL_CONSTASCII_USTRINGPARAM ( "Coordinates" ) );
+
+                                    sal_uInt32 i, nPt = nC;
+                                    com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments;
+                                    pAny = aGeometryItem.GetPropertyValueByName( sPath, sSegments );
+                                    if ( pAny )
+                                    {
+                                        if ( *pAny >>= aSegments )
+                                        {
+                                            for ( nPt = 0, i = 1; nC && ( i < (sal_uInt32)aSegments.getLength() ); i++ )
+                                            {
+                                                sal_Int16 j, nCount = aSegments[ i ].Count;
+                                                if ( aSegments[ i ].Command != EnhancedCustomShapeSegmentCommand::UNKNOWN )
+                                                {
+                                                    for ( j = 0; nC && ( j < nCount ); j++ )
+                                                    {
+                                                        switch( aSegments[ i ].Command )
+                                                        {
+                                                            case EnhancedCustomShapeSegmentCommand::ENDSUBPATH :
+                                                            case EnhancedCustomShapeSegmentCommand::CLOSESUBPATH :
+                                                            case EnhancedCustomShapeSegmentCommand::LINETO :
+                                                            case EnhancedCustomShapeSegmentCommand::MOVETO :
+                                                            {
+                                                                nC--;
+                                                                nPt++;
+                                                            }
+                                                            break;
+                                                            case EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX :
+                                                            case EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY :
+                                                            break;
+
+                                                            case EnhancedCustomShapeSegmentCommand::CURVETO :
+                                                            {
+                                                                nC--;
+                                                                nPt += 3;
+                                                            }
+                                                            break;
+
+                                                            case EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO :
+                                                            case EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE :
+                                                            {
+                                                                nC--;
+                                                                nPt += 3;
+                                                            }
+                                                            break;
+                                                            case EnhancedCustomShapeSegmentCommand::ARCTO :
+                                                            case EnhancedCustomShapeSegmentCommand::ARC :
+                                                            case EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO :
+                                                            case EnhancedCustomShapeSegmentCommand::CLOCKWISEARC :
+                                                            {
+                                                                nC--;
+                                                                nPt += 4;
+                                                            }
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    pAny = aGeometryItem.GetPropertyValueByName( sPath, sCoordinates );
+                                    if ( pAny )
+                                    {
+                                        com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+                                        *pAny >>= aCoordinates;
+                                        if ( nPt < (sal_uInt32)aCoordinates.getLength() )
+                                        {
+                                            nId = 4;
+                                            drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair& rPara = aCoordinates[ nPt ];
+                                            sal_Int32 nX, nY;
+                                            if ( ( rPara.First.Value >>= nX ) && ( rPara.Second.Value >>= nY ) )
+                                            {
+                                                const rtl::OUString sGluePoints( RTL_CONSTASCII_USTRINGPARAM ( "GluePoints" ) );
+                                                com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
+                                                pAny = aGeometryItem.GetPropertyValueByName( sPath, sGluePoints );
+                                                if ( pAny )
+                                                    *pAny >>= aGluePoints;
+                                                sal_Int32 nGluePoints = aGluePoints.getLength();
+                                                aGluePoints.realloc( nGluePoints + 1 );
+                                                EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aGluePoints[ nGluePoints ].First, nX );
+                                                EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aGluePoints[ nGluePoints ].Second, nY );
+                                                PropertyValue aProp;
+                                                aProp.Name = sGluePoints;
+                                                aProp.Value <<= aGluePoints;
+                                                aGeometryItem.SetPropertyValue( sPath, aProp );
+                                                bValidGluePoint = sal_True;
+                                                ((SdrObjCustomShape*)pO)->SetMergedItem( aGeometryItem );
+                                                SdrGluePointList* pList = pO->ForceGluePointList();
+                                                nId = (sal_Int32)((*pList)[ (sal_uInt16)nGluePoints ].GetId() + 4 );
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
                         }
                         if ( bValidGluePoint )
                         {
@@ -4725,10 +4887,15 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             pRet->NbcSetPoint(aPoint1, 0);  // Startpunkt
                             pRet->NbcSetPoint(aPoint2, 1);  // Endpunkt
 
+                            sal_Int32 n1HorzDist, n1VertDist, n2HorzDist, n2VertDist;
+                            n1HorzDist = n1VertDist = n2HorzDist = n2VertDist = 0;
                             switch( eConnectorStyle )
                             {
                                 case mso_cxstyleBent:
+                                {
                                     aSet.Put( SdrEdgeKindItem( SDREDGE_ORTHOLINES ) );
+                                    n1HorzDist = n1VertDist = n2HorzDist = n2VertDist = 630;
+                                }
                                 break;
                                 case mso_cxstyleCurved:
                                     aSet.Put( SdrEdgeKindItem( SDREDGE_BEZIER ) );
@@ -4737,10 +4904,10 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                     aSet.Put( SdrEdgeKindItem( SDREDGE_ONELINE ) );
                                 break;
                             }
-                            aSet.Put( SdrEdgeNode1HorzDistItem( 0 ) );
-                            aSet.Put( SdrEdgeNode1VertDistItem( 0 ) );
-                            aSet.Put( SdrEdgeNode2HorzDistItem( 0 ) );
-                            aSet.Put( SdrEdgeNode2VertDistItem( 0 ) );
+                            aSet.Put( SdrEdgeNode1HorzDistItem( n1HorzDist ) );
+                            aSet.Put( SdrEdgeNode1VertDistItem( n1VertDist ) );
+                            aSet.Put( SdrEdgeNode2HorzDistItem( n2HorzDist ) );
+                            aSet.Put( SdrEdgeNode2VertDistItem( n2VertDist ) );
                         }
                     }
                     else if ( ( (int)aObjData.eShapeType > (int)mso_sptRectangle ) && ( (int)aObjData.eShapeType < (int)mso_sptTextBox ) )
