@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:20:10 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,9 @@
 #include <app.hrc>
 #endif
 
+#include <cfgid.h>
 #include <svtools/moduleoptions.hxx>
+#include <sfx2/fcontnr.hxx>
 
 using namespace rtl;
 using namespace ::com::sun::star::uno;
@@ -291,6 +293,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 
+#define C2S(cChar) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
+
 class SwTmpPersist : public SvPersist
 {
     SwDocShell* pDShell;
@@ -309,30 +313,19 @@ public:
 
 SFX_IMPL_INTERFACE( SwDocShell, SfxObjectShell, SW_RES(0) )
 {
-    if ( SvtModuleOptions().IsWriter() )
-    {
-        SwGlobalDocShell::Factory().RegisterHelpFile(String::CreateFromAscii("swriter.svh"));
-        SwGlobalDocShell::Factory().RegisterHelpPIFile(String::CreateFromAscii("swriter.svh"));
-    }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Aller Filter registrieren
- --------------------------------------------------------------------*/
-
-SFX_IMPL_OBJECTFACTORY_DLL(SwDocShell, SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU,  \
-//swriter3  0xDC5C7E40L, 0xB35C, 0x101B, 0x99, 0x61, 0x04, 0x02, 0x1C, 0x00, 0x70,0x02)
-//swriter4  0x8b04e9b0,  0x420e, 0x11d0, 0xa4, 0x5e, 0x0,  0xa0, 0x24, 0x9d, 0x57,0xb1, Sw)
-//swriter5  0xc20cf9d1, 0x85ae, 0x11d1, 0xaa, 0xb4, 0x0, 0x60, 0x97, 0xda, 0x56, 0x1a
-  SvGlobalName(SO3_SW_CLASSID), Sw)      /*swriter5,*/
-
-/*{
-    ::RegisterFilterInSfxFactory( (SfxObjectFactory&)Factory(), RC_DOC_ICON );
-}
-  */
-
 
 TYPEINIT2(SwDocShell, SfxObjectShell, SfxListener);
+
+//-------------------------------------------------------------------------
+SFX_IMPL_OBJECTFACTORY(SwDocShell, SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, swriter, SvGlobalName(SO3_SW_CLASSID) )
+{
+    SfxObjectFactory& rFactory = (SfxObjectFactory&)Factory();
+    rFactory.SetDocumentServiceName(C2S("com.sun.star.text.TextDocument"));
+    //rFactory.GetFilterContainer()->SetDetectFilter( &SwDLL::DetectFilter );
+    SwDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SW_MENU));
+    SwDocShell::Factory().RegisterAccel(SW_RES(CFG_SW_ACCEL));
+}
 
 /*--------------------------------------------------------------------
     Beschreibung: Laden vorbereiten
