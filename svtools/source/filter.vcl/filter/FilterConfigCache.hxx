@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-22 11:25:38 $
+ *  last change: $Author: sj $ $Date: 2001-02-22 17:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,14 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
 #endif
 #include <vector>
 
@@ -78,6 +84,7 @@ class FilterConfigCache
         struct FilterConfigCacheEntry
         {
             ::rtl::OUString sType;
+            ::rtl::OUString sExtension;
             ::rtl::OUString sUIName;
             ::rtl::OUString sDocumentService;
             ::rtl::OUString sFilterService;
@@ -107,7 +114,10 @@ class FilterConfigCache
         sal_Bool            ImplIsOwnFilter( const ::com::sun::star::uno::Sequence<
                                                 ::com::sun::star::beans::PropertyValue >& rFilterProperties );
         sal_Bool            ImplAddFilterEntry( const ::com::sun::star::uno::Sequence<
-                                                ::com::sun::star::beans::PropertyValue >& rFilterProperties );
+                                                ::com::sun::star::beans::PropertyValue >& rFilterProperties,
+                                                    const ::com::sun::star::uno::Reference<
+                                                        ::com::sun::star::container::XNameAccess >& xTypeAccess );
+
         void                ImplInit();
 
     public :

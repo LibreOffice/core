@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-22 11:26:12 $
+ *  last change: $Author: sj $ $Date: 2001-02-22 17:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
-#include <com/sun/star/uno/Reference.h>
-#endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
 #endif
@@ -82,9 +79,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
 #define TOKEN_COUNT_FOR_OWN_FILTER      3
@@ -181,7 +175,8 @@ sal_Bool FilterConfigCache::ImplIsOwnFilter( const Sequence< PropertyValue >& rF
     return bIsOwn;
 }
 
-sal_Bool FilterConfigCache::ImplAddFilterEntry( const Sequence< PropertyValue >& rFilterProperties )
+sal_Bool FilterConfigCache::ImplAddFilterEntry( const Sequence< PropertyValue >& rFilterProperties,
+                                                    const Reference< XNameAccess >& xTypeAccess )
 {
     static OUString sType               ( RTL_CONSTASCII_USTRINGPARAM( "Type" ) );
     static OUString sUIName             ( RTL_CONSTASCII_USTRINGPARAM( "UIName" ) );
@@ -192,10 +187,13 @@ sal_Bool FilterConfigCache::ImplAddFilterEntry( const Sequence< PropertyValue >&
     static OUString sFileFormatVersion  ( RTL_CONSTASCII_USTRINGPARAM( "FileFormatVersion" ) );
     static OUString sTemplateName       ( RTL_CONSTASCII_USTRINGPARAM( "TemplateName" ) );
 
+    static OUString sExtensions         ( RTL_CONSTASCII_USTRINGPARAM( "Extensions" ) );
+
     static OUString sTrue               ( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
 
     sal_Bool bFilterEntryCreated = sal_False;
     FilterConfigCacheEntry  aEntry;
+    OUString sFilterType;
 
     try
     {
@@ -204,7 +202,7 @@ sal_Bool FilterConfigCache::ImplAddFilterEntry( const Sequence< PropertyValue >&
         {
             PropertyValue aPropValue( rFilterProperties[ i ] );
             if ( aPropValue.Name.equals( sType ) )
-                aPropValue.Value >>= aEntry.sType;
+                aPropValue.Value >>= sFilterType;
             else if ( aPropValue.Name.equals( sUIName ) )
                 aPropValue.Value >>= aEntry.sUIName;
             else if ( aPropValue.Name.equals( sDocumentService ) )
@@ -228,14 +226,53 @@ sal_Bool FilterConfigCache::ImplAddFilterEntry( const Sequence< PropertyValue >&
             else if ( aPropValue.Name.equals( sTemplateName ) )
                 aPropValue.Value >>= aEntry.sTemplateName;
         }
+
         if ( aEntry.IsValid() )
         {
-            if ( aEntry.nFlags & 1 )
-                aImport.push_back( aEntry );
-            if ( aEntry.nFlags & 2 )
-                aExport.push_back( aEntry );
-            if ( aEntry.nFlags & 3 )
-                bFilterEntryCreated = sal_True;
+            // trying to get the corresponding type for this filter
+            if ( xTypeAccess->hasByName( sFilterType ) )
+            {
+                Any aTypePropertySet = xTypeAccess->getByName( sFilterType );
+                Sequence< PropertyValue > lProperties;
+                aTypePropertySet >>= lProperties;
+                sal_Int32 j, nCount = lProperties.getLength();
+
+                // searching index for extension property
+
+                for ( j = 0; j < nCount; j++ )
+                {
+                    if ( lProperties[ j ].Name.equals( sExtensions ) )
+                        break;
+                }
+                if ( j < nCount )
+                {
+                    Sequence< OUString > lExtensionList;
+                    lProperties[ j ].Value >>= lExtensionList;
+                    sal_Int32 nExtensionCount = lExtensionList.getLength();
+                    if ( nExtensionCount )
+                    {
+                        // The first extension will be used
+                        // to generate our internal FilterType ( BMP, WMF ... )
+
+                        String aExtension( lExtensionList[ 0 ] );
+                        if ( aExtension.SearchAscii( "*.", 0 ) == 0 )
+                            aExtension.Erase( 0, 2 );
+
+                        if ( aExtension.Len() == 3 )
+                        {
+                            aEntry.sExtension = aExtension;
+                            aEntry.sType = aExtension;
+
+                            if ( aEntry.nFlags & 1 )
+                                aImport.push_back( aEntry );
+                            if ( aEntry.nFlags & 2 )
+                                aExport.push_back( aEntry );
+                            if ( aEntry.nFlags & 3 )
+                                bFilterEntryCreated = sal_True;
+                        }
+                    }
+                }
+            }
         }
     }
     catch ( ::com::sun::star::uno::Exception& )
@@ -253,8 +290,6 @@ void FilterConfigCache::ImplInit()
     // create type detection service
     Reference< XNameAccess > xTypeAccess( xSMGR->createInstance(
         OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ), UNO_QUERY );
-    Sequence< OUString > lAllTypes = xTypeAccess->getElementNames();
-    sal_Int32 nAllTypesCount = lAllTypes.getLength();
 
     Reference< XNameAccess > xFilterAccess( xSMGR->createInstance(
         OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ), UNO_QUERY );
@@ -262,41 +297,6 @@ void FilterConfigCache::ImplInit()
     sal_Int32 nAllFilterCount = lAllFilter.getLength();
 
     sal_Int32 i;
-/*
-    for ( i = 0; i < nAllTypesCount; i++ )
-    {
-        OUString sInternalTypeName = lAllTypes[ i ];
-        Any aTypePropertySet = xTypeAccess->getByName( sInternalTypeName );
-
-        Sequence< PropertyValue > lProperties;
-        aTypePropertySet >>= lProperties;
-        sal_Int32 j, nCount = lProperties.getLength();
-        for ( j = 0; j < nCount; j++ )
-        {
-            PropertyValue aPropValue( lProperties[ j ] );
-            OUString aName( aPropValue.Name );
-        }
-    }
-*/
-/*
-    [0].Name    =   "UIName"
-    [0].Value   =   localized name of filter as [string]
-
-    [1].Name    =   "MediaType"
-    [1].Value   =   mime type as [string]
-
-    [2].Name    =   "ClipboardFormat"
-    [2].Value   =   name of clipboard format as [string]
-
-    [3].Name    =   "URLPattern"
-    [3].Value   =   list of matching URL pattern to specify type; as [stringlist]
-
-    [4].Name    =   "Extensions"
-    [4].Value   =   list of matching file extensions to specify type; as [stringlist]
-
-    [5].Name    =   "DocumentIconID"
-    [5].Value   =   ID of a suitable document icon as [integer]
-*/
 
     for ( i =  0; i < nAllFilterCount; i++ )
     {
@@ -307,7 +307,7 @@ void FilterConfigCache::ImplInit()
         aTypePropertySet >>= lProperties;
 
         if ( ImplIsOwnFilter( lProperties ) )
-            ImplAddFilterEntry( lProperties );
+            ImplAddFilterEntry( lProperties, xTypeAccess );
     }
 };
 
@@ -355,14 +355,15 @@ String FilterConfigCache::GetImportFormatType( sal_uInt16 nFormat )
     return ( aIter < aImport.end() ) ? aIter->sType : String();
 }
 
-String FilterConfigCache::GetImportFormatExtension( sal_uInt16 nFormat )
+String FilterConfigCache::GetImportFormatShortName( sal_uInt16 nFormat )
 {
     return GetImportFormatType( nFormat );
 }
 
-String FilterConfigCache::GetImportFormatShortName( sal_uInt16 nFormat )
+String FilterConfigCache::GetImportFormatExtension( sal_uInt16 nFormat )
 {
-    return GetImportFormatType( nFormat );
+    CacheVector::iterator aIter( aImport.begin() + nFormat );
+    return ( aIter < aImport.end() ) ? aIter->sExtension : String();
 }
 
 String FilterConfigCache::GetImportWildcard( sal_uInt16 nFormat )
@@ -434,14 +435,15 @@ String FilterConfigCache::GetExportFormatType( sal_uInt16 nFormat )
     return ( aIter < aExport.end() ) ? aIter->sType : String();
 }
 
-String FilterConfigCache::GetExportFormatExtension( sal_uInt16 nFormat )
+String FilterConfigCache::GetExportFormatShortName( sal_uInt16 nFormat )
 {
     return GetExportFormatType( nFormat );
 }
 
-String FilterConfigCache::GetExportFormatShortName( sal_uInt16 nFormat )
+String FilterConfigCache::GetExportFormatExtension( sal_uInt16 nFormat )
 {
-    return GetExportFormatType( nFormat );
+    CacheVector::iterator aIter( aExport.begin() + nFormat );
+    return ( aIter < aExport.end() ) ? aIter->sExtension : String();
 }
 
 String FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat )
