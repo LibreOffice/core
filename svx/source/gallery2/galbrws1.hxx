@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 13:23:43 $
+ *  last change: $Author: ka $ $Date: 2000-12-01 14:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ public:
                             ~GalleryBrowser1();
 
     void                    SelectTheme( const String& rThemeName ) { mpThemes->SelectEntry( rThemeName ); SelectThemeHdl( NULL ); }
-    void                    SelectTheme( ULONG nThemePos ) { mpThemes->SelectEntryPos( nThemePos ); SelectThemeHdl( NULL ); }
+    void                    SelectTheme( ULONG nThemePos ) { mpThemes->SelectEntryPos( (USHORT) nThemePos ); SelectThemeHdl( NULL ); }
     String                  GetSelectedTheme() { return mpThemes->GetEntryCount() ? mpThemes->GetEntry( mpThemes->GetSelectEntryPos() ) : String(); }
 
     void                    ShowContextMenu();

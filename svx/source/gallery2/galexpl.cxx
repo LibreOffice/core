@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galexpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-16 12:16:21 $
+ *  last change: $Author: ka $ $Date: 2000-12-01 14:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,10 +378,7 @@ BOOL GalleryExplorer::GetSdrObj( const String& rThemeName, ULONG nSdrModelPos,
                     if( nActPos++ == nSdrModelPos )
                     {
                         if( pModel )
-                        {
-                            ULONG nStmErr = ERRCODE_NONE;
-                            bRet = bRet || pTheme->GetModel( i, *pModel, nStmErr );
-                        }
+                            bRet = bRet || pTheme->GetModel( i, *pModel, FALSE );
 
                         if( pThumb )
                             bRet = bRet || pTheme->GetThumb( i, *pThumb );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-17 10:47:44 $
+ *  last change: $Author: ka $ $Date: 2000-12-01 14:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,7 +446,7 @@ void GalleryBrowser2::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     switch( rGalleryHint.GetType() )
     {
         case( GALLERY_HINT_THEME_UPDATEVIEW ):
-            ImplUpdateValueSet( rGalleryHint.GetData1() + 1 );
+            ImplUpdateValueSet( (USHORT) rGalleryHint.GetData1() + 1 );
         break;
 
         default:
@@ -639,7 +639,7 @@ void GalleryBrowser2::ImplUpdateValueSet( USHORT nSelectionId )
     if( mpCurTheme )
     {
         for( ULONG i = 0, nCount = mpCurTheme->GetObjectCount(); i < nCount; )
-            mpValueSet->InsertItem( ++i );
+            mpValueSet->InsertItem( (USHORT) ++i );
     }
 
     mpValueSet->SelectItem( ( ( nSelectionId > mpValueSet->GetItemCount() ) ? mpValueSet->GetItemCount() : nSelectionId ) );

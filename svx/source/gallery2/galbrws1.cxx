@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-17 10:47:44 $
+ *  last change: $Author: ka $ $Date: 2000-12-01 14:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include <vcl/msgbox.hxx>
 #include <ucbhelper/content.hxx>
 #include <sfx2/app.hxx>
+#include "helpid.hrc"
 #include "gallery1.hxx"
 #include "galtheme.hxx"
 #include "galmisc.hxx"
@@ -127,9 +128,11 @@ GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, 
 {
     StartListening( *mpGallery );
 
+    maNewTheme.SetHelpId( HID_GALLERY_NEWTHEME );
     maNewTheme.SetText( String( GAL_RESID( RID_SVXSTR_GALLERY_CREATETHEME ) ) );
     maNewTheme.SetClickHdl( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
 
+    mpThemes->SetHelpId( HID_GALLERY_THEMELIST );
     mpThemes->SetControlForeground( COL_WHITE );
     mpThemes->SetControlBackground( COL_GRAY );
     mpThemes->SetSelectHdl( LINK( this, GalleryBrowser1, SelectThemeHdl ) );

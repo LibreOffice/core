@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-16 12:17:44 $
+ *  last change: $Author: ka $ $Date: 2000-12-01 14:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,7 +657,7 @@ BOOL Gallery::CreateImportTheme( const INetURLObject& rURL, const String& rImpor
                     while ( HasTheme( aNewName ) && ( nCount++ < 16000 ) )
                     {
                         aNewName = aName;
-                        aNewName += nCount;
+                        aNewName += String::CreateFromInt32( nCount );
                     }
 
                     pImportTheme->SetImportName( aNewName );
