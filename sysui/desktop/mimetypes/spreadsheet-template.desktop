@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=spreadsheet-template
+Type=MimeType
+Patterns=*.stc
+MimeType=application/vnd.sun.xml.calc.template
+Comment=%PRODUCTNAME Spreadsheet Template
