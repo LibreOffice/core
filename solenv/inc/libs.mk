@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.76 $
+#   $Revision: 1.77 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-12 10:50:16 $
+#   last change: $Author: kz $ $Date: 2004-08-31 12:27:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.76 $$"
+LIBSMKREV!:="$$Revision: 1.77 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -143,6 +143,13 @@ FREETYPELIBST=$(STATIC) -lfreetype $(DYNAMIC)
 XPLIB=-l_xp
 TKLIB=-ltk$(OFFICEUPD)$(DLLPOSTFIX)
 SVTOOLLIB=-lsvt$(OFFICEUPD)$(DLLPOSTFIX)
+XMLSECLIB=-lxmlsec
+XMLSECLIB-NSS=-lxmlsec-nss
+LIBXML2LIB=-lxml2
+NSS3LIB=-lnss3
+NSPR4LIB=-lnspr4
+PLC4LIB=-lplc4
+NSSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-NSS) $(NSS3LIB) $(NSPR4LIB) $(PLC4LIB)
 AUTOMATIONLIB=-lsts$(OFFICEUPD)$(DLLPOSTFIX)
 SVLLIB=-lsvl$(OFFICEUPD)$(DLLPOSTFIX)
 SVMEMLIB=
@@ -330,6 +337,15 @@ BTSTRPLIB=$(LIBPRE) bootstrp.lib
 TRANSEXLIB=$(LIBPRE) transex.lib
 ICOLIB= $(LIBPRE) icom.lib
 SVTOOLLIB=$(LIBPRE) svtool.lib
+XMLSECLIB=$(LIBPRE) xmlsec.lib
+XMLSECLIB-MS=$(LIBPRE) xmlsec-mscrypto.lib
+XMLSECLIB-NSS=$(LIBPRE) xmlsec-nss.lib
+LIBXML2LIB=$(LIBPRE) libxml2.lib
+NSS3LIB=$(LIBPRE) nss3.lib
+NSPR4LIB=$(LIBPRE) nspr4.lib
+PLC4LIB=$(LIBPRE) plc4.lib
+NSSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-NSS) $(NSS3LIB) $(NSPR4LIB) $(PLC4LIB)
+MSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-MS) $(LIBPRE) crypt32.lib $(LIBPRE) advapi32.lib
 AUTOMATIONLIB=$(LIBPRE) ists.lib
 SVLLIB=$(LIBPRE) isvl.lib
 PLUGCTORLIB=$(LIBPRE) plugctor.lib
