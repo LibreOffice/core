@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxwiz.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:29 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    OWizardPage* OGroupBoxWizard::createPage(sal_uInt16 _nState)
+    OWizardPage* OGroupBoxWizard::createPage(WizardState _nState)
     {
         switch (_nState)
         {
@@ -152,7 +152,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_uInt16 OGroupBoxWizard::determineNextState(sal_uInt16 _nCurrentState)
+    WizardTypes::WizardState OGroupBoxWizard::determineNextState( WizardState _nCurrentState )
     {
         switch (_nCurrentState)
         {
@@ -179,7 +179,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    void OGroupBoxWizard::enterState(sal_uInt16 _nState)
+    void OGroupBoxWizard::enterState(WizardState _nState)
     {
         // some stuff to do before calling the base class (modifying our settings)
         switch (_nState)
@@ -216,15 +216,6 @@ namespace dbp
         enableButtons(WZB_NEXT, GBW_STATE_FINALIZE != _nState);
 
         OControlWizard::enterState(_nState);
-    }
-
-    //---------------------------------------------------------------------
-    sal_Bool OGroupBoxWizard::leaveState(sal_uInt16 _nState)
-    {
-        if (!OControlWizard::leaveState(_nState))
-            return sal_False;
-
-        return sal_True;
     }
 
     //---------------------------------------------------------------------
@@ -332,7 +323,7 @@ namespace dbp
         rSettings.aValues.clear();
         rSettings.aLabels.reserve(m_aExistingRadios.GetEntryCount());
         rSettings.aValues.reserve(m_aExistingRadios.GetEntryCount());
-        for (sal_uInt16 i=0; i<m_aExistingRadios.GetEntryCount(); ++i)
+        for (WizardState i=0; i<m_aExistingRadios.GetEntryCount(); ++i)
         {
             rSettings.aLabels.push_back(m_aExistingRadios.GetEntry(i));
             rSettings.aValues.push_back(String::CreateFromInt32((sal_Int32)(i + 1)));
@@ -471,7 +462,7 @@ namespace dbp
         ,m_aValue               (this, ResId(ET_OPTIONVALUE))
         ,m_aOptionsLabel        (this, ResId(FT_RADIOBUTTONS))
         ,m_aOptions             (this, ResId(LB_RADIOBUTTONS))
-        ,m_nLastSelection((sal_uInt16)-1)
+        ,m_nLastSelection((WizardState)-1)
     {
         FreeResource();
 
@@ -495,7 +486,7 @@ namespace dbp
     //---------------------------------------------------------------------
     void OOptionValuesPage::implTraveledOptions()
     {
-        if ((sal_uInt16)-1 != m_nLastSelection)
+        if ((WizardState)-1 != m_nLastSelection)
         {
             // save the value for the last option
             DBG_ASSERT(m_nLastSelection < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid previous selection index!");
