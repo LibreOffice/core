@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlDatabase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:20:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
         case XML_TOK_QUERIES:
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                Reference<XQueryDefinitionsSupplier> xSup(GetOwnImport().GetModel(),UNO_QUERY);
+                Reference<XQueryDefinitionsSupplier> xSup(GetOwnImport().getDataSource(),UNO_QUERY);
                 if ( xSup.is() )
                     pContext = new OXMLDocuments( GetOwnImport(), nPrefix, rLocalName,xSup->getQueryDefinitions(),SERVICE_NAME_QUERY_COLLECTION);
             }
@@ -157,7 +157,7 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
         case XML_TOK_TABLES:
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                Reference<XTablesSupplier> xSup(GetOwnImport().GetModel(),UNO_QUERY);
+                Reference<XTablesSupplier> xSup(GetOwnImport().getDataSource(),UNO_QUERY);
                 if ( xSup.is() )
                     pContext = new OXMLDocuments( GetOwnImport(), nPrefix, rLocalName,xSup->getTables());
             }
