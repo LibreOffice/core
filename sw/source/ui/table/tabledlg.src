@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:05:02 $
+ *  last change: $Author: vg $ $Date: 2001-05-17 08:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
     Text [ English ] = "Text Flow" ; \
     Text [ norwegian ] = "Utvidelse av avsnitt" ; \
     Text [ italian ] = "Flusso di testo" ; \
-    Text [ portuguese_brazilian ] = "Extens es de Parágrafo" ; \
+    Text [ portuguese_brazilian ] = "Extens es de Par?grafo" ; \
     Text [ portuguese ] = "Fluxo de texto" ; \
     Text [ finnish ] = "Tekstin rivitys" ; \
     Text [ danish ] = "Tekstretning" ; \
@@ -381,7 +381,7 @@ TabPage TP_FORMAT_TABLE
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Opzioni" ;
-        Text [ portuguese_brazilian ] = "Opções" ;
+        Text [ portuguese_brazilian ] = "Op??s" ;
         Text [ portuguese ] = "Propriedades" ;
         Text [ finnish ] = "Ominaisuudet" ;
         Text [ danish ] = "Egenskaber" ;
@@ -392,7 +392,7 @@ TabPage TP_FORMAT_TABLE
         Text [ english_us ] = "Properties" ;
         Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ russian ] = "Ñâîéñòâà";
-        Text[ polish ] = "W³aœciwoœci";
+        Text[ polish ] = "W³a?ciwo?ci";
         Text[ japanese ] = "ÌßÛÊßÃ¨";
         Text[ chinese_traditional ] = "Äİ©Ê";
         Text[ arabic ] = "ÎÕÇÆÕ";
@@ -539,7 +539,7 @@ TabPage TP_FORMAT_TABLE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "¾ÓÖĞ(~C)";
         Text[ russian ] = "Ïî öåíòğó";
-        Text[ polish ] = "Wyœrodkowany";
+        Text[ polish ] = "Wy?rodkowany";
         Text[ japanese ] = "’†‰›(~C)";
         Text[ chinese_traditional ] = "¸m¤¤(~C)";
         Text[ arabic ] = "ÊæÓíØ";
@@ -586,7 +586,7 @@ TabPage TP_FORMAT_TABLE
         Text [ ENGLISH ] = "Position" ;
         Text [ norwegian ] = "Posisjon" ;
         Text [ italian ] = "Allineamento" ;
-        Text [ portuguese_brazilian ] = "Posição" ;
+        Text [ portuguese_brazilian ] = "Posi??o" ;
         Text [ portuguese ] = "Alinhamento" ;
         Text [ finnish ] = "Tasaus" ;
         Text [ danish ] = "Justering" ;
@@ -615,7 +615,7 @@ TabPage TP_FORMAT_TABLE
         Text [ ENGLISH ] = "Distance" ;
         Text [ norwegian ] = "Avstand" ;
         Text [ italian ] = "Distanze" ;
-        Text [ portuguese_brazilian ] = "Distância" ;
+        Text [ portuguese_brazilian ] = "Dist?ncia" ;
         Text [ portuguese ] = "Espaçamento" ;
         Text [ finnish ] = "Välit" ;
         Text [ danish ] = "Afstand" ;
@@ -850,7 +850,7 @@ TabPage TP_TABLE_COLUMN
         Text [ portuguese ] = "A~justar largura da tabela" ;
         Text[ chinese_simplified ] = "µ÷Õû±í¸ñ¿í¶È(~W)";
         Text[ russian ] = "Ñîãëàñîâàòü øèğèíó òàáëèöû";
-        Text[ polish ] = "Dopasuj szerokoœæ tabeli";
+        Text[ polish ] = "Dopasuj szeroko?æ tabeli";
         Text[ japanese ] = "•\\‚Ì•‚Ö‚Ìì—p‚ğ”F‚ß‚é(~W)";
         Text[ chinese_traditional ] = "½Õ¾ãªí®æ¼e«×(~W)";
         Text[ arabic ] = "ãáÇÁãÉ áÚÑÖ ÇáÌÏæá";
@@ -869,7 +869,7 @@ TabPage TP_TABLE_COLUMN
         Text [ ENGLISH ] = "Adjust columns equally" ;
         TabStop = TRUE ;
         Text [ english_us ] = "Ad~just columns proportionally" ;
-        Text [ portuguese_brazilian ] = "Spalten proportional ändern" ;
+        Text [ portuguese_brazilian ] = "Spalten proportional ?ndern" ;
         Text [ swedish ] = "Ändra ~kolumner proportionellt" ;
         Text [ danish ] = "Modificer kolonner jævnt" ;
         Text [ italian ] = "Modifica colonne proporzionalmente" ;
@@ -904,7 +904,7 @@ TabPage TP_TABLE_COLUMN
         Text [ swedish ] = "Återstående plats" ;
         Text [ danish ] = "Plads til rådighed" ;
         Text [ portuguese ] = "Espaço restante" ;
-        Text [ portuguese_brazilian ] = "Noch verfügbarer Platz" ;
+        Text [ portuguese_brazilian ] = "Noch verf?barer Platz" ;
         Text[ chinese_simplified ] = "»¹ÓĞÏÖ´æ¿ÉÓÃ¿Õ¼ä";
         Text[ russian ] = "Îñòàòîê ìåñòà";
         Text[ polish ] = "Miejsce do dyspozycji";
@@ -1169,7 +1169,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ ENGLISH ] = "~Break" ;
         Text [ norwegian ] = "~Skift" ;
         Text [ italian ] = "I~nterruzione" ;
-        Text [ portuguese_brazilian ] = "~Interrupção" ;
+        Text [ portuguese_brazilian ] = "~Interrup??o" ;
         Text [ portuguese ] = "~Quebra" ;
         Text [ finnish ] = "~Keskeytys" ;
         Text [ danish ] = "Skift" ;
@@ -1200,7 +1200,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ ENGLISH ] = "~Page" ;
         Text [ norwegian ] = "~Page" ;
         Text [ italian ] = "~Pagina" ;
-        Text [ portuguese_brazilian ] = "~Página" ;
+        Text [ portuguese_brazilian ] = "~P?gina" ;
         Text [ portuguese ] = "~Página" ;
         Text [ finnish ] = "~Sivu" ;
         Text [ danish ] = "Side" ;
@@ -1464,7 +1464,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ ENGLISH ] = "R~epeat Headline" ;
         Text [ norwegian ] = "G~jenta Overskrift" ;
         Text [ italian ] = "R~ipeti riga intestazione" ;
-        Text [ portuguese_brazilian ] = "R~epetir Título" ;
+        Text [ portuguese_brazilian ] = "R~epetir T?tulo" ;
         Text [ portuguese ] = "R~epetir título" ;
         Text [ finnish ] = "~Toista otsikko" ;
         Text [ danish ] = "Gentag overskrift" ;
@@ -1559,7 +1559,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ portuguese ] = "~Centro" ;
         Text[ chinese_simplified ] = "ÖĞ(~R)";
         Text[ russian ] = "Ïî ñåğåäèíå";
-        Text[ polish ] = "Poœrodku";
+        Text[ polish ] = "Po?rodku";
         Text[ japanese ] = "’†‰›(~R)";
         Text[ chinese_traditional ] = "¤¤(~R)";
         Text[ arabic ] = "ÇáæÓØ";
