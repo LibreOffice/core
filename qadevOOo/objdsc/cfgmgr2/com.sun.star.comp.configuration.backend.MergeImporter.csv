@@ -1,0 +1,5 @@
+"MergeImporter";"com::sun::star::lang::XInitialization#optional";"initialize()"
+"MergeImporter";"com::sun::star::configuration::backend::XLayerImporter";"getTargetBackend()"
+"MergeImporter";"com::sun::star::configuration::backend::XLayerImporter";"setTargetBackend()"
+"MergeImporter";"com::sun::star::configuration::backend::XLayerImporter";"importLayer()"
+"MergeImporter";"com::sun::star::configuration::backend::XLayerImporter";"importLayerForEntity()"
