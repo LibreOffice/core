@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshcol.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:03 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 11:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _SVX_UNOSHGRP_HXX
 #define _SVX_UNOSHGRP_HXX
 
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
 #endif
@@ -70,29 +73,50 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
-#include <cppuhelper/interfacecontainer.h>
+#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
+#include <cppuhelper/interfacecontainer.hxx>
 #endif
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 
 class XShapeList;
+
+class SvxShapeCollectionMutex
+{
+public:
+    ::osl::Mutex maMutex;
+};
+
+com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SvxShapeCollection_NewInstance() throw();
 
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SvxShapeCollection : public ::cppu::WeakAggImplHelper2<
+class SvxShapeCollection :  public ::cppu::WeakAggImplHelper3<
                                             ::com::sun::star::drawing::XShapes,
-                                            ::com::sun::star::lang::XServiceInfo
-                                            >
+                                            ::com::sun::star::lang::XServiceInfo,
+                                            ::com::sun::star::lang::XComponent
+                                            >,
+                            public SvxShapeCollectionMutex
 {
 private:
-    ::osl::Mutex maShapeContainerMutex;
-    ::cppu::OInterfaceContainerHelper maShapeContainer;
+    cppu::OInterfaceContainerHelper maShapeContainer;
+
+    cppu::OBroadcastHelper mrBHelper;
+
+    virtual void disposing() throw();
 
 public:
     SvxShapeCollection() throw();
     virtual ~SvxShapeCollection() throw();
+
+    // XInterface
+    virtual void SAL_CALL release() throw();
+
+    // XComponent
+    virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException) ;
