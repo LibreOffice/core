@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 13:59:23 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #endif
 #ifndef _PSPRINT_HELPER_HXX_
 #include <psprint/helper.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
 #endif
 
 #define ATOM_FAMILYNAME                     2
@@ -433,7 +437,7 @@ class PrintFontManager
         it = m_aFonts.find( nID );
         return it == m_aFonts.end() ? NULL : it->second;
     }
-    ByteString getXLFD( PrintFont* pFont ) const;
+    rtl::OString getXLFD( PrintFont* pFont ) const;
     void fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& rInfo ) const;
     void fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo ) const;
 
@@ -710,11 +714,16 @@ public:
     <li>pitch</li>
     </ul>
 
+    @param rLocale
+    if <code>rLocal</code> contains non empty strings the corresponding
+    locale will be used for font matching also; e.g. "Sans" can result
+    in different fonts in e.g. english and japanese
+
     @returns
     true if a match was found
     false else
      */
-    bool matchFont( FastPrintFontInfo& rInfo );
+    bool matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale );
 };
 
 } // namespace
