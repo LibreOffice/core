@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:33:54 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 13:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,7 +481,7 @@ void SmParser::NextToken()
     ParseResult aRes;
     xub_StrLen  nRealStart;
     BOOL        bCont;
-    BOOL        bNumStart;
+    BOOL        bNumStart = FALSE;
     const CharClass& rCC = SM_MOD1()->GetSysLocale().GetCharClass();
     do
     {
@@ -493,13 +493,15 @@ void SmParser::NextToken()
         sal_Int32 nStartFlags = coStartFlags;
         sal_Int32 nContFlags  = coContFlags;
         sal_Unicode cFirstChar = BufferString.GetChar( BufferIndex );
+/*
+        removed because of #i11752#
         bNumStart = cFirstChar == '.' || ('0' <= cFirstChar && cFirstChar <= '9');
         if (bNumStart)
         {
             nStartFlags = coNumStartFlags;
             nContFlags  = coNumContFlags;
         }
-
+*/
         aRes = rCC.parseAnyToken( BufferString, BufferIndex,
                                             nStartFlags, aEmptyStr,
                                             nContFlags, aEmptyStr );
