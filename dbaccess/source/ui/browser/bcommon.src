@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bcommon.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:08:44 $
+ *  last change: $Author: rt $ $Date: 2000-11-29 09:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ String RID_STR_TBL_TITLE
     Text[ dutch ] = "Tabel #";
     Text[ chinese_simplified ] = "±í¸ñ #";
     Text[ greek ] = "Ðßíáêáò #";
-    Text[ korean ] = "Å×ÀÌºí #";
+    Text[ korean ] = "Ç¥ #";
     Text[ chinese_traditional ] = "ªí®æ #";
     Text[ arabic ] = "ÇáÌÏæá #";
     Text[ turkish ] = "Tablo #";
