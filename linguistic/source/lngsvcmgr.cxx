@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-29 13:50:06 $
+ *  last change: $Author: tl $ $Date: 2001-07-17 06:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1288,7 +1288,9 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
             OUString aCfgLocaleStr( ConvertLanguageToIsoString(
                                         LocaleToLanguage( pLocale[i] ) ) );
             pValue->Value = aCfgAny;
-            pValue->Name  = aCfgLocaleStr;
+            pValue->Name  = aNodeName;
+            pValue->Name += OUString::valueOf( (sal_Unicode) '/' );
+            pValue->Name += aCfgLocaleStr;
             pValue++;
         }
         // change, add new or replace existing entries.
