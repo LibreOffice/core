@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.63 $
+#   $Revision: 1.64 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-22 18:39:51 $
+#   last change: $Author: hjs $ $Date: 2001-08-27 15:31:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -350,6 +350,18 @@ ADDOPTTARGET=do_it_add
 .IF "$(NOPCHFILES)" != ""
 NOPCHTARGET=do_itpch
 .ENDIF
+
+.IF "$(UPDATER)"!=""
+.IF "$(BUILD_SOSL)"!=""
+.IF "$(PRJNAME)"=="vcl"
+.IF "$(REMOTE_BUILD_FLAG)" == ""
+.IF "$(remote)" == ""
+REMOTE_BUILD=do_it_remote
+.ENDIF          # "$(remote)" == ""
+.ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
+.ENDIF          # "$(PRJNAME)"=="vcl"
+.ENDIF          # "$(BUILD_SOSL)"!=""
+.ENDIF          # "$(UPDATER)"!=""
 
 .IF "$(LIBTARGET)"==""
 .IF "$(OBJFILES)$(IDLOBJFILES)"!=""
@@ -1911,7 +1923,9 @@ ALLTAR:	\
         $(RESLIBSPLIT1TARGETN) $(RESLIBSPLIT2TARGETN)\
         $(RESLIBSPLIT3TARGETN) $(RESLIBSPLIT4TARGETN)\
         $(RESLIBSPLIT5TARGETN) $(RESLIBSPLIT6TARGETN)\
-        $(RESLIBSPLIT7TARGETN)
+        $(RESLIBSPLIT7TARGETN)\
+        $(REMOTE_BUILD)\
+        last_target
 
 .ELSE			# "$(L10N-framework)"!=""
 #		$(NOOPTTARGET) $(EXCEPTIONSTARGET)
@@ -2042,6 +2056,7 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(DO_JS)$(SIGNFOREXPLORER) \
         $(DO_JS)$(SIGNFORJARSIGNER) \
         $(CONVERTUNIXTEXT) \
+        $(REMOTE_BUILD)\
         last_target
 
 .IF "$(EXCEPTIONSNOOPT_FLAG)"==""
@@ -2529,6 +2544,21 @@ $(EXCEPTIONSNOOPTFILES):
 
 .ENDIF
 .ENDIF
+
+# ----------------------------------
+# - REMOTE_BUILD - build remote vcl -
+# ----------------------------------
+
+.IF "$(UPDATER)"!=""
+.IF "$(PRJNAME)"=="vcl"
+.IF "$(REMOTE_BUILD_FLAG)" == ""
+$(REMOTE_BUILD):
+    @+echo --- REMOTE_BUILD ---
+    @dmake $(MFLAGS) remote=true REMOTE_BUILD_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/)
+    @+echo --- REMOTE_BUILD OVER ---
+.ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
+.ENDIF          # "$(PRJNAME)"=="vcl"
+.ENDIF          # "$(UPDATER)"!=""
 
 .IF "$(LAZY_DEPS)"!=""
 warn_lazy_deps:
