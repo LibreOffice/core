@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XResourceBundle.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ module com { module sun { module star { module resource {
     @author      Markus Meyer
     @deprecated draft
 */
-interface XResourceBundle: com::sun::star::container::XNameAccess
+published interface XResourceBundle: com::sun::star::container::XNameAccess
 {
     //-------------------------------------------------------------------------
     /** contains the parent bundle of this bundle.
