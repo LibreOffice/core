@@ -3,9 +3,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:49:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,7 +525,7 @@ BOOL SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
     xub_StrLen nUChrPos = bBackSp ? 0 : pSttStr->Len()-1;
     sal_Unicode cDelChar = pDelTxtNd->GetTxt().GetChar( pStt->nContent.GetIndex() );
     CharClass& rCC = GetAppCharClass();
-    if( ( CH_TXTATR_BREAKWORD == cDelChar && CH_TXTATR_INWORD == cDelChar ) ||
+    if( ( CH_TXTATR_BREAKWORD == cDelChar || CH_TXTATR_INWORD == cDelChar ) ||
         rCC.isLetterNumeric( String( cDelChar ), 0 ) !=
         rCC.isLetterNumeric( *pSttStr, nUChrPos ) )
         return FALSE;
