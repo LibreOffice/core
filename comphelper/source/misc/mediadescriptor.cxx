@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediadescriptor.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:47:05 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,6 +409,12 @@ const ::rtl::OUString& MediaDescriptor::PROP_TITLE()
 const ::rtl::OUString& MediaDescriptor::PROP_SALVAGEDFILE()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("SalvagedFile"));
+    return sProp;
+}
+
+const ::rtl::OUString& MediaDescriptor::PROP_VIEWONLY()
+{
+    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("ViewOnly"));
     return sProp;
 }
 
