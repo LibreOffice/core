@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: sj $ $Date: 2001-12-18 17:04:32 $
+ *  last change: $Author: thb $ $Date: 2002-01-04 10:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4649,7 +4649,7 @@ BOOL SvxMSDffManager::GetBLIP(ULONG nIdx_, Graphic& rData) const
             {
                 // create new BlipCacheEntry for this graphic
                 if ( !pEscherBlipCache )
-                    const_cast <List*>(pEscherBlipCache) = new List();
+                    const_cast <SvxMSDffManager*> (this)->pEscherBlipCache = new List();
                 EscherBlipCacheEntry* pNewEntry = new EscherBlipCacheEntry( nIdx_, rData );
                 pEscherBlipCache->Insert( pNewEntry, LIST_APPEND );
             }
