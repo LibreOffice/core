@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:15:09 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 09:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2626,7 +2626,12 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
     {
         PolyPolygon aPoly;
         if ( bContour )
-            bContour = GetContour( aPoly );
+        {
+            // OD 16.04.2003 #i13147# - add 2nd parameter with value <sal_True>
+            // to indicate that method is called for paint in order to avoid
+            // load of the intrinsic graphic.
+            bContour = GetContour( aPoly, sal_True );
+        }
 
         //Hintergrund painten fuer:
         bPaintBack = !pNoTxt || Prt().SSize() != Frm().SSize();
@@ -3258,6 +3263,8 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
     // the table frame has/is a follow.
     const SwFrm* pTmpFrm = _pCellFrm;
     bool bCellAtBorder = true;
+    bool bCellAtLeftBorder = !_pCellFrm->GetPrev();
+    bool bCellAtRightBorder = !_pCellFrm->GetNext();
     while( !pTmpFrm->IsRowFrm() || !pTmpFrm->GetUpper()->IsTabFrm() )
     {
         pTmpFrm = pTmpFrm->GetUpper();
@@ -3266,6 +3273,17 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
            )
         {
             bCellAtBorder = false;
+        }
+        if ( pTmpFrm->IsCellFrm() )
+        {
+            if ( pTmpFrm->GetPrev() )
+            {
+                bCellAtLeftBorder = false;
+            }
+            if ( pTmpFrm->GetNext() )
+            {
+                bCellAtRightBorder = false;
+            }
         }
     }
     ASSERT( pTmpFrm && pTmpFrm->IsRowFrm(), "No RowFrm available" );
@@ -3292,8 +3310,8 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
         const SvxBoxItem aBorderBox = _rCellBorderAttrs.GetBox();
         const bool bNoBordersInside =
                 ( !aBorderBox.GetTop()    || !pParentRowFrm->GetPrev() ) &&
-                ( !aBorderBox.GetLeft()   || !_pCellFrm->GetPrev() ) &&
-                ( !aBorderBox.GetRight()  || !_pCellFrm->GetNext() ) &&
+                ( !aBorderBox.GetLeft()   || bCellAtLeftBorder ) &&
+                ( !aBorderBox.GetRight()  || bCellAtRightBorder ) &&
                 ( !aBorderBox.GetBottom() || !pParentRowFrm->GetNext() );
 
         if ( bNoBordersInside )
