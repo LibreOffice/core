@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-24 13:44:05 $
+ *  last change: $Author: ka $ $Date: 2001-01-25 14:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #include <com/sun/star/drawing/PointSequence.hpp>
 #endif
 
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
@@ -76,6 +82,9 @@
 #endif
 #ifndef _FLTCALL_HXX
 #include <svtools/fltcall.hxx>
+#endif
+#ifndef _SVX_IMPGRF_HXX
+#include <svx/impgrf.hxx>
 #endif
 
 #include <rtl/uuid.h>
@@ -1247,14 +1256,34 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
         else if( ( aGrafURL.GetTokenCount( ':' ) != 2 ) ||
                  ( aGrafURL.GetToken( 0, ':' ) != String( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) ).GetToken( 0, ':' ) ) )
         {
-            const SfxFilter* pFilter = NULL;
-            SfxMedium aSfxMedium(aURL, (STREAM_READ | STREAM_SHARE_DENYNONE), FALSE);
-            SFX_APP()->GetFilterMatcher().GuessFilter(aSfxMedium, &pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
+            // normal link
+            const SfxFilter*    pSfxFilter = NULL;
+            SfxMedium           aSfxMedium( aURL, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
+            String              aFilterName;
 
-            if( NULL == pFilter )
-                throw lang::IllegalArgumentException();
+            SFX_APP()->GetFilterMatcher().GuessFilter( aSfxMedium, &pSfxFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
-            const String aFilterName = pFilter->GetFilterName();
+            if( !pSfxFilter )
+            {
+                INetURLObject aURLObj( aURL );
+
+                if( aURLObj.GetProtocol() == INET_PROT_NOT_VALID )
+                {
+                    String aValidURL;
+
+                    if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aURL, aValidURL ) )
+                        aURLObj = INetURLObject( aValidURL );
+                }
+
+                if( aURLObj.GetProtocol() != INET_PROT_NOT_VALID )
+                {
+                    GraphicFilter* pGrfFilter = GetGrfFilter();
+                    aFilterName = pGrfFilter->GetImportFormatName( pGrfFilter->GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
+                }
+            }
+            else
+                aFilterName = pSfxFilter->GetFilterName();
+
             ((SdrGrafObj*)pObj)->SetGraphicLink( aURL, aFilterName );
         }
 
@@ -1333,27 +1362,6 @@ uno::Any SAL_CALL SvxGraphicObject::getPropertyValue( const OUString& aPropertyN
 
         return aAny;
     }
-
-/*  else if( pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("NativeFormat")) )
-    {
-        const Graphic& rGraphic = ((SdrGrafObj*)pObj)->GetGraphic();
-        GfxLink aLink = ((Graphic*)&rGraphic)->GetLink();
-        if( aLink.GetType() == GFX_LINK_TYPE_NONE )
-            return uno::Any();
-
-        uno::Sequence<BYTE> aSeq(aLink.GetData(), aLink.GetDataSize());
-        return uno::Any( &aSeq, ::getCppuType((const uno::Sequence< BYTE >*)0));
-    }
-    else if( pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("LinkType")) )
-    {
-        const Graphic& rGraphic = ((SdrGrafObj*)pObj)->GetGraphic();
-        GfxLink aLink = ((Graphic*)&rGraphic)->GetLink();
-
-        uno::Any aAny;
-        aAny <<= (sal_Int32)aLink.GetType();
-        return aAny;
-    }
-*/
     else
     {
         return SvxShape::getPropertyValue(aPropertyName);
