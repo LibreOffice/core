@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:28:55 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,7 +712,7 @@ TabPage RID_SUBTBASE
     StringList [ korean ] =
     {
             < "합계" ; Default ; > ;
-        < "카운트" ; Default ; > ;
+        < "수" ; Default ; > ;
         < "평균" ; Default ; > ;
         < "최대" ; Default ; > ;
         < "최소" ; Default ; > ;
