@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlinfo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-25 18:09:50 $
+ *  last change: $Author: cl $ $Date: 2002-12-02 15:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,10 +443,14 @@ IMPL_LINK(OutlinerInfo, DrawPortionHdl, DrawPortionInfo*, pInfo)
                     pInfo->rFont.GetColor()),
                     nInsertIndex);
 
+                long dx = 0;
+                if( pInfo->pDXArray )
+                    dx = (pInfo->pDXArray)[nCharIndex];
+
                 if(bIsVertical)
-                    aStart.Y() = pInfo->rStartPos.Y() + aTextOffset.Y() + (pInfo->pDXArray)[nCharIndex];
+                    aStart.Y() = pInfo->rStartPos.Y() + aTextOffset.Y() + dx;
                 else
-                    aStart.X() = pInfo->rStartPos.X() + aTextOffset.X() + (pInfo->pDXArray)[nCharIndex];
+                    aStart.X() = pInfo->rStartPos.X() + aTextOffset.X() + dx;
             }
 
             nCharIndex += nNextGlyphLen;
