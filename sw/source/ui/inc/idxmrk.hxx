@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2002-08-08 13:09:46 $
+ *  last change: $Author: os $ $Date: 2002-09-05 09:47:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,8 @@ class SwAuthMarkDlg : public Window
     static sal_Bool     bIsFromComponent;
 
     friend class SwAuthMarkModalDlg;
+    friend class SwAuthMarkFloatDlg;
+
     RadioButton     aFromComponentRB;
     RadioButton     aFromDocContentRB;
     FixedText       aAuthorFT;
@@ -315,6 +317,7 @@ class SwAuthMarkDlg : public Window
     DECL_LINK(IsEntryAllowedHdl, Edit*);
 
     void InitControls();
+    virtual void    Activate();
 public:
 
     SwAuthMarkDlg( Window *pParent,

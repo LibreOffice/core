@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: iha $ $Date: 2002-08-09 11:39:37 $
+ *  last change: $Author: os $ $Date: 2002-09-05 09:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -905,7 +905,8 @@ IMPL_LINK( SwIndexMarkDlg, ModifyHdl, ListBox *, pBox )
         aPhoneticFT0.Enable(bHasText&&bIsPhoneticReadingEnabled);
         aPhoneticED0.Enable(bHasText&&bIsPhoneticReadingEnabled);
     }
-    aOKBT.Enable(aEntryED.GetText().Len() || pSh->GetCrsrCnt(sal_False));
+    aOKBT.Enable(!pSh->HasReadonlySel() &&
+        (aEntryED.GetText().Len() || pSh->GetCrsrCnt(sal_False)));
     return 0;
 }
 
@@ -1725,9 +1726,15 @@ void SwAuthMarkDlg::InitControls()
     aEntryED.SetText(pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER));
     aAuthorFI.SetText(pEntry->GetAuthorField(AUTH_FIELD_AUTHOR));
     aTitleFI.SetText(pEntry->GetAuthorField(AUTH_FIELD_TITLE));
-
 }
+/* -----------------------------05.09.2002 09:44------------------------------
 
+ ---------------------------------------------------------------------------*/
+void    SwAuthMarkDlg::Activate()
+{
+    aOKBT.Enable(!pSh->HasReadonlySel());
+    Window::Activate();
+}
 /* -----------------07.09.99 08:15-------------------
 
  --------------------------------------------------*/
