@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ItemConverter.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 15:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef CHART_ITEMCONVERTER_HXX
 #define CHART_ITEMCONVERTER_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
+#include <unotools/eventlisteneradapter.hxx>
 #endif
 
 #ifndef _SFXITEMPOOL_HXX
@@ -71,15 +71,9 @@
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
-// #ifndef _SVX_UNOIPSET_HXX_
-// #include <svx/unoipset.hxx>
-// #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
-#include <com/sun/star/lang/XEventListener.hpp>
 #endif
 
 class SfxItemPropertyMap;
@@ -92,22 +86,20 @@ namespace wrapper
 /** This class serves for conversion between properties of an XPropertySet and
     SfxItems in SfxItemSets.
 
-    <p>With this helper classes, you can feed dialogs with XPropertySets and let
-    those modify by the dialogs.</p>
+    With this helper classes, you can feed dialogs with XPropertySets and let
+    those modify by the dialogs.
 
-    <p>You must implement GetWhichPairs() such that an SfxItemSet created with
-    CreateEmptyItemSet() is able to hold all items that may be mapped.</p>
+    You must implement GetWhichPairs() such that an SfxItemSet created with
+    CreateEmptyItemSet() is able to hold all items that may be mapped.
 
-    <p>You also have to implement GetItemPropertyName(), in order to return the
-    property name for a given which-id.</p>
+    You also have to implement GetItemPropertyName(), in order to return the
+    property name for a given which-id.
 
-    <p>FillSpecialItem and ApplySpecialItem may be used for special handling of
-    individual item, e.g. if you need member-ids in QueryValue/PutValue</p>
+    FillSpecialItem and ApplySpecialItem may be used for special handling of
+    individual item, e.g. if you need member-ids in QueryValue/PutValue
  */
 class ItemConverter :
-        public ::cppu::WeakImplHelper1<
-            ::com::sun::star::lang::XEventListener
-        >
+        public ::utl::OEventListenerAdapter
 {
 public:
     /** Construct an item converter that uses the given property set for
@@ -122,43 +114,43 @@ public:
     /** applies all properties that can be mapped to items into the given item
         set.
 
-        <p>Call this method before opening a dialog.</p>
+        Call this method before opening a dialog.
 
-        @param rOutItemSet the SfxItemSet is filled with all items that are a
-               result of a conversion from a property of the internal
-               XPropertySet.
+        @param rOutItemSet
+            the SfxItemSet is filled with all items that are a result of a
+            conversion from a property of the internal XPropertySet.
      */
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const;
 
     /** applies all properties that are results of a conversion from all items
         in rItemSet to the internal XPropertySet.
 
-        <p>Call this method after a dialog was closed with OK</p>
+        Call this method after a dialog was closed with OK
 
         @return true, if any properties have been changed, false otherwise.
      */
     virtual bool ApplyItemSet( const SfxItemSet & rItemSet );
 
-    /** creates an empty item set using the given pool
-        or a common pool if empty (see GetItemPool) and
-        allowing all items given in the ranges returned by GetWhichPairs.
+    /** creates an empty item set using the given pool or a common pool if empty
+        (see GetItemPool) and allowing all items given in the ranges returned by
+        GetWhichPairs.
      */
     SfxItemSet CreateEmptyItemSet() const;
 
     /** States whether conversion is still likely to work.
 
-        <p>In particular, it is checked if the XPropertySet given in the CTOR is
+        In particular, it is checked if the XPropertySet given in the CTOR is
         still valid, i.e. not disposed.  It is assumed that the XPropertySet is
-        valid when the converter is constructed.</p>
+        valid when the converter is constructed.
 
-        <p>This only works if the XPropertySet given in the CTOR supports the
-        interface ::com::sun::star::lang::XComponent.</p>
+        This only works if the XPropertySet given in the CTOR supports the
+        interface ::com::sun::star::lang::XComponent.
      */
     bool IsValid() const;
 
-    /// creates a pure chart item pool
-    static SfxItemPool* CreateSchItemPool();
-
+    /** Invalidates all items in rDestSet, that are set (state SFX_ITEM_SET) in
+        both item sets (rDestSet and rSourceSet) and have differing content.
+     */
     static void InvalidateUnequalItems( SfxItemSet &rDestSet, const SfxItemSet &rSourceSet );
 
 protected:
@@ -166,31 +158,32 @@ protected:
 
     /** implement this method to provide an array of which-ranges of the form:
 
-       <pre>
         const USHORT aMyPairs[] =
         {
-          from_1, to_1,
-          from_2, to_2,
-          ...
-          from_n, to_n,
-          0
+            from_1, to_1,
+            from_2, to_2,
+            ...
+            from_n, to_n,
+            0
         };
-        </pre>
     */
     virtual const USHORT * GetWhichPairs() const = 0;
 
     /** implement this method to return a Property object for a given which id.
 
-        @param rOutName If </TRUE> is returned, this contains the property name.
+        @param rOutName
+            If true is returned, this contains the property name.
 
-        @return </TRUE>, if the item can be mapped to a property.
+        @return true, if the item can be mapped to a property.
      */
-    virtual bool GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const;
+    virtual bool GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const = 0;
 
     /** for items that can not be mapped directly to a property.
 
         This method is called from FillItemSet(), if GetItemPropertyName() returns
         false.
+
+        The default implementation does nothing except showing an assertion
      */
     virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const;
 
@@ -199,7 +192,9 @@ protected:
         This method is called from ApplyItemSet(), if GetItemPropertyName() returns
         false.
 
-        @return </TRUE> if the item changed a property, </FALSE> otherwise.
+        The default implementation returns just false and shows an assertion
+
+        @return true if the item changed a property, false otherwise.
      */
     virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet ) const;
 
@@ -214,9 +209,8 @@ protected:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >  GetPropertySet() const;
 
-    // ____ XEventListener ____
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException);
+    // ____ ::utl::OEventListenerAdapter ____
+    virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
 
 private:
     ::com::sun::star::uno::Reference<

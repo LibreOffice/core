@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ItemConverter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 11:39:34 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 15:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,6 @@
  *
  ************************************************************************/
 #include "ItemConverter.hxx"
-#include "SchItemPool.hxx"
-
-// only used for OSL_ENSURE
-#if OSL_DEBUG_LEVEL > 0
-#include "macros.hxx"
-#endif
 
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
@@ -100,23 +94,18 @@ ItemConverter::ItemConverter(
     {
         m_xPropertySetInfo = m_xPropertySet->getPropertySetInfo();
 
-        // Note: Do not add this as Reference in the CTOR !!!!
-//         uno::Reference< lang::XComponent > xComp( m_xPropertySet, uno::UNO_QUERY );
-//         if( xComp.is())
-//         {
-//             xComp->addEventListener( this );
-//         }
+        uno::Reference< lang::XComponent > xComp( m_xPropertySet, uno::UNO_QUERY );
+        if( xComp.is())
+        {
+            // method of base class ::utl::OEventListenerAdapter
+            startComponentListening( xComp );
+        }
     }
 }
 
 ItemConverter::~ItemConverter()
-{}
-
-
-//static
-SfxItemPool* ItemConverter::CreateSchItemPool()
 {
-    return new SchItemPool();
+    stopAllComponentListening();
 }
 
 SfxItemPool & ItemConverter::GetItemPool() const
@@ -134,9 +123,17 @@ bool ItemConverter::IsValid() const
     return m_bIsValid;
 }
 
-uno::Reference< beans::XPropertySet >  ItemConverter::GetPropertySet() const
+uno::Reference< beans::XPropertySet > ItemConverter::GetPropertySet() const
 {
     return m_xPropertySet;
+}
+
+void ItemConverter::_disposing( const lang::EventObject& _rSource )
+{
+    if( _rSource.Source == m_xPropertySet )
+    {
+        m_bIsValid = false;
+    }
 }
 
 void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
@@ -161,18 +158,6 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
         {
             if( GetItemPropertyName( nWhich, aPropName ))
             {
-#if OSL_DEBUG_LEVEL > 0
-                try
-                {
-                    beans::Property aProp( m_xPropertySetInfo->getPropertyByName( aPropName ));
-                    OSL_ASSERT( aProp.Name.equals( aPropName ));
-                }
-                catch( beans::UnknownPropertyException ex )
-                {
-                    ASSERT_EXCEPTION( ex );
-                }
-#endif
-
                 // put the Property into the itemset
                 SfxPoolItem * pItem = rPool.GetDefaultItem( nWhich ).Clone();
 
@@ -185,7 +170,6 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                                 ))
                         {
                             delete pItem;
-//                             throw lang::IllegalArgumentException();
                         }
                         else
                         {
@@ -195,8 +179,18 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                     }
                     catch( beans::UnknownPropertyException ex )
                     {
-                        OSL_ENSURE( false, U2C( ex.Message + C2U( " - unknown Property: " ) + aPropName ) );
+                        OSL_ENSURE( false,
+                                    ::rtl::OUStringToOString(
+                                        ex.Message +
+                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                             " - unknown Property: " )) + aPropName,
+                                        RTL_TEXTENCODING_ASCII_US ).getStr());
                         delete pItem;
+                    }
+                    catch( uno::Exception ex )
+                    {
+                        OSL_ENSURE( false, ::rtl::OUStringToOString(
+                                        ex.Message, RTL_TEXTENCODING_ASCII_US).getStr());
                     }
                 }
             }
@@ -255,7 +249,17 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                 }
                 catch( beans::UnknownPropertyException ex )
                 {
-                    OSL_ENSURE( false, U2C( ex.Message + C2U( " - unknown Property: " ) + aPropName ) );
+                    OSL_ENSURE( false,
+                                ::rtl::OUStringToOString(
+                                    ex.Message +
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                         " - unknown Property: " )) + aPropName,
+                                    RTL_TEXTENCODING_ASCII_US).getStr());
+                }
+                catch( uno::Exception ex )
+                {
+                    OSL_ENSURE( false, ::rtl::OUStringToOString(
+                                    ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
                 }
             }
             else
@@ -269,15 +273,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return bItemsChanged;
 }
 
-// ____ XEventListener ____
-void SAL_CALL ItemConverter::disposing( const lang::EventObject& Source )
-    throw (uno::RuntimeException)
-{
-    if( Source.Source == m_xPropertySet )
-    {
-        m_bIsValid = false;
-    }
-}
+// --------------------------------------------------------------------------------
 
 //static
 void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItemSet &rSourceSet )

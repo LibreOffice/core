@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultipleItemConverter.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 15:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@ public:
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const;
     virtual bool ApplyItemSet( const SfxItemSet & rItemSet );
+
+    /// implemented empty (returns always false)
+    virtual bool GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const;
 
 protected:
     MultipleItemConverter( SfxItemPool& rItemPool );

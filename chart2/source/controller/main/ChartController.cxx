@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 15:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 #include "ChartController.hxx"
 #include "servicenames.hxx"
+#include "SchItemPool.hxx"
 
 #include "InlineContainer.hxx"
 #include "Chart.hrc"
@@ -486,7 +487,7 @@ void SAL_CALL ChartController
         return sal_False;
 
     m_pDrawModelWrapper = new DrawModelWrapper(m_xCC
-        ,wrapper::ItemConverter::CreateSchItemPool());
+        ,wrapper::SchItemPool::CreateSchItemPool());
 
     uno::Reference< frame::XModel > xDrawModel = m_pDrawModelWrapper->getUnoModel();
     if( xDrawModel.is())
