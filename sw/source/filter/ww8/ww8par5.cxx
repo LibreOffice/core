@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 14:24:57 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,12 +226,14 @@
 #include "fields.hxx"
 #endif
 
+#include <algorithm> // #i24377#
 
 #define MAX_FIELDLEN 64000
 
 #define WW8_TOX_LEVEL_DELIM     ':'
 
 using namespace sw::util;
+using namespace std; // #i24377#
 
 class _ReadFieldParams
 {
@@ -2975,39 +2977,39 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                                 // falls es eine Seitenzahl gibt:
                                 FormTokenType ePrevType = TOKEN_END;
                                 FormTokenType eType;
-                                SwFormTokenEnumerator aEnumer =
-                                    aForm.CreateTokenEnumerator(nLevel);
+                                // -> #i21237#
+                                SwFormTokens aPattern =
+                                    aForm.GetPattern(nLevel);
+                                SwFormTokens::iterator aIt = aPattern.begin();
                                 do
                                 {
-                                    eType = aEnumer.GetNextTokenType();
+                                    aIt++;
+                                    eType = aIt->eTokenType;
+
                                     if (eType == TOKEN_PAGE_NUMS)
                                     {
                                         if (TOKEN_TAB_STOP == ePrevType)
                                         {
-                                            // remove Tab
-                                            aEnumer.GetPrevTokenType();
-                                            aEnumer.RemoveCurToken();
-                                            // insert new Token
+                                            aIt--;
+
                                             if(0x09 == sDelimiter.GetChar(0))
-                                            {
-                                                SwFormToken aToken(TOKEN_TAB_STOP );
-                                                aToken.eTabAlign = SVX_TAB_ADJUST_END;
-                                                aEnumer.InsertToken(aToken);
-                                            }
+                                                aIt->eTabAlign = SVX_TAB_ADJUST_END;
                                             else
                                             {
-                                                SwFormToken aToken(TOKEN_TEXT );
+                                                SwFormToken aToken(TOKEN_TEXT);
                                                 aToken.sText = sDelimiter;
-                                                aEnumer.InsertToken(aToken);
+                                                *aIt = aToken;
                                             }
-                                            aForm.SetPattern(nLevel,
-                                                aEnumer.GetPattern());
+                                            aForm.SetPattern(nLevel, aPattern);
                                         }
+
                                         eType = TOKEN_END;
                                     }
+
                                     ePrevType = eType;
                                 }
                                 while (TOKEN_END != eType);
+                                // <- #i21237#
                             }
                             pBase->SetTOXForm( aForm );
                         }
@@ -3123,31 +3125,34 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                                 // falls es eine Seitenzahl gibt:
                                 FormTokenType ePrevType = TOKEN_END;
                                 FormTokenType eType;
-                                SwFormTokenEnumerator aEnumer =
-                                    aForm.CreateTokenEnumerator( nLevel );
+
+                                // -> #i21237#
+                                SwFormTokens aPattern = aForm.GetPattern(nLevel);
+                                SwFormTokens::iterator aIt = aPattern.begin();
                                 do
                                 {
-                                    eType = aEnumer.GetNextTokenType();
+                                    aIt++;
+
+                                    eType = aIt->eTokenType;
                                     if (eType == TOKEN_PAGE_NUMS)
                                     {
                                         if (TOKEN_TAB_STOP == ePrevType)
                                         {
-                                            // remove Tab
-                                            aEnumer.GetPrevTokenType();
-                                            aEnumer.RemoveCurToken();
-                                            // insert new Token
+                                            aIt--;
+
                                             SwFormToken aToken(TOKEN_TEXT);
                                             aToken.sText = sDelimiter;
 
-                                            aEnumer.InsertToken(aToken);
+                                            *aIt = aToken;
                                             aForm.SetPattern(nLevel,
-                                                aEnumer.GetPattern());
+                                                             aPattern);
                                         }
                                         eType = TOKEN_END;
                                     }
                                     ePrevType = eType;
                                 }
                                 while( TOKEN_END != eType );
+                                // <- #i21237#
                             }
                             pBase->SetTOXForm( aForm );
                         }
@@ -3178,27 +3183,31 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                             // Seitenzahl und ggfs. davorstehenden Tabstop
                             // entfernen:
                             FormTokenType eType;
-                            SwFormTokenEnumerator aEnumer =
-                                aForm.CreateTokenEnumerator( nLevel );
+                            // -> #i21237#
+                            SwFormTokens aPattern = aForm.GetPattern(nLevel);
+                            SwFormTokens::iterator aIt = aPattern.begin();
                             do
                             {
-                                eType = aEnumer.GetNextTokenType();
+                                aIt++;
+                                eType = aIt->eTokenType;
+
                                 if (eType == TOKEN_PAGE_NUMS)
                                 {
-                                    aEnumer.RemoveCurToken();
+                                    aIt = aPattern.erase(aIt);
+                                    aIt--;
                                     if (
                                          TOKEN_TAB_STOP ==
-                                         aEnumer.GetPrevTokenType()
+                                         aIt->eTokenType
                                        )
                                     {
-                                        aEnumer.RemoveCurToken();
-                                        aForm.SetPattern(nLevel,
-                                                aEnumer.GetPattern());
+                                        aPattern.erase(aIt);
+                                        aForm.SetPattern(nLevel, aPattern);
                                     }
                                     eType = TOKEN_END;
                                 }
                             }
                             while (TOKEN_END != eType);
+                            // <- #i21237#
                         }
                         pBase->SetTOXForm( aForm );
                     }
@@ -3222,18 +3231,19 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                 SwFormToken aLinkStart(TOKEN_LINK_START);
                 SwFormToken aLinkEnd(TOKEN_LINK_END);
 
+                // -> #i21237#
                 for(USHORT nLevel = 1; nLevel <= nEnd; ++nLevel)
                 {
-                    SwFormTokenEnumerator aEnumer(
-                        aForm.CreateTokenEnumerator(nLevel));
+                    SwFormTokens aPattern = aForm.GetPattern(nLevel);
+                    SwFormTokens::iterator aIt = aPattern.begin();
 
-                    aEnumer.InsertToken(aLinkStart);
-                    while (TOKEN_END != aEnumer.GetNextTokenType());
-                    aEnumer.InsertToken(aLinkEnd);
+                    aPattern.insert(aPattern.begin(), aLinkStart);
+                    aPattern.push_back(aLinkEnd);
 
-                    aForm.SetPattern(nLevel, aEnumer.GetPattern());
+                    aForm.SetPattern(nLevel, aPattern);
 
                 }
+                // <- #i21237#
                 pBase->SetTOXForm(aForm);
             }
 
@@ -3279,24 +3289,20 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         SwForm aForm( eType );
                         USHORT nEnd = aForm.GetFormMax()-1;
 
+                        // -> #i21237#
                         for(USHORT nLevel = 1; nLevel <= nEnd; ++nLevel)
                         {
+                            SwFormTokens aPattern = aOldForm.GetPattern(nLevel);
 
-                            SwFormTokenEnumerator aTokenEnum(aOldForm.
-                                GetPattern(nLevel));
-                            while (aTokenEnum.HasNextToken())
-                            {
-                                if (aTokenEnum.GetNextTokenType() ==
-                                        TOKEN_ENTRY_NO)
-                                {
-                                    aTokenEnum.RemoveCurToken();
-                                }
-                            }
-                            aForm.SetPattern(nLevel, aTokenEnum.GetPattern());
+                            remove_if(aPattern.begin(), aPattern.end(),
+                                      SwFormTokenEqualToFormTokenType(TOKEN_ENTRY_NO));
+
+                            aForm.SetPattern(nLevel, aPattern);
 
                             aForm.SetTemplate( nLevel,
                                 aOldForm.GetTemplate(nLevel));
                         }
+                        // <- #i21237#
 
                         pBase->SetTOXForm( aForm );
                     }
@@ -3316,6 +3322,11 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 
     // Update fuer TOX anstossen
     rDoc.SetUpdateTOX(true);
+
+    // #i21237#
+    // propagate tab stops from paragraph styles used in TOX to
+    // patterns of the TOX
+    pBase->AdjustTabStops(rDoc, TRUE);
 
     //#i10028# inserting a toc implicltly acts like a parabreak
     //in word and writer
