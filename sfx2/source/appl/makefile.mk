@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: ab $ $Date: 2001-03-19 12:47:12 $
+#   last change: $Author: pb $ $Date: 2001-04-23 12:01:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,16 +135,17 @@ SLOFILES =  \
         $(SLO)$/helpinterceptor.obj
 
 EXCEPTIONSFILES=\
-        $(SLO)$/appmain.obj		\
-        $(SLO)$/appmisc.obj		\
-        $(SLO)$/frstinit.obj	\
-        $(SLO)$/appinit.obj		\
-        $(SLO)$/applicat.obj	\
-        $(SLO)$/picklist.obj	\
-        $(SLO)$/rmacceptor.obj	\
-        $(SLO)$/appcfg.obj		\
-        $(SLO)$/helpinterceptor.obj \
-                $(SLO)$/newhelp.obj
+    $(SLO)$/appmain.obj			\
+    $(SLO)$/appmisc.obj			\
+    $(SLO)$/frstinit.obj		\
+    $(SLO)$/appinit.obj			\
+    $(SLO)$/applicat.obj		\
+    $(SLO)$/picklist.obj		\
+    $(SLO)$/rmacceptor.obj		\
+    $(SLO)$/appcfg.obj			\
+    $(SLO)$/helpinterceptor.obj	\
+    $(SLO)$/newhelp.obj			\
+    $(SLO)$/sfxhelp.obj
 
 .IF "$(GUI)" == "MAC"
 SLOFILES +=\
