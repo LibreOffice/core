@@ -2,9 +2,9 @@
 *
 *  $RCSfile: DBMetaData.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:40:28 $
+*  last change: $Author: hr $ $Date: 2004-08-02 17:19:41 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -62,18 +62,26 @@ package com.sun.star.wizards.db;
 
 import java.util.*;
 
+import com.sun.star.io.IOException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.container.XChild;
+import com.sun.star.container.XHierarchicalNameContainer;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
+import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.sdbcx.XColumnsSupplier;
 
+import com.sun.star.ucb.CommandAbortedException;
+import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -87,6 +95,7 @@ import com.sun.star.util.XNumberFormats;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.*;
 import com.sun.star.task.XInteractionHandler;
+import com.sun.star.sdb.XFormDocumentsSupplier;
 import com.sun.star.sdb.XQueryDefinitionsSupplier;
 import com.sun.star.sdb.XBookmarksSupplier;
 import com.sun.star.sdbc.SQLException;
@@ -98,6 +107,7 @@ import com.sun.star.util.XFlushable;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.sdb.XQueriesSupplier;
 import com.sun.star.sdbcx.XTablesSupplier;
+import com.sun.star.sdb.XReportDocumentsSupplier;
 
 public class DBMetaData {
     public XNameAccess xTableNames;
@@ -390,23 +400,37 @@ public class DBMetaData {
     try {
         com.sun.star.sdbc.XConnection xConnection = null;
         if (Properties.hasPropertyValue(curproperties, "ActiveConnection"))
+        {
             xConnection = (com.sun.star.sdbc.XConnection) AnyConverter.toObject(com.sun.star.sdbc.XConnection.class,
-                                                                                Properties.getPropertyValue(curproperties, "ActiveConnection"));
+                Properties.getPropertyValue(curproperties, "ActiveConnection"));
+            if (xConnection !=null)
+            {
+                com.sun.star.container.XChild child = (com.sun.star.container.XChild)UnoRuntime.queryInterface(com.sun.star.container.XChild.class, xConnection);
+
+                xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, child.getParent());
+                XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xDataSource);
+                if ( xPSet != null )
+                    DataSourceName = AnyConverter.toString(xPSet.getPropertyValue("Name"));
+                return getConnection(xConnection);
+            }
+
+        }
         if (Properties.hasPropertyValue(curproperties, "DataSourceName")){
             String sDataSourceName = AnyConverter.toString(Properties.getPropertyValue(curproperties, "DataSourceName"));
             return getConnection(sDataSourceName);
         }
-        else if (Properties.hasPropertyValue(curproperties, "DataSource")){
-            xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, Properties.getPropertyValue(curproperties, "DataSource"));
-//          XDataSource xDataSource = (XDataSource) AnyConverter.toObject(XDataSource.class, Properties.getPropertyValue(curproperties, "DataSourceName"))
-            return getConnection(xDataSource);
-        }
-        else if (xConnection !=null){
-            return getConnection(xConnection);
-        }
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException e){
         e.printStackTrace(System.out);
     }
+    catch (UnknownPropertyException e)
+    {
+        e.printStackTrace(System.out);
+    }
+    catch (WrappedTargetException e)
+    {
+        e.printStackTrace(System.out);
+    }
+
     return false;
     }
 
@@ -478,7 +502,10 @@ public class DBMetaData {
     }}
 
 
-
+    /**
+     * @deprecated links in datasource are no longer possible since integration of cws insight01
+     * @param StorePath
+     */
     public void createDBLink(String StorePath) {
         try {
             String BookmarkName = JavaTools.getFileDescription(StorePath);
@@ -520,6 +547,71 @@ public class DBMetaData {
             return null;
         }
     }
+
+
+    public XNameAccess getReportDocuments(){
+        XReportDocumentsSupplier xReportDocumentSuppl = (XReportDocumentsSupplier) UnoRuntime.queryInterface(XReportDocumentsSupplier.class, this.xDataSource);
+        return xReportDocumentSuppl.getReportDocuments();
+    }
+
+
+    public XNameAccess getFormDocuments(){
+        XFormDocumentsSupplier xFormDocumentSuppl = (XFormDocumentsSupplier) UnoRuntime.queryInterface(XFormDocumentsSupplier.class, this.xDataSource);
+        return xFormDocumentSuppl.getFormDocuments();
+    }
+
+
+    /**
+     * adds the passed document as a report or a form to the database. Afterwards the document is deleted.
+     * the document may not be open
+     * @param xComponent
+     * @param _bIsForm describes the type of the document: "form" or "report"
+     */
+    public void addDatabaseDocument(XComponent _xComponent, boolean _bIsForm,boolean bAsTemplate){
+    try {
+
+        XModel xDocumentModel = (XModel) UnoRuntime.queryInterface(XModel.class, _xComponent);
+        String sPath = xDocumentModel.getURL();
+        String sFileName = FileAccess.getFilename(sPath);
+        _xComponent.dispose();
+        XNameAccess xDocNameAccess;
+        if (_bIsForm)
+            xDocNameAccess = getFormDocuments();
+        else
+            xDocNameAccess = getReportDocuments();
+        PropertyValue[] aDocProperties = new PropertyValue[_bIsForm ? 3 : 4];
+        aDocProperties[0] = Properties.createProperty("Name", sFileName);
+        aDocProperties[1] = Properties.createProperty("Parent", xDocNameAccess);
+        aDocProperties[2] = Properties.createProperty("URL", sPath);
+                if ( !_bIsForm )
+                    aDocProperties[3] = Properties.createProperty("AsTemplate", new Boolean(bAsTemplate));
+
+        XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xDocNameAccess);
+        Object oDBDocument = xDocMSF.createInstanceWithArguments("com.sun.star.sdb.DocumentDefinition", aDocProperties);
+        XNameContainer xNamed = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, xDocNameAccess);
+        xNamed.insertByName(sFileName, oDBDocument);
+        XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
+        XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class, xInterface);
+        xSimpleFileAccess.kill(sPath);
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+    }}
+
+
+    public void openReportDocument(String _sReportName){
+    try {
+        PropertyValue[] aArgs = new PropertyValue[2];
+        aArgs[0] = Properties.createProperty("ActiveConnection", DBConnection);
+        aArgs[1] = Properties.createProperty("OpenMode", "open");
+        XNameAccess xReportDocuments = getReportDocuments();
+        XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xReportDocuments);
+        XHierarchicalNameContainer xHierarchicalNameContainer = (XHierarchicalNameContainer) UnoRuntime.queryInterface(XHierarchicalNameContainer.class, xReportDocuments);
+        if (xHierarchicalNameContainer.hasByHierarchicalName(_sReportName))
+            xComponentLoader.loadComponentFromURL(_sReportName, "", 0, aArgs);
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+    }}
+
 
     public boolean isConnectionOvergiven() {
         return bConnectionOvergiven;
