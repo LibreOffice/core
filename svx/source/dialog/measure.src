@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 20:25:40 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,10 +91,10 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ ENGLISH ] = "Line" ;
         Text[ english_us ] = "Line";
         Text[ portuguese ] = "Line";
-        Text[ russian ] = "Line";
+        Text[ russian ] = "Ëèíèÿ";
         Text[ greek ] = "Line";
         Text[ dutch ] = "Line";
-        Text[ french ] = "Line";
+        Text[ french ] = "Ligne";
         Text[ spanish ] = "Línea";
         Text[ finnish ] = "Line";
         Text[ italian ] = "Line";
@@ -102,7 +102,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ swedish ] = "Linje";
         Text[ polish ] = "Lina";
         Text[ portuguese_brazilian ] = "Line";
-        Text[ japanese ] = "Line";
+        Text[ japanese ] = "ü";
         Text[ korean ] = "Line";
         Text[ chinese_simplified ] = "ÏßÌõ";
         Text[ chinese_traditional ] = "?±ø";
@@ -339,7 +339,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ ENGLISH ] = "Measure ~below reference edge" ;
         Text[ english_us ] = "~Below reference edge";
         Text[ portuguese ] = "Mostrar ~abaixo";
-        Text[ russian ] = "Ïîêàç íèæå";
+        Text[ russian ] = "Ëèíèÿ ğàçìåğà ïîä îáúåêòîì";
         Text[ greek ] = "ÅìöÜíéóç êÜôù áğü";
         Text[ dutch ] = "~Weergave onder";
         Text[ french ] = "Afficher ~en dessous";
@@ -348,9 +348,9 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ italian ] = "Mostra in basso";
         Text[ danish ] = "Vis nedenfor";
         Text[ swedish ] = "Måttlinje ~nedanför objekt";
-        Text[ polish ] = "Poka¿ poni¿ej";
+        Text[ polish ] = "Linia wymiarowa pod obiektem";
         Text[ portuguese_brazilian ] = "Anzeige ~unterhalb";
-        Text[ japanese ] = "‰º•û‚É•\\¦(~B)";
+        Text[ japanese ] = "µÌŞ¼Şª¸Ä‰º•û‚É¡–@ü‚Ì•\\¦(~B)";
         Text[ korean ] = "¾Æ·¡¿¡ Ç¥½Ã(~B)";
         Text[ chinese_simplified ] = "³ß´çÏßÌõÏÔÊ¾ÔÚ¶ÔÏóÏÂ·½(~B)";
         Text[ chinese_traditional ] = "¤Ø¤o?±øÅã¥Ü¦bª«¥ó¤U¤è(~B)";
@@ -371,10 +371,10 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ ENGLISH ] = "Legend" ;
         Text[ english_us ] = "Legend";
         Text[ portuguese ] = "Legend";
-        Text[ russian ] = "Legend";
+        Text[ russian ] = "Ïîäïèñü";
         Text[ greek ] = "Legend";
         Text[ dutch ] = "Legend";
-        Text[ french ] = "Legend";
+        Text[ french ] = "Étiquette";
         Text[ spanish ] = "Etiqueta";
         Text[ finnish ] = "Legend";
         Text[ italian ] = "Legend";
@@ -382,7 +382,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ swedish ] = "Etikett";
         Text[ polish ] = "Etykieta";
         Text[ portuguese_brazilian ] = "Legend";
-        Text[ japanese ] = "Legend";
+        Text[ japanese ] = "×ÍŞÙ";
         Text[ korean ] = "Legend";
         Text[ chinese_simplified ] = "±êÇ©";
         Text[ chinese_traditional ] = "¼ĞÅÒ";
@@ -400,7 +400,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ english_us ] = "~Text position" ;
         Text [ italian ] = "Posizione testo" ;
         Text [ spanish ] = "Posición del texto" ;
-        Text [ french ] = "Position du texte" ;
+        Text [ french ] = "Position du ~texte" ;
         Text [ swedish ] = "~Textposition" ;
         Text [ danish ] = "Tekstplacering" ;
         Text [ portuguese_brazilian ] = "Textposition" ;
@@ -438,7 +438,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ russian ] = "~Àâòîì. âåğòèêàëüíî";
         Text[ greek ] = "ÁõôïìÜôùò êáôáêüñõöá";
         Text[ dutch ] = "~Automatisch verticaal";
-        Text[ french ] = "~Automatiquement vertical";
+        Text[ french ] = "Automatiquement ~vertical";
         Text[ spanish ] = "~Vertical automáticamente";
         Text[ italian ] = "Verticale ~autom.";
         Text[ danish ] = "Automatisk lodret";
@@ -467,7 +467,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ russian ] = "Àâòîì. ãîğèçîíòàëüíî";
         Text[ greek ] = "ÁõôïìÜôùò ïñéæüíôéá";
         Text[ dutch ] = "~Automatisch horizontaal";
-        Text[ french ] = "~Automatiquement horizontal";
+        Text[ french ] = "Automatiquement ~horizontal";
         Text[ spanish ] = "~Horizontal automáticamente";
         Text[ italian ] = "~Orizzontale automat.";
         Text[ danish ] = "Automatisk vandret";
@@ -501,7 +501,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ portuguese ] = "Mostrar ~métrica" ;
         Text [ portuguese_brazilian ] = "~Metrik anzeigen" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾³ß´çµ¥Î»(~M)";
-        Text[ russian ] = "Ïîêàç ìåòğèêè";
+        Text[ russian ] = "Ïîêàçàòü åäèíèöó èçìåğ.";
         Text[ polish ] = "Poka¿ jednostkê miary";
         Text[ japanese ] = "’PˆÊ‚ğ•\\¦(~M)";
         Text[ chinese_traditional ] = "Åã¥Ü¤Ø¤o³æ¦ì(~M)";
@@ -531,7 +531,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ ENGLISH ] = "legend ~parallel to help line" ;
         Text[ english_us ] = "~Parallel";
         Text[ portuguese ] = "Paralelamente";
-        Text[ russian ] = "Ïàğàëëåëüíî";
+        Text[ russian ] = "Ïîäïèñü ïàğàëëåëüíî äîï. ëèíèè";
         Text[ greek ] = "ĞáñÜëëçëç ğñïâïëŞ";
         Text[ dutch ] = "Weergave ~parallel";
         Text[ french ] = "Affichage ~parallèle";
@@ -542,7 +542,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ swedish ] = "Etikett ~parallell med hjälplinje";
         Text[ polish ] = "Ustaw etykietê równolegle do linii pomocniczej";
         Text[ portuguese_brazilian ] = "Anzeige ~parallel";
-        Text[ japanese ] = "•½s‚É•\\¦(~P)";
+        Text[ japanese ] = "¡–@ü‚Æ•½s‚É×ÍŞÙ•\\¦(~P)";
         Text[ korean ] = "ÆòÇàÀ¸·Î Ç¥½Ã(~P)";
         Text[ chinese_simplified ] = "±êÇ©ºÍ¸¨ÖúÏßÆ½ĞĞ(~P)";
         Text[ chinese_traditional ] = "¼ĞÅÒ©M»²§U½u¥­¦æ(~P)";
@@ -598,5 +598,6 @@ TabPage RID_SVXPAGE_MEASURE
     Text[ finnish ] = "Mitoitus";
 };
  // ********************************************************************** EOF
+
 
 
