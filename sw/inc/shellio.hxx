@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:19:05 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,7 +712,7 @@ public:
 
         static bool IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
         CharSet *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0);
-    static bool IsDetectableW4W(const String& rFileName);
+    static bool IsDetectableW4W(const String& rFileName, const String& rUserData);
 
     static const SfxFilter* GetTextFilter(const sal_Char* pBuf, ULONG nLen);
     // gebe einen bestimmten Reader zurueck
