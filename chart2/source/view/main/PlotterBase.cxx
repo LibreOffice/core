@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlotterBase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-15 08:35:31 $
+ *  last change: $Author: bm $ $Date: 2003-12-15 10:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ double lcl_getErrorBarLogicLength(
     return fResult;
 }
 
-void lcl_getErrorBarPosAndSize(
+bool lcl_getErrorBarPosAndSize(
     double fErrorBarLength,
     ShapeFactory::tErrorBarDirection eDirection,
     const uno::Reference< XTransformation > & xTrans,
@@ -250,6 +250,8 @@ void lcl_getErrorBarPosAndSize(
     drawing::Position3D & rInOutNewPos,
     drawing::Direction3D & rOutNewSize )
 {
+    bool bClipped = false;
+
     if( xTrans.is())
     {
         drawing::Position3D aUpperLeft( rInOutNewPos ), aLowerRight( rInOutNewPos );
@@ -269,16 +271,36 @@ void lcl_getErrorBarPosAndSize(
                 break;
         }
 
+        rPositionHelper.clipLogicValues(
+            & rInOutNewPos.PositionX, & rInOutNewPos.PositionY, & rInOutNewPos.PositionZ );
         rPositionHelper.doLogicScaling(
             & rInOutNewPos.PositionX, & rInOutNewPos.PositionY, & rInOutNewPos.PositionZ );
         rInOutNewPos = drawing::Position3D(
             SequenceToPosition3D( xTrans->transform( Position3DToSequence( rInOutNewPos ))));
 
+        double fOldX = aUpperLeft.PositionX;
+        double fOldY = aUpperLeft.PositionY;
+        rPositionHelper.clipLogicValues(
+            & aUpperLeft.PositionX, & aUpperLeft.PositionY, & aUpperLeft.PositionZ );
+        bClipped = bClipped ||
+            ( ( eDirection == ShapeFactory::ERROR_BAR_UP ||
+                eDirection == ShapeFactory::ERROR_BAR_LEFT ) &&
+              ( fOldX != aUpperLeft.PositionX ||
+                fOldY != aUpperLeft.PositionY ));
         rPositionHelper.doLogicScaling(
             & aUpperLeft.PositionX, & aUpperLeft.PositionY, & aUpperLeft.PositionZ );
         drawing::Position3D aNewUpperLeft(
             SequenceToPosition3D( xTrans->transform( Position3DToSequence( aUpperLeft ))));
 
+        fOldX = aLowerRight.PositionX;
+        fOldY = aLowerRight.PositionY;
+        rPositionHelper.clipLogicValues(
+            & aLowerRight.PositionX, & aLowerRight.PositionY, & aLowerRight.PositionZ );
+        bClipped = bClipped ||
+            ( ( eDirection == ShapeFactory::ERROR_BAR_DOWN ||
+                eDirection == ShapeFactory::ERROR_BAR_RIGHT ) &&
+              ( fOldX != aLowerRight.PositionX ||
+                fOldY != aLowerRight.PositionY ));
         rPositionHelper.doLogicScaling(
             & aLowerRight.PositionX, & aLowerRight.PositionY, & aLowerRight.PositionZ );
         drawing::Position3D aNewLowerRight(
@@ -301,7 +323,9 @@ void lcl_getErrorBarPosAndSize(
             rOutNewSize.DirectionX = fFixedWidth;
         }
     }
+    return bClipped;
 }
+
 } // anonymous namespace
 
 // virtual
@@ -342,9 +366,10 @@ void PlotterBase::createErrorBar(
 
             drawing::Position3D  aPos( rPos );
             drawing::Direction3D aSize;
-            lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, *m_pPosHelper, aPos, aSize );
+            bool bClipped =
+                lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, *m_pPosHelper, aPos, aSize );
 
-            m_pShapeFactory->createErrorBar2D( xTarget, aPos, aSize, eErrorBarDir );
+            m_pShapeFactory->createErrorBar2D( xTarget, aPos, aSize, eErrorBarDir, bClipped );
         }
 
         if( bShowNeg )
@@ -358,9 +383,10 @@ void PlotterBase::createErrorBar(
 
             drawing::Position3D  aPos( rPos );
             drawing::Direction3D aSize;
-            lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, *m_pPosHelper, aPos, aSize );
+            bool bClipped =
+                lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, *m_pPosHelper, aPos, aSize );
 
-            m_pShapeFactory->createErrorBar2D( xTarget, aPos, aSize, eErrorBarDir );
+            m_pShapeFactory->createErrorBar2D( xTarget, aPos, aSize, eErrorBarDir, bClipped );
         }
     }
     catch( uno::Exception & e )

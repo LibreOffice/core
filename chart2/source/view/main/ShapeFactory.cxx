@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-12 17:02:52 $
+ *  last change: $Author: bm $ $Date: 2003-12-15 10:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1802,6 +1802,7 @@ uno::Reference< drawing::XShape > ShapeFactory::createErrorBar2D(
     , const drawing::Position3D& rPos
     , const drawing::Direction3D& rSize
     , tErrorBarDirection eDirection
+    , bool bClip
     )
 //     , const tNameSequence& rPropNames
 //     , const tAnySequence& rPropValues )
@@ -1823,21 +1824,24 @@ uno::Reference< drawing::XShape > ShapeFactory::createErrorBar2D(
 
     drawing::PolyPolygonShape3D aPPShape;
 
-    aPPShape.SequenceX.realloc(2);
-    aPPShape.SequenceY.realloc(2);
-    aPPShape.SequenceZ.realloc(2);
+    sal_Int32 nNumOfPolys = bClip ? 1 : 2;
+    aPPShape.SequenceX.realloc( nNumOfPolys );
+    aPPShape.SequenceY.realloc( nNumOfPolys );
+    aPPShape.SequenceZ.realloc( nNumOfPolys );
 
     aPPShape.SequenceX[0].realloc(2);
     aPPShape.SequenceY[0].realloc(2);
     aPPShape.SequenceZ[0].realloc(2);
+    aPPShape.SequenceZ[0][0] = aPPShape.SequenceZ[0][1] = fZ;
 
-    aPPShape.SequenceX[1].realloc(2);
-    aPPShape.SequenceY[1].realloc(2);
-    aPPShape.SequenceZ[1].realloc(2);
+    if( !bClip )
+    {
+        aPPShape.SequenceX[1].realloc(2);
+        aPPShape.SequenceY[1].realloc(2);
+        aPPShape.SequenceZ[1].realloc(2);
+        aPPShape.SequenceZ[1][0] = aPPShape.SequenceZ[1][1] = fZ;
+    }
 
-    aPPShape.SequenceZ[0][0] = aPPShape.SequenceZ[0][1] =
-    aPPShape.SequenceZ[1][0] = aPPShape.SequenceZ[1][1] =
-        fZ;
 
     switch( eDirection )
     {
@@ -1847,9 +1851,12 @@ uno::Reference< drawing::XShape > ShapeFactory::createErrorBar2D(
             aPPShape.SequenceY[0][0] = fY;
             aPPShape.SequenceY[0][1] = fY - fHeight;
             // head
-            aPPShape.SequenceX[1][0] = fX - fWidthHalf;
-            aPPShape.SequenceX[1][1] = fX + fWidthHalf;
-            aPPShape.SequenceY[1][0] = aPPShape.SequenceY[1][1] = fY - fHeight;
+            if( !bClip )
+            {
+                aPPShape.SequenceX[1][0] = fX - fWidthHalf;
+                aPPShape.SequenceX[1][1] = fX + fWidthHalf;
+                aPPShape.SequenceY[1][0] = aPPShape.SequenceY[1][1] = fY - fHeight;
+            }
             break;
 
         case ERROR_BAR_RIGHT:
@@ -1858,9 +1865,12 @@ uno::Reference< drawing::XShape > ShapeFactory::createErrorBar2D(
             aPPShape.SequenceX[0][1] = fX + fWidth;
             aPPShape.SequenceY[0][0] = aPPShape.SequenceY[0][1] = fY;
             // head
-            aPPShape.SequenceX[1][0] = aPPShape.SequenceX[1][1] = fX + fWidth;
-            aPPShape.SequenceY[1][0] = fY - fHeightHalf;
-            aPPShape.SequenceY[1][1] = fY + fHeightHalf;
+            if( !bClip )
+            {
+                aPPShape.SequenceX[1][0] = aPPShape.SequenceX[1][1] = fX + fWidth;
+                aPPShape.SequenceY[1][0] = fY - fHeightHalf;
+                aPPShape.SequenceY[1][1] = fY + fHeightHalf;
+            }
             break;
 
         case ERROR_BAR_DOWN:
@@ -1869,9 +1879,12 @@ uno::Reference< drawing::XShape > ShapeFactory::createErrorBar2D(
             aPPShape.SequenceY[0][0] = fY;
             aPPShape.SequenceY[0][1] = fY + fHeight;
             // head
-            aPPShape.SequenceX[1][0] = fX - fWidthHalf;
-            aPPShape.SequenceX[1][1] = fX + fWidthHalf;
-            aPPShape.SequenceY[1][0] = aPPShape.SequenceY[1][1] = fY + fHeight;
+            if( !bClip )
+            {
+                aPPShape.SequenceX[1][0] = fX - fWidthHalf;
+                aPPShape.SequenceX[1][1] = fX + fWidthHalf;
+                aPPShape.SequenceY[1][0] = aPPShape.SequenceY[1][1] = fY + fHeight;
+            }
             break;
 
         case ERROR_BAR_LEFT:
@@ -1880,9 +1893,12 @@ uno::Reference< drawing::XShape > ShapeFactory::createErrorBar2D(
             aPPShape.SequenceX[0][1] = fX - fWidth;
             aPPShape.SequenceY[0][0] = aPPShape.SequenceY[0][1] = fY;
             // head
-            aPPShape.SequenceX[1][0] = aPPShape.SequenceX[1][1] = fX - fWidth;
-            aPPShape.SequenceY[1][0] = fY - fHeightHalf;
-            aPPShape.SequenceY[1][1] = fY + fHeightHalf;
+            if( !bClip )
+            {
+                aPPShape.SequenceX[1][0] = aPPShape.SequenceX[1][1] = fX - fWidth;
+                aPPShape.SequenceY[1][0] = fY - fHeightHalf;
+                aPPShape.SequenceY[1][1] = fY + fHeightHalf;
+            }
             break;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-12 17:02:48 $
+ *  last change: $Author: bm $ $Date: 2003-12-15 10:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,11 +196,20 @@ public:
                     , const ::com::sun::star::drawing::PolyPolygonShape3D& rPoints
                     , const VLineProperties& rLineProperties );
 
+    /** creates an error bar shape, that is a line with a small perpendicular
+        line on top like the letter 'T'.
+
+        @param bClip
+            If true, the perpendicular line is omitted.
+
+        @todo If bClip is true, the main line could end in dots.
+     */
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createErrorBar2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::Position3D& rPos
                     , const ::com::sun::star::drawing::Direction3D& rSize
                     , tErrorBarDirection eDirection
+                    , bool bClip
             );
 //                     , const tNameSequence& rPropNames
 //                     , const tAnySequence& rPropValues );
