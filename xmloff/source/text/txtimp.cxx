@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:40:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1952,6 +1952,16 @@ Reference< XPropertySet> XMLTextImportHelper::createAndInsertOLEObject(
     return xPropSet;
 }
 
+Reference< XPropertySet> XMLTextImportHelper::createAndInsertOOoLink(
+                                        SvXMLImport& rImport,
+                                        const OUString& rHRef,
+                                        const OUString& rStyleName,
+                                        const OUString& rTblName,
+                                        sal_Int32 nWidth, sal_Int32 nHeight )
+{
+    Reference< XPropertySet> xPropSet;
+    return xPropSet;
+}
 
 Reference< XPropertySet> XMLTextImportHelper::createAndInsertApplet(
                                         const OUString& rCode,
