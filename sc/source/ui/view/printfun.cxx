@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-04 18:55:38 $
+ *  last change: $Author: nn $ $Date: 2002-12-10 17:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1264,7 +1264,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
     if ( pShadow && pShadow->GetLocation() != SVX_SHADOW_NONE )
     {
         if ( bCellContrast )
-            pDev->SetFillColor(Application::GetSettings().GetStyleSettings().GetWindowTextColor());
+            pDev->SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
         else
             pDev->SetFillColor(pShadow->GetColor());
         pDev->SetLineColor();
@@ -1557,7 +1557,7 @@ void ScPrintFunc::PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
 
     Color aGridColor( COL_BLACK );
     if ( bUseStyleColor )
-        aGridColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+        aGridColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
     aOutputData.SetGridColor( aGridColor );
 
     if ( !pPrinter && !bIsRender )      // when rendering (PDF), don't use printer
@@ -2207,7 +2207,7 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
 
     Color aGridColor( COL_BLACK );
     if ( bUseStyleColor )
-        aGridColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+        aGridColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
 
     if (aTableParam.bHeaders)
     {

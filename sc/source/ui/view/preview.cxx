@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 09:29:43 $
+ *  last change: $Author: nn $ $Date: 2002-12-10 17:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
         if ( bValidPage )
         {
-            Color aBorderColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
+            Color aBorderColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
 
             //  draw border
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-11 18:06:08 $
+ *  last change: $Author: nn $ $Date: 2002-12-10 17:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ SvStream& __EXPORT ScPatternAttr::Store(SvStream& rStream, USHORT nItemVersion) 
 void ScPatternAttr::GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
                                 OutputDevice* pOutDev, const Fraction* pScale,
                                 const SfxItemSet* pCondSet, BYTE nScript,
-                                const Color* pBackConfigColor ) const
+                                const Color* pBackConfigColor, const Color* pTextConfigColor ) const
 {
     //  Items auslesen
 
@@ -431,8 +431,13 @@ void ScPatternAttr::GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
             Color aSysTextColor;
             if ( eAutoMode == SC_AUTOCOL_PRINT )
                 aSysTextColor.SetColor( COL_BLACK );
+            else if ( pTextConfigColor )
+            {
+                // pTextConfigColor can be used to avoid repeated lookup of the configured color
+                aSysTextColor = *pTextConfigColor;
+            }
             else
-                aSysTextColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+                aSysTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
 
             //  select the resulting color
             if ( aBackColor.IsDark() && aSysTextColor.IsDark() )

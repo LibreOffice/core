@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-11 18:05:52 $
+ *  last change: $Author: nn $ $Date: 2002-12-10 17:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,8 @@ public:
                                         OutputDevice* pOutDev = NULL,
                                         const Fraction* pScale = NULL,
                                         const SfxItemSet* pCondSet = NULL,
-                                        BYTE nScript = 0, const Color* pBackConfigColor = NULL ) const;
+                                        BYTE nScript = 0, const Color* pBackConfigColor = NULL,
+                                        const Color* pTextConfigColor = NULL ) const;
 
     void                    FillEditItemSet( SfxItemSet* pSet,
                                         const SfxItemSet* pCondSet = NULL ) const;

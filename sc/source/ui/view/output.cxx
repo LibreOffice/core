@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-04 18:55:37 $
+ *  last change: $Author: nn $ $Date: 2002-12-10 17:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -929,7 +929,7 @@ void ScOutputData::DrawShadow()
     BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
     Color aAutoTextColor;
     if ( bCellContrast )
-        aAutoTextColor = rStyleSettings.GetWindowTextColor();
+        aAutoTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
 
     long nPosY = nScrY;
     for (USHORT nArrY=1; nArrY+1<nArrCount; nArrY++)
@@ -1031,7 +1031,7 @@ void ScOutputData::DrawExtraShadow(BOOL bLeft, BOOL bTop, BOOL bRight, BOOL bBot
     BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
     Color aAutoTextColor;
     if ( bCellContrast )
-        aAutoTextColor = rStyleSettings.GetWindowTextColor();
+        aAutoTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
 
     long nPosY = nScrY - pRowInfo[0].nHeight;
     for (USHORT nArrY=0; nArrY<nArrCount; nArrY++)
@@ -1350,7 +1350,7 @@ void ScOutputData::DrawFrame()
     BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
     Color aAutoTextColor;
     if ( bCellContrast )
-        aAutoTextColor = rStyleSettings.GetWindowTextColor();
+        aAutoTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
 
     pDev->SetLineColor();
     pDev->SetFillColor( aOldCol );
@@ -1895,7 +1895,7 @@ void ScOutputData::DrawRotatedFrame()
     const Color* pForceColor = NULL;
     if ( bCellContrast )
     {
-        aAutoTextColor = rStyleSettings.GetWindowTextColor();
+        aAutoTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
         pForceColor = &aAutoTextColor;
     }
 
@@ -2613,7 +2613,7 @@ void ScOutputData::DrawNoteMarks()
 
                         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
                         if ( bUseStyleColor && rStyleSettings.GetHighContrastMode() )
-                            pDev->SetFillColor( rStyleSettings.GetWindowTextColor() );
+                            pDev->SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
                         else
                             pDev->SetFillColor(COL_LIGHTRED);
 
@@ -2714,7 +2714,7 @@ void ScOutputData::DrawClipMarks()
         //  use DrawMode to change the arrow's outline color
         pDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE );
         //  use text color also for the fill color
-        aArrowFillCol = rStyleSettings.GetWindowTextColor();
+        aArrowFillCol.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
     }
 
     Rectangle aCellRect;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-04 18:55:37 $
+ *  last change: $Author: nn $ $Date: 2002-12-10 17:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ class ScDrawStringsVars
     BOOL                bCellContrast;
 
     Color               aBackConfigColor;       // used for ScPatternAttr::GetFont calls
+    Color               aTextConfigColor;
 
 public:
                 ScDrawStringsVars(ScOutputData* pData, BOOL bPTL);
@@ -203,7 +204,10 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, BOOL bPTL) :
     //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     bCellContrast = pOutput->bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-    aBackConfigColor.SetColor( pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
+
+    const svx::ColorConfig& rColorConfig = pScMod->GetColorConfig();
+    aBackConfigColor.SetColor( rColorConfig.GetColorValue(svx::DOCCOLOR).nColor );
+    aTextConfigColor.SetColor( rColorConfig.GetColorValue(svx::FONTCOLOR).nColor );
 }
 
 ScDrawStringsVars::~ScDrawStringsVars()
@@ -236,9 +240,11 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
         eColorMode = SC_AUTOCOL_PRINT;
 
     if ( bPixelToLogic )
-        pPattern->GetFont( aFont, eColorMode, pFmtDevice, NULL, pCondSet, nScript, &aBackConfigColor );
+        pPattern->GetFont( aFont, eColorMode, pFmtDevice, NULL, pCondSet, nScript,
+                            &aBackConfigColor, &aTextConfigColor );
     else
-        pPattern->GetFont( aFont, eColorMode, pFmtDevice, &pOutput->aZoomY, pCondSet, nScript, &aBackConfigColor );
+        pPattern->GetFont( aFont, eColorMode, pFmtDevice, &pOutput->aZoomY, pCondSet, nScript,
+                            &aBackConfigColor, &aTextConfigColor );
     aFont.SetAlign(ALIGN_BASELINE);
 
     //  Orientierung
@@ -1085,7 +1091,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                     Color aFontColor = ((const SvxColorItem&)pInfo->pPatternAttr->
                                             GetItem( ATTR_FONT_COLOR )).GetValue();
                     if ( ( aFontColor == COL_AUTO || bForceAutoColor ) && bUseStyleColor )
-                        aFontColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+                        aFontColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor );
                     pDev->DrawPixel( aPos, aFontColor );
                     bEmpty = TRUE;
                 }
