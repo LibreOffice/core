@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeChange.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:11:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 17:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,33 +37,41 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
+import com.sun.star.awt.Rectangle;
 
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.frame.XComponentLoader;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
+
+import com.sun.star.chart.XDiagram;
 import com.sun.star.chart.XChartDocument;
-import com.sun.star.document.XEmbeddedObjectSupplier;
-import com.sun.star.uno.XInterface;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.table.XTableChart;
-import com.sun.star.table.XTableCharts;
-import com.sun.star.sheet.XSpreadsheets;
-import com.sun.star.sheet.XSpreadsheet;
-import com.sun.star.table.XCell;
-import com.sun.star.table.XCellRange;
-import com.sun.star.sheet.XCellRangeAddressable;
+
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XIndexAccess;
+
+import com.sun.star.document.XEmbeddedObjectSupplier;
+
+import com.sun.star.frame.XComponentLoader;
+
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XMultiComponentFactory;
+
+import com.sun.star.sheet.XSpreadsheets;
+import com.sun.star.sheet.XSpreadsheet;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.sheet.XCellRangeAddressable;
+
+import com.sun.star.table.XTableChart;
+import com.sun.star.table.XTableCharts;
+import com.sun.star.table.XCell;
+import com.sun.star.table.XCellRange;
 import com.sun.star.table.XTableChartsSupplier;
 import com.sun.star.table.CellRangeAddress;
-import com.sun.star.chart.XDiagram;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.awt.Rectangle;
+
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.uno.XComponentContext;
+
 
 
 /** This class loads an OpenOffice.org Calc document and changes the type of the
@@ -72,28 +80,24 @@ import com.sun.star.awt.Rectangle;
  */
 public class ChartTypeChange {
 
-    /** Default connection string
-     */
-    private String sConnectionString = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
-
     /** Table chart, which type will be changed.
      */
     private XTableChart xtablechart = null;
 
     /** Service factory
      */
-    private XMultiComponentFactory xmulticomponentfactory = null;
+    private XMultiComponentFactory xMCF = null;
 
     /** Component context
      */
-    private XComponentContext xcomponentcontext = null;
+    private XComponentContext xCompContext = null;
 
     /** Beginning of the program.
      * @param args No arguments will be passed to the class.
      */
     public static void main(String args[]) {
         try {
-            ChartTypeChange charttypechange = new ChartTypeChange( args );
+            ChartTypeChange charttypechange = new ChartTypeChange();
 
             // Double array holding all values the chart should be based on.
             String[][] stringValues = {
@@ -116,10 +120,10 @@ public class ChartTypeChange {
             };
 
             for ( int intCounter = 0; intCounter < stringChartType.length;
-            intCounter++ ) {
+                  intCounter++ ) {
                 charttypechange.changeChartType( stringChartType[ intCounter ],
-                false );
-                Thread.sleep( 1200 );
+                                                 false );
+                Thread.sleep( 3000 );
             }
 
             System.exit(0);
@@ -133,57 +137,18 @@ public class ChartTypeChange {
      * @param args Parameters for this constructor (connection string).
      * @throws Exception All exceptions are thrown from this method.
      */
-    public ChartTypeChange( String[] args )
-    throws Exception {
-        // It is possible to use a different connection string, passed as argument
-        if ( args.length == 1 ) {
-            sConnectionString = args[0];
-        }
+    public ChartTypeChange()
+        throws Exception {
 
-      /* Bootstraps a component context with the jurt base components
-         registered. Component context to be granted to a component for running.
-         Arbitrary values can be retrieved from the context. */
-        xcomponentcontext =
-        com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(
-        null );
+        /* Bootstraps a component context. Component context to be granted
+           to a component for running. Arbitrary values can be retrieved
+           from the context. */
+        xCompContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
 
-      /* Gets the service manager instance to be used (or null). This method has
-         been added for convenience, because the service manager is a often used
-         object. */
-        XMultiComponentFactory xmulticomponentfactory =
-        xcomponentcontext.getServiceManager();
-
-      /* Creates an instance of the component UnoUrlResolver which
-         supports the services specified by the factory. */
-        Object objectUrlResolver =
-        xmulticomponentfactory.createInstanceWithContext(
-        "com.sun.star.bridge.UnoUrlResolver", xcomponentcontext );
-
-        // Create a new url resolver
-        XUnoUrlResolver xurlresolver = ( XUnoUrlResolver )
-        UnoRuntime.queryInterface( XUnoUrlResolver.class,
-        objectUrlResolver );
-
-        // Resolves an object that is specified as follow:
-        // uno:<connection description>;<protocol description>;<initial object name>
-        Object objectInitial = xurlresolver.resolve( sConnectionString );
-
-        // Create a service manager from the initial object
-        xmulticomponentfactory = ( XMultiComponentFactory )
-        UnoRuntime.queryInterface( XMultiComponentFactory.class,
-        objectInitial );
-
-        // Query for the XPropertySet interface.
-        XPropertySet xpropertysetMultiComponentFactory = ( XPropertySet )
-        UnoRuntime.queryInterface( XPropertySet.class, xmulticomponentfactory );
-
-        // Get the default context from the office server.
-        Object objectDefaultContext =
-        xpropertysetMultiComponentFactory.getPropertyValue( "DefaultContext" );
-
-        // Query for the interface XComponentContext.
-        xcomponentcontext = ( XComponentContext ) UnoRuntime.queryInterface(
-        XComponentContext.class, objectDefaultContext );
+        /* Gets the service manager instance to be used (or null). This method has
+           been added for convenience, because the service manager is a often used
+           object. */
+        xMCF = xCompContext.getServiceManager();
     }
 
     /** This method will change the type of a specified chart.
@@ -193,68 +158,66 @@ public class ChartTypeChange {
      */
     public void changeChartType( String stringType, boolean booleanIs3D )
     throws Exception {
-        XEmbeddedObjectSupplier xembeddedobjectsupplier = (XEmbeddedObjectSupplier)
+        XEmbeddedObjectSupplier xEmbeddedObjSupplier = (XEmbeddedObjectSupplier)
             UnoRuntime.queryInterface(XEmbeddedObjectSupplier.class, xtablechart);
-        XInterface xinterface = xembeddedobjectsupplier.getEmbeddedObject();
+        XInterface xInterface = xEmbeddedObjSupplier.getEmbeddedObject();
 
-        XChartDocument xchartdocument = (XChartDocument)UnoRuntime.queryInterface(
-            XChartDocument.class, xinterface);
-        XDiagram xdiagram = (XDiagram) xchartdocument.getDiagram();
-        XMultiServiceFactory xmultiservicefactory = (XMultiServiceFactory)
-            UnoRuntime.queryInterface( XMultiServiceFactory.class, xchartdocument );
-        Object object = xmultiservicefactory.createInstance( stringType );
-        xdiagram = (XDiagram) UnoRuntime.queryInterface(XDiagram.class,object);
+        XChartDocument xChartDoc = (XChartDocument)UnoRuntime.queryInterface(
+            XChartDocument.class, xInterface);
+        XDiagram xDiagram = (XDiagram) xChartDoc.getDiagram();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)
+            UnoRuntime.queryInterface( XMultiServiceFactory.class, xChartDoc );
+        Object object = xMSF.createInstance( stringType );
+        xDiagram = (XDiagram) UnoRuntime.queryInterface(XDiagram.class, object);
 
-        XPropertySet xpropertyset = ( XPropertySet ) UnoRuntime.queryInterface(
-            XPropertySet.class, xdiagram );
-        xpropertyset.setPropertyValue( "Dim3D", new Boolean( booleanIs3D ) );
+        XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet.class, xDiagram );
+        xPropSet.setPropertyValue( "Dim3D", new Boolean( booleanIs3D ) );
 
-        xchartdocument.setDiagram(xdiagram);
+        xChartDoc.setDiagram(xDiagram);
     }
 
     /** Loading an OpenOffice.org Calc document and getting a chart by name.
-     * @param stringFileName Name of the OpenOffice.org Calc document which should be loaded.
+     * @param stringFileName Name of the OpenOffice.org Calc document which should
+     *                       be loaded.
      * @param stringChartName Name of the chart which should get a new chart type.
      */
     public void getChart( String stringFileName, String stringChartName ) {
         try {
-            XMultiComponentFactory xmulticomponentfactory =
-            xcomponentcontext.getServiceManager();
-
-      /* A desktop environment contains tasks with one or more
-         frames in which components can be loaded. Desktop is the
-         environment for components which can instanciate within
-         frames. */
-            XComponentLoader xcomponentloader = ( XComponentLoader )
+            /* A desktop environment contains tasks with one or more
+               frames in which components can be loaded. Desktop is the
+               environment for components which can instanciate within
+               frames. */
+            XComponentLoader xComponentloader = (XComponentLoader)
                 UnoRuntime.queryInterface( XComponentLoader.class,
-                                           xmulticomponentfactory.createInstanceWithContext(
-                                               "com.sun.star.frame.Desktop", xcomponentcontext ) );
+                    xMCF.createInstanceWithContext("com.sun.star.frame.Desktop",
+                                                   xCompContext ) );
 
             // Load a Writer document, which will be automaticly displayed
-            XComponent xcomponent = xcomponentloader.loadComponentFromURL(
+            XComponent xComponent = xComponentloader.loadComponentFromURL(
             "file:///" + stringFileName, "_blank", 0,
             new PropertyValue[0] );
 
             // Query for the interface XSpreadsheetDocument
-            XSpreadsheetDocument xspreadsheetdocument = ( XSpreadsheetDocument )
-                UnoRuntime.queryInterface( XSpreadsheetDocument.class, xcomponent );
+            XSpreadsheetDocument xSpreadSheetDocument = ( XSpreadsheetDocument )
+                UnoRuntime.queryInterface( XSpreadsheetDocument.class, xComponent );
 
-            XSpreadsheets xspreadsheets = xspreadsheetdocument.getSheets() ;
+            XSpreadsheets xSpreadsheets = xSpreadSheetDocument.getSheets() ;
 
-            XIndexAccess xindexaccess = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class, xspreadsheets );
+            XIndexAccess xIndexAccess = (XIndexAccess)
+                UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets );
 
-            XSpreadsheet xspreadsheet = (XSpreadsheet) UnoRuntime.queryInterface(
-                XSpreadsheet.class, xindexaccess.getByIndex(0));
+            XSpreadsheet xSpreadsheet = (XSpreadsheet) UnoRuntime.queryInterface(
+                XSpreadsheet.class, xIndexAccess.getByIndex(0));
 
-            XTableChartsSupplier xtablechartssupplier = ( XTableChartsSupplier )
-                UnoRuntime.queryInterface( XTableChartsSupplier.class, xspreadsheet );
+            XTableChartsSupplier xTableChartsSupplier = ( XTableChartsSupplier )
+                UnoRuntime.queryInterface( XTableChartsSupplier.class, xSpreadsheet );
 
-            xindexaccess = (XIndexAccess) UnoRuntime.queryInterface(
-                XIndexAccess.class, xtablechartssupplier.getCharts() );
+            xIndexAccess = (XIndexAccess) UnoRuntime.queryInterface(
+                XIndexAccess.class, xTableChartsSupplier.getCharts() );
 
             this.xtablechart = (XTableChart) UnoRuntime.queryInterface(
-                XTableChart.class,  xindexaccess.getByIndex( 0 ) );
+                XTableChart.class,  xIndexAccess.getByIndex( 0 ) );
         }
         catch( Exception exception ) {
             System.err.println( exception );
@@ -267,25 +230,24 @@ public class ChartTypeChange {
      */
     public void getChart( String[][] stringValues ) {
         try {
-            XMultiComponentFactory xmulticomponentfactory =
-            xcomponentcontext.getServiceManager();
-      /* A desktop environment contains tasks with one or more
-         frames in which components can be loaded. Desktop is the
-         environment for components which can instanciate within
-         frames. */
+            /* A desktop environment contains tasks with one or more
+               frames in which components can be loaded. Desktop is the
+               environment for components which can instanciate within
+               frames. */
             XComponentLoader xcomponentloader = ( XComponentLoader )
                 UnoRuntime.queryInterface( XComponentLoader.class,
-                                           xmulticomponentfactory.createInstanceWithContext(
-                                               "com.sun.star.frame.Desktop", xcomponentcontext ) );
+                                           xMCF.createInstanceWithContext(
+                                               "com.sun.star.frame.Desktop",
+                                               xCompContext ) );
 
             // Create an empty calc document, which will be automaticly displayed
-            XComponent xcomponent = xcomponentloader.loadComponentFromURL(
+            XComponent xComponent = xcomponentloader.loadComponentFromURL(
             "private:factory/scalc", "_blank", 0,
             new PropertyValue[0] );
 
             // Query for the interface XSpreadsheetDocument
             XSpreadsheetDocument xspreadsheetdocument = ( XSpreadsheetDocument )
-                UnoRuntime.queryInterface( XSpreadsheetDocument.class, xcomponent );
+                UnoRuntime.queryInterface( XSpreadsheetDocument.class, xComponent );
 
             // Get all sheets of the spreadsheet document.
             XSpreadsheets xspreadsheets = xspreadsheetdocument.getSheets() ;
@@ -374,11 +336,13 @@ public class ChartTypeChange {
      * @param intY Row on the spreadsheet.
      * @param stringValue Value to be inserted to a cell.
      * @param xspreadsheet Spreadsheet of the cell, which will be changed.
-     * @param stringFlag If the value of stringFlag is "V", the stringValue will be converted to the
+     * @param stringFlag If the value of stringFlag is "V", the stringValue
+     *                   will be converted to the
      * float type. Otherwise the stringValue will be written as a formula.
      */
     public static void insertIntoCell( int intX, int intY, String stringValue,
-    XSpreadsheet xspreadsheet, String stringFlag ) {
+                                       XSpreadsheet xspreadsheet, String stringFlag )
+    {
         XCell xcell = null;
 
         try {
