@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransactionListener.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:27:52 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 09:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include <com/sun/star/lang/EventObject.idl>
 #endif
 
+#ifndef __com_sun_star_uno_Exception_idl__
+#include <com/sun/star/uno/Exception.idl>
+#endif
 
 //=============================================================================
 
@@ -81,12 +84,24 @@ module com {  module sun {  module star {  module embed {
 interface XTransactionListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
-    /** is called when the object is commited.
+    /** is called just before the object is commited.
+     */
+    void preCommit( [in] com::sun::star::lang::EventObject aEvent )
+        raises( ::com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** is called after the object is commited.
      */
     void commited( [in] com::sun::star::lang::EventObject aEvent );
 
     //-------------------------------------------------------------------------
-    /** is called when the object is commited.
+    /** is called just before the object is reverted.
+     */
+    void preRevert( [in] com::sun::star::lang::EventObject aEvent )
+        raises( ::com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** is called after the object is reverted.
      */
     void reverted( [in] com::sun::star::lang::EventObject aEvent );
 };
