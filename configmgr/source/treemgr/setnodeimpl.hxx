@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:41:52 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,8 @@ namespace configmgr
 
             void implDifferenceToDefaultState(data::Accessor const& _aAccessor, SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree) const;
         protected:
+            bool hasStoredElement(Name const& aName) const
+            { return m_aDataSet.hasElement(aName); }
             Element* getStoredElement(Name const& aName)
             { return m_aDataSet.getElement(aName); }
             Element const* getStoredElement(Name const& aName) const
