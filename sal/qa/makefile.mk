@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: sw $ $Date: 2002-02-27 10:10:12 $
+#   last change: $Author: sz $ $Date: 2002-04-11 10:14:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,8 @@
 PRJ=..
 
 PRJNAME=sal
-TARGET=tests
+TARGET=qa
+TESTDIR=TRUE
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
@@ -114,20 +115,24 @@ DEF2NAME    =$(SHL2TARGET)
 
 .INCLUDE :  target.mk
 
-$(MISC)$/$(SHL1TARGET).map : sce$/$(SHL1TARGET).sce    
+$(MISC)$/$(SHL1TARGET).map : sce$/$(SHL1TARGET).sce
+    +$(RM)  $(MISC)$/$(SHL1TARGET).tst
+    +$(RM)  $(MISC)$/$(SHL1TARGET).map
     +$(TYPE) $< | sed $(REGEXP) > $@
-    +$(TYPE) $@ | sed "s/^/test_/" >> $(MISC)$/$(SHL1TARGET).tst    
+    +$(TYPE) $@ | sed "s/^/test_/" >> $(MISC)$/$(SHL1TARGET).tst
     +$(TYPE) mapHeader > $(MISC)$/$(SHL1TARGET).map
     +$(TYPE) $(MISC)$/$(SHL1TARGET).tst | sed "/test_./ w $(MISC)$/$(SHL1TARGET).map1"
     +$(TYPE) $(MISC)$/$(SHL1TARGET).map1 | sed "s/.*/&;/" >> $(MISC)$/$(SHL1TARGET).map
-    +$(RM) $(MISC)$/$(SHL2TARGET).map1    
+    +$(RM) $(MISC)$/$(SHL2TARGET).map1
     +$(TYPE) mapFooter >> $(MISC)$/$(SHL1TARGET).map
 
-$(MISC)$/$(SHL2TARGET).map : sce$/$(SHL2TARGET).sce    
+$(MISC)$/$(SHL2TARGET).map : sce$/$(SHL2TARGET).sce
+    +$(RM)  $(MISC)$/$(SHL1TARGET).tst
+    +$(RM)  $(MISC)$/$(SHL1TARGET).map
     +$(TYPE) $< | sed $(REGEXP) > $@
-    +$(TYPE) $@ | sed "s/^/test_/" >> $(MISC)$/$(SHL2TARGET).tst    
+    +$(TYPE) $@ | sed "s/^/test_/" >> $(MISC)$/$(SHL2TARGET).tst
     +$(TYPE) mapHeader > $(MISC)$/$(SHL2TARGET).map
-    +$(TYPE) $(MISC)$/$(SHL2TARGET).tst | sed "/test_./ w $(MISC)$/$(SHL2TARGET).map1"    
+    +$(TYPE) $(MISC)$/$(SHL2TARGET).tst | sed "/test_./ w $(MISC)$/$(SHL2TARGET).map1"
     +$(TYPE) $(MISC)$/$(SHL2TARGET).map1 | sed "s/.*/&;/" >> $(MISC)$/$(SHL2TARGET).map
     +$(RM) $(MISC)$/$(SHL2TARGET).map1
     +$(TYPE) mapFooter >> $(MISC)$/$(SHL2TARGET).map
