@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Content.idl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-24 13:06:51 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 09:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,9 +186,41 @@ service Content
                 sequence&lt; <type scope="com::sun::star::beans">Property</type> &gt; aProps
 
         // This command sets property values of the content.
-        // Note: The execution will not be aborted, if there are properties
-        //       contained, that are unknown to the content!
-        void
+        // Note that setPropertyValues does not throw an exception in the case
+        // that one or more of the requested property values cannot be set! The
+        // implementation should set as much property values as possible. This
+        // command returns a sequence< any > which has exactly the same number
+        // of elements like the number of properties to set. Every sequence
+        // element contains the status for a property. The first sequence
+        // elements corresponds to the first element in the sequence of
+        // <type scope="com::sun::star::beans">PropertyValue</type> passed as
+        // command argument and so on. The exceptions will never be passed to
+        // an Interaction Handler.
+        //
+        // An any containing:
+        //
+        // - No value indicates, that the property value was set successfully.
+        // - <type scope="com::sun::star::beans">UnknownPropertyException</type>
+        //   indicates, that the property is not known to the content
+        //   implementation.
+        // - <type scope="com::sun::star::beans">IllegalTypeException</type>
+        //   indicates, that the data type of the property value is not
+        //   acceptable.
+        // - <type scope="com::sun::star::lang">IllegalAccessException</type>
+        //   indicates, that the property is constant
+        //   (<member scope="com::sun::star::beans">PropertyAttribute::READONLY</member>
+        //   is set).
+        // - <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        //   indicates, that the property value is not acceptable. For instance,
+        //   setting an empty title may be illegal.
+        // - Any other execption derived from <type scope="com::sun::star::uno">Exception</type>
+        //   indicates, that the value was not set successfully. For example,
+        //   this can be a <type>InteractiveAugmentedIOException</type>
+        //   transporting the error code <member>IOErrorCode::ACCESS_DENIED</member>.
+        //
+        // If the value to set is equal to the current value, no exception must
+        // be added to the returned sequence
+        sequence&lt; any &gt;
             setPropertyValues
                 sequence&lt; <type scope="com::sun::star::beans">PropertyValue</type> &gt; aValues
 
