@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Store.xcs,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:59:54 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,230 +62,41 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Store" oor:package="org.openoffice.ucb" xml:lang="en-US"> <info>
 		<author>KSO</author>
-		<desc xml:lang="en-US">Contains components and templates used for storing UCB related data.</desc>
+		<desc >Contains components and templates used for storing UCB related data.</desc>
 	</info>
 	<templates>
 		<group oor:name="PropertyValue">
 			<info>
-				<desc xml:lang="en-US">Specifies a property value.</desc>
-				<desc xml:lang="el">Specifies a property value.</desc>
-				<desc xml:lang="nl">Specifies a property value.</desc>
-				<desc xml:lang="fr">Specifies a property value.</desc>
-				<desc xml:lang="fi">Specifies a property value.</desc>
-				<desc xml:lang="cs">Specifies a property value.</desc>
-				<desc xml:lang="da">Specifies a property value.</desc>
-				<desc xml:lang="zh-CN">指定属性值。</desc>
-				<desc xml:lang="zh-TW">Specifies a property value.</desc>
-				<desc xml:lang="ar">Specifies a property value.</desc>
-				<desc xml:lang="he">Specifies a property value.</desc>
-				<desc xml:lang="ca">Specifies a property value.</desc>
-				<desc xml:lang="pt">Specifies a property value.</desc>
-				<desc xml:lang="ru">Specifies a property value.</desc>
-				<desc xml:lang="es">Specifies a property value.</desc>
-				<desc xml:lang="it">Specifies a property value.</desc>
-				<desc xml:lang="sv">Specifies a property value.</desc>
-				<desc xml:lang="pl">Specifies a property value.</desc>
-				<desc xml:lang="pt-BR">Especifica um valor da propriedade.</desc>
-				<desc xml:lang="ja">プロパティ値を指定します。</desc>
-				<desc xml:lang="ko">Specifies a property value.</desc>
-				<desc xml:lang="tr">Specifies a property value.</desc>
-				<desc xml:lang="th">Specifies a property value.</desc>
-				<desc xml:lang="hi-IN">Specifies a property value.</desc>
-				<desc xml:lang="x-comment">; Specifies a property value.</desc>
-				<desc xml:lang="sk">Specifies a property value.</desc>
-				<desc xml:lang="hu">Specifies a property value.</desc>
-				<desc xml:lang="sl">Specifies a property value.</desc>
+				<desc>Specifies a property value.</desc>
 			</info>
 			<prop oor:name="Handle" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="el">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="nl">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="fr">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="fi">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="cs">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="da">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="zh-CN">指定数字属性标志。</desc>
-					<desc xml:lang="zh-TW">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="ar">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="he">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="ca">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="pt">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="ru">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="es">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="it">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="sv">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="pl">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="pt-BR">Especifica o identificador de propriedade numérica.</desc>
-					<desc xml:lang="ja">数値プロパティ識別子を指定します。</desc>
-					<desc xml:lang="ko">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="tr">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="th">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="hi-IN">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="x-comment">; Specifies the numeric property identifier.</desc>
-					<desc xml:lang="sk">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="hu">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="sl">Specifies the numeric property identifier.</desc>
+					<desc>Specifies the numeric property identifier.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Attributes" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Specifies property attributes.</desc>
-					<desc xml:lang="el">Specifies property attributes.</desc>
-					<desc xml:lang="nl">Specifies property attributes.</desc>
-					<desc xml:lang="fr">Specifies property attributes.</desc>
-					<desc xml:lang="fi">Specifies property attributes.</desc>
-					<desc xml:lang="cs">Specifies property attributes.</desc>
-					<desc xml:lang="da">Specifies property attributes.</desc>
-					<desc xml:lang="zh-CN">指定属性的属性。</desc>
-					<desc xml:lang="zh-TW">Specifies property attributes.</desc>
-					<desc xml:lang="ar">Specifies property attributes.</desc>
-					<desc xml:lang="he">Specifies property attributes.</desc>
-					<desc xml:lang="ca">Specifies property attributes.</desc>
-					<desc xml:lang="pt">Specifies property attributes.</desc>
-					<desc xml:lang="ru">Specifies property attributes.</desc>
-					<desc xml:lang="es">Specifies property attributes.</desc>
-					<desc xml:lang="it">Specifies property attributes.</desc>
-					<desc xml:lang="sv">Specifies property attributes.</desc>
-					<desc xml:lang="pl">Specifies property attributes.</desc>
-					<desc xml:lang="pt-BR">Especifica atributos de propriedade.</desc>
-					<desc xml:lang="ja">プロパティの属性を指定します。</desc>
-					<desc xml:lang="ko">Specifies property attributes.</desc>
-					<desc xml:lang="tr">Specifies property attributes.</desc>
-					<desc xml:lang="th">Specifies property attributes.</desc>
-					<desc xml:lang="hi-IN">Specifies property attributes.</desc>
-					<desc xml:lang="x-comment">; Specifies property attributes.</desc>
-					<desc xml:lang="sk">Specifies property attributes.</desc>
-					<desc xml:lang="hu">Specifies property attributes.</desc>
-					<desc xml:lang="sl">Specifies property attributes.</desc>
+					<desc>Specifies property attributes.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Value" oor:type="oor:any">
 				<info>
-					<desc xml:lang="en-US">Specifies the Property value.</desc>
-					<desc xml:lang="el">Specifies the Property value.</desc>
-					<desc xml:lang="nl">Specifies the Property value.</desc>
-					<desc xml:lang="fr">Specifies the Property value.</desc>
-					<desc xml:lang="fi">Specifies the Property value.</desc>
-					<desc xml:lang="cs">Specifies the Property value.</desc>
-					<desc xml:lang="da">Specifies the Property value.</desc>
-					<desc xml:lang="zh-CN">指定属性值。</desc>
-					<desc xml:lang="zh-TW">Specifies the Property value.</desc>
-					<desc xml:lang="ar">Specifies the Property value.</desc>
-					<desc xml:lang="he">Specifies the Property value.</desc>
-					<desc xml:lang="ca">Specifies the Property value.</desc>
-					<desc xml:lang="pt">Specifies the Property value.</desc>
-					<desc xml:lang="ru">Specifies the Property value.</desc>
-					<desc xml:lang="es">Specifies the Property value.</desc>
-					<desc xml:lang="it">Specifies the Property value.</desc>
-					<desc xml:lang="sv">Specifies the Property value.</desc>
-					<desc xml:lang="pl">Specifies the Property value.</desc>
-					<desc xml:lang="pt-BR">Especifica o valor da propriedade.</desc>
-					<desc xml:lang="ja">プロパティ値を指定します。</desc>
-					<desc xml:lang="ko">Specifies the Property value.</desc>
-					<desc xml:lang="tr">Specifies the Property value.</desc>
-					<desc xml:lang="th">Specifies the Property value.</desc>
-					<desc xml:lang="hi-IN">Specifies the Property value.</desc>
-					<desc xml:lang="x-comment">; Specifies the Property value.</desc>
-					<desc xml:lang="sk">Specifies the Property value.</desc>
-					<desc xml:lang="hu">Specifies the Property value.</desc>
-					<desc xml:lang="sl">Specifies the Property value.</desc>
+					<desc>Specifies the Property value.</desc>
 				</info>
 			</prop>
 			<prop oor:name="State" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Specifies the property state.</desc>
-					<desc xml:lang="el">Specifies the property state.</desc>
-					<desc xml:lang="nl">Specifies the property state.</desc>
-					<desc xml:lang="fr">Specifies the property state.</desc>
-					<desc xml:lang="fi">Specifies the property state.</desc>
-					<desc xml:lang="cs">Specifies the property state.</desc>
-					<desc xml:lang="da">Specifies the property state.</desc>
-					<desc xml:lang="zh-CN">指定属性的状态。</desc>
-					<desc xml:lang="zh-TW">Specifies the property state.</desc>
-					<desc xml:lang="ar">Specifies the property state.</desc>
-					<desc xml:lang="he">Specifies the property state.</desc>
-					<desc xml:lang="ca">Specifies the property state.</desc>
-					<desc xml:lang="pt">Specifies the property state.</desc>
-					<desc xml:lang="ru">Specifies the property state.</desc>
-					<desc xml:lang="es">Specifies the property state.</desc>
-					<desc xml:lang="it">Specifies the property state.</desc>
-					<desc xml:lang="sv">Specifies the property state.</desc>
-					<desc xml:lang="pl">Specifies the property state.</desc>
-					<desc xml:lang="pt-BR">Especifica o estado da propriedade.</desc>
-					<desc xml:lang="ja">プロパティの状態を指定します。</desc>
-					<desc xml:lang="ko">Specifies the property state.</desc>
-					<desc xml:lang="tr">Specifies the property state.</desc>
-					<desc xml:lang="th">Specifies the property state.</desc>
-					<desc xml:lang="hi-IN">Specifies the property state.</desc>
-					<desc xml:lang="x-comment">; Specifies the property state.</desc>
-					<desc xml:lang="sk">Specifies the property state.</desc>
-					<desc xml:lang="hu">Specifies the property state.</desc>
-					<desc xml:lang="sl">Specifies the property state.</desc>
+					<desc>Specifies the property state.</desc>
 				</info>
 			</prop>
 		</group>
 		<group oor:name="Properties">
 			<info>
-				<desc xml:lang="en-US">Specifies a set of property values.</desc>
-				<desc xml:lang="el">Specifies a set of property values.</desc>
-				<desc xml:lang="nl">Specifies a set of property values.</desc>
-				<desc xml:lang="fr">Specifies a set of property values.</desc>
-				<desc xml:lang="fi">Specifies a set of property values.</desc>
-				<desc xml:lang="cs">Specifies a set of property values.</desc>
-				<desc xml:lang="da">Specifies a set of property values.</desc>
-				<desc xml:lang="zh-CN">指定属性值集合。</desc>
-				<desc xml:lang="zh-TW">Specifies a set of property values.</desc>
-				<desc xml:lang="ar">Specifies a set of property values.</desc>
-				<desc xml:lang="he">Specifies a set of property values.</desc>
-				<desc xml:lang="ca">Specifies a set of property values.</desc>
-				<desc xml:lang="pt">Specifies a set of property values.</desc>
-				<desc xml:lang="ru">Specifies a set of property values.</desc>
-				<desc xml:lang="es">Specifies a set of property values.</desc>
-				<desc xml:lang="it">Specifies a set of property values.</desc>
-				<desc xml:lang="sv">Specifies a set of property values.</desc>
-				<desc xml:lang="pl">Specifies a set of property values.</desc>
-				<desc xml:lang="pt-BR">Especifica um conjunto de valores de propriedade.</desc>
-				<desc xml:lang="ja">プロパティ値セットを指定します。</desc>
-				<desc xml:lang="ko">Specifies a set of property values.</desc>
-				<desc xml:lang="tr">Specifies a set of property values.</desc>
-				<desc xml:lang="th">Specifies a set of property values.</desc>
-				<desc xml:lang="hi-IN">Specifies a set of property values.</desc>
-				<desc xml:lang="x-comment">; Specifies a set of property values.</desc>
-				<desc xml:lang="sk">Specifies a set of property values.</desc>
-				<desc xml:lang="hu">Specifies a set of property values.</desc>
-				<desc xml:lang="sl">Specifies a set of property values.</desc>
+				<desc>Specifies a set of property values.</desc>
 			</info>
 			<set oor:name="Values" oor:node-type="PropertyValue">
 				<info>
-					<desc xml:lang="en-US">Specifies a set of property values.</desc>
-					<desc xml:lang="el">Specifies a set of property values.</desc>
-					<desc xml:lang="nl">Specifies a set of property values.</desc>
-					<desc xml:lang="fr">Specifies a set of property values.</desc>
-					<desc xml:lang="fi">Specifies a set of property values.</desc>
-					<desc xml:lang="cs">Specifies a set of property values.</desc>
-					<desc xml:lang="da">Specifies a set of property values.</desc>
-					<desc xml:lang="zh-CN">指定属性值集合。</desc>
-					<desc xml:lang="zh-TW">Specifies a set of property values.</desc>
-					<desc xml:lang="ar">Specifies a set of property values.</desc>
-					<desc xml:lang="he">Specifies a set of property values.</desc>
-					<desc xml:lang="ca">Specifies a set of property values.</desc>
-					<desc xml:lang="pt">Specifies a set of property values.</desc>
-					<desc xml:lang="ru">Specifies a set of property values.</desc>
-					<desc xml:lang="es">Specifies a set of property values.</desc>
-					<desc xml:lang="it">Specifies a set of property values.</desc>
-					<desc xml:lang="sv">Specifies a set of property values.</desc>
-					<desc xml:lang="pl">Specifies a set of property values.</desc>
-					<desc xml:lang="pt-BR">Especifica um conjunto de valores de propriedade.</desc>
-					<desc xml:lang="ja">プロパティ値セットを指定します。</desc>
-					<desc xml:lang="ko">Specifies a set of property values.</desc>
-					<desc xml:lang="tr">Specifies a set of property values.</desc>
-					<desc xml:lang="th">Specifies a set of property values.</desc>
-					<desc xml:lang="hi-IN">Specifies a set of property values.</desc>
-					<desc xml:lang="x-comment">; Specifies a set of property values.</desc>
-					<desc xml:lang="sk">Specifies a set of property values.</desc>
-					<desc xml:lang="hu">Specifies a set of property values.</desc>
-					<desc xml:lang="sl">Specifies a set of property values.</desc>
+					<desc>Specifies a set of property values.</desc>
 				</info>
 			</set>
 		</group>
@@ -293,34 +104,7 @@
 	<component>
 		<set oor:name="ContentProperties" oor:node-type="Properties">
 			<info>
-				<desc xml:lang="en-US">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="el">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="nl">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="fr">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="fi">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="cs">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="da">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="zh-CN">指定已存储的内容属性的根条目。</desc>
-				<desc xml:lang="zh-TW">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="ar">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="he">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="ca">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="pt">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="ru">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="es">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="it">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="sv">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="pl">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="pt-BR">Especifica a entrada raiz para conteúdos de propriedade armazenados.</desc>
-				<desc xml:lang="ja">格納済みの内容プロパティのルート項目を指定します。</desc>
-				<desc xml:lang="ko">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="tr">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="th">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="hi-IN">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="x-comment">; Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="sk">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="hu">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="sl">Specifies the root entry for stored content properties.</desc>
+				<desc>Specifies the root entry for stored content properties.</desc>
 			</info>
 		</set>
 	</component>
