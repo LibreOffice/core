@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@
 #include <wrong.hxx>
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 const sal_Char *GetLangName( const MSHORT nLang );
 #endif
 
@@ -499,7 +499,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
 
 sal_Bool SwTxtPortion::Format( SwTxtFormatInfo &rInf )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     const XubString aDbgTxt( rInf.GetTxt().Copy( rInf.GetIdx(), rInf.GetLen() ) );
 #endif
 
