@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:26:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <rtl/tencinfo.h>
 #endif
 
+#include <vcl/svapp.hxx>
 #include <svx/algitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/brshitem.hxx>
@@ -90,8 +91,7 @@
 #ifndef _MyEDITENG_HXX //autogen wg. EditEngine
 #include <svx/editeng.hxx>
 #endif
-#include <offmgr/app.hxx>
-#include <offmgr/htmlcfg.hxx>
+#include <svx/htmlcfg.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docinf.hxx>
 #include <sfx2/frmhtmlw.hxx>
@@ -320,7 +320,7 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, ScDocument* pDocP,
     sIndent[0] = 0;
 
     // set HTML configuration
-    OfaHtmlOptions* pHtmlOptions = ((OfficeApplication*)SFX_APP())->GetHtmlOptions();
+    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
     eDestEnc = (pDoc->IsClipOrUndo() ? RTL_TEXTENCODING_UTF8 : pHtmlOptions->GetTextEncoding());
     bCopyLocalFileToINet = pHtmlOptions->IsSaveGraphicsLocal();
     for ( USHORT j=0; j < SC_HTML_FONTSIZES; j++ )
