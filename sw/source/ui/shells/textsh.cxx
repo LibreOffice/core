@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:31:15 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,14 +788,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
             const SwRect &rPr = GetShell().GetAnyCurRect(RECT_PAGE_PRT);
             SwFmtFrmSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
-            {
-                SwRewriter aRewriter;
-                aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_START_QUOTE));
-                aRewriter.AddRule(UNDO_ARG2, rSh.GetTableFmt()->GetName());
-                aRewriter.AddRule(UNDO_ARG3, SW_RES(STR_END_QUOTE));
-
             aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
-            }
             aSet.Put(aPrtSize);
 
             aSet.Put(aMgr.GetAttrSet());
@@ -843,7 +836,14 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 }
 
                 GetView().AutoCaption(FRAME_CAP);
-                GetShell().EndUndo(UNDO_INSERT);
+
+                {
+                    SwRewriter aRewriter;
+
+                    aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_FRAME));
+
+                    GetShell().EndUndo(UNDO_INSERT, &aRewriter);
+                }
                 GetShell().EndAllAction();
             }
 
