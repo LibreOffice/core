@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:09:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,10 @@
 
 namespace typereg { class Reader; }
 
-typedef ::std::list< Registry* >    RegistryList;
+//typedef ::std::list< Registry* >  RegistryList;
+typedef ::std::vector< Registry* >  RegistryList;
+typedef ::std::pair< RegistryKey, sal_Bool >    KeyPair;
+typedef ::std::vector< KeyPair >    RegistryKeyList;
 
 #if defined( _MSC_VER ) && ( _MSC_VER < 1200 )
 typedef ::std::__hash_map__
@@ -125,12 +128,20 @@ public:
     virtual sal_Bool isValidType(const ::rtl::OString& name) const
         { return sal_False; }
 
+    virtual ::rtl::OString getTypeName(RegistryKey& rTypeKey) const
+        { return ::rtl::OString(); }
+
     virtual RegistryKey getTypeKey(
         const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const
         { return RegistryKey(); }
+    virtual RegistryKeyList getTypeKeys(const ::rtl::OString& name) const
+        { return RegistryKeyList(); }
     virtual typereg::Reader getTypeReader(
         const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const = 0;
+    virtual typereg::Reader getTypeReader(RegistryKey& rTypeKey) const = 0;
     virtual RTTypeClass getTypeClass(const ::rtl::OString& name) const
+        { return RT_TYPE_INVALID; }
+    virtual RTTypeClass getTypeClass(RegistryKey& rTypeKey) const
         { return RT_TYPE_INVALID; }
 
     virtual void setBase(const ::rtl::OString& base) {}
@@ -174,14 +185,19 @@ public:
 
     sal_Bool init(const StringVector& regFiles, const StringVector& extraFiles = StringVector() );
 
+    ::rtl::OString getTypeName(RegistryKey& rTypeKey) const;
+
     sal_Bool    isValidType(const ::rtl::OString& name) const
         { return searchTypeKey(name, 0).isValid(); }
     RegistryKey getTypeKey(
         const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const
         { return searchTypeKey(name, pIsExtraType); }
+    RegistryKeyList getTypeKeys(const ::rtl::OString& name) const;
     typereg::Reader getTypeReader(
         const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const;
+    typereg::Reader getTypeReader(RegistryKey& rTypeKey) const;
     RTTypeClass getTypeClass(const ::rtl::OString& name) const;
+    RTTypeClass getTypeClass(RegistryKey& rTypeKey) const;
 
     void setBase(const ::rtl::OString& base);
     ::rtl::OString getBase() const { return m_pImpl->m_base; }
