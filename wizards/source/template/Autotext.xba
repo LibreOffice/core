@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Autotext" script:language="StarBasic">Public UserfieldDataType(14) as String
 Public oDocument as Object
 Public BulletList(7) as Integer
@@ -123,14 +123,17 @@ End Sub
 
 
 &apos; Creates a placeholder out of a string with the following structure:
-&apos;&lt;placeholder:â€œShowtextâ€œ:â€œHelptextâ€œ&gt;
+&apos;&lt;placeholder:Showtext:Helptext&gt;
 Sub	CreatePlaceholder(oCursor, sFoundContent as String)
 Dim MaxIndex as Integer
 	oPlaceholder = oDocument.CreateInstance(&quot;com.sun.star.text.TextField.JumpEdit&quot;)
 	sFoundList() = ArrayoutofString(sFoundContent, &quot;:&quot; &amp; chr(34),MaxIndex)
 	&apos; Delete The Double-quotes
-	oPlaceHolder.Hint = DeleteStr(sFoundList(1),chr(34))
-	oPlaceHolder.placeholder = 	DeleteStr(sFoundList(2),chr(34))
+	msgbox(DeleteStr(sFoundList(2),chr(34)))
+	msgbox(DeleteStr(sFoundList(1),chr(34)))
+	
+	oPlaceHolder.Hint = DeleteStr(sFoundList(2),chr(34))
+	oPlaceHolder.placeholder = 	DeleteStr(sFoundList(1),chr(34))
 	oCursor.Text.InsertTextContent(oCursor,oPlaceholder,True)
 End Sub
 

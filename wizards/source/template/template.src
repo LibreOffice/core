@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:41:52 $
+ *  last change: $Author: tv $ $Date: 2001-06-08 14:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 #define CorrespondenceNoTextmark    1300
 #define CorrespondenceMsgError  1302
 #define CorrespondenceDialog    1303
+#define CorrespondenceFields    1350
 #define TextField    1400
+
 // --------------------------------------------------------------------
 String SAMPLES
 {
@@ -429,9 +431,9 @@ String CorrespondenceMsgError
 
 String CorrespondenceDialog
 {
-    Text = "Was wollen Sie schreiben?";
-    Text[English] = "What do you want to write?";
-    Text[ english_us ] = "What do you want to write?";
+    Text = "Empfänger";
+    Text[English] = "Who will get this document?";
+    Text[ english_us ] = "Who will get this document?";
     Text[ portuguese ] = "Que deseja escrever?";
     Text[ dutch ] = "Wat wilt u schrijven?";
     Text[ french ] = "Que souhaitez-vous écrire ?";
@@ -455,9 +457,9 @@ String CorrespondenceDialog
 
 String CorrespondenceDialog+1
 {
-    Text = "Einzelnen Brief";
-    Text[English] = "Single letter";
-    Text[ english_us ] = "Single letter";
+    Text = "Ein Empfänger";
+    Text[English] = "One Recipient";
+    Text[ english_us ] = "One Recipient";
     Text[ portuguese ] = "Carta individual";
     Text[ dutch ] = "Een enkele brief";
     Text[ french ] = "Lettre individuelle";
@@ -482,9 +484,9 @@ String CorrespondenceDialog+1
 
 String CorrespondenceDialog+2
 {
-    Text = "Serienbrief";
-    Text[English] = "Multiple letter";
-    Text[ english_us ] = "Form letter";
+    Text = "Mehrere Empfänger (Adressdatenbank)";
+    Text[English] = "Multiple Recipients (Address Database)";
+    Text[ english_us ] = "Multiple Recipients (Address Database)";
     Text[ portuguese ] = "Carta em série";
     Text[ dutch ] = "Standaardbrief";
     Text[ french ] = "Mailing";
@@ -505,6 +507,292 @@ String CorrespondenceDialog+2
     Text[ catalan ] = "Carta en serie";
     Text[ finnish ] = "Lomakekirje";
 };
+
+String CorrespondenceDialog+3
+{
+    Text = "Verwendung der Vorlage";
+    Text[English] = "Use of this template";
+    Text[ english_us ] = "Use of this template";
+};
+
+
+String CorrespondenceFields
+{
+    Text = "Platzhalter anklicken und überschreiben";
+    Text[English] = "Click place holder and overwrite";
+    Text[ english_us ] = "Click place holder and overwrite";
+    Text[ language_user1 ] = "Platzhalter-Hinweistext";
+};
+
+String CorrespondenceFields+1
+{
+    Text = "Firma";
+    Text[English] = "Company";
+    Text[ english_us ] = "Company";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+String CorrespondenceFields+2
+{
+    Text = "Abteilung";
+    Text[English] = "Department";
+    Text[ english_us ] = "Department";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+String CorrespondenceFields+3
+{
+    Text = "Vorname";
+    Text[English] = "First Name";
+    Text[ english_us ] = "First Name";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+String CorrespondenceFields+4
+{
+    Text = "Nachname";
+    Text[English] = "Last Name";
+    Text[ english_us ] = "Last Name";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+String CorrespondenceFields+5
+{
+    Text = "Straße";
+    Text[English] = "Address";
+    Text[ english_us ] = "Address";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+String CorrespondenceFields+6
+{
+    Text = "Land";
+    Text[English] = "Country";
+    Text[ english_us ] = "Country";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+7
+{
+    Text = "PLZ";
+    Text[English] = "Postal Code";
+    Text[ english_us ] = "Postal Code";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+String CorrespondenceFields+8
+{
+    Text = "Ort";
+    Text[English] = "City";
+    Text[ english_us ] = "City";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+String CorrespondenceFields+9
+{
+    Text = "Titel";
+    Text[English] = "Title";
+    Text[ english_us ] = "Title";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+10
+{
+    Text = "Position";
+    Text[English] = "Position";
+    Text[ english_us ] = "Position";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+11
+{
+    Text = "Anrede";
+    Text[English] = "Form of Address";
+    Text[ english_us ] = "Form of Address";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+12
+{
+    Text = "Kürzel";
+    Text[English] = "Initials";
+    Text[ english_us ] = "Initials";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+13
+{
+    Text = "Briefanrede";
+    Text[English] = "Salutation";
+    Text[ english_us ] = "Salutation";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+14
+{
+    Text = "Tel. privat";
+    Text[English] = "Home Phone";
+    Text[ english_us ] = "Home Phone";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+15
+{
+    Text = "Tel. gesch.";
+    Text[English] = "Work Phone";
+    Text[ english_us ] = "Work Phone";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+16
+{
+    Text = "Fax";
+    Text[English] = "Fax";
+    Text[ english_us ] = "Fax";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+17
+{
+    Text = "E-Mail";
+    Text[English] = "E-Mail";
+    Text[ english_us ] = "E-Mail";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+18
+{
+    Text = "URL";
+    Text[English] = "URL";
+    Text[ english_us ] = "URL";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+19
+{
+    Text = "Notiz";
+    Text[English] = "Notes";
+    Text[ english_us ] = "Notes";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+20
+{
+    Text = "Alt. Feld 1";
+    Text[English] = "Alt. Field 1";
+    Text[ english_us ] = "Alt. Field 1";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+21
+{
+    Text = "Alt. Feld 2";
+    Text[English] = "Alt. Field 2";
+    Text[ english_us ] = "Alt. Field 2";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+22
+{
+    Text = "Alt. Feld 3";
+    Text[English] = "Alt. Field 3";
+    Text[ english_us ] = "Alt. Field 3";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+23
+{
+    Text = "Alt. Feld 4";
+    Text[English] = "Alt. Field 4";
+    Text[ english_us ] = "Alt. Field 4";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+24
+{
+    Text = "ID";
+    Text[English] = "ID";
+    Text[ english_us ] = "ID";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+25
+{
+    Text = "Bundesland";
+    Text[English] = "State";
+    Text[ english_us ] = "State";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+26
+{
+    Text = "Tel. Büro";
+    Text[English] = "Office Phone";
+    Text[ english_us ] = "Office Phone";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+27
+{
+    Text = "Pager";
+    Text[English] = "Pager";
+    Text[ english_us ] = "Pager";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+28
+{
+    Text = "Tel. Mobil";
+    Text[English] = "Mobile Phone";
+    Text[ english_us ] = "Mobile Phone";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+
+String CorrespondenceFields+29
+{
+    Text = "Tel. Andere";
+    Text[English] = "Other Phone";
+    Text[ english_us ] = "Other Phone";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+String CorrespondenceFields+30
+{
+    Text = "Kalender URL";
+    Text[English] = "Calendar URL";
+    Text[ english_us ] = "Calendar URL";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
+String CorrespondenceFields+31
+{
+    Text = "Einladen";
+    Text[English] = "Invite";
+    Text[ english_us ] = "Invite";
+    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+};
+
 
 String TextField
 {
