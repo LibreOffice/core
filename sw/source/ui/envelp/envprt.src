@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:32:13 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 22:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,3 +383,4 @@ Bitmap BMP_VER_RGHT_UPPER
 {
     File = "envvr_u.bmp" ;
 };
+
