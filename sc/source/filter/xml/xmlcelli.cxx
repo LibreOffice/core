@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 13:49:41 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 13:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,7 +842,7 @@ void ScXMLTableRowCellContext::EndElement()
                 else
                 {
                     GetScImport().GetStylesImportHelper()->AddCell(aCellPos);
-                    SetCellProperties(xTempCell); // set now only the validation
+                    SetCellProperties(xCell); // set now only the validation
                     //SetType(xTempCell);
                 }
             }
