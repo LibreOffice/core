@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:56:39 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ ModalDialog DLG_CAPTION
         Text[ japanese ] = "ε›³θ΅¨η•ªε·γƒ†γ‚­γ‚Ήγƒ(~C)";
         Text[ chinese_traditional ] = "ζ¨™η±¤ζ–‡(~C)";
         Text[ arabic ] = "δΥ ΗαΚΣγνΙ ΗαΚζΦνΝνΙ";
-        Text[ greek ] = "Κείμενο επιγραφής";
+        Text[ greek ] = "Κείμενο λεζάντας";
         Text[ korean ] = "μΊ΅μ…(~C)";
         Text[ turkish ] = "R~esim yazύsύ metni";
         Text[ language_user1 ] = " ";
@@ -479,7 +479,7 @@ ModalDialog DLG_CAPTION
         Text[ japanese ] = "ζ€εΎγ«";
         Text[ chinese_traditional ] = "ε¨ηµζδ½η½®";
         Text[ arabic ] = "έν ΗαδεΗνΙ";
-        Text[ greek ] = "Στο τέλος";
+        Text[ greek ] = "Κάτω από";
         Text[ korean ] = "λ";
         Text[ turkish ] = "Altta";
         Text[ language_user1 ] = " ";
@@ -560,7 +560,7 @@ ModalDialog DLG_CAPTION
     Text[ japanese ] = "ε›³θ΅¨η•ªε·";
     Text[ chinese_traditional ] = "ζ¨™η±¤";
     Text[ arabic ] = "ΚΣγνΙ ΚζΦνΝνΙ";
-    Text[ greek ] = "Επιγραφή";
+    Text[ greek ] = "Λεζάντα";
     Text[ korean ] = "μΊ΅μ…";
     Text[ turkish ] = "Resim yazύsύ";
     Text[ language_user1 ] = " ";
@@ -854,6 +854,7 @@ ModalDialog DLG_SEQUENCE_OPTION
     Text[ slovak ] = "VoΔΎby intervalu ΔΓ­slovania";
 };
  // ********************************************************************** EOF
+
 
 
 
