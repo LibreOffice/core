@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberFormatIndex.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 13:28:53 $
+ *  last change: $Author: jsc $ $Date: 2001-10-31 15:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,7 @@ constants NumberFormatIndex
              formatter. If you want to access this format you <b>MUST</b>
             do it via <member scope="com::sun::star::util">XNumberFormatTypes::getFormatIndex()</member>
             instead of <member>XNumberFormatCode::getFormatCode()</member>
+    */
     const short TEXT                        = BOOLEAN+1;
 
     /// count of built-in format codes.
