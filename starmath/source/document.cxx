@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:03:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ void SmDocShell::SFX_NOTIFY(SfxBroadcaster&, const TypeId&,
             nModifyCount++;     //! merkwrdig...
                                 // ohne dies wird die Grafik letztlich
                                 // nicht geupdatet
-            Resize();
+            Repaint();
             break;
     }
 }
@@ -334,13 +334,13 @@ void SmDocShell::SetText(const String& rBuffer)
 
         aText = rBuffer;
         Parse();
-        //Resize();
+        //Repaint();
         SmViewShell *pViewSh = SmGetActiveView();
         if( pViewSh )
         {
             pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_TEXT);
             if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
-                Resize();
+                Repaint();
             else
                 pViewSh->GetGraphicWindow().Invalidate();
         }
@@ -748,7 +748,7 @@ void SmDocShell::SetPrinter( SfxPrinter *pNew )
     pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
     SetFormulaArranged(FALSE);
     SM_MOD1()->GetRectCache()->Reset();
-    Resize();
+    Repaint();
 }
 
 void SmDocShell::OnDocumentPrinterChanged( Printer *pPrt )
@@ -757,19 +757,21 @@ void SmDocShell::OnDocumentPrinterChanged( Printer *pPrt )
     SetFormulaArranged(FALSE);
     SM_MOD1()->GetRectCache()->Reset();
     Size aOldSize = GetVisArea().GetSize();
-    Resize();
+    Repaint();
     if( aOldSize != GetVisArea().GetSize() && aText.Len() )
         SetModified( TRUE );
     pTmpPrinter = 0;
 }
 
-void SmDocShell::Resize()
+void SmDocShell::Repaint()
 {
     Size aVisSize = GetSize();
 
     BOOL bIsEnabled = IsEnableSetModified();
     if ( bIsEnabled )
         EnableSetModified( FALSE );
+
+    SetFormulaArranged( FALSE );
 
     SetVisAreaSize( aVisSize );
     SmViewShell *pViewSh = SmGetActiveView();
@@ -1200,7 +1202,7 @@ BOOL SmDocShell::ImportSM20File(SvStream *pStream)
 
                 case 'F':
                     aFormat.ReadSM20Format(*pStream);
-                    aFormat.From300To304a ();
+                    aFormat.From300To304a();
                     break;
 
                 case 'S':
@@ -1232,15 +1234,23 @@ void SmDocShell::Execute(SfxRequest& rReq)
         pBindings = &pViewSh->GetViewFrame()->GetBindings();
     switch (rReq.GetSlot())
     {
-    case SID_TEXTMODE:
+        case SID_TEXTMODE:
         {
-            SmFormat  &rFormat = GetFormat();
-            rFormat.SetTextmode(!rFormat.IsTextmode());
-            rFormat.RequestApplyChanges();
+            SmFormat aOldFormat  = GetFormat();
+            SmFormat aNewFormat( aOldFormat );
+            aNewFormat.SetTextmode(!aOldFormat.IsTextmode());
+
+            SfxUndoManager *pUndoMgr = GetUndoManager();
+            if (pUndoMgr)
+                pUndoMgr->AddUndoAction(
+                    new SmFormatAction(this, aOldFormat, aNewFormat));
+
+            SetFormat( aNewFormat );
+            Repaint();
         }
         break;
 
-    case SID_AUTO_REDRAW :
+        case SID_AUTO_REDRAW :
         {
             SmModule *pp = SM_MOD1();
             BOOL bRedraw = pp->GetConfig()->IsAutoRedraw();
@@ -1248,14 +1258,14 @@ void SmDocShell::Execute(SfxRequest& rReq)
         }
         break;
 
-    case SID_SYMBOLS_CATALOGUE:
+        case SID_SYMBOLS_CATALOGUE:
         {
             SmSymbolDialog(NULL, GetSymSetManager()).Execute();
             RestartFocusTimer();
         }
         break;
 
-    case SID_TOOLBOX:
+        case SID_TOOLBOX:
         {
             SmViewShell *pView = SmGetActiveView();
             if (pView)
@@ -1266,7 +1276,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
         }
         break;
 
-    case SID_INSERT_FORMULA:
+        case SID_INSERT_FORMULA:
         {
             SfxMedium *pMedium = SFX_APP()->
                     InsertDocumentDialog( 0, GetFactory().GetFactoryName() );
@@ -1281,121 +1291,109 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
                 UpdateText();
                 ArrangeFormula();
-                Resize();
+                Repaint();
                 // Fenster anpassen, neuzeichnen, ModifyCount erhöhen,...
                 if (pBindings)
                     pBindings->Invalidate(SID_GAPHIC_SM);
             }
             RestartFocusTimer();
-            rReq.SetReturnValue (SfxBoolItem (rReq.GetSlot(), TRUE));
+            rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), TRUE));
         }
         break;
 
-    case SID_LOADSYMBOLS:
+        case SID_LOADSYMBOLS:
         LoadSymbols();
         break;
 
-    case SID_SAVESYMBOLS:
+        case SID_SAVESYMBOLS:
         SaveSymbols();
         break;
 
-    case SID_FONT:
+        case SID_FONT:
         {
             SmFontTypeDialog *pFontTypeDialog = new SmFontTypeDialog(NULL);
 
             pFontTypeDialog->ReadFrom(GetFormat());
             if (pFontTypeDialog->Execute() == RET_OK)
             {
-                SmFormat& rOldFormat  = GetFormat();
+                SmFormat aOldFormat  = GetFormat();
+                SmFormat aNewFormat;
 
-                pFontTypeDialog->WriteTo(GetFormat());
+                pFontTypeDialog->WriteTo(aNewFormat);
                 SfxUndoManager *pUndoMgr = GetUndoManager();
                 if (pUndoMgr)
                     pUndoMgr->AddUndoAction(
-                        new SmFormatAction(this, rOldFormat, GetFormat()));
+                        new SmFormatAction(this, aOldFormat, aNewFormat));
 
-                if (aText.Len ())
-                {
-                    SetModified(TRUE);
-                    if (pBindings)
-                        pBindings->Invalidate(SID_GAPHIC_SM);
-                }
-                else SetModified (FALSE);
+                SetFormat( aNewFormat );
+                Repaint();
             }
             delete pFontTypeDialog;
-            RestartFocusTimer ();
+            RestartFocusTimer();
         }
         break;
 
-    case SID_FONTSIZE:
+        case SID_FONTSIZE:
         {
             SmFontSizeDialog *pFontSizeDialog = new SmFontSizeDialog(NULL);
 
             pFontSizeDialog->ReadFrom(GetFormat());
             if (pFontSizeDialog->Execute() == RET_OK)
             {
-                SmFormat& rOldFormat  = GetFormat();
+                SmFormat aOldFormat  = GetFormat();
+                SmFormat aNewFormat;
 
-                pFontSizeDialog->WriteTo(GetFormat());
+                pFontSizeDialog->WriteTo(aNewFormat);
 
                 SfxUndoManager *pUndoMgr = GetUndoManager();
                 if (pUndoMgr)
                     pUndoMgr->AddUndoAction(
-                        new SmFormatAction(this, rOldFormat, GetFormat()));
+                        new SmFormatAction(this, aOldFormat, aNewFormat));
 
-                if (aText.Len ())
-                {
-                    SetModified(TRUE);
-                    if (pBindings)
-                        pBindings->Invalidate(SID_GAPHIC_SM);
-                }
-                else SetModified (FALSE);
+                SetFormat( aNewFormat );
+                Repaint();
             }
             delete pFontSizeDialog;
-            RestartFocusTimer ();
+            RestartFocusTimer();
         }
         break;
 
-    case SID_DISTANCE:
+        case SID_DISTANCE:
         {
             SmDistanceDialog *pDistanceDialog = new SmDistanceDialog(NULL);
 
             pDistanceDialog->ReadFrom(GetFormat());
             if (pDistanceDialog->Execute() == RET_OK)
             {
-                SmFormat& rOldFormat  = GetFormat();
+                SmFormat aOldFormat  = GetFormat();
+                SmFormat aNewFormat;
 
-                pDistanceDialog->WriteTo(GetFormat());
+                pDistanceDialog->WriteTo(aNewFormat);
 
                 SfxUndoManager *pUndoMgr = GetUndoManager();
                 if (pUndoMgr)
                     pUndoMgr->AddUndoAction(
-                        new SmFormatAction(this, rOldFormat, GetFormat()));
+                        new SmFormatAction(this, aOldFormat, aNewFormat));
 
-                if (aText.Len ())
-                {
-                    SetModified(TRUE);
-                    if (pBindings)
-                        pBindings->Invalidate(SID_GAPHIC_SM);
-                }
-                else
-                    SetModified (FALSE);
+                SetFormat( aNewFormat );
+                Repaint();
             }
             delete pDistanceDialog;
-            RestartFocusTimer ();
+            RestartFocusTimer();
         }
         break;
 
-    case SID_ALIGN:
+        case SID_ALIGN:
         {
             SmAlignDialog *pAlignDialog = new SmAlignDialog(NULL);
 
             pAlignDialog->ReadFrom(GetFormat());
             if (pAlignDialog->Execute() == RET_OK)
             {
-                SmFormat aOldFormat(GetFormat());
+                SmFormat aOldFormat  = GetFormat();
+                SmFormat aNewFormat;
 
-                pAlignDialog->WriteTo(GetFormat());
+                pAlignDialog->WriteTo(aNewFormat);
 
                 SmModule *pp = SM_MOD1();
                 SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
@@ -1405,23 +1403,17 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 SfxUndoManager *pUndoMgr = GetUndoManager();
                 if (pUndoMgr)
                     pUndoMgr->AddUndoAction(
-                        new SmFormatAction(this, aOldFormat, GetFormat()));
+                        new SmFormatAction(this, aOldFormat, aNewFormat));
 
-                if (aText.Len ())
-                {
-                    SetModified(TRUE);
-                    if (pBindings)
-                        pBindings->Invalidate(SID_GAPHIC_SM);
-                }
-                else
-                    SetModified (FALSE);
+                SetFormat( aNewFormat );
+                Repaint();
             }
             delete pAlignDialog;
-            RestartFocusTimer ();
+            RestartFocusTimer();
         }
         break;
 
-    case SID_TEXT:
+        case SID_TEXT:
         {
             const SfxStringItem& rItem =
                 (const SfxStringItem&)rReq.GetArgs()->Get(SID_TEXT);
@@ -1433,7 +1425,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
         }
         break;
 
-    case SID_COPYOBJECT:
+        case SID_COPYOBJECT:
         {
             //TODO/LATER: does not work because of UNO Tunneling - will be fixed later
             Reference< datatransfer::XTransferable > xTrans( GetModel(), uno::UNO_QUERY );
@@ -1453,7 +1445,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
         }
         break;
 
-    case SID_PASTEOBJECT:
+        case SID_PASTEOBJECT:
         {
             TransferableDataHelper aData( TransferableDataHelper::CreateFromSystemClipboard(pViewSh ? pViewSh->GetEditWindow(): 0) );
             uno::Reference < io::XInputStream > xStrm;
@@ -1473,8 +1465,8 @@ void SmDocShell::Execute(SfxRequest& rReq)
         }
         break;
 
-    case SID_UNDO:
-    case SID_REDO:
+        case SID_UNDO:
+        case SID_REDO:
         {
             SfxUndoManager* pUndoMgr = GetUndoManager();
             if( pUndoMgr )
@@ -1502,6 +1494,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 for( ; nCnt && nCount; --nCnt, --nCount )
                     (pUndoMgr->*fnDo)( 0 );
             }
+            Repaint();
         }
         break;
     }
@@ -1521,7 +1514,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
             break;
 
         case SID_DOCTEMPLATE :
-            rSet.DisableItem (SID_DOCTEMPLATE);
+            rSet.DisableItem(SID_DOCTEMPLATE);
             break;
 
         case SID_AUTO_REDRAW :
@@ -1529,7 +1522,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
                 SmModule  *pp = SM_MOD1();
                 BOOL       bRedraw = pp->GetConfig()->IsAutoRedraw();
 
-                rSet.Put (SfxBoolItem(SID_AUTO_REDRAW, bRedraw));
+                rSet.Put(SfxBoolItem(SID_AUTO_REDRAW, bRedraw));
             }
             break;
 
@@ -1583,7 +1576,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
                 SfxUndoManager* pUndoMgr = GetUndoManager();
                 if( pUndoMgr )
                 {
-                    UniString (SfxUndoManager:: *fnGetComment)( USHORT ) const;
+                    UniString(SfxUndoManager:: *fnGetComment)( USHORT ) const;
 
                     sal_uInt16 nCount;
                     if( SID_GETUNDOSTRINGS == nWh )
@@ -1633,7 +1626,7 @@ void SmDocShell::SaveSymbols()
 
 
 
-void SmDocShell::RestartFocusTimer ()
+void SmDocShell::RestartFocusTimer()
 {
     SmCmdBoxWrapper *pWrapper = NULL;
     SmViewShell *pView = SmGetActiveView();
@@ -1642,7 +1635,7 @@ void SmDocShell::RestartFocusTimer ()
                 GetChildWindow( SmCmdBoxWrapper::GetChildWindowId() );
 
     if (pWrapper)
-        pWrapper->RestartFocusTimer ();
+        pWrapper->RestartFocusTimer();
 }
 
 
@@ -1661,14 +1654,14 @@ SfxItemPool& SmDocShell::GetPool()
     return SFX_APP()->GetPool();
 }
 
-void SmDocShell::SetVisArea (const Rectangle & rVisArea)
+void SmDocShell::SetVisArea(const Rectangle & rVisArea)
 {
-    Rectangle aNewRect (rVisArea);
+    Rectangle aNewRect(rVisArea);
 
-    aNewRect.SetPos(Point ());
+    aNewRect.SetPos(Point());
 
-    if (! aNewRect.Right ()) aNewRect.Right () = 2000;
-    if (! aNewRect.Bottom ()) aNewRect.Bottom () = 1000;
+    if (! aNewRect.Right()) aNewRect.Right() = 2000;
+    if (! aNewRect.Bottom()) aNewRect.Bottom() = 1000;
 
     BOOL bIsEnabled = IsEnableSetModified();
     if ( bIsEnabled )
@@ -1899,7 +1892,7 @@ void SmDocShell::UIActivate (BOOL bActivate)
             pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                     SID_GETEDITTEXT, SFX_CALLMODE_STANDARD,
                     new SfxVoidItem (SID_GETEDITTEXT), 0L);
-            Resize();
+            Repaint();
         }
 
         SfxObjectShell::UIActivate (bActivate);
