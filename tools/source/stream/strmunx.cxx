@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strmunx.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:12:48 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
+
 using namespace osl;
 
 // -----------------------------------------------------------------------
@@ -89,6 +93,11 @@ using namespace osl;
 
 class InternalStreamLock;
 DECLARE_LIST( InternalStreamLockList, InternalStreamLock* );
+namespace { struct LockList : public rtl::Static< InternalStreamLockList, LockList > {}; }
+
+#ifndef BOOTSTRAP
+namespace { struct LockMutex : public rtl::Static< NAMESPACE_VOS(OMutex), LockMutex > {}; }
+#endif
 
 class InternalStreamLock
 {
@@ -97,22 +106,12 @@ class InternalStreamLock
     SvFileStream*   m_pStream;
     struct stat     m_aStat;
 
-    static InternalStreamLockList LockList;
-#ifndef BOOTSTRAP
-    static NAMESPACE_VOS(OMutex) LockMutex;
-#endif
-
     InternalStreamLock( sal_Size, sal_Size, SvFileStream* );
     ~InternalStreamLock();
 public:
     static sal_Bool LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* );
     static void UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* );
 };
-
-InternalStreamLockList InternalStreamLock::LockList;
-#ifndef BOOTSTRAP
-NAMESPACE_VOS(OMutex) InternalStreamLock::LockMutex;
-#endif
 
 InternalStreamLock::InternalStreamLock(
     sal_Size nStart,
@@ -124,7 +123,7 @@ InternalStreamLock::InternalStreamLock(
 {
     ByteString aFileName(m_pStream->GetFileName(), osl_getThreadTextEncoding());
     stat( aFileName.GetBuffer(), &m_aStat );
-    LockList.Insert( this, LIST_APPEND );
+    LockList::get().Insert( this, LIST_APPEND );
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "locked %s", aFileName.GetBuffer() );
     if( m_nStartPos || m_nEndPos )
@@ -135,7 +134,7 @@ InternalStreamLock::InternalStreamLock(
 
 InternalStreamLock::~InternalStreamLock()
 {
-    LockList.Remove( this );
+    LockList::get().Remove( this );
 #if OSL_DEBUG_LEVEL > 1
     ByteString aFileName(m_pStream->GetFileName(), osl_getThreadTextEncoding());
     fprintf( stderr, "unlocked %s", aFileName.GetBuffer() );
@@ -148,7 +147,7 @@ InternalStreamLock::~InternalStreamLock()
 sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
 {
 #ifndef BOOTSTRAP
-    NAMESPACE_VOS( OGuard ) aGuard( LockMutex );
+    NAMESPACE_VOS( OGuard ) aGuard( LockMutex::get() );
 #endif
     ByteString aFileName(pStream->GetFileName(), osl_getThreadTextEncoding());
     struct stat aStat;
@@ -159,9 +158,10 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
         return sal_True;
 
     InternalStreamLock* pLock = NULL;
-    for( int i = 0; i < LockList.Count(); i++ )
+    InternalStreamLockList &rLockList = LockList::get();
+    for( int i = 0; i < rLockList.Count(); ++i )
     {
-        pLock = LockList.GetObject( i );
+        pLock = rLockList.GetObject( i );
         if( aStat.st_ino == pLock->m_aStat.st_ino )
         {
             sal_Bool bDenyByOptions = sal_False;
@@ -197,14 +197,15 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
 void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
 {
 #ifndef BOOTSTRAP
-    NAMESPACE_VOS( OGuard ) aGuard( LockMutex );
+    NAMESPACE_VOS( OGuard ) aGuard( LockMutex::get() );
 #endif
     InternalStreamLock* pLock = NULL;
+    InternalStreamLockList &rLockList = LockList::get();
     if( nStart == 0 && nEnd == 0 )
     {
-        for( int i = 0; i < LockList.Count(); i++ )
+        for( int i = 0; i < rLockList.Count(); ++i )
         {
-            if( ( pLock = LockList.GetObject( i ) )->m_pStream == pStream )
+            if( ( pLock = rLockList.GetObject( i ) )->m_pStream == pStream )
             {
                 delete pLock;
                 i--;
@@ -212,9 +213,9 @@ void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStrea
         }
         return;
     }
-    for( int i = 0; i < LockList.Count(); i++ )
+    for( int i = 0; i < rLockList.Count(); ++i )
     {
-        if( ( pLock = LockList.GetObject( i ) )->m_pStream == pStream &&
+        if( ( pLock = rLockList.GetObject( i ) )->m_pStream == pStream &&
             nStart == pLock->m_nStartPos && nEnd == pLock->m_nEndPos )
         {
             delete pLock;
@@ -278,7 +279,7 @@ static sal_uInt32 GetSvError( int nErrno )
             nRetVal = errArr[i].sv;
             break;
         }
-        i++;
+        ++i;
     }
     while( errArr[i].nErr != 0xFFFF );
     return nRetVal;
