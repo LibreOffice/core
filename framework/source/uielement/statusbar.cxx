@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:11:24 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,10 @@ FrameworkStatusBar::FrameworkStatusBar(
     m_bLock( sal_False ),
     m_pMgr( NULL )
 {
+    // enable a thin border to better separate from the vertical docking areas
+    SetTopBorder();
+    // set optimal size
+    SetOutputSizePixel( CalcWindowSizePixel() );
 }
 
 FrameworkStatusBar::~FrameworkStatusBar()
