@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: nn $ $Date: 2002-02-22 09:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,9 @@ private:
     long            nTotalPages;
     Size            aPageSize;          // fuer GetOptimalZoom
     BOOL            bStateValid;
+    BOOL            bLocationValid;
     ScPrintState    aState;
+    ScPreviewLocationData* pLocationData;   // stores table layout for accessibility API
     FmFormView*     pDrawView;
 
                                         // intern:
@@ -109,6 +111,7 @@ private:
     void    CalcPages( USHORT nToWhichTab );
     void    RecalcPages();
     void    UpdateDrawView();
+    void    DoPrint( ScPreviewLocationData* pFillLocation );
 
 protected:
     virtual void    Paint( const Rectangle& rRect );
@@ -128,6 +131,8 @@ public:
     void    SetYOffset( long nY );
     void    SetZoom(USHORT nNewZoom);
     void    SetPageNo( long nPage );
+
+    const ScPreviewLocationData& GetLocationData();
 
     String  GetPosString();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-29 19:38:48 $
+ *  last change: $Author: nn $ $Date: 2002-02-22 09:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ class EditTextObject;
 class MultiSelection;
 class ScHeaderEditEngine;
 class ScPageBreakData;
+class ScPreviewLocationData;
 class ScPrintOptions;
 class SvxBoxItem;
 class SvxBrushItem;
@@ -297,9 +298,9 @@ public:
     BOOL            UpdatePages();
 
     void            ApplyPrintSettings();       // aus DoPrint() schon gerufen
-    long            DoPrint(const MultiSelection& rPageRanges,
-                                long nStartPage, long nDisplayStart,
-                                SfxProgress* pProgress = NULL );
+    long            DoPrint( const MultiSelection& rPageRanges,
+                                long nStartPage, long nDisplayStart, BOOL bDoPrint,
+                                SfxProgress* pProgress, ScPreviewLocationData* pLocationData );
 
                     //  Werte abfragen - sofort
 
@@ -344,16 +345,22 @@ private:
     void            MakeTableString();                  // setzt aTableStr
 
     void            PrintPage( long nPageNo,
-                                    USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 );
+                                    USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
+                                    BOOL bDoPrint, ScPreviewLocationData* pLocationData );
     void            PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                                     long nScrX, long nScrY,
                                     BOOL bShLeft, BOOL bShTop, BOOL bShRight, BOOL bShBottom );
+    void            LocateArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
+                                    long nScrX, long nScrY, ScPreviewLocationData& rLocationData );
     void            PrintColHdr( USHORT nX1, USHORT nX2, long nScrX, long nScrY );
     void            PrintRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY );
-    void            PrintHF( long nPageNo, const ScPrintHFParam& rParam, long nStartY );
+    void            LocateColHdr( USHORT nX1, USHORT nX2, long nScrX, long nScrY, ScPreviewLocationData& rLocationData );
+    void            LocateRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY, ScPreviewLocationData& rLocationData );
+    void            PrintHF( long nPageNo, const ScPrintHFParam& rParam, long nStartY,
+                                    BOOL bDoPrint, ScPreviewLocationData* pLocationData );
 
-    long            PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint );
-    long            DoNotes( long nNoteStart, BOOL bDoPrint );
+    long            PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPreviewLocationData* pLocationData );
+    long            DoNotes( long nNoteStart, BOOL bDoPrint, ScPreviewLocationData* pLocationData );
 
     void            DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
                                     const SvxBoxItem* pBorderData,

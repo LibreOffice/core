@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-22 19:55:20 $
+ *  last change: $Author: nn $ $Date: 2002-02-22 10:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1813,7 +1813,7 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
 
                     ScPrintFunc aPrintFunc( this, pPrinter, nTab, nAttrPage, nTotalPages, pMarkedRange, &aOptions );
                     aPrintFunc.SetDrawView( pDrawView );
-                    aPrintFunc.DoPrint( aPageRanges, nTabStart, nDisplayStart, &rProgress );
+                    aPrintFunc.DoPrint( aPageRanges, nTabStart, nDisplayStart, TRUE, &rProgress, NULL );
 
                     nTabStart += aPageArr[nTab];
                     if ( aDocument.NeedPageResetAfterTab(nTab) )

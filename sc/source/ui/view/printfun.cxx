@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-08 12:44:08 $
+ *  last change: $Author: nn $ $Date: 2002-02-22 09:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@
 #include "sc.hrc"
 #include "pagedata.hxx"
 #include "printopt.hxx"
+#include "prevloc.hxx"
 
 #define _PRINTFUN_CXX
 #include "printfun.hxx"
@@ -1423,6 +1424,75 @@ void ScPrintFunc::PrintRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY )
     }
 }
 
+void ScPrintFunc::LocateColHdr( USHORT nX1, USHORT nX2, long nScrX, long nScrY,
+                                ScPreviewLocationData& rLocationData )
+{
+    Size aOnePixel = pDev->PixelToLogic(Size(1,1));
+    long nOneX = aOnePixel.Width();
+    long nOneY = aOnePixel.Height();
+
+    long nHeight = (long) (PRINT_HEADER_HEIGHT * nScaleY);
+    long nEndY = nScrY + nHeight - nOneY;
+
+    long nPosX = nScrX - nOneX;
+    for (USHORT nCol=nX1; nCol<=nX2; nCol++)
+    {
+        USHORT nDocW = pDoc->GetColWidth( nCol, nPrintTab );
+        if (nDocW)
+            nPosX += (long) (nDocW * nScaleX);
+    }
+    Rectangle aCellRect( nScrX, nScrY, nPosX, nEndY );
+    rLocationData.AddColHeaders( aCellRect, nX1, nX2 );
+}
+
+void ScPrintFunc::LocateRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY,
+                                ScPreviewLocationData& rLocationData )
+{
+    Size aOnePixel = pDev->PixelToLogic(Size(1,1));
+    long nOneX = aOnePixel.Width();
+    long nOneY = aOnePixel.Height();
+
+    long nWidth = (long) (PRINT_HEADER_WIDTH * nScaleX);
+    long nEndX = nScrX + nWidth - nOneX;
+
+    long nPosY = nScrY - nOneY;
+    for (USHORT nRow=nY1; nRow<=nY2; nRow++)
+    {
+        USHORT nDocH = pDoc->FastGetRowHeight( nRow, nPrintTab );
+        if (nDocH)
+            nPosY += (long) (nDocH * nScaleY);
+    }
+    Rectangle aCellRect( nScrX, nScrY, nEndX, nPosY );
+    rLocationData.AddColHeaders( aCellRect, nY1, nY2 );
+}
+
+void ScPrintFunc::LocateArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
+                                long nScrX, long nScrY, ScPreviewLocationData& rLocationData )
+{
+    Size aOnePixel = pDev->PixelToLogic(Size(1,1));
+    long nOneX = aOnePixel.Width();
+    long nOneY = aOnePixel.Height();
+
+    long nPosX = nScrX - nOneX;
+    for (USHORT nCol=nX1; nCol<=nX2; nCol++)
+    {
+        USHORT nDocW = pDoc->GetColWidth( nCol, nPrintTab );
+        if (nDocW)
+            nPosX += (long) (nDocW * nScaleX);
+    }
+
+    long nPosY = nScrY - nOneY;
+    for (USHORT nRow=nY1; nRow<=nY2; nRow++)
+    {
+        USHORT nDocH = pDoc->FastGetRowHeight( nRow, nPrintTab );
+        if (nDocH)
+            nPosY += (long) (nDocH * nScaleY);
+    }
+
+    Rectangle aCellRect( nScrX, nScrY, nPosX, nPosY );
+    rLocationData.AddCellRange( aCellRect, ScRange( nX1,nY1,nPrintTab, nX2,nY2,nPrintTab ) );
+}
+
 void ScPrintFunc::PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                                 long nScrX, long nScrY,
                                 BOOL bShLeft, BOOL bShTop, BOOL bShRight, BOOL bShBottom )
@@ -1598,7 +1668,8 @@ void ScPrintFunc::MakeEditEngine()
 }
 
 //  nStartY = logic
-void ScPrintFunc::PrintHF( long nPageNo, const ScPrintHFParam& rParam, long nStartY )
+void ScPrintFunc::PrintHF( long nPageNo, const ScPrintHFParam& rParam, long nStartY,
+                            BOOL bDoPrint, ScPreviewLocationData* pLocationData )
 {
     pDev->SetMapMode( aTwipMode );          // Kopf-/Fusszeilen in Twips
 
@@ -1667,64 +1738,73 @@ void ScPrintFunc::PrintHF( long nPageNo, const ScPrintHFParam& rParam, long nSta
         aBorderSize.Height() = nMaxHeight;
     }
 
-    double nOldScaleX = nScaleX;
-    double nOldScaleY = nScaleY;
-    nScaleX = nScaleY = 1.0;            // direkt in Twips ausgeben
-    DrawBorder( aBorderStart.X(), aBorderStart.Y(), aBorderSize.Width(), aBorderSize.Height(),
-                    rParam.pBorder, rParam.pBack, rParam.pShadow );
-    nScaleX = nOldScaleX;
-    nScaleY = nOldScaleY;
-
-    //  Clipping fuer Text
-
-    pDev->SetClipRegion( Rectangle( aStart, aPaperSize ) );
-
-    //  links
-
-    pObject = pHFItem->GetLeftArea();
-    if (pObject)
+    if ( bDoPrint )
     {
-        pEditDefaults->Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
-        pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, FALSE );
-        Point aDraw = aStart;
-        long nDif = aPaperSize.Height() - (long) pEditEngine->GetTextHeight();
-        if (nDif > 0)
-            aDraw.Y() += nDif / 2;
-        pEditEngine->Draw( pDev, aDraw, 0 );
+        double nOldScaleX = nScaleX;
+        double nOldScaleY = nScaleY;
+        nScaleX = nScaleY = 1.0;            // direkt in Twips ausgeben
+        DrawBorder( aBorderStart.X(), aBorderStart.Y(), aBorderSize.Width(), aBorderSize.Height(),
+                        rParam.pBorder, rParam.pBack, rParam.pShadow );
+        nScaleX = nOldScaleX;
+        nScaleY = nOldScaleY;
+
+        //  Clipping fuer Text
+
+        pDev->SetClipRegion( Rectangle( aStart, aPaperSize ) );
+
+        //  links
+
+        pObject = pHFItem->GetLeftArea();
+        if (pObject)
+        {
+            pEditDefaults->Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
+            pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, FALSE );
+            Point aDraw = aStart;
+            long nDif = aPaperSize.Height() - (long) pEditEngine->GetTextHeight();
+            if (nDif > 0)
+                aDraw.Y() += nDif / 2;
+            pEditEngine->Draw( pDev, aDraw, 0 );
+        }
+
+        //  Mitte
+
+        pObject = pHFItem->GetCenterArea();
+        if (pObject)
+        {
+            pEditDefaults->Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
+            pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, FALSE );
+            Point aDraw = aStart;
+            long nDif = aPaperSize.Height() - (long) pEditEngine->GetTextHeight();
+            if (nDif > 0)
+                aDraw.Y() += nDif / 2;
+            pEditEngine->Draw( pDev, aDraw, 0 );
+        }
+
+        //  rechts
+
+        pObject = pHFItem->GetRightArea();
+        if (pObject)
+        {
+            pEditDefaults->Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+            pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, FALSE );
+            Point aDraw = aStart;
+            long nDif = aPaperSize.Height() - (long) pEditEngine->GetTextHeight();
+            if (nDif > 0)
+                aDraw.Y() += nDif / 2;
+            pEditEngine->Draw( pDev, aDraw, 0 );
+        }
+
+        pDev->SetClipRegion();
     }
 
-    //  Mitte
-
-    pObject = pHFItem->GetCenterArea();
-    if (pObject)
+    if ( pLocationData )
     {
-        pEditDefaults->Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
-        pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, FALSE );
-        Point aDraw = aStart;
-        long nDif = aPaperSize.Height() - (long) pEditEngine->GetTextHeight();
-        if (nDif > 0)
-            aDraw.Y() += nDif / 2;
-        pEditEngine->Draw( pDev, aDraw, 0 );
+        Rectangle aHeaderRect( aBorderStart, aBorderSize );
+        pLocationData->AddHeaderFooter( aHeaderRect );
     }
-
-    //  rechts
-
-    pObject = pHFItem->GetRightArea();
-    if (pObject)
-    {
-        pEditDefaults->Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
-        pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, FALSE );
-        Point aDraw = aStart;
-        long nDif = aPaperSize.Height() - (long) pEditEngine->GetTextHeight();
-        if (nDif > 0)
-            aDraw.Y() += nDif / 2;
-        pEditEngine->Draw( pDev, aDraw, 0 );
-    }
-
-    pDev->SetClipRegion();
 }
 
-long ScPrintFunc::DoNotes( long nNoteStart, BOOL bDoPrint )
+long ScPrintFunc::DoNotes( long nNoteStart, BOOL bDoPrint, ScPreviewLocationData* pLocationData )
 {
     if (bDoPrint)
         pDev->SetMapMode(aTwipMode);
@@ -1782,6 +1862,15 @@ long ScPrintFunc::DoNotes( long nNoteStart, BOOL bDoPrint )
                         pEditEngine->Draw( pDev, Point( aPageRect.Left(), nPosY ), 0 );
                     }
 
+                    if ( pLocationData )
+                    {
+                        ScAddress aAddress( pPos->GetCol(), pPos->GetRow(), pPos->GetTab() );
+                        Rectangle aTextRect( Point( nPosX, nPosY ), Size( aDataSize.Width(), nTextHeight ) );
+                        pLocationData->AddNoteText( aTextRect, aAddress );
+                        Rectangle aMarkRect( Point( aPageRect.Left(), nPosY ), Size( nMarkLen, nTextHeight ) );
+                        pLocationData->AddNoteMark( aMarkRect, aAddress );
+                    }
+
                     nPosY += nTextHeight;
                     nPosY += 200;                   // Abstand
                     ++nCount;
@@ -1795,7 +1884,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, BOOL bDoPrint )
     return nCount;
 }
 
-long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint )
+long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPreviewLocationData* pLocationData )
 {
     if ( nNoteStart >= (long) aNotePosList.Count() || !aTableParam.bNotes )
         return 0;
@@ -1829,38 +1918,39 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint )
         aPageRect.Right() = ( aTempRect.Right() - nRightMargin ) * 100 / nZoom;
     }
 
-    if (bDoPrint)
-    {
-        if (pPrinter)
-            pPrinter->StartPage();
+    if ( pPrinter && bDoPrint )
+        pPrinter->StartPage();
 
+    if ( bDoPrint || pLocationData )
+    {
         //  Kopf- und Fusszeilen
 
         if (aHdr.bEnable)
         {
             long nHeaderY = aPageRect.Top()-aHdr.nHeight;
-            PrintHF( nPageNo, aHdr, nHeaderY );
+            PrintHF( nPageNo, aHdr, nHeaderY, bDoPrint, pLocationData );
         }
         if (aFtr.bEnable)
         {
             long nFooterY = aPageRect.Bottom()+aFtr.nDistance;
-            PrintHF( nPageNo, aFtr, nFooterY );
+            PrintHF( nPageNo, aFtr, nFooterY, bDoPrint, pLocationData );
         }
     }
 
-    long nCount = DoNotes( nNoteStart, bDoPrint );
+    long nCount = DoNotes( nNoteStart, bDoPrint, pLocationData );
 
-    if (pPrinter && bDoPrint)
+    if ( pPrinter && bDoPrint )
         pPrinter->EndPage();
 
     return nCount;
 }
 
-void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 )
+void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
+                                BOOL bDoPrint, ScPreviewLocationData* pLocationData )
 {
     //  nPageNo - Seitennummer innerhalb einer "Startseite"-Einstellung
 
-    if (bClearWin)
+    if ( bClearWin && bDoPrint )
     {
         //  muss genau zum Zeichnen des Rahmens in preview.cxx passen !!!
 
@@ -1908,7 +1998,7 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
 
     USHORT i;
 
-    if (pPrinter)
+    if ( pPrinter && bDoPrint )
         pPrinter->StartPage();
 
     //  Kopf- und Fusszeilen (ohne Zentrierung)
@@ -1916,12 +2006,12 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
     if (aHdr.bEnable)
     {
         long nHeaderY = aPageRect.Top()-aHdr.nHeight;
-        PrintHF( nPageNo, aHdr, nHeaderY );
+        PrintHF( nPageNo, aHdr, nHeaderY, bDoPrint, pLocationData );
     }
     if (aFtr.bEnable)
     {
         long nFooterY = aPageRect.Bottom()+aFtr.nDistance;
-        PrintHF( nPageNo, aFtr, nFooterY );
+        PrintHF( nPageNo, aFtr, nFooterY, bDoPrint, pLocationData );
     }
 
     //  Position ( Raender / zentrieren )
@@ -2030,55 +2120,97 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
         nBorderEndX += (long) ( pShadowItem->CalcShadowSpace(SHADOW_RIGHT) * nScaleX );
         nBorderEndY += (long) ( pShadowItem->CalcShadowSpace(SHADOW_BOTTOM) * nScaleY );
     }
-    pDev->SetMapMode( aOffsetMode );
-    DrawBorder( nStartX, nStartY, nBorderEndX-nStartX, nBorderEndY-nStartY,
-                    pBorderItem, pBackgroundItem, pShadowItem );
 
-    pDev->SetMapMode( aTwipMode );
-    SFX_APP()->SpoilDemoOutput( *pDev, aPageRect );
+    if ( bDoPrint )
+    {
+        pDev->SetMapMode( aOffsetMode );
+        DrawBorder( nStartX, nStartY, nBorderEndX-nStartX, nBorderEndY-nStartY,
+                        pBorderItem, pBackgroundItem, pShadowItem );
+
+        pDev->SetMapMode( aTwipMode );
+        SFX_APP()->SpoilDemoOutput( *pDev, aPageRect );
+    }
+
     pDev->SetMapMode( aOffsetMode );
 
     //  Wiederholungszeilen/Spalten ausgeben
 
     if (bDoRepCol && bDoRepRow)
-        PrintArea( nRepeatStartCol,nRepeatStartRow, nRepeatEndCol,nRepeatEndRow,
-                        nRepStartX,nRepStartY, TRUE,TRUE,FALSE,FALSE );
+    {
+        if ( bDoPrint )
+            PrintArea( nRepeatStartCol,nRepeatStartRow, nRepeatEndCol,nRepeatEndRow,
+                            nRepStartX,nRepStartY, TRUE,TRUE,FALSE,FALSE );
+        if ( pLocationData )
+            LocateArea( nRepeatStartCol,nRepeatStartRow, nRepeatEndCol,nRepeatEndRow,
+                            nRepStartX,nRepStartY, *pLocationData );
+    }
     if (bDoRepCol)
-        PrintArea( nRepeatStartCol,nY1, nRepeatEndCol,nY2, nRepStartX,nDataY,
-                    TRUE,!bDoRepRow,FALSE,TRUE );
+    {
+        if ( bDoPrint )
+            PrintArea( nRepeatStartCol,nY1, nRepeatEndCol,nY2, nRepStartX,nDataY,
+                        TRUE,!bDoRepRow,FALSE,TRUE );
+        if ( pLocationData )
+            LocateArea( nRepeatStartCol,nY1, nRepeatEndCol,nY2, nRepStartX,nDataY, *pLocationData );
+    }
     if (bDoRepRow)
-        PrintArea( nX1,nRepeatStartRow, nX2,nRepeatEndRow, nDataX,nRepStartY,
-                    !bDoRepCol,TRUE,TRUE,FALSE );
+    {
+        if ( bDoPrint )
+            PrintArea( nX1,nRepeatStartRow, nX2,nRepeatEndRow, nDataX,nRepStartY,
+                        !bDoRepCol,TRUE,TRUE,FALSE );
+        if ( pLocationData )
+            LocateArea( nX1,nRepeatStartRow, nX2,nRepeatEndRow, nDataX,nRepStartY, *pLocationData );
+    }
 
     //  Daten ausgeben
 
-    PrintArea( nX1,nY1, nX2,nY2, nDataX,nDataY, !bDoRepCol,!bDoRepRow,TRUE,TRUE );
+    if ( bDoPrint )
+        PrintArea( nX1,nY1, nX2,nY2, nDataX,nDataY, !bDoRepCol,!bDoRepRow,TRUE,TRUE );
+    if ( pLocationData )
+        LocateArea( nX1,nY1, nX2,nY2, nDataX,nDataY, *pLocationData );
 
     //  Spalten-/Zeilenkoepfe ausgeben
     //  nach den Daten (ueber evtl. weitergezeichneten Schatten)
 
     if (aTableParam.bHeaders)
     {
-        pDev->SetLineColor( COL_BLACK );
-        pDev->SetFillColor();
+        if ( bDoPrint )
+        {
+            pDev->SetLineColor( COL_BLACK );
+            pDev->SetFillColor();
+        }
 
         ScPatternAttr aPattern( pDoc->GetPool() );
         Font aFont;
-//      aPattern.GetFont( aFont, pDev, (USHORT)((nZoom * (long) nManualZoom) / 100) );
         aPattern.GetFont( aFont, pDev );
         pDev->SetFont( aFont );
 
         if (bDoRepCol)
-            PrintColHdr( nRepeatStartCol,nRepeatEndCol, nRepStartX,nInnerStartY );
-        PrintColHdr( nX1,nX2, nDataX,nInnerStartY );
+        {
+            if ( bDoPrint )
+                PrintColHdr( nRepeatStartCol,nRepeatEndCol, nRepStartX,nInnerStartY );
+            if ( pLocationData )
+                LocateColHdr( nRepeatStartCol,nRepeatEndCol, nRepStartX,nInnerStartY, *pLocationData );
+        }
+        if ( bDoPrint )
+            PrintColHdr( nX1,nX2, nDataX,nInnerStartY );
+        if ( pLocationData )
+            LocateColHdr( nX1,nX2, nDataX,nInnerStartY, *pLocationData );
         if (bDoRepRow)
-            PrintRowHdr( nRepeatStartRow,nRepeatEndRow, nInnerStartX,nRepStartY );
-        PrintRowHdr( nY1,nY2, nInnerStartX,nDataY );
+        {
+            if ( bDoPrint )
+                PrintRowHdr( nRepeatStartRow,nRepeatEndRow, nInnerStartX,nRepStartY );
+            if ( pLocationData )
+                LocateRowHdr( nRepeatStartRow,nRepeatEndRow, nInnerStartX,nRepStartY, *pLocationData );
+        }
+        if ( bDoPrint )
+            PrintRowHdr( nY1,nY2, nInnerStartX,nDataY );
+        if ( pLocationData )
+            LocateRowHdr( nY1,nY2, nInnerStartX,nDataY, *pLocationData );
     }
 
     //  einfacher Rahmen
 
-    if (aTableParam.bGrid || aTableParam.bHeaders)
+    if ( bDoPrint && ( aTableParam.bGrid || aTableParam.bHeaders ) )
     {
         Size aOnePixel = pDev->PixelToLogic(Size(1,1));
         long nOneX = aOnePixel.Width();
@@ -2093,7 +2225,7 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
         //  nEndX/Y ohne Rahmen-Anpassung
     }
 
-    if (pPrinter)
+    if ( pPrinter && bDoPrint )
         pPrinter->EndPage();
 }
 
@@ -2276,7 +2408,7 @@ long ScPrintFunc::CountNotePages()
     long nNoteAdd;
     do
     {
-        nNoteAdd = PrintNotes( nPages, nNoteNr, FALSE );
+        nNoteAdd = PrintNotes( nPages, nNoteNr, FALSE, NULL );
         if (nNoteAdd)
         {
             nNoteNr += nNoteAdd;
@@ -2355,19 +2487,21 @@ void ScPrintFunc::ApplyPrintSettings()
 //  nDisplayStart = lfd. Nummer fuer Anzeige der Seitennummer
 
 long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
-                                long nStartPage, long nDisplayStart,
-                                SfxProgress* pProgress )
+                                long nStartPage, long nDisplayStart, BOOL bDoPrint,
+                                SfxProgress* pProgress, ScPreviewLocationData* pLocationData )
 {
     DBG_ASSERT(pDev,"Device == NULL");
     if (!pParamSet)
         return 0;
 
-    if ( pPrinter )
+    if ( pPrinter && bDoPrint )
         ApplyPrintSettings();
 
     //--------------------------------------------------------------------
 
     InitModes();
+    if ( pLocationData )
+        pLocationData->SetCellMapMode( aOffsetMode );
 
     MakeTableString();
 
@@ -2412,8 +2546,8 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                     {
                         if ( rPageRanges.IsSelected( nPageNo+nStartPage+1 ) )
                         {
-                            // PrintPage( nPageNo+nStartPage, nX1, nY1, nX2, nY2 );
-                            PrintPage( nPageNo+nDisplayStart, nX1, nY1, nX2, nY2 );
+                            PrintPage( nPageNo+nDisplayStart, nX1, nY1, nX2, nY2,
+                                        bDoPrint, pLocationData );
 
                             if ( pProgress )
                             {
@@ -2442,8 +2576,8 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                     {
                         if ( rPageRanges.IsSelected( nPageNo+nStartPage+1 ) )
                         {
-                            // PrintPage( nPageNo+nStartPage, nX1, nY1, nX2, nY2 );
-                            PrintPage( nPageNo+nDisplayStart, nX1, nY1, nX2, nY2 );
+                            PrintPage( nPageNo+nDisplayStart, nX1, nY1, nX2, nY2,
+                                        bDoPrint, pLocationData );
 
                             if ( pProgress )
                             {
@@ -2469,7 +2603,8 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
         if ( nPageNo+nStartPage <= nEndPage )
         {
             BOOL bPageSelected = rPageRanges.IsSelected( nPageNo+nStartPage+1 );
-            nNoteAdd = PrintNotes( nPageNo+nStartPage, nNoteNr, bPageSelected );
+            nNoteAdd = PrintNotes( nPageNo+nStartPage, nNoteNr, bDoPrint && bPageSelected,
+                                    ( bPageSelected ? pLocationData : NULL ) );
             if ( nNoteAdd )
             {
                 nNoteNr += nNoteAdd;

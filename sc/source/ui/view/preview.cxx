@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-29 19:46:58 $
+ *  last change: $Author: nn $ $Date: 2002-02-22 09:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,11 @@
 #include <svtools/itemset.hxx>
 #include <tools/multisel.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/sound.hxx>
 
 #include "preview.hxx"
 #include "prevwsh.hxx"
+#include "prevloc.hxx"
 #include "docsh.hxx"
 #include "printfun.hxx"
 #include "printopt.hxx"
@@ -112,7 +114,9 @@ ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pView
     bInPaint( FALSE ),
     bValid( FALSE ),
     bStateValid( FALSE ),
+    bLocationValid( FALSE ),
     bInGetState( FALSE ),
+    pLocationData( NULL ),
     pDrawView( NULL ),
     nTabsTested( 0 ),
     nPageNo( 0 ),
@@ -132,6 +136,7 @@ ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pView
 __EXPORT ScPreview::~ScPreview()
 {
     delete pDrawView;
+    delete pLocationData;
 }
 
 
@@ -315,7 +320,7 @@ void ScPreview::RecalcPages()                   // nur nPageNo geaendert
 }
 
 
-void __EXPORT ScPreview::Paint( const Rectangle& rRect )
+void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 {
     if (!bValid)
     {
@@ -327,6 +332,8 @@ void __EXPORT ScPreview::Paint( const Rectangle& rRect )
     Fraction aPreviewZoom( nZoom, 100 );
     Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
     MapMode aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
+
+    BOOL bDoPrint = ( pFillLocation == NULL );
 
     Size aPageSize;
     if ( nPageNo < nTotalPages )
@@ -352,7 +359,7 @@ void __EXPORT ScPreview::Paint( const Rectangle& rRect )
         aPage.SetTotalRange( Range(0,RANGE_MAX) );
         aPage.Select( aPageRange );
 
-        long nPrinted = pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart );
+        long nPrinted = pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart, bDoPrint, NULL, pFillLocation );
         DBG_ASSERT(nPrinted<=1, "was'n nu los?");
 
         SetMapMode(aMMMode);
@@ -374,27 +381,35 @@ void __EXPORT ScPreview::Paint( const Rectangle& rRect )
         delete pPrintFunc;
     }
 
-    long nPageEndX = aPageSize.Width()  - aOffset.X();
-    long nPageEndY = aPageSize.Height() - aOffset.Y();
-    Size aWinSize = GetOutputSize();
-    Point aWinEnd( aWinSize.Width(), aWinSize.Height() );
-    BOOL bRight  = nPageEndX <= aWinEnd.X();
-    BOOL bBottom = nPageEndY <= aWinEnd.Y();
-    if (bRight || bBottom)
+    if ( bDoPrint )
     {
-        SetLineColor();
-        SetFillColor(COL_LIGHTGRAY);
-        if (bRight)
-            DrawRect(Rectangle(nPageEndX,0, aWinEnd.X(),aWinEnd.Y()));
-        if (bBottom)
+        long nPageEndX = aPageSize.Width()  - aOffset.X();
+        long nPageEndY = aPageSize.Height() - aOffset.Y();
+        Size aWinSize = GetOutputSize();
+        Point aWinEnd( aWinSize.Width(), aWinSize.Height() );
+        BOOL bRight  = nPageEndX <= aWinEnd.X();
+        BOOL bBottom = nPageEndY <= aWinEnd.Y();
+        if (bRight || bBottom)
         {
+            SetLineColor();
+            SetFillColor(COL_LIGHTGRAY);
             if (bRight)
-                DrawRect(Rectangle(0,nPageEndY, nPageEndX,aWinEnd.Y()));    // Ecke nicht doppelt
-            else
-                DrawRect(Rectangle(0,nPageEndY, aWinEnd.X(),aWinEnd.Y()));
+                DrawRect(Rectangle(nPageEndX,0, aWinEnd.X(),aWinEnd.Y()));
+            if (bBottom)
+            {
+                if (bRight)
+                    DrawRect(Rectangle(0,nPageEndY, nPageEndX,aWinEnd.Y()));    // Ecke nicht doppelt
+                else
+                    DrawRect(Rectangle(0,nPageEndY, aWinEnd.X(),aWinEnd.Y()));
+            }
         }
     }
+}
 
+
+void __EXPORT ScPreview::Paint( const Rectangle& rRect )
+{
+    DoPrint( NULL );
     pViewShell->UpdateScrollBars();
 }
 
@@ -422,6 +437,23 @@ void __EXPORT ScPreview::KeyInput( const KeyEvent& rKEvt )
 }
 
 
+const ScPreviewLocationData& ScPreview::GetLocationData()
+{
+    if ( !pLocationData )
+    {
+        pLocationData = new ScPreviewLocationData( pDocShell->GetDocument(), this );
+        bLocationValid = FALSE;
+    }
+    if ( !bLocationValid )
+    {
+        pLocationData->Clear();
+        DoPrint( pLocationData );
+        bLocationValid = TRUE;
+    }
+    return *pLocationData;
+}
+
+
 void ScPreview::DataChanged(BOOL bNewTime)
 {
     if (bNewTime)
@@ -431,6 +463,7 @@ void ScPreview::DataChanged(BOOL bNewTime)
     }
 
     bValid = FALSE;
+    bLocationValid = FALSE;
     Invalidate();
 }
 
@@ -473,6 +506,7 @@ void ScPreview::SetZoom(USHORT nNewZoom)
 //      DataChanged();
 
         bStateValid = FALSE;
+        bLocationValid = FALSE;
         DoInvalidate();
         Invalidate();
     }
@@ -484,6 +518,7 @@ void ScPreview::SetPageNo( long nPage )
     nPageNo = nPage;
     RecalcPages();
     UpdateDrawView();       // Tabelle evtl. geaendert
+    bLocationValid = FALSE;
     Invalidate();
 }
 
@@ -578,6 +613,7 @@ void ScPreview::SetXOffset( long nX )
         if (!bInPaint)
             Invalidate();
     }
+    bLocationValid = FALSE;
 }
 
 
@@ -600,6 +636,7 @@ void ScPreview::SetYOffset( long nY )
         if (!bInPaint)
             Invalidate();
     }
+    bLocationValid = FALSE;
 }
 
 
@@ -658,6 +695,7 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
             pDocShell->UpdateFontList();
 
         Invalidate();
+        bLocationValid = FALSE;
     }
 }
 

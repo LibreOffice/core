@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mh $ $Date: 2000-12-07 09:14:57 $
+#   last change: $Author: nn $ $Date: 2002-02-22 09:57:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,6 +118,7 @@ SLOFILES =  \
         $(SLO)$/preview.obj \
         $(SLO)$/prevwsh.obj \
         $(SLO)$/prevwsh2.obj \
+        $(SLO)$/prevloc.obj \
         $(SLO)$/editsh.obj \
         $(SLO)$/pivotsh.obj \
         $(SLO)$/auditsh.obj \
