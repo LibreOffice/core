@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 17:50:37 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:56:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=lingu
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -75,13 +73,6 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        hyp.cxx \
-        olmenu.cxx \
-        sdrspell.cxx \
-        hhcwrp.cxx \
-        splwrp.cxx
-
 SLOFILES =  \
         $(SLO)$/hyp.obj \
         $(SLO)$/olmenu.obj \
@@ -89,7 +80,8 @@ SLOFILES =  \
         $(SLO)$/hhcwrp.obj \
         $(SLO)$/splwrp.obj
 
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         olmenu.src
 
 # --- Targets -------------------------------------------------------
