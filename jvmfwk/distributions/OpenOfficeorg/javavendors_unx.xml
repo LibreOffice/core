@@ -12,6 +12,6 @@
  </vendorInfos>
 
  <plugins>
-  <library vendor="Sun Microsystems Inc.">program/sunjavaplugin.so</library>
+  <library vendor="Sun Microsystems Inc.">sunjavaplugin.so</library>
  </plugins>
 </javaSelection>
