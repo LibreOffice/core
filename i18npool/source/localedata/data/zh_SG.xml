@@ -435,7 +435,10 @@
 <quarter4Word>第4季度</quarter4Word>
 <aboveWord>上面</aboveWord>
 <belowWord>下面</belowWord>
-<quarterAbbreviation>Q</quarterAbbreviation>
+<quarter1Abbreviation>Q1</quarter1Abbreviation>
+<quarter2Abbreviation>Q2</quarter2Abbreviation>
+<quarter3Abbreviation>Q3</quarter3Abbreviation>
+<quarter4Abbreviation>Q4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
 

@@ -378,7 +378,10 @@
 <quarter4Word>4. kvartal</quarter4Word>
 <aboveWord>over</aboveWord>
 <belowWord>under</belowWord>
-<quarterAbbreviation>K</quarterAbbreviation>
+<quarter1Abbreviation>K1</quarter1Abbreviation>
+<quarter2Abbreviation>K2</quarter2Abbreviation>
+<quarter3Abbreviation>K3</quarter3Abbreviation>
+<quarter4Abbreviation>K4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel>

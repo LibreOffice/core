@@ -378,7 +378,10 @@
 <quarter4Word>4.negyed</quarter4Word>
 <aboveWord>felett</aboveWord>
 <belowWord>alatt</belowWord>
-<quarterAbbreviation>N</quarterAbbreviation>
+<quarter1Abbreviation>N1</quarter1Abbreviation>
+<quarter2Abbreviation>N2</quarter2Abbreviation>
+<quarter3Abbreviation>N3</quarter3Abbreviation>
+<quarter4Abbreviation>N4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel>

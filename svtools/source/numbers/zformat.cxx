@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: er $ $Date: 2002-07-26 12:57:38 $
+ *  last change: $Author: er $ $Date: 2002-07-26 20:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2793,11 +2793,10 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             break;
             case NF_KEY_Q:                  // Q
             {
-                OutString += rLoc().getQuarterAbbreviation();
                 if ( bOtherCalendar )
                     ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-                OutString += sal_Unicode( '1' + (nVal / 3) );
+                OutString += rLoc().getQuarterAbbreviation( nVal / 3 );
                 if ( bOtherCalendar )
                     ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
@@ -3117,11 +3116,10 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             break;
             case NF_KEY_Q:                  // Q
             {
-                OutString += rLoc().getQuarterAbbreviation();
                 if ( bOtherCalendar )
                     ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-                OutString += sal_Unicode( '1' + (nVal / 3) );
+                OutString += rLoc().getQuarterAbbreviation( nVal / 3 );
                 if ( bOtherCalendar )
                     ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }

@@ -378,7 +378,10 @@
 <quarter4Word>4º trimestre</quarter4Word>
 <aboveWord>acima</aboveWord>
 <belowWord>abaixo</belowWord>
-<quarterAbbreviation>T</quarterAbbreviation>
+<quarter1Abbreviation>T1</quarter1Abbreviation>
+<quarter2Abbreviation>T2</quarter2Abbreviation>
+<quarter3Abbreviation>T3</quarter3Abbreviation>
+<quarter4Abbreviation>T4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel>

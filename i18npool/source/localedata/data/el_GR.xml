@@ -385,7 +385,10 @@
 <quarter4Word>4ο τρίμηνο</quarter4Word>
 <aboveWord>επάνω</aboveWord>
 <belowWord>κάτω</belowWord>
-<quarterAbbreviation>Q</quarterAbbreviation>
+<quarter1Abbreviation>Q1</quarter1Abbreviation>
+<quarter2Abbreviation>Q2</quarter2Abbreviation>
+<quarter3Abbreviation>Q3</quarter3Abbreviation>
+<quarter4Abbreviation>Q4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel>

@@ -378,7 +378,10 @@
 <quarter4Word>4th fjórðungur</quarter4Word>
 <aboveWord>yfir</aboveWord>
 <belowWord>undir</belowWord>
-<quarterAbbreviation>F</quarterAbbreviation>
+<quarter1Abbreviation>F1</quarter1Abbreviation>
+<quarter2Abbreviation>F2</quarter2Abbreviation>
+<quarter3Abbreviation>F3</quarter3Abbreviation>
+<quarter4Abbreviation>F4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel>

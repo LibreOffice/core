@@ -207,7 +207,7 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 <!ELEMENT ForbiddenLineBeginCharacters (#PCDATA)>
 <!ELEMENT ForbiddenLineEndCharacters (#PCDATA)>
 
-<!ELEMENT ReservedWords  (trueWord, falseWord, quarter1Word, quarter2Word, quarter3Word, quarter4Word, aboveWord, belowWord, quarterAbbreviation)>
+<!ELEMENT ReservedWords  (trueWord, falseWord, quarter1Word, quarter2Word, quarter3Word, quarter4Word, aboveWord, belowWord, quarter1Abbreviatio, quarter2Abbreviatio, quarter3Abbreviationnn, quarter4Abbreviation)>
 <!-- order is significant! -->
 <!ELEMENT trueWord (#PCDATA)>
 <!ELEMENT falseWord (#PCDATA)>
@@ -217,7 +217,10 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 <!ELEMENT quarter4Word (#PCDATA)>
 <!ELEMENT aboveWord (#PCDATA)>
 <!ELEMENT belowWord (#PCDATA)>
-<!ELEMENT quarterAbbreviation (#PCDATA)>    <!-- "Q" (quarter), "T" (trimestre), ... -->
+<!ELEMENT quarter1Abbreviation (#PCDATA)>    <!-- "Q1" (quarter), "T1" (trimestre), ... -->
+<!ELEMENT quarter2Abbreviation (#PCDATA)>
+<!ELEMENT quarter3Abbreviation (#PCDATA)>
+<!ELEMENT quarter4Abbreviation (#PCDATA)>
 
 
 <!--
