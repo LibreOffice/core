@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cp $ $Date: 2001-11-19 18:00:16 $
+ *  last change: $Author: cp $ $Date: 2002-01-24 16:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,6 +503,8 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
 {
     // only for ps fonts
     if ((meBaseType != fonttype::Builtin) && (meBaseType != fonttype::Type1))
+        return sal_False;
+    if (mnBaseEncoding == RTL_TEXTENCODING_SYMBOL)
         return sal_False;
 
     PrintFontManager &rMgr = rGfx.GetFontMgr();
