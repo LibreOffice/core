@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-10 15:19:15 $
+ *  last change: $Author: fme $ $Date: 2001-11-27 13:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ public:
     SwMarginPortion *CalcLeftMargin();
 
     inline SwTwips GetHangingMargin() const
-        { if( IsHanging() ) return _GetHangingMargin(); return 0; }
+        { return _GetHangingMargin(); }
 
     // fuer die Sonderbehandlung bei leeren Zeilen
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );

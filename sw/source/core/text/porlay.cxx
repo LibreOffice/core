@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-20 10:49:48 $
+ *  last change: $Author: fme $ $Date: 2001-11-27 13:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,6 +1033,10 @@ SwTwips SwLineLayout::_GetHangingMargin() const
             if( nDiff )
                 bFound = sal_True;
         }
+        // the last post its portion
+        else if ( pPor->IsPostItsPortion() && ! pPor->GetPortion() )
+            nDiff = nAscent;
+
         pPor = pPor->GetPortion();
     }
     if( !bFound ) // actualize the hanging-flag
