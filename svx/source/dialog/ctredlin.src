@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:32:18 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ czech ] = "Filtr";
         Text[ hebrew ] = "‮סינון‬";
         Text[ hindi ] = "फ़िल्टर";
+        Text[ slovak ] = "Filter";
     };
     HelpId = HID_REDLINING_FILTER_PAGE ;
     OutputSize = TRUE ;
@@ -134,6 +135,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ czech ] = "Datum";
         Text[ hebrew ] = "‮על פי תאריך‬";
         Text[ hindi ] = "~दिनांक";
+        Text[ slovak ] = "~Dátum";
     };
     ListBox LB_DATE
     {
@@ -387,6 +389,15 @@ TabPage SID_REDLIN_FILTER_PAGE
         < "बीच में" ; Default ; > ;
         < "से संचित कर रहा है" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "skôr ako" ; Default ; > ;
+        < "od" ; Default ; > ;
+        < "je rovné " ; Default ; > ;
+        < "nie je rovné" ; Default ; > ;
+        < "medzi" ; Default ; > ;
+        < "od zápisu" ; Default ; > ;
+    };
     };
     DateField DF_DATE
     {
@@ -462,6 +473,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ czech ] = "Nastavit datum a čas";
         QuickHelpText[ hebrew ] = "Datum/Uhrzeit einstellen";
         QuickHelpText[ hindi ] = "दिनांक/समय सेट्ट करो";
+        QuickHelpText[ slovak ] = "Nastaviť dátum a čas";
     };
     FixedText FT_DATE2
     {
@@ -496,6 +508,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ czech ] = "a";
         Text[ hebrew ] = "‮ו ‬";
         Text[ hindi ] = "और";
+        Text[ slovak ] = "a";
     };
     DateField DF_DATE2
     {
@@ -571,6 +584,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ czech ] = "Nastavit datum a čas";
         QuickHelpText[ hebrew ] = "Datum/Uhrzeit einstellen";
         QuickHelpText[ hindi ] = "दिनांक/समय सेट्ट करो";
+        QuickHelpText[ slovak ] = "Nastaviť dátum a čas";
     };
     CheckBox CB_AUTOR
     {
@@ -605,6 +619,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ czech ] = "Autor";
         Text[ hebrew ] = "‮מחבר‬";
         Text[ hindi ] = "~लेखक";
+        Text[ slovak ] = "~Autor";
     };
     ListBox LB_AUTOR
     {
@@ -649,6 +664,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ czech ] = "Rozsah";
         Text[ hebrew ] = "‮טווח‬";
         Text[ hindi ] = "~फ़ैलाव";
+        Text[ slovak ] = "~Rozsah";
     };
     Edit ED_RANGE
     {
@@ -688,6 +704,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ czech ] = "Činnost";
         Text[ hebrew ] = "‮פעולה‬";
         Text[ hindi ] = "~कार्य";
+        Text[ slovak ] = "Či~nnosť";
     };
     ListBox LB_ACTION
     {
@@ -754,11 +771,13 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ thai ] = "...";
         QuickHelpText[ thai ] = "Set Reference";
         Text[ czech ] = "...";
-        Text[ hebrew ] = "...";
+        Text[ hebrew ] = "‮...‬";
         QuickHelpText[ czech ] = "Nastavit odkaz";
         QuickHelpText[ hebrew ] = "Tabellenreferenz einstellen";
         Text[ hindi ] = "...";
         QuickHelpText[ hindi ] = "रेफरेन्स सेट्ट करो";
+        Text[ slovak ] = "...";
+        QuickHelpText[ slovak ] = "Nastaviť odkaz";
     };
     CheckBox CB_COMMENT
     {
@@ -793,6 +812,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ czech ] = "Komentář";
         Text[ hebrew ] = "‮הערה‬";
         Text[ hindi ] = "अपवाद";
+        Text[ slovak ] = "Komentár";
     };
     Edit ED_COMMENT
     {
@@ -845,6 +865,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ czech ] = "Seznam";
         Text[ hebrew ] = "‮רשימת שינויים‬";
         Text[ hindi ] = "सूची";
+        Text[ slovak ] = "Zoznam";
     };
     Control DG_VIEW
     {
@@ -885,6 +906,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ czech ] = "Přijmout";
         Text[ hebrew ] = "‮קבלת שינוי‬";
         Text[ hindi ] = "~स्वीकार";
+        Text[ slovak ] = "~Prijať";
     };
     PushButton PB_REJECT
     {
@@ -918,6 +940,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ czech ] = "Odmítnout";
         Text[ hebrew ] = "‮דחית שינוי‬";
         Text[ hindi ] = "~अस्वीकार";
+        Text[ slovak ] = "~Odmietnuť";
     };
     PushButton PB_ACCEPTALL
     {
@@ -951,6 +974,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ czech ] = "Přijmout vše";
         Text[ hebrew ] = "‮קבלת כל השינויים‬";
         Text[ hindi ] = "सब स्वी~कार";
+        Text[ slovak ] = "Prijať ~všetko";
     };
     PushButton PB_REJECTALL
     {
@@ -984,6 +1008,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ czech ] = "Odmítnout vše";
         Text[ hebrew ] = "‮דחית כל השינויים‬";
         Text[ hindi ] = "सब अस्वीका~र";
+        Text[ slovak ] = "O~dmietnuť všetko";
     };
 
     PushButton PB_UNDO
@@ -1019,6 +1044,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ czech ] = "Zpět";
         Text[ hebrew ] = "‮ביטול פעולה‬";
         Text[ hindi ] = "अनावृत्ति";
+        Text[ slovak ] = "Späť";
     };
     String STR_TITLE1
     {
@@ -1049,6 +1075,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ czech ] = "Činnost";
         Text[ hebrew ] = "‮פעולה‬";
         Text[ hindi ] = "कार्य";
+        Text[ slovak ] = "Činnosť";
     };
     String STR_TITLE2
     {
@@ -1079,6 +1106,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
+        Text[ slovak ] = "Umiestnenie";
     };
     String STR_TITLE3
     {
@@ -1109,6 +1137,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ czech ] = "Autor";
         Text[ hebrew ] = "‮מחבר‬";
         Text[ hindi ] = "लेखक";
+        Text[ slovak ] = "Autor";
     };
     String STR_TITLE4
     {
@@ -1139,6 +1168,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ czech ] = "Datum";
         Text[ hebrew ] = "‮תאריך‬";
         Text[ hindi ] = "दिनांक";
+        Text[ slovak ] = "Dátum";
     };
     String STR_TITLE5
     {
@@ -1169,8 +1199,11 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ czech ] = "Komentář";
         Text[ hebrew ] = "‮הערה‬";
         Text[ hindi ] = "अपवाद";
+        Text[ slovak ] = "Komentár";
     };
 };
+
+
 
 
 
