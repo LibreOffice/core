@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldump.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-11 09:52:26 $
+ *  last change: $Author: mh $ $Date: 2001-08-15 03:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,7 +628,7 @@ bool LibDump::DumpError( unsigned long n )
 *********************************************************************/
 
 
-usage()
+int usage()
 {
     LibDump::DumpError(99);
     exit(0);
