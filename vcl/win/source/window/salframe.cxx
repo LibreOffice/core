@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-01 09:18:25 $
+ *  last change: $Author: ssa $ $Date: 2001-11-02 18:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,9 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     pFrame->maFrameData.mnHeight = aRect.bottom;
     ImplSaveFrameState( pFrame );
     pFrame->maFrameData.mbDefPos = TRUE;
+
+    RECT aWindowRect;
+    GetWindowRect( hWnd, &aWindowRect );   // x,y in screen coordinates, width and height with border
 
     return pFrame;
 }
@@ -1060,20 +1063,21 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
             nY = aPt.y;
     }
 
+    int     nScreenX;
+    int     nScreenY;
+    int     nScreenWidth;
+    int     nScreenHeight;
+
+    RECT aRect;
+    SystemParametersInfo( SPI_GETWORKAREA, 0, &aRect, 0 );
+    nScreenX        = aRect.left;
+    nScreenY        = aRect.top;
+    nScreenWidth    = aRect.right-aRect.left;
+    nScreenHeight   = aRect.bottom-aRect.top;
+
     if ( maFrameData.mbDefPos && (nPosSize & SWP_NOMOVE)) // we got no positioning request, so choose default position
     {
         // center window
-        int     nScreenX;
-        int     nScreenY;
-        int     nScreenWidth;
-        int     nScreenHeight;
-
-        RECT aRect;
-        SystemParametersInfo( SPI_GETWORKAREA, 0, &aRect, 0 );
-        nScreenX        = aRect.left;
-        nScreenY        = aRect.top;
-        nScreenWidth    = aRect.right-aRect.left;
-        nScreenHeight   = aRect.bottom-aRect.top;
 
         HWND hWndParent = ::GetParent( maFrameData.mhWnd );
         // Search for TopLevel Frame
@@ -1109,15 +1113,6 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
             nY = (nScreenHeight-nHeight)/2 + nScreenY;
         }
 
-        // Adjust Window in the screen
-        if ( nX+nWidth > nScreenX+nScreenWidth )
-            nX = (nScreenX+nScreenWidth) - nWidth;
-        if ( nY+nHeight > nScreenY+nScreenHeight )
-            nY = (nScreenY+nScreenHeight) - nHeight;
-        if ( nX < nScreenX )
-            nX = nScreenX;
-        if ( nY < nScreenY )
-            nY = nScreenY;
 
         //if ( bVisible )
         //    maFrameData.mbDefPos = FALSE;
@@ -1127,6 +1122,16 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
         nEvent = SALEVENT_MOVERESIZE;
     }
 
+
+    // Adjust Window in the screen
+    if ( nX+nWidth > nScreenX+nScreenWidth )
+        nX = (nScreenX+nScreenWidth) - nWidth;
+    if ( nY+nHeight > nScreenY+nScreenHeight )
+        nY = (nScreenY+nScreenHeight) - nHeight;
+    if ( nX < nScreenX )
+        nX = nScreenX;
+    if ( nY < nScreenY )
+        nY = nScreenY;
 
     SetWindowPos( maFrameData.mhWnd, 0, nX, nY, (int)nWidth, (int)nHeight, SWP_NOZORDER | SWP_NOACTIVATE | nPosSize );
 
