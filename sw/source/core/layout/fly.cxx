@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:08:41 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1486,8 +1486,14 @@ void CalcCntnt( SwLayoutFrm *pLay,
 
             // #111937# The keep-attribute can cause the position
             // of the prev to be invalid:
+            // OD 2004-03-15 #116560# - Do not consider invalid previous frame
+            // due to its keep-attribute, if current frame is a follow or is locked.
             SwFrm* pTmpPrev = pFrm->FindPrev();
-            bool bPrevInvalid = pTmpPrev &&
+            bool bPrevInvalid = ( pFrm->IsFlowFrm()
+                                  ? ( !SwFlowFrm::CastFlowFrm(pFrm)->IsFollow() &&
+                                      !SwFlowFrm::CastFlowFrm(pFrm)->IsJoinLocked() )
+                                  : true ) &&
+                                pTmpPrev &&
                                !pTmpPrev->GetValidPosFlag() &&
                                 pTmpPrev->GetAttrSet()->GetKeep().GetValue() &&
                                 pLay->IsAnLower( pTmpPrev );
@@ -1503,36 +1509,41 @@ void CalcCntnt( SwLayoutFrm *pLay,
                     if ( pO->ISA(SwVirtFlyDrawObj) )
                     {
                         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                        pFly->InvalidatePos();
-                        SwRect aRect( pFly->Frm() );
-                        pFly->Calc();
-                        if ( aRect != pFly->Frm() )
+                        // OD 2004-03-16 #116560# - no invalidation and format
+                        // of Writer fly frame, if it's locked.
+                        if ( !pFly->IsLocked() && !pFly->IsColLocked() )
                         {
-                            bAgain = TRUE;
-                            if ( pAgainFly2 == pFly )
+                            pFly->InvalidatePos();
+                            SwRect aRect( pFly->Frm() );
+                            pFly->Calc();
+                            if ( aRect != pFly->Frm() )
                             {
-                                //Oszillation unterbinden.
-                                SwFrmFmt *pFmt = pFly->GetFmt();
-                                SwFmtSurround aAttr( pFmt->GetSurround() );
-                                if( SURROUND_THROUGHT != aAttr.GetSurround() )
+                                bAgain = TRUE;
+                                if ( pAgainFly2 == pFly )
                                 {
-                                    // Bei autopositionierten hilft manchmal nur
-                                    // noch, auf Durchlauf zu schalten
-                                    if( pFly->IsAutoPos() &&
-                                        SURROUND_PARALLEL == aAttr.GetSurround() )
-                                        aAttr.SetSurround( SURROUND_THROUGHT );
-                                    else
-                                        aAttr.SetSurround( SURROUND_PARALLEL );
-                                    pFmt->LockModify();
-                                    pFmt->SetAttr( aAttr );
-                                    pFmt->UnlockModify();
+                                    //Oszillation unterbinden.
+                                    SwFrmFmt *pFmt = pFly->GetFmt();
+                                    SwFmtSurround aAttr( pFmt->GetSurround() );
+                                    if( SURROUND_THROUGHT != aAttr.GetSurround() )
+                                    {
+                                        // Bei autopositionierten hilft manchmal nur
+                                        // noch, auf Durchlauf zu schalten
+                                        if( pFly->IsAutoPos() &&
+                                            SURROUND_PARALLEL == aAttr.GetSurround() )
+                                            aAttr.SetSurround( SURROUND_THROUGHT );
+                                        else
+                                            aAttr.SetSurround( SURROUND_PARALLEL );
+                                        pFmt->LockModify();
+                                        pFmt->SetAttr( aAttr );
+                                        pFmt->UnlockModify();
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                if ( pAgainFly1 == pFly )
-                                    pAgainFly2 = pFly;
-                                pAgainFly1 = pFly;
+                                else
+                                {
+                                    if ( pAgainFly1 == pFly )
+                                        pAgainFly2 = pFly;
+                                    pAgainFly1 = pFly;
+                                }
                             }
                         }
                         if ( !pFrm->GetDrawObjs() )
