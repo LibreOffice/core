@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
+ *  last change: $Author: sb $ $Date: 2000-11-09 12:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@
 #include "appuno.hxx"
 
 SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
+        bServer( false ),
         pAppCfg (0),
         pProgress(0),
         pPool(0),
