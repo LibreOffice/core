@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-09-13 17:45:41 $
+ *  last change: $Author: jb $ $Date: 2002-09-16 08:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,7 @@ uno::Reference<backend::XSchema> SAL_CALL LocalSingleBackend::getSchema(
     if (errorCode != osl_File_E_None) {
         throw backend::BackendAccessException(
                 FileHelper::createOSLErrorString(errorCode),
-                *this, uno::makeAny(0)) ;
+                *this, uno::Any()) ;
     }
     uno::Sequence<uno::Any> arguments(1) ;
     uno::Reference<io::XInputStream> stream =
