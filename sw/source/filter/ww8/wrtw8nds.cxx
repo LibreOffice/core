@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:54 $
+ *  last change: $Author: cmc $ $Date: 2002-08-28 15:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,17 @@
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
+#ifndef __SGI_STL_LIST
+#include <list>
+#endif
 #ifndef __SGI_STL_UTILITY
 #include <utility>
+#endif
+#ifndef __SGI_STL_ALGORITHM
+#include <algorithm>
+#endif
+#ifndef __SGI_STL_FUNCTIONAL
+#include <functional>
 #endif
 
 #include <unicode/ubidi.h>
@@ -247,12 +256,30 @@ void WW8_AttrIter::GetItems( WW8Bytes& ) const
 // ein Attribut ohne Ende und mit \xff im Text befindet.
 // Mit OutAttr() werden die Attribute an der angegebenen SwPos
 // ausgegeben.
+
+class CurrentCharSet
+{
+private:
+    const SwTxtAttr *mpPointer;
+    rtl_TextEncoding meCharSet;
+public:
+    rtl_TextEncoding CharSet() const {return meCharSet;}
+    CurrentCharSet(const SwTxtAttr *pPointer, rtl_TextEncoding eCharSet)
+        : mpPointer(pPointer), meCharSet(eCharSet) {}
+    bool operator==(const CurrentCharSet &rSecond) const;
+};
+
+bool CurrentCharSet::operator==(const CurrentCharSet &rSecond) const
+{
+    return (mpPointer == rSecond.mpPointer);
+}
+
 class WW8_SwAttrIter : public WW8_AttrIter
 {
 private:
     const SwTxtNode& rNd;
-    SvPtrarr aTxtAtrArr;
-    SvUShorts aChrSetArr;
+    std::list<CurrentCharSet> maCharSets;
+    typedef std::list<CurrentCharSet>::iterator mychsiter;
     const SwRedline* pCurRedline;
     xub_StrLen nAktSwPos;
     xub_StrLen nTmpSwPos;                   // fuer HasItem()
@@ -302,10 +329,9 @@ public:
     bool IsParaRTL() const {return mbParaIsRTL; }
 };
 
-WW8_SwAttrIter::WW8_SwAttrIter( SwWW8Writer& rWr, const SwTxtNode& rTxtNd )
-    : WW8_AttrIter( rWr ), rNd( rTxtNd ), nAktSwPos( 0 ), nTmpSwPos( 0 ),
-    aTxtAtrArr( 0, 4 ), aChrSetArr( 0, 4 ), nCurRedlinePos( USHRT_MAX ),
-    pCurRedline(0), mbCharIsRTL(false)
+WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
+    : WW8_AttrIter(rWr), rNd(rTxtNd), nAktSwPos(0), nTmpSwPos(0),
+    nCurRedlinePos(USHRT_MAX), pCurRedline(0), mbCharIsRTL(false)
 {
     SwPosition aPos(rTxtNd);
     if (FRMDIR_HORI_RIGHT_TOP == rWr.pDoc->GetTextDirection(aPos))
@@ -372,8 +398,8 @@ WW8_SwAttrIter::WW8_SwAttrIter( SwWW8Writer& rWr, const SwTxtNode& rTxtNd )
 
 rtl_TextEncoding WW8_SwAttrIter::GetNextCharSet() const
 {
-    if (aChrSetArr.Count())
-        return (rtl_TextEncoding)aChrSetArr[ aChrSetArr.Count() - 1 ];
+    if (!maCharSets.empty())
+        return maCharSets.back().CharSet();
     return eNdChrSet;
 }
 
@@ -477,43 +503,41 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
 
 void WW8_SwAttrIter::SetCharSet(const SwTxtAttr& rAttr, bool bStart)
 {
-    void* p = 0;
+    const SwTxtAttr* p = 0;
     rtl_TextEncoding eChrSet;
     const SfxPoolItem& rItem = rAttr.GetAttr();
-    switch( rItem.Which() )
+    switch(rItem.Which())
     {
-    case RES_CHRATR_FONT:
-        p = (void*)&rAttr;
-        eChrSet = ((SvxFontItem&)rItem).GetCharSet();
-        break;
-    case RES_TXTATR_CHARFMT:
-        {
-            const SfxPoolItem* pItem;
-            if( ((SwFmtCharFmt&)rItem).GetCharFmt() && SFX_ITEM_SET ==
-                ((SwFmtCharFmt&)rItem).GetCharFmt()->GetItemState(
-                    RES_CHRATR_FONT, true, &pItem ))
+        case RES_CHRATR_FONT:
+            p = &rAttr;
+            eChrSet = ((const SvxFontItem&)rItem).GetCharSet();
+            break;
+        case RES_TXTATR_CHARFMT:
             {
-                eChrSet = ((SvxFontItem*)pItem)->GetCharSet();
-                p = (void*)&rAttr;
+                const SfxPoolItem* pItem;
+                if( ((SwFmtCharFmt&)rItem).GetCharFmt() && SFX_ITEM_SET ==
+                    ((SwFmtCharFmt&)rItem).GetCharFmt()->GetItemState(
+                        RES_CHRATR_FONT, true, &pItem ))
+                {
+                    eChrSet = ((const SvxFontItem*)pItem)->GetCharSet();
+                    p = &rAttr;
+                }
             }
-        }
-        break;
+            break;
     }
 
-    if( p )
+    if (p)
     {
-        USHORT nPos;
-        if( bStart )
+        CurrentCharSet aEntry(p, GetExtendedTextEncoding(eChrSet));
+        if (bStart)
+            maCharSets.push_back(aEntry);
+        else
         {
-            nPos = aChrSetArr.Count();
-            eChrSet = GetExtendedTextEncoding(eChrSet);
-            aChrSetArr.Insert( eChrSet, nPos );
-            aTxtAtrArr.Insert( p, nPos );
-        }
-        else if( USHRT_MAX != ( nPos = aTxtAtrArr.GetPos( p )) )
-        {
-            aTxtAtrArr.Remove( nPos );
-            aChrSetArr.Remove( nPos );
+            mychsiter aIter = std::find(maCharSets.begin(), maCharSets.end(),
+                aEntry);
+            ASSERT(aIter != maCharSets.end(), "Pop entry that isn't there ?");
+            if (aIter != maCharSets.end())
+                maCharSets.erase(aIter);
         }
     }
 }
