@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-19 15:33:53 $
+ *  last change: $Author: os $ $Date: 2001-11-26 15:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,18 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
     if(pTemp)
         *pTemp = *pImpl->pMergeData;
     else
-        aDataSourceParams.Insert(new SwDSParam(*pImpl->pMergeData), aDataSourceParams.Count());
+    {
+        //#94779# calls from the calculator may have added a connection with an invalid commandtype
+        //"real" data base connections added here have to re-use the already available
+        //DSData and set the correct CommandType
+        SwDBData aTempData(aData);
+        pTemp = FindDSData(aData, FALSE);
+        aData.nCommandType = -1;
+        if(pTemp)
+            *pTemp = *pImpl->pMergeData;
+        else
+            aDataSourceParams.Insert(new SwDSParam(*pImpl->pMergeData), aDataSourceParams.Count());
+    }
     if(!pImpl->pMergeData->xConnection.is())
         pImpl->pMergeData->xConnection = xConnection;
 
@@ -1893,9 +1904,16 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, BOOL bCreate)
         SwDSParam* pParam = aDataSourceParams[nPos];
         if(rData.sDataSource == pParam->sDataSource &&
             rData.sCommand == pParam->sCommand &&
-            (rData.nCommandType == -1 || rData.nCommandType == pParam->nCommandType))
+            (rData.nCommandType == -1 || rData.nCommandType == pParam->nCommandType ||
+            (bCreate && pParam->nCommandType == -1)))
             {
+                //#94779# calls from the calculator may add a connection with an invalid commandtype
+                //later added "real" data base connections have to re-use the already available
+                //DSData and set the correct CommandType
+                if(bCreate && pParam->nCommandType == -1)
+                    pParam->nCommandType = rData.nCommandType;
                 pFound = pParam;
+
                 break;
             }
     }
