@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.37 $
+*  $Revision: 1.38 $
 *
-*  last change: $Author: ka $ $Date: 2004-08-27 13:31:24 $
+*  last change: $Author: kz $ $Date: 2004-08-31 13:44:19 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1861,7 +1861,7 @@ File gid_File_Lib_Xml2
     Styles = (PACKED,SETUPZIP);
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT3(libxml2,UNXSUFFIX,.2));
+    Name = STRING(CONCAT3(libxml2,UNXSUFFIX,.2.5.11));
   #else
     Name = "libxml2.dll";
   #endif
@@ -1905,3 +1905,70 @@ UNO_JAR_FILE( gid_File_Jar_AVmedia, avmedia )
 SPECIAL_UNO_LIB_FILE( gid_File_Lib_AVMediaWin, avmediawin )
 #endif
 #endif
+
+File gid_File_Lib_XSec_Framework
+    TXT_FILE_BODY;
+	#ifdef UNX
+        Name = STRING(CONCAT2(libxsec_fw,UNXSUFFIX));
+    #else
+        Name = "xsec_fw.dll";
+    #endif
+    Dir = gid_Dir_Program;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+End
+
+File gid_File_Lib_XSec_XmlSec
+    TXT_FILE_BODY;
+	#ifdef UNX
+        Name = STRING(CONCAT2(libxsec_xmlsec,UNXSUFFIX));
+    #else
+        Name = "xsec_xmlsec.dll";
+    #endif
+    Dir = gid_Dir_Program;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+End
+
+File gid_File_Lib_XSec_XMLSecurity
+    TXT_FILE_BODY;
+	#ifdef UNX
+        Name = STRING(CONCAT2(libxmlsecurity,UNXSUFFIX));
+    #else
+        Name = "xmlsecurity.dll";
+    #endif
+    Dir = gid_Dir_Program;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+End
+
+File gid_File_Lib_LibXMLSec_xmlseccore
+    TXT_FILE_BODY;
+	#ifdef UNX
+        Name = STRING(CONCAT2(libxmlsec,UNXSUFFIX));
+    #else
+        Name = "xmlsec.dll";
+    #endif
+    Dir = gid_Dir_Program;
+    Styles = (PACKED,UNO_COMPONENT);
+End
+
+#ifdef WNT
+File gid_File_Lib_LibXMLSec_xmlsecmscrypto
+    TXT_FILE_BODY;
+    Name = "xmlsec-mscrypto.dll";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED,UNO_COMPONENT);
+End
+#endif
+
+#ifdef UNX
+File gid_File_Lib_LibXMLSec_xmlsecnss
+    TXT_FILE_BODY;
+    Name = STRING(CONCAT2(libxmlsec-nss,UNXSUFFIX));
+    Dir = gid_Dir_Program;
+    Styles = (PACKED,UNO_COMPONENT);
+End
+#endif
+
+//i20156 - end
