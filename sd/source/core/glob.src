@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-30 19:58:58 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 22:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2108,3 +2108,4 @@ String STR_POOLSHEET_ARROW
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Arrow";
 };
+
