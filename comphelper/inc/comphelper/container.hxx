@@ -2,9 +2,9 @@
  *
  *  $RCSfile: container.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:30 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //.........................................................................
 namespace comphelper
@@ -84,7 +87,7 @@ namespace comphelper
 //========================================================================
 /** ein Iterator, der von einem XIndexAccess ausgehend alle Elemente durchiteriert (pre-order)
 */
-class IndexAccessIterator
+class COMPHELPER_DLLPUBLIC IndexAccessIterator
 {
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    m_xStartingPoint;
