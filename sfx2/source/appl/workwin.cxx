@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-19 18:50:56 $
+ *  last change: $Author: mba $ $Date: 2001-12-20 11:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1402,7 +1402,8 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW )
 #endif
         // Zumindest der ExtraString wird beim Auswerten ver"andert, also neu holen
         BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
-        pCW->aInfo = pChildWin->GetInfo();
+        SfxChildWinInfo aInfo = pChildWin->GetInfo();
+        pCW->aInfo.aExtraString = aInfo.aExtraString;
         if ( bTask )
             pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
 
