@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SecurityDialog.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-02-06 17:21:23 $
+ *  last change: $Author: dfoster $ $Date: 2003-02-11 16:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,18 +95,16 @@ import com.sun.star.uno.XComponentContext;
 public class SecurityDialog extends WeakBase implements XServiceInfo, XDialog,
 XInitialization {
 
-    static final String __serviceName = "com.sun.star.scripting.framework.security.SecurityDialog";
+    static final String __serviceName = "com.sun.star.script.framework.security.SecurityDialog";
 
-    // DOUBLE CHECK ALL STRINGS AGAINST STARBASIC!!!!!!
     private static final String _label1Name = "Label1";
     private static final String _label1String = "This document contains macros. Do you want to allow these macros to be run?";
 
     private static final String _label2Name = "Label2";
     private static final String _label2String = "This document contains macros. According to the security settings, the macros in this document should not be run. Do you want to run them anyway?";
 
-    private static final String _label3Name = "Label3";
-    private static final String _label3String = "Add this directory to the list of secure paths: ";
     private static final String _checkBoxName = "CheckBox";
+    private static final String _checkBoxString = "Add this directory to the list of secure paths: ";
 
     private static final String _title = "Run Macro";
     private static final String _runMacro = "Run";
@@ -116,60 +114,62 @@ XInitialization {
 
     private static final int dialogX = 100;
     private static final int dialogY = 100;
-    private static final int dialogW = 200;
-    private static final int dialogH = 40;
+    private static final int dialogW = 235;
+    private static final int dialogH = 47;
 
-    private static int cbIncrX = 0;
-    private static int cbIncrY = 0;
-    private static int cbIncrW = 0;
-    private static int cbIncrH = 0;
+    private int cbIncrW = 0;
+    private int cbIncrH = 19;
 
-    private static final int runButtonW = 30;
-    private static final int runButtonH = 14;
-    private static final int doNotRunButtonW = 30;
-    private static final int doNotRunButtonH = 14;
-    private static final int label1X = 0;
-    private static final int label1Y = 0;
-    private static final int label1W = 0;
-    private static final int label1H = 0;
-    private static final int label2X = 0;
-    private static final int label2Y = 0;
-    private static final int label2W = 0;
-    private static final int label2H = 0;
-    private static final int label3X = 0;
-    private static final int label3Y = 0;
-    private static final int label3W = 0;
-    private static final int label3H = 0;
-    private static final int checkBoxX = 0;
-    private static final int checkBoxY = 0;
-    private static final int checkBoxW = 0;
-    private static final int checkBoxH = 0;
+    private static final int runButtonW = 40;
+    private static final int runButtonH = 13;
+    private static final int doNotRunButtonW = 40;
+    private static final int doNotRunButtonH = 13;
+    private static final int label1X = 23;
+    private static final int label1Y = 9;
+    private static final int label1W = 210;
+    private static final int label1H = 12;
+    private static final int label2X = 19;
+    private static final int label2Y = 12;
+    private static final int label2W = 210;
+    private static final int label2H = 12;
+    private static final int checkBoxX = 19;
+    private static final int checkBoxY = 31;
+    private static final int checkBoxW = 210;
+    private static final int checkBoxH = 12;
 
     private boolean checkBoxDialog;
-    private String checkBoxPath;
+    private boolean checkBoxState;
+    private String checkBoxPath="";
     private String _pushed = _doNotRunButtonName;
 
     private XComponentContext _xComponentContext;
     private XDialog _xDialog;
 
-    public SecurityDialog( XComponentContext xComponentContext ) {
-
+    public SecurityDialog( XComponentContext xComponentContext )
+    {
+        System.out.println("SecurityDialog ctor");
         _xComponentContext = xComponentContext;
     }
 
     public void initialize( Object[] args )
     {
+        System.out.println("SecurityDialog init");
         // figure out if we need a checkbox
         if ( args.length != 1)
         {
             //check args is a path
             // set checkBoxPath with the arg
+            System.out.println("checkbox");
             checkBoxPath = (String) args[0];
+            System.out.println("path: "+checkBoxPath);
             checkBoxDialog=true;
 
         }
         else
         {
+            System.out.println("no checkbox");
+            cbIncrW = 0;
+            cbIncrH = 0;
             checkBoxDialog=false;
         }
 
@@ -177,6 +177,11 @@ XInitialization {
         try
         {
             _xDialog = createDialog();
+        }
+        catch ( com.sun.star.uno.Exception e )
+        {
+            System.out.println("Couldn't create dialog");
+            System.out.println("message: "+e.getMessage());
         }
         catch ( Exception e )
         {
@@ -234,8 +239,8 @@ XInitialization {
             "com.sun.star.awt.UnoControlDialogModel", _xComponentContext );
         XPropertySet xPSetDialog = ( XPropertySet )UnoRuntime.queryInterface(
             XPropertySet.class, dialogModel );
-        xPSetDialog.setPropertyValue( "PositionX", new Integer( dialogX+cbIncrX  ) );
-        xPSetDialog.setPropertyValue( "PositionY", new Integer( dialogY+cbIncrY ));
+        xPSetDialog.setPropertyValue( "PositionX", new Integer( dialogX) );
+        xPSetDialog.setPropertyValue( "PositionY", new Integer( dialogY));
         xPSetDialog.setPropertyValue( "Width", new Integer( dialogW+cbIncrW ));
         xPSetDialog.setPropertyValue( "Height", new Integer( dialogH+cbIncrH ));
         xPSetDialog.setPropertyValue( "Title", _title );
@@ -244,13 +249,26 @@ XInitialization {
         XMultiServiceFactory xMultiServiceFactory = ( XMultiServiceFactory )UnoRuntime.queryInterface(
             XMultiServiceFactory.class, dialogModel );
 
+        // create the image model and set the properties
+        /*Object imageModel = xMultiServiceFactory.createInstance(
+            "com.sun.star.awt.UnoControlImageModel" );
+        XPropertySet xPSetButton = ( XPropertySet )UnoRuntime.queryInterface(
+            XPropertySet.class, imageModel );
+        xPSetImage.setPropertyValue( "PositionX", new Integer( (((dialogW+cbIncrX)/2)-runButtonW -1) ));
+        xPSetImage.setPropertyValue( "PositionY", new Integer( dialogH+cbIncrY-runButtonH-1));
+        xPSetImage.setPropertyValue( "Width", new Integer( runButtonW ));
+        xPSetImage.setPropertyValue( "Height", new Integer( runButtonW ));
+        xPSetImage.setPropertyValue( "ImageURL", new Integer( runButtonH )); */
+
         // create the Run Macro button model and set the properties
         Object runButtonModel = xMultiServiceFactory.createInstance(
             "com.sun.star.awt.UnoControlButtonModel" );
         XPropertySet xPSetButton = ( XPropertySet )UnoRuntime.queryInterface(
             XPropertySet.class, runButtonModel );
-        xPSetButton.setPropertyValue( "PositionX", new Integer( (((dialogX+cbIncrX)/2)-runButtonW -1) ));
-        xPSetButton.setPropertyValue( "PositionY", new Integer( ((dialogY+cbIncrY-runButtonH-1)) ));
+        System.out.println("run: x="+(((dialogW+cbIncrW)/2)-runButtonW -1) );
+        System.out.println("run: y="+(dialogH+cbIncrH-runButtonH-1));
+        xPSetButton.setPropertyValue( "PositionX", new Integer( (((dialogW+cbIncrW)/2)-runButtonW -1) ));
+        xPSetButton.setPropertyValue( "PositionY", new Integer( dialogH+cbIncrH-runButtonH-1));
         xPSetButton.setPropertyValue( "Width", new Integer( runButtonW ));
         xPSetButton.setPropertyValue( "Height", new Integer( runButtonH ));
         xPSetButton.setPropertyValue( "Name", _runButtonName );
@@ -262,8 +280,10 @@ XInitialization {
             "com.sun.star.awt.UnoControlButtonModel" );
         xPSetButton = ( XPropertySet )UnoRuntime.queryInterface(
             XPropertySet.class, doNotRunButtonModel );
-        xPSetButton.setPropertyValue( "PositionX", new Integer( ( ((dialogX+cbIncrX)/2) + 1) ));
-        xPSetButton.setPropertyValue( "PositionY", new Integer( ( dialogY+cbIncrY-doNotRunButtonH-1 ) ));
+        System.out.println("dontrun: x="+(((dialogW+cbIncrW)/2)-1) );
+        System.out.println("dontrun: y="+(dialogH+cbIncrH-doNotRunButtonH-1 ));
+        xPSetButton.setPropertyValue( "PositionX", new Integer(  (((dialogW+cbIncrW)/2) + 1) ));
+        xPSetButton.setPropertyValue( "PositionY", new Integer(  (dialogH+cbIncrH-doNotRunButtonH-1 ) ));
         xPSetButton.setPropertyValue( "Width", new Integer( doNotRunButtonW ));
         xPSetButton.setPropertyValue( "Height", new Integer( doNotRunButtonH ));
         xPSetButton.setPropertyValue( "Name", _doNotRunButtonName );
@@ -278,6 +298,7 @@ XInitialization {
 
         if ( checkBoxDialog )
         {
+            System.out.println("creating label & checkbox");
             // create the label model and set the properties
             Object label2Model = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlFixedTextModel" );
@@ -291,33 +312,23 @@ XInitialization {
             xPSetLabel.setPropertyValue( "TabIndex", new Short( (short)1 ) );
             xPSetLabel.setPropertyValue( "Label", _label2String );
 
-            // create the label model and set the properties
+            // create the checkbox model and set the properties
             Object checkBoxModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlCheckBoxModel" );
             XPropertySet xPSetCheckBox = ( XPropertySet )UnoRuntime.queryInterface(
                 XPropertySet.class, checkBoxModel );
             xPSetCheckBox.setPropertyValue( "PositionX", new Integer( checkBoxX ));
             xPSetCheckBox.setPropertyValue( "PositionY", new Integer( checkBoxY ));
-            xPSetCheckBox.setPropertyValue( "State", new Integer (0) );
+            xPSetCheckBox.setPropertyValue( "Width", new Integer( checkBoxW ));
+            xPSetCheckBox.setPropertyValue( "Height", new Integer( checkBoxH ));
+            xPSetCheckBox.setPropertyValue( "State", new Short((short)0) );
             xPSetCheckBox.setPropertyValue( "Name", _checkBoxName );
             xPSetCheckBox.setPropertyValue( "TabIndex", new Short( (short)1 ) );
+            xPSetCheckBox.setPropertyValue( "Label", new String(_checkBoxString +checkBoxPath) );
 
-            // create the label model and set the properties
-            Object label3Model = xMultiServiceFactory.createInstance(
-                "com.sun.star.awt.UnoControlFixedTextModel" );
-            XPropertySet xPSetLabel2 = ( XPropertySet )UnoRuntime.queryInterface(
-                XPropertySet.class, label3Model );
-            xPSetLabel2.setPropertyValue( "PositionX", new Integer( label3X ));
-            xPSetLabel2.setPropertyValue( "PositionY", new Integer( label3Y ));
-            xPSetLabel2.setPropertyValue( "Width", new Integer( label3W ));
-            xPSetLabel2.setPropertyValue( "Height", new Integer( label3H ));
-            xPSetLabel2.setPropertyValue( "Name", _label3Name );
-            xPSetLabel2.setPropertyValue( "TabIndex", new Short( (short)1 ) );
-            xPSetLabel2.setPropertyValue( "Label", _label3String );
             // insert the control models into the dialog model
             xNameCont.insertByName( _label2Name, label2Model );
             xNameCont.insertByName( _checkBoxName, checkBoxModel );
-            xNameCont.insertByName( _label2Name, label3Model );
         }
         else
         {
@@ -373,7 +384,7 @@ XInitialization {
         xWindow.setVisible( false );
         xControl.createPeer( xToolkit, null );
 
-        // execute the dialog
+        // return the dialog
         XDialog xDialog = ( XDialog )UnoRuntime.queryInterface(
             XDialog.class, dialog );
         return xDialog;
@@ -382,9 +393,9 @@ XInitialization {
     {
 
         _pushed = _doNotRunButtonName;
-        System.out.println("**** Before execute " );
+        System.out.println("*DF* Before execute " );
         _xDialog.execute();
-        System.out.println("**** After execute " );
+        System.out.println("*DF* After execute " );
 
         /*// dispose the dialog
         XComponent xComponent = ( XComponent )UnoRuntime.queryInterface(
