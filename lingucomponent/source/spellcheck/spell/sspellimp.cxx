@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sspellimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: khendricks $ $Date: 2003-06-24 19:48:04 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,10 @@ BOOL operator == ( const Locale &rL1, const Locale &rL2 )
 SpellChecker::SpellChecker() :
     aEvtListeners   ( GetLinguMutex() )
 {
+        aDicts = NULL;
+    aDEncs = NULL;
+    aDLocs = NULL;
+    aDNames = NULL;
     bDisposing = FALSE;
     pPropHelper = NULL;
         numdict = 0;
@@ -133,20 +137,21 @@ SpellChecker::SpellChecker() :
 
 SpellChecker::~SpellChecker()
 {
-
-  for (int i = 0; i < numdict; i++) {
-         if (aDicts[i]) delete aDicts[i];
-         aDicts[i] = NULL;
+  if (aDicts) {
+     for (int i = 0; i < numdict; i++) {
+            if (aDicts[i]) delete aDicts[i];
+            aDicts[i] = NULL;
+     }
+     delete[] aDicts;
   }
-  if (aDicts) delete[] aDicts;
   aDicts = NULL;
+  numdict = 0;
   if (aDEncs) delete[] aDEncs;
   aDEncs = NULL;
   if (aDLocs) delete[] aDLocs;
   aDLocs = NULL;
   if (aDNames) delete[] aDNames;
   aDNames = NULL;
-  numdict = 0;
   if (pPropHelper)
      pPropHelper->RemoveAsPropListener();
 }
