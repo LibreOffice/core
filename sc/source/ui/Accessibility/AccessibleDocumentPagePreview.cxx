@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:30:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1442,7 +1442,7 @@ sal_Bool ScShapeChilds::FindShape(ScShapeChildVec& rShapes, const uno::Reference
 
 SdrPage* ScShapeChilds::GetDrawPage() const
 {
-    sal_uInt16 nTab( mpViewShell->GetLocationData().GetPrintTab() );
+    SCTAB nTab( mpViewShell->GetLocationData().GetPrintTab() );
     SdrPage* pDrawPage = NULL;
     if (mpViewShell)
     {
@@ -1451,7 +1451,7 @@ SdrPage* ScShapeChilds::GetDrawPage() const
         {
             ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
             if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
-                pDrawPage = pDrawLayer->GetPage(nTab);
+                pDrawPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
         }
     }
     return pDrawPage;
