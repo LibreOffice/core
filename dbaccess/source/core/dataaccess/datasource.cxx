@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-26 09:09:55 $
+ *  last change: $Author: oj $ $Date: 2001-04-26 09:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,7 +504,13 @@ void ODatabaseSource::disposing()
 Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::OUString& _rUid, const ::rtl::OUString& _rPwd)
 {
     Reference< XConnection > xReturn;
-    Reference< XDriverManager > xManager(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdbc.ConnectionPool") ), UNO_QUERY);
+    Reference< XDriverManager > xManager(m_xServiceFactory->createInstance(
+#ifdef SUPD < 631
+        SERVICE_SDBC_DRIVERMANAGER
+#else
+        ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ConnectionPool") )
+#endif
+        , UNO_QUERY);
     // SERVICE_SDBC_DRIVERMANAGER
     if (xManager.is())
     {
