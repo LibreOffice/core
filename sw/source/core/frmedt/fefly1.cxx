@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 13:56:57 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1473,7 +1473,7 @@ void SwFEShell::RequestObjectResize( const SwRect &rRect, SvEmbeddedObject *pIPO
                     SwFrmFmt *pFmt = pChgFly->GetFmt();
                     SwFmtFrmSize aFrmSz( pFmt->GetFrmSize() );
                     aFrmSz.SetWidth( aNewSz.Width() );
-                    if( ATT_MIN_SIZE != aFrmSz.GetSizeType() )
+                    if( ATT_MIN_SIZE != aFrmSz.GetHeightSizeType() )
                     {
                         aNewSz.Height() += pChgFly->Frm().Height() -
                                                pFly->Prt().Height();
