@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:45:14 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,8 +264,6 @@ BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& rSet)
 
     if (!aData.sDataSource.getLength())
         aData = pSh->GetDBData();
-    else
-        pSh->ChgDBData(aData);
 
     if(aData.sDataSource.getLength())       // Ohne Datenbank kein neuer Feldbefehl
     {
