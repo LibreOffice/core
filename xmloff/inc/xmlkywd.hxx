@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 06:23:30 $
+ *  last change: $Author: sab $ $Date: 2001-02-15 11:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,6 +577,7 @@ XML_CONSTASCII_ACTION( sXML_editor, "editor" );
 XML_CONSTASCII_ACTION( sXML_ellipse , "ellipse" );
 XML_CONSTASCII_ACTION( sXML_email, "email" );
 XML_CONSTASCII_ACTION( sXML_embed, "embed" );
+XML_CONSTASCII_ACTION( sXML_embedded_visible_area, "embedded-visible-area" );
 XML_CONSTASCII_ACTION( sXML_emissive_color, "emissive-color" );
 XML_CONSTASCII_ACTION( sXML_empty, "empty");
 XML_CONSTASCII_ACTION( sXML_enabled, "enabled" );
@@ -1678,6 +1679,7 @@ XML_CONSTASCII_ACTION( sXML_viewBox, "viewBox" );
 XML_CONSTASCII_ACTION( sXML_view_settings, "view-settings" );
 XML_CONSTASCII_ACTION( sXML_visibility, "visibility" );
 XML_CONSTASCII_ACTION( sXML_visible, "visible" );
+XML_CONSTASCII_ACTION( sXML_visible_area, "visible-area" );
 XML_CONSTASCII_ACTION( sXML_visited_style_name, "visited-style-name" );
 XML_CONSTASCII_ACTION( sXML_volatile, "volatile" );
 XML_CONSTASCII_ACTION( sXML_volume, "volume" );

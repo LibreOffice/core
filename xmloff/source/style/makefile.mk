@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: sab $ $Date: 2001-02-02 09:03:34 $
+#   last change: $Author: sab $ $Date: 2001-02-15 11:03:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -156,7 +156,9 @@ CXXFILES = \
         XMLBitmapRepeatOffsetPropertyHandler.cxx \
         XMLFillBitmapSizePropertyHandler.cxx \
         XMLBitmapLogicalSizePropertyHandler.cxx \
-        durationhdl.cxx
+        durationhdl.cxx \
+        VisAreaExport.cxx \
+        VisAreaContext.cxx
 
 
 SLOFILES =	\
@@ -238,7 +240,9 @@ SLOFILES =	\
         $(SLO)$/XMLBitmapRepeatOffsetPropertyHandler.obj \
         $(SLO)$/XMLFillBitmapSizePropertyHandler.obj	\
         $(SLO)$/XMLBitmapLogicalSizePropertyHandler.obj	\
-        $(SLO)$/durationhdl.obj
+        $(SLO)$/durationhdl.obj	\
+        $(SLO)$/VisAreaExport.obj \
+        $(SLO)$/VisAreaContext.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
