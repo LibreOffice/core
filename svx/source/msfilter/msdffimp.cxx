@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:49:21 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5020,62 +5020,62 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
             if( aStgNm == aTypeName )
             {
                 String sStarName( String::CreateFromAscii( pArr->pFactoryNm ));
-                const SfxObjectFactory* pFact =
-                            SfxObjectFactory::GetFactory( sStarName );
-                if( pFact && pFact->GetFilterContainer() )
+                SfxFilterMatcher aMatch( sStarName );
+                SfxMedium* pMed = new SfxMedium( &rSrcStg, FALSE );
+                const SfxFilter* pFilter = 0;
+                String aType = SfxFilter::GetTypeFromStorage( rSrcStg );
+                if ( aType.Len() )
+                    pFilter = aMatch.GetFilter4EA( aType );
+
+                if ( pFilter )
                 {
-                    SfxMedium* pMed = new SfxMedium( &rSrcStg, FALSE );
-                    const SfxFilter* pFilter = 0;
-                    if( !pFact->GetFilterContainer()->
-                        GetFilter4Content( *pMed, &pFilter ) && pFilter )
+                    //then the StarFactory can import this storage
+                    pMed->SetFilter( pFilter );
+
+                    SfxObjectShellRef xObjShell( SfxObjectShell::CreateObjectByFactoryName( sStarName ,SFX_CREATE_MODE_EMBEDDED ) );
+                    if ( xObjShell.Is() )
                     {
-                        //then the StarFactory can import this storage
-                        pMed->SetFilter( pFilter );
-                        SfxObjectShellRef xObjShell( pFact->CreateObject( SFX_CREATE_MODE_EMBEDDED ) );
-                        if (xObjShell.Is())
-                        {
-                            xObjShell->OwnerLock( sal_True );
-                            xIPObj = xObjShell->GetInPlaceObject();
+                        xObjShell->OwnerLock( sal_True );
+                        xIPObj = xObjShell->GetInPlaceObject();
 
-                            //Reuse current ole name
-                            String aDstStgName(String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM(MSO_OLE_Obj)));
+                        //Reuse current ole name
+                        String aDstStgName(String::CreateFromAscii(
+                            RTL_CONSTASCII_STRINGPARAM(MSO_OLE_Obj)));
 
-                            aDstStgName +=
+                        aDstStgName +=
                                 String::CreateFromInt32(nMSOleObjCntr);
 
-                            SvStorageRef xObjStor(rDestStorage.OpenUCBStorage(
+                        SvStorageRef xObjStor(rDestStorage.OpenUCBStorage(
                                     aDstStgName,
                                     STREAM_READWRITE| STREAM_SHARE_DENYALL));
 
-                            xObjShell->DoLoad( pMed );
-                            // JP 26.10.2001: Bug 93374 / 91928 the writer
-                            // objects need the correct visarea needs the
-                            // correct visarea, but this is not true for
-                            // PowerPoint (see bugdoc 94908b)
-                            // SJ: 19.11.2001 bug 94908, also chart objects
-                            // needs the correct visarea
-                            if( sStarName.EqualsAscii( "swriter" )
-                                || sStarName.EqualsAscii( "scalc" ) )
-                            {
-                                Size aSz(lcl_GetPrefSize(rGrf, MapMode( xIPObj->GetMapUnit())));
-                                // don't modify the object
-                                xIPObj->EnableSetModified( FALSE );
-                                xIPObj->SetVisArea( Rectangle( xIPObj->GetVisArea().TopLeft(), aSz ));
-                                xIPObj->EnableSetModified( TRUE );
-                            }
-                            else if ( sStarName.EqualsAscii( "smath" ) )
-                            {   // SJ: force the object to recalc its visarea
-                                xIPObj->OnDocumentPrinterChanged( NULL );
-                            }
-                            xObjShell->DoSaveAs( xObjStor );
-                            xObjShell->DoSaveCompleted( xObjStor );
-                            xObjShell->RemoveOwnerLock();
-                            pMed = 0;
+                        xObjShell->DoLoad( pMed );
+                        // JP 26.10.2001: Bug 93374 / 91928 the writer
+                        // objects need the correct visarea needs the
+                        // correct visarea, but this is not true for
+                        // PowerPoint (see bugdoc 94908b)
+                        // SJ: 19.11.2001 bug 94908, also chart objects
+                        // needs the correct visarea
+                        if( sStarName.EqualsAscii( "swriter" )
+                            || sStarName.EqualsAscii( "scalc" ) )
+                        {
+                            Size aSz(lcl_GetPrefSize(rGrf, MapMode( xIPObj->GetMapUnit())));
+                            // don't modify the object
+                            xIPObj->EnableSetModified( FALSE );
+                            xIPObj->SetVisArea( Rectangle( xIPObj->GetVisArea().TopLeft(), aSz ));
+                            xIPObj->EnableSetModified( TRUE );
                         }
+                        else if ( sStarName.EqualsAscii( "smath" ) )
+                        {   // SJ: force the object to recalc its visarea
+                            xIPObj->OnDocumentPrinterChanged( NULL );
+                        }
+                        xObjShell->DoSaveAs( xObjStor );
+                        xObjShell->DoSaveCompleted( xObjStor );
+                        xObjShell->RemoveOwnerLock();
+                        pMed = 0;
                     }
-                    delete pMed;
                 }
+                delete pMed;
                 break;
             }
         }
