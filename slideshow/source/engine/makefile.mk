@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-14 11:38:46 $
+#   last change: $Author: kz $ $Date: 2005-01-21 16:55:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,9 +81,9 @@ CDEFS+= -DVERBOSE
 CDEFS+= -DBOOST_SP_ENABLE_DEBUG_HOOKS
 .ENDIF
 
-# Disable optimization for SunCC (funny loops
+# Disable optimization for SunCC SPARC (funny loops
 # when parsing e.g. "x+width/2")
-.IF "$(OS)"=="SOLARISS" && "$(COM)"!="GCC"
+.IF "$(OS)$(CPU)"=="SOLARISS" && "$(COM)"!="GCC"
 NOOPTFILES= $(SLO)$/smilfunctionparser.obj
 .ENDIF
 # same issue for MACOSX
@@ -91,11 +91,9 @@ NOOPTFILES= $(SLO)$/smilfunctionparser.obj
 NOOPTFILES= $(SLO)$/smilfunctionparser.obj
 .ENDIF
 
-SLOFILES =	$(SLO)$/activitiesfactory.obj \
-            $(SLO)$/activitiesqueue.obj \
+SLOFILES =	$(SLO)$/activitiesqueue.obj \
             $(SLO)$/animatedsprite.obj \
             $(SLO)$/animationfactory.obj \
-            $(SLO)$/animationnodefactory.obj \
             $(SLO)$/attributemap.obj \
             $(SLO)$/backgroundshape.obj \
             $(SLO)$/color.obj \
@@ -126,8 +124,9 @@ SLOFILES =	$(SLO)$/activitiesfactory.obj \
             $(SLO)$/viewbackgroundshape.obj \
             $(SLO)$/viewmediashape.obj \
             $(SLO)$/viewshape.obj \
-            $(SLO)$/wakeupevent.obj
-
+            $(SLO)$/wakeupevent.obj \
+            $(SLO)$/rehearsetimingsactivity.obj \
+            $(SLO)$/waitsymbol.obj
 
 # ==========================================================================
 
