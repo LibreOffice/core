@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:27:58 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 19:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ Menu RID_SVXMNU_ROWS
             Text[ korean ] = "Çà »èÁ¦";
             Text[ arabic ] = "ÍÐÝ ÕÝæÝ";
             Text[ turkish ] = "Satýrlarý sil";
+            Text[ catalan ] = "Eliminar filas";
         };
         MenuItem
         {
@@ -120,6 +121,7 @@ Menu RID_SVXMNU_ROWS
             Text[ korean ] = "·¹ÄÚµå ÀúÀå";
             Text[ arabic ] = "ÍÝÙ ÓÌá";
             Text[ turkish ] = "Veri kümesini kaydet";
+            Text[ catalan ] = "Guardar registro";
         };
         MenuItem
         {
@@ -147,6 +149,7 @@ Menu RID_SVXMNU_ROWS
             Text[ korean ] = "½ÇÇàÃë¼Ò: µ¥ÀÌÅÍ ÀÔ·Â";
             Text[ arabic ] = "ÊÑÇÌÚ: ÅÏÎÇá ÈíÇäÇÊ";
             Text[ turkish ] = "Geri al: Veri giriþi";
+            Text[ catalan ] = "Deshacer: entrada de datos";
         };
     };
 };
@@ -199,6 +202,7 @@ Menu RID_SVXMNU_COLS
                         Text[ korean ] = "ÅØ½ºÆ® ÇÊµå";
                         Text[ arabic ] = "ÍÞá äÕ";
                         Text[ turkish ] = "Metin alaný";
+                        Text[ catalan ] = "Campo de texto";
                     };
                     MenuItem
                     {
@@ -226,6 +230,7 @@ Menu RID_SVXMNU_COLS
                         Text[ korean ] = "È®ÀÎ¶õ";
                         Text[ arabic ] = "ÎÇäÉ ÇÎÊíÇÑ";
                         Text[ turkish ] = "Seçme kutusu";
+                        Text[ catalan ] = "Casilla de verificación";
                     };
                     MenuItem
                     {
@@ -253,6 +258,7 @@ Menu RID_SVXMNU_COLS
                         Text[ korean ] = "ÄÞº¸ ¹Ú½º";
                         Text[ arabic ] = "ãÑÈÚ ÊÍÑíÑ æÓÑÏ";
                         Text[ turkish ] = "Kombinasyon alaný";
+                        Text[ catalan ] = "Campo combinado";
                     };
                     MenuItem
                     {
@@ -280,6 +286,7 @@ Menu RID_SVXMNU_COLS
                         Text[ korean ] = "¸ñ·Ï ÇÊµå";
                         Text[ arabic ] = "ãÑÈÚ ÞÇÆãÉ";
                         Text[ turkish ] = "Liste alaný";
+                        Text[ catalan ] = "Listado";
                     };
                     MenuItem
                     {
@@ -307,6 +314,7 @@ Menu RID_SVXMNU_COLS
                         Text[ korean ] = "³¯Â¥ ÇÊµå";
                         Text[ arabic ] = "ÍÞá ÇáÊÇÑíÎ";
                         Text[ turkish ] = "Tarih alaný";
+                        Text[ catalan ] = "Campo de fecha";
                     };
                     MenuItem
                     {
@@ -334,6 +342,7 @@ Menu RID_SVXMNU_COLS
                         Text[ korean ] = "½Ã°£ ÇÊµå";
                         Text[ arabic ] = "ÍÞá ÇáæÞÊ";
                         Text[ turkish ] = "Zaman alaný";
+                        Text[ catalan ] = "Campo horario";
                     };
                     MenuItem
                     {
@@ -361,6 +370,7 @@ Menu RID_SVXMNU_COLS
                         Text[ korean ] = "¼ýÀÚ ÇÊµå";
                         Text[ arabic ] = "ÍÞá ÑÞãí";
                         Text[ turkish ] = "Sayýsal alan";
+                        Text[ catalan ] = "Campo numérico";
                     };
                     MenuItem
                     {
@@ -388,6 +398,7 @@ Menu RID_SVXMNU_COLS
                         Text[ korean ] = "ÅëÈ­ ÇÊµå";
                         Text[ arabic ] = "ÍÞá ÇáÚãáÉ";
                         Text[ turkish ] = "Para birimi alaný";
+                        Text[ catalan ] = "Campo de moneda";
                     };
                     MenuItem
                     {
@@ -415,6 +426,7 @@ Menu RID_SVXMNU_COLS
                         Text[ korean ] = "¸¶½ºÅ©µÈ ÇÊµå";
                         Text[ arabic ] = "ÍÞá ãõÞäøóÚ";
                         Text[ turkish ] = "Maskelenmiþ alan";
+                        Text[ catalan ] = "Campo enmascarado";
                     };
                     MenuItem
                     {
@@ -440,6 +452,7 @@ Menu RID_SVXMNU_COLS
                         Text[ chinese_traditional ] = "®æ¦¡¤ÆªºÄæ¦ì";
                         Text[ arabic ] = "ÍÞá ãõäÓøóÞ";
                         Text[ turkish ] = "Formatlý alan";
+                        Text[ catalan ] = "Campo formateado";
                     };
                     MenuItem
                     {
@@ -466,6 +479,7 @@ Menu RID_SVXMNU_COLS
                         Text[ chinese_traditional ] = "¤é´Á©M®É¶¡Äæ";
                         Text[ arabic ] = "ÍÞá ÊÇÑíÎ ææÞÊ";
                         Text[ turkish ] = "Tarih ve zaman alaný";
+                        Text[ catalan ] = "Campo de fecha y hora";
                     };
                 };
             };
@@ -480,6 +494,7 @@ Menu RID_SVXMNU_COLS
             Text[ korean ] = "¿­ »ðÀÔ(~C)";
             Text[ arabic ] = "ÅÏÑÇÌ ÚãæÏ";
             Text[ turkish ] = "Sütun ekle";
+            Text[ catalan ] = "~Insertar columna";
         };
         MenuItem
         {
@@ -507,6 +522,7 @@ Menu RID_SVXMNU_COLS
             Text[ korean ] = "¹Ù²Ù±â(~R)";
             Text[ arabic ] = "ÇÓÊÈÏÇá ÈÜ";
             Text[ turkish ] = "Þununla deðiþtir...";
+            Text[ catalan ] = "~Reemplazar con";
         };
         MenuItem
         {
@@ -534,6 +550,7 @@ Menu RID_SVXMNU_COLS
             Text[ korean ] = "¿­ »èÁ¦";
             Text[ arabic ] = "ÍÐÝ ÚãæÏ";
             Text[ turkish ] = "Sütunu sil";
+            Text[ catalan ] = "~Eliminar columna";
         };
         MenuItem
         {
@@ -559,6 +576,7 @@ Menu RID_SVXMNU_COLS
             Text[ chinese_traditional ] = "Áô¤JÄæ(~H)";
             Text[ arabic ] = "ÅÎÝÇÁ ÇáÚãæÏ";
             Text[ turkish ] = "Sütunu gizle";
+            Text[ catalan ] = "~Ocultar columna";
         };
         MenuItem
         {
@@ -595,6 +613,7 @@ Menu RID_SVXMNU_COLS
                         Text[ arabic ] = "ÇáãÒíÏ ...";
                         Text[ language_user1 ] = "(ÄÄ): Þ Ðåñéóóüôåñá Þ åðéðñüóèåôá; - - - -";
                         Text[ turkish ] = "Diðer...";
+                        Text[ catalan ] = "~Más ...";
                     };
                     MenuItem
                     {
@@ -624,6 +643,7 @@ Menu RID_SVXMNU_COLS
                         Text[ chinese_traditional ] = "¥þ³¡(~A)";
                         Text[ arabic ] = "Çáßá";
                         Text[ turkish ] = "Tümü";
+                        Text[ catalan ] = "~Todas";
                     };
                 };
             };
@@ -645,6 +665,7 @@ Menu RID_SVXMNU_COLS
             Text[ chinese_traditional ] = "Åã¥ÜÄæ(~S)";
             Text[ arabic ] = "ÅÙåÇÑ ÇáÃÚãÏÉ";
             Text[ turkish ] = "Sütunlarý göster";
+            Text[ catalan ] = "~Mostrar columnas";
         };
         MenuItem
         {
@@ -672,6 +693,7 @@ Menu RID_SVXMNU_COLS
             Text[ korean ] = "¿­...";
             Text[ arabic ] = "...ÚãæÏ";
             Text[ turkish ] = "Sütun...";
+            Text[ catalan ] = "~Columna...";
         };
     };
 };
