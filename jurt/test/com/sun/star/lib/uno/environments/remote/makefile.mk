@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kr $ $Date: 2001-05-17 12:55:06 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:16:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -57,31 +57,21 @@
 #   Contributor(s): _______________________________________
 #
 #
-#
 #*************************************************************************
 
-PRJ=..$/..$/..$/..$/..$/..$/..$/..
-
+PRJ := ..$/..$/..$/..$/..$/..$/..$/..
 PRJNAME := jurt
+TARGET := test_com_sun_star_lib_uno_environments_remote
+
 PACKAGE := com$/sun$/star$/lib$/uno$/environments$/remote
-TARGET  := test_com_sun_star_lib_uno_environments_remote
+JAVATESTFILES := \
+    JobQueue_Test.java \
+    ThreadPool_Test.java
+JAVAFILES := \
+    TestIWorkAt.java \
+    TestMessage.java \
+    TestReceiver.java \
+    TestWorkAt.java
+JARFILES := ridl.jar sandbox.jar
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-# Files --------------------------------------------------------
-
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/MyInterface.class					\
-    $(CLASSDIR)$/$(PACKAGE)$/JobQueue_Test.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/MyMessage.class					\
-    $(CLASSDIR)$/$(PACKAGE)$/MyReceiver.class					\
-    $(CLASSDIR)$/$(PACKAGE)$/IWorkAt.class					\
-    $(CLASSDIR)$/$(PACKAGE)$/WorkAt.class					\
-    $(CLASSDIR)$/$(PACKAGE)$/ThreadPool_Test.class
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+.INCLUDE: javaunittest.mk
