@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:19:57 $
+ *  last change: $Author: kz $ $Date: 2001-07-20 20:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ Window WIN_HELP_INDEX
                 Text[ chinese_traditional ] = "¤º®e";
                 Text[ turkish ] = "Contents";
                 Text[ arabic ] = "ÇáãÍÊæíÇÊ";
+                Text[ finnish ] = "Contents";
+                Text[ catalan ] = "Contents";
             };
             PageItem
             {
@@ -534,12 +536,12 @@ String STR_HELP_BUTTON_INDEX_ON
     Text[ portuguese ] = "Índice";
     Text[ russian ] = "Èíäåêñ";
     Text[ greek ] = "ÅõñåôÞñéï";
-    Text[ dutch ] = "Index";
+    Text[ dutch ] = "Navigatiebereik weergeven";
     Text[ french ] = "Index";
-    Text[ spanish ] = "Índice";
+    Text[ spanish ] = "Mostrar área de navegación";
     Text[ italian ] = "Indice";
     Text[ danish ] = "INDEKS";
-    Text[ swedish ] = "Index";
+    Text[ swedish ] = "Visa navigationsområde";
     Text[ polish ] = "Indeks";
     Text[ portuguese_brazilian ] = "Index";
     Text[ japanese ] = "–ÚŽŸ";
@@ -555,6 +557,25 @@ String STR_HELP_BUTTON_INDEX_OFF
 {
     Text = "Navigationsbereich ausschalten";
     Text [ english_us ] = "Hide navigation area";
+    Text[ portuguese ] = "Hide navigation area";
+    Text[ russian ] = "Hide navigation area";
+    Text[ greek ] = "Hide navigation area";
+    Text[ dutch ] = "Navigatiebereik uitschakelen";
+    Text[ french ] = "Hide navigation area";
+    Text[ spanish ] = "Ocultar área de navegación";
+    Text[ finnish ] = "Hide navigation area";
+    Text[ italian ] = "Hide navigation area";
+    Text[ danish ] = "Hide navigation area";
+    Text[ swedish ] = "Hide navigation area";
+    Text[ polish ] = "Hide navigation area";
+    Text[ portuguese_brazilian ] = "Hide navigation area";
+    Text[ japanese ] = "Hide navigation area";
+    Text[ korean ] = "Hide navigation area";
+    Text[ chinese_simplified ] = "Hide navigation area";
+    Text[ chinese_traditional ] = "Hide navigation area";
+    Text[ turkish ] = "Hide navigation area";
+    Text[ arabic ] = "Hide navigation area";
+    Text[ catalan ] = "Hide navigation area";
 };
 String STR_HELP_BUTTON_START
 {
@@ -937,6 +958,7 @@ Menu MENU_HELP_BOOKMARKS
         };
     };
 };
+
 
 
 
