@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:05:14 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@
 #include "shapeuno.hxx"
 #include "printfun.hxx"
 #include "pfuncache.hxx"
+#include "scmod.hxx"
 #ifndef _SC_VIEWSETTINGSSEQUENCEDEFINES_HXX
 #include "ViewSettingsSequenceDefines.hxx"
 #endif
@@ -528,7 +529,10 @@ OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyValue>& rO
             {
                 VCLXDevice* pDevice = VCLXDevice::GetImplementation( xRenderDevice );
                 if ( pDevice )
+                {
                     pRet = pDevice->GetOutputDevice();
+                    pRet->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
+                }
             }
         }
     }
