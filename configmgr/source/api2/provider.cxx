@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:36 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
