@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartPlotAreaOOoTContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:45:28 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,13 @@
 #include "TContextVector.hxx"
 #endif
 
+class XMLAxisOOoContext;
+
+class XMLAxisContextVector :
+    public ::std::vector< ::rtl::Reference< XMLAxisOOoContext > >
+{
+};
+
 class XMLChartPlotAreaOOoTContext  : public XMLProcAttrTransformerContext
 {
 public:
@@ -85,10 +92,10 @@ public:
     virtual void ExportContent();
 
 protected:
-    void AddContent( XMLTransformerContext *pContent );
+    void AddContent( XMLAxisOOoContext *pContent );
 
 private:
-    XMLTransformerContextVector m_aChildContexts;
+    XMLAxisContextVector m_aChildContexts;
 };
 
 // XMLOFF_XMLCHARTPLOTAREAOOOTCONTEXT_HXX
