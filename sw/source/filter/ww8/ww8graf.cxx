@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:02:09 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -982,7 +982,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(long& rStartCp, long& rEndCp,
     USHORT nTxBxS, USHORT nSequence)
 {
     // rasch den TextBox-PLCF greifen
-    WW8PLCFspecial* pT = pPlcxMan->GetTxbx();
+    WW8PLCFspecial* pT = pPlcxMan ? pPlcxMan->GetTxbx() : 0;
     if( !pT )
     {
         ASSERT( !this, "+Wo ist der Grafik-Text (1) ?" );
