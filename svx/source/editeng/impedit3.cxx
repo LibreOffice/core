@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-12 11:39:49 $
+ *  last change: $Author: mt $ $Date: 2002-08-19 14:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2582,7 +2582,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     // Ueber die Portions der Zeile...
                     // --------------------------------------------------
                     nIndex = pLine->GetStart();
-// R2L                    long nR2LWidth = 0;
                     for ( sal_uInt16 y = pLine->GetStartPortion(); y <= pLine->GetEndPortion(); y++ )
                     {
                         DBG_ASSERT( pPortion->GetTextPortions().Count(), "Zeile ohne Textportion im Paint!" );
@@ -2622,15 +2621,25 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                             case PORTIONKIND_HYPHENATOR:
                             {
                                 SeekCursor( pPortion->GetNode(), nIndex+1, aTmpFont, pOutDev );
+
+                                BOOL bDrawFrame = FALSE;
+
+                                if ( ( pTextPortion->GetKind() == PORTIONKIND_FIELD ) && !aTmpFont.IsTransparent() &&
+                                     ( GetBackgroundColor() != COL_AUTO ) && GetBackgroundColor().IsDark() &&
+                                     ( IsAutoColorEnabled() && ( pOutDev->GetOutDevType() != OUTDEV_PRINTER ) ) )
+                                {
+                                    aTmpFont.SetTransparent( TRUE );
+                                    pOutDev->SetFillColor();
+                                    pOutDev->SetLineColor( GetAutoColor() );
+                                    bDrawFrame = TRUE;
+                                }
+
 #ifdef EDITDEBUG
                                 if ( pTextPortion->GetKind() == PORTIONKIND_HYPHENATOR )
                                 {
                                     aTmpFont.SetFillColor( COL_LIGHTGRAY );
                                     aTmpFont.SetTransparent( sal_False );
                                 }
-#endif
-
-#if defined (DEBUG) && defined( DBG_UTIL )
                                 if ( pTextPortion->GetRightToLeft()  )
                                 {
                                     aTmpFont.SetFillColor( COL_LIGHTGRAY );
@@ -2641,7 +2650,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     aTmpFont.SetFillColor( COL_LIGHTCYAN );
                                     aTmpFont.SetTransparent( sal_False );
                                 }
-
 #endif
                                 aTmpFont.SetPhysFont( pOutDev );
 
@@ -2798,6 +2806,15 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                             aRealOutPos.X() += pTextPortion->GetExtraInfos()->nPortionOffsetX;
                                         }
                                         aTmpFont.QuickDrawText( pOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
+                                        if ( bDrawFrame )
+                                        {
+                                            Point aTopLeft( aTmpPos );
+                                            aTopLeft.Y() -= pLine->GetMaxAscent();
+                                            if ( nOrientation )
+                                                aTopLeft = lcl_ImplCalcRotatedPos( aTopLeft, aOrigin, nSin, nCos );
+                                            Rectangle aRect( aTopLeft, pTextPortion->GetSize() );
+                                            pOutDev->DrawRect( aRect );
+                                        }
                                     }
 
 #ifndef SVX_LIGHT
