@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-01 15:19:22 $
+ *  last change: $Author: sj $ $Date: 2002-02-19 16:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ public:
     void   SetReadOnlyMode( sal_Bool bReadOnly = sal_False );
     const BOOL IsHTMLDoc() const { return mbIsHTMLDoc; }
 
+    SfxBindings*   GetBindings() const { return mpBindings; };
     SfxDispatcher* GetDispatcher() const { return mpBindings->GetDispatcher(); }
 };
 
