@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtextedt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 14:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,8 @@
  ************************************************************************/
 
 #include <xtextedt.hxx>
-#include <txtcmp.hxx>
 #include <vcl/svapp.hxx>  // International
+#include <unotools/textsearch.hxx>
 
 // -------------------------------------------------------------------------
 // class ExtTextEngine
@@ -173,7 +173,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
     return aSel;
 }
 
-BOOL ExtTextEngine::Search( TextSelection& rSel, const SearchParam& rSearchParam, BOOL bForward )
+BOOL ExtTextEngine::Search( TextSelection& rSel, const utl::SearchParam& rSearchParam, BOOL bForward )
 {
     TextSelection aSel( rSel );
     aSel.Justify();
@@ -195,7 +195,7 @@ BOOL ExtTextEngine::Search( TextSelection& rSel, const SearchParam& rSearchParam
         nEndNode = bForward ? (GetParagraphCount()-1) : 0;
 
     nStartNode = aStartPaM.GetPara();
-    SearchText aSearcher( rSearchParam, Application::GetAppInternational() );
+    utl::TextSearch aSearcher( rSearchParam, Application::GetAppInternational().GetLanguage() );
 
     // ueber die Absaetze iterieren...
     for ( ULONG nNode = nStartNode;
@@ -290,7 +290,7 @@ BOOL ExtTextView::MatchGroup()
     return aMatchSel.HasRange() ? TRUE : FALSE;
 }
 
-BOOL ExtTextView::Search( const SearchParam& rSearchParam, BOOL bForward )
+BOOL ExtTextView::Search( const utl::SearchParam& rSearchParam, BOOL bForward )
 {
     BOOL bFound = FALSE;
     TextSelection aSel( GetSelection() );
@@ -313,7 +313,7 @@ BOOL ExtTextView::Search( const SearchParam& rSearchParam, BOOL bForward )
     return bFound;
 }
 
-USHORT ExtTextView::Replace( const SearchParam& rSearchParam, BOOL bAll, BOOL bForward )
+USHORT ExtTextView::Replace( const utl::SearchParam& rSearchParam, BOOL bAll, BOOL bForward )
 {
     USHORT nFound = 0;
 
