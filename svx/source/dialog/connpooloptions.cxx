@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connpooloptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:18:32 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@ namespace offapp
         void SetRowChangeHandler(const Link& _rHdl) { m_aRowChangeHandler = _rHdl; }
         Link GetRowChangeHandler() const { return m_aRowChangeHandler; }
 
-        DriverPoolingSettings::const_iterator   getCurrentRow() const;
-        DriverPoolingSettings::iterator         getCurrentRow();
+        const DriverPooling* getCurrentRow() const;
+        DriverPooling* getCurrentRow();
         void                                    updateCurrentRow();
 
         const DriverPoolingSettings& getSettings() const { return m_aSettings; }
@@ -214,25 +214,25 @@ namespace offapp
     }
 
     //--------------------------------------------------------------------
-    DriverPoolingSettings::const_iterator DriverListControl::getCurrentRow() const
+    const DriverPooling* DriverListControl::getCurrentRow() const
     {
         OSL_ENSURE( ( GetCurRow() < m_aSettings.size() ) && ( GetCurRow() >= 0 ),
             "DriverListControl::getCurrentRow: invalid current row!");
 
         if ( ( GetCurRow() >= 0 ) && ( GetCurRow() < m_aSettings.size() ) )
-            return m_aSettings.begin() + GetCurRow();
+            return &(*(m_aSettings.begin() + GetCurRow()));
 
         return NULL;
     }
 
     //--------------------------------------------------------------------
-    DriverPoolingSettings::iterator DriverListControl::getCurrentRow()
+    DriverPooling* DriverListControl::getCurrentRow()
     {
         OSL_ENSURE( ( GetCurRow() < m_aSettings.size() ) && ( GetCurRow() >= 0 ),
             "DriverListControl::getCurrentRow: invalid current row!");
 
         if ( ( GetCurRow() >= 0 ) && ( GetCurRow() < m_aSettings.size() ) )
-            return m_aSettings.begin() + GetCurRow();
+            return &(*(m_aSettings.begin() + GetCurRow()));
 
         return NULL;
     }
@@ -489,11 +489,11 @@ namespace offapp
         }
         else
         {
-            DriverPoolingSettings::const_iterator aDriverPos = static_cast<DriverPoolingSettings::const_iterator>(_pRowIterator);
+            const DriverPooling *pDriverPos = static_cast<const DriverPooling*>(_pRowIterator);
 
-            m_aDriver.SetText(aDriverPos->sName);
-            m_aDriverPoolingEnabled.Check(aDriverPos->bEnabled);
-            m_aTimeout.SetText(String::CreateFromInt32(aDriverPos->nTimeoutSeconds));
+            m_aDriver.SetText(pDriverPos->sName);
+            m_aDriverPoolingEnabled.Check(pDriverPos->bEnabled);
+            m_aTimeout.SetText(String::CreateFromInt32(pDriverPos->nTimeoutSeconds));
 
             OnEnabledDisabled(&m_aDriverPoolingEnabled);
         }
@@ -504,10 +504,9 @@ namespace offapp
     //--------------------------------------------------------------------
     void ConnectionPoolOptionsPage::commitTimeoutField()
     {
-        DriverPoolingSettings::iterator aCurrentDriver = m_pDriverList->getCurrentRow();
-        if (aCurrentDriver)
+        if (DriverPooling* pCurrentDriver = m_pDriverList->getCurrentRow())
         {
-            aCurrentDriver->nTimeoutSeconds = m_aTimeout.GetValue();
+            pCurrentDriver->nTimeoutSeconds = m_aTimeout.GetValue();
             m_pDriverList->updateCurrentRow();
         }
     }
