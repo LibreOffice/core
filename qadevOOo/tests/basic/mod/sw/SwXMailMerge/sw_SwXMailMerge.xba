@@ -5,9 +5,9 @@
 '*
 '*  $RCSfile: sw_SwXMailMerge.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-02-05 10:28:29 $ 
+'*  last change:$Date: 2003-03-21 10:42:04 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -73,6 +73,7 @@ Global cMailMerge_DocumentURL as String
 
 Dim cDataSourceName  as String
 Dim cDataCommand as String
+Dim oXResultSet as Variant
 
 ' Be sure that all variables are dimensioned:
 option explicit
@@ -85,15 +86,14 @@ Sub CreateObj()
 '*************************************************************************
 On Error Goto ErrHndl
 
-	Dim vXJobArg0(0 to 8) as new com.sun.star.beans.NamedValue
-	Dim vXJobArg1(0 to 7) as new com.sun.star.beans.NamedValue
+	Dim vXJobArg0(0 to 7) as new com.sun.star.beans.NamedValue
+	Dim vXJobArg1(0 to 6) as new com.sun.star.beans.NamedValue
 	Dim vXJobArg2(0 to 9) as new com.sun.star.beans.NamedValue
 	Dim vXJobArg3(0) as new com.sun.star.beans.NamedValue
 	Dim cTestDoc as String
 	Dim cOutputURL as String
-	Dim aSel(1) as Variant
-    Dim oXResultSet as Variant
     Dim oXConnection as Variant
+    Dim myBookMarks as Variant
 	
     oObj = createUnoService("com.sun.star.text.MailMerge")
 
@@ -106,8 +106,7 @@ On Error Goto ErrHndl
     oXConnection = oXResultSet.ActiveConnection
     
 	' create arguments for XJob:
-	aSel(0) = 2
-	aSel(1) = 5
+    myBookMarks = getMyBookMarks()
 	
     oObj.DataSourceName = cDataSourceName
     oObj.DataCommand = cDataCommand
@@ -128,7 +127,6 @@ On Error Goto ErrHndl
 	vXJobArg0(5).Name = "OutputURL" : vXJobArg0(5).Value = cOutputURL
 	vXJobArg0(6).Name = "FileNamePrefix" : vXJobArg0(6).Value = "Identifier"
 	vXJobArg0(7).Name = "FileNameFromColumn" : vXJobArg0(7).Value = true
-	vXJobArg0(8).Name = "Selection" : vXJobArg0(8).Value = aSel()
 	
 	' use a simple DataBase with simple Table and write to printer
 	vXJobArg1(0).Name = "DataSourceName" : vXJobArg1(0).Value = cDataSourceName
@@ -137,8 +135,7 @@ On Error Goto ErrHndl
 	vXJobArg1(3).Name = "OutputType" : vXJobArg1(3).Value = com.sun.star.text.MailMergeType.PRINTER
 	vXJobArg1(4).Name = "FileNamePrefix" : vXJobArg1(4).Value = "Author"
 	vXJobArg1(5).Name = "FileNameFromColumn" : vXJobArg1(5).Value = true
-	vXJobArg1(6).Name = "Selection" : vXJobArg1(6).Value = aSel()
-	vXJobArg1(7).Name = "DocumentURL" : vXJobArg1(7).Value = cTestDoc
+	vXJobArg1(6).Name = "DocumentURL" : vXJobArg1(6).Value = cTestDoc
 	
 	' use a XConnection
 	vXJobArg2(0).Name = "Connection" : vXJobArg2(0).Value = oXConnection
@@ -150,15 +147,13 @@ On Error Goto ErrHndl
 	vXJobArg2(6).Name = "OutputURL" : vXJobArg2(6).Value = cOutputURL
 	vXJobArg2(7).Name = "FileNamePrefix" : vXJobArg2(7).Value = "Identifier"
 	vXJobArg2(8).Name = "FileNameFromColumn" : vXJobArg2(8).Value = true
-	vXJobArg2(9).Name = "Selection" : vXJobArg2(9).Value = aSel()
+	vXJobArg2(9).Name = "Selection" : vXJobArg2(9).Value = myBookMarks()
 	
 	vXJobArgs(0) = vXJobArg0()
 	vXJobArgs(1) = vXJobArg1()
 	vXJobArgs(2) = vXJobArg2()
 	vXJobArgs(3) = DimArray()
     
-    
-
 	out.log("com.sun.star.text.MailMerge created.")
     
 Exit Sub
@@ -170,27 +165,25 @@ Sub XMailMergeEvent()
     oObj.execute(vXJobArgs(0))
 end sub
 
-Function getXConnection() as Variant
-    Dim oRowSet as Object
-    oRowSet = createUnoService("com.sun.star.sdb.RowSet")
-    oRowSet.DataSourceName = cDataSourceName
-    oRowSet.Command = cDataCommand
-    oRowSet.CommandType = com.sun.star.sdb.CommandType.TABLE
-    oRowSet.execute()
-    wait(200)
-    getXConnection() = oRowSet.ActiveConnection
-end Function
-
 Function getXResultSet() as Variant
     Dim oRowSet as Object
     oRowSet = createUnoService("com.sun.star.sdb.RowSet")
-
     oRowSet.DataSourceName = cDataSourceName
     oRowSet.Command = cDataCommand
     oRowSet.CommandType = com.sun.star.sdb.CommandType.TABLE
     oRowSet.execute()
     wait(200)
+'    oRowSet.getFirst()
     getXResultSet() = oRowSet 
+end Function
+
+Function getMyBookMarks() as Variant
+    Dim BookMarks(1) as Variant
+    oXResultSet.first()
+    BookMarks(0) = oXResultSet.getBookmark()
+    oXResultSet.next()
+    BookMarks(1) = oXResultSet.getBookmark()
+    getMyBookMarks() = BookMarks()
 end Function
 
 </script:module>
