@@ -2,9 +2,9 @@
  *
  *  $RCSfile: activitiesfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:57:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@
 #include <continuouskeytimeactivitybase.hxx>
 
 
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 
@@ -218,13 +218,13 @@ namespace presentation
                                       "FromToByActivity::FromToByActivity(): From and one of To or By, or To or By alone must be valid" );
                 }
 
-                virtual void start()
+                virtual void startAnimation()
                 {
-                    BaseType::start();
+                    BaseType::startAnimation();
 
                     // start animation
-                    mpAnim->start( BaseType::mpShape,
-                                   BaseType::mpAttributeLayer );
+                    mpAnim->start( BaseType::getShape(),
+                                   BaseType::getShapeAttributeLayer() );
 
                     // setup start and end value. Determine animation
                     // start value only when animation actually
@@ -280,12 +280,10 @@ namespace presentation
                     }
                 }
 
-                virtual void end()
+                virtual void endAnimation()
                 {
                     // end animation
                     mpAnim->end();
-
-                    BaseType::end();
                 }
 
                 /// perform override for ContinuousActivityBase
@@ -314,7 +312,7 @@ namespace presentation
                                                maStartValue),
                                               maEndValue,
                                               nFrame,
-                                              BaseType::maDiscreteTimes.size() ) ) ) );
+                                              BaseType::getNumberOfKeyTimes() ) ) ) );
                 }
 
             private:
@@ -487,21 +485,19 @@ namespace presentation
                                       "ValuesActivity::ValuesActivity(): Empty value vector" );
                 }
 
-                virtual void start()
+                virtual void startAnimation()
                 {
-                    BaseType::start();
+                    BaseType::startAnimation();
 
                     // start animation
-                    mpAnim->start( BaseType::mpShape,
-                                   BaseType::mpAttributeLayer );
+                    mpAnim->start( BaseType::getShape(),
+                                   BaseType::getShapeAttributeLayer() );
                 }
 
-                virtual void end()
+                virtual void endAnimation()
                 {
                     // end animation
                     mpAnim->end();
-
-                    BaseType::end();
                 }
 
                 /// perform override for ContinuousKeyTimeActivityBase base
@@ -618,6 +614,7 @@ namespace presentation
 
                 ActivityParameters aActivityParms( rParms.mpEndEvent,
                                                    rParms.mrEventQueue,
+                                                   rParms.mrActivitiesQueue,
                                                    rParms.mnMinDuration,
                                                    rParms.maRepeats,
                                                    rParms.mnAcceleration,
@@ -685,7 +682,9 @@ namespace presentation
                             // since DiscreteActivityBase suspends itself
                             // between the frames, create a WakeupEvent for it.
                             aActivityParms.mpWakeupEvent.reset(
-                                new WakeupEvent( rParms.mrActivitiesQueue ) );
+                                new WakeupEvent(
+                                    rParms.mrEventQueue.getTimer(),
+                                    rParms.mrActivitiesQueue ) );
 
                             AnimationActivitySharedPtr pActivity(
                                 createValueListActivity< DiscreteActivityBase >(
@@ -749,7 +748,9 @@ namespace presentation
                             // since DiscreteActivityBase suspends itself
                             // between the frames, create a WakeupEvent for it.
                             aActivityParms.mpWakeupEvent.reset(
-                                new WakeupEvent( rParms.mrActivitiesQueue ) );
+                                new WakeupEvent(
+                                    rParms.mrEventQueue.getTimer(),
+                                    rParms.mrActivitiesQueue ) );
 
                             AnimationActivitySharedPtr pActivity(
                                 createFromToByActivity< DiscreteActivityBase >(
@@ -817,21 +818,19 @@ namespace presentation
                                       "SimpleActivity::SimpleActivity(): Invalid animation object" );
                 }
 
-                virtual void start()
+                virtual void startAnimation()
                 {
-                    ContinuousActivityBase::start();
+                    ContinuousActivityBase::startAnimation();
 
                     // start animation
-                    mpAnim->start( mpShape,
-                                   mpAttributeLayer );
+                    mpAnim->start( getShape(),
+                                   getShapeAttributeLayer() );
                 }
 
-                virtual void end()
+                virtual void endAnimation()
                 {
                     // end animation
                     mpAnim->end();
-
-                    ContinuousActivityBase::end();
                 }
 
                 /// perform override for ContinuousActivityBase
@@ -926,6 +925,7 @@ namespace presentation
         {
             ActivityParameters aActivityParms( rParms.mpEndEvent,
                                                rParms.mrEventQueue,
+                                               rParms.mrActivitiesQueue,
                                                rParms.mnMinDuration,
                                                rParms.maRepeats,
                                                rParms.mnAcceleration,
