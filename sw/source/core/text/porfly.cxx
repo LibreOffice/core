@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-16 07:27:41 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,6 +380,10 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
     {
         // OD 2004-04-01 #i26791# - no direct positioning needed any more
         pDrawContact->ConnectToLayout();
+        // --> OD 2005-01-14 #i40333# - follow-up of #i35635#
+        // move object to visible layer
+        pDrawContact->MoveObjToVisibleLayer( pDrawContact->GetMaster() );
+        // <--
     }
     nLineLength = 1;
     nFlags |= AS_CHAR_ULSPACE | AS_CHAR_INIT;
