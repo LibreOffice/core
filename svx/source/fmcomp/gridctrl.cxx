@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-17 12:12:00 $
+ *  last change: $Author: oj $ $Date: 2002-04-23 07:58:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1064,6 +1064,8 @@ void DbGridControl::Construct()
     m_pSeekCursor = m_pDataCursor = NULL;
     m_bHandle = sal_True;
 
+    String sName(SVX_RES(RID_STR_NAVIGATIONBAR));
+    m_aBar.SetAccessibleName(sName);
     m_aBar.Show();
     ImplInitSettings(sal_True,sal_True,sal_True);
 }

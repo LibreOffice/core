@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-22 15:37:37 $
+ *  last change: $Author: oj $ $Date: 2002-04-23 07:58:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1913,4 +1913,76 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
 
     return aBookmarks;
 }
+// -----------------------------------------------------------------------------
+namespace
+{
+    ::rtl::OUString getColumnPropertyFromPeer(FmXGridPeer* _pPeer,sal_Int32 _nPosition,const ::rtl::OUString& _sPropName)
+    {
+        ::rtl::OUString sRetText;
+        if ( _pPeer && _nPosition != -1)
+        {
+            Reference<XIndexContainer> xIndex = _pPeer->getColumns();
+            if ( xIndex.is() && xIndex->getCount() > _nPosition )
+            {
+                Reference<XPropertySet> xProp;
+                xIndex->getByIndex( _nPosition ) >>= xProp;
+                if ( xProp.is() )
+                    xProp->getPropertyValue( _sPropName ) >>= sRetText;
+            }
+        }
+        return sRetText;
+    }
+}
+// Object data and state ------------------------------------------------------
+::rtl::OUString FmGridControl::GetAccessibleName( ::svt::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
+{
+    ::rtl::OUString sRetText;
+    switch( _eObjType )
+    {
+        case ::svt::BBTYPE_BROWSEBOX:
+            if ( GetPeer() )
+            {
+                Reference<XPropertySet> xProp(GetPeer()->getColumns(),UNO_QUERY);
+                if ( xProp.is() )
+                    xProp->getPropertyValue(FM_PROP_NAME) >>= sRetText;
+            }
+            break;
+        case ::svt::BBTYPE_COLUMNHEADERCELL:
+            sRetText = getColumnPropertyFromPeer(GetPeer(),
+                                                GetModelColumnPos(_nPosition),
+                                                FM_PROP_LABEL);
+            break;
+        default:
+            sRetText = DbGridControl::GetAccessibleName(_eObjType,_nPosition);
+    }
+    return sRetText;
+}
+// -----------------------------------------------------------------------------
+
+::rtl::OUString FmGridControl::GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
+{
+    ::rtl::OUString sRetText;
+    switch( _eObjType )
+    {
+        case ::svt::BBTYPE_BROWSEBOX:
+            if ( GetPeer() )
+            {
+                Reference<XPropertySet> xProp(GetPeer()->getColumns(),UNO_QUERY);
+                if ( xProp.is() )
+                    xProp->getPropertyValue(FM_PROP_HELPTEXT) >>= sRetText;
+            }
+            break;
+        case ::svt::BBTYPE_COLUMNHEADERCELL:
+            sRetText = getColumnPropertyFromPeer(GetPeer(),
+                                                GetModelColumnPos(_nPosition),
+                                                FM_PROP_HELPTEXT);
+            break;
+        default:
+            sRetText = DbGridControl::GetAccessibleDescription(_eObjType,_nPosition);
+    }
+    return sRetText;
+}
+// -----------------------------------------------------------------------------
+
+
 
