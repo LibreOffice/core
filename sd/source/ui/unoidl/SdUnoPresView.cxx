@@ -48,7 +48,9 @@ Any SAL_CALL SdUnoPresView::queryInterface( const Type & rType )
     QUERYINT( drawing::XDrawView );
     else QUERYINT( lang::XServiceInfo );
     else QUERYINT( beans::XPropertySet );
-    else QUERYINT( lang::XComponent );
+    else if( rType == ITYPE(lang::XComponent) )
+        aAny <<= uno::Reference< lang::XComponent >(static_cast<SfxBaseController*>(this));
+    else QUERYINT( awt::XWindow );
     else
         return SfxBaseController::queryInterface(rType);
 
@@ -72,7 +74,7 @@ Sequence< Type > SAL_CALL SdUnoPresView::getTypes()
             const sal_Int32 nBaseTypes = aBaseTypes.getLength();
             const Type* pBaseTypes = aBaseTypes.getConstArray();
 
-            const sal_Int32 nOwnTypes = 4;      // !DANGER! Keep this updated!
+            const sal_Int32 nOwnTypes = 5;      // !DANGER! Keep this updated!
 
             aTypeSequence.realloc(  nBaseTypes + nOwnTypes );
             Type* pTypes = aTypeSequence.getArray();
@@ -81,6 +83,7 @@ Sequence< Type > SAL_CALL SdUnoPresView::getTypes()
             *pTypes++ = ITYPE(lang::XServiceInfo);
             *pTypes++ = ITYPE(beans::XPropertySet);
             *pTypes++ = ITYPE(lang::XComponent);
+            *pTypes++ = ITYPE(awt::XWindow);
 
             for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
                 *pTypes++ = *pBaseTypes++;

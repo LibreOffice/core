@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-30 11:38:57 $
+ *  last change: $Author: cl $ $Date: 2002-03-21 13:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,13 @@
 #include <svx/unoshape.hxx>
 #include <svx/unoshcol.hxx>
 
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
+
+#include "sdwindow.hxx"
+#include "outlnvsh.hxx"
+
 #include "unohelp.hxx"
 #include "unopage.hxx"
 #include "unomodel.hxx"
@@ -136,7 +143,9 @@ Any SAL_CALL SdUnoOutlineView::queryInterface( const Type & rType )
     else QUERYINT( drawing::XDrawView );
     else QUERYINT( lang::XServiceInfo );
     else QUERYINT( beans::XPropertySet );
-    else QUERYINT( lang::XComponent );
+    else if( rType == ITYPE(lang::XComponent) )
+        aAny <<= uno::Reference< lang::XComponent >(static_cast<SfxBaseController*>(this));
+    else QUERYINT( awt::XWindow );
     else
         return SfxBaseController::queryInterface(rType);
 
@@ -176,7 +185,7 @@ Sequence< Type > SAL_CALL SdUnoOutlineView::getTypes()
             const sal_Int32 nBaseTypes = aBaseTypes.getLength();
             const Type* pBaseTypes = aBaseTypes.getConstArray();
 
-            const sal_Int32 nOwnTypes = 5;      // !DANGER! Keep this updated!
+            const sal_Int32 nOwnTypes = 6;      // !DANGER! Keep this updated!
 
             aTypeSequence.realloc(  nBaseTypes + nOwnTypes );
             Type* pTypes = aTypeSequence.getArray();
@@ -186,6 +195,7 @@ Sequence< Type > SAL_CALL SdUnoOutlineView::getTypes()
             *pTypes++ = ITYPE(lang::XServiceInfo);
             *pTypes++ = ITYPE(beans::XPropertySet);
             *pTypes++ = ITYPE(lang::XComponent);
+            *pTypes++ = ITYPE(awt::XWindow);
 
             for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
                 *pTypes++ = *pBaseTypes++;
@@ -604,3 +614,135 @@ void SdUnoOutlineView::fireVisAreaChanged( const Rectangle& rVisArea ) throw()
         maLastVisArea = rVisArea;
     }
 }
+
+Reference< ::com::sun::star::awt::XWindow > SdUnoOutlineView::getWindow()
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow;
+    if( mpViewSh && mpViewSh->GetActiveWindow() )
+        xWindow = VCLUnoHelper::GetInterface( mpViewSh->GetActiveWindow() );
+    return xWindow;
+}
+
+void SAL_CALL SdUnoOutlineView::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->setPosSize( X, Y, Width, Height, Flags );
+}
+
+::com::sun::star::awt::Rectangle SAL_CALL SdUnoOutlineView::getPosSize(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::awt::Rectangle aRect;
+
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        aRect = xWindow->getPosSize();
+
+    return aRect;
+}
+
+void SAL_CALL SdUnoOutlineView::setVisible( sal_Bool Visible ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->setVisible( Visible );
+}
+
+void SAL_CALL SdUnoOutlineView::setEnable( sal_Bool Enable ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->setEnable( Enable );
+}
+
+void SAL_CALL SdUnoOutlineView::setFocus(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->setFocus();
+}
+
+void SAL_CALL SdUnoOutlineView::addWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->addWindowListener( xListener );
+}
+
+void SAL_CALL SdUnoOutlineView::removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->removeWindowListener( xListener );
+}
+
+void SAL_CALL SdUnoOutlineView::addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->addFocusListener( xListener );
+}
+
+void SAL_CALL SdUnoOutlineView::removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->removeFocusListener( xListener );
+}
+
+void SAL_CALL SdUnoOutlineView::addKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->addKeyListener( xListener );
+}
+
+void SAL_CALL SdUnoOutlineView::removeKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->removeKeyListener( xListener );
+}
+
+void SAL_CALL SdUnoOutlineView::addMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->addMouseListener( xListener );
+}
+
+void SAL_CALL SdUnoOutlineView::removeMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->removeMouseListener( xListener );
+}
+
+void SAL_CALL SdUnoOutlineView::addMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->addMouseMotionListener( xListener );
+}
+
+void SAL_CALL SdUnoOutlineView::removeMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->removeMouseMotionListener( xListener );
+}
+
+void SAL_CALL SdUnoOutlineView::addPaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->addPaintListener( xListener );
+}
+
+void SAL_CALL SdUnoOutlineView::removePaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    if( xWindow.is() )
+        xWindow->removePaintListener( xListener );
+}
+
