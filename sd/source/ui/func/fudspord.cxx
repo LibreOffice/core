@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudspord.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-01 09:59:51 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,18 +62,29 @@
 
 #pragma hdrstop
 
+#include "fudspord.hxx"
+
 #include <svx/svxids.hrc>
 #ifndef _VCL_POINTR_HXX //autogen
 #include <vcl/pointr.hxx>
 #endif
 
 #include "app.hrc"
-#include "fudspord.hxx"
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
-#include "viewshel.hxx"
-#include "sdview.hxx"
-#include "sdwindow.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
 #include "drawdoc.hxx"
+
+namespace sd {
 
 TYPEINIT1( FuDisplayOrder, FuPoor );
 
@@ -83,14 +94,15 @@ TYPEINIT1( FuDisplayOrder, FuPoor );
 |*
 \************************************************************************/
 
-FuDisplayOrder::FuDisplayOrder(SdViewShell*     pViewSh,
-                               SdWindow*        pWin,
-                               SdView*          pView,
-                               SdDrawDocument*  pDoc,
-                               SfxRequest&      rReq) :
-    FuPoor(pViewSh, pWin, pView, pDoc, rReq),
-    pUserMarker(NULL),
-    pRefObj(NULL)
+FuDisplayOrder::FuDisplayOrder (
+    ViewShell*  pViewSh,
+    ::sd::Window*       pWin,
+    ::sd::View*         pView,
+    SdDrawDocument* pDoc,
+    SfxRequest&     rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
+      pUserMarker(NULL),
+      pRefObj(NULL)
 {
     pUserMarker = new SdrViewUserMarker(pView);
 }
@@ -217,3 +229,4 @@ void FuDisplayOrder::Deactivate()
 }
 
 
+} // end of namespace sd
