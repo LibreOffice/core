@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:59:34 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ using ::com::sun::star::drawing::XControlShape;
 
 XclOcxConverter::XclOcxConverter( const XclRoot& rRoot ) :
     SvxMSConvertOCXControls( rRoot.GetDocShell(), NULL ),
-    XclRoot( rRoot ),
+    mrDoc( rRoot.GetDoc() ),
     mnCurrTab( 0 ),
     mnCachedTab( 0 )
 {
@@ -147,6 +147,11 @@ XclOcxConverter::~XclOcxConverter()
 
 void XclOcxConverter::SetCurrTab( sal_uInt16 nTab )
 {
+    /*  Invalidate SvxMSConvertOCXControls::xFormComps whenever sheet index changes,
+        otherwise GetDrawPage() will not be called in SvxMSConvertOCXControls::GetFormComps(). */
+    if( mnCurrTab != nTab )
+        xFormComps = NULL;
+
     mnCurrTab = nTab;
 }
 
@@ -155,7 +160,7 @@ const Reference< XDrawPage >& XclOcxConverter::GetDrawPage()
     // find and cache draw page if uninitialized or sheet index has been changed
     if( !xDrawPage.is() || (mnCachedTab != mnCurrTab) )
     {
-        if( ScDrawLayer* pDrawLayer = GetDoc().GetDrawLayer() )
+        if( ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer() )
         {
             // mnCurrTab set in ReadControl() contains sheet index of current control
             if( SdrPage* pPage = pDrawLayer->GetPage( mnCurrTab ) )
@@ -172,22 +177,23 @@ const Reference< XDrawPage >& XclOcxConverter::GetDrawPage()
 
 // ----------------------------------------------------------------------------
 
-XclImpOcxConverter::XclImpOcxConverter( const XclRoot& rRoot ) :
-    XclOcxConverter( rRoot )
+XclImpOcxConverter::XclImpOcxConverter( const XclImpRoot& rRoot ) :
+    XclOcxConverter( rRoot ),
+    XclImpRoot( rRoot )
 {
     mxStrm = ScfTools::OpenStorageStreamRead( GetRootStorage(), EXC_STREAMNAME_CTLS );
 }
 
-bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOleObj )
+bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOcxCtrl )
 {
-    DBG_ASSERT( rOleObj.IsControl(), "XclOcxConverter::CreateSdrUnoObj - no control object" );
-    if( mxStrm.Is() && rOleObj.IsControl() )
+    DBG_ASSERT( rOcxCtrl.IsControl(), "XclOcxConverter::CreateSdrUnoObj - no control object" );
+    if( mxStrm.Is() && rOcxCtrl.IsControl() )
     {
         // virtual call of GetDrawPage() needs current sheet index
-        SetCurrTab( rOleObj.GetTab() );
+        SetCurrTab( rOcxCtrl.GetTab() );
 
         // stream position of the extra data for this control
-        sal_uInt32 nStrmPos = rOleObj.GetCtrlStreamPos();
+        sal_uInt32 nStrmPos = rOcxCtrl.GetCtrlStreamPos();
         mxStrm->Seek( nStrmPos );
 
         // the shape to fill
@@ -204,10 +210,10 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOleObj )
                 {
                     Reference< XPropertySet > xPropSet( xControlShape->getControl(), UNO_QUERY );
                     if( xPropSet.is() )
-                        rOleObj.SetProperties( xPropSet );
+                        rOcxCtrl.SetProperties( xPropSet );
                 }
 
-                rOleObj.SetSdrObj( pSdrObj );
+                rOcxCtrl.SetSdrObj( pSdrObj );
                 return true;
             }
         }
@@ -215,24 +221,24 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOleObj )
     return false;
 }
 
-bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherCtrl& rCtrlObj )
+bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherTbxCtrl& rTbxCtrl )
 {
     // virtual call of GetDrawPage() needs current sheet index
-    SetCurrTab( rCtrlObj.GetTab() );
+    SetCurrTab( rTbxCtrl.GetTab() );
 
     const Reference< XMultiServiceFactory >& rxServiceFactory = GetServiceFactory();
     if( rxServiceFactory.is() )
     {
-        Reference< XInterface > xInt( rxServiceFactory->createInstance( rCtrlObj.GetServiceName() ) );
+        Reference< XInterface > xInt( rxServiceFactory->createInstance( rTbxCtrl.GetServiceName() ) );
         Reference< XFormComponent > xFormComp( xInt, UNO_QUERY );
         Reference< XPropertySet > xPropSet( xInt, UNO_QUERY );
         if( xFormComp.is() && xPropSet.is() )
         {
             // set the control properties
-            rCtrlObj.SetProperties( xPropSet );
+            rTbxCtrl.SetProperties( xPropSet );
             // the shape to fill
             Reference< XShape > xShape;
-            // dummy size -> is done in XclImpEscherCtrl::Apply
+            // dummy size -> is done in XclImpEscherTbxCtrl::Apply
             ::com::sun::star::awt::Size aSize;
 
             // try to insert the control into the form
@@ -240,7 +246,7 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherCtrl& rCtrlObj )
             {
                 if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
                 {
-                    rCtrlObj.SetSdrObj( pSdrObj );
+                    rTbxCtrl.SetSdrObj( pSdrObj );
                     return true;
                 }
             }
@@ -292,22 +298,21 @@ sal_Bool XclImpOcxConverter::InsertControl(
 
 // ----------------------------------------------------------------------------
 
-#if EXC_INCL_EXP_OCX
-
-XclExpOcxConverter::XclExpOcxConverter( const XclRoot& rRoot ) :
-    XclOcxConverter( rRoot )
+XclExpOcxConverter::XclExpOcxConverter( const XclExpRoot& rRoot ) :
+    XclOcxConverter( rRoot ),
+    XclExpRoot( rRoot )
 {
 }
 
-XclExpObjControl* XclExpOcxConverter::CreateObjRec( const Reference< XShape >& rxShape )
+#if EXC_EXP_OCX_CTRL
+
+XclExpObjOcxCtrl* XclExpOcxConverter::CreateCtrlObj( const Reference< XShape >& rxShape )
 {
-    XclExpObjControl* pObjRec = NULL;
+    XclExpObjOcxCtrl* pOcxCtrl = NULL;
 
     // the shape to export
-    const SdrObject* pSdrObj = ::GetSdrObjectFromXShape( rxShape );
     Reference< XControlShape > xControlShape( rxShape, UNO_QUERY );
-
-    if( pSdrObj && xControlShape.is() )
+    if( xControlShape.is() )
     {
         // the control model
         Reference< XControlModel > xControlModel = xControlShape->getControl();
@@ -327,12 +332,34 @@ XclExpObjControl* XclExpOcxConverter::CreateObjRec( const Reference< XShape >& r
                     sal_uInt32 nStrmSize = mxStrm->Tell() - nStrmStart;
                     // adjust the class name to "Forms.***.1"
                     aClassName.InsertAscii( "Forms.", 0 ).AppendAscii( ".1" );
-                    pObjRec = new XclExpObjControl( *this, rxShape, aClassName, nStrmStart, nStrmSize );
+                    pOcxCtrl = new XclExpObjOcxCtrl( GetRoot(), rxShape, aClassName, nStrmStart, nStrmSize );
                 }
             }
         }
     }
-    return pObjRec;
+    return pOcxCtrl;
+}
+
+#else
+
+XclExpObjTbxCtrl* XclExpOcxConverter::CreateCtrlObj( const Reference< XShape >& rxShape )
+{
+    XclExpObjTbxCtrl* pTbxCtrl = NULL;
+
+    // the shape to export
+    Reference< XControlShape > xControlShape( rxShape, UNO_QUERY );
+    if( xControlShape.is() )
+    {
+        // the control model
+        Reference< XControlModel > xControlModel = xControlShape->getControl();
+        if( xControlModel.is() )
+        {
+            pTbxCtrl = new XclExpObjTbxCtrl( GetRoot(), rxShape, xControlModel );
+            if( pTbxCtrl->GetObjType() == EXC_OBJ_CMO_UNKNOWN )
+                DELETEZ( pTbxCtrl );
+        }
+    }
+    return pTbxCtrl;
 }
 
 #endif
