@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:20:48 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@ TabPage RID_SVXPAGE_PICK_BULLET
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
         Text[ slovak ] = "Výber";
+        Text[ hungarian ] = "Választék";
+        Text[ slovenian ] = "Izbor";
     };
     Control VS_VALUES
     {
@@ -157,6 +159,8 @@ TabPage RID_SVXPAGE_PICK_SINGLE_NUM
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
         Text[ slovak ] = "Výber";
+        Text[ hungarian ] = "Választék";
+        Text[ slovenian ] = "Izbor";
     };
     Control VS_VALUES
     {
@@ -208,6 +212,8 @@ TabPage RID_SVXPAGE_PICK_NUM
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
         Text[ slovak ] = "Výber";
+        Text[ hungarian ] = "Választék";
+        Text[ slovenian ] = "Izbor";
     };
     Control VS_VALUES
     {
@@ -259,6 +265,8 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
         Text[ slovak ] = "Výber";
+        Text[ hungarian ] = "Választék";
+        Text[ slovenian ] = "Izbor";
     };
     Control VS_VALUES
     {
@@ -282,7 +290,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ french ] = "~Lier les images";
         Text[ spanish ] = "~Vincular im�genes";
         Text[ italian ] = "Collega ~immagini";
-        Text[ danish ] = "K�d grafik";
+        Text[ danish ] = "~K�d grafik";
         Text[ swedish ] = "~L�nka grafik";
         Text[ polish ] = "~Do��cz grafik�";
         Text[ portuguese_brazilian ] = "~Vincular figuras";
@@ -300,6 +308,8 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ hebrew ] = "Grafiken ~verknüpfen";
         Text[ hindi ] = "सुचित्रों को ~लिंक करो";
         Text[ slovak ] = "~Prepojiť obrázky";
+        Text[ hungarian ] = "~Hivatkozásként";
+        Text[ slovenian ] = "~Poveži grafike";
     };
     FixedText FT_ERROR
     {
@@ -311,7 +321,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text [ english_us ] = "The Gallery theme 'Bullets' is empty (no graphics)." ;
         Text [ portuguese_brazilian ] = "N�o h� figuras no tema 'Marcas' da Galeria." ;
         Text [ swedish ] = "Det finns ingen grafik i Gallery-temat 'Punkter'." ;
-        Text [ danish ] = "Der findes ingen grafik i Gallery-emnet 'Punkttegn'." ;
+        Text [ danish ] = "Galleritemaet 'Punkttegn' er tomt (ingen grafik)" ;
         Text [ italian ] = "Nella gallery con argomento 'Punti' non ci sono immagini." ;
         Text [ spanish ] = "No hay im�genes en el tema 'Bullets' de la Gallery." ;
         Text [ french ] = "Il n'existe pas d'image pour le th�me 'Puces' dans la Gallery." ;
@@ -335,6 +345,8 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ hebrew ] = "Es sind keine Grafiken im Gallery-Thema 'Bullets' vorhanden.";
         Text[ hindi ] = "गेलरी विषय 'बुलेट्स्' खाली है (सुचित्र नहीं है)।";
         Text[ slovak ] = "Motív galérie 'Odrážky' je prázdny (žiadne obrázky).";
+        Text[ hungarian ] = "A \"Felsorolásjelek (bullets)\" képtár üres (nincsenek benne képek).";
+        Text[ slovenian ] = "Galerijska tema 'Oznake' je prazna (ni grafik)";
     };
 };
 /**************************************************************************/
@@ -359,7 +371,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ portuguese_brazilian ] = "N�vel" ;
         Text [ portuguese ] = "~N�vel" ;
         Text [ finnish ] = "Taso" ;
-        Text [ danish ] = "~Niveau" ;
+        Text [ danish ] = "Niveau" ;
         Text [ french ] = "Niveau" ;
         Text [ swedish ] = "~Niv�" ;
         Text [ dutch ] = "~Niveau" ;
@@ -381,6 +393,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "~Ebene";
         Text[ hindi ] = "स्तर";
         Text[ slovak ] = "Úroveň";
+        Text[ hungarian ] = "Vázlatszint";
+        Text[ slovenian ] = "Raven";
     };
     MultiListBox LB_LEVEL
     {
@@ -423,6 +437,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
         Text[ slovak ] = "Formát";
+        Text[ hungarian ] = "Formátum";
+        Text[ slovenian ] = "Oblika";
     };
     FixedText FT_FMT
     {
@@ -432,7 +448,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ ENGLISH ] = "~Numbering" ;
         Text [ english_us ] = "~Numbering" ;
         Text [ swedish ] = "Numrering" ;
-        Text [ danish ] = "Nummerering" ;
+        Text [ danish ] = "~Nummerering" ;
         Text [ italian ] = "Numerazione" ;
         Text [ spanish ] = "Nu~meraci�n" ;
         Text [ french ] = "Num�rotation" ;
@@ -456,6 +472,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "‮מיספור‬";
         Text[ hindi ] = "~संख्या देना";
         Text[ slovak ] = "Čí~slovanie";
+        Text[ hungarian ] = "S~zámozás";
+        Text[ slovenian ] = "Oš~tevilčevanje";
     };
     ListBox LB_FMT
     {
@@ -537,12 +555,12 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         StringList [ greek ] =
         {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "�, �, �, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "�, �, �, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
             < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
             < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "�, .., ��, .., ���, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "�, .., ��, .., ���, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
             < "�������" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
             < "�������" ;                   8/*SVX_NUM_BITMAP              */; > ;
             < "������� �����������" ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
@@ -557,7 +575,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
             < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
             < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
             < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-            < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Opsommingsteken" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
             < "Afbeelding" ;                    8/*SVX_NUM_BITMAP              */; > ;
             < "Afbeelding gekoppeld" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
             < "Geen" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
@@ -615,7 +633,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
             < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
             < "Punkttegn" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
             < "Grafik" ;                    8/*SVX_NUM_BITMAP              */; > ;
-            < "Grafik k�det" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "K�det grafik" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
             < "Ingen" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
         };
         StringList [ swedish ] =
@@ -856,6 +874,34 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         < "Obrázky s odkazom" ;            0x88/*SVX_NUM_BITMAP|0x80      */; > ;
         < "Žiadne" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "1, 2, 3, ..." ;                 4/*SVX_NUM_ARABIC              */; > ;
+        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+        < "A, .., AA, .., AAA, ... " ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+        < "Felsorolás" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "Kép" ;                  8/*SVX_NUM_BITMAP              */; > ;
+        < "Csatolt képek" ;            0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+        < "Nincs" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "1, 2, 3, ..." ;                 4/*SVX_NUM_ARABIC              */; > ;
+        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+        < "A, .., AA, .., AAA. ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+        < "Oznaka" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "Grafika" ;                   8/*SVX_NUM_BITMAP              */; > ;
+        < "Povezane grafike" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+        < "Brez" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+    };
     };
     FixedText FT_PREFIX
     {
@@ -891,6 +937,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "‮לפני‬";
         Text[ hindi ] = "से पहिले";
         Text[ slovak ] = "Pred";
+        Text[ hungarian ] = "Előtte";
+        Text[ slovenian ] = "Pred";
     };
     Edit ED_PREFIX
     {
@@ -935,6 +983,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "‮אחרי‬";
         Text[ hindi ] = "के पश्चात्";
         Text[ slovak ] = "Za";
+        Text[ hungarian ] = "Utána";
+        Text[ slovenian ] = "Za";
     };
     Edit ED_SUFFIX
     {
@@ -977,6 +1027,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "Zeichen~vorlage";
         Text[ hindi ] = "~अक्षर शैली";
         Text[ slovak ] = "Štýl ~znaku";
+        Text[ hungarian ] = "~Karakterstílus";
+        Text[ slovenian ] = "~Znakovni slog";
     };
     ListBox LB_CHARFMT
     {
@@ -995,7 +1047,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ italian ] = "Colore";
         Text[ portuguese_brazilian ] = "Cor";
         Text[ portuguese ] = "~Cor";
-        Text[ danish ] = "~Farve";
+        Text[ danish ] = "Farve";
         Text[ french ] = "Couleur";
         Text[ swedish ] = "~F�rg";
         Text[ dutch ] = "~Kleur";
@@ -1018,6 +1070,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "रंग";
         Text[ slovak ] = "Farba";
+        Text[ hungarian ] = "Szín";
+        Text[ slovenian ] = "Barva";
     };
     ListBox LB_BUL_COLOR
     {
@@ -1060,6 +1114,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "~Relative Größe";
         Text[ hindi ] = "~सम्बन्धित परिमाण";
         Text[ slovak ] = "~Relatívna veľkosť";
+        Text[ hungarian ] = "~Relatív méret";
+        Text[ slovenian ] = "~Relativna velikost";
     };
     MetricField MF_BUL_REL_SIZE
     {
@@ -1088,7 +1144,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ portuguese_brazilian ] = "Mostrar sub n�veis" ;
         Text [ portuguese ] = "Co~mpleto" ;
         Text [ finnish ] = "N�yt� alitasot" ;
-        Text [ danish ] = "F~uldst�ndig" ;
+        Text [ danish ] = "Vis underniveauer" ;
         Text [ french ] = "Complet" ;
         Text [ swedish ] = "F~ullst�ndig" ;
         Text [ dutch ] = "~Volledig" ;
@@ -1110,6 +1166,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "V~ollständig";
         Text[ hindi ] = "उपस्तरों को दिखाओ";
         Text[ slovak ] = "Zobraziť všetko";
+        Text[ hungarian ] = "Alszintek száma";
+        Text[ slovenian ] = "Prikaži podravni";
     };
     NumericField NF_ALL_LEVEL
     {
@@ -1137,7 +1195,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ portuguese_brazilian ] = "Iniciar em" ;
         Text [ portuguese ] = "~Come�ar em" ;
         Text [ finnish ] = "Aloita kohdasta" ;
-        Text [ danish ] = "Be~gyndelse ved" ;
+        Text [ danish ] = "Begyndelse ved" ;
         Text [ french ] = "Commencer avec" ;
         Text [ swedish ] = "~B�rja med" ;
         Text [ dutch ] = "~Begin met" ;
@@ -1160,6 +1218,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "Be~ginn bei";
         Text[ hindi ] = "से प्रारंभ करो";
         Text[ slovak ] = "Začať od";
+        Text[ hungarian ] = "Kezdőérték";
+        Text[ slovenian ] = "Začni z";
     };
     NumericField ED_START
     {
@@ -1210,6 +1270,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "~Symbol anzeigen";
         Text[ hindi ] = "संकेत दिखाओ";
         Text[ slovak ] = "Zobraziť symbol";
+        Text[ hungarian ] = "Szimbólumok megjelenítése";
+        Text[ slovenian ] = "Pokaži simbol";
     };
     FixedText FT_ALIGN
     {
@@ -1222,10 +1284,10 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ italian ] = "Allineamento";
         Text[ portuguese_brazilian ] = "~Alinhamento";
         Text[ portuguese ] = "~Alinhamento";
-        Text[ danish ] = "Justering";
+        Text[ danish ] = "~Justering";
         Text[ french ] = "Alignement";
         Text[ swedish ] = "~Justering";
-        Text[ dutch ] = "~Uitlijnen";
+        Text[ dutch ] = "~Uitlijning";
         Text[ spanish ] = "~Alineaci�n";
         Text[ chinese_simplified ] = "对齐(~A)";
         Text[ russian ] = "������������";
@@ -1244,6 +1306,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "‮ישור‬";
         Text[ hindi ] = "~पंक्तिकरण";
         Text[ slovak ] = "Z~arovnanie";
+        Text[ hungarian ] = "Ig~azítás";
+        Text[ slovenian ] = "~Poravnava";
     };
     ListBox LB_ALIGN
     {
@@ -1420,6 +1484,18 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         < "Na stred" ; > ;
         < "Vpravo" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Balra" ; > ;
+        < "Középre igazított" ; > ;
+        < "Jobbra" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Levo" ; > ;
+        < "Na sredini" ; > ;
+        < "Desno" ; > ;
+    };
     };
     String STR_BULLET
     {
@@ -1452,6 +1528,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "Ze~ichen";
         Text[ hindi ] = "अक्षर";
         Text[ slovak ] = "Znak";
+        Text[ hungarian ] = "Karakter";
+        Text[ slovenian ] = "Znak";
     };
     PushButton PB_BULLET
     {
@@ -1494,6 +1572,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "‮גרפיקה‬";
         Text[ hindi ] = "सुचित्र";
         Text[ slovak ] = "Obrázky";
+        Text[ hungarian ] = "Kép";
+        Text[ slovenian ] = "Grafika";
     };
     MenuButton MB_BITMAP
     {
@@ -1539,6 +1619,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
                     Text[ hebrew ] = "‮מקובץ...‬";
                     Text[ hindi ] = "फाइल से...";
                     Text[ slovak ] = "Zo súboru...";
+                    Text[ hungarian ] = "Fájlból...";
+                    Text[ slovenian ] = "Iz datoteke...";
                 };
                 MenuItem
                 {
@@ -1554,7 +1636,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
                     Text[ spanish ] = "Gallery";
                     Text[ finnish ] = "Galleria";
                     Text[ italian ] = "Gallery";
-                    Text[ danish ] = "Gallery";
+                    Text[ danish ] = "Galleri";
                     Text[ swedish ] = "Gallery";
                     Text[ polish ] = "Galeria";
                     Text[ portuguese_brazilian ] = "Galeria";
@@ -1570,6 +1652,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
                     Text[ hebrew ] = "‮גלריה‬";
                     Text[ hindi ] = "गेलरी";
                     Text[ slovak ] = "Galéria";
+                    Text[ hungarian ] = "Képtár";
+                    Text[ slovenian ] = "Galerija";
                 };
             };
         };
@@ -1599,6 +1683,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "‮בחירה...‬";
         Text[ hindi ] = "चुनो...";
         Text[ slovak ] = "Vybrať...";
+        Text[ hungarian ] = "Kiválasztás...";
+        Text[ slovenian ] = "Izberi...";
     };
     FixedText FT_SIZE
     {
@@ -1633,6 +1719,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौड़ाई";
         Text[ slovak ] = "Šírka";
+        Text[ hungarian ] = "Szélesség";
+        Text[ slovenian ] = "Širina";
     };
     MetricField MF_WIDTH
     {
@@ -1663,7 +1751,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ english_us ] = "Height" ;
         Text [ portuguese_brazilian ] = "Altura" ;
         Text [ swedish ] = "H~�jd" ;
-        Text [ danish ] = "H~�jde" ;
+        Text [ danish ] = "H�jde" ;
         Text [ italian ] = "Altezza" ;
         Text [ spanish ] = "A~ltura" ;
         Text [ french ] = "Hauteur" ;
@@ -1686,6 +1774,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँचाई";
         Text[ slovak ] = "Výška";
+        Text[ hungarian ] = "Magasság";
+        Text[ slovenian ] = "Višina";
     };
     MetricField MF_HEIGHT
     {
@@ -1716,7 +1806,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ english_us ] = "Keep ratio" ;
         Text [ portuguese_brazilian ] = "Manter propor��o" ;
         Text [ swedish ] = "Anpassa ~proportionellt" ;
-        Text [ danish ] = "Proportional" ;
+        Text [ danish ] = "Bevar st�rrelsesforhold" ;
         Text [ italian ] = "Sin~cronizza" ;
         Text [ spanish ] = "Proporcional" ;
         Text [ french ] = "Proportionnel" ;
@@ -1739,6 +1829,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "Abg~leich";
         Text[ hindi ] = "अनुपात रखो";
         Text[ slovak ] = "Zachovať pomer";
+        Text[ hungarian ] = "Rögzített méretarány";
+        Text[ slovenian ] = "Ohrani razmerje";
     };
     FixedText FT_ORIENT
     {
@@ -1773,6 +1865,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "‮ישור‬";
         Text[ hindi ] = "पंक्तिकरण";
         Text[ slovak ] = "Zarovnanie";
+        Text[ hungarian ] = "Igazítás";
+        Text[ slovenian ] = "Poravnava";
     };
     ListBox LB_ORIENT
     {
@@ -1844,15 +1938,15 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         };
         stringlist [ danish ] =
         {
-            < "Basis �verst" ; > ;
-            < "Basis centreret" ; > ;
-            < "Basis nederst" ; > ;
-            < "Tegn �verst" ; > ;
-            < "Tegn centreret" ; > ;
-            < "Tegn nederst" ; > ;
-            < "R�kke �verst" ; > ;
-            < "R�kke centreret" ; > ;
-            < "R�kke nederst" ; > ;
+            < "Toppen af grundlinjen" ; > ;
+            < "Midten af grundlinjen" ; > ;
+            < "Bunden af grundlinjen" ; > ;
+            < "Toppen af tegnet" ; > ;
+            < "Midten af tegnet" ; > ;
+            < "Bunden af tegnet" ; > ;
+            < "Toppen af linjen" ; > ;
+            < "Midten af linjen" ; > ;
+            < "Bunden af linjen" ; > ;
         };
         stringlist [ italian ] =
         {
@@ -2118,6 +2212,30 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         < "Stred riadku" ; > ;
         < "Päta riadku" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Alapvonal teteje" ; > ;
+        < "Alapvonal közepe" ; > ;
+        < "Alapvonal alja" ; > ;
+        < "Karakter teteje" ; > ;
+        < "Karakter közepe" ; > ;
+        < "Karakter alja" ; > ;
+        < "Sor teteje" ; > ;
+        < "Sor közepe" ; > ;
+        < "Sor alja" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Na vrhu osnovne vrstice" ; > ;
+        < "Na sredini osnovne vrstice" ; > ;
+        < "Na dnu osnovne vrstice" ; > ;
+        < "Nad znakom" ; > ;
+        < "Na sredini znaka" ; > ;
+        < "Pod znakom" ; > ;
+        < "Nad vrstico" ; > ;
+        < "Na sredini vrstice" ; > ;
+        < "Na dnu vrstice" ; > ;
+    };
     };
     FixedLine FL_SAME_LEVEL
     {
@@ -2151,6 +2269,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "Alle Ebenen";
         Text[ hindi ] = "सब स्तरें";
         Text[ slovak ] = "všetky úrovne";
+        Text[ hungarian ] = "Minden vázlatszintre";
+        Text[ slovenian ] = "Vse ravni";
     };
     CheckBox CB_SAME_LEVEL
     {
@@ -2161,7 +2281,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ english_us ] = "~Consecutive numbering" ;
         Text [ portuguese_brazilian ] = "Numera��o se~q�encial" ;
         Text [ swedish ] = "Fort~l�pande numrering" ;
-        Text [ danish ] = "~Fortl�bende nu~mmerering" ;
+        Text [ danish ] = "~Fortl�bende nummerering" ;
         Text [ italian ] = "~Numerazione continua" ;
         Text [ spanish ] = "Numeraci�n consecutiva" ;
         Text [ french ] = "Num�rotation continue" ;
@@ -2184,6 +2304,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "~Fortlaufende Nu~mmerierung";
         Text[ hindi ] = "~क्रमागत संख्या देना";
         Text[ slovak ] = "~Postupné číslovanie";
+        Text[ hungarian ] = "~Folyamatos számozás";
+        Text[ slovenian ] = "~Zaporedno oštevilčevanje";
     };
     Window WIN_PREVIEW
     {
@@ -2199,11 +2321,11 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ portuguese ] = "N�o existem imagens no tema \"Bullets\" da Gallery.";
         Text[ russian ] = "� ���� ������� '�������' ����������� �������� �� ����������.";
         Text[ greek ] = "��� �������� ������� ��� ���� \"���������\" ��� �������.";
-        Text[ dutch ] = "Er zijn geen afbeeldingen voor het gallery-onderwerp 'Bullets'.";
+        Text[ dutch ] = "Er zijn geen afbeeldingen voor het gallery-onderwerp 'Opsommingstekens'.";
         Text[ french ] = "Il n'existe pas d'image pour le th�me 'Puces' dans la Gallery..";
         Text[ spanish ] = "No existen im�genes en el tema 'Vi�etas' de la Gallery.";
         Text[ italian ] = "La cartella 'Bullets' della Gallery � vuota.";
-        Text[ danish ] = "Der findes ingen grafik i Gallery-emnet 'Punkttegn'.";
+        Text[ danish ] = "Der findes ingen grafik i Galleritemaet 'Punkttegn'.";
         Text[ swedish ] = "Det finns ingen grafik i Gallery-temat 'Punkter'.";
         Text[ polish ] = "Temat Galerii 'Znaki wypunktowania' jest pusty (nie ma w nim �adnych grafik).";
         Text[ portuguese_brazilian ] = "N�o h� figuras no tema 'Marcas' da Galeria.";
@@ -2220,6 +2342,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ hebrew ] = "Es sind keine Grafiken im Gallery-Thema 'Bullets' vorhanden.";
         Text[ hindi ] = "'बुल्लेट्स' गेलरी विषय में कोई सुचित्र नहीं है ।";
         Text[ slovak ] = "V motíve galérie 'Odrážky' nie sú žiadne obrázky.";
+        Text[ hungarian ] = "Nincsenek képek a \"Felsorolásjelek (bullets)\" képtárban";
+        Text[ slovenian ] = "V galeriji 'Oznake' ni grafik";
     };
 
 };
@@ -2245,7 +2369,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ portuguese_brazilian ] = "N�vel" ;
         Text [ portuguese ] = "~N�vel" ;
         Text [ finnish ] = "Taso" ;
-        Text [ danish ] = "~Niveau" ;
+        Text [ danish ] = "Niveau" ;
         Text [ french ] = "Niveau" ;
         Text [ swedish ] = "~Niv�" ;
         Text [ dutch ] = "~Niveau" ;
@@ -2267,6 +2391,8 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ hebrew ] = "~Ebene";
         Text[ hindi ] = "स्तर";
         Text[ slovak ] = "Úroveň";
+        Text[ hungarian ] = "Vázlatszint";
+        Text[ slovenian ] = "Raven";
     };
     MultiListBox LB_LEVEL
     {
@@ -2310,6 +2436,8 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ hebrew ] = "Position und Abstand";
         Text[ hindi ] = "स्थान और अंतर देना";
         Text[ slovak ] = "Umiestnenie a rozostupy";
+        Text[ hungarian ] = "Pozíció és térköz";
+        Text[ slovenian ] = "Položaj in razmik";
     };
     FixedText FT_BORDERDIST
     {
@@ -2343,6 +2471,8 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ hebrew ] = "‮שוליים‬";
         Text[ hindi ] = "इन्डेन्ट";
         Text[ slovak ] = "Odsadenie";
+        Text[ hungarian ] = "Behúzás";
+        Text[ slovenian ] = "Zamik";
     };
     CheckBox CB_RELATIVE
     {
@@ -2354,7 +2484,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ english_us ] = "Relati~ve" ;
         Text [ portuguese_brazilian ] = "~Relativo" ;
         Text [ swedish ] = "Relati~vt" ;
-        Text [ danish ] = "Relativ" ;
+        Text [ danish ] = "~Relativ" ;
         Text [ italian ] = "Relativo" ;
         Text [ spanish ] = "Relati~vo" ;
         Text [ french ] = "Relatif" ;
@@ -2376,6 +2506,8 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ hebrew ] = "Relati~v";
         Text[ hindi ] = "सम्बन्धि~त";
         Text[ slovak ] = "Relatí~vne";
+        Text[ hungarian ] = "~Viszonylagos";
+        Text[ slovenian ] = "Relati~vno";
     };
     MetricField MF_BORDERDIST
     {
@@ -2427,6 +2559,8 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ hebrew ] = "Abstand zum Te~xt";
         Text[ hindi ] = "टेक्स्ट् को अंतर देना";
         Text[ slovak ] = "Vzdialenosť k textu";
+        Text[ hungarian ] = "Függő behúzás";
+        Text[ slovenian ] = "Razmik do besedila";
     };
     MetricField MF_INDENT
     {
@@ -2478,6 +2612,8 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ hebrew ] = "~Mindestabstand Nummer <-> Text";
         Text[ hindi ] = "न्यूनतम अंतर संख्या देना <-> टेक्स्ट्";
         Text[ slovak ] = "Min. vzdial. medzi čísl. a textom";
+        Text[ hungarian ] = "Számozás és szöveg minimális távolsága";
+        Text[ slovenian ] = "Min. razmik oštevilčenje <-> besedilo";
     };
     MetricField MF_NUMDIST
     {
@@ -2505,7 +2641,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ ENGLISH ] = "N~umbering alignment" ;
         Text [ english_us ] = "N~umbering alignment" ;
         Text [ swedish ] = "Justering av numrering" ;
-        Text [ danish ] = "Justering af nummerering" ;
+        Text [ danish ] = "Justering af n~ummerering" ;
         Text [ italian ] = "~Allineamento della numerazione" ;
         Text [ spanish ] = "~Alineaci�n de la numeraci�n" ;
         Text [ french ] = "~Alignement de la num�rotation" ;
@@ -2529,6 +2665,8 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ hebrew ] = "Ausri~chtung der Nummerierung";
         Text[ hindi ] = "सं~ख्या की पंक्तिकरण";
         Text[ slovak ] = "~Zarovnanie číslovaní";
+        Text[ hungarian ] = "S~zámozás igazítása";
+        Text[ slovenian ] = "Poravnava ošt~evilčenja";
     };
     ListBox LB_ALIGN
     {
@@ -2704,6 +2842,18 @@ TabPage RID_SVXPAGE_NUM_POSITION
         < "Na stred" ; > ;
         < "Vpravo" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Balra" ; > ;
+        < "Középre igazított" ; > ;
+        < "Jobbra" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Levo" ; > ;
+        < "Na sredini" ; > ;
+        < "Desno" ; > ;
+    };
     };
     PushButton PB_STANDARD
     {
@@ -2737,6 +2887,8 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "अनुपस्थिति";
         Text[ slovak ] = "Východzie";
+        Text[ hungarian ] = "Alapértelmezett";
+        Text[ slovenian ] = "Privzeto";
     };
     Window WIN_PREVIEW
     {
@@ -2777,6 +2929,8 @@ String RID_STR_EDIT_GRAPHIC
     Text[ hebrew ] = "Verknüpfen";
     Text[ hindi ] = "लिंक";
     Text[ slovak ] = "Odkaz";
+    Text[ hungarian ] = "Hivatkozás";
+    Text[ slovenian ] = "Povezava";
 };
 String RID_STR_FULLNUMS_1 { Text = "1.|1.1|a)|61589|61589" ; };
 String RID_STR_FULLNUMS_2 { Text = "1.|a)|61589|61589|61589" ; };
@@ -2787,6 +2941,7 @@ String RID_STR_FULLNUMS_6 { Text = "A.|I.|a.|i.|61589" ; };
 String RID_STR_FULLNUMS_7 { Text = "1|1.1|1.1.1|1.1.1.1|1.1.1.1.1" ; };
 String RID_STR_FULLNUMS_8 { Text = "61487|61488|61485|61589|61589" ; };
 String RID_STR_FULLNUMS_7_HTML { Text = "I.|I.|I|I.|I." ; };
+
 
 
 
