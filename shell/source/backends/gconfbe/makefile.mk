@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-17 13:01:40 $
+#   last change: $Author: hjs $ $Date: 2004-09-21 14:58:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ DLLPRE =
 
 .IF "$(ENABLE_GNOMEVFS)"!=""
 COMPILER_WARN_ALL=TRUE
-PKGCONFIG_MODULES=GConf-2.0
+PKGCONFIG_MODULES=gconf-2.0
 .INCLUDE: pkg_config.mk
 
 .IF "$(OS)" == "SOLARIS"
@@ -103,6 +103,7 @@ SLOFILES=\
     $(SLO)$/gconfbackend.obj \
     $(SLO)$/gconflayer.obj
         
+SHL1NOCHECK=TRUE
 SHL1TARGET=$(TARGET)1.uno   
 SHL1OBJS=$(SLOFILES)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
