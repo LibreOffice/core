@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-02 12:19:58 $
+ *  last change: $Author: hdu $ $Date: 2001-04-02 13:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,10 +684,16 @@ SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
 #ifdef USE_BUILTIN_RASTERIZER
         // requesting a font provided by builtin rasterizer
         mpServerSideFont = GlyphCache::GetInstance().CacheFont( *pEntry );
-
-        if( mpServerSideFont )
+        if( mpServerSideFont != NULL )
+        {
+            if( !mpServerSideFont->TestFont() )     // => bad font
+            {
+                GlyphCache::GetInstance().UncacheFont( *mpServerSideFont );
+                mpServerSideFont = NULL;
+                xFont_ = mxFallbackFont;
+            }
             return;
-
+        }
 #endif //USE_BUILTIN_RASTERIZER
 
         ExtendedXlfd *pSysFont = (ExtendedXlfd*)pEntry->mpFontData->mpSysData;
