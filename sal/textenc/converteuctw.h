@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converteuctw.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2001-10-17 14:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,10 @@ extern "C" {
 
 typedef struct
 {
-    sal_Unicode const * m_pCns116431992ToUnicodeData;
+    sal_uInt16 const * m_pCns116431992ToUnicodeData;
     sal_Int32 const * m_pCns116431992ToUnicodeRowOffsets;
     sal_Int32 const * m_pCns116431992ToUnicodePlaneOffsets;
-    sal_uInt32 const * m_pUnicodeToCns116431992Data;
+    sal_uInt8 const * m_pUnicodeToCns116431992Data;
     sal_Int32 const * m_pUnicodeToCns116431992PageOffsets;
     sal_Int32 const * m_pUnicodeToCns116431992PlaneOffsets;
 } ImplEucTwConverterData;

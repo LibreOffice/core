@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converteuctw.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2001-10-17 14:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
 #include "tenchelp.h"
 #endif
+#ifndef INCLUDED_RTL_TEXTENC_UNICHARS_H
+#include "unichars.h"
+#endif
 
 #ifndef _RTL_ALLOC_H_
 #include "rtl/alloc.h"
@@ -124,7 +127,7 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
                                    sal_uInt32 * pInfo,
                                    sal_Size * pSrcCvtBytes)
 {
-    sal_Unicode const * pCns116431992Data
+    sal_uInt16 const * pCns116431992Data
         = ((ImplEucTwConverterData const *) pData)->
               m_pCns116431992ToUnicodeData;
     sal_Int32 const * pCns116431992RowOffsets
@@ -177,32 +180,8 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
         case IMPL_EUC_TW_TO_UNICODE_STATE_1:
             if (nChar >= 0xA1 && nChar <= 0xFE)
             {
-                sal_Int32 nOffset = pCns116431992RowOffsets[nRow];
-                if (nOffset == -1)
-                    goto bad_input;
-                else
-                {
-                    sal_Unicode nUnicode;
-                    nOffset += nChar - 0xA1;
-                    nUnicode = pCns116431992Data[nOffset];
-                    if (nUnicode == 0xFFFF)
-                        goto bad_input;
-                    else if (nUnicode < RTL_UNICODE_START_HIGH_SURROGATES
-                             || nUnicode > RTL_UNICODE_END_HIGH_SURROGATES)
-                        if (pDestBufPtr != pDestBufEnd)
-                            *pDestBufPtr++ = nUnicode;
-                        else
-                            goto no_output;
-                    else
-                        if (pDestBufEnd - pDestBufPtr >= 2)
-                        {
-                            *pDestBufPtr++ = nUnicode;
-                            *pDestBufPtr++ = pCns116431992Data[nOffset + 94];
-                        }
-                        else
-                            goto no_output;
-                    eState = IMPL_EUC_TW_TO_UNICODE_STATE_0;
-                }
+                nPlane = 0;
+                goto transform;
             }
             else
             {
@@ -239,43 +218,7 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
 
         case IMPL_EUC_TW_TO_UNICODE_STATE_2_3:
             if (nChar >= 0xA1 && nChar <= 0xFE)
-            {
-                sal_Int32 nPlaneOffset = pCns116431992PlaneOffsets[nPlane];
-                if (nPlaneOffset == -1)
-                    goto bad_input;
-                else
-                {
-                    sal_Int32 nOffset
-                        = pCns116431992RowOffsets[nPlaneOffset + nRow];
-                    if (nOffset == -1)
-                        goto bad_input;
-                    else
-                    {
-                        sal_Unicode nUnicode;
-                        nOffset += nChar - 0xA1;
-                        nUnicode = pCns116431992Data[nOffset];
-                        if (nUnicode == 0xFFFF)
-                            goto bad_input;
-                        else if (nUnicode < RTL_UNICODE_START_HIGH_SURROGATES
-                                 || nUnicode
-                                        > RTL_UNICODE_END_HIGH_SURROGATES)
-                            if (pDestBufPtr != pDestBufEnd)
-                                *pDestBufPtr++ = nUnicode;
-                            else
-                                goto no_output;
-                        else
-                            if (pDestBufEnd - pDestBufPtr >= 2)
-                            {
-                                *pDestBufPtr++ = nUnicode;
-                                *pDestBufPtr++
-                                    = pCns116431992Data[nOffset + 94];
-                            }
-                            else
-                                goto no_output;
-                        eState = IMPL_EUC_TW_TO_UNICODE_STATE_0;
-                    }
-                }
-            }
+                goto transform;
             else
             {
                 bUndefined = sal_False;
@@ -284,6 +227,56 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
             break;
         }
         continue;
+
+    transform:
+        {
+            sal_Int32 nPlaneOffset = pCns116431992PlaneOffsets[nPlane];
+            if (nPlaneOffset == -1)
+                goto bad_input;
+            else
+            {
+                sal_Int32 nOffset
+                    = pCns116431992RowOffsets[nPlaneOffset + nRow];
+                if (nOffset == -1)
+                    goto bad_input;
+                else
+                {
+                    sal_uInt32 nFirstLast = pCns116431992Data[nOffset++];
+                    sal_uInt32 nFirst = nFirstLast & 0xFF;
+                    sal_uInt32 nLast = nFirstLast >> 8;
+                    nChar -= 0xA0;
+                    if (nChar >= nFirst && nChar <= nLast)
+                    {
+                        sal_uInt32 nUnicode
+                            = pCns116431992Data[nOffset + (nChar - nFirst)];
+                        if (nUnicode == 0xFFFF)
+                            goto bad_input;
+                        else if (ImplIsHighSurrogate(nUnicode))
+                            if (pDestBufEnd - pDestBufPtr >= 2)
+                            {
+                                nOffset += nLast - nFirst + 1;
+                                nFirst = pCns116431992Data[nOffset++];
+                                *pDestBufPtr++ = (sal_Unicode) nUnicode;
+                                *pDestBufPtr++
+                                    = (sal_Unicode)
+                                          pCns116431992Data[
+                                              nOffset + (nChar - nFirst)];
+                            }
+                            else
+                                goto no_output;
+                        else
+                            if (pDestBufPtr != pDestBufEnd)
+                                *pDestBufPtr++ = (sal_Unicode) nUnicode;
+                            else
+                                goto no_output;
+                    }
+                    else
+                        goto bad_input;
+                    eState = IMPL_EUC_TW_TO_UNICODE_STATE_0;
+                }
+            }
+            continue;
+        }
 
     bad_input:
         switch (ImplHandleBadInputMbTextToUnicodeConversion(bUndefined,
@@ -358,15 +351,7 @@ sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
                                    sal_uInt32 * pInfo,
                                    sal_Size * pSrcCvtChars)
 {
-    /* TODO! RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE
-             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR
-             RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0
-             RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE
-             RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE
-             RTL_UNICODETOTEXT_FLAGS_PRIVATE_IGNORE
-             RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE */
-
-    sal_uInt32 const * pCns116431992Data
+    sal_uInt8 const * pCns116431992Data
         = ((ImplEucTwConverterData const *) pData)->
               m_pUnicodeToCns116431992Data;
     sal_Int32 const * pCns116431992PageOffsets
@@ -390,49 +375,37 @@ sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
         sal_Bool bUndefined = sal_True;
         sal_uInt32 nChar = *pSrcBuf++;
         if (nHighSurrogate == 0)
-            if (nChar < 0x80)
-                if (pDestBufPtr != pDestBufEnd)
-                    *pDestBufPtr++ = (sal_Char) nChar;
-                else
-                    goto no_output;
-            else if (nChar >= RTL_UNICODE_START_HIGH_SURROGATES
-                     && nChar <= RTL_UNICODE_END_HIGH_SURROGATES)
+        {
+            if (ImplIsHighSurrogate(nChar))
+            {
                 nHighSurrogate = (sal_Unicode) nChar;
-            else if ((nChar < RTL_UNICODE_START_LOW_SURROGATES
-                          || nChar > RTL_UNICODE_END_LOW_SURROGATES)
-                     && (nChar < 0xFDD0 || nChar > 0xFDEF)
-                     && nChar < 0xFFFE)
-                goto translate;
-            else
-            {
-                bUndefined = sal_False;
-                goto bad_input;
+                continue;
             }
+        }
+        else if (ImplIsLowSurrogate(nChar))
+            nChar = ImplCombineSurrogates(nHighSurrogate, nChar);
         else
-            if (nChar >= RTL_UNICODE_START_LOW_SURROGATES
-                && nChar <= RTL_UNICODE_END_LOW_SURROGATES)
-            {
-                nChar = ((nHighSurrogate & 0x3FF) << 10 | nChar & 0x3FF)
-                            + 0x10000;
-                if ((nChar & 0xFFFF) < 0xFFFE)
-                    goto translate;
-                else
-                {
-                    bUndefined = sal_False;
-                    goto bad_input;
-                }
-            }
-            else
-            {
-                bUndefined = sal_False;
-                goto bad_input;
-            }
-        continue;
+        {
+            bUndefined = sal_False;
+            goto bad_input;
+        }
 
-    translate:
+        if (ImplIsLowSurrogate(nChar) || ImplIsNoncharacter(nChar))
+        {
+            bUndefined = sal_False;
+            goto bad_input;
+        }
+
+        if (nChar < 0x80)
+            if (pDestBufPtr != pDestBufEnd)
+                *pDestBufPtr++ = (sal_Char) nChar;
+            else
+                goto no_output;
+        else
         {
             sal_Int32 nOffset = pCns116431992PlaneOffsets[nChar >> 16];
-            sal_uInt32 nData;
+            sal_uInt32 nFirst;
+            sal_uInt32 nLast;
             sal_uInt32 nPlane;
             if (nOffset == -1)
                 goto bad_input;
@@ -440,10 +413,15 @@ sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
                 = pCns116431992PageOffsets[nOffset + ((nChar & 0xFF00) >> 8)];
             if (nOffset == -1)
                 goto bad_input;
-            nData = pCns116431992Data[nOffset + (nChar & 0xFF)];
-            if (nData == 0)
+            nFirst = pCns116431992Data[nOffset++];
+            nLast = pCns116431992Data[nOffset++];
+            nChar &= 0xFF;
+            if (nChar < nFirst || nChar > nLast)
                 goto bad_input;
-            nPlane = nData >> 16;
+            nOffset += 3 * (nChar - nFirst);
+            nPlane = pCns116431992Data[nOffset++];
+            if (nPlane == 0)
+                goto bad_input;
             if (pDestBufEnd - pDestBufPtr < (nPlane == 1 ? 2 : 4))
                 goto no_output;
             if (nPlane != 1)
@@ -451,14 +429,15 @@ sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
                 *pDestBufPtr++ = (sal_Char) 0x8E;
                 *pDestBufPtr++ = (sal_Char) (0xA0 + nPlane);
             }
-            *pDestBufPtr++ = (sal_Char) (nData >> 8 & 0xFF);
-            *pDestBufPtr++ = (sal_Char) (nData & 0xFF);
-            nHighSurrogate = 0;
+            *pDestBufPtr++ = (sal_Char) (0xA0 + pCns116431992Data[nOffset++]);
+            *pDestBufPtr++ = (sal_Char) (0xA0 + pCns116431992Data[nOffset]);
         }
+        nHighSurrogate = 0;
         continue;
 
     bad_input:
         switch (ImplHandleBadInputUnicodeToTextConversion(bUndefined,
+                                                          nChar,
                                                           nFlags,
                                                           &pDestBufPtr,
                                                           pDestBufEnd,
@@ -491,6 +470,7 @@ sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
             nInfo |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
         else
             switch (ImplHandleBadInputUnicodeToTextConversion(sal_False,
+                                                              0,
                                                               nFlags,
                                                               &pDestBufPtr,
                                                               pDestBufEnd,
