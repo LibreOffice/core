@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:11:17 $
+ *  last change: $Author: rt $ $Date: 2000-12-01 11:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ ModalDialog DLG_UUI_LOGIN
         Text = "Bitte geben Sie hier Benutzernamen und Passwort für %1 ein." ;
         Text [ English ] = "Please enter user name and password here for %1." ;
         Text [ portuguese ] = "Especifique o nome do utilizador e a senha para %1." ;
-        Text [ english_us ] = "Please enter user name and password for %1 here." ;
+        Text [ english_us ] = "Enter the user name and password for %1 here." ;
         Text [ portuguese_brazilian ] = "Bitte geben Sie hier Benutzernamen und Passwort für %1 ein." ;
         Text [ swedish ] = "Mata in användarnamn och lösenord här för %1." ;
         Text [ danish ] = "Indtast her venligst brugernavnet og adgangkoden for %1." ;
@@ -125,7 +125,7 @@ ModalDialog DLG_UUI_LOGIN
         Text [ dutch ] = "Vermeld hier de gebruiker en het wachtwoord voor %1." ;
         Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎª %1 ÊäÈëÊ¹ÓÃÃûºÍÃÜÂë¡£";
         Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ ïîëüçîâàòåëÿ è ïàğîëü äëÿ %1.";
-        Text[ polish ] = "Wpisz nazwê u¿ytkownika i has³o dla %1";
+        Text[ polish ] = "Wpisz u¿ytkownika i has³o dla %1.";
         Text[ japanese ] = "‚±‚±‚É %1 ‚ÌÕ°»Ş°–¼‚ÆÊß½Ü°ÄŞ‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
         Text[ chinese_traditional ] = "½Ğ¬° %1 ¿é¤J¨Ï¥Î¦W©M±K½X¡C";
         Text[ greek ] = "Ğáñáêáëş åéóÜãåôå åäş ôï üíïìá ôïõ ÷ñŞóôç êáé ôïí êùäéêü ğñüóâáóçò ãéá ôï %1.";
@@ -193,7 +193,7 @@ ModalDialog DLG_UUI_LOGIN
         Text [ portuguese ] = "~Nome do utilizador" ;
         Text[ chinese_simplified ] = "Ê¹ÓÃÃû(~U)";
         Text[ russian ] = "Èìÿ ïîëüçîâàòåëÿ";
-        Text[ polish ] = "Nazwa u¿ytkownika";
+        Text[ polish ] = "U¿ytkownik";
         Text[ japanese ] = "Õ°»Ş°–¼(~U)";
         Text[ chinese_traditional ] = "¨Ï¥Î¦W(~U)";
         Text[ greek ] = "¼íïìá ÷ñŞóôç";
@@ -377,7 +377,7 @@ ModalDialog DLG_UUI_LOGIN
     Text [ portuguese ] = "Requere-se nome de utilizador e senha" ;
     Text[ chinese_simplified ] = "ÒªÇóÊäÈëÊ¹ÓÃÃûºÍÃÜÂë";
     Text[ russian ] = "Íåîáõîäèìû èìÿ ïîëüçîâàòåëÿ è ïàğîëü";
-    Text[ polish ] = "Wymagana nazwa u¿ytkownika i has³o";
+    Text[ polish ] = "Nale¿y podaæ u¿ytkownika i has³o.";
     Text[ japanese ] = "Õ°»Ş°–¼‚ÆÊß½Ü°ÄŞ‚ª•K—v";
     Text[ chinese_traditional ] = "½Ğ¿é¤J¨Ï¥Î¦W©M±K½X";
     Text[ greek ] = "Áğáéôåßôáé ôï üíïìá ôïõ ÷ñŞóôç êáé ï êùäéêüò ğñüóâáóçò";
