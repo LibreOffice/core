@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-09-16 15:22:59 $
+ *  last change: $Author: er $ $Date: 2001-11-12 16:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,17 +99,6 @@ rtl::OUString C2U( const char* s )
   return OUString::createFromAscii(s);
 }
 
-static
-void printf_String( const char* fmt, ::rtl::OUString str )
-{
-     const int max = 1024;
-     char buf[ max+1 ];
-
-     for(int i=0; i<str.getLength() && i<max; i++) buf[i] = str[i];
-     buf[i]='\0';
-     printf( fmt, buf );
-}
-
 DefaultNumberingProvider::DefaultNumberingProvider(
     const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xMSF )
     : xSMgr(xMSF)
@@ -133,61 +122,46 @@ DefaultNumberingProvider::getDefaultContinuousNumberingLevels( const Locale& rLo
 }
 
 
-struct Level
-{
-     Level( ::rtl::OUString i0, ::rtl::OUString v0, ::rtl::OUString x0 ) : i( i0 ), v( v0 ), x( x0 ) {}
-     ::rtl::OUString i, v, x;
-};
-struct Level level[] = {
-     Level(::rtl::OUString::createFromAscii("I"), ::rtl::OUString::createFromAscii("V"), ::rtl::OUString::createFromAscii("X")),
-     Level(::rtl::OUString::createFromAscii("X"), ::rtl::OUString::createFromAscii("L"), ::rtl::OUString::createFromAscii("C")),
-     Level(::rtl::OUString::createFromAscii("C"), ::rtl::OUString::createFromAscii("D"), ::rtl::OUString::createFromAscii("M")),
-};
-
-::rtl::OUString calcDigit( int d, int l )
-{
-     ::rtl::OUString str;
-     if (l > 2)
-     {
-          for (int m=1; m <= d*pow(10, l-3); m++)
-               str += ::rtl::OUString::createFromAscii("M");
-          return str;
-     }
-     else
-     {
-          switch( d )
-          {
-          case 0: return rtl::OUString::createFromAscii("");
-          case 1: return level[l].i;
-          case 2: return level[l].i + level[l].i;
-          case 3: return level[l].i + level[l].i + level[l].i;
-          case 4: return level[l].i + level[l].v;
-          case 5: return level[l].v;
-          case 6: return level[l].v + level[l].i;
-          case 7: return level[l].v + level[l].i + level[l].i;
-          case 8: return level[l].v + level[l].i + level[l].i + level[l].i;
-          case 9: return level[l].i + level[l].x;
-          default:
-               assert(0);
-           return ::rtl::OUString::createFromAscii("");
-          }
-     }
-}
-
 ::rtl::OUString toRoman( sal_Int32 n )
 {
-     ::rtl::OUString result;
 
-     OUString tmp = OUString::valueOf( n );
-     ::rtl::OUString buf = tmp;
-     int length = buf.getLength();
+//      i, ii, iii, iv, v, vi, vii, vii, viii, ix
+//                          (Dummy),1000,500,100,50,10,5,1
+    static const sal_Char coRomanArr[] = "MDCLXVI--";   // +2 Dummy entries !!
+    const sal_Char* cRomanStr = coRomanArr;
+    USHORT nMask = 1000;
+    xub_StrLen nOver1000 = n / nMask;
+    n -= ( nOver1000 * nMask );
 
-     for( int i=0; i<length; i++ )
-     {
-          result += calcDigit( buf[i]-'0', length-i-1 );
-     }
+    String sTmp;
+    sTmp.Fill( nOver1000, *coRomanArr );
 
-     return result;
+    while( nMask )
+    {
+        BYTE nZahl = BYTE( n / nMask );
+        BYTE nDiff = 1;
+        n %= nMask;
+
+        if( 5 < nZahl )
+        {
+            if( nZahl < 9 )
+                sTmp += *(cRomanStr-1);
+            ++nDiff;
+            nZahl -= 5;
+        }
+        switch( nZahl )
+        {
+        case 3: sTmp += *cRomanStr;     //no break!
+        case 2: sTmp += *cRomanStr;     //no break!
+        case 1: sTmp += *cRomanStr;     break;
+        case 4: ( sTmp += *cRomanStr ) += *(cRomanStr-nDiff); break;
+        case 5: sTmp += *(cRomanStr-nDiff); break;
+        }
+
+        nMask /= 10;            // to the next decade
+        cRomanStr += 2;
+    }
+    return OUString( sTmp );
 }
 
 static
@@ -546,7 +520,7 @@ OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingT
 OUString DefaultNumberingProvider::getImplementationName(void)
                 throw( RuntimeException )
 {
-    return C2U("i18n::DefaultNumberingProvider");
+    return C2U("com.sun.star.i18n.DefaultNumberingProvider");
 }
 /* -----------------------------05.07.01 13:34--------------------------------
 
