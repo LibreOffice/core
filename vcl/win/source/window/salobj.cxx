@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-07 11:33:35 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,14 @@
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
 #endif
-#ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#ifndef _SV_SALINST_H
+#include <salinst.h>
 #endif
-#ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#ifndef _SV_SALFRAME_H
+#include <salframe.h>
 #endif
-#ifndef _SV_SALOBJ_HXX
-#include <salobj.hxx>
+#ifndef _SV_SALOBJ_H
+#include <salobj.h>
 #endif
 
 #ifndef _DEBUG_HXX
@@ -110,16 +110,16 @@ static BOOL ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
 
 // -----------------------------------------------------------------------
 
-SalObject* ImplFindSalObject( HWND hWndChild )
+WinSalObject* ImplFindSalObject( HWND hWndChild )
 {
-    SalData*    pSalData = GetSalData();
-    SalObject*  pObject = pSalData->mpFirstObject;
+    SalData*        pSalData = GetSalData();
+    WinSalObject*   pObject = pSalData->mpFirstObject;
     while ( pObject )
     {
-        if ( ImplIsSysWindowOrChild( pObject->maObjectData.mhWndChild, hWndChild ) )
+        if ( ImplIsSysWindowOrChild( pObject->mhWndChild, hWndChild ) )
             return pObject;
 
-        pObject = pObject->maObjectData.mpNextObject;
+        pObject = pObject->mpNextObject;
     }
 
     return NULL;
@@ -127,21 +127,21 @@ SalObject* ImplFindSalObject( HWND hWndChild )
 
 // -----------------------------------------------------------------------
 
-SalFrame* ImplFindSalObjectFrame( HWND hWnd )
+WinSalFrame* ImplFindSalObjectFrame( HWND hWnd )
 {
-    SalFrame* pFrame = NULL;
-    SalObject* pObject = ImplFindSalObject( hWnd );
+    WinSalFrame* pFrame = NULL;
+    WinSalObject* pObject = ImplFindSalObject( hWnd );
     if ( pObject )
     {
         // Dazugehoerenden Frame suchen
-        HWND hWnd = ::GetParent( pObject->maObjectData.mhWnd );
+        HWND hWnd = ::GetParent( pObject->mhWnd );
         pFrame = GetSalData()->mpFirstFrame;
         while ( pFrame )
         {
-            if ( pFrame->maFrameData.mhWnd == hWnd )
+            if ( pFrame->mhWnd == hWnd )
                 break;
 
-            pFrame = pFrame->maFrameData.mpNextFrame;
+            pFrame = pFrame->mpNextFrame;
         }
     }
 
@@ -164,21 +164,20 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
 
         // Testen, ob wir Daten fuer ein SalObject-Fenster behandeln
         // muessen
-        SalObject* pObject;
+        WinSalObject* pObject;
         if ( pData->message == WM_SETFOCUS )
         {
             pObject = ImplFindSalObject( pData->hwnd );
             if ( pObject )
             {
-                pObject->maObjectData.mhLastFocusWnd = pData->hwnd;
+                pObject->mhLastFocusWnd = pData->hwnd;
                 if ( ImplSalYieldMutexTryToAcquire() )
                 {
-                    pObject->maObjectData.mpProc( pObject->maObjectData.mpInst, pObject,
-                                                  SALOBJ_EVENT_GETFOCUS, 0 );
+                    pObject->CallCallback( SALOBJ_EVENT_GETFOCUS, 0 );
                     ImplSalYieldMutexRelease();
                 }
                 else
-                    ImplPostMessage( pObject->maObjectData.mhWnd, SALOBJ_MSG_POSTFOCUS, 0, 0 );
+                    ImplPostMessage( pObject->mhWnd, SALOBJ_MSG_POSTFOCUS, 0, 0 );
             }
         }
         else if ( pData->message == WM_KILLFOCUS )
@@ -192,15 +191,14 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
                 {
                     if ( ImplSalYieldMutexTryToAcquire() )
                     {
-                        pObject->maObjectData.mpProc( pObject->maObjectData.mpInst, pObject,
-                                                      SALOBJ_EVENT_LOSEFOCUS, 0 );
+                        pObject->CallCallback( SALOBJ_EVENT_LOSEFOCUS, 0 );
                         ImplSalYieldMutexRelease();
                     }
                     else
-                        ImplPostMessage( pObject->maObjectData.mhWnd, SALOBJ_MSG_POSTFOCUS, 0, 0 );
+                        ImplPostMessage( pObject->mhWnd, SALOBJ_MSG_POSTFOCUS, 0, 0 );
                 }
                 else
-                    pObject->maObjectData.mhLastFocusWnd = (HWND)pData->wParam;
+                    pObject->mhLastFocusWnd = (HWND)pData->wParam;
             }
         }
     }
@@ -213,8 +211,8 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
 BOOL ImplSalPreDispatchMsg( MSG* pMsg )
 {
     // Used for Unicode and none Unicode
-    SalData*    pSalData = GetSalData();
-    SalObject*  pObject;
+    SalData*        pSalData = GetSalData();
+    WinSalObject*   pObject;
 
     if ( (pMsg->message == WM_LBUTTONDOWN) ||
          (pMsg->message == WM_RBUTTONDOWN) ||
@@ -223,7 +221,7 @@ BOOL ImplSalPreDispatchMsg( MSG* pMsg )
         ImplSalYieldMutexAcquireWithWait();
         pObject = ImplFindSalObject( pMsg->hwnd );
         if ( pObject )
-            ImplPostMessage( pObject->maObjectData.mhWnd, SALOBJ_MSG_TOTOP, 0, 0 );
+            ImplPostMessage( pObject->mhWnd, SALOBJ_MSG_TOTOP, 0, 0 );
         ImplSalYieldMutexRelease();
     }
 
@@ -276,10 +274,10 @@ BOOL ImplSalPreDispatchMsg( MSG* pMsg )
             {
                 if ( pMsg->hwnd == ::GetFocus() )
                 {
-                    SalFrame* pFrame = ImplFindSalObjectFrame( pMsg->hwnd );
+                    WinSalFrame* pFrame = ImplFindSalObjectFrame( pMsg->hwnd );
                     if ( pFrame )
                     {
-                        if ( ImplHandleSalObjSysCharMsg( pFrame->maFrameData.mhWnd, pMsg->wParam, pMsg->lParam ) )
+                        if ( ImplHandleSalObjSysCharMsg( pFrame->mhWnd, pMsg->wParam, pMsg->lParam ) )
                             bRet = TRUE;
                     }
                 }
@@ -300,8 +298,8 @@ BOOL ImplSalPreDispatchMsg( MSG* pMsg )
 void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT /* nDispatchResult */ )
 {
     // Used for Unicode and none Unicode
-    SalData*    pSalData = GetSalData();
-    SalFrame*   pFrame;
+    SalData*        pSalData = GetSalData();
+    WinSalFrame*    pFrame;
 
     if ( (pMsg->message == WM_KEYDOWN) || (pMsg->message == WM_KEYUP) )
     {
@@ -313,7 +311,7 @@ void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT /* nDispatchResult */ )
                 ImplSalYieldMutexAcquireWithWait();
                 pFrame = ImplFindSalObjectFrame( pMsg->hwnd );
                 if ( pFrame )
-                    ImplHandleSalObjKeyMsg( pFrame->maFrameData.mhWnd, pMsg->message, pMsg->wParam, pMsg->lParam );
+                    ImplHandleSalObjKeyMsg( pFrame->mhWnd, pMsg->message, pMsg->wParam, pMsg->lParam );
                 ImplSalYieldMutexRelease();
             }
         }
@@ -326,8 +324,8 @@ void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT /* nDispatchResult */ )
 
 LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
-    SalObject*  pSysObj;
-    LRESULT     nRet = 0;
+    WinSalObject*   pSysObj;
+    LRESULT         nRet = 0;
 
     switch( nMsg )
     {
@@ -354,7 +352,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
                 ImplSalYieldMutexAcquireWithWait();
                 pSysObj = GetSalObjWindowPtr( hWnd );
                 if ( pSysObj )
-                    pSysObj->maObjectData.mpProc( pSysObj->maObjectData.mpInst, pSysObj, SALOBJ_EVENT_TOTOP, 0 );
+                    pSysObj->CallCallback( SALOBJ_EVENT_TOTOP, 0 );
                 ImplSalYieldMutexRelease();
             }
             }
@@ -368,8 +366,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             if ( ImplSalYieldMutexTryToAcquire() )
             {
                 pSysObj = GetSalObjWindowPtr( hWnd );
-                pSysObj->maObjectData.mpProc( pSysObj->maObjectData.mpInst, pSysObj,
-                                              SALOBJ_EVENT_TOTOP, 0 );
+                pSysObj->CallCallback( SALOBJ_EVENT_TOTOP, 0 );
                 ImplSalYieldMutexRelease();
                 rDef = FALSE;
             }
@@ -387,8 +384,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
                     nEvent = SALOBJ_EVENT_GETFOCUS;
                 else
                     nEvent = SALOBJ_EVENT_LOSEFOCUS;
-                pSysObj->maObjectData.mpProc( pSysObj->maObjectData.mpInst, pSysObj,
-                                              nEvent, 0 );
+                pSysObj->CallCallback( nEvent, 0 );
                 ImplSalYieldMutexRelease();
             }
             else
@@ -415,12 +411,12 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             // Can also be used for the W-Version, because the struct
             // to access lpCreateParams is the same structure
             CREATESTRUCTA* pStruct = (CREATESTRUCTA*)lParam;
-            pSysObj = (SalObject*)pStruct->lpCreateParams;
+            pSysObj = (WinSalObject*)pStruct->lpCreateParams;
             SetSalObjWindowPtr( hWnd, pSysObj );
             // HWND schon hier setzen, da schon auf den Instanzdaten
             // gearbeitet werden kann, wenn Messages waehrend
             // CreateWindow() gesendet werden
-            pSysObj->maObjectData.mhWnd = hWnd;
+            pSysObj->mhWnd = hWnd;
             rDef = FALSE;
             }
             break;
@@ -495,7 +491,7 @@ LRESULT CALLBACK SalSysObjChildWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LP
 
 // =======================================================================
 
-SalObject* ImplSalCreateObject( SalInstance* pInst, SalFrame* pParent )
+SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
 {
     SalData* pSalData = GetSalData();
 
@@ -577,7 +573,7 @@ SalObject* ImplSalCreateObject( SalInstance* pInst, SalFrame* pParent )
 
     if ( pSalData->mbObjClassInit )
     {
-        SalObject* pObject = new SalObject;
+        WinSalObject* pObject = new WinSalObject;
         HWND        hWnd;
         HWND        hWndChild = 0;
         // #95301# shockwave plugin has bug; expects ASCII functions to be used
@@ -585,30 +581,30 @@ SalObject* ImplSalCreateObject( SalInstance* pInst, SalFrame* pParent )
         {
             hWnd = CreateWindowExW( 0, SAL_OBJECT_CLASSNAMEW, L"",
                                     WS_CHILD, 0, 0, 0, 0,
-                                    pParent->maFrameData.mhWnd, 0,
-                                    pInst->maInstData.mhInst, (void*)pObject );
+                                    pParent->mhWnd, 0,
+                                    pInst->mhInst, (void*)pObject );
             if ( hWnd )
             {
                 hWndChild = CreateWindowExW( 0, SAL_OBJECT_CHILDCLASSNAMEW, L"",
                                              WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
                                              0, 0, 0, 0,
                                              hWnd, 0,
-                                             pInst->maInstData.mhInst, NULL );
+                                             pInst->mhInst, NULL );
             }
         }
         else
         {
             hWnd = CreateWindowExA( 0, SAL_OBJECT_CLASSNAMEA, "",
                                     WS_CHILD, 0, 0, 0, 0,
-                                    pParent->maFrameData.mhWnd, 0,
-                                    pInst->maInstData.mhInst, (void*)pObject );
+                                    pParent->mhWnd, 0,
+                                    pInst->mhInst, (void*)pObject );
             if ( hWnd )
             {
                 hWndChild = CreateWindowExA( 0, SAL_OBJECT_CHILDCLASSNAMEA, "",
                                              WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
                                              0, 0, 0, 0,
                                              hWnd, 0,
-                                             pInst->maInstData.mhInst, NULL );
+                                             pInst->mhInst, NULL );
             }
         }
         if ( !hWndChild )
@@ -619,9 +615,9 @@ SalObject* ImplSalCreateObject( SalInstance* pInst, SalFrame* pParent )
 
         if ( hWnd )
         {
-            pObject->maObjectData.mhWnd             = hWnd;
-            pObject->maObjectData.mhWndChild        = hWndChild;
-            pObject->maObjectData.maSysData.hWnd    = hWndChild;
+            pObject->mhWnd          = hWnd;
+            pObject->mhWndChild     = hWndChild;
+            pObject->maSysData.hWnd = hWndChild;
             return pObject;
         }
     }
@@ -631,40 +627,31 @@ SalObject* ImplSalCreateObject( SalInstance* pInst, SalFrame* pParent )
 
 // =======================================================================
 
-long ImplSalObjCallbackDummy( void*, SalObject*, USHORT, const void* )
-{
-    return 0;
-}
-
-// =======================================================================
-
-SalObject::SalObject()
+WinSalObject::WinSalObject()
 {
     SalData* pSalData = GetSalData();
 
-    maObjectData.mhWnd              = 0;
-    maObjectData.mhWndChild         = 0;
-    maObjectData.mhLastFocusWnd     = 0;
-    maObjectData.maSysData.nSize    = sizeof( SystemEnvData );
-    maObjectData.mpInst             = NULL;
-    maObjectData.mpProc             = ImplSalObjCallbackDummy;
-    maObjectData.mpStdClipRgnData   = NULL;
+    mhWnd           = 0;
+    mhWndChild      = 0;
+    mhLastFocusWnd  = 0;
+    maSysData.nSize = sizeof( SystemEnvData );
+    mpStdClipRgnData    = NULL;
 
     // Insert object in objectlist
-    maObjectData.mpNextObject = pSalData->mpFirstObject;
+    mpNextObject = pSalData->mpFirstObject;
     pSalData->mpFirstObject = this;
 }
 
 // -----------------------------------------------------------------------
 
-SalObject::~SalObject()
+WinSalObject::~WinSalObject()
 {
     SalData* pSalData = GetSalData();
 
     // remove frame from framelist
     if ( this == pSalData->mpFirstObject )
     {
-        pSalData->mpFirstObject = maObjectData.mpNextObject;
+        pSalData->mpFirstObject = mpNextObject;
 
         // Wenn letztes SalObject, dann Hook wieder entfernen
         if ( !pSalData->mpFirstObject )
@@ -672,23 +659,23 @@ SalObject::~SalObject()
     }
     else
     {
-        SalObject* pTempObject = pSalData->mpFirstObject;
-        while ( pTempObject->maObjectData.mpNextObject != this )
-            pTempObject = pTempObject->maObjectData.mpNextObject;
+        WinSalObject* pTempObject = pSalData->mpFirstObject;
+        while ( pTempObject->mpNextObject != this )
+            pTempObject = pTempObject->mpNextObject;
 
-        pTempObject->maObjectData.mpNextObject = maObjectData.mpNextObject;
+        pTempObject->mpNextObject = mpNextObject;
     }
 
     // Cache-Daten zerstoeren
-    if ( maObjectData.mpStdClipRgnData )
-        delete maObjectData.mpStdClipRgnData;
+    if ( mpStdClipRgnData )
+        delete mpStdClipRgnData;
 
-    HWND hWndParent = ::GetParent( maObjectData.mhWnd );
+    HWND hWndParent = ::GetParent( mhWnd );
 
-    if ( maObjectData.mhWndChild )
-        DestroyWindow( maObjectData.mhWndChild );
-    if ( maObjectData.mhWnd )
-        DestroyWindow( maObjectData.mhWnd );
+    if ( mhWndChild )
+        DestroyWindow( mhWndChild );
+    if ( mhWnd )
+        DestroyWindow( mhWnd );
 
     // Palette wieder zuruecksetzen, wenn kein externes Child-Fenster
     // mehr vorhanden ist, da diese unsere Palette ueberschrieben haben
@@ -701,56 +688,56 @@ SalObject::~SalObject()
 
 // -----------------------------------------------------------------------
 
-void SalObject::ResetClipRegion()
+void WinSalObject::ResetClipRegion()
 {
-    SetWindowRgn( maObjectData.mhWnd, 0, TRUE );
+    SetWindowRgn( mhWnd, 0, TRUE );
 }
 
 // -----------------------------------------------------------------------
 
-USHORT SalObject::GetClipRegionType()
+USHORT WinSalObject::GetClipRegionType()
 {
     return SAL_OBJECT_CLIP_INCLUDERECTS;
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::BeginSetClipRegion( ULONG nRectCount )
+void WinSalObject::BeginSetClipRegion( ULONG nRectCount )
 {
     ULONG nRectBufSize = sizeof(RECT)*nRectCount;
     if ( nRectCount < SAL_CLIPRECT_COUNT )
     {
-        if ( !maObjectData.mpStdClipRgnData )
-            maObjectData.mpStdClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+(SAL_CLIPRECT_COUNT*sizeof(RECT))];
-        maObjectData.mpClipRgnData = maObjectData.mpStdClipRgnData;
+        if ( !mpStdClipRgnData )
+            mpStdClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+(SAL_CLIPRECT_COUNT*sizeof(RECT))];
+        mpClipRgnData = mpStdClipRgnData;
     }
     else
-        maObjectData.mpClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+nRectBufSize];
-    maObjectData.mpClipRgnData->rdh.dwSize    = sizeof( RGNDATAHEADER );
-    maObjectData.mpClipRgnData->rdh.iType     = RDH_RECTANGLES;
-    maObjectData.mpClipRgnData->rdh.nCount    = nRectCount;
-    maObjectData.mpClipRgnData->rdh.nRgnSize  = nRectBufSize;
-    SetRectEmpty( &(maObjectData.mpClipRgnData->rdh.rcBound) );
-    maObjectData.mpNextClipRect           = (RECT*)(&(maObjectData.mpClipRgnData->Buffer));
-    maObjectData.mbFirstClipRect          = TRUE;
+        mpClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+nRectBufSize];
+    mpClipRgnData->rdh.dwSize     = sizeof( RGNDATAHEADER );
+    mpClipRgnData->rdh.iType      = RDH_RECTANGLES;
+    mpClipRgnData->rdh.nCount     = nRectCount;
+    mpClipRgnData->rdh.nRgnSize  = nRectBufSize;
+    SetRectEmpty( &(mpClipRgnData->rdh.rcBound) );
+    mpNextClipRect        = (RECT*)(&(mpClipRgnData->Buffer));
+    mbFirstClipRect       = TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void WinSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
-    RECT*       pRect = maObjectData.mpNextClipRect;
-    RECT*       pBoundRect = &(maObjectData.mpClipRgnData->rdh.rcBound);
+    RECT*       pRect = mpNextClipRect;
+    RECT*       pBoundRect = &(mpClipRgnData->rdh.rcBound);
     long        nRight = nX + nWidth;
     long        nBottom = nY + nHeight;
 
-    if ( maObjectData.mbFirstClipRect )
+    if ( mbFirstClipRect )
     {
         pBoundRect->left    = nX;
         pBoundRect->top     = nY;
         pBoundRect->right   = nRight;
         pBoundRect->bottom  = nBottom;
-        maObjectData.mbFirstClipRect = FALSE;
+        mbFirstClipRect = FALSE;
     }
     else
     {
@@ -771,105 +758,94 @@ void SalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
     pRect->top      = (int)nY;
     pRect->right    = (int)nRight;
     pRect->bottom   = (int)nBottom;
-    maObjectData.mpNextClipRect++;
+    mpNextClipRect++;
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::EndSetClipRegion()
+void WinSalObject::EndSetClipRegion()
 {
     HRGN hRegion;
 
     // Aus den Region-Daten muessen wir jetzt eine ClipRegion erzeugen
-    if ( maObjectData.mpClipRgnData->rdh.nCount == 1 )
+    if ( mpClipRgnData->rdh.nCount == 1 )
     {
-        RECT* pRect = &(maObjectData.mpClipRgnData->rdh.rcBound);
+        RECT* pRect = &(mpClipRgnData->rdh.rcBound);
         hRegion = CreateRectRgn( pRect->left, pRect->top,
                                  pRect->right, pRect->bottom );
     }
     else
     {
-        ULONG nSize = maObjectData.mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
-        hRegion = ExtCreateRegion( NULL, nSize, maObjectData.mpClipRgnData );
-        if ( maObjectData.mpClipRgnData != maObjectData.mpStdClipRgnData )
-            delete maObjectData.mpClipRgnData;
+        ULONG nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
+        hRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
+        if ( mpClipRgnData != mpStdClipRgnData )
+            delete mpClipRgnData;
     }
 
     DBG_ASSERT( hRegion, "SalObject::EndSetClipRegion() - Can't create ClipRegion" );
-    SetWindowRgn( maObjectData.mhWnd, hRegion, TRUE );
+    SetWindowRgn( mhWnd, hRegion, TRUE );
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
+void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
     ULONG nStyle = 0;
-    BOOL bVisible = (GetWindowStyle( maObjectData.mhWnd ) & WS_VISIBLE) != 0;
+    BOOL bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
     if ( bVisible )
     {
-        ShowWindow( maObjectData.mhWnd, SW_HIDE );
+        ShowWindow( mhWnd, SW_HIDE );
         nStyle |= SWP_SHOWWINDOW;
     }
-    SetWindowPos( maObjectData.mhWnd, 0,
+    SetWindowPos( mhWnd, 0,
                   (int)nX, (int)nY, (int)nWidth, (int)nHeight,
                   SWP_NOZORDER | SWP_NOACTIVATE | nStyle );
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::Show( BOOL bVisible )
+void WinSalObject::Show( BOOL bVisible )
 {
     if ( bVisible )
-        ShowWindow( maObjectData.mhWnd, SW_SHOWNORMAL );
+        ShowWindow( mhWnd, SW_SHOWNORMAL );
     else
-        ShowWindow( maObjectData.mhWnd, SW_HIDE );
+        ShowWindow( mhWnd, SW_HIDE );
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::Enable( BOOL bEnable )
+void WinSalObject::Enable( BOOL bEnable )
 {
-    EnableWindow( maObjectData.mhWnd, bEnable );
+    EnableWindow( mhWnd, bEnable );
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::GrabFocus()
+void WinSalObject::GrabFocus()
 {
-    if ( maObjectData.mhLastFocusWnd &&
-         IsWindow( maObjectData.mhLastFocusWnd ) &&
-         ImplIsSysWindowOrChild( maObjectData.mhWndChild, maObjectData.mhLastFocusWnd ) )
-        ::SetFocus( maObjectData.mhLastFocusWnd );
+    if ( mhLastFocusWnd &&
+         IsWindow( mhLastFocusWnd ) &&
+         ImplIsSysWindowOrChild( mhWndChild, mhLastFocusWnd ) )
+        ::SetFocus( mhLastFocusWnd );
     else
-        ::SetFocus( maObjectData.mhWndChild );
+        ::SetFocus( mhWndChild );
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::SetBackground()
+void WinSalObject::SetBackground()
 {
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::SetBackground( SalColor nSalColor )
+void WinSalObject::SetBackground( SalColor nSalColor )
 {
 }
 
 // -----------------------------------------------------------------------
 
-const SystemEnvData* SalObject::GetSystemData() const
+const SystemEnvData* WinSalObject::GetSystemData() const
 {
-    return &maObjectData.maSysData;
-}
-
-// -----------------------------------------------------------------------
-
-void SalObject::SetCallback( void* pInst, SALOBJECTPROC pProc )
-{
-    maObjectData.mpInst = pInst;
-    if ( pProc )
-        maObjectData.mpProc = pProc;
-    else
-        maObjectData.mpProc = ImplSalObjCallbackDummy;
+    return &maSysData;
 }
