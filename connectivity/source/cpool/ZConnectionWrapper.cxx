@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionWrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:54:00 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,11 @@ OConnectionWeakWrapper::OConnectionWeakWrapper(Reference< XAggregation >& _xConn
 //-----------------------------------------------------------------------------
 OConnectionWeakWrapper::~OConnectionWeakWrapper()
 {
+    if ( !OConnectionWeakWrapper_BASE::rBHelper.bDisposed )
+    {
+        osl_incrementInterlockedCount( &m_refCount );
+        dispose();
+    }
 }
 // XServiceInfo
 // --------------------------------------------------------------------------------
@@ -281,7 +286,18 @@ void OConnectionWeakWrapper::disposing()
 }
 // -----------------------------------------------------------------------------
 // com::sun::star::lang::XUnoTunnel
+#ifdef N_DEBUG
 IMPLEMENT_FORWARD_XINTERFACE2(OConnectionWeakWrapper,OConnectionWeakWrapper_BASE,OConnectionWrapper)
+#else
+IMPLEMENT_FORWARD_REFCOUNT( OConnectionWeakWrapper, OConnectionWeakWrapper_BASE ) \
+::com::sun::star::uno::Any SAL_CALL OConnectionWeakWrapper::queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException) \
+{ \
+    ::com::sun::star::uno::Any aReturn = OConnectionWeakWrapper_BASE::queryInterface( _rType ); \
+    if ( !aReturn.hasValue() ) \
+        aReturn = OConnectionWrapper::queryInterface( _rType ); \
+    return aReturn; \
+}
+#endif
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(OConnectionWeakWrapper,OConnectionWeakWrapper_BASE,OConnectionWrapper)
 
 
