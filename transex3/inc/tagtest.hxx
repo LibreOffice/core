@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tagtest.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-10 17:16:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 15:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,16 +68,36 @@
 
 typedef USHORT TokenId;
 
-struct TokenInfo
+#define TOK_INVALIDPOS  USHORT( 0xFFFF )
+
+class ParserMessage;
+
+DECLARE_LIST( ParserMessageList, ParserMessage* );
+
+class TokenInfo
 {
-    ByteString aName;
+private:
+    void SplitTag( ParserMessageList &rErrorList );
+
+    String aTagName;
+
+public:
+
+    String aTokenString;
     TokenId nId;
+    USHORT nPos;            // Position in String
+
+    String aName;
 
     TokenInfo():nId( 0 ){;}
-explicit    TokenInfo( TokenId pnId ):nId( pnId ){;}
-explicit    TokenInfo( TokenId pnId, ByteString paStr ):nId( pnId ), aName( paStr ){;}
+explicit    TokenInfo( TokenId pnId, USHORT nP ):nId( pnId ),nPos(nP){;}
+explicit    TokenInfo( TokenId pnId, USHORT nP, String paStr ):nId( pnId ), nPos(nP), aTokenString( paStr ){;}
+explicit    TokenInfo( TokenId pnId, USHORT nP, String paStr, ParserMessageList &rErrorList );
+
+    String GetTagName() const;
+
     BOOL operator == ( const TokenInfo& rInfo ) const
-    { return nId == rInfo.nId  && aName.Equals( rInfo.aName ); }
+    { return nId == rInfo.nId  && aTokenString.Equals( rInfo.aTokenString ); }
 };
 
 
@@ -228,13 +248,7 @@ class ParserMessage
     ByteString aErrorText;
     USHORT nTagBegin,nTagLength;
 public:
-    ParserMessage( USHORT PnErrorNr, const ByteString &PaErrorText, USHORT PnTagBegin = STRING_NOTFOUND, USHORT PnTagLength = 0)
-        : nErrorNr( PnErrorNr )
-        , aErrorText( PaErrorText )
-        , nTagBegin( PnTagBegin )
-        , nTagLength( PnTagLength )
-    {}
-
+    ParserMessage( USHORT PnErrorNr, ByteString PaErrorText, const TokenInfo &rTag );
 
     USHORT GetErrorNr() { return nErrorNr; }
     ByteString GetErrorText() { return aErrorText; }
@@ -243,28 +257,23 @@ public:
     USHORT GetTagLength() { return nTagLength; }
 };
 
-DECLARE_LIST( ParserMessageList, ParserMessage* );
-
 class SimpleParser
 {
 private:
     USHORT nPos;
-    ByteString aSource;
-    ByteString aLastToken;
-//  static ByteString aLastUnknownToken;
+    String aSource;
+    String aLastToken;
     TokenList aTokenList;
 
     TokenInfo aNextTag;     // to store closetag in case of combined tags like <br/>
 
-    ByteString GetNextTokenString( ParserMessageList &rErrorList );
+    String GetNextTokenString( ParserMessageList &rErrorList, USHORT &rTokeStartPos );
 
 public:
     SimpleParser();
-    void Parse( ByteString PaSource );
+    void Parse( String PaSource );
     TokenInfo GetNextToken( ParserMessageList &rErrorList );
-    ByteString GetTokenText();
-    static ByteString GetLexem( TokenInfo const &aToken );
-    USHORT GetScanningPosition(){ return nPos; }
+    static String GetLexem( TokenInfo const &aToken );
     TokenList GetTokenList(){ return aTokenList; }
 };
 
@@ -272,7 +281,7 @@ class TokenParser
 {
     BOOL match( const TokenInfo &aCurrentToken, const TokenId &aExpectedToken );
     BOOL match( const TokenInfo &aCurrentToken, const TokenInfo &aExpectedToken );
-    void ParseError( USHORT nErrNr, const ByteString &aErrMsg );
+    void ParseError( USHORT nErrNr, ByteString aErrMsg, const TokenInfo &rTag );
     void Paragraph();
     void PfCase();
     void PfCaseBegin();
@@ -282,7 +291,6 @@ class TokenParser
     void SimpleTag();
     void TagPair();
     void TagRef();
-    void Error( const ByteString &aMsg );
 
     SimpleParser aParser;
     TokenInfo aTag;
@@ -297,7 +305,7 @@ class TokenParser
 
 public:
     TokenParser();
-    void Parse( const ByteString &aCode );
+    void Parse( const String &aCode );
     ParserMessageList& GetErrors(){ return aErrorList; }
     BOOL HasErrors(){ return ( aErrorList.Count() > 0 ); }
     TokenList GetTokenList(){ return aParser.GetTokenList(); }
@@ -309,12 +317,11 @@ private:
     TokenParser aReferenceParser;
     TokenParser aTesteeParser;
     ParserMessageList aCompareWarningList;
-    void CheckMandatoryTag( TokenList aReference, TokenList aTestee, ParserMessageList &rErrorList, TokenInfo aToken );
     void CheckTags( TokenList aReference, TokenList aTestee, ParserMessageList &rErrorList );
     BOOL IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens );
 public:
-    BOOL ReferenceOK( const ByteString &aReference );
-    BOOL TesteeOK( const ByteString &aTestee, BOOL bHasSourceLine );
+    BOOL ReferenceOK( const String &aReference );
+    BOOL TesteeOK( const String &aTestee, BOOL bHasSourceLine );
 
     ParserMessageList& GetReferenceErrors(){ return aReferenceParser.GetErrors(); }
     BOOL HasReferenceErrors(){ return aReferenceParser.HasErrors(); }
