@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:06:12 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 10:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,6 +423,14 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ slovak ] = "Automaticky zamerať ovládací prvok";
             Text[ hungarian ] = "Automatikus fókuszvezérlés";
             Text[ slovenian ] = "Samodejni fokus kontrolnika";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_NAVIGATIONBAR;
+            HelpID = SID_FM_CONVERTTO_NAVIGATIONBAR;
+            Text = "Navigationsleiste" ;
+            Text [ english ] = "Navigation Bar" ;
+            Text [ english_us ] = "Navigation Bar";
         };
     };
 };
@@ -1067,6 +1075,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         RID_SVXIMG_EDIT ; \
         RID_SVXIMG_LISTBOX ; \
         RID_SVXIMG_COMBOBOX ; \
+        RID_SVXIMG_NAVIGATIONBAR ; \
         RID_SVXIMG_CONTROL ; \
         RID_SVXIMG_FORM ; \
         RID_SVXIMG_FORMS ; \
@@ -1089,7 +1098,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         RID_SVXIMG_SCROLLBAR; \
         RID_SVXIMG_SPINBUTTON; \
     }; \
-    IdCount = 29
+    IdCount = 30
 
 ImageList RID_SVXIMGLIST_FMEXPL
 {
