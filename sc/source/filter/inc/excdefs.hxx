@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-06 16:14:23 $
+ *  last change: $Author: dr $ $Date: 2001-01-11 09:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,18 @@
 #define EXC_SCEN_MAXSTRINGLEN       0xFF
 
 //_________________________________________________________
+// (0x01B8) HLINK
+
+#define EXC_HLINK_BODY              0x00000001  // contains file link or URL
+#define EXC_HLINK_ABS               0x00000002  // absolute path
+#define EXC_HLINK_DESCR             0x00000014  // description
+#define EXC_HLINK_MARK              0x00000008  // text mark
+#define EXC_HLINK_NET               0x00000100  // network path
+
+#define EXC_HLINK_ID_FILE           0x00000303
+#define EXC_HLINK_ID_URL            0x79EAC9E0
+
+//_________________________________________________________
 // (0x007D) COLINFO
 
 // flags
@@ -360,10 +372,6 @@
 #define EXC_CHTR_NOTHING            0x0000
 #define EXC_CHTR_ACCEPT             0x0001
 #define EXC_CHTR_REJECT             0x0003
-
-// list for 3D references - internal or external
-#define EXC_CHTR_3DREF_INT          0x0001
-#define EXC_CHTR_3DREF_EXT          0x0002
 
 //_________________________________________________________
 
