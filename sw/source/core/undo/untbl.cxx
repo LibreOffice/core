@@ -2,9 +2,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:50:42 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2139,7 +2139,8 @@ void SwUndoTblMerge::MoveBoxCntnt( SwPaM& rPam, SwPosition& rPos,
         aHst.Add( *rArr[ n ].pFrmFmt );
 
     SwUndoMove* pUndoMove;
-    if( pDoc->Move( rPam, rPos ) )
+
+    if( pDoc->Move( rPam, rPos, DOC_MOVEREDLINES ) )
         pUndoMove = (SwUndoMove*)pDoc->RemoveLastUndo( UNDO_MOVE );
     else
     {
