@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-06 19:47:09 $
+ *  last change: $Author: obo $ $Date: 2001-12-14 16:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,14 +91,14 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ swedish ] = "Kommando";
                 Text[ polish ] = "Polecenie";
                 Text[ portuguese_brazilian ] = "Command";
-                Text[ japanese ] = "ï½ºï¾ï¾ï¾„ï¾";
+                Text[ japanese ] = "ã‚³ãƒãƒ³ãƒ‰";
                 Text[ korean ] = "ëª…ë ¹";
                 Text[ chinese_simplified ] = "å‘½ä»¤";
                 Text[ chinese_traditional ] = "æŒ‡ä»¤";
                 Text[ turkish ] = "Command";
                 Text[ arabic ] = "ÃãÑ";
-                Text[ finnish ] = "Kommando";
-                Text[ catalan ] = "Command";
+                Text[ finnish ] = "Komento";
+                Text[ catalan ] = "Ordre";
             };
             PageItem
             {
@@ -123,8 +123,8 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ chinese_traditional ] = "ç´™å¼µ";
                 Text[ turkish ] = "Paper";
                 Text[ arabic ] = "ÇáæÑŞ";
-                Text[ finnish ] = "Paper";
-                Text[ catalan ] = "Papel";
+                Text[ finnish ] = "Paperi";
+                Text[ catalan ] = "Paper";
             };
             PageItem
             {
@@ -143,14 +143,14 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ swedish ] = "Enhet";
                 Text[ polish ] = "Sprzêt";
                 Text[ portuguese_brazilian ] = "Device";
-                Text[ japanese ] = "ï¾ƒï¾ï¾Šï¾ï½²ï½½";
+                Text[ japanese ] = "ãƒ‡ãƒã‚¤ã‚¹";
                 Text[ korean ] = "ì¥ì¹˜";
                 Text[ chinese_simplified ] = "è®¾å¤‡";
                 Text[ chinese_traditional ] = "è¨­å‚™";
                 Text[ turkish ] = "Device";
                 Text[ arabic ] = "ÇáÌåÇÒ";
-                Text[ finnish ] = "Device";
-                Text[ catalan ] = "Dispositivo";
+                Text[ finnish ] = "Laite";
+                Text[ catalan ] = "Dispositiu";
             };
             PageItem
             {
@@ -169,14 +169,14 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ swedish ] = "Teckensnittsersättning";
                 Text[ polish ] = "Zamiana czcionki";
                 Text[ portuguese_brazilian ] = "Fontsubstitution";
-                Text[ japanese ] = "ï¾Œï½«ï¾ï¾„ã®ç½®æ›";
-                Text[ korean ] = "ê¸€ê¼´ ëŒ€ì²´";
+                Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆã®ç½®æ›";
+                Text[ korean ] = "ê¸€ê¼´ ë°”ê¾¸ê¸°";
                 Text[ chinese_simplified ] = "æ›¿æ¢å­—ä½“";
                 Text[ chinese_traditional ] = "ä»£æ›¿å­—å‹";
                 Text[ turkish ] = "Fontsubstitution";
                 Text[ arabic ] = "ÇÓÊÈÏÇá ÎØ";
                 Text[ finnish ] = "Fontin korvaus";
-                Text[ catalan ] = "Fontsubstitution";
+                Text[ catalan ] = "Reemplaçament del tipus de lletra";
             };
             PageItem
             {
@@ -201,8 +201,8 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ chinese_traditional ] = "å…¶ä»–è¨­å®š";
                 Text[ turkish ] = "Other settings";
                 Text[ arabic ] = "ÅÚÏÇÏÇÊ ÃÎÑì";
-                Text[ finnish ] = "Other Settings";
-                Text[ catalan ] = "Otra configuración";
+                Text[ finnish ] = "Muut asetukset";
+                Text[ catalan ] = "Altres paràmetres";
             };
         };
     };
@@ -222,14 +222,14 @@ TabDialog RID_RTS_RTSDIALOG
         Text[ swedish ] = "från drivrutin";
         Text[ polish ] = "ze sterownika";
         Text[ portuguese_brazilian ] = "from driver";
-        Text[ japanese ] = "ï¾„ï¾ï¾—ï½²ï¾Šï¾ã‹ã‚‰";
+        Text[ japanese ] = "ãƒ‰ãƒ©ã‚¤ãƒã‹ã‚‰";
         Text[ korean ] = "ë“œë¼ì´ë²„ì˜";
         Text[ chinese_simplified ] = "æŒ‰ç…§é©±åŠ¨ç¨‹åº";
         Text[ chinese_traditional ] = "æŒ‰ç…§é©…å‹•ç¨‹å¼";
         Text[ turkish ] = "from driver";
         Text[ arabic ] = "ãä ÈÑäÇãÌ ÇáÊÔÛíá";
-        Text[ finnish ] = "from driver";
-        Text[ catalan ] = "del controlador";
+        Text[ finnish ] = "ohjaimesta";
+        Text[ catalan ] = "des d'un controlador";
     };
     String RID_RTS_RTSDIALOG_INVALID_TXT
     {
@@ -253,8 +253,8 @@ TabDialog RID_RTS_RTSDIALOG
         Text[ chinese_traditional ] = "<å¿½ç•¥>";
         Text[ turkish ] = "<ignore>";
         Text[ arabic ] = "<ÊÌÇåá>";
-        Text[ finnish ] = "<ignore>";
-        Text[ catalan ] = "<ignorar>";
+        Text[ finnish ] = "<ohita>";
+        Text[ catalan ] = "<ignora>";
     };
     Text[ english_us ] = "Properties of %s";
     Text[ portuguese ] = "Propriedades de %s";
@@ -274,8 +274,8 @@ TabDialog RID_RTS_RTSDIALOG
     Text[ chinese_traditional ] = "%s çš„å±¬æ€§";
     Text[ turkish ] = "Properties of %s";
     Text[ arabic ] = "ÅÚÏÇÏÇÊ %s";
-    Text[ finnish ] = "Properties of %s";
-    Text[ catalan ] = "Propiedades para %s";
+    Text[ finnish ] = "Kohteen %s ominaisuudet";
+    Text[ catalan ] = "Propietats per a %s";
 };
 
 TabPage RID_RTS_PAPERPAGE
@@ -300,14 +300,14 @@ TabPage RID_RTS_PAPERPAGE
         Text[ swedish ] = "~Pappersformat";
         Text[ polish ] = "Format papieru";
         Text[ portuguese_brazilian ] = "~Papersize";
-        Text[ japanese ] = "ç”¨ç´™ï½»ï½²ï½½ï¾(~P)";
-        Text[ korean ] = "ìš©ì§€ í¬ë§·(~P)";
+        Text[ japanese ] = "ç”¨ç´™ã‚µã‚¤ã‚º(~P)";
+        Text[ korean ] = "ìš©ì§€ í˜•ì‹(~P)";
         Text[ chinese_simplified ] = "çº¸å¼ æ ¼å¼(~P)";
         Text[ chinese_traditional ] = "ç´™å¼µæ ¼å¼(~P)";
         Text[ turkish ] = "~Papersize";
         Text[ arabic ] = "ÍÌã ÇáæÑŞ";
-        Text[ finnish ] = "~Paper size";
-        Text[ catalan ] = "~Formato de papel";
+        Text[ finnish ] = "Paperi~koko";
+        Text[ catalan ] = "Mida del ~paper";
     };
     ListBox RID_RTS_PAPER_PAPER_BOX
     {
@@ -340,8 +340,8 @@ TabPage RID_RTS_PAPERPAGE
         Text[ chinese_traditional ] = "é€²ç´™æ–¹å‘(~O)";
         Text[ turkish ] = "~Orientation";
         Text[ arabic ] = "ÇáÇÊÌÇå";
-        Text[ finnish ] = "~Orientation";
-        Text[ catalan ] = "~Orientación";
+        Text[ finnish ] = "~Suunta";
+        Text[ catalan ] = "~Orientació";
     };
     ListBox RID_RTS_PAPER_ORIENTATION_BOX
     {
@@ -374,8 +374,8 @@ TabPage RID_RTS_PAPERPAGE
         Text[ chinese_traditional ] = "é›™å‘(~D)";
         Text[ turkish ] = "~Duplex";
         Text[ arabic ] = "ãÒÏæÌ";
-        Text[ finnish ] = "~Duplex";
-        Text[ catalan ] = "~Doble";
+        Text[ finnish ] = "~Kaksipuolinen";
+        Text[ catalan ] = "~Bidireccional";
     };
     ListBox RID_RTS_PAPER_DUPLEX_BOX
     {
@@ -402,14 +402,14 @@ TabPage RID_RTS_PAPERPAGE
         Text[ swedish ] = "Pappersmagas~in";
         Text[ polish ] = "Zasobnik papieru";
         Text[ portuguese_brazilian ] = "~Input slot";
-        Text[ japanese ] = "çµ¦ç´™ç”¨æ³•(~I)";
-        Text[ korean ] = "ìš©ì§€ ê³µê¸‰í•¨(~I)";
-        Text[ chinese_simplified ] = "çº¸å¼ æ¥æº(~I)";
-        Text[ chinese_traditional ] = "ç´™å¼µä¾†æº(~I)";
+        Text[ japanese ] = "çµ¦ç´™ç”¨æ³•";
+        Text[ korean ] = "ìš©ì§€ ê³µê¸‰í•¨";
+        Text[ chinese_simplified ] = "çº¸å¼ æ¥æº";
+        Text[ chinese_traditional ] = "ç´™å¼µä¾†æº";
         Text[ turkish ] = "~Input slot";
         Text[ arabic ] = "ÏÑÌ ÇáæÑŞ";
-        Text[ finnish ] = "~Input slot";
-        Text[ catalan ] = "~Bandeja de papel";
+        Text[ finnish ] = "~Syöttöpaikka";
+        Text[ catalan ] = "Ranura d'~entrada";
     };
     ListBox RID_RTS_PAPER_SLOT_BOX
     {
@@ -436,13 +436,13 @@ TabPage RID_RTS_PAPERPAGE
         Text[ swedish ] = "~Skalning";
         Text[ polish ] = "Skalowanie";
         Text[ portuguese_brazilian ] = "~Scale";
-        Text[ japanese ] = "ï½½ï½¹ï½°ï¾™(~S)";
+        Text[ japanese ] = "ã‚¹ã‚±ãƒ¼ãƒ«(~S)";
         Text[ korean ] = "ë°°ìœ¨(~S)";
         Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹(~S)";
         Text[ chinese_traditional ] = "é¡¯ç¤ºæ¯”ä¾‹(~S)";
         Text[ turkish ] = "~Scale";
         Text[ arabic ] = "ÇáãŞíÇÓ";
-        Text[ finnish ] = "~Scale";
+        Text[ finnish ] = "~Skaalaa";
         Text[ catalan ] = "~Escala";
     };
     MetricField RID_RTS_PAPER_SCALE_BOX
@@ -478,10 +478,10 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ japanese ] = "è‰²";
         Text[ korean ] = "ìƒ‰ìƒ";
         Text[ chinese_simplified ] = "é¢œè‰²";
-        Text[ chinese_traditional ] = "é¡”è‰²";
+        Text[ chinese_traditional ] = "é¡è‰²";
         Text[ turkish ] = "Color";
         Text[ arabic ] = "Çááæä";
-        Text[ finnish ] = "Color";
+        Text[ finnish ] = "Väri";
         Text[ catalan ] = "Color";
     };
     String RID_RTS_DEVICE_GRAY_TXT
@@ -500,14 +500,14 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ swedish ] = "Gråskalor";
         Text[ polish ] = "Odcienie szaroœci";
         Text[ portuguese_brazilian ] = "Grayscale";
-        Text[ japanese ] = "ï½¸ï¾ï¾šï½°ï½½ï½¹ï½°ï¾™";
+        Text[ japanese ] = "ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«";
         Text[ korean ] = "íšŒìƒ‰ë„";
         Text[ chinese_simplified ] = "ç°åº¦";
         Text[ chinese_traditional ] = "ç°éš";
         Text[ turkish ] = "Grayscale";
         Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
-        Text[ finnish ] = "Grayscale";
-        Text[ catalan ] = "Escalas de grises";
+        Text[ finnish ] = "Harmaasävy";
+        Text[ catalan ] = "Escala de grisos";
     };
 
     FixedText RID_RTS_DEVICE_PPDKEY_TXT
@@ -528,14 +528,14 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ swedish ] = "~Alternativ";
         Text[ polish ] = "Opcja";
         Text[ portuguese_brazilian ] = "~Option";
-        Text[ japanese ] = "ï½µï¾Œï¾Ÿï½¼ï½®ï¾(~O)";
+        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³(~O)";
         Text[ korean ] = "ì˜µì…˜(~O)";
         Text[ chinese_simplified ] = "é€‰é¡¹(~O)";
         Text[ chinese_traditional ] = "é¸é …(~O)";
         Text[ turkish ] = "Seçenek";
         Text[ arabic ] = "ÇáÎíÇÑ";
-        Text[ finnish ] = "~Option";
-        Text[ catalan ] = "~Opción";
+        Text[ finnish ] = "~Asetus";
+        Text[ catalan ] = "~Opció";
     };
     ListBox RID_RTS_DEVICE_PPDKEY_BOX
     {
@@ -564,10 +564,10 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ japanese ] = "ç¾åœ¨ã®å€¤(~V)";
         Text[ korean ] = "í˜„ì¬ê°’(~V)";
         Text[ chinese_simplified ] = "å½“å‰çš„æ•°å€¼(~V)";
-        Text[ chinese_traditional ] = "ç•¶å‰çš„æ•¸å€¼(~V)";
+        Text[ chinese_traditional ] = "ç›®å‰çš„æ•¸å€¼(~V)";
         Text[ turkish ] = "Current ~value";
         Text[ arabic ] = "ÇáŞíãÉ ÇáÍÇáíÉ";
-        Text[ finnish ] = "Current ~value";
+        Text[ finnish ] = "Nykyinen ~arvo";
         Text[ catalan ] = "~Valor actual";
     };
     ListBox RID_RTS_DEVICE_PPDVALUE_BOX
@@ -595,14 +595,14 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ swedish ] = "PostScript-ni~vå";
         Text[ polish ] = "Poziom PostScript";
         Text[ portuguese_brazilian ] = "PostScript ~Level";
-        Text[ japanese ] = "PostScript ï¾šï¾ï¾ï¾™(~L)";
+        Text[ japanese ] = "PostScript ãƒ¬ãƒ™ãƒ«(~L)";
         Text[ korean ] = "í¬ìŠ¤íŠ¸ìŠ¤í¬ë¦½íŠ¸ ìˆ˜ì¤€(~L)";
         Text[ chinese_simplified ] = "PostScript çº§(~L)";
         Text[ chinese_traditional ] = "PostScript ç´š(~L)";
         Text[ turkish ] = "PostScript düzeyi";
         Text[ arabic ] = "ãÓÊæì PostScript";
-        Text[ finnish ] = "PostScript ~Level";
-        Text[ catalan ] = "~Nivel PostScript";
+        Text[ finnish ] = "~PostScript-taso";
+        Text[ catalan ] = "~Nivell PostScript";
     };
     ListBox RID_RTS_DEVICE_LEVEL_BOX
     {
@@ -631,10 +631,10 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ japanese ] = "è‰²(~C)";
         Text[ korean ] = "ìƒ‰ìƒ(~C)";
         Text[ chinese_simplified ] = "é¢œè‰²(~C)";
-        Text[ chinese_traditional ] = "é¡”è‰²(~C)";
+        Text[ chinese_traditional ] = "é¡è‰²(~C)";
         Text[ turkish ] = "~Color";
         Text[ arabic ] = "Çááæä";
-        Text[ finnish ] = "~Color";
+        Text[ finnish ] = "~Väri";
         Text[ catalan ] = "~Color";
     };
     ListBox RID_RTS_DEVICE_SPACE_BOX
@@ -664,11 +664,11 @@ TabPage RID_RTS_DEVICEPAGE
         Text[ japanese ] = "è‰²ã®æ·±ã¿(~D)";
         Text[ korean ] = "ìƒ‰ìƒ ê¹Šì´(~D)";
         Text[ chinese_simplified ] = "é¢œè‰²æ·±åº¦(~D)";
-        Text[ chinese_traditional ] = "é¡”è‰²æ·±åº¦(~D)";
+        Text[ chinese_traditional ] = "é¡è‰²æ·±åº¦(~D)";
         Text[ turkish ] = "Color ~depth";
         Text[ arabic ] = "ÚãŞ ÇáÃáæÇä";
-        Text[ finnish ] = "Color ~depth";
-        Text[ catalan ] = "Prof~undidad de color";
+        Text[ finnish ] = "~Värisyvyys";
+        Text[ catalan ] = "~Profunditat de color";
     };
     ListBox RID_RTS_DEVICE_DEPTH_BOX
     {
@@ -706,14 +706,14 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ swedish ] = "Aktivera tecken~snittsersättning";
         Text[ polish ] = "Uaktywnij zamianê czcionek";
         Text[ portuguese_brazilian ] = "~Enable font substitution";
-        Text[ japanese ] = "ï¾Œï½«ï¾ï¾„ã®ç½®æ›ã‚’ï½µï¾ã«ã™ã‚‹(~E)";
+        Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆã®ç½®æ›ã‚’ã‚ªãƒ³ã«ã™ã‚‹(~E)";
         Text[ korean ] = "ê¸€ê¼´ ëŒ€ì²´ ê°€ëŠ¥(~E)";
         Text[ chinese_simplified ] = "ä½¿ç”¨æ›¿æ¢å­—ä½“(~E)";
         Text[ chinese_traditional ] = "ä½¿ç”¨ä»£æ›¿å­—å‹(~E)";
         Text[ turkish ] = "~Enable font substitution";
         Text[ arabic ] = "ÅÊÇÍÉ ÇÓÊÈÏÇá ÇáÎØ";
-        Text[ finnish ] = "~Schriftersetzung einschalten";
-        Text[ catalan ] = "~Enable font substitution";
+        Text[ finnish ] = "~Ota käyttöön fontin korvaus";
+        Text[ catalan ] = "~Habilita el reemplaçament del tipus de lletra";
     };
 
     FixedText RID_RTS_FS_SUBST_TXT
@@ -734,14 +734,14 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ swedish ] = "Ersatta te~ckensnitt";
         Text[ polish ] = "Zamieñ czcionki";
         Text[ portuguese_brazilian ] = "Substituted ~fonts";
-        Text[ japanese ] = "ç½®æ›ã™ã‚‹ï¾Œï½«ï¾ï¾„(~F)";
+        Text[ japanese ] = "ç½®æ›ã™ã‚‹ãƒ•ã‚©ãƒ³ãƒˆ(~F)";
         Text[ korean ] = "ëŒ€ì²´ëœ ê¸€ê¼´(~F)";
         Text[ chinese_simplified ] = "è¢«æ›¿æ¢çš„å­—ä½“(~F)";
         Text[ chinese_traditional ] = "è¦ä»£æ›¿çš„å­—å‹(~F)";
         Text[ turkish ] = "Substituted ~fonts";
         Text[ arabic ] = "ÇáÎØæØ ÇáãÓÊÈÏáÉ";
-        Text[ finnish ] = "Ersetzte S~chriften";
-        Text[ catalan ] = "Substituted ~fonts";
+        Text[ finnish ] = "Korvatut ~fontit";
+        Text[ catalan ] = "~Tipus de lletra reemplaçats";
     };
     MultiListBox RID_RTS_FS_SUBST_BOX
     {
@@ -777,7 +777,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ turkish ] = "~Add";
         Text[ arabic ] = "ÅÖÇİÉ";
         Text[ finnish ] = "~Lisää";
-        Text[ catalan ] = "~Add";
+        Text[ catalan ] = "~Afegeix";
     };
     PushButton RID_RTS_FS_REMOVE_BTN
     {
@@ -804,7 +804,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ turkish ] = "~Remove";
         Text[ arabic ] = "ÅÒÇáÉ";
         Text[ finnish ] = "~Poista";
-        Text[ catalan ] = "~Remove";
+        Text[ catalan ] = "~Suprimeix";
     };
     FixedText RID_RTS_FS_FROM_TXT
     {
@@ -824,14 +824,14 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ swedish ] = "E~rsätt teckensnitt";
         Text[ polish ] = "Zamieñ czcionkê";
         Text[ portuguese_brazilian ] = "~Substitute font";
-        Text[ japanese ] = "ï¾Œï½«ï¾ï¾„ã‚’ç½®æ›ã™ã‚‹(~C)";
-        Text[ korean ] = "ëŒ€ì²´ëœ ê¸€ê¼´(~C)";
+        Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆã‚’ç½®æ›ã™ã‚‹(~C)";
+        Text[ korean ] = "ë°”ë€ ê¸€ê¼´(~C)";
         Text[ chinese_simplified ] = "æ›¿æ¢å­—ä½“(~C)";
         Text[ chinese_traditional ] = "ä»£æ›¿å­—å‹(~C)";
         Text[ turkish ] = "~Substitute font";
         Text[ arabic ] = "ÇÓÊÈÏÇá ÇáÎØ";
-        Text[ finnish ] = "Ersetze Sc~hriftart";
-        Text[ catalan ] = "~Substitute font";
+        Text[ finnish ] = "~Korvaa fontti";
+        Text[ catalan ] = "~Reemplaça el tipus de lletra";
     };
     ComboBox RID_RTS_FS_FROM_BOX
     {
@@ -859,14 +859,14 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ swedish ] = "med s~krivarteckensnitt";
         Text[ polish ] = "na czcionkê drukarki";
         Text[ portuguese_brazilian ] = "by ~printer font";
-        Text[ japanese ] = "ï¾Œï¾Ÿï¾˜ï¾ï¾€ç”¨ã®ï¾Œï½«ï¾ï¾„ã«ç½®æ›(~P)";
+        Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿ç”¨ã®ãƒ•ã‚©ãƒ³ãƒˆã«ç½®æ›(~P)";
         Text[ korean ] = "í”„ë¦°í„° ê¸€ê¼´ì„ í†µí•´(~P)";
         Text[ chinese_simplified ] = "é‡‡ç”¨æ‰“å°æœºå­—ä½“ã€‚(~P)";
         Text[ chinese_traditional ] = "ä»£æ›¿ä½¿ç”¨åˆ—å°å­—å‹(~P)";
         Text[ turkish ] = "by ~printer font";
         Text[ arabic ] = "ÈÎØ ØÇÈÚÉ";
-        Text[ finnish ] = "durch ~Druckerschriftart";
-        Text[ catalan ] = "by ~printer font";
+        Text[ finnish ] = "~tulostinfontilla";
+        Text[ catalan ] = "pel tipus de lletra de la ~impressora";
     };
     ListBox RID_RTS_FS_TO_BOX
     {
@@ -908,14 +908,14 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ swedish ] = "Välj kommando";
         Text[ polish ] = "Wybierz polecenie";
         Text[ portuguese_brazilian ] = "Select command";
-        Text[ japanese ] = "ï½ºï¾ï¾ï¾„ï¾ã®é¸æŠ";
+        Text[ japanese ] = "ã‚³ãƒãƒ³ãƒ‰ã®é¸æŠ";
         Text[ korean ] = "ëª…ë ¹ ì„ íƒ";
         Text[ chinese_simplified ] = "é€‰æ‹©ä¸€ä¸ªå‘½ä»¤";
         Text[ chinese_traditional ] = "é¸æ“‡æŒ‡ä»¤";
         Text[ turkish ] = "Select command";
         Text[ arabic ] = "ÇÎÊíÇÑ ÇáÃãÑ";
-        Text[ finnish ] = "Kommando auswählen";
-        Text[ catalan ] = "Select command";
+        Text[ finnish ] = "Valitse käsky";
+        Text[ catalan ] = "Selecció de l'ordre";
     };
     String RID_RTS_CMD_STR_CONFIGURE_PRINTER
     {
@@ -933,14 +933,14 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ swedish ] = "Skrivare";
         Text[ polish ] = "Drukarka";
         Text[ portuguese_brazilian ] = "printer";
-        Text[ japanese ] = "ï¾Œï¾Ÿï¾˜ï¾ï¾€";
+        Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿";
         Text[ korean ] = "í”„ë¦°í„°";
         Text[ chinese_simplified ] = "æ‰“å°æœº";
         Text[ chinese_traditional ] = "å°è¡¨æ©Ÿ";
         Text[ turkish ] = "printer";
         Text[ arabic ] = "ØÇÈÚÉ";
         Text[ finnish ] = "Tulostin ";
-        Text[ catalan ] = "printer";
+        Text[ catalan ] = "Impressora";
     };
     String RID_RTS_CMD_STR_CONFIGURE_FAX
     {
@@ -964,7 +964,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ chinese_traditional ] = "å‚³çœŸ";
         Text[ turkish ] = "Faks";
         Text[ arabic ] = "İÇßÓ";
-        Text[ finnish ] = "faksi";
+        Text[ finnish ] = "Faksi";
         Text[ catalan ] = "fax";
     };
     String RID_RTS_CMD_STR_CONFIGURE_PDF
@@ -983,14 +983,14 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ swedish ] = "PDF-konverterare";
         Text[ polish ] = "Konwerter PDF";
         Text[ portuguese_brazilian ] = "PDF converter";
-        Text[ japanese ] = "PDF ï½ºï¾ï¾Šï¾ï½°ï¾€";
+        Text[ japanese ] = "PDF ã‚³ãƒ³ãƒãƒ¼ã‚¿";
         Text[ korean ] = "PDF ì»¨ë²„í„°";
         Text[ chinese_simplified ] = "PDF è½¬æ¢å™¨";
         Text[ chinese_traditional ] = "PDF è½‰æ›å™¨";
         Text[ turkish ] = "PDF converter";
         Text[ arabic ] = "PDF ãÍæá";
-        Text[ finnish ] = "PDF-Konverter";
-        Text[ catalan ] = "PDF converter";
+        Text[ finnish ] = "PDF-muunto-ohjelma";
+        Text[ catalan ] = "Convertidor PDF";
     };
 
     ListBox RID_RTS_CMD_LB_CONFIGURE
@@ -1019,13 +1019,13 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ polish ] = "Konfiguruj jako";
         Text[ portuguese_brazilian ] = "Configure as : ";
         Text[ japanese ] = "è¨­å®šå¯¾è±¡(~C)";
-        Text[ korean ] = "ë¡œ ì»¨í”¼ê·œë ˆì´ì…˜: (~C)";
+        Text[ korean ] = "ë¡œ êµ¬ì„±: (~C)";
         Text[ chinese_simplified ] = "é…ç½®æˆ(~C)";
         Text[ chinese_traditional ] = "é…ç½®æˆ(~C)";
         Text[ turkish ] = "Configure as : ";
         Text[ arabic ] = "Êßæíä ßÜ :";
-        Text[ finnish ] = "Konfigurieren als :";
-        Text[ catalan ] = "Configure as : ";
+        Text[ finnish ] = "~Määritä nimellä:";
+        Text[ catalan ] = "~Configura com a:";
     };
 
     CheckBox RID_RTS_CMD_BOX_SWALLOWFAXNO
@@ -1041,19 +1041,19 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ dutch ] = "~Faxnummer wordt niet weergegeven";
         Text[ french ] = "Le numéro de ~fax ne sera pas indiqué.";
         Text[ spanish ] = "El número de fa~x se eliminará de la salida";
-        Text[ finnish ] = "~Faxnummer wird aus der Ausgabe entfernt";
-        Text[ italian ] = "Numero di fax eliminato dalla copia";
+        Text[ finnish ] = "~Faksinumerot poistetaan tulosteesta";
+        Text[ italian ] = "~Numero di fax eliminato dalla copia";
         Text[ danish ] = "~fax number will be removed from output";
         Text[ swedish ] = "~Faxnummer tas bort från utmatningen";
         Text[ polish ] = "Numer faksu zostanie usuniêty z wyjœcia";
         Text[ portuguese_brazilian ] = "~fax number will be removed from output";
-        Text[ japanese ] = "~Fax ç•ªå·ã‚’ï½±ï½³ï¾„ï¾Œï¾Ÿï½¯ï¾„ã‹ã‚‰å‰Šé™¤";
+        Text[ japanese ] = "~Fax ç•ªå·ã‚’ã‚¢ã‚¦ãƒˆãƒ—ãƒƒãƒˆã‹ã‚‰å‰Šé™¤";
         Text[ korean ] = "íŒ©ìŠ¤ ë²ˆí˜¸ê°€ ì¶œë ¥ì—ì„œ ì‚­ì œë©ë‹ˆë‹¤(~F)";
         Text[ chinese_simplified ] = "ä¸æ‰“å°ä¼ çœŸå·ç (~F)";
         Text[ chinese_traditional ] = "ä¸åˆ—å°å‚³çœŸè™Ÿç¢¼(~F)";
         Text[ turkish ] = "~fax number will be removed from output";
         Text[ arabic ] = "~fax number will be removed from output";
-        Text[ catalan ] = "~fax number will be removed from output";
+        Text[ catalan ] = "El ~número de fax se suprimirà des de la sortida";
     };
     FixedText RID_RTS_CMD_TXT_PDFDIR
     {
@@ -1073,14 +1073,14 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ swedish ] = "PDF-målkatalog :";
         Text[ polish ] = "Katalog docelowy PDF :";
         Text[ portuguese_brazilian ] = "PDF target directory :";
-        Text[ japanese ] = "PDF ï¾€ï½°ï½¹ï¾ï½¯ï¾„ï¾ƒï¾ï½¨ï¾šï½¸ï¾„ï¾˜:";
-        Text[ korean ] = "PDF ëª©í‘œ ë””ë ‰í† ë¦¬ :";
+        Text[ japanese ] = "PDF ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª:";
+        Text[ korean ] = "PDF ëŒ€ìƒ ë””ë ‰í† ë¦¬ :";
         Text[ chinese_simplified ] = "PDF ç›®æ ‡ç›®å½•ï¼š";
         Text[ chinese_traditional ] = "PDF ç›®æ¨™ç›®éŒ„ï¼š";
         Text[ turkish ] = "PDF target directory :";
         Text[ arabic ] = "ÇáÏáíá PDF ÇáåÏİ :";
-        Text[ finnish ] = "PDF Zielverzeichnis :";
-        Text[ catalan ] = "PDF target directory :";
+        Text[ finnish ] = "PDF-kohdehakemisto :";
+        Text[ catalan ] = "Directori de destí PDF:";
     };
     Edit RID_RTS_CMD_EDT_PDFDIR
     {
@@ -1117,14 +1117,14 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ swedish ] = "Kommando: ";
         Text[ polish ] = "Polecenie: ";
         Text[ portuguese_brazilian ] = "Command: ";
-        Text[ japanese ] = "ï½ºï¾ï¾ï¾„ï¾: ";
+        Text[ japanese ] = "ã‚³ãƒãƒ³ãƒ‰: ";
         Text[ korean ] = "ëª…ë ¹: ";
         Text[ chinese_simplified ] = "å‘½ä»¤ï¼š";
         Text[ chinese_traditional ] = "æŒ‡ä»¤ï¼š";
         Text[ turkish ] = "Command: ";
         Text[ arabic ] = "ÇáÃãÑ:";
-        Text[ finnish ] = "Kommando: ";
-        Text[ catalan ] = "Command: ";
+        Text[ finnish ] = "Komento: ";
+        Text[ catalan ] = "Ordre: ";
     };
     FixedLine RID_RTS_CMD_FL_DEFAULT
     {
@@ -1144,14 +1144,14 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ swedish ] = "Skrivare";
         Text[ polish ] = "Drukarka";
         Text[ portuguese_brazilian ] = "Printer";
-        Text[ japanese ] = "ï¾Œï¾Ÿï¾˜ï¾ï¾€";
+        Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿";
         Text[ korean ] = "í”„ë¦°í„°";
         Text[ chinese_simplified ] = "æ‰“å°æœº";
         Text[ chinese_traditional ] = "å°è¡¨æ©Ÿ";
         Text[ turkish ] = "Printer";
         Text[ arabic ] = "ØÇÈÚÉ";
-        Text[ finnish ] = "Tulostin ";
-        Text[ catalan ] = "Printer";
+        Text[ finnish ] = "Tulostin";
+        Text[ catalan ] = "Impressora";
     };
     PushButton RID_RTS_CMD_BTN_HELP
     {
@@ -1171,14 +1171,14 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ swedish ] = "~Hjälp";
         Text[ polish ] = "Pomoc";
         Text[ portuguese_brazilian ] = "~Help";
-        Text[ japanese ] = "ï¾ï¾™ï¾Œï¾Ÿ(~H)";
+        Text[ japanese ] = "ãƒ˜ãƒ«ãƒ—(~H)";
         Text[ korean ] = "ë„ì›€ë§(~H)";
         Text[ chinese_simplified ] = "å¸®åŠ©(~H)";
         Text[ chinese_traditional ] = "èªªæ˜(~H)";
         Text[ turkish ] = "~Help";
         Text[ arabic ] = "ãÓÇÚÏÉ";
         Text[ finnish ] = "~Ohje";
-        Text[ catalan ] = "~Help";
+        Text[ catalan ] = "~Ajuda";
     };
     PushButton RID_RTS_CMD_BTN_REMOVE
     {
@@ -1205,7 +1205,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ turkish ] = "~Remove";
         Text[ arabic ] = "ÅÒÇáÉ";
         Text[ finnish ] = "~Poista";
-        Text[ catalan ] = "~Remove";
+        Text[ catalan ] = "~Suprimeix";
     };
     String RID_RTS_CMD_STR_PDFHELP
     {
@@ -1223,14 +1223,14 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ swedish ] = "Kommandoraden för PDF-konverterare bearbetas på följande sätt: på varje utskrivet dokument ersätts \"(TMP)\" och \"(OUTFILE)\" i kommandoraden av en temporär fil resp. av PDF-filen som ska skapas. Om \"(TMP)\" förekommer i kommandoraden överförs PostScript-koden i en fil, i annat fall via standardinmatningen (d.v.s. som pipe).";
         Text[ polish ] = "Wiersz poleceñ konwerterów PDF przetwarzany jest w nastêpuj¹cy sposób: Podczas drukowania dokumentu, \"(TMP)\" w wierszu poleceñ zamieniane jest na plik tymczasowy, a \"(OUTFILE)\" na plik PDF, który ma byæ utworzony. Je¿eli wiersz poleceñ zawiera \"(TMP)\", kod PostScript przekazany zostanie w pliku. W innym przypadku przekazany zostanie domyœlne (tzn jako potok (pipe)).";
         Text[ portuguese_brazilian ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
-        Text[ japanese ] = "PDF ï½ºï¾ï¾Šï¾ï½°ï¾€ã§ã®ï½ºï¾ï¾ï¾„ï¾è¡Œã¯æ¬¡ã®ã‚ˆã†ã«å®Ÿè¡Œã•ã‚Œã¾ã™: ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã‚’å°åˆ·ã™ã‚‹ãŸã³ã«ã€ï½ºï¾ï¾ï¾„ï¾è¡Œã§ \"(TMP)\" ã¯ä¸€æ™‚ï¾Œï½§ï½²ï¾™ã§ã€\"(OUTFILE)\" ã¯ä½œæˆã•ã‚Œã‚‹ PDF ï¾Œï½§ï½²ï¾™ã«ç½®æ›ã•ã‚Œã¾ã™ã€‚ï½ºï¾ï¾ï¾„ï¾è¡Œã« \"(TMP)\" ãŒã‚ã‚‹ã¨ã€PostScript ï½ºï½°ï¾„ï¾ã¯ï¾Œï½§ï½²ï¾™ã«èª­ã¿è¾¼ã¾ã‚Œã¾ã™ã€‚ãã†ã§ãªã„å ´åˆã¯ã€æ¨™æº–å›è·¯ã®å…¥åŠ›ã€ã¤ã¾ã‚Šï¾Šï¾Ÿï½²ï¾Œï¾Ÿï¾—ï½²ï¾å‡¦ç†ãŒè¡Œã‚ã‚Œã¾ã™ã€‚";
+        Text[ japanese ] = "PDF ã‚³ãƒ³ãƒãƒ¼ã‚¿ã§ã®ã‚³ãƒãƒ³ãƒ‰è¡Œã¯æ¬¡ã®ã‚ˆã†ã«å®Ÿè¡Œã•ã‚Œã¾ã™: ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’å°åˆ·ã™ã‚‹ãŸã³ã«ã€ã‚³ãƒãƒ³ãƒ‰è¡Œã§ \"(TMP)\" ã¯ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã§ã€\"(OUTFILE)\" ã¯ä½œæˆã•ã‚Œã‚‹ PDF ãƒ•ã‚¡ã‚¤ãƒ«ã«ç½®æ›ã•ã‚Œã¾ã™ã€‚ã‚³ãƒãƒ³ãƒ‰è¡Œã« \"(TMP)\" ãŒã‚ã‚‹ã¨ã€PostScript ã‚³ãƒ¼ãƒ‰ã¯ãƒ•ã‚¡ã‚¤ãƒ«ã«èª­ã¿è¾¼ã¾ã‚Œã¾ã™ã€‚ãã†ã§ãªã„å ´åˆã¯ã€æ¨™æº–å›è·¯ã®å…¥åŠ›ã€ã¤ã¾ã‚Šãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³å‡¦ç†ãŒè¡Œã‚ã‚Œã¾ã™ã€‚";
         Text[ korean ] = "PDF ì»¨ë²„í„°ì˜ ëª…ë ¹í–‰ì€ ë‹¤ìŒê³¼ ê°™ì´ ì‹¤í–‰ë©ë‹ˆë‹¤: ë§¤ë²ˆ ë¬¸ì„œ ì¸ì‡„ì‹œ, ì„ì‹œ íŒŒì¼ì— ì˜í•´ì„œëŠ” \"(TMP)\", ìƒì„±ë˜ì–´ì•¼ í•˜ëŠ” PDF íŒŒì¼ì— ì˜í•´ì„œëŠ” \"(OUTFILE)\"ë¡œ ëŒ€ì²´ë©ë‹ˆë‹¤. ëª…ë ¹í–‰ì— \"(TMP)\"ê°€ ë‚˜íƒ€ë‚˜ë©´ PostScript ì½”ë“œê°€ íŒŒì¼ì— ì œê³µë˜ê³ , ê·¸ ì™¸ì˜ ê²½ìš°ì—ëŠ” ê¸°ë³¸ ì…ë ¥ì„ í†µí•´ ì œê³µë©ë‹ˆë‹¤ (íŒŒì´í”„ë¡œì„œ).";
         Text[ chinese_simplified ] = "PDF è½¬æ¢å™¨çš„å‘½ä»¤å¤„ç†æ–¹å¼å¦‚ä¸‹ï¼šåˆ—å°æ¯ä¸ªæ–‡æ¡£æ—¶æŒ‡ä»¤è¡Œä¹‹ä¸­åˆ†åˆ«ç”¨ä¸€ä¸ªæš‚æ—¶æ–‡ä»¶æ¥æ›¿ä»£ \"(TMP)\" å’Œç”¨ä¸€ä¸ªç›®æ ‡ PDF æ–‡ä»¶åç§°æ¥æ›¿ä»£ \"(OUTFILE)\" ã€‚å¦‚æœ \"(TMP)\" å·²ç»å­˜åœ¨äºå‘½ä»¤è¡Œä¹‹ä¸­ï¼ŒPostScript ä»£ç å°±ä¼šè¾“å…¥æˆä¸€ä¸ªæ–‡ä»¶ï¼Œå¦åˆ™å°±ä¼šå½“ä½œæ ‡å‡†è¾“å…¥(å½“ä½œpipe)ã€‚";
         Text[ chinese_traditional ] = "PDF è½‰æ›å™¨çš„æŒ‡ä»¤è™•ç†æ–¹å¼å¦‚ä¸‹ï¼šåˆ—å°æ¯å€‹æ–‡ä»¶æ™‚æŒ‡ä»¤è¡Œä¹‹ä¸­åˆ†åˆ¥ç”¨ä¸€å€‹æš«æ™‚æª”æ¡ˆä¾†æ›¿ä»£(TMP)å’Œç”¨ä¸€å€‹ç›®æ¨™ PDF æª”æ¡ˆåç¨±ä¾†æ›¿ä»£(OUTFILE)ã€‚å¦‚æœ(TMP)å·²ç¶“å­˜åœ¨æ–¼æŒ‡ä»¤è¡Œä¹‹ä¸­ï¼ŒPostScript ä»£ç¢¼å°±æœƒè¼¸å…¥æˆä¸€å€‹æª”æ¡ˆï¼Œå¦å‰‡æœƒç•¶ä½œæ¨™æº–è¼¸å…¥(ç•¶ä½œpipe)ã€‚";
         Text[ turkish ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
         Text[ arabic ] = "ÓíÊã ÊäİíĞ ÓØÑ ÇáÃãÑ İí ãÍæáÇÊ PDF ßÇáÂÊí: İí ßá ãÑÉ íÊã İíåÇ ØÈÇÚÉ ãÓÊäÏ¡ Óæİ íÊã ÇÓÊÈÏÇá \"(TMP)\" Èãáİ ãÄŞÊ æ \"(OUTFILE)\" Èãáİ PDF ÇáãÑÇÏ ÅäÔÇÄå. ÅĞÇ æÑÏÊ \"(TMP)\" İí ÓØÑ ÇáÃæÇãÑ¡ íÊã ÊãÑíÑ ÔíİÑÉ PostScript  İí ãáİ¡ İíãÇ ÚÏÇ Ğáß¡ íÊã ÊãÑíÑåÇ ßÅÏÎÇá ŞíÇÓí (åĞÇ íÚäí ßÜ Pipe).";
-        Text[ finnish ] = "Die Kommandozeile bei PDF-Konvertern wird wie folgt verarbeitet: bei jedem gedruckten Dokument wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(OUTFILE)\" durch die zu erzeugende PDF Datei ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe).";
-        Text[ catalan ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ finnish ] = "PDF-muunto-ohjelmien komentorivi suoritetaan seuraavasti: kunkin tulostetun asiakirjan osalta komentorivillä oleva merkkijono \"(TMP)\" korvataan väliaikaistiedostolla ja komentorivillä oleva merkkijono \"(OUTFILE)\" korvataan kohde-PDF-tiedoston nimellä. Jos \"(TMP)\" on komentorivillä, PostScript-koodi toimitetaan tiedoston kautta, muussa tapauksessa normaalisyötteenä eli välitysyhteyttä käyttäen.";
+        Text[ catalan ] = "La línia d'ordres pels filtres PDF s'executa de la següent manera: cada document imprès a la línia d'ordres \"(TMP)\" serà reemplaçat per un fitxer temporal i \"(OUTFILE)\" pel fitxer PDF de destí. Si \"(TMP)\" existeix en la línia d'ordres el codi PostScript s'enviarà a través d'un fitxer temporal a l'entrada estàndard (com a tuberia).";
     };
     String RID_RTS_CMD_STR_PRINTERHELP
     {
@@ -1248,14 +1248,14 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ swedish ] = "Kommandoraden för skrivare bearbetas på följande sätt: den skapade PostScript-koden överförs som standardinmatning (d.v.s. som pipe) till kommandoraden.";
         Text[ polish ] = "Wiersz poleceñ przetwarzany jest w trakcie drukowania w nastêpuj¹cy sposób: Utworzony kod PostScript przekazany zostanie do wiersza poleceñ domyœlnie (tzn. jako potok (pipe)).";
         Text[ portuguese_brazilian ] = "The command line for printer devices is executed in the following way: the generated PostScript code will be delivered as standard input (as a pipe) to the command line.";
-        Text[ japanese ] = "å°åˆ·æ™‚ã®ï½ºï¾ï¾ï¾„ï¾è¡Œã¯æ¬¡ã®ã‚ˆã†ã«å®Ÿè¡Œã•ã‚Œã¾ã™: ä½œæˆã•ã‚ŒãŸ PostScript ï½ºï½°ï¾„ï¾ã¯ã€ï½ºï¾ï¾ï¾„ï¾è¡Œã«æ¨™æº–å›è·¯ã®å…¥åŠ›ã€ã¤ã¾ã‚Šï¾Šï¾Ÿï½²ï¾Œï¾Ÿï¾—ï½²ï¾å‡¦ç†ã•ã‚Œã¾ã™ã€‚";
+        Text[ japanese ] = "å°åˆ·æ™‚ã®ã‚³ãƒãƒ³ãƒ‰è¡Œã¯æ¬¡ã®ã‚ˆã†ã«å®Ÿè¡Œã•ã‚Œã¾ã™: ä½œæˆã•ã‚ŒãŸ PostScript ã‚³ãƒ¼ãƒ‰ã¯ã€ã‚³ãƒãƒ³ãƒ‰è¡Œã«æ¨™æº–å›è·¯ã®å…¥åŠ›ã€ã¤ã¾ã‚Šãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³å‡¦ç†ã•ã‚Œã¾ã™ã€‚";
         Text[ korean ] = "í”„ë¦°í„° ê¸°ê¸°ì˜ ëª…ë ¹í–‰ì€ ë‹¤ìŒê³¼ ê°™ì´ ì‹¤í–‰ë©ë‹ˆë‹¤: ìƒì„±ëœ PostScript ì½”ë“œëŠ” ê¸°ë³¸ ì…ë ¥ (íŒŒì´í”„ë¡œì„œ)ìœ¼ë¡œì„œ ëª…ë ¹í–‰ì— ì œê³µë©ë‹ˆë‹¤.";
         Text[ chinese_simplified ] = "æ‰“å°æœºå•é¡¹å‘½ä»¤çš„å¤„ç†æ–¹å¼å¦‚ä¸‹ï¼šç”Ÿæˆçš„ PostScript çš„æºä»£ç æŒ‰ç…§æ ‡å‡†è¾“å…¥(å½“ä½œ pipe)æ–¹å¼ä¼ é€’ç»™å‘½ä»¤è¡Œã€‚";
-        Text[ chinese_traditional ] = "å°è¡¨æ©Ÿå–®é …å‘½ä»¤çš„è™•ç†æ–¹å¼å¦‚ä¸‹ï¼šç”Ÿæˆçš„ PostScript çš„æºä»£ç¢¼æŒ‰ç…§æ¨™æº–è¼¸å…¥(ç•¶ä½œ pipe)æ–¹å¼é€çµ¦æŒ‡ä»¤è¡Œã€‚";
+        Text[ chinese_traditional ] = "å°è¡¨æ©Ÿå–®é …æŒ‡ä»¤çš„è™•ç†æ–¹å¼å¦‚ä¸‹ï¼šç”Ÿæˆçš„ PostScript çš„æºä»£ç¢¼æŒ‰ç…§æ¨™æº–è¼¸å…¥(ç•¶ä½œ pipe)æ–¹å¼é€çµ¦æŒ‡ä»¤è¡Œã€‚";
         Text[ turkish ] = "The command line for printer devices is executed in the following way: the generated PostScript code will be delivered as standard input (as a pipe) to the command line.";
         Text[ arabic ] = "ÓíÊã ÊäİíĞ ÓØÑ ÇáÃãÑ İí ÃÌåÒÉ ÇáØÈÇÚÉ ßÇáÂÊí: Óæİ íÊã ÊãÑíÑ ÔíİÑÉPostScript ¡ ÇáÊí Êã ÅäÔÇÄåÇ¡ Åáì ÓØÑ ÇáÃæÇãÑ ßÅÏÎÇá ŞíÇÓí (åĞÇ íÚäí ßÜ Pipe).";
-        Text[ finnish ] = "Die Kommandozeile bei Druckern wird wie folgt verarbeitet: der erzeugte PostScript-code wird der Kommandozeile als Standardeingabe (d.h. als Pipe) übergeben.";
-        Text[ catalan ] = "The command line for printer devices is executed in the following way: the generated PostScript code will be delivered as standard input (as a pipe) to the command line.";
+        Text[ finnish ] = "Tulostinlaitteiden komentorivi suoritetaan seuraavasti: luotu PostScript-koodi toimitetaan normaalisyötteenä eli välitysyhteyttä käyttäen komentoriville.";
+        Text[ catalan ] = "La línia d'ordres de les impressores s'executa de la següent manera: el codi PostScript generat s'envia a l'entrada estàndard (com a tuberia).";
     };
     String RID_RTS_CMD_STR_FAXHELP
     {
@@ -1273,14 +1273,14 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ swedish ] = "Kommandoraden för faxar bearbetas på följande sätt: för varje fax som skickas ersätts \"(TMP)\" och \"(PHONE)\" med en temporär fil resp. av faxnumret. Om \"(TMP)\" förekommer i kommandoraden överförs PostScript-koden i en fil, i annat fall via standardinmatningen (d.v.s. som pipe).";
         Text[ polish ] = "Wiersz poleceñ w faksach przetwarzany jest w nastêpuj¹cy sposób: Podczas wysy³ania faksu, \"(TMP)\" w wierszu poleceñ zamieniane jest na plik tymczasowy, a \"(PHON)\" na numer faksu. Je¿eli wiersz poleceñ zawiera \"(TMP)\", kod PostScript przekazany zostanie w pliku. W innym przypadku przekazany zostanie domyœlnie (tzn. jako potok (pipe)).";
         Text[ portuguese_brazilian ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
-        Text[ japanese ] = "Fax æ©Ÿã®ï½ºï¾ï¾ï¾„ï¾è¡Œã¯æ¬¡ã®ã‚ˆã†ã«å®Ÿè¡Œã•ã‚Œã¾ã™:  Fax é€ä¿¡ã™ã‚‹ãŸã³ã«ã€ï½ºï¾ï¾ï¾„ï¾è¡Œã® \"(TMP)\" ã¯ä¸€æ™‚ï¾Œï½§ï½²ï¾™ã§ã€\"(PHONE)\" ã¯ï¾Œï½§ï½¯ï½¸ï½½ç•ªå·ã§ç½®æ›ã•ã‚Œã¾ã™ã€‚\"(TMP)\" ãŒï½ºï¾ï¾ï¾„ï¾è¡Œã«ã‚ã‚‹ã¨ã€PostScript ï½ºï½°ï¾„ï¾ã¯ï¾Œï½§ï½²ï¾™ã«èª­ã¿è¾¼ã¾ã‚Œã¾ã™ã€‚ãã†ã§ãªã‘ã‚Œã°æ¨™æº–å›è·¯ã®å…¥åŠ›ã€ã¤ã¾ã‚Šï¾Šï¾Ÿï½²ï¾Œï¾Ÿï¾—ï½²ï¾å‡¦ç†ãŒè¡Œã‚ã‚Œã¾ã™ã€‚";
+        Text[ japanese ] = "Fax æ©Ÿã®ã‚³ãƒãƒ³ãƒ‰è¡Œã¯æ¬¡ã®ã‚ˆã†ã«å®Ÿè¡Œã•ã‚Œã¾ã™:  Fax é€ä¿¡ã™ã‚‹ãŸã³ã«ã€ã‚³ãƒãƒ³ãƒ‰è¡Œã® \"(TMP)\" ã¯ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã§ã€\"(PHONE)\" ã¯ãƒ•ã‚¡ãƒƒã‚¯ã‚¹ç•ªå·ã§ç½®æ›ã•ã‚Œã¾ã™ã€‚\"(TMP)\" ãŒã‚³ãƒãƒ³ãƒ‰è¡Œã«ã‚ã‚‹ã¨ã€PostScript ã‚³ãƒ¼ãƒ‰ã¯ãƒ•ã‚¡ã‚¤ãƒ«ã«èª­ã¿è¾¼ã¾ã‚Œã¾ã™ã€‚ãã†ã§ãªã‘ã‚Œã°æ¨™æº–å›è·¯ã®å…¥åŠ›ã€ã¤ã¾ã‚Šãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³å‡¦ç†ãŒè¡Œã‚ã‚Œã¾ã™ã€‚";
         Text[ korean ] = "íŒ©ìŠ¤ ê¸°ê¸°ì˜ ëª…ë ¹í–‰ì€ ë‹¤ìŒê³¼ ê°™ì´ ì‹¤í–‰ë©ë‹ˆë‹¤: ë§¤ë²ˆ íŒ©ìŠ¤ ì†¡ì‹ ì‹œ, ì„ì‹œ íŒŒì¼ì— ì˜í•´ì„œëŠ” \"(TMP)\", íŒ©ìŠ¤ ë²ˆí˜¸ì— ì˜í•´ì„œëŠ” \"(PHONE)\"ìœ¼ë¡œ ëŒ€ì²´ë©ë‹ˆë‹¤. ëª…ë ¹í–‰ì— \"(TMP)\"ê°€ ë‚˜íƒ€ë‚˜ë©´ PostScript ì½”ë“œê°€ íŒŒì¼ì— ì œê³µë˜ê³ , ê·¸ ì™¸ì˜ ê²½ìš°ì—ëŠ” ê¸°ë³¸ ì…ë ¥ì„ í†µí•´ ì œê³µë©ë‹ˆë‹¤ (íŒŒì´í”„ë¡œì„œ).";
         Text[ chinese_simplified ] = "ä¼ çœŸæœºå•é¡¹å‘½ä»¤çš„å¤„ç†æ–¹å¼å¦‚ä¸‹ï¼šå¯„å‘ä¼ çœŸæ—¶é€šè¿‡å‘½ä»¤è¾“å…¥è¡Œç”¨ä¸€ä¸ªæš‚æ—¶æ–‡ä»¶æ›¿ä»£\"(TMP)\" ï¼Œç”¨ä¼ çœŸå·ç æ›¿ä»£ \"(PHONE)\" ã€‚å¦‚æœå‘½ä»¤è¡Œå«æœ‰ \"(TMP)\" ï¼ŒPostScript æºä»£ç å°±ä¼šè½¬æ¢æˆä¸€ä¸ªæ–‡ä»¶ï¼Œå¦åˆ™å°±ä¼šå½“ä½œæ ‡å‡†è¾“å…¥(å½“ä½œpipe)ã€‚";
         Text[ chinese_traditional ] = "å‚³çœŸæœºå–®é …æŒ‡ä»¤çš„è™•ç†æ–¹å¼å¦‚ä¸‹ï¼šå¯„ç™¼å‚³çœŸæ™‚é€šéæŒ‡ä»¤è¡Œç”¨ä¸€å€‹æš«æ™‚æª”æ¡ˆæ›¿ä»£(TMP)ï¼Œç”¨å‚³çœŸè™Ÿç¢¼æ›¿ä»£ (PHONE)ã€‚å¦‚æœæŒ‡ä»¤è¡Œå«æœ‰(TMP)ï¼ŒPostScript æºä»£ç¢¼å°±æœƒè½‰æ›æˆä¸€å€‹æª”æ¡ˆï¼Œå¦å‰‡å°±æœƒç•¶ä½œæ¨™æº–è¼¸å…¥(ç•¶ä½œpipe)ã€‚";
         Text[ turkish ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
         Text[ arabic ] = "ÓíÊã ÊäİíĞ ÓØÑ ÇáÃãÑ İí ÃÌåÒÉ ÇáİÇßÓ ßÇáÂÊí: İí ßá ãÑÉ íÊã İíåÇ ÅÑÓÇá ÑÓÇáÉ İÇßÓ¡ Óæİ íÊã ÇÓÊÈÏÇá \"(TMP)\" Èãáİ ãÄŞÊ æ \"(PHONE)\" ÈÑŞã ÇáİÇßÓ. ÅĞÇ æÑÏÊ \"(TMP)\" İí ÓØÑ ÇáÃæÇãÑ¡ íÊã ÊãÑíÑ ÔíİÑÉPostScript  İí ãáİ¡ İíãÇ ÚÏÇ Ğáß¡ íÊã ÊãÑíÑåÇ ßÅÏÎÇá ŞíÇÓí (åĞÇ íÚäí ßÜ Pipe).";
-        Text[ finnish ] = "Die Kommandozeile bei Faxgeräten wird wie folgt verarbeitet: bei jedem gesendeten Fax wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(PHONE)\" durch die Faxnummer ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe).";
-        Text[ catalan ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ finnish ] = "Faksilaitteiden komentorivi suoritetaan seuraavasti: kunkin lähetetyn faksin osalta komentorivillä oleva merkkijono \"(TMP)\" korvataan väliaikaistiedostolla ja komentorivillä oleva merkkijono \"(PHONE)\" korvataan faksinumerolla. Jos \"(TMP)\" on komentorivillä, PostScript-koodi toimitetaan tiedoston kautta, muussa tapauksessa normaalisyötteenä eli välitysyhteyttä käyttäen.";
+        Text[ catalan ] = "La línia d'ordres pel dispositiu de fax s'executa de la manera següent: per a cada fax enviat a la línia d'ordres \"(TMP)\" es reemplaçarà per un fitxer temporal i \"(PHONE)\" pel número de fax. Si \"(TMP)\" existeix en la lína d'ordres i el codi PostScript s'enviarà mitjançant un fitxer temporal a l'entrada estàndard (com a tuberia).";
     };
 };
 
@@ -1295,26 +1295,26 @@ TabPage RID_RTS_OTHERPAGE
         Size = MAP_APPFONT( 85, 8 );
         Text = "~Linker Rand" ;
         Text [ English ] = "~Left margin" ;
-        Text[ english_us ] = "~Left margin";
+        Text[ english_us ] = "~Left margin adjustment";
         Text[ portuguese ] = "~Ajuste da margem esquerda";
         Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñëåâà";
         Text[ greek ] = "Äéüñèùóç áñéóôåñïı ğåñéèùñßïõ :";
         Text[ dutch ] = "~Linker marge corrigeren";
-        Text[ french ] = "Correction de la marge gauche";
+        Text[ french ] = "Marge gauche";
         Text[ spanish ] = "~Corrección del margen izquierdo";
         Text[ italian ] = "Correggi margine ~sinistro:";
         Text[ danish ] = "~Left margin adjustment :";
-        Text[ swedish ] = "Vänster margina~lkorrigering";
+        Text[ swedish ] = "Vänster margina~l";
         Text[ polish ] = "Wyrównanie lewego marginesu";
         Text[ portuguese_brazilian ] = "~Left margin adjustment :";
-        Text[ japanese ] = "å·¦ä½™ç™½ã®èª¿æ•´(~L)";
+        Text[ japanese ] = "å·¦ä½™ç™½(~L)";
         Text[ korean ] = "ì™¼ìª½ ì—¬ë°± ì¡°ì •(~L)";
-        Text[ chinese_simplified ] = "è°ƒæ•´å·¦è¾¹è·(~L)";
-        Text[ chinese_traditional ] = "èª¿æ•´å·¦é‚Šè·(~L)";
+        Text[ chinese_simplified ] = "å·¦è¾¹è·(~L)";
+        Text[ chinese_traditional ] = "å·¦é‚Šè·(~L)";
         Text[ turkish ] = "~Left margin adjustment :";
         Text[ arabic ] = "ÖÈØ ÇáåÇãÔ ÇáÃíÓÑ :";
-        Text[ finnish ] = "~Left margin adjustment :";
-        Text[ catalan ] = "~Corrección del margen izquierdo :";
+        Text[ finnish ] = "~Vasemman marginaalin säätö";
+        Text[ catalan ] = "~Correcció del marge esquerre :";
     };
     MetricField RID_RTS_OTHER_LEFTMARGIN_BOX
     {
@@ -1332,26 +1332,26 @@ TabPage RID_RTS_OTHERPAGE
         Size = MAP_APPFONT( 85, 8 );
         Text = "~Oberer Rand" ;
         Text [ English ] = "~Top margin" ;
-        Text[ english_us ] = "~Top margin";
+        Text[ english_us ] = "~Top margin adjustment";
         Text[ portuguese ] = "Aju~ste da margem superior";
         Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñâåğõó";
         Text[ greek ] = "Äéüñèùóç ğÜíù ğåñéèùñß~ïõ :";
         Text[ dutch ] = "~Marge boven corrigeren";
-        Text[ french ] = "Correction de la marge supérieure";
+        Text[ french ] = "Marge supérieure";
         Text[ spanish ] = "~Corrección del margen superior";
         Text[ italian ] = "Correggi margine s~uperiore:";
         Text[ danish ] = "~Top margin adjustment :";
-        Text[ swedish ] = "Övre marginalj~ustering";
+        Text[ swedish ] = "~Övre marginal";
         Text[ polish ] = "Wyrównanie górnego marginesu";
         Text[ portuguese_brazilian ] = "~Top margin adjustment :";
-        Text[ japanese ] = "ä¸Šä½™ç™½ã®èª¿æ•´(~T)";
+        Text[ japanese ] = "ä¸Šä½™ç™½(~T)";
         Text[ korean ] = "ìœ„ ì—¬ë°± ì¡°ì •(~T):";
-        Text[ chinese_simplified ] = "è°ƒæ•´ä¸Šè¾¹è·(~T)";
-        Text[ chinese_traditional ] = "èª¿æ•´ä¸Šé‚Šè·(~T)";
+        Text[ chinese_simplified ] = "ä¸Šè¾¹è·(~T)";
+        Text[ chinese_traditional ] = "ä¸Šé‚Šè·(~T)";
         Text[ turkish ] = "~Top margin adjustment :";
         Text[ arabic ] = "ÖÈØ ÇáåÇãÔ ÇáÚáæí :";
-        Text[ finnish ] = "~Top margin adjustment :";
-        Text[ catalan ] = "~Corrección del margen superior:";
+        Text[ finnish ] = "~Ylämarginaalin säätö";
+        Text[ catalan ] = "~Correcció del marge superior:";
     };
     MetricField RID_RTS_OTHER_TOPMARGIN_BOX
     {
@@ -1369,26 +1369,26 @@ TabPage RID_RTS_OTHERPAGE
         Size = MAP_APPFONT( 85, 8 );
         Text = "~Rechter Rand" ;
         Text [ English ] = "~Right margin" ;
-        Text[ english_us ] = "~Right margin";
+        Text[ english_us ] = "~Right margin adjustment";
         Text[ portuguese ] = "Ajuste ~da margem direita";
         Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñïğàâà";
         Text[ greek ] = "Äéüñèùóç äåîéïı ğå~ñéèùñßïõ :";
         Text[ dutch ] = "~Rechter marge corrigeren";
-        Text[ french ] = "Correction de la marge droite";
+        Text[ french ] = "Marge droite";
         Text[ spanish ] = "~Corrección del margen derecho";
         Text[ italian ] = "Correzione margine ~destro:";
         Text[ danish ] = "~Right margin adjustment :";
-        Text[ swedish ] = "Höge~r marginalkorrigering";
+        Text[ swedish ] = "Höge~r marginal";
         Text[ polish ] = "Wyrównanie prawego marginesu";
         Text[ portuguese_brazilian ] = "~Right margin adjustment :";
-        Text[ japanese ] = "å³ä½™ç™½ã®èª¿æ•´(~R)";
+        Text[ japanese ] = "å³ä½™ç™½(~R)";
         Text[ korean ] = "ì˜¤ë¥¸ìª½ ì—¬ë°± ì¡°ì •(~R):";
-        Text[ chinese_simplified ] = "è°ƒæ•´å³è¾¹è·(~R)";
-        Text[ chinese_traditional ] = "èª¿æ•´å³é‚Šè·(~R)";
+        Text[ chinese_simplified ] = "å³è¾¹è·(~R)";
+        Text[ chinese_traditional ] = "å³é‚Šè·(~R)";
         Text[ turkish ] = "~Right margin adjustment :";
         Text[ arabic ] = "ÖÈØ ÇáåÇãÔ ÇáÃíãä :";
-        Text[ finnish ] = "~Right margin adjustment :";
-        Text[ catalan ] = "~Corrección del margen derecho:";
+        Text[ finnish ] = "~Oikean marginaalin säätö";
+        Text[ catalan ] = "~Correcció del marge dret:";
     };
     MetricField RID_RTS_OTHER_RIGHTMARGIN_BOX
     {
@@ -1406,26 +1406,26 @@ TabPage RID_RTS_OTHERPAGE
         Size = MAP_APPFONT( 85, 8 );
         Text = "~Unterer Rand" ;
         Text [ English ] = "~Bottom margin" ;
-        Text[ english_us ] = "~Bottom margin";
+        Text[ english_us ] = "~Bottom margin adjustment";
         Text[ portuguese ] = "Ajuste da margem ~inferior";
         Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñíèçó";
         Text[ greek ] = "Äéüñèùóç êÜôù ğåñéèùñßï~õ :";
         Text[ dutch ] = "M~arge beneden corrigeren";
-        Text[ french ] = "Correction de la marge inférieure";
+        Text[ french ] = "Marge inférieure";
         Text[ spanish ] = "~Corrección del margen inferior";
         Text[ italian ] = "Correggi margine ~inferiore:";
         Text[ danish ] = "~Bottom margin adjustment :";
-        Text[ swedish ] = "~Undre marginalkorrigering";
+        Text[ swedish ] = "~Undre marginal";
         Text[ polish ] = "Wyrównanie dolnego marginesu";
         Text[ portuguese_brazilian ] = "~Bottom margin adjustment :";
-        Text[ japanese ] = "ä¸‹ä½™ç™½ã®èª¿æ•´(~B)";
+        Text[ japanese ] = "ä¸‹ä½™ç™½(~B)";
         Text[ korean ] = "ì•„ë˜ ì—¬ë°± ì¡°ì • (~B):";
-        Text[ chinese_simplified ] = "è°ƒæ•´ä¸‹è¾¹è·(~B)";
-        Text[ chinese_traditional ] = "èª¿æ•´å°é‚Šè·(~B)";
+        Text[ chinese_simplified ] = "ä¸‹è¾¹è·(~B)";
+        Text[ chinese_traditional ] = "ä¸‹é‚Šè·(~B)";
         Text[ turkish ] = "~Bottom margin adjustment :";
         Text[ arabic ] = "ÖÈØ ÇáåÇãÔ ÇáÓİáí :";
-        Text[ finnish ] = "~Bottom margin adjustment :";
-        Text[ catalan ] = "~Corrección del margen inferior:";
+        Text[ finnish ] = "~Alamarginaalin säätö";
+        Text[ catalan ] = "~Correcció del marge inferior:";
     };
     MetricField RID_RTS_OTHER_BOTTOMMARGIN_BOX
     {
@@ -1455,14 +1455,14 @@ TabPage RID_RTS_OTHERPAGE
         Text[ swedish ] = "~Kommentar";
         Text[ polish ] = "Komentarz";
         Text[ portuguese_brazilian ] = "~Comment :";
-        Text[ japanese ] = "ï½ºï¾’ï¾ï¾„(~C)";
+        Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆ(~C)";
         Text[ korean ] = "ì£¼ì„ (~C):";
         Text[ chinese_simplified ] = "æ³¨è§£(~C)";
         Text[ chinese_traditional ] = "è¨»è§£(~C)";
         Text[ turkish ] = "~Comment :";
         Text[ arabic ] = "ÇáÊÚáíŞ :";
-        Text[ finnish ] = "~Comment :";
-        Text[ catalan ] = "~Comentario:";
+        Text[ finnish ] = "~Huomautus";
+        Text[ catalan ] = "~Comentari:";
     };
     Edit RID_RTS_OTHER_COMMENT_EDT
     {
@@ -1483,7 +1483,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ dutch ] = "~Standaard";
         Text[ french ] = "Par défaut";
         Text[ spanish ] = "~Predeterminado";
-        Text[ finnish ] = "~Default Values";
+        Text[ finnish ] = "~Oletusarvo";
         Text[ italian ] = "Standard";
         Text[ danish ] = "~Default values";
         Text[ swedish ] = "~Standard";
@@ -1495,7 +1495,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ chinese_traditional ] = "æ¨™æº–(~D)";
         Text[ turkish ] = "~Default values";
         Text[ arabic ] = "Şíã ÇİÊÑÇÖíÉ";
-        Text[ catalan ] = "~Valores estándar";
+        Text[ catalan ] = "~Valors estàndard";
     };
 };
 
@@ -1521,9 +1521,10 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ chinese_traditional ] = "è«‹æ‚¨è¼¸å…¥å‚³çœŸè™Ÿç¢¼ã€‚";
     Text[ turkish ] = "Please enter the fax number.";
     Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÑŞã ÇáİÇßÓ.";
-    Text[ finnish ] = "Please enter the fax number.";
-    Text[ catalan ] = "Indique el número de fax";
+    Text[ finnish ] = "~Kirjoita faksinumero.";
+    Text[ catalan ] = "Indiqueu el número de fax";
 };
+
 
 
 
