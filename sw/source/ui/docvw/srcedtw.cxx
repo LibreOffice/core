@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:24:04 $
+ *  last change: $Author: obo $ $Date: 2003-11-12 17:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,7 +689,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
 {
     Time aSyntaxCheckStart;
     DBG_ASSERT( pTextView, "Noch keine View, aber Syntax-Highlight ?!" );
-    pTextEngine->SetUpdateMode( FALSE );
+    // pTextEngine->SetUpdateMode( FALSE );
 
     bHighlighting = TRUE;
     USHORT nLine;
@@ -738,11 +738,14 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
     }
     // os: #43050# hier wird ein TextView-Problem umpopelt:
     // waehrend des Highlightings funktionierte das Scrolling nicht
-    TextView* pTmp = pTextEngine->GetActiveView();
-    pTextEngine->SetActiveView(0);
-    pTextEngine->SetUpdateMode( TRUE );
-    pTextEngine->SetActiveView(pTmp);
-    pTextView->ShowCursor(FALSE, FALSE);
+    /* MT: Shouldn't be a oproblem any more, using IdeFormatter in Insert/RemoveAttrib now.
+
+        TextView* pTmp = pTextEngine->GetActiveView();
+        pTextEngine->SetActiveView(0);
+        // pTextEngine->SetUpdateMode( TRUE );
+        pTextEngine->SetActiveView(pTmp);
+        pTextView->ShowCursor(FALSE, FALSE);
+    */
 
     if(aSyntaxLineTable.Count() && !pTimer->IsActive())
         pTimer->Start();
@@ -767,7 +770,7 @@ void SwSrcEditWindow::DoSyntaxHighlight( USHORT nPara )
     if ( nPara < pTextEngine->GetParagraphCount() )
     {
         BOOL bTempModified = IsModified();
-        pTextEngine->RemoveAttribs( nPara );
+        pTextEngine->RemoveAttribs( nPara, TRUE );
         String aSource( pTextEngine->GetText( nPara ) );
         pTextEngine->SetUpdateMode( FALSE );
         ImpDoHighlight( aSource, nPara );
@@ -866,7 +869,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
                 r.eType = (SwHtmlTextType)svtools::HTMLUNKNOWN;
         Color aColor((ColorData)SW_MOD()->GetColorConfig().GetColorValue((svtools::ColorConfigEntry)r.eType).nColor);
         USHORT nLine = nLineOff+r.nLine; //
-        pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );
+        pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1, TRUE );
     }
 }
 /*-----------------21.04.97 09:42-------------------
@@ -901,7 +904,8 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             pVScrollbar->SetThumbPos( pTextView->GetStartDocPos().Y() );
             SetScrollBarRanges();
         }
-        else if( rTextHint.GetId() == TEXT_HINT_FORMATPARA )
+        else if( ( rTextHint.GetId() == TEXT_HINT_PARAINSERTED ) ||
+                 ( rTextHint.GetId() == TEXT_HINT_PARACONTENTCHANGED ) )
         {
             DoDelayedSyntaxHighlight( (USHORT)rTextHint.GetValue() );
         }
