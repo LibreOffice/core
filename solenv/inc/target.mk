@@ -5,8 +5,8 @@
 #*	  Beschreibung		TARGET-Rules
 #*
 #*	  Ersterstellung	TH 28.03.94
-#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-09-28 11:33:46 $
-#*	  $Revision: 1.5 $
+#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-10-06 11:15:49 $
+#*	  $Revision: 1.6 $
 #*
 #*	  $Logfile:   T:/solar/inc/target.mkv  $
 #*
@@ -2455,22 +2455,22 @@ do_copy_mk .IGNORE .SILENT :
     @+-$(COPY) /u $(SOLARENV)$/inc$/startup$/os2$/*.mk $(OS2_SOLENV_INC)$/startup$/os2 >& $(NULLDEV)
 
 killbin:
-    @if exist $(BIN)\$(SHL1TARGET).dll @del $(BIN)\$(SHL1TARGET).dll
-    @if exist $(BIN)\$(SHL2TARGET).dll @del $(BIN)\$(SHL2TARGET).dll
-    @if exist $(BIN)\$(SHL3TARGET).dll @del $(BIN)\$(SHL3TARGET).dll
-    @if exist $(BIN)\$(SHL4TARGET).dll @del $(BIN)\$(SHL4TARGET).dll
-    @if exist $(BIN)\$(SHL5TARGET).dll @del $(BIN)\$(SHL5TARGET).dll
-    @if exist $(BIN)\$(SHL6TARGET).dll @del $(BIN)\$(SHL6TARGET).dll
-    @if exist $(BIN)\$(SHL7TARGET).dll @del $(BIN)\$(SHL7TARGET).dll
-    @if exist $(BIN)\$(APP1TARGET)$(EXECPOST) @del $(BIN)\$(APP1TARGET)$(EXECPOST)
-    @if exist $(BIN)\$(APP2TARGET)$(EXECPOST) @del $(BIN)\$(APP2TARGET)$(EXECPOST)
-    @if exist $(BIN)\$(APP3TARGET)$(EXECPOST) @del $(BIN)\$(APP3TARGET)$(EXECPOST)
-    @if exist $(BIN)\$(APP4TARGET)$(EXECPOST) @del $(BIN)\$(APP4TARGET)$(EXECPOST)
-    @if exist $(BIN)\$(APP5TARGET)$(EXECPOST) @del $(BIN)\$(APP5TARGET)$(EXECPOST)
-    @if exist $(BIN)\$(APP6TARGET)$(EXECPOST) @del $(BIN)\$(APP6TARGET)$(EXECPOST)
-    @if exist $(BIN)\$(APP7TARGET)$(EXECPOST) @del $(BIN)\$(APP7TARGET)$(EXECPOST)
-    @if exist $(BIN)\$(APP8TARGET)$(EXECPOST) @del $(BIN)\$(APP8TARGET)$(EXECPOST)
-    @if exist $(BIN)\$(APP9TARGET)$(EXECPOST) @del $(BIN)\$(APP9TARGET)$(EXECPOST)
+    @+if exist $(BIN)\$(SHL1TARGET).dll @del $(BIN)\$(SHL1TARGET).dll
+    @+if exist $(BIN)\$(SHL2TARGET).dll @del $(BIN)\$(SHL2TARGET).dll
+    @+if exist $(BIN)\$(SHL3TARGET).dll @del $(BIN)\$(SHL3TARGET).dll
+    @+if exist $(BIN)\$(SHL4TARGET).dll @del $(BIN)\$(SHL4TARGET).dll
+    @+if exist $(BIN)\$(SHL5TARGET).dll @del $(BIN)\$(SHL5TARGET).dll
+    @+if exist $(BIN)\$(SHL6TARGET).dll @del $(BIN)\$(SHL6TARGET).dll
+    @+if exist $(BIN)\$(SHL7TARGET).dll @del $(BIN)\$(SHL7TARGET).dll
+    @+if exist $(BIN)\$(APP1TARGET)$(EXECPOST) @del $(BIN)\$(APP1TARGET)$(EXECPOST)
+    @+if exist $(BIN)\$(APP2TARGET)$(EXECPOST) @del $(BIN)\$(APP2TARGET)$(EXECPOST)
+    @+if exist $(BIN)\$(APP3TARGET)$(EXECPOST) @del $(BIN)\$(APP3TARGET)$(EXECPOST)
+    @+if exist $(BIN)\$(APP4TARGET)$(EXECPOST) @del $(BIN)\$(APP4TARGET)$(EXECPOST)
+    @+if exist $(BIN)\$(APP5TARGET)$(EXECPOST) @del $(BIN)\$(APP5TARGET)$(EXECPOST)
+    @+if exist $(BIN)\$(APP6TARGET)$(EXECPOST) @del $(BIN)\$(APP6TARGET)$(EXECPOST)
+    @+if exist $(BIN)\$(APP7TARGET)$(EXECPOST) @del $(BIN)\$(APP7TARGET)$(EXECPOST)
+    @+if exist $(BIN)\$(APP8TARGET)$(EXECPOST) @del $(BIN)\$(APP8TARGET)$(EXECPOST)
+    @+if exist $(BIN)\$(APP9TARGET)$(EXECPOST) @del $(BIN)\$(APP9TARGET)$(EXECPOST)
 
 killobj:
 .IF "$(SLOFILES)" != ""
