@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-02 10:09:26 $
+#   last change: $Author: rt $ $Date: 2004-08-23 08:20:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ PROJECTPCH=sd
 PROJECTPCHSOURCE=$(PRJ)$/util\sd
 PRJNAME=sd
 TARGET=func
+LIBTARGET=NO
 
 AUTOSEG=true
 
@@ -165,7 +166,90 @@ SLOFILES = \
 NOOPTFILES=\
     $(SLO)$/futext.obj
 
-.ENDIF
+.ENDIF # wnt
+
+LIB1TARGET=	$(SLB)$/$(TARGET).lib
+LIB1OBJFILES= \
+        $(SLO)$/fuformatpaintbrush.obj	\
+        $(SLO)$/fuhhconv.obj	\
+        $(SLO)$/undoheaderfooter.obj    \
+        $(SLO)$/undolayer.obj	\
+        $(SLO)$/fupoor.obj		\
+        $(SLO)$/fudraw.obj		\
+        $(SLO)$/fuzoom.obj		\
+        $(SLO)$/fusel.obj		\
+        $(SLO)$/fuconstr.obj 	\
+        $(SLO)$/fuconrec.obj 	\
+        $(SLO)$/fuconuno.obj 	\
+        $(SLO)$/fuconbez.obj 	\
+        $(SLO)$/fuediglu.obj 	\
+        $(SLO)$/fuslid.obj		\
+        $(SLO)$/fuslsel.obj		\
+        $(SLO)$/fuslshow.obj 	\
+        $(SLO)$/fuslshw2.obj 	\
+        $(SLO)$/fuslshw3.obj 	\
+        $(SLO)$/fuslshw4.obj 	\
+        $(SLO)$/fuslshw5.obj 	\
+        $(SLO)$/fuslshw6.obj 	\
+        $(SLO)$/fusldlg.obj 	\
+        $(SLO)$/fader.obj		\
+        $(SLO)$/fader2.obj		\
+        $(SLO)$/mover.obj		\
+        $(SLO)$/fuslprms.obj 	\
+        $(SLO)$/fuscale.obj		\
+        $(SLO)$/fuslhide.obj 	\
+        $(SLO)$/futransf.obj 	\
+        $(SLO)$/futext.obj		\
+        $(SLO)$/futext2.obj		\
+        $(SLO)$/fuline.obj		\
+        $(SLO)$/sdundo.obj		\
+        $(SLO)$/sdundogr.obj 	\
+        $(SLO)$/unslprms.obj 	\
+        $(SLO)$/fuoaprms.obj 	\
+        $(SLO)$/unoaprms.obj 	\
+        $(SLO)$/fuarea.obj		\
+        $(SLO)$/fuchar.obj		\
+        $(SLO)$/fuconarc.obj 	\
+        $(SLO)$/fuparagr.obj 	\
+        $(SLO)$/fubullet.obj 	\
+        $(SLO)$/futempl.obj		\
+        $(SLO)$/fuoutl.obj		\
+        $(SLO)$/fuoltext.obj 	\
+        $(SLO)$/fuinsert.obj 	\
+        $(SLO)$/fupage.obj		\
+        $(SLO)$/undopage.obj 	\
+        $(SLO)$/fuprlout.obj 	\
+        $(SLO)$/fuprobjs.obj 	\
+        $(SLO)$/fulinend.obj 	\
+        $(SLO)$/fusnapln.obj 	\
+        $(SLO)$/fuolbull.obj 	\
+        $(SLO)$/fucopy.obj		\
+        $(SLO)$/fulink.obj		\
+        $(SLO)$/fuspell.obj		\
+        $(SLO)$/futhes.obj		\
+        $(SLO)$/fusearch.obj 	\
+        $(SLO)$/fuinsfil.obj 	\
+        $(SLO)$/futxtatt.obj 	\
+        $(SLO)$/fumeasur.obj 	\
+        $(SLO)$/fuconnct.obj 	\
+        $(SLO)$/unprlout.obj 	\
+        $(SLO)$/fudspord.obj 	\
+        $(SLO)$/unmovss.obj		\
+        $(SLO)$/fucon3d.obj		\
+        $(SLO)$/fumorph.obj		\
+        $(SLO)$/fuexpand.obj    \
+        $(SLO)$/fusumry.obj     \
+        $(SLO)$/sdmtf.obj		\
+        $(SLO)$/sprite.obj		\
+        $(SLO)$/outlinfo.obj	\
+        $(SLO)$/fucushow.obj	\
+        $(SLO)$/speedctl.obj	\
+        $(SLO)$/fuvect.obj		\
+        $(SLO)$/undoback.obj    
+
+LIB2TARGET=	$(SLB)$/$(TARGET)_ui.lib
+LIB2OBJFILES= \
+        $(SLO)$/bulmaper.obj
 
 # --- Tagets -------------------------------------------------------
 
