@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:55:02 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 11:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,12 +453,12 @@ namespace connectivity
                 Reference<XStatement> xStmt = _xConnection->createStatement();
                 if ( xStmt.is() )
                 {
-                    Reference<XResultSet> xRes(xStmt->executeQuery(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" SELECT COUNT(*) FROM SYSTEM_SESSIONS WHERE USER_NAME ='SA'"))),UNO_QUERY);
+                    Reference<XResultSet> xRes(xStmt->executeQuery(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT COUNT(*) FROM SYSTEM_SESSIONS WHERE USER_NAME ='SA'"))),UNO_QUERY);
                     Reference<XRow> xRow(xRes,UNO_QUERY);
                     if ( xRow.is() && xRes->next() )
                         bLastOne = xRow->getInt(1) == 1;
                     if ( bLastOne )
-                        xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shutdown")));
+                        xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SHUTDOWN")));
                 }
             }
         }
@@ -478,22 +478,25 @@ namespace connectivity
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         Reference<XConnection> xCon(Source.Source,UNO_QUERY);
-        TWeakPairVector::iterator i = m_aConnections.begin();
-        for (; m_aConnections.end() != i; ++i)
+        if ( xCon.is() )
         {
-            if ( i->first.get() == xCon.get() )
+            TWeakPairVector::iterator i = m_aConnections.begin();
+            for (; m_aConnections.end() != i; ++i)
             {
-                shutdownConnection(i);
-                break;
+                if ( i->first.get() == xCon.get() )
+                {
+                    shutdownConnection(i);
+                    break;
+                }
             }
         }
-        if ( !xCon.is() )
+        else
         {
             Reference< XStorage> xStorage(Source.Source,UNO_QUERY);
             if ( xStorage.is() )
             {
                 ::rtl::OUString sKey = StorageContainer::getRegisteredKey(xStorage);
-                i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::std::compose1(
+                TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::std::compose1(
                                 ::std::bind2nd(::std::equal_to< ::rtl::OUString >(),sKey)
                                 ,::std::compose1(::std::select1st<TWeakConnectionPair>(),::std::select2nd< TWeakPair >())));
                 if ( i != m_aConnections.end() )
@@ -530,6 +533,7 @@ namespace connectivity
         TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::std::compose1(
                          ::std::bind2nd(::std::equal_to< ::rtl::OUString >(),sKey)
                         ,::std::compose1(::std::select1st<TWeakConnectionPair>(),::std::select2nd< TWeakPair >())));
+        OSL_ENSURE( i != m_aConnections.end(), "ODriverDelegator::preCommit: they're committing a storage which I do not know!" );
         if ( i != m_aConnections.end() )
         {
             try
@@ -538,14 +542,22 @@ namespace connectivity
                 if ( xConnection.is() )
                 {
                     Reference< XStatement> xStmt = xConnection->createStatement();
+                    OSL_ENSURE( xStmt.is(), "ODriverDelegator::preCommit: no statement!" );
                     if ( xStmt.is() )
-                    {
-                        xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SET WRITE_DELAY 2")));
-                    }
+                        xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 0" ) ) );
+
+                    sal_Bool bPreviousAutoCommit = xConnection->getAutoCommit();
+                    xConnection->setAutoCommit( sal_False );
+                    xConnection->commit();
+                    xConnection->setAutoCommit( bPreviousAutoCommit );
+
+                    if ( xStmt.is() )
+                        xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 60" ) ) );
                 }
             }
             catch(Exception&)
             {
+                OSL_ENSURE( false, "ODriverDelegator::preCommit: caught an exception!" );
             }
         }
     }
