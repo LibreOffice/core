@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:59:34 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,7 @@ ModalDialog DLG_INSERT_ABSTRACT
     Text[ catalan ] = "Crear AutoAbstracto";
     Text[ finnish ] = "Luo automaattinen tiivistelmä";
 };
+
 
 
 
