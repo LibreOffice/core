@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 20:16:51 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,11 @@ GraphicFilter* DialogsResMgr::GetGrfFilter_Impl()
 {
     if( !pGrapicFilter )
     {
+#ifndef SVX_LIGHT
         pGrapicFilter = new GraphicFilter;
+#else
+        pGrapicFilter = new GraphicFilter(sal_False);
+#endif
         ::FillFilter( *pGrapicFilter );
     }
     const Link aLink;

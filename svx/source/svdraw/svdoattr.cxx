@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-19 16:51:50 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,6 +792,11 @@ void SdrAttrObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem
 {
     if(pNewItem)
     {
+#ifdef SVX_LIGHT
+        // set item
+        ((SdrAttrObj*)this)->ImpForceItemSet();
+        mpObjectItemSet->Put(*pNewItem);
+#else
         const SfxPoolItem* pItem = pNewItem;
 
         switch( nWhich )
@@ -830,6 +835,7 @@ void SdrAttrObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem
             if( pItem != pNewItem)
                 delete (SfxPoolItem*)pItem;
         }
+#endif
     }
     else
     {

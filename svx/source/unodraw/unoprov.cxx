@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-25 16:20:44 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1017,6 +1017,7 @@ void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalNam
 */
 void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& rApiName, String& rInternalName ) throw()
 {
+#ifndef SVX_LIGHT
     String aNew = rApiName;
 
     if( nWhich == XATTR_LINECOLOR )
@@ -1042,7 +1043,9 @@ void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& 
             }
         }
     }
+#endif // !SVX_LIGHT
 
+    // just use previous name, if nothing else was found.
     rInternalName = rApiName;
 }
 

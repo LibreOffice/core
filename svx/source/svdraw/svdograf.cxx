@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-29 12:11:01 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ GraphicFilter* SVX_LIGHT_pGrapicFilter = NULL;
 GraphicFilter* GetGrfFilter()
 {
     if( !SVX_LIGHT_pGrapicFilter )
-        SVX_LIGHT_pGrapicFilter = new GraphicFilter;
+        SVX_LIGHT_pGrapicFilter = new GraphicFilter( FALSE );
     return SVX_LIGHT_pGrapicFilter;
 }
 
@@ -1569,6 +1569,7 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
                 pModel->SetChanged( bIsChanged );
             }
 #else
+/*
             SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileName, STREAM_READ | STREAM_SHARE_DENYNONE );
 
             if( pIStm )
@@ -1584,6 +1585,7 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
 
                 delete pIStm;
             }
+*/
 #endif
         }
     }
@@ -1947,7 +1949,6 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                 {
                     Graphic aGraphic;
 
-#ifndef SVX_LIGHT
                     if( pGraphic->HasUserData() )
                     {
                         if( !GetGrfFilter()->ImportGraphic( aGraphic, String(), *pStream ) )
@@ -1959,7 +1960,6 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         }
                     }
                     else
-#endif
                     {
                         pStream->Seek( nGrafStreamPos );
                         *pStream >> aGraphic;
