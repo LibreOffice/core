@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-16 12:01:50 $
+ *  last change: $Author: tl $ $Date: 2001-05-17 13:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,15 +715,18 @@ void SmSymSetManager::Load()
         const SmSym *pSym = rCfg.GetSymbol(i);
         if (pSym)
         {
+            SmSymSet *pSymSet = 0;
             const String &rSetName = pSym->GetSetName();
-            if (SYMBOLSET_NONE == GetSymbolSetPos( rSetName ))
-                AddSymbolSet( new SmSymSet( rSetName ) );
             USHORT nSetPos = GetSymbolSetPos( rSetName );
-            SmSymSet *pSymSet = GetSymbolSet( nSetPos );
-            if (pSymSet)
+            if (SYMBOLSET_NONE != nSetPos)
+                pSymSet = GetSymbolSet( nSetPos );
+            else
             {
-                pSymSet->AddSymbol( new SmSym( *pSym ) );
+                pSymSet = new SmSymSet( rSetName );
+                AddSymbolSet( pSymSet );
             }
+
+            pSymSet->AddSymbol( new SmSym( *pSym ) );
         }
     }
     // build HashTables
