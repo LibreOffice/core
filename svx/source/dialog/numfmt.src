@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: gt $ $Date: 2002-06-11 08:03:53 $
+ *  last change: $Author: nf $ $Date: 2002-06-20 12:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,17 +100,18 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ dutch ] = "~Categorie" ;
         Text [ spanish ] = "~Categoría" ;
         Text [ english_us ] = "~Category" ;
-        Text[ chinese_simplified ] = "·ÖÀà(~C)";
+        Text[ chinese_simplified ] = "åˆ†ç±»(~C)";
         Text[ russian ] = "Êàòåãîğèÿ";
         Text[ polish ] = "Kategoria";
-        Text[ japanese ] = "•ª—Ş(~C)";
-        Text[ chinese_traditional ] = "¤ÀÃş(~C)";
+        Text[ japanese ] = "åˆ†é¡(~C)";
+        Text[ chinese_traditional ] = "åˆ†é¡(~C)";
         Text[ arabic ] = "ÇáİÆÉ";
         Text[ greek ] = "Êáôçãïñßá";
-        Text[ korean ] = "¹üÁÖ(~C)";
+        Text[ korean ] = "ë²”ì£¼(~C)";
         Text[ turkish ] = "~Kategori";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Categoría";
+        Text[ thai ] = "~à¸›à¸£à¸°à¹€à¸ à¸—";
     };
     ListBox LB_CATEGORY
     {
@@ -206,7 +207,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         StringList [ finnish ] =
         {
             < "Kaikki" ; Default ; > ;
-            < "Käyttäjän määrittämät" ; Default ; > ;
+            < "Käyttäjän määrittämä" ; Default ; > ;
             < "Luku" ; Default ; > ;
             < "Prosenttia" ; Default ; > ;
             < "Valuutta" ; Default ; > ;
@@ -303,17 +304,17 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         };
         StringList [ chinese_simplified ] =
         {
-                < "È«²¿" ; Default ; > ;
-            < "Ê¹ÓÃÕß×Ô¶¨" ; Default ; > ;
-            < "Êı×Ö" ; Default ; > ;
-            < "°Ù·Ö±È" ; Default ; > ;
-            < "»õ±Ò" ; Default ; > ;
-            < "ÈÕÆÚ" ; Default ; > ;
-            < "Ê±¼ä" ; Default ; > ;
-            < "¿ÆÑ§" ; Default ; > ;
-            < "·ÖÊı" ; Default ; > ;
-            < "Âß¼­Öµ" ; Default ; > ;
-            < "ÎÄ×Ö" ; Default ; > ;
+                < "å…¨éƒ¨" ; Default ; > ;
+            < "ä½¿ç”¨è€…è‡ªå®š" ; Default ; > ;
+            < "æ•°å­—" ; Default ; > ;
+            < "ç™¾åˆ†æ¯”" ; Default ; > ;
+            < "è´§å¸" ; Default ; > ;
+            < "æ—¥æœŸ" ; Default ; > ;
+            < "æ—¶é—´" ; Default ; > ;
+            < "ç§‘å­¦" ; Default ; > ;
+            < "åˆ†æ•°" ; Default ; > ;
+            < "é€»è¾‘å€¼" ; Default ; > ;
+            < "æ–‡å­—" ; Default ; > ;
         };
         StringList [ russian ] =
         {
@@ -345,31 +346,31 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         };
         StringList [ japanese ] =
         {
-                < "‚·‚×‚Ä" ; Default ; > ;
-            < "Õ°»Ş°İ’è" ; Default ; > ;
-            < "”’l" ; Default ; > ;
-            < "Êß°¾İÃ°¼Ş" ; Default ; > ;
-            < "’Ê‰İ" ; Default ; > ;
-            < "“ú•t" ; Default ; > ;
-            < "" ; Default ; > ;
-            < "‰ÈŠw" ; Default ; > ;
-            < "•ª”" ; Default ; > ;
-            < "˜_—’l" ; Default ; > ;
-            < "Ã·½Ä" ; Default ; > ;
+                < "ã™ã¹ã¦" ; Default ; > ;
+            < "ãƒ¦ãƒ¼ã‚¶ãƒ¼è¨­å®š" ; Default ; > ;
+            < "æ•°å€¤" ; Default ; > ;
+            < "ãƒ‘ãƒ¼ã‚»ãƒ³ãƒ†ãƒ¼ã‚¸" ; Default ; > ;
+            < "é€šè²¨" ; Default ; > ;
+            < "æ—¥ä»˜" ; Default ; > ;
+            < "æ™‚åˆ»" ; Default ; > ;
+            < "ç§‘å­¦" ; Default ; > ;
+            < "åˆ†æ•°" ; Default ; > ;
+            < "è«–ç†å€¤" ; Default ; > ;
+            < "ãƒ†ã‚­ã‚¹ãƒˆ" ; Default ; > ;
         };
         StringList [ chinese_traditional ] =
         {
-                < "¥ş³¡" ; Default ; > ;
-            < "¨Ï¥ÎªÌ¦Û­q" ; Default ; > ;
-            < "¼Æ¦r" ; Default ; > ;
-            < "¦Ê¤À¤ñ" ; Default ; > ;
-            < "³f¹ô" ; Default ; > ;
-            < "¤é´Á" ; Default ; > ;
-            < "®É¶¡" ; Default ; > ;
-            < "¬ì¾Ç" ; Default ; > ;
-            < "¤À¼Æ" ; Default ; > ;
-            < "¥¬¤ó­È" ; Default ; > ;
-            < "¤å¦r" ; Default ; > ;
+                < "å…¨éƒ¨" ; Default ; > ;
+            < "ä½¿ç”¨è€…è‡ªè¨‚" ; Default ; > ;
+            < "æ•¸å­—" ; Default ; > ;
+            < "ç™¾åˆ†æ¯”" ; Default ; > ;
+            < "è²¨å¹£" ; Default ; > ;
+            < "æ—¥æœŸ" ; Default ; > ;
+            < "æ™‚é–“" ; Default ; > ;
+            < "ç§‘å­¸" ; Default ; > ;
+            < "åˆ†æ•¸" ; Default ; > ;
+            < "å¸ƒæ°å€¼" ; Default ; > ;
+            < "æ–‡å­—" ; Default ; > ;
         };
         StringList [ arabic ] =
         {
@@ -401,17 +402,17 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         };
         StringList [ korean ] =
         {
-                < "¸ğµÎ" ; Default ; > ;
-            < "»ç¿ëÀÚ Á¤ÀÇ" ; Default ; > ;
-            < "¼ö" ; Default ; > ;
-            < "ÆÛ¼¾Æ®" ; Default ; > ;
-            < "ÅëÈ­" ; Default ; > ;
-            < "³¯Â¥" ; Default ; > ;
-            < "½Ã°£" ; Default ; > ;
-            < "°úÇĞ" ; Default ; > ;
-            < "ºĞ¼ö" ; Default ; > ;
-            < "ºÒ °ª" ; Default ; > ;
-            < "ÅØ½ºÆ®" ; Default ; > ;
+                < "ëª¨ë‘" ; Default ; > ;
+            < "ì‚¬ìš©ì ì •ì˜" ; Default ; > ;
+            < "ìˆ˜" ; Default ; > ;
+            < "í¼ì„¼íŠ¸" ; Default ; > ;
+            < "í†µí™”" ; Default ; > ;
+            < "ë‚ ì§œ" ; Default ; > ;
+            < "ì‹œê°„" ; Default ; > ;
+            < "ê³¼í•™" ; Default ; > ;
+            < "ë¶„ìˆ˜" ; Default ; > ;
+            < "ë…¼ë¦¬ ê°’" ; Default ; > ;
+            < "í…ìŠ¤íŠ¸" ; Default ; > ;
         };
         StringList [ turkish ] =
         {
@@ -455,6 +456,20 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
             < "Valor lógico" ; Default ; > ;
             < "Texto" ; Default ; > ;
         };
+    StringList [ thai ] =
+    {
+         < "à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”" ; Default ; > ;
+        < "à¸£à¸°à¸šà¸¸à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰" ; Default ; > ;
+        < "à¸•à¸±à¸§à¹€à¸¥à¸‚" ; Default ; > ;
+        < "à¹€à¸›à¸­à¸£à¹Œà¹€à¸‹à¹‡à¸™à¸•à¹Œ" ; Default ; > ;
+        < "à¸ªà¸à¸¸à¸¥à¹€à¸‡à¸´à¸™" ; Default ; > ;
+        < "à¸§à¸±à¸™" ; Default ; > ;
+        < "à¹€à¸§à¸¥à¸²" ; Default ; > ;
+        < "à¸—à¸²à¸‡à¸§à¸´à¸—à¸¢à¸²à¸¨à¸²à¸ªà¸•à¸£à¹Œ" ; Default ; > ;
+        < "à¹€à¸¨à¸©à¸ªà¹ˆà¸§à¸™" ; Default ; > ;
+        < "à¸„à¹ˆà¸²à¸šà¸¹à¸¥à¸µà¸™" ; Default ; > ;
+        < "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡" ; Default ; > ;
+    };
     };
     FixedText FT_EDFORMAT
     {
@@ -468,22 +483,23 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ portuguese ] = "Código do formato" ;
         Text [ finnish ] = "~Muotoile koodi" ;
         Text [ danish ] = "Format-kode" ;
-        Text [ french ] = "~Description de format" ;
+        Text [ french ] = "Description de format" ;
         Text [ swedish ] = "Format~beskrivning" ;
         Text [ dutch ] = "F~ormaatcode" ;
         Text [ spanish ] = "Código del for~mato" ;
         Text [ english_us ] = "~Format code" ;
-        Text[ chinese_simplified ] = "¸ñÊ½Âë(~F)";
+        Text[ chinese_simplified ] = "æ ¼å¼ç (~F)";
         Text[ russian ] = "Êîä ôîğìàòà";
         Text[ polish ] = "Kod formatu";
-        Text[ japanese ] = "‘®º°ÄŞ(~F)";
-        Text[ chinese_traditional ] = "®æ¦¡½X(~F)";
+        Text[ japanese ] = "æ›¸å¼ã‚³ãƒ¼ãƒ‰(~F)";
+        Text[ chinese_traditional ] = "æ ¼å¼ç¢¼(~F)";
         Text[ arabic ] = "ÑãÒ ÊäÓíŞ";
         Text[ greek ] = "Êùäéêüò ìïñöïğïßçóçò";
-        Text[ korean ] = "¼­½Ä ÄÚµå(~F)";
+        Text[ korean ] = "ì„œì‹ ì½”ë“œ(~F)";
         Text[ turkish ] = "Format ~kodu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Código del for~mato";
+        Text[ thai ] = "à¸£à¸«à¸±à¸ª~à¸£à¸¹à¸›à¹à¸šà¸š";
     };
     Edit ED_FORMAT
     {
@@ -521,17 +537,18 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ dutch ] = "~Formaat" ;
         Text [ spanish ] = "~Formato" ;
         Text [ english_us ] = "F~ormat" ;
-        Text[ chinese_simplified ] = "¸ñÊ½(~O)";
+        Text[ chinese_simplified ] = "æ ¼å¼(~O)";
         Text[ russian ] = "Ôîğ~ìàò";
         Text[ polish ] = "Format";
-        Text[ japanese ] = "‘®(~O)";
-        Text[ chinese_traditional ] = "®æ¦¡(~O)";
+        Text[ japanese ] = "æ›¸å¼(~O)";
+        Text[ chinese_traditional ] = "æ ¼å¼(~O)";
         Text[ arabic ] = "ÊäÓíŞ";
         Text[ greek ] = "Ìïñ~öŞ";
-        Text[ korean ] = "¼­½Ä(~O)";
+        Text[ korean ] = "ì„œì‹(~O)";
         Text[ turkish ] = "~Format";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Formato";
+        Text[ thai ] = "à¸£à¸¹~à¸›à¹à¸šà¸š";
     };
 
     ListBox LB_CURRENCY
@@ -599,15 +616,15 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         };
         StringList [ japanese ] =
         {
-                < "©“®" ; Default ; > ;
+                < "è‡ªå‹•" ; Default ; > ;
         };
         StringList [ chinese_simplified ] =
         {
-                < "×Ô¶¯" ; Default ; > ;
+                < "è‡ªåŠ¨" ; Default ; > ;
         };
         StringList [ chinese_traditional ] =
         {
-                < "¦Û°Ê" ; Default ; > ;
+                < "è‡ªå‹•" ; Default ; > ;
         };
         StringList [ arabic ] =
         {
@@ -619,7 +636,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         };
         StringList [ korean ] =
         {
-                < "ÀÚµ¿À¸·Î" ; Default ; > ;
+                < "ìë™ìœ¼ë¡œ" ; Default ; > ;
         };
         StringList [ turkish ] =
         {
@@ -633,6 +650,10 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         {
                 < "Automaattisesti" ; Default ; > ;
         };
+    StringList [ thai ] =
+    {
+         < "à¹‚à¸”à¸¢à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´" ; Default ; > ;
+    };
     };
 
     Control LB_FORMAT
@@ -656,22 +677,23 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ portuguese ] = "Casas ~decimais" ;
         Text [ finnish ] = "~Desimaaleja" ;
         Text [ danish ] = "Antal decimaler" ;
-        Text [ french ] = "~Décimales" ;
-        Text [ swedish ] = "~Decimalpositioner" ;
+        Text [ french ] = "Décimales" ;
+        Text [ swedish ] = "~Antal decimaler" ;
         Text [ dutch ] = "~Aantal decimalen" ;
         Text [ spanish ] = "~Decimales" ;
         Text [ english_us ] = "~Decimal places" ;
-        Text[ chinese_simplified ] = "Ğ¡ÊıµãÎ»Êı(~D)";
+        Text[ chinese_simplified ] = "å°æ•°ç‚¹ä½æ•°(~D)";
         Text[ russian ] = "Äğîáíàÿ ÷àñòü";
         Text[ polish ] = "Miejsca po przecinku";
-        Text[ japanese ] = "¬”“_ˆÈ‰º‚ÌŒ…(~D)";
-        Text[ chinese_traditional ] = "¤p¼ÆÂI¦ì¼Æ(~D)";
+        Text[ japanese ] = "å°æ•°ç‚¹ä»¥ä¸‹ã®æ¡(~D)";
+        Text[ chinese_traditional ] = "å°æ•¸é»ä½æ•¸(~D)";
         Text[ arabic ] = "ÇáãäÇÒá ÇáÚÔÑíÉ";
         Text[ greek ] = "Äåê~áäéêÜ øçößá";
-        Text[ korean ] = "¼Ò¼öÁ¡ ÀÌÇÏ ÀÚ¸®(~D)";
+        Text[ korean ] = "ì†Œìˆ˜ì  ì´í•˜ ìë¦¬(~D)";
         Text[ turkish ] = "~Ondalık haneler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Decimales";
+        Text[ thai ] = "à¸ˆà¸¸à¸”~à¸—à¸¨à¸™à¸´à¸¢à¸¡";
     };
     NumericField ED_DECIMALS
     {
@@ -704,17 +726,18 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ dutch ] = "~Voorloopnullen" ;
         Text [ spanish ] = "Ceros a la i~zquierda" ;
         Text [ english_us ] = "Leading ~zeroes" ;
-        Text[ chinese_simplified ] = "Ç°ÖÃÁã(~Z)";
+        Text[ chinese_simplified ] = "å‰ç½®é›¶(~Z)";
         Text[ russian ] = "Íà÷àëüíûå íóëè";
         Text[ polish ] = "Zera wiod¹ce";
-        Text[ japanese ] = "æ“ª‚Ì¾ŞÛ(~Z)";
-        Text[ chinese_traditional ] = "«e¸m¹s(~Z)";
+        Text[ japanese ] = "å…ˆé ­ã®ã‚¼ãƒ­(~Z)";
+        Text[ chinese_traditional ] = "å‰ç½®é›¶(~Z)";
         Text[ arabic ] = "ÃÕİÇÑ ŞíÇÏíÉ";
         Text[ greek ] = "Áñ÷éêÜ ìçäå~íéêÜ";
-        Text[ korean ] = "¼±Çà Á¦·Î(~Z)";
+        Text[ korean ] = "ì„ í–‰ ì œë¡œ(~Z)";
         Text[ turkish ] = "Virgül öncesi ~sıfır sayısı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ceros a la i~zquierda";
+        Text[ thai ] = "à¸à¸²à¸£à¸™à¸³~à¸¨à¸¹à¸™à¸¢à¹Œ";
     };
     NumericField ED_LEADZEROES
     {
@@ -746,17 +769,18 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ dutch ] = "~Negatieve getallen rood" ;
         Text [ spanish ] = "~Negativo en rojo" ;
         Text [ english_us ] = "~Negative numbers red" ;
-        Text[ chinese_simplified ] = "ÓÃºìÉ«ÏÔÊ¾¸ºÖµ(~N)";
+        Text[ chinese_simplified ] = "ç”¨çº¢è‰²æ˜¾ç¤ºè´Ÿå€¼(~N)";
         Text[ russian ] = "Âûäåë. îòğèö. ÷èñåë";
         Text[ polish ] = "Licz~by ujemne w kolorze czerwonym";
-        Text[ japanese ] = "Ï²Å½‚Ì”‚ÍÔš‚Å(~N)";
-        Text[ chinese_traditional ] = "¥Î¬õ¦âÅã¥Ü­t­È(~N)";
+        Text[ japanese ] = "ãƒã‚¤ãƒŠã‚¹å€¤ã¯èµ¤ã§(~N)";
+        Text[ chinese_traditional ] = "ç”¨ç´…è‰²é¡¯ç¤ºè² å€¼(~N)";
         Text[ arabic ] = "ÇáÃÑŞÇã ÇáÓáÈíÉ ÈÇááæä ÇáÃÍãÑ";
         Text[ greek ] = "Áñíçôéêïß ìå êüêêéíï";
-        Text[ korean ] = "(-)´Â Àû»öÀ¸·Î(~N)";
+        Text[ korean ] = "ìŒìˆ˜ëŠ” ì ìƒ‰ìœ¼ë¡œ í‘œì‹œ(~N)";
         Text[ turkish ] = "Negatif sayılar ~kırmızı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Negativo en rojo";
+        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸‚à¸•à¸´à¸”~à¸¥à¸šà¸ªà¸µà¹à¸”à¸‡";
     };
     CheckBox BTN_THOUSAND
     {
@@ -765,7 +789,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text = "~Tausenderpunkt" ;
         Text [ ENGLISH ] = "~Thousands point" ;
         Text [ norwegian ] = "~Tusen punkter Thousands point" ;
-        Text [ italian ] = "Separatore migliaia" ;
+        Text [ italian ] = "Separatore ~migliaia" ;
         Text [ portuguese_brazilian ] = "~Ponto da casa dos milhares" ;
         Text [ portuguese ] = "Casa dos ~milhares" ;
         Text [ finnish ] = "~Tuhaterotin" ;
@@ -775,17 +799,18 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ dutch ] = "~Scheidingsteken duizendtallen" ;
         Text [ spanish ] = "~Separador de miles" ;
         Text [ english_us ] = "~Thousands separator" ;
-        Text[ chinese_simplified ] = "Ç§Î»µã(~T)";
+        Text[ chinese_simplified ] = "åƒä½ç‚¹(~T)";
         Text[ russian ] = "Ğàçäåëåíèå ğàçğÿäîâ";
         Text[ polish ] = "Separator tysiêczny";
-        Text[ japanese ] = "ç’PˆÊ‚ÌŒ…‹æØ‚è(~T)";
-        Text[ chinese_traditional ] = "¤d¦ìÂI(~T)";
+        Text[ japanese ] = "åƒå˜ä½ã®æ¡åŒºåˆ‡ã‚Š(~T)";
+        Text[ chinese_traditional ] = "åƒä½é»(~T)";
         Text[ arabic ] = "ÚáÇãÉ İÕá ÇáÃáæİ";
         Text[ greek ] = "Äéá÷ùñéó~ôéêü ÷éëßùí";
-        Text[ korean ] = "Ãµ´ÜÀ§ ±¸ºĞÁ¡(~T)";
+        Text[ korean ] = "ì²œë‹¨ìœ„ êµ¬ë¶„ ê¸°í˜¸ ì‚¬ìš©(~T)";
         Text[ turkish ] = "~Binlik ayırıcısı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Separador de miles";
+        Text[ thai ] = "à¸•à¸±à¸§à¸„à¸±à¹ˆà¸™~à¸ˆà¸³à¸™à¸§à¸™à¸à¸±à¸™";
     };
     FixedLine FL_OPTIONS
     {
@@ -804,17 +829,18 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ dutch ] = "Opties" ;
         Text [ spanish ] = "Opciones" ;
         Text [ english_us ] = "Options" ;
-        Text[ chinese_simplified ] = "Ñ¡Ïî";
+        Text[ chinese_simplified ] = "é€‰é¡¹";
         Text[ russian ] = "Ïàğàìåòğû";
         Text[ polish ] = "Opcje";
-        Text[ japanese ] = "µÌß¼®İ";
-        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
+        Text[ chinese_traditional ] = "é¸é …";
         Text[ arabic ] = "ÇáÎíÇÑÇÊ";
         Text[ greek ] = "Åğéëïãİò";
-        Text[ korean ] = "¿É¼Ç";
+        Text[ korean ] = "ì˜µì…˜";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opciones";
+        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
     };
     FixedText FT_LANGUAGE
     {
@@ -833,17 +859,18 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ dutch ] = "~Taal" ;
         Text [ spanish ] = "~Idioma" ;
         Text [ english_us ] = "~Language" ;
-        Text[ chinese_simplified ] = "ÓïÑÔ(~L)";
+        Text[ chinese_simplified ] = "è¯­è¨€(~L)";
         Text[ russian ] = "ßçûê";
         Text[ polish ] = "Jêzyk";
-        Text[ japanese ] = "Œ¾Œê(~L)";
-        Text[ chinese_traditional ] = "»y¨¥(~L)";
+        Text[ japanese ] = "è¨€èª(~L)";
+        Text[ chinese_traditional ] = "èªè¨€(~L)";
         Text[ arabic ] = "ÇááÛÉ";
         Text[ greek ] = "Ãëşóóá";
-        Text[ korean ] = "¾ğ¾î(~L)";
+        Text[ korean ] = "ì–¸ì–´(~L)";
         Text[ turkish ] = "~Dil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Idioma";
+        Text[ thai ] = "~à¸ à¸²à¸©à¸²";
     };
     ListBox LB_LANGUAGE
     {
@@ -863,22 +890,23 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ portuguese ] = "Formato da fonte";
         Text[ russian ] = "Èñõîäíûé ôîğìàò";
         Text[ greek ] = "So~urce format";
-        Text[ dutch ] = "So~urce format";
+        Text[ dutch ] = "Br~onformaat";
         Text[ french ] = "Format de la so~urce";
         Text[ spanish ] = "Formato de fuente";
-        Text[ finnish ] = "So~urce format";
+        Text[ finnish ] = "~Lähdemuoto";
         Text[ italian ] = "Formato d'origine";
         Text[ danish ] = "So~urce format";
         Text[ swedish ] = "Kä~llformat";
         Text[ polish ] = "Format Ÿród³owy";
         Text[ portuguese_brazilian ] = "So~urce format";
-        Text[ japanese ] = "¿°½‘®(~U)";
-        Text[ korean ] = "¼Ò½º Æ÷¸Ë(~U)";
-        Text[ chinese_simplified ] = "Ô­Ê¼¸ñÊ½(~U)";
-        Text[ chinese_traditional ] = "­ì©l®æ¦¡(~U)";
+        Text[ japanese ] = "ã‚½ãƒ¼ã‚¹æ›¸å¼(~U)";
+        Text[ korean ] = "ì†ŒìŠ¤ í˜•ì‹(~U)";
+        Text[ chinese_simplified ] = "åŸå§‹æ ¼å¼(~U)";
+        Text[ chinese_traditional ] = "åŸå§‹æ ¼å¼(~U)";
         Text[ turkish ] = "So~urce format";
         Text[ arabic ] = "So~urce format";
         Text[ catalan ] = "So~urce format";
+        Text[ thai ] = "à¹à¸«~à¸¥à¹ˆà¸‡à¸£à¸¹à¸›à¹à¸šà¸š";
     };
     Window WND_NUMBER_PREVIEW
     {
@@ -910,17 +938,18 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
          // ### ACHTUNG: Neuer Text in Resource? Neues Zahlenformat hinzufügen : Neues Zahlenformat hinzuf³gen
         QuickHelpText[ russian ] = "Äîáàâèòü";
         QuickHelpText[ polish ] = "Dodaj";
-        QuickHelpText[ japanese ] = "’Ç‰Á";
-        QuickHelpText[ chinese_simplified ] = "ĞÂÔö";
-        QuickHelpText[ chinese_traditional ] = "¼W¥[";
+        QuickHelpText[ japanese ] = "è¿½åŠ ";
+        QuickHelpText[ chinese_simplified ] = "æ–°å¢";
+        QuickHelpText[ chinese_traditional ] = "å¢åŠ ";
         QuickHelpText[ arabic ] = "ÅÖÇİÉ";
         QuickHelpText[ greek ] = "ĞñïóèŞêç";
-        QuickHelpText[ korean ] = "Ãß°¡";
+        QuickHelpText[ korean ] = "ì¶”ê°€";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Hinzufügen";
         QuickHelpText[ catalan ] = "Añadir";
+        QuickHelpText[ thai ] = "Add";
     };
     ImageButton IB_REMOVE
     {
@@ -944,17 +973,18 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
          // ### ACHTUNG: Neuer Text in Resource? Zahlenformat löschen : Zahlenformat l÷schen
         QuickHelpText[ russian ] = "Óáğàòü";
         QuickHelpText[ polish ] = "Usuñ";
-        QuickHelpText[ japanese ] = "íœ";
-        QuickHelpText[ chinese_simplified ] = "É¾³ı";
-        QuickHelpText[ chinese_traditional ] = "§R°£";
+        QuickHelpText[ japanese ] = "å‰Šé™¤";
+        QuickHelpText[ chinese_simplified ] = "åˆ é™¤";
+        QuickHelpText[ chinese_traditional ] = "åˆªé™¤";
         QuickHelpText[ arabic ] = "ÅÒÇáÉ";
         QuickHelpText[ greek ] = "ÄéáãñáöŞ";
-        QuickHelpText[ korean ] = "Á¦°Å";
+        QuickHelpText[ korean ] = "ì œê±°";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Entfernen";
         QuickHelpText[ catalan ] = "Eliminar";
+        QuickHelpText[ thai ] = "Remove";
     };
     ImageButton IB_INFO
     {
@@ -975,18 +1005,19 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText [ portuguese ] = "Edita comentário" ;
         QuickHelpText[ russian ] = "Èçìåíèòü êîììåíòàğèé";
         QuickHelpText[ polish ] = "Zmieñ komentarz";
-        QuickHelpText[ japanese ] = "ºÒİÄ‚Ì•ÏX";
-        QuickHelpText[ chinese_simplified ] = "±à¼­ÆÀÓï";
-        QuickHelpText[ chinese_traditional ] = "ÅÜ§óµû»y";
+        QuickHelpText[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆã®å¤‰æ›´";
+        QuickHelpText[ chinese_simplified ] = "ç¼–è¾‘è¯„è¯­";
+        QuickHelpText[ chinese_traditional ] = "è®Šæ›´è©•èª";
         QuickHelpText[ arabic ] = "ÊÛííÑ ÇáÊÚáíŞ";
         QuickHelpText[ greek ] = "Åğåîåñãáóßá ó÷ïëßïõ";
-        QuickHelpText[ korean ] = "ÁÖ¼® ÆíÁı";
+        QuickHelpText[ korean ] = "ì£¼ì„ í¸ì§‘";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Kommentar ändern";
         QuickHelpText[ catalan ] = "Modificar comentario";
-        QuickHelpText[ finnish ] = "Muokkaa huomautusta";
+        QuickHelpText[ finnish ] = "Muokkaa kommenttia";
+        QuickHelpText[ thai ] = "Edit Comment";
     };
     ImageList IL_ICON
     {
@@ -1028,29 +1059,31 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ swedish ] = "Europa";
         Text[ polish ] = "Europa";
         Text[ portuguese_brazilian ] = "Europe";
-        Text[ japanese ] = "Ö°Û¯Êß";
-        Text[ chinese_simplified ] = "Å·ÖŞ";
-        Text[ chinese_traditional ] = "¼Ú¬w";
+        Text[ japanese ] = "ãƒ¨ãƒ¼ãƒ­ãƒƒãƒ‘";
+        Text[ chinese_simplified ] = "æ¬§æ´²";
+        Text[ chinese_traditional ] = "æ­æ´²";
         Text[ arabic ] = "ÃæÑæÈÇ";
         Text[ greek ] = "Åõñşğç";
-        Text[ korean ] = "À¯·´";
+        Text[ korean ] = "ìœ ëŸ½";
         Text[ turkish ] = "Avrupa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Europa";
         Text[ finnish ] = "Eurooppa";
+        Text[ thai ] = "à¸¢à¸¸à¹‚à¸£à¸›";
     };
 
-    Text[ chinese_simplified ] = "Êı×Ö¸ñÊ½";
+    Text[ chinese_simplified ] = "æ•°å­—æ ¼å¼";
     Text[ russian ] = "×èñëîâîé ôîğìàò";
     Text[ polish ] = "Format liczb";
-    Text[ japanese ] = "”‚Ì‘®";
-    Text[ chinese_traditional ] = "¼Æ¦r®æ¦¡";
+    Text[ japanese ] = "æ•°ã®æ›¸å¼";
+    Text[ chinese_traditional ] = "æ•¸å­—æ ¼å¼";
     Text[ arabic ] = "ÊäÓíŞ ÇáÃÑŞÇã";
     Text[ greek ] = "ÌïñöŞ áñéèìşí";
-    Text[ korean ] = "¼ö ¼­½Ä";
+    Text[ korean ] = "ìˆ«ì í˜•ì‹";
     Text[ turkish ] = "Sayı formatı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Formato numérico";
+    Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
 };
  // ********************************************************************** EOF
 
