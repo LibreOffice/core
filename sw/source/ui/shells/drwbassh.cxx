@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-02-28 17:07:45 $
+ *  last change: $Author: os $ $Date: 2002-03-04 14:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,6 +559,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                 "Object is not a group, graphic or OLE shape")
             sName = pObj->GetName();
             SvxNameDialog* pDlg = new SvxNameDialog( NULL, sName, sDesc );
+            pDlg->SetText(SW_RESSTR(STR_NAME_GROUP_DIALOG));
             pDlg->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
             if( pDlg->Execute() == RET_OK )
             {
