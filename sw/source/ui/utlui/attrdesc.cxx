@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 13:01:16 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
             }
             else
             {
-                rText += ::GetMetricText( GetWidth(), eCoreUnit, ePresUnit );
+                rText += ::GetMetricText( GetWidth(), eCoreUnit, ePresUnit, pIntl );
                 rText += ::GetSvxString( ::GetMetricId( ePresUnit ) );
             }
             if ( ATT_VAR_SIZE != GetSizeType() )
@@ -452,7 +452,7 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
                 }
                 else
                 {
-                    rText += ::GetMetricText( GetHeight(), eCoreUnit, ePresUnit );
+                    rText += ::GetMetricText( GetHeight(), eCoreUnit, ePresUnit, pIntl );
                     rText += ::GetSvxString( ::GetMetricId( ePresUnit ) );
                 }
             }
@@ -603,7 +603,7 @@ SfxItemPresentation SwFmtVertOrient::GetPresentation
                 {
                     rText += SW_RESSTR( STR_POS_Y );
                     rText += ' ';
-                    rText += ::GetMetricText( GetPos(), eCoreUnit, ePresUnit );
+                    rText += ::GetMetricText( GetPos(), eCoreUnit, ePresUnit, pIntl );
                     rText += ::GetSvxString( ::GetMetricId( ePresUnit ) );
                 }
                 break;
@@ -662,7 +662,7 @@ SfxItemPresentation SwFmtHoriOrient::GetPresentation
                 {
                     rText += SW_RESSTR( STR_POS_X );
                     rText += ' ';
-                    rText += ::GetMetricText( GetPos(), eCoreUnit, ePresUnit );
+                    rText += ::GetMetricText( GetPos(), eCoreUnit, ePresUnit, pIntl );
                     rText += ::GetSvxString( ::GetMetricId( ePresUnit ) );
                 }
                 break;
@@ -796,7 +796,7 @@ SfxItemPresentation SwFmtCol::GetPresentation
                     rText += SW_RESSTR( STR_LINE_WIDTH );
                     rText += ' ';
                     rText += ::GetMetricText( nWdth, eCoreUnit,
-                                              SFX_MAPUNIT_POINT );
+                                              SFX_MAPUNIT_POINT, pIntl );
                 }
             }
             else
