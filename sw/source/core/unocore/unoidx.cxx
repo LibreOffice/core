@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-16 10:31:05 $
+ *  last change: $Author: os $ $Date: 2000-10-27 09:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2393,12 +2393,14 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
         aRetSeq.realloc(nTokenCount);
         PropertyValues* pTokenProps = aRetSeq.getArray();
         SwFormToken  aToken = aEnumerator.GetNextToken();
+
+        Sequence< PropertyValue >& rCurTokenSeq = pTokenProps[nTokenCount-1];
         switch(aToken.eTokenType)
         {
             case TOKEN_ENTRY_NO     :
             {
-                pTokenProps->realloc( 2 );
-                PropertyValue* pArr = pTokenProps->getArray();
+                rCurTokenSeq.realloc( 2 );
+                PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<= OUString::createFromAscii("TokenEntryNumber");
@@ -2411,8 +2413,8 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
             case TOKEN_ENTRY        :   // no difference between Entry and Entry Text
             case TOKEN_ENTRY_TEXT   :
             {
-                pTokenProps->realloc( 2 );
-                PropertyValue* pArr = pTokenProps->getArray();
+                rCurTokenSeq.realloc( 2 );
+                PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<= OUString::createFromAscii("TokenEntryText");
@@ -2423,8 +2425,8 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
             break;
             case TOKEN_TAB_STOP     :
             {
-                pTokenProps->realloc(3);
-                PropertyValue* pArr = pTokenProps->getArray();
+                rCurTokenSeq.realloc(3);
+                PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<= OUString::createFromAscii("TokenTabStop");
@@ -2447,8 +2449,8 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
             break;
             case TOKEN_TEXT         :
             {
-                pTokenProps->realloc( 3 );
-                PropertyValue* pArr = pTokenProps->getArray();
+                rCurTokenSeq.realloc( 3 );
+                PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<= OUString::createFromAscii("TokenText");
@@ -2462,8 +2464,8 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
             break;
             case TOKEN_PAGE_NUMS    :
             {
-                pTokenProps->realloc( 2 );
-                PropertyValue* pArr = pTokenProps->getArray();
+                rCurTokenSeq.realloc( 2 );
+                PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<= OUString::createFromAscii("TokenPageNumber");
@@ -2474,8 +2476,8 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
             break;
             case TOKEN_CHAPTER_INFO :
             {
-                pTokenProps->realloc( 3 );
-                PropertyValue* pArr = pTokenProps->getArray();
+                rCurTokenSeq.realloc( 3 );
+                PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<= OUString::createFromAscii("TokenChapterInfo");
@@ -2498,8 +2500,8 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
             break;
             case TOKEN_LINK_START   :
             {
-                pTokenProps->realloc( 1 );
-                PropertyValue* pArr = pTokenProps->getArray();
+                rCurTokenSeq.realloc( 1 );
+                PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<= OUString::createFromAscii("TokenHyperlinkStart");
@@ -2507,16 +2509,16 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
             break;
             case TOKEN_LINK_END     :
             {
-                pTokenProps->realloc( 1 );
-                PropertyValue* pArr = pTokenProps->getArray();
+                rCurTokenSeq.realloc( 1 );
+                PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<= OUString::createFromAscii("TokenHyperlinkEnd");
             }
             break;
             case TOKEN_AUTHORITY :
-                pTokenProps->realloc( 1 );
-                PropertyValue* pArr = pTokenProps->getArray();
+                rCurTokenSeq.realloc( 1 );
+                PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<= OUString::createFromAscii("TokenBibliographyDataField");
@@ -2547,6 +2549,9 @@ sal_Bool SwXIndexTokenAccess_Impl::hasElements(void) throw( RuntimeException )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/16 10:31:05  os
+    #79422# SwXDocumentIndexMark: invalidation uses SwUnoCallBack
+
     Revision 1.2  2000/10/05 12:10:09  jp
     should change: remove image
 
