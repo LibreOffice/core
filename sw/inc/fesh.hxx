@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:58:24 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,6 @@ public:
 
     // finde/loeschen den Fly, in dem der Cursor steht
     SwFrmFmt* WizzardGetFly();
-    BOOL WizzardDelFly();
 
     //Selebstaendiges selektieren von Flys
     BOOL GotoNextFly(GotoObjType eType = FLY_ANY)
