@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-20 14:05:25 $
+ *  last change: $Author: dbo $ $Date: 2001-02-20 16:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@ public:
     inline void addAttr( OUString const & rAttrName, OUString const & rValue );
     inline void addBoolAttr( OUString const & rAttrName, sal_Bool bValue );
 
+    //
+    void addEvents()
+        throw (Exception);
     //
     void readButtonModel( StyleBag * all_styles )
         throw (Exception);

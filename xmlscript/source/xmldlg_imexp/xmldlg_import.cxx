@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-20 14:05:25 $
+ *  last change: $Author: dbo $ $Date: 2001-02-20 16:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,21 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 
+#include <com/sun/star/script/XScriptEventsSupplier.hpp>
+#include <com/sun/star/script/ScriptEventDescriptor.hpp>
+
 
 using namespace ::osl;
 
 namespace xmlscript
 {
 
+//__________________________________________________________________________________________________
+void EventElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    static_cast< ControlElement * >( _pParent )->_events.push_back( _xAttributes );
+}
 //__________________________________________________________________________________________________
 ControlElement::ControlElement(
     OUString const & rLocalName,
@@ -711,6 +720,53 @@ void ControlImportContext::importDefaults(
     importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
                            OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
                            xAttributes );
+}
+//__________________________________________________________________________________________________
+void ControlImportContext::importEvents(
+    vector< Reference< xml::sax2::XExtendedAttributes > > const & rEvents )
+{
+    Reference< script::XScriptEventsSupplier > xSupplier( _xControlModel, UNO_QUERY );
+    if (xSupplier.is())
+    {
+        Reference< container::XNameContainer > xEvents( xSupplier->getEvents() );
+        if (xEvents.is())
+        {
+            for ( size_t nPos = 0; nPos < rEvents.size(); ++nPos )
+            {
+                script::ScriptEventDescriptor descr;
+                Reference< xml::sax2::XExtendedAttributes > xEvent( rEvents[ nPos ] );
+
+                if (!getStringAttr( &descr.ListenerType,
+                                    OUString( RTL_CONSTASCII_USTRINGPARAM("listener-type") ),
+                                    xEvent ) ||
+                    !getStringAttr( &descr.EventMethod,
+                                    OUString( RTL_CONSTASCII_USTRINGPARAM("event-method") ),
+                                    xEvent ))
+                {
+                    throw xml::sax::SAXException(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("missing listener-type | event attribute(s)!") ),
+                        Reference< XInterface >(), Any() );
+                }
+
+                getStringAttr( &descr.ScriptType,
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("script-type") ),
+                               xEvent );
+                getStringAttr( &descr.ScriptType,
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("script-code") ),
+                               xEvent );
+                getStringAttr( &descr.AddListenerParam,
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("param") ),
+                               xEvent );
+
+                OUStringBuffer buf( 32 );
+                buf.append( descr.ListenerType );
+                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("::") );
+                buf.append( descr.EventMethod );
+
+                xEvents->insertByName( buf.makeStringAndClear(), makeAny( descr ) );
+            }
+        }
+    }
 }
 
 //##################################################################################################

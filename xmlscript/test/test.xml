@@ -13,7 +13,11 @@
 
         <button dlg:id="button1" ns:value="hallo" dlg:left="50" ns:top="50"  width="50" height="50"
                 style-id="bla3"
-                xmlns:ns="http://openoffice.org/2000/dialog"/>
+                xmlns:ns="http://openoffice.org/2000/dialog">
+
+            <event listener-type="type" event-method="clicked"
+                   script-type="basic" script-code="code" param="testi"/>
+        </button>
 
         <button dlg:id="button3" ns:value="hallo2" dlg:left="250" ns:top="50"  width="50" height="50"
                 style-id="bla"

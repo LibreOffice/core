@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-20 14:05:25 $
+ *  last change: $Author: dbo $ $Date: 2001-02-20 16:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,67 @@ namespace xmlscript
 
 //##################################################################################################
 
+// fixed text
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > TextElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
+}
+//__________________________________________________________________________________________________
+void TextElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ) );
+
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        pStyle->importBackgroundColorStyle( xControlModel );
+        pStyle->importTextColorStyle( xControlModel );
+        pStyle->importBorderStyle( xControlModel );
+        pStyle->importFontStyle( xControlModel );
+    }
+
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                              _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("multiline") ),
+                               _xAttributes );
+    ctx.importAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
+                             _xAttributes );
+
+    ctx.importEvents( _events );
+}
+
+//##################################################################################################
+
 // edit
 //__________________________________________________________________________________________________
 Reference< xml::XImportContext > TextFieldElement::createChildContext(
@@ -85,11 +146,11 @@ Reference< xml::XImportContext > TextFieldElement::createChildContext(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
             Reference< XInterface >(), Any() );
     }
-//      // event
-//      else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
-//      {
-//          return new EventElement( rLocalName, xAttributes, this, _pImport );
-//      }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
     else
     {
         throw xml::sax::SAXException(
@@ -151,6 +212,8 @@ void TextFieldElement::endElement()
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("EchoChar") ),
                                          makeAny( nChar ) );
     }
+
+    ctx.importEvents( _events );
 }
 
 //##################################################################################################
@@ -180,14 +243,16 @@ Reference< xml::XImportContext > TitledBoxElement::createChildContext(
     {
         // dont create radios here, => titledbox must be inserted first due to radio grouping,
         // possible predecessors!
-        _radios.push_back( xAttributes );
-        return new ElementBase( rLocalName, xAttributes, this, _pImport );
+        Reference< xml::XImportContext > xRet(
+            new RadioElement( rLocalName, xAttributes, this, _pImport ) );
+        _radios.push_back( xRet );
+        return xRet;
     }
-//      // event
-//      else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
-//      {
-//          return new EventElement( rLocalName, xAttributes, this, _pImport );
-//      }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
     else
     {
         return BulletinBoardElement::createChildContext( nUid, rLocalName, xAttributes );
@@ -244,7 +309,9 @@ void TitledBoxElement::endElement()
     // create radios AFTER group box!
     for ( size_t nPos = 0; nPos < _radios.size(); ++nPos )
     {
-        Reference< xml::sax2::XExtendedAttributes > xAttributes( _radios[ nPos ] );
+        Reference< xml::XImportContext > xRadio( _radios[ nPos ] );
+        Reference< xml::sax2::XExtendedAttributes > xAttributes( xRadio->getAttributes() );
+
         ControlImportContext ctx(
             _pImport, getControlId( xAttributes ),
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ) );
@@ -280,6 +347,36 @@ void TitledBoxElement::endElement()
 
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
                                          makeAny( nVal ) );
+
+        ctx.importEvents( * static_cast< RadioElement * >( xRadio.get() )->getEvents() );
+    }
+}
+
+//##################################################################################################
+
+// radio
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > RadioElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
     }
 }
 
@@ -301,6 +398,29 @@ Reference< xml::XImportContext > RadioGroupElement::createChildContext(
     // radio
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("radio") ))
     {
+        // dont create radios here, => titledbox must be inserted first due to radio grouping,
+        // possible predecessors!
+        Reference< xml::XImportContext > xRet(
+            new RadioElement( rLocalName, xAttributes, this, _pImport ) );
+        _radios.push_back( xRet );
+        return xRet;
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
+}
+//__________________________________________________________________________________________________
+void RadioGroupElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    for ( size_t nPos = 0; nPos < _radios.size(); ++nPos )
+    {
+        Reference< xml::XImportContext > xRadio( _radios[ nPos ] );
+        Reference< xml::sax2::XExtendedAttributes > xAttributes( xRadio->getAttributes() );
+
         ControlImportContext ctx(
             _pImport, getControlId( xAttributes ),
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ) );
@@ -337,18 +457,7 @@ Reference< xml::XImportContext > RadioGroupElement::createChildContext(
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
                                          makeAny( nVal ) );
 
-        return new ElementBase( rLocalName, xAttributes, this, _pImport );
-    }
-//      // event
-//      else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
-//      {
-//          return new EventElement( rLocalName, xAttributes, this, _pImport );
-//      }
-    else
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
-            Reference< XInterface >(), Any() );
+        ctx.importEvents( * static_cast< RadioElement * >( xRadio.get() )->getEvents() );
     }
 }
 
@@ -437,11 +546,11 @@ Reference< xml::XImportContext > MenuListElement::createChildContext(
         _popup = new MenuPopupElement( rLocalName, xAttributes, this, _pImport );
         return _popup;
     }
-//      // event
-//      else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
-//      {
-//          return new EventElement( rLocalName, xAttributes, this, _pImport );
-//      }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
     else
     {
         throw xml::sax::SAXException(
@@ -485,6 +594,8 @@ void MenuListElement::endElement()
                                      makeAny( p->getItemValues() ) );
     xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("SelectedItems") ),
                                      makeAny( p->getSelectedItems() ) );
+
+    ctx.importEvents( _events );
 }
 
 //##################################################################################################
@@ -508,11 +619,11 @@ Reference< xml::XImportContext > ComboBoxElement::createChildContext(
         _popup = new MenuPopupElement( rLocalName, xAttributes, this, _pImport );
         return _popup;
     }
-//      // event
-//      else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
-//      {
-//          return new EventElement( rLocalName, xAttributes, this, _pImport );
-//      }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
     else
     {
         throw xml::sax::SAXException(
@@ -564,6 +675,8 @@ void ComboBoxElement::endElement()
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
                               _xAttributes );
+
+    ctx.importEvents( _events );
 }
 
 //##################################################################################################
@@ -581,11 +694,11 @@ Reference< xml::XImportContext > CheckBoxElement::createChildContext(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
             Reference< XInterface >(), Any() );
     }
-//      // event
-//      else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
-//      {
-//          return new EventElement( rLocalName, xAttributes, this, _pImport );
-//      }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
     else
     {
         throw xml::sax::SAXException(
@@ -636,6 +749,8 @@ void CheckBoxElement::endElement()
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
                                          makeAny( nVal ) );
     }
+
+    ctx.importEvents( _events );
 }
 
 //##################################################################################################
@@ -653,11 +768,11 @@ Reference< xml::XImportContext > ButtonElement::createChildContext(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
             Reference< XInterface >(), Any() );
     }
-//      // event
-//      else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
-//      {
-//          return new EventElement( rLocalName, xAttributes, this, _pImport );
-//      }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
     else
     {
         throw xml::sax::SAXException(
@@ -691,6 +806,8 @@ void ButtonElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultButton") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("default") ),
                                _xAttributes );
+
+    ctx.importEvents( _events );
 }
 
 //##################################################################################################
@@ -741,34 +858,7 @@ Reference< xml::XImportContext > BulletinBoardElement::createChildContext(
     // text
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("text") ))
     {
-        ControlImportContext ctx(
-            _pImport, getControlId( xAttributes ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ) );
-        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
-
-        Reference< xml::XImportContext > xStyle( getStyle( xAttributes ) );
-        if (xStyle.is())
-        {
-            StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-            pStyle->importBackgroundColorStyle( xControlModel );
-            pStyle->importTextColorStyle( xControlModel );
-            pStyle->importBorderStyle( xControlModel );
-            pStyle->importFontStyle( xControlModel );
-        }
-
-        ctx.importDefaults( _nBasePosX, _nBasePosY, xAttributes );
-
-        ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
-                                  OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
-                                  xAttributes );
-        ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
-                                   OUString( RTL_CONSTASCII_USTRINGPARAM("multiline") ),
-                                   xAttributes );
-        ctx.importAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
-                                 xAttributes );
-        // dummy
-        return new ElementBase( rLocalName, xAttributes, this, _pImport );
+        return new TextElement( rLocalName, xAttributes, this, _pImport );
     }
     // textfield
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("textfield") ))

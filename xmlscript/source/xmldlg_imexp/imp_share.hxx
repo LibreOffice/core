@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-20 14:05:25 $
+ *  last change: $Author: dbo $ $Date: 2001-02-20 16:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,14 +311,20 @@ public:
 class ControlElement
     : public ElementBase
 {
+    friend class EventElement;
+
 protected:
     sal_Int32 _nBasePosX, _nBasePosY;
+
+    vector< Reference< xml::sax2::XExtendedAttributes > > _events;
 
     OUString getControlId(
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
     Reference< xml::XImportContext > getStyle(
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
 public:
+    vector< Reference< xml::sax2::XExtendedAttributes > > const * getEvents() throw ()
+        { return &_events; }
 
     ControlElement(
         OUString const & rLocalName,
@@ -347,6 +353,9 @@ public:
     inline Reference< beans::XPropertySet > getControlModel()
         { return _xControlModel; }
 
+    void importEvents(
+        vector< Reference< xml::sax2::XExtendedAttributes > > const & rEvents );
+
     void importDefaults(
         sal_Int32 nBaseX, sal_Int32 nBaseY,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
@@ -371,7 +380,6 @@ public:
         OUString const & rPropName, OUString const & rAttrName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
 };
-
 //==================================================================================================
 class WindowElement
     : public ControlElement
@@ -390,6 +398,22 @@ public:
         ElementBase * pParent, DialogImport * pImport )
         throw ()
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+//==================================================================================================
+class EventElement
+    : public ElementBase
+{
+public:
+    virtual void SAL_CALL endElement()
+        throw (xml::sax::SAXException, RuntimeException);
+
+    EventElement(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        throw ()
+        : ElementBase( rLocalName, xAttributes, pParent, pImport )
         {}
 };
 //==================================================================================================
@@ -491,13 +515,34 @@ public:
         {}
 };
 //==================================================================================================
-class RadioGroupElement
+class RadioElement
     : public ControlElement
 {
 public:
     virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
         sal_Int32 nUid, OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+
+    RadioElement(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        throw ()
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+//==================================================================================================
+class RadioGroupElement
+    : public ControlElement
+{
+    vector< Reference< xml::XImportContext > > _radios;
+public:
+    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+    void SAL_CALL endElement()
         throw (xml::sax::SAXException, RuntimeException);
 
     RadioGroupElement(
@@ -513,7 +558,7 @@ class TitledBoxElement
     : public BulletinBoardElement
 {
     OUString _label;
-    vector< Reference< xml::sax2::XExtendedAttributes > > _radios;
+    vector< Reference< xml::XImportContext > > _radios;
 public:
     virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
         sal_Int32 nUid, OUString const & rLocalName,
@@ -528,6 +573,26 @@ public:
         ElementBase * pParent, DialogImport * pImport )
         throw ()
         : BulletinBoardElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+//==================================================================================================
+class TextElement
+    : public ControlElement
+{
+public:
+    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (xml::sax::SAXException, RuntimeException);
+
+    TextElement(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        throw ()
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
 //==================================================================================================
