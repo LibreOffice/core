@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-02 06:25:49 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 07:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,17 +87,15 @@ namespace dbaui
     private:
         OFieldDescription*      m_pActFieldDescr;
         long                    m_nPos;
-        BOOL                    m_bReadOnly;
-        BOOL                    m_bFirstNameModify;
-        BOOL                    m_bFirstDescrModify;
-        BOOL                    m_bOwnsDescriptions;
+        bool                    m_bReadOnly;
+        bool                    m_bOwnsDescriptions;
 
     protected:
     public:
         OTableRow();
         OTableRow(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAffectedCol);
         OTableRow( const OTableRow& rRow, long nPosition = -1 );
-        virtual ~OTableRow();
+        ~OTableRow();
 
         inline OFieldDescription* GetActFieldDescr() const { return m_pActFieldDescr; }
         inline bool isValid() const { return GetActFieldDescr() != NULL; }
@@ -107,16 +105,23 @@ namespace dbaui
         void SetPrimaryKey( BOOL bSet );
         BOOL IsPrimaryKey() const;
 
+        /** returns the current position in the table.
+            @return
+                the current position in the table
+        */
         inline long GetPos() const { return m_nPos; }
 
-        inline void SetReadOnly( BOOL bRead=TRUE ){ m_bReadOnly = bRead; }
-        inline BOOL IsReadOnly() const { return m_bReadOnly; }
+        /** set the row readonly
+            @param  _bRead
+                if <TRUE/> then the row is redonly, otherwise not
+        */
+        inline void SetReadOnly( bool _bRead=true ){ m_bReadOnly = _bRead; }
 
-        inline void SetFirstNameModify( BOOL bMod ){ m_bFirstNameModify = bMod; }
-        inline void SetFirstDescrModify( BOOL bMod ){ m_bFirstDescrModify = bMod; }
-
-        inline BOOL IsFirstNameModify() const { return m_bFirstNameModify; }
-        inline BOOL IsFirstDescrModify() const { return m_bFirstDescrModify; }
+        /** returns if the row is readonly
+            @return
+                <TRUE/> if readonly, otherwise <FALSE/>
+        */
+        inline bool IsReadOnly() const { return m_bReadOnly; }
 
         friend SvStream& operator<<( SvStream& rStr,const OTableRow& _rRow );
         friend SvStream& operator>>( SvStream& rStr, OTableRow& _rRow );

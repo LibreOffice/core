@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 08:31:14 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 07:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,10 +86,8 @@ DBG_NAME(OTableRow);
 OTableRow::OTableRow()
     :m_pActFieldDescr( NULL )
     ,m_nPos( -1 )
-    ,m_bReadOnly( sal_False )
-    ,m_bFirstNameModify( sal_True )
-    ,m_bFirstDescrModify( sal_True )
-    ,m_bOwnsDescriptions(sal_False)
+    ,m_bReadOnly( false )
+    ,m_bOwnsDescriptions(false)
 {
     DBG_CTOR(OTableRow,NULL);
 }
@@ -97,10 +95,8 @@ OTableRow::OTableRow()
 OTableRow::OTableRow(const Reference< XPropertySet >& xAffectedCol)
     :m_pActFieldDescr( NULL )
     ,m_nPos( -1 )
-    ,m_bReadOnly( sal_False )
-    ,m_bFirstNameModify( sal_True )
-    ,m_bFirstDescrModify( sal_True )
-    ,m_bOwnsDescriptions(sal_True)
+    ,m_bReadOnly( false )
+    ,m_bOwnsDescriptions(true)
 {
     DBG_CTOR(OTableRow,NULL);
     m_pActFieldDescr = new OFieldDescription(xAffectedCol);
@@ -109,16 +105,17 @@ OTableRow::OTableRow(const Reference< XPropertySet >& xAffectedCol)
 OTableRow::OTableRow( const OTableRow& rRow, long nPosition ) :
     m_nPos( nPosition )
     ,m_bReadOnly(rRow.IsReadOnly())
-    ,m_bFirstNameModify(rRow.IsFirstNameModify())
-    ,m_bFirstDescrModify(rRow.IsFirstDescrModify())
     ,m_pActFieldDescr(NULL)
-    ,m_bOwnsDescriptions(sal_False)
+    ,m_bOwnsDescriptions(false)
 {
     DBG_CTOR(OTableRow,NULL);
 
     OFieldDescription* pSrcField = rRow.GetActFieldDescr();
     if(pSrcField)
+    {
         m_pActFieldDescr = new OFieldDescription(*pSrcField);
+        m_bOwnsDescriptions = true;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -151,7 +148,7 @@ void OTableRow::SetFieldType( const OTypeInfo* _pType, sal_Bool _bForce )
         if( !m_pActFieldDescr )
         {
             m_pActFieldDescr = new OFieldDescription();
-            m_bOwnsDescriptions = sal_True;
+            m_bOwnsDescriptions = true;
         }
 
         const OTypeInfo* pOldType = m_pActFieldDescr->getTypeInfo();
