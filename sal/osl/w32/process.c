@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-08 14:24:08 $
+ *  last change: $Author: hro $ $Date: 2001-05-11 08:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,18 +134,18 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
     if ( !(Options & osl_Process_SEARCHPATH) )
     {
         rtl_uString_newFromString( &strPath, strImageName);
-        osl_getSystemPathFromNormalizedPath( strPath, &strPath );
+        osl_getSystemPathFromFileURL( strPath, &strPath );
     }
-    else if ( osl_Process_E_None == osl_searchNormalizedPath( strImageName, NULL, &strPath ) )
+    else if ( osl_Process_E_None == osl_searchFileURL( strImageName, NULL, &strPath ) )
     {
-        osl_getSystemPathFromNormalizedPath( strPath, &strPath );
+        osl_getSystemPathFromFileURL( strPath, &strPath );
     }
     else
     {
         /* This is only for convenience if full qualified system paths are specified */
 
         rtl_uString_newFromString( &strPath, strImageName);
-        osl_getSystemPathFromNormalizedPath( strPath, &strPath );
+        osl_getSystemPathFromFileURL( strPath, &strPath );
     }
 
     n = rtl_uString_getLength(strPath) + 1;
@@ -424,7 +424,7 @@ oslProcessError SAL_CALL osl_getExecutableFile(rtl_uString **strFile)
     {
         rtl_uString *strTmp = NULL;
         rtl_uString_newFromStr_WithLength( &strTmp, buffer, nLen );
-        osl_normalizePath(strTmp, strFile);
+        osl_getFileURLFromSystemPath(strTmp, strFile);
         rtl_uString_release(strTmp);
         return osl_Process_E_None;
     }
