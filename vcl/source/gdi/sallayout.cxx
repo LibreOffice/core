@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-18 14:30:48 $
+ *  last change: $Author: hdu $ $Date: 2002-11-19 16:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,7 +513,6 @@ GenericSalLayout::~GenericSalLayout()
     delete[] mpGlyphItems;
 }
 
-
 // -----------------------------------------------------------------------
 
 void GenericSalLayout::AppendGlyph( const GlyphItem& rGlyphItem )
@@ -747,15 +746,20 @@ bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
         if( pMinPos[n] > nXPos )
             pMinPos[n] = nXPos;
 
-        // maximum is right extent of cluster
-        int j = i;
-        while( (--j >= 0) && !pG[i-j].IsClusterStart() );   // advance to next cluster
-        if( j >= 0 )
-            nXPos = pG[i-j].maLinearPos.X();                // left edge of next cluster
-        else if( pG->mnNewWidth > 0 )
-            nXPos += pG->mnNewWidth;                        // right edge of this glyph
-        if( pMaxPos[n] < nXPos )
-            pMaxPos[n] = nXPos;
+        // calculate maximum for this cluster
+        for( const GlyphItem* pGCluster = pG;; pG = ++pGCluster, --i )
+        {
+            // update max X position
+            nXPos += pGCluster->mnNewWidth;
+            if( pMaxPos[n] < nXPos )
+                pMaxPos[n] = nXPos;
+            // break at right end of cluster
+            if( i <= 1 )
+                break;
+            if( pGCluster[1].IsClusterStart() )
+                break;
+            nXPos = pGCluster[1].maLinearPos.X();
+        }
     }
 
     // set char width array
@@ -992,7 +996,10 @@ void GenericSalLayout::ApplyAsianKerning( const sal_Unicode* pStr, int nLength )
 
 void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
 {
-    // TODO: maybe use a different container type for GlyphItems
+    if( nKashidaWidth < 1 )
+    return;
+
+    // TODO: redo when using a different container type for GlyphItems
     GlyphItem* pG1 = mpGlyphItems;
     int nKashidaCount = 0, i;
     for( i = 0; i < mnGlyphCount; ++i, ++pG1 )
@@ -1000,8 +1007,8 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
         if( pG1->IsRTLGlyph() )
         {
             int nDelta = pG1->mnNewWidth - pG1->mnOrigWidth;
-            if( nDelta )
-                nKashidaCount += (nDelta + nKashidaWidth - 1) / nKashidaWidth;
+            if( nDelta > 0 )
+                nKashidaCount += (2*nDelta + nKashidaWidth - 1) / nKashidaWidth;
         }
     }
 
@@ -1040,6 +1047,7 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
         }
     }
 
+    DBG_ASSERT( mnGlyphCapacity >= pG2-pNewGlyphItems, "AKashidaJ overflow" );
     delete[] mpGlyphItems;
     mpGlyphItems = pNewGlyphItems;
     mnGlyphCount = pG2 - pNewGlyphItems;
