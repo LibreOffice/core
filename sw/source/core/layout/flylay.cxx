@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:07:54 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1124,7 +1124,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                 objectpositioning::SwEnvironmentOfAnchoredObject
                                                 aEnvOfObj( bFollowTextFlow );
                 const SwLayoutFrm& rVertClipFrm =
-                    aEnvOfObj.GetVertEnvironmentLayoutFrm( *pVertPosOrientFrm, !bMove );
+                    aEnvOfObj.GetVertEnvironmentLayoutFrm( *pVertPosOrientFrm );
                 if ( rV.GetRelationOrient() == REL_PG_FRAME )
                 {
                     rRect = rVertClipFrm.Frm();
