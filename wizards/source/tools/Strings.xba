@@ -477,4 +477,14 @@ Dim MaxIndex as Integer
 	End If
 End Function
 
-</script:module>
+
+Function CheckDouble(DoubleString as String)
+On Local Error Goto WRONGDATATYPE
+	CheckDouble() = CDbl(DoubleString) 
+WRONGDATATYPE:
+	If Err &lt;&gt; 0 Then
+		CheckDouble() = 0
+		Resume NoErr:
+	End If
+NOERR:	
+End Function</script:module>
