@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChainablePropertySetInfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-01 11:44:41 $
+ *  last change: $Author: mtg $ $Date: 2001-10-16 17:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,7 @@ Property SAL_CALL ChainablePropertySetInfo::getPropertyByName( const ::rtl::OUSt
     aProperty.Handle = pInfo->mnHandle;
     const Type* pType = &aProperty.Type;
     GenerateCppuType ( pInfo->meCppuType, pType );
+    aProperty.Type = *pType;
     aProperty.Attributes = pInfo->mnAttributes;
     return aProperty;
 }
