@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cookiedg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-22 14:06:59 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ ModalDialog DLG_COOKIES
         Text[ japanese ] = "Έ―·°‚Μ΅γ‚Μ‘€μθ‡";
         Text[ chinese_traditional ] = "¤µ«α³B²z Cookie ªΊ¤θ¦΅";
         Text[ greek ] = "Μελλοντική μεταχείριση για αυτά τα Cookies";
-        Text[ korean ] = "ΐΜ·―ΗΡ CookieΏ΅ ΄λΗΡ ΎΥΐΈ·ΞΐΗ Γλ±ή";
+        Text[ korean ] = "ΐΜ ΔνΕ°Ώ΅ ΄λΗΡ ΎΥΐΈ·ΞΐΗ Γλ±ή";
         Text[ arabic ] = "ΨΡνήΙ ΗαΚΪΗγα γΪ εΠε ΗαάίζίνÒ (ύ(Cookies γΣΚήΘανΗπ";
         Text[ turkish ] = "Cookie'lerde uygulanacak kurallar";
         Text[ catalan ] = "Futuro tratamiento de estas cookies";
@@ -280,7 +280,7 @@ String STR_COOKIES_RECV_START
     Text[ japanese ] = "»°Κή° '${HOST}' ‚Ν1‚ΒΘγ‚ΜΈ―·°‚Μέ’θ‚ª•K—v‚Ε‚·B\nΈ―·°‚ΝURL‚Μ‚ ‚ιΈΧ½‚ΙΦA‚·‚ιξ•ρ‚Ε‚·B‚·‚Ε‚ΙσM‚µ‚Δ‚Ά‚ιΈ―·°‚Ζ“―‚¶URL‚ΜΔή·­ÒέΔ‚π %PRODUCTNAME ‚ª—v‹‚µ‚½‚Ζ‚«A‚±‚Μξ•ρ‚ª %PRODUCTNAME ‚©‚η»°Κή°‚Ι‘—‚η‚κ‚ά‚·B‚»‚µ‚Δ»°Κή°‚ª WWW ‚Μg—pσ‘Τ(µέΧ²έw”ƒ‚ΜΫ‚Ι”ƒ‚Ά•¨‚©‚²‚Μ’†‚Ι“ό‚κ‚½¤•i‚Θ‚Η)‚πo‚¦‚Δ‚¨‚«‚ά‚·B\n\nΘ‰Ί‚ΜΈ―·°‚πέ’θ‚µ‚ά‚·B\n\n";
     Text[ chinese_traditional ] = "΅Ε΅Ε΅Ε΅Ε'${HOST}' ΅Εn΅Ε?e΅Ε@΅Ε?£Xh΅Ε΅Ε cookie ΅ΕC\ncookie ΅Εt΅Ε΅Ε΅Ε΅Ε΅Ε΅ΕRL΅Ε{΅Ε΅Ε΅Εw΅Ε΅Ε΅ΕT΅Ε΅Ε΅ΕC%PRODUCTNAME ΅Εb΅ΕU΅Ε@΅Ε΅Ε΅ΕΗΐD΅Ε?΅Ε΅ΕP΅Ε΅Ε΅Ε΅Ε??N΅Ε|΅Ε΅Ε΅Ε{΅Ε΅Ε΅Εw΅Ε?dURL΅Ε??΅Εcookie΅Ε}΅ΕN΅Ε΅Ε΅Ε΅Ε΅Ε΅Ε΅Ε?e΅Ε΅Ε΅Ε΅Ε΅Ε΅Ε΅Ε΅Ε΅ΕC΅Εo΅Ε?A΅Ε΅Ε΅Ε΅Ε΅Ε΅Ε΅ΕN΅Ε΅Ε΅ΕD΅Εz΅Ε??΅Ε΅Εs΅Ε΅Ε΅Ε΅Ε΅Ε΅Ε΅Ε(΅Εp΅Εu΅ΕW΅ΕP΅Ε΅Εt΅Ε?΅Ε΅Ε΅Ε΅Ε΅Εx΅Εt΅Ε΅Ε΅Ε΅Ε΅Ε΅Ε΅Ε~΅ΕW΅Ε΅Ε)΅ΕC\n\n΅Ε{΅Εb΅Εn΅Ε??p΅ΕU΅Ε΅Ε cookie:\n\n";
     Text[ greek ] = "Ο διακομιστής '${HOST}' θα επιχειρήσει να τοποθετήσει ένα ή περισσότερα cookies. \nΤα Cookies είναι πληροφορίες, που αναφέρονται σε συγκεκριμένες κλάσεις των URL. Αν γίνει αργότερα η ζήτηση κάποιου εγγράφου από το %PRODUCTNAME, το οποίο αντιστοιχεί σε μια κλάση URL ενός Cookie που έγινε δεκτό προηγουμένως, το %PRODUCTNAME αποστέλλει αυτή την πληροφορία προς τον διακομιστή. Έτσι ο διακομιστής έχει την δυνατότητα να 'θυμάται' την κατάσταση μιας εφαρμογής του WWW όπως (π.χ. αγορές μέσω του Internet).\n\nΤα ακόλουθα Cookie πρόκειται να τοποθετηθούν:\n\n";
-    Text[ korean ] = "'${HOST}' Ό­Ήφ΄Β ΗΟ³ª ¶Η΄Β ±Χ ΐΜ»σΐΗ Cookie ΌΌΖΓΐ» ΏψΗΥ΄Ο΄Ω.\nCookie΄Β URLΐΗ Ζ―Α¤ Ε¬·΅½ΊΏ΅ °ό·ΓµΘ Α¤ΊΈΐΤ΄Ο΄Ω. ΒχΘΔΏ΅ %PRODUCTNAME ΐΜ(°΅)  URLΐΜ  ΐΜΐόΏ΅ Όφ½ΕΗΡ CookieΐΗ Ε¬·΅½ΊΏ΅  »σΐΐΗΟ΄Β Ή®Ό­Έ¦ Ώδ±ΈΗΟΈι %PRODUCTNAMEΐΊ (΄Β) ±Χ Α¤ΊΈΈ¦ Ό­ΉφΏ΅ ΊΈ³»°Τ µΛ΄Ο΄Ω.  ΐΜ·Έ°Τ ΗΨΌ­ Ό­Ήφ΄Β WWW ΐΐΏλΗΑ·Ξ±Χ·¥ (ΏΉΈ¦ µιΎξ ΏΒ¶σΐΞ ΌξΗΞΏ΅Ό­΅΅ΉΩ±Έ΄ΟΏ΅ ³ΦΐΊ Ή°°Η)Έ¦ ΐΞ½ΔΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.\n\n΄Ωΐ½°ϊ °°ΐΊ  CookieµιΐΜ Ό³Α¤µΗΎξΎί ΗΥ΄Ο΄Ω:\n\n";
+    Text[ korean ] = "'${HOST}'Ό­Ήφ΄Β ΗΟ³ª ¶Η΄Β ±Χ ΐΜ»σΐΗ ΔνΕ° ΌΌΖΓΐ» ΏψΗΥ΄Ο΄Ω.\nΔνΕ°΄Β URLΐΗ Ζ―Α¤ Ε¬·΅½ΊΏ΅ °ό·ΓµΘ Α¤ΊΈΐΤ΄Ο΄Ω. ΒχΘΔΏ΅ %PRODUCTNAME ΐΜ(°΅) ΐΜΐόΏ΅ Όφ½ΕΗΡ ΔνΕ°ΐΗ Ε¬·΅½ΊΏ΅ µϋΈ¥ URLΏ΅ »σΐΐΗΟ΄Β Ή®Ό­Έ¦ Ώδ±ΈΗΟΈι, %PRODUCTNAMEΐΊ(΄Β) ±Χ Α¤ΊΈΈ¦ Ό­ΉφΏ΅ ΊΈ³»°Τ µΛ΄Ο΄Ω. ΐΜ·Έ°Τ ΗΨΌ­ Ό­Ήφ΄Β WWW ΐΐΏλΗΑ·Ξ±Χ·¥ΐΗ »σΕΒ(ΏΉΈ¦ µιΎξ ΏΒ¶σΐΞ ΌξΗΞΏ΅Ό­΅΅ΉΩ±Έ΄ΟΏ΅ ³ΦΐΊ Ή°°Η)Έ¦ ΐΞ½ΔΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.\n\n΄Ωΐ½°ϊ °°ΐΊ ΔνΕ°°΅ Ό³Α¤µΗΎξΎί ΗΥ΄Ο΄Ω:\n\n";
     Text[ arabic ] = "???? ?????? '${HOST}' ????? ???? ???? ?? ????.\n??????? (Cookies) ?? ??????? ???? ????? ????? ?? ???????? (URLs). ??? ??? %PRODUCTNAME ??????????????????? ?????? ?? ??? ????? ?? ????????? ?? ??? ???? %PRODUCTNAME ?????? ??? ????????? ??? ??????. ???? ??????? ???? ???????? ????? ?????? ?? ????????? WWW (?????????????? ???????? ?? ????? ?????? ????? ?????? ??? ????????).\n\n???? ????? ???????? ???????:\n\n";
     Text[ turkish ] = "Sunucu '${HOST}' bir ya da birden ?ok Cookie g?dermek istiyor.\nCookie'ler, belirli URL s??lar?a ili?kin bilgilerdir. %PRODUCTNAME ileride daha ?ceden al?m? bir Cookie s???? URL'si ile ?t?en bir belge talep etti?nde, bu bilgi %PRODUCTNAME taraf?dan ilgili sunucuya g?derilir. B?lece sunucu, bir WWW uygulamas?? son durumunu (?n. bir al?veri? sisteminde, sepete konulan ??leri) kaydedebilir. \n\n?u Cookie'ler bilgisayar??da belirlenmi? olmal?\n\n";
     Text[ catalan ] = "El servidor '${HOST}' desea instalar una o mαs cookies.\nLas cookies son informaciones referentes a determinadas clases de URLs. Si %PRODUCTNAME solicita mαs tarde un documento que de acuerdo con su URL corresponda a una clase de una cookie recibida anteriormente, %PRODUCTNAME enviarα esta informaciσn al servidor. De esta forma los servidores pueden recordar el estado de una aplicaciσn www (p.ej. los artνculos de una cesta de compra en un sistema de compras).\n\nLas siguientes cookies se deberαn instalar:\n\n";
@@ -306,7 +306,7 @@ String STR_COOKIES_RECV_COOKIES
     Text[ japanese ] = "ΔήÒ²έ: ${DOMAIN}¤Κί½: ${PATH}AΈ―·°: ${COOKIE}B\n";
     Text[ chinese_traditional ] = "»β°μ΅G${DOMAIN}΅AΈτ®|΅G${PATH}, Cookie΅G${COOKIE}΅C\n";
     Text[ greek ] = "Τομέας: ${DOMAIN}, Διαδρομή: ${PATH}, Cookie: ${COOKIE}.\n";
-    Text[ korean ] = "µµΈήΐΞ: ${DOMAIN}, °ζ·Ξ: ${PATH},  COOKIE : ${COOKIE}.\n";
+    Text[ korean ] = "µµΈήΐΞ: ${DOMAIN}, °ζ·Ξ: ${PATH}, ΔνΕ° : ${COOKIE}.\n";
     Text[ arabic ] = "ΗαδΨΗή: ${DOMAIN}, ΗαγΣΗΡ: ${PATH}, Ηαίζίν: ${COOKIE}.\n";
     Text[ turkish ] = "Etki alanύ: ${DOMAIN}, Veri yolu: ${PATH}, Cookie: ${COOKIE}.\n";
     Text[ catalan ] = "Dominio: ${DOMAIN}, Ruta: ${PATH}, Cookie: ${COOKIE}.\n";
@@ -332,7 +332,7 @@ String STR_COOKIES_RECV_TITLE
     Text[ japanese ] = "Έ―·°‚ΜσM";
     Text[ chinese_traditional ] = "±µ¨ό Cookie";
     Text[ greek ] = "Λήψη των Cookie";
-    Text[ korean ] = "COOKIE  Όφ½Ε";
+    Text[ korean ] = "ΔνΕ°Όφ½Ε";
     Text[ arabic ] = "ΗΣΚήΘΗα ίζίν";
     Text[ turkish ] = "Cookie al";
     Text[ catalan ] = "Recepciσn de cookies";
@@ -358,7 +358,7 @@ String STR_COOKIES_SEND_START
     Text[ japanese ] = "%PRODUCTNAME ‚Ν»°Κή° '${HOST}' —p‚ΙAΔή·­ÒέΔ ${PATH} —v‹‚ΜΫ‚Ι‘—M‚³‚κ‚ιΈ―·°‚π•Ϋ‘¶‚µ‚ά‚µ‚½B\nΈ―·°‚Ν UR L‚Μ‚ ‚ιΈΧ½‚ΙΦA‚·‚ιξ•ρ‚ΕA‚ ‚ιΔή·­ÒέΔ‚ª‚Ά‚­‚Β‚©‚Μ»°Κή°‚©‚ηΔ‚Ρo‚³‚κ‚½Ϋ‚Ι %PRODUCTNAME ‚Ι‘—M‚³‚κA‚»‚±‚Ε•Ϋ‘¶‚³‚κ‚ά‚·B‚·‚Ε‚ΙσM‚µ‚½Έ―·°‚Ζ“―‚¶ URL ‚ΜΔή·­ÒέΔ‚π %PRODUCTNAME ‚ª—v‹‚µ‚½‚Ζ‚«A‚±‚Μξ•ρ‚ª %PRODUCTNAME ‚©‚η»°Κή°‚Ι‘—‚η‚κ‚ά‚·B‚»‚µ‚Δ»°Κή°‚ª WWW ‚Μg—pσ‘Τ(µέΧ²έw”ƒ‚ΜΫ‚Ι”ƒ‚Ά•¨‚©‚²‚Μ’†‚Ι“ό‚κ‚½¤•i‚Θ‚Η)‚πo‚¦‚Δ‚¨‚«‚ά‚·B\n\nΘ‰Ί‚ΜΈ―·°‚πέ’θ‚µ‚ά‚·B\n\n";
     Text[ chinese_traditional ] = "%PRODUCTNAME ¤wΈg«O¦s¤F¦ψªAΎΉ'${HOST}' ¶Η°eªΊ cookie ΅C%PRODUCTNAME ¦b¤U¤@¦Έ½Π¨DΈΛΈό¬Ϋ¦PªΊ¤ε¥σΈκ®Ζ${PATH}®Ι΄N·|«φ·Σµ{¦΅®wΐΛ¬dURL¬Ϋ²ΕªΊcookie¦}±N¦³Γφ°T®§¶Η°eµΉΉο¤θ¦ψªAΎΉ΅C³oΌΛ΅AΉο¤θ¦ψªAΎΉ΄N―ΰ°χªΎΉD±z¨Ο¥ΞªΊΒsΔύΎΉªΊ¦³ΓφΈκ®Ζ(¦p½u¤WΎP°β¨t²ΞªΊªφΑΚΔx§t¦³ªΊª««~¦WΊΩ)΅C\n\n²{¦b­n«Ψ¥ί¦p¤UªΊ cookie:\n\n";
     Text[ greek ] = "Το %PRODUCTNAME έχει αποθηκεύσει cookies για τον διακομιστή '${HOST}', τα οποία θα αποσταλούν κατά την ζήτηση του εγγράφου ${PATH}.\nΤα Cookies είναι πληροφορίες, που αναφέρονται σε συγκεκριμένες κλάσης των URL. Με την ζήτηση συγκεκριμένων εγγράφων αποστέλλονται από ορισμένους διακομιστές προς το %PRODUCTNAME και αποθηκεύονται εκεί. Αν γίνει αργότερα ζήτηση από το %PRODUCTNAME κάποιου εγγράφου, το οποίο αντιστοιχεί σε μια κλάση URL ενός Cookie που έγινε δεκτό προηγουμένως, το %PRODUCTNAME αποστέλλει αυτή την πληροφορία προς τον διακομιστή. Έτσι ο διακομιστής έχει την δυνατότητα να 'θυμάται' την κατάσταση μιας εφαρμογής WWW όπως π.χ. όταν κάνετε αγορές online.\n\nΤα ακόλουθα Cookie πρόκειται να τοποθετηθούν:\n\n";
-    Text[ korean ] = "%PRODUCTNAME ΐΊ(΄Β) Ό­Ήφ'$(HOST)'Έ¦ ΐ§ΗΨ, Ή®Ό­${PATH} Ώδ±Έ½Γ ΊΈ³»Α®Ύί ΗÒ CookieΈ¦ ΐϊΐεΗΟΏ΄½ΐ΄Ο΄Ω .\nCookie ΄Β URLΐΗ Ζ―Α¤ Ε¬·΅½ΊΏ΅ °ό·ΓµΘ Α¤ΊΈΐΤ΄Ο΄Ω. Cookie ΄Β Ζ―Α¤ Ή®Ό­µιΐ» ΊÒ·― ΏΓ ¶§ Ώ©·― Ό­ΉφµιΏ΅ ΐΗΗΨ %PRODUCTNAMEΏ΅ ΊΈ³»Α®Ό­ ±Χ°χΏ΅ ΐϊΐεµΛ΄Ο΄Ω. ΒχΘΔΏ΅ %PRODUCTNAMEΐΜ£¨°΅£©URLΐΜ ΐΜΐόΏ΅ Όφ½ΕΗΡ CookieΐΗ Ε¬·΅½ΊΏ΅ »σΐΐΗΟ΄Β Ή®Ό­Έ¦ Ώδ±ΈΗΟΈι %PRODUCTNAMEΐΜ£¨°΅£© ±Χ Α¤ΊΈΈ¦ Ό­ΉφΏ΅ ΊΈ³»°Τ µΛ΄Ο΄Ω. ΐΜ·Έ°Τ ΗΨΌ­ Ό­Ήφ΄Β WWW ΐΐΏλΗΑ·Ξ±Χ·¥ (ΏΉΈ¦ µιΎξ ΏΒ¶σΐΞ ΌξΗΞΏ΅Ό­΅΅ΉΩ±Έ΄ΟΏ΅ ³ΦΐΊ Ή°°Η)ΐ» ΐΞ½ΔΗΟ°Τ µΛ΄Ο΄Ω.\n\n΄Ωΐ½°ϊ °°ΐΊ CookieµιΐΜ Ό³Α¤µΗΎξΎί ΗΥ΄Ο΄Ω:\n\n";
+    Text[ korean ] = "%PRODUCTNAMEΐΊ(΄Β) Ό­Ήφ'$(HOST)'Έ¦ ΐ§ΗΨ, Ή®Ό­${PATH} Ώδ±Έ½Γ ΊΈ³»Α®Ύί ΗÒ ΔνΕ°Έ¦ ΐϊΐεΗΟΏ΄½ΐ΄Ο΄Ω.\nΔνΕ°΄Β URLΐΗ Ζ―Α¤ Ε¬·΅½ΊΏ΅ °ό·ΓµΘ Α¤ΊΈΐΤ΄Ο΄Ω. ΔνΕ°΄Β Ζ―Α¤ Ή®Ό­µιΐ» ΊÒ·― ΏΓ ¶§ Ώ©·― Ό­ΉφµιΏ΅ ΐΗΗΨ %PRODUCTNAMEΏ΅ ΊΈ³»Α®Ό­ ±Χ°χΏ΅ ΐϊΐεµΛ΄Ο΄Ω. ΒχΘΔΏ΅ %PRODUCTNAMEΐΜ°΅) ΐΜΐόΏ΅ Όφ½ΕΗΡ ΔνΕ°ΐΗ Ε¬·΅½ΊΏ΅ µϋΈ¥ URLΏ΅ »σΐΐΗΟ΄Β Ή®Ό­Έ¦ Ώδ±ΈΗΟΈι %PRODUCTNAMEΐΜ(°΅£©±Χ Α¤ΊΈΈ¦ Ό­ΉφΏ΅ ΊΈ³»°Τ µΛ΄Ο΄Ω. ΐΜ·Έ°Τ ΗΨΌ­ Ό­Ήφ΄Β WWW ΐΐΏλΗΑ·Ξ±Χ·¥ΐΗ »σΕΒ(ΏΉΈ¦ µιΎξ ΏΒ¶σΐΞ ΌξΗΞΏ΅Ό­΅΅ΉΩ±Έ΄ΟΏ΅ ³ΦΐΊ Ή°°Η)Έ¦ ΐΞ½ΔΗΟ°Τ µΛ΄Ο΄Ω.\n\n΄Ωΐ½°ϊ °°ΐΊ ΔνΕ°°΅ Ό³Α¤µΗΎξΎί ΗΥ΄Ο΄Ω:\n\n";
     Text[ arabic ] = "ήΗγ %PRODUCTNAME ΘΚΞÒν ίζίνÒ (Cookies) ααγÒζΟ '${HOST}'. Σζέ νΚγ ΕΡΣΗα εΠε ΗαάίζίνÒ ΪδΟ ΨαΘ ΗαγΣΚδΟ.${PATH}\nΗαίζίνÒ εν γΪαζγΗΚ ΞΗΥΙ ΘέΖΗΚ γΪνδΙ γδ ΗαΪδΗζνδ .(URLs) νΚγ ΕΡΣΗα εΠε ΗαγΪαζγΗΚ γδ ήΘα ΘΪΦ ΗαγÒζΟΗΚ Εαμ %PRODUCTNAME ΪδΟ ΗΣΚΟΪΗΑ γΣΚδΟΗΚ ΞΗΥΙ΅ ΝνΛ νΚγ ΚΞÒνδ εΠε ΗαγΪαζγΗΚ έν %PRODUCTNAME. ΕΠΗ ΨαΘ %PRODUCTNAME αΗΝήΗπ γΣΚδΟΗπ νΚΨΗΘή ΪδζΗδε γΪ έΖΙ ίζίνÒ Κγ ΗΣΚήΘΗαεΗ γδ ήΘα΅ νήζγ %PRODUCTNAME ΘΕΡΣΗα εΠε ΗαγΪαζγΗΚ Εαμ ΗαγÒζΟ. ΘεΠε ΗαΨΡνήΙ νγίδ ααγÒζΟΗΚ γΪΡέΙ ΘνΗδΗΚ Ϊδ ΗΣΚΞΟΗγΗΚ WWW (γΛαΗπ ΗαγΤΚΡνΗΚ ΗαγζΜζΟΙ έν ΝήνΘΙ ΗαΤΡΗΑ ΓΛδΗΑ ΗαΚΣζή ΪΘΡ ΗαΕδΚΡδΚ).\n\nνυΡΗΟ ΚΪννδ ΗαάίζίνÒ ΗαΚΗανΙ:\n\n";
     Text[ turkish ] = "%PRODUCTNAME, sunucu '${HOST}' iηin Cookie'ler kaydetti.  Bunlar, ${PATH} belgesi talep edildiπinde %PRODUCTNAME tarafύndan gφnderilir.\nCookie'ler, belirli URL sύnύflarύna iliώkin bilgilerdir. %PRODUCTNAME ileride daha φnceden alύnmύώ bir Cookie sύnύfύnύn URL'si ile φrtόώen bir belge talep ettiπinde, bu bilgi %PRODUCTNAME tarafύndan ilgili sunucuya gφnderilir. Bφylece sunucu, bir WWW uygulamasύnύn son durumunu (φrn. bir alύώveriώ sisteminde, sepete konulan όrόnleri) kaydedebilir. \n\nήu Cookie'ler bilgisayarύnύzda belirlenecek:\n\n";
     Text[ catalan ] = "%PRODUCTNAME ha guardado cookies para el servidor '${HOST}' que serαn enviadas cuando se solicite el documento ${PATH}.\nLas cookies son informaciones referentes a determinadas clases de URLs. Cuando se solicita un documento, algunos servidores las envνan a %PRODUCTNAME y las guardan allν. Si %PRODUCTNAME solicita mαs tarde un documento que de acuerdo con su URL corresponda a una clase de una cookie recibida anteriormente, %PRODUCTNAME enviarα esta informaciσn al servidor. Asν, los servidores pueden recordar el estado de una aplicaciσn www, como por ejemplo los artνculos en la cesta de un sistema de compras.\n\nEstas son las cookies a instalar:\n\n";
@@ -384,7 +384,7 @@ String STR_COOKIES_SEND_COOKIES
     Text[ japanese ] = "ΔήÒ²έ: ${DOMAIN}AΚί½: ${PATH}AΈ―·°: ${COOKIE}B\n";
     Text[ chinese_traditional ] = "»β°μ΅G${DOMAIN}΅AΈτ®|΅G${PATH}΅ACookie ΅G${COOKIE}΅C\n";
     Text[ greek ] = "Τομέας: ${DOMAIN}, Διαδρομή: ${PATH}, Cookie: ${COOKIE}.\n";
-    Text[ korean ] = "µµΈήΐΞ: ${DOMAIN}, °ζ·Ξ: ${PATH}, COOKIE : ${COOKIE}.\n";
+    Text[ korean ] = "µµΈήΐΞ: ${DOMAIN}, °ζ·Ξ: ${PATH}, ΔνΕ°: ${COOKIE}.\n";
     Text[ arabic ] = "ΗαδΨΗή: ${DOMAIN}, ΗαγΣΗΡ: ${PATH}, Ηαίζίν: ${COOKIE}.\n";
     Text[ turkish ] = "Etki alanύ: ${DOMAIN}, Veri yolu: ${PATH}, Cookie: ${COOKIE}.\n";
     Text[ catalan ] = "Dominio: ${DOMAIN}, Ruta: ${PATH}, Cookie: ${COOKIE}.\n";
@@ -410,12 +410,13 @@ String STR_COOKIES_SEND_TITLE
     Text[ japanese ] = "Έ―·°‚Μ‘—M";
     Text[ chinese_traditional ] = "¶Η°e Cookie";
     Text[ greek ] = "Αποστολή Cookies";
-    Text[ korean ] = "COOKIE  ΊΈ³»±β";
+    Text[ korean ] = "ΔνΕ° ΊΈ³»±β";
     Text[ arabic ] = "ΕΡΣΗα ΗαίζίνÒ";
     Text[ turkish ] = "Cookies gφnder";
     Text[ catalan ] = "Enviar cookies";
     Text[ finnish ] = "Lδhetδ evδsteet";
 };
+
 
 
 
