@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" dlg:id="WebWzrd" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210">
+ <dlg:styles>
+  <dlg:style dlg:style-id="0"/>
+ </dlg:styles>
+ <dlg:bulletinboard>
+  <dlg:button dlg:style-id="0" dlg:id="cbCancel" dlg:left="5" dlg:top="190" dlg:width="50" dlg:height="13" dlg:value="cbCancel">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="WebWizard.HtmlAutoPilotBasic.CancelHTMLWizard"/>
+  </dlg:button>
+  <dlg:button dlg:style-id="0" dlg:id="cbHelp" dlg:left="65" dlg:top="190" dlg:width="50" dlg:height="13" dlg:value="cbHelp"/>
+  <dlg:button dlg:style-id="0" dlg:id="cbGoOn" dlg:left="216" dlg:top="190" dlg:width="50" dlg:height="13" dlg:value="cbGoOn">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="WebWizard.HtmlAutoPilotBasic.EndDialog"/>
+  </dlg:button>
+  <dlg:img dlg:id="ImageControl1" dlg:left="5" dlg:top="5" dlg:width="260" dlg:height="30"/>
+  <dlg:menulist dlg:style-id="0" dlg:id="lbTemplate" dlg:left="5" dlg:top="53" dlg:width="110" dlg:height="90">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="WebWizard.HtmlAutoPilotBasic.ReloadCurrentDocument"/>
+  </dlg:menulist>
+  <dlg:menulist dlg:style-id="0" dlg:id="lbStyles" dlg:left="155" dlg:top="53" dlg:width="110" dlg:height="90">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="WebWizard.HtmlAutoPilotBasic.LoadWebPageStyles"/>
+  </dlg:menulist>
+  <dlg:text dlg:style-id="0" dlg:id="lblTemplate" dlg:left="5" dlg:top="42" dlg:width="110" dlg:height="10"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblStyle" dlg:left="155" dlg:top="42" dlg:width="110" dlg:height="10" dlg:value="FixedText2"/>
+  <dlg:radiogroup>
+   <dlg:radio dlg:style-id="0" dlg:id="OptTiled" dlg:left="161" dlg:top="156" dlg:width="96" dlg:height="12" dlg:value="OptTiled">
+    <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="WebWizard.HtmlAutoPilotBasic.SetBackGraphicStyle"/>
+   </dlg:radio>
+   <dlg:radio dlg:style-id="0" dlg:id="OptArea" dlg:left="161" dlg:top="169" dlg:width="96" dlg:height="12" dlg:value="OptArea">
+    <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="WebWizard.HtmlAutoPilotBasic.SetBackGraphicStyle"/>
+   </dlg:radio>
+  </dlg:radiogroup>
+  <dlg:titledbox dlg:style-id="0" dlg:id="FrmBackground" dlg:left="155" dlg:top="147" dlg:width="110" dlg:height="37">
+   <dlg:title dlg:value="FrmBackground"/>
+  </dlg:titledbox>
+  <dlg:checkbox dlg:style-id="0" dlg:id="chkSaveasTemplate" dlg:left="5" dlg:top="158" dlg:width="110" dlg:height="12" dlg:value="chkSaveasTemplate"/>
+ </dlg:bulletinboard>
+</dlg:window>
