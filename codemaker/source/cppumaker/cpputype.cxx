@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:53:41 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,6 +632,21 @@ void CppuType::dumpGetCppuType(FileStream& o)
 {
     OString typeName(m_typeName.replace('/', '_'));
 
+    if ( m_typeName.equals("com/sun/star/uno/Exception") )
+    {
+        o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
+        dumpType(o, m_typeName, sal_True, sal_False);
+        o << "* ) SAL_THROW( () )\n{\n";
+        inc();
+
+        o << indent() << "return * reinterpret_cast< const ::com::sun::star::uno::Type * >( "
+         << "::typelib_static_type_getByTypeClass( typelib_TypeClass_EXCEPTION ) );\n";
+
+        dec();
+        o << indent() << "}\n";
+        return;
+    }
+
     if ( m_cppuTypeLeak )
     {
         dumpLGetCppuType(o);
@@ -643,117 +658,108 @@ void CppuType::dumpGetCppuType(FileStream& o)
         return;
     }
 
-    if ( !m_typeName.equals("com/sun/star/uno/Exception") )
-    {
-        o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
-          << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
-          << "#endif\n\n";
-    }
+    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
+      << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
+      << "#endif\n\n";
 
     o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
     o << "* ) SAL_THROW( () )\n{\n";
     inc();
 
-    if ( m_typeName.equals("com/sun/star/uno/Exception") )
+    o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
+      << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
+      << indent() << "#endif\n\n";
+
+    o << indent() << "if ( !s_pType_" << typeName << " )\n" << indent() << "{\n";
+    inc();
+
+    OString superType(m_reader.getSuperTypeName());
+    sal_Bool bIsBaseException = sal_False;
+    if (superType.getLength() > 0)
     {
-        o << indent() << "return * reinterpret_cast< const ::com::sun::star::uno::Type * >( ::typelib_static_type_getByTypeClass("
-          << " typelib_TypeClass_EXCEPTION ) );\n";
+        if ( superType.equals("com/sun/star/uno/Exception") )
+        {
+            bIsBaseException = sal_True;
+        } else
+        {
+            o << indent() << "const ::com::sun::star::uno::Type& rBaseType = getCppuType( ( ";
+            dumpType(o, superType, sal_True, sal_False);
+            o << " *)0 );\n\n";
+        }
+    }
+
+    sal_uInt32 count = getMemberCount();
+    if (count)
+    {
+        o << indent() << "typelib_TypeDescriptionReference * aMemberRefs[" << count << "];\n";
+
+        sal_uInt32      fieldCount = m_reader.getFieldCount();
+        RTFieldAccess   access = RT_ACCESS_INVALID;
+        OString         fieldType, fieldName;
+        OString         scope = m_typeName.replace('/', '.');
+        sal_Bool        bWithScope = sal_True;
+        OString         modFieldType;
+        StringSet       generatedTypeSet;
+        StringSet::iterator findIter;
+
+        for (sal_uInt16 i=0; i < fieldCount; i++)
+        {
+            access = m_reader.getFieldAccess(i);
+
+            if (access == RT_ACCESS_CONST || access == RT_ACCESS_INVALID)
+                continue;
+
+            fieldName = m_reader.getFieldName(i);
+            fieldType = checkRealBaseType(m_reader.getFieldType(i), sal_True);
+
+            modFieldType = typeToIdentifier(fieldType);
+
+            findIter = generatedTypeSet.find(fieldType);
+            if ( findIter == generatedTypeSet.end() )
+            {
+                generatedTypeSet.insert(fieldType);
+                o << indent() << "const ::com::sun::star::uno::Type& rMemberType_"
+                  << modFieldType/*i*/ << " = getCppuType( ( ";
+                dumpType(o, fieldType, sal_True, sal_False);
+                o << " *)0 );\n";
+            }
+
+            o << indent() << "aMemberRefs[" << i << "] = rMemberType_"
+              << modFieldType/*i*/ << ".getTypeLibType();\n";
+        }
+        o << "\n";
+    }
+
+    o << indent() << "typelib_static_compound_type_init( &s_pType_" << typeName << ", "
+      << getTypeClass(m_typeName, sal_True) << ", \"" << m_typeName.replace('/', '.') << "\", ";
+    if ( superType.getLength() > 0 || bIsBaseException )
+    {
+        if ( bIsBaseException )
+        {
+            o << "* ::typelib_static_type_getByTypeClass( typelib_TypeClass_EXCEPTION ), "
+              << count << ", ";
+        } else
+        {
+            o << "rBaseType.getTypeLibType(), " << count << ", ";
+        }
     } else
     {
-        o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
-          << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
-          << indent() << "#endif\n\n";
-
-        o << indent() << "if ( !s_pType_" << typeName << " )\n" << indent() << "{\n";
-        inc();
-
-        OString superType(m_reader.getSuperTypeName());
-        sal_Bool bIsBaseException = sal_False;
-        if (superType.getLength() > 0)
-        {
-            if ( superType.equals("com/sun/star/uno/Exception") )
-            {
-                bIsBaseException = sal_True;
-            } else
-            {
-                o << indent() << "const ::com::sun::star::uno::Type& rBaseType = getCppuType( ( ";
-                dumpType(o, superType, sal_True, sal_False);
-                o << " *)0 );\n\n";
-            }
-        }
-
-        sal_uInt32 count = getMemberCount();
-        if (count)
-        {
-            o << indent() << "typelib_TypeDescriptionReference * aMemberRefs[" << count << "];\n";
-
-            sal_uInt32      fieldCount = m_reader.getFieldCount();
-            RTFieldAccess   access = RT_ACCESS_INVALID;
-            OString         fieldType, fieldName;
-            OString         scope = m_typeName.replace('/', '.');
-            sal_Bool        bWithScope = sal_True;
-            OString         modFieldType;
-            StringSet       generatedTypeSet;
-            StringSet::iterator findIter;
-
-            for (sal_uInt16 i=0; i < fieldCount; i++)
-            {
-                access = m_reader.getFieldAccess(i);
-
-                if (access == RT_ACCESS_CONST || access == RT_ACCESS_INVALID)
-                    continue;
-
-                fieldName = m_reader.getFieldName(i);
-                fieldType = checkRealBaseType(m_reader.getFieldType(i), sal_True);
-
-                modFieldType = typeToIdentifier(fieldType);
-
-                findIter = generatedTypeSet.find(fieldType);
-                if ( findIter == generatedTypeSet.end() )
-                {
-                    generatedTypeSet.insert(fieldType);
-                    o << indent() << "const ::com::sun::star::uno::Type& rMemberType_"
-                      << modFieldType/*i*/ << " = getCppuType( ( ";
-                    dumpType(o, fieldType, sal_True, sal_False);
-                    o << " *)0 );\n";
-                }
-
-                o << indent() << "aMemberRefs[" << i << "] = rMemberType_"
-                  << modFieldType/*i*/ << ".getTypeLibType();\n";
-            }
-            o << "\n";
-        }
-
-        o << indent() << "typelib_static_compound_type_init( &s_pType_" << typeName << ", "
-          << getTypeClass(m_typeName, sal_True) << ", \"" << m_typeName.replace('/', '.') << "\", ";
-        if ( superType.getLength() > 0 || bIsBaseException )
-        {
-            if ( bIsBaseException )
-            {
-                o << "* ::typelib_static_type_getByTypeClass( typelib_TypeClass_EXCEPTION ), "
-                  << count << ", ";
-            } else
-            {
-                o << "rBaseType.getTypeLibType(), " << count << ", ";
-            }
-        } else
-        {
-            o << "0, " << count << ", ";
-        }
-
-        if (count)
-        {
-            o << " aMemberRefs );\n";
-        } else
-        {
-            o << " 0 );\n";
-        }
-        dec();
-        o << indent() << "}\n";
-        o << indent() << "return * reinterpret_cast< const ::com::sun::star::uno::Type * >( &s_pType_"
-          << typeName <<" );\n";
+        o << "0, " << count << ", ";
     }
+
+    if (count)
+    {
+        o << " aMemberRefs );\n";
+    } else
+    {
+        o << " 0 );\n";
+    }
+    dec();
+    o << indent() << "}\n";
+    o << indent() << "return * reinterpret_cast< const ::com::sun::star::uno::Type * >( &s_pType_"
+      << typeName <<" );\n";
+
     dec();
     o << indent() << "}\n";
 
@@ -1878,6 +1884,21 @@ void InterfaceType::dumpGetCppuType(FileStream& o)
 {
     OString typeName(m_typeName.replace('/', '_'));
 
+    if ( m_typeName.equals("com/sun/star/uno/XInterface") )
+    {
+        o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
+        dumpType(o, m_typeName, sal_True, sal_False);
+        o << "* ) SAL_THROW( () )\n{\n";
+        inc();
+
+        o << indent() << "return * reinterpret_cast< const ::com::sun::star::uno::Type * >( "
+         << "::typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE ) );\n";
+
+        dec();
+        o << indent() << "}\n";
+        return;
+    }
+
     if ( m_cppuTypeLeak )
     {
         dumpLGetCppuType(o);
@@ -1889,56 +1910,47 @@ void InterfaceType::dumpGetCppuType(FileStream& o)
         return;
     }
 
-    if ( !m_typeName.equals("com/sun/star/uno/XInterface") )
-    {
-        o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
-          << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
-          << "#endif\n\n";
-    }
+    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
+      << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
+      << "#endif\n\n";
 
     o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
     o << "* ) SAL_THROW( () )\n{\n";
     inc();
 
-    if ( m_typeName.equals("com/sun/star/uno/XInterface") )
+    o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
+      << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
+      << indent() << "#endif\n\n";
+
+    o << indent() << "if ( !s_pType_" << typeName << " )\n" << indent() << "{\n";
+    inc();
+    OString superType(m_reader.getSuperTypeName());
+    sal_Bool bWithBase = sal_False;
+    if (superType.getLength() > 0 && !superType.equals("com/sun/star/uno/XInterface"))
     {
-        o << indent() << "return * reinterpret_cast< const ::com::sun::star::uno::Type * >( ::typelib_static_type_getByTypeClass("
-          << " typelib_TypeClass_INTERFACE ) );\n";
+        bWithBase = sal_True;
+        o << indent() << "const ::com::sun::star::uno::Type& rSuperType = getCppuType( ( ";
+        dumpType(o, superType, sal_True, sal_False);
+        o << " *)0 );\n";
+    }
+
+    o << indent() << "typelib_static_interface_type_init( &s_pType_" << typeName
+      << ", \"" << m_typeName.replace('/', '.') << "\", ";
+
+    if ( bWithBase )
+    {
+        o << "rSuperType.getTypeLibType() );\n";
     } else
     {
-        o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
-          << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
-          << indent() << "#endif\n\n";
-
-        o << indent() << "if ( !s_pType_" << typeName << " )\n" << indent() << "{\n";
-        inc();
-        OString superType(m_reader.getSuperTypeName());
-        sal_Bool bWithBase = sal_False;
-        if (superType.getLength() > 0 && !superType.equals("com/sun/star/uno/XInterface"))
-        {
-            bWithBase = sal_True;
-            o << indent() << "const ::com::sun::star::uno::Type& rSuperType = getCppuType( ( ";
-            dumpType(o, superType, sal_True, sal_False);
-            o << " *)0 );\n";
-        }
-
-        o << indent() << "typelib_static_interface_type_init( &s_pType_" << typeName
-          << ", \"" << m_typeName.replace('/', '.') << "\", ";
-
-        if ( bWithBase )
-        {
-            o << "rSuperType.getTypeLibType() );\n";
-        } else
-        {
-            o << "0 );\n";
-        }
-
-        dec();
-        o << indent() << "}\n";
-        o << indent() << "return * reinterpret_cast< ::com::sun::star::uno::Type * >( &s_pType_"
-          << typeName <<" );\n";
+        o << "0 );\n";
     }
+
+    dec();
+    o << indent() << "}\n";
+    o << indent() << "return * reinterpret_cast< ::com::sun::star::uno::Type * >( &s_pType_"
+      << typeName <<" );\n";
+
     dec();
     o << indent() << "}\n";
 
