@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tustring.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:21:30 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 #define private public
 #include <string.hxx>
@@ -131,6 +134,14 @@ UniString UniString::CreateFromDouble( double d )
 {
     sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFDOUBLE];
     return UniString( aBuf, rtl_ustr_valueOfDouble( aBuf, d ) );
+}
+
+// -----------------------------------------------------------------------
+
+namespace { struct Empty : public rtl::Static< const UniString, Empty> {}; }
+const UniString& UniString::EmptyString()
+{
+    return Empty::get();
 }
 
 // -----------------------------------------------------------------------
