@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-30 15:21:36 $
+ *  last change: $Author: oj $ $Date: 2001-01-03 09:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,12 +396,12 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLExcep
 
     columnIndex = mapColumn(columnIndex);
 
-//  if(m_bFetchData)
-//  {
-//      if(columnIndex > m_nLastColumnPos)
-//          fillRow(columnIndex);
-//      return any2bool(m_aRow[columnIndex]);
-//  }
+    if(m_bFetchData)
+    {
+        if(columnIndex > m_nLastColumnPos)
+            fillRow(columnIndex);
+        return any2bool(m_aRow[columnIndex]);
+    }
 
 
     return getValue(m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,sal_Int8(0));
@@ -416,6 +416,15 @@ sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLExceptio
 
     columnIndex = mapColumn(columnIndex);
 
+    if(m_bFetchData)
+    {
+        if(columnIndex > m_nLastColumnPos)
+            fillRow(columnIndex);
+        sal_Int8 nRet = 0;
+        m_aRow[columnIndex] >>= nRet;
+        return nRet;
+    }
+
     return getValue(m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,sal_Int8(0));
 }
 // -------------------------------------------------------------------------
@@ -427,6 +436,15 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
+    if(m_bFetchData)
+    {
+        if(columnIndex > m_nLastColumnPos)
+            fillRow(columnIndex);
+        Sequence< sal_Int8 > nRet;
+        m_aRow[columnIndex] >>= nRet;
+        return nRet;
+    }
+
     sal_Int32 nType = getMetaData()->getColumnType(columnIndex);
     switch(nType)
     {
@@ -449,6 +467,14 @@ Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, R
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
+    if(m_bFetchData)
+    {
+        if(columnIndex > m_nLastColumnPos)
+            fillRow(columnIndex);
+        Date nRet;
+        m_aRow[columnIndex] >>= nRet;
+        return nRet;
+    }
 
     DATE_STRUCT aDate;
     aDate.day = 0;
@@ -466,6 +492,14 @@ double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLExceptio
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
+    if(m_bFetchData)
+    {
+        if(columnIndex > m_nLastColumnPos)
+            fillRow(columnIndex);
+        double nRet = 0;
+        m_aRow[columnIndex] >>= nRet;
+        return nRet;
+    }
     return getValue(m_aStatementHandle,columnIndex,SQL_C_DOUBLE,m_bWasNull,**this,double(0.0));
 }
 // -------------------------------------------------------------------------
@@ -488,6 +522,14 @@ sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLExceptio
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
+    if(m_bFetchData)
+    {
+        if(columnIndex > m_nLastColumnPos)
+            fillRow(columnIndex);
+        sal_Int32 nRet=0;
+        m_aRow[columnIndex] >>= nRet;
+        return nRet;
+    }
     return getValue(m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,sal_Int32(0));
 }
 // -------------------------------------------------------------------------
@@ -588,6 +630,14 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
+    if(m_bFetchData)
+    {
+        if(columnIndex > m_nLastColumnPos)
+            fillRow(columnIndex);
+        sal_Int16 nRet=0;
+        m_aRow[columnIndex] >>= nRet;
+        return nRet;
+    }
     return getValue(m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,sal_Int16(0));
 }
 // -------------------------------------------------------------------------
@@ -600,6 +650,14 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
+    if(m_bFetchData)
+    {
+        if(columnIndex > m_nLastColumnPos)
+            fillRow(columnIndex);
+        ::rtl::OUString nRet;
+        m_aRow[columnIndex] >>= nRet;
+        return nRet;
+    }
     return OTools::getStringValue(m_aStatementHandle,columnIndex,getMetaData()->getColumnType(columnIndex),m_bWasNull,**this);
 }
 // -------------------------------------------------------------------------
@@ -612,6 +670,14 @@ Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, R
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
+    if(m_bFetchData)
+    {
+        if(columnIndex > m_nLastColumnPos)
+            fillRow(columnIndex);
+        Time nRet;
+        m_aRow[columnIndex] >>= nRet;
+        return nRet;
+    }
     TIME_STRUCT aTime={0,0,0};
     aTime = getValue(m_aStatementHandle,columnIndex,SQL_C_TIME,m_bWasNull,**this,aTime);
     return Time(0,aTime.second,aTime.minute,aTime.hour);
@@ -626,6 +692,14 @@ DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLExc
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
+    if(m_bFetchData)
+    {
+        if(columnIndex > m_nLastColumnPos)
+            fillRow(columnIndex);
+        DateTime nRet;
+        m_aRow[columnIndex] >>= nRet;
+        return nRet;
+    }
     TIMESTAMP_STRUCT aTime={0,0,0,0,0,0,0};
     aTime = getValue(m_aStatementHandle,columnIndex,SQL_C_TIMESTAMP,m_bWasNull,**this,aTime);
     return DateTime(aTime.fraction*1000,aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year);
@@ -1503,7 +1577,7 @@ void OResultSet::getFastPropertyValue(
 // -------------------------------------------------------------------------
 void OResultSet::fillRow(sal_Int32 _nToColumn)
 {
-    m_bFetchData = sal_True;
+    m_bFetchData = sal_False;
     Reference< XResultSetMetaData > xMeta = getMetaData();
     for(sal_Int32 i=m_nLastColumnPos+1;i <= _nToColumn; ++i)
     {
@@ -1558,7 +1632,7 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
         }
     }
     m_nLastColumnPos = _nToColumn;
-    m_bFetchData = sal_False;
+    m_bFetchData = sal_True;
 }
 
 
