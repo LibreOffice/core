@@ -7577,6 +7577,33 @@ SfxVoidItem Undo SID_UNDO
     GroupId = GID_EDIT;
 ]
 
+//------------------------------------------------
+SfxVoidItem FormatPaintbrush SID_FORMATPAINTBRUSH ( SfxBoolItem PersistentCopy SID_FORMATPAINTBRUSH )
+[
+      /* flags: */
+      AutoUpdate = TRUE,
+      Cachable = Cachable,
+      FastCall = FALSE,
+      HasCoreId = FALSE,
+      HasDialog = FALSE,
+      ReadOnlyDoc = FALSE,
+      Toggle = FALSE,
+      Container = FALSE,
+      RecordAbsolute = FALSE,
+      RecordPerSet;
+      Synchron;
+
+      /* status: */
+      SlotType = SfxBoolItem
+
+      /* config: */
+      AccelConfig = TRUE,
+      MenuConfig = TRUE,
+      StatusBarConfig = FALSE,
+      ToolBoxConfig = TRUE,
+      GroupId = GID_EDIT;
+]
+
 //--------------------------------------------------------------------------
 SfxUInt16Item UndoCount SID_ATTR_UNDO_COUNT
 
