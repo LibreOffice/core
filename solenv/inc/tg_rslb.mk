@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_rslb.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:47:27 $
+#   last change: $Author: rt $ $Date: 2004-05-21 13:47:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,11 +111,31 @@ ALLTAR : $(HIDRES$(TNR)PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
+.IF "$(common_build_reslib)"!=""
+$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION).ilst2 : $(RSC_MULTI$(TNR))
+.IF "$(use_shell)"!="4nt"	
+    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
+.ELSE			# "$(use_shell)"!="4nt"	
+    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
+.ENDIF			# "$(use_shell)"!="4nt"	
+
+ALLTAR : $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION).ilst2
+.ELSE           # "$(common_build_reslib)"!=""
+$(BIN)$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION).ilst2 : $(RSC_MULTI$(TNR))
+.IF "$(use_shell)"!="4nt"	
+    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(BIN)$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
+.ELSE			# "$(use_shell)"!="4nt"	
+    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
+.ENDIF			# "$(use_shell)"!="4nt"	
+
+ALLTAR : $(BIN)$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION).ilst2
+.ENDIF          # "$(common_build_reslib)"!=""
+
+
 $(RSC_MULTI$(TNR)) : \
         $(RESLIB$(TNR)SRSFILES) \
         $(RESLIB$(TNR)TARGETN) \
         $(RESLIB$(TNR)BMPS)
-.IF "$(rsc_once)"!=""
     @+echo using rsc multi-res feature
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
@@ -123,10 +143,15 @@ $(RSC_MULTI$(TNR)) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.res} \
-    -lip{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(i)}) ) \
+    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    -lip{$j} ) \
+    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -subMODULE=$(PRJ) \
+    -subGLOBAL=$(SOLARSRC) \
+    -subCUSTOM=to_be_defined \
+    -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
     -ft$@ \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
-    -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
+    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC$(TNR)HEADER) $(RESLIB$(TNR)SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
@@ -135,14 +160,18 @@ $(RSC_MULTI$(TNR)) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(BIN)$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.res} \
-    -lip{$(RES)}$/$(langext_{$(i)}) ) \
+    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    -lip{$j} ) \
+    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -subGLOBAL=$(SOLARSRC) \
+    -subMODULE=$(PRJ) \
+    -subCUSTOM=to_be_defined \
+    -oil$(BIN) \
     -ft$@ \
-    -I{$(RES)}$/$(defaultlangext) \
-    -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
+    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC$(TNR)HEADER) $(RESLIB$(TNR)SRSFILES) \
     ) > $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
-.ENDIF           # "$(rsc_once)"!=""
 
 $(RESLIB$(TNR)TARGETN): \
         $(RESLIB$(TNR)SRSFILES) \
@@ -150,75 +179,15 @@ $(RESLIB$(TNR)TARGETN): \
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-.IF "$(rsc_once)"!=""
     @+-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
-.ELSE           # "$(rsc_once)"!=""
-    $(RSC) -presponse @$(mktmp \
-    -r -p \
-    $(rsclang_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
-    -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
-    -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
-    $(RSC$(TNR)HEADER) $(RESLIB$(TNR)SRSFILES) \
-    )
-    +$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.new >& $(NULLDEV)
-    +-$(RM) $@ >& $(NULLDEV)
-    +$(RENAME) $@.new $@
-.ENDIF          # "$(rsc_once)"!=""
 .ELSE			# "$(common_build_reslib)"!=""
-.IF "$(rsc_once)"!=""
     @+-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
-.ELSE           # "$(rsc_once)"!=""
-    $(RSC) -presponse @$(mktmp \
-    -r \
-    $(rsclang_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
-    -fs$@ \
-    -I$(PRJ)$/$(INPATH)$/res$/$(defaultlangext) \
-    -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
-    $(RSC$(TNR)HEADER) $(RESLIB$(TNR)SRSFILES) \
-    )
-.ENDIF          # "$(rsc_once)"!=""
 .ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
 .IF "$(common_build_reslib)"!=""
-.IF "$(rsc_once)"!=""
     @+-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
-.ELSE           # "$(rsc_once)"!=""
-    $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
-    -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
-    -r -p \
-    -I$(RES) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
-    -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INCLUDE) \
-    $(RSC$(TNR)HEADER) $(RESLIB$(TNR)SRSFILES) \
-    )
-    +-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.new >& $(NULLDEV)
-    +-$(RM) $@ >& $(NULLDEV)
-    +$(RENAME) $@.new $@
-.ENDIF          # "$(rsc_once)"!=""
 .ELSE			# "$(common_build_reslib)"!=""
-.IF "$(rsc_once)"!=""
     @+-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
-.ELSE           # "$(rsc_once)"!=""
-    $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
-    -fs$@ \
-    -r -p \
-    -I$(RES) \
-    -I$(PRJ)$/$(INPATH)$/res$/$(defaultlangext) \
-    -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INCLUDE) \
-    $(RSC$(TNR)HEADER) $(RESLIB$(TNR)SRSFILES) \
-    )
-.ENDIF          # "$(rsc_once)"!=""
 .ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB$(TNR)TARGETN)"!=""
